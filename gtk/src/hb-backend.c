@@ -1121,6 +1121,24 @@ ghb_find_closest_audio_bitrate(gint codec, gint rate)
 	return result;
 }
 
+gint
+ghb_find_closest_audio_rate(gint rate)
+{
+	gint ii;
+	gint result;
+
+	result = 0;
+	for (ii = 0; ii < hb_audio_rates_count; ii++)
+	{
+		if (rate <= hb_audio_rates[ii].rate)
+		{
+			result = hb_audio_rates[ii].rate;
+			break;
+		}
+	}
+	return result;
+}
+
 static gint
 lookup_audio_bitrate_int(const GValue *rate)
 {

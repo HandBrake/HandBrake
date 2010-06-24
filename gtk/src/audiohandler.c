@@ -348,13 +348,15 @@ G_MODULE_EXPORT void
 audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	static gint prev_acodec = 0;
-	gint acodec_code, mix_code;
+	gint acodec_code;
 	GValue *asettings, *gval;
 	
 	g_debug("audio_codec_changed_cb ()");
 	gval = ghb_widget_value(widget);
 	acodec_code = ghb_lookup_combo_int("AudioEncoder", gval);
 	ghb_value_free(gval);
+
+	asettings = get_selected_asettings(ud);
 	if (ghb_audio_is_passthru (prev_acodec) && 
 		!ghb_audio_is_passthru (acodec_code))
 	{
@@ -362,13 +364,29 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		// pref settings
 		gint titleindex;
 		gint track;
+		gint br, sr, mix_code;
+
+		if (asettings != NULL)
+		{
+			br = ghb_settings_get_int(asettings, "AudioBitrate");
+			sr = ghb_settings_get_int(asettings, "AudioSamplerate");
+			mix_code = ghb_settings_combo_int(asettings, "AudioMixdown");
+		}
+		else
+		{
+			br = 160;
+			sr = 0;
+			mix_code = 0;
+		}
 
 		titleindex = ghb_settings_combo_int(ud->settings, "title");
 		track = ghb_settings_combo_int(ud->settings, "AudioTrack");
 
-		ghb_ui_update(ud, "AudioBitrate", ghb_string_value("160"));
-		ghb_ui_update(ud, "AudioSamplerate", ghb_string_value("source"));
-		mix_code = ghb_lookup_combo_int("AudioMixdown", ghb_string_value("dpl2"));
+		br = ghb_find_closest_audio_bitrate(acodec_code, br);
+		ghb_ui_update(ud, "AudioBitrate", ghb_int64_value(br));
+
+		sr = ghb_find_closest_audio_rate(sr);
+		ghb_ui_update(ud, "AudioSamplerate", ghb_int64_value(sr));
 		mix_code = ghb_get_best_mix( titleindex, track, acodec_code, mix_code);
 		ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix_code));
 	}
@@ -376,7 +394,6 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_grey_combo_options (ud->builder);
 	ghb_check_dependency(ud, widget, NULL);
 	prev_acodec = acodec_code;
-	asettings = get_selected_asettings(ud);
 	if (asettings != NULL)
 	{
 		ghb_widget_to_setting(asettings, widget);
