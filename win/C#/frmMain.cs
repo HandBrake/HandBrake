@@ -79,7 +79,13 @@ namespace Handbrake
 
         #region Application Startup
 
-        public frmMain()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="frmMain"/> class.
+        /// </summary>
+        /// <param name="args">
+        /// The arguments passed in on application startup.
+        /// </param>
+        public frmMain(string[] args)
         {
             // Load and setup the splash screen in this thread
             splash.Show(this);
@@ -168,6 +174,12 @@ namespace Handbrake
             // Event Handlers and Queue Recovery
             events();
             queueRecovery();
+
+            // If have a file passed in via command arguemtents, check it's a file and try scanning it.
+            if (args.Length >= 1 && File.Exists(args[0]))
+            {
+                this.StartScan(args[0], 0);
+            }
         }
 
         private void UpdateCheckDone(IAsyncResult result)
@@ -2046,17 +2058,19 @@ namespace Handbrake
                     drp_dvdtitle.SelectedIndex = 0;
                 }
 
-                // Enable the creation of chapter markers if the file is an image of a dvd.
-                int start, end;
-                int.TryParse(drop_chapterStart.Items[0].ToString(), out start);
-                int.TryParse(drop_chapterFinish.Items[drop_chapterFinish.Items.Count - 1].ToString(), out end);
-                if (end > start)
-                    Check_ChapterMarkers.Enabled = true;
-                else
+                // Enable the creation of chapter markers if the file is an image of a dvd
+                if (drop_chapterStart.Items.Count > 0)
                 {
-                    Check_ChapterMarkers.Enabled = false;
-                    Check_ChapterMarkers.Checked = false;
-                    data_chpt.Rows.Clear();
+                    int start, end;
+                    int.TryParse(drop_chapterStart.Items[0].ToString(), out start);
+                    int.TryParse(drop_chapterFinish.Items[drop_chapterFinish.Items.Count - 1].ToString(), out end);
+                    if (end > start) Check_ChapterMarkers.Enabled = true;
+                    else
+                    {
+                        Check_ChapterMarkers.Enabled = false;
+                        Check_ChapterMarkers.Checked = false;
+                        data_chpt.Rows.Clear();
+                    }
                 }
 
                 // If no titles were found, Display an error message
@@ -2440,7 +2454,10 @@ namespace Handbrake
                         "Close HandBrake?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (result == DialogResult.No)
+                {
                     e.Cancel = true;
+                    return;
+                }
 
                 // Try to safely close out if we can, or kill the cli if using in-gui status
                 if (Settings.Default.enocdeStatusInGui)
