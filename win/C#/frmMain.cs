@@ -176,7 +176,7 @@ namespace Handbrake
             queueRecovery();
 
             // If have a file passed in via command arguemtents, check it's a file and try scanning it.
-            if (args.Length >= 1 && File.Exists(args[0]))
+            if (args.Length >= 1 && (File.Exists(args[0]) || Directory.Exists(args[0])))
             {
                 this.StartScan(args[0], 0);
             }
