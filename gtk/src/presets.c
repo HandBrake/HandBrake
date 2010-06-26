@@ -4114,6 +4114,7 @@ ghb_refresh_preset(signal_user_data_t *ud)
 		if (!folder)
 		{
 			ud->dont_clear_presets = TRUE;
+			ud->scale_busy = TRUE;
 			// Temporarily set the video_quality range to (0,100)
 			// This is needed so the video_quality value does not get
 			// truncated when set.  The range will be readjusted below
@@ -4134,6 +4135,7 @@ ghb_refresh_preset(signal_user_data_t *ud)
 			{
 				preset_update_title_deps(ud, &tinfo);
 			}
+			ud->scale_busy = FALSE;
 			ghb_set_scale (ud, GHB_PIC_KEEP_PAR);
 			ud->dont_clear_presets = FALSE;
 
@@ -4192,6 +4194,7 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 		if (!folder)
 		{
 			ud->dont_clear_presets = TRUE;
+			ud->scale_busy = TRUE;
 			// Temporarily set the video_quality range to (0,100)
 			// This is needed so the video_quality value does not get
 			// truncated when set.  The range will be readjusted below
@@ -4212,6 +4215,7 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 			{
 				preset_update_title_deps(ud, &tinfo);
 			}
+			ud->scale_busy = FALSE;
 			ghb_set_scale (ud, GHB_PIC_KEEP_PAR);
 			ud->dont_clear_presets = FALSE;
 

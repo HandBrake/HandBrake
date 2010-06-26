@@ -3579,7 +3579,6 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	gint mod;
 	gint max_width = 0;
 	gint max_height = 0;
-	static gboolean busy = FALSE;
 	
 	g_debug("ghb_set_scale ()\n");
 	picture_settings_deps(ud);
@@ -3593,13 +3592,13 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	gint titleindex;
 
 	titleindex = ghb_settings_combo_int(ud->settings, "title");
-    title = hb_list_item( list, titleindex );
+	title = hb_list_item( list, titleindex );
 	if (title == NULL) return;
 	job   = title->job;
 	if (job == NULL) return;
 
-	if (busy) return;
-	busy = TRUE;
+	if (ud->scale_busy) return;
+	ud->scale_busy = TRUE;
 
 	if (!ud->dont_clear_presets && (keep_width || keep_height))
 	{
@@ -3724,15 +3723,9 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	width = MOD_ROUND(width, mod);
 	height = MOD_ROUND(height, mod);
 
-	// Adjust dims according to max values
-	if (max_height)
-		height = MIN(height, max_height);
-	if (max_width)
-		width = MIN(width, max_width);
-
+	job->anamorphic.mode = pic_par;
 	if (pic_par)
 	{
-		job->anamorphic.mode = pic_par;
 		// The scaler crashes if the dimensions are not divisible by 2
 		// Align mod 2.  And so does something in x264_encoder_headers()
 		job->modulus = mod;
@@ -3742,7 +3735,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		job->anamorphic.dar_height = 0;
 
 		if (keep_height && pic_par == 2)
-			width = ((double)height * crop_width / crop_height) + mod / 2;
+			width = ((double)height * crop_width / crop_height);
 		job->width = width;
 		job->height = height;
 		job->maxWidth = max_width;
@@ -3771,6 +3764,9 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		{
 			job->anamorphic.keep_display_aspect = 1;
 		}
+		// hb_set_anamorphic_size will adjust par, dar, and width/height
+		// to conform to job parameters that have been set, including 
+		// maxWidth and maxHeight
 		hb_set_anamorphic_size( job, &width, &height, 
 								&par_width, &par_height );
 		if (job->anamorphic.mode == 3 && !keep_aspect && 
@@ -3787,7 +3783,12 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	}
 	else 
 	{
-		job->anamorphic.mode = pic_par;
+		// Adjust dims according to max values
+		if (max_height)
+			height = MIN(height, max_height);
+		if (max_width)
+			width = MIN(width, max_width);
+
 		if (keep_aspect)
 		{
 			gdouble par;
@@ -3866,7 +3867,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	ghb_ui_update(ud, "PicturePARHeight", ghb_int64_value(par_height));
 	ghb_ui_update(ud, "PictureDisplayWidth", ghb_int64_value(disp_width));
 	ghb_ui_update(ud, "PictureDisplayHeight", ghb_int64_value(height));
-	busy = FALSE;
+	ud->scale_busy = FALSE;
 }
 
 static void

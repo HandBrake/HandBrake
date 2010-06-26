@@ -1408,6 +1408,7 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 		}
 	}
 	ud->dont_clear_presets = TRUE;
+	ud->scale_busy = TRUE;
 	update_title_duration(ud);
 	widget = GHB_WIDGET (ud->builder, "source_dimensions");
 	text = g_strdup_printf ("%d x %d", tinfo->width, tinfo->height);
@@ -1458,6 +1459,7 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 		ghb_ui_update(ud, "PictureLeftCrop", ghb_int64_value(tinfo->crop[2]));
 		ghb_ui_update(ud, "PictureRightCrop", ghb_int64_value(tinfo->crop[3]));
 	}
+	ud->scale_busy = FALSE;
 	ghb_set_scale (ud, GHB_PIC_KEEP_PAR);
 	gint width, height, crop[4];
 	crop[0] = ghb_settings_get_int(ud->settings, "PictureTopCrop");
