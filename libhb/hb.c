@@ -907,6 +907,11 @@ void hb_set_anamorphic_size( hb_job_t * job,
         - 3: Power user anamorphic, specify everything
     */
     int width, height;
+    int maxWidth, maxHeight;
+
+    maxWidth = MULTIPLE_MOD_DOWN( job->maxWidth, mod );
+    maxHeight = MULTIPLE_MOD_DOWN( job->maxHeight, mod );
+
     switch( job->anamorphic.mode )
     {
         case 1:
@@ -933,27 +938,24 @@ void hb_set_anamorphic_size( hb_job_t * job,
                If not, set job height to job width divided by storage aspect.
             */
 
-            if ( job->maxWidth && (job->maxWidth < job->width) )
-                width = job->maxWidth;
-
             /* Time to get picture width that divide cleanly.*/
             width  = MULTIPLE_MOD( width, mod);
 
-            /* Verify these new dimensions don't violate max height and width settings */
-            if ( job->maxWidth && (job->maxWidth < job->width) )
-                width = job->maxWidth;
+            if ( maxWidth && (maxWidth < job->width) )
+                width = maxWidth;
 
+            /* Verify these new dimensions don't violate max height and width settings */
             height = ((double)width / storage_aspect) + 0.5;
-            
-            if ( job->maxHeight && (job->maxHeight < height) )
-                height = job->maxHeight;
 
             /* Time to get picture height that divide cleanly.*/
             height = MULTIPLE_MOD( height, mod);
-
-            /* Verify these new dimensions don't violate max height and width settings */
-            if ( job->maxHeight && (job->maxHeight < height) )
-                height = job->maxHeight;
+            
+            if ( maxHeight && (maxHeight < height) )
+            {
+                height = maxHeight;
+                width = ((double)height * storage_aspect) + 0.5;
+                width  = MULTIPLE_MOD( width, mod);
+            }
 
             /* The film AR is the source's display width / cropped source height.
                The output display width is the output height * film AR.
@@ -971,28 +973,42 @@ void hb_set_anamorphic_size( hb_job_t * job,
                - Set everything based on specified values */
             
             /* Use specified storage dimensions */
+            storage_aspect = (double)job->width / (double)job->height;
             width = job->width;
             height = job->height;
-            
-            /* Bind to max dimensions */
-            if( job->maxWidth && width > job->maxWidth )
-                width = job->maxWidth;
-            if( job->maxHeight && height > job->maxHeight )
-                height = job->maxHeight;
             
             /* Time to get picture dimensions that divide cleanly.*/
             width  = MULTIPLE_MOD( width, mod);
             height = MULTIPLE_MOD( height, mod);
             
-            /* Verify we're still within max dimensions */
-            if( job->maxWidth && width > job->maxWidth )
-                width = job->maxWidth - (mod/2);
-            if( job->maxHeight && height > job->maxHeight )
-                height = job->maxHeight - (mod/2);
-                
-            /* Re-ensure we have picture dimensions that divide cleanly. */
-            width  = MULTIPLE_MOD( width, mod );
-            height = MULTIPLE_MOD( height, mod );
+            /* Bind to max dimensions */
+            if( maxWidth && width > maxWidth )
+            {
+                width = maxWidth;
+                // If we are keeping the display aspect, then we are going
+                // to be modifying the PAR anyway.  So it's preferred
+                // to let the width/height stray some from the original
+                // requested storage aspect.
+                //
+                // But otherwise, PAR and DAR will change the least
+                // if we stay as close as possible to the requested
+                // storage aspect.
+                if ( !job->anamorphic.keep_display_aspect )
+                {
+                    height = ((double)width / storage_aspect) + 0.5;
+                    height = MULTIPLE_MOD( height, mod);
+                }
+            }
+            if( maxHeight && height > maxHeight )
+            {
+                height = maxHeight;
+                // Ditto, see comment above
+                if ( !job->anamorphic.keep_display_aspect )
+                {
+                    width = ((double)height * storage_aspect) + 0.5;
+                    width  = MULTIPLE_MOD( width, mod);
+                }
+            }
             
             /* That finishes the storage dimensions. On to display. */            
             if( job->anamorphic.dar_width && job->anamorphic.dar_height )
