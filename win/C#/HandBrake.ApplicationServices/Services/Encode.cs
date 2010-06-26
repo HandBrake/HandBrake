@@ -57,6 +57,11 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private int processID;
 
+        /// <summary>
+        /// Windows 7 API Pack wrapper
+        /// </summary>
+        private Win7 windowsSeven = new Win7();
+
         /* Constructor */
 
         /// <summary>
@@ -276,6 +281,11 @@ namespace HandBrake.ApplicationServices.Services
 
             if (this.EncodeEnded != null)
                 this.EncodeEnded(this, new EventArgs());
+
+            if (windowsSeven.IsWindowsSeven)
+            {
+                windowsSeven.SetTaskBarProgressToNoProgress();
+            }
         }
 
         /// <summary>
@@ -601,6 +611,14 @@ namespace HandBrake.ApplicationServices.Services
 
             if (this.EncodeStatusChanged != null)
                 this.EncodeStatusChanged(this, eventArgs);
+
+            if (windowsSeven.IsWindowsSeven)
+            {
+                int percent;
+                int.TryParse(Math.Round(percentComplete).ToString(), out percent);
+
+                windowsSeven.SetTaskBarProgress(percent);
+            }
         }
     }
 }

@@ -47,6 +47,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libraries\Growl.CoreLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libraries\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libraries\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -73,6 +81,7 @@
     <Compile Include="Functions\GrowlCommunicator.cs" />
     <Compile Include="Functions\Main.cs" />
     <Compile Include="Functions\Win32.cs" />
+    <Compile Include="Functions\Win7.cs" />
     <Compile Include="Init.cs" />
     <Compile Include="Model\Cropping.cs" />
     <Compile Include="Model\Job.cs" />
@@ -114,20 +123,20 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\logo64.png" />
+    <EmbeddedResource Include="Resources\logo64.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ErrorX.png" />
+    <EmbeddedResource Include="Resources\ErrorX.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AssemblyInfo.cs.tmpl" />
-    <None Include="Resources\copy.png" />
+    <EmbeddedResource Include="Resources\copy.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\Microsoft\StyleCop\v4.3\Microsoft.StyleCop.targets" />
