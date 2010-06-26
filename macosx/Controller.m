@@ -6986,14 +6986,34 @@ return YES;
                 job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
                 if (job->keep_ratio == 1)
                 {
+                    int height = fTitle->height;
+
+                    if ( job->height && job->height < fTitle->height )
+                        height = job->height;
+
                     hb_fix_aspect( job, HB_KEEP_WIDTH );
-                    if( job->height > fTitle->height )
+                    // Make sure the resulting height is less than
+                    // the title height and less than the height
+                    // requested in the preset.
+                    if( job->height > height )
                     {
-                        job->height = fTitle->height;
+                        job->height = height;
                         hb_fix_aspect( job, HB_KEEP_HEIGHT );
                     }
                 }
                 job->anamorphic.mode = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
+                if ( job->anamorphic.mode > 0 )
+                {
+                    int w, h, par_w, par_h;
+
+                    job->anamorphic.par_width = fTitle->pixel_aspect_width;
+                    job->anamorphic.par_height = fTitle->pixel_aspect_height;
+                    job->maxWidth = job->width;
+                    job->maxHeight = job->height;
+                    hb_set_anamorphic_size( job, &w, &h, &par_w, &par_h );
+                    job->width = w;
+                    job->height = h;
+                }
                 
             }
             
