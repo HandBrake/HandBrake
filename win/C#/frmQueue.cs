@@ -62,6 +62,8 @@ namespace Handbrake
 
             queue.EncodeStarted += new EventHandler(queue_EncodeStarted);
             queue.EncodeEnded += new EventHandler(queue_EncodeEnded);
+
+            drp_completeOption.Text = Properties.Settings.Default.CompletionOption;
         }
 
         /// <summary>
@@ -686,6 +688,21 @@ namespace Handbrake
             e.Cancel = true;
             this.Hide();
             base.OnClosing(e);
+        }
+
+        /// <summary>
+        /// Change the OnComplete option setting.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The EventArgs.
+        /// </param>
+        private void CompleteOptionChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.CompletionOption = drp_completeOption.Text;
+            Properties.Settings.Default.Save();
         }
     }
 }

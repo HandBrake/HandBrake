@@ -50,6 +50,8 @@ namespace Handbrake
             this.mnu_export = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_readd = new System.Windows.Forms.ToolStripMenuItem();
+            this.drp_completeOption = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.SaveFile = new System.Windows.Forms.SaveFileDialog();
             this.list_queue = new System.Windows.Forms.ListView();
             this.Title = new System.Windows.Forms.ColumnHeader();
@@ -70,9 +72,10 @@ namespace Handbrake
             this.OpenFile = new System.Windows.Forms.OpenFileDialog();
             this.lbl_encodeStatus = new System.Windows.Forms.Label();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
             this.lbl_encodeOptions = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.toolStrip1.SuspendLayout();
             this.mnu_queue.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -127,11 +130,13 @@ namespace Handbrake
             this.btn_encode,
             this.btn_pause,
             this.toolStripSeparator1,
-            this.drop_button_queue});
+            this.drop_button_queue,
+            this.drp_completeOption,
+            this.toolStripButton1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip1.Size = new System.Drawing.Size(813, 39);
+            this.toolStrip1.Size = new System.Drawing.Size(789, 39);
             this.toolStrip1.TabIndex = 71;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -216,6 +221,34 @@ namespace Handbrake
             this.mnu_readd.ToolTipText = "Readds the currently encoding job back onto the queue.";
             this.mnu_readd.Click += new System.EventHandler(this.MnuReaddClick);
             // 
+            // drp_completeOption
+            // 
+            this.drp_completeOption.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.drp_completeOption.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drp_completeOption.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.drp_completeOption.Items.AddRange(new object[] {
+            "Do nothing",
+            "Shutdown",
+            "Suspend",
+            "Hibernate",
+            "Lock system",
+            "Log off",
+            "Quit HandBrake"});
+            this.drp_completeOption.Margin = new System.Windows.Forms.Padding(1, 0, 15, 0);
+            this.drp_completeOption.Name = "drp_completeOption";
+            this.drp_completeOption.Size = new System.Drawing.Size(155, 39);
+            this.drp_completeOption.SelectedIndexChanged += new System.EventHandler(this.CompleteOptionChanged);
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(76, 36);
+            this.toolStripButton1.Text = "When Done:";
+            // 
             // SaveFile
             // 
             this.SaveFile.Filter = "Batch|.bat";
@@ -237,7 +270,7 @@ namespace Handbrake
             this.list_queue.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.list_queue.Location = new System.Drawing.Point(15, 0);
             this.list_queue.Name = "list_queue";
-            this.list_queue.Size = new System.Drawing.Size(773, 214);
+            this.list_queue.Size = new System.Drawing.Size(759, 199);
             this.list_queue.TabIndex = 72;
             this.list_queue.UseCompatibleStateImageBehavior = false;
             this.list_queue.View = System.Windows.Forms.View.Details;
@@ -330,7 +363,8 @@ namespace Handbrake
             this.statusStrip1.Location = new System.Drawing.Point(0, 363);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 12, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(813, 22);
+            this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.statusStrip1.Size = new System.Drawing.Size(789, 22);
             this.statusStrip1.TabIndex = 73;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -357,6 +391,7 @@ namespace Handbrake
             // 
             // splitContainer1
             // 
+            this.splitContainer1.BackColor = System.Drawing.Color.Transparent;
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.Location = new System.Drawing.Point(0, 39);
@@ -365,6 +400,8 @@ namespace Handbrake
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.BackColor = System.Drawing.Color.Transparent;
+            this.splitContainer1.Panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.splitContainer1.Panel1.Controls.Add(this.lbl_encodeOptions);
             this.splitContainer1.Panel1.Controls.Add(this.label3);
             this.splitContainer1.Panel1.Controls.Add(this.lbl_dest);
@@ -375,27 +412,12 @@ namespace Handbrake
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.list_queue);
+            this.splitContainer1.Panel2.Controls.Add(this.panel3);
             this.splitContainer1.Panel2.Controls.Add(this.panel2);
             this.splitContainer1.Panel2.Controls.Add(this.panel1);
-            this.splitContainer1.Size = new System.Drawing.Size(813, 324);
+            this.splitContainer1.Size = new System.Drawing.Size(789, 324);
             this.splitContainer1.SplitterDistance = 106;
             this.splitContainer1.TabIndex = 74;
-            // 
-            // panel1
-            // 
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(15, 214);
-            this.panel1.TabIndex = 0;
-            // 
-            // panel2
-            // 
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel2.Location = new System.Drawing.Point(788, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(25, 214);
-            this.panel2.TabIndex = 1;
             // 
             // lbl_encodeOptions
             // 
@@ -406,11 +428,38 @@ namespace Handbrake
             this.lbl_encodeOptions.TabIndex = 74;
             this.lbl_encodeOptions.Text = "-";
             // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.Transparent;
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel2.Location = new System.Drawing.Point(774, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(15, 214);
+            this.panel2.TabIndex = 1;
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.Transparent;
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(15, 214);
+            this.panel1.TabIndex = 0;
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.Transparent;
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel3.Location = new System.Drawing.Point(15, 199);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(759, 15);
+            this.panel3.TabIndex = 73;
+            // 
             // frmQueue
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(813, 385);
+            this.ClientSize = new System.Drawing.Size(789, 385);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.toolStrip1);
@@ -474,5 +523,8 @@ namespace Handbrake
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lbl_encodeOptions;
+        private System.Windows.Forms.ToolStripComboBox drp_completeOption;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.Panel panel3;
     }
 }
