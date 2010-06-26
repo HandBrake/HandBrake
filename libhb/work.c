@@ -696,6 +696,7 @@ static void do_job( hb_job_t * job, int cpu_count )
 
     /*
      * Look for the scanned subtitle in the existing subtitle list
+     * select_subtitle implies that we did a scan.
      */
     if ( !job->indepth_scan && interjob->select_subtitle &&
          ( job->pass == 0 || job->pass == 2 ) )
@@ -703,8 +704,6 @@ static void do_job( hb_job_t * job, int cpu_count )
         /*
          * Disable forced subtitles if we didn't find any in the scan
          * so that we display normal subtitles instead.
-         *
-         * select_subtitle implies that we did a scan.
          */
         if( interjob->select_subtitle->config.force && 
             interjob->select_subtitle->forced_hits == 0 )
@@ -718,12 +717,14 @@ static void do_job( hb_job_t * job, int cpu_count )
             if( subtitle )
             {
                 /*
-                * Disable forced subtitles if we didn't find any in the scan
-                * so that we display normal subtitles instead.
-                *
-                * select_subtitle implies that we did a scan.
+                * Remove the scanned subtitle from the subtitle list if
+                * it would result in an identical duplicate subtitle track
+                * or an emty track (forced and no forced hits).
                 */
-                if( interjob->select_subtitle->id == subtitle->id )
+                if( ( interjob->select_subtitle->id == subtitle->id ) &&
+                    ( ( interjob->select_subtitle->forced_hits == 0 &&
+                        subtitle->config.force ) ||
+                    ( subtitle->config.force == interjob->select_subtitle->config.force ) ) )
                 {
                     *subtitle = *(interjob->select_subtitle);
                     free( interjob->select_subtitle );
