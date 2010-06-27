@@ -7011,6 +7011,8 @@ return YES;
                     job->maxWidth = job->width;
                     job->maxHeight = job->height;
                     hb_set_anamorphic_size( job, &w, &h, &par_w, &par_h );
+                    job->maxWidth = 0;
+                    job->maxHeight = 0;
                     job->width = w;
                     job->height = h;
                 }
