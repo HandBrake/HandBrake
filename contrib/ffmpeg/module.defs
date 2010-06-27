@@ -14,6 +14,7 @@ FFMPEG.CONFIGURE.extra = \
     --disable-ffserver \
     --disable-muxers \
     --disable-network \
+    --disable-vaapi \
     --enable-bzlib \
     --enable-encoder=ac3 \
     --enable-encoder=mpeg4 \
