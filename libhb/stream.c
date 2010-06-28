@@ -358,16 +358,54 @@ static int hb_stream_check_for_ts(const uint8_t *buf)
     return 0;
 }
 
-static int hb_stream_check_for_ps(const uint8_t *buf)
+static int hb_stream_check_for_ps(hb_stream_t *stream)
 {
+    uint8_t buf[2048*4];
+    uint8_t sc_buf[4];
+    int pos;
+    int hits = 0;
+
+    fseek(stream->file_handle, 0, SEEK_SET);
+
     // program streams should start with a PACK then some other mpeg start 
     // code (usually a SYS but that might be missing if we only have a clip). 
-    int offset = 0;
-
-    for ( offset = 0; offset < 8*1024-24; ++offset )
+    while (pos < 512 * 1024)
     {
-        if ( check_ps_sync( &buf[offset] ) && check_ps_sc( &buf[offset] ) )
-            return 1;
+        int offset;
+
+        if ( fread(buf, 1, sizeof(buf), stream->file_handle) != sizeof(buf) )
+            return 0;
+
+        for ( offset = 0; offset < 8*1024-27; ++offset )
+        {
+            if ( check_ps_sync( &buf[offset] ) && check_ps_sc( &buf[offset] ) )
+            {
+                int pes_offset, prev, data_len;
+                uint8_t sid;
+
+                if ( ++hits == 3 )
+                    return 1;
+                pes_offset = 14 + (buf[13] & 0x7);
+                sid = buf[pes_offset+3];
+                data_len = (buf[pes_offset+4] << 8) + buf[pes_offset+5];
+                if ( data_len && sid > 0xba && sid < 0xf9 )
+                {
+                    prev = ftell( stream->file_handle );
+                    pos = pes_offset + 6 + data_len + prev;
+                    fseek( stream->file_handle, pos, SEEK_SET );
+                    if ( fread(sc_buf, 1, 4, stream->file_handle) != 4 )
+                        return 0;
+                    if (sc_buf[0] == 0x00 && sc_buf[1] == 0x00 && 
+                        sc_buf[2] == 0x01)
+                    {
+                        return 1;
+                    }
+                    fseek( stream->file_handle, prev, SEEK_SET );
+                }
+            }
+        }
+        fseek( stream->file_handle, -27, SEEK_CUR );
+        pos = ftell( stream->file_handle );
     }
     return 0;
 }
@@ -383,7 +421,6 @@ static int hb_stream_check_for_dvd_ps(const uint8_t *buf)
 static int hb_stream_get_type(hb_stream_t *stream)
 {
     uint8_t buf[2048*4];
-    int i = 64;
 
     if ( fread(buf, 1, sizeof(buf), stream->file_handle) == sizeof(buf) )
     {
@@ -409,17 +446,12 @@ static int hb_stream_get_type(hb_stream_t *stream)
             stream->hb_stream_type = dvd_program;
             return 1;
         }
-        do
+        if ( hb_stream_check_for_ps(stream) != 0 )
         {
-            if ( hb_stream_check_for_ps(buf) != 0 )
-            {
-                hb_log("file is MPEG Program Stream");
-                stream->hb_stream_type = program;
-                return 1;
-            }
-            // Seek back to handle start codes that run over end of last buffer
-            fseek( stream->file_handle, -28, SEEK_CUR );
-        } while ( --i && fread(buf, 1, sizeof(buf), stream->file_handle) == sizeof(buf) );
+            hb_log("file is MPEG Program Stream");
+            stream->hb_stream_type = program;
+            return 1;
+        }
     }
     return 0;
 }
