@@ -3600,12 +3600,6 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	if (ud->scale_busy) return;
 	ud->scale_busy = TRUE;
 
-	if (!ud->dont_clear_presets && (keep_width || keep_height))
-	{
-		ghb_settings_set_int(ud->settings, "PictureWidth", 0);
-		ghb_settings_set_int(ud->settings, "PictureHeight", 0);
-	}
-
 	// First configure widgets
 	mod = ghb_settings_combo_int(ud->settings, "PictureModulus");
 	pic_par = ghb_settings_combo_int(ud->settings, "PicturePAR");
@@ -3708,10 +3702,13 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	{
 		width = ghb_settings_get_int(ud->settings, "scale_width");
 		height = ghb_settings_get_int(ud->settings, "scale_height");
-		max_width = MOD_DOWN(
-			ghb_settings_get_int(ud->settings, "PictureWidth"), mod);
-		max_height = MOD_DOWN(
-			ghb_settings_get_int(ud->settings, "PictureHeight"), mod);
+		if (mode & GHB_PIC_USE_MAX)
+		{
+			max_width = MOD_DOWN(
+				ghb_settings_get_int(ud->settings, "PictureWidth"), mod);
+			max_height = MOD_DOWN(
+				ghb_settings_get_int(ud->settings, "PictureHeight"), mod);
+		}
 	}
 	g_debug("max_width %d, max_height %d\n", max_width, max_height);
 

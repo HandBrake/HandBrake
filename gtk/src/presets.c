@@ -3062,7 +3062,6 @@ settings_save(signal_user_data_t *ud, const GValue *path)
 	GHashTableIter iter;
 	gchar *key;
 	GValue *value;
-	gboolean autoscale;
 	gint *indices, len, count;
 	gint *def_indices, def_len;
 	const gchar *name;
@@ -3105,7 +3104,6 @@ settings_save(signal_user_data_t *ud, const GValue *path)
 		}
 	}
 	current_preset = dict;
-	autoscale = ghb_settings_get_boolean(ud->settings, "autoscale");
 	ghb_settings_set_int64(ud->settings, "Type", PRESETS_CUSTOM);
 	ghb_settings_set_int64(ud->settings, "PresetBuildNumber", hb_get_build(NULL));
 
@@ -3117,21 +3115,8 @@ settings_save(signal_user_data_t *ud, const GValue *path)
 			&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&value))
 	{
 		const GValue *gval;
-		gchar *key2;
 
-		key2 = key;
-		if (!autoscale)
-		{
-			if (strcmp(key, "PictureWidth") == 0)
-			{
-				key2 = "scale_width";
-			}
-			else if (strcmp(key, "PictureHeight") == 0)
-			{
-				key2 = "scale_height";
-			}
-		}
-		gval = ghb_settings_get_value(ud->settings, key2);
+		gval = ghb_settings_get_value(ud->settings, key);
 		if (gval == NULL)
 		{
 			continue;
@@ -4136,7 +4121,7 @@ ghb_refresh_preset(signal_user_data_t *ud)
 				preset_update_title_deps(ud, &tinfo);
 			}
 			ud->scale_busy = FALSE;
-			ghb_set_scale (ud, GHB_PIC_KEEP_PAR);
+			ghb_set_scale (ud, GHB_PIC_KEEP_PAR|GHB_PIC_USE_MAX);
 			ud->dont_clear_presets = FALSE;
 
 			gdouble vqmin, vqmax, step, page;
@@ -4216,7 +4201,7 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 				preset_update_title_deps(ud, &tinfo);
 			}
 			ud->scale_busy = FALSE;
-			ghb_set_scale (ud, GHB_PIC_KEEP_PAR);
+			ghb_set_scale (ud, GHB_PIC_KEEP_PAR|GHB_PIC_USE_MAX);
 			ud->dont_clear_presets = FALSE;
 
 			gdouble vqmin, vqmax, step, page;

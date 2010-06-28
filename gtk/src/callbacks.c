@@ -1460,7 +1460,7 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 		ghb_ui_update(ud, "PictureRightCrop", ghb_int64_value(tinfo->crop[3]));
 	}
 	ud->scale_busy = FALSE;
-	ghb_set_scale (ud, GHB_PIC_KEEP_PAR);
+	ghb_set_scale (ud, GHB_PIC_KEEP_PAR|GHB_PIC_USE_MAX);
 	gint width, height, crop[4];
 	crop[0] = ghb_settings_get_int(ud->settings, "PictureTopCrop");
 	crop[1] = ghb_settings_get_int(ud->settings, "PictureBottomCrop");

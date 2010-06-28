@@ -59,6 +59,7 @@ typedef struct
 #define GHB_PIC_KEEP_DISPLAY_HEIGHT 0x08
 #define GHB_PIC_KEEP_DAR            0x10
 #define GHB_PIC_KEEP_PAR            0x20
+#define GHB_PIC_USE_MAX             0x40
 
 typedef struct
 {

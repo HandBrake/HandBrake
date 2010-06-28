@@ -40,6 +40,7 @@ dep_map = (
 	DepEntry("PictureDenoise", "PictureDenoiseCustom", "custom", False, True),
 	DepEntry("PictureDecomb", "PictureDecombCustom", "custom", False, True),
 	DepEntry("PictureDetelecine", "PictureDetelecineCustom", "custom", False, True),
+	DepEntry("autoscale", "PicturePresetBox", "FALSE", False, True),
 	DepEntry("PictureAutoCrop", "PictureTopCrop", "FALSE", False, False),
 	DepEntry("PictureAutoCrop", "PictureBottomCrop", "FALSE", False, False),
 	DepEntry("PictureAutoCrop", "PictureLeftCrop", "FALSE", False, False),
