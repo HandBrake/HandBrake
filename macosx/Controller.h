@@ -233,6 +233,10 @@ BOOL                        fIsDragging;
 	IBOutlet NSTextField         * fPresetNewName;
 	IBOutlet NSTextField         * fPresetNewDesc;
 	IBOutlet NSPopUpButton       * fPresetNewPicSettingsPopUp;
+    IBOutlet NSTextField         * fPresetNewPicWidth;
+    IBOutlet NSTextField         * fPresetNewPicHeight;
+    IBOutlet NSBox               * fPresetNewPicWidthHeightBox;
+    
     IBOutlet NSButton            * fPresetNewPicFiltersCheck;
     IBOutlet NSButton            * fPresetNewFolderCheck;
 	IBOutlet NSTextField         * fPresetSelectedDisplay;
@@ -423,6 +427,7 @@ BOOL                        fIsDragging;
 - (void) loadPresets;
 - (IBAction) customSettingUsed: (id) sender;
 - (IBAction) showAddPresetPanel: (id) sender;
+- (IBAction) addPresetPicDropdownChanged: (id) sender;
 - (IBAction) closeAddPresetPanel: (id) sender;
 - (NSDictionary *)createPreset;
 

@@ -7190,6 +7190,18 @@ return YES;
 }
 
 
+- (IBAction) addPresetPicDropdownChanged: (id) sender
+{
+    if ([fPresetNewPicSettingsPopUp indexOfSelectedItem] == 1)
+    {
+        [fPresetNewPicWidthHeightBox setHidden:NO];  
+    }
+    else
+    {
+        [fPresetNewPicWidthHeightBox setHidden:YES];
+    }
+}
+
 - (IBAction) showAddPresetPanel: (id) sender
 {
     /* Deselect the currently selected Preset if there is one*/
@@ -7198,7 +7210,7 @@ return YES;
     /* Populate the preset picture settings popup here */
     [fPresetNewPicSettingsPopUp removeAllItems];
     [fPresetNewPicSettingsPopUp addItemWithTitle:@"None"];
-    [fPresetNewPicSettingsPopUp addItemWithTitle:@"Current"];
+    [fPresetNewPicSettingsPopUp addItemWithTitle:@"Custom"];
     [fPresetNewPicSettingsPopUp addItemWithTitle:@"Source Maximum (post source scan)"];
     [fPresetNewPicSettingsPopUp selectItemAtIndex: 0];	
     /* Uncheck the preset use filters checkbox */
@@ -7208,6 +7220,12 @@ return YES;
     /* Erase info from the input fields*/
 	[fPresetNewName setStringValue: @""];
 	[fPresetNewDesc setStringValue: @""];
+    
+    /* Initialize custom height and width settings to current values */
+    
+	[fPresetNewPicWidth setStringValue: [NSString stringWithFormat:@"%d",fTitle->job->width]];
+	[fPresetNewPicHeight setStringValue: [NSString stringWithFormat:@"%d",fTitle->job->height]];
+    [self addPresetPicDropdownChanged:nil];
 	/* Show the panel */
 	[NSApp beginSheet:fAddPresetPanel modalForWindow:fWindow modalDelegate:nil didEndSelector:NULL contextInfo:NULL];
 }
@@ -7340,11 +7358,11 @@ return YES;
         [preset setObject:[NSNumber numberWithInt:[fVidTurboPassCheck state]] forKey:@"VideoTurboTwoPass"];
         /*Picture Settings*/
         hb_job_t * job = fTitle->job;
+        
         /* Picture Sizing */
-        /* Use Max Picture settings for whatever the dvd is.*/
         [preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
-        [preset setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
-        [preset setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
+        [preset setObject:[NSNumber numberWithInt:[fPresetNewPicWidth intValue]] forKey:@"PictureWidth"];
+        [preset setObject:[NSNumber numberWithInt:[fPresetNewPicHeight intValue]] forKey:@"PictureHeight"];
         [preset setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
         [preset setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.mode] forKey:@"PicturePAR"];
         [preset setObject:[NSNumber numberWithInt:fTitle->job->modulus] forKey:@"PictureModulus"];
