@@ -3157,6 +3157,20 @@ settings_save(signal_user_data_t *ud, const GValue *path)
 						ghb_boolean_value_new(FALSE));
 		presets_list_insert(ud, indices, len);
 	}
+	if (!ghb_settings_get_boolean( ud->settings, "PictureWidthEnable"))
+	{
+		ghb_dict_remove(dict, "PictureWidth");
+	}
+	if (!ghb_settings_get_boolean( ud->settings, "PictureHeightEnable"))
+	{
+		ghb_dict_remove(dict, "PictureHeight");
+	}
+	ghb_dict_insert(dict, g_strdup("autoscale"), 
+		ghb_boolean_value_new(
+			!ghb_settings_get_boolean( ud->settings, "PictureWidthEnable") &&
+			!ghb_settings_get_boolean( ud->settings, "PictureHeightEnable")
+		)
+	);
 	store_presets();
 	ud->dont_clear_presets = TRUE;
 	// Make the new preset the selected item
@@ -3541,7 +3555,7 @@ presets_new_folder_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	const gchar *description = "";
 	gint count, *indices, len;
 
-	g_debug("presets_save_clicked_cb ()");
+	g_debug("presets_new_folder_clicked_cb ()");
 	preset = ghb_settings_get_value (ud->settings, "preset_selection");
 
 	count = ghb_array_len(preset);
@@ -3556,12 +3570,12 @@ presets_new_folder_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	{
 		description = g_value_get_string(
 							ghb_dict_lookup(dict, "PresetDescription"));
-		ghb_ui_update(ud, "PresetDescription", ghb_string_value(description));
+		ghb_ui_update(ud, "FolderDescription", ghb_string_value(description));
 	}
 
-	desc = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "PresetDescription"));
-	dialog = GHB_WIDGET(ud->builder, "preset_save_dialog");
-	entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetName"));
+	desc = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "FolderDescription"));
+	dialog = GHB_WIDGET(ud->builder, "preset_new_folder_dialog");
+	entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "FolderName"));
 	gtk_entry_set_text(entry, name);
 	response = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_hide(dialog);
@@ -3586,7 +3600,8 @@ presets_new_folder_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 			}
 		}
 		ghb_array_append(dest, ghb_string_value_new(name));
-		ghb_widget_to_setting(ud->settings, GTK_WIDGET(desc));
+		GValue *val = ghb_widget_value(GTK_WIDGET(desc));
+		ghb_settings_set_value(ud->settings, "PresetDescription", val);
 		folder_save(ud, dest);
 		ghb_value_free(dest);
 	}
@@ -3615,6 +3630,23 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 		count = 1;
 
 	desc = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "PresetDescription"));
+	int width = ghb_settings_get_int(ud->settings, "PictureWidth");
+	int height = ghb_settings_get_int(ud->settings, "PictureHeight");
+	gboolean autoscale = ghb_settings_get_boolean(ud->settings, "autoscale");
+	ghb_ui_update(ud, "PictureWidthEnable", 
+		ghb_boolean_value(width!=0&&!autoscale));
+	ghb_ui_update(ud, "PictureHeightEnable", 
+		ghb_boolean_value(height!=0&&!autoscale));
+	if (!width)
+	{
+		width = ghb_settings_get_int(ud->settings, "scale_width");
+		ghb_ui_update(ud, "PictureWidth", ghb_int_value(width));
+	}
+	if (!height)
+	{
+		height = ghb_settings_get_int(ud->settings, "scale_height");
+		ghb_ui_update(ud, "PictureHeight", ghb_int_value(height));
+	}
 	dialog = GHB_WIDGET(ud->builder, "preset_save_dialog");
 	entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetName"));
 	gtk_entry_set_text(entry, name);
