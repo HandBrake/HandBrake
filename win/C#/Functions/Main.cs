@@ -833,5 +833,45 @@ namespace Handbrake.Functions
             exceptionWindow.Setup(shortError, longError);
             exceptionWindow.Show();
         }
+
+        /// <summary>
+        /// Get The Source from the CLI Query
+        /// </summary>
+        /// <param name="query">Full CLI Query</param>
+        /// <returns>The Source Path</returns>
+        public static string GetSourceFromQuery(string query)
+        {
+            int startIndex = query.IndexOf("-i \"");
+            if (startIndex != -1)
+            {
+                string input = query.Substring(startIndex).Replace("-i \"", string.Empty).Trim();
+
+                int closeIndex = input.IndexOf('"');
+
+                return closeIndex == -1 ? "Unknown" : input.Substring(0, closeIndex);
+            }
+
+            return "Unknown";
+        }
+
+        /// <summary>
+        /// Get the Destination from the CLI Query
+        /// </summary>
+        /// <param name="query">Full CLI Query</param>
+        /// <returns>The Destination path</returns>
+        public static string GetDestinationFromQuery(string query)
+        {
+            int startIndex = query.IndexOf("-o \"");
+            if (startIndex != -1)
+            {
+                string output = query.Substring(startIndex).Replace("-o \"", string.Empty).Trim();
+
+                int closeIndex = output.IndexOf('"');
+
+                return closeIndex == -1 ? "Unknown" : output.Substring(0, closeIndex);
+            }
+
+            return "Unknown";
+        }
     }
 }

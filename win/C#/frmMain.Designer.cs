@@ -39,7 +39,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -100,8 +100,10 @@ namespace Handbrake
             this.Label47 = new System.Windows.Forms.Label();
             this.Label3 = new System.Windows.Forms.Label();
             this.tab_audio = new System.Windows.Forms.TabPage();
+            this.AudioSettings = new Handbrake.Controls.AudioPanel();
             this.AudioMenuRowHeightHack = new System.Windows.Forms.ImageList(this.components);
             this.tab_video = new System.Windows.Forms.TabPage();
+            this.checkMaximumFramerate = new System.Windows.Forms.CheckBox();
             this.radio_cq = new System.Windows.Forms.RadioButton();
             this.radio_avgBitrate = new System.Windows.Forms.RadioButton();
             this.radio_targetFilesize = new System.Windows.Forms.RadioButton();
@@ -111,13 +113,17 @@ namespace Handbrake
             this.lbl_SliderValue = new System.Windows.Forms.Label();
             this.lbl_framerate = new System.Windows.Forms.Label();
             this.tab_picture = new System.Windows.Forms.TabPage();
+            this.PictureSettings = new Handbrake.Controls.PictureSettings();
             this.Check_ChapterMarkers = new System.Windows.Forms.CheckBox();
             this.tabs_panel = new System.Windows.Forms.TabControl();
             this.tab_filters = new System.Windows.Forms.TabPage();
+            this.Filters = new Handbrake.Controls.Filters();
             this.tab_subtitles = new System.Windows.Forms.TabPage();
+            this.Subtitles = new Handbrake.Controls.Subtitles();
             this.tab_chapters = new System.Windows.Forms.TabPage();
             this.label31 = new System.Windows.Forms.Label();
             this.tab_advanced = new System.Windows.Forms.TabPage();
+            this.x264Panel = new Handbrake.Controls.x264Panel();
             this.tab_query = new System.Windows.Forms.TabPage();
             this.btn_clear = new System.Windows.Forms.Button();
             this.label34 = new System.Windows.Forms.Label();
@@ -170,12 +176,6 @@ namespace Handbrake
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.openPreset = new System.Windows.Forms.OpenFileDialog();
             this.File_ChapterImport = new System.Windows.Forms.OpenFileDialog();
-            this.checkMaximumFramerate = new System.Windows.Forms.CheckBox();
-            this.PictureSettings = new Handbrake.Controls.PictureSettings();
-            this.Filters = new Handbrake.Controls.Filters();
-            this.AudioSettings = new Handbrake.Controls.AudioPanel();
-            this.Subtitles = new Handbrake.Controls.Subtitles();
-            this.x264Panel = new Handbrake.Controls.x264Panel();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
@@ -404,9 +404,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewCellStyle2.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle2;
             this.number.Frozen = true;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
@@ -825,6 +825,15 @@ namespace Handbrake
             this.tab_audio.Text = "Audio";
             this.tab_audio.UseVisualStyleBackColor = true;
             // 
+            // AudioSettings
+            // 
+            this.AudioSettings.BackColor = System.Drawing.Color.Transparent;
+            this.AudioSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AudioSettings.Location = new System.Drawing.Point(0, 0);
+            this.AudioSettings.Name = "AudioSettings";
+            this.AudioSettings.Size = new System.Drawing.Size(715, 310);
+            this.AudioSettings.TabIndex = 0;
+            // 
             // AudioMenuRowHeightHack
             // 
             this.AudioMenuRowHeightHack.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
@@ -857,6 +866,17 @@ namespace Handbrake
             this.tab_video.TabIndex = 2;
             this.tab_video.Text = "Video";
             this.tab_video.UseVisualStyleBackColor = true;
+            // 
+            // checkMaximumFramerate
+            // 
+            this.checkMaximumFramerate.AutoSize = true;
+            this.checkMaximumFramerate.BackColor = System.Drawing.Color.Transparent;
+            this.checkMaximumFramerate.Location = new System.Drawing.Point(125, 89);
+            this.checkMaximumFramerate.Name = "checkMaximumFramerate";
+            this.checkMaximumFramerate.Size = new System.Drawing.Size(132, 17);
+            this.checkMaximumFramerate.TabIndex = 19;
+            this.checkMaximumFramerate.Text = "Peak Framerate (VFR)";
+            this.checkMaximumFramerate.UseVisualStyleBackColor = false;
             // 
             // radio_cq
             // 
@@ -963,6 +983,18 @@ namespace Handbrake
             this.tab_picture.Text = "Picture";
             this.tab_picture.UseVisualStyleBackColor = true;
             // 
+            // PictureSettings
+            // 
+            this.PictureSettings.BackColor = System.Drawing.Color.Transparent;
+            this.PictureSettings.CurrentlySelectedPreset = null;
+            this.PictureSettings.Enabled = false;
+            this.PictureSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PictureSettings.Location = new System.Drawing.Point(0, 0);
+            this.PictureSettings.Name = "PictureSettings";
+            this.PictureSettings.PresetMaximumResolution = new System.Drawing.Size(0, 0);
+            this.PictureSettings.Size = new System.Drawing.Size(666, 279);
+            this.PictureSettings.TabIndex = 0;
+            // 
             // Check_ChapterMarkers
             // 
             this.Check_ChapterMarkers.AutoSize = true;
@@ -1002,6 +1034,15 @@ namespace Handbrake
             this.tab_filters.Text = "Video Filters";
             this.tab_filters.UseVisualStyleBackColor = true;
             // 
+            // Filters
+            // 
+            this.Filters.BackColor = System.Drawing.Color.Transparent;
+            this.Filters.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Filters.Location = new System.Drawing.Point(0, 0);
+            this.Filters.Name = "Filters";
+            this.Filters.Size = new System.Drawing.Size(713, 310);
+            this.Filters.TabIndex = 0;
+            // 
             // tab_subtitles
             // 
             this.tab_subtitles.Controls.Add(this.Subtitles);
@@ -1012,6 +1053,15 @@ namespace Handbrake
             this.tab_subtitles.TabIndex = 10;
             this.tab_subtitles.Text = "Subtitles";
             this.tab_subtitles.UseVisualStyleBackColor = true;
+            // 
+            // Subtitles
+            // 
+            this.Subtitles.BackColor = System.Drawing.Color.Transparent;
+            this.Subtitles.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Subtitles.Location = new System.Drawing.Point(0, 0);
+            this.Subtitles.Name = "Subtitles";
+            this.Subtitles.Size = new System.Drawing.Size(722, 310);
+            this.Subtitles.TabIndex = 0;
             // 
             // tab_chapters
             // 
@@ -1051,6 +1101,16 @@ namespace Handbrake
             this.tab_advanced.Text = "Advanced";
             this.tab_advanced.UseVisualStyleBackColor = true;
             // 
+            // x264Panel
+            // 
+            this.x264Panel.BackColor = System.Drawing.Color.Transparent;
+            this.x264Panel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.x264Panel.Location = new System.Drawing.Point(0, 0);
+            this.x264Panel.Name = "x264Panel";
+            this.x264Panel.Size = new System.Drawing.Size(720, 306);
+            this.x264Panel.TabIndex = 0;
+            this.x264Panel.X264Query = "";
+            // 
             // tab_query
             // 
             this.tab_query.Controls.Add(this.btn_clear);
@@ -1070,7 +1130,7 @@ namespace Handbrake
             this.btn_clear.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_clear.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_clear.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_clear.Location = new System.Drawing.Point(634, 75);
+            this.btn_clear.Location = new System.Drawing.Point(634, 104);
             this.btn_clear.Name = "btn_clear";
             this.btn_clear.Size = new System.Drawing.Size(75, 22);
             this.btn_clear.TabIndex = 4;
@@ -1081,19 +1141,18 @@ namespace Handbrake
             // label34
             // 
             this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(13, 36);
+            this.label34.Location = new System.Drawing.Point(13, 35);
             this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(367, 26);
+            this.label34.Size = new System.Drawing.Size(631, 52);
             this.label34.TabIndex = 1;
-            this.label34.Text = "Here you can alter the query generated by this program.\r\nDon\'t forget to re-gener" +
-                "ate this query should you change any GUI options.";
+            this.label34.Text = resources.GetString("label34.Text");
             // 
             // btn_generate_Query
             // 
             this.btn_generate_Query.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_generate_Query.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_generate_Query.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_generate_Query.Location = new System.Drawing.Point(16, 75);
+            this.btn_generate_Query.Location = new System.Drawing.Point(16, 104);
             this.btn_generate_Query.Name = "btn_generate_Query";
             this.btn_generate_Query.Size = new System.Drawing.Size(126, 22);
             this.btn_generate_Query.TabIndex = 2;
@@ -1115,9 +1174,9 @@ namespace Handbrake
             // rtf_query
             // 
             this.rtf_query.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.rtf_query.Location = new System.Drawing.Point(16, 103);
+            this.rtf_query.Location = new System.Drawing.Point(16, 132);
             this.rtf_query.Name = "rtf_query";
-            this.rtf_query.Size = new System.Drawing.Size(693, 190);
+            this.rtf_query.Size = new System.Drawing.Size(693, 161);
             this.rtf_query.TabIndex = 5;
             this.rtf_query.Text = "";
             // 
@@ -1616,66 +1675,6 @@ namespace Handbrake
             // File_ChapterImport
             // 
             this.File_ChapterImport.Filter = "CSV Files|*.csv";
-            // 
-            // checkMaximumFramerate
-            // 
-            this.checkMaximumFramerate.AutoSize = true;
-            this.checkMaximumFramerate.BackColor = System.Drawing.Color.Transparent;
-            this.checkMaximumFramerate.Location = new System.Drawing.Point(125, 89);
-            this.checkMaximumFramerate.Name = "checkMaximumFramerate";
-            this.checkMaximumFramerate.Size = new System.Drawing.Size(132, 17);
-            this.checkMaximumFramerate.TabIndex = 19;
-            this.checkMaximumFramerate.Text = "Peak Framerate (VFR)";
-            this.checkMaximumFramerate.UseVisualStyleBackColor = false;
-            // 
-            // PictureSettings
-            // 
-            this.PictureSettings.BackColor = System.Drawing.Color.Transparent;
-            this.PictureSettings.CurrentlySelectedPreset = null;
-            this.PictureSettings.Enabled = false;
-            this.PictureSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PictureSettings.Location = new System.Drawing.Point(0, 0);
-            this.PictureSettings.Name = "PictureSettings";
-            this.PictureSettings.PresetMaximumResolution = new System.Drawing.Size(0, 0);
-            this.PictureSettings.Size = new System.Drawing.Size(666, 279);
-            this.PictureSettings.TabIndex = 0;
-            // 
-            // Filters
-            // 
-            this.Filters.BackColor = System.Drawing.Color.Transparent;
-            this.Filters.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Filters.Location = new System.Drawing.Point(0, 0);
-            this.Filters.Name = "Filters";
-            this.Filters.Size = new System.Drawing.Size(713, 310);
-            this.Filters.TabIndex = 0;
-            // 
-            // AudioSettings
-            // 
-            this.AudioSettings.BackColor = System.Drawing.Color.Transparent;
-            this.AudioSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AudioSettings.Location = new System.Drawing.Point(0, 0);
-            this.AudioSettings.Name = "AudioSettings";
-            this.AudioSettings.Size = new System.Drawing.Size(715, 310);
-            this.AudioSettings.TabIndex = 0;
-            // 
-            // Subtitles
-            // 
-            this.Subtitles.BackColor = System.Drawing.Color.Transparent;
-            this.Subtitles.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Subtitles.Location = new System.Drawing.Point(0, 0);
-            this.Subtitles.Name = "Subtitles";
-            this.Subtitles.Size = new System.Drawing.Size(722, 310);
-            this.Subtitles.TabIndex = 0;
-            // 
-            // x264Panel
-            // 
-            this.x264Panel.BackColor = System.Drawing.Color.Transparent;
-            this.x264Panel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x264Panel.Location = new System.Drawing.Point(0, 0);
-            this.x264Panel.Name = "x264Panel";
-            this.x264Panel.Size = new System.Drawing.Size(720, 306);
-            this.x264Panel.TabIndex = 0;
-            this.x264Panel.X264Query = "";
             // 
             // frmMain
             // 

@@ -1130,36 +1130,47 @@ namespace Handbrake
         /// </param>
         private void btn_add2Queue_Click(object sender, EventArgs e)
         {
+            // Note, don't currently do checks for custom queries. Only GUI components.
+            // Make sure we have a Source and Destination.
             if (string.IsNullOrEmpty(sourcePath) || string.IsNullOrEmpty(text_destination.Text))
-                MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            else
             {
-                if (!Directory.Exists(Path.GetDirectoryName(text_destination.Text)))
-                {
-                    MessageBox.Show("Destination Path does not exist.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                string query = QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null);
-                if (rtf_query.Text != string.Empty)
-                    query = rtf_query.Text;
-
-                if (encodeQueue.CheckForDestinationDuplicate(text_destination.Text))
-                {
-                    DialogResult result =
-                        MessageBox.Show(
-                            "There is already a queue item for this destination path. \n\n If you continue, the encode will be overwritten. Do you wish to continue?",
-                            "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                    if (result == DialogResult.Yes)
-                        encodeQueue.Add(query, this.GetTitle(), sourcePath, text_destination.Text, (rtf_query.Text != string.Empty));
-                }
-                else
-                    encodeQueue.Add(query, this.GetTitle(), sourcePath, text_destination.Text, (rtf_query.Text != string.Empty));
-
-                lbl_encode.Text = encodeQueue.Count + " encode(s) pending in the queue";
-
-                queueWindow.Show();
+                MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
+
+            // Make sure the destination path exists.
+            if (!Directory.Exists(Path.GetDirectoryName(text_destination.Text)))
+            {
+                MessageBox.Show("Destination Path does not exist.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Get the CLI query or use the query editor if it's not empty.
+            string query = QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null);
+            if (!string.IsNullOrEmpty(rtf_query.Text )) 
+                query = rtf_query.Text;
+
+            // If we have a custom query, then we'll want to figure out what the new source and destination is, otherwise we'll just use the gui components.
+            string jobSourcePath = !string.IsNullOrEmpty(rtf_query.Text) ? Main.GetSourceFromQuery(rtf_query.Text) : sourcePath;
+            string jobDestination = !string.IsNullOrEmpty(rtf_query.Text) ? Main.GetDestinationFromQuery(rtf_query.Text): text_destination.Text;
+
+            // Make sure we don't have a duplciate on the queue.
+            if (encodeQueue.CheckForDestinationDuplicate(jobDestination))
+            {
+                DialogResult result =
+                    MessageBox.Show(
+                        "There is already a queue item for this destination path. \n\n If you continue, the encode will be overwritten. Do you wish to continue?",
+                        "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (result == DialogResult.Yes)
+                    encodeQueue.Add(query, this.GetTitle(), jobSourcePath, jobDestination, (rtf_query.Text != string.Empty));
+            }
+            else
+                encodeQueue.Add(query, this.GetTitle(), jobSourcePath, jobDestination, (rtf_query.Text != string.Empty));
+
+            lbl_encode.Text = encodeQueue.Count + " encode(s) pending in the queue";
+
+            queueWindow.Show();
+
         }
 
         /// <summary>
@@ -1765,7 +1776,7 @@ namespace Handbrake
             {
                 this.checkMaximumFramerate.Visible = false;
                 this.checkMaximumFramerate.CheckState = CheckState.Unchecked;
-            } 
+            }
             else
             {
                 this.checkMaximumFramerate.Visible = true;
