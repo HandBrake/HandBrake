@@ -538,7 +538,7 @@ namespace Handbrake
         /// </param>
         private void btn_new_preset_Click(object sender, EventArgs e)
         {
-            Form preset = new frmAddPreset(this, QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null),
+            Form preset = new frmAddPreset(this, QueryGenerator.GenerateQueryForPreset(this, QueryPictureSettingsMode.SourceMaximum, true, 0, 0),
                                            presetHandler);
             preset.ShowDialog();
         }
@@ -650,6 +650,7 @@ namespace Handbrake
         /// </param>
         private void pmnu_saveChanges_Click(object sender, EventArgs e)
         {
+            // TODO this requires a re-think since the Query Editor has changed.
             DialogResult result =
                 MessageBox.Show(
                     "Do you wish to include picture settings when updating the preset: " +
@@ -657,10 +658,10 @@ namespace Handbrake
                     MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
                 presetHandler.Update(treeView_presets.SelectedNode.Text,
-                                     QueryGenerator.GenerateTabbedComponentsQuery(this), true);
+                                     QueryGenerator.GenerateQueryForPreset(this, QueryPictureSettingsMode.SourceMaximum, true, 0, 0), true);
             else if (result == DialogResult.No)
                 presetHandler.Update(treeView_presets.SelectedNode.Text,
-                                     QueryGenerator.GenerateTabbedComponentsQuery(this), false);
+                                     QueryGenerator.GenerateQueryForPreset(this, QueryPictureSettingsMode.SourceMaximum, true, 0, 0), false);
         }
 
         /// <summary>
@@ -717,7 +718,8 @@ namespace Handbrake
         /// </param>
         private void btn_addPreset_Click(object sender, EventArgs e)
         {
-            Form preset = new frmAddPreset(this, QueryGenerator.GenerateTabbedComponentsQuery(this), presetHandler);
+            // TODO this requires a re-think due to the Query Editor Changing.
+            Form preset = new frmAddPreset(this, QueryGenerator.GenerateQueryForPreset(this, QueryPictureSettingsMode.SourceMaximum, true, 0, 0), presetHandler);
             preset.ShowDialog();
         }
 
@@ -922,7 +924,7 @@ namespace Handbrake
                     {
                         PresetLoader.LoadPreset(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
                         presetHandler.Update(parsed.PresetName + " (Imported)",
-                                             QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null),
+                                             QueryGenerator.GenerateFullQuery(this),
                                              parsed.UsesPictureSettings);
                     }
                 }
@@ -930,7 +932,7 @@ namespace Handbrake
                 {
                     PresetLoader.LoadPreset(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
                     if (presetHandler.Add(parsed.PresetName + " (Imported)",
-                                          QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null),
+                                          QueryGenerator.GenerateFullQuery(this),
                                           parsed.UsesPictureSettings))
                     {
                         TreeNode preset_treeview = new TreeNode(parsed.PresetName + " (Imported)")
@@ -1051,10 +1053,10 @@ namespace Handbrake
 
                 if (encodeQueue.Count != 0 || (!string.IsNullOrEmpty(jobSourcePath) && !string.IsNullOrEmpty(jobDestination)))
                 {
-                    string generatedQuery = QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null);
+                    string generatedQuery = QueryGenerator.GenerateFullQuery(this);
                     string specifiedQuery = rtf_query.Text != string.Empty
                                                 ? rtf_query.Text
-                                                : QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null);
+                                                : QueryGenerator.GenerateFullQuery(this);
                     string query = string.Empty;
 
                     // Check to make sure the generated query matches the GUI settings
@@ -1135,7 +1137,7 @@ namespace Handbrake
         private void btn_add2Queue_Click(object sender, EventArgs e)
         {
             // Get the CLI query or use the query editor if it's not empty.
-            string query = QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null);
+            string query = QueryGenerator.GenerateFullQuery(this);
             if (!string.IsNullOrEmpty(rtf_query.Text))
                 query = rtf_query.Text;
 
@@ -1955,7 +1957,7 @@ namespace Handbrake
         // Query Editor Tab
         private void btn_generate_Query_Click(object sender, EventArgs e)
         {
-            rtf_query.Text = QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null);
+            rtf_query.Text = QueryGenerator.GenerateFullQuery(this);
         }
 
         private void btn_clear_Click(object sender, EventArgs e)

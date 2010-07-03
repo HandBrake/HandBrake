@@ -11,30 +11,86 @@ namespace Handbrake.Functions
     using System.IO;
     using System.Windows.Forms;
 
+    using Handbrake.Model;
+
     /// <summary>
     /// Generate a CLI Query for HandBrakeCLI
     /// </summary>
     public class QueryGenerator
     {
-        /// <summary>
-        /// Generates a full CLI query for either encoding or previe encoeds if duration and preview are defined.
-        /// </summary>
-        /// <param name="mainWindow">
-        /// The Main Window
-        /// </param>
-        /// <param name="mode">
-        /// What Mode. (Point to Point Encoding)  Chapters, Seconds, Frames OR Preview Encode
-        /// </param>
-        /// <param name="duration">
-        /// Time in seconds for preview mode
-        /// </param>
-        /// <param name="preview">
-        /// Preview --start-at-preview (int) 
-        /// </param>
-        /// <returns>
-        /// CLI Query 
-        /// </returns>
-        public static string GenerateCliQuery(frmMain mainWindow, int mode, int duration, string preview)
+        public static string GenerateQueryForPreset(frmMain mainWindow, QueryPictureSettingsMode mode, bool filters, int width, int height)
+        {
+            string query = string.Empty;
+
+            query += GenerateTabbedComponentsQuery(mainWindow, filters, mode, width, height);
+
+            return query;
+        }
+
+        public static string GeneratePreviewQuery(frmMain mainWindow, int duration, string preview)
+        {
+            string query = string.Empty;
+
+            query += SourceQuery(mainWindow, 3, duration, preview);
+
+            query += DestinationQuery(mainWindow, QueryEncodeMode.Preview);
+
+            query += GenerateTabbedComponentsQuery(mainWindow, true, QueryPictureSettingsMode.UserInterfaceSettings, 0, 0);
+
+            return query;
+        }
+
+        public static string GenerateFullQuery(frmMain mainWindow)
+        {
+            string query = string.Empty;
+
+            query += SourceQuery(mainWindow, mainWindow.drop_mode.SelectedIndex, 0, null);
+
+            query += DestinationQuery(mainWindow, QueryEncodeMode.Standard);
+
+            query += GenerateTabbedComponentsQuery(mainWindow, true, QueryPictureSettingsMode.UserInterfaceSettings, 0, 0);
+
+            return query;
+        }
+
+        #region Individual Query Sections
+
+        private static string GenerateTabbedComponentsQuery(frmMain mainWindow, bool filters, QueryPictureSettingsMode mode, int width, int height)
+        {
+            string query = string.Empty;
+
+            // Output Settings
+            query += OutputSettingsQuery(mainWindow);
+
+            // Filters Panel
+            if (filters)
+                query += FiltersQuery(mainWindow);
+
+            // Picture Settings
+            query += PictureSettingsQuery(mainWindow, mode, width, height);
+
+            // Video Settings
+            query += VideoSettingsQuery(mainWindow);
+
+            // Audio Settings
+            query += AudioSettingsQuery(mainWindow);
+
+            // Subtitles Panel
+            query += mainWindow.Subtitles.GetCliQuery;
+
+            // Chapter Markers
+            query += ChapterMarkersQuery(mainWindow);
+
+            // X264 Panel
+            query += X264Query(mainWindow);
+
+            // Extra Settings
+            query += ExtraSettings();
+
+            return query;
+        }
+
+        private static string SourceQuery(frmMain mainWindow, int mode, int duration, string preview)
         {
             string query = string.Empty;
 
@@ -82,31 +138,32 @@ namespace Handbrake.Functions
                     query += " --previews " + Properties.Settings.Default.previewScanCount + " ";
                     query += " --start-at-preview " + preview;
                     query += " --stop-at duration:" + duration + " ";
-
-                    if (mainWindow.text_destination.Text != string.Empty)
-                        query += string.Format(" -o \"{0}\" ", mainWindow.text_destination.Text.Replace(".m", "_sample.m"));
                     break;
                 default:
                     break;
             }
-            if (mode != 3)
-                query += string.Format(" -o \"{0}\" ", mainWindow.text_destination.Text);
-
-            query += GenerateTabbedComponentsQuery(mainWindow);
 
             return query;
         }
 
-        /// <summary>
-        /// Generates part of the CLI query, for the tabbed components only.
-        /// </summary>
-        /// <param name="mainWindow">frmMain the main window</param>
-        /// <returns>The CLI Query for the Tab Screens on the main window</returns>
-        public static string GenerateTabbedComponentsQuery(frmMain mainWindow)
+        private static string DestinationQuery(frmMain mainWindow, QueryEncodeMode mode)
         {
             string query = string.Empty;
 
-            #region Output Settings Box
+            if (mode != QueryEncodeMode.Preview)
+                query += string.Format(" -o \"{0}\" ", mainWindow.text_destination.Text);
+            else
+            {
+                if (mainWindow.text_destination.Text != string.Empty)
+                    query += string.Format(" -o \"{0}\" ", mainWindow.text_destination.Text.Replace(".m", "_sample.m"));
+            }
+
+            return query;
+        }
+
+        private static string OutputSettingsQuery(frmMain mainWindow)
+        {
+            string query = string.Empty;
 
             query += " -f " + mainWindow.drop_format.Text.ToLower().Replace(" file", string.Empty);
 
@@ -120,17 +177,42 @@ namespace Handbrake.Functions
             if (mainWindow.check_optimiseMP4.Checked)
                 query += " -O ";
 
-            #endregion
+            return query;
+        }
 
-            #region Picture Settings Tab
+        private static string PictureSettingsQuery(frmMain mainWindow, QueryPictureSettingsMode mode, int width, int height)
+        {
+            string query = string.Empty;
 
-            if (mainWindow.PictureSettings.text_width.Value != 0)
-                if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex != 1) // Prevent usage for strict anamorphic
-                    query += " -w " + mainWindow.PictureSettings.text_width.Text;
+            if (mode == QueryPictureSettingsMode.UserInterfaceSettings)
+            {
+                if (mainWindow.PictureSettings.text_width.Value != 0)
+                    if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex != 1) // Prevent usage for strict anamorphic
+                        query += " -w " + mainWindow.PictureSettings.text_width.Text;
 
-            if (mainWindow.PictureSettings.text_height.Value != 0 && mainWindow.PictureSettings.text_height.Text != string.Empty)
-                    if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 0 || mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 3) // Prevent usage for strict anamorphic
+                if (mainWindow.PictureSettings.text_height.Value != 0 &&
+                    mainWindow.PictureSettings.text_height.Text != string.Empty)
+                    if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 0 ||
+                        mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 3) // Prevent usage for strict anamorphic
                         query += " -l " + mainWindow.PictureSettings.text_height.Text;
+            }
+            else if (mode == QueryPictureSettingsMode.Custom) // For Add Preset Only.
+            {
+                query += " -X " + width;
+                query += " -Y " + height;
+            }
+            else if (mode == QueryPictureSettingsMode.SourceMaximum) // For Add Preset Only.
+            {
+                if (mainWindow.PictureSettings.text_width.Value != 0)
+                    if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex != 1) // Prevent usage for strict anamorphic
+                        query += " -X " + mainWindow.PictureSettings.text_width.Text;
+
+                if (mainWindow.PictureSettings.text_height.Value != 0 &&
+                    mainWindow.PictureSettings.text_height.Text != string.Empty)
+                    if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 0 ||
+                        mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 3) // Prevent usage for strict anamorphic
+                        query += " -Y " + mainWindow.PictureSettings.text_height.Text;
+            }
 
             string cropTop = mainWindow.PictureSettings.crop_top.Text;
             string cropBottom = mainWindow.PictureSettings.crop_bottom.Text;
@@ -185,12 +267,17 @@ namespace Handbrake.Functions
                     break;
             }
 
-            #endregion
+            return query;
+        }
 
-            // Filters Panel
-            query += mainWindow.Filters.GetCliQuery;
+        private static string FiltersQuery(frmMain mainWindow)
+        {
+            return mainWindow.Filters.GetCliQuery;
+        }
 
-            #region Video Settings Tab
+        private static string VideoSettingsQuery(frmMain mainWindow)
+        {
+            string query = string.Empty;
 
             switch (mainWindow.drp_videoEncoder.Text)
             {
@@ -251,9 +338,12 @@ namespace Handbrake.Functions
             if (mainWindow.checkMaximumFramerate.Checked)
                 query += " --pfr ";
 
-            #endregion
+            return query;
+        }
 
-            #region Audio Settings Tab
+        private static string AudioSettingsQuery(frmMain mainWindow)
+        {
+            string query = string.Empty;
 
             DataGridView audioTracks = mainWindow.AudioSettings.GetAudioPanel();
             List<string> tracks = new List<string>();
@@ -398,12 +488,12 @@ namespace Handbrake.Functions
             if (audioItems.Trim() != String.Empty)
                 query += " -D " + audioItems;
 
-            #endregion
+            return query;
+        }
 
-            // Subtitles Panel
-            query += mainWindow.Subtitles.GetCliQuery;
-
-            #region Chapter Markers
+        private static string ChapterMarkersQuery(frmMain mainWindow)
+        {
+            string query = string.Empty;
 
             // Attach Source name and dvd title to the start of the chapters.csv filename.
             // This is for the queue. It allows different chapter name files for each title.
@@ -433,10 +523,19 @@ namespace Handbrake.Functions
                     query += " -m";
             }
 
-            #endregion
+            return query;
+        }
 
-            // X264 Panel
-            query += " -x " + mainWindow.x264Panel.X264Query;
+        private static string X264Query(frmMain mainWindow)
+        {
+            if (string.IsNullOrEmpty(mainWindow.x264Panel.X264Query)) return string.Empty;
+
+            return " -x " + mainWindow.x264Panel.X264Query;
+        }
+
+        private static string ExtraSettings()
+        {
+            string query = string.Empty;
 
             // Verbosity Level
             query += " -v " + Properties.Settings.Default.verboseLevel;
@@ -447,6 +546,10 @@ namespace Handbrake.Functions
 
             return query;
         }
+
+        #endregion
+
+        #region Helpers
 
         /// <summary>
         /// Return the CLI Mixdown name
@@ -533,5 +636,6 @@ namespace Handbrake.Functions
                 return false;
             }
         }
+        #endregion
     }
 }

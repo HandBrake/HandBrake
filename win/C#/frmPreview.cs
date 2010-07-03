@@ -219,7 +219,7 @@ namespace Handbrake
             this.Text += " (Encoding)";
             int duration;
             int.TryParse(cb_duration.Text, out duration);
-            string query = QueryGenerator.GenerateCliQuery(this.mainWindow, 3, duration, cb_preview.Text);
+            string query = QueryGenerator.GeneratePreviewQuery(this.mainWindow, duration, cb_preview.Text);
             ThreadPool.QueueUserWorkItem(this.CreatePreview, query);
         }
 
@@ -271,7 +271,7 @@ namespace Handbrake
                 this.Text += " (Encoding)";
                 int duration;
                 int.TryParse(cb_duration.Text, out duration);
-                string query = QueryGenerator.GenerateCliQuery(this.mainWindow, 3, duration, cb_preview.Text);
+                string query = QueryGenerator.GeneratePreviewQuery(this.mainWindow, duration, cb_preview.Text);
 
                 ThreadPool.QueueUserWorkItem(this.CreatePreview, query);
             }

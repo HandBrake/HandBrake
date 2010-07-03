@@ -217,6 +217,8 @@
       <DependentUpon>frmExceptionWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\ActivityLogMode.cs" />
+    <Compile Include="Model\QueryPictureSettingsMode.cs" />
+    <Compile Include="Model\QueryEncodeMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="frmPreview.cs">
       <SubType>Form</SubType>
