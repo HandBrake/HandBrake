@@ -35,7 +35,7 @@ namespace Handbrake
         // Windows ************************************************************
         private frmQueue queueWindow;
         private frmPreview qtpreview;
-        private frmActivityWindow ActivityWindow;
+        private frmActivityWindow activityWindow;
         private frmSplashScreen splash = new frmSplashScreen();
 
         // Globals: Mainly used for tracking. *********************************
@@ -44,7 +44,7 @@ namespace Handbrake
         private SourceType selectedSourceType;
         private string dvdDrivePath;
         private string dvdDriveLabel;
-        private Preset CurrentlySelectedPreset;
+        private Preset currentlySelectedPreset;
         private DVD currentSource;
         private IScan SourceScan = new ScanService();
         private List<DriveInformation> drives;
@@ -322,7 +322,7 @@ namespace Handbrake
         private void changePresetLabel(object sender, EventArgs e)
         {
             labelPreset.Text = "Output Settings (Preset: Custom)";
-            CurrentlySelectedPreset = null;
+            this.currentlySelectedPreset = null;
         }
 
         private static void frmMain_DragEnter(object sender, DragEventArgs e)
@@ -882,7 +882,7 @@ namespace Handbrake
                         x264Panel.SetCurrentSettingsInPanel();
 
                         // Finally, let this window have a copy of the preset settings.
-                        CurrentlySelectedPreset = preset;
+                        this.currentlySelectedPreset = preset;
                         PictureSettings.SetPresetCropWarningLabel(preset);
                     }
                 }
@@ -1033,8 +1033,7 @@ namespace Handbrake
                     // Pause The Queue
                     encodeQueue.Pause();
 
-                    if (Properties.Settings.Default.enocdeStatusInGui &&
-                        !Properties.Settings.Default.showCliForInGuiEncodeStatus)
+                    if (Settings.Default.enocdeStatusInGui && !Settings.Default.showCliForInGuiEncodeStatus)
                     {
                         encodeQueue.Stop();
                     }
@@ -1046,8 +1045,11 @@ namespace Handbrake
             }
             else
             {
-                if (encodeQueue.Count != 0 ||
-                    (!string.IsNullOrEmpty(sourcePath) && !string.IsNullOrEmpty(text_destination.Text)))
+                // If we have a custom query, then we'll want to figure out what the new source and destination is, otherwise we'll just use the gui components.
+                string jobSourcePath = !string.IsNullOrEmpty(rtf_query.Text) ? Main.GetSourceFromQuery(rtf_query.Text) : sourcePath;
+                string jobDestination = !string.IsNullOrEmpty(rtf_query.Text) ? Main.GetDestinationFromQuery(rtf_query.Text) : text_destination.Text;
+
+                if (encodeQueue.Count != 0 || (!string.IsNullOrEmpty(jobSourcePath) && !string.IsNullOrEmpty(jobDestination)))
                 {
                     string generatedQuery = QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null);
                     string specifiedQuery = rtf_query.Text != string.Empty
@@ -1091,17 +1093,19 @@ namespace Handbrake
                     }
 
                     DialogResult overwrite = DialogResult.Yes;
-                    if (text_destination.Text != string.Empty)
-                        if (File.Exists(text_destination.Text))
-                            overwrite =
-                                MessageBox.Show(
-                                    "The destination file already exists. Are you sure you want to overwrite it?",
-                                    "Overwrite File?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (!string.IsNullOrEmpty(jobDestination) && File.Exists(jobDestination))
+                    {
+                        overwrite = MessageBox.Show(
+                                "The destination file already exists. Are you sure you want to overwrite it?",
+                                "Overwrite File?",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Question);
+                    }
 
                     if (overwrite == DialogResult.Yes)
                     {
                         if (encodeQueue.Count == 0)
-                            encodeQueue.Add(query, this.GetTitle(), sourcePath, text_destination.Text, (rtf_query.Text != string.Empty));
+                            encodeQueue.Add(query, this.GetTitle(), jobSourcePath, jobDestination, (rtf_query.Text != string.Empty));
 
                         queueWindow.SetQueue();
                         if (encodeQueue.Count > 1)
@@ -1130,29 +1134,28 @@ namespace Handbrake
         /// </param>
         private void btn_add2Queue_Click(object sender, EventArgs e)
         {
-            // Note, don't currently do checks for custom queries. Only GUI components.
+            // Get the CLI query or use the query editor if it's not empty.
+            string query = QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null);
+            if (!string.IsNullOrEmpty(rtf_query.Text))
+                query = rtf_query.Text;
+
+            // If we have a custom query, then we'll want to figure out what the new source and destination is, otherwise we'll just use the gui components.
+            string jobSourcePath = !string.IsNullOrEmpty(rtf_query.Text) ? Main.GetSourceFromQuery(rtf_query.Text) : sourcePath;
+            string jobDestination = !string.IsNullOrEmpty(rtf_query.Text) ? Main.GetDestinationFromQuery(rtf_query.Text) : text_destination.Text;
+
             // Make sure we have a Source and Destination.
-            if (string.IsNullOrEmpty(sourcePath) || string.IsNullOrEmpty(text_destination.Text))
+            if (string.IsNullOrEmpty(jobSourcePath) || string.IsNullOrEmpty(jobDestination))
             {
                 MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             // Make sure the destination path exists.
-            if (!Directory.Exists(Path.GetDirectoryName(text_destination.Text)))
+            if (!Directory.Exists(Path.GetDirectoryName(jobDestination)))
             {
                 MessageBox.Show("Destination Path does not exist.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
-            // Get the CLI query or use the query editor if it's not empty.
-            string query = QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null);
-            if (!string.IsNullOrEmpty(rtf_query.Text )) 
-                query = rtf_query.Text;
-
-            // If we have a custom query, then we'll want to figure out what the new source and destination is, otherwise we'll just use the gui components.
-            string jobSourcePath = !string.IsNullOrEmpty(rtf_query.Text) ? Main.GetSourceFromQuery(rtf_query.Text) : sourcePath;
-            string jobDestination = !string.IsNullOrEmpty(rtf_query.Text) ? Main.GetDestinationFromQuery(rtf_query.Text): text_destination.Text;
 
             // Make sure we don't have a duplciate on the queue.
             if (encodeQueue.CheckForDestinationDuplicate(jobDestination))
@@ -1231,11 +1234,11 @@ namespace Handbrake
         /// </param>
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
         {
-            if (ActivityWindow == null || !ActivityWindow.IsHandleCreated)
-                ActivityWindow = new frmActivityWindow(encodeQueue, SourceScan);
+            if (this.activityWindow == null || !this.activityWindow.IsHandleCreated)
+                this.activityWindow = new frmActivityWindow(encodeQueue, SourceScan);
 
-            ActivityWindow.Show();
-            ActivityWindow.Activate();
+            this.activityWindow.Show();
+            this.activityWindow.Activate();
         }
 
         #endregion
@@ -1380,7 +1383,7 @@ namespace Handbrake
             {
                 selectedTitle = drp_dvdtitle.SelectedItem as Title;
                 lbl_duration.Text = selectedTitle.Duration.ToString();
-                PictureSettings.CurrentlySelectedPreset = CurrentlySelectedPreset;
+                PictureSettings.CurrentlySelectedPreset = this.currentlySelectedPreset;
                 PictureSettings.Source = selectedTitle; // Setup Picture Settings Tab Control
 
                 // Populate the Angles dropdown
@@ -1415,7 +1418,7 @@ namespace Handbrake
                     drop_chapterFinish.Text = drop_chapterFinish.Items[drop_chapterFinish.Items.Count - 1].ToString();
 
                 // Populate the Audio Channels Dropdown
-                AudioSettings.SetTrackList(selectedTitle, CurrentlySelectedPreset);
+                AudioSettings.SetTrackList(selectedTitle, this.currentlySelectedPreset);
 
                 // Populate the Subtitles dropdown
                 Subtitles.SetSubtitleTrackAuto(selectedTitle.Subtitles.ToArray());
@@ -2218,7 +2221,7 @@ namespace Handbrake
                 x264Panel.SetCurrentSettingsInPanel();
 
                 // Finally, let this window have a copy of the preset settings.
-                CurrentlySelectedPreset = null;
+                this.currentlySelectedPreset = null;
                 PictureSettings.SetPresetCropWarningLabel(null);
             }
         }
