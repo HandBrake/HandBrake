@@ -183,7 +183,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String (We can use this to tweak the appleTV output)*/
-    [preset setObject:@"cabac=0:ref=2:me=umh:b-adapt=2:weightb=0:trellis=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500" forKey:@"x264Option"];
+    [preset setObject:@"cabac=0:ref=2:me=umh:b-pyramid=none:b-adapt=2:weightb=0:trellis=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:2] forKey:@"VideoQualityType"];
@@ -233,7 +233,7 @@
     [audioTrack1Array setObject:[NSNumber numberWithInt:1] forKey:@"AudioTrack"];
     [audioTrack1Array setObject:@"AAC (faac)" forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"  forKey:@"AudioMixdown"];
-    [audioTrack1Array setObject:@"48" forKey:@"AudioSamplerate"];
+    [audioTrack1Array setObject:@"Auto" forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"160" forKey:@"AudioBitrate"];
     [audioTrack1Array setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackDRCSlider"];
     [audioTrack1Array autorelease];
@@ -276,7 +276,7 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
 
     /*Get the whether or not to apply pic settings in the AddPresetPanel*/
-    [preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
+    [preset setObject:[NSNumber numberWithInt:2] forKey:@"UsesPictureSettings"];
 
     /* Get the New Preset Description from the field in the AddPresetPanel */
     [preset setObject:@"HandBrake's deprecated settings for the AppleTV, including Dolby Digital 5.1 AC3 sound. Provides a good balance between quality and file size, and optimizes performance. This is the AppleTV preset from HandBrake 0.9.2, and while it is offered as a service to legacy users, it is no longer supported." forKey:@"PresetDescription"];
@@ -294,7 +294,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String (We can use this to tweak the appleTV output)*/
-    [preset setObject:@"ref=1:subme=5:me=umh:no-fast-pskip=1:cabac=0:weightb=0:8x8dct=0:trellis=0" forKey:@"x264Option"];
+    [preset setObject:@"ref=1:b-pyramid=none:subme=5:me=umh:no-fast-pskip=1:cabac=0:weightb=0:8x8dct=0:trellis=0" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
@@ -313,7 +313,6 @@
 
     /* Basic Picture Settings */
     /* Use Max Picture settings for whatever the dvd is.*/
-    [preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesMaxPictureSettings"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
@@ -344,7 +343,7 @@
     [audioTrack1Array setObject:[NSNumber numberWithInt:1] forKey:@"AudioTrack"];
     [audioTrack1Array setObject:@"AAC (faac)" forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"  forKey:@"AudioMixdown"];
-    [audioTrack1Array setObject:@"48" forKey:@"AudioSamplerate"];
+    [audioTrack1Array setObject:@"Auto" forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"160" forKey:@"AudioBitrate"];
     [audioTrack1Array setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackDRCSlider"];
     [audioTrack1Array autorelease];
@@ -456,7 +455,7 @@
     [audioTrack1Array setObject:[NSNumber numberWithInt:1] forKey:@"AudioTrack"];
     [audioTrack1Array setObject:@"AAC (faac)" forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"  forKey:@"AudioMixdown"];
-    [audioTrack1Array setObject:@"48" forKey:@"AudioSamplerate"];
+    [audioTrack1Array setObject:@"Auto" forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"160" forKey:@"AudioBitrate"];
     [audioTrack1Array setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackDRCSlider"];
     [audioTrack1Array autorelease];
@@ -569,7 +568,7 @@
     [audioTrack1Array setObject:[NSNumber numberWithInt:1] forKey:@"AudioTrack"];
     [audioTrack1Array setObject:@"AAC (faac)" forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"  forKey:@"AudioMixdown"];
-    [audioTrack1Array setObject:@"48" forKey:@"AudioSamplerate"];
+    [audioTrack1Array setObject:@"Auto" forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"160" forKey:@"AudioBitrate"];
     [audioTrack1Array setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackDRCSlider"];
     [audioTrack1Array autorelease];
@@ -598,7 +597,7 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
 
     /*Get the whether or not to apply pic settings in the AddPresetPanel*/
-    [preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
+    [preset setObject:[NSNumber numberWithInt:2] forKey:@"UsesPictureSettings"];
 
     /* Get the New Preset Description from the field in the AddPresetPanel */
     [preset setObject:@"HandBrake's traditional, faster, lower-quality settings." forKey:@"PresetDescription"];
@@ -632,7 +631,6 @@
 
     /*Picture Settings*/
     /* Use Max Picture settings for whatever the dvd is.*/
-    [preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesMaxPictureSettings"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureAutoCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
@@ -663,7 +661,7 @@
     [audioTrack1Array setObject:[NSNumber numberWithInt:1] forKey:@"AudioTrack"];
     [audioTrack1Array setObject:@"AAC (faac)" forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"  forKey:@"AudioMixdown"];
-    [audioTrack1Array setObject:@"48" forKey:@"AudioSamplerate"];
+    [audioTrack1Array setObject:@"Auto" forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"160" forKey:@"AudioBitrate"];
     [audioTrack1Array setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackDRCSlider"];
     [audioTrack1Array autorelease];
@@ -692,7 +690,7 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
 
     /*Get the whether or not to apply pic settings in the AddPresetPanel*/
-    [preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
+    [preset setObject:[NSNumber numberWithInt:2] forKey:@"UsesPictureSettings"];
 
     /* Get the New Preset Description from the field in the AddPresetPanel */
     [preset setObject:@"HandBrake's general-purpose preset for High Profile H.264 video, with all the bells and whistles." forKey:@"PresetDescription"];
@@ -727,7 +725,6 @@
 
     /*Picture Settings*/
     /* Use Max Picture settings for whatever the dvd is.*/
-    [preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesMaxPictureSettings"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureAutoCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
@@ -759,7 +756,7 @@
     [audioTrack1Array setObject:[NSNumber numberWithInt:1] forKey:@"AudioTrack"];
     [audioTrack1Array setObject:@"AAC (faac)" forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"  forKey:@"AudioMixdown"];
-    [audioTrack1Array setObject:@"48" forKey:@"AudioSamplerate"];
+    [audioTrack1Array setObject:@"Auto" forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"160" forKey:@"AudioBitrate"];
     [audioTrack1Array setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackDRCSlider"];
     [audioTrack1Array autorelease];
@@ -836,7 +833,6 @@
 
     /*Picture Settings*/
     /* Use a width of 480 for the iPhone*/
-    [preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
     [preset setObject:[NSNumber numberWithInt:480] forKey:@"PictureWidth"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureKeepRatio"];
@@ -867,7 +863,7 @@
     [audioTrack1Array setObject:[NSNumber numberWithInt:1] forKey:@"AudioTrack"];
     [audioTrack1Array setObject:@"AAC (faac)" forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"  forKey:@"AudioMixdown"];
-    [audioTrack1Array setObject:@"48" forKey:@"AudioSamplerate"];
+    [audioTrack1Array setObject:@"Auto" forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"128" forKey:@"AudioBitrate"];
     [audioTrack1Array setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackDRCSlider"];
     [audioTrack1Array autorelease];
@@ -930,7 +926,6 @@
 
     /*Picture Settings*/
     /* Use a width of 480 for the iPhone*/
-    [preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
     [preset setObject:[NSNumber numberWithInt:480] forKey:@"PictureWidth"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureKeepRatio"];
@@ -961,7 +956,7 @@
     [audioTrack1Array setObject:[NSNumber numberWithInt:1] forKey:@"AudioTrack"];
     [audioTrack1Array setObject:@"AAC (faac)" forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"  forKey:@"AudioMixdown"];
-    [audioTrack1Array setObject:@"48" forKey:@"AudioSamplerate"];
+    [audioTrack1Array setObject:@"Auto" forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"128" forKey:@"AudioBitrate"];
     [audioTrack1Array setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackDRCSlider"];
     [audioTrack1Array autorelease];
@@ -1024,7 +1019,6 @@
 
     /*Picture Settings*/
     /* Use a width of 640 for iPod TV-out */
-    [preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
     [preset setObject:[NSNumber numberWithInt:640] forKey:@"PictureWidth"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureKeepRatio"];
@@ -1055,7 +1049,7 @@
     [audioTrack1Array setObject:[NSNumber numberWithInt:1] forKey:@"AudioTrack"];
     [audioTrack1Array setObject:@"AAC (faac)" forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"  forKey:@"AudioMixdown"];
-    [audioTrack1Array setObject:@"48" forKey:@"AudioSamplerate"];
+    [audioTrack1Array setObject:@"Auto" forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"160" forKey:@"AudioBitrate"];
     [audioTrack1Array setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackDRCSlider"];
     [audioTrack1Array autorelease];
@@ -1118,7 +1112,6 @@
 
     /*Picture Settings*/
     /* Use a width of 320 for the iPod screen */
-    [preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureAutoCrop"];
     [preset setObject:[NSNumber numberWithInt:320] forKey:@"PictureWidth"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
@@ -1149,7 +1142,7 @@
     [audioTrack1Array setObject:[NSNumber numberWithInt:1] forKey:@"AudioTrack"];
     [audioTrack1Array setObject:@"AAC (faac)" forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"  forKey:@"AudioMixdown"];
-    [audioTrack1Array setObject:@"48" forKey:@"AudioSamplerate"];
+    [audioTrack1Array setObject:@"Auto" forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"160" forKey:@"AudioBitrate"];
     [audioTrack1Array setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackDRCSlider"];
     [audioTrack1Array autorelease];
@@ -1178,7 +1171,7 @@
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"Default"];
 
     /*Get the whether or not to apply pic settings in the AddPresetPanel*/
-    [preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
+    [preset setObject:[NSNumber numberWithInt:2] forKey:@"UsesPictureSettings"];
 
     /* Get the New Preset Description from the field in the AddPresetPanel */
     [preset setObject:@"HandBrake's normal, default settings." forKey:@"PresetDescription"];
@@ -1213,7 +1206,6 @@
 
     /*Picture Settings*/
     /* Use Max Picture settings for whatever the dvd is.*/
-    [preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesMaxPictureSettings"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureAutoCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureWidth"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
@@ -1244,7 +1236,7 @@
     [audioTrack1Array setObject:[NSNumber numberWithInt:1] forKey:@"AudioTrack"];
     [audioTrack1Array setObject:@"AAC (faac)" forKey:@"AudioEncoder"];
     [audioTrack1Array setObject:@"Dolby Pro Logic II"  forKey:@"AudioMixdown"];
-    [audioTrack1Array setObject:@"48" forKey:@"AudioSamplerate"];
+    [audioTrack1Array setObject:@"Auto" forKey:@"AudioSamplerate"];
     [audioTrack1Array setObject:@"160" forKey:@"AudioBitrate"];
     [audioTrack1Array setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackDRCSlider"];
     [audioTrack1Array autorelease];

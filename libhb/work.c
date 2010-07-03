@@ -525,6 +525,14 @@ static void do_job( hb_job_t * job, int cpu_count )
             free( audio );
             continue;
         }
+        if( audio->config.out.codec != HB_ACODEC_AC3 && 
+            audio->config.out.codec != HB_ACODEC_DCA &&
+            audio->config.out.samplerate > 48000 )
+        {
+            hb_log( "Sample rate %d not supported.  Down-sampling to 48kHz.",
+                    audio->config.out.samplerate );
+            audio->config.out.samplerate = 48000;
+        }
         if ( audio->config.in.codec == HB_ACODEC_FFMPEG )
         {
             if ( aud_id_uses[audio->id] )

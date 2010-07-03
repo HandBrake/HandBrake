@@ -166,8 +166,6 @@
 				<string>None</string>
 				<key>Type</key>
 				<integer>0</integer>
-				<key>UsesMaxPictureSettings</key>
-				<integer>0</integer>
 				<key>UsesPictureFilters</key>
 				<integer>1</integer>
 				<key>UsesPictureSettings</key>
@@ -252,8 +250,6 @@
 				<key>Subtitles</key>
 				<string>None</string>
 				<key>Type</key>
-				<integer>0</integer>
-				<key>UsesMaxPictureSettings</key>
 				<integer>0</integer>
 				<key>UsesPictureFilters</key>
 				<integer>1</integer>
@@ -468,7 +464,7 @@
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
-				<string>cabac=0:ref=2:me=umh:b-adapt=2:weightb=0:trellis=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500</string>
+				<string>cabac=0:ref=2:me=umh:b-pyramid=none:b-adapt=2:weightb=0:trellis=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500</string>
 			</dict>
 		</array>
 		<key>Default</key>
@@ -476,7 +472,7 @@
 		<key>Folder</key>
 		<true/>
 		<key>PresetBuildNumber</key>
-		<integer>2010061801</integer>
+		<integer>2010070201</integer>
 		<key>PresetName</key>
 		<string>Apple</string>
 		<key>Type</key>
@@ -543,12 +539,10 @@
 				<string>None</string>
 				<key>Type</key>
 				<integer>0</integer>
-				<key>UsesMaxPictureSettings</key>
-				<integer>1</integer>
 				<key>UsesPictureFilters</key>
 				<integer>1</integer>
 				<key>UsesPictureSettings</key>
-				<integer>1</integer>
+				<integer>2</integer>
 				<key>VFR</key>
 				<integer>0</integer>
 				<key>VideoAvgBitrate</key>
@@ -648,12 +642,10 @@
 				<string>None</string>
 				<key>Type</key>
 				<integer>0</integer>
-				<key>UsesMaxPictureSettings</key>
-				<integer>1</integer>
 				<key>UsesPictureFilters</key>
 				<integer>1</integer>
 				<key>UsesPictureSettings</key>
-				<integer>1</integer>
+				<integer>2</integer>
 				<key>VideoAvgBitrate</key>
 				<string>1800</string>
 				<key>VideoEncoder</key>
@@ -681,7 +673,7 @@
 		<key>Folder</key>
 		<true/>
 		<key>PresetBuildNumber</key>
-		<integer>2010061801</integer>
+		<integer>2010070201</integer>
 		<key>PresetName</key>
 		<string>Regular</string>
 		<key>Type</key>
@@ -748,12 +740,10 @@
 				<string>None</string>
 				<key>Type</key>
 				<integer>0</integer>
-				<key>UsesMaxPictureSettings</key>
-				<integer>1</integer>
 				<key>UsesPictureFilters</key>
 				<integer>1</integer>
 				<key>UsesPictureSettings</key>
-				<integer>1</integer>
+				<integer>2</integer>
 				<key>VFR</key>
 				<integer>0</integer>
 				<key>VideoAvgBitrate</key>
@@ -849,12 +839,10 @@
 				<string>None</string>
 				<key>Type</key>
 				<integer>0</integer>
-				<key>UsesMaxPictureSettings</key>
-				<integer>1</integer>
 				<key>UsesPictureFilters</key>
 				<integer>1</integer>
 				<key>UsesPictureSettings</key>
-				<integer>1</integer>
+				<integer>2</integer>
 				<key>VFR</key>
 				<integer>0</integer>
 				<key>VideoAvgBitrate</key>
@@ -874,7 +862,7 @@
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
-				<string>ref=1:subme=5:me=umh:no-fast-pskip=1:cabac=0:weightb=0:8x8dct=0:trellis=0</string>
+				<string>ref=1:b-pyramid=none:subme=5:me=umh:no-fast-pskip=1:cabac=0:weightb=0:8x8dct=0:trellis=0</string>
 			</dict>
 			<dict>
 				<key>AudioList</key>
@@ -935,8 +923,6 @@
 				<key>Subtitles</key>
 				<string>None</string>
 				<key>Type</key>
-				<integer>0</integer>
-				<key>UsesMaxPictureSettings</key>
 				<integer>0</integer>
 				<key>UsesPictureFilters</key>
 				<integer>1</integer>
@@ -1023,8 +1009,6 @@
 				<string>None</string>
 				<key>Type</key>
 				<integer>0</integer>
-				<key>UsesMaxPictureSettings</key>
-				<integer>0</integer>
 				<key>UsesPictureFilters</key>
 				<integer>1</integer>
 				<key>UsesPictureSettings</key>
@@ -1056,7 +1040,7 @@
 		<key>Folder</key>
 		<true/>
 		<key>PresetBuildNumber</key>
-		<integer>2010061801</integer>
+		<integer>2010070201</integer>
 		<key>PresetName</key>
 		<string>Legacy</string>
 		<key>Type</key>

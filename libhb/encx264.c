@@ -123,9 +123,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         }
     }
     
-    /* Temporary hack to use old b-pyramid default */
-    param.i_bframe_pyramid = X264_B_PYRAMID_NONE;
-
     /* Enable metrics */
     param.analyse.b_psnr = 1;
     param.analyse.b_ssim = 1;
@@ -219,18 +216,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
             {
                 *value = 0;
                 value++;
-            }
-
-            if( !( strcmp( name, "b-pyramid" ) ) )
-            {
-                if( value == NULL || !strcmp( value, "1" ) )
-                {
-                    value = "normal";
-                }
-                else if( !strcmp( value, "0" ) )
-                {
-                    value = "none";
-                }
             }
 
             /* Here's where the strings are passed to libx264 for parsing. */
