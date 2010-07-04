@@ -5,8 +5,6 @@
 
 namespace Handbrake.Presets
 {
-    using System.Windows.Controls;
-
     /// <summary>
     /// A Preset
     /// </summary>
@@ -30,7 +28,7 @@ namespace Handbrake.Presets
         /// <summary>
         /// Gets or sets a value indicating whether to use picture Settings in presets.
         /// </summary>
-        public bool PictureSettings { get; set; }
+        public bool CropSettings { get; set; }
 
         /// <summary>
         /// Gets or sets The version number which associates this preset with a HB build

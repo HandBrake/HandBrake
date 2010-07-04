@@ -29,7 +29,7 @@ namespace Handbrake.Functions
         /// <param name="pictureSettings">
         /// Save picture settings in the preset
         /// </param>
-        public static void LoadPreset(frmMain mainWindow, QueryParser presetQuery, string name, bool pictureSettings)
+        public static void LoadPreset(frmMain mainWindow, QueryParser presetQuery, string name)
         {
             #region Source
 
@@ -83,22 +83,19 @@ namespace Handbrake.Functions
             #region Picture
 
             mainWindow.PictureSettings.check_autoCrop.Checked = true;
-            if (pictureSettings) // only Load picture settings if the perset requires it
+            if (presetQuery.CropValues != null)
             {
-                if (presetQuery.CropValues != null)
-                {
-                    int top, bottom, left, right;
-                    int.TryParse(presetQuery.CropTop, out top);
-                    int.TryParse(presetQuery.CropBottom, out bottom);
-                    int.TryParse(presetQuery.CropLeft, out left);
-                    int.TryParse(presetQuery.CropRight, out right);
+                int top, bottom, left, right;
+                int.TryParse(presetQuery.CropTop, out top);
+                int.TryParse(presetQuery.CropBottom, out bottom);
+                int.TryParse(presetQuery.CropLeft, out left);
+                int.TryParse(presetQuery.CropRight, out right);
 
-                    mainWindow.PictureSettings.check_customCrop.Checked = true;
-                    mainWindow.PictureSettings.crop_top.Value = top;
-                    mainWindow.PictureSettings.crop_bottom.Value = bottom;
-                    mainWindow.PictureSettings.crop_left.Value = left;
-                    mainWindow.PictureSettings.crop_right.Value = right;
-                }
+                mainWindow.PictureSettings.check_customCrop.Checked = true;
+                mainWindow.PictureSettings.crop_top.Value = top;
+                mainWindow.PictureSettings.crop_bottom.Value = bottom;
+                mainWindow.PictureSettings.crop_left.Value = left;
+                mainWindow.PictureSettings.crop_right.Value = right;
             }
 
             // Set the anamorphic mode 0,1,2,3

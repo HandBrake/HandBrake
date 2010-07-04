@@ -46,6 +46,11 @@ namespace Handbrake.Presets
         private List<Preset> userPresets = new List<Preset>();
 
         /// <summary>
+        ///  Last preset added
+        /// </summary>
+        public Preset LastPresetAdded { get; set; }
+
+        /// <summary>
         /// Add a new preset to the system
         /// </summary>
         /// <param name="presetName">
@@ -68,11 +73,12 @@ namespace Handbrake.Presets
                                        {
                                            Name = presetName, 
                                            Query = query, 
-                                           PictureSettings = pictureSettings, 
+                                           CropSettings = pictureSettings, 
                                            Version = Properties.Settings.Default.hb_version
                                        };
                 this.userPresets.Add(newPreset);
                 this.UpdatePresetFiles();
+                this.LastPresetAdded = newPreset;
                 return true;
             }
             return false;
@@ -135,7 +141,7 @@ namespace Handbrake.Presets
                 if (item.Name == presetName)
                 {
                     item.Query = query;
-                    item.PictureSettings = pictureSettings;
+                    item.CropSettings = pictureSettings;
                     MessageBox.Show(
                         "Changes to \"" + presetName + "\" Saved",
                                     "Success",
@@ -216,7 +222,7 @@ namespace Handbrake.Presets
                                                    Name = presetName[0].Replace("+", string.Empty).Trim(), 
                                                    Query = presetName[2], 
                                                    Version = Properties.Settings.Default.hb_version, 
-                                                   PictureSettings = pic
+                                                   CropSettings = pic
                                                };
                         this.presets.Add(newPreset);
                     }

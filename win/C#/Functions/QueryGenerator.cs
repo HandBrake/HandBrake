@@ -219,7 +219,7 @@ namespace Handbrake.Functions
             string cropLeft = mainWindow.PictureSettings.crop_left.Text;
             string cropRight = mainWindow.PictureSettings.crop_right.Text;
 
-            if (mainWindow.PictureSettings.check_customCrop.Checked)
+            if (mainWindow.PictureSettings.check_customCrop.Checked && mode != QueryPictureSettingsMode.None)
             {
                 if (mainWindow.PictureSettings.crop_top.Text == string.Empty)
                     cropTop = "0";

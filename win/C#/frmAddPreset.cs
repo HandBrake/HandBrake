@@ -6,8 +6,11 @@
 namespace Handbrake
 {
     using System;
-    using System.Drawing;
     using System.Windows.Forms;
+
+    using Handbrake.Functions;
+    using Handbrake.Model;
+
     using Presets;
 
     /// <summary>
@@ -15,9 +18,6 @@ namespace Handbrake
     /// </summary>
     public partial class frmAddPreset : Form
     {
-        /// <summary>
-        /// The Main  Window
-        /// </summary>
         private readonly frmMain mainWindow;
 
         /// <summary>
@@ -26,28 +26,19 @@ namespace Handbrake
         private readonly PresetsHandler presetCode;
 
         /// <summary>
-        /// The CLI Query
-        /// </summary>
-        private readonly string query = string.Empty;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="frmAddPreset"/> class.
         /// </summary>
-        /// <param name="fmw">
-        /// The fmw.
-        /// </param>
-        /// <param name="queryString">
-        /// The query string.
-        /// </param>
+        /// <param name="mainWindow"></param>
         /// <param name="presetHandler">
         /// The preset handler.
         /// </param>
-        public frmAddPreset(frmMain fmw, string queryString, PresetsHandler presetHandler)
+        public frmAddPreset(frmMain mainWindow, PresetsHandler presetHandler)
         {
             InitializeComponent();
-            mainWindow = fmw;
+            this.mainWindow = mainWindow;
             presetCode = presetHandler;
-            this.query = queryString;
+
+            cb_usePictureSettings.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -61,11 +52,34 @@ namespace Handbrake
         /// </param>
         private void BtnAddClick(object sender, EventArgs e)
         {
-            if (presetCode.Add(txt_preset_name.Text.Trim(), query, check_pictureSettings.Checked))
+            if (string.IsNullOrEmpty(txt_preset_name.Text.Trim()))
             {
-                TreeNode presetTreeview = new TreeNode(txt_preset_name.Text.Trim()) {ForeColor = Color.Black};
-                mainWindow.treeView_presets.Nodes.Add(presetTreeview);
-                this.Close();
+                MessageBox.Show("You must enter a preset name!", "Warning",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);                
+                return;
+            }
+
+            QueryPictureSettingsMode pictureSettingsMode;
+
+            switch (cb_usePictureSettings.SelectedIndex)
+            {
+                case 0:
+                    pictureSettingsMode = QueryPictureSettingsMode.None;
+                    break;
+                case 1:
+                    pictureSettingsMode = QueryPictureSettingsMode.SourceMaximum;
+                    break;
+                default:
+                    pictureSettingsMode = QueryPictureSettingsMode.None;
+                    break;
+            }
+
+            string query = QueryGenerator.GenerateQueryForPreset(mainWindow, pictureSettingsMode, check_useFilters.Checked, 0, 0);
+
+            if (presetCode.Add(txt_preset_name.Text.Trim(), query, pictureSettingsMode != QueryPictureSettingsMode.None))
+            {
+                this.DialogResult = DialogResult.OK;
+                this.Close();           
             }
             else
                 MessageBox.Show("Sorry, that preset name already exists. Please choose another!", "Warning", 
@@ -83,6 +97,7 @@ namespace Handbrake
         /// </param>
         private void BtnCancelClick(object sender, EventArgs e)
         {
+            this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
     }

@@ -152,8 +152,7 @@ namespace Handbrake
                     x264Panel.Reset2Defaults();
 
                     QueryParser presetQuery = QueryParser.Parse(query);
-                    PresetLoader.LoadPreset(this, presetQuery, Properties.Settings.Default.defaultPreset,
-                                            presetHandler.GetPreset(Properties.Settings.Default.defaultPreset).PictureSettings);
+                    PresetLoader.LoadPreset(this, presetQuery, Properties.Settings.Default.defaultPreset);
 
                     x264Panel.StandardizeOptString();
                     x264Panel.SetCurrentSettingsInPanel();
@@ -538,9 +537,13 @@ namespace Handbrake
         /// </param>
         private void btn_new_preset_Click(object sender, EventArgs e)
         {
-            Form preset = new frmAddPreset(this, QueryGenerator.GenerateQueryForPreset(this, QueryPictureSettingsMode.SourceMaximum, true, 0, 0),
-                                           presetHandler);
-            preset.ShowDialog();
+            Form preset = new frmAddPreset(this, presetHandler);
+            if (preset.ShowDialog() == DialogResult.OK)
+            {
+                TreeNode presetTreeview = new TreeNode(presetHandler.LastPresetAdded.Name) { ForeColor = Color.Black };
+                treeView_presets.Nodes.Add(presetTreeview);
+                presetHandler.LastPresetAdded = null;
+            }
         }
 
         #endregion
@@ -718,9 +721,13 @@ namespace Handbrake
         /// </param>
         private void btn_addPreset_Click(object sender, EventArgs e)
         {
-            // TODO this requires a re-think due to the Query Editor Changing.
-            Form preset = new frmAddPreset(this, QueryGenerator.GenerateQueryForPreset(this, QueryPictureSettingsMode.SourceMaximum, true, 0, 0), presetHandler);
-            preset.ShowDialog();
+            Form preset = new frmAddPreset(this, presetHandler);
+            if (preset.ShowDialog() == DialogResult.OK)
+            {
+                TreeNode presetTreeview = new TreeNode(presetHandler.LastPresetAdded.Name) { ForeColor = Color.Black };
+                treeView_presets.Nodes.Add(presetTreeview);
+                presetHandler.LastPresetAdded = null;
+            }
         }
 
         /// <summary>
@@ -866,7 +873,6 @@ namespace Handbrake
                 if (preset != null)
                 {
                     string query = presetHandler.GetPreset(presetName).Query;
-                    bool loadPictureSettings = presetHandler.GetPreset(presetName).PictureSettings;
 
                     if (query != null)
                     {
@@ -877,7 +883,7 @@ namespace Handbrake
                         QueryParser presetQuery = QueryParser.Parse(query);
 
                         // Now load the preset
-                        PresetLoader.LoadPreset(this, presetQuery, presetName, loadPictureSettings);
+                        PresetLoader.LoadPreset(this, presetQuery, presetName);
 
                         // The x264 widgets will need updated, so do this now:
                         x264Panel.StandardizeOptString();
@@ -922,7 +928,7 @@ namespace Handbrake
                                         MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
                     {
-                        PresetLoader.LoadPreset(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
+                        PresetLoader.LoadPreset(this, parsed, parsed.PresetName);
                         presetHandler.Update(parsed.PresetName + " (Imported)",
                                              QueryGenerator.GenerateFullQuery(this),
                                              parsed.UsesPictureSettings);
@@ -930,7 +936,7 @@ namespace Handbrake
                 }
                 else
                 {
-                    PresetLoader.LoadPreset(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
+                    PresetLoader.LoadPreset(this, parsed, parsed.PresetName);
                     if (presetHandler.Add(parsed.PresetName + " (Imported)",
                                           QueryGenerator.GenerateFullQuery(this),
                                           parsed.UsesPictureSettings))
@@ -2216,7 +2222,7 @@ namespace Handbrake
                 QueryParser presetQuery = QueryParser.Parse(query);
 
                 // Now load the preset
-                PresetLoader.LoadPreset(this, presetQuery, "Load Back From Queue", true);
+                PresetLoader.LoadPreset(this, presetQuery, "Load Back From Queue");
 
                 // The x264 widgets will need updated, so do this now:
                 x264Panel.StandardizeOptString();

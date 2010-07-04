@@ -610,7 +610,7 @@ namespace Handbrake.Controls
             this.lbl_presetCropWarning.TabIndex = 118;
             this.lbl_presetCropWarning.Text = "( Preset values are in use! )";
             // 
-            // PictureSettings
+            // CropSettings
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.BackColor = System.Drawing.Color.Transparent;

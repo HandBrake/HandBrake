@@ -81,11 +81,16 @@ namespace Handbrake.Controls
         /// </param>
         public void SetPresetCropWarningLabel(Preset selectedPreset)
         {
-            lbl_presetCropWarning.Visible = true;
-            if (selectedPreset != null && selectedPreset.PictureSettings == false)
+            if (this.check_customCrop.Checked)
+            {
+                lbl_presetCropWarning.Visible = true;
+                if (selectedPreset != null && selectedPreset.CropSettings == false) lbl_presetCropWarning.Visible = false;
+                else if (selectedPreset == null) lbl_presetCropWarning.Visible = false;
+            }
+            else
+            {
                 lbl_presetCropWarning.Visible = false;
-            else if (selectedPreset == null)
-                lbl_presetCropWarning.Visible = false;
+            }
         }
 
         /// <summary>
@@ -97,7 +102,7 @@ namespace Handbrake.Controls
             lbl_src_res.Text = sourceTitle.Resolution.Width + " x " + sourceTitle.Resolution.Height;
 
             // Set the Recommended Cropping values, but only if a preset doesn't have hard set picture settings.
-            if ((CurrentlySelectedPreset != null && CurrentlySelectedPreset.PictureSettings == false) || CurrentlySelectedPreset == null)
+            if ((CurrentlySelectedPreset != null && CurrentlySelectedPreset.CropSettings == false) || CurrentlySelectedPreset == null)
             {
                 crop_top.Value = GetCropMod2Clean(sourceTitle.AutoCropDimensions.Top);
                 crop_bottom.Value = GetCropMod2Clean(sourceTitle.AutoCropDimensions.Bottom);

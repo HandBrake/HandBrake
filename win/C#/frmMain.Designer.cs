@@ -983,7 +983,7 @@ namespace Handbrake
             this.tab_picture.Text = "Picture";
             this.tab_picture.UseVisualStyleBackColor = true;
             // 
-            // PictureSettings
+            // CropSettings
             // 
             this.PictureSettings.BackColor = System.Drawing.Color.Transparent;
             this.PictureSettings.CurrentlySelectedPreset = null;
