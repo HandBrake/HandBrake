@@ -1181,6 +1181,9 @@ static void work_loop( void * _w )
             break;
         }
 
+        // Invalidate buf_out so that if there is no output
+        // we don't try to pass along junk.
+        buf_out = NULL;
         w->status = w->work( w, &buf_in, &buf_out );
 
         // Propagate any chapter breaks for the worker if and only if the
