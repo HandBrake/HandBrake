@@ -237,7 +237,11 @@ namespace Handbrake.Controls
                                 check_noDCTDecimate.CheckState = CheckState.Checked;
                                 continue;
                             case "subq":
-                                drop_subpixelMotionEstimation.SelectedItem = optValue;
+                                int subqValue;
+                                if (int.TryParse(optValue, out subqValue))
+                                {
+                                    drop_subpixelMotionEstimation.SelectedIndex = subqValue + 1;
+                                }
                                 continue;
                             case "trellis":
                                 switch (optValue)
