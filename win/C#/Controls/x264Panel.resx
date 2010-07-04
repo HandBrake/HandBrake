@@ -232,10 +232,6 @@ Baseline profile, as required for iPods and similar devices, requires weighted P
 Note that some devices and players, even those that support Main Profile, 
 may have problems with Weighted P-frame prediction: the Apple TV is completely incompatible with it, for example.</value>
   </data>
-  <data name="slider_adaptiveQuantStrength.ToolTip" xml:space="preserve">
-    <value>Psychovisual Rate Distortion Optimization sure is a mouthful, isn't it? Basically, it means x264 tries to retain detail, for better quality to the human eye, 
-as opposed to trying to maximize quality the way a computer understands it, through signal-to-noise ratios that have trouble telling apart fine detail and noise.</value>
-  </data>
   <data name="combo_pyrmidalBFrames.ToolTip" xml:space="preserve">
     <value>This is the distance x264 searches from its best guess at the motion of a block in order to try to find its actual motion.  
 Doesn't apply to Diamond or Hexagon search options.  

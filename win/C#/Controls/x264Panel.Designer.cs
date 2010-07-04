@@ -615,7 +615,9 @@ namespace Handbrake.Controls
             this.slider_adaptiveQuantStrength.Name = "slider_adaptiveQuantStrength";
             this.slider_adaptiveQuantStrength.Size = new System.Drawing.Size(131, 45);
             this.slider_adaptiveQuantStrength.TabIndex = 88;
-            this.ToolTip.SetToolTip(this.slider_adaptiveQuantStrength, resources.GetString("slider_adaptiveQuantStrength.ToolTip"));
+            this.ToolTip.SetToolTip(this.slider_adaptiveQuantStrength, "Adaptive quantization controls how the encoder distributes bits across the frame." +
+                    "  \r\nHigher values take more bits away from edges and complex areas to improve ar" +
+                    "eas with finer detail");
             this.slider_adaptiveQuantStrength.Value = 10;
             this.slider_adaptiveQuantStrength.Scroll += new System.EventHandler(this.widgetControlChanged);
             // 
