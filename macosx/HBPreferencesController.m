@@ -46,7 +46,7 @@
         @"Open Source",     @"LaunchSourceBehavior",
         @"English",         @"DefaultLanguage",
         @"YES",             @"UseCoreAudio",
-        @"NO",              @"DefaultMpegName",
+        @"YES",              @"DefaultMpegName",
         @"YES",             @"UseDvdNav",
         @"",                @"DefAdvancedx264Flags",
         @"YES",             @"DefaultPresetsDrawerShow",
