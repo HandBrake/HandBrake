@@ -351,12 +351,20 @@ namespace Handbrake
 
         private void encodeStarted(object sender, EventArgs e)
         {
+            if (Properties.Settings.Default.preventSleep)
+            {
+                Win32.PreventSleep();
+            }    
             SetEncodeStarted();
             encodeQueue.EncodeStatusChanged += EncodeQueue_EncodeStatusChanged;
         }
 
         private void encodeEnded(object sender, EventArgs e)
         {
+            if (Properties.Settings.Default.preventSleep)
+            {
+                Win32.AllowSleep();
+            }
             encodeQueue.EncodeStatusChanged -= EncodeQueue_EncodeStatusChanged;
             SetEncodeFinished();
         }

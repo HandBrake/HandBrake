@@ -139,5 +139,32 @@ namespace Handbrake.Functions
             /// </summary>
             CTRL_CLOSE = 2,
         }
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags);
+
+        [FlagsAttribute]
+        public enum EXECUTION_STATE : uint
+        {
+            ES_SYSTEM_REQUIRED = 0x00000001,
+            ES_CONTINUOUS = 0x80000000,
+            ES_AWAYMODE_REQUIRED = 0x00000040
+        }
+
+        /// <summary>
+        /// Prevent the system from sleeping
+        /// </summary>
+        public static void PreventSleep()
+        {
+            SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS | EXECUTION_STATE.ES_SYSTEM_REQUIRED | EXECUTION_STATE.ES_AWAYMODE_REQUIRED);
+        }
+
+        /// <summary>
+        ///  Allow the system to sleep.
+        /// </summary>
+        public static void AllowSleep()
+        {
+            SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS);
+        }
     }
 }

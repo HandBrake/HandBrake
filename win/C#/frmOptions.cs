@@ -119,6 +119,8 @@ namespace Handbrake
             // Priority level for encodes
             drp_Priority.Text = Properties.Settings.Default.processPriority;
 
+            check_preventSleep.Checked = Properties.Settings.Default.preventSleep; 
+
             // Log Verbosity Level
             cb_logVerboseLvl.SelectedIndex = Properties.Settings.Default.verboseLevel;
 
@@ -334,6 +336,11 @@ namespace Handbrake
             Properties.Settings.Default.processPriority = drp_Priority.Text;
         }
 
+        private void check_preventSleep_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.preventSleep = check_preventSleep.Checked;
+        }
+
         private void cb_logVerboseLvl_SelectedIndexChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.verboseLevel = cb_logVerboseLvl.SelectedIndex;
@@ -502,6 +509,5 @@ namespace Handbrake
                                Settings.Default.processPriority, Settings.Default.saveLogPath, Settings.Default.saveLogToSpecifiedPath,
                                Settings.Default.saveLogWithVideo, Settings.Default.showCliForInGuiEncodeStatus);
         }
-
     }
 }

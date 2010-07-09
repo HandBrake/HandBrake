@@ -560,5 +560,17 @@ namespace Handbrake.Properties {
                 this["ActivityWindowLastMode"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool preventSleep {
+            get {
+                return ((bool)(this["preventSleep"]));
+            }
+            set {
+                this["preventSleep"] = value;
+            }
+        }
     }
 }

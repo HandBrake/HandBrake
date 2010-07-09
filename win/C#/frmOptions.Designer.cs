@@ -69,6 +69,7 @@ namespace Handbrake
             this.drop_preferredLang = new System.Windows.Forms.ComboBox();
             this.radio_dub = new System.Windows.Forms.RadioButton();
             this.tab_cli = new System.Windows.Forms.TabPage();
+            this.check_preventSleep = new System.Windows.Forms.CheckBox();
             this.check_clearOldLogs = new System.Windows.Forms.CheckBox();
             this.label12 = new System.Windows.Forms.Label();
             this.check_cli_minimized = new System.Windows.Forms.CheckBox();
@@ -136,6 +137,7 @@ namespace Handbrake
             this.label27 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.label11 = new System.Windows.Forms.Label();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
@@ -570,7 +572,7 @@ namespace Handbrake
             this.radio_foreignAndSubs.AutoSize = true;
             this.radio_foreignAndSubs.Location = new System.Drawing.Point(200, 76);
             this.radio_foreignAndSubs.Name = "radio_foreignAndSubs";
-            this.radio_foreignAndSubs.Size = new System.Drawing.Size(347, 17);
+            this.radio_foreignAndSubs.Size = new System.Drawing.Size(358, 17);
             this.radio_foreignAndSubs.TabIndex = 90;
             this.radio_foreignAndSubs.TabStop = true;
             this.radio_foreignAndSubs.Text = "Use foreign language audio and add first preferred language subtitle.";
@@ -595,7 +597,7 @@ namespace Handbrake
             this.radio_dub.AutoSize = true;
             this.radio_dub.Location = new System.Drawing.Point(200, 53);
             this.radio_dub.Name = "radio_dub";
-            this.radio_dub.Size = new System.Drawing.Size(167, 17);
+            this.radio_dub.Size = new System.Drawing.Size(164, 17);
             this.radio_dub.TabIndex = 89;
             this.radio_dub.TabStop = true;
             this.radio_dub.Text = "DUB Foreign Language Audio";
@@ -606,6 +608,8 @@ namespace Handbrake
             // 
             // tab_cli
             // 
+            this.tab_cli.Controls.Add(this.label11);
+            this.tab_cli.Controls.Add(this.check_preventSleep);
             this.tab_cli.Controls.Add(this.check_clearOldLogs);
             this.tab_cli.Controls.Add(this.label12);
             this.tab_cli.Controls.Add(this.check_cli_minimized);
@@ -626,16 +630,29 @@ namespace Handbrake
             this.tab_cli.Padding = new System.Windows.Forms.Padding(10);
             this.tab_cli.Size = new System.Drawing.Size(580, 334);
             this.tab_cli.TabIndex = 2;
-            this.tab_cli.Text = "CLI";
+            this.tab_cli.Text = "CLI / System / Logging";
             this.tab_cli.UseVisualStyleBackColor = true;
+            // 
+            // check_preventSleep
+            // 
+            this.check_preventSleep.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_preventSleep.AutoSize = true;
+            this.check_preventSleep.Location = new System.Drawing.Point(73, 71);
+            this.check_preventSleep.Name = "check_preventSleep";
+            this.check_preventSleep.Size = new System.Drawing.Size(272, 17);
+            this.check_preventSleep.TabIndex = 91;
+            this.check_preventSleep.Text = "Prevent the system from sleepping when encoding.";
+            this.ToolTip.SetToolTip(this.check_preventSleep, "Prevent system from sleeping during encoding.");
+            this.check_preventSleep.UseVisualStyleBackColor = true;
+            this.check_preventSleep.CheckedChanged += new System.EventHandler(this.check_preventSleep_CheckedChanged);
             // 
             // check_clearOldLogs
             // 
             this.check_clearOldLogs.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_clearOldLogs.AutoSize = true;
-            this.check_clearOldLogs.Location = new System.Drawing.Point(73, 226);
+            this.check_clearOldLogs.Location = new System.Drawing.Point(73, 260);
             this.check_clearOldLogs.Name = "check_clearOldLogs";
-            this.check_clearOldLogs.Size = new System.Drawing.Size(162, 17);
+            this.check_clearOldLogs.Size = new System.Drawing.Size(166, 17);
             this.check_clearOldLogs.TabIndex = 90;
             this.check_clearOldLogs.Text = "Clear logs older than 30 days";
             this.ToolTip.SetToolTip(this.check_clearOldLogs, "Clear logs which are older than 30 days.\r\nThis only applies to HandBrakes Applica" +
@@ -648,7 +665,7 @@ namespace Handbrake
             this.label12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(15, 15);
+            this.label12.Location = new System.Drawing.Point(7, 15);
             this.label12.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(28, 13);
@@ -661,7 +678,7 @@ namespace Handbrake
             this.check_cli_minimized.AutoSize = true;
             this.check_cli_minimized.Location = new System.Drawing.Point(73, 14);
             this.check_cli_minimized.Name = "check_cli_minimized";
-            this.check_cli_minimized.Size = new System.Drawing.Size(135, 17);
+            this.check_cli_minimized.Size = new System.Drawing.Size(137, 17);
             this.check_cli_minimized.TabIndex = 76;
             this.check_cli_minimized.Text = "Start window minimized";
             this.ToolTip.SetToolTip(this.check_cli_minimized, "Starts a CLI window minimized.");
@@ -673,7 +690,7 @@ namespace Handbrake
             this.btn_viewLogs.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btn_viewLogs.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_viewLogs.ForeColor = System.Drawing.Color.DarkOrange;
-            this.btn_viewLogs.Location = new System.Drawing.Point(129, 188);
+            this.btn_viewLogs.Location = new System.Drawing.Point(129, 222);
             this.btn_viewLogs.Name = "btn_viewLogs";
             this.btn_viewLogs.Size = new System.Drawing.Size(139, 23);
             this.btn_viewLogs.TabIndex = 89;
@@ -686,7 +703,7 @@ namespace Handbrake
             this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(7, 84);
+            this.label9.Location = new System.Drawing.Point(7, 118);
             this.label9.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(36, 13);
@@ -698,7 +715,7 @@ namespace Handbrake
             this.Label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.Label4.AutoSize = true;
             this.Label4.BackColor = System.Drawing.Color.Transparent;
-            this.Label4.Location = new System.Drawing.Point(70, 45);
+            this.Label4.Location = new System.Drawing.Point(70, 34);
             this.Label4.Name = "Label4";
             this.Label4.Size = new System.Drawing.Size(70, 13);
             this.Label4.TabIndex = 42;
@@ -709,7 +726,7 @@ namespace Handbrake
             this.btn_clearLogs.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btn_clearLogs.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_clearLogs.ForeColor = System.Drawing.Color.DarkOrange;
-            this.btn_clearLogs.Location = new System.Drawing.Point(274, 188);
+            this.btn_clearLogs.Location = new System.Drawing.Point(274, 222);
             this.btn_clearLogs.Name = "btn_clearLogs";
             this.btn_clearLogs.Size = new System.Drawing.Size(135, 23);
             this.btn_clearLogs.TabIndex = 88;
@@ -729,7 +746,7 @@ namespace Handbrake
             "Normal",
             "Below Normal",
             "Low"});
-            this.drp_Priority.Location = new System.Drawing.Point(177, 42);
+            this.drp_Priority.Location = new System.Drawing.Point(177, 31);
             this.drp_Priority.Name = "drp_Priority";
             this.drp_Priority.Size = new System.Drawing.Size(111, 21);
             this.drp_Priority.TabIndex = 43;
@@ -741,9 +758,9 @@ namespace Handbrake
             // 
             this.check_logsInSpecifiedLocation.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_logsInSpecifiedLocation.AutoSize = true;
-            this.check_logsInSpecifiedLocation.Location = new System.Drawing.Point(73, 131);
+            this.check_logsInSpecifiedLocation.Location = new System.Drawing.Point(73, 165);
             this.check_logsInSpecifiedLocation.Name = "check_logsInSpecifiedLocation";
-            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(305, 17);
+            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(306, 17);
             this.check_logsInSpecifiedLocation.TabIndex = 87;
             this.check_logsInSpecifiedLocation.Text = "Put a copy of individual encode logs in a specified location:";
             this.ToolTip.SetToolTip(this.check_logsInSpecifiedLocation, "Place a copy of the encode log in the same folder as the encoded movie.");
@@ -754,7 +771,7 @@ namespace Handbrake
             // 
             this.check_saveLogWithVideo.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_saveLogWithVideo.AutoSize = true;
-            this.check_saveLogWithVideo.Location = new System.Drawing.Point(73, 108);
+            this.check_saveLogWithVideo.Location = new System.Drawing.Point(73, 142);
             this.check_saveLogWithVideo.Name = "check_saveLogWithVideo";
             this.check_saveLogWithVideo.Size = new System.Drawing.Size(382, 17);
             this.check_saveLogWithVideo.TabIndex = 83;
@@ -768,7 +785,7 @@ namespace Handbrake
             this.label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Transparent;
-            this.label3.Location = new System.Drawing.Point(70, 84);
+            this.label3.Location = new System.Drawing.Point(70, 118);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(101, 13);
             this.label3.TabIndex = 85;
@@ -780,7 +797,7 @@ namespace Handbrake
             this.btn_saveLog.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_saveLog.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_saveLog.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_saveLog.Location = new System.Drawing.Point(437, 161);
+            this.btn_saveLog.Location = new System.Drawing.Point(437, 195);
             this.btn_saveLog.Name = "btn_saveLog";
             this.btn_saveLog.Size = new System.Drawing.Size(77, 22);
             this.btn_saveLog.TabIndex = 82;
@@ -797,7 +814,7 @@ namespace Handbrake
             "0",
             "1",
             "2"});
-            this.cb_logVerboseLvl.Location = new System.Drawing.Point(177, 81);
+            this.cb_logVerboseLvl.Location = new System.Drawing.Point(177, 115);
             this.cb_logVerboseLvl.Name = "cb_logVerboseLvl";
             this.cb_logVerboseLvl.Size = new System.Drawing.Size(111, 21);
             this.cb_logVerboseLvl.TabIndex = 86;
@@ -807,7 +824,7 @@ namespace Handbrake
             // text_logPath
             // 
             this.text_logPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.text_logPath.Location = new System.Drawing.Point(129, 161);
+            this.text_logPath.Location = new System.Drawing.Point(129, 195);
             this.text_logPath.Name = "text_logPath";
             this.text_logPath.Size = new System.Drawing.Size(302, 21);
             this.text_logPath.TabIndex = 80;
@@ -818,7 +835,7 @@ namespace Handbrake
             // 
             this.label14.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(70, 164);
+            this.label14.Location = new System.Drawing.Point(70, 198);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(53, 13);
             this.label14.TabIndex = 81;
@@ -856,7 +873,7 @@ namespace Handbrake
             this.check_showCliForInGUIEncode.BackColor = System.Drawing.Color.Transparent;
             this.check_showCliForInGUIEncode.Location = new System.Drawing.Point(100, 152);
             this.check_showCliForInGUIEncode.Name = "check_showCliForInGUIEncode";
-            this.check_showCliForInGUIEncode.Size = new System.Drawing.Size(324, 17);
+            this.check_showCliForInGUIEncode.Size = new System.Drawing.Size(330, 17);
             this.check_showCliForInGUIEncode.TabIndex = 96;
             this.check_showCliForInGUIEncode.Text = "Show CLI window (Allows you to cleanly exit encode with ctrl-c)";
             this.ToolTip.SetToolTip(this.check_showCliForInGUIEncode, resources.GetString("check_showCliForInGUIEncode.ToolTip"));
@@ -910,7 +927,7 @@ namespace Handbrake
             this.check_trayStatusAlerts.BackColor = System.Drawing.Color.Transparent;
             this.check_trayStatusAlerts.Location = new System.Drawing.Point(81, 37);
             this.check_trayStatusAlerts.Name = "check_trayStatusAlerts";
-            this.check_trayStatusAlerts.Size = new System.Drawing.Size(288, 17);
+            this.check_trayStatusAlerts.Size = new System.Drawing.Size(296, 17);
             this.check_trayStatusAlerts.TabIndex = 93;
             this.check_trayStatusAlerts.Text = "Display status messages from tray icon (balloon popups)";
             this.ToolTip.SetToolTip(this.check_trayStatusAlerts, "Minimize the window to the system tray rather than the task bar.\r\nThe system tray" +
@@ -926,7 +943,7 @@ namespace Handbrake
             this.check_mainMinimize.BackColor = System.Drawing.Color.Transparent;
             this.check_mainMinimize.Location = new System.Drawing.Point(81, 14);
             this.check_mainMinimize.Name = "check_mainMinimize";
-            this.check_mainMinimize.Size = new System.Drawing.Size(133, 17);
+            this.check_mainMinimize.Size = new System.Drawing.Size(138, 17);
             this.check_mainMinimize.TabIndex = 82;
             this.check_mainMinimize.Text = "Minimize to system tray";
             this.ToolTip.SetToolTip(this.check_mainMinimize, "Minimize the window to the system tray rather than the task bar.\r\nThe system tray" +
@@ -940,7 +957,7 @@ namespace Handbrake
             this.check_promptOnUnmatchingQueries.AutoSize = true;
             this.check_promptOnUnmatchingQueries.Location = new System.Drawing.Point(100, 83);
             this.check_promptOnUnmatchingQueries.Name = "check_promptOnUnmatchingQueries";
-            this.check_promptOnUnmatchingQueries.Size = new System.Drawing.Size(300, 17);
+            this.check_promptOnUnmatchingQueries.Size = new System.Drawing.Size(305, 17);
             this.check_promptOnUnmatchingQueries.TabIndex = 63;
             this.check_promptOnUnmatchingQueries.Text = "Prompt when a manual query does not match GUI settings";
             this.check_promptOnUnmatchingQueries.UseVisualStyleBackColor = true;
@@ -953,7 +970,7 @@ namespace Handbrake
             this.check_dvdnav.BackColor = System.Drawing.Color.Transparent;
             this.check_dvdnav.Location = new System.Drawing.Point(82, 247);
             this.check_dvdnav.Name = "check_dvdnav";
-            this.check_dvdnav.Size = new System.Drawing.Size(277, 17);
+            this.check_dvdnav.Size = new System.Drawing.Size(276, 17);
             this.check_dvdnav.TabIndex = 90;
             this.check_dvdnav.Text = "Disable LibDVDNav. (libdvdread will be used instead)";
             this.check_dvdnav.UseVisualStyleBackColor = false;
@@ -966,7 +983,7 @@ namespace Handbrake
             this.check_queryEditorTab.BackColor = System.Drawing.Color.Transparent;
             this.check_queryEditorTab.Location = new System.Drawing.Point(81, 60);
             this.check_queryEditorTab.Name = "check_queryEditorTab";
-            this.check_queryEditorTab.Size = new System.Drawing.Size(236, 17);
+            this.check_queryEditorTab.Size = new System.Drawing.Size(241, 17);
             this.check_queryEditorTab.TabIndex = 84;
             this.check_queryEditorTab.Text = "Enable \"Query Editor\" tab (Requires Restart)";
             this.ToolTip.SetToolTip(this.check_queryEditorTab, "Enables the Query Editor tab on the main window. Requires program restart to take" +
@@ -1018,7 +1035,7 @@ namespace Handbrake
             this.check_disablePresetNotification.BackColor = System.Drawing.Color.Transparent;
             this.check_disablePresetNotification.Location = new System.Drawing.Point(81, 106);
             this.check_disablePresetNotification.Name = "check_disablePresetNotification";
-            this.check_disablePresetNotification.Size = new System.Drawing.Size(216, 17);
+            this.check_disablePresetNotification.Size = new System.Drawing.Size(222, 17);
             this.check_disablePresetNotification.TabIndex = 91;
             this.check_disablePresetNotification.Text = "Disable built-in preset update notification";
             this.ToolTip.SetToolTip(this.check_disablePresetNotification, "Disables the notification you recieve when presets are updated when a new version" +
@@ -1044,9 +1061,9 @@ namespace Handbrake
             this.check_inGuiStatus.BackColor = System.Drawing.Color.Transparent;
             this.check_inGuiStatus.Location = new System.Drawing.Point(81, 129);
             this.check_inGuiStatus.Name = "check_inGuiStatus";
-            this.check_inGuiStatus.Size = new System.Drawing.Size(230, 17);
+            this.check_inGuiStatus.Size = new System.Drawing.Size(162, 17);
             this.check_inGuiStatus.TabIndex = 92;
-            this.check_inGuiStatus.Text = "Enable in-GUI encode status (experimental)";
+            this.check_inGuiStatus.Text = "Enable in-GUI encode status";
             this.ToolTip.SetToolTip(this.check_inGuiStatus, "Displays the CLI status in the GUI windows instead of the CLI window.");
             this.check_inGuiStatus.UseVisualStyleBackColor = false;
             this.check_inGuiStatus.CheckedChanged += new System.EventHandler(this.check_inGuiStatus_CheckedChanged);
@@ -1067,7 +1084,7 @@ namespace Handbrake
             this.check_disableResCalc.AutoSize = true;
             this.check_disableResCalc.Location = new System.Drawing.Point(13, 15);
             this.check_disableResCalc.Name = "check_disableResCalc";
-            this.check_disableResCalc.Size = new System.Drawing.Size(329, 17);
+            this.check_disableResCalc.Size = new System.Drawing.Size(327, 17);
             this.check_disableResCalc.TabIndex = 0;
             this.check_disableResCalc.Text = "Disable Resolution Calculation for \"None\" and \"Custom\" modes.";
             this.ToolTip.SetToolTip(this.check_disableResCalc, resources.GetString("check_disableResCalc.ToolTip"));
@@ -1454,6 +1471,18 @@ namespace Handbrake
             this.tableLayoutPanel5.Size = new System.Drawing.Size(594, 429);
             this.tableLayoutPanel5.TabIndex = 62;
             // 
+            // label11
+            // 
+            this.label11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(7, 72);
+            this.label11.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(53, 13);
+            this.label11.TabIndex = 92;
+            this.label11.Text = "System:";
+            // 
             // frmOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1599,5 +1628,7 @@ namespace Handbrake
         internal System.Windows.Forms.CheckBox check_showCliForInGUIEncode;
         internal System.Windows.Forms.CheckBox check_TitleCase;
         internal System.Windows.Forms.CheckBox check_removeUnderscores;
+        internal System.Windows.Forms.CheckBox check_preventSleep;
+        private System.Windows.Forms.Label label11;
     }
 }
