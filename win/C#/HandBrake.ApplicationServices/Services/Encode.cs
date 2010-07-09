@@ -193,6 +193,11 @@ namespace HandBrake.ApplicationServices.Services
             this.job = encJob;
             try
             {
+                if (Properties.Settings.Default.preventSleep)
+                {
+                    Win32.PreventSleep();
+                }
+
                 ResetLogReader();
                 IsEncoding = true;
 
@@ -215,8 +220,7 @@ namespace HandBrake.ApplicationServices.Services
                 HbProcess = Process.Start(cliStart);
                 this.processID = Main.GetCliProcess(before);
 
-                if (HbProcess != null)
-                    this.processHandle = HbProcess.MainWindowHandle; // Set the process Handle
+                this.processHandle = HbProcess.MainWindowHandle; // Set the process Handle
 
                 // Start the Log Monitor
                 windowTimer = new Timer(new TimerCallback(ReadFile), null, 1000, 1000);
@@ -285,6 +289,11 @@ namespace HandBrake.ApplicationServices.Services
             if (windowsSeven.IsWindowsSeven)
             {
                 windowsSeven.SetTaskBarProgressToNoProgress();
+            }
+
+            if (Properties.Settings.Default.preventSleep)
+            {
+                Win32.AllowSleep();
             }
         }
 
@@ -579,7 +588,7 @@ namespace HandBrake.ApplicationServices.Services
                 while (!encode.EndOfStream)
                     encode.ReadEncodeStatus();
 
-               // Main.ShowExceptiowWindow("Encode Monitor Stopped", "Stopped");
+                // Main.ShowExceptiowWindow("Encode Monitor Stopped", "Stopped");
             }
             catch (Exception exc)
             {

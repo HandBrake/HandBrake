@@ -49,9 +49,12 @@ namespace HandBrake.ApplicationServices
         /// <param name="showCliForInGuiEncodeStatus">
         /// The show cli for in gui encode status.
         /// </param>
+        /// <param name="preventSleep">
+        /// Prevent the system from sleeping
+        /// </param>
         public static void SetupSettings(bool cli_minimized, string completionOption, bool disableDvdNav, bool enocdeStatusInGui,
                                   bool growlEncode, bool growlQueue, string processPriority, string saveLogPath, bool saveLogToSpecifiedPath,
-                                  bool saveLogWithVideo, bool showCliForInGuiEncodeStatus)
+                                  bool saveLogWithVideo, bool showCliForInGuiEncodeStatus, bool preventSleep)
         {
             Properties.Settings.Default.cli_minimized = cli_minimized;
             Properties.Settings.Default.CompletionOption = completionOption;
@@ -64,6 +67,7 @@ namespace HandBrake.ApplicationServices
             Properties.Settings.Default.saveLogToSpecifiedPath = saveLogToSpecifiedPath;
             Properties.Settings.Default.saveLogWithVideo = saveLogWithVideo;
             Properties.Settings.Default.showCliForInGuiEncodeStatus = showCliForInGuiEncodeStatus;
+            Properties.Settings.Default.preventSleep = preventSleep;
 
             Properties.Settings.Default.Save();
         }

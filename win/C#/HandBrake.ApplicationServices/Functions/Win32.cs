@@ -154,7 +154,7 @@ namespace HandBrake.ApplicationServices.Functions
         /// <summary>
         /// Prevent the system from sleeping
         /// </summary>
-        public void PreventSleep()
+        public static void PreventSleep()
         {
             SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS | EXECUTION_STATE.ES_SYSTEM_REQUIRED | EXECUTION_STATE.ES_AWAYMODE_REQUIRED);
         }
@@ -162,7 +162,7 @@ namespace HandBrake.ApplicationServices.Functions
         /// <summary>
         ///  Allow the system to sleep.
         /// </summary>
-        public void AllowSleep()
+        public static void AllowSleep()
         {
             SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS);
         }
