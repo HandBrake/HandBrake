@@ -421,7 +421,7 @@ namespace Handbrake.Controls
             // 
             this.updownParHeight.Location = new System.Drawing.Point(82, 111);
             this.updownParHeight.Maximum = new decimal(new int[] {
-            2560,
+            10000,
             0,
             0,
             0});
@@ -485,7 +485,7 @@ namespace Handbrake.Controls
             // 
             this.updownParWidth.Location = new System.Drawing.Point(82, 84);
             this.updownParWidth.Maximum = new decimal(new int[] {
-            2560,
+            10000,
             0,
             0,
             0});
@@ -610,7 +610,7 @@ namespace Handbrake.Controls
             this.lbl_presetCropWarning.TabIndex = 118;
             this.lbl_presetCropWarning.Text = "( Preset values are in use! )";
             // 
-            // CropSettings
+            // PictureSettings
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.BackColor = System.Drawing.Color.Transparent;
