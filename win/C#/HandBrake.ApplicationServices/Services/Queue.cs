@@ -306,6 +306,9 @@ namespace HandBrake.ApplicationServices.Services
 
                         if (file != "hb_queue_recovery.xml")
                             this.WriteQueueStateToFile("hb_queue_recovery.xml");
+
+                        if (this.QueueListChanged != null)
+                            this.QueueListChanged(this, new EventArgs());
                     }
                 }
             }
