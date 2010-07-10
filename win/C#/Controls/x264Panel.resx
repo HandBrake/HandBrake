@@ -233,9 +233,9 @@ Note that some devices and players, even those that support Main Profile,
 may have problems with Weighted P-frame prediction: the Apple TV is completely incompatible with it, for example.</value>
   </data>
   <data name="combo_pyrmidalBFrames.ToolTip" xml:space="preserve">
-    <value>This is the distance x264 searches from its best guess at the motion of a block in order to try to find its actual motion.  
-Doesn't apply to Diamond or Hexagon search options.  
-The default is fine for most content, but extremely high motion video, especially at HD resolutions, 
-may benefit from higher ranges, albeit at a high speed cost.</value>
+    <value>B-pyramid improves compression by creating a pyramidal structure (hence the name) of B-frames, allowing B-frames to 
+reference each other to improve compression.  
+
+Requires Max B-frames greater than 1; optimal adaptive B-frames is strongly recommended for full compression benefit.</value>
   </data>
 </root>
