@@ -380,7 +380,7 @@ namespace HandBrake.ApplicationServices.Services
                 Job encJob = this.GetNextJob();
                 this.WriteQueueStateToFile("hb_queue_recovery.xml"); // Update the queue recovery file
 
-                Run(encJob, false);
+                Run(encJob, true);
 
                 if (HbProcess == null)
                 {
@@ -388,7 +388,6 @@ namespace HandBrake.ApplicationServices.Services
                 }
                 HbProcess.WaitForExit();
 
-                AddCLIQueryToLog(encJob);
                 this.CopyLog(this.LastEncode.Destination);
 
                 HbProcess.Close();

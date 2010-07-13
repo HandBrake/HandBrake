@@ -88,8 +88,8 @@ namespace Handbrake
         /// </summary>
         private static void InitializeApplicationServices()
         {
-            Init.SetupSettings(Settings.Default.cli_minimized, Settings.Default.CompletionOption, Settings.Default.noDvdNav,
-                               Settings.Default.enocdeStatusInGui, Settings.Default.growlEncode, Settings.Default.growlQueue,
+            Init.SetupSettings(Settings.Default.CompletionOption, Settings.Default.noDvdNav,
+                               Settings.Default.growlEncode, Settings.Default.growlQueue,
                                Settings.Default.processPriority, Settings.Default.saveLogPath, Settings.Default.saveLogToSpecifiedPath,
                                Settings.Default.saveLogWithVideo, Settings.Default.showCliForInGuiEncodeStatus, Settings.Default.preventSleep);
         }

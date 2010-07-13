@@ -52,14 +52,12 @@ namespace HandBrake.ApplicationServices
         /// <param name="preventSleep">
         /// Prevent the system from sleeping
         /// </param>
-        public static void SetupSettings(bool cli_minimized, string completionOption, bool disableDvdNav, bool enocdeStatusInGui,
+        public static void SetupSettings(string completionOption, bool disableDvdNav,
                                   bool growlEncode, bool growlQueue, string processPriority, string saveLogPath, bool saveLogToSpecifiedPath,
                                   bool saveLogWithVideo, bool showCliForInGuiEncodeStatus, bool preventSleep)
         {
-            Properties.Settings.Default.cli_minimized = cli_minimized;
             Properties.Settings.Default.CompletionOption = completionOption;
             Properties.Settings.Default.disableDvdNav = disableDvdNav;
-            Properties.Settings.Default.enocdeStatusInGui = enocdeStatusInGui;
             Properties.Settings.Default.growlEncode = growlEncode;
             Properties.Settings.Default.growlQueue = growlQueue;
             Properties.Settings.Default.processPriority = processPriority;

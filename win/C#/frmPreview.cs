@@ -24,6 +24,7 @@ namespace Handbrake
     /// </summary>
     public partial class frmPreview : Form
     {
+        #region Private Variables
         /// <summary>
         /// The Main Window
         /// </summary>
@@ -98,6 +99,8 @@ namespace Handbrake
         /// The Open Movie Handler
         /// </summary>
         private delegate void OpenMovieHandler();
+
+        #endregion
 
         /// <summary>
         /// The encode has started

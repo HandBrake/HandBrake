@@ -110,36 +110,12 @@ namespace HandBrake.ApplicationServices.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool cli_minimized {
-            get {
-                return ((bool)(this["cli_minimized"]));
-            }
-            set {
-                this["cli_minimized"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool showCliForInGuiEncodeStatus {
             get {
                 return ((bool)(this["showCliForInGuiEncodeStatus"]));
             }
             set {
                 this["showCliForInGuiEncodeStatus"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool enocdeStatusInGui {
-            get {
-                return ((bool)(this["enocdeStatusInGui"]));
-            }
-            set {
-                this["enocdeStatusInGui"] = value;
             }
         }
         

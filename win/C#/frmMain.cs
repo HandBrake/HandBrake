@@ -1022,33 +1022,27 @@ namespace Handbrake
         {
             if (btn_start.Text == "Stop")
             {
-                DialogResult result;
-                if (Properties.Settings.Default.enocdeStatusInGui &&
-                    !Properties.Settings.Default.showCliForInGuiEncodeStatus)
-                {
-                    result = MessageBox.Show(
-                        "Are you sure you wish to cancel the encode?\n\nPlease note, when 'Enable in-GUI encode status' is enabled, stopping this encode will render the file unplayable. ",
-                        "Cancel Encode?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                }
-                else
-                {
-                    result = MessageBox.Show("Are you sure you wish to cancel the encode?", "Cancel Encode?",
-                                             MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                }
+                DialogResult result = !Properties.Settings.Default.showCliForInGuiEncodeStatus
+                             ? MessageBox.Show(
+                                 "Are you sure you wish to cancel the encode?\n\nPlease note: Stopping this encode will render the file unplayable. ",
+                                 "Cancel Encode?",
+                                 MessageBoxButtons.YesNo,
+                                 MessageBoxIcon.Question)
+                             : MessageBox.Show(
+                                 "Are you sure you wish to cancel the encode?",
+                                 "Cancel Encode?",
+                                 MessageBoxButtons.YesNo,
+                                 MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
                 {
                     // Pause The Queue
                     encodeQueue.Pause();
 
-                    if (Settings.Default.enocdeStatusInGui && !Settings.Default.showCliForInGuiEncodeStatus)
-                    {
-                        encodeQueue.Stop();
-                    }
-                    else
-                    {
+                    if (Settings.Default.showCliForInGuiEncodeStatus)
                         encodeQueue.SafelyClose();
-                    }
+                    else
+                        encodeQueue.Stop();
                 }
             }
             else
@@ -2482,7 +2476,7 @@ namespace Handbrake
                 }
 
                 // Try to safely close out if we can, or kill the cli if using in-gui status
-                if (Settings.Default.enocdeStatusInGui)
+                if (!Settings.Default.showCliForInGuiEncodeStatus)
                     encodeQueue.Stop();
                 else
                     encodeQueue.SafelyClose();

@@ -169,18 +169,6 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool cli_minimized {
-            get {
-                return ((bool)(this["cli_minimized"]));
-            }
-            set {
-                this["cli_minimized"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("{source}-{title}")]
         public string autoNameFormat {
             get {
@@ -308,18 +296,6 @@ namespace Handbrake.Properties {
             }
             set {
                 this["presetNotification"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool enocdeStatusInGui {
-            get {
-                return ((bool)(this["enocdeStatusInGui"]));
-            }
-            set {
-                this["enocdeStatusInGui"] = value;
             }
         }
         

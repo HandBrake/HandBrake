@@ -6,8 +6,6 @@
 namespace HandBrake.ApplicationServices.Functions
 {
     using System;
-
-    using Microsoft.WindowsAPICodePack;
     using Microsoft.WindowsAPICodePack.Taskbar;
 
     /// <summary>
@@ -55,7 +53,7 @@ namespace HandBrake.ApplicationServices.Functions
             {
                 return;
             }
-
+            windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal); // todo CHECK THIS
             windowsTaskbar.SetProgressValue(percentage, 100);
         }
 

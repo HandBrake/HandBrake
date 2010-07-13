@@ -112,10 +112,6 @@ namespace Handbrake
             // CLI
             // #############################
 
-            // Enable Start CLI minimized
-            if (Properties.Settings.Default.cli_minimized)
-                check_cli_minimized.CheckState = CheckState.Checked;
-
             // Priority level for encodes
             drp_Priority.Text = Properties.Settings.Default.processPriority;
 
@@ -161,12 +157,8 @@ namespace Handbrake
             if (Properties.Settings.Default.presetNotification)
                 check_disablePresetNotification.CheckState = CheckState.Checked;
 
-            // Experimental In-GUI encode status indicator.
-            if (Properties.Settings.Default.enocdeStatusInGui)
-                check_inGuiStatus.CheckState = CheckState.Checked;
-
+            // Show CLI Window
             check_showCliForInGUIEncode.Checked = Properties.Settings.Default.showCliForInGuiEncodeStatus;
-            check_showCliForInGUIEncode.Enabled = check_inGuiStatus.Checked;
 
             // Set the preview count
             drop_previewScanCount.SelectedItem = Properties.Settings.Default.previewScanCount.ToString();
@@ -326,11 +318,6 @@ namespace Handbrake
 
         #region CLI
 
-        private void check_cli_minimized_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.cli_minimized = check_cli_minimized.Checked;
-        }
-
         private void drp_Priority_SelectedIndexChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.processPriority = drp_Priority.Text;
@@ -427,24 +414,6 @@ namespace Handbrake
             Properties.Settings.Default.presetNotification = check_disablePresetNotification.Checked;
         }
 
-        private void check_inGuiStatus_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.enocdeStatusInGui = check_inGuiStatus.Checked;
-
-            check_showCliForInGUIEncode.Enabled = check_inGuiStatus.Checked;
-
-            if (this.IsHandleCreated)
-                if (check_inGuiStatus.Checked)
-                {
-                    MessageBox.Show(
-                        "This feature is experimental!\n\n You will not be able to ‘Stop’ an encode mid-process.\n"
-                        + "Doing so will render the file unplayable.\n" +
-                        "If you enable 'Show CLI Window', you'll be ablt to hit ctrl-c in the encode window to cleanly exit the CLI. This will give you a playable file.\n\n" +
-                        "You are also limited to 1 instance of HandBrakeCLI on your system.", 
-                        "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-        }
-
         private void check_showCliForInGUIEncode_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.showCliForInGuiEncodeStatus = check_showCliForInGUIEncode.Checked;
@@ -504,8 +473,8 @@ namespace Handbrake
         /// </summary>
         private static void UpdateApplicationServicesSettings()
         {
-            Init.SetupSettings(Settings.Default.cli_minimized, Settings.Default.CompletionOption, Settings.Default.noDvdNav,
-                               Settings.Default.enocdeStatusInGui, Settings.Default.growlEncode, Settings.Default.growlQueue,
+            Init.SetupSettings(Settings.Default.CompletionOption, Settings.Default.noDvdNav,
+                               Settings.Default.growlEncode, Settings.Default.growlQueue,
                                Settings.Default.processPriority, Settings.Default.saveLogPath, Settings.Default.saveLogToSpecifiedPath,
                                Settings.Default.saveLogWithVideo, Settings.Default.showCliForInGuiEncodeStatus, Settings.Default.preventSleep);
         }
