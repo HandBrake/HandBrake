@@ -890,7 +890,7 @@ namespace Handbrake
             this.drop_previewScanCount.Size = new System.Drawing.Size(85, 21);
             this.drop_previewScanCount.TabIndex = 95;
             this.ToolTip.SetToolTip(this.drop_previewScanCount, "Allows a greater number of preview frames to be selectable on the \"Preview\" windo" +
-                    "w.");
+                    "w.\r\n\r\nThis can in some cases improve the accuracy of the auto crop feature.");
             this.drop_previewScanCount.SelectedIndexChanged += new System.EventHandler(this.drop_previewScanCount_SelectedIndexChanged);
             // 
             // label33
@@ -938,9 +938,9 @@ namespace Handbrake
             this.check_mainMinimize.BackColor = System.Drawing.Color.Transparent;
             this.check_mainMinimize.Location = new System.Drawing.Point(81, 14);
             this.check_mainMinimize.Name = "check_mainMinimize";
-            this.check_mainMinimize.Size = new System.Drawing.Size(138, 17);
+            this.check_mainMinimize.Size = new System.Drawing.Size(230, 17);
             this.check_mainMinimize.TabIndex = 82;
-            this.check_mainMinimize.Text = "Minimize to system tray";
+            this.check_mainMinimize.Text = "Minimize to system tray (Requires Restart)";
             this.ToolTip.SetToolTip(this.check_mainMinimize, "Minimize the window to the system tray rather than the task bar.\r\nThe system tray" +
                     " icon has encode status notifications.\r\nNote: requires restart to take effect!\r\n" +
                     "");
