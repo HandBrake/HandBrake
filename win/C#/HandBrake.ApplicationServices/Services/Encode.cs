@@ -18,19 +18,12 @@ namespace HandBrake.ApplicationServices.Services
     using HandBrake.ApplicationServices.Properties;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
-    using Timer = System.Threading.Timer;
-
     /// <summary>
     /// Class which handles the CLI
     /// </summary>
     public class Encode : IEncode
     {
         #region Private Variables
-
-        /// <summary>
-        /// An Encode Job
-        /// </summary>
-        private Job job;
 
         /// <summary>
         /// The Log Buffer
@@ -152,7 +145,6 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         protected void Run(Job encJob, bool enableLogging)
         {
-            this.job = encJob;
             try
             {
                 IsEncoding = true;

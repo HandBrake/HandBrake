@@ -5,8 +5,6 @@
 
 namespace HandBrake.ApplicationServices.Functions
 {
-    using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
 
     /// <summary>
@@ -17,51 +15,10 @@ namespace HandBrake.ApplicationServices.Functions
         /// <summary>
         /// Get the Process ID of HandBrakeCLI for the current instance.
         /// </summary>
-        /// <param name="before">List of processes before the new process was started</param>
-        /// <returns>Int - Process ID</returns>
-        public static int GetCliProcess(Process[] before)
+        /// <returns>A list of processes</returns>
+        public static Process[] GetCliProcess()
         {
-            // This is a bit of a cludge. Maybe someone has a better idea on how to impliment this.
-            // Since we used CMD to start HandBrakeCLI, we don't get the process ID from hbProc.
-            // Instead we take the processes before and after, and get the ID of HandBrakeCLI.exe
-            // avoiding any previous instances of HandBrakeCLI.exe in before.
-            // Kill the current process.
-
-            DateTime startTime = DateTime.Now;
-            TimeSpan duration;
-
-            Process[] hbProcesses = Process.GetProcessesByName("HandBrakeCLI");
-            while (hbProcesses.Length == 0)
-            {
-                hbProcesses = Process.GetProcessesByName("HandBrakeCLI");
-                duration = DateTime.Now - startTime;
-                if (duration.Seconds > 5 && hbProcesses.Length == 0)
-                    // Make sure we don't wait forever if the process doesn't start
-                    return -1;
-            }
-
-            Process hbProcess = null;
-            foreach (Process process in hbProcesses)
-            {
-                bool found = false;
-                // Check if the current CLI instance was running before we started the current one
-                foreach (Process bprocess in before)
-                {
-                    if (process.Id == bprocess.Id)
-                        found = true;
-                }
-
-                // If it wasn't running before, we found the process we want.
-                if (!found)
-                {
-                    hbProcess = process;
-                    break;
-                }
-            }
-            if (hbProcess != null)
-                return hbProcess.Id;
-
-            return -1;
+            return Process.GetProcessesByName("HandBrakeCLI");
         }
 
         /// <summary>

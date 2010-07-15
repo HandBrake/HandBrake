@@ -53,7 +53,7 @@ namespace HandBrake.ApplicationServices.Functions
             {
                 return;
             }
-            windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal); // todo CHECK THIS
+            windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
             windowsTaskbar.SetProgressValue(percentage, 100);
         }
 
