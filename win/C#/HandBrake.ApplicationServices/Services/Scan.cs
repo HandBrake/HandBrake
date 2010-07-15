@@ -154,7 +154,7 @@ namespace HandBrake.ApplicationServices.Services
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
                 string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
                                 "\\HandBrake\\logs";
-                string dvdInfoPath = Path.Combine(logDir, "last_scan_log.txt");
+                string dvdInfoPath = Path.Combine(logDir, string.Format("last_scan_log{0}.txt", Init.InstanceId));
 
                 // Make we don't pick up a stale last_encode_log.txt (and that we have rights to the file)
                 if (File.Exists(dvdInfoPath))
@@ -218,8 +218,8 @@ namespace HandBrake.ApplicationServices.Services
                 // we'll need to make a copy of it.
                 string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
                                 "\\HandBrake\\logs";
-                string logFile = Path.Combine(logDir, "last_scan_log.txt");
-                string logFile2 = Path.Combine(logDir, "tmp_appReadable_log.txt");
+                string logFile = Path.Combine(logDir, string.Format("last_scan_log{0}.txt", Init.InstanceId));
+                string logFile2 = Path.Combine(logDir, string.Format("tmp_appReadable_log{0}.txt", Init.InstanceId));
 
                 try
                 {

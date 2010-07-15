@@ -473,7 +473,7 @@ namespace Handbrake
         /// </summary>
         private static void UpdateApplicationServicesSettings()
         {
-            Init.SetupSettings(Settings.Default.CompletionOption, Settings.Default.noDvdNav,
+            Init.SetupSettings(Program.InstanceId, Settings.Default.CompletionOption, Settings.Default.noDvdNav,
                                Settings.Default.growlEncode, Settings.Default.growlQueue,
                                Settings.Default.processPriority, Settings.Default.saveLogPath, Settings.Default.saveLogToSpecifiedPath,
                                Settings.Default.saveLogWithVideo, Settings.Default.showCliForInGuiEncodeStatus, Settings.Default.preventSleep);

@@ -6,6 +6,7 @@
 namespace Handbrake
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
     using System.Windows.Forms;
 
@@ -26,6 +27,8 @@ namespace Handbrake
         [STAThread]
         public static void Main(string[] args)
         {
+            InstanceId = Process.GetProcessesByName("HandBrake").Length;
+
             // Handle any unhandled exceptions
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
@@ -88,7 +91,7 @@ namespace Handbrake
         /// </summary>
         private static void InitializeApplicationServices()
         {
-            Init.SetupSettings(Settings.Default.CompletionOption, Settings.Default.noDvdNav,
+            Init.SetupSettings(InstanceId, Settings.Default.CompletionOption, Settings.Default.noDvdNav,
                                Settings.Default.growlEncode, Settings.Default.growlQueue,
                                Settings.Default.processPriority, Settings.Default.saveLogPath, Settings.Default.saveLogToSpecifiedPath,
                                Settings.Default.saveLogWithVideo, Settings.Default.showCliForInGuiEncodeStatus, Settings.Default.preventSleep);
@@ -116,5 +119,10 @@ namespace Handbrake
                     MessageBoxIcon.Error);
             }
         }
+
+
+        public static int InstanceId = 0;
+
+
     }
 }

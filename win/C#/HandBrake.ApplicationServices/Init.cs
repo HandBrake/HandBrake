@@ -16,17 +16,14 @@ namespace HandBrake.ApplicationServices
         /// <summary>
         /// Setup the Settings used by the applicaiton with this library
         /// </summary>
-        /// <param name="cli_minimized">
-        /// The cli_minimized.
+        /// <param name="instanceId">
+        /// The Instance ID
         /// </param>
         /// <param name="completionOption">
         /// The completion option.
         /// </param>
         /// <param name="disableDvdNav">
         /// The disable dvd nav.
-        /// </param>
-        /// <param name="enocdeStatusInGui">
-        /// The enocde status in gui.
         /// </param>
         /// <param name="growlEncode">
         /// The growl encode.
@@ -52,10 +49,11 @@ namespace HandBrake.ApplicationServices
         /// <param name="preventSleep">
         /// Prevent the system from sleeping
         /// </param>
-        public static void SetupSettings(string completionOption, bool disableDvdNav,
+        public static void SetupSettings(int instanceId, string completionOption, bool disableDvdNav,
                                   bool growlEncode, bool growlQueue, string processPriority, string saveLogPath, bool saveLogToSpecifiedPath,
                                   bool saveLogWithVideo, bool showCliForInGuiEncodeStatus, bool preventSleep)
         {
+            InstanceId = instanceId;
             Properties.Settings.Default.CompletionOption = completionOption;
             Properties.Settings.Default.disableDvdNav = disableDvdNav;
             Properties.Settings.Default.growlEncode = growlEncode;
@@ -80,5 +78,7 @@ namespace HandBrake.ApplicationServices
         {
             return Assembly.GetExecutingAssembly().GetName().Version;
         }
+
+        public static int InstanceId;
     }
 }

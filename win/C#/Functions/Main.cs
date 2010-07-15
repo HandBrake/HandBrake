@@ -372,77 +372,51 @@ namespace Handbrake.Functions
         /// <returns>
         /// True if there is a queue to recover.
         /// </returns>
-        public static bool CheckQueueRecovery()
+        public static List<string> CheckQueueRecovery()
         {
             try
             {
-                string tempPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\hb_queue_recovery.xml");
-                if (File.Exists(tempPath))
+                string tempPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
+                List<string> queueFiles = new List<string>();
+
+                DirectoryInfo info = new DirectoryInfo(tempPath);
+                FileInfo[] logFiles = info.GetFiles("*.xml");
+                foreach (FileInfo file in logFiles)
                 {
-                    using (FileStream strm = new FileStream(tempPath, FileMode.Open, FileAccess.Read))
+                    if (!file.Name.Contains("hb_queue_recovery"))
+                        continue;
+
+                    using (FileStream strm = new FileStream(Path.Combine(file.DirectoryName, file.Name), FileMode.Open, FileAccess.Read))
                     {
                         List<Job> list = Ser.Deserialize(strm) as List<Job>;
                         if (list != null)
+                        {
                             if (list.Count != 0)
-                                return true;
+                            {
+                                queueFiles.Add(file.Name);
+                            }
+                        }
                     }
                 }
-                return false;
+
+                return queueFiles;
             }
             catch (Exception)
             {
-                return false; // Keep quiet about the error.
+                return new List<string>(); // Keep quiet about the error.
             }
         }
 
         /// <summary>
-        /// Get the Process ID of HandBrakeCLI for the current instance.
+        /// Checks if this HandBrake is running multiple instances
         /// </summary>
-        /// <param name="before">List of processes before the new process was started</param>
-        /// <returns>Int - Process ID</returns>
-        public static int GetCliProcess(Process[] before)
+        /// <returns>True if the UI has another instance running</returns>
+        public static bool IsMultiInstance
         {
-            // This is a bit of a cludge. Maybe someone has a better idea on how to impliment this.
-            // Since we used CMD to start HandBrakeCLI, we don't get the process ID from hbProc.
-            // Instead we take the processes before and after, and get the ID of HandBrakeCLI.exe
-            // avoiding any previous instances of HandBrakeCLI.exe in before.
-            // Kill the current process.
-
-            DateTime startTime = DateTime.Now;
-            TimeSpan duration;
-
-            Process[] hbProcesses = Process.GetProcessesByName("HandBrakeCLI");
-            while (hbProcesses.Length == 0)
+            get
             {
-                hbProcesses = Process.GetProcessesByName("HandBrakeCLI");
-                duration = DateTime.Now - startTime;
-                if (duration.Seconds > 5 && hbProcesses.Length == 0)
-                    // Make sure we don't wait forever if the process doesn't start
-                    return -1;
+                return Process.GetProcessesByName("HandBrake").Length > 0 ? true : false;
             }
-
-            Process hbProcess = null;
-            foreach (Process process in hbProcesses)
-            {
-                bool found = false;
-                // Check if the current CLI instance was running before we started the current one
-                foreach (Process bprocess in before)
-                {
-                    if (process.Id == bprocess.Id)
-                        found = true;
-                }
-
-                // If it wasn't running before, we found the process we want.
-                if (!found)
-                {
-                    hbProcess = process;
-                    break;
-                }
-            }
-            if (hbProcess != null)
-                return hbProcess.Id;
-
-            return -1;
         }
 
         /// <summary>
@@ -457,8 +431,7 @@ namespace Handbrake.Functions
                 FileInfo[] logFiles = info.GetFiles("*.txt");
                 foreach (FileInfo file in logFiles)
                 {
-                    if (!file.Name.Contains("last_scan_log") && !file.Name.Contains("last_encode_log") &&
-                        !file.Name.Contains("tmp_appReadable_log.txt"))
+                    if (!file.Name.Contains("last_scan_log") && !file.Name.Contains("last_encode_log"))
                         File.Delete(file.FullName);
                 }
             }
@@ -479,8 +452,7 @@ namespace Handbrake.Functions
                 {
                     if (file.LastWriteTime < DateTime.Now.AddDays(-30))
                     {
-                        if (!file.Name.Contains("last_scan_log") && !file.Name.Contains("last_encode_log") &&
-                            !file.Name.Contains("tmp_appReadable_log.txt"))
+                        if (!file.Name.Contains("last_scan_log.txt") && !file.Name.Contains("last_encode_log.txt"))
                             File.Delete(file.FullName);
                     }
                 }

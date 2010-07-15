@@ -104,7 +104,7 @@ namespace HandBrake.ApplicationServices.Services
             this.LastEncode = job;
             this.Remove(0); // Remove the item which we are about to pass out.
 
-            this.WriteQueueStateToFile("hb_queue_recovery.xml");
+            this.SaveQueue();
 
             return job;
         }
@@ -140,7 +140,7 @@ namespace HandBrake.ApplicationServices.Services
                              };
 
             this.queue.Add(newJob);
-            this.WriteQueueStateToFile("hb_queue_recovery.xml");
+            this.SaveQueue();
 
             if (this.QueueListChanged != null)
                 this.QueueListChanged(this, new EventArgs());
@@ -153,7 +153,7 @@ namespace HandBrake.ApplicationServices.Services
         public void Remove(int index)
         {
             this.queue.RemoveAt(index);
-            this.WriteQueueStateToFile("hb_queue_recovery.xml");
+            this.SaveQueue();
 
             if (this.QueueListChanged != null)
                 this.QueueListChanged(this, new EventArgs());
@@ -186,7 +186,7 @@ namespace HandBrake.ApplicationServices.Services
                 queue.Insert((index - 1), item);
             }
 
-            WriteQueueStateToFile("hb_queue_recovery.xml"); // Update the queue recovery file
+            this.SaveQueue(); // Update the queue recovery file
 
             if (this.QueueListChanged != null)
                 this.QueueListChanged(this, new EventArgs());
@@ -206,10 +206,21 @@ namespace HandBrake.ApplicationServices.Services
                 this.queue.Insert((index + 1), item);
             }
 
-            this.WriteQueueStateToFile("hb_queue_recovery.xml"); // Update the queue recovery file
+            this.SaveQueue(); // Update the queue recovery file
 
             if (this.QueueListChanged != null)
                 this.QueueListChanged(this, new EventArgs());
+        }
+        
+        /// <summary>
+        /// Save any updates to the main queue file.
+        /// </summary>
+        public void SaveQueue()
+        {
+            string file = Init.InstanceId == 0
+                              ? "hb_queue_recovery.xml"
+                              : string.Format("hb_queue_recovery{0}.xml", Init.InstanceId);
+            this.WriteQueueStateToFile(file);
         }
 
         /// <summary>
@@ -218,9 +229,8 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="file">The location of the file to write the queue to.</param>
         public void WriteQueueStateToFile(string file)
         {
-            string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                                              @"HandBrake\hb_queue_recovery.xml");
-            string tempPath = file == "hb_queue_recovery.xml" ? appDataPath : file;
+            string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
+            string tempPath = file.Contains("hb_queue_recovery") ? appDataPath + file : file;
 
             try
             {
@@ -285,9 +295,8 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="file">The location of the file to read the queue from.</param>
         public void LoadQueueFromFile(string file)
         {
-            string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                                              @"HandBrake\hb_queue_recovery.xml");
-            string tempPath = file == "hb_queue_recovery.xml" ? appDataPath : file;
+            string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
+            string tempPath = file.Contains("hb_queue_recovery") ? appDataPath + file : file;
 
             if (File.Exists(tempPath))
             {
@@ -304,8 +313,8 @@ namespace HandBrake.ApplicationServices.Services
                             foreach (Job item in list)
                                 this.queue.Add(item);
 
-                        if (file != "hb_queue_recovery.xml")
-                            this.WriteQueueStateToFile("hb_queue_recovery.xml");
+                        if (!file.Contains("hb_queue_recovery"))
+                            this.SaveQueue();
 
                         if (this.QueueListChanged != null)
                             this.QueueListChanged(this, new EventArgs());
@@ -378,7 +387,7 @@ namespace HandBrake.ApplicationServices.Services
             while (this.Count != 0)
             {
                 Job encJob = this.GetNextJob();
-                this.WriteQueueStateToFile("hb_queue_recovery.xml"); // Update the queue recovery file
+                this.SaveQueue(); // Update the queue recovery file
 
                 Run(encJob, true);
 

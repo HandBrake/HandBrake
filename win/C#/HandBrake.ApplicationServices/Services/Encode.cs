@@ -159,13 +159,13 @@ namespace HandBrake.ApplicationServices.Services
 
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
                 ProcessStartInfo cliStart = new ProcessStartInfo(handbrakeCLIPath, encJob.Query)
-                { 
+                {
                     RedirectStandardOutput = true,
                     RedirectStandardError = enableLogging ? true : false,
                     UseShellExecute = false,
                     CreateNoWindow = !Settings.Default.showCliForInGuiEncodeStatus ? true : false
                 };
-              
+
                 this.HbProcess = Process.Start(cliStart);
 
                 if (enableLogging)
@@ -213,8 +213,8 @@ namespace HandBrake.ApplicationServices.Services
             }
             catch (Exception exc)
             {
-                Main.ShowExceptiowWindow("It would appear that HandBrakeCLI has not started correctly."+ 
-                "You should take a look at the Activity log as it may indicate the reason why.\n\nDetailed Error Information: error occured in runCli()", 
+                Main.ShowExceptiowWindow("It would appear that HandBrakeCLI has not started correctly." +
+                "You should take a look at the Activity log as it may indicate the reason why.\n\nDetailed Error Information: error occured in runCli()",
                 exc.ToString());
             }
         }
@@ -227,11 +227,7 @@ namespace HandBrake.ApplicationServices.Services
             try
             {
                 if (this.HbProcess != null) this.HbProcess.Kill();
-
-                Process[] list = Process.GetProcessesByName("HandBrakeCLI");
-                foreach (Process process in list)
-                    process.Kill();
-            } 
+            }
             catch (Exception exc)
             {
                 Main.ShowExceptiowWindow("Unable to stop HandBrakeCLI. It may not be running.", exc.ToString());
@@ -272,36 +268,12 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         private static string CreateCliLogHeader(Job encJob)
         {
-            try
-            {
-                //string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
-                //                "\\HandBrake\\logs";
-                //string logPath = Path.Combine(logDir, "last_encode_log.txt");
+            StringBuilder logHeader = new StringBuilder();
+            logHeader.AppendLine("# CLI Query: " + encJob.Query);
+            logHeader.AppendLine("# User Query: " + encJob.CustomQuery);
+            logHeader.AppendLine("-------------------------------------------");
 
-                //var reader = new StreamReader(File.Open(logPath, FileMode.Open, FileAccess.Read, FileShare.Read));
-                //string log = reader.ReadToEnd();
-                //reader.Close();
-
-                //var writer = new StreamWriter(File.Create(logPath));
-
-
-                //writer.WriteLine("### CLI Query: " + encJob.Query);
-                //writer.WriteLine("### User Query: " + encJob.CustomQuery);
-                //writer.WriteLine("#########################################");
-                //writer.WriteLine(log);
-                //writer.Flush();
-                //writer.Close();
-                StringBuilder logHeader = new StringBuilder();
-                logHeader.AppendLine("### CLI Query: " + encJob.Query);
-                logHeader.AppendLine("### User Query: " + encJob.CustomQuery);
-                logHeader.AppendLine("#########################################");
-
-                return logHeader.ToString();
-            }
-            catch (Exception)
-            {
-                return string.Empty;
-            }
+            return logHeader.ToString();
         }
 
         /// <summary>
@@ -317,7 +289,7 @@ namespace HandBrake.ApplicationServices.Services
             {
                 string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
                                 "\\HandBrake\\logs";
-                string tempLogFile = Path.Combine(logDir, "last_encode_log.txt");
+                string tempLogFile = Path.Combine(logDir, string.Format("last_encode_log{0}.txt", Init.InstanceId));
 
                 string encodeDestinationPath = Path.GetDirectoryName(destination);
                 string destinationFile = Path.GetFileName(destination);
@@ -378,8 +350,8 @@ namespace HandBrake.ApplicationServices.Services
             {
                 if (fileWriter != null)
                     fileWriter.Close();
-            } 
-            catch(Exception exc)
+            }
+            catch (Exception exc)
             {
                 Main.ShowExceptiowWindow("Unable to close the log file wrtier", exc.ToString());
             }
@@ -399,8 +371,8 @@ namespace HandBrake.ApplicationServices.Services
                 // last_encode_log.txt is the primary log file. Since .NET can't read this file whilst the CLI is outputing to it (Not even in read only mode),
                 // we'll need to make a copy of it.
                 string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
-                string logFile = Path.Combine(logDir, "last_encode_log.txt");
-                string logFile2 = Path.Combine(logDir, "tmp_appReadable_log.txt");
+                string logFile = Path.Combine(logDir, string.Format("last_encode_log{0}.txt", Init.InstanceId));
+                string logFile2 = Path.Combine(logDir, string.Format("tmp_appReadable_log{0}.txt", Init.InstanceId));
                 int logFilePosition = 0;
 
                 try
@@ -414,7 +386,7 @@ namespace HandBrake.ApplicationServices.Services
                         File.Copy(logFile, logFile2, true);
                     else
                         return;
- 
+
                     // Start the Reader
                     // Only use text which continues on from the last read line
                     StreamReader sr = new StreamReader(logFile2);
@@ -445,8 +417,8 @@ namespace HandBrake.ApplicationServices.Services
         private void SetupLogging(Job encodeJob)
         {
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
-            string logFile = Path.Combine(logDir, "last_encode_log.txt");
-            string logFile2 = Path.Combine(logDir, "tmp_appReadable_log.txt");
+            string logFile = Path.Combine(logDir, string.Format("last_encode_log{0}.txt", Init.InstanceId));
+            string logFile2 = Path.Combine(logDir, string.Format("tmp_appReadable_log{0}.txt", Init.InstanceId));
 
             try
             {
@@ -493,7 +465,7 @@ namespace HandBrake.ApplicationServices.Services
                 catch (Exception exc)
                 {
                     Main.ShowExceptiowWindow("Unable to write log data...", exc.ToString());
-                }         
+                }
             }
         }
 
