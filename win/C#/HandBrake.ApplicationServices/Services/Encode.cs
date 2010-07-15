@@ -175,7 +175,7 @@ namespace HandBrake.ApplicationServices.Services
                 }
 
                 this.processID = HbProcess.Id;
-                this.processHandle = HbProcess.MainWindowHandle;
+                this.processHandle = HbProcess.Handle;
 
                 // Set the process Priority
                 if (this.processID != -1)
@@ -252,11 +252,11 @@ namespace HandBrake.ApplicationServices.Services
             SendKeys.Send("^C");
             SendKeys.Flush();
 
-            if (HbProcess != null)
-            {
-                HbProcess.StandardInput.AutoFlush = true;
-                HbProcess.StandardInput.WriteLine("^C");
-            }
+            //if (HbProcess != null)
+            //{
+            //    HbProcess.StandardInput.AutoFlush = true;
+            //    HbProcess.StandardInput.WriteLine("^C");
+            //}
         }
 
         /* Helpers */
