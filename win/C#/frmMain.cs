@@ -36,7 +36,6 @@ namespace Handbrake
         private frmQueue queueWindow;
         private frmPreview qtpreview;
         private frmActivityWindow activityWindow;
-        private frmSplashScreen splash = new frmSplashScreen();
 
         // Globals: Mainly used for tracking. *********************************
         public Title selectedTitle;
@@ -87,15 +86,9 @@ namespace Handbrake
         /// </param>
         public frmMain(string[] args)
         {
-            // Load and setup the splash screen in this thread
-            splash.Show(this);
-            Label lblStatus = new Label { Size = new Size(150, 20), Location = new Point(182, 102) };
-            splash.Controls.Add(lblStatus);
-
             InitializeComponent();
 
             // Update the users config file with the CLI version data.
-            UpdateSplashStatus(lblStatus, "Checking CLI Version Data ...");
             Main.SetCliVersionData();
             Main.CheckForValidCliVersion();
 
@@ -105,54 +98,43 @@ namespace Handbrake
                 this.Text += " " + v.ToString(4);
             }
 
-            // Show the form, but leave disabled until preloading is complete then show the main form)
-            this.Enabled = false;
-            this.Show();
-            Application.DoEvents(); // Forces frmMain to draw
-
             // Check for new versions, if update checking is enabled
-            if (Properties.Settings.Default.updateStatus)
+            if (Settings.Default.updateStatus)
             {
-                DateTime now = DateTime.Now;
-                DateTime lastCheck = Properties.Settings.Default.lastUpdateCheckDate;
-                TimeSpan elapsed = now.Subtract(lastCheck);
-                if (elapsed.TotalDays > Properties.Settings.Default.daysBetweenUpdateCheck)
+                if (DateTime.Now.Subtract(Settings.Default.lastUpdateCheckDate).TotalDays > Properties.Settings.Default.daysBetweenUpdateCheck)
                 {
-                    UpdateSplashStatus(lblStatus, "Checking for updates ...");
                     Main.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDone), false);
                 }
             }
 
             // Clear the log files in the background
-            if (Properties.Settings.Default.clearOldLogs)
+            if (Settings.Default.clearOldLogs)
             {
-                UpdateSplashStatus(lblStatus, "Clearing Old Log Files ..");
                 Thread clearLog = new Thread(Main.ClearOldLogs);
                 clearLog.Start();
             }
 
             // Setup the GUI components
-            UpdateSplashStatus(lblStatus, "Setting up the GUI ...");
             LoadPresetPanel(); // Load the Preset Panel
             treeView_presets.ExpandAll();
             lbl_encode.Text = string.Empty;
             drop_mode.SelectedIndex = 0;
             queueWindow = new frmQueue(encodeQueue, this); // Prepare the Queue
-            if (!Properties.Settings.Default.QueryEditorTab)
+            if (!Settings.Default.QueryEditorTab)
                 tabs_panel.TabPages.RemoveAt(7); // Remove the query editor tab if the user does not want it enabled.
-            if (Properties.Settings.Default.tooltipEnable)
+            if (Settings.Default.tooltipEnable)
                 ToolTip.Active = true;
 
             // Load the user's default settings or Normal Preset
-            if (Properties.Settings.Default.defaultPreset != string.Empty && presetHandler.GetPreset(Properties.Settings.Default.defaultPreset) != null)
+            if (Settings.Default.defaultPreset != string.Empty && presetHandler.GetPreset(Properties.Settings.Default.defaultPreset) != null)
             {
-                string query = presetHandler.GetPreset(Properties.Settings.Default.defaultPreset).Query;
+                string query = presetHandler.GetPreset(Settings.Default.defaultPreset).Query;
                 if (query != null)
                 {
                     x264Panel.Reset2Defaults();
 
                     QueryParser presetQuery = QueryParser.Parse(query);
-                    PresetLoader.LoadPreset(this, presetQuery, Properties.Settings.Default.defaultPreset);
+                    PresetLoader.LoadPreset(this, presetQuery, Settings.Default.defaultPreset);
 
                     x264Panel.StandardizeOptString();
                     x264Panel.SetCurrentSettingsInPanel();
@@ -164,15 +146,9 @@ namespace Handbrake
             // Register with Growl (if not using Growl for the encoding completion action, this wont hurt anything)
             GrowlCommunicator.Register();
 
-            // Finished Loading
-            UpdateSplashStatus(lblStatus, "Loading Complete.");
-            splash.Close();
-            splash.Dispose();
-            this.Enabled = true;
-
             // Event Handlers and Queue Recovery
             events();
-            queueRecovery();
+            Main.RecoverQueue(encodeQueue);
 
             // If have a file passed in via command arguemtents, check it's a file and try scanning it.
             if (args.Length >= 1 && (File.Exists(args[0]) || Directory.Exists(args[0])))
@@ -181,6 +157,10 @@ namespace Handbrake
             }
         }
 
+        /// <summary>
+        /// When the update check is done, process the results.
+        /// </summary>
+        /// <param name="result">IAsyncResult result</param>
         private void UpdateCheckDone(IAsyncResult result)
         {
             if (InvokeRequired)
@@ -206,50 +186,6 @@ namespace Handbrake
                 if ((bool)result.AsyncState)
                     Main.ShowExceptiowWindow("Unable to check for updates, Please try again later.", ex.ToString());
             }
-        }
-
-        // Startup Functions   
-        private void queueRecovery()
-        {
-            DialogResult result = DialogResult.None;
-            List<string> queueFiles = Main.CheckQueueRecovery();
-            if (queueFiles.Count == 1)
-            {
-                result = MessageBox.Show(
-                        "HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?",
-                        "Queue Recovery Possible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            }
-            else if (queueFiles.Count > 1)
-            {
-                result = MessageBox.Show(
-                        "HandBrake has detected multiple unfinished queue files. These will be from multiple instances of HandBrake running. Would you like to recover all unfinished jobs?",
-                        "Queue Recovery Possible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            }
-
-            if (result == DialogResult.Yes)
-            {
-                foreach (string file in queueFiles)
-                {
-                    encodeQueue.LoadQueueFromFile(file); // Start Recovery
-                }
-            }
-            else
-            {
-                if (Main.IsMultiInstance) return; // Don't tamper with the files if we are multi instance
-
-                string tempPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
-                foreach (string file in queueFiles)
-                {
-                    if (File.Exists(Path.Combine(tempPath, file)))
-                        File.Delete(Path.Combine(tempPath, file));
-                }
-            }
-        }
-
-        private void UpdateSplashStatus(Label status, string text)
-        {
-            status.Text = text;
-            Application.DoEvents();
         }
 
         #endregion
@@ -439,8 +375,7 @@ namespace Handbrake
         /// </param>
         private void mnu_encodeLog_Click(object sender, EventArgs e)
         {
-            frmActivityWindow dvdInfoWindow = new frmActivityWindow(encodeQueue, SourceScan);
-            dvdInfoWindow.Show();
+            this.btn_ActivityWindow_Click(this, null);
         }
 
         /// <summary>
@@ -2326,11 +2261,12 @@ namespace Handbrake
 
             lbl_encode.Text =
                 string.Format(
-                "{0:00.00}%,    FPS: {1:000.0},    Avg FPS: {2:000.0},    Time Remaining: {3}",
+                "{0:00.00}%,  FPS: {1:000.0},  Avg FPS: {2:000.0},  Time Remaining: {3},  Encode(s) Pending {4}",
                 e.PercentComplete,
                 e.CurrentFrameRate,
                 e.AverageFrameRate,
-                e.EstimatedTimeLeft);
+                e.EstimatedTimeLeft,
+                encodeQueue.Count);
 
             ProgressBarStatus.Value = (int)Math.Round(e.PercentComplete);
         }
@@ -2378,8 +2314,8 @@ namespace Handbrake
         private void LoadPresetPanel()
         {
             if (presetHandler.CheckIfPresetsAreOutOfDate())
-                if (!Properties.Settings.Default.presetNotification)
-                    MessageBox.Show(splash,
+                if (!Settings.Default.presetNotification)
+                    MessageBox.Show(this,
                                     "HandBrake has determined your built-in presets are out of date... These presets will now be updated.",
                                     "Preset Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -2477,33 +2413,41 @@ namespace Handbrake
         /// <param name="e">FormClosingEventArgs</param>
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            // If currently encoding, the queue isn't paused, and there are queue items to process, prompt to confirm close.
-            if (encodeQueue.IsEncoding)
+            try
             {
-                DialogResult result =
-                    MessageBox.Show(
-                        "HandBrake has queue items to process. Closing HandBrake will stop the current encoding.\n\nDo you want to close HandBrake?",
-                        "Close HandBrake?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                if (result == DialogResult.No)
+                // If currently encoding, the queue isn't paused, and there are queue items to process, prompt to confirm close.
+                if (encodeQueue.IsEncoding)
                 {
-                    e.Cancel = true;
-                    return;
+                    DialogResult result =
+                        MessageBox.Show(
+                            "HandBrake is currently encoding. Closing HandBrake will stop the current encode and will result in an unplayable file.\n\nDo you want to close HandBrake?",
+                            "Close HandBrake?",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question);
+
+                    if (result == DialogResult.No)
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+
+                    encodeQueue.Stop();
                 }
 
-                // Try to safely close out if we can, or kill the cli if using in-gui status
-                if (!Settings.Default.showCliForInGuiEncodeStatus)
-                    encodeQueue.Stop();
-                else
-                    encodeQueue.SafelyClose();
+                if (SourceScan.IsScanning)
+                {
+                    SourceScan.ScanCompleted -= new EventHandler(SourceScan_ScanCompleted);
+                    SourceScan.Stop();
+                }
             }
-
-            if (SourceScan.IsScanning)
+            catch (Exception exc)
             {
-                SourceScan.ScanCompleted -= new EventHandler(SourceScan_ScanCompleted);
-                SourceScan.Stop();
+                Main.ShowExceptiowWindow("HandBrake was not able to shutdown properly. You may need to forcefully quit HandBrake CLI from TaskManager if it's still running.", exc.ToString());
             }
-            base.OnFormClosing(e);
+            finally
+            {
+                base.OnFormClosing(e);
+            }
         }
 
         #endregion

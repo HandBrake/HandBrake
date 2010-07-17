@@ -18,6 +18,7 @@ namespace Handbrake.Functions
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.ApplicationServices.Services.Interfaces;
 
     using Model;
 
@@ -404,6 +405,46 @@ namespace Handbrake.Functions
             catch (Exception)
             {
                 return new List<string>(); // Keep quiet about the error.
+            }
+        }
+
+        /// <summary>
+        /// Recover a queue from file.
+        /// </summary>
+        public static void RecoverQueue(IQueue encodeQueue)
+        {
+            DialogResult result = DialogResult.None;
+            List<string> queueFiles = CheckQueueRecovery();
+            if (queueFiles.Count == 1)
+            {
+                result = MessageBox.Show(
+                        "HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?",
+                        "Queue Recovery Possible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            }
+            else if (queueFiles.Count > 1)
+            {
+                result = MessageBox.Show(
+                        "HandBrake has detected multiple unfinished queue files. These will be from multiple instances of HandBrake running. Would you like to recover all unfinished jobs?",
+                        "Queue Recovery Possible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            }
+
+            if (result == DialogResult.Yes)
+            {
+                foreach (string file in queueFiles)
+                {
+                    encodeQueue.LoadQueueFromFile(file); // Start Recovery
+                }
+            }
+            else
+            {
+                if (IsMultiInstance) return; // Don't tamper with the files if we are multi instance
+
+                string tempPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
+                foreach (string file in queueFiles)
+                {
+                    if (File.Exists(Path.Combine(tempPath, file)))
+                        File.Delete(Path.Combine(tempPath, file));
+                }
             }
         }
 

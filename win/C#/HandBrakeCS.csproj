@@ -356,10 +356,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmSplashScreen.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>frmSplashScreen.cs</DependentUpon>
-    </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -377,12 +373,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <Compile Include="frmSplashScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmSplashScreen.Designer.cs">
-      <DependentUpon>frmSplashScreen.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -414,7 +404,6 @@
     <Content Include="Resources\window.png" />
     <None Include="Resources\save.png" />
     <None Include="Resources\stop.png" />
-    <None Include="Resources\SplashScreen.jpg" />
     <None Include="Resources\Movies.png" />
     <None Include="Resources\General Preferences.png" />
   </ItemGroup>

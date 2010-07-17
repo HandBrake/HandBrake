@@ -255,7 +255,7 @@ namespace HandBrake.ApplicationServices.Services
             //if (HbProcess != null)
             //{
             //    HbProcess.StandardInput.AutoFlush = true;
-            //    HbProcess.StandardInput.WriteLine("^C");
+            //    HbProcess.StandardInput.WriteLine("^c^z");
             //}
         }
 

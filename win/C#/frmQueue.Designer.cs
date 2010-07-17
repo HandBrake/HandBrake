@@ -73,9 +73,9 @@ namespace Handbrake
             this.lbl_encodeStatus = new System.Windows.Forms.Label();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.lbl_encodeOptions = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
             this.toolStrip1.SuspendLayout();
             this.mnu_queue.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -428,6 +428,15 @@ namespace Handbrake
             this.lbl_encodeOptions.TabIndex = 74;
             this.lbl_encodeOptions.Text = "-";
             // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.Transparent;
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel3.Location = new System.Drawing.Point(15, 199);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(759, 15);
+            this.panel3.TabIndex = 73;
+            // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.Transparent;
@@ -445,15 +454,6 @@ namespace Handbrake
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(15, 214);
             this.panel1.TabIndex = 0;
-            // 
-            // panel3
-            // 
-            this.panel3.BackColor = System.Drawing.Color.Transparent;
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(15, 199);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(759, 15);
-            this.panel3.TabIndex = 73;
             // 
             // frmQueue
             // 
