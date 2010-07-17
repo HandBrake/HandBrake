@@ -53,8 +53,9 @@ BOOL                        fIsDragging;
     hb_handle_t                  *fQueueEncodeLibhb;              // reference to libhb
     HBController                 *fHBController;        // reference to HBController
     NSMutableArray               *fJobGroups;           // mirror image of the queue array from controller.mm
-
-    int                          fEncodingQueueItem;     // corresponds to the index of fJobGroups encoding item
+    
+    int                          pidNum;                // Records the PID number from HBController for this instance
+    int                          fEncodingQueueItem;    // corresponds to the index of fJobGroups encoding item
     int                          fPendingCount;         // Number of various kinds of job groups in fJobGroups.
     int                          fCompletedCount;
     int                          fCanceledCount;
@@ -106,7 +107,6 @@ BOOL                        fIsDragging;
 #endif
 
 }
-
 - (void)setHandle: (hb_handle_t *)handle;
 - (void)setHBController: (HBController *)controller;
 

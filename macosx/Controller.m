@@ -83,7 +83,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     fPreferencesController = [[HBPreferencesController alloc] init];
     /* Lets report the HandBrake version number here to the activity log and text log file */
     NSString *versionStringFull = [[NSString stringWithFormat: @"Handbrake Version: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]] stringByAppendingString: [NSString stringWithFormat: @" (%@)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
-    [self writeToActivityLog: "%s", [versionStringFull UTF8String]];    
+    [self writeToActivityLog: "%s", [versionStringFull UTF8String]];
+    
+    /* Get the PID number for this hb instance, used in multi instance encoding */
+    pidNum = [self getThisHBInstancePID];
+    /* Report this pid to the activity log */
+    [self writeToActivityLog: "Pid for this instance:%d", pidNum];
     
     return self;
 }
@@ -122,12 +127,19 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fPresetsOutlineView setAutosaveExpandedItems:YES];
     
     dockIconProgress = 0;
-
+    
+    /* Init QueueFile .plist */
+    [self loadQueueFile];
+    
     /* Call UpdateUI every 1/2 sec */
+    
     [[NSRunLoop currentRunLoop] addTimer:[NSTimer
-                                          scheduledTimerWithTimeInterval:0.5 target:self
-                                          selector:@selector(updateUI:) userInfo:nil repeats:YES]
-                                 forMode:NSDefaultRunLoopMode];
+                                          scheduledTimerWithTimeInterval:0.5 
+                                          target:self
+                                          selector:@selector(updateUI:) 
+                                          userInfo:nil repeats:YES]
+                                          forMode:NSDefaultRunLoopMode];
+                             
 
     // Open debug output window now if it was visible when HB was closed
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"OutputPanelIsOpen"])
@@ -217,29 +229,42 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [self browseSources:(id)fOpenSourceTitleMMenu];
         }
     }
+    currentQueueEncodeNameString = @"";
 }
 
+#pragma mark -
+#pragma mark Multiple Instances
 - (int) hbInstances
 {
     /* check to see if another instance of HandBrake.app is running */
     NSArray *runningAppDictionaries = [[NSWorkspace sharedWorkspace] launchedApplications];
-    NSDictionary *aDictionary;
+    NSDictionary *runningAppsDictionary;
     int hbInstances = 0;
-    for (aDictionary in runningAppDictionaries)
+    for (runningAppsDictionary in runningAppDictionaries)
 	{
-        if ([[aDictionary valueForKey:@"NSApplicationName"] isEqualToString:@"HandBrake"])
+        if ([[runningAppsDictionary valueForKey:@"NSApplicationName"] isEqualToString:@"HandBrake"])
 		{
             hbInstances++;
 		}
 	}
     return hbInstances;
 }
+/* Gets the Process Identifer (PID) for this instance and returns it as an integer */
+- (int) getThisHBInstancePID
+{
+    /* Get the PID of this HB instance */
+    int hbInstancePID = [[NSRunningApplication currentApplication] processIdentifier];
+    return hbInstancePID;
+}
+
+#pragma mark -
 
 - (void) didDimissReloadQueue: (NSWindow *)sheet returnCode: (int)returnCode contextInfo: (void *)contextInfo
 {
     if (returnCode == NSAlertOtherReturn)
     {
         [self clearQueueAllItems];
+        
         /* We show whichever open source window specified in LaunchSourceBehavior preference key */
         if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source"])
         {
@@ -302,7 +327,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification
 {
-    
+    [currentQueueEncodeNameString release];
     [browsedSourceDisplayName release];
     [outputPanel release];
 	[fQueueController release];
@@ -336,9 +361,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
     /* Init UserPresets .plist */
 	[self loadPresets];
-    
-    /* Init QueueFile .plist */
-    [self loadQueueFile];
 	
     fRipIndicatorShown = NO;  // initially out of view in the nib
     
@@ -490,8 +512,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	[self getDefaultPresets:nil];
 	/* lets initialize the current successful scancount here to 0 */
 	currentSuccessfulScanCount = 0;
-    
-    
 }
 
 - (void) enableUI: (bool) b
@@ -758,10 +778,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 			break;
         }
 #undef p
-
+            
             
 #define p s.param.working
-        
+            
         case HB_STATE_SEARCHING:
 		{
             NSMutableString * string;
@@ -808,7 +828,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             break;  
         }
             
-
+            
         case HB_STATE_WORKING:
         {
             NSMutableString * string;
@@ -840,8 +860,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             }
             
             [fStatusField setStringValue: string];
-            /* Set the status string in fQueueController as well */
-            [fQueueController setQueueStatusString: string];
+            /* Set the status string in fQueueController as well but add currentQueueEncodeNameString to delineate
+             * which encode is being worked on by this instance in a multiple instance situation
+             */
+            NSString * queueStatusString = [NSString stringWithFormat:@"%@ -> %@",string,currentQueueEncodeNameString];
+            [fQueueController setQueueStatusString:queueStatusString];
+            
             /* Update slider */
             CGFloat progress_total = ( p.progress + p.job_cur - 1 ) / p.job_count;
             [fRipIndicator setIndeterminate: NO];
@@ -862,14 +886,14 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 fRipIndicatorShown = YES;
                 
             }
-
+            
             /* Update dock icon */
             if( dockIconProgress < 100.0 * progress_total )
             {
                 [self UpdateDockIcon: progress_total];
                 dockIconProgress += 5;
             }
-
+            
             break;
         }
 #undef p
@@ -946,7 +970,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 [self sendToMetaX:pathOfFinishedEncode];
                 
                 /* since we have successfully completed an encode, we increment the queue counter */
-                [self incrementQueueItemDone:nil]; 
+                [self incrementQueueItemDone:currentQueueEncodeIndex]; 
                 
                 /* all end of queue actions below need to be done after all queue encodes have finished 
                  * and there are no pending jobs left to process
@@ -986,15 +1010,22 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                         returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
                         [scriptObject release];
                     }
-                    
                 }
-                
-                
             }
             
             break;
         }
     }
+    
+    /* Since we can use multiple instance off of the same queue file it is imperative that we keep the QueueFileArray updated off of the QueueFile.plist
+     * so we go ahead and do it in this existing timer as opposed to using a new one */
+    
+    NSMutableArray * tempQueueArray = [[NSMutableArray alloc] initWithContentsOfFile:QueueFile];
+    [QueueFileArray setArray:tempQueueArray];
+    [tempQueueArray release]; 
+    /* Send Fresh QueueFileArray to fQueueController to update queue window */
+    [fQueueController setQueueArray: QueueFileArray];
+    [self getQueueStats];
     
 }
 
@@ -1887,53 +1918,38 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	/*We define the location of the user presets file */
     QueueFile = @"~/Library/Application Support/HandBrake/Queue.plist";
 	QueueFile = [[QueueFile stringByExpandingTildeInPath]retain];
-    /* We check for the presets.plist */
+    /* We check for the Queue.plist */
 	if ([fileManager fileExistsAtPath:QueueFile] == 0)
 	{
 		[fileManager createFileAtPath:QueueFile contents:nil attributes:nil];
 	}
-
+    
 	QueueFileArray = [[NSMutableArray alloc] initWithContentsOfFile:QueueFile];
 	/* lets check to see if there is anything in the queue file .plist */
     if (nil == QueueFileArray)
 	{
         /* if not, then lets initialize an empty array */
 		QueueFileArray = [[NSMutableArray alloc] init];
-        
-     /* Initialize our curQueueEncodeIndex to 0
-     * so we can use it to track which queue
-     * item is to be used to track our encodes */
-     /* NOTE: this should be changed if and when we
-      * are able to get the last unfinished encode
-      * in the case of a crash or shutdown */
-    
-	}
+    }
     else
     {
-    [self clearQueueEncodedItems];
+        /* ONLY clear out encoded items if we are single instance */
+        if ([self hbInstances] == 1)
+        {
+            [self clearQueueEncodedItems];
+        }
     }
-    currentQueueEncodeIndex = 0;
 }
 
 - (void)addQueueFileItem
 {
-        [QueueFileArray addObject:[self createQueueFileItem]];
-        [self saveQueueFileItem];
-
+    [QueueFileArray addObject:[self createQueueFileItem]];
+    [self saveQueueFileItem];
+    
 }
 
 - (void) removeQueueFileItem:(int) queueItemToRemove
 {
-   
-   /* Find out if the item we are removing is a cancelled (3) or a finished (0) item*/
-   if ([[[QueueFileArray objectAtIndex:queueItemToRemove] objectForKey:@"Status"] intValue] == 3 || [[[QueueFileArray objectAtIndex:queueItemToRemove] objectForKey:@"Status"] intValue] == 0)
-    {
-    /* Since we are removing a cancelled or finished item, WE need to decrement the currentQueueEncodeIndex
-     * by one to keep in sync with the queue array
-     */
-    currentQueueEncodeIndex--;
-
-    }
     [QueueFileArray removeObjectAtIndex:queueItemToRemove];
     [self saveQueueFileItem];
 
@@ -1977,7 +1993,13 @@ fWorkingCount = 0;
 		if ([[thisQueueDict objectForKey:@"Status"] intValue] == 1) // being encoded
 		{
 			fWorkingCount++;
-            fEncodingQueueItem = i;	
+            fEncodingQueueItem = i;
+            /* check to see if we are the instance doing this encoding */
+            if ([thisQueueDict objectForKey:@"EncodingPID"] && [[thisQueueDict objectForKey:@"EncodingPID"] intValue] == pidNum)
+            {
+                currentQueueEncodeIndex = i;
+            }
+            	
 		}
         if ([[thisQueueDict objectForKey:@"Status"] intValue] == 2) // pending		
         {
@@ -2002,6 +2024,30 @@ fWorkingCount = 0;
     }
     [fQueueStatus setStringValue:string];
 }
+
+/* Used to get the next pending queue item index and return it if found */
+- (int)getNextPendingQueueIndex
+{
+    /* initialize nextPendingIndex to -1, this value tells incrementQueueItemDone that there are no pending items in the queue */
+    int nextPendingIndex = -1;
+	BOOL nextPendingFound = NO;
+    NSEnumerator *enumerator = [QueueFileArray objectEnumerator];
+	id tempObject;
+    int i = 0;
+	while (tempObject = [enumerator nextObject])
+	{
+		NSDictionary *thisQueueDict = tempObject;
+        if ([[thisQueueDict objectForKey:@"Status"] intValue] == 2 && nextPendingFound == NO) // pending		
+        {
+			nextPendingFound = YES;
+            nextPendingIndex = [QueueFileArray indexOfObject: tempObject];
+            [self writeToActivityLog: "getNextPendingQueueIndex next pending encod index is:%d", nextPendingIndex];
+		}
+        i++;
+	}
+    return nextPendingIndex;
+}
+
 
 /* This method will set any item marked as encoding back to pending
  * currently used right after a queue reload
@@ -2401,8 +2447,8 @@ fWorkingCount = 0;
 
 - (void) incrementQueueItemDone:(int) queueItemDoneIndexNum
 {
-    int i = currentQueueEncodeIndex;
-    [[QueueFileArray objectAtIndex:i] setObject:[NSNumber numberWithInt:0] forKey:@"Status"];
+    /* Mark the encode just finished as done (status 0)*/
+    [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] setObject:[NSNumber numberWithInt:0] forKey:@"Status"];
 	
     /* We save all of the Queue data here */
     [self saveQueueFileItem];
@@ -2411,24 +2457,40 @@ fWorkingCount = 0;
      * we can go ahead and increment currentQueueEncodeIndex 
      * so that if there is anything left in the queue we can
      * go ahead and move to the next item if we want to */
-    currentQueueEncodeIndex++ ;
     int queueItems = [QueueFileArray count];
-    /* If we still have more items in our queue, lets go to the next one */
-    if (currentQueueEncodeIndex < queueItems)
+    /* Check to see if there are any more pending items in the queue */
+    int newQueueItemIndex = [self getNextPendingQueueIndex];
+    /* If we still have more pending items in our queue, lets go to the next one */
+    if (newQueueItemIndex >= 0 && newQueueItemIndex < queueItems)
     {
+        /*Set our currentQueueEncodeIndex now to the newly found Pending encode as we own it */
+        currentQueueEncodeIndex = newQueueItemIndex;
+        /* now we mark the queue item as Status = 1 ( being encoded ) so another instance can not come along and try to scan it while we are scanning */
+        [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] setObject:[NSNumber numberWithInt:1] forKey:@"Status"];
+        [self writeToActivityLog: "incrementQueueItemDone new pending items found: %d", currentQueueEncodeIndex];
+        [self saveQueueFileItem];
+        /* now we can go ahead and scan the new pending queue item */
         [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]];
+
     }
     else
     {
-        [self writeToActivityLog: "incrementQueueItemDone the %d item queue is complete", currentQueueEncodeIndex - 1];
+        [self writeToActivityLog: "incrementQueueItemDone there are no more pending encodes"];
     }
 }
 
 /* Here we actually tell hb_scan to perform the source scan, using the path to source and title number*/
 - (void) performNewQueueScan:(NSString *) scanPath scanTitleNum: (int) scanTitleNum
 {
-   /* Tell HB to output a new activity log file for this encode */
+    /* Tell HB to output a new activity log file for this encode */
     [outputPanel startEncodeLog:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"DestinationPath"]];
+    
+    /* We now flag the queue item as being owned by this instance of HB using the PID */
+    [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] setObject:[NSNumber numberWithInt:pidNum] forKey:@"EncodingPID"];
+    /* Get the currentQueueEncodeNameString from the queue item to display in the status field */
+    currentQueueEncodeNameString = [[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"DestinationPath"] lastPathComponent]retain];
+    /* We save all of the Queue data here */
+    [self saveQueueFileItem];
     
     /* use a bool to determine whether or not we can decrypt using vlc */
     BOOL cancelScanDecrypt = 0;
@@ -3960,7 +4022,7 @@ bool one_burned = FALSE;
 
 
 /* addToQueue: puts up an alert before ultimately calling doAddToQueue
-*/
+ */
 - (IBAction) addToQueue: (id) sender
 {
 	/* We get the destination directory from the destination field here */
@@ -4010,7 +4072,7 @@ bool one_burned = FALSE;
     }
     else if (fileExistsInQueue == YES)
     {
-    NSBeginCriticalAlertSheet( NSLocalizedString( @"There is already a queue item for this destination.", @"" ),
+        NSBeginCriticalAlertSheet( NSLocalizedString( @"There is already a queue item for this destination.", @"" ),
                                   NSLocalizedString( @"Cancel", @"" ), NSLocalizedString( @"Overwrite", @"" ), nil, fWindow, self,
                                   @selector( overwriteAddToQueueAlertDone:returnCode:contextInfo: ),
                                   NULL, NULL, [NSString stringWithFormat:
@@ -4062,6 +4124,7 @@ bool one_burned = FALSE;
     // If there are pending jobs in the queue, then this is a rip the queue
     if (fPendingCount > 0)
     {
+        currentQueueEncodeIndex = [self getNextPendingQueueIndex];
         /* here lets start the queue with the first pending item */
         [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]]; 
         
@@ -4099,6 +4162,7 @@ bool one_burned = FALSE;
         }
         
         /* go right to processing the new queue encode */
+        currentQueueEncodeIndex = [self getNextPendingQueueIndex];
         [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]]; 
         
     }
@@ -4236,23 +4300,29 @@ bool one_burned = FALSE;
     // and as always, save it in the queue .plist...
     /* We save all of the Queue data here */
     [self saveQueueFileItem];
-    // so now lets move to 
-    currentQueueEncodeIndex++ ;
+    
     // ... and see if there are more items left in our queue
     int queueItems = [QueueFileArray count];
     /* If we still have more items in our queue, lets go to the next one */
-    if (currentQueueEncodeIndex < queueItems)
+    /* Check to see if there are any more pending items in the queue */
+    int newQueueItemIndex = [self getNextPendingQueueIndex];
+    /* If we still have more pending items in our queue, lets go to the next one */
+    if (newQueueItemIndex >= 0 && newQueueItemIndex < queueItems)
     {
-    [self writeToActivityLog: "doCancelCurrentJob currentQueueEncodeIndex is incremented to: %d", currentQueueEncodeIndex];
-    [self writeToActivityLog: "doCancelCurrentJob moving to the next job"];
-    
-    [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]];
+        /*Set our currentQueueEncodeIndex now to the newly found Pending encode as we own it */
+        currentQueueEncodeIndex = newQueueItemIndex;
+        /* now we mark the queue item as Status = 1 ( being encoded ) so another instance can not come along and try to scan it while we are scanning */
+        [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] setObject:[NSNumber numberWithInt:1] forKey:@"Status"];
+        [self writeToActivityLog: "incrementQueueItemDone new pending items found: %d", currentQueueEncodeIndex];
+        [self saveQueueFileItem];
+        /* now we can go ahead and scan the new pending queue item */
+        [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]];
+
     }
     else
     {
-        [self writeToActivityLog: "doCancelCurrentJob the item queue is complete"];
+        [self writeToActivityLog: "incrementQueueItemDone there are no more pending encodes"];
     }
-
 }
 
 - (void) doCancelCurrentJobAndStop

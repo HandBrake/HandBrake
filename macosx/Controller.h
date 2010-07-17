@@ -275,7 +275,8 @@ BOOL                        fIsDragging;
     int                          fWorkingCount;
     
     int                          fqueueEditRescanItemNum; // queue array item to be reloaded into the main window
-    
+    int                          pidNum; // The pid number for this instance
+    NSString                     * currentQueueEncodeNameString;
     
     /* integer to set to determine the previous state
 		of encode 0==idle, 1==encoding, 2==cancelled*/
@@ -285,11 +286,12 @@ BOOL                        fIsDragging;
     BOOL                           SuccessfulScan;
     BOOL                           applyQueueToScan;
 	NSString                      * currentSource;
-    NSString                     * browsedSourceDisplayName;
+    NSString                      * browsedSourceDisplayName;
     
     double                         dockIconProgress;
 }
 
+- (int) getThisHBInstancePID;
 - (IBAction) showAboutPanel:(id)sender;
 
 - (void) writeToActivityLog:(const char *) format, ...;
@@ -458,6 +460,7 @@ BOOL                        fIsDragging;
 - (void)moveObjectsInPresetsArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(NSUInteger)insertIndex;
 
 - (int) hbInstances;
+- (int) getThisHBInstancePID;
 
 // Chapter files methods
 - (IBAction) browseForChapterFile: (id) sender;

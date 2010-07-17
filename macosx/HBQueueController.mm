@@ -109,7 +109,8 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
             nil]];
 
         fJobGroups = [[NSMutableArray arrayWithCapacity:0] retain];
-       } 
+       }
+
         return self;
 }
 
@@ -118,14 +119,13 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
     [fJobGroups setArray:QueueFileArray];
     fIsDragging = NO; 
     /* First stop any timer working now */
-    [self stopAnimatingCurrentJobGroupInQueue];
+    //[self stopAnimatingCurrentJobGroupInQueue];
     [fOutlineView reloadData];
     
     
     
     /* lets get the stats on the status of the queue array */
     
-    fEncodingQueueItem = 0;
     fPendingCount = 0;
     fCompletedCount = 0;
     fCanceledCount = 0;
@@ -138,11 +138,11 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
      * 2 == is yet to be encoded
      * 3 == cancelled
      */
-    
 	int i = 0;
+    NSDictionary *thisQueueDict = nil;
 	for(id tempObject in fJobGroups)
 	{
-		NSDictionary *thisQueueDict = tempObject;
+		thisQueueDict = tempObject;
 		if ([[thisQueueDict objectForKey:@"Status"] intValue] == 0) // Completed
 		{
 			fCompletedCount++;	
@@ -150,7 +150,11 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 		if ([[thisQueueDict objectForKey:@"Status"] intValue] == 1) // being encoded
 		{
 			fWorkingCount++;
-            fEncodingQueueItem = i;	
+            /* we have an encoding job so, lets start the animation timer */
+            if ([thisQueueDict objectForKey:@"EncodingPID"] && [[thisQueueDict objectForKey:@"EncodingPID"] intValue] == pidNum)
+            {
+                fEncodingQueueItem = i;
+            }
 		}
         if ([[thisQueueDict objectForKey:@"Status"] intValue] == 2) // pending		
         {
@@ -162,14 +166,6 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 		}
 		i++;
 	}
-    
-    /* We should fire up the encoding timer here based on fWorkingCount */
-    
-    if (fWorkingCount > 0)
-    {
-        /* we have an encoding job so, lets start the animation timer */
-        [self startAnimatingCurrentWorkingEncodeInQueue];
-    }
     
     /* Set the queue status field in the queue window */
     NSMutableString * string;
@@ -184,6 +180,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
     [fQueueCountField setStringValue:string];
     
 }
+
 /* This method sets the status string in the queue window
  * and is called from Controller.mm (fHBController)
  * instead of running another timer here polling libhb
@@ -191,7 +188,9 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
  */
 - (void)setQueueStatusString: (NSString *)statusString
 {
-[fProgressTextField setStringValue:statusString];
+    
+    [fProgressTextField setStringValue:statusString];
+    
 }
 
 //------------------------------------------------------------------------------------
@@ -227,6 +226,9 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 - (void)setHBController: (HBController *)controller
 {
     fHBController = controller;
+    /* Now get this pidnum from HBController */
+    pidNum = [fHBController getThisHBInstancePID];
+    [fHBController writeToActivityLog: "HBQueueController : My Pidnum is %d", pidNum];
 }
 
 #pragma mark -
@@ -238,6 +240,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 {
     [self showWindow:sender];
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"QueueWindowIsOpen"];
+    [self startAnimatingCurrentWorkingEncodeInQueue];
 }
 
 
@@ -252,7 +255,6 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
     if( ![[self window] setFrameUsingName:@"Queue"] )
         [[self window] center];
     [self setWindowFrameAutosaveName:@"Queue"];
-    //[[self window] setExcludedFromWindowsMenu:YES];
 
     /* lets setup our queue list outline view for drag and drop here */
     [fOutlineView registerForDraggedTypes: [NSArray arrayWithObject:DragDropSimplePboardType] ];
@@ -273,9 +275,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 
     // Show/hide UI elements
     fCurrentJobPaneShown = NO;     // it's shown in the nib
-    //[self showCurrentJobPane:NO];
 
-    //[self updateQueueCountField];
 }
 
 
@@ -285,6 +285,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 - (void)windowWillClose:(NSNotification *)aNotification
 {
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"QueueWindowIsOpen"];
+    [self stopAnimatingCurrentJobGroupInQueue];
 }
 
 #pragma mark Toolbar
@@ -507,7 +508,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
     }
     else
     { 
-    /* since we are not a currently encoding item, we can just be cancelled */
+    /* since we are not a currently encoding item, we can just be removed */
             [fHBController removeQueueFileItem:row];
     }
 }
@@ -520,19 +521,19 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
      * In this case, we are paused from the calling window, so calling
      * [fHBController Pause:NULL]; Again will resume encoding
      */
-       [fHBController Pause:NULL];
+    [fHBController Pause:NULL];
     if (returnCode == NSAlertOtherReturn)
     {
-    /* We need to save the currently encoding item number first */
-    int encodingItemToRemove = fEncodingQueueItem;
-    /* Since we are encoding, we need to let fHBController Cancel this job
-     * upon which it will move to the next one if there is one
-     */
-    [fHBController doCancelCurrentJob];
-    /* Now, we can go ahead and remove the job we just cancelled since
-     * we have its item number from above
-     */
-    [fHBController removeQueueFileItem:encodingItemToRemove];
+        /* We need to save the currently encoding item number first */
+        int encodingItemToRemove = fEncodingQueueItem;
+        /* Since we are encoding, we need to let fHBController Cancel this job
+         * upon which it will move to the next one if there is one
+         */
+        [fHBController doCancelCurrentJob];
+        /* Now, we can go ahead and remove the job we just cancelled since
+         * we have its item number from above
+         */
+        [fHBController removeQueueFileItem:encodingItemToRemove];
     }
     
 }
@@ -676,7 +677,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
     }
 }
 
-
+/* We need to make sure we denote only working encodes even for multiple instances */
 - (void) animateWorkingEncodeIconInQueue
 {
     NSInteger row = fEncodingQueueItem; /// need to set to fEncodingQueueItem
@@ -959,9 +960,6 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
 
 - (id)outlineView:(NSOutlineView *)fOutlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
 {
-    // nb: The "desc" column is currently an HBImageAndTextCell. However, we are longer
-    // using the image portion of the cell so we could switch back to a regular NSTextFieldCell.
-    
     if ([[tableColumn identifier] isEqualToString:@"desc"])
     {
         
@@ -996,7 +994,6 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
                                          nil];
         
         /* First line, we should strip the destination path and just show the file name and add the title num and chapters (if any) */
-        //finalDescription = [finalDescription stringByAppendingString:[NSString stringWithFormat:@"Source: %@ Output: %@\n", [item objectForKey:@"SourceName"],[item objectForKey:@"DestinationPath"]]];
         NSString * summaryInfo;
         
         NSString * titleString = [NSString stringWithFormat:@"Title %d", [[item objectForKey:@"TitleNumber"] intValue]];
@@ -1448,7 +1445,7 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         return @"";
     }
 }
-
+/* This method inserts the proper action icons into the far right of the queue window */
 - (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item
 {
     if ([[tableColumn identifier] isEqualToString:@"desc"])
@@ -1465,7 +1462,8 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
     {
         [cell setEnabled: YES];
         BOOL highlighted = [outlineView isRowSelected:[outlineView rowForItem: item]] && [[outlineView window] isKeyWindow] && ([[outlineView window] firstResponder] == outlineView);
-        if ([[item objectForKey:@"Status"] intValue] == 0)
+        
+        if ([[item objectForKey:@"Status"] intValue] == 0 || ([[item objectForKey:@"Status"] intValue] == 1 && [[item objectForKey:@"EncodingPID"] intValue] != pidNum))
         {
             [cell setAction: @selector(revealSelectedQueueItem:)];
             if (highlighted)
@@ -1478,21 +1476,23 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         }
         else
         {
-            [cell setAction: @selector(removeSelectedQueueItem:)];
-            if (highlighted)
-            {
-                [cell setImage:[NSImage imageNamed:@"DeleteHighlight"]];
-                [cell setAlternateImage:[NSImage imageNamed:@"DeleteHighlightPressed"]];
-            }
-            else
-                [cell setImage:[NSImage imageNamed:@"Delete"]];
+            
+                [cell setAction: @selector(removeSelectedQueueItem:)];
+                if (highlighted)
+                {
+                    [cell setImage:[NSImage imageNamed:@"DeleteHighlight"]];
+                    [cell setAlternateImage:[NSImage imageNamed:@"DeleteHighlightPressed"]];
+                }
+                else
+                    [cell setImage:[NSImage imageNamed:@"Delete"]];
+   
         }
     }
 }
 
 - (void)outlineView:(NSOutlineView *)outlineView willDisplayOutlineCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item
 {
-    // By default, the discolsure image gets centered vertically in the cell. We want
+    // By default, the disclosure image gets centered vertically in the cell. We want
     // always at the top.
     if ([outlineView isItemExpanded: item])
         [cell setImagePosition: NSImageAbove];

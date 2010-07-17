@@ -2,17 +2,18 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">10C540</string>
-		<string key="IBDocument.InterfaceBuilderVersion">732</string>
-		<string key="IBDocument.AppKitVersion">1038.25</string>
-		<string key="IBDocument.HIToolboxVersion">458.00</string>
+		<string key="IBDocument.SystemVersion">10F569</string>
+		<string key="IBDocument.InterfaceBuilderVersion">788</string>
+		<string key="IBDocument.AppKitVersion">1038.29</string>
+		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">732</string>
+			<string key="NS.object.0">788</string>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="2649"/>
+			<integer value="2577"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -41,7 +42,7 @@
 			<object class="NSWindowTemplate" id="238545558">
 				<int key="NSWindowStyleMask">4111</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{893, 137}, {574, 423}}</string>
+				<string key="NSWindowRect">{{893, 130}, {594, 430}}</string>
 				<int key="NSWTFlags">1886912512</int>
 				<string key="NSWindowTitle">Queue - HandBrake</string>
 				<string key="NSWindowClass">NSWindow</string>
@@ -51,7 +52,7 @@
 				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
 				<string key="NSWindowContentMinSize">{525, 340}</string>
 				<object class="NSView" key="NSWindowView" id="431299686">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -229,6 +230,7 @@
 											</object>
 											<string key="NSFrame">{{1, 1}, {517, 342}}</string>
 											<reference key="NSSuperview" ref="9160137"/>
+											<reference key="NSNextKeyView" ref="790027174"/>
 											<reference key="NSDocView" ref="790027174"/>
 											<object class="NSColor" key="NSBGColor">
 												<int key="NSColorSpace">6</int>
@@ -263,6 +265,7 @@
 									</object>
 									<string key="NSFrame">{{20, 20}, {534, 344}}</string>
 									<reference key="NSSuperview" ref="60629844"/>
+									<reference key="NSNextKeyView" ref="13598910"/>
 									<int key="NSsFlags">18</int>
 									<reference key="NSVScroller" ref="459639248"/>
 									<reference key="NSHScroller" ref="636348341"/>
@@ -388,7 +391,7 @@
 									</object>
 								</object>
 							</object>
-							<string key="NSFrameSize">{574, 371}</string>
+							<string key="NSFrame">{{0, 7}, {574, 371}}</string>
 							<reference key="NSSuperview" ref="431299686"/>
 							<string key="NSClassName">NSView</string>
 							<string key="NSExtension">NSResponder</string>
@@ -396,7 +399,7 @@
 						<object class="NSTextField" id="463845363">
 							<reference key="NSNextResponder" ref="431299686"/>
 							<int key="NSvFlags">264</int>
-							<string key="NSFrame">{{17, 398}, {148, 14}}</string>
+							<string key="NSFrame">{{17, 405}, {148, 14}}</string>
 							<reference key="NSSuperview" ref="431299686"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="617812287">
@@ -411,13 +414,13 @@
 						</object>
 						<object class="NSTextField" id="138063786">
 							<reference key="NSNextResponder" ref="431299686"/>
-							<int key="NSvFlags">264</int>
-							<string key="NSFrame">{{17, 376}, {540, 14}}</string>
+							<int key="NSvFlags">266</int>
+							<string key="NSFrame">{{17, 383}, {560, 14}}</string>
 							<reference key="NSSuperview" ref="431299686"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="108133680">
 								<int key="NSCellFlags">67239424</int>
-								<int key="NSCellFlags2">272760832</int>
+								<int key="NSCellFlags2">4325376</int>
 								<string key="NSContents">There are no jobs currently encoding</string>
 								<reference key="NSSupport" ref="26"/>
 								<reference key="NSControlView" ref="138063786"/>
@@ -426,7 +429,8 @@
 							</object>
 						</object>
 					</object>
-					<string key="NSFrameSize">{574, 423}</string>
+					<string key="NSFrameSize">{594, 430}</string>
+					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1920, 1178}}</string>
 				<string key="NSMinSize">{525, 362}</string>
@@ -914,9 +918,9 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{-1207, 366}, {574, 423}}</string>
+					<string>{{-1207, 359}, {594, 430}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{-1207, 366}, {574, 423}}</string>
+					<string>{{-1207, 359}, {594, 430}}</string>
 					<integer value="1"/>
 					<boolean value="NO"/>
 					<integer value="1"/>
@@ -1033,6 +1037,45 @@
 							<string>id</string>
 						</object>
 					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>editSelectedQueueItem:</string>
+							<string>imageSpacingChanged:</string>
+							<string>indentChanged:</string>
+							<string>removeSelectedQueueItem:</string>
+							<string>revealSelectedQueueItem:</string>
+							<string>showQueueWindow:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">editSelectedQueueItem:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">imageSpacingChanged:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">indentChanged:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">removeSelectedQueueItem:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">revealSelectedQueueItem:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">showQueueWindow:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+						</object>
+					</object>
 					<object class="NSMutableDictionary" key="outlets">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
@@ -1062,6 +1105,65 @@
 							<string>NSSlider</string>
 						</object>
 					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>fCurrentJobPane</string>
+							<string>fIndentation</string>
+							<string>fJobDescTextField</string>
+							<string>fJobIconView</string>
+							<string>fOutlineView</string>
+							<string>fProgressBar</string>
+							<string>fProgressTextField</string>
+							<string>fQueueCountField</string>
+							<string>fQueuePane</string>
+							<string>fSpacing</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fCurrentJobPane</string>
+								<string key="candidateClassName">NSView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fIndentation</string>
+								<string key="candidateClassName">NSSlider</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fJobDescTextField</string>
+								<string key="candidateClassName">NSTextField</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fJobIconView</string>
+								<string key="candidateClassName">NSImageView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fOutlineView</string>
+								<string key="candidateClassName">HBQueueOutlineView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fProgressBar</string>
+								<string key="candidateClassName">NSProgressIndicator</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fProgressTextField</string>
+								<string key="candidateClassName">NSTextField</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fQueueCountField</string>
+								<string key="candidateClassName">NSTextField</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fQueuePane</string>
+								<string key="candidateClassName">NSView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fSpacing</string>
+								<string key="candidateClassName">NSSlider</string>
+							</object>
+						</object>
+					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier" id="333889241">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">HBQueueController.h</string>
@@ -1085,6 +1187,35 @@
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>cancelCurrentJob:</string>
+							<string>revealSelectedJobGroups:</string>
+							<string>togglePauseResume:</string>
+							<string>toggleStartCancel:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">cancelCurrentJob:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">revealSelectedJobGroups:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">togglePauseResume:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">toggleStartCancel:</string>
+								<string key="candidateClassName">id</string>
+							</object>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -1749,6 +1880,13 @@
 						<string key="NS.key.0">showWindow:</string>
 						<string key="NS.object.0">id</string>
 					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">showWindow:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">showWindow:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
 						<string key="minorKey">AppKit.framework/Headers/NSWindowController.h</string>
@@ -1757,6 +1895,7 @@
 			</object>
 		</object>
 		<int key="IBDocument.localizationMode">0</int>
+		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencies">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin.macosx</string>
 			<integer value="1050" key="NS.object.0"/>
@@ -1768,5 +1907,20 @@
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<string key="IBDocument.LastKnownRelativeProjectPath">../HandBrake.xcodeproj</string>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
+		<object class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
+			<bool key="EncodedWithXMLCoder">YES</bool>
+			<object class="NSArray" key="dict.sortedKeys">
+				<bool key="EncodedWithXMLCoder">YES</bool>
+				<string>Delete</string>
+				<string>NSMenuCheckmark</string>
+				<string>NSMenuMixedState</string>
+			</object>
+			<object class="NSMutableArray" key="dict.values">
+				<bool key="EncodedWithXMLCoder">YES</bool>
+				<string>{16, 16}</string>
+				<string>{9, 8}</string>
+				<string>{7, 2}</string>
+			</object>
+		</object>
 	</data>
 </archive>
