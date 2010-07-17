@@ -58,18 +58,16 @@ namespace HandBrake.ApplicationServices
         {
             InstanceId = instanceId;
             HandBrakeGuiVersionString = versionString;
-            Properties.Settings.Default.CompletionOption = completionOption;
-            Properties.Settings.Default.disableDvdNav = disableDvdNav;
-            Properties.Settings.Default.growlEncode = growlEncode;
-            Properties.Settings.Default.growlQueue = growlQueue;
-            Properties.Settings.Default.processPriority = processPriority;
-            Properties.Settings.Default.saveLogPath = saveLogPath;
-            Properties.Settings.Default.saveLogToSpecifiedPath = saveLogToSpecifiedPath;
-            Properties.Settings.Default.saveLogWithVideo = saveLogWithVideo;
-            Properties.Settings.Default.showCliForInGuiEncodeStatus = showCliForInGuiEncodeStatus;
-            Properties.Settings.Default.preventSleep = preventSleep;
-
-            Properties.Settings.Default.Save();
+            CompletionOption = completionOption;
+            DisableDvdNav = disableDvdNav;
+            GrowlEncode = growlEncode;
+            GrowlQueue = growlQueue;
+            ProcessPriority = processPriority;
+            SaveLogPath = saveLogPath;
+            SaveLogToSpecifiedPath = saveLogToSpecifiedPath;
+            SaveLogWithVideo = saveLogWithVideo;
+            ShowCliForInGuiEncodeStatus = showCliForInGuiEncodeStatus;
+            PreventSleep = preventSleep;
         }
 
         /// <summary>
@@ -92,5 +90,56 @@ namespace HandBrake.ApplicationServices
         /// The Applicaiton that uses this DLL can pass in it's version string.
         /// </summary>
         public static string HandBrakeGuiVersionString;
+
+        /// <summary>
+        /// What to do when the encode completes.
+        /// </summary>
+        public static string CompletionOption;
+
+        /// <summary>
+        /// Disable LibDvdNav
+        /// </summary>
+        public static bool DisableDvdNav;
+
+        /// <summary>
+        /// Growl when an encode has finished.
+        /// </summary>
+        public static bool GrowlEncode;
+
+        /// <summary>
+        /// Growl when a queue has finished.
+        /// </summary>
+        public static bool GrowlQueue;
+
+        /// <summary>
+        /// The Process Priority for HandBrakeCLI
+        /// </summary>
+        public static string ProcessPriority;
+
+        /// <summary>
+        /// Path to save log files to.
+        /// </summary>
+        public static string SaveLogPath;
+
+        /// <summary>
+        /// Copy log files to the SaveLogPath
+        /// </summary>
+        public static bool SaveLogToSpecifiedPath;
+
+        /// <summary>
+        /// Save a copy of the log files with the video
+        /// </summary>
+        public static bool SaveLogWithVideo;
+
+        /// <summary>
+        /// Show the CLI window when encoding.
+        /// </summary>
+        public static bool ShowCliForInGuiEncodeStatus;
+
+        /// <summary>
+        /// Prevent system sleep
+        /// </summary>
+        public static bool PreventSleep;
+
     }
 }

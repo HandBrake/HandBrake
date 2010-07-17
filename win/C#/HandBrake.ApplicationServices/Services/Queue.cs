@@ -403,7 +403,7 @@ namespace HandBrake.ApplicationServices.Services
                 HbProcess.Dispose();
 
                 // Growl
-                if (Properties.Settings.Default.growlEncode)
+                if (Init.GrowlEncode)
                     GrowlCommunicator.Notify("Encode Completed",
                                              "Put down that cocktail...\nyour Handbrake encode is done.");
 
@@ -427,11 +427,11 @@ namespace HandBrake.ApplicationServices.Services
         private void Finish()
         {
             // Growl
-            if (Settings.Default.growlQueue)
+            if (Init.GrowlQueue)
                 GrowlCommunicator.Notify("Queue Completed", "Put down that cocktail...\nyour Handbrake queue is done.");
 
             // Do something whent he encode ends.
-            switch (Settings.Default.CompletionOption)
+            switch (Init.CompletionOption)
             {
                 case "Shutdown":
                     Process.Start("Shutdown", "-s -t 60");

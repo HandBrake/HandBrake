@@ -136,7 +136,7 @@ namespace HandBrake.ApplicationServices.Parsing
             if (m.Success)
                 thisTitle.SourceName = path.Replace("+ stream:", string.Empty).Trim();
 
-            if (!Properties.Settings.Default.disableDvdNav)
+            if (!Init.DisableDvdNav)
             {
                 // Get the Angles for the title.
                 m = Regex.Match(output.ReadLine(), @"  \+ angle\(s\) ([0-9])");

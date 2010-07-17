@@ -161,7 +161,7 @@ namespace HandBrake.ApplicationServices.Services
                     File.Delete(dvdInfoPath);
 
                 string extraArguments = string.Empty;
-                if (Properties.Settings.Default.disableDvdNav)
+                if (Init.DisableDvdNav)
                     extraArguments = " --no-dvdnav";
 
                 if (title > 0)

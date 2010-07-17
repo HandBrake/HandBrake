@@ -152,7 +152,7 @@ namespace HandBrake.ApplicationServices.Services
                 if (enableLogging)
                     SetupLogging(encJob);
 
-                if (Settings.Default.preventSleep)
+                if (Init.PreventSleep)
                 {
                     Win32.PreventSleep();
                 }
@@ -163,7 +163,7 @@ namespace HandBrake.ApplicationServices.Services
                     RedirectStandardOutput = true,
                     RedirectStandardError = enableLogging ? true : false,
                     UseShellExecute = false,
-                    CreateNoWindow = !Settings.Default.showCliForInGuiEncodeStatus ? true : false
+                    CreateNoWindow = !Init.ShowCliForInGuiEncodeStatus ? true : false
                 };
 
                 this.HbProcess = Process.Start(cliStart);
@@ -185,7 +185,7 @@ namespace HandBrake.ApplicationServices.Services
                 }
 
                 // Set the Process Priority
-                switch (Settings.Default.processPriority)
+                switch (Init.ProcessPriority)
                 {
                     case "Realtime":
                         this.HbProcess.PriorityClass = ProcessPriorityClass.RealTime;
@@ -288,13 +288,13 @@ namespace HandBrake.ApplicationServices.Services
                 File.Copy(tempLogFile, Path.Combine(logDir, encodeLogFile));
 
                 // Save a copy of the log file in the same location as the enocde.
-                if (Settings.Default.saveLogWithVideo)
+                if (Init.SaveLogWithVideo)
                     File.Copy(tempLogFile, Path.Combine(encodeDestinationPath, encodeLogFile));
 
                 // Save a copy of the log file to a user specified location
-                if (Directory.Exists(Settings.Default.saveLogPath))
-                    if (Settings.Default.saveLogPath != String.Empty && Settings.Default.saveLogToSpecifiedPath)
-                        File.Copy(tempLogFile, Path.Combine(Settings.Default.saveLogPath, encodeLogFile));
+                if (Directory.Exists(Init.SaveLogPath))
+                    if (Init.SaveLogPath != String.Empty && Init.SaveLogToSpecifiedPath)
+                        File.Copy(tempLogFile, Path.Combine(Init.SaveLogPath, encodeLogFile));
             }
             catch (Exception exc)
             {
@@ -325,7 +325,7 @@ namespace HandBrake.ApplicationServices.Services
                 windowsSeven.SetTaskBarProgressToNoProgress();
             }
 
-            if (Properties.Settings.Default.preventSleep)
+            if (Init.PreventSleep)
             {
                 Win32.AllowSleep();
             }
