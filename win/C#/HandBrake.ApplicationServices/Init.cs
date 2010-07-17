@@ -16,6 +16,9 @@ namespace HandBrake.ApplicationServices
         /// <summary>
         /// Setup the Settings used by the applicaiton with this library
         /// </summary>
+        /// <param name="versionString">
+        /// The version / name of the application that's using this DLL.
+        /// </param>
         /// <param name="instanceId">
         /// The Instance ID
         /// </param>
@@ -49,11 +52,12 @@ namespace HandBrake.ApplicationServices
         /// <param name="preventSleep">
         /// Prevent the system from sleeping
         /// </param>
-        public static void SetupSettings(int instanceId, string completionOption, bool disableDvdNav,
+        public static void SetupSettings(string versionString, int instanceId, string completionOption, bool disableDvdNav,
                                   bool growlEncode, bool growlQueue, string processPriority, string saveLogPath, bool saveLogToSpecifiedPath,
                                   bool saveLogWithVideo, bool showCliForInGuiEncodeStatus, bool preventSleep)
         {
             InstanceId = instanceId;
+            HandBrakeGuiVersionString = versionString;
             Properties.Settings.Default.CompletionOption = completionOption;
             Properties.Settings.Default.disableDvdNav = disableDvdNav;
             Properties.Settings.Default.growlEncode = growlEncode;
@@ -79,6 +83,14 @@ namespace HandBrake.ApplicationServices
             return Assembly.GetExecutingAssembly().GetName().Version;
         }
 
+        /// <summary>
+        /// The instance ID used by the Main Applicaiton
+        /// </summary>
         public static int InstanceId;
+
+        /// <summary>
+        /// The Applicaiton that uses this DLL can pass in it's version string.
+        /// </summary>
+        public static string HandBrakeGuiVersionString;
     }
 }

@@ -78,8 +78,10 @@
     <Compile Include="frmExceptionWindow.Designer.cs">
       <DependentUpon>frmExceptionWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Functions\Logging.cs" />
     <Compile Include="Functions\GrowlCommunicator.cs" />
     <Compile Include="Functions\Main.cs" />
+    <Compile Include="Functions\System.cs" />
     <Compile Include="Functions\Win32.cs" />
     <Compile Include="Functions\Win7.cs" />
     <Compile Include="Init.cs" />

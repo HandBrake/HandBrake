@@ -272,7 +272,6 @@
     <Compile Include="Functions\PresetLoader.cs" />
     <Compile Include="Functions\QueryGenerator.cs" />
     <Compile Include="Functions\Main.cs" />
-    <Compile Include="Functions\System.cs" />
     <Compile Include="Functions\UpdateCheckInformation.cs" />
     <Compile Include="Functions\Win32.cs" />
     <Compile Include="frmActivityWindow.cs">

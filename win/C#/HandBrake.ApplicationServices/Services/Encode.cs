@@ -261,22 +261,6 @@ namespace HandBrake.ApplicationServices.Services
 
         /* Helpers */
         /// <summary>
-        /// Add the CLI Query to the Log File.
-        /// </summary>
-        /// <param name="encJob">
-        /// The Encode Job Object
-        /// </param>
-        private static string CreateCliLogHeader(Job encJob)
-        {
-            StringBuilder logHeader = new StringBuilder();
-            logHeader.AppendLine("# CLI Query: " + encJob.Query);
-            logHeader.AppendLine("# User Query: " + encJob.CustomQuery);
-            logHeader.AppendLine("-------------------------------------------");
-
-            return logHeader.ToString();
-        }
-
-        /// <summary>
         /// Save a copy of the log to the users desired location or a default location
         /// if this feature is enabled in options.
         /// </summary>
@@ -430,8 +414,8 @@ namespace HandBrake.ApplicationServices.Services
 
                 fileWriter = new StreamWriter(logFile) { AutoFlush = true };
 
-                fileWriter.WriteLine(CreateCliLogHeader(encodeJob));
-                logBuffer.AppendLine(CreateCliLogHeader(encodeJob));
+                fileWriter.WriteLine(Logging.CreateCliLogHeader(encodeJob));
+                logBuffer.AppendLine(Logging.CreateCliLogHeader(encodeJob));
             }
             catch (Exception exc)
             {

@@ -8,7 +8,7 @@ namespace HandBrake.ApplicationServices.Model
     /// <summary>
     /// The job.
     /// </summary>
-    public struct Job
+    public class Job
     {
         /// <summary>
         /// Gets or sets the job ID.

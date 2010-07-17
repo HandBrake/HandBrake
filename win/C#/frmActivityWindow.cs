@@ -12,7 +12,6 @@ namespace Handbrake
     using System.Text;
     using System.Threading;
     using System.Windows.Forms;
-    using Functions;
 
     using HandBrake.ApplicationServices.Services.Interfaces;
 
@@ -231,7 +230,6 @@ namespace Handbrake
                     appendText.AppendFormat("Waiting for the log to be generated ...\n");
                     position = 0;
                     ClearWindowText();
-                    PrintLogHeader();
                     return appendText;
                 }
 
@@ -247,7 +245,6 @@ namespace Handbrake
                     appendText.AppendFormat("Waiting for the log to be generated ...\n");
                     position = 0;
                     ClearWindowText();
-                    PrintLogHeader();
                     return appendText;
                 }
 
@@ -343,48 +340,6 @@ namespace Handbrake
         }
 
         /// <summary>
-        /// Display the log header
-        /// </summary>
-        private void PrintLogHeader()
-        {
-            try
-            {
-                if (IsHandleCreated)
-                {
-                    if (rtf_actLog.InvokeRequired)
-                    {
-                        IAsyncResult invoked = BeginInvoke(new SetTextClearCallback(PrintLogHeader));
-                        EndInvoke(invoked);
-                    }
-                    else
-                    {
-                        lock (rtf_actLog)
-                        {
-                            // Print the log header. This function will be re-implimented later. Do not delete.
-                            StringBuilder header = new StringBuilder();
-
-                            header.Append(String.Format("### Windows GUI {1} {0} \n", Properties.Settings.Default.hb_build, Properties.Settings.Default.hb_version));
-                            header.Append(String.Format("### Running: {0} \n###\n", Environment.OSVersion));
-                            header.Append(String.Format("### CPU: {0} \n", SystemInfo.GetCpuCount));
-                            header.Append(String.Format("### Ram: {0} MB \n", SystemInfo.TotalPhysicalMemory));
-                            header.Append(String.Format("### Screen: {0}x{1} \n", SystemInfo.ScreenBounds.Bounds.Width, SystemInfo.ScreenBounds.Bounds.Height));
-                            header.Append(String.Format("### Temp Dir: {0} \n", Path.GetTempPath()));
-                            header.Append(String.Format("### Install Dir: {0} \n", Application.StartupPath));
-                            header.Append(String.Format("### Data Dir: {0} \n", Application.UserAppDataPath));
-                            header.Append("#########################################\n\n");
-
-                            rtf_actLog.AppendText(header.ToString());
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                return;
-            }
-        }
-
-        /// <summary>
         /// Reset Everything
         /// </summary>
         private void Reset()
@@ -393,7 +348,6 @@ namespace Handbrake
                 windowTimer.Dispose();
             position = 0;
             ClearWindowText();
-            PrintLogHeader();
             windowTimer = new Timer(new TimerCallback(LogMonitor), null, 1000, 1000);
         }
 

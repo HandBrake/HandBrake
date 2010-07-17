@@ -191,10 +191,11 @@ namespace HandBrake.ApplicationServices.Services
 
                 // Write the Buffer out to file.
                 StreamWriter scanLog = new StreamWriter(dvdInfoPath);
+                scanLog.WriteLine(Logging.CreateCliLogHeader(null));
                 scanLog.Write(this.readData.Buffer);
                 scanLog.Flush();
                 scanLog.Close();
-                logBuffer = readData.Buffer;
+                logBuffer.AppendLine(this.readData.Buffer.ToString());
 
                 IsScanning = false;
 
@@ -268,6 +269,7 @@ namespace HandBrake.ApplicationServices.Services
         {
             logFilePosition = 0;
             logBuffer = new StringBuilder();
+            logBuffer.AppendLine(Logging.CreateCliLogHeader(null));
         }
 
         /// <summary>
