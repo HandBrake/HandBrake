@@ -39,7 +39,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -279,7 +279,7 @@ namespace Handbrake
             this.check_turbo.Enabled = false;
             this.check_turbo.Location = new System.Drawing.Point(146, 143);
             this.check_turbo.Name = "check_turbo";
-            this.check_turbo.Size = new System.Drawing.Size(101, 17);
+            this.check_turbo.Size = new System.Drawing.Size(99, 17);
             this.check_turbo.TabIndex = 7;
             this.check_turbo.Text = "Turbo first Pass";
             this.ToolTip.SetToolTip(this.check_turbo, "Makes the first pass of a 2 pass encode faster.");
@@ -404,9 +404,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle2.Format = "N0";
-            dataGridViewCellStyle2.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.Frozen = true;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
@@ -873,7 +873,7 @@ namespace Handbrake
             this.checkMaximumFramerate.BackColor = System.Drawing.Color.Transparent;
             this.checkMaximumFramerate.Location = new System.Drawing.Point(125, 89);
             this.checkMaximumFramerate.Name = "checkMaximumFramerate";
-            this.checkMaximumFramerate.Size = new System.Drawing.Size(132, 17);
+            this.checkMaximumFramerate.Size = new System.Drawing.Size(131, 17);
             this.checkMaximumFramerate.TabIndex = 19;
             this.checkMaximumFramerate.Text = "Peak Framerate (VFR)";
             this.checkMaximumFramerate.UseVisualStyleBackColor = false;
@@ -884,7 +884,7 @@ namespace Handbrake
             this.radio_cq.BackColor = System.Drawing.Color.Transparent;
             this.radio_cq.Location = new System.Drawing.Point(365, 97);
             this.radio_cq.Name = "radio_cq";
-            this.radio_cq.Size = new System.Drawing.Size(110, 17);
+            this.radio_cq.Size = new System.Drawing.Size(105, 17);
             this.radio_cq.TabIndex = 18;
             this.radio_cq.Text = "Constant Quality:";
             this.radio_cq.UseVisualStyleBackColor = false;
@@ -897,7 +897,7 @@ namespace Handbrake
             this.radio_avgBitrate.Checked = true;
             this.radio_avgBitrate.Location = new System.Drawing.Point(365, 64);
             this.radio_avgBitrate.Name = "radio_avgBitrate";
-            this.radio_avgBitrate.Size = new System.Drawing.Size(116, 17);
+            this.radio_avgBitrate.Size = new System.Drawing.Size(112, 17);
             this.radio_avgBitrate.TabIndex = 17;
             this.radio_avgBitrate.TabStop = true;
             this.radio_avgBitrate.Text = "Avg Bitrate (kbps):";
@@ -910,7 +910,7 @@ namespace Handbrake
             this.radio_targetFilesize.BackColor = System.Drawing.Color.Transparent;
             this.radio_targetFilesize.Location = new System.Drawing.Point(365, 37);
             this.radio_targetFilesize.Name = "radio_targetFilesize";
-            this.radio_targetFilesize.Size = new System.Drawing.Size(108, 17);
+            this.radio_targetFilesize.Size = new System.Drawing.Size(107, 17);
             this.radio_targetFilesize.TabIndex = 16;
             this.radio_targetFilesize.Text = "Target Size (MB):";
             this.radio_targetFilesize.UseVisualStyleBackColor = false;
@@ -933,7 +933,7 @@ namespace Handbrake
             this.check_2PassEncode.BackColor = System.Drawing.Color.Transparent;
             this.check_2PassEncode.Location = new System.Drawing.Point(125, 120);
             this.check_2PassEncode.Name = "check_2PassEncode";
-            this.check_2PassEncode.Size = new System.Drawing.Size(104, 17);
+            this.check_2PassEncode.Size = new System.Drawing.Size(106, 17);
             this.check_2PassEncode.TabIndex = 6;
             this.check_2PassEncode.Text = "2-Pass Encoding";
             this.check_2PassEncode.UseVisualStyleBackColor = false;
@@ -1001,7 +1001,7 @@ namespace Handbrake
             this.Check_ChapterMarkers.BackColor = System.Drawing.Color.Transparent;
             this.Check_ChapterMarkers.Location = new System.Drawing.Point(16, 32);
             this.Check_ChapterMarkers.Name = "Check_ChapterMarkers";
-            this.Check_ChapterMarkers.Size = new System.Drawing.Size(140, 17);
+            this.Check_ChapterMarkers.Size = new System.Drawing.Size(136, 17);
             this.Check_ChapterMarkers.TabIndex = 1;
             this.Check_ChapterMarkers.Text = "Create chapter markers";
             this.Check_ChapterMarkers.UseVisualStyleBackColor = false;
@@ -1225,9 +1225,9 @@ namespace Handbrake
             this.treeView_presets.ShowLines = false;
             this.treeView_presets.Size = new System.Drawing.Size(240, 424);
             this.treeView_presets.TabIndex = 0;
-            this.treeView_presets.MouseUp += new System.Windows.Forms.MouseEventHandler(this.treeview_presets_mouseUp);
             this.treeView_presets.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_presets_AfterSelect);
             this.treeView_presets.KeyUp += new System.Windows.Forms.KeyEventHandler(this.treeView_presets_deleteKey);
+            this.treeView_presets.MouseUp += new System.Windows.Forms.MouseEventHandler(this.treeview_presets_mouseUp);
             // 
             // presets_menu
             // 
