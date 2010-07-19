@@ -9,7 +9,7 @@ X264.CONFIGURE.shared =
 X264.CONFIGURE.static =
 
 X264.CONFIGURE.extra = --disable-gpac
-X264.CONFIGURE.extra += --disable-avs --disable-lavf --disable-ffms
+X264.CONFIGURE.extra += --disable-avs --disable-lavf --disable-ffms --disable-swscale
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
     X264.CONFIGURE.extra += --cross-prefix=$(BUILD.spec)-
