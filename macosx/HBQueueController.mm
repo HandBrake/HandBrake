@@ -226,8 +226,11 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 - (void)setHBController: (HBController *)controller
 {
     fHBController = controller;
-    /* Now get this pidnum from HBController */
-    pidNum = [fHBController getThisHBInstancePID];
+}
+
+- (void)setPidNum: (int)myPidnum
+{
+    pidNum = myPidnum;
     [fHBController writeToActivityLog: "HBQueueController : My Pidnum is %d", pidNum];
 }
 

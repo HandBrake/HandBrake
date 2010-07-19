@@ -107,6 +107,7 @@ BOOL                        fIsDragging;
 #endif
 
 }
+- (void)setPidNum: (int)myPidnum;
 - (void)setHandle: (hb_handle_t *)handle;
 - (void)setHBController: (HBController *)controller;
 

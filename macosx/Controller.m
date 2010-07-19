@@ -86,9 +86,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [self writeToActivityLog: "%s", [versionStringFull UTF8String]];
     
     /* Get the PID number for this hb instance, used in multi instance encoding */
-    pidNum = [self getThisHBInstancePID];
+    //pidNum = [self getThisHBInstancePID];
     /* Report this pid to the activity log */
-    [self writeToActivityLog: "Pid for this instance:%d", pidNum];
+    //[self writeToActivityLog: "Pid for this instance:%d", pidNum];
     
     return self;
 }
@@ -130,6 +130,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
     /* Init QueueFile .plist */
     [self loadQueueFile];
+    /* Run hbInstances to get any info on other instances as well as set the
+     * pid number for this instance in the case of multi-instance encoding. */ 
+    hbInstanceNum = [self hbInstances];
     
     /* Call UpdateUI every 1/2 sec */
     
@@ -177,7 +180,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         /* We check to see if there is already another instance of hb running.
          * Note: hbInstances == 1 means we are the only instance of HandBrake.app
          */
-        if ([self hbInstances] > 1)
+        if (hbInstanceNum > 1)
         {
         alertTitle = [NSString stringWithFormat:
                          NSLocalizedString(@"There is already an instance of HandBrake running.", @"")];
@@ -234,27 +237,44 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 #pragma mark -
 #pragma mark Multiple Instances
+
+/* hbInstances checks to see if other instances of HB are running and also sets the pid for this instance for multi-instance queue encoding */
+ 
+ /* Note for now since we are in early phases of multi-instance I have put in quite a bit of logging. Can be removed as we see fit. */
 - (int) hbInstances
 {
     /* check to see if another instance of HandBrake.app is running */
     NSArray *runningAppDictionaries = [[NSWorkspace sharedWorkspace] launchedApplications];
     NSDictionary *runningAppsDictionary;
     int hbInstances = 0;
+    NSString * thisInstanceAppPath = [[NSBundle mainBundle] bundlePath];
+    NSString * runningInstanceAppPath;
+    int runningInstancePidNum;
+    [self writeToActivityLog: "hbInstances path to this instance: %s", [thisInstanceAppPath UTF8String]];
     for (runningAppsDictionary in runningAppDictionaries)
 	{
         if ([[runningAppsDictionary valueForKey:@"NSApplicationName"] isEqualToString:@"HandBrake"])
 		{
             hbInstances++;
+            /*Report the path to each active instances app path */
+            runningInstancePidNum = [[runningAppsDictionary valueForKey:@"NSApplicationProcessIdentifier"] intValue];
+            runningInstanceAppPath = [runningAppsDictionary valueForKey:@"NSApplicationPath"];
+            [self writeToActivityLog: "hbInstance found instance pidnum:%d at path: %s", runningInstancePidNum, [runningInstanceAppPath UTF8String]];
+            /* see if this is us by comparing the app path */
+            if ([runningInstanceAppPath isEqualToString: thisInstanceAppPath])
+            {
+                /* If so this is our pidnum */
+                [self writeToActivityLog: "hbInstance MATCH FOUND, our pidnum is:%d", runningInstancePidNum];
+                /* Get the PID number for this hb instance, used in multi instance encoding */
+                pidNum = runningInstancePidNum;
+                /* Report this pid to the activity log */
+                [self writeToActivityLog: "Pid for this instance:%d", pidNum];
+                /* Tell fQueueController what our pidNum is */
+                [fQueueController setPidNum:pidNum];
+            }
 		}
 	}
     return hbInstances;
-}
-/* Gets the Process Identifer (PID) for this instance and returns it as an integer */
-- (int) getThisHBInstancePID
-{
-    /* Get the PID of this HB instance */
-    int hbInstancePID = [[NSRunningApplication currentApplication] processIdentifier];
-    return hbInstancePID;
 }
 
 #pragma mark -
@@ -1934,7 +1954,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     else
     {
         /* ONLY clear out encoded items if we are single instance */
-        if ([self hbInstances] == 1)
+        if (hbInstanceNum == 1)
         {
             [self clearQueueEncodedItems];
         }

@@ -265,7 +265,8 @@ BOOL                        fIsDragging;
     hb_handle_t                  * fHandle;
     
     /* Queue variables */
-    hb_handle_t              * fQueueEncodeLibhb;           // libhb for HB Encoding
+    int                          hbInstanceNum; //stores the number of HandBrake instances currently running
+    hb_handle_t                  * fQueueEncodeLibhb;           // libhb for HB Encoding
 	hb_title_t                   * fTitle;
     hb_title_t                   * fQueueEncodeTitle;
     int                          fEncodingQueueItem;     // corresponds to the index of fJobGroups encoding item
@@ -291,7 +292,6 @@ BOOL                        fIsDragging;
     double                         dockIconProgress;
 }
 
-- (int) getThisHBInstancePID;
 - (IBAction) showAboutPanel:(id)sender;
 
 - (void) writeToActivityLog:(const char *) format, ...;
