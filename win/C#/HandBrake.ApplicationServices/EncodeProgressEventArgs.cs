@@ -30,7 +30,7 @@ namespace HandBrake.ApplicationServices
         /// <summary>
         /// Gets or sets EstimatedTimeLeft.
         /// </summary>
-        public TimeSpan EstimatedTimeLeft { get; set; }
+        public string EstimatedTimeLeft { get; set; }
 
         /// <summary>
         /// Gets or sets Task.

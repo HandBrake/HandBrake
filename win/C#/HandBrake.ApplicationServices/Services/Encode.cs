@@ -498,7 +498,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="currentFps">Current encode speed in fps</param>
         /// <param name="avg">Avg encode speed</param>
         /// <param name="timeRemaining">Time Left</param>
-        private void EncodeOnEncodeProgress(object sender, int currentTask, int taskCount, float percentComplete, float currentFps, float avg, TimeSpan timeRemaining)
+        private void EncodeOnEncodeProgress(object sender, int currentTask, int taskCount, float percentComplete, float currentFps, float avg, string timeRemaining)
         {
             EncodeProgressEventArgs eventArgs = new EncodeProgressEventArgs
                 {
