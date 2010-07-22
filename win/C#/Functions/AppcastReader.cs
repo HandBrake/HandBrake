@@ -54,7 +54,9 @@ namespace Handbrake.Functions
                 Match verShort = Regex.Match(result, @"sparkle:shortVersionString=""(([svn]*)([0-9.\s]*))\""");
 
                 this.Build = ver.ToString().Replace("sparkle:version=", string.Empty).Replace("\"", string.Empty);
-                this.Version = verShort.ToString().Replace("sparkle:shortVersionString=", string.Empty).Replace("\"", string.Empty);
+                this.Version = verShort.ToString().Replace("sparkle:shortVersionString=", string.Empty).Replace("\"", 
+                                                                                                                string.
+                                                                                                                    Empty);
                 this.DownloadFile = nodeItem["windows"].InnerText;
                 this.DescriptionUrl = new Uri(nodeItem["sparkle:releaseNotesLink"].InnerText);
             }

@@ -8,11 +8,13 @@ namespace Handbrake.Controls
     using System;
     using System.Windows.Forms;
 
-    /// <summary>
-    /// The Filters Panel
-    /// </summary>
     public partial class Filters : UserControl
     {
+        /// <summary>
+        /// The Filter settings have changed
+        /// </summary>
+        public event EventHandler FilterSettingsChanged;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Filters"/> class. 
         /// Creates a new instance of Filters
@@ -25,11 +27,6 @@ namespace Handbrake.Controls
             drop_denoise.SelectedIndex = 0;
             drop_detelecine.SelectedIndex = 0;
         }
-
-        /// <summary>
-        /// The Filter settings have changed
-        /// </summary>
-        public event EventHandler FilterSettingsChanged;
 
         /// <summary>
         /// Gets the CLI query for the query generator.
@@ -263,12 +260,6 @@ namespace Handbrake.Controls
         }
 
         // Controls
-
-        /// <summary>
-        /// Delecine Selected Index Changed
-        /// </summary>
-        /// <param name="sender">The Sender</param>
-        /// <param name="e">The EventArgs</param>
         private void DropDetelecineSelectedIndexChanged(object sender, EventArgs e)
         {
             text_customDT.Visible = drop_detelecine.Text == "Custom";
@@ -277,11 +268,6 @@ namespace Handbrake.Controls
                 this.FilterSettingsChanged(this, new EventArgs());
         }
 
-        /// <summary>
-        /// Decomb Selected Index Changed
-        /// </summary>
-        /// <param name="sender">The Sender</param>
-        /// <param name="e">The EventArgs</param>
         private void DropDecombSelectedIndexChanged(object sender, EventArgs e)
         {
             text_customDC.Visible = drop_decomb.Text == "Custom";
@@ -293,11 +279,6 @@ namespace Handbrake.Controls
                 this.FilterSettingsChanged(this, new EventArgs());
         }
 
-        /// <summary>
-        /// DeInterlace Selected Index Changed
-        /// </summary>
-        /// <param name="sender">The Sender</param>
-        /// <param name="e">The EventArgs</param>
         private void DropDeinterlaceSelectedIndexChanged(object sender, EventArgs e)
         {
             text_customDI.Visible = drop_deinterlace.Text == "Custom";
@@ -309,11 +290,6 @@ namespace Handbrake.Controls
                 this.FilterSettingsChanged(this, new EventArgs());
         }
 
-        /// <summary>
-        /// DeNoise Selected Index Changed
-        /// </summary>
-        /// <param name="sender">The Sender</param>
-        /// <param name="e">The EventArgs</param>
         private void DropDenoiseSelectedIndexChanged(object sender, EventArgs e)
         {
             text_customDN.Visible = drop_denoise.Text == "Custom";
@@ -323,11 +299,6 @@ namespace Handbrake.Controls
                 this.FilterSettingsChanged(this, new EventArgs());
         }
 
-        /// <summary>
-        /// Deblock Changed
-        /// </summary>
-        /// <param name="sender">The Sender</param>
-        /// <param name="e">The EventArgs</param>
         private void SliderDeblockScroll(object sender, EventArgs e)
         {
             lbl_deblockVal.Text = slider_deblock.Value == 4 ? "Off" : slider_deblock.Value.ToString();

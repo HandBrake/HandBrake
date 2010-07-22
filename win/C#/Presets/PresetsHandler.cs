@@ -46,7 +46,7 @@ namespace Handbrake.Presets
         private List<Preset> userPresets = new List<Preset>();
 
         /// <summary>
-        /// Gets or sets the Last preset added
+        ///  Last preset added
         /// </summary>
         public Preset LastPresetAdded { get; set; }
 

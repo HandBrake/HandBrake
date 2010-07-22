@@ -14,11 +14,8 @@ namespace Handbrake
 
     using HandBrake.ApplicationServices;
 
-    using Properties;
+    using Handbrake.Properties;
 
-    /// <summary>
-    /// The Options Screen
-    /// </summary>
     public partial class frmOptions : Form
     {
         private frmMain mainWindow;
@@ -37,18 +34,18 @@ namespace Handbrake
             // #############################
 
             // Enable Tooltips.
-            if (Settings.Default.tooltipEnable)
+            if (Properties.Settings.Default.tooltipEnable)
             {
                 check_tooltip.CheckState = CheckState.Checked;
                 ToolTip.Active = true;
             }
 
             // Update Check
-            if (Settings.Default.updateStatus)
+            if (Properties.Settings.Default.updateStatus)
                 check_updateCheck.CheckState = CheckState.Checked;
 
             // Days between update checks
-            switch (Settings.Default.daysBetweenUpdateCheck)
+            switch (Properties.Settings.Default.daysBetweenUpdateCheck)
             {
                 case 1:
                     drop_updateCheckDays.SelectedIndex = 0;
@@ -62,51 +59,51 @@ namespace Handbrake
             }
 
             // On Encode Completeion Action
-            drp_completeOption.Text = Settings.Default.CompletionOption;
+            drp_completeOption.Text = Properties.Settings.Default.CompletionOption;
 
             // Growl.
-            if (Settings.Default.growlEncode)
+            if (Properties.Settings.Default.growlEncode)
                 check_growlEncode.CheckState = CheckState.Checked;
 
-            if (Settings.Default.growlQueue)
+            if (Properties.Settings.Default.growlQueue)
                 check_GrowlQueue.CheckState = CheckState.Checked;
 
             // Enable auto naming feature.
-            if (Settings.Default.autoNaming)
+            if (Properties.Settings.Default.autoNaming)
                 check_autoNaming.CheckState = CheckState.Checked;
 
             // Store the auto name path
-            text_an_path.Text = Settings.Default.autoNamePath;
+            text_an_path.Text = Properties.Settings.Default.autoNamePath;
             if (text_an_path.Text == string.Empty)
                 text_an_path.Text = "Click 'Browse' to set the default location";
 
             // Store auto name format
-            txt_autoNameFormat.Text = Settings.Default.autoNameFormat;
+            txt_autoNameFormat.Text = Properties.Settings.Default.autoNameFormat;
 
             // Use iPod/iTunes friendly .m4v extension for MP4 files.
-            if (Settings.Default.useM4v)
+            if (Properties.Settings.Default.useM4v)
                 check_m4v.CheckState = CheckState.Checked;
 
             // Remove Underscores
-            check_removeUnderscores.Checked = Settings.Default.AutoNameRemoveUnderscore;
+            check_removeUnderscores.Checked = Properties.Settings.Default.AutoNameRemoveUnderscore;
 
             // Title case
-            check_TitleCase.Checked = Settings.Default.AutoNameTitleCase;
+            check_TitleCase.Checked = Properties.Settings.Default.AutoNameTitleCase;
 
             // #############################
             // Picture Tab
             // #############################
 
             // VLC Path
-            txt_vlcPath.Text = Settings.Default.VLC_Path;
+            txt_vlcPath.Text = Properties.Settings.Default.VLC_Path;
 
             // #############################
             // Audio and Subtitles Tab
             // #############################
 
-            drop_preferredLang.SelectedItem = Settings.Default.NativeLanguage;
+            drop_preferredLang.SelectedItem = Properties.Settings.Default.NativeLanguage;
 
-            if (Settings.Default.DubAudio)
+            if (Properties.Settings.Default.DubAudio)
                 radio_dub.Checked = true;
             else
                 radio_foreignAndSubs.Checked = true;
@@ -116,58 +113,58 @@ namespace Handbrake
             // #############################
 
             // Priority level for encodes
-            drp_Priority.Text = Settings.Default.processPriority;
+            drp_Priority.Text = Properties.Settings.Default.processPriority;
 
-            check_preventSleep.Checked = Settings.Default.preventSleep; 
+            check_preventSleep.Checked = Properties.Settings.Default.preventSleep; 
 
             // Log Verbosity Level
-            cb_logVerboseLvl.SelectedIndex = Settings.Default.verboseLevel;
+            cb_logVerboseLvl.SelectedIndex = Properties.Settings.Default.verboseLevel;
 
             // Save logs in the same directory as encoded files
-            if (Settings.Default.saveLogWithVideo)
+            if (Properties.Settings.Default.saveLogWithVideo)
                 check_saveLogWithVideo.CheckState = CheckState.Checked;
 
             // Save Logs in a specified path
-            if (Settings.Default.saveLogToSpecifiedPath)
+            if (Properties.Settings.Default.saveLogToSpecifiedPath)
                 check_logsInSpecifiedLocation.CheckState = CheckState.Checked;
 
             // The saved log path
-            text_logPath.Text = Settings.Default.saveLogPath;
+            text_logPath.Text = Properties.Settings.Default.saveLogPath;
 
-            check_clearOldLogs.Checked = Settings.Default.clearOldLogs;
+            check_clearOldLogs.Checked = Properties.Settings.Default.clearOldLogs;
 
             // #############################
             // Advanced
             // #############################
 
             // Minimise to Tray
-            if (Settings.Default.trayIconAlerts)
+            if (Properties.Settings.Default.trayIconAlerts)
                 check_trayStatusAlerts.CheckState = CheckState.Checked;
 
             // Tray Balloon popups
-            if (Settings.Default.MainWindowMinimize)
+            if (Properties.Settings.Default.MainWindowMinimize)
                 check_mainMinimize.CheckState = CheckState.Checked;
 
             // Enable / Disable Query editor tab
-            if (Settings.Default.QueryEditorTab)
+            if (Properties.Settings.Default.QueryEditorTab)
                 check_queryEditorTab.CheckState = CheckState.Checked;
             check_promptOnUnmatchingQueries.Enabled = check_queryEditorTab.Checked;
 
             // Prompt on inconsistant queries
-            check_promptOnUnmatchingQueries.Checked = Settings.Default.PromptOnUnmatchingQueries;
+            check_promptOnUnmatchingQueries.Checked = Properties.Settings.Default.PromptOnUnmatchingQueries;
 
             // Preset update notification
-            if (Settings.Default.presetNotification)
+            if (Properties.Settings.Default.presetNotification)
                 check_disablePresetNotification.CheckState = CheckState.Checked;
 
             // Show CLI Window
-            check_showCliForInGUIEncode.Checked = Settings.Default.showCliForInGuiEncodeStatus;
+            check_showCliForInGUIEncode.Checked = Properties.Settings.Default.showCliForInGuiEncodeStatus;
 
             // Set the preview count
-            drop_previewScanCount.SelectedItem = Settings.Default.previewScanCount.ToString();
+            drop_previewScanCount.SelectedItem = Properties.Settings.Default.previewScanCount.ToString();
 
             // x264 step
-            string step = Settings.Default.x264cqstep.ToString(new CultureInfo("en-US"));
+            string step = Properties.Settings.Default.x264cqstep.ToString(new CultureInfo("en-US"));
             switch (step)
             {
                 case "1":
@@ -185,15 +182,21 @@ namespace Handbrake
             }
 
             // Use Experimental dvdnav
-            if (Settings.Default.noDvdNav)
+            if (Properties.Settings.Default.noDvdNav)
                 check_dvdnav.CheckState = CheckState.Checked;
+
+            // #############################
+            // Debug
+            // #############################
+            if (Properties.Settings.Default.disableResCalc)
+                check_disableResCalc.Checked = true;
         }
 
         #region General
 
         private void check_updateCheck_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.updateStatus = check_updateCheck.Checked;
+            Properties.Settings.Default.updateStatus = check_updateCheck.Checked;
         }
 
         private void drop_updateCheckDays_SelectedIndexChanged(object sender, EventArgs e)
@@ -201,45 +204,45 @@ namespace Handbrake
             switch (drop_updateCheckDays.SelectedIndex)
             {
                 case 0:
-                    Settings.Default.daysBetweenUpdateCheck = 1;
+                    Properties.Settings.Default.daysBetweenUpdateCheck = 1;
                     break;
                 case 1:
-                    Settings.Default.daysBetweenUpdateCheck = 7;
+                    Properties.Settings.Default.daysBetweenUpdateCheck = 7;
                     break;
                 case 2:
-                    Settings.Default.daysBetweenUpdateCheck = 30;
+                    Properties.Settings.Default.daysBetweenUpdateCheck = 30;
                     break;
             }
         }
 
         private void check_tooltip_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.tooltipEnable = check_tooltip.Checked;
+            Properties.Settings.Default.tooltipEnable = check_tooltip.Checked;
         }
 
         private void drp_completeOption_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Settings.Default.CompletionOption = drp_completeOption.Text;
+            Properties.Settings.Default.CompletionOption = drp_completeOption.Text;
         }
 
         private void check_GrowlQueue_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.growlQueue = check_GrowlQueue.Checked;
+            Properties.Settings.Default.growlQueue = check_GrowlQueue.Checked;
         }
 
         private void check_growlEncode_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.growlEncode = check_growlEncode.Checked;
+            Properties.Settings.Default.growlEncode = check_growlEncode.Checked;
         }
 
         private void check_autoNaming_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.autoNaming = check_autoNaming.Checked;
+            Properties.Settings.Default.autoNaming = check_autoNaming.Checked;
         }
 
         private void txt_autoNameFormat_TextChanged(object sender, EventArgs e)
         {
-            Settings.Default.autoNameFormat = txt_autoNameFormat.Text;
+            Properties.Settings.Default.autoNameFormat = txt_autoNameFormat.Text;
         }
 
         private void btn_browse_Click(object sender, EventArgs e)
@@ -252,26 +255,26 @@ namespace Handbrake
         {
             if (text_an_path.Text == string.Empty)
             {
-                Settings.Default.autoNamePath = string.Empty;
+                Properties.Settings.Default.autoNamePath = string.Empty;
                 text_an_path.Text = "Click 'Browse' to set the default location";
             }
             else
-                Settings.Default.autoNamePath = text_an_path.Text;
+                Properties.Settings.Default.autoNamePath = text_an_path.Text;
         }
 
         private void check_m4v_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.useM4v = check_m4v.Checked;
+            Properties.Settings.Default.useM4v = check_m4v.Checked;
         }
 
         private void check_removeUnderscores_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.AutoNameRemoveUnderscore = check_removeUnderscores.Checked;
+            Properties.Settings.Default.AutoNameRemoveUnderscore = check_removeUnderscores.Checked;
         }
 
         private void check_TitleCase_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.AutoNameTitleCase = check_TitleCase.Checked;
+            Properties.Settings.Default.AutoNameTitleCase = check_TitleCase.Checked;
         }
 
         #endregion
@@ -287,7 +290,7 @@ namespace Handbrake
 
         private void txt_vlcPath_TextChanged(object sender, EventArgs e)
         {
-            Settings.Default.VLC_Path = txt_vlcPath.Text;
+            Properties.Settings.Default.VLC_Path = txt_vlcPath.Text;
         }
 
         #endregion
@@ -296,19 +299,19 @@ namespace Handbrake
 
         private void drop_preferredLang_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Settings.Default.NativeLanguage = drop_preferredLang.SelectedItem.ToString();
+            Properties.Settings.Default.NativeLanguage = drop_preferredLang.SelectedItem.ToString();
         }
 
         private void radio_dub_CheckedChanged(object sender, EventArgs e)
         {
             if (radio_dub.Checked)
-                Settings.Default.DubAudio = true;
+                Properties.Settings.Default.DubAudio = true;
         }
 
         private void radio_foreignAndSubs_CheckedChanged(object sender, EventArgs e)
         {
             if (radio_foreignAndSubs.Checked)
-                Settings.Default.DubAudio = false;
+                Properties.Settings.Default.DubAudio = false;
         }
 
         #endregion
@@ -317,27 +320,27 @@ namespace Handbrake
 
         private void drp_Priority_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Settings.Default.processPriority = drp_Priority.Text;
+            Properties.Settings.Default.processPriority = drp_Priority.Text;
         }
 
         private void check_preventSleep_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.preventSleep = check_preventSleep.Checked;
+            Properties.Settings.Default.preventSleep = check_preventSleep.Checked;
         }
 
         private void cb_logVerboseLvl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Settings.Default.verboseLevel = cb_logVerboseLvl.SelectedIndex;
+            Properties.Settings.Default.verboseLevel = cb_logVerboseLvl.SelectedIndex;
         }
 
         private void check_saveLogWithVideo_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.saveLogWithVideo = check_saveLogWithVideo.Checked;
+            Properties.Settings.Default.saveLogWithVideo = check_saveLogWithVideo.Checked;
         }
 
         private void check_logsInSpecifiedLocation_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.saveLogToSpecifiedPath = check_logsInSpecifiedLocation.Checked;
+            Properties.Settings.Default.saveLogToSpecifiedPath = check_logsInSpecifiedLocation.Checked;
         }
 
         private void btn_saveLog_Click(object sender, EventArgs e)
@@ -350,17 +353,16 @@ namespace Handbrake
 
         private void text_logPath_TextChanged(object sender, EventArgs e)
         {
-            Settings.Default.saveLogPath = text_logPath.Text;
+            Properties.Settings.Default.saveLogPath = text_logPath.Text;
         }
 
         private void btn_viewLogs_Click(object sender, EventArgs e)
         {
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
             string windir = Environment.GetEnvironmentVariable("WINDIR");
-            Process prc = new Process
-                              {
-                                  StartInfo = {FileName = windir + @"\explorer.exe", Arguments = logDir}
-                              };
+            Process prc = new Process();
+            prc.StartInfo.FileName = windir + @"\explorer.exe";
+            prc.StartInfo.Arguments = logDir;
             prc.Start();
         }
 
@@ -378,7 +380,7 @@ namespace Handbrake
 
         private void check_clearOldLogs_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.clearOldLogs = check_clearOldLogs.Checked;
+            Properties.Settings.Default.clearOldLogs = check_clearOldLogs.Checked;
         }
 
         #endregion
@@ -387,39 +389,39 @@ namespace Handbrake
 
         private void check_mainMinimize_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.MainWindowMinimize = check_mainMinimize.Checked;
+            Properties.Settings.Default.MainWindowMinimize = check_mainMinimize.Checked;
             check_trayStatusAlerts.Enabled = check_mainMinimize.Checked;
         }
 
         private void check_trayStatusAlerts_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.trayIconAlerts = check_trayStatusAlerts.Checked;
+            Properties.Settings.Default.trayIconAlerts = check_trayStatusAlerts.Checked;
         }
 
         private void check_queryEditorTab_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.QueryEditorTab = check_queryEditorTab.Checked;
+            Properties.Settings.Default.QueryEditorTab = check_queryEditorTab.Checked;
             check_promptOnUnmatchingQueries.Enabled = check_queryEditorTab.Checked;
         }
 
         private void check_promptOnUnmatchingQueries_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.PromptOnUnmatchingQueries = check_promptOnUnmatchingQueries.Checked;
+            Properties.Settings.Default.PromptOnUnmatchingQueries = check_promptOnUnmatchingQueries.Checked;
         }
 
         private void check_disablePresetNotification_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.presetNotification = check_disablePresetNotification.Checked;
+            Properties.Settings.Default.presetNotification = check_disablePresetNotification.Checked;
         }
 
         private void check_showCliForInGUIEncode_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.showCliForInGuiEncodeStatus = check_showCliForInGUIEncode.Checked;
+            Properties.Settings.Default.showCliForInGuiEncodeStatus = check_showCliForInGUIEncode.Checked;
         }
 
         private void drop_previewScanCount_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Settings.Default.previewScanCount = int.Parse(drop_previewScanCount.SelectedItem.ToString());
+            Properties.Settings.Default.previewScanCount = int.Parse(drop_previewScanCount.SelectedItem.ToString());
         }
 
         private void x264step_SelectedIndexChanged(object sender, EventArgs e)
@@ -427,16 +429,16 @@ namespace Handbrake
             switch (drop_x264step.SelectedIndex)
             {
                 case 0:
-                    Settings.Default.x264cqstep = 1.0;
+                    Properties.Settings.Default.x264cqstep = 1.0;
                     break;
                 case 1:
-                    Settings.Default.x264cqstep = 0.50;
+                    Properties.Settings.Default.x264cqstep = 0.50;
                     break;
                 case 2:
-                    Settings.Default.x264cqstep = 0.25;
+                    Properties.Settings.Default.x264cqstep = 0.25;
                     break;
                 case 3:
-                    Settings.Default.x264cqstep = 0.20;
+                    Properties.Settings.Default.x264cqstep = 0.20;
                     break;
             }
             mainWindow.setQualityFromSlider();
@@ -444,14 +446,23 @@ namespace Handbrake
 
         private void check_dvdnav_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.noDvdNav = check_dvdnav.Checked;
+            Properties.Settings.Default.noDvdNav = check_dvdnav.Checked;
+        }
+
+        #endregion
+
+        #region Debug
+
+        private void check_disableResCalc_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.disableResCalc = check_disableResCalc.Checked;
         }
 
         #endregion
 
         private void btn_close_Click(object sender, EventArgs e)
         {
-            Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
+            Properties.Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
             UpdateApplicationServicesSettings();
 
             this.Close();

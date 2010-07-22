@@ -182,9 +182,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
          */
         if (hbInstanceNum > 1)
         {
-            alertTitle = [NSString stringWithFormat:
-                          NSLocalizedString(@"There is already an instance of HandBrake running.", @"")];
-            NSBeginCriticalAlertSheet(
+        alertTitle = [NSString stringWithFormat:
+                         NSLocalizedString(@"There is already an instance of HandBrake running.", @"")];
+        NSBeginCriticalAlertSheet(
                                       alertTitle,
                                       NSLocalizedString(@"Reload Queue", nil),
                                       nil,
@@ -195,48 +195,29 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         }
         else
         {
-            if (fWorkingCount > 0 || fPendingCount > 0)
+            if (fWorkingCount > 0)
             {
-                if (fWorkingCount > 0)
-                {
-                    alertTitle = [NSString stringWithFormat:
-                                  NSLocalizedString(@"HandBrake Has Detected %d Previously Encoding Item(s) and %d Pending Item(s) In Your Queue.", @""),
-                                  fWorkingCount,fPendingCount];
-                }
-                else
-                {
-                    alertTitle = [NSString stringWithFormat:
-                                  NSLocalizedString(@"HandBrake Has Detected %d Pending Item(s) In Your Queue.", @""),
-                                  fPendingCount];
-                }
-                
-                NSBeginCriticalAlertSheet(
-                                          alertTitle,
-                                          NSLocalizedString(@"Reload Queue", nil),
-                                          nil,
-                                          NSLocalizedString(@"Empty Queue", nil),
-                                          fWindow, self,
-                                          nil, @selector(didDimissReloadQueue:returnCode:contextInfo:), nil,
-                                          NSLocalizedString(@" Do you want to reload them ?", nil));
+                alertTitle = [NSString stringWithFormat:
+                              NSLocalizedString(@"HandBrake Has Detected %d Previously Encoding Item and %d Pending Item(s) In Your Queue.", @""),
+                              fWorkingCount,fPendingCount];
             }
             else
             {
-                /* Since we addressed any pending or previously encoding items above, we go ahead and make sure the queue
-                 * is empty of any finished items or cancelled items */
-                [self clearQueueAllItems];
-                /* We show whichever open source window specified in LaunchSourceBehavior preference key */
-                if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source"])
-                {
-                    [self browseSources:nil];
-                }
-                
-                if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source (Title Specific)"])
-                {
-                    [self browseSources:(id)fOpenSourceTitleMMenu];
-                }
+                alertTitle = [NSString stringWithFormat:
+                              NSLocalizedString(@"HandBrake Has Detected %d Pending Item(s) In Your Queue.", @""),
+                              fPendingCount];
             }
             
+            NSBeginCriticalAlertSheet(
+                                      alertTitle,
+                                      NSLocalizedString(@"Reload Queue", nil),
+                                      nil,
+                                      NSLocalizedString(@"Empty Queue", nil),
+                                      fWindow, self,
+                                      nil, @selector(didDimissReloadQueue:returnCode:contextInfo:), nil,
+                                      NSLocalizedString(@" Do you want to reload them ?", nil));
         }
+        
     }
     else
     {
@@ -274,6 +255,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	{
         if ([[runningAppsDictionary valueForKey:@"NSApplicationName"] isEqualToString:@"HandBrake"])
 		{
+            hbInstances++;
             /*Report the path to each active instances app path */
             runningInstancePidNum = [[runningAppsDictionary valueForKey:@"NSApplicationProcessIdentifier"] intValue];
             runningInstanceAppPath = [runningAppsDictionary valueForKey:@"NSApplicationPath"];
@@ -290,8 +272,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 /* Tell fQueueController what our pidNum is */
                 [fQueueController setPidNum:pidNum];
             }
-            hbInstances++;
-        }
+		}
 	}
     return hbInstances;
 }
@@ -300,11 +281,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 - (void) didDimissReloadQueue: (NSWindow *)sheet returnCode: (int)returnCode contextInfo: (void *)contextInfo
 {
-    
-    [self writeToActivityLog: "didDimissReloadQueue number of hb instances:%d", hbInstanceNum];
     if (returnCode == NSAlertOtherReturn)
     {
-        [self writeToActivityLog: "didDimissReloadQueue NSAlertOtherReturn Chosen"];
         [self clearQueueAllItems];
         
         /* We show whichever open source window specified in LaunchSourceBehavior preference key */
@@ -320,10 +298,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }
     else
     {
-        [self writeToActivityLog: "didDimissReloadQueue First Button Chosen"];
-        if (hbInstanceNum == 1)
+        if ([self hbInstances] == 1)
         {
-            
             [self setQueueEncodingItemsAsPending];
         }
         [self showQueueWindow:NULL];
@@ -2105,19 +2081,15 @@ fWorkingCount = 0;
     /* we look here to see if the preset is we move on to the next one */
     while ( tempObject = [enumerator nextObject] )  
     {
-        /* We want to keep any queue item that is pending or was previously being encoded */
-        if ([[tempObject objectForKey:@"Status"] intValue] == 1 || [[tempObject objectForKey:@"Status"] intValue] == 2)
+        /* If the queue item is marked as "encoding" (1)
+         * then change its status back to pending (2) which effectively
+         * puts it back into the queue to be encoded
+         */
+        if ([[tempObject objectForKey:@"Status"] intValue] == 1)
         {
-            /* If the queue item is marked as "encoding" (1)
-             * then change its status back to pending (2) which effectively
-             * puts it back into the queue to be encoded
-             */
-            if ([[tempObject objectForKey:@"Status"] intValue] == 1)
-            {
-                [tempObject setObject:[NSNumber numberWithInt: 2] forKey:@"Status"];
-            }
-            [tempArray addObject:tempObject];
+            [tempObject setObject:[NSNumber numberWithInt: 2] forKey:@"Status"];
         }
+        [tempArray addObject:tempObject];
     }
     
     [QueueFileArray setArray:tempArray];

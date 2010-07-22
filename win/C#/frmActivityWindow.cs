@@ -120,7 +120,7 @@ namespace Handbrake
                     this.mode = setMode;
 
                     Array values = Enum.GetValues(typeof(ActivityLogMode));
-                    Properties.Settings.Default.ActivityWindowLastMode = (int)values.GetValue(Convert.ToInt32(setMode));
+                    Properties.Settings.Default.ActivityWindowLastMode = (int) values.GetValue(Convert.ToInt32(setMode));
                     Properties.Settings.Default.Save();
 
                     this.Text = mode == ActivityLogMode.Scan
@@ -155,7 +155,7 @@ namespace Handbrake
         /// </param>
         private void NewActivityWindow_Load(object sender, EventArgs e)
         {
-            ActivityLogMode activitLogMode = (ActivityLogMode)Enum.ToObject(typeof(ActivityLogMode), Properties.Settings.Default.ActivityWindowLastMode);
+            ActivityLogMode activitLogMode = (ActivityLogMode) Enum.ToObject(typeof(ActivityLogMode), Properties.Settings.Default.ActivityWindowLastMode);
             SetMode(activitLogMode);        
         }
 

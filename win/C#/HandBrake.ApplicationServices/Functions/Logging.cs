@@ -23,7 +23,6 @@ namespace HandBrake.ApplicationServices.Functions
         /// <param name="encJob">
         /// The Encode Job Object
         /// </param>
-        /// <returns>String with the log header</returns>
         public static string CreateCliLogHeader(Job encJob)
         {
             StringBuilder logHeader = new StringBuilder();

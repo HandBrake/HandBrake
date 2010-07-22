@@ -7,6 +7,7 @@ namespace Handbrake.Controls
 {
     using System;
     using System.Drawing;
+    using System.Globalization;
     using System.Windows.Forms;
 
     using HandBrake.ApplicationServices.Parsing;
@@ -18,6 +19,7 @@ namespace Handbrake.Controls
     /// </summary>
     public partial class PictureSettings : UserControl
     {
+        private readonly CultureInfo culture = new CultureInfo("en-US", false);
         private bool preventChangingWidth;
         private bool preventChangingHeight;
         private bool preventChangingCustom;
@@ -150,6 +152,9 @@ namespace Handbrake.Controls
         // Picture Controls
         private void TextWidthValueChanged(object sender, EventArgs e)
         {
+            if (Properties.Settings.Default.disableResCalc)
+                return;
+
             if (preventChangingWidth)
                 return;
 
@@ -209,6 +214,9 @@ namespace Handbrake.Controls
 
         private void TextHeightValueChanged(object sender, EventArgs e)
         {
+            if (Properties.Settings.Default.disableResCalc)
+                return;
+
             if (preventChangingHeight)
                 return;
 
@@ -269,6 +277,9 @@ namespace Handbrake.Controls
 
         private void CheckKeepArCheckedChanged(object sender, EventArgs e)
         {
+            if (Properties.Settings.Default.disableResCalc)
+                return;
+
             // Force TextWidth to recalc height
             if (check_KeepAR.Checked)
                 TextWidthValueChanged(this, new EventArgs());
@@ -287,6 +298,9 @@ namespace Handbrake.Controls
 
         private void UpdownDisplayWidthValueChanged(object sender, EventArgs e)
         {
+            if (Properties.Settings.Default.disableResCalc)
+                return;
+
             if (preventChangingDisplayWidth == false && check_KeepAR.CheckState == CheckState.Unchecked)
             {
                 preventChangingCustom = true;
@@ -312,7 +326,7 @@ namespace Handbrake.Controls
 
                 // Update value
                 preventChangingHeight = true;
-                text_height.Value = modulusHeight;
+                text_height.Value = (decimal)modulusHeight;
                 updownParWidth.Value = updownDisplayWidth.Value;
                 updownParHeight.Value = text_width.Value;
                 preventChangingHeight = false;

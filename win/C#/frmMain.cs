@@ -26,9 +26,6 @@ namespace Handbrake
     using Presets;
     using Properties;
 
-    /// <summary>
-    /// The Main Window
-    /// </summary>
     public partial class frmMain : Form
     {
         // Objects which may be used by one or more other objects *************
@@ -918,6 +915,7 @@ namespace Handbrake
 
             if (treeView_presets.SelectedNode != null)
             {
+
                 if (savefiledialog.ShowDialog() == DialogResult.OK)
                 {
                     Preset preset = presetHandler.GetPreset(treeView_presets.SelectedNode.Text);
@@ -1128,6 +1126,7 @@ namespace Handbrake
             lbl_encode.Text = encodeQueue.Count + " encode(s) pending in the queue";
 
             queueWindow.Show();
+
         }
 
         /// <summary>
@@ -1289,6 +1288,7 @@ namespace Handbrake
                 int id;
                 if (int.TryParse(driveId, out id))
                 {
+
                     this.dvdDrivePath = drives[id].RootDirectory;
                     this.dvdDriveLabel = drives[id].VolumeLabel;
 
@@ -1341,7 +1341,7 @@ namespace Handbrake
 
                 // Populate the Angles dropdown
                 drop_angle.Items.Clear();
-                if (!Settings.Default.noDvdNav)
+                if (!Properties.Settings.Default.noDvdNav)
                 {
                     drop_angle.Visible = true;
                     lbl_angle.Visible = true;
@@ -1382,7 +1382,7 @@ namespace Handbrake
                     labelSource.Text = labelSource.Text = Path.GetFileName(selectedTitle.SourceName);
 
             // Run the AutoName & ChapterNaming functions
-            if (Settings.Default.autoNaming)
+            if (Properties.Settings.Default.autoNaming)
             {
                 string autoPath = Main.AutoName(this);
                 if (autoPath != null)
@@ -1444,7 +1444,7 @@ namespace Handbrake
                     // Add more rows to the Chapter menu if needed.
                     if (Check_ChapterMarkers.Checked)
                     {
-                        int i = data_chpt.Rows.Count, finish;
+                        int i = data_chpt.Rows.Count, finish = 0;
                         int.TryParse(drop_chapterFinish.Text, out finish);
 
                         while (i < finish)
@@ -1466,7 +1466,7 @@ namespace Handbrake
                     .ToString();
 
             // Run the Autonaming function
-            if (Settings.Default.autoNaming)
+            if (Properties.Settings.Default.autoNaming)
                 text_destination.Text = Main.AutoName(this);
 
             // Disable chapter markers if only 1 chapter is selected.
@@ -1515,8 +1515,8 @@ namespace Handbrake
         private void drop_mode_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Reset
-            this.drop_chapterFinish.TextChanged -= this.SecondsOrFramesChanged;
-            this.drop_chapterStart.TextChanged -= this.SecondsOrFramesChanged;
+            this.drop_chapterFinish.TextChanged -= new EventHandler(this.SecondsOrFramesChanged);
+            this.drop_chapterStart.TextChanged -= new EventHandler(this.SecondsOrFramesChanged);
 
             // Do Work
             switch (drop_mode.SelectedIndex)
@@ -1533,8 +1533,8 @@ namespace Handbrake
                         lbl_duration.Text = "--:--:--";
                     return;
                 case 1:
-                    this.drop_chapterStart.TextChanged += this.SecondsOrFramesChanged;
-                    this.drop_chapterFinish.TextChanged += this.SecondsOrFramesChanged;
+                    this.drop_chapterStart.TextChanged += new EventHandler(this.SecondsOrFramesChanged);
+                    this.drop_chapterFinish.TextChanged += new EventHandler(this.SecondsOrFramesChanged);
                     drop_chapterStart.DropDownStyle = ComboBoxStyle.Simple;
                     drop_chapterFinish.DropDownStyle = ComboBoxStyle.Simple;
                     if (selectedTitle != null)
@@ -1544,8 +1544,8 @@ namespace Handbrake
                     }
                     return;
                 case 2:
-                    this.drop_chapterStart.TextChanged += this.SecondsOrFramesChanged;
-                    this.drop_chapterFinish.TextChanged += this.SecondsOrFramesChanged;
+                    this.drop_chapterStart.TextChanged += new EventHandler(this.SecondsOrFramesChanged);
+                    this.drop_chapterFinish.TextChanged += new EventHandler(this.SecondsOrFramesChanged);
                     drop_chapterStart.DropDownStyle = ComboBoxStyle.Simple;
                     drop_chapterFinish.DropDownStyle = ComboBoxStyle.Simple;
                     if (selectedTitle != null)
@@ -1573,17 +1573,23 @@ namespace Handbrake
             else if (drop_format.SelectedIndex.Equals(1))
                 DVD_Save.FilterIndex = 2;
 
-            if (DVD_Save.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(DVD_Save.FileName))
+            if (DVD_Save.ShowDialog() == DialogResult.OK)
             {
                 // Add a file extension manually, as FileDialog.AddExtension has issues with dots in filenames
                 switch (DVD_Save.FilterIndex)
                 {
                     case 1:
-                        if (!Path.GetExtension(DVD_Save.FileName).Equals(".mp4", StringComparison.InvariantCultureIgnoreCase))
-                            DVD_Save.FileName = Settings.Default.useM4v ? DVD_Save.FileName.Replace(".mp4", ".m4v").Replace(".mkv", ".m4v") : DVD_Save.FileName.Replace(".m4v", ".mp4").Replace(".mkv", ".mp4");
+                        if (
+                            !Path.GetExtension(DVD_Save.FileName).Equals(".mp4",
+                                                                         StringComparison.InvariantCultureIgnoreCase))
+                            if (Properties.Settings.Default.useM4v)
+                                DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", ".m4v").Replace(".mkv", ".m4v");
+                            else
+                                DVD_Save.FileName = DVD_Save.FileName.Replace(".m4v", ".mp4").Replace(".mkv", ".mp4");
                         break;
                     case 2:
-                        if (!Path.GetExtension(DVD_Save.FileName).Equals(".mkv", StringComparison.InvariantCultureIgnoreCase))
+                        if (
+                            !Path.GetExtension(DVD_Save.FileName).Equals(".mkv", StringComparison.InvariantCultureIgnoreCase))
                             DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", ".mkv").Replace(".m4v", ".mkv");
                         break;
                     default:
@@ -1613,7 +1619,7 @@ namespace Handbrake
             switch (drop_format.SelectedIndex)
             {
                 case 0:
-                    if (Settings.Default.useM4v || Check_ChapterMarkers.Checked ||
+                    if (Properties.Settings.Default.useM4v || Check_ChapterMarkers.Checked ||
                         AudioSettings.RequiresM4V() || Subtitles.RequiresM4V())
                         SetExtension(".m4v");
                     else
@@ -1641,7 +1647,7 @@ namespace Handbrake
         public void SetExtension(string newExtension)
         {
             if (newExtension == ".mp4" || newExtension == ".m4v")
-                if (Settings.Default.useM4v || Check_ChapterMarkers.Checked || AudioSettings.RequiresM4V() ||
+                if (Properties.Settings.Default.useM4v || Check_ChapterMarkers.Checked || AudioSettings.RequiresM4V() ||
                     Subtitles.RequiresM4V())
                     newExtension = ".m4v";
                 else
@@ -1691,11 +1697,12 @@ namespace Handbrake
                     slider_videoQuality.Minimum = 0;
                     slider_videoQuality.TickFrequency = 1;
 
-                    double cqStep = Settings.Default.x264cqstep;
+                    CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
+                    double cqStep = Properties.Settings.Default.x264cqstep;
                     double multiplier = 1.0 / cqStep;
                     double value = slider_videoQuality.Value * multiplier;
 
-                    slider_videoQuality.Maximum = (int)(51 / Settings.Default.x264cqstep);
+                    slider_videoQuality.Maximum = (int)(51 / Properties.Settings.Default.x264cqstep);
 
                     if (value < slider_videoQuality.Maximum)
                         slider_videoQuality.Value = slider_videoQuality.Maximum - (int)value;
@@ -1754,7 +1761,7 @@ namespace Handbrake
             }
         }
 
-        private double cachedCqStep = Settings.Default.x264cqstep;
+        private double _cachedCqStep = Properties.Settings.Default.x264cqstep;
 
         /// <summary>
         /// Update the CQ slider for x264 for a new CQ step. This is set from option
@@ -1762,17 +1769,17 @@ namespace Handbrake
         public void setQualityFromSlider()
         {
             // Work out the current RF value.
-            double cqStep = cachedCqStep;
+            double cqStep = _cachedCqStep;
             double rfValue = 51.0 - slider_videoQuality.Value * cqStep;
 
             // Change the maximum value for the slider
-            slider_videoQuality.Maximum = (int)(51 / Settings.Default.x264cqstep);
+            slider_videoQuality.Maximum = (int)(51 / Properties.Settings.Default.x264cqstep);
 
             // Reset the CQ slider to RF0
             slider_videoQuality.Value = slider_videoQuality.Maximum;
 
             // Reset the CQ slider back to the previous value as close as possible
-            double cqStepNew = Settings.Default.x264cqstep;
+            double cqStepNew = Properties.Settings.Default.x264cqstep;
             double rfValueCurrent = 51.0 - slider_videoQuality.Value * cqStepNew;
             while (rfValueCurrent < rfValue)
             {
@@ -1781,12 +1788,12 @@ namespace Handbrake
             }
 
             // Cache the CQ step for the next calculation
-            cachedCqStep = Settings.Default.x264cqstep;
+            _cachedCqStep = Properties.Settings.Default.x264cqstep;
         }
 
         private void slider_videoQuality_Scroll(object sender, EventArgs e)
         {
-            double cqStep = Settings.Default.x264cqstep;
+            double cqStep = Properties.Settings.Default.x264cqstep;
             switch (drp_videoEncoder.Text)
             {
                 case "MPEG-4 (FFmpeg)":
@@ -1857,7 +1864,7 @@ namespace Handbrake
             }
             else
             {
-                if (drop_format.SelectedIndex != 1 && !Settings.Default.useM4v)
+                if (drop_format.SelectedIndex != 1 && !Properties.Settings.Default.useM4v)
                     SetExtension(".mp4");
                 data_chpt.Enabled = false;
                 btn_importChapters.Enabled = false;
@@ -1877,7 +1884,9 @@ namespace Handbrake
 
         private void btn_export_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog { Filter = "Csv File|*.csv", DefaultExt = "csv" };
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Csv File|*.csv";
+            saveFileDialog.DefaultExt = "csv";
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 string filename = saveFileDialog.FileName;
@@ -1933,8 +1942,8 @@ namespace Handbrake
             try
             {
                 SourceScan.Scan(sourcePath, title);
-                SourceScan.ScanStatusChanged += SourceScan_ScanStatusChanged;
-                SourceScan.ScanCompleted += SourceScan_ScanCompleted;
+                SourceScan.ScanStatusChanged += new EventHandler(SourceScan_ScanStatusChanged);
+                SourceScan.ScanCompleted += new EventHandler(SourceScan_ScanCompleted);
             }
             catch (Exception exc)
             {
@@ -1951,9 +1960,9 @@ namespace Handbrake
         /// <param name="e">
         /// The e.
         /// </param>
-        private void SourceScan_ScanStatusChanged(object sender, HandBrake.ApplicationServices.ScanProgressEventArgs e)
+        private void SourceScan_ScanStatusChanged(object sender, EventArgs e)
         {
-            UpdateScanStatusLabel(sender, e);
+            UpdateScanStatusLabel();
         }
 
         /// <summary>
@@ -1973,17 +1982,14 @@ namespace Handbrake
         /// <summary>
         /// Update the Scan Status Label
         /// </summary>
-        /// <param name="sender"> The Sender </param>
-        /// <param name="e">Scan Progress Event Args</param>
-        private void UpdateScanStatusLabel(object sender, HandBrake.ApplicationServices.ScanProgressEventArgs e)
+        private void UpdateScanStatusLabel()
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new ScanService.ScanProgessStatus(UpdateScanStatusLabel), new[] { e });
+                BeginInvoke(new UpdateWindowHandler(UpdateScanStatusLabel));
                 return;
             }
-
-            lbl_encode.Text = "Scanning Title" + e.CurrentTitle + " of " + e.TotalTitles;
+            lbl_encode.Text = SourceScan.ScanStatus;
         }
 
         /// <summary>
@@ -2104,7 +2110,7 @@ namespace Handbrake
         /// </summary>
         private void KillScan()
         {
-            SourceScan.ScanCompleted -= SourceScan_ScanCompleted;
+            SourceScan.ScanCompleted -= new EventHandler(SourceScan_ScanCompleted);
             EnableGUI();
             ResetGUI();
 
@@ -2194,10 +2200,10 @@ namespace Handbrake
                 ProgressBarStatus.Visible = false;
                 btn_start.Text = "Start";
                 btn_start.ToolTipText = "Start the encoding process";
-                btn_start.Image = Resources.Play;
+                btn_start.Image = Properties.Resources.Play;
 
                 // If the window is minimized, display the notification in a popup.
-                if (Settings.Default.trayIconAlerts)
+                if (Properties.Settings.Default.trayIconAlerts)
                     if (FormWindowState.Minimized == this.WindowState)
                     {
                         notifyIcon.BalloonTipText = lbl_encode.Text;
@@ -2228,7 +2234,7 @@ namespace Handbrake
                 lbl_encode.Text = "Encoding with " + encodeQueue.Count + " encode(s) pending";
                 btn_start.Text = "Stop";
                 btn_start.ToolTipText = "Stop the encoding process.";
-                btn_start.Image = Resources.stop;
+                btn_start.Image = Properties.Resources.stop;
             }
             catch (Exception exc)
             {
@@ -2289,7 +2295,7 @@ namespace Handbrake
                             Text = drive.RootDirectory + " (" + drive.VolumeLabel + ")",
                             Image = Resources.disc_small
                         };
-                    menuItem.Click += mnu_dvd_drive_Click;
+                    menuItem.Click += new EventHandler(mnu_dvd_drive_Click);
                     menuItems.Add(menuItem);
                 }
 
@@ -2430,7 +2436,7 @@ namespace Handbrake
 
                 if (SourceScan.IsScanning)
                 {
-                    SourceScan.ScanCompleted -= SourceScan_ScanCompleted;
+                    SourceScan.ScanCompleted -= new EventHandler(SourceScan_ScanCompleted);
                     SourceScan.Stop();
                 }
             }

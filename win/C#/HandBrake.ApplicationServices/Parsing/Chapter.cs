@@ -36,7 +36,8 @@ namespace HandBrake.ApplicationServices.Parsing
         /// </returns>
         public static Chapter Parse(StringReader output)
         {
-            Match m = Regex.Match(output.ReadLine(),
+            Match m = Regex.Match(
+                                  output.ReadLine(),
                                   @"^    \+ ([0-9]*): cells ([0-9]*)->([0-9]*), ([0-9]*) blocks, duration ([0-9]{2}:[0-9]{2}:[0-9]{2})");
             if (m.Success)
             {

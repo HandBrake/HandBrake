@@ -476,7 +476,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Import Project="$(ProgramFiles)\MSBuild\Microsoft\StyleCop\v4.4\Microsoft.StyleCop.targets" />
+  <Import Project="$(ProgramFiles)\MSBuild\Microsoft\StyleCop\v4.3\Microsoft.StyleCop.targets" />
   <PropertyGroup Condition=" '$(Configuration)' == 'Install' ">
     <PostBuildEvent>
 	cd ../../

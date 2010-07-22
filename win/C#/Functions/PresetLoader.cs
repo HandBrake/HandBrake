@@ -26,6 +26,9 @@ namespace Handbrake.Functions
         /// <param name="name">
         /// Name of the preset
         /// </param>
+        /// <param name="pictureSettings">
+        /// Save picture settings in the preset
+        /// </param>
         public static void LoadPreset(frmMain mainWindow, QueryParser presetQuery, string name)
         {
             #region Source

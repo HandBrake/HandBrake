@@ -58,6 +58,16 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         int Count { get; }
 
         /// <summary>
+        /// Gets a value indicating whether IsEncoding.
+        /// </summary>
+        bool IsEncoding { get; }
+
+        /// <summary>
+        /// Gets ActivityLog.
+        /// </summary>
+        string ActivityLog { get; }
+
+        /// <summary>
         /// Adds an item to the queue.
         /// </summary>
         /// <param name="query">
@@ -112,7 +122,6 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// Writes the current state of the queue in the form of a batch (.bat) file.
         /// </summary>
         /// <param name="file">The location of the file to write the batch file to.</param>
-        /// <returns>True if sucessful</returns>
         bool WriteBatchScriptToFile(string file);
 
         /// <summary>
