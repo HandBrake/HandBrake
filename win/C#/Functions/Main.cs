@@ -411,6 +411,7 @@ namespace Handbrake.Functions
         /// <summary>
         /// Recover a queue from file.
         /// </summary>
+        /// <param name="encodeQueue"> The IQueue Object</param>
         public static void RecoverQueue(IQueue encodeQueue)
         {
             DialogResult result = DialogResult.None;
@@ -449,7 +450,7 @@ namespace Handbrake.Functions
         }
 
         /// <summary>
-        /// Checks if this HandBrake is running multiple instances
+        /// Gets a value indicating whether this this application is running in multi instance mode.
         /// </summary>
         /// <returns>True if the UI has another instance running</returns>
         public static bool IsMultiInstance

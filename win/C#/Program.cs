@@ -10,11 +10,11 @@ namespace Handbrake
     using System.IO;
     using System.Windows.Forms;
 
+    using Handbrake.Presets;
+
     using HandBrake.ApplicationServices;
 
     using Handbrake.Properties;
-
-    using Presets;
 
     /// <summary>
     /// HandBrake Starts Here
@@ -24,13 +24,14 @@ namespace Handbrake
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        /// <param name="args">Arguments passed in from the shortcut/executable</param>
         [STAThread]
         public static void Main(string[] args)
         {
             InstanceId = Process.GetProcessesByName("HandBrake").Length;
 
             // Handle any unhandled exceptions
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
             // Attempt to upgrade / keep the users settings between versions
             if (Settings.Default.UpdateRequired)
@@ -121,9 +122,6 @@ namespace Handbrake
             }
         }
 
-
-        public static int InstanceId = 0;
-
-
+        public static int InstanceId;
     }
 }

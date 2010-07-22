@@ -61,9 +61,20 @@ namespace HandBrake.ApplicationServices.Services
         public event EventHandler ScanCompleted;
 
         /// <summary>
+        /// Scan Progess Status
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The ScanProgressEventArgs.
+        /// </param>
+        public delegate void ScanProgessStatus(object sender, ScanProgressEventArgs e);
+
+        /// <summary>
         /// Scan process has changed to a new title
         /// </summary>
-        public event EventHandler ScanStatusChanged;
+        public event ScanProgessStatus ScanStatusChanged;
 
         /* Properties */
 
@@ -71,11 +82,6 @@ namespace HandBrake.ApplicationServices.Services
         /// Gets a value indicating whether IsScanning.
         /// </summary>
         public bool IsScanning { get; private set; }
-
-        /// <summary>
-        /// Gets the Scan Status.
-        /// </summary>
-        public string ScanStatus { get; private set; }
 
         /// <summary>
         /// Gets the Souce Data.
@@ -186,7 +192,7 @@ namespace HandBrake.ApplicationServices.Services
                 this.hbProc.Start();
 
                 this.readData = new Parser(this.hbProc.StandardError.BaseStream);
-                this.readData.OnScanProgress += new ScanProgressEventHandler(this.OnScanProgress);
+                this.readData.OnScanProgress += this.OnScanProgress;
                 this.SouceData = DVD.Parse(this.readData);
 
                 // Write the Buffer out to file.
@@ -280,9 +286,14 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="titleCount">the total number of titles</param>
         private void OnScanProgress(object sender, int currentTitle, int titleCount)
         {
-            this.ScanStatus = string.Format("Processing Title: {0} of {1}", currentTitle, titleCount);
+            ScanProgressEventArgs scanProgressEventArgs = new ScanProgressEventArgs
+            {
+                TotalTitles = titleCount,
+                CurrentTitle = currentTitle
+            };
+
             if (this.ScanStatusChanged != null)
-                this.ScanStatusChanged(this, new EventArgs());
+                this.ScanStatusChanged(this, scanProgressEventArgs);
         }
     }
 }

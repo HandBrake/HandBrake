@@ -14,63 +14,6 @@ namespace HandBrake.ApplicationServices
     public class Init
     {
         /// <summary>
-        /// Setup the Settings used by the applicaiton with this library
-        /// </summary>
-        /// <param name="versionString">
-        /// The version / name of the application that's using this DLL.
-        /// </param>
-        /// <param name="instanceId">
-        /// The Instance ID
-        /// </param>
-        /// <param name="completionOption">
-        /// The completion option.
-        /// </param>
-        /// <param name="disableDvdNav">
-        /// The disable dvd nav.
-        /// </param>
-        /// <param name="growlEncode">
-        /// The growl encode.
-        /// </param>
-        /// <param name="growlQueue">
-        /// The growl queue.
-        /// </param>
-        /// <param name="processPriority">
-        /// The process priority.
-        /// </param>
-        /// <param name="saveLogPath">
-        /// The save log path.
-        /// </param>
-        /// <param name="saveLogToSpecifiedPath">
-        /// The save log to specified path.
-        /// </param>
-        /// <param name="saveLogWithVideo">
-        /// The save log with video.
-        /// </param>
-        /// <param name="showCliForInGuiEncodeStatus">
-        /// The show cli for in gui encode status.
-        /// </param>
-        /// <param name="preventSleep">
-        /// Prevent the system from sleeping
-        /// </param>
-        public static void SetupSettings(string versionString, int instanceId, string completionOption, bool disableDvdNav,
-                                  bool growlEncode, bool growlQueue, string processPriority, string saveLogPath, bool saveLogToSpecifiedPath,
-                                  bool saveLogWithVideo, bool showCliForInGuiEncodeStatus, bool preventSleep)
-        {
-            InstanceId = instanceId;
-            HandBrakeGuiVersionString = versionString;
-            CompletionOption = completionOption;
-            DisableDvdNav = disableDvdNav;
-            GrowlEncode = growlEncode;
-            GrowlQueue = growlQueue;
-            ProcessPriority = processPriority;
-            SaveLogPath = saveLogPath;
-            SaveLogToSpecifiedPath = saveLogToSpecifiedPath;
-            SaveLogWithVideo = saveLogWithVideo;
-            ShowCliForInGuiEncodeStatus = showCliForInGuiEncodeStatus;
-            PreventSleep = preventSleep;
-        }
-
-        /// <summary>
         /// Gets the Assembly version.
         /// </summary>
         /// <returns>
@@ -141,5 +84,61 @@ namespace HandBrake.ApplicationServices
         /// </summary>
         public static bool PreventSleep;
 
+        /// <summary>
+        /// Setup the Settings used by the applicaiton with this library
+        /// </summary>
+        /// <param name="versionString">
+        /// The version / name of the application that's using this DLL.
+        /// </param>
+        /// <param name="instanceId">
+        /// The Instance ID
+        /// </param>
+        /// <param name="completionOption">
+        /// The completion option.
+        /// </param>
+        /// <param name="disableDvdNav">
+        /// The disable dvd nav.
+        /// </param>
+        /// <param name="growlEncode">
+        /// The growl encode.
+        /// </param>
+        /// <param name="growlQueue">
+        /// The growl queue.
+        /// </param>
+        /// <param name="processPriority">
+        /// The process priority.
+        /// </param>
+        /// <param name="saveLogPath">
+        /// The save log path.
+        /// </param>
+        /// <param name="saveLogToSpecifiedPath">
+        /// The save log to specified path.
+        /// </param>
+        /// <param name="saveLogWithVideo">
+        /// The save log with video.
+        /// </param>
+        /// <param name="showCliForInGuiEncodeStatus">
+        /// The show cli for in gui encode status.
+        /// </param>
+        /// <param name="preventSleep">
+        /// Prevent the system from sleeping
+        /// </param>
+        public static void SetupSettings(string versionString, int instanceId, string completionOption, bool disableDvdNav,
+                                  bool growlEncode, bool growlQueue, string processPriority, string saveLogPath, bool saveLogToSpecifiedPath,
+                                  bool saveLogWithVideo, bool showCliForInGuiEncodeStatus, bool preventSleep)
+        {
+            InstanceId = instanceId;
+            HandBrakeGuiVersionString = versionString;
+            CompletionOption = completionOption;
+            DisableDvdNav = disableDvdNav;
+            GrowlEncode = growlEncode;
+            GrowlQueue = growlQueue;
+            ProcessPriority = processPriority;
+            SaveLogPath = saveLogPath;
+            SaveLogToSpecifiedPath = saveLogToSpecifiedPath;
+            SaveLogWithVideo = saveLogWithVideo;
+            ShowCliForInGuiEncodeStatus = showCliForInGuiEncodeStatus;
+            PreventSleep = preventSleep;
+        }
     }
 }

@@ -100,8 +100,6 @@ namespace Handbrake
             this.label30 = new System.Windows.Forms.Label();
             this.check_disablePresetNotification = new System.Windows.Forms.CheckBox();
             this.label28 = new System.Windows.Forms.Label();
-            this.tab_debug = new System.Windows.Forms.TabPage();
-            this.check_disableResCalc = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pathFinder = new System.Windows.Forms.FolderBrowserDialog();
@@ -143,7 +141,6 @@ namespace Handbrake
             this.tab_audio_sub.SuspendLayout();
             this.tab_cli.SuspendLayout();
             this.tab_advanced.SuspendLayout();
-            this.tab_debug.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tableLayoutPanel5.SuspendLayout();
             this.SuspendLayout();
@@ -191,7 +188,6 @@ namespace Handbrake
             this.tab_options.Controls.Add(this.tab_audio_sub);
             this.tab_options.Controls.Add(this.tab_cli);
             this.tab_options.Controls.Add(this.tab_advanced);
-            this.tab_options.Controls.Add(this.tab_debug);
             this.tab_options.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tab_options.Location = new System.Drawing.Point(3, 38);
             this.tab_options.Name = "tab_options";
@@ -1049,29 +1045,6 @@ namespace Handbrake
             this.label28.TabIndex = 85;
             this.label28.Text = "x264:";
             // 
-            // tab_debug
-            // 
-            this.tab_debug.Controls.Add(this.check_disableResCalc);
-            this.tab_debug.Location = new System.Drawing.Point(4, 22);
-            this.tab_debug.Name = "tab_debug";
-            this.tab_debug.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_debug.Size = new System.Drawing.Size(580, 334);
-            this.tab_debug.TabIndex = 7;
-            this.tab_debug.Text = "Debug";
-            this.tab_debug.UseVisualStyleBackColor = true;
-            // 
-            // check_disableResCalc
-            // 
-            this.check_disableResCalc.AutoSize = true;
-            this.check_disableResCalc.Location = new System.Drawing.Point(13, 15);
-            this.check_disableResCalc.Name = "check_disableResCalc";
-            this.check_disableResCalc.Size = new System.Drawing.Size(327, 17);
-            this.check_disableResCalc.TabIndex = 0;
-            this.check_disableResCalc.Text = "Disable Resolution Calculation for \"None\" and \"Custom\" modes.";
-            this.ToolTip.SetToolTip(this.check_disableResCalc, resources.GetString("check_disableResCalc.ToolTip"));
-            this.check_disableResCalc.UseVisualStyleBackColor = true;
-            this.check_disableResCalc.CheckedChanged += new System.EventHandler(this.check_disableResCalc_CheckedChanged);
-            // 
             // label8
             // 
             this.label8.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -1484,8 +1457,6 @@ namespace Handbrake
             this.tab_cli.PerformLayout();
             this.tab_advanced.ResumeLayout(false);
             this.tab_advanced.PerformLayout();
-            this.tab_debug.ResumeLayout(false);
-            this.tab_debug.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.tableLayoutPanel5.ResumeLayout(false);
             this.tableLayoutPanel5.PerformLayout();
@@ -1585,8 +1556,6 @@ namespace Handbrake
         private System.Windows.Forms.RadioButton radio_dub;
         private System.Windows.Forms.Label label15;
         internal System.Windows.Forms.Button btn_browse;
-        private System.Windows.Forms.TabPage tab_debug;
-        private System.Windows.Forms.CheckBox check_disableResCalc;
         internal System.Windows.Forms.CheckBox check_growlEncode;
         internal System.Windows.Forms.CheckBox check_GrowlQueue;
         internal System.Windows.Forms.ComboBox drop_previewScanCount;

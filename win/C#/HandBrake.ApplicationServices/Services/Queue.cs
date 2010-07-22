@@ -17,7 +17,6 @@ namespace HandBrake.ApplicationServices.Services
 
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Properties;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     /// <summary>
@@ -253,6 +252,7 @@ namespace HandBrake.ApplicationServices.Services
         /// Writes the current state of the queue in the form of a batch (.bat) file.
         /// </summary>
         /// <param name="file">The location of the file to write the batch file to.</param>
+        /// <returns>True if successful</returns>
         public bool WriteBatchScriptToFile(string file)
         {
             string queries = string.Empty;

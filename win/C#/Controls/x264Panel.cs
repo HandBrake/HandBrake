@@ -8,6 +8,9 @@ namespace Handbrake.Controls
     using System;
     using System.Windows.Forms;
 
+    /// <summary>
+    /// The Advanced Panel
+    /// </summary>
     public partial class x264Panel : UserControl
     {
         /* 
@@ -38,7 +41,10 @@ namespace Handbrake.Controls
             {
                 return rtf_x264Query.Text;
             }
-            set { rtf_x264Query.Text = value; }
+            set
+            {
+                rtf_x264Query.Text = value;
+            }
         }
 
         /// <summary>
@@ -999,7 +1005,7 @@ namespace Handbrake.Controls
 
         private void widgetControlChanged(object sender, EventArgs e)
         {
-            Control changedControlName = (Control) sender;
+            Control changedControlName = (Control)sender;
             string controlName = string.Empty;
 
             switch (changedControlName.Name.Trim())

@@ -87,7 +87,7 @@ namespace HandBrake.ApplicationServices.Parsing
         public static IEnumerable<Subtitle> ParseList(StringReader output)
         {
             var subtitles = new List<Subtitle>();
-            while ((char) output.Peek() != '+')
+            while ((char)output.Peek() != '+')
             {
                 Subtitle thisSubtitle = Parse(output);
 

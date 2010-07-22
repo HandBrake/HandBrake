@@ -15,7 +15,6 @@ namespace HandBrake.ApplicationServices.Services
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
-    using HandBrake.ApplicationServices.Properties;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     /// <summary>
@@ -252,14 +251,15 @@ namespace HandBrake.ApplicationServices.Services
             SendKeys.Send("^C");
             SendKeys.Flush();
 
-            //if (HbProcess != null)
+            /*//if (HbProcess != null)
             //{
             //    HbProcess.StandardInput.AutoFlush = true;
             //    HbProcess.StandardInput.WriteLine("^c^z");
-            //}
+            //}*/
         }
 
         /* Helpers */
+
         /// <summary>
         /// Save a copy of the log to the users desired location or a default location
         /// if this feature is enabled in options.
@@ -315,8 +315,6 @@ namespace HandBrake.ApplicationServices.Services
         {
             IsEncoding = false;
 
-            //   ReadFile(null);
-
             if (this.EncodeEnded != null)
                 this.EncodeEnded(this, new EventArgs());
 
@@ -344,9 +342,6 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Read the log file
         /// </summary>
-        /// <param name="n">
-        /// The object.
-        /// </param>
         private void ReadFile()
         {
             logBuffer = new StringBuilder();
@@ -398,6 +393,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Setup the logging.
         /// </summary>
+        /// <param name="encodeJob">The Encode Job Object</param>
         private void SetupLogging(Job encodeJob)
         {
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";

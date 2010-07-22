@@ -27,17 +27,12 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <summary>
         /// Scan process has changed to a new title
         /// </summary>
-        event EventHandler ScanStatusChanged;
+        event ScanService.ScanProgessStatus ScanStatusChanged;
 
         /// <summary>
         /// Gets a value indicating whether IsScanning.
         /// </summary>
         bool IsScanning { get; }
-
-        /// <summary>
-        /// Gets the Scan Status.
-        /// </summary>
-        string ScanStatus { get; }
 
         /// <summary>
         /// Gets the Souce Data.

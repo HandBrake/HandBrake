@@ -41,7 +41,7 @@ namespace HandBrake.ApplicationServices.Parsing
 
             while (!output.EndOfStream)
             {
-                if ((char) output.Peek() == '+')
+                if ((char)output.Peek() == '+')
                     thisDVD.Titles.AddRange(Title.ParseList(output.ReadToEnd()));
                 else
                     output.ReadLine();

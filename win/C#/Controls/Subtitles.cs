@@ -195,7 +195,7 @@ namespace Handbrake.Controls
                 srtFile = drp_subtitleTracks.SelectedItem.ToString();
                 srtLangVal = srt_lang.SelectedItem.ToString();
                 srtCode = srt_charcode.SelectedItem.ToString();
-                srtOffsetMs = (int) srt_offset.Value;
+                srtOffsetMs = (int)srt_offset.Value;
                 if (defaultSub == "Yes") SetNoSrtDefault();
             }
             else
@@ -210,14 +210,14 @@ namespace Handbrake.Controls
 
             SubtitleInfo track = new SubtitleInfo
                                      {
-                                         Track = trackName, 
-                                         Forced = forcedVal, 
-                                         Burned = burnedVal, 
-                                         Default = defaultSub, 
-                                         SrtLang = srtLangVal, 
-                                         SrtCharCode = srtCode, 
-                                         SrtOffset = srtOffsetMs, 
-                                         SrtPath = srtPath, 
+                                         Track = trackName,
+                                         Forced = forcedVal,
+                                         Burned = burnedVal,
+                                         Default = defaultSub,
+                                         SrtLang = srtLangVal,
+                                         SrtCharCode = srtCode,
+                                         SrtOffset = srtOffsetMs,
+                                         SrtPath = srtPath,
                                          SrtFileName = srtFile
                                      };
 
@@ -286,7 +286,7 @@ namespace Handbrake.Controls
 
                 int c = 0;
                 if (lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[0].Text.ToLower().Contains(".srt"))
-                    // We have an SRT
+                // We have an SRT
                 {
                     foreach (var item in drp_subtitleTracks.Items)
                     {
@@ -388,7 +388,7 @@ namespace Handbrake.Controls
             lv_subList.Select();
 
             subList[lv_subList.SelectedIndices[0]].Forced = check_forced.Checked ? "Yes" : "No";
-                // Update SubList List<SubtitleInfo> 
+            // Update SubList List<SubtitleInfo> 
         }
 
         /// <summary>
@@ -411,7 +411,7 @@ namespace Handbrake.Controls
             lv_subList.Select();
 
             subList[lv_subList.SelectedIndices[0]].Burned = check_burned.Checked ? "Yes" : "No";
-                // Update SubList List<SubtitleInfo> 
+            // Update SubList List<SubtitleInfo> 
         }
 
         /// <summary>
@@ -437,7 +437,7 @@ namespace Handbrake.Controls
             lv_subList.Select();
 
             subList[lv_subList.SelectedIndices[0]].Default = check_default.Checked ? "Yes" : "No";
-                // Update SubList List<SubtitleInfo>
+            // Update SubList List<SubtitleInfo>
         }
 
         /// <summary>
@@ -458,8 +458,7 @@ namespace Handbrake.Controls
             lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[6].Text = srt_offset.Value.ToString();
             lv_subList.Select();
 
-            subList[lv_subList.SelectedIndices[0]].SrtOffset = (int) srt_offset.Value;
-                // Update SubList List<SubtitleInfo>
+            subList[lv_subList.SelectedIndices[0]].SrtOffset = (int)srt_offset.Value;
         }
 
         /// <summary>
@@ -479,7 +478,7 @@ namespace Handbrake.Controls
             lv_subList.Select();
 
             subList[lv_subList.SelectedIndices[0]].SrtCharCode = srt_charcode.SelectedItem.ToString();
-                // Update SubList List<SubtitleInfo>
+            // Update SubList List<SubtitleInfo>
         }
 
         /// <summary>
@@ -499,7 +498,7 @@ namespace Handbrake.Controls
             lv_subList.Select();
 
             subList[lv_subList.SelectedIndices[0]].SrtLang = srt_lang.SelectedItem.ToString();
-                // Update SubList List<SubtitleInfo>
+            // Update SubList List<SubtitleInfo>
         }
 
         /* Right Click Menu */
