@@ -199,6 +199,7 @@ namespace Handbrake
         private void stopWindowRefresh(object sender, EventArgs e)
         {
             windowTimer.Dispose();
+            Reset();
             LogMonitor(null);
         }
 

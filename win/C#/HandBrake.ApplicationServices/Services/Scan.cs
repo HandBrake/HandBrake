@@ -94,7 +94,7 @@ namespace HandBrake.ApplicationServices.Services
 
                 if (logBuffer == null)
                 {
-                    ResetLogReader();
+                    ResetLogReader(false);
                     ReadLastScanFile();  
                 }
 
@@ -149,12 +149,12 @@ namespace HandBrake.ApplicationServices.Services
                 if (this.ScanStared != null)
                     this.ScanStared(this, new EventArgs());
 
-                ResetLogReader();
+                ResetLogReader(true);
 
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
                 string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
                                 "\\HandBrake\\logs";
-                string dvdInfoPath = Path.Combine(logDir, string.Format("last_scan_log{0}.txt", Init.InstanceId));
+                string dvdInfoPath = Path.Combine(logDir, string.Format("last_scan_log{0}.txt", Init.InstanceId == 0 ? string.Empty : Init.InstanceId.ToString()));
 
                 // Make we don't pick up a stale last_encode_log.txt (and that we have rights to the file)
                 if (File.Exists(dvdInfoPath))
@@ -219,8 +219,8 @@ namespace HandBrake.ApplicationServices.Services
                 // we'll need to make a copy of it.
                 string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
                                 "\\HandBrake\\logs";
-                string logFile = Path.Combine(logDir, string.Format("last_scan_log{0}.txt", Init.InstanceId));
-                string logFile2 = Path.Combine(logDir, string.Format("tmp_appReadable_log{0}.txt", Init.InstanceId));
+                string logFile = Path.Combine(logDir, string.Format("last_scan_log{0}.txt", Init.InstanceId == 0 ? string.Empty : Init.InstanceId.ToString()));
+                string logFile2 = Path.Combine(logDir, string.Format("tmp_appReadable_log{0}.txt", Init.InstanceId == 0 ? string.Empty : Init.InstanceId.ToString()));
 
                 try
                 {
@@ -233,7 +233,7 @@ namespace HandBrake.ApplicationServices.Services
                         File.Copy(logFile, logFile2, true);
                     else
                     {
-                        ResetLogReader();
+                        ResetLogReader(true);
                         return;
                     }
 
@@ -257,7 +257,7 @@ namespace HandBrake.ApplicationServices.Services
                 catch (Exception exc)
                 {
                     Console.WriteLine(exc.ToString());
-                    ResetLogReader();
+                    ResetLogReader(true);
                 }
             }
         }
@@ -265,11 +265,15 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Reset the Log Reader
         /// </summary>
-        private void ResetLogReader()
+        /// <param name="addHeader">
+        /// The add Header.
+        /// </param>
+        private void ResetLogReader(bool addHeader)
         {
             logFilePosition = 0;
             logBuffer = new StringBuilder();
-            logBuffer.AppendLine(Logging.CreateCliLogHeader(null));
+            if (addHeader)
+                logBuffer.AppendLine(Logging.CreateCliLogHeader(null));
         }
 
         /// <summary>
