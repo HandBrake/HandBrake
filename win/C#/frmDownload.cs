@@ -12,15 +12,18 @@ namespace Handbrake
     using System.Threading;
     using System.Windows.Forms;
 
+    /// <summary>
+    /// The Download Window
+    /// </summary>
     public partial class frmDownload : Form
     {
-        private readonly Thread _downloadThread;
-        private Stream _responceStream;
-        private Stream _loacalStream;
-        private HttpWebRequest _webRequest;
-        private HttpWebResponse _webResponse;
-        private static int _progress;
-        private bool _killThread;
+        private readonly Thread downloadThread;
+        private Stream responceStream;
+        private Stream localStream;
+        private HttpWebRequest webRequest;
+        private HttpWebResponse webResponse;
+        private static int progress;
+        private bool killThread;
 
         private delegate void UpdateProgessCallback(long bytesRead, long totalBytes);
 
@@ -32,14 +35,14 @@ namespace Handbrake
         {
             InitializeComponent();
 
-            _downloadThread = new Thread(Download);
-            _downloadThread.Start(filename);
+            this.downloadThread = new Thread(Download);
+            this.downloadThread.Start(filename);
         }
 
         private void Download(object file)
         {
             string tempPath = Path.Combine(Path.GetTempPath(), "handbrake-setup.exe");
-            string hbUpdate = (string) file;
+            string hbUpdate = (string)file;
             WebClient wcDownload = new WebClient();
 
             try
@@ -47,29 +50,29 @@ namespace Handbrake
                 if (File.Exists(tempPath))
                     File.Delete(tempPath);
 
-                _webRequest = (HttpWebRequest) WebRequest.Create(hbUpdate);
-                _webRequest.Credentials = CredentialCache.DefaultCredentials;
-                _webResponse = (HttpWebResponse) _webRequest.GetResponse();
-                long fileSize = _webResponse.ContentLength;
+                this.webRequest = (HttpWebRequest)WebRequest.Create(hbUpdate);
+                this.webRequest.Credentials = CredentialCache.DefaultCredentials;
+                this.webResponse = (HttpWebResponse)this.webRequest.GetResponse();
+                long fileSize = this.webResponse.ContentLength;
 
-                _responceStream = wcDownload.OpenRead(hbUpdate);
-                _loacalStream = new FileStream(tempPath, FileMode.Create, FileAccess.Write, FileShare.None);
+                this.responceStream = wcDownload.OpenRead(hbUpdate);
+                this.localStream = new FileStream(tempPath, FileMode.Create, FileAccess.Write, FileShare.None);
 
                 int bytesSize;
                 byte[] downBuffer = new byte[2048];
 
                 long flength = 0;
-                while ((bytesSize = _responceStream.Read(downBuffer, 0, downBuffer.Length)) > 0)
+                while ((bytesSize = this.responceStream.Read(downBuffer, 0, downBuffer.Length)) > 0)
                 {
-                    if (_killThread)
+                    if (this.killThread)
                         return;
-                    _loacalStream.Write(downBuffer, 0, bytesSize);
-                    flength = _loacalStream.Length;
-                    Invoke(new UpdateProgessCallback(this.UpdateProgress), new object[] {_loacalStream.Length, fileSize});
+                    this.localStream.Write(downBuffer, 0, bytesSize);
+                    flength = this.localStream.Length;
+                    Invoke(new UpdateProgessCallback(this.UpdateProgress), new object[] {this.localStream.Length, fileSize});
                 }
 
-                _responceStream.Close();
-                _loacalStream.Close();
+                this.responceStream.Close();
+                this.localStream.Close();
 
                 if (flength != fileSize)
                     Invoke(new DownloadFailedCallback(this.DownloadFailed));
@@ -85,8 +88,8 @@ namespace Handbrake
         private void UpdateProgress(long bytesRead, long totalBytes)
         {
             long p = (bytesRead * 100) / totalBytes;
-            int.TryParse(p.ToString(), out _progress);
-            progress_download.Value = _progress;
+            int.TryParse(p.ToString(), out progress);
+            progress_download.Value = progress;
             lblProgress.Text = (bytesRead / 1024) + "k of " + (totalBytes / 1024) + "k ";
         }
 
@@ -108,11 +111,11 @@ namespace Handbrake
 
         private void btn_cancel_Click(object sender, EventArgs e)
         {
-            _killThread = true;
+            this.killThread = true;
             lblProgress.Text = "Cancelling ...";
-            if (_webResponse != null) _webResponse.Close();
-            if (_responceStream != null) _responceStream.Close();
-            if (_loacalStream != null) _loacalStream.Close();
+            if (this.webResponse != null) this.webResponse.Close();
+            if (this.responceStream != null) this.responceStream.Close();
+            if (this.localStream != null) this.localStream.Close();
             this.Close();
         }
     }

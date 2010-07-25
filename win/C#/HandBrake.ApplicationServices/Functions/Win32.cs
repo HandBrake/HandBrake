@@ -99,10 +99,7 @@ namespace HandBrake.ApplicationServices.Functions
         /// The lp buffer.
         /// </param>
         [DllImport("kernel32.dll")]
-        public static extern void GlobalMemoryStatus
-        (
-            ref MEMORYSTATUS lpBuffer
-        );
+        public static extern void GlobalMemoryStatus(ref MEMORYSTATUS lpBuffer);
 
         /// <summary>
         /// Generate a Console Ctrl Event

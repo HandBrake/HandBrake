@@ -26,6 +26,9 @@ namespace Handbrake
     using Presets;
     using Properties;
 
+    /// <summary>
+    /// The Main Window
+    /// </summary>
     public partial class frmMain : Form
     {
         // Objects which may be used by one or more other objects *************
@@ -910,7 +913,7 @@ namespace Handbrake
             MessageBox.Show("This feature has not been implimented yet.", "Not Implimented", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
 
-            SaveFileDialog savefiledialog = new SaveFileDialog();
+            /*SaveFileDialog savefiledialog = new SaveFileDialog();
             savefiledialog.Filter = "plist|*.plist";
 
             if (treeView_presets.SelectedNode != null)
@@ -921,7 +924,7 @@ namespace Handbrake
                     Preset preset = presetHandler.GetPreset(treeView_presets.SelectedNode.Text);
                     PlistPresetHandler.Export(savefiledialog.FileName, preset);
                 }
-            }
+            }*/
         }
 
         #endregion
@@ -1126,7 +1129,6 @@ namespace Handbrake
             lbl_encode.Text = encodeQueue.Count + " encode(s) pending in the queue";
 
             queueWindow.Show();
-
         }
 
         /// <summary>
@@ -1288,7 +1290,6 @@ namespace Handbrake
                 int id;
                 if (int.TryParse(driveId, out id))
                 {
-
                     this.dvdDrivePath = drives[id].RootDirectory;
                     this.dvdDriveLabel = drives[id].VolumeLabel;
 
@@ -1761,7 +1762,7 @@ namespace Handbrake
             }
         }
 
-        private double _cachedCqStep = Properties.Settings.Default.x264cqstep;
+        private double cachedCqStep = Properties.Settings.Default.x264cqstep;
 
         /// <summary>
         /// Update the CQ slider for x264 for a new CQ step. This is set from option
@@ -1769,7 +1770,7 @@ namespace Handbrake
         public void setQualityFromSlider()
         {
             // Work out the current RF value.
-            double cqStep = _cachedCqStep;
+            double cqStep = this.cachedCqStep;
             double rfValue = 51.0 - slider_videoQuality.Value * cqStep;
 
             // Change the maximum value for the slider
@@ -1788,7 +1789,7 @@ namespace Handbrake
             }
 
             // Cache the CQ step for the next calculation
-            _cachedCqStep = Properties.Settings.Default.x264cqstep;
+            this.cachedCqStep = Properties.Settings.Default.x264cqstep;
         }
 
         private void slider_videoQuality_Scroll(object sender, EventArgs e)

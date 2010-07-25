@@ -8,6 +8,9 @@ namespace Handbrake.Controls
     using System;
     using System.Windows.Forms;
 
+    /// <summary>
+    /// The Filters Panel
+    /// </summary>
     public partial class Filters : UserControl
     {
         /// <summary>

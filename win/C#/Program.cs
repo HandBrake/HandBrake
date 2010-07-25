@@ -12,9 +12,8 @@ namespace Handbrake
 
     using HandBrake.ApplicationServices;
 
+    using Handbrake.Presets;
     using Handbrake.Properties;
-
-    using Presets;
 
     /// <summary>
     /// HandBrake Starts Here
@@ -24,6 +23,9 @@ namespace Handbrake
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        /// <param name="args">
+        /// The args.
+        /// </param>
         [STAThread]
         public static void Main(string[] args)
         {
@@ -121,9 +123,6 @@ namespace Handbrake
             }
         }
 
-
-        public static int InstanceId = 0;
-
-
+        public static int InstanceId;
     }
 }

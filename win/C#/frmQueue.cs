@@ -425,6 +425,7 @@ namespace Handbrake
         }
 
         /* Right Click Menu */
+
         /// <summary>
         /// Handle the Move Up Menu Item
         /// </summary>

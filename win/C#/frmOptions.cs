@@ -10,12 +10,15 @@ namespace Handbrake
     using System.Diagnostics;
     using System.Globalization;
     using System.Windows.Forms;
-    using Functions;
 
     using HandBrake.ApplicationServices;
 
+    using Handbrake.Functions;
     using Handbrake.Properties;
 
+    /// <summary>
+    /// The Options Window
+    /// </summary>
     public partial class frmOptions : Form
     {
         private frmMain mainWindow;

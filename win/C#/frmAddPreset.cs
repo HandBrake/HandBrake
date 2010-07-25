@@ -28,7 +28,9 @@ namespace Handbrake
         /// <summary>
         /// Initializes a new instance of the <see cref="frmAddPreset"/> class.
         /// </summary>
-        /// <param name="mainWindow"></param>
+        /// <param name="mainWindow">
+        /// The Main Window
+        /// </param>
         /// <param name="presetHandler">
         /// The preset handler.
         /// </param>

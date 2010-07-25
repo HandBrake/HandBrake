@@ -140,6 +140,5 @@ namespace HandBrake.ApplicationServices
         /// Prevent system sleep
         /// </summary>
         public static bool PreventSleep;
-
     }
 }
