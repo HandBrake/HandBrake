@@ -85,11 +85,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     NSString *versionStringFull = [[NSString stringWithFormat: @"Handbrake Version: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]] stringByAppendingString: [NSString stringWithFormat: @" (%@)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
     [self writeToActivityLog: "%s", [versionStringFull UTF8String]];
     
-    /* Get the PID number for this hb instance, used in multi instance encoding */
-    //pidNum = [self getThisHBInstancePID];
-    /* Report this pid to the activity log */
-    //[self writeToActivityLog: "Pid for this instance:%d", pidNum];
-    
     return self;
 }
 
@@ -1015,46 +1010,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 
                 /* since we have successfully completed an encode, we increment the queue counter */
                 [self incrementQueueItemDone:currentQueueEncodeIndex]; 
-                
-                /* all end of queue actions below need to be done after all queue encodes have finished 
-                 * and there are no pending jobs left to process
-                 */
-                if (fPendingCount == 0)
-                {
-                    /* If Alert Window or Window and Growl has been selected */
-                    if( [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window"] ||
-                       [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"] )
-                    {
-                        /*On Screen Notification*/
-                        int status;
-                        NSBeep();
-                        status = NSRunAlertPanel(@"Put down that cocktail...",@"Your HandBrake queue is done!", @"OK", nil, nil);
-                        [NSApp requestUserAttention:NSCriticalRequest];
-                    }
-                    
-                    /* If sleep has been selected */
-                    if( [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Put Computer To Sleep"] )
-                    {
-                        /* Sleep */
-                        NSDictionary* errorDict;
-                        NSAppleEventDescriptor* returnDescriptor = nil;
-                        NSAppleScript* scriptObject = [[NSAppleScript alloc] initWithSource:
-                                                       @"tell application \"Finder\" to sleep"];
-                        returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
-                        [scriptObject release];
-                    }
-                    /* If Shutdown has been selected */
-                    if( [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Shut Down Computer"] )
-                    {
-                        /* Shut Down */
-                        NSDictionary* errorDict;
-                        NSAppleEventDescriptor* returnDescriptor = nil;
-                        NSAppleScript* scriptObject = [[NSAppleScript alloc] initWithSource:
-                                                       @"tell application \"Finder\" to shut down"];
-                        returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
-                        [scriptObject release];
-                    }
-                }
+
             }
             
             break;
@@ -1426,6 +1382,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 -(void)showGrowlDoneNotification:(NSString *) filePath
 {
     /* This end of encode action is called as each encode rolls off of the queue */
+    
+      /* If Play System Alert has been selected in Preferences */
+    if( [[NSUserDefaults standardUserDefaults] boolForKey:@"AlertWhenDoneSound"] == YES )
+    {
+        NSBeep();
+    }
+    /* Setup the Growl stuff ... */
     NSString * finishedEncode = filePath;
     /* strip off the path to just show the file name */
     finishedEncode = [finishedEncode lastPathComponent];
@@ -1460,6 +1423,49 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         
     }
 }
+
+- (void) queueCompletedAlerts
+{
+    /* If Play System Alert has been selected in Preferences */
+    if( [[NSUserDefaults standardUserDefaults] boolForKey:@"AlertWhenDoneSound"] == YES )
+    {
+        NSBeep();
+    }
+    
+    /* If Alert Window or Window and Growl has been selected */
+    if( [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window"] ||
+       [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"] )
+    {
+        /*On Screen Notification*/
+        int status;
+        status = NSRunAlertPanel(@"Put down that cocktail...",@"Your HandBrake queue is done!", @"OK", nil, nil);
+        [NSApp requestUserAttention:NSCriticalRequest];
+    }
+    
+    /* If sleep has been selected */
+    if( [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Put Computer To Sleep"] )
+    {
+        /* Sleep */
+        NSDictionary* errorDict;
+        NSAppleEventDescriptor* returnDescriptor = nil;
+        NSAppleScript* scriptObject = [[NSAppleScript alloc] initWithSource:
+                                       @"tell application \"Finder\" to sleep"];
+        returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
+        [scriptObject release];
+    }
+    /* If Shutdown has been selected */
+    if( [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Shut Down Computer"] )
+    {
+        /* Shut Down */
+        NSDictionary* errorDict;
+        NSAppleEventDescriptor* returnDescriptor = nil;
+        NSAppleScript* scriptObject = [[NSAppleScript alloc] initWithSource:
+                                       @"tell application \"Finder\" to shut down"];
+        returnDescriptor = [scriptObject executeAndReturnError: &errorDict];
+        [scriptObject release];
+    }
+}
+
 #pragma mark -
 #pragma mark Get New Source
 
@@ -2524,6 +2530,8 @@ fWorkingCount = 0;
     else
     {
         [self writeToActivityLog: "incrementQueueItemDone there are no more pending encodes"];
+        /*Since there are no more items to encode, go to queueCompletedAlerts for user specified alerts after queue completed*/
+        [self queueCompletedAlerts];
     }
 }
 
@@ -2706,8 +2714,6 @@ fWorkingCount = 0;
     /* We should be all setup so let 'er rip */   
     [self doRip];
 }
-
-
 
 #pragma mark -
 #pragma mark Queue Item Editing

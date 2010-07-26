@@ -55,6 +55,7 @@
         @"NO",              @"DefaultAutoNaming",
         @"NO",              @"DisableDvdAutoDetect",
         @"Alert Window",    @"AlertWhenDone",
+        @"YES",             @"AlertWhenDoneSound",
         @"1",               @"LoggingLevel",
         @"NO",              @"EncodeLogLocation",
         @"10",              @"PreviewsNumber",
