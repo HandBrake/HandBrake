@@ -17,6 +17,7 @@ namespace Handbrake
     using System.Windows.Forms;
     using Functions;
 
+    using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services;
@@ -25,6 +26,8 @@ namespace Handbrake
     using Model;
     using Presets;
     using Properties;
+
+    using Main = Handbrake.Functions.Main;
 
     /// <summary>
     /// The Main Window

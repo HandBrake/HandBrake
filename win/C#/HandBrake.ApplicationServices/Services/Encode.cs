@@ -60,6 +60,7 @@ namespace HandBrake.ApplicationServices.Services
         public Encode()
         {
             this.EncodeStarted += Encode_EncodeStarted;
+            GrowlCommunicator.Register();
         }
 
         #region Delegates and Event Handlers
