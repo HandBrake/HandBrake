@@ -10,6 +10,7 @@ namespace Handbrake.Functions
     using System.Diagnostics;
     using System.IO;
     using System.Net;
+    using System.Reflection;
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading;
@@ -345,18 +346,21 @@ namespace Handbrake.Functions
         public static void CheckForValidCliVersion()
         {
             // Make sure we have a recent version for svn builds
-            string version = Properties.Settings.Default.hb_version;
-            if (version.Contains("svn"))
+            string cli_version = Properties.Settings.Default.hb_version;
+            Version gui_version = Assembly.GetExecutingAssembly().GetName().Version;
+
+            if (cli_version.Contains("svn") || gui_version.Revision > 0)
             {
-                version = version.Replace("svn", string.Empty).Trim();
-                int build;
-                int.TryParse(version, out build);
-                if (build < Properties.Settings.Default.hb_min_cli)
+                int gui_build, cli_build;
+                int.TryParse(gui_version.Revision.ToString(), out gui_build);
+                int.TryParse(Properties.Settings.Default.hb_version.Replace("svn", string.Empty), out cli_build);
+
+                if (gui_build > cli_build)
                 {
                     MessageBox.Show(
                         "It appears you are trying to use a CLI executable that is too old for this version of the HandBrake GUI.\n" +
                         "Please update the HandBrakeCLI.exe to a newer build.\n\n" +
-                        "HandBrake build Detected: " + Properties.Settings.Default.hb_version,
+                        "HandBrake build Detected: " + cli_build,
                         "Error",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);

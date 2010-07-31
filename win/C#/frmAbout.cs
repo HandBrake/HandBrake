@@ -6,7 +6,6 @@
 namespace Handbrake
 {
     using System;
-    using System.Reflection;
     using System.Windows.Forms;
 
     /// <summary>
@@ -20,12 +19,9 @@ namespace Handbrake
         public frmAbout()
         {
             InitializeComponent();
-            lbl_HBBuild.Text = "CLI Build: " + Properties.Settings.Default.hb_version + " (" + Properties.Settings.Default.hb_build +
-                               ") - " + Properties.Settings.Default.hb_platform;
 
-            Version gui = Assembly.GetExecutingAssembly().GetName().Version;
-            Version appServices = HandBrake.ApplicationServices.Init.AssemblyVersion();
-            lbl_GUIBuild.Text = gui.ToString(4) + " (Services: "  + appServices.ToString(4) + ")";
+            string nightly = Properties.Settings.Default.hb_version.Contains("svn") ? " (SVN / Nightly Build)" : string.Empty;
+            lbl_GUIBuild.Text = Properties.Settings.Default.hb_version + " (" + Properties.Settings.Default.hb_build + ") " + nightly;
         }
 
         /// <summary>

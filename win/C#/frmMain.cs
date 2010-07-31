@@ -100,8 +100,7 @@ namespace Handbrake
 
             if (Settings.Default.hb_version.Contains("svn"))
             {
-                Version v = Assembly.GetExecutingAssembly().GetName().Version;
-                this.Text += " " + v.ToString(4);
+                this.Text += " " + Settings.Default.hb_version;
             }
 
             // Check for new versions, if update checking is enabled

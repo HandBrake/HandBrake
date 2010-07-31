@@ -37,7 +37,6 @@ namespace Handbrake
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAbout));
             this.Label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.lbl_HBBuild = new System.Windows.Forms.Label();
             this.PictureBox1 = new System.Windows.Forms.PictureBox();
             this.btn_close = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
@@ -61,24 +60,13 @@ namespace Handbrake
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(125, 64);
+            this.label1.Location = new System.Drawing.Point(125, 47);
             this.label1.Margin = new System.Windows.Forms.Padding(3);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(224, 13);
             this.label1.TabIndex = 33;
             this.label1.Text = "Copyright  2003-2010 HandBrake Developers";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lbl_HBBuild
-            // 
-            this.lbl_HBBuild.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_HBBuild.Location = new System.Drawing.Point(125, 35);
-            this.lbl_HBBuild.Margin = new System.Windows.Forms.Padding(3, 1, 3, 3);
-            this.lbl_HBBuild.Name = "lbl_HBBuild";
-            this.lbl_HBBuild.Size = new System.Drawing.Size(224, 13);
-            this.lbl_HBBuild.TabIndex = 32;
-            this.lbl_HBBuild.Text = "{CLI Version}";
-            this.lbl_HBBuild.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // PictureBox1
             // 
@@ -147,7 +135,6 @@ namespace Handbrake
             this.Controls.Add(this.btn_close);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.PictureBox1);
-            this.Controls.Add(this.lbl_HBBuild);
             this.Controls.Add(this.Label3);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -169,7 +156,6 @@ namespace Handbrake
 
         internal System.Windows.Forms.Label Label3;
         internal System.Windows.Forms.Label label1;
-        internal System.Windows.Forms.Label lbl_HBBuild;
         internal System.Windows.Forms.PictureBox PictureBox1;
         private System.Windows.Forms.Button btn_close;
         private System.Windows.Forms.RichTextBox richTextBox1;
