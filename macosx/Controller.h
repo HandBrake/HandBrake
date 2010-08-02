@@ -460,7 +460,6 @@ BOOL                        fIsDragging;
 - (void)moveObjectsInPresetsArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(NSUInteger)insertIndex;
 
 - (int) hbInstances;
-- (int) getThisHBInstancePID;
 
 // Chapter files methods
 - (IBAction) browseForChapterFile: (id) sender;
