@@ -1003,8 +1003,17 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 pathOfFinishedEncode = [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"DestinationPath"];
                 
                 /* Both the Growl Alert and Sending to MetaX can be done as encodes roll off the queue */
-                /* Growl alert */
-                [self showGrowlDoneNotification:pathOfFinishedEncode];
+                if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Growl Notification"] || 
+                    [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"])
+                {
+                    /* If Play System Alert has been selected in Preferences */
+                    if( [[NSUserDefaults standardUserDefaults] boolForKey:@"AlertWhenDoneSound"] == YES )
+                    {
+                        NSBeep();
+                    }
+                    [self showGrowlDoneNotification:pathOfFinishedEncode];
+                }
+                
                 /* Send to MetaX */
                 [self sendToMetaX:pathOfFinishedEncode];
                 
@@ -1382,30 +1391,19 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 -(void)showGrowlDoneNotification:(NSString *) filePath
 {
     /* This end of encode action is called as each encode rolls off of the queue */
-    
-      /* If Play System Alert has been selected in Preferences */
-    if( [[NSUserDefaults standardUserDefaults] boolForKey:@"AlertWhenDoneSound"] == YES )
-    {
-        NSBeep();
-    }
     /* Setup the Growl stuff ... */
     NSString * finishedEncode = filePath;
     /* strip off the path to just show the file name */
     finishedEncode = [finishedEncode lastPathComponent];
-    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Growl Notification"] || 
-        [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"])
-    {
-        NSString * growlMssg = [NSString stringWithFormat: @"your HandBrake encode %@ is done!",finishedEncode];
-        [GrowlApplicationBridge 
-         notifyWithTitle:@"Put down that cocktail..." 
-         description:growlMssg 
-         notificationName:SERVICE_NAME
-         iconData:nil 
-         priority:0 
-         isSticky:1 
-         clickContext:nil];
-    }
-    
+    NSString * growlMssg = [NSString stringWithFormat: @"your HandBrake encode %@ is done!",finishedEncode];
+    [GrowlApplicationBridge 
+     notifyWithTitle:@"Put down that cocktail..." 
+     description:growlMssg 
+     notificationName:SERVICE_NAME
+     iconData:nil 
+     priority:0 
+     isSticky:1 
+     clickContext:nil];
 }
 -(void)sendToMetaX:(NSString *) filePath
 {
