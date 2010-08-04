@@ -107,6 +107,7 @@
 - (void) installMovieCallbacks;
 - (void)removeMovieCallbacks;
 
+- (IBAction) cancelCreateMoviePreview: (id) sender;
 - (IBAction) createMoviePreview: (id) sender;
 - (void) libhbStateChanged: (hb_state_t ) state;
 - (IBAction) showMoviePreview: (NSString *) path;

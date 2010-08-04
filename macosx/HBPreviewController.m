@@ -137,6 +137,7 @@
     [fMovieTimer release];
     [fMovieView setHidden:YES];
 	[fMovieView setMovie:nil];
+    [self pictureSliderChanged:nil];
 
     hudTimerSeconds = 0;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"PreviewWindowIsOpen"];
@@ -152,7 +153,7 @@
     hb_stop(fPreviewLibhb);
     if (fPreviewMoviePath)
     {
-        [[NSFileManager defaultManager] removeFileAtPath:fPreviewMoviePath handler:nil];
+        [[NSFileManager defaultManager] removeItemAtPath:fPreviewMoviePath error:nil];
         [fPreviewMoviePath release];
     }    
     
@@ -243,7 +244,10 @@
     [fMovieCreationProgressIndicator stopAnimation: nil];
     [fMovieCreationProgressIndicator setHidden: YES];
     [fMoviePlaybackControlBox setHidden: YES];
-    [self stopMovieTimer];
+    if( fMovieTimer )
+    {
+        [self stopMovieTimer];
+    }
     [fPictureControlBox setHidden: NO];
     
     [fPictureView setHidden:NO];
@@ -745,6 +749,30 @@
  
 
 #pragma mark Movie Preview
+
+- (IBAction) cancelCreateMoviePreview: (id) sender
+{
+    
+    hb_state_t s;
+    hb_get_state2( fPreviewLibhb, &s );
+    
+    if(isEncoding && (s.state == HB_STATE_WORKING || s.state == HB_STATE_PAUSED))
+    {
+        hb_stop( fPreviewLibhb );
+        [fPictureView setHidden:NO];
+        [fMovieView pause:nil];
+        [fMovieView setHidden:YES];
+		[fMovieView setMovie:nil];
+        [fPictureSlider setHidden:NO];
+        isEncoding = NO;
+        
+        [self pictureSliderChanged:nil];
+        
+        return;
+    }
+    
+}
+
 - (IBAction) createMoviePreview: (id) sender
 {
     
@@ -758,7 +786,7 @@
     hb_get_state2( fPreviewLibhb, &s );
     
     if(sender == fCancelPreviewMovieButton && (s.state == HB_STATE_WORKING || s.state == HB_STATE_PAUSED))
-	{
+    {
         hb_stop( fPreviewLibhb );
         [fPictureView setHidden:NO];
         [fMovieView pause:nil];
@@ -808,8 +836,7 @@
     /* See if there is an existing preview file, if so, delete it */
     if( ![[NSFileManager defaultManager] fileExistsAtPath:fPreviewMoviePath] )
     {
-        [[NSFileManager defaultManager] removeFileAtPath:fPreviewMoviePath
-                                                 handler:nil];
+        [[NSFileManager defaultManager] removeItemAtPath:fPreviewMoviePath error:nil];
     }
     
     /* We now direct our preview encode to fPreviewMoviePath */
