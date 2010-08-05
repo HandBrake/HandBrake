@@ -137,7 +137,6 @@
     [fMovieTimer release];
     [fMovieView setHidden:YES];
 	[fMovieView setMovie:nil];
-    [self pictureSliderChanged:nil];
 
     hudTimerSeconds = 0;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"PreviewWindowIsOpen"];
