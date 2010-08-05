@@ -170,6 +170,8 @@
 - (IBAction) resizeInspectorForTab: (id)sender;
 - (IBAction) showPreviewWindow: (id)sender;
 
+- (void) enablePreviewHudControls;
+- (void) disablePreviewHudControls;
 
 - (IBAction) adjustSizingDisplay: (id) sender;
 

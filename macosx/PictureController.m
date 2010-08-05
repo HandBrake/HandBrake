@@ -395,7 +395,15 @@
     [fPreviewController showWindow:sender];
 }
 
+- (void) enablePreviewHudControls
+{
+    [fPreviewController enableHudControls];
+}
 
+- (void) disablePreviewHudControls
+{
+    [fPreviewController disableHudControls];
+}
 
 - (void) setToWindowedMode
 {

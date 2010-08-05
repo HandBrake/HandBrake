@@ -594,19 +594,23 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         
     }
     
-	if (b) {
+	if (b) 
+    {
         
         /* if we're enabling the interface, check if the audio mixdown controls need to be enabled or not */
         /* these will have been enabled by the mass control enablement above anyway, so we're sense-checking it here */
         [self setEnabledStateOfAudioMixdownControls:nil];
         /* we also call calculatePictureSizing here to sense check if we already have vfr selected */
         [self calculatePictureSizing:nil];
-        
-	} else {
+        /* Also enable the preview window hud controls */
+        [fPictureController enablePreviewHudControls];
+    }
+    else 
+    {
         
 		[fPresetsOutlineView setEnabled: NO];
-        
-	}
+        [fPictureController disablePreviewHudControls];
+    }
     
     [self videoMatrixChanged:nil];
     [fAdvancedOptions enableUI:b];

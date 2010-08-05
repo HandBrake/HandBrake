@@ -97,6 +97,9 @@
 - (IBAction)goWindowedScreen:(id)sender;
 
 /* HUD overlay */
+- (void) enableHudControls;
+- (void) disableHudControls;
+
 - (void) startHudTimer;
 - (void) stopHudTimer;
 

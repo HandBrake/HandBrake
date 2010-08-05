@@ -487,6 +487,28 @@
 }
 
 #pragma mark Hud Control Overlay
+/* enableHudControls and disableHudControls are used to sync enableUI
+ * in HBController so that during a scan we do not attempt to access source
+ * images, etc. which can cause a crash. In general this ui behavior will mirror
+ * the main window ui's enableUI method and in fact is called from there */
+- (void) enableHudControls
+{
+    [fPictureSlider setEnabled:YES];
+    [fScaleToScreenToggleButton setEnabled:YES];
+    [fCreatePreviewMovieButton setEnabled:YES];
+    [fGoToStillPreviewButton setEnabled:YES];
+    [fHBController writeToActivityLog: "Preview: Enabling HUD Controls"];
+}
+
+- (void) disableHudControls
+{
+    [fPictureSlider setEnabled:NO];
+    [fScaleToScreenToggleButton setEnabled:NO];
+    [fCreatePreviewMovieButton setEnabled:NO];
+    [fGoToStillPreviewButton setEnabled:NO];
+    [fHBController writeToActivityLog: "Preview: Disabling HUD Controls"];
+}
+
 - (void) mouseMoved:(NSEvent *)theEvent
 {
     [super mouseMoved:theEvent];
