@@ -856,9 +856,6 @@
     
     fPreviewMoviePath = [[fPreviewMoviePath stringByExpandingTildeInPath]retain];
     
-    [fHBController writeToActivityLog: "Movie Preview path attempt: %s",[fPreviewMoviePath UTF8String] ];
-    
-    
     /* See if there is an existing preview file, if so, delete it */
     if( ![[NSFileManager defaultManager] fileExistsAtPath:fPreviewMoviePath] )
     {
