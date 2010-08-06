@@ -129,6 +129,34 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
      * pid number for this instance in the case of multi-instance encoding. */ 
     hbInstanceNum = [self hbInstances];
     
+    /* If we are a single instance it is safe to clean up the previews if there are any
+     * left over. This is a bit of a kludge but will prevent a build up of old instance
+     * live preview cruft. No danger of removing an active preview directory since they
+     * are created later in HBPreviewController if they don't exist at the moment a live
+     * preview encode is initiated. */
+    if (hbInstanceNum == 1)
+    {
+        NSString *PreviewDirectory = [NSString stringWithFormat:@"~/Library/Application Support/HandBrake/Previews"];
+        PreviewDirectory = [PreviewDirectory stringByExpandingTildeInPath];
+        NSError *error;
+        NSArray *files = [ [NSFileManager defaultManager]  contentsOfDirectoryAtPath: PreviewDirectory error: &error ];
+        for( NSString *file in files ) 
+        {
+            if( file != @"." && file != @".." ) 
+            {
+                [ [NSFileManager defaultManager] removeItemAtPath: [ PreviewDirectory stringByAppendingPathComponent: file ] error: &error ];
+                if( error ) 
+                { 
+                    //an error occurred...
+                    [self writeToActivityLog: "Could not remove existing preview at : %s",[file UTF8String] ];
+                }
+            }    
+        }
+        
+    }
+    
+     
+    
     /* Call UpdateUI every 1/2 sec */
     
     [[NSRunLoop currentRunLoop] addTimer:[NSTimer
@@ -284,11 +312,17 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 [self writeToActivityLog: "Pid for this instance:%d", pidNum];
                 /* Tell fQueueController what our pidNum is */
                 [fQueueController setPidNum:pidNum];
+                
+                hbInstances++;
             }
-            hbInstances++;
         }
-	}
+    }
     return hbInstances;
+}
+
+- (int) getPidnum
+{
+    return pidNum;
 }
 
 #pragma mark -

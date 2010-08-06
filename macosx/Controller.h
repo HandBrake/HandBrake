@@ -291,7 +291,7 @@ BOOL                        fIsDragging;
     
     double                         dockIconProgress;
 }
-
+- (int) getPidnum;
 - (IBAction) showAboutPanel:(id)sender;
 
 - (void) writeToActivityLog:(const char *) format, ...;

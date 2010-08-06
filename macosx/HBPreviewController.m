@@ -832,27 +832,32 @@
     
     [fHBController prepareJobForPreview];
     
+    /* Make sure we have a Preview sub directory with our pidnum attached */
+    NSString *PreviewDirectory = [NSString stringWithFormat:@"~/Library/Application Support/HandBrake/Previews/%d", [fHBController getPidnum]];
+    PreviewDirectory = [PreviewDirectory stringByExpandingTildeInPath];
+    if( ![[NSFileManager defaultManager] fileExistsAtPath:PreviewDirectory] )
+    {
+        [[NSFileManager defaultManager] createDirectoryAtPath:PreviewDirectory 
+                                  withIntermediateDirectories:NO 
+                                                   attributes:nil 
+                                                        error:nil];
+    }
     /* Destination file. We set this to our preview directory
      * changing the extension appropriately.*/
     if (fTitle->job->mux == HB_MUX_MP4) // MP4 file
     {
         /* we use .m4v for our mp4 files so that ac3 and chapters in mp4 will play properly */
-        fPreviewMoviePath = @"~/Library/Application Support/HandBrake/Previews/preview_temp.m4v";
+        fPreviewMoviePath = [PreviewDirectory stringByAppendingString:@"/preview_temp.m4v"];
     }
     else if (fTitle->job->mux == HB_MUX_MKV) // MKV file
     {
-        fPreviewMoviePath = @"~/Library/Application Support/HandBrake/Previews/preview_temp.mkv";
-    }
-    else if (fTitle->job->mux == HB_MUX_AVI) // AVI file
-    {
-        fPreviewMoviePath = @"~/Library/Application Support/HandBrake/Previews/preview_temp.avi";
-    }
-    else if (fTitle->job->mux == HB_MUX_OGM) // OGM file
-    {
-        fPreviewMoviePath = @"~/Library/Application Support/HandBrake/Previews/preview_temp.ogm";
+        fPreviewMoviePath = [PreviewDirectory stringByAppendingString:@"/preview_temp.mkv"];
     }
     
     fPreviewMoviePath = [[fPreviewMoviePath stringByExpandingTildeInPath]retain];
+    
+    [fHBController writeToActivityLog: "Movie Preview path attempt: %s",[fPreviewMoviePath UTF8String] ];
+    
     
     /* See if there is an existing preview file, if so, delete it */
     if( ![[NSFileManager defaultManager] fileExistsAtPath:fPreviewMoviePath] )
