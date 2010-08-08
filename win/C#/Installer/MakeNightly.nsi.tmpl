@@ -120,8 +120,9 @@ Section "Handbrake" SEC01
      SetDetailsView show
   ${EndIf}
   
-  
+  ; Install Files
   File "Handbrake.exe"
+  File "HandBrakeCLI.exe"
   CreateDirectory "$SMPROGRAMS\Handbrake"
   CreateShortCut "$SMPROGRAMS\Handbrake\Handbrake.lnk" "$INSTDIR\Handbrake.exe"
   CreateShortCut "$DESKTOP\Handbrake.lnk" "$INSTDIR\Handbrake.exe"
@@ -134,6 +135,16 @@ Section "Handbrake" SEC01
   File "HandBrake.ApplicationServices.dll"
   File "Microsoft.WindowsAPICodePack.Shell.dll"
   File "Microsoft.WindowsAPICodePack.dll"
+
+  ; Copy the standard doc set into the doc folder
+  SetOutPath "$INSTDIR\doc"
+  SetOverwrite ifnewer
+  File "doc\AUTHORS"
+  File "doc\COPYING"
+  File "doc\CREDITS"
+  File "doc\NEWS"
+  File "doc\THANKS"
+  File "doc\TRANSLATIONS"
 SectionEnd
 
 Section -AdditionalIcons
@@ -166,13 +177,22 @@ Section Uninstall
   Delete "$INSTDIR\Interop.QTOLibrary.dll"
   Delete "$INSTDIR\Interop.QTOControlLib.dll"
   Delete "$INSTDIR\AxInterop.QTOControlLib.dll"
+  Delete "$INSTDIR\HandBrakeCLI.exe"
+  Delete "$INSTDIR\handbrakepineapple.ico"
   Delete "$INSTDIR\Handbrake.exe"
   Delete "$INSTDIR\Handbrake.exe.config"
   Delete "$INSTDIR\Growl.Connector.dll"
   Delete "$INSTDIR\Growl.CoreLibrary.dll"
+  Delete "$INSTDIR\libgcc_s_sjlj-1.dll"
   Delete "$INSTDIR\HandBrake.ApplicationServices.dll"
   Delete "$INSTDIR\Microsoft.WindowsAPICodePack.Shell.dll"
   Delete "$INSTDIR\Microsoft.WindowsAPICodePack.dll"
+  Delete "$INSTDIR\doc\AUTHORS"
+  Delete "$INSTDIR\doc\COPYING"
+  Delete "$INSTDIR\doc\CREDITS"
+  Delete "$INSTDIR\doc\NEWS"
+  Delete "$INSTDIR\doc\THANKS"
+  Delete "$INSTDIR\doc\TRANSLATIONS"
   RMDir  "$INSTDIR"
   Delete "$SMPROGRAMS\Handbrake\Uninstall.lnk"
   Delete "$DESKTOP\Handbrake.lnk"

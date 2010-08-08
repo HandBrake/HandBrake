@@ -60,7 +60,7 @@ namespace Handbrake
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(125, 47);
+            this.label1.Location = new System.Drawing.Point(125, 36);
             this.label1.Margin = new System.Windows.Forms.Padding(3);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(224, 13);

@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrake.ApplicationServic
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Build|Any CPU = Build|Any CPU
-		Build|x86 = Build|x86
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x86 = Debug|x86
 		Install|Any CPU = Install|Any CPU
@@ -19,10 +17,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Build|Any CPU.ActiveCfg = Build|Any CPU
-		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Build|Any CPU.Build.0 = Build|Any CPU
-		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Build|x86.ActiveCfg = Build|x86
-		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Build|x86.Build.0 = Build|x86
 		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Debug|x86.ActiveCfg = Debug|x86
@@ -39,9 +33,6 @@ Global
 		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Release|x86.ActiveCfg = Release|x86
 		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Release|x86.Build.0 = Release|x86
-		{087A2BA8-BAC2-4577-A46F-07FF9D420016}.Build|Any CPU.ActiveCfg = Release|Any CPU
-		{087A2BA8-BAC2-4577-A46F-07FF9D420016}.Build|Any CPU.Build.0 = Release|Any CPU
-		{087A2BA8-BAC2-4577-A46F-07FF9D420016}.Build|x86.ActiveCfg = Release|Any CPU
 		{087A2BA8-BAC2-4577-A46F-07FF9D420016}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{087A2BA8-BAC2-4577-A46F-07FF9D420016}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{087A2BA8-BAC2-4577-A46F-07FF9D420016}.Debug|x86.ActiveCfg = Debug|Any CPU
