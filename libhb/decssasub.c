@@ -92,26 +92,75 @@ static void ssa_append_html_tags_for_style_change(
     #undef APPEND
 }
 
+static hb_buffer_t *ssa_decode_to_utf8_line( uint8_t *in_data, int in_size );
+
 /*
  * SSA packet format:
- *   Dialogue: Marked,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text
+ * ( Dialogue: Marked,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text CR LF ) +
  *             1      2     3   4     5    6       7       8       9      10
  */
 static hb_buffer_t *ssa_decode_to_utf8( hb_buffer_t *in )
 {
-    uint8_t *pos = in->data;
-    uint8_t *end = in->data + in->size;
-    
-    // Store NULL after the end of the buffer to make using sscanf safe
+    // Store NULL after the end of the buffer to make using string processing safe
     hb_buffer_realloc( in, in->size + 1 );
     in->data[in->size] = '\0';
+    
+    hb_buffer_t *out_list = NULL;
+    hb_buffer_t **nextPtr = &out_list;
+    
+    const char *EOL = "\r\n";
+    char *curLine, *curLine_parserData;
+    for ( curLine = strtok_r( (char *) in->data, EOL, &curLine_parserData );
+          curLine;
+          curLine = strtok_r( NULL, EOL, &curLine_parserData ) )
+    {
+        // Skip empty lines and spaces between adjacent CR and LF
+        if (curLine[0] == '\0')
+            continue;
+        
+        // Decode an individual SSA line
+        hb_buffer_t *out = ssa_decode_to_utf8_line( (uint8_t*)curLine, strlen( curLine ) );
+        
+        // We shouldn't be storing the extra NULL character,
+        // but the MP4 muxer expects this, unfortunately.
+        if ( out->size > 0 && out->data[out->size - 1] != '\0' ) {
+            // NOTE: out->size remains unchanged
+            hb_buffer_realloc( out, out->size + 1 );
+            out->data[out->size] = '\0';
+        }
+        
+        // If the input packet was non-empty, do not pass through
+        // an empty output packet (even if the subtitle was empty),
+        // as this would be interpreted as an end-of-stream
+        if ( in->size > 0 && out->size == 0 ) {
+            hb_buffer_close(&out);
+            continue;
+        }
+        
+        // Append 'out' to 'out_list'
+        *nextPtr = out;
+        nextPtr = &out->next;
+    }
+    
+    return out_list;
+}
+
+/*
+ * SSA line format:
+ *   Dialogue: Marked,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text '\0'
+ *             1      2     3   4     5    6       7       8       9      10
+ */
+static hb_buffer_t *ssa_decode_to_utf8_line( uint8_t *in_data, int in_size )
+{
+    uint8_t *pos = in_data;
+    uint8_t *end = in_data + in_size;
     
     /*
      * Parse Start and End fields for timing information
      */
     int start_hr, start_min, start_sec, start_centi;
     int   end_hr,   end_min,   end_sec,   end_centi;
-    int numPartsRead = sscanf( (char *) in->data, "%*128[^,],"
+    int numPartsRead = sscanf( (char *) in_data, "%*128[^,],"
         "%d:%d:%d.%d,"  // Start
         "%d:%d:%d.%d,", // End
         &start_hr, &start_min, &start_sec, &start_centi,
@@ -119,8 +168,8 @@ static hb_buffer_t *ssa_decode_to_utf8( hb_buffer_t *in )
     if ( numPartsRead != 8 )
         goto fail;
     
-    in->start = SSA_2_HB_TIME(start_hr, start_min, start_sec, start_centi);
-    in->stop  = SSA_2_HB_TIME(  end_hr,   end_min,   end_sec,   end_centi);
+    int64_t in_start = SSA_2_HB_TIME(start_hr, start_min, start_sec, start_centi);
+    int64_t in_stop  = SSA_2_HB_TIME(  end_hr,   end_min,   end_sec,   end_centi);
     
     /*
      * Advance 'pos' to the beginning of the Text field
@@ -202,13 +251,13 @@ static hb_buffer_t *ssa_decode_to_utf8( hb_buffer_t *in )
     out->size = dst - out->data;
     
     // Copy metadata from the input packet to the output packet
-    out->start = in->start;
-    out->stop = in->stop;
+    out->start = in_start;
+    out->stop = in_stop;
     
     return out;
     
 fail:
-    hb_log( "decssasub: malformed SSA subtitle packet: %.*s\n", in->size, in->data );
+    hb_log( "decssasub: malformed SSA subtitle packet: %.*s\n", in_size, in_data );
     return NULL;
 }
 
@@ -221,36 +270,19 @@ static int decssaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                         hb_buffer_t ** buf_out )
 {
     hb_buffer_t * in = *buf_in;
-    hb_buffer_t * out = NULL;
+    hb_buffer_t * out_list = NULL;
     
     if ( in->size > 0 ) {
-        out = ssa_decode_to_utf8(in);
+        out_list = ssa_decode_to_utf8(in);
     } else {
-        out = hb_buffer_init( 0 );
-    }
-    
-    if ( out != NULL ) {
-        // We shouldn't be storing the extra NULL character,
-        // but the MP4 muxer expects this, unfortunately.
-        if ( out->size > 0 && out->data[out->size - 1] != '\0' ) {
-            // NOTE: out->size remains unchanged
-            hb_buffer_realloc( out, out->size + 1 );
-            out->data[out->size] = '\0';
-        }
-        
-        // If the input packet was non-empty, do not pass through
-        // an empty output packet (even if the subtitle was empty),
-        // as this would be interpreted as an end-of-stream
-        if ( in->size > 0 && out->size == 0 ) {
-            hb_buffer_close(&out);
-        }
+        out_list = hb_buffer_init( 0 );
     }
     
     // Dispose the input packet, as it is no longer needed
     hb_buffer_close(&in);
     
     *buf_in = NULL;
-    *buf_out = out;
+    *buf_out = out_list;
     return HB_WORK_OK;
 }
 
