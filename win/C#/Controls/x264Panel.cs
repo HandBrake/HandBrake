@@ -6,6 +6,7 @@
 namespace Handbrake.Controls
 {
     using System;
+    using System.Globalization;
     using System.Windows.Forms;
 
     /// <summary>
@@ -17,6 +18,8 @@ namespace Handbrake.Controls
          * TODO This code was ported from the obj-c MacGUI code. It's really messy and could really do with being cleaned up
          * at some point.
          */
+
+        private CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="x264Panel"/> class. 
@@ -468,7 +471,7 @@ namespace Handbrake.Controls
                             else
                             {
                                 double value = slider_adaptiveQuantStrength.Value * 0.1;
-                                string aqs = value.ToString("f1");
+                                string aqs = value.ToString("f1", culture);
                                 thisOpt = "aq-strength=" + aqs;
                             }
                         }
@@ -481,8 +484,8 @@ namespace Handbrake.Controls
                                 double psyrd = slider_psyrd.Value * 0.1;
                                 double psytre = slider_psytrellis.Value * 0.05;
 
-                                string rd = psyrd.ToString("f2");
-                                string rt = psytre.ToString("f2");
+                                string rd = psyrd.ToString("f2", culture);
+                                string rt = psytre.ToString("f2", culture);
 
                                 thisOpt = "psy-rd=" + rd + "," + rt;
                             }
@@ -771,7 +774,7 @@ namespace Handbrake.Controls
                 else
                 {
                     double value = slider_adaptiveQuantStrength.Value * 0.1;
-                    string aqs = value.ToString("f1");
+                    string aqs = value.ToString("f1", culture);
                     query += colon + "aq-strength=" + aqs;
                 }
             }
@@ -784,8 +787,8 @@ namespace Handbrake.Controls
                     double psyrd = slider_psyrd.Value * 0.1;
                     double psytre = slider_psytrellis.Value * 0.05;
 
-                    string rd = psyrd.ToString("f1");
-                    string rt = psytre.ToString("f2");
+                    string rd = psyrd.ToString("f1", culture);
+                    string rt = psytre.ToString("f2", culture);
 
                     query += colon + "psy-rd=" + rd + "," + rt;
                 }
