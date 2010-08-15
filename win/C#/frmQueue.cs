@@ -507,7 +507,7 @@ namespace Handbrake
         /// </param>
         private void ListQueueDeleteKey(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Delete)
+            if (e.KeyCode == Keys.Delete && e.Modifiers == Keys.None)
                 DeleteSelectedItems();
         }
 
@@ -665,7 +665,7 @@ namespace Handbrake
         /// </param>
         private void MnuReaddClick(object sender, EventArgs e)
         {
-            if (!queue.LastEncode.IsEmpty)
+            if (queue.LastEncode != null && !queue.LastEncode.IsEmpty)
             {
                 queue.Add(
                     queue.LastEncode.Query, 
