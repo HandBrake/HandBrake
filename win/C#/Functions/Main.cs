@@ -278,8 +278,10 @@ namespace Handbrake.Functions
             // 1 = Build Date
             DateTime lastModified = File.GetLastWriteTime("HandBrakeCLI.exe");
 
-            if (Properties.Settings.Default.cliLastModified == lastModified && Properties.Settings.Default.hb_build != 0)
+            if (Properties.Settings.Default.hb_build != 0 && Properties.Settings.Default.cliLastModified == lastModified )
+            {
                 return;
+            }   
 
             Properties.Settings.Default.cliLastModified = lastModified;
 

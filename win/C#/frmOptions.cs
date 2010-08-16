@@ -187,12 +187,6 @@ namespace Handbrake
             // Use Experimental dvdnav
             if (Properties.Settings.Default.noDvdNav)
                 check_dvdnav.CheckState = CheckState.Checked;
-
-            // #############################
-            // Debug
-            // #############################
-            if (Properties.Settings.Default.disableResCalc)
-                check_disableResCalc.Checked = true;
         }
 
         #region General
@@ -454,14 +448,6 @@ namespace Handbrake
 
         #endregion
 
-        #region Debug
-
-        private void check_disableResCalc_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.disableResCalc = check_disableResCalc.Checked;
-        }
-
-        #endregion
 
         private void btn_close_Click(object sender, EventArgs e)
         {

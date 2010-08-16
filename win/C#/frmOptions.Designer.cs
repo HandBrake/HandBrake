@@ -100,8 +100,6 @@ namespace Handbrake
             this.label30 = new System.Windows.Forms.Label();
             this.check_disablePresetNotification = new System.Windows.Forms.CheckBox();
             this.label28 = new System.Windows.Forms.Label();
-            this.tab_debug = new System.Windows.Forms.TabPage();
-            this.check_disableResCalc = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pathFinder = new System.Windows.Forms.FolderBrowserDialog();
@@ -135,7 +133,8 @@ namespace Handbrake
             this.label26 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
-            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
@@ -143,19 +142,20 @@ namespace Handbrake
             this.tab_audio_sub.SuspendLayout();
             this.tab_cli.SuspendLayout();
             this.tab_advanced.SuspendLayout();
-            this.tab_debug.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            this.tableLayoutPanel5.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btn_close
             // 
-            this.btn_close.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btn_close.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_close.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(519, 404);
+            this.btn_close.Location = new System.Drawing.Point(528, 440);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(72, 22);
             this.btn_close.TabIndex = 53;
@@ -185,15 +185,15 @@ namespace Handbrake
             // 
             // tab_options
             // 
-            this.tableLayoutPanel5.SetColumnSpan(this.tab_options, 2);
+            this.tab_options.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tab_options.Controls.Add(this.tab_general);
             this.tab_options.Controls.Add(this.tab_picture);
             this.tab_options.Controls.Add(this.tab_audio_sub);
             this.tab_options.Controls.Add(this.tab_cli);
             this.tab_options.Controls.Add(this.tab_advanced);
-            this.tab_options.Controls.Add(this.tab_debug);
-            this.tab_options.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tab_options.Location = new System.Drawing.Point(3, 38);
+            this.tab_options.Location = new System.Drawing.Point(12, 74);
             this.tab_options.Name = "tab_options";
             this.tab_options.SelectedIndex = 0;
             this.tab_options.Size = new System.Drawing.Size(588, 360);
@@ -1049,35 +1049,11 @@ namespace Handbrake
             this.label28.TabIndex = 85;
             this.label28.Text = "x264:";
             // 
-            // tab_debug
-            // 
-            this.tab_debug.Controls.Add(this.check_disableResCalc);
-            this.tab_debug.Location = new System.Drawing.Point(4, 22);
-            this.tab_debug.Name = "tab_debug";
-            this.tab_debug.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_debug.Size = new System.Drawing.Size(580, 334);
-            this.tab_debug.TabIndex = 7;
-            this.tab_debug.Text = "Debug";
-            this.tab_debug.UseVisualStyleBackColor = true;
-            // 
-            // check_disableResCalc
-            // 
-            this.check_disableResCalc.AutoSize = true;
-            this.check_disableResCalc.Location = new System.Drawing.Point(13, 15);
-            this.check_disableResCalc.Name = "check_disableResCalc";
-            this.check_disableResCalc.Size = new System.Drawing.Size(327, 17);
-            this.check_disableResCalc.TabIndex = 0;
-            this.check_disableResCalc.Text = "Disable Resolution Calculation for \"None\" and \"Custom\" modes.";
-            this.ToolTip.SetToolTip(this.check_disableResCalc, resources.GetString("check_disableResCalc.ToolTip"));
-            this.check_disableResCalc.UseVisualStyleBackColor = true;
-            this.check_disableResCalc.CheckedChanged += new System.EventHandler(this.check_disableResCalc_CheckedChanged);
-            // 
             // label8
             // 
-            this.label8.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(41, 11);
+            this.label8.Location = new System.Drawing.Point(51, 19);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(115, 13);
             this.label8.TabIndex = 61;
@@ -1086,7 +1062,7 @@ namespace Handbrake
             // pictureBox2
             // 
             this.pictureBox2.Image = global::Handbrake.Properties.Resources.General_Preferences;
-            this.pictureBox2.Location = new System.Drawing.Point(3, 0);
+            this.pictureBox2.Location = new System.Drawing.Point(12, 9);
             this.pictureBox2.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(32, 32);
@@ -1432,25 +1408,29 @@ namespace Handbrake
             this.openFile_vlc.DefaultExt = "exe";
             this.openFile_vlc.Filter = "exe|*.exe";
             // 
-            // tableLayoutPanel5
+            // panel1
             // 
-            this.tableLayoutPanel5.AutoSize = true;
-            this.tableLayoutPanel5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel5.ColumnCount = 2;
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel5.Controls.Add(this.pictureBox2, 0, 0);
-            this.tableLayoutPanel5.Controls.Add(this.btn_close, 1, 2);
-            this.tableLayoutPanel5.Controls.Add(this.label8, 1, 0);
-            this.tableLayoutPanel5.Controls.Add(this.tab_options, 0, 1);
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(12, 12);
-            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-            this.tableLayoutPanel5.RowCount = 3;
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(594, 429);
-            this.tableLayoutPanel5.TabIndex = 62;
+            this.panel1.BackColor = System.Drawing.Color.White;
+            this.panel1.Controls.Add(this.panel2);
+            this.panel1.Controls.Add(this.label8);
+            this.panel1.Controls.Add(this.pictureBox2);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(615, 65);
+            this.panel1.TabIndex = 62;
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.SystemColors.Control;
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(0, 55);
+            this.panel2.MaximumSize = new System.Drawing.Size(0, 10);
+            this.panel2.MinimumSize = new System.Drawing.Size(0, 10);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(615, 10);
+            this.panel2.TabIndex = 59;
             // 
             // frmOptions
             // 
@@ -1458,15 +1438,16 @@ namespace Handbrake
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(627, 456);
-            this.Controls.Add(this.tableLayoutPanel5);
+            this.ClientSize = new System.Drawing.Size(615, 472);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.btn_close);
+            this.Controls.Add(this.tab_options);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmOptions";
-            this.Padding = new System.Windows.Forms.Padding(12);
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -1484,13 +1465,10 @@ namespace Handbrake
             this.tab_cli.PerformLayout();
             this.tab_advanced.ResumeLayout(false);
             this.tab_advanced.PerformLayout();
-            this.tab_debug.ResumeLayout(false);
-            this.tab_debug.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            this.tableLayoutPanel5.ResumeLayout(false);
-            this.tableLayoutPanel5.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -1576,7 +1554,6 @@ namespace Handbrake
         internal System.Windows.Forms.ComboBox drop_updateCheckDays;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         internal System.Windows.Forms.ComboBox drp_Priority;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.CheckBox check_promptOnUnmatchingQueries;
         private System.Windows.Forms.TabPage tab_audio_sub;
         internal System.Windows.Forms.ComboBox drop_preferredLang;
@@ -1585,8 +1562,6 @@ namespace Handbrake
         private System.Windows.Forms.RadioButton radio_dub;
         private System.Windows.Forms.Label label15;
         internal System.Windows.Forms.Button btn_browse;
-        private System.Windows.Forms.TabPage tab_debug;
-        private System.Windows.Forms.CheckBox check_disableResCalc;
         internal System.Windows.Forms.CheckBox check_growlEncode;
         internal System.Windows.Forms.CheckBox check_GrowlQueue;
         internal System.Windows.Forms.ComboBox drop_previewScanCount;
@@ -1597,5 +1572,7 @@ namespace Handbrake
         internal System.Windows.Forms.CheckBox check_removeUnderscores;
         internal System.Windows.Forms.CheckBox check_preventSleep;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel2;
     }
 }

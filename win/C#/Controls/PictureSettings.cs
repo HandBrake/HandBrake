@@ -152,9 +152,6 @@ namespace Handbrake.Controls
         // Picture Controls
         private void TextWidthValueChanged(object sender, EventArgs e)
         {
-            if (Properties.Settings.Default.disableResCalc)
-                return;
-
             if (preventChangingWidth)
                 return;
 
@@ -214,9 +211,6 @@ namespace Handbrake.Controls
 
         private void TextHeightValueChanged(object sender, EventArgs e)
         {
-            if (Properties.Settings.Default.disableResCalc)
-                return;
-
             if (preventChangingHeight)
                 return;
 
@@ -277,9 +271,6 @@ namespace Handbrake.Controls
 
         private void CheckKeepArCheckedChanged(object sender, EventArgs e)
         {
-            if (Properties.Settings.Default.disableResCalc)
-                return;
-
             // Force TextWidth to recalc height
             if (check_KeepAR.Checked)
                 TextWidthValueChanged(this, new EventArgs());
@@ -298,9 +289,6 @@ namespace Handbrake.Controls
 
         private void UpdownDisplayWidthValueChanged(object sender, EventArgs e)
         {
-            if (Properties.Settings.Default.disableResCalc)
-                return;
-
             if (preventChangingDisplayWidth == false && check_KeepAR.CheckState == CheckState.Unchecked)
             {
                 preventChangingCustom = true;
