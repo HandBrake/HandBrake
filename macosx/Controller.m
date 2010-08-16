@@ -1982,12 +1982,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)theApplication hasVisibleWindows:(BOOL)flag
 {
     if( !flag ) {
-        [fWindow  makeKeyAndOrderFront:nil];
-                
-        return YES;
+        [fWindow makeKeyAndOrderFront:nil];
     }
-    
-    return NO;
+    return YES;
 }
 
 - (NSSize) drawerWillResizeContents:(NSDrawer *) drawer toSize:(NSSize) contentSize {
