@@ -12,8 +12,8 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="2649"/>
 			<integer value="2577"/>
+			<integer value="2649"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -42,7 +42,7 @@
 			<object class="NSWindowTemplate" id="238545558">
 				<int key="NSWindowStyleMask">4111</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{893, 130}, {594, 430}}</string>
+				<string key="NSWindowRect">{{893, 128}, {587, 432}}</string>
 				<int key="NSWTFlags">1886912512</int>
 				<string key="NSWindowTitle">Queue - HandBrake</string>
 				<string key="NSWindowClass">NSWindow</string>
@@ -74,7 +74,7 @@
 												<object class="NSOutlineView" id="790027174">
 													<reference key="NSNextResponder" ref="13598910"/>
 													<int key="NSvFlags">4352</int>
-													<string key="NSFrameSize">{517, 342}</string>
+													<string key="NSFrameSize">{517, 329}</string>
 													<reference key="NSSuperview" ref="13598910"/>
 													<bool key="NSEnabled">YES</bool>
 													<object class="_NSCornerView" key="NSCornerView">
@@ -228,7 +228,7 @@
 													<int key="NSTableViewDraggingDestinationStyle">0</int>
 												</object>
 											</object>
-											<string key="NSFrame">{{1, 1}, {517, 342}}</string>
+											<string key="NSFrame">{{1, 1}, {517, 329}}</string>
 											<reference key="NSSuperview" ref="9160137"/>
 											<reference key="NSNextKeyView" ref="790027174"/>
 											<reference key="NSDocView" ref="790027174"/>
@@ -246,7 +246,7 @@
 										<object class="NSScroller" id="459639248">
 											<reference key="NSNextResponder" ref="9160137"/>
 											<int key="NSvFlags">256</int>
-											<string key="NSFrame">{{518, 1}, {15, 342}}</string>
+											<string key="NSFrame">{{518, 1}, {15, 329}}</string>
 											<reference key="NSSuperview" ref="9160137"/>
 											<reference key="NSTarget" ref="9160137"/>
 											<string key="NSAction">_doScroller:</string>
@@ -263,7 +263,7 @@
 											<double key="NSPercent">0.9656652</double>
 										</object>
 									</object>
-									<string key="NSFrame">{{20, 20}, {534, 344}}</string>
+									<string key="NSFrame">{{20, 20}, {534, 331}}</string>
 									<reference key="NSSuperview" ref="60629844"/>
 									<reference key="NSNextKeyView" ref="13598910"/>
 									<int key="NSsFlags">18</int>
@@ -391,7 +391,7 @@
 									</object>
 								</object>
 							</object>
-							<string key="NSFrame">{{0, 7}, {574, 371}}</string>
+							<string key="NSFrame">{{0, 9}, {574, 358}}</string>
 							<reference key="NSSuperview" ref="431299686"/>
 							<string key="NSClassName">NSView</string>
 							<string key="NSExtension">NSResponder</string>
@@ -399,7 +399,7 @@
 						<object class="NSTextField" id="463845363">
 							<reference key="NSNextResponder" ref="431299686"/>
 							<int key="NSvFlags">264</int>
-							<string key="NSFrame">{{17, 405}, {148, 14}}</string>
+							<string key="NSFrame">{{17, 407}, {148, 14}}</string>
 							<reference key="NSSuperview" ref="431299686"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="617812287">
@@ -415,7 +415,7 @@
 						<object class="NSTextField" id="138063786">
 							<reference key="NSNextResponder" ref="431299686"/>
 							<int key="NSvFlags">266</int>
-							<string key="NSFrame">{{17, 383}, {560, 14}}</string>
+							<string key="NSFrame">{{17, 373}, {560, 30}}</string>
 							<reference key="NSSuperview" ref="431299686"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="108133680">
@@ -429,7 +429,7 @@
 							</object>
 						</object>
 					</object>
-					<string key="NSFrameSize">{594, 430}</string>
+					<string key="NSFrameSize">{587, 432}</string>
 					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1920, 1178}}</string>
@@ -918,9 +918,9 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{-1207, 359}, {594, 430}}</string>
+					<string>{{77, 333}, {587, 432}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{-1207, 359}, {594, 430}}</string>
+					<string>{{77, 333}, {587, 432}}</string>
 					<integer value="1"/>
 					<boolean value="NO"/>
 					<integer value="1"/>

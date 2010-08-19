@@ -927,7 +927,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 pass_desc = @"";
             }
             
-			string = [NSMutableString stringWithFormat: NSLocalizedString( @"Encoding: pass %d %@ of %d, %.2f %%", @"" ), p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
+			string = [NSMutableString stringWithFormat: NSLocalizedString( @"Encoding: %@ \nPass %d %@ of %d, %.2f %%", @"" ), currentQueueEncodeNameString, p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
             
 			if( p.seconds > -1 )
             {
@@ -935,13 +935,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                  NSLocalizedString( @" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)", @"" ),
                  p.rate_cur, p.rate_avg, p.hours, p.minutes, p.seconds];
             }
-            
             [fStatusField setStringValue: string];
-            /* Set the status string in fQueueController as well but add currentQueueEncodeNameString to delineate
-             * which encode is being worked on by this instance in a multiple instance situation
-             */
-            NSString * queueStatusString = [NSString stringWithFormat:@"%@ -> %@",string,currentQueueEncodeNameString];
-            [fQueueController setQueueStatusString:queueStatusString];
+            [fQueueController setQueueStatusString:string];
             
             /* Update slider */
             CGFloat progress_total = ( p.progress + p.job_cur - 1 ) / p.job_count;
@@ -2099,11 +2094,11 @@ fWorkingCount = 0;
     NSMutableString * string;
     if (fPendingCount == 1)
     {
-        string = [NSMutableString stringWithFormat: NSLocalizedString( @"%d encode pending in the queue", @"" ), fPendingCount];
+        string = [NSMutableString stringWithFormat: NSLocalizedString( @"%d encode pending in queue", @"" ), fPendingCount];
     }
     else
     {
-        string = [NSMutableString stringWithFormat: NSLocalizedString( @"%d encode(s) pending in the queue", @"" ), fPendingCount];
+        string = [NSMutableString stringWithFormat: NSLocalizedString( @"%d encode(s) pending in queue", @"" ), fPendingCount];
     }
     [fQueueStatus setStringValue:string];
 }
