@@ -312,9 +312,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 [self writeToActivityLog: "Pid for this instance:%d", pidNum];
                 /* Tell fQueueController what our pidNum is */
                 [fQueueController setPidNum:pidNum];
-                
-                hbInstances++;
             }
+            hbInstances++;
         }
     }
     return hbInstances;
