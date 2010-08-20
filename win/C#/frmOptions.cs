@@ -14,6 +14,7 @@ namespace Handbrake
     using HandBrake.ApplicationServices;
 
     using Handbrake.Functions;
+    using Handbrake.Model;
     using Handbrake.Properties;
 
     /// <summary>
@@ -106,10 +107,18 @@ namespace Handbrake
 
             drop_preferredLang.SelectedItem = Properties.Settings.Default.NativeLanguage;
 
-            if (Properties.Settings.Default.DubAudio)
-                radio_dub.Checked = true;
-            else
-                radio_foreignAndSubs.Checked = true;
+            switch (Settings.Default.DubMode)
+            {
+                case 1:
+                    radio_dub.Checked = true;
+                    break;
+                case 2:
+                    radio_foreignAndSubs.Checked = true;
+                    break;
+                case 3:
+                    radio_preferredAudioAndSubs.Checked = true;
+                    break;
+            }
 
             // #############################
             // CLI
@@ -118,7 +127,7 @@ namespace Handbrake
             // Priority level for encodes
             drp_Priority.Text = Properties.Settings.Default.processPriority;
 
-            check_preventSleep.Checked = Properties.Settings.Default.preventSleep; 
+            check_preventSleep.Checked = Properties.Settings.Default.preventSleep;
 
             // Log Verbosity Level
             cb_logVerboseLvl.SelectedIndex = Properties.Settings.Default.verboseLevel;
@@ -302,13 +311,24 @@ namespace Handbrake
         private void radio_dub_CheckedChanged(object sender, EventArgs e)
         {
             if (radio_dub.Checked)
-                Properties.Settings.Default.DubAudio = true;
+                Properties.Settings.Default.DubMode = 1;
         }
 
         private void radio_foreignAndSubs_CheckedChanged(object sender, EventArgs e)
         {
             if (radio_foreignAndSubs.Checked)
-                Properties.Settings.Default.DubAudio = false;
+                Properties.Settings.Default.DubMode = 2;
+        }
+
+        private void radio_preferredAudioAndSubs_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radio_preferredAudioAndSubs.Checked)
+                Properties.Settings.Default.DubMode = 3;
+        }
+
+        private void check_AddCCTracks_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.useClosedCaption = check_AddCCTracks.Checked;
         }
 
         #endregion
@@ -365,12 +385,12 @@ namespace Handbrake
 
         private void btn_clearLogs_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you wish to clear the log file directory?", "Clear Logs", 
+            DialogResult result = MessageBox.Show("Are you sure you wish to clear the log file directory?", "Clear Logs",
                                                   MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
                 Main.ClearLogs();
-                MessageBox.Show(this, "HandBrake's Log file directory has been cleared!", "Notice", MessageBoxButtons.OK, 
+                MessageBox.Show(this, "HandBrake's Log file directory has been cleared!", "Notice", MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
             }
         }
@@ -448,7 +468,6 @@ namespace Handbrake
 
         #endregion
 
-
         private void btn_close_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
@@ -462,11 +481,21 @@ namespace Handbrake
         /// </summary>
         private static void UpdateApplicationServicesSettings()
         {
-            string versionId = String.Format("Windows GUI {1} {0}", Settings.Default.hb_build, Settings.Default.hb_version);
-            Init.SetupSettings(versionId, Program.InstanceId, Settings.Default.CompletionOption, Settings.Default.noDvdNav,
-                               Settings.Default.growlEncode, Settings.Default.growlQueue,
-                               Settings.Default.processPriority, Settings.Default.saveLogPath, Settings.Default.saveLogToSpecifiedPath,
-                               Settings.Default.saveLogWithVideo, Settings.Default.showCliForInGuiEncodeStatus, Settings.Default.preventSleep);
+            string versionId = String.Format(
+                "Windows GUI {1} {0}", Settings.Default.hb_build, Settings.Default.hb_version);
+            Init.SetupSettings(
+                versionId,
+                Program.InstanceId,
+                Settings.Default.CompletionOption,
+                Settings.Default.noDvdNav,
+                Settings.Default.growlEncode,
+                Settings.Default.growlQueue,
+                Settings.Default.processPriority,
+                Settings.Default.saveLogPath,
+                Settings.Default.saveLogToSpecifiedPath,
+                Settings.Default.saveLogWithVideo,
+                Settings.Default.showCliForInGuiEncodeStatus,
+                Settings.Default.preventSleep);
         }
     }
 }

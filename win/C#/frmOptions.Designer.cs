@@ -135,6 +135,8 @@ namespace Handbrake
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.check_AddCCTracks = new System.Windows.Forms.CheckBox();
+            this.radio_preferredAudioAndSubs = new System.Windows.Forms.RadioButton();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
@@ -531,6 +533,8 @@ namespace Handbrake
             // 
             // tab_audio_sub
             // 
+            this.tab_audio_sub.Controls.Add(this.radio_preferredAudioAndSubs);
+            this.tab_audio_sub.Controls.Add(this.check_AddCCTracks);
             this.tab_audio_sub.Controls.Add(this.label31);
             this.tab_audio_sub.Controls.Add(this.label15);
             this.tab_audio_sub.Controls.Add(this.radio_foreignAndSubs);
@@ -1416,7 +1420,7 @@ namespace Handbrake
             this.panel1.Controls.Add(this.pictureBox2);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(615, 65);
             this.panel1.TabIndex = 62;
@@ -1431,6 +1435,31 @@ namespace Handbrake
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(615, 10);
             this.panel2.TabIndex = 59;
+            // 
+            // check_AddCCTracks
+            // 
+            this.check_AddCCTracks.AutoSize = true;
+            this.check_AddCCTracks.Location = new System.Drawing.Point(200, 131);
+            this.check_AddCCTracks.Name = "check_AddCCTracks";
+            this.check_AddCCTracks.Size = new System.Drawing.Size(199, 17);
+            this.check_AddCCTracks.TabIndex = 92;
+            this.check_AddCCTracks.Text = "Add Closed Captions when available";
+            this.ToolTip.SetToolTip(this.check_AddCCTracks, "Add any CC tracks if they exist");
+            this.check_AddCCTracks.UseVisualStyleBackColor = true;
+            this.check_AddCCTracks.CheckedChanged += new System.EventHandler(this.check_AddCCTracks_CheckedChanged);
+            // 
+            // radio_preferredAudioAndSubs
+            // 
+            this.radio_preferredAudioAndSubs.AutoSize = true;
+            this.radio_preferredAudioAndSubs.Location = new System.Drawing.Point(200, 99);
+            this.radio_preferredAudioAndSubs.Name = "radio_preferredAudioAndSubs";
+            this.radio_preferredAudioAndSubs.Size = new System.Drawing.Size(254, 17);
+            this.radio_preferredAudioAndSubs.TabIndex = 93;
+            this.radio_preferredAudioAndSubs.TabStop = true;
+            this.radio_preferredAudioAndSubs.Text = "Use Preferred Language for Audio and Subtitles";
+            this.ToolTip.SetToolTip(this.radio_preferredAudioAndSubs, "Use Preferred Language for Audio and Subtitle.");
+            this.radio_preferredAudioAndSubs.UseVisualStyleBackColor = true;
+            this.radio_preferredAudioAndSubs.CheckedChanged += new System.EventHandler(this.radio_preferredAudioAndSubs_CheckedChanged);
             // 
             // frmOptions
             // 
@@ -1574,5 +1603,7 @@ namespace Handbrake
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.RadioButton radio_preferredAudioAndSubs;
+        private System.Windows.Forms.CheckBox check_AddCCTracks;
     }
 }

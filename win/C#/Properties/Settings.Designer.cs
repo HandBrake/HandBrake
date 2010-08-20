@@ -372,13 +372,13 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool DubAudio {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int DubMode {
             get {
-                return ((bool)(this["DubAudio"]));
+                return ((int)(this["DubMode"]));
             }
             set {
-                this["DubAudio"] = value;
+                this["DubMode"] = value;
             }
         }
         
@@ -522,6 +522,18 @@ namespace Handbrake.Properties {
             }
             set {
                 this["preventSleep"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool useClosedCaption {
+            get {
+                return ((bool)(this["useClosedCaption"]));
+            }
+            set {
+                this["useClosedCaption"] = value;
             }
         }
     }

@@ -174,7 +174,7 @@ namespace Handbrake.Controls
                 drp_audioTrack.SelectedIndex = drp_audioTrack.Items.Count >= 2 ? 1 : 0;
             else
             {
-                if (Properties.Settings.Default.DubAudio) // "Dub Foreign language audio" 
+                if (Properties.Settings.Default.DubMode > 1) // "Dub Foreign language audio" 
                 {
                     int i = 0;
                     foreach (object item in drp_audioTrack.Items)
