@@ -95,7 +95,6 @@ namespace Handbrake
 
             // Update the users config file with the CLI version data.
             Main.SetCliVersionData();
-            Main.CheckForValidCliVersion();
 
             if (Settings.Default.hb_version.Contains("svn"))
             {

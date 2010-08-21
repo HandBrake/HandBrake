@@ -278,7 +278,7 @@ namespace Handbrake.Functions
             // 1 = Build Date
             DateTime lastModified = File.GetLastWriteTime("HandBrakeCLI.exe");
 
-            if (Properties.Settings.Default.hb_build != 0 && Properties.Settings.Default.cliLastModified == lastModified )
+            if (Properties.Settings.Default.hb_build != 0 && Properties.Settings.Default.cliLastModified == lastModified)
             {
                 return;
             }   
@@ -305,16 +305,19 @@ namespace Handbrake.Functions
                 while (!cliProcess.HasExited)
                 {
                     line = stdOutput.ReadLine() ?? string.Empty;
-                    Match m = Regex.Match(line, @"HandBrake ([svnM0-9.]*) \([0-9]*\)");
+                    Match m = Regex.Match(line, @"HandBrake ([svnM0-9.]*) \(([0-9]*)\)");
                     Match platform = Regex.Match(line, @"- ([A-Za-z0-9\s ]*) -");
 
                     if (m.Success)
                     {
-                        string data = line.Replace("(", string.Empty).Replace(")", string.Empty).Replace("HandBrake ", string.Empty);
-                        string[] arr = data.Split(' ');
+                        string version = m.Groups[1].Success ? m.Groups[1].Value : string.Empty;
+                        string build = m.Groups[2].Success ? m.Groups[2].Value : string.Empty;
 
-                        Properties.Settings.Default.hb_build = int.Parse(arr[1]);
-                        Properties.Settings.Default.hb_version = arr[0];
+                        int buildValue;
+                        int.TryParse(build, out buildValue);
+
+                        Properties.Settings.Default.hb_build = buildValue;
+                        Properties.Settings.Default.hb_version = version;
                     }
 
                     if (platform.Success)
@@ -336,38 +339,12 @@ namespace Handbrake.Functions
             }
             catch (Exception e)
             {
+                Properties.Settings.Default.hb_build = 0;
+                Properties.Settings.Default.Save();
+
                 frmExceptionWindow exceptionWindow = new frmExceptionWindow();
                 exceptionWindow.Setup("Unable to retrieve version information from the CLI.", e.ToString());
                 exceptionWindow.ShowDialog();
-            }
-        }
-
-        /// <summary>
-        /// Check to make sure that the user has an up to date version of the CLI installed.
-        /// </summary>
-        public static void CheckForValidCliVersion()
-        {
-            // Make sure we have a recent version for svn builds
-            string cli_version = Properties.Settings.Default.hb_version;
-            Version gui_version = Assembly.GetExecutingAssembly().GetName().Version;
-
-            if (cli_version.Contains("svn") || gui_version.Revision > 0)
-            {
-                int gui_build, cli_build;
-                int.TryParse(gui_version.Revision.ToString(), out gui_build);
-                int.TryParse(Properties.Settings.Default.hb_version.Replace("svn", string.Empty), out cli_build);
-
-                if (gui_build > cli_build)
-                {
-                    MessageBox.Show(
-                        "It appears you are trying to use a CLI executable that is too old for this version of the HandBrake GUI.\n" +
-                        "Please update the HandBrakeCLI.exe to a newer build.\n\n" +
-                        "HandBrake build Detected: " + cli_build,
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                    return;
-                }
             }
         }
 
