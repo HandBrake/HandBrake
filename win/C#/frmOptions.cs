@@ -120,6 +120,8 @@ namespace Handbrake
                     break;
             }
 
+            check_AddCCTracks.Checked = Properties.Settings.Default.useClosedCaption;
+
             // #############################
             // CLI
             // #############################
