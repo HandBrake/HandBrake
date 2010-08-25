@@ -1,10 +1,10 @@
 $(eval $(call import.MODULE.rules,GTK))
 
-build: hgtk.build gtk.build
+build: gtk.build
 install: gtk.install
 install-strip: gtk.install-strip
 uninstall: gtk.uninstall
-clean: hgtk.clean gtk.clean
+clean: gtk.clean
 xclean: gtk.xclean
 
 gtk.configure: $(GTK.CONFIGURE.stamp)
@@ -35,31 +35,11 @@ gtk.install:
 gtk.uninstall:
 	$(MAKE) -C $(GTK.build/) uninstall
 
-gtk.clean: hgtk.clean
+gtk.clean:
 	$(MAKE) -C $(GTK.build/) clean
 
-gtk.xclean: hgtk.clean
+gtk.xclean:
 	$(MAKE) -C $(GTK.build/) distclean
 	$(RM.exe) -f $(GTK.out)
 	$(RM.exe) -fr $(GTK.build/)
 
-###############################################################################
-###############################################################################
-$(eval $(call import.MODULE.rules,HGTK))
- 
-hgtk.build: $(CREATE_RES.exe)
- 
-$(CREATE_RES.exe): | $(dir $(CREATE_RES.exe))
-$(CREATE_RES.exe): $(CREATE_RES.c.o) $(HGTKCOMMON.c.o)
-	$(call HGTK.GCC.EXE,$@,$^)
- 
-$(HGTKCOMMON.c.o): | $(dir $(HGTKCOMMON.c.o))
-$(HGTKCOMMON.c.o): $(BUILD/)%-native.o: $(SRC/)%.c
-	$(call HGTK.GCC.C_O,$@,$<)
- 
-$(CREATE_RES.c.o): | $(dir $(CREATE_RES.c.o))
-$(CREATE_RES.c.o): $(BUILD/)%-native.o: $(SRC/)%.c
-	$(call HGTK.GCC.C_O,$@,$<)
- 
-hgtk.clean:
-	$(RM.exe) -f $(HGTK.out)

@@ -13,6 +13,16 @@ AC_PROG_CXX
 AM_PROG_CC_STDC
 AC_HEADER_STDC
 
+if test x"$CC_FOR_BUILD" = x; then
+	if test x"$cross_compiling" = x"yes"; then
+		AC_CHECK_PROGS(CC_FOR_BUILD, gcc, cc)
+	else
+		CC_FOR_BUILD="$CC"
+	fi
+fi
+
+AC_SUBST(CC_FOR_BUILD)
+
 # introduce the optional configure parameter for the path of libXXX.a
 AC_ARG_WITH(hb,
 	AC_HELP_STRING(
@@ -116,6 +126,14 @@ AM_CONDITIONAL([MINGW], [test "x$mingw_flag" = "xyes"])
 
 PKG_CHECK_MODULES(GHB, [$GHB_PACKAGES])
 
+AC_PATH_PROG(BUILD_PKG_CONFIG, pkg-config, no)
+if test x"$BUILD_PKG_CONFIG" = x"no"; then
+	AC_MSG_ERROR([You need to install pkg-config])
+fi
+
+GHB_TOOLS_CFLAGS=`$BUILD_PKG_CONFIG --cflags glib-2.0 gdk-pixbuf-2.0`
+GHB_TOOLS_LIBS=`$BUILD_PKG_CONFIG --libs glib-2.0 gdk-pixbuf-2.0`
+
 case $host in
   *-*-mingw*)
     if test "x$use_libdl" = "xyes" ; then
@@ -124,6 +142,8 @@ case $host in
     ;;
 esac
 
+AC_SUBST(GHB_TOOLS_CFLAGS)
+AC_SUBST(GHB_TOOLS_LIBS)
 AC_SUBST(GHB_CFLAGS)
 AC_SUBST(GHB_LIBS)
 

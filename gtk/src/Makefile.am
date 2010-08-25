@@ -127,6 +127,19 @@ widget.deps: makedeps.py
 resources.plist: create_resources resources.list $(icons_dep) internal_defaults.xml standard_presets.xml ghb.ui widget.deps widget_reverse.deps
 	./create_resources -I$(srcdir) $(srcdir)/resources.list resources.plist
 
+CREATE_RES.c = \
+	create_resources.c \
+	plist.c \
+	values.c 
+
+CREATE_RES.c.o = $(patsubst %.c,%-native.o,$(CREATE_RES.c))
+
+create_resources: $(CREATE_RES.c.o)
+	$(CC_FOR_BUILD) -o $@ $^ $(GHB_TOOLS_LIBS)
+ 
+$(CREATE_RES.c.o): %-native.o: %.c
+	$(CC_FOR_BUILD) $(GHB_TOOLS_CFLAGS) -c -o $@ $<
+
 ghbcellrenderertext.$(OBJEXT): marshalers.h
 
 $(srcdir)/marshalers.h: marshalers.list
