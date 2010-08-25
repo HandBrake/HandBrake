@@ -172,7 +172,7 @@
     [fX264optTrellisPopUp addItemWithTitle:[NSString stringWithFormat:@"Always"]];
     [fX264optTrellisPopUp setWantsLayer:YES];
     toolTip =
-        @"Trellis fine-tunes the rounding of transform coefficients to squeeze out 3-5% more compression at the cost of some speed. \"Always\" uses trellis not only during the main encoding process, but also during analysis, which improves compression even more, albeit at great speed cost.  Trellis costs more speed at higher bitrates and requires CABAC.";
+        @"Trellis fine-tunes the rounding of transform coefficients to squeeze out 3-5% more compression at the cost of some speed. \"Always\" uses trellis not only during the main encoding process, but also during analysis, which improves compression even more, albeit at great speed cost. Trellis costs more speed at higher bitrates.";
     [fX264optTrellisPopUp setToolTip: toolTip];
     [fX264optTrellisLabel setToolTip: toolTip];
     
@@ -562,44 +562,6 @@
         }
     }
     
-    if( sender == fX264optCabacSwitch || sender == nil || sender == fDisplayX264Options )
-    {
-        if ( [fX264optCabacSwitch state] == false)
-        {
-            if( [fX264optTrellisPopUp isHidden] == false )
-            {
-                /* Without CABAC entropy coding, trellis doesn't run. */
-                [[fX264optTrellisPopUp animator] setHidden:YES];
-                [[fX264optTrellisLabel animator] setHidden:YES];
-                [fX264optTrellisPopUp selectItemAtIndex:0];
-                [[fX264optTrellisPopUp cell] performClick:self];
-                
-                if( [fX264optPsyTrellisSlider isHidden] == false)
-                {
-                    [[fX264optPsyTrellisSlider animator] setHidden:YES];
-                    [[fX264optPsyTrellisLabel animator] setHidden:YES];
-                    if ( [fX264optPsyTrellisSlider floatValue] > 0.0 )
-                    {
-                        [fX264optPsyTrellisSlider setFloatValue:0.0];
-                        [[fX264optPsyTrellisSlider cell] performClick:self];
-                    }
-                }
-            }
-        }
-        else if( [fX264optTrellisPopUp isHidden] == true)
-        {
-            [[fX264optTrellisPopUp animator] setHidden:NO];
-            [[fX264optTrellisLabel animator] setHidden:NO];
-            
-            if( [fX264optPsyTrellisSlider isHidden] == true)
-            {
-                [[fX264optPsyTrellisSlider animator] setHidden:NO];
-                [[fX264optPsyTrellisLabel animator] setHidden:NO];
-            }
-        }
-    }
-    
-    
     if( sender == fX264optMotionEstPopUp || sender == nil || sender == fDisplayX264Options )
     {
         if ( [fX264optMotionEstPopUp indexOfSelectedItem] < 3 )
@@ -662,7 +624,7 @@
                 [[fX264optPsyRDLabel animator] setHidden:NO];
             }
 
-            if( ( [fX264optTrellisPopUp indexOfSelectedItem] == 0 || [fX264optTrellisPopUp indexOfSelectedItem] >= 2 ) && [fX264optCabacSwitch state] == true && [fX264optPsyTrellisSlider isHidden] == true )
+            if( ( [fX264optTrellisPopUp indexOfSelectedItem] == 0 || [fX264optTrellisPopUp indexOfSelectedItem] >= 2 ) && [fX264optPsyTrellisSlider isHidden] == true )
             {
                 [[fX264optPsyTrellisSlider animator] setHidden:NO];
                 [[fX264optPsyTrellisLabel animator] setHidden:NO];
@@ -685,7 +647,7 @@
         }
         else
         {
-            if( ( [fX264optSubmePopUp indexOfSelectedItem] == 0 || [fX264optSubmePopUp indexOfSelectedItem] >= 7 ) && [fX264optCabacSwitch state] == true  && [fX264optPsyTrellisSlider isHidden] == true )
+            if( ( [fX264optSubmePopUp indexOfSelectedItem] == 0 || [fX264optSubmePopUp indexOfSelectedItem] >= 7 ) && [fX264optPsyTrellisSlider isHidden] == true )
             {
                 [[fX264optPsyTrellisSlider animator] setHidden:NO];
                 [[fX264optPsyTrellisLabel animator] setHidden:NO];
