@@ -144,10 +144,10 @@ Don't touch this unless you're having banding issues or other such cases where y
   </data>
   <data name="drop_trellis.ToolTip" xml:space="preserve">
     <value>Trellis fine-tunes the rounding of transform coefficients to squeeze out 3-5% more compression at the cost of some speed. 
-\"Always\" uses trellis not only during the main encoding process, but also during analysis, 
-which improves compression even more, albeit at great speed cost.  
+"Always" uses trellis not only during the main encoding process, but also during analysis, which improves compression even 
+more, albeit at great speed cost. 
 
-Trellis costs more speed at higher bitrates and requires CABAC.</value>
+Trellis costs more speed at higher bitrates</value>
   </data>
   <data name="drop_deblockBeta.ToolTip" xml:space="preserve">
     <value>H.264 has a built-in deblocking filter that smooths out blocking artifacts after decoding each frame.  This not only improves visual quality, but also helps compression significantly. 

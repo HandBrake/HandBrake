@@ -925,27 +925,6 @@ namespace Handbrake.Controls
                         lbl_adaptBFrames.Visible = true;
                     }
                     break;
-                case "cabac":
-                    if (check_Cabac.Checked == false)
-                    {
-                        /* Without CABAC entropy coding, trellis doesn't run. */
-                        drop_trellis.Visible = false;
-                        drop_trellis.SelectedIndex = 0;
-                        lbl_trellis.Visible = false;
-
-                        slider_psytrellis.Visible = false;
-                        lbl_psytrellis.Visible = false;
-                        slider_psytrellis.Value = 0;
-                    }
-                    else
-                    {
-                        drop_trellis.Visible = true;
-                        lbl_trellis.Visible = true;
-
-                        slider_psytrellis.Visible = true;
-                        lbl_psytrellis.Visible = true;
-                    }
-                    break;
                 case "me": // Motion Estimation
                     if (drop_MotionEstimationMethod.SelectedIndex < 3)
                     {
@@ -976,7 +955,7 @@ namespace Handbrake.Controls
                         slider_psyrd.Visible = true;
                         lbl_psyrd.Visible = true;
 
-                        if (drop_trellis.SelectedIndex >= 2 && check_Cabac.Checked && slider_psytrellis.Visible == false)
+                        if (drop_trellis.SelectedIndex >= 2 && slider_psytrellis.Visible == false)
                         {
                             slider_psytrellis.Visible = true;
                             lbl_psytrellis.Visible = true;
@@ -992,9 +971,7 @@ namespace Handbrake.Controls
                     }
                     else
                     {
-                        if ((drop_subpixelMotionEstimation.SelectedIndex == 0 ||
-                             drop_subpixelMotionEstimation.SelectedIndex >= 7) && check_Cabac.Checked &&
-                            slider_psytrellis.Visible == false)
+                        if ((drop_subpixelMotionEstimation.SelectedIndex == 0 || drop_subpixelMotionEstimation.SelectedIndex >= 7) && slider_psytrellis.Visible == false)
                         {
                             slider_psytrellis.Visible = true;
                             lbl_psytrellis.Visible = true;
