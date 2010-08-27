@@ -23,6 +23,7 @@ namespace Handbrake
     public partial class frmOptions : Form
     {
         private frmMain mainWindow;
+        private bool optionsWindowLoading = true;
 
         public frmOptions(frmMain mw)
         {
@@ -198,6 +199,8 @@ namespace Handbrake
             // Use Experimental dvdnav
             if (Properties.Settings.Default.noDvdNav)
                 check_dvdnav.CheckState = CheckState.Checked;
+
+            optionsWindowLoading = false;
         }
 
         #region General
@@ -268,6 +271,13 @@ namespace Handbrake
             }
             else
                 Properties.Settings.Default.autoNamePath = text_an_path.Text;
+
+            if (text_an_path.Text == "{source}" && !optionsWindowLoading)
+            {
+                MessageBox.Show(
+                    "Be careful with this feature. Make sure you can write to the same folder as the source! \n\n If you are encoding from a DVD, do not use this feature as HandBrake will not be able to write to the DVD!",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void check_m4v_CheckedChanged(object sender, EventArgs e)

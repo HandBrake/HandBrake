@@ -1390,7 +1390,7 @@ namespace Handbrake
                     text_destination.Text = autoPath;
                 else
                     MessageBox.Show(
-                        "You currently have \"Automatically name output files\" enabled for the destination file box, but you do not have a default directory set.\n\nYou should set a \"Default Path\" in HandBrakes preferences. (See 'Tools' menu -> 'Options' -> 'General' Tab -> 'Default Path')",
+                        "You currently have \"Automatically name output files\" enabled for the destination file box, but you do not have a valid default directory set.\n\nYou should set a \"Default Path\" in HandBrakes preferences. (See 'Tools' menu -> 'Options' -> 'General' Tab -> 'Default Path')",
                         "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 

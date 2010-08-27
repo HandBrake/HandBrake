@@ -63,6 +63,8 @@ namespace Handbrake
             this.btn_vlcPath = new System.Windows.Forms.Button();
             this.txt_vlcPath = new System.Windows.Forms.TextBox();
             this.tab_audio_sub = new System.Windows.Forms.TabPage();
+            this.radio_preferredAudioAndSubs = new System.Windows.Forms.RadioButton();
+            this.check_AddCCTracks = new System.Windows.Forms.CheckBox();
             this.label31 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.radio_foreignAndSubs = new System.Windows.Forms.RadioButton();
@@ -135,8 +137,7 @@ namespace Handbrake
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.check_AddCCTracks = new System.Windows.Forms.CheckBox();
-            this.radio_preferredAudioAndSubs = new System.Windows.Forms.RadioButton();
+            this.label34 = new System.Windows.Forms.Label();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
@@ -150,14 +151,12 @@ namespace Handbrake
             // 
             // btn_close
             // 
-            this.btn_close.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_close.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(528, 440);
+            this.btn_close.Location = new System.Drawing.Point(528, 463);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(72, 22);
             this.btn_close.TabIndex = 53;
@@ -167,7 +166,6 @@ namespace Handbrake
             // 
             // drp_completeOption
             // 
-            this.drp_completeOption.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.drp_completeOption.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drp_completeOption.FormattingEnabled = true;
             this.drp_completeOption.Items.AddRange(new object[] {
@@ -187,9 +185,6 @@ namespace Handbrake
             // 
             // tab_options
             // 
-            this.tab_options.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tab_options.Controls.Add(this.tab_general);
             this.tab_options.Controls.Add(this.tab_picture);
             this.tab_options.Controls.Add(this.tab_audio_sub);
@@ -198,11 +193,12 @@ namespace Handbrake
             this.tab_options.Location = new System.Drawing.Point(12, 74);
             this.tab_options.Name = "tab_options";
             this.tab_options.SelectedIndex = 0;
-            this.tab_options.Size = new System.Drawing.Size(588, 360);
+            this.tab_options.Size = new System.Drawing.Size(588, 383);
             this.tab_options.TabIndex = 58;
             // 
             // tab_general
             // 
+            this.tab_general.Controls.Add(this.label34);
             this.tab_general.Controls.Add(this.check_TitleCase);
             this.tab_general.Controls.Add(this.check_removeUnderscores);
             this.tab_general.Controls.Add(this.check_growlEncode);
@@ -225,16 +221,15 @@ namespace Handbrake
             this.tab_general.Location = new System.Drawing.Point(4, 22);
             this.tab_general.Name = "tab_general";
             this.tab_general.Padding = new System.Windows.Forms.Padding(10);
-            this.tab_general.Size = new System.Drawing.Size(580, 334);
+            this.tab_general.Size = new System.Drawing.Size(580, 357);
             this.tab_general.TabIndex = 3;
             this.tab_general.Text = "General";
             this.tab_general.UseVisualStyleBackColor = true;
             // 
             // check_TitleCase
             // 
-            this.check_TitleCase.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_TitleCase.AutoSize = true;
-            this.check_TitleCase.Location = new System.Drawing.Point(297, 279);
+            this.check_TitleCase.Location = new System.Drawing.Point(297, 297);
             this.check_TitleCase.Name = "check_TitleCase";
             this.check_TitleCase.Size = new System.Drawing.Size(151, 17);
             this.check_TitleCase.TabIndex = 101;
@@ -246,9 +241,8 @@ namespace Handbrake
             // 
             // check_removeUnderscores
             // 
-            this.check_removeUnderscores.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_removeUnderscores.AutoSize = true;
-            this.check_removeUnderscores.Location = new System.Drawing.Point(108, 279);
+            this.check_removeUnderscores.Location = new System.Drawing.Point(108, 297);
             this.check_removeUnderscores.Name = "check_removeUnderscores";
             this.check_removeUnderscores.Size = new System.Drawing.Size(183, 17);
             this.check_removeUnderscores.TabIndex = 100;
@@ -259,7 +253,6 @@ namespace Handbrake
             // 
             // check_growlEncode
             // 
-            this.check_growlEncode.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_growlEncode.AutoSize = true;
             this.check_growlEncode.BackColor = System.Drawing.Color.Transparent;
             this.check_growlEncode.Location = new System.Drawing.Point(282, 122);
@@ -274,7 +267,6 @@ namespace Handbrake
             // 
             // check_GrowlQueue
             // 
-            this.check_GrowlQueue.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_GrowlQueue.AutoSize = true;
             this.check_GrowlQueue.BackColor = System.Drawing.Color.Transparent;
             this.check_GrowlQueue.Location = new System.Drawing.Point(108, 122);
@@ -289,9 +281,8 @@ namespace Handbrake
             // 
             // check_m4v
             // 
-            this.check_m4v.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_m4v.AutoSize = true;
-            this.check_m4v.Location = new System.Drawing.Point(108, 303);
+            this.check_m4v.Location = new System.Drawing.Point(108, 321);
             this.check_m4v.Name = "check_m4v";
             this.check_m4v.Size = new System.Drawing.Size(319, 17);
             this.check_m4v.TabIndex = 82;
@@ -302,7 +293,6 @@ namespace Handbrake
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -315,9 +305,8 @@ namespace Handbrake
             // 
             // label7
             // 
-            this.label7.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(179, 260);
+            this.label7.Location = new System.Drawing.Point(179, 278);
             this.label7.Margin = new System.Windows.Forms.Padding(3);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(225, 13);
@@ -326,7 +315,6 @@ namespace Handbrake
             // 
             // drop_updateCheckDays
             // 
-            this.drop_updateCheckDays.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.drop_updateCheckDays.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drop_updateCheckDays.FormattingEnabled = true;
             this.drop_updateCheckDays.Items.AddRange(new object[] {
@@ -342,7 +330,6 @@ namespace Handbrake
             // 
             // check_autoNaming
             // 
-            this.check_autoNaming.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_autoNaming.AutoSize = true;
             this.check_autoNaming.Location = new System.Drawing.Point(108, 174);
             this.check_autoNaming.Name = "check_autoNaming";
@@ -355,8 +342,7 @@ namespace Handbrake
             // 
             // txt_autoNameFormat
             // 
-            this.txt_autoNameFormat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_autoNameFormat.Location = new System.Drawing.Point(182, 233);
+            this.txt_autoNameFormat.Location = new System.Drawing.Point(182, 251);
             this.txt_autoNameFormat.Name = "txt_autoNameFormat";
             this.txt_autoNameFormat.Size = new System.Drawing.Size(349, 21);
             this.txt_autoNameFormat.TabIndex = 79;
@@ -367,7 +353,6 @@ namespace Handbrake
             // 
             // check_tooltip
             // 
-            this.check_tooltip.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_tooltip.AutoSize = true;
             this.check_tooltip.BackColor = System.Drawing.Color.Transparent;
             this.check_tooltip.Location = new System.Drawing.Point(108, 62);
@@ -381,9 +366,8 @@ namespace Handbrake
             // 
             // label5
             // 
-            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(105, 236);
+            this.label5.Location = new System.Drawing.Point(105, 254);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(45, 13);
             this.label5.TabIndex = 80;
@@ -391,7 +375,6 @@ namespace Handbrake
             // 
             // check_updateCheck
             // 
-            this.check_updateCheck.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_updateCheck.AutoSize = true;
             this.check_updateCheck.BackColor = System.Drawing.Color.Transparent;
             this.check_updateCheck.Location = new System.Drawing.Point(108, 14);
@@ -406,7 +389,6 @@ namespace Handbrake
             // 
             // label10
             // 
-            this.label10.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(105, 209);
             this.label10.Name = "label10";
@@ -416,7 +398,6 @@ namespace Handbrake
             // 
             // btn_browse
             // 
-            this.btn_browse.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btn_browse.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_browse.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_browse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
@@ -430,7 +411,6 @@ namespace Handbrake
             // 
             // label2
             // 
-            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(7, 98);
@@ -441,7 +421,6 @@ namespace Handbrake
             // 
             // label13
             // 
-            this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label13.Location = new System.Drawing.Point(4, 164);
@@ -453,7 +432,6 @@ namespace Handbrake
             // 
             // text_an_path
             // 
-            this.text_an_path.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.text_an_path.Location = new System.Drawing.Point(182, 206);
             this.text_an_path.Name = "text_an_path";
             this.text_an_path.Size = new System.Drawing.Size(253, 21);
@@ -468,7 +446,7 @@ namespace Handbrake
             this.tab_picture.Location = new System.Drawing.Point(4, 22);
             this.tab_picture.Name = "tab_picture";
             this.tab_picture.Padding = new System.Windows.Forms.Padding(10);
-            this.tab_picture.Size = new System.Drawing.Size(580, 334);
+            this.tab_picture.Size = new System.Drawing.Size(580, 357);
             this.tab_picture.TabIndex = 5;
             this.tab_picture.Text = "Picture";
             this.tab_picture.UseVisualStyleBackColor = true;
@@ -543,10 +521,35 @@ namespace Handbrake
             this.tab_audio_sub.Location = new System.Drawing.Point(4, 22);
             this.tab_audio_sub.Name = "tab_audio_sub";
             this.tab_audio_sub.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_audio_sub.Size = new System.Drawing.Size(580, 334);
+            this.tab_audio_sub.Size = new System.Drawing.Size(580, 357);
             this.tab_audio_sub.TabIndex = 6;
             this.tab_audio_sub.Text = "Audio / Subtitles";
             this.tab_audio_sub.UseVisualStyleBackColor = true;
+            // 
+            // radio_preferredAudioAndSubs
+            // 
+            this.radio_preferredAudioAndSubs.AutoSize = true;
+            this.radio_preferredAudioAndSubs.Location = new System.Drawing.Point(200, 99);
+            this.radio_preferredAudioAndSubs.Name = "radio_preferredAudioAndSubs";
+            this.radio_preferredAudioAndSubs.Size = new System.Drawing.Size(254, 17);
+            this.radio_preferredAudioAndSubs.TabIndex = 93;
+            this.radio_preferredAudioAndSubs.TabStop = true;
+            this.radio_preferredAudioAndSubs.Text = "Use Preferred Language for Audio and Subtitles";
+            this.ToolTip.SetToolTip(this.radio_preferredAudioAndSubs, "Use Preferred Language for Audio and Subtitle.");
+            this.radio_preferredAudioAndSubs.UseVisualStyleBackColor = true;
+            this.radio_preferredAudioAndSubs.CheckedChanged += new System.EventHandler(this.radio_preferredAudioAndSubs_CheckedChanged);
+            // 
+            // check_AddCCTracks
+            // 
+            this.check_AddCCTracks.AutoSize = true;
+            this.check_AddCCTracks.Location = new System.Drawing.Point(200, 131);
+            this.check_AddCCTracks.Name = "check_AddCCTracks";
+            this.check_AddCCTracks.Size = new System.Drawing.Size(199, 17);
+            this.check_AddCCTracks.TabIndex = 92;
+            this.check_AddCCTracks.Text = "Add Closed Captions when available";
+            this.ToolTip.SetToolTip(this.check_AddCCTracks, "Add any CC tracks if they exist");
+            this.check_AddCCTracks.UseVisualStyleBackColor = true;
+            this.check_AddCCTracks.CheckedChanged += new System.EventHandler(this.check_AddCCTracks_CheckedChanged);
             // 
             // label31
             // 
@@ -629,7 +632,7 @@ namespace Handbrake
             this.tab_cli.Location = new System.Drawing.Point(4, 22);
             this.tab_cli.Name = "tab_cli";
             this.tab_cli.Padding = new System.Windows.Forms.Padding(10);
-            this.tab_cli.Size = new System.Drawing.Size(580, 334);
+            this.tab_cli.Size = new System.Drawing.Size(580, 357);
             this.tab_cli.TabIndex = 2;
             this.tab_cli.Text = "CLI / System / Logging";
             this.tab_cli.UseVisualStyleBackColor = true;
@@ -860,7 +863,7 @@ namespace Handbrake
             this.tab_advanced.Location = new System.Drawing.Point(4, 22);
             this.tab_advanced.Name = "tab_advanced";
             this.tab_advanced.Padding = new System.Windows.Forms.Padding(10);
-            this.tab_advanced.Size = new System.Drawing.Size(580, 334);
+            this.tab_advanced.Size = new System.Drawing.Size(580, 357);
             this.tab_advanced.TabIndex = 4;
             this.tab_advanced.Text = "Advanced / Other";
             this.tab_advanced.UseVisualStyleBackColor = true;
@@ -1436,30 +1439,16 @@ namespace Handbrake
             this.panel2.Size = new System.Drawing.Size(615, 10);
             this.panel2.TabIndex = 59;
             // 
-            // check_AddCCTracks
+            // label34
             // 
-            this.check_AddCCTracks.AutoSize = true;
-            this.check_AddCCTracks.Location = new System.Drawing.Point(200, 131);
-            this.check_AddCCTracks.Name = "check_AddCCTracks";
-            this.check_AddCCTracks.Size = new System.Drawing.Size(199, 17);
-            this.check_AddCCTracks.TabIndex = 92;
-            this.check_AddCCTracks.Text = "Add Closed Captions when available";
-            this.ToolTip.SetToolTip(this.check_AddCCTracks, "Add any CC tracks if they exist");
-            this.check_AddCCTracks.UseVisualStyleBackColor = true;
-            this.check_AddCCTracks.CheckedChanged += new System.EventHandler(this.check_AddCCTracks_CheckedChanged);
-            // 
-            // radio_preferredAudioAndSubs
-            // 
-            this.radio_preferredAudioAndSubs.AutoSize = true;
-            this.radio_preferredAudioAndSubs.Location = new System.Drawing.Point(200, 99);
-            this.radio_preferredAudioAndSubs.Name = "radio_preferredAudioAndSubs";
-            this.radio_preferredAudioAndSubs.Size = new System.Drawing.Size(254, 17);
-            this.radio_preferredAudioAndSubs.TabIndex = 93;
-            this.radio_preferredAudioAndSubs.TabStop = true;
-            this.radio_preferredAudioAndSubs.Text = "Use Preferred Language for Audio and Subtitles";
-            this.ToolTip.SetToolTip(this.radio_preferredAudioAndSubs, "Use Preferred Language for Audio and Subtitle.");
-            this.radio_preferredAudioAndSubs.UseVisualStyleBackColor = true;
-            this.radio_preferredAudioAndSubs.CheckedChanged += new System.EventHandler(this.radio_preferredAudioAndSubs_CheckedChanged);
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(179, 233);
+            this.label34.Margin = new System.Windows.Forms.Padding(3);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(139, 13);
+            this.label34.TabIndex = 102;
+            this.label34.Text = "Available Options: {source}";
+            this.ToolTip.SetToolTip(this.label34, "{source} = Use the same directory as the source is in.");
             // 
             // frmOptions
             // 
@@ -1467,7 +1456,7 @@ namespace Handbrake
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(615, 472);
+            this.ClientSize = new System.Drawing.Size(615, 495);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btn_close);
             this.Controls.Add(this.tab_options);
@@ -1605,5 +1594,6 @@ namespace Handbrake
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.RadioButton radio_preferredAudioAndSubs;
         private System.Windows.Forms.CheckBox check_AddCCTracks;
+        private System.Windows.Forms.Label label34;
     }
 }
