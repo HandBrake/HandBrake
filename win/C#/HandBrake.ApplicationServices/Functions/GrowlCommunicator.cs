@@ -46,7 +46,7 @@ namespace HandBrake.ApplicationServices.Functions
         {
             Initialize();
 
-            return growl.IsGrowlRunning();
+            return GrowlConnector.IsGrowlRunningLocally();
         }
 
         /// <summary>
