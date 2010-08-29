@@ -1,82 +1,91 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Title.cs" company="HandBrake Project (http://handbrake.fr)">
-//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
-// </copyright>
-// <summary>
-//   An object that represents a single Title of a DVD
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+/*  Title.cs $
+ 	
+ 	   This file is part of the HandBrake source code.
+ 	   Homepage: <http://handbrake.fr>.
+ 	   It may be used under the terms of the GNU General Public License. */
 
-using System.Drawing;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Text.RegularExpressions;
+using HandBrake.Interop;
 
-namespace HandBrake.Interop.SourceData
+namespace HandBrake.SourceData
 {
-    using System;
-    using System.Collections.Generic;
-    using Model;
-
     /// <summary>
     /// An object that represents a single Title of a DVD
     /// </summary>
     public class Title
     {
+        private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
+        private readonly List<AudioTrack> audioTracks;
+        private readonly List<Chapter> chapters;
+        private readonly List<Subtitle> subtitles;
+        
         /// <summary>
-        /// Initializes a new instance of the <see cref="Title"/> class. 
+        /// The constructor for this object
         /// </summary>
         public Title()
         {
-            this.AudioTracks = new List<AudioTrack>();
-            this.Chapters = new List<Chapter>();
-            this.Subtitles = new List<Subtitle>();
+            this.audioTracks = new List<AudioTrack>();
+            this.chapters = new List<Chapter>();
+            this.subtitles = new List<Subtitle>();
         }
 
         /// <summary>
-        /// Gets Collection of chapters in this Title
+        /// Collection of chapters in this Title
         /// </summary>
-        public List<Chapter> Chapters { get; private set; }
+        public List<Chapter> Chapters
+        {
+            get { return this.chapters; }
+        }
 
         /// <summary>
-        /// Gets Collection of audio tracks associated with this Title
+        /// Collection of audio tracks associated with this Title
         /// </summary>
-        public List<AudioTrack> AudioTracks { get; private set; }
+        public List<AudioTrack> AudioTracks
+        {
+            get { return this.audioTracks; }
+        }
 
         /// <summary>
-        /// Gets Collection of subtitles associated with this Title
+        /// Collection of subtitles associated with this Title
         /// </summary>
-        public List<Subtitle> Subtitles { get; private set; }
+        public List<Subtitle> Subtitles
+        {
+            get { return this.subtitles; }
+        }
 
         /// <summary>
-        /// Gets or sets The track number of this Title (1-based).
+        /// The track number of this Title (1-based).
         /// </summary>
         public int TitleNumber { get; set; }
 
         /// <summary>
-        /// Gets or sets The length in time of this Title
+        /// The length in time of this Title
         /// </summary>
         public TimeSpan Duration { get; set; }
 
         /// <summary>
-        /// Gets or sets The resolution (width/height) of this Title
+        /// The resolution (width/height) of this Title
         /// </summary>
         public Size Resolution { get; set; }
 
         /// <summary>
-        /// Gets or sets The aspect ratio of this Title
+        /// The aspect ratio of this Title
         /// </summary>
         public double AspectRatio { get; set; }
 
-        /// <summary>
-        /// Gets or sets AngleCount.
-        /// </summary>
         public int AngleCount { get; set; }
 
         /// <summary>
-        /// Gets or sets Par Value
+        /// Par Value
         /// </summary>
         public Size ParVal { get; set; }
 
         /// <summary>
-        /// Gets or sets the automatically detected crop region for this Title.
+        /// The automatically detected crop region for this Title.
         /// This is an int array with 4 items in it as so:
         /// 0: 
         /// 1: 
@@ -84,17 +93,6 @@ namespace HandBrake.Interop.SourceData
         /// 3: 
         /// </summary>
         public Cropping AutoCropDimensions { get; set; }
-
-        /// <summary>
-        /// Gets Display.
-        /// </summary>
-        public string Display
-        {
-            get
-            {
-                return this.ToString();
-            }
-        }
   
         /// <summary>
         /// Override of the ToString method to provide an easy way to use this object in the UI
@@ -104,6 +102,14 @@ namespace HandBrake.Interop.SourceData
         {
             return string.Format("{0} ({1:00}:{2:00}:{3:00})", this.TitleNumber, this.Duration.Hours,
                                  this.Duration.Minutes, this.Duration.Seconds);
+        }
+
+        public string Display
+        {
+            get
+            {
+                return this.ToString();
+            }
         }
     }
 }

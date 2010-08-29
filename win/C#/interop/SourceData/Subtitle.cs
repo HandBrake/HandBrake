@@ -1,13 +1,14 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Subtitle.cs" company="HandBrake Project (http://handbrake.fr)">
-//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
-// </copyright>
-// <summary>
-//   An object that represents a subtitle associated with a Title, in a DVD
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+/*  Subtitle.cs $
+ 	
+ 	   This file is part of the HandBrake source code.
+ 	   Homepage: <http://handbrake.fr>.
+ 	   It may be used under the terms of the GNU General Public License. */
 
-namespace HandBrake.Interop.SourceData
+using System.Collections.Generic;
+using System.IO;
+using System.Text.RegularExpressions;
+
+namespace HandBrake.SourceData
 {
     /// <summary>
     /// An object that represents a subtitle associated with a Title, in a DVD
@@ -15,33 +16,37 @@ namespace HandBrake.Interop.SourceData
     public class Subtitle
     {
         /// <summary>
-        /// Gets or sets the track number of this Subtitle
+        /// The track number of this Subtitle
         /// </summary>
         public int TrackNumber { get; set; }
 
         /// <summary>
-        /// Gets or sets the language (if detected) of this Subtitle
+        /// The language (if detected) of this Subtitle
         /// </summary>
         public string Language { get; set; }
 
         /// <summary>
-        /// Gets or sets Langauage Code
+        /// Langauage Code
         /// </summary>
         public string LanguageCode { get; set; }
 
-        /// <summary>
-        /// Gets or sets SubtitleType.
-        /// </summary>
         public SubtitleType SubtitleType { get; set; }
 
         /// <summary>
-        /// Gets Subtitle Type
+        /// Subtitle Type
         /// </summary>
         public string TypeString
         {
             get
             {
-                return this.SubtitleType == SubtitleType.Picture ? "Bitmap" : "Text";
+                if (this.SubtitleType == SubtitleType.Picture)
+                {
+                    return "Bitmap";
+                }
+                else
+                {
+                    return "Text";
+                }
             }
         }
 
@@ -52,6 +57,14 @@ namespace HandBrake.Interop.SourceData
         public override string ToString()
         {
             return string.Format("{0} {1} ({2})", this.TrackNumber, this.Language, this.TypeString);
+        }
+
+        public string Display
+        {
+            get
+            {
+                return this.ToString();
+            }
         }
     }
 }

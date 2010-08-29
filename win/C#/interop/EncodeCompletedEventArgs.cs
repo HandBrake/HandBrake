@@ -5,10 +5,8 @@ using System.Text;
 
 namespace HandBrake.Interop
 {
-    public enum Detelecine
+    public class EncodeCompletedEventArgs : EventArgs
     {
-        Off = 0,
-        Default,
-        Custom
+        public bool Error { get; set; }
     }
 }

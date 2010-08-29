@@ -1,17 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OutputFormat.cs" company="HandBrake Project (http://handbrake.fr)">
-//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
-// </copyright>
-// <summary>
-//   Defines the OutputFormat type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.ComponentModel;
 
-namespace HandBrake.Interop.Model.Encoding
+namespace HandBrake.Interop
 {
-    /// <summary>
-    /// Output File Format
-    /// </summary>
     public enum OutputFormat
     {
         [DisplayString("MP4")]

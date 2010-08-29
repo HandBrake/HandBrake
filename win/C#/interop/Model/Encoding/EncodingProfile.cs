@@ -1,18 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EncodingProfile.cs" company="HandBrake Project (http://handbrake.fr)">
-//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
-// </copyright>
-// <summary>
-//   Defines the EncodingProfile type.
-// </summary>
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace HandBrake.Interop.Model.Encoding
+namespace HandBrake.Interop
 {
-    using System.Collections.Generic;
-
-    /// <summary>
-    /// Encode Profiles
-    /// </summary>
     public class EncodingProfile
     {
         public EncodingProfile()
@@ -61,15 +53,10 @@ namespace HandBrake.Interop.Model.Encoding
         public bool TwoPass { get; set; }
         public bool TurboFirstPass { get; set; }
         public double Framerate { get; set; }
+        public bool PeakFramerate { get; set; }
 
         public List<AudioEncoding> AudioEncodings { get; set; }
 
-        /// <summary>
-        /// Clone this encode profile
-        /// </summary>
-        /// <returns>
-        /// An Encode Profile Object
-        /// </returns>
         public EncodingProfile Clone()
         {
             EncodingProfile profile = new EncodingProfile
@@ -115,6 +102,7 @@ namespace HandBrake.Interop.Model.Encoding
                 TwoPass = this.TwoPass,
                 TurboFirstPass = this.TurboFirstPass,
                 Framerate = this.Framerate,
+                PeakFramerate = this.PeakFramerate,
 
                 AudioEncodings = new List<AudioEncoding>(this.AudioEncodings)
             };

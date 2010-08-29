@@ -1,25 +1,16 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HandBrakeInstance.cs" company="HandBrake Project (http://handbrake.fr)">
-//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
-// </copyright>
-// <summary>
-//   A wrapper for a HandBrake instance.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using System.Drawing;
-
-namespace HandBrake.Interop
+﻿namespace HandBrake.Interop
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Runtime.InteropServices;
+    using System.Text;
+    using System.Timers;
+    using System.Threading;
     using System.Windows.Media.Imaging;
-    using Model;
-    using Model.Encoding;
-    using SourceData;
+    using HandBrake.SourceData;
+    using HandBrake.Interop;
 
     /// <summary>
     /// A wrapper for a HandBrake instance.
@@ -67,6 +58,11 @@ namespace HandBrake.Interop
         private List<Title> titles;
 
         /// <summary>
+        /// The index of the default title.
+        /// </summary>
+        private int featureTitle;
+
+        /// <summary>
         /// A list of native memory locations allocated by this instance.
         /// </summary>
         private List<IntPtr> encodeAllocatedMemory;
@@ -99,7 +95,7 @@ namespace HandBrake.Interop
         /// <summary>
         /// Fires when an encode has completed.
         /// </summary>
-        public event EventHandler<EventArgs> EncodeCompleted;
+        public event EventHandler<EncodeCompletedEventArgs> EncodeCompleted;
 
         /// <summary>
         /// Fires when HandBrake has logged a message.
@@ -131,6 +127,17 @@ namespace HandBrake.Interop
         }
 
         /// <summary>
+        /// Gets the index of the default title.
+        /// </summary>
+        public int FeatureTitle
+        {
+            get
+            {
+                return this.featureTitle;
+            }
+        }
+
+        /// <summary>
         /// Initializes this instance.
         /// </summary>
         /// <param name="verbosity"></param>
@@ -146,7 +153,7 @@ namespace HandBrake.Interop
                 HbLib.hb_register_error_handler(errorCallback);
             }
 
-            this.hbHandle = HbLib.hb_init(verbosity, 0);
+            this.hbHandle = HbLib.hb_init(verbosity, update_check: 0);
         }
 
         /// <summary>
@@ -261,7 +268,7 @@ namespace HandBrake.Interop
             for (int i = 0; i < nativeJob.height; i++)
             {
                 Marshal.Copy(managedBuffer, i * nativeJob.width * 4, ptr, nativeJob.width * 4);
-                ptr = AddOffset(ptr, bitmapData.Stride);
+                ptr = IntPtr.Add(ptr, bitmapData.Stride);
             }
 
             bitmap.UnlockBits(bitmapData);
@@ -280,11 +287,6 @@ namespace HandBrake.Interop
 
                 return wpfBitmap;
             }
-        }
-
-        public static IntPtr AddOffset(IntPtr src, int offset)
-        {
-            return new IntPtr(src.ToInt64() + offset);
         }
 
         /// <summary>
@@ -485,6 +487,16 @@ namespace HandBrake.Interop
                     this.titles.Add(newTitle);
                 }
 
+                if (this.originalTitles.Count > 0)
+                {
+                    hb_job_s nativeJob = InteropUtilities.ReadStructure<hb_job_s>(this.originalTitles[0].job);
+                    this.featureTitle = nativeJob.feature;
+                }
+                else
+                {
+                    this.featureTitle = 0;
+                }
+
                 this.scanPollTimer.Stop();
 
                 if (this.ScanCompleted != null)
@@ -529,7 +541,7 @@ namespace HandBrake.Interop
 
                 if (this.EncodeCompleted != null)
                 {
-                    this.EncodeCompleted(this, new EventArgs());
+                    this.EncodeCompleted(this, new EncodeCompletedEventArgs { Error = state.param.workdone.error > 0 });
                 }
             }
         }
@@ -614,7 +626,6 @@ namespace HandBrake.Interop
                 }
 
                 this.AddFilter(filterList, NativeConstants.HB_FILTER_DEINTERLACE, settings, allocatedMemory);
-                //filterList.Add(HbLib.hb_get_filter_object(NativeConstants.HB_FILTER_DEINTERLACE, settings));
             }
             else
             {
@@ -630,7 +641,6 @@ namespace HandBrake.Interop
                 }
 
                 this.AddFilter(filterList, NativeConstants.HB_FILTER_DETELECINE, settings, allocatedMemory);
-                //filterList.Add(HbLib.hb_get_filter_object(NativeConstants.HB_FILTER_DETELECINE, settings));
             }
 
             if (profile.Decomb != Decomb.Off)
@@ -642,13 +652,11 @@ namespace HandBrake.Interop
                 }
 
                 this.AddFilter(filterList, NativeConstants.HB_FILTER_DECOMB, settings, allocatedMemory);
-                //filterList.Add(HbLib.hb_get_filter_object(NativeConstants.HB_FILTER_DECOMB, settings));
             }
 
             if (profile.Deblock > 0)
             {
                 this.AddFilter(filterList, NativeConstants.HB_FILTER_DEBLOCK, profile.Deblock.ToString(), allocatedMemory);
-                //filterList.Add(HbLib.hb_get_filter_object(NativeConstants.HB_FILTER_DEBLOCK, profile.Deblock.ToString()));
             }
 
             if (profile.Denoise != Denoise.Off)
@@ -673,7 +681,6 @@ namespace HandBrake.Interop
                 }
 
                 this.AddFilter(filterList, NativeConstants.HB_FILTER_DENOISE, settings, allocatedMemory);
-                //filterList.Add(HbLib.hb_get_filter_object(NativeConstants.HB_FILTER_DENOISE, settings));
             }
 
             NativeList filterListNative = InteropUtilities.CreateIntPtrList(filterList);
@@ -778,21 +785,26 @@ namespace HandBrake.Interop
                     break;
             }
 
-            if (profile.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)
+            if (profile.Framerate == 0)
             {
-                nativeJob.vquality = (float)profile.Quality;
-                nativeJob.vbitrate = 0;
+                nativeJob.cfr = 0;
             }
-            else if (profile.VideoEncodeRateType == VideoEncodeRateType.AverageBitrate)
+            else
             {
-                nativeJob.vquality = -1;
-                nativeJob.vbitrate = profile.VideoBitrate;
+                if (profile.PeakFramerate)
+                {
+                    nativeJob.cfr = 2;
+                }
+                else
+                {
+                    nativeJob.cfr = 1;
+                }
+
+                nativeJob.vrate = 27000000;
+                nativeJob.vrate_base = Converters.FramerateToVrate(profile.Framerate);
             }
 
-            // vrate
-            // vrate_base
             // vfr
-            // cfr
             // areBframes
             // color_matrix
             List<hb_audio_s> titleAudio = InteropUtilities.ConvertList<hb_audio_s>(originalTitle.list_audio);
@@ -931,6 +943,24 @@ namespace HandBrake.Interop
             if (title.AngleCount > 1)
             {
                 nativeJob.angle = job.Angle;
+            }
+
+            switch (profile.VideoEncodeRateType)
+            {
+                case VideoEncodeRateType.ConstantQuality:
+                    nativeJob.vquality = (float)profile.Quality;
+                    nativeJob.vbitrate = 0;
+                    break;
+                case VideoEncodeRateType.AverageBitrate:
+                    nativeJob.vquality = -1;
+                    nativeJob.vbitrate = profile.VideoBitrate;
+                    break;
+                case VideoEncodeRateType.TargetSize:
+                    nativeJob.vquality = -1;
+                    nativeJob.vbitrate = HbLib.hb_calc_bitrate(ref nativeJob, profile.TargetSize);
+                    break;
+                default:
+                    break;
             }
 
             // frames_to_skip

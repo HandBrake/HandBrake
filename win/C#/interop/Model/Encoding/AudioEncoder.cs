@@ -1,16 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AudioEncoder.cs" company="HandBrake Project (http://handbrake.fr)">
-//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
-// </copyright>
-// <summary>
-//   Defines the AudioEncoder type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace HandBrake.Interop.Model.Encoding
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace HandBrake.Interop
 {
-    /// <summary>
-    /// Audio Encoder
-    /// </summary>
     public enum AudioEncoder
     {
         [DisplayString("AAC (faac)")]

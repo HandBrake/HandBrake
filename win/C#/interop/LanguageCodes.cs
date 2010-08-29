@@ -1,15 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LanguageCodes.cs" company="HandBrake Project (http://handbrake.fr)">
-//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
-// </copyright>
-// <summary>
-//   Contains utilities for converting language codes.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace HandBrake.Interop
+﻿namespace HandBrake.Interop
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
 
     /// <summary>
     /// Contains utilities for converting language codes.

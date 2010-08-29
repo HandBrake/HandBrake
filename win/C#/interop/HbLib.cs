@@ -1,51 +1,46 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HbLib.cs" company="HandBrake Project (http://handbrake.fr)">
-//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
-// </copyright>
-// <summary>
-//   Defines the NativeConstants type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Runtime.InteropServices;
 
 namespace HandBrake.Interop
 {
-    using System;
-    using System.Runtime.InteropServices;
 
-    internal partial class NativeConstants
+    public partial class NativeConstants
     {
-        public const int HB_ACODEC_MASK = 0x00FF00;
-        public const int HB_ACODEC_FAAC = 0x000100;
-        public const int HB_ACODEC_LAME = 0x000200;
+        public const int HB_ACODEC_MASK =   0x00FF00;
+        public const int HB_ACODEC_FAAC =   0x000100;
+        public const int HB_ACODEC_LAME =   0x000200;
         public const int HB_ACODEC_VORBIS = 0x000400;
-        public const int HB_ACODEC_AC3 = 0x000800;
-        public const int HB_ACODEC_MPGA = 0x001000;
-        public const int HB_ACODEC_LPCM = 0x002000;
-        public const int HB_ACODEC_DCA = 0x004000;
+        public const int HB_ACODEC_AC3 =    0x000800;
+        public const int HB_ACODEC_MPGA =   0x001000;
+        public const int HB_ACODEC_LPCM =   0x002000;
+        public const int HB_ACODEC_DCA =    0x004000;
         public const int HB_ACODEC_FFMPEG = 0x008000;
         public const int HB_ACODEC_CA_AAC = 0x010000;
 
-        public const int HB_AMIXDOWN_DCA_FORMAT_MASK = 0x00FFF000;
-        public const int HB_AMIXDOWN_A52_FORMAT_MASK = 0x00000FF0;
-        public const int HB_AMIXDOWN_DISCRETE_CHANNEL_COUNT_MASK = 0x0000000F;
-        public const int HB_AMIXDOWN_MONO = 0x01000001;
-        public const int HB_AMIXDOWN_STEREO = 0x02002022;
-        public const int HB_AMIXDOWN_DOLBY = 0x042070A2;
-        public const int HB_AMIXDOWN_DOLBYPLII = 0x084094A2;
-        public const int HB_AMIXDOWN_6CH = 0x10089176;
+        public const int HB_AMIXDOWN_DCA_FORMAT_MASK =              0x00FFF000;
+        public const int HB_AMIXDOWN_A52_FORMAT_MASK =              0x00000FF0;
+        public const int HB_AMIXDOWN_DISCRETE_CHANNEL_COUNT_MASK =  0x0000000F;
+        public const int HB_AMIXDOWN_MONO =                         0x01000001;
+        public const int HB_AMIXDOWN_STEREO =                       0x02002022;
+        public const int HB_AMIXDOWN_DOLBY =                        0x042070A2;
+        public const int HB_AMIXDOWN_DOLBYPLII =                    0x084094A2;
+        public const int HB_AMIXDOWN_6CH =                          0x10089176;
 
-        public const int HB_VCODEC_MASK = 0x0000FF;
+        public const int HB_VCODEC_MASK =   0x0000FF;
         public const int HB_VCODEC_FFMPEG = 0x000001;
-        public const int HB_VCODEC_X264 = 0x000002;
+        public const int HB_VCODEC_X264 =   0x000002;
         public const int HB_VCODEC_THEORA = 0x000004;
 
-        public const int HB_MUX_MASK = 0xFF0000;
-        public const int HB_MUX_MP4 = 0x010000;
-        public const int HB_MUX_PSP = 0x020000;
-        public const int HB_MUX_AVI = 0x040000;
-        public const int HB_MUX_OGM = 0x080000;
-        public const int HB_MUX_IPOD = 0x100000;
-        public const int HB_MUX_MKV = 0x200000;
+        public const int HB_MUX_MASK =  0xFF0000;
+        public const int HB_MUX_MP4 =   0x010000;
+        public const int HB_MUX_PSP =   0x020000;
+        public const int HB_MUX_AVI =   0x040000;
+        public const int HB_MUX_OGM =   0x080000;
+        public const int HB_MUX_IPOD =  0x100000;
+        public const int HB_MUX_MKV =   0x200000;
 
         public const int HBTF_NO_IDR = 1 << 0;
 
@@ -63,14 +58,14 @@ namespace HandBrake.Interop
 
         public const int AUDIO_F_DOLBY = 1 << 31;
 
-        public const int HB_FRAME_IDR = 0x01;
-        public const int HB_FRAME_I = 0x02;
-        public const int HB_FRAME_AUDIO = 0x04;
-        public const int HB_FRAME_P = 0x10;
-        public const int HB_FRAME_B = 0x20;
-        public const int HB_FRAME_BREF = 0x40;
-        public const int HB_FRAME_KEY = 0x0F;
-        public const int HB_FRAME_REF = 0xF0;
+        public const int HB_FRAME_IDR =     0x01;
+        public const int HB_FRAME_I =       0x02;
+        public const int HB_FRAME_AUDIO =   0x04;
+        public const int HB_FRAME_P =       0x10;
+        public const int HB_FRAME_B =       0x20;
+        public const int HB_FRAME_BREF =    0x40;
+        public const int HB_FRAME_KEY =     0x0F;
+        public const int HB_FRAME_REF =     0xF0;
 
         public const int HB_CONFIG_MAX_SIZE = 8192;
 
@@ -83,7 +78,7 @@ namespace HandBrake.Interop
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct hb_anamorphic_substruct
+    public struct hb_anamorphic_substruct
     {
         /// int
         public int mode;
@@ -108,7 +103,7 @@ namespace HandBrake.Interop
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct hb_job_s
+    public struct hb_job_s
     {
         /// int
         public int sequence_id;
@@ -128,7 +123,8 @@ namespace HandBrake.Interop
         public int chapter_markers;
 
         /// int[4]
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4, ArraySubType = UnmanagedType.I4)] public int[] crop;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4, ArraySubType = UnmanagedType.I4)]
+        public int[] crop;
 
         /// int
         public int deinterlace;
@@ -191,6 +187,7 @@ namespace HandBrake.Interop
         /// char*
         //[MarshalAs(UnmanagedType.LPStr)]
         //public string x264opts;
+
         public IntPtr x264opts;
 
         /// int
@@ -209,7 +206,8 @@ namespace HandBrake.Interop
         public int mux;
 
         /// char*
-        [MarshalAs(UnmanagedType.LPStr)] public string file;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string file;
 
         /// int
         public int largeFileSize;
@@ -249,11 +247,12 @@ namespace HandBrake.Interop
         public uint frames_to_skip;
 
         // Padding for the part of the struct we don't care about marshaling.
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 24644, ArraySubType = UnmanagedType.U1)] public byte[] padding;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 24644, ArraySubType = UnmanagedType.U1)]
+        public byte[] padding;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct hb_list_s
+    public struct hb_list_s
     {
         /// void**
         public IntPtr items;
@@ -266,17 +265,18 @@ namespace HandBrake.Interop
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct hb_rate_s
+    public struct hb_rate_s
     {
         /// char*
-        [MarshalAs(UnmanagedType.LPStr)] public string @string;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string @string;
 
         /// int
         public int rate;
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-    internal struct hb_handle_s
+    public struct hb_handle_s
     {
         public int id;
 
@@ -284,7 +284,8 @@ namespace HandBrake.Interop
         public int build;
 
         /// char[32]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)] public string version;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+        public string version;
 
         /// hb_thread_t*
         public IntPtr update_thread;
@@ -348,7 +349,7 @@ namespace HandBrake.Interop
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-    internal struct hb_chapter_s
+    public struct hb_chapter_s
     {
         /// int
         public int index;
@@ -387,17 +388,18 @@ namespace HandBrake.Interop
         public ulong duration;
 
         /// char[1024]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)] public string title;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)]
+        public string title;
     }
 
-    internal enum hb_subtitle_s_subtype
+    public enum hb_subtitle_s_subtype
     {
         PICTURESUB,
 
         TEXTSUB,
     }
 
-    internal enum hb_subtitle_s_subsource
+    public enum hb_subtitle_s_subsource
     {
         VOBSUB,
 
@@ -409,11 +411,13 @@ namespace HandBrake.Interop
 
         UTF8SUB,
 
-        TX3GSUB
+        TX3GSUB,
+
+        SSASUB
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-    internal struct hb_subtitle_s
+    public struct hb_subtitle_s
     {
         /// int
         public int id;
@@ -431,15 +435,18 @@ namespace HandBrake.Interop
         public hb_subtitle_s_subsource source;
 
         /// char[1024]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)] public string lang;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)]
+        public string lang;
 
         /// char[4]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)] public string iso639_2;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
+        public string iso639_2;
 
         /// uint8_t->unsigned char
         public byte type;
 
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16, ArraySubType = UnmanagedType.U4)] public uint[] palette;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16, ArraySubType = UnmanagedType.U4)]
+        public uint[] palette;
 
         public int width;
 
@@ -468,28 +475,35 @@ namespace HandBrake.Interop
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-    internal struct hb_metadata_s
+    public struct hb_metadata_s
     {
         /// char[255]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)] public string name;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)]
+        public string name;
 
         /// char[255]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)] public string artist;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)]
+        public string artist;
 
         /// char[255]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)] public string composer;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)]
+        public string composer;
 
         /// char[255]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)] public string release_date;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)]
+        public string release_date;
 
         /// char[1024]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)] public string comment;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)]
+        public string comment;
 
         /// char[255]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)] public string album;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)]
+        public string album;
 
         /// char[255]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)] public string genre;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)]
+        public string genre;
 
         /// uint32_t->unsigned int
         public uint coverart_size;
@@ -498,14 +512,14 @@ namespace HandBrake.Interop
         public IntPtr coverart;
     }
 
-    internal enum Anonymous_990d28ea_6cf3_4fbc_8143_4df9513e9550
+    public enum Anonymous_990d28ea_6cf3_4fbc_8143_4df9513e9550
     {
         HB_DVD_TYPE,
 
         HB_STREAM_TYPE,
     }
 
-    internal enum Anonymous_618ebeca_0ad9_4a71_9a49_18e50ac2e9db
+    public enum Anonymous_618ebeca_0ad9_4a71_9a49_18e50ac2e9db
     {
         /// HB_MPEG2_PS_DEMUXER -> 0
         HB_MPEG2_PS_DEMUXER = 0,
@@ -516,16 +530,18 @@ namespace HandBrake.Interop
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-    internal struct hb_title_s
+    public struct hb_title_s
     {
         /// Anonymous_990d28ea_6cf3_4fbc_8143_4df9513e9550
         public Anonymous_990d28ea_6cf3_4fbc_8143_4df9513e9550 type;
 
         /// char[1024]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)] public string dvd;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)]
+        public string dvd;
 
         /// char[1024]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)] public string name;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)]
+        public string name;
 
         //public fixed byte dvd[1024];
 
@@ -595,7 +611,8 @@ namespace HandBrake.Interop
         public int rate_base;
 
         /// int[4]
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4, ArraySubType = UnmanagedType.I4)] public int[] crop;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4, ArraySubType = UnmanagedType.I4)]
+        public int[] crop;
 
         //public fixed int crop[4];
 
@@ -646,7 +663,7 @@ namespace HandBrake.Interop
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct hb_state_scanning_s
+    public struct hb_state_scanning_s
     {
         /// int
         public int title_cur;
@@ -656,7 +673,7 @@ namespace HandBrake.Interop
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct hb_state_working_s
+    public struct hb_state_working_s
     {
         /// float
         public float progress;
@@ -687,42 +704,46 @@ namespace HandBrake.Interop
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct hb_state_workdone_s
+    public struct hb_state_workdone_s
     {
         /// int
         public int error;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct hb_state_muxing_s
+    public struct hb_state_muxing_s
     {
         /// float
         public float progress;
     }
 
     [StructLayout(LayoutKind.Explicit)]
-    internal struct hb_state_param_u
+    public struct hb_state_param_u
     {
-        [FieldOffset(0)] public hb_state_scanning_s scanning;
+        [FieldOffset(0)]
+        public hb_state_scanning_s scanning;
 
-        [FieldOffset(0)] public hb_state_working_s working;
+        [FieldOffset(0)]
+        public hb_state_working_s working;
 
-        [FieldOffset(0)] public hb_state_workdone_s workdone;
+        [FieldOffset(0)]
+        public hb_state_workdone_s workdone;
 
-        [FieldOffset(0)] public hb_state_muxing_s muxing;
+        [FieldOffset(0)]
+        public hb_state_muxing_s muxing;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct hb_state_s
+    public struct hb_state_s
     {
+
         /// int
         public int state;
-
         public hb_state_param_u param;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct hb_audio_s
+    public struct hb_audio_s
     {
         /// int
         public int id;
@@ -731,14 +752,15 @@ namespace HandBrake.Interop
         public hb_audio_config_s config;
 
         // Padding for the part of the struct we don't care about marshaling.
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 24600, ArraySubType = UnmanagedType.U1)] public byte[] padding;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 24600, ArraySubType = UnmanagedType.U1)]
+        public byte[] padding;
 
         /// Anonymous_e6c7b779_b5a3_4e80_9fa8_13619d14f545
         //public Anonymous_e6c7b779_b5a3_4e80_9fa8_13619d14f545 priv;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct hb_audio_config_s
+    public struct hb_audio_config_s
     {
         public hb_audio_config_output_s output;
         public hb_audio_config_input_s input;
@@ -750,7 +772,7 @@ namespace HandBrake.Interop
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct hb_audio_config_output_s
+    public struct hb_audio_config_output_s
     {
         /// int
         public int track;
@@ -771,11 +793,12 @@ namespace HandBrake.Interop
         public double dynamic_range_compression;
 
         /// char*
-        [MarshalAs(UnmanagedType.LPStr)] public string name;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string name;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct hb_audio_config_input_s
+    public struct hb_audio_config_input_s
     {
         /// int
         public int track;
@@ -803,48 +826,56 @@ namespace HandBrake.Interop
     }
 
     [StructLayout(LayoutKind.Explicit)]
-    internal struct Anonymous_a0a59d69_d9a4_4003_a198_f7c51511e31d
+    public struct Anonymous_a0a59d69_d9a4_4003_a198_f7c51511e31d
     {
         /// int
-        [FieldOffset(0)] public int ac3;
+        [FieldOffset(0)]
+        public int ac3;
 
         /// int
-        [FieldOffset(0)] public int dca;
+        [FieldOffset(0)]
+        public int dca;
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-    internal struct hb_audio_config_lang_s
+    public struct hb_audio_config_lang_s
     {
         /// char[1024]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)] public string description;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)]
+        public string description;
 
         /// char[1024]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)] public string simple;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)]
+        public string simple;
 
         /// char[4]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)] public string iso639_2;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
+        public string iso639_2;
 
         /// uint8_t->unsigned char
         public byte type;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct hb_mixdown_s
+    public struct hb_mixdown_s
     {
         /// char*
-        [MarshalAs(UnmanagedType.LPStr)] public string human_readable_name;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string human_readable_name;
 
         /// char*
-        [MarshalAs(UnmanagedType.LPStr)] public string internal_name;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string internal_name;
 
         /// char*
-        [MarshalAs(UnmanagedType.LPStr)] public string short_name;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string short_name;
 
         /// int
         public int amixdown;
     }
 
-    internal enum hb_subtitle_config_s_subdest
+    public enum hb_subtitle_config_s_subdest
     {
         RENDERSUB,
 
@@ -852,7 +883,7 @@ namespace HandBrake.Interop
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-    internal struct hb_subtitle_config_s
+    public struct hb_subtitle_config_s
     {
         /// hb_subtitle_config_s_subdest
         public hb_subtitle_config_s_subdest dest;
@@ -864,17 +895,19 @@ namespace HandBrake.Interop
         public int default_track;
 
         /// char[128]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)] public string src_filename;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+        public string src_filename;
 
         /// char[40]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 40)] public string src_codeset;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 40)]
+        public string src_codeset;
 
         /// int64_t->int
         public long offset;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct hb_fifo_s
+    public struct hb_fifo_s
     {
         /// hb_lock_t*
         public IntPtr @lock;
@@ -896,12 +929,12 @@ namespace HandBrake.Interop
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct hb_lock_s
+    public struct hb_lock_s
     {
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct hb_buffer_s
+    public struct hb_buffer_s
     {
         /// int
         public int size;
@@ -910,7 +943,8 @@ namespace HandBrake.Interop
         public int alloc;
 
         /// uint8_t*
-        [MarshalAs(UnmanagedType.LPStr)] public string data;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string data;
 
         /// int
         public int cur;
@@ -959,7 +993,7 @@ namespace HandBrake.Interop
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct hb_mux_data_s
+    public struct hb_mux_data_s
     {
         /// MP4TrackId->uint32_t->unsigned int
         public uint track;
@@ -975,7 +1009,7 @@ namespace HandBrake.Interop
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct hb_interjob_s
+    public struct hb_interjob_s
     {
         /// int
         public int last_job;
@@ -1001,13 +1035,14 @@ namespace HandBrake.Interop
 
     /// Return Type: void
     ///param0: void*
-    internal delegate void hb_thread_s_function(IntPtr param0);
+    public delegate void hb_thread_s_function(IntPtr param0);
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct hb_thread_s
+    public struct hb_thread_s
     {
         /// char*
-        [MarshalAs(UnmanagedType.LPStr)] public string name;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string name;
 
         /// int
         public int priority;
@@ -1029,7 +1064,7 @@ namespace HandBrake.Interop
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct ptw32_handle_t
+    public struct ptw32_handle_t
     {
         /// void*
         public IntPtr p;
@@ -1039,10 +1074,13 @@ namespace HandBrake.Interop
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    internal delegate void LoggingCallback(string message);
+    public delegate void LoggingCallback(string message);
 
-    internal partial class HbLib
+    public partial class HbLib
     {
+        [DllImport("hb.dll", EntryPoint = "hb_calc_bitrate", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_calc_bitrate(ref hb_job_s job, int size);
+
         [DllImport("hb.dll", EntryPoint = "hb_register_logger", CallingConvention = CallingConvention.Cdecl)]
         public static extern void hb_register_logger(LoggingCallback callback);
 
@@ -1108,8 +1146,7 @@ namespace HandBrake.Interop
         ///preview_count: int
         ///store_previews: int
         [DllImport("hb.dll", EntryPoint = "hb_scan", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void hb_scan(IntPtr hbHandle, [In] [MarshalAs(UnmanagedType.LPStr)] string path,
-                                          int title_index, int preview_count, int store_previews);
+        public static extern void hb_scan(IntPtr hbHandle, [In] [MarshalAs(UnmanagedType.LPStr)] string path, int title_index, int preview_count, int store_previews);
 
 
         /// Return Type: hb_list_t*
@@ -1129,9 +1166,7 @@ namespace HandBrake.Interop
         ///prog_diff: int
         ///prog_threshold: int
         [DllImport("hb.dll", EntryPoint = "hb_detect_comb", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int hb_detect_comb(ref hb_buffer_s buf, int width, int height, int color_equal,
-                                                int color_diff, int threshold, int prog_equal, int prog_diff,
-                                                int prog_threshold);
+        public static extern int hb_detect_comb(ref hb_buffer_s buf, int width, int height, int color_equal, int color_diff, int threshold, int prog_equal, int prog_diff, int prog_threshold);
 
         [DllImport("hb.dll", EntryPoint = "hb_get_preview_by_index", CallingConvention = CallingConvention.Cdecl)]
         public static extern void hb_get_preview_by_index(IntPtr hbHandle, int title_index, int picture, IntPtr buffer);
@@ -1152,11 +1187,8 @@ namespace HandBrake.Interop
         [DllImport("hb.dll", EntryPoint = "hb_set_size", CallingConvention = CallingConvention.Cdecl)]
         public static extern void hb_set_size(ref hb_job_s param0, double ratio, int pixels);
 
-        [DllImport("hb.dll", EntryPoint = "hb_set_anamorphic_size_by_index", CallingConvention = CallingConvention.Cdecl
-            )]
-        public static extern void hb_set_anamorphic_size_by_index(IntPtr hbHandle, int title_index, ref int output_width,
-                                                                  ref int output_height, ref int output_par_width,
-                                                                  ref int output_par_height);
+        [DllImport("hb.dll", EntryPoint = "hb_set_anamorphic_size_by_index", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void hb_set_anamorphic_size_by_index(IntPtr hbHandle, int title_index, ref int output_width, ref int output_height, ref int output_par_width, ref int output_par_height);
 
         /// Return Type: void
         ///param0: hb_job_t*
@@ -1165,8 +1197,7 @@ namespace HandBrake.Interop
         ///output_par_width: int*
         ///output_par_height: int*
         [DllImport("hb.dll", EntryPoint = "hb_set_anamorphic_size", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void hb_set_anamorphic_size(ref hb_job_s job, ref int output_width, ref int output_height,
-                                                         ref int output_par_width, ref int output_par_height);
+        public static extern void hb_set_anamorphic_size(ref hb_job_s job, ref int output_width, ref int output_height, ref int output_par_width, ref int output_par_height);
 
 
         /// Return Type: int
@@ -1182,8 +1213,7 @@ namespace HandBrake.Interop
         public static extern IntPtr hb_job(IntPtr hbHandle, int jobIndex);
 
         [DllImport("hb.dll", EntryPoint = "hb_set_chapter_name", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void hb_set_chapter_name(IntPtr hbHandle, int title_index, int chapter_index,
-                                                      [In] [MarshalAs(UnmanagedType.LPStr)] string chapter_name);
+        public static extern void hb_set_chapter_name(IntPtr hbHandle, int title_index, int chapter_index, [In] [MarshalAs(UnmanagedType.LPStr)] string chapter_name);
 
         [DllImport("hb.dll", EntryPoint = "hb_set_job", CallingConvention = CallingConvention.Cdecl)]
         public static extern void hb_set_job(IntPtr hbHandle, int title_index, ref hb_job_s job);

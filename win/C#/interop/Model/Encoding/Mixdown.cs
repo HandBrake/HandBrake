@@ -1,17 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Mixdown.cs" company="HandBrake Project (http://handbrake.fr)">
-//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
-// </copyright>
-// <summary>
-//   Defines the Mixdown type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace HandBrake.Interop.Model.Encoding
+namespace HandBrake.Interop
 {
-    /// <summary>
-    /// The Mixdown mode
-    /// </summary>
     public enum Mixdown
     {
         [DisplayString("Dolby Pro Logic II")]

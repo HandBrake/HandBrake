@@ -1,17 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="VideoEncoder.cs" company="HandBrake Project (http://handbrake.fr)">
-//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
-// </copyright>
-// <summary>
-//   Defines the VideoEncoder type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace HandBrake.Interop.Model.Encoding
+namespace HandBrake.Interop
 {
-    /// <summary>
-    /// Video Encoder
-    /// </summary>
     public enum VideoEncoder
     {
         [DisplayString("H.264 (x264)")]
