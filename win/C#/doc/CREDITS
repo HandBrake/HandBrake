@@ -35,24 +35,9 @@ libavcodec authors:
   Juan J. Sierralta
   Lionel Ulmer
 
-libdts authors:
+libdca authors:
   Gildas Bazin
   Sam Hocevar
-
-libdvdcss authors:
-  Billy Biggs
-  Stéphane Borel
-  Håkan Hjort
-  Samuel Hocevar
-  Eugenio Jarosiewicz
-  Jon Lech Johansen
-  Markus Kuespert
-  Pascal Levesque
-  Steven M. Schultz
-  David Siebörger
-  Alex Strelnikov
-  German Tischler
-  Gildas Bazin
 
 libdvdread authors:
   Björn Englund
@@ -67,6 +52,12 @@ libfaac authors:
   thebard
   Ivan Dimkovic
   Krzysztof Nikiel
+  
+libfaad2 authors:
+  M. Bakker
+  Alexander Kurpiers
+  Volker Fischer
+  Gian-Carlo Pascutto
 
 libmp3lame authors:
   Mike Cheng
@@ -136,6 +127,13 @@ libmpeg2 authors:
 
 libogg authors:
   Christopher Montgomery
+  
+libmkv authors:
+  John A. Stebbins
+  Nathan Caldwell
+  Mike Matsnev
+  Nathan Caldwell
+  Christophe Devine
 
 libsamplerate authors:
   Erik de Castro Lopo
@@ -145,16 +143,33 @@ libvorbis authors:
 
 libx264 authors:
   Laurent Aimar
-
-libxvidcore authors:
-  Christoph Lampert
-  Michael Militzer
-  Peter Ross
-  Benjamin Herrenschmidt
-  Daniel Smith
-  Dirk Knop
-  Edouard Gomez
-  Guillaume Morin
-  MinChen
-  Pascal Massimino
-  Radoslaw Czyz
+  
+libtheora authors:
+  Monty
+  Ralph Giles
+  Timothy B. Terriberry
+  Dan B. Miller
+  Rudolf Marek
+  Wim Tayman
+  Dan Lenski
+  Nils Pipenbrinck
+  Aaron Colwell
+  Thomas Vander Stichele
+  Jan Gerber
+  Conrad Parker
+  Cristian Adam
+  Sebastian Pippin
+  Simon Hosie
+  Mauricio Piacentini
+  Silvia Pfeiffer
+  Michael Smith
+  Andre Pang
+  calc
+  Chris Cheney
+  Brendan Cully
+  Edward Hervey
+  Adam Moss
+  Colin Ward
+  Jeremy C. Reed
+  Arc Riley
+  Rodolphe Ortalo
