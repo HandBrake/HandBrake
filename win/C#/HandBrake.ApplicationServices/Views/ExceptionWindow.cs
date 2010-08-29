@@ -3,7 +3,7 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace HandBrake.ApplicationServices
+namespace HandBrake.ApplicationServices.Views
 {
     using System;
     using System.Windows.Forms;
@@ -11,12 +11,12 @@ namespace HandBrake.ApplicationServices
     /// <summary>
     /// A window to display Exceptions in a form which can be easily copied and reported by users.
     /// </summary>
-    public partial class frmExceptionWindow : Form
+    public partial class ExceptionWindow : Form
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="frmExceptionWindow"/> class.
+        /// Initializes a new instance of the <see cref="ExceptionWindow"/> class.
         /// </summary>
-        public frmExceptionWindow()
+        public ExceptionWindow()
         {
             InitializeComponent();
         }
@@ -45,7 +45,7 @@ namespace HandBrake.ApplicationServices
         /// <param name="e">
         /// The e.
         /// </param>
-        private void btn_copy_Click(object sender, EventArgs e)
+        private void BtnCopyClick(object sender, EventArgs e)
         {
             Clipboard.SetDataObject(rtf_exceptionFull.SelectedText != string.Empty ? rtf_exceptionFull.SelectedText : rtf_exceptionFull.Text, true);
         }
@@ -59,7 +59,7 @@ namespace HandBrake.ApplicationServices
         /// <param name="e">
         /// The e.
         /// </param>
-        private void mnu_copy_log_Click(object sender, EventArgs e)
+        private void MnuCopyLogClick(object sender, EventArgs e)
         {
             Clipboard.SetDataObject(rtf_exceptionFull.SelectedText != string.Empty ? rtf_exceptionFull.SelectedText : rtf_exceptionFull.Text, true);
         } 
@@ -73,7 +73,7 @@ namespace HandBrake.ApplicationServices
         /// <param name="e">
         /// The e.
         /// </param>
-        private void btn_close_Click(object sender, EventArgs e)
+        private void BtnCloseClick(object sender, EventArgs e)
         {
             this.Close();
         }

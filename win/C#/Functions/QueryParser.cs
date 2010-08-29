@@ -9,7 +9,6 @@ namespace Handbrake.Functions
     using System.Collections;
     using System.Globalization;
     using System.Text.RegularExpressions;
-    using System.Windows.Forms;
     using Model;
 
     /// <summary>
@@ -641,9 +640,7 @@ namespace Handbrake.Functions
             }
             catch (Exception exc)
             {
-                frmExceptionWindow exceptionWindow = new frmExceptionWindow();
-                exceptionWindow.Setup("An error has occured in the Query Parser.", exc.ToString());
-                exceptionWindow.ShowDialog();
+                Main.ShowExceptiowWindow("An error has occured in the Query Parser.", exc.ToString());
             }
 
             #endregion

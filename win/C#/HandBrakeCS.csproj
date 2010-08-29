@@ -210,12 +210,6 @@
     <Compile Include="Controls\x264Panel.Designer.cs">
       <DependentUpon>x264Panel.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmExceptionWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmExceptionWindow.Designer.cs">
-      <DependentUpon>frmExceptionWindow.cs</DependentUpon>
-    </Compile>
     <Compile Include="Model\ActivityLogMode.cs" />
     <Compile Include="Model\QueryPictureSettingsMode.cs" />
     <Compile Include="Model\QueryEncodeMode.cs" />
@@ -306,10 +300,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\x264Panel.resx">
       <DependentUpon>x264Panel.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmExceptionWindow.resx">
-      <DependentUpon>frmExceptionWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmPreview.resx">
@@ -405,6 +395,11 @@
     <None Include="Resources\General Preferences.png" />
   </ItemGroup>
   <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
       <Visible>False</Visible>
       <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
@@ -419,6 +414,11 @@
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
       <Visible>False</Visible>

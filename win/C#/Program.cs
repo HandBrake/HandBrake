@@ -32,7 +32,7 @@ namespace Handbrake
             InstanceId = Process.GetProcessesByName("HandBrake").Length;
 
             // Handle any unhandled exceptions
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomainUnhandledException);
 
             // Attempt to upgrade / keep the users settings between versions
             if (Settings.Default.UpdateRequired)
@@ -105,22 +105,13 @@ namespace Handbrake
         /// </summary>
         /// <param name="sender">The sender</param>
         /// <param name="e">Unhandled Exception EventArgs </param>
-        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        private static void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            try
-            {
-                frmExceptionWindow exceptionWindow = new frmExceptionWindow();
-                exceptionWindow.Setup("An Unknown Error has occured.", e.ExceptionObject.ToString());
-                exceptionWindow.ShowDialog();
-            }
-            catch (Exception)
-            {
-                MessageBox.Show(
-                    "An Unknown Error has occured. \n\n Exception:" + e.ExceptionObject,
-                    "Unhandled Exception",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            MessageBox.Show(
+                "An Unknown Error has occured. \n\n Exception:" + e.ExceptionObject,
+                "Unhandled Exception",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
         }
 
         public static int InstanceId;

@@ -105,11 +105,19 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\Encode.cs" />
+    <Compile Include="Services\ErrorService.cs" />
     <Compile Include="Services\Interfaces\IEncode.cs" />
+    <Compile Include="Services\Interfaces\IErrorService.cs" />
     <Compile Include="Services\Interfaces\IQueue.cs" />
     <Compile Include="Services\Interfaces\IScan.cs" />
     <Compile Include="Services\Queue.cs" />
     <Compile Include="Services\Scan.cs" />
+    <Compile Include="Views\ExceptionWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\ExceptionWindow.designer.cs">
+      <DependentUpon>ExceptionWindow.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -123,6 +131,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\ExceptionWindow.resx">
+      <DependentUpon>ExceptionWindow.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

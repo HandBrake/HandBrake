@@ -3,7 +3,7 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-using System.Linq;
+using HandBrake.ApplicationServices.Services;
 
 namespace Handbrake.Functions
 {
@@ -11,18 +11,16 @@ namespace Handbrake.Functions
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
     using System.Net;
-    using System.Reflection;
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Windows.Forms;
     using System.Xml.Serialization;
-
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
-
     using Model;
 
     /// <summary>
@@ -30,6 +28,11 @@ namespace Handbrake.Functions
     /// </summary>
     public static class Main
     {
+        /// <summary>
+        /// The Error Service
+        /// </summary>
+        private static readonly IErrorService errorService = new ErrorService();
+
         /// <summary>
         /// The XML Serializer
         /// </summary>
@@ -168,9 +171,7 @@ namespace Handbrake.Functions
             }
             catch (Exception exc)
             {
-                frmExceptionWindow exceptionWindow = new frmExceptionWindow();
-                exceptionWindow.Setup("Unable to save Chapter Makrers file! \nChapter marker names will NOT be saved in your encode", exc.ToString());
-                exceptionWindow.ShowDialog();
+                ShowExceptiowWindow("Unable to save Chapter Makrers file! \nChapter marker names will NOT be saved in your encode", exc.ToString());
                 return false;
             }
         }
@@ -343,9 +344,7 @@ namespace Handbrake.Functions
                 Properties.Settings.Default.hb_build = 0;
                 Properties.Settings.Default.Save();
 
-                frmExceptionWindow exceptionWindow = new frmExceptionWindow();
-                exceptionWindow.Setup("Unable to retrieve version information from the CLI.", e.ToString());
-                exceptionWindow.ShowDialog();
+                ShowExceptiowWindow("Unable to retrieve version information from the CLI.", e.ToString());
             }
         }
 
@@ -829,9 +828,7 @@ namespace Handbrake.Functions
         /// </param>
         public static void ShowExceptiowWindow(string shortError, string longError)
         {
-            frmExceptionWindow exceptionWindow = new frmExceptionWindow();
-            exceptionWindow.Setup(shortError, longError);
-            exceptionWindow.Show();
+            errorService.ShowError(shortError, longError);
         }
 
         /// <summary>
