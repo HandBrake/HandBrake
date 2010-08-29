@@ -39,6 +39,7 @@ namespace Handbrake
             this.drp_completeOption = new System.Windows.Forms.ComboBox();
             this.tab_options = new System.Windows.Forms.TabControl();
             this.tab_general = new System.Windows.Forms.TabPage();
+            this.label34 = new System.Windows.Forms.Label();
             this.check_TitleCase = new System.Windows.Forms.CheckBox();
             this.check_removeUnderscores = new System.Windows.Forms.CheckBox();
             this.check_growlEncode = new System.Windows.Forms.CheckBox();
@@ -137,7 +138,6 @@ namespace Handbrake
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.label34 = new System.Windows.Forms.Label();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
@@ -225,6 +225,17 @@ namespace Handbrake
             this.tab_general.TabIndex = 3;
             this.tab_general.Text = "General";
             this.tab_general.UseVisualStyleBackColor = true;
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(179, 233);
+            this.label34.Margin = new System.Windows.Forms.Padding(3);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(139, 13);
+            this.label34.TabIndex = 102;
+            this.label34.Text = "Available Options: {source}";
+            this.ToolTip.SetToolTip(this.label34, "{source} = Use the same directory as the source is in.");
             // 
             // check_TitleCase
             // 
@@ -423,7 +434,7 @@ namespace Handbrake
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(4, 164);
+            this.label13.Location = new System.Drawing.Point(4, 174);
             this.label13.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(77, 13);
@@ -531,7 +542,7 @@ namespace Handbrake
             this.radio_preferredAudioAndSubs.AutoSize = true;
             this.radio_preferredAudioAndSubs.Location = new System.Drawing.Point(200, 99);
             this.radio_preferredAudioAndSubs.Name = "radio_preferredAudioAndSubs";
-            this.radio_preferredAudioAndSubs.Size = new System.Drawing.Size(254, 17);
+            this.radio_preferredAudioAndSubs.Size = new System.Drawing.Size(250, 17);
             this.radio_preferredAudioAndSubs.TabIndex = 93;
             this.radio_preferredAudioAndSubs.TabStop = true;
             this.radio_preferredAudioAndSubs.Text = "Use Preferred Language for Audio and Subtitles";
@@ -544,7 +555,7 @@ namespace Handbrake
             this.check_AddCCTracks.AutoSize = true;
             this.check_AddCCTracks.Location = new System.Drawing.Point(200, 131);
             this.check_AddCCTracks.Name = "check_AddCCTracks";
-            this.check_AddCCTracks.Size = new System.Drawing.Size(199, 17);
+            this.check_AddCCTracks.Size = new System.Drawing.Size(198, 17);
             this.check_AddCCTracks.TabIndex = 92;
             this.check_AddCCTracks.Text = "Add Closed Captions when available";
             this.ToolTip.SetToolTip(this.check_AddCCTracks, "Add any CC tracks if they exist");
@@ -577,7 +588,7 @@ namespace Handbrake
             this.radio_foreignAndSubs.AutoSize = true;
             this.radio_foreignAndSubs.Location = new System.Drawing.Point(200, 76);
             this.radio_foreignAndSubs.Name = "radio_foreignAndSubs";
-            this.radio_foreignAndSubs.Size = new System.Drawing.Size(358, 17);
+            this.radio_foreignAndSubs.Size = new System.Drawing.Size(347, 17);
             this.radio_foreignAndSubs.TabIndex = 90;
             this.radio_foreignAndSubs.TabStop = true;
             this.radio_foreignAndSubs.Text = "Use foreign language audio and add first preferred language subtitle.";
@@ -602,7 +613,7 @@ namespace Handbrake
             this.radio_dub.AutoSize = true;
             this.radio_dub.Location = new System.Drawing.Point(200, 53);
             this.radio_dub.Name = "radio_dub";
-            this.radio_dub.Size = new System.Drawing.Size(164, 17);
+            this.radio_dub.Size = new System.Drawing.Size(167, 17);
             this.radio_dub.TabIndex = 89;
             this.radio_dub.TabStop = true;
             this.radio_dub.Text = "DUB Foreign Language Audio";
@@ -655,7 +666,7 @@ namespace Handbrake
             this.check_preventSleep.AutoSize = true;
             this.check_preventSleep.Location = new System.Drawing.Point(73, 45);
             this.check_preventSleep.Name = "check_preventSleep";
-            this.check_preventSleep.Size = new System.Drawing.Size(272, 17);
+            this.check_preventSleep.Size = new System.Drawing.Size(266, 17);
             this.check_preventSleep.TabIndex = 91;
             this.check_preventSleep.Text = "Prevent the system from sleepping when encoding.";
             this.ToolTip.SetToolTip(this.check_preventSleep, "Prevent system from sleeping during encoding.");
@@ -668,7 +679,7 @@ namespace Handbrake
             this.check_clearOldLogs.AutoSize = true;
             this.check_clearOldLogs.Location = new System.Drawing.Point(73, 234);
             this.check_clearOldLogs.Name = "check_clearOldLogs";
-            this.check_clearOldLogs.Size = new System.Drawing.Size(166, 17);
+            this.check_clearOldLogs.Size = new System.Drawing.Size(162, 17);
             this.check_clearOldLogs.TabIndex = 90;
             this.check_clearOldLogs.Text = "Clear logs older than 30 days";
             this.ToolTip.SetToolTip(this.check_clearOldLogs, "Clear logs which are older than 30 days.\r\nThis only applies to HandBrakes Applica" +
@@ -763,7 +774,7 @@ namespace Handbrake
             this.check_logsInSpecifiedLocation.AutoSize = true;
             this.check_logsInSpecifiedLocation.Location = new System.Drawing.Point(73, 139);
             this.check_logsInSpecifiedLocation.Name = "check_logsInSpecifiedLocation";
-            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(306, 17);
+            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(305, 17);
             this.check_logsInSpecifiedLocation.TabIndex = 87;
             this.check_logsInSpecifiedLocation.Text = "Put a copy of individual encode logs in a specified location:";
             this.ToolTip.SetToolTip(this.check_logsInSpecifiedLocation, "Place a copy of the encode log in the same folder as the encoded movie.");
@@ -875,7 +886,7 @@ namespace Handbrake
             this.check_showCliForInGUIEncode.BackColor = System.Drawing.Color.Transparent;
             this.check_showCliForInGUIEncode.Location = new System.Drawing.Point(81, 129);
             this.check_showCliForInGUIEncode.Name = "check_showCliForInGUIEncode";
-            this.check_showCliForInGUIEncode.Size = new System.Drawing.Size(330, 17);
+            this.check_showCliForInGUIEncode.Size = new System.Drawing.Size(324, 17);
             this.check_showCliForInGUIEncode.TabIndex = 96;
             this.check_showCliForInGUIEncode.Text = "Show CLI window (Allows you to cleanly exit encode with ctrl-c)";
             this.ToolTip.SetToolTip(this.check_showCliForInGUIEncode, resources.GetString("check_showCliForInGUIEncode.ToolTip"));
@@ -929,7 +940,7 @@ namespace Handbrake
             this.check_trayStatusAlerts.BackColor = System.Drawing.Color.Transparent;
             this.check_trayStatusAlerts.Location = new System.Drawing.Point(81, 37);
             this.check_trayStatusAlerts.Name = "check_trayStatusAlerts";
-            this.check_trayStatusAlerts.Size = new System.Drawing.Size(296, 17);
+            this.check_trayStatusAlerts.Size = new System.Drawing.Size(288, 17);
             this.check_trayStatusAlerts.TabIndex = 93;
             this.check_trayStatusAlerts.Text = "Display status messages from tray icon (balloon popups)";
             this.ToolTip.SetToolTip(this.check_trayStatusAlerts, "Minimize the window to the system tray rather than the task bar.\r\nThe system tray" +
@@ -945,7 +956,7 @@ namespace Handbrake
             this.check_mainMinimize.BackColor = System.Drawing.Color.Transparent;
             this.check_mainMinimize.Location = new System.Drawing.Point(81, 14);
             this.check_mainMinimize.Name = "check_mainMinimize";
-            this.check_mainMinimize.Size = new System.Drawing.Size(230, 17);
+            this.check_mainMinimize.Size = new System.Drawing.Size(221, 17);
             this.check_mainMinimize.TabIndex = 82;
             this.check_mainMinimize.Text = "Minimize to system tray (Requires Restart)";
             this.ToolTip.SetToolTip(this.check_mainMinimize, "Minimize the window to the system tray rather than the task bar.\r\nThe system tray" +
@@ -959,7 +970,7 @@ namespace Handbrake
             this.check_promptOnUnmatchingQueries.AutoSize = true;
             this.check_promptOnUnmatchingQueries.Location = new System.Drawing.Point(100, 83);
             this.check_promptOnUnmatchingQueries.Name = "check_promptOnUnmatchingQueries";
-            this.check_promptOnUnmatchingQueries.Size = new System.Drawing.Size(305, 17);
+            this.check_promptOnUnmatchingQueries.Size = new System.Drawing.Size(300, 17);
             this.check_promptOnUnmatchingQueries.TabIndex = 63;
             this.check_promptOnUnmatchingQueries.Text = "Prompt when a manual query does not match GUI settings";
             this.check_promptOnUnmatchingQueries.UseVisualStyleBackColor = true;
@@ -972,7 +983,7 @@ namespace Handbrake
             this.check_dvdnav.BackColor = System.Drawing.Color.Transparent;
             this.check_dvdnav.Location = new System.Drawing.Point(82, 247);
             this.check_dvdnav.Name = "check_dvdnav";
-            this.check_dvdnav.Size = new System.Drawing.Size(276, 17);
+            this.check_dvdnav.Size = new System.Drawing.Size(277, 17);
             this.check_dvdnav.TabIndex = 90;
             this.check_dvdnav.Text = "Disable LibDVDNav. (libdvdread will be used instead)";
             this.check_dvdnav.UseVisualStyleBackColor = false;
@@ -985,7 +996,7 @@ namespace Handbrake
             this.check_queryEditorTab.BackColor = System.Drawing.Color.Transparent;
             this.check_queryEditorTab.Location = new System.Drawing.Point(81, 60);
             this.check_queryEditorTab.Name = "check_queryEditorTab";
-            this.check_queryEditorTab.Size = new System.Drawing.Size(241, 17);
+            this.check_queryEditorTab.Size = new System.Drawing.Size(236, 17);
             this.check_queryEditorTab.TabIndex = 84;
             this.check_queryEditorTab.Text = "Enable \"Query Editor\" tab (Requires Restart)";
             this.ToolTip.SetToolTip(this.check_queryEditorTab, "Enables the Query Editor tab on the main window. Requires program restart to take" +
@@ -1037,7 +1048,7 @@ namespace Handbrake
             this.check_disablePresetNotification.BackColor = System.Drawing.Color.Transparent;
             this.check_disablePresetNotification.Location = new System.Drawing.Point(81, 106);
             this.check_disablePresetNotification.Name = "check_disablePresetNotification";
-            this.check_disablePresetNotification.Size = new System.Drawing.Size(222, 17);
+            this.check_disablePresetNotification.Size = new System.Drawing.Size(216, 17);
             this.check_disablePresetNotification.TabIndex = 91;
             this.check_disablePresetNotification.Text = "Disable built-in preset update notification";
             this.ToolTip.SetToolTip(this.check_disablePresetNotification, "Disables the notification you recieve when presets are updated when a new version" +
@@ -1438,17 +1449,6 @@ namespace Handbrake
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(615, 10);
             this.panel2.TabIndex = 59;
-            // 
-            // label34
-            // 
-            this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(179, 233);
-            this.label34.Margin = new System.Windows.Forms.Padding(3);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(139, 13);
-            this.label34.TabIndex = 102;
-            this.label34.Text = "Available Options: {source}";
-            this.ToolTip.SetToolTip(this.label34, "{source} = Use the same directory as the source is in.");
             // 
             // frmOptions
             // 
