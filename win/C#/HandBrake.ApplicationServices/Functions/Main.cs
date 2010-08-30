@@ -3,6 +3,8 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
+using HandBrake.ApplicationServices.Views;
+
 namespace HandBrake.ApplicationServices.Functions
 {
     using System.Diagnostics;
@@ -32,7 +34,7 @@ namespace HandBrake.ApplicationServices.Functions
         /// </param>
         public static void ShowExceptiowWindow(string shortError, string longError)
         {
-            frmExceptionWindow exceptionWindow = new frmExceptionWindow();
+            ExceptionWindow exceptionWindow = new ExceptionWindow();
             exceptionWindow.Setup(shortError, longError);
             exceptionWindow.Show();
         }
