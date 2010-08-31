@@ -6,6 +6,8 @@
 
 #include "hb.h"
 
+#define MAX_BUFFERING (1024*1024*50)
+
 struct hb_mux_object_s
 {
     HB_MUX_COMMON;
@@ -25,6 +27,7 @@ typedef struct
     uint64_t        frames;
     uint64_t        bytes;
     mux_fifo_t      mf;
+    int             buffered_size;
 } hb_track_t;
 
 typedef struct
@@ -105,16 +108,9 @@ static void add_mux_track( hb_mux_t *mux, hb_mux_data_t *mux_data,
 
 static int mf_full( hb_track_t * track )
 {
-    uint32_t mask = track->mf.flen - 1;
-    uint32_t in = track->mf.in;
+    if ( track->buffered_size > MAX_BUFFERING )
+        return 1;
 
-    if ( ( ( in + 1 ) & mask ) == ( track->mf.out & mask ) )
-    {
-        if ( track->mf.flen >= 256 )
-        {
-            return 1;
-        }
-    }
     return 0;
 }
 
@@ -124,12 +120,9 @@ static void mf_push( hb_mux_t * mux, int tk, hb_buffer_t *buf )
     uint32_t mask = track->mf.flen - 1;
     uint32_t in = track->mf.in;
 
-    if ( ( ( in + 2 ) & mask ) == ( track->mf.out & mask ) )
+    if ( track->buffered_size > MAX_BUFFERING )
     {
-        if ( track->mf.flen >= 256 )
-        {
-            mux->rdy = mux->allRdy;
-        }
+        mux->rdy = mux->allRdy;
     }
     if ( ( ( in + 1 ) & mask ) == ( track->mf.out & mask ) )
     {
@@ -159,6 +152,7 @@ static void mf_push( hb_mux_t * mux, int tk, hb_buffer_t *buf )
     }
     track->mf.fifo[in & mask] = buf;
     track->mf.in = in + 1;
+    track->buffered_size += buf->alloc;
 }
 
 static hb_buffer_t *mf_pull( hb_track_t *track )
@@ -169,6 +163,8 @@ static hb_buffer_t *mf_pull( hb_track_t *track )
         // the fifo isn't empty
         b = track->mf.fifo[track->mf.out & (track->mf.flen - 1)];
         ++track->mf.out;
+
+        track->buffered_size -= b->alloc;
     }
     return b;
 }
@@ -370,7 +366,12 @@ void muxClose( hb_work_object_t * w )
     
         for( i = 0; i < mux->ntracks; ++i )
         {
+            hb_buffer_t * b;
             track = mux->track[i];
+            while ( (b = mf_pull( track )) != NULL )
+            {
+                hb_buffer_close( &b );
+            }
             if( track->mux_data )
             {
                 free( track->mux_data );
