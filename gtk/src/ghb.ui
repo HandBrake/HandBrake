@@ -6955,6 +6955,7 @@ libx264 authors:
   <object class="GtkFileChooserDialog" id="source_dialog">
     <property name="border_width">5</property>
     <property name="local-only">False</property>
+    <property name="create-folders">False</property>
     <property name="modal">True</property>
     <property name="action">GTK_FILE_CHOOSER_ACTION_OPEN</property>
     <property name="type_hint">dialog</property>
@@ -7010,21 +7011,6 @@ libx264 authors:
               </packing>
             </child>
             <child>
-              <object class="GtkCheckButton" id="source_folder_flag">
-                <property name="label" translatable="yes">Open folder (DVD or batch)</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-                <signal handler="source_type_changed_cb" name="toggled"/>
-              </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkHBox" id="hbox74">
                 <property name="visible">True</property>
                 <property name="spacing">4</property>
@@ -7063,7 +7049,7 @@ libx264 authors:
                 </child>
               </object>
               <packing>
-                <property name="position">2</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
@@ -7115,7 +7101,7 @@ libx264 authors:
     </child>
     <action-widgets>
       <action-widget response="-6">source_cancel</action-widget>
-      <action-widget response="-3">source_ok</action-widget>
+      <action-widget response="-9">source_ok</action-widget>
     </action-widgets>
   </object>
   <object class="GtkImage" id="image11">

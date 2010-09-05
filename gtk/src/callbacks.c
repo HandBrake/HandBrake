@@ -768,6 +768,8 @@ chooser_file_selected_cb(GtkFileChooser *dialog, signal_user_data_t *ud)
 	gboolean foundit = FALSE;
 	GtkComboBox *combo;
 	
+	g_debug("chooser_file_selected_cb ()");
+
 	if (name == NULL) return;
 	combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, "source_device"));
 	store = gtk_combo_box_get_model(combo);
@@ -797,6 +799,7 @@ dvd_device_changed_cb(GtkComboBox *combo, signal_user_data_t *ud)
 	GtkWidget *dialog;
 	gint ii;
 
+	g_debug("dvd_device_changed_cb ()");
 	ii = gtk_combo_box_get_active (combo);
 	if (ii > 0)
 	{
@@ -813,52 +816,17 @@ dvd_device_changed_cb(GtkComboBox *combo, signal_user_data_t *ud)
 	}
 }
 
-G_MODULE_EXPORT void
-source_type_changed_cb(GtkToggleButton *toggle, signal_user_data_t *ud)
-{
-	gchar *folder;
-	GtkFileChooser *chooser;
-	GtkWidget *dvd_device_combo;
-	
-	g_debug("source_type_changed_cb ()");
-	chooser = GTK_FILE_CHOOSER(GHB_WIDGET(ud->builder, "source_dialog"));
-	dvd_device_combo = GHB_WIDGET(ud->builder, "source_device");
-	folder = gtk_file_chooser_get_current_folder (chooser);
-	if (gtk_toggle_button_get_active (toggle))
-	{
-		gtk_file_chooser_set_action (chooser, 
-									GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-		gtk_widget_set_sensitive (dvd_device_combo, FALSE);
-		gtk_combo_box_set_active (GTK_COMBO_BOX(dvd_device_combo), 0);
-	}
-	else
-	{
-		gtk_file_chooser_set_action (chooser, GTK_FILE_CHOOSER_ACTION_OPEN);
-		gtk_widget_set_sensitive (dvd_device_combo, TRUE);
-	}
-	if (folder != NULL)
-	{
-		gtk_file_chooser_set_current_folder(chooser, folder);
-		g_free(folder);
-	}
-}
-
 static void
 source_dialog_extra_widgets(
 	signal_user_data_t *ud,
-	GtkWidget *dialog, 
-	gboolean checkbutton_active)
+	GtkWidget *dialog)
 {
-	GtkToggleButton *checkbutton;
 	GtkComboBox *combo;
 	GList *drives, *link;
 	
-	checkbutton = GTK_TOGGLE_BUTTON(
-		GHB_WIDGET(ud->builder, "source_folder_flag"));
-	gtk_toggle_button_set_active(checkbutton, checkbutton_active);
+	g_debug("source_dialog_extra_widgets ()");
 	combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, "source_device"));
-	gtk_list_store_clear(GTK_LIST_STORE(
-						gtk_combo_box_get_model(combo)));
+	gtk_list_store_clear(GTK_LIST_STORE(gtk_combo_box_get_model(combo)));
 
 	link = drives = dvd_device_list();
 	gtk_combo_box_append_text (combo, "Not Selected");
@@ -871,6 +839,7 @@ source_dialog_extra_widgets(
 		link = link->next;
 	}
 	g_list_free(drives);
+	gtk_combo_box_set_active (combo, 0);
 }
 
 extern GValue *ghb_queue_edit_settings;
@@ -967,41 +936,15 @@ ghb_do_scan(
 	}
 }
 
-static gboolean 
-update_source_name(gpointer data)
-{
-	signal_user_data_t *ud = (signal_user_data_t*)data;
-	GtkWidget *dialog;
-	gchar *sourcename;
-
-	sourcename = ghb_settings_get_string(ud->settings, "scan_source");
-	dialog = GHB_WIDGET(ud->builder, "source_dialog");
-	gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), sourcename);
-	g_free(sourcename);
-	return FALSE;
-}
-
 static void
 do_source_dialog(GtkButton *button, gboolean single, signal_user_data_t *ud)
 {
 	GtkWidget *dialog;
 	gchar *sourcename;
 	gint	response;
-	GtkFileChooserAction action;
-	gboolean checkbutton_active;
 
 	g_debug("source_browse_clicked_cb ()");
 	sourcename = ghb_settings_get_string(ud->settings, "scan_source");
-	checkbutton_active = FALSE;
-	if (g_file_test(sourcename, G_FILE_TEST_IS_DIR))
-	{
-		action = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
-		checkbutton_active = TRUE;
-	}
-	else
-	{
-		action = GTK_FILE_CHOOSER_ACTION_OPEN;
-	}
 	GtkWidget *widget;
 	widget = GHB_WIDGET(ud->builder, "single_title_box");
 	if (single)
@@ -1009,16 +952,11 @@ do_source_dialog(GtkButton *button, gboolean single, signal_user_data_t *ud)
 	else
 		gtk_widget_hide(widget);
 	dialog = GHB_WIDGET(ud->builder, "source_dialog");
-	source_dialog_extra_widgets(ud, dialog, checkbutton_active);
-	gtk_file_chooser_set_action(GTK_FILE_CHOOSER(dialog), action);
-	// Updating the filename in the file chooser dialog doesn't seem
-	// to work unless the dialog is running for some reason.
-	// So handle it in an "idle" event.
-	//gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), sourcename);
-	g_idle_add((GSourceFunc)update_source_name, ud);
+	source_dialog_extra_widgets(ud, dialog);
+	gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), sourcename);
 	response = gtk_dialog_run(GTK_DIALOG (dialog));
 	gtk_widget_hide(dialog);
-	if (response == GTK_RESPONSE_ACCEPT)
+	if (response == GTK_RESPONSE_NO)
 	{
 		gchar *filename;
 
