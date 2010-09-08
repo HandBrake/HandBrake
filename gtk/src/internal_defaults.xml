@@ -157,6 +157,8 @@
 		<true />
 		<key>reduce_hd_preview</key>
 		<true />
+		<key>MinTitleDuration</key>
+		<integer>10</integer>
 		<key>preview_count</key>
 		<integer>10</integer>
 		<key>preview_fullscreen</key>

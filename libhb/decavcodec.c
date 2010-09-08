@@ -533,7 +533,12 @@ static int reget_frame_buf( AVCodecContext *context, AVFrame *frame )
 
 static void log_chapter( hb_work_private_t *pv, int chap_num, int64_t pts )
 {
-    hb_chapter_t *c = hb_list_item( pv->job->title->list_chapter, chap_num - 1 );
+    hb_chapter_t *c;
+
+    if ( !pv->job )
+        return;
+
+    c = hb_list_item( pv->job->title->list_chapter, chap_num - 1 );
     if ( c && c->title )
     {
         hb_log( "%s: \"%s\" (%d) at frame %u time %"PRId64,
@@ -648,6 +653,17 @@ static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size, int sequ
             buf = copy_frame( pv, &frame );
             buf->start = pts;
             buf->sequence = sequence;
+            if ( pv->new_chap && buf->start >= pv->chap_time )
+            {
+                buf->new_chap = pv->new_chap;
+                pv->new_chap = 0;
+                pv->chap_time = 0;
+                log_chapter( pv, buf->new_chap, buf->start );
+            }
+            else if ( pv->nframes == 0 && pv->job )
+            {
+                log_chapter( pv, pv->job->chapter_start, buf->start );
+            }
             hb_list_add( pv->list, buf );
             ++pv->nframes;
             return got_picture;
@@ -687,7 +703,7 @@ static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size, int sequ
                 pv->chap_time = 0;
                 log_chapter( pv, buf->new_chap, buf->start );
             }
-            else if ( pv->nframes == 0 )
+            else if ( pv->nframes == 0 && pv->job )
             {
                 log_chapter( pv, pv->job->chapter_start, buf->start );
             }

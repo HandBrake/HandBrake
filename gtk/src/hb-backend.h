@@ -124,7 +124,7 @@ gint ghb_get_scan_state();
 gint ghb_get_queue_state();
 void ghb_get_status(ghb_status_t *status);
 void ghb_track_status(void);
-void ghb_backend_scan(const gchar *path, gint titleindex, gint preview_count);
+void ghb_backend_scan(const gchar *path, gint titleindex, gint preview_count, guint64 min_duration);
 void ghb_backend_scan_stop();
 void ghb_backend_queue_scan(const gchar *path, gint titleindex);
 gboolean ghb_get_title_info(ghb_title_info_t *tinfo, gint titleindex);

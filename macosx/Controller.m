@@ -1784,11 +1784,14 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         {
             [self writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
         }
-        /* We use our advance pref to determine how many previews to scan */
+        /* We use our advanced pref to determine how many previews to scan */
         int hb_num_previews = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
+        /* We use our advanced pref to determine the minimum title length to use in seconds*/
+        uint64_t min_title_duration_seconds = 90000L * [[[NSUserDefaults standardUserDefaults] objectForKey:@"MinTitleScanSeconds"] intValue];
         /* set title to NULL */
         fTitle = NULL;
-        hb_scan( fHandle, [path UTF8String], scanTitleNum, hb_num_previews, 1 );
+        [self writeToActivityLog: "Minimum length of title for scan: %d", min_title_duration_seconds];
+        hb_scan( fHandle, [path UTF8String], scanTitleNum, hb_num_previews, 1 , min_title_duration_seconds );
         [fSrcDVD2Field setStringValue:@"Scanning new source ..."];
     }
 }
@@ -2644,7 +2647,7 @@ fWorkingCount = 0;
         
          /* We use our advance pref to determine how many previews to scan */
         int hb_num_previews = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
-        hb_scan( fQueueEncodeLibhb, [path UTF8String], scanTitleNum, hb_num_previews, 0 );
+        hb_scan( fQueueEncodeLibhb, [path UTF8String], scanTitleNum, hb_num_previews, 0 , 0 );
     }
 }
 

@@ -42,7 +42,7 @@ void          hb_dvd_set_dvdnav( int enable );
    a VOB file. If title_index is 0, scan all titles. */
 void          hb_scan( hb_handle_t *, const char * path,
                        int title_index, int preview_count,
-                       int store_previews );
+                       int store_previews, uint64_t min_duration );
 void          hb_scan_stop( hb_handle_t * );
 hb_filter_object_t * hb_get_filter_object(int filter_id, const char * settings);
 uint64_t      hb_first_duration( hb_handle_t * );

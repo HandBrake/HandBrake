@@ -202,14 +202,19 @@ void hb_buffer_close( hb_buffer_t ** _b )
         return;
     }
     /* either the pool is full or this size doesn't use a pool - free the buf */
-    if( b->data )
+    while( b )
     {
-        free( b->data );
-        hb_lock(buffers.lock);
-        buffers.allocated -= b->alloc;
-        hb_unlock(buffers.lock);
+        hb_buffer_t * next = b->next;
+        if( b->data )
+        {
+            free( b->data );
+            hb_lock(buffers.lock);
+            buffers.allocated -= b->alloc;
+            hb_unlock(buffers.lock);
+        }
+        free( b );
+        b = next;
     }
-    free( b );
     *_b = NULL;
 }
 

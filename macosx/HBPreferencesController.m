@@ -58,6 +58,7 @@
         @"YES",             @"AlertWhenDoneSound",
         @"1",               @"LoggingLevel",
         @"NO",              @"EncodeLogLocation",
+        @"10",              @"MinTitleScanSeconds",
         @"10",              @"PreviewsNumber",
         @"",                @"Drawer Size",
         @"0.25",            @"x264CqSliderFractional",

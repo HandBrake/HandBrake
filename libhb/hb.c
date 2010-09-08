@@ -539,7 +539,7 @@ void hb_remove_previews( hb_handle_t * h )
  * @param store_previews Whether or not to write previews to disk.
  */
 void hb_scan( hb_handle_t * h, const char * path, int title_index,
-              int preview_count, int store_previews )
+              int preview_count, int store_previews, uint64_t min_duration )
 {
     hb_title_t * title;
 
@@ -556,7 +556,7 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
     hb_log( "hb_scan: path=%s, title_index=%d", path, title_index );
     h->scan_thread = hb_scan_init( h, &h->scan_die, path, title_index, 
                                    h->list_title, preview_count, 
-                                   store_previews );
+                                   store_previews, min_duration );
 }
 
 /**

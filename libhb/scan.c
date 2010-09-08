@@ -19,12 +19,15 @@ typedef struct
     int            title_index;
     hb_list_t    * list_title;
 
+    hb_bd_t      * bd;
     hb_dvd_t     * dvd;
     hb_stream_t  * stream;
     hb_batch_t   * batch;
-	
+
     int            preview_count;
     int            store_previews;
+
+    uint64_t       min_title_duration;
 
 } hb_scan_t;
 
@@ -48,7 +51,7 @@ static const char *aspect_to_string( double aspect )
 hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
                             const char * path, int title_index, 
                             hb_list_t * list_title, int preview_count, 
-                            int store_previews )
+                            int store_previews, uint64_t min_duration )
 {
     hb_scan_t * data = calloc( sizeof( hb_scan_t ), 1 );
 
@@ -60,6 +63,7 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
     
     data->preview_count  = preview_count;
     data->store_previews = store_previews;
+    data->min_title_duration = min_duration;
     
     return hb_thread_init( "scan", ScanFunc, data, HB_NORMAL_PRIORITY );
 }
@@ -71,12 +75,33 @@ static void ScanFunc( void * _data )
     int          i;
     int          feature = 0;
 
-	data->dvd = NULL;
-	data->stream = NULL;
+    data->bd = NULL;
+    data->dvd = NULL;
+    data->stream = NULL;
 
     /* Try to open the path as a DVD. If it fails, try as a file */
-    hb_log( "scan: trying to open with libdvdread" );
-    if( ( data->dvd = hb_dvd_init( data->path ) ) )
+    if( ( data->bd = hb_bd_init( data->path ) ) )
+    {
+        hb_log( "scan: BD has %d title(s)",
+                hb_bd_title_count( data->bd ) );
+        if( data->title_index )
+        {
+            /* Scan this title only */
+            hb_list_add( data->list_title, hb_bd_title_scan( data->bd,
+                         data->title_index, 0 ) );
+        }
+        else
+        {
+            /* Scan all titles */
+            for( i = 0; i < hb_bd_title_count( data->bd ); i++ )
+            {
+                hb_list_add( data->list_title, hb_bd_title_scan( data->bd, 
+                             i + 1, data->min_title_duration ) );
+            }
+            feature = hb_bd_main_feature( data->bd, data->list_title );
+        }
+    }
+    else if( ( data->dvd = hb_dvd_init( data->path ) ) )
     {
         hb_log( "scan: DVD has %d title(s)",
                 hb_dvd_title_count( data->dvd ) );
@@ -84,15 +109,15 @@ static void ScanFunc( void * _data )
         {
             /* Scan this title only */
             hb_list_add( data->list_title, hb_dvd_title_scan( data->dvd,
-                            data->title_index ) );
+                            data->title_index, 0 ) );
         }
         else
         {
             /* Scan all titles */
             for( i = 0; i < hb_dvd_title_count( data->dvd ); i++ )
             {
-                hb_list_add( data->list_title,
-                             hb_dvd_title_scan( data->dvd, i + 1 ) );
+                hb_list_add( data->list_title, hb_dvd_title_scan( data->dvd, 
+                            i + 1, data->min_title_duration ) );
             }
             feature = hb_dvd_main_feature( data->dvd, data->list_title );
         }
@@ -132,7 +157,7 @@ static void ScanFunc( void * _data )
 
         if ( *data->die )
         {
-			goto finish;
+            goto finish;
         }
         title = hb_list_item( data->list_title, i );
 
@@ -140,7 +165,9 @@ static void ScanFunc( void * _data )
         /* Update the UI */
         state.state   = HB_STATE_SCANNING;
         p.title_cur   = title->index;
-        p.title_count = data->dvd ? hb_dvd_title_count( data->dvd ) : hb_list_count(data->list_title);
+        p.title_count = data->dvd ? hb_dvd_title_count( data->dvd ) : 
+                        data->bd ? hb_bd_title_count( data->bd ) :
+                                   hb_list_count(data->list_title);
         hb_set_state( data->h, &state );
 #undef p
 
@@ -173,7 +200,7 @@ static void ScanFunc( void * _data )
             j++;
         }
 
-        if ( data->dvd )
+        if ( data->dvd || data->bd )
         {
             // The subtitle width and height needs to be set to the 
             // title widht and height for DVDs.  title width and
@@ -253,14 +280,18 @@ static void ScanFunc( void * _data )
 
 finish:
 
+    if( data->bd )
+    {
+        hb_bd_close( &data->bd );
+    }
     if( data->dvd )
     {
         hb_dvd_close( &data->dvd );
     }
-	if (data->stream)
-	{
-		hb_stream_close(&data->stream);
-	}
+    if (data->stream)
+    {
+        hb_stream_close(&data->stream);
+    }
     if( data->batch )
     {
         hb_batch_close( &data->batch );
@@ -432,7 +463,12 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 
     hb_log( "scan: decoding previews for title %d", title->index );
 
-    if (data->dvd)
+    if (data->bd)
+    {
+        hb_bd_start( data->bd, title );
+        hb_log( "scan: title angle(s) %d", title->angle_count );
+    }
+    else if (data->dvd)
     {
         hb_dvd_start( data->dvd, title, 1 );
         title->angle_count = hb_dvd_angle_count( data->dvd );
@@ -453,9 +489,16 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         {
             return 0;
         }
+        if (data->bd)
+        {
+            if( !hb_bd_seek( data->bd, (float) ( i + 1 ) / ( data->preview_count + 1.0 ) ) )
+          {
+              continue;
+          }
+        }
         if (data->dvd)
         {
-          if( !hb_dvd_seek( data->dvd, (float) ( i + 1 ) / ( data->preview_count + 1.0 ) ) )
+            if( !hb_dvd_seek( data->dvd, (float) ( i + 1 ) / ( data->preview_count + 1.0 ) ) )
           {
               continue;
           }
@@ -493,10 +536,26 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             {
                 vidskip = (double)title->rate / (double)title->rate_base + 0.5;
             }
+            // If it's a BD, we can relax this a bit. Since seeks will
+            // at least get us to a recovery point.
+            if (data->bd)
+                vidskip = 4;
         }
 
         for( j = 0; j < 10240 ; j++ )
         {
+            if (data->bd)
+            {
+              if( !hb_bd_read( data->bd, buf_ps ) )
+              {
+                  if ( vid_buf )
+                  {
+                    break;
+                  }
+                  hb_log( "Warning: Could not read data for preview %d, skipped", i + 1 );
+                  goto skip_preview;
+              }
+            }
             if (data->dvd)
             {
               if( !hb_dvd_read( data->dvd, buf_ps ) )
@@ -533,8 +592,13 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                     {
                         // we're dropping frames to get the video decoder in sync
                         // when the video stream doesn't contain IDR frames
-                        hb_buffer_close( &vid_buf );
-                        vid_buf = NULL;
+                        while (vid_buf && --vidskip >= 0)
+                        {
+                            hb_buffer_t * next = vid_buf->next;
+                            vid_buf->next = NULL;
+                            hb_buffer_close( &vid_buf );
+                            vid_buf = next;
+                        }
                     }
                 }
                 else if( ! AllAudioOK( title ) ) 
@@ -565,6 +629,10 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
              * Could not fill vid_info, don't continue and try to use vid_info
              * in this case.
              */
+            if (vid_buf)
+            {
+                hb_buffer_close( &vid_buf );
+            }
             vid_decoder->close( vid_decoder );
             free( vid_decoder );
             continue;
@@ -732,8 +800,10 @@ skip_preview:
                 hb_fifo_flush( audio->priv.scan_cache );
             }
         }
-        if ( vid_buf )
+        if (vid_buf)
+        {
             hb_buffer_close( &vid_buf );
+        }
     }
 
     if ( data->batch && data->stream )
@@ -823,6 +893,8 @@ skip_preview:
         hb_buffer_close( &buf_es );
     }
     hb_list_close( &list_es );
+    if (data->bd)
+      hb_bd_stop( data->bd );
     if (data->dvd)
       hb_dvd_stop( data->dvd );
 

@@ -126,6 +126,7 @@ static int64_t stop_at_pts    = 0;
 static int    stop_at_frame = 0;
 static char * stop_at_string = NULL;
 static char * stop_at_token = NULL;
+static uint64_t min_title_duration = 900000LL;
 
 /* Exit cleanly on Ctrl-C */
 static volatile int die = 0;
@@ -241,7 +242,7 @@ int main( int argc, char ** argv )
         titleindex = 0;
     }
 
-    hb_scan( h, input, titleindex, preview_count, store_previews );
+    hb_scan( h, input, titleindex, preview_count, store_previews, min_title_duration );
 
     /* Wait... */
     while( !die )
@@ -388,11 +389,11 @@ static void PrintTitleInfo( hb_title_t * title )
     }
     else if ( title->type == HB_DVD_TYPE )
     {
-        fprintf( stderr, "  + vts %d, ttn %d, cells %d->%d (%d blocks)\n",
+        fprintf( stderr, "  + vts %d, ttn %d, cells %d->%d (%"PRIu64" blocks)\n",
                 title->vts, title->ttn, title->cell_start, title->cell_end,
                 title->block_count );
     }
-    if (dvdnav)
+    if (title->angle_count > 1)
         fprintf( stderr, "  + angle(s) %d\n", title->angle_count );
     fprintf( stderr, "  + duration: %02d:%02d:%02d\n",
              title->hours, title->minutes, title->seconds );
@@ -408,7 +409,7 @@ static void PrintTitleInfo( hb_title_t * title )
     for( i = 0; i < hb_list_count( title->list_chapter ); i++ )
     {
         chapter = hb_list_item( title->list_chapter, i );
-        fprintf( stderr, "    + %d: cells %d->%d, %d blocks, duration "
+        fprintf( stderr, "    + %d: cells %d->%d, %"PRIu64" blocks, duration "
                  "%02d:%02d:%02d\n", chapter->index,
                  chapter->cell_start, chapter->cell_end,
                  chapter->block_count, chapter->hours, chapter->minutes,
@@ -2607,6 +2608,7 @@ static int ParseOptions( int argc, char ** argv )
     #define ROTATE_FILTER       275
     #define SCAN_ONLY           276
     #define MAIN_FEATURE        277
+    #define MIN_DURATION        278
     
     for( ;; )
     {
@@ -2626,6 +2628,7 @@ static int ParseOptions( int argc, char ** argv )
             { "ipod-atom",   no_argument,       NULL,    'I' },
 
             { "title",       required_argument, NULL,    't' },
+            { "min-duration",required_argument, NULL,    MIN_DURATION },
             { "scan",        no_argument,       NULL,    SCAN_ONLY },
             { "main-feature",no_argument,       NULL,    MAIN_FEATURE },
             { "chapters",    required_argument, NULL,    'c' },
@@ -3153,6 +3156,9 @@ static int ParseOptions( int argc, char ** argv )
                     color_matrix = 1;
                 else if( atoi( optarg ) == 709 )
                     color_matrix = 2;
+                break;
+            case MIN_DURATION:
+                min_title_duration = strtol( optarg, NULL, 0 );
                 break;
             default:
                 fprintf( stderr, "unknown option (%s)\n", argv[cur_optind] );

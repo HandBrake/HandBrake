@@ -884,7 +884,8 @@ start_scan(
 	gtk_action_set_sensitive(action, FALSE);
 	action = GHB_ACTION(ud->builder, "source_single_action");
 	gtk_action_set_sensitive(action, FALSE);
-	ghb_backend_scan(path, titlenum, preview_count);
+	ghb_backend_scan(path, titlenum, preview_count, 
+			90000L * ghb_settings_get_int64(ud->settings, "MinTitleDuration"));
 }
 
 void

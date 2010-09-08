@@ -23,6 +23,7 @@ MODULES += contrib/lame
 MODULES += contrib/libdca
 MODULES += contrib/libdvdread
 MODULES += contrib/libdvdnav
+MODULES += contrib/libbluray
 MODULES += contrib/libmkv
 MODULES += contrib/libogg
 MODULES += contrib/libsamplerate

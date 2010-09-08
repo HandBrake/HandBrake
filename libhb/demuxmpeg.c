@@ -263,6 +263,10 @@ int hb_demux_ts( hb_buffer_t *buf_ps, hb_list_t *list_es, hb_psdemux_t *state )
 
     hb_buffer_t *buf = hb_buffer_init( buf_ps->alloc );
     hb_buffer_swap_copy( buf_ps, buf );
+    if (buf->type == VIDEO_BUF) {
+        // Consume a chapter break
+        buf_ps->new_chap = 0;
+    }
     hb_list_add( list_es, buf );
 
     return 1;

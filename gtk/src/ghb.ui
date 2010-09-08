@@ -272,6 +272,14 @@
     <property name="page_size">0</property>
     <property name="value">10</property>
   </object>
+  <object class="GtkAdjustment" id="min_title_adj">
+    <property name="upper">7200</property>
+    <property name="lower">0</property>
+    <property name="page_increment">10</property>
+    <property name="step_increment">5</property>
+    <property name="page_size">0</property>
+    <property name="value">10</property>
+  </object>
   <object class="GtkImage" id="subtitle_add_image">
     <property name="visible">True</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -4075,6 +4083,51 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkAlignment" id="alignment58">
+                            <property name="visible">True</property>
+                            <property name="top_padding">6</property>
+                            <property name="bottom_padding">6</property>
+                            <property name="left_padding">12</property>
+                            <child>
+                              <object class="GtkHBox" id="hbox60">
+                                <property name="visible">True</property>
+                                <property name="spacing">4</property>
+                                <child>
+                                  <object class="GtkSpinButton" id="MinTitleDuration">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="max_length">4</property>
+                                    <property name="invisible_char">&#x25CF;</property>
+                                    <property name="shadow_type">none</property>
+                                    <property name="adjustment">min_title_adj</property>
+                                    <property name="numeric">True</property>
+                                    <signal name="value_changed" handler="pref_changed_cb"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label70">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Filter short titles (seconds)</property>
+                                    <property name="use_markup">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">4</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkAlignment" id="alignment64">
                             <property name="visible">True</property>
                             <property name="top_padding">6</property>
@@ -4093,7 +4146,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">4</property>
+                            <property name="position">5</property>
                           </packing>
                         </child>
                       </object>

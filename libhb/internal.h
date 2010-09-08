@@ -64,6 +64,8 @@ struct hb_buffer_s
      */
     int64_t       sequence;
 
+    enum { AUDIO_BUF, VIDEO_BUF, SUBTITLE_BUF, OTHER_BUF } type;
+
     int           id;           // ID of the track that the packet comes from
     int64_t       start;        // Video and subtitle packets: start time of frame/subtitle
     int64_t       stop;         // Video and subtitle packets: stop time of frame/subtitle
@@ -164,7 +166,7 @@ hb_thread_t * hb_update_init( int * build, char * version );
 hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die, 
                             const char * path, int title_index, 
                             hb_list_t * list_title, int preview_count, 
-                            int store_previews );
+                            int store_previews, uint64_t min_duration );
 hb_thread_t * hb_work_init( hb_list_t * jobs, int cpu_count,
                             volatile int * die, int * error, hb_job_t ** job );
 hb_thread_t  * hb_reader_init( hb_job_t * );
@@ -214,12 +216,13 @@ hb_title_t  * hb_batch_title_scan( hb_batch_t * d, int t );
 /***********************************************************************
  * dvd.c
  **********************************************************************/
+typedef struct hb_bd_s hb_bd_t;
 typedef union  hb_dvd_s hb_dvd_t;
 typedef struct hb_stream_s hb_stream_t;
 
 hb_dvd_t *   hb_dvd_init( char * path );
 int          hb_dvd_title_count( hb_dvd_t * );
-hb_title_t * hb_dvd_title_scan( hb_dvd_t *, int title );
+hb_title_t * hb_dvd_title_scan( hb_dvd_t *, int title, uint64_t min_duration );
 int          hb_dvd_start( hb_dvd_t *, hb_title_t *title, int chapter );
 void         hb_dvd_stop( hb_dvd_t * );
 int          hb_dvd_seek( hb_dvd_t *, float );
@@ -231,6 +234,21 @@ int          hb_dvd_angle_count( hb_dvd_t * d );
 void         hb_dvd_set_angle( hb_dvd_t * d, int angle );
 int          hb_dvd_main_feature( hb_dvd_t * d, hb_list_t * list_title );
 
+hb_bd_t     * hb_bd_init( char * path );
+int           hb_bd_title_count( hb_bd_t * d );
+hb_title_t  * hb_bd_title_scan( hb_bd_t * d, int t, uint64_t min_duration );
+int           hb_bd_start( hb_bd_t * d, hb_title_t *title );
+void          hb_bd_stop( hb_bd_t * d );
+int           hb_bd_seek( hb_bd_t * d, float f );
+int           hb_bd_seek_pts( hb_bd_t * d, uint64_t pts );
+int           hb_bd_seek_chapter( hb_bd_t * d, int chapter );
+int           hb_bd_read( hb_bd_t * d, hb_buffer_t * b );
+int           hb_bd_chapter( hb_bd_t * d );
+void          hb_bd_close( hb_bd_t ** _d );
+void          hb_bd_set_angle( hb_bd_t * d, int angle );
+int           hb_bd_main_feature( hb_bd_t * d, hb_list_t * list_title );
+
+hb_stream_t * hb_bd_stream_open( hb_title_t *title );
 hb_stream_t * hb_stream_open( char * path, hb_title_t *title );
 void		 hb_stream_close( hb_stream_t ** );
 hb_title_t * hb_stream_title_scan( hb_stream_t *);
@@ -240,9 +258,17 @@ int          hb_stream_seek_ts( hb_stream_t * stream, int64_t ts );
 int          hb_stream_seek_chapter( hb_stream_t *, int );
 int          hb_stream_chapter( hb_stream_t * );
 
+int          hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt, hb_buffer_t *obuf );
+
 
 void       * hb_ffmpeg_context( int codec_param );
 void       * hb_ffmpeg_avstream( int codec_param );
+
+#define STR4_TO_UINT32(p) \
+    ((((const uint8_t*)(p))[0] << 24) | \
+     (((const uint8_t*)(p))[1] << 16) | \
+     (((const uint8_t*)(p))[2] <<  8) | \
+      ((const uint8_t*)(p))[3])
 
 /***********************************************************************
  * Work objects

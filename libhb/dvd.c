@@ -16,7 +16,7 @@ static hb_dvd_t    * hb_dvdread_init( char * path );
 static void          hb_dvdread_close( hb_dvd_t ** _d );
 static char        * hb_dvdread_name( char * path );
 static int           hb_dvdread_title_count( hb_dvd_t * d );
-static hb_title_t  * hb_dvdread_title_scan( hb_dvd_t * d, int t );
+static hb_title_t  * hb_dvdread_title_scan( hb_dvd_t * d, int t, uint64_t min_duration );
 static int           hb_dvdread_start( hb_dvd_t * d, hb_title_t *title, int chapter );
 static void          hb_dvdread_stop( hb_dvd_t * d );
 static int           hb_dvdread_seek( hb_dvd_t * d, float f );
@@ -162,7 +162,7 @@ static int hb_dvdread_title_count( hb_dvd_t * e )
 /***********************************************************************
  * hb_dvdread_title_scan
  **********************************************************************/
-static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t )
+static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_duration )
 {
 
     hb_dvdread_t *d = &(e->dvdread);
@@ -299,8 +299,8 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t )
         d->cell_cur = d->cell_next;
     }
 
-    hb_log( "scan: vts=%d, ttn=%d, cells=%d->%d, blocks=%d->%d, "
-            "%d blocks", title->vts, title->ttn, title->cell_start,
+    hb_log( "scan: vts=%d, ttn=%d, cells=%d->%d, blocks=%"PRIu64"->%"PRIu64", "
+            "%"PRIu64" blocks", title->vts, title->ttn, title->cell_start,
             title->cell_end, title->block_start, title->block_end,
             title->block_count );
 
@@ -316,7 +316,7 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t )
     /* ignore titles under 10 seconds because they're often stills or
      * clips with no audio & our preview code doesn't currently handle
      * either of these. */
-    if( title->duration < 900000LL )
+    if( title->duration < min_duration )
     {
         hb_log( "scan: ignoring title (too short)" );
         goto fail;
@@ -624,7 +624,7 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t )
         chapter->minutes   = ( seconds % 3600 ) / 60;
         chapter->seconds   = seconds % 60;
 
-        hb_log( "scan: chap %d c=%d->%d, b=%d->%d (%d), %"PRId64" ms",
+        hb_log( "scan: chap %d c=%d->%d, b=%"PRIu64"->%"PRIu64" (%"PRIu64"), %"PRId64" ms",
                 chapter->index, chapter->cell_start, chapter->cell_end,
                 chapter->block_start, chapter->block_end,
                 chapter->block_count, chapter->duration / 90 );
@@ -1268,9 +1268,9 @@ int hb_dvd_title_count( hb_dvd_t * d )
     return dvd_methods->title_count(d);
 }
 
-hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
+hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t, uint64_t min_duration )
 {
-    return dvd_methods->title_scan(d, t);
+    return dvd_methods->title_scan(d, t, min_duration);
 }
 
 int hb_dvd_start( hb_dvd_t * d, hb_title_t *title, int chapter )

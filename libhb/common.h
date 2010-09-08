@@ -397,6 +397,7 @@ struct hb_audio_config_s
     {
         int track;                /* Input track number */
         PRIVATE uint32_t codec;   /* Input audio codec */
+        PRIVATE uint32_t stream_type; /* stream type from source stream */
         PRIVATE uint32_t codec_param; /* per-codec config info */
         PRIVATE uint32_t version; /* Bitsream version */
         PRIVATE uint32_t mode;    /* Bitstream mode, codec dependent encoding */
@@ -452,9 +453,9 @@ struct hb_chapter_s
     int      pgn;
     int      cell_start;
     int      cell_end;
-    int      block_start;
-    int      block_end;
-    int      block_count;
+    uint64_t block_start;
+    uint64_t block_end;
+    uint64_t block_count;
 
     /* Visual-friendly duration */
     int      hours;
@@ -544,7 +545,8 @@ struct hb_metadata_s
 
 struct hb_title_s
 {
-    enum { HB_DVD_TYPE, HB_STREAM_TYPE } type;
+    enum { HB_DVD_TYPE, HB_BD_TYPE, HB_STREAM_TYPE } type;
+    uint32_t    reg_desc;
     char        path[1024];
     char        name[1024];
     int         index;
@@ -552,9 +554,9 @@ struct hb_title_s
     int         ttn;
     int         cell_start;
     int         cell_end;
-    int         block_start;
-    int         block_end;
-    int         block_count;
+    uint64_t    block_start;
+    uint64_t    block_end;
+    uint64_t    block_count;
     int         angle_count;
 
     /* Visual-friendly duration */
@@ -576,8 +578,10 @@ struct hb_title_s
     int         crop[4];
     enum { HB_MPEG2_PS_DEMUXER = 0, HB_MPEG2_TS_DEMUXER, HB_NULL_DEMUXER } demuxer;
     int         detected_interlacing;
+    int         pcr_pid;                /* PCR PID for TS streams */
     int         video_id;               /* demuxer stream id for video */
     int         video_codec;            /* worker object id of video codec */
+    uint32_t    video_stream_type;      /* stream type from source stream */
     int         video_codec_param;      /* codec specific config */
     const char  *video_codec_name;
     int         video_bitrate;

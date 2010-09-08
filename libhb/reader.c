@@ -12,6 +12,7 @@ typedef struct
     int64_t last;   // last timestamp seen on this stream
     int id;         // stream id
     int is_audio;   // != 0 if this is an audio stream
+    int valid;      // Stream timing is not valid until next scr.
 } stream_timing_t;
 
 typedef struct
@@ -20,6 +21,7 @@ typedef struct
     hb_title_t   * title;
     volatile int * die;
 
+    hb_bd_t      * bd;
     hb_dvd_t     * dvd;
     hb_stream_t  * stream;
 
@@ -65,6 +67,7 @@ hb_thread_t * hb_reader_init( hb_job_t * job )
     r->stream_timing[0].average = 90000. * (double)job->vrate_base /
                                            (double)job->vrate;
     r->stream_timing[0].last = -r->stream_timing[0].average;
+    r->stream_timing[0].valid = 1;
     r->stream_timing[1].id = -1;
 
     if ( !job->pts_to_start )
@@ -124,7 +127,7 @@ static stream_timing_t *find_st( hb_reader_t *r, const hb_buffer_t *buf )
 
 // find or create the per-stream timing state for 'buf'
 
-static stream_timing_t *id_to_st( hb_reader_t *r, const hb_buffer_t *buf )
+static stream_timing_t *id_to_st( hb_reader_t *r, const hb_buffer_t *buf, int valid )
 {
     stream_timing_t *st = r->stream_timing;
     while ( st->id != buf->id && st->id != -1)
@@ -147,15 +150,13 @@ static stream_timing_t *id_to_st( hb_reader_t *r, const hb_buffer_t *buf )
         }
         st->id = buf->id;
         st->average = 30.*90.;
-        if ( r->saw_video )
-            st->last = buf->renderOffset - st->average;
-        else
-            st->last = -st->average;
+        st->last = -st->average;
         if ( ( st->is_audio = is_audio( r, buf->id ) ) != 0 )
         {
             r->saw_audio = 1;
         }
         st[1].id = -1;
+        st->valid = valid;
     }
     return st;
 }
@@ -165,7 +166,7 @@ static stream_timing_t *id_to_st( hb_reader_t *r, const hb_buffer_t *buf )
 
 static void update_ipt( hb_reader_t *r, const hb_buffer_t *buf )
 {
-    stream_timing_t *st = id_to_st( r, buf );
+    stream_timing_t *st = id_to_st( r, buf, 1 );
     double dt = buf->renderOffset - st->last;
     // Protect against spurious bad timestamps
     if ( dt > -5 * 90000LL && dt < 5 * 90000LL )
@@ -173,6 +174,7 @@ static void update_ipt( hb_reader_t *r, const hb_buffer_t *buf )
         st->average += ( dt - st->average ) * (1./32.);
         st->last = buf->renderOffset;
     }
+    st->valid = 1;
 }
 
 // use the per-stream state associated with 'buf' to compute a new scr_offset
@@ -181,9 +183,25 @@ static void update_ipt( hb_reader_t *r, const hb_buffer_t *buf )
 
 static void new_scr_offset( hb_reader_t *r, hb_buffer_t *buf )
 {
-    stream_timing_t *st = id_to_st( r, buf );
-    int64_t nxt = st->last + st->average;
+    stream_timing_t *st = id_to_st( r, buf, 1 );
+    int64_t last;
+    if ( !st->valid )
+    {
+        // !valid means we've not received any previous data
+        // for this stream.  There is no 'last' packet time.
+        // So approximate it with video's last time.
+        last = r->stream_timing[0].last;
+        st->valid = 1;
+    }
+    else
+    {
+        last = st->last;
+    }
+    int64_t nxt = last + st->average;
     r->scr_offset = buf->renderOffset - nxt;
+    // This log is handy when you need to debug timing problems...
+    //hb_log("id %x last %ld avg %g nxt %ld renderOffset %ld scr_offset %ld",
+    //    buf->id, last, st->average, nxt, buf->renderOffset, r->scr_offset);
     r->scr_changes = r->demux.scr_changes;
     st->last = nxt;
 }
@@ -203,7 +221,12 @@ static void ReaderFunc( void * _r )
     int            chapter = -1;
     int            chapter_end = r->job->chapter_end;
 
-    if ( r->title->type == HB_DVD_TYPE )
+    if ( r->title->type == HB_BD_TYPE )
+    {
+        if ( !( r->bd = hb_bd_init( r->title->path ) ) )
+            return;
+    }
+    else if ( r->title->type == HB_DVD_TYPE )
     {
         if ( !( r->dvd = hb_dvd_init( r->title->path ) ) )
             return;
@@ -220,7 +243,34 @@ static void ReaderFunc( void * _r )
     }
 
     hb_buffer_t *ps = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
-    if (r->dvd)
+    if (r->bd)
+    {
+        if( !hb_bd_start( r->bd, r->title ) )
+        {
+            hb_bd_close( &r->bd );
+            hb_buffer_close( &ps );
+            return;
+        }
+        if ( r->job->start_at_preview )
+        {
+            // XXX code from DecodePreviews - should go into its own routine
+            hb_bd_seek( r->bd, (float)r->job->start_at_preview /
+                         ( r->job->seek_points ? ( r->job->seek_points + 1.0 ) : 11.0 ) );
+        }
+        else if ( r->job->pts_to_start )
+        {
+            hb_bd_seek_pts( r->bd, r->job->pts_to_start );
+        }
+        else
+        {
+            hb_bd_seek_chapter( r->bd, r->job->chapter_start );
+        }
+        if (r->job->angle > 1)
+        {
+            hb_bd_set_angle( r->bd, r->job->angle - 1 );
+        }
+    }
+    else if (r->dvd)
     {
         /*
          * XXX this code is a temporary hack that should go away if/when
@@ -315,7 +365,9 @@ static void ReaderFunc( void * _r )
 
     while( !*r->die && !r->job->done )
     {
-        if (r->dvd)
+        if (r->bd)
+            chapter = hb_bd_chapter( r->bd );
+        else if (r->dvd)
             chapter = hb_dvd_chapter( r->dvd );
         else if (r->stream)
             chapter = hb_stream_chapter( r->stream );
@@ -332,7 +384,14 @@ static void ReaderFunc( void * _r )
             break;
         }
 
-        if (r->dvd)
+        if (r->bd)
+        {
+          if( !hb_bd_read( r->bd, ps ) )
+          {
+              break;
+          }
+        }
+        else if (r->dvd)
         {
           if( !hb_dvd_read( r->dvd, ps ) )
           {
@@ -399,7 +458,7 @@ static void ReaderFunc( void * _r )
                     r->scr_changes = r->demux.scr_changes - 1;
                     // create a stream state if we don't have one so the
                     // offset will get computed correctly.
-                    id_to_st( r, buf );
+                    id_to_st( r, buf, 1 );
                     r->saw_video = 1;
                     hb_log( "reader: first SCR %"PRId64" id %d DTS %"PRId64,
                             r->demux.last_scr, buf->id, buf->renderOffset );
@@ -417,51 +476,37 @@ static void ReaderFunc( void * _r )
                     {
                         // This is the first audio or video packet after an SCR
                         // change. Compute a new scr offset that would make this
-                        // packet follow the last of this stream with the correct
-                        // average spacing.
-                        stream_timing_t *st = find_st( r, buf );
+                        // packet follow the last of this stream with the 
+                        // correct average spacing.
+                        stream_timing_t *st = id_to_st( r, buf, 0 );
 
-                        if ( st )
+                        // if this is the video stream and we don't have
+                        // audio yet or this is an audio stream
+                        // generate a new scr
+                        if ( st->is_audio ||
+                             ( st == r->stream_timing && !r->saw_audio ) )
                         {
-                            // if this is the video stream and we don't have
-                            // audio yet or this is an audio stream
-                            // generate a new scr
-                            if ( st->is_audio ||
-                                 ( st == r->stream_timing && !r->saw_audio ) )
-                            {
-                                new_scr_offset( r, buf );
-                            }
-                            else
-                            {
-                                // defer the scr change until we get some
-                                // audio since audio has a timestamp per
-                                // frame but video & subtitles don't. Clear
-                                // the timestamps so the decoder will generate
-                                // them from the frame durations.
-                                if ( st != r->stream_timing )
-                                {
-                                    // not a video stream so it's probably
-                                    // subtitles - the best we can do is to
-                                    // line it up with the last video packet.
-                                    buf->start = r->stream_timing->last;
-                                }
-                                else
-                                {
-                                    buf->start = -1;
-                                    buf->renderOffset = -1;
-                                }
-                            }
+                            new_scr_offset( r, buf );
                         }
                         else
                         {
-                            // we got a new scr at the same time as the first
-                            // packet of a stream we've never seen before. We
-                            // have no idea what the timing should be so toss
-                            // this buffer & wait for a stream we've already seen.
-                            // add stream to list of streams we have seen
-                            id_to_st( r, buf );
-                            hb_buffer_close( &buf );
-                            continue;
+                            // defer the scr change until we get some
+                            // audio since audio has a timestamp per
+                            // frame but video & subtitles don't. Clear
+                            // the timestamps so the decoder will generate
+                            // them from the frame durations.
+                            if ( st != r->stream_timing )
+                            {
+                                // not a video stream so it's probably
+                                // subtitles - the best we can do is to
+                                // line it up with the last video packet.
+                                buf->start = r->stream_timing->last;
+                            }
+                            else
+                            {
+                                buf->start = -1;
+                                buf->renderOffset = -1;
+                            }
                         }
                     }
                 }
@@ -490,6 +535,10 @@ static void ReaderFunc( void * _r )
                             r->job->pts_to_start = 0;
                         }
                     }
+                    // This log is handy when you need to debug timing problems
+                    //hb_log("id %x scr_offset %ld start %ld --> %ld", 
+                    //        buf->id, r->scr_offset, buf->start, 
+                    //        buf->start - r->scr_offset);
                     buf->start -= r->scr_offset;
                 }
                 if ( buf->renderOffset != -1 )
@@ -553,7 +602,12 @@ static void ReaderFunc( void * _r )
 
     hb_list_empty( &list );
     hb_buffer_close( &ps );
-    if (r->dvd)
+    if (r->bd)
+    {
+        hb_bd_stop( r->bd );
+        hb_bd_close( &r->bd );
+    }
+    else if (r->dvd)
     {
         hb_dvd_stop( r->dvd );
         hb_dvd_close( &r->dvd );
