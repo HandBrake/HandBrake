@@ -136,10 +136,11 @@ namespace HandBrake.ApplicationServices.Parsing
             if (m.Success)
                 thisTitle.SourceName = path.Replace("+ stream:", string.Empty).Trim();
 
+            string nextLine = output.ReadLine();
             if (!Init.DisableDvdNav)
             {
                 // Get the Angles for the title.
-                m = Regex.Match(output.ReadLine(), @"  \+ angle\(s\) ([0-9])");
+                m = Regex.Match(nextLine, @"  \+ angle\(s\) ([0-9])");
                 if (m.Success)
                 {
                     string angleList = m.Value.Replace("+ angle(s) ", string.Empty).Trim();
@@ -147,11 +148,12 @@ namespace HandBrake.ApplicationServices.Parsing
                     int.TryParse(angleList, out angleCount);
 
                     thisTitle.AngleCount = angleCount;
+                    nextLine = output.ReadLine();
                 }
             }
 
             // Get duration for this title
-            m = Regex.Match(output.ReadLine(), @"^  \+ duration: ([0-9]{2}:[0-9]{2}:[0-9]{2})");
+            m = Regex.Match(nextLine, @"^  \+ duration: ([0-9]{2}:[0-9]{2}:[0-9]{2})");
             if (m.Success)
                 thisTitle.Duration = TimeSpan.Parse(m.Groups[1].Value);
 
