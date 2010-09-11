@@ -140,6 +140,9 @@ namespace HandBrake.ApplicationServices.Functions
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags);
 
+        /// <summary>
+        /// Execution State
+        /// </summary>
         [FlagsAttribute]
         public enum EXECUTION_STATE : uint
         {

@@ -5,6 +5,9 @@
 
 namespace HandBrake.ApplicationServices.Services.Interfaces
 {
+    /// <summary>
+    /// The Error service for showing the exception window.
+    /// </summary>
     public interface IErrorService
     {
         /// <summary>

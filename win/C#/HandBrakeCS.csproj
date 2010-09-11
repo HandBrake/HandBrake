@@ -282,6 +282,12 @@
     <Compile Include="Functions\AppcastReader.cs" />
     <Compile Include="Functions\QueryParser.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="TitleSpecificScan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TitleSpecificScan.Designer.cs">
+      <DependentUpon>TitleSpecificScan.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Controls\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -348,6 +354,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="TitleSpecificScan.resx">
+      <DependentUpon>TitleSpecificScan.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Installer\MakeNightly.nsi.tmpl" />
     <None Include="Installer\MakeNightly.nsi" />

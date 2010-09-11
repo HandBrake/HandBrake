@@ -1259,29 +1259,31 @@ namespace Handbrake
         #region Main Window and Tab Control
 
         // Source
-        private void btn_dvd_source_Click(object sender, EventArgs e)
+        private void BtnFolderScanClicked(object sender, EventArgs e)
         {
+            this.btn_source.HideDropDown();
             if (DVD_Open.ShowDialog() == DialogResult.OK)
             {
                 this.selectedSourceType = SourceType.Folder;
-                SelectSource(DVD_Open.SelectedPath);
+                SelectSource(DVD_Open.SelectedPath, 0);
             }
             else
                 UpdateSourceLabel();
         }
 
-        private void btn_file_source_Click(object sender, EventArgs e)
+        private void BtnFileScanClicked(object sender, EventArgs e)
         {
+            this.btn_source.HideDropDown();
             if (ISO_Open.ShowDialog() == DialogResult.OK)
             {
                 this.selectedSourceType = SourceType.VideoFile;
-                SelectSource(ISO_Open.FileName);
+                SelectSource(ISO_Open.FileName, 0);
             }
             else
                 UpdateSourceLabel();
         }
 
-        private void mnu_dvd_drive_Click(object sender, EventArgs e)
+        private void MnuDvdDriveClick(object sender, EventArgs e)
         {
             ToolStripMenuItem item = sender as ToolStripMenuItem;
             if (item != null)
@@ -1295,12 +1297,52 @@ namespace Handbrake
 
                     if (this.dvdDrivePath == null) return;
                     this.selectedSourceType = SourceType.DvdDrive;
-                    SelectSource(this.dvdDrivePath);
+                    SelectSource(this.dvdDrivePath, 0);
                 }
             }
         }
 
-        private void SelectSource(string file)
+        private void VideoTitleSpecificScanClick(object sender, EventArgs e)
+        {
+            this.btn_source.HideDropDown();
+            if (ISO_Open.ShowDialog() == DialogResult.OK)
+            {
+                this.selectedSourceType = SourceType.VideoFile;
+
+                int sourceTitle = 0;
+                TitleSpecificScan title = new TitleSpecificScan();
+                if (title.ShowDialog() == DialogResult.OK)
+                {
+                    sourceTitle = title.Title;
+                }
+
+                SelectSource(ISO_Open.FileName, sourceTitle);
+            }
+            else
+                UpdateSourceLabel();
+        }
+
+        private void FolderTitleSpecificScanClick(object sender, EventArgs e)
+        {
+            this.btn_source.HideDropDown();
+            if (DVD_Open.ShowDialog() == DialogResult.OK)
+            {
+                this.selectedSourceType = SourceType.Folder;
+
+                int sourceTitle = 0;
+                TitleSpecificScan title = new TitleSpecificScan();
+                if (title.ShowDialog() == DialogResult.OK)
+                {
+                    sourceTitle = title.Title;
+                }
+
+                SelectSource(DVD_Open.SelectedPath, sourceTitle);
+            }
+            else
+                UpdateSourceLabel();
+        }
+
+        private void SelectSource(string file, int titleSpecific)
         {
             Check_ChapterMarkers.Enabled = true;
             sourcePath = string.Empty;
@@ -1312,7 +1354,7 @@ namespace Handbrake
             }
 
             sourcePath = Path.GetFileName(file);
-            StartScan(file, 0);
+            StartScan(file, titleSpecific);
         }
 
         private void drp_dvdtitle_Click(object sender, EventArgs e)
@@ -2296,7 +2338,7 @@ namespace Handbrake
                             Text = drive.RootDirectory + " (" + drive.VolumeLabel + ")",
                             Image = Resources.disc_small
                         };
-                    menuItem.Click += new EventHandler(mnu_dvd_drive_Click);
+                    menuItem.Click += new EventHandler(MnuDvdDriveClick);
                     menuItems.Add(menuItem);
                 }
 

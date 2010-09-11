@@ -3,11 +3,11 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-using HandBrake.ApplicationServices.Views;
-
 namespace HandBrake.ApplicationServices.Functions
 {
     using System.Diagnostics;
+
+    using HandBrake.ApplicationServices.Views;
 
     /// <summary>
     /// Useful functions which various screens can use.
