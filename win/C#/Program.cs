@@ -39,6 +39,7 @@ namespace Handbrake
             {
                 Settings.Default.Upgrade();
                 Settings.Default.UpdateRequired = false;
+                Functions.Main.SetCliVersionData();
             }
 
             // Make sure we have any pre-requesits before trying to launch
