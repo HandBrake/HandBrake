@@ -39,18 +39,19 @@
             this.cb_duration = new System.Windows.Forms.ToolStripComboBox();
             this.btn_playQT = new System.Windows.Forms.ToolStripButton();
             this.btn_playVLC = new System.Windows.Forms.ToolStripButton();
-            this.QTControl = new AxQTOControlLib.AxQTControl();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ProgressBarStatus = new System.Windows.Forms.ToolStripProgressBar();
             this.lbl_encodeStatus = new System.Windows.Forms.ToolStripLabel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.QTControl = new AxQTOControlLib.AxQTControl();
             this.toolBar.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.QTControl)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.QTControl)).BeginInit();
             this.SuspendLayout();
             // 
             // toolBar
             // 
+            this.toolBar.AutoSize = false;
             this.toolBar.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lbl_preview,
@@ -65,7 +66,7 @@
             this.toolBar.Location = new System.Drawing.Point(0, 0);
             this.toolBar.Name = "toolBar";
             this.toolBar.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolBar.Size = new System.Drawing.Size(772, 25);
+            this.toolBar.Size = new System.Drawing.Size(722, 25);
             this.toolBar.TabIndex = 37;
             this.toolBar.Text = "toolStrip1";
             // 
@@ -134,7 +135,7 @@
             this.btn_playQT.Name = "btn_playQT";
             this.btn_playQT.Size = new System.Drawing.Size(96, 22);
             this.btn_playQT.Text = "Play with QT";
-            this.btn_playQT.Click += new System.EventHandler(this.PlayQT_Click);
+            this.btn_playQT.Click += new System.EventHandler(this.PlayQtClick);
             // 
             // btn_playVLC
             // 
@@ -144,26 +145,7 @@
             this.btn_playVLC.Name = "btn_playVLC";
             this.btn_playVLC.Size = new System.Drawing.Size(101, 22);
             this.btn_playVLC.Text = "Play with VLC";
-            this.btn_playVLC.Click += new System.EventHandler(this.PlayVLC_Click);
-            // 
-            // QTControl
-            // 
-            this.QTControl.Enabled = true;
-            this.QTControl.Location = new System.Drawing.Point(0, 0);
-            this.QTControl.Name = "QTControl";
-            this.QTControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("QTControl.OcxState")));
-            this.QTControl.Size = new System.Drawing.Size(64, 72);
-            this.QTControl.TabIndex = 39;
-            this.QTControl.Visible = false;
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.QTControl);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 25);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(772, 481);
-            this.panel1.TabIndex = 40;
+            this.btn_playVLC.Click += new System.EventHandler(this.PlayVlcClick);
             // 
             // toolStripSeparator1
             // 
@@ -183,23 +165,47 @@
             this.lbl_encodeStatus.Text = "0.00%";
             this.lbl_encodeStatus.Visible = false;
             // 
+            // panel1
+            // 
+            this.panel1.AutoSize = true;
+            this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.panel1.Controls.Add(this.QTControl);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 25);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(722, 481);
+            this.panel1.TabIndex = 40;
+            // 
+            // QTControl
+            // 
+            this.QTControl.Enabled = true;
+            this.QTControl.Location = new System.Drawing.Point(0, 0);
+            this.QTControl.Name = "QTControl";
+            this.QTControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("QTControl.OcxState")));
+            this.QTControl.Size = new System.Drawing.Size(64, 72);
+            this.QTControl.TabIndex = 39;
+            this.QTControl.Visible = false;
+            // 
             // frmPreview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(772, 506);
+            this.ClientSize = new System.Drawing.Size(722, 506);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolBar);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(730, 32);
             this.Name = "frmPreview";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Video Preview";
             this.toolBar.ResumeLayout(false);
             this.toolBar.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.QTControl)).EndInit();
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.QTControl)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

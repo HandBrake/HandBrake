@@ -25,6 +25,7 @@ namespace Handbrake
     public partial class frmPreview : Form
     {
         #region Private Variables
+
         /// <summary>
         /// The Main Window
         /// </summary>
@@ -33,7 +34,7 @@ namespace Handbrake
         /// <summary>
         /// True if QT is not installed
         /// </summary>
-        private readonly bool noQT;
+        private readonly bool noQt;
 
         /// <summary>
         /// The encode queue
@@ -48,12 +49,14 @@ namespace Handbrake
         /// <summary>
         /// Play With VLC tracker
         /// </summary>
-        private bool playWithVLC;
+        private bool playWithVlc;
 
         /// <summary>
         /// A Thread for the video player
         /// </summary>
         private Thread player;
+
+        #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="frmPreview"/> class.
@@ -69,21 +72,27 @@ namespace Handbrake
             }
             catch (Exception)
             {
-                this.noQT = true;
+                this.noQt = true;
             }
+
             this.mainWindow = mw;
+
             cb_preview.SelectedIndex = 0;
             cb_duration.SelectedIndex = 1;
 
             cb_preview.Items.Clear();
             for (int i = 1; i <= Properties.Settings.Default.previewScanCount; i++)
+            {
                 cb_preview.Items.Add(i.ToString());
+            }
+
             cb_preview.SelectedIndex = 0;
 
-            encodeQueue.EncodeStarted += this.EncodeQueue_EncodeStarted;
-            encodeQueue.EncodeEnded += this.EncodeQueue_EncodeEnded;
+            encodeQueue.EncodeStarted += this.EncodeQueueEncodeStarted;
+            encodeQueue.EncodeEnded += this.EncodeQueueEncodeEnded;
         }
 
+        #region Delegates
         /// <summary>
         /// Update UI Delegate
         /// </summary>
@@ -93,15 +102,15 @@ namespace Handbrake
         /// <param name="e">
         /// The e.
         /// </param>
-        private delegate void UpdateUIHandler(object sender, EventArgs e);
+        private delegate void UpdateUiHandler(object sender, EventArgs e);
 
         /// <summary>
         /// The Open Movie Handler
         /// </summary>
         private delegate void OpenMovieHandler();
-
         #endregion
 
+        #region Event Handlers
         /// <summary>
         /// The encode has started
         /// </summary>
@@ -111,9 +120,9 @@ namespace Handbrake
         /// <param name="e">
         /// The e.
         /// </param>
-        private void EncodeQueue_EncodeStarted(object sender, EventArgs e)
+        private void EncodeQueueEncodeStarted(object sender, EventArgs e)
         {
-            encodeQueue.EncodeStatusChanged += this.EncodeQueue_EncodeStatusChanged;
+            encodeQueue.EncodeStatusChanged += this.EncodeQueueEncodeStatusChanged;
         }
 
         /// <summary>
@@ -125,22 +134,22 @@ namespace Handbrake
         /// <param name="e">
         /// The e.
         /// </param>
-        private void EncodeQueue_EncodeEnded(object sender, EventArgs e)
+        private void EncodeQueueEncodeEnded(object sender, EventArgs e)
         {
-            encodeQueue.EncodeStatusChanged -= this.EncodeQueue_EncodeStatusChanged;
+            encodeQueue.EncodeStatusChanged -= this.EncodeQueueEncodeStatusChanged;
 
             try
             {
                 if (this.InvokeRequired)
                 {
-                    this.BeginInvoke(new UpdateUIHandler(EncodeQueue_EncodeEnded), new[] { sender, e });
+                    this.BeginInvoke(new UpdateUiHandler(EncodeQueueEncodeEnded), new[] { sender, e });
                     return;
                 }
 
                 ProgressBarStatus.Visible = false;
                 lbl_encodeStatus.Visible = false;
 
-                if (!this.noQT)
+                if (!this.noQt)
                     btn_playQT.Enabled = true;
                 btn_playVLC.Enabled = true;
 
@@ -153,10 +162,10 @@ namespace Handbrake
                             Replace(".mkv", "_sample.mkv");
 
                 // Play back in QT or VLC
-                if (!playWithVLC)
+                if (!playWithVlc)
                     Play();
                 else
-                    PlayVLC();
+                    PlayVlc();
             }
             catch (Exception exc)
             {
@@ -173,17 +182,18 @@ namespace Handbrake
         /// <param name="e">
         /// The e.
         /// </param>
-        private void EncodeQueue_EncodeStatusChanged(object sender, HandBrake.ApplicationServices.EncodeProgressEventArgs e)
+        private void EncodeQueueEncodeStatusChanged(object sender, HandBrake.ApplicationServices.EncodeProgressEventArgs e)
         {
             if (this.InvokeRequired)
             {
-                this.BeginInvoke(new Encode.EncodeProgessStatus(this.EncodeQueue_EncodeStatusChanged), new[] { sender, e });
+                this.BeginInvoke(new Encode.EncodeProgessStatus(this.EncodeQueueEncodeStatusChanged), new[] { sender, e });
                 return;
             }
 
             lbl_encodeStatus.Text = e.PercentComplete + "%";
             ProgressBarStatus.Value = (int)Math.Round(e.PercentComplete);
         }
+        #endregion
 
         #region Encode Sample
 
@@ -196,16 +206,17 @@ namespace Handbrake
         /// <param name="e">
         /// The e.
         /// </param>
-        private void PlayVLC_Click(object sender, EventArgs e)
+        private void PlayVlcClick(object sender, EventArgs e)
         {
             ProgressBarStatus.Visible = true;
             ProgressBarStatus.Value = 0;
             lbl_encodeStatus.Visible = true;
-            playWithVLC = true;
-
+            playWithVlc = true;
+            this.panel1.Visible = false;
+            
             try
             {
-                if (!this.noQT)
+                if (!this.noQt)
                     QTControl.URL = string.Empty;
 
                 if (File.Exists(this.currentlyPlaying))
@@ -235,10 +246,11 @@ namespace Handbrake
         /// <param name="e">
         /// The e.
         /// </param>
-        private void PlayQT_Click(object sender, EventArgs e)
+        private void PlayQtClick(object sender, EventArgs e)
         {
-            playWithVLC = false;
-            if (this.noQT)
+            playWithVlc = false;
+            this.panel1.Visible = true;
+            if (this.noQt)
             {
                 MessageBox.Show(this,
                                 "It would appear QuickTime 7 is not installed or not accessible. Please (re)install QuickTime.",
@@ -248,7 +260,7 @@ namespace Handbrake
             if (this.mainWindow.text_destination.Text.Contains(".mkv"))
             {
                 MessageBox.Show(this,
-                                "The QuickTime Control does not support MKV files, It is recommended you use VLC option instead.",
+                                "The QuickTime Control does not support MKV files, It is recommended you use the VLC option instead.",
                                 "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
@@ -294,7 +306,7 @@ namespace Handbrake
                 MessageBox.Show(
                     this,
                     "Handbrake is already encoding a video!",
-                    "Status",
+                    "Warning",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
 
@@ -320,7 +332,7 @@ namespace Handbrake
         /// <summary>
         /// Play the video back in an external VLC Player
         /// </summary>
-        private void PlayVLC()
+        private void PlayVlc()
         {
             // Launch VLC and Play video.
             if (this.currentlyPlaying != string.Empty)
@@ -411,8 +423,8 @@ namespace Handbrake
         /// </param>
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            encodeQueue.EncodeStarted -= this.EncodeQueue_EncodeStarted;
-            encodeQueue.EncodeEnded -= this.EncodeQueue_EncodeEnded;
+            encodeQueue.EncodeStarted -= this.EncodeQueueEncodeStarted;
+            encodeQueue.EncodeEnded -= this.EncodeQueueEncodeEnded;
             base.OnClosing(e);
         }
     }
