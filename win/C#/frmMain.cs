@@ -1392,6 +1392,12 @@ namespace Handbrake
                     for (int i = 1; i <= selectedTitle.AngleCount; i++)
                         drop_angle.Items.Add(i.ToString());
 
+                    if (drop_angle.Items.Count == 0)
+                    {
+                        drop_angle.Visible = false;
+                        lbl_angle.Visible = false;
+                    }
+
                     if (drop_angle.Items.Count != 0)
                         drop_angle.SelectedIndex = 0;
                 }
