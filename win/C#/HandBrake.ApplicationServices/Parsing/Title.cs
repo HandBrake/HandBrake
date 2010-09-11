@@ -116,30 +116,40 @@ namespace HandBrake.ApplicationServices.Parsing
         public static Title Parse(StringReader output)
         {
             var thisTitle = new Title();
+            string nextLine = output.ReadLine();
 
-            Match m = Regex.Match(output.ReadLine(), @"^\+ title ([0-9]*):");
-            // Match track number for this title
+            // Get the Title Number
+            Match m = Regex.Match(nextLine, @"^\+ title ([0-9]*):");
             if (m.Success)
                 thisTitle.TitleNumber = int.Parse(m.Groups[1].Value.Trim());
+            nextLine = output.ReadLine();
 
-            // If we are scanning a groupd of files, we'll want to get the source name.
-            string path = output.ReadLine();
-
-            m = Regex.Match(path, @"  \+ Main Feature");
+            // Detect if this is the main feature
+            m = Regex.Match(nextLine, @"  \+ Main Feature");
             if (m.Success)
             {
                 thisTitle.MainTitle = true;
-                path = output.ReadLine();
+                nextLine = output.ReadLine();
             }
 
-            m = Regex.Match(path, @"^  \+ stream:");
+            // Get the stream name for file import
+            m = Regex.Match(nextLine, @"^  \+ stream:");
             if (m.Success)
-                thisTitle.SourceName = path.Replace("+ stream:", string.Empty).Trim();
+            {
+                thisTitle.SourceName = nextLine.Replace("+ stream:", string.Empty).Trim();
+                nextLine = output.ReadLine();
+            }
 
-            string nextLine = output.ReadLine();
+            // Jump over the VTS and blocks line
+            m = Regex.Match(nextLine, @"^  \+ vts:");
+            if (nextLine.Contains("blocks") || nextLine.Contains("+ vts "))
+            {
+                nextLine = output.ReadLine();
+            }
+       
+            // Multi-Angle Support if LibDvdNav is enabled
             if (!Init.DisableDvdNav)
             {
-                // Get the Angles for the title.
                 m = Regex.Match(nextLine, @"  \+ angle\(s\) ([0-9])");
                 if (m.Success)
                 {
