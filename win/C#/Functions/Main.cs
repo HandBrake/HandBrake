@@ -808,9 +808,12 @@ namespace Handbrake.Functions
             StringBuilder sb = new StringBuilder(input.Length);
             foreach (string s in tokens)
             {
-                sb.Append(s[0].ToString().ToUpper());
-                sb.Append(s.Substring(1).ToLower());
-                sb.Append(" ");
+                if (!string.IsNullOrEmpty(s))
+                {
+                    sb.Append(s[0].ToString().ToUpper());
+                    sb.Append(s.Substring(1).ToLower());
+                    sb.Append(" ");
+                }
             }
 
             return sb.ToString().Trim();
