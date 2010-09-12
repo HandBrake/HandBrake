@@ -1109,7 +1109,7 @@ namespace Handbrake
             // Make sure the destination path exists.
             if (!Directory.Exists(Path.GetDirectoryName(jobDestination)))
             {
-                MessageBox.Show("Destination Path does not exist.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(string.Format("Destination Path does not exist.\nPath: {0}\n\nThis item was not added to the Queue.", Path.GetDirectoryName(jobDestination)), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -1118,7 +1118,7 @@ namespace Handbrake
             {
                 DialogResult result =
                     MessageBox.Show(
-                        "There is already a queue item for this destination path. \n\n If you continue, the encode will be overwritten. Do you wish to continue?",
+                        string.Format("There is already a queue item for this destination path.\nDestination Path: {0} \n\nIf you continue, the encode will be overwritten. Do you wish to continue?", jobDestination),
                         "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (result == DialogResult.Yes)
                     encodeQueue.Add(query, this.GetTitle(), jobSourcePath, jobDestination, (rtf_query.Text != string.Empty));
@@ -1314,9 +1314,8 @@ namespace Handbrake
                 if (title.ShowDialog() == DialogResult.OK)
                 {
                     sourceTitle = title.Title;
-                }
-
-                SelectSource(ISO_Open.FileName, sourceTitle);
+                    SelectSource(ISO_Open.FileName, sourceTitle);
+                }          
             }
             else
                 UpdateSourceLabel();
@@ -1334,9 +1333,8 @@ namespace Handbrake
                 if (title.ShowDialog() == DialogResult.OK)
                 {
                     sourceTitle = title.Title;
+                    SelectSource(DVD_Open.SelectedPath, sourceTitle);
                 }
-
-                SelectSource(DVD_Open.SelectedPath, sourceTitle);
             }
             else
                 UpdateSourceLabel();

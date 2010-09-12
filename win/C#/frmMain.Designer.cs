@@ -60,7 +60,6 @@ namespace Handbrake
             this.ChaptersMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnu_resetChapters = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_file_source = new System.Windows.Forms.ToolStripMenuItem();
-            this.VideoTitleSpecificScan = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_addPreset = new System.Windows.Forms.Button();
             this.btn_removePreset = new System.Windows.Forms.Button();
             this.drop_format = new System.Windows.Forms.ComboBox();
@@ -146,6 +145,8 @@ namespace Handbrake
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btn_source = new System.Windows.Forms.ToolStripDropDownButton();
             this.btn_dvd_source = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnTitleSpecific = new System.Windows.Forms.ToolStripMenuItem();
+            this.FileTitleSpecificScan = new System.Windows.Forms.ToolStripMenuItem();
             this.FolderTitleSpecificScan = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
@@ -442,21 +443,12 @@ namespace Handbrake
             // 
             // btn_file_source
             // 
-            this.btn_file_source.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.VideoTitleSpecificScan});
             this.btn_file_source.Image = global::Handbrake.Properties.Resources.Movies_Small;
             this.btn_file_source.Name = "btn_file_source";
             this.btn_file_source.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.btn_file_source.Size = new System.Drawing.Size(182, 22);
             this.btn_file_source.Text = "Video File";
             this.btn_file_source.Click += new System.EventHandler(this.BtnFileScanClicked);
-            // 
-            // VideoTitleSpecificScan
-            // 
-            this.VideoTitleSpecificScan.Name = "VideoTitleSpecificScan";
-            this.VideoTitleSpecificScan.Size = new System.Drawing.Size(169, 22);
-            this.VideoTitleSpecificScan.Text = "Title Specific Scan";
-            this.VideoTitleSpecificScan.Click += new System.EventHandler(this.VideoTitleSpecificScanClick);
             // 
             // btn_addPreset
             // 
@@ -1334,6 +1326,7 @@ namespace Handbrake
             this.btn_source.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btn_file_source,
             this.btn_dvd_source,
+            this.btnTitleSpecific,
             this.toolStripSeparator1});
             this.btn_source.Image = global::Handbrake.Properties.Resources.Movies;
             this.btn_source.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
@@ -1346,8 +1339,6 @@ namespace Handbrake
             // 
             // btn_dvd_source
             // 
-            this.btn_dvd_source.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.FolderTitleSpecificScan});
             this.btn_dvd_source.Image = global::Handbrake.Properties.Resources.folder;
             this.btn_dvd_source.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_dvd_source.Name = "btn_dvd_source";
@@ -1357,11 +1348,29 @@ namespace Handbrake
             this.btn_dvd_source.Text = "Folder";
             this.btn_dvd_source.Click += new System.EventHandler(this.BtnFolderScanClicked);
             // 
+            // btnTitleSpecific
+            // 
+            this.btnTitleSpecific.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.FileTitleSpecificScan,
+            this.FolderTitleSpecificScan});
+            this.btnTitleSpecific.Name = "btnTitleSpecific";
+            this.btnTitleSpecific.Size = new System.Drawing.Size(182, 22);
+            this.btnTitleSpecific.Text = "Title Specific Scan";
+            // 
+            // FileTitleSpecificScan
+            // 
+            this.FileTitleSpecificScan.Image = global::Handbrake.Properties.Resources.Movies_Small;
+            this.FileTitleSpecificScan.Name = "FileTitleSpecificScan";
+            this.FileTitleSpecificScan.Size = new System.Drawing.Size(125, 22);
+            this.FileTitleSpecificScan.Text = "Video File";
+            this.FileTitleSpecificScan.Click += new System.EventHandler(this.VideoTitleSpecificScanClick);
+            // 
             // FolderTitleSpecificScan
             // 
+            this.FolderTitleSpecificScan.Image = global::Handbrake.Properties.Resources.folder;
             this.FolderTitleSpecificScan.Name = "FolderTitleSpecificScan";
-            this.FolderTitleSpecificScan.Size = new System.Drawing.Size(169, 22);
-            this.FolderTitleSpecificScan.Text = "Title Specific Scan";
+            this.FolderTitleSpecificScan.Size = new System.Drawing.Size(125, 22);
+            this.FolderTitleSpecificScan.Text = "Folder";
             this.FolderTitleSpecificScan.Click += new System.EventHandler(this.FolderTitleSpecificScanClick);
             // 
             // toolStripSeparator1
@@ -1901,7 +1910,8 @@ namespace Handbrake
         private ToolStripMenuItem mnu_exportMacPreset;
         private ToolStripProgressBar ProgressBarStatus;
         internal CheckBox checkMaximumFramerate;
-        private ToolStripMenuItem VideoTitleSpecificScan;
+        private ToolStripMenuItem btnTitleSpecific;
+        private ToolStripMenuItem FileTitleSpecificScan;
         private ToolStripMenuItem FolderTitleSpecificScan;
     }
 }

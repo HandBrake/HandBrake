@@ -25,7 +25,7 @@ namespace Handbrake
         /// <param name="e">The EventArgs</param>
         private void BtnCancelClick(object sender, EventArgs e)
         {
-            this.Close();
+            this.DialogResult = DialogResult.Cancel;
         }
 
         /// <summary>
