@@ -272,6 +272,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
+                windowTimer.Dispose();
                 errorService.ShowError("GetLog() Error", exc.ToString());
             }
 
