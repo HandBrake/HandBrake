@@ -13,6 +13,7 @@ namespace Handbrake
     using System.Threading;
     using System.Windows.Forms;
 
+    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     using Model;
@@ -26,6 +27,21 @@ namespace Handbrake
         /* Private Variables */
 
         /// <summary>
+        /// The Encode Object
+        /// </summary>
+        private readonly IQueue encode;
+
+        /// <summary>
+        /// The Scan Object
+        /// </summary>
+        private readonly IScan scan;
+
+        /// <summary>
+        /// The Error service
+        /// </summary>
+        private readonly IErrorService errorService = new ErrorService();
+
+        /// <summary>
         /// The current position in the log file
         /// </summary>
         private int position;
@@ -34,16 +50,6 @@ namespace Handbrake
         /// A Timer for this window
         /// </summary>
         private Timer windowTimer;
-
-        /// <summary>
-        /// The Encode Object
-        /// </summary>
-        private IQueue encode;
-
-        /// <summary>
-        /// The Scan Object
-        /// </summary>
-        private IScan scan;
 
         /// <summary>
         /// The Type of log that the window is currently dealing with
@@ -111,7 +117,7 @@ namespace Handbrake
             {
                 if (rtf_actLog.InvokeRequired)
                 {
-                    IAsyncResult invoked = BeginInvoke(new SetModeCallback(SetMode), new object[] {setMode});
+                    IAsyncResult invoked = BeginInvoke(new SetModeCallback(SetMode), new object[] { setMode });
                     EndInvoke(invoked);
                 }
                 else
@@ -120,7 +126,7 @@ namespace Handbrake
                     this.mode = setMode;
 
                     Array values = Enum.GetValues(typeof(ActivityLogMode));
-                    Properties.Settings.Default.ActivityWindowLastMode = (int) values.GetValue(Convert.ToInt32(setMode));
+                    Properties.Settings.Default.ActivityWindowLastMode = (int)values.GetValue(Convert.ToInt32(setMode));
                     Properties.Settings.Default.Save();
 
                     this.Text = mode == ActivityLogMode.Scan
@@ -155,8 +161,15 @@ namespace Handbrake
         /// </param>
         private void NewActivityWindow_Load(object sender, EventArgs e)
         {
-            ActivityLogMode activitLogMode = (ActivityLogMode) Enum.ToObject(typeof(ActivityLogMode), Properties.Settings.Default.ActivityWindowLastMode);
-            SetMode(activitLogMode);        
+            try
+            {
+                ActivityLogMode activitLogMode = (ActivityLogMode)Enum.ToObject(typeof(ActivityLogMode), Properties.Settings.Default.ActivityWindowLastMode);
+                SetMode(activitLogMode);
+            }
+            catch (Exception exc)
+            {
+                errorService.ShowError("Error during load.", exc.ToString());
+            }
         }
 
         /// <summary>
@@ -224,36 +237,44 @@ namespace Handbrake
         {
             StringBuilder appendText = new StringBuilder();
 
-            if (this.mode == ActivityLogMode.Scan)
+            try
             {
-                if (scan == null || scan.ActivityLog == string.Empty)
+                if (this.mode == ActivityLogMode.Scan)
                 {
-                    appendText.AppendFormat("Waiting for the log to be generated ...\n");
-                    position = 0;
-                    ClearWindowText();
-                    return appendText;
-                }
+                    if (scan == null || scan.ActivityLog == string.Empty)
+                    {
+                        appendText.AppendFormat("Waiting for the log to be generated ...\n");
+                        position = 0;
+                        ClearWindowText();
+                        return appendText;
+                    }
 
-                using (StringReader reader = new StringReader(scan.ActivityLog))
+                    using (StringReader reader = new StringReader(scan.ActivityLog))
+                    {
+                        LogReader(reader, appendText);
+                    }
+                }
+                else
                 {
-                    LogReader(reader, appendText);
+                    if (encode == null || encode.ActivityLog == string.Empty)
+                    {
+                        appendText.AppendFormat("Waiting for the log to be generated ...\n");
+                        position = 0;
+                        ClearWindowText();
+                        return appendText;
+                    }
+
+                    using (StringReader reader = new StringReader(encode.ActivityLog))
+                    {
+                        LogReader(reader, appendText);
+                    }
                 }
             }
-            else
+            catch (Exception exc)
             {
-                if (encode == null || encode.ActivityLog == string.Empty)
-                {
-                    appendText.AppendFormat("Waiting for the log to be generated ...\n");
-                    position = 0;
-                    ClearWindowText();
-                    return appendText;
-                }
-
-                using (StringReader reader = new StringReader(encode.ActivityLog))
-                {
-                    LogReader(reader, appendText);
-                }
+                errorService.ShowError("GetLog() Error", exc.ToString());
             }
+
             return appendText;
         }
 
