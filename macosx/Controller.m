@@ -6241,7 +6241,7 @@ the user is using "Custom" settings by determining the sender*/
 - (IBAction) openUserGuide: (id) sender
 {
     [[NSWorkspace sharedWorkspace] openURL: [NSURL
-        URLWithString:@"https://trac.handbrake.fr/wiki/HandBrakeGuide"]];
+        URLWithString:@"http://trac.handbrake.fr/wiki/HandBrakeGuide"]];
 }
 
 /**
