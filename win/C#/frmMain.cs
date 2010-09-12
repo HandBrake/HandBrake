@@ -22,6 +22,8 @@ namespace Handbrake
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
+    using Handbrake.ToolWindows;
+
     using Model;
     using Presets;
     using Properties;

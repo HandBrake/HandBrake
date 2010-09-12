@@ -3,7 +3,7 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace Handbrake
+namespace Handbrake.ToolWindows
 {
     using System;
     using System.Windows.Forms;

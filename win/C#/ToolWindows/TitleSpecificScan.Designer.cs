@@ -1,4 +1,4 @@
-﻿namespace Handbrake
+﻿namespace Handbrake.ToolWindows
 {
     partial class TitleSpecificScan
     {
