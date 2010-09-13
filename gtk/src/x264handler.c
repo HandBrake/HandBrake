@@ -1038,10 +1038,6 @@ sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 	{
 		x264_remove_opt(split, x264_bpyramid_syns);
 	}
-	if (!ghb_settings_get_boolean(ud->settings, "x264_cabac"))
-	{
-		x264_remove_opt(split, x264_trellis_syns);
-	}
 	// Remove entries that match the defaults
 	for (ii = 0; split[ii] != NULL; ii++)
 	{
