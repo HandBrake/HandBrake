@@ -1,0 +1,22 @@
+Index: configure
+===================================================================
+--- ffmpeg.orig/configure	(revision 25082)
++++ ffmpeg/configure	(working copy)
+@@ -2222,7 +2222,7 @@
+ fi
+ 
+ add_cppflags -D_ISOC99_SOURCE -D_POSIX_C_SOURCE=200112
+-check_cflags -std=c99
++check_cflags -std=gnu99
+ check_cc -D_FILE_OFFSET_BITS=64 <<EOF && add_cppflags -D_FILE_OFFSET_BITS=64
+ #include <stdlib.h>
+ EOF
+@@ -2230,7 +2230,7 @@
+ #include <stdlib.h>
+ EOF
+ 
+-check_host_cflags -std=c99
++check_host_cflags -std=gnu99
+ 
+ case "$arch" in
+     alpha|ia64|mips|parisc|sparc)
