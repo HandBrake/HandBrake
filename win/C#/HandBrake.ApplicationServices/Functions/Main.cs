@@ -22,21 +22,5 @@ namespace HandBrake.ApplicationServices.Functions
         {
             return Process.GetProcessesByName("HandBrakeCLI");
         }
-
-        /// <summary>
-        /// Show the Exception Window
-        /// </summary>
-        /// <param name="shortError">
-        /// The short error.
-        /// </param>
-        /// <param name="longError">
-        /// The long error.
-        /// </param>
-        public static void ShowExceptiowWindow(string shortError, string longError)
-        {
-            ExceptionWindow exceptionWindow = new ExceptionWindow();
-            exceptionWindow.Setup(shortError, longError);
-            exceptionWindow.Show();
-        }
     }
 }

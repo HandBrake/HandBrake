@@ -288,7 +288,7 @@ namespace HandBrake.ApplicationServices.Services
                 }
                 catch (Exception exc)
                 {
-                    Main.ShowExceptiowWindow("Unable to write to the file. Please make sure that the location has the correct permissions for file writing.", exc.ToString());
+                    errorService.ShowError("Unable to write to the file. Please make sure that the location has the correct permissions for file writing.", exc.ToString());
                 }
             }
             return false;
@@ -365,7 +365,7 @@ namespace HandBrake.ApplicationServices.Services
                     }
                     catch (Exception exc)
                     {
-                        Main.ShowExceptiowWindow("Unable to Start Queue", exc.ToString());
+                        errorService.ShowError("Unable to Start Queue", exc.ToString());
                     }
                 }
             }

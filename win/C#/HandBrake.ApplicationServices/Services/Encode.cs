@@ -23,7 +23,13 @@ namespace HandBrake.ApplicationServices.Services
     /// </summary>
     public class Encode : IEncode
     {
+
         #region Private Variables
+
+        /// <summary>
+        /// The Error Service
+        /// </summary>
+        protected IErrorService errorService;
 
         /// <summary>
         /// The Log Buffer
@@ -61,6 +67,8 @@ namespace HandBrake.ApplicationServices.Services
         {
             this.EncodeStarted += Encode_EncodeStarted;
             GrowlCommunicator.Register();
+
+            this.errorService = new ErrorService();
         }
 
         #region Delegates and Event Handlers
@@ -214,7 +222,7 @@ namespace HandBrake.ApplicationServices.Services
             }
             catch (Exception exc)
             {
-                Main.ShowExceptiowWindow("It would appear that HandBrakeCLI has not started correctly." +
+                errorService.ShowError("It would appear that HandBrakeCLI has not started correctly." +
                 "You should take a look at the Activity log as it may indicate the reason why.\n\nDetailed Error Information: error occured in runCli()",
                 exc.ToString());
             }
@@ -231,7 +239,7 @@ namespace HandBrake.ApplicationServices.Services
             }
             catch (Exception exc)
             {
-                Main.ShowExceptiowWindow("Unable to stop HandBrakeCLI. It may not be running.", exc.ToString());
+                errorService.ShowError("Unable to stop HandBrakeCLI. It may not be running.", exc.ToString());
             }
 
             if (this.EncodeEnded != null)
@@ -300,7 +308,7 @@ namespace HandBrake.ApplicationServices.Services
             }
             catch (Exception exc)
             {
-                Main.ShowExceptiowWindow("Unable to make a copy of the log file", exc.ToString());
+                errorService.ShowError("Unable to make a copy of the log file", exc.ToString());
             }
         }
 
@@ -336,7 +344,7 @@ namespace HandBrake.ApplicationServices.Services
             }
             catch (Exception exc)
             {
-                Main.ShowExceptiowWindow("Unable to close the log file wrtier", exc.ToString());
+                errorService.ShowError("Unable to close the log file wrtier", exc.ToString());
             }
         }
 
@@ -386,7 +394,7 @@ namespace HandBrake.ApplicationServices.Services
                 }
                 catch (Exception exc)
                 {
-                    Main.ShowExceptiowWindow("Unable to read log file", exc.ToString());
+                    errorService.ShowError("Unable to read log file", exc.ToString());
                 }
             }
         }
@@ -420,7 +428,7 @@ namespace HandBrake.ApplicationServices.Services
             {
                 if (fileWriter != null)
                     fileWriter.Close();
-                Main.ShowExceptiowWindow("Error", exc.ToString());
+                errorService.ShowError("Error", exc.ToString());
             }
         }
 
@@ -447,7 +455,7 @@ namespace HandBrake.ApplicationServices.Services
                 }
                 catch (Exception exc)
                 {
-                    Main.ShowExceptiowWindow("Unable to write log data...", exc.ToString());
+                    errorService.ShowError("Unable to write log data...", exc.ToString());
                 }
             }
         }
@@ -483,7 +491,7 @@ namespace HandBrake.ApplicationServices.Services
             }
             catch (Exception exc)
             {
-                Main.ShowExceptiowWindow("An Unknown Error has occured", exc.ToString());
+                errorService.ShowError("An Unknown Error has occured", exc.ToString());
             }
         }
 

@@ -24,6 +24,11 @@ namespace HandBrake.ApplicationServices.Services
         /* Private Variables */
 
         /// <summary>
+        /// The Error Service
+        /// </summary>
+        private IErrorService errorService;
+
+        /// <summary>
         /// A Lock object
         /// </summary>
         private static readonly object locker = new object();
@@ -47,6 +52,14 @@ namespace HandBrake.ApplicationServices.Services
         /// The Process belonging to the CLI
         /// </summary>
         private Process hbProc;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScanService"/> class.
+        /// </summary>
+        public ScanService()
+        {
+            this.errorService = new ErrorService();
+        }
 
         /* Event Handlers */
 
@@ -128,7 +141,7 @@ namespace HandBrake.ApplicationServices.Services
             }
             catch (Exception ex)
             {
-                Main.ShowExceptiowWindow("Unable to kill HandBrakeCLI.exe \n" +
+                errorService.ShowError("Unable to kill HandBrakeCLI.exe \n" +
                 "You may need to manually kill HandBrakeCLI.exe using the Windows Task Manager if it does not close automatically" + 
                 " within the next few minutes. ", ex.ToString());
             }
@@ -200,11 +213,11 @@ namespace HandBrake.ApplicationServices.Services
                 IsScanning = false;
 
                 if (this.ScanCompleted != null)
-                    this.ScanCompleted(this, new EventArgs());
+                    this.ScanCompleted(this, new EventArgs()); 
             }
             catch (Exception exc)
             {
-                Main.ShowExceptiowWindow("frmMain.cs - scanProcess() Error", exc.ToString());
+                errorService.ShowError("frmMain.cs - scanProcess() Error", exc.ToString());
             }
         }
 
