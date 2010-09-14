@@ -114,7 +114,7 @@ namespace Handbrake.Controls
                             trackId = tempSub[0];
 
                             if (item.Forced == "Yes")
-                                itemToAdd = "scan";
+                                itemToAdd = trackId;
 
                             if (itemToAdd != string.Empty)
                                 subtitleForced += subtitleForced == string.Empty ? itemToAdd : "," + itemToAdd;
