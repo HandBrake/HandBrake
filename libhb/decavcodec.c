@@ -977,10 +977,11 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
         if ( info->pixel_aspect_width == 0 ||
              info->pixel_aspect_height == 0 )
         {
+            // There will not be an ffmpeg stream if the file is TS
             AVStream *st = hb_ffmpeg_avstream( w->codec_param );
-            info->pixel_aspect_width = st->sample_aspect_ratio.num ?
-                                        st->sample_aspect_ratio.num : 1;
-            info->pixel_aspect_height = st->sample_aspect_ratio.den ?
+            info->pixel_aspect_width = st && st->sample_aspect_ratio.num ?
+                                       st->sample_aspect_ratio.num : 1;
+            info->pixel_aspect_height = st && st->sample_aspect_ratio.den ?
                                         st->sample_aspect_ratio.den : 1;
         }
         /* ffmpeg returns the Pixel Aspect Ratio (PAR). Handbrake wants the

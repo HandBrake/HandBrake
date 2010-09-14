@@ -2875,6 +2875,9 @@ static void ffmpeg_remap_stream( hb_stream_t *stream, hb_title_t *title )
 
 void *hb_ffmpeg_context( int codec_param )
 {
+    if ( ffmpeg_streams == NULL )
+        return NULL;
+
     int slot = codec_param & (ffmpeg_sl_size - 1);
     int stream_index = codec_param >> ffmpeg_sl_bits;
     return ffmpeg_streams[slot]->ffmpeg_ic->streams[stream_index]->codec;
@@ -2882,6 +2885,9 @@ void *hb_ffmpeg_context( int codec_param )
 
 void *hb_ffmpeg_avstream( int codec_param )
 {
+    if ( ffmpeg_streams == NULL )
+        return NULL;
+
     int slot = codec_param & (ffmpeg_sl_size - 1);
     int stream_index = codec_param >> ffmpeg_sl_bits;
     return ffmpeg_streams[slot]->ffmpeg_ic->streams[stream_index];
