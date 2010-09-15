@@ -174,7 +174,7 @@ hb_work_object_t * hb_sync_init( hb_job_t * job )
     /* Initialize libsamplerate for every audio track we have */
     if ( ! job->indepth_scan )
     {
-        for( i = 0; i < hb_list_count( title->list_audio ) && i < 8; i++ )
+        for( i = 0; i < hb_list_count( title->list_audio ); i++ )
         {
             InitAudio( job, pv->common, i );
         }

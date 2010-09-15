@@ -641,7 +641,6 @@ audio_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	
 	g_debug("audio_add_clicked_cb ()");
 	asettings = ghb_dict_value_new();
-	// Only allow up to 8 audio entries
 	widget = GHB_WIDGET(ud->builder, "AudioTrack");
 	ghb_settings_take_value(asettings, "AudioTrack", ghb_widget_value(widget));
 	widget = GHB_WIDGET(ud->builder, "AudioEncoder");
