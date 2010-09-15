@@ -23,7 +23,6 @@ namespace HandBrake.ApplicationServices.Services
     /// </summary>
     public class Encode : IEncode
     {
-
         #region Private Variables
 
         /// <summary>
@@ -123,7 +122,14 @@ namespace HandBrake.ApplicationServices.Services
             {
                 if (this.IsEncoding == false)
                 {
-                    ReadFile(); // Read the last log file back in if it exists
+                    try
+                    {
+                        ReadFile(); // Read the last log file back in if it exists
+                    }
+                    catch (Exception exc)
+                    {
+                        return exc.ToString();
+                    }
                 }
 
                 return string.IsNullOrEmpty(this.logBuffer.ToString()) ? "No log data available..." : this.logBuffer.ToString();
@@ -365,10 +371,6 @@ namespace HandBrake.ApplicationServices.Services
 
                 try
                 {
-                    // Make sure the application readable log file does not already exist. FileCopy fill fail if it does.
-                    if (File.Exists(logFile2))
-                        File.Delete(logFile2);
-
                     // Copy the log file.
                     if (File.Exists(logFile))
                         File.Copy(logFile, logFile2, true);
@@ -377,24 +379,25 @@ namespace HandBrake.ApplicationServices.Services
 
                     // Start the Reader
                     // Only use text which continues on from the last read line
-                    StreamReader sr = new StreamReader(logFile2);
-                    string line;
-                    int i = 1;
-                    while ((line = sr.ReadLine()) != null)
+                    using (StreamReader sr = new StreamReader(logFile2))
                     {
-                        if (i > logFilePosition)
+                        string line;
+                        int i = 1;
+                        while ((line = sr.ReadLine()) != null)
                         {
-                            logBuffer.AppendLine(line);
-                            logFilePosition++;
+                            if (i > logFilePosition)
+                            {
+                                logBuffer.AppendLine(line);
+                                logFilePosition++;
+                            }
+                            i++;
                         }
-                        i++;
+                        sr.Close();
                     }
-                    sr.Close();
-                    sr.Dispose();
                 }
                 catch (Exception exc)
                 {
-                    errorService.ShowError("Unable to read log file", exc.ToString());
+                    throw new Exception("Unable to read log file" + Environment.NewLine + exc);
                 }
             }
         }
@@ -428,6 +431,7 @@ namespace HandBrake.ApplicationServices.Services
             {
                 if (fileWriter != null)
                     fileWriter.Close();
+
                 errorService.ShowError("Error", exc.ToString());
             }
         }
@@ -455,7 +459,7 @@ namespace HandBrake.ApplicationServices.Services
                 }
                 catch (Exception exc)
                 {
-                    errorService.ShowError("Unable to write log data...", exc.ToString());
+                   // errorService.ShowError("Unable to write log data...", exc.ToString());
                 }
             }
         }
@@ -491,7 +495,7 @@ namespace HandBrake.ApplicationServices.Services
             }
             catch (Exception exc)
             {
-                errorService.ShowError("An Unknown Error has occured", exc.ToString());
+                EncodeOnEncodeProgress(null, 0, 0, 0, 0, 0, "Unknown, status not available..");
             }
         }
 
