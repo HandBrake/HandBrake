@@ -67,6 +67,10 @@
 		A906A0520F7A7B210007A827 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A906A0500F7A7B210007A827 /* AudioToolbox.framework */; };
 		A9AC41DF0C918DB500DDF9B8 /* HBAdvancedController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9AC41DD0C918DB500DDF9B8 /* HBAdvancedController.m */; };
 		A9AC41E00C918DB500DDF9B8 /* HBAdvancedController.h in Headers */ = {isa = PBXBuildFile; fileRef = A9AC41DE0C918DB500DDF9B8 /* HBAdvancedController.h */; };
+		D234BCBD1240E82800BE2E98 /* HBAudio.h in Headers */ = {isa = PBXBuildFile; fileRef = D234BCB91240E82800BE2E98 /* HBAudio.h */; };
+		D234BCBE1240E82800BE2E98 /* HBAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = D234BCBA1240E82800BE2E98 /* HBAudio.m */; };
+		D234BCBF1240E82800BE2E98 /* HBAudioController.h in Headers */ = {isa = PBXBuildFile; fileRef = D234BCBB1240E82800BE2E98 /* HBAudioController.h */; };
+		D234BCC01240E82800BE2E98 /* HBAudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = D234BCBC1240E82800BE2E98 /* HBAudioController.m */; };
 		D289A9F30DBBE7AC00CE614B /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D289A9F20DBBE7AC00CE614B /* CoreServices.framework */; };
 		D289AAC40DBBF3F100CE614B /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DEB2024052B055F00C39CA9 /* IOKit.framework */; };
 		E3003C7F0C88505D0072F2A8 /* DeleteHighlightPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E3003C7E0C88505D0072F2A8 /* DeleteHighlightPressed.png */; };
@@ -193,6 +197,10 @@
 		A906A0500F7A7B210007A827 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		A9AC41DD0C918DB500DDF9B8 /* HBAdvancedController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = HBAdvancedController.m; sourceTree = "<group>"; };
 		A9AC41DE0C918DB500DDF9B8 /* HBAdvancedController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HBAdvancedController.h; sourceTree = "<group>"; };
+		D234BCB91240E82800BE2E98 /* HBAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudio.h; sourceTree = "<group>"; };
+		D234BCBA1240E82800BE2E98 /* HBAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudio.m; sourceTree = "<group>"; };
+		D234BCBB1240E82800BE2E98 /* HBAudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioController.h; sourceTree = "<group>"; };
+		D234BCBC1240E82800BE2E98 /* HBAudioController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioController.m; sourceTree = "<group>"; };
 		D289A9F20DBBE7AC00CE614B /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		E3003C7E0C88505D0072F2A8 /* DeleteHighlightPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DeleteHighlightPressed.png; sourceTree = "<group>"; };
 		E3003CB40C8852B70072F2A8 /* DeletePressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DeletePressed.png; sourceTree = "<group>"; };
@@ -341,6 +349,10 @@
 		526FBC930B4CAA260064E04C /* HandBrake Sources */ = {
 			isa = PBXGroup;
 			children = (
+				D234BCB91240E82800BE2E98 /* HBAudio.h */,
+				D234BCBA1240E82800BE2E98 /* HBAudio.m */,
+				D234BCBB1240E82800BE2E98 /* HBAudioController.h */,
+				D234BCBC1240E82800BE2E98 /* HBAudioController.m */,
 				A2D18AA50FD81C50003C997B /* HBSubtitles.h */,
 				A2D18AA60FD81C50003C997B /* HBSubtitles.m */,
 				4DF3C8CB052889CD00A80101 /* Controller.h */,
@@ -431,6 +443,8 @@
 				A2BEA5FB0F2A1ED1001CE7A1 /* PictureController.h in Headers */,
 				278070240F5C261300699207 /* ChapterTitles.h in Headers */,
 				A2D18AA70FD81C50003C997B /* HBSubtitles.h in Headers */,
+				D234BCBD1240E82800BE2E98 /* HBAudio.h in Headers */,
+				D234BCBF1240E82800BE2E98 /* HBAudioController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -622,6 +636,8 @@
 				A22C85ED0D05D35100C10E36 /* HBPresets.m in Sources */,
 				A2BEA5FC0F2A1ED1001CE7A1 /* PictureController.m in Sources */,
 				A2D18AA80FD81C50003C997B /* HBSubtitles.m in Sources */,
+				D234BCBE1240E82800BE2E98 /* HBAudio.m in Sources */,
+				D234BCC01240E82800BE2E98 /* HBAudioController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -898,22 +898,14 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         }
         
         /* check to see how many audio track lines to allow for */
-        if ([[queueItemToCheck objectForKey:@"Audio1Track"] intValue] > 0)
-        {
-            itemHeightForDisplay +=  rowHeightNonTitle; 
-        }
-        if ([[queueItemToCheck objectForKey:@"Audio2Track"] intValue] > 0)
-        {
-            itemHeightForDisplay +=  rowHeightNonTitle; 
-        }
-        if ([[queueItemToCheck objectForKey:@"Audio3Track"] intValue] > 0)
-        {
-            itemHeightForDisplay +=  rowHeightNonTitle; 
-        }
-        if ([[queueItemToCheck objectForKey:@"Audio4Track"] intValue] > 0)
-        {
-            itemHeightForDisplay +=  rowHeightNonTitle; 
-        }
+		unsigned int ourMaximumNumberOfAudioTracks = [HBController maximumNumberOfAllowedAudioTracks];
+		int actualCountOfAudioTracks = 0;
+		for (unsigned int i = 1; i <= ourMaximumNumberOfAudioTracks; i++) {
+			if (0 < [[queueItemToCheck objectForKey: [NSString stringWithFormat: @"Audio%dTrack", i]] intValue]) {
+				actualCountOfAudioTracks++;
+			}
+		}
+		itemHeightForDisplay += (actualCountOfAudioTracks * rowHeightNonTitle);
         
         /* add in subtitle lines for each subtitle in the SubtitleList array */
         itemHeightForDisplay +=  rowHeightNonTitle * [[queueItemToCheck objectForKey:@"SubtitleList"] count];
@@ -1060,91 +1052,30 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         [finalString appendString:[NSString stringWithFormat:@"%@\n", [item objectForKey:@"PresetName"]] withAttributes:detailAttr];
         
         /* Third Line  (Format Summary) */
-        NSString * audioCodecSummary = @"";
+        NSString * audioCodecSummary = @"";	//	This seems to be set by the last track we have available...
         /* Lets also get our audio track detail since we are going through the logic for use later */
-        NSString * audioDetail1 = @"";
-        NSString * audioDetail2 = @"";
-        NSString * audioDetail3 = @"";
-        NSString * audioDetail4 = @"";
-        if ([[item objectForKey:@"Audio1Track"] intValue] > 0)
-        {
-            audioCodecSummary = [NSString stringWithFormat:@"%@", [item objectForKey:@"Audio1Encoder"]];
-            audioDetail1 = [NSString stringWithFormat:@"%@ Encoder: %@ Mixdown: %@ SampleRate: %@(khz) Bitrate: %@(kbps)",
-                            [item objectForKey:@"Audio1TrackDescription"] ,
-                            [item objectForKey:@"Audio1Encoder"],
-                            [item objectForKey:@"Audio1Mixdown"] ,
-                            [item objectForKey:@"Audio1Samplerate"],
-                            [item objectForKey:@"Audio1Bitrate"]];
-            
-            if ([[item objectForKey:@"Audio1TrackDRCSlider"] floatValue] > 0.00)
-            {
-                audioDetail1 = [NSString stringWithFormat:@"%@, DRC: %@",audioDetail1,[item objectForKey:@"Audio1TrackDRCSlider"]];
-            }
-            else
-            {
-                audioDetail1 = [NSString stringWithFormat:@"%@, DRC: Off",audioDetail1];
-            }
-        }
+		unsigned int ourMaximumNumberOfAudioTracks = [HBController maximumNumberOfAllowedAudioTracks];
+		NSMutableArray *audioDetails = [NSMutableArray arrayWithCapacity: ourMaximumNumberOfAudioTracks];
+		NSString *base;
+		NSString *detailString;
+		NSNumber *drc;
+		for (unsigned int i = 1; i <= ourMaximumNumberOfAudioTracks; i++) {
+			base = [NSString stringWithFormat: @"Audio%d", i];
+			if (0 < [[item objectForKey: [base stringByAppendingString: @"Track"]] intValue]) {
+				audioCodecSummary = [NSString stringWithFormat: @"%@", [item objectForKey: [base stringByAppendingString: @"Encoder"]]];
+				drc = [item objectForKey: [base stringByAppendingString: @"TrackDRCSlider"]];
+				detailString = [NSString stringWithFormat: @"%@ Encoder: %@ Mixdown: %@ SampleRate: %@(khz) Bitrate: %@(kbps), DRC: %@",
+								[item objectForKey: [base stringByAppendingString: @"TrackDescription"]],
+								[item objectForKey: [base stringByAppendingString: @"Encoder"]],
+								[item objectForKey: [base stringByAppendingString: @"Mixdown"]],
+								[item objectForKey: [base stringByAppendingString: @"Samplerate"]],
+								[item objectForKey: [base stringByAppendingString: @"Bitrate"]],
+								(0.0 < [drc floatValue]) ? drc : @"Off"
+								];
+				[audioDetails addObject: detailString];
+			}
+		}
         
-        if ([[item objectForKey:@"Audio2Track"] intValue] > 0)
-        {
-            audioCodecSummary = [NSString stringWithFormat:@"%@, %@",audioCodecSummary ,[item objectForKey:@"Audio2Encoder"]];
-            audioDetail2 = [NSString stringWithFormat:@"%@ Encoder: %@ Mixdown: %@ SampleRate: %@(khz) Bitrate: %@(kbps)",
-                            [item objectForKey:@"Audio2TrackDescription"] ,
-                            [item objectForKey:@"Audio2Encoder"],
-                            [item objectForKey:@"Audio2Mixdown"] ,
-                            [item objectForKey:@"Audio2Samplerate"],
-                            [item objectForKey:@"Audio2Bitrate"]];
-            
-            if ([[item objectForKey:@"Audio2TrackDRCSlider"] floatValue] > 0.00)
-            {
-                audioDetail2 = [NSString stringWithFormat:@"%@, DRC: %@",audioDetail2,[item objectForKey:@"Audio2TrackDRCSlider"]];
-            }
-            else
-            {
-                audioDetail2 = [NSString stringWithFormat:@"%@, DRC: Off",audioDetail2];
-            }
-        }
-        
-        if ([[item objectForKey:@"Audio3Track"] intValue] > 0)
-        {
-            audioCodecSummary = [NSString stringWithFormat:@"%@, %@",audioCodecSummary ,[item objectForKey:@"Audio3Encoder"]];
-            audioDetail3 = [NSString stringWithFormat:@"%@ Encoder: %@ Mixdown: %@ SampleRate: %@(khz) Bitrate: %@(kbps)",
-                            [item objectForKey:@"Audio3TrackDescription"] ,
-                            [item objectForKey:@"Audio3Encoder"],
-                            [item objectForKey:@"Audio3Mixdown"] ,
-                            [item objectForKey:@"Audio3Samplerate"],
-                            [item objectForKey:@"Audio3Bitrate"]];
-            
-            if ([[item objectForKey:@"Audio3TrackDRCSlider"] floatValue] > 0.00)
-            {
-                audioDetail3 = [NSString stringWithFormat:@"%@, DRC: %@",audioDetail3,[item objectForKey:@"Audio3TrackDRCSlider"]];
-            }
-            else
-            {
-                audioDetail3 = [NSString stringWithFormat:@"%@, DRC: Off",audioDetail3];
-            }
-        }
-        
-        if ([[item objectForKey:@"Audio4Track"] intValue] > 0)
-        {
-            audioCodecSummary = [NSString stringWithFormat:@"%@, %@",audioCodecSummary ,[item objectForKey:@"Audio3Encoder"]];
-            audioDetail4 = [NSString stringWithFormat:@"%@ Encoder: %@ Mixdown: %@ SampleRate: %@(khz) Bitrate: %@(kbps)",
-                            [item objectForKey:@"Audio4TrackDescription"] ,
-                            [item objectForKey:@"Audio4Encoder"],
-                            [item objectForKey:@"Audio4Mixdown"] ,
-                            [item objectForKey:@"Audio4Samplerate"],
-                            [item objectForKey:@"Audio4Bitrate"]];
-            
-            if ([[item objectForKey:@"Audio4TrackDRCSlider"] floatValue] > 0.00)
-            {
-                audioDetail4 = [NSString stringWithFormat:@"%@, DRC: %@",audioDetail4,[item objectForKey:@"Audio4TrackDRCSlider"]];
-            }
-            else
-            {
-                audioDetail4 = [NSString stringWithFormat:@"%@, DRC: Off",audioDetail4];
-            }
-        }
         
         NSString * jobFormatInfo;
         if ([[item objectForKey:@"ChapterMarkers"] intValue] == 1)
@@ -1362,33 +1293,18 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         
         
         /* Seventh Line Audio Details*/
-        if ([audioDetail1 length] != 0)
-        {
-            [finalString appendString: @"Audio Track 1: " withAttributes:detailBoldAttr];
-            [finalString appendString: audioDetail1 withAttributes:detailAttr];
-            [finalString appendString:@"\n" withAttributes:detailAttr];
-        }
-        
-        if ([audioDetail2 length] != 0)
-        {
-            [finalString appendString: @"Audio Track 2: " withAttributes:detailBoldAttr];
-            [finalString appendString: audioDetail2 withAttributes:detailAttr];
-            [finalString appendString:@"\n" withAttributes:detailAttr];
-        }
-        
-        if ([audioDetail3 length] != 0)
-        {
-            [finalString appendString: @"Audio Track 3: " withAttributes:detailBoldAttr];
-            [finalString appendString: audioDetail3 withAttributes:detailAttr];
-            [finalString appendString:@"\n" withAttributes:detailAttr];
-        }
-        
-        if ([audioDetail4 length] != 0)
-        {
-            [finalString appendString: @"Audio Track 4: " withAttributes:detailBoldAttr];
-            [finalString appendString: audioDetail4 withAttributes:detailAttr];
-            [finalString appendString:@"\n" withAttributes:detailAttr];
-        }
+        NSEnumerator *audioDetailEnumerator = [audioDetails objectEnumerator];
+		NSString *anAudioDetail;
+		int audioDetailCount = 0;
+		while (nil != (anAudioDetail = [audioDetailEnumerator nextObject])) {
+			audioDetailCount++;
+			if (0 < [anAudioDetail length]) {
+				[finalString appendString: [NSString stringWithFormat: @"Audio Track %d ", audioDetailCount] withAttributes: detailBoldAttr];
+				[finalString appendString: anAudioDetail withAttributes: detailAttr];
+				[finalString appendString: @"\n" withAttributes: detailAttr];
+			}
+		}
+
         /* Eighth Line Subtitle Details */
         
         int i = 0;

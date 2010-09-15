@@ -17,6 +17,12 @@
 #import "HBAdvancedController.h"
 #import "HBPreferencesController.h"
 #import "HBPresets.h"
+#import "HBAudioController.h"
+
+extern NSString *HBContainerChangedNotification;
+extern NSString *keyContainerTag;
+extern NSString *HBTitleChangedNotification;
+extern NSString *keyTitleTag;
 
 @class HBOutputPanelController;
 
@@ -154,61 +160,9 @@ BOOL                        fIsDragging;
 	HBSubtitles                  * fSubtitlesDelegate;
     IBOutlet NSButton            * fBrowseSrtFileButton;
     
-	
-    /* Audio box */
-    /* Track Labels */
-    IBOutlet NSTextField         * fAudSourceLabel;
-    IBOutlet NSTextField         * fAudCodecLabel;
-    IBOutlet NSTextField         * fAudMixdownLabel;
-    IBOutlet NSTextField         * fAudSamplerateLabel;
-    IBOutlet NSTextField         * fAudBitrateLabel;
-    IBOutlet NSTextField         * fAudDrcLabel;
-    
-    IBOutlet NSTextField         * fAudTrack1Label;
-    IBOutlet NSTextField         * fAudTrack2Label;
-    IBOutlet NSTextField         * fAudTrack3Label;
-    IBOutlet NSTextField         * fAudTrack4Label;
-    
-    /* Source Audio PopUps */
-    IBOutlet NSPopUpButton       * fAudLang1PopUp;
-    IBOutlet NSPopUpButton       * fAudLang2PopUp;
-    IBOutlet NSPopUpButton       * fAudLang3PopUp;
-    IBOutlet NSPopUpButton       * fAudLang4PopUp;
-    
-    /* Codec Popups */
-    IBOutlet NSPopUpButton       * fAudTrack1CodecPopUp;
-    IBOutlet NSPopUpButton       * fAudTrack2CodecPopUp;
-    IBOutlet NSPopUpButton       * fAudTrack3CodecPopUp;
-    IBOutlet NSPopUpButton       * fAudTrack4CodecPopUp;
-    
-	/* Mixdown PopUps */
-	IBOutlet NSPopUpButton       * fAudTrack1MixPopUp;
-    IBOutlet NSPopUpButton       * fAudTrack2MixPopUp;
-    IBOutlet NSPopUpButton       * fAudTrack3MixPopUp;
-    IBOutlet NSPopUpButton       * fAudTrack4MixPopUp;
-	
-    /* Samplerate PopUps */
-	IBOutlet NSPopUpButton       * fAudTrack1RatePopUp;
-    IBOutlet NSPopUpButton       * fAudTrack2RatePopUp;
-    IBOutlet NSPopUpButton       * fAudTrack3RatePopUp;
-    IBOutlet NSPopUpButton       * fAudTrack4RatePopUp;
-    
-    /* Bitrate PopUps */
-    IBOutlet NSPopUpButton       * fAudTrack1BitratePopUp;
-    IBOutlet NSPopUpButton       * fAudTrack2BitratePopUp;
-    IBOutlet NSPopUpButton       * fAudTrack3BitratePopUp;
-    IBOutlet NSPopUpButton       * fAudTrack4BitratePopUp;
-    
-    /* Dynamic Range Compression */
-    IBOutlet NSSlider            * fAudTrack1DrcSlider;
-    IBOutlet NSTextField         * fAudTrack1DrcField;
-    IBOutlet NSSlider            * fAudTrack2DrcSlider;
-    IBOutlet NSTextField         * fAudTrack2DrcField;
-    IBOutlet NSSlider            * fAudTrack3DrcSlider;
-    IBOutlet NSTextField         * fAudTrack3DrcField;
-    IBOutlet NSSlider            * fAudTrack4DrcSlider;
-    IBOutlet NSTextField         * fAudTrack4DrcField;
-    
+	/* New Audio box */
+	IBOutlet HBAudioController   * fAudioDelegate;
+	    
     /* Chapters box */
     IBOutlet NSButton            * fCreateChapterMarkers;
     IBOutlet NSTableView         * fChapterTable;
@@ -320,14 +274,6 @@ BOOL                        fIsDragging;
 - (IBAction) autoSetM4vExtension: (id) sender;
 - (IBAction) twoPassCheckboxChanged: (id) sender;
 - (IBAction) videoFrameRateChanged: (id) sender;
-- (IBAction) audioAddAudioTrackCodecs: (id)sender;
-- (IBAction) audioCodecsPopUpChanged: (id) sender;
-- (IBAction) setEnabledStateOfAudioMixdownControls: (id) sender;
-- (IBAction) addAllAudioTracksToPopUp: (id) sender;
-- (IBAction) selectAudioTrackInPopUp: (id) sender searchPrefixString: (NSString *) searchPrefixString selectIndexIfNotFound: (int) selectIndexIfNotFound;
-- (IBAction) audioTrackPopUpChanged: (id) sender;
-- (IBAction) audioTrackPopUpChanged: (id) sender mixdownToUse: (int) mixdownToUse;
-- (IBAction) audioTrackMixdownChanged: (id) sender;
 - (void) prepareJob;
 - (IBAction) browseFile: (id) sender;
 - (void)     browseFileDone: (NSSavePanel *) sheet
@@ -338,7 +284,6 @@ BOOL                        fIsDragging;
 - (IBAction) qualitySliderChanged: (id) sender;
 - (void) setupQualitySlider;
 
-- (IBAction) audioDRCSliderChanged: (id) sender;
 - (IBAction) browseImportSrtFile: (id) sender;
 - (void) browseImportSrtFileDone: (NSSavePanel *) sheet
                      returnCode: (int) returnCode contextInfo: (void *) contextInfo;
@@ -469,6 +414,8 @@ BOOL                        fIsDragging;
 - (IBAction) browseForChapterFileSave: (id) sender;
 - (void)     browseForChapterFileSaveDone: (NSSavePanel *) sheet
                  returnCode: (int) returnCode contextInfo: (void *) contextInfo;
+
++ (unsigned int) maximumNumberOfAllowedAudioTracks;
 
 @end
 

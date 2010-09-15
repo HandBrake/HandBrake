@@ -12,6 +12,12 @@
 #import "HBPresets.h"
 #import "HBPreviewController.h"
 
+unsigned int maximumNumberOfAllowedAudioTracks = 24;
+NSString *HBContainerChangedNotification = @"HBContainerChangedNotification";
+NSString *keyContainerTag = @"keyContainerTag";
+NSString *HBTitleChangedNotification = @"HBTitleChangedNotification";
+NSString *keyTitleTag = @"keyTitleTag";
+
 #define DragDropSimplePboardType 	@"MyCustomOutlineViewPboardType"
 
 /* We setup the toolbar values here ShowPreviewIdentifier */
@@ -30,6 +36,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
  * HBController implementation *
  *******************************/
 @implementation HBController
+
++ (unsigned int) maximumNumberOfAllowedAudioTracks	{	return maximumNumberOfAllowedAudioTracks;	}
 
 - (id)init
 {
@@ -118,6 +126,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fSubtitlesTable setDelegate:fSubtitlesDelegate];
     [fSubtitlesTable setRowHeight:25.0];
     
+	/* setup the audio controller */
+	[fAudioDelegate setHBController: self];
+	[[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(autoSetM4vExtension:) name: HBMixdownChangedNotification object: nil];
+
     [fPresetsOutlineView setAutosaveName:@"Presets View"];
     [fPresetsOutlineView setAutosaveExpandedItems:YES];
     
@@ -549,26 +561,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	
 	/* Set Auto Crop to On at launch */
     [fPictureController setAutoCrop:YES];
-	
-	/* Audio bitrate */
-    [fAudTrack1BitratePopUp removeAllItems];
-    for( int i = 0; i < hb_audio_bitrates_count; i++ )
-    {
-        [fAudTrack1BitratePopUp addItemWithTitle:
-         [NSString stringWithUTF8String: hb_audio_bitrates[i].string]];
-        
-    }
-    [fAudTrack1BitratePopUp selectItemAtIndex: hb_audio_bitrates_default];
-	
-    /* Audio samplerate */
-    [fAudTrack1RatePopUp removeAllItems];
-    for( int i = 0; i < hb_audio_rates_count; i++ )
-    {
-        [fAudTrack1RatePopUp addItemWithTitle:
-         [NSString stringWithUTF8String: hb_audio_rates[i].string]];
-    }
-    [fAudTrack1RatePopUp selectItemAtIndex: hb_audio_rates_default];
-	
+		
     /* Bottom */
     [fStatusField setStringValue: @""];
     
@@ -595,18 +588,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         fDstFormatField, fDstFormatPopUp, fDstFile1Field, fDstFile2Field,
         fDstBrowseButton, fVidRateField, fVidRatePopUp,fVidEncoderField, fVidEncoderPopUp, fVidQualityField,
         fPictureSizeField,fPictureCroppingField, fVideoFiltersField,fVidQualityMatrix, fSubField, fSubPopUp,
-        fAudSourceLabel, fAudCodecLabel, fAudMixdownLabel, fAudSamplerateLabel, fAudBitrateLabel,
-        fAudTrack1Label, fAudTrack2Label, fAudTrack3Label, fAudTrack4Label,
-        fAudLang1PopUp, fAudLang2PopUp, fAudLang3PopUp, fAudLang4PopUp,
-        fAudTrack1CodecPopUp, fAudTrack2CodecPopUp, fAudTrack3CodecPopUp, fAudTrack4CodecPopUp,
-        fAudTrack1MixPopUp, fAudTrack2MixPopUp, fAudTrack3MixPopUp, fAudTrack4MixPopUp,
-        fAudTrack1RatePopUp, fAudTrack2RatePopUp, fAudTrack3RatePopUp, fAudTrack4RatePopUp,
-        fAudTrack1BitratePopUp, fAudTrack2BitratePopUp, fAudTrack3BitratePopUp, fAudTrack4BitratePopUp,
-        fAudDrcLabel, fAudTrack1DrcSlider, fAudTrack1DrcField, fAudTrack2DrcSlider,
-        fAudTrack2DrcField, fAudTrack3DrcSlider, fAudTrack3DrcField, fAudTrack4DrcSlider,fAudTrack4DrcField,
         fQueueStatus,fPresetsAdd,fPresetsDelete,fSrcAngleLabel,fSrcAnglePopUp,
 		fCreateChapterMarkers,fVidTurboPassCheck,fDstMp4LargeFileCheck,fSubForcedCheck,fPresetsOutlineView,
-        fAudDrcLabel,fDstMp4HttpOptFileCheck,fDstMp4iPodFileCheck,fVidQualityRFField,fVidQualityRFLabel,
+        fDstMp4HttpOptFileCheck,fDstMp4iPodFileCheck,fVidQualityRFField,fVidQualityRFLabel,
         fEncodeStartStopPopUp,fSrcTimeStartEncodingField,fSrcTimeEndEncodingField,fSrcFrameStartEncodingField,
         fSrcFrameEndEncodingField, fLoadChaptersButton, fSaveChaptersButton, fFrameratePfrCheck};
     
@@ -630,9 +614,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	if (b) 
     {
         
-        /* if we're enabling the interface, check if the audio mixdown controls need to be enabled or not */
-        /* these will have been enabled by the mass control enablement above anyway, so we're sense-checking it here */
-        [self setEnabledStateOfAudioMixdownControls:nil];
         /* we also call calculatePictureSizing here to sense check if we already have vfr selected */
         [self calculatePictureSizing:nil];
         /* Also enable the preview window hud controls */
@@ -1723,6 +1704,14 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fSubtitlesDelegate resetWithTitle:nil];
     [fSubtitlesTable reloadData];
     
+	//	Notify anyone interested (audio controller) that there's no title
+	[[NSNotificationCenter defaultCenter] postNotification:
+	 [NSNotification notificationWithName: HBTitleChangedNotification
+								   object: self
+								 userInfo: [NSDictionary dictionaryWithObjectsAndKeys:
+											[NSData dataWithBytesNoCopy: &fTitle length: sizeof(fTitle) freeWhenDone: NO], keyTitleTag,
+											nil]]];
+
     [self enableUI: NO];
     
     if( [detector isVideoDVD] )
@@ -1804,7 +1793,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (IBAction) showNewScan:(id)sender
 {
     hb_list_t  * list;
-	hb_title_t * title;
+	hb_title_t * title = NULL;
 	int feature_title=0; // Used to store the main feature title
 
         list = hb_get_titles( fHandle );
@@ -1822,6 +1811,14 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             // Notify Subtitles that there's no title
             [fChapterTitlesDelegate resetWithTitle:nil];
             [fChapterTable reloadData];
+
+			//	Notify anyone interested (audio controller) that there's no title
+			[[NSNotificationCenter defaultCenter] postNotification:
+			 [NSNotification notificationWithName: HBTitleChangedNotification
+										   object: self
+										 userInfo: [NSDictionary dictionaryWithObjectsAndKeys:
+													[NSData dataWithBytesNoCopy: &fTitle length: sizeof(fTitle) freeWhenDone: NO], keyTitleTag,
+													nil]]];
         }
         else
         {
@@ -2376,46 +2373,7 @@ fWorkingCount = 0;
     [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController grayscale]] forKey:@"VideoGrayScale"];
     
     /*Audio*/
-    if ([fAudLang1PopUp indexOfSelectedItem] > 0)
-    {
-        [queueFileJob setObject:[NSNumber numberWithInt:[fAudLang1PopUp indexOfSelectedItem]] forKey:@"Audio1Track"];
-        [queueFileJob setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"Audio1TrackDescription"];
-        [queueFileJob setObject:[fAudTrack1CodecPopUp titleOfSelectedItem] forKey:@"Audio1Encoder"];
-        [queueFileJob setObject:[fAudTrack1MixPopUp titleOfSelectedItem] forKey:@"Audio1Mixdown"];
-        [queueFileJob setObject:[fAudTrack1RatePopUp titleOfSelectedItem] forKey:@"Audio1Samplerate"];
-        [queueFileJob setObject:[fAudTrack1BitratePopUp titleOfSelectedItem] forKey:@"Audio1Bitrate"];
-        [queueFileJob setObject:[NSNumber numberWithFloat:[fAudTrack1DrcSlider floatValue]] forKey:@"Audio1TrackDRCSlider"];
-    }
-    if ([fAudLang2PopUp indexOfSelectedItem] > 0)
-    {
-        [queueFileJob setObject:[NSNumber numberWithInt:[fAudLang2PopUp indexOfSelectedItem]] forKey:@"Audio2Track"];
-        [queueFileJob setObject:[fAudLang2PopUp titleOfSelectedItem] forKey:@"Audio2TrackDescription"];
-        [queueFileJob setObject:[fAudTrack2CodecPopUp titleOfSelectedItem] forKey:@"Audio2Encoder"];
-        [queueFileJob setObject:[fAudTrack2MixPopUp titleOfSelectedItem] forKey:@"Audio2Mixdown"];
-        [queueFileJob setObject:[fAudTrack2RatePopUp titleOfSelectedItem] forKey:@"Audio2Samplerate"];
-        [queueFileJob setObject:[fAudTrack2BitratePopUp titleOfSelectedItem] forKey:@"Audio2Bitrate"];
-        [queueFileJob setObject:[NSNumber numberWithFloat:[fAudTrack2DrcSlider floatValue]] forKey:@"Audio2TrackDRCSlider"];
-    }
-    if ([fAudLang3PopUp indexOfSelectedItem] > 0)
-    {
-        [queueFileJob setObject:[NSNumber numberWithInt:[fAudLang3PopUp indexOfSelectedItem]] forKey:@"Audio3Track"];
-        [queueFileJob setObject:[fAudLang3PopUp titleOfSelectedItem] forKey:@"Audio3TrackDescription"];
-        [queueFileJob setObject:[fAudTrack3CodecPopUp titleOfSelectedItem] forKey:@"Audio3Encoder"];
-        [queueFileJob setObject:[fAudTrack3MixPopUp titleOfSelectedItem] forKey:@"Audio3Mixdown"];
-        [queueFileJob setObject:[fAudTrack3RatePopUp titleOfSelectedItem] forKey:@"Audio3Samplerate"];
-        [queueFileJob setObject:[fAudTrack3BitratePopUp titleOfSelectedItem] forKey:@"Audio3Bitrate"];
-        [queueFileJob setObject:[NSNumber numberWithFloat:[fAudTrack3DrcSlider floatValue]] forKey:@"Audio3TrackDRCSlider"];
-    }
-    if ([fAudLang4PopUp indexOfSelectedItem] > 0)
-    {
-        [queueFileJob setObject:[NSNumber numberWithInt:[fAudLang4PopUp indexOfSelectedItem]] forKey:@"Audio4Track"];
-        [queueFileJob setObject:[fAudLang4PopUp titleOfSelectedItem] forKey:@"Audio4TrackDescription"];
-        [queueFileJob setObject:[fAudTrack4CodecPopUp titleOfSelectedItem] forKey:@"Audio4Encoder"];
-        [queueFileJob setObject:[fAudTrack4MixPopUp titleOfSelectedItem] forKey:@"Audio4Mixdown"];
-        [queueFileJob setObject:[fAudTrack4RatePopUp titleOfSelectedItem] forKey:@"Audio4Samplerate"];
-        [queueFileJob setObject:[fAudTrack4BitratePopUp titleOfSelectedItem] forKey:@"Audio4Bitrate"];
-        [queueFileJob setObject:[NSNumber numberWithFloat:[fAudTrack4DrcSlider floatValue]] forKey:@"Audio4TrackDRCSlider"];
-    }
+	[fAudioDelegate prepareAudioForQueueFileJob: queueFileJob];	
     
 	/* Subtitles*/
     NSMutableArray *subtitlesArray = [[NSMutableArray alloc] initWithArray:[fSubtitlesDelegate getSubtitleArray] copyItems:YES];
@@ -2456,35 +2414,6 @@ fWorkingCount = 0;
 	[queueFileJob setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
     
     
-    /*Audio*/
-    if ([fAudLang1PopUp indexOfSelectedItem] > 0)
-    {
-        [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack1CodecPopUp selectedItem] tag]] forKey:@"JobAudio1Encoder"];
-        [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack1MixPopUp selectedItem] tag]] forKey:@"JobAudio1Mixdown"];
-        [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack1RatePopUp selectedItem] tag]] forKey:@"JobAudio1Samplerate"];
-        [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack1BitratePopUp selectedItem] tag]] forKey:@"JobAudio1Bitrate"];
-     }
-    if ([fAudLang2PopUp indexOfSelectedItem] > 0)
-    {
-        [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack2CodecPopUp selectedItem] tag]] forKey:@"JobAudio2Encoder"];
-        [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack2MixPopUp selectedItem] tag]] forKey:@"JobAudio2Mixdown"];
-        [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack2RatePopUp selectedItem] tag]] forKey:@"JobAudio2Samplerate"];
-        [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack2BitratePopUp selectedItem] tag]] forKey:@"JobAudio2Bitrate"];
-    }
-    if ([fAudLang3PopUp indexOfSelectedItem] > 0)
-    {
-        [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack3CodecPopUp selectedItem] tag]] forKey:@"JobAudio3Encoder"];
-        [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack3MixPopUp selectedItem] tag]] forKey:@"JobAudio3Mixdown"];
-        [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack3RatePopUp selectedItem] tag]] forKey:@"JobAudio3Samplerate"];
-        [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack3BitratePopUp selectedItem] tag]] forKey:@"JobAudio3Bitrate"];
-    }
-    if ([fAudLang4PopUp indexOfSelectedItem] > 0)
-    {
-        [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack4CodecPopUp selectedItem] tag]] forKey:@"JobAudio4Encoder"];
-        [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack4MixPopUp selectedItem] tag]] forKey:@"JobAudio4Mixdown"];
-        [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack4RatePopUp selectedItem] tag]] forKey:@"JobAudio4Samplerate"];
-        [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack4BitratePopUp selectedItem] tag]] forKey:@"JobAudio4Bitrate"];
-    }
 
     /* we need to auto relase the queueFileJob and return it */
     [queueFileJob autorelease];
@@ -2858,86 +2787,7 @@ fWorkingCount = 0;
     
     
     /* Now lets add our new tracks to the audio list here */
-    if ([[queueToApply objectForKey:@"Audio1Track"] intValue] > 0)
-    {
-        [fAudLang1PopUp selectItemAtIndex: [[queueToApply objectForKey:@"Audio1Track"] intValue]];
-        [self audioTrackPopUpChanged: fAudLang1PopUp];
-        [fAudTrack1CodecPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio1Encoder"]];
-        [self audioTrackPopUpChanged: fAudTrack1CodecPopUp];
-        
-        [fAudTrack1MixPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio1Mixdown"]];
-        
-        [fAudTrack1RatePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio1Samplerate"]];
-        [fAudTrack1BitratePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio1Bitrate"]];
-        
-        [fAudTrack1DrcSlider setFloatValue:[[queueToApply objectForKey:@"Audio1TrackDRCSlider"] floatValue]];
-        [self audioDRCSliderChanged: fAudTrack1DrcSlider];
-    }
-    else
-    {
-        [fAudLang1PopUp selectItemAtIndex: 0];
-        [self audioTrackPopUpChanged: fAudLang1PopUp];
-    }
-    if ([[queueToApply objectForKey:@"Audio2Track"] intValue] > 0)
-    {
-        [fAudLang2PopUp selectItemAtIndex: [[queueToApply objectForKey:@"Audio2Track"] intValue]];
-        [self audioTrackPopUpChanged: fAudLang2PopUp];
-        [fAudTrack2CodecPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio2Encoder"]];
-        [self audioTrackPopUpChanged: fAudTrack2CodecPopUp];
-        
-        [fAudTrack2MixPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio2Mixdown"]];
-        
-        [fAudTrack2RatePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio2Samplerate"]];
-        [fAudTrack2BitratePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio2Bitrate"]];
-        
-        [fAudTrack2DrcSlider setFloatValue:[[queueToApply objectForKey:@"Audio2TrackDRCSlider"] floatValue]];
-        [self audioDRCSliderChanged: fAudTrack2DrcSlider];
-    }
-    else
-    {
-        [fAudLang2PopUp selectItemAtIndex: 0];
-        [self audioTrackPopUpChanged: fAudLang2PopUp];
-    }
-    if ([[queueToApply objectForKey:@"Audio3Track"] intValue] > 0)
-    {
-        [fAudLang3PopUp selectItemAtIndex: [[queueToApply objectForKey:@"Audio3Track"] intValue]];
-        [self audioTrackPopUpChanged: fAudLang3PopUp];
-        [fAudTrack3CodecPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio3Encoder"]];
-        [self audioTrackPopUpChanged: fAudTrack3CodecPopUp];
-        
-        [fAudTrack3MixPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio3Mixdown"]];
-        
-        [fAudTrack3RatePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio3Samplerate"]];
-        [fAudTrack3BitratePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio3Bitrate"]];
-        
-        [fAudTrack3DrcSlider setFloatValue:[[queueToApply objectForKey:@"Audio3TrackDRCSlider"] floatValue]];
-        [self audioDRCSliderChanged: fAudTrack3DrcSlider];
-    }
-    else
-    {
-        [fAudLang3PopUp selectItemAtIndex: 0];
-        [self audioTrackPopUpChanged: fAudLang3PopUp];
-    }
-    if ([[queueToApply objectForKey:@"Audio4Track"] intValue] > 0)
-    {
-        [fAudLang4PopUp selectItemAtIndex: [[queueToApply objectForKey:@"Audio4Track"] intValue]];
-        [self audioTrackPopUpChanged: fAudLang4PopUp];
-        [fAudTrack4CodecPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio4Encoder"]];
-        [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
-        
-        [fAudTrack4MixPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio4Mixdown"]];
-        
-        [fAudTrack4RatePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio4Samplerate"]];
-        [fAudTrack4BitratePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio4Bitrate"]];
-        
-        [fAudTrack4DrcSlider setFloatValue:[[queueToApply objectForKey:@"Audio4TrackDRCSlider"] floatValue]];
-        [self audioDRCSliderChanged: fAudTrack4DrcSlider];
-    }
-    else
-    {
-        [fAudLang4PopUp selectItemAtIndex: 0];
-        [self audioTrackPopUpChanged: fAudLang4PopUp];
-    }
+	[fAudioDelegate addTracksFromQueue: queueToApply];
     
     /*Subtitles*/
     /* Crashy crashy right now, working on it */
@@ -3349,83 +3199,7 @@ bool one_burned = FALSE;
     
     
     /* Audio tracks and mixdowns */
-    /* Lets make sure there arent any erroneous audio tracks in the job list, so lets make sure its empty*/
-    int audiotrack_count = hb_list_count(job->list_audio);
-    for( int i = 0; i < audiotrack_count;i++)
-    {
-        hb_audio_t * temp_audio = (hb_audio_t*) hb_list_item( job->list_audio, 0 );
-        hb_list_rem(job->list_audio, temp_audio);
-    }
-    /* Now lets add our new tracks to the audio list here */
-    if ([fAudLang1PopUp indexOfSelectedItem] > 0)
-    {
-        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
-        hb_audio_config_init(audio);
-        audio->in.track = [fAudLang1PopUp indexOfSelectedItem] - 1;
-        /* We go ahead and assign values to our audio->out.<properties> */
-        audio->out.track = [fAudLang1PopUp indexOfSelectedItem] - 1;
-        audio->out.codec = [[fAudTrack1CodecPopUp selectedItem] tag];
-        audio->out.mixdown = [[fAudTrack1MixPopUp selectedItem] tag];
-        audio->out.bitrate = [[fAudTrack1BitratePopUp selectedItem] tag];
-        audio->out.samplerate = [[fAudTrack1RatePopUp selectedItem] tag];
-        audio->out.dynamic_range_compression = [fAudTrack1DrcField floatValue];
-        
-        hb_audio_add( job, audio );
-        free(audio);
-    }  
-    if ([fAudLang2PopUp indexOfSelectedItem] > 0)
-    {
-        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
-        hb_audio_config_init(audio);
-        audio->in.track = [fAudLang2PopUp indexOfSelectedItem] - 1;
-        /* We go ahead and assign values to our audio->out.<properties> */
-        audio->out.track = [fAudLang2PopUp indexOfSelectedItem] - 1;
-        audio->out.codec = [[fAudTrack2CodecPopUp selectedItem] tag];
-        audio->out.mixdown = [[fAudTrack2MixPopUp selectedItem] tag];
-        audio->out.bitrate = [[fAudTrack2BitratePopUp selectedItem] tag];
-        audio->out.samplerate = [[fAudTrack2RatePopUp selectedItem] tag];
-        audio->out.dynamic_range_compression = [fAudTrack2DrcField floatValue];
-        
-        hb_audio_add( job, audio );
-        free(audio);
-        
-    }
-    
-    if ([fAudLang3PopUp indexOfSelectedItem] > 0)
-    {
-        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
-        hb_audio_config_init(audio);
-        audio->in.track = [fAudLang3PopUp indexOfSelectedItem] - 1;
-        /* We go ahead and assign values to our audio->out.<properties> */
-        audio->out.track = [fAudLang3PopUp indexOfSelectedItem] - 1;
-        audio->out.codec = [[fAudTrack3CodecPopUp selectedItem] tag];
-        audio->out.mixdown = [[fAudTrack3MixPopUp selectedItem] tag];
-        audio->out.bitrate = [[fAudTrack3BitratePopUp selectedItem] tag];
-        audio->out.samplerate = [[fAudTrack3RatePopUp selectedItem] tag];
-        audio->out.dynamic_range_compression = [fAudTrack3DrcField floatValue];
-        
-        hb_audio_add( job, audio );
-        free(audio);
-        
-    }
-
-    if ([fAudLang4PopUp indexOfSelectedItem] > 0)
-    {
-        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
-        hb_audio_config_init(audio);
-        audio->in.track = [fAudLang4PopUp indexOfSelectedItem] - 1;
-        /* We go ahead and assign values to our audio->out.<properties> */
-        audio->out.track = [fAudLang4PopUp indexOfSelectedItem] - 1;
-        audio->out.codec = [[fAudTrack4CodecPopUp selectedItem] tag];
-        audio->out.mixdown = [[fAudTrack4MixPopUp selectedItem] tag];
-        audio->out.bitrate = [[fAudTrack4BitratePopUp selectedItem] tag];
-        audio->out.samplerate = [[fAudTrack4RatePopUp selectedItem] tag];
-        audio->out.dynamic_range_compression = [fAudTrack4DrcField floatValue];
-        
-        hb_audio_add( job, audio );
-        free(audio);
-        
-    }
+	[fAudioDelegate prepareAudioForJob: job];
 
     
     
@@ -3927,75 +3701,25 @@ bool one_burned = FALSE;
         hb_list_rem(job->list_audio, temp_audio);
     }
     /* Now lets add our new tracks to the audio list here */
-    if ([[queueToApply objectForKey:@"Audio1Track"] intValue] > 0)
-    {
-        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
-        hb_audio_config_init(audio);
-        audio->in.track = [[queueToApply objectForKey:@"Audio1Track"] intValue] - 1;
-        /* We go ahead and assign values to our audio->out.<properties> */
-        audio->out.track = [[queueToApply objectForKey:@"Audio1Track"] intValue] - 1;
-        audio->out.codec = [[queueToApply objectForKey:@"JobAudio1Encoder"] intValue];
-        audio->out.mixdown = [[queueToApply objectForKey:@"JobAudio1Mixdown"] intValue];
-        audio->out.bitrate = [[queueToApply objectForKey:@"JobAudio1Bitrate"] intValue];
-        audio->out.samplerate = [[queueToApply objectForKey:@"JobAudio1Samplerate"] intValue];
-        audio->out.dynamic_range_compression = [[queueToApply objectForKey:@"Audio1TrackDRCSlider"] floatValue];
-        
-        hb_audio_add( job, audio );
-        free(audio);
-    }  
-    if ([[queueToApply objectForKey:@"Audio2Track"] intValue] > 0)
-    {
-        
-        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
-        hb_audio_config_init(audio);
-        audio->in.track = [[queueToApply objectForKey:@"Audio2Track"] intValue] - 1;
-        [self writeToActivityLog: "prepareJob audiotrack 2 is: %d", audio->in.track];
-        /* We go ahead and assign values to our audio->out.<properties> */
-        audio->out.track = [[queueToApply objectForKey:@"Audio2Track"] intValue] - 1;
-        audio->out.codec = [[queueToApply objectForKey:@"JobAudio2Encoder"] intValue];
-        audio->out.mixdown = [[queueToApply objectForKey:@"JobAudio2Mixdown"] intValue];
-        audio->out.bitrate = [[queueToApply objectForKey:@"JobAudio2Bitrate"] intValue];
-        audio->out.samplerate = [[queueToApply objectForKey:@"JobAudio2Samplerate"] intValue];
-        audio->out.dynamic_range_compression = [[queueToApply objectForKey:@"Audio2TrackDRCSlider"] floatValue];
-        
-        hb_audio_add( job, audio );
-        free(audio);
-    }
-    
-    if ([[queueToApply objectForKey:@"Audio3Track"] intValue] > 0)
-    {
-        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
-        hb_audio_config_init(audio);
-        audio->in.track = [[queueToApply objectForKey:@"Audio3Track"] intValue] - 1;
-        /* We go ahead and assign values to our audio->out.<properties> */
-        audio->out.track = [[queueToApply objectForKey:@"Audio3Track"] intValue] - 1;
-        audio->out.codec = [[queueToApply objectForKey:@"JobAudio3Encoder"] intValue];
-        audio->out.mixdown = [[queueToApply objectForKey:@"JobAudio3Mixdown"] intValue];
-        audio->out.bitrate = [[queueToApply objectForKey:@"JobAudio3Bitrate"] intValue];
-        audio->out.samplerate = [[queueToApply objectForKey:@"JobAudio3Samplerate"] intValue];
-        audio->out.dynamic_range_compression = [[queueToApply objectForKey:@"Audio3TrackDRCSlider"] floatValue];
-        
-        hb_audio_add( job, audio );
-        free(audio);        
-    }
-    
-    if ([[queueToApply objectForKey:@"Audio4Track"] intValue] > 0)
-    {
-        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
-        hb_audio_config_init(audio);
-        audio->in.track = [[queueToApply objectForKey:@"Audio4Track"] intValue] - 1;
-        /* We go ahead and assign values to our audio->out.<properties> */
-        audio->out.track = [[queueToApply objectForKey:@"Audio4Track"] intValue] - 1;
-        audio->out.codec = [[queueToApply objectForKey:@"JobAudio4Encoder"] intValue];
-        audio->out.mixdown = [[queueToApply objectForKey:@"JobAudio4Mixdown"] intValue];
-        audio->out.bitrate = [[queueToApply objectForKey:@"JobAudio4Bitrate"] intValue];
-        audio->out.samplerate = [[queueToApply objectForKey:@"JobAudio4Samplerate"] intValue];
-        audio->out.dynamic_range_compression = [[queueToApply objectForKey:@"Audio4TrackDRCSlider"] floatValue];
-        
-        hb_audio_add( job, audio );
-        
-
-    }
+	for (unsigned int counter = 0; counter < maximumNumberOfAllowedAudioTracks; counter++) {
+		NSString *prefix = [NSString stringWithFormat: @"Audio%d", counter + 1];
+		if ([[queueToApply objectForKey: [prefix stringByAppendingString: @"Track"]] intValue] > 0) {
+			audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
+			hb_audio_config_init(audio);
+			audio->in.track = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Track"]] intValue] - 1;
+			/* We go ahead and assign values to our audio->out.<properties> */
+			audio->out.track = audio->in.track;
+			audio->out.dynamic_range_compression = [[queueToApply objectForKey: [prefix stringByAppendingString: @"TrackDRCSlider"]] floatValue];
+			prefix = [NSString stringWithFormat: @"JobAudio%d", counter + 1];
+			audio->out.codec = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Encoder"]] intValue];
+			audio->out.mixdown = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Mixdown"]] intValue];
+			audio->out.bitrate = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Bitrate"]] intValue];
+			audio->out.samplerate = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Samplerate"]] intValue];
+			
+			hb_audio_add( job, audio );
+			free(audio);
+		}
+	}
     
     /* Filters */ 
     job->filters = hb_list_init();
@@ -4553,7 +4277,15 @@ bool one_burned = FALSE;
     [fChapterTitlesDelegate resetWithTitle:title];
     [fChapterTable reloadData];
 
-   /* Lets make sure there arent any erroneous audio tracks in the job list, so lets make sure its empty*/
+	/* Update audio table */
+	[[NSNotificationCenter defaultCenter] postNotification:
+	 [NSNotification notificationWithName: HBTitleChangedNotification
+								   object: self
+								 userInfo: [NSDictionary dictionaryWithObjectsAndKeys:
+											[NSData dataWithBytesNoCopy: &fTitle length: sizeof(fTitle) freeWhenDone: NO], keyTitleTag,
+											nil]]];
+	
+	/* Lets make sure there arent any erroneous audio tracks in the job list, so lets make sure its empty*/
     int audiotrack_count = hb_list_count(job->list_audio);
     for( int i = 0; i < audiotrack_count;i++)
     {
@@ -4561,25 +4293,7 @@ bool one_burned = FALSE;
         hb_list_rem(job->list_audio, temp_audio);
     }
 
-    /* Update audio popups */
-    [self addAllAudioTracksToPopUp: fAudLang1PopUp];
-    [self addAllAudioTracksToPopUp: fAudLang2PopUp];
-    [self addAllAudioTracksToPopUp: fAudLang3PopUp];
-    [self addAllAudioTracksToPopUp: fAudLang4PopUp];
-    /* search for the first instance of our prefs default language for track 1, and set track 2 to "none" */
-	NSString * audioSearchPrefix = [[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"];
-        [self selectAudioTrackInPopUp: fAudLang1PopUp searchPrefixString: audioSearchPrefix selectIndexIfNotFound: 1];
-    [self selectAudioTrackInPopUp:fAudLang2PopUp searchPrefixString:nil selectIndexIfNotFound:0];
-    [self selectAudioTrackInPopUp:fAudLang3PopUp searchPrefixString:nil selectIndexIfNotFound:0];
-    [self selectAudioTrackInPopUp:fAudLang4PopUp searchPrefixString:nil selectIndexIfNotFound:0];
-
-	/* changing the title may have changed the audio channels on offer, */
-	/* so call audioTrackPopUpChanged for both audio tracks to update the mixdown popups */
-	[self audioTrackPopUpChanged: fAudLang1PopUp];
-	[self audioTrackPopUpChanged: fAudLang2PopUp];
-    [self audioTrackPopUpChanged: fAudLang3PopUp];
-    [self audioTrackPopUpChanged: fAudLang4PopUp];
-
+	
     [fVidRatePopUp selectItemAtIndex: 0];
 
     /* we run the picture size values through calculatePictureSizing to get all picture setting	information*/
@@ -4769,6 +4483,15 @@ bool one_burned = FALSE;
     
     [fSubtitlesDelegate containerChanged:[[fDstFormatPopUp selectedItem] tag]];
     [fSubtitlesTable reloadData];
+	
+	/* post a notification for any interested observers to indicate that our video container has changed */
+	[[NSNotificationCenter defaultCenter] postNotification:
+	 [NSNotification notificationWithName: HBContainerChangedNotification
+								   object: self
+								 userInfo: [NSDictionary dictionaryWithObjectsAndKeys:
+											[NSNumber numberWithInt: [[fDstFormatPopUp selectedItem] tag]], keyContainerTag,
+											nil]]];
+	
     /* if we have a previously selected vid encoder tag, then try to select it */
     if (selectedVidEncoderTag)
     {
@@ -4779,10 +4502,6 @@ bool one_burned = FALSE;
         [fVidEncoderPopUp selectItemAtIndex: 0];
     }
 
-    [self audioAddAudioTrackCodecs: fAudTrack1CodecPopUp];
-    [self audioAddAudioTrackCodecs: fAudTrack2CodecPopUp];
-    [self audioAddAudioTrackCodecs: fAudTrack3CodecPopUp];
-    [self audioAddAudioTrackCodecs: fAudTrack4CodecPopUp];
 
     if( format == 0 )
         [self autoSetM4vExtension: sender];
@@ -4792,10 +4511,6 @@ bool one_burned = FALSE;
     if( SuccessfulScan )
     {
         /* Add/replace to the correct extension */
-        [self audioTrackPopUpChanged: fAudLang1PopUp];
-        [self audioTrackPopUpChanged: fAudLang2PopUp];
-        [self audioTrackPopUpChanged: fAudLang3PopUp];
-        [self audioTrackPopUpChanged: fAudLang4PopUp];
 
         if( [fVidEncoderPopUp selectedItem] == nil )
         {
@@ -4821,9 +4536,8 @@ bool one_burned = FALSE;
 
     NSString * extension = @"mp4";
 
-    if( [[fAudTrack1CodecPopUp selectedItem] tag] == HB_ACODEC_AC3 || [[fAudTrack2CodecPopUp selectedItem] tag] == HB_ACODEC_AC3 ||
-                                                        [[fAudTrack3CodecPopUp selectedItem] tag] == HB_ACODEC_AC3 ||
-                                                        [[fAudTrack4CodecPopUp selectedItem] tag] == HB_ACODEC_AC3 ||
+	BOOL anyCodecAC3 = [fAudioDelegate anyCodecMatches: HB_ACODEC_AC3];
+	if (YES == anyCodecAC3 ||
                                                         [fCreateChapterMarkers state] == NSOnState ||
                                                         [[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultMpegName"] > 0 )
     {
@@ -5084,82 +4798,7 @@ the user is using "Custom" settings by determining the sender*/
     job->mux = [[fDstFormatPopUp selectedItem] tag];
     
     /* Audio goes here */
-    int audiotrack_count = hb_list_count(job->list_audio);
-    for( int i = 0; i < audiotrack_count;i++)
-    {
-        hb_audio_t * temp_audio = (hb_audio_t*) hb_list_item( job->list_audio, 0 );
-        hb_list_rem(job->list_audio, temp_audio);
-    }
-    /* Now we need our audio info here for each track if applicable */
-    if ([fAudLang1PopUp indexOfSelectedItem] > 0)
-    {
-        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
-        hb_audio_config_init(audio);
-        audio->in.track = [fAudLang1PopUp indexOfSelectedItem] - 1;
-        /* We go ahead and assign values to our audio->out.<properties> */
-        audio->out.track = [fAudLang1PopUp indexOfSelectedItem] - 1;
-        audio->out.codec = [[fAudTrack1CodecPopUp selectedItem] tag];
-        audio->out.mixdown = [[fAudTrack1MixPopUp selectedItem] tag];
-        audio->out.bitrate = [[fAudTrack1BitratePopUp selectedItem] tag];
-        audio->out.samplerate = [[fAudTrack1RatePopUp selectedItem] tag];
-        audio->out.dynamic_range_compression = [fAudTrack1DrcField floatValue];
-        
-        hb_audio_add( job, audio );
-        free(audio);
-    }  
-    if ([fAudLang2PopUp indexOfSelectedItem] > 0)
-    {
-        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
-        hb_audio_config_init(audio);
-        audio->in.track = [fAudLang2PopUp indexOfSelectedItem] - 1;
-        /* We go ahead and assign values to our audio->out.<properties> */
-        audio->out.track = [fAudLang2PopUp indexOfSelectedItem] - 1;
-        audio->out.codec = [[fAudTrack2CodecPopUp selectedItem] tag];
-        audio->out.mixdown = [[fAudTrack2MixPopUp selectedItem] tag];
-        audio->out.bitrate = [[fAudTrack2BitratePopUp selectedItem] tag];
-        audio->out.samplerate = [[fAudTrack2RatePopUp selectedItem] tag];
-        audio->out.dynamic_range_compression = [fAudTrack2DrcField floatValue];
-        
-        hb_audio_add( job, audio );
-        free(audio);
-        
-    }
-    
-    if ([fAudLang3PopUp indexOfSelectedItem] > 0)
-    {
-        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
-        hb_audio_config_init(audio);
-        audio->in.track = [fAudLang3PopUp indexOfSelectedItem] - 1;
-        /* We go ahead and assign values to our audio->out.<properties> */
-        audio->out.track = [fAudLang3PopUp indexOfSelectedItem] - 1;
-        audio->out.codec = [[fAudTrack3CodecPopUp selectedItem] tag];
-        audio->out.mixdown = [[fAudTrack3MixPopUp selectedItem] tag];
-        audio->out.bitrate = [[fAudTrack3BitratePopUp selectedItem] tag];
-        audio->out.samplerate = [[fAudTrack3RatePopUp selectedItem] tag];
-        audio->out.dynamic_range_compression = [fAudTrack3DrcField floatValue];
-        
-        hb_audio_add( job, audio );
-        free(audio);
-        
-    }
-
-    if ([fAudLang4PopUp indexOfSelectedItem] > 0)
-    {
-        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
-        hb_audio_config_init(audio);
-        audio->in.track = [fAudLang4PopUp indexOfSelectedItem] - 1;
-        /* We go ahead and assign values to our audio->out.<properties> */
-        audio->out.track = [fAudLang4PopUp indexOfSelectedItem] - 1;
-        audio->out.codec = [[fAudTrack4CodecPopUp selectedItem] tag];
-        audio->out.mixdown = [[fAudTrack4MixPopUp selectedItem] tag];
-        audio->out.bitrate = [[fAudTrack4BitratePopUp selectedItem] tag];
-        audio->out.samplerate = [[fAudTrack4RatePopUp selectedItem] tag];
-        audio->out.dynamic_range_compression = [fAudTrack4DrcField floatValue];
-        
-        hb_audio_add( job, audio );
-        free(audio);
-        
-    }
+	[fAudioDelegate prepareAudioForJob: job];
        
 [fVidBitrateField setIntValue: hb_calc_bitrate( job, [fVidTargetSizeField intValue] )];
 }
@@ -5315,868 +4954,7 @@ the user is using "Custom" settings by determining the sender*/
 
 #pragma mark -
 #pragma mark - Audio and Subtitles
-- (IBAction) audioCodecsPopUpChanged: (id) sender
-{
-    
-    NSPopUpButton * audiotrackPopUp;
-    NSPopUpButton * sampleratePopUp;
-    NSPopUpButton * bitratePopUp;
-    NSPopUpButton * audiocodecPopUp;
-    if (sender == fAudTrack1CodecPopUp)
-    {
-        audiotrackPopUp = fAudLang1PopUp;
-        audiocodecPopUp = fAudTrack1CodecPopUp;
-        sampleratePopUp = fAudTrack1RatePopUp;
-        bitratePopUp = fAudTrack1BitratePopUp;
-    }
-    else if (sender == fAudTrack2CodecPopUp)
-    {
-        audiotrackPopUp = fAudLang2PopUp;
-        audiocodecPopUp = fAudTrack2CodecPopUp;
-        sampleratePopUp = fAudTrack2RatePopUp;
-        bitratePopUp = fAudTrack2BitratePopUp;
-    }
-    else if (sender == fAudTrack3CodecPopUp)
-    {
-        audiotrackPopUp = fAudLang3PopUp;
-        audiocodecPopUp = fAudTrack3CodecPopUp;
-        sampleratePopUp = fAudTrack3RatePopUp;
-        bitratePopUp = fAudTrack3BitratePopUp;
-    }
-    else
-    {
-        audiotrackPopUp = fAudLang4PopUp;
-        audiocodecPopUp = fAudTrack4CodecPopUp;
-        sampleratePopUp = fAudTrack4RatePopUp;
-        bitratePopUp = fAudTrack4BitratePopUp;
-    }
-	
-    /* changing the codecs on offer may mean that we can / can't offer mono or 6ch, */
-	/* so call audioTrackPopUpChanged for both audio tracks to update the mixdown popups */
-    [self audioTrackPopUpChanged: audiotrackPopUp];
-    
-}
 
-- (IBAction) setEnabledStateOfAudioMixdownControls: (id) sender
-{
-    /* We will be setting the enabled/disabled state of each tracks audio controls based on
-     * the settings of the source audio for that track. We leave the samplerate and bitrate
-     * to audiotrackMixdownChanged
-     */
-    
-    /* We will first verify that a lower track number has been selected before enabling each track
-     * for example, make sure a track is selected for track 1 before enabling track 2, etc.
-     */
-    
-    /* If the source has no audio then disable audio track 1 */
-    if (hb_list_count( fTitle->list_audio ) == 0)
-    {
-        [fAudLang1PopUp selectItemAtIndex:0];
-    }
-     
-    if ([fAudLang1PopUp indexOfSelectedItem] == 0)
-    {
-        [fAudLang2PopUp setEnabled: NO];
-        [fAudLang2PopUp selectItemAtIndex: 0];
-    }
-    else
-    {
-        [fAudLang2PopUp setEnabled: YES];
-    }
-    
-    if ([fAudLang2PopUp indexOfSelectedItem] == 0)
-    {
-        [fAudLang3PopUp setEnabled: NO];
-        [fAudLang3PopUp selectItemAtIndex: 0];
-    }
-    else
-    {
-        [fAudLang3PopUp setEnabled: YES];
-    }
-    if ([fAudLang3PopUp indexOfSelectedItem] == 0)
-    {
-        [fAudLang4PopUp setEnabled: NO];
-        [fAudLang4PopUp selectItemAtIndex: 0];
-    }
-    else
-    {
-        [fAudLang4PopUp setEnabled: YES];
-    }
-    /* enable/disable the mixdown text and popupbutton for audio track 1 */
-    [fAudTrack1CodecPopUp setEnabled: ([fAudLang1PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack1MixPopUp setEnabled: ([fAudLang1PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack1RatePopUp setEnabled: ([fAudLang1PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack1BitratePopUp setEnabled: ([fAudLang1PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack1DrcSlider setEnabled: ([fAudLang1PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack1DrcField setEnabled: ([fAudLang1PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    if ([fAudLang1PopUp indexOfSelectedItem] == 0)
-    {
-        [fAudTrack1CodecPopUp removeAllItems];
-        [fAudTrack1MixPopUp removeAllItems];
-        [fAudTrack1RatePopUp removeAllItems];
-        [fAudTrack1BitratePopUp removeAllItems];
-        [fAudTrack1DrcSlider setFloatValue: 0.00];
-        [self audioDRCSliderChanged: fAudTrack1DrcSlider];
-    }
-    else if ([[fAudTrack1MixPopUp selectedItem] tag] == HB_ACODEC_AC3 || [[fAudTrack1MixPopUp selectedItem] tag] == HB_ACODEC_DCA)
-    {
-        [fAudTrack1RatePopUp setEnabled: NO];
-        [fAudTrack1BitratePopUp setEnabled: NO];
-        [fAudTrack1DrcSlider setEnabled: NO];
-        [fAudTrack1DrcField setEnabled: NO];
-    }
-    
-    /* enable/disable the mixdown text and popupbutton for audio track 2 */
-    [fAudTrack2CodecPopUp setEnabled: ([fAudLang2PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack2MixPopUp setEnabled: ([fAudLang2PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack2RatePopUp setEnabled: ([fAudLang2PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack2BitratePopUp setEnabled: ([fAudLang2PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack2DrcSlider setEnabled: ([fAudLang2PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack2DrcField setEnabled: ([fAudLang2PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    if ([fAudLang2PopUp indexOfSelectedItem] == 0)
-    {
-        [fAudTrack2CodecPopUp removeAllItems];
-        [fAudTrack2MixPopUp removeAllItems];
-        [fAudTrack2RatePopUp removeAllItems];
-        [fAudTrack2BitratePopUp removeAllItems];
-        [fAudTrack2DrcSlider setFloatValue: 0.00];
-        [self audioDRCSliderChanged: fAudTrack2DrcSlider];
-    }
-    else if ([[fAudTrack2MixPopUp selectedItem] tag] == HB_ACODEC_AC3 || [[fAudTrack2MixPopUp selectedItem] tag] == HB_ACODEC_DCA)
-    {
-        [fAudTrack2RatePopUp setEnabled: NO];
-        [fAudTrack2BitratePopUp setEnabled: NO];
-        [fAudTrack2DrcSlider setEnabled: NO];
-        [fAudTrack2DrcField setEnabled: NO];
-    }
-    
-    /* enable/disable the mixdown text and popupbutton for audio track 3 */
-    [fAudTrack3CodecPopUp setEnabled: ([fAudLang3PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack3MixPopUp setEnabled: ([fAudLang3PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack3RatePopUp setEnabled: ([fAudLang3PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack3BitratePopUp setEnabled: ([fAudLang3PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack3DrcSlider setEnabled: ([fAudLang3PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack3DrcField setEnabled: ([fAudLang3PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    if ([fAudLang3PopUp indexOfSelectedItem] == 0)
-    {
-        [fAudTrack3CodecPopUp removeAllItems];
-        [fAudTrack3MixPopUp removeAllItems];
-        [fAudTrack3RatePopUp removeAllItems];
-        [fAudTrack3BitratePopUp removeAllItems];
-        [fAudTrack3DrcSlider setFloatValue: 0.00];
-        [self audioDRCSliderChanged: fAudTrack3DrcSlider];
-    }
-    else if ([[fAudTrack3MixPopUp selectedItem] tag] == HB_ACODEC_AC3 || [[fAudTrack3MixPopUp selectedItem] tag] == HB_ACODEC_DCA)
-    {
-        [fAudTrack3RatePopUp setEnabled: NO];
-        [fAudTrack3BitratePopUp setEnabled: NO];
-        [fAudTrack3DrcSlider setEnabled: NO];
-        [fAudTrack3DrcField setEnabled: NO];
-    }
-    
-    /* enable/disable the mixdown text and popupbutton for audio track 4 */
-    [fAudTrack4CodecPopUp setEnabled: ([fAudLang4PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack4MixPopUp setEnabled: ([fAudLang4PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack4RatePopUp setEnabled: ([fAudLang4PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack4BitratePopUp setEnabled: ([fAudLang4PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack4DrcSlider setEnabled: ([fAudLang4PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    [fAudTrack4DrcField setEnabled: ([fAudLang4PopUp indexOfSelectedItem] == 0) ? NO : YES];
-    if ([fAudLang4PopUp indexOfSelectedItem] == 0)
-    {
-        [fAudTrack4CodecPopUp removeAllItems];
-        [fAudTrack4MixPopUp removeAllItems];
-        [fAudTrack4RatePopUp removeAllItems];
-        [fAudTrack4BitratePopUp removeAllItems];
-        [fAudTrack4DrcSlider setFloatValue: 0.00];
-        [self audioDRCSliderChanged: fAudTrack4DrcSlider];
-    }
-    else if ([[fAudTrack4MixPopUp selectedItem] tag] == HB_ACODEC_AC3 || [[fAudTrack4MixPopUp selectedItem] tag] == HB_ACODEC_DCA)
-    {
-        [fAudTrack4RatePopUp setEnabled: NO];
-        [fAudTrack4BitratePopUp setEnabled: NO];
-        [fAudTrack4DrcSlider setEnabled: NO];
-        [fAudTrack4DrcField setEnabled: NO];
-    }
-    
-}
-
-- (IBAction) addAllAudioTracksToPopUp: (id) sender
-{
-
-    hb_list_t  * list  = hb_get_titles( fHandle );
-    hb_title_t * title = (hb_title_t*)
-        hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
-
-	hb_audio_config_t * audio;
-
-    [sender removeAllItems];
-    [sender addItemWithTitle: NSLocalizedString( @"None", @"" )];
-    for( int i = 0; i < hb_list_count( title->list_audio ); i++ )
-    {
-        audio = (hb_audio_config_t *) hb_list_audio_config_item( title->list_audio, i );
-        [[sender menu] addItemWithTitle:
-            [NSString stringWithUTF8String: audio->lang.description]
-            action: NULL keyEquivalent: @""];
-    }
-    [sender selectItemAtIndex: 0];
-
-}
-
-- (IBAction) selectAudioTrackInPopUp: (id) sender searchPrefixString: (NSString *) searchPrefixString selectIndexIfNotFound: (int) selectIndexIfNotFound
-{
-
-    /* this method can be used to find a language, or a language-and-source-format combination, by passing in the appropriate string */
-    /* e.g. to find the first French track, pass in an NSString * of "Francais" */
-    /* e.g. to find the first English 5.1 AC3 track, pass in an NSString * of "English (AC3) (5.1 ch)" */
-    /* if no matching track is found, then selectIndexIfNotFound is used to choose which track to select instead */
-    if (hb_list_count( fTitle->list_audio ) != 0)
-    {
-        if (searchPrefixString)
-        {
-            
-            for( int i = 0; i < [sender numberOfItems]; i++ )
-            {
-                /* Try to find the desired search string */
-                if ([[[sender itemAtIndex: i] title] hasPrefix:searchPrefixString])
-                {
-                    [sender selectItemAtIndex: i];
-                    return;
-                }
-            }
-            /* couldn't find the string, so select the requested "search string not found" item */
-            /* index of 0 means select the "none" item */
-            /* index of 1 means select the first audio track */
-            [sender selectItemAtIndex: selectIndexIfNotFound];
-        }
-        else
-        {
-            /* if no search string is provided, then select the selectIndexIfNotFound item */
-            [sender selectItemAtIndex: selectIndexIfNotFound];
-        }
-    }
-    else
-    {
-        [sender selectItemAtIndex: 0];
-    }
-
-}
-- (IBAction) audioAddAudioTrackCodecs: (id)sender
-{
-    int format = [fDstFormatPopUp indexOfSelectedItem];
-    
-    /* setup pointers to the appropriate popups for the correct track */
-    NSPopUpButton * audiocodecPopUp;
-    NSPopUpButton * audiotrackPopUp;
-    if (sender == fAudTrack1CodecPopUp)
-    {
-        audiotrackPopUp = fAudLang1PopUp;
-        audiocodecPopUp = fAudTrack1CodecPopUp;
-    }
-    else if (sender == fAudTrack2CodecPopUp)
-    {
-        audiotrackPopUp = fAudLang2PopUp;
-        audiocodecPopUp = fAudTrack2CodecPopUp;
-    }
-    else if (sender == fAudTrack3CodecPopUp)
-    {
-        audiotrackPopUp = fAudLang3PopUp;
-        audiocodecPopUp = fAudTrack3CodecPopUp;
-    }
-    else
-    {
-        audiotrackPopUp = fAudLang4PopUp;
-        audiocodecPopUp = fAudTrack4CodecPopUp;
-    }
-    
-    [audiocodecPopUp removeAllItems];
-    /* Make sure "None" isnt selected in the source track */
-    if ([audiotrackPopUp indexOfSelectedItem] > 0)
-    {
-        [audiocodecPopUp setEnabled:YES];
-        NSMenuItem *menuItem;
-        /* We setup our appropriate popups for codecs and put the int value in the popup tag for easy retrieval */
-        switch( format )
-        {
-            case 0:
-                /* MP4 */
-                // CA_AAC
-                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AAC (CoreAudio)" action: NULL keyEquivalent: @""];
-                [menuItem setTag: HB_ACODEC_CA_AAC];
-                // FAAC
-                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AAC (faac)" action: NULL keyEquivalent: @""];
-                [menuItem setTag: HB_ACODEC_FAAC];
-                // MP3
-                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"MP3 (lame)" action: NULL keyEquivalent: @""];
-                [menuItem setTag: HB_ACODEC_LAME];
-                // AC3 Passthru
-                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AC3 Passthru" action: NULL keyEquivalent: @""];
-                [menuItem setTag: HB_ACODEC_AC3];
-                break;
-                
-            case 1:
-                /* MKV */
-                // CA_AAC
-                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AAC (CoreAudio)" action: NULL keyEquivalent: @""];
-                [menuItem setTag: HB_ACODEC_CA_AAC];
-                // FAAC
-                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AAC (faac)" action: NULL keyEquivalent: @""];
-                [menuItem setTag: HB_ACODEC_FAAC];
-                // AC3 Passthru
-                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AC3 Passthru" action: NULL keyEquivalent: @""];
-                [menuItem setTag: HB_ACODEC_AC3];
-                // DTS Passthru
-                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"DTS Passthru" action: NULL keyEquivalent: @""];
-                [menuItem setTag: HB_ACODEC_DCA];
-                // MP3
-                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"MP3 (lame)" action: NULL keyEquivalent: @""];
-                [menuItem setTag: HB_ACODEC_LAME];
-                // Vorbis
-                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"Vorbis (vorbis)" action: NULL keyEquivalent: @""];
-                [menuItem setTag: HB_ACODEC_VORBIS];
-                break;
-        }
-        [audiocodecPopUp selectItemAtIndex:0];
-    }
-    else
-    {
-        [audiocodecPopUp setEnabled:NO];
-    }
-}
-
-- (IBAction) audioTrackPopUpChanged: (id) sender
-{
-    /* utility function to call audioTrackPopUpChanged without passing in a mixdown-to-use */
-    [self audioTrackPopUpChanged: sender mixdownToUse: 0];
-}
-
-- (IBAction) audioTrackPopUpChanged: (id) sender mixdownToUse: (int) mixdownToUse
-{
-    
-    /* make sure we have a selected title before continuing */
-    if (fTitle == NULL) return;
-    /* make sure we have a source audio track before continuing */
-    if (hb_list_count( fTitle->list_audio ) == 0)
-    {
-        [sender selectItemAtIndex:0];
-        return;
-    }
-    /* if the sender is the lanaguage popup and there is nothing in the codec popup, lets call
-    * audioAddAudioTrackCodecs on the codec popup to populate it properly before moving on
-    */
-    if (sender == fAudLang1PopUp && [[fAudTrack1CodecPopUp menu] numberOfItems] == 0)
-    {
-        [self audioAddAudioTrackCodecs: fAudTrack1CodecPopUp];
-    }
-    if (sender == fAudLang2PopUp && [[fAudTrack2CodecPopUp menu] numberOfItems] == 0)
-    {
-        [self audioAddAudioTrackCodecs: fAudTrack2CodecPopUp];
-    }
-    if (sender == fAudLang3PopUp && [[fAudTrack3CodecPopUp menu] numberOfItems] == 0)
-    {
-        [self audioAddAudioTrackCodecs: fAudTrack3CodecPopUp];
-    }
-    if (sender == fAudLang4PopUp && [[fAudTrack4CodecPopUp menu] numberOfItems] == 0)
-    {
-        [self audioAddAudioTrackCodecs: fAudTrack4CodecPopUp];
-    }
-    
-    /* Now lets make the sender the appropriate Audio Track popup from this point on */
-    if (sender == fAudTrack1CodecPopUp || sender == fAudTrack1MixPopUp)
-    {
-        sender = fAudLang1PopUp;
-    }
-    if (sender == fAudTrack2CodecPopUp || sender == fAudTrack2MixPopUp)
-    {
-        sender = fAudLang2PopUp;
-    }
-    if (sender == fAudTrack3CodecPopUp || sender == fAudTrack3MixPopUp)
-    {
-        sender = fAudLang3PopUp;
-    }
-    if (sender == fAudTrack4CodecPopUp || sender == fAudTrack4MixPopUp)
-    {
-        sender = fAudLang4PopUp;
-    }
-    
-    /* pointer to this track's mixdown, codec, sample rate and bitrate NSPopUpButton's */
-    NSPopUpButton * mixdownPopUp;
-    NSPopUpButton * audiocodecPopUp;
-    NSPopUpButton * sampleratePopUp;
-    NSPopUpButton * bitratePopUp;
-    if (sender == fAudLang1PopUp)
-    {
-        mixdownPopUp = fAudTrack1MixPopUp;
-        audiocodecPopUp = fAudTrack1CodecPopUp;
-        sampleratePopUp = fAudTrack1RatePopUp;
-        bitratePopUp = fAudTrack1BitratePopUp;
-    }
-    else if (sender == fAudLang2PopUp)
-    {
-        mixdownPopUp = fAudTrack2MixPopUp;
-        audiocodecPopUp = fAudTrack2CodecPopUp;
-        sampleratePopUp = fAudTrack2RatePopUp;
-        bitratePopUp = fAudTrack2BitratePopUp;
-    }
-    else if (sender == fAudLang3PopUp)
-    {
-        mixdownPopUp = fAudTrack3MixPopUp;
-        audiocodecPopUp = fAudTrack3CodecPopUp;
-        sampleratePopUp = fAudTrack3RatePopUp;
-        bitratePopUp = fAudTrack3BitratePopUp;
-    }
-    else
-    {
-        mixdownPopUp = fAudTrack4MixPopUp;
-        audiocodecPopUp = fAudTrack4CodecPopUp;
-        sampleratePopUp = fAudTrack4RatePopUp;
-        bitratePopUp = fAudTrack4BitratePopUp;
-    }
-
-    /* get the index of the selected audio Track*/
-    int thisAudioIndex = [sender indexOfSelectedItem] - 1;
-
-    /* pointer for the hb_audio_s struct we will use later on */
-    hb_audio_config_t * audio;
-
-    int acodec;
-    /* check if the audio mixdown controls need their enabled state changing */
-    [self setEnabledStateOfAudioMixdownControls:nil];
-
-    if (thisAudioIndex != -1)
-    {
-
-        /* get the audio */
-        audio = (hb_audio_config_t *) hb_list_audio_config_item( fTitle->list_audio, thisAudioIndex );// Should "fTitle" be title and be setup ?
-
-        /* actually manipulate the proper mixdowns here */
-        /* delete the previous audio mixdown options */
-        [mixdownPopUp removeAllItems];
-
-        acodec = [[audiocodecPopUp selectedItem] tag];
-
-        if (audio != NULL)
-        {
-
-            /* find out if our selected output audio codec supports 6ch */
-            int audioCodecsSupport6Ch = (audio->in.codec && acodec != HB_ACODEC_LAME);
-            
-            /* check for AC-3 passthru */
-            if (audio->in.codec == HB_ACODEC_AC3 && acodec == HB_ACODEC_AC3)
-            {
-                
-            NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                 [NSString stringWithUTF8String: "AC3 Passthru"]
-                                               action: NULL keyEquivalent: @""];
-             [menuItem setTag: HB_ACODEC_AC3];   
-            }
-            else if (audio->in.codec == HB_ACODEC_DCA && acodec == HB_ACODEC_DCA)
-            {
-            NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                 [NSString stringWithUTF8String: "DTS Passthru"]
-                                               action: NULL keyEquivalent: @""];
-             [menuItem setTag: HB_ACODEC_DCA]; 
-            }
-            else
-            {
-                
-                /* add the appropriate audio mixdown menuitems to the popupbutton */
-                /* in each case, we set the new menuitem's tag to be the amixdown value for that mixdown,
-                 so that we can reference the mixdown later */
-                
-                /* keep a track of the min and max mixdowns we used, so we can select the best match later */
-                int minMixdownUsed = 0;
-                int maxMixdownUsed = 0;
-                
-                /* get the input channel layout without any lfe channels */
-                int layout = audio->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
-                
-                /* add a mono option */
-                NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                                        [NSString stringWithUTF8String: hb_audio_mixdowns[0].human_readable_name]
-                                                                      action: NULL keyEquivalent: @""];
-                [menuItem setTag: hb_audio_mixdowns[0].amixdown];
-                if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[0].amixdown;
-                maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[0].amixdown);
-                
-                /* do we want to add a stereo option? */
-                /* offer stereo if we have a stereo-or-better source */
-                if (layout >= HB_INPUT_CH_LAYOUT_STEREO)
-                {
-                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                                            [NSString stringWithUTF8String: hb_audio_mixdowns[1].human_readable_name]
-                                                                          action: NULL keyEquivalent: @""];
-                    [menuItem setTag: hb_audio_mixdowns[1].amixdown];
-                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[1].amixdown;
-                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[1].amixdown);
-                }
-                
-                /* do we want to add a dolby surround (DPL1) option? */
-                if (layout == HB_INPUT_CH_LAYOUT_3F1R || layout == HB_INPUT_CH_LAYOUT_3F2R || layout == HB_INPUT_CH_LAYOUT_DOLBY)
-                {
-                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                                            [NSString stringWithUTF8String: hb_audio_mixdowns[2].human_readable_name]
-                                                                          action: NULL keyEquivalent: @""];
-                    [menuItem setTag: hb_audio_mixdowns[2].amixdown];
-                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[2].amixdown;
-                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[2].amixdown);
-                }
-                
-                /* do we want to add a dolby pro logic 2 (DPL2) option? */
-                if (layout == HB_INPUT_CH_LAYOUT_3F2R)
-                {
-                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                                            [NSString stringWithUTF8String: hb_audio_mixdowns[3].human_readable_name]
-                                                                          action: NULL keyEquivalent: @""];
-                    [menuItem setTag: hb_audio_mixdowns[3].amixdown];
-                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[3].amixdown;
-                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[3].amixdown);
-                }
-                
-                /* do we want to add a 6-channel discrete option? */
-                if (audioCodecsSupport6Ch == 1 && layout == HB_INPUT_CH_LAYOUT_3F2R && (audio->in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE))
-                {
-                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                                            [NSString stringWithUTF8String: hb_audio_mixdowns[4].human_readable_name]
-                                                                          action: NULL keyEquivalent: @""];
-                    [menuItem setTag: hb_audio_mixdowns[4].amixdown];
-                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[4].amixdown;
-                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[4].amixdown);
-                }
-                
-                /* do we want to add an AC-3 passthrough option? */
-                if (audio->in.codec == HB_ACODEC_AC3 && acodec == HB_ACODEC_AC3) 
-                {
-                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                                            [NSString stringWithUTF8String: hb_audio_mixdowns[5].human_readable_name]
-                                                                          action: NULL keyEquivalent: @""];
-                    [menuItem setTag: HB_ACODEC_AC3];
-                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[5].amixdown;
-                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[5].amixdown);
-                }
-                
-                /* do we want to add a DTS Passthru option ? HB_ACODEC_DCA*/
-                if (audio->in.codec == HB_ACODEC_DCA && acodec == HB_ACODEC_DCA) 
-                {
-                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                                            [NSString stringWithUTF8String: hb_audio_mixdowns[5].human_readable_name]
-                                                                          action: NULL keyEquivalent: @""];
-                    [menuItem setTag: HB_ACODEC_DCA];
-                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[5].amixdown;
-                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[5].amixdown);
-                }
-                
-                /* auto-select the best mixdown based on our saved mixdown preference */
-                
-                /* for now, this is hard-coded to a "best" mixdown of HB_AMIXDOWN_DOLBYPLII */
-                /* ultimately this should be a prefs option */
-                int useMixdown;
-                
-                /* if we passed in a mixdown to use - in order to load a preset - then try and use it */
-                if (mixdownToUse > 0)
-                {
-                    useMixdown = mixdownToUse;
-                }
-                else
-                {
-                    useMixdown = HB_AMIXDOWN_DOLBYPLII;
-                }
-                
-                /* if useMixdown > maxMixdownUsed, then use maxMixdownUsed */
-                if (useMixdown > maxMixdownUsed)
-                { 
-                    useMixdown = maxMixdownUsed;
-                }
-                
-                /* if useMixdown < minMixdownUsed, then use minMixdownUsed */
-                if (useMixdown < minMixdownUsed)
-                { 
-                    useMixdown = minMixdownUsed;
-                }
-                
-                /* select the (possibly-amended) preferred mixdown */
-                [mixdownPopUp selectItemWithTag: useMixdown];
-
-            }
-            /* In the case of a source track that is not AC3 and the user tries to use AC3 Passthru (which does not work)
-             * we force the Audio Codec choice back to a workable codec. We use CoreAudio aac for all containers.
-             */
-            if (audio->in.codec != HB_ACODEC_AC3 && [[audiocodecPopUp selectedItem] tag] == HB_ACODEC_AC3)
-            {
-                [audiocodecPopUp selectItemWithTag: HB_ACODEC_CA_AAC];
-            }
-            
-            /* In the case of a source track that is not DTS and the user tries to use DTS Passthru (which does not work)
-             * we force the Audio Codec choice back to a workable codec. We use CoreAudio aac for all containers.
-             */
-            if (audio->in.codec != HB_ACODEC_DCA && [[audiocodecPopUp selectedItem] tag] == HB_ACODEC_DCA)
-            {
-                [audiocodecPopUp selectItemWithTag: HB_ACODEC_CA_AAC];
-            }
-            
-            /* Setup our samplerate and bitrate popups we will need based on mixdown */
-            [self audioTrackMixdownChanged: mixdownPopUp];	       
-        }
-    
-    }
-    if( [fDstFormatPopUp indexOfSelectedItem] == 0 )
-    {
-        [self autoSetM4vExtension: sender];
-    }
-}
-
-- (IBAction) audioTrackMixdownChanged: (id) sender
-{
-    
-    int acodec;
-    /* setup pointers to all of the other audio track controls
-    * we will need later
-    */
-    NSPopUpButton * mixdownPopUp;
-    NSPopUpButton * sampleratePopUp;
-    NSPopUpButton * bitratePopUp;
-    NSPopUpButton * audiocodecPopUp;
-    NSPopUpButton * audiotrackPopUp;
-    NSSlider * drcSlider;
-    NSTextField * drcField;
-    if (sender == fAudTrack1MixPopUp)
-    {
-        audiotrackPopUp = fAudLang1PopUp;
-        audiocodecPopUp = fAudTrack1CodecPopUp;
-        mixdownPopUp = fAudTrack1MixPopUp;
-        sampleratePopUp = fAudTrack1RatePopUp;
-        bitratePopUp = fAudTrack1BitratePopUp;
-        drcSlider = fAudTrack1DrcSlider;
-        drcField = fAudTrack1DrcField;
-    }
-    else if (sender == fAudTrack2MixPopUp)
-    {
-        audiotrackPopUp = fAudLang2PopUp;
-        audiocodecPopUp = fAudTrack2CodecPopUp;
-        mixdownPopUp = fAudTrack2MixPopUp;
-        sampleratePopUp = fAudTrack2RatePopUp;
-        bitratePopUp = fAudTrack2BitratePopUp;
-        drcSlider = fAudTrack2DrcSlider;
-        drcField = fAudTrack2DrcField;
-    }
-    else if (sender == fAudTrack3MixPopUp)
-    {
-        audiotrackPopUp = fAudLang3PopUp;
-        audiocodecPopUp = fAudTrack3CodecPopUp;
-        mixdownPopUp = fAudTrack3MixPopUp;
-        sampleratePopUp = fAudTrack3RatePopUp;
-        bitratePopUp = fAudTrack3BitratePopUp;
-        drcSlider = fAudTrack3DrcSlider;
-        drcField = fAudTrack3DrcField;
-    }
-    else
-    {
-        audiotrackPopUp = fAudLang4PopUp;
-        audiocodecPopUp = fAudTrack4CodecPopUp;
-        mixdownPopUp = fAudTrack4MixPopUp;
-        sampleratePopUp = fAudTrack4RatePopUp;
-        bitratePopUp = fAudTrack4BitratePopUp;
-        drcSlider = fAudTrack4DrcSlider;
-        drcField = fAudTrack4DrcField;
-    }
-    acodec = [[audiocodecPopUp selectedItem] tag];
-    /* storage variable for the min and max bitrate allowed for this codec */
-    int minbitrate;
-    int maxbitrate;
-    
-    switch( acodec )
-    {
-        case HB_ACODEC_FAAC:
-            /* check if we have a 6ch discrete conversion in either audio track */
-            if ([[mixdownPopUp selectedItem] tag] == HB_AMIXDOWN_6CH)
-            {
-                /* FAAC has a minimum of 192 kbps for 6-channel discrete */
-                minbitrate = 192;
-                /* If either mixdown popup includes 6-channel discrete, then allow up to 768 kbps */
-                maxbitrate = 768;
-                break;
-            }
-            else
-            {
-                /* FAAC is happy using our min bitrate of 32 kbps for stereo or mono */
-                minbitrate = 32;
-                /* note: haven't dealt with mono separately here, FAAC will just use the max it can */
-                maxbitrate = 320;
-                break;
-            }
-
-        case HB_ACODEC_CA_AAC:
-            /* check if we have a 6ch discrete conversion in either audio track */
-            if ([[mixdownPopUp selectedItem] tag] == HB_AMIXDOWN_6CH)
-            {
-                minbitrate = 128;
-                maxbitrate = 768;
-                break;
-            }
-            else
-            {
-                minbitrate = 64;
-                maxbitrate = 320;
-                break;
-            }
-
-            case HB_ACODEC_LAME:
-            /* Lame is happy using our min bitrate of 32 kbps */
-            minbitrate = 32;
-            /* Lame won't encode if the bitrate is higher than 320 kbps */
-            maxbitrate = 320;
-            break;
-            
-            case HB_ACODEC_VORBIS:
-            if ([[mixdownPopUp selectedItem] tag] == HB_AMIXDOWN_6CH)
-            {
-                /* Vorbis causes a crash if we use a bitrate below 192 kbps with 6 channel */
-                minbitrate = 192;
-                /* If either mixdown popup includes 6-channel discrete, then allow up to 384 kbps */
-                maxbitrate = 384;
-                break;
-            }
-            else
-            {
-                /* Vorbis causes a crash if we use a bitrate below 48 kbps */
-                minbitrate = 48;
-                /* Vorbis can cope with 384 kbps quite happily, even for stereo */
-                maxbitrate = 384;
-                break;
-            }
-            
-            default:
-            /* AC3 passthru disables the bitrate dropdown anyway, so we might as well just use the min and max bitrate */
-            minbitrate = 32;
-            maxbitrate = 384;
-            
-    }
-    
-    /* make sure we have a selected title before continuing */
-    if (fTitle == NULL || hb_list_count( fTitle->list_audio ) == 0) return;
-    /* get the audio so we can find out what input rates are*/
-    hb_audio_config_t * audio;
-    audio = (hb_audio_config_t *) hb_list_audio_config_item( fTitle->list_audio, [audiotrackPopUp indexOfSelectedItem] - 1 );
-    int inputbitrate = audio->in.bitrate / 1000;
-    int inputsamplerate = audio->in.samplerate;
-    
-    if ([[mixdownPopUp selectedItem] tag] != HB_ACODEC_AC3 && [[mixdownPopUp selectedItem] tag] != HB_ACODEC_DCA)
-    {
-        [bitratePopUp removeAllItems];
-        
-        for( int i = 0; i < hb_audio_bitrates_count; i++ )
-        {
-            if (hb_audio_bitrates[i].rate >= minbitrate && hb_audio_bitrates[i].rate <= maxbitrate)
-            {
-                /* add a new menuitem for this bitrate */
-                NSMenuItem *menuItem = [[bitratePopUp menu] addItemWithTitle:
-                                        [NSString stringWithUTF8String: hb_audio_bitrates[i].string]
-                                                                      action: NULL keyEquivalent: @""];
-                /* set its tag to be the actual bitrate as an integer, so we can retrieve it later */
-                [menuItem setTag: hb_audio_bitrates[i].rate];
-            }
-        }
-        
-        /* select the default bitrate (but use 384 for 6-ch AAC) */
-        if ([[mixdownPopUp selectedItem] tag] == HB_AMIXDOWN_6CH)
-        {
-            [bitratePopUp selectItemWithTag: 384];
-        }
-        else
-        {
-            [bitratePopUp selectItemWithTag: hb_audio_bitrates[hb_audio_bitrates_default].rate];
-        }
-    }
-    /* populate and set the sample rate popup */
-    /* Audio samplerate */
-    [sampleratePopUp removeAllItems];
-    /* we create a same as source selection (Auto) so that we can choose to use the input sample rate */
-    NSMenuItem *menuItem = [[sampleratePopUp menu] addItemWithTitle: @"Auto" action: NULL keyEquivalent: @""];
-    [menuItem setTag: inputsamplerate];
-    
-    for( int i = 0; i < hb_audio_rates_count; i++ )
-    {
-        NSMenuItem *menuItem = [[sampleratePopUp menu] addItemWithTitle:
-                                [NSString stringWithUTF8String: hb_audio_rates[i].string]
-                                                                 action: NULL keyEquivalent: @""];
-        [menuItem setTag: hb_audio_rates[i].rate];
-    }
-    /* We use the input sample rate as the default sample rate as downsampling just makes audio worse
-    * and there is no compelling reason to use anything else as default, though the users default
-    * preset will likely override any setting chosen here.
-    */
-    [sampleratePopUp selectItemWithTag: inputsamplerate];
-    
-    
-    /* Since AC3 Pass Thru and DTS Pass Thru uses the input bitrate and sample rate, we get the input tracks
-    * bitrate and display it in the bitrate popup even though libhb happily ignores any bitrate input from
-    * the gui. We do this for better user feedback in the audio tab as well as the queue for the most part
-    */
-    if ([[mixdownPopUp selectedItem] tag] == HB_ACODEC_AC3 || [[mixdownPopUp selectedItem] tag] == HB_ACODEC_DCA)
-    {
-        
-        /* lets also set the bitrate popup to the input bitrate as thats what passthru will use */
-        [bitratePopUp removeAllItems];
-        NSMenuItem *menuItem = [[bitratePopUp menu] addItemWithTitle:
-                                [NSString stringWithFormat:@"%d", inputbitrate]
-                                                              action: NULL keyEquivalent: @""];
-        [menuItem setTag: inputbitrate];
-        /* For ac3 passthru we disable the sample rate and bitrate popups as well as the drc slider*/
-        [bitratePopUp setEnabled: NO];
-        [sampleratePopUp setEnabled: NO];
-        
-        [drcSlider setFloatValue: 0.00];
-        [self audioDRCSliderChanged: drcSlider];
-        [drcSlider setEnabled: NO];
-        [drcField setEnabled: NO];
-    }
-    else
-    {
-        [sampleratePopUp setEnabled: YES];
-        [bitratePopUp setEnabled: YES];
-        [drcSlider setEnabled: YES];
-        [drcField setEnabled: YES];
-    }
-[self calculateBitrate:nil];    
-}
-
-- (IBAction) audioDRCSliderChanged: (id) sender
-{
-    NSSlider * drcSlider;
-    NSTextField * drcField;
-    if (sender == fAudTrack1DrcSlider)
-    {
-        drcSlider = fAudTrack1DrcSlider;
-        drcField = fAudTrack1DrcField;
-    }
-    else if (sender == fAudTrack2DrcSlider)
-    {
-        drcSlider = fAudTrack2DrcSlider;
-        drcField = fAudTrack2DrcField;
-    }
-    else if (sender == fAudTrack3DrcSlider)
-    {
-        drcSlider = fAudTrack3DrcSlider;
-        drcField = fAudTrack3DrcField;
-    }
-    else
-    {
-        drcSlider = fAudTrack4DrcSlider;
-        drcField = fAudTrack4DrcField;
-    }
-    
-    /* If we are between 0.0 and 1.0 on the slider, snap it to 1.0 */
-    if ([drcSlider floatValue] > 0.0 && [drcSlider floatValue] < 1.0)
-    {
-        [drcSlider setFloatValue:1.0];
-    }
-    
-    
-    [drcField setStringValue: [NSString stringWithFormat: @"%.2f", [drcSlider floatValue]]];
-    /* For now, do not call this until we have an intelligent way to determine audio track selections
-    * compared to presets
-    */
-    //[self customSettingUsed: sender];
-}
 
 #pragma mark -
 
@@ -6737,320 +5515,7 @@ return YES;
         [fVidTurboPassCheck setState:[[chosenPreset objectForKey:@"VideoTurboTwoPass"] intValue]];
         
         /*Audio*/
-        /* First we check to see if we are using the current audio track layout based on AudioList array */
-        if ([chosenPreset objectForKey:@"AudioList"])
-        {
-            
-            /* pointer to this track's mixdown, codec, sample rate and bitrate NSPopUpButton's */
-            NSPopUpButton * trackLangPreviousPopUp = nil;
-            NSPopUpButton * trackLangPopUp = nil;
-            NSPopUpButton * mixdownPopUp = nil;
-            NSPopUpButton * audiocodecPopUp = nil;
-            NSPopUpButton * sampleratePopUp = nil;
-            NSPopUpButton * bitratePopUp = nil;
-            NSSlider      * drcSlider = nil;
-            
-            
-            /* Populate the audio widgets based on the contents of the AudioList array */
-            int i = 0;
-            NSEnumerator *enumerator = [[chosenPreset objectForKey:@"AudioList"] objectEnumerator];
-            id tempObject;
-            while (tempObject = [enumerator nextObject])
-            {
-                i++;
-                if( i == 1 )
-                {
-                    trackLangPopUp = fAudLang1PopUp;
-                    mixdownPopUp = fAudTrack1MixPopUp;
-                    audiocodecPopUp = fAudTrack1CodecPopUp;
-                    sampleratePopUp = fAudTrack1RatePopUp;
-                    bitratePopUp = fAudTrack1BitratePopUp;
-                    drcSlider = fAudTrack1DrcSlider;
-                }
-                if( i == 2 )
-                {
-                    trackLangPreviousPopUp = fAudLang1PopUp;
-                    trackLangPopUp = fAudLang2PopUp;
-                    mixdownPopUp = fAudTrack2MixPopUp;
-                    audiocodecPopUp = fAudTrack2CodecPopUp;
-                    sampleratePopUp = fAudTrack2RatePopUp;
-                    bitratePopUp = fAudTrack2BitratePopUp;
-                    drcSlider = fAudTrack2DrcSlider;
-                }
-                if( i == 3 )
-                {
-                    trackLangPreviousPopUp = fAudLang2PopUp;
-                    trackLangPopUp = fAudLang3PopUp;
-                    mixdownPopUp = fAudTrack3MixPopUp;
-                    audiocodecPopUp = fAudTrack3CodecPopUp;
-                    sampleratePopUp = fAudTrack3RatePopUp;
-                    bitratePopUp = fAudTrack3BitratePopUp;
-                    drcSlider = fAudTrack3DrcSlider;
-                }
-                if( i == 4 )
-                {
-                    trackLangPreviousPopUp = fAudLang3PopUp;
-                    trackLangPopUp = fAudLang4PopUp;
-                    mixdownPopUp = fAudTrack4MixPopUp;
-                    audiocodecPopUp = fAudTrack4CodecPopUp;
-                    sampleratePopUp = fAudTrack4RatePopUp;
-                    bitratePopUp = fAudTrack4BitratePopUp;
-                    drcSlider = fAudTrack4DrcSlider;
-                }
-                
-                
-                if ([trackLangPopUp indexOfSelectedItem] == 0)
-                {
-                    if (i ==1)
-                    {
-                        [trackLangPopUp selectItemAtIndex: 1];
-                    }
-                    else
-                    {
-                        /* if we are greater than track 1, select
-                         * the same track as the previous track */
-                        [trackLangPopUp selectItemAtIndex: [trackLangPreviousPopUp indexOfSelectedItem]];
-                    }
-                }
-                [self audioTrackPopUpChanged: trackLangPopUp];
-                [audiocodecPopUp selectItemWithTitle:[tempObject objectForKey:@"AudioEncoder"]];
-                /* check our pref for core audio and use it in place of faac if preset is a built in  */
-                if ([[chosenPreset objectForKey:@"Type"] intValue] == 0 && 
-                    [[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
-                    [[tempObject objectForKey:@"AudioEncoder"] isEqualToString: @"AAC (faac)"])
-                {
-                    [audiocodecPopUp selectItemWithTitle:@"AAC (CoreAudio)"];
-                }                    
-                
-                [self audioTrackPopUpChanged: audiocodecPopUp];
-                [mixdownPopUp selectItemWithTitle:[tempObject objectForKey:@"AudioMixdown"]];
-                [self audioTrackMixdownChanged: mixdownPopUp];
-                /* check to see if the selection was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
-                 * mixdown*/
-                if  ([mixdownPopUp selectedItem] == nil)
-                {
-                    [self audioTrackPopUpChanged: audiocodecPopUp];
-                    [self writeToActivityLog: "presetSelected mixdown not selected, rerun audioTrackPopUpChanged"];
-                }
-                [sampleratePopUp selectItemWithTitle:[tempObject objectForKey:@"AudioSamplerate"]];
-                /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
-                if (![[tempObject objectForKey:@"AudioEncoder"] isEqualToString:@"AC3 Passthru"])
-                {
-                    [bitratePopUp selectItemWithTitle:[tempObject objectForKey:@"AudioBitrate"]];
-                    /* check to see if the bitrate selection was available, if not, rerun audioTrackMixdownChanged using the mixdown to just set the
-                     *default mixdown bitrate*/
-                    if ([bitratePopUp selectedItem] == nil)
-                    {
-                        [self audioTrackMixdownChanged: mixdownPopUp];
-                    }
-                }
-                [drcSlider setFloatValue:[[tempObject objectForKey:@"AudioTrackDRCSlider"] floatValue]];
-                [self audioDRCSliderChanged: drcSlider];
-                
-                
-                /* If we are any track greater than 1 check to make sure we have a matching source codec is using ac3 passthru or dts passthru,
-                 * if not we will set the track to "None". Track 1 is allowed to mixdown to a suitable DPL2 mix if we cannot passthru */
-                
-                if( i > 1 )
-                {
-                    /* Check to see if the preset asks for a passhthru track (AC3 or DTS) and verify there is a matching source track if not, set the track to "None". */
-                    if (([[tempObject objectForKey:@"AudioEncoder"] isEqualToString:@"AC3 Passthru"] || [[tempObject objectForKey:@"AudioEncoder"] isEqualToString:@"DTS Passthru"])  && [trackLangPopUp indexOfSelectedItem] != 0)
-                    {
-                        hb_audio_config_t * audio;
-                        /* get the audio source audio codec */
-                        audio = (hb_audio_config_t *) hb_list_audio_config_item( fTitle->list_audio, [trackLangPopUp indexOfSelectedItem] - 1 );
-                        if (audio != NULL && [[tempObject objectForKey:@"AudioEncoder"] isEqualToString:@"AC3 Passthru"] && audio->in.codec != HB_ACODEC_AC3 ||
-                            [[tempObject objectForKey:@"AudioEncoder"] isEqualToString:@"DTS Passthru"] && audio->in.codec != HB_ACODEC_DCA )
-                        {
-                            /* We have a preset using ac3 passthru but no ac3 source audio, so set the track to "None" and bail */
-                            if ([[tempObject objectForKey:@"AudioEncoder"] isEqualToString:@"AC3 Passthru"])
-                            {
-                                [self writeToActivityLog: "Preset calls for AC3 Pass thru ..."];
-                            }
-                            if ([[tempObject objectForKey:@"AudioEncoder"] isEqualToString:@"DTS Passthru"])
-                            {
-                                [self writeToActivityLog: "Preset calls for DTS Pass thru ..."];
-                            }
-                            [self writeToActivityLog: "No matching source codec, setting track  %d to None", i];
-                            [trackLangPopUp selectItemAtIndex: 0];
-                            [self audioTrackPopUpChanged: trackLangPopUp]; 
-                        }   
-                    }
-                }
-            }
-            
-            /* We now cleanup any extra audio tracks that may have been previously set if we need to */
-            
-            if (i < 4)
-            {
-                [fAudLang4PopUp selectItemAtIndex: 0];
-                [self audioTrackPopUpChanged: fAudLang4PopUp];
-                
-                if (i < 3)
-                {
-                    [fAudLang3PopUp selectItemAtIndex: 0];
-                    [self audioTrackPopUpChanged: fAudLang3PopUp];
-                    
-                    if (i < 2)
-                    {
-                        [fAudLang2PopUp selectItemAtIndex: 0];
-                        [self audioTrackPopUpChanged: fAudLang2PopUp];
-                    }
-                }
-            }
-            
-        }
-        else
-        {
-            if ([chosenPreset objectForKey:@"Audio1Track"] > 0)
-            {
-                if ([fAudLang1PopUp indexOfSelectedItem] == 0)
-                {
-                    [fAudLang1PopUp selectItemAtIndex: 1];
-                }
-                [self audioTrackPopUpChanged: fAudLang1PopUp];
-                [fAudTrack1CodecPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio1Encoder"]];
-                /* check our pref for core audio and use it in place of faac if preset is built in */
-                if ([[chosenPreset objectForKey:@"Type"] intValue] == 0 && 
-                    [[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
-                    [[chosenPreset objectForKey:@"Audio1Encoder"] isEqualToString: @"AAC (faac)"])
-                {
-                    [fAudTrack1CodecPopUp selectItemWithTitle:@"AAC (CoreAudio)"];
-                }
-                
-                [self audioTrackPopUpChanged: fAudTrack1CodecPopUp];
-                [fAudTrack1MixPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio1Mixdown"]];
-                /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
-                 * mixdown*/
-                if  ([fAudTrack1MixPopUp selectedItem] == nil)
-                {
-                    [self audioTrackPopUpChanged: fAudTrack1CodecPopUp];
-                }
-                [fAudTrack1RatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio1Samplerate"]];
-                /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
-                if (![[chosenPreset objectForKey:@"Audio1Encoder"] isEqualToString:@"AC3 Passthru"])
-                {
-                    [fAudTrack1BitratePopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio1Bitrate"]];
-                }
-                [fAudTrack1DrcSlider setFloatValue:[[chosenPreset objectForKey:@"Audio1TrackDRCSlider"] floatValue]];
-                [self audioDRCSliderChanged: fAudTrack1DrcSlider];
-            }
-            
-            if ([chosenPreset objectForKey:@"Audio2Track"] > 0)
-            {
-                if ([fAudLang2PopUp indexOfSelectedItem] == 0)
-                {
-                    [fAudLang2PopUp selectItemAtIndex: 1];
-                }
-                [self audioTrackPopUpChanged: fAudLang2PopUp];
-                [fAudTrack2CodecPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio2Encoder"]];
-                /* check our pref for core audio and use it in place of faac if preset is built in */
-                if ([[chosenPreset objectForKey:@"Type"] intValue] == 0 && 
-                    [[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
-                    [[chosenPreset objectForKey:@"Audio2Encoder"] isEqualToString: @"AAC (faac)"])
-                {
-                    [fAudTrack2CodecPopUp selectItemWithTitle:@"AAC (CoreAudio)"];
-                }
-                [self audioTrackPopUpChanged: fAudTrack2CodecPopUp];
-                [fAudTrack2MixPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio2Mixdown"]];
-                /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
-                 * mixdown*/
-                if  ([fAudTrack2MixPopUp selectedItem] == nil)
-                {
-                    [self audioTrackPopUpChanged: fAudTrack2CodecPopUp];
-                }
-                [fAudTrack2RatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio2Samplerate"]];
-                /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
-                if (![[chosenPreset objectForKey:@"Audio2Encoder"] isEqualToString:@"AC3 Passthru"])
-                {
-                    [fAudTrack2BitratePopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio2Bitrate"]];
-                }
-                [fAudTrack2DrcSlider setFloatValue:[[chosenPreset objectForKey:@"Audio2TrackDRCSlider"] floatValue]];
-                [self audioDRCSliderChanged: fAudTrack2DrcSlider];
-            }
-            if ([chosenPreset objectForKey:@"Audio3Track"] > 0)
-            {
-                if ([fAudLang3PopUp indexOfSelectedItem] == 0)
-                {
-                    [fAudLang3PopUp selectItemAtIndex: 1];
-                }
-                [self audioTrackPopUpChanged: fAudLang3PopUp];
-                [fAudTrack3CodecPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio3Encoder"]];
-                /* check our pref for core audio and use it in place of faac if preset is built in */
-                if ([[chosenPreset objectForKey:@"Type"] intValue] == 0 && 
-                    [[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
-                    [[chosenPreset objectForKey:@"Audio3Encoder"] isEqualToString: @"AAC (faac)"])
-                {
-                    [fAudTrack3CodecPopUp selectItemWithTitle:@"AAC (CoreAudio)"];
-                }
-                [self audioTrackPopUpChanged: fAudTrack3CodecPopUp];
-                [fAudTrack3MixPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio3Mixdown"]];
-                /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
-                 * mixdown*/
-                if  ([fAudTrack3MixPopUp selectedItem] == nil)
-                {
-                    [self audioTrackPopUpChanged: fAudTrack3CodecPopUp];
-                }
-                [fAudTrack3RatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio3Samplerate"]];
-                /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
-                if (![[chosenPreset objectForKey:@"Audio3Encoder"] isEqualToString: @"AC3 Passthru"])
-                {
-                    [fAudTrack3BitratePopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio3Bitrate"]];
-                }
-                [fAudTrack3DrcSlider setFloatValue:[[chosenPreset objectForKey:@"Audio3TrackDRCSlider"] floatValue]];
-                [self audioDRCSliderChanged: fAudTrack3DrcSlider];
-            }
-            if ([chosenPreset objectForKey:@"Audio4Track"] > 0)
-            {
-                if ([fAudLang4PopUp indexOfSelectedItem] == 0)
-                {
-                    [fAudLang4PopUp selectItemAtIndex: 1];
-                }
-                [self audioTrackPopUpChanged: fAudLang4PopUp];
-                [fAudTrack4CodecPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio4Encoder"]];
-                /* check our pref for core audio and use it in place of faac if preset is built in */
-                if ([[chosenPreset objectForKey:@"Type"] intValue] == 0 && 
-                    [[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
-                    [[chosenPreset objectForKey:@"Audio4Encoder"] isEqualToString: @"AAC (faac)"])
-                {
-                    [fAudTrack4CodecPopUp selectItemWithTitle:@"AAC (CoreAudio)"];
-                }
-                [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
-                [fAudTrack4MixPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio4Mixdown"]];
-                /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
-                 * mixdown*/
-                if  ([fAudTrack4MixPopUp selectedItem] == nil)
-                {
-                    [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
-                }
-                [fAudTrack4RatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio4Samplerate"]];
-                /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
-                if (![[chosenPreset objectForKey:@"Audio4Encoder"] isEqualToString:@"AC3 Passthru"])
-                {
-                    [fAudTrack4BitratePopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio4Bitrate"]];
-                }
-                [fAudTrack4DrcSlider setFloatValue:[[chosenPreset objectForKey:@"Audio4TrackDRCSlider"] floatValue]];
-                [self audioDRCSliderChanged: fAudTrack4DrcSlider];
-            }
-            
-            /* We now cleanup any extra audio tracks that may have been previously set if we need to */
-            
-            if (![chosenPreset objectForKey:@"Audio2Track"] || [chosenPreset objectForKey:@"Audio2Track"] == 0)
-            {
-                [fAudLang2PopUp selectItemAtIndex: 0];
-                [self audioTrackPopUpChanged: fAudLang2PopUp];
-            }
-            if (![chosenPreset objectForKey:@"Audio3Track"] || [chosenPreset objectForKey:@"Audio3Track"] > 0)
-            {
-                [fAudLang3PopUp selectItemAtIndex: 0];
-                [self audioTrackPopUpChanged: fAudLang3PopUp];
-            }
-            if (![chosenPreset objectForKey:@"Audio4Track"] || [chosenPreset objectForKey:@"Audio4Track"] > 0)
-            {
-                [fAudLang4PopUp selectItemAtIndex: 0];
-                [self audioTrackPopUpChanged: fAudLang4PopUp];
-            }
-        }
+		[fAudioDelegate addTracksFromPreset: chosenPreset];
         
         /*Subtitles*/
         [fSubPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Subtitles"]];
@@ -7543,62 +6008,7 @@ return YES;
         
         /*Audio*/
         NSMutableArray *audioListArray = [[NSMutableArray alloc] init];
-        /* we actually call the methods for the nests here */
-        if ([fAudLang1PopUp indexOfSelectedItem] > 0)
-        {
-            NSMutableDictionary *audioTrack1Array = [[NSMutableDictionary alloc] init];
-            [audioTrack1Array setObject:[NSNumber numberWithInt:[fAudLang1PopUp indexOfSelectedItem]] forKey:@"AudioTrack"];
-            [audioTrack1Array setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"AudioTrackDescription"];
-            [audioTrack1Array setObject:[fAudTrack1CodecPopUp titleOfSelectedItem] forKey:@"AudioEncoder"];
-            [audioTrack1Array setObject:[fAudTrack1MixPopUp titleOfSelectedItem] forKey:@"AudioMixdown"];
-            [audioTrack1Array setObject:[fAudTrack1RatePopUp titleOfSelectedItem] forKey:@"AudioSamplerate"];
-            [audioTrack1Array setObject:[fAudTrack1BitratePopUp titleOfSelectedItem] forKey:@"AudioBitrate"];
-            [audioTrack1Array setObject:[NSNumber numberWithFloat:[fAudTrack1DrcSlider floatValue]] forKey:@"AudioTrackDRCSlider"];
-            [audioTrack1Array autorelease];
-            [audioListArray addObject:audioTrack1Array];
-        }
-        
-        if ([fAudLang2PopUp indexOfSelectedItem] > 0)
-        {
-            NSMutableDictionary *audioTrack2Array = [[NSMutableDictionary alloc] init];
-            [audioTrack2Array setObject:[NSNumber numberWithInt:[fAudLang2PopUp indexOfSelectedItem]] forKey:@"AudioTrack"];
-            [audioTrack2Array setObject:[fAudLang2PopUp titleOfSelectedItem] forKey:@"AudioTrackDescription"];
-            [audioTrack2Array setObject:[fAudTrack2CodecPopUp titleOfSelectedItem] forKey:@"AudioEncoder"];
-            [audioTrack2Array setObject:[fAudTrack2MixPopUp titleOfSelectedItem] forKey:@"AudioMixdown"];
-            [audioTrack2Array setObject:[fAudTrack2RatePopUp titleOfSelectedItem] forKey:@"AudioSamplerate"];
-            [audioTrack2Array setObject:[fAudTrack2BitratePopUp titleOfSelectedItem] forKey:@"AudioBitrate"];
-            [audioTrack2Array setObject:[NSNumber numberWithFloat:[fAudTrack2DrcSlider floatValue]] forKey:@"AudioTrackDRCSlider"];
-            [audioTrack2Array autorelease];
-            [audioListArray addObject:audioTrack2Array];
-        }
-        
-        if ([fAudLang3PopUp indexOfSelectedItem] > 0)
-        {
-            NSMutableDictionary *audioTrack3Array = [[NSMutableDictionary alloc] init];
-            [audioTrack3Array setObject:[NSNumber numberWithInt:[fAudLang3PopUp indexOfSelectedItem]] forKey:@"AudioTrack"];
-            [audioTrack3Array setObject:[fAudLang3PopUp titleOfSelectedItem] forKey:@"AudioTrackDescription"];
-            [audioTrack3Array setObject:[fAudTrack3CodecPopUp titleOfSelectedItem] forKey:@"AudioEncoder"];
-            [audioTrack3Array setObject:[fAudTrack3MixPopUp titleOfSelectedItem] forKey:@"AudioMixdown"];
-            [audioTrack3Array setObject:[fAudTrack3RatePopUp titleOfSelectedItem] forKey:@"AudioSamplerate"];
-            [audioTrack3Array setObject:[fAudTrack3BitratePopUp titleOfSelectedItem] forKey:@"AudioBitrate"];
-            [audioTrack3Array setObject:[NSNumber numberWithFloat:[fAudTrack3DrcSlider floatValue]] forKey:@"AudioTrackDRCSlider"];
-            [audioTrack3Array autorelease];
-            [audioListArray addObject:audioTrack3Array];
-        }
-        
-        if ([fAudLang4PopUp indexOfSelectedItem] > 0)
-        {
-            NSMutableDictionary *audioTrack4Array = [[NSMutableDictionary alloc] init];
-            [audioTrack4Array setObject:[NSNumber numberWithInt:[fAudLang4PopUp indexOfSelectedItem]] forKey:@"AudioTrack"];
-            [audioTrack4Array setObject:[fAudLang4PopUp titleOfSelectedItem] forKey:@"AudioTrackDescription"];
-            [audioTrack4Array setObject:[fAudTrack4CodecPopUp titleOfSelectedItem] forKey:@"AudioEncoder"];
-            [audioTrack4Array setObject:[fAudTrack4MixPopUp titleOfSelectedItem] forKey:@"AudioMixdown"];
-            [audioTrack4Array setObject:[fAudTrack4RatePopUp titleOfSelectedItem] forKey:@"AudioSamplerate"];
-            [audioTrack4Array setObject:[fAudTrack4BitratePopUp titleOfSelectedItem] forKey:@"AudioBitrate"];
-            [audioTrack4Array setObject:[NSNumber numberWithFloat:[fAudTrack4DrcSlider floatValue]] forKey:@"AudioTrackDRCSlider"];
-            [audioTrack4Array autorelease];
-            [audioListArray addObject:audioTrack4Array];
-        }
+		[fAudioDelegate prepareAudioForPreset: audioListArray];
         
         
         [preset setObject:[NSMutableArray arrayWithArray: audioListArray] forKey:@"AudioList"];
