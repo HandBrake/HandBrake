@@ -182,9 +182,15 @@ ghb_preview_init(signal_user_data_t *ud)
 	ud->preview->xid = GDK_WINDOW_HWND(ud->preview->view->window);
 #endif
 	ud->preview->play = gst_element_factory_make("playbin", "play");
-	//xover = gst_element_factory_make("xvimagesink", "xover");
-	//xover = gst_element_factory_make("ximagesink", "xover");
 	xover = gst_element_factory_make("gconfvideosink", "xover");
+	if (xover == NULL)
+	{
+		xover = gst_element_factory_make("xvimagesink", "xover");
+	}
+	if (xover == NULL)
+	{
+		xover = gst_element_factory_make("ximagesink", "xover");
+	}
 	if (ud->preview->play == NULL || xover == NULL)
 	{
 		g_message("Couldn't initialize gstreamer. Disabling live preview.");
