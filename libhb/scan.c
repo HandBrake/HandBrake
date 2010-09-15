@@ -124,18 +124,27 @@ static void ScanFunc( void * _data )
     }
     else if ( ( data->batch = hb_batch_init( data->path ) ) )
     {
-        int j = 1;
-
-        /* Scan all titles */
-        for( i = 0; i < hb_batch_title_count( data->batch ); i++ )
+        if( data->title_index )
         {
-            hb_title_t * title;
-
-            title = hb_batch_title_scan( data->batch, i );
-            if ( title != NULL )
+            /* Scan this title only */
+            title = hb_batch_title_scan( data->batch, data->title_index );
+            if ( title )
             {
-                title->index = j++;
                 hb_list_add( data->list_title, title );
+            }
+        }
+        else
+        {
+            /* Scan all titles */
+            for( i = 0; i < hb_batch_title_count( data->batch ); i++ )
+            {
+                hb_title_t * title;
+
+                title = hb_batch_title_scan( data->batch, i + 1 );
+                if ( title != NULL )
+                {
+                    hb_list_add( data->list_title, title );
+                }
             }
         }
     }

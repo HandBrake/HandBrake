@@ -90,7 +90,7 @@ hb_title_t * hb_batch_title_scan( hb_batch_t * d, int t )
     if ( t < 0 )
         return NULL;
 
-    filename = hb_list_item( d->list_file, t );
+    filename = hb_list_item( d->list_file, t - 1 );
     if ( filename == NULL )
         return NULL;
 
@@ -100,6 +100,10 @@ hb_title_t * hb_batch_title_scan( hb_batch_t * d, int t )
 
     title = hb_stream_title_scan( stream );
     hb_stream_close( &stream );
+    if ( title != NULL )
+    {
+        title->index = t;
+    }
 
     return title;
 }
