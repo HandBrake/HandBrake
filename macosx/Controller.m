@@ -4958,6 +4958,16 @@ the user is using "Custom" settings by determining the sender*/
 
 #pragma mark -
 
+@synthesize hasValidPresetSelected;
+
+//	This causes all audio tracks from the title to be used based on the current preset
+- (IBAction) addAllAudioTracks: (id) sender
+
+{
+	[fAudioDelegate	addAllTracksFromPreset: [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]]];
+	return;
+}
+
 - (IBAction) browseImportSrtFile: (id) sender
 {
 
@@ -5421,6 +5431,7 @@ return YES;
     
     if ([fPresetsOutlineView selectedRow] >= 0 && [[[fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]] objectForKey:@"Folder"] intValue] != 1)
     {
+		[self setHasValidPresetSelected: YES];
         chosenPreset = [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]];
         [fPresetSelectedDisplay setStringValue:[chosenPreset objectForKey:@"PresetName"]];
         
@@ -5741,6 +5752,9 @@ return YES;
         [fPictureController SetTitle:fTitle];
         [self calculatePictureSizing:nil];
     }
+	else {
+		[self setHasValidPresetSelected: NO];
+	}
 }
 
 

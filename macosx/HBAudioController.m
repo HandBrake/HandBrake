@@ -193,17 +193,17 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 	return;
 }
 
-- (void) addTracksFromPreset: (NSMutableDictionary *) aPreset
+//	This routine takes the preset and will return the value for the key AudioList
+//	if it exists, otherwise it creates an array from the data in the present.
+- (NSArray *) _presetAudioArrayFromPreset: (NSMutableDictionary *) aPreset
 
 {
-	id whatToUse = nil;
+	NSArray *retval = [aPreset objectForKey: @"AudioList"];
 
-	//	If we do not have an AudioList we need to make one from the data we have
-	if (nil == (whatToUse = [aPreset objectForKey: @"AudioList"])) {
+	if (nil == retval) {
 		int maximumNumberOfAllowedAudioTracks = [HBController maximumNumberOfAllowedAudioTracks];
 		NSString *base;
-
-		whatToUse = [NSMutableArray array];
+		NSMutableArray *whatToUse = [NSMutableArray array];
 		for (unsigned int i = 1; i <= maximumNumberOfAllowedAudioTracks; i++) {
 			base = [NSString stringWithFormat: @"Audio%d", i];
 			if (nil != [aPreset objectForKey: [base stringByAppendingString: @"Track"]]) {
@@ -216,14 +216,16 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 									   nil]];
 			}
 		}
+		retval = whatToUse;
 	}
+	return retval;
+}
 
-	//	Reinitialize the configured list of audio tracks
-	[audioArray release];
-	audioArray = [[NSMutableArray alloc] init];
-	
-	//	Now to process the list
-	NSEnumerator *enumerator = [whatToUse objectEnumerator];
+//	This uses the templateAudioArray from the preset to create the audios for the specified trackIndex
+- (void) _processPresetAudioArray: (NSArray *) templateAudioArray forTrack: (unsigned int) trackIndex andType: (int) aType
+
+{
+	NSEnumerator *enumerator = [templateAudioArray objectEnumerator];
 	NSDictionary *dict;
 	NSString *key;
 	
@@ -232,9 +234,9 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 		[newAudio setController: self];
 		[self insertObject: newAudio inAudioArrayAtIndex: [self countOfAudioArray]];
 		[newAudio setVideoContainerTag: [self videoContainerTag]];
-		[newAudio setTrackFromIndex: 1];
+		[newAudio setTrackFromIndex: trackIndex];
 		key = [dict objectForKey: @"AudioEncoder"];
-		if (0 == [[aPreset objectForKey: @"Type"] intValue] &&
+		if (0 == aType &&
 			YES == [[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] &&
 			YES == [key isEqualToString: @"AAC (faac)"]
 			) {
@@ -253,9 +255,41 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 		}
 		[newAudio release];
 	}
+	return;
+}
+
+- (void) addTracksFromPreset: (NSMutableDictionary *) aPreset
+
+{
+	id whatToUse = [self _presetAudioArrayFromPreset: aPreset];
+
+	//	Reinitialize the configured list of audio tracks
+	[audioArray release];
+	audioArray = [[NSMutableArray alloc] init];
+	
+	[self _processPresetAudioArray: whatToUse forTrack: 1 andType: [[aPreset objectForKey: @"Type"] intValue]];
 
 	[self switchingTrackFromNone: nil];	// see if we need to add one to the list
 
+	return;
+}
+
+- (void) addAllTracksFromPreset: (NSMutableDictionary *) aPreset
+
+{
+	id whatToUse = [self _presetAudioArrayFromPreset: aPreset];
+	
+	//	Reinitialize the configured list of audio tracks
+	[audioArray release];
+	audioArray = [[NSMutableArray alloc] init];
+	
+	for (unsigned int i = 1; i < [masterTrackArray count]; i++) {
+		[self _processPresetAudioArray: whatToUse forTrack: i andType: [[aPreset objectForKey: @"Type"] intValue]];
+	}
+	
+	[self switchingTrackFromNone: nil];	// see if we need to add one to the list
+	
+	return;
 	return;
 }
 
