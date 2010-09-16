@@ -2093,11 +2093,11 @@ fWorkingCount = 0;
     NSMutableString * string;
     if (fPendingCount == 1)
     {
-        string = [NSMutableString stringWithFormat: NSLocalizedString( @"%d encode pending in queue", @"" ), fPendingCount];
+        string = [NSMutableString stringWithFormat: NSLocalizedString( @"%d encode pending", @"" ), fPendingCount];
     }
     else
     {
-        string = [NSMutableString stringWithFormat: NSLocalizedString( @"%d encode(s) pending in queue", @"" ), fPendingCount];
+        string = [NSMutableString stringWithFormat: NSLocalizedString( @"%d encode(s) pending", @"" ), fPendingCount];
     }
     [fQueueStatus setStringValue:string];
 }
