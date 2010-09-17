@@ -346,7 +346,10 @@ namespace HandBrake.ApplicationServices.Services
             try
             {
                 if (fileWriter != null)
+                {
                     fileWriter.Close();
+                    fileWriter.Dispose();
+                }
             }
             catch (Exception exc)
             {
@@ -430,7 +433,10 @@ namespace HandBrake.ApplicationServices.Services
             catch (Exception exc)
             {
                 if (fileWriter != null)
+                {
                     fileWriter.Close();
+                    fileWriter.Dispose();
+                }
 
                 errorService.ShowError("Error", exc.ToString());
             }
@@ -454,12 +460,14 @@ namespace HandBrake.ApplicationServices.Services
 
                 try
                 {
-                    if (fileWriter != null)
+                    if (fileWriter != null && fileWriter.BaseStream.CanWrite)
+                    {
                         fileWriter.WriteLine(e.Data);
+                    }            
                 }
                 catch (Exception exc)
                 {
-                   // errorService.ShowError("Unable to write log data...", exc.ToString());
+                    // errorService.ShowError("Unable to write log data...", exc.ToString());
                 }
             }
         }

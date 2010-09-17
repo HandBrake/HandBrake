@@ -28,41 +28,19 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         public void ShowError(string shortError, string longError)
         {
-            Thread newThread = new Thread(new ParameterizedThreadStart(WriteExceptionToFile));
-            newThread.Start(shortError + Environment.NewLine + longError);
+            try
+            {
+                Thread newThread = new Thread(new ParameterizedThreadStart(WriteExceptionToFile));
+                newThread.Start(shortError + Environment.NewLine + longError);
+            }
+            catch (Exception)
+            {
+                // Do Nothing
+            }
 
             ExceptionWindow window = new ExceptionWindow();
             window.Setup(shortError, longError);
             window.Show();
-        }
-
-        /// <summary>
-        /// Write Exceptions out to log files
-        /// </summary>
-        /// <param name="state">
-        /// The state.
-        /// </param>
-        public void WriteExceptionToFile(object state)
-        {
-            string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
-            string file = Path.Combine(logDir, string.Format("Exception_{0}.txt", DateTime.Now.Ticks));
-
-            try
-            {
-                if (!File.Exists(file))
-                {
-                    using (StreamWriter streamWriter = new StreamWriter(file))
-                    {
-                        streamWriter.WriteLine(state.ToString());
-                        streamWriter.Close();
-                        streamWriter.Dispose();
-                    }
-                }
-            }
-            catch
-            {
-                return; // Game over. Stop digging.
-            }
         }
 
         /// <summary>
@@ -77,6 +55,35 @@ namespace HandBrake.ApplicationServices.Services
         public void ShowNotice(string notice, bool isWarning)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Write Exceptions out to log files
+        /// </summary>
+        /// <param name="state">
+        /// The state.
+        /// </param>
+        public void WriteExceptionToFile(object state)
+        {
+            try
+            {
+                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+                string file = Path.Combine(logDir, string.Format("Exception_{0}.txt", DateTime.Now.Ticks));
+
+                if (!File.Exists(file))
+                {
+                    using (StreamWriter streamWriter = new StreamWriter(file))
+                    {
+                        streamWriter.WriteLine(state.ToString());
+                        streamWriter.Close();
+                        streamWriter.Dispose();
+                    }
+                }
+            }
+            catch
+            {
+                return; // Game over. Stop digging.
+            }
         }
     }
 }
