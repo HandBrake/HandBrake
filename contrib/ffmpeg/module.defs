@@ -8,6 +8,7 @@ FFMPEG.CONFIGURE.env  =
 FFMPEG.CONFIGURE.host =
 
 FFMPEG.CONFIGURE.extra = \
+    --disable-doc \
     --disable-bsfs \
     --disable-encoders \
     --disable-ffmpeg \
