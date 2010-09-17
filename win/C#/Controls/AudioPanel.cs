@@ -224,7 +224,23 @@ namespace Handbrake.Controls
             {
                 case "drp_audioTrack":
                     if (audioList.Rows.Count != 0 && audioList.SelectedRows.Count != 0)
+                    {
                         audioList.SelectedRows[0].Cells[1].Value = drp_audioTrack.Text;
+
+                        // If the track isn't AC3, and the encoder is, change it.
+                        if (audioList.SelectedRows[0].Cells[2].Value.ToString().Contains("AC3") && !audioList.SelectedRows[0].Cells[1].Value.ToString().Contains("AC3"))
+                        {
+                            // Switch to AAC
+                            drp_audioEncoder.SelectedIndex = 0;
+                        }
+
+                        // If the track isn't DTS, and the encoder is, change it.
+                        if (audioList.SelectedRows[0].Cells[2].Value.ToString().Contains("DTS") && !audioList.SelectedRows[0].Cells[1].Value.ToString().Contains("DTS"))
+                        {
+                            // Switch to AAC
+                            drp_audioEncoder.SelectedIndex = 0;
+                        }
+                    }
                     break;
                 case "drp_audioEncoder":
                     SetMixDown();
