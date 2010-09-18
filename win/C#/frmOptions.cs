@@ -272,11 +272,16 @@ namespace Handbrake
             else
                 Properties.Settings.Default.autoNamePath = text_an_path.Text;
 
-            if (text_an_path.Text == "{source}" && !optionsWindowLoading)
+            if (text_an_path.Text.ToLower() == "{source_path}" && !optionsWindowLoading)
             {
                 MessageBox.Show(
                     "Be careful with this feature. Make sure you can write to the same folder as the source! \n\n If you are encoding from a DVD, do not use this feature as HandBrake will not be able to write to the DVD!",
                     "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+            if (text_an_path.Text.ToLower().Contains("{source_path}") && text_an_path.Text.ToLower() != "{source_path}")
+            {
+                MessageBox.Show("Note you can not use the {source_path} within a path. {source_path} is the full source file path.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

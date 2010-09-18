@@ -238,7 +238,7 @@ namespace Handbrake.Functions
                 if (!mainWindow.text_destination.Text.Contains(Path.DirectorySeparatorChar.ToString()))
                 {
                     // If there is an auto name path, use it...
-                    if (Properties.Settings.Default.autoNamePath.Trim() == "{source}" && !string.IsNullOrEmpty(mainWindow.sourcePath))
+                    if (Properties.Settings.Default.autoNamePath.Trim() == "{source_path}" && !string.IsNullOrEmpty(mainWindow.sourcePath))
                     {
                         autoNamePath = Path.Combine(Path.GetDirectoryName(mainWindow.sourcePath), destinationFilename);
                         if (autoNamePath == mainWindow.sourcePath)

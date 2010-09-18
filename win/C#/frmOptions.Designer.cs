@@ -232,10 +232,12 @@ namespace Handbrake
             this.label34.Location = new System.Drawing.Point(179, 233);
             this.label34.Margin = new System.Windows.Forms.Padding(3);
             this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(139, 13);
+            this.label34.Size = new System.Drawing.Size(167, 13);
             this.label34.TabIndex = 102;
-            this.label34.Text = "Available Options: {source}";
-            this.ToolTip.SetToolTip(this.label34, "{source} = Use the same directory as the source is in.");
+            this.label34.Text = "Available Options: {source_path}";
+            this.ToolTip.SetToolTip(this.label34, "{source_path} = Use the same directory as the source is in.\r\nNote: you can not us" +
+                    "e {source_path} within a path.  It has to be the only text in the path above to " +
+                    "work.");
             // 
             // check_TitleCase
             // 
@@ -447,8 +449,7 @@ namespace Handbrake
             this.text_an_path.Name = "text_an_path";
             this.text_an_path.Size = new System.Drawing.Size(253, 21);
             this.text_an_path.TabIndex = 76;
-            this.ToolTip.SetToolTip(this.text_an_path, "This is the default location where your encoded files will be stored if \"Automati" +
-                    "cally name output files\" is enabled.");
+            this.ToolTip.SetToolTip(this.text_an_path, resources.GetString("text_an_path.ToolTip"));
             this.text_an_path.TextChanged += new System.EventHandler(this.text_an_path_TextChanged);
             // 
             // tab_picture
