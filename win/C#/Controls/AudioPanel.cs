@@ -117,10 +117,12 @@ namespace Handbrake.Controls
                 newTrack.Cells[2].Value = track.Encoder;
                 newTrack.Cells[3].Value = track.MixDown;
                 newTrack.Cells[4].Value = track.SampleRate;
-                newTrack.Cells[5].Value = track.Encoder.Contains("AC3") ? "Auto" : track.Bitrate;
+                newTrack.Cells[5].Value = track.Encoder.Contains("AC3") || track.Encoder.Contains("DTS") ? "Auto" : track.Bitrate;
                 newTrack.Cells[6].Value = track.DRC;
                 AddTrackForPreset(newTrack);
             }
+
+            this.AutomaticTrackSelection();
         }
 
         /// <summary>
@@ -128,7 +130,7 @@ namespace Handbrake.Controls
         /// </summary>
         /// <param name="selectedTitle">The selected title</param>
         /// <param name="preset">A preset</param>
-        public void SetTrackList(Title selectedTitle, Preset preset)
+        public void SetTrackListFromPreset(Title selectedTitle, Preset preset)
         {
             if (selectedTitle.AudioTracks.Count == 0)
             {
@@ -139,18 +141,17 @@ namespace Handbrake.Controls
                 return;
             }
 
-            // The Source Information for the title will have changed, so set all the tracks to Automatic.
+            // Setup the Audio track source dropdown with the new audio tracks.
+            drp_audioTrack.Items.Clear();
+            drp_audioTrack.Items.AddRange(selectedTitle.AudioTracks.ToArray());
+
+            // Reset the Audio Track Selection to the first audio track of the source, or Audiomatic if that fails
             foreach (DataGridViewRow row in this.audioList.Rows)
             {
                 row.Cells[1].Value = "Automatic";
             }
 
-            // Setup the Audio track source dropdown with the new audio tracks.
-            drp_audioTrack.Items.Clear();
-            drp_audioTrack.Items.Add("Automatic");
-            drp_audioTrack.Items.AddRange(selectedTitle.AudioTracks.ToArray());
-
-            // Re-add any audio tracks that the preset has.
+            // Add any tracks the preset has, if there is a preset and no audio tracks in the list currently
             if (audioList.Rows.Count == 0 && preset != null)
             {
                 QueryParser parsed = QueryParser.Parse(preset.Query);
@@ -169,39 +170,66 @@ namespace Handbrake.Controls
                 }
             }
 
+            this.AutomaticTrackSelection();
+        }
+
+        private void AutomaticTrackSelection()
+        {
             // Handle Native Language and "Dub Foreign language audio" and "Use Foreign language audio and Subtitles" Options
             if (Properties.Settings.Default.NativeLanguage == "Any")
-                drp_audioTrack.SelectedIndex = drp_audioTrack.Items.Count >= 2 ? 1 : 0;
+            {
+                drp_audioTrack.SelectedIndex = 0;
+                foreach (DataGridViewRow item in audioList.Rows)
+                {
+                    if (this.drp_audioTrack.SelectedItem != null)
+                    {
+                        item.Cells[1].Value = this.drp_audioTrack.SelectedItem.ToString();
+                    }
+                }
+            }
             else
             {
-                if (Properties.Settings.Default.DubMode > 1) // "Dub Foreign language audio" 
+                int mode = Properties.Settings.Default.DubMode;
+                switch (mode)
                 {
-                    int i = 0;
-                    foreach (object item in drp_audioTrack.Items)
-                    {
-                        if (item.ToString().Contains(Properties.Settings.Default.NativeLanguage))
+                    case 1:
+                    case 3:
+                        // Dub Foreign Language Audio 
+                        // Select the prefered language audio, or the first track if it doesn't exist.
+                        int i = 0;
+                        foreach (object item in drp_audioTrack.Items)
                         {
-                            drp_audioTrack.SelectedIndex = i;
-                            break;
+                            if (item.ToString().Contains(Properties.Settings.Default.NativeLanguage))
+                            {
+                                drp_audioTrack.SelectedIndex = i;
+                                break;
+                            }
+
+                            i++;
                         }
 
-                        i++;
-                    }
-
-                    if (drp_audioTrack.SelectedItem != null)
-                        foreach (DataGridViewRow item in audioList.Rows)
-                            item.Cells[1].Value = drp_audioTrack.SelectedItem.ToString();
-                    else
-                    {
-                        drp_audioTrack.SelectedIndex = 0;
                         if (drp_audioTrack.SelectedItem != null)
                             foreach (DataGridViewRow item in audioList.Rows)
                                 item.Cells[1].Value = drp_audioTrack.SelectedItem.ToString();
-                    }
+                        else
+                        {
+                            drp_audioTrack.SelectedIndex = 0;
+                            if (drp_audioTrack.SelectedItem != null)
+                                foreach (DataGridViewRow item in audioList.Rows)
+                                    item.Cells[1].Value = drp_audioTrack.SelectedItem.ToString();
+                        }
+
+                        break;
+                    case 2:
+                    default:
+                        // Select the first track which is hopefully the default and foreign track.
+                        drp_audioTrack.SelectedIndex = 0;
+
+                        if (drp_audioTrack.SelectedItem != null)
+                            foreach (DataGridViewRow item in audioList.Rows)
+                                item.Cells[1].Value = drp_audioTrack.SelectedItem.ToString();
+                        break;
                 }
-                else
-                    drp_audioTrack.SelectedIndex = drp_audioTrack.Items.Count >= 3 ? 2 : 0;
-                // "Use Foreign language audio and Subtitles"
             }
         }
 
@@ -528,7 +556,7 @@ namespace Handbrake.Controls
 
             if (up) index--;
             else index++;
-    
+
             if (index < audioList.Rows.Count || (audioList.Rows.Count > index && index >= 0))
             {
                 audioList.Rows.Remove(item);
