@@ -2460,7 +2460,7 @@ namespace Handbrake
                 return true;
             }
 
-            if (keyData == (Keys.Control | Keys.A))
+            if (keyData == (Keys.Control | Keys.Shift | Keys.A))
             {
                 btn_add2Queue_Click(this, new EventArgs());
                 return true;
