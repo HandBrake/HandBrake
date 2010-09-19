@@ -135,6 +135,7 @@ Section "Handbrake" SEC01
   File "Handbrake.exe.config"
   File "handbrakepineapple.ico"
   File "HandBrake.ApplicationServices.dll"
+  File "HandBrake.Framework.dll"
   File "Microsoft.WindowsAPICodePack.Shell.dll"
   File "Microsoft.WindowsAPICodePack.dll"
 
@@ -185,6 +186,7 @@ Section Uninstall
   Delete "$INSTDIR\Growl.CoreLibrary.dll"
   Delete "$INSTDIR\libgcc_s_sjlj-1.dll"
   Delete "$INSTDIR\HandBrake.ApplicationServices.dll"
+  Delete "$INSTDIR\HandBrake.Framework.dll"
   Delete "$INSTDIR\Microsoft.WindowsAPICodePack.Shell.dll"
   Delete "$INSTDIR\Microsoft.WindowsAPICodePack.dll"
   Delete "$INSTDIR\doc\AUTHORS"
