@@ -7,8 +7,6 @@ namespace HandBrake.ApplicationServices.Functions
 {
     using System.Diagnostics;
 
-    using HandBrake.ApplicationServices.Views;
-
     /// <summary>
     /// Useful functions which various screens can use.
     /// </summary>

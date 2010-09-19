@@ -99,42 +99,32 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\Encode.cs" />
-    <Compile Include="Services\ErrorService.cs" />
     <Compile Include="Services\Interfaces\IEncode.cs" />
-    <Compile Include="Services\Interfaces\IErrorService.cs" />
     <Compile Include="Services\Interfaces\IQueue.cs" />
     <Compile Include="Services\Interfaces\IScan.cs" />
     <Compile Include="Services\Queue.cs" />
     <Compile Include="Services\Scan.cs" />
-    <Compile Include="Views\ExceptionWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\ExceptionWindow.designer.cs">
-      <DependentUpon>ExceptionWindow.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\ExceptionWindow.resx">
-      <DependentUpon>ExceptionWindow.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\logo64.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\ErrorX.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Properties\AssemblyInfo.cs.tmpl" />
-    <EmbeddedResource Include="Resources\copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HandBrake.Framework\HandBrake.Framework.csproj">
+      <Project>{49AD42C1-BF9B-4D78-A644-020878FAADE6}</Project>
+      <Name>HandBrake.Framework</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\Microsoft\StyleCop\v4.4\Microsoft.StyleCop.targets" />

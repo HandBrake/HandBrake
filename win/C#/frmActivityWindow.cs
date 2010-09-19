@@ -13,7 +13,8 @@ namespace Handbrake
     using System.Threading;
     using System.Windows.Forms;
 
-    using HandBrake.ApplicationServices.Services;
+    using HandBrake.Framework.Services;
+    using HandBrake.Framework.Services.Interfaces;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     using Model;

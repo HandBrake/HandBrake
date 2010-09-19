@@ -1,9 +1,9 @@
-/*  frmDownload.cs $
+/*  DownloadUpdate.cs $
     This file is part of the HandBrake source code.
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace Handbrake
+namespace HandBrake.Framework.Views
 {
     using System;
     using System.Diagnostics;
@@ -15,7 +15,7 @@ namespace Handbrake
     /// <summary>
     /// The Download Window
     /// </summary>
-    public partial class frmDownload : Form
+    public partial class DownloadUpdate : Form
     {
         private readonly Thread downloadThread;
         private Stream responceStream;
@@ -31,7 +31,7 @@ namespace Handbrake
 
         private delegate void DownloadFailedCallback();
 
-        public frmDownload(string filename)
+        public DownloadUpdate(string filename)
         {
             InitializeComponent();
 

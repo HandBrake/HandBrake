@@ -16,6 +16,9 @@ namespace Handbrake.Functions
     using System.Threading;
     using System.Windows.Forms;
     using System.Xml.Serialization;
+
+    using HandBrake.Framework.Services;
+    using HandBrake.Framework.Services.Interfaces;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -483,90 +486,6 @@ namespace Handbrake.Functions
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Begins checking for an update to HandBrake.
-        /// </summary>
-        /// <param name="callback">The method that will be called when the check is finished.</param>
-        /// <param name="debug">Whether or not to execute this in debug mode.</param>
-        public static void BeginCheckForUpdates(AsyncCallback callback, bool debug)
-        {
-            ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
-                                                              {
-                                                                  try
-                                                                  {
-                                                                      // Is this a stable or unstable build?
-                                                                      string url =
-                                                                          Properties.Settings.Default.hb_build.ToString()
-                                                                              .EndsWith("1")
-                                                                              ? Properties.Settings.Default.
-                                                                                    appcast_unstable
-                                                                              : Properties.Settings.Default.appcast;
-
-                                                                      // Initialize variables
-                                                                      WebRequest request = WebRequest.Create(url);
-                                                                      WebResponse response = request.GetResponse();
-                                                                      AppcastReader reader = new AppcastReader();
-
-                                                                      // Get the data, convert it to a string, and parse it into the AppcastReader
-                                                                      reader.GetInfo(
-                                                                          new StreamReader(response.GetResponseStream())
-                                                                              .ReadToEnd());
-
-                                                                      // Further parse the information
-                                                                      string build = reader.Build;
-
-                                                                      int latest = int.Parse(build);
-                                                                      int current = Properties.Settings.Default.hb_build;
-                                                                      int skip = Properties.Settings.Default.skipversion;
-
-                                                                      // If the user wanted to skip this version, don't report the update
-                                                                      if (latest == skip)
-                                                                      {
-                                                                          UpdateCheckInformation info =
-                                                                              new UpdateCheckInformation
-                                                                                  {
-                                                                                      NewVersionAvailable = false,
-                                                                                      BuildInformation = null
-                                                                                  };
-                                                                          callback(new UpdateCheckResult(debug, info));
-                                                                          return;
-                                                                      }
-
-                                                                      // Set when the last update was
-                                                                      Properties.Settings.Default.lastUpdateCheckDate =
-                                                                          DateTime.Now;
-                                                                      Properties.Settings.Default.Save();
-
-                                                                      UpdateCheckInformation info2 =
-                                                                          new UpdateCheckInformation
-                                                                              {
-                                                                                  NewVersionAvailable = latest > current,
-                                                                                  BuildInformation = reader
-                                                                              };
-                                                                      callback(new UpdateCheckResult(debug, info2));
-                                                                  }
-                                                                  catch (Exception exc)
-                                                                  {
-                                                                      callback(new UpdateCheckResult(debug, new UpdateCheckInformation { Error = exc }));
-                                                                  }
-                                                              }));
-        }
-
-        /// <summary>
-        /// End Check for Updates
-        /// </summary>
-        /// <param name="result">
-        /// The result.
-        /// </param>
-        /// <returns>
-        /// Update Check information
-        /// </returns>
-        public static UpdateCheckInformation EndCheckForUpdates(IAsyncResult result)
-        {
-            UpdateCheckResult checkResult = (UpdateCheckResult)result;
-            return checkResult.Result;
         }
 
         /// <summary>

@@ -690,6 +690,14 @@ namespace Handbrake.Controls
             drp_subtitleTracks.SelectedIndex = 0;
             Clear();
 
+            this.AutomaticSubtitleSelection();
+        }
+
+        /// <summary>
+        /// Automatic Subtitle Selection based on user preferences.
+        /// </summary>
+        public void AutomaticSubtitleSelection()
+        {
             // Handle Native Language and "Dub Foreign language audio" and "Use Foreign language audio and Subtitles" Options
             if (Properties.Settings.Default.NativeLanguage != "Any")
             {
@@ -714,7 +722,7 @@ namespace Handbrake.Controls
                                 BtnAddSubTrackClick(this, new EventArgs());
                             }
                         }
-                    }                    
+                    }
                 }
             }
         }

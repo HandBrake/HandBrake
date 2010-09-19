@@ -16,6 +16,9 @@ namespace Handbrake
     using System.Windows.Forms;
     using Functions;
 
+    using HandBrake.Framework.Model;
+    using HandBrake.Framework.Services;
+    using HandBrake.Framework.Views;
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
@@ -108,7 +111,13 @@ namespace Handbrake
             {
                 if (DateTime.Now.Subtract(Settings.Default.lastUpdateCheckDate).TotalDays > Properties.Settings.Default.daysBetweenUpdateCheck)
                 {
-                    Main.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDone), false);
+                    // Set when the last update was
+                    Settings.Default.lastUpdateCheckDate = DateTime.Now;
+                    Settings.Default.Save();
+                    string url = Settings.Default.hb_build.ToString().EndsWith("1")
+                                                  ? Settings.Default.appcast_unstable
+                                                  : Settings.Default.appcast;
+                    UpdateService.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDone), false, url, Settings.Default.hb_build, Settings.Default.skipversion, Settings.Default.hb_version);
                 }
             }
 
@@ -174,15 +183,13 @@ namespace Handbrake
                 return;
             }
 
-            UpdateCheckInformation info;
-
             try
             {
-                info = Main.EndCheckForUpdates(result);
+                UpdateCheckInformation info = UpdateService.EndCheckForUpdates(result);
 
                 if (info.NewVersionAvailable)
                 {
-                    frmUpdater updateWindow = new frmUpdater(info.BuildInformation);
+                    UpdateInfo updateWindow = new UpdateInfo(info.BuildInformation, Settings.Default.hb_version, Settings.Default.hb_build.ToString());
                     updateWindow.ShowDialog();
                 }
             }
@@ -532,7 +539,12 @@ namespace Handbrake
         private void mnu_UpdateCheck_Click(object sender, EventArgs e)
         {
             lbl_updateCheck.Visible = true;
-            Main.BeginCheckForUpdates(new AsyncCallback(this.UpdateCheckDoneMenu), false);
+            Settings.Default.lastUpdateCheckDate = DateTime.Now;
+            Settings.Default.Save();
+            string url = Settings.Default.hb_build.ToString().EndsWith("1")
+                                                  ? Settings.Default.appcast_unstable
+                                                  : Settings.Default.appcast;
+            UpdateService.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDoneMenu), false, url, Settings.Default.hb_build, Settings.Default.skipversion, Settings.Default.hb_version);
         }
 
         /// <summary>
@@ -1317,7 +1329,7 @@ namespace Handbrake
                 {
                     sourceTitle = title.Title;
                     SelectSource(ISO_Open.FileName, sourceTitle);
-                }          
+                }
             }
             else
                 UpdateSourceLabel();
@@ -1420,7 +1432,7 @@ namespace Handbrake
                     drop_chapterFinish.Text = drop_chapterFinish.Items[drop_chapterFinish.Items.Count - 1].ToString();
 
                 // Populate the Audio Channels Dropdown
-                AudioSettings.SetTrackList(selectedTitle, this.currentlySelectedPreset);
+                AudioSettings.SetTrackListFromPreset(selectedTitle, this.currentlySelectedPreset);
 
                 // Populate the Subtitles dropdown
                 Subtitles.SetSubtitleTrackAuto(selectedTitle.Subtitles.ToArray());
@@ -2408,11 +2420,11 @@ namespace Handbrake
             try
             {
                 // Get the information about the new build, if any, and close the window
-                info = Main.EndCheckForUpdates(result);
+                info = UpdateService.EndCheckForUpdates(result);
 
                 if (info.NewVersionAvailable && info.BuildInformation != null)
                 {
-                    frmUpdater updateWindow = new frmUpdater(info.BuildInformation);
+                    UpdateInfo updateWindow = new UpdateInfo(info.BuildInformation, Settings.Default.hb_version, Settings.Default.hb_build.ToString());
                     updateWindow.ShowDialog();
                 }
                 else

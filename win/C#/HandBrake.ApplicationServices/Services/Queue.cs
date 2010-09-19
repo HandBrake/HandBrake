@@ -17,7 +17,6 @@ namespace HandBrake.ApplicationServices.Services
 
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Properties;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     /// <summary>

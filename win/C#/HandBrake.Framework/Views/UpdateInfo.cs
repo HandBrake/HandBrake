@@ -1,18 +1,19 @@
-/*  frmUpdater.cs $
+/*  UpdateInfo.cs $
     This file is part of the HandBrake source code.
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace Handbrake
+namespace HandBrake.Framework.Views
 {
     using System;
     using System.Windows.Forms;
-    using Functions;
+
+    using HandBrake.Framework.Helpers;
 
     /// <summary>
     /// A window to display update information.
     /// </summary>
-    public partial class frmUpdater : Form
+    public partial class UpdateInfo : Form
     {
         /// <summary>
         /// An instance of the Appcast Reader
@@ -20,19 +21,43 @@ namespace Handbrake
         private readonly AppcastReader appcast;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="frmUpdater"/> class.
+        /// The Current Version
+        /// </summary>
+        private readonly string currentVersion;
+
+        /// <summary>
+        /// The Current Build
+        /// </summary>
+        private readonly string currentBuild;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpdateInfo"/> class.
         /// </summary>
         /// <param name="reader">
         /// The appcast reader.
         /// </param>
-        public frmUpdater(AppcastReader reader)
+        /// <param name="currentVersion">
+        /// The current Version.
+        /// </param>
+        /// <param name="currentBuild">
+        /// The current Build.
+        /// </param>
+        public UpdateInfo(AppcastReader reader, string currentVersion, string currentBuild)
         {
             InitializeComponent();
 
             appcast = reader;
+            this.currentVersion = currentVersion;
+            this.currentBuild = currentBuild;
             GetRss();
             SetVersions();
         }
+        
+        /// <summary>
+        /// Gets the SkipVersion number
+        /// </summary>
+        public int SkipVersion { get; private set; }
+
 
         /// <summary>
         /// Get the RSS feed
@@ -47,8 +72,7 @@ namespace Handbrake
         /// </summary>
         private void SetVersions()
         {
-            string old = "(You have: " + Properties.Settings.Default.hb_version.Trim() + " / " +
-                         Properties.Settings.Default.hb_build.ToString().Trim() + ")";
+            string old = "(You have: " + currentVersion + " / " + currentBuild + ")";
             string newBuild = appcast.Version.Trim() + " (" + appcast.Build + ")";
             lbl_update_text.Text = "HandBrake " + newBuild + " is now available. " + old;
         }
@@ -64,9 +88,9 @@ namespace Handbrake
         /// </param>
         private void BtnInstallUpdateClick(object sender, EventArgs e)
         {
-            frmDownload download = new frmDownload(appcast.DownloadFile);
+            DownloadUpdate download = new DownloadUpdate(appcast.DownloadFile);
             download.ShowDialog();
-            this.Close();
+            this.DialogResult = DialogResult.OK;
         }
 
         /// <summary>
@@ -80,7 +104,7 @@ namespace Handbrake
         /// </param>
         private void BtnRemindLaterClick(object sender, EventArgs e)
         {
-            this.Close();
+            this.DialogResult = DialogResult.Cancel;
         }
 
         /// <summary>
@@ -94,10 +118,8 @@ namespace Handbrake
         /// </param>
         private void BtnSkipClick(object sender, EventArgs e)
         {
-            Properties.Settings.Default.skipversion = int.Parse(appcast.Build);
-            Properties.Settings.Default.Save();
-
-            this.Close();
+            this.SkipVersion = int.Parse(appcast.Build);
+            this.DialogResult = DialogResult.OK;
         }
     }
 }

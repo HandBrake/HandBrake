@@ -4,9 +4,9 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace Handbrake
+namespace HandBrake.Framework.Views
 {
-    partial class frmDownload
+    partial class DownloadUpdate
     {
         /// <summary>
         /// Required designer variable.
@@ -34,7 +34,7 @@ namespace Handbrake
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDownload));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DownloadUpdate));
             this.lblProgress = new System.Windows.Forms.Label();
             this.progress_download = new System.Windows.Forms.ProgressBar();
             this.btn_cancel = new System.Windows.Forms.Button();
@@ -98,7 +98,7 @@ namespace Handbrake
             // 
             // PictureBox1
             // 
-            this.PictureBox1.Image = global::Handbrake.Properties.Resources.logo64;
+            this.PictureBox1.Image = global::HandBrake.Framework.Properties.Resources.logo64;
             this.PictureBox1.InitialImage = null;
             this.PictureBox1.Location = new System.Drawing.Point(3, 3);
             this.PictureBox1.Name = "PictureBox1";
@@ -119,7 +119,7 @@ namespace Handbrake
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "frmDownload";
+            this.Name = "DownloadUpdate";
             this.Padding = new System.Windows.Forms.Padding(9);
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

@@ -232,12 +232,6 @@
     <Compile Include="frmAddPreset.Designer.cs">
       <DependentUpon>frmAddPreset.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmDownload.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmDownload.Designer.cs">
-      <DependentUpon>frmDownload.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -256,16 +250,9 @@
     <Compile Include="frmQueue.Designer.cs">
       <DependentUpon>frmQueue.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmUpdater.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmUpdater.designer.cs">
-      <DependentUpon>frmUpdater.cs</DependentUpon>
-    </Compile>
     <Compile Include="Functions\PresetLoader.cs" />
     <Compile Include="Functions\QueryGenerator.cs" />
     <Compile Include="Functions\Main.cs" />
-    <Compile Include="Functions\UpdateCheckInformation.cs" />
     <Compile Include="frmActivityWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -279,7 +266,6 @@
     <Compile Include="Presets\PlistPresetHandler.cs" />
     <Compile Include="Presets\Preset.cs" />
     <Compile Include="Presets\PresetsHandler.cs" />
-    <Compile Include="Functions\AppcastReader.cs" />
     <Compile Include="Functions\QueryParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ToolWindows\TitleSpecificScan.cs">
@@ -320,10 +306,6 @@
       <DependentUpon>frmAddPreset.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmDownload.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>frmDownload.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmMain.cs</DependentUpon>
@@ -335,10 +317,6 @@
     <EmbeddedResource Include="frmQueue.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmQueue.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmUpdater.resx">
-      <DependentUpon>frmUpdater.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmActivityWindow.resx">
       <DependentUpon>frmActivityWindow.cs</DependentUpon>
@@ -473,6 +451,10 @@
     <ProjectReference Include="HandBrake.ApplicationServices\HandBrake.ApplicationServices.csproj">
       <Project>{087A2BA8-BAC2-4577-A46F-07FF9D420016}</Project>
       <Name>HandBrake.ApplicationServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="HandBrake.Framework\HandBrake.Framework.csproj">
+      <Project>{49AD42C1-BF9B-4D78-A644-020878FAADE6}</Project>
+      <Name>HandBrake.Framework</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

@@ -3,14 +3,14 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace HandBrake.ApplicationServices.Services
+namespace HandBrake.Framework.Services
 {
     using System;
     using System.IO;
     using System.Threading;
 
-    using Interfaces;
-    using Views;
+    using HandBrake.Framework.Services.Interfaces;
+    using HandBrake.Framework.Views;
 
     /// <summary>
     /// The Error Service

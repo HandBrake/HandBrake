@@ -12,6 +12,8 @@ namespace HandBrake.ApplicationServices.Services
     using System.Threading;
     using System.Windows.Forms;
 
+    using HandBrake.Framework.Services;
+    using HandBrake.Framework.Services.Interfaces;
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;

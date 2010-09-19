@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Properties {
+namespace HandBrake.Framework.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace HandBrake.ApplicationServices.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("HandBrake.ApplicationServices.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("HandBrake.Framework.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,20 @@ namespace HandBrake.ApplicationServices.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        internal static System.Drawing.Bitmap copy {
+            get {
+                object obj = ResourceManager.GetObject("copy", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ErrorX {
+            get {
+                object obj = ResourceManager.GetObject("ErrorX", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

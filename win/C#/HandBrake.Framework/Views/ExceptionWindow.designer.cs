@@ -1,4 +1,4 @@
-﻿namespace HandBrake.ApplicationServices.Views
+﻿namespace HandBrake.Framework.Views
 {
     partial class ExceptionWindow
     {
@@ -76,7 +76,7 @@
             // 
             // PictureBox1
             // 
-            this.PictureBox1.Image = global::HandBrake.ApplicationServices.Properties.Resources.ErrorX;
+            this.PictureBox1.Image = global::HandBrake.Framework.Properties.Resources.ErrorX;
             this.PictureBox1.InitialImage = null;
             this.PictureBox1.Location = new System.Drawing.Point(12, 12);
             this.PictureBox1.Name = "PictureBox1";
@@ -167,7 +167,7 @@
             this.btn_copy.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_copy.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_copy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_copy.Image = global::HandBrake.ApplicationServices.Properties.Resources.copy;
+            this.btn_copy.Image = global::HandBrake.Framework.Properties.Resources.copy;
             this.btn_copy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btn_copy.Location = new System.Drawing.Point(14, 8);
             this.btn_copy.Name = "btn_copy";
@@ -188,7 +188,7 @@
             // 
             // mnu_copy_log
             // 
-            this.mnu_copy_log.Image = global::HandBrake.ApplicationServices.Properties.Resources.copy;
+            this.mnu_copy_log.Image = global::HandBrake.Framework.Properties.Resources.copy;
             this.mnu_copy_log.Name = "mnu_copy_log";
             this.mnu_copy_log.Size = new System.Drawing.Size(152, 22);
             this.mnu_copy_log.Text = "Copy";

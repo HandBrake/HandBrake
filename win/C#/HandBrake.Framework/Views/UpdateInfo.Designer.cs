@@ -3,9 +3,9 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace Handbrake
+namespace HandBrake.Framework.Views
 {
-    partial class frmUpdater
+    partial class UpdateInfo
     {
         /// <summary>
         /// Required designer variable.
@@ -33,7 +33,7 @@ namespace Handbrake
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmUpdater));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UpdateInfo));
             this.label1 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.btn_skip = new System.Windows.Forms.Button();
@@ -43,21 +43,21 @@ namespace Handbrake
             this.lbl_update_text = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.PictureBox1 = new System.Windows.Forms.PictureBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.wBrowser = new System.Windows.Forms.WebBrowser();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.button_container = new System.Windows.Forms.SplitContainer();
-            this.PictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.button_container.Panel1.SuspendLayout();
             this.button_container.Panel2.SuspendLayout();
             this.button_container.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -172,6 +172,16 @@ namespace Handbrake
             this.panel2.Size = new System.Drawing.Size(710, 10);
             this.panel2.TabIndex = 59;
             // 
+            // PictureBox1
+            // 
+            this.PictureBox1.Image = global::HandBrake.Framework.Properties.Resources.logo64;
+            this.PictureBox1.InitialImage = null;
+            this.PictureBox1.Location = new System.Drawing.Point(12, 12);
+            this.PictureBox1.Name = "PictureBox1";
+            this.PictureBox1.Size = new System.Drawing.Size(64, 64);
+            this.PictureBox1.TabIndex = 24;
+            this.PictureBox1.TabStop = false;
+            // 
             // statusStrip1
             // 
             this.statusStrip1.Location = new System.Drawing.Point(0, 346);
@@ -244,17 +254,7 @@ namespace Handbrake
             this.button_container.SplitterDistance = 318;
             this.button_container.TabIndex = 0;
             // 
-            // PictureBox1
-            // 
-            this.PictureBox1.Image = global::Handbrake.Properties.Resources.logo64;
-            this.PictureBox1.InitialImage = null;
-            this.PictureBox1.Location = new System.Drawing.Point(12, 12);
-            this.PictureBox1.Name = "PictureBox1";
-            this.PictureBox1.Size = new System.Drawing.Size(64, 64);
-            this.PictureBox1.TabIndex = 24;
-            this.PictureBox1.TabStop = false;
-            // 
-            // frmUpdater
+            // UpdateInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -268,11 +268,12 @@ namespace Handbrake
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(540, 300);
-            this.Name = "frmUpdater";
+            this.Name = "UpdateInfo";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Update";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
@@ -281,7 +282,6 @@ namespace Handbrake
             this.button_container.Panel2.ResumeLayout(false);
             this.button_container.Panel2.PerformLayout();
             this.button_container.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
