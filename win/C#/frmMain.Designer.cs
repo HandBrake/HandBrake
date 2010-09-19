@@ -39,7 +39,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -176,7 +176,7 @@ namespace Handbrake
             this.labelPreset = new System.Windows.Forms.Label();
             this.labelSource = new System.Windows.Forms.Label();
             this.labelStaticSource = new System.Windows.Forms.Label();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.SourceLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.openPreset = new System.Windows.Forms.OpenFileDialog();
             this.File_ChapterImport = new System.Windows.Forms.OpenFileDialog();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -204,7 +204,7 @@ namespace Handbrake
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
+            this.SourceLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIconMenu
@@ -407,9 +407,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewCellStyle2.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle2;
             this.number.Frozen = true;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
@@ -1685,17 +1685,17 @@ namespace Handbrake
             this.labelStaticSource.TabIndex = 51;
             this.labelStaticSource.Text = "Source:";
             // 
-            // flowLayoutPanel1
+            // SourceLayoutPanel
             // 
-            this.flowLayoutPanel1.AutoSize = true;
-            this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.flowLayoutPanel1.Controls.Add(this.labelStaticSource);
-            this.flowLayoutPanel1.Controls.Add(this.labelSource);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(9, 70);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(195, 13);
-            this.flowLayoutPanel1.TabIndex = 55;
+            this.SourceLayoutPanel.AutoSize = true;
+            this.SourceLayoutPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.SourceLayoutPanel.Controls.Add(this.labelStaticSource);
+            this.SourceLayoutPanel.Controls.Add(this.labelSource);
+            this.SourceLayoutPanel.Location = new System.Drawing.Point(9, 70);
+            this.SourceLayoutPanel.Margin = new System.Windows.Forms.Padding(0);
+            this.SourceLayoutPanel.Name = "SourceLayoutPanel";
+            this.SourceLayoutPanel.Size = new System.Drawing.Size(195, 13);
+            this.SourceLayoutPanel.TabIndex = 55;
             // 
             // openPreset
             // 
@@ -1715,7 +1715,7 @@ namespace Handbrake
             this.ClientSize = new System.Drawing.Size(1002, 583);
             this.Controls.Add(this.tableLayoutPanel3);
             this.Controls.Add(this.toolStrip1);
-            this.Controls.Add(this.flowLayoutPanel1);
+            this.Controls.Add(this.SourceLayoutPanel);
             this.Controls.Add(this.frmMainMenu);
             this.Controls.Add(this.tableLayoutPanel2);
             this.Controls.Add(this.labelPreset);
@@ -1765,8 +1765,8 @@ namespace Handbrake
             this.tableLayoutPanel3.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            this.flowLayoutPanel1.ResumeLayout(false);
-            this.flowLayoutPanel1.PerformLayout();
+            this.SourceLayoutPanel.ResumeLayout(false);
+            this.SourceLayoutPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1894,7 +1894,7 @@ namespace Handbrake
         internal ComboBox drp_dvdtitle;
         internal Label Label10;
         private Label labelStaticSource;
-        private FlowLayoutPanel flowLayoutPanel1;
+        private FlowLayoutPanel SourceLayoutPanel;
         private ToolStripMenuItem mnu_importMacPreset;
         private OpenFileDialog openPreset;
         private Button btn_importChapters;

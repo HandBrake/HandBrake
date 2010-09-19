@@ -2050,7 +2050,7 @@ namespace Handbrake
                 BeginInvoke(new UpdateWindowHandler(UpdateScanStatusLabel));
                 return;
             }
-            lbl_encode.Text = SourceScan.ScanStatus;
+            labelSource.Text = SourceScan.ScanStatus;
         }
 
         /// <summary>
@@ -2131,7 +2131,6 @@ namespace Handbrake
             {
                 if (InvokeRequired)
                     BeginInvoke(new UpdateWindowHandler(EnableGUI));
-                lbl_encode.Text = "Scan Completed";
                 foreach (Control ctrl in Controls)
                     ctrl.Enabled = true;
                 btn_start.Enabled = true;
@@ -2156,8 +2155,9 @@ namespace Handbrake
                 if (!(ctrl is StatusStrip || ctrl is MenuStrip || ctrl is ToolStrip))
                     ctrl.Enabled = false;
 
-            lbl_encode.Visible = true;
-            lbl_encode.Text = "Scanning ...";
+            labelSource.Enabled = true;
+            labelStaticSource.Enabled = true;
+            SourceLayoutPanel.Enabled = true;
             btn_source.Enabled = false;
             btn_start.Enabled = false;
             btn_showQueue.Enabled = false;
