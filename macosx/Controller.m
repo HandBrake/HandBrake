@@ -4958,7 +4958,11 @@ the user is using "Custom" settings by determining the sender*/
 
 #pragma mark -
 
-@synthesize hasValidPresetSelected;
+- (BOOL) hasValidPresetSelected
+
+{
+	return ([fPresetsOutlineView selectedRow] >= 0 && [[[fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]] objectForKey:@"Folder"] intValue] != 1);
+}
 
 //	This causes all audio tracks from the title to be used based on the current preset
 - (IBAction) addAllAudioTracks: (id) sender
@@ -5315,6 +5319,14 @@ return YES;
     //}
 }
 
+- (void) outlineViewSelectionDidChange: (NSNotification *) ignored
+
+{
+	[self willChangeValueForKey: @"hasValidPresetSelected"];
+	[self didChangeValueForKey: @"hasValidPresetSelected"];
+	return;
+}
+
 #pragma mark -
 #pragma mark Preset Outline View Methods (dragging related)
 
@@ -5429,9 +5441,8 @@ return YES;
 - (IBAction)selectPreset:(id)sender
 {
     
-    if ([fPresetsOutlineView selectedRow] >= 0 && [[[fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]] objectForKey:@"Folder"] intValue] != 1)
+	if (YES == [self hasValidPresetSelected])
     {
-		[self setHasValidPresetSelected: YES];
         chosenPreset = [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]];
         [fPresetSelectedDisplay setStringValue:[chosenPreset objectForKey:@"PresetName"]];
         
@@ -5752,9 +5763,6 @@ return YES;
         [fPictureController SetTitle:fTitle];
         [self calculatePictureSizing:nil];
     }
-	else {
-		[self setHasValidPresetSelected: NO];
-	}
 }
 
 
@@ -6136,7 +6144,7 @@ return YES;
             /* now get and add selected presets to export */
             
         }
-        if ([fPresetsOutlineView selectedRow] >= 0 && [[[fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]] objectForKey:@"Folder"] intValue] != 1)
+		if (YES == [self hasValidPresetSelected])
         {
             [presetsToExport addObject:[fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]]];
             [presetsToExport writeToFile:exportPresetsFile atomically:YES];

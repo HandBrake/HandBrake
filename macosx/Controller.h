@@ -244,7 +244,6 @@ BOOL                        fIsDragging;
     NSString                      * browsedSourceDisplayName;
     
     double                         dockIconProgress;
-	BOOL                           hasValidPresetSelected;
 }
 - (int) getPidnum;
 - (IBAction) showAboutPanel:(id)sender;
@@ -417,7 +416,7 @@ BOOL                        fIsDragging;
                  returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 
 + (unsigned int) maximumNumberOfAllowedAudioTracks;
-@property (nonatomic, assign) BOOL hasValidPresetSelected; 
+@property (nonatomic, readonly) BOOL hasValidPresetSelected; 
 - (IBAction) addAllAudioTracks: (id) sender;
 
 @end
