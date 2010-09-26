@@ -456,11 +456,11 @@ namespace HandBrake.ApplicationServices.Services
         {
             if (!String.IsNullOrEmpty(e.Data))
             {
-                lock (logBuffer)
-                    logBuffer.AppendLine(e.Data);
-
                 try
                 {
+                    lock (logBuffer)
+                        logBuffer.AppendLine(e.Data);
+
                     if (fileWriter != null && fileWriter.BaseStream.CanWrite)
                     {
                         fileWriter.WriteLine(e.Data);
