@@ -242,7 +242,7 @@ namespace HandBrake.ApplicationServices.Services
         {
             try
             {
-                if (this.HbProcess != null) this.HbProcess.Kill();
+                if (this.HbProcess != null && !this.HbProcess.HasExited) this.HbProcess.Kill();
             }
             catch (Exception exc)
             {
@@ -464,6 +464,14 @@ namespace HandBrake.ApplicationServices.Services
                     if (fileWriter != null && fileWriter.BaseStream.CanWrite)
                     {
                         fileWriter.WriteLine(e.Data);
+
+                        // If the logging grows past 100MB, kill the encode and stop.
+                        if (fileWriter.BaseStream.Length > 100000000)
+                        {
+                            this.Stop();
+                            errorService.ShowError("The encode has been stopped. The log file has grown to over 100MB which indicates a serious problem has occured with the encode.",
+                                "Please check the encode log for an indication of what the problem is.");
+                        }
                     }            
                 }
                 catch (Exception exc)

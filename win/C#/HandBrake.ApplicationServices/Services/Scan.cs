@@ -28,7 +28,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// The Error Service
         /// </summary>
-        private IErrorService errorService;
+        private readonly IErrorService errorService;
 
         /// <summary>
         /// A Lock object
@@ -138,7 +138,7 @@ namespace HandBrake.ApplicationServices.Services
         {
             try
             {
-                if (hbProc != null)
+                if (hbProc != null && !hbProc.HasExited)
                     hbProc.Kill();
             }
             catch (Exception ex)
@@ -205,12 +205,21 @@ namespace HandBrake.ApplicationServices.Services
                 this.SouceData = DVD.Parse(this.readData);
 
                 // Write the Buffer out to file.
-                StreamWriter scanLog = new StreamWriter(dvdInfoPath);
-                scanLog.WriteLine(Logging.CreateCliLogHeader(null));
-                scanLog.Write(this.readData.Buffer);
-                scanLog.Flush();
-                scanLog.Close();
-                logBuffer.AppendLine(this.readData.Buffer.ToString());
+                using (StreamWriter scanLog = new StreamWriter(dvdInfoPath))
+                {
+                    // Only write the log file to disk if it's less than 100MB.
+                    if (this.readData.Buffer.Length < 100000000)
+                    {
+                        scanLog.WriteLine(Logging.CreateCliLogHeader(null));
+                        scanLog.Write(this.readData.Buffer);
+                        logBuffer.AppendLine(this.readData.Buffer.ToString());
+                    }
+                    else
+                    {
+                        throw new Exception(
+                            "The Log file has not been written to disk as it has grown above the 100MB limit. This indicates there was a problem during the scan process.");
+                    }
+                }
 
                 IsScanning = false;
 
@@ -219,7 +228,12 @@ namespace HandBrake.ApplicationServices.Services
             }
             catch (Exception exc)
             {
-                errorService.ShowError("frmMain.cs - scanProcess() Error", exc.ToString());
+                this.Stop();
+
+                errorService.ShowError("An error has occured during the scan process.", exc.ToString());
+
+                if (this.ScanCompleted != null)
+                    this.ScanCompleted(this, new EventArgs());   
             }
         }
 

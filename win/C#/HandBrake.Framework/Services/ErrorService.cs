@@ -8,6 +8,7 @@ namespace HandBrake.Framework.Services
     using System;
     using System.IO;
     using System.Threading;
+    using System.Windows.Forms;
 
     using HandBrake.Framework.Services.Interfaces;
     using HandBrake.Framework.Views;
@@ -17,6 +18,8 @@ namespace HandBrake.Framework.Services
     /// </summary>
     public class ErrorService : IErrorService
     {
+        private int exceptionCount;
+
         /// <summary>
         /// Show an Error Window
         /// </summary>
@@ -28,6 +31,8 @@ namespace HandBrake.Framework.Services
         /// </param>
         public void ShowError(string shortError, string longError)
         {
+            exceptionCount++;
+
             try
             {
                 Thread newThread = new Thread(new ParameterizedThreadStart(WriteExceptionToFile));
@@ -38,9 +43,19 @@ namespace HandBrake.Framework.Services
                 // Do Nothing
             }
 
+            if (exceptionCount > 30)
+            {
+                // If we are getting a large number of exceptions, just die out. We don't want to fill the users drive with a ton 
+                // of exception files.
+                return;
+            }
+
             ExceptionWindow window = new ExceptionWindow();
             window.Setup(shortError, longError);
-            window.Show();
+
+            // This seems far from ideal so maybe have a think about a better way of doing this.
+            // This method can be called from UI and worker threads, so the ExcWindow needs to be called on the UI thread or on it's on UI thread.
+            Application.Run(window); 
         }
 
         /// <summary>
@@ -67,6 +82,13 @@ namespace HandBrake.Framework.Services
         {
             try
             {
+                if (exceptionCount > 30)
+                {
+                    // If we are getting a large number of exceptions, just die out. We don't want to fill the users drive with a ton 
+                    // of exception files.
+                    return;
+                }
+
                 string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
                 string file = Path.Combine(logDir, string.Format("Exception_{0}.txt", DateTime.Now.Ticks));
 
@@ -75,8 +97,6 @@ namespace HandBrake.Framework.Services
                     using (StreamWriter streamWriter = new StreamWriter(file))
                     {
                         streamWriter.WriteLine(state.ToString());
-                        streamWriter.Close();
-                        streamWriter.Dispose();
                     }
                 }
             }
