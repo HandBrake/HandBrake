@@ -2177,7 +2177,7 @@ namespace Handbrake
 
             SourceScan.Stop();
 
-            lbl_encode.Text = "Scan Cancelled!";
+            labelSource.Text = "Scan Cancelled";
         }
 
         /// <summary>
