@@ -63,6 +63,7 @@ typedef struct hb_audio_s hb_audio_t;
 typedef struct hb_audio_config_s hb_audio_config_t;
 typedef struct hb_subtitle_s hb_subtitle_t;
 typedef struct hb_subtitle_config_s hb_subtitle_config_t;
+typedef struct hb_attachment_s hb_attachment_t;
 typedef struct hb_metadata_s hb_metadata_t;
 typedef struct hb_state_s hb_state_t;
 typedef union  hb_esconfig_u     hb_esconfig_t;
@@ -102,10 +103,12 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg);
 int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg);
 hb_audio_config_t * hb_list_audio_config_item(hb_list_t * list, int i);
 
+hb_subtitle_t *hb_subtitle_copy(const hb_subtitle_t *src);
 int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlecfg, int track);
 int hb_srt_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlecfg, 
                const char *lang);
 
+hb_attachment_t *hb_attachment_copy(const hb_attachment_t *src);
 
 struct hb_rate_s
 {
@@ -194,8 +197,8 @@ struct hb_job_s
         int             itu_par;
         int             par_width;
         int             par_height;
-        int             dar_width;
-        int             dar_height;
+        int             dar_width;  // 0 if normal
+        int             dar_height; // 0 if normal
         int             keep_display_aspect;
     } anamorphic;
 
@@ -237,8 +240,7 @@ struct hb_job_s
     /* List of audio settings. */
     hb_list_t     * list_audio;
 
-    /* Subtitles
-     */
+    /* Subtitles */
     hb_list_t     * list_subtitle;
 
     /* Muxer settings
@@ -488,9 +490,8 @@ struct hb_chapter_s
  * > config.dest
  *     - whether to render the subtitle on the video track (RENDERSUB) or 
  *       to pass it through its own subtitle track in the output container (PASSTHRUSUB)
- *     - for legacy compatibility, all newly created VOBSUB tracks should default to RENDERSUB
- *     - since only VOBSUBs are renderable (as of 2010-04-25), all other newly created
- *       subtitle track types should default to PASSTHRUSUB
+ *     - all newly created non-VOBSUB tracks should default to PASSTHRUSUB
+ *     - all newly created VOBSUB tracks should default to RENDERSUB, for legacy compatibility
  * > lang
  *     - user-readable description of the subtitle track
  *     - may correspond to the language of the track (see the 'iso639_2' field)
@@ -516,6 +517,10 @@ struct hb_subtitle_s
     uint32_t    palette[16];
     int         width;
     int         height;
+    
+    // Codec private data for subtitles originating from FFMPEG sources
+    uint8_t *   extradata;
+    int         extradata_size;
 
     int hits;     /* How many hits/occurrences of this subtitle */
     int forced_hits; /* How many forced hits in this subtitle */
@@ -528,6 +533,19 @@ struct hb_subtitle_s
     hb_fifo_t * fifo_out; /* Correct Timestamps, ready to be muxed */
     hb_mux_data_t * mux_data;
 #endif
+};
+
+/*
+ * An attachment.
+ * 
+ * These are usually used for attaching embedded fonts to movies containing SSA subtitles.
+ */
+struct hb_attachment_s
+{
+    enum attachtype { FONT_TTF_ATTACH } type;
+    char *  name;
+    char *  data;
+    int     size;
 };
 
 struct hb_metadata_s 
@@ -593,6 +611,7 @@ struct hb_title_s
     hb_list_t * list_chapter;
     hb_list_t * list_audio;
     hb_list_t * list_subtitle;
+    hb_list_t * list_attachment;
 
     /* Job template for this title */
     hb_job_t  * job;
@@ -799,5 +818,7 @@ char * hb_strdup_printf( char * fmt, ... );
 
 int hb_yuv2rgb(int yuv);
 int hb_rgb2yuv(int rgb);
+
+const char * hb_subsource_name( int source );
 
 #endif

@@ -10,8 +10,5 @@ MP4V2.CONFIGURE.env.CXXFLAGS = CXXFLAGS="$(call fn.ARGS,MP4V2.GCC,*archs *sysroo
 ## save some build-time by disabling utils
 MP4V2.CONFIGURE.extra += --disable-util
 
-## make sure gch is disabled; we get build errors on linux with gcc-4.3.x and -g3
-## relatively safe to enable for darwin as it is unlikely to have that bugged version
-ifneq (darwin,$(BUILD.system))
-    MP4V2.CONFIGURE.extra += --disable-gch
-endif
+# gch causes build errors with -g3 on many gcc toolchains
+MP4V2.CONFIGURE.extra += --disable-gch

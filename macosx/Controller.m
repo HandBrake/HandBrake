@@ -3183,6 +3183,13 @@ bool one_burned = FALSE;
                             continue;
                         one_burned = TRUE;
                     }
+                    
+                    /* Besides VOBSUBS we can also burn in SSA text subs */
+                    if (subt->source == SSASUB && burned)
+                    {
+                        sub_config.dest = RENDERSUB;
+                    }
+                    
                     sub_config.force = force;
                     sub_config.default_track = def;
                     hb_subtitle_add( job, &sub_config, subtitle );
@@ -3672,13 +3679,20 @@ bool one_burned = FALSE;
                     {
                         sub_config.dest = PASSTHRUSUB;
                     }
-                    else if ( burned && subt->format == PICTURESUB )
+                    else if ( burned  )
                     {
                         // Only allow one subtitle to be burned into the video
                         if (one_burned)
                             continue;
                         one_burned = TRUE;
                     }
+                    
+                    /* Besides VOBSUBS we can also burn in SSA text subs */
+                    if (subt->source == SSASUB && burned)
+                    {
+                        sub_config.dest = RENDERSUB;
+                    }
+
                     sub_config.force = force;
                     sub_config.default_track = def;
                     hb_subtitle_add( job, &sub_config, subtitle );

@@ -730,6 +730,7 @@ hb_title_t * hb_title_init( char * path, int index )
     t->list_audio    = hb_list_init();
     t->list_chapter  = hb_list_init();
     t->list_subtitle = hb_list_init();
+    t->list_attachment = hb_list_init();
     strcat( t->path, path );
     // default to decoding mpeg2
     t->video_id      = 0xE0;
@@ -749,6 +750,7 @@ void hb_title_close( hb_title_t ** _t )
     hb_audio_t * audio;
     hb_chapter_t * chapter;
     hb_subtitle_t * subtitle;
+    hb_attachment_t * attachment;
 
     while( ( audio = hb_list_item( t->list_audio, 0 ) ) )
     {
@@ -767,9 +769,31 @@ void hb_title_close( hb_title_t ** _t )
     while( ( subtitle = hb_list_item( t->list_subtitle, 0 ) ) )
     {
         hb_list_rem( t->list_subtitle, subtitle );
+        if ( subtitle->extradata )
+        {
+            free( subtitle->extradata );
+            subtitle->extradata = NULL;
+        }
         free( subtitle );
     }
     hb_list_close( &t->list_subtitle );
+    
+    while( ( attachment = hb_list_item( t->list_attachment, 0 ) ) )
+    {
+        hb_list_rem( t->list_attachment, attachment );
+        if ( attachment->name )
+        {
+            free( attachment->name );
+            attachment->name = NULL;
+        }
+        if ( attachment->data )
+        {
+            free( attachment->data );
+            attachment->data = NULL;
+        }
+        free( attachment );
+    }
+    hb_list_close( &t->list_attachment );
 
     if( t->metadata )
     {
@@ -924,6 +948,11 @@ hb_subtitle_t *hb_subtitle_copy(const hb_subtitle_t *src)
     {
         subtitle = calloc(1, sizeof(*subtitle));
         memcpy(subtitle, src, sizeof(*subtitle));
+        if ( src->extradata )
+        {
+            subtitle->extradata = malloc( src->extradata_size );
+            memcpy( subtitle->extradata, src->extradata, src->extradata_size );
+        }
     }
     return subtitle;
 }
@@ -1022,6 +1051,32 @@ char * hb_strdup_printf( char * fmt, ... )
 }
 
 /**********************************************************************
+ * hb_attachment_copy
+ **********************************************************************
+ *
+ *********************************************************************/
+hb_attachment_t *hb_attachment_copy(const hb_attachment_t *src)
+{
+    hb_attachment_t *attachment = NULL;
+
+    if( src )
+    {
+        attachment = calloc(1, sizeof(*attachment));
+        memcpy(attachment, src, sizeof(*attachment));
+        if ( src->name )
+        {
+            attachment->name = strdup( src->name );
+        }
+        if ( src->data )
+        {
+            attachment->data = malloc( src->size );
+            memcpy( attachment->data, src->data, src->size );
+        }
+    }
+    return attachment;
+}
+
+/**********************************************************************
  * hb_yuv2rgb
  **********************************************************************
  * Converts a YCbCr pixel to an RGB pixel.
@@ -1087,5 +1142,28 @@ int hb_rgb2yuv(int rgb)
     Cr = (Cr > 255) ? 255 : Cr;
     
     return (y << 16) | (Cb << 8) | Cr;
+}
+
+const char * hb_subsource_name( int source )
+{
+    switch (source)
+    {
+        case VOBSUB:
+            return "VOBSUB";
+        case SRTSUB:
+            return "SRT";
+        case CC608SUB:
+            return "CC";
+        case CC708SUB:
+            return "CC";
+        case UTF8SUB:
+            return "UTF-8";
+        case TX3GSUB:
+            return "TX3G";
+        case SSASUB:
+            return "SSA";
+        default:
+            return "Unknown";
+    }
 }
 

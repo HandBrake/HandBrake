@@ -17,10 +17,10 @@
  *
  * Output format of this decoder is PICTURESUB, which is:
  *   struct PictureSubPacket {
- *       uint8_t lum[pixelCount];
- *       uint8_t alpha[pixelCount];
- *       uint8_t chromaU[pixelCount];
- *       uint8_t chromaV[pixelCount];
+ *       uint8_t lum[pixelCount];       // Y
+ *       uint8_t alpha[pixelCount];     // alpha (max = 16)
+ *       uint8_t chromaU[pixelCount];   // Cb
+ *       uint8_t chromaV[pixelCount];   // Cr
  *   }
  */
 

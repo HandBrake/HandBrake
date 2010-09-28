@@ -247,6 +247,8 @@ void syncVideoClose( hb_work_object_t * w )
  ***********************************************************************
  *
  **********************************************************************/
+static hb_buffer_t * copy_subtitle( hb_buffer_t * src );
+
 int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
               hb_buffer_t ** buf_out )
 {
@@ -562,12 +564,10 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         /*
          * Rewrite timestamps on subtitles that need it (on raw queue).
          */
-        if( subtitle->source == CC608SUB ||
-            subtitle->source == CC708SUB ||
-            subtitle->source == SRTSUB ||
-            subtitle->source == UTF8SUB ||
-            subtitle->source == TX3GSUB ||
-            subtitle->source == SSASUB)
+        // NOTE: It's probably fine to use this logic for passthru VOBSUBs as well,
+        //       but I am currently preserving backwards compatibility with the old
+        //       VOBSUB behavior, which uses the more complex logic following this if-statement.
+        if( subtitle->config.dest == PASSTHRUSUB && subtitle->source != VOBSUB )
         {
             /*
              * Rewrite timestamps on subtitles that came from Closed Captions
@@ -611,9 +611,13 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     }
                 }
             }
+            
+            continue;
         }
 
-        if( subtitle->source == VOBSUB ) 
+        // For rendered subtitles (and, for backward compatibility, passthru VOBSUBs),
+        // delay pushing subtitle packets through the pipeline until the video catches up
+        if( subtitle->config.dest == RENDERSUB || subtitle->source == VOBSUB ) 
         {
             hb_buffer_t * sub2;
             while( ( sub = hb_fifo_see( subtitle->fifo_raw ) ) )
@@ -681,7 +685,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                                  * Subtitle is on for less than three 
                                  * seconds, extend the time that it is 
                                  * displayed to make it easier to read. 
-                                 * Make it 3 seconds or until the next
+                                 * Make it 2 seconds or until the next
                                  * subtitle is displayed.
                                  *
                                  * This is in response to Indochine which 
@@ -760,24 +764,23 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             }
             
             /* If we have a subtitle for this picture, copy it */
-            /* FIXME: we should avoid this memcpy */
             if( sub )
             {
                 if( sub->size > 0 )
                 {
                     if( subtitle->config.dest == RENDERSUB )
                     {
+                        // Only allow one subtitle to be showing at once; ignore others
                         if ( cur->sub == NULL )
                         {
                             /*
                              * Tack onto the video buffer for rendering
                              */
-                            cur->sub         = hb_buffer_init( sub->size );
-                            cur->sub->x      = sub->x;
-                            cur->sub->y      = sub->y;
-                            cur->sub->width  = sub->width;
-                            cur->sub->height = sub->height;
-                            memcpy( cur->sub->data, sub->data, sub->size ); 
+                            /* FIXME: we should avoid this memcpy */
+                            cur->sub = copy_subtitle( sub );
+                            
+                            // Leave the subtitle on the raw queue
+                            // (until it no longer needs to be displayed)
                         }
                     } else {
                         /*
@@ -844,6 +847,29 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     UpdateState( w );
 
     return HB_WORK_OK;
+}
+
+static hb_buffer_t * copy_subtitle( hb_buffer_t * src_list )
+{
+    hb_buffer_t * dst_list = NULL;
+    
+    hb_buffer_t * src;
+    hb_buffer_t * dst;
+    hb_buffer_t ** dst_ptr = &dst_list;
+    for ( src = src_list, dst_ptr = &dst_list;
+          src;
+          src = src->next_subpicture, dst_ptr = &dst->next_subpicture )
+    {
+        (*dst_ptr)  = hb_buffer_init( src->size );
+        dst         = (*dst_ptr); 
+        dst->x      = src->x;
+        dst->y      = src->y;
+        dst->width  = src->width;
+        dst->height = src->height;
+        memcpy( dst->data, src->data, src->size );
+    }
+    
+    return dst_list;
 }
 
 // sync*Init does nothing because sync has a special initializer

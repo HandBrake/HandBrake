@@ -1225,6 +1225,7 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     hb_chapter_t  * chapter,  * chapter_copy;
     hb_audio_t    * audio;
     hb_subtitle_t * subtitle, * subtitle_copy;
+    hb_attachment_t * attachment;
     int             i;
     char            audio_lang[4];
 
@@ -1272,7 +1273,6 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
 
     /* Copy the audio track(s) we want */
     title_copy->list_audio = hb_list_init();
-
     for( i = 0; i < hb_list_count(job->list_audio); i++ )
     {
         if( ( audio = hb_list_item( job->list_audio, i ) ) )
@@ -1281,7 +1281,18 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
         }
     }
 
+    /* Initialize subtitle list - filled out further below */
     title_copy->list_subtitle = hb_list_init();
+    
+    /* Copy all the attachments */
+    title_copy->list_attachment = hb_list_init();
+    for( i = 0; i < hb_list_count(title->list_attachment); i++ )
+    {
+        if( ( attachment = hb_list_item( title->list_attachment, i ) ) )
+        {
+            hb_list_add( title_copy->list_attachment, hb_attachment_copy(attachment) );
+        }
+    }
 
     /*
      * The following code is confusing, there are two ways in which

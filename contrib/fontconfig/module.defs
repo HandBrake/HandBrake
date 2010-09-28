@@ -1,0 +1,71 @@
+__deps__ := FREETYPE LIBXML2
+$(eval $(call import.MODULE.defs,FONTCONFIG,fontconfig,$(__deps__)))
+$(eval $(call import.CONTRIB.defs,FONTCONFIG))
+
+FONTCONFIG.FETCH.url = http://download.m0k.org/handbrake/contrib/fontconfig-2.8.0.tar.gz
+FONTCONFIG.EXTRACT.tarbase = fontconfig-2.8.0
+
+#
+# Under MinGW:
+# 
+# - A 'i386-ming32-gcc' $(FONTCONFIG.GCC.gcc) command will be available,
+#   and the '-arch <arch>' argument should be omitted, as it will confuse this compiler.
+# 
+# - The $(FONTCONFIG.GCC.archs) variable is not set.
+#   Therefore statically guess the target arch to be i386.
+# 
+ifeq ($(BUILD.system),mingw)
+    FONTCONFIG.cc_archoption      = 
+    FONTCONFIG.config_archoption  = --with-arch=i386
+else ifeq ($(BUILD.system),linux)
+    FONTCONFIG.cc_archoption      = 
+else
+    FONTCONFIG.cc_archoption      = -arch $(FONTCONFIG.GCC.archs)
+    FONTCONFIG.config_archoption  = --with-arch=$(FONTCONFIG.GCC.archs)
+endif
+
+#
+# Support cross-compiling:
+# 
+# - Add '-arch <arch>' to CC argument to avoid the need to put a <host_triplet>-gcc
+#   trampoline script in the PATH, since fontconfig's configure looks for this when
+#   in cross-compile mode. If such a trampoline were used, it would just call "gcc -arch <arch> $@".
+# 
+# - In the case of MinGW (on i386), a 'i386-ming32-gcc' command will be available,
+#   and the '-arch <arch>' argument should be omitted, as it will confuse the compiler.
+# 
+# The following line overrides the original line in /make/include/contrib.defs,
+# but has the -arch argument added (and '$(1)' presubstituted for 'FONTCONFIG').
+# 
+FONTCONFIG.CONFIGURE.env.CC       = CC="$(FONTCONFIG.GCC.gcc) $(FONTCONFIG.cc_archoption)"
+
+#
+# Support cross-compiling:
+# - Remove '-arch <arch>' from *FLAGS variables, since fontconfig's configure script
+#   needs to be given the freedom to insert that flag as necessary, since there are
+#   some trampoline executables that need to be built in the native build architecture
+#   (without the -arch flag).
+# 
+# The following lines override the original lines in /make/include/contrib.defs,
+# but have '*archs' removed (and '$(1)' presubstituted for 'FONTCONFIG').
+# 
+FONTCONFIG.CONFIGURE.env.CFLAGS   = CFLAGS="$(call fn.ARGS,FONTCONFIG.GCC,*sysroot *minver ?extra)"
+FONTCONFIG.CONFIGURE.env.CXXFLAGS = CXXFLAGS="$(call fn.ARGS,FONTCONFIG.GCC,*sysroot *minver ?extra)"
+FONTCONFIG.CONFIGURE.env.CPPFLAGS = CPPFLAGS="$(call fn.ARGS,FONTCONFIG.GCC,*sysroot *minver ?extra)"
+FONTCONFIG.CONFIGURE.env.LDFLAGS  = LDFLAGS="$(call fn.ARGS,FONTCONFIG.GCC,*sysroot *minver)"
+
+# 
+# Force use of libxml2 instead of expat with --enable-libxml2.
+# 
+# Tell configure where to find our (cross-compiled) versions of freetype and libxml2.
+# 
+# Support cross-compiling:
+# - Add --with-arch argument since fontconfig's configure isn't smart enough
+#   to infer it from the --host argument
+# 
+FONTCONFIG.CONFIGURE.extra = \
+    --enable-libxml2 \
+    --with-freetype-config=$(call fn.ABSOLUTE,$(CONTRIB.build/)bin/freetype-config) \
+    LIBXML2_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lxml2" \
+    LIBXML2_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include/libxml2" \
+    $(FONTCONFIG.config_archoption)

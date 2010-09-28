@@ -1,0 +1,84 @@
+--- libass-0.9.9/configure	2010-02-28 20:38:16.000000000 -0800
++++ libass-0.9.9/configure	2010-08-19 23:24:11.000000000 -0700
+@@ -15728,10 +15728,10 @@
+ { echo "$as_me:$LINENO: checking for FREETYPE" >&5
+ echo $ECHO_N "checking for FREETYPE... $ECHO_C" >&6; }
+ 
+-if test -n "$PKG_CONFIG"; then
+     if test -n "$FREETYPE_CFLAGS"; then
+         pkg_cv_FREETYPE_CFLAGS="$FREETYPE_CFLAGS"
+     else
++if test -n "$PKG_CONFIG"; then
+         if test -n "$PKG_CONFIG" && \
+     { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"freetype2 >= 9.10.3\"") >&5
+   ($PKG_CONFIG --exists --print-errors "freetype2 >= 9.10.3") 2>&5
+@@ -15742,14 +15742,14 @@
+ else
+   pkg_failed=yes
+ fi
+-    fi
+ else
+ 	pkg_failed=untried
+ fi
+-if test -n "$PKG_CONFIG"; then
++    fi
+     if test -n "$FREETYPE_LIBS"; then
+         pkg_cv_FREETYPE_LIBS="$FREETYPE_LIBS"
+     else
++if test -n "$PKG_CONFIG"; then
+         if test -n "$PKG_CONFIG" && \
+     { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"freetype2 >= 9.10.3\"") >&5
+   ($PKG_CONFIG --exists --print-errors "freetype2 >= 9.10.3") 2>&5
+@@ -15760,10 +15760,10 @@
+ else
+   pkg_failed=yes
+ fi
+-    fi
+ else
+ 	pkg_failed=untried
+ fi
++    fi
+ 
+ 
+ 
+@@ -15849,10 +15849,10 @@
+ { echo "$as_me:$LINENO: checking for FONTCONFIG" >&5
+ echo $ECHO_N "checking for FONTCONFIG... $ECHO_C" >&6; }
+ 
+-if test -n "$PKG_CONFIG"; then
+     if test -n "$FONTCONFIG_CFLAGS"; then
+         pkg_cv_FONTCONFIG_CFLAGS="$FONTCONFIG_CFLAGS"
+     else
++if test -n "$PKG_CONFIG"; then
+         if test -n "$PKG_CONFIG" && \
+     { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"fontconfig >= 2.4.2\"") >&5
+   ($PKG_CONFIG --exists --print-errors "fontconfig >= 2.4.2") 2>&5
+@@ -15863,14 +15863,14 @@
+ else
+   pkg_failed=yes
+ fi
+-    fi
+ else
+ 	pkg_failed=untried
+ fi
+-if test -n "$PKG_CONFIG"; then
++    fi
+     if test -n "$FONTCONFIG_LIBS"; then
+         pkg_cv_FONTCONFIG_LIBS="$FONTCONFIG_LIBS"
+     else
++if test -n "$PKG_CONFIG"; then
+         if test -n "$PKG_CONFIG" && \
+     { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"fontconfig >= 2.4.2\"") >&5
+   ($PKG_CONFIG --exists --print-errors "fontconfig >= 2.4.2") 2>&5
+@@ -15881,10 +15881,10 @@
+ else
+   pkg_failed=yes
+ fi
+-    fi
+ else
+ 	pkg_failed=untried
+ fi
++    fi
+ 
+ 
+ 

@@ -44,6 +44,18 @@ mustBurn(signal_user_data_t *ud, GValue *settings)
 	return FALSE;
 }
 
+static gboolean
+canBurn(int source)
+{
+	return (source == VOBSUB || source == SSASUB);
+}
+
+static gboolean
+canForce(int source)
+{
+	return (source == VOBSUB);
+}
+
 gboolean
 ghb_soft_in_subtitle_list(GValue *subtitle_list)
 {
@@ -519,7 +531,7 @@ subtitle_forced_toggled_cb(
 	settings = ghb_array_get_nth(subtitle_list, row);
 
 	source = ghb_settings_get_int(settings, "SubtitleSource");
-	if (source != VOBSUB)
+	if (!canForce(source))
 		return;
 
 	ghb_settings_set_boolean(settings, "SubtitleForced", active);
@@ -567,7 +579,7 @@ subtitle_burned_toggled_cb(
 
 	settings = ghb_array_get_nth(subtitle_list, row);
 	source = ghb_settings_get_int(settings, "SubtitleSource");
-	if (source != VOBSUB)
+	if (!canBurn(source))
 		return;
 	if (!active && mustBurn(ud, settings))
 		return;
@@ -654,7 +666,8 @@ subtitle_list_refresh_selected(signal_user_data_t *ud)
 	gint row;
 	GValue *settings = NULL;
 	const GValue *subtitle_list;
-	gboolean allow_burn_force = FALSE;
+	gboolean allow_force = FALSE;
+	gboolean allow_burn = FALSE;
 	
 	g_debug("subtitle_list_refresh_selected ()");
 	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list"));
@@ -681,13 +694,16 @@ subtitle_list_refresh_selected(signal_user_data_t *ud)
 
 		gint i_source;
 		i_source = ghb_settings_get_int(settings, "SubtitleSource");
-		if (i_source != VOBSUB)
+		if (!canBurn(i_source))
 		{
-			// Force and burn only apply to VOBSUBS
-			forced = FALSE;
 			burned = FALSE;
-			ghb_settings_set_boolean(settings, "SubtitleForced", forced);
 			ghb_settings_set_boolean(settings, "SubtitleBurned", burned);
+		}
+		if (!canForce(i_source))
+		{
+			// Force only apply to VOBSUBS
+			forced = FALSE;
+			ghb_settings_set_boolean(settings, "SubtitleForced", forced);
 		}
 
 		if (i_source == SRTSUB)
@@ -730,9 +746,10 @@ subtitle_list_refresh_selected(signal_user_data_t *ud)
 			burned = ghb_settings_get_boolean(settings, "SubtitleBurned");
 		}
 
-		if (i_source == VOBSUB)
-			allow_burn_force = TRUE;
-
+		if (canBurn(i_source))
+			allow_burn = TRUE;
+		if (canForce(i_source))
+			allow_force = TRUE;
 
 		gtk_list_store_set(GTK_LIST_STORE(store), &iter, 
 			// These are displayed in list
@@ -744,8 +761,8 @@ subtitle_list_refresh_selected(signal_user_data_t *ud)
 			// These are used to set combo box values when a list item is selected
 			5, s_track,
 			6, i_source,
-			7, allow_burn_force,
-			8, allow_burn_force,
+			7, allow_force,
+			8, allow_burn,
 			-1);
 		g_free(track);
 		g_free(source);
@@ -892,7 +909,8 @@ add_to_subtitle_list(
 	gboolean forced, burned, def;
 	gchar *s_track;
 	gint i_source;
-	gboolean allow_burn_force = FALSE;
+	gboolean allow_force = FALSE;
+	gboolean allow_burn = FALSE;
 	
 	g_debug("add_to_subtitle_list ()");
 	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list"));
@@ -908,8 +926,10 @@ add_to_subtitle_list(
 	i_source = ghb_settings_get_int(settings, "SubtitleSource");
 	source = ghb_subtitle_source_name(i_source);
 
-	if (i_source == VOBSUB)
-		allow_burn_force = TRUE;
+	if (canBurn(i_source))
+		allow_burn = TRUE;
+	if (canForce(i_source))
+		allow_force = TRUE;
 
 	gtk_list_store_append(store, &iter);
 	gtk_list_store_set(store, &iter, 
@@ -921,8 +941,8 @@ add_to_subtitle_list(
 		// These are used to set combo box values when a list item is selected
 		5, s_track,
 		6, i_source,
-		7, allow_burn_force,
-		8, allow_burn_force,
+		7, allow_force,
+		8, allow_burn,
 		9, FALSE,
 		-1);
 	gtk_tree_selection_select_iter(selection, &iter);

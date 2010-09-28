@@ -440,10 +440,11 @@ static void PrintTitleInfo( hb_title_t * title )
     for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
     {
         subtitle = hb_list_item( title->list_subtitle, i );
-        fprintf( stderr, "    + %d, %s (iso639-2: %s) (%s)\n", 
+        fprintf( stderr, "    + %d, %s (iso639-2: %s) (%s)(%s)\n", 
                  i + 1, subtitle->lang,
                  subtitle->iso639_2,
-                 (subtitle->format == TEXTSUB) ? "Text" : "Bitmap");
+                 (subtitle->format == TEXTSUB) ? "Text" : "Bitmap",
+                 hb_subsource_name(subtitle->source));
     }
 
     if(title->detected_interlacing)
@@ -1857,12 +1858,12 @@ static int HandleEvents( hb_handle_t * h )
                         }
 
                         force = test_sub_list(subforce, token, pos);
-
-                        if ( !burn && subtitle->format == PICTURESUB)
-                        {
-                            sub_config.dest = PASSTHRUSUB;
-                        }
-                        else if ( burn && subtitle->format == PICTURESUB )
+                        
+                        int supports_burn =
+                            ( subtitle->source == VOBSUB ) ||
+                            ( subtitle->source == SSASUB );
+                        
+                        if ( burn && supports_burn )
                         {
                             // Only allow one subtitle to be burned into video
                             if ( sub_burned )
@@ -1871,6 +1872,13 @@ static int HandleEvents( hb_handle_t * h )
                                 continue;
                             }
                             sub_burned = 1;
+                            
+                            // Mark as burn-in
+                            sub_config.dest = RENDERSUB;
+                        }
+                        else
+                        {
+                            sub_config.dest = PASSTHRUSUB;
                         }
                         sub_config.force = force;
                         sub_config.default_track = def;

@@ -1,0 +1,73 @@
+--- fontconfig-2.8.0/configure	2009-11-18 15:49:41.000000000 -0800
++++ fontconfig-2.8.0/configure	2010-09-09 21:23:24.000000000 -0700
+@@ -825,6 +825,8 @@
+ ms_librarian
+ OS_WIN32_FALSE
+ OS_WIN32_TRUE
++OS_WIN32_ENABLE_SHARED_TRUE
++OS_WIN32_ENABLE_SHARED_FALSE
+ LTCXXCOMPILE
+ LTCOMPILE
+ DOLT_BASH
+@@ -11782,6 +11784,14 @@
+   OS_WIN32_FALSE=
+ fi
+ 
++ if test "$os_win32-$enable_shared" = "yes-yes"; then
++  OS_WIN32_ENABLE_SHARED_TRUE=
++  OS_WIN32_ENABLE_SHARED_FALSE='#'
++else
++  OS_WIN32_ENABLE_SHARED_TRUE='#'
++  OS_WIN32_ENABLE_SHARED_FALSE=
++fi
++
+ 
+ if test "$os_win32" = "yes"; then
+   # Extract the first word of "lib.exe", so it can be a program name with args.
+@@ -15155,6 +15165,13 @@
+ Usually this means the macro was only invoked conditionally." >&2;}
+    { (exit 1); exit 1; }; }
+ fi
++if test -z "${OS_WIN32_ENABLE_SHARED_TRUE}" && test -z "${OS_WIN32_ENABLE_SHARED_FALSE}"; then
++  { { echo "$as_me:$LINENO: error: conditional \"OS_WIN32_ENABLE_SHARED\" was never defined.
++Usually this means the macro was only invoked conditionally." >&5
++echo "$as_me: error: conditional \"OS_WIN32_ENABLE_SHARED\" was never defined.
++Usually this means the macro was only invoked conditionally." >&2;}
++   { (exit 1); exit 1; }; }
++fi
+ if test -z "${MS_LIB_AVAILABLE_TRUE}" && test -z "${MS_LIB_AVAILABLE_FALSE}"; then
+   { { $as_echo "$as_me:$LINENO: error: conditional \"MS_LIB_AVAILABLE\" was never defined.
+ Usually this means the macro was only invoked conditionally." >&5
+--- fontconfig-2.8.0/configure.in	2009-11-18 15:49:23.000000000 -0800
++++ fontconfig-2.8.0/configure.in	2010-09-09 21:11:37.000000000 -0700
+@@ -76,6 +76,7 @@
+     os_win32=no
+ esac
+ AM_CONDITIONAL(OS_WIN32, test "$os_win32" = "yes")
++AM_CONDITIONAL(OS_WIN32_ENABLE_SHARED, test "$os_win32-$enable_shared" = "yes-yes")
+ 
+ if test "$os_win32" = "yes"; then
+   AC_CHECK_PROG(ms_librarian, lib.exe, yes, no)
+--- fontconfig-2.8.0/src/Makefile.am	2010-09-09 21:12:43.000000000 -0700
++++ fontconfig-2.8.0/src/Makefile.am	2010-09-09 21:13:07.000000000 -0700
+@@ -30,7 +30,9 @@
+ # gcc import library install/uninstall
+ 
+ install-libtool-import-lib: 
++if OS_WIN32_ENABLE_SHARED
+ 	$(INSTALL) .libs/libfontconfig.dll.a $(DESTDIR)$(libdir)
++endif
+ 	$(INSTALL) fontconfig.def $(DESTDIR)$(libdir)/fontconfig.def
+ 
+ uninstall-libtool-import-lib:
+--- fontconfig-2.8.0/src/Makefile.in	2009-11-18 15:49:39.000000000 -0800
++++ fontconfig-2.8.0/src/Makefile.in	2010-09-09 21:14:38.000000000 -0700
+@@ -688,7 +688,7 @@
+ # gcc import library install/uninstall
+ 
+ @OS_WIN32_TRUE@install-libtool-import-lib: 
+-@OS_WIN32_TRUE@	$(INSTALL) .libs/libfontconfig.dll.a $(DESTDIR)$(libdir)
++@OS_WIN32_ENABLE_SHARED_TRUE@@OS_WIN32_TRUE@	$(INSTALL) .libs/libfontconfig.dll.a $(DESTDIR)$(libdir)
+ @OS_WIN32_TRUE@	$(INSTALL) fontconfig.def $(DESTDIR)$(libdir)/fontconfig.def
+ 
+ @OS_WIN32_TRUE@uninstall-libtool-import-lib:

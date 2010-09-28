@@ -1,5 +1,5 @@
-__deps__ := A52DEC BZIP2 FAAC FAAD2 FFMPEG LAME LIBDCA \
-    LIBDVDREAD LIBDVDNAV LIBICONV LIBMKV LIBOGG LIBSAMPLERATE LIBTHEORA LIBVORBIS \
+__deps__ := A52DEC BZIP2 FAAC FAAD2 FFMPEG FONTCONFIG FREETYPE LAME LIBASS LIBDCA \
+    LIBDVDREAD LIBDVDNAV LIBICONV LIBMKV LIBOGG LIBSAMPLERATE LIBTHEORA LIBVORBIS LIBXML2 \
     MP4V2 MPEG2DEC PTHREADW32 X264 ZLIB LIBBLURAY
 
 $(eval $(call import.MODULE.defs,LIBHB,libhb,$(__deps__)))
@@ -89,8 +89,8 @@ LIBHB.dll = $(LIBHB.build/)hb.dll
 LIBHB.lib = $(LIBHB.build/)hb.lib
 
 LIBHB.dll.libs = $(foreach n, \
-        a52 avcore avcodec avformat avutil dca dvdnav dvdread faac faad mkv mpeg2 mp3lame mp4v2 \
-        ogg samplerate swscale theora vorbis vorbisenc x264 bluray, \
+        a52 ass avcore avcodec avformat avutil dca dvdnav dvdread faac faad fontconfig freetype mkv mpeg2 mp3lame mp4v2 \
+        ogg samplerate swscale theora vorbis vorbisenc x264 xml2 bluray, \
         $(CONTRIB.build/)lib/lib$(n).a )
 
 ifneq ($(HAS.iconv),1)

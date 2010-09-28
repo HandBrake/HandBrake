@@ -3181,7 +3181,53 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
     strcpy( subtitle->lang, language->eng_name );
     strncpy( subtitle->iso639_2, language->iso639_2, 4 );
     
+    // Copy the extradata for the subtitle track
+    subtitle->extradata = malloc( codec->extradata_size );
+    memcpy( subtitle->extradata, codec->extradata, codec->extradata_size );
+    subtitle->extradata_size = codec->extradata_size;
+    
     hb_list_add(title->list_subtitle, subtitle);
+}
+
+static char *get_ffmpeg_metadata_value( AVMetadata *m, char *key )
+{
+    AVMetadataTag *tag = NULL;
+    while ( tag = av_metadata_get(m, "", tag, AV_METADATA_IGNORE_SUFFIX) )
+    {
+        if ( !strcmp( key, tag->key ) )
+        {
+            return tag->value;
+        }
+    }
+    return NULL;
+}
+
+static void add_ffmpeg_attachment( hb_title_t *title, hb_stream_t *stream, int id )
+{
+    AVStream *st = stream->ffmpeg_ic->streams[id];
+    AVCodecContext *codec = st->codec;
+    
+    enum attachtype type;
+    switch ( codec->codec_id )
+    {
+        case CODEC_ID_TTF:
+            type = FONT_TTF_ATTACH;
+            break;
+        default:
+            // Ignore unrecognized attachment type
+            return;
+    }
+    
+    hb_attachment_t *attachment = calloc( 1, sizeof(*attachment) );
+    
+    // Copy the attachment name and data
+    attachment->type = type;
+    attachment->name = strdup( get_ffmpeg_metadata_value( st->metadata, "filename" ) );
+    attachment->data = malloc( codec->extradata_size );
+    memcpy( attachment->data, codec->extradata, codec->extradata_size );
+    attachment->size = codec->extradata_size;
+    
+    hb_list_add(title->list_attachment, attachment);
 }
 
 static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream )
@@ -3243,6 +3289,10 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream )
         else if ( ic->streams[i]->codec->codec_type == CODEC_TYPE_SUBTITLE )
         {
             add_ffmpeg_subtitle( title, stream, i );
+        }
+        else if ( ic->streams[i]->codec->codec_type == CODEC_TYPE_ATTACHMENT )
+        {
+            add_ffmpeg_attachment( title, stream, i );
         }
     }
 

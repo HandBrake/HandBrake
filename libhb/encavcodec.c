@@ -235,13 +235,22 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     // doesn't do the trick.  It must be set in the AVFrame.
     frame->quality = pv->context->global_quality;
 
-    /* Should be way too large */
-    buf = hb_video_buffer_init( job->width, job->height );
-    buf->size = avcodec_encode_video( pv->context, buf->data, buf->alloc,
-                                      frame );
-    buf->start = in->start;
-    buf->stop  = in->stop;
-    buf->frametype   = pv->context->coded_frame->key_frame ? HB_FRAME_KEY : HB_FRAME_REF;
+    if ( pv->context->codec )
+    {
+        /* Should be way too large */
+        buf = hb_video_buffer_init( job->width, job->height );
+        buf->size = avcodec_encode_video( pv->context, buf->data, buf->alloc,
+                                          frame );
+        buf->start = in->start;
+        buf->stop  = in->stop;
+        buf->frametype   = pv->context->coded_frame->key_frame ? HB_FRAME_KEY : HB_FRAME_REF;
+    }
+    else
+    {
+        buf = NULL;
+        
+        hb_error( "encavcodec: codec context has uninitialized codec; skipping frame" );
+    }
 
     av_free( frame );
 

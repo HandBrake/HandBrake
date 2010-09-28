@@ -1,0 +1,10 @@
+$(eval $(call import.MODULE.defs,LIBXML2,libxml2))
+$(eval $(call import.CONTRIB.defs,LIBXML2))
+
+LIBXML2.FETCH.url = http://download.m0k.org/handbrake/contrib/libxml2-2.7.7.tar.gz
+LIBXML2.EXTRACT.tarbase = libxml2-2.7.7
+
+# The Python components do not build on MinGW due to the lack of a select() call
+# in the MinGW environment.
+LIBXML2.CONFIGURE.extra = \
+    --without-python

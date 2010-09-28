@@ -1,0 +1,5 @@
+$(eval $(call import.MODULE.defs,FREETYPE,freetype))
+$(eval $(call import.CONTRIB.defs,FREETYPE))
+
+FREETYPE.FETCH.url = http://download.m0k.org/handbrake/contrib/freetype-2.3.9.tar.gz
+FREETYPE.EXTRACT.tarbase = freetype-2.3.9

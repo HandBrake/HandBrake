@@ -2187,20 +2187,9 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 		for (ii = 0; ii < count; ii++)
 		{
        		subtitle = (hb_subtitle_t *)hb_list_item(title->list_subtitle, ii);
-			// Skip subtitles that must be burned if there is already
-			// a burned subtitle in the list
-#if 0
-			if (subtitle->source == VOBSUB)
-			{
-				options[ii] = g_strdup_printf("%d - %s", ii+1, subtitle->lang);
-			}
-			else
-#endif
-			{
-				options[ii] = g_strdup_printf("%d - %s (%s)", ii+1, 
-					subtitle->lang, 
-					ghb_subtitle_source_name(subtitle->source));
-			}
+			options[ii] = g_strdup_printf("%d - %s (%s)", ii+1, 
+				subtitle->lang, 
+				ghb_subtitle_source_name(subtitle->source));
 			subtitle_opts.map[ii+1].option = options[ii];
 			subtitle_opts.map[ii+1].shortOpt = index_str[ii];
 			subtitle_opts.map[ii+1].ivalue = ii;
@@ -2575,6 +2564,18 @@ ghb_find_cc_track(gint titleindex)
 	return -2;
 }
 
+static gboolean
+canForce(int source)
+{
+	return (source == VOBSUB);
+}
+
+static gboolean
+canBurn(int source)
+{
+	return (source == VOBSUB || source == SSASUB);
+}
+
 gint
 ghb_find_subtitle_track(
 	gint          titleindex, 
@@ -2627,7 +2628,8 @@ ghb_find_subtitle_track(
 				continue;
 
        		subtitle = (hb_subtitle_t*)hb_list_item( title->list_subtitle, ii );
-			if ((!(burn || force) || (subtitle->source == VOBSUB)) &&
+			if (((!force || (force && canForce(subtitle->source))) &&
+				 (!burn  || (burn  &&  canBurn(subtitle->source)))) &&
 				((strcmp(lang, subtitle->iso639_2) == 0) ||
 				 (strcmp(lang, "und") == 0)))
 			{
@@ -4878,15 +4880,16 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 			if (subt != NULL)
 			{
 				sub_config = subt->config;
-				if (!burned && subt->format == PICTURESUB)
+				if (!burned)
 				{
 					sub_config.dest = PASSTHRUSUB;
 				}
-				else if ( burned && subt->format == PICTURESUB )
+				else if ( burned && canBurn(subt->source) )
 				{
 					// Only allow one subtitle to be burned into the video
 					if (one_burned)
 						continue;
+					sub_config.dest = RENDERSUB;
 					one_burned = TRUE;
 				}
 				sub_config.force = force;

@@ -732,6 +732,7 @@
 				OTHER_LDFLAGS = (
 					"$(EXTERNAL_BUILD)/contrib/lib/libbluray.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libass.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
@@ -741,6 +742,8 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfontconfig.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfreetype.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
@@ -752,6 +755,7 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxml2.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -765,6 +769,7 @@
 				OTHER_LDFLAGS = (
 					"$(EXTERNAL_BUILD)/contrib/lib/libbluray.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libass.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
@@ -774,6 +779,8 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfontconfig.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfreetype.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
@@ -785,6 +792,7 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxml2.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -797,7 +805,7 @@
 				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
 				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
 				EXTERNAL_BUILD = "$(EXTERNAL_SRC)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 2;
+				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
@@ -833,6 +841,7 @@
 				OTHER_LDFLAGS = (
 					"$(EXTERNAL_BUILD)/contrib/lib/libbluray.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libass.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
@@ -842,6 +851,8 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfontconfig.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfreetype.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
@@ -853,6 +864,7 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxml2.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -872,6 +884,7 @@
 				OTHER_LDFLAGS = (
 					"$(EXTERNAL_BUILD)/contrib/lib/libbluray.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libass.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
@@ -881,6 +894,8 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfontconfig.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfreetype.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
@@ -892,6 +907,7 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxml2.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -925,7 +941,7 @@
 				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
 				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
 				EXTERNAL_BUILD = "$(EXTERNAL_SRC)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 2;
+				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
@@ -961,6 +977,7 @@
 				OTHER_LDFLAGS = (
 					"$(EXTERNAL_BUILD)/contrib/lib/libbluray.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libass.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
@@ -970,6 +987,8 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfontconfig.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfreetype.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
@@ -981,6 +1000,7 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxml2.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1000,6 +1020,7 @@
 				OTHER_LDFLAGS = (
 					"$(EXTERNAL_BUILD)/contrib/lib/libbluray.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libass.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
@@ -1009,6 +1030,8 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfontconfig.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfreetype.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
@@ -1020,6 +1043,7 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxml2.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -1053,7 +1077,7 @@
 				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
 				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
 				EXTERNAL_BUILD = "$(EXTERNAL_SRC)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 2;
+				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
@@ -1089,6 +1113,7 @@
 				OTHER_LDFLAGS = (
 					"$(EXTERNAL_BUILD)/contrib/lib/libbluray.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libass.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
@@ -1098,6 +1123,8 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfontconfig.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfreetype.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
@@ -1109,6 +1136,7 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxml2.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1128,6 +1156,7 @@
 				OTHER_LDFLAGS = (
 					"$(EXTERNAL_BUILD)/contrib/lib/libbluray.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libass.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
@@ -1137,6 +1166,8 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfontconfig.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfreetype.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
@@ -1148,6 +1179,7 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxml2.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -1181,7 +1213,7 @@
 				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
 				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
 				EXTERNAL_BUILD = "$(EXTERNAL_SRC)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 2;
+				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
@@ -1217,6 +1249,7 @@
 				OTHER_LDFLAGS = (
 					"$(EXTERNAL_BUILD)/contrib/lib/libbluray.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libass.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
@@ -1226,6 +1259,8 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfontconfig.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfreetype.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
@@ -1237,6 +1272,7 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxml2.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1256,6 +1292,7 @@
 				OTHER_LDFLAGS = (
 					"$(EXTERNAL_BUILD)/contrib/lib/libbluray.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libass.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
@@ -1265,6 +1302,8 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfontconfig.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfreetype.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
@@ -1276,6 +1315,7 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxml2.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -1311,7 +1351,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXTERNAL_BUILD = "$(EXTERNAL_SRC)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 2;
+				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
@@ -1348,6 +1388,7 @@
 				OTHER_LDFLAGS = (
 					"$(EXTERNAL_BUILD)/contrib/lib/libbluray.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libass.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
@@ -1357,6 +1398,8 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfontconfig.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfreetype.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
@@ -1368,6 +1411,7 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxml2.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1387,6 +1431,7 @@
 				OTHER_LDFLAGS = (
 					"$(EXTERNAL_BUILD)/contrib/lib/libbluray.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libass.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
@@ -1396,6 +1441,8 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfontconfig.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfreetype.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
@@ -1407,6 +1454,7 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxml2.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -1442,7 +1490,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXTERNAL_BUILD = "$(EXTERNAL_SRC)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 2;
+				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
@@ -1479,6 +1527,7 @@
 				OTHER_LDFLAGS = (
 					"$(EXTERNAL_BUILD)/contrib/lib/libbluray.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libass.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
@@ -1488,6 +1537,8 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfontconfig.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfreetype.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
@@ -1499,6 +1550,7 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxml2.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1518,6 +1570,7 @@
 				OTHER_LDFLAGS = (
 					"$(EXTERNAL_BUILD)/contrib/lib/libbluray.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libass.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
@@ -1527,6 +1580,8 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfontconfig.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfreetype.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
@@ -1538,6 +1593,7 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxml2.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -1573,7 +1629,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXTERNAL_BUILD = "$(EXTERNAL_SRC)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 2;
+				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
@@ -1610,6 +1666,7 @@
 				OTHER_LDFLAGS = (
 					"$(EXTERNAL_BUILD)/contrib/lib/libbluray.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libass.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
@@ -1619,6 +1676,8 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfontconfig.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfreetype.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
@@ -1630,6 +1689,7 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxml2.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1649,6 +1709,7 @@
 				OTHER_LDFLAGS = (
 					"$(EXTERNAL_BUILD)/contrib/lib/libbluray.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libass.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
@@ -1658,6 +1719,8 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfontconfig.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfreetype.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
@@ -1669,6 +1732,7 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxml2.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -1704,7 +1768,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXTERNAL_BUILD = "$(EXTERNAL_SRC)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 2;
+				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
@@ -1741,6 +1805,7 @@
 				OTHER_LDFLAGS = (
 					"$(EXTERNAL_BUILD)/contrib/lib/libbluray.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libass.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
@@ -1750,6 +1815,8 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfontconfig.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfreetype.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
@@ -1761,6 +1828,7 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxml2.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1780,6 +1848,7 @@
 				OTHER_LDFLAGS = (
 					"$(EXTERNAL_BUILD)/contrib/lib/libbluray.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libass.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
@@ -1789,6 +1858,8 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfontconfig.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfreetype.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
@@ -1800,6 +1871,7 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxml2.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -1880,6 +1952,7 @@
 				OTHER_LDFLAGS = (
 					"$(EXTERNAL_BUILD)/contrib/lib/libbluray.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libass.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
@@ -1889,6 +1962,8 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfontconfig.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfreetype.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
@@ -1900,6 +1975,7 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxml2.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1923,6 +1999,7 @@
 				OTHER_LDFLAGS = (
 					"$(EXTERNAL_BUILD)/contrib/lib/libbluray.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libass.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
@@ -1932,6 +2009,8 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfontconfig.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfreetype.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
@@ -1943,6 +2022,7 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxml2.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1962,7 +2042,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXTERNAL_BUILD = "$(EXTERNAL_SRC)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 2;
+				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
@@ -1993,7 +2073,7 @@
 				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
 				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
 				EXTERNAL_BUILD = "$(EXTERNAL_SRC)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 2;
+				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";

@@ -19,7 +19,10 @@ endif
 MODULES += contrib/faac
 MODULES += contrib/faad2
 MODULES += contrib/ffmpeg
+MODULES += contrib/fontconfig
+MODULES += contrib/freetype
 MODULES += contrib/lame
+MODULES += contrib/libass
 MODULES += contrib/libdca
 MODULES += contrib/libdvdread
 MODULES += contrib/libdvdnav
@@ -29,6 +32,7 @@ MODULES += contrib/libogg
 MODULES += contrib/libsamplerate
 MODULES += contrib/libtheora
 MODULES += contrib/libvorbis
+MODULES += contrib/libxml2
 MODULES += contrib/mp4v2
 MODULES += contrib/mpeg2dec
 

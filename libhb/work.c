@@ -317,11 +317,7 @@ void hb_display_job_info( hb_job_t * job )
             {
                 hb_log( " * subtitle track %i, %s (id %x) %s [%s] -> %s%s%s", subtitle->track, subtitle->lang, subtitle->id,
                         subtitle->format == PICTURESUB ? "Picture" : "Text",
-                        subtitle->source == VOBSUB ? "VOBSUB" : 
-                        subtitle->source == CC608SUB || subtitle->source == CC708SUB ? "CC" : 
-                        subtitle->source == UTF8SUB ? "UTF-8" : 
-                        subtitle->source == TX3GSUB ? "TX3G" : 
-                        subtitle->source == SSASUB ? "SSA" : "Unknown",
+                        hb_subsource_name( subtitle->source ),
                         job->indepth_scan ? "Foreign Audio Search" :
                         subtitle->config.dest == RENDERSUB ? "Render/Burn in" : "Pass-Through",
                         subtitle->config.force ? ", Forced Only" : "",
@@ -422,6 +418,7 @@ static void do_job( hb_job_t * job, int cpu_count )
 
     hb_audio_t   * audio;
     hb_subtitle_t * subtitle;
+    hb_attachment_t * attachment;
     unsigned int subtitle_highest = 0;
     unsigned int subtitle_highest_id = 0;
     unsigned int subtitle_lowest = -1;
@@ -819,6 +816,7 @@ static void do_job( hb_job_t * job, int cpu_count )
                 w = hb_get_work( WORK_DECSSASUB );
                 w->fifo_in  = subtitle->fifo_in;
                 w->fifo_out = subtitle->fifo_raw;
+                w->subtitle = subtitle;
                 hb_list_add( job->list_work, w );
             }
 

@@ -85,15 +85,16 @@ struct hb_buffer_s
     /* Holds the output PTS from x264, for use by b-frame offsets in muxmp4.c */
     int64_t     renderOffset;
 
-    // VOB subtitle packets:
+    // PICTURESUB subtitle packets:
     //   Location and size of the subpicture.
     int           x;
     int           y;
     int           width;
     int           height;
+    hb_buffer_t * next_subpicture;
 
     // Video packets (after processing by the hb_sync_video work-object):
-    //   A (copy of a) VOB subtitle packet that needs to be burned into this video packet by the hb_render work-object.
+    //   A (copy of a) PICTURESUB subtitle packet that needs to be burned into this video packet by the hb_render work-object.
     //   Subtitles that are simply passed thru are NOT attached to the associated video packets.
     hb_buffer_t * sub;
 

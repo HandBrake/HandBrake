@@ -284,6 +284,7 @@
             {
                 NSString * trackTypeString = @"";
                 int isPictureSub = 0;
+                int canBeBurnedIn = 0;
                 subtitle = (hb_subtitle_t *) hb_list_item( fTitle->list_subtitle, i );
                 sub_config = subtitle->config;
                 
@@ -291,12 +292,16 @@
                 {
                     trackTypeString = @"- (Bitmap)";
                     isPictureSub = 1;
+                    canBeBurnedIn = 1;
                 }
                 else
                 {
                     trackTypeString = @"- (Text)";
+                    if(subtitle->source == SSASUB)
+                    {
+                    	canBeBurnedIn = 1;
+                    }
                 }
-                
                 /* create a dictionary of source subtitle information to store in our array */
                 NSString *popupName = [NSString stringWithFormat:@"%d - %@ %@",i,[NSString stringWithUTF8String:subtitle->lang],trackTypeString];
                 NSMutableDictionary *newSubtitleSourceTrack = [[NSMutableDictionary alloc] init];
@@ -308,6 +313,8 @@
                 [newSubtitleSourceTrack setObject:@"Source" forKey:@"sourceTrackType"];
                 /* Subtitle Source track popup isPictureSub */ 
                 [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:isPictureSub] forKey:@"sourceTrackisPictureSub"];
+                /* Subtitle Source track popup canBeBurnedIn */ 
+                [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:canBeBurnedIn] forKey:@"sourceTrackcanBeBurnedIn"];
                 
                 [subtitleSourceArray addObject:newSubtitleSourceTrack];
                 [newSubtitleSourceTrack autorelease];
@@ -343,6 +350,8 @@
     [newSubtitleTrack setObject:@"None" forKey:@"subtitleSourceTrackName"];
     /* Subtitle Source track popup isPictureSub */
     [newSubtitleTrack setObject:[NSNumber numberWithInt:0] forKey:@"subtitleSourceTrackisPictureSub"];
+    /* Subtitle Source track popup canBeBurnedIn */
+    [newSubtitleTrack setObject:[NSNumber numberWithInt:0] forKey:@"subtitleSourceTrackcanBeBurnedIn"];
     /* Subtitle track forced state */
     [newSubtitleTrack setObject:[NSNumber numberWithInt:0] forKey:@"subtitleTrackForced"];
     /* Subtitle track burned state */
@@ -369,8 +378,10 @@
     [newSubtitleSourceTrack setObject:@"SRT" forKey:@"subtitleSourceTrackType"];
     /* Subtitle Source track type */
     [newSubtitleSourceTrack setObject:filePath forKey:@"sourceSrtFilePath"];
-    /* Subtitle Source track popup isPictureSub */ 
+    /* Subtitle Source track popup isPictureSub */
     [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:0] forKey:@"sourceTrackisPictureSub"];
+    /* Subtitle Source track popup canBeBurnedIn */ 
+    [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:0] forKey:@"sourceTrackcanBeBurnedIn"];
     
     [subtitleSourceArray addObject:newSubtitleSourceTrack];
     [newSubtitleSourceTrack autorelease];
@@ -398,6 +409,8 @@
     [newSubtitleSrtTrack setObject:displayname forKey:@"subtitleSourceTrackName"];
     /* Subtitle Source track popup isPictureSub */
     [newSubtitleSrtTrack setObject:[NSNumber numberWithInt:0] forKey:@"subtitleSourceTrackisPictureSub"];
+    /* Subtitle Source track popup canBeBurnedIn */
+    [newSubtitleSrtTrack setObject:[NSNumber numberWithInt:0] forKey:@"subtitleSourceTrackcanBeBurnedIn"];
     /* Subtitle track forced state */
     [newSubtitleSrtTrack setObject:[NSNumber numberWithInt:0] forKey:@"subtitleTrackForced"];
     /* Subtitle track burned state */
@@ -469,6 +482,8 @@
             [newSubtitleSourceTrack setObject:filePath forKey:@"sourceSrtFilePath"];
             /* Subtitle Source track popup isPictureSub */ 
             [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:0] forKey:@"sourceTrackisPictureSub"];
+            /* Subtitle Source track popup canBeBurnedIn */ 
+            [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:0] forKey:@"sourceTrackcanBeBurnedIn"];
             
             [subtitleSourceArray addObject:newSubtitleSourceTrack];
             [newSubtitleSourceTrack autorelease];
@@ -636,6 +651,7 @@
         {
             int sourceSubtitleIndex;
             bool isPictureSub = FALSE;
+            bool canBeBurnedIn = FALSE;
             
             if (rowIndex == 0)
             {
@@ -649,12 +665,17 @@
             if (rowIndex == 0 && [anObject intValue] == 1)// we are Foreign Launguage Search, which is inherently bitmap
             {
                 isPictureSub = TRUE;
+                canBeBurnedIn = TRUE;
             }
             else
             {
                 if ([[[subtitleSourceArray objectAtIndex:sourceSubtitleIndex] objectForKey:@"sourceTrackisPictureSub"] intValue] ==1)
                 {
                     isPictureSub = TRUE;
+                }
+                if ([[[subtitleSourceArray objectAtIndex:sourceSubtitleIndex] objectForKey:@"sourceTrackcanBeBurnedIn"] intValue] ==1)
+                {
+                    canBeBurnedIn = TRUE;
                 }
             }
             if (isPictureSub == TRUE)
@@ -664,7 +685,15 @@
             else
             {
                 [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:0] forKey:@"subtitleSourceTrackisPictureSub"];
-                /* if we are not picture sub, then we must be a text sub, handbrake does not support burning in text subs */
+            }
+            if (canBeBurnedIn == TRUE)
+            {
+                [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:1] forKey:@"subtitleSourceTrackcanBeBurnedIn"];
+            }
+            else
+            {
+                [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:0] forKey:@"subtitleSourceTrackcanBeBurnedIn"];
+                /* the source track cannot be burned in, so uncheck the widget */
                 [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:0] forKey:@"subtitleTrackBurned"];
             }
             
@@ -854,10 +883,10 @@
         else if ([[aTableColumn identifier] isEqualToString:@"burned"])
         {
             [aCell setState:[[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleTrackBurned"] intValue]];
-            /* Disable the "Burned-In" checkbox if a) the track is "None" or b) the subtitle track is text (we do not support burning in
-             * text subs) */
+            /* Disable the "Burned-In" checkbox if a) the track is "None" or b) the subtitle track is text but not ssa (we do not support burning in
+             * non-ssa text subs) */
             if ([[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackNum"] intValue] == 0 ||
-                [[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackisPictureSub"] intValue] == 0)
+                [[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackcanBeBurnedIn"] intValue] == 0)
             {
                 [aCell setEnabled:NO];
             }

@@ -472,8 +472,14 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 pv->dropped_frames++;
 
                 /* Pop the frame's subtitle and dispose of it. */
-                hb_buffer_t * subtitles = hb_fifo_get( pv->subtitle_queue );
-                hb_buffer_close( &subtitles );
+                hb_buffer_t * subpicture_list = hb_fifo_get( pv->subtitle_queue );
+                hb_buffer_t * subpicture;
+                hb_buffer_t * subpicture_next;
+                for ( subpicture = subpicture_list; subpicture; subpicture = subpicture_next )
+                {
+                    subpicture_next = subpicture->next_subpicture;
+                    hb_buffer_close( &subpicture );
+                }
                 buf_tmp_in = NULL;
                 break;
             }
@@ -500,10 +506,13 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     /* Apply subtitles */
     if( buf_tmp_in )
     {
-        hb_buffer_t * subtitles = hb_fifo_get( pv->subtitle_queue );
-        if( subtitles )
+        hb_buffer_t * subpicture_list = hb_fifo_get( pv->subtitle_queue );
+        hb_buffer_t * subpicture;
+        hb_buffer_t * subpicture_next;
+        for ( subpicture = subpicture_list; subpicture; subpicture = subpicture_next )
         {
-            ApplySub( job, buf_tmp_in, &subtitles );
+            subpicture_next = subpicture->next_subpicture;
+            ApplySub( job, buf_tmp_in, &subpicture );
         }
     }
 
