@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn3269 (2010042701) on Linux
+Guide to Building HandBrake svn3555 (2010092801) on Linux
 *********************************************************
 
 Table of Contents
@@ -160,7 +160,7 @@ Additional Fedora packages:
 
 To install these packages:
      sudo yum install yasm zlib-devel bzip2-devel \
-     dbus-glib-devel libgudev1-devel webkitgtk-devel libnotify-devel\
+     dbus-glib-devel libgudev1-devel webkitgtk-devel libnotify-devel \
      gstreamer-devel gstreamer-plugins-base-devel
 
 3 QuickStart
@@ -548,7 +548,7 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    3269
-     date:   2010-04-27 09:51:55 -0700
+     rev:    3555
+     date:   2010-09-26 09:13:48 -0700
      type:   developer
 

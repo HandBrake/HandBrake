@@ -95,7 +95,7 @@ Additional Fedora packages:
 To install these packages:
 @example
 sudo yum install yasm zlib-devel bzip2-devel \
-dbus-glib-devel libgudev1-devel webkitgtk-devel libnotify-devel\
+dbus-glib-devel libgudev1-devel webkitgtk-devel libnotify-devel \
 gstreamer-devel gstreamer-plugins-base-devel
 @end example
 
