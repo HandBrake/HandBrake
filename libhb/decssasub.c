@@ -370,7 +370,7 @@ static hb_buffer_t *ssa_decode_line_to_picture( hb_work_object_t * w, uint8_t *i
     
     int changed;
     ASS_Image *frameList = ass_render_frame( pv->renderer, pv->ssaTrack, renderTime / 90, &changed );
-    if ( !changed && !frameList )
+    if ( !changed || !frameList )
         return NULL;
     
     int numFrames = 0;
