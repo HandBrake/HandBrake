@@ -73,6 +73,7 @@ typedef struct
 	gint num_chapters;
 	gint rate;
 	gint rate_base;
+	gint interlaced;
 	gint aspect_n;
 	gint aspect_d;
 	gint hours;

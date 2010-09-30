@@ -1365,6 +1365,9 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	gtk_label_set_text (GTK_LABEL(widget), text);
 	g_free(text);
 
+	//widget = GHB_WIDGET (ud->builder, "source_interlaced");
+	//gtk_label_set_text (GTK_LABEL(widget), tinfo->interlaced ? "Yes" : "No");
+
 	ghb_ui_update(ud, "scale_width", 
 		ghb_int64_value(tinfo->width - tinfo->crop[2] - tinfo->crop[3]));
 	// If anamorphic or keep_aspect, the hight will be automatically calculated

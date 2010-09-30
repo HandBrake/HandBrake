@@ -3469,6 +3469,7 @@ ghb_get_title_info(ghb_title_info_t *tinfo, gint titleindex)
 	tinfo->num_chapters = hb_list_count(title->list_chapter);
 	tinfo->rate_base = title->rate_base;
 	tinfo->rate = title->rate;
+	tinfo->interlaced = title->detected_interlacing;
 	hb_reduce(&(tinfo->aspect_n), &(tinfo->aspect_d), 
 				title->width * title->pixel_aspect_width, 
 				title->height * title->pixel_aspect_height);
