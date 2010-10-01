@@ -10,6 +10,7 @@ namespace HandBrake.ApplicationServices.Parsing
     using System.Text.RegularExpressions;
 
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.Framework.Helpers;
 
     /// <summary>
     /// An object that represents a subtitle associated with a Title, in a DVD
@@ -43,7 +44,7 @@ namespace HandBrake.ApplicationServices.Parsing
         {
             get
             {
-                return this.SubtitleType == SubtitleType.Picture ? "Bitmap" : "Text";
+                return EnumHelper.GetDescription(this.SubtitleType);
             }
         }
 
@@ -60,16 +61,43 @@ namespace HandBrake.ApplicationServices.Parsing
         {
             string curLine = output.ReadLine();
 
-            Match m = Regex.Match(curLine, @"^    \+ ([0-9]*), ([A-Za-z, ]*) \((.*)\) \(([a-zA-Z]*)\)");
+            // + 1, English (iso639-2: eng) (Text)(SSA)
+            Match m = Regex.Match(curLine, @"^    \+ ([0-9]*), ([A-Za-z, ]*) \((.*)\) \(([a-zA-Z]*)\)\(([a-zA-Z]*)\)");
+
             if (m.Success && !curLine.Contains("HandBrake has exited."))
             {
                 var thisSubtitle = new Subtitle
                                        {
-                                           TrackNumber = int.Parse(m.Groups[1].Value.Trim()), 
-                                           Language = m.Groups[2].Value, 
-                                           LanguageCode = m.Groups[3].Value, 
-                                           SubtitleType = m.Groups[4].Value.Contains("Text") ? SubtitleType.Text : SubtitleType.Picture
+                                           TrackNumber = int.Parse(m.Groups[1].Value.Trim()),
+                                           Language = m.Groups[2].Value,
+                                           LanguageCode = m.Groups[3].Value,
                                        };
+
+                switch (m.Groups[5].Value)
+                {
+                    case "VOBSUB":
+                        thisSubtitle.SubtitleType = SubtitleType.VobSub;
+                        break;
+                    case "SRT":
+                        thisSubtitle.SubtitleType = SubtitleType.SRT;
+                        break;
+                    case "CC":
+                        thisSubtitle.SubtitleType = SubtitleType.CC;
+                        break;
+                    case "UTF-8":
+                        thisSubtitle.SubtitleType = SubtitleType.UTF8Sub;
+                        break;
+                    case "TX3G":
+                        thisSubtitle.SubtitleType = SubtitleType.TX3G;
+                        break;
+                    case "SSA":
+                        thisSubtitle.SubtitleType = SubtitleType.SSA;
+                        break;
+                    default:
+                        thisSubtitle.SubtitleType = SubtitleType.Unknown;
+                        break;
+                }
+
                 return thisSubtitle;
             }
             return null;
@@ -87,7 +115,7 @@ namespace HandBrake.ApplicationServices.Parsing
         public static IEnumerable<Subtitle> ParseList(StringReader output)
         {
             var subtitles = new List<Subtitle>();
-            while ((char) output.Peek() != '+')
+            while ((char)output.Peek() != '+')
             {
                 Subtitle thisSubtitle = Parse(output);
 

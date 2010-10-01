@@ -5,14 +5,26 @@
 
 namespace HandBrake.ApplicationServices.Model
 {
+    using System.ComponentModel;
+
     /// <summary>
     /// Subtitle Type. 
-    /// 0: Picture
-    /// 1: Text
     /// </summary>
     public enum SubtitleType
     {
-        Picture,
-        Text
+        [Description("SSA")]
+        SSA,
+        [Description("SRT")]
+        SRT,
+        [Description("VobSub")]
+        VobSub,
+        [Description("CC")]
+        CC,
+        [Description("UTF8")]
+        UTF8Sub,
+        [Description("TX3G")]
+        TX3G,
+        [Description("Unknown")]
+        Unknown
     }
 }

@@ -11,6 +11,9 @@ namespace Handbrake.Controls
     using System.Linq;
     using System.Windows.Forms;
     using Functions;
+
+    using HandBrake.ApplicationServices.Model;
+
     using Model;
 
     /// <summary>
@@ -18,6 +21,8 @@ namespace Handbrake.Controls
     /// </summary>
     public partial class Subtitles : UserControl
     {
+        #region Priavate Variables and Collections
+
         /// <summary>
         /// Map of languages to language codes
         /// </summary>
@@ -32,6 +37,8 @@ namespace Handbrake.Controls
         /// The Subtitle List
         /// </summary>
         private readonly List<SubtitleInfo> subList = new List<SubtitleInfo>();
+
+        #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Subtitles"/> class.
@@ -48,6 +55,7 @@ namespace Handbrake.Controls
             srt_lang.SelectedIndex = 40;
         }
 
+        #region Public Methods
         /// <summary>
         /// Gets the CLI Query for this panel
         /// </summary>
@@ -84,7 +92,7 @@ namespace Handbrake.Controls
                             srtLang += srtLang == string.Empty ? langMap[item.SrtLang] : "," + langMap[item.SrtLang];
                             srtCodeset += srtCodeset == string.Empty ? item.SrtCharCode : "," + item.SrtCharCode;
 
-                            if (item.Default == "Yes")
+                            if (item.Default)
                                 srtDefault = srtCount.ToString();
 
                             itemToAdd = item.SrtPath;
@@ -113,7 +121,7 @@ namespace Handbrake.Controls
                             tempSub = item.Track.Split(' ');
                             trackId = tempSub[0];
 
-                            if (item.Forced == "Yes")
+                            if (item.Forced)
                                 itemToAdd = trackId;
 
                             if (itemToAdd != string.Empty)
@@ -125,10 +133,10 @@ namespace Handbrake.Controls
                             if (trackId.Trim() == "Foreign") // foreign audio search
                                 trackId = "scan";
 
-                            if (item.Burned == "Yes") // burn
+                            if (item.Burned) // burn
                                 subtitleBurn = trackId;
 
-                            if (item.Default == "Yes") // default
+                            if (item.Default) // default
                                 subtitleDefault = trackId;
                         }
                     }
@@ -164,7 +172,76 @@ namespace Handbrake.Controls
             }
         }
 
-        /* Primary Controls */
+        /// <summary>
+        /// Checks of the current settings will require the m4v file extension
+        /// </summary>
+        /// <returns>True if Yes</returns>
+        public bool RequiresM4V()
+        {
+            return this.subList.Any(track => track.SubtitleType != SubtitleType.VobSub);
+        }
+
+        /// <summary>
+        /// Automatically setup the subtitle tracks.
+        /// This handles the automatic setup of subitles which the user can control from the program options
+        /// </summary>
+        /// <param name="subs">List of Subtitles</param>
+        public void SetSubtitleTrackAuto(object[] subs)
+        {
+            drp_subtitleTracks.Items.Clear();
+            drp_subtitleTracks.Items.Add("Foreign Audio Search (Bitmap)");
+            drp_subtitleTracks.Items.AddRange(subs);
+            drp_subtitleTracks.SelectedIndex = 0;
+            Clear();
+
+            this.AutomaticSubtitleSelection();
+        }
+
+        /// <summary>
+        /// Automatic Subtitle Selection based on user preferences.
+        /// </summary>
+        public void AutomaticSubtitleSelection()
+        {
+            // Handle Native Language and "Dub Foreign language audio" and "Use Foreign language audio and Subtitles" Options
+            if (Properties.Settings.Default.NativeLanguage != "Any")
+            {
+                if (Properties.Settings.Default.DubMode != 1) // We need to add a subtitle track if this is false.
+                {
+                    foreach (object item in drp_subtitleTracks.Items)
+                    {
+                        if (item.ToString().Contains(Properties.Settings.Default.NativeLanguage))
+                        {
+                            drp_subtitleTracks.SelectedItem = item;
+                            BtnAddSubTrackClick(this, new EventArgs());
+                        }
+                    }
+
+                    if (drp_subtitleTracks.SelectedIndex == 0 && Properties.Settings.Default.useClosedCaption)
+                    {
+                        foreach (object item in drp_subtitleTracks.Items)
+                        {
+                            if (item.ToString().Contains("Closed"))
+                            {
+                                drp_subtitleTracks.SelectedItem = item;
+                                BtnAddSubTrackClick(this, new EventArgs());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Clear the Subtitle List
+        /// </summary>
+        public void Clear()
+        {
+            lv_subList.Items.Clear();
+            subList.Clear();
+        }
+        #endregion
+
+        #region Primary Controls
 
         /// <summary>
         /// Add a Subtitle track.
@@ -181,7 +258,7 @@ namespace Handbrake.Controls
             string forcedVal = check_forced.CheckState == CheckState.Checked ? "Yes" : "No";
             string defaultSub = check_default.CheckState == CheckState.Checked ? "Yes" : "No";
             string burnedVal = check_burned.CheckState == CheckState.Checked &&
-                               (!drp_subtitleTracks.Text.Contains("Text"))
+                               (drp_subtitleTracks.Text.Contains("(VOBSUB)") || drp_subtitleTracks.Text.Contains("(SSA)"))
                                    ? "Yes"
                                    : "No";
             string srtCode = "-", srtLangVal = "-", srtPath = "-", srtFile = "-";
@@ -189,19 +266,17 @@ namespace Handbrake.Controls
 
             if (drp_subtitleTracks.SelectedItem.ToString().Contains(".srt"))
             {
-                burnedVal = "No";
-                forcedVal = "No";
                 srtFiles.TryGetValue(drp_subtitleTracks.SelectedItem.ToString(), out srtPath);
                 srtFile = drp_subtitleTracks.SelectedItem.ToString();
                 srtLangVal = srt_lang.SelectedItem.ToString();
                 srtCode = srt_charcode.SelectedItem.ToString();
                 srtOffsetMs = (int)srt_offset.Value;
-                if (defaultSub == "Yes") SetNoSrtDefault();
+                if (defaultSub == "Yes") this.SetDefaultToOffForAllSRTTracks();
             }
             else
             {
-                if (defaultSub == "Yes") SetNoDefault();
-                if (burnedVal == "Yes") SetNoBurned();
+                if (defaultSub == "Yes") this.SetDefaultToOffForAllTracks();
+                if (burnedVal == "Yes") this.SetBurnedToOffForAllTracks();
             }
 
             string trackName = (drp_subtitleTracks.SelectedItem.ToString().Contains(".srt"))
@@ -211,9 +286,9 @@ namespace Handbrake.Controls
             SubtitleInfo track = new SubtitleInfo
                                      {
                                          Track = trackName,
-                                         Forced = forcedVal,
-                                         Burned = burnedVal,
-                                         Default = defaultSub,
+                                         Forced = check_forced.Checked,
+                                         Burned = check_burned.Checked,
+                                         Default = check_default.Checked,
                                          SrtLang = srtLangVal,
                                          SrtCharCode = srtCode,
                                          SrtOffset = srtOffsetMs,
@@ -265,7 +340,7 @@ namespace Handbrake.Controls
         /// </param>
         private void BtnRemoveSubTrackClick(object sender, EventArgs e)
         {
-            RemoveTrack();
+            this.RemoveSelectedTrack();
         }
 
         /// <summary>
@@ -297,7 +372,7 @@ namespace Handbrake.Controls
                     srt_lang.SelectedItem = track.SrtLang;
                     srt_offset.Value = track.SrtOffset;
                     srt_charcode.SelectedItem = track.SrtCharCode;
-                    check_default.CheckState = track.Default == "Yes" ? CheckState.Checked : CheckState.Unchecked;
+                    check_default.CheckState = track.Default ? CheckState.Checked : CheckState.Unchecked;
                     SubGroupBox.Text = "Selected Track: " + track.Track;
                 }
                 else // We have Bitmap/CC
@@ -308,9 +383,9 @@ namespace Handbrake.Controls
                             drp_subtitleTracks.SelectedIndex = c;
                         c++;
                     }
-                    check_forced.CheckState = track.Forced == "Yes" ? CheckState.Checked : CheckState.Unchecked;
-                    check_burned.CheckState = track.Burned == "Yes" ? CheckState.Checked : CheckState.Unchecked;
-                    check_default.CheckState = track.Default == "Yes" ? CheckState.Checked : CheckState.Unchecked;
+                    check_forced.CheckState = track.Forced ? CheckState.Checked : CheckState.Unchecked;
+                    check_burned.CheckState = track.Burned ? CheckState.Checked : CheckState.Unchecked;
+                    check_default.CheckState = track.Default ? CheckState.Checked : CheckState.Unchecked;
                     SubGroupBox.Text = "Selected Track: " +
                                        lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[0].Text;
                 }
@@ -319,7 +394,9 @@ namespace Handbrake.Controls
                 SubGroupBox.Text = "Selected Track: None (Click \"Add\" to add another track to the list)";
         }
 
-        /* Bitmap / CC / SRT Controls */
+        #endregion
+
+        #region Subtitle Controls
 
         /// <summary>
         /// Handle the Subtitle track dropdown changed event
@@ -387,7 +464,7 @@ namespace Handbrake.Controls
             lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[1].Text = check_forced.Checked ? "Yes" : "No";
             lv_subList.Select();
 
-            subList[lv_subList.SelectedIndices[0]].Forced = check_forced.Checked ? "Yes" : "No";
+            subList[lv_subList.SelectedIndices[0]].Forced = check_forced.Checked;
             // Update SubList List<SubtitleInfo> 
         }
 
@@ -405,12 +482,12 @@ namespace Handbrake.Controls
             if (lv_subList.Items.Count == 0 || lv_subList.SelectedIndices.Count == 0) return;
 
             if (check_burned.Checked) // Make sure we only have 1 burned track
-                SetNoBurned();
+                this.SetBurnedToOffForAllTracks();
 
             lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[2].Text = check_burned.Checked ? "Yes" : "No";
             lv_subList.Select();
 
-            subList[lv_subList.SelectedIndices[0]].Burned = check_burned.Checked ? "Yes" : "No";
+            subList[lv_subList.SelectedIndices[0]].Burned = check_burned.Checked;
             // Update SubList List<SubtitleInfo> 
         }
 
@@ -429,14 +506,14 @@ namespace Handbrake.Controls
 
             if (check_default.Checked) // Make sure we only have 1 default track
                 if (lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[0].Text.Contains(".srt"))
-                    SetNoSrtDefault();
+                    this.SetDefaultToOffForAllSRTTracks();
                 else
-                    SetNoDefault();
+                    this.SetDefaultToOffForAllTracks();
 
             lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[3].Text = check_default.Checked ? "Yes" : "No";
             lv_subList.Select();
 
-            subList[lv_subList.SelectedIndices[0]].Default = check_default.Checked ? "Yes" : "No";
+            subList[lv_subList.SelectedIndices[0]].Default = check_default.Checked;
             // Update SubList List<SubtitleInfo>
         }
 
@@ -502,7 +579,9 @@ namespace Handbrake.Controls
             // Update SubList List<SubtitleInfo>
         }
 
-        /* Right Click Menu */
+        #endregion
+
+        #region Right Click Menu
 
         /// <summary>
         /// Move an item in the subtitle list up
@@ -569,15 +648,16 @@ namespace Handbrake.Controls
         /// </param>
         private void MnuRemoveClick(object sender, EventArgs e)
         {
-            RemoveTrack();
+            this.RemoveSelectedTrack();
         }
 
-        /* Functions */
+        #endregion
 
+        #region Helpers
         /// <summary>
         /// Set all Non SRT tracks to Default = NO
         /// </summary>
-        private void SetNoDefault()
+        private void SetDefaultToOffForAllTracks()
         {
             int c = 0;
             foreach (ListViewItem item in lv_subList.Items)
@@ -587,7 +667,7 @@ namespace Handbrake.Controls
                     if (item.SubItems[3].Text == "Yes")
                     {
                         item.SubItems[3].Text = "No";
-                        subList[c].Default = "No";
+                        subList[c].Default = false;
                     }
                 }
                 c++;
@@ -597,7 +677,7 @@ namespace Handbrake.Controls
         /// <summary>
         /// Set all subtitle tracks so that they have no default.
         /// </summary>
-        private void SetNoSrtDefault()
+        private void SetDefaultToOffForAllSRTTracks()
         {
             int c = 0;
             foreach (ListViewItem item in lv_subList.Items)
@@ -607,7 +687,7 @@ namespace Handbrake.Controls
                     if (item.SubItems[3].Text == "Yes")
                     {
                         item.SubItems[3].Text = "No";
-                        subList[c].Default = "No";
+                        subList[c].Default = false;
                     }
                 }
                 c++;
@@ -617,7 +697,7 @@ namespace Handbrake.Controls
         /// <summary>
         /// Set all tracks to Burned = No
         /// </summary>
-        private void SetNoBurned()
+        private void SetBurnedToOffForAllTracks()
         {
             int c = 0;
             foreach (ListViewItem item in lv_subList.Items)
@@ -625,7 +705,7 @@ namespace Handbrake.Controls
                 if (item.SubItems[2].Text == "Yes")
                 {
                     item.SubItems[2].Text = "No";
-                    subList[c].Burned = "No";
+                    subList[c].Burned = false;
                 }
                 c++;
             }
@@ -634,7 +714,7 @@ namespace Handbrake.Controls
         /// <summary>
         /// Remove a selected track
         /// </summary>
-        private void RemoveTrack()
+        private void RemoveSelectedTrack()
         {
             // Remove the Item and reselect the control if the following conditions are met.
             if (lv_subList.SelectedItems.Count != 0)
@@ -658,82 +738,6 @@ namespace Handbrake.Controls
                 }
             }
         }
-
-        /// <summary>
-        /// Clear the Subtitle List
-        /// </summary>
-        public void Clear()
-        {
-            lv_subList.Items.Clear();
-            subList.Clear();
-        }
-
-        /// <summary>
-        /// Checks of the current settings will require the m4v file extension
-        /// </summary>
-        /// <returns>True if Yes</returns>
-        public bool RequiresM4V()
-        {
-            return this.lv_subList.Items.Cast<ListViewItem>().Any(item => item.SubItems.Count != 5 || item.SubItems[1].Text.Contains("(Text)"));
-        }
-
-        /// <summary>
-        /// Automatically setup the subtitle tracks.
-        /// This handles the automatic setup of subitles which the user can control from the program options
-        /// </summary>
-        /// <param name="subs">List of Subtitles</param>
-        public void SetSubtitleTrackAuto(object[] subs)
-        {
-            drp_subtitleTracks.Items.Clear();
-            drp_subtitleTracks.Items.Add("Foreign Audio Search (Bitmap)");
-            drp_subtitleTracks.Items.AddRange(subs);
-            drp_subtitleTracks.SelectedIndex = 0;
-            Clear();
-
-            this.AutomaticSubtitleSelection();
-        }
-
-        /// <summary>
-        /// Automatic Subtitle Selection based on user preferences.
-        /// </summary>
-        public void AutomaticSubtitleSelection()
-        {
-            // Handle Native Language and "Dub Foreign language audio" and "Use Foreign language audio and Subtitles" Options
-            if (Properties.Settings.Default.NativeLanguage != "Any")
-            {
-                if (Properties.Settings.Default.DubMode != 1) // We need to add a subtitle track if this is false.
-                {
-                    foreach (object item in drp_subtitleTracks.Items)
-                    {
-                        if (item.ToString().Contains(Properties.Settings.Default.NativeLanguage))
-                        {
-                            drp_subtitleTracks.SelectedItem = item;
-                            BtnAddSubTrackClick(this, new EventArgs());
-                        }
-                    }
-
-                    if (drp_subtitleTracks.SelectedIndex == 0 && Properties.Settings.Default.useClosedCaption)
-                    {
-                        foreach (object item in drp_subtitleTracks.Items)
-                        {
-                            if (item.ToString().Contains("Closed"))
-                            {
-                                drp_subtitleTracks.SelectedItem = item;
-                                BtnAddSubTrackClick(this, new EventArgs());
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Get the list of subtitles.
-        /// </summary>
-        /// <returns>A List of SubtitleInfo Object</returns>
-        public List<SubtitleInfo> GetSubtitleInfoList()
-        {
-            return subList;
-        }
+        #endregion
     }
 }
