@@ -30,6 +30,12 @@
 #endif
 
 /* Options */
+#if defined( __APPLE_CC__ )
+#define EXTRA_VLC_DYLD_PATH "/Applications/VLC.app/Contents/MacOS/lib"
+#define DEFAULT_DYLD_PATH "/usr/local/lib:/usr/lib"
+
+static int    no_vlc_dylib = 0;
+#endif
 static int    debug       = HB_DEBUG_ALL;
 static int    update      = 0;
 static int    dvdnav      = 1;
@@ -2700,6 +2706,9 @@ static int ParseOptions( int argc, char ** argv )
             { "vfr",         no_argument,       &cfr,    0 },
             { "cfr",         no_argument,       &cfr,    1 },
             { "pfr",         no_argument,       &cfr,    2 },
+#if defined( __APPLE_CC__ )
+            { "no-vlc-dylib-path", no_argument, &no_vlc_dylib,    1 },
+#endif
             { 0, 0, 0, 0 }
           };
 
@@ -3177,8 +3186,109 @@ static int ParseOptions( int argc, char ** argv )
     return 0;
 }
 
+char * str_printf(const char *fmt, ...)
+{
+    /* Guess we need no more than 100 bytes. */
+    int len;
+    va_list ap;
+    int size = 100;
+    char *tmp, *str = NULL;
+
+    str = (char*)malloc(size);
+    while (1) 
+    {
+        /* Try to print in the allocated space. */
+        va_start(ap, fmt);
+        len = vsnprintf(str, size, fmt, ap);
+        va_end(ap);
+
+        /* If that worked, return the string. */
+        if (len > -1 && len < size) {
+            return str;
+        }
+
+        /* Else try again with more space. */
+        if (len > -1)    /* glibc 2.1 */
+            size = len+1; /* precisely what is needed */
+        else           /* glibc 2.0 */
+            size *= 2;  /* twice the old size */
+
+        tmp = (char*)realloc(str, size);
+        if (tmp == NULL) {
+            return str;
+        }
+        str = tmp;
+    }
+}
+
 static int CheckOptions( int argc, char ** argv )
 {
+#if defined( __APPLE_CC__ )
+    // If OSX, add VLC dylib path and exec to make it stick.
+    char *dylib_path;
+
+    if ( !no_vlc_dylib )
+    {
+        dylib_path = getenv("DYLD_FALLBACK_LIBRARY_PATH");
+        if ( dylib_path == NULL ||
+             strstr( dylib_path, "/Applications/VLC.app/Contents/MacOS/lib" ) == NULL )
+        {
+            char *path = NULL;
+            char *home;
+            int result = -1;
+
+            home = getenv("HOME");
+
+            if ( dylib_path == NULL )
+            {
+                // Set the system default of $HOME/lib:/usr/local/lib:/usr/lib
+                // And add our extra path
+                if ( home != NULL )
+                {
+                    path = str_printf("%s/lib:%s:%s:%s%s", home, 
+                                      DEFAULT_DYLD_PATH, 
+                                      EXTRA_VLC_DYLD_PATH, 
+                                      home, EXTRA_VLC_DYLD_PATH);
+                }
+                else
+                {
+                    path = str_printf("%s:%s", DEFAULT_DYLD_PATH, EXTRA_VLC_DYLD_PATH);
+                }
+                if ( path != NULL )
+                    result = setenv("DYLD_FALLBACK_LIBRARY_PATH", path, 1);
+            }
+            else
+            {
+                // add our extra path
+                if ( home != NULL )
+                {
+                    path = str_printf("%s:%s:%s%s", dylib_path, EXTRA_VLC_DYLD_PATH,
+                                                        home, EXTRA_VLC_DYLD_PATH);
+                }
+                else
+                {
+                    path = str_printf("%s:%s", dylib_path, EXTRA_VLC_DYLD_PATH);
+                }
+                if ( path != NULL )
+                    result = setenv("DYLD_FALLBACK_LIBRARY_PATH", path, 1);
+            }
+            if ( result == 0 )
+            {
+                const char ** new_argv;
+                int i;
+
+                new_argv = (const char**)malloc( (argc + 2) * sizeof(char*) );
+                new_argv[0] = argv[0];
+                new_argv[1] = "--no-vlc-dylib-path";
+                for (i = 1; i < argc; i++)
+                    new_argv[i+1] = argv[i];
+                new_argv[i+1] = NULL;
+                execv(new_argv[0], (char* const*)new_argv);
+            }
+        }
+    }
+#endif
+
     if( update )
     {
         return 0;
