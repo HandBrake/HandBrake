@@ -82,6 +82,15 @@ int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec)
     return ret;
 }
 
+int hb_av_find_stream_info(AVFormatContext *ic)
+{
+    int ret;
+    hb_lock( hb_avcodec_lock );
+    ret = av_find_stream_info( ic );
+    hb_unlock( hb_avcodec_lock );
+    return ret;
+}
+
 int hb_avcodec_close(AVCodecContext *avctx)
 {
     int ret;

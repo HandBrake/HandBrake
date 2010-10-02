@@ -9,4 +9,5 @@
 void hb_avcodec_init(void);
 int hb_avcodec_open( AVCodecContext *, struct AVCodec * );
 int hb_avcodec_close( AVCodecContext * );
+int hb_av_find_stream_info(AVFormatContext *ic);
 int hb_ff_layout_xlat(int64_t ff_layout, int channels);

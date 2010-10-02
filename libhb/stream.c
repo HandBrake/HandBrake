@@ -2909,7 +2909,7 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title )
     {
         return 0;
     }
-    if ( av_find_stream_info( ic ) < 0 )
+    if ( hb_av_find_stream_info( ic ) < 0 )
         goto fail;
 
     stream->ffmpeg_ic = ic;
