@@ -337,10 +337,7 @@ namespace Handbrake.Presets
         public static void Export(string path, Preset preset)
         {
             QueryParser parsed = QueryParser.Parse(preset.Query);
-
-            XmlTextWriter xmlWriter;
-
-            xmlWriter = new XmlTextWriter(path, Encoding.UTF8);
+            XmlTextWriter xmlWriter = new XmlTextWriter(path, Encoding.UTF8) { Formatting = Formatting.Indented };
 
             // Header
             xmlWriter.WriteStartDocument();
@@ -399,16 +396,16 @@ namespace Handbrake.Presets
         private static void AddEncodeSettings(XmlTextWriter xmlWriter, QueryParser parsed, Preset preset)
         {
             AddEncodeElement(xmlWriter, "ChapterMarkers", "integer", parsed.ChapterMarkers ? "1" : "0");
-            AddEncodeElement(xmlWriter, "Default", "integer", string.Empty); // TODO
-            AddEncodeElement(xmlWriter, "FileFormat", "string", parsed.Format);
-            AddBooleanElement(xmlWriter, "Folder", false); // TODO 
+            AddEncodeElement(xmlWriter, "Default", "integer", "0");
+            AddEncodeElement(xmlWriter, "FileFormat", "string", parsed.Format.ToUpper() + " file");
+            AddBooleanElement(xmlWriter, "Folder", false);
             AddEncodeElement(xmlWriter, "Mp4HttpOptimize", "integer", parsed.OptimizeMP4 ? "1" : "0");
             AddEncodeElement(xmlWriter, "Mp4LargeFile", "integer", parsed.LargeMP4 ? "1" : "0");
             AddEncodeElement(xmlWriter, "Mp4iPodCompatible", "integer", parsed.IpodAtom ? "1" : "0");
-            AddEncodeElement(xmlWriter, "PictureAutoCrop", "integer", "1"); // TODO
+            AddEncodeElement(xmlWriter, "PictureAutoCrop", "integer", "1");
             AddEncodeElement(xmlWriter, "PictureBottomCrop", "integer", parsed.CropBottom);
 
-            // Filters - TODO Requires Some Logic to convert modes
+            // Filters
             AddEncodeElement(xmlWriter, "PictureDeblock", "integer", parsed.DeBlock.ToString());
 
             switch (parsed.Decomb)
@@ -496,6 +493,7 @@ namespace Handbrake.Presets
             AddEncodeElement(xmlWriter, "PictureHeight", "integer", parsed.Height.ToString());
             AddEncodeElement(xmlWriter, "PictureKeepRatio", "integer", parsed.KeepDisplayAsect ? "1" : "0");
             AddEncodeElement(xmlWriter, "PictureLeftCrop", "integer", parsed.CropLeft);
+            AddEncodeElement(xmlWriter, "PictureModulus", "integer", parsed.AnamorphicModulus.ToString());
             AddEncodeElement(xmlWriter, "PicturePAR", "integer", parsed.AnamorphicMode.ToString());
             AddEncodeElement(xmlWriter, "PictureRightCrop", "integer", parsed.CropRight);
             AddEncodeElement(xmlWriter, "PictureTopCrop", "integer", parsed.CropTop);
@@ -508,14 +506,15 @@ namespace Handbrake.Presets
             AddEncodeElement(xmlWriter, "Type", "integer", "1"); // 1 is user preset, 0 is built in
 
             // Preset Settings
-            AddEncodeElement(xmlWriter, "UsesMaxPictureSettings", "integer", (parsed.MaxWidth != 0 || parsed.MaxHeight != 0).ToString());
-            AddEncodeElement(xmlWriter, "UsesPictureFilters", "integer", "True");
-            AddEncodeElement(xmlWriter, "UsesPictureSettings", "integer", "True");
+            AddEncodeElement(xmlWriter, "UsesMaxPictureSettings", "integer", (parsed.MaxWidth != 0 || parsed.MaxHeight != 0) ? "1" : "0");
+            AddEncodeElement(xmlWriter, "UsesPictureFilters", "integer", "1");
+            AddEncodeElement(xmlWriter, "UsesPictureSettings", "integer", "2");
 
             // Video Settings
             AddEncodeElement(xmlWriter, "VideoAvgBitrate", "string", parsed.AverageVideoBitrate);
             AddEncodeElement(xmlWriter, "VideoEncoder", "string", parsed.VideoEncoder);
             AddEncodeElement(xmlWriter, "VideoFramerate", "string", parsed.VideoFramerate);
+            AddEncodeElement(xmlWriter, "VideFrameratePFR", "integer", parsed.Pfr ? "1" : "0");
             AddEncodeElement(xmlWriter, "VideoGrayScale", "integer", parsed.Grayscale ? "1" : "0");
             AddEncodeElement(xmlWriter, "VideoQualitySlider", "real", parsed.VideoQuality.ToString());
 
@@ -580,6 +579,13 @@ namespace Handbrake.Presets
         private static void AddEncodeElement(XmlTextWriter xmlWriter, string keyName, string type, string value)
         {
             xmlWriter.WriteElementString("key", keyName);
+
+            // This is a hack for Apples XML parser. It doesn't understand <integer /> so instead, always set a default value
+            // of 0 if the value is empty.
+            if (type == "integer" && string.IsNullOrEmpty(value))
+            {
+                value = "0";
+            }
             xmlWriter.WriteElementString(type, value);
         }
 
@@ -617,37 +623,28 @@ namespace Handbrake.Presets
         /// </param>
         private static void AddAudioItem(XmlTextWriter xmlWriter, AudioTrack audioTrack)
         {
-            string bitrate = audioTrack.Bitrate;
-            string encoder = audioTrack.Encoder;
-            string mixdown = audioTrack.MixDown;
-            string sample = audioTrack.SampleRate;
-            int track;
-            int.TryParse(audioTrack.Track, out track);
-            string drc = audioTrack.DRC;
-            string desc = "Automatic";
-
             xmlWriter.WriteStartElement("dict");
 
             xmlWriter.WriteElementString("key", "AudioBitrate");
-            xmlWriter.WriteElementString("string", bitrate);
+            xmlWriter.WriteElementString("string", audioTrack.Bitrate);
 
             xmlWriter.WriteElementString("key", "AudioEncoder");
-            xmlWriter.WriteElementString("string", encoder);
+            xmlWriter.WriteElementString("string", audioTrack.Encoder);
 
             xmlWriter.WriteElementString("key", "AudioMixdown");
-            xmlWriter.WriteElementString("string", mixdown);
+            xmlWriter.WriteElementString("string", audioTrack.MixDown);
 
             xmlWriter.WriteElementString("key", "AudioSamplerate");
-            xmlWriter.WriteElementString("string", sample);
+            xmlWriter.WriteElementString("string",  audioTrack.SampleRate);
 
             xmlWriter.WriteElementString("key", "AudioTrack");
-            xmlWriter.WriteElementString("integer", track.ToString());
+            xmlWriter.WriteElementString("integer", audioTrack.Track);
 
             xmlWriter.WriteElementString("key", "AudioTrackDRCSlider");
-            xmlWriter.WriteElementString("real", drc);
+            xmlWriter.WriteElementString("real", audioTrack.DRC);
 
             xmlWriter.WriteElementString("key", "AudioTrackDescription");
-            xmlWriter.WriteElementString("string", desc);
+            xmlWriter.WriteElementString("string", "Unknown");
 
             xmlWriter.WriteEndElement();
         }
