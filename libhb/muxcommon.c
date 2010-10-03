@@ -247,7 +247,8 @@ static int muxWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     int more = mux->rdy;
     // all tracks have at least 'interleave' ticks of data. Output
     // all that we can in 'interleave' size chunks.
-    while ( ( mux->rdy & mux->allRdy ) == mux->allRdy && more )
+    while ( (( mux->rdy & mux->allRdy ) == mux->allRdy && more) ||
+            ( mux->eof == mux->allEof ) ) 
     {
         more = 0;
         for ( i = 0; i < mux->ntracks; ++i )
