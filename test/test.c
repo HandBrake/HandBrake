@@ -461,11 +461,11 @@ static void PrintTitleInfo( hb_title_t * title )
 
 }
 
-static int test_sub_list( char ** list, char * needle, int pos )
+static int test_sub_list( char ** list, int pos )
 {
     int i;
 
-    if ( list == NULL || needle == NULL )
+    if ( list == NULL || pos == 0 )
         return 0;
 
     if ( list[0] == NULL && pos == 1 )
@@ -473,8 +473,9 @@ static int test_sub_list( char ** list, char * needle, int pos )
 
     for ( i = 0; list[i] != NULL; i++ )
     {
-        if ( strcasecmp( list[i], needle ) == 0 )
-            return i + 1;
+        int idx = strtol( list[i], NULL, 0 );
+        if ( idx == pos )
+            return 1;
     }
     return 0;
 }
@@ -1797,12 +1798,15 @@ static int HandleEvents( hb_handle_t * h )
             if( subtracks )
             {
                 char * token;
-                int    i, pos;
+                int    i;
+                int    burnpos = 0, defaultpos = 0;
 
-                pos = 0;
+                if ( subburn )
+                    burnpos = strtol( subburn, NULL, 0 );
+                if ( subdefault )
+                    defaultpos = strtol( subdefault, NULL, 0 );
                 for ( i = 0; subtracks[i] != NULL; i++ )
                 {
-                    pos++;
                     token = subtracks[i];
                     if( strcasecmp(token, "scan" ) == 0 )
                     {
@@ -1810,15 +1814,15 @@ static int HandleEvents( hb_handle_t * h )
 
                         if ( subburn != NULL )
                         {
-                            burn = ( pos == 1 && subburn[0] == 0 ) ||
-                                   ( strcmp( "scan", subburn ) == 0 );
+                            burn = ( i == 0 && subburn[0] == 0 ) ||
+                                   ( burnpos == i+1 );
                         }
                         if ( subdefault != NULL )
                         {
-                            def =  ( pos == 1 && subdefault[0] == 0 ) ||
-                                   ( strcmp( "scan", subdefault ) == 0 );
+                            def =  ( i == 0 && subdefault[0] == 0 ) ||
+                                   ( defaultpos == i+1 );
                         }
-                        force = test_sub_list( subforce, "scan", pos );
+                        force = test_sub_list( subforce, i+1 );
 
                         if ( !burn )
                         {
@@ -1854,16 +1858,16 @@ static int HandleEvents( hb_handle_t * h )
 
                         if ( subburn != NULL )
                         {
-                            burn = ( pos == 1 && subburn[0] == 0 ) ||
-                                   ( strcmp( token, subburn ) == 0 );
+                            burn = ( i == 0 && subburn[0] == 0 ) ||
+                                   ( burnpos == i+1 );
                         }
                         if ( subdefault != NULL )
                         {
-                            def =  ( pos == 1 && subdefault[0] == 0 ) ||
-                                   ( strcmp( token, subdefault ) == 0 );
+                            def =  ( i == 0 && subdefault[0] == 0 ) ||
+                                   ( defaultpos == i+1 );
                         }
 
-                        force = test_sub_list(subforce, token, pos);
+                        force = test_sub_list(subforce, i+1);
                         
                         int supports_burn =
                             ( subtitle->source == VOBSUB ) ||
@@ -1896,17 +1900,15 @@ static int HandleEvents( hb_handle_t * h )
             if( srtfile )
             {
                 char * token;
-                int i, pos;
+                int i;
                 hb_subtitle_config_t sub_config;
 
-                pos = 0;
                 for( i=0; srtfile[i] != NULL; i++ )
                 {
                     char *codeset = "L1";
                     int64_t offset = 0;
                     char *lang = "und";
 
-                    pos++;
                     token = srtfile[i];
                     if( srtcodeset && srtcodeset[i] )
                     {
@@ -2450,7 +2452,7 @@ static void ShowHelp()
     "    -s, --subtitle <string> Select subtitle track(s), separated by commas\n"
     "                            More than one output track can be used for one\n"
     "                            input.\n"
-    "                            (\"1,2,3\" for multiple tracks.\n"
+    "                            Example: \"1,2,3\" for multiple tracks.\n"
     "                            A special track name \"scan\" adds an extra 1st pass.\n"
     "                            This extra pass scans subtitles matching the\n"
     "                            language of the first audio or the language \n"
@@ -2460,18 +2462,22 @@ static void ShowHelp()
     "                            for short foreign language segments. Best used in\n"
     "                            conjunction with --subtitle-forced.\n"
     "    -F, --subtitle-forced   Only display subtitles from the selected stream if\n"
-    "          <string>          the subtitle has the forced flag set. May be used in\n"
-    "                            conjunction with \"scan\" track to auto-select\n"
-    "                            a stream if it contains forced subtitles.\n"
+    "          <string>          the subtitle has the forced flag set. The values in\n"
+    "                            \"string\" are indexes into the subtitle list\n"
+    "                            specified with '--subtitle'.\n"
     "                            Separated by commas for more than one audio track.\n"
-    "                            (\"1,2,3\" for multiple tracks.\n"
+    "                            Example: \"1,2,3\" for multiple tracks.\n"
     "                            If \"string\" is omitted, the first trac is forced.\n"
     "        --subtitle-burn     \"Burn\" the selected subtitle into the video track\n"
     "          <number>          If \"number\" is omitted, the first trac is burned.\n"
+    "                            \"number\" is an index into the subtitle list\n"
+    "                            specified with '--subtitle'.\n"
     "        --subtitle-default  Flag the selected subtitle as the default subtitle\n"
     "          <number>          to be displayed upon playback.  Setting no default\n"
     "                            means no subtitle will be automatically displayed\n"
     "                            If \"number\" is omitted, the first trac is default.\n"
+    "                            \"number\" is an index into the subtitle list\n"
+    "                            specified with '--subtitle'.\n"
     "    -N, --native-language   Specifiy the your language preference. When the first\n"
     "          <string>          audio track does not match your native language then\n"
     "                            select the first subtitle that does. When used in\n"
