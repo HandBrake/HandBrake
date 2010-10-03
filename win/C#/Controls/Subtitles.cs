@@ -80,10 +80,11 @@ namespace Handbrake.Controls
                     string srtLang = String.Empty;
                     string srtDefault = String.Empty;
                     int srtCount = 0;
+                    int subCount = 0;
 
                     foreach (SubtitleInfo item in subList)
                     {
-                        string itemToAdd, trackId;
+                        string itemToAdd;
 
                         if (item.IsSrtSubtitle) // We have an SRT file
                         {
@@ -103,41 +104,30 @@ namespace Handbrake.Controls
                         }
                         else // We have Bitmap or CC
                         {
-                            string[] tempSub;
+                            subCount++;
 
                             // Find --subtitle <string>
                             if (item.Track.Contains("Foreign Audio Search"))
                                 itemToAdd = "scan";
                             else
                             {
-                                tempSub = item.Track.Split(' ');
+                                string[] tempSub = item.Track.Split(' ');
                                 itemToAdd = tempSub[0];
                             }
 
                             subtitleTracks += subtitleTracks == string.Empty ? itemToAdd : "," + itemToAdd;
 
                             // Find --subtitle-forced
-                            itemToAdd = string.Empty;
-                            tempSub = item.Track.Split(' ');
-                            trackId = tempSub[0];
-
                             if (item.Forced)
-                                itemToAdd = trackId;
+                                subtitleForced += subtitleForced == string.Empty ? subCount.ToString() : "," + subCount;
 
-                            if (itemToAdd != string.Empty)
-                                subtitleForced += subtitleForced == string.Empty ? itemToAdd : "," + itemToAdd;
+                            // Find --subtitle-burn
+                            if (item.Burned)
+                                subtitleBurn = subCount.ToString();
 
-                            // Find --subtitle-burn and --subtitle-default
-                            trackId = tempSub[0];
-
-                            if (trackId.Trim() == "Foreign") // foreign audio search
-                                trackId = "scan";
-
-                            if (item.Burned) // burn
-                                subtitleBurn = trackId;
-
-                            if (item.Default) // default
-                                subtitleDefault = trackId;
+                            // Find --subtitle-default
+                            if (item.Default)
+                                subtitleDefault = subCount.ToString();
                         }
                     }
 
