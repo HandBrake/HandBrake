@@ -625,6 +625,20 @@ static NSDictionary *bitRate384 = nil;
 	return retval;
 }
 
+- (BOOL) AC3Enabled
+
+{
+	BOOL retval = [self enabled];
+
+	if (YES == retval) {
+		int myTrackCodec = [[[self track] objectForKey: keyAudioInputCodec] intValue];
+		if (HB_ACODEC_AC3 != myTrackCodec) {
+			retval = NO;
+		}
+	}
+	return retval;
+}
+
 + (NSSet *) keyPathsForValuesAffectingEnabled
 
 {
@@ -635,6 +649,12 @@ static NSDictionary *bitRate384 = nil;
 
 {
 	return [NSSet setWithObjects: @"track", @"mixdown", nil];
+}
+
++ (NSSet *) keyPathsForValuesAffectingAC3Enabled
+
+{
+	return [NSSet setWithObjects: @"track", nil];
 }
 
 @end

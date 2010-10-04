@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="5688"/>
+			<integer value="5684"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -4319,6 +4319,7 @@
 					<string>bitRates</string>
 					<string>bitRates.keyAudioBitrateName</string>
 					<string>bitRate</string>
+					<string>AC3Enabled</string>
 				</object>
 				<bool key="NSEditable">YES</bool>
 				<object class="_NSManagedProxy" key="_NSManagedProxy"/>
@@ -5948,38 +5949,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled: arrangedObjects.mixdownEnabled</string>
-						<reference key="source" ref="393032802"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="393032802"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">enabled: arrangedObjects.mixdownEnabled</string>
-							<string key="NSBinding">enabled</string>
-							<string key="NSKeyPath">arrangedObjects.mixdownEnabled</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5782</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled: arrangedObjects.mixdownEnabled</string>
-						<reference key="source" ref="581296833"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="581296833"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">enabled: arrangedObjects.mixdownEnabled</string>
-							<string key="NSBinding">enabled</string>
-							<string key="NSKeyPath">arrangedObjects.mixdownEnabled</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5784</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
 						<string key="label">selectedObject: arrangedObjects.track</string>
 						<reference key="source" ref="33212493"/>
 						<reference key="destination" ref="141316080"/>
@@ -6131,6 +6100,38 @@
 						</object>
 					</object>
 					<int key="connectionID">5791</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: arrangedObjects.AC3Enabled</string>
+						<reference key="source" ref="393032802"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="393032802"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">enabled: arrangedObjects.AC3Enabled</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">arrangedObjects.AC3Enabled</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5792</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: arrangedObjects.AC3Enabled</string>
+						<reference key="source" ref="581296833"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="581296833"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">enabled: arrangedObjects.AC3Enabled</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">arrangedObjects.AC3Enabled</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5793</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -10308,7 +10309,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">5791</int>
+			<int key="maxID">5793</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
