@@ -550,7 +550,7 @@ audio_list_refresh(signal_user_data_t *ud)
 				s_drc = g_strdup_printf("%.1f", drc);
 
 			if (icodec == HB_ACODEC_MASK)
-				codec = ghb_select_audio_codec_str(ud, itrack);
+				codec = ghb_select_audio_codec_str(ud->settings, icodec, itrack);
 
 			gtk_list_store_set(GTK_LIST_STORE(store), &iter, 
 				// These are displayed in list

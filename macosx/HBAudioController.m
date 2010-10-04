@@ -253,6 +253,11 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 				) {
 				key = @"AAC (CoreAudio)";
 			}
+			if (YES == [key isEqualToString: @"AC3 Passthru"]) {
+				if (NO == [newAudio setCodecFromName: key]) {
+					key = @"AC3";
+				}
+			}
 			//	If our preset wants us to support a codec that the track does not support, instead
 			//	of changing the codec we remove the audio instead.
 			if (YES == [newAudio setCodecFromName: key]) {

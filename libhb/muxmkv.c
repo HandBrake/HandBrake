@@ -167,11 +167,13 @@ static int MKVInit( hb_mux_object_t * m )
         switch (audio->config.out.codec)
         {
             case HB_ACODEC_DCA:
+            case HB_ACODEC_DCA_PASS:
                 track->codecPrivate = NULL;
                 track->codecPrivateSize = 0;
                 track->codecID = MK_ACODEC_DTS;
                 break;
             case HB_ACODEC_AC3:
+            case HB_ACODEC_AC3_PASS:
                 track->codecPrivate = NULL;
                 track->codecPrivateSize = 0;
                 track->codecID = MK_ACODEC_AC3;
@@ -228,8 +230,8 @@ static int MKVInit( hb_mux_object_t * m )
         track->trackType = MK_TRACK_AUDIO;
         track->language = audio->config.lang.iso639_2;
         track->extra.audio.samplingFreq = (float)audio->config.out.samplerate;
-        if (audio->config.out.codec == HB_ACODEC_AC3 ||
-            audio->config.out.codec == HB_ACODEC_DCA)
+        if (audio->config.out.codec == HB_ACODEC_AC3_PASS ||
+            audio->config.out.codec == HB_ACODEC_DCA_PASS)
         {
             track->extra.audio.channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(audio->config.in.channel_layout);
         }

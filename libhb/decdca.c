@@ -231,7 +231,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     double frame_dur = (double)(pv->frame_length & ~0xFF) / (double)pv->rate * 90000.;
 
     /* DCA passthrough: don't decode the DCA frame */
-    if( audio->config.out.codec == HB_ACODEC_DCA )
+    if( audio->config.out.codec == HB_ACODEC_DCA_PASS )
     {
         buf = hb_buffer_init( pv->size );
         memcpy( buf->data, pv->frame, pv->size );

@@ -898,7 +898,7 @@ void syncAudioClose( hb_work_object_t * w )
     hb_work_private_t * pv    = w->private_data;
     hb_sync_audio_t   * sync  = &pv->type.audio;
 
-    if( w->audio->config.out.codec == HB_ACODEC_AC3 )
+    if( w->audio->config.out.codec == HB_ACODEC_AC3_PASS )
     {
         free( sync->ac3_buf );
     }
@@ -1073,7 +1073,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
          * Or in the case of DCA, skip some frames from the
          * other streams.
          */
-        if( w->audio->config.out.codec == HB_ACODEC_DCA )
+        if( w->audio->config.out.codec == HB_ACODEC_DCA_PASS )
         {
             hb_log( "sync: audio gap %d ms. Skipping frames. Audio %d"
                     "  start %"PRId64", next %"PRId64,
@@ -1131,8 +1131,8 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
     w->audio = hb_list_item( title->list_audio, i );
     w->fifo_in = w->audio->priv.fifo_raw;
 
-    if( w->audio->config.out.codec == HB_ACODEC_AC3 ||
-        w->audio->config.out.codec == HB_ACODEC_DCA )
+    if( w->audio->config.out.codec == HB_ACODEC_AC3_PASS ||
+        w->audio->config.out.codec == HB_ACODEC_DCA_PASS )
     {
         w->fifo_out = w->audio->priv.fifo_out;
     }
@@ -1141,7 +1141,7 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
         w->fifo_out = w->audio->priv.fifo_sync;
     }
 
-    if( w->audio->config.out.codec == HB_ACODEC_AC3 )
+    if( w->audio->config.out.codec == HB_ACODEC_AC3_PASS )
     {
         /* Have a silent AC-3 frame ready in case we have to fill a
            gap */
@@ -1199,8 +1199,8 @@ static hb_buffer_t * OutputAudioFrame( hb_audio_t *audio, hb_buffer_t *buf,
     sync->next_pts += duration;
 
     if( audio->config.in.samplerate == audio->config.out.samplerate ||
-        audio->config.out.codec == HB_ACODEC_AC3 ||
-        audio->config.out.codec == HB_ACODEC_DCA )
+        audio->config.out.codec == HB_ACODEC_AC3_PASS ||
+        audio->config.out.codec == HB_ACODEC_DCA_PASS )
     {
         /*
          * If we don't have to do sample rate conversion or this audio is 
@@ -1271,7 +1271,7 @@ static void InsertSilence( hb_work_object_t * w, int64_t duration )
 
     while ( --frame_count >= 0 )
     {
-        if( w->audio->config.out.codec == HB_ACODEC_AC3 )
+        if( w->audio->config.out.codec == HB_ACODEC_AC3_PASS )
         {
             buf        = hb_buffer_init( sync->ac3_size );
             buf->start = sync->next_pts;

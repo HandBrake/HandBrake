@@ -307,16 +307,21 @@ struct hb_job_s
 
 /* Audio starts here */
 /* Audio Codecs */
-#define HB_ACODEC_MASK   0x00FF00
-#define HB_ACODEC_FAAC   0x000100
-#define HB_ACODEC_LAME   0x000200
-#define HB_ACODEC_VORBIS 0x000400
-#define HB_ACODEC_AC3    0x000800
-#define HB_ACODEC_MPGA   0x001000
-#define HB_ACODEC_LPCM   0x002000
-#define HB_ACODEC_DCA    0x004000
-#define HB_ACODEC_FFMPEG 0x008000
-#define HB_ACODEC_CA_AAC 0x010000
+#define HB_ACODEC_MASK      0x000FFF00
+#define HB_ACODEC_FAAC      0x00000100
+#define HB_ACODEC_LAME      0x00000200
+#define HB_ACODEC_VORBIS    0x00000400
+#define HB_ACODEC_AC3       0x00000800
+#define HB_ACODEC_MPGA      0x00001000
+#define HB_ACODEC_LPCM      0x00002000
+#define HB_ACODEC_DCA       0x00004000
+#define HB_ACODEC_FFMPEG    0x00008000
+#define HB_ACODEC_CA_AAC    0x00010000
+#define HB_ACODEC_PASS_FLAG 0x40000000
+#define HB_ACODEC_PASS_MASK (HB_ACODEC_AC3 | HB_ACODEC_DCA)
+#define HB_ACODEC_AC3_PASS  (HB_ACODEC_AC3 | HB_ACODEC_PASS_FLAG)
+#define HB_ACODEC_DCA_PASS  (HB_ACODEC_DCA | HB_ACODEC_PASS_FLAG)
+#define HB_ACODEC_ANY       (HB_ACODEC_MASK | HB_ACODEC_PASS_FLAG)
 
 /* Audio Mixdown */
 /* define some masks, used to extract the various information from the HB_AMIXDOWN_XXXX values */
@@ -771,6 +776,7 @@ extern hb_work_object_t hb_enclame;
 extern hb_work_object_t hb_encvorbis;
 extern hb_work_object_t hb_muxer;
 extern hb_work_object_t hb_encca_aac;
+extern hb_work_object_t hb_encac3;
 
 #define FILTER_OK      0
 #define FILTER_DELAY   1

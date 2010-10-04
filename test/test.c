@@ -623,7 +623,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !acodecs )
                     {
-                        acodecs = strdup("faac,ac3");
+                        acodecs = strdup("faac,ac3pass");
                     }
                     if( !abitrates )
                     {
@@ -796,7 +796,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !acodecs )
                     {
-                        acodecs = strdup("faac,ac3");
+                        acodecs = strdup("faac,ac3pass");
                     }
                     if( !abitrates )
                     {
@@ -885,7 +885,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !acodecs )
                     {
-                        acodecs = strdup("faac,ac3");
+                        acodecs = strdup("faac,ac3pass");
                     }
                     if( !abitrates )
                     {
@@ -966,7 +966,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !acodecs )
                     {
-                        acodecs = strdup("faac,ac3");
+                        acodecs = strdup("faac,ac3pass");
                     }
                     if( !abitrates )
                     {
@@ -2361,14 +2361,16 @@ static void ShowHelp()
 
 #ifdef __APPLE_CC__
     fprintf( out,
-    "    -E, --aencoder <string> Audio encoder(s) (ca_aac/faac/lame/vorbis/ac3/dts) \n"
-    "                            ac3 and dts meaning passthrough\n"
+    "    -E, --aencoder <string> Audio encoder(s)\n"
+    "                                (ca_aac/faac/lame/vorbis/ac3/ac3pass/dtspass)\n"
+    "                            ac3pass and dtspass meaning passthrough\n"
     "                            Separated by commas for more than one audio track.\n"
     "                            (default: guessed)\n" );
 #else
     fprintf( out,
-    "    -E, --aencoder <string> Audio encoder(s) (faac/lame/vorbis/ac3/dts) \n"
-    "                            ac3 and dts meaning passthrough\n"
+    "    -E, --aencoder <string> Audio encoder(s):\n"
+    "                                (faac/lame/vorbis/ac3/ac3pass/dtspass)\n"
+    "                            ac3pass and dtspass meaning passthrough\n"
     "                            Separated by commas for more than one audio track.\n"
     "                            (default: guessed)\n" );
 #endif
@@ -2519,7 +2521,7 @@ static void ShowPresets()
 {
     printf("\n< Apple\n");
 
-    printf("\n   + Universal:  -e x264  -q 20.0 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -X 720 --loose-anamorphic -m -x cabac=0:ref=2:me=umh:bframes=0:8x8dct=0:trellis=0:subme=6\n");
+    printf("\n   + Universal:  -e x264  -q 20.0 -a 1,1 -E faac,ac3pass -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -X 720 --loose-anamorphic -m -x cabac=0:ref=2:me=umh:bframes=0:8x8dct=0:trellis=0:subme=6\n");
 
     printf("\n   + iPod:  -e x264  -b 700 -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 -f mp4 -I -X 320 -m -x level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:subme=6:8x8dct=0:trellis=0\n");
 
@@ -2527,7 +2529,7 @@ static void ShowPresets()
 
     printf("\n   + iPad:  -e x264  -q 20.0 -r 29.97 --pfr  -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 -f mp4 -4 -X 1024 --loose-anamorphic -m\n");
 
-    printf("\n   + AppleTV:  -e x264  -q 20.0 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 -X 960 --loose-anamorphic -m -x cabac=0:ref=2:me=umh:b-pyramid=none:b-adapt=2:weightb=0:trellis=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500\n");
+    printf("\n   + AppleTV:  -e x264  -q 20.0 -a 1,1 -E faac,ac3pass -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 -X 960 --loose-anamorphic -m -x cabac=0:ref=2:me=umh:b-pyramid=none:b-adapt=2:weightb=0:trellis=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500\n");
 
     printf("\n>\n");
 
@@ -2535,7 +2537,7 @@ static void ShowPresets()
 
     printf("\n   + Normal:  -e x264  -q 20.0 -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 -f mp4 --strict-anamorphic -m -x ref=2:bframes=2:subme=6:mixed-refs=0:weightb=0:8x8dct=0:trellis=0\n");
 
-    printf("\n   + High Profile:  -e x264  -q 20.0 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 --detelecine --decomb --loose-anamorphic -m -x b-adapt=2:rc-lookahead=50\n");
+    printf("\n   + High Profile:  -e x264  -q 20.0 -a 1,1 -E faac,ac3pass -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 --detelecine --decomb --loose-anamorphic -m -x b-adapt=2:rc-lookahead=50\n");
 
     printf("\n>\n");
 
@@ -2543,7 +2545,7 @@ static void ShowPresets()
 
     printf("\n   + Classic:  -b 1000 -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 -f mp4\n");
 
-    printf("\n   + AppleTV Legacy:  -e x264  -b 2500 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 --strict-anamorphic -m -x ref=1:b-pyramid=none:subme=5:me=umh:no-fast-pskip=1:cabac=0:weightb=0:8x8dct=0:trellis=0\n");
+    printf("\n   + AppleTV Legacy:  -e x264  -b 2500 -a 1,1 -E faac,ac3pass -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 --strict-anamorphic -m -x ref=1:b-pyramid=none:subme=5:me=umh:no-fast-pskip=1:cabac=0:weightb=0:8x8dct=0:trellis=0\n");
 
     printf("\n   + iPhone Legacy:  -e x264  -b 960 -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0.0 -f mp4 -I -X 480 -m -x level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:bframes=0:subme=6:8x8dct=0:trellis=0\n");
 
@@ -3374,9 +3376,13 @@ static int get_acodec_for_string( char *codec )
     {
         return HB_ACODEC_AC3;
     }
-    else if( !strcasecmp( codec, "dts" ) || !strcasecmp( codec, "dca" ) )
+    else if( !strcasecmp( codec, "ac3pass" ) )
     {
-        return HB_ACODEC_DCA;
+        return HB_ACODEC_AC3_PASS;
+    }
+    else if( !strcasecmp( codec, "dtspass" ) || !strcasecmp( codec, "dcapass" ) )
+    {
+        return HB_ACODEC_DCA_PASS;
     }
     else if( !strcasecmp( codec, "lame" ) )
     {

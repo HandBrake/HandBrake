@@ -128,7 +128,8 @@ hb_work_object_t * hb_codec_encoder( int codec )
         case HB_ACODEC_FAAC:   return hb_get_work( WORK_ENCFAAC );
         case HB_ACODEC_LAME:   return hb_get_work( WORK_ENCLAME );
         case HB_ACODEC_VORBIS: return hb_get_work( WORK_ENCVORBIS );
-        case HB_ACODEC_CA_AAC:  return hb_get_work( WORK_ENC_CA_AAC );
+        case HB_ACODEC_CA_AAC: return hb_get_work( WORK_ENC_CA_AAC );
+        case HB_ACODEC_AC3:    return hb_get_work( WORK_ENCAC3 );
     }
     return NULL;
 }
@@ -344,7 +345,7 @@ void hb_display_job_info( hb_job_t * job )
                 hb_log( "     + bitrate: %d kbps, samplerate: %d Hz", audio->config.in.bitrate / 1000, audio->config.in.samplerate );
             }
 
-            if( (audio->config.out.codec != HB_ACODEC_AC3) && (audio->config.out.codec != HB_ACODEC_DCA) )
+            if( (audio->config.out.codec != HB_ACODEC_AC3_PASS) && (audio->config.out.codec != HB_ACODEC_DCA_PASS) )
             {
                 for (j = 0; j < hb_audio_mixdowns_count; j++)
                 {
@@ -355,22 +356,24 @@ void hb_display_job_info( hb_job_t * job )
                 }
             }
 
-            if ( audio->config.out.dynamic_range_compression && (audio->config.out.codec != HB_ACODEC_AC3) && (audio->config.out.codec != HB_ACODEC_DCA))
+            if ( audio->config.out.dynamic_range_compression && (audio->config.out.codec != HB_ACODEC_AC3_PASS) && (audio->config.out.codec != HB_ACODEC_DCA_PASS))
             {
                 hb_log("   + dynamic range compression: %f", audio->config.out.dynamic_range_compression);
             }
             
-            if( (audio->config.out.codec == HB_ACODEC_AC3) || (audio->config.out.codec == HB_ACODEC_DCA) )
+            if( (audio->config.out.codec == HB_ACODEC_AC3_PASS) || (audio->config.out.codec == HB_ACODEC_DCA_PASS) )
             {
-                hb_log( "   + %s passthrough", (audio->config.out.codec == HB_ACODEC_AC3) ?
+                hb_log( "   + %s passthrough", (audio->config.out.codec == HB_ACODEC_AC3_PASS) ?
                     "AC3" : "DCA" );
             }
             else
             {
-                hb_log( "   + encoder: %s", ( audio->config.out.codec == HB_ACODEC_FAAC ) ?
-                    "faac" : ( ( audio->config.out.codec == HB_ACODEC_LAME ) ?
-                    "lame" : ( ( audio->config.out.codec == HB_ACODEC_CA_AAC ) ?
-                              "ca_aac" : "vorbis"  ) ) );
+                hb_log( "   + encoder: %s", 
+                    ( audio->config.out.codec == HB_ACODEC_FAAC ) ?  "faac" : 
+                    ( ( audio->config.out.codec == HB_ACODEC_LAME ) ?  "lame" : 
+                    ( ( audio->config.out.codec == HB_ACODEC_CA_AAC ) ?  "ca_aac" : 
+                    ( ( audio->config.out.codec == HB_ACODEC_AC3 ) ?  "ffac3" : 
+                    "vorbis"  ) ) ) );
                 hb_log( "     + bitrate: %d kbps, samplerate: %d Hz", audio->config.out.bitrate, audio->config.out.samplerate );            
             }
         }
@@ -513,8 +516,8 @@ static void do_job( hb_job_t * job, int cpu_count )
     for( i = 0; i < hb_list_count( title->list_audio ); )
     {
         audio = hb_list_item( title->list_audio, i );
-        if( ( ( audio->config.out.codec == HB_ACODEC_AC3 ) && ( audio->config.in.codec != HB_ACODEC_AC3 ) ) ||
-            ( ( audio->config.out.codec == HB_ACODEC_DCA ) && ( audio->config.in.codec != HB_ACODEC_DCA ) ) )
+        if( ( ( audio->config.out.codec == HB_ACODEC_AC3_PASS ) && ( audio->config.in.codec != HB_ACODEC_AC3 ) ) ||
+            ( ( audio->config.out.codec == HB_ACODEC_DCA_PASS ) && ( audio->config.in.codec != HB_ACODEC_DCA ) ) )
         {
             hb_log( "Passthru requested and input codec is not the same as output codec for track %d",
                     audio->config.out.track );
@@ -522,13 +525,20 @@ static void do_job( hb_job_t * job, int cpu_count )
             free( audio );
             continue;
         }
-        if( audio->config.out.codec != HB_ACODEC_AC3 && 
-            audio->config.out.codec != HB_ACODEC_DCA &&
+        if( audio->config.out.codec != HB_ACODEC_AC3_PASS && 
+            audio->config.out.codec != HB_ACODEC_DCA_PASS &&
             audio->config.out.samplerate > 48000 )
         {
             hb_log( "Sample rate %d not supported.  Down-sampling to 48kHz.",
                     audio->config.out.samplerate );
             audio->config.out.samplerate = 48000;
+        }
+        if( audio->config.out.codec == HB_ACODEC_AC3 && 
+            audio->config.out.bitrate > 640 )
+        {
+            hb_log( "Bitrate %d not supported.  Reducing to 640Kbps.",
+                    audio->config.out.bitrate );
+            audio->config.out.bitrate = 640;
         }
         if ( audio->config.in.codec == HB_ACODEC_FFMPEG )
         {
@@ -570,8 +580,8 @@ static void do_job( hb_job_t * job, int cpu_count )
             /* sense-check the requested mixdown */
 
             if( audio->config.out.mixdown == 0 &&
-                audio->config.out.codec != HB_ACODEC_AC3 && 
-                audio->config.out.codec != HB_ACODEC_DCA )
+                audio->config.out.codec != HB_ACODEC_AC3_PASS && 
+                audio->config.out.codec != HB_ACODEC_DCA_PASS )
             {
                 /*
                  * Mixdown wasn't specified and this is not pass-through,
@@ -863,8 +873,8 @@ static void do_job( hb_job_t * job, int cpu_count )
             /*
             * Audio Encoder Thread
             */
-            if( audio->config.out.codec != HB_ACODEC_AC3 &&
-                audio->config.out.codec != HB_ACODEC_DCA )
+            if( audio->config.out.codec != HB_ACODEC_AC3_PASS &&
+                audio->config.out.codec != HB_ACODEC_DCA_PASS )
             {
                 /*
                 * Add the encoder thread if not doing AC-3 pass through

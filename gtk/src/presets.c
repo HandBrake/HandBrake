@@ -1999,7 +1999,8 @@ static value_map_t acodec_xlat[] =
 {
 	{"AAC (faac)", "faac"},
 	{"AAC (CoreAudio)", "faac"},
-	{"AC3 Passthru", "ac3"},
+	{"AC3 Passthru", "ac3pass"},
+	{"DTS Passthru", "dtspass"},
 	{"MP3 (lame)", "lame"},
 	{"Vorbis (vorbis)", "vorbis"},
 	{NULL,NULL}

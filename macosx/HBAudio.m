@@ -110,21 +110,32 @@ static NSDictionary *bitRate384 = nil;
 									  nil]];
 		[masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
 									  NSLocalizedString(@"AC3 Passthru", @"AC3 Passthru"), keyAudioCodecName,
-									  [NSNumber numberWithInt: HB_ACODEC_AC3], keyAudioCodec,
+									  [NSNumber numberWithInt: HB_ACODEC_AC3_PASS], keyAudioCodec,
 									  [NSNumber numberWithBool: YES], keyAudioMP4,
 									  [NSNumber numberWithBool: YES], keyAudioMKV,
-									  [NSNumber numberWithBool: YES], keyAudioMustMatchTrack,
+									  [NSNumber numberWithInt: HB_ACODEC_AC3], keyAudioMustMatchTrack,
 									  [NSNumber numberWithInt: 32], keyAudioMinimumBitrate,
 									  [NSNumber numberWithInt: 384], keyAudioMaximumBitrate,
 									  [NSNumber numberWithInt: 32], keyAudioMinimumBitrate6Channel,
 									  [NSNumber numberWithInt: 384], keyAudioMaximumBitrate6Channel,
 									  nil]];
 		[masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
+									  NSLocalizedString(@"AC3", @"AC3"), keyAudioCodecName,
+									  [NSNumber numberWithInt: HB_ACODEC_AC3], keyAudioCodec,
+									  [NSNumber numberWithBool: YES], keyAudioMP4,
+									  [NSNumber numberWithBool: YES], keyAudioMKV,
+									  [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
+									  [NSNumber numberWithInt: 32], keyAudioMinimumBitrate,
+									  [NSNumber numberWithInt: 640], keyAudioMaximumBitrate,
+									  [NSNumber numberWithInt: 32], keyAudioMinimumBitrate6Channel,
+									  [NSNumber numberWithInt: 640], keyAudioMaximumBitrate6Channel,
+									  nil]];
+		[masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
 									  NSLocalizedString(@"DTS Passthru", @"DTS Passthru"), keyAudioCodecName,
-									  [NSNumber numberWithInt: HB_ACODEC_DCA], keyAudioCodec,
+									  [NSNumber numberWithInt: HB_ACODEC_DCA_PASS], keyAudioCodec,
 									  [NSNumber numberWithBool: NO], keyAudioMP4,
 									  [NSNumber numberWithBool: YES], keyAudioMKV,
-									  [NSNumber numberWithBool: YES], keyAudioMustMatchTrack,
+									  [NSNumber numberWithInt: HB_ACODEC_DCA], keyAudioMustMatchTrack,
 									  [NSNumber numberWithInt: 32], keyAudioMinimumBitrate,
 									  [NSNumber numberWithInt: 384], keyAudioMaximumBitrate,
 									  [NSNumber numberWithInt: 32], keyAudioMinimumBitrate6Channel,
@@ -214,7 +225,7 @@ static NSDictionary *bitRate384 = nil;
 			
 			//	Now we make sure if DTS or AC3 is not available in the track it is not put in the codec list, but in a general way
 			if (YES == [[dict objectForKey: keyAudioMustMatchTrack] boolValue]) {
-				if ([[dict objectForKey: keyAudioCodec] intValue] != [[[self track] objectForKey: keyAudioInputCodec] intValue]) {
+				if ([[dict objectForKey: keyAudioMustMatchTrack] intValue] != [[[self track] objectForKey: keyAudioInputCodec] intValue]) {
 					goodToAdd = NO;
 				}
 			}
@@ -250,18 +261,18 @@ static NSDictionary *bitRate384 = nil;
 	int trackCodec = [[track objectForKey: keyAudioInputCodec] intValue];
 	int codecCodec = [[codec objectForKey: keyAudioCodec] intValue];
 
-	if (HB_ACODEC_AC3 == trackCodec && HB_ACODEC_AC3 == codecCodec) {
+	if (HB_ACODEC_AC3 == trackCodec && HB_ACODEC_AC3_PASS == codecCodec) {
 		[retval addObject: [NSDictionary dictionaryWithObjectsAndKeys:
 							NSLocalizedString(@"AC3 Passthru", @"AC3 Passthru"), keyAudioMixdownName,
-							[NSNumber numberWithInt: HB_ACODEC_AC3], keyAudioMixdown,
+							[NSNumber numberWithInt: HB_ACODEC_AC3_PASS], keyAudioMixdown,
 							[NSNumber numberWithBool: YES], keyAudioMixdownLimitsToTrackBitRate,
 							[NSNumber numberWithBool: YES], keyAudioMixdownCanBeDefault,
 							nil]];
 	}
-	else if (HB_ACODEC_DCA == trackCodec && HB_ACODEC_DCA == codecCodec) {
+	else if (HB_ACODEC_DCA == trackCodec && HB_ACODEC_DCA_PASS == codecCodec) {
 		[retval addObject: [NSDictionary dictionaryWithObjectsAndKeys:
 							NSLocalizedString(@"DTS Passthru", @"DTS Passthru"), keyAudioMixdownName,
-							[NSNumber numberWithInt: HB_ACODEC_DCA], keyAudioMixdown,
+							[NSNumber numberWithInt: HB_ACODEC_DCA_PASS], keyAudioMixdown,
 							[NSNumber numberWithBool: YES], keyAudioMixdownLimitsToTrackBitRate,
 							[NSNumber numberWithBool: YES], keyAudioMixdownCanBeDefault,
 							nil]];
@@ -315,7 +326,7 @@ static NSDictionary *bitRate384 = nil;
 								[NSString stringWithUTF8String: hb_audio_mixdowns[4].human_readable_name], keyAudioMixdownName,
 								[NSNumber numberWithInt: hb_audio_mixdowns[4].amixdown], keyAudioMixdown,
 								[NSNumber numberWithBool: NO], keyAudioMixdownLimitsToTrackBitRate,
-								[NSNumber numberWithBool: NO], keyAudioMixdownCanBeDefault,
+								[NSNumber numberWithBool: (HB_ACODEC_AC3 == trackCodec) ? NO : YES], keyAudioMixdownCanBeDefault,
 								nil]];
 		}
 		
@@ -323,20 +334,20 @@ static NSDictionary *bitRate384 = nil;
 		//	situations, the following code will never add anything to the returned array.  I am leaving this in place for
 		//	historical reasons.
 		/* do we want to add an AC-3 passthrough option? */
-		if (HB_ACODEC_AC3 == trackCodec && HB_ACODEC_AC3 == codecCodec) {
+		if (HB_ACODEC_AC3 == trackCodec && HB_ACODEC_AC3_PASS == codecCodec) {
 			[retval addObject: [NSDictionary dictionaryWithObjectsAndKeys:
 								[NSString stringWithUTF8String: hb_audio_mixdowns[5].human_readable_name], keyAudioMixdownName,
-								[NSNumber numberWithInt: HB_ACODEC_AC3], keyAudioMixdown,
+								[NSNumber numberWithInt: HB_ACODEC_AC3_PASS], keyAudioMixdown,
 								[NSNumber numberWithBool: YES], keyAudioMixdownLimitsToTrackBitRate,
 								[NSNumber numberWithBool: YES], keyAudioMixdownCanBeDefault,
 								nil]];
 		}
 			
 		/* do we want to add a DTS Passthru option ? HB_ACODEC_DCA*/
-		if (HB_ACODEC_DCA == trackCodec && HB_ACODEC_DCA == codecCodec) {
+		if (HB_ACODEC_DCA == trackCodec && HB_ACODEC_DCA_PASS == codecCodec) {
 			[retval addObject: [NSDictionary dictionaryWithObjectsAndKeys:
 								[NSString stringWithUTF8String: hb_audio_mixdowns[5].human_readable_name], keyAudioMixdownName,
-								[NSNumber numberWithInt: HB_ACODEC_DCA], keyAudioMixdown,
+								[NSNumber numberWithInt: HB_ACODEC_DCA_PASS], keyAudioMixdown,
 								[NSNumber numberWithBool: YES], keyAudioMixdownLimitsToTrackBitRate,
 								[NSNumber numberWithBool: YES], keyAudioMixdownCanBeDefault,
 								nil]];
@@ -382,6 +393,13 @@ static NSDictionary *bitRate384 = nil;
 		//	Now make sure the mixdown is not limiting us to the track input bitrate
 		if (YES == shouldAdd && YES == limitsToTrackInputBitRate) {
 			if (currentBitRate != trackInputBitRate) {
+				shouldAdd = NO;
+			}
+		}
+		
+		//	Now make sure the bitrate does not exceed the track's bitrate
+		if (YES == shouldAdd) {
+			if (currentBitRate > trackInputBitRate) {
 				shouldAdd = NO;
 			}
 		}
@@ -618,7 +636,7 @@ static NSDictionary *bitRate384 = nil;
 
 	if (YES == retval) {
 		int myMixdown = [[[self mixdown] objectForKey: keyAudioMixdown] intValue];
-		if (HB_ACODEC_AC3 == myMixdown || HB_ACODEC_DCA == myMixdown) {
+		if (HB_ACODEC_AC3_PASS == myMixdown || HB_ACODEC_DCA_PASS == myMixdown) {
 			retval = NO;
 		}
 	}
@@ -629,7 +647,7 @@ static NSDictionary *bitRate384 = nil;
 
 {
 	BOOL retval = [self enabled];
-
+	
 	if (YES == retval) {
 		int myTrackCodec = [[[self track] objectForKey: keyAudioInputCodec] intValue];
 		if (HB_ACODEC_AC3 != myTrackCodec) {

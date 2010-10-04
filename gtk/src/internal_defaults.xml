@@ -291,7 +291,7 @@
 				<key>AudioBitrate</key>
 				<string>192</string>
 				<key>AudioEncoder</key>
-				<string>ac3</string>
+				<string>ac3pass</string>
 				<key>AudioTrack</key>
 				<integer>1</integer>
 				<key>AudioTrackDescription</key>

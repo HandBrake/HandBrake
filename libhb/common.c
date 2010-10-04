@@ -34,7 +34,7 @@ hb_rate_t hb_audio_bitrates[] =
   {  "64",  64 }, {  "80",  80 }, {  "96",  96 }, { "112", 112 },
   { "128", 128 }, { "160", 160 }, { "192", 192 }, { "224", 224 },
   { "256", 256 }, { "320", 320 }, { "384", 384 }, { "448", 448 },
-  { "768", 768 } };
+  { "512", 512 }, { "576", 576 }, { "640", 640 }, { "768", 768 } };
 int hb_audio_bitrates_count = sizeof( hb_audio_bitrates ) /
                               sizeof( hb_rate_t );
 int hb_audio_bitrates_default = 8; /* 128 kbps */
@@ -255,6 +255,8 @@ int hb_calc_bitrate( hb_job_t * job, int size )
             case HB_ACODEC_LAME:
                 samples_per_frame = 1152;
                 break;
+            case HB_ACODEC_AC3_PASS:
+            case HB_ACODEC_DCA_PASS:
             case HB_ACODEC_AC3:
             case HB_ACODEC_DCA:
                 samples_per_frame = 1536;
@@ -263,8 +265,8 @@ int hb_calc_bitrate( hb_job_t * job, int size )
                 return 0;
         }
 
-        if( audio->config.out.codec == HB_ACODEC_AC3 ||
-            audio->config.out.codec == HB_ACODEC_DCA)
+        if( audio->config.out.codec == HB_ACODEC_AC3_PASS ||
+            audio->config.out.codec == HB_ACODEC_DCA_PASS)
         {
             /*
              * For pass through we take the bitrate from the input audio
@@ -904,7 +906,8 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
      */
     audio->config.out.track = hb_list_count(job->list_audio) + 1;
     audio->config.out.codec = audiocfg->out.codec;
-    if( audiocfg->out.codec == audio->config.in.codec )
+    if( (audiocfg->out.codec & HB_ACODEC_MASK) == audio->config.in.codec &&
+        (audiocfg->out.codec & HB_ACODEC_PASS_FLAG ) )
     {
         /* Pass-through, copy from input. */
         audio->config.out.samplerate = audio->config.in.samplerate;
@@ -915,6 +918,7 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
     else
     {
         /* Non pass-through, use what is given. */
+        audio->config.out.codec &= ~HB_ACODEC_PASS_FLAG;
         audio->config.out.samplerate = audiocfg->out.samplerate;
         audio->config.out.bitrate = audiocfg->out.bitrate;
         audio->config.out.dynamic_range_compression = audiocfg->out.dynamic_range_compression;

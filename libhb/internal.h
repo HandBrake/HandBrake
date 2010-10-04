@@ -355,6 +355,7 @@ enum
     WORK_ENCLAME,
     WORK_ENCVORBIS,
     WORK_ENC_CA_AAC,
+    WORK_ENCAC3,
     WORK_MUX
 };
 

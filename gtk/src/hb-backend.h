@@ -137,6 +137,7 @@ void ghb_part_duration(gint tt, gint sc, gint ec, gint *hh, gint *mm, gint *ss);
 gint ghb_get_best_mix(gint titleindex, gint track, gint acodec, gint mix);
 gboolean ghb_ac3_in_audio_list(const GValue *audio_list);
 gboolean ghb_audio_is_passthru(gint acodec);
+gboolean ghb_audio_can_passthru(gint acodec);
 gint ghb_get_default_acodec(void);
 gboolean ghb_get_audio_info(
 	ghb_audio_info_t *ainfo, gint titleindex, gint audioindex);
@@ -182,8 +183,8 @@ gdouble ghb_lookup_combo_double(const gchar *name, const GValue *gval);
 const gchar* ghb_lookup_combo_option(const gchar *name, const GValue *gval);
 const gchar* ghb_lookup_combo_string(const gchar *name, const GValue *gval);
 gchar* ghb_get_tmp_dir();
-gint ghb_select_audio_codec(signal_user_data_t *ud, gint track);
-const gchar* ghb_select_audio_codec_str(signal_user_data_t *ud, gint track);
+gint ghb_select_audio_codec(GValue *settings, gint acodec, gint track);
+const gchar* ghb_select_audio_codec_str(GValue *settings, gint acodec, gint track);
 gint ghb_find_closest_audio_bitrate(gint codec, gint rate);
 gint ghb_find_closest_audio_rate(gint rate);
 GValue* ghb_lookup_acodec_value(gint val);

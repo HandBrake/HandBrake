@@ -63,6 +63,14 @@ static int MP4TuneTrackDurationPerChunk( hb_mux_object_t* m, MP4TrackId trackId 
     return 1;
 }
 
+static const uint16_t ac3_sample_rate_tab[3] = { 48000, 44100, 32000 };
+/* possible bitrates */
+static const uint16_t ac3_bitrate_tab[19] = {
+    32, 40, 48, 56, 64, 80, 96, 112, 128,
+    160, 192, 224, 256, 320, 384, 448, 512, 576, 640
+};  
+
+
 /**********************************************************************
  * MP4Init
  **********************************************************************
@@ -225,106 +233,51 @@ static int MP4Init( hb_mux_object_t * m )
         mux_data = calloc(1, sizeof( hb_mux_data_t ) );
         audio->priv.mux_data = mux_data;
 
-        if( audio->config.out.codec == HB_ACODEC_AC3 )
+        if( audio->config.out.codec == HB_ACODEC_AC3_PASS )
         {
-            uint8_t fscod = 0;
             uint8_t bsid = audio->config.in.version;
             uint8_t bsmod = audio->config.in.mode;
             uint8_t acmod = audio->config.flags.ac3 & 0x7;
             uint8_t lfeon = (audio->config.flags.ac3 & A52_LFE) ? 1 : 0;
             uint8_t bit_rate_code = 0;
+            int ii, jj;
+            int freq = audio->config.in.samplerate;
+            int bitrate = audio->config.in.bitrate;
+            int sr_shift, sr_code;
 
-            /*
-             * Rewrite AC3 information into correct format for dac3 atom
-             */
-            switch( audio->config.in.samplerate )
+            for (ii = 0; ii < 3; ii++)
             {
-            case 48000:
-                fscod = 0;
-                break;
-            case 44100:
-                fscod = 1;
-                break;
-            case 32000:
-                fscod = 2;
-                break;
-            default:
-                /*
-                 * Error value, tells decoder to not decode this audio.
-                 */
-                fscod = 3;
-                break;
+                for (jj = 0; jj < 3; jj++)
+                {
+                    if ((ac3_sample_rate_tab[jj] >> ii) == freq)
+                    {
+                        break;
+                    }
+                }
             }
-
-            switch( audio->config.in.bitrate )
+            if ( ii >= 3 )
             {
-            case 32000:
-                bit_rate_code = 0;
-                break;
-            case 40000:
-                bit_rate_code = 1;
-                break;
-            case 48000:
-                bit_rate_code = 2;
-                break;
-            case 56000:
-                bit_rate_code = 3;
-                break;
-            case 64000:
-                bit_rate_code = 4;
-                break;
-            case 80000:
-                bit_rate_code = 5;
-                break;
-            case 96000:
-                bit_rate_code = 6;
-                break;
-            case 112000:
-                bit_rate_code = 7;
-                break;
-            case 128000:
-                bit_rate_code = 8;
-                break;
-            case 160000:
-                bit_rate_code = 9;
-                break;
-            case 192000:
-                bit_rate_code = 10;
-                break;
-            case 224000:
-                bit_rate_code = 11;
-                break;
-            case 256000:
-                bit_rate_code = 12;
-                break;
-            case 320000:
-                bit_rate_code = 13;
-                break;
-            case 384000:
-                bit_rate_code = 14;
-                break;
-            case 448000:
-                bit_rate_code = 15;
-                break;
-            case 512000:
-                bit_rate_code = 16;
-                break;
-            case 576000:
-                bit_rate_code = 17;
-                break;
-            case 640000:
-                bit_rate_code = 18;
-                break;
-            default:
+                hb_error("Unknown AC3 samplerate");
+                ii = jj = 0;
+            }
+            sr_shift = ii;
+            sr_code = jj;
+            for (ii = 0; ii < 19; ii++)
+            {
+                if ((ac3_bitrate_tab[ii] >> sr_shift)*1000 == bitrate)
+                    break;
+            }
+            if ( ii >= 19 )
+            {
                 hb_error("Unknown AC3 bitrate");
-                bit_rate_code = 0;
-                break;
+                ii = 0;
             }
+            bit_rate_code = ii;
 
             mux_data->track = MP4AddAC3AudioTrack(
                 m->file,
-                audio->config.out.samplerate, 
-                fscod,
+                audio->config.in.samplerate, 
+                sr_code,
                 bsid,
                 bsmod,
                 acmod,
@@ -347,8 +300,101 @@ static int MP4Init( hb_mux_object_t * m )
                     (const uint8_t*)(audio->config.out.name),
                     strlen(audio->config.out.name));
             }
-        } else if( audio->config.out.codec == HB_ACODEC_FAAC ||
-                   audio->config.out.codec == HB_ACODEC_CA_AAC ) {
+        }
+        else if( audio->config.out.codec == HB_ACODEC_AC3 )
+        {
+            uint8_t bsid = 8;
+            uint8_t bsmod = 0;
+            uint8_t acmod = 2;
+            uint8_t lfeon = 0;
+            uint8_t bit_rate_code = 0;
+            int ii, jj;
+            int freq = audio->config.out.samplerate;
+            int bitrate = audio->config.out.bitrate;
+            int sr_shift, sr_code;
+
+            for (ii = 0; ii < 3; ii++)
+            {
+                for (jj = 0; jj < 3; jj++)
+                {
+                    if ((ac3_sample_rate_tab[jj] >> ii) == freq)
+                    {
+                        break;
+                    }
+                }
+            }
+            if ( ii >= 3 )
+            {
+                hb_error("Unknown AC3 samplerate");
+                ii = jj = 0;
+            }
+            sr_shift = ii;
+            sr_code = jj;
+            bsid = 8 + ii;
+            for (ii = 0; ii < 19; ii++)
+            {
+                if ((ac3_bitrate_tab[ii] >> sr_shift)*1000 == bitrate)
+                    break;
+            }
+            if ( ii >= 19 )
+            {
+                hb_error("Unknown AC3 bitrate");
+                ii = 0;
+            }
+            bit_rate_code = ii;
+
+            switch( audio->config.out.mixdown )
+            {
+                case HB_AMIXDOWN_MONO:
+                    acmod = 1;
+                    break;
+
+                case HB_AMIXDOWN_STEREO:
+                case HB_AMIXDOWN_DOLBY:
+                case HB_AMIXDOWN_DOLBYPLII:
+                    acmod = 2;
+                    break;
+
+                case HB_AMIXDOWN_6CH:
+                    acmod = 7;
+                    lfeon = 1;
+                    break;
+
+                default:
+                    hb_log(" MP4Init: bad mixdown" );
+                    break;
+            }
+
+            mux_data->track = MP4AddAC3AudioTrack(
+                m->file,
+                audio->config.out.samplerate, 
+                sr_code,
+                bsid,
+                bsmod,
+                acmod,
+                lfeon,
+                bit_rate_code);
+
+            /* Tune track chunk duration */
+            MP4TuneTrackDurationPerChunk( m, mux_data->track );
+
+            if (audio->config.out.name == NULL) {
+                MP4SetTrackBytesProperty(
+                    m->file, mux_data->track,
+                    "udta.name.value",
+                    (const uint8_t*)"Surround", strlen("Surround"));
+            }
+            else {
+                MP4SetTrackBytesProperty(
+                    m->file, mux_data->track,
+                    "udta.name.value",
+                    (const uint8_t*)(audio->config.out.name),
+                    strlen(audio->config.out.name));
+            }
+        } 
+        else if( audio->config.out.codec == HB_ACODEC_FAAC ||
+                 audio->config.out.codec == HB_ACODEC_CA_AAC ) 
+        {
             mux_data->track = MP4AddAudioTrack(
                 m->file,
                 audio->config.out.samplerate, 1024, MP4_MPEG4_AUDIO_TYPE );

@@ -111,6 +111,7 @@ struct hb_work_private_s
     struct SwsContext *sws_context; // if we have to rescale or convert color space
     hb_downmix_t    *downmix;
     hb_sample_t     *downmix_buffer;
+    hb_chan_map_t   *out_map;
 };
 
 static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *data, int size );
@@ -203,13 +204,25 @@ static int decavcodecInit( hb_work_object_t * w, hb_job_t * job )
     pv->context = avcodec_alloc_context();
     hb_avcodec_open( pv->context, codec );
 
-    if ( w->audio != NULL &&
-         hb_need_downmix( w->audio->config.in.channel_layout, 
-                          w->audio->config.out.mixdown) )
+    if ( w->audio != NULL )
     {
-        pv->downmix = hb_downmix_init(w->audio->config.in.channel_layout, 
-                                      w->audio->config.out.mixdown);
-        hb_downmix_set_chan_map( pv->downmix, &hb_smpte_chan_map, &hb_qt_chan_map );
+        if ( w->audio->config.out.codec == HB_ACODEC_AC3 )
+        {
+            // ffmpegs audio encoder expect an smpte chan map as input.
+            // So we need to map the decoders output to smpte.
+            pv->out_map = &hb_smpte_chan_map;
+        }
+        else
+        {
+            pv->out_map = &hb_qt_chan_map;
+        }
+        if ( hb_need_downmix( w->audio->config.in.channel_layout, 
+                              w->audio->config.out.mixdown) )
+        {
+            pv->downmix = hb_downmix_init(w->audio->config.in.channel_layout, 
+                                          w->audio->config.out.mixdown);
+            hb_downmix_set_chan_map( pv->downmix, &hb_smpte_chan_map, pv->out_map );
+        }
     }
 
     return 0;
@@ -1129,13 +1142,25 @@ static int decavcodecviInit( hb_work_object_t * w, hb_job_t * job )
     pv->pts_next = -1;
     pv->pts = -1;
 
-    if ( w->audio != NULL &&
-         hb_need_downmix( w->audio->config.in.channel_layout, 
-                          w->audio->config.out.mixdown) )
+    if ( w->audio != NULL )
     {
-        pv->downmix = hb_downmix_init(w->audio->config.in.channel_layout, 
-                                      w->audio->config.out.mixdown);
-        hb_downmix_set_chan_map( pv->downmix, &hb_smpte_chan_map, &hb_qt_chan_map );
+        if ( w->audio->config.out.codec == HB_ACODEC_AC3 )
+        {
+            // ffmpegs audio encoder expect an smpte chan map as input.
+            // So we need to map the decoders output to smpte.
+            pv->out_map = &hb_smpte_chan_map;
+        }
+        else
+        {
+            pv->out_map = &hb_qt_chan_map;
+        }
+        if ( hb_need_downmix( w->audio->config.in.channel_layout, 
+                              w->audio->config.out.mixdown) )
+        {
+            pv->downmix = hb_downmix_init(w->audio->config.in.channel_layout, 
+                                          w->audio->config.out.mixdown);
+            hb_downmix_set_chan_map( pv->downmix, &hb_smpte_chan_map, pv->out_map );
+        }
     }
 
     return 0;
@@ -1308,7 +1333,7 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
                     fl32[i] = buffer[i];
                 }
                 int n_ch_samples = nsamples / context->channels;
-                hb_layout_remap( &hb_smpte_chan_map, &hb_qt_chan_map,
+                hb_layout_remap( &hb_smpte_chan_map, pv->out_map,
                                  audio->config.in.channel_layout, 
                                  fl32, n_ch_samples );
             }

@@ -259,7 +259,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     double frame_dur = (6. * 256. * 90000.) / pv->rate;
 
     /* AC3 passthrough: don't decode the AC3 frame */
-    if( audio->config.out.codec == HB_ACODEC_AC3 )
+    if( audio->config.out.codec == HB_ACODEC_AC3_PASS )
     {
         buf = hb_buffer_init( size );
         memcpy( buf->data, pv->frame, size );

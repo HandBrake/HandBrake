@@ -346,6 +346,7 @@ hb_handle_t * hb_init( int verbose, int update_check )
 #ifdef __APPLE__
 	hb_register( &hb_encca_aac );
 #endif
+	hb_register( &hb_encac3 );
     
     return h;
 }
@@ -450,6 +451,7 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
 #ifdef __APPLE__
 	hb_register( &hb_encca_aac );
 #endif
+	hb_register( &hb_encac3 );
 
 	return h;
 }

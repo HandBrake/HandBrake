@@ -249,12 +249,13 @@ combo_opts_t vcodec_opts =
 
 static options_map_t d_acodec_opts[] =
 {
-	{"AAC (faac)",      "faac",   HB_ACODEC_FAAC,   "faac"},
-	{"MP3 (lame)",      "lame",   HB_ACODEC_LAME,   "lame"},
-	{"Vorbis",          "vorbis", HB_ACODEC_VORBIS, "vorbis"},
-	{"AC3 (pass-thru)", "ac3",    HB_ACODEC_AC3,    "ac3"},
-	{"DTS (pass-thru)", "dts",    HB_ACODEC_DCA,    "dts"},
-	{"Choose For Me",   "auto",   HB_ACODEC_MASK,   "auto"},
+	{"AAC (faac)",      "faac",    HB_ACODEC_FAAC,     "faac"},
+	{"MP3 (lame)",      "lame",    HB_ACODEC_LAME,     "lame"},
+	{"Vorbis",          "vorbis",  HB_ACODEC_VORBIS,   "vorbis"},
+	{"AC3 (ffmpeg)",    "ac3",     HB_ACODEC_AC3,      "ac3"},
+	{"AC3 (pass-thru)", "ac3pass", HB_ACODEC_AC3_PASS, "ac3pass"},
+	{"DTS (pass-thru)", "dtspass", HB_ACODEC_DCA_PASS, "dtspass"},
+	{"Choose For Me",   "auto",    HB_ACODEC_ANY,      "auto"},
 };
 combo_opts_t acodec_opts =
 {
@@ -1104,6 +1105,8 @@ ghb_find_closest_audio_bitrate(gint codec, gint rate)
 
 	if (codec == HB_ACODEC_FAAC)
 		high = 320;
+	else if (codec == HB_ACODEC_AC3)
+		high = 640;
 
 	result = high;
 	for (ii = 0; ii < hb_audio_bitrates_count; ii++)
@@ -1581,19 +1584,19 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	gboolean allow_dca = TRUE;
 	allow_dca = (container != HB_MUX_MP4);
 
-	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_AC3, FALSE);
+	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_AC3_PASS, FALSE);
 	if (allow_dca)
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA, FALSE);
+		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_PASS, FALSE);
 	else
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA, TRUE);
+		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_PASS, TRUE);
 
 	if (audio && audio->in.codec != HB_ACODEC_AC3)
 	{
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_AC3, TRUE);
+		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_AC3_PASS, TRUE);
 	}
 	if (audio && audio->in.codec != HB_ACODEC_DCA)
 	{
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA, TRUE);
+		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_PASS, TRUE);
 	}
 	grey_combo_box_item(builder, "VideoEncoder", HB_VCODEC_THEORA, FALSE);
 
@@ -1601,10 +1604,7 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	gval = ghb_widget_value(widget);
 	acodec = ghb_lookup_combo_int("AudioEncoder", gval);
 	ghb_value_free(gval);
-	if (acodec != HB_ACODEC_AC3)
-	{
-		grey_combo_box_item(builder, "AudioMixdown", 0, TRUE);
-	}
+	grey_combo_box_item(builder, "AudioMixdown", 0, TRUE);
 	if (container == HB_MUX_MP4)
 	{
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_VORBIS, TRUE);
@@ -1666,7 +1666,7 @@ ghb_get_best_mix(gint titleindex, gint track, gint acodec, gint mix)
 	gboolean allow_dpl2 = TRUE;
 	gboolean allow_6ch = TRUE;
 	
-	if (acodec & (HB_ACODEC_AC3 | HB_ACODEC_DCA))
+	if (acodec & HB_ACODEC_PASS_FLAG)
 	{
 		// Audio codec pass-thru.  No mixdown
 		return 0;
@@ -2047,7 +2047,7 @@ find_combo_item_by_int(GtkTreeModel *store, gint value, GtkTreeIter *iter)
 		do
 		{
 			gtk_tree_model_get(store, iter, 3, &ivalue, -1);
-			if (value == (int)ivalue)
+			if (value == (gint)ivalue)
 			{
 				foundit = TRUE;
 				break;
@@ -2340,14 +2340,14 @@ ghb_find_audio_track(
 	// Try to find an item that matches the preferred language and
 	// the passthru codec type
 	max_chan = 0;
-	passthru = (acodec & (HB_ACODEC_AC3 | HB_ACODEC_DCA)) != 0;
+	passthru = (acodec & HB_ACODEC_PASS_FLAG) != 0;
 	if (passthru)
 	{
 		for (ii = 0; ii < count; ii++)
 		{
 			audio = (hb_audio_config_t*)hb_list_audio_config_item( 
 													title->list_audio, ii );
-			passthru_acodec = (HB_ACODEC_AC3 | HB_ACODEC_DCA) & audio->in.codec;
+			passthru_acodec = acodec & audio->in.codec;
 			// Is the source track use a passthru capable codec?
 			if (passthru_acodec == 0)
 				continue;
@@ -2392,7 +2392,7 @@ ghb_find_audio_track(
 			continue;
 		audio = (hb_audio_config_t*)hb_list_audio_config_item( 
 												title->list_audio, ii );
-		passthru_acodec = (HB_ACODEC_AC3 | HB_ACODEC_DCA) & audio->in.codec;
+		passthru_acodec = HB_ACODEC_PASS_MASK & audio->in.codec;
 		if (passthru_acodec && passthru)
 		{
 			passthru_used = get_track_used(passthru_acodec, track_indices, count);
@@ -2428,7 +2428,7 @@ ghb_find_audio_track(
 		{
 			audio = (hb_audio_config_t*)hb_list_audio_config_item( 
 													title->list_audio, ii );
-			passthru_acodec = (HB_ACODEC_AC3 | HB_ACODEC_DCA) & audio->in.codec;
+			passthru_acodec = HB_ACODEC_PASS_MASK & audio->in.codec;
 			// Is the source track use a passthru capable codec?
 			if (passthru_acodec == 0)
 				continue;
@@ -2471,7 +2471,7 @@ ghb_find_audio_track(
 			continue;
 		audio = (hb_audio_config_t*)hb_list_audio_config_item( 
 													title->list_audio, ii );
-		passthru_acodec = (HB_ACODEC_AC3 | HB_ACODEC_DCA) & audio->in.codec;
+		passthru_acodec = HB_ACODEC_PASS_MASK & audio->in.codec;
 		channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(
 												audio->in.channel_layout);
 		if (passthru_acodec && passthru)
@@ -2501,7 +2501,7 @@ ghb_find_audio_track(
 	{
 		audio = (hb_audio_config_t*)hb_list_audio_config_item( 
 												title->list_audio, ii );
-		passthru_acodec = (HB_ACODEC_AC3 | HB_ACODEC_DCA) & audio->in.codec;
+		passthru_acodec = HB_ACODEC_PASS_MASK & audio->in.codec;
 		if (passthru_acodec && passthru)
 		{
 			passthru_used = get_track_used(passthru_acodec, track_indices, count);
@@ -3502,7 +3502,14 @@ gboolean
 ghb_audio_is_passthru(gint acodec)
 {
 	g_debug("ghb_audio_is_passthru () \n");
-	return (acodec & (HB_ACODEC_AC3 | HB_ACODEC_DCA));
+	return (acodec & HB_ACODEC_PASS_FLAG) != 0;
+}
+
+gboolean
+ghb_audio_can_passthru(gint acodec)
+{
+	g_debug("ghb_audio_can_passthru () \n");
+	return (acodec & HB_ACODEC_PASS_MASK) != 0;
 }
 
 gint
@@ -4166,7 +4173,7 @@ ghb_validate_subtitles(signal_user_data_t *ud)
 }
 
 gint
-ghb_select_audio_codec(signal_user_data_t *ud, gint track)
+ghb_select_audio_codec(GValue *settings, gint acodec, gint track)
 {
 	hb_list_t  * list;
 	hb_title_t * title;
@@ -4181,39 +4188,68 @@ ghb_select_audio_codec(signal_user_data_t *ud, gint track)
 
 	gint titleindex;
 
-	titleindex = ghb_settings_combo_int(ud->settings, "title");
+	titleindex = ghb_settings_combo_int(settings, "title");
     title = hb_list_item( list, titleindex );
 	if (title == NULL) return -1;
 
-	gint mux = ghb_settings_combo_int(ud->settings, "FileFormat");
+	gint mux = ghb_settings_combo_int(settings, "FileFormat");
 
 	if (track < 0 || track >= hb_list_count(title->list_audio))
 		return -1;
 
 	audio = (hb_audio_config_t *) hb_list_audio_config_item(
 									title->list_audio, track );
+
 	if (mux == HB_MUX_MP4)
 	{
-		if (audio->in.codec == HB_ACODEC_AC3)
-			return audio->in.codec;
-		else
+		if ((acodec & audio->in.codec & HB_ACODEC_AC3))
+		{
+			return acodec & (audio->in.codec | HB_ACODEC_PASS_FLAG);
+		}
+		else if (acodec & HB_ACODEC_AC3)
+		{
+			return HB_ACODEC_AC3;
+		}
+		else if (acodec & HB_ACODEC_FAAC)
+		{
 			return HB_ACODEC_FAAC;
+		}
+		else
+		{
+			return HB_ACODEC_FAAC;
+		}
 	}
 	else
 	{
-		if (audio->in.codec == HB_ACODEC_AC3 || audio->in.codec == HB_ACODEC_DCA)
-			return audio->in.codec;
-		else
+		if ((acodec & audio->in.codec & HB_ACODEC_PASS_MASK))
+		{
+			return acodec & (audio->in.codec | HB_ACODEC_PASS_FLAG);
+		}
+		else if (acodec & HB_ACODEC_AC3)
+		{
+			return HB_ACODEC_AC3;
+		}
+		else if (acodec & HB_ACODEC_VORBIS)
+		{
+			return HB_ACODEC_VORBIS;
+		}
+		else if (acodec & HB_ACODEC_LAME)
+		{
 			return HB_ACODEC_LAME;
+		}
+		else
+		{
+			return HB_ACODEC_LAME;
+		}
 	}
 }
 
 const gchar*
-ghb_select_audio_codec_str(signal_user_data_t *ud, gint track)
+ghb_select_audio_codec_str(GValue *settings, gint icodec, gint track)
 {
 	gint acodec, ii;
 
-	acodec = ghb_select_audio_codec(ud, track);
+	acodec = ghb_select_audio_codec(settings, icodec, track);
 	for (ii = 0; ii < acodec_opts.count; ii++)
 	{
 		if (acodec_opts.map[ii].ivalue == acodec)
@@ -4259,13 +4295,14 @@ ghb_validate_audio(signal_user_data_t *ud)
 		asettings = ghb_array_get_nth(audio_list, ii);
 		gint track = ghb_settings_combo_int(asettings, "AudioTrack");
 		gint codec = ghb_settings_combo_int(asettings, "AudioEncoder");
-		if (codec == HB_ACODEC_MASK)
+		if (codec == HB_ACODEC_ANY)
 			continue;
 
         taudio = (hb_audio_config_t *) hb_list_audio_config_item(
 											title->list_audio, track );
-		if (!(taudio->in.codec & codec) && 
-			(codec & (HB_ACODEC_AC3 | HB_ACODEC_DCA)))
+		if ( ghb_audio_is_passthru(codec) &&
+			!(ghb_audio_can_passthru(taudio->in.codec) && 
+			 (taudio->in.codec & codec)))
 		{
 			// Not supported.  AC3 is passthrough only, so input must be AC3
 			message = g_strdup_printf(
@@ -4278,7 +4315,12 @@ ghb_validate_audio(signal_user_data_t *ud)
 				return FALSE;
 			}
 			g_free(message);
-			if (mux == HB_MUX_MKV)
+			if ((codec & HB_ACODEC_AC3) ||
+				taudio->in.codec == HB_ACODEC_DCA)
+			{
+				codec = HB_ACODEC_AC3;
+			}
+			else if (mux == HB_MUX_MKV)
 			{
 				codec = HB_ACODEC_LAME;
 			}
@@ -4303,7 +4345,7 @@ ghb_validate_audio(signal_user_data_t *ud)
 			if (codec == HB_ACODEC_DCA)
 			{
 				a_unsup = "DTS";
-				codec = HB_ACODEC_FAAC;
+				codec = HB_ACODEC_AC3;
 			}
 		}
 		if (a_unsup)
@@ -4715,48 +4757,24 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		GValue *asettings;
 	    hb_audio_config_t audio;
 	    hb_audio_config_t *taudio;
+		gint acodec;
 
 		hb_audio_config_init(&audio);
 		asettings = ghb_array_get_nth(audio_list, ii);
 		audio.in.track = ghb_settings_get_int(asettings, "AudioTrack");
 		audio.out.track = tcount;
-		audio.out.codec = ghb_settings_combo_int(asettings, "AudioEncoder");
+		acodec = ghb_settings_combo_int(asettings, "AudioEncoder");
+		audio.out.codec = ghb_select_audio_codec(js, acodec, audio.in.track);
+
         taudio = (hb_audio_config_t *) hb_list_audio_config_item(
 									title->list_audio, audio.in.track );
-		if (audio.out.codec & (HB_ACODEC_AC3 | HB_ACODEC_DCA))
-		{
-			if (!(taudio->in.codec & (HB_ACODEC_AC3 | HB_ACODEC_DCA)))
-			{
-				// Not supported.  
-				// AC3/DTS is passthrough only, so input must be AC3/DTS
-				if (job->mux == HB_MUX_MKV)
-				{
-					audio.out.codec = HB_ACODEC_LAME;
-				}
-				else
-				{
-					audio.out.codec = HB_ACODEC_FAAC;
-				}
-			}
-			else
-			{
-				audio.out.codec &= taudio->in.codec;
-			}
-		}
-		if ((job->mux == HB_MUX_MP4) && 
-			((audio.out.codec & HB_ACODEC_DCA) ||
-			(audio.out.codec & HB_ACODEC_VORBIS)))
-		{
-			// mp4/mp3|dts|vorbis combination is not supported.
-			audio.out.codec = HB_ACODEC_FAAC;
-		}
         audio.out.dynamic_range_compression = 
 			ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
         if (audio.out.dynamic_range_compression < 1.0)
         	audio.out.dynamic_range_compression = 0.0;
 
 		// It would be better if this were done in libhb for us, but its not yet.
-		if (audio.out.codec & (HB_ACODEC_AC3 | HB_ACODEC_DCA))
+		if (ghb_audio_is_passthru(audio.out.codec))
 		{
 			audio.out.mixdown = 0;
 		}
