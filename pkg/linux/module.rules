@@ -61,12 +61,23 @@ $(PKG.cli.deb): $(PKG.gui.tmp.deb)
 # Debian source package rules
 #
 pkg.push.src.deb:: $(PKG.src.deb.stamp)
+	(cd $(STAGE.out.src/)maverick && dput handbrake-snapshots handbrake_$(HB.version)ppa1~maverick1_source.changes )
 	(cd $(STAGE.out.src/)lucid && dput handbrake-snapshots handbrake_$(HB.version)ppa1~lucid1_source.changes )
 	(cd $(STAGE.out.src/)karmic && dput handbrake-snapshots handbrake_$(HB.version)ppa1~karmic1_source.changes )
 
 $(PKG.src.deb.stamp): GNUmakefile
 	-$(RM.exe) -rf $(STAGE.out.src/)
 	make contrib.fetch
+	svn co -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)maverick/$(PKG.deb.basename)
+	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)maverick/$(PKG.deb.basename)
+	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)maverick/$(PKG.deb.basename)
+	echo "handbrake ($(HB.version)ppa1~maverick1) maverick; urgency=low" > $(STAGE.out.src/)maverick/$(PKG.deb.basename)/debian/changelog
+	echo "  * Snapshot" >> $(STAGE.out.src/)maverick/$(PKG.deb.basename)/debian/changelog
+	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)maverick/$(PKG.deb.basename)/debian/changelog
+	echo "" >> $(STAGE.out.src/)maverick/$(PKG.deb.basename)/debian/changelog
+	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)maverick/$(PKG.deb.basename)/debian/changelog
+	$(TAR.exe) czf $(STAGE.out.src/)maverick/$(PKG.src.deb.tar) -C $(STAGE.out.src/)maverick $(PKG.deb.basename)
+	(cd $(STAGE.out.src/)maverick/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
 	svn co -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)lucid/$(PKG.deb.basename)
 	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)lucid/$(PKG.deb.basename)
 	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)lucid/$(PKG.deb.basename)
