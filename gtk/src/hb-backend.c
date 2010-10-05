@@ -1096,35 +1096,6 @@ lookup_audio_rate_option(const GValue *rate)
 }
 
 gint
-ghb_find_closest_audio_bitrate(gint codec, gint rate)
-{
-	gint ii;
-	gint low = 32;
-	gint high = 768;
-	gint result;
-
-	if (codec == HB_ACODEC_FAAC)
-		high = 320;
-	else if (codec == HB_ACODEC_AC3)
-		high = 640;
-
-	result = high;
-	for (ii = 0; ii < hb_audio_bitrates_count; ii++)
-	{
-		if (hb_audio_bitrates[ii].rate < low)
-			continue;
-		if (hb_audio_bitrates[ii].rate > high)
-			break;
-		if (rate <= hb_audio_bitrates[ii].rate)
-		{
-			result = hb_audio_bitrates[ii].rate;
-			break;
-		}
-	}
-	return result;
-}
-
-gint
 ghb_find_closest_audio_rate(gint rate)
 {
 	gint ii;
@@ -1640,6 +1611,35 @@ ghb_grey_combo_options(GtkBuilder *builder)
 }
 
 gint
+ghb_find_closest_audio_bitrate(gint codec, gint rate)
+{
+	gint ii;
+	gint low = 32;
+	gint high = 768;
+	gint result;
+
+	if (codec == HB_ACODEC_FAAC)
+		high = 320;
+	else if (codec == HB_ACODEC_AC3)
+		high = 640;
+
+	result = high;
+	for (ii = 0; ii < hb_audio_bitrates_count; ii++)
+	{
+		if (hb_audio_bitrates[ii].rate < low)
+			continue;
+		if (hb_audio_bitrates[ii].rate > high)
+			break;
+		if (rate <= hb_audio_bitrates[ii].rate)
+		{
+			result = hb_audio_bitrates[ii].rate;
+			break;
+		}
+	}
+	return result;
+}
+
+gint
 ghb_get_best_audio_bitrate(gint acodec, gint br, gint channels)
 {
 	if (acodec & HB_ACODEC_FAAC)
@@ -1653,6 +1653,57 @@ ghb_get_best_audio_bitrate(gint acodec, gint br, gint channels)
 		if (br > maxbr)
 			br = maxbr;
 	}
+	if (acodec & HB_ACODEC_AC3)
+	{
+		if (br > 640)
+			br = 640;
+	}
+	br = ghb_find_closest_audio_bitrate(acodec, br);
+	return br;
+}
+
+gint
+ghb_get_default_audio_bitrate(gint acodec, gint sr, gint br, gint channels)
+{
+	gint min_rate, max_rate;
+	gint sr_div = 1;
+
+	// Min bitrate is established such that we get good quality
+	// audio as a minimum. If the input bitrate is higher than
+	// the output codec allows, we will cap the bitrate. 
+	if (sr <= 24000)
+	{
+		sr_div = 2;
+	}
+	if (acodec & HB_ACODEC_AC3)
+	{
+		switch (channels)
+		{
+			case 1:
+				min_rate = 96;
+				break;
+			case 2:
+				min_rate = 224;
+				break;
+			case 6:
+			default:
+				min_rate = 448;
+				break;
+		}
+		max_rate = channels * 160;
+	}
+	else
+	{
+		min_rate = channels * 64;
+		max_rate = channels * 160;
+	}
+	max_rate /= sr_div;
+	min_rate /= sr_div;
+	if ( br < min_rate )
+		br = min_rate;
+	if ( br > max_rate )
+		br = max_rate;
+	br = ghb_get_best_audio_bitrate(acodec, br, channels);
 	return br;
 }
 
