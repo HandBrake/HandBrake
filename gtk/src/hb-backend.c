@@ -1614,22 +1614,11 @@ gint
 ghb_find_closest_audio_bitrate(gint codec, gint rate)
 {
 	gint ii;
-	gint low = 32;
-	gint high = 768;
 	gint result;
 
-	if (codec == HB_ACODEC_FAAC)
-		high = 320;
-	else if (codec == HB_ACODEC_AC3)
-		high = 640;
-
-	result = high;
+	result = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
 	for (ii = 0; ii < hb_audio_bitrates_count; ii++)
 	{
-		if (hb_audio_bitrates[ii].rate < low)
-			continue;
-		if (hb_audio_bitrates[ii].rate > high)
-			break;
 		if (rate <= hb_audio_bitrates[ii].rate)
 		{
 			result = hb_audio_bitrates[ii].rate;

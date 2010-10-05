@@ -109,7 +109,7 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 	ghb_ui_update(ud, "AudioBitrate", ghb_int64_value(bitrate));
 	if (select_acodec == HB_ACODEC_FAAC)
 	{
-		gint br, last = 320, first = 0;
+		gint last = 320, first = 0;
 
 		if (mix == HB_AMIXDOWN_6CH)
 		{
@@ -426,12 +426,13 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		titleindex = ghb_settings_combo_int(ud->settings, "title");
 		track = ghb_settings_combo_int(ud->settings, "AudioTrack");
 
-		br = ghb_find_closest_audio_bitrate(acodec_code, br);
+		mix_code = ghb_get_best_mix( titleindex, track, acodec_code, mix_code);
+		int channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(mix_code);
+		br = ghb_get_best_audio_bitrate(acodec_code, br, channels);
 		ghb_ui_update(ud, "AudioBitrate", ghb_int64_value(br));
 
 		sr = ghb_find_closest_audio_rate(sr);
 		ghb_ui_update(ud, "AudioSamplerate", ghb_int64_value(sr));
-		mix_code = ghb_get_best_mix( titleindex, track, acodec_code, mix_code);
 		ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix_code));
 	}
 	ghb_adjust_audio_rate_combos(ud);
