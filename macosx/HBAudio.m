@@ -396,14 +396,7 @@ static NSDictionary *bitRate384 = nil;
 				shouldAdd = NO;
 			}
 		}
-		
-		//	Now make sure the bitrate does not exceed the track's bitrate
-		if (YES == shouldAdd) {
-			if (currentBitRate > trackInputBitRate) {
-				shouldAdd = NO;
-			}
-		}
-		
+				
 		if (YES == shouldAdd) {
 			[permittedBitRates addObject: dict];
 		}
