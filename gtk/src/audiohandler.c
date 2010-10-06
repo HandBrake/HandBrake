@@ -99,10 +99,10 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 		}
 		else
 		{
-			ghb_ui_update(ud, "AudioBitrate", ghb_int64_value(384));
 			ghb_ui_update(ud, "AudioSamplerate", ghb_int64_value(0));
 			ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(0));
-			select_acodec = HB_ACODEC_AC3;
+			bitrate = 448;
+			mix = ghb_get_best_mix( titleindex, track, select_acodec, 0);
 		}
 		ghb_ui_update(ud, "AudioTrackDRCSlider", ghb_double_value(0));
 	}

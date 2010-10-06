@@ -1656,22 +1656,13 @@ ghb_find_closest_audio_bitrate(gint codec, gint rate)
 gint
 ghb_get_best_audio_bitrate(gint acodec, gint br, gint channels)
 {
-	if (acodec & HB_ACODEC_FAAC)
-	{
-		int maxbr;
+	int low, high;
 
-		if (channels == 2)
-			maxbr = 320;
-		else
-			maxbr = 768;
-		if (br > maxbr)
-			br = maxbr;
-	}
-	if (acodec & HB_ACODEC_AC3)
-	{
-		if (br > 640)
-			br = 640;
-	}
+	ghb_get_audio_bitrate_limits(acodec, channels, &low, &high);
+	if (br > high)
+		br = high;
+	if (br < low)
+		br = low;
 	br = ghb_find_closest_audio_bitrate(acodec, br);
 	return br;
 }
