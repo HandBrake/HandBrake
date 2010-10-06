@@ -50,7 +50,9 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 	mix = ghb_lookup_combo_int("AudioMixdown", gval);
 	ghb_value_free(gval);
 
-	bitrate = ghb_settings_combo_int(ud->settings, "AudioBitrate");
+	widget = GHB_WIDGET(ud->builder, "AudioBitrate");
+	gval = ghb_widget_value(widget);
+	bitrate = ghb_lookup_combo_int("AudioBitrate", gval);
 
 	select_acodec = acodec;
 	if (mux == HB_MUX_MP4)
@@ -107,25 +109,11 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 	gint channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(mix);
 	bitrate = ghb_get_best_audio_bitrate(select_acodec, bitrate, channels);
 	ghb_ui_update(ud, "AudioBitrate", ghb_int64_value(bitrate));
-	if (select_acodec == HB_ACODEC_FAAC)
-	{
-		gint last = 320, first = 0;
 
-		if (mix == HB_AMIXDOWN_6CH)
-		{
-			first = 192;
-			last = 768;
-		}
-		ghb_set_default_bitrate_opts (ud->builder, first, last);
-	}
-	else if (select_acodec == HB_ACODEC_AC3)
-	{
-		ghb_set_default_bitrate_opts (ud->builder, 0, 640);
-	}
-	else
-	{
-		ghb_set_default_bitrate_opts (ud->builder, 0, -1);
-	}
+	int low, high;
+	ghb_get_audio_bitrate_limits(select_acodec, channels, &low, &high);
+	ghb_set_default_bitrate_opts (ud->builder, low, high);
+
 	ghb_settings_take_value(ud->settings, "AudioEncoderActual", 
 							ghb_lookup_acodec_value(select_acodec));
 	ghb_check_dependency(ud, NULL, "AudioEncoderActual");

@@ -189,6 +189,7 @@ gint ghb_find_closest_audio_bitrate(gint codec, gint rate);
 gint ghb_find_closest_audio_rate(gint rate);
 gint ghb_get_best_audio_bitrate(gint acodec, gint br, gint channels);
 gint ghb_get_default_audio_bitrate(gint acodec, gint sr, gint br, gint channels);
+void ghb_get_audio_bitrate_limits(gint acodec, gint channels, gint *low, gint *high);
 GValue* ghb_lookup_acodec_value(gint val);
 
 #endif // _HBBACKEND_H_

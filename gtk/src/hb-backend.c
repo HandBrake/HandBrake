@@ -1610,6 +1610,31 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	grey_combo_box_item(builder, "AudioMixdown", HB_AMIXDOWN_6CH, !allow_6ch);
 }
 
+void
+ghb_get_audio_bitrate_limits(gint acodec, gint channels, gint *low, gint *high)
+{
+	if (acodec & HB_ACODEC_FAAC)
+	{
+		*low = 32 * channels;
+		if (channels >= 6)
+			*high = 768;
+		else if (channels >= 2)
+			*high = 320;
+		else
+			*high = 160;
+	}
+	else if (acodec & HB_ACODEC_AC3)
+	{
+		*low = 32 * channels;
+		*high = 640;
+	}
+	else
+	{
+		*low = hb_audio_bitrates[0].rate;
+		*high = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
+	}
+}
+
 gint
 ghb_find_closest_audio_bitrate(gint codec, gint rate)
 {
