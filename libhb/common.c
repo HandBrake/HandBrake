@@ -86,7 +86,7 @@ int hb_find_closest_audio_bitrate(int bitrate)
     // result is highest rate if none found during search.
     // rate returned will always be <= rate asked for.
     result = hb_audio_bitrates[0].rate;
-    for (ii = hb_audio_bitrates_count-1; ii >= 0; ii++)
+    for (ii = hb_audio_bitrates_count-1; ii >= 0; ii--)
     {
         if (bitrate >= hb_audio_bitrates[ii].rate)
         {
