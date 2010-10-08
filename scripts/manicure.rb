@@ -335,7 +335,7 @@ class Display
       #Encoders
       case audioTrack["AudioEncoder"]
         when /AC3 Pass/
-          audioEncoders << "ac3pass"
+          audioEncoders << "copy:ac3"
         when /AC3/
           audioEncoders << "ac3"
         when /AAC/
@@ -584,7 +584,7 @@ class Display
       #Encoders
       case audioTrack["AudioEncoder"]
         when /AC3 Pass/
-          audioEncoders << "ac3pass"
+          audioEncoders << "copy:ac3"
         when /AC3/
           audioEncoders << "ac3"
         when /AAC/
@@ -828,7 +828,7 @@ class Display
       #Encoders
       case audioTrack["AudioEncoder"]
         when /AC3 Pass/
-          audioEncoders << "ac3pass"
+          audioEncoders << "copy:ac3"
         when /AC3/
           audioEncoders << "ac3"
         when /AAC/
@@ -1109,7 +1109,7 @@ class Display
       #Encoders
       case audioTrack["AudioEncoder"]
         when /AC3 Pass/
-          audioEncoders << "ac3pass"
+          audioEncoders << "copy:ac3"
         when /AC3/
           audioEncoders << "ac3"
         when /AAC/
