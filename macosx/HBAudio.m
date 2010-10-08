@@ -14,10 +14,6 @@ NSString *keyAudioMP4 = @"keyAudioMP4";
 NSString *keyAudioMKV = @"keyAudioMKV";
 NSString *keyAudioSampleRateName = @"keyAudioSampleRateName";
 NSString *keyAudioBitrateName = @"keyAudioBitrateName";
-NSString *keyAudioMinimumBitrate = @"keyAudioMinimumBitrate";
-NSString *keyAudioMaximumBitrate = @"keyAudioMaximumBitrate";
-NSString *keyAudioMinimumBitrate6Channel = @"keyAudioMinimumBitrate6Channel";
-NSString *keyAudioMaximumBitrate6Channel = @"keyAudioMaximumBitrate6Channel";
 NSString *keyAudioMustMatchTrack = @"keyAudioMustMatchTrack";
 NSString *keyAudioMixdownName = @"keyAudioMixdownName";
 NSString *keyAudioMixdownLimitsToTrackBitRate = @"keyAudioMixdownLimitsToTrackBitRate";
@@ -31,8 +27,6 @@ NSString *keyAudioBitrate = @"bitrate";
 static NSMutableArray *masterCodecArray = nil;
 static NSMutableArray *masterSampleRateArray = nil;
 static NSMutableArray *masterBitRateArray = nil;
-static NSDictionary *defaultBitRate = nil;
-static NSDictionary *bitRate384 = nil;
 
 @interface NSArray (HBAudioSupport)
 - (NSDictionary *) dictionaryWithObject: (id) anObject matchingKey: (NSString *) aKey;
@@ -81,10 +75,6 @@ static NSDictionary *bitRate384 = nil;
 									  [NSNumber numberWithBool: YES], keyAudioMP4,
 									  [NSNumber numberWithBool: YES], keyAudioMKV,
 									  [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
-									  [NSNumber numberWithInt: 64], keyAudioMinimumBitrate,
-									  [NSNumber numberWithInt: 320], keyAudioMaximumBitrate,
-									  [NSNumber numberWithInt: 128], keyAudioMinimumBitrate6Channel,
-									  [NSNumber numberWithInt: 768], keyAudioMaximumBitrate6Channel,
 									  nil]];
 		[masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
 									  NSLocalizedString(@"AAC (faac)", @"AAC (faac)"), keyAudioCodecName,
@@ -92,10 +82,6 @@ static NSDictionary *bitRate384 = nil;
 									  [NSNumber numberWithBool: YES], keyAudioMP4,
 									  [NSNumber numberWithBool: YES], keyAudioMKV,
 									  [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
-									  [NSNumber numberWithInt: 32], keyAudioMinimumBitrate,
-									  [NSNumber numberWithInt: 320], keyAudioMaximumBitrate,
-									  [NSNumber numberWithInt: 192], keyAudioMinimumBitrate6Channel,
-									  [NSNumber numberWithInt: 768], keyAudioMaximumBitrate6Channel,
 									  nil]];
 		[masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
 									  NSLocalizedString(@"MP3 (lame)", @"MP3 (lame)"), keyAudioCodecName,
@@ -103,10 +89,6 @@ static NSDictionary *bitRate384 = nil;
 									  [NSNumber numberWithBool: YES], keyAudioMP4,
 									  [NSNumber numberWithBool: YES], keyAudioMKV,
 									  [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
-									  [NSNumber numberWithInt: 32], keyAudioMinimumBitrate,
-									  [NSNumber numberWithInt: 320], keyAudioMaximumBitrate,
-									  [NSNumber numberWithInt: 32], keyAudioMinimumBitrate6Channel,
-									  [NSNumber numberWithInt: 320], keyAudioMaximumBitrate6Channel,
 									  nil]];
 		[masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
 									  NSLocalizedString(@"AC3 Passthru", @"AC3 Passthru"), keyAudioCodecName,
@@ -114,10 +96,6 @@ static NSDictionary *bitRate384 = nil;
 									  [NSNumber numberWithBool: YES], keyAudioMP4,
 									  [NSNumber numberWithBool: YES], keyAudioMKV,
 									  [NSNumber numberWithInt: HB_ACODEC_AC3], keyAudioMustMatchTrack,
-									  [NSNumber numberWithInt: 32], keyAudioMinimumBitrate,
-									  [NSNumber numberWithInt: 384], keyAudioMaximumBitrate,
-									  [NSNumber numberWithInt: 32], keyAudioMinimumBitrate6Channel,
-									  [NSNumber numberWithInt: 384], keyAudioMaximumBitrate6Channel,
 									  nil]];
 		[masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
 									  NSLocalizedString(@"AC3", @"AC3"), keyAudioCodecName,
@@ -125,10 +103,6 @@ static NSDictionary *bitRate384 = nil;
 									  [NSNumber numberWithBool: YES], keyAudioMP4,
 									  [NSNumber numberWithBool: YES], keyAudioMKV,
 									  [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
-									  [NSNumber numberWithInt: 32], keyAudioMinimumBitrate,
-									  [NSNumber numberWithInt: 640], keyAudioMaximumBitrate,
-									  [NSNumber numberWithInt: 32], keyAudioMinimumBitrate6Channel,
-									  [NSNumber numberWithInt: 640], keyAudioMaximumBitrate6Channel,
 									  nil]];
 		[masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
 									  NSLocalizedString(@"DTS Passthru", @"DTS Passthru"), keyAudioCodecName,
@@ -136,10 +110,6 @@ static NSDictionary *bitRate384 = nil;
 									  [NSNumber numberWithBool: NO], keyAudioMP4,
 									  [NSNumber numberWithBool: YES], keyAudioMKV,
 									  [NSNumber numberWithInt: HB_ACODEC_DCA], keyAudioMustMatchTrack,
-									  [NSNumber numberWithInt: 32], keyAudioMinimumBitrate,
-									  [NSNumber numberWithInt: 384], keyAudioMaximumBitrate,
-									  [NSNumber numberWithInt: 32], keyAudioMinimumBitrate6Channel,
-									  [NSNumber numberWithInt: 384], keyAudioMaximumBitrate6Channel,
 									  nil]];
 		[masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
 									  NSLocalizedString(@"Vorbis (vorbis)", @"Vorbis (vorbis)"), keyAudioCodecName,
@@ -147,10 +117,6 @@ static NSDictionary *bitRate384 = nil;
 									  [NSNumber numberWithBool: NO], keyAudioMP4,
 									  [NSNumber numberWithBool: YES], keyAudioMKV,
 									  [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
-									  [NSNumber numberWithInt: 48], keyAudioMinimumBitrate,
-									  [NSNumber numberWithInt: 384], keyAudioMaximumBitrate,
-									  [NSNumber numberWithInt: 192], keyAudioMinimumBitrate6Channel,
-									  [NSNumber numberWithInt: 384], keyAudioMaximumBitrate6Channel,
 									  nil]];
 		
 		//	Note that for the Auto value we use 0 for the sample rate because our controller will give back the track's
@@ -169,19 +135,12 @@ static NSDictionary *bitRate384 = nil;
 		}
 		
 		masterBitRateArray = [[NSMutableArray alloc] init];	// knowingly leaked
-		int defaultRate = hb_audio_bitrates[hb_audio_bitrates_default].rate;
 		for (i = 0; i < hb_audio_bitrates_count; i++) {
 			int rate = hb_audio_bitrates[i].rate;
 			dict = [NSDictionary dictionaryWithObjectsAndKeys:
 					[NSString stringWithUTF8String: hb_audio_bitrates[i].string], keyAudioBitrateName,
 					[NSNumber numberWithInt: rate], keyAudioBitrate,
 					nil];
-			if (rate == defaultRate) {
-				defaultBitRate = [dict retain];	// knowingly leaked
-			}
-			if (384 == rate) {
-				bitRate384 = [dict retain];	// knowingly leaked
-			}
 			[masterBitRateArray addObject: dict];
 		}
 		
@@ -326,7 +285,7 @@ static NSDictionary *bitRate384 = nil;
 								[NSString stringWithUTF8String: hb_audio_mixdowns[4].human_readable_name], keyAudioMixdownName,
 								[NSNumber numberWithInt: hb_audio_mixdowns[4].amixdown], keyAudioMixdown,
 								[NSNumber numberWithBool: NO], keyAudioMixdownLimitsToTrackBitRate,
-								[NSNumber numberWithBool: (HB_ACODEC_AC3 == trackCodec) ? NO : YES], keyAudioMixdownCanBeDefault,
+								[NSNumber numberWithBool: (HB_ACODEC_AC3 == codecCodec) ? YES : NO], keyAudioMixdownCanBeDefault,
 								nil]];
 		}
 		
@@ -358,7 +317,8 @@ static NSDictionary *bitRate384 = nil;
 	[self setMixdowns: retval];
 	
 	//	Ensure our mixdown is on the list of permitted ones
-	if (nil == [self mixdown] || NO == [retval containsObject: [self mixdown]]) {
+	if (YES == [[NSUserDefaults standardUserDefaults] boolForKey: @"CodecDefaultsMixdown"] ||
+		nil == [self mixdown] || NO == [retval containsObject: [self mixdown]]) {
 		[self setMixdown: [retval lastDictionaryWithObject: [NSNumber numberWithBool: YES] matchingKey: keyAudioMixdownCanBeDefault]];
 	}
 	
@@ -371,18 +331,27 @@ static NSDictionary *bitRate384 = nil;
 	NSMutableArray *permittedBitRates = [NSMutableArray array];
 	int count;
 	NSDictionary *dict;
-	BOOL has6chMixdown = (HB_AMIXDOWN_6CH == [[[self mixdown] objectForKey: keyAudioMixdown] intValue]);
 	
 	count = [masterBitRateArray count];
-	NSString *minKey = (has6chMixdown) ? keyAudioMinimumBitrate6Channel : keyAudioMinimumBitrate;
-	NSString *maxKey = (has6chMixdown) ? keyAudioMaximumBitrate6Channel : keyAudioMaximumBitrate;
-	int minBitRate = [[codec objectForKey: minKey] intValue];
-	int maxBitRate = [[codec objectForKey: maxKey] intValue];
+	int minBitRate;
+	int maxBitRate;
+	NSString *defaultBitRate;
 	int currentBitRate;
 	int trackInputBitRate = [[[self track] objectForKey: keyAudioInputBitrate] intValue];
 	BOOL limitsToTrackInputBitRate = [[[self mixdown] objectForKey: keyAudioMixdownLimitsToTrackBitRate] boolValue];
 	BOOL shouldAdd;
-	
+	int theSampleRate = [[[self sampleRate] objectForKey: keyAudioSamplerate] intValue];
+		
+	if (0 == theSampleRate) {	//	this means Auto
+		theSampleRate = [[[self track] objectForKey: keyAudioInputSampleRate] intValue];
+		}
+
+	int ourCodec = [[codec objectForKey: keyAudioCodec] intValue];
+	int ourMixdown = [[[self mixdown] objectForKey: keyAudioMixdown] intValue];
+	hb_get_audio_bitrate_limits(ourCodec, theSampleRate, ourMixdown, &minBitRate, &maxBitRate);
+	int theDefaultBitRate = hb_get_default_audio_bitrate(ourCodec, theSampleRate, ourMixdown);
+	defaultBitRate = [NSString stringWithFormat: @"%d", theDefaultBitRate];
+
 	for (unsigned int i = 0; i < count; i++) {
 		dict = [masterBitRateArray objectAtIndex: i];
 		currentBitRate = [[dict objectForKey: keyAudioBitrate] intValue];
@@ -422,12 +391,8 @@ static NSDictionary *bitRate384 = nil;
 	[self setBitRates: permittedBitRates];
 
 	//	Select the proper one
-	if (YES == has6chMixdown) {
-		[self setBitRate: bitRate384];
-	}
-	else {
-		[self setBitRate: defaultBitRate];
-	}
+	[self setBitRateFromName: defaultBitRate];
+
 	if (nil == [self bitRate] || NO == [permittedBitRates containsObject: [self bitRate]]) {
 		[self setBitRate: [permittedBitRates lastObject]];
 	}

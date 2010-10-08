@@ -253,7 +253,8 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 				) {
 				key = @"AAC (CoreAudio)";
 			}
-			if (YES == [key isEqualToString: @"AC3 Passthru"]) {
+			if (YES == [[NSUserDefaults standardUserDefaults] boolForKey: @"AC3PassthruDefaultsToAC3"] &&
+				YES == [key isEqualToString: @"AC3 Passthru"]) {
 				if (NO == [newAudio setCodecFromName: key]) {
 					key = @"AC3";
 				}
@@ -295,6 +296,28 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 	return retval;
 }
 
+//	When we add a track and we do not have a preset to use for the track we use
+//	this bogus preset to do the dirty work.
+- (NSMutableDictionary *) _defaultPreset
+
+{
+	static NSMutableDictionary *retval = nil;
+	
+	if (nil == retval) {
+		retval = [[NSMutableDictionary dictionaryWithObjectsAndKeys:
+		[NSArray arrayWithObject:
+		[NSDictionary dictionaryWithObjectsAndKeys:
+		[NSNumber numberWithInt: 1],     @"AudioTrack",
+		@"AAC (faac)",                   @"AudioEncoder",
+		@"Dolby Pro Logic II",           @"AudioMixdown",
+		@"Auto",                         @"AudioSamplerate",
+		@"160",                          @"AudioBitrate",
+		[NSNumber numberWithFloat: 0.0], @"AudioTrackDRCSlider",
+		nil]], @"AudioList", nil] retain];
+	}
+	return retval;
+}
+
 - (void) addTracksFromPreset: (NSMutableDictionary *) aPreset allTracks: (BOOL) allTracks
 
 {
@@ -315,8 +338,17 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 		}
 	}
 
-	[self switchingTrackFromNone: nil];	// see if we need to add one to the list
+	return;
+}
 
+- (void) _ensureAtLeastOneNonEmptyTrackExists
+
+{
+	int count = [self countOfAudioArray];
+	if (0 == count || NO == [[self objectInAudioArrayAtIndex: 0] enabled]) {
+		[self addTracksFromPreset: [self _defaultPreset] allTracks: NO];
+		}
+	[self switchingTrackFromNone: nil];	//	this ensures there is a None track at the end of the list
 	return;
 }
 
@@ -324,6 +356,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
 {
 	[self addTracksFromPreset: aPreset allTracks: NO];
+	[self _ensureAtLeastOneNonEmptyTrackExists];
 	return;
 }
 
@@ -331,6 +364,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
 {
 	[self addTracksFromPreset: aPreset allTracks: YES];
+	[self _ensureAtLeastOneNonEmptyTrackExists];
 	return;
 }
 
@@ -463,11 +497,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 	[self _clearAudioArray];
 
 	if (NO == [myController hasValidPresetSelected]) {
-		NSString *preferredLanguageName = [[NSUserDefaults standardUserDefaults] stringForKey: @"DefaultLanguage"];
-		int preferredLanguage = [self _trackWithTitlePrefix: preferredLanguageName defaultIfNotFound: 1];
-		[self addNewAudioTrack];
-		HBAudio *anAudio = [self objectInAudioArrayAtIndex: 0];
-		[anAudio setTrackFromIndex: preferredLanguage];
+		[self _ensureAtLeastOneNonEmptyTrackExists];
 	}
 	return;
 }
