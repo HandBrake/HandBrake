@@ -85,10 +85,10 @@ int hb_find_closest_audio_bitrate(int bitrate)
 
     // result is highest rate if none found during search.
     // rate returned will always be <= rate asked for.
-    result = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
-    for (ii = 0; ii < hb_audio_bitrates_count; ii++)
+    result = hb_audio_bitrates[0].rate;
+    for (ii = hb_audio_bitrates_count-1; ii >= 0; ii++)
     {
-        if (bitrate <= hb_audio_bitrates[ii].rate)
+        if (bitrate >= hb_audio_bitrates[ii].rate)
         {
             result = hb_audio_bitrates[ii].rate;
             break;
@@ -111,11 +111,11 @@ void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, in
             break;
 
         case HB_ACODEC_CA_AAC:
-            *low = channels * 80;
+            *low = channels * 40;
             if (samplerate <= 44100)
-                *low = channels * 64;
-            if (samplerate <= 24000)
                 *low = channels * 32;
+            if (samplerate <= 24000)
+                *low = channels * 16;
             *high = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
             break;
 
