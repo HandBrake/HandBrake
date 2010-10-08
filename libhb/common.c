@@ -77,6 +77,130 @@ const char * hb_mixdown_get_short_name_from_mixdown( int amixdown )
     return "";
 }
 
+// Given an input bitrate, find closest match in the set of allowed bitrates
+int hb_find_closest_audio_bitrate(int bitrate)
+{
+    int ii;
+    int result;
+
+    // result is highest rate if none found during search.
+    // rate returned will always be <= rate asked for.
+    result = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
+    for (ii = 0; ii < hb_audio_bitrates_count; ii++)
+    {
+        if (bitrate <= hb_audio_bitrates[ii].rate)
+        {
+            result = hb_audio_bitrates[ii].rate;
+            break;
+        }
+    }
+    return result;
+}
+
+// Get the bitrate low and high limits for a codec/samplerate/mixdown triplet
+void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, int *low, int *high)
+{
+    int channels;
+
+    channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(mixdown);
+    switch (codec)
+    {
+        case HB_ACODEC_AC3:
+            *low = 32 * channels;
+            *high = 640;
+            break;
+
+        case HB_ACODEC_CA_AAC:
+            *low = channels * 80;
+            if (samplerate <= 44100)
+                *low = channels * 64;
+            if (samplerate <= 24000)
+                *low = channels * 32;
+            *high = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
+            break;
+
+        case HB_ACODEC_FAAC:
+            *low = 32 * channels;
+            if (channels >= 6)
+                *high = 768;
+            else if (channels >= 2)
+                *high = 320;
+            else
+                *high = 160;
+            break;
+
+        case HB_ACODEC_VORBIS:
+            *low = channels * 16;
+            *high = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
+            if (samplerate > 24000)
+            {
+                if (channels > 2)
+                {
+                    // Vorbis minimum is around 30kbps/ch for 6ch 
+                    // at rates > 24k (32k/44.1k/48k) 
+                    *low = 32 * channels;
+                }
+                else
+                {
+                    // Allow 24kbps mono and 48kbps stereo at rates > 24k 
+                    // (32k/44.1k/48k)
+                    *low = 24 * channels;
+                }
+            }
+            break;
+
+        default:
+            *low = hb_audio_bitrates[0].rate;
+            *high = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
+            break;
+    }
+}
+
+// Given an input bitrate, sanitize it.  Check low and high limits and
+// make sure it is in the set of allowed bitrates.
+int hb_get_best_audio_bitrate( uint32_t codec, int bitrate, int samplerate, int mixdown)
+{
+    int low, high;
+
+    hb_get_audio_bitrate_limits(codec, samplerate, mixdown, &low, &high);
+    if (bitrate > high)
+        bitrate = high;
+    if (bitrate < low)
+        bitrate = low;
+    bitrate = hb_find_closest_audio_bitrate(bitrate);
+    return bitrate;
+}
+
+// Get the default bitrate for a given codec/samplerate/mixdown triplet.
+int hb_get_default_audio_bitrate( uint32_t codec, int samplerate, int mixdown )
+{
+    int bitrate, channels;
+    int sr_shift;
+
+    channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(mixdown);
+
+    // Min bitrate is established such that we get good quality
+    // audio as a minimum.
+    sr_shift = (samplerate <= 24000) ? 1 : 0;
+
+    switch ( codec )
+    {
+        case HB_ACODEC_AC3:
+            if (channels == 1)
+                bitrate = 96;
+            else if (channels <= 2)
+                bitrate = 224;
+            else
+                bitrate = 640;
+            break;
+        default:
+            bitrate = channels * 80;
+    }
+    bitrate >>= sr_shift;
+    bitrate = hb_get_best_audio_bitrate( codec, bitrate, samplerate, mixdown );
+    return bitrate;
+}
+
 /**********************************************************************
  * hb_reduce
  **********************************************************************

@@ -1610,108 +1610,6 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	grey_combo_box_item(builder, "AudioMixdown", HB_AMIXDOWN_6CH, !allow_6ch);
 }
 
-void
-ghb_get_audio_bitrate_limits(gint acodec, gint channels, gint *low, gint *high)
-{
-	if (acodec & HB_ACODEC_FAAC)
-	{
-		*low = 32 * channels;
-		if (channels >= 6)
-			*high = 768;
-		else if (channels >= 2)
-			*high = 320;
-		else
-			*high = 160;
-	}
-	else if (acodec & HB_ACODEC_AC3)
-	{
-		*low = 32 * channels;
-		*high = 640;
-	}
-	else
-	{
-		*low = hb_audio_bitrates[0].rate;
-		*high = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
-	}
-}
-
-gint
-ghb_find_closest_audio_bitrate(gint codec, gint rate)
-{
-	gint ii;
-	gint result;
-
-	result = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
-	for (ii = 0; ii < hb_audio_bitrates_count; ii++)
-	{
-		if (rate <= hb_audio_bitrates[ii].rate)
-		{
-			result = hb_audio_bitrates[ii].rate;
-			break;
-		}
-	}
-	return result;
-}
-
-gint
-ghb_get_best_audio_bitrate(gint acodec, gint br, gint channels)
-{
-	int low, high;
-
-	ghb_get_audio_bitrate_limits(acodec, channels, &low, &high);
-	if (br > high)
-		br = high;
-	if (br < low)
-		br = low;
-	br = ghb_find_closest_audio_bitrate(acodec, br);
-	return br;
-}
-
-gint
-ghb_get_default_audio_bitrate(gint acodec, gint sr, gint br, gint channels)
-{
-	gint min_rate, max_rate;
-	gint sr_div = 1;
-
-	// Min bitrate is established such that we get good quality
-	// audio as a minimum. If the input bitrate is higher than
-	// the output codec allows, we will cap the bitrate. 
-	if (sr <= 24000)
-	{
-		sr_div = 2;
-	}
-	if (acodec & HB_ACODEC_AC3)
-	{
-		switch (channels)
-		{
-			case 1:
-				min_rate = 96;
-				break;
-			case 2:
-				min_rate = 224;
-				break;
-			case 6:
-			default:
-				min_rate = 448;
-				break;
-		}
-		max_rate = channels * 160;
-	}
-	else
-	{
-		min_rate = channels * 64;
-		max_rate = channels * 160;
-	}
-	max_rate /= sr_div;
-	min_rate /= sr_div;
-	if ( br < min_rate )
-		br = min_rate;
-	if ( br > max_rate )
-		br = max_rate;
-	br = ghb_get_best_audio_bitrate(acodec, br, channels);
-	return br;
-}
-
 gint
 ghb_get_best_mix(gint titleindex, gint track, gint acodec, gint mix)
 {
@@ -4836,16 +4734,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		}
 		else
 		{
-			int channels;
-
 			audio.out.mixdown = ghb_settings_combo_int(asettings, "AudioMixdown");
-			if (audio.out.mixdown == HB_AMIXDOWN_MONO)
-				channels = 1;
-			else if (audio.out.mixdown == HB_AMIXDOWN_6CH)
-				channels = 6;
-			else
-				channels = 2;
-
 			// Make sure the mixdown is valid and pick a new one if not.
 			audio.out.mixdown = ghb_get_best_mix(titleindex, 
 				audio.in.track, audio.out.codec, audio.out.mixdown);
@@ -4857,8 +4746,9 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 			else
 				audio.out.samplerate = srate;
 
-			audio.out.bitrate = ghb_get_best_audio_bitrate(
-				audio.out.codec, audio.out.bitrate, channels);
+			audio.out.bitrate = hb_get_best_audio_bitrate(
+				audio.out.codec, audio.out.bitrate, 
+				audio.out.samplerate, audio.out.mixdown);
 		}
 
 		// Add it to the jobs audio list

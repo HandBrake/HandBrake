@@ -185,11 +185,7 @@ const gchar* ghb_lookup_combo_string(const gchar *name, const GValue *gval);
 gchar* ghb_get_tmp_dir();
 gint ghb_select_audio_codec(GValue *settings, gint acodec, gint track);
 const gchar* ghb_select_audio_codec_str(GValue *settings, gint acodec, gint track);
-gint ghb_find_closest_audio_bitrate(gint codec, gint rate);
 gint ghb_find_closest_audio_rate(gint rate);
-gint ghb_get_best_audio_bitrate(gint acodec, gint br, gint channels);
-gint ghb_get_default_audio_bitrate(gint acodec, gint sr, gint br, gint channels);
-void ghb_get_audio_bitrate_limits(gint acodec, gint channels, gint *low, gint *high);
 GValue* ghb_lookup_acodec_value(gint val);
 
 #endif // _HBBACKEND_H_
