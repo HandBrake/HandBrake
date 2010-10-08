@@ -116,6 +116,8 @@ void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, in
                 *low = channels * 32;
             if (samplerate <= 24000)
                 *low = channels * 16;
+            if (channels == 6)
+                *low = 192;
             *high = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
             break;
 
