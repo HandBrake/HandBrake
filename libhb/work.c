@@ -559,100 +559,55 @@ static void do_job( hb_job_t * job, int cpu_count )
     }
 
     int requested_mixdown = 0;
+    int best_mixdown = 0;
     int requested_mixdown_index = 0;
 
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
 
-        if( audio->config.out.codec != audio->config.in.codec )
+        best_mixdown = hb_get_best_mixdown( audio->config.out.codec,
+                                            audio->config.in.channel_layout );
+
+        /* sense-check the current mixdown options */
+
+        /* log the requested mixdown */
+        for (j = 0; j < hb_audio_mixdowns_count; j++) {
+            if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown) {
+                requested_mixdown = audio->config.out.mixdown;
+                requested_mixdown_index = j;
+            }
+        }
+
+        /* sense-check the requested mixdown */
+        if( audio->config.out.mixdown == 0 &&
+            audio->config.out.codec != HB_ACODEC_AC3_PASS && 
+            audio->config.out.codec != HB_ACODEC_DCA_PASS )
         {
-            /* sense-check the current mixdown options */
+            /*
+             * Mixdown wasn't specified and this is not pass-through,
+             * set a default mixdown
+             */
+            audio->config.out.mixdown = best_mixdown;
+        }
 
-            /* log the requested mixdown */
-            for (j = 0; j < hb_audio_mixdowns_count; j++) {
-                if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown) {
-                    requested_mixdown = audio->config.out.mixdown;
-                    requested_mixdown_index = j;
-                }
-            }
-
-            /* sense-check the requested mixdown */
-
-            if( audio->config.out.mixdown == 0 &&
-                audio->config.out.codec != HB_ACODEC_AC3_PASS && 
-                audio->config.out.codec != HB_ACODEC_DCA_PASS )
+        if ( !( audio->config.out.codec & HB_ACODEC_PASS_FLAG ) )
+        {
+            if ( audio->config.out.mixdown > best_mixdown )
             {
-                /*
-                 * Mixdown wasn't specified and this is not pass-through,
-                 * set a default mixdown of stereo.
-                 */
-                audio->config.out.mixdown = HB_AMIXDOWN_STEREO;
+                audio->config.out.mixdown = best_mixdown;
             }
+        }
 
-            // Here we try to sanitize the audio input to output mapping.
-            // Constraints are:
-            //   1. only the AC3 & DCA decoder libraries currently support mixdown
-            //   2. the lame encoder library only supports stereo.
-            // So if the encoder is lame we need the output to be stereo (or multichannel
-            // matrixed into stereo like dpl). If the decoder is not AC3 or DCA the
-            // encoder has to handle the input format since we can't do a mixdown.
-            switch (audio->config.in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK)
-            {
-                // stereo input or something not handled below
-                default:
-                case HB_INPUT_CH_LAYOUT_STEREO:
-                    // mono gets mixed up to stereo & more than stereo gets mixed down
-                    if ( audio->config.out.mixdown > HB_AMIXDOWN_STEREO )
-                    {
-                        audio->config.out.mixdown = HB_AMIXDOWN_STEREO;
-                    }
-                    break;
-
-                // mono input
-                case HB_INPUT_CH_LAYOUT_MONO:
-                    // everything else passes through
-                    audio->config.out.mixdown = HB_AMIXDOWN_MONO;
-                    break;
-
-                // dolby (DPL1 aka Dolby Surround = 4.0 matrix-encoded) input
-                // the A52 flags don't allow for a way to distinguish between DPL1 and
-                // DPL2 on a DVD so we always assume a DPL1 source for A52_DOLBY.
-                case HB_INPUT_CH_LAYOUT_DOLBY:
-                    if ( audio->config.out.mixdown > HB_AMIXDOWN_DOLBY )
-                    {
-                        audio->config.out.mixdown = HB_AMIXDOWN_DOLBY;
-                    }
-                    break;
-
-                // 4 channel discrete
-                case HB_INPUT_CH_LAYOUT_2F2R:
-                case HB_INPUT_CH_LAYOUT_3F1R:
-                    if ( audio->config.out.mixdown > HB_AMIXDOWN_DOLBY )
-                    {
-                        audio->config.out.mixdown = HB_AMIXDOWN_DOLBY;
-                    }
-                    break;
-
-                // 5 or 6 channel discrete
-                case HB_INPUT_CH_LAYOUT_3F2R:
-                    if ( ! ( audio->config.in.channel_layout &
-                                    HB_INPUT_CH_LAYOUT_HAS_LFE ) )
-                    {
-                        // we don't do 5 channel discrete so mixdown to DPLII
-                        audio->config.out.mixdown = HB_AMIXDOWN_DOLBYPLII;
-                    }
-                    break;
-            }
-
+        if ( audio->config.out.mixdown != requested_mixdown )
+        {
             /* log the output mixdown */
-            for (j = 0; j < hb_audio_mixdowns_count; j++) {
-                if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown) {
-                    if ( audio->config.out.mixdown != requested_mixdown )
-                    {
-                        hb_log("work: sanitizing track %i mixdown %s to %s", i, hb_audio_mixdowns[requested_mixdown_index].human_readable_name, hb_audio_mixdowns[j].human_readable_name);
-                    }
-                    break;
+            for (j = 0; j < hb_audio_mixdowns_count; j++)
+            {
+                if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown)
+                {
+                    hb_log("work: sanitizing track %i mixdown %s to %s", i, hb_audio_mixdowns[requested_mixdown_index].human_readable_name, hb_audio_mixdowns[j].human_readable_name);
+                break;
                 }
             }
         }

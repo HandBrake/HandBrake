@@ -201,6 +201,108 @@ int hb_get_default_audio_bitrate( uint32_t codec, int samplerate, int mixdown )
     return bitrate;
 }
 
+int hb_get_best_mixdown( uint32_t codec, int layout )
+{
+    switch (layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK)
+    {
+        // stereo input or something not handled below
+        default:
+        case HB_INPUT_CH_LAYOUT_STEREO:
+            // mono gets mixed up to stereo & more than stereo gets mixed down
+            return HB_AMIXDOWN_STEREO;
+
+        // mono input
+        case HB_INPUT_CH_LAYOUT_MONO:
+            // everything else passes through
+            return HB_AMIXDOWN_MONO;
+
+        // dolby (DPL1 aka Dolby Surround = 4.0 matrix-encoded) input
+        // the A52 flags don't allow for a way to distinguish between DPL1 and
+        // DPL2 on a DVD so we always assume a DPL1 source for A52_DOLBY.
+        case HB_INPUT_CH_LAYOUT_DOLBY:
+            return HB_AMIXDOWN_DOLBY;
+
+        // 4 channel discrete
+        case HB_INPUT_CH_LAYOUT_2F2R:
+        case HB_INPUT_CH_LAYOUT_3F1R:
+            // a52dec and libdca can't upmix to 6ch, 
+            // so we must downmix these.
+            return HB_AMIXDOWN_DOLBYPLII;
+
+        // 5 or 6 channel discrete
+        case HB_INPUT_CH_LAYOUT_3F2R:
+            if ( ! ( layout & HB_INPUT_CH_LAYOUT_HAS_LFE ) )
+            {
+                // we don't do 5 channel discrete so mixdown to DPLII
+                // a52dec and libdca can't upmix to 6ch, 
+                // so we must downmix this.
+                return HB_AMIXDOWN_DOLBYPLII;
+            }
+            else
+            {
+                switch (codec)
+                {
+                    case HB_ACODEC_LAME:
+                        return HB_AMIXDOWN_DOLBYPLII;
+
+                    default:
+                        return HB_AMIXDOWN_6CH;
+                }
+            }
+    }
+}
+
+int hb_get_default_mixdown( uint32_t codec, int layout )
+{
+    switch (layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK)
+    {
+        // stereo input or something not handled below
+        default:
+        case HB_INPUT_CH_LAYOUT_STEREO:
+            // mono gets mixed up to stereo & more than stereo gets mixed down
+            return HB_AMIXDOWN_STEREO;
+
+        // mono input
+        case HB_INPUT_CH_LAYOUT_MONO:
+            // everything else passes through
+            return HB_AMIXDOWN_MONO;
+
+        // dolby (DPL1 aka Dolby Surround = 4.0 matrix-encoded) input
+        // the A52 flags don't allow for a way to distinguish between DPL1 and
+        // DPL2 on a DVD so we always assume a DPL1 source for A52_DOLBY.
+        case HB_INPUT_CH_LAYOUT_DOLBY:
+            return HB_AMIXDOWN_DOLBY;
+
+        // 4 channel discrete
+        case HB_INPUT_CH_LAYOUT_2F2R:
+        case HB_INPUT_CH_LAYOUT_3F1R:
+            // a52dec and libdca can't upmix to 6ch, 
+            // so we must downmix these.
+            return HB_AMIXDOWN_DOLBYPLII;
+
+        // 5 or 6 channel discrete
+        case HB_INPUT_CH_LAYOUT_3F2R:
+            if ( ! ( layout & HB_INPUT_CH_LAYOUT_HAS_LFE ) )
+            {
+                // we don't do 5 channel discrete so mixdown to DPLII
+                // a52dec and libdca can't upmix to 6ch, 
+                // so we must downmix this.
+                return HB_AMIXDOWN_DOLBYPLII;
+            }
+            else
+            {
+                switch (codec)
+                {
+                    case HB_ACODEC_AC3:
+                        return HB_AMIXDOWN_6CH;
+
+                    default:
+                        return HB_AMIXDOWN_DOLBYPLII;
+                }
+            }
+    }
+}
+
 /**********************************************************************
  * hb_reduce
  **********************************************************************

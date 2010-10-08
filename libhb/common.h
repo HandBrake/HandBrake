@@ -150,6 +150,8 @@ extern hb_mixdown_t hb_audio_mixdowns[];
 extern int          hb_audio_mixdowns_count;
 int hb_mixdown_get_mixdown_from_short_name( const char * short_name );
 const char * hb_mixdown_get_short_name_from_mixdown( int amixdown );
+int hb_get_best_mixdown( uint32_t codec, int layout );
+int hb_get_default_mixdown( uint32_t codec, int layout );
 int hb_find_closest_audio_bitrate(int bitrate);
 void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, int *low, int *high);
 int hb_get_best_audio_bitrate( uint32_t codec, int bitrate, int samplerate, int mixdown);

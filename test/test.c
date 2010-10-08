@@ -1796,26 +1796,11 @@ static int HandleEvents( hb_handle_t * h )
                      ( audio->out.codec & HB_ACODEC_PASS_FLAG ) &&
                     !( audio->out.codec & audio->in.codec ) )
                 {
-                    int channels;
                     audio->out.codec = HB_ACODEC_AC3;
-                    channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(audio->in.channel_layout);
-                    // bitrate setting is a placeholder till we get 
-                    // defaults and limits implemented in libhb
-                    if (channels == 1)
-                    {
-                        audio->out.mixdown = HB_AMIXDOWN_MONO;
-                        audio->out.bitrate = 96;
-                    }
-                    if (channels == 2)
-                    {
-                        audio->out.mixdown = HB_AMIXDOWN_DOLBYPLII;
-                        audio->out.bitrate = 224;
-                    }
-                    else
-                    {
-                        audio->out.mixdown = HB_AMIXDOWN_6CH;
-                        audio->out.bitrate = 640;
-                    }
+                    audio->out.mixdown = hb_get_default_mixdown( audio->out.codec, audio->in.channel_layout );
+                    audio->out.bitrate = hb_get_default_audio_bitrate(
+                        audio->out.codec, audio->out.samplerate,
+                        audio->out.mixdown );
                 }
                 // fix 'copy' to select a specific codec
                 if ( audio->out.codec & HB_ACODEC_PASS_FLAG )
