@@ -251,20 +251,18 @@ static int MP4Init( hb_mux_object_t * m )
                 {
                     if ((ac3_sample_rate_tab[jj] >> ii) == freq)
                     {
-                        break;
+                        goto rate_found1;
                     }
                 }
             }
-            if ( ii >= 3 )
-            {
-                hb_error("Unknown AC3 samplerate");
-                ii = jj = 0;
-            }
+            hb_error("Unknown AC3 samplerate");
+            ii = jj = 0;
+rate_found1:
             sr_shift = ii;
             sr_code = jj;
             for (ii = 0; ii < 19; ii++)
             {
-                if ((ac3_bitrate_tab[ii] >> sr_shift)*1000 == bitrate)
+                if ((ac3_bitrate_tab[ii] >> sr_shift) == bitrate)
                     break;
             }
             if ( ii >= 19 )
@@ -319,21 +317,19 @@ static int MP4Init( hb_mux_object_t * m )
                 {
                     if ((ac3_sample_rate_tab[jj] >> ii) == freq)
                     {
-                        break;
+                        goto rate_found2;
                     }
                 }
             }
-            if ( ii >= 3 )
-            {
-                hb_error("Unknown AC3 samplerate");
-                ii = jj = 0;
-            }
+            hb_error("Unknown AC3 samplerate");
+            ii = jj = 0;
+rate_found2:
             sr_shift = ii;
             sr_code = jj;
             bsid = 8 + ii;
             for (ii = 0; ii < 19; ii++)
             {
-                if ((ac3_bitrate_tab[ii] >> sr_shift)*1000 == bitrate)
+                if ((ac3_bitrate_tab[ii] >> sr_shift) == bitrate)
                     break;
             }
             if ( ii >= 19 )
