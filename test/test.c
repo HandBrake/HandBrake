@@ -1600,6 +1600,10 @@ static int HandleEvents( hb_handle_t * h )
 
                     if( audio != NULL )
                     {
+                        if ( !strcasecmp( token, "auto" ) )
+                        {
+                            arate = audio->in.samplerate;
+                        }
                         if (!is_sample_rate_valid(arate))
                         {
                             fprintf(stderr, "Invalid sample rate %d, using input rate %d\n", arate, audio->in.samplerate);
