@@ -571,14 +571,6 @@ static void do_job( hb_job_t * job, int cpu_count )
 
         /* sense-check the current mixdown options */
 
-        /* log the requested mixdown */
-        for (j = 0; j < hb_audio_mixdowns_count; j++) {
-            if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown) {
-                requested_mixdown = audio->config.out.mixdown;
-                requested_mixdown_index = j;
-            }
-        }
-
         /* sense-check the requested mixdown */
         if( audio->config.out.mixdown == 0 &&
             audio->config.out.codec != HB_ACODEC_AC3_PASS && 
@@ -589,6 +581,23 @@ static void do_job( hb_job_t * job, int cpu_count )
              * set a default mixdown
              */
             audio->config.out.mixdown = best_mixdown;
+            for (j = 0; j < hb_audio_mixdowns_count; j++)
+            {
+                if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown)
+                {
+                    hb_log("work: mixdown not specified, track %i setting mixdown %s", i, hb_audio_mixdowns[j].human_readable_name);
+                    break;
+                }
+            }
+        }
+
+        /* log the requested mixdown */
+        for (j = 0; j < hb_audio_mixdowns_count; j++) {
+            if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown) {
+                requested_mixdown = audio->config.out.mixdown;
+                requested_mixdown_index = j;
+                break;
+            }
         }
 
         if ( !( audio->config.out.codec & HB_ACODEC_PASS_FLAG ) )
