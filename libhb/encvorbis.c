@@ -68,6 +68,12 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
     }
 
     /* init */
+    for( i = 0; i < 3; i++ )
+    {
+        // Zero vorbis headers so that we don't crash in mk_laceXiph
+        // when vorbis_encode_setup_managed fails.
+        memset( w->config->vorbis.headers[i], 0, sizeof( ogg_packet ) );
+    }
     vorbis_info_init( &pv->vi );
     if( vorbis_encode_setup_managed( &pv->vi, pv->out_discrete_channels,
           audio->config.out.samplerate, -1, 1000 * audio->config.out.bitrate, -1 ) )
