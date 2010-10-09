@@ -262,7 +262,7 @@ rate_found1:
             sr_code = jj;
             for (ii = 0; ii < 19; ii++)
             {
-                if ((ac3_bitrate_tab[ii] >> sr_shift) == bitrate)
+                if ((ac3_bitrate_tab[ii] >> sr_shift)*1000 == bitrate)
                     break;
             }
             if ( ii >= 19 )
