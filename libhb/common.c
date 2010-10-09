@@ -107,30 +107,57 @@ void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, in
     {
         case HB_ACODEC_AC3:
             *low = 32 * channels;
-            *high = 640;
+            if (samplerate > 24000)
+            {
+                *high = 640;
+            }
+            else
+            {
+                *high = 320;
+            }
             break;
 
         case HB_ACODEC_CA_AAC:
-            *low = channels * 40;
-            if (samplerate <= 44100)
+            if (samplerate > 24000)
+            {
                 *low = channels * 32;
-            if (samplerate <= 24000)
+                *high = 256;
+                if (channels == 2)
+                    *high = 320;
+                if (channels == 6)
+                {
+                    *low = 160;
+                    *high = 768;
+                }
+            }
+            else
+            {
                 *low = channels * 16;
-            if (channels == 6)
-                *low = 192;
-            *high = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
+                *high = channels * 64;
+                if (channels == 6)
+                {
+                    *low = 80;
+                    *high = 320;
+                }
+            }
             break;
 
         case HB_ACODEC_FAAC:
             *low = 32 * channels;
-            *high = 160 * channels;
+            if (samplerate > 24000)
+            {
+                *high = 160 * channels;
+            }
+            else
+            {
+                *high = 128 * channels;
+            }
             if (*high > 768)
                 *high = 768;
             break;
 
         case HB_ACODEC_VORBIS:
-            *low = channels * 16;
-            *high = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
+            *high = channels * 80;
             if (samplerate > 24000)
             {
                 if (channels > 2)
@@ -138,13 +165,23 @@ void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, in
                     // Vorbis minimum is around 30kbps/ch for 6ch 
                     // at rates > 24k (32k/44.1k/48k) 
                     *low = 32 * channels;
+                    *high = 128 * channels;
                 }
                 else
                 {
                     // Allow 24kbps mono and 48kbps stereo at rates > 24k 
                     // (32k/44.1k/48k)
                     *low = 24 * channels;
+                    if (samplerate > 32000)
+                        *high = channels * 224;
+                    else
+                        *high = channels * 160;
                 }
+            }
+            else
+            {
+                *low = channels * 16;
+                *high = 80 * channels;
             }
             break;
 
