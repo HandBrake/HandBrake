@@ -18,6 +18,7 @@
 #define _HBBACKEND_H_
 
 #include "settings.h"
+#include "hb.h"
 
 enum
 {
@@ -83,13 +84,6 @@ typedef struct
 	gint angle_count;
 } ghb_title_info_t;
 
-typedef struct
-{
-	gint codec;
-	gint bitrate;
-	gint samplerate;
-} ghb_audio_info_t;
-
 #define GHB_AUDIO_SAMPLERATE 1
 #define GHB_AUDIO_BITRATE 2
 #define GHB_FRAMERATE 3
@@ -134,13 +128,12 @@ void ghb_set_scale(signal_user_data_t *ud, gint mode);
 GValue* ghb_get_chapters(gint titleindex);
 void ghb_get_chapter_duration(gint ti, gint ii, gint *hh, gint *mm, gint *ss);
 void ghb_part_duration(gint tt, gint sc, gint ec, gint *hh, gint *mm, gint *ss);
-gint ghb_get_best_mix(gint titleindex, gint track, gint acodec, gint mix);
+gint ghb_get_best_mix(hb_audio_config_t *aconfig, gint acodec, gint mix);
 gboolean ghb_ac3_in_audio_list(const GValue *audio_list);
 gboolean ghb_audio_is_passthru(gint acodec);
 gboolean ghb_audio_can_passthru(gint acodec);
 gint ghb_get_default_acodec(void);
-gboolean ghb_get_audio_info(
-	ghb_audio_info_t *ainfo, gint titleindex, gint audioindex);
+hb_audio_config_t* ghb_get_scan_audio_info(gint titleindex, gint audioindex);
 void ghb_set_passthru_bitrate_opts(GtkBuilder *builder, gint bitrate);
 void ghb_set_default_bitrate_opts(
 	GtkBuilder *builder, gint first_rate, gint last_rate);
@@ -183,8 +176,7 @@ gdouble ghb_lookup_combo_double(const gchar *name, const GValue *gval);
 const gchar* ghb_lookup_combo_option(const gchar *name, const GValue *gval);
 const gchar* ghb_lookup_combo_string(const gchar *name, const GValue *gval);
 gchar* ghb_get_tmp_dir();
-gint ghb_select_audio_codec(GValue *settings, gint acodec, gint track);
-const gchar* ghb_select_audio_codec_str(GValue *settings, gint acodec, gint track);
+gint ghb_select_audio_codec(GValue *settings, hb_audio_config_t *aconfig, gint acodec);
 gint ghb_find_closest_audio_rate(gint rate);
 GValue* ghb_lookup_acodec_value(gint val);
 

@@ -413,6 +413,7 @@ combo_name_map_t combo_name_map[] =
 	{"PictureDenoise", &denoise_opts},
 	{"VideoEncoder", &vcodec_opts},
 	{"AudioEncoder", &acodec_opts},
+	{"AudioEncoderActual", &acodec_opts},
 	{"x264_direct", &direct_opts},
 	{"x264_b_adapt", &badapt_opts},
 	{"x264_bpyramid", &bpyramid_opts},
@@ -1460,14 +1461,14 @@ ghb_get_title_number(gint titleindex)
 }
 
 static hb_audio_config_t*
-get_hb_audio(gint titleindex, gint track)
+get_hb_audio(hb_handle_t *h, gint titleindex, gint track)
 {
 	hb_list_t  * list;
 	hb_title_t * title;
     hb_audio_config_t *audio = NULL;
 	
-    if (h_scan == NULL) return NULL;
-	list = hb_get_titles( h_scan );
+    if (h == NULL) return NULL;
+	list = hb_get_titles( h );
 	if( !hb_list_count( list ) )
 	{
 		/* No valid title, stop right there */
@@ -1530,7 +1531,7 @@ ghb_grey_combo_options(GtkBuilder *builder)
 {
 	GtkWidget *widget;
 	gint container, track, titleindex, acodec;
-    hb_audio_config_t *audio = NULL;
+    hb_audio_config_t *aconfig = NULL;
 	GValue *gval;
 	
 	widget = GHB_WIDGET (builder, "title");
@@ -1541,7 +1542,7 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	gval = ghb_widget_value(widget);
 	track = ghb_lookup_combo_int("AudioTrack", gval);
 	ghb_value_free(gval);
-	audio = get_hb_audio(titleindex, track);
+	aconfig = get_hb_audio(h_scan, titleindex, track);
 	widget = GHB_WIDGET (builder, "FileFormat");
 	gval = ghb_widget_value(widget);
 	container = ghb_lookup_combo_int("FileFormat", gval);
@@ -1561,11 +1562,11 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	else
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_PASS, TRUE);
 
-	if (audio && audio->in.codec != HB_ACODEC_AC3)
+	if (aconfig && aconfig->in.codec != HB_ACODEC_AC3)
 	{
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_AC3_PASS, TRUE);
 	}
-	if (audio && audio->in.codec != HB_ACODEC_DCA)
+	if (aconfig && aconfig->in.codec != HB_ACODEC_DCA)
 	{
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_PASS, TRUE);
 	}
@@ -1589,9 +1590,9 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	gboolean allow_6ch = TRUE;
 	allow_mono = TRUE;
 	allow_6ch = acodec & ~HB_ACODEC_LAME;
-	if (audio)
+	if (aconfig)
 	{
-		gint layout = audio->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
+		gint layout = aconfig->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
 		allow_stereo =
 			((layout == HB_INPUT_CH_LAYOUT_MONO && !allow_mono) || layout >= HB_INPUT_CH_LAYOUT_STEREO);
 		allow_dolby =
@@ -1601,7 +1602,7 @@ ghb_grey_combo_options(GtkBuilder *builder)
 		allow_dpl2 = (layout == HB_INPUT_CH_LAYOUT_3F2R);
 		allow_6ch = allow_6ch &&
 			(layout == HB_INPUT_CH_LAYOUT_3F2R) && 
-			(audio->in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE);
+			(aconfig->in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE);
 	}
 	grey_combo_box_item(builder, "AudioMixdown", HB_AMIXDOWN_MONO, !allow_mono);
 	grey_combo_box_item(builder, "AudioMixdown", HB_AMIXDOWN_STEREO, !allow_stereo);
@@ -1611,9 +1612,8 @@ ghb_grey_combo_options(GtkBuilder *builder)
 }
 
 gint
-ghb_get_best_mix(gint titleindex, gint track, gint acodec, gint mix)
+ghb_get_best_mix(hb_audio_config_t *aconfig, gint acodec, gint mix)
 {
-    hb_audio_config_t *audio = NULL;
 	gboolean allow_mono = TRUE;
 	gboolean allow_stereo = TRUE;
 	gboolean allow_dolby = TRUE;
@@ -1625,11 +1625,10 @@ ghb_get_best_mix(gint titleindex, gint track, gint acodec, gint mix)
 		// Audio codec pass-thru.  No mixdown
 		return 0;
 	}
-	audio = get_hb_audio(titleindex, track);
-	if (audio)
+	if (aconfig)
 	{
 		allow_mono = TRUE;
-		gint layout = audio->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
+		gint layout = aconfig->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
 		allow_stereo =
 			((layout == HB_INPUT_CH_LAYOUT_MONO && !allow_mono) || layout >= HB_INPUT_CH_LAYOUT_STEREO);
 		allow_dolby =
@@ -1640,7 +1639,7 @@ ghb_get_best_mix(gint titleindex, gint track, gint acodec, gint mix)
 		allow_6ch =
 			(acodec & ~HB_ACODEC_LAME) &&
 			(layout == HB_INPUT_CH_LAYOUT_3F2R) && 
-			(audio->in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE);
+			(aconfig->in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE);
 	}
 	gboolean greater = FALSE;
 	if (mix == 0) 
@@ -3439,17 +3438,13 @@ ghb_get_title_info(ghb_title_info_t *tinfo, gint titleindex)
 	return TRUE;
 }
 
-gboolean
-ghb_get_audio_info(ghb_audio_info_t *ainfo, gint titleindex, gint audioindex)
+hb_audio_config_t*
+ghb_get_scan_audio_info(gint titleindex, gint audioindex)
 {
-    hb_audio_config_t *audio;
+    hb_audio_config_t *aconfig;
 	
-	audio = get_hb_audio(titleindex, audioindex);
-	if (audio == NULL) return FALSE; // Bad audioindex
-	ainfo->codec = audio->in.codec;
-	ainfo->bitrate = audio->in.bitrate;
-	ainfo->samplerate = audio->in.samplerate;
-	return TRUE;
+	aconfig = get_hb_audio(h_scan, titleindex, audioindex);
+	return aconfig;
 }
 
 gboolean
@@ -4127,38 +4122,16 @@ ghb_validate_subtitles(signal_user_data_t *ud)
 }
 
 gint
-ghb_select_audio_codec(GValue *settings, gint acodec, gint track)
+ghb_select_audio_codec(GValue *settings, hb_audio_config_t *aconfig, gint acodec)
 {
-	hb_list_t  * list;
-	hb_title_t * title;
-	hb_audio_config_t *audio;
-
-	if (h_scan == NULL) return -1;
-	list = hb_get_titles( h_scan );
-	if( !hb_list_count( list ) )
-	{
-		return -1;
-	}
-
-	gint titleindex;
-
-	titleindex = ghb_settings_combo_int(settings, "title");
-    title = hb_list_item( list, titleindex );
-	if (title == NULL) return -1;
-
 	gint mux = ghb_settings_combo_int(settings, "FileFormat");
 
-	if (track < 0 || track >= hb_list_count(title->list_audio))
-		return -1;
-
-	audio = (hb_audio_config_t *) hb_list_audio_config_item(
-									title->list_audio, track );
-
+	guint32 in_codec = aconfig ? aconfig->in.codec : HB_ACODEC_MASK;
 	if (mux == HB_MUX_MP4)
 	{
-		if ((acodec & audio->in.codec & HB_ACODEC_AC3))
+		if ((acodec & in_codec & HB_ACODEC_AC3))
 		{
-			return acodec & (audio->in.codec | HB_ACODEC_PASS_FLAG);
+			return acodec & (in_codec | HB_ACODEC_PASS_FLAG);
 		}
 		else if (acodec & HB_ACODEC_AC3)
 		{
@@ -4175,9 +4148,9 @@ ghb_select_audio_codec(GValue *settings, gint acodec, gint track)
 	}
 	else
 	{
-		if ((acodec & audio->in.codec & HB_ACODEC_PASS_MASK))
+		if ((acodec & in_codec & HB_ACODEC_PASS_MASK))
 		{
-			return acodec & (audio->in.codec | HB_ACODEC_PASS_FLAG);
+			return acodec & (in_codec | HB_ACODEC_PASS_FLAG);
 		}
 		else if (acodec & HB_ACODEC_AC3)
 		{
@@ -4196,20 +4169,6 @@ ghb_select_audio_codec(GValue *settings, gint acodec, gint track)
 			return HB_ACODEC_LAME;
 		}
 	}
-}
-
-const gchar*
-ghb_select_audio_codec_str(GValue *settings, gint icodec, gint track)
-{
-	gint acodec, ii;
-
-	acodec = ghb_select_audio_codec(settings, icodec, track);
-	for (ii = 0; ii < acodec_opts.count; ii++)
-	{
-		if (acodec_opts.map[ii].ivalue == acodec)
-			return acodec_opts.map[ii].option;
-	}
-	return "Unknown";
 }
 
 gboolean
@@ -4244,7 +4203,7 @@ ghb_validate_audio(signal_user_data_t *ud)
 	for (ii = 0; ii < count; ii++)
 	{
 		GValue *asettings;
-	    hb_audio_config_t *taudio;
+	    hb_audio_config_t *aconfig;
 
 		asettings = ghb_array_get_nth(audio_list, ii);
 		gint track = ghb_settings_combo_int(asettings, "AudioTrack");
@@ -4252,11 +4211,11 @@ ghb_validate_audio(signal_user_data_t *ud)
 		if (codec == HB_ACODEC_ANY)
 			continue;
 
-        taudio = (hb_audio_config_t *) hb_list_audio_config_item(
+        aconfig = (hb_audio_config_t *) hb_list_audio_config_item(
 											title->list_audio, track );
 		if ( ghb_audio_is_passthru(codec) &&
-			!(ghb_audio_can_passthru(taudio->in.codec) && 
-			 (taudio->in.codec & codec)))
+			!(ghb_audio_can_passthru(aconfig->in.codec) && 
+			 (aconfig->in.codec & codec)))
 		{
 			// Not supported.  AC3 is passthrough only, so input must be AC3
 			message = g_strdup_printf(
@@ -4270,7 +4229,7 @@ ghb_validate_audio(signal_user_data_t *ud)
 			}
 			g_free(message);
 			if ((codec & HB_ACODEC_AC3) ||
-				taudio->in.codec == HB_ACODEC_DCA)
+				aconfig->in.codec == HB_ACODEC_DCA)
 			{
 				codec = HB_ACODEC_AC3;
 			}
@@ -4324,7 +4283,7 @@ ghb_validate_audio(signal_user_data_t *ud)
 		gboolean allow_dpl2 = TRUE;
 		gboolean allow_6ch = TRUE;
 		allow_mono = TRUE;
-		gint layout = taudio->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
+		gint layout = aconfig->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
 		allow_stereo =
 			((layout == HB_INPUT_CH_LAYOUT_MONO && !allow_mono) || layout >= HB_INPUT_CH_LAYOUT_STEREO);
 		allow_dolby =
@@ -4335,7 +4294,7 @@ ghb_validate_audio(signal_user_data_t *ud)
 		allow_6ch =
 			(codec & ~HB_ACODEC_LAME) &&
 			(layout == HB_INPUT_CH_LAYOUT_3F2R) && 
-			(taudio->in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE);
+			(aconfig->in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE);
 
 		gchar *mix_unsup = NULL;
 		if (mix == HB_AMIXDOWN_MONO && !allow_mono)
@@ -4370,7 +4329,7 @@ ghb_validate_audio(signal_user_data_t *ud)
 				return FALSE;
 			}
 			g_free(message);
-			mix = ghb_get_best_mix(titleindex, track, codec, mix);
+			mix = ghb_get_best_mix(aconfig, codec, mix);
 			value = get_amix_value(mix);
 			ghb_settings_take_value(asettings, "AudioMixdown", value);
 		}
@@ -4710,7 +4669,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	{
 		GValue *asettings;
 	    hb_audio_config_t audio;
-	    hb_audio_config_t *taudio;
+	    hb_audio_config_t *aconfig;
 		gint acodec;
 
 		hb_audio_config_init(&audio);
@@ -4718,9 +4677,9 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		audio.in.track = ghb_settings_get_int(asettings, "AudioTrack");
 		audio.out.track = tcount;
 		acodec = ghb_settings_combo_int(asettings, "AudioEncoder");
-		audio.out.codec = ghb_select_audio_codec(js, acodec, audio.in.track);
+		audio.out.codec = ghb_select_audio_codec(js, aconfig, acodec);
 
-        taudio = (hb_audio_config_t *) hb_list_audio_config_item(
+        aconfig = (hb_audio_config_t *) hb_list_audio_config_item(
 									title->list_audio, audio.in.track );
         audio.out.dynamic_range_compression = 
 			ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
@@ -4736,13 +4695,13 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		{
 			audio.out.mixdown = ghb_settings_combo_int(asettings, "AudioMixdown");
 			// Make sure the mixdown is valid and pick a new one if not.
-			audio.out.mixdown = ghb_get_best_mix(titleindex, 
-				audio.in.track, audio.out.codec, audio.out.mixdown);
+			audio.out.mixdown = ghb_get_best_mix(aconfig, audio.out.codec, 
+													audio.out.mixdown);
 			audio.out.bitrate = 
 				ghb_settings_combo_int(asettings, "AudioBitrate");
 			gint srate = ghb_settings_combo_int(asettings, "AudioSamplerate");
 			if (srate == 0)	// 0 is same as source
-				audio.out.samplerate = taudio->in.samplerate;
+				audio.out.samplerate = aconfig->in.samplerate;
 			else
 				audio.out.samplerate = srate;
 

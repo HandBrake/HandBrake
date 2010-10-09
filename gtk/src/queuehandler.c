@@ -409,7 +409,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 
 		asettings = ghb_array_get_nth(audio_list, ii);
 
-		acodec = ghb_settings_combo_option(asettings, "AudioEncoder");
+		acodec = ghb_settings_combo_option(asettings, "AudioEncoderActual");
 		bitrate = ghb_settings_get_string(asettings, "AudioBitrate");
 		sr = ghb_settings_get_double(asettings, "AudioSamplerate");
 		samplerate = ghb_settings_get_string(asettings, "AudioSamplerate");
@@ -526,7 +526,7 @@ audio_list_refresh(signal_user_data_t *ud)
 		{
 			const gchar *track, *codec, *br, *sr, *mix;
 			gchar *s_drc;
-			gint itrack, icodec;
+			gint itrack;
 			gdouble drc;
 			GValue *asettings;
 
@@ -537,8 +537,7 @@ audio_list_refresh(signal_user_data_t *ud)
 
 			track = ghb_settings_combo_option(asettings, "AudioTrack");
 			itrack = ghb_settings_combo_int(asettings, "AudioTrack");
-			codec = ghb_settings_combo_option(asettings, "AudioEncoder");
-			icodec = ghb_settings_combo_int(asettings, "AudioEncoder");
+			codec = ghb_settings_combo_option(asettings, "AudioEncoderActual");
 			br = ghb_settings_combo_option(asettings, "AudioBitrate");
 			sr = ghb_settings_combo_option(asettings, "AudioSamplerate");
 			mix = ghb_settings_combo_option(asettings, "AudioMixdown");
@@ -548,9 +547,6 @@ audio_list_refresh(signal_user_data_t *ud)
 				s_drc = g_strdup("Off");
 			else
 				s_drc = g_strdup_printf("%.1f", drc);
-
-			if (icodec == HB_ACODEC_ANY)
-				codec = ghb_select_audio_codec_str(ud->settings, icodec, itrack);
 
 			gtk_list_store_set(GTK_LIST_STORE(store), &iter, 
 				// These are displayed in list
