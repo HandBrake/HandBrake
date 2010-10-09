@@ -4676,11 +4676,13 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		asettings = ghb_array_get_nth(audio_list, ii);
 		audio.in.track = ghb_settings_get_int(asettings, "AudioTrack");
 		audio.out.track = tcount;
-		acodec = ghb_settings_combo_int(asettings, "AudioEncoder");
-		audio.out.codec = ghb_select_audio_codec(js, aconfig, acodec);
 
         aconfig = (hb_audio_config_t *) hb_list_audio_config_item(
 									title->list_audio, audio.in.track );
+
+		acodec = ghb_settings_combo_int(asettings, "AudioEncoder");
+		audio.out.codec = ghb_select_audio_codec(js, aconfig, acodec);
+
         audio.out.dynamic_range_compression = 
 			ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
         if (audio.out.dynamic_range_compression < 1.0)
