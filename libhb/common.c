@@ -98,6 +98,38 @@ int hb_find_closest_audio_bitrate(int bitrate)
 }
 
 // Get the bitrate low and high limits for a codec/samplerate/mixdown triplet
+// The limits have been empirically determined through testing.  Max bitrates
+// in table below. Numbers in parenthesis are the target bitrate chosen.
+/*
+Encoder     1 channel           2 channels          6 channels
+
+faac
+24kHz       86 (128)            173 (256)           460 (768)
+48kHz       152 (160)           304 (320)           759 (768)
+
+Vorbis
+24kHz       97 (80)             177 (160)           527 (512)
+48kHz       241 (224)           465 (448)           783 (768)
+
+Lame
+24kHz       146 (768)           138 (768)
+48kHz       318 (768)           318 (768)
+
+ffac3
+24kHz       318 (320)           318 (320)           318 (320)
+48kHz       636 (640)           636 (640)           636 (640)
+
+Core Audio  (core audio api provides range of allowed bitrates)
+24kHz       16-64               32-128              80-320      
+44.1kHz                         64-320              160-768      
+48kHz       32-256              64-320              160-768                 
+
+Core Audio  (minimum limits found in testing)
+24kHz       16                  32                  96
+44.1kHz     32                  64                  160
+48kHz       40                  80                  240
+*/
+
 void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, int *low, int *high)
 {
     int channels;
@@ -118,7 +150,18 @@ void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, in
             break;
 
         case HB_ACODEC_CA_AAC:
-            if (samplerate > 24000)
+            if (samplerate > 44100)
+            {
+                *low = channels * 40;
+                *high = 256;
+                if (channels == 2)
+                    *high = 320;
+                if (channels == 6)
+                {
+                    *high = 768;
+                }
+            }
+            else if (samplerate > 24000)
             {
                 *low = channels * 32;
                 *high = 256;
@@ -136,7 +179,6 @@ void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, in
                 *high = channels * 64;
                 if (channels == 6)
                 {
-                    *low = 80;
                     *high = 320;
                 }
             }
