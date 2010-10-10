@@ -59,13 +59,13 @@ namespace Handbrake.Controls
             this.AudioTrackGroup = new System.Windows.Forms.GroupBox();
             this.AudioMenuRowHeightHack = new System.Windows.Forms.ImageList(this.components);
             this.audioList = new System.Windows.Forms.DataGridView();
-            this.DRC = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Bitrate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Samplerate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Mixdown = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AudioCodec = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Track = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AudioCodec = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Mixdown = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Samplerate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Bitrate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DRC = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.audioMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tb_drc)).BeginInit();
             this.AudioTrackGroup.SuspendLayout();
@@ -166,7 +166,7 @@ namespace Handbrake.Controls
             this.tb_drc.Size = new System.Drawing.Size(57, 45);
             this.tb_drc.TabIndex = 60;
             this.tb_drc.TickFrequency = 10;
-            this.tb_drc.Scroll += new System.EventHandler(this.controlChanged);
+            this.tb_drc.Scroll += new System.EventHandler(this.ControlChanged);
             // 
             // label68
             // 
@@ -227,12 +227,14 @@ namespace Handbrake.Controls
             "AAC (faac)",
             "MP3 (lame)",
             "Vorbis (vorbis)",
-            "AC3 Passthru"});
+            "AC3 Passthru",
+            "AC3 (ffmpeg)",
+            "DTS Passthru"});
             this.drp_audioEncoder.Location = new System.Drawing.Point(215, 34);
             this.drp_audioEncoder.Name = "drp_audioEncoder";
             this.drp_audioEncoder.Size = new System.Drawing.Size(111, 21);
             this.drp_audioEncoder.TabIndex = 52;
-            this.drp_audioEncoder.SelectedIndexChanged += new System.EventHandler(this.controlChanged);
+            this.drp_audioEncoder.SelectedIndexChanged += new System.EventHandler(this.ControlChanged);
             // 
             // label27
             // 
@@ -259,7 +261,7 @@ namespace Handbrake.Controls
             this.drp_audioMix.Name = "drp_audioMix";
             this.drp_audioMix.Size = new System.Drawing.Size(129, 21);
             this.drp_audioMix.TabIndex = 54;
-            this.drp_audioMix.SelectedIndexChanged += new System.EventHandler(this.controlChanged);
+            this.drp_audioMix.SelectedIndexChanged += new System.EventHandler(this.ControlChanged);
             // 
             // drp_audioTrack
             // 
@@ -271,7 +273,7 @@ namespace Handbrake.Controls
             this.drp_audioTrack.Name = "drp_audioTrack";
             this.drp_audioTrack.Size = new System.Drawing.Size(194, 21);
             this.drp_audioTrack.TabIndex = 50;
-            this.drp_audioTrack.SelectedIndexChanged += new System.EventHandler(this.controlChanged);
+            this.drp_audioTrack.SelectedIndexChanged += new System.EventHandler(this.ControlChanged);
             // 
             // drp_audioBitrate
             // 
@@ -292,7 +294,7 @@ namespace Handbrake.Controls
             this.drp_audioBitrate.Name = "drp_audioBitrate";
             this.drp_audioBitrate.Size = new System.Drawing.Size(70, 21);
             this.drp_audioBitrate.TabIndex = 58;
-            this.drp_audioBitrate.SelectedIndexChanged += new System.EventHandler(this.controlChanged);
+            this.drp_audioBitrate.SelectedIndexChanged += new System.EventHandler(this.ControlChanged);
             // 
             // drp_audioSample
             // 
@@ -309,7 +311,7 @@ namespace Handbrake.Controls
             this.drp_audioSample.Name = "drp_audioSample";
             this.drp_audioSample.Size = new System.Drawing.Size(55, 21);
             this.drp_audioSample.TabIndex = 56;
-            this.drp_audioSample.SelectedIndexChanged += new System.EventHandler(this.controlChanged);
+            this.drp_audioSample.SelectedIndexChanged += new System.EventHandler(this.ControlChanged);
             // 
             // AudioTrackGroup
             // 
@@ -371,32 +373,29 @@ namespace Handbrake.Controls
             this.audioList.TabIndex = 67;
             this.audioList.SelectionChanged += new System.EventHandler(this.audioList_SelectionChanged);
             // 
-            // DRC
+            // Track
             // 
-            this.DRC.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.DRC.FillWeight = 96.36334F;
-            this.DRC.HeaderText = "DRC";
-            this.DRC.Name = "DRC";
-            this.DRC.ReadOnly = true;
-            this.DRC.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Track.FillWeight = 304.2808F;
+            this.Track.HeaderText = "Track";
+            this.Track.Name = "Track";
+            this.Track.ReadOnly = true;
+            this.Track.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Track.Width = 50;
             // 
-            // Bitrate
+            // Source
             // 
-            this.Bitrate.FillWeight = 49.69727F;
-            this.Bitrate.HeaderText = "Bitrate";
-            this.Bitrate.Name = "Bitrate";
-            this.Bitrate.ReadOnly = true;
-            this.Bitrate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Bitrate.Width = 75;
+            this.Source.FillWeight = 49.69727F;
+            this.Source.HeaderText = "Source";
+            this.Source.Name = "Source";
+            this.Source.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Source.Width = 150;
             // 
-            // Samplerate
+            // AudioCodec
             // 
-            this.Samplerate.FillWeight = 49.69727F;
-            this.Samplerate.HeaderText = "Samplerate";
-            this.Samplerate.Name = "Samplerate";
-            this.Samplerate.ReadOnly = true;
-            this.Samplerate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Samplerate.Width = 75;
+            this.AudioCodec.HeaderText = "Audio Codec";
+            this.AudioCodec.Name = "AudioCodec";
+            this.AudioCodec.ReadOnly = true;
+            this.AudioCodec.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Mixdown
             // 
@@ -407,29 +406,32 @@ namespace Handbrake.Controls
             this.Mixdown.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.Mixdown.Width = 150;
             // 
-            // AudioCodec
+            // Samplerate
             // 
-            this.AudioCodec.HeaderText = "Audio Codec";
-            this.AudioCodec.Name = "AudioCodec";
-            this.AudioCodec.ReadOnly = true;
-            this.AudioCodec.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Samplerate.FillWeight = 49.69727F;
+            this.Samplerate.HeaderText = "Samplerate";
+            this.Samplerate.Name = "Samplerate";
+            this.Samplerate.ReadOnly = true;
+            this.Samplerate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Samplerate.Width = 75;
             // 
-            // Source
+            // Bitrate
             // 
-            this.Source.FillWeight = 49.69727F;
-            this.Source.HeaderText = "Source";
-            this.Source.Name = "Source";
-            this.Source.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Source.Width = 150;
+            this.Bitrate.FillWeight = 49.69727F;
+            this.Bitrate.HeaderText = "Bitrate";
+            this.Bitrate.Name = "Bitrate";
+            this.Bitrate.ReadOnly = true;
+            this.Bitrate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Bitrate.Width = 75;
             // 
-            // Track
+            // DRC
             // 
-            this.Track.FillWeight = 304.2808F;
-            this.Track.HeaderText = "Track";
-            this.Track.Name = "Track";
-            this.Track.ReadOnly = true;
-            this.Track.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Track.Width = 50;
+            this.DRC.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.DRC.FillWeight = 96.36334F;
+            this.DRC.HeaderText = "DRC";
+            this.DRC.Name = "DRC";
+            this.DRC.ReadOnly = true;
+            this.DRC.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // AudioPanel
             // 

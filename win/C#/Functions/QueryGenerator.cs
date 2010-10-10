@@ -597,9 +597,11 @@ namespace Handbrake.Functions
                 case "Vorbis (vorbis)":
                     return "vorbis";
                 case "AC3 Passthru":
-                    return "ac3";
+                    return "copy:ac3";
                 case "DTS Passthru":
-                    return "dts";
+                    return "copy:dts";
+                case "AC3 (ffmpeg)":
+                    return "ac3";
                 default:
                     return string.Empty;
             }

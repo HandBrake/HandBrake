@@ -21,6 +21,11 @@ namespace Handbrake.Controls
     /// </summary>
     public partial class AudioPanel : UserControl
     {
+
+        private const string AC3Passthru = "AC3 Passthru";
+
+        private const string DTSPassthru = "DTS Passthru";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioPanel"/> class. 
         /// Create a new instance of the Audio Panel
@@ -55,32 +60,26 @@ namespace Handbrake.Controls
         public void SetContainer(string path)
         {
             string oldval = drp_audioEncoder.Text;
-            if ((path.Contains("MP4")) || (path.Contains("M4V")))
+
+            drp_audioEncoder.Items.Clear();
+            drp_audioEncoder.Items.Add("AAC (faac)");
+            drp_audioEncoder.Items.Add("MP3 (lame)");
+            drp_audioEncoder.Items.Add(AC3Passthru);
+            drp_audioEncoder.Items.Add("AC3 (ffmpeg)");
+
+            if (path.Contains("MKV"))
             {
-                drp_audioEncoder.Items.Clear();
-                drp_audioEncoder.Items.Add("AAC (faac)");
-                drp_audioEncoder.Items.Add("MP3 (lame)");
-                drp_audioEncoder.Items.Add("AC3 Passthru");
-                if ((oldval != "AAC (faac)") && (oldval != "AC3 Passthru"))
-                    drp_audioEncoder.SelectedIndex = 0;
-                else
-                    drp_audioEncoder.SelectedItem = oldval;
-            }
-            else if (path.Contains("MKV"))
-            {
-                drp_audioEncoder.Items.Clear();
-                drp_audioEncoder.Items.Add("AAC (faac)");
-                drp_audioEncoder.Items.Add("MP3 (lame)");
-                drp_audioEncoder.Items.Add("AC3 Passthru");
-                drp_audioEncoder.Items.Add("DTS Passthru");
+                drp_audioEncoder.Items.Add(DTSPassthru);
                 drp_audioEncoder.Items.Add("Vorbis (vorbis)");
+            }
+
+            if (!drp_audioEncoder.Text.Contains(oldval))
+                drp_audioEncoder.SelectedIndex = 0;
+            else
                 drp_audioEncoder.SelectedItem = oldval;
 
-                if (drp_audioEncoder.Text == string.Empty)
-                    drp_audioEncoder.SelectedIndex = 0;
-            }
-
             // Make sure the table is updated with new audio codecs
+            // Defaults to AAC encoding.
             foreach (DataGridViewRow row in audioList.Rows)
             {
                 if (!drp_audioEncoder.Items.Contains(row.Cells[2].Value))
@@ -117,7 +116,7 @@ namespace Handbrake.Controls
                 newTrack.Cells[2].Value = track.Encoder;
                 newTrack.Cells[3].Value = track.MixDown;
                 newTrack.Cells[4].Value = track.SampleRate;
-                newTrack.Cells[5].Value = track.Encoder.Contains("AC3") || track.Encoder.Contains("DTS") ? "Auto" : track.Bitrate;
+                newTrack.Cells[5].Value = track.Encoder.Contains(AC3Passthru) || track.Encoder.Contains(DTSPassthru) ? "Auto" : track.Bitrate;
                 newTrack.Cells[6].Value = track.DRC;
                 AddTrackForPreset(newTrack);
             }
@@ -144,12 +143,6 @@ namespace Handbrake.Controls
             // Setup the Audio track source dropdown with the new audio tracks.
             drp_audioTrack.Items.Clear();
             drp_audioTrack.Items.AddRange(selectedTitle.AudioTracks.ToArray());
-
-            // Reset the Audio Track Selection to the first audio track of the source, or Audiomatic if that fails
-            foreach (DataGridViewRow row in this.audioList.Rows)
-            {
-                row.Cells[1].Value = "Automatic";
-            }
 
             // Add any tracks the preset has, if there is a preset and no audio tracks in the list currently
             if (audioList.Rows.Count == 0 && preset != null)
@@ -244,7 +237,7 @@ namespace Handbrake.Controls
         /// <param name="e">
         /// The e.
         /// </param>
-        private void controlChanged(object sender, EventArgs e)
+        private void ControlChanged(object sender, EventArgs e)
         {
             Control ctl = (Control)sender;
 
@@ -256,14 +249,14 @@ namespace Handbrake.Controls
                         audioList.SelectedRows[0].Cells[1].Value = drp_audioTrack.Text;
 
                         // If the track isn't AC3, and the encoder is, change it.
-                        if (audioList.SelectedRows[0].Cells[2].Value.ToString().Contains("AC3") && !audioList.SelectedRows[0].Cells[1].Value.ToString().Contains("AC3"))
+                        if (audioList.SelectedRows[0].Cells[2].Value.ToString().Contains(AC3Passthru) && !audioList.SelectedRows[0].Cells[1].Value.ToString().Contains("(AC3)"))
                         {
                             // Switch to AAC
                             drp_audioEncoder.SelectedIndex = 0;
                         }
 
                         // If the track isn't DTS, and the encoder is, change it.
-                        if (audioList.SelectedRows[0].Cells[2].Value.ToString().Contains("DTS") && !audioList.SelectedRows[0].Cells[1].Value.ToString().Contains("DTS"))
+                        if (audioList.SelectedRows[0].Cells[2].Value.ToString().Contains(DTSPassthru) && !audioList.SelectedRows[0].Cells[1].Value.ToString().Contains("DTS"))
                         {
                             // Switch to AAC
                             drp_audioEncoder.SelectedIndex = 0;
@@ -275,7 +268,7 @@ namespace Handbrake.Controls
                     SetBitrate();
 
                     // Configure the widgets with values
-                    if (drp_audioEncoder.Text.Contains("AC3") || drp_audioEncoder.Text.Contains("DTS"))
+                    if (drp_audioEncoder.Text.Contains(AC3Passthru) || drp_audioEncoder.Text.Contains(DTSPassthru))
                     {
                         drp_audioMix.Enabled =
                             drp_audioBitrate.Enabled = drp_audioSample.Enabled = tb_drc.Enabled = false;
@@ -592,6 +585,7 @@ namespace Handbrake.Controls
             drp_audioBitrate.Items.Remove("320");
             drp_audioBitrate.Items.Remove("384");
             drp_audioBitrate.Items.Remove("448");
+            drp_audioBitrate.Items.Remove("640");
             drp_audioBitrate.Items.Remove("768");
 
             switch (drp_audioEncoder.Text)
@@ -605,12 +599,15 @@ namespace Handbrake.Controls
                 case "Vorbis (vorbis)":
                     max = 384;
                     break;
-                case "AC3 Passthru":
+                case "AC3 (ffmpeg)":
+                    max = 640;
+                    break;
+                case AC3Passthru:
                     drp_audioBitrate.Items.Add("Auto");
                     drp_audioBitrate.SelectedItem = "Auto";
                     drp_audioSample.SelectedItem = "Auto";
                     break;
-                case "DTS Passthru":
+                case DTSPassthru:
                     drp_audioBitrate.Items.Add("Auto");
                     drp_audioBitrate.SelectedItem = "Auto";
                     drp_audioSample.SelectedItem = "Auto";
@@ -630,9 +627,14 @@ namespace Handbrake.Controls
                 drp_audioBitrate.Items.Add("384");
             }
 
-            if (max == 768)
+            if (max >= 640)
             {
                 drp_audioBitrate.Items.Add("448");
+                drp_audioBitrate.Items.Add("640");
+            }
+
+            if (max == 768)
+            {
                 drp_audioBitrate.Items.Add("768");
             }
 
@@ -651,31 +653,35 @@ namespace Handbrake.Controls
             drp_audioMix.Items.Add("Dolby Surround");
             drp_audioMix.Items.Add("Dolby Pro Logic II");
             drp_audioMix.Items.Add("6 Channel Discrete");
-            drp_audioMix.Items.Add("AC3 Passthru");
-            drp_audioMix.Items.Add("DTS Passthru");
+            drp_audioMix.Items.Add(AC3Passthru);
+            drp_audioMix.Items.Add(DTSPassthru);
 
             drp_audioMix.SelectedItem = "Dolby Pro Logic II";
 
             switch (drp_audioEncoder.Text)
             {
                 case "AAC (faac)":
-                    drp_audioMix.Items.Remove("AC3 Passthru");
-                    drp_audioMix.Items.Remove("DTS Passthru");
+                    drp_audioMix.Items.Remove(AC3Passthru);
+                    drp_audioMix.Items.Remove(DTSPassthru);
                     break;
                 case "MP3 (lame)":
                     drp_audioMix.Items.Remove("6 Channel Discrete");
-                    drp_audioMix.Items.Remove("AC3 Passthru");
-                    drp_audioMix.Items.Remove("DTS Passthru");
+                    drp_audioMix.Items.Remove(AC3Passthru);
+                    drp_audioMix.Items.Remove(DTSPassthru);
                     break;
                 case "Vorbis (vorbis)":
-                    drp_audioMix.Items.Remove("AC3 Passthru");
-                    drp_audioMix.Items.Remove("DTS Passthru");
+                    drp_audioMix.Items.Remove(AC3Passthru);
+                    drp_audioMix.Items.Remove(DTSPassthru);
+                    break;
+                case "AC3 (ffmpeg)":
+                    drp_audioMix.Items.Remove(AC3Passthru);
+                    drp_audioMix.Items.Remove(DTSPassthru);
                     break;
                 case "AC3 Passthru":
-                    drp_audioMix.SelectedItem = "AC3 Passthru";
+                    drp_audioMix.SelectedItem = AC3Passthru;
                     break;
                 case "DTS Passthru":
-                    drp_audioMix.SelectedItem = "DTS Passthru";
+                    drp_audioMix.SelectedItem = DTSPassthru;
                     break;
             }
         }

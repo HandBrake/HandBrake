@@ -353,7 +353,7 @@ namespace Handbrake.Functions
             Match noAudio = Regex.Match(input, @"-a none");
             Match audioTracks = Regex.Match(input, @"-a ([0-9,]*)");
             Match audioTrackMixes = Regex.Match(input, @"-6 ([0-9a-zA-Z,]*)");
-            Match audioEncoders = Regex.Match(input, @"-E ([a-zA-Z0-9+,]*)");
+            Match audioEncoders = Regex.Match(input, @"-E ([a-zA-Z0-9+,:]*)");
             Match audioBitrates = Regex.Match(input, @"-B ([0-9a-zA-Z,]*)"); // Auto = a-z
             Match audioSampleRates = Regex.Match(input, @"-R ([0-9a-zA-Z.,]*)"); // Auto = a-z
             Match drcValues = Regex.Match(input, @"-D ([0-9.,]*)");
@@ -688,8 +688,10 @@ namespace Handbrake.Functions
                 case "vorbis":
                     return "Vorbis (vorbis)";
                 case "ac3":
+                    return "AC3 (ffmpeg)";
+                case "copy:ac3":
                     return "AC3 Passthru";
-                case "dts":
+                case "copy:dts":
                     return "DTS Passthru";
                 default:
                     return "AAC (faac)";

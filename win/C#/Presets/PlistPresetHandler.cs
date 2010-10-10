@@ -549,16 +549,8 @@ namespace Handbrake.Presets
             xmlWriter.WriteStartElement("key");
             xmlWriter.WriteString(keyName);
             xmlWriter.WriteEndElement();
-            if (value)
-            {
-                xmlWriter.WriteStartElement("true");
-                xmlWriter.WriteEndElement();
-            }
-            else
-            {
-                xmlWriter.WriteStartElement("false");
-                xmlWriter.WriteEndElement();
-            }
+            xmlWriter.WriteStartElement(value ? "true" : "false");
+            xmlWriter.WriteEndElement();
         }
 
         /// <summary>

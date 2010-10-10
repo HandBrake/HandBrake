@@ -39,7 +39,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -407,9 +407,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewCellStyle2.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle2;
             this.number.Frozen = true;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
@@ -717,13 +717,17 @@ namespace Handbrake
             this.mnu_importMacPreset.Name = "mnu_importMacPreset";
             this.mnu_importMacPreset.Size = new System.Drawing.Size(194, 22);
             this.mnu_importMacPreset.Text = "Import";
+            this.mnu_importMacPreset.ToolTipText = "Import a (plist - mac format) preset.\r\nYou can import plist presets from the Mac," +
+                " Linux and Windows GUI\'s";
             this.mnu_importMacPreset.Click += new System.EventHandler(this.mnu_importMacPreset_Click);
             // 
             // mnu_exportMacPreset
             // 
             this.mnu_exportMacPreset.Name = "mnu_exportMacPreset";
             this.mnu_exportMacPreset.Size = new System.Drawing.Size(194, 22);
-            this.mnu_exportMacPreset.Text = "Export";
+            this.mnu_exportMacPreset.Text = "Export (Experimental)";
+            this.mnu_exportMacPreset.ToolTipText = "Export a (plist - mac format) preset.\r\nThis can be imported by Mac, Linux or Wind" +
+                "ows GUI\'s";
             this.mnu_exportMacPreset.Click += new System.EventHandler(this.mnu_exportMacPreset_Click);
             // 
             // mnu_SelectDefault
