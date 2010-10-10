@@ -75,7 +75,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	gboolean pass2 = FALSE, keep_aspect, vqtype, turbo;
 	gint pic_par;
 	gboolean tweaks;
-	gchar *escape;
+	gchar *escape, *escape2;
 	
 	g_debug("update_queue_list ()");
 	if (settings == NULL) return;
@@ -90,6 +90,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	dest = ghb_settings_get_string(settings, "destination");
 	basename = g_path_get_basename(dest);
 	escape = g_markup_escape_text(basename, -1);
+	escape2 = g_markup_escape_text(vol_name, -1);
 
 	vqtype = ghb_settings_get_boolean(settings, "vquality_type_constant");
 	if (!vqtype)
@@ -106,11 +107,12 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		"<big><b>%s</b></big> "
 		"<small>(Title %d, %s %d through %d, %d Video %s)"
 		" --> %s</small>",
-		 vol_name, title, points, start_point, end_point, 
+		 escape2, title, points, start_point, end_point, 
 		 pass2 ? 2:1, pass2 ? "Passes":"Pass", escape
 	);
 	g_free(basename);
 	g_free(escape);
+	g_free(escape2);
 
 	if (piter)
 		iter = *piter;
