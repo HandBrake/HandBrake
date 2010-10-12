@@ -616,19 +616,20 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     AVPicture            pic_in, pic_preview, pic_deint, pic_crop, pic_scale;
     struct SwsContext  * context;
     int                  i;
+    int                  deint_width = ((title->width + 7) >> 3) << 3;
     int                  rgb_width = ((job->width + 7) >> 3) << 3;
     int                  preview_size;
 
     swsflags = SWS_LANCZOS | SWS_ACCURATE_RND;
 
     buf1 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P, title->width, title->height ) );
-    buf2 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P, title->width, title->height ) );
+    buf2 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P, deint_width, title->height ) );
     buf3 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P, rgb_width, job->height ) );
     buf4 = av_malloc( avpicture_get_size( PIX_FMT_RGB32, rgb_width, job->height ) );
     avpicture_fill( &pic_in, buf1, PIX_FMT_YUV420P,
                     title->width, title->height );
     avpicture_fill( &pic_deint, buf2, PIX_FMT_YUV420P,
-                    title->width, title->height );
+                    deint_width, title->height );
     avpicture_fill( &pic_scale, buf3, PIX_FMT_YUV420P,
                     rgb_width, job->height );
     avpicture_fill( &pic_preview, buf4, PIX_FMT_RGB32,
