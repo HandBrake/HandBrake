@@ -510,10 +510,9 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
 
         if ( ! pv->sws_context )
         {
-            pv->sws_context = sws_getContext( context->width, context->height, context->pix_fmt,
+            pv->sws_context = hb_sws_get_context( context->width, context->height, context->pix_fmt,
                                               w, h, PIX_FMT_YUV420P,
-                                              SWS_LANCZOS|SWS_ACCURATE_RND,
-                                              NULL, NULL, NULL );
+                                              SWS_LANCZOS|SWS_ACCURATE_RND);
         }
         sws_scale( pv->sws_context, frame->data, frame->linesize, 0, h,
                    dstpic.data, dstpic.linesize );

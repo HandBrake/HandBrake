@@ -91,6 +91,41 @@ int hb_av_find_stream_info(AVFormatContext *ic)
     return ret;
 }
 
+struct SwsContext*
+hb_sws_get_context(int srcW, int srcH, enum PixelFormat srcFormat,
+                   int dstW, int dstH, enum PixelFormat dstFormat,
+                   int flags)
+{
+    struct SwsContext * ctx;
+
+#if 0
+    // sws_getContext is being depricated.  But it appears that
+    // the new method isn't quite wrung out yet.  So when it is
+    // this code should be fixed up and enabled.
+    ctx = sws_alloc_context();
+    if ( ctx )
+    {
+        av_set_int(ctx, "srcw", srcW);
+        av_set_int(ctx, "srch", srcH);
+        av_set_int(ctx, "src_format", srcFormat);
+        av_set_int(ctx, "dstw", dstW);
+        av_set_int(ctx, "dsth", dstH);
+        av_set_int(ctx, "dst_format", dstFormat);
+        av_set_int(ctx, "sws_flags", flags);
+
+        if (sws_init_context(ctx, NULL, NULL) < 0) {
+            fprintf(stderr, "Cannot initialize resampling context\n");
+            sws_freeContext(ctx);
+            ctx = NULL;
+        } 
+    }
+#else
+    ctx = sws_getContext(srcW, srcH, srcFormat, dstW, dstH, dstFormat, 
+                         flags, NULL, NULL, NULL);
+#endif
+    return ctx;
+}
+
 int hb_avcodec_close(AVCodecContext *avctx)
 {
     int ret;
@@ -665,11 +700,11 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     }
 
     // Get scaling context
-    context = sws_getContext(title->width  - (job->crop[2] + job->crop[3]),
+    context = hb_sws_get_context(title->width  - (job->crop[2] + job->crop[3]),
                              title->height - (job->crop[0] + job->crop[1]),
                              PIX_FMT_YUV420P,
                              job->width, job->height, PIX_FMT_YUV420P,
-                             swsflags, NULL, NULL, NULL);
+                             swsflags);
 
     // Scale
     sws_scale(context,
@@ -681,9 +716,9 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     sws_freeContext( context );
 
     // Get preview context
-    context = sws_getContext(rgb_width, job->height, PIX_FMT_YUV420P,
+    context = hb_sws_get_context(rgb_width, job->height, PIX_FMT_YUV420P,
                               rgb_width, job->height, PIX_FMT_RGB32,
-                              swsflags, NULL, NULL, NULL);
+                              swsflags);
 
     // Create preview
     sws_scale(context,

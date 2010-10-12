@@ -291,10 +291,9 @@ static hb_buffer_t *hb_copy_frame( hb_job_t *job, int width, int height,
             memcpy( in.data[1], u, src_wh >> 2 );
             memcpy( in.data[2], v, src_wh >> 2 );
         }
-        struct SwsContext *context = sws_getContext( width, height, pixfmt,
+        struct SwsContext *context = hb_sws_get_context( width, height, pixfmt,
                                                      dst_w, dst_h, PIX_FMT_YUV420P,
-                                                     SWS_LANCZOS|SWS_ACCURATE_RND,
-                                                     NULL, NULL, NULL );
+                                                     SWS_LANCZOS|SWS_ACCURATE_RND);
         sws_scale( context, in.data, in.linesize, 0, height, out.data, out.linesize );
         sws_freeContext( context );
 

@@ -721,11 +721,11 @@ int renderInit( hb_work_object_t * w, hb_job_t * job )
     if( job->crop[0] || job->crop[1] || job->crop[2] || job->crop[3] ||
         job->width != title->width || job->height != title->height )
     {
-        pv->context = sws_getContext(title->width  - (job->crop[2] + job->crop[3]),
+        pv->context = hb_sws_get_context(title->width  - (job->crop[2] + job->crop[3]),
                                      title->height - (job->crop[0] + job->crop[1]),
                                      PIX_FMT_YUV420P,
                                      job->width, job->height, PIX_FMT_YUV420P,
-                                     swsflags, NULL, NULL, NULL);
+                                     swsflags);
     }
 
     /* Setup FIFO queue for subtitle cache */
