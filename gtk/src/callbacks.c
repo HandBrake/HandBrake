@@ -1974,7 +1974,30 @@ typedef struct
 	const gchar *msg;
 	const gchar *action;
 	gint timeout;
+	signal_user_data_t *ud;
 } countdown_t;
+
+static gboolean
+quit_cb(countdown_t *cd)
+{
+	gchar *str;
+
+	cd->timeout--;
+	if (cd->timeout == 0)
+	{
+		ghb_hb_cleanup(FALSE);
+		prune_logs(cd->ud);
+
+		gtk_widget_destroy (GTK_WIDGET(cd->dlg));
+		gtk_main_quit();
+		return FALSE;
+	}
+	str = g_strdup_printf("%s\n\n%s in %d seconds ...", 
+							cd->msg, cd->action, cd->timeout);
+	gtk_message_dialog_set_markup(cd->dlg, str);
+	g_free(str);
+	return TRUE;
+}
 
 static gboolean
 shutdown_cb(countdown_t *cd)
@@ -1984,6 +2007,9 @@ shutdown_cb(countdown_t *cd)
 	cd->timeout--;
 	if (cd->timeout == 0)
 	{
+		ghb_hb_cleanup(FALSE);
+		prune_logs(cd->ud);
+
 		ghb_shutdown_gsm();
 		gtk_main_quit();
 		return FALSE;
@@ -2021,6 +2047,7 @@ ghb_countdown_dialog(
 	const gchar *action, 
 	const gchar *cancel, 
 	GSourceFunc action_func,
+	signal_user_data_t *ud,
 	gint timeout)
 {
 	GtkWidget *dialog;
@@ -2031,6 +2058,7 @@ ghb_countdown_dialog(
 	cd.msg = message;
 	cd.action = action;
 	cd.timeout = timeout;
+	cd.ud = ud;
 
 	// Toss up a warning dialog
 	dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
@@ -4852,7 +4880,7 @@ ghb_notify_done(signal_user_data_t *ud)
 			ghb_countdown_dialog(GTK_MESSAGE_WARNING, 
 				"Your encode is complete.",
 				"Shutting down the computer", 
-				"Cancel", (GSourceFunc)shutdown_cb, 60);
+				"Cancel", (GSourceFunc)shutdown_cb, ud, 60);
 		}
 	}
 	if (ghb_settings_combo_int(ud->settings, "WhenComplete") == 2)
@@ -4862,7 +4890,14 @@ ghb_notify_done(signal_user_data_t *ud)
 			ghb_countdown_dialog(GTK_MESSAGE_WARNING, 
 				"Your encode is complete.",
 				"Putting computer to sleep", 
-				"Cancel", (GSourceFunc)suspend_cb, 60);
+				"Cancel", (GSourceFunc)suspend_cb, ud, 60);
 		}
+	}
+	if (ghb_settings_combo_int(ud->settings, "WhenComplete") == 4)
+	{
+		ghb_countdown_dialog(GTK_MESSAGE_WARNING, 
+							"Your encode is complete.",
+							"Quiting Handbrake", 
+							"Cancel", (GSourceFunc)quit_cb, ud, 60);
 	}
 }

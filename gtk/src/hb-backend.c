@@ -86,6 +86,7 @@ static options_map_t d_when_complete_opts[] =
 {
 	{"Do Nothing",            "nothing",  0, "0"},
 	{"Show Notification",     "notify",   1, "1"},
+	{"Quit Handbrake",        "quit",     4, "4"},
 	{"Put Computer To Sleep", "sleep",    2, "2"},
 	{"Shutdown Computer",     "shutdown", 3, "3"},
 };
