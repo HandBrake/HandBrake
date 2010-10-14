@@ -1115,6 +1115,9 @@ ghb_find_closest_audio_rate(gint rate)
 	return result;
 }
 
+hb_rate_t *ghb_audio_bitrates;
+int ghb_audio_bitrates_count;
+
 static gint
 lookup_audio_bitrate_int(const GValue *rate)
 {
@@ -1126,11 +1129,11 @@ lookup_audio_bitrate_int(const GValue *rate)
 		// Coincidentally, the string "source" will return 0
 		// which is our flag to use "same as source"
 		gchar *str = ghb_value_string(rate);
-		for (ii = 0; ii < hb_audio_bitrates_count; ii++)
+		for (ii = 0; ii < ghb_audio_bitrates_count; ii++)
 		{
-			if (strcmp(hb_audio_bitrates[ii].string, str) == 0)
+			if (strcmp(ghb_audio_bitrates[ii].string, str) == 0)
 			{
-				result = hb_audio_bitrates[ii].rate;
+				result = ghb_audio_bitrates[ii].rate;
 				break;
 			}
 		}
@@ -1141,11 +1144,11 @@ lookup_audio_bitrate_int(const GValue *rate)
 			 G_VALUE_TYPE(rate) == G_TYPE_DOUBLE)
 	{
 		gint val = ghb_value_int(rate);
-		for (ii = 0; ii < hb_audio_bitrates_count; ii++)
+		for (ii = 0; ii < ghb_audio_bitrates_count; ii++)
 		{
-			if (hb_audio_bitrates[ii].rate == val)
+			if (ghb_audio_bitrates[ii].rate == val)
 			{
-				result = hb_audio_bitrates[ii].rate;
+				result = ghb_audio_bitrates[ii].rate;
 				break;
 			}
 		}
@@ -1164,11 +1167,11 @@ lookup_audio_bitrate_option(const GValue *rate)
 		// Coincidentally, the string "source" will return 0
 		// which is our flag to use "same as source"
 		gchar *str = ghb_value_string(rate);
-		for (ii = 0; ii < hb_audio_bitrates_count; ii++)
+		for (ii = 0; ii < ghb_audio_bitrates_count; ii++)
 		{
-			if (strcmp(hb_audio_bitrates[ii].string, str) == 0)
+			if (strcmp(ghb_audio_bitrates[ii].string, str) == 0)
 			{
-				result = hb_audio_bitrates[ii].string;
+				result = ghb_audio_bitrates[ii].string;
 				break;
 			}
 		}
@@ -1179,11 +1182,11 @@ lookup_audio_bitrate_option(const GValue *rate)
 			 G_VALUE_TYPE(rate) == G_TYPE_DOUBLE)
 	{
 		gint val = ghb_value_int(rate);
-		for (ii = 0; ii < hb_audio_bitrates_count; ii++)
+		for (ii = 0; ii < ghb_audio_bitrates_count; ii++)
 		{
-			if (hb_audio_bitrates[ii].rate == val)
+			if (ghb_audio_bitrates[ii].rate == val)
 			{
-				result = hb_audio_bitrates[ii].string;
+				result = ghb_audio_bitrates[ii].string;
 				break;
 			}
 		}
@@ -3027,6 +3030,15 @@ audio_bitrate_opts_add(GtkBuilder *builder, const gchar *name, gint rate)
 
 	if (rate < 8) return;
 
+	if (ghb_audio_bitrates[hb_audio_bitrates_count].string)
+	{
+		g_free(ghb_audio_bitrates[hb_audio_bitrates_count].string);
+	}
+	ghb_audio_bitrates[hb_audio_bitrates_count].rate = rate;
+	ghb_audio_bitrates[hb_audio_bitrates_count].string = 
+		g_strdup_printf("%d", rate);
+	ghb_audio_bitrates_count = hb_audio_bitrates_count + 1;
+
 	store = get_combo_box_store(builder, name);
 	if (!find_combo_item_by_int(GTK_TREE_MODEL(store), rate, &iter))
 	{
@@ -3035,9 +3047,9 @@ audio_bitrate_opts_add(GtkBuilder *builder, const gchar *name, gint rate)
 		gtk_list_store_set(store, &iter, 
 						   0, str, 
 						   1, TRUE, 
-						   2, str, 
+						   2, ghb_audio_bitrates[hb_audio_bitrates_count].string, 
 						   3, (gdouble)rate, 
-						   4, str, 
+						   4, ghb_audio_bitrates[hb_audio_bitrates_count].string, 
 						   -1);
 		g_free(str);
 	}
@@ -3058,6 +3070,8 @@ audio_bitrate_opts_clean(
 	guint last = (guint)last_rate;
 	guint first = (guint)first_rate;
 	
+	ghb_audio_bitrates_count = hb_audio_bitrates_count;
+
 	g_debug("audio_bitrate_opts_clean ()\n");
 	store = get_combo_box_store(builder, name);
 	if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL(store), &iter))
@@ -3066,7 +3080,7 @@ audio_bitrate_opts_clean(
 		{
 			gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, 3, &ivalue, -1);
 			if (search_rates(
-				hb_audio_bitrates, ivalue, hb_audio_bitrates_count) < 0)
+				ghb_audio_bitrates, ivalue, ghb_audio_bitrates_count) < 0)
 			{
 				done = !gtk_list_store_remove(store, &iter);
 			}
@@ -3094,20 +3108,28 @@ audio_bitrate_opts_set(GtkBuilder *builder, const gchar *name)
 	gint ii;
 	gchar *str;
 	
+	ghb_audio_bitrates_count = hb_audio_bitrates_count;
+	ghb_audio_bitrates = calloc(hb_audio_bitrates_count+1, sizeof(hb_rate_t));
+
+	for (ii = 0; ii < hb_audio_bitrates_count; ii++)
+	{
+		ghb_audio_bitrates[ii] = hb_audio_bitrates[ii];
+	}
+
 	g_debug("audio_bitrate_opts_set ()\n");
 	store = get_combo_box_store(builder, name);
 	gtk_list_store_clear(store);
-	for (ii = 0; ii < hb_audio_bitrates_count; ii++)
+	for (ii = 0; ii < ghb_audio_bitrates_count; ii++)
 	{
 		gtk_list_store_append(store, &iter);
 		str = g_strdup_printf ("<small>%s</small>", 
-			hb_audio_bitrates[ii].string);
+			ghb_audio_bitrates[ii].string);
 		gtk_list_store_set(store, &iter, 
 						   0, str,
 						   1, TRUE, 
-						   2, hb_audio_bitrates[ii].string, 
-						   3, (gdouble)hb_audio_bitrates[ii].rate, 
-						   4, hb_audio_bitrates[ii].string, 
+						   2, ghb_audio_bitrates[ii].string, 
+						   3, (gdouble)ghb_audio_bitrates[ii].rate, 
+						   4, ghb_audio_bitrates[ii].string, 
 						   -1);
 		g_free(str);
 	}

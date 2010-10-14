@@ -76,9 +76,9 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 	{
 		sr = aconfig ? aconfig->in.samplerate : 48000;
 	}
+	gboolean codec_defined_bitrate = FALSE;
 	if (ghb_audio_is_passthru (select_acodec))
 	{
-		ghb_set_default_bitrate_opts (ud->builder, 0, -1);
 		if (aconfig)
 		{
 			bitrate = aconfig->in.bitrate / 1000;
@@ -89,6 +89,7 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 				ghb_set_passthru_bitrate_opts (ud->builder, bitrate);
 				ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(0));
 				select_acodec &= aconfig->in.codec | HB_ACODEC_PASS_FLAG;
+				codec_defined_bitrate = TRUE;
 			}
 			else
 			{
@@ -117,11 +118,13 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 	{
 		bitrate = hb_get_best_audio_bitrate(select_acodec, bitrate, sr, mix);
 	}
+	if (!codec_defined_bitrate)
+	{
+		int low, high;
+		hb_get_audio_bitrate_limits(select_acodec, sr, mix, &low, &high);
+		ghb_set_default_bitrate_opts (ud->builder, low, high);
+	}
 	ghb_ui_update(ud, "AudioBitrate", ghb_int64_value(bitrate));
-
-	int low, high;
-	hb_get_audio_bitrate_limits(select_acodec, sr, mix, &low, &high);
-	ghb_set_default_bitrate_opts (ud->builder, low, high);
 
 	ghb_settings_take_value(ud->settings, "AudioEncoderActual", 
 							ghb_lookup_acodec_value(select_acodec));
@@ -496,6 +499,7 @@ audio_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	GValue *asettings;
 
 	g_debug("audio_widget_changed_cb ()");
+
 	ghb_adjust_audio_rate_combos(ud);
 	ghb_check_dependency(ud, widget, NULL);
 	asettings = get_selected_asettings(ud);
