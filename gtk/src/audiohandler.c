@@ -21,6 +21,7 @@
 #include "audiohandler.h"
 
 static void ghb_add_audio(signal_user_data_t *ud, GValue *settings);
+static GValue* get_selected_asettings(signal_user_data_t *ud);
 
 void
 ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
@@ -128,6 +129,13 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 
 	ghb_settings_take_value(ud->settings, "AudioEncoderActual", 
 							ghb_lookup_acodec_value(select_acodec));
+	GValue *asettings = get_selected_asettings(ud);
+	if (asettings)
+	{
+		ghb_settings_take_value(asettings, "AudioEncoderActual", 
+							ghb_lookup_acodec_value(select_acodec));
+	}
+	ghb_audio_list_refresh_selected(ud);
 	ghb_check_dependency(ud, NULL, "AudioEncoderActual");
 }
 
