@@ -669,7 +669,7 @@ namespace Handbrake
             this.check_preventSleep.Name = "check_preventSleep";
             this.check_preventSleep.Size = new System.Drawing.Size(266, 17);
             this.check_preventSleep.TabIndex = 91;
-            this.check_preventSleep.Text = "Prevent the system from sleepping when encoding.";
+            this.check_preventSleep.Text = "Prevent the system from sleeping when encoding.";
             this.ToolTip.SetToolTip(this.check_preventSleep, "Prevent system from sleeping during encoding.");
             this.check_preventSleep.UseVisualStyleBackColor = true;
             this.check_preventSleep.CheckedChanged += new System.EventHandler(this.check_preventSleep_CheckedChanged);
@@ -680,7 +680,7 @@ namespace Handbrake
             this.check_clearOldLogs.AutoSize = true;
             this.check_clearOldLogs.Location = new System.Drawing.Point(73, 234);
             this.check_clearOldLogs.Name = "check_clearOldLogs";
-            this.check_clearOldLogs.Size = new System.Drawing.Size(162, 17);
+            this.check_clearOldLogs.Size = new System.Drawing.Size(166, 17);
             this.check_clearOldLogs.TabIndex = 90;
             this.check_clearOldLogs.Text = "Clear logs older than 30 days";
             this.ToolTip.SetToolTip(this.check_clearOldLogs, "Clear logs which are older than 30 days.\r\nThis only applies to HandBrakes Applica" +
@@ -775,7 +775,7 @@ namespace Handbrake
             this.check_logsInSpecifiedLocation.AutoSize = true;
             this.check_logsInSpecifiedLocation.Location = new System.Drawing.Point(73, 139);
             this.check_logsInSpecifiedLocation.Name = "check_logsInSpecifiedLocation";
-            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(305, 17);
+            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(306, 17);
             this.check_logsInSpecifiedLocation.TabIndex = 87;
             this.check_logsInSpecifiedLocation.Text = "Put a copy of individual encode logs in a specified location:";
             this.ToolTip.SetToolTip(this.check_logsInSpecifiedLocation, "Place a copy of the encode log in the same folder as the encoded movie.");
