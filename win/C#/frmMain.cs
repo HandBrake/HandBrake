@@ -77,6 +77,11 @@ namespace Handbrake
                     return this.dvdDriveLabel;
                 }
 
+                if (selectedTitle != null && !string.IsNullOrEmpty(selectedTitle.SourceName))
+                {
+                    return Path.GetFileName(selectedTitle.SourceName);
+                }
+
                 if (Path.GetFileNameWithoutExtension(this.sourcePath) != "VIDEO_TS")
                     return Path.GetFileNameWithoutExtension(this.sourcePath);
 
@@ -1435,7 +1440,7 @@ namespace Handbrake
             // Update the source label if we have multiple streams
             if (selectedTitle != null)
                 if (!string.IsNullOrEmpty(selectedTitle.SourceName))
-                    labelSource.Text = labelSource.Text = Path.GetFileName(selectedTitle.SourceName);
+                    labelSource.Text = Path.GetFileName(selectedTitle.SourceName);
 
             // Run the AutoName & ChapterNaming functions
             if (Properties.Settings.Default.autoNaming)
@@ -2196,11 +2201,6 @@ namespace Handbrake
         private void UpdateSourceLabel()
         {
             labelSource.Text = string.IsNullOrEmpty(sourcePath) ? "Select \"Source\" to continue." : this.SourceName;
-
-            if (selectedTitle != null)
-                if (!string.IsNullOrEmpty(selectedTitle.SourceName))
-                    // If it's one of multiple source files, make sure we don't use the folder name
-                    labelSource.Text = Path.GetFileName(selectedTitle.SourceName);
         }
 
         /// <summary>
