@@ -178,8 +178,13 @@ static int declpcmWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 static hb_buffer_t *Decode( hb_work_object_t *w )
 {
     hb_work_private_t *pv = w->private_data;
-    hb_buffer_t *out = hb_buffer_init( pv->count * sizeof( float ) );
+    hb_buffer_t *out;
  
+    if (pv->count == 0)
+        return NULL;
+
+    out = hb_buffer_init( pv->count * sizeof( float ) );
+
     out->start  = pv->next_pts;
     pv->next_pts += pv->duration;
     out->stop = pv->next_pts;
