@@ -369,6 +369,17 @@ enum
     FILTER_ROTATE
 };
 
+// Picture flags used by filters
+#ifndef PIC_FLAG_REPEAT_FIRST_FIELD
+#define PIC_FLAG_REPEAT_FIRST_FIELD 256
+#endif
+#ifndef PIC_FLAG_TOP_FIELD_FIRST
+#define PIC_FLAG_TOP_FIELD_FIRST 8
+#endif
+#ifndef PIC_FLAG_PROGRESSIVE_FRAME
+#define PIC_FLAG_PROGRESSIVE_FRAME 16
+#endif
+
 extern hb_work_object_t * hb_objects;
 
 #define HB_WORK_IDLE     0

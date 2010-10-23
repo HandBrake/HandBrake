@@ -111,6 +111,7 @@ struct hb_work_private_s
     struct SwsContext *sws_context; // if we have to rescale or convert color space
     hb_downmix_t    *downmix;
     hb_sample_t     *downmix_buffer;
+    int cadence[12];
     hb_chan_map_t   *out_map;
 };
 
@@ -578,6 +579,85 @@ static void flushDelayQueue( hb_work_private_t *pv )
     }
 }
 
+#define TOP_FIRST PIC_FLAG_TOP_FIELD_FIRST
+#define PROGRESSIVE PIC_FLAG_PROGRESSIVE_FRAME
+#define REPEAT_FIRST PIC_FLAG_REPEAT_FIRST_FIELD
+#define TB 8
+#define BT 16
+#define BT_PROG 32
+#define BTB_PROG 64
+#define TB_PROG 128
+#define TBT_PROG 256
+
+static void checkCadence( int * cadence, uint16_t flags, int64_t start )
+{
+    /*  Rotate the cadence tracking. */
+    int i = 0;
+    for(i=11; i > 0; i--)
+    {
+        cadence[i] = cadence[i-1];
+    }
+
+    if ( !(flags & PROGRESSIVE) && !(flags & TOP_FIRST) )
+    {
+        /* Not progressive, not top first...
+           That means it's probably bottom
+           first, 2 fields displayed.
+        */
+        //hb_log("MPEG2 Flag: Bottom field first, 2 fields displayed.");
+        cadence[0] = BT;
+    }
+    else if ( !(flags & PROGRESSIVE) && (flags & TOP_FIRST) )
+    {
+        /* Not progressive, top is first,
+           Two fields displayed.
+        */
+        //hb_log("MPEG2 Flag: Top field first, 2 fields displayed.");
+        cadence[0] = TB;
+    }
+    else if ( (flags & PROGRESSIVE) && !(flags & TOP_FIRST) && !( flags & REPEAT_FIRST )  )
+    {
+        /* Progressive, but noting else.
+           That means Bottom first,
+           2 fields displayed.
+        */
+        //hb_log("MPEG2 Flag: Progressive. Bottom field first, 2 fields displayed.");
+        cadence[0] = BT_PROG;
+    }
+    else if ( (flags & PROGRESSIVE) && !(flags & TOP_FIRST) && ( flags & REPEAT_FIRST )  )
+    {
+        /* Progressive, and repeat. .
+           That means Bottom first,
+           3 fields displayed.
+        */
+        //hb_log("MPEG2 Flag: Progressive repeat. Bottom field first, 3 fields displayed.");
+        cadence[0] = BTB_PROG;
+    }
+    else if ( (flags & PROGRESSIVE) && (flags & TOP_FIRST) && !( flags & REPEAT_FIRST )  )
+    {
+        /* Progressive, top first.
+           That means top first,
+           2 fields displayed.
+        */
+        //hb_log("MPEG2 Flag: Progressive. Top field first, 2 fields displayed.");
+        cadence[0] = TB_PROG;
+    }
+    else if ( (flags & PROGRESSIVE) && (flags & TOP_FIRST) && ( flags & REPEAT_FIRST )  )
+    {
+        /* Progressive, top, repeat.
+           That means top first,
+           3 fields displayed.
+        */
+        //hb_log("MPEG2 Flag: Progressive repeat. Top field first, 3 fields displayed.");
+        cadence[0] = TBT_PROG;
+    }
+
+    if ( (cadence[2] <= TB) && (cadence[1] <= TB) && (cadence[0] > TB) && (cadence[11]) )
+        hb_log("%fs: Video -> Film", (float)start / 90000);
+    if ( (cadence[2] > TB) && (cadence[1] <= TB) && (cadence[0] <= TB) && (cadence[11]) )
+        hb_log("%fs: Film -> Video", (float)start / 90000);
+}
+
 /*
  * Decodes a video frame from the specified raw packet data ('data', 'size', 'sequence').
  * The output of this function is stored in 'pv->list', which contains a list
@@ -616,6 +696,8 @@ static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size, int sequ
     }
     if( got_picture )
     {
+        uint16_t flags = 0;
+
         // ffmpeg makes it hard to attach a pts to a frame. if the MPEG ES
         // packet had a pts we handed it to av_parser_parse (if the packet had
         // no pts we set it to -1 but before the parse we can't distinguish between
@@ -635,9 +717,13 @@ static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size, int sequ
                         (double)pv->context->time_base.den;
             pv->duration = frame_dur;
         }
+        if ( pv->context->ticks_per_frame > 1 )
+        {
+            frame_dur *= 2;
+        }
         if ( frame.repeat_pict )
         {
-            frame_dur += frame.repeat_pict * frame_dur * 0.5;
+            frame_dur += frame.repeat_pict * pv->duration;
         }
         // XXX Unlike every other video decoder, the Raw decoder doesn't
         //     use the standard buffer allocation routines so we never
@@ -656,6 +742,19 @@ static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size, int sequ
         }
         pv->pts_next = pts + frame_dur;
 
+        if ( frame.top_field_first )
+        {
+            flags |= PIC_FLAG_TOP_FIELD_FIRST;
+        }
+        if ( !frame.interlaced_frame )
+        {
+            flags |= PIC_FLAG_PROGRESSIVE_FRAME;
+        }
+        if ( frame.repeat_pict )
+        {
+            flags |= PIC_FLAG_REPEAT_FIRST_FIELD;
+        }
+
         hb_buffer_t *buf;
 
         // if we're doing a scan or this content couldn't have been broken
@@ -665,6 +764,7 @@ static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size, int sequ
             buf = copy_frame( pv, &frame );
             buf->start = pts;
             buf->sequence = sequence;
+            buf->flags = flags;
             if ( pv->new_chap && buf->start >= pv->chap_time )
             {
                 buf->new_chap = pv->new_chap;
@@ -676,6 +776,7 @@ static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size, int sequ
             {
                 log_chapter( pv, pv->job->chapter_start, buf->start );
             }
+            checkCadence( pv->cadence, buf->flags, buf->start );
             hb_list_add( pv->list, buf );
             ++pv->nframes;
             return got_picture;
@@ -719,12 +820,14 @@ static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size, int sequ
             {
                 log_chapter( pv, pv->job->chapter_start, buf->start );
             }
+            checkCadence( pv->cadence, buf->flags, buf->start );
             hb_list_add( pv->list, buf );
         }
 
         // add the new frame to the delayq & push its timestamp on the heap
         buf = copy_frame( pv, &frame );
         buf->sequence = sequence;
+        buf->flags = flags;
         pv->delayq[slot] = buf;
         heap_push( &pv->pts_heap, pts );
 
@@ -978,7 +1081,7 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
             // field rate rather than frame rate so convert back to frames.
             info->rate_base *= context->ticks_per_frame;
         }
-        
+
         info->pixel_aspect_width = context->sample_aspect_ratio.num;
         info->pixel_aspect_height = context->sample_aspect_ratio.den;
 
