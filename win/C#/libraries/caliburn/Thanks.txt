@@ -1,0 +1,20 @@
+Many thanks to all those whose code, blogs etc. inspired me or helped to solve some of the difficult problems.  
+Special thanks to (in no particular order):
+
+Contributors
+Marco Amendola - http://marcoamendola.wordpress.com/
+Ryan Rauh - http://rauhski.blogspot.com
+Michael Davis - n/a
+Chistopher Bennage - http://devlicio.us/blogs/christopher_bennage/default.aspx
+Ayende Rahien - http://www.ayende.com
+
+Inspiration
+Kevin Moore - http://j832.com/BagOTricks/
+Nick Guerrera - http://blogs.msdn.com/nicholg/archive/2006/06/04/617466.aspx
+Jeremy Miller - http://codebetter.com/blogs/jeremy.miller/archive/2007/07/25/the-build-your-own-cab-series-table-of-contents.aspx
+John Gossman - http://blogs.msdn.com/johngossman/archive/2005/10/08/478683.aspx
+Dan Crevier - http://blogs.msdn.com/dancre/archive/tags/DM-V-VM/default.aspx
+Brownie Points - http://mbrownchicago.spaces.live.com/Blog/cns!2221DC39E0C749A4!596.entry
+Kevin Hoffman - http://dotnetaddict.dotnetdevelopersjournal.com/read/poster/87984.htm
+
+I hope you find this framework useful or inspiring for solving the problems in your own work.

@@ -139,6 +139,13 @@ Section "Handbrake" SEC01
   File "Microsoft.WindowsAPICodePack.Shell.dll"
   File "Microsoft.WindowsAPICodePack.dll"
 
+  File "Caliburn.Castle.dll"
+  File "Caliburn.Core.dll"
+  File "Castle.Core.dll"
+  File "Castle.DynamicProxy2.dll"
+  File "Castle.MicroKernel.dll"
+  File "Castle.Windsor.dll"
+
   SetOutPath "$INSTDIR\doc"
   SetOverwrite ifnewer
   File "doc\AUTHORS"
@@ -189,6 +196,14 @@ Section Uninstall
   Delete "$INSTDIR\HandBrake.Framework.dll"
   Delete "$INSTDIR\Microsoft.WindowsAPICodePack.Shell.dll"
   Delete "$INSTDIR\Microsoft.WindowsAPICodePack.dll"
+
+  Delete "$INSTDIR\Caliburn.Castle.dll"
+  Delete "$INSTDIR\Caliburn.Core.dll"
+  Delete "$INSTDIR\Castle.Core.dll"
+  Delete "$INSTDIR\Castle.DynamicProxy2.dll"
+  Delete "$INSTDIR\Castle.MicroKernel.dll"
+  Delete "$INSTDIR\Castle.Windsor.dll"
+
   Delete "$INSTDIR\doc\AUTHORS"
   Delete "$INSTDIR\doc\COPYING"
   Delete "$INSTDIR\doc\CREDITS"

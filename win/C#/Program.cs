@@ -10,10 +10,18 @@ namespace Handbrake
     using System.IO;
     using System.Windows.Forms;
 
+    using Caliburn.Castle;
+
+    using Castle.Core.Resource;
+    using Castle.Windsor;
+    using Castle.Windsor.Configuration.Interpreters;
+
     using HandBrake.ApplicationServices;
 
     using Handbrake.Presets;
     using Handbrake.Properties;
+
+    using Microsoft.Practices.ServiceLocation;
 
     /// <summary>
     /// HandBrake Starts Here
@@ -29,6 +37,9 @@ namespace Handbrake
         [STAThread]
         public static void Main(string[] args)
         {
+            WindsorContainer container = new WindsorContainer(new XmlInterpreter(new ConfigResource("castle")));
+            ServiceLocator.SetLocatorProvider(() => new WindsorAdapter(container));
+
             InstanceId = Process.GetProcessesByName("HandBrake").Length;
 
             // Handle any unhandled exceptions
