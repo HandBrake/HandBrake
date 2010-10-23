@@ -10,3 +10,4 @@ TOUCH.exe = touch
 WGET.exe  = wget
 MV.exe    = mv
 ZIP.exe   = zip
+LN.exe    = ln

@@ -1,0 +1,1457 @@
+# Bazaar merge directive format 2 (Bazaar 0.90)
+# revision_id: dmitrij.ledkov@ubuntu.com-20100710232946-\
+#   1vpsymidgi7alpwt
+# target_branch: ../pthreads.bzr/
+# testament_sha1: 521ee14bce6f871b77f9d6797b4460612a673359
+# timestamp: 2010-07-11 02:10:15 +0100
+# source_branch: .
+# base_revision_id: git-v1:fe3f4b4cd92c4d6fc37139dd6cf8214c558676ca
+# 
+# Begin patch
+=== modified file 'GNUmakefile'
+--- pthreadw32/GNUmakefile	2010-06-20 03:31:18 +0000
++++ pthreadw32/GNUmakefile	2010-07-10 23:29:46 +0000
+@@ -49,14 +49,27 @@
+ 
+ # For cross compiling use e.g.
+ # make CROSS=i386-mingw32msvc- clean GC-inlined
+-CROSS	= 
+-
+-AR	= $(CROSS)ar
+-DLLTOOL = $(CROSS)dlltool
+-CC      = $(CROSS)gcc
+-CXX     = $(CROSS)g++
+-RANLIB  = $(CROSS)ranlib
+-RC	= $(CROSS)windres
++target  = 
++prefix = /usr/local
++
++ifeq (,$(findstring x86_64, $(target)))
++#32bit
++BITNESS=-m32
++DLLFLAG=-m i386
++WINDRESFLAG=pe-i386
++else
++#64bit
++BITNESS=-m64
++DLLFLAG=-m i386:x86-64
++WINDRESFLAG=pe-x86-64
++endif
++
++AR	= $(target)ar
++DLLTOOL = $(target)dlltool $(DLLFLAG)
++CC      = $(target)gcc $(BITNESS)
++CXX     = $(target)g++ $(BITNESS)
++RANLIB  = $(target)ranlib
++RC	= $(target)windres -F $(WINDRESFLAG)
+ 
+ OPT	= $(CLEANUP) -O3 -finline-functions
+ DOPT	= $(CLEANUP) -g -O0
+@@ -268,7 +281,7 @@
+ 		version.o
+ 
+ INCL	= \
+-		config.h \
++		pthreads_win32_config.h \
+ 		implement.h \
+ 		semaphore.h \
+ 		pthread.h \
+@@ -585,3 +598,11 @@
+ sync.o:		sync.c $(SYNC_SRCS) $(INCL)
+ tsd.o:		tsd.c $(TSD_SRCS) $(INCL)
+ version.o:	version.rc $(INCL)
++
++install:
++	install -d $(prefix)/$(target)/bin
++	install -d $(prefix)/$(target)/lib
++	install -d $(prefix)/$(target)/include
++	install pthreadGC$(DLL_VER).dll $(prefix)/$(target)/bin/pthreadGC$(DLL_VER).dll
++	install pthreadGC$(DLL_VER).dll $(prefix)/$(target)/lib/libpthread.a
++	install pthreads_win32_config.h pthread.h sched.h semaphore.h $(prefix)/$(target)/include
+
+=== modified file 'context.h'
+--- pthreadw32/context.h	2007-01-06 13:44:39 +0000
++++ pthreadw32/context.h	2010-07-10 23:05:44 +0000
+@@ -39,7 +39,7 @@
+ 
+ #undef PTW32_PROGCTR
+ 
+-#if defined(_M_IX86) || defined(_X86_)
++#if defined(_M_IX86) || (defined(_X86_) && !defined(__amd64__))
+ #define PTW32_PROGCTR(Context)  ((Context).Eip)
+ #endif
+ 
+
+=== modified file 'pthread.h'
+--- pthreadw32/pthread.h	2010-06-20 03:31:18 +0000
++++ pthreadw32/pthread.h	2010-07-10 23:29:46 +0000
+@@ -112,7 +112,7 @@
+ #ifdef _UWIN
+ #   define HAVE_STRUCT_TIMESPEC 1
+ #   define HAVE_SIGNAL_H        1
+-#   undef HAVE_CONFIG_H
++#   undef 1
+ #   pragma comment(lib, "pthread")
+ #endif
+ 
+@@ -210,9 +210,17 @@
+  * -----------------
+  */
+ 
+-#if HAVE_CONFIG_H
+-#include "config.h"
+-#endif /* HAVE_CONFIG_H */
++#if 1
++#include "pthreads_win32_config.h"
++#endif /* 1 */
++
++#ifdef __MINGW32__
++# include <_mingw.h>
++# ifdef __MINGW64_VERSION_MAJOR
++  /* MinGW-w64 already has it: */
++#   define HAVE_STRUCT_TIMESPEC 1
++# endif
++#endif
+ 
+ #ifndef NEED_FTIME
+ #include <time.h>
+@@ -236,7 +244,7 @@
+ };
+ 
+ /*
+- * This is a duplicate of what is in the autoconf config.h,
++ * This is a duplicate of what is in the autoconf pthreads_win32_config.h,
+  * which is only used when building the pthread-win32 libraries.
+  */
+ 
+
+--- pthreadsw32/pthread_win32_attach_detach_np.c	2010-09-11 13:08:31.120188567 -0700
++++ xxx/pthread_win32_attach_detach_np.c	2010-09-11 13:08:40.209188369 -0700
+@@ -97,6 +97,10 @@
+  * InterlockedCompareExchange routine in WIN64 is an intrinsic function.
+  * See PTW32_INTERLOCKED_COMPARE_EXCHANGE implement.h
+  */
++  ptw32_interlocked_compare_exchange = 
++    (PTW32_INTERLOCKED_LONG (WINAPI *)
++     (PTW32_INTERLOCKED_LPLONG, PTW32_INTERLOCKED_LONG,
++      PTW32_INTERLOCKED_LONG)) InterlockedCompareExchange;
+ 
+ #else
+ 
+=== modified file 'pthread_cancel.c'
+--- pthreadw32/pthread_cancel.c	2010-06-20 03:31:18 +0000
++++ pthreadw32/pthread_cancel.c	2010-07-10 23:29:46 +0000
+@@ -47,7 +47,7 @@
+ }
+ 
+ static void CALLBACK
+-ptw32_cancel_callback (DWORD unused)
++ptw32_cancel_callback (ULONG_PTR unused)
+ {
+   ptw32_throw (PTW32_EPS_CANCEL);
+ 
+@@ -157,7 +157,7 @@
+ 	       * this will result in a call to ptw32_RegisterCancelation and only
+ 	       * the threadH arg will be used.
+ 	       */
+-	      ptw32_register_cancelation (ptw32_cancel_callback, threadH, 0);
++	      ptw32_register_cancelation ((PAPCFUNC)ptw32_cancel_callback, threadH, 0);
+ 	      (void) pthread_mutex_unlock (&tp->cancelLock);
+ 	      ResumeThread (threadH);
+ 	    }
+
+=== modified file 'pthread_exit.c'
+--- pthreadw32/pthread_exit.c	2007-05-15 13:46:42 +0000
++++ pthreadw32/pthread_exit.c	2010-07-10 23:05:44 +0000
+@@ -89,7 +89,7 @@
+        */
+ 
+ #if ! defined (__MINGW32__) || defined (__MSVCRT__)  || defined (__DMC__)
+-      _endthreadex ((unsigned) value_ptr);
++      _endthreadex ((unsigned) (size_t) value_ptr);
+ #else
+       _endthread ();
+ #endif
+
+=== modified file 'pthread_spin_destroy.c'
+--- pthreadw32/pthread_spin_destroy.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/pthread_spin_destroy.c	2010-07-10 23:05:44 +0000
+@@ -59,9 +59,9 @@
+ 	       PTW32_INTERLOCKED_COMPARE_EXCHANGE ((PTW32_INTERLOCKED_LPLONG)
+ 						   & (s->interlock),
+ 						   (PTW32_INTERLOCKED_LONG)
+-						   PTW32_OBJECT_INVALID,
++						   (size_t)PTW32_OBJECT_INVALID,
+ 						   (PTW32_INTERLOCKED_LONG)
+-						   PTW32_SPIN_UNLOCKED))
++						   (size_t)PTW32_SPIN_UNLOCKED))
+ 	{
+ 	  result = EINVAL;
+ 	}
+
+=== modified file 'pthread_timechange_handler_np.c'
+--- pthreadw32/pthread_timechange_handler_np.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/pthread_timechange_handler_np.c	2010-07-10 23:05:44 +0000
+@@ -103,5 +103,5 @@
+ 
+   LeaveCriticalSection (&ptw32_cond_list_lock);
+ 
+-  return (void *) (result != 0 ? EAGAIN : 0);
++  return (void *) (size_t) (result != 0 ? EAGAIN : 0);
+ }
+
+=== renamed file 'config.h' => 'pthreads_win32_config.h'
+=== modified file 'ptw32_MCS_lock.c'
+--- pthreadw32/ptw32_MCS_lock.c	2010-06-20 03:31:18 +0000
++++ pthreadw32/ptw32_MCS_lock.c	2010-07-10 23:29:46 +0000
+@@ -101,10 +101,10 @@
+ INLINE void 
+ ptw32_mcs_flag_set (LONG * flag)
+ {
+-  HANDLE e = (HANDLE)PTW32_INTERLOCKED_COMPARE_EXCHANGE(
++  HANDLE e = (HANDLE)(size_t) PTW32_INTERLOCKED_COMPARE_EXCHANGE(
+ 						(PTW32_INTERLOCKED_LPLONG)flag,
+-						(PTW32_INTERLOCKED_LONG)-1,
+-						(PTW32_INTERLOCKED_LONG)0);
++						(PTW32_INTERLOCKED_LONG)(size_t)-1,
++						(PTW32_INTERLOCKED_LONG)(size_t)0);
+   if ((HANDLE)0 != e)
+     {
+       /* another thread has already stored an event handle in the flag */
+@@ -129,8 +129,8 @@
+ 
+       if (0 == PTW32_INTERLOCKED_COMPARE_EXCHANGE(
+ 			                  (PTW32_INTERLOCKED_LPLONG)flag,
+-			                  (PTW32_INTERLOCKED_LONG)e,
+-			                  (PTW32_INTERLOCKED_LONG)0))
++			                  (PTW32_INTERLOCKED_LONG)(size_t)e,
++			                  (PTW32_INTERLOCKED_LONG)(size_t)0))
+ 	{
+ 	  /* stored handle in the flag. wait on it now. */
+ 	  WaitForSingleObject(e, INFINITE);
+@@ -159,8 +159,8 @@
+   node->next = 0; /* initially, no successor */
+   
+   /* queue for the lock */
+-  pred = (ptw32_mcs_local_node_t *)PTW32_INTERLOCKED_EXCHANGE((PTW32_INTERLOCKED_LPLONG)lock,
+-						              (PTW32_INTERLOCKED_LONG)node);
++  pred = (ptw32_mcs_local_node_t *)InterlockedExchangePointer((PVOID volatile *)lock,
++						              (void*)node);
+ 
+   if (0 != pred)
+     {
+@@ -184,17 +184,19 @@
+ {
+   ptw32_mcs_lock_t *lock = node->lock;
+   ptw32_mcs_local_node_t *next = (ptw32_mcs_local_node_t *)
+-    InterlockedExchangeAdd((LPLONG)&node->next,
+-                           (LONG)0); /* MBR fence */
+-
++#ifndef _WIN64
++    InterlockedExchangeAdd((LPLONG)&node->next, 0); /* MBR fence */
++#else
++    InterlockedExchangeAdd64((LONG64 *)&node->next, 0); /* MBR fence */
++#endif
+   if (0 == next)
+     {
+       /* no known successor */
+ 
+       if (node == (ptw32_mcs_local_node_t *)
+-	  PTW32_INTERLOCKED_COMPARE_EXCHANGE((PTW32_INTERLOCKED_LPLONG)lock,
+-					     (PTW32_INTERLOCKED_LONG)0,
+-					     (PTW32_INTERLOCKED_LONG)node))
++	  InterlockedCompareExchangePointer((LPVOID volatile *)lock,
++					     (PVOID)0,
++					     (PVOID)node))
+ 	{
+ 	  /* no successor, lock is free now */
+ 	  return;
+@@ -203,7 +205,11 @@
+       /* wait for successor */
+       ptw32_mcs_flag_wait(&node->nextFlag);
+       next = (ptw32_mcs_local_node_t *)
++#ifndef _WIN64
+ 	InterlockedExchangeAdd((LPLONG)&node->next, 0); /* MBR fence */
++#else
++	InterlockedExchangeAdd64((LONG64 *)&node->next, 0); /* MBR fence */
++#endif
+     }
+ 
+   /* pass the lock */
+
+=== modified file 'ptw32_threadStart.c'
+--- pthreadw32/ptw32_threadStart.c	2005-05-15 15:28:24 +0000
++++ pthreadw32/ptw32_threadStart.c	2010-07-10 23:05:44 +0000
+@@ -344,7 +344,7 @@
+ #endif
+ 
+ #if ! defined (__MINGW32__) || defined (__MSVCRT__) || defined (__DMC__)
+-  _endthreadex ((unsigned) status);
++  _endthreadex ((unsigned) (size_t) status);
+ #else
+   _endthread ();
+ #endif
+@@ -354,7 +354,7 @@
+    */
+ 
+ #if ! defined (__MINGW32__) || defined (__MSVCRT__) || defined (__DMC__)
+-  return (unsigned) status;
++  return (unsigned) (size_t) status;
+ #endif
+ 
+ }				/* ptw32_threadStart */
+
+=== modified file 'ptw32_throw.c'
+--- pthreadw32/ptw32_throw.c	2008-06-06 00:23:20 +0000
++++ pthreadw32/ptw32_throw.c	2010-07-10 23:05:44 +0000
+@@ -79,12 +79,12 @@
+       switch (exception)
+ 	{
+ 	case PTW32_EPS_CANCEL:
+-	  exitCode = (unsigned) PTHREAD_CANCELED;
++	  exitCode = (unsigned) (size_t) PTHREAD_CANCELED;
+ 	  break;
+ 	case PTW32_EPS_EXIT:
+ 	  if (NULL != sp)
+ 	    {
+-	      exitCode = (unsigned) sp->exitStatus;
++	      exitCode = (unsigned) (size_t) sp->exitStatus;
+ 	    }
+ 	  break;
+ 	}
+@@ -166,7 +166,7 @@
+ 
+ #else
+ 
+-  return (DWORD) NULL;
++  return (DWORD) (size_t) NULL;
+ 
+ #endif
+ }
+
+=== modified file 'tests/GNUmakefile'
+--- pthreadw32/tests/GNUmakefile	2010-06-20 04:26:26 +0000
++++ pthreadw32/tests/GNUmakefile	2010-07-10 23:29:46 +0000
+@@ -33,6 +33,11 @@
+ 
+ DLL_VER	= 2
+ 
++# For cross compiling use, e.g. CROSS=x86_64-w64-mingw32msvc-
++# Although testing is supposed to be done on windows, this may still be
++# needed, because one may as well use an x86-hosted toolchain on an x64.
++CROSS	= 
++
+ CP	= cp -f
+ MV	= mv -f
+ RM	= rm -f
+@@ -167,34 +172,34 @@
+ 	@ $(MAKE) clean GCE
+ 
+ GC:
+-	$(MAKE) TEST=GC CC=gcc XXCFLAGS="-fopenmp -D__CLEANUP_C" all-pass
++	$(MAKE) TEST=GC CC=$(CROSS)gcc XXCFLAGS="-fopenmp -D__CLEANUP_C" all-pass
+ 
+ GCE:
+-	$(MAKE) TEST=GCE CC=g++ XXCFLAGS="-fopenmp -mthreads -D__CLEANUP_CXX" all-pass
++	$(MAKE) TEST=GCE CC=$(CROSS)g++ XXCFLAGS="-fopenmp -mthreads -D__CLEANUP_CXX" all-pass
+ 
+ GCX:
+-	$(MAKE) TEST=GC CC=g++ XXCFLAGS="-fopenmp -mthreads -D__CLEANUP_C" all-pass
++	$(MAKE) TEST=GC CC=$(CROSS)g++ XXCFLAGS="-fopenmp -mthreads -D__CLEANUP_C" all-pass
+ 
+ GC-bench:
+-	$(MAKE) TEST=GC CC=gcc XXCFLAGS="-D__CLEANUP_C" XXLIBS="benchlib.o" all-bench
++	$(MAKE) TEST=GC CC=$(CROSS)gcc XXCFLAGS="-D__CLEANUP_C" XXLIBS="benchlib.o" all-bench
+ 
+ GCE-bench:
+-	$(MAKE) TEST=GCE  CC=g++ XXCFLAGS="-mthreads -D__CLEANUP_CXX" XXLIBS="benchlib." all-bench
++	$(MAKE) TEST=GCE  CC=$(CROSS)g++ XXCFLAGS="-mthreads -D__CLEANUP_CXX" XXLIBS="benchlib." all-bench
+ 
+ GC-debug:
+-	$(MAKE) TEST=GC CC=gcc XXCFLAGS="-fopenmp -D__CLEANUP_C" DLL_VER="$(DLL_VER)d" all-pass
++	$(MAKE) TEST=GC CC=$(CROSS)gcc XXCFLAGS="-fopenmp -D__CLEANUP_C" DLL_VER="$(DLL_VER)d" all-pass
+ 
+ GC-static:
+-	$(MAKE) TEST=GC CC=gcc XXCFLAGS="-D__CLEANUP_C -DPTW32_STATIC_LIB" XXLIBS="-lws2_32" DLL="" all-static
++	$(MAKE) TEST=GC CC=$(CROSS)gcc XXCFLAGS="-D__CLEANUP_C -DPTW32_STATIC_LIB" XXLIBS="-lws2_32" DLL="" all-static
+ 
+ GC-stress:
+ 	$(ECHO) Stress tests can take a long time since they are trying to
+ 	$(ECHO) expose weaknesses that may be intermittant or statistically rare.
+ 	$(ECHO) A pass does not prove correctness, but may give greater confidence.
+-	$(MAKE) TEST=GC CC=gcc XXCFLAGS="-D__CLEANUP_C" XXLIBS="" all-stress
++	$(MAKE) TEST=GC CC=$(CROSS)gcc XXCFLAGS="-D__CLEANUP_C" XXLIBS="" all-stress
+ 
+ GCE-stress:
+-	$(MAKE) TEST=GCE  CC=g++ XXCFLAGS="-mthreads -D__CLEANUP_CXX" XXLIBS="" all-stress
++	$(MAKE) TEST=GCE  CC=$(CROSS)g++ XXCFLAGS="-mthreads -D__CLEANUP_CXX" XXLIBS="" all-stress
+ 
+ all-pass: $(PASSES)
+ 	@ $(ECHO) ALL TESTS PASSED! Congratulations!
+
+=== modified file 'tests/barrier3.c'
+--- pthreadw32/tests/barrier3.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/barrier3.c	2010-07-10 23:05:44 +0000
+@@ -41,7 +41,7 @@
+ #include "test.h"
+  
+ pthread_barrier_t barrier = NULL;
+-static int result = 1;
++static DWORD_PTR result = 1;
+ 
+ void * func(void * arg)
+ {
+
+=== modified file 'tests/barrier5.c'
+--- pthreadw32/tests/barrier5.c	2010-06-20 03:31:18 +0000
++++ pthreadw32/tests/barrier5.c	2010-07-10 23:29:46 +0000
+@@ -79,7 +79,7 @@
+ main()
+ {
+   int i, j;
+-  int result;
++  DWORD_PTR result;
+   int serialThreadsTotal;
+   LONG Crossings;
+   pthread_t t[NUMTHREADS + 1];
+@@ -104,7 +104,7 @@
+       for (i = 1; i <= j; i++)
+         {
+           assert(pthread_join(t[i], (void **) &result) == 0);
+-          serialThreadsTotal += result;
++          serialThreadsTotal += (int)result;
+         }
+ 
+       assert(serialThreadsTotal == BARRIERMULTIPLE);
+
+=== modified file 'tests/cancel2.c'
+--- pthreadw32/tests/cancel2.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/cancel2.c	2010-07-10 23:05:44 +0000
+@@ -217,7 +217,7 @@
+   for (i = 1; i <= NUMTHREADS; i++)
+     {
+       int fail = 0;
+-      int result = 0;
++      DWORD_PTR result = 0;
+ 
+       assert(pthread_join(t[i], (void **) &result) == 0);
+       fail = (result != (int) PTHREAD_CANCELED);
+
+=== modified file 'tests/cancel3.c'
+--- pthreadw32/tests/cancel3.c	2010-06-22 01:19:08 +0000
++++ pthreadw32/tests/cancel3.c	2010-07-10 23:29:46 +0000
+@@ -173,7 +173,7 @@
+   for (i = 1; i <= NUMTHREADS; i++)
+     {
+       int fail = 0;
+-      int result = 0;
++      DWORD_PTR result = 0;
+ 
+       /*
+        * The thread does not contain any cancelation points, so
+
+=== modified file 'tests/cancel4.c'
+--- pthreadw32/tests/cancel4.c	2005-05-06 07:31:28 +0000
++++ pthreadw32/tests/cancel4.c	2010-07-10 23:05:44 +0000
+@@ -98,7 +98,7 @@
+ void *
+ mythread(void * arg)
+ {
+-  int result = ((int)PTHREAD_CANCELED + 1);
++  int result = ((int)(size_t)PTHREAD_CANCELED + 1);
+   bag_t * bag = (bag_t *) arg;
+ 
+   assert(bag == &threadbag[bag->threadnum]);
+@@ -118,7 +118,7 @@
+   for (bag->count = 0; bag->count < 20; bag->count++)
+     Sleep(100);
+ 
+-  return (void *) result;
++  return (void *) (size_t)result;
+ }
+ 
+ int
+@@ -173,7 +173,7 @@
+   for (i = 1; i <= NUMTHREADS; i++)
+     {
+       int fail = 0;
+-      int result = 0;
++      DWORD_PTR result = 0;
+ 
+       /*
+        * The thread does not contain any cancelation points, so
+@@ -182,7 +182,7 @@
+        */
+       assert(pthread_join(t[i], (void **) &result) == 0);
+ 
+-      fail = (result == (int) PTHREAD_CANCELED);
++      fail = (result == (int) (size_t) PTHREAD_CANCELED);
+ 
+       if (fail)
+ 	{
+
+=== modified file 'tests/cancel5.c'
+--- pthreadw32/tests/cancel5.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/cancel5.c	2010-07-10 23:05:44 +0000
+@@ -171,7 +171,7 @@
+   for (i = 1; i <= NUMTHREADS; i++)
+     {
+       int fail = 0;
+-      int result = 0;
++      DWORD_PTR result = 0;
+ 
+       /*
+        * The thread does not contain any cancelation points, so
+
+=== modified file 'tests/cancel6a.c'
+--- pthreadw32/tests/cancel6a.c	2004-11-03 01:08:41 +0000
++++ pthreadw32/tests/cancel6a.c	2010-07-10 23:05:44 +0000
+@@ -85,7 +85,7 @@
+ void *
+ mythread(void * arg)
+ {
+-  int result = ((int)PTHREAD_CANCELED + 1);
++  int result = ((int)(size_t)PTHREAD_CANCELED + 1);
+   bag_t * bag = (bag_t *) arg;
+ 
+   assert(bag == &threadbag[bag->threadnum]);
+@@ -105,7 +105,7 @@
+   for (bag->count = 0; bag->count < 100; bag->count++)
+     Sleep(100);
+ 
+-  return (void *) result;
++  return (void *) (size_t)result;
+ }
+ 
+ int
+@@ -161,7 +161,7 @@
+   for (i = 1; i <= NUMTHREADS; i++)
+     {
+       int fail = 0;
+-      int result = 0;
++      DWORD_PTR result = 0;
+ 
+       /*
+        * The thread does not contain any cancelation points, so
+@@ -170,7 +170,7 @@
+        */
+       assert(pthread_join(t[i], (void **) &result) == 0);
+ 
+-      fail = (result != (int) PTHREAD_CANCELED);
++      fail = (result != (int) (size_t) PTHREAD_CANCELED);
+ 
+       if (fail)
+ 	{
+
+=== modified file 'tests/cancel6d.c'
+--- pthreadw32/tests/cancel6d.c	2004-11-03 01:08:41 +0000
++++ pthreadw32/tests/cancel6d.c	2010-07-10 23:05:44 +0000
+@@ -86,7 +86,7 @@
+ void *
+ mythread(void * arg)
+ {
+-  int result = ((int)PTHREAD_CANCELED + 1);
++  int result = ((int) (size_t) PTHREAD_CANCELED + 1);
+   bag_t * bag = (bag_t *) arg;
+ 
+   assert(bag == &threadbag[bag->threadnum]);
+@@ -109,7 +109,7 @@
+       pthread_testcancel();
+     }
+ 
+-  return (void *) result;
++  return (void *) (size_t) result;
+ }
+ 
+ int
+@@ -165,11 +165,11 @@
+   for (i = 1; i <= NUMTHREADS; i++)
+     {
+       int fail = 0;
+-      int result = 0;
++      DWORD_PTR result = 0;
+ 
+       assert(pthread_join(t[i], (void **) &result) == 0);
+ 
+-      fail = (result != (int) PTHREAD_CANCELED);
++      fail = (result != (int) (size_t) PTHREAD_CANCELED);
+ 
+       if (fail)
+ 	{
+
+=== modified file 'tests/cancel8.c'
+--- pthreadw32/tests/cancel8.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/cancel8.c	2010-07-10 23:05:44 +0000
+@@ -195,7 +195,7 @@
+       assert(threadbag[i].self.p != NULL);
+       assert(pthread_kill(threadbag[i].self, 0) == ESRCH);
+ 
+-      fail = (result != (int) PTHREAD_CANCELED);
++      fail = (result != (int) (size_t) PTHREAD_CANCELED);
+ 
+       if (fail)
+ 	{
+
+=== modified file 'tests/cleanup0.c'
+--- pthreadw32/tests/cleanup0.c	2005-04-06 02:16:29 +0000
++++ pthreadw32/tests/cleanup0.c	2010-07-10 23:05:44 +0000
+@@ -189,7 +189,7 @@
+   for (i = 1; i <= NUMTHREADS; i++)
+     {
+       int fail = 0;
+-      int result = 0;
++      DWORD_PTR result = 0;
+ 
+       assert(pthread_join(t[i], (void **) &result) == 0);
+ 
+
+=== modified file 'tests/cleanup1.c'
+--- pthreadw32/tests/cleanup1.c	2005-04-06 02:16:29 +0000
++++ pthreadw32/tests/cleanup1.c	2010-07-10 23:05:44 +0000
+@@ -203,7 +203,7 @@
+   for (i = 1; i <= NUMTHREADS; i++)
+     {
+       int fail = 0;
+-      int result = 0;
++      DWORD_PTR result = 0;
+ 
+       assert(pthread_join(t[i], (void **) &result) == 0);
+ 
+
+=== modified file 'tests/cleanup2.c'
+--- pthreadw32/tests/cleanup2.c	2005-04-06 02:16:29 +0000
++++ pthreadw32/tests/cleanup2.c	2010-07-10 23:05:44 +0000
+@@ -178,7 +178,7 @@
+   for (i = 1; i <= NUMTHREADS; i++)
+     {
+       int fail = 0;
+-      int result = 0;
++      DWORD_PTR result = 0;
+ 
+       assert(pthread_join(t[i], (void **) &result) == 0);
+ 
+
+=== modified file 'tests/cleanup3.c'
+--- pthreadw32/tests/cleanup3.c	2005-04-06 02:16:29 +0000
++++ pthreadw32/tests/cleanup3.c	2010-07-10 23:05:44 +0000
+@@ -183,7 +183,7 @@
+   for (i = 1; i <= NUMTHREADS; i++)
+     {
+       int fail = 0;
+-      int result = 0;
++      DWORD_PTR result = 0;
+ 
+       assert(pthread_join(t[i], (void **) &result) == 0);
+ 
+
+=== modified file 'tests/condvar1_2.c'
+--- pthreadw32/tests/condvar1_2.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/condvar1_2.c	2010-07-10 23:05:44 +0000
+@@ -89,7 +89,7 @@
+ main()
+ {
+   int i, j, k;
+-  int result = -1;
++  DWORD_PTR result = -1;
+   pthread_t t;
+ 
+   for (k = 0; k < NUM_LOOPS; k++)
+
+=== modified file 'tests/condvar2.c'
+--- pthreadw32/tests/condvar2.c	2005-05-06 07:31:28 +0000
++++ pthreadw32/tests/condvar2.c	2010-07-10 23:05:44 +0000
+@@ -99,7 +99,7 @@
+   /* get current system time */
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   abstime.tv_sec += 1;
+@@ -109,7 +109,7 @@
+   assert(pthread_mutex_unlock(&mutex) == 0);
+ 
+   {
+-  int result = pthread_cond_destroy(&cv);
++  DWORD_PTR result = pthread_cond_destroy(&cv);
+   if (result != 0)
+     {
+       fprintf(stderr, "Result = %s\n", error_string[result]);
+
+=== modified file 'tests/condvar2_1.c'
+--- pthreadw32/tests/condvar2_1.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/condvar2_1.c	2010-07-10 23:05:44 +0000
+@@ -105,7 +105,7 @@
+ {
+   int i;
+   pthread_t t[NUMTHREADS + 1];
+-  int result = 0;
++  DWORD_PTR result = 0;
+   struct _timeb currSysTime;
+   const DWORD NANOSEC_PER_MILLISEC = 1000000;
+ 
+@@ -116,7 +116,7 @@
+   /* get current system time */
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   abstime.tv_sec += 5;
+
+=== modified file 'tests/condvar3.c'
+--- pthreadw32/tests/condvar3.c	2005-04-25 14:42:37 +0000
++++ pthreadw32/tests/condvar3.c	2010-07-10 23:05:44 +0000
+@@ -126,7 +126,7 @@
+   /* get current system time */
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   assert(pthread_create(&t[1], NULL, mythread, (void *) 1) == 0);
+
+=== modified file 'tests/condvar3_1.c'
+--- pthreadw32/tests/condvar3_1.c	2005-04-25 14:42:37 +0000
++++ pthreadw32/tests/condvar3_1.c	2010-07-10 23:05:44 +0000
+@@ -126,7 +126,7 @@
+ {
+   int i;
+   pthread_t t[NUMTHREADS + 1];
+-  int result = 0;
++  DWORD_PTR result = 0;
+   struct _timeb currSysTime;
+   const DWORD NANOSEC_PER_MILLISEC = 1000000;
+ 
+@@ -139,7 +139,7 @@
+   /* get current system time */
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   abstime.tv_sec += 5;
+
+=== modified file 'tests/condvar3_2.c'
+--- pthreadw32/tests/condvar3_2.c	2005-04-25 14:42:37 +0000
++++ pthreadw32/tests/condvar3_2.c	2010-07-10 23:05:44 +0000
+@@ -127,7 +127,7 @@
+ {
+   int i;
+   pthread_t t[NUMTHREADS + 1];
+-  int result = 0;
++  DWORD_PTR result = 0;
+   struct _timeb currSysTime;
+   const DWORD NANOSEC_PER_MILLISEC = 1000000;
+ 
+@@ -138,7 +138,7 @@
+   /* get current system time */
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = abstime.tv_sec = currSysTime.time + 5;
++  abstime.tv_sec = abstime.tv_sec = (long)currSysTime.time + 5;
+   abstime.tv_nsec = abstime2.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   assert(pthread_mutex_lock(&mutex) == 0);
+
+=== modified file 'tests/condvar3_3.c'
+--- pthreadw32/tests/condvar3_3.c	2005-04-25 14:42:37 +0000
++++ pthreadw32/tests/condvar3_3.c	2010-07-10 23:05:44 +0000
+@@ -96,7 +96,7 @@
+    /* get current system time */
+    _ftime(&currSysTime);
+ 
+-   abstime.tv_sec = currSysTime.time;
++   abstime.tv_sec = (long)currSysTime.time;
+    abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+    abstime.tv_sec += 1;
+ 
+@@ -120,7 +120,7 @@
+ 
+    assert(pthread_mutex_lock(&mtx) == 0);
+ 
+-   abstime.tv_sec = currSysTime.time;
++   abstime.tv_sec = (long)currSysTime.time;
+    abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+    abstime.tv_sec += 1;
+ 
+
+=== modified file 'tests/condvar4.c'
+--- pthreadw32/tests/condvar4.c	2005-04-25 14:42:37 +0000
++++ pthreadw32/tests/condvar4.c	2010-07-10 23:05:44 +0000
+@@ -130,7 +130,7 @@
+   /* get current system time */
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   abstime.tv_sec += 5;
+@@ -143,7 +143,7 @@
+ 
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   abstime.tv_sec += 5;
+
+=== modified file 'tests/condvar5.c'
+--- pthreadw32/tests/condvar5.c	2005-04-25 14:42:37 +0000
++++ pthreadw32/tests/condvar5.c	2010-07-10 23:05:44 +0000
+@@ -129,7 +129,7 @@
+   /* get current system time */
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   abstime.tv_sec += 5;
+@@ -142,7 +142,7 @@
+ 
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   abstime.tv_sec += 5;
+
+=== modified file 'tests/condvar6.c'
+--- pthreadw32/tests/condvar6.c	2005-04-25 14:42:37 +0000
++++ pthreadw32/tests/condvar6.c	2010-07-10 23:05:44 +0000
+@@ -159,7 +159,7 @@
+ 
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   abstime.tv_sec += 5;
+
+=== modified file 'tests/condvar7.c'
+--- pthreadw32/tests/condvar7.c	2005-04-25 14:42:37 +0000
++++ pthreadw32/tests/condvar7.c	2010-07-10 23:05:44 +0000
+@@ -169,7 +169,7 @@
+ 
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   abstime.tv_sec += 10;
+
+=== modified file 'tests/condvar8.c'
+--- pthreadw32/tests/condvar8.c	2005-04-25 14:42:37 +0000
++++ pthreadw32/tests/condvar8.c	2010-07-10 23:05:44 +0000
+@@ -166,7 +166,7 @@
+ 
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   abstime.tv_sec += 10;
+
+=== modified file 'tests/condvar9.c'
+--- pthreadw32/tests/condvar9.c	2005-04-25 14:42:37 +0000
++++ pthreadw32/tests/condvar9.c	2010-07-10 23:05:44 +0000
+@@ -174,7 +174,7 @@
+ 
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   abstime.tv_sec += 5;
+
+=== modified file 'tests/delay2.c'
+--- pthreadw32/tests/delay2.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/delay2.c	2010-07-10 23:05:44 +0000
+@@ -65,7 +65,7 @@
+ main(int argc, char * argv[])
+ {
+   pthread_t t;
+-  int result = 0;
++  DWORD_PTR result = 0;
+ 
+   assert(pthread_mutex_lock(&mx) == 0);
+ 
+
+=== modified file 'tests/exception1.c'
+--- pthreadw32/tests/exception1.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/exception1.c	2010-07-10 23:05:44 +0000
+@@ -226,7 +226,7 @@
+   for (i = 0; i < NUMTHREADS; i++)
+     {
+       int fail = 0;
+-      int result = 0;
++      DWORD_PTR result = 0;
+ 
+ 	/* Canceled thread */
+       assert(pthread_join(ct[i], (void **) &result) == 0);
+
+=== modified file 'tests/inherit1.c'
+--- pthreadw32/tests/inherit1.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/inherit1.c	2010-07-10 23:05:44 +0000
+@@ -89,7 +89,7 @@
+   struct sched_param param;
+ 
+   assert(pthread_getschedparam(pthread_self(), &policy, &param) == 0);
+-  return (void *) param.sched_priority;
++  return (void *) (size_t) param.sched_priority;
+ }
+ 
+ 
+@@ -169,7 +169,7 @@
+           assert(pthread_attr_setschedparam(&attr, &param) == 0);
+           assert(pthread_create(&t, &attr, func, NULL) == 0);
+           pthread_join(t, &result);
+-          assert((int) result == mainParam.sched_priority);
++          assert((int) (size_t)result == mainParam.sched_priority);
+         }
+     }
+ 
+
+=== modified file 'tests/join0.c'
+--- pthreadw32/tests/join0.c	2005-05-15 15:28:24 +0000
++++ pthreadw32/tests/join0.c	2010-07-10 23:05:44 +0000
+@@ -53,7 +53,7 @@
+ main(int argc, char * argv[])
+ {
+   pthread_t id;
+-  int result;
++  DWORD_PTR result;
+ 
+   /* Create a single thread and wait for it to exit. */
+   assert(pthread_create(&id, NULL, func, (void *) 123) == 0);
+
+=== modified file 'tests/join1.c'
+--- pthreadw32/tests/join1.c	2005-05-15 15:28:24 +0000
++++ pthreadw32/tests/join1.c	2010-07-10 23:05:44 +0000
+@@ -56,7 +56,7 @@
+ {
+ 	pthread_t id[4];
+ 	int i;
+-	int result;
++	DWORD_PTR result;
+ 
+ 	/* Create a few threads and then exit. */
+ 	for (i = 0; i < 4; i++)
+
+=== modified file 'tests/join2.c'
+--- pthreadw32/tests/join2.c	2005-05-15 15:28:24 +0000
++++ pthreadw32/tests/join2.c	2010-07-10 23:05:44 +0000
+@@ -50,7 +50,7 @@
+ {
+ 	pthread_t id[4];
+ 	int i;
+-	int result;
++	DWORD_PTR result;
+ 
+ 	/* Create a few threads and then exit. */
+ 	for (i = 0; i < 4; i++)
+
+=== modified file 'tests/join3.c'
+--- pthreadw32/tests/join3.c	2005-05-15 15:28:24 +0000
++++ pthreadw32/tests/join3.c	2010-07-10 23:05:44 +0000
+@@ -50,7 +50,7 @@
+ {
+ 	pthread_t id[4];
+ 	int i;
+-	int result;
++	DWORD_PTR result;
+ 
+ 	/* Create a few threads and then exit. */
+ 	for (i = 0; i < 4; i++)
+
+=== modified file 'tests/mutex6e.c'
+--- pthreadw32/tests/mutex6e.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/mutex6e.c	2010-07-10 23:05:44 +0000
+@@ -74,7 +74,7 @@
+ main()
+ {
+   pthread_t t;
+-  int result = 0;
++  DWORD_PTR result = 0;
+   int mxType = -1;
+ 
+   assert(pthread_mutexattr_init(&mxAttr) == 0);
+
+=== modified file 'tests/mutex6es.c'
+--- pthreadw32/tests/mutex6es.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/mutex6es.c	2010-07-10 23:05:44 +0000
+@@ -73,7 +73,7 @@
+ main()
+ {
+   pthread_t t;
+-  int result = 0;
++  DWORD_PTR result = 0;
+ 
+   assert(mutex == PTHREAD_ERRORCHECK_MUTEX_INITIALIZER);
+ 
+
+=== modified file 'tests/mutex6r.c'
+--- pthreadw32/tests/mutex6r.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/mutex6r.c	2010-07-10 23:05:44 +0000
+@@ -73,7 +73,7 @@
+ main()
+ {
+   pthread_t t;
+-  int result = 0;
++  DWORD_PTR result = 0;
+   int mxType = -1;
+ 
+   assert(pthread_mutexattr_init(&mxAttr) == 0);
+
+=== modified file 'tests/mutex6rs.c'
+--- pthreadw32/tests/mutex6rs.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/mutex6rs.c	2010-07-10 23:05:44 +0000
+@@ -72,7 +72,7 @@
+ main()
+ {
+   pthread_t t;
+-  int result = 0;
++  DWORD_PTR result = 0;
+ 
+   assert(mutex == PTHREAD_RECURSIVE_MUTEX_INITIALIZER);
+ 
+
+=== modified file 'tests/mutex7e.c'
+--- pthreadw32/tests/mutex7e.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/mutex7e.c	2010-07-10 23:05:44 +0000
+@@ -74,7 +74,7 @@
+ main()
+ {
+   pthread_t t;
+-  int result = 0;
++  DWORD_PTR result = 0;
+   int mxType = -1;
+ 
+   assert(pthread_mutexattr_init(&mxAttr) == 0);
+
+=== modified file 'tests/mutex7r.c'
+--- pthreadw32/tests/mutex7r.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/mutex7r.c	2010-07-10 23:05:44 +0000
+@@ -73,7 +73,7 @@
+ main()
+ {
+   pthread_t t;
+-  int result = 0;
++  DWORD_PTR result = 0;
+   int mxType = -1;
+ 
+   assert(pthread_mutexattr_init(&mxAttr) == 0);
+
+=== modified file 'tests/mutex8.c'
+--- pthreadw32/tests/mutex8.c	2002-02-20 04:39:56 +0000
++++ pthreadw32/tests/mutex8.c	2010-07-10 23:05:44 +0000
+@@ -49,7 +49,7 @@
+ 
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   abstime.tv_sec += 1;
+
+=== modified file 'tests/mutex8e.c'
+--- pthreadw32/tests/mutex8e.c	2002-02-20 04:39:56 +0000
++++ pthreadw32/tests/mutex8e.c	2010-07-10 23:05:44 +0000
+@@ -57,7 +57,7 @@
+ 
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   abstime.tv_sec += 1;
+
+=== modified file 'tests/mutex8n.c'
+--- pthreadw32/tests/mutex8n.c	2002-02-20 04:39:56 +0000
++++ pthreadw32/tests/mutex8n.c	2010-07-10 23:05:44 +0000
+@@ -57,7 +57,7 @@
+ 
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   abstime.tv_sec += 1;
+
+=== modified file 'tests/mutex8r.c'
+--- pthreadw32/tests/mutex8r.c	2002-02-20 04:39:56 +0000
++++ pthreadw32/tests/mutex8r.c	2010-07-10 23:05:44 +0000
+@@ -57,7 +57,7 @@
+ 
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   abstime.tv_sec += 1;
+
+=== modified file 'tests/priority1.c'
+--- pthreadw32/tests/priority1.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/priority1.c	2010-07-10 23:05:44 +0000
+@@ -91,7 +91,7 @@
+ 
+   assert(pthread_getschedparam(threadID, &policy, &param) == 0);
+   assert(policy == SCHED_OTHER);
+-  return (void *) (param.sched_priority);
++  return (void *) (size_t) (param.sched_priority);
+ }
+ 
+ void *
+@@ -164,8 +164,8 @@
+ 
+       assert(pthread_join(t, &result) == 0);
+ 
+-      assert(param.sched_priority == (int) result);
+-      printf("%10d %10d %10d\n", param.sched_priority, (int) result, prio);
++      assert(param.sched_priority == (int) (size_t) result);
++      printf("%10d %10d %10d\n", param.sched_priority, (int) (size_t) result, prio);
+     }
+ 
+   return 0;
+
+=== modified file 'tests/priority2.c'
+--- pthreadw32/tests/priority2.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/priority2.c	2010-07-10 23:05:44 +0000
+@@ -95,7 +95,7 @@
+   assert(policy == SCHED_OTHER);
+   result = pthread_barrier_wait(&endBarrier);
+   assert(result == 0 || result == PTHREAD_BARRIER_SERIAL_THREAD);
+-  return (void *) param.sched_priority;
++  return (void *) (size_t) param.sched_priority;
+ }
+ 
+ 
+@@ -162,7 +162,7 @@
+       assert(GetThreadPriority(pthread_getw32threadhandle_np(t)) ==
+ 	  validPriorities[param.sched_priority+(PTW32TEST_MAXPRIORITIES/2)]);
+       pthread_join(t, &result);
+-      assert(param.sched_priority == (int)result);
++      assert(param.sched_priority == (int)(size_t)result);
+     }
+ 
+   return 0;
+
+=== modified file 'tests/rwlock2_t.c'
+--- pthreadw32/tests/rwlock2_t.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/rwlock2_t.c	2010-07-10 23:05:44 +0000
+@@ -55,7 +55,7 @@
+ 
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   abstime.tv_sec += 1;
+
+=== modified file 'tests/rwlock3_t.c'
+--- pthreadw32/tests/rwlock3_t.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/rwlock3_t.c	2010-07-10 23:05:44 +0000
+@@ -68,7 +68,7 @@
+ 
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   abstime.tv_sec += 1;
+
+=== modified file 'tests/rwlock4_t.c'
+--- pthreadw32/tests/rwlock4_t.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/rwlock4_t.c	2010-07-10 23:05:44 +0000
+@@ -68,7 +68,7 @@
+ 
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   abstime.tv_sec += 1;
+
+=== modified file 'tests/rwlock5_t.c'
+--- pthreadw32/tests/rwlock5_t.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/rwlock5_t.c	2010-07-10 23:05:44 +0000
+@@ -70,7 +70,7 @@
+ 
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   abstime.tv_sec += 1;
+
+=== modified file 'tests/rwlock6.c'
+--- pthreadw32/tests/rwlock6.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/rwlock6.c	2010-07-10 23:05:44 +0000
+@@ -77,9 +77,9 @@
+   pthread_t wrt1;
+   pthread_t wrt2;
+   pthread_t rdt;
+-  int wr1Result = 0;
+-  int wr2Result = 0;
+-  int rdResult = 0;
++  DWORD_PTR wr1Result = 0;
++  DWORD_PTR wr2Result = 0;
++  DWORD_PTR rdResult = 0;
+ 
+   bankAccount = 0;
+ 
+
+=== modified file 'tests/rwlock6_t.c'
+--- pthreadw32/tests/rwlock6_t.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/rwlock6_t.c	2010-07-10 23:05:44 +0000
+@@ -55,7 +55,7 @@
+   bankAccount += 10;
+   assert(pthread_rwlock_unlock(&rwlock1) == 0);
+ 
+-  return ((void *) bankAccount);
++  return ((void *) (size_t) bankAccount);
+ }
+ 
+ void * rdfunc(void * arg)
+@@ -67,17 +67,17 @@
+ 
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+ 
+-  if ((int) arg == 1)
++  if ((int) ((size_t) arg) == 1)
+     {
+       abstime.tv_sec += 1;
+       assert(pthread_rwlock_timedrdlock(&rwlock1, &abstime) == ETIMEDOUT);
+       ba = 0;
+     }
+-  else if ((int) arg == 2)
++  else if ((int) ((size_t) arg) == 2)
+     {
+       abstime.tv_sec += 3;
+       assert(pthread_rwlock_timedrdlock(&rwlock1, &abstime) == 0);
+@@ -85,7 +85,7 @@
+       assert(pthread_rwlock_unlock(&rwlock1) == 0);
+     }
+ 
+-  return ((void *) ba);
++  return ((void *) (size_t) ba);
+ }
+ 
+ int
+@@ -95,10 +95,10 @@
+   pthread_t wrt2;
+   pthread_t rdt1;
+   pthread_t rdt2;
+-  int wr1Result = 0;
+-  int wr2Result = 0;
+-  int rd1Result = 0;
+-  int rd2Result = 0;
++  DWORD_PTR wr1Result = 0;
++  DWORD_PTR wr2Result = 0;
++  DWORD_PTR rd1Result = 0;
++  DWORD_PTR rd2Result = 0;
+ 
+   bankAccount = 0;
+ 
+
+=== modified file 'tests/rwlock6_t2.c'
+--- pthreadw32/tests/rwlock6_t2.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/rwlock6_t2.c	2010-07-10 23:05:44 +0000
+@@ -54,21 +54,21 @@
+   int result;
+ 
+   result = pthread_rwlock_timedwrlock(&rwlock1, &abstime);
+-  if ((int) arg == 1)
++  if ((int) ((size_t)arg) == 1)
+     {
+       assert(result == 0);
+       Sleep(2000);
+       bankAccount += 10;
+       assert(pthread_rwlock_unlock(&rwlock1) == 0);
+-      return ((void *) bankAccount);
++      return ((void *) (size_t) bankAccount);
+     }
+-  else if ((int) arg == 2)
++  else if ((int) ((size_t)arg) == 2)
+     {
+       assert(result == ETIMEDOUT);
+-      return ((void *) 100);
++      return ((void *) (size_t) 100);
+     }
+ 
+-  return ((void *) -1);
++  return ((void *) (size_t) -1);
+ }
+ 
+ void * rdfunc(void * arg)
+@@ -77,7 +77,7 @@
+ 
+   assert(pthread_rwlock_timedrdlock(&rwlock1, &abstime) == ETIMEDOUT);
+ 
+-  return ((void *) ba);
++  return ((void *) (size_t) ba);
+ }
+ 
+ int
+@@ -86,15 +86,15 @@
+   pthread_t wrt1;
+   pthread_t wrt2;
+   pthread_t rdt;
+-  int wr1Result = 0;
+-  int wr2Result = 0;
+-  int rdResult = 0;
++  DWORD_PTR wr1Result = 0;
++  DWORD_PTR wr2Result = 0;
++  DWORD_PTR rdResult = 0;
+   struct _timeb currSysTime;
+   const DWORD NANOSEC_PER_MILLISEC = 1000000;
+ 
+   _ftime(&currSysTime);
+ 
+-  abstime.tv_sec = currSysTime.time;
++  abstime.tv_sec = (long)currSysTime.time;
+   abstime.tv_nsec = NANOSEC_PER_MILLISEC * currSysTime.millitm;
+ 
+   abstime.tv_sec += 1;
+
+=== modified file 'tests/semaphore1.c'
+--- pthreadw32/tests/semaphore1.c	2005-05-08 16:52:50 +0000
++++ pthreadw32/tests/semaphore1.c	2010-07-10 23:05:44 +0000
+@@ -119,7 +119,7 @@
+ {
+   pthread_t t;
+   sem_t s;
+-  int result;
++  DWORD_PTR result;
+ 
+   assert(pthread_create(&t, NULL, thr, NULL) == 0);
+   assert(pthread_join(t, (void **)&result) == 0);
+
+=== modified file 'tests/semaphore4.c'
+--- pthreadw32/tests/semaphore4.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/semaphore4.c	2010-07-10 23:05:44 +0000
+@@ -113,7 +113,7 @@
+ //printf("value = %d\n", -value); fflush(stdout);
+ 	assert(pthread_cancel(t[50]) == 0);
+ 	  {
+-	    int result;
++	    DWORD_PTR result;
+ 	    assert(pthread_join(t[50], (void **) &result) == 0);
+ //	    printf("result = %d\n", result); fflush(stdout);
+ 	  }
+
+=== modified file 'tests/spin3.c'
+--- pthreadw32/tests/spin3.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/spin3.c	2010-07-10 23:05:44 +0000
+@@ -46,7 +46,7 @@
+  
+ void * unlocker(void * arg)
+ {
+-  int expectedResult = (int) arg;
++  int expectedResult = (int) (size_t) arg;
+ 
+   wasHere++;
+   assert(pthread_spin_unlock(&spin) == expectedResult);
+
+=== modified file 'tests/spin4.c'
+--- pthreadw32/tests/spin4.c	2005-01-01 14:36:17 +0000
++++ pthreadw32/tests/spin4.c	2010-07-10 23:05:44 +0000
+@@ -63,7 +63,7 @@
+ int
+ main()
+ {
+-  long result = 0;
++  DWORD_PTR result = 0;
+   pthread_t t;
+   int CPUs;
+   struct _timeb sysTime;
+
+=== modified file 'tests/stress1.c'
+--- pthreadw32/tests/stress1.c	2010-06-20 03:31:18 +0000
++++ pthreadw32/tests/stress1.c	2010-07-10 23:29:46 +0000
+@@ -141,9 +141,9 @@
+ void *
+ masterThread (void * arg)
+ {
+-  int dither = (int) arg;
++  int dither = (int) (size_t)arg;
+ 
+-  timeout = (int) arg;
++  timeout = (int) (size_t)arg;
+ 
+   pthread_barrier_wait(&startBarrier);
+ 
+@@ -239,7 +239,7 @@
+   assert(pthread_barrier_init(&readyBarrier, NULL, 3) == 0);
+   assert(pthread_barrier_init(&holdBarrier, NULL, 3) == 0);
+ 
+-  assert(pthread_create(&master, NULL, masterThread, (void *) timeout) == 0);
++  assert(pthread_create(&master, NULL, masterThread, (void *) (size_t)timeout) == 0);
+   assert(pthread_create(&slave, NULL, slaveThread, NULL) == 0);
+ 
+   allExit = FALSE;
+
+=== modified file 'tests/tsd1.c'
+--- pthreadw32/tests/tsd1.c	2005-05-08 16:52:50 +0000
++++ pthreadw32/tests/tsd1.c	2010-07-10 23:05:44 +0000
+@@ -179,7 +179,7 @@
+    */
+   for (i = 1; i < NUM_THREADS; i++)
+     {
+-	int result = 0;
++	DWORD_PTR result = 0;
+ 
+ 	assert(pthread_join(thread[i], (void **) &result) == 0);
+     }
+
+=== modified file 'tests/tsd2.c'
+--- pthreadw32/tests/tsd2.c	2005-05-08 16:52:50 +0000
++++ pthreadw32/tests/tsd2.c	2010-07-10 23:05:44 +0000
+@@ -183,7 +183,7 @@
+    */
+   for (i = 1; i < NUM_THREADS; i++)
+     {
+-	int result = 0;
++	DWORD_PTR result = 0;
+ 
+ 	assert(pthread_join(thread[i], (void **) &result) == 0);
+     }
+
+=== modified file 'version.rc'
+--- pthreadw32/version.rc	2005-05-19 04:19:35 +0000
++++ pthreadw32/version.rc	2010-07-10 23:05:44 +0000
+@@ -102,7 +102,7 @@
+     BEGIN
+         BLOCK "040904b0"
+         BEGIN
+-            VALUE "FileDescription", "POSIX Threads for Windows32 Library\0"
++            VALUE "FileDescription", "POSIX Threads for Windows Library\0"
+             VALUE "ProductVersion", PTW32_VERSION_STRING
+             VALUE "FileVersion", PTW32_VERSION_STRING
+             VALUE "InternalName", PTW32_VERSIONINFO_NAME
+

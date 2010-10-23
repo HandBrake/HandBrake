@@ -1,18 +1,20 @@
 $(eval $(call import.MODULE.defs,PTHREADW32,pthreadw32))
 $(eval $(call import.CONTRIB.defs,PTHREADW32))
 
-PTHREADW32.FETCH.url = http://download.m0k.org/handbrake/contrib/pthreads-w32-2-8-0-release.tar.gz
+PTHREADW32.FETCH.url = http://download.m0k.org/handbrake/contrib/pthreads-w32-cvs20100909.tar.bz2
 
 PTHREADW32.CONFIGURE = $(TOUCH.exe) $@
 
-PTHREADW32.BUILD.extra = CROSS=$(BUILD.cross.prefix) clean GC-static
+PTHREADW32.BUILD.extra = target=$(BUILD.cross.prefix) clean GC-static
 PTHREADW32.BUILD.ntargets = clean GC-static
 
 define PTHREADW32.INSTALL
     $(CP.exe) $(PTHREADW32.EXTRACT.dir/)libpthreadGC2.a $(CONTRIB.build/)lib/
     $(CP.exe) $(PTHREADW32.EXTRACT.dir/)pthread.h $(CONTRIB.build/)include/
+    $(CP.exe) $(PTHREADW32.EXTRACT.dir/)pthreads_win32_config.h $(CONTRIB.build/)include/
     $(CP.exe) $(PTHREADW32.EXTRACT.dir/)sched.h $(CONTRIB.build/)include/
     $(CP.exe) $(PTHREADW32.EXTRACT.dir/)semaphore.h $(CONTRIB.build/)include/
+    $(LN.exe) -sf ./libpthreadGC2.a $(CONTRIB.build/)lib/libpthread.a
     $(TOUCH.exe) $@
 endef
 
