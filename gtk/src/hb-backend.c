@@ -1618,69 +1618,10 @@ ghb_grey_combo_options(GtkBuilder *builder)
 gint
 ghb_get_best_mix(hb_audio_config_t *aconfig, gint acodec, gint mix)
 {
-	gboolean allow_mono = TRUE;
-	gboolean allow_stereo = TRUE;
-	gboolean allow_dolby = TRUE;
-	gboolean allow_dpl2 = TRUE;
-	gboolean allow_6ch = TRUE;
-	
-	if (acodec & HB_ACODEC_PASS_FLAG)
-	{
-		// Audio codec pass-thru.  No mixdown
-		return 0;
-	}
-	if (aconfig)
-	{
-		allow_mono = TRUE;
-		gint layout = aconfig->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
-		allow_stereo =
-			((layout == HB_INPUT_CH_LAYOUT_MONO && !allow_mono) || layout >= HB_INPUT_CH_LAYOUT_STEREO);
-		allow_dolby =
-			(layout == HB_INPUT_CH_LAYOUT_3F1R) || 
-			(layout == HB_INPUT_CH_LAYOUT_3F2R) || 
-			(layout == HB_INPUT_CH_LAYOUT_DOLBY);
-		allow_dpl2 = (layout == HB_INPUT_CH_LAYOUT_3F2R);
-		allow_6ch =
-			(acodec & ~HB_ACODEC_LAME) &&
-			(layout == HB_INPUT_CH_LAYOUT_3F2R) && 
-			(aconfig->in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE);
-	}
-	gboolean greater = FALSE;
-	if (mix == 0) 
-	{
-		// If no mix is specified, select the best available.
-		mix = HB_AMIXDOWN_6CH;
-	}
-	if (mix == HB_AMIXDOWN_6CH)
-	{
-		greater = TRUE;
-		if (allow_6ch) return HB_AMIXDOWN_6CH;
-	}
-	if (mix == HB_AMIXDOWN_DOLBYPLII || greater)
-	{
-		greater = TRUE;
-		if (allow_dpl2) return HB_AMIXDOWN_DOLBYPLII;
-	}
-	if (mix == HB_AMIXDOWN_DOLBY || greater)
-	{
-		greater = TRUE;
-		if (allow_dolby) return HB_AMIXDOWN_DOLBY;
-	}
-	if (mix == HB_AMIXDOWN_STEREO || greater)
-	{
-		greater = TRUE;
-		if (allow_stereo) return HB_AMIXDOWN_STEREO;
-	}
-	if (mix == HB_AMIXDOWN_MONO || greater)
-	{
-		greater = TRUE;
-		if (allow_mono) return HB_AMIXDOWN_MONO;
-	}
-	if (allow_stereo) return HB_AMIXDOWN_STEREO;
-	if (allow_dolby) return HB_AMIXDOWN_DOLBY;
-	if (allow_dpl2) return HB_AMIXDOWN_DOLBYPLII;
-	if (allow_6ch) return HB_AMIXDOWN_6CH;
-	return 0;
+	int layout;
+	layout = aconfig ? aconfig->in.channel_layout : 
+						HB_INPUT_CH_LAYOUT_3F2R | HB_INPUT_CH_LAYOUT_HAS_LFE;
+	return hb_get_best_mixdown( acodec, layout, mix );
 }
 
 // Set up the model for the combo box
