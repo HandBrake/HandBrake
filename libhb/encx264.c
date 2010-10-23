@@ -85,44 +85,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     x264_param_default( &param );
     
-    /* Default weightp to off for baseline,
-       overridable through x264 option strings. */
-    if( job->x264opts != NULL && *job->x264opts != '\0' )
-    {
-        char *x264opts, *x264opts_start;
-    
-        x264opts = x264opts_start = strdup(job->x264opts);
-    
-        while( x264opts_start && *x264opts )
-        {
-            char *name = x264opts;
-            char *value;
-    
-            x264opts += strcspn( x264opts, ":" );
-            if( *x264opts )
-            {
-                *x264opts = 0;
-                x264opts++;
-            }
-    
-            value = strchr( name, '=' );
-            if( value )
-            {
-                *value = 0;
-                value++;
-            }
-    
-            if( !( strcmp( name, "bframes" ) ) )
-            {
-                if( atoi( value ) == 0 )
-                {
-                    param.analyse.i_weighted_pred = X264_WEIGHTP_NONE;
-                    hb_log("encx264: no bframes, disabling weight-p unless told otherwise");
-                }
-            }
-        }
-    }
-    
     /* Enable metrics */
     param.analyse.b_psnr = 1;
     param.analyse.b_ssim = 1;

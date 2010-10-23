@@ -294,7 +294,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String (We can use this to tweak the appleTV output)*/
-    [preset setObject:@"ref=1:b-pyramid=none:subme=5:me=umh:no-fast-pskip=1:cabac=0:weightb=0:8x8dct=0:trellis=0" forKey:@"x264Option"];
+    [preset setObject:@"ref=1:b-pyramid=none:weightp=0:subme=5:me=umh:no-fast-pskip=1:cabac=0:weightb=0:8x8dct=0:trellis=0" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
@@ -405,7 +405,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String (We can use this to tweak the appleTV output)*/
-    [preset setObject:@"cabac=0:ref=2:me=umh:bframes=0:8x8dct=0:trellis=0:subme=6" forKey:@"x264Option"];
+    [preset setObject:@"cabac=0:ref=2:me=umh:bframes=0:weightp=0:8x8dct=0:trellis=0:subme=6" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:2] forKey:@"VideoQualityType"];
@@ -814,7 +814,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"Mp4iPodCompatible"];
     /* x264 Option String */
-    [preset setObject:@"cabac=0:ref=2:me=umh:bframes=0:subme=6:8x8dct=0:trellis=0" forKey:@"x264Option"];
+    [preset setObject:@"cabac=0:ref=2:me=umh:bframes=0:weightp=0:subme=6:8x8dct=0:trellis=0" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:2] forKey:@"VideoQualityType"];
@@ -907,7 +907,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"Mp4iPodCompatible"];
     /* x264 Option String */
-    [preset setObject:@"level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:bframes=0:subme=6:8x8dct=0:trellis=0" forKey:@"x264Option"];
+    [preset setObject:@"level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:bframes=0:weightp=0:subme=6:8x8dct=0:trellis=0" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
@@ -1000,7 +1000,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"Mp4iPodCompatible"];
     /* x264 Option String */
-    [preset setObject:@"level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:subme=6:8x8dct=0:trellis=0" forKey:@"x264Option"];
+    [preset setObject:@"level=30:bframes=0:weightp=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:subme=6:8x8dct=0:trellis=0" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
@@ -1093,7 +1093,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"Mp4iPodCompatible"];
     /* x264 Option String */
-    [preset setObject:@"level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:subme=6:8x8dct=0:trellis=0" forKey:@"x264Option"];
+    [preset setObject:@"level=30:bframes=0:weightp=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:subme=6:8x8dct=0:trellis=0" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
