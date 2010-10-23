@@ -27,6 +27,16 @@
 #include <machine/cpu.h>
 #endif
 
+#ifdef SYS_MINGW
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#else
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#endif
+
 #ifdef SYS_CYGWIN
 #include <windows.h>
 #endif
@@ -42,17 +52,6 @@
 
 #include <time.h>
 #include <sys/time.h>
-
-
-#ifdef SYS_MINGW
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#else
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <netinet/in.h>
-#endif
 
 #if defined( SYS_LINUX )
 #include <linux/cdrom.h>
