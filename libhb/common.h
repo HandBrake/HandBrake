@@ -220,7 +220,6 @@ struct hb_job_s
          vrate, vrate_base: output framerate is vrate / vrate_base
          cfr:               0 (vfr), 1 (cfr), 2 (pfr) [see render.c]
          pass:              0, 1 or 2 (or -1 for scan)
-         h264_level:        vestigial boolean to decide if we're encoding for iPod
          x264opts:          string of extra x264 options
          areBframes:        boolean to note if b-frames are included in x264opts */
 #define HB_VCODEC_MASK   0x0000FF
@@ -236,8 +235,6 @@ struct hb_job_s
     int             vfr;
     int             cfr;
     int             pass;
-    int             h264_13;
-    int             h264_level;
     char            *x264opts;
     int             areBframes;
     int             color_matrix;
@@ -253,10 +250,6 @@ struct hb_job_s
          file: file path */
 #define HB_MUX_MASK 0xFF0000
 #define HB_MUX_MP4  0x010000
-#define HB_MUX_PSP  0x020000
-#define HB_MUX_AVI  0x040000
-#define HB_MUX_OGM  0x080000
-#define HB_MUX_IPOD 0x100000
 #define HB_MUX_MKV  0x200000
 
     int             mux;

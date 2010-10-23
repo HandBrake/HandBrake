@@ -115,13 +115,9 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 job->anamorphic.par_width, job->anamorphic.par_height );
     }
 
-    if( job->mux & ( HB_MUX_MP4 | HB_MUX_PSP ) )
+    if( job->mux & HB_MUX_MP4 )
     {
         context->flags |= CODEC_FLAG_GLOBAL_HEADER;
-    }
-    if( job->mux & HB_MUX_PSP )
-    {
-        context->flags |= CODEC_FLAG_BITEXACT;
     }
     if( job->grayscale )
     {
@@ -164,7 +160,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
     pv->context = context;
 
-    if( ( job->mux & ( HB_MUX_MP4 | HB_MUX_PSP ) ) && job->pass != 1 )
+    if( ( job->mux & HB_MUX_MP4 ) && job->pass != 1 )
     {
 #if 0
         /* Hem hem */

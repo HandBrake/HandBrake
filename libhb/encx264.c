@@ -169,13 +169,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     }
 
     param.i_log_level  = X264_LOG_INFO;
-    if( job->h264_level )
-    {
-        param.b_cabac     = 0;
-        param.i_level_idc = job->h264_level;
-        hb_log( "encx264: encoding at level %i",
-                param.i_level_idc );
-    }
     
     /*
        	This section passes the string x264opts to libx264 for parsing into
@@ -423,16 +416,6 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
         memcpy(buf->data + buf->size, nal[i].p_payload, size);
         if( size < 1 )
         {
-            continue;
-        }
-
-        if( job->mux & HB_MUX_AVI )
-        {
-            if( nal[i].i_ref_idc == NAL_PRIORITY_HIGHEST )
-            {
-                buf->frametype = HB_FRAME_KEY;
-            }
-            buf->size += size;
             continue;
         }
 

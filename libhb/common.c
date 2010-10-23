@@ -488,16 +488,8 @@ int hb_calc_bitrate( hb_job_t * job, int size )
        (quite guessed) */
     switch( job->mux )
     {
-       case HB_MUX_MP4:
-       case HB_MUX_PSP:
-		case HB_MUX_IPOD:
-		case HB_MUX_MKV:
-            overhead = 6;
-            break;
-        case HB_MUX_AVI:
-            overhead = 24;
-            break;
-        case HB_MUX_OGM:
+        case HB_MUX_MP4:
+        case HB_MUX_MKV:
             overhead = 6;
             break;
         default:

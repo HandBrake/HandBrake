@@ -148,7 +148,7 @@ static int MP4Init( hb_mux_object_t * m )
         MP4AddH264PictureParameterSet( m->file, mux_data->track,
                 job->config.h264.pps, job->config.h264.pps_length );
 
-		if( job->h264_level == 30 || job->ipod_atom)
+		if( job->ipod_atom )
 		{
 			hb_deep_log( 2, "muxmp4: adding iPod atom");
 			MP4AddIPodUUID(m->file, mux_data->track);

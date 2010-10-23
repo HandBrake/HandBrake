@@ -451,15 +451,7 @@ hb_work_object_t * hb_muxer_init( hb_job_t * job )
         switch( job->mux )
         {
         case HB_MUX_MP4:
-        case HB_MUX_PSP:
-        case HB_MUX_IPOD:
             mux->m = hb_mux_mp4_init( job );
-            break;
-        case HB_MUX_AVI:
-            mux->m = hb_mux_avi_init( job );
-            break;
-        case HB_MUX_OGM:
-            mux->m = hb_mux_ogm_init( job );
             break;
         case HB_MUX_MKV:
             mux->m = hb_mux_mkv_init( job );

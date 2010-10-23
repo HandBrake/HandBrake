@@ -183,16 +183,8 @@ void hb_display_job_info( hb_job_t * job )
                 hb_log( "     + custom color matrix: %s", job->color_matrix == 1 ? "ITU Bt.601 (SD)" : "ITU Bt.709 (HD)");
             break;
 
-        case HB_MUX_AVI:
-            hb_log("   + container: AVI");
-            break;
-
         case HB_MUX_MKV:
             hb_log("   + container: Matroska (.mkv)");
-            break;
-
-        case HB_MUX_OGM:
-            hb_log("   + conttainer: Ogg Media (.ogm)");
             break;
     }
 
@@ -476,16 +468,6 @@ static void do_job( hb_job_t * job, int cpu_count )
         hb_fix_aspect( job, HB_KEEP_WIDTH );
         hb_log( "Width out of bounds, scaling down to %i", job->maxWidth );
         hb_log( "New dimensions %i * %i", job->width, job->height );
-    }
-
-    if( job->mux & HB_MUX_AVI )
-    {
-        // The concept of variable frame rate video was a bit too advanced
-        // for Microsoft so AVI doesn't support it. Since almost all dvd
-        // video is VFR we have to convert it to constant frame rate to
-        // put it in an AVI container. So duplicate, drop and
-        // otherwise trash video frames to appease the gods of Redmond.
-        job->cfr = 1;
     }
 
     if ( job->cfr == 0 )

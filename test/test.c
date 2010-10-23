@@ -62,8 +62,6 @@ static int    rotate                = 0;
 static char * rotate_opt            = 0;
 static int    grayscale   = 0;
 static int    vcodec      = HB_VCODEC_FFMPEG;
-static int    h264_13     = 0;
-static int    h264_30     = 0;
 static hb_list_t * audios = NULL;
 static hb_audio_config_t * audio = NULL;
 static int    num_audio_tracks = 0;
@@ -1355,14 +1353,6 @@ static int HandleEvents( hb_handle_t * h )
             if( vcodec )
             {
                 job->vcodec = vcodec;
-            }
-            if( h264_13 )
-            {
-                job->h264_level = 13;
-            }
-	        if( h264_30 )
-	        {
-	            job->h264_level = 30;
             }
             if( vrate )
             {
@@ -3081,16 +3071,6 @@ static int ParseOptions( int argc, char ** argv )
                 {
                     vcodec = HB_VCODEC_X264;
                 }
-                else if( !strcasecmp( optarg, "x264b13" ) )
-                {
-                    vcodec = HB_VCODEC_X264;
-                    h264_13 = 1;
-                }
-                else if( !strcasecmp( optarg, "x264b30" ) )
-                {
-                    vcodec = HB_VCODEC_X264;
-                    h264_30 = 1;
-                }
                 else if( !strcasecmp( optarg, "theora" ) )
                 {
                     vcodec = HB_VCODEC_THEORA;
@@ -3382,12 +3362,9 @@ static int CheckOptions( int argc, char ** argv )
 
             /* autodetect */
             if( p && ( !strcasecmp( p, ".mp4" )  ||
-                            !strcasecmp( p, ".m4v" ) ) )
+                       !strcasecmp( p, ".m4v" ) ) )
             {
-                if ( h264_30 == 1 )
-                    mux = HB_MUX_IPOD;
-                else
-                    mux = HB_MUX_MP4;
+                mux = HB_MUX_MP4;
             }
             else if( p && !strcasecmp(p, ".mkv" ) )
             {
@@ -3407,10 +3384,7 @@ static int CheckOptions( int argc, char ** argv )
         else if( !strcasecmp( format, "mp4" ) ||
                  !strcasecmp( format, "m4v" ) )
         {
-            if ( h264_30 == 1)
-                mux = HB_MUX_IPOD;
-            else
-                mux = HB_MUX_MP4;
+            mux = HB_MUX_MP4;
         }
         else if( !strcasecmp( format, "mkv" ) )
         {
