@@ -5,4 +5,4 @@ LIBBLURAY.FETCH.url = http://download.m0k.org/handbrake/contrib/libbluray-0.0.1-
 
 LIBBLURAY.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; ./bootstrap;
 
-LIBBLURAY.CONFIGURE.extra += --disable-optimizations --enable-debug
+LIBBLURAY.CONFIGURE.extra += --disable-optimizations --enable-debug --disable-examples
