@@ -1,0 +1,34 @@
+--- libvorbis/doc/Makefile.am	2005-11-27 21:43:22.000000000 -0800
++++ xxx/doc/Makefile.am	2010-09-11 09:29:32.849597873 -0700
+@@ -30,7 +30,18 @@
+ 	vorbisword2.png \
+ 	wait.png \
+ 	white-ogg.png \
+-	white-xifish.png
++	components.png \
++	floor1-1.png \
++	floor1-2.png \
++	floor1-3.png \
++	floor1-4.png \
++	hufftree.png \
++	hufftree-under.png \
++	residue-pack.png \
++	residue2.png \
++	white-xifish.png \
++	window1.png \
++	window2.png
+ 
+ ### FIXME: bits needed by the spec which lives in xml
+ SPEC_PNG = \
+@@ -55,9 +66,9 @@
+ 
+ # conditionally make the generated documentation
+ if BUILD_DOCS
+-doc_DATA = $(static_docs) $(SPEC_PNG) $(built_docs)
++doc_DATA = $(static_docs) $(built_docs)
+ else
+-doc_DATA = $(static_docs) $(SPEC_PNG)
++doc_DATA = $(static_docs)
+ endif
+ 
+ EXTRA_DIST = $(static_docs) $(doc_sources) \
