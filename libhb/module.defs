@@ -34,6 +34,9 @@ LIBHB.out += $(LIBHB.a)
 
 ###############################################################################
 
+ifeq (1,$(FEATURE.ff.mpeg2))
+LIBHB.GCC.D += USE_FF_MPEG2
+endif
 LIBHB.GCC.D += __LIBHB__ USE_PTHREAD
 LIBHB.GCC.I += $(LIBHB.build/) $(CONTRIB.build/)include
 

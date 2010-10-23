@@ -637,6 +637,13 @@ static void do_job( hb_job_t * job, int cpu_count )
 
     /* Video decoder */
     int vcodec = title->video_codec? title->video_codec : WORK_DECMPEG2;
+#if defined(USE_FF_MPEG2)
+    if (vcodec == WORK_DECMPEG2)
+    {
+        vcodec = WORK_DECAVCODECV;
+        title->video_codec_param = CODEC_ID_MPEG2VIDEO;
+    }
+#endif
     hb_list_add( job->list_work, ( w = hb_get_work( vcodec ) ) );
     w->codec_param = title->video_codec_param;
     w->fifo_in  = job->fifo_mpeg2;

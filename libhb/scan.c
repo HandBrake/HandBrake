@@ -5,6 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
 
 #include "hb.h"
+#include "hbffmpeg.h"
 #include "a52dec/a52.h"
 #include "dca.h"
 
@@ -526,6 +527,13 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         hb_deep_log( 2, "scan: preview %d", i + 1 );
 
         int vcodec = title->video_codec? title->video_codec : WORK_DECMPEG2;
+#if defined(USE_FF_MPEG2)
+        if (vcodec == WORK_DECMPEG2)
+        {
+            vcodec = WORK_DECAVCODECV;
+            title->video_codec_param = CODEC_ID_MPEG2VIDEO;
+        }
+#endif
         hb_work_object_t *vid_decoder = hb_get_work( vcodec );
         vid_decoder->codec_param = title->video_codec_param;
         vid_decoder->title = title;
