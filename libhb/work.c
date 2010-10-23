@@ -559,28 +559,30 @@ static void do_job( hb_job_t * job, int cpu_count )
     }
 
     int requested_mixdown = 0;
-    int best_mixdown = 0;
     int requested_mixdown_index = 0;
+    int best_mixdown = 0;
+    int requested_bitrate = 0;
+    int best_bitrate = 0;
 
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
 
         best_mixdown = hb_get_best_mixdown( audio->config.out.codec,
-                                            audio->config.in.channel_layout );
+                                            audio->config.in.channel_layout, 0 );
 
         /* sense-check the current mixdown options */
 
         /* sense-check the requested mixdown */
         if( audio->config.out.mixdown == 0 &&
-            audio->config.out.codec != HB_ACODEC_AC3_PASS && 
-            audio->config.out.codec != HB_ACODEC_DCA_PASS )
+            !( audio->config.out.codec & HB_ACODEC_PASS_FLAG ) )
         {
             /*
              * Mixdown wasn't specified and this is not pass-through,
              * set a default mixdown
              */
-            audio->config.out.mixdown = best_mixdown;
+            audio->config.out.mixdown = hb_get_default_mixdown( audio->config.out.codec,
+                                                                audio->config.in.channel_layout );
             for (j = 0; j < hb_audio_mixdowns_count; j++)
             {
                 if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown)
@@ -616,9 +618,49 @@ static void do_job( hb_job_t * job, int cpu_count )
                 if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown)
                 {
                     hb_log("work: sanitizing track %i mixdown %s to %s", i, hb_audio_mixdowns[requested_mixdown_index].human_readable_name, hb_audio_mixdowns[j].human_readable_name);
-                break;
+                    break;
                 }
             }
+        }
+        
+        /* sense-check the current bitrates */
+        
+        /* sense-check the requested bitrate */
+        if( audio->config.out.bitrate == 0 &&
+            !( audio->config.out.codec & HB_ACODEC_PASS_FLAG ) )
+        {
+            /*
+             * Bitrate wasn't specified and this is not pass-through,
+             * set a default bitrate
+             */
+            audio->config.out.bitrate = hb_get_default_audio_bitrate( audio->config.out.codec,
+                                                                      audio->config.out.samplerate,
+                                                                      audio->config.out.mixdown );
+            
+            hb_log( "work: bitrate not specified, track %d setting bitrate %d",
+                    i, audio->config.out.bitrate );
+        }
+        
+        /* log the requested bitrate */
+        requested_bitrate = audio->config.out.bitrate;
+        best_bitrate = hb_get_best_audio_bitrate( audio->config.out.codec, 
+                                                  audio->config.out.bitrate,
+                                                  audio->config.out.samplerate,
+                                                  audio->config.out.mixdown );
+        
+        if ( !( audio->config.out.codec & HB_ACODEC_PASS_FLAG ) )
+        {
+            if ( audio->config.out.bitrate != best_bitrate )
+            {
+                audio->config.out.bitrate = best_bitrate;
+            }
+        }
+        
+        if ( audio->config.out.bitrate != requested_bitrate )
+        {
+            /* log the output bitrate */
+            hb_log( "work: sanitizing track %d audio bitrate %d to %d", 
+                    i, requested_bitrate, audio->config.out.bitrate);
         }
 
         if (audio->config.out.codec == HB_ACODEC_VORBIS)

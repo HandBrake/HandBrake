@@ -74,8 +74,11 @@ static char * arates      = NULL;
 static char * abitrates   = NULL;
 static char * acodecs     = NULL;
 static char * anames      = NULL;
+#ifdef __APPLE_CC__
+static int    default_acodec = HB_ACODEC_CA_AAC;
+#else
 static int    default_acodec = HB_ACODEC_FAAC;
-static int    default_abitrate = 160;
+#endif
 static int    audio_explicit = 0;
 static char ** subtracks   = NULL;
 static char ** subforce    = NULL;
@@ -1635,6 +1638,52 @@ static int HandleEvents( hb_handle_t * h )
                 }
             }
             /* Sample Rate */
+            
+            /* Audio Mixdown */
+            i = 0;
+            if ( mixdowns )
+            {
+                char * token = strtok(mixdowns, ",");
+                if (token == NULL)
+                    token = mixdowns;
+                while ( token != NULL )
+                {
+                    mixdown = hb_mixdown_get_mixdown_from_short_name(token);
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    if( audio != NULL )
+                    {
+                        audio->out.mixdown = mixdown;
+                        if( (++i) >= num_audio_tracks )
+                            break;  /* We have more inputs than audio tracks, oops */
+                    }
+                    else
+                    {
+                        fprintf(stderr, "Ignoring mixdown, no audio tracks\n");
+                    }
+                    token = strtok(NULL, ",");
+                }
+            }
+            if (i < num_audio_tracks)
+            {
+                /* We have fewer inputs than audio tracks, use the default mixdown for the rest. Unless
+                 * we only have one input, then use that.
+                 */
+                int use_default = 0;
+                if (i != 1)
+                    use_default = 1;
+
+                for (; i < num_audio_tracks; i++)
+                {
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    if (use_default)
+                    {
+                        // Get default for this tracks codec and layout
+                        mixdown = hb_get_default_mixdown( audio->out.codec, audio->in.channel_layout );
+                    }
+                    audio->out.mixdown = mixdown;
+                }
+            }
+            /* Audio Mixdown */
 
             /* Audio Bitrate */
             i = 0;
@@ -1667,11 +1716,19 @@ static int HandleEvents( hb_handle_t * h )
                  * for the remaining tracks. Unless we only have one input, then use
                  * that for all tracks.
                  */
+                int use_default = 0;
                 if (i != 1)
-                    abitrate = default_abitrate;
+                    use_default = 1;
+
                 for (; i < num_audio_tracks; i++)
                 {
                     audio = hb_list_audio_config_item(job->list_audio, i);
+                    if (use_default)
+                    {
+                        abitrate = hb_get_default_audio_bitrate( 
+                                        audio->out.codec, audio->out.samplerate,
+                                        audio->out.mixdown );
+                    }
                     audio->out.bitrate = abitrate;
                 }
             }
@@ -1716,45 +1773,6 @@ static int HandleEvents( hb_handle_t * h )
                 }
             }
             /* Audio DRC */
-
-            /* Audio Mixdown */
-            i = 0;
-            if ( mixdowns )
-            {
-                char * token = strtok(mixdowns, ",");
-                if (token == NULL)
-                    token = mixdowns;
-                while ( token != NULL )
-                {
-                    mixdown = hb_mixdown_get_mixdown_from_short_name(token);
-                    audio = hb_list_audio_config_item(job->list_audio, i);
-                    if( audio != NULL )
-                    {
-                        audio->out.mixdown = mixdown;
-                        if( (++i) >= num_audio_tracks )
-                            break;  /* We have more inputs than audio tracks, oops */
-                    }
-                    else
-                    {
-                        fprintf(stderr, "Ignoring mixdown, no audio tracks\n");
-                    }
-                    token = strtok(NULL, ",");
-                }
-            }
-            if (i < num_audio_tracks)
-            {
-                /* We have fewer inputs than audio tracks, use DPLII for the rest. Unless
-                 * we only have one input, then use that.
-                 */
-                if (i != 1)
-                    mixdown = HB_AMIXDOWN_DOLBYPLII;
-                for (; i < num_audio_tracks; i++)
-                {
-                   audio = hb_list_audio_config_item(job->list_audio, i);
-                   audio->out.mixdown = mixdown;
-                }
-            }
-            /* Audio Mixdown */
 
             /* Audio Track Names */
             i = 0;
@@ -2401,7 +2419,7 @@ static void ShowHelp()
     "                            copy, copy:ac3 and copy:dts meaning passthrough.\n"
     "                            copy will passthrough either ac3 or dts.\n"
     "                            Separated by commas for more than one audio track.\n"
-    "                            (default: guessed)\n" );
+    "                            (default: ca_aac)\n" );
 #else
     fprintf( out,
     "    -E, --aencoder <string> Audio encoder(s):\n"
@@ -2409,14 +2427,16 @@ static void ShowHelp()
     "                            copy, copy:ac3 and copy:dts meaning passthrough.\n"
     "                            copy will passthrough either ac3 or dts.\n"
     "                            Separated by commas for more than one audio track.\n"
-    "                            (default: guessed)\n" );
+    "                            (default: faac for mp4, lame for mkv)\n" );
 #endif
     fprintf( out,
-    "    -B, --ab <kb/s>         Set audio bitrate(s)  (default: 160)\n"
+    "    -B, --ab <kb/s>         Set audio bitrate(s) (default: depends on the\n"
+    "                            selected codec, mixdown and samplerate)\n"
     "                            Separated by commas for more than one audio track.\n"
     "    -6, --mixdown <string>  Format(s) for surround sound downmixing\n"
     "                            Separated by commas for more than one audio track.\n"
-    "                            (mono/stereo/dpl1/dpl2/6ch, default: dpl2)\n"
+    "                            (mono/stereo/dpl1/dpl2/6ch, default: up to 6ch for ac3,\n"
+    "                            up to dpl2 for other encoders)\n"
     "    -R, --arate             Set audio samplerate(s) (" );
     for( i = 0; i < hb_audio_rates_count; i++ )
     {
@@ -3368,12 +3388,14 @@ static int CheckOptions( int argc, char ** argv )
                     mux = HB_MUX_IPOD;
                 else
                     mux = HB_MUX_MP4;
-                default_acodec = HB_ACODEC_FAAC;
             }
             else if( p && !strcasecmp(p, ".mkv" ) )
             {
                 mux = HB_MUX_MKV;
-                default_acodec = HB_ACODEC_AC3;
+#ifndef __APPLE_CC__
+                // default to Lame for MKV (except under OS X where Core Audio is available)
+                default_acodec = HB_ACODEC_LAME;
+#endif
             }
             else
             {
@@ -3389,12 +3411,14 @@ static int CheckOptions( int argc, char ** argv )
                 mux = HB_MUX_IPOD;
             else
                 mux = HB_MUX_MP4;
-            default_acodec = HB_ACODEC_FAAC;
         }
         else if( !strcasecmp( format, "mkv" ) )
         {
             mux = HB_MUX_MKV;
-            default_acodec = HB_ACODEC_AC3;
+#ifndef __APPLE_CC__
+            // default to Lame for MKV (except under OS X where Core Audio is available)
+            default_acodec = HB_ACODEC_LAME;
+#endif
         }
         else
         {
