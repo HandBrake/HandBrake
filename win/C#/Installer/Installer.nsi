@@ -145,7 +145,8 @@ Section "Handbrake" SEC01
   File "Castle.DynamicProxy2.dll"
   File "Castle.MicroKernel.dll"
   File "Castle.Windsor.dll"
-
+  File "Microsoft.Practices.ServiceLocation.dll"
+ 
   SetOutPath "$INSTDIR\doc"
   SetOverwrite ifnewer
   File "doc\AUTHORS"
@@ -203,6 +204,7 @@ Section Uninstall
   Delete "$INSTDIR\Castle.DynamicProxy2.dll"
   Delete "$INSTDIR\Castle.MicroKernel.dll"
   Delete "$INSTDIR\Castle.Windsor.dll"
+  Delete "$INSTDIR\Microsoft.Practices.ServiceLocation.dll"
 
   Delete "$INSTDIR\doc\AUTHORS"
   Delete "$INSTDIR\doc\COPYING"
