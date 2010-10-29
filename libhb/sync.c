@@ -327,7 +327,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
 
     /* Wait till we can determine the initial pts of all streams */
-    if( pv->common->pts_offset == INT64_MIN )
+    if( next->size != 0 && pv->common->pts_offset == INT64_MIN )
     {
         pv->common->first_pts[0] = next->start;
         hb_lock( pv->common->mutex );

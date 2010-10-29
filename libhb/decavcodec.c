@@ -1014,7 +1014,10 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     /* if we got an empty buffer signaling end-of-stream send it downstream */
     if ( in->size == 0 )
     {
-        decodeVideo( pv, in->data, in->size, in->sequence, pts, dts );
+        if ( pv->context->codec != NULL )
+        {
+            decodeVideo( pv, in->data, in->size, in->sequence, pts, dts );
+        }
         hb_list_add( pv->list, in );
         *buf_out = link_buf_list( pv );
         return HB_WORK_DONE;
