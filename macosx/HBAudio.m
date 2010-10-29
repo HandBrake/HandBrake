@@ -325,7 +325,7 @@ static NSMutableArray *masterBitRateArray = nil;
 	return;
 }
 
-- (void) updateBitRates
+- (void) updateBitRates: (BOOL) shouldSetDefault
 
 {
 	NSMutableArray *permittedBitRates = [NSMutableArray array];
@@ -391,7 +391,9 @@ static NSMutableArray *masterBitRateArray = nil;
 	[self setBitRates: permittedBitRates];
 
 	//	Select the proper one
-	[self setBitRateFromName: defaultBitRate];
+	if (YES == shouldSetDefault) {
+		[self setBitRateFromName: defaultBitRate];
+		}
 
 	if (nil == [self bitRate] || NO == [permittedBitRates containsObject: [self bitRate]]) {
 		[self setBitRate: [permittedBitRates lastObject]];
@@ -464,7 +466,7 @@ static NSMutableArray *masterBitRateArray = nil;
 		[codec release];
 		codec = aValue;
 		[self updateMixdowns];
-		[self updateBitRates];
+		[self updateBitRates: YES];
 	}
 	return;
 }
@@ -476,8 +478,20 @@ static NSMutableArray *masterBitRateArray = nil;
 		[aValue retain];
 		[mixdown release];
 		mixdown = aValue;
-		[self updateBitRates];
+		[self updateBitRates: YES];
 		[[NSNotificationCenter defaultCenter] postNotificationName: HBMixdownChangedNotification object: self];
+	}
+	return;
+}
+
+- (void) setSampleRate: (NSDictionary *) aValue
+
+{
+	if ((nil != aValue || nil != sampleRate) && NO == [aValue isEqual: sampleRate]) {
+		[aValue retain];
+		[sampleRate release];
+		sampleRate = aValue;
+		[self updateBitRates: NO];
 	}
 	return;
 }

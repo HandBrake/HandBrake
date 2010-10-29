@@ -241,6 +241,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 	
 	while (nil != (dict = [enumerator nextObject])) {
 		if ([self countOfAudioArray] < maximumNumberOfAllowedAudioTracks) {
+			BOOL fallenBack = NO;
 			HBAudio *newAudio = [[HBAudio alloc] init];
 			[newAudio setController: self];
 			[self insertObject: newAudio inAudioArrayAtIndex: [self countOfAudioArray]];
@@ -257,6 +258,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 				YES == [key isEqualToString: @"AC3 Passthru"]) {
 				if (NO == [newAudio setCodecFromName: key]) {
 					key = @"AC3";
+					fallenBack = YES;
 				}
 			}
 			//	If our preset wants us to support a codec that the track does not support, instead
@@ -264,7 +266,9 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 			if (YES == [newAudio setCodecFromName: key]) {
 				[newAudio setMixdownFromName: [dict objectForKey: @"AudioMixdown"]];
 				[newAudio setSampleRateFromName: [dict objectForKey: @"AudioSamplerate"]];
-				[newAudio setBitRateFromName: [dict objectForKey: @"AudioBitrate"]];
+				if (NO == fallenBack) {
+					[newAudio setBitRateFromName: [dict objectForKey: @"AudioBitrate"]];
+					}
 				[newAudio setDrc: [dict objectForKey: @"AudioTrackDRCSlider"]];
 			}
 			else {
