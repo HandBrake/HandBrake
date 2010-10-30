@@ -62,7 +62,8 @@ namespace HandBrake.ApplicationServices.Parsing
             string curLine = output.ReadLine();
 
             // + 1, English (iso639-2: eng) (Text)(SSA)
-            Match m = Regex.Match(curLine, @"^    \+ ([0-9]*), ([A-Za-z, ]*) \((.*)\) \(([a-zA-Z]*)\)\(([a-zA-Z]*)\)");
+            // + 1, English (iso639-2: eng) (Text)(UTF-8)
+            Match m = Regex.Match(curLine, @"^    \+ ([0-9]*), ([A-Za-z, ]*) \((.*)\) \(([a-zA-Z]*)\)\(([a-zA-Z0-9\-]*)\)");
 
             if (m.Success && !curLine.Contains("HandBrake has exited."))
             {
