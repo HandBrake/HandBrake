@@ -638,8 +638,13 @@ namespace Handbrake.Controls
                 drp_audioBitrate.Items.Add("768");
             }
 
-            if (drp_audioBitrate.SelectedItem == null)
+            if (drp_audioBitrate.SelectedItem == null && audioList.SelectedRows.Count == 0)
                 drp_audioBitrate.SelectedIndex = drp_audioBitrate.Items.Count - 1;
+
+            if (drp_audioBitrate.SelectedItem == null && audioList.SelectedRows.Count != 0 && (string)this.audioList.SelectedRows[0].Cells[5].Value == "Auto")
+            {
+                drp_audioBitrate.SelectedItem = "160";
+            }
         }
 
         /// <summary>

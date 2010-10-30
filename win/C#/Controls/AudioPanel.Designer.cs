@@ -346,6 +346,7 @@ namespace Handbrake.Controls
             // 
             this.audioList.AllowUserToAddRows = false;
             this.audioList.AllowUserToResizeColumns = false;
+            this.audioList.AllowUserToResizeRows = false;
             this.audioList.BackgroundColor = System.Drawing.Color.White;
             this.audioList.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.audioList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
