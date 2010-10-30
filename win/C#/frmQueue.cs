@@ -131,7 +131,7 @@ namespace Handbrake
                 string.Format(
                 "Encoding: Pass {0} of {1}, {2:00.00}% Time Remaining: {3}",
                 e.Task,
-                e.Task,
+                e.TaskCount,
                 e.PercentComplete,
                 e.EstimatedTimeLeft);
         }
