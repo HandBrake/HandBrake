@@ -86,6 +86,7 @@
         <Abbreviation Text="UTF" />
         <Abbreviation Text="TX" />
         <Abbreviation Text="SRT" />
+        <Abbreviation Text="CLI" />
       </Naming2>
       <CustomMemberReorderingPatterns><![CDATA[<?xml version="1.0" encoding="utf-8"?>
 <Patterns xmlns="urn:shemas-jetbrains-com:member-reordering-patterns">

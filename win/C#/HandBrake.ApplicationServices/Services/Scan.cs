@@ -138,6 +138,8 @@ namespace HandBrake.ApplicationServices.Services
         {
             try
             {
+                this.readData.OnScanProgress -= this.OnScanProgress;
+
                 if (hbProc != null && !hbProc.HasExited)
                     hbProc.Kill();
             }
@@ -201,7 +203,7 @@ namespace HandBrake.ApplicationServices.Services
                 this.hbProc.Start();
 
                 this.readData = new Parser(this.hbProc.StandardError.BaseStream);
-                this.readData.OnScanProgress += new ScanProgressEventHandler(this.OnScanProgress);
+                this.readData.OnScanProgress += this.OnScanProgress;
                 this.SouceData = DVD.Parse(this.readData);
 
                 // Write the Buffer out to file.
