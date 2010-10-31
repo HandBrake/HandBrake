@@ -42,10 +42,8 @@ namespace Handbrake
             this.mnu_openLogFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.dropDownLogSelector = new System.Windows.Forms.ToolStripDropDownButton();
-            this.btn_encode_log = new System.Windows.Forms.ToolStripMenuItem();
-            this.btn_scan_log = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_copy = new System.Windows.Forms.ToolStripButton();
+            this.logSelector = new System.Windows.Forms.ToolStripComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.rightClickMenu.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -96,43 +94,14 @@ namespace Handbrake
             // 
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.dropDownLogSelector,
-            this.btn_copy});
+            this.btn_copy,
+            this.logSelector});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.toolStrip1.Size = new System.Drawing.Size(404, 25);
             this.toolStrip1.TabIndex = 96;
             this.toolStrip1.Text = "toolStrip1";
-            // 
-            // dropDownLogSelector
-            // 
-            this.dropDownLogSelector.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.dropDownLogSelector.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btn_encode_log,
-            this.btn_scan_log});
-            this.dropDownLogSelector.Image = global::Handbrake.Properties.Resources.Output_Small;
-            this.dropDownLogSelector.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.dropDownLogSelector.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.dropDownLogSelector.Name = "dropDownLogSelector";
-            this.dropDownLogSelector.Size = new System.Drawing.Size(90, 22);
-            this.dropDownLogSelector.Text = "Select Log";
-            // 
-            // btn_encode_log
-            // 
-            this.btn_encode_log.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btn_encode_log.Name = "btn_encode_log";
-            this.btn_encode_log.Size = new System.Drawing.Size(152, 22);
-            this.btn_encode_log.Text = "Encode Log";
-            this.btn_encode_log.Click += new System.EventHandler(this.BtnEncodeLogClick);
-            // 
-            // btn_scan_log
-            // 
-            this.btn_scan_log.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btn_scan_log.Name = "btn_scan_log";
-            this.btn_scan_log.Size = new System.Drawing.Size(152, 22);
-            this.btn_scan_log.Text = "Scan Log";
-            this.btn_scan_log.Click += new System.EventHandler(this.BtnScanLogClick);
             // 
             // btn_copy
             // 
@@ -143,6 +112,17 @@ namespace Handbrake
             this.btn_copy.Size = new System.Drawing.Size(122, 22);
             this.btn_copy.Text = "Copy to clipboard";
             this.btn_copy.Click += new System.EventHandler(this.BtnCopyClick);
+            // 
+            // logSelector
+            // 
+            this.logSelector.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.logSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.logSelector.Items.AddRange(new object[] {
+            "Scan Log",
+            "Encode Log"});
+            this.logSelector.Name = "logSelector";
+            this.logSelector.Size = new System.Drawing.Size(121, 25);
+            this.logSelector.SelectedIndexChanged += new System.EventHandler(this.LogSelectorClick);
             // 
             // panel1
             // 
@@ -169,7 +149,7 @@ namespace Handbrake
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Activity Window";
-            this.Load += new System.EventHandler(this.NewActivityWindow_Load);
+            this.Load += new System.EventHandler(this.ActivityWindowLoad);
             this.rightClickMenu.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
@@ -184,12 +164,10 @@ namespace Handbrake
         internal System.Windows.Forms.ToolTip ToolTip;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.ToolStripDropDownButton dropDownLogSelector;
-        private System.Windows.Forms.ToolStripMenuItem btn_encode_log;
-        private System.Windows.Forms.ToolStripMenuItem btn_scan_log;
         private System.Windows.Forms.ToolStripButton btn_copy;
         private System.Windows.Forms.ContextMenuStrip rightClickMenu;
         private System.Windows.Forms.ToolStripMenuItem mnu_copy_log;
         private System.Windows.Forms.ToolStripMenuItem mnu_openLogFolder;
+        private System.Windows.Forms.ToolStripComboBox logSelector;
     }
 }

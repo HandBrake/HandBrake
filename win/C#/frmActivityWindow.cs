@@ -158,14 +158,27 @@ namespace Handbrake
         /// The sender.
         /// </param>
         /// <param name="e">
-        /// The e.
+        /// The EventArgs.
         /// </param>
-        private void NewActivityWindow_Load(object sender, EventArgs e)
+        private void ActivityWindowLoad(object sender, EventArgs e)
         {
             try
             {
-                ActivityLogMode activitLogMode = (ActivityLogMode)Enum.ToObject(typeof(ActivityLogMode), Properties.Settings.Default.ActivityWindowLastMode);
-                SetMode(activitLogMode);
+                // Set the inital log file.
+                if (encode.IsEncoding)
+                {
+                    this.logSelector.SelectedIndex = 1;
+                }
+                else if (scan.IsScanning)
+                {
+                    this.logSelector.SelectedIndex = 0;
+                }
+                else
+                {
+                    // Otherwise, use the last mode the window was in.
+                    ActivityLogMode activitLogMode = (ActivityLogMode)Enum.ToObject(typeof(ActivityLogMode), Properties.Settings.Default.ActivityWindowLastMode);
+                    this.logSelector.SelectedIndex = activitLogMode == ActivityLogMode.Scan ? 0 : 1;
+                }
             }
             catch (Exception exc)
             {
@@ -430,31 +443,13 @@ namespace Handbrake
         }
 
         /// <summary>
-        /// Set scan mode
+        /// Change the Log file in the viewer
         /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void BtnScanLogClick(object sender, EventArgs e)
+        /// <param name="sender">The Sender </param>
+        /// <param name="e">The EventArgs</param>
+        private void LogSelectorClick(object sender, EventArgs e)
         {
-            SetMode(ActivityLogMode.Scan);
-        }
-
-        /// <summary>
-        /// Set the encode mode
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void BtnEncodeLogClick(object sender, EventArgs e)
-        {
-            SetMode(ActivityLogMode.Encode);
+            this.SetMode((string)this.logSelector.SelectedItem == "Scan Log" ? ActivityLogMode.Scan : ActivityLogMode.Encode);
         }
 
         /* Overrides */
