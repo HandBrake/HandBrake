@@ -888,6 +888,22 @@ start_scan(
 			90000L * ghb_settings_get_int64(ud->settings, "MinTitleDuration"));
 }
 
+gboolean
+ghb_idle_scan(signal_user_data_t *ud)
+{
+	gchar *path;
+	gint preview_count;
+
+	show_scan_progress(ud);
+	path = ghb_settings_get_string( ud->settings, "scan_source");
+	prune_logs(ud);
+
+	preview_count = ghb_settings_get_int(ud->settings, "preview_count");
+	start_scan(ud, path, 0, preview_count);
+	g_free(path);
+	return FALSE;
+}
+
 void
 ghb_do_scan(
 	signal_user_data_t *ud, 

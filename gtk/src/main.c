@@ -777,6 +777,11 @@ main (int argc, char *argv[])
 #endif
 	g_option_context_parse (context, &argc, &argv, &error);
 	g_option_context_free(context);
+
+	if (argc > 1 && dvd_device == NULL && argv[1][0] != '-')
+	{
+		dvd_device = argv[1];
+	}
 	
 	gtk_set_locale ();
 	gtk_init (&argc, &argv);
@@ -913,7 +918,8 @@ main (int argc, char *argv[])
 	if (dvd_device != NULL)
 	{
 		// Source overridden from command line option
-		ghb_settings_set_string(ud->settings, "source", dvd_device);
+		ghb_settings_set_string(ud->settings, "scan_source", dvd_device);
+		g_idle_add((GSourceFunc)ghb_idle_scan, ud);
 	}
 	// Reload and check status of the last saved queue
 	g_idle_add((GSourceFunc)ghb_reload_queue, ud);
