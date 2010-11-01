@@ -67,6 +67,13 @@ namespace HandBrake.Framework.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap download {
+            get {
+                object obj = ResourceManager.GetObject("download", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ErrorX {
             get {
                 object obj = ResourceManager.GetObject("ErrorX", resourceCulture);

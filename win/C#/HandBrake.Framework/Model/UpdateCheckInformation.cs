@@ -7,6 +7,8 @@ namespace HandBrake.Framework.Model
 {
     using System;
     using HandBrake.Framework.Helpers;
+    using HandBrake.Framework.Services;
+    using HandBrake.Framework.Services.Interfaces;
 
     /// <summary>
     /// Provides information about an update check.
@@ -29,7 +31,7 @@ namespace HandBrake.Framework.Model
         /// <summary>
         /// Gets or sets information about the new build, if any. This will be null if there is no new verison.
         /// </summary>
-        public AppcastReader BuildInformation { get; set; }
+        public IAppcastReader BuildInformation { get; set; }
 
         /// <summary>
         /// Gets or sets the error that occurred, if any. This will be null if no error occured.

@@ -12,6 +12,7 @@ namespace HandBrake.Framework.Services
 
     using HandBrake.Framework.Helpers;
     using HandBrake.Framework.Model;
+    using HandBrake.Framework.Services.Interfaces;
 
     public class UpdateService
     {
@@ -45,10 +46,10 @@ namespace HandBrake.Framework.Services
                     // Initialize variables
                     WebRequest request = WebRequest.Create(url);
                     WebResponse response = request.GetResponse();
-                    AppcastReader reader = new AppcastReader();
+                    IAppcastReader reader = new AppcastReader();
 
                     // Get the data, convert it to a string, and parse it into the AppcastReader
-                    reader.GetInfo(new StreamReader(response.GetResponseStream()).ReadToEnd());
+                    reader.GetUpdateInfo(new StreamReader(response.GetResponseStream()).ReadToEnd());
 
                     // Further parse the information
                     string build = reader.Build;

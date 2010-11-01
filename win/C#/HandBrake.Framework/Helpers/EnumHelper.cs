@@ -25,9 +25,9 @@ namespace HandBrake.Framework.Helpers
         /// </returns>
         public static string GetDescription(Enum value)
         {
-            FieldInfo fi = value.GetType().GetField(value.ToString());
+            FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
             DescriptionAttribute[] attributes =
-                  (DescriptionAttribute[])fi.GetCustomAttributes(
+                  (DescriptionAttribute[])fieldInfo.GetCustomAttributes(
                   typeof(DescriptionAttribute), false);
             return (attributes.Length > 0) ? attributes[0].Description : value.ToString();
         }

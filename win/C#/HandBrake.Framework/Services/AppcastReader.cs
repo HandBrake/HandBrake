@@ -3,17 +3,19 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace HandBrake.Framework.Helpers
+namespace HandBrake.Framework.Services
 {
     using System;
     using System.IO;
     using System.Text.RegularExpressions;
     using System.Xml;
 
+    using HandBrake.Framework.Services.Interfaces;
+
     /// <summary>
     /// Appcast Reader - Used for parsing HandBrakes update file
     /// </summary>
-    public class AppcastReader
+    public class AppcastReader : IAppcastReader
     {
         /// <summary>
         /// Gets Information about an update to HandBrake
@@ -41,7 +43,7 @@ namespace HandBrake.Framework.Helpers
         /// <param name="input">
         /// The input.
         /// </param>
-        public void GetInfo(string input)
+        public void GetUpdateInfo(string input)
         {
             try
             {

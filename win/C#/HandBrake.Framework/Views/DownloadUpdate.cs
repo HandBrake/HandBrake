@@ -81,7 +81,7 @@ namespace HandBrake.Framework.Views
             }
             catch
             {
-                // Do Nothing 
+                lblProgress.Text = "An Error Occured. Please try again later.";
             }
         }
 
@@ -109,7 +109,7 @@ namespace HandBrake.Framework.Views
             btn_cancel.Text = "Close";
         }
 
-        private void btn_cancel_Click(object sender, EventArgs e)
+        private void BtnCancelClick(object sender, EventArgs e)
         {
             this.killThread = true;
             lblProgress.Text = "Cancelling ...";

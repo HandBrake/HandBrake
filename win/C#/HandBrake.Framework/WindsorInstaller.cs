@@ -28,6 +28,7 @@ namespace HandBrake.Framework
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.AddComponent<IErrorService, ErrorService>();
+            container.AddComponent<IAppcastReader, AppcastReader>();
         }
     }
 }

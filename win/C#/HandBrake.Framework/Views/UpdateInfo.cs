@@ -8,7 +8,7 @@ namespace HandBrake.Framework.Views
     using System;
     using System.Windows.Forms;
 
-    using HandBrake.Framework.Helpers;
+    using HandBrake.Framework.Services.Interfaces;
 
     /// <summary>
     /// A window to display update information.
@@ -18,7 +18,7 @@ namespace HandBrake.Framework.Views
         /// <summary>
         /// An instance of the Appcast Reader
         /// </summary>
-        private readonly AppcastReader appcast;
+        private readonly IAppcastReader appcast;
 
         /// <summary>
         /// The Current Version
@@ -42,7 +42,7 @@ namespace HandBrake.Framework.Views
         /// <param name="currentBuild">
         /// The current Build.
         /// </param>
-        public UpdateInfo(AppcastReader reader, string currentVersion, string currentBuild)
+        public UpdateInfo(IAppcastReader reader, string currentVersion, string currentBuild)
         {
             InitializeComponent();
 
@@ -72,9 +72,9 @@ namespace HandBrake.Framework.Views
         /// </summary>
         private void SetVersions()
         {
-            string old = "(You have: " + currentVersion + " / " + currentBuild + ")";
+            string old = string.Format("(You have: {0} / {1})", this.currentVersion, this.currentBuild);
             string newBuild = appcast.Version.Trim() + " (" + appcast.Build + ")";
-            lbl_update_text.Text = "HandBrake " + newBuild + " is now available. " + old;
+            lbl_update_text.Text = string.Format("HandBrake {0} is now available. {1}", newBuild, old);
         }
 
         /// <summary>

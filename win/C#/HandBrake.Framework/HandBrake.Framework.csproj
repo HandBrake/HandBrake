@@ -57,7 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\AppcastReader.cs" />
+    <Compile Include="Services\AppcastReader.cs" />
     <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Model\UpdateCheckResult.cs" />
     <Compile Include="Model\UpdateCheckInformation.cs" />
@@ -68,6 +68,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\ErrorService.cs" />
+    <Compile Include="Services\Interfaces\IAppcastReader.cs" />
     <Compile Include="Services\Interfaces\IErrorService.cs" />
     <Compile Include="Services\UpdateService.cs" />
     <Compile Include="Views\ExceptionWindow.cs">
@@ -116,7 +117,9 @@
   <ItemGroup>
     <None Include="Resources\logo64.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\download.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\Microsoft\StyleCop\v4.4\Microsoft.StyleCop.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

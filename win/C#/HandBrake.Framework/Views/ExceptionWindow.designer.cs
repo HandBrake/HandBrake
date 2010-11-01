@@ -57,107 +57,69 @@
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.lbl_shortError);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
+            resources.ApplyResources(this.panel1, "panel1");
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(669, 97);
-            this.panel1.TabIndex = 61;
             // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.Control;
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 87);
+            resources.ApplyResources(this.panel2, "panel2");
             this.panel2.MaximumSize = new System.Drawing.Size(0, 10);
             this.panel2.MinimumSize = new System.Drawing.Size(0, 10);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(669, 10);
-            this.panel2.TabIndex = 59;
             // 
             // PictureBox1
             // 
             this.PictureBox1.Image = global::HandBrake.Framework.Properties.Resources.ErrorX;
-            this.PictureBox1.InitialImage = null;
-            this.PictureBox1.Location = new System.Drawing.Point(12, 12);
+            resources.ApplyResources(this.PictureBox1, "PictureBox1");
             this.PictureBox1.Name = "PictureBox1";
-            this.PictureBox1.Size = new System.Drawing.Size(64, 64);
-            this.PictureBox1.TabIndex = 24;
             this.PictureBox1.TabStop = false;
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(84, 63);
+            resources.ApplyResources(this.label3, "label3");
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(80, 13);
-            this.label3.TabIndex = 57;
-            this.label3.Text = "Error Details:";
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(84, 12);
+            resources.ApplyResources(this.label1, "label1");
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(150, 16);
-            this.label1.TabIndex = 25;
-            this.label1.Text = "An Error has occured.";
             // 
             // lbl_shortError
             // 
-            this.lbl_shortError.Location = new System.Drawing.Point(84, 33);
+            resources.ApplyResources(this.lbl_shortError, "lbl_shortError");
             this.lbl_shortError.Name = "lbl_shortError";
-            this.lbl_shortError.Size = new System.Drawing.Size(573, 30);
-            this.lbl_shortError.TabIndex = 58;
-            this.lbl_shortError.Text = "An Unknown Error has occured.";
             // 
             // panel3
             // 
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel3.Location = new System.Drawing.Point(0, 97);
+            resources.ApplyResources(this.panel3, "panel3");
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(76, 216);
-            this.panel3.TabIndex = 68;
             // 
             // panel5
             // 
-            this.panel5.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel5.Location = new System.Drawing.Point(640, 97);
+            resources.ApplyResources(this.panel5, "panel5");
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(29, 216);
-            this.panel5.TabIndex = 69;
             // 
             // panel4
             // 
             this.panel4.Controls.Add(this.panel6);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel4.Location = new System.Drawing.Point(0, 313);
+            resources.ApplyResources(this.panel4, "panel4");
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(669, 42);
-            this.panel4.TabIndex = 69;
             // 
             // panel6
             // 
             this.panel6.Controls.Add(this.btn_close);
             this.panel6.Controls.Add(this.btn_copy);
-            this.panel6.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel6.Location = new System.Drawing.Point(491, 0);
+            resources.ApplyResources(this.panel6, "panel6");
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(178, 42);
-            this.panel6.TabIndex = 58;
             // 
             // btn_close
             // 
             this.btn_close.BackColor = System.Drawing.Color.Transparent;
             this.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            resources.ApplyResources(this.btn_close, "btn_close");
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(105, 8);
             this.btn_close.Name = "btn_close";
-            this.btn_close.Size = new System.Drawing.Size(70, 25);
-            this.btn_close.TabIndex = 56;
-            this.btn_close.Text = "OK";
             this.btn_close.UseVisualStyleBackColor = false;
             this.btn_close.Click += new System.EventHandler(this.BtnCloseClick);
             // 
@@ -165,48 +127,35 @@
             // 
             this.btn_copy.BackColor = System.Drawing.Color.Transparent;
             this.btn_copy.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_copy.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            resources.ApplyResources(this.btn_copy, "btn_copy");
             this.btn_copy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_copy.Image = global::HandBrake.Framework.Properties.Resources.copy;
-            this.btn_copy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btn_copy.Location = new System.Drawing.Point(14, 8);
             this.btn_copy.Name = "btn_copy";
-            this.btn_copy.Size = new System.Drawing.Size(85, 25);
-            this.btn_copy.TabIndex = 57;
-            this.btn_copy.Text = "Copy";
             this.btn_copy.UseVisualStyleBackColor = false;
             this.btn_copy.Click += new System.EventHandler(this.BtnCopyClick);
             // 
             // rtf_exceptionFull
             // 
-            this.rtf_exceptionFull.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtf_exceptionFull.Location = new System.Drawing.Point(76, 97);
+            resources.ApplyResources(this.rtf_exceptionFull, "rtf_exceptionFull");
             this.rtf_exceptionFull.Name = "rtf_exceptionFull";
-            this.rtf_exceptionFull.Size = new System.Drawing.Size(564, 216);
-            this.rtf_exceptionFull.TabIndex = 70;
-            this.rtf_exceptionFull.Text = "";
             // 
             // mnu_copy_log
             // 
             this.mnu_copy_log.Image = global::HandBrake.Framework.Properties.Resources.copy;
             this.mnu_copy_log.Name = "mnu_copy_log";
-            this.mnu_copy_log.Size = new System.Drawing.Size(152, 22);
-            this.mnu_copy_log.Text = "Copy";
+            resources.ApplyResources(this.mnu_copy_log, "mnu_copy_log");
             this.mnu_copy_log.Click += new System.EventHandler(this.MnuCopyLogClick);
             // 
             // ExceptionWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(669, 355);
             this.Controls.Add(this.rtf_exceptionFull);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ExceptionWindow";
-            this.Text = "Error";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).EndInit();
