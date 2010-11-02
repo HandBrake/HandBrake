@@ -278,8 +278,8 @@ struct x264_opt_map_s x264_opt_map[] =
 	{x264_decimate_syns, "x264_no_dct_decimate", "0", X264_OPT_BOOL},
 	{x264_cabac_syns, "x264_cabac", "1", X264_OPT_BOOL},
 	{x264_aq_strength_syns, "x264_aq_strength", "1", X264_OPT_DOUBLE},
-	{x264_psy_syns, "x264_psy_rd", "1,0", X264_OPT_PSY},
-	{x264_psy_syns, "x264_psy_trell", "1,0", X264_OPT_PSY},
+	{x264_psy_syns, "x264_psy_rd", "1|0", X264_OPT_PSY},
+	{x264_psy_syns, "x264_psy_trell", "1|0", X264_OPT_PSY},
 	{x264_mbtree_syns, "x264_mbtree", "1", X264_OPT_BOOL_NONE},
 };
 #define X264_OPT_MAP_SIZE (sizeof(x264_opt_map)/sizeof(struct x264_opt_map_s))
@@ -459,26 +459,13 @@ x264_update_deblock(signal_user_data_t *ud, const gchar *xval)
 static void
 x264_parse_psy(const gchar *psy, gdouble *psy_rd, gdouble *psy_trell)
 {
-	gchar *val;
-	gchar *trell_val = NULL;
-	gchar *end;
-
 	*psy_rd = 0.;
 	*psy_trell = 0.;
 	if (psy == NULL) return;
-	val = g_strdup(psy);
-	gchar *pos = strchr(val, ',');
-	if (pos != NULL)
+	if (2 == sscanf(psy, "%lf|%lf", psy_rd, psy_trell) ||
+	    2 == sscanf(psy, "%lf,%lf", psy_rd, psy_trell))
 	{
-		trell_val = pos + 1;
-		*pos = 0;
 	}
-	*psy_rd = g_strtod (val, &end);
-	if (trell_val != NULL)
-	{
-		*psy_trell = g_strtod (trell_val, &end);
-	}
-	g_free(val);
 }
 
 static void
@@ -666,13 +653,10 @@ gchar*
 get_psy_val(signal_user_data_t *ud)
 {
 	gdouble rd, trell;
-	gchar rd_str[8], trell_str[8];
 	gchar *result;
 	rd = ghb_settings_get_double(ud->settings, "x264_psy_rd");
 	trell = ghb_settings_get_double(ud->settings, "x264_psy_trell");
-	g_ascii_formatd(rd_str, 8, "%g", rd);
-	g_ascii_formatd(trell_str, 8, "%g", trell);
-	result = g_strdup_printf("%s,%s", rd_str, trell_str);
+	result = g_strdup_printf("%g|%g", rd, trell);
 	return result;
 }
 
@@ -741,17 +725,6 @@ x264_opt_update(signal_user_data_t *ud, GtkWidget *widget)
 							val = g_strdup("1");
 						else
 							val = g_strdup("0");
-					}
-					else if (G_VALUE_TYPE(gval) == G_TYPE_BOOLEAN)
-					{
-						// x264 doesn't accept internationalized
-						// decimal points.  So force '.' when converting
-						// doubles.
-						gchar str[20];
-						gdouble dd;
-
-						dd = ghb_widget_double(widget);
-						val = g_strdup(g_ascii_formatd(str, 20, "%g", dd));
 					}
 					else
 					{
@@ -1039,7 +1012,7 @@ sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 				x264_parse_psy(pos+1, &psy_rd, &psy_trell);
 			}
 			g_free(split[psy]);
-			split[psy] = g_strdup_printf("psy-rd=%g,0", psy_rd);
+			split[psy] = g_strdup_printf("psy-rd=%g|0", psy_rd);
 		}
 	}
 	gint bframes = ghb_settings_get_int(ud->settings, "x264_bframes");
