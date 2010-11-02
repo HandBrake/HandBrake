@@ -666,10 +666,13 @@ gchar*
 get_psy_val(signal_user_data_t *ud)
 {
 	gdouble rd, trell;
+	gchar rd_str[8], trell_str[8];
 	gchar *result;
 	rd = ghb_settings_get_double(ud->settings, "x264_psy_rd");
 	trell = ghb_settings_get_double(ud->settings, "x264_psy_trell");
-	result = g_strdup_printf("%g,%g", rd, trell);
+	g_ascii_formatd(rd_str, 8, "%g", rd);
+	g_ascii_formatd(trell_str, 8, "%g", trell);
+	result = g_strdup_printf("%s,%s", rd_str, trell_str);
 	return result;
 }
 
@@ -738,6 +741,17 @@ x264_opt_update(signal_user_data_t *ud, GtkWidget *widget)
 							val = g_strdup("1");
 						else
 							val = g_strdup("0");
+					}
+					else if (G_VALUE_TYPE(gval) == G_TYPE_BOOLEAN)
+					{
+						// x264 doesn't accept internationalized
+						// decimal points.  So force '.' when converting
+						// doubles.
+						gchar str[20];
+						gdouble dd;
+
+						dd = ghb_widget_double(widget);
+						val = g_strdup(g_ascii_formatd(str, 20, "%g", dd));
 					}
 					else
 					{
