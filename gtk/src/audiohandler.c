@@ -403,7 +403,13 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	GValue *asettings, *gval;
 	
 	g_debug("audio_codec_changed_cb ()");
-	if (block_updates) return;
+	gval = ghb_widget_value(widget);
+	acodec_code = ghb_lookup_combo_int("AudioEncoder", gval);
+	if (block_updates)
+	{
+		prev_acodec = acodec_code;
+		return;
+	}
 
 	gval = ghb_widget_value(widget);
 	acodec_code = ghb_lookup_combo_int("AudioEncoder", gval);
