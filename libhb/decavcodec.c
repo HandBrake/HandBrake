@@ -1332,6 +1332,10 @@ static int decavcodecviInfo( hb_work_object_t *w, hb_work_info_t *info )
         // need it in units of the 27MHz MPEG clock. */
         info->rate = 27000000;
         info->rate_base = pv->duration * 300.;
+        if ( pv->context->ticks_per_frame > 1 )
+        {
+            info->rate_base *= 2;
+        }
         return 1;
     }
     return 0;
