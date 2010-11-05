@@ -1180,19 +1180,19 @@ static void init_ffmpeg_context( hb_work_object_t *w )
         // Because the time bases are so screwed up, we only take values
         // in the range 8fps - 64fps.
         AVRational tb;
-        if ( st->avg_frame_rate.den * 64 > st->avg_frame_rate.num &&
-             st->avg_frame_rate.num > st->avg_frame_rate.den * 8 )
+        if ( st->avg_frame_rate.den * 64L > st->avg_frame_rate.num &&
+             st->avg_frame_rate.num > st->avg_frame_rate.den * 8L )
         {
             tb.num = st->avg_frame_rate.den;
             tb.den = st->avg_frame_rate.num;
         }
-        else if ( st->time_base.num * 64 > st->time_base.den &&
-                  st->time_base.den > st->time_base.num * 8 )
+        else if ( st->time_base.num * 64L > st->time_base.den &&
+                  st->time_base.den > st->time_base.num * 8L )
         {
             tb = st->time_base;
         }
-        else if ( st->r_frame_rate.den * 64 > st->r_frame_rate.num &&
-                  st->r_frame_rate.num > st->r_frame_rate.den * 8 )
+        else if ( st->r_frame_rate.den * 64L > st->r_frame_rate.num &&
+                  st->r_frame_rate.num > st->r_frame_rate.den * 8L )
         {
             tb.num = st->r_frame_rate.den;
             tb.den = st->r_frame_rate.num;
@@ -1332,10 +1332,6 @@ static int decavcodecviInfo( hb_work_object_t *w, hb_work_info_t *info )
         // need it in units of the 27MHz MPEG clock. */
         info->rate = 27000000;
         info->rate_base = pv->duration * 300.;
-        if ( pv->context->ticks_per_frame > 1 )
-        {
-            info->rate_base *= 2;
-        }
         return 1;
     }
     return 0;
