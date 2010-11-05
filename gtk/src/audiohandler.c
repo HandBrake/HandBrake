@@ -408,6 +408,7 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	if (block_updates)
 	{
 		prev_acodec = acodec_code;
+		ghb_grey_combo_options (ud->builder);
 		return;
 	}
 

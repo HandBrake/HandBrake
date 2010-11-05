@@ -318,7 +318,9 @@ int hb_get_best_mixdown( uint32_t codec, int layout, int mixdown )
             best_mixdown = HB_AMIXDOWN_DOLBYPLII;
             break;
 
-        // 5 or 6 channel discrete
+        // 5, 6, 7, or 8 channel discrete
+        case HB_INPUT_CH_LAYOUT_4F2R:
+        case HB_INPUT_CH_LAYOUT_3F4R:
         case HB_INPUT_CH_LAYOUT_3F2R:
             if ( ! ( layout & HB_INPUT_CH_LAYOUT_HAS_LFE ) )
             {

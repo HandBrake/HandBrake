@@ -1596,17 +1596,12 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	allow_6ch = acodec & ~HB_ACODEC_LAME;
 	if (aconfig)
 	{
-		gint layout = aconfig->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
-		allow_stereo =
-			((layout == HB_INPUT_CH_LAYOUT_MONO && !allow_mono) || layout >= HB_INPUT_CH_LAYOUT_STEREO);
-		allow_dolby =
-			(layout == HB_INPUT_CH_LAYOUT_3F1R) || 
-			(layout == HB_INPUT_CH_LAYOUT_3F2R) || 
-			(layout == HB_INPUT_CH_LAYOUT_DOLBY);
-		allow_dpl2 = (layout == HB_INPUT_CH_LAYOUT_3F2R);
-		allow_6ch = allow_6ch &&
-			(layout == HB_INPUT_CH_LAYOUT_3F2R) && 
-			(aconfig->in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE);
+		gint best = hb_get_best_mixdown(acodec, aconfig->in.channel_layout, 0);
+
+		allow_stereo = best >= HB_AMIXDOWN_STEREO;
+		allow_dolby = best >= HB_AMIXDOWN_DOLBY;
+		allow_dpl2 = best >= HB_AMIXDOWN_DOLBYPLII;
+		allow_6ch = best >= HB_AMIXDOWN_6CH;
 	}
 	grey_combo_box_item(builder, "AudioMixdown", HB_AMIXDOWN_MONO, !allow_mono);
 	grey_combo_box_item(builder, "AudioMixdown", HB_AMIXDOWN_STEREO, !allow_stereo);
@@ -4244,6 +4239,7 @@ ghb_validate_audio(signal_user_data_t *ud)
 			value = ghb_lookup_acodec_value(codec);
 			ghb_settings_take_value(asettings, "AudioEncoder", value);
 		}
+
 		gint mix = ghb_settings_combo_int (asettings, "AudioMixdown");
 		gboolean allow_mono = TRUE;
 		gboolean allow_stereo = TRUE;
@@ -4251,18 +4247,13 @@ ghb_validate_audio(signal_user_data_t *ud)
 		gboolean allow_dpl2 = TRUE;
 		gboolean allow_6ch = TRUE;
 		allow_mono = TRUE;
-		gint layout = aconfig->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
-		allow_stereo =
-			((layout == HB_INPUT_CH_LAYOUT_MONO && !allow_mono) || layout >= HB_INPUT_CH_LAYOUT_STEREO);
-		allow_dolby =
-			(layout == HB_INPUT_CH_LAYOUT_3F1R) || 
-			(layout == HB_INPUT_CH_LAYOUT_3F2R) || 
-			(layout == HB_INPUT_CH_LAYOUT_DOLBY);
-		allow_dpl2 = (layout == HB_INPUT_CH_LAYOUT_3F2R);
-		allow_6ch =
-			(codec & ~HB_ACODEC_LAME) &&
-			(layout == HB_INPUT_CH_LAYOUT_3F2R) && 
-			(aconfig->in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE);
+
+		gint best = hb_get_best_mixdown(codec, aconfig->in.channel_layout, 0);
+
+		allow_stereo = best >= HB_AMIXDOWN_STEREO;
+		allow_dolby = best >= HB_AMIXDOWN_DOLBY;
+		allow_dpl2 = best >= HB_AMIXDOWN_DOLBYPLII;
+		allow_6ch = best >= HB_AMIXDOWN_6CH;
 
 		gchar *mix_unsup = NULL;
 		if (mix == HB_AMIXDOWN_MONO && !allow_mono)
