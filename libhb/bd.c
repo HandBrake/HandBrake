@@ -133,13 +133,6 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
 
     title->angle_count = ti->angle_count;
 
-    /* ignore short titles because they're often stills */
-    if( ti->duration < min_duration )
-    {
-        hb_log( "bd: ignoring title (too short)" );
-        goto fail;
-    }
-
     /* Get duration */
     title->duration = ti->duration;
     title->hours    = title->duration / 90000 / 3600;
@@ -148,6 +141,13 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     hb_log( "bd: duration is %02d:%02d:%02d (%"PRId64" ms)",
             title->hours, title->minutes, title->seconds,
             title->duration / 90 );
+
+    /* ignore short titles because they're often stills */
+    if( ti->duration < min_duration )
+    {
+        hb_log( "bd: ignoring title (too short)" );
+        goto fail;
+    }
 
     BLURAY_STREAM_INFO * bdvideo = &ti->clips[0].video_streams[0];
 

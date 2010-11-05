@@ -415,6 +415,15 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
         }
     }
 
+    /* Get duration */
+    title->duration = longest;
+    title->hours    = title->duration / 90000 / 3600;
+    title->minutes  = ( ( title->duration / 90000 ) % 3600 ) / 60;
+    title->seconds  = ( title->duration / 90000 ) % 60;
+    hb_log( "scan: duration is %02d:%02d:%02d (%"PRId64" ms)",
+            title->hours, title->minutes, title->seconds,
+            title->duration / 90 );
+
     /* ignore titles under 10 seconds because they're often stills or
      * clips with no audio & our preview code doesn't currently handle
      * either of these. */
@@ -460,15 +469,6 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
             "%"PRIu64" blocks", title->vts, title->ttn, title->cell_start,
             title->cell_end, title->block_start, title->block_end,
             title->block_count );
-
-    /* Get duration */
-    title->duration = longest;
-    title->hours    = title->duration / 90000 / 3600;
-    title->minutes  = ( ( title->duration / 90000 ) % 3600 ) / 60;
-    title->seconds  = ( title->duration / 90000 ) % 60;
-    hb_log( "scan: duration is %02d:%02d:%02d (%"PRId64" ms)",
-            title->hours, title->minutes, title->seconds,
-            title->duration / 90 );
 
     /* Detect languages */
     for( i = 0; i < ifo->vtsi_mat->nr_of_vts_audio_streams; i++ )
