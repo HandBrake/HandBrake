@@ -2245,7 +2245,7 @@ ghb_find_audio_track(
 		{
 			audio = (hb_audio_config_t*)hb_list_audio_config_item( 
 													title->list_audio, ii );
-			passthru_acodec = acodec & audio->in.codec;
+			passthru_acodec = HB_ACODEC_PASS_MASK & acodec & audio->in.codec;
 			// Is the source track use a passthru capable codec?
 			if (passthru_acodec == 0)
 				continue;
@@ -2326,7 +2326,7 @@ ghb_find_audio_track(
 		{
 			audio = (hb_audio_config_t*)hb_list_audio_config_item( 
 													title->list_audio, ii );
-			passthru_acodec = HB_ACODEC_PASS_MASK & audio->in.codec;
+			passthru_acodec = HB_ACODEC_PASS_MASK & acodec & audio->in.codec;
 			// Is the source track use a passthru capable codec?
 			if (passthru_acodec == 0)
 				continue;
