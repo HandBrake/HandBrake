@@ -36,7 +36,7 @@ typedef struct
 typedef struct
 {
     int          index;
-    int64_t      next_start;    /* start time of next output frame */
+    double       next_start;   /* start time of next output frame */
     int64_t      next_pts;     /* start time of next input frame */
     int64_t      first_drop;   /* PTS of first 'went backwards' frame dropped */
     int          drop_count;   /* count of 'time went backwards' drops */
@@ -1193,8 +1193,8 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
 static hb_buffer_t * OutputAudioFrame( hb_audio_t *audio, hb_buffer_t *buf,
                                        hb_sync_audio_t *sync )
 {
-    int64_t start = sync->next_start;
-    int64_t duration = buf->stop - buf->start;
+    int64_t start = (int64_t)sync->next_start;
+    double duration = buf->stop - buf->start;
 
     sync->next_pts += duration;
 
@@ -1244,13 +1244,13 @@ static hb_buffer_t * OutputAudioFrame( hb_audio_t *audio, hb_buffer_t *buf,
         hb_buffer_close( &buf_raw );
 
         buf->size = sync->data.output_frames_gen * channel_count;
-        duration = ( sync->data.output_frames_gen * 90000 ) /
+        duration = (double)( sync->data.output_frames_gen * 90000 ) /
                    audio->config.out.samplerate;
     }
     buf->frametype = HB_FRAME_AUDIO;
     buf->start = start;
-    buf->stop  = start + duration;
-    sync->next_start = start + duration;
+    sync->next_start += duration;
+    buf->stop  = (int64_t)sync->next_start;
     return buf;
 }
 

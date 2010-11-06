@@ -18,8 +18,8 @@ struct hb_work_private_s
     uint8_t       * buf;
     uint8_t       * obuf;
     hb_list_t     * list;
-    int64_t         pts;
-    int64_t         framedur;
+    double          pts;
+    double          framedur;
 	int             out_discrete_channels;
 };
 
@@ -97,8 +97,9 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
                             &pv->input_samples, &pv->output_bytes );
     pv->buf  = malloc( pv->input_samples * sizeof( float ) );
     pv->obuf = malloc( pv->output_bytes );
-    pv->framedur = 90000LL * pv->input_samples /
+    pv->framedur = 90000.0 * pv->input_samples /
                    ( audio->config.out.samplerate * pv->out_discrete_channels );
+printf("in %ld out %ld sr %d dur %g\n", pv->input_samples, pv->output_bytes, audio->config.out.samplerate, pv->framedur);
 
     cfg                = faacEncGetCurrentConfiguration( pv->faac );
     cfg->mpegVersion   = MPEG4;
