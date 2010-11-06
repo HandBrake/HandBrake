@@ -960,7 +960,7 @@ static int setup_extradata( hb_work_object_t *w, hb_buffer_t *in )
     {
         // we haven't been inflicted with M$ - allocate a little space as
         // a marker and return success.
-        pv->context->extradata_size = 16;
+        pv->context->extradata_size = 0;
         pv->context->extradata = av_malloc(pv->context->extradata_size);
         return 0;
     }
@@ -1025,7 +1025,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     // if this is the first frame open the codec (we have to wait for the
     // first frame because of M$ VC1 braindamage).
-    if ( pv->context->extradata_size == 0 )
+    if ( pv->context->extradata == NULL )
     {
         if ( setup_extradata( w, in ) )
         {
