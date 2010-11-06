@@ -330,6 +330,11 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         private void HbProcess_Exited(object sender, EventArgs e)
         {
+            if (HbProcess != null && HbProcess.ExitCode != 0)
+            {
+                errorService.ShowError("It appears that HandBrakeCLI has crashed. You can check the Activity Log for further information.", string.Format("Exit Code was: {0}", HbProcess.ExitCode));
+            }
+
             IsEncoding = false;
             if (this.EncodeEnded != null)
                 this.EncodeEnded(this, new EventArgs());

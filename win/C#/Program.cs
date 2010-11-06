@@ -8,22 +8,12 @@ namespace Handbrake
     using System;
     using System.Diagnostics;
     using System.IO;
-    using System.Reflection;
     using System.Windows.Forms;
 
-    using Caliburn.Castle;
-
-    using Castle.MicroKernel;
-    using Castle.Windsor;
-
     using HandBrake.ApplicationServices;
-    using HandBrake.Framework.Services;
-    using HandBrake.Framework.Services.Interfaces;
 
     using Handbrake.Presets;
     using Handbrake.Properties;
-
-    using Microsoft.Practices.ServiceLocation;
 
     /// <summary>
     /// HandBrake Starts Here
@@ -39,14 +29,6 @@ namespace Handbrake
         [STAThread]
         public static void Main(string[] args)
         {
-            // WindsorContainer container = new WindsorContainer(new XmlInterpreter(new ConfigResource("castle")));
-            WindsorContainer container = new WindsorContainer();
-            // TODO Would be nice to find a way to do this automatically without having to reference the libraries specifically.
-            container.Install(new HandBrake.Framework.WindsorInstaller());
-            container.Install(new HandBrake.ApplicationServices.WindsorInstaller());
-
-            ServiceLocator.SetLocatorProvider(() => new WindsorAdapter(container));
-
             InstanceId = Process.GetProcessesByName("HandBrake").Length;
 
             // Handle any unhandled exceptions
