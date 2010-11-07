@@ -3158,8 +3158,10 @@ bool one_burned = FALSE;
                     sub_config.offset = [[tempObject objectForKey:@"subtitleTrackSrtOffset"] intValue];
                     
                     /* we need to srncpy file path and char code */
-                    strncpy(sub_config.src_filename, [[tempObject objectForKey:@"subtitleSourceSrtFilePath"] UTF8String], 128);
-                    strncpy(sub_config.src_codeset, [[tempObject objectForKey:@"subtitleTrackSrtCharCode"] UTF8String], 40);
+                    strncpy(sub_config.src_filename, [[tempObject objectForKey:@"subtitleSourceSrtFilePath"] UTF8String], 255);
+                    sub_config.src_filename[255] = 0;
+                    strncpy(sub_config.src_codeset, [[tempObject objectForKey:@"subtitleTrackSrtCharCode"] UTF8String], 39);
+                    sub_config.src_codeset[39] = 0;
                     
                     sub_config.force = 0;
                     sub_config.dest = PASSTHRUSUB;

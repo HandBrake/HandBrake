@@ -131,7 +131,7 @@ struct hb_subtitle_config_s
     int  default_track; 
     
     /* SRT subtitle tracks only */
-    char src_filename[128];
+    char src_filename[256];
     char src_codeset[40];
     int64_t offset;
 };

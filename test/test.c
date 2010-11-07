@@ -1968,8 +1968,10 @@ static int HandleEvents( hb_handle_t * h )
                     sub_config.default_track = 
                            ( srtdefault != -1 ) && ( srtdefault == i + 1 );
                     sub_config.force = 0;
-                    strncpy( sub_config.src_filename, srtfile[i], 128);
-                    strncpy( sub_config.src_codeset, codeset, 40);
+                    strncpy( sub_config.src_filename, srtfile[i], 255);
+                    sub_config.src_filename[255] = 0;
+                    strncpy( sub_config.src_codeset, codeset, 39);
+                    sub_config.src_codeset[39] = 0;
                     sub_config.offset = offset;
 
                     hb_srt_add( job, &sub_config, lang);

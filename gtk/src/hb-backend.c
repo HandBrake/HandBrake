@@ -4722,8 +4722,10 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 			sub_config.offset = ghb_settings_get_int(ssettings, "SrtOffset");
 			lang = ghb_settings_get_string(ssettings, "SrtLanguage");
 			code = ghb_settings_get_string(ssettings, "SrtCodeset");
-			strncpy(sub_config.src_filename, filename, 128);
-			strncpy(sub_config.src_codeset, code, 40);
+			strncpy(sub_config.src_filename, filename, 255);
+			sub_config.src_filename[255] = 0;
+			strncpy(sub_config.src_codeset, code, 39);
+			sub_config.src_codeset[39] = 0;
 			sub_config.force = 0;
 			sub_config.dest = PASSTHRUSUB;
 			sub_config.default_track = def;
