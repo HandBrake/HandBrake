@@ -10,6 +10,7 @@ namespace Handbrake
     using System.IO;
     using System.Runtime.InteropServices;
     using System.Threading;
+    using System.Windows;
     using System.Windows.Forms;
     using Functions;
 
@@ -18,6 +19,8 @@ namespace Handbrake
 
     using QTOControlLib;
     using QTOLibrary;
+
+    using MessageBox = System.Windows.Forms.MessageBox;
 
     /// <summary>
     /// The Preview Window
@@ -73,6 +76,13 @@ namespace Handbrake
             catch (Exception)
             {
                 this.noQt = true;
+
+                int borderWidth = (this.Width - this.ClientSize.Width) / 2;
+                int titlebarAndBorder = this.Height - this.ClientSize.Height;
+
+                this.Height = toolBar.Height + titlebarAndBorder + 1;
+                btn_playQT.Enabled = false;
+                btn_playQT.Visible = false;
             }
 
             this.mainWindow = mw;
@@ -400,7 +410,7 @@ namespace Handbrake
                 QTControl.Show();
 
                 this.ClientSize = QTControl.Size;
-                this.Height += 25;
+                this.Height += toolBar.Height;
             }
             catch (COMException ex)
             {
