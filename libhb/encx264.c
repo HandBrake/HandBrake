@@ -120,13 +120,13 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
                we still want the same keyframe intervals as the 1st pass,
                so the 1st pass stats won't conflict on frame decisions.    */
             hb_interjob_t * interjob = hb_interjob_get( job->h );
-            param.i_keyint_max = ( ( 10 * (double)interjob->vrate / (double)interjob->vrate_base ) + 0.5 );
+            param.i_keyint_max = 10 * (int)( (double)interjob->vrate / (double)interjob->vrate_base + 0.5 );
         }
         else
         {
             /* adjust +0.5 for when fps has remainder to bump
                { 23.976, 29.976, 59.94 } to { 24, 30, 60 } */
-            param.i_keyint_max = ( ( 10 * (double)job->vrate / (double)job->vrate_base ) + 0.5 );
+            param.i_keyint_max = 10 * (int)( (double)job->vrate / (double)job->vrate_base + 0.5 );
         }
     }
 
@@ -206,8 +206,25 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     }
     
     if( param.i_keyint_min != X264_KEYINT_MIN_AUTO || param.i_keyint_max != 250 )
-        hb_log("encx264: min-keyint: %i, keyint: %i", param.i_keyint_min == X264_KEYINT_MIN_AUTO ? param.i_keyint_max / 10 : param.i_keyint_min,
-                                                      param.i_keyint_max);
+    {
+        int min_auto;
+
+        if ( param.i_fps_num / param.i_fps_den < param.i_keyint_max / 10 )
+            min_auto = param.i_fps_num / param.i_fps_den;
+        else
+            min_auto = param.i_keyint_max / 10;
+
+        char min[40], max[40];
+        param.i_keyint_min == X264_KEYINT_MIN_AUTO ? 
+            snprintf( min, 40, "auto (%d)", min_auto ) : 
+            snprintf( min, 40, "%d", param.i_keyint_min );
+
+        param.i_keyint_max == X264_KEYINT_MAX_INFINITE ? 
+            snprintf( max, 40, "infinite" ) : 
+            snprintf( max, 40, "%d", param.i_keyint_max );
+
+        hb_log( "encx264: min-keyint: %s, keyint: %s", min, max );
+    }
 
     /* set up the VUI color model & gamma to match what the COLR atom
      * set in muxmp4.c says. See libhb/muxmp4.c for notes. */
