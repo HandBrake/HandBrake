@@ -219,7 +219,7 @@ int hb_get_cpu_count()
 #endif
 
     cpu_count = MAX( 1, cpu_count );
-    cpu_count = MIN( cpu_count, 8 );
+    cpu_count = MIN( cpu_count, 64 );
 
     return cpu_count;
 }

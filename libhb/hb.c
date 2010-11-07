@@ -532,7 +532,7 @@ int hb_check_update( hb_handle_t * h, char ** version )
 void hb_set_cpu_count( hb_handle_t * h, int cpu_count )
 {
     cpu_count    = MAX( 1, cpu_count );
-    cpu_count    = MIN( cpu_count, 8 );
+    cpu_count    = MIN( cpu_count, 64 );
     h->cpu_count = cpu_count;
 }
 
