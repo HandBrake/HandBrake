@@ -390,7 +390,7 @@ static int hb_stream_check_for_ps(hb_stream_t *stream)
 {
     uint8_t buf[2048*4];
     uint8_t sc_buf[4];
-    int pos;
+    int pos = 0;
     int hits = 0;
 
     fseek(stream->file_handle, 0, SEEK_SET);
