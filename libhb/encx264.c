@@ -48,7 +48,7 @@ struct hb_work_private_s
     hb_job_t       * job;
     x264_t         * x264;
     x264_picture_t   pic_in;
-    uint8_t         *x264_allocated_pic;
+    uint8_t        * grey_data;
 
     uint32_t       frames_in;
     uint32_t       frames_out;
@@ -314,11 +314,20 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     memcpy(w->config->h264.pps, nal[1].p_payload + 4, nal[1].i_payload - 4);
     w->config->h264.pps_length = nal[1].i_payload - 4;
 
-    x264_picture_alloc( &pv->pic_in, X264_CSP_I420,
-                        job->width, job->height );
+    x264_picture_init( &pv->pic_in );
 
+    pv->pic_in.img.i_csp = X264_CSP_I420;
+    pv->pic_in.img.i_plane = 3;
+    pv->pic_in.img.i_stride[0] = job->width;
     pv->pic_in.img.i_stride[2] = pv->pic_in.img.i_stride[1] = ( ( job->width + 1 ) >> 1 );
-    pv->x264_allocated_pic = pv->pic_in.img.plane[0];
+
+    if( job->grayscale )
+    {
+        int uvsize = ( (job->width + 1) >> 1 ) * ( (job->height + 1) >> 1 );
+        pv->grey_data = malloc( uvsize );
+        memset( pv->grey_data, 0x80, uvsize );
+        pv->pic_in.img.plane[1] = pv->pic_in.img.plane[2] = pv->grey_data;
+    }
 
     return 0;
 }
@@ -332,12 +341,7 @@ void encx264Close( hb_work_object_t * w )
         hb_log( "encx264: %u frames had to be split (%u in, %u out)",
                 pv->frames_split, pv->frames_in, pv->frames_out );
     }
-    /*
-     * Patch the x264 allocated data back in so that x264 can free it
-     * we have been using our own buffers during the encode to avoid copying.
-     */
-    pv->pic_in.img.plane[0] = pv->x264_allocated_pic;
-    x264_picture_clean( &pv->pic_in );
+    free( pv->grey_data );
     x264_encoder_close( pv->x264 );
     free( pv );
     w->private_data = NULL;
@@ -487,13 +491,7 @@ static hb_buffer_t *x264_encode( hb_work_object_t *w, hb_buffer_t *in )
     pv->pic_in.img.plane[0] = in->data;
 
     int uvsize = ( (job->width + 1) >> 1 ) * ( (job->height + 1) >> 1 );
-    if( job->grayscale )
-    {
-        /* XXX x264 has currently no option for grayscale encoding */
-        memset( pv->pic_in.img.plane[1], 0x80, uvsize );
-        memset( pv->pic_in.img.plane[2], 0x80, uvsize );
-    }
-    else
+    if( !job->grayscale )
     {
         /* Point x264 at our buffers (Y)UV data */
         pv->pic_in.img.plane[1] = in->data + job->width * job->height;
@@ -519,7 +517,6 @@ static hb_buffer_t *x264_encode( hb_work_object_t *w, hb_buffer_t *in )
     {
         pv->pic_in.i_type = X264_TYPE_AUTO;
     }
-    pv->pic_in.i_qpplus1 = 0;
 
     /* XXX this is temporary debugging code to check that the upstream
      * modules (render & sync) have generated a continuous, self-consistent
