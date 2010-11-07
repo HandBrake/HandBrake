@@ -267,6 +267,18 @@
     <Compile Include="Presets\PresetsHandler.cs" />
     <Compile Include="Functions\QueryParser.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ToolWindows\BatchAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ToolWindows\BatchAdd.Designer.cs">
+      <DependentUpon>BatchAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ToolWindows\PreviewOverlay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ToolWindows\PreviewOverlay.Designer.cs">
+      <DependentUpon>PreviewOverlay.cs</DependentUpon>
+    </Compile>
     <Compile Include="ToolWindows\TitleSpecificScan.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -331,6 +343,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="ToolWindows\BatchAdd.resx">
+      <DependentUpon>BatchAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolWindows\PreviewOverlay.resx">
+      <DependentUpon>PreviewOverlay.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ToolWindows\TitleSpecificScan.resx">
       <DependentUpon>TitleSpecificScan.cs</DependentUpon>
     </EmbeddedResource>
@@ -456,7 +474,6 @@
       <Name>HandBrake.Framework</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

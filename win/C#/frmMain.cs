@@ -1104,7 +1104,64 @@ namespace Handbrake
         /// </param>
         private void btn_add2Queue_Click(object sender, EventArgs e)
         {
-            // Get the CLI query or use the query editor if it's not empty.
+            // Add the item to the queue.
+            AddItemToQueue(true);
+            queueWindow.Show();
+        }
+
+        /// <summary>
+        /// Add Multiple Items to the Queue at once.
+        /// </summary>
+        /// <param name="sender">The Sender</param>
+        /// <param name="e">The EventArgs</param>
+        private void MnuAddMultiToQueueClick(object sender, EventArgs e)
+        {
+            if (!Settings.Default.autoNaming)
+            {
+                MessageBox.Show("Destination Auto Naming must be enabled in preferences for this feature to work.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (this.SourceScan.SouceData == null)
+            {
+                MessageBox.Show("You must first scan a source or collection of source to use this feature.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            BatchAdd batchAdd = new BatchAdd();
+            if (batchAdd.ShowDialog() == DialogResult.OK)
+            {
+                int min = batchAdd.Min;
+                int max = batchAdd.Max;
+                bool errors = false;
+
+                foreach (Title title in this.SourceScan.SouceData.Titles)
+                {
+                    if (title.Duration.TotalMinutes > min && title.Duration.TotalMinutes < max)
+                    {
+                        // Add to Queue
+                        this.drp_dvdtitle.SelectedItem = title;
+
+                        if (!this.AddItemToQueue(false))
+                        {
+                            errors = true;
+                        }
+                    }
+                }
+
+                if (errors)
+                {
+                    MessageBox.Show(
+                        "One or more items could not be added to the queue. You should check your queue and manually add any missing jobs.",
+                        "Warning",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
+            }
+        }
+
+        private bool AddItemToQueue(bool showError)
+        {
             string query = QueryGenerator.GenerateFullQuery(this);
             if (!string.IsNullOrEmpty(rtf_query.Text))
                 query = rtf_query.Text;
@@ -1116,33 +1173,48 @@ namespace Handbrake
             // Make sure we have a Source and Destination.
             if (string.IsNullOrEmpty(jobSourcePath) || string.IsNullOrEmpty(jobDestination))
             {
-                MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                if (showError)
+                    MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
             }
 
             // Make sure the destination path exists.
             if (!Directory.Exists(Path.GetDirectoryName(jobDestination)))
             {
-                MessageBox.Show(string.Format("Destination Path does not exist.\nPath: {0}\n\nThis item was not added to the Queue.", Path.GetDirectoryName(jobDestination)), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                if (showError)
+                    MessageBox.Show(string.Format("Destination Path does not exist.\nPath: {0}\n\nThis item was not added to the Queue.", Path.GetDirectoryName(jobDestination)), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
             }
 
             // Make sure we don't have a duplciate on the queue.
             if (encodeQueue.CheckForDestinationDuplicate(jobDestination))
             {
-                DialogResult result =
-                    MessageBox.Show(
-                        string.Format("There is already a queue item for this destination path.\nDestination Path: {0} \n\nIf you continue, the encode will be overwritten. Do you wish to continue?", jobDestination),
-                        "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                if (result == DialogResult.Yes)
-                    encodeQueue.Add(query, this.GetTitle(), jobSourcePath, jobDestination, (rtf_query.Text != string.Empty));
+                if (showError)
+                {
+                    DialogResult result;
+                    result =
+                        MessageBox.Show(
+                            string.Format(
+                                "There is already a queue item for this destination path.\nDestination Path: {0} \n\nIf you continue, the encode will be overwritten. Do you wish to continue?",
+                                jobDestination),
+                            "Warning",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Warning);
+
+                    if (result != DialogResult.Yes) return false;
+                } 
+                else
+                {
+                    return false;
+                }
             }
-            else
-                encodeQueue.Add(query, this.GetTitle(), jobSourcePath, jobDestination, (rtf_query.Text != string.Empty));
+            
+            // Add the job.
+            encodeQueue.Add(query, this.GetTitle(), jobSourcePath, jobDestination, (rtf_query.Text != string.Empty));
 
             lbl_encode.Text = encodeQueue.Count + " encode(s) pending in the queue";
 
-            queueWindow.Show();
+            return true;
         }
 
         /// <summary>
