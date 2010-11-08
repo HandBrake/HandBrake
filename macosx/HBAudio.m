@@ -312,7 +312,11 @@ static NSMutableArray *masterBitRateArray = nil;
 								nil]];
 		}
 	}
-	
+
+	if (NO == [self enabled]) {
+		retval = nil;
+	}
+
 	//	Now make sure the permitted list and the actual ones matches
 	[self setMixdowns: retval];
 	
@@ -386,7 +390,11 @@ static NSMutableArray *masterBitRateArray = nil;
 			}
 		[permittedBitRates addObject: missingBitRate];
 	}
-	
+
+	if (NO == [self enabled]) {
+		permittedBitRates = nil;
+	}
+
 	//	Make sure we are updated with the permitted list
 	[self setBitRates: permittedBitRates];
 
@@ -400,6 +408,19 @@ static NSMutableArray *masterBitRateArray = nil;
 	}
 	
 	return;
+}
+
+- (id) init
+
+{
+	if (self = [super init]) {
+		[self addObserver: self forKeyPath: @"videoContainerTag" options: 0 context: NULL];
+		[self addObserver: self forKeyPath: @"track" options: NSKeyValueObservingOptionOld context: NULL];
+		[self addObserver: self forKeyPath: @"codec" options: 0 context: NULL];
+		[self addObserver: self forKeyPath: @"mixdown" options: 0 context: NULL];
+		[self addObserver: self forKeyPath: @"sampleRate" options: 0 context: NULL];
+		}
+	return self;
 }
 
 #pragma mark -
@@ -418,84 +439,6 @@ static NSMutableArray *masterBitRateArray = nil;
 @synthesize mixdowns;
 @synthesize bitRates;
 
-- (void) setVideoContainerTag: (NSNumber *) aValue
-
-{
-	if ((nil != aValue || nil != videoContainerTag) && NO == [aValue isEqual: videoContainerTag]) {
-		[aValue retain];
-		[videoContainerTag release];
-		videoContainerTag = aValue;
-		[self updateCodecs];
-	}
-	return;
-}
-
-//	We do some detection of the None track to do special things.
-- (void) setTrack: (NSDictionary *) aValue
-
-{
-	if ((nil != aValue || nil != track) && NO == [aValue isEqual: track]) {
-		BOOL switchingFromNone = [track isEqual: [controller noneTrack]];
-		BOOL switchingToNone = [aValue isEqual: [controller noneTrack]];
-
-		[aValue retain];
-		[track release];
-		track = aValue;
-
-		if (nil != aValue) {
-			[self updateCodecs];
-			if (YES == [self enabled]) {
-				[self setSampleRate: [[self sampleRates] objectAtIndex: 0]];	//	default to Auto
-			}
-			if (YES == switchingFromNone) {
-				[controller switchingTrackFromNone: self];
-			}
-			if (YES == switchingToNone) {
-				[controller settingTrackToNone: self];
-			}
-		}
-	}
-	return;
-}
-
-- (void) setCodec: (NSDictionary *) aValue
-
-{
-	if ((nil != aValue || nil != codec) && NO == [aValue isEqual: codec]) {
-		[aValue retain];
-		[codec release];
-		codec = aValue;
-		[self updateMixdowns];
-		[self updateBitRates: YES];
-	}
-	return;
-}
-
-- (void) setMixdown: (NSDictionary *) aValue
-
-{
-	if ((nil != aValue || nil != mixdown) && NO == [aValue isEqual: mixdown]) {
-		[aValue retain];
-		[mixdown release];
-		mixdown = aValue;
-		[self updateBitRates: YES];
-		[[NSNotificationCenter defaultCenter] postNotificationName: HBMixdownChangedNotification object: self];
-	}
-	return;
-}
-
-- (void) setSampleRate: (NSDictionary *) aValue
-
-{
-	if ((nil != aValue || nil != sampleRate) && NO == [aValue isEqual: sampleRate]) {
-		[aValue retain];
-		[sampleRate release];
-		sampleRate = aValue;
-		[self updateBitRates: NO];
-	}
-	return;
-}
-
 - (NSArray *) tracks	{	return [controller masterTrackArray];	}
 
 - (NSArray *) sampleRates	{	return masterSampleRateArray;	}
@@ -503,6 +446,11 @@ static NSMutableArray *masterBitRateArray = nil;
 - (void) dealloc
 
 {
+	[self removeObserver: self forKeyPath: @"videoContainerTag"];
+	[self removeObserver: self forKeyPath: @"track"];
+	[self removeObserver: self forKeyPath: @"codec"];
+	[self removeObserver: self forKeyPath: @"mixdown"];
+	[self removeObserver: self forKeyPath: @"sampleRate"];
 	[self setTrack: nil];
 	[self setCodec: nil];
 	[self setMixdown: nil];
@@ -514,6 +462,43 @@ static NSMutableArray *masterBitRateArray = nil;
 	[self setMixdowns: nil];
 	[self setBitRates: nil];
 	[super dealloc];
+	return;
+}
+
+#pragma mark -
+#pragma mark KVO
+
+- (void) observeValueForKeyPath: (NSString *) keyPath ofObject: (id) object change: (NSDictionary *) change context: (void *) context
+
+{
+	if (YES == [keyPath isEqualToString: @"videoContainerTag"]) {
+		[self updateCodecs];
+		}
+	else if (YES == [keyPath isEqualToString: @"track"]) {
+		if (nil != [self track]) {
+			[self updateCodecs];
+			if (YES == [self enabled]) {
+				[self setSampleRate: [[self sampleRates] objectAtIndex: 0]];	// default to Auto
+				}
+			if (YES == [[controller noneTrack] isEqual: [change objectForKey: NSKeyValueChangeOldKey]]) {
+				[controller switchingTrackFromNone: self];
+				}
+			if (YES == [[controller noneTrack] isEqual: [self track]]) {
+				[controller settingTrackToNone: self];
+				}
+			}
+		}
+	else if (YES == [keyPath isEqualToString: @"codec"]) {
+		[self updateMixdowns];
+		[self updateBitRates: YES];
+		}
+	else if (YES == [keyPath isEqualToString: @"mixdown"]) {
+		[self updateBitRates: YES];
+		[[NSNotificationCenter defaultCenter] postNotificationName: HBMixdownChangedNotification object: self];
+		}
+	else if (YES == [keyPath isEqualToString: @"sampleRate"]) {
+		[self updateBitRates: NO];
+		}
 	return;
 }
 
@@ -629,22 +614,18 @@ static NSMutableArray *masterBitRateArray = nil;
 	return retval;
 }
 
-+ (NSSet *) keyPathsForValuesAffectingEnabled
++ (NSSet *) keyPathsForValuesAffectingValueForKey: (NSString *) key
 
 {
-	return [NSSet setWithObjects: @"track", nil];
-}
+	NSSet *retval = nil;
 
-+ (NSSet *) keyPathsForValuesAffectingMixdownEnabled
-
-{
-	return [NSSet setWithObjects: @"track", @"mixdown", nil];
-}
-
-+ (NSSet *) keyPathsForValuesAffectingAC3Enabled
-
-{
-	return [NSSet setWithObjects: @"track", nil];
+	if (YES == [key isEqualToString: @"enabled"] || YES == [key isEqualToString: @"AC3Enabled"]) {
+		retval = [NSSet setWithObjects: @"track", nil];
+		}
+	else if (YES == [key isEqualToString: @"mixdownEnabled"]) {
+		retval = [NSSet setWithObjects: @"track", @"mixdown", nil];
+		}
+	return retval;
 }
 
 @end
