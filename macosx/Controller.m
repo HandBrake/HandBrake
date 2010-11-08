@@ -4009,8 +4009,9 @@ bool one_burned = FALSE;
 
         NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
         [[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
+        currentQueueEncodeIndex = [self getNextPendingQueueIndex];
         [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]]; 
-      
+
     }
 }
 
@@ -4552,7 +4553,7 @@ bool one_burned = FALSE;
 
     NSString * extension = @"mp4";
 
-	BOOL anyCodecAC3 = [fAudioDelegate anyCodecMatches: HB_ACODEC_AC3];
+	BOOL anyCodecAC3 = [fAudioDelegate anyCodecMatches: HB_ACODEC_AC3] || [fAudioDelegate anyCodecMatches: HB_ACODEC_AC3_PASS];
 	if (YES == anyCodecAC3 ||
                                                         [fCreateChapterMarkers state] == NSOnState ||
                                                         [[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultMpegName"] > 0 )
