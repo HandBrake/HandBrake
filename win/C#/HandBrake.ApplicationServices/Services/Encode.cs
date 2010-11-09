@@ -109,6 +109,8 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         protected Process HbProcess { get; set; }
 
+        private bool processKilled;
+
         /// <summary>
         /// Gets a value indicating whether IsEncoding.
         /// </summary>
@@ -242,7 +244,11 @@ namespace HandBrake.ApplicationServices.Services
         {
             try
             {
-                if (this.HbProcess != null && !this.HbProcess.HasExited) this.HbProcess.Kill();
+                if (this.HbProcess != null && !this.HbProcess.HasExited)
+                {
+                    processKilled = true;
+                    this.HbProcess.Kill();
+                }
             }
             catch (Exception exc)
             {
@@ -330,7 +336,7 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         private void HbProcess_Exited(object sender, EventArgs e)
         {
-            if (HbProcess != null && HbProcess.HasExited && HbProcess.ExitCode != 0)
+            if (HbProcess != null && HbProcess.HasExited && HbProcess.ExitCode != 0 && !processKilled)
             {
                 errorService.ShowError("It appears that HandBrakeCLI has crashed. You can check the Activity Log for further information.", string.Format("Exit Code was: {0}", HbProcess.ExitCode));
             }
