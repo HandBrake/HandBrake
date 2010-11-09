@@ -1039,8 +1039,7 @@
         }
         else
         {
-            /* Otherwise the format is deblock=a,b, where a and b both have an array
-               offset of 7 because deblocking values start at -6 instead of at zero. */
+            /* Otherwise the format is psy-rd=a,b */
             thisOpt = [NSString stringWithFormat:@"%@=%0.1f,%0.2f", optName, [fX264optPsyRDSlider floatValue], [fX264optPsyTrellisSlider floatValue] ];
         }
     }
