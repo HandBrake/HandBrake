@@ -21,7 +21,7 @@ typedef struct
     hb_lock_t * mutex;
     int         ref;        /* Reference count to tell us when it's unused */
     int         count_frames;
-    int64_t     audio_passthru_slip;
+    int64_t     audio_pts_slip;
     int64_t     video_pts_slip;
     int64_t     pts_offset;
 
@@ -37,7 +37,6 @@ typedef struct
 {
     int          index;
     double       next_start;   /* start time of next output frame */
-    int64_t      next_pts;     /* start time of next input frame */
     int64_t      first_drop;   /* PTS of first 'went backwards' frame dropped */
     int          drop_count;   /* count of 'time went backwards' drops */
 
@@ -56,7 +55,6 @@ typedef struct
     int        first_frame;
     int64_t    pts_skip;
     int64_t    next_start;    /* start time of next output frame */
-    int64_t    next_pts;      /* start time of next input frame */
     int64_t    first_drop;    /* PTS of first 'went backwards' frame dropped */
     int        drop_count;    /* count of 'time went backwards' drops */
     int        drops;         /* frames dropped to make a cbr video stream */
@@ -258,10 +256,37 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_subtitle_t     * subtitle;
     hb_sync_video_t   * sync = &pv->type.video;
     int i;
+    int64_t start, next_start;
 
     *buf_out = NULL;
     next = *buf_in;
     *buf_in = NULL;
+
+    /* Wait till we can determine the initial pts of all streams */
+    if( next->size != 0 && pv->common->pts_offset == INT64_MIN )
+    {
+        pv->common->first_pts[0] = next->start;
+        hb_lock( pv->common->mutex );
+        while( pv->common->pts_offset == INT64_MIN )
+        {
+            // Full fifos will make us wait forever, so get the
+            // pts offset from the available streams if full
+            if ( hb_fifo_is_full( job->fifo_raw ) )
+            {
+                getPtsOffset( w );
+                hb_cond_broadcast( pv->common->next_frame );
+            }
+            else if ( checkPtsOffset( w ) )
+                hb_cond_broadcast( pv->common->next_frame );
+            else
+                hb_cond_timedwait( pv->common->next_frame, pv->common->mutex, 200 );
+        }
+        hb_unlock( pv->common->mutex );
+    }
+
+    hb_lock( pv->common->mutex );
+    next_start = next->start - pv->common->video_pts_slip;
+    hb_unlock( pv->common->mutex );
 
     /* Wait for start of point-to-point encoding */
     if( !pv->common->start_found )
@@ -292,7 +317,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             return HB_WORK_DONE;
         }
         if ( pv->common->count_frames < job->frame_to_start ||
-             next->start < job->pts_to_start )
+             next_start < job->pts_to_start )
         {
             // Flush any subtitles that have pts prior to the
             // current frame
@@ -309,7 +334,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             }
             hb_lock( pv->common->mutex );
             // Tell the audio threads what must be dropped
-            pv->common->audio_pts_thresh = next->start;
+            pv->common->audio_pts_thresh = next_start;
             hb_cond_broadcast( pv->common->next_frame );
             hb_unlock( pv->common->mutex );
 
@@ -319,33 +344,15 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             return HB_WORK_OK;
         }
         hb_lock( pv->common->mutex );
+        pv->common->audio_pts_thresh = 0;
+        pv->common->audio_pts_slip = next_start;
+        pv->common->video_pts_slip = next_start;
+        next_start = 0;
         pv->common->start_found = 1;
         pv->common->count_frames = 0;
         hb_cond_broadcast( pv->common->next_frame );
         hb_unlock( pv->common->mutex );
         sync->st_first = 0;
-    }
-
-    /* Wait till we can determine the initial pts of all streams */
-    if( next->size != 0 && pv->common->pts_offset == INT64_MIN )
-    {
-        pv->common->first_pts[0] = next->start;
-        hb_lock( pv->common->mutex );
-        while( pv->common->pts_offset == INT64_MIN )
-        {
-            // Full fifos will make us wait forever, so get the
-            // pts offset from the available streams if full
-            if ( hb_fifo_is_full( job->fifo_raw ) )
-            {
-                getPtsOffset( w );
-                hb_cond_broadcast( pv->common->next_frame );
-            }
-            else if ( checkPtsOffset( w ) )
-                hb_cond_broadcast( pv->common->next_frame );
-            else
-                hb_cond_timedwait( pv->common->next_frame, pv->common->mutex, 200 );
-        }
-        hb_unlock( pv->common->mutex );
     }
 
     if( !sync->cur )
@@ -452,13 +459,16 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_DONE;
     }
 
+    hb_lock( pv->common->mutex );
+    start = cur->start - pv->common->video_pts_slip;
+    hb_unlock( pv->common->mutex );
+
     /* Check for end of point-to-point pts encoding */
     if( job->pts_to_stop && sync->next_start >= job->pts_to_stop )
     {
         // Drop an empty buffer into our output to ensure that things
         // get flushed all the way out.
-        hb_log( "sync: reached pts %"PRId64", exiting early",
-                sync->cur->start );
+        hb_log( "sync: reached pts %"PRId64", exiting early", start );
         hb_buffer_close( &sync->cur );
         hb_buffer_close( &next );
         *buf_out = hb_buffer_init( 0 );
@@ -483,7 +493,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     if( sync->first_frame )
     {
         /* This is our first frame */
-        if ( cur->start > pv->common->pts_offset )
+        if ( start > 0 )
         {
             /*
              * The first pts from a dvd should always be zero but
@@ -493,8 +503,8 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
              * as if it started at zero so that our audio timing will
              * be in sync.
              */
-            hb_log( "sync: first pts is %"PRId64, cur->start );
-            cur->start = pv->common->pts_offset;
+            hb_log( "sync: first pts is %"PRId64, start );
+            start = 0;
         }
         sync->first_frame = 0;
     }
@@ -510,20 +520,13 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
      * can deal with overlaps of up to a frame time but anything larger
      * we handle by dropping frames here.
      */
-    hb_lock( pv->common->mutex );
-    if ( (int64_t)( next->start - pv->common->video_pts_slip - cur->start ) <= 0 )
+    if ( next_start - start <= 0 )
     {
         if ( sync->first_drop == 0 )
         {
-            sync->first_drop = next->start;
+            sync->first_drop = next_start;
         }
         ++sync->drop_count;
-        if (next->start - cur->start > 0)
-        {
-            sync->pts_skip += next->start - cur->start;
-            pv->common->video_pts_slip -= next->start - cur->start;
-        }
-        hb_unlock( pv->common->mutex );
         if ( next->new_chap )
         {
             // don't drop a chapter mark when we drop the buffer
@@ -532,13 +535,12 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         hb_buffer_close( &next );
         return HB_WORK_OK;
     }
-    hb_unlock( pv->common->mutex );
     if ( sync->first_drop )
     {
         hb_log( "sync: video time didn't advance - dropped %d frames "
                 "(delta %d ms, current %"PRId64", next %"PRId64", dur %d)",
-                sync->drop_count, (int)( cur->start - sync->first_drop ) / 90,
-                cur->start, next->start, (int)( next->start - cur->start ) );
+                sync->drop_count, (int)( start - sync->first_drop ) / 90,
+                start, next_start, (int)( next_start - start ) );
         sync->first_drop = 0;
         sync->drop_count = 0;
     }
@@ -559,6 +561,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
      */
     for( i = 0; i < hb_list_count( job->list_subtitle ); i++)
     {
+        int64_t sub_start, sub_stop, duration;
         subtitle = hb_list_item( job->list_subtitle, i );
 
         /*
@@ -575,6 +578,12 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
              */
             while( ( sub = hb_fifo_see( subtitle->fifo_raw ) ) )
             {
+                hb_lock( pv->common->mutex );
+                sub_start = sub->start - pv->common->video_pts_slip;
+                hb_unlock( pv->common->mutex );
+                duration = sub->stop - sub->start;
+                sub_stop = sub_start + duration;
+
                 /*
                  * Rewrite the timestamps as and when the video
                  * (cur->start) reaches the same timestamp as a
@@ -601,9 +610,11 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                      * so just push them through for rendering.
                      *
                      */
-                    if( sub->start < cur->start )
+                    if( sub_start < start )
                     {
                         sub = hb_fifo_get( subtitle->fifo_raw );
+                        sub->start = sub_start;
+                        sub->stop = sub_stop;
                         hb_fifo_push( subtitle->fifo_out, sub );
                     } else {
                         sub = NULL;
@@ -630,6 +641,12 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     break;
                 }
 
+                hb_lock( pv->common->mutex );
+                sub_start = sub->start - pv->common->video_pts_slip;
+                hb_unlock( pv->common->mutex );
+                duration = sub->stop - sub->start;
+                sub_stop = sub_start + duration;
+
                 /* If two subtitles overlap, make the first one stop
                    when the second one starts */
                 sub2 = hb_fifo_see2( subtitle->fifo_raw );
@@ -653,7 +670,8 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     break;
                 }
                 
-                if( sub->stop > cur->start ) {
+                if( sub_stop > start ) 
+                {
                     /*
                      * The stop time is in the future, so fall through
                      * and we'll deal with it in the next block of
@@ -663,15 +681,15 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     /*
                      * There is a valid subtitle, is it time to display it?
                      */
-                    if( sub->stop > sub->start)
+                    if( sub_stop > sub_start)
                     {
                         /*
                          * Normal subtitle which ends after it starts, 
                          * check to see that the current video is between 
                          * the start and end.
                          */
-                        if( cur->start > sub->start &&
-                            cur->start < sub->stop )
+                        if( start > sub_start &&
+                            start < sub_stop )
                         {
                             /*
                             * We should be playing this, so leave the
@@ -679,28 +697,6 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                             *
                             * fall through to display
                             */
-                            if( ( sub->stop - sub->start ) < ( 2 * 90000 ) )
-                            {
-                                /*
-                                 * Subtitle is on for less than three 
-                                 * seconds, extend the time that it is 
-                                 * displayed to make it easier to read. 
-                                 * Make it 2 seconds or until the next
-                                 * subtitle is displayed.
-                                 *
-                                 * This is in response to Indochine which 
-                                 * only displays subs for 1 second - 
-                                 * too fast to read.
-                                 */
-                                sub->stop = sub->start + ( 2 * 90000 );
-                            
-                                sub2 = hb_fifo_see2( subtitle->fifo_raw );
-                            
-                                if( sub2 && sub->stop > sub2->start )
-                                {
-                                    sub->stop = sub2->start;
-                                }
-                            }
                         }
                         else
                         {
@@ -717,14 +713,14 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                          * The end of the subtitle is less than the start, 
                          * this is a sign of a PTS discontinuity.
                          */
-                        if( sub->start > cur->start )
+                        if( sub_start > start )
                         {
                             /*
                              * we haven't reached the start time yet, or
                              * we have jumped backwards after having
                              * already started this subtitle.
                              */
-                            if( cur->start < sub->stop )
+                            if( start < sub_stop )
                             {
                                 /*
                                  * We have jumped backwards and so should
@@ -778,6 +774,8 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                              */
                             /* FIXME: we should avoid this memcpy */
                             cur->sub = copy_subtitle( sub );
+                            cur->sub->start = sub_start;
+                            cur->sub->stop = sub_stop;
                             
                             // Leave the subtitle on the raw queue
                             // (until it no longer needs to be displayed)
@@ -787,6 +785,8 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                          * Pass-Through, pop it off of the raw queue, 
                          */
                         sub = hb_fifo_get( subtitle->fifo_raw );
+                        sub->start = sub_start;
+                        sub->stop = sub_stop;
                         hb_fifo_push( subtitle->fifo_sync, sub );
                     }
                 } else {
@@ -799,6 +799,8 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                         hb_buffer_close( &sub );
                     } else {
                         sub = hb_fifo_get( subtitle->fifo_raw );
+                        sub->start = sub_start;
+                        sub->stop = sub_stop;
                         hb_fifo_push( subtitle->fifo_sync, sub );
                     }
                 }
@@ -822,13 +824,12 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     *buf_out = cur;
     sync->cur = cur = next;
     cur->sub = NULL;
-    sync->next_pts = cur->start;
-    int64_t duration = cur->start - sync->pts_skip - (*buf_out)->start;
+    int64_t duration = next_start - start;
     sync->pts_skip = 0;
     if ( duration <= 0 )
     {
         hb_log( "sync: invalid video duration %"PRId64", start %"PRId64", next %"PRId64"",
-                duration, (*buf_out)->start, next->start );
+                duration, start, next_start );
     }
 
     (*buf_out)->start = sync->next_start;
@@ -953,37 +954,6 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_DONE;
     }
 
-    /* Wait for start frame if doing point-to-point */
-    hb_lock( pv->common->mutex );
-    while ( !pv->common->start_found )
-    {
-        if ( pv->common->audio_pts_thresh < 0 )
-        {
-            // I would initialize this in hb_sync_init, but 
-            // job->pts_to_start can be modified by reader 
-            // after hb_sync_init is called.
-            pv->common->audio_pts_thresh = job->pts_to_start;
-        }
-        if ( buf->start < pv->common->audio_pts_thresh )
-        {
-            hb_buffer_close( &buf );
-            hb_unlock( pv->common->mutex );
-            return HB_WORK_OK;
-        }
-        while ( !pv->common->start_found && 
-                buf->start >= pv->common->audio_pts_thresh )
-        {
-            hb_cond_timedwait( pv->common->next_frame, pv->common->mutex, 200 );
-        }
-    }
-    if ( buf->start < pv->common->audio_pts_thresh )
-    {
-        hb_buffer_close( &buf );
-        hb_unlock( pv->common->mutex );
-        return HB_WORK_OK;
-    }
-    hb_unlock( pv->common->mutex );
-
     /* Wait till we can determine the initial pts of all streams */
     if( pv->common->pts_offset == INT64_MIN )
     {
@@ -1006,6 +976,38 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         hb_unlock( pv->common->mutex );
     }
 
+    /* Wait for start frame if doing point-to-point */
+    hb_lock( pv->common->mutex );
+    start = buf->start - pv->common->audio_pts_slip;
+    while ( !pv->common->start_found )
+    {
+        if ( pv->common->audio_pts_thresh < 0 )
+        {
+            // I would initialize this in hb_sync_init, but 
+            // job->pts_to_start can be modified by reader 
+            // after hb_sync_init is called.
+            pv->common->audio_pts_thresh = job->pts_to_start;
+        }
+        if ( start < pv->common->audio_pts_thresh )
+        {
+            hb_buffer_close( &buf );
+            hb_unlock( pv->common->mutex );
+            return HB_WORK_OK;
+        }
+        while ( !pv->common->start_found && 
+                start >= pv->common->audio_pts_thresh )
+        {
+            hb_cond_timedwait( pv->common->next_frame, pv->common->mutex, 200 );
+        }
+    }
+    if ( start < 0 )
+    {
+        hb_buffer_close( &buf );
+        hb_unlock( pv->common->mutex );
+        return HB_WORK_OK;
+    }
+    hb_unlock( pv->common->mutex );
+
     if( job->frame_to_stop && pv->common->count_frames >= job->frame_to_stop )
     {
         hb_buffer_close( &buf );
@@ -1020,10 +1022,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_DONE;
     }
 
-    hb_lock( pv->common->mutex );
-    start = buf->start - pv->common->audio_passthru_slip;
-    hb_unlock( pv->common->mutex );
-    if ( (int64_t)( start - sync->next_pts ) < 0 )
+    if ( start - sync->next_start < 0 )
     {
         // audio time went backwards.
         // If our output clock is more than a half frame ahead of the
@@ -1034,36 +1033,34 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             // Discard data that's in the past.
             if ( sync->first_drop == 0 )
             {
-                sync->first_drop = sync->next_pts;
+                sync->first_drop = sync->next_start;
             }
             ++sync->drop_count;
             hb_buffer_close( &buf );
             return HB_WORK_OK;
         }
-        sync->next_pts = start;
     }
     if ( sync->first_drop )
     {
         // we were dropping old data but input buf time is now current
         hb_log( "sync: audio %d time went backwards %d ms, dropped %d frames "
                 "(next %"PRId64", current %"PRId64")", w->audio->id,
-                (int)( sync->next_pts - sync->first_drop ) / 90,
-                sync->drop_count, sync->first_drop, sync->next_pts );
+                (int)( sync->next_start - sync->first_drop ) / 90,
+                sync->drop_count, sync->first_drop, (int64_t)sync->next_start );
         sync->first_drop = 0;
         sync->drop_count = 0;
-        sync->next_pts = start;
     }
-    if ( start - sync->next_pts >= (90 * 70) )
+    if ( start - sync->next_start >= (90 * 70) )
     {
-        if ( start - sync->next_pts > (90000LL * 60) )
+        if ( start - sync->next_start > (90000LL * 60) )
         {
             // there's a gap of more than a minute between the last
             // frame and this. assume we got a corrupted timestamp
             // and just drop the next buf.
             hb_log( "sync: %d minute time gap in audio %d - dropping buf"
                     "  start %"PRId64", next %"PRId64,
-                    (int)((start - sync->next_pts) / (90000*60)),
-                    w->audio->id, start, sync->next_pts );
+                    (int)((start - sync->next_start) / (90000*60)),
+                    w->audio->id, start, (int64_t)sync->next_start );
             hb_buffer_close( &buf );
             return HB_WORK_OK;
         }
@@ -1077,20 +1074,20 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         {
             hb_log( "sync: audio gap %d ms. Skipping frames. Audio %d"
                     "  start %"PRId64", next %"PRId64,
-                    (int)((start - sync->next_pts) / 90),
-                    w->audio->id, start, sync->next_pts );
+                    (int)((start - sync->next_start) / 90),
+                    w->audio->id, start, (int64_t)sync->next_start );
             hb_lock( pv->common->mutex );
-            pv->common->audio_passthru_slip += (start - sync->next_pts);
-            pv->common->video_pts_slip += (start - sync->next_pts);
+            pv->common->audio_pts_slip += (start - sync->next_start);
+            pv->common->video_pts_slip += (start - sync->next_start);
             hb_unlock( pv->common->mutex );
             *buf_out = buf;
             return HB_WORK_OK;
         }
         hb_log( "sync: adding %d ms of silence to audio %d"
                 "  start %"PRId64", next %"PRId64,
-                (int)((start - sync->next_pts) / 90),
-                w->audio->id, start, sync->next_pts );
-        InsertSilence( w, start - sync->next_pts );
+                (int)((start - sync->next_start) / 90),
+                w->audio->id, start, (int64_t)sync->next_start );
+        InsertSilence( w, start - sync->next_start );
     }
 
     /*
@@ -1196,8 +1193,6 @@ static hb_buffer_t * OutputAudioFrame( hb_audio_t *audio, hb_buffer_t *buf,
     int64_t start = (int64_t)sync->next_start;
     double duration = buf->stop - buf->start;
 
-    sync->next_pts += duration;
-
     if( audio->config.in.samplerate == audio->config.out.samplerate ||
         audio->config.out.codec == HB_ACODEC_AC3_PASS ||
         audio->config.out.codec == HB_ACODEC_DCA_PASS )
@@ -1274,7 +1269,7 @@ static void InsertSilence( hb_work_object_t * w, int64_t duration )
         if( w->audio->config.out.codec == HB_ACODEC_AC3_PASS )
         {
             buf        = hb_buffer_init( sync->ac3_size );
-            buf->start = sync->next_pts;
+            buf->start = sync->next_start;
             buf->stop  = buf->start + frame_dur;
             memcpy( buf->data, sync->ac3_buf, buf->size );
             fifo = w->audio->priv.fifo_out;
@@ -1284,7 +1279,7 @@ static void InsertSilence( hb_work_object_t * w, int64_t duration )
             buf = hb_buffer_init( AC3_SAMPLES_PER_FRAME * sizeof( float ) *
                                      HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(
                                          w->audio->config.out.mixdown) );
-            buf->start = sync->next_pts;
+            buf->start = sync->next_start;
             buf->stop  = buf->start + frame_dur;
             memset( buf->data, 0, buf->size );
             fifo = w->audio->priv.fifo_sync;
@@ -1422,7 +1417,7 @@ static void getPtsOffset( hb_work_object_t * w )
         if ( pv->common->first_pts[i] < first_pts )
             first_pts = pv->common->first_pts[i];
     }
-    pv->common->audio_passthru_slip = pv->common->pts_offset = first_pts;
+    pv->common->video_pts_slip = pv->common->audio_pts_slip = pv->common->pts_offset = first_pts;
     return;
 }
 
