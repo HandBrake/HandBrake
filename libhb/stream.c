@@ -58,11 +58,7 @@ static const stream2codec_t st2codec[256] = {
     st(0x0e, N, 0,                 0,              "ISO 13818-1 auxiliary"),
     st(0x0f, A, HB_ACODEC_MPGA,    CODEC_ID_AAC,   "ISO 13818-7 AAC Audio"),
     st(0x10, V, WORK_DECAVCODECV,  CODEC_ID_MPEG4, "MPEG4"),
-#if defined(OLD_LATM_PATCH)
     st(0x11, A, HB_ACODEC_MPGA,    CODEC_ID_AAC_LATM, "MPEG4 LATM AAC"),
-#else
-    st(0x11, N, 0,                 0,              "MPEG4 LATM AAC"),
-#endif
     st(0x12, U, 0,                 0,              "MPEG4 generic"),
 
     st(0x14, N, 0,                 0,              "ISO 13818-6 DSM-CC download"),
@@ -2997,6 +2993,7 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
 {
     AVStream *st = stream->ffmpeg_ic->streams[id];
     AVCodecContext *codec = st->codec;
+    AVMetadataTag *tag;
     int layout;
 
     // scan will ignore any audio without a bitrate. Since we've already
@@ -3031,7 +3028,9 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
             audio->config.in.channel_layout = layout;
         }
 
-        set_audio_description( audio, lang_for_code2( st->language ) );
+        tag = av_metadata_get( st->metadata, "language", NULL, 0 );
+        set_audio_description( audio, 
+            lang_for_code2( tag ? tag->value : "und" ) );
 
         hb_list_add( title->list_audio, audio );
     }
@@ -3199,7 +3198,11 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
             return;
     }
     
-    iso639_lang_t *language = lang_for_code2( st->language );
+    AVMetadataTag *tag;
+    iso639_lang_t *language;
+
+    tag = av_metadata_get( st->metadata, "language", NULL, 0 );
+    language = lang_for_code2( tag ? tag->value : "und" );
     strcpy( subtitle->lang, language->eng_name );
     strncpy( subtitle->iso639_2, language->iso639_2, 4 );
     
@@ -3330,6 +3333,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream )
         for( i = 0; i < ic->nb_chapters; i++ )
             if( ( m = ic->chapters[i] ) != NULL )
             {
+                AVMetadataTag *tag;
                 hb_chapter_t * chapter;
                 chapter = calloc( sizeof( hb_chapter_t ), 1 );
                 chapter->index    = i+1;
@@ -3338,7 +3342,8 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream )
                 chapter->hours    = chapter->duration / 90000 / 3600;
                 chapter->minutes  = ( ( chapter->duration / 90000 ) % 3600 ) / 60;
                 chapter->seconds  = ( chapter->duration / 90000 ) % 60;
-                strcpy( chapter->title, m->title );
+                tag = av_metadata_get( m->metadata, "title", NULL, 0 );
+                strcpy( chapter->title, tag ? tag->value : "" );
                 hb_deep_log( 2, "Added chapter %i, name='%s', dur=%"PRIu64", (%02i:%02i:%02i)",
                             chapter->index, chapter->title,
                             chapter->duration, chapter->hours,

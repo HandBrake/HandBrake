@@ -1386,7 +1386,7 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
                 //       anything more complicated than a one-for-one format
                 //       conversion we'd probably want to cache the converter
                 //       context in the pv.
-                int isamp = av_get_bits_per_sample_format( context->sample_fmt ) / 8;
+                int isamp = av_get_bits_per_sample_fmt( context->sample_fmt ) / 8;
                 AVAudioConvert *ctx = av_audio_convert_alloc( SAMPLE_FMT_S16, 1,
                                                               context->sample_fmt, 1,
                                                               NULL, 0 );
