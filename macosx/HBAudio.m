@@ -607,7 +607,8 @@ static NSMutableArray *masterBitRateArray = nil;
 	
 	if (YES == retval) {
 		int myTrackCodec = [[[self track] objectForKey: keyAudioInputCodec] intValue];
-		if (HB_ACODEC_AC3 != myTrackCodec) {
+		int myCodecCodec = [[[self codec] objectForKey: keyAudioCodec] intValue];
+		if (HB_ACODEC_AC3 != myTrackCodec || HB_ACODEC_AC3_PASS == myCodecCodec) {
 			retval = NO;
 		}
 	}
@@ -619,9 +620,12 @@ static NSMutableArray *masterBitRateArray = nil;
 {
 	NSSet *retval = nil;
 
-	if (YES == [key isEqualToString: @"enabled"] || YES == [key isEqualToString: @"AC3Enabled"]) {
+	if (YES == [key isEqualToString: @"enabled"]) {
 		retval = [NSSet setWithObjects: @"track", nil];
 		}
+	else if (YES == [key isEqualToString: @"AC3Enabled"]) {
+		retval = [NSSet setWithObjects: @"track", @"codec", nil];
+	}
 	else if (YES == [key isEqualToString: @"mixdownEnabled"]) {
 		retval = [NSSet setWithObjects: @"track", @"mixdown", nil];
 		}
