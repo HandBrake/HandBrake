@@ -110,11 +110,6 @@ namespace HandBrake.ApplicationServices.Services
         protected Process HbProcess { get; set; }
 
         /// <summary>
-        /// Determines if the process was killed or safely closed.
-        /// </summary>
-        private bool processKilled;
-
-        /// <summary>
         /// Gets a value indicating whether IsEncoding.
         /// </summary>
         public bool IsEncoding { get; private set; }
@@ -339,12 +334,6 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         private void HbProcess_Exited(object sender, EventArgs e)
         {
-            if (HbProcess != null && HbProcess.HasExited && HbProcess.ExitCode != 0 && !processKilled)
-            {
-                errorService.ShowError("It appears that HandBrakeCLI has crashed. You can check the Activity Log for further information.", string.Format("Exit Code was: {0}", HbProcess.ExitCode));
-            }
-
-            processKilled = false;
             IsEncoding = false;
             if (this.EncodeEnded != null)
                 this.EncodeEnded(this, new EventArgs());

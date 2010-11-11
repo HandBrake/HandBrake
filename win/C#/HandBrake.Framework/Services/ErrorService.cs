@@ -35,7 +35,7 @@ namespace HandBrake.Framework.Services
 
             try
             {
-                Thread newThread = new Thread(new ParameterizedThreadStart(WriteExceptionToFile));
+                Thread newThread = new Thread(new ParameterizedThreadStart(this.LogError));
                 newThread.Start(shortError + Environment.NewLine + longError);
             }
             catch (Exception)
@@ -78,7 +78,7 @@ namespace HandBrake.Framework.Services
         /// <param name="state">
         /// The state.
         /// </param>
-        public void WriteExceptionToFile(object state)
+        public void LogError(object state)
         {
             try
             {

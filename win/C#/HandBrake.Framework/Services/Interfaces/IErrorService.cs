@@ -31,5 +31,11 @@ namespace HandBrake.Framework.Services.Interfaces
         /// Is a warning window, show the warning icon instead of the notice
         /// </param>
         void ShowNotice(string notice, bool isWarning);
+
+        /// <summary>
+        /// Log the error
+        /// </summary>
+        /// <param name="state">The error message</param>
+        void LogError(object state);
     }
 }
