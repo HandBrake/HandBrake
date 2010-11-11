@@ -244,7 +244,6 @@ namespace HandBrake.ApplicationServices.Services
             {
                 if (this.HbProcess != null && !this.HbProcess.HasExited)
                 {
-                    processKilled = true;
                     this.HbProcess.Kill();
                 }
             }
