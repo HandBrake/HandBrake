@@ -188,13 +188,15 @@ void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, in
             if (samplerate > 24000)
             {
                 *high = 160 * channels;
+                if (*high > 768)
+                    *high = 768;
             }
             else
             {
-                *high = 128 * channels;
+                *high = 96 * channels;
+                if (*high > 480)
+                    *high = 480;
             }
-            if (*high > 768)
-                *high = 768;
             break;
 
         case HB_ACODEC_VORBIS:
@@ -226,6 +228,14 @@ void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, in
             }
             break;
 
+        case HB_ACODEC_LAME:
+            *low = hb_audio_bitrates[0].rate;
+            if (samplerate > 24000)
+                *high = 320;
+            else
+                *high = 160;
+            break;
+        
         default:
             *low = hb_audio_bitrates[0].rate;
             *high = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
