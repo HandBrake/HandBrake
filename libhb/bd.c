@@ -434,12 +434,14 @@ int hb_bd_seek( hb_bd_t * d, float f )
     uint64_t packet = f * d->pkt_count;
 
     bd_seek(d->bd, packet * 192);
+    d->next_chap = bd_get_current_chapter( d->bd ) + 1;
     return 1;
 }
 
 int hb_bd_seek_pts( hb_bd_t * d, uint64_t pts )
 {
     bd_seek_time(d->bd, pts);
+    d->next_chap = bd_get_current_chapter( d->bd ) + 1;
     return 1;
 }
 
