@@ -999,6 +999,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         {
             hb_cond_timedwait( pv->common->next_frame, pv->common->mutex, 200 );
         }
+        start = buf->start - pv->common->audio_pts_slip;
     }
     if ( start < 0 )
     {
