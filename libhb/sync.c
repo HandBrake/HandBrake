@@ -338,7 +338,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             hb_cond_broadcast( pv->common->next_frame );
             hb_unlock( pv->common->mutex );
 
-            UpdateSearchState( w, next->start );
+            UpdateSearchState( w, next_start );
             hb_buffer_close( &next );
 
             return HB_WORK_OK;
@@ -610,13 +610,14 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                      * so just push them through for rendering.
                      *
                      */
-                    if( sub_start < start )
+                    if( sub_start <= start )
                     {
                         sub = hb_fifo_get( subtitle->fifo_raw );
                         sub->start = sub_start;
                         sub->stop = sub_stop;
                         hb_fifo_push( subtitle->fifo_out, sub );
                     } else {
+                        // sub too early. Leave it in the fifo.
                         sub = NULL;
                         break;
                     }
