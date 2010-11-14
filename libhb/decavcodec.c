@@ -851,7 +851,7 @@ static void decodeVideo( hb_work_private_t *pv, uint8_t *data, int size, int seq
         uint8_t *pout;
         int pout_len;
         int len = av_parser_parse2( pv->parser, pv->context, &pout, &pout_len,
-                                    data + pos, size - pos, pts, dts, AV_NOPTS_VALUE );
+                                    data + pos, size - pos, pts, dts, 0 );
         pos += len;
 
         if ( pout_len > 0 )
