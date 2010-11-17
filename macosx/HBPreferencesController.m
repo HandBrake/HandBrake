@@ -65,7 +65,6 @@
         @"YES",             @"AlertBuiltInPresetUpdate",
         @"MetaX",           @"SendCompletedEncodeToApp",
 		@"YES",				@"AC3PassthruDefaultsToAC3",
-		@"YES",				@"CodecDefaultsMixdown",
         nil]];
 }
 

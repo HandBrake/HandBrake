@@ -16,8 +16,6 @@ NSString *keyAudioSampleRateName = @"keyAudioSampleRateName";
 NSString *keyAudioBitrateName = @"keyAudioBitrateName";
 NSString *keyAudioMustMatchTrack = @"keyAudioMustMatchTrack";
 NSString *keyAudioMixdownName = @"keyAudioMixdownName";
-NSString *keyAudioMixdownLimitsToTrackBitRate = @"keyAudioMixdownLimitsToTrackBitRate";
-NSString *keyAudioMixdownCanBeDefault = @"keyAudioMixdownCanBeDefault";
 
 NSString *keyAudioCodec = @"codec";
 NSString *keyAudioMixdown = @"mixdown";
@@ -25,6 +23,7 @@ NSString *keyAudioSamplerate = @"samplerate";
 NSString *keyAudioBitrate = @"bitrate";
 
 static NSMutableArray *masterCodecArray = nil;
+static NSMutableArray *masterMixdownArray = nil;
 static NSMutableArray *masterSampleRateArray = nil;
 static NSMutableArray *masterBitRateArray = nil;
 
@@ -119,6 +118,22 @@ static NSMutableArray *masterBitRateArray = nil;
 									  [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
 									  nil]];
 		
+		masterMixdownArray = [[NSMutableArray alloc] init];	//	knowingly leaked
+		[masterMixdownArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
+										NSLocalizedString(@"AC3 Passthru", @"AC3 Passthru"), keyAudioMixdownName,
+										[NSNumber numberWithInt: HB_ACODEC_AC3_PASS], keyAudioMixdown,
+										nil]];
+		[masterMixdownArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
+										NSLocalizedString(@"DTS Passthru", @"DTS Passthru"), keyAudioMixdownName,
+										[NSNumber numberWithInt: HB_ACODEC_DCA_PASS], keyAudioMixdown,
+										nil]];
+		for (i = 0; i < hb_audio_mixdowns_count; i++) {
+			[masterMixdownArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
+											[NSString stringWithUTF8String: hb_audio_mixdowns[i].human_readable_name], keyAudioMixdownName,
+											[NSNumber numberWithInt: hb_audio_mixdowns[i].amixdown], keyAudioMixdown,
+											nil]];
+		}
+
 		//	Note that for the Auto value we use 0 for the sample rate because our controller will give back the track's
 		//	input sample rate when it finds this 0 value as the selected sample rate.  We do this because the input
 		//	sample rate depends on the track, which means it depends on the title, so cannot be nicely set up here.
@@ -136,10 +151,9 @@ static NSMutableArray *masterBitRateArray = nil;
 		
 		masterBitRateArray = [[NSMutableArray alloc] init];	// knowingly leaked
 		for (i = 0; i < hb_audio_bitrates_count; i++) {
-			int rate = hb_audio_bitrates[i].rate;
 			dict = [NSDictionary dictionaryWithObjectsAndKeys:
 					[NSString stringWithUTF8String: hb_audio_bitrates[i].string], keyAudioBitrateName,
-					[NSNumber numberWithInt: rate], keyAudioBitrate,
+					[NSNumber numberWithInt: hb_audio_bitrates[i].rate], keyAudioBitrate,
 					nil];
 			[masterBitRateArray addObject: dict];
 		}
@@ -211,121 +225,61 @@ static NSMutableArray *masterBitRateArray = nil;
 	return;
 }
 
-//	The rules here are provided as-is from the original -[Controller audioTrackPopUpChanged:mixdownToUse:] routine
-//	with the comments taken from there as well.
-- (void) updateMixdowns
+- (void) updateMixdowns: (BOOL) shouldSetDefault
 
 {
-	NSMutableArray *retval = [NSMutableArray array];
-	int trackCodec = [[track objectForKey: keyAudioInputCodec] intValue];
-	int codecCodec = [[codec objectForKey: keyAudioCodec] intValue];
+	NSMutableArray *permittedMixdowns = [NSMutableArray array];
+	NSDictionary *dict;
+	BOOL shouldAdd;
+	int currentMixdown;
 
-	if (HB_ACODEC_AC3 == trackCodec && HB_ACODEC_AC3_PASS == codecCodec) {
-		[retval addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-							NSLocalizedString(@"AC3 Passthru", @"AC3 Passthru"), keyAudioMixdownName,
-							[NSNumber numberWithInt: HB_ACODEC_AC3_PASS], keyAudioMixdown,
-							[NSNumber numberWithBool: YES], keyAudioMixdownLimitsToTrackBitRate,
-							[NSNumber numberWithBool: YES], keyAudioMixdownCanBeDefault,
-							nil]];
+	unsigned int count = [masterMixdownArray count];
+	int codecCodec = [[codec objectForKey: keyAudioCodec] intValue];
+	int channelLayout = [[track objectForKey: keyAudioInputChannelLayout] intValue];
+	int theDefaultMixdown = hb_get_default_mixdown(codecCodec, channelLayout);
+	int theBestMixdown = hb_get_best_mixdown(codecCodec, channelLayout, 0);
+
+	for (unsigned int i = 0; i < count; i++) {
+		dict = [masterMixdownArray objectAtIndex: i];
+		currentMixdown = [[dict objectForKey: keyAudioMixdown] intValue];
+
+		//	Basically with the way the mixdowns are stored, the assumption from the libhb point of view
+		//	currently is that all mixdowns from the best down to mono are supported.
+		if (currentMixdown <= theBestMixdown) {
+			shouldAdd = YES;
+		} else if (0 == theBestMixdown && codecCodec == currentMixdown) {
+			// 0 means passthrough, add the current mixdown if it matches the passthrough codec
+			shouldAdd = YES;
+		} else {
+			shouldAdd = NO;
+		}
+
+		if (YES == shouldAdd) {
+			[permittedMixdowns addObject: dict];
+		}
 	}
-	else if (HB_ACODEC_DCA == trackCodec && HB_ACODEC_DCA_PASS == codecCodec) {
-		[retval addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-							NSLocalizedString(@"DTS Passthru", @"DTS Passthru"), keyAudioMixdownName,
-							[NSNumber numberWithInt: HB_ACODEC_DCA_PASS], keyAudioMixdown,
-							[NSNumber numberWithBool: YES], keyAudioMixdownLimitsToTrackBitRate,
-							[NSNumber numberWithBool: YES], keyAudioMixdownCanBeDefault,
-							nil]];
-	}
-	else {
-		int audioCodecsSupport6Ch = (trackCodec && HB_ACODEC_LAME != codecCodec);
-		int channelLayout = [[track objectForKey: keyAudioInputChannelLayout] intValue];
-		int layout = channelLayout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
-		
-		/* add a mono option? */
-		[retval addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-							[NSString stringWithUTF8String: hb_audio_mixdowns[0].human_readable_name], keyAudioMixdownName,
-							[NSNumber numberWithInt: hb_audio_mixdowns[0].amixdown], keyAudioMixdown,
-							[NSNumber numberWithBool: NO], keyAudioMixdownLimitsToTrackBitRate,
-							[NSNumber numberWithBool: YES], keyAudioMixdownCanBeDefault,
-							nil]];
-		
-		/* offer stereo if we have a stereo-or-better source */
-		if (layout >= HB_INPUT_CH_LAYOUT_STEREO) {
-			[retval addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-								[NSString stringWithUTF8String: hb_audio_mixdowns[1].human_readable_name], keyAudioMixdownName,
-								[NSNumber numberWithInt: hb_audio_mixdowns[1].amixdown], keyAudioMixdown,
-								[NSNumber numberWithBool: NO], keyAudioMixdownLimitsToTrackBitRate,
-								[NSNumber numberWithBool: YES], keyAudioMixdownCanBeDefault,
-								nil]];
-		}
-	
-		/* do we want to add a dolby surround (DPL1) option? */
-		if (HB_INPUT_CH_LAYOUT_3F1R == layout || HB_INPUT_CH_LAYOUT_3F2R == layout || HB_INPUT_CH_LAYOUT_DOLBY == layout) {
-			[retval addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-								[NSString stringWithUTF8String: hb_audio_mixdowns[2].human_readable_name], keyAudioMixdownName,
-								[NSNumber numberWithInt: hb_audio_mixdowns[2].amixdown], keyAudioMixdown,
-								[NSNumber numberWithBool: NO], keyAudioMixdownLimitsToTrackBitRate,
-								[NSNumber numberWithBool: YES], keyAudioMixdownCanBeDefault,
-								nil]];
-		}
-		
-		/* do we want to add a dolby pro logic 2 (DPL2) option? */
-		if (HB_INPUT_CH_LAYOUT_3F2R == layout) {
-			[retval addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-								[NSString stringWithUTF8String: hb_audio_mixdowns[3].human_readable_name], keyAudioMixdownName,
-								[NSNumber numberWithInt: hb_audio_mixdowns[3].amixdown], keyAudioMixdown,
-								[NSNumber numberWithBool: NO], keyAudioMixdownLimitsToTrackBitRate,
-								[NSNumber numberWithBool: YES], keyAudioMixdownCanBeDefault,
-								nil]];
-		}
-		
-		/* do we want to add a 6-channel discrete option? */
-		if (1 == audioCodecsSupport6Ch && HB_INPUT_CH_LAYOUT_3F2R == layout && (channelLayout & HB_INPUT_CH_LAYOUT_HAS_LFE)) {
-			[retval addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-								[NSString stringWithUTF8String: hb_audio_mixdowns[4].human_readable_name], keyAudioMixdownName,
-								[NSNumber numberWithInt: hb_audio_mixdowns[4].amixdown], keyAudioMixdown,
-								[NSNumber numberWithBool: NO], keyAudioMixdownLimitsToTrackBitRate,
-								[NSNumber numberWithBool: (HB_ACODEC_AC3 == codecCodec) ? YES : NO], keyAudioMixdownCanBeDefault,
-								nil]];
-		}
-		
-		//	based on the fact that we are in an else section where the ifs before hand would have detected the following two
-		//	situations, the following code will never add anything to the returned array.  I am leaving this in place for
-		//	historical reasons.
-		/* do we want to add an AC-3 passthrough option? */
-		if (HB_ACODEC_AC3 == trackCodec && HB_ACODEC_AC3_PASS == codecCodec) {
-			[retval addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-								[NSString stringWithUTF8String: hb_audio_mixdowns[5].human_readable_name], keyAudioMixdownName,
-								[NSNumber numberWithInt: HB_ACODEC_AC3_PASS], keyAudioMixdown,
-								[NSNumber numberWithBool: YES], keyAudioMixdownLimitsToTrackBitRate,
-								[NSNumber numberWithBool: YES], keyAudioMixdownCanBeDefault,
-								nil]];
-		}
-			
-		/* do we want to add a DTS Passthru option ? HB_ACODEC_DCA*/
-		if (HB_ACODEC_DCA == trackCodec && HB_ACODEC_DCA_PASS == codecCodec) {
-			[retval addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-								[NSString stringWithUTF8String: hb_audio_mixdowns[5].human_readable_name], keyAudioMixdownName,
-								[NSNumber numberWithInt: HB_ACODEC_DCA_PASS], keyAudioMixdown,
-								[NSNumber numberWithBool: YES], keyAudioMixdownLimitsToTrackBitRate,
-								[NSNumber numberWithBool: YES], keyAudioMixdownCanBeDefault,
-								nil]];
-		}
+
+	if (0 == theDefaultMixdown) {
+		// a mixdown of 0 means passthrough
+		theDefaultMixdown = codecCodec;
 	}
 
 	if (NO == [self enabled]) {
-		retval = nil;
+		permittedMixdowns = nil;
 	}
 
 	//	Now make sure the permitted list and the actual ones matches
-	[self setMixdowns: retval];
-	
-	//	Ensure our mixdown is on the list of permitted ones
-	if (YES == [[NSUserDefaults standardUserDefaults] boolForKey: @"CodecDefaultsMixdown"] ||
-		nil == [self mixdown] || NO == [retval containsObject: [self mixdown]]) {
-		[self setMixdown: [retval lastDictionaryWithObject: [NSNumber numberWithBool: YES] matchingKey: keyAudioMixdownCanBeDefault]];
+	[self setMixdowns: permittedMixdowns];
+
+	//	Select the proper one
+	if (YES == shouldSetDefault) {
+		[self setMixdown: [permittedMixdowns dictionaryWithObject: [NSNumber numberWithInt: theDefaultMixdown] matchingKey: keyAudioMixdown]];
 	}
-	
+
+	if (nil == [self mixdown] || NO == [permittedMixdowns containsObject: [self mixdown]]) {
+		[self setMixdown: [permittedMixdowns lastObject]];
+	}
+
 	return;
 }
 
@@ -333,17 +287,15 @@ static NSMutableArray *masterBitRateArray = nil;
 
 {
 	NSMutableArray *permittedBitRates = [NSMutableArray array];
-	int count;
 	NSDictionary *dict;
-	
-	count = [masterBitRateArray count];
 	int minBitRate;
 	int maxBitRate;
-	NSString *defaultBitRate;
 	int currentBitRate;
-	int trackInputBitRate = [[[self track] objectForKey: keyAudioInputBitrate] intValue];
-	BOOL limitsToTrackInputBitRate = [[[self mixdown] objectForKey: keyAudioMixdownLimitsToTrackBitRate] boolValue];
 	BOOL shouldAdd;
+	
+	unsigned int count = [masterBitRateArray count];
+	int trackInputBitRate = [[[self track] objectForKey: keyAudioInputBitrate] intValue];
+	BOOL limitsToTrackInputBitRate = ([[codec objectForKey: keyAudioCodec] intValue] & HB_ACODEC_PASS_FLAG) ? YES : NO;
 	int theSampleRate = [[[self sampleRate] objectForKey: keyAudioSamplerate] intValue];
 		
 	if (0 == theSampleRate) {	//	this means Auto
@@ -354,7 +306,6 @@ static NSMutableArray *masterBitRateArray = nil;
 	int ourMixdown = [[[self mixdown] objectForKey: keyAudioMixdown] intValue];
 	hb_get_audio_bitrate_limits(ourCodec, theSampleRate, ourMixdown, &minBitRate, &maxBitRate);
 	int theDefaultBitRate = hb_get_default_audio_bitrate(ourCodec, theSampleRate, ourMixdown);
-	defaultBitRate = [NSString stringWithFormat: @"%d", theDefaultBitRate];
 
 	for (unsigned int i = 0; i < count; i++) {
 		dict = [masterBitRateArray objectAtIndex: i];
@@ -400,7 +351,7 @@ static NSMutableArray *masterBitRateArray = nil;
 
 	//	Select the proper one
 	if (YES == shouldSetDefault) {
-		[self setBitRateFromName: defaultBitRate];
+		[self setBitRateFromName: [NSString stringWithFormat:@"%d", theDefaultBitRate]];
 		}
 
 	if (nil == [self bitRate] || NO == [permittedBitRates containsObject: [self bitRate]]) {
@@ -489,7 +440,7 @@ static NSMutableArray *masterBitRateArray = nil;
 			}
 		}
 	else if (YES == [keyPath isEqualToString: @"codec"]) {
-		[self updateMixdowns];
+		[self updateMixdowns: YES];
 		[self updateBitRates: YES];
 		}
 	else if (YES == [keyPath isEqualToString: @"mixdown"]) {
