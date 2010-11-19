@@ -274,7 +274,7 @@ namespace Handbrake.Controls
         private void DropDecombSelectedIndexChanged(object sender, EventArgs e)
         {
             text_customDC.Visible = drop_decomb.Text == "Custom";
-            if (drop_decomb.SelectedIndex != 0 && drop_deinterlace.SelectedIndex != 0)
+            if (drop_decomb.SelectedIndex != 0 && drop_deinterlace.SelectedIndex != 0)0000
                 drop_deinterlace.SelectedIndex = 0;
 
             // A Filter has changed so raise a FilterSettingsChanged event.

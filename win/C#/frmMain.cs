@@ -1529,7 +1529,7 @@ namespace Handbrake
             data_chpt.Rows.Clear();
             if (selectedTitle.Chapters.Count != 1)
             {
-                DataGridView chapterGridView = Main.ChapterNaming(data_chpt, drop_chapterFinish.Text);
+                DataGridView chapterGridView = Main.ChapterNaming(selectedTitle, data_chpt, drop_chapterFinish.Text);
                 if (chapterGridView != null)
                     data_chpt = chapterGridView;
             }
@@ -2031,7 +2031,7 @@ namespace Handbrake
         private void mnu_resetChapters_Click(object sender, EventArgs e)
         {
             data_chpt.Rows.Clear();
-            DataGridView chapterGridView = Main.ChapterNaming(data_chpt, drop_chapterFinish.Text);
+            DataGridView chapterGridView = Main.ChapterNaming(selectedTitle, data_chpt, drop_chapterFinish.Text);
             if (chapterGridView != null)
             {
                 data_chpt = chapterGridView;

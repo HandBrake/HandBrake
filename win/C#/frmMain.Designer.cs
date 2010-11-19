@@ -70,6 +70,7 @@ namespace Handbrake
             this.btn_importChapters = new System.Windows.Forms.Button();
             this.btn_export = new System.Windows.Forms.Button();
             this.drop_mode = new System.Windows.Forms.ComboBox();
+            this.btn_generate_Query = new System.Windows.Forms.Button();
             this.DVD_Open = new System.Windows.Forms.FolderBrowserDialog();
             this.File_Open = new System.Windows.Forms.OpenFileDialog();
             this.ISO_Open = new System.Windows.Forms.OpenFileDialog();
@@ -128,7 +129,6 @@ namespace Handbrake
             this.tab_query = new System.Windows.Forms.TabPage();
             this.btn_clear = new System.Windows.Forms.Button();
             this.label34 = new System.Windows.Forms.Label();
-            this.btn_generate_Query = new System.Windows.Forms.Button();
             this.label33 = new System.Windows.Forms.Label();
             this.rtf_query = new System.Windows.Forms.RichTextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -351,8 +351,7 @@ namespace Handbrake
             this.btn_setDefault.TabIndex = 1;
             this.btn_setDefault.TabStop = false;
             this.btn_setDefault.Text = "Set Default";
-            this.ToolTip.SetToolTip(this.btn_setDefault, "Set current settings as program defaults.\r\nRequires option to be enabled in Tools" +
-                    " > Options");
+            this.ToolTip.SetToolTip(this.btn_setDefault, "Set current settings as program defaults.");
             this.btn_setDefault.UseVisualStyleBackColor = true;
             this.btn_setDefault.Click += new System.EventHandler(this.btn_setDefault_Click);
             // 
@@ -461,7 +460,7 @@ namespace Handbrake
             this.btn_addPreset.TabIndex = 3;
             this.btn_addPreset.TabStop = false;
             this.btn_addPreset.Text = "Add";
-            this.ToolTip.SetToolTip(this.btn_addPreset, "Add a preset to the preset panel");
+            this.ToolTip.SetToolTip(this.btn_addPreset, "This option will take the current settings and add it as a new preset.");
             this.btn_addPreset.UseVisualStyleBackColor = true;
             this.btn_addPreset.Click += new System.EventHandler(this.btn_addPreset_Click);
             // 
@@ -476,7 +475,7 @@ namespace Handbrake
             this.btn_removePreset.TabIndex = 4;
             this.btn_removePreset.TabStop = false;
             this.btn_removePreset.Text = "Remove";
-            this.ToolTip.SetToolTip(this.btn_removePreset, "Remove a preset from the panel above.");
+            this.ToolTip.SetToolTip(this.btn_removePreset, "Remove the selected preset from the panel above.");
             this.btn_removePreset.UseVisualStyleBackColor = true;
             this.btn_removePreset.Click += new System.EventHandler(this.btn_removePreset_Click);
             // 
@@ -491,7 +490,7 @@ namespace Handbrake
             this.drop_format.Name = "drop_format";
             this.drop_format.Size = new System.Drawing.Size(106, 21);
             this.drop_format.TabIndex = 28;
-            this.ToolTip.SetToolTip(this.drop_format, "Select the file container format.");
+            this.ToolTip.SetToolTip(this.drop_format, "Select the file container format.\r\nHandBrake supports MKV and MP4(M4v)");
             this.drop_format.SelectedIndexChanged += new System.EventHandler(this.drop_format_SelectedIndexChanged);
             // 
             // drop_chapterFinish
@@ -536,8 +535,9 @@ namespace Handbrake
             this.drp_dvdtitle.Name = "drp_dvdtitle";
             this.drp_dvdtitle.Size = new System.Drawing.Size(119, 21);
             this.drp_dvdtitle.TabIndex = 7;
-            this.ToolTip.SetToolTip(this.drp_dvdtitle, "Select the title you wish to encode.\r\nThe longest title is selected by default af" +
-                    "ter you have scanned a source.");
+            this.ToolTip.SetToolTip(this.drp_dvdtitle, "Select the title you wish to encode.\r\n\r\nWhen a DVD is in use, HandBrake will try " +
+                    "to determine the \"Main Feature\" title automatically.\r\nPlease note, this is not a" +
+                    "lways accurate and should be checked.");
             this.drp_dvdtitle.SelectedIndexChanged += new System.EventHandler(this.drp_dvdtitle_SelectedIndexChanged);
             this.drp_dvdtitle.Click += new System.EventHandler(this.drp_dvdtitle_Click);
             // 
@@ -581,7 +581,24 @@ namespace Handbrake
             this.drop_mode.Name = "drop_mode";
             this.drop_mode.Size = new System.Drawing.Size(77, 21);
             this.drop_mode.TabIndex = 46;
+            this.ToolTip.SetToolTip(this.drop_mode, resources.GetString("drop_mode.ToolTip"));
             this.drop_mode.SelectedIndexChanged += new System.EventHandler(this.drop_mode_SelectedIndexChanged);
+            // 
+            // btn_generate_Query
+            // 
+            this.btn_generate_Query.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_generate_Query.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_generate_Query.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_generate_Query.Location = new System.Drawing.Point(16, 104);
+            this.btn_generate_Query.Name = "btn_generate_Query";
+            this.btn_generate_Query.Size = new System.Drawing.Size(126, 22);
+            this.btn_generate_Query.TabIndex = 2;
+            this.btn_generate_Query.Text = "Generate Query";
+            this.ToolTip.SetToolTip(this.btn_generate_Query, "This will allow you to override the generated query.\r\nNote, The query in the box " +
+                    "below will always override any automatically generated query, even if you change" +
+                    " title or source.");
+            this.btn_generate_Query.UseVisualStyleBackColor = true;
+            this.btn_generate_Query.Click += new System.EventHandler(this.btn_generate_Query_Click);
             // 
             // DVD_Open
             // 
@@ -1163,19 +1180,6 @@ namespace Handbrake
             this.label34.Size = new System.Drawing.Size(631, 52);
             this.label34.TabIndex = 1;
             this.label34.Text = resources.GetString("label34.Text");
-            // 
-            // btn_generate_Query
-            // 
-            this.btn_generate_Query.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_generate_Query.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_generate_Query.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_generate_Query.Location = new System.Drawing.Point(16, 104);
-            this.btn_generate_Query.Name = "btn_generate_Query";
-            this.btn_generate_Query.Size = new System.Drawing.Size(126, 22);
-            this.btn_generate_Query.TabIndex = 2;
-            this.btn_generate_Query.Text = "Generate Query";
-            this.btn_generate_Query.UseVisualStyleBackColor = true;
-            this.btn_generate_Query.Click += new System.EventHandler(this.btn_generate_Query_Click);
             // 
             // label33
             // 

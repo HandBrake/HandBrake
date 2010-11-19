@@ -7,6 +7,7 @@ namespace Handbrake
 {
     using System;
     using System.Diagnostics;
+    using System.Drawing;
     using System.IO;
     using System.Windows.Forms;
 
@@ -43,10 +44,7 @@ namespace Handbrake
             }
 
             // Make sure we have any pre-requesits before trying to launch
-            const string FailedInstall = "HandBrake is not installed properly. Please reinstall HandBrake. \n\n";
-            const string NightlyCLIMissing =
-                "If you have downloaded the \"HandBrakeGUI\" nightly, " +
-                "please make sure you have also downloaded the \"HandBrakeCLI\" nightly and extracted it's contents to the same folder. ";
+            string failedInstall = "HandBrake is not installed properly. Please reinstall HandBrake. \n\n";
             string missingFiles = string.Empty;
 
             // Verify HandBrakeCLI.exe exists
@@ -58,7 +56,7 @@ namespace Handbrake
             if (missingFiles != string.Empty)
             {
                 MessageBox.Show(
-                    FailedInstall + missingFiles + "\n\n" + NightlyCLIMissing,
+                    failedInstall + missingFiles,
                     "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -68,7 +66,15 @@ namespace Handbrake
             // Check were not running on a screen that's going to cause some funnies to happen.
             Screen scr = Screen.PrimaryScreen;
             if ((scr.Bounds.Width < 1024) || (scr.Bounds.Height < 620))
-                MessageBox.Show("Your system does not meet the minimum requirements for HandBrake. \n" + "Your screen is running at: " + scr.Bounds.Width + "x" + scr.Bounds.Height + " \nScreen resolution is too Low. Must be 1024x620 or greater", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            {
+                MessageBox.Show(
+                    "Your system does not meet the minimum requirements for HandBrake. \n" +
+                    "Your screen is running at: " + scr.Bounds.Width + "x" + scr.Bounds.Height +
+                    " \nScreen resolution is too Low. Must be 1024x620 or greater.\n\n",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            } 
             else
             {
                 string logDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\logs");

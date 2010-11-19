@@ -152,7 +152,8 @@ The CSV should be formatted as follows:
 2,Chapter 2 Name
 3,Chapter 3 Name
 
-Note: Currently, if you wish to use a , in your chapter name, you must escape it with a \</value>
+Note: Currently, if you wish to use a , in your chapter name, you must escape it with a \
+Note2: HandBrake can NOT create chapters, only add a name to any chapters your source currently has.</value>
   </data>
   <data name="btn_export.ToolTip" xml:space="preserve">
     <value>Export to a comma separated file containing the chapter information.
@@ -163,6 +164,14 @@ The CSV is formatted as follows:
 3,Chapter 3 Name
 
 Note: Commas in names are escaped by a \</value>
+  </data>
+  <data name="drop_mode.ToolTip" xml:space="preserve">
+    <value>There are several ranges which can be encoded:
+- Encode a range of Chapters.
+
+The Following options are not 100% accurate:
+- Encode video between a start and end time, measured in seconds
+- Encode video between a start and end frame.</value>
   </data>
   <metadata name="DVD_Open.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>232, 15</value>

@@ -69,6 +69,10 @@ namespace Handbrake.Functions
         /// <summary>
         /// Set's up the DataGridView on the Chapters tab (frmMain)
         /// </summary>
+        /// <param name="title">
+        /// The currently selected title object.
+        /// This will be used to get chapter names if they exist.
+        /// </param>
         /// <param name="dataChpt">
         /// The DataGridView Control
         /// </param>
@@ -78,7 +82,7 @@ namespace Handbrake.Functions
         /// <returns>
         /// The chapter naming.
         /// </returns>
-        public static DataGridView ChapterNaming(DataGridView dataChpt, string chapterEnd)
+        public static DataGridView ChapterNaming(Title title, DataGridView dataChpt, string chapterEnd)
         {
             int i = 0, finish = 0;
 
@@ -87,9 +91,18 @@ namespace Handbrake.Functions
 
             while (i < finish)
             {
+                string chapterName = string.Empty;
+                if (title != null)
+                {
+                    if (title.Chapters.Count <= i && title.Chapters[i] != null)
+                    {
+                        chapterName = title.Chapters[i].ChapterName;
+                    }
+                }
+
                 int n = dataChpt.Rows.Add();
                 dataChpt.Rows[n].Cells[0].Value = i + 1;
-                dataChpt.Rows[n].Cells[1].Value = "Chapter " + (i + 1);
+                dataChpt.Rows[n].Cells[1].Value = string.IsNullOrEmpty(chapterName) ? "Chapter " + (i + 1) : chapterName;
                 dataChpt.Rows[n].Cells[0].ValueType = typeof(int);
                 dataChpt.Rows[n].Cells[1].ValueType = typeof(string);
                 i++;

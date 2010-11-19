@@ -21,6 +21,11 @@ namespace HandBrake.ApplicationServices.Parsing
         public int ChapterNumber { get; set; }
 
         /// <summary>
+        /// Gets or sets ChapterName.
+        /// </summary>
+        public string ChapterName { get; set; }
+
+        /// <summary>
         /// Gets or sets The length in time this Chapter spans
         /// </summary>
         public TimeSpan Duration { get; set; }
@@ -36,6 +41,7 @@ namespace HandBrake.ApplicationServices.Parsing
         /// </returns>
         public static Chapter Parse(StringReader output)
         {
+            // TODO add support for reading chapter names to the regex.
             Match m = Regex.Match(
                                   output.ReadLine(),
                                   @"^    \+ ([0-9]*): cells ([0-9]*)->([0-9]*), ([0-9]*) blocks, duration ([0-9]{2}:[0-9]{2}:[0-9]{2})");
@@ -44,6 +50,7 @@ namespace HandBrake.ApplicationServices.Parsing
                 var thisChapter = new Chapter
                                       {
                                           ChapterNumber = int.Parse(m.Groups[1].Value.Trim()), 
+                                          ChapterName = string.Empty,
                                           Duration = TimeSpan.Parse(m.Groups[5].Value)
                                       };
                 return thisChapter;
