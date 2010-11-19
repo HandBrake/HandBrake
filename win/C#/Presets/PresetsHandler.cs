@@ -62,10 +62,13 @@ namespace Handbrake.Presets
         /// <param name="pictureSettings">
         /// Bool, store crop/picture sizes in the Presets
         /// </param>
+        /// <param name="description">
+        /// The description.
+        /// </param>
         /// <returns>
         /// The add.
         /// </returns>
-        public bool Add(string presetName, string query, bool pictureSettings)
+        public bool Add(string presetName, string query, bool pictureSettings, string description)
         {
             if (this.CheckIfPresetExists(presetName) == false)
             {
@@ -113,8 +116,7 @@ namespace Handbrake.Presets
             }
             this.userPresets = newUserPresets;
 
-            // Rebuild the UserPresets.xml file
-            this.UpdatePresetFiles();
+            // Rebuild the Preset XML files
             this.UpdatePresetFiles();
         }
 
@@ -222,7 +224,8 @@ namespace Handbrake.Presets
                                                    Name = presetName[0].Replace("+", string.Empty).Trim(), 
                                                    Query = presetName[2], 
                                                    Version = Properties.Settings.Default.hb_version, 
-                                                   CropSettings = pic
+                                                   CropSettings = pic,
+                                                   Description = string.Empty // Maybe one day we will populate this.
                                                };
                         this.presets.Add(newPreset);
                     }
@@ -243,13 +246,15 @@ namespace Handbrake.Presets
         {
             this.LoadPresetData();
             presetPanel.Nodes.Clear();
-            string category = string.Empty;
+            string category = string.Empty; // The category we are currnetly processing
             TreeNode rootNode = null;
 
             if (this.presets.Count != 0) // Built In Presets
             {
                 foreach (Preset preset in this.presets)
                 {
+                    // If the category of this preset doesn't match the current category we are processing
+                    // Then we need to create a new root node.
                     if (preset.Category != category)
                     {
                         rootNode = new TreeNode(preset.Category);
@@ -258,7 +263,7 @@ namespace Handbrake.Presets
                     }
 
                     if (preset.Category == category && rootNode != null)
-                        rootNode.Nodes.Add(preset.Name);
+                        rootNode.Nodes.Add(new TreeNode(preset.Name) { ToolTipText = preset.Description });
                 }
             }
 
@@ -274,9 +279,9 @@ namespace Handbrake.Presets
                 }
 
                 if (preset.Category == category && rootNode != null)
-                    rootNode.Nodes.Add(new TreeNode(preset.Name) {ForeColor = Color.Black});
+                    rootNode.Nodes.Add(new TreeNode(preset.Name) {ForeColor = Color.Black, ToolTipText = preset.Description});
                 else
-                    presetPanel.Nodes.Add(new TreeNode(preset.Name) {ForeColor = Color.Black});
+                    presetPanel.Nodes.Add(new TreeNode(preset.Name) { ForeColor = Color.Black, ToolTipText = preset.Description });
             }
         }
 

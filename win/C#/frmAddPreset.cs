@@ -78,7 +78,7 @@ namespace Handbrake
 
             string query = QueryGenerator.GenerateQueryForPreset(mainWindow, pictureSettingsMode, check_useFilters.Checked, 0, 0);
 
-            if (presetCode.Add(txt_preset_name.Text.Trim(), query, pictureSettingsMode != QueryPictureSettingsMode.None))
+            if (presetCode.Add(txt_preset_name.Text.Trim(), query, pictureSettingsMode != QueryPictureSettingsMode.None, string.Empty))
             {
                 this.DialogResult = DialogResult.OK;
                 this.Close();           

@@ -34,5 +34,10 @@ namespace Handbrake.Presets
         /// Gets or sets The version number which associates this preset with a HB build
         /// </summary>
         public string Version { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Description for the preset
+        /// </summary>
+        public string Description { get; set; }
     }
 }

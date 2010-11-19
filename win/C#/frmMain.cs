@@ -793,6 +793,29 @@ namespace Handbrake
         }
 
         /// <summary>
+        /// When the mouse moves, display a preset
+        /// </summary>
+        /// <param name="sender">The Sender</param>
+        /// <param name="e">the MouseEventArgs</param>
+        private void TreeViewPresetsMouseMove(object sender, MouseEventArgs e)
+        {
+            TreeNode theNode = this.treeView_presets.GetNodeAt(e.X, e.Y);
+
+            if ((theNode != null))
+            {
+                // Change the ToolTip only if the pointer moved to a new node.
+                if (theNode.ToolTipText != this.ToolTip.GetToolTip(this.treeView_presets))
+                {
+                    this.ToolTip.SetToolTip(this.treeView_presets, theNode.ToolTipText);
+                }
+            }
+            else     // Pointer is not over a node so clear the ToolTip.
+            {
+                this.ToolTip.SetToolTip(this.treeView_presets, string.Empty);
+            }
+        }
+
+        /// <summary>
         /// Preset Bar - Handle the Delete Key
         /// </summary>
         /// <param name="sender">
@@ -912,7 +935,7 @@ namespace Handbrake
                     PresetLoader.LoadPreset(this, parsed, parsed.PresetName);
                     if (presetHandler.Add(parsed.PresetName + " (Imported)",
                                           QueryGenerator.GenerateFullQuery(this),
-                                          parsed.UsesPictureSettings))
+                                          parsed.UsesPictureSettings, string.Empty))
                     {
                         TreeNode preset_treeview = new TreeNode(parsed.PresetName + " (Imported)")
                                                        {
@@ -1202,13 +1225,13 @@ namespace Handbrake
                             MessageBoxIcon.Warning);
 
                     if (result != DialogResult.Yes) return false;
-                } 
+                }
                 else
                 {
                     return false;
                 }
             }
-            
+
             // Add the job.
             encodeQueue.Add(query, this.GetTitle(), jobSourcePath, jobDestination, (rtf_query.Text != string.Empty));
 
