@@ -703,6 +703,7 @@ namespace Handbrake
         private void CompleteOptionChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.CompletionOption = drp_completeOption.Text;
+            HandBrake.ApplicationServices.Init.CompletionOption = drp_completeOption.Text;
             Properties.Settings.Default.Save();
         }
     }
