@@ -317,7 +317,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             return HB_WORK_DONE;
         }
         if ( pv->common->count_frames < job->frame_to_start ||
-             next_start < job->pts_to_start )
+             next->start < job->pts_to_start )
         {
             // Flush any subtitles that have pts prior to the
             // current frame
@@ -334,7 +334,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             }
             hb_lock( pv->common->mutex );
             // Tell the audio threads what must be dropped
-            pv->common->audio_pts_thresh = next_start;
+            pv->common->audio_pts_thresh = next_start + pv->common->video_pts_slip;
             hb_cond_broadcast( pv->common->next_frame );
             hb_unlock( pv->common->mutex );
 
@@ -345,8 +345,8 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         }
         hb_lock( pv->common->mutex );
         pv->common->audio_pts_thresh = 0;
-        pv->common->audio_pts_slip = next_start;
-        pv->common->video_pts_slip = next_start;
+        pv->common->audio_pts_slip += next_start;
+        pv->common->video_pts_slip += next_start;
         next_start = 0;
         pv->common->start_found = 1;
         pv->common->count_frames = 0;
@@ -989,14 +989,14 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             // after hb_sync_init is called.
             pv->common->audio_pts_thresh = job->pts_to_start;
         }
-        if ( start < pv->common->audio_pts_thresh )
+        if ( buf->start < pv->common->audio_pts_thresh )
         {
             hb_buffer_close( &buf );
             hb_unlock( pv->common->mutex );
             return HB_WORK_OK;
         }
         while ( !pv->common->start_found && 
-                start >= pv->common->audio_pts_thresh )
+                buf->start >= pv->common->audio_pts_thresh )
         {
             hb_cond_timedwait( pv->common->next_frame, pv->common->mutex, 200 );
         }

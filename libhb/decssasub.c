@@ -170,6 +170,34 @@ static hb_buffer_t *ssa_decode_packet( hb_work_object_t * w, hb_buffer_t *in )
         *nextPtr = out;
         nextPtr = &out->next;
     }
+
+    // For point-to-point encoding, when the start time of the stream 
+    // may be offset, the timestamps of the subtitles must be offset as well.
+    //
+    // HACK: Here we are making the assumption that, under normal circumstances,
+    //       the output display time of the first output packet is equal to the
+    //       display time of the input packet.
+    //      
+    //       During point-to-point encoding, the display time of the input 
+    //       packet will be offset to compensate.
+    //      
+    //       Therefore we offset all of the output packets by a slip amount 
+    //       such that first output packet's display time aligns with the 
+    //       input packet's display time. This should give the correct time 
+    //       when point-to-point encoding is in effect.
+    if (out_list && out_list->start > in->start)
+    {
+        int64_t slip = out_list->start - in->start;
+        hb_buffer_t *out;
+
+        out = out_list;
+        while (out)
+        {
+            out->start -= slip;
+            out->stop -= slip;
+            out = out->next;
+        }
+    }
     
     return out_list;
 }

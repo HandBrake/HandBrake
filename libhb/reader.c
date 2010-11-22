@@ -260,6 +260,8 @@ static void ReaderFunc( void * _r )
         else if ( r->job->pts_to_start )
         {
             hb_bd_seek_pts( r->bd, r->job->pts_to_start );
+            r->job->pts_to_start = 0;
+            r->start_found = 1;
         }
         else
         {
@@ -410,10 +412,14 @@ static void ReaderFunc( void * _r )
             // to skip from this seek point to the timestamp we
             // want to start at.
             if ( ps->start > 0 && ps->start < r->job->pts_to_start )
+            {
                 r->job->pts_to_start -= ps->start;
+            }
             else if ( ps->start >= r->job->pts_to_start )
+            {
                 r->job->pts_to_start = 0;
-            r->start_found = 1;
+                r->start_found = 1;
+            }
           }
         }
 
@@ -495,18 +501,8 @@ static void ReaderFunc( void * _r )
                             // frame but video & subtitles don't. Clear
                             // the timestamps so the decoder will generate
                             // them from the frame durations.
-                            if ( st != r->stream_timing )
-                            {
-                                // not a video stream so it's probably
-                                // subtitles - the best we can do is to
-                                // line it up with the last video packet.
-                                buf->start = r->stream_timing->last;
-                            }
-                            else
-                            {
-                                buf->start = -1;
-                                buf->renderOffset = -1;
-                            }
+                            buf->start = -1;
+                            buf->renderOffset = -1;
                         }
                     }
                 }
@@ -517,23 +513,10 @@ static void ReaderFunc( void * _r )
                         UpdateState( r, start );
 
                     if ( !r->start_found &&
-                        r->job->pts_to_start && 
-                        buf->renderOffset != -1 &&
                         start >= r->job->pts_to_start )
                     {
                         // pts_to_start point found
-                        // force a new scr offset computation
-                        stream_timing_t *st = find_st( r, buf );
-                        if ( st && 
-                            (st->is_audio ||
-                            ( st == r->stream_timing && !r->saw_audio ) ) )
-                        {
-                            // Re-zero our timestamps
-                            st->last = -st->average;
-                            new_scr_offset( r, buf );
-                            r->start_found = 1;
-                            r->job->pts_to_start = 0;
-                        }
+                        r->start_found = 1;
                     }
                     // This log is handy when you need to debug timing problems
                     //hb_log("id %x scr_offset %ld start %ld --> %ld", 
