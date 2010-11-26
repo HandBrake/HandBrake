@@ -4096,6 +4096,10 @@ ghb_select_audio_codec(GValue *settings, hb_audio_config_t *aconfig, gint acodec
 		{
 			return HB_ACODEC_AC3;
 		}
+		else if (acodec & HB_ACODEC_LAME)
+		{
+			return HB_ACODEC_LAME;
+		}
 		else if (acodec & HB_ACODEC_FAAC)
 		{
 			return HB_ACODEC_FAAC;
