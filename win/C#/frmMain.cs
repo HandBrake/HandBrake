@@ -223,6 +223,10 @@ namespace Handbrake
             encodeQueue.EncodeStarted += new EventHandler(encodeStarted);
             encodeQueue.EncodeEnded += new EventHandler(encodeEnded);
 
+            // Scan Started and Completed Events
+            SourceScan.ScanStatusChanged += new EventHandler(SourceScan_ScanStatusChanged);
+            SourceScan.ScanCompleted += new EventHandler(SourceScan_ScanCompleted);
+
             // Handle a file being draged onto the GUI.
             this.DragEnter += new DragEventHandler(frmMain_DragEnter);
             this.DragDrop += new DragEventHandler(frmMain_DragDrop);
@@ -2098,8 +2102,6 @@ namespace Handbrake
             try
             {
                 SourceScan.Scan(sourcePath, title);
-                SourceScan.ScanStatusChanged += new EventHandler(SourceScan_ScanStatusChanged);
-                SourceScan.ScanCompleted += new EventHandler(SourceScan_ScanCompleted);
             }
             catch (Exception exc)
             {
