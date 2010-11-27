@@ -204,7 +204,8 @@ namespace Handbrake.Functions
             if (mainWindow.drp_dvdtitle.Text != "Automatic")
             {
                 // Get the Source Name and remove any invalid characters
-                string sourceName = Path.GetInvalidFileNameChars().Aggregate(mainWindow.SourceName, (current, character) => current.Replace(character.ToString(), string.Empty));
+
+                string sourceName = Path.GetInvalidFileNameChars().Aggregate(Path.GetFileNameWithoutExtension(mainWindow.SourceName), (current, character) => current.Replace(character.ToString(), string.Empty));
 
                 if (Properties.Settings.Default.AutoNameRemoveUnderscore)
                     sourceName = sourceName.Replace("_", " ");
