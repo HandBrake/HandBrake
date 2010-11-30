@@ -2091,13 +2091,17 @@ fWorkingCount = 0;
 
     /* Set the queue status field in the main window */
     NSMutableString * string;
-    if (fPendingCount == 1)
+    if (fPendingCount == 0)
+    {
+        string = [NSMutableString stringWithFormat: NSLocalizedString( @"No encode pending", @"" )];
+    }
+    else if (fPendingCount == 1)
     {
         string = [NSMutableString stringWithFormat: NSLocalizedString( @"%d encode pending", @"" ), fPendingCount];
     }
     else
     {
-        string = [NSMutableString stringWithFormat: NSLocalizedString( @"%d encode(s) pending", @"" ), fPendingCount];
+        string = [NSMutableString stringWithFormat: NSLocalizedString( @"%d encodes pending", @"" ), fPendingCount];
     }
     [fQueueStatus setStringValue:string];
 }
@@ -2118,7 +2122,7 @@ fWorkingCount = 0;
         {
 			nextPendingFound = YES;
             nextPendingIndex = [QueueFileArray indexOfObject: tempObject];
-            [self writeToActivityLog: "getNextPendingQueueIndex next pending encod index is:%d", nextPendingIndex];
+            [self writeToActivityLog: "getNextPendingQueueIndex next pending encode index is:%d", nextPendingIndex];
 		}
         i++;
 	}
