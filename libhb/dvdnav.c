@@ -1503,7 +1503,7 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
                 return 0;
             }
             error_count++;
-            if (error_count > 10)
+            if (error_count > 500)
             {
                 hb_error("dvdnav: Error, too many consecutive read errors");
                 return 0;

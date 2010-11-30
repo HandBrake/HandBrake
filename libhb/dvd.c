@@ -861,22 +861,37 @@ static int hb_dvdread_read( hb_dvd_t * e, hb_buffer_t * b )
         {
             int block, pack_len, next_vobu, read_retry;
 
-            for( read_retry = 0; read_retry < 3; read_retry++ )
+            for( read_retry = 1; read_retry < 1024; read_retry++ )
             {
                 if( DVDReadBlocks( d->file, d->next_vobu, 1, b->data ) == 1 )
                 {
                     /*
                      * Successful read.
                      */
+                    if( read_retry > 1 && !is_nav_pack( b->data) )
+                    {
+                        // But wasn't a nav pack, so carry on looking
+                        read_retry = 1;
+                        d->next_vobu++;
+                        continue;
+                    }
                     break;
-                } else {
-                    hb_log( "dvd: Read Error on blk %d, attempt %d",
-                            d->next_vobu, read_retry );
+                } else {  
+                    // First retry the same block, then try the next one, 
+                    // adjust the skip increment upwards so that we can skip
+                    // large sections of bad blocks more efficiently (at the
+                    // cost of some missed good blocks at the end).
+                    hb_log( "dvd: vobu read error blk %d - skipping to next blk incr %d",
+                            d->next_vobu, (read_retry * 10));
+                    d->next_vobu += (read_retry * 10);
                 }
+                
             }
 
-            if( read_retry == 3 )
+            if( read_retry == 1024 )
             {
+                // That's too many bad blocks, jump to the start of the
+                // next cell.
                 hb_log( "dvd: vobu read error blk %d - skipping to cell %d",
                         d->next_vobu, d->cell_next );
                 d->cell_cur  = d->cell_next;
@@ -895,7 +910,7 @@ static int hb_dvdread_read( hb_dvd_t * e, hb_buffer_t * b )
                     hb_log("dvd: Lost sync, searching for NAV pack at blk %d",
                            d->next_vobu);
                     d->in_sync = 0;
-                }
+                } 
                 continue;
             }
 
@@ -1030,7 +1045,7 @@ static int hb_dvdread_read( hb_dvd_t * e, hb_buffer_t * b )
                 }
                 if( d->in_cell )
                 {
-                    hb_error( "dvd: assuming missed end of cell %d", d->cell_cur );
+                    hb_error( "dvd: assuming missed end of cell %d at block %d", d->cell_cur, d->block );
                     d->cell_cur  = d->cell_next;
                     d->next_vobu = d->pgc->cell_playback[d->cell_cur].first_sector;
                     FindNextCell( d );
