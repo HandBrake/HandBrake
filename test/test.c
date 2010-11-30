@@ -611,476 +611,564 @@ static int HandleEvents( hb_handle_t * h )
                 fprintf( stderr, "+ Using preset: %s", preset_name);
 
                 if (!strcmp(preset_name, "Universal"))
-                {
-                    if( !mux )
-                    {
-                        mux = HB_MUX_MP4;
-                    }
-                    vcodec = HB_VCODEC_X264;
-                    job->vquality = 20.0;
-                    if( !atracks )
-                    {
-                        atracks = strdup("1,1");
-                    }
-                    if( !acodecs )
-                    {
-                        acodecs = strdup("faac,copy:ac3");
-                    }
-                    if( !abitrates )
-                    {
-                        abitrates = strdup("160,160");
-                    }
-                    if( !mixdowns )
-                    {
-                        mixdowns = strdup("dpl2,auto");
-                    }
-                    if( !arates )
-                    {
-                        arates = strdup("Auto,Auto");
-                    }
-                    if( !dynamic_range_compression )
-                    {
-                        dynamic_range_compression = strdup("0.0,0.0");
-                    }
-                    maxWidth = 720;
-                    if( !x264opts )
-                    {
-                        x264opts = strdup("cabac=0:ref=2:me=umh:bframes=0:weightp=0:8x8dct=0:trellis=0:subme=6");
-                    }
-                    if( !anamorphic_mode )
-                    {
-                        anamorphic_mode = 2;
-                    }
-                    job->chapter_markers = 1;
-                    
-                }
-
-                if (!strcmp(preset_name, "iPod"))
-                {
-                    if( !mux )
-                    {
-                        mux = HB_MUX_MP4;
-                    }
-                    job->ipod_atom = 1;
-                    vcodec = HB_VCODEC_X264;
-                    job->vbitrate = 700;
-                    if( !atracks )
-                    {
-                        atracks = strdup("1");
-                    }
-                    if( !acodecs )
-                    {
-                        acodecs = strdup("faac");
-                    }
-                    if( !abitrates )
-                    {
-                        abitrates = strdup("160");
-                    }
-                    if( !mixdowns )
-                    {
-                        mixdowns = strdup("dpl2");
-                    }
-                    if( !arates )
-                    {
-                        arates = strdup("Auto");
-                    }
-                    if( !dynamic_range_compression )
-                    {
-                        dynamic_range_compression = strdup("0.0");
-                    }
-                    maxWidth = 320;
-                    if( !x264opts )
-                    {
-                        x264opts = strdup("level=30:bframes=0:weightp=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:subme=6:8x8dct=0:trellis=0");
-                    }
-                    job->chapter_markers = 1;
-                    
-                }
-
-                if (!strcmp(preset_name, "iPhone & iPod Touch"))
-                {
-                    if( !mux )
-                    {
-                        mux = HB_MUX_MP4;
-                    }
-                    vcodec = HB_VCODEC_X264;
-                    job->vquality = 20.0;
-                    if( !atracks )
-                    {
-                        atracks = strdup("1");
-                    }
-                    if( !acodecs )
-                    {
-                        acodecs = strdup("faac");
-                    }
-                    if( !abitrates )
-                    {
-                        abitrates = strdup("128");
-                    }
-                    if( !mixdowns )
-                    {
-                        mixdowns = strdup("dpl2");
-                    }
-                    if( !arates )
-                    {
-                        arates = strdup("Auto");
-                    }
-                    if( !dynamic_range_compression )
-                    {
-                        dynamic_range_compression = strdup("0.0");
-                    }
-                    maxWidth = 480;
-                    if( !x264opts )
-                    {
-                        x264opts = strdup("cabac=0:ref=2:me=umh:bframes=0:weightp=0:subme=6:8x8dct=0:trellis=0");
-                    }
-                    job->chapter_markers = 1;
-                    
-                }
-
-                if (!strcmp(preset_name, "iPad"))
-                {
-                    if( !mux )
-                    {
-                        mux = HB_MUX_MP4;
-                    }
-                    job->largeFileSize = 1;
-                    vcodec = HB_VCODEC_X264;
-                    job->vquality = 20.0;
-                    job->vrate_base = 900900;
-                    job->cfr = 2;
-                    if( !atracks )
-                    {
-                        atracks = strdup("1");
-                    }
-                    if( !acodecs )
-                    {
-                        acodecs = strdup("faac");
-                    }
-                    if( !abitrates )
-                    {
-                        abitrates = strdup("160");
-                    }
-                    if( !mixdowns )
-                    {
-                        mixdowns = strdup("dpl2");
-                    }
-                    if( !arates )
-                    {
-                        arates = strdup("Auto");
-                    }
-                    if( !dynamic_range_compression )
-                    {
-                        dynamic_range_compression = strdup("0.0");
-                    }
-                    maxWidth = 1024;
-                    if( !anamorphic_mode )
-                    {
-                        anamorphic_mode = 2;
-                    }
-                    job->chapter_markers = 1;
-                    
-                }
-
-                if (!strcmp(preset_name, "AppleTV"))
-                {
-                    if( !mux )
-                    {
-                        mux = HB_MUX_MP4;
-                    }
-                    job->largeFileSize = 1;
-                    vcodec = HB_VCODEC_X264;
-                    job->vquality = 20.0;
-                    if( !atracks )
-                    {
-                        atracks = strdup("1,1");
-                    }
-                    if( !acodecs )
-                    {
-                        acodecs = strdup("faac,copy:ac3");
-                    }
-                    if( !abitrates )
-                    {
-                        abitrates = strdup("160,160");
-                    }
-                    if( !mixdowns )
-                    {
-                        mixdowns = strdup("dpl2,auto");
-                    }
-                    if( !arates )
-                    {
-                        arates = strdup("Auto,Auto");
-                    }
-                    if( !dynamic_range_compression )
-                    {
-                        dynamic_range_compression = strdup("0.0,0.0");
-                    }
-                    maxWidth = 960;
-                    if( !x264opts )
-                    {
-                        x264opts = strdup("cabac=0:ref=2:me=umh:b-pyramid=none:b-adapt=2:weightb=0:trellis=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500");
-                    }
-                    if( !anamorphic_mode )
-                    {
-                        anamorphic_mode = 2;
-                    }
-                    job->chapter_markers = 1;
-                    
-                }
-
-                if (!strcmp(preset_name, "Normal"))
-                {
-                    if( !mux )
-                    {
-                        mux = HB_MUX_MP4;
-                    }
-                    vcodec = HB_VCODEC_X264;
-                    job->vquality = 20.0;
-                    if( !atracks )
-                    {
-                        atracks = strdup("1");
-                    }
-                    if( !acodecs )
-                    {
-                        acodecs = strdup("faac");
-                    }
-                    if( !abitrates )
-                    {
-                        abitrates = strdup("160");
-                    }
-                    if( !mixdowns )
-                    {
-                        mixdowns = strdup("dpl2");
-                    }
-                    if( !arates )
-                    {
-                        arates = strdup("Auto");
-                    }
-                    if( !dynamic_range_compression )
-                    {
-                        dynamic_range_compression = strdup("0.0");
-                    }
-                    if( !x264opts )
-                    {
-                        x264opts = strdup("ref=2:bframes=2:subme=6:mixed-refs=0:weightb=0:8x8dct=0:trellis=0");
-                    }
-                    if( !anamorphic_mode )
-                    {
-                        anamorphic_mode = 1;
-                    }
-                    job->chapter_markers = 1;
-                    
-                }
-
-                if (!strcmp(preset_name, "High Profile"))
-                {
-                    if( !mux )
-                    {
-                        mux = HB_MUX_MP4;
-                    }
-                    vcodec = HB_VCODEC_X264;
-                    job->vquality = 20.0;
-                    if( !atracks )
-                    {
-                        atracks = strdup("1,1");
-                    }
-                    if( !acodecs )
-                    {
-                        acodecs = strdup("faac,copy:ac3");
-                    }
-                    if( !abitrates )
-                    {
-                        abitrates = strdup("160,160");
-                    }
-                    if( !mixdowns )
-                    {
-                        mixdowns = strdup("dpl2,auto");
-                    }
-                    if( !arates )
-                    {
-                        arates = strdup("Auto,Auto");
-                    }
-                    if( !dynamic_range_compression )
-                    {
-                        dynamic_range_compression = strdup("0.0,0.0");
-                    }
-                    if( !x264opts )
-                    {
-                        x264opts = strdup("b-adapt=2:rc-lookahead=50");
-                    }
-                    detelecine = 1;
-                    decomb = 1;
-                    if( !anamorphic_mode )
-                    {
-                        anamorphic_mode = 2;
-                    }
-                    job->chapter_markers = 1;
-                    
-                }
-
-                if (!strcmp(preset_name, "Classic"))
-                {
-                    if( !mux )
-                    {
-                        mux = HB_MUX_MP4;
-                    }
-                    job->vbitrate = 1000;
-                    if( !atracks )
-                    {
-                        atracks = strdup("1");
-                    }
-                    if( !acodecs )
-                    {
-                        acodecs = strdup("faac");
-                    }
-                    if( !abitrates )
-                    {
-                        abitrates = strdup("160");
-                    }
-                    if( !mixdowns )
-                    {
-                        mixdowns = strdup("dpl2");
-                    }
-                    if( !arates )
-                    {
-                        arates = strdup("Auto");
-                    }
-                    if( !dynamic_range_compression )
-                    {
-                        dynamic_range_compression = strdup("0.0");
-                    }
-                    
-                }
-
-                if (!strcmp(preset_name, "AppleTV Legacy"))
-                {
-                    if( !mux )
-                    {
-                        mux = HB_MUX_MP4;
-                    }
-                    job->largeFileSize = 1;
-                    vcodec = HB_VCODEC_X264;
-                    job->vbitrate = 2500;
-                    if( !atracks )
-                    {
-                        atracks = strdup("1,1");
-                    }
-                    if( !acodecs )
-                    {
-                        acodecs = strdup("faac,copy:ac3");
-                    }
-                    if( !abitrates )
-                    {
-                        abitrates = strdup("160,160");
-                    }
-                    if( !mixdowns )
-                    {
-                        mixdowns = strdup("dpl2,auto");
-                    }
-                    if( !arates )
-                    {
-                        arates = strdup("Auto,Auto");
-                    }
-                    if( !dynamic_range_compression )
-                    {
-                        dynamic_range_compression = strdup("0.0,0.0");
-                    }
-                    if( !x264opts )
-                    {
-                        x264opts = strdup("ref=1:b-pyramid=none:weightp=0:subme=5:me=umh:no-fast-pskip=1:cabac=0:weightb=0:8x8dct=0:trellis=0");
-                    }
-                    if( !anamorphic_mode )
-                    {
-                        anamorphic_mode = 1;
-                    }
-                    job->chapter_markers = 1;
-                    
-                }
-
-                if (!strcmp(preset_name, "iPhone Legacy"))
-                {
-                    if( !mux )
-                    {
-                        mux = HB_MUX_MP4;
-                    }
-                    job->ipod_atom = 1;
-                    vcodec = HB_VCODEC_X264;
-                    job->vbitrate = 960;
-                    if( !atracks )
-                    {
-                        atracks = strdup("1");
-                    }
-                    if( !acodecs )
-                    {
-                        acodecs = strdup("faac");
-                    }
-                    if( !abitrates )
-                    {
-                        abitrates = strdup("128");
-                    }
-                    if( !mixdowns )
-                    {
-                        mixdowns = strdup("dpl2");
-                    }
-                    if( !arates )
-                    {
-                        arates = strdup("Auto");
-                    }
-                    if( !dynamic_range_compression )
-                    {
-                        dynamic_range_compression = strdup("0.0");
-                    }
-                    maxWidth = 480;
-                    if( !x264opts )
-                    {
-                        x264opts = strdup("level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:bframes=0:weightp=0:subme=6:8x8dct=0:trellis=0");
-                    }
-                    job->chapter_markers = 1;
-                    
-                }
-
-                if (!strcmp(preset_name, "iPod Legacy"))
-                {
-                    if( !mux )
-                    {
-                        mux = HB_MUX_MP4;
-                    }
-                    job->ipod_atom = 1;
-                    vcodec = HB_VCODEC_X264;
-                    job->vbitrate = 1500;
-                    if( !atracks )
-                    {
-                        atracks = strdup("1");
-                    }
-                    if( !acodecs )
-                    {
-                        acodecs = strdup("faac");
-                    }
-                    if( !abitrates )
-                    {
-                        abitrates = strdup("160");
-                    }
-                    if( !mixdowns )
-                    {
-                        mixdowns = strdup("dpl2");
-                    }
-                    if( !arates )
-                    {
-                        arates = strdup("Auto");
-                    }
-                    if( !dynamic_range_compression )
-                    {
-                        dynamic_range_compression = strdup("0.0");
-                    }
-                    maxWidth = 640;
-                    if( !x264opts )
-                    {
-                        x264opts = strdup("level=30:bframes=0:weightp=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:subme=6:8x8dct=0:trellis=0");
-                    }
-                    job->chapter_markers = 1;
-                    
-                }
-
+				{
+					if( !mux )
+					{
+						mux = HB_MUX_MP4;
+					}
+					vcodec = HB_VCODEC_X264;
+					job->vquality = 20.0;
+					if( !atracks )
+					{
+						atracks = strdup("1,1");
+					}
+					if( !acodecs )
+					{
+						acodecs = strdup("faac,copy:ac3");
+					}
+					if( !abitrates )
+					{
+						abitrates = strdup("160,160");
+					}
+					if( !mixdowns )
+					{
+						mixdowns = strdup("dpl2,auto");
+					}
+					if( !arates )
+					{
+						arates = strdup("Auto,Auto");
+					}
+					if( !dynamic_range_compression )
+					{
+						dynamic_range_compression = strdup("0.0,0.0");
+					}
+					maxWidth = 720;
+					if( !x264opts )
+					{
+						x264opts = strdup("cabac=0:ref=2:me=umh:bframes=0:weightp=0:8x8dct=0:trellis=0:subme=6");
+					}
+					if( !anamorphic_mode )
+					{
+						anamorphic_mode = 2;
+					}
+					job->chapter_markers = 1;
+					
+				}
+				
+				if (!strcmp(preset_name, "iPod"))
+				{
+					if( !mux )
+					{
+						mux = HB_MUX_MP4;
+					}
+					job->ipod_atom = 1;
+					vcodec = HB_VCODEC_X264;
+					job->vbitrate = 700;
+					if( !atracks )
+					{
+						atracks = strdup("1");
+					}
+					if( !acodecs )
+					{
+						acodecs = strdup("faac");
+					}
+					if( !abitrates )
+					{
+						abitrates = strdup("160");
+					}
+					if( !mixdowns )
+					{
+						mixdowns = strdup("dpl2");
+					}
+					if( !arates )
+					{
+						arates = strdup("Auto");
+					}
+					if( !dynamic_range_compression )
+					{
+						dynamic_range_compression = strdup("0.0");
+					}
+					maxWidth = 320;
+					if( !x264opts )
+					{
+						x264opts = strdup("level=30:bframes=0:weightp=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:subme=6:8x8dct=0:trellis=0");
+					}
+					job->chapter_markers = 1;
+					
+				}
+				
+				if (!strcmp(preset_name, "iPhone & iPod Touch"))
+				{
+					if( !mux )
+					{
+						mux = HB_MUX_MP4;
+					}
+					vcodec = HB_VCODEC_X264;
+					job->vquality = 20.0;
+					if( !atracks )
+					{
+						atracks = strdup("1");
+					}
+					if( !acodecs )
+					{
+						acodecs = strdup("faac");
+					}
+					if( !abitrates )
+					{
+						abitrates = strdup("128");
+					}
+					if( !mixdowns )
+					{
+						mixdowns = strdup("dpl2");
+					}
+					if( !arates )
+					{
+						arates = strdup("Auto");
+					}
+					if( !dynamic_range_compression )
+					{
+						dynamic_range_compression = strdup("0.0");
+					}
+					maxWidth = 480;
+					if( !x264opts )
+					{
+						x264opts = strdup("cabac=0:ref=2:me=umh:bframes=0:weightp=0:subme=6:8x8dct=0:trellis=0");
+					}
+					job->chapter_markers = 1;
+					
+				}
+				
+				if (!strcmp(preset_name, "iPhone 4"))
+				{
+					if( !mux )
+					{
+						mux = HB_MUX_MP4;
+					}
+					job->largeFileSize = 1;
+					vcodec = HB_VCODEC_X264;
+					job->vquality = 20.0;
+					job->vrate_base = 900900;
+					job->cfr = 2;
+					if( !atracks )
+					{
+						atracks = strdup("1");
+					}
+					if( !acodecs )
+					{
+						acodecs = strdup("faac");
+					}
+					if( !abitrates )
+					{
+						abitrates = strdup("160");
+					}
+					if( !mixdowns )
+					{
+						mixdowns = strdup("dpl2");
+					}
+					if( !arates )
+					{
+						arates = strdup("Auto");
+					}
+					if( !dynamic_range_compression )
+					{
+						dynamic_range_compression = strdup("0.0");
+					}
+					maxWidth = 960;
+					if( !anamorphic_mode )
+					{
+						anamorphic_mode = 2;
+					}
+					job->chapter_markers = 1;
+					
+				}
+				
+				if (!strcmp(preset_name, "iPad"))
+				{
+					if( !mux )
+					{
+						mux = HB_MUX_MP4;
+					}
+					job->largeFileSize = 1;
+					vcodec = HB_VCODEC_X264;
+					job->vquality = 20.0;
+					job->vrate_base = 900900;
+					job->cfr = 2;
+					if( !atracks )
+					{
+						atracks = strdup("1");
+					}
+					if( !acodecs )
+					{
+						acodecs = strdup("faac");
+					}
+					if( !abitrates )
+					{
+						abitrates = strdup("160");
+					}
+					if( !mixdowns )
+					{
+						mixdowns = strdup("dpl2");
+					}
+					if( !arates )
+					{
+						arates = strdup("Auto");
+					}
+					if( !dynamic_range_compression )
+					{
+						dynamic_range_compression = strdup("0.0");
+					}
+					maxWidth = 1024;
+					if( !anamorphic_mode )
+					{
+						anamorphic_mode = 2;
+					}
+					job->chapter_markers = 1;
+					
+				}
+				
+				if (!strcmp(preset_name, "AppleTV"))
+				{
+					if( !mux )
+					{
+						mux = HB_MUX_MP4;
+					}
+					job->largeFileSize = 1;
+					vcodec = HB_VCODEC_X264;
+					job->vquality = 20.0;
+					if( !atracks )
+					{
+						atracks = strdup("1,1");
+					}
+					if( !acodecs )
+					{
+						acodecs = strdup("faac,copy:ac3");
+					}
+					if( !abitrates )
+					{
+						abitrates = strdup("160,160");
+					}
+					if( !mixdowns )
+					{
+						mixdowns = strdup("dpl2,auto");
+					}
+					if( !arates )
+					{
+						arates = strdup("Auto,Auto");
+					}
+					if( !dynamic_range_compression )
+					{
+						dynamic_range_compression = strdup("0.0,0.0");
+					}
+					maxWidth = 960;
+					if( !x264opts )
+					{
+						x264opts = strdup("cabac=0:ref=2:me=umh:b-pyramid=none:b-adapt=2:weightb=0:trellis=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500");
+					}
+					if( !anamorphic_mode )
+					{
+						anamorphic_mode = 2;
+					}
+					job->chapter_markers = 1;
+					
+				}
+				
+				if (!strcmp(preset_name, "Apple Tv 2"))
+				{
+					if( !mux )
+					{
+						mux = HB_MUX_MP4;
+					}
+					job->largeFileSize = 1;
+					vcodec = HB_VCODEC_X264;
+					job->vquality = 20.0;
+					job->vrate_base = 900900;
+					job->cfr = 2;
+					if( !atracks )
+					{
+						atracks = strdup("1,1");
+					}
+					if( !acodecs )
+					{
+						acodecs = strdup("faac,copy:ac3");
+					}
+					if( !abitrates )
+					{
+						abitrates = strdup("160,160");
+					}
+					if( !mixdowns )
+					{
+						mixdowns = strdup("dpl2,auto");
+					}
+					if( !arates )
+					{
+						arates = strdup("Auto,Auto");
+					}
+					if( !dynamic_range_compression )
+					{
+						dynamic_range_compression = strdup("0.0,0.0");
+					}
+					maxWidth = 1280;
+					if( !anamorphic_mode )
+					{
+						anamorphic_mode = 2;
+					}
+					job->chapter_markers = 1;
+					
+				}
+				
+				if (!strcmp(preset_name, "Normal"))
+				{
+					if( !mux )
+					{
+						mux = HB_MUX_MP4;
+					}
+					vcodec = HB_VCODEC_X264;
+					job->vquality = 20.0;
+					if( !atracks )
+					{
+						atracks = strdup("1");
+					}
+					if( !acodecs )
+					{
+						acodecs = strdup("faac");
+					}
+					if( !abitrates )
+					{
+						abitrates = strdup("160");
+					}
+					if( !mixdowns )
+					{
+						mixdowns = strdup("dpl2");
+					}
+					if( !arates )
+					{
+						arates = strdup("Auto");
+					}
+					if( !dynamic_range_compression )
+					{
+						dynamic_range_compression = strdup("0.0");
+					}
+					if( !x264opts )
+					{
+						x264opts = strdup("ref=2:bframes=2:subme=6:mixed-refs=0:weightb=0:8x8dct=0:trellis=0");
+					}
+					if( !anamorphic_mode )
+					{
+						anamorphic_mode = 1;
+					}
+					job->chapter_markers = 1;
+					
+				}
+				
+				if (!strcmp(preset_name, "High Profile"))
+				{
+					if( !mux )
+					{
+						mux = HB_MUX_MP4;
+					}
+					vcodec = HB_VCODEC_X264;
+					job->vquality = 20.0;
+					if( !atracks )
+					{
+						atracks = strdup("1,1");
+					}
+					if( !acodecs )
+					{
+						acodecs = strdup("faac,copy:ac3");
+					}
+					if( !abitrates )
+					{
+						abitrates = strdup("160,160");
+					}
+					if( !mixdowns )
+					{
+						mixdowns = strdup("dpl2,auto");
+					}
+					if( !arates )
+					{
+						arates = strdup("Auto,Auto");
+					}
+					if( !dynamic_range_compression )
+					{
+						dynamic_range_compression = strdup("0.0,0.0");
+					}
+					if( !x264opts )
+					{
+						x264opts = strdup("b-adapt=2:rc-lookahead=50");
+					}
+					detelecine = 1;
+					decomb = 1;
+					if( !anamorphic_mode )
+					{
+						anamorphic_mode = 2;
+					}
+					job->chapter_markers = 1;
+					
+				}
+				
+				if (!strcmp(preset_name, "Classic"))
+				{
+					if( !mux )
+					{
+						mux = HB_MUX_MP4;
+					}
+					job->vbitrate = 1000;
+					if( !atracks )
+					{
+						atracks = strdup("1");
+					}
+					if( !acodecs )
+					{
+						acodecs = strdup("faac");
+					}
+					if( !abitrates )
+					{
+						abitrates = strdup("160");
+					}
+					if( !mixdowns )
+					{
+						mixdowns = strdup("dpl2");
+					}
+					if( !arates )
+					{
+						arates = strdup("Auto");
+					}
+					if( !dynamic_range_compression )
+					{
+						dynamic_range_compression = strdup("0.0");
+					}
+					
+				}
+				
+				if (!strcmp(preset_name, "AppleTV Legacy"))
+				{
+					if( !mux )
+					{
+						mux = HB_MUX_MP4;
+					}
+					job->largeFileSize = 1;
+					vcodec = HB_VCODEC_X264;
+					job->vbitrate = 2500;
+					if( !atracks )
+					{
+						atracks = strdup("1,1");
+					}
+					if( !acodecs )
+					{
+						acodecs = strdup("faac,copy:ac3");
+					}
+					if( !abitrates )
+					{
+						abitrates = strdup("160,160");
+					}
+					if( !mixdowns )
+					{
+						mixdowns = strdup("dpl2,auto");
+					}
+					if( !arates )
+					{
+						arates = strdup("Auto,Auto");
+					}
+					if( !dynamic_range_compression )
+					{
+						dynamic_range_compression = strdup("0.0,0.0");
+					}
+					if( !x264opts )
+					{
+						x264opts = strdup("ref=1:b-pyramid=none:weightp=0:subme=5:me=umh:no-fast-pskip=1:cabac=0:weightb=0:8x8dct=0:trellis=0");
+					}
+					if( !anamorphic_mode )
+					{
+						anamorphic_mode = 1;
+					}
+					job->chapter_markers = 1;
+					
+				}
+				
+				if (!strcmp(preset_name, "iPhone Legacy"))
+				{
+					if( !mux )
+					{
+						mux = HB_MUX_MP4;
+					}
+					job->ipod_atom = 1;
+					vcodec = HB_VCODEC_X264;
+					job->vbitrate = 960;
+					if( !atracks )
+					{
+						atracks = strdup("1");
+					}
+					if( !acodecs )
+					{
+						acodecs = strdup("faac");
+					}
+					if( !abitrates )
+					{
+						abitrates = strdup("128");
+					}
+					if( !mixdowns )
+					{
+						mixdowns = strdup("dpl2");
+					}
+					if( !arates )
+					{
+						arates = strdup("Auto");
+					}
+					if( !dynamic_range_compression )
+					{
+						dynamic_range_compression = strdup("0.0");
+					}
+					maxWidth = 480;
+					if( !x264opts )
+					{
+						x264opts = strdup("level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:bframes=0:weightp=0:subme=6:8x8dct=0:trellis=0");
+					}
+					job->chapter_markers = 1;
+					
+				}
+				
+				if (!strcmp(preset_name, "iPod Legacy"))
+				{
+					if( !mux )
+					{
+						mux = HB_MUX_MP4;
+					}
+					job->ipod_atom = 1;
+					vcodec = HB_VCODEC_X264;
+					job->vbitrate = 1500;
+					if( !atracks )
+					{
+						atracks = strdup("1");
+					}
+					if( !acodecs )
+					{
+						acodecs = strdup("faac");
+					}
+					if( !abitrates )
+					{
+						abitrates = strdup("160");
+					}
+					if( !mixdowns )
+					{
+						mixdowns = strdup("dpl2");
+					}
+					if( !arates )
+					{
+						arates = strdup("Auto");
+					}
+					if( !dynamic_range_compression )
+					{
+						dynamic_range_compression = strdup("0.0");
+					}
+					maxWidth = 640;
+					if( !x264opts )
+					{
+						x264opts = strdup("level=30:bframes=0:weightp=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:subme=6:8x8dct=0:trellis=0");
+					}
+					job->chapter_markers = 1;
+					
+				}
+						
             }
 
 			if ( chapter_markers )
@@ -2568,38 +2656,42 @@ static void ShowHelp()
  ****************************************************************************/
 static void ShowPresets()
 {
-    printf("\n< Apple\n");
-
+	printf("\n< Apple\n");
+	
     printf("\n   + Universal:  -e x264  -q 20.0 -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -X 720 --loose-anamorphic -m -x cabac=0:ref=2:me=umh:bframes=0:weightp=0:8x8dct=0:trellis=0:subme=6\n");
-
+	
     printf("\n   + iPod:  -e x264  -b 700 -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 -f mp4 -I -X 320 -m -x level=30:bframes=0:weightp=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:subme=6:8x8dct=0:trellis=0\n");
-
+	
     printf("\n   + iPhone & iPod Touch:  -e x264  -q 20.0 -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0.0 -f mp4 -X 480 -m -x cabac=0:ref=2:me=umh:bframes=0:weightp=0:subme=6:8x8dct=0:trellis=0\n");
-
+	
+    printf("\n   + iPhone 4:  -e x264  -q 20.0 -r 29.97 --pfr  -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 -f mp4 -4 -X 960 --loose-anamorphic -m\n");
+	
     printf("\n   + iPad:  -e x264  -q 20.0 -r 29.97 --pfr  -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 -f mp4 -4 -X 1024 --loose-anamorphic -m\n");
-
+	
     printf("\n   + AppleTV:  -e x264  -q 20.0 -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 -X 960 --loose-anamorphic -m -x cabac=0:ref=2:me=umh:b-pyramid=none:b-adapt=2:weightb=0:trellis=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500\n");
-
+	
+    printf("\n   + Apple Tv 2:  -e x264  -q 20.0 -r 29.97 --pfr  -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 -X 1280 --loose-anamorphic -m\n");
+	
     printf("\n>\n");
-
+	
     printf("\n< Regular\n");
-
+	
     printf("\n   + Normal:  -e x264  -q 20.0 -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 -f mp4 --strict-anamorphic -m -x ref=2:bframes=2:subme=6:mixed-refs=0:weightb=0:8x8dct=0:trellis=0\n");
-
+	
     printf("\n   + High Profile:  -e x264  -q 20.0 -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 --detelecine --decomb --loose-anamorphic -m -x b-adapt=2:rc-lookahead=50\n");
-
+	
     printf("\n>\n");
-
+	
     printf("\n< Legacy\n");
-
+	
     printf("\n   + Classic:  -b 1000 -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 -f mp4\n");
-
+	
     printf("\n   + AppleTV Legacy:  -e x264  -b 2500 -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 --strict-anamorphic -m -x ref=1:b-pyramid=none:weightp=0:subme=5:me=umh:no-fast-pskip=1:cabac=0:weightb=0:8x8dct=0:trellis=0\n");
-
+	
     printf("\n   + iPhone Legacy:  -e x264  -b 960 -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0.0 -f mp4 -I -X 480 -m -x level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:bframes=0:weightp=0:subme=6:8x8dct=0:trellis=0\n");
-
+	
     printf("\n   + iPod Legacy:  -e x264  -b 1500 -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 -f mp4 -I -X 640 -m -x level=30:bframes=0:weightp=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:subme=6:8x8dct=0:trellis=0\n");
-
+	
     printf("\n>\n");
 
 }
