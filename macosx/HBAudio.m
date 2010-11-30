@@ -428,6 +428,7 @@ static NSMutableArray *masterBitRateArray = nil;
 	else if (YES == [keyPath isEqualToString: @"track"]) {
 		if (nil != [self track]) {
 			[self updateCodecs];
+			[self updateMixdowns: YES];
 			if (YES == [self enabled]) {
 				[self setSampleRate: [[self sampleRates] objectAtIndex: 0]];	// default to Auto
 				}
