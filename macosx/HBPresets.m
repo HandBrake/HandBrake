@@ -774,6 +774,21 @@
     [audioTrack1Array autorelease];
     [audioListArray addObject:audioTrack1Array];
 	
+    /* Track 2 */
+    NSMutableDictionary *audioTrack2Array = [[NSMutableDictionary alloc] init];
+    [audioTrack2Array setObject:[NSNumber numberWithInt:1] forKey:@"AudioTrack"];
+    [audioTrack2Array setObject:@"AC3 Passthru" forKey:@"AudioEncoder"];
+    [audioTrack2Array setObject:@"AC3 Passthru" forKey:@"AudioMixdown"];
+    [audioTrack2Array setObject:@"Auto" forKey:@"AudioSamplerate"];
+    [audioTrack2Array setObject:@"160" forKey:@"AudioBitrate"];
+    /* Note: we ignore specified bitrate for AC3 Passthru in libhb and use
+     * the sources bitrate, however we need to initially set the value to something so
+     * the macgui doesnt barf, so 160 seems as good as anything */
+    [audioTrack2Array setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackDRCSlider"];
+    [audioTrack2Array autorelease];
+    [audioListArray addObject:audioTrack2Array];
+	
+	
     [preset setObject:[NSMutableArray arrayWithArray: audioListArray] forKey:@"AudioList"];
 	
     /* Subtitles*/
