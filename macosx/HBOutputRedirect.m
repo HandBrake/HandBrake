@@ -182,7 +182,7 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
  */ 
 - (void)forwardOutput:(NSData *)data
 {
-	NSString *string = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+	NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 	[listeners makeObjectsPerformSelector:forwardingSelector withObject:string];
 	[string release];
 }

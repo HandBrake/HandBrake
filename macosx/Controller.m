@@ -1883,8 +1883,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 }
                 
                 [fSrcTitlePopUp addItemWithTitle: [NSString
-                                                   stringWithFormat: @"%s %d - %02dh%02dm%02ds",
-                                                   title->name,title->index, title->hours, title->minutes,
+                                                   stringWithFormat: @"%@ %d - %02dh%02dm%02ds",
+                                                   currentSource, title->index, title->hours, title->minutes,
                                                    title->seconds]];
             }
             
