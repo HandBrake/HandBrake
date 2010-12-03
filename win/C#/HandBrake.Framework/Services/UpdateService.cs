@@ -10,7 +10,6 @@ namespace HandBrake.Framework.Services
     using System.Net;
     using System.Threading;
 
-    using HandBrake.Framework.Helpers;
     using HandBrake.Framework.Model;
     using HandBrake.Framework.Services.Interfaces;
 

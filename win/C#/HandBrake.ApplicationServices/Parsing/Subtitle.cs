@@ -9,8 +9,8 @@ namespace HandBrake.ApplicationServices.Parsing
     using System.IO;
     using System.Text.RegularExpressions;
 
+    using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.Framework.Helpers;
 
     /// <summary>
     /// An object that represents a subtitle associated with a Title, in a DVD

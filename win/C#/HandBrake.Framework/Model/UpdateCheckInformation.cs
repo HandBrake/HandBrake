@@ -6,8 +6,6 @@
 namespace HandBrake.Framework.Model
 {
     using System;
-    using HandBrake.Framework.Helpers;
-    using HandBrake.Framework.Services;
     using HandBrake.Framework.Services.Interfaces;
 
     /// <summary>

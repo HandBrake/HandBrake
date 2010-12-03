@@ -55,7 +55,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Services\AppcastReader.cs" />
-    <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Model\UpdateCheckResult.cs" />
     <Compile Include="Model\UpdateCheckInformation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
