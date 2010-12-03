@@ -538,7 +538,7 @@ namespace Handbrake.Functions
             string query = string.Empty;
 
             // Verbosity Level
-            query += " -v " + Properties.Settings.Default.verboseLevel;
+            query += " --verbose=" + Properties.Settings.Default.verboseLevel;
 
             // LibDVDNav
             if (Properties.Settings.Default.noDvdNav)
