@@ -47,59 +47,33 @@ namespace HandBrake.ApplicationServices.Functions
         public static extern int ExitWindowsEx(int uFlags, int dwReason);
 
         /// <summary>
-        /// System Memory Status
+        /// Memory Status EX Struct
         /// </summary>
-        public struct MEMORYSTATUS // Unused var's are required here.
+        public struct MEMORYSTATUSEX
         {
-            /// <summary>
-            /// Unknown
-            /// </summary>
-            public UInt32 dwLength;
-
-            /// <summary>
-            /// Memory Load
-            /// </summary>
-            public UInt32 dwMemoryLoad;
-
-            /// <summary>
-            /// Total Physical Memory
-            /// </summary>
-            public UInt32 dwTotalPhys; // Used
-
-            /// <summary>
-            /// Available Physical Memory
-            /// </summary>
-            public UInt32 dwAvailPhys;
-
-            /// <summary>
-            /// Total Page File
-            /// </summary>
-            public UInt32 dwTotalPageFile;
-
-            /// <summary>
-            /// Available Page File
-            /// </summary>
-            public UInt32 dwAvailPageFile;
-
-            /// <summary>
-            /// Total Virtual Memory
-            /// </summary>
-            public UInt32 dwTotalVirtual;
-
-            /// <summary>
-            /// Available Virtual Memory
-            /// </summary>
-            public UInt32 dwAvailVirtual;
+            public int dwLength;
+            public int dwMemoryLoad;
+            public ulong ullTotalPhys;
+            public ulong ullAvailPhys;
+            public ulong ullTotalPageFile;
+            public ulong ullAvailPageFile;
+            public ulong ullTotalVirtual;
+            public ulong ullAvailVirtual;
+            public ulong ullAvailExtendedVirtual;
         }
 
         /// <summary>
-        /// Global Memory Status
+        /// Get the System Memory information
         /// </summary>
         /// <param name="lpBuffer">
         /// The lp buffer.
         /// </param>
-        [DllImport("kernel32.dll")]
-        public static extern void GlobalMemoryStatus(ref MEMORYSTATUS lpBuffer);
+        /// <returns>
+        /// A boolean.
+        /// </returns>
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool GlobalMemoryStatusEx(ref MEMORYSTATUSEX lpBuffer);
+
 
         /// <summary>
         /// Generate a Console Ctrl Event

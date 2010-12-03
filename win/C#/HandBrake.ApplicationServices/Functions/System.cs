@@ -18,17 +18,15 @@ namespace HandBrake.ApplicationServices.Functions
         /// Gets the total physical ram in a system
         /// </summary>
         /// <returns>The total memory in the system</returns>
-        public static uint TotalPhysicalMemory
+        public static ulong TotalPhysicalMemory
         {
             get
             {
-                Win32.MEMORYSTATUS memStatus = new Win32.MEMORYSTATUS();
-                Win32.GlobalMemoryStatus(ref memStatus);
+                Win32.MEMORYSTATUSEX memStat = new Win32.MEMORYSTATUSEX { dwLength = 64 };
+                Win32.GlobalMemoryStatusEx(ref memStat);
 
-                uint memoryInfo = memStatus.dwTotalPhys;
-                memoryInfo = memoryInfo / 1024 / 1024;
-
-                return memoryInfo;
+                ulong value = memStat.ullTotalPhys / 1024 / 1024;
+                return value;
             }
         }
 
