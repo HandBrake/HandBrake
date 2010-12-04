@@ -73,6 +73,7 @@ namespace Handbrake.Controls
             slider_psyrd.Value = 10;
             slider_psytrellis.Value = 0;
             drop_adaptBFrames.SelectedIndex = 0;
+            slider_adaptiveQuantStrength.Value = slider_adaptiveQuantStrength.Maximum / 2;
 
             rtf_x264Query.Text = string.Empty;
         }
