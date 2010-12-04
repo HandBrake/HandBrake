@@ -2891,7 +2891,6 @@ static int ParseOptions( int argc, char ** argv )
             case 'v':
                 if( optarg != NULL )
                 {
-					printf("#################adnfkjsdnfkj");
                     debug = atoi( optarg );
                 }
                 else
