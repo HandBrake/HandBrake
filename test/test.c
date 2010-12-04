@@ -2656,6 +2656,8 @@ static void ShowHelp()
  ****************************************************************************/
 static void ShowPresets()
 {
+	fprintf( stderr, "%s - %s - %s\n", HB_PROJECT_TITLE, HB_PROJECT_BUILD_TITLE, HB_PROJECT_URL_WEBSITE );
+	
 	printf("\n< Apple\n");
 	
     printf("\n   + Universal:  -e x264  -q 20.0 -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -X 720 --loose-anamorphic -m -x cabac=0:ref=2:me=umh:bframes=0:weightp=0:8x8dct=0:trellis=0:subme=6\n");
@@ -2889,6 +2891,7 @@ static int ParseOptions( int argc, char ** argv )
             case 'v':
                 if( optarg != NULL )
                 {
+					printf("#################adnfkjsdnfkj");
                     debug = atoi( optarg );
                 }
                 else
