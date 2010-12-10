@@ -57,6 +57,7 @@ namespace Handbrake
         private DVD currentSource;
         private IScan SourceScan = new ScanService();
         private List<DriveInformation> drives;
+        private Job queueEdit;
 
         // Delegates **********************************************************
         private delegate void UpdateWindowHandler();
@@ -2208,6 +2209,34 @@ namespace Handbrake
                 }
                 UpdateSourceLabel();
 
+                // This is a bit of a hack to fix the queue editing.
+                // If afte the scan, we find a job sitting in queueEdit, then the user has rescaned the source from the queue by clicking edit.
+                // When this occures, we want to repopulate their old settings.
+                if (queueEdit != null)
+                {
+                    // Setup UI
+                    if (queueEdit.Query != null)
+                    {
+                        // Send the query from the file to the Query Parser class
+                        QueryParser presetQuery = QueryParser.Parse(queueEdit.Query);
+
+                        // Now load the preset
+                        PresetLoader.LoadPreset(this, presetQuery, "Load Back From Queue");
+
+                        // Set the destination path
+                        this.text_destination.Text = queueEdit.Destination;
+
+                        // The x264 widgets will need updated, so do this now:
+                        x264Panel.StandardizeOptString();
+                        x264Panel.SetCurrentSettingsInPanel();
+
+                        // Set the crop label
+                        PictureSettings.SetPresetCropWarningLabel(null);
+                    }
+
+                    queueEdit = null;
+                }
+
                 // Enable the GUI components and enable any disabled components
                 EnableGUI();
             }
@@ -2308,28 +2337,13 @@ namespace Handbrake
         /// </param>
         public void RecievingJob(Job job)
         {
-            string query = job.Query;
+            // Reset
+            this.currentlySelectedPreset = null;
+            x264Panel.Reset2Defaults();
+
+            // Scan
+            queueEdit = job; // Nasty but will do for now. TODO
             StartScan(job.Source, job.Title);
-
-            if (query != null)
-            {
-                // Ok, Reset all the H264 widgets before changing the preset
-                x264Panel.Reset2Defaults();
-
-                // Send the query from the file to the Query Parser class
-                QueryParser presetQuery = QueryParser.Parse(query);
-
-                // Now load the preset
-                PresetLoader.LoadPreset(this, presetQuery, "Load Back From Queue");
-
-                // The x264 widgets will need updated, so do this now:
-                x264Panel.StandardizeOptString();
-                x264Panel.SetCurrentSettingsInPanel();
-
-                // Finally, let this window have a copy of the preset settings.
-                this.currentlySelectedPreset = null;
-                PictureSettings.SetPresetCropWarningLabel(null);
-            }
         }
 
         #endregion
