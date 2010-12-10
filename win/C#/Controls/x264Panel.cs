@@ -348,7 +348,7 @@ namespace Handbrake.Controls
                                 continue;
                             case "aq-strength":
                                 float value;
-                                float.TryParse(optValue, out value);
+                                float.TryParse(optValue, NumberStyles.Float, CultureInfo.InvariantCulture, out value);
                                 int sliderValue;
                                 int.TryParse((value * 10).ToString(), out sliderValue);
                                 slider_adaptiveQuantStrength.Value = sliderValue;
@@ -363,9 +363,9 @@ namespace Handbrake.Controls
                                 int val, val2;
 
                                 // default psy-rd = 1 (10 for the slider)
-                                psyrd = double.TryParse(x[0], out psyrd) ? psyrd * 10 : 10.0;
+                                psyrd = double.TryParse(x[0], NumberStyles.Float, CultureInfo.InvariantCulture, out psyrd) ? psyrd * 10 : 10.0;
                                 // default psy-trellis = 0
-                                psytrellis = double.TryParse(x[1], out psytrellis) ? psytrellis * 20 : 0.0;
+                                psytrellis = double.TryParse(x[1], NumberStyles.Float, CultureInfo.InvariantCulture, out psytrellis) ? psytrellis * 20 : 0.0;
 
                                 int.TryParse(psyrd.ToString(), out val);
                                 int.TryParse(psytrellis.ToString(), out val2);
