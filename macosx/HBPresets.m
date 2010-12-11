@@ -689,7 +689,7 @@
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	
     /* Get the New Preset Name from the field in the AddPresetPanel */
-    [preset setObject:@"Apple Tv 2" forKey:@"PresetName"];
+    [preset setObject:@"AppleTV 2" forKey:@"PresetName"];
 	
     /*Set whether or not this is a user preset where 0 is factory, 1 is user*/
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
