@@ -872,7 +872,7 @@ static int HandleEvents( hb_handle_t * h )
 					
 				}
 				
-				if (!strcmp(preset_name, "Apple Tv 2"))
+				if (!strcmp(preset_name, "AppleTV 2"))
 				{
 					if( !mux )
 					{
@@ -2672,7 +2672,7 @@ static void ShowPresets()
 	
     printf("\n   + AppleTV:  -e x264  -q 20.0 -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 -X 960 --loose-anamorphic -m -x cabac=0:ref=2:me=umh:b-pyramid=none:b-adapt=2:weightb=0:trellis=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500\n");
 	
-    printf("\n   + Apple Tv 2:  -e x264  -q 20.0 -r 29.97 --pfr  -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 -X 1280 --loose-anamorphic -m\n");
+    printf("\n   + AppleTV 2:  -e x264  -q 20.0 -r 29.97 --pfr  -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 -X 1280 --loose-anamorphic -m\n");
 	
     printf("\n>\n");
 	
