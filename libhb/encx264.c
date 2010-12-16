@@ -88,6 +88,12 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     /* Enable metrics */
     param.analyse.b_psnr = 1;
     param.analyse.b_ssim = 1;
+
+    /* QuickTime has trouble with very low QPs (resulting in visual artifacts).
+     * Known to affect QuickTime 7, QuickTime X and iTunes.
+     * Testing shows that a qpmin of 3 works.
+     */
+    param.rc.i_qp_min = 3;
     
     param.i_threads    = ( hb_get_cpu_count() * 3 / 2 );
     param.i_width      = job->width;
