@@ -237,9 +237,9 @@ void hb_display_job_info( hb_job_t * job )
     }
     else
     {
-        hb_log( "   + dimensions: %d * %d -> %d * %d, crop %d/%d/%d/%d",
+        hb_log( "   + dimensions: %d * %d -> %d * %d, crop %d/%d/%d/%d, mod %i",
                 title->width, title->height, job->width, job->height,
-                job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
+                job->crop[0], job->crop[1], job->crop[2], job->crop[3], job->modulus );
     }
 
     if ( job->grayscale )

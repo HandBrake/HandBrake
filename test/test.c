@@ -1285,6 +1285,11 @@ static int HandleEvents( hb_handle_t * h )
             {
                 case 0: // Non-anamorphic
                     
+                    if (modulus)
+                    {
+                        job->modulus = modulus;
+                    }
+                    
                     if( width && height )
                     {
                         job->width  = width;
@@ -1293,15 +1298,27 @@ static int HandleEvents( hb_handle_t * h )
                     else if( width )
                     {
                         job->width = width;
+                        // do not exceed source dimensions by default
+                        if( !maxHeight )
+                            job->maxHeight = title->height;
                         hb_fix_aspect( job, HB_KEEP_WIDTH );
                     }
                     else if( height )
                     {
                         job->height = height;
+                        // do not exceed source dimensions by default
+                        if( !maxWidth )
+                            job->maxWidth = title->width;
                         hb_fix_aspect( job, HB_KEEP_HEIGHT );
                     }
                     else if( !width && !height )
                     {
+                        /* Default to cropped width when one isn't specified
+                         * avoids rounding to mod 16 regardless of modulus */
+                        job->width = title->width - job->crop[2] - job->crop[3];
+                        // do not exceed source dimensions by default
+                        if( !maxHeight )
+                            job->maxHeight = title->height;
                         hb_fix_aspect( job, HB_KEEP_WIDTH );
                     }
 
