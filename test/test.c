@@ -1428,7 +1428,7 @@ static int HandleEvents( hb_handle_t * h )
                 break;
             }
 
-            if( vquality >= 0.0 && ( ( vquality <= 1.0 ) || ( vcodec == HB_VCODEC_X264 ) || (vcodec == HB_VCODEC_FFMPEG) ) )
+            if( vquality >= 0.0 )
             {
                 job->vquality = vquality;
                 job->vbitrate = 0;
