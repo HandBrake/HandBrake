@@ -449,6 +449,7 @@ static void do_job( hb_job_t * job, int cpu_count )
                 job->anamorphic.par_width >>= 1;
                 job->anamorphic.par_height >>= 1;
             }
+            hb_reduce( &job->anamorphic.par_width, &job->anamorphic.par_height, job->anamorphic.par_width, job->anamorphic.par_height );
         }
     }
     

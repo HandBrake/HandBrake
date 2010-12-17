@@ -963,10 +963,12 @@ void hb_set_anamorphic_size( hb_job_t * job,
     {
         case 1:
             /* Strict anamorphic */
-            *output_width = cropped_width;
-            *output_height = cropped_height;
-            *output_par_width = title->pixel_aspect_width;
-            *output_par_height = title->pixel_aspect_height;
+            *output_width  = MULTIPLE_MOD( cropped_width, 2 );
+            *output_height = MULTIPLE_MOD( cropped_height, 2 );
+            // adjust the source PAR for new width/height
+            // new PAR = source PAR * ( old width / new_width ) * ( new_height / old_height )
+            pixel_aspect_width = title->pixel_aspect_width * cropped_width * (*output_height);            
+            pixel_aspect_height = title->pixel_aspect_height * (*output_width) * cropped_height;
         break;
 
         case 2:
@@ -1007,8 +1009,8 @@ void hb_set_anamorphic_size( hb_job_t * job,
             /* The film AR is the source's display width / cropped source height.
                The output display width is the output height * film AR.
                The output PAR is the output display width / output storage width. */
-            pixel_aspect_width = height * source_display_width / cropped_height;
-            pixel_aspect_height = width;
+            pixel_aspect_width = height * cropped_width * pixel_aspect_width;
+            pixel_aspect_height = width * cropped_height * pixel_aspect_height;
 
             /* Pass the results back to the caller */
             *output_width = width;
