@@ -1045,6 +1045,11 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
 
 	paused = queue_state & GHB_STATE_PAUSED;
 
+	widget = GHB_WIDGET(ud->builder, "queue_add");
+	gtk_widget_set_sensitive(widget, show_start);
+	action = GHB_ACTION(ud->builder, "queue_add_menu");
+	gtk_action_set_sensitive(action, show_start);
+
 	widget = GHB_WIDGET (ud->builder, "queue_start1");
 	if (show_stop)
 	{
