@@ -2687,8 +2687,10 @@ fWorkingCount = 0;
     fqueueEditRescanItemNum = selectedQueueItem;
     [self writeToActivityLog: "rescanQueueItemToMainWindow: Re-scanning queue item at index:%d",fqueueEditRescanItemNum];
     applyQueueToScan = YES;
+    /* Make sure we release the display name before reassigning it */
+    [browsedSourceDisplayName release];
     /* Set the browsedSourceDisplayName for showNewScan */
-    browsedSourceDisplayName = [[QueueFileArray objectAtIndex:fqueueEditRescanItemNum] objectForKey:@"SourceName"];
+    browsedSourceDisplayName = [[[QueueFileArray objectAtIndex:fqueueEditRescanItemNum] objectForKey:@"SourceName"] retain];
     [self performScan:scanPath scanTitleNum:scanTitleNum];
 }
 
