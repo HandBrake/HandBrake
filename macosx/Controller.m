@@ -1858,6 +1858,14 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 }
                 [fSrcDVD2Field setStringValue:browsedSourceDisplayName];
                 
+                // use the correct extension based on the container
+                int format = [fDstFormatPopUp indexOfSelectedItem];
+                char *ext = "mp4";
+                if (format == 1)
+                {
+                    ext = "mkv";
+                }
+                
                 /* If its a queue rescan for edit, get the queue item output path */
                 /* if not, its a new source scan. */
                 /* Check to see if the last destination has been set,use if so, if not, use Desktop */
@@ -1868,12 +1876,18 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 else if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"])
                 {
                     [fDstFile2Field setStringValue: [NSString stringWithFormat:
-                                                     @"%@/%@.mp4", [[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"],[browsedSourceDisplayName stringByDeletingPathExtension]]];
+                                                     @"%@/%@.%s", [[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"],[browsedSourceDisplayName stringByDeletingPathExtension],ext]];
                 }
                 else
                 {
                     [fDstFile2Field setStringValue: [NSString stringWithFormat:
-                                                     @"%@/Desktop/%@.mp4", NSHomeDirectory(),[browsedSourceDisplayName stringByDeletingPathExtension]]];
+                                                     @"%@/Desktop/%@.%s", NSHomeDirectory(),[browsedSourceDisplayName stringByDeletingPathExtension],ext]];
+                }
+                
+                // set m4v extension if necessary - do not override user-specified .mp4 extension
+                if (format == 0 && applyQueueToScan != YES)
+                {
+                    [self autoSetM4vExtension: sender];
                 }
                 
                 /* See if this is the main feature according to libhb */
