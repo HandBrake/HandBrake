@@ -2578,9 +2578,9 @@ fWorkingCount = 0;
             [self writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
         }
         
-         /* We use our advance pref to determine how many previews to scan */
-        int hb_num_previews = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
-        hb_scan( fQueueEncodeLibhb, [path UTF8String], scanTitleNum, hb_num_previews, 0 , 0 );
+        /* Only scan 10 previews before an encode - additional previews are only useful for autocrop and static previews,
+         * which are already taken care of at this point */
+        hb_scan( fQueueEncodeLibhb, [path UTF8String], scanTitleNum, 10, 0, 0 );
     }
 }
 
