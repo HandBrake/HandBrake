@@ -573,22 +573,23 @@ static int have_ts_sync(const uint8_t *buf, int psize)
 
 #define MAX_HOLE 192*80
 
-static uint64_t align_to_next_packet(BLURAY *bd)
+static uint64_t align_to_next_packet(BLURAY *bd, uint8_t *pkt)
 {
     uint8_t buf[MAX_HOLE];
     uint64_t pos = 0;
     uint64_t start = bd_tell(bd);
     uint64_t orig;
+    uint64_t off = 192;
 
+    memcpy(buf, pkt, 192);
     if ( start >= 192 ) {
         start -= 192;
-        bd_seek(bd, start);
     }
     orig = start;
 
     while (1)
     {
-        if (bd_read(bd, buf, sizeof(buf)) == sizeof(buf))
+        if (bd_read(bd, buf+off, sizeof(buf)-off) == sizeof(buf)-off)
         {
             const uint8_t *bp = buf;
             int i;
@@ -605,16 +606,27 @@ static uint64_t align_to_next_packet(BLURAY *bd)
                 pos = ( bp - buf );
                 break;
             }
-            uint64_t next = start + sizeof(buf) - 8 * 192;
-            bd_seek(bd, next);
-            start = bd_tell(bd);
+            off = 8 * 192;
+            memcpy(buf, buf + sizeof(buf) - off, off);
+            start += sizeof(buf) - off;
         }
         else
         {
             return 0;
         }
     }
-    bd_seek(bd, start+pos);
+    off = start + pos - 4;
+    // bd_seek seeks to the nearest access unit *before* the requested position
+    // we don't want to seek backwards, so we need to read until we get
+    // past that position.
+    bd_seek(bd, off);
+    while (off > bd_tell(bd))
+    {
+        if (bd_read(bd, buf, 192) != 192)
+        {
+            break;
+        }
+    }
     return start - orig + pos;
 }
 
@@ -639,8 +651,8 @@ static int next_packet( BLURAY *bd, uint8_t *pkt )
             return 1;
         }
         // lost sync - back up to where we started then try to re-establish.
-        uint64_t pos = bd_tell(bd) - 192;
-        uint64_t pos2 = align_to_next_packet(bd);
+        uint64_t pos = bd_tell(bd);
+        uint64_t pos2 = align_to_next_packet(bd, pkt);
         if ( pos2 == 0 )
         {
             hb_log( "next_packet: eof while re-establishing sync @ %"PRId64, pos );
