@@ -1913,10 +1913,12 @@ static int HandleEvents( hb_handle_t * h )
                      ( audio->out.codec & HB_ACODEC_PASS_FLAG ) &&
                     !( audio->out.codec & audio->in.codec ) )
                 {
+                    // AC3 passthru not possible, fallback to AC3 encoder.
+                    fprintf( stderr, "AC3 passthru requested and input codec is not AC3 for track %d, using AC3 encoder\n",
+                        audio->out.track );
                     audio->out.codec = HB_ACODEC_AC3;
                     audio->out.mixdown = hb_get_default_mixdown( audio->out.codec, audio->in.channel_layout );
-                    audio->out.bitrate = hb_get_default_audio_bitrate(
-                        audio->out.codec, audio->out.samplerate,
+                    audio->out.bitrate = hb_get_default_audio_bitrate( audio->out.codec, audio->out.samplerate,
                         audio->out.mixdown );
                 }
                 // fix 'copy' to select a specific codec
@@ -1926,7 +1928,7 @@ static int HandleEvents( hb_handle_t * h )
                     if ( !( audio->out.codec & HB_ACODEC_MASK ) )
                     {
                         // Passthru not possible, drop audio.
-                        fprintf( stderr, "Passthru requested and input codec is not the same as output codec for track %d\n",
+                        fprintf( stderr, "Passthru requested and input codec is not the same as output codec for track %d, dropping track\n",
                             audio->out.track );
                         hb_audio_t * item = hb_list_item( job->list_audio, i );
                         hb_list_rem( job->list_audio, item );
