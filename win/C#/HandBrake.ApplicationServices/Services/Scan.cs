@@ -184,14 +184,22 @@ namespace HandBrake.ApplicationServices.Services
                 if (title > 0)
                     extraArguments += " --scan ";
 
+                // Quick fix for "F:\\" style paths. Just get rid of the \\ so the CLI doesn't fall over.
+                // Sould probably clean up the escaping of the strings later.
+                if (sourcePath.ToString().EndsWith("\\"))
+                {
+                    sourcePath = sourcePath.ToString().Replace("\\", string.Empty);
+                }
+
+                string source = "\"" + sourcePath + "\"";
+                string command = String.Format(@" -i {0} -t{1} {2} -v ", source, title, extraArguments);
+
                 this.hbProc = new Process
                                   {
                                       StartInfo =
                                           {
                                               FileName = handbrakeCLIPath,
-                                              Arguments =
-                                                  String.Format(@" -i ""{0}"" -t{1} {2} -v ", sourcePath, title,
-                                                                extraArguments),
+                                              Arguments = command,
                                               RedirectStandardOutput = true,
                                               RedirectStandardError = true,
                                               UseShellExecute = false,
@@ -213,7 +221,10 @@ namespace HandBrake.ApplicationServices.Services
                     if (this.readData.Buffer.Length < 100000000)
                     {
                         scanLog.WriteLine(Logging.CreateCliLogHeader(null));
+                        scanLog.WriteLine("Query: " + command);
                         scanLog.Write(this.readData.Buffer);
+
+                        logBuffer.AppendLine("Query: " + command);
                         logBuffer.AppendLine(this.readData.Buffer.ToString());
                     }
                     else
