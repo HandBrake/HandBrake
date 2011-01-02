@@ -3432,6 +3432,12 @@ static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf )
   again:
     if ( ( err = av_read_frame( stream->ffmpeg_ic, stream->ffmpeg_pkt )) < 0 )
     {
+        // av_read_frame can return EAGAIN.  In this case, it expects
+        // to be called again to get more data.
+        if ( err == AVERROR(EAGAIN) )
+        {
+            goto again;
+        }
         // XXX the following conditional is to handle avi files that
         // use M$ 'packed b-frames' and occasionally have negative
         // sizes for the null frames these require.
