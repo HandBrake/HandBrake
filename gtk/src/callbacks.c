@@ -4612,7 +4612,14 @@ format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 	{
 		case HB_VCODEC_X264:
 		{
-			return g_strdup_printf("RF: %.4g", val);
+			if (val == 0.0)
+			{
+				return g_strdup_printf("RF: %.4g (Warning: lossless)", val);
+			}
+			else
+			{
+				return g_strdup_printf("RF: %.4g", val);
+			}
 		} break;
 
 		case HB_VCODEC_FFMPEG:

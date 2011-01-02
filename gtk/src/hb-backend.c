@@ -4339,11 +4339,28 @@ ghb_validate_vquality(GValue *settings)
 				max = 62;
 			} break;
 		}
-		if (vquality < min || vquality > max)
+		if (vcodec == HB_VCODEC_X264 && vquality == 0.0)
 		{
 			message = g_strdup_printf(
-						"Interesting video quality choise: %d\n\n"
-						"Typical values range from %d to %d.\n"
+						"Warning: lossless h.264 selected\n\n"
+						"Lossless h.264 is not well supported by\n"
+						"many players and editors.\n\n"
+                        "It will produce enormous output files.\n\n"
+						"Are you sure you wish to use this setting?",
+						(gint)vquality, min, max);
+			if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, 
+									"Cancel", "Continue"))
+			{
+				g_free(message);
+				return FALSE;
+			}
+			g_free(message);
+		}
+		else if (vquality < min || vquality > max)
+		{
+			message = g_strdup_printf(
+						"Interesting video quality choice: %d\n\n"
+						"Typical values range from %d to %d.\n\n"
 						"Are you sure you wish to use this setting?",
 						(gint)vquality, min, max);
 			if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, 
