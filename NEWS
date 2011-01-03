@@ -7,19 +7,26 @@ Changes between 0.9.4 and 0.9.5:
   - Updated Libraries (x264, ffmpeg) 
   - SSA Subtitle support. (Including burn-in) 
   - MP3 audio now supported in MP4 files (Note: Limited Player compatibility) 
+  - VOBSUB subtitle now supported in MP4 files (Note: Limited Player compatibility) 
   - Updated Presets for newer devices and better quality 
+  - AC3 encoding support.
   - Many Bug fixes and other small improvements
+  - Improved DVD Main Feature detection (when using dvdnav)
+  - Universal audio downmix support (all audio types can be downmixed)
 
 *All GUIs
   - Updated x264 Advanced Panel
   - Video Quality Slider drops % value and only shows RF for x264
   - Batch Scan (Scan Multiple files at once. N.B: Does not include multiple VIDEO_TS folders / Image files) 
+  - Peak framerate option (Capped VFR)
   - Many Bug fixes
   - Many Tweaks to improve usability.
   - Ability to edit queue jobs
+  - Point-to-Point encoding (second or frame start and end times)
 
 * Mac GUI
   - New Audio Panel supporting >4 Audio Tracks
+  - VLC detection in /Applications and ~/Applications
 
 * Windows GUI
   - Encode Status in GUI. (CLI window is now always hidden)
@@ -27,6 +34,7 @@ Changes between 0.9.4 and 0.9.5:
   - Drag / Drop Video onto Main Window to scan.
   
 * Linux GUI
+  - Multiple instance support (run multiple copies of ghb at once)
   - Many Bug fixes and UI improvements. 
   
 Changes between 0.9.3 and 0.9.4:
