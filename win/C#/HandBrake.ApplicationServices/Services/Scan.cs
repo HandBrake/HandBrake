@@ -110,7 +110,7 @@ namespace HandBrake.ApplicationServices.Services
                 if (logBuffer == null)
                 {
                     ResetLogReader(false);
-                    ReadLastScanFile();  
+                    ReadLastScanFile();
                 }
 
                 return logBuffer != null ? logBuffer.ToString() : string.Empty;
@@ -146,7 +146,7 @@ namespace HandBrake.ApplicationServices.Services
             catch (Exception ex)
             {
                 errorService.ShowError("Unable to kill HandBrakeCLI.exe \n" +
-                "You may need to manually kill HandBrakeCLI.exe using the Windows Task Manager if it does not close automatically" + 
+                "You may need to manually kill HandBrakeCLI.exe using the Windows Task Manager if it does not close automatically" +
                 " within the next few minutes. ", ex.ToString());
             }
         }
@@ -186,12 +186,16 @@ namespace HandBrake.ApplicationServices.Services
 
                 // Quick fix for "F:\\" style paths. Just get rid of the \\ so the CLI doesn't fall over.
                 // Sould probably clean up the escaping of the strings later.
+                string source;
                 if (sourcePath.ToString().EndsWith("\\"))
                 {
-                    sourcePath = sourcePath.ToString().Replace("\\", string.Empty);
+                    source = sourcePath.ToString();
+                }
+                else
+                {
+                    source = "\"" + sourcePath + "\"";
                 }
 
-                string source = "\"" + sourcePath + "\"";
                 string command = String.Format(@" -i {0} -t{1} {2} -v ", source, title, extraArguments);
 
                 this.hbProc = new Process
@@ -237,7 +241,7 @@ namespace HandBrake.ApplicationServices.Services
                 IsScanning = false;
 
                 if (this.ScanCompleted != null)
-                    this.ScanCompleted(this, new EventArgs()); 
+                    this.ScanCompleted(this, new EventArgs());
             }
             catch (Exception exc)
             {
@@ -246,7 +250,7 @@ namespace HandBrake.ApplicationServices.Services
                 errorService.ShowError("An error has occured during the scan process.", exc.ToString());
 
                 if (this.ScanCompleted != null)
-                    this.ScanCompleted(this, new EventArgs());   
+                    this.ScanCompleted(this, new EventArgs());
             }
         }
 

@@ -11,11 +11,6 @@ namespace HandBrake.ApplicationServices.Model
     public class Job
     {
         /// <summary>
-        /// the CLI Query.
-        /// </summary>
-        private string query;
-
-        /// <summary>
         /// Gets or sets the job ID.
         /// </summary>
         public int Id { get; set; }
@@ -28,17 +23,7 @@ namespace HandBrake.ApplicationServices.Model
         /// <summary>
         /// Gets or sets the query string.
         /// </summary>
-        public string Query
-        {
-            get
-            {
-                return this.query.Replace("\\\"", "\"").Replace("\\\\", "\\");
-            }
-            set
-            {
-                this.query = value;
-            }
-        }
+        public string Query { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether if this is a user or GUI generated query

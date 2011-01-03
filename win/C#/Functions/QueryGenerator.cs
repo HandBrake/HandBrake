@@ -94,9 +94,17 @@ namespace Handbrake.Functions
         {
             string query = string.Empty;
 
-            if (!string.IsNullOrEmpty(mainWindow.sourcePath) &&
-                mainWindow.sourcePath.Trim() != "Select \"Source\" to continue")
-                query = " -i " + '"' + mainWindow.sourcePath + '"';
+            if (!string.IsNullOrEmpty(mainWindow.sourcePath) && mainWindow.sourcePath.Trim() != "Select \"Source\" to continue")
+            {
+                if (mainWindow.sourcePath.EndsWith("\\"))
+                {
+                    query = " -i " + mainWindow.sourcePath;
+                }
+                else
+                {
+                    query = " -i " + '"' + mainWindow.sourcePath + '"';
+                }
+            }
 
             if (mainWindow.drp_dvdtitle.Text != string.Empty)
             {

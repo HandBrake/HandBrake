@@ -30,7 +30,7 @@ SetCompressor lzma
 !define MUI_UNICON "handbrakepineapple.ico"
 
 ; Welcome page
-!insertmacro MUI_PAGE_WELCOME 
+!insertmacro MUI_PAGE_WELCOME
 ; License page
 !insertmacro MUI_PAGE_LICENSE "doc\COPYING"
 ; Directory page
@@ -91,11 +91,10 @@ Function .onInit
   done:
 FunctionEnd
 
-
 Section "Handbrake" SEC01
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  
+
   ; Begin Check .NET version
   StrCpy $InstallDotNET "No"
   Call CheckFramework
@@ -120,9 +119,10 @@ Section "Handbrake" SEC01
 
      SetDetailsView show
   ${EndIf}
-
+  
   ; Install Files
   File "Handbrake.exe"
+  File "HandBrakeCLI.exe"
   CreateDirectory "$SMPROGRAMS\Handbrake"
   CreateShortCut "$SMPROGRAMS\Handbrake\Handbrake.lnk" "$INSTDIR\Handbrake.exe"
   CreateShortCut "$DESKTOP\Handbrake.lnk" "$INSTDIR\Handbrake.exe"
@@ -131,9 +131,7 @@ Section "Handbrake" SEC01
   File "AxInterop.QTOControlLib.dll"
   File "Growl.Connector.dll"
   File "Growl.CoreLibrary.dll"
-  File "HandBrakeCLI.exe"
   File "Handbrake.exe.config"
-  File "handbrakepineapple.ico"
   File "HandBrake.ApplicationServices.dll"
   File "HandBrake.Framework.dll"
   File "Microsoft.WindowsAPICodePack.Shell.dll"
@@ -146,7 +144,8 @@ Section "Handbrake" SEC01
   ;File "Castle.MicroKernel.dll"
   ;File "Castle.Windsor.dll"
   ;File "Microsoft.Practices.ServiceLocation.dll"
- 
+
+  ; Copy the standard doc set into the doc folder
   SetOutPath "$INSTDIR\doc"
   SetOverwrite ifnewer
   File "doc\AUTHORS"
@@ -169,6 +168,7 @@ Section -Post
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\Handbrake.exe"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
 SectionEnd
+
 
 Function un.onUninstSuccess
   HideWindow
