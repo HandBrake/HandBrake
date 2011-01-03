@@ -1,5 +1,34 @@
 NEWS file for HandBrake <http://handbrake.fr/>
 
+Changes between 0.9.4 and 0.9.5:
+
+* Core Library
+  - BluRay? disc structure support. (No decryption support) 
+  - Updated Libraries (x264, ffmpeg) 
+  - SSA Subtitle support. (Including burn-in) 
+  - MP3 audio now supported in MP4 files (Note: Limited Player compatibility) 
+  - Updated Presets for newer devices and better quality 
+  - Many Bug fixes and other small improvements
+
+*All GUIs
+  - Updated x264 Advanced Panel
+  - Video Quality Slider drops % value and only shows RF for x264
+  - Batch Scan (Scan Multiple files at once. N.B: Does not include multiple VIDEO_TS folders / Image files) 
+  - Many Bug fixes
+  - Many Tweaks to improve usability.
+  - Ability to edit queue jobs
+
+* Mac GUI
+  - New Audio Panel supporting >4 Audio Tracks
+
+* Windows GUI
+  - Encode Status in GUI. (CLI window is now always hidden)
+  - Improved Auto-Naming for Destination file name.
+  - Drag / Drop Video onto Main Window to scan.
+  
+* Linux GUI
+  - Many Bug fixes and UI improvements. 
+  
 Changes between 0.9.3 and 0.9.4:
 
 Core:
