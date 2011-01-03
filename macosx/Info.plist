@@ -31,7 +31,7 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>© 2003-2009, HandBrake Developers</string>
+	<string>© 2003-2011, HandBrake Developers</string>
 	<key>SUFeedURL</key>
 	<string>HB_PLIST_SUFEEDURL</string>
 </dict>
