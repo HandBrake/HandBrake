@@ -10,6 +10,9 @@ namespace HandBrake.ApplicationServices.Model
     /// </summary>
     public class Job
     {
+        /// <summary>
+        /// the CLI Query.
+        /// </summary>
         private string query;
 
         /// <summary>

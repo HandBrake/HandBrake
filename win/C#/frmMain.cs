@@ -83,6 +83,19 @@ namespace Handbrake
                     return Path.GetFileName(selectedTitle.SourceName);
                 }
 
+                // We have a drive, selected as a folder.
+                if (this.sourcePath.EndsWith("\\"))
+                {
+                    drives = Main.GetDrives();
+                    foreach (DriveInformation item in drives)
+                    {
+                        if (item.RootDirectory.Contains(this.sourcePath))
+                        {
+                            return item.VolumeLabel;
+                        }
+                    }
+                }
+
                 if (Path.GetFileNameWithoutExtension(this.sourcePath) != "VIDEO_TS")
                     return Path.GetFileNameWithoutExtension(this.sourcePath);
 
