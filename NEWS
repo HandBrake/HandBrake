@@ -3,7 +3,7 @@ NEWS file for HandBrake <http://handbrake.fr/>
 Changes between 0.9.4 and 0.9.5:
 
 * Core Library
-  - BluRay? disc structure support. (No decryption support) 
+  - BluRay disc structure support. (No decryption support) 
   - Updated Libraries (x264, ffmpeg) 
   - SSA Subtitle support. (Including burn-in) 
   - MP3 audio now supported in MP4 files (Note: Limited Player compatibility) 
