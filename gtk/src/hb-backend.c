@@ -2,7 +2,7 @@
  *            hb-backend.c
  *
  *  Fri Mar 28 10:38:44 2008
- *  Copyright  2008  John Stebbins
+ *  Copyright  2008-2011  John Stebbins
  *  <john at stebbins dot name>
  ****************************************************************************/
 
