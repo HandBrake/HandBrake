@@ -10,6 +10,8 @@ namespace HandBrake.ApplicationServices.Model
     /// </summary>
     public class Job
     {
+        private string query;
+
         /// <summary>
         /// Gets or sets the job ID.
         /// </summary>
@@ -23,7 +25,17 @@ namespace HandBrake.ApplicationServices.Model
         /// <summary>
         /// Gets or sets the query string.
         /// </summary>
-        public string Query { get; set; }
+        public string Query
+        {
+            get
+            {
+                return this.query.Replace("\\\"", "\"").Replace("\\\\", "\\");
+            }
+            set
+            {
+                this.query = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether if this is a user or GUI generated query
