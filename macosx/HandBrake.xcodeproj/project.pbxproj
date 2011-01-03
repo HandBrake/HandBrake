@@ -540,7 +540,6 @@
 			};
 			buildConfigurationList = 4D4E7BC4087804870051572B /* Build configuration list for PBXProject "HandBrake" */;
 			compatibilityVersion = "Xcode 3.1";
-			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,

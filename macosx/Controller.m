@@ -4802,6 +4802,12 @@ the user is using "Custom" settings by determining the sender*/
     {
         [fVidQualityRFField setStringValue: [NSString stringWithFormat: @"%.2f", sliderRfInverse]];
     }
+    /* Show a warning if x264 and rf 0 which is lossless */
+    if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_X264 && sliderRfInverse == 0.0)
+    {
+        [fVidQualityRFField setStringValue: [NSString stringWithFormat: @"%.2f (Warning: Lossless)", sliderRfInverse]];
+    }
+    
     [self customSettingUsed: sender];
 }
 
