@@ -114,6 +114,7 @@ namespace Handbrake
             this.AudioSettings = new Handbrake.Controls.AudioPanel();
             this.AudioMenuRowHeightHack = new System.Windows.Forms.ImageList(this.components);
             this.tab_video = new System.Windows.Forms.TabPage();
+            this.lbl_rfwarn = new System.Windows.Forms.Label();
             this.checkMaximumFramerate = new System.Windows.Forms.CheckBox();
             this.radio_cq = new System.Windows.Forms.RadioButton();
             this.radio_avgBitrate = new System.Windows.Forms.RadioButton();
@@ -956,6 +957,7 @@ namespace Handbrake
             // tab_video
             // 
             this.tab_video.BackColor = System.Drawing.Color.Transparent;
+            this.tab_video.Controls.Add(this.lbl_rfwarn);
             this.tab_video.Controls.Add(this.checkMaximumFramerate);
             this.tab_video.Controls.Add(this.drp_videoFramerate);
             this.tab_video.Controls.Add(this.radio_cq);
@@ -979,6 +981,19 @@ namespace Handbrake
             this.tab_video.TabIndex = 2;
             this.tab_video.Text = "Video";
             this.tab_video.UseVisualStyleBackColor = true;
+            // 
+            // lbl_rfwarn
+            // 
+            this.lbl_rfwarn.AutoSize = true;
+            this.lbl_rfwarn.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_rfwarn.ForeColor = System.Drawing.Color.Red;
+            this.lbl_rfwarn.Location = new System.Drawing.Point(385, 165);
+            this.lbl_rfwarn.Name = "lbl_rfwarn";
+            this.lbl_rfwarn.Size = new System.Drawing.Size(321, 39);
+            this.lbl_rfwarn.TabIndex = 20;
+            this.lbl_rfwarn.Text = "RF:0 is x264\'s lossless mode.\r\nThis will result in a very large output which may " +
+                "not be compatible\r\nwith your playback software.";
+            this.lbl_rfwarn.Visible = false;
             // 
             // checkMaximumFramerate
             // 
@@ -1922,5 +1937,6 @@ namespace Handbrake
         private ToolStripMenuItem btnTitleSpecific;
         private ToolStripMenuItem FileTitleSpecificScan;
         private ToolStripMenuItem FolderTitleSpecificScan;
+        internal Label lbl_rfwarn;
     }
 }
