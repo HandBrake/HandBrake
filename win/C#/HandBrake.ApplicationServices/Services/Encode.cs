@@ -12,6 +12,7 @@ namespace HandBrake.ApplicationServices.Services
     using System.Threading;
     using System.Windows.Forms;
 
+    using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.Framework.Services;
     using HandBrake.Framework.Services.Interfaces;
     using HandBrake.ApplicationServices.Functions;
@@ -535,7 +536,7 @@ namespace HandBrake.ApplicationServices.Services
                 {
                     AverageFrameRate = avg,
                     CurrentFrameRate = currentFps,
-                    EstimatedTimeLeft = timeRemaining,
+                    EstimatedTimeLeft = Converters.EncodeToTimespan(timeRemaining),
                     PercentComplete = percentComplete,
                     Task = currentTask,
                     TaskCount = taskCount

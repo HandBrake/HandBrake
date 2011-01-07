@@ -3,7 +3,7 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace HandBrake.ApplicationServices
+namespace HandBrake.ApplicationServices.EventArgs
 {
     using System;
 
@@ -30,7 +30,7 @@ namespace HandBrake.ApplicationServices
         /// <summary>
         /// Gets or sets EstimatedTimeLeft.
         /// </summary>
-        public string EstimatedTimeLeft { get; set; }
+        public TimeSpan EstimatedTimeLeft { get; set; }
 
         /// <summary>
         /// Gets or sets Task.

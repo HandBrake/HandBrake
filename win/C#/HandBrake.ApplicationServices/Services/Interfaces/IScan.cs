@@ -7,7 +7,30 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
 {
     using System;
 
+    using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Parsing;
+
+    /// <summary>
+    /// Encode Progess Status
+    /// </summary>
+    /// <param name="sender">
+    /// The sender.
+    /// </param>
+    /// <param name="e">
+    /// The EncodeProgressEventArgs.
+    /// </param>
+    public delegate void ScanProgessStatus(object sender, ScanProgressEventArgs e);
+
+    /// <summary>
+    /// Encode Progess Status
+    /// </summary>
+    /// <param name="sender">
+    /// The sender.
+    /// </param>
+    /// <param name="e">
+    /// The ScanCompletedEventArgs.
+    /// </param>
+    public delegate void ScanCompletedStatus(object sender, ScanCompletedEventArgs e);
 
     /// <summary>
     /// The IScan Interface
@@ -22,22 +45,17 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <summary>
         /// Scan has completed
         /// </summary>
-        event EventHandler ScanCompleted;
+        event ScanCompletedStatus ScanCompleted;
 
         /// <summary>
         /// Scan process has changed to a new title
         /// </summary>
-        event EventHandler ScanStatusChanged;
+        event ScanProgessStatus ScanStatusChanged;
 
         /// <summary>
         /// Gets a value indicating whether IsScanning.
         /// </summary>
         bool IsScanning { get; }
-
-        /// <summary>
-        /// Gets the Scan Status.
-        /// </summary>
-        string ScanStatus { get; }
 
         /// <summary>
         /// Gets the Souce Data.

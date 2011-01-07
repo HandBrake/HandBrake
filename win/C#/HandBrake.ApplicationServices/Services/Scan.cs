@@ -12,8 +12,7 @@ namespace HandBrake.ApplicationServices.Services
     using System.Threading;
     using System.Windows.Forms;
 
-    using HandBrake.Framework.Services;
-    using HandBrake.Framework.Services.Interfaces;
+    using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -23,12 +22,7 @@ namespace HandBrake.ApplicationServices.Services
     /// </summary>
     public class ScanService : IScan
     {
-        /* Private Variables */
-
-        /// <summary>
-        /// The Error Service
-        /// </summary>
-        private readonly IErrorService errorService;
+        #region Private Variables
 
         /// <summary>
         /// A Lock object
@@ -55,15 +49,16 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private Process hbProc;
 
+        #endregion
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ScanService"/> class.
         /// </summary>
         public ScanService()
         {
-            this.errorService = new ErrorService();
         }
 
-        /* Event Handlers */
+        #region Events
 
         /// <summary>
         /// Scan has Started
@@ -73,24 +68,21 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Scan has completed
         /// </summary>
-        public event EventHandler ScanCompleted;
+        public event ScanCompletedStatus ScanCompleted;
 
         /// <summary>
-        /// Scan process has changed to a new title
+        /// Encode process has progressed
         /// </summary>
-        public event EventHandler ScanStatusChanged;
+        public event ScanProgessStatus ScanStatusChanged;
 
-        /* Properties */
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
         /// Gets a value indicating whether IsScanning.
         /// </summary>
         public bool IsScanning { get; private set; }
-
-        /// <summary>
-        /// Gets the Scan Status.
-        /// </summary>
-        public string ScanStatus { get; private set; }
 
         /// <summary>
         /// Gets the Souce Data.
@@ -117,7 +109,9 @@ namespace HandBrake.ApplicationServices.Services
             }
         }
 
-        /* Public Methods */
+        #endregion
+
+        #region Public Methods
 
         /// <summary>
         /// Scan a Source Path.
@@ -138,20 +132,23 @@ namespace HandBrake.ApplicationServices.Services
         {
             try
             {
-                this.readData.OnScanProgress -= this.OnScanProgress;
+                // Try to clean things up as best as possible.
+                if (this.readData != null)
+                {
+                    this.readData.OnScanProgress -= this.OnScanProgress;
+                }
 
                 if (hbProc != null && !hbProc.HasExited)
                     hbProc.Kill();
             }
-            catch (Exception ex)
+            catch
             {
-                errorService.ShowError("Unable to kill HandBrakeCLI.exe \n" +
-                "You may need to manually kill HandBrakeCLI.exe using the Windows Task Manager if it does not close automatically" +
-                " within the next few minutes. ", ex.ToString());
+                // We don't really need to notify the user of any errors here.
             }
         }
+        #endregion
 
-        /* Private Methods */
+        #region Private Methods
 
         /// <summary>
         /// Start a scan for a given source path and title
@@ -164,52 +161,67 @@ namespace HandBrake.ApplicationServices.Services
             {
                 IsScanning = true;
                 if (this.ScanStared != null)
+                {
                     this.ScanStared(this, new EventArgs());
+                }
 
                 ResetLogReader(true);
 
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
                 string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
                                 "\\HandBrake\\logs";
-                string dvdInfoPath = Path.Combine(logDir, string.Format("last_scan_log{0}.txt", Init.InstanceId == 0 ? string.Empty : Init.InstanceId.ToString()));
+                string dvdInfoPath = Path.Combine(
+                    logDir,
+                    string.Format("last_scan_log{0}.txt", Init.InstanceId == 0 ? string.Empty : Init.InstanceId.ToString()));
 
                 // Make we don't pick up a stale last_encode_log.txt (and that we have rights to the file)
                 if (File.Exists(dvdInfoPath))
+                {
                     File.Delete(dvdInfoPath);
+                }
 
                 string extraArguments = string.Empty;
                 if (Init.DisableDvdNav)
+                {
                     extraArguments = " --no-dvdnav";
+                }
 
                 if (title > 0)
+                {
                     extraArguments += " --scan ";
+                }
 
                 // Quick fix for "F:\\" style paths. Just get rid of the \\ so the CLI doesn't fall over.
                 // Sould probably clean up the escaping of the strings later.
-                string source;
-                if (sourcePath.ToString().EndsWith("\\"))
-                {
-                    source = sourcePath.ToString();
-                }
-                else
-                {
-                    source = "\"" + sourcePath + "\"";
-                }
+                string source = sourcePath.ToString().EndsWith("\\") ? sourcePath.ToString() : "\"" + sourcePath + "\"";
+
+                this.hbProc = new Process
+                    {
+                        StartInfo =
+                            {
+                                FileName = handbrakeCLIPath,
+                                Arguments = String.Format(@" -i ""{0}"" -t{1} {2} -v ", sourcePath, title, extraArguments),
+                                RedirectStandardOutput = true,
+                                RedirectStandardError = true,
+                                UseShellExecute = false,
+                                CreateNoWindow = true
+                            }
+                    };
 
                 string command = String.Format(@" -i {0} -t{1} {2} -v ", source, title, extraArguments);
 
                 this.hbProc = new Process
-                                  {
-                                      StartInfo =
-                                          {
-                                              FileName = handbrakeCLIPath,
-                                              Arguments = command,
-                                              RedirectStandardOutput = true,
-                                              RedirectStandardError = true,
-                                              UseShellExecute = false,
-                                              CreateNoWindow = true
-                                          }
-                                  };
+                    {
+                        StartInfo =
+                            {
+                                FileName = handbrakeCLIPath,
+                                Arguments = command,
+                                RedirectStandardOutput = true,
+                                RedirectStandardError = true,
+                                UseShellExecute = false,
+                                CreateNoWindow = true
+                            }
+                    };
 
                 // Start the Scan
                 this.hbProc.Start();
@@ -225,10 +237,7 @@ namespace HandBrake.ApplicationServices.Services
                     if (this.readData.Buffer.Length < 100000000)
                     {
                         scanLog.WriteLine(Logging.CreateCliLogHeader(null));
-                        scanLog.WriteLine("Query: " + command);
                         scanLog.Write(this.readData.Buffer);
-
-                        logBuffer.AppendLine("Query: " + command);
                         logBuffer.AppendLine(this.readData.Buffer.ToString());
                     }
                     else
@@ -241,16 +250,16 @@ namespace HandBrake.ApplicationServices.Services
                 IsScanning = false;
 
                 if (this.ScanCompleted != null)
-                    this.ScanCompleted(this, new EventArgs());
+                {
+                    this.ScanCompleted(this, new ScanCompletedEventArgs(true, null, string.Empty));
+                }
             }
             catch (Exception exc)
             {
                 this.Stop();
 
-                errorService.ShowError("An error has occured during the scan process.", exc.ToString());
-
                 if (this.ScanCompleted != null)
-                    this.ScanCompleted(this, new EventArgs());
+                    this.ScanCompleted(this, new ScanCompletedEventArgs(false, exc, "An Error has occured in ScanService.ScanSource()"));
             }
         }
 
@@ -302,7 +311,6 @@ namespace HandBrake.ApplicationServices.Services
                 }
                 catch (Exception exc)
                 {
-                    Console.WriteLine(exc.ToString());
                     ResetLogReader(true);
                 }
             }
@@ -330,9 +338,18 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="titleCount">the total number of titles</param>
         private void OnScanProgress(object sender, int currentTitle, int titleCount)
         {
-            this.ScanStatus = string.Format("Processing Title: {0} of {1}", currentTitle, titleCount);
+            ScanProgressEventArgs eventArgs = new ScanProgressEventArgs
+            {
+                CurrentTitle = currentTitle,
+                Titles = titleCount
+            };
+
             if (this.ScanStatusChanged != null)
-                this.ScanStatusChanged(this, new EventArgs());
+            {
+                this.ScanStatusChanged(this, eventArgs);
+            }
         }
+
+        #endregion
     }
 }

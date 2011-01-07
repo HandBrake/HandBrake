@@ -16,6 +16,7 @@ namespace Handbrake
     using System.Windows.Forms;
     using Functions;
 
+    using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.Framework.Model;
     using HandBrake.Framework.Services;
     using HandBrake.Framework.Views;
@@ -238,8 +239,8 @@ namespace Handbrake
             encodeQueue.EncodeEnded += new EventHandler(encodeEnded);
 
             // Scan Started and Completed Events
-            SourceScan.ScanStatusChanged += new EventHandler(SourceScan_ScanStatusChanged);
-            SourceScan.ScanCompleted += new EventHandler(SourceScan_ScanCompleted);
+            SourceScan.ScanStatusChanged += this.SourceScanScanStatusChanged;
+            SourceScan.ScanCompleted += this.SourceScanScanCompleted;
 
             // Handle a file being draged onto the GUI.
             this.DragEnter += new DragEventHandler(frmMain_DragEnter);
@@ -2133,9 +2134,15 @@ namespace Handbrake
         /// <param name="e">
         /// The e.
         /// </param>
-        private void SourceScan_ScanStatusChanged(object sender, EventArgs e)
+        private void SourceScanScanStatusChanged(object sender, ScanProgressEventArgs e)
         {
-            UpdateScanStatusLabel();
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new ScanProgessStatus(this.SourceScanScanStatusChanged), new[] { sender, e });
+                return;
+            }
+
+            labelSource.Text = string.Format("Processing Title: {0} of {1}", e.CurrentTitle, e.Titles); 
         }
 
         /// <summary>
@@ -2147,32 +2154,11 @@ namespace Handbrake
         /// <param name="e">
         /// The e.
         /// </param>
-        private void SourceScan_ScanCompleted(object sender, EventArgs e)
+        private void SourceScanScanCompleted(object sender, EventArgs e)
         {
-            UpdateGuiAfterScan();
-        }
-
-        /// <summary>
-        /// Update the Scan Status Label
-        /// </summary>
-        private void UpdateScanStatusLabel()
-        {
-            if (InvokeRequired)
+            if (this.InvokeRequired)
             {
-                BeginInvoke(new UpdateWindowHandler(UpdateScanStatusLabel));
-                return;
-            }
-            labelSource.Text = SourceScan.ScanStatus;
-        }
-
-        /// <summary>
-        /// Reset the GUI when the scan has completed
-        /// </summary>
-        private void UpdateGuiAfterScan()
-        {
-            if (InvokeRequired)
-            {
-                BeginInvoke(new UpdateWindowHandler(UpdateGuiAfterScan));
+                this.BeginInvoke(new ScanCompletedStatus(this.SourceScanScanCompleted), new[] { sender, e });
                 return;
             }
 
@@ -2311,7 +2297,7 @@ namespace Handbrake
         /// </summary>
         private void KillScan()
         {
-            SourceScan.ScanCompleted -= new EventHandler(SourceScan_ScanCompleted);
+            SourceScan.ScanCompleted -= this.SourceScanScanCompleted;
             EnableGUI();
             ResetGUI();
 
@@ -2432,7 +2418,7 @@ namespace Handbrake
         /// <param name="e">
         /// The e.
         /// </param>
-        private void EncodeQueue_EncodeStatusChanged(object sender, HandBrake.ApplicationServices.EncodeProgressEventArgs e)
+        private void EncodeQueue_EncodeStatusChanged(object sender, EncodeProgressEventArgs e)
         {
             if (this.InvokeRequired)
             {
@@ -2616,10 +2602,12 @@ namespace Handbrake
                 }
 
                 if (SourceScan.IsScanning)
-                {
-                    SourceScan.ScanCompleted -= new EventHandler(SourceScan_ScanCompleted);
+                {               
                     SourceScan.Stop();
                 }
+
+                SourceScan.ScanCompleted -= this.SourceScanScanCompleted;
+                SourceScan.ScanStatusChanged -= this.SourceScanScanStatusChanged;
             }
             catch (Exception exc)
             {

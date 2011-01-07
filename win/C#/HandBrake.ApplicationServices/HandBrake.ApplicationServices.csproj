@@ -76,7 +76,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EncodeProgressEventArgs.cs" />
+    <Compile Include="EventArgs\EncodeCompletedEventArgs.cs" />
+    <Compile Include="EventArgs\EncodeProgressEventArgs.cs" />
+    <Compile Include="EventArgs\QueueProgressEventArgs.cs" />
+    <Compile Include="EventArgs\ScanCompletedEventArgs.cs" />
+    <Compile Include="EventArgs\ScanProgressEventArgs.cs" />
+    <Compile Include="Functions\Converters.cs" />
     <Compile Include="Functions\EnumHelper.cs" />
     <Compile Include="Functions\Logging.cs" />
     <Compile Include="Functions\GrowlCommunicator.cs" />

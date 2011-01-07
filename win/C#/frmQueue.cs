@@ -119,7 +119,7 @@ namespace Handbrake
         /// <param name="e">
         /// The e.
         /// </param>
-        private void EncodeQueue_EncodeStatusChanged(object sender, HandBrake.ApplicationServices.EncodeProgressEventArgs e)
+        private void EncodeQueue_EncodeStatusChanged(object sender, HandBrake.ApplicationServices.EventArgs.EncodeProgressEventArgs e)
         {
             if (this.InvokeRequired)
             {
