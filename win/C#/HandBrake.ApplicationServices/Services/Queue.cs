@@ -287,7 +287,7 @@ namespace HandBrake.ApplicationServices.Services
                 }
                 catch (Exception exc)
                 {
-                    errorService.ShowError("Unable to write to the file. Please make sure that the location has the correct permissions for file writing.", exc.ToString());
+                    throw new Exception("Unable to write to the file. Please make sure that the location has the correct permissions for file writing.", exc);
                 }
             }
             return false;
@@ -364,7 +364,7 @@ namespace HandBrake.ApplicationServices.Services
                     }
                     catch (Exception exc)
                     {
-                        errorService.ShowError("Unable to Start Queue", exc.ToString());
+                        throw new Exception("Unable to Start Queue", exc);
                     }
                 }
             }
@@ -393,7 +393,7 @@ namespace HandBrake.ApplicationServices.Services
                 QueueTask encJob = this.GetNextJob();
                 this.SaveQueue(); // Update the queue recovery file
 
-                Run(encJob, true);
+                Start(encJob, true);
 
                 if (HbProcess == null)
                 {

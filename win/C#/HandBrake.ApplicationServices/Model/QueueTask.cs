@@ -17,6 +17,24 @@ namespace HandBrake.ApplicationServices.Model
          */
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="QueueTask"/> class.
+        /// </summary>
+        public QueueTask()
+        {         
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QueueTask"/> class.
+        /// </summary>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        public QueueTask(string query)
+        {
+            this.Query = query;
+        }
+
+        /// <summary>
         /// Gets or sets the job ID.
         /// </summary>
         public int Id { get; set; }

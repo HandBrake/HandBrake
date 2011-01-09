@@ -14,6 +14,13 @@ namespace HandBrake.ApplicationServices.Model
     /// </summary>
     public class EncodeTask
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EncodeTask"/> class.
+        /// </summary>
+        public EncodeTask()
+        {
+        }
+
         #region Source
         /// <summary>
         /// Gets or sets Source.

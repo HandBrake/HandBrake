@@ -13,8 +13,6 @@ namespace HandBrake.ApplicationServices.Services
     using System.Windows.Forms;
 
     using HandBrake.ApplicationServices.EventArgs;
-    using HandBrake.Framework.Services;
-    using HandBrake.Framework.Services.Interfaces;
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
@@ -26,11 +24,6 @@ namespace HandBrake.ApplicationServices.Services
     public class Encode : IEncode
     {
         #region Private Variables
-
-        /// <summary>
-        /// The Error Service
-        /// </summary>
-        protected IErrorService errorService;
 
         /// <summary>
         /// The Log Buffer
@@ -50,7 +43,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Gets the Process ID
         /// </summary>
-        private int processID;
+        private int processId;
 
         /// <summary>
         /// Windows 7 API Pack wrapper
@@ -59,43 +52,26 @@ namespace HandBrake.ApplicationServices.Services
 
         #endregion
 
-        /* Constructor */
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Encode"/> class.
         /// </summary>
         public Encode()
         {
-            this.EncodeStarted += Encode_EncodeStarted;
+            this.EncodeStarted += this.EncodeEncodeStarted;
             GrowlCommunicator.Register();
-
-            this.errorService = new ErrorService();
         }
 
         #region Delegates and Event Handlers
 
         /// <summary>
-        /// Encode Progess Status
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The EncodeProgressEventArgs.
-        /// </param>
-        public delegate void EncodeProgessStatus(object sender, EncodeProgressEventArgs e);
-
-        /* Event Handlers */
-
-        /// <summary>
-        /// Fires when a new CLI Job starts
+        /// Fires when a new CLI QueueTask starts
         /// </summary>
         public event EventHandler EncodeStarted;
 
         /// <summary>
-        /// Fires when a CLI job finishes.
+        /// Fires when a CLI QueueTask finishes.
         /// </summary>
-        public event EventHandler EncodeEnded;
+        public event EncodeCompletedStatus EncodeCompleted;
 
         /// <summary>
         /// Encode process has progressed
@@ -103,7 +79,7 @@ namespace HandBrake.ApplicationServices.Services
         public event EncodeProgessStatus EncodeStatusChanged;
         #endregion
 
-        /* Properties */
+        #region Properties
 
         /// <summary>
         /// Gets or sets The HB Process
@@ -138,36 +114,49 @@ namespace HandBrake.ApplicationServices.Services
             }
         }
 
-        /* Public Methods */
+        #endregion
 
-        /// <summary>
-        /// Create a preview sample video
-        /// </summary>
-        /// <param name="query">
-        /// The CLI Query
-        /// </param>
-        public void CreatePreviewSample(string query)
-        {
-            this.Run(new QueueTask { Query = query }, false);
-        }
+        #region Public Methods
 
         /// <summary>
         /// Execute a HandBrakeCLI process.
         /// </summary>
-        /// <param name="encJob">
-        /// The enc Job.
+        /// <param name="encodeQueueTask">
+        /// The encodeQueueTask.
         /// </param>
         /// <param name="enableLogging">
         /// Enable Logging. When Disabled we onlt parse Standard Ouput for progress info. Standard Error log data is ignored.
         /// </param>
-        protected void Run(QueueTask encJob, bool enableLogging)
+        public void Start(QueueTask encodeQueueTask, bool enableLogging)
         {
             try
             {
+                QueueTask QueueTask = encodeQueueTask as QueueTask;
+
+                if (QueueTask == null)
+                {
+                    throw new ArgumentNullException("QueueTask was null");
+                }
+
+                if (IsEncoding)
+                {
+                    throw new Exception("HandBrake is already encodeing.");
+                }
+
                 IsEncoding = true;
 
                 if (enableLogging)
-                    SetupLogging(encJob);
+                {
+                    if (!SetupLogging(QueueTask))
+                    {
+                        if (this.EncodeCompleted != null)
+                            this.EncodeCompleted(
+                                this,
+                                new EncodeCompletedEventArgs(false, null, "Unable to Start Encode Logging process."));
+
+                        return;
+                    }
+                }
 
                 if (Init.PreventSleep)
                 {
@@ -175,7 +164,7 @@ namespace HandBrake.ApplicationServices.Services
                 }
 
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
-                ProcessStartInfo cliStart = new ProcessStartInfo(handbrakeCLIPath, encJob.Query)
+                ProcessStartInfo cliStart = new ProcessStartInfo(handbrakeCLIPath, QueueTask.Query)
                 {
                     RedirectStandardOutput = true,
                     RedirectStandardError = enableLogging ? true : false,
@@ -191,14 +180,14 @@ namespace HandBrake.ApplicationServices.Services
                     this.HbProcess.BeginErrorReadLine();
                 }
 
-                this.processID = HbProcess.Id;
+                this.processId = HbProcess.Id;
                 this.processHandle = HbProcess.Handle;
 
                 // Set the process Priority
-                if (this.processID != -1)
+                if (this.processId != -1)
                 {
                     this.HbProcess.EnableRaisingEvents = true;
-                    this.HbProcess.Exited += HbProcess_Exited;
+                    this.HbProcess.Exited += this.HbProcessExited;
                 }
 
                 // Set the Process Priority
@@ -230,16 +219,27 @@ namespace HandBrake.ApplicationServices.Services
             }
             catch (Exception exc)
             {
-                errorService.ShowError("It would appear that HandBrakeCLI has not started correctly." +
-                "You should take a look at the Activity log as it may indicate the reason why.\n\nDetailed Error Information: error occured in runCli()",
-                exc.ToString());
+                if (this.EncodeCompleted != null)
+                    this.EncodeCompleted(this, new EncodeCompletedEventArgs(false, exc, "An Error has occured in EncodeService.Run()"));
             }
+        }
+
+        /// <summary>
+        /// Stop the Encode
+        /// </summary>
+        public void Stop()
+        {
+            this.Stop(null);
         }
 
         /// <summary>
         /// Kill the CLI process
         /// </summary>
-        public void Stop()
+        /// <param name="exc">
+        /// The Exception that has occured.
+        /// This will get bubbled up through the EncodeCompletedEventArgs
+        /// </param>
+        public void Stop(Exception exc)
         {
             try
             {
@@ -248,13 +248,22 @@ namespace HandBrake.ApplicationServices.Services
                     this.HbProcess.Kill();
                 }
             }
-            catch (Exception exc)
+            catch (Exception)
             {
-                errorService.ShowError("Unable to stop HandBrakeCLI. It may not be running.", exc.ToString());
+                // No need to report anything to the user. If it fails, it's probably already stopped.
             }
 
-            if (this.EncodeEnded != null)
-                this.EncodeEnded(this, new EventArgs());
+
+            if (exc == null)
+            {
+                if (this.EncodeCompleted != null)
+                    this.EncodeCompleted(this, new EncodeCompletedEventArgs(true, null, string.Empty));
+            }
+            else
+            {
+                if (this.EncodeCompleted != null)
+                    this.EncodeCompleted(this, new EncodeCompletedEventArgs(false, exc, "An Error has occured."));
+            }
         }
 
         /// <summary>
@@ -262,7 +271,7 @@ namespace HandBrake.ApplicationServices.Services
         /// NOTE: This will not work with a MinGW CLI
         /// Note: http://www.cygwin.com/ml/cygwin/2006-03/msg00330.html
         /// </summary>
-        public void SafelyClose()
+        public void SafelyStop()
         {
             if ((int)this.processHandle == 0)
                 return;
@@ -279,7 +288,9 @@ namespace HandBrake.ApplicationServices.Services
             //}*/
         }
 
-        /* Helpers */
+        #endregion
+
+        #region Private Helper Methods
 
         /// <summary>
         /// Save a copy of the log to the users desired location or a default location
@@ -319,7 +330,7 @@ namespace HandBrake.ApplicationServices.Services
             }
             catch (Exception exc)
             {
-                errorService.ShowError("Unable to make a copy of the log file", exc.ToString());
+                // This exception doesn't warrent user interaction, but it should be logged (TODO)
             }
         }
 
@@ -332,11 +343,11 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="e">
         /// The EventArgs.
         /// </param>
-        private void HbProcess_Exited(object sender, EventArgs e)
+        private void HbProcessExited(object sender, EventArgs e)
         {
             IsEncoding = false;
-            if (this.EncodeEnded != null)
-                this.EncodeEnded(this, new EventArgs());
+            if (this.EncodeCompleted != null)
+                this.EncodeCompleted(this, new EncodeCompletedEventArgs(true, null, string.Empty));
 
             if (windowsSeven.IsWindowsSeven)
             {
@@ -358,7 +369,7 @@ namespace HandBrake.ApplicationServices.Services
             }
             catch (Exception exc)
             {
-                errorService.ShowError("Unable to close the log file wrtier", exc.ToString());
+                // This exception doesn't warrent user interaction, but it should be logged (TODO)
             }
         }
 
@@ -405,7 +416,9 @@ namespace HandBrake.ApplicationServices.Services
                 }
                 catch (Exception exc)
                 {
-                    throw new Exception("Unable to read log file" + Environment.NewLine + exc);
+                    logBuffer.Append(
+                        Environment.NewLine + "Unable to read Log file..." + Environment.NewLine + exc +
+                        Environment.NewLine);
                 }
             }
         }
@@ -413,10 +426,13 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Setup the logging.
         /// </summary>
-        /// <param name="encodeJob">
-        /// The encode Job.
+        /// <param name="encodeQueueTask">
+        /// The encode QueueTask.
         /// </param>
-        private void SetupLogging(QueueTask encodeJob)
+        /// <returns>
+        /// The setup logging.
+        /// </returns>
+        private bool SetupLogging(QueueTask encodeQueueTask)
         {
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
             string logFile = Path.Combine(logDir, string.Format("last_encode_log{0}.txt", Init.InstanceId));
@@ -432,8 +448,10 @@ namespace HandBrake.ApplicationServices.Services
 
                 fileWriter = new StreamWriter(logFile) { AutoFlush = true };
 
-                fileWriter.WriteLine(Logging.CreateCliLogHeader(encodeJob));
-                logBuffer.AppendLine(Logging.CreateCliLogHeader(encodeJob));
+                fileWriter.WriteLine(Logging.CreateCliLogHeader(encodeQueueTask));
+                logBuffer.AppendLine(Logging.CreateCliLogHeader(encodeQueueTask));
+
+                return true;
             }
             catch (Exception exc)
             {
@@ -443,7 +461,7 @@ namespace HandBrake.ApplicationServices.Services
                     fileWriter.Dispose();
                 }
 
-                errorService.ShowError("Error", exc.ToString());
+                return false;
             }
         }
 
@@ -472,11 +490,10 @@ namespace HandBrake.ApplicationServices.Services
                         // If the logging grows past 100MB, kill the encode and stop.
                         if (fileWriter.BaseStream.Length > 100000000)
                         {
-                            this.Stop();
-                            errorService.ShowError("The encode has been stopped. The log file has grown to over 100MB which indicates a serious problem has occured with the encode.",
-                                "Please check the encode log for an indication of what the problem is.");
+                            this.Stop(new Exception("The encode has been stopped. The log file has grown to over 100MB which indicates a serious problem has occured with the encode." +
+                                "Please check the encode log for an indication of what the problem is."));
                         }
-                    }            
+                    }
                 }
                 catch (Exception exc)
                 {
@@ -484,8 +501,6 @@ namespace HandBrake.ApplicationServices.Services
                 }
             }
         }
-
-        #region Encode Status from Standard Output
 
         /// <summary>
         /// Encode Started
@@ -496,14 +511,14 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="e">
         /// The EventArgs.
         /// </param>
-        private void Encode_EncodeStarted(object sender, EventArgs e)
+        private void EncodeEncodeStarted(object sender, EventArgs e)
         {
             Thread monitor = new Thread(EncodeMonitor);
             monitor.Start();
         }
 
         /// <summary>
-        /// Monitor the Job
+        /// Monitor the QueueTask
         /// </summary>
         private void EncodeMonitor()
         {
@@ -533,14 +548,14 @@ namespace HandBrake.ApplicationServices.Services
         private void EncodeOnEncodeProgress(object sender, int currentTask, int taskCount, float percentComplete, float currentFps, float avg, string timeRemaining)
         {
             EncodeProgressEventArgs eventArgs = new EncodeProgressEventArgs
-                {
-                    AverageFrameRate = avg,
-                    CurrentFrameRate = currentFps,
-                    EstimatedTimeLeft = Converters.EncodeToTimespan(timeRemaining),
-                    PercentComplete = percentComplete,
-                    Task = currentTask,
-                    TaskCount = taskCount
-                };
+            {
+                AverageFrameRate = avg,
+                CurrentFrameRate = currentFps,
+                EstimatedTimeLeft = Converters.EncodeToTimespan(timeRemaining),
+                PercentComplete = percentComplete,
+                Task = currentTask,
+                TaskCount = taskCount
+            };
 
             if (this.EncodeStatusChanged != null)
                 this.EncodeStatusChanged(this, eventArgs);
