@@ -13,6 +13,7 @@ namespace Handbrake.Controls
     using Functions;
 
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Model.Encoding;
 
     using Model;
 
@@ -36,7 +37,7 @@ namespace Handbrake.Controls
         /// <summary>
         /// The Subtitle List
         /// </summary>
-        private readonly List<SubtitleInfo> subList = new List<SubtitleInfo>();
+        private readonly List<SubtitleTrack> subList = new List<SubtitleTrack>();
 
         #endregion
 
@@ -82,7 +83,7 @@ namespace Handbrake.Controls
                     int srtCount = 0;
                     int subCount = 0;
 
-                    foreach (SubtitleInfo item in subList)
+                    foreach (SubtitleTrack item in subList)
                     {
                         string itemToAdd;
 
@@ -273,7 +274,7 @@ namespace Handbrake.Controls
                                    ? srtLangVal + " (" + srtFile + ")"
                                    : drp_subtitleTracks.SelectedItem.ToString();
 
-            SubtitleInfo track = new SubtitleInfo
+            SubtitleTrack track = new SubtitleTrack
                                      {
                                          Track = trackName,
                                          Forced = check_forced.Checked,
@@ -347,7 +348,7 @@ namespace Handbrake.Controls
             // Set the dropdown controls based on the selected item in the List.
             if (lv_subList.Items.Count != 0 && lv_subList.SelectedIndices.Count != 0)
             {
-                SubtitleInfo track = subList[lv_subList.SelectedIndices[0]];
+                SubtitleTrack track = subList[lv_subList.SelectedIndices[0]];
 
                 int c = 0;
                 if (lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[0].Text.ToLower().Contains(".srt"))

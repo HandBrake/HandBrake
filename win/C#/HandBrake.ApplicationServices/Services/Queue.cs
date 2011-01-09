@@ -27,7 +27,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// The Queue Job List
         /// </summary>
-        private readonly List<Job> queue = new List<Job>();
+        private readonly List<QueueTask> queue = new List<QueueTask>();
 
         /// <summary>
         /// An XML Serializer
@@ -67,7 +67,7 @@ namespace HandBrake.ApplicationServices.Services
         /// Gets or sets the last encode that was processed.
         /// </summary>
         /// <returns></returns> 
-        public Job LastEncode { get; set; }
+        public QueueTask LastEncode { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether Request Pause
@@ -77,7 +77,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Gets the current state of the encode queue.
         /// </summary>
-        public ReadOnlyCollection<Job> CurrentQueue
+        public ReadOnlyCollection<QueueTask> CurrentQueue
         {
             get { return this.queue.AsReadOnly(); }
         }
@@ -97,9 +97,9 @@ namespace HandBrake.ApplicationServices.Services
         /// Gets and removes the next job in the queue.
         /// </summary>
         /// <returns>The job that was removed from the queue.</returns>
-        private Job GetNextJob()
+        private QueueTask GetNextJob()
         {
-            Job job = this.queue[0];
+            QueueTask job = this.queue[0];
             this.LastEncode = job;
             this.Remove(0); // Remove the item which we are about to pass out.
 
@@ -128,7 +128,7 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         public void Add(string query, int title, string source, string destination, bool customJob)
         {
-            Job newJob = new Job
+            QueueTask newJob = new QueueTask
                              {
                                  Id = this.nextJobId++,
                                  Title = title,
@@ -163,12 +163,12 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         /// <param name="index">the job id</param>
         /// <returns>A job for the given index or blank job object</returns>
-        public Job GetJob(int index)
+        public QueueTask GetJob(int index)
         {
             if (this.queue.Count >= (index + 1))
                 return this.queue[index];
 
-            return new Job();
+            return new QueueTask();
         }
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace HandBrake.ApplicationServices.Services
         {
             if (index > 0)
             {
-                Job item = queue[index];
+                QueueTask item = queue[index];
 
                 queue.RemoveAt(index);
                 queue.Insert((index - 1), item);
@@ -199,7 +199,7 @@ namespace HandBrake.ApplicationServices.Services
         {
             if (index < this.queue.Count - 1)
             {
-                Job item = this.queue[index];
+                QueueTask item = this.queue[index];
 
                 this.queue.RemoveAt(index);
                 this.queue.Insert((index + 1), item);
@@ -236,7 +236,7 @@ namespace HandBrake.ApplicationServices.Services
                 using (FileStream strm = new FileStream(tempPath, FileMode.Create, FileAccess.Write))
                 {
                     if (serializer == null)
-                        serializer = new XmlSerializer(typeof(List<Job>));
+                        serializer = new XmlSerializer(typeof(List<QueueTask>));
                     serializer.Serialize(strm, queue);
                     strm.Close();
                     strm.Dispose();
@@ -260,7 +260,7 @@ namespace HandBrake.ApplicationServices.Services
         public bool WriteBatchScriptToFile(string file)
         {
             string queries = string.Empty;
-            foreach (Job queueItem in this.queue)
+            foreach (QueueTask queueItem in this.queue)
             {
                 string qItem = queueItem.Query;
                 string fullQuery = '"' + Application.StartupPath + "\\HandBrakeCLI.exe" + '"' + qItem;
@@ -309,12 +309,12 @@ namespace HandBrake.ApplicationServices.Services
                     if (strm.Length != 0)
                     {
                         if (serializer == null)
-                            serializer = new XmlSerializer(typeof(List<Job>));
+                            serializer = new XmlSerializer(typeof(List<QueueTask>));
 
-                        List<Job> list = serializer.Deserialize(strm) as List<Job>;
+                        List<QueueTask> list = serializer.Deserialize(strm) as List<QueueTask>;
 
                         if (list != null)
-                            foreach (Job item in list)
+                            foreach (QueueTask item in list)
                                 this.queue.Add(item);
 
                         if (!file.Contains("hb_queue_recovery"))
@@ -390,7 +390,7 @@ namespace HandBrake.ApplicationServices.Services
             // Run through each item on the queue
             while (this.Count != 0)
             {
-                Job encJob = this.GetNextJob();
+                QueueTask encJob = this.GetNextJob();
                 this.SaveQueue(); // Update the queue recovery file
 
                 Run(encJob, true);
@@ -416,7 +416,7 @@ namespace HandBrake.ApplicationServices.Services
                     Thread.Sleep(2000);
                 }
             }
-            this.LastEncode = new Job();
+            this.LastEncode = new QueueTask();
 
             if (this.QueueCompleted != null)
                 this.QueueCompleted(this, new EventArgs());

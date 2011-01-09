@@ -12,6 +12,9 @@ namespace Handbrake.Presets
     using System.Windows.Forms;
     using System.Xml;
     using Functions;
+
+    using HandBrake.ApplicationServices.Model.Encoding;
+
     using Model;
 
     /// <summary>

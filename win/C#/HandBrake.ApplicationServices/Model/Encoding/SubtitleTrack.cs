@@ -3,36 +3,36 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace Handbrake.Model
+namespace HandBrake.ApplicationServices.Model.Encoding
 {
     using System.Windows.Forms;
-
-    using HandBrake.ApplicationServices.Model;
 
     /// <summary>
     /// Subtitle Information
     /// </summary>
-    public class SubtitleInfo
+    public class SubtitleTrack
     {
         /// <summary>
-        /// Gets or sets the Subtitle Track
+        /// Gets or sets Track.
         /// </summary>
         public string Track { get; set; }
 
         /// <summary>
-        /// Gets or sets the Forced Subtitle
+        /// Gets or sets a value indicating whether Forced.
         /// </summary>
         public bool Forced { get; set; }
 
         /// <summary>
-        /// Gets or sets the Burned In Subtitle
+        /// Gets or sets a value indicating whether Burned.
         /// </summary>
         public bool Burned { get; set; }
 
         /// <summary>
-        /// Gets or sets the Default Subtitle Track
+        /// Gets or sets a value indicating whether Default.
         /// </summary>
         public bool Default { get; set; }
+
+        #region SRT Specific Options
 
         /// <summary>
         /// Gets or sets the SRT Language
@@ -66,6 +66,8 @@ namespace Handbrake.Model
         {
             get { return this.SrtFileName != "-"; }
         }
+
+        #endregion
 
         /// <summary>
         /// Gets or sets the type of the subtitle

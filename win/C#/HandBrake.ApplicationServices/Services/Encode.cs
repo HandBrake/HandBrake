@@ -148,7 +148,7 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         public void CreatePreviewSample(string query)
         {
-            this.Run(new Job { Query = query }, false);
+            this.Run(new QueueTask { Query = query }, false);
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="enableLogging">
         /// Enable Logging. When Disabled we onlt parse Standard Ouput for progress info. Standard Error log data is ignored.
         /// </param>
-        protected void Run(Job encJob, bool enableLogging)
+        protected void Run(QueueTask encJob, bool enableLogging)
         {
             try
             {
@@ -416,7 +416,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="encodeJob">
         /// The encode Job.
         /// </param>
-        private void SetupLogging(Job encodeJob)
+        private void SetupLogging(QueueTask encodeJob)
         {
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
             string logFile = Path.Combine(logDir, string.Format("last_encode_log{0}.txt", Init.InstanceId));

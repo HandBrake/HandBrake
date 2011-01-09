@@ -13,6 +13,7 @@ namespace HandBrake.ApplicationServices.Parsing
     using System.Text.RegularExpressions;
 
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Model.Encoding;
 
     /// <summary>
     /// An object that represents a single Title of a DVD

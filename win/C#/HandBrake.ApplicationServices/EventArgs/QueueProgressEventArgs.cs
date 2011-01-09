@@ -20,7 +20,7 @@ namespace HandBrake.ApplicationServices.EventArgs
         /// <param name="newJob">
         /// The new job.
         /// </param>
-        public QueueProgressEventArgs(Job newJob)
+        public QueueProgressEventArgs(QueueTask newJob)
         {
             this.NewJob = newJob;
         }
@@ -28,6 +28,6 @@ namespace HandBrake.ApplicationServices.EventArgs
         /// <summary>
         /// Gets or sets the new job which is about to be processed.
         /// </summary>
-        public Job NewJob { get; set; }
+        public QueueTask NewJob { get; set; }
     }
 }

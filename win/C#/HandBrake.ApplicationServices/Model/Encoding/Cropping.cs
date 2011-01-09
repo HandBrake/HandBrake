@@ -3,7 +3,7 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace HandBrake.ApplicationServices.Model
+namespace HandBrake.ApplicationServices.Model.Encoding
 {
     /// <summary>
     /// Cropping T B L R

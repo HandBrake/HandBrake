@@ -14,6 +14,7 @@ namespace Handbrake
     using Functions;
 
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
@@ -317,8 +318,8 @@ namespace Handbrake
             }
 
             list_queue.Items.Clear();
-            ReadOnlyCollection<Job> theQueue = queue.CurrentQueue;
-            foreach (Job queueItem in theQueue)
+            ReadOnlyCollection<QueueTask> theQueue = queue.CurrentQueue;
+            foreach (QueueTask queueItem in theQueue)
             {
                 string qItem = queueItem.Query;
                 QueryParser parsed = Functions.QueryParser.Parse(qItem);

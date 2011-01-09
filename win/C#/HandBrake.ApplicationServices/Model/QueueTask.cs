@@ -8,17 +8,33 @@ namespace HandBrake.ApplicationServices.Model
     /// <summary>
     /// The job.
     /// </summary>
-    public class Job
+    public class QueueTask
     {
+        /*
+         * TODO
+         * - Update the Query property to generate the query from the EncodeTask object.
+         * - Remove Sourcee, Destination and Title when they are no longer used.
+         */
+
         /// <summary>
         /// Gets or sets the job ID.
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the selected Title.
+        /// Gets or sets Title.
         /// </summary>
         public int Title { get; set; }
+
+        /// <summary>
+        /// Gets or sets Source.
+        /// </summary>
+        public string Source { get; set; }
+
+        /// <summary>
+        /// Gets or sets Destination.
+        /// </summary>
+        public string Destination { get; set; }
 
         /// <summary>
         /// Gets or sets the query string.
@@ -31,14 +47,9 @@ namespace HandBrake.ApplicationServices.Model
         public bool CustomQuery { get; set; }
 
         /// <summary>
-        /// Gets or sets the source file of encoding.
+        /// Gets or sets the Encode Task.
         /// </summary>
-        public string Source { get; set; }
-
-        /// <summary>
-        /// Gets or sets the destination for the file to be encoded.
-        /// </summary>
-        public string Destination { get; set; }
+        public EncodeTask Task { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether or not this instance is empty.
@@ -47,8 +58,8 @@ namespace HandBrake.ApplicationServices.Model
         {
             get
             {
-                return this.Id == 0 && string.IsNullOrEmpty(this.Query) && string.IsNullOrEmpty(this.Source) &&
-                       string.IsNullOrEmpty(this.Destination);
+                return this.Id == 0 && string.IsNullOrEmpty(this.Query) && string.IsNullOrEmpty(this.Task.Source) &&
+                       string.IsNullOrEmpty(this.Task.Destination);
             }
         }
     }

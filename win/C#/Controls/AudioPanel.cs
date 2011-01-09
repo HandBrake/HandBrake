@@ -14,7 +14,8 @@ namespace Handbrake.Controls
     using HandBrake.ApplicationServices.Parsing;
 
     using Presets;
-    using AudioTrack = Model.AudioTrack;
+
+    using AudioTrack = HandBrake.ApplicationServices.Model.Encoding.AudioTrack;
 
     /// <summary>
     /// The AudioPanel Control

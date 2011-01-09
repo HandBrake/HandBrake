@@ -40,7 +40,7 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// Gets or sets the last encode that was processed.
         /// </summary>
         /// <returns></returns> 
-        Job LastEncode { get; set; }
+        QueueTask LastEncode { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether Request Pause
@@ -50,7 +50,7 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <summary>
         /// Gets the current state of the encode queue.
         /// </summary>
-        ReadOnlyCollection<Job> CurrentQueue { get; }
+        ReadOnlyCollection<QueueTask> CurrentQueue { get; }
 
         /// <summary>
         /// Gets the number of items in the queue.
@@ -88,7 +88,7 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// </summary>
         /// <param name="index">the job id</param>
         /// <returns>A job for the given index or blank job object</returns>
-        Job GetJob(int index);
+        QueueTask GetJob(int index);
 
         /// <summary>
         /// Moves an item up one position in the queue.

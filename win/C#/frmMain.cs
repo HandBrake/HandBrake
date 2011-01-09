@@ -58,7 +58,7 @@ namespace Handbrake
         private DVD currentSource;
         private IScan SourceScan = new ScanService();
         private List<DriveInformation> drives;
-        private Job queueEdit;
+        private QueueTask queueEdit;
 
         // Delegates **********************************************************
         private delegate void UpdateWindowHandler();
@@ -2335,7 +2335,7 @@ namespace Handbrake
         /// <param name="job">
         /// The job.
         /// </param>
-        public void RecievingJob(Job job)
+        public void RecievingJob(QueueTask job)
         {
             // Reset
             this.currentlySelectedPreset = null;

@@ -3,7 +3,7 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace Handbrake.Model
+namespace HandBrake.ApplicationServices.Model.Encoding
 {
     /// <summary>
     /// An Audio Track for the Audio Panel

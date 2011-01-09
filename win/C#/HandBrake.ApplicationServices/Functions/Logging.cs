@@ -26,7 +26,7 @@ namespace HandBrake.ApplicationServices.Functions
         /// <returns>
         /// The create cli log header.
         /// </returns>
-        public static string CreateCliLogHeader(Job encJob)
+        public static string CreateCliLogHeader(QueueTask encJob)
         {
             StringBuilder logHeader = new StringBuilder();
 

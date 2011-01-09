@@ -35,7 +35,7 @@ namespace Handbrake.Functions
         /// <summary>
         /// The XML Serializer
         /// </summary>
-        private static readonly XmlSerializer Ser = new XmlSerializer(typeof(List<Job>));
+        private static readonly XmlSerializer Ser = new XmlSerializer(typeof(List<QueueTask>));
 
         /// <summary>
         /// Calculate the duration of the selected title and chapters
@@ -385,7 +385,7 @@ namespace Handbrake.Functions
 
                     using (FileStream strm = new FileStream(Path.Combine(file.DirectoryName, file.Name), FileMode.Open, FileAccess.Read))
                     {
-                        List<Job> list = Ser.Deserialize(strm) as List<Job>;
+                        List<QueueTask> list = Ser.Deserialize(strm) as List<QueueTask>;
                         if (list != null)
                         {
                             if (list.Count != 0)

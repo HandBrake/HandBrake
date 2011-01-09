@@ -9,6 +9,9 @@ namespace Handbrake.Functions
     using System.Collections;
     using System.Globalization;
     using System.Text.RegularExpressions;
+
+    using HandBrake.ApplicationServices.Model.Encoding;
+
     using Model;
 
     /// <summary>
