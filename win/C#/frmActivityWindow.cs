@@ -137,12 +137,12 @@ namespace Handbrake
                     if (mode == ActivityLogMode.Scan)
                     {
                         scan.ScanCompleted += stopWindowRefresh;
-                        encode.EncodeEnded -= stopWindowRefresh;
+                        encode.EncodeCompleted -= stopWindowRefresh;
                     }
                     else
                     {
                         scan.ScanCompleted -= stopWindowRefresh;
-                        encode.EncodeEnded += stopWindowRefresh;
+                        encode.EncodeCompleted += stopWindowRefresh;
                     }
 
                     // Start a fresh window timer
@@ -466,7 +466,7 @@ namespace Handbrake
             encode.EncodeStarted -= encode_EncodeStarted;
 
             scan.ScanCompleted -= stopWindowRefresh;
-            encode.EncodeEnded -= stopWindowRefresh;
+            encode.EncodeCompleted -= stopWindowRefresh;
 
             windowTimer.Dispose();
             e.Cancel = true;

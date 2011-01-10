@@ -14,6 +14,7 @@ namespace Handbrake
     using System.Windows.Forms;
     using Functions;
 
+    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
@@ -99,7 +100,7 @@ namespace Handbrake
             cb_preview.SelectedIndex = 0;
 
             encodeQueue.EncodeStarted += this.EncodeQueueEncodeStarted;
-            encodeQueue.EncodeEnded += this.EncodeQueueEncodeEnded;
+            encodeQueue.EncodeCompleted += this.EncodeQueueEncodeEnded;
         }
 
         #region Delegates
@@ -196,7 +197,7 @@ namespace Handbrake
         {
             if (this.InvokeRequired)
             {
-                this.BeginInvoke(new Encode.EncodeProgessStatus(this.EncodeQueueEncodeStatusChanged), new[] { sender, e });
+                this.BeginInvoke(new EncodeProgessStatus(this.EncodeQueueEncodeStatusChanged), new[] { sender, e });
                 return;
             }
 
@@ -323,7 +324,8 @@ namespace Handbrake
                 return;
             }
 
-            encodeQueue.CreatePreviewSample((string)state);
+            QueueTask task = new QueueTask((string)state);
+            encodeQueue.Start(task, false);
         }
 
         #endregion
@@ -434,7 +436,7 @@ namespace Handbrake
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             encodeQueue.EncodeStarted -= this.EncodeQueueEncodeStarted;
-            encodeQueue.EncodeEnded -= this.EncodeQueueEncodeEnded;
+            encodeQueue.EncodeCompleted -= this.EncodeQueueEncodeEnded;
             base.OnClosing(e);
         }
     }

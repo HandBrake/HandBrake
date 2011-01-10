@@ -236,7 +236,7 @@ namespace Handbrake
 
             // Handle Encode Start / Finish / Pause
             encodeQueue.EncodeStarted += new EventHandler(encodeStarted);
-            encodeQueue.EncodeEnded += new EventHandler(encodeEnded);
+            encodeQueue.EncodeCompleted += encodeEnded;
 
             // Scan Started and Completed Events
             SourceScan.ScanStatusChanged += this.SourceScanScanStatusChanged;
@@ -1050,7 +1050,7 @@ namespace Handbrake
                     encodeQueue.Pause();
 
                     if (Settings.Default.showCliForInGuiEncodeStatus)
-                        encodeQueue.SafelyClose();
+                        encodeQueue.SafelyStop();
                     else
                         encodeQueue.Stop();
                 }
@@ -2422,7 +2422,7 @@ namespace Handbrake
         {
             if (this.InvokeRequired)
             {
-                this.BeginInvoke(new Encode.EncodeProgessStatus(EncodeQueue_EncodeStatusChanged), new[] { sender, e });
+                this.BeginInvoke(new EncodeProgessStatus(EncodeQueue_EncodeStatusChanged), new[] { sender, e });
                 return;
             }
 

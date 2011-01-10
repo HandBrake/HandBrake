@@ -62,7 +62,7 @@ namespace Handbrake
             queue.QueueListChanged += new EventHandler(queue_QueueListChanged);
 
             queue.EncodeStarted += new EventHandler(queue_EncodeStarted);
-            queue.EncodeEnded += new EventHandler(queue_EncodeEnded);
+            queue.EncodeCompleted += queue_EncodeEnded;
 
             drp_completeOption.Text = Properties.Settings.Default.CompletionOption;
         }
@@ -124,7 +124,7 @@ namespace Handbrake
         {
             if (this.InvokeRequired)
             {
-                this.BeginInvoke(new Encode.EncodeProgessStatus(EncodeQueue_EncodeStatusChanged), new[] { sender, e });
+                this.BeginInvoke(new EncodeProgessStatus(EncodeQueue_EncodeStatusChanged), new[] { sender, e });
                 return;
             }
 
