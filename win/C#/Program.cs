@@ -33,13 +33,20 @@ namespace Handbrake
             InstanceId = Process.GetProcessesByName("HandBrake").Length;
 
             // Handle any unhandled exceptions
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomainUnhandledException);
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
 
             // Attempt to upgrade / keep the users settings between versions
             if (Settings.Default.UpdateRequired)
             {
                 Settings.Default.Upgrade();
+                // Reset some settings
                 Settings.Default.UpdateRequired = false;
+                Settings.Default.CliExeHash = null;
+                Settings.Default.hb_build = 0;
+                Settings.Default.hb_platform = null;
+                Settings.Default.hb_version = null;
+
+                // Re-detect the CLI version data.
                 Functions.Main.SetCliVersionData();
             }
 
