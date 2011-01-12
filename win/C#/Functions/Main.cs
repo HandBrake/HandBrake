@@ -10,6 +10,7 @@ namespace Handbrake.Functions
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Security.Cryptography;
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Windows.Forms;
@@ -291,15 +292,22 @@ namespace Handbrake.Functions
 
             // 0 = SVN Build / Version
             // 1 = Build Date
-            DateTime lastModified = File.GetLastWriteTime("HandBrakeCLI.exe");
 
-            if (Properties.Settings.Default.hb_build != 0 && Properties.Settings.Default.cliLastModified == lastModified)
+            // Get the SHA1 Hash of HandBrakeCLI
+            byte[] hash;
+            using (Stream stream = File.OpenRead("HandBrakeCLI.exe"))
+            {
+                hash = SHA1.Create().ComputeHash(stream);
+            }
+            string base64Hash = Convert.ToBase64String(hash);
+         
+            // Compare the hash with the last known hash. If it's the same, return.
+            if (Properties.Settings.Default.CliExeHash == base64Hash)
             {
                 return;
             }
 
-            Properties.Settings.Default.cliLastModified = lastModified;
-
+            // It's not the same, so start the CLI to get it's version data.
             Process cliProcess = new Process();
             ProcessStartInfo handBrakeCli = new ProcessStartInfo("HandBrakeCLI.exe", " -u -v0")
                                                 {
@@ -350,11 +358,14 @@ namespace Handbrake.Functions
                     }
                 }
 
+                Properties.Settings.Default.CliExeHash = base64Hash;
+
                 Properties.Settings.Default.Save();
             }
             catch (Exception e)
             {
                 Properties.Settings.Default.hb_build = 0;
+                Properties.Settings.Default.CliExeHash = null;
                 Properties.Settings.Default.Save();
 
                 ShowExceptiowWindow("Unable to retrieve version information from the CLI.", e.ToString());

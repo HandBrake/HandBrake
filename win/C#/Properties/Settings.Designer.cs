@@ -420,12 +420,13 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.DateTime cliLastModified {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CliExeHash {
             get {
-                return ((global::System.DateTime)(this["cliLastModified"]));
+                return ((string)(this["CliExeHash"]));
             }
             set {
-                this["cliLastModified"] = value;
+                this["CliExeHash"] = value;
             }
         }
         

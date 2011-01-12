@@ -101,7 +101,7 @@
     <Setting Name="growlEncode" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="cliLastModified" Type="System.DateTime" Scope="User">
+    <Setting Name="CliExeHash" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="previewScanCount" Type="System.Int32" Scope="User">
