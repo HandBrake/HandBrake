@@ -671,7 +671,15 @@ static void hb_libmpeg2_close( hb_libmpeg2_t ** _m )
     for ( i = 0; i < NTAGS; ++i )
     {
         if ( m->tags[i].cc_buf )
+        {
+            if ( m->tags[i].cc_buf == m->last_cc1_buf )
+                m->last_cc1_buf = NULL;
             hb_buffer_close( &m->tags[i].cc_buf );
+        }
+    }
+    if ( m->last_cc1_buf )
+    {
+        hb_buffer_close( &m->last_cc1_buf );
     }
 
     free( m );
@@ -782,6 +790,11 @@ static int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
             if ( pv->libmpeg2->last_cc1_buf )
             {
                 cc_send_to_decoder( pv->libmpeg2, pv->libmpeg2->last_cc1_buf );
+                if ( pv->libmpeg2->tags[pv->libmpeg2->cur_tag].cc_buf == 
+                     pv->libmpeg2->last_cc1_buf )
+                {
+                    pv->libmpeg2->tags[pv->libmpeg2->cur_tag].cc_buf = NULL;
+                }
                 pv->libmpeg2->last_cc1_buf = NULL;
             }
             cc_send_to_decoder( pv->libmpeg2, hb_buffer_init( 0 ) );
@@ -820,10 +833,6 @@ static void decmpeg2Close( hb_work_object_t * w )
     if ( pv->libmpeg2->job )
     {
         hb_log( "mpeg2 done: %d frames", pv->libmpeg2->nframes );
-    }
-    if ( pv->libmpeg2->last_cc1_buf )
-    {
-        hb_buffer_close( &pv->libmpeg2->last_cc1_buf );
     }
     hb_list_close( &pv->list );
     if ( pv->libmpeg2->list_subtitle )
