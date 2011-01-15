@@ -30,7 +30,7 @@ namespace Handbrake
         /// <summary>
         /// The Encode Object
         /// </summary>
-        private readonly IQueue encode;
+        private readonly IEncode encode;
 
         /// <summary>
         /// The Scan Object
@@ -68,7 +68,7 @@ namespace Handbrake
         /// <param name="scan">
         /// The scan.
         /// </param>
-        public frmActivityWindow(IQueue encode, IScan scan)
+        public frmActivityWindow(IEncode encode, IScan scan)
         {
             InitializeComponent();
 

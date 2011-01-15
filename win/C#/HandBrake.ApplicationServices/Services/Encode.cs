@@ -131,9 +131,9 @@ namespace HandBrake.ApplicationServices.Services
         {
             try
             {
-                QueueTask QueueTask = encodeQueueTask as QueueTask;
+                QueueTask queueTask = encodeQueueTask;
 
-                if (QueueTask == null)
+                if (queueTask == null)
                 {
                     throw new ArgumentNullException("QueueTask was null");
                 }
@@ -147,14 +147,14 @@ namespace HandBrake.ApplicationServices.Services
 
                 if (enableLogging)
                 {
-                    if (!SetupLogging(QueueTask))
+                    try
                     {
-                        if (this.EncodeCompleted != null)
-                            this.EncodeCompleted(
-                                this,
-                                new EncodeCompletedEventArgs(false, null, "Unable to Start Encode Logging process."));
-
-                        return;
+                        SetupLogging(queueTask);
+                    }
+                    catch (Exception)
+                    {
+                        IsEncoding = false;
+                        throw;
                     }
                 }
 
@@ -164,7 +164,7 @@ namespace HandBrake.ApplicationServices.Services
                 }
 
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
-                ProcessStartInfo cliStart = new ProcessStartInfo(handbrakeCLIPath, QueueTask.Query)
+                ProcessStartInfo cliStart = new ProcessStartInfo(handbrakeCLIPath, queueTask.Query)
                 {
                     RedirectStandardOutput = true,
                     RedirectStandardError = enableLogging ? true : false,
@@ -346,9 +346,7 @@ namespace HandBrake.ApplicationServices.Services
         private void HbProcessExited(object sender, EventArgs e)
         {
             IsEncoding = false;
-            if (this.EncodeCompleted != null)
-                this.EncodeCompleted(this, new EncodeCompletedEventArgs(true, null, string.Empty));
-
+  
             if (windowsSeven.IsWindowsSeven)
             {
                 windowsSeven.SetTaskBarProgressToNoProgress();
@@ -371,6 +369,9 @@ namespace HandBrake.ApplicationServices.Services
             {
                 // This exception doesn't warrent user interaction, but it should be logged (TODO)
             }
+
+            if (this.EncodeCompleted != null)
+                this.EncodeCompleted(this, new EncodeCompletedEventArgs(true, null, string.Empty));
         }
 
         /// <summary>
@@ -429,10 +430,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="encodeQueueTask">
         /// The encode QueueTask.
         /// </param>
-        /// <returns>
-        /// The setup logging.
-        /// </returns>
-        private bool SetupLogging(QueueTask encodeQueueTask)
+        private void SetupLogging(QueueTask encodeQueueTask)
         {
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
             string logFile = Path.Combine(logDir, string.Format("last_encode_log{0}.txt", Init.InstanceId));
@@ -450,18 +448,15 @@ namespace HandBrake.ApplicationServices.Services
 
                 fileWriter.WriteLine(Logging.CreateCliLogHeader(encodeQueueTask));
                 logBuffer.AppendLine(Logging.CreateCliLogHeader(encodeQueueTask));
-
-                return true;
             }
-            catch (Exception exc)
+            catch (Exception)
             {
                 if (fileWriter != null)
                 {
                     fileWriter.Close();
                     fileWriter.Dispose();
                 }
-
-                return false;
+                throw;
             }
         }
 

@@ -40,7 +40,7 @@ namespace Handbrake
     public partial class frmMain : Form
     {
         // Objects which may be used by one or more other objects *************
-        private IQueue encodeQueue = new Queue();
+        private IQueueProcessor queueProcessor = new QueueProcessor(Program.InstanceId);
         private PresetsHandler presetHandler = new PresetsHandler();
 
         // Windows ************************************************************
@@ -153,7 +153,7 @@ namespace Handbrake
             treeView_presets.ExpandAll();
             lbl_encode.Text = string.Empty;
             drop_mode.SelectedIndex = 0;
-            queueWindow = new frmQueue(encodeQueue, this); // Prepare the Queue
+            queueWindow = new frmQueue(this.queueProcessor, this); // Prepare the Queue
             if (!Settings.Default.QueryEditorTab)
                 tabs_panel.TabPages.RemoveAt(7); // Remove the query editor tab if the user does not want it enabled.
             if (Settings.Default.tooltipEnable)
@@ -182,7 +182,7 @@ namespace Handbrake
 
             // Event Handlers and Queue Recovery
             events();
-            Main.RecoverQueue(encodeQueue);
+            Main.RecoverQueue(this.queueProcessor);
 
             // If have a file passed in via command arguemtents, check it's a file and try scanning it.
             if (args.Length >= 1 && (File.Exists(args[0]) || Directory.Exists(args[0])))
@@ -231,79 +231,79 @@ namespace Handbrake
             RegisterPresetEventHandler();
 
             // Handle Window Resize
-            if (Properties.Settings.Default.MainWindowMinimize)
-                this.Resize += new EventHandler(frmMain_Resize);
+            if (Settings.Default.MainWindowMinimize)
+                this.Resize += this.frmMain_Resize;
 
             // Handle Encode Start / Finish / Pause
-            encodeQueue.EncodeStarted += new EventHandler(encodeStarted);
-            encodeQueue.EncodeCompleted += encodeEnded;
+            this.queueProcessor.EncodeService.EncodeStarted += this.encodeStarted;
+            this.queueProcessor.EncodeService.EncodeCompleted += encodeEnded;
 
             // Scan Started and Completed Events
             SourceScan.ScanStatusChanged += this.SourceScanScanStatusChanged;
             SourceScan.ScanCompleted += this.SourceScanScanCompleted;
 
             // Handle a file being draged onto the GUI.
-            this.DragEnter += new DragEventHandler(frmMain_DragEnter);
-            this.DragDrop += new DragEventHandler(frmMain_DragDrop);
+            this.DragEnter += frmMain_DragEnter;
+            this.DragDrop += this.frmMain_DragDrop;
         }
 
         // Change the preset label to custom when a user changes a setting. Don't want to give the impression that users can change settings and still be using a preset
         private void RegisterPresetEventHandler()
         {
             // Output Settings
-            drop_format.SelectedIndexChanged += new EventHandler(changePresetLabel);
-            check_largeFile.CheckedChanged += new EventHandler(changePresetLabel);
-            check_iPodAtom.CheckedChanged += new EventHandler(changePresetLabel);
-            check_optimiseMP4.CheckedChanged += new EventHandler(changePresetLabel);
+            drop_format.SelectedIndexChanged += this.changePresetLabel;
+            check_largeFile.CheckedChanged += this.changePresetLabel;
+            check_iPodAtom.CheckedChanged += this.changePresetLabel;
+            check_optimiseMP4.CheckedChanged += this.changePresetLabel;
 
             // Picture Settings
-            PictureSettings.PictureSettingsChanged += new EventHandler(changePresetLabel);
+            PictureSettings.PictureSettingsChanged += this.changePresetLabel;
 
             // Filter Settings
-            Filters.FilterSettingsChanged += new EventHandler(changePresetLabel);
+            Filters.FilterSettingsChanged += this.changePresetLabel;
 
             // Video Tab
-            drp_videoEncoder.SelectedIndexChanged += new EventHandler(changePresetLabel);
-            check_2PassEncode.CheckedChanged += new EventHandler(changePresetLabel);
-            check_turbo.CheckedChanged += new EventHandler(changePresetLabel);
-            text_filesize.TextChanged += new EventHandler(changePresetLabel);
-            text_bitrate.TextChanged += new EventHandler(changePresetLabel);
-            slider_videoQuality.ValueChanged += new EventHandler(changePresetLabel);
+            drp_videoEncoder.SelectedIndexChanged += this.changePresetLabel;
+            check_2PassEncode.CheckedChanged += this.changePresetLabel;
+            check_turbo.CheckedChanged += this.changePresetLabel;
+            text_filesize.TextChanged += this.changePresetLabel;
+            text_bitrate.TextChanged += this.changePresetLabel;
+            slider_videoQuality.ValueChanged += this.changePresetLabel;
 
             // Audio Panel
-            AudioSettings.AudioListChanged += new EventHandler(changePresetLabel);
+            AudioSettings.AudioListChanged += this.changePresetLabel;
 
             // Advanced Tab
-            x264Panel.rtf_x264Query.TextChanged += new EventHandler(changePresetLabel);
+            x264Panel.rtf_x264Query.TextChanged += this.changePresetLabel;
         }
 
         private void UnRegisterPresetEventHandler()
         {
             // Output Settings 
-            drop_format.SelectedIndexChanged -= new EventHandler(changePresetLabel);
-            check_largeFile.CheckedChanged -= new EventHandler(changePresetLabel);
-            check_iPodAtom.CheckedChanged -= new EventHandler(changePresetLabel);
-            check_optimiseMP4.CheckedChanged -= new EventHandler(changePresetLabel);
+            drop_format.SelectedIndexChanged -= this.changePresetLabel;
+            check_largeFile.CheckedChanged -= this.changePresetLabel;
+            check_iPodAtom.CheckedChanged -= this.changePresetLabel;
+            check_optimiseMP4.CheckedChanged -= this.changePresetLabel;
 
             // Picture Settings
-            PictureSettings.PictureSettingsChanged -= new EventHandler(changePresetLabel);
+            PictureSettings.PictureSettingsChanged -= this.changePresetLabel;
 
             // Filter Settings
-            Filters.FilterSettingsChanged -= new EventHandler(changePresetLabel);
+            Filters.FilterSettingsChanged -= this.changePresetLabel;
 
             // Video Tab
-            drp_videoEncoder.SelectedIndexChanged -= new EventHandler(changePresetLabel);
-            check_2PassEncode.CheckedChanged -= new EventHandler(changePresetLabel);
-            check_turbo.CheckedChanged -= new EventHandler(changePresetLabel);
-            text_filesize.TextChanged -= new EventHandler(changePresetLabel);
-            text_bitrate.TextChanged -= new EventHandler(changePresetLabel);
-            slider_videoQuality.ValueChanged -= new EventHandler(changePresetLabel);
+            drp_videoEncoder.SelectedIndexChanged -= this.changePresetLabel;
+            check_2PassEncode.CheckedChanged -= this.changePresetLabel;
+            check_turbo.CheckedChanged -= this.changePresetLabel;
+            text_filesize.TextChanged -= this.changePresetLabel;
+            text_bitrate.TextChanged -= this.changePresetLabel;
+            slider_videoQuality.ValueChanged -= this.changePresetLabel;
 
             // Audio Panel
-            AudioSettings.AudioListChanged -= new EventHandler(changePresetLabel);
+            AudioSettings.AudioListChanged -= this.changePresetLabel;
 
             // Advanced Tab
-            x264Panel.rtf_x264Query.TextChanged -= new EventHandler(changePresetLabel);
+            x264Panel.rtf_x264Query.TextChanged -= this.changePresetLabel;
         }
 
         private void changePresetLabel(object sender, EventArgs e)
@@ -340,12 +340,12 @@ namespace Handbrake
         private void encodeStarted(object sender, EventArgs e)
         {
             SetEncodeStarted();
-            encodeQueue.EncodeStatusChanged += EncodeQueue_EncodeStatusChanged;
+            this.queueProcessor.EncodeService.EncodeStatusChanged += EncodeQueue_EncodeStatusChanged;
         }
 
         private void encodeEnded(object sender, EventArgs e)
         {
-            encodeQueue.EncodeStatusChanged -= EncodeQueue_EncodeStatusChanged;
+            this.queueProcessor.EncodeService.EncodeStatusChanged -= EncodeQueue_EncodeStatusChanged;
             SetEncodeFinished();
         }
         #endregion
@@ -1047,12 +1047,12 @@ namespace Handbrake
                 if (result == DialogResult.Yes)
                 {
                     // Pause The Queue
-                    encodeQueue.Pause();
+                    this.queueProcessor.Pause();
 
                     if (Settings.Default.showCliForInGuiEncodeStatus)
-                        encodeQueue.SafelyStop();
+                        this.queueProcessor.EncodeService.SafelyStop();
                     else
-                        encodeQueue.Stop();
+                        this.queueProcessor.EncodeService.Stop();
                 }
             }
             else
@@ -1061,7 +1061,7 @@ namespace Handbrake
                 string jobSourcePath = !string.IsNullOrEmpty(rtf_query.Text) ? Main.GetSourceFromQuery(rtf_query.Text) : sourcePath;
                 string jobDestination = !string.IsNullOrEmpty(rtf_query.Text) ? Main.GetDestinationFromQuery(rtf_query.Text) : text_destination.Text;
 
-                if (encodeQueue.Count != 0 || (!string.IsNullOrEmpty(jobSourcePath) && !string.IsNullOrEmpty(jobDestination)))
+                if (this.queueProcessor.QueueManager.Count != 0 || (!string.IsNullOrEmpty(jobSourcePath) && !string.IsNullOrEmpty(jobDestination)))
                 {
                     string generatedQuery = QueryGenerator.GenerateFullQuery(this);
                     string specifiedQuery = rtf_query.Text != string.Empty
@@ -1116,15 +1116,23 @@ namespace Handbrake
 
                     if (overwrite == DialogResult.Yes)
                     {
-                        if (encodeQueue.Count == 0)
-                            encodeQueue.Add(query, this.GetTitle(), jobSourcePath, jobDestination, (rtf_query.Text != string.Empty));
+                        QueueTask task = new QueueTask(query)
+                            {
+                                Title = this.GetTitle(),
+                                Source = jobSourcePath,
+                                Destination = jobDestination,
+                                CustomQuery = (this.rtf_query.Text != string.Empty)
+                            };
+
+                        if (this.queueProcessor.QueueManager.Count == 0)
+                            this.queueProcessor.QueueManager.Add(task);
 
                         queueWindow.SetQueue();
-                        if (encodeQueue.Count > 1)
+                        if (this.queueProcessor.QueueManager.Count > 1)
                             queueWindow.Show(false);
 
                         SetEncodeStarted(); // Encode is running, so setup the GUI appropriately
-                        encodeQueue.Start(); // Start The Queue Encoding Process
+                        this.queueProcessor.Start(); // Start The Queue Encoding Process
                     }
 
                     this.Focus();
@@ -1229,7 +1237,7 @@ namespace Handbrake
             }
 
             // Make sure we don't have a duplciate on the queue.
-            if (encodeQueue.CheckForDestinationDuplicate(jobDestination))
+            if (this.queueProcessor.QueueManager.CheckForDestinationPathDuplicates(jobDestination))
             {
                 if (showError)
                 {
@@ -1252,9 +1260,16 @@ namespace Handbrake
             }
 
             // Add the job.
-            encodeQueue.Add(query, this.GetTitle(), jobSourcePath, jobDestination, (rtf_query.Text != string.Empty));
+            QueueTask task = new QueueTask(query)
+            {
+                Title = this.GetTitle(),
+                Source = jobSourcePath,
+                Destination = jobDestination,
+                CustomQuery = (this.rtf_query.Text != string.Empty)
+            };
+            this.queueProcessor.QueueManager.Add(task);
 
-            lbl_encode.Text = encodeQueue.Count + " encode(s) pending in the queue";
+            lbl_encode.Text = this.queueProcessor.QueueManager.Count + " encode(s) pending in the queue";
 
             return true;
         }
@@ -1318,7 +1333,7 @@ namespace Handbrake
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
         {
             if (this.activityWindow == null || !this.activityWindow.IsHandleCreated)
-                this.activityWindow = new frmActivityWindow(encodeQueue, SourceScan);
+                this.activityWindow = new frmActivityWindow(this.queueProcessor.EncodeService, SourceScan);
 
             this.activityWindow.Show();
             this.activityWindow.Activate();
@@ -2398,7 +2413,7 @@ namespace Handbrake
                 lbl_encode.Visible = true;
                 ProgressBarStatus.Value = 0;
                 ProgressBarStatus.Visible = true;
-                lbl_encode.Text = "Encoding with " + encodeQueue.Count + " encode(s) pending";
+                lbl_encode.Text = "Encoding with " + this.queueProcessor.QueueManager.Count + " encode(s) pending";
                 btn_start.Text = "Stop";
                 btn_start.ToolTipText = "Stop the encoding process.";
                 btn_start.Image = Properties.Resources.stop;
@@ -2433,7 +2448,7 @@ namespace Handbrake
                 e.CurrentFrameRate,
                 e.AverageFrameRate,
                 e.EstimatedTimeLeft,
-                encodeQueue.Count);
+                this.queueProcessor.QueueManager.Count);
 
             ProgressBarStatus.Value = (int)Math.Round(e.PercentComplete);
         }
@@ -2583,7 +2598,7 @@ namespace Handbrake
             try
             {
                 // If currently encoding, the queue isn't paused, and there are queue items to process, prompt to confirm close.
-                if (encodeQueue.IsEncoding)
+                if (this.queueProcessor.EncodeService.IsEncoding)
                 {
                     DialogResult result =
                         MessageBox.Show(
@@ -2598,7 +2613,8 @@ namespace Handbrake
                         return;
                     }
 
-                    encodeQueue.Stop();
+                    this.queueProcessor.Pause();
+                    this.queueProcessor.EncodeService.Stop();
                 }
 
                 if (SourceScan.IsScanning)

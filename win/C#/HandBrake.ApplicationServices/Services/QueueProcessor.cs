@@ -249,7 +249,7 @@ namespace HandBrake.ApplicationServices.Services
                 case "Shutdown":
                     Process.Start("Shutdown", "-s -t 60");
                     break;
-                case "Log Off":
+                case "Log off":
                     Win32.ExitWindowsEx(0, 0);
                     break;
                 case "Suspend":

@@ -43,7 +43,7 @@ namespace Handbrake
         /// <summary>
         /// The encode queue
         /// </summary>
-        private readonly IQueue encodeQueue = new Queue();
+        private readonly IEncode encodeQueue = new Encode();
 
         /// <summary>
         /// What is currently playing

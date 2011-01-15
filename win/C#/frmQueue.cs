@@ -10,6 +10,7 @@ namespace Handbrake
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.IO;
+    using System.Linq;
     using System.Windows.Forms;
     using Functions;
 
@@ -33,7 +34,7 @@ namespace Handbrake
         /// <summary>
         /// An instance of the Queue service
         /// </summary>
-        private readonly IQueue queue;
+        private readonly IQueueProcessor queue;
 
         /// <summary>
         /// A reference to the main application window
@@ -49,20 +50,20 @@ namespace Handbrake
         /// <param name="mw">
         /// The main window.
         /// </param>
-        public frmQueue(IQueue q, frmMain mw)
+        public frmQueue(IQueueProcessor q, frmMain mw)
         {
             InitializeComponent();
 
             this.mainWindow = mw;
 
             this.queue = q;
-            queue.EncodeStarted += new EventHandler(QueueOnEncodeStart);
-            queue.QueueCompleted += new EventHandler(QueueOnQueueFinished);
-            queue.QueuePauseRequested += new EventHandler(QueueOnPaused);
-            queue.QueueListChanged += new EventHandler(queue_QueueListChanged);
+            queue.EncodeService.EncodeStarted += this.QueueOnEncodeStart;
+            queue.QueueCompleted += this.QueueOnQueueFinished;
+            queue.QueuePaused += this.QueueOnPaused;
+            queue.QueueManager.QueueChanged += new EventHandler(queue_QueueListChanged);
 
-            queue.EncodeStarted += new EventHandler(queue_EncodeStarted);
-            queue.EncodeCompleted += queue_EncodeEnded;
+            queue.EncodeService.EncodeStarted += this.queue_EncodeStarted;
+            queue.EncodeService.EncodeCompleted += this.queue_EncodeEnded;
 
             drp_completeOption.Text = Properties.Settings.Default.CompletionOption;
         }
@@ -92,7 +93,7 @@ namespace Handbrake
         /// </param>
         private void queue_EncodeEnded(object sender, EventArgs e)
         {
-            queue.EncodeStatusChanged -= EncodeQueue_EncodeStatusChanged;
+            queue.EncodeService.EncodeStatusChanged -= EncodeQueue_EncodeStatusChanged;
             ResetEncodeText();
         }
 
@@ -108,7 +109,7 @@ namespace Handbrake
         private void queue_EncodeStarted(object sender, EventArgs e)
         {
             this.SetCurrentEncodeInformation();
-            queue.EncodeStatusChanged += EncodeQueue_EncodeStatusChanged;        
+            queue.EncodeService.EncodeStatusChanged += EncodeQueue_EncodeStatusChanged;        
         }
 
         /// <summary>
@@ -215,7 +216,7 @@ namespace Handbrake
         /// <param name="e">the EventArgs</param>
         private void BtnEncodeClick(object sender, EventArgs e)
         {
-            if (queue.Paused)
+            if (!queue.IsProcessing)
             {
                 SetUiEncodeStarted();
             }
@@ -318,11 +319,11 @@ namespace Handbrake
             }
 
             list_queue.Items.Clear();
-            ReadOnlyCollection<QueueTask> theQueue = queue.CurrentQueue;
+            ReadOnlyCollection<QueueTask> theQueue = queue.QueueManager.Queue;
             foreach (QueueTask queueItem in theQueue)
             {
                 string qItem = queueItem.Query;
-                QueryParser parsed = Functions.QueryParser.Parse(qItem);
+                QueryParser parsed = QueryParser.Parse(qItem);
 
                 // Get the DVD Title
                 string title = parsed.Title == 0 ? "Auto" : parsed.Title.ToString();
@@ -338,8 +339,7 @@ namespace Handbrake
                         chapters = chapters + " - " + parsed.ChapterFinish;
                 }
 
-                ListViewItem item = new ListViewItem();
-                item.Text = title; // Title
+                ListViewItem item = new ListViewItem { Tag = queueItem, Text = title };
                 item.SubItems.Add(chapters); // Chapters
                 item.SubItems.Add(queueItem.Source); // Source
                 item.SubItems.Add(queueItem.Destination); // Destination
@@ -387,7 +387,7 @@ namespace Handbrake
                     BeginInvoke(new UpdateHandler(SetCurrentEncodeInformation));
                 }
 
-                QueryParser parsed = QueryParser.Parse(queue.LastEncode.Query);
+                QueryParser parsed = QueryParser.Parse(queue.QueueManager.LastProcessedJob.Query);
 
                 // Get title and chapters
                 string title = parsed.Title == 0 ? "Auto" : parsed.Title.ToString();
@@ -414,8 +414,8 @@ namespace Handbrake
 
                 // found query is a global varible        
                 lbl_encodeStatus.Text = "Encoding ...";
-                lbl_source.Text = queue.LastEncode.Source + "(Title: " + title + " Chapters: " + chapterlbl + ")";
-                lbl_dest.Text = queue.LastEncode.Destination;
+                lbl_source.Text = queue.QueueManager.LastProcessedJob.Source + "(Title: " + title + " Chapters: " + chapterlbl + ")";
+                lbl_dest.Text = queue.QueueManager.LastProcessedJob.Destination;
                 lbl_encodeOptions.Text = "Video: " + parsed.VideoEncoder + " Audio: " + audio + Environment.NewLine +
                                     "x264 Options: " + parsed.H264Query;
                }
@@ -472,9 +472,9 @@ namespace Handbrake
                 {
                     lock (list_queue)
                     {
-                        int index = list_queue.SelectedIndices[0];
-                        mainWindow.RecievingJob(queue.GetJob(index));
-                        queue.Remove(index);
+                        QueueTask index = list_queue.SelectedItems[0].Tag as QueueTask;
+                        mainWindow.RecievingJob(index);
+                        queue.QueueManager.Remove(index);
                         RedrawQueue();
                     }
                 }
@@ -529,7 +529,7 @@ namespace Handbrake
 
                 // Move up each selected item
                 foreach (int selectedIndex in selectedIndices)
-                    queue.MoveUp(selectedIndex);
+                    queue.QueueManager.MoveUp(selectedIndex);
 
                 // Keep the selected item(s) selected, now moved up one index
                 foreach (int selectedIndex in selectedIndices)
@@ -559,7 +559,7 @@ namespace Handbrake
 
                 // Move down each selected item
                 foreach (int selectedIndex in selectedIndices)
-                    queue.MoveDown(selectedIndex);
+                    queue.QueueManager.MoveDown(selectedIndex);
 
                 // Keep the selected item(s) selected, now moved down one index
                 foreach (int selectedIndex in selectedIndices)
@@ -578,23 +578,13 @@ namespace Handbrake
             // If there are selected items
             if (list_queue.SelectedIndices.Count > 0)
             {
-                // Save the selected indices to select them after the move
-                List<int> selectedIndices = new List<int>(list_queue.SelectedIndices.Count);
-                foreach (int selectedIndex in list_queue.SelectedIndices)
-                    selectedIndices.Add(selectedIndex);
-
-                int firstSelectedIndex = selectedIndices[0];
-
-                // Reverse the list to delete the items from last to first (preserves indices)
-                selectedIndices.Reverse();
-
                 // Remove each selected item
-                foreach (int selectedIndex in selectedIndices)
-                    queue.Remove(selectedIndex);
+                foreach (ListViewItem selectedIndex in this.list_queue.SelectedItems)
+                    queue.QueueManager.Remove((QueueTask)selectedIndex.Tag);
 
-                // Select the item where the first deleted item was previously
-                if (firstSelectedIndex < list_queue.Items.Count)
-                    list_queue.Items[firstSelectedIndex].Selected = true;
+                // Select the first item after deletion.
+                if (list_queue.Items.Count > 0)
+                    list_queue.Items[0].Selected = true;
             }
 
             list_queue.Select(); // Activate the control to show the selected items
@@ -617,7 +607,7 @@ namespace Handbrake
             SaveFile.Filter = "Batch|.bat";
             SaveFile.ShowDialog();
             if (SaveFile.FileName != String.Empty)
-                queue.WriteBatchScriptToFile(SaveFile.FileName);
+                queue.QueueManager.WriteBatchScriptToFile(SaveFile.FileName);
         }
 
         /// <summary>
@@ -635,7 +625,7 @@ namespace Handbrake
             SaveFile.Filter = "HandBrake Queue|*.queue";
             SaveFile.ShowDialog();
             if (SaveFile.FileName != String.Empty)
-                queue.WriteQueueStateToFile(SaveFile.FileName);
+                queue.QueueManager.BackupQueue(SaveFile.FileName);
         }
 
         /// <summary>
@@ -652,7 +642,7 @@ namespace Handbrake
             OpenFile.FileName = string.Empty;
             OpenFile.ShowDialog();
             if (OpenFile.FileName != String.Empty)
-                queue.LoadQueueFromFile(OpenFile.FileName);
+                queue.QueueManager.RestoreQueue(OpenFile.FileName);
         }
 
         /// <summary>
@@ -666,14 +656,9 @@ namespace Handbrake
         /// </param>
         private void MnuReaddClick(object sender, EventArgs e)
         {
-            if (queue.LastEncode != null && !queue.LastEncode.IsEmpty)
+            if (queue.QueueManager.LastProcessedJob != null && !queue.QueueManager.LastProcessedJob.IsEmpty)
             {
-                queue.Add(
-                    queue.LastEncode.Query, 
-                    queue.LastEncode.Title, 
-                    queue.LastEncode.Source,
-                    queue.LastEncode.Destination,
-                    queue.LastEncode.CustomQuery);
+                queue.QueueManager.Add(queue.QueueManager.LastProcessedJob);
             }
         }
 

@@ -22,6 +22,7 @@
         /*
          * TODO
          * - Rewrite the batch script generator. 
+         * - QueueTask, switch everything to use the Task property, which is a model of all settings.
          */
 
         #region Private Variables
@@ -163,9 +164,7 @@
         {
             lock (QueueLock)
             {
-                // Tag the job with an ID
-                job.Id = lastJobId++;
-                queue.Add(job);
+                queue.Remove(job);
                 InvokeQueueChanged(EventArgs.Empty);
             }
         }
@@ -185,7 +184,7 @@
                 this.LastProcessedJob = job;
                 this.Remove(job); // Remove the item which we are about to pass out.
 
-                return job;  
+                return job;
             }
 
             return null;
@@ -236,15 +235,12 @@
             string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
             string tempPath = !string.IsNullOrEmpty(exportPath) ? exportPath : appDataPath + string.Format(this.queueFile, string.Empty);
 
-            if (File.Exists(tempPath))
+            using (FileStream strm = new FileStream(tempPath, FileMode.Create, FileAccess.Write))
             {
-                using (FileStream strm = new FileStream(tempPath, FileMode.Create, FileAccess.Write))
-                {
-                    XmlSerializer serializer = new XmlSerializer(typeof(List<QueueTask>));
-                    serializer.Serialize(strm, queue);
-                    strm.Close();
-                    strm.Dispose();
-                }
+                XmlSerializer serializer = new XmlSerializer(typeof(List<QueueTask>));
+                serializer.Serialize(strm, queue);
+                strm.Close();
+                strm.Dispose();
             }
         }
 
@@ -286,7 +282,7 @@
         /// <returns>Whether or not the supplied destination is already in the queue.</returns>
         public bool CheckForDestinationPathDuplicates(string destination)
         {
-            return this.queue.Any(checkItem => checkItem.Task.Destination.Contains(destination.Replace("\\\\", "\\")));
+            return this.queue.Any(checkItem => checkItem.Destination.Contains(destination.Replace("\\\\", "\\")));
         }
 
         /// <summary>

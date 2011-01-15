@@ -123,7 +123,6 @@
     </Compile>
     <Compile Include="Services\Encode.cs" />
     <Compile Include="Services\Interfaces\IEncode.cs" />
-    <Compile Include="Services\Interfaces\IQueue.cs" />
     <Compile Include="Services\Interfaces\IQueueManager.cs" />
     <Compile Include="Services\Interfaces\IQueueProcessor.cs" />
     <Compile Include="Services\Interfaces\IScan.cs" />

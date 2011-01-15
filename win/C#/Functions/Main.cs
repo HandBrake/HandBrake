@@ -421,8 +421,10 @@ namespace Handbrake.Functions
         /// <param name="encodeQueue">
         /// The encode Queue.
         /// </param>
-        public static void RecoverQueue(IQueue encodeQueue)
+        public static void RecoverQueue(IQueueProcessor encodeQueue)
         {
+            string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
+
             DialogResult result = DialogResult.None;
             List<string> queueFiles = CheckQueueRecovery();
             if (queueFiles.Count == 1)
@@ -442,18 +444,17 @@ namespace Handbrake.Functions
             {
                 foreach (string file in queueFiles)
                 {
-                    encodeQueue.LoadQueueFromFile(file); // Start Recovery
+                    encodeQueue.QueueManager.RestoreQueue(appDataPath + file); // Start Recovery
                 }
             }
             else
             {
                 if (IsMultiInstance) return; // Don't tamper with the files if we are multi instance
 
-                string tempPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
                 foreach (string file in queueFiles)
                 {
-                    if (File.Exists(Path.Combine(tempPath, file)))
-                        File.Delete(Path.Combine(tempPath, file));
+                    if (File.Exists(Path.Combine(appDataPath, file)))
+                        File.Delete(Path.Combine(appDataPath, file));
                 }
             }
         }
