@@ -23,6 +23,8 @@ static void work_func();
 static void do_job( hb_job_t *, int cpu_count );
 static void work_loop( void * );
 
+#define FIFO_UNBOUNDED 65536
+#define FIFO_UNBOUNDED_WAKE 65535
 #define FIFO_LARGE 32
 #define FIFO_LARGE_WAKE 16
 #define FIFO_SMALL 16
@@ -767,7 +769,15 @@ static void do_job( hb_job_t * job, int cpu_count )
         if( subtitle )
         {
             subtitle->fifo_in   = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
-            subtitle->fifo_raw  = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
+            // Must set capacity of the raw-FIFO to be set >= the maximum number of subtitle
+            // lines that could be decoded prior to a video frame in order to prevent the following
+            // deadlock condition:
+            //   1. Subtitle decoder blocks trying to generate more subtitle lines than will fit in the FIFO.
+            //   2. Blocks the processing of further subtitle packets read from the input stream.
+            //   3. And that blocks the processing of any further video packets read from the input stream.
+            //   4. And that blocks the sync work-object from running, which is needed to consume the subtitle lines in the raw-FIFO.
+            // Since that number is unbounded, the FIFO must be made (effectively) unbounded in capacity.
+            subtitle->fifo_raw  = hb_fifo_init( FIFO_UNBOUNDED, FIFO_UNBOUNDED_WAKE );
             subtitle->fifo_sync = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
             subtitle->fifo_out  = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
 
