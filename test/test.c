@@ -365,6 +365,8 @@ int main( int argc, char ** argv )
     if( stop_at_string ) free( stop_at_string );
     if( start_at_string ) free( start_at_string );
 
+    // write a carriage return to stdout - avoids overlap / line wrapping when stderr is redirected
+    fprintf( stdout, "\n" );
     fprintf( stderr, "HandBrake has exited.\n" );
 
     return 0;
@@ -608,7 +610,7 @@ static int HandleEvents( hb_handle_t * h )
 
             if (preset)
             {
-                fprintf( stderr, "+ Using preset: %s", preset_name);
+                fprintf( stderr, "+ Using preset: %s\n", preset_name);
 
                 if (!strcmp(preset_name, "Universal"))
 				{
@@ -1511,7 +1513,7 @@ static int HandleEvents( hb_handle_t * h )
                         }
                         else
                         {
-                            fprintf(stderr, "ERROR: Unable to parse audio input \"%s\", skipping.",
+                            fprintf(stderr, "ERROR: Unable to parse audio input \"%s\", skipping.\n",
                                     token);
                             free(audio);
                         }
