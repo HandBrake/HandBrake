@@ -132,7 +132,7 @@ namespace Handbrake.Controls
             0});
             this.crop_left.Location = new System.Drawing.Point(32, 95);
             this.crop_left.Maximum = new decimal(new int[] {
-            1920,
+            10000,
             0,
             0,
             0});
@@ -151,7 +151,7 @@ namespace Handbrake.Controls
             0});
             this.crop_right.Location = new System.Drawing.Point(132, 95);
             this.crop_right.Maximum = new decimal(new int[] {
-            1920,
+            10000,
             0,
             0,
             0});
@@ -199,7 +199,7 @@ namespace Handbrake.Controls
             0});
             this.crop_top.Location = new System.Drawing.Point(82, 68);
             this.crop_top.Maximum = new decimal(new int[] {
-            1080,
+            10000,
             0,
             0,
             0});
@@ -244,7 +244,7 @@ namespace Handbrake.Controls
             0});
             this.crop_bottom.Location = new System.Drawing.Point(82, 122);
             this.crop_bottom.Maximum = new decimal(new int[] {
-            1080,
+            10000,
             0,
             0,
             0});
@@ -335,7 +335,7 @@ namespace Handbrake.Controls
             // 
             this.text_width.Location = new System.Drawing.Point(50, 22);
             this.text_width.Maximum = new decimal(new int[] {
-            2560,
+            128000,
             0,
             0,
             0});
@@ -362,7 +362,7 @@ namespace Handbrake.Controls
             // 
             this.text_height.Location = new System.Drawing.Point(168, 22);
             this.text_height.Maximum = new decimal(new int[] {
-            2560,
+            128000,
             0,
             0,
             0});
@@ -421,7 +421,7 @@ namespace Handbrake.Controls
             // 
             this.updownParHeight.Location = new System.Drawing.Point(82, 111);
             this.updownParHeight.Maximum = new decimal(new int[] {
-            10000,
+            128000,
             0,
             0,
             0});
@@ -485,7 +485,7 @@ namespace Handbrake.Controls
             // 
             this.updownParWidth.Location = new System.Drawing.Point(82, 84);
             this.updownParWidth.Maximum = new decimal(new int[] {
-            10000,
+            128000,
             0,
             0,
             0});
@@ -526,7 +526,7 @@ namespace Handbrake.Controls
             // 
             this.updownDisplayWidth.Location = new System.Drawing.Point(82, 57);
             this.updownDisplayWidth.Maximum = new decimal(new int[] {
-            2560,
+            128000,
             0,
             0,
             0});
