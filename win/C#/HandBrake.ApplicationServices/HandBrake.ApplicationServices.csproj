@@ -126,7 +126,6 @@
     <Compile Include="Services\Interfaces\IQueueManager.cs" />
     <Compile Include="Services\Interfaces\IQueueProcessor.cs" />
     <Compile Include="Services\Interfaces\IScan.cs" />
-    <Compile Include="Services\Queue.cs" />
     <Compile Include="Services\QueueManager.cs" />
     <Compile Include="Services\QueueProcessor.cs" />
     <Compile Include="Services\Scan.cs" />
