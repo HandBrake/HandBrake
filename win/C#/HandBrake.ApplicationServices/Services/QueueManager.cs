@@ -21,17 +21,10 @@
     {
         /*
          * TODO
-         * - Multi HandBrake Instance Support for Queue Saving.
          * - Rewrite the batch script generator. 
          */
 
         #region Private Variables
-
-        /// <summary>
-        /// HandBrakes Queue file with a place holder for an extra string.
-        /// Use this with String.Format()
-        /// </summary>
-        private const string QueueFile = "hb_queue_recovery{0}.xml";
 
         /// <summary>
         /// A Lock object to maintain thread safety
@@ -42,6 +35,11 @@
         /// The Queue of Job objects
         /// </summary>
         private readonly List<QueueTask> queue = new List<QueueTask>();
+
+        /// <summary>
+        /// HandBrakes Queue file with a place holder for an extra string.
+        /// </summary>
+        private readonly string queueFile;
 
         /// <summary>
         /// The ID of the job last added
@@ -64,6 +62,9 @@
         public QueueManager(int instanceId)
         {
             this.instanceId = instanceId;
+
+            // If this is the first instance, just use the main queue file, otherwise add the instance id to the filename.
+            this.queueFile = instanceId == 0 ? "hb_queue_recovery.xml" : string.Format("hb_queue_recovery{0}.xml", instanceId);
         }
 
         #region Events
@@ -233,7 +234,7 @@
         public void BackupQueue(string exportPath)
         {
             string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
-            string tempPath = !string.IsNullOrEmpty(exportPath) ? exportPath : appDataPath + string.Format(QueueFile, string.Empty);
+            string tempPath = !string.IsNullOrEmpty(exportPath) ? exportPath : appDataPath + string.Format(this.queueFile, string.Empty);
 
             if (File.Exists(tempPath))
             {
@@ -256,7 +257,7 @@
         public void RestoreQueue(string importPath)
         {
             string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
-            string tempPath = !string.IsNullOrEmpty(importPath) ? importPath : (appDataPath + string.Format(QueueFile, string.Empty));
+            string tempPath = !string.IsNullOrEmpty(importPath) ? importPath : (appDataPath + string.Format(this.queueFile, string.Empty));
 
             if (File.Exists(tempPath))
             {

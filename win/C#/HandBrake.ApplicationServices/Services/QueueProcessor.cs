@@ -19,12 +19,6 @@ namespace HandBrake.ApplicationServices.Services
     /// </summary>
     public class QueueProcessor : IQueueProcessor
     {
-        /*
-         * TODO
-         * - Hookup the logging to write to disk
-         * 
-         */
-
         /// <summary>
         /// Initializes a new instance of the <see cref="QueueProcessor"/> class.
         /// </summary>
@@ -204,7 +198,7 @@ namespace HandBrake.ApplicationServices.Services
                                          "Put down that cocktail...\nyour Handbrake encode is done.");
 
             // Handling Log Data 
-            // TODO - Still need to re-write this using CopyLog()
+            this.EncodeService.ProcessLogs(this.QueueManager.LastProcessedJob.Destination);
 
             // Move onto the next job.
             this.ProcessNextJob();

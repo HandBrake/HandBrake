@@ -288,10 +288,6 @@ namespace HandBrake.ApplicationServices.Services
             //}*/
         }
 
-        #endregion
-
-        #region Private Helper Methods
-
         /// <summary>
         /// Save a copy of the log to the users desired location or a default location
         /// if this feature is enabled in options.
@@ -299,7 +295,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="destination">
         /// The Destination File Path
         /// </param>
-        protected void CopyLog(string destination)
+        public void ProcessLogs(string destination)
         {
             try
             {
@@ -333,6 +329,10 @@ namespace HandBrake.ApplicationServices.Services
                 // This exception doesn't warrent user interaction, but it should be logged (TODO)
             }
         }
+
+        #endregion
+
+        #region Private Helper Methods
 
         /// <summary>
         /// The HandBrakeCLI process has exited.

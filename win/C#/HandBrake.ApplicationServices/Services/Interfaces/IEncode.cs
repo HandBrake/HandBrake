@@ -84,5 +84,13 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// Note: http://www.cygwin.com/ml/cygwin/2006-03/msg00330.html
         /// </summary>
         void SafelyStop();
+
+        /// <summary>
+        /// Copy the log file to the desired destinations
+        /// </summary>
+        /// <param name="destination">
+        /// The destination.
+        /// </param>
+        void ProcessLogs(string destination);
     }
 }
