@@ -56,7 +56,8 @@ namespace Handbrake
         private string dvdDriveLabel;
         private Preset currentlySelectedPreset;
         private DVD currentSource;
-        private IScan SourceScan = new ScanService();
+
+        private IScan SourceScan;
         private List<DriveInformation> drives;
         private QueueTask queueEdit;
 
@@ -117,6 +118,9 @@ namespace Handbrake
         public frmMain(string[] args)
         {
             InitializeComponent();
+
+            // We can use LibHB, if the library hb.dll exists.
+            this.SourceScan = File.Exists("hb.dll") ? (IScan)new LibScan() : new ScanService();
 
             // Update the users config file with the CLI version data.
             Main.SetCliVersionData();

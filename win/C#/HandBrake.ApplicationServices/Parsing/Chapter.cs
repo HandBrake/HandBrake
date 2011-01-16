@@ -16,6 +16,32 @@ namespace HandBrake.ApplicationServices.Parsing
     public class Chapter
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="Chapter"/> class.
+        /// </summary>
+        public Chapter()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Chapter"/> class.
+        /// </summary>
+        /// <param name="number">
+        /// The number.
+        /// </param>
+        /// <param name="Name">
+        /// The name.
+        /// </param>
+        /// <param name="duration">
+        /// The duration.
+        /// </param>
+        public Chapter(int number, string Name, TimeSpan duration)
+        {
+            this.ChapterName = Name;
+            this.ChapterNumber = number;
+            this.Duration = duration;
+        }
+
+        /// <summary>
         /// Gets or sets The number of this Chapter, in regards to it's parent Title
         /// </summary>
         public int ChapterNumber { get; set; }

@@ -136,6 +136,7 @@ Section "Handbrake" SEC01
   File "HandBrake.Framework.dll"
   File "Microsoft.WindowsAPICodePack.Shell.dll"
   File "Microsoft.WindowsAPICodePack.dll"
+  File "HandBrakeInterop.dll"
 
   ;File "Caliburn.Castle.dll"
   ;File "Caliburn.Core.dll"
@@ -197,6 +198,7 @@ Section Uninstall
   Delete "$INSTDIR\HandBrake.Framework.dll"
   Delete "$INSTDIR\Microsoft.WindowsAPICodePack.Shell.dll"
   Delete "$INSTDIR\Microsoft.WindowsAPICodePack.dll"
+  Delete "$INSTDIR\HandBrakeInterop.dll"
 
   Delete "$INSTDIR\Caliburn.Castle.dll"
   Delete "$INSTDIR\Caliburn.Core.dll"

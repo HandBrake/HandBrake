@@ -10,14 +10,13 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>HandBrake.ApplicationServices</RootNamespace>
     <AssemblyName>HandBrake.ApplicationServices</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,6 +53,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libraries\Growl.CoreLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="HandBrakeInterop">
+      <HintPath>..\libraries\HandBrakeInterop.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libraries\Microsoft.WindowsAPICodePack.dll</HintPath>
@@ -62,6 +64,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libraries\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -76,6 +79,7 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventArgs\EncodeCompletedEventArgs.cs" />
@@ -92,9 +96,9 @@
     <Compile Include="Functions\Win32.cs" />
     <Compile Include="Functions\Win7.cs" />
     <Compile Include="Init.cs" />
+    <Compile Include="Model\Encoding\AudioTrack.cs" />
     <Compile Include="Model\Encoding\Anamorphic.cs" />
     <Compile Include="Model\Encoding\AudioEncoder.cs" />
-    <Compile Include="Model\Encoding\AudioTrack.cs" />
     <Compile Include="Model\Encoding\Mixdown.cs" />
     <Compile Include="Model\Encoding\PointToPointMode.cs" />
     <Compile Include="Model\Encoding\Cropping.cs" />
@@ -126,6 +130,7 @@
     <Compile Include="Services\Interfaces\IQueueManager.cs" />
     <Compile Include="Services\Interfaces\IQueueProcessor.cs" />
     <Compile Include="Services\Interfaces\IScan.cs" />
+    <Compile Include="Services\LibScan.cs" />
     <Compile Include="Services\QueueManager.cs" />
     <Compile Include="Services\QueueProcessor.cs" />
     <Compile Include="Services\Scan.cs" />
@@ -151,9 +156,7 @@
       <Name>HandBrake.Framework</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\Interfaces\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\Microsoft\StyleCop\v4.4\Microsoft.StyleCop.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

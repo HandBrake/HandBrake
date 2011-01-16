@@ -22,9 +22,9 @@ namespace HandBrake.ApplicationServices.Parsing
         }
 
         /// <summary>
-        /// Gets Titles. A list of titles from the source
+        /// Gets or sets Titles. A list of titles from the source
         /// </summary>
-        public List<Title> Titles { get; private set; }
+        public List<Title> Titles { get; set; }
 
         /// <summary>
         /// Parse the StreamReader output into a List of Titles

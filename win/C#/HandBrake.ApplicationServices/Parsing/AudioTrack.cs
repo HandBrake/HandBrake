@@ -15,6 +15,48 @@ namespace HandBrake.ApplicationServices.Parsing
     public class AudioTrack
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="AudioTrack"/> class.
+        /// </summary>
+        public AudioTrack()
+        {       
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AudioTrack"/> class.
+        /// </summary>
+        /// <param name="trackNumber">
+        /// The track number.
+        /// </param>
+        /// <param name="language">
+        /// The language.
+        /// </param>
+        /// <param name="languageCode">
+        /// The language code.
+        /// </param>
+        /// <param name="description">
+        /// The description.
+        /// </param>
+        /// <param name="format">
+        /// The format.
+        /// </param>
+        /// <param name="sampleRate">
+        /// The sample rate.
+        /// </param>
+        /// <param name="bitrate">
+        /// The bitrate.
+        /// </param>
+        public AudioTrack(int trackNumber, string language, string languageCode, string description, string format, int sampleRate, int bitrate)
+        {
+            this.TrackNumber = trackNumber;
+            this.Language = language;
+            this.LanguageCode = languageCode;
+            this.Description = description;
+            this.Format = format;
+            this.SampleRate = sampleRate;
+            this.Bitrate = bitrate;
+        }
+
+        /// <summary>
         /// Gets or sets The track number of this Audio Track
         /// </summary>
         public int TrackNumber { get; set; }

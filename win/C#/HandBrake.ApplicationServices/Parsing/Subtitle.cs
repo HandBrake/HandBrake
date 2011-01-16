@@ -18,6 +18,37 @@ namespace HandBrake.ApplicationServices.Parsing
     public class Subtitle
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="Subtitle"/> class.
+        /// </summary>
+        public Subtitle()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Subtitle"/> class.
+        /// </summary>
+        /// <param name="trackNumber">
+        /// The track number.
+        /// </param>
+        /// <param name="language">
+        /// The language.
+        /// </param>
+        /// <param name="languageCode">
+        /// The language code.
+        /// </param>
+        /// <param name="subtitleType">
+        /// The subtitle type.
+        /// </param>
+        public Subtitle(int trackNumber, string language, string languageCode, SubtitleType subtitleType)
+        {
+            this.TrackNumber = trackNumber;
+            this.Language = language;
+            this.LanguageCode = languageCode;
+            this.SubtitleType = subtitleType;
+        }
+
+
+        /// <summary>
         /// Gets or sets the track number of this Subtitle
         /// </summary>
         public int TrackNumber { get; set; }
