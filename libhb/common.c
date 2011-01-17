@@ -1051,6 +1051,10 @@ void hb_title_close( hb_title_t ** _t )
 
     while( ( audio = hb_list_item( t->list_audio, 0 ) ) )
     {
+        if ( audio->priv.ff_audio_list != NULL )
+        {
+            hb_list_close( &audio->priv.ff_audio_list );
+        }
         hb_list_rem( t->list_audio, audio );
         free( audio );
     }

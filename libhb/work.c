@@ -393,6 +393,27 @@ void correct_framerate( hb_job_t * job )
     job->vrate = job->vrate_base * ( (double)real_frames * 90000 / interjob->total_time );
 }
 
+static int check_ff_audio( hb_list_t *list_audio, hb_audio_t *ff_audio )
+{
+    int i;
+
+    for( i = 0; i < hb_list_count( list_audio ); i++ )
+    {
+        hb_audio_t * audio = hb_list_item( list_audio, i );
+
+        if ( audio == ff_audio )
+            break;
+
+        if ( audio->config.in.codec == HB_ACODEC_FFMPEG && 
+             audio->id == ff_audio->id )
+        {
+            hb_list_add( audio->priv.ff_audio_list, ff_audio );
+            return 1;
+        }
+    }
+    return 0;
+}
+
 /**
  * Job initialization rountine.
  * Initializes fifos.
@@ -496,8 +517,6 @@ static void do_job( hb_job_t * job, int cpu_count )
     // audio references that audio stream since the codec context is specific to
     // the audio id & multiple copies of the same stream will garble the audio
     // or cause aborts.
-    uint8_t aud_id_uses[MAX_STREAMS];
-    memset( aud_id_uses, 0, sizeof(aud_id_uses) );
     for( i = 0; i < hb_list_count( title->list_audio ); )
     {
         audio = hb_list_item( title->list_audio, i );
@@ -524,18 +543,6 @@ static void do_job( hb_job_t * job, int cpu_count )
             hb_log( "Bitrate %d not supported.  Reducing to 640Kbps.",
                     audio->config.out.bitrate );
             audio->config.out.bitrate = 640;
-        }
-        if ( audio->config.in.codec == HB_ACODEC_FFMPEG )
-        {
-            if ( aud_id_uses[audio->id] )
-            {
-                hb_log( "Multiple decodes of audio id %d, removing track %d",
-                        audio->id, audio->config.out.track );
-                hb_list_rem( title->list_audio, audio );
-                free( audio );
-                continue;
-            }
-            ++aud_id_uses[audio->id];
         }
         /* Adjust output track number, in case we removed one.
          * Output tracks sadly still need to be in sequential order.
@@ -572,7 +579,7 @@ static void do_job( hb_job_t * job, int cpu_count )
             {
                 if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown)
                 {
-                    hb_log("work: mixdown not specified, track %i setting mixdown %s", i, hb_audio_mixdowns[j].human_readable_name);
+                    hb_log("work: mixdown not specified, track %i setting mixdown %s", audio->config.out.track, hb_audio_mixdowns[j].human_readable_name);
                     break;
                 }
             }
@@ -602,7 +609,10 @@ static void do_job( hb_job_t * job, int cpu_count )
             {
                 if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown)
                 {
-                    hb_log("work: sanitizing track %i mixdown %s to %s", i, hb_audio_mixdowns[requested_mixdown_index].human_readable_name, hb_audio_mixdowns[j].human_readable_name);
+                    hb_log("work: sanitizing track %i mixdown %s to %s", 
+                        audio->config.out.track, 
+                        hb_audio_mixdowns[requested_mixdown_index].human_readable_name, 
+                        hb_audio_mixdowns[j].human_readable_name);
                     break;
                 }
             }
@@ -623,7 +633,7 @@ static void do_job( hb_job_t * job, int cpu_count )
                                                                       audio->config.out.mixdown );
             
             hb_log( "work: bitrate not specified, track %d setting bitrate %d",
-                    i, audio->config.out.bitrate );
+                    audio->config.out.track, audio->config.out.bitrate );
         }
         
         /* log the requested bitrate */
@@ -645,17 +655,30 @@ static void do_job( hb_job_t * job, int cpu_count )
         {
             /* log the output bitrate */
             hb_log( "work: sanitizing track %d audio bitrate %d to %d", 
-                    i, requested_bitrate, audio->config.out.bitrate);
+                    audio->config.out.track, requested_bitrate, 
+                    audio->config.out.bitrate);
         }
 
         if (audio->config.out.codec == HB_ACODEC_VORBIS)
             audio->priv.config.vorbis.language = audio->config.lang.simple;
 
         /* set up the audio work structures */
-        audio->priv.fifo_in   = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
         audio->priv.fifo_raw  = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
         audio->priv.fifo_sync = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
         audio->priv.fifo_out  = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
+
+        audio->priv.ff_audio_list = hb_list_init();
+        if ( audio->config.in.codec == HB_ACODEC_FFMPEG )
+        {
+            if ( !check_ff_audio( title->list_audio, audio ) )
+            {
+                audio->priv.fifo_in   = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
+            }
+        }
+        else
+        {
+            audio->priv.fifo_in   = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
+        }
     }
 
     }
@@ -862,19 +885,22 @@ static void do_job( hb_job_t * job, int cpu_count )
             /*
             * Audio Decoder Thread
             */
-            if ( ( w = hb_codec_decoder( audio->config.in.codec ) ) == NULL )
+            if ( audio->priv.fifo_in )
             {
-                hb_error("Invalid input codec: %d", audio->config.in.codec);
-                *job->die = 1;
-                goto cleanup;
-            }
-            w->fifo_in  = audio->priv.fifo_in;
-            w->fifo_out = audio->priv.fifo_raw;
-            w->config   = &audio->priv.config;
-            w->audio    = audio;
-            w->codec_param = audio->config.in.codec_param;
+                if ( ( w = hb_codec_decoder( audio->config.in.codec ) ) == NULL )
+                {
+                    hb_error("Invalid input codec: %d", audio->config.in.codec);
+                    *job->die = 1;
+                    goto cleanup;
+                }
+                w->fifo_in  = audio->priv.fifo_in;
+                w->fifo_out = audio->priv.fifo_raw;
+                w->config   = &audio->priv.config;
+                w->audio    = audio;
+                w->codec_param = audio->config.in.codec_param;
 
-            hb_list_add( job->list_work, w );
+                hb_list_add( job->list_work, w );
+            }
 
             /*
             * Audio Encoder Thread

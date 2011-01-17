@@ -1461,7 +1461,7 @@ int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
         // that causes the problem. since hb_stream_seek_chapter
         // is called before we start reading, make sure
         // we do a seek here.
-        av_seek_frame( stream->ffmpeg_ic, -1, ffmpeg_initial_timestamp( stream ), AVSEEK_FLAG_BACKWARD );
+        av_seek_frame( stream->ffmpeg_ic, -1, ffmpeg_initial_timestamp( stream ), AVSEEK_FLAG_BACKWARD | AVSEEK_FLAG_ANY );
     }
     return 1;
 }

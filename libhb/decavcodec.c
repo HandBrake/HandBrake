@@ -96,6 +96,7 @@ struct hb_work_private_s
     AVCodecContext  *context;
     AVCodecParserContext *parser;
     hb_list_t       *list;
+    hb_list_t       *ff_audio_list;
     double          duration;   // frame duration (for video)
     double          pts_next;   // next pts we expect to generate
     int64_t         pts;        // (video) pts passing from parser to decoder
@@ -187,6 +188,7 @@ static void heap_push( pts_heap_t *heap, int64_t v )
 static int decavcodecInit( hb_work_object_t * w, hb_job_t * job )
 {
     AVCodec * codec;
+    int i;
 
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
@@ -224,6 +226,36 @@ static int decavcodecInit( hb_work_object_t * w, hb_job_t * job )
                                           w->audio->config.out.mixdown);
             hb_downmix_set_chan_map( pv->downmix, &hb_smpte_chan_map, pv->out_map );
         }
+
+        pv->ff_audio_list = hb_list_init();
+        for ( i = 0; i < hb_list_count( w->audio->priv.ff_audio_list ); i++ )
+        {
+            hb_work_private_t * ff_pv = calloc( 1, sizeof( hb_work_private_t ) );
+            hb_list_add( pv->ff_audio_list, ff_pv );
+
+            hb_audio_t *audio = hb_list_item( w->audio->priv.ff_audio_list, i );
+
+            ff_pv->list  = hb_list_init();
+            ff_pv->job   = job;
+
+            if ( audio->config.out.codec == HB_ACODEC_AC3 )
+            {
+                // ffmpegs audio encoder expect an smpte chan map as input.
+                // So we need to map the decoders output to smpte.
+                ff_pv->out_map = &hb_smpte_chan_map;
+            }
+            else
+            {
+                ff_pv->out_map = &hb_qt_chan_map;
+            }
+            if ( hb_need_downmix( audio->config.in.channel_layout, 
+                                  audio->config.out.mixdown) )
+            {
+                ff_pv->downmix = hb_downmix_init(audio->config.in.channel_layout, 
+                                              audio->config.out.mixdown);
+                hb_downmix_set_chan_map( ff_pv->downmix, &hb_smpte_chan_map, ff_pv->out_map );
+            }
+        }
     }
 
     return 0;
@@ -234,9 +266,9 @@ static int decavcodecInit( hb_work_object_t * w, hb_job_t * job )
  ***********************************************************************
  *
  **********************************************************************/
-static void decavcodecClose( hb_work_object_t * w )
+static void closePrivData( hb_work_private_t ** ppv )
 {
-    hb_work_private_t * pv = w->private_data;
+    hb_work_private_t * pv = *ppv;
 
     if ( pv )
     {
@@ -277,7 +309,99 @@ static void decavcodecClose( hb_work_object_t * w )
             pv->downmix_buffer = NULL;
         }
         free( pv );
+    }
+    *ppv = NULL;
+}
+
+static void decavcodecClose( hb_work_object_t * w )
+{
+    hb_work_private_t * pv = w->private_data;
+
+    if ( pv )
+    {
+        if ( pv->ff_audio_list != NULL )
+        {
+            hb_work_private_t * ff_pv;
+            while ( ( ff_pv = hb_list_item( pv->list, 0 ) ) != NULL )
+            {
+                hb_list_rem( pv->ff_audio_list, ff_pv );
+                closePrivData( &ff_pv );
+            }
+        }
+        closePrivData( &pv );
         w->private_data = NULL;
+    }
+}
+
+static void writeAudioEof( hb_work_object_t * w )
+{
+    hb_work_private_t * pv = w->private_data;
+    hb_audio_t * audio = w->audio;
+    int i;
+    hb_buffer_t * buf;
+
+    for ( i = 0; i < hb_list_count( audio->priv.ff_audio_list ); i++ )
+    {
+        hb_audio_t *ff_audio = hb_list_item( audio->priv.ff_audio_list, i );
+        hb_work_private_t *ff_pv = hb_list_item( pv->ff_audio_list, i );
+        if ( ff_pv )
+        {
+            buf = hb_buffer_init( 0 );
+            if ( buf )
+            {
+                while ( !*w->done )
+                {
+                    if ( hb_fifo_full_wait( ff_audio->priv.fifo_raw ) )
+                    {
+                        hb_fifo_push( ff_audio->priv.fifo_raw, buf );
+                        buf = NULL;
+                        break;
+                    }
+                }
+                if ( buf )
+                {
+                    // w->done == true while waiting
+                    hb_buffer_close( &buf );
+                    break;
+                }
+            }
+        }
+    }
+}
+
+static void writeAudioFifos( hb_work_object_t * w )
+{
+    hb_work_private_t * pv = w->private_data;
+    hb_audio_t * audio = w->audio;
+    int i;
+    hb_buffer_t * buf;
+
+    for ( i = 0; i < hb_list_count( audio->priv.ff_audio_list ); i++ )
+    {
+        hb_audio_t *ff_audio = hb_list_item( audio->priv.ff_audio_list, i );
+        hb_work_private_t *ff_pv = hb_list_item( pv->ff_audio_list, i );
+        if ( ff_pv )
+        {
+            buf = link_buf_list( ff_pv );
+            if ( buf )
+            {
+                while ( !*w->done )
+                {
+                    if ( hb_fifo_full_wait( ff_audio->priv.fifo_raw ) )
+                    {
+                        hb_fifo_push( ff_audio->priv.fifo_raw, buf );
+                        buf = NULL;
+                        break;
+                    }
+                }
+                if ( buf )
+                {
+                    // w->done == true while waiting
+                    hb_buffer_close( &buf );
+                    break;
+                }
+            }
+        }
     }
 }
 
@@ -297,6 +421,7 @@ static int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         /* EOF on input stream - send it downstream & say that we're done */
         *buf_out = in;
         *buf_in = NULL;
+        writeAudioEof( w );
         return HB_WORK_DONE;
     }
 
@@ -349,6 +474,7 @@ static int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             decodeAudio( w->audio, pv, parser_output_buffer, parser_output_buffer_len );
         }
     }
+    writeAudioFifos( w );
     *buf_out = link_buf_list( pv );
     return HB_WORK_OK;
 }
@@ -1241,6 +1367,7 @@ static int decavcodecviInit( hb_work_object_t * w, hb_job_t * job )
 {
 
     hb_work_private_t *pv = calloc( 1, sizeof( hb_work_private_t ) );
+    int i;
     w->private_data = pv;
     pv->job   = job;
     pv->list = hb_list_init();
@@ -1265,6 +1392,36 @@ static int decavcodecviInit( hb_work_object_t * w, hb_job_t * job )
             pv->downmix = hb_downmix_init(w->audio->config.in.channel_layout, 
                                           w->audio->config.out.mixdown);
             hb_downmix_set_chan_map( pv->downmix, &hb_smpte_chan_map, pv->out_map );
+        }
+
+        pv->ff_audio_list = hb_list_init();
+        for ( i = 0; i < hb_list_count( w->audio->priv.ff_audio_list ); i++ )
+        {
+            hb_work_private_t * ff_pv = calloc( 1, sizeof( hb_work_private_t ) );
+            hb_list_add( pv->ff_audio_list, ff_pv );
+
+            hb_audio_t *audio = hb_list_item( w->audio->priv.ff_audio_list, i );
+
+            ff_pv->list  = hb_list_init();
+            ff_pv->job   = job;
+
+            if ( audio->config.out.codec == HB_ACODEC_AC3 )
+            {
+                // ffmpegs audio encoder expect an smpte chan map as input.
+                // So we need to map the decoders output to smpte.
+                ff_pv->out_map = &hb_smpte_chan_map;
+            }
+            else
+            {
+                ff_pv->out_map = &hb_qt_chan_map;
+            }
+            if ( hb_need_downmix( audio->config.in.channel_layout, 
+                                  audio->config.out.mixdown) )
+            {
+                ff_pv->downmix = hb_downmix_init(audio->config.in.channel_layout, 
+                                              audio->config.out.mixdown);
+                hb_downmix_set_chan_map( ff_pv->downmix, &hb_smpte_chan_map, ff_pv->out_map );
+            }
         }
     }
 
@@ -1335,6 +1492,50 @@ static int decavcodecviInfo( hb_work_object_t *w, hb_work_info_t *info )
         return 1;
     }
     return 0;
+}
+
+static hb_buffer_t * downmixAudio( 
+    hb_audio_t *audio, 
+    hb_work_private_t *pv, 
+    int16_t *buffer, 
+    int channels,
+    int nsamples )
+{
+    hb_buffer_t * buf = NULL;
+
+    if ( pv->downmix )
+    {
+        pv->downmix_buffer = realloc(pv->downmix_buffer, nsamples * sizeof(hb_sample_t));
+        
+        int i;
+        for( i = 0; i < nsamples; ++i )
+        {
+            pv->downmix_buffer[i] = buffer[i];
+        }
+
+        int n_ch_samples = nsamples / channels;
+        int out_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
+
+        buf = hb_buffer_init( n_ch_samples * out_channels * sizeof(float) );
+        hb_sample_t *samples = (hb_sample_t *)buf->data;
+        hb_downmix(pv->downmix, samples, pv->downmix_buffer, n_ch_samples);
+    }
+    else
+    {
+        buf = hb_buffer_init( nsamples * sizeof(float) );
+        float *fl32 = (float *)buf->data;
+        int i;
+        for( i = 0; i < nsamples; ++i )
+        {
+            fl32[i] = buffer[i];
+        }
+        int n_ch_samples = nsamples / channels;
+        hb_layout_remap( &hb_smpte_chan_map, pv->out_map,
+                         audio->config.in.channel_layout, 
+                         fl32, n_ch_samples );
+    }
+
+    return buf;
 }
 
 static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *data, int size )
@@ -1410,46 +1611,33 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
             }
 
             hb_buffer_t * buf;
-
-            if ( pv->downmix )
-            {
-                pv->downmix_buffer = realloc(pv->downmix_buffer, nsamples * sizeof(hb_sample_t));
-                
-                int i;
-                for( i = 0; i < nsamples; ++i )
-                {
-                    pv->downmix_buffer[i] = buffer[i];
-                }
-
-                int n_ch_samples = nsamples / context->channels;
-                int channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
-
-                buf = hb_buffer_init( n_ch_samples * channels * sizeof(float) );
-                hb_sample_t *samples = (hb_sample_t *)buf->data;
-                hb_downmix(pv->downmix, samples, pv->downmix_buffer, n_ch_samples);
-            }
-            else
-            {
-                buf = hb_buffer_init( nsamples * sizeof(float) );
-                float *fl32 = (float *)buf->data;
-                int i;
-                for( i = 0; i < nsamples; ++i )
-                {
-                    fl32[i] = buffer[i];
-                }
-                int n_ch_samples = nsamples / context->channels;
-                hb_layout_remap( &hb_smpte_chan_map, pv->out_map,
-                                 audio->config.in.channel_layout, 
-                                 fl32, n_ch_samples );
-            }
-
             double pts = pv->pts_next;
-            buf->start = pts;
-            pts += nsamples * pv->duration;
-            buf->stop  = pts;
-            pv->pts_next = pts;
+            double pts_next = pts + nsamples * pv->duration;
+            buf = downmixAudio( audio, pv, buffer, context->channels, nsamples );
+            if ( buf )
+            {
+                buf->start = pts;
+                buf->stop = pts_next;
+                hb_list_add( pv->list, buf );
+            }
 
-            hb_list_add( pv->list, buf );
+            int i;
+            for ( i = 0; i < hb_list_count( audio->priv.ff_audio_list ); i++ )
+            {
+                hb_audio_t *ff_audio = hb_list_item( audio->priv.ff_audio_list, i );
+                hb_work_private_t *ff_pv = hb_list_item( pv->ff_audio_list, i );
+                if ( ff_pv )
+                {
+                    buf = downmixAudio( ff_audio, ff_pv, buffer, context->channels, nsamples );
+                    if ( buf )
+                    {
+                        buf->start = pts;
+                        buf->stop = pts_next;
+                        hb_list_add( ff_pv->list, buf );
+                    }
+                }
+            }
+            pv->pts_next = pts_next;
 
             // if we allocated a buffer for sample format conversion, free it
             if ( buffer != pv->buffer )
@@ -1468,6 +1656,7 @@ static int decavcodecaiWork( hb_work_object_t *w, hb_buffer_t **buf_in,
         /* EOF on input stream - send it downstream & say that we're done */
         *buf_out = *buf_in;
         *buf_in = NULL;
+        writeAudioEof( w );
         return HB_WORK_DONE;
     }
 
@@ -1502,6 +1691,7 @@ static int decavcodecaiWork( hb_work_object_t *w, hb_buffer_t **buf_in,
     }
     prepare_ffmpeg_buffer( in );
     decodeAudio( w->audio, pv, in->data, in->size );
+    writeAudioFifos( w );
     *buf_out = link_buf_list( pv );
 
     return HB_WORK_OK;
