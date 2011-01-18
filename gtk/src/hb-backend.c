@@ -1890,14 +1890,20 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
 		{
 			if (title->duration != 0)
 			{
-				titles[ii]  = g_strdup_printf ("%d - %02dh%02dm%02ds - %s",
+                char *tmp;
+				tmp  = g_strdup_printf ("%d - %02dh%02dm%02ds - %s",
 					title->index, title->hours, title->minutes, title->seconds, 
 					title->name);
+                titles[ii] = g_markup_escape_text(tmp, -1);
+                g_free(tmp);
 			}
 			else
 			{
-				titles[ii]  = g_strdup_printf ("%d - %s", 
+                char *tmp;
+				tmp  = g_strdup_printf ("%d - %s", 
 										title->index, title->name);
+                titles[ii] = g_markup_escape_text(tmp, -1);
+                g_free(tmp);
 			}
 		}
 		else
