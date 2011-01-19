@@ -7,6 +7,7 @@ namespace Handbrake.Controls
 {
     using System;
     using System.Collections;
+    using System.Globalization;
     using System.Linq;
     using System.Windows.Forms;
     using Functions;
@@ -22,6 +23,7 @@ namespace Handbrake.Controls
     /// </summary>
     public partial class AudioPanel : UserControl
     {
+        private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
 
         private const string AC3Passthru = "AC3 Passthru";
 
@@ -349,7 +351,7 @@ namespace Handbrake.Controls
                 double.TryParse(audioList.SelectedRows[0].Cells[6].Value.ToString(), out drcValue);
                 if (drcValue != 0)
                     drcValue = ((drcValue * 10) + 1) - 10;
-                int.TryParse(drcValue.ToString(), out drcCalculated);
+                int.TryParse(drcValue.ToString(Culture), out drcCalculated);
                 tb_drc.Value = drcCalculated;
                 lbl_drc.Text = audioList.SelectedRows[0].Cells[6].Value.ToString();
 
