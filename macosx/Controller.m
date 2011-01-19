@@ -4484,15 +4484,7 @@ bool one_burned = FALSE;
     switch( format )
     {
         case 0:
-			/*Get Default MP4 File Extension*/
-			if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultMpegName"] > 0)
-			{
-				ext = "m4v";
-			}
-			else
-			{
-				ext = "mp4";
-			}
+			[self autoSetM4vExtension: nil];
             /* Add additional video encoders here */
             menuItem = [[fVidEncoderPopUp menu] addItemWithTitle:@"H.264 (x264)" action: NULL keyEquivalent: @""];
             [menuItem setTag: HB_VCODEC_X264];
@@ -4570,22 +4562,23 @@ bool one_burned = FALSE;
 {
     if ( [fDstFormatPopUp indexOfSelectedItem] )
         return;
-
+    
     NSString * extension = @"mp4";
-
+    
 	BOOL anyCodecAC3 = [fAudioDelegate anyCodecMatches: HB_ACODEC_AC3] || [fAudioDelegate anyCodecMatches: HB_ACODEC_AC3_PASS];
-	if (YES == anyCodecAC3 ||
-                                                        [fCreateChapterMarkers state] == NSOnState ||
-                                                        [[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultMpegName"] > 0 )
+	
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultMpegExtension"] isEqualToString: @".m4v"] || 
+        ((YES == anyCodecAC3 || [fCreateChapterMarkers state] == NSOnState) && 
+         [[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultMpegExtension"] isEqualToString: @"Auto"] ))
     {
         extension = @"m4v";
     }
-
+    
     if( [extension isEqualTo: [[fDstFile2Field stringValue] pathExtension]] )
         return;
     else
         [fDstFile2Field setStringValue: [NSString stringWithFormat:@"%@.%@",
-                                    [[fDstFile2Field stringValue] stringByDeletingPathExtension], extension]];
+                                         [[fDstFile2Field stringValue] stringByDeletingPathExtension], extension]];
 }
 
 /* Method to determine if we should change the UI
