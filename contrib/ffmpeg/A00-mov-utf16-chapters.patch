@@ -1,0 +1,25 @@
+diff --git a/libavformat/mov.c b/libavformat/mov.c
+index 4370b48..b28c9ae 100644
+--- a/libavformat/mov.c
++++ b/libavformat/mov.c
+@@ -2334,6 +2334,20 @@ static void mov_read_chapters(AVFormatContext *s)
+             av_freep(&title);
+             title = utf8;
+         }
++        else if (AV_RL16(title+2) == 0xfeff) {
++            uint8_t *utf8 = av_malloc(2*len+3);
++
++            i8 = i16 = 0;
++            while (i16 < len) {
++                uint32_t ch;
++                uint8_t tmp;
++                GET_UTF16(ch, i16 < len ? AV_RL16(title + (i16+=2)) : 0, break;)
++                PUT_UTF8(ch, tmp, if (i8 < 2*len) utf8[2+i8++] = tmp;)
++            }
++            utf8[2+i8] = 0;
++            av_freep(&title);
++            title = utf8;
++        }
+ 
+         ff_new_chapter(s, i, st->time_base, sample->timestamp, end, title+2);
+         av_freep(&title);
