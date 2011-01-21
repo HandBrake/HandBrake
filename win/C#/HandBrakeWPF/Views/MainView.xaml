@@ -1,0 +1,8 @@
+﻿<Window x:Class="HandBrakeWPF.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{Binding Path=WindowTitle}" Height="300" Width="300">
+    <Grid>
+        <TextBlock Text="{Binding Path=WindowTitle}" /> 
+    </Grid>
+</Window>
