@@ -35,22 +35,7 @@ namespace Handbrake
             // Handle any unhandled exceptions
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
 
-            // Attempt to upgrade / keep the users settings between versions
-            if (Settings.Default.UpdateRequired)
-            {
-                Settings.Default.Upgrade();
-                // Reset some settings
-                Settings.Default.UpdateRequired = false;
-                Settings.Default.CliExeHash = null;
-                Settings.Default.hb_build = 0;
-                Settings.Default.hb_platform = null;
-                Settings.Default.hb_version = null;
-
-                // Re-detect the CLI version data.
-                Functions.Main.SetCliVersionData();
-            }
-
-            // Make sure we have any pre-requesits before trying to launch
+            // Check that HandBrakeCLI is availabl.
             string failedInstall = "HandBrake is not installed properly. Please reinstall HandBrake. \n\n";
             string missingFiles = string.Empty;
 
@@ -68,6 +53,21 @@ namespace Handbrake
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
                 return;
+            }
+
+            // Attempt to upgrade / keep the users settings between versions
+            if (Settings.Default.UpdateRequired)
+            {
+                Settings.Default.Upgrade();
+                // Reset some settings
+                Settings.Default.UpdateRequired = false;
+                Settings.Default.CliExeHash = null;
+                Settings.Default.hb_build = 0;
+                Settings.Default.hb_platform = null;
+                Settings.Default.hb_version = null;
+
+                // Re-detect the CLI version data.
+                Functions.Main.SetCliVersionData();
             }
 
             // Check were not running on a screen that's going to cause some funnies to happen.
