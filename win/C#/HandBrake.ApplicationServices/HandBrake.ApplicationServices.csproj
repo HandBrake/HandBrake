@@ -89,13 +89,12 @@
     <Compile Include="EventArgs\ScanProgressEventArgs.cs" />
     <Compile Include="Functions\Converters.cs" />
     <Compile Include="Functions\EnumHelper.cs" />
-    <Compile Include="Functions\Logging.cs" />
     <Compile Include="Functions\GrowlCommunicator.cs" />
-    <Compile Include="Functions\Main.cs" />
     <Compile Include="Functions\System.cs" />
     <Compile Include="Functions\Win32.cs" />
     <Compile Include="Functions\Win7.cs" />
     <Compile Include="Init.cs" />
+    <Compile Include="Model\DriveInformation.cs" />
     <Compile Include="Model\Encoding\AudioTrack.cs" />
     <Compile Include="Model\Encoding\Anamorphic.cs" />
     <Compile Include="Model\Encoding\AudioEncoder.cs" />
@@ -110,7 +109,7 @@
     <Compile Include="Model\Encoding\OutputFormat.cs" />
     <Compile Include="Model\Encoding\SubtitleTrack.cs" />
     <Compile Include="Model\Encoding\VideoEncoder.cs" />
-    <Compile Include="Model\Encoding\VideoEncodeRateType.cs" />
+    <Compile Include="Model\Encoding\VideoEncodeMode.cs" />
     <Compile Include="Model\QueueTask.cs" />
     <Compile Include="Model\Encoding\SubtitleType.cs" />
     <Compile Include="Parsing\AudioTrack.cs" />
@@ -133,7 +132,8 @@
     <Compile Include="Services\LibScan.cs" />
     <Compile Include="Services\QueueManager.cs" />
     <Compile Include="Services\QueueProcessor.cs" />
-    <Compile Include="Services\Scan.cs" />
+    <Compile Include="Services\ScanService.cs" />
+    <Compile Include="Services\UtilityService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

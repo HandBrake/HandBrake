@@ -1,7 +1,11 @@
-﻿namespace HandBrake.ApplicationServices.Functions
+﻿/*  Converters.cs $
+    This file is part of the HandBrake source code.
+    Homepage: <http://handbrake.fr>.
+    It may be used under the terms of the GNU General Public License. */
+
+namespace HandBrake.ApplicationServices.Functions
 {
     using System;
-    using System.Collections.Generic;
     using System.Text.RegularExpressions;
 
     /// <summary>
@@ -29,42 +33,6 @@
             }
 
             return converted;
-        }
-
-        /// <summary>
-        /// Video Framerate Converter
-        /// </summary>
-        private static readonly Dictionary<double, int> vrates = new Dictionary<double, int>
-        {
-           {5, 5400000},
-           {10, 2700000},
-           {12, 2250000},
-           {15, 1800000},
-           {23.976, 1126125},
-           {24, 1125000},
-           {25, 1080000},
-           {29.97, 900900}
-        };
-
-        /// <summary>
-        /// Convert the desired framerate to the video rate.
-        /// </summary>
-        /// <param name="framerate">
-        /// The framerate.
-        /// </param>
-        /// <returns>
-        /// The Video Rate.
-        /// </returns>
-        /// <exception cref="ArgumentException">
-        /// </exception>
-        public static int FramerateToVrate(double framerate)
-        {
-            if (!vrates.ContainsKey(framerate))
-            {
-                throw new ArgumentException("Framerate not recognized.", "framerate");
-            }
-
-            return vrates[framerate];
         }
     }
 }

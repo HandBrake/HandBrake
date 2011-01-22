@@ -1,4 +1,4 @@
-﻿/*  Detelecine.cs $
+﻿/*  VideoEncoderMode.cs $
     This file is part of the HandBrake source code.
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
@@ -6,12 +6,12 @@
 namespace HandBrake.ApplicationServices.Model.Encoding
 {
     /// <summary>
-    /// Detelecine Filter
+    /// The Mode of Video Encoding. Bitrate, Filesize or Quality
     /// </summary>
-    public enum Detelecine
+    public enum VideoEncodeMode
     {
-        Off = 0,
-        Default,
-        Custom
+        TargetSize = 0,
+        AverageBitrate,
+        ConstantQuality
     }
 }

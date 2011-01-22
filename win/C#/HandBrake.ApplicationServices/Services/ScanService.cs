@@ -13,7 +13,6 @@ namespace HandBrake.ApplicationServices.Services
     using System.Windows.Forms;
 
     using HandBrake.ApplicationServices.EventArgs;
-    using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
@@ -236,7 +235,7 @@ namespace HandBrake.ApplicationServices.Services
                     // Only write the log file to disk if it's less than 100MB.
                     if (this.readData.Buffer.Length < 100000000)
                     {
-                        scanLog.WriteLine(Logging.CreateCliLogHeader(null));
+                        scanLog.WriteLine(UtilityService.CreateCliLogHeader(null));
                         scanLog.Write(this.readData.Buffer);
                         logBuffer.AppendLine(this.readData.Buffer.ToString());
                     }
@@ -327,7 +326,7 @@ namespace HandBrake.ApplicationServices.Services
             logFilePosition = 0;
             logBuffer = new StringBuilder();
             if (addHeader)
-                logBuffer.AppendLine(Logging.CreateCliLogHeader(null));
+                logBuffer.AppendLine(UtilityService.CreateCliLogHeader(null));
         }
 
         /// <summary>

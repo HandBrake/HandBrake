@@ -200,7 +200,7 @@ namespace HandBrake.ApplicationServices.Model
         /// <summary>
         /// Gets or sets VideoEncodeRateType.
         /// </summary>
-        public VideoEncodeRateType VideoEncodeRateType { get; set; }
+        public VideoEncodeMode VideoEncodeRateType { get; set; }
 
         /// <summary>
         /// Gets or sets Quality.

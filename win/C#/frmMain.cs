@@ -88,7 +88,7 @@ namespace Handbrake
                 // We have a drive, selected as a folder.
                 if (this.sourcePath.EndsWith("\\"))
                 {
-                    drives = Main.GetDrives();
+                    drives = UtilityService.GetDrives();
                     foreach (DriveInformation item in drives)
                     {
                         if (item.RootDirectory.Contains(this.sourcePath))
@@ -148,7 +148,7 @@ namespace Handbrake
             // Clear the log files in the background
             if (Settings.Default.clearOldLogs)
             {
-                Thread clearLog = new Thread(Main.ClearOldLogs);
+                Thread clearLog = new Thread(() => UtilityService.ClearLogFiles(30));
                 clearLog.Start();
             }
 
@@ -2470,7 +2470,7 @@ namespace Handbrake
                     return;
                 }
 
-                drives = Main.GetDrives();
+                drives = UtilityService.GetDrives();
 
                 List<ToolStripMenuItem> menuItems = new List<ToolStripMenuItem>();
                 foreach (DriveInformation drive in drives)

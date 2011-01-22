@@ -446,8 +446,8 @@ namespace HandBrake.ApplicationServices.Services
 
                 fileWriter = new StreamWriter(logFile) { AutoFlush = true };
 
-                fileWriter.WriteLine(Logging.CreateCliLogHeader(encodeQueueTask));
-                logBuffer.AppendLine(Logging.CreateCliLogHeader(encodeQueueTask));
+                fileWriter.WriteLine(UtilityService.CreateCliLogHeader(encodeQueueTask));
+                logBuffer.AppendLine(UtilityService.CreateCliLogHeader(encodeQueueTask));
             }
             catch (Exception)
             {

@@ -3,7 +3,7 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace Handbrake.Model
+namespace HandBrake.ApplicationServices.Model
 {
     /// <summary>
     /// Information about a DVD drive
@@ -26,6 +26,11 @@ namespace Handbrake.Model
         public string RootDirectory { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this is a BluRay Drive.
+        /// </summary>
+        public bool IsBluRay { get; set; }
+
+        /// <summary>
         /// Returns  "Drive" + Id  (e.g  Drive2)
         /// </summary>
         /// <returns>
@@ -33,7 +38,7 @@ namespace Handbrake.Model
         /// </returns>
         public override string ToString()
         {
-            return "Drive" + Id;
+            return "Drive" + this.Id;
         }
     }
 }

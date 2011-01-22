@@ -1,4 +1,4 @@
-﻿/*  QueueItem.cs $
+﻿/*  QueueTask.cs $
     This file is part of the HandBrake source code.
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
@@ -6,7 +6,7 @@
 namespace HandBrake.ApplicationServices.Model
 {
     /// <summary>
-    /// The job.
+    /// The QueueTask.
     /// </summary>
     public class QueueTask
     {

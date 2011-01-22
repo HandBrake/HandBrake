@@ -5,9 +5,9 @@
 
 namespace HandBrake.ApplicationServices.Functions
 {
+    using System;
     using System.ComponentModel;
     using System.Reflection;
-    using System;
 
     /// <summary>
     /// Enum Helpers

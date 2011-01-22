@@ -472,46 +472,6 @@ namespace Handbrake.Functions
         }
 
         /// <summary>
-        ///  Clear all the encode log files.
-        /// </summary>
-        public static void ClearLogs()
-        {
-            string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
-            if (Directory.Exists(logDir))
-            {
-                DirectoryInfo info = new DirectoryInfo(logDir);
-                FileInfo[] logFiles = info.GetFiles("*.txt");
-                foreach (FileInfo file in logFiles)
-                {
-                    if (!file.Name.Contains("last_scan_log") && !file.Name.Contains("last_encode_log"))
-                        File.Delete(file.FullName);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Clear old log files x days in the past
-        /// </summary>
-        public static void ClearOldLogs()
-        {
-            string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
-            if (Directory.Exists(logDir))
-            {
-                DirectoryInfo info = new DirectoryInfo(logDir);
-                FileInfo[] logFiles = info.GetFiles("*.txt");
-
-                foreach (FileInfo file in logFiles)
-                {
-                    if (file.LastWriteTime < DateTime.Now.AddDays(-30))
-                    {
-                        if (!file.Name.Contains("last_scan_log.txt") && !file.Name.Contains("last_encode_log.txt"))
-                            File.Delete(file.FullName);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
         /// Map languages and their iso639_2 value into a IDictionary
         /// </summary>
         /// <returns>A Dictionary containing the language and iso code</returns>
@@ -707,32 +667,6 @@ namespace Handbrake.Functions
                                                               {"Zulu", "zul"}
                                                           };
             return languageMap;
-        }
-
-        /// <summary>
-        /// Get a list of available DVD drives which are ready and contain DVD content.
-        /// </summary>
-        /// <returns>A List of Drives with their details</returns>
-        public static List<DriveInformation> GetDrives()
-        {
-            List<DriveInformation> drives = new List<DriveInformation>();
-            DriveInfo[] theCollectionOfDrives = DriveInfo.GetDrives();
-            int id = 0;
-            foreach (DriveInfo curDrive in theCollectionOfDrives)
-            {
-                if (curDrive.DriveType == DriveType.CDRom && curDrive.IsReady &&
-                    File.Exists(curDrive.RootDirectory + "VIDEO_TS\\VIDEO_TS.IFO"))
-                {
-                    drives.Add(new DriveInformation
-                                   {
-                                       Id = id,
-                                       VolumeLabel = curDrive.VolumeLabel,
-                                       RootDirectory = curDrive.RootDirectory + "VIDEO_TS"
-                                   });
-                    id++;
-                }
-            }
-            return drives;
         }
 
         /// <summary>

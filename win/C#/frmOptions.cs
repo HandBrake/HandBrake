@@ -12,6 +12,7 @@ namespace Handbrake
     using System.Windows.Forms;
 
     using HandBrake.ApplicationServices;
+    using HandBrake.ApplicationServices.Services;
 
     using Handbrake.Functions;
     using Handbrake.Model;
@@ -406,7 +407,7 @@ namespace Handbrake
                                                   MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                Main.ClearLogs();
+                UtilityService.ClearLogFiles(30);
                 MessageBox.Show(this, "HandBrake's Log file directory has been cleared!", "Notice", MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
             }

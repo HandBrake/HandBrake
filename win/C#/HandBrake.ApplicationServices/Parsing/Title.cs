@@ -30,9 +30,9 @@ namespace HandBrake.ApplicationServices.Parsing
         /// </summary>
         public Title()
         {
-            AudioTracks = new List<AudioTrack>();
-            Chapters = new List<Chapter>();
-            Subtitles = new List<Subtitle>();
+            this.AudioTracks = new List<AudioTrack>();
+            this.Chapters = new List<Chapter>();
+            this.Subtitles = new List<Subtitle>();
         }
 
         #region Properties
@@ -112,8 +112,8 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <summary>
         /// Parse the Title Information
         /// </summary>
-        /// <param name="output">A stingreader of output data</param>
-        /// <returns>A Title</returns>
+        /// <param name="output">A StringReader of output data</param>
+        /// <returns>A Title Object</returns>
         public static Title Parse(StringReader output)
         {
             var thisTitle = new Title();
