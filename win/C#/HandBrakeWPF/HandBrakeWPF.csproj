@@ -109,6 +109,44 @@
   <ItemGroup>
     <Folder Include="Model\" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\ActivityWindow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\ActivityWindow_small.png" />
+    <Resource Include="Views\Images\copy.png" />
+    <Resource Include="Views\Images\disc_small.png" />
+    <Resource Include="Views\Images\Output_Small.png" />
+    <Resource Include="Views\Images\Pref_Small.png" />
+    <Resource Include="Views\Images\Queue.png" />
+    <Resource Include="Views\Images\Queue_Small.png" />
+    <Resource Include="Views\Images\stop.png" />
+    <Resource Include="Views\Images\save.png" />
+    <Resource Include="Views\Images\Play_small.png" />
+    <Resource Include="Views\Images\Play.png" />
+    <Resource Include="Views\Images\picture.png" />
+    <Resource Include="Views\Images\Pause.png" />
+    <Resource Include="Views\Images\Movies.png" />
+    <Resource Include="Views\Images\logo64.png" />
+    <Resource Include="Views\Images\logo128.png" />
+    <Resource Include="Views\Images\info16.png" />
+    <Resource Include="Views\Images\Help16.png" />
+    <Resource Include="Views\Images\hb32.png" />
+    <Resource Include="Views\Images\hb16.png" />
+    <Resource Include="Views\Images\General Preferences.png" />
+    <Resource Include="Views\Images\folder.png" />
+    <Resource Include="Views\Images\ErrorX.png" />
+    <Resource Include="Views\Images\download.png" />
+    <Resource Include="Views\Images\AddToQueue_small.png" />
+    <Resource Include="Views\Images\AddToQueue.png" />
+    <Resource Include="Views\Images\window.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HandBrake.ApplicationServices\HandBrake.ApplicationServices.csproj">
+      <Project>{087A2BA8-BAC2-4577-A46F-07FF9D420016}</Project>
+      <Name>HandBrake.ApplicationServices</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
