@@ -1,4 +1,4 @@
-/*  DVD.cs $    This file is part of the HandBrake source code.
+/*  Source.cs $    This file is part of the HandBrake source code.
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
@@ -10,13 +10,13 @@ namespace HandBrake.ApplicationServices.Parsing
     /// <summary>
     /// An object representing a scanned DVD
     /// </summary>
-    public class DVD
+    public class Source
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DVD"/> class. 
+        /// Initializes a new instance of the <see cref="Source"/> class. 
         /// Default constructor for this object
         /// </summary>
-        public DVD()
+        public Source()
         {
             Titles = new List<Title>();
         }
@@ -35,9 +35,9 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <returns>
         /// A DVD object which contains a list of title inforamtion
         /// </returns>
-        public static DVD Parse(StreamReader output)
+        public static Source Parse(StreamReader output)
         {
-            var thisDVD = new DVD();
+            var thisDVD = new Source();
 
             while (!output.EndOfStream)
             {

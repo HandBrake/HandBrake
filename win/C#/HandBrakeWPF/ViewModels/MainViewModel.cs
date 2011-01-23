@@ -5,26 +5,74 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using Caliburn.Core;
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Windows;
+
+    using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.ApplicationServices.Services;
+    using HandBrake.ApplicationServices.Services.Interfaces;
 
     /// <summary>
     /// HandBrakes Main Window
     /// </summary>
-    public class MainViewModel : PropertyChangedBase
+    public class MainViewModel : ViewModelBase
     {
+        #region Private Variables and Services
+
+        /// <summary>
+        /// The Source Scan Service.
+        /// </summary>
+        private readonly IScan scanService;
+
+        /// <summary>
+        /// The Encode Service
+        /// </summary>
+        private readonly IQueueProcessor queueProcessor;
+
         /// <summary>
         /// HandBrakes Main Window Title
         /// </summary>
         private string windowName;
 
         /// <summary>
+        /// The Source Label
+        /// </summary>
+        private string sourceLabel;
+
+        /// <summary>
+        /// The Toolbar Status Label
+        /// </summary>
+        private string programStatusLabel;
+
+        #endregion
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MainViewModel"/> class.
         /// </summary>
         public MainViewModel()
         {
+            // Setup Services
+            this.scanService = File.Exists("hb.dll") ? (IScan)new LibScan() : new ScanService();
+            this.queueProcessor = new QueueProcessor(Process.GetProcessesByName("HandBrake").Length);
+
+            // Setup Properties
             this.WindowTitle = "HandBrake WPF Test Application";
+
+            // Setup Events
+            this.scanService.ScanStared += this.ScanStared;
+            this.scanService.ScanCompleted += this.ScanCompleted;
+            this.scanService.ScanStatusChanged += this.ScanStatusChanged;
+
+            this.queueProcessor.QueueCompleted += this.QueueCompleted;
+            this.queueProcessor.QueuePaused += this.QueuePaused;
+            this.queueProcessor.EncodeService.EncodeStarted += this.EncodeStarted;
+            this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeStatusChanged;
         }
 
+        #region Properties
         /// <summary>
         /// Gets or sets TestProperty.
         /// </summary>
@@ -44,5 +92,190 @@ namespace HandBrakeWPF.ViewModels
                 }
             }
         }
+
+        /// <summary>
+        /// Gets or sets The Current Encode Task that the user is building
+        /// </summary>
+        public EncodeTask CurrentTask { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Last Scanned Source
+        /// This object contains information about the scanned source.
+        /// </summary>
+        public Source ScannedSource { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Source Label
+        /// This indicates the status of scans.
+        /// </summary>
+        public string SourceLabel
+        {
+            get
+            {
+                return string.IsNullOrEmpty(this.sourceLabel) ? "Select 'Source' to continue" : this.sourceLabel;
+            }
+
+            set
+            {
+                if (!object.Equals(this.sourceLabel, value))
+                {
+                    this.sourceLabel = value;
+                    this.NotifyOfPropertyChange("SourceLabel");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the Program Status Toolbar Label
+        /// This indicates the status of HandBrake
+        /// </summary>
+        public string ProgramStatusLabel
+        {
+            get
+            {
+                return string.IsNullOrEmpty(this.programStatusLabel) ? "Ready" : this.sourceLabel;
+            }
+
+            set
+            {
+                if (!object.Equals(this.programStatusLabel, value))
+                {
+                    this.programStatusLabel = value;
+                    this.NotifyOfPropertyChange("ProgramStatusLabel");
+                }
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Shutdown this View
+        /// </summary>
+        public override void Shutdown()
+        {
+            // Unsubscribe from Events.
+            this.scanService.ScanStared -= this.ScanStared;
+            this.scanService.ScanCompleted -= this.ScanCompleted;
+            this.scanService.ScanStatusChanged -= this.ScanStatusChanged;
+
+            this.queueProcessor.QueueCompleted -= this.QueueCompleted;
+            this.queueProcessor.QueuePaused -= this.QueuePaused;
+            this.queueProcessor.EncodeService.EncodeStarted -= this.EncodeStarted;
+            this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
+
+            // Shutdown Normally
+            base.Shutdown();
+        }
+
+        /// <summary>
+        /// Shutdown the Application
+        /// </summary>
+        public void ExitApplication()
+        {
+            Application.Current.Shutdown();
+        }
+
+        #region Event Handlers
+        /// <summary>
+        /// Handle the Scan Status Changed Event.
+        /// </summary>
+        /// <param name="sender">
+        /// The Sender
+        /// </param>
+        /// <param name="e">
+        /// The EventArgs
+        /// </param>
+        private void ScanStatusChanged(object sender, HandBrake.ApplicationServices.EventArgs.ScanProgressEventArgs e)
+        {
+            this.SourceLabel = "Scanning Title " + e.CurrentTitle + " of " + e.Titles;
+        }
+
+        /// <summary>
+        /// Handle the Scan Completed Event
+        /// </summary>
+        /// <param name="sender">
+        /// The Sender
+        /// </param>
+        /// <param name="e">
+        /// The EventArgs
+        /// </param>
+        private void ScanCompleted(object sender, HandBrake.ApplicationServices.EventArgs.ScanCompletedEventArgs e)
+        {
+            if (e.Successful)
+            {
+                this.ScannedSource = this.scanService.SouceData;
+            }
+        }
+
+        /// <summary>
+        /// Handle the Scan Started Event
+        /// </summary>
+        /// <param name="sender">
+        /// The Sender
+        /// </param>
+        /// <param name="e">
+        /// The EventArgs
+        /// </param>
+        private void ScanStared(object sender, EventArgs e)
+        {
+            // TODO - Disable relevant parts of the UI.
+        }
+
+        /// <summary>
+        /// The Encode Status has changed Handler
+        /// </summary>
+        /// <param name="sender">
+        /// The Sender
+        /// </param>
+        /// <param name="e">
+        /// The Encode Progress Event Args
+        /// </param>
+        private void EncodeStatusChanged(object sender, HandBrake.ApplicationServices.EventArgs.EncodeProgressEventArgs e)
+        {
+            //
+        }
+
+        /// <summary>
+        /// Encode Started Handler
+        /// </summary>
+        /// <param name="sender">
+        /// The Sender
+        /// </param>
+        /// <param name="e">
+        /// The EventArgs
+        /// </param>
+        private void EncodeStarted(object sender, EventArgs e)
+        {
+            // TODO Handle Updating the UI
+        }
+
+        /// <summary>
+        /// The Queue has been paused handler
+        /// </summary>
+        /// <param name="sender">
+        /// The Sender
+        /// </param>
+        /// <param name="e">
+        /// The EventArgs
+        /// </param>
+        private void QueuePaused(object sender, EventArgs e)
+        {
+            // TODO Handle Updating the UI
+        }
+
+        /// <summary>
+        /// The Queue has completed handler
+        /// </summary>
+        /// <param name="sender">
+        /// The Sender
+        /// </param>
+        /// <param name="e">
+        /// The EventArgs
+        /// </param>
+        private void QueueCompleted(object sender, EventArgs e)
+        {
+            // TODO Handle Updating the UI
+        }
+        #endregion
     }
 }

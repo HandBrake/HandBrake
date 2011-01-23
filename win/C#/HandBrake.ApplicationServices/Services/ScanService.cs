@@ -86,7 +86,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Gets the Souce Data.
         /// </summary>
-        public DVD SouceData { get; private set; }
+        public Source SouceData { get; private set; }
 
         /// <summary>
         /// Gets ActivityLog.
@@ -227,7 +227,7 @@ namespace HandBrake.ApplicationServices.Services
 
                 this.readData = new Parser(this.hbProc.StandardError.BaseStream);
                 this.readData.OnScanProgress += this.OnScanProgress;
-                this.SouceData = DVD.Parse(this.readData);
+                this.SouceData = Source.Parse(this.readData);
 
                 // Write the Buffer out to file.
                 using (StreamWriter scanLog = new StreamWriter(dvdInfoPath))

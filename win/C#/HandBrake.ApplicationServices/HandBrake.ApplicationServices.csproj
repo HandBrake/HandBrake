@@ -114,7 +114,7 @@
     <Compile Include="Model\Encoding\SubtitleType.cs" />
     <Compile Include="Parsing\AudioTrack.cs" />
     <Compile Include="Parsing\Chapter.cs" />
-    <Compile Include="Parsing\DVD.cs" />
+    <Compile Include="Parsing\Source.cs" />
     <Compile Include="Parsing\Parser.cs" />
     <Compile Include="Parsing\Subtitle.cs" />
     <Compile Include="Parsing\Title.cs" />

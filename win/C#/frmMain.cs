@@ -55,7 +55,7 @@ namespace Handbrake
         private string dvdDrivePath;
         private string dvdDriveLabel;
         private Preset currentlySelectedPreset;
-        private DVD currentSource;
+        private Source currentSource;
 
         private IScan SourceScan;
         private List<DriveInformation> drives;

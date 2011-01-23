@@ -60,7 +60,7 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <summary>
         /// Gets the Souce Data.
         /// </summary>
-        DVD SouceData { get; }
+        Source SouceData { get; }
 
         /// <summary>
         /// Gets ActivityLog.

@@ -1,7 +1,6 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="{Binding Path=WindowTitle}" Height="645" Width="1015" FontSize="11">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:PresentationFramework="clr-namespace:Caliburn.PresentationFramework;assembly=Caliburn.PresentationFramework" Title="{Binding Path=WindowTitle}" Height="655" Width="1015" FontSize="11">
     
     <Grid>
         <Grid.RowDefinitions>
@@ -19,7 +18,7 @@
         <Menu Height="23" Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Stretch">
             <MenuItem Header="File">
                 <MenuItem Header="Cancel Scan" />
-                <MenuItem Header="Exit" />
+                <MenuItem Header="Exit" PresentationFramework:Message.Attach="[Event Click] = [Action ExitApplication]" />
             </MenuItem>
 
             <MenuItem Header="Tools">
@@ -98,20 +97,20 @@
         <StackPanel Grid.Row="2" Margin="10,5,10,5" MaxWidth="725" Width="725" HorizontalAlignment="Left">
             <StackPanel Orientation="Horizontal">
                 <Label Content="Source" FontWeight="Bold" />
-                <Label Content="Select 'Source' to continue" />
+                <Label Content="{Binding Path=SourceLabel}" />
             </StackPanel>
             
             <StackPanel Orientation="Horizontal">
                 <Label Content="Title" Margin="8,0,0,0" />
-                <ComboBox Name="Titles" Margin="8,0,0,0" MinWidth="100" />
+                <ComboBox Name="Titles" Margin="8,0,0,0" MinWidth="100" SelectedItem="{Binding Path=CurrentTask.Title}" />
 
                 <Label Content="Angle" Margin="8,0,0,0" />
-                <ComboBox Name="Angles" Margin="8,0,0,0" MinWidth="60"/>
+                <ComboBox Name="Angles" Margin="8,0,0,0" MinWidth="60"  SelectedItem="{Binding Path=CurrentTask.Angle}"/>
 
-                <ComboBox Name="PointToPointMode" Margin="8,0,0,0" MinWidth="80" />
-                <ComboBox Name="StartPoint" Margin="8,0,0,0" MinWidth="60" />
+                <ComboBox Name="PointToPointMode" Margin="8,0,0,0" MinWidth="80" SelectedItem="{Binding Path=CurrentTask.PointToPointMode}" />
+                <ComboBox Name="StartPoint" Margin="8,0,0,0" MinWidth="60" SelectedItem="{Binding Path=CurrentTask.StartPoint}" />
                 <Label Content="through" Margin="8,0,0,0" />
-                <ComboBox Name="EndPoint" Margin="8,0,0,0" MinWidth="60" />
+                <ComboBox Name="EndPoint" Margin="8,0,0,0" MinWidth="60" SelectedItem="{Binding Path=CurrentTask.EndPoint}" />
                 <Label Content="Duration" Margin="8,0,0,0" />
                 <Label Content="--:--:--" Margin="8,0,0,0" />
             </StackPanel>
@@ -122,7 +121,7 @@
             <Label Content="Destination" FontWeight="Bold" />
             <StackPanel Orientation="Horizontal">
                 <Label Content="File" Margin="8,0,0,0" />
-                <TextBox Name="Destination" Margin="8,0,0,0" Width="600" />
+                <TextBox Name="Destination" Margin="8,0,0,0" Width="600" Text="{}" />
                 <Button Name="DestinationBrowser" Margin="8,0,0,0" Padding="8,0,8,0" Content="Browse" />
             </StackPanel>
         </StackPanel>
@@ -132,11 +131,11 @@
             <Label Content="Output Settings (Preset: None)" FontWeight="Bold" />
             <StackPanel Orientation="Horizontal">
                 <Label Content="Container" Margin="8,0,0,0" />
-                <ComboBox Name="Container" Margin="8,0,0,0" MinWidth="100" />
+                <ComboBox Name="Container" Margin="8,0,0,0" MinWidth="100" SelectedItem="{Binding Path=CurrentTask.OutputFormat}" />
 
-                <CheckBox Name="LargeFileMp4" Content="Large File Size" VerticalAlignment="Center" Margin="8,0,0,0" />
-                <CheckBox Name="WebOptimized" Content="Web Optimized" VerticalAlignment="Center" Margin="8,0,0,0" />
-                <CheckBox Name="iPod5G" Content="iPod 5G Support" VerticalAlignment="Center" Margin="8,0,0,0" />
+                <CheckBox Name="LargeFileMp4" Content="Large File Size" IsChecked="{Binding Path=CurrentTask.LargeFile}" VerticalAlignment="Center" Margin="8,0,0,0" />
+                <CheckBox Name="WebOptimized" Content="Web Optimized" IsChecked="{Binding Path=CurrentTask.OptimizeMP4}" VerticalAlignment="Center" Margin="8,0,0,0" />
+                <CheckBox Name="iPod5G" Content="iPod 5G Support" IsChecked="{Binding Path=CurrentTask.IPod5GSupport}" VerticalAlignment="Center" Margin="8,0,0,0" />
             </StackPanel>
         </StackPanel>
 
@@ -164,7 +163,7 @@
         
         <!-- Status Bar -->
         <StatusBar Grid.Row="6" Height="30" VerticalAlignment="Bottom">
-            <Label Content="Ready" FontSize="11" />
+            <Label Content="{Binding Path=ProgramStatusLabel}" FontSize="10" VerticalAlignment="Center" />
         </StatusBar>
         
     </Grid>

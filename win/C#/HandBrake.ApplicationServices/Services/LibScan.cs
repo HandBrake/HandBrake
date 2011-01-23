@@ -97,7 +97,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Gets the Souce Data.
         /// </summary>
-        public DVD SouceData { get; private set; }
+        public Source SouceData { get; private set; }
 
         /// <summary>
         /// Gets ActivityLog.
@@ -179,7 +179,7 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         private void InstanceScanCompleted(object sender, EventArgs e)
         {
-            this.SouceData = new DVD { Titles = ConvertTitles(this.instance.Titles) };
+            this.SouceData = new Source { Titles = ConvertTitles(this.instance.Titles) };
 
             IsScanning = false;
 

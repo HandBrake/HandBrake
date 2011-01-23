@@ -33,6 +33,11 @@ namespace HandBrake.ApplicationServices.Model
         public int Title { get; set; }
 
         /// <summary>
+        /// Gets or sets the Angle
+        /// </summary>
+        public int Angle { get; set; }
+
+        /// <summary>
         /// Gets or sets PointToPointMode.
         /// </summary>
         public PointToPointMode PointToPointMode { get; set; }
