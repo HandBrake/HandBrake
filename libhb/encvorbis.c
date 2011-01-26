@@ -47,7 +47,6 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
     hb_audio_t * audio = w->audio;
     int i;
     ogg_packet header[3];
-    struct ovectl_ratemanage2_arg  ctl_rate_arg;
 
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
@@ -83,15 +82,7 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
         return 0;
     }
 
-    if( vorbis_encode_ctl( &pv->vi, OV_ECTL_RATEMANAGE2_GET, &ctl_rate_arg) )
-    {
-        hb_log( "encvorbis: vorbis_encode_ctl( ratemanage2_get ) failed" );
-    }
-
-    ctl_rate_arg.bitrate_average_kbps = audio->config.out.bitrate;
-    ctl_rate_arg.management_active = 1;
-
-    if( vorbis_encode_ctl( &pv->vi, OV_ECTL_RATEMANAGE2_SET, &ctl_rate_arg ) ||
+    if( vorbis_encode_ctl( &pv->vi, OV_ECTL_RATEMANAGE2_SET, NULL ) ||
           vorbis_encode_setup_init( &pv->vi ) )
     {
         hb_error( "encvorbis: vorbis_encode_ctl( ratemanage2_set ) OR vorbis_encode_setup_init failed.\n" );
