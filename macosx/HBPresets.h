@@ -18,6 +18,8 @@
 - (NSDictionary *)createLegacyPresetFolder;
 
 - (NSDictionary *)createiPadPreset;
+- (NSDictionary *)createiPhone4Preset;
+- (NSDictionary *)createAppleTv2Preset;
 - (NSDictionary *)createAppleTVPreset;
 - (NSDictionary *)createAppleTVLegacyPreset;
 - (NSDictionary *)createAppleUniversalPreset;
