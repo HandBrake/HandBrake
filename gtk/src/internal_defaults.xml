@@ -114,6 +114,12 @@
 		<string></string>
 		<key>SrtOffset</key>
 		<integer>0</integer>
+		<key>VideoFramerateCFR</key>
+		<false />
+		<key>VideoFrameratePFR</key>
+		<false />
+		<key>VideoFramerateVFR</key>
+		<false />
 	</dict>
 	<key>Preferences</key>
 	<dict>
@@ -200,19 +206,19 @@
 	</dict>
 	<key>XlatPresets</key>
 	<dict>
-		<key>anamorphic</key>
-		<true />
 		<key>autoscale</key>
 		<false />
-		<key>par_width</key>
-		<integer>0</integer>
-		<key>par_height</key>
-		<integer>0</integer>
 		<key>vquality_type_bitrate</key>
 		<false />
 		<key>vquality_type_constant</key>
 		<false />
 		<key>vquality_type_target</key>
+		<false />
+		<key>VideoFramerateCFR</key>
+		<false />
+		<key>VideoFrameratePFR</key>
+		<false />
+		<key>VideoFramerateVFR</key>
 		<false />
 	</dict>
 	<key>Presets</key>
@@ -273,8 +279,8 @@
 		<integer>0</integer>
 		<key>VideoFramerate</key>
 		<string>source</string>
-		<key>VideoFrameratePFR</key>
-		<false />
+		<key>VideoFramerateMode</key>
+		<string>vfr</string>
 		<key>VideoGrayScale</key>
 		<false />
 		<key>Mp4HttpOptimize</key>

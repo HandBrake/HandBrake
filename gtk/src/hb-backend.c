@@ -4632,18 +4632,18 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	{
 		job->vrate = title->rate;
 		job->vrate_base = title->rate_base;
-		job->cfr = 0;
 	}
 	else
 	{
 		job->vrate = 27000000;
 		job->vrate_base = vrate;
-		gboolean pfr = ghb_settings_get_boolean(js, "VideoFrameratePFR");
-		if (pfr)
-			job->cfr = 2;
-		else
-			job->cfr = 1;
 	}
+	if (ghb_settings_get_boolean(js, "VideoFrameratePFR"))
+		job->cfr = 2;
+	else if (ghb_settings_get_boolean(js, "VideoFramerateCFR"))
+		job->cfr = 1;
+	else
+		job->cfr = 0;
 
 	const GValue *audio_list;
 	gint count, ii;

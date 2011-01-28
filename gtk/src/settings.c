@@ -222,8 +222,16 @@ ghb_widget_value(GtkWidget *widget)
 	{
 		g_debug("\tradio_button");
 		gboolean bval;
-		bval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-		value = ghb_boolean_value_new(bval);
+		bval = gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget));
+		if (bval)
+		{
+			value = ghb_boolean_value_new(FALSE);
+		}
+		else
+		{
+			bval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+			value = ghb_boolean_value_new(bval);
+		}
 	}
 	else if (type == GTK_TYPE_CHECK_BUTTON)
 	{
@@ -427,6 +435,26 @@ ghb_widget_boolean(GtkWidget *widget)
 	return bval;
 }
 
+static void check_radio_consistency(GValue *settings, GtkWidget *widget)
+{
+	const gchar *key = NULL;
+	GValue *value;
+
+	if (widget == NULL) return;
+	if (G_OBJECT_TYPE(widget) == GTK_TYPE_RADIO_BUTTON)
+	{
+		// Find corresponding setting
+		key = ghb_get_setting_key(widget);
+		if (key == NULL) return;
+		value = ghb_widget_value(widget);
+		if (value == NULL) return;
+		if (ghb_value_boolean(value) == ghb_settings_get_boolean(settings, key))
+		{
+			gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget), FALSE);
+		}
+	}
+}
+
 void
 ghb_widget_to_setting(GValue *settings, GtkWidget *widget)
 {
@@ -441,6 +469,7 @@ ghb_widget_to_setting(GValue *settings, GtkWidget *widget)
 	value = ghb_widget_value(widget);
 	if (value != NULL)
 	{
+		check_radio_consistency(settings, widget);
 		ghb_settings_take_value(settings, key, value);
 	}
 	else
@@ -474,7 +503,16 @@ update_widget(GtkWidget *widget, const GValue *value)
 	else if (type == GTK_TYPE_RADIO_BUTTON)
 	{
 		g_debug("radio button");
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), ival);
+		int cur_val = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		if (cur_val && !ival)
+		{
+			gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget), TRUE);
+		}
+		else
+		{
+			gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget), FALSE);
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), ival);
+		}
 	}
 	else if (type == GTK_TYPE_CHECK_BUTTON)
 	{

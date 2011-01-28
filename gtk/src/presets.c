@@ -2682,7 +2682,80 @@ import_xlat_preset(GValue *dict)
 						ghb_boolean_value_new(TRUE));
 	} break;
 	}
+
 	import_value_xlat(dict);
+
+	GValue *mode = ghb_dict_lookup(dict, "VideoFramerateMode");
+	if (mode == NULL)
+	{
+		GValue *fr = ghb_dict_lookup(dict, "VideoFramerate");
+		if (fr)
+		{
+			gchar *str;
+			gboolean pfr = FALSE;
+			GValue *pfr_val = ghb_dict_lookup(dict, "VideoFrameratePFR");
+			if (pfr_val)
+			{
+				pfr = ghb_value_boolean(pfr_val);
+			}
+			str = ghb_value_string(fr);
+			if (strcmp(str, "source") == 0)
+			{
+				ghb_dict_insert(dict, g_strdup("VideoFramerateCFR"), 
+								ghb_boolean_value_new(FALSE));
+				ghb_dict_insert(dict, g_strdup("VideoFramerateVFR"), 
+								ghb_boolean_value_new(TRUE));
+			}
+			else if (!pfr)
+			{
+				ghb_dict_insert(dict, g_strdup("VideoFramerateCFR"), 
+								ghb_boolean_value_new(TRUE));
+				ghb_dict_insert(dict, g_strdup("VideoFramerateVFR"), 
+								ghb_boolean_value_new(FALSE));
+			}
+			else
+			{
+				ghb_dict_insert(dict, g_strdup("VideoFramerateCFR"), 
+								ghb_boolean_value_new(FALSE));
+				ghb_dict_insert(dict, g_strdup("VideoFramerateVFR"), 
+								ghb_boolean_value_new(FALSE));
+			}
+            g_free(str);
+		}
+	}
+	else
+	{
+		gchar *str;
+		str = ghb_value_string(mode);
+		if (strcmp(str, "cfr") == 0)
+		{
+				ghb_dict_insert(dict, g_strdup("VideoFramerateCFR"), 
+								ghb_boolean_value_new(TRUE));
+				ghb_dict_insert(dict, g_strdup("VideoFrameratePFR"), 
+								ghb_boolean_value_new(FALSE));
+				ghb_dict_insert(dict, g_strdup("VideoFramerateVFR"), 
+								ghb_boolean_value_new(FALSE));
+		}
+		else if (strcmp(str, "pfr") == 0)
+		{
+				ghb_dict_insert(dict, g_strdup("VideoFramerateCFR"), 
+								ghb_boolean_value_new(FALSE));
+				ghb_dict_insert(dict, g_strdup("VideoFrameratePFR"), 
+								ghb_boolean_value_new(TRUE));
+				ghb_dict_insert(dict, g_strdup("VideoFramerateVFR"), 
+								ghb_boolean_value_new(FALSE));
+		}
+		else
+		{
+				ghb_dict_insert(dict, g_strdup("VideoFramerateCFR"), 
+								ghb_boolean_value_new(FALSE));
+				ghb_dict_insert(dict, g_strdup("VideoFrameratePFR"), 
+								ghb_boolean_value_new(FALSE));
+				ghb_dict_insert(dict, g_strdup("VideoFramerateVFR"), 
+								ghb_boolean_value_new(TRUE));
+		}
+		g_free(str);
+	}
 
 	gdouble vquality;
 	const GValue *gval;
@@ -2787,6 +2860,22 @@ export_xlat_preset(GValue *dict)
 						ghb_int_value_new(2));
 	}
 
+	if (ghb_value_boolean(preset_dict_get_value(dict, "VideoFramerateCFR")))
+	{
+		ghb_dict_insert(dict, g_strdup("VideoFramerateMode"), 
+						ghb_string_value_new("cfr"));
+	}
+	else if (ghb_value_boolean(preset_dict_get_value(dict, "VideoFrameratePFR")))
+	{
+		ghb_dict_insert(dict, g_strdup("VideoFramerateMode"), 
+						ghb_string_value_new("pfr"));
+	}
+	else
+	{
+		ghb_dict_insert(dict, g_strdup("VideoFramerateMode"), 
+						ghb_string_value_new("vfr"));
+	}
+
 	GValue *alist, *adict;
 	gint count, ii;
 
@@ -2806,11 +2895,25 @@ export_xlat_preset(GValue *dict)
 		}
 	}
 
+	GValue *internal;
+	GHashTableIter iter;
+	gchar *key;
+	GValue *value;
+	internal = plist_get_dict(internalPlist, "XlatPresets");
+	ghb_dict_iter_init(&iter, internal);
+	// middle (void*) cast prevents gcc warning "defreferencing type-punned
+	// pointer will break strict-aliasing rules"
+	while (g_hash_table_iter_next(
+			&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&value))
+	{
+		ghb_dict_remove(dict, key);
+	}
+
+	// remove obsolete keys
 	ghb_dict_remove(dict, "UsesMaxPictureSettings");
-	ghb_dict_remove(dict, "autoscale");
-	ghb_dict_remove(dict, "vquality_type_target");
-	ghb_dict_remove(dict, "vquality_type_bitrate");
-	ghb_dict_remove(dict, "vquality_type_constant");
+	ghb_dict_remove(dict, "VFR");
+	ghb_dict_remove(dict, "VideoFrameratePFR");
+
 	export_value_xlat(dict);
 }
 
