@@ -3,10 +3,10 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace Handbrake.Presets
+namespace HandBrake.ApplicationServices.Model
 {
     /// <summary>
-    /// A Preset
+    /// A Preset for encoding with.
     /// </summary>
     public class Preset 
     {
@@ -31,6 +31,11 @@ namespace Handbrake.Presets
         public bool CropSettings { get; set; }
 
         /// <summary>
+        /// Gets or sets the Settings for this encode/preset. Can be used in place of Query property.
+        /// </summary>
+        public EncodeTask EncodeSettings { get; set; }
+
+        /// <summary>
         /// Gets or sets The version number which associates this preset with a HB build
         /// </summary>
         public string Version { get; set; }
@@ -39,5 +44,10 @@ namespace Handbrake.Presets
         /// Gets or sets the Description for the preset
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this is a built in preset
+        /// </summary>
+        public bool IsBuildIn { get; set; }
     }
 }

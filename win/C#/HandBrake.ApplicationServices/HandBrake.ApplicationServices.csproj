@@ -65,6 +65,7 @@
       <HintPath>..\libraries\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -110,6 +111,7 @@
     <Compile Include="Model\Encoding\SubtitleTrack.cs" />
     <Compile Include="Model\Encoding\VideoEncoder.cs" />
     <Compile Include="Model\Encoding\VideoEncodeMode.cs" />
+    <Compile Include="Model\Preset.cs" />
     <Compile Include="Model\QueueTask.cs" />
     <Compile Include="Model\Encoding\SubtitleType.cs" />
     <Compile Include="Parsing\AudioTrack.cs" />
@@ -129,7 +131,9 @@
     <Compile Include="Services\Interfaces\IQueueManager.cs" />
     <Compile Include="Services\Interfaces\IQueueProcessor.cs" />
     <Compile Include="Services\Interfaces\IScan.cs" />
+    <Compile Include="Services\Interfaces\IPresetService.cs" />
     <Compile Include="Services\LibScan.cs" />
+    <Compile Include="Services\PresetService.cs" />
     <Compile Include="Services\QueueManager.cs" />
     <Compile Include="Services\QueueProcessor.cs" />
     <Compile Include="Services\ScanService.cs" />

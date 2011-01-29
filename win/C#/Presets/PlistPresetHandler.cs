@@ -13,9 +13,8 @@ namespace Handbrake.Presets
     using System.Xml;
     using Functions;
 
+    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
-
-    using Model;
 
     /// <summary>
     /// Plist Preset Converter

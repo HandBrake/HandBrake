@@ -15,6 +15,8 @@ namespace Handbrake.Presets
     using System.Windows.Forms;
     using System.Xml.Serialization;
 
+    using HandBrake.ApplicationServices.Model;
+
     /// <summary>
     /// The Preset Handler Class
     /// </summary>

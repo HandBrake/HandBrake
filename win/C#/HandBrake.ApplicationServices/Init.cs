@@ -13,6 +13,11 @@ namespace HandBrake.ApplicationServices
     /// </summary>
     public class Init
     {
+        /**
+         *  I really dislike this, Need to replace this sooner rather than later.
+         **/ 
+
+
         /// <summary>
         /// Setup the Settings used by the applicaiton with this library
         /// </summary>
@@ -52,12 +57,13 @@ namespace HandBrake.ApplicationServices
         /// <param name="preventSleep">
         /// Prevent the system from sleeping
         /// </param>
-        public static void SetupSettings(string versionString, int instanceId, string completionOption, bool disableDvdNav,
+        public static void SetupSettings(string versionString, string version, int instanceId, string completionOption, bool disableDvdNav,
                                   bool growlEncode, bool growlQueue, string processPriority, string saveLogPath, bool saveLogToSpecifiedPath,
                                   bool saveLogWithVideo, bool showCliForInGuiEncodeStatus, bool preventSleep)
         {
             InstanceId = instanceId;
             HandBrakeGuiVersionString = versionString;
+            Version = version;
             CompletionOption = completionOption;
             DisableDvdNav = disableDvdNav;
             GrowlEncode = growlEncode;
@@ -90,6 +96,11 @@ namespace HandBrake.ApplicationServices
         /// The Applicaiton that uses this DLL can pass in it's version string.
         /// </summary>
         public static string HandBrakeGuiVersionString;
+
+        /// <summary>
+        /// HandBrakes Version or Svn revision
+        /// </summary>
+        public static string Version;
 
         /// <summary>
         /// What to do when the encode completes.

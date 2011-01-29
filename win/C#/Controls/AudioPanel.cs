@@ -12,6 +12,7 @@ namespace Handbrake.Controls
     using System.Windows.Forms;
     using Functions;
 
+    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
 
     using Presets;

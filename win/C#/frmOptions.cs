@@ -503,6 +503,7 @@ namespace Handbrake
                 "Windows GUI {1} {0}", Settings.Default.hb_build, Settings.Default.hb_version);
             Init.SetupSettings(
                 versionId,
+                Settings.Default.hb_version,
                 Program.InstanceId,
                 Settings.Default.CompletionOption,
                 Settings.Default.noDvdNav,

@@ -10,6 +10,7 @@ namespace Handbrake.Controls
     using System.Globalization;
     using System.Windows.Forms;
 
+    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
 
     using Presets;
