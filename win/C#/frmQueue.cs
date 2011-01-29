@@ -18,6 +18,7 @@ namespace Handbrake
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Utilities;
 
     using Model;
 
@@ -323,7 +324,7 @@ namespace Handbrake
             foreach (QueueTask queueItem in theQueue)
             {
                 string qItem = queueItem.Query;
-                QueryParser parsed = QueryParser.Parse(qItem);
+                QueryParserUtility parsed = QueryParserUtility.Parse(qItem);
 
                 // Get the DVD Title
                 string title = parsed.Title == 0 ? "Auto" : parsed.Title.ToString();
@@ -387,7 +388,7 @@ namespace Handbrake
                     BeginInvoke(new UpdateHandler(SetCurrentEncodeInformation));
                 }
 
-                QueryParser parsed = QueryParser.Parse(queue.QueueManager.LastProcessedJob.Query);
+                QueryParserUtility parsed = QueryParserUtility.Parse(queue.QueueManager.LastProcessedJob.Query);
 
                 // Get title and chapters
                 string title = parsed.Title == 0 ? "Auto" : parsed.Title.ToString();

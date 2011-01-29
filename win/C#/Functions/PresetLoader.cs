@@ -8,6 +8,8 @@ namespace Handbrake.Functions
     using System.Drawing;
     using System.Windows.Forms;
 
+    using HandBrake.ApplicationServices.Utilities;
+
     /// <summary>
     /// Load a preset into the main Window
     /// </summary>
@@ -26,7 +28,7 @@ namespace Handbrake.Functions
         /// <param name="name">
         /// Name of the preset
         /// </param>
-        public static void LoadPreset(frmMain mainWindow, QueryParser presetQuery, string name)
+        public static void LoadPreset(frmMain mainWindow, QueryParserUtility presetQuery, string name)
         {
             #region Source
 

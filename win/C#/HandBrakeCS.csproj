@@ -256,9 +256,7 @@
       <DependentUpon>frmActivityWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\SourceType.cs" />
-    <Compile Include="Presets\PlistPresetHandler.cs" />
     <Compile Include="Presets\PresetsHandler.cs" />
-    <Compile Include="Functions\QueryParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ToolWindows\BatchAdd.cs">
       <SubType>Form</SubType>

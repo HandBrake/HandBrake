@@ -504,6 +504,7 @@ namespace Handbrake
             Init.SetupSettings(
                 versionId,
                 Settings.Default.hb_version,
+                Settings.Default.hb_build,
                 Program.InstanceId,
                 Settings.Default.CompletionOption,
                 Settings.Default.noDvdNav,

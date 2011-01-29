@@ -3,21 +3,20 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace Handbrake.Functions
+namespace HandBrake.ApplicationServices.Utilities
 {
     using System;
     using System.Collections;
     using System.Globalization;
     using System.Text.RegularExpressions;
 
+    using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model.Encoding;
-
-    using Model;
 
     /// <summary>
     /// Parse a CLI Query
     /// </summary>
-    public class QueryParser
+    public class QueryParserUtility
     {
         /// <summary>
         /// The Culture
@@ -300,9 +299,9 @@ namespace Handbrake.Functions
         /// </summary>
         /// <param name="input">A ClI Query</param>
         /// <returns>A Parsed Query</returns>
-        public static QueryParser Parse(string input)
+        public static QueryParserUtility Parse(string input)
         {
-            var thisQuery = new QueryParser();
+            var thisQuery = new QueryParserUtility();
 
             #region Regular Expressions
 
@@ -593,11 +592,11 @@ namespace Handbrake.Functions
 
                     if (trackMixes != null)
                         if (trackMixes.Length >= (x + 1)) // Audio Mix
-                            track.MixDown = GetMixDown(trackMixes[x].Trim());
+                            track.MixDown = Converters.GetMixDown(trackMixes[x].Trim());
 
                     if (trackEncoders != null)
                         if (trackEncoders.Length >= (x + 1)) // Audio Mix
-                            track.Encoder = GetAudioEncoder(trackEncoders[x].Trim());
+                            track.Encoder = Converters.GetAudioEncoder(trackEncoders[x].Trim());
 
                     if (trackBitrates != null)
                         if (trackBitrates.Length >= (x + 1)) // Audio Encoder
@@ -643,62 +642,12 @@ namespace Handbrake.Functions
             }
             catch (Exception exc)
             {
-                Main.ShowExceptiowWindow("An error has occured in the Query Parser.", exc.ToString());
+                throw new Exception("An error has occured in the QueryParser Utility.", exc);
             }
 
             #endregion
 
             return thisQuery;
-        }
-
-        /// <summary>
-        /// Get the GUI equiv to a CLI mixdown
-        /// </summary>
-        /// <param name="mixdown">The Audio Mixdown</param>
-        /// <returns>The GUI representation of the mixdown</returns>
-        private static string GetMixDown(string mixdown)
-        {
-            switch (mixdown.Trim())
-            {
-                case "mono":
-                    return "Mono";
-                case "stereo":
-                    return "Stereo";
-                case "dpl1":
-                    return "Dolby Surround";
-                case "dpl2":
-                    return "Dolby Pro Logic II";
-                case "6ch":
-                    return "6 Channel Discrete";
-                default:
-                    return "Automatic";
-            }
-        }
-
-        /// <summary>
-        /// Get the GUI equiv to a CLI audio encoder
-        /// </summary>
-        /// <param name="audioEnc">The Audio Encoder</param>
-        /// <returns>The GUI representation of that audio encoder</returns>
-        private static string GetAudioEncoder(string audioEnc)
-        {
-            switch (audioEnc)
-            {
-                case "faac":
-                    return "AAC (faac)";
-                case "lame":
-                    return "MP3 (lame)";
-                case "vorbis":
-                    return "Vorbis (vorbis)";
-                case "ac3":
-                    return "AC3 (ffmpeg)";
-                case "copy:ac3":
-                    return "AC3 Passthru";
-                case "copy:dts":
-                    return "DTS Passthru";
-                default:
-                    return "AAC (faac)";
-            }
         }
     }
 }

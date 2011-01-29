@@ -108,7 +108,7 @@ namespace Handbrake
         private static void InitializeApplicationServices()
         {
             string versionId = String.Format("Windows GUI {1} {0}", Settings.Default.hb_build, Settings.Default.hb_version);
-            Init.SetupSettings(versionId, Settings.Default.hb_version, InstanceId, Settings.Default.CompletionOption, Settings.Default.noDvdNav,
+            Init.SetupSettings(versionId, Settings.Default.hb_version, Settings.Default.hb_build, InstanceId, Settings.Default.CompletionOption, Settings.Default.noDvdNav,
                                Settings.Default.growlEncode, Settings.Default.growlQueue,
                                Settings.Default.processPriority, Settings.Default.saveLogPath, Settings.Default.saveLogToSpecifiedPath,
                                Settings.Default.saveLogWithVideo, Settings.Default.showCliForInGuiEncodeStatus, Settings.Default.preventSleep);

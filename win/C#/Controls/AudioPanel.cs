@@ -14,6 +14,7 @@ namespace Handbrake.Controls
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.ApplicationServices.Utilities;
 
     using Presets;
 
@@ -151,7 +152,7 @@ namespace Handbrake.Controls
             // Add any tracks the preset has, if there is a preset and no audio tracks in the list currently
             if (audioList.Rows.Count == 0 && preset != null)
             {
-                QueryParser parsed = QueryParser.Parse(preset.Query);
+                QueryParserUtility parsed = QueryParserUtility.Parse(preset.Query);
                 foreach (AudioTrack audioTrack in parsed.AudioInformation)
                 {
                     DataGridViewRow newTrack = new DataGridViewRow();

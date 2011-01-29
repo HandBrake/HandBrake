@@ -3,7 +3,7 @@
     Homepage: <http://handbrake.fr/>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace Handbrake.Presets
+namespace HandBrake.ApplicationServices.Utilities
 {
     using System;
     using System.Collections;
@@ -11,7 +11,6 @@ namespace Handbrake.Presets
     using System.Text;
     using System.Windows.Forms;
     using System.Xml;
-    using Functions;
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
@@ -21,16 +20,22 @@ namespace Handbrake.Presets
     /// </summary>
     public class PlistPresetHandler
     {
+        /**
+         * TODO:
+         * - Update with the new vfr,pfr,cfr keys
+         * - Clean up this code, it's pretty nasty right now.
+         **/ 
+
         #region Import
 
-        public static QueryParser Import(string filename)
+        public static QueryParserUtility Import(string filename)
         {
             XmlNode root = loadFile(filename);
             if (root == null) return null;
 
             // We'll query a query parser object and use it's public var structures to store all the data.
             // This will allow the preset loader logic to be used instead of writing custom logic just for this file.
-            QueryParser queryParsed = new QueryParser();
+            QueryParserUtility queryParsed = new QueryParserUtility();
             string qualityMode = string.Empty;
 
             #region Get a List of Audio Track Objects
@@ -338,7 +343,7 @@ namespace Handbrake.Presets
         /// </param>
         public static void Export(string path, Preset preset)
         {
-            QueryParser parsed = QueryParser.Parse(preset.Query);
+            QueryParserUtility parsed = QueryParserUtility.Parse(preset.Query);
             XmlTextWriter xmlWriter = new XmlTextWriter(path, Encoding.UTF8) { Formatting = Formatting.Indented };
 
             // Header
@@ -374,7 +379,7 @@ namespace Handbrake.Presets
         /// <param name="preset">
         /// The preset.
         /// </param>
-        private static void WritePreset(XmlTextWriter xmlWriter, QueryParser parsed, Preset preset)
+        private static void WritePreset(XmlTextWriter xmlWriter, QueryParserUtility parsed, Preset preset)
         {
             xmlWriter.WriteStartElement("dict");
             AudioListArrayDict(xmlWriter, parsed);
@@ -395,7 +400,7 @@ namespace Handbrake.Presets
         /// <param name="preset">
         /// The preset.
         /// </param>
-        private static void AddEncodeSettings(XmlTextWriter xmlWriter, QueryParser parsed, Preset preset)
+        private static void AddEncodeSettings(XmlTextWriter xmlWriter, QueryParserUtility parsed, Preset preset)
         {
             AddEncodeElement(xmlWriter, "ChapterMarkers", "integer", parsed.ChapterMarkers ? "1" : "0");
             AddEncodeElement(xmlWriter, "Default", "integer", "0");
@@ -488,6 +493,7 @@ namespace Handbrake.Presets
                     detelecine = 1;
                     break;
             }
+
             AddEncodeElement(xmlWriter, "PictureDetelecine", "integer", detelecine.ToString());
             AddEncodeElement(xmlWriter, "PictureDetelecineCustom", "string", detelecine == 1 ? parsed.DeTelecine : string.Empty);
 
@@ -502,7 +508,7 @@ namespace Handbrake.Presets
             AddEncodeElement(xmlWriter, "PictureWidth", "integer", parsed.Width.ToString());
 
             // Preset Information
-            AddEncodeElement(xmlWriter, "PresetBuildNumber", "string", Properties.Settings.Default.hb_build.ToString());
+            AddEncodeElement(xmlWriter, "PresetBuildNumber", "string", Init.Build.ToString());
             AddEncodeElement(xmlWriter, "PresetDescription", "string", "No Description");
             AddEncodeElement(xmlWriter, "PresetName", "string", preset.Name);
             AddEncodeElement(xmlWriter, "Type", "integer", "1"); // 1 is user preset, 0 is built in
@@ -592,7 +598,7 @@ namespace Handbrake.Presets
         /// <param name="parsed">
         /// The parsed.
         /// </param>
-        private static void AudioListArrayDict(XmlTextWriter xmlWriter, QueryParser parsed)
+        private static void AudioListArrayDict(XmlTextWriter xmlWriter, QueryParserUtility parsed)
         {
             xmlWriter.WriteStartElement("key");
             xmlWriter.WriteString("AudioList");

@@ -17,6 +17,7 @@ namespace Handbrake
     using Functions;
 
     using HandBrake.ApplicationServices.EventArgs;
+    using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Framework.Model;
     using HandBrake.Framework.Services;
     using HandBrake.Framework.Views;
@@ -171,7 +172,7 @@ namespace Handbrake
                 {
                     x264Panel.Reset2Defaults();
 
-                    QueryParser presetQuery = QueryParser.Parse(query);
+                    QueryParserUtility presetQuery = QueryParserUtility.Parse(query);
                     PresetLoader.LoadPreset(this, presetQuery, Settings.Default.defaultPreset);
 
                     x264Panel.StandardizeOptString();
@@ -899,7 +900,7 @@ namespace Handbrake
                         x264Panel.Reset2Defaults();
 
                         // Send the query from the file to the Query Parser class
-                        QueryParser presetQuery = QueryParser.Parse(query);
+                        QueryParserUtility presetQuery = QueryParserUtility.Parse(query);
 
                         // Now load the preset
                         PresetLoader.LoadPreset(this, presetQuery, presetName);
@@ -938,7 +939,7 @@ namespace Handbrake
         {
             if (openPreset.ShowDialog() == DialogResult.OK)
             {
-                QueryParser parsed = PlistPresetHandler.Import(openPreset.FileName);
+                QueryParserUtility parsed = PlistPresetHandler.Import(openPreset.FileName);
                 if (presetHandler.CheckIfUserPresetExists(parsed.PresetName + " (Imported)"))
                 {
                     DialogResult result =
@@ -2237,7 +2238,7 @@ namespace Handbrake
                     if (queueEdit.Query != null)
                     {
                         // Send the query from the file to the Query Parser class
-                        QueryParser presetQuery = QueryParser.Parse(queueEdit.Query);
+                        QueryParserUtility presetQuery = QueryParserUtility.Parse(queueEdit.Query);
 
                         // Now load the preset
                         PresetLoader.LoadPreset(this, presetQuery, "Load Back From Queue");
