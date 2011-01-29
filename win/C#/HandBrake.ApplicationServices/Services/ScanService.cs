@@ -15,6 +15,7 @@ namespace HandBrake.ApplicationServices.Services
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>
     /// Scan a Source

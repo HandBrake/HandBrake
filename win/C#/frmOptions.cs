@@ -13,6 +13,7 @@ namespace Handbrake
 
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Services;
+    using HandBrake.ApplicationServices.Utilities;
 
     using Handbrake.Functions;
     using Handbrake.Model;

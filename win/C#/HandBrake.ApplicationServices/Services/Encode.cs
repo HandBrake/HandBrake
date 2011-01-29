@@ -17,6 +17,7 @@ namespace HandBrake.ApplicationServices.Services
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>
     /// Class which handles the CLI
