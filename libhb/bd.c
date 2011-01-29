@@ -262,7 +262,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
 
             case BLURAY_STREAM_TYPE_AUDIO_AC3PLUS:
                 audio->config.in.codec = HB_ACODEC_MPGA;
-                audio->config.in.codec_param = CODEC_ID_AC3;
+                audio->config.in.codec_param = CODEC_ID_EAC3;
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_MPEG1:
