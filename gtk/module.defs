@@ -15,7 +15,7 @@ BUILD.out += $(GTK.out)
 ###############################################################################
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
-GTK.CONFIGURE.extra += --host=$(BUILD.spec) 
+GTK.CONFIGURE.extra += --host=$(BUILD.spec) --disable-gst
 ifeq ($(HAS.dlfcn),1)
 	GTK.CONFIGURE.extra += --enable-dl
 endif
@@ -23,5 +23,9 @@ endif
 
 ifeq (0,$(FEATURE.gtk.update.checks))
 	GTK.CONFIGURE.extra += --disable-update-checks
+endif
+
+ifeq (0,$(FEATURE.gst))
+	GTK.CONFIGURE.extra += --disable-gst
 endif
 

@@ -34,8 +34,11 @@
 
 #include <gtk/gtk.h>
 
-#if !defined(_WIN32)
+#if defined(_ENABLE_GST)
 #include <gst/gst.h>
+#endif
+
+#if !defined(_WIN32)
 #include <libnotify/notify.h>
 #include <dbus/dbus-glib.h>
 #else
@@ -772,7 +775,7 @@ main (int argc, char *argv[])
 	context = g_option_context_new ("- Rip and encode DVD or MPEG file");
 	g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
 	g_option_context_add_group (context, gtk_get_option_group (TRUE));
-#if !defined(_WIN32)
+#if defined(_ENABLE_GST)
 	g_option_context_add_group (context, gst_init_get_option_group ());
 #endif
 	g_option_context_parse (context, &argc, &argv, &error);

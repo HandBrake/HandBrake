@@ -1059,6 +1059,8 @@ def createCLI():
     grp.add_option( '--disable-gtk-update-checks', default=False, action='store_true', help=h )
     h = IfHost( 'enable GTK GUI (mingw)', '*-*-mingw*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-gtk-mingw', default=False, action='store_true', help=h )
+    h = IfHost( 'disable gstreamer (live preview)', '*-*-linux*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--disable-gst', default=False, action='store_true', help=h )
     h = IfHost( 'enable use of ffmpeg mpeg2 decoding', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-ff-mpeg2', default=False, action='store_true', help=h )
 
@@ -1457,6 +1459,7 @@ int main ()
     doc.add( 'FEATURE.gtk',   int( not options.disable_gtk ))
     doc.add( 'FEATURE.gtk.update.checks',   int( not options.disable_gtk_update_checks ))
     doc.add( 'FEATURE.gtk.mingw',   int( options.enable_gtk_mingw ))
+    doc.add( 'FEATURE.gst',   int( not options.disable_gst ))
     doc.add( 'FEATURE.ff.mpeg2',   int( options.enable_ff_mpeg2 ))
     doc.add( 'FEATURE.xcode', int( not (Tools.xcodebuild.fail or options.disable_xcode or options.cross) ))
 

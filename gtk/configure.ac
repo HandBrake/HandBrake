@@ -60,8 +60,8 @@ AC_ARG_ENABLE(dl,
 	use_libdl=yes, use_libdl=no)
 
 AC_ARG_ENABLE(gst,
-	AS_HELP_STRING([--enable-gst], [enable gstreamer on Win32]),
-	w32_gst=yes, w32_gst=no)
+	AS_HELP_STRING([--disable-gst], [disable gstreamer (live preview)]),
+	gst_disable=yes, gst_disable=no)
 
 AC_ARG_ENABLE(update-checks,
 	AS_HELP_STRING([--disable-update-checks], [disable update checks]),
@@ -86,20 +86,24 @@ AM_PROG_LIBTOOL
 
 case $host in
   *-*-mingw*)
-    if test "x$w32_gst" = "xyes" ; then
-		GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-video-0.10 gstreamer-pbutils-0.10 gio-2.0"
-	else
+    if test "x$gst_disable" = "xyes" ; then
         GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gio-2.0"
+	else
+		GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-video-0.10 gstreamer-pbutils-0.10 gio-2.0"
 	fi
 	mingw_flag=yes
     ;;
   *)
-	GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-video-0.10 gstreamer-pbutils-0.10 gio-2.0 libnotify gudev-1.0"
+    if test "x$gst_disable" = "xyes" ; then
+	    GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gio-2.0 libnotify gudev-1.0"
+    else
+	    GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-video-0.10 gstreamer-pbutils-0.10 gio-2.0 libnotify gudev-1.0"
+    fi
 	mingw_flag=no
     ;;
 esac
 
-if test "x$w32_gst" = "xyes" -o  "x$mingw_flag" != "xyes" ; then
+if test "x$gst_disable" = "xno" ; then
 	CXXFLAGS="$CXXFLAGS -D_ENABLE_GST"
 	CFLAGS="$CFLAGS -D_ENABLE_GST"
 fi
