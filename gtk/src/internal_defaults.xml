@@ -220,6 +220,8 @@
 		<false />
 		<key>VideoFramerateVFR</key>
 		<false />
+		<key>PictureDeinterlaceDecomb</key>
+		<false />
 	</dict>
 	<key>Presets</key>
 	<dict>
