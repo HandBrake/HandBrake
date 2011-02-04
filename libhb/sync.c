@@ -1154,6 +1154,7 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
         c->bit_rate    = w->audio->config.in.bitrate;
         c->sample_rate = w->audio->config.in.samplerate;
         c->channels    = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT( w->audio->config.in.channel_layout );
+        c->sample_fmt  = AV_SAMPLE_FMT_FLT;
 
         if( hb_avcodec_open( c, codec ) < 0 )
         {
@@ -1162,7 +1163,7 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
         }
 
         zeros          = calloc( AC3_SAMPLES_PER_FRAME *
-                                 sizeof( short ) * c->channels, 1 );
+                                 sizeof( float ) * c->channels, 1 );
         sync->ac3_size = w->audio->config.in.bitrate * AC3_SAMPLES_PER_FRAME /
                              w->audio->config.in.samplerate / 8;
         sync->ac3_buf  = malloc( sync->ac3_size );
