@@ -2,7 +2,7 @@ __deps__ := FONTCONFIG FREETYPE
 $(eval $(call import.MODULE.defs,LIBASS,libass,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,LIBASS))
 
-LIBASS.FETCH.url = http://download.m0k.org/handbrake/contrib/libass-0.9.9.tar.bz2
+LIBASS.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libass-0.9.9.tar.bz2
 LIBASS.EXTRACT.tarbase = libass-0.9.9
 
 # Disable as many external dependencies as I can get away with

@@ -1,7 +1,7 @@
 $(eval $(call import.MODULE.defs,LIBDVDREAD,libdvdread))
 $(eval $(call import.CONTRIB.defs,LIBDVDREAD))
 
-LIBDVDREAD.FETCH.url = http://download.m0k.org/handbrake/contrib/libdvdread-svn1168.tar.gz
+LIBDVDREAD.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libdvdread-svn1168.tar.gz
 LIBDVDREAD.EXTRACT.tarbase = libdvdread
 
 LIBDVDREAD.CONFIGURE.extra = --enable-local-dlfcn
