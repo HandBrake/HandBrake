@@ -1,4 +1,4 @@
-﻿/*  Deinterlace.cs $
+﻿/*  VideoEncoderRateMode.cs $
     This file is part of the HandBrake source code.
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
@@ -6,15 +6,12 @@
 namespace HandBrake.ApplicationServices.Model.Encoding
 {
     /// <summary>
-    /// The Deinterlace Filter
+    /// The Mode of Video Encoding. Bitrate, Filesize or Quality
     /// </summary>
-    public enum Deinterlace
+    public enum VideoEncodeRateMode
     {
-        Off = 0,
-        Fast,
-        Slow,
-        Slower,
-        Slowest,
-        Custom
+        TargetSize = 0,
+        AverageBitrate,
+        ConstantQuality
     }
 }

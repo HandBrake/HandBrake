@@ -19,6 +19,7 @@ namespace HandBrake.ApplicationServices.Model
         /// </summary>
         public EncodeTask()
         {
+            this.Cropping = new Cropping();
         }
 
         #region Source
@@ -124,7 +125,7 @@ namespace HandBrake.ApplicationServices.Model
         /// <summary>
         /// Gets or sets DisplayWidth.
         /// </summary>
-        public int DisplayWidth { get; set; }
+        public double DisplayWidth { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether KeepDisplayAspect.
@@ -205,22 +206,32 @@ namespace HandBrake.ApplicationServices.Model
         /// <summary>
         /// Gets or sets VideoEncodeRateType.
         /// </summary>
-        public VideoEncodeMode VideoEncodeRateType { get; set; }
+        public VideoEncodeRateMode VideoEncodeRateType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the VideoEncoder
+        /// </summary>
+        public VideoEncoder VideoEncoder { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Video Encode Mode
+        /// </summary>
+        public FramerateMode FramerateMode { get; set; }
 
         /// <summary>
         /// Gets or sets Quality.
         /// </summary>
-        public double Quality { get; set; }
+        public double? Quality { get; set; }
 
         /// <summary>
         /// Gets or sets TargetSize.
         /// </summary>
-        public int TargetSize { get; set; }
+        public int? TargetSize { get; set; }
 
         /// <summary>
         /// Gets or sets VideoBitrate.
         /// </summary>
-        public int VideoBitrate { get; set; }
+        public int? VideoBitrate { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether TwoPass.
@@ -237,11 +248,6 @@ namespace HandBrake.ApplicationServices.Model
         /// Null = Same as Source
         /// </summary>
         public double? Framerate { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether PeakFramerate.
-        /// </summary>
-        public bool PeakFramerate { get; set; }
 
         #endregion
 
@@ -281,6 +287,45 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets X264Options.
         /// </summary>
         public string X264Options { get; set; }
+
+        #endregion
+
+        #region Preset Information (TODO This should probably be dropped)
+
+        /// <summary>
+        /// Gets or sets PresetBuildNumber.
+        /// </summary>
+        public int PresetBuildNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets PresetDescription.
+        /// </summary>
+        public string PresetDescription { get; set; }
+
+        /// <summary>
+        /// Gets or sets PresetName.
+        /// </summary>
+        public string PresetName { get; set; }
+
+        /// <summary>
+        /// Gets or sets Type.
+        /// </summary>
+        public string Type { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether UsesMaxPictureSettings.
+        /// </summary>
+        public bool UsesMaxPictureSettings { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether UsesPictureFilters.
+        /// </summary>
+        public bool UsesPictureFilters { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether UsesPictureSettings.
+        /// </summary>
+        public bool UsesPictureSettings { get; set; }
         #endregion
     }
 }

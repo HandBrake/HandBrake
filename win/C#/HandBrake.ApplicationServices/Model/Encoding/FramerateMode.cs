@@ -6,12 +6,12 @@
 namespace HandBrake.ApplicationServices.Model.Encoding
 {
     /// <summary>
-    /// The Mode of Video Encoding. Bitrate, Filesize or Quality
+    /// The Mode of Video Encoding. CFR, VFR, PFR
     /// </summary>
-    public enum VideoEncodeMode
+    public enum FramerateMode
     {
-        TargetSize = 0,
-        AverageBitrate,
-        ConstantQuality
+        CFR = 0,
+        PFR,
+        VFR
     }
 }

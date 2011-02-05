@@ -6,12 +6,13 @@
 namespace HandBrake.ApplicationServices.Utilities
 {
     using System;
-    using System.Collections;
+    using System.Collections.Generic;
     using System.IO;
     using System.Text;
     using System.Windows.Forms;
     using System.Xml;
 
+    using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
 
@@ -24,23 +25,23 @@ namespace HandBrake.ApplicationServices.Utilities
          * TODO:
          * - Update with the new vfr,pfr,cfr keys
          * - Clean up this code, it's pretty nasty right now.
-         **/ 
+         **/
 
         #region Import
 
-        public static QueryParserUtility Import(string filename)
+        public static EncodeTask Import(string filename)
         {
             XmlNode root = loadFile(filename);
             if (root == null) return null;
 
             // We'll query a query parser object and use it's public var structures to store all the data.
             // This will allow the preset loader logic to be used instead of writing custom logic just for this file.
-            QueryParserUtility queryParsed = new QueryParserUtility();
+            EncodeTask parsed = new EncodeTask();
             string qualityMode = string.Empty;
 
             #region Get a List of Audio Track Objects
             XmlNode audioListDict = root.ChildNodes[2].ChildNodes[0].FirstChild.ChildNodes[1];
-            ArrayList audioTracks = new ArrayList();
+            List<AudioTrack> audioTracks = new List<AudioTrack>();
 
             for (int i = 0; i < audioListDict.ChildNodes.Count; i++)
             {
@@ -75,7 +76,7 @@ namespace HandBrake.ApplicationServices.Utilities
                     }
                 }
                 audioTracks.Add(track);
-                queryParsed.AudioInformation = audioTracks;
+                parsed.AudioTracks = audioTracks;
             }
             #endregion
 
@@ -93,16 +94,16 @@ namespace HandBrake.ApplicationServices.Utilities
                 {
                     // Output Settings
                     case "FileFormat":
-                        queryParsed.Format = value;
+                        parsed.OutputFormat = Converters.GetFileFormat(value);
                         break;
                     case "Mp4HttpOptimize":
-                        queryParsed.OptimizeMP4 = value == "1";
+                        parsed.OptimizeMP4 = value == "1";
                         break;
                     case "Mp4LargeFile":
-                        queryParsed.LargeMP4 = value == "1";
+                        parsed.IPod5GSupport = value == "1";
                         break;
                     case "Mp4iPodCompatible":
-                        queryParsed.IpodAtom = value == "1";
+                        parsed.IPod5GSupport = value == "1";
                         break;
 
                     // Picture Settings
@@ -110,42 +111,58 @@ namespace HandBrake.ApplicationServices.Utilities
                         // Not used
                         break;
                     case "PictureTopCrop":
-                        queryParsed.CropTop = value;
+                        parsed.Cropping.Top = int.Parse(value);
                         break;
                     case "PictureBottomCrop":
-                        queryParsed.CropBottom = value;
+                        parsed.Cropping.Bottom = int.Parse(value);
                         break;
                     case "PictureLeftCrop":
-                        queryParsed.CropLeft = value;
+                        parsed.Cropping.Left = int.Parse(value);
                         break;
                     case "PictureRightCrop":
-                        queryParsed.CropRight = value;
+                        parsed.Cropping.Right = int.Parse(value);
                         break;
                     case "PictureHeight":
-                        queryParsed.Height = int.Parse(value);
+                        parsed.Height = int.Parse(value);
                         break;
                     case "PictureWidth":
-                        queryParsed.Width = int.Parse(value);
+                        parsed.Width = int.Parse(value);
                         break;
                     case "PictureKeepRatio":
-                        queryParsed.KeepDisplayAsect = value == "1";
+                        parsed.KeepDisplayAspect = value == "1";
                         break;
                     case "PicturePAR":
-                        queryParsed.AnamorphicMode = int.Parse(value);
+                        switch (value)
+                        {
+                                
+                            case "0":
+                                parsed.Anamorphic = Anamorphic.None;
+                                break;
+                            default:
+                                parsed.Anamorphic = Anamorphic.Strict;
+                                break;
+                                case "2":
+                                parsed.Anamorphic = Anamorphic.Loose;
+                                break;
+                                case "3":
+                                parsed.Anamorphic = Anamorphic.Custom;
+                                break;
+
+                        }
                         break;
 
                     // Filters
                     case "PictureDeblock":
-                        queryParsed.DeBlock = int.Parse(value);
+                        parsed.Deblock = int.Parse(value);
                         break;
                     case "PictureDecomb":
-                        queryParsed.Decomb = "Off";
+                        parsed.Decomb = Decomb.Off;
                         // Don't place custom here as it's handled in the filter panel
-                        if (value == "2") queryParsed.Decomb = "Default";
+                        if (value == "2") parsed.Decomb = Decomb.Default;
                         break;
                     case "PictureDecombCustom":
                         if (value != string.Empty)
-                            queryParsed.Decomb = value;
+                            parsed.CustomDecomb = value;
                         break;
                     case "PictureDecombDeinterlace":
                         // Not Used
@@ -154,116 +171,116 @@ namespace HandBrake.ApplicationServices.Utilities
                         switch (value)
                         {
                             case "0":
-                                queryParsed.DeInterlace = "Off";
+                                parsed.Deinterlace = Deinterlace.Off;
                                 break;
                             // Don't place custom here as it's handled in the filter panel
                             case "2":
-                                queryParsed.DeInterlace = "Fast";
+                                parsed.Deinterlace = Deinterlace.Fast;
                                 break;
                             case "3":
-                                queryParsed.DeInterlace = "Slow";
+                                parsed.Deinterlace = Deinterlace.Slow;
                                 break;
                             case "4":
-                                queryParsed.DeInterlace = "Slowest";
+                                parsed.Deinterlace = Deinterlace.Slower;
                                 break;
                         }
                         break;
                     case "PictureDeinterlaceCustom":
                         if (value != string.Empty)
-                            queryParsed.DeInterlace = value;
+                            parsed.CustomDeinterlace = value;
                         break;
                     case "PictureDenoise":
                         switch (value)
                         {
                             case "0":
-                                queryParsed.DeNoise = "Off";
+                                parsed.Denoise = Denoise.Off;
                                 break;
                             // Don't place custom here as it's handled in the filter panel
                             case "2":
-                                queryParsed.DeNoise = "Weak";
+                                parsed.Denoise = Denoise.Weak;
                                 break;
                             case "3":
-                                queryParsed.DeNoise = "Medium";
+                                parsed.Denoise = Denoise.Medium;
                                 break;
                             case "4":
-                                queryParsed.DeNoise = "Strong";
+                                parsed.Denoise = Denoise.Strong;
                                 break;
                         }
 
                         break;
                     case "PictureDenoiseCustom":
                         if (value != string.Empty)
-                            queryParsed.DeNoise = value;
+                            parsed.CustomDenoise = value;
                         break;
                     case "PictureDetelecine":
-                        queryParsed.DeTelecine = "Off";
-                        if (value == "1") queryParsed.DeTelecine = "Default";
+                        parsed.Detelecine = Detelecine.Off;
+                        if (value == "1") parsed.Detelecine = Detelecine.Default;
                         break;
                     case "PictureDetelecineCustom":
                         if (value != string.Empty)
-                            queryParsed.DeTelecine = value;
+                            parsed.CustomDetelecine = value;
                         break;
 
                     // Video Tab
                     case "VideoAvgBitrate":
-                        queryParsed.AverageVideoBitrate = value;
+                        parsed.VideoBitrate = int.Parse(value);
                         break;
                     case "VideoEncoder":
-                        queryParsed.VideoEncoder = value;
+                        parsed.VideoEncoder = Converters.GetVideoEncoder(value);
                         break;
                     case "VideoFramerate":
-                        queryParsed.VideoFramerate = value;
+                        parsed.Framerate = int.Parse(value);
                         break;
                     case "VideoGrayScale":
-                        queryParsed.Grayscale = value == "1";
+                        parsed.Grayscale = value == "1";
                         break;
                     case "VideoQualitySlider":
-                        queryParsed.VideoQuality = float.Parse(value);
+                        parsed.Quality = double.Parse(value);
                         break;
                     case "VideoQualityType": // The Type of Quality Mode used
                         qualityMode = value;
                         break;
                     case "VideoTargetSize":
-                        queryParsed.VideoTargetSize = value;
+                        parsed.TargetSize = int.Parse(value);
                         break;
                     case "VideoTurboTwoPass":
-                        queryParsed.TurboFirstPass = value == "1";
+                        parsed.TurboFirstPass = value == "1";
                         break;
                     case "VideoTwoPass":
-                        queryParsed.TwoPass = value == "1";
+                        parsed.TwoPass = value == "1";
                         break;
 
                     // Chapter Markers Tab
                     case "ChapterMarkers":
-                        queryParsed.ChapterMarkers = value == "1";
+                        parsed.IncludeChapterMarkers = value == "1";
                         break;
 
                     // Advanced x264 tab
                     case "x264Option":
-                        queryParsed.H264Query = value;
+                        parsed.X264Options = value;
                         break;
 
                     // Preset Information
                     case "PresetBuildNumber":
-                        queryParsed.PresetBuildNumber = int.Parse(value);
+                        parsed.PresetBuildNumber = int.Parse(value);
                         break;
                     case "PresetDescription":
-                        queryParsed.PresetDescription = value;
+                        parsed.PresetDescription = value;
                         break;
                     case "PresetName":
-                        queryParsed.PresetName = value;
+                        parsed.PresetName = value;
                         break;
                     case "Type":
-                        queryParsed.Type = value;
+                        parsed.Type = value;
                         break;
                     case "UsesMaxPictureSettings":
-                        queryParsed.UsesMaxPictureSettings = value == "1";
+                        parsed.UsesMaxPictureSettings = value == "1";
                         break;
                     case "UsesPictureFilters":
-                        queryParsed.UsesPictureFilters = value == "1";
+                        parsed.UsesPictureFilters = value == "1";
                         break;
                     case "UsesPictureSettings":
-                        queryParsed.UsesPictureSettings = value == "1";
+                        parsed.UsesPictureSettings = value == "1";
                         break;
                 }
             }
@@ -272,21 +289,21 @@ namespace HandBrake.ApplicationServices.Utilities
             switch (qualityMode)
             {
                 case "0": // FileSize
-                    queryParsed.VideoQuality = -1;
-                    queryParsed.AverageVideoBitrate = null;
+                    parsed.Quality = null;
+                    parsed.VideoBitrate = null;
                     break;
                 case "1": // Avg Bitrate
-                    queryParsed.VideoQuality = -1;
-                    queryParsed.VideoTargetSize = null;
+                    parsed.Quality = null;
+                    parsed.TargetSize = null;
                     break;
                 case "2": // CQ
-                    queryParsed.AverageVideoBitrate = null;
-                    queryParsed.VideoTargetSize = null;
+                    parsed.VideoBitrate = null;
+                    parsed.TargetSize = null;
                     break;
             }
             #endregion
 
-            return queryParsed;
+            return parsed;
         }
 
         private static XmlNode loadFile(string filename)
@@ -343,7 +360,7 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </param>
         public static void Export(string path, Preset preset)
         {
-            QueryParserUtility parsed = QueryParserUtility.Parse(preset.Query);
+            EncodeTask parsed = QueryParserUtility.Parse(preset.Query);
             XmlTextWriter xmlWriter = new XmlTextWriter(path, Encoding.UTF8) { Formatting = Formatting.Indented };
 
             // Header
@@ -379,7 +396,7 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="preset">
         /// The preset.
         /// </param>
-        private static void WritePreset(XmlTextWriter xmlWriter, QueryParserUtility parsed, Preset preset)
+        private static void WritePreset(XmlTextWriter xmlWriter, EncodeTask parsed, Preset preset)
         {
             xmlWriter.WriteStartElement("dict");
             AudioListArrayDict(xmlWriter, parsed);
@@ -400,93 +417,93 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="preset">
         /// The preset.
         /// </param>
-        private static void AddEncodeSettings(XmlTextWriter xmlWriter, QueryParserUtility parsed, Preset preset)
+        private static void AddEncodeSettings(XmlTextWriter xmlWriter, EncodeTask parsed, Preset preset)
         {
-            AddEncodeElement(xmlWriter, "ChapterMarkers", "integer", parsed.ChapterMarkers ? "1" : "0");
+            AddEncodeElement(xmlWriter, "ChapterMarkers", "integer", parsed.IncludeChapterMarkers ? "1" : "0");
             AddEncodeElement(xmlWriter, "Default", "integer", "0");
-            AddEncodeElement(xmlWriter, "FileFormat", "string", parsed.Format.ToUpper() + " file");
+            AddEncodeElement(xmlWriter, "FileFormat", "string", Converters.GetFileFormat(parsed.OutputFormat) + " file");
             AddBooleanElement(xmlWriter, "Folder", false);
             AddEncodeElement(xmlWriter, "Mp4HttpOptimize", "integer", parsed.OptimizeMP4 ? "1" : "0");
-            AddEncodeElement(xmlWriter, "Mp4LargeFile", "integer", parsed.LargeMP4 ? "1" : "0");
-            AddEncodeElement(xmlWriter, "Mp4iPodCompatible", "integer", parsed.IpodAtom ? "1" : "0");
+            AddEncodeElement(xmlWriter, "Mp4LargeFile", "integer", parsed.LargeFile ? "1" : "0");
+            AddEncodeElement(xmlWriter, "Mp4iPodCompatible", "integer", parsed.IPod5GSupport ? "1" : "0");
             AddEncodeElement(xmlWriter, "PictureAutoCrop", "integer", "1");
-            AddEncodeElement(xmlWriter, "PictureBottomCrop", "integer", parsed.CropBottom);
+            AddEncodeElement(xmlWriter, "PictureBottomCrop", "integer", parsed.Cropping.Bottom.ToString());
 
             // Filters
-            AddEncodeElement(xmlWriter, "PictureDeblock", "integer", parsed.DeBlock.ToString());
+            AddEncodeElement(xmlWriter, "PictureDeblock", "integer", parsed.Deblock.ToString());
 
             switch (parsed.Decomb)
             {
-                case "Off":
+                case Decomb.Off:
                     AddEncodeElement(xmlWriter, "PictureDecomb", "integer", "0");
                     AddEncodeElement(xmlWriter, "PictureDecombCustom", "string", string.Empty);
                     break;
-                case "Default":
+                case Decomb.Default:
                     AddEncodeElement(xmlWriter, "PictureDecomb", "integer", "1");
                     AddEncodeElement(xmlWriter, "PictureDecombCustom", "string", string.Empty);
                     break;
                 default:
                     AddEncodeElement(xmlWriter, "PictureDecomb", "integer", "2");
-                    AddEncodeElement(xmlWriter, "PictureDecombCustom", "string", parsed.Decomb);
+                    AddEncodeElement(xmlWriter, "PictureDecombCustom", "string", parsed.CustomDecomb);
                     break;
             }
-            AddEncodeElement(xmlWriter, "PictureDecombDeinterlace", "integer", parsed.Decomb != "Off" ? "0" : "1"); 
+            AddEncodeElement(xmlWriter, "PictureDecombDeinterlace", "integer", parsed.Decomb != Decomb.Off ? "0" : "1");
 
-            switch (parsed.DeInterlace)
+            switch (parsed.Deinterlace)
             {
-                case "Off":
+                case Deinterlace.Off:
                     AddEncodeElement(xmlWriter, "PictureDeinterlace", "integer", "0");
                     AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", string.Empty);
                     break;
-                case "Fast":
+                case Deinterlace.Fast:
                     AddEncodeElement(xmlWriter, "PictureDeinterlace", "integer", "1");
                     AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", string.Empty);
                     break;
-                case "Slow":
+                case Deinterlace.Slow:
                     AddEncodeElement(xmlWriter, "PictureDeinterlace", "integer", "2");
                     AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", string.Empty);
                     break;
-                case "Slower":
+                case Deinterlace.Slower:
                     AddEncodeElement(xmlWriter, "PictureDeinterlace", "integer", "3");
                     AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", string.Empty);
                     break;
                 default:
                     AddEncodeElement(xmlWriter, "PictureDeinterlace", "integer", "4");
-                    AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", parsed.DeInterlace);
+                    AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", parsed.CustomDeinterlace);
                     break;
             }
 
-            switch (parsed.DeNoise)
+            switch (parsed.Denoise)
             {
-                case "Off":
+                case Denoise.Off:
                     AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "0");
                     AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", string.Empty);
                     break;
-                case "Weak":
+                case Denoise.Weak:
                     AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "1");
                     AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", string.Empty);
                     break;
-                case "Medium":
+                case Denoise.Medium:
                     AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "2");
                     AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", string.Empty);
                     break;
-                case "Strong":
+                case Denoise.Strong:
                     AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "3");
                     AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", string.Empty);
                     break;
                 default:
                     AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "4");
-                    AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", parsed.DeNoise);
+                    AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", parsed.CustomDenoise);
                     break;
             }
 
             int detelecine;
-            switch (parsed.DeTelecine)
+            switch (parsed.Detelecine)
             {
-                case "Off":
+                case Detelecine.Off:
                     detelecine = 0;
                     break;
-                case "Default":
+                case Detelecine.Default:
                     detelecine = 2;
                     break;
                 default:
@@ -495,16 +512,16 @@ namespace HandBrake.ApplicationServices.Utilities
             }
 
             AddEncodeElement(xmlWriter, "PictureDetelecine", "integer", detelecine.ToString());
-            AddEncodeElement(xmlWriter, "PictureDetelecineCustom", "string", detelecine == 1 ? parsed.DeTelecine : string.Empty);
+            AddEncodeElement(xmlWriter, "PictureDetelecineCustom", "string", detelecine == 1 ? parsed.CustomDecomb : string.Empty);
 
             // Picture Settings
             AddEncodeElement(xmlWriter, "PictureHeight", "integer", parsed.Height.ToString());
-            AddEncodeElement(xmlWriter, "PictureKeepRatio", "integer", parsed.KeepDisplayAsect ? "1" : "0");
-            AddEncodeElement(xmlWriter, "PictureLeftCrop", "integer", parsed.CropLeft);
-            AddEncodeElement(xmlWriter, "PictureModulus", "integer", parsed.AnamorphicModulus.ToString());
-            AddEncodeElement(xmlWriter, "PicturePAR", "integer", parsed.AnamorphicMode.ToString());
-            AddEncodeElement(xmlWriter, "PictureRightCrop", "integer", parsed.CropRight);
-            AddEncodeElement(xmlWriter, "PictureTopCrop", "integer", parsed.CropTop);
+            AddEncodeElement(xmlWriter, "PictureKeepRatio", "integer", parsed.KeepDisplayAspect ? "1" : "0");
+            AddEncodeElement(xmlWriter, "PictureLeftCrop", "integer", parsed.Cropping.Left.ToString());
+            AddEncodeElement(xmlWriter, "PictureModulus", "integer", parsed.Modulus.ToString());
+            AddEncodeElement(xmlWriter, "PicturePAR", "integer", ((int)parsed.Anamorphic).ToString());
+            AddEncodeElement(xmlWriter, "PictureRightCrop", "integer", parsed.Cropping.Right.ToString());
+            AddEncodeElement(xmlWriter, "PictureTopCrop", "integer", parsed.Cropping.Top.ToString());
             AddEncodeElement(xmlWriter, "PictureWidth", "integer", parsed.Width.ToString());
 
             // Preset Information
@@ -519,25 +536,25 @@ namespace HandBrake.ApplicationServices.Utilities
             AddEncodeElement(xmlWriter, "UsesPictureSettings", "integer", "2");
 
             // Video Settings
-            AddEncodeElement(xmlWriter, "VideoAvgBitrate", "string", parsed.AverageVideoBitrate);
-            AddEncodeElement(xmlWriter, "VideoEncoder", "string", parsed.VideoEncoder);
-            AddEncodeElement(xmlWriter, "VideoFramerate", "string", parsed.VideoFramerate);
-            AddEncodeElement(xmlWriter, "VideFrameratePFR", "integer", parsed.Pfr ? "1" : "0");
+            AddEncodeElement(xmlWriter, "VideoAvgBitrate", "string", parsed.VideoBitrate.ToString());
+            AddEncodeElement(xmlWriter, "VideoEncoder", "string", Converters.GetGUIVideoEncoder(parsed.VideoEncoder));
+            AddEncodeElement(xmlWriter, "VideoFramerate", "string", parsed.Framerate.ToString());
+            AddEncodeElement(xmlWriter, "VideFrameratePFR", "integer", parsed.FramerateMode == FramerateMode.PFR ? "1" : "0");
             AddEncodeElement(xmlWriter, "VideoGrayScale", "integer", parsed.Grayscale ? "1" : "0");
-            AddEncodeElement(xmlWriter, "VideoQualitySlider", "real", parsed.VideoQuality.ToString());
+            AddEncodeElement(xmlWriter, "VideoQualitySlider", "real", parsed.Quality.ToString());
 
             int videoQualityType = 0;
-            if (!string.IsNullOrEmpty(parsed.VideoTargetSize)) videoQualityType = 0;
-            else if (!string.IsNullOrEmpty(parsed.AverageVideoBitrate)) videoQualityType = 1;
-            else if (parsed.VideoQuality != 0) videoQualityType = 2;
+            if (parsed.TargetSize != null) videoQualityType = 0;
+            else if (parsed.VideoBitrate != null) videoQualityType = 1;
+            else if (parsed.Quality != null) videoQualityType = 2;
 
             AddEncodeElement(xmlWriter, "VideoQualityType", "integer", videoQualityType.ToString());
-            AddEncodeElement(xmlWriter, "VideoTargetSize", "string", parsed.VideoTargetSize);
+            AddEncodeElement(xmlWriter, "VideoTargetSize", "string", parsed.TargetSize.ToString());
             AddEncodeElement(xmlWriter, "VideoTurboTwoPass", "integer", parsed.TurboFirstPass ? "1" : "0");
             AddEncodeElement(xmlWriter, "VideoTwoPass", "integer", parsed.TwoPass ? "1" : "0");
 
             // x264 string
-            AddEncodeElement(xmlWriter, "x264Option", "string", parsed.H264Query);
+            AddEncodeElement(xmlWriter, "x264Option", "string", parsed.X264Options);
         }
 
         /// <summary>
@@ -598,14 +615,14 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="parsed">
         /// The parsed.
         /// </param>
-        private static void AudioListArrayDict(XmlTextWriter xmlWriter, QueryParserUtility parsed)
+        private static void AudioListArrayDict(XmlTextWriter xmlWriter, EncodeTask parsed)
         {
             xmlWriter.WriteStartElement("key");
             xmlWriter.WriteString("AudioList");
             xmlWriter.WriteEndElement();
 
             xmlWriter.WriteStartElement("array");
-            foreach (AudioTrack track in parsed.AudioInformation)
+            foreach (AudioTrack track in parsed.AudioTracks)
             {
                 AddAudioItem(xmlWriter, track);
             }
@@ -635,7 +652,7 @@ namespace HandBrake.ApplicationServices.Utilities
             xmlWriter.WriteElementString("string", audioTrack.MixDown);
 
             xmlWriter.WriteElementString("key", "AudioSamplerate");
-            xmlWriter.WriteElementString("string",  audioTrack.SampleRate);
+            xmlWriter.WriteElementString("string", audioTrack.SampleRate);
 
             xmlWriter.WriteElementString("key", "AudioTrack");
             xmlWriter.WriteElementString("integer", audioTrack.Track);

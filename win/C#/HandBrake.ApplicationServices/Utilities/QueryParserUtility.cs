@@ -7,10 +7,12 @@ namespace HandBrake.ApplicationServices.Utilities
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Text.RegularExpressions;
 
     using HandBrake.ApplicationServices.Functions;
+    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
 
     /// <summary>
@@ -18,280 +20,16 @@ namespace HandBrake.ApplicationServices.Utilities
     /// </summary>
     public class QueryParserUtility
     {
+
+        /**
+         * TODO
+         * - Add support for PointToPointMode = Seconds or Frames
+         **/
+
         /// <summary>
         /// The Culture
         /// </summary>
         private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
-
-        #region Varibles
-
-        #region Source Title / Chapters
-        /// <summary>
-        /// Gets or sets Title.
-        /// </summary>
-        public int Title { get; set; }
-
-        /// <summary>
-        /// Gets or sets ChapterStart.
-        /// </summary>
-        public int ChapterStart { get; set; }
-
-        /// <summary>
-        /// Gets or sets ChapterFinish.
-        /// </summary>
-        public int ChapterFinish { get; set; }
-        #endregion
-
-        #region Output Settings
-        /// <summary>
-        /// Gets or sets the file Format. e.g mkv or mp4
-        /// </summary>
-        public string Format { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether LargeMP4 support is enabled.
-        /// This is the 64bit MP4 file that allows >4GB files
-        /// </summary>
-        public bool LargeMP4 { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether IpodAtom is inserted
-        /// </summary>
-        public bool IpodAtom { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether OptimizeMP4 is enabed for web streaming
-        /// </summary>
-        public bool OptimizeMP4 { get; set; }
-        #endregion
-
-        #region Picture Settings
-
-        /// <summary>
-        /// Gets or sets Width.
-        /// </summary>
-        public int Width { get; set; }
-
-        /// <summary>
-        /// Gets or sets Height.
-        /// </summary>
-        public int Height { get; set; }
-
-        /// <summary>
-        /// Gets or sets MaxWidth.
-        /// </summary>
-        public int MaxWidth { get; set; }
-
-        /// <summary>
-        /// Gets or sets MaxHeight.
-        /// </summary>
-        public int MaxHeight { get; set; }
-
-        /// <summary>
-        /// Gets or sets CropValues.
-        /// </summary>
-        public string CropValues { get; set; }
-
-        /// <summary>
-        /// Gets or sets CropTop.
-        /// </summary>
-        public string CropTop { get; set; }
-
-        /// <summary>
-        /// Gets or sets CropBottom.
-        /// </summary>
-        public string CropBottom { get; set; }
-
-        /// <summary>
-        /// Gets or sets CropLeft.
-        /// </summary>
-        public string CropLeft { get; set; }
-
-        /// <summary>
-        /// Gets or sets CropRight.
-        /// </summary>
-        public string CropRight { get; set; }
-
-        /// <summary>
-        /// Gets or sets AnamorphicMode.
-        /// </summary>
-        public int AnamorphicMode { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether KeepDisplayAsect.
-        /// </summary>
-        public bool KeepDisplayAsect { get; set; }
-
-        /// <summary>
-        /// Gets or sets DisplayWidthValue.
-        /// </summary>
-        public double DisplayWidthValue { get; set; }
-
-        /// <summary>
-        /// Gets or sets PixelAspectWidth.
-        /// </summary>
-        public int PixelAspectWidth { get; set; }
-
-        /// <summary>
-        /// Gets or sets PixelAspectHeight.
-        /// </summary>
-        public int PixelAspectHeight { get; set; }
-
-        /// <summary>
-        /// Gets or sets AnamorphicModulus.
-        /// </summary>
-        public int AnamorphicModulus { get; set; }
-        #endregion
-
-        #region Video Filters
-
-        /// <summary>
-        /// Gets or sets DeTelecine.
-        /// </summary>
-        public string DeTelecine { get; set; }
-
-        /// <summary>
-        /// Gets or sets DeBlock.
-        /// </summary>
-        public int DeBlock { get; set; }
-
-        /// <summary>
-        /// Gets or sets DeInterlace.
-        /// </summary>
-        public string DeInterlace { get; set; }
-
-        /// <summary>
-        /// Gets or sets DeNoise.
-        /// </summary>
-        public string DeNoise { get; set; }
-
-        /// <summary>
-        /// Gets or sets Decomb.
-        /// </summary>
-        public string Decomb { get; set; }
-        #endregion
-
-        #region Video Settings
-        /// <summary>
-        /// Gets or sets VideoEncoder.
-        /// </summary>
-        public string VideoEncoder { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether Grayscale.
-        /// </summary>
-        public bool Grayscale { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether TwoPass.
-        /// </summary>
-        public bool TwoPass { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether TurboFirstPass.
-        /// </summary>
-        public bool TurboFirstPass { get; set; }
-
-        /// <summary>
-        /// Gets or sets VideoFramerate.
-        /// </summary>
-        public string VideoFramerate { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether Pfr.
-        /// </summary>
-        public bool Pfr { get; set; }
-
-        /// <summary>
-        /// Gets or sets AverageVideoBitrate.
-        /// </summary>
-        public string AverageVideoBitrate { get; set; }
-
-        /// <summary>
-        /// Gets or sets VideoTargetSize.
-        /// </summary>
-        public string VideoTargetSize { get; set; }
-
-        /// <summary>
-        /// Gets or sets VideoQuality.
-        /// </summary>
-        public float VideoQuality { get; set; }
-        #endregion
-
-        #region Audio Settings
-
-        /// <summary>
-        /// Gets or sets AudioInformation.
-        /// </summary>
-        public ArrayList AudioInformation { get; set; }
-
-        /// <summary>
-        /// Gets or sets Subtitles.
-        /// </summary>
-        public string Subtitles { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether ForcedSubtitles.
-        /// </summary>
-        public bool ForcedSubtitles { get; set; }
-        #endregion
-
-        #region Other
-        /// <summary>
-        /// Gets or sets a value indicating whether ChapterMarkers.
-        /// </summary>
-        public bool ChapterMarkers { get; set; }
-
-        /// <summary>
-        /// Gets or sets H264Query.
-        /// </summary>
-        public string H264Query { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether Verbose.
-        /// </summary>
-        public bool Verbose { get; set; }
-        #endregion
-
-        #region Preset Information
-
-        /// <summary>
-        /// Gets or sets PresetBuildNumber.
-        /// </summary>
-        public int PresetBuildNumber { get; set; }
-
-        /// <summary>
-        /// Gets or sets PresetDescription.
-        /// </summary>
-        public string PresetDescription { get; set; }
-
-        /// <summary>
-        /// Gets or sets PresetName.
-        /// </summary>
-        public string PresetName { get; set; }
-
-        /// <summary>
-        /// Gets or sets Type.
-        /// </summary>
-        public string Type { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether UsesMaxPictureSettings.
-        /// </summary>
-        public bool UsesMaxPictureSettings { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether UsesPictureFilters.
-        /// </summary>
-        public bool UsesPictureFilters { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether UsesPictureSettings.
-        /// </summary>
-        public bool UsesPictureSettings { get; set; }
-        #endregion
-
-        #endregion
 
         /// <summary>
         /// Takes in a query which can be in any order and parses it. 
@@ -299,9 +37,9 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </summary>
         /// <param name="input">A ClI Query</param>
         /// <returns>A Parsed Query</returns>
-        public static QueryParserUtility Parse(string input)
+        public static EncodeTask Parse(string input)
         {
-            var thisQuery = new QueryParserUtility();
+            var parsed = new EncodeTask();
 
             #region Regular Expressions
 
@@ -310,7 +48,7 @@ namespace HandBrake.ApplicationServices.Utilities
             Match chapters = Regex.Match(input, @"-c ([0-9-]*)");
 
             // Output Settings
-            Match format = Regex.Match(input, @"-f ([a-z0-9a-z0-9a-z0-9]*)");
+            Match format = Regex.Match(input, @"-f ([a-zA-Z0-9]*)");
             Match grayscale = Regex.Match(input, @" -g");
             Match largerMp4 = Regex.Match(input, @" -4");
             Match ipodAtom = Regex.Match(input, @" -I");
@@ -350,6 +88,8 @@ namespace HandBrake.ApplicationServices.Utilities
             Match turboFirstPass = Regex.Match(input, @" -T");
             Match optimizeMP4 = Regex.Match(input, @" -O");
             Match pfr = Regex.Match(input, @" --pfr");
+            Match vfr = Regex.Match(input, @" --vfr");
+            Match cfr = Regex.Match(input, @" --cfr");
 
             // Audio Settings Tab
             Match noAudio = Regex.Match(input, @"-a none");
@@ -360,19 +100,12 @@ namespace HandBrake.ApplicationServices.Utilities
             Match audioSampleRates = Regex.Match(input, @"-R ([0-9a-zA-Z.,]*)"); // Auto = a-z
             Match drcValues = Regex.Match(input, @"-D ([0-9.,]*)");
 
-            Match subtitles = Regex.Match(input, @"-s ([0-9a-zA-Z]*)");
-            Match subScan = Regex.Match(input, @" -U");
-            Match forcedSubtitles = Regex.Match(input, @" -F");
-
             // Chapters Tab
             Match chapterMarkers = Regex.Match(input, @" -m");
             Match chapterMarkersFileMode = Regex.Match(input, @"--markers");
 
             // H264 Tab
             Match x264 = Regex.Match(input, @"-x ([.,/a-zA-Z0-9=:-]*)");
-
-            // Program Options
-            Match verbose = Regex.Match(input, @" -v");
 
             #endregion
 
@@ -383,170 +116,215 @@ namespace HandBrake.ApplicationServices.Utilities
                 #region Source Tab
 
                 if (title.Success)
-                    thisQuery.Title = int.Parse(title.ToString().Replace("-t ", string.Empty));
+                {
+                    parsed.Title = int.Parse(title.ToString().Replace("-t ", string.Empty));
+                }
 
                 if (chapters.Success)
                 {
+                    parsed.PointToPointMode = PointToPointMode.Chapters;
                     string[] actTitles = chapters.ToString().Replace("-c ", string.Empty).Split('-');
-                    thisQuery.ChapterStart = int.Parse(actTitles[0]);
+                    parsed.StartPoint = int.Parse(actTitles[0]);
                     if (actTitles.Length > 1)
                     {
-                        thisQuery.ChapterFinish = int.Parse(actTitles[1]);
+                        parsed.EndPoint = int.Parse(actTitles[1]);
                     }
 
-                    if ((thisQuery.ChapterStart == 1) && (thisQuery.ChapterFinish == 0))
-                        thisQuery.ChapterFinish = thisQuery.ChapterStart;
+                    if ((parsed.StartPoint == 1) && (parsed.EndPoint == 0))
+                    {
+                        parsed.EndPoint = parsed.StartPoint;
+                    }
                 }
-
+             
                 #endregion
 
                 #region Output Settings
 
                 if (format.Success)
-                    thisQuery.Format = format.ToString().Replace("-f ", string.Empty);
-                thisQuery.LargeMP4 = largerMp4.Success;
-                thisQuery.IpodAtom = ipodAtom.Success;
-                thisQuery.OptimizeMP4 = optimizeMP4.Success;
+                {
+                    parsed.OutputFormat = Converters.GetFileFormat(format.Groups[1].ToString());
+                }
+                parsed.LargeFile = largerMp4.Success;
+                parsed.IPod5GSupport = ipodAtom.Success;
+                parsed.OptimizeMP4 = optimizeMP4.Success;
 
                 #endregion
 
                 #region Picture Tab
 
                 if (width.Success)
-                    thisQuery.Width = int.Parse(width.Groups[0].Value.Replace("-w ", string.Empty));
+                    parsed.Width = int.Parse(width.Groups[0].Value.Replace("-w ", string.Empty));
 
                 if (height.Success)
-                    thisQuery.Height = int.Parse(height.Groups[0].Value.Replace("-l ", string.Empty));
+                    parsed.Height = int.Parse(height.Groups[0].Value.Replace("-l ", string.Empty));
 
                 if (maxWidth.Success)
-                    thisQuery.MaxWidth = int.Parse(maxWidth.Groups[0].Value.Replace("-X ", string.Empty));
+                    parsed.MaxWidth = int.Parse(maxWidth.Groups[0].Value.Replace("-X ", string.Empty));
 
                 if (maxHeight.Success)
-                    thisQuery.MaxHeight = int.Parse(maxHeight.Groups[0].Value.Replace("-Y ", string.Empty));
+                    parsed.MaxHeight = int.Parse(maxHeight.Groups[0].Value.Replace("-Y ", string.Empty));
 
                 if (crop.Success)
                 {
-                    thisQuery.CropValues = crop.ToString().Replace("--crop ", string.Empty);
-                    string[] actCropValues = thisQuery.CropValues.Split(':');
-                    thisQuery.CropTop = actCropValues[0];
-                    thisQuery.CropBottom = actCropValues[1];
-                    thisQuery.CropLeft = actCropValues[2];
-                    thisQuery.CropRight = actCropValues[3];
+                    try
+                    {
+                        string values = crop.ToString().Replace("--crop ", string.Empty);
+                        string[] actCropValues = values.Split(':');
+                        parsed.Cropping = new Cropping(
+                            int.Parse(actCropValues[0]),
+                            int.Parse(actCropValues[1]),
+                            int.Parse(actCropValues[2]),
+                            int.Parse(actCropValues[3]));
+                    }
+                    catch (Exception)
+                    {
+                        // No need to do anything.
+                    }
                 }
 
                 if (strictAnamorphic.Success)
-                    thisQuery.AnamorphicMode = 1;
+                    parsed.Anamorphic = Anamorphic.Strict;
                 else if (looseAnamorphic.Success)
-                    thisQuery.AnamorphicMode = 2;
+                    parsed.Anamorphic = Anamorphic.Loose;
                 else if (customAnamorphic.Success)
-                    thisQuery.AnamorphicMode = 3;
+                    parsed.Anamorphic = Anamorphic.Custom;
                 else
-                    thisQuery.AnamorphicMode = 0;
+                    parsed.Anamorphic = Anamorphic.None;
 
-                thisQuery.KeepDisplayAsect = keepDisplayAsect.Success;
+                parsed.KeepDisplayAspect = keepDisplayAsect.Success;
 
                 if (displayWidth.Success)
-                    thisQuery.DisplayWidthValue =
+                    parsed.DisplayWidth =
                         double.Parse(displayWidth.Groups[0].Value.Replace("--display-width ", string.Empty));
 
                 if (pixelAspect.Success)
-                    thisQuery.PixelAspectWidth = int.Parse(pixelAspect.Groups[1].Value.Replace("--pixel-aspect ", string.Empty));
+                    parsed.PixelAspectX = int.Parse(pixelAspect.Groups[1].Value.Replace("--pixel-aspect ", string.Empty));
 
                 if (pixelAspect.Success && pixelAspect.Groups.Count >= 3)
-                    thisQuery.PixelAspectHeight = int.Parse(pixelAspect.Groups[2].Value.Replace("--pixel-aspect ", string.Empty));
+                    parsed.PixelAspectY = int.Parse(pixelAspect.Groups[2].Value.Replace("--pixel-aspect ", string.Empty));
 
                 if (modulus.Success)
-                    thisQuery.AnamorphicModulus = int.Parse(modulus.Groups[0].Value.Replace("--modulus ", string.Empty));
+                    parsed.Modulus = int.Parse(modulus.Groups[0].Value.Replace("--modulus ", string.Empty));
 
                 #endregion
 
                 #region Filters
 
-                thisQuery.Decomb = "Off";
+                parsed.Decomb = Decomb.Off;
                 if (decomb.Success)
                 {
-                    thisQuery.Decomb = "Default";
+                    parsed.Decomb = Decomb.Default;
                     if (decombValue.Success)
-                        thisQuery.Decomb = decombValue.ToString().Replace("--decomb=", string.Empty).Replace("\"", string.Empty);
+                    {
+                        parsed.CustomDecomb = decombValue.ToString().Replace("--decomb=", string.Empty).Replace("\"", string.Empty);
+                    }
                 }
 
-                thisQuery.DeInterlace = "Off";
+                parsed.Deinterlace = Deinterlace.Off;
                 if (deinterlace.Success)
                 {
-                    thisQuery.DeInterlace = deinterlace.ToString().Replace("--deinterlace=", string.Empty).Replace("\"", string.Empty);
-                    thisQuery.DeInterlace =
-                        thisQuery.DeInterlace.Replace("fast", "Fast").Replace("slow", "Slow").Replace("slower", "Slower");
-                    thisQuery.DeInterlace = thisQuery.DeInterlace.Replace("slowest", "Slowest");
+                    switch (deinterlace.ToString().Replace("--deinterlace=", string.Empty).Replace("\"", string.Empty).ToLower())
+                    {
+                        case "fast":
+                            parsed.Deinterlace = Deinterlace.Fast;
+                            break;
+                        case "slow":
+                            parsed.Deinterlace = Deinterlace.Slow;
+                            break;
+                        case "slower":
+                            parsed.Deinterlace = Deinterlace.Slower;
+                            break;
+                        case "slowest":
+                            parsed.Deinterlace = Deinterlace.Slowest;
+                            break;
+                        default:
+                            parsed.Deinterlace = Deinterlace.Custom;
+                            parsed.CustomDeinterlace = deinterlace.ToString().Replace("--deinterlace=", string.Empty).Replace("\"", string.Empty).ToLower();
+                            break;
+                    }
                 }
 
-                thisQuery.DeNoise = "Off";
+                parsed.Denoise = Denoise.Off;
                 if (denoise.Success)
                 {
-                    thisQuery.DeNoise = denoise.ToString().Replace("--denoise=", string.Empty).Replace("\"", string.Empty);
-                    thisQuery.DeNoise =
-                        thisQuery.DeNoise.Replace("weak", "Weak").Replace("medium", "Medium").Replace("strong", "Strong");
+                    switch (denoise.ToString().Replace("--denoise=", string.Empty).Replace("\"", string.Empty))
+                    {
+                        case "weak":
+                            parsed.Denoise = Denoise.Weak;
+                            break;
+                        case "medium":
+                            parsed.Denoise = Denoise.Medium;
+                            break;
+                        case "strong":
+                            parsed.Denoise = Denoise.Strong;
+                            break;
+                        default:
+                            parsed.Denoise = Denoise.Custom;
+                            parsed.CustomDenoise = denoise.ToString().Replace("--denoise=", string.Empty).Replace("\"", string.Empty);
+                            break;
+                    }
                 }
 
-                string deblockValue = string.Empty;
-                thisQuery.DeBlock = 0;
+                parsed.Deblock = 0;
                 if (deblock.Success)
-                    deblockValue = deblock.ToString().Replace("--deblock=", string.Empty);
+                {
+                    int dval;
+                    int.TryParse(deblock.ToString().Replace("--deblock=", string.Empty), out dval);
+                    parsed.Deblock = dval;
+                }
 
-                int dval = 0;
-                if (deblockValue != string.Empty)
-                    int.TryParse(deblockValue, out dval);
-                thisQuery.DeBlock = dval;
-
-                thisQuery.DeTelecine = "Off";
+                parsed.Detelecine = Detelecine.Off;
                 if (detelecine.Success)
                 {
-                    thisQuery.DeTelecine = "Default";
+                    parsed.Detelecine = Detelecine.Default;
                     if (detelecineValue.Success)
-                        thisQuery.DeTelecine = detelecineValue.ToString().Replace("--detelecine=", string.Empty).Replace("\"", string.Empty);
+                    {
+                        parsed.CustomDetelecine = detelecineValue.ToString().Replace("--detelecine=", string.Empty).Replace("\"", string.Empty);
+                        parsed.Detelecine = Detelecine.Custom;
+                    }
                 }
 
                 #endregion
 
                 #region Video Settings Tab
 
-                string videoEncoderConvertion = videoEncoder.ToString().Replace("-e ", string.Empty);
-                switch (videoEncoderConvertion)
-                {
-                    case "ffmpeg":
-                        videoEncoderConvertion = "MPEG-4 (FFmpeg)";
-                        break;
-                    case "x264":
-                        videoEncoderConvertion = "H.264 (x264)";
-                        break;
-                    case "theora":
-                        videoEncoderConvertion = "VP3 (Theora)";
-                        break;
-                    default:
-                        videoEncoderConvertion = "MPEG-4 (FFmpeg)";
-                        break;
-                }
-                thisQuery.VideoEncoder = videoEncoderConvertion;
-                thisQuery.VideoFramerate = videoFramerate.Success
-                                               ? videoFramerate.ToString().Replace("-r ", string.Empty)
-                                               : "Same as source";
+                parsed.VideoEncoder = Converters.GetVideoEncoder(videoEncoder.ToString().Replace("-e ", string.Empty));
 
-                thisQuery.Pfr = pfr.Success;
-                thisQuery.Grayscale = grayscale.Success;
-                thisQuery.TwoPass = twoPass.Success;
-                thisQuery.TurboFirstPass = turboFirstPass.Success;
+                if (videoFramerate.Success)
+                {
+                    double fps;
+                    double.TryParse(videoFramerate.Groups[1].ToString(), out fps);
+                    parsed.Framerate = fps;
+                }
+
+                if (pfr.Success)
+                    parsed.FramerateMode = FramerateMode.PFR;
+                else if (vfr.Success)
+                    parsed.FramerateMode = FramerateMode.VFR;
+                else if (cfr.Success)
+                    parsed.FramerateMode = FramerateMode.CFR;
+
+                parsed.Grayscale = grayscale.Success;
+                parsed.TwoPass = twoPass.Success;
+                parsed.TurboFirstPass = turboFirstPass.Success;
 
                 if (videoBitrate.Success)
-                    thisQuery.AverageVideoBitrate = videoBitrate.ToString().Replace("-b ", string.Empty);
+                {
+                    parsed.VideoEncodeRateType = VideoEncodeRateMode.AverageBitrate;
+                    parsed.VideoBitrate = int.Parse(videoBitrate.ToString().Replace("-b ", string.Empty));
+                }
+
                 if (videoFilesize.Success)
-                    thisQuery.VideoTargetSize = videoFilesize.ToString().Replace("-S ", string.Empty);
+                {
+                    parsed.VideoEncodeRateType = VideoEncodeRateMode.TargetSize;
+                    parsed.TargetSize = int.Parse(videoBitrate.ToString().Replace("-S ", string.Empty));
+                }
 
                 if (videoQuality.Success)
                 {
-                    float qConvert = float.Parse(videoQuality.ToString().Replace("-q ", string.Empty), Culture);
-                    thisQuery.VideoQuality = qConvert;
+                    float quality = float.Parse(videoQuality.ToString().Replace("-q ", string.Empty), Culture);
+                    parsed.Quality = quality;
                 }
-                else
-                    thisQuery.VideoQuality = -1;
 
                 #endregion
 
@@ -582,7 +360,7 @@ namespace HandBrake.ApplicationServices.Utilities
                     trackDRCvalues = drcValues.ToString().Replace("-D ", string.Empty).Split(',');
 
                 // Create new Audio Track Classes and store them in the ArrayList
-                ArrayList allAudioTrackInfo = new ArrayList();
+                List<AudioTrack> allAudioTrackInfo = new List<AudioTrack>();
                 for (int x = 0; x < encoderCount; x++)
                 {
                     AudioTrack track = new AudioTrack();
@@ -596,7 +374,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
                     if (trackEncoders != null)
                         if (trackEncoders.Length >= (x + 1)) // Audio Mix
-                            track.Encoder = Converters.GetAudioEncoder(trackEncoders[x].Trim());
+                            track.Encoder = Converters.GetGUIAudioEncoder(trackEncoders[x].Trim());
 
                     if (trackBitrates != null)
                         if (trackBitrates.Length >= (x + 1)) // Audio Encoder
@@ -612,31 +390,22 @@ namespace HandBrake.ApplicationServices.Utilities
 
                     allAudioTrackInfo.Add(track);
                 }
-                thisQuery.AudioInformation = allAudioTrackInfo;
 
-                // Subtitle Stuff
-                if (subtitles.Success)
-                    thisQuery.Subtitles = subtitles.ToString().Replace("-s ", string.Empty);
-                else
-                    thisQuery.Subtitles = subScan.Success ? "Autoselect" : "None";
-
-                thisQuery.ForcedSubtitles = forcedSubtitles.Success;
+                parsed.AudioTracks = allAudioTrackInfo;
 
                 #endregion
 
                 #region Chapters Tab
 
                 if (chapterMarkersFileMode.Success || chapterMarkers.Success)
-                    thisQuery.ChapterMarkers = true;
+                    parsed.IncludeChapterMarkers = true;
 
                 #endregion
 
                 #region H.264 and other
 
                 if (x264.Success)
-                    thisQuery.H264Query = x264.ToString().Replace("-x ", string.Empty);
-
-                thisQuery.Verbose = verbose.Success;
+                    parsed.X264Options = x264.ToString().Replace("-x ", string.Empty);
 
                 #endregion
             }
@@ -647,7 +416,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
             #endregion
 
-            return thisQuery;
+            return parsed;
         }
     }
 }

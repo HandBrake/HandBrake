@@ -11,6 +11,36 @@ namespace HandBrake.ApplicationServices.Model.Encoding
     public class Cropping
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="Cropping"/> class. 
+        /// </summary>
+        public Cropping()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Cropping"/> class. 
+        /// </summary>
+        /// <param name="top">
+        /// The Top Value
+        /// </param>
+        /// <param name="bottom">
+        /// The Bottom Value
+        /// </param>
+        /// <param name="left">
+        /// The Left Value
+        /// </param>
+        /// <param name="right">
+        /// The Right Value
+        /// </param>
+        public Cropping(int top, int bottom, int left, int right)
+        {
+            this.Top = top;
+            this.Bottom = bottom;
+            this.Left = left;
+            this.Right = right;
+        }
+
+        /// <summary>
         /// Gets or sets Top.
         /// </summary>
         public int Top { get; set; }
@@ -29,28 +59,5 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         /// Gets or sets Right.
         /// </summary>
         public int Right { get; set; }
-
-        /// <summary>
-        /// Create a cropping object
-        /// </summary>
-        /// <param name="top">
-        /// The top.
-        /// </param>
-        /// <param name="bottom">
-        /// The bottom.
-        /// </param>
-        /// <param name="left">
-        /// The left.
-        /// </param>
-        /// <param name="right">
-        /// The right.
-        /// </param>
-        /// <returns>
-        /// A Cropping object
-        /// </returns>
-        public static Cropping CreateCroppingObject(int top, int bottom, int left, int right)
-        {
-            return new Cropping { Top = top, Bottom = bottom, Left = left, Right = right };
-        }
     }
 }

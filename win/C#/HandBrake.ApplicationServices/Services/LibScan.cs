@@ -261,18 +261,18 @@ namespace HandBrake.ApplicationServices.Services
             {
                 Title converted = new Title
                     {
-                        TitleNumber = title.TitleNumber,
-                        Duration = title.Duration,
-                        Resolution = new Size(title.Resolution.Width, title.Resolution.Height),
-                        AspectRatio = title.AspectRatio,
-                        AngleCount = title.AngleCount,
-                        ParVal = new Size(title.ParVal.Width, title.ParVal.Height),
+                        TitleNumber = title.TitleNumber, 
+                        Duration = title.Duration, 
+                        Resolution = new Size(title.Resolution.Width, title.Resolution.Height), 
+                        AspectRatio = title.AspectRatio, 
+                        AngleCount = title.AngleCount, 
+                        ParVal = new Size(title.ParVal.Width, title.ParVal.Height), 
                         AutoCropDimensions =
-                            Cropping.CreateCroppingObject(
-                                title.AutoCropDimensions.Top,
-                                title.AutoCropDimensions.Bottom,
-                                title.AutoCropDimensions.Left,
-                                title.AutoCropDimensions.Right),
+                            new Cropping(
+                            title.AutoCropDimensions.Top, 
+                            title.AutoCropDimensions.Bottom, 
+                            title.AutoCropDimensions.Left, 
+                            title.AutoCropDimensions.Right), 
                         Fps = title.Framerate
                     };
 

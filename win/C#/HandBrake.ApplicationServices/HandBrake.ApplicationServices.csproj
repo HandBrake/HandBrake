@@ -100,6 +100,7 @@
     <Compile Include="Model\Encoding\AudioTrack.cs" />
     <Compile Include="Model\Encoding\Anamorphic.cs" />
     <Compile Include="Model\Encoding\AudioEncoder.cs" />
+    <Compile Include="Model\Encoding\FramerateMode.cs" />
     <Compile Include="Model\Encoding\Mixdown.cs" />
     <Compile Include="Model\Encoding\PointToPointMode.cs" />
     <Compile Include="Model\Encoding\Cropping.cs" />
@@ -111,7 +112,7 @@
     <Compile Include="Model\Encoding\OutputFormat.cs" />
     <Compile Include="Model\Encoding\SubtitleTrack.cs" />
     <Compile Include="Model\Encoding\VideoEncoder.cs" />
-    <Compile Include="Model\Encoding\VideoEncodeMode.cs" />
+    <Compile Include="Model\Encoding\VideoEncodeRateMode.cs" />
     <Compile Include="Model\Preset.cs" />
     <Compile Include="Model\QueueTask.cs" />
     <Compile Include="Model\Encoding\SubtitleType.cs" />

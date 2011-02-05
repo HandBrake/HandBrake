@@ -8,11 +8,19 @@ namespace HandBrake.ApplicationServices.Functions
     using System;
     using System.Text.RegularExpressions;
 
+    using HandBrake.ApplicationServices.Model.Encoding;
+
     /// <summary>
     /// A class to convert various things to native C# objects
     /// </summary>
     public class Converters
     {
+        /**
+         * TODO:
+         * - Many of these converters can be ditched at a later point. Should be able to model all this within the enums themsevles.
+         * 
+         **/ 
+
         /// <summary>
         /// Convert HandBrakes time remaining into a TimeSpan
         /// </summary>
@@ -64,7 +72,7 @@ namespace HandBrake.ApplicationServices.Functions
         /// </summary>
         /// <param name="audioEnc">The Audio Encoder</param>
         /// <returns>The GUI representation of that audio encoder</returns>
-        public static string GetAudioEncoder(string audioEnc)
+        public static string GetGUIAudioEncoder(string audioEnc)
         {
             switch (audioEnc)
             {
@@ -82,6 +90,99 @@ namespace HandBrake.ApplicationServices.Functions
                     return "DTS Passthru";
                 default:
                     return "AAC (faac)";
+            }
+        }
+
+        /// <summary>
+        /// Get the Video Encoder for a given string
+        /// </summary>
+        /// <param name="encoder">
+        /// The encoder name
+        /// </param>
+        /// <returns>
+        /// VideoEncoder enum object
+        /// </returns>
+        public static VideoEncoder GetVideoEncoder(string encoder)
+        {
+            switch (encoder)
+            {
+                case "ffmpeg":
+                    return VideoEncoder.FFMpeg;
+                case "x264":
+                    return VideoEncoder.X264;
+                case "theora":
+                    return VideoEncoder.Theora;
+                default:
+                    return VideoEncoder.X264;
+            }
+        }
+
+        /// <summary>
+        /// Get a GUI name for a given video Encoder.
+        /// </summary>
+        /// <param name="encoder">
+        /// A VideoEncoder Enum object
+        /// </param>
+        /// <returns>
+        /// A GUI encoder name, default is x264
+        /// </returns>
+        public static string GetGUIVideoEncoder(VideoEncoder encoder)
+        {
+            switch (encoder)
+            {
+                case VideoEncoder.FFMpeg:
+                    return "MPEG-4 (FFmpeg)";
+                case VideoEncoder.X264:
+                    return "H.264 (x264)";
+                case VideoEncoder.Theora:
+                    return "VP3 (Theora)";
+                default:
+                    return "H.264 (x264)";
+            }
+        }
+
+
+        /// <summary>
+        /// Get the OutputFormat Enum for a given string
+        /// </summary>
+        /// <param name="format">
+        /// OutputFormat as a string
+        /// </param>
+        /// <returns>
+        /// An OutputFormat Enum
+        /// </returns>
+        public static OutputFormat GetFileFormat(string format)
+        {
+            switch (format.ToLower())
+            {
+                default:
+                    return OutputFormat.Mp4;
+                case "m4v":
+                    return OutputFormat.M4V;
+                case "mkv":
+                    return OutputFormat.Mkv;
+            }
+        }
+
+        /// <summary>
+        /// Get the OutputFormat Enum for a given string
+        /// </summary>
+        /// <param name="format">
+        /// OutputFormat as a string
+        /// </param>
+        /// <returns>
+        /// An OutputFormat Enum
+        /// </returns>
+        public static string GetFileFormat(OutputFormat format)
+        {
+            switch (format)
+            {
+                default:
+                    return "mp4";
+                case OutputFormat.M4V:
+                    return "m4v";
+                case OutputFormat.Mkv:
+                    return "mkv";
             }
         }
     }
