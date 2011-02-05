@@ -7,6 +7,7 @@ namespace Handbrake.Controls
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using System.Windows.Forms;
@@ -105,7 +106,7 @@ namespace Handbrake.Controls
         /// Load an arraylist of AudioTrack items into the list.
         /// </summary>
         /// <param name="audioTracks">List of audio tracks</param>
-        public void LoadTracks(ArrayList audioTracks)
+        public void LoadTracks(List<AudioTrack> audioTracks)
         {
             ClearAudioList();
 
@@ -152,8 +153,8 @@ namespace Handbrake.Controls
             // Add any tracks the preset has, if there is a preset and no audio tracks in the list currently
             if (audioList.Rows.Count == 0 && preset != null)
             {
-                QueryParserUtility parsed = QueryParserUtility.Parse(preset.Query);
-                foreach (AudioTrack audioTrack in parsed.AudioInformation)
+                EncodeTask parsed = QueryParserUtility.Parse(preset.Query);
+                foreach (AudioTrack audioTrack in parsed.AudioTracks)
                 {
                     DataGridViewRow newTrack = new DataGridViewRow();
                     newTrack.CreateCells(audioList);

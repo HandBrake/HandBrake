@@ -8,6 +8,8 @@ namespace Handbrake.Controls
     using System;
     using System.Windows.Forms;
 
+    using HandBrake.ApplicationServices.Model.Encoding;
+
     /// <summary>
     /// The Filters Panel
     /// </summary>
@@ -129,22 +131,27 @@ namespace Handbrake.Controls
         /// <summary>
         /// Set the Detelecine control
         /// </summary>
-        /// <param name="value">The value part of the CLI string</param>
-        public void SetDeTelecine(string value)
+        /// <param name="value">
+        /// The value part of the CLI string
+        /// </param>
+        /// <param name="custom">
+        /// The Custom Detelecine setting
+        /// </param>
+        public void SetDeTelecine(Detelecine value, string custom)
         {
             text_customDT.Text = string.Empty;
             text_customDT.Visible = false;
             switch (value)
             {
-                case "Off":
+                case Detelecine.Off:
                     drop_detelecine.SelectedIndex = 0;
                     break;
-                case "Default":
+                case Detelecine.Default:
                     drop_detelecine.SelectedIndex = 2;
                     break;
                 default:
                     drop_detelecine.SelectedIndex = 1;
-                    text_customDT.Text = value;
+                    text_customDT.Text = custom;
                     text_customDT.Visible = true;
                     break;
             }
@@ -153,28 +160,33 @@ namespace Handbrake.Controls
         /// <summary>
         /// Set the Denoise control
         /// </summary>
-        /// <param name="value">The value part of the CLI string</param>
-        public void SetDeNoise(string value)
+        /// <param name="value">
+        /// The value part of the CLI string
+        /// </param>
+        /// <param name="custom">
+        /// The custom denoise setting.
+        /// </param>
+        public void SetDeNoise(Denoise value, string custom)
         {
             text_customDN.Text = string.Empty;
             text_customDN.Visible = false;
             switch (value)
             {
-                case "Off":
+                case Denoise.Off:
                     drop_denoise.SelectedIndex = 0;
                     break;
-                case "Weak":
+                case Denoise.Weak:
                     drop_denoise.SelectedIndex = 2;
                     break;
-                case "Medium":
+                case Denoise.Medium:
                     drop_denoise.SelectedIndex = 3;
                     break;
-                case "Strong":
+                case Denoise.Strong:
                     drop_denoise.SelectedIndex = 4;
                     break;
                 default:
                     drop_denoise.SelectedIndex = 1;
-                    text_customDN.Text = value;
+                    text_customDN.Text = custom;
                     text_customDN.Visible = true;
                     break;
             }
@@ -183,29 +195,34 @@ namespace Handbrake.Controls
         /// <summary>
         /// Set the Deinterlace Control
         /// </summary>
-        /// <param name="value">The value part of the CLI string</param>
-        public void SetDeInterlace(string value)
+        /// <param name="value">
+        /// The value part of the CLI string
+        /// </param>
+        /// <param name="custom">
+        /// The Custom Detinerlace Settings
+        /// </param>
+        public void SetDeInterlace(Deinterlace value, string custom)
         {
             text_customDI.Text = string.Empty;
             text_customDI.Visible = false;
             switch (value)
             {
-                case "Off":
+                case Deinterlace.Off:
                     drop_deinterlace.SelectedIndex = 0;
                     break;
-                case "Fast":
+                case Deinterlace.Fast:
                     drop_deinterlace.SelectedIndex = 2;
                     break;
-                case "Slow":
+                case Deinterlace.Slow:
                     drop_deinterlace.SelectedIndex = 3;
                     break;
-                case "Slower":
+                case Deinterlace.Slower:
                     drop_deinterlace.SelectedIndex = 4;
 
                     break;
                 default:
                     drop_deinterlace.SelectedIndex = 1;
-                    text_customDI.Text = value;
+                    text_customDI.Text = custom;
                     text_customDI.Visible = true;
                     break;
             }
@@ -214,22 +231,27 @@ namespace Handbrake.Controls
         /// <summary>
         /// Set the Decomb Control
         /// </summary>
-        /// <param name="value">The value part of the CLI string</param>
-        public void SetDecomb(string value)
+        /// <param name="value">
+        /// The value part of the CLI string
+        /// </param>
+        /// <param name="custom">
+        /// The custom option string
+        /// </param>
+        public void SetDecomb(Decomb value, string custom)
         {
             text_customDC.Text = string.Empty;
             text_customDC.Visible = false;
             switch (value)
             {
-                case "Off":
+                case Decomb.Off:
                     drop_decomb.SelectedIndex = 0;
                     break;
-                case "Default":
+                case Decomb.Default:
                     drop_decomb.SelectedIndex = 2;
                     break;
                 default:
                     drop_decomb.SelectedIndex = 1;
-                    text_customDC.Text = value;
+                    text_customDC.Text = custom;
                     text_customDC.Visible = true;
                     break;
             }

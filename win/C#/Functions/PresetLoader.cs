@@ -8,7 +8,8 @@ namespace Handbrake.Functions
     using System.Drawing;
     using System.Windows.Forms;
 
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Model.Encoding;
 
     /// <summary>
     /// Load a preset into the main Window
@@ -28,7 +29,7 @@ namespace Handbrake.Functions
         /// <param name="name">
         /// Name of the preset
         /// </param>
-        public static void LoadPreset(frmMain mainWindow, QueryParserUtility presetQuery, string name)
+        public static void LoadPreset(frmMain mainWindow, EncodeTask presetQuery, string name)
         {
             #region Source
 
@@ -36,44 +37,46 @@ namespace Handbrake.Functions
             mainWindow.check_iPodAtom.CheckState = CheckState.Unchecked;
 
             // Now load all the new settings onto the main window
-            if (presetQuery.Format != null)
-            {
-                string destination = mainWindow.text_destination.Text;
-                destination = destination.Replace(".mp4", "." + presetQuery.Format);
-                destination = destination.Replace(".m4v", "." + presetQuery.Format);
-                destination = destination.Replace(".mkv", "." + presetQuery.Format);
-                mainWindow.text_destination.Text = destination;
-            }
+            string destination = mainWindow.text_destination.Text;
+            destination = destination.Replace(".mp4", "." + presetQuery.OutputFormat);
+            destination = destination.Replace(".m4v", "." + presetQuery.OutputFormat);
+            destination = destination.Replace(".mkv", "." + presetQuery.OutputFormat);
+            mainWindow.text_destination.Text = destination;
 
             #endregion
 
             #region Destination and Output Settings
 
-            if (presetQuery.Format != null)
+            if (presetQuery.OutputFormat == OutputFormat.Mp4 || presetQuery.OutputFormat == OutputFormat.M4V)
             {
-                if (presetQuery.Format == "mp4" || presetQuery.Format == "m4v")
+                if (mainWindow.drop_format.SelectedIndex == 0)
                 {
-                    if (mainWindow.drop_format.SelectedIndex == 0)
-                        mainWindow.SetExtension(".mp4");
-                    else
-                        mainWindow.drop_format.SelectedIndex = 0;
+                    mainWindow.SetExtension(".mp4");
                 }
-                else if (presetQuery.Format == "mkv")
+                else
                 {
-                    if (mainWindow.drop_format.SelectedIndex == 1)
-                        mainWindow.SetExtension(".mkv");
-                    else
-                        mainWindow.drop_format.SelectedIndex = 1;
+                    mainWindow.drop_format.SelectedIndex = 0;
+                }
+            }
+            else if (presetQuery.OutputFormat == OutputFormat.Mkv)
+            {
+                if (mainWindow.drop_format.SelectedIndex == 1)
+                {
+                    mainWindow.SetExtension(".mkv");
+                }
+                else
+                {
+                    mainWindow.drop_format.SelectedIndex = 1;
                 }
             }
 
-            mainWindow.check_iPodAtom.CheckState = presetQuery.IpodAtom ? CheckState.Checked : CheckState.Unchecked;
+            mainWindow.check_iPodAtom.CheckState = presetQuery.IPod5GSupport ? CheckState.Checked : CheckState.Unchecked;
 
             mainWindow.check_optimiseMP4.CheckState = presetQuery.OptimizeMP4
                                                           ? CheckState.Checked
                                                           : CheckState.Unchecked;
 
-            mainWindow.check_largeFile.CheckState = presetQuery.LargeMP4 ? CheckState.Checked : CheckState.Unchecked;
+            mainWindow.check_largeFile.CheckState = presetQuery.LargeFile ? CheckState.Checked : CheckState.Unchecked;
 
             mainWindow.setContainerOpts(); // select the container options according to the selected format
 
@@ -82,104 +85,150 @@ namespace Handbrake.Functions
             #region Picture
 
             mainWindow.PictureSettings.check_autoCrop.Checked = true;
-            if (presetQuery.CropValues != null)
+            if (presetQuery.IsCustomCropping)
             {
-                int top, bottom, left, right;
-                int.TryParse(presetQuery.CropTop, out top);
-                int.TryParse(presetQuery.CropBottom, out bottom);
-                int.TryParse(presetQuery.CropLeft, out left);
-                int.TryParse(presetQuery.CropRight, out right);
-
                 mainWindow.PictureSettings.check_customCrop.Checked = true;
-                mainWindow.PictureSettings.crop_top.Value = top;
-                mainWindow.PictureSettings.crop_bottom.Value = bottom;
-                mainWindow.PictureSettings.crop_left.Value = left;
-                mainWindow.PictureSettings.crop_right.Value = right;
+                mainWindow.PictureSettings.crop_top.Value = presetQuery.Cropping.Top;
+                mainWindow.PictureSettings.crop_bottom.Value = presetQuery.Cropping.Bottom;
+                mainWindow.PictureSettings.crop_left.Value = presetQuery.Cropping.Left;
+                mainWindow.PictureSettings.crop_right.Value = presetQuery.Cropping.Right;
             }
 
             // Set the anamorphic mode 0,1,2,3
-            mainWindow.PictureSettings.drp_anamorphic.SelectedIndex = presetQuery.AnamorphicMode;
+
+            switch (presetQuery.Anamorphic)
+            {
+                case Anamorphic.None:
+                    mainWindow.PictureSettings.drp_anamorphic.SelectedIndex = 0;
+                    break;
+                case Anamorphic.Strict:
+                    mainWindow.PictureSettings.drp_anamorphic.SelectedIndex = 1;
+                    break;
+                case Anamorphic.Loose:
+                    mainWindow.PictureSettings.drp_anamorphic.SelectedIndex = 2;
+                    break;
+                case Anamorphic.Custom:
+                    mainWindow.PictureSettings.drp_anamorphic.SelectedIndex = 3;
+                    break;
+            }
 
             // Keep Aspect Ration Anamorphic Setting.
-            mainWindow.PictureSettings.check_KeepAR.CheckState = presetQuery.KeepDisplayAsect
+            mainWindow.PictureSettings.check_KeepAR.CheckState = presetQuery.KeepDisplayAspect
                                                                      ? CheckState.Checked
                                                                      : CheckState.Unchecked;
 
             // Set the Width and height as Required.
             if (presetQuery.Width != 0)
+            {
                 mainWindow.PictureSettings.text_width.Value = presetQuery.Width;
+            }
 
             if (presetQuery.Height != 0)
+            {
                 mainWindow.PictureSettings.text_height.Value = presetQuery.Height;
+            }
 
             // Max Width/Height override Width/Height
             if (presetQuery.MaxWidth != 0)
+            {
                 mainWindow.PictureSettings.text_width.Value = presetQuery.MaxWidth;
+            }
 
             if (presetQuery.MaxHeight != 0)
+            {
                 mainWindow.PictureSettings.text_height.Value = presetQuery.MaxHeight;
+            }
 
             mainWindow.PictureSettings.PresetMaximumResolution = new Size(presetQuery.MaxWidth, presetQuery.MaxHeight);
 
             // Case where both height and max height are 0 - For built-in presets
             if (presetQuery.MaxHeight == 0 && presetQuery.Height == 0)
+            {
                 mainWindow.PictureSettings.text_height.Value = 0;
+            }
 
             if (presetQuery.MaxWidth == 0 && presetQuery.Width == 0)
+            {
                 if (mainWindow.selectedTitle != null && mainWindow.selectedTitle.Resolution.Width != 0)
+                {
                     mainWindow.PictureSettings.text_width.Value = mainWindow.selectedTitle.Resolution.Width;
+                }
+            }
 
             // Aspect Ratio for non anamorphic sources
-            if (presetQuery.AnamorphicMode == 0)
+            if (presetQuery.Anamorphic == Anamorphic.None)
+            {
                 mainWindow.PictureSettings.check_KeepAR.CheckState = presetQuery.Height == 0
                                                                          ? CheckState.Checked
                                                                          : CheckState.Unchecked;
+            }
 
             // Custom Anamorphic Controls
-            mainWindow.PictureSettings.updownDisplayWidth.Text = presetQuery.DisplayWidthValue.ToString();
-            mainWindow.PictureSettings.updownParHeight.Text = presetQuery.PixelAspectHeight.ToString();
-            mainWindow.PictureSettings.updownParWidth.Text = presetQuery.PixelAspectWidth.ToString();
-            mainWindow.PictureSettings.drp_modulus.SelectedItem = presetQuery.AnamorphicModulus.ToString();
+            mainWindow.PictureSettings.updownDisplayWidth.Text = presetQuery.DisplayWidth.ToString();
+            mainWindow.PictureSettings.updownParHeight.Text = presetQuery.PixelAspectY.ToString();
+            mainWindow.PictureSettings.updownParWidth.Text = presetQuery.PixelAspectX.ToString();
+            mainWindow.PictureSettings.drp_modulus.SelectedItem = presetQuery.Modulus.ToString();
 
             #endregion
 
             #region Filters
 
-            mainWindow.Filters.SetDecomb(presetQuery.Decomb);
-            mainWindow.Filters.SetDeInterlace(presetQuery.DeInterlace);
-            mainWindow.Filters.SetDeNoise(presetQuery.DeNoise);
-            mainWindow.Filters.SetDeTelecine(presetQuery.DeTelecine);
-            mainWindow.Filters.SetDeBlock(presetQuery.DeBlock);
+            mainWindow.Filters.SetDecomb(presetQuery.Decomb, presetQuery.CustomDecomb);
+            mainWindow.Filters.SetDeInterlace(presetQuery.Deinterlace, presetQuery.CustomDeinterlace);
+            mainWindow.Filters.SetDeNoise(presetQuery.Denoise, presetQuery.CustomDenoise);
+            mainWindow.Filters.SetDeTelecine(presetQuery.Detelecine, presetQuery.CustomDetelecine);
+            mainWindow.Filters.SetDeBlock(presetQuery.Deblock);
             mainWindow.Filters.SetGrayScale(presetQuery.Grayscale);
 
             #endregion
 
             #region Video
 
-            mainWindow.drp_videoEncoder.Text = presetQuery.VideoEncoder;
+            switch (presetQuery.VideoEncoder)
+            {
+                case VideoEncoder.X264:
+                    mainWindow.drp_videoEncoder.SelectedIndex = 1;
+                    break;
+                case VideoEncoder.FFMpeg:
+                    mainWindow.drp_videoEncoder.SelectedIndex = 0;
+                    break;
+                case VideoEncoder.Theora:
+                    mainWindow.drp_videoEncoder.SelectedIndex = 2;
+                    break;
+            }
 
-            if (presetQuery.AverageVideoBitrate != null)
+            if (presetQuery.VideoBitrate != null)
             {
                 mainWindow.radio_avgBitrate.Checked = true;
-                mainWindow.text_bitrate.Text = presetQuery.AverageVideoBitrate;
+                mainWindow.text_bitrate.Text = presetQuery.VideoBitrate.ToString();
             }
-            if (presetQuery.VideoTargetSize != null)
+
+            if (presetQuery.TargetSize != null)
             {
                 mainWindow.radio_targetFilesize.Checked = true;
-                mainWindow.text_filesize.Text = presetQuery.VideoTargetSize;
+                mainWindow.text_filesize.Text = presetQuery.TargetSize.ToString();
             }
 
             // Quality
-            if (presetQuery.VideoQuality != -1)
+            if (presetQuery.Quality != null)
             {
                 mainWindow.radio_cq.Checked = true;
-                mainWindow.slider_videoQuality.Value = QualityToSliderValue(presetQuery.VideoEncoder, presetQuery.VideoQuality);
+                mainWindow.slider_videoQuality.Value = QualityToSliderValue(
+                    presetQuery.VideoEncoder, presetQuery.Quality);
             }
 
             mainWindow.check_2PassEncode.CheckState = presetQuery.TwoPass ? CheckState.Checked : CheckState.Unchecked;
 
-            mainWindow.drp_videoFramerate.Text = presetQuery.VideoFramerate;
-            mainWindow.checkMaximumFramerate.Checked = presetQuery.Pfr;
+            if (presetQuery.Framerate != null)
+            {
+                mainWindow.drp_videoFramerate.Text = presetQuery.Framerate.ToString();
+            }
+            else
+            {
+                mainWindow.drp_videoFramerate.SelectedIndex = 0;
+            }
+
+            mainWindow.checkMaximumFramerate.Checked = presetQuery.FramerateMode == FramerateMode.PFR;
 
             mainWindow.check_turbo.CheckState = presetQuery.TurboFirstPass ? CheckState.Checked : CheckState.Unchecked;
 
@@ -187,25 +236,27 @@ namespace Handbrake.Functions
 
             #region Chapter Markers
 
-            if (presetQuery.ChapterMarkers)
+            if (presetQuery.IncludeChapterMarkers)
             {
                 mainWindow.Check_ChapterMarkers.CheckState = CheckState.Checked;
                 mainWindow.Check_ChapterMarkers.Enabled = true;
             }
             else
+            {
                 mainWindow.Check_ChapterMarkers.CheckState = CheckState.Unchecked;
+            }
 
             #endregion
 
             #region Audio
 
-            mainWindow.AudioSettings.LoadTracks(presetQuery.AudioInformation);
+            mainWindow.AudioSettings.LoadTracks(presetQuery.AudioTracks);
 
             #endregion
 
             #region Other
 
-            mainWindow.x264Panel.X264Query = presetQuery.H264Query;
+            mainWindow.x264Panel.X264Query = presetQuery.X264Options;
 
             // Set the preset name
             mainWindow.labelPreset.Text = "Output Settings (Preset: " + name + ")";
@@ -219,19 +270,25 @@ namespace Handbrake.Functions
         /// <param name="videoEncoder">The selected video encoder</param>
         /// <param name="value">The Quality value</param>
         /// <returns>The position on the video quality slider</returns>
-        private static int QualityToSliderValue(string videoEncoder, float value)
+        private static int QualityToSliderValue(VideoEncoder videoEncoder, double? value)
         {
+            if (!value.HasValue)
+            {
+                // Default to a sensible level.
+                return 20;
+            }
+
             int sliderValue = 0;
             switch (videoEncoder)
             {
-                case "MPEG-4 (FFmpeg)":
+                case VideoEncoder.FFMpeg:
                     sliderValue = 32 - (int)value;
                     break;
-                case "H.264 (x264)":
+                case VideoEncoder.X264:
                     double cqStep = Properties.Settings.Default.x264cqstep;
                     sliderValue = (int)((51.0 / cqStep) - (value / cqStep));
                     break;
-                case "VP3 (Theora)":
+                case VideoEncoder.Theora:
                     sliderValue = (int)value;
                     break;
             }

@@ -324,31 +324,46 @@ namespace Handbrake
             foreach (QueueTask queueItem in theQueue)
             {
                 string qItem = queueItem.Query;
-                QueryParserUtility parsed = QueryParserUtility.Parse(qItem);
+                EncodeTask parsed = QueryParserUtility.Parse(qItem);
 
                 // Get the DVD Title
                 string title = parsed.Title == 0 ? "Auto" : parsed.Title.ToString();
 
                 // Get the DVD Chapters
                 string chapters;
-                if (parsed.ChapterStart == 0)
+                if (parsed.StartPoint == 0)
                     chapters = "Auto";
                 else
                 {
-                    chapters = parsed.ChapterStart.ToString();
-                    if (parsed.ChapterFinish != 0)
-                        chapters = chapters + " - " + parsed.ChapterFinish;
+                    chapters = parsed.StartPoint.ToString();
+                    if (parsed.EndPoint != 0)
+                        chapters = chapters + " - " + parsed.EndPoint;
                 }
 
                 ListViewItem item = new ListViewItem { Tag = queueItem, Text = title };
                 item.SubItems.Add(chapters); // Chapters
                 item.SubItems.Add(queueItem.Source); // Source
                 item.SubItems.Add(queueItem.Destination); // Destination
-                item.SubItems.Add(parsed.VideoEncoder); // Video
+
+                switch (parsed.VideoEncoder)
+                {
+                    case VideoEncoder.FFMpeg:
+                        item.SubItems.Add("MPEG-4 (FFmpeg)");
+                        break;
+                    default:
+                    case VideoEncoder.X264:
+                        item.SubItems.Add("H.264 (x264)");
+                        break;
+                    case VideoEncoder.Theora:
+                        item.SubItems.Add("VP3 (Theroa)");
+                        break;
+                }
+
+                 // Video
 
                 // Display The Audio Track Information
                 string audio = string.Empty;
-                foreach (AudioTrack track in parsed.AudioInformation)
+                foreach (AudioTrack track in parsed.AudioTracks)
                 {
                     if (audio != string.Empty)
                         audio += ", " + track.Encoder;
@@ -388,24 +403,24 @@ namespace Handbrake
                     BeginInvoke(new UpdateHandler(SetCurrentEncodeInformation));
                 }
 
-                QueryParserUtility parsed = QueryParserUtility.Parse(queue.QueueManager.LastProcessedJob.Query);
+                EncodeTask parsed = QueryParserUtility.Parse(queue.QueueManager.LastProcessedJob.Query);
 
                 // Get title and chapters
                 string title = parsed.Title == 0 ? "Auto" : parsed.Title.ToString();
                 string chapterlbl;
-                if (Equals(parsed.ChapterStart, 0))
+                if (Equals(parsed.StartPoint, 0))
                     chapterlbl = "Auto";
                 else
                 {
-                    string chapters = parsed.ChapterStart.ToString();
-                    if (parsed.ChapterFinish != 0)
-                        chapters = chapters + " - " + parsed.ChapterFinish;
+                    string chapters = parsed.StartPoint.ToString();
+                    if (parsed.EndPoint != 0)
+                        chapters = chapters + " - " + parsed.EndPoint;
                     chapterlbl = chapters;
                 }
 
                 // Get audio information
                 string audio = string.Empty;
-                foreach (AudioTrack track in parsed.AudioInformation)
+                foreach (AudioTrack track in parsed.AudioTracks)
                 {
                     if (audio != string.Empty) 
                         audio += ", " + track.Encoder;
@@ -418,7 +433,7 @@ namespace Handbrake
                 lbl_source.Text = queue.QueueManager.LastProcessedJob.Source + "(Title: " + title + " Chapters: " + chapterlbl + ")";
                 lbl_dest.Text = queue.QueueManager.LastProcessedJob.Destination;
                 lbl_encodeOptions.Text = "Video: " + parsed.VideoEncoder + " Audio: " + audio + Environment.NewLine +
-                                    "x264 Options: " + parsed.H264Query;
+                                    "x264 Options: " + parsed.X264Options;
                }
             catch (Exception)
             {

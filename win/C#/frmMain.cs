@@ -172,7 +172,7 @@ namespace Handbrake
                 {
                     x264Panel.Reset2Defaults();
 
-                    QueryParserUtility presetQuery = QueryParserUtility.Parse(query);
+                    EncodeTask presetQuery = QueryParserUtility.Parse(query);
                     PresetLoader.LoadPreset(this, presetQuery, Settings.Default.defaultPreset);
 
                     x264Panel.StandardizeOptString();
@@ -900,7 +900,7 @@ namespace Handbrake
                         x264Panel.Reset2Defaults();
 
                         // Send the query from the file to the Query Parser class
-                        QueryParserUtility presetQuery = QueryParserUtility.Parse(query);
+                        EncodeTask presetQuery = QueryParserUtility.Parse(query);
 
                         // Now load the preset
                         PresetLoader.LoadPreset(this, presetQuery, presetName);
@@ -939,7 +939,7 @@ namespace Handbrake
         {
             if (openPreset.ShowDialog() == DialogResult.OK)
             {
-                QueryParserUtility parsed = PlistPresetHandler.Import(openPreset.FileName);
+                EncodeTask parsed = PlistPresetHandler.Import(openPreset.FileName);
                 if (presetHandler.CheckIfUserPresetExists(parsed.PresetName + " (Imported)"))
                 {
                     DialogResult result =
@@ -2238,7 +2238,7 @@ namespace Handbrake
                     if (queueEdit.Query != null)
                     {
                         // Send the query from the file to the Query Parser class
-                        QueryParserUtility presetQuery = QueryParserUtility.Parse(queueEdit.Query);
+                        EncodeTask presetQuery = QueryParserUtility.Parse(queueEdit.Query);
 
                         // Now load the preset
                         PresetLoader.LoadPreset(this, presetQuery, "Load Back From Queue");
