@@ -297,6 +297,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         {
             *buf_out = next;
             pv->common->start_found = 1;
+            pv->common->first_pts[0] = INT64_MAX - 1;
             hb_cond_broadcast( pv->common->next_frame );
 
             /*
@@ -366,6 +367,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             *buf_out = hb_buffer_init( 0 );
 
             pv->common->start_found = 1;
+            pv->common->first_pts[0] = INT64_MAX - 1;
             hb_cond_broadcast( pv->common->next_frame );
 
             /*
@@ -396,6 +398,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     {
         hb_buffer_close( &next );
 
+        pv->common->first_pts[0] = INT64_MAX - 1;
         cur->start = sync->next_start;
         cur->stop = cur->start + 90000. / ((double)job->vrate / (double)job->vrate_base);
 
@@ -952,6 +955,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     {
         hb_buffer_close( &buf );
         *buf_out = hb_buffer_init( 0 );
+        pv->common->first_pts[sync->index+1] = INT64_MAX - 1;
         return HB_WORK_DONE;
     }
 
