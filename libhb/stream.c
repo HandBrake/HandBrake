@@ -1540,21 +1540,6 @@ int hb_stream_seek_ts( hb_stream_t * stream, int64_t ts )
     return -1;
 }
 
-static const char* make_upper( const char* s )
-{
-    static char name[8];
-    char *cp = name;
-    char *ep = cp + sizeof(name)-1;
-
-    while ( *s && cp < ep )
-    {
-        *cp++ = islower(*s)? toupper(*s) : *s;
-        ++s;
-    }
-    *cp = 0;
-    return name;
-}
-
 static void set_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
 {
     /* XXX
@@ -1570,10 +1555,22 @@ static void set_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
          ( cc = hb_ffmpeg_context( audio->config.in.codec_param ) ) &&
          avcodec_find_decoder( cc->codec_id ) )
     {
-        codec_name = make_upper( avcodec_find_decoder( cc->codec_id )->name );
+        AVCodec *codec = avcodec_find_decoder( cc->codec_id );
+        codec_name = codec->name;
         if ( !strcmp( codec_name, "LIBFAAD" ) )
         {
             codec_name = "AAC";
+        }
+        if ( !strcmp( codec_name, "DCA" ) )
+        {
+            codec_name = "DTS";
+        }
+
+        char *profile_name;
+        profile_name = av_get_profile_name( codec, cc->profile );
+        if ( profile_name )
+        {
+            codec_name = profile_name;
         }
     }
     else if ( audio->config.in.codec == HB_ACODEC_MPGA &&
@@ -3014,7 +3011,10 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
         {
             audio->config.in.codec = HB_ACODEC_AC3;
         }
-        else if ( codec->codec_id == CODEC_ID_DTS )
+        else if ( codec->codec_id == CODEC_ID_DTS &&
+                ( codec->profile == FF_PROFILE_DTS ||
+                  codec->profile == FF_PROFILE_DTS_ES ||
+                  codec->profile == FF_PROFILE_DTS_96_24 ) )
         {
             audio->config.in.codec = HB_ACODEC_DCA;
         }
