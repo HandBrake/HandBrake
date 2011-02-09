@@ -303,9 +303,9 @@ combo_opts_t bpyramid_opts =
 
 static options_map_t d_weightp_opts[] =
 {
-	{"Off",   "0", 0, "0"},
-	{"Blind", "1", 1, "1"},
-	{"Smart", "2", 2, "2"},
+	{"Off",    "0", 0, "0"},
+	{"Simple", "1", 1, "1"},
+	{"Smart",  "2", 2, "2"},
 };
 combo_opts_t weightp_opts =
 {
