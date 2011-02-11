@@ -1,4 +1,4 @@
-$(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,BZIP2 FAAD2 ZLIB))
+$(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,BZIP2 ZLIB))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
 FFMPEG.FETCH.url = http://download.handbrake.fr/handbrake/contrib/ffmpeg-git-185a155.tar.bz2
