@@ -1557,10 +1557,6 @@ static void set_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
     {
         AVCodec *codec = avcodec_find_decoder( cc->codec_id );
         codec_name = codec->name;
-        if ( !strcmp( codec_name, "LIBFAAD" ) )
-        {
-            codec_name = "AAC";
-        }
         if ( !strcmp( codec_name, "DCA" ) )
         {
             codec_name = "DTS";
