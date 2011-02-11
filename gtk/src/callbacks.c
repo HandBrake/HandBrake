@@ -1517,14 +1517,14 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
 	gint end;
 	widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
-	gtk_widget_set_sensitive(widget, TRUE);
 	end = ghb_settings_get_int(ud->settings, "end_point");
 	if (1 == end)
 	{
-		ud->dont_clear_presets = TRUE;
-		ghb_ui_update(ud, "ChapterMarkers", ghb_boolean_value(FALSE));
-		ud->dont_clear_presets = FALSE;
 		gtk_widget_set_sensitive(widget, FALSE);
+	}
+	else
+	{
+		gtk_widget_set_sensitive(widget, TRUE);
 	}
 }
 
@@ -1709,15 +1709,15 @@ start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 			set_destination(ud);
 		}
 		widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
-		gtk_widget_set_sensitive(widget, TRUE);
 		// End may have been changed above, get it again
 		end = ghb_settings_get_int(ud->settings, "end_point");
 		if (start == end)
 		{
-			ud->dont_clear_presets = TRUE;
-			ghb_ui_update(ud, "ChapterMarkers", ghb_boolean_value(FALSE));
-			ud->dont_clear_presets = FALSE;
 			gtk_widget_set_sensitive(widget, FALSE);
+		}
+		else
+		{
+			gtk_widget_set_sensitive(widget, TRUE);
 		}
 		update_title_duration(ud);
 	}
@@ -1761,15 +1761,15 @@ end_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 			set_destination(ud);
 		}
 		widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
-		gtk_widget_set_sensitive(widget, TRUE);
 		// Start may have been changed above, get it again
 		start = ghb_settings_get_int(ud->settings, "start_point");
 		if (start == end)
 		{
-			ud->dont_clear_presets = TRUE;
-			ghb_ui_update(ud, "ChapterMarkers", ghb_boolean_value(FALSE));
-			ud->dont_clear_presets = FALSE;
 			gtk_widget_set_sensitive(widget, FALSE);
+		}
+		else
+		{
+			gtk_widget_set_sensitive(widget, TRUE);
 		}
 		update_title_duration(ud);
 	}

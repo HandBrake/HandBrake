@@ -4438,6 +4438,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		gint start, end;
 		gint num_chapters = hb_list_count(title->list_chapter);
 		gint duration = title->duration / 90000;
+		job->chapter_markers = FALSE;
 		job->chapter_start = 1;
 		job->chapter_end = num_chapters;
 
@@ -4451,8 +4452,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		}
 		if (ghb_settings_combo_int(js, "PtoPType") == 1)
 		{
-			job->chapter_start = 1;
-			job->chapter_end = num_chapters;
 			start = ghb_settings_get_int(js, "start_point");
 			end = ghb_settings_get_int(js, "end_point");
 			job->pts_to_start = (int64_t)MIN(duration-1, start) * 90000;
@@ -4461,8 +4460,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		}
 		if (ghb_settings_combo_int(js, "PtoPType") == 2)
 		{
-			job->chapter_start = 1;
-			job->chapter_end = num_chapters;
 			start = ghb_settings_get_int(js, "start_point");
 			end = ghb_settings_get_int(js, "end_point");
 			gint64 max_frames;
@@ -4471,7 +4468,10 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 			job->frame_to_stop = (int64_t)MAX(start, end-1) - 
 								 job->frame_to_start;
 		}
-		job->chapter_markers = ghb_settings_get_boolean(js, "ChapterMarkers");
+		if (job->chapter_start != job->chapter_end)
+		{
+			job->chapter_markers = ghb_settings_get_boolean(js, "ChapterMarkers");
+		}
 		if (job->chapter_start == job->chapter_end)
 			job->chapter_markers = 0;
 		if ( job->chapter_markers )

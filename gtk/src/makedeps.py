@@ -61,7 +61,6 @@ dep_map = (
 	DepEntry("x264_subme", "x264_psy_rd", "<6", True, False),
 	DepEntry("x264_subme", "x264_psy_trell", "<6", True, False),
 	DepEntry("x264_trellis", "x264_psy_trell", "0", True, False),
-	DepEntry("ChapterMarkers", "chapters_list", "TRUE", False, False),
 	DepEntry("use_source_name", "chapters_in_destination", "TRUE", False, False),
 	DepEntry("use_source_name", "title_no_in_destination", "TRUE", False, False),
 	)
