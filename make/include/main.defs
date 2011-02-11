@@ -17,7 +17,6 @@ endif
 endif
 
 MODULES += contrib/faac
-MODULES += contrib/faad2
 MODULES += contrib/ffmpeg
 MODULES += contrib/fontconfig
 MODULES += contrib/freetype
