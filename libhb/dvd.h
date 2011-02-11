@@ -51,6 +51,7 @@ struct hb_dvdnav_s
     int            title;
     int            title_block_count;
     int            chapter;
+    int            cell;
     hb_list_t    * list_chapter;
     int            stopped;
 };

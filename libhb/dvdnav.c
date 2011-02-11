@@ -1345,6 +1345,7 @@ static int hb_dvdnav_start( hb_dvd_t * e, hb_title_t *title, int c )
     d->title = t;
     d->stopped = 0;
     d->chapter = 0;
+    d->cell = 0;
     return 1;
 }
 
@@ -1471,6 +1472,8 @@ static int hb_dvdnav_seek( hb_dvd_t * e, float f )
                   dvdnav_err_to_string(d->dvdnav) );
         return 0;
     }
+    d->chapter = 0;
+    d->cell = 0;
     return 1;
 }
 
@@ -1610,7 +1613,10 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
             * and update the decoding/displaying accordingly. 
             */
             {
+                dvdnav_cell_change_event_t * cell_event;
                 int tt = 0, pgcn = 0, pgn = 0, c;
+
+                cell_event = (dvdnav_cell_change_event_t*)b->data;
 
                 dvdnav_current_title_program(d->dvdnav, &tt, &pgcn, &pgn);
                 if (tt != d->title)
@@ -1629,6 +1635,11 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
                     }
                     chapter = d->chapter = c;
                 }
+                else if ( cell_event->cellN <= d->cell )
+                {
+                    return 0;
+                }
+                d->cell = cell_event->cellN;
             }
             break;
 
