@@ -1602,6 +1602,11 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
                 nsamples = out_size / 2;
             }
 
+            if ( pts == AV_NOPTS_VALUE )
+            {
+                pts = pv->pts_next;
+            }
+
             hb_buffer_t * buf;
             double pts_next = pts + nsamples * pv->duration;
             buf = downmixAudio( audio, pv, buffer, context->channels, nsamples );
