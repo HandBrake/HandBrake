@@ -64,6 +64,7 @@
 #include "downmix.h"
 #include "libavcodec/audioconvert.h"
 
+static void flushDelayQueue( hb_work_private_t *pv );
 static int  decavcodecInit( hb_work_object_t *, hb_job_t * );
 static int  decavcodecWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
 static void decavcodecClose( hb_work_object_t * );
@@ -271,6 +272,8 @@ static void closePrivData( hb_work_private_t ** ppv )
 
     if ( pv )
     {
+        flushDelayQueue( pv );
+
         if ( pv->job && pv->context && pv->context->codec )
         {
             hb_log( "%s-decoder done: %u frames, %u decoder errors, %u drops",
@@ -291,7 +294,7 @@ static void closePrivData( hb_work_private_t ** ppv )
         }
         if ( pv->list )
         {
-            hb_list_close( &pv->list );
+            hb_list_empty( &pv->list );
         }
         if ( pv->buffer )
         {

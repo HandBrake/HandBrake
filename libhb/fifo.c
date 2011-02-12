@@ -193,18 +193,22 @@ void hb_buffer_realloc( hb_buffer_t * b, int size )
 void hb_buffer_close( hb_buffer_t ** _b )
 {
     hb_buffer_t * b = *_b;
-    hb_fifo_t *buffer_pool = size_to_pool( b->alloc );
 
-    if( buffer_pool && b->data && !hb_fifo_is_full( buffer_pool ) )
-    {
-        hb_fifo_push_head( buffer_pool, b );
-        *_b = NULL;
-        return;
-    }
-    /* either the pool is full or this size doesn't use a pool - free the buf */
     while( b )
     {
         hb_buffer_t * next = b->next;
+        hb_fifo_t *buffer_pool = size_to_pool( b->alloc );
+
+        b->next = NULL;
+
+        if( buffer_pool && b->data && !hb_fifo_is_full( buffer_pool ) )
+        {
+            hb_fifo_push_head( buffer_pool, b );
+            b = next;
+            continue;
+        }
+        // either the pool is full or this size doesn't use a pool
+        // free the buf 
         if( b->data )
         {
             free( b->data );

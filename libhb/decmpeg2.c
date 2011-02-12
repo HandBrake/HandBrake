@@ -834,7 +834,7 @@ static void decmpeg2Close( hb_work_object_t * w )
     {
         hb_log( "mpeg2 done: %d frames", pv->libmpeg2->nframes );
     }
-    hb_list_close( &pv->list );
+    hb_list_empty( &pv->list );
     if ( pv->libmpeg2->list_subtitle )
     {
         hb_list_close( &pv->libmpeg2->list_subtitle );

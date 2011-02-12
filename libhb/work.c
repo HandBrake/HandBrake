@@ -984,10 +984,10 @@ static void do_job( hb_job_t * job, int cpu_count )
         w = muxer;
     }
 
+    hb_buffer_t      * buf_in, * buf_out;
+
     while ( !*job->die && !*w->done && w->status != HB_WORK_DONE )
     {
-        hb_buffer_t      * buf_in, * buf_out;
-
         buf_in = hb_fifo_get_wait( w->fifo_in );
         if ( buf_in == NULL )
             continue;
@@ -1018,10 +1018,16 @@ static void do_job( hb_job_t * job, int cpu_count )
                 if ( hb_fifo_full_wait( w->fifo_out ) )
                 {
                     hb_fifo_push( w->fifo_out, buf_out );
+                    buf_out = NULL;
                     break;
                 }
             }
         }
+    }
+
+    if ( buf_out )
+    {
+        hb_buffer_close( &buf_out );
     }
 
     hb_handle_t * h = job->h;
@@ -1253,11 +1259,17 @@ static void work_loop( void * _w )
                 if ( hb_fifo_full_wait( w->fifo_out ) )
                 {
                     hb_fifo_push( w->fifo_out, buf_out );
+                    buf_out = NULL;
                     break;
                 }
             }
         }
     }
+    if ( buf_out )
+    {
+        hb_buffer_close( &buf_out );
+    }
+
     // Consume data in incoming fifo till job complete so that
     // residual data does not stall the pipeline
     while( !*w->done )

@@ -84,8 +84,13 @@ static void push_buf( const hb_reader_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
         if ( hb_fifo_full_wait( fifo ) )
         {
             hb_fifo_push( fifo, buf );
+            buf = NULL;
             break;
         }
+    }
+    if ( buf )
+    {
+        hb_buffer_close( &buf );
     }
 }
 
