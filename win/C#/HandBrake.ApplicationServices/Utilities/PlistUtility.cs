@@ -240,9 +240,6 @@ namespace HandBrake.ApplicationServices.Utilities
                     case "VideoQualityType": // The Type of Quality Mode used
                         qualityMode = value;
                         break;
-                    case "VideoTargetSize":
-                        parsed.TargetSize = int.Parse(value);
-                        break;
                     case "VideoTurboTwoPass":
                         parsed.TurboFirstPass = value == "1";
                         break;
@@ -294,11 +291,9 @@ namespace HandBrake.ApplicationServices.Utilities
                     break;
                 case "1": // Avg Bitrate
                     parsed.Quality = null;
-                    parsed.TargetSize = null;
                     break;
                 case "2": // CQ
                     parsed.VideoBitrate = null;
-                    parsed.TargetSize = null;
                     break;
             }
             #endregion
@@ -544,12 +539,11 @@ namespace HandBrake.ApplicationServices.Utilities
             AddEncodeElement(xmlWriter, "VideoQualitySlider", "real", parsed.Quality.ToString());
 
             int videoQualityType = 0;
-            if (parsed.TargetSize != null) videoQualityType = 0;
-            else if (parsed.VideoBitrate != null) videoQualityType = 1;
+            if (parsed.VideoBitrate != null) videoQualityType = 1;
             else if (parsed.Quality != null) videoQualityType = 2;
 
             AddEncodeElement(xmlWriter, "VideoQualityType", "integer", videoQualityType.ToString());
-            AddEncodeElement(xmlWriter, "VideoTargetSize", "string", parsed.TargetSize.ToString());
+            AddEncodeElement(xmlWriter, "VideoTargetSize", "string", string.Empty);
             AddEncodeElement(xmlWriter, "VideoTurboTwoPass", "integer", parsed.TurboFirstPass ? "1" : "0");
             AddEncodeElement(xmlWriter, "VideoTwoPass", "integer", parsed.TwoPass ? "1" : "0");
 

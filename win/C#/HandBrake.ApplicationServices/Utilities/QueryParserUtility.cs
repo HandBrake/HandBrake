@@ -83,7 +83,6 @@ namespace HandBrake.ApplicationServices.Utilities
             Match videoFramerate = Regex.Match(input, @"-r ([0-9.]*)");
             Match videoBitrate = Regex.Match(input, @"-b ([0-9]*)");
             Match videoQuality = Regex.Match(input, @"-q ([0-9.]*)");
-            Match videoFilesize = Regex.Match(input, @"-S ([0-9.]*)");
             Match twoPass = Regex.Match(input, @" -2");
             Match turboFirstPass = Regex.Match(input, @" -T");
             Match optimizeMP4 = Regex.Match(input, @" -O");
@@ -312,12 +311,6 @@ namespace HandBrake.ApplicationServices.Utilities
                 {
                     parsed.VideoEncodeRateType = VideoEncodeRateMode.AverageBitrate;
                     parsed.VideoBitrate = int.Parse(videoBitrate.ToString().Replace("-b ", string.Empty));
-                }
-
-                if (videoFilesize.Success)
-                {
-                    parsed.VideoEncodeRateType = VideoEncodeRateMode.TargetSize;
-                    parsed.TargetSize = int.Parse(videoBitrate.ToString().Replace("-S ", string.Empty));
                 }
 
                 if (videoQuality.Success)

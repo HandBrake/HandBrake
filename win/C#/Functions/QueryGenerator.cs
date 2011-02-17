@@ -307,9 +307,6 @@ namespace Handbrake.Functions
             if (mainWindow.radio_avgBitrate.Checked)
                 query += " -b " + mainWindow.text_bitrate.Text;
 
-            if (mainWindow.radio_targetFilesize.Checked)
-                query += " -S " + mainWindow.text_filesize.Text;
-
             // Video Quality Setting
             if (mainWindow.radio_cq.Checked)
             {

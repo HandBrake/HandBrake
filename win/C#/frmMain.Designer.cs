@@ -49,7 +49,6 @@ namespace Handbrake
             this.check_turbo = new System.Windows.Forms.CheckBox();
             this.drp_videoFramerate = new System.Windows.Forms.ComboBox();
             this.slider_videoQuality = new System.Windows.Forms.TrackBar();
-            this.text_filesize = new System.Windows.Forms.TextBox();
             this.text_bitrate = new System.Windows.Forms.TextBox();
             this.btn_setDefault = new System.Windows.Forms.Button();
             this.check_optimiseMP4 = new System.Windows.Forms.CheckBox();
@@ -118,7 +117,6 @@ namespace Handbrake
             this.checkMaximumFramerate = new System.Windows.Forms.CheckBox();
             this.radio_cq = new System.Windows.Forms.RadioButton();
             this.radio_avgBitrate = new System.Windows.Forms.RadioButton();
-            this.radio_targetFilesize = new System.Windows.Forms.RadioButton();
             this.label25 = new System.Windows.Forms.Label();
             this.check_2PassEncode = new System.Windows.Forms.CheckBox();
             this.Label2 = new System.Windows.Forms.Label();
@@ -315,7 +313,7 @@ namespace Handbrake
             // 
             this.slider_videoQuality.BackColor = System.Drawing.SystemColors.Window;
             this.slider_videoQuality.Enabled = false;
-            this.slider_videoQuality.Location = new System.Drawing.Point(376, 120);
+            this.slider_videoQuality.Location = new System.Drawing.Point(376, 90);
             this.slider_videoQuality.Margin = new System.Windows.Forms.Padding(0);
             this.slider_videoQuality.Maximum = 100;
             this.slider_videoQuality.Name = "slider_videoQuality";
@@ -325,18 +323,9 @@ namespace Handbrake
             this.ToolTip.SetToolTip(this.slider_videoQuality, "Set the quality level of the video. ");
             this.slider_videoQuality.ValueChanged += new System.EventHandler(this.slider_videoQuality_Scroll);
             // 
-            // text_filesize
-            // 
-            this.text_filesize.Enabled = false;
-            this.text_filesize.Location = new System.Drawing.Point(511, 36);
-            this.text_filesize.Name = "text_filesize";
-            this.text_filesize.Size = new System.Drawing.Size(81, 21);
-            this.text_filesize.TabIndex = 12;
-            this.ToolTip.SetToolTip(this.text_filesize, "Set the file size you wish the encoded file to be.");
-            // 
             // text_bitrate
             // 
-            this.text_bitrate.Location = new System.Drawing.Point(511, 63);
+            this.text_bitrate.Location = new System.Drawing.Point(511, 33);
             this.text_bitrate.Name = "text_bitrate";
             this.text_bitrate.Size = new System.Drawing.Size(81, 21);
             this.text_bitrate.TabIndex = 14;
@@ -961,14 +950,12 @@ namespace Handbrake
             this.tab_video.Controls.Add(this.drp_videoFramerate);
             this.tab_video.Controls.Add(this.radio_cq);
             this.tab_video.Controls.Add(this.radio_avgBitrate);
-            this.tab_video.Controls.Add(this.radio_targetFilesize);
             this.tab_video.Controls.Add(this.drp_videoEncoder);
             this.tab_video.Controls.Add(this.Label47);
             this.tab_video.Controls.Add(this.label25);
             this.tab_video.Controls.Add(this.check_turbo);
             this.tab_video.Controls.Add(this.check_2PassEncode);
             this.tab_video.Controls.Add(this.Label2);
-            this.tab_video.Controls.Add(this.text_filesize);
             this.tab_video.Controls.Add(this.slider_videoQuality);
             this.tab_video.Controls.Add(this.text_bitrate);
             this.tab_video.Controls.Add(this.lbl_SliderValue);
@@ -986,7 +973,7 @@ namespace Handbrake
             this.lbl_rfwarn.AutoSize = true;
             this.lbl_rfwarn.BackColor = System.Drawing.Color.Transparent;
             this.lbl_rfwarn.ForeColor = System.Drawing.Color.Red;
-            this.lbl_rfwarn.Location = new System.Drawing.Point(385, 165);
+            this.lbl_rfwarn.Location = new System.Drawing.Point(385, 135);
             this.lbl_rfwarn.Name = "lbl_rfwarn";
             this.lbl_rfwarn.Size = new System.Drawing.Size(321, 39);
             this.lbl_rfwarn.TabIndex = 0;
@@ -1009,7 +996,7 @@ namespace Handbrake
             // 
             this.radio_cq.AutoSize = true;
             this.radio_cq.BackColor = System.Drawing.Color.Transparent;
-            this.radio_cq.Location = new System.Drawing.Point(365, 97);
+            this.radio_cq.Location = new System.Drawing.Point(365, 67);
             this.radio_cq.Name = "radio_cq";
             this.radio_cq.Size = new System.Drawing.Size(105, 17);
             this.radio_cq.TabIndex = 3;
@@ -1022,7 +1009,7 @@ namespace Handbrake
             this.radio_avgBitrate.AutoSize = true;
             this.radio_avgBitrate.BackColor = System.Drawing.Color.Transparent;
             this.radio_avgBitrate.Checked = true;
-            this.radio_avgBitrate.Location = new System.Drawing.Point(365, 64);
+            this.radio_avgBitrate.Location = new System.Drawing.Point(365, 34);
             this.radio_avgBitrate.Name = "radio_avgBitrate";
             this.radio_avgBitrate.Size = new System.Drawing.Size(112, 17);
             this.radio_avgBitrate.TabIndex = 4;
@@ -1030,18 +1017,6 @@ namespace Handbrake
             this.radio_avgBitrate.Text = "Avg Bitrate (kbps):";
             this.radio_avgBitrate.UseVisualStyleBackColor = false;
             this.radio_avgBitrate.CheckedChanged += new System.EventHandler(this.radio_avgBitrate_CheckedChanged);
-            // 
-            // radio_targetFilesize
-            // 
-            this.radio_targetFilesize.AutoSize = true;
-            this.radio_targetFilesize.BackColor = System.Drawing.Color.Transparent;
-            this.radio_targetFilesize.Location = new System.Drawing.Point(365, 37);
-            this.radio_targetFilesize.Name = "radio_targetFilesize";
-            this.radio_targetFilesize.Size = new System.Drawing.Size(107, 17);
-            this.radio_targetFilesize.TabIndex = 5;
-            this.radio_targetFilesize.Text = "Target Size (MB):";
-            this.radio_targetFilesize.UseVisualStyleBackColor = false;
-            this.radio_targetFilesize.CheckedChanged += new System.EventHandler(this.radio_targetFilesize_CheckedChanged);
             // 
             // label25
             // 
@@ -1082,7 +1057,7 @@ namespace Handbrake
             this.lbl_SliderValue.AutoSize = true;
             this.lbl_SliderValue.BackColor = System.Drawing.Color.Transparent;
             this.lbl_SliderValue.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_SliderValue.Location = new System.Drawing.Point(509, 100);
+            this.lbl_SliderValue.Location = new System.Drawing.Point(509, 70);
             this.lbl_SliderValue.Name = "lbl_SliderValue";
             this.lbl_SliderValue.Size = new System.Drawing.Size(21, 13);
             this.lbl_SliderValue.TabIndex = 15;
@@ -1825,7 +1800,6 @@ namespace Handbrake
         internal System.Windows.Forms.ComboBox drp_videoFramerate;
         internal System.Windows.Forms.CheckBox check_2PassEncode;
         internal System.Windows.Forms.TrackBar slider_videoQuality;
-        internal System.Windows.Forms.TextBox text_filesize;
         internal System.Windows.Forms.TextBox text_bitrate;
         internal System.Windows.Forms.TabPage tab_picture;
         internal System.Windows.Forms.CheckBox Check_ChapterMarkers;
@@ -1890,7 +1864,6 @@ namespace Handbrake
         private System.Windows.Forms.TabPage tab_filters;
         internal System.Windows.Forms.RadioButton radio_cq;
         internal System.Windows.Forms.RadioButton radio_avgBitrate;
-        internal System.Windows.Forms.RadioButton radio_targetFilesize;
         internal Handbrake.Controls.x264Panel x264Panel;
         private System.Windows.Forms.ToolStripButton tb_preview;
         private System.Diagnostics.Process hbproc;

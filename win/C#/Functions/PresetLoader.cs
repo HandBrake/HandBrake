@@ -203,12 +203,6 @@ namespace Handbrake.Functions
                 mainWindow.text_bitrate.Text = presetQuery.VideoBitrate.ToString();
             }
 
-            if (presetQuery.TargetSize != null)
-            {
-                mainWindow.radio_targetFilesize.Checked = true;
-                mainWindow.text_filesize.Text = presetQuery.TargetSize.ToString();
-            }
-
             // Quality
             if (presetQuery.Quality != null)
             {

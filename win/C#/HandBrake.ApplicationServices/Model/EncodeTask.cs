@@ -224,11 +224,6 @@ namespace HandBrake.ApplicationServices.Model
         public double? Quality { get; set; }
 
         /// <summary>
-        /// Gets or sets TargetSize.
-        /// </summary>
-        public int? TargetSize { get; set; }
-
-        /// <summary>
         /// Gets or sets VideoBitrate.
         /// </summary>
         public int? VideoBitrate { get; set; }

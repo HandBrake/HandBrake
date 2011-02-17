@@ -271,7 +271,6 @@ namespace Handbrake
             drp_videoEncoder.SelectedIndexChanged += this.changePresetLabel;
             check_2PassEncode.CheckedChanged += this.changePresetLabel;
             check_turbo.CheckedChanged += this.changePresetLabel;
-            text_filesize.TextChanged += this.changePresetLabel;
             text_bitrate.TextChanged += this.changePresetLabel;
             slider_videoQuality.ValueChanged += this.changePresetLabel;
 
@@ -300,7 +299,6 @@ namespace Handbrake
             drp_videoEncoder.SelectedIndexChanged -= this.changePresetLabel;
             check_2PassEncode.CheckedChanged -= this.changePresetLabel;
             check_turbo.CheckedChanged -= this.changePresetLabel;
-            text_filesize.TextChanged -= this.changePresetLabel;
             text_bitrate.TextChanged -= this.changePresetLabel;
             slider_videoQuality.ValueChanged -= this.changePresetLabel;
 
@@ -2006,19 +2004,9 @@ namespace Handbrake
             }
         }
 
-        private void radio_targetFilesize_CheckedChanged(object sender, EventArgs e)
-        {
-            text_bitrate.Enabled = false;
-            text_filesize.Enabled = true;
-            slider_videoQuality.Enabled = false;
-
-            check_2PassEncode.Enabled = true;
-        }
-
         private void radio_avgBitrate_CheckedChanged(object sender, EventArgs e)
         {
             text_bitrate.Enabled = true;
-            text_filesize.Enabled = false;
             slider_videoQuality.Enabled = false;
 
             check_2PassEncode.Enabled = true;
@@ -2027,7 +2015,6 @@ namespace Handbrake
         private void radio_cq_CheckedChanged(object sender, EventArgs e)
         {
             text_bitrate.Enabled = false;
-            text_filesize.Enabled = false;
             slider_videoQuality.Enabled = true;
 
             check_2PassEncode.Enabled = false;
