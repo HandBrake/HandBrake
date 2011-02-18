@@ -174,6 +174,7 @@
     <Reference Include="System.Messaging" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\AudioPanel.cs">
@@ -256,7 +257,6 @@
       <DependentUpon>frmActivityWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\SourceType.cs" />
-    <Compile Include="Presets\PresetsHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ToolWindows\BatchAdd.cs">
       <SubType>Form</SubType>

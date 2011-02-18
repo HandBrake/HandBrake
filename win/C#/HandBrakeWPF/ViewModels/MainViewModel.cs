@@ -6,6 +6,7 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
+    using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.IO;
     using System.Windows;
@@ -33,6 +34,11 @@ namespace HandBrakeWPF.ViewModels
         private readonly IQueueProcessor queueProcessor;
 
         /// <summary>
+        /// The preset service
+        /// </summary>
+        private readonly IPresetService presetService;
+
+        /// <summary>
         /// HandBrakes Main Window Title
         /// </summary>
         private string windowName;
@@ -54,9 +60,10 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public MainViewModel()
         {
-            // Setup Services
+            // Setup Services (TODO - Bring Castle back into the project to wire these up for us)
             this.scanService = File.Exists("hb.dll") ? (IScan)new LibScan() : new ScanService();
             this.queueProcessor = new QueueProcessor(Process.GetProcessesByName("HandBrake").Length);
+            this.presetService = new PresetService();
 
             // Setup Properties
             this.WindowTitle = "HandBrake WPF Test Application";
@@ -90,6 +97,17 @@ namespace HandBrakeWPF.ViewModels
                     this.windowName = value;
                     this.NotifyOfPropertyChange("TestProperty");
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of presets
+        /// </summary>
+        public ObservableCollection<Preset> Presets
+        {
+            get
+            {
+                return this.presetService.Presets;
             }
         }
 

@@ -8,10 +8,11 @@ namespace Handbrake
     using System;
     using System.Windows.Forms;
 
+    using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Services;
+
     using Handbrake.Functions;
     using Handbrake.Model;
-
-    using Presets;
 
     /// <summary>
     /// The Add Preset Window
@@ -23,7 +24,7 @@ namespace Handbrake
         /// <summary>
         /// The Preset Handler
         /// </summary>
-        private readonly PresetsHandler presetCode;
+        private readonly PresetService presetCode;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="frmAddPreset"/> class.
@@ -34,7 +35,7 @@ namespace Handbrake
         /// <param name="presetHandler">
         /// The preset handler.
         /// </param>
-        public frmAddPreset(frmMain mainWindow, PresetsHandler presetHandler)
+        public frmAddPreset(frmMain mainWindow, PresetService presetHandler)
         {
             InitializeComponent();
             this.mainWindow = mainWindow;
@@ -78,7 +79,16 @@ namespace Handbrake
 
             string query = QueryGenerator.GenerateQueryForPreset(mainWindow, pictureSettingsMode, check_useFilters.Checked, 0, 0);
 
-            if (presetCode.Add(txt_preset_name.Text.Trim(), query, pictureSettingsMode != QueryPictureSettingsMode.None, string.Empty))
+
+            Preset preset = new Preset
+                {
+                    Name = this.txt_preset_name.Text,
+                    Query = query,
+                    CropSettings = pictureSettingsMode != QueryPictureSettingsMode.None,
+                    Description = string.Empty
+                };
+
+            if (presetCode.Add(preset))
             {
                 this.DialogResult = DialogResult.OK;
                 this.Close();           

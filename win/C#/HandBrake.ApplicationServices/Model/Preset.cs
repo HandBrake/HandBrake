@@ -8,7 +8,7 @@ namespace HandBrake.ApplicationServices.Model
     /// <summary>
     /// A Preset for encoding with.
     /// </summary>
-    public class Preset 
+    public class Preset
     {
         /// <summary>
         /// Gets or sets the category which the preset resides under
@@ -49,5 +49,16 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets a value indicating whether this is a built in preset
         /// </summary>
         public bool IsBuildIn { get; set; }
+
+        /// <summary>
+        ///  Override the ToString Method
+        /// </summary>
+        /// <returns>
+        /// The Preset Name
+        /// </returns>
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 }

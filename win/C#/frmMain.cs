@@ -12,6 +12,7 @@ namespace Handbrake
     using System.Drawing;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Threading;
     using System.Windows.Forms;
     using Functions;
@@ -30,7 +31,6 @@ namespace Handbrake
     using Handbrake.ToolWindows;
 
     using Model;
-    using Presets;
     using Properties;
 
     using Main = Handbrake.Functions.Main;
@@ -42,7 +42,7 @@ namespace Handbrake
     {
         // Objects which may be used by one or more other objects *************
         private IQueueProcessor queueProcessor = new QueueProcessor(Program.InstanceId);
-        private PresetsHandler presetHandler = new PresetsHandler();
+        private PresetService presetHandler = new PresetService();
 
         // Windows ************************************************************
         private frmQueue queueWindow;
@@ -447,7 +447,7 @@ namespace Handbrake
         /// </param>
         private void mnu_presetReset_Click(object sender, EventArgs e)
         {
-            presetHandler.UpdateBuiltInPresets();
+            presetHandler.UpdateBuiltInPresets(string.Empty);
             LoadPresetPanel();
             if (treeView_presets.Nodes.Count == 0)
                 MessageBox.Show(
@@ -470,7 +470,7 @@ namespace Handbrake
         /// </param>
         private void mnu_delete_preset_Click(object sender, EventArgs e)
         {
-            presetHandler.RemoveBuiltInPresets();
+            presetHandler.ClearBuiltIn();
             LoadPresetPanel(); // Reload the preset panel
         }
 
@@ -648,18 +648,21 @@ namespace Handbrake
         /// </param>
         private void pmnu_saveChanges_Click(object sender, EventArgs e)
         {
-            // TODO this requires a re-think since the Query Editor has changed.
             DialogResult result =
                 MessageBox.Show(
                     "Do you wish to include picture settings when updating the preset: " +
                     treeView_presets.SelectedNode.Text, "Update Preset", MessageBoxButtons.YesNoCancel,
                     MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
-                presetHandler.Update(treeView_presets.SelectedNode.Text,
-                                     QueryGenerator.GenerateQueryForPreset(this, QueryPictureSettingsMode.SourceMaximum, true, 0, 0), true);
-            else if (result == DialogResult.No)
-                presetHandler.Update(treeView_presets.SelectedNode.Text,
-                                     QueryGenerator.GenerateQueryForPreset(this, QueryPictureSettingsMode.SourceMaximum, true, 0, 0), false);
+
+            Preset preset = new Preset
+                {
+                    Name = this.treeView_presets.SelectedNode.Text,
+                    Query =
+                        QueryGenerator.GenerateQueryForPreset(this, QueryPictureSettingsMode.SourceMaximum, true, 0, 0),
+                    CropSettings = (result == DialogResult.Yes)
+                };
+
+            presetHandler.Update(preset);
         }
 
         /// <summary>
@@ -675,7 +678,7 @@ namespace Handbrake
         {
             if (treeView_presets.SelectedNode != null)
             {
-                presetHandler.Remove(treeView_presets.SelectedNode.Text);
+                presetHandler.Remove((Preset)treeView_presets.SelectedNode.Tag);
                 treeView_presets.Nodes.Remove(treeView_presets.SelectedNode);
             }
             treeView_presets.Select();
@@ -697,7 +700,7 @@ namespace Handbrake
 
             // Now enable the save menu if the selected preset is a user preset
             if (treeView_presets.SelectedNode != null)
-                if (presetHandler.CheckIfUserPresetExists(treeView_presets.SelectedNode.Text))
+                if (presetHandler.CheckIfPresetExists(treeView_presets.SelectedNode.Text))
                     pmnu_saveChanges.Enabled = true;
 
             treeView_presets.Select();
@@ -742,7 +745,7 @@ namespace Handbrake
             {
                 if (treeView_presets.SelectedNode != null)
                 {
-                    presetHandler.Remove(treeView_presets.SelectedNode.Text);
+                    presetHandler.Remove((Preset)treeView_presets.SelectedNode.Tag);
                     treeView_presets.Nodes.Remove(treeView_presets.SelectedNode);
                 }
             }
@@ -855,7 +858,7 @@ namespace Handbrake
                 if (result == DialogResult.Yes)
                 {
                     if (treeView_presets.SelectedNode != null)
-                        presetHandler.Remove(treeView_presets.SelectedNode.Text);
+                        presetHandler.Remove((Preset)treeView_presets.SelectedNode.Tag);
 
                     // Remember each nodes expanded status so we can reload it
                     List<bool> nodeStatus = new List<bool>();
@@ -938,7 +941,7 @@ namespace Handbrake
             if (openPreset.ShowDialog() == DialogResult.OK)
             {
                 EncodeTask parsed = PlistPresetHandler.Import(openPreset.FileName);
-                if (presetHandler.CheckIfUserPresetExists(parsed.PresetName + " (Imported)"))
+                if (presetHandler.CheckIfPresetExists(parsed.PresetName + " (Imported)"))
                 {
                     DialogResult result =
                         MessageBox.Show("This preset appears to already exist. Would you like to overwrite it?",
@@ -947,17 +950,29 @@ namespace Handbrake
                     if (result == DialogResult.Yes)
                     {
                         PresetLoader.LoadPreset(this, parsed, parsed.PresetName);
-                        presetHandler.Update(parsed.PresetName + " (Imported)",
-                                             QueryGenerator.GenerateFullQuery(this),
-                                             parsed.UsesPictureSettings);
+
+                        Preset preset = new Preset
+                            {
+                                Name = parsed.PresetName + " (Imported)",
+                                Query = QueryGenerator.GenerateFullQuery(this),
+                                CropSettings = parsed.UsesPictureSettings
+                            };
+
+                        presetHandler.Update(preset);
                     }
                 }
                 else
                 {
                     PresetLoader.LoadPreset(this, parsed, parsed.PresetName);
-                    if (presetHandler.Add(parsed.PresetName + " (Imported)",
-                                          QueryGenerator.GenerateFullQuery(this),
-                                          parsed.UsesPictureSettings, string.Empty))
+
+                    Preset preset = new Preset
+                    {
+                        Name = parsed.PresetName + " (Imported)",
+                        Query = QueryGenerator.GenerateFullQuery(this),
+                        CropSettings = parsed.UsesPictureSettings
+                    };
+
+                    if (presetHandler.Add(preset))
                     {
                         TreeNode preset_treeview = new TreeNode(parsed.PresetName + " (Imported)")
                                                        {
@@ -2149,7 +2164,7 @@ namespace Handbrake
                 return;
             }
 
-            labelSource.Text = string.Format("Processing Title: {0} of {1}", e.CurrentTitle, e.Titles); 
+            labelSource.Text = string.Format("Processing Title: {0} of {1}", e.CurrentTitle, e.Titles);
         }
 
         /// <summary>
@@ -2493,7 +2508,44 @@ namespace Handbrake
                                     "HandBrake has determined your built-in presets are out of date... These presets will now be updated.",
                                     "Preset Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            presetHandler.GetPresetPanel(ref treeView_presets);
+            // Clear the old presets
+            treeView_presets.Nodes.Clear();
+
+
+            string category = string.Empty; // The category we are currnetly processing
+            TreeNode rootNode = null;
+            foreach (Preset preset in this.presetHandler.Presets.Where(p => p.IsBuildIn))
+            {
+                // If the category of this preset doesn't match the current category we are processing
+                // Then we need to create a new root node.
+                if (preset.Category != category)
+                {
+                    rootNode = new TreeNode(preset.Category) { ForeColor = Color.DarkBlue };
+                    treeView_presets.Nodes.Add(rootNode);
+                    category = preset.Category;
+                }
+
+                if (preset.Category == category && rootNode != null)
+                    rootNode.Nodes.Add(new TreeNode(preset.Name) { ToolTipText = preset.Description, ForeColor = Color.DarkBlue });
+            }
+
+            rootNode = null;
+            category = null;
+            foreach (Preset preset in this.presetHandler.Presets.Where(p => !p.IsBuildIn)) // User Presets
+            {
+                if (preset.Category != category && preset.Category != string.Empty)
+                {
+                    rootNode = new TreeNode(preset.Category) { ForeColor = Color.Black };
+                    treeView_presets.Nodes.Add(rootNode);
+                    category = preset.Category;
+                }
+
+                if (preset.Category == category && rootNode != null)
+                    rootNode.Nodes.Add(new TreeNode(preset.Name) { ForeColor = Color.Black, ToolTipText = preset.Description });
+                else
+                    treeView_presets.Nodes.Add(new TreeNode(preset.Name) { ForeColor = Color.Black, ToolTipText = preset.Description });
+            }
+
             treeView_presets.Update();
         }
 
@@ -2610,7 +2662,7 @@ namespace Handbrake
                 }
 
                 if (SourceScan.IsScanning)
-                {               
+                {
                     SourceScan.Stop();
                 }
 

@@ -5,7 +5,7 @@
 
 namespace HandBrake.ApplicationServices.Services.Interfaces
 {
-    using System.ComponentModel;
+    using System.Collections.ObjectModel;
 
     using HandBrake.ApplicationServices.Model;
 
@@ -17,7 +17,7 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <summary>
         /// Gets or sets a Collection of presets.
         /// </summary>
-        ICollectionView Presets { get; set; }
+        ObservableCollection<Preset> Presets { get; set; }
 
         /// <summary>
         /// Add a new preset to the system

@@ -28,7 +28,8 @@ namespace HandBrake.ApplicationServices.Services
          * TODO:
          * - Wire this into the Forms and WPF UI's
          * - Note: This is untested so far. It'll likely need fixes before it can be used.
-         **/ 
+         * - Maybe change the collection to a dictionary to allow easier lookups?
+         **/
 
         #region Private Variables
 
@@ -59,14 +60,30 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         public PresetService()
         {
-            this.Presets = CollectionViewSource.GetDefaultView(this.presets);
+            // this.Presets = CollectionViewSource.GetDefaultView(this.presets);
             this.LoadPresets();
         }
 
         /// <summary>
         /// Gets or sets a Collection of presets.
         /// </summary>
-        public ICollectionView Presets { get; set; }
+        public ObservableCollection<Preset> Presets
+        {
+            get
+            {
+                return this.presets;
+            }
+
+            set
+            {
+                this.presets = value;
+            }
+        }
+
+        /// <summary>
+        /// The last preset added.
+        /// </summary>
+        public Preset LastPresetAdded { get; set; }
 
         #region Public Methods
 
@@ -85,6 +102,7 @@ namespace HandBrake.ApplicationServices.Services
             if (this.CheckIfPresetExists(preset.Name) == false)
             {
                 this.presets.Add(preset);
+                this.LastPresetAdded = preset;
 
                 // Update the presets file
                 this.UpdatePresetFiles();
@@ -92,6 +110,25 @@ namespace HandBrake.ApplicationServices.Services
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Update a preset
+        /// </summary>
+        /// <param name="update">
+        /// The updated preset
+        /// </param>
+        public void Update(Preset update)
+        {
+            // TODO - Change this to be a lookup
+            foreach (Preset preset in this.presets)
+            {
+                if (preset.Name == update.Name)
+                {
+                    preset.Query = update.Query;
+                    break;
+                }
+            }
         }
 
         /// <summary>
@@ -154,7 +191,7 @@ namespace HandBrake.ApplicationServices.Services
             string handbrakeCLIPath = Path.Combine(cliPath, "HandBrakeCLI.exe");
             string presetsPath = Path.Combine(Path.GetTempPath(), "temp_presets.dat");
             string strCmdLine = String.Format(@"cmd /c """"{0}"" --preset-list >""{1}"" 2>&1""", handbrakeCLIPath, presetsPath);
-            
+
             ProcessStartInfo getPresets = new ProcessStartInfo("CMD.exe", strCmdLine) { WindowStyle = ProcessWindowStyle.Hidden };
 
             Process hbproc = Process.Start(getPresets);
@@ -163,7 +200,7 @@ namespace HandBrake.ApplicationServices.Services
             hbproc.Close();
 
             // Clear the current built in Presets and now parse the tempory Presets file.
-            this.presets.Clear();
+            this.ClearBuiltIn();
 
             if (File.Exists(presetsPath))
             {
@@ -176,13 +213,13 @@ namespace HandBrake.ApplicationServices.Services
                     string line = presetInput.ReadLine();
 
                     // Found the beginning of a preset block 
-                    if (line != null && line.Contains("<") && !line.Contains("<<")) 
+                    if (line != null && line.Contains("<") && !line.Contains("<<"))
                     {
                         category = line.Replace("<", string.Empty).Trim();
                     }
 
                     // Found a preset
-                    if (line != null && line.Contains("+")) 
+                    if (line != null && line.Contains("+"))
                     {
                         Regex r = new Regex("(:  )"); // Split on hyphens. 
                         string[] presetName = r.Split(line);
@@ -194,14 +231,15 @@ namespace HandBrake.ApplicationServices.Services
                         }
 
                         Preset newPreset = new Preset
-                        {
-                            Category = category,
-                            Name = presetName[0].Replace("+", string.Empty).Trim(),
-                            Query = presetName[2],
-                            Version = Init.Version,
-                            CropSettings = pic,
-                            Description = string.Empty // Maybe one day we will populate this.
-                        };
+                            {
+                                Category = category,
+                                Name = presetName[0].Replace("+", string.Empty).Trim(),
+                                Query = presetName[2],
+                                Version = Init.Version,
+                                CropSettings = pic,
+                                Description = string.Empty, // Maybe one day we will populate this.
+                                IsBuildIn = true
+                            };
                         this.presets.Add(newPreset);
                     }
                 }
@@ -327,14 +365,14 @@ namespace HandBrake.ApplicationServices.Services
             {
                 using (FileStream strm = new FileStream(this.builtInPresetFile, FileMode.Create, FileAccess.Write))
                 {
-                    Ser.Serialize(strm, this.presets.Where(p => p.IsBuildIn));
+                    Ser.Serialize(strm, this.presets.Where(p => p.IsBuildIn).ToList());
                     strm.Close();
                     strm.Dispose();
                 }
 
                 using (FileStream strm = new FileStream(this.userPresetFile, FileMode.Create, FileAccess.Write))
                 {
-                    Ser.Serialize(strm, this.presets.Where(p => p.IsBuildIn == false));
+                    Ser.Serialize(strm, this.presets.Where(p => p.IsBuildIn == false).ToList());
                     strm.Close();
                     strm.Dispose();
                 }

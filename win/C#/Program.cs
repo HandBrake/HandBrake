@@ -12,8 +12,8 @@ namespace Handbrake
     using System.Windows.Forms;
 
     using HandBrake.ApplicationServices;
+    using HandBrake.ApplicationServices.Services;
 
-    using Handbrake.Presets;
     using Handbrake.Properties;
 
     /// <summary>
@@ -90,8 +90,8 @@ namespace Handbrake
 
                 if (!File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\presets.xml")))
                 {
-                    PresetsHandler x = new PresetsHandler();
-                    x.UpdateBuiltInPresets();
+                    PresetService x = new PresetService();
+                    x.UpdateBuiltInPresets(string.Empty);
                 }
 
                 InitializeApplicationServices();
