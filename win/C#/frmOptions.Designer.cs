@@ -39,12 +39,13 @@ namespace Handbrake
             this.drp_completeOption = new System.Windows.Forms.ComboBox();
             this.tab_options = new System.Windows.Forms.TabControl();
             this.tab_general = new System.Windows.Forms.TabPage();
+            this.label35 = new System.Windows.Forms.Label();
+            this.cb_mp4FileMode = new System.Windows.Forms.ComboBox();
             this.label34 = new System.Windows.Forms.Label();
             this.check_TitleCase = new System.Windows.Forms.CheckBox();
             this.check_removeUnderscores = new System.Windows.Forms.CheckBox();
             this.check_growlEncode = new System.Windows.Forms.CheckBox();
             this.check_GrowlQueue = new System.Windows.Forms.CheckBox();
-            this.check_m4v = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.drop_updateCheckDays = new System.Windows.Forms.ComboBox();
@@ -198,12 +199,13 @@ namespace Handbrake
             // 
             // tab_general
             // 
+            this.tab_general.Controls.Add(this.label35);
+            this.tab_general.Controls.Add(this.cb_mp4FileMode);
             this.tab_general.Controls.Add(this.label34);
             this.tab_general.Controls.Add(this.check_TitleCase);
             this.tab_general.Controls.Add(this.check_removeUnderscores);
             this.tab_general.Controls.Add(this.check_growlEncode);
             this.tab_general.Controls.Add(this.check_GrowlQueue);
-            this.tab_general.Controls.Add(this.check_m4v);
             this.tab_general.Controls.Add(this.label1);
             this.tab_general.Controls.Add(this.label7);
             this.tab_general.Controls.Add(this.drp_completeOption);
@@ -225,6 +227,30 @@ namespace Handbrake
             this.tab_general.TabIndex = 3;
             this.tab_general.Text = "General";
             this.tab_general.UseVisualStyleBackColor = true;
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(105, 323);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(100, 13);
+            this.label35.TabIndex = 104;
+            this.label35.Text = "MP4 File Extension:";
+            // 
+            // cb_mp4FileMode
+            // 
+            this.cb_mp4FileMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_mp4FileMode.FormattingEnabled = true;
+            this.cb_mp4FileMode.Items.AddRange(new object[] {
+            "Automatic",
+            "Always use MP4",
+            "Always use M4V"});
+            this.cb_mp4FileMode.Location = new System.Drawing.Point(211, 320);
+            this.cb_mp4FileMode.Name = "cb_mp4FileMode";
+            this.cb_mp4FileMode.Size = new System.Drawing.Size(150, 21);
+            this.cb_mp4FileMode.TabIndex = 103;
+            this.ToolTip.SetToolTip(this.cb_mp4FileMode, resources.GetString("cb_mp4FileMode.ToolTip"));
+            this.cb_mp4FileMode.SelectedIndexChanged += new System.EventHandler(this.cb_mp4FileMode_SelectedIndexChanged);
             // 
             // label34
             // 
@@ -291,18 +317,6 @@ namespace Handbrake
                     "alerts on your desktop.");
             this.check_GrowlQueue.UseVisualStyleBackColor = false;
             this.check_GrowlQueue.CheckedChanged += new System.EventHandler(this.check_GrowlQueue_CheckedChanged);
-            // 
-            // check_m4v
-            // 
-            this.check_m4v.AutoSize = true;
-            this.check_m4v.Location = new System.Drawing.Point(108, 321);
-            this.check_m4v.Name = "check_m4v";
-            this.check_m4v.Size = new System.Drawing.Size(319, 17);
-            this.check_m4v.TabIndex = 82;
-            this.check_m4v.Text = "Always use iPod/iTunes friendly file extension (.m4v) for MP4";
-            this.ToolTip.SetToolTip(this.check_m4v, resources.GetString("check_m4v.ToolTip"));
-            this.check_m4v.UseVisualStyleBackColor = true;
-            this.check_m4v.CheckedChanged += new System.EventHandler(this.check_m4v_CheckedChanged);
             // 
             // label1
             // 
@@ -1569,7 +1583,6 @@ namespace Handbrake
         internal System.Windows.Forms.CheckBox check_trayStatusAlerts;
         private System.Windows.Forms.Button btn_viewLogs;
         private System.Windows.Forms.Button btn_clearLogs;
-        internal System.Windows.Forms.CheckBox check_m4v;
         internal System.Windows.Forms.ComboBox drop_updateCheckDays;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         internal System.Windows.Forms.ComboBox drp_Priority;
@@ -1596,5 +1609,7 @@ namespace Handbrake
         private System.Windows.Forms.RadioButton radio_preferredAudioAndSubs;
         private System.Windows.Forms.CheckBox check_AddCCTracks;
         private System.Windows.Forms.Label label34;
+        internal System.Windows.Forms.Label label35;
+        internal System.Windows.Forms.ComboBox cb_mp4FileMode;
     }
 }

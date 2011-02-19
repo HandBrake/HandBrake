@@ -240,7 +240,7 @@ namespace Handbrake.Functions
                 // Add the appropriate file extension
                 if (mainWindow.drop_format.SelectedIndex == 0)
                 {
-                    destinationFilename += Properties.Settings.Default.useM4v || mainWindow.Check_ChapterMarkers.Checked ||
+                    destinationFilename += Properties.Settings.Default.useM4v == 0 || Properties.Settings.Default.useM4v == 2 || mainWindow.Check_ChapterMarkers.Checked ||
                                            mainWindow.AudioSettings.RequiresM4V() || mainWindow.Subtitles.RequiresM4V()
                                                ? ".m4v"
                                                : ".mp4";

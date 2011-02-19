@@ -80,8 +80,8 @@
     <Setting Name="daysBetweenUpdateCheck" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">7</Value>
     </Setting>
-    <Setting Name="useM4v" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+    <Setting Name="useM4v" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="PromptOnUnmatchingQueries" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

@@ -1787,17 +1787,14 @@ namespace Handbrake
                 switch (DVD_Save.FilterIndex)
                 {
                     case 1:
-                        if (
-                            !Path.GetExtension(DVD_Save.FileName).Equals(".mp4",
-                                                                         StringComparison.InvariantCultureIgnoreCase))
-                            if (Properties.Settings.Default.useM4v)
+                        if (!Path.GetExtension(DVD_Save.FileName).Equals(".mp4", StringComparison.InvariantCultureIgnoreCase))
+                            if (Properties.Settings.Default.useM4v == 2 || Properties.Settings.Default.useM4v == 0)
                                 DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", ".m4v").Replace(".mkv", ".m4v");
                             else
                                 DVD_Save.FileName = DVD_Save.FileName.Replace(".m4v", ".mp4").Replace(".mkv", ".mp4");
                         break;
                     case 2:
-                        if (
-                            !Path.GetExtension(DVD_Save.FileName).Equals(".mkv", StringComparison.InvariantCultureIgnoreCase))
+                        if (!Path.GetExtension(DVD_Save.FileName).Equals(".mkv", StringComparison.InvariantCultureIgnoreCase))
                             DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", ".mkv").Replace(".m4v", ".mkv");
                         break;
                     default:
@@ -1827,11 +1824,7 @@ namespace Handbrake
             switch (drop_format.SelectedIndex)
             {
                 case 0:
-                    if (Properties.Settings.Default.useM4v || Check_ChapterMarkers.Checked ||
-                        AudioSettings.RequiresM4V() || Subtitles.RequiresM4V())
-                        SetExtension(".m4v");
-                    else
-                        SetExtension(".mp4");
+                    SetExtension(".mp4");
                     break;
                 case 1:
                     SetExtension(".mkv");
@@ -1855,9 +1848,8 @@ namespace Handbrake
         public void SetExtension(string newExtension)
         {
             if (newExtension == ".mp4" || newExtension == ".m4v")
-                if (Properties.Settings.Default.useM4v || Check_ChapterMarkers.Checked || AudioSettings.RequiresM4V() ||
-                    Subtitles.RequiresM4V())
-                    newExtension = ".m4v";
+                if (Check_ChapterMarkers.Checked || AudioSettings.RequiresM4V() || Subtitles.RequiresM4V() || Properties.Settings.Default.useM4v == 2) 
+                    newExtension = Properties.Settings.Default.useM4v == 1 ? ".mp4" : ".m4v";
                 else
                     newExtension = ".mp4";
 
@@ -2062,7 +2054,7 @@ namespace Handbrake
             }
             else
             {
-                if (drop_format.SelectedIndex != 1 && !Properties.Settings.Default.useM4v)
+                if (drop_format.SelectedIndex != 1)
                     SetExtension(".mp4");
                 data_chpt.Enabled = false;
                 btn_importChapters.Enabled = false;

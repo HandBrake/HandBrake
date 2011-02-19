@@ -88,8 +88,7 @@ namespace Handbrake
             txt_autoNameFormat.Text = Properties.Settings.Default.autoNameFormat;
 
             // Use iPod/iTunes friendly .m4v extension for MP4 files.
-            if (Properties.Settings.Default.useM4v)
-                check_m4v.CheckState = CheckState.Checked;
+            cb_mp4FileMode.SelectedIndex = Properties.Settings.Default.useM4v;
 
             // Remove Underscores
             check_removeUnderscores.Checked = Properties.Settings.Default.AutoNameRemoveUnderscore;
@@ -287,9 +286,10 @@ namespace Handbrake
             }
         }
 
-        private void check_m4v_CheckedChanged(object sender, EventArgs e)
+        private void cb_mp4FileMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.useM4v = check_m4v.Checked;
+
+            Properties.Settings.Default.useM4v = cb_mp4FileMode.SelectedIndex;
         }
 
         private void check_removeUnderscores_CheckedChanged(object sender, EventArgs e)

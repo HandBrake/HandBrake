@@ -336,10 +336,10 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool useM4v {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int useM4v {
             get {
-                return ((bool)(this["useM4v"]));
+                return ((int)(this["useM4v"]));
             }
             set {
                 this["useM4v"] = value;

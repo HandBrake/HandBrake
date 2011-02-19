@@ -120,12 +120,13 @@
   <metadata name="ToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>132, 18</value>
   </metadata>
-  <data name="check_m4v.ToolTip" xml:space="preserve">
-    <value>Use .m4v instead of .mp4 for MP4 files
+  <data name="cb_mp4FileMode.ToolTip" xml:space="preserve">
+    <value>The default file extension for MP4 Files.
+Automatic   - This will use M4v when AC3 Audio, SRT Subtitles or Chapters are present, otherwise MP4.
+Always MP4 - The MP4 extension will always be used.
+Always M4V - The M4V extension will always be used.
 
-Chapter Markers, AC3 Audio and SRT Subtitles will require the m4v extension if you are using QuickTime for playback.
-When this option is disabled, Chapter Markers, AC3 audio and SRT subtitiles will still automatically change the file extension to m4v.
-</value>
+Note, the file itself is identical. This simply changes the default extension for MP4 files.</value>
   </data>
   <data name="text_an_path.ToolTip" xml:space="preserve">
     <value>This is the default location where your encoded files will be stored if "Automatically name output files" is enabled.
