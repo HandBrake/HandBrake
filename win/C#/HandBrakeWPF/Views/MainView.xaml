@@ -1,6 +1,10 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:PresentationFramework="clr-namespace:Caliburn.PresentationFramework;assembly=Caliburn.PresentationFramework" Title="{Binding Path=WindowTitle}" Height="655" Width="1015" FontSize="11">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:PresentationFramework="clr-namespace:Caliburn.PresentationFramework;assembly=Caliburn.PresentationFramework" 
+        xmlns:Views="clr-namespace:HandBrakeWPF.Views"
+        xmlns:Data="clr-namespace:System.Windows.Data;assembly=PresentationFramework" 
+        Title="{Data:Binding Path=WindowTitle}" Height="655" Width="1015" FontSize="11">
 
     <Grid>
         <StackPanel Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -140,22 +144,22 @@
                     <!-- Tab Control -->
                     <TabControl HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="725" Height="330" Margin="10,10,10,10" Name="tabControl" >
                         <TabItem Header="Picture" Name="pictureTab">
-                            <Grid />
+                            <Views:PictureSettingsView></Views:PictureSettingsView>
                         </TabItem>
                         <TabItem Header="Video Filters" Name="filtersTab">
-                            <Grid />
+                            <Views:FiltersView></Views:FiltersView>
                         </TabItem>
                         <TabItem Header="Video" Name="videoTab">
-                            <Grid />
+                            <Views:VideoView></Views:VideoView>
                         </TabItem>
                         <TabItem Header="Audio" Name="audioTab">
-                            <Grid />
+                            <Views:AudioView></Views:AudioView>
                         </TabItem>
                         <TabItem Header="Chapters" Name="chaptersTab">
-                            <Grid />
+                            <Views:ChaptersView></Views:ChaptersView>
                         </TabItem>
                         <TabItem Header="Advanced" Name="advancedTab">
-                            <Grid />
+                            <Views:AdvancedView></Views:AdvancedView>
                         </TabItem>
                     </TabControl>
 
@@ -178,8 +182,7 @@
                     </GroupBox>
                 </StackPanel>
 
-            </StackPanel>
-            
+            </StackPanel>      
   
             <!-- Status Bar -->
             <StatusBar Grid.Row="6" Height="30" Grid.ColumnSpan="2" VerticalAlignment="Bottom">
@@ -187,11 +190,5 @@
             </StatusBar>
 
         </StackPanel>
-       
-
-
-
-    
-
     </Grid>
 </Window>
