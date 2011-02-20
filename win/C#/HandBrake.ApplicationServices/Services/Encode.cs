@@ -57,8 +57,6 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         static readonly object fileWriterLock = new object();
 
-        static readonly object syncObject = new object();
-
         #endregion
 
         /// <summary>
@@ -71,8 +69,6 @@ namespace HandBrake.ApplicationServices.Services
         }
 
         #region Delegates and Event Handlers
-
-        public delegate void ProcessEncodeEventsDelegate();
 
         /// <summary>
         /// Fires when a new CLI QueueTask starts
