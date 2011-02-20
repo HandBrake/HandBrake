@@ -6,6 +6,7 @@
 namespace HandBrake.ApplicationServices.Services
 {
     using System;
+    using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
     using System.Text;
@@ -51,6 +52,13 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private Win7 windowsSeven = new Win7();
 
+        /// <summary>
+        /// A Lock for the filewriter
+        /// </summary>
+        static readonly object fileWriterLock = new object();
+
+        static readonly object syncObject = new object();
+
         #endregion
 
         /// <summary>
@@ -63,6 +71,8 @@ namespace HandBrake.ApplicationServices.Services
         }
 
         #region Delegates and Event Handlers
+
+        public delegate void ProcessEncodeEventsDelegate();
 
         /// <summary>
         /// Fires when a new CLI QueueTask starts
@@ -173,7 +183,9 @@ namespace HandBrake.ApplicationServices.Services
                     CreateNoWindow = !Init.ShowCliForInGuiEncodeStatus ? true : false
                 };
 
-                this.HbProcess = Process.Start(cliStart);
+                this.HbProcess = new Process { StartInfo = cliStart };
+
+                this.HbProcess.Start();
 
                 if (enableLogging)
                 {
@@ -347,7 +359,6 @@ namespace HandBrake.ApplicationServices.Services
         private void HbProcessExited(object sender, EventArgs e)
         {
             IsEncoding = false;
-  
             if (windowsSeven.IsWindowsSeven)
             {
                 windowsSeven.SetTaskBarProgressToNoProgress();
@@ -360,10 +371,24 @@ namespace HandBrake.ApplicationServices.Services
 
             try
             {
-                if (fileWriter != null)
+                lock (fileWriterLock)
                 {
-                    fileWriter.Close();
-                    fileWriter.Dispose();
+                    // This is just a quick hack to ensure that we are done processing the logging data.
+                    // Logging data comes in after the exit event has processed sometimes. We should really impliment ISyncronizingInvoke
+                    // and set the SyncObject on the process. I think this may resolve this properly.
+                    // For now, just wait 2.5 seconds to let any trailing log messages come in and be processed.
+                    Thread.Sleep(2500);
+
+                    this.HbProcess.CancelErrorRead();
+                    this.HbProcess.CancelOutputRead();
+
+                    if (fileWriter != null)
+                    {
+                        fileWriter.Close();
+                        fileWriter.Dispose();
+                    }
+
+                    fileWriter = null;
                 }
             }
             catch (Exception exc)
@@ -479,21 +504,26 @@ namespace HandBrake.ApplicationServices.Services
                     lock (logBuffer)
                         logBuffer.AppendLine(e.Data);
 
-                    if (fileWriter != null && fileWriter.BaseStream.CanWrite)
+                    lock (fileWriterLock)
                     {
-                        fileWriter.WriteLine(e.Data);
-
-                        // If the logging grows past 100MB, kill the encode and stop.
-                        if (fileWriter.BaseStream.Length > 100000000)
+                        if (fileWriter != null && fileWriter.BaseStream.CanWrite)
                         {
-                            this.Stop(new Exception("The encode has been stopped. The log file has grown to over 100MB which indicates a serious problem has occured with the encode." +
-                                "Please check the encode log for an indication of what the problem is."));
+                            fileWriter.WriteLine(e.Data);
+
+                            // If the logging grows past 100MB, kill the encode and stop.
+                            if (fileWriter.BaseStream.Length > 100000000)
+                            {
+                                this.Stop(
+                                    new Exception(
+                                        "The encode has been stopped. The log file has grown to over 100MB which indicates a serious problem has occured with the encode." +
+                                        "Please check the encode log for an indication of what the problem is."));
+                            }
                         }
                     }
                 }
                 catch (Exception exc)
                 {
-                    // errorService.ShowError("Unable to write log data...", exc.ToString());
+                    // Do Nothing.
                 }
             }
         }
