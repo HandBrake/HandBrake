@@ -289,13 +289,18 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
         lang = lang_for_code2( (char*)bdaudio->lang );
 
         snprintf( audio->config.lang.description, 
-                  sizeof( audio->config.lang.description ), "%s (%s)",
-                  strlen(lang->native_name) ? lang->native_name : 
+            sizeof( audio->config.lang.description ), "%s (%s)",
+            strlen(lang->native_name) ? lang->native_name : 
                                               lang->eng_name,
-                  audio->config.in.codec == HB_ACODEC_AC3 ? "AC3" : 
-                  ( audio->config.in.codec == HB_ACODEC_DCA ? "DTS" : 
-                  ( audio->config.in.codec == HB_ACODEC_MPGA ? "MPEG" : 
-                                                               "LPCM" ) ) );
+            audio->config.in.codec == HB_ACODEC_AC3 ? "AC3" : 
+            ( audio->config.in.codec == HB_ACODEC_DCA ? "DTS" : 
+            ( audio->config.in.codec == HB_ACODEC_MPGA ? 
+                ( audio->config.in.codec_param == CODEC_ID_PCM_BLURAY ? "LPCM" :
+                ( audio->config.in.codec_param == CODEC_ID_EAC3 ? "E-AC3" :
+                ( audio->config.in.codec_param == CODEC_ID_MP2 ? "MPEG" :
+                                                               "Unknown FFMpeg" 
+                ) ) ) : "Unknown" 
+            ) ) );
 
         snprintf( audio->config.lang.simple, 
                   sizeof( audio->config.lang.simple ), "%s",
