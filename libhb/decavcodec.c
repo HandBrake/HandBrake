@@ -452,6 +452,7 @@ static int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             len = av_parser_parse2( pv->parser, pv->context,
                     &parser_output_buffer, &parser_output_buffer_len,
                     in->data + pos, in->size - pos, cur, cur, 0 );
+            cur = pv->parser->pts;
         }
         else
         {
@@ -472,7 +473,7 @@ static int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 pv->duration = 90000. /
                             (double)( pv->context->sample_rate * pv->context->channels );
             }
-            decodeAudio( w->audio, pv, parser_output_buffer, parser_output_buffer_len, pv->parser->pts );
+            decodeAudio( w->audio, pv, parser_output_buffer, parser_output_buffer_len, cur );
         }
     }
     writeAudioFifos( w );
