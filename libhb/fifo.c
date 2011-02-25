@@ -190,6 +190,7 @@ void hb_buffer_realloc( hb_buffer_t * b, int size )
     }
 }
 
+// Frees the specified buffer list.
 void hb_buffer_close( hb_buffer_t ** _b )
 {
     hb_buffer_t * b = *_b;
@@ -294,6 +295,8 @@ float hb_fifo_percent_full( hb_fifo_t * f )
     return ret;
 }
 
+// Pulls the first packet out of this FIFO, blocking until such a packet is available.
+// Returns NULL if this FIFO has been closed or flushed.
 hb_buffer_t * hb_fifo_get_wait( hb_fifo_t * f )
 {
     hb_buffer_t * b;
@@ -323,6 +326,7 @@ hb_buffer_t * hb_fifo_get_wait( hb_fifo_t * f )
     return b;
 }
 
+// Pulls a packet out of this FIFO, or returns NULL if no packet is available.
 hb_buffer_t * hb_fifo_get( hb_fifo_t * f )
 {
     hb_buffer_t * b;
@@ -368,6 +372,8 @@ hb_buffer_t * hb_fifo_see_wait( hb_fifo_t * f )
     return b;
 }
 
+// Returns the first packet in the specified FIFO.
+// If the FIFO is empty, returns NULL.
 hb_buffer_t * hb_fifo_see( hb_fifo_t * f )
 {
     hb_buffer_t * b;
@@ -400,6 +406,8 @@ hb_buffer_t * hb_fifo_see2( hb_fifo_t * f )
     return b;
 }
 
+// Waits until the specified FIFO is no longer full or until FIFO_TIMEOUT milliseconds have elapsed.
+// Returns whether the FIFO is non-full upon return.
 int hb_fifo_full_wait( hb_fifo_t * f )
 {
     int result;
@@ -415,6 +423,8 @@ int hb_fifo_full_wait( hb_fifo_t * f )
     return result;
 }
 
+// Pushes the specified buffer onto the specified FIFO,
+// blocking until the FIFO has space available.
 void hb_fifo_push_wait( hb_fifo_t * f, hb_buffer_t * b )
 {
     if( !b )
@@ -451,6 +461,7 @@ void hb_fifo_push_wait( hb_fifo_t * f, hb_buffer_t * b )
     hb_unlock( f->lock );
 }
 
+// Appends the specified packet list to the end of the specified FIFO.
 void hb_fifo_push( hb_fifo_t * f, hb_buffer_t * b )
 {
     if( !b )
@@ -482,6 +493,7 @@ void hb_fifo_push( hb_fifo_t * f, hb_buffer_t * b )
     hb_unlock( f->lock );
 }
 
+// Prepends the specified packet list to the start of the specified FIFO.
 void hb_fifo_push_head( hb_fifo_t * f, hb_buffer_t * b )
 {
     hb_buffer_t * tmp;
@@ -517,6 +529,29 @@ void hb_fifo_push_head( hb_fifo_t * f, hb_buffer_t * b )
     f->size += ( size + 1 );
 
     hb_unlock( f->lock );
+}
+
+// Pushes a list of packets onto the specified FIFO as a single element.
+void hb_fifo_push_list_element( hb_fifo_t *fifo, hb_buffer_t *buffer_list )
+{
+    hb_buffer_t *container = hb_buffer_init( 0 );
+    // XXX: Using an arbitrary hb_buffer_t pointer (other than 'next')
+    //      to carry the list inside a single "container" buffer
+    container->next_subpicture = buffer_list;
+    
+    hb_fifo_push( fifo, container );
+}
+
+// Removes a list of packets from the specified FIFO that were stored as a single element.
+hb_buffer_t *hb_fifo_get_list_element( hb_fifo_t *fifo )
+{
+    hb_buffer_t *container = hb_fifo_get( fifo );
+    // XXX: Using an arbitrary hb_buffer_t pointer (other than 'next')
+    //      to carry the list inside a single "container" buffer
+    hb_buffer_t *buffer_list = container->next_subpicture;
+    hb_buffer_close( &container );
+    
+    return buffer_list;
 }
 
 void hb_fifo_close( hb_fifo_t ** _f )

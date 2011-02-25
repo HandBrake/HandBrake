@@ -50,6 +50,8 @@ typedef enum {
               sec   * 1000L +\
               centi * 10L ) )
 
+#define SSA_VERBOSE_PACKETS 0
+
 static StyleSet ssa_parse_style_override( uint8_t *pos, StyleSet prevStyles )
 {
     StyleSet nextStyles = prevStyles;
@@ -591,6 +593,10 @@ static int decssaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 {
     hb_buffer_t * in = *buf_in;
     hb_buffer_t * out_list = NULL;
+    
+#if SSA_VERBOSE_PACKETS
+    printf("\nPACKET(%"PRId64",%"PRId64"): %.*s\n", in->start/90, in->stop/90, in->size, in->data);
+#endif
     
     if ( in->size > 0 ) {
         out_list = ssa_decode_packet(w, in);

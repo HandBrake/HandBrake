@@ -126,6 +126,8 @@ void          hb_fifo_push( hb_fifo_t *, hb_buffer_t * );
 void          hb_fifo_push_wait( hb_fifo_t *, hb_buffer_t * );
 int           hb_fifo_full_wait( hb_fifo_t * f );
 void          hb_fifo_push_head( hb_fifo_t *, hb_buffer_t * );
+void          hb_fifo_push_list_element( hb_fifo_t *fifo, hb_buffer_t *buffer_list );
+hb_buffer_t * hb_fifo_get_list_element( hb_fifo_t *fifo );
 void          hb_fifo_close( hb_fifo_t ** );
 void          hb_fifo_flush( hb_fifo_t * f );
 
