@@ -5,8 +5,10 @@
 
 namespace HandBrakeWPF
 {
+    using Caliburn.PresentationFramework;
     using Caliburn.PresentationFramework.ApplicationModel;
 
+    using HandBrakeWPF.Services;
     using HandBrakeWPF.ViewModels;
 
     /// <summary>
@@ -37,12 +39,18 @@ namespace HandBrakeWPF
         /// </returns>
         protected override object CreateRootModel()
         {
-            var binder = (DefaultBinder)Container.GetInstance<IBinder>();
+            var binder = (DefaultBinder)Container.GetInstance<DefaultBinder>();
 
             binder.EnableBindingConventions();
             binder.EnableMessageConventions();
 
-            return new MainViewModel();
+            return Container.GetInstance<MainViewModel>();
+        }
+
+
+        protected override void ConfigurePresentationFramework(PresentationFrameworkModule module)
+        {
+            module.UsingWindowManager<WindowManager>();
         }
     }
 }

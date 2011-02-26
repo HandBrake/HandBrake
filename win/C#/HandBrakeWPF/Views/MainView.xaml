@@ -18,26 +18,26 @@
                     </MenuItem>
 
                     <MenuItem Header="Tools">
-                        <MenuItem Header="Show Queue" />
-                        <MenuItem Header="Activity Window" />
+                        <MenuItem Header="Show Queue" PresentationFramework:Message.Attach="[Event Click] = [Action ExitApplication]" />
+                        <MenuItem Header="Activity Window" PresentationFramework:Message.Attach="[Event Click] = [Action ExitApplication]" />
                     </MenuItem>
 
                     <MenuItem Header="Presets">
-                        <MenuItem Header="Reset Built-in Presets" />
-                        <MenuItem Header="Delete Built-in Presets" />
+                        <MenuItem Header="Reset Built-in Presets" PresentationFramework:Message.Attach="[Event Click] = [Action ExitApplication]" />
+                        <MenuItem Header="Delete Built-in Presets" PresentationFramework:Message.Attach="[Event Click] = [Action ExitApplication]" />
                         <Separator />
-                        <MenuItem Header="Save As New Preset" />
-                        <MenuItem Header="Import" />
-                        <MenuItem Header="Export" />
-                        <MenuItem Header="Set as Default" />
+                        <MenuItem Header="Save As New Preset" PresentationFramework:Message.Attach="[Event Click] = [Action ExitApplication]" />
+                        <MenuItem Header="Import" PresentationFramework:Message.Attach="[Event Click] = [Action ExitApplication]" />
+                        <MenuItem Header="Export" PresentationFramework:Message.Attach="[Event Click] = [Action ExitApplication]" />
+                        <MenuItem Header="Set as Default" PresentationFramework:Message.Attach="[Event Click] = [Action ExitApplication]" />
                     </MenuItem>
 
                     <MenuItem Header="Help">
-                        <MenuItem Header="HandBrake User Guide" />
+                        <MenuItem Header="HandBrake User Guide" PresentationFramework:Message.Attach="[Event Click] = [Action ExitApplication]" />
                         <Separator />
-                        <MenuItem Header="Check for Updates" />
+                        <MenuItem Header="Check for Updates" PresentationFramework:Message.Attach="[Event Click] = [Action ExitApplication]" />
                         <Separator />
-                        <MenuItem Header="About..." />
+                        <MenuItem Header="About..." PresentationFramework:Message.Attach="[Event Click] = [Action AboutApplication]" />
                     </MenuItem>
                 </Menu>
 
@@ -144,7 +144,7 @@
                     <!-- Tab Control -->
                     <TabControl HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="725" Height="330" Margin="10,10,10,10" Name="tabControl" >
                         <TabItem Header="Picture" Name="pictureTab">
-                            <Views:PictureSettingsView></Views:PictureSettingsView>
+                            <Views:PictureSettingsView x:Name="pictureSettingsView"></Views:PictureSettingsView>
                         </TabItem>
                         <TabItem Header="Video Filters" Name="filtersTab">
                             <Views:FiltersView></Views:FiltersView>

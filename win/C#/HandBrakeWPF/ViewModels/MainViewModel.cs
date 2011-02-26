@@ -16,6 +16,8 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
+    using Microsoft.Practices.ServiceLocation;
+
     /// <summary>
     /// HandBrakes Main Window
     /// </summary>
@@ -55,10 +57,10 @@ namespace HandBrakeWPF.ViewModels
 
         #endregion
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MainViewModel"/> class.
-        /// </summary>
-        public MainViewModel()
+        #region Properties
+
+        public MainViewModel(IServiceLocator locator)
+            : base(locator)
         {
             // Setup Services (TODO - Bring Castle back into the project to wire these up for us)
             this.scanService = File.Exists("hb.dll") ? (IScan)new LibScan() : new ScanService();
@@ -79,7 +81,6 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeStatusChanged;
         }
 
-        #region Properties
         /// <summary>
         /// Gets or sets TestProperty.
         /// </summary>
@@ -185,6 +186,14 @@ namespace HandBrakeWPF.ViewModels
             base.Shutdown();
         }
 
+
+        #region Menu and Taskbar
+        
+        public void AboutApplication()
+        {
+           this.ShowDialog<AboutViewModel>();
+        }
+        
         /// <summary>
         /// Shutdown the Application
         /// </summary>
@@ -192,6 +201,9 @@ namespace HandBrakeWPF.ViewModels
         {
             Application.Current.Shutdown();
         }
+
+        #endregion
+
 
         #region Event Handlers
         /// <summary>

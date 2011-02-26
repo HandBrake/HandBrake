@@ -3,9 +3,100 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Background="Beige">
+             xmlns:Controls="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit.Extended"
+             >
+    
+    <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+
+        <!-- Size Panel-->
+        <StackPanel Name="SizePanel" Orientation="Vertical" >
+            <Label Content="Size" FontWeight="Bold" />
+
+            <!-- Row 1-->
+            <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
+                <Label Content="Source" Grid.Row="0" Grid.Column="0" />
+                <Label Content="---" Name="sourceResolution" Grid.Row="0" Grid.Column="1" />
+            </StackPanel>
+
+            <!-- Row 2-->
+            <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
+                <Label Content="Width:" Grid.Row="1" Grid.Column="0" />
+                <Controls:NumericUpDown Name="width" Minimum="0" Grid.Row="1" Grid.Column="1" Width="45"  />
+                <Label Content="Height:" Grid.Row="1" Grid.Column="2" />
+                <Controls:NumericUpDown Name="height" Minimum="0" Grid.Row="1" Grid.Column="3" Width="45"  />
+                <CheckBox Content="Keep Aspect Ratio" VerticalAlignment="Center" Margin="5,0,0,0" />
+            </StackPanel>
+
+            <!-- Row 3-->
+            <Grid Margin="5,15,5,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Label Content="Anamorphic:" Grid.Row="0" Grid.Column="0" />
+                <Label Content="Modulus:" Grid.Row="1" Grid.Column="0" />
+                <Label Content="Display Width:" Grid.Row="2" Grid.Column="0" />
+                <Label Content="PAR Width:" Grid.Row="3" Grid.Column="0" />
+                <Label Content="PAR Height:" Grid.Row="4" Grid.Column="0" />
+                <Label Content="Display Size:" Grid.Row="5" Grid.Column="0" />
+
+                <ComboBox Width="110" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <ComboBox Width="110" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <Controls:NumericUpDown Width="45" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <Controls:NumericUpDown Width="45" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <Controls:NumericUpDown Width="45" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <Label Content="---" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+            </Grid>
+        </StackPanel>
+
+
+        <StackPanel Name="CropPanel" Margin="50,0,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Label Content="Cropping" FontWeight="Bold" />
+            <RadioButton Content="Automatic" Margin="10,0,0,0"/>
+            <RadioButton Content="Custom" Margin="10,0,0,0" />
             
-    </Grid>
+            <Grid Margin="0,10,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Label Content="Top" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" />
+                <Label Content="Bottom" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" />
+                <Label Content="Left" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" />
+                <Label Content="Right" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" />
+
+                <Controls:NumericUpDown Width="45" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <Controls:NumericUpDown Width="45" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <Controls:NumericUpDown Width="45" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <Controls:NumericUpDown Width="45" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Margin="0,0,0,5" />
+
+            </Grid>
+            
+            
+        </StackPanel>
+
+
+    </StackPanel>
 </UserControl>

@@ -5,10 +5,16 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using Microsoft.Practices.ServiceLocation;
+
     /// <summary>
     /// The Add Preset View Model
     /// </summary>
     public class AddPresetViewModel : ViewModelBase
     {
+        public AddPresetViewModel(IServiceLocator locator)
+            : base(locator)
+        {
+        }
     }
 }
