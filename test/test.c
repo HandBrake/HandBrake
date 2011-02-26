@@ -91,7 +91,6 @@ static int    subtitle_scan = 0;
 static int    width       = 0;
 static int    height      = 0;
 static int    crop[4]     = { -1,-1,-1,-1 };
-static int    cpu         = 0;
 static int    vrate       = 0;
 static float  vquality    = -1.0;
 static int    vbitrate    = 0;
@@ -229,12 +228,6 @@ int main( int argc, char ** argv )
     /* Geeky */
     fprintf( stderr, "%d CPU%s detected\n", hb_get_cpu_count(),
              hb_get_cpu_count( h ) > 1 ? "s" : "" );
-    if( cpu )
-    {
-        fprintf( stderr, "Forcing %d CPU%s\n", cpu,
-                 cpu > 1 ? "s" : "" );
-        hb_set_cpu_count( h, cpu );
-    }
 
     /* Exit ASAP on Ctrl-C */
     signal( SIGINT, SigHandler );
@@ -2428,7 +2421,6 @@ static void ShowHelp()
     "    -h, --help              Print help\n"
     "    -u, --update            Check for updates and exit\n"
     "    -v, --verbose <#>       Be verbose (optional argument: logging level)\n"
-    "    -C, --cpu               Set CPU count (default: autodetected)\n"
     "    -Z. --preset <string>   Use a built-in preset. Capitalization matters, and\n"
     "                            if the preset name has spaces, surround it with\n"
     "                            double quotation marks\n"
@@ -2803,7 +2795,6 @@ static int ParseOptions( int argc, char ** argv )
             { "help",        no_argument,       NULL,    'h' },
             { "update",      no_argument,       NULL,    'u' },
             { "verbose",     optional_argument, NULL,    'v' },
-            { "cpu",         required_argument, NULL,    'C' },
             { "no-dvdnav",      no_argument,       NULL,    DVDNAV },
 
             { "format",      required_argument, NULL,    'f' },
@@ -2919,10 +2910,6 @@ static int ParseOptions( int argc, char ** argv )
                     debug = 1;
                 }
                 break;
-            case 'C':
-                cpu = atoi( optarg );
-                break;
-
             case 'Z':
                 preset = 1;
                 preset_name = strdup(optarg);

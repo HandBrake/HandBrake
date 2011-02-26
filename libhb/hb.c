@@ -525,18 +525,6 @@ int hb_check_update( hb_handle_t * h, char ** version )
 }
 
 /**
- * Sets the cpu count to the desired value.
- * @param h Handle to hb_handle_t
- * @param cpu_count Number of CPUs to use.
- */
-void hb_set_cpu_count( hb_handle_t * h, int cpu_count )
-{
-    cpu_count    = MAX( 1, cpu_count );
-    cpu_count    = MIN( cpu_count, 64 );
-    h->cpu_count = cpu_count;
-}
-
-/**
  * Deletes current previews associated with titles
  * @param h Handle to hb_handle_t
  */

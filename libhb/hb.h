@@ -28,11 +28,6 @@ int           hb_get_build( hb_handle_t * );
    negative value otherwise. */
 int           hb_check_update( hb_handle_t * h, char ** version );
 
-/* hb_set_cpu_count()
-   Force libhb to act as if you had X CPU(s).
-   Default is to use the detected count (see also hb_get_cpu_count() in
-   ports.h) */
-void          hb_set_cpu_count( hb_handle_t *, int );
 
 char *        hb_dvd_name( char * path );
 void          hb_dvd_set_dvdnav( int enable );
