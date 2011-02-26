@@ -39,7 +39,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -50,7 +50,6 @@ namespace Handbrake
             this.drp_videoFramerate = new System.Windows.Forms.ComboBox();
             this.slider_videoQuality = new System.Windows.Forms.TrackBar();
             this.text_bitrate = new System.Windows.Forms.TextBox();
-            this.btn_setDefault = new System.Windows.Forms.Button();
             this.check_optimiseMP4 = new System.Windows.Forms.CheckBox();
             this.check_iPodAtom = new System.Windows.Forms.CheckBox();
             this.data_chpt = new System.Windows.Forms.DataGridView();
@@ -59,8 +58,6 @@ namespace Handbrake
             this.ChaptersMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnu_resetChapters = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_file_source = new System.Windows.Forms.ToolStripMenuItem();
-            this.btn_addPreset = new System.Windows.Forms.Button();
-            this.btn_removePreset = new System.Windows.Forms.Button();
             this.drop_format = new System.Windows.Forms.ComboBox();
             this.drop_chapterFinish = new System.Windows.Forms.ComboBox();
             this.drop_chapterStart = new System.Windows.Forms.ComboBox();
@@ -91,20 +88,6 @@ namespace Handbrake
             this.mnu_encodeLog = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_options = new System.Windows.Forms.ToolStripMenuItem();
-            this.PresetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_presetReset = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_delete_preset = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
-            this.btn_new_preset = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_importMacPreset = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_exportMacPreset = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_SelectDefault = new System.Windows.Forms.ToolStripMenuItem();
-            this.HelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_user_guide = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.mnu_UpdateCheck = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.mnu_about = new System.Windows.Forms.ToolStripMenuItem();
             this.frmMainMenu = new System.Windows.Forms.MenuStrip();
             this.label5 = new System.Windows.Forms.Label();
             this.Label47 = new System.Windows.Forms.Label();
@@ -141,6 +124,16 @@ namespace Handbrake
             this.rtf_query = new System.Windows.Forms.RichTextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.presetsToolStrip = new System.Windows.Forms.ToolStrip();
+            this.BtnAddPreset = new System.Windows.Forms.ToolStripButton();
+            this.BtnRemovePreset = new System.Windows.Forms.ToolStripButton();
+            this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.MnuSetDefaultPreset = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.MnuImportPreset = new System.Windows.Forms.ToolStripMenuItem();
+            this.MnuExportPreset = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.MnuResetBuiltInPresets = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btn_source = new System.Windows.Forms.ToolStripDropDownButton();
             this.btn_dvd_source = new System.Windows.Forms.ToolStripMenuItem();
@@ -155,6 +148,13 @@ namespace Handbrake
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.tb_preview = new System.Windows.Forms.ToolStripButton();
             this.btn_ActivityWindow = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.MnuUserGuide = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+            this.MnuCheckForUpdates = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
+            this.MnuAboutHandBrake = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.ProgressBarStatus = new System.Windows.Forms.ToolStripProgressBar();
@@ -199,6 +199,7 @@ namespace Handbrake
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.presetsToolStrip.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.StatusStrip.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -331,20 +332,6 @@ namespace Handbrake
             this.text_bitrate.TabIndex = 14;
             this.ToolTip.SetToolTip(this.text_bitrate, "Set the bitrate of the video");
             // 
-            // btn_setDefault
-            // 
-            this.btn_setDefault.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_setDefault.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_setDefault.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_setDefault.Location = new System.Drawing.Point(135, 8);
-            this.btn_setDefault.Name = "btn_setDefault";
-            this.btn_setDefault.Size = new System.Drawing.Size(101, 22);
-            this.btn_setDefault.TabIndex = 2;
-            this.btn_setDefault.Text = "Set Default";
-            this.ToolTip.SetToolTip(this.btn_setDefault, "Set current settings as program defaults.");
-            this.btn_setDefault.UseVisualStyleBackColor = true;
-            this.btn_setDefault.Click += new System.EventHandler(this.btn_setDefault_Click);
-            // 
             // check_optimiseMP4
             // 
             this.check_optimiseMP4.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -396,9 +383,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewCellStyle2.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle2;
             this.number.Frozen = true;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
@@ -438,34 +425,6 @@ namespace Handbrake
             this.btn_file_source.Size = new System.Drawing.Size(182, 22);
             this.btn_file_source.Text = "Video File";
             this.btn_file_source.Click += new System.EventHandler(this.BtnFileScanClicked);
-            // 
-            // btn_addPreset
-            // 
-            this.btn_addPreset.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_addPreset.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_addPreset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_addPreset.Location = new System.Drawing.Point(3, 8);
-            this.btn_addPreset.Name = "btn_addPreset";
-            this.btn_addPreset.Size = new System.Drawing.Size(49, 22);
-            this.btn_addPreset.TabIndex = 0;
-            this.btn_addPreset.Text = "Add";
-            this.ToolTip.SetToolTip(this.btn_addPreset, "This option will take the current settings and add it as a new preset.");
-            this.btn_addPreset.UseVisualStyleBackColor = true;
-            this.btn_addPreset.Click += new System.EventHandler(this.btn_addPreset_Click);
-            // 
-            // btn_removePreset
-            // 
-            this.btn_removePreset.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_removePreset.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_removePreset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_removePreset.Location = new System.Drawing.Point(58, 8);
-            this.btn_removePreset.Name = "btn_removePreset";
-            this.btn_removePreset.Size = new System.Drawing.Size(71, 22);
-            this.btn_removePreset.TabIndex = 1;
-            this.btn_removePreset.Text = "Remove";
-            this.ToolTip.SetToolTip(this.btn_removePreset, "Remove the selected preset from the panel above.");
-            this.btn_removePreset.UseVisualStyleBackColor = true;
-            this.btn_removePreset.Click += new System.EventHandler(this.btn_removePreset_Click);
             // 
             // drop_format
             // 
@@ -591,13 +550,13 @@ namespace Handbrake
             // treeView_presets
             // 
             this.treeView_presets.ContextMenuStrip = this.presets_menu;
-            this.treeView_presets.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView_presets.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.treeView_presets.ForeColor = System.Drawing.Color.DarkBlue;
             this.treeView_presets.FullRowSelect = true;
             this.treeView_presets.HideSelection = false;
             this.treeView_presets.ItemHeight = 21;
             this.treeView_presets.Location = new System.Drawing.Point(0, 0);
+            this.treeView_presets.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.treeView_presets.Name = "treeView_presets";
             this.treeView_presets.ShowLines = false;
             this.treeView_presets.Size = new System.Drawing.Size(240, 424);
@@ -755,125 +714,11 @@ namespace Handbrake
             this.mnu_options.Text = "Options";
             this.mnu_options.Click += new System.EventHandler(this.mnu_options_Click);
             // 
-            // PresetsToolStripMenuItem
-            // 
-            this.PresetsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_presetReset,
-            this.mnu_delete_preset,
-            this.toolStripSeparator7,
-            this.btn_new_preset,
-            this.mnu_importMacPreset,
-            this.mnu_exportMacPreset,
-            this.mnu_SelectDefault});
-            this.PresetsToolStripMenuItem.Name = "PresetsToolStripMenuItem";
-            this.PresetsToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
-            this.PresetsToolStripMenuItem.Text = "&Presets";
-            // 
-            // mnu_presetReset
-            // 
-            this.mnu_presetReset.Name = "mnu_presetReset";
-            this.mnu_presetReset.Size = new System.Drawing.Size(194, 22);
-            this.mnu_presetReset.Text = "Update Built-in Presets";
-            this.mnu_presetReset.ToolTipText = "Resets all presets.";
-            this.mnu_presetReset.Click += new System.EventHandler(this.mnu_presetReset_Click);
-            // 
-            // mnu_delete_preset
-            // 
-            this.mnu_delete_preset.Name = "mnu_delete_preset";
-            this.mnu_delete_preset.Size = new System.Drawing.Size(194, 22);
-            this.mnu_delete_preset.Text = "Delete Built-in Presets";
-            this.mnu_delete_preset.Click += new System.EventHandler(this.mnu_delete_preset_Click);
-            // 
-            // toolStripSeparator7
-            // 
-            this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(191, 6);
-            // 
-            // btn_new_preset
-            // 
-            this.btn_new_preset.Name = "btn_new_preset";
-            this.btn_new_preset.Size = new System.Drawing.Size(194, 22);
-            this.btn_new_preset.Text = "Save Preset";
-            this.btn_new_preset.Click += new System.EventHandler(this.btn_new_preset_Click);
-            // 
-            // mnu_importMacPreset
-            // 
-            this.mnu_importMacPreset.Name = "mnu_importMacPreset";
-            this.mnu_importMacPreset.Size = new System.Drawing.Size(194, 22);
-            this.mnu_importMacPreset.Text = "Import";
-            this.mnu_importMacPreset.ToolTipText = "Import a (plist - mac format) preset.\r\nYou can import plist presets from the Mac," +
-                " Linux and Windows GUI\'s";
-            this.mnu_importMacPreset.Click += new System.EventHandler(this.mnu_importMacPreset_Click);
-            // 
-            // mnu_exportMacPreset
-            // 
-            this.mnu_exportMacPreset.Name = "mnu_exportMacPreset";
-            this.mnu_exportMacPreset.Size = new System.Drawing.Size(194, 22);
-            this.mnu_exportMacPreset.Text = "Export (Experimental)";
-            this.mnu_exportMacPreset.ToolTipText = "Export a (plist - mac format) preset.\r\nThis can be imported by Mac, Linux or Wind" +
-                "ows GUI\'s";
-            this.mnu_exportMacPreset.Click += new System.EventHandler(this.mnu_exportMacPreset_Click);
-            // 
-            // mnu_SelectDefault
-            // 
-            this.mnu_SelectDefault.Name = "mnu_SelectDefault";
-            this.mnu_SelectDefault.Size = new System.Drawing.Size(194, 22);
-            this.mnu_SelectDefault.Text = "Select Default Preset";
-            this.mnu_SelectDefault.ToolTipText = "Select HandBrake\'s default preset";
-            this.mnu_SelectDefault.Click += new System.EventHandler(this.mnu_SelectDefault_Click);
-            // 
-            // HelpToolStripMenuItem
-            // 
-            this.HelpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_user_guide,
-            this.ToolStripSeparator3,
-            this.mnu_UpdateCheck,
-            this.toolStripSeparator6,
-            this.mnu_about});
-            this.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem";
-            this.HelpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.HelpToolStripMenuItem.Text = "&Help";
-            // 
-            // mnu_user_guide
-            // 
-            this.mnu_user_guide.Image = global::Handbrake.Properties.Resources.Help16;
-            this.mnu_user_guide.Name = "mnu_user_guide";
-            this.mnu_user_guide.Size = new System.Drawing.Size(192, 22);
-            this.mnu_user_guide.Text = "HandBrake User Guide";
-            this.mnu_user_guide.Click += new System.EventHandler(this.mnu_user_guide_Click);
-            // 
-            // ToolStripSeparator3
-            // 
-            this.ToolStripSeparator3.Name = "ToolStripSeparator3";
-            this.ToolStripSeparator3.Size = new System.Drawing.Size(189, 6);
-            // 
-            // mnu_UpdateCheck
-            // 
-            this.mnu_UpdateCheck.Name = "mnu_UpdateCheck";
-            this.mnu_UpdateCheck.Size = new System.Drawing.Size(192, 22);
-            this.mnu_UpdateCheck.Text = "Check for Updates";
-            this.mnu_UpdateCheck.Click += new System.EventHandler(this.mnu_UpdateCheck_Click);
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(189, 6);
-            // 
-            // mnu_about
-            // 
-            this.mnu_about.Image = global::Handbrake.Properties.Resources.hb16;
-            this.mnu_about.Name = "mnu_about";
-            this.mnu_about.Size = new System.Drawing.Size(192, 22);
-            this.mnu_about.Text = "About...";
-            this.mnu_about.Click += new System.EventHandler(this.mnu_about_Click);
-            // 
             // frmMainMenu
             // 
             this.frmMainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FileToolStripMenuItem,
-            this.ToolsToolStripMenuItem,
-            this.PresetsToolStripMenuItem,
-            this.HelpToolStripMenuItem});
+            this.ToolsToolStripMenuItem});
             this.frmMainMenu.Location = new System.Drawing.Point(0, 0);
             this.frmMainMenu.Name = "frmMainMenu";
             this.frmMainMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -1292,12 +1137,113 @@ namespace Handbrake
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.btn_addPreset);
-            this.splitContainer1.Panel2.Controls.Add(this.btn_removePreset);
-            this.splitContainer1.Panel2.Controls.Add(this.btn_setDefault);
+            this.splitContainer1.Panel2.Controls.Add(this.presetsToolStrip);
             this.splitContainer1.Size = new System.Drawing.Size(240, 462);
             this.splitContainer1.SplitterDistance = 424;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // presetsToolStrip
+            // 
+            this.presetsToolStrip.CanOverflow = false;
+            this.presetsToolStrip.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.presetsToolStrip.GripMargin = new System.Windows.Forms.Padding(0);
+            this.presetsToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.presetsToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.BtnAddPreset,
+            this.BtnRemovePreset,
+            this.toolStripDropDownButton2});
+            this.presetsToolStrip.Location = new System.Drawing.Point(0, 0);
+            this.presetsToolStrip.Name = "presetsToolStrip";
+            this.presetsToolStrip.Padding = new System.Windows.Forms.Padding(0);
+            this.presetsToolStrip.Size = new System.Drawing.Size(240, 34);
+            this.presetsToolStrip.TabIndex = 2;
+            this.presetsToolStrip.Text = "toolStrip2";
+            // 
+            // BtnAddPreset
+            // 
+            this.BtnAddPreset.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnAddPreset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.BtnAddPreset.Image = global::Handbrake.Properties.Resources.Add16;
+            this.BtnAddPreset.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.BtnAddPreset.Name = "BtnAddPreset";
+            this.BtnAddPreset.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.BtnAddPreset.Padding = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.BtnAddPreset.Size = new System.Drawing.Size(65, 31);
+            this.BtnAddPreset.Text = "Add";
+            this.BtnAddPreset.Click += new System.EventHandler(this.BtnAddPreset_Click);
+            // 
+            // BtnRemovePreset
+            // 
+            this.BtnRemovePreset.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnRemovePreset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.BtnRemovePreset.Image = global::Handbrake.Properties.Resources.Close;
+            this.BtnRemovePreset.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.BtnRemovePreset.Name = "BtnRemovePreset";
+            this.BtnRemovePreset.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.BtnRemovePreset.Padding = new System.Windows.Forms.Padding(0, 0, 8, 0);
+            this.BtnRemovePreset.Size = new System.Drawing.Size(82, 31);
+            this.BtnRemovePreset.Text = "Remove";
+            this.BtnRemovePreset.Click += new System.EventHandler(this.BtnRemovePreset_Click);
+            // 
+            // toolStripDropDownButton2
+            // 
+            this.toolStripDropDownButton2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MnuSetDefaultPreset,
+            this.toolStripSeparator3,
+            this.MnuImportPreset,
+            this.MnuExportPreset,
+            this.toolStripSeparator6,
+            this.MnuResetBuiltInPresets});
+            this.toolStripDropDownButton2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripDropDownButton2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.toolStripDropDownButton2.Image = global::Handbrake.Properties.Resources.Options24;
+            this.toolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton2.Name = "toolStripDropDownButton2";
+            this.toolStripDropDownButton2.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.toolStripDropDownButton2.Size = new System.Drawing.Size(79, 31);
+            this.toolStripDropDownButton2.Text = "Options";
+            // 
+            // MnuSetDefaultPreset
+            // 
+            this.MnuSetDefaultPreset.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MnuSetDefaultPreset.Name = "MnuSetDefaultPreset";
+            this.MnuSetDefaultPreset.Size = new System.Drawing.Size(178, 22);
+            this.MnuSetDefaultPreset.Text = "Set Default";
+            this.MnuSetDefaultPreset.Click += new System.EventHandler(this.MnuSetDefaultPreset_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(175, 6);
+            // 
+            // MnuImportPreset
+            // 
+            this.MnuImportPreset.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MnuImportPreset.Name = "MnuImportPreset";
+            this.MnuImportPreset.Size = new System.Drawing.Size(178, 22);
+            this.MnuImportPreset.Text = "Import";
+            this.MnuImportPreset.Click += new System.EventHandler(this.MnuImportPreset_Click);
+            // 
+            // MnuExportPreset
+            // 
+            this.MnuExportPreset.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MnuExportPreset.Name = "MnuExportPreset";
+            this.MnuExportPreset.Size = new System.Drawing.Size(178, 22);
+            this.MnuExportPreset.Text = "Export";
+            this.MnuExportPreset.Click += new System.EventHandler(this.MnuExportPreset_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(175, 6);
+            // 
+            // MnuResetBuiltInPresets
+            // 
+            this.MnuResetBuiltInPresets.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MnuResetBuiltInPresets.Name = "MnuResetBuiltInPresets";
+            this.MnuResetBuiltInPresets.Size = new System.Drawing.Size(178, 22);
+            this.MnuResetBuiltInPresets.Text = "Reset Built-In Presets";
+            this.MnuResetBuiltInPresets.Click += new System.EventHandler(this.MnuResetBuiltInPresets_Click);
             // 
             // toolStrip1
             // 
@@ -1310,7 +1256,9 @@ namespace Handbrake
             this.btn_showQueue,
             this.toolStripSeparator4,
             this.tb_preview,
-            this.btn_ActivityWindow});
+            this.btn_ActivityWindow,
+            this.toolStripSeparator8,
+            this.toolStripDropDownButton1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -1440,6 +1388,63 @@ namespace Handbrake
             this.btn_ActivityWindow.ToolTipText = "Displays the activity window which displays the log of the last completed or curr" +
                 "ently running encode.";
             this.btn_ActivityWindow.Click += new System.EventHandler(this.btn_ActivityWindow_Click);
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 39);
+            // 
+            // toolStripDropDownButton1
+            // 
+            this.toolStripDropDownButton1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripDropDownButton1.AutoSize = false;
+            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MnuUserGuide,
+            this.toolStripSeparator9,
+            this.MnuCheckForUpdates,
+            this.toolStripSeparator11,
+            this.MnuAboutHandBrake});
+            this.toolStripDropDownButton1.Image = global::Handbrake.Properties.Resources.Help24;
+            this.toolStripDropDownButton1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(69, 36);
+            this.toolStripDropDownButton1.Text = "Help";
+            // 
+            // MnuUserGuide
+            // 
+            this.MnuUserGuide.Image = global::Handbrake.Properties.Resources.info16;
+            this.MnuUserGuide.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.MnuUserGuide.Name = "MnuUserGuide";
+            this.MnuUserGuide.Size = new System.Drawing.Size(192, 24);
+            this.MnuUserGuide.Text = "HandBrake User Guide";
+            this.MnuUserGuide.Click += new System.EventHandler(this.MnuUserGuide_Click);
+            // 
+            // toolStripSeparator9
+            // 
+            this.toolStripSeparator9.Name = "toolStripSeparator9";
+            this.toolStripSeparator9.Size = new System.Drawing.Size(189, 6);
+            // 
+            // MnuCheckForUpdates
+            // 
+            this.MnuCheckForUpdates.Name = "MnuCheckForUpdates";
+            this.MnuCheckForUpdates.Size = new System.Drawing.Size(192, 24);
+            this.MnuCheckForUpdates.Text = "Check for Updates";
+            this.MnuCheckForUpdates.Click += new System.EventHandler(this.MnuCheckForUpdates_Click);
+            // 
+            // toolStripSeparator11
+            // 
+            this.toolStripSeparator11.Name = "toolStripSeparator11";
+            this.toolStripSeparator11.Size = new System.Drawing.Size(189, 6);
+            // 
+            // MnuAboutHandBrake
+            // 
+            this.MnuAboutHandBrake.Image = global::Handbrake.Properties.Resources.hb16;
+            this.MnuAboutHandBrake.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.MnuAboutHandBrake.Name = "MnuAboutHandBrake";
+            this.MnuAboutHandBrake.Size = new System.Drawing.Size(192, 24);
+            this.MnuAboutHandBrake.Text = "About HandBrake";
+            this.MnuAboutHandBrake.Click += new System.EventHandler(this.MnuAboutHandBrake_Click);
             // 
             // notifyIcon
             // 
@@ -1752,8 +1757,11 @@ namespace Handbrake
             this.groupBox2.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.presetsToolStrip.ResumeLayout(false);
+            this.presetsToolStrip.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.StatusStrip.ResumeLayout(false);
@@ -1781,11 +1789,6 @@ namespace Handbrake
         internal System.Windows.Forms.ToolStripMenuItem mnu_encode;
         internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator5;
         internal System.Windows.Forms.ToolStripMenuItem mnu_options;
-        internal System.Windows.Forms.ToolStripMenuItem PresetsToolStripMenuItem;
-        internal System.Windows.Forms.ToolStripMenuItem mnu_presetReset;
-        internal System.Windows.Forms.ToolStripMenuItem HelpToolStripMenuItem;
-        internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator3;
-        internal System.Windows.Forms.ToolStripMenuItem mnu_about;
         internal System.Windows.Forms.MenuStrip frmMainMenu;
         internal System.Windows.Forms.Label Label3;
         internal System.Windows.Forms.ComboBox drp_videoEncoder;
@@ -1806,13 +1809,8 @@ namespace Handbrake
         internal System.Windows.Forms.TabControl tabs_panel;
         internal System.Windows.Forms.Label lbl_framerate;
         private System.Windows.Forms.GroupBox groupBox2;
-        internal System.Windows.Forms.Button btn_setDefault;
-        private System.Windows.Forms.ToolStripMenuItem mnu_SelectDefault;
-        private System.Windows.Forms.ToolStripMenuItem mnu_UpdateCheck;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.SaveFileDialog DVD_Save;
         private System.Windows.Forms.OpenFileDialog File_Open;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         internal System.Windows.Forms.CheckBox check_iPodAtom;
         private System.Windows.Forms.TabPage tab_chapters;
         internal System.Windows.Forms.Label label31;
@@ -1829,8 +1827,6 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripButton btn_showQueue;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton btn_ActivityWindow;
-        internal System.Windows.Forms.Button btn_removePreset;
-        internal System.Windows.Forms.Button btn_addPreset;
         internal System.Windows.Forms.Label label25;
         internal System.Windows.Forms.TabPage tab_advanced;
         internal System.Windows.Forms.TreeView treeView_presets;
@@ -1839,9 +1835,6 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripMenuItem btn_restore;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
         private System.Windows.Forms.ToolStripMenuItem btn_file_source;
-        private System.Windows.Forms.ToolStripMenuItem mnu_delete_preset;
-        private System.Windows.Forms.ToolStripMenuItem btn_new_preset;
-        private System.Windows.Forms.ToolStripMenuItem mnu_user_guide;
         private System.Windows.Forms.ToolStripDropDownButton btn_source;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem btn_dvd_source;
@@ -1892,7 +1885,6 @@ namespace Handbrake
         internal Label Label10;
         private Label labelStaticSource;
         private FlowLayoutPanel SourceLayoutPanel;
-        private ToolStripMenuItem mnu_importMacPreset;
         private OpenFileDialog openPreset;
         private Button btn_importChapters;
         private OpenFileDialog File_ChapterImport;
@@ -1904,12 +1896,28 @@ namespace Handbrake
         private Button btn_export;
         private DataGridViewTextBoxColumn number;
         private DataGridViewTextBoxColumn name;
-        private ToolStripMenuItem mnu_exportMacPreset;
         private ToolStripProgressBar ProgressBarStatus;
         internal CheckBox checkMaximumFramerate;
         private ToolStripMenuItem btnTitleSpecific;
         private ToolStripMenuItem FileTitleSpecificScan;
         private ToolStripMenuItem FolderTitleSpecificScan;
         internal Label lbl_rfwarn;
+        private ToolStripSeparator toolStripSeparator8;
+        private ToolStripDropDownButton toolStripDropDownButton1;
+        private ToolStripMenuItem MnuUserGuide;
+        private ToolStripSeparator toolStripSeparator9;
+        private ToolStripMenuItem MnuCheckForUpdates;
+        private ToolStripSeparator toolStripSeparator11;
+        private ToolStripMenuItem MnuAboutHandBrake;
+        private ToolStrip presetsToolStrip;
+        private ToolStripButton BtnAddPreset;
+        private ToolStripButton BtnRemovePreset;
+        private ToolStripDropDownButton toolStripDropDownButton2;
+        private ToolStripMenuItem MnuSetDefaultPreset;
+        private ToolStripSeparator toolStripSeparator3;
+        private ToolStripMenuItem MnuImportPreset;
+        private ToolStripMenuItem MnuExportPreset;
+        private ToolStripSeparator toolStripSeparator6;
+        private ToolStripMenuItem MnuResetBuiltInPresets;
     }
 }

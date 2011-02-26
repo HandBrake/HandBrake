@@ -148,6 +148,10 @@
     <Reference Include="AxInterop.QTOControlLib">
       <HintPath>libraries\AxInterop.QTOControlLib.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Data.v10.2, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Utils.v10.2, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraBars.v10.2, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraEditors.v10.2, Version=10.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="Growl.Connector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=980c2339411be384, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>libraries\Growl.Connector.dll</HintPath>
@@ -207,6 +211,7 @@
     <Compile Include="Controls\x264Panel.Designer.cs">
       <DependentUpon>x264Panel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Functions\ToolStripRenderOverride.cs" />
     <Compile Include="Model\ActivityLogMode.cs" />
     <Compile Include="Model\QueryPictureSettingsMode.cs" />
     <Compile Include="Model\QueryEncodeMode.cs" />
@@ -366,6 +371,7 @@
     <None Include="Resources\AddToQueue.png" />
     <Content Include="Resources\ActivityWindow_small.png" />
     <None Include="Resources\AddToQueue_small.png" />
+    <None Include="Resources\Add16.png" />
     <Content Include="Resources\copy.png" />
     <Content Include="Resources\disc_small.png" />
     <None Include="Resources\hb32.png" />
@@ -375,6 +381,9 @@
     <None Include="Resources\folder.png" />
     <None Include="Resources\download.png" />
     <None Include="Resources\ErrorX.png" />
+    <None Include="Resources\Help32.png" />
+    <None Include="Resources\Help24.png" />
+    <None Include="Resources\Options24.png" />
     <Content Include="Resources\Output_Small.png" />
     <None Include="Resources\Pause.png" />
     <None Include="Resources\Play.png" />

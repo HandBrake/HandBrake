@@ -15,6 +15,9 @@ namespace Handbrake
     using System.Linq;
     using System.Threading;
     using System.Windows.Forms;
+
+    using DevExpress.Utils.Menu;
+
     using Functions;
 
     using HandBrake.ApplicationServices.EventArgs;
@@ -119,6 +122,7 @@ namespace Handbrake
         public frmMain(string[] args)
         {
             InitializeComponent();
+            this.presetsToolStrip.Renderer = new ToolStripRenderOverride();
 
             // We can use LibHB, if the library hb.dll exists.
             this.SourceScan = File.Exists("hb.dll") ? (IScan)new LibScan() : new ScanService();
@@ -434,136 +438,24 @@ namespace Handbrake
 
         #endregion
 
-        #region Presets Menu
+        #region Help Menu (Toolbar)
 
         /// <summary>
-        /// Reset the Built in Presets
+        ///  Menu - Display the User Guide Web Page
         /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void mnu_presetReset_Click(object sender, EventArgs e)
-        {
-            presetHandler.UpdateBuiltInPresets(string.Empty);
-            LoadPresetPanel();
-            if (treeView_presets.Nodes.Count == 0)
-                MessageBox.Show(
-                    "Unable to load the presets.xml file. Please select \"Update Built-in Presets\" from the Presets Menu. \nMake sure you are running the program in Admin mode if running on Vista. See Windows FAQ for details!",
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            else
-                MessageBox.Show("Presets have been updated!", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            treeView_presets.ExpandAll();
-        }
-
-        /// <summary>
-        /// Delete the selected preset
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void mnu_delete_preset_Click(object sender, EventArgs e)
-        {
-            presetHandler.ClearBuiltIn();
-            LoadPresetPanel(); // Reload the preset panel
-        }
-
-        /// <summary>
-        /// Select the Normal preset
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void mnu_SelectDefault_Click(object sender, EventArgs e)
-        {
-            loadNormalPreset();
-        }
-
-        /// <summary>
-        /// Import a plist Preset
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void mnu_importMacPreset_Click(object sender, EventArgs e)
-        {
-            ImportPreset();
-        }
-
-        /// <summary>
-        /// Export a Plist Preset
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void mnu_exportMacPreset_Click(object sender, EventArgs e)
-        {
-            ExportPreset();
-        }
-
-        /// <summary>
-        /// Create a new Preset
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void btn_new_preset_Click(object sender, EventArgs e)
-        {
-            Form preset = new frmAddPreset(this, presetHandler);
-            if (preset.ShowDialog() == DialogResult.OK)
-            {
-                TreeNode presetTreeview = new TreeNode(presetHandler.LastPresetAdded.Name) { ForeColor = Color.Black };
-                treeView_presets.Nodes.Add(presetTreeview);
-                presetHandler.LastPresetAdded = null;
-            }
-        }
-
-        #endregion
-
-        #region Help Menu
-
-        /// <summary>
-        /// Menu - Display the User Guide Web Page
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void mnu_user_guide_Click(object sender, EventArgs e)
+        /// <param name="sender">The Sender</param>
+        /// <param name="e">The EventArgs</param>
+        private void MnuUserGuide_Click(object sender, EventArgs e)
         {
             Process.Start("http://trac.handbrake.fr/wiki/HandBrakeGuide");
         }
 
         /// <summary>
-        /// Menu - Check for Updates
+        /// Check for Updates
         /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void mnu_UpdateCheck_Click(object sender, EventArgs e)
+        /// <param name="sender">The Sender</param>
+        /// <param name="e">The EventArgs</param>
+        private void MnuCheckForUpdates_Click(object sender, EventArgs e)
         {
             lbl_updateCheck.Visible = true;
             Settings.Default.lastUpdateCheckDate = DateTime.Now;
@@ -577,13 +469,9 @@ namespace Handbrake
         /// <summary>
         /// Menu - Display the About Window
         /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void mnu_about_Click(object sender, EventArgs e)
+        /// <param name="sender">The Sender</param>
+        /// <param name="e">The EventArgs</param>
+        private void MnuAboutHandBrake_Click(object sender, EventArgs e)
         {
             using (frmAbout About = new frmAbout())
             {
@@ -708,16 +596,7 @@ namespace Handbrake
 
         // Presets Management
 
-        /// <summary>
-        /// Button - Add a preset
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void btn_addPreset_Click(object sender, EventArgs e)
+        private void BtnAddPreset_Click(object sender, EventArgs e)
         {
             Form preset = new frmAddPreset(this, presetHandler);
             if (preset.ShowDialog() == DialogResult.OK)
@@ -728,16 +607,7 @@ namespace Handbrake
             }
         }
 
-        /// <summary>
-        /// Button - remove a Preset
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void btn_removePreset_Click(object sender, EventArgs e)
+        private void BtnRemovePreset_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("Are you sure you wish to delete the selected preset?", "Preset",
                                                   MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -752,16 +622,8 @@ namespace Handbrake
             treeView_presets.Select();
         }
 
-        /// <summary>
-        /// Button - Set the selected preset as the default
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void btn_setDefault_Click(object sender, EventArgs e)
+
+        private void MnuSetDefaultPreset_Click(object sender, EventArgs e)
         {
             if (treeView_presets.SelectedNode != null)
             {
@@ -776,6 +638,30 @@ namespace Handbrake
             }
             else
                 MessageBox.Show("Please select a preset first.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        private void MnuImportPreset_Click(object sender, EventArgs e)
+        {
+            this.ImportPreset();
+        }
+
+        private void MnuExportPreset_Click(object sender, EventArgs e)
+        {
+            this.ExportPreset();
+        }
+
+        private void MnuResetBuiltInPresets_Click(object sender, EventArgs e)
+        {
+            presetHandler.UpdateBuiltInPresets(string.Empty);
+            LoadPresetPanel();
+            if (treeView_presets.Nodes.Count == 0)
+                MessageBox.Show(
+                    "Unable to load the presets.xml file. Please select \"Update Built-in Presets\" from the Presets Menu. \nMake sure you are running the program in Admin mode if running on Vista. See Windows FAQ for details!",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+                MessageBox.Show("Presets have been updated!", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            treeView_presets.ExpandAll();
         }
 
         /// <summary>

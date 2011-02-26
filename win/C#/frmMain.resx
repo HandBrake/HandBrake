@@ -174,7 +174,7 @@ The Following options are not 100% accurate:
 - Encode video between a start and end frame.</value>
   </data>
   <metadata name="presets_menu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1354, 15</value>
+    <value>984, 17</value>
   </metadata>
   <metadata name="DVD_Open.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>232, 15</value>
@@ -197,6 +197,9 @@ Don't forget to re-generate this query if you change any GUI options.
 Note that this will also override the "Add to Queue" query as well.
 Clear the text box below to return to the internal query generation.</value>
   </data>
+  <metadata name="presetsToolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>565, 54</value>
+  </metadata>
   <metadata name="toolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>767, 15</value>
   </metadata>

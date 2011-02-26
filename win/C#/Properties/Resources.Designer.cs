@@ -74,6 +74,13 @@ namespace Handbrake.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Add16 {
+            get {
+                object obj = ResourceManager.GetObject("Add16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap AddToQueue {
             get {
                 object obj = ResourceManager.GetObject("AddToQueue", resourceCulture);
@@ -84,6 +91,13 @@ namespace Handbrake.Properties {
         internal static System.Drawing.Bitmap AddToQueue_small {
             get {
                 object obj = ResourceManager.GetObject("AddToQueue_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Close {
+            get {
+                object obj = ResourceManager.GetObject("Close", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -151,6 +165,20 @@ namespace Handbrake.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Help24 {
+            get {
+                object obj = ResourceManager.GetObject("Help24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Help32 {
+            get {
+                object obj = ResourceManager.GetObject("Help32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap info16 {
             get {
                 object obj = ResourceManager.GetObject("info16", resourceCulture);
@@ -182,6 +210,13 @@ namespace Handbrake.Properties {
         internal static System.Drawing.Bitmap Movies_Small {
             get {
                 object obj = ResourceManager.GetObject("Movies_Small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap Options24 {
+            get {
+                object obj = ResourceManager.GetObject("Options24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
