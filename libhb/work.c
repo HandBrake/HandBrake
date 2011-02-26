@@ -13,14 +13,13 @@ typedef struct
 {
     hb_list_t * jobs;
     hb_job_t  ** current_job;
-    int         cpu_count;
     int       * error;
     volatile int * die;
 
 } hb_work_t;
 
 static void work_func();
-static void do_job( hb_job_t *, int cpu_count );
+static void do_job( hb_job_t *);
 static void work_loop( void * );
 
 #define FIFO_UNBOUNDED 65536
@@ -33,18 +32,15 @@ static void work_loop( void * );
 /**
  * Allocates work object and launches work thread with work_func.
  * @param jobs Handle to hb_list_t.
- * @param cpu_count Humber of CPUs found in system.
  * @param die Handle to user inititated exit indicator.
  * @param error Handle to error indicator.
  */
-hb_thread_t * hb_work_init( hb_list_t * jobs, int cpu_count,
-                            volatile int * die, int * error, hb_job_t ** job )
+hb_thread_t * hb_work_init( hb_list_t * jobs, volatile int * die, int * error, hb_job_t ** job )
 {
     hb_work_t * work = calloc( sizeof( hb_work_t ), 1 );
 
     work->jobs      = jobs;
     work->current_job = job;
-    work->cpu_count = cpu_count;
     work->die       = die;
     work->error     = error;
 
@@ -86,7 +82,7 @@ static void work_func( void * _work )
         job->die = work->die;
         *(work->current_job) = job;
         InitWorkState( job->h );
-        do_job( job, work->cpu_count );
+        do_job( job );
         *(work->current_job) = NULL;
     }
 
@@ -423,9 +419,8 @@ static int check_ff_audio( hb_list_t *list_audio, hb_audio_t *ff_audio )
  * Exits loop when conversion is done and fifos are empty.
  * Closes threads and frees fifos.
  * @param job Handle work hb_job_t.
- * @param cpu_count number of CPUs found in system.
  */
-static void do_job( hb_job_t * job, int cpu_count )
+static void do_job( hb_job_t * job )
 {
     hb_title_t    * title;
     int             i, j;

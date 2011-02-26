@@ -40,8 +40,6 @@ struct hb_handle_s
     int            work_error;
     hb_thread_t  * work_thread;
 
-    int            cpu_count;
-
     hb_lock_t    * state_lock;
     hb_state_t     state;
 
@@ -331,10 +329,6 @@ hb_handle_t * hb_init( int verbose, int update_check )
      */
     hb_buffer_pool_init();
 
-    /* CPU count detection */
-    hb_log( "hb_init: checking cpu count" );
-    h->cpu_count = hb_get_cpu_count();
-
     h->list_title = hb_list_init();
     h->jobs       = hb_list_init();
 
@@ -434,10 +428,6 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
             hb_snooze( 500 );
         }
     }
-
-    /* CPU count detection */
-    hb_log( "hb_init: checking cpu count" );
-    h->cpu_count = hb_get_cpu_count();
 
     h->list_title = hb_list_init();
     h->jobs       = hb_list_init();
@@ -1496,8 +1486,7 @@ void hb_start( hb_handle_t * h )
     h->paused = 0;
 
     h->work_die    = 0;
-    h->work_thread = hb_work_init( h->jobs, h->cpu_count,
-                                   &h->work_die, &h->work_error, &h->current_job );
+    h->work_thread = hb_work_init( h->jobs, &h->work_die, &h->work_error, &h->current_job );
 }
 
 /**

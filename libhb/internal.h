@@ -170,7 +170,7 @@ hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die,
                             const char * path, int title_index, 
                             hb_list_t * list_title, int preview_count, 
                             int store_previews, uint64_t min_duration );
-hb_thread_t * hb_work_init( hb_list_t * jobs, int cpu_count,
+hb_thread_t * hb_work_init( hb_list_t * jobs,
                             volatile int * die, int * error, hb_job_t ** job );
 hb_thread_t  * hb_reader_init( hb_job_t * );
 hb_work_object_t * hb_muxer_init( hb_job_t * );
