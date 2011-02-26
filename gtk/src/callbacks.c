@@ -1491,11 +1491,6 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_adjust_audio_rate_combos(ud);
 	ghb_set_pref_audio(titleindex, ud);
 	ghb_set_pref_subtitle(titleindex, ud);
-	if (ghb_settings_get_boolean(ud->settings, "vquality_type_target"))
-	{
-		gint bitrate = ghb_calculate_target_bitrate (ud->settings, titleindex);
-		ghb_ui_update(ud, "VideoAvgBitrate", ghb_int64_value(bitrate));
-	}
 
 	// Unfortunately, there is no way to query how many frames were
 	// actually generated during the scan.
@@ -1669,24 +1664,6 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	gtk_range_set_increments (GTK_RANGE(qp), step, page);
 	gtk_scale_set_digits(GTK_SCALE(qp), digits);
 	gtk_range_set_inverted (GTK_RANGE(qp), inverted);
-}
-
-G_MODULE_EXPORT void
-target_size_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
-{
-	const gchar *name = ghb_get_setting_key(widget);
-	g_debug("target_size_changed_cb () %s", name);
-	ghb_widget_to_setting(ud->settings, widget);
-	ghb_check_dependency(ud, widget, NULL);
-	ghb_clear_presets_selection(ud);
-	ghb_live_reset(ud);
-	if (ghb_settings_get_boolean(ud->settings, "vquality_type_target"))
-	{
-		gint titleindex;
-		titleindex = ghb_settings_combo_int(ud->settings, "title");
-		gint bitrate = ghb_calculate_target_bitrate (ud->settings, titleindex);
-		ghb_ui_update(ud, "VideoAvgBitrate", ghb_int64_value(bitrate));
-	}
 }
 
 G_MODULE_EXPORT void

@@ -104,8 +104,6 @@
 		<false />
 		<key>vquality_type_constant</key>
 		<false />
-		<key>vquality_type_target</key>
-		<false />
 		<key>SrtLanguage</key>
 		<string>und</string>
 		<key>SrtCodeset</key>
@@ -211,8 +209,6 @@
 		<key>vquality_type_bitrate</key>
 		<false />
 		<key>vquality_type_constant</key>
-		<false />
-		<key>vquality_type_target</key>
 		<false />
 		<key>VideoFramerateCFR</key>
 		<false />

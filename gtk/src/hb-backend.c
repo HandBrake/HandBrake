@@ -3856,24 +3856,6 @@ set_preview_job_settings(hb_job_t *job, GValue *settings)
 	}
 }
 
-gint
-ghb_calculate_target_bitrate(GValue *settings, gint titleindex)
-{
-	hb_list_t  * list;
-	hb_title_t * title;
-	hb_job_t   * job;
-	gint size;
-
-	if (h_scan == NULL) return 1500;
-	list = hb_get_titles( h_scan );
-    title = hb_list_item( list, titleindex );
-	if (title == NULL) return 1500;
-	job   = title->job;
-	if (job == NULL) return 1500;
-	size = ghb_settings_get_int(settings, "VideoTargetSize");
-	return hb_calc_bitrate( job, size );
-}
-
 gboolean
 ghb_validate_filter_string(const gchar *str, gint max_fields)
 {
@@ -4701,17 +4683,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		// Add it to the jobs audio list
         hb_audio_add( job, &audio );
 		tcount++;
-	}
-	// I was tempted to move this up with the reset of the video quality
-	// settings, but I suspect the settings above need to be made
-	// first in order for hb_calc_bitrate to be accurate.
-	if (ghb_settings_get_boolean(js, "vquality_type_target"))
-	{
-		gint size;
-		
-		size = ghb_settings_get_int(js, "VideoTargetSize");
-        job->vbitrate = hb_calc_bitrate( job, size );
-		job->vquality = -1.0;
 	}
 
 	dest_str = ghb_settings_get_string(js, "destination");

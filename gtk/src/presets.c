@@ -2643,21 +2643,18 @@ import_xlat_preset(GValue *dict)
 	} break;
 	}
 	// VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
+	// *note: target is no longer used
 	switch (vqtype)
 	{
 	case 0:
 	{
-		ghb_dict_insert(dict, g_strdup("vquality_type_target"), 
-						ghb_boolean_value_new(TRUE));
 		ghb_dict_insert(dict, g_strdup("vquality_type_bitrate"), 
-						ghb_boolean_value_new(FALSE));
+						ghb_boolean_value_new(TRUE));
 		ghb_dict_insert(dict, g_strdup("vquality_type_constant"), 
 						ghb_boolean_value_new(FALSE));
 	} break;
 	case 1:
 	{
-		ghb_dict_insert(dict, g_strdup("vquality_type_target"), 
-						ghb_boolean_value_new(FALSE));
 		ghb_dict_insert(dict, g_strdup("vquality_type_bitrate"), 
 						ghb_boolean_value_new(TRUE));
 		ghb_dict_insert(dict, g_strdup("vquality_type_constant"), 
@@ -2665,8 +2662,6 @@ import_xlat_preset(GValue *dict)
 	} break;
 	case 2:
 	{
-		ghb_dict_insert(dict, g_strdup("vquality_type_target"), 
-						ghb_boolean_value_new(FALSE));
 		ghb_dict_insert(dict, g_strdup("vquality_type_bitrate"), 
 						ghb_boolean_value_new(FALSE));
 		ghb_dict_insert(dict, g_strdup("vquality_type_constant"), 
@@ -2674,8 +2669,6 @@ import_xlat_preset(GValue *dict)
 	} break;
 	default:
 	{
-		ghb_dict_insert(dict, g_strdup("vquality_type_target"), 
-						ghb_boolean_value_new(FALSE));
 		ghb_dict_insert(dict, g_strdup("vquality_type_bitrate"), 
 						ghb_boolean_value_new(FALSE));
 		ghb_dict_insert(dict, g_strdup("vquality_type_constant"), 
@@ -2825,12 +2818,10 @@ import_xlat_presets(GValue *presets)
 static void
 export_xlat_preset(GValue *dict)
 {
-	gboolean autoscale, target, br, constant;
+	gboolean autoscale, br, constant;
 
 	g_debug("export_xlat_prest ()");
 	autoscale = ghb_value_boolean(preset_dict_get_value(dict, "autoscale"));
-	target = ghb_value_boolean(
-				preset_dict_get_value(dict, "vquality_type_target"));
 	br = ghb_value_boolean(
 				preset_dict_get_value(dict, "vquality_type_bitrate"));
 	constant = ghb_value_boolean(
@@ -2844,12 +2835,8 @@ export_xlat_preset(GValue *dict)
 						ghb_int_value_new(1));
 
 	// VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
-	if (target)
-	{
-		ghb_dict_insert(dict, g_strdup("VideoQualityType"), 
-						ghb_int_value_new(0));
-	}
-	else if (br)
+	// *note: target is no longer used
+	if (br)
 	{
 		ghb_dict_insert(dict, g_strdup("VideoQualityType"), 
 						ghb_int_value_new(1));
