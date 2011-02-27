@@ -2942,7 +2942,7 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title )
         // we're opening for scan. let ffmpeg put some info into the
         // log about what we've got.
         av_log_set_level( AV_LOG_INFO );
-        dump_format( ic, 0, stream->path, 0 );
+        av_dump_format( ic, 0, stream->path, 0 );
         av_log_set_level( AV_LOG_ERROR );
 
         // accept this file if it has at least one video stream we can decode
