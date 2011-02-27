@@ -295,7 +295,7 @@ namespace Handbrake.Functions
 
             // Get the SHA1 Hash of HandBrakeCLI
             byte[] hash;
-            using (Stream stream = File.OpenRead("HandBrakeCLI.exe"))
+            using (Stream stream = File.OpenRead(Path.Combine(Application.StartupPath, "HandBrakeCLI.exe")))
             {
                 hash = SHA1.Create().ComputeHash(stream);
             }
