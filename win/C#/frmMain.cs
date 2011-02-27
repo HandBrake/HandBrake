@@ -16,8 +16,6 @@ namespace Handbrake
     using System.Threading;
     using System.Windows.Forms;
 
-    using DevExpress.Utils.Menu;
-
     using Functions;
 
     using HandBrake.ApplicationServices.EventArgs;
