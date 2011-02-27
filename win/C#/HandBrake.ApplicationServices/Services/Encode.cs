@@ -376,7 +376,6 @@ namespace HandBrake.ApplicationServices.Services
                     Thread.Sleep(2500);
 
                     this.HbProcess.CancelErrorRead();
-                    this.HbProcess.CancelOutputRead();
 
                     if (fileWriter != null)
                     {

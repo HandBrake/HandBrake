@@ -197,6 +197,12 @@ namespace HandBrake.ApplicationServices.Services
                 GrowlCommunicator.Notify("Encode Completed",
                                          "Put down that cocktail...\nyour Handbrake encode is done.");
 
+            if (!e.Successful)
+            {
+                this.Pause();
+                MessageBox.Show(e.Exception + e.ErrorInformation);
+            }
+
             // Handling Log Data 
             this.EncodeService.ProcessLogs(this.QueueManager.LastProcessedJob.Destination);
 
@@ -209,9 +215,10 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private void ProcessNextJob()
         {
-            if (this.EncodeService.IsEncoding)
+            if (this.EncodeService.IsEncoding || !this.IsProcessing)
             {
                 // We don't want to try start a second encode, so just return out. The event will trigger the next encode automatically.
+                // Also, we don't want to start a new encode if we are paused.
                 return;
             }
 
