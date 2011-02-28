@@ -453,7 +453,7 @@ void hb_fifo_push_wait( hb_fifo_t * f, hb_buffer_t * b )
         f->size += 1;
         f->last  = f->last->next;
     }
-    if( f->wait_empty && f->size >= f->thresh )
+    if( f->wait_empty && f->size >= 1 )
     {
         f->wait_empty = 0;
         hb_cond_signal( f->cond_empty );
@@ -485,7 +485,7 @@ void hb_fifo_push( hb_fifo_t * f, hb_buffer_t * b )
         f->size += 1;
         f->last  = f->last->next;
     }
-    if( f->wait_empty && f->size >= f->thresh )
+    if( f->wait_empty && f->size >= 1 )
     {
         f->wait_empty = 0;
         hb_cond_signal( f->cond_empty );
