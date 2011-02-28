@@ -245,21 +245,10 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	gdouble vqvalue;
 	if (!vqtype)
 	{
-		vqtype = ghb_settings_get_boolean(settings, "vquality_type_target");
-		if (!vqtype)
-		{
-			// Has to be bitrate
-			vqvalue = ghb_settings_get_int(settings, "VideoAvgBitrate");
-			vq_desc = "Bitrate:";
-			vq_units = "kbps";
-		}
-		else
-		{
-			// Target file size
-			vqvalue = ghb_settings_get_int(settings, "VideoTargetSize");
-			vq_desc = "Target Size:";
-			vq_units = "MB";
-		}
+        // Has to be bitrate
+        vqvalue = ghb_settings_get_int(settings, "VideoAvgBitrate");
+        vq_desc = "Bitrate:";
+        vq_units = "kbps";
 		vqstr = g_strdup_printf("%d", (gint)vqvalue);
 	}
 	else
