@@ -1032,6 +1032,7 @@ hb_title_t * hb_title_init( char * path, int index )
     // default to decoding mpeg2
     t->video_id      = 0xE0;
     t->video_codec   = WORK_DECMPEG2;
+    t->angle_count   = 1;
 
     return t;
 }
