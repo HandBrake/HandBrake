@@ -525,9 +525,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
     
     /* Video quality */
-    [fVidTargetSizeField setIntValue: 700];
 	[fVidBitrateField    setIntValue: 1000];
-    
     [fVidQualityMatrix   selectCell: fVidBitrateCell];
     [self videoMatrixChanged:nil];
     
@@ -2326,8 +2324,7 @@ fWorkingCount = 0;
 	/* x264 Option String */
 	[queueFileJob setObject:[fAdvancedOptions optionsString] forKey:@"x264Option"];
 
-	[queueFileJob setObject:[NSNumber numberWithInt:[fVidQualityMatrix selectedRow]] forKey:@"VideoQualityType"];
-	[queueFileJob setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
+	[queueFileJob setObject:[NSNumber numberWithInt:[[fVidQualityMatrix selectedCell] tag] + 1] forKey:@"VideoQualityType"];
 	[queueFileJob setObject:[fVidBitrateField stringValue] forKey:@"VideoAvgBitrate"];
 	[queueFileJob setObject:[NSNumber numberWithFloat:[fVidQualityRFField floatValue]] forKey:@"VideoQualitySlider"];
     /* Framerate */
@@ -2755,7 +2752,6 @@ fWorkingCount = 0;
     /* Video quality */
     [fVidQualityMatrix selectCellAtRow:[[queueToApply objectForKey:@"VideoQualityType"] intValue] column:0];
     
-    [fVidTargetSizeField setStringValue:[queueToApply objectForKey:@"VideoTargetSize"]];
     [fVidBitrateField setStringValue:[queueToApply objectForKey:@"VideoAvgBitrate"]];
     /* Since we are now using RF Values for the slider, we detect if the preset uses an old quality float.
      * So, check to see if the quality value is less than 1.0 which should indicate the old ".062" type
@@ -3076,17 +3072,15 @@ fWorkingCount = 0;
         }
     }
 
-    switch( [fVidQualityMatrix selectedRow] )
+    switch( [[fVidQualityMatrix selectedCell] tag] )
     {
         case 0:
-            /* Target size.
-               Bitrate should already have been calculated and displayed
-               in fVidBitrateField, so let's just use it */
-        case 1:
+            /* ABR */
             job->vquality = -1.0;
             job->vbitrate = [fVidBitrateField intValue];
             break;
-        case 2:
+        case 1:
+            /* Constant Quality */
             job->vquality = [fVidQualityRFField floatValue];
             job->vbitrate = 0;
             break;
@@ -3576,9 +3570,6 @@ bool one_burned = FALSE;
     
     if ( [[queueToApply objectForKey:@"VideoQualityType"] intValue] != 2 )
     {
-        /* Target size.
-         Bitrate should already have been calculated and displayed
-         in fVidBitrateField, so let's just use it same as abr*/
         job->vquality = -1.0;
         job->vbitrate = [[queueToApply objectForKey:@"VideoAvgBitrate"] intValue];
     }
@@ -4418,7 +4409,7 @@ bool one_burned = FALSE;
         @"%02lld:%02lld:%02lld", duration / 3600, ( duration / 60 ) % 60,
         duration % 60]];
     
-    [self calculateBitrate: sender];
+    //[self calculateBitrate: sender];
     
     if ( [fSrcChapterStartPopUp indexOfSelectedItem] ==  [fSrcChapterEndPopUp indexOfSelectedItem] )
     {
@@ -4683,33 +4674,33 @@ the user is using "Custom" settings by determining the sender*/
     /* We call method method to change UI to reflect whether a preset is used or not*/
 	[self customSettingUsed: sender];
 }
+
 - (IBAction) videoMatrixChanged: (id) sender;
 {
-    bool target, bitrate, quality;
-
-    target = bitrate = quality = false;
+    /* We use the selectedCell: tag of the fVidQualityMatrix instead of selectedRow
+     * so that the order of the video controls can be switched around.
+     * Constant quality is 1 and Average bitrate is 0 for reference. */
+    bool bitrate, quality;
+    bitrate = quality = false;
     if( [fVidQualityMatrix isEnabled] )
     {
-        switch( [fVidQualityMatrix selectedRow] )
+        switch( [[fVidQualityMatrix selectedCell] tag] )
         {
             case 0:
-                target = true;
-                break;
-            case 1:
                 bitrate = true;
                 break;
-            case 2:
+            case 1:
                 quality = true;
                 break;
         }
     }
-    [fVidTargetSizeField  setEnabled: target];
+
     [fVidBitrateField     setEnabled: bitrate];
     [fVidQualitySlider    setEnabled: quality];
     [fVidQualityRFField   setEnabled: quality];
     [fVidQualityRFLabel    setEnabled: quality];
     [fVidTwoPassCheck     setEnabled: !quality &&
-        [fVidQualityMatrix isEnabled]];
+     [fVidQualityMatrix isEnabled]];
     if( quality )
     {
         [fVidTwoPassCheck setState: NSOffState];
@@ -4718,7 +4709,7 @@ the user is using "Custom" settings by determining the sender*/
     }
 
     [self qualitySliderChanged: sender];
-    [self calculateBitrate: sender];
+    //[self calculateBitrate: sender];
 	[self customSettingUsed: sender];
 }
 
@@ -4811,7 +4802,7 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction) calculateBitrate: (id) sender
 {
-    if( !fHandle || [fVidQualityMatrix selectedRow] != 0 || !SuccessfulScan )
+    if( !fHandle || ![fVidQualityMatrix selectedRow] || !SuccessfulScan )
     {
         return;
     }
@@ -4836,7 +4827,6 @@ the user is using "Custom" settings by determining the sender*/
     /* Audio goes here */
 	[fAudioDelegate prepareAudioForJob: job];
        
-[fVidBitrateField setIntValue: hb_calc_bitrate( job, [fVidTargetSizeField intValue] )];
 }
 
 #pragma mark -
@@ -5517,9 +5507,19 @@ return YES;
         [self calculateBitrate:nil];
         
         /* Video quality */
-        [fVidQualityMatrix selectCellAtRow:[[chosenPreset objectForKey:@"VideoQualityType"] intValue] column:0];
         
-        [fVidTargetSizeField setStringValue:[chosenPreset objectForKey:@"VideoTargetSize"]];
+        int qualityType = [[chosenPreset objectForKey:@"VideoQualityType"] intValue] - 1;
+        /* Note since the removal of Target Size encoding, the possible values for VideoQuality type are 0 - 1.
+         * Therefore any preset that uses the old 2 for Constant Quality would now use 1 since there is one less index
+         * for the fVidQualityMatrix. It should also be noted that any preset that used the deprecated Target Size
+         * setting of 0 would set us to 0 or ABR since ABR is now tagged 0. Fortunately this does not affect any built-in
+         * presets since they all use Constant Quality or Average Bitrate.*/
+        if (qualityType == -1)
+        {
+            qualityType = 0;
+        }
+        [fVidQualityMatrix selectCellWithTag:qualityType];
+
         [fVidBitrateField setStringValue:[chosenPreset objectForKey:@"VideoAvgBitrate"]];
         
         /* Since we are now using RF Values for the slider, we detect if the preset uses an old quality float.
@@ -6013,8 +6013,10 @@ return YES;
         /* x264 Option String */
         [preset setObject:[fAdvancedOptions optionsString] forKey:@"x264Option"];
         
-        [preset setObject:[NSNumber numberWithInt:[fVidQualityMatrix selectedRow]] forKey:@"VideoQualityType"];
-        [preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
+        /* though there are actually only 0 - 1 types available in the ui we need to map to the old 0 - 2
+         * set of indexes from when we had 0 == Target , 1 == Abr and 2 == Constant Quality for presets
+         * to take care of any legacy presets. */
+        [preset setObject:[NSNumber numberWithInt:[[fVidQualityMatrix selectedCell] tag] +1 ] forKey:@"VideoQualityType"];
         [preset setObject:[fVidBitrateField stringValue] forKey:@"VideoAvgBitrate"];
         [preset setObject:[NSNumber numberWithFloat:[fVidQualityRFField floatValue]] forKey:@"VideoQualitySlider"];
         

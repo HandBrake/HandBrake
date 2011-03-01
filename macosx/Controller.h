@@ -127,8 +127,6 @@ BOOL                        fIsDragging;
     IBOutlet NSTextField         * fVidQualityRFLabel;
     IBOutlet NSTextField         * fVidQualityRFField;
     IBOutlet NSMatrix            * fVidQualityMatrix;
-    IBOutlet NSButtonCell        * fVidTargetCell;
-    IBOutlet NSTextField         * fVidTargetSizeField;
     IBOutlet NSButtonCell        * fVidBitrateCell;
     IBOutlet NSTextField         * fVidBitrateField;
     IBOutlet NSButtonCell        * fVidConstantCell;
