@@ -1562,7 +1562,7 @@ static void set_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
             codec_name = "DTS";
         }
 
-        char *profile_name;
+        const char *profile_name;
         profile_name = av_get_profile_name( codec, cc->profile );
         if ( profile_name )
         {
