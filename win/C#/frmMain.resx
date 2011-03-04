@@ -140,6 +140,14 @@ the original source, unless the source was also lossless
 
 FFmpeg's and Theora's scale is more linear. These encoders do not have a lossless mode.</value>
   </data>
+  <data name="text_bitrate.ToolTip" xml:space="preserve">
+    <value>Set the average bitrate. The instantaneous bitrate can be
+much higher or lower at any point in time. But the average over a long
+duration will be the value set here. 
+
+If you need to limit instantaneous bitrate look into x264's vbv-bufsize and 
+vbv-maxrate settings.</value>
+  </data>
   <metadata name="number.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>

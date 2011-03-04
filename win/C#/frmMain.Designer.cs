@@ -333,7 +333,7 @@ namespace Handbrake
             this.text_bitrate.Name = "text_bitrate";
             this.text_bitrate.Size = new System.Drawing.Size(81, 21);
             this.text_bitrate.TabIndex = 14;
-            this.ToolTip.SetToolTip(this.text_bitrate, "Set the average bitrate. The instantaneous bitrate can be");
+            this.ToolTip.SetToolTip(this.text_bitrate, resources.GetString("text_bitrate.ToolTip"));
             // 
             // check_optimiseMP4
             // 
