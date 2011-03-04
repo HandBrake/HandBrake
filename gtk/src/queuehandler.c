@@ -238,6 +238,8 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	} break;
 	}
 	vqtype = ghb_settings_get_boolean(settings, "vquality_type_constant");
+	vcodec = ghb_settings_combo_option(settings, "VideoEncoder");
+	vcodec_abbr = ghb_settings_get_string(settings, "VideoEncoder");
 
 	gchar *vq_desc = "Error";
 	gchar *vq_units = "";
@@ -257,7 +259,14 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		vqvalue = ghb_settings_get_double(settings, "VideoQualitySlider");
 		vq_desc = "Constant Quality:";
 		vqstr = g_strdup_printf("%d", (gint)vqvalue);
-		vq_units = "(RF)";
+	    if (strcmp(vcodec_abbr, "x264") == 0)
+        {
+		    vq_units = "(RF)";
+        }
+        else
+        {
+		    vq_units = "(QP)";
+        }
 	}
 	fps = ghb_settings_get_string(settings, "VideoFramerate");
 	if (strcmp("source", fps) == 0)
@@ -275,8 +284,6 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		g_free(fps);
 		fps = tmp;
 	}
-	vcodec = ghb_settings_combo_option(settings, "VideoEncoder");
-	vcodec_abbr = ghb_settings_get_string(settings, "VideoEncoder");
 	source_width = ghb_settings_get_int(settings, "source_width");
 	source_height = ghb_settings_get_int(settings, "source_height");
 	g_string_append_printf(str,
