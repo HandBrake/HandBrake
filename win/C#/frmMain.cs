@@ -1812,15 +1812,7 @@ namespace Handbrake
         /// </param>
         private void drp_videoFramerate_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.drp_videoFramerate.SelectedIndex == 0)
-            {
-                this.checkMaximumFramerate.Visible = false;
-                this.checkMaximumFramerate.CheckState = CheckState.Unchecked;
-            }
-            else
-            {
-                this.checkMaximumFramerate.Visible = true;
-            }
+            this.radio_peakAndVariable.Text = this.drp_videoFramerate.SelectedIndex == 0 ? "Variable Framerate" : "Peak Framerate (VFR)";
         }
 
         /// <summary>

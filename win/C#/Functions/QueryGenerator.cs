@@ -340,8 +340,16 @@ namespace Handbrake.Functions
             if (mainWindow.drp_videoFramerate.Text != "Same as source")
                 query += " -r " + mainWindow.drp_videoFramerate.Text;
 
-            if (mainWindow.checkMaximumFramerate.Checked)
-                query += " --pfr ";
+            if (mainWindow.drp_videoFramerate.SelectedIndex == 0)
+            {
+                // If we use Same as Source, we can either output CFR or VFR
+                query += mainWindow.radio_constantFramerate.Checked ? " --cfr " : " --vfr ";
+            } 
+            else
+            {
+                // We have a hard framerate set, so we can either be Constant or peak (VFR) framerate
+                query += mainWindow.radio_constantFramerate.Checked ? " --cfr " : " --pfr ";
+            }
 
             return query;
         }
