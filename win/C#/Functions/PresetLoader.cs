@@ -227,18 +227,18 @@ namespace Handbrake.Functions
             {
                 // Constant or Peak Framerate for a set framerate.
 
-                if (presetQuery.FramerateMode == FramerateMode.PFR)
-                    mainWindow.radio_peakAndVariable.Checked = true;
-                else
+                if (presetQuery.FramerateMode == FramerateMode.CFR)
                     mainWindow.radio_constantFramerate.Checked = true;
-            } 
+                else
+                    mainWindow.radio_peakAndVariable.Checked = true;
+            }
             else
             {
                 // Constant or Variable Framerate for Same as Source.
-                if (presetQuery.FramerateMode == FramerateMode.VFR)
-                    mainWindow.radio_peakAndVariable.Checked = true;
-                else
+                if (presetQuery.FramerateMode == FramerateMode.CFR)
                     mainWindow.radio_constantFramerate.Checked = true;
+                else
+                    mainWindow.radio_peakAndVariable.Checked = true;
             }
 
             mainWindow.check_turbo.CheckState = presetQuery.TurboFirstPass ? CheckState.Checked : CheckState.Unchecked;

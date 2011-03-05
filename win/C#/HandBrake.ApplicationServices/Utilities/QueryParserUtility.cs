@@ -298,10 +298,10 @@ namespace HandBrake.ApplicationServices.Utilities
 
                 if (pfr.Success)
                     parsed.FramerateMode = FramerateMode.PFR;
-                else if (vfr.Success)
-                    parsed.FramerateMode = FramerateMode.VFR;
                 else if (cfr.Success)
                     parsed.FramerateMode = FramerateMode.CFR;
+                else
+                    parsed.FramerateMode = FramerateMode.VFR; // Default to VFR
 
                 parsed.Grayscale = grayscale.Success;
                 parsed.TwoPass = twoPass.Success;
