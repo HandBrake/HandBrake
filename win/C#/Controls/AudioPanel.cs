@@ -6,12 +6,10 @@
 namespace Handbrake.Controls
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using System.Windows.Forms;
-    using Functions;
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
@@ -25,9 +23,7 @@ namespace Handbrake.Controls
     public partial class AudioPanel : UserControl
     {
         private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
-
         private const string AC3Passthru = "AC3 Passthru";
-
         private const string DTSPassthru = "DTS Passthru";
 
         /// <summary>
@@ -46,6 +42,7 @@ namespace Handbrake.Controls
         /// </summary>
         public event EventHandler AudioListChanged;
 
+        #region Public Methods
         /// <summary>
         /// Get the audio panel
         /// </summary>
@@ -119,9 +116,9 @@ namespace Handbrake.Controls
                 newTrack.Cells[1].Value = "Automatic";
                 newTrack.Cells[2].Value = track.Encoder;
                 newTrack.Cells[3].Value = track.MixDown;
-                newTrack.Cells[4].Value = track.SampleRate;
+                newTrack.Cells[4].Value = track.Encoder.Contains(AC3Passthru) || track.Encoder.Contains(DTSPassthru) ? "Auto" : track.SampleRate;
                 newTrack.Cells[5].Value = track.Encoder.Contains(AC3Passthru) || track.Encoder.Contains(DTSPassthru) ? "Auto" : track.Bitrate;
-                newTrack.Cells[6].Value = track.DRC;
+                newTrack.Cells[6].Value = track.Encoder.Contains(AC3Passthru) || track.Encoder.Contains(DTSPassthru) ? string.Empty : track.DRC;
                 AddTrackForPreset(newTrack);
             }
 
@@ -170,67 +167,9 @@ namespace Handbrake.Controls
             this.AutomaticTrackSelection();
         }
 
-        private void AutomaticTrackSelection()
-        {
-            // Handle Native Language and "Dub Foreign language audio" and "Use Foreign language audio and Subtitles" Options
-            if (Properties.Settings.Default.NativeLanguage == "Any")
-            {
-                drp_audioTrack.SelectedIndex = 0;
-                foreach (DataGridViewRow item in audioList.Rows)
-                {
-                    if (this.drp_audioTrack.SelectedItem != null)
-                    {
-                        item.Cells[1].Value = this.drp_audioTrack.SelectedItem.ToString();
-                    }
-                }
-            }
-            else
-            {
-                int mode = Properties.Settings.Default.DubMode;
-                switch (mode)
-                {
-                    case 1:
-                    case 3:
-                        // Dub Foreign Language Audio 
-                        // Select the prefered language audio, or the first track if it doesn't exist.
-                        int i = 0;
-                        foreach (object item in drp_audioTrack.Items)
-                        {
-                            if (item.ToString().Contains(Properties.Settings.Default.NativeLanguage))
-                            {
-                                drp_audioTrack.SelectedIndex = i;
-                                break;
-                            }
+        #endregion
 
-                            i++;
-                        }
-
-                        if (drp_audioTrack.SelectedItem != null)
-                            foreach (DataGridViewRow item in audioList.Rows)
-                                item.Cells[1].Value = drp_audioTrack.SelectedItem.ToString();
-                        else
-                        {
-                            drp_audioTrack.SelectedIndex = 0;
-                            if (drp_audioTrack.SelectedItem != null)
-                                foreach (DataGridViewRow item in audioList.Rows)
-                                    item.Cells[1].Value = drp_audioTrack.SelectedItem.ToString();
-                        }
-
-                        break;
-                    case 2:
-                    default:
-                        // Select the first track which is hopefully the default and foreign track.
-                        drp_audioTrack.SelectedIndex = 0;
-
-                        if (drp_audioTrack.SelectedItem != null)
-                            foreach (DataGridViewRow item in audioList.Rows)
-                                item.Cells[1].Value = drp_audioTrack.SelectedItem.ToString();
-                        break;
-                }
-            }
-        }
-
-        // Control and ListView
+        #region Control and ListView
 
         /// <summary>
         /// one of the controls has changed. Event handler
@@ -274,19 +213,13 @@ namespace Handbrake.Controls
                     // Configure the widgets with values
                     if (drp_audioEncoder.Text.Contains(AC3Passthru) || drp_audioEncoder.Text.Contains(DTSPassthru))
                     {
-                        drp_audioMix.Enabled =
-                            drp_audioBitrate.Enabled = drp_audioSample.Enabled = tb_drc.Enabled = false;
-                        lbl_bitrate.Enabled =
-                            lbl_drc.Enabled =
-                            lbl_drcHeader.Enabled = lbl_mixdown.Enabled = lbl_sampleRate.Enabled = false;
+                        drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = tb_drc.Enabled = false;
+                        lbl_bitrate.Enabled = lbl_drc.Enabled = lbl_drcHeader.Enabled = lbl_mixdown.Enabled = lbl_sampleRate.Enabled = false;
                     }
                     else
                     {
-                        drp_audioMix.Enabled =
-                            drp_audioBitrate.Enabled = drp_audioSample.Enabled = tb_drc.Enabled = true;
-                        lbl_bitrate.Enabled =
-                            lbl_drc.Enabled =
-                            lbl_drcHeader.Enabled = lbl_mixdown.Enabled = lbl_sampleRate.Enabled = true;
+                        drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = tb_drc.Enabled = true;
+                        lbl_bitrate.Enabled = lbl_drc.Enabled = lbl_drcHeader.Enabled = lbl_mixdown.Enabled = lbl_sampleRate.Enabled = true;
                     }
 
                     // Update an item in the Audio list if required.
@@ -362,7 +295,9 @@ namespace Handbrake.Controls
                 AudioTrackGroup.Text = "Selected Track: None (Click \"Add Track\" to add)";
         }
 
-        // Track Controls
+        #endregion
+
+        #region Track Controls
 
         /// <summary>
         /// The Add Audio Track button event handler
@@ -425,7 +360,9 @@ namespace Handbrake.Controls
             RemoveTrack();
         }
 
-        // Audio List Menu
+        #endregion
+
+        #region Audio List Menu
 
         /// <summary>
         /// The Audio List Move Up menu item
@@ -469,7 +406,70 @@ namespace Handbrake.Controls
             RemoveTrack();
         }
 
-        // Private Functions
+        #endregion
+
+        #region Private Functions
+
+
+        private void AutomaticTrackSelection()
+        {
+            // Handle Native Language and "Dub Foreign language audio" and "Use Foreign language audio and Subtitles" Options
+            if (Properties.Settings.Default.NativeLanguage == "Any")
+            {
+                drp_audioTrack.SelectedIndex = 0;
+                foreach (DataGridViewRow item in audioList.Rows)
+                {
+                    if (this.drp_audioTrack.SelectedItem != null)
+                    {
+                        item.Cells[1].Value = this.drp_audioTrack.SelectedItem.ToString();
+                    }
+                }
+            }
+            else
+            {
+                int mode = Properties.Settings.Default.DubMode;
+                switch (mode)
+                {
+                    case 1:
+                    case 3:
+                        // Dub Foreign Language Audio 
+                        // Select the prefered language audio, or the first track if it doesn't exist.
+                        int i = 0;
+                        foreach (object item in drp_audioTrack.Items)
+                        {
+                            if (item.ToString().Contains(Properties.Settings.Default.NativeLanguage))
+                            {
+                                drp_audioTrack.SelectedIndex = i;
+                                break;
+                            }
+
+                            i++;
+                        }
+
+                        if (drp_audioTrack.SelectedItem != null)
+                            foreach (DataGridViewRow item in audioList.Rows)
+                                item.Cells[1].Value = drp_audioTrack.SelectedItem.ToString();
+                        else
+                        {
+                            drp_audioTrack.SelectedIndex = 0;
+                            if (drp_audioTrack.SelectedItem != null)
+                                foreach (DataGridViewRow item in audioList.Rows)
+                                    item.Cells[1].Value = drp_audioTrack.SelectedItem.ToString();
+                        }
+
+                        break;
+                    case 2:
+                    default:
+                        // Select the first track which is hopefully the default and foreign track.
+                        drp_audioTrack.SelectedIndex = 0;
+
+                        if (drp_audioTrack.SelectedItem != null)
+                            foreach (DataGridViewRow item in audioList.Rows)
+                                item.Cells[1].Value = drp_audioTrack.SelectedItem.ToString();
+                        break;
+                }
+            }
+        }
 
         /// <summary>
         /// Add track for preset
@@ -582,6 +582,9 @@ namespace Handbrake.Controls
         private void SetBitrate()
         {
             int max = 0;
+            string defaultRate = "160";
+
+            // Remove defaults
             drp_audioBitrate.Items.Remove("Auto");
             drp_audioBitrate.Items.Remove("192");
             drp_audioBitrate.Items.Remove("224");
@@ -592,32 +595,38 @@ namespace Handbrake.Controls
             drp_audioBitrate.Items.Remove("640");
             drp_audioBitrate.Items.Remove("768");
 
+            // Find Max and Defaults based on encoders
             switch (drp_audioEncoder.Text)
             {
                 case "AAC (faac)":
                     max = drp_audioMix.Text.Contains("6 Channel") ? 768 : 320;
+                    defaultRate = "160";
                     break;
                 case "MP3 (lame)":
                     max = 320;
+                    defaultRate = "160";
                     break;
                 case "Vorbis (vorbis)":
+                    defaultRate = "160";
                     max = 384;
                     break;
                 case "AC3 (ffmpeg)":
+                    defaultRate = "640";
                     max = 640;
                     break;
                 case AC3Passthru:
                     drp_audioBitrate.Items.Add("Auto");
-                    drp_audioBitrate.SelectedItem = "Auto";
+                    defaultRate = "Auto";
                     drp_audioSample.SelectedItem = "Auto";
                     break;
                 case DTSPassthru:
                     drp_audioBitrate.Items.Add("Auto");
-                    drp_audioBitrate.SelectedItem = "Auto";
+                    defaultRate = "Auto";
                     drp_audioSample.SelectedItem = "Auto";
                     break;
             }
 
+            // Re-add appropiate options
             if (max > 160)
             {
                 drp_audioBitrate.Items.Add("192");
@@ -642,13 +651,8 @@ namespace Handbrake.Controls
                 drp_audioBitrate.Items.Add("768");
             }
 
-            if (drp_audioBitrate.SelectedItem == null && audioList.SelectedRows.Count == 0)
-                drp_audioBitrate.SelectedIndex = drp_audioBitrate.Items.Count - 1;
-
-            if (drp_audioBitrate.SelectedItem == null && audioList.SelectedRows.Count != 0 && (string)this.audioList.SelectedRows[0].Cells[5].Value == "Auto")
-            {
-                drp_audioBitrate.SelectedItem = "160";
-            }
+            // Set the default bit-rate
+            drp_audioBitrate.SelectedItem = defaultRate;
         }
 
         /// <summary>
@@ -694,5 +698,7 @@ namespace Handbrake.Controls
                     break;
             }
         }
+
+        #endregion
     }
 }

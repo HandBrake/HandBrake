@@ -1879,7 +1879,12 @@ namespace Handbrake
                     double rfValue = 51.0 - slider_videoQuality.Value * cqStep;
                     rfValue = Math.Round(rfValue, 2);
                     lbl_SliderValue.Text = "RF:" + rfValue.ToString(new CultureInfo("en-US"));
-                    this.lbl_rfwarn.Visible = rfValue == 0;
+
+                    if (rfValue == 0)
+                    {
+                        lbl_SliderValue.Text += " (Warning: lossless)";
+                    }
+                    
                     break;
                 case "VP3 (Theora)":
                     lbl_SliderValue.Text = "QP:" + slider_videoQuality.Value;
