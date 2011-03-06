@@ -1,6 +1,8 @@
 =head2 HandBrake Repositories
 
 =begin html
+
+
 <p>
  <h3> Subversion </h3>
 
@@ -26,7 +28,7 @@
  <h3> Freenode </h3>
  <b>IRC:</a> <a href="irc://irc.freenode.net/#handbrake">#Handbrake on Freenode </a>
  
- 
 </p>
+
 
 =end html
