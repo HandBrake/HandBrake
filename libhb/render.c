@@ -779,7 +779,14 @@ int renderInit( hb_work_object_t * w, hb_job_t * job )
     pv->chapter_time = 0;
     pv->chapter_val  = 0;
 
-    pv->frame_rate = (double)job->vrate_base * (1./300.);
+    if ( job->cfr == 2 )
+    {
+        pv->frame_rate = (double)job->pfr_vrate_base * (1./300.);
+    }
+    else
+    {
+        pv->frame_rate = (double)job->vrate_base * (1./300.);
+    }
 
     /* Setup filters */
     /* TODO: Move to work.c? */

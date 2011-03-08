@@ -230,6 +230,8 @@ struct hb_job_s
     int             vcodec;
     float           vquality;
     int             vbitrate;
+    int             pfr_vrate;
+    int             pfr_vrate_base;
     int             vrate;
     int             vrate_base;
     int             vfr;

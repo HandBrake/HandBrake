@@ -98,8 +98,17 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.i_threads    = ( hb_get_cpu_count() * 3 / 2 );
     param.i_width      = job->width;
     param.i_height     = job->height;
-    param.i_fps_num    = job->vrate;
-    param.i_fps_den    = job->vrate_base;
+    if( job->pass == 2 )
+    {
+        hb_interjob_t * interjob = hb_interjob_get( job->h );
+        param.i_fps_num = interjob->vrate;
+        param.i_fps_den = interjob->vrate_base;
+    }
+    else
+    {
+        param.i_fps_num = job->vrate;
+        param.i_fps_den = job->vrate_base;
+    }
     if ( job->cfr == 1 )
     {
         param.i_timebase_num   = 0;
@@ -115,26 +124,11 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     /* Disable annexb. Inserts size into nal header instead of start code */
     param.b_annexb     = 0;
 
-    /* Set min:max key intervals ratio to 1:10 of fps.
-     * This section is skipped if fps=25 (default).
-     */
-    if (job->vrate_base != 1080000)
-    {
-        if (job->pass == 2 && !job->cfr )
-        {
-            /* Even though the framerate might be different due to VFR,
-               we still want the same keyframe intervals as the 1st pass,
-               so the 1st pass stats won't conflict on frame decisions.    */
-            hb_interjob_t * interjob = hb_interjob_get( job->h );
-            param.i_keyint_max = 10 * (int)( (double)interjob->vrate / (double)interjob->vrate_base + 0.5 );
-        }
-        else
-        {
-            /* adjust +0.5 for when fps has remainder to bump
-               { 23.976, 29.976, 59.94 } to { 24, 30, 60 } */
-            param.i_keyint_max = 10 * (int)( (double)job->vrate / (double)job->vrate_base + 0.5 );
-        }
-    }
+    /* Set min:max keyframe intervals to 1:10 of fps.
+       adjust +0.5 for when fps has remainder to bump
+       { 23.976, 29.976, 59.94 } to { 24, 30, 60 } */
+    param.i_keyint_min = (int)( (double)job->vrate / (double)job->vrate_base + 0.5 );
+    param.i_keyint_max = 10 * param.i_keyint_min;
 
     param.i_log_level  = X264_LOG_INFO;
     
@@ -211,7 +205,9 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         job->areBframes = 0;
     }
     
-    if( param.i_keyint_min != X264_KEYINT_MIN_AUTO || param.i_keyint_max != 250 )
+    /* For 25 fps sources, HandBrake's explicit keyints will match the x264 defaults:
+       min-keyint 25 (same as auto), keyint 250 */
+    if( param.i_keyint_min != 25 || param.i_keyint_max != 250 )
     {
         int min_auto;
 

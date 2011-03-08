@@ -66,8 +66,17 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
     ti.frame_height = (job->height + 0xf) & ~0xf;
     ti.pic_x = ti.pic_y = 0;
 
-    ti.fps_numerator = job->vrate;
-    ti.fps_denominator = job->vrate_base;
+    if( job->pass == 2 )
+    {
+        hb_interjob_t * interjob = hb_interjob_get( job->h );
+        ti.fps_numerator = interjob->vrate;
+        ti.fps_denominator = interjob->vrate_base;
+    }
+    else
+    {
+        ti.fps_numerator = job->vrate;
+        ti.fps_denominator = job->vrate_base;
+    }
     if( job->anamorphic.mode )
     {
         ti.aspect_numerator = job->anamorphic.par_width;
@@ -98,30 +107,13 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
-    if ( job->pass == 2 && !job->cfr )
-    {
-        /* Even though the framerate might be different due to VFR,
-           we still want the same keyframe intervals as the 1st pass,
-           so the 1st pass stats won't conflict on frame decisions.    */
-        hb_interjob_t * interjob = hb_interjob_get( job->h );
-        keyframe_frequency = ( 10 * interjob->vrate / interjob->vrate_base ) + 1;
-    }
-    else
-    {
-        int fps = job->vrate / job->vrate_base;
+    keyframe_frequency = 10 * (int)( (double)job->vrate / (double)job->vrate_base + 0.5 );
 
-        /* adjust +1 when fps has remainder to bump
-           { 23.976, 29.976, 59.94 } to { 24, 30, 60 } */
-        if (job->vrate % job->vrate_base)
-            fps += 1;
+    hb_log("theora: keyint: %i", keyframe_frequency);
 
-        keyframe_frequency = fps * 10;
-    }
     int tmp = keyframe_frequency - 1;
     for (log_keyframe = 0; tmp; log_keyframe++)
         tmp >>= 1;
-        
-    hb_log("theora: keyint: %i", keyframe_frequency);
 
     ti.keyframe_granule_shift = log_keyframe;
 

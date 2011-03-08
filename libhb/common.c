@@ -520,9 +520,8 @@ int hb_calc_bitrate( hb_job_t * job, int size )
 
     if( size == -1 )
     {
-        hb_interjob_t * interjob = hb_interjob_get( job->h );
         avail = job->vbitrate * 125 * length;
-        avail += length * interjob->vrate * overhead / interjob->vrate_base;
+        avail += length * job->vrate * overhead / job->vrate_base;
     }
 
     /* Video overhead */

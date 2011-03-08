@@ -148,8 +148,19 @@ static int MKVInit( hb_mux_object_t * m )
         track->extra.video.displayWidth = job->width;
     }
 
-
-    track->defaultDuration = (int64_t)(((float)job->vrate_base / (float)job->vrate) * 1000000000);
+    int vrate_base, vrate;
+    if( job->pass == 2 )
+    {
+        hb_interjob_t * interjob = hb_interjob_get( job->h );
+        vrate_base = interjob->vrate_base;
+        vrate = interjob->vrate;
+    }
+    else
+    {
+        vrate_base = job->vrate_base;
+        vrate = job->vrate;
+    }
+    track->defaultDuration = (int64_t)(((float)vrate_base / (float)vrate) * 1000000000);
 
     mux_data->track = mk_createTrack(m->file, track);
 

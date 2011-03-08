@@ -82,8 +82,8 @@ typedef struct hb_interjob_s
     int frame_count;       /* number of frames counted by sync */
     uint64_t total_time;   /* real length in 90khz (i.e. / 90000 */
     int render_dropped;    /* frames droped by telecine */
-    int vrate;             /* initial assigned vrate */
-    int vrate_base;        /* initial assigned vrate_base */
+    int vrate;             /* actual measured output vrate from 1st pass */
+    int vrate_base;        /* actual measured output vrate_base from 1st pass */
 
     hb_subtitle_t *select_subtitle; /* foreign language scan subtitle */
 } hb_interjob_t;

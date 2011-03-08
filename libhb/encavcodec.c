@@ -77,8 +77,18 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
     context->width     = job->width;
     context->height    = job->height;
-    rate_num = job->vrate_base;
-    rate_den = job->vrate;
+
+    if( job->pass == 2 )
+    {
+        hb_interjob_t * interjob = hb_interjob_get( job->h );
+        rate_num = interjob->vrate_base;
+        rate_den = interjob->vrate;
+    }
+    else
+    {
+        rate_num = job->vrate_base;
+        rate_den = job->vrate;
+    }
     if (rate_den == 27000000)
     {
         int ii;
@@ -103,7 +113,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         rate_den >>= 1;
     }
     context->time_base = (AVRational) { rate_num, rate_den };
-    context->gop_size  = 10 * job->vrate / job->vrate_base;
+    context->gop_size  = 10 * (int)( (double)job->vrate / (double)job->vrate_base + 0.5 );
     context->pix_fmt   = PIX_FMT_YUV420P;
 
     if( job->anamorphic.mode )

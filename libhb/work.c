@@ -200,19 +200,22 @@ void hb_display_job_info( hb_job_t * job )
         hb_log( "     + bitrate %d kbps", title->video_bitrate / 1000 );
     }
     
-    if( !job->cfr )
+    if( job->cfr == 0 )
     {
         hb_log( "   + frame rate: same as source (around %.3f fps)",
             (float) title->rate / (float) title->rate_base );
     }
-    else
+    else if( job->cfr == 1 )
     {
-        static const char *frtypes[] = {
-            "", "constant", "peak rate limited to"
-        };
-        hb_log( "   + frame rate: %.3f fps -> %s %.3f fps",
-            (float) title->rate / (float) title->rate_base, frtypes[job->cfr],
+        hb_log( "   + frame rate: %.3f fps -> constant %.3f fps",
+            (float) title->rate / (float) title->rate_base,
             (float) job->vrate / (float) job->vrate_base );
+    }
+    else if( job->cfr == 2 )
+    {
+        hb_log( "   + frame rate: %.3f fps -> peak rate limited to %.3f fps",
+            (float) title->rate / (float) title->rate_base,
+            (float) job->pfr_vrate / (float) job->pfr_vrate_base );
     }
 
     if( job->anamorphic.mode )
@@ -380,13 +383,11 @@ void correct_framerate( hb_job_t * job )
     if( ( job->sequence_id & 0xFFFFFF ) != ( interjob->last_job & 0xFFFFFF) )
         return; // Interjob information is for a different encode.
 
-    /* Cache the original framerate before altering it. */
-    interjob->vrate = job->vrate;
-    interjob->vrate_base = job->vrate_base;
-
+    // compute actual output vrate from first pass
     real_frames = interjob->frame_count - interjob->render_dropped;
 
-    job->vrate = job->vrate_base * ( (double)real_frames * 90000 / interjob->total_time );
+    interjob->vrate = job->vrate_base * ( (double)real_frames * 90000 / interjob->total_time );
+    interjob->vrate_base = job->vrate_base;
 }
 
 static int check_ff_audio( hb_list_t *list_audio, hb_audio_t *ff_audio )
@@ -442,7 +443,7 @@ static void do_job( hb_job_t * job )
     title = job->title;
     interjob = hb_interjob_get( job->h );
 
-    if( job->pass == 2 && !job->cfr )
+    if( job->pass == 2 )
     {
         correct_framerate( job );
     }
@@ -492,7 +493,24 @@ static void do_job( hb_job_t * job )
     if ( job->cfr == 0 )
     {
         /* Ensure we're using "Same as source" FPS */
+        job->vrate = title->rate;
         job->vrate_base = title->rate_base;
+    }
+    else if ( job->cfr == 2 )
+    {
+        job->pfr_vrate = job->vrate;
+        job->pfr_vrate_base = job->vrate_base;
+
+        // Ensure we're using "Same as source" FPS, with peak set by pfr_vrate_* 
+        // For PFR, we want the framerate based on the source's actual 
+        // framerate, unless it's higher than the specified peak framerate. 
+        double source_fps = (double)job->title->rate / job->title->rate_base;
+        double peak_l_fps = (double)job->vrate / job->vrate_base;
+        if ( source_fps < peak_l_fps )
+        {
+            job->vrate_base = title->rate_base;
+            job->vrate = title->rate;
+        }
     }
 
     job->fifo_mpeg2  = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
@@ -1221,7 +1239,6 @@ static void work_loop( void * _w )
             }
             break;
         }
-
         // Invalidate buf_out so that if there is no output
         // we don't try to pass along junk.
         buf_out = NULL;
