@@ -95,9 +95,9 @@ case $host in
     ;;
   *)
     if test "x$gst_disable" = "xyes" ; then
-	    GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gio-2.0 libnotify gudev-1.0"
+	    GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gio-2.0 libnotify dbus-glib-1 gudev-1.0"
     else
-	    GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-video-0.10 gstreamer-pbutils-0.10 gio-2.0 libnotify gudev-1.0"
+	    GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-video-0.10 gstreamer-pbutils-0.10 gio-2.0 libnotify dbus-glib-1 gudev-1.0"
     fi
 	mingw_flag=no
     ;;
