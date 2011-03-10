@@ -57,7 +57,6 @@ struct hb_handle_s
 
 };
 
-hb_lock_t *hb_avcodec_lock;
 hb_work_object_t * hb_objects = NULL;
 int hb_instance_counter = 0;
 int hb_process_initialized = 0;
@@ -65,27 +64,52 @@ int hb_process_initialized = 0;
 static void thread_func( void * );
 hb_title_t * hb_get_title_by_index( hb_handle_t *, int );
 
+hb_lock_t *hb_avcodec_lock;
+static int ff_lockmgr_cb(void **mutex, enum AVLockOp op)
+{
+    switch ( op )
+    {
+        case AV_LOCK_CREATE:
+        {
+            hb_avcodec_lock  = hb_lock_init();
+            *mutex = hb_avcodec_lock;
+        } break;
+        case AV_LOCK_DESTROY:
+        {
+            hb_lock_close( &hb_avcodec_lock );
+            *mutex = NULL;
+        } break;
+        case AV_LOCK_OBTAIN:
+        {
+            hb_lock( (hb_lock_t*)*mutex );
+        } break;
+        case AV_LOCK_RELEASE:
+        {
+            hb_unlock( (hb_lock_t*)*mutex );
+        } break;
+        default:
+            break;
+    }
+    return 0;
+}
+
 void hb_avcodec_init()
 {
-    hb_avcodec_lock  = hb_lock_init();
+    av_lockmgr_register( ff_lockmgr_cb );
     av_register_all();
 }
 
 int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec)
 {
     int ret;
-    hb_lock( hb_avcodec_lock );
     ret = avcodec_open(avctx, codec);
-    hb_unlock( hb_avcodec_lock );
     return ret;
 }
 
-int hb_av_find_stream_info(AVFormatContext *ic)
+int hb_avcodec_close(AVCodecContext *avctx)
 {
     int ret;
-    hb_lock( hb_avcodec_lock );
-    ret = av_find_stream_info( ic );
-    hb_unlock( hb_avcodec_lock );
+    ret = avcodec_close(avctx);
     return ret;
 }
 
@@ -122,15 +146,6 @@ hb_sws_get_context(int srcW, int srcH, enum PixelFormat srcFormat,
                          flags, NULL, NULL, NULL);
 #endif
     return ctx;
-}
-
-int hb_avcodec_close(AVCodecContext *avctx)
-{
-    int ret;
-    hb_lock( hb_avcodec_lock );
-    ret = avcodec_close(avctx);
-    hb_unlock( hb_avcodec_lock );
-    return ret;
 }
 
 int hb_ff_layout_xlat(int64_t ff_channel_layout, int channels)
