@@ -257,71 +257,48 @@ static void next_tag( hb_libmpeg2_t *m, hb_buffer_t *buf_es )
 }
 
 static hb_buffer_t *hb_copy_frame( hb_job_t *job, int width, int height,
-                                   enum PixelFormat pixfmt,
+                                   int *crop, enum PixelFormat pixfmt,
                                    uint8_t* y, uint8_t *u, uint8_t *v )
 {
-    int dst_w = width, dst_h = height;
+    int dst_w, dst_h;
+    int src_w, src_h;
+
+    src_w = width - (crop[2] + crop[3]);
+    src_h = height - (crop[0] + crop[1]);
     if ( job )
     {
         dst_w = job->title->width;
         dst_h = job->title->height;
     }
-    int dst_wh = dst_w * dst_h;
+    else
+    {
+        dst_w = src_w;
+        dst_h = src_h;
+    }
+
     hb_buffer_t *buf  = hb_video_buffer_init( dst_w, dst_h );
     buf->start = -1;
 
-    if ( dst_w != width || dst_h != height || pixfmt == PIX_FMT_YUV422P )
-    {
-        // we're encoding and the frame dimensions don't match the title dimensions -
-        // rescale & matte Y, U, V into our output buf.
-        AVPicture in, out;
-        avpicture_alloc(&in,  pixfmt, width, height );
-        avpicture_alloc(&out, PIX_FMT_YUV420P, dst_w, dst_h );
+    AVPicture in, out, pic_crop;
 
-        int src_wh = width * height;
-        if ( pixfmt == PIX_FMT_YUV422P )
-        {
-            memcpy( in.data[0], y, src_wh );
-            memcpy( in.data[1], u, src_wh >> 1 );
-            memcpy( in.data[2], v, src_wh >> 1 );
-        }
-        else
-        {
-            memcpy( in.data[0], y, src_wh );
-            memcpy( in.data[1], u, src_wh >> 2 );
-            memcpy( in.data[2], v, src_wh >> 2 );
-        }
-        struct SwsContext *context = hb_sws_get_context( width, height, pixfmt,
-                                                     dst_w, dst_h, PIX_FMT_YUV420P,
-                                                     SWS_LANCZOS|SWS_ACCURATE_RND);
-        sws_scale( context, in.data, in.linesize, 0, height, out.data, out.linesize );
-        sws_freeContext( context );
+    in.data[0] = y;
+    in.data[1] = u;
+    in.data[2] = v;
+    in.linesize[0] = width;
+    in.linesize[1] = width>>1;
+    in.linesize[2] = width>>1;
+    avpicture_fill( &out, buf->data, PIX_FMT_YUV420P, dst_w, dst_h );
 
-        uint8_t *data = buf->data;
-        memcpy( data, out.data[0], dst_wh );
-        data += dst_wh;
-        // U & V planes are 1/4 the size of Y plane.
-        dst_wh >>= 2;
-        memcpy( data, out.data[1], dst_wh );
-        data += dst_wh;
-        memcpy( data, out.data[2], dst_wh );
+    av_picture_crop( &pic_crop, &in, pixfmt, crop[0], crop[2] );
 
-        avpicture_free( &out );
-        avpicture_free( &in );
-    }
-    else
-    {
-        // we're scanning or the frame dimensions match the title's dimensions
-        // so we can do a straight copy.
-        uint8_t *data = buf->data;
-        memcpy( data, y, dst_wh );
-        data += dst_wh;
-        // U & V planes are 1/4 the size of Y plane.
-        dst_wh >>= 2;
-        memcpy( data, u, dst_wh );
-        data += dst_wh;
-        memcpy( data, v, dst_wh );
-    }
+    // Source and Dest dimensions may be the same.  There is no speed
+    // cost to using sws_scale to simply copy the data.
+    struct SwsContext *context = hb_sws_get_context( src_w, src_h, pixfmt,
+                                                 dst_w, dst_h, PIX_FMT_YUV420P,
+                                                 SWS_LANCZOS|SWS_ACCURATE_RND);
+    sws_scale( context, pic_crop.data, pic_crop.linesize, 0, src_h, out.data, out.linesize );
+    sws_freeContext( context );
+
     return buf;
 }
 
@@ -383,8 +360,8 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
         {
             if( !( m->width && m->height && m->rate ) )
             {
-                m->width  = m->info->sequence->width;
-                m->height = m->info->sequence->height;
+                m->width  = m->info->sequence->display_width;
+                m->height = m->info->sequence->display_height;
                 m->rate   = m->info->sequence->frame_period;
                 if ( m->aspect_ratio <= 0 && m->height &&
                      m->info->sequence->pixel_height )
@@ -430,8 +407,19 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
 
             if( m->got_iframe )
             {
-                buf  = hb_copy_frame( m->job, m->info->sequence->width,
+                int crop[4] = {0};
+                if ( m->info->sequence->display_width < m->info->sequence->width )
+                {
+                    crop[3] = m->info->sequence->width - m->info->sequence->display_width;
+                }
+                if ( m->info->sequence->display_height < m->info->sequence->height )
+                {
+                    crop[1] = m->info->sequence->height - m->info->sequence->display_height;
+                }
+                buf  = hb_copy_frame( m->job, 
+                                      m->info->sequence->width,
                                       m->info->sequence->height,
+                                      crop,
                                       m->pixfmt,
                                       m->info->display_fbuf->buf[0],
                                       m->info->display_fbuf->buf[1],
