@@ -279,9 +279,9 @@ namespace HandBrake.ApplicationServices.Model
         #region Advanced
 
         /// <summary>
-        /// Gets or sets X264Options.
+        /// Gets or sets AdvancedEncoderOptions.
         /// </summary>
-        public string X264Options { get; set; }
+        public string AdvancedEncoderOptions { get; set; }
 
         #endregion
 

@@ -607,16 +607,29 @@ namespace Handbrake
 
         private void BtnRemovePreset_Click(object sender, EventArgs e)
         {
+            throw new Exception();
+            if (treeView_presets.SelectedNode == null)
+            {
+                return;
+            }
+
             DialogResult result = MessageBox.Show("Are you sure you wish to delete the selected preset?", "Preset",
                                                   MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                if (treeView_presets.SelectedNode != null)
+                if (treeView_presets.SelectedNode.Nodes.Count > 0)
                 {
-                    presetHandler.Remove((Preset)treeView_presets.SelectedNode.Tag);
-                    treeView_presets.Nodes.Remove(treeView_presets.SelectedNode);
+                    // Delete the selected group category
+                    this.presetHandler.RemoveGroup(treeView_presets.SelectedNode.Text.Trim());
                 }
+                else
+                {
+                    // Delete the selected item.
+                    presetHandler.Remove((Preset)treeView_presets.SelectedNode.Tag);
+                }
+                treeView_presets.Nodes.Remove(treeView_presets.SelectedNode);
             }
+
             treeView_presets.Select();
         }
 
@@ -625,14 +638,9 @@ namespace Handbrake
         {
             if (treeView_presets.SelectedNode != null)
             {
-                DialogResult result = MessageBox.Show("Are you sure you wish to set this preset as the default?",
-                                                      "Preset", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
-                {
-                    Properties.Settings.Default.defaultPreset = treeView_presets.SelectedNode.Text;
-                    Properties.Settings.Default.Save();
-                    MessageBox.Show("New default preset set.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                Settings.Default.defaultPreset = treeView_presets.SelectedNode.Text;
+                Settings.Default.Save();
+                MessageBox.Show("New default preset set.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
                 MessageBox.Show("Please select a preset first.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -652,13 +660,6 @@ namespace Handbrake
         {
             presetHandler.UpdateBuiltInPresets(string.Empty);
             LoadPresetPanel();
-            if (treeView_presets.Nodes.Count == 0)
-                MessageBox.Show(
-                    "Unable to load the presets.xml file. Please select \"Update Built-in Presets\" from the Presets Menu. \nMake sure you are running the program in Admin mode if running on Vista. See Windows FAQ for details!",
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            else
-                MessageBox.Show("Presets have been updated!", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
             treeView_presets.ExpandAll();
         }
 
@@ -737,31 +738,7 @@ namespace Handbrake
         {
             if (e.KeyCode == Keys.Delete)
             {
-                DialogResult result = MessageBox.Show("Are you sure you wish to delete the selected preset?", "Preset",
-                                                      MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
-                {
-                    if (treeView_presets.SelectedNode != null)
-                        presetHandler.Remove((Preset)treeView_presets.SelectedNode.Tag);
-
-                    // Remember each nodes expanded status so we can reload it
-                    List<bool> nodeStatus = new List<bool>();
-                    foreach (TreeNode node in treeView_presets.Nodes)
-                        nodeStatus.Add(node.IsExpanded);
-
-                    // Now reload the preset panel
-                    LoadPresetPanel();
-
-                    // And finally, re-expand any of the nodes if required
-                    int i = 0;
-                    foreach (TreeNode node in treeView_presets.Nodes)
-                    {
-                        if (nodeStatus[i])
-                            node.Expand();
-
-                        i++;
-                    }
-                }
+                this.BtnRemovePreset_Click(sender, e);
             }
         }
 
@@ -1732,7 +1709,7 @@ namespace Handbrake
         public void SetExtension(string newExtension)
         {
             if (newExtension == ".mp4" || newExtension == ".m4v")
-                if (Check_ChapterMarkers.Checked || AudioSettings.RequiresM4V() || Subtitles.RequiresM4V() || Properties.Settings.Default.useM4v == 2) 
+                if (Check_ChapterMarkers.Checked || AudioSettings.RequiresM4V() || Subtitles.RequiresM4V() || Properties.Settings.Default.useM4v == 2)
                     newExtension = Properties.Settings.Default.useM4v == 1 ? ".mp4" : ".m4v";
                 else
                     newExtension = ".mp4";
@@ -1752,7 +1729,6 @@ namespace Handbrake
                 if (check_2PassEncode.CheckState == CheckState.Checked)
                     check_turbo.Enabled = true;
 
-                tab_advanced.Enabled = true;
                 if ((drop_format.Text.Contains("MP4")) || (drop_format.Text.Contains("M4V")))
                     check_iPodAtom.Enabled = true;
                 else
@@ -1762,13 +1738,12 @@ namespace Handbrake
             {
                 check_turbo.CheckState = CheckState.Unchecked;
                 check_turbo.Enabled = false;
-                tab_advanced.Enabled = false;
                 x264Panel.X264Query = string.Empty;
                 check_iPodAtom.Enabled = false;
                 check_iPodAtom.Checked = false;
             }
 
-            // Setup the CQ Slider
+            // Setup the CQ Slider and Advanced Panel
             switch (drp_videoEncoder.Text)
             {
                 case "MPEG-4 (FFmpeg)":
@@ -1776,12 +1751,13 @@ namespace Handbrake
                         slider_videoQuality.Value = 20; // Just reset to 70% QP 10 on encode change.
                     slider_videoQuality.Minimum = 1;
                     slider_videoQuality.Maximum = 31;
+                    this.x264Panel.Visible = false;
+                    this.advancedEncoderOpts.Visible = true;
+                    this.advancedEncoderOpts.IsDisabled = false;
                     break;
                 case "H.264 (x264)":
                     slider_videoQuality.Minimum = 0;
                     slider_videoQuality.TickFrequency = 1;
-
-                    CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
                     double cqStep = Properties.Settings.Default.x264cqstep;
                     double multiplier = 1.0 / cqStep;
                     double value = slider_videoQuality.Value * multiplier;
@@ -1791,12 +1767,19 @@ namespace Handbrake
                     if (value < slider_videoQuality.Maximum)
                         slider_videoQuality.Value = slider_videoQuality.Maximum - (int)value;
 
+                    this.x264Panel.Visible = true;
+                    this.x264Panel.BringToFront();
+                    this.advancedEncoderOpts.Visible = false;
                     break;
                 case "VP3 (Theora)":
                     if (slider_videoQuality.Value > 63)
                         slider_videoQuality.Value = 45; // Just reset to 70% QP 45 on encode change.
                     slider_videoQuality.Minimum = 0;
                     slider_videoQuality.Maximum = 63;
+
+                    this.x264Panel.Visible = false;
+                    this.advancedEncoderOpts.Visible = true;
+                    this.advancedEncoderOpts.IsDisabled = true;
                     break;
             }
         }
@@ -1884,7 +1867,7 @@ namespace Handbrake
                     {
                         lbl_SliderValue.Text += " (Warning: lossless)";
                     }
-                    
+
                     break;
                 case "VP3 (Theora)":
                     lbl_SliderValue.Text = "QP:" + slider_videoQuality.Value;
@@ -1894,10 +1877,17 @@ namespace Handbrake
 
         private void radio_avgBitrate_CheckedChanged(object sender, EventArgs e)
         {
-            text_bitrate.Enabled = true;
-            slider_videoQuality.Enabled = false;
+            if (radio_avgBitrate.Checked)
+            {
+                text_bitrate.Enabled = true;
+                if (string.IsNullOrEmpty(text_bitrate.Text))
+                {
+                    text_bitrate.Text = "1500";
+                }
+                slider_videoQuality.Enabled = false;
 
-            check_2PassEncode.Enabled = true;
+                check_2PassEncode.Enabled = true;
+            }
         }
 
         private void radio_cq_CheckedChanged(object sender, EventArgs e)
@@ -2399,13 +2389,15 @@ namespace Handbrake
                 }
 
                 if (preset.Category == category && rootNode != null)
-                    rootNode.Nodes.Add(new TreeNode(preset.Name) { ToolTipText = preset.Description, ForeColor = Color.DarkBlue });
+                    rootNode.Nodes.Add(new TreeNode(preset.Name) { ToolTipText = preset.Description, ForeColor = Color.DarkBlue, Tag = preset });
             }
 
             rootNode = null;
             category = null;
             foreach (Preset preset in this.presetHandler.Presets.Where(p => !p.IsBuildIn)) // User Presets
             {
+                // If the category of this preset doesn't match the current category we are processing
+                // Then we need to create a new root node.
                 if (preset.Category != category && preset.Category != string.Empty)
                 {
                     rootNode = new TreeNode(preset.Category) { ForeColor = Color.Black };
@@ -2414,9 +2406,9 @@ namespace Handbrake
                 }
 
                 if (preset.Category == category && rootNode != null)
-                    rootNode.Nodes.Add(new TreeNode(preset.Name) { ForeColor = Color.Black, ToolTipText = preset.Description });
+                    rootNode.Nodes.Add(new TreeNode(preset.Name) { ForeColor = Color.Black, ToolTipText = preset.Description, Tag = preset });
                 else
-                    treeView_presets.Nodes.Add(new TreeNode(preset.Name) { ForeColor = Color.Black, ToolTipText = preset.Description });
+                    treeView_presets.Nodes.Add(new TreeNode(preset.Name) { ForeColor = Color.Black, ToolTipText = preset.Description, Tag = preset });
             }
 
             treeView_presets.Update();

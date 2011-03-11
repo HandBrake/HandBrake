@@ -140,8 +140,23 @@ namespace HandBrake.ApplicationServices.Services
         public void Remove(Preset preset)
         {
             this.presets.Remove(preset);
+            this.UpdatePresetFiles();
+        }
 
-            // Update the presets file
+        /// <summary>
+        /// Remove a group of presets by category
+        /// </summary>
+        /// <param name="category">
+        /// The Category to remove
+        /// </param>
+        public void RemoveGroup(string category)
+        {
+            List<Preset> removeList = this.presets.Where(p => p.Category == category).ToList();
+            foreach (Preset preset in removeList)
+            {
+                this.presets.Remove(preset);
+            }
+
             this.UpdatePresetFiles();
         }
 

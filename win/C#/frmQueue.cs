@@ -433,7 +433,7 @@ namespace Handbrake
                 lbl_source.Text = queue.QueueManager.LastProcessedJob.Source + "(Title: " + title + " Chapters: " + chapterlbl + ")";
                 lbl_dest.Text = queue.QueueManager.LastProcessedJob.Destination;
                 lbl_encodeOptions.Text = "Video: " + parsed.VideoEncoder + " Audio: " + audio + Environment.NewLine +
-                                    "x264 Options: " + parsed.X264Options;
+                                    "x264 Options: " + parsed.AdvancedEncoderOptions;
                }
             catch (Exception)
             {

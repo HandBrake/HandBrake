@@ -40,6 +40,14 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         void Remove(Preset preset);
 
         /// <summary>
+        /// Remove a group of presets by category
+        /// </summary>
+        /// <param name="category">
+        /// The Category to remove
+        /// </param>
+        void RemoveGroup(string category);
+
+        /// <summary>
         /// Get a Preset
         /// </summary>
         /// <param name="name">

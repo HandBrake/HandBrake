@@ -103,8 +103,8 @@ namespace HandBrake.ApplicationServices.Utilities
             Match chapterMarkers = Regex.Match(input, @" -m");
             Match chapterMarkersFileMode = Regex.Match(input, @"--markers");
 
-            // H264 Tab
-            Match x264 = Regex.Match(input, @"-x ([.,/a-zA-Z0-9=:-]*)");
+            // Advanced Tab
+            Match advanced = Regex.Match(input, @"-x ([.,/a-zA-Z0-9=:-]*)");
 
             #endregion
 
@@ -395,10 +395,10 @@ namespace HandBrake.ApplicationServices.Utilities
 
                 #endregion
 
-                #region H.264 and other
+                #region Advanced and other
 
-                if (x264.Success)
-                    parsed.X264Options = x264.ToString().Replace("-x ", string.Empty);
+                if (advanced.Success)
+                    parsed.AdvancedEncoderOptions = advanced.ToString().Replace("-x ", string.Empty);
 
                 #endregion
             }

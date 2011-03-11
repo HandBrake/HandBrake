@@ -13,6 +13,7 @@ namespace Handbrake
 
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Services;
+    using HandBrake.Framework.Views;
 
     using Handbrake.Properties;
 
@@ -121,11 +122,21 @@ namespace Handbrake
         /// <param name="e">Unhandled Exception EventArgs </param>
         private static void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            MessageBox.Show(
-                "An Unknown Error has occured. \n\n Exception:" + e.ExceptionObject,
-                "Unhandled Exception",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
+            try
+            {
+                ExceptionWindow window = new ExceptionWindow();
+                window.Setup("An Unknown Error has occured.", e.ExceptionObject.ToString());
+                window.ShowDialog();              
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(
+                    "An Unknown Error has occured. \n\n Exception:" + e.ExceptionObject,
+                    "Unhandled Exception",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+
         }
 
         public static int InstanceId;

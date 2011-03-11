@@ -541,9 +541,26 @@ namespace Handbrake.Functions
 
         private static string X264Query(frmMain mainWindow)
         {
-            if (string.IsNullOrEmpty(mainWindow.x264Panel.X264Query)) return string.Empty;
+            string advancedOptions = string.Empty;
+            switch (mainWindow.drp_videoEncoder.SelectedIndex)
+            {
+                case 0: // ffmpeg
+                    advancedOptions = string.IsNullOrEmpty(mainWindow.x264Panel.X264Query)
+                        ? string.Empty
+                        : mainWindow.x264Panel.X264Query;
+                    break;
+                case 1: // x264
+                    advancedOptions = string.IsNullOrEmpty(mainWindow.x264Panel.X264Query)
+                        ? string.Empty
+                        : mainWindow.x264Panel.X264Query;
+                    break;
+                case 2: // VP3
+                    advancedOptions = string.Empty;
+                    break;
+            }
 
-            return " -x " + mainWindow.x264Panel.X264Query;
+
+            return " -x " + advancedOptions;
         }
 
         private static string ExtraSettings()

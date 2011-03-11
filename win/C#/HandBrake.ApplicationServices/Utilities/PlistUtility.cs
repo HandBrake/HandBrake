@@ -254,7 +254,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
                     // Advanced x264 tab
                     case "x264Option":
-                        parsed.X264Options = value;
+                        parsed.AdvancedEncoderOptions = value;
                         break;
 
                     // Preset Information
@@ -548,7 +548,7 @@ namespace HandBrake.ApplicationServices.Utilities
             AddEncodeElement(xmlWriter, "VideoTwoPass", "integer", parsed.TwoPass ? "1" : "0");
 
             // x264 string
-            AddEncodeElement(xmlWriter, "x264Option", "string", parsed.X264Options);
+            AddEncodeElement(xmlWriter, "x264Option", "string", parsed.AdvancedEncoderOptions);
         }
 
         /// <summary>

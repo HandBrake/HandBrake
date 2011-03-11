@@ -267,7 +267,7 @@ namespace Handbrake.Functions
 
             #region Other
 
-            mainWindow.x264Panel.X264Query = presetQuery.X264Options;
+            mainWindow.x264Panel.X264Query = presetQuery.AdvancedEncoderOptions;
 
             // Set the preset name
             mainWindow.labelPreset.Text = "Output Settings (Preset: " + name + ")";
