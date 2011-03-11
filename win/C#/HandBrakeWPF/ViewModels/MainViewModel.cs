@@ -7,21 +7,25 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
     using System.Collections.ObjectModel;
+    using System.ComponentModel.Composition;
     using System.Diagnostics;
     using System.IO;
     using System.Windows;
+
+    using Caliburn.PresentationFramework.ApplicationModel;
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
-    using Microsoft.Practices.ServiceLocation;
+    using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
     /// HandBrakes Main Window
     /// </summary>
-    public class MainViewModel : ViewModelBase
+    [Export(typeof(IMainViewModel))]
+    public class MainViewModel : ViewModelBase, IMainViewModel
     {
         #region Private Variables and Services
 
@@ -59,8 +63,8 @@ namespace HandBrakeWPF.ViewModels
 
         #region Properties
 
-        public MainViewModel(IServiceLocator locator)
-            : base(locator)
+        [ImportingConstructor]
+        public MainViewModel(IWindowManager windowManager) : base(windowManager) 
         {
             // Setup Services (TODO - Bring Castle back into the project to wire these up for us)
             this.scanService = File.Exists("hb.dll") ? (IScan)new LibScan() : new ScanService();
@@ -96,7 +100,6 @@ namespace HandBrakeWPF.ViewModels
                 if (!object.Equals(this.windowName, value))
                 {
                     this.windowName = value;
-                    this.NotifyOfPropertyChange("TestProperty");
                 }
             }
         }
@@ -139,7 +142,6 @@ namespace HandBrakeWPF.ViewModels
                 if (!object.Equals(this.sourceLabel, value))
                 {
                     this.sourceLabel = value;
-                    this.NotifyOfPropertyChange("SourceLabel");
                 }
             }
         }
@@ -160,7 +162,6 @@ namespace HandBrakeWPF.ViewModels
                 if (!object.Equals(this.programStatusLabel, value))
                 {
                     this.programStatusLabel = value;
-                    this.NotifyOfPropertyChange("ProgramStatusLabel");
                 }
             }
         }
@@ -170,7 +171,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Shutdown this View
         /// </summary>
-        public override void Shutdown()
+        public void Shutdown()
         {
             // Unsubscribe from Events.
             this.scanService.ScanStared -= this.ScanStared;
@@ -181,9 +182,6 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueuePaused -= this.QueuePaused;
             this.queueProcessor.EncodeService.EncodeStarted -= this.EncodeStarted;
             this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
-
-            // Shutdown Normally
-            base.Shutdown();
         }
 
 
@@ -191,7 +189,6 @@ namespace HandBrakeWPF.ViewModels
         
         public void AboutApplication()
         {
-           this.ShowDialog<AboutViewModel>();
         }
         
         /// <summary>

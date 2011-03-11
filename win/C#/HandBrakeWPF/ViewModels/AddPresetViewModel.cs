@@ -5,15 +5,14 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using Microsoft.Practices.ServiceLocation;
+    using Caliburn.PresentationFramework.ApplicationModel;
 
     /// <summary>
     /// The Add Preset View Model
     /// </summary>
     public class AddPresetViewModel : ViewModelBase
     {
-        public AddPresetViewModel(IServiceLocator locator)
-            : base(locator)
+        public AddPresetViewModel(IWindowManager windowManager) : base(windowManager)
         {
         }
     }

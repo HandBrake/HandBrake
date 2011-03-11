@@ -1,6 +1,6 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.AboutView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:PresentationFramework="clr-namespace:Caliburn.PresentationFramework;assembly=Caliburn.PresentationFramework" Title="AboutView" Height="268" Width="511">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:PresentationFramework="clr-namespace:Caliburn.PresentationFramework;assembly=Caliburn.PresentationFramework" xmlns:RoutedMessaging="clr-namespace:Caliburn.PresentationFramework.RoutedMessaging;assembly=Caliburn.PresentationFramework" Title="AboutView" Height="268" Width="511">
     
     <StackPanel Orientation="Horizontal">
         <Image Source="Images/logo64.png" Width="64" Height="64" SnapsToDevicePixels="True" Margin="10,10,10,10" HorizontalAlignment="Left" VerticalAlignment="Top" />
@@ -18,7 +18,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
             </TextBox>
 
-            <Button Content="OK" PresentationFramework:Message.Attach="[Event Click] = [Action Close]"
+            <Button Content="OK" RoutedMessaging:Message.Attach="[Event Click] = [Action Close]"
                     HorizontalAlignment="Right" Padding="10,2" Margin="0,0,10,10" />
             
          </StackPanel>

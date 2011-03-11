@@ -39,17 +39,54 @@
     <Reference Include="Caliburn.Core">
       <HintPath>..\libraries\caliburn\Caliburn.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Caliburn.ModelFramework">
-      <HintPath>..\libraries\caliburn\Caliburn.ModelFramework.dll</HintPath>
+    <Reference Include="Caliburn.DynamicProxy">
+      <HintPath>..\libraries\caliburn\Caliburn.DynamicProxy.dll</HintPath>
+    </Reference>
+    <Reference Include="Caliburn.FluentValidation">
+      <HintPath>..\libraries\caliburn\Caliburn.FluentValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="Caliburn.MEF">
+      <HintPath>..\libraries\caliburn\Caliburn.MEF.dll</HintPath>
     </Reference>
     <Reference Include="Caliburn.PresentationFramework">
       <HintPath>..\libraries\caliburn\Caliburn.PresentationFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation">
-      <HintPath>..\libraries\caliburn\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    <Reference Include="Caliburn.ShellFramework">
+      <HintPath>..\libraries\caliburn\Caliburn.ShellFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Caliburn.Windsor">
+      <HintPath>..\libraries\caliburn\Caliburn.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\libraries\caliburn\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor">
+      <HintPath>..\libraries\caliburn\Castle.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging">
+      <HintPath>..\libraries\caliburn\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation">
+      <HintPath>..\libraries\caliburn\FluentValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Composite">
+      <HintPath>..\libraries\caliburn\Microsoft.Practices.Composite.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Composite.Presentation">
+      <HintPath>..\libraries\caliburn\Microsoft.Practices.Composite.Presentation.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.CoreEx">
+      <HintPath>..\libraries\caliburn\System.CoreEx.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Interactive">
+      <HintPath>..\libraries\caliburn\System.Interactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive">
+      <HintPath>..\libraries\caliburn\System.Reactive.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -70,9 +107,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Services\WindowManager.cs" />
+    <Compile Include="Services\MefBootstrapper.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AddPresetViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IMainViewModel.cs" />
     <Compile Include="ViewModels\PreviewViewModel.cs" />
     <Compile Include="ViewModels\QueueViewModel.cs" />
     <Compile Include="ViewModels\OptionsViewModel.cs" />

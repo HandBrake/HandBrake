@@ -5,15 +5,14 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using Microsoft.Practices.ServiceLocation;
+    using Caliburn.PresentationFramework.ApplicationModel;
 
     /// <summary>
     /// The Options View Model
     /// </summary>
     public class OptionsViewModel : ViewModelBase
     {
-        public OptionsViewModel(IServiceLocator locator)
-            : base(locator)
+        public OptionsViewModel(IWindowManager windowManager) : base(windowManager)
         {
         }
     }

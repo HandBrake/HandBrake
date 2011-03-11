@@ -5,15 +5,14 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using Microsoft.Practices.ServiceLocation;
+    using Caliburn.PresentationFramework.ApplicationModel;
 
     /// <summary>
     /// The About View Model
     /// </summary>
     public class PreviewViewModel : ViewModelBase
     {
-        public PreviewViewModel(IServiceLocator locator)
-            : base(locator)
+        public PreviewViewModel(IWindowManager windowManager) : base(windowManager)
         {
         }
     }
