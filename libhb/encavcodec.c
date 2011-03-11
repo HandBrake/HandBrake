@@ -7,11 +7,37 @@
 #include "hb.h"
 #include "hbffmpeg.h"
 
+/*
+ * The frame info struct remembers information about each frame across calls
+ * to avcodec_encode_video. Since frames are uniquely identified by their
+ * frame number, we use this as an index.
+ *
+ * The size of the array is chosen so that two frames can't use the same 
+ * slot during the encoder's max frame delay (set by the standard as 16 
+ * frames) and so that, up to some minimum frame rate, frames are guaranteed
+ * to map to * different slots.
+ */
+#define FRAME_INFO_SIZE 32
+#define FRAME_INFO_MASK (FRAME_INFO_SIZE - 1)
+
 struct hb_work_private_s
 {
     hb_job_t * job;
     AVCodecContext * context;
     FILE * file;
+
+    int frameno_in;
+    int frameno_out;
+    hb_buffer_t * delay_head;
+    hb_buffer_t * delay_tail;
+
+    int64_t dts_delay;
+
+    struct {
+        int64_t start;
+        int64_t stop;
+        int64_t renderOffset;
+    } frame_info[FRAME_INFO_SIZE];
 };
 
 int  encavcodecInit( hb_work_object_t *, hb_job_t * );
@@ -44,7 +70,110 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         hb_log( "hb_work_encavcodec_init: avcodec_find_encoder "
                 "failed" );
     }
-    context = avcodec_alloc_context();
+    context = avcodec_alloc_context3( codec );
+
+    // Set things in context that we will allow the user to 
+    // override with advanced settings.
+    context->thread_count = ( hb_get_cpu_count() * 3 / 2 );
+
+    if( job->pass == 2 )
+    {
+        hb_interjob_t * interjob = hb_interjob_get( job->h );
+        rate_num = interjob->vrate_base;
+        rate_den = interjob->vrate;
+    }
+    else
+    {
+        rate_num = job->vrate_base;
+        rate_den = job->vrate;
+    }
+
+    // If the rate_den is 27000000, there's a good chance this is
+    // a standard rate that we have in our hb_video_rates table.
+    // Because of rounding errors and approximations made while 
+    // measuring framerate, the actual value may not be exact.  So
+    // we look for rates that are "close" and make an adjustment
+    // to rate_num.
+    if (rate_den == 27000000)
+    {
+        int ii;
+        for (ii = 0; ii < hb_video_rates_count; ii++)
+        {
+            if (abs(rate_num - hb_video_rates[ii].rate) < 10)
+            {
+                rate_num = hb_video_rates[ii].rate;
+                break;
+            }
+        }
+    }
+    hb_reduce(&rate_num, &rate_den, rate_num, rate_den);
+    if ((rate_num & ~0xFFFF) || (rate_den & ~0xFFFF))
+    {
+        hb_log( "encavcodec: truncating framerate %d / %d", 
+                rate_num, rate_den );
+    }
+    while ((rate_num & ~0xFFFF) || (rate_den & ~0xFFFF))
+    {
+        rate_num >>= 1;
+        rate_den >>= 1;
+    }
+    context->time_base = (AVRational) { rate_num, rate_den };
+    context->gop_size  = 10 * (int)( (double)job->vrate / (double)job->vrate_base + 0.5 );
+
+    /*
+        This section passes the string advanced_opts to avutil for parsing 
+        into an AVCodecContext.
+
+        The string is set up like this:
+        option1=value1:option2=value2
+
+        So, you have to iterate through based on the colons, and then put
+        the left side of the equals sign in "name" and the right side into
+        "value." Then you hand those strings off to avutil for interpretation.
+     */
+    if( job->advanced_opts != NULL && *job->advanced_opts != '\0' )
+    {
+        char *opts, *opts_start;
+
+        opts = opts_start = strdup(job->advanced_opts);
+
+        if( opts_start )
+        {
+            while( *opts )
+            {
+                char *name = opts;
+                char *value;
+                int ret;
+
+                opts += strcspn( opts, ":" );
+                if( *opts )
+                {
+                    *opts = 0;
+                    opts++;
+                }
+
+                value = strchr( name, '=' );
+                if( value )
+                {
+                    *value = 0;
+                    value++;
+                }
+
+                /* Here's where the strings are passed to avutil for parsing. */
+                ret = av_set_string3( context, name, value, 1, NULL );
+
+                /* Let avutil sanity check the options for us*/
+                if( ret == AVERROR(ENOENT) )
+                    hb_log( "avcodec options: Unknown option %s", name );
+                if( ret == AVERROR(EINVAL) )
+                    hb_log( "avcodec options: Bad argument %s=%s", name, value ? value : "(null)" );
+            }
+        }
+        free(opts_start);
+    }
+
+    // Now set the things in context that we don't want to allow
+    // the user to override.
     if( job->vquality < 0.0 )
     {
         /* Rate control */
@@ -71,49 +200,11 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         {
             context->global_quality = FF_QP2LAMBDA * job->vquality + 0.5;
         }
-        context->mb_decision = 1;
         hb_log( "encavcodec: encoding at constant quantizer %d",
                 context->global_quality );
     }
     context->width     = job->width;
     context->height    = job->height;
-
-    if( job->pass == 2 )
-    {
-        hb_interjob_t * interjob = hb_interjob_get( job->h );
-        rate_num = interjob->vrate_base;
-        rate_den = interjob->vrate;
-    }
-    else
-    {
-        rate_num = job->vrate_base;
-        rate_den = job->vrate;
-    }
-    if (rate_den == 27000000)
-    {
-        int ii;
-        for (ii = 0; ii < hb_video_rates_count; ii++)
-        {
-            if (abs(rate_num - hb_video_rates[ii].rate) < 10)
-            {
-                rate_num = hb_video_rates[ii].rate;
-                break;
-            }
-        }
-    }
-    hb_reduce(&rate_num, &rate_den, rate_num, rate_den);
-    if ((rate_num & ~0xFFFF) || (rate_den & ~0xFFFF))
-    {
-        hb_log( "encavcodec: truncating framerate %d / %d", 
-                rate_num, rate_den );
-    }
-    while ((rate_num & ~0xFFFF) || (rate_den & ~0xFFFF))
-    {
-        rate_num >>= 1;
-        rate_den >>= 1;
-    }
-    context->time_base = (AVRational) { rate_num, rate_den };
-    context->gop_size  = 10 * (int)( (double)job->vrate / (double)job->vrate_base + 0.5 );
     context->pix_fmt   = PIX_FMT_YUV420P;
 
     if( job->anamorphic.mode )
@@ -170,17 +261,15 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
     pv->context = context;
 
+    if ( context->has_b_frames )
+    {
+        job->areBframes = 1;
+    }
     if( ( job->mux & HB_MUX_MP4 ) && job->pass != 1 )
     {
-#if 0
-        /* Hem hem */
-        w->config->mpeg4.length = 15;
-        memcpy( w->config->mpeg4.bytes, context->extradata + 15, 15 );
-#else
         w->config->mpeg4.length = context->extradata_size;
         memcpy( w->config->mpeg4.bytes, context->extradata,
                 context->extradata_size );
-#endif
     }
 
     return 0;
@@ -207,6 +296,109 @@ void encavcodecClose( hb_work_object_t * w )
     }
     free( pv );
     w->private_data = NULL;
+}
+
+/*
+ * see comments in definition of 'frame_info' in pv struct for description
+ * of what these routines are doing.
+ */
+static void save_frame_info( hb_work_private_t * pv, hb_buffer_t * in )
+{
+    int i = pv->frameno_in & FRAME_INFO_MASK;
+    pv->frame_info[i].start = in->start;
+    pv->frame_info[i].stop = in->stop;
+}
+
+static int64_t get_frame_start( hb_work_private_t * pv, int64_t frameno )
+{
+    int i = frameno & FRAME_INFO_MASK;
+    return pv->frame_info[i].start;
+}
+
+static int64_t get_frame_stop( hb_work_private_t * pv, int64_t frameno )
+{
+    int i = frameno & FRAME_INFO_MASK;
+    return pv->frame_info[i].stop;
+}
+
+static void compute_dts_offset( hb_work_private_t * pv, hb_buffer_t * buf )
+{
+    if ( pv->job->areBframes )
+    {
+        if ( ( pv->frameno_in - 1 ) == pv->job->areBframes )
+        {
+            pv->dts_delay = buf->start;
+            pv->job->config.h264.init_delay = pv->dts_delay;
+        }
+    }
+}
+
+// Generate DTS by rearranging PTS in this sequence:
+// pts0 - delay, pts1 - delay, pts2 - delay, pts1, pts2, pts3...
+//
+// Where pts0 - ptsN are in decoded monotonically increasing presentation 
+// order and delay == pts1 (1 being the number of frames the decoder must
+// delay before it has suffecient information to decode). The number of
+// frames to delay is set by job->areBframes, so it is configurable.
+// This guarantees that DTS <= PTS for any frame.
+//
+// This is similar to how x264 generates DTS
+static hb_buffer_t * process_delay_list( hb_work_private_t * pv, hb_buffer_t * buf )
+{
+    if ( pv->job->areBframes )
+    {
+        // Has dts_delay been set yet?
+        if ( pv->frameno_in <= pv->job->areBframes )
+        {
+            // dts_delay not yet set.  queue up buffers till it is set.
+            if ( pv->delay_tail == NULL )
+            {
+                pv->delay_head = pv->delay_tail = buf;
+            }
+            else
+            {
+                pv->delay_tail->next = buf;
+                pv->delay_tail = buf;
+            }
+            return NULL;
+        }
+
+        // We have dts_delay.  Apply it to any queued buffers renderOffset
+        // and return all queued buffers.
+        if ( pv->delay_tail == NULL && buf != NULL )
+        {
+            pv->frameno_out++;
+            // Use the cached frame info to get the start time of Nth frame
+            // Note that start Nth frame != start time this buffer since the
+            // output buffers have rearranged start times.
+            int64_t start = get_frame_start( pv, pv->frameno_out );
+            buf->renderOffset = start - pv->dts_delay;
+            return buf;
+        }
+        else
+        {
+            pv->delay_tail->next = buf;
+            buf = pv->delay_head;
+            while ( buf )
+            {
+                pv->frameno_out++;
+                // Use the cached frame info to get the start time of Nth frame
+                // Note that start Nth frame != start time this buffer since the
+                // output buffers have rearranged start times.
+                int64_t start = get_frame_start( pv, pv->frameno_out );
+                buf->renderOffset = start - pv->dts_delay;
+            }
+            buf = pv->delay_head;
+            pv->delay_head = pv->delay_tail = NULL;
+            return buf;
+        }
+    }
+    else if ( buf )
+    {
+        buf->renderOffset = buf->start - pv->dts_delay;
+        return buf;
+    }
+    return NULL;
 }
 
 /***********************************************************************
@@ -241,15 +433,78 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     // doesn't do the trick.  It must be set in the AVFrame.
     frame->quality = pv->context->global_quality;
 
+    // Bizarro ffmpeg appears to require the input AVFrame.pts to be
+    // set to a frame number.  Setting it to an actual pts causes
+    // jerky video.
+    // frame->pts = in->start;
+    frame->pts = ++pv->frameno_in;
+
+    // Remember info about this frame that we need to pass across
+    // the avcodec_encode_video call (since it reorders frames).
+    save_frame_info( pv, in );
+    compute_dts_offset( pv, in );
+
     if ( pv->context->codec )
     {
         /* Should be way too large */
         buf = hb_video_buffer_init( job->width, job->height );
         buf->size = avcodec_encode_video( pv->context, buf->data, buf->alloc,
                                           frame );
-        buf->start = in->start;
-        buf->stop  = in->stop;
-        buf->frametype   = pv->context->coded_frame->key_frame ? HB_FRAME_KEY : HB_FRAME_REF;
+        if ( buf->size <= 0 )
+        {
+            hb_buffer_close( &buf );
+        }
+        else
+        {
+            int64_t frameno = pv->context->coded_frame->pts;
+            buf->start  = get_frame_start( pv, frameno );
+            buf->stop  = get_frame_stop( pv, frameno );
+            switch ( pv->context->coded_frame->pict_type )
+            {
+                case FF_P_TYPE:
+                {
+                    buf->frametype = HB_FRAME_P;
+                } break;
+
+                case FF_B_TYPE:
+                {
+                    buf->frametype = HB_FRAME_B;
+                } break;
+
+                case FF_S_TYPE:
+                {
+                    buf->frametype = HB_FRAME_P;
+                } break;
+
+                case FF_SP_TYPE:
+                {
+                    buf->frametype = HB_FRAME_P;
+                } break;
+
+                case FF_BI_TYPE:
+                case FF_SI_TYPE:
+                case FF_I_TYPE:
+                {
+                    if ( pv->context->coded_frame->key_frame )
+                    {
+                        buf->frametype = HB_FRAME_IDR;
+                    }
+                    else
+                    {
+                        buf->frametype = HB_FRAME_I;
+                    }
+                } break;
+
+                default:
+                {
+                    if ( pv->context->coded_frame->key_frame )
+                        buf->frametype = HB_FRAME_KEY;
+                    else
+                        buf->frametype = HB_FRAME_REF;
+                } break;
+            }
+            buf = process_delay_list( pv, buf );
+        }
     }
     else
     {

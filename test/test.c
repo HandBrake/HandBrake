@@ -108,8 +108,8 @@ static int    chapter_start = 0;
 static int    chapter_end   = 0;
 static int    chapter_markers = 0;
 static char * marker_file   = NULL;
-static char	  *x264opts		= NULL;
-static char	  *x264opts2 	= NULL;
+static char	  *advanced_opts = NULL;
+static char	  *advanced_opts2 = NULL;
 static int	  maxHeight		= 0;
 static int	  maxWidth		= 0;
 static int    turbo_opts_enabled = 0;
@@ -352,8 +352,8 @@ int main( int argc, char ** argv )
     if( acodecs ) free( acodecs );
     if( anames ) free( anames );
     if (native_language ) free (native_language );
-	if( x264opts ) free (x264opts );
-	if( x264opts2 ) free (x264opts2 );
+	if( advanced_opts ) free (advanced_opts );
+	if( advanced_opts2 ) free (advanced_opts2 );
     if (preset_name) free (preset_name);
     if( stop_at_string ) free( stop_at_string );
     if( start_at_string ) free( start_at_string );
@@ -638,9 +638,9 @@ static int HandleEvents( hb_handle_t * h )
 						dynamic_range_compression = strdup("0.0,0.0");
 					}
 					maxWidth = 720;
-					if( !x264opts )
+					if( !advanced_opts )
 					{
-						x264opts = strdup("cabac=0:ref=2:me=umh:bframes=0:weightp=0:8x8dct=0:trellis=0:subme=6");
+						advanced_opts = strdup("cabac=0:ref=2:me=umh:bframes=0:weightp=0:8x8dct=0:trellis=0:subme=6");
 					}
 					if( !anamorphic_mode )
 					{
@@ -684,9 +684,9 @@ static int HandleEvents( hb_handle_t * h )
 						dynamic_range_compression = strdup("0.0");
 					}
 					maxWidth = 320;
-					if( !x264opts )
+					if( !advanced_opts )
 					{
-						x264opts = strdup("level=30:bframes=0:weightp=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:subme=6:8x8dct=0:trellis=0");
+						advanced_opts = strdup("level=30:bframes=0:weightp=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:subme=6:8x8dct=0:trellis=0");
 					}
 					job->chapter_markers = 1;
 					
@@ -725,9 +725,9 @@ static int HandleEvents( hb_handle_t * h )
 						dynamic_range_compression = strdup("0.0");
 					}
 					maxWidth = 480;
-					if( !x264opts )
+					if( !advanced_opts )
 					{
-						x264opts = strdup("cabac=0:ref=2:me=umh:bframes=0:weightp=0:subme=6:8x8dct=0:trellis=0");
+						advanced_opts = strdup("cabac=0:ref=2:me=umh:bframes=0:weightp=0:subme=6:8x8dct=0:trellis=0");
 					}
 					job->chapter_markers = 1;
 					
@@ -855,9 +855,9 @@ static int HandleEvents( hb_handle_t * h )
 						dynamic_range_compression = strdup("0.0,0.0");
 					}
 					maxWidth = 960;
-					if( !x264opts )
+					if( !advanced_opts )
 					{
-						x264opts = strdup("cabac=0:ref=2:me=umh:b-pyramid=none:b-adapt=2:weightb=0:trellis=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500");
+						advanced_opts = strdup("cabac=0:ref=2:me=umh:b-pyramid=none:b-adapt=2:weightb=0:trellis=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500");
 					}
 					if( !anamorphic_mode )
 					{
@@ -943,9 +943,9 @@ static int HandleEvents( hb_handle_t * h )
 					{
 						dynamic_range_compression = strdup("0.0");
 					}
-					if( !x264opts )
+					if( !advanced_opts )
 					{
-						x264opts = strdup("ref=2:bframes=2:subme=6:mixed-refs=0:weightb=0:8x8dct=0:trellis=0");
+						advanced_opts = strdup("ref=2:bframes=2:subme=6:mixed-refs=0:weightb=0:8x8dct=0:trellis=0");
 					}
 					if( !anamorphic_mode )
 					{
@@ -987,9 +987,9 @@ static int HandleEvents( hb_handle_t * h )
 					{
 						dynamic_range_compression = strdup("0.0,0.0");
 					}
-					if( !x264opts )
+					if( !advanced_opts )
 					{
-						x264opts = strdup("b-adapt=2:rc-lookahead=50");
+						advanced_opts = strdup("b-adapt=2:rc-lookahead=50");
 					}
 					detelecine = 1;
 					decomb = 1;
@@ -1068,9 +1068,9 @@ static int HandleEvents( hb_handle_t * h )
 					{
 						dynamic_range_compression = strdup("0.0,0.0");
 					}
-					if( !x264opts )
+					if( !advanced_opts )
 					{
-						x264opts = strdup("ref=1:b-pyramid=none:weightp=0:subme=5:me=umh:no-fast-pskip=1:cabac=0:weightb=0:8x8dct=0:trellis=0");
+						advanced_opts = strdup("ref=1:b-pyramid=none:weightp=0:subme=5:me=umh:no-fast-pskip=1:cabac=0:weightb=0:8x8dct=0:trellis=0");
 					}
 					if( !anamorphic_mode )
 					{
@@ -1114,9 +1114,9 @@ static int HandleEvents( hb_handle_t * h )
 						dynamic_range_compression = strdup("0.0");
 					}
 					maxWidth = 480;
-					if( !x264opts )
+					if( !advanced_opts )
 					{
-						x264opts = strdup("level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:bframes=0:weightp=0:subme=6:8x8dct=0:trellis=0");
+						advanced_opts = strdup("level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:bframes=0:weightp=0:subme=6:8x8dct=0:trellis=0");
 					}
 					job->chapter_markers = 1;
 					
@@ -1156,9 +1156,9 @@ static int HandleEvents( hb_handle_t * h )
 						dynamic_range_compression = strdup("0.0");
 					}
 					maxWidth = 640;
-					if( !x264opts )
+					if( !advanced_opts )
 					{
-						x264opts = strdup("level=30:bframes=0:weightp=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:subme=6:8x8dct=0:trellis=0");
+						advanced_opts = strdup("level=30:bframes=0:weightp=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:subme=6:8x8dct=0:trellis=0");
 					}
 					job->chapter_markers = 1;
 					
@@ -2181,13 +2181,13 @@ static int HandleEvents( hb_handle_t * h )
                 job->color_matrix = color_matrix;
             }
 
-            if( x264opts != NULL && *x264opts != '\0' )
+            if( advanced_opts != NULL && *advanced_opts != '\0' )
             {
-                job->x264opts = x264opts;
+                job->advanced_opts = advanced_opts;
             }
             else /*avoids a bus error crash when options aren't specified*/
             {
-                job->x264opts =  NULL;
+                job->advanced_opts =  NULL;
             }
             if (maxWidth)
                 job->maxWidth = maxWidth;
@@ -2226,7 +2226,7 @@ static int HandleEvents( hb_handle_t * h )
             
             if( subtitle_scan )
             {
-                char *x264opts_tmp;
+                char *advanced_opts_tmp;
 
                 /*
                  * When subtitle scan is enabled do a fast pre-scan job
@@ -2234,9 +2234,9 @@ static int HandleEvents( hb_handle_t * h )
                  */
                 job->pass = -1;
 
-                x264opts_tmp = job->x264opts;
+                advanced_opts_tmp = job->advanced_opts;
 
-                job->x264opts = NULL;
+                job->advanced_opts = NULL;
 
                 job->indepth_scan = subtitle_scan;
                 fprintf( stderr, "Subtitle Scan Enabled - enabling "
@@ -2247,7 +2247,7 @@ static int HandleEvents( hb_handle_t * h )
                  */
                 hb_add( h, job );
 
-                job->x264opts = x264opts_tmp;
+                job->advanced_opts = advanced_opts_tmp;
             }
 
             if( twoPass )
@@ -2261,40 +2261,40 @@ static int HandleEvents( hb_handle_t * h )
 
                 job->indepth_scan = 0;
 
-                if (x264opts)
+                if (advanced_opts)
                 {
-                    x264opts2 = strdup(x264opts);
+                    advanced_opts2 = strdup(advanced_opts);
                 }
 
                 /*
                  * If turbo options have been selected then append them
-                 * to the x264opts now (size includes one ':' and the '\0')
+                 * to the advanced_opts now (size includes one ':' and the '\0')
                  */
                 if( turbo_opts_enabled )
                 {
-                    int size = (x264opts ? strlen(x264opts) : 0) + strlen(turbo_opts) + 2;
-                    char *tmp_x264opts;
+                    int size = (advanced_opts ? strlen(advanced_opts) : 0) + strlen(turbo_opts) + 2;
+                    char *tmp_advanced_opts;
 
-                    tmp_x264opts = malloc(size * sizeof(char));
-                    if( x264opts )
+                    tmp_advanced_opts = malloc(size * sizeof(char));
+                    if( advanced_opts )
                     {
-                        snprintf( tmp_x264opts, size, "%s:%s",
-                                  x264opts, turbo_opts );
-                        free( x264opts );
+                        snprintf( tmp_advanced_opts, size, "%s:%s",
+                                  advanced_opts, turbo_opts );
+                        free( advanced_opts );
                     } else {
                         /*
-                         * No x264opts to modify, but apply the turbo options
+                         * No advanced_opts to modify, but apply the turbo options
                          * anyway as they may be modifying defaults
                          */
-                        snprintf( tmp_x264opts, size, "%s",
+                        snprintf( tmp_advanced_opts, size, "%s",
                                   turbo_opts );
                     }
-                    x264opts = tmp_x264opts;
+                    advanced_opts = tmp_advanced_opts;
 
                     fprintf( stderr, "Modified x264 options for pass 1 to append turbo options: %s\n",
-                             x264opts );
+                             advanced_opts );
 
-                    job->x264opts = x264opts;
+                    job->advanced_opts = advanced_opts;
                 }
                 hb_add( h, job );
 
@@ -2307,7 +2307,7 @@ static int HandleEvents( hb_handle_t * h )
                  */
                 job->indepth_scan = 0;
 
-                job->x264opts = x264opts2;
+                job->advanced_opts = advanced_opts2;
 
                 hb_add( h, job );
             }
@@ -2464,8 +2464,8 @@ static void ShowHelp()
     "### Video Options------------------------------------------------------------\n\n"
     "    -e, --encoder <string>  Set video library encoder (ffmpeg,x264,theora)\n"
     "                            (default: ffmpeg)\n"
-    "    -x, --x264opts <string> Specify advanced x264 options in the\n"
-    "                            same style as mencoder:\n"
+    "    -x, --encopts <string>  Specify advanced encoder options in the\n"
+    "                            same style as mencoder (x264 and ffmpeg only):\n"
     "                            option1=value1:option2=value2\n"
     "    -q, --quality <number>  Set video quality\n"
     "    -S, --size <MB>         Set target size\n"
@@ -2853,7 +2853,7 @@ static int ParseOptions( int argc, char ** argv )
             { "ab",          required_argument, NULL,    'B' },
             { "rate",        required_argument, NULL,    'r' },
             { "arate",       required_argument, NULL,    'R' },
-            { "x264opts",    required_argument, NULL,    'x' },
+            { "encopts",     required_argument, NULL,    'x' },
             { "turbo",       no_argument,       NULL,    'T' },
             { "maxHeight",   required_argument, NULL,    'Y' },
             { "maxWidth",    required_argument, NULL,    'X' },
@@ -3254,7 +3254,7 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 break;
             case 'x':
-                x264opts = strdup( optarg );
+                advanced_opts = strdup( optarg );
                 break;
             case 'T':
                 turbo_opts_enabled = 1;

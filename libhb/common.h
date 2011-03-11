@@ -220,8 +220,8 @@ struct hb_job_s
          vrate, vrate_base: output framerate is vrate / vrate_base
          cfr:               0 (vfr), 1 (cfr), 2 (pfr) [see render.c]
          pass:              0, 1 or 2 (or -1 for scan)
-         x264opts:          string of extra x264 options
-         areBframes:        boolean to note if b-frames are included in x264opts */
+         advanced_opts:     string of extra advanced encoder options
+         areBframes:        boolean to note if b-frames are included in advanced_opts */
 #define HB_VCODEC_MASK   0x0000FF
 #define HB_VCODEC_FFMPEG 0x000001
 #define HB_VCODEC_X264   0x000002
@@ -237,7 +237,7 @@ struct hb_job_s
     int             vfr;
     int             cfr;
     int             pass;
-    char            *x264opts;
+    char            *advanced_opts;
     int             areBframes;
     int             color_matrix;
 

@@ -259,14 +259,14 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		vqvalue = ghb_settings_get_double(settings, "VideoQualitySlider");
 		vq_desc = "Constant Quality:";
 		vqstr = g_strdup_printf("%d", (gint)vqvalue);
-	    if (strcmp(vcodec_abbr, "x264") == 0)
-        {
-		    vq_units = "(RF)";
-        }
-        else
-        {
-		    vq_units = "(QP)";
-        }
+		if (strcmp(vcodec_abbr, "x264") == 0)
+		{
+			vq_units = "(RF)";
+		}
+		else
+		{
+			vq_units = "(QP)";
+		}
 	}
 	fps = ghb_settings_get_string(settings, "VideoFramerate");
 	if (strcmp("source", fps) == 0)
@@ -385,12 +385,13 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	{
 		g_string_append_printf(str, "<b>Turbo:</b> <small>On</small>\n");
 	}
-	if (strcmp(vcodec_abbr, "x264") == 0)
+	if (strcmp(vcodec_abbr, "x264") == 0 ||
+		strcmp(vcodec_abbr, "ffmpeg") == 0)
 	{
-		gchar *x264opts = ghb_build_x264opts_string(settings);
+		gchar *opts = ghb_build_advanced_opts_string(settings);
 		g_string_append_printf(str, 
-			"<b>x264 Options:</b> <small>%s</small>\n", x264opts);
-		g_free(x264opts);
+			"<b>Advanced Options:</b> <small>%s</small>\n", opts);
+		g_free(opts);
 	}
 	// Add the audios
 	gint count, ii;

@@ -886,7 +886,8 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     {
         /* Video */
 
-        if( job->vcodec == HB_VCODEC_X264 )
+        if( job->vcodec == HB_VCODEC_X264 ||
+            job->vcodec == HB_VCODEC_FFMPEG )
         {
             if ( buf && buf->start < buf->renderOffset )
             {
@@ -905,7 +906,8 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         if ( !buf )
             return 0;
 
-        if( job->vcodec == HB_VCODEC_X264 )
+        if( job->vcodec == HB_VCODEC_X264 ||
+            job->vcodec == HB_VCODEC_FFMPEG )
         {
             // x264 supplies us with DTS, so offset is PTS - DTS
             offset = buf->start - buf->renderOffset;
@@ -942,7 +944,8 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             }
         }
 
-        if( job->vcodec == HB_VCODEC_X264 )
+        if( job->vcodec == HB_VCODEC_X264 ||
+            job->vcodec == HB_VCODEC_FFMPEG )
         {
             // x264 supplies us with DTS
             if ( m->delay_buf )
@@ -1014,7 +1017,8 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     }
 
     /* Here's where the sample actually gets muxed. */
-    if( job->vcodec == HB_VCODEC_X264 && mux_data == job->mux_data )
+    if( ( job->vcodec == HB_VCODEC_X264 || job->vcodec == HB_VCODEC_FFMPEG )
+        && mux_data == job->mux_data )
     {
         /* Compute dependency flags.
          *

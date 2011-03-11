@@ -1684,8 +1684,7 @@ static int decavcodecaiWork( hb_work_object_t *w, hb_buffer_t **buf_in,
 
     // if the packet has a timestamp use it if we don't have a timestamp yet
     // or if there's been a timing discontinuity of more than 100ms.
-    if ( in->start >= 0 &&
-         ( pv->pts_next < 0 || ( in->start - pv->pts_next ) > 90*100 ) )
+    if ( in->start >= 0 )
     {
         pv->pts_next = in->start;
     }

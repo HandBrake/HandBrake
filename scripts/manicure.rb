@@ -483,7 +483,7 @@ class Display
     if hash["VideoTwoPass"] == 1 then commandString << " -2" end
     if hash["VideoTurboTwoPass"] == 1 then commandString << " -T" end
 
-    #x264 Options
+    #Advanced Options
     if hash["x264Option"] != ""
       commandString << " -x "
       commandString << hash["x264Option"]
@@ -731,7 +731,7 @@ class Display
     if hash["VideoTwoPass"] == 1 then commandString << " -2" end
     if hash["VideoTurboTwoPass"] == 1 then commandString << " -T" end
 
-    #x264 Options
+    #Advanced Options
     if hash["x264Option"] != ""
       commandString << " -x "
       commandString << hash["x264Option"]
@@ -938,11 +938,11 @@ class Display
       end
     end
     
-    #x264 Options
+    #Advanced Options
     if hash["x264Option"] != ""
-      commandString << "if( !x264opts )\n    "
+      commandString << "if( !advanced_opts )\n    "
       commandString << "{\n    "
-      commandString << "    x264opts = strdup(\""
+      commandString << "    advanced_opts = strdup(\""
       commandString << hash["x264Option"] << "\");\n    "
       commandString << "}\n    "
     end
@@ -1256,7 +1256,7 @@ class Display
     if hash["VideoTwoPass"] == 1 then commandString << " -2" end
     if hash["VideoTurboTwoPass"] == 1 then commandString << " -T" end
     
-      #x264 Options
+      #Advanced Options
       if hash["x264Option"] != ""
         commandString << " -x "
         commandString << hash["x264Option"]

@@ -270,8 +270,8 @@ void hb_display_job_info( hb_job_t * job )
 
             case HB_VCODEC_X264:
                 hb_log( "   + encoder: x264" );
-                if( job->x264opts != NULL && *job->x264opts != '\0' )
-                    hb_log( "     + options: %s", job->x264opts);
+                if( job->advanced_opts != NULL && *job->advanced_opts != '\0' )
+                    hb_log( "     + options: %s", job->advanced_opts);
                 break;
 
             case HB_VCODEC_THEORA:

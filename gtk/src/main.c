@@ -962,6 +962,15 @@ main (int argc, char *argv[])
 	widget = GHB_WIDGET(ud->builder, "subtitle_table");
 	gtk_widget_set_size_request(widget, -1, height);
 	
+	widget = GHB_WIDGET (ud->builder, "hb_window");
+
+	GdkGeometry geo = { 
+		-1, -1, 1024, 768, 200, 200, 10, 10, 0, 0, GDK_GRAVITY_NORTH_WEST
+	};
+	GdkWindowHints geo_mask;
+	geo_mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE | GDK_HINT_BASE_SIZE;
+	gtk_window_set_geometry_hints( GTK_WINDOW(widget), widget, &geo, geo_mask);
+
 	// Everything should be go-to-go.  Lets rock!
 
 	gtk_main ();

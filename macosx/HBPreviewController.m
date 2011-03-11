@@ -893,15 +893,15 @@
          * which will determine which subtitles to enable, if any.
          */
         job->pass = -1;
-        x264opts_tmp = job->x264opts;
+        x264opts_tmp = job->advanced_opts;
         
-        job->x264opts = NULL;
+        job->advanced_opts = NULL;
         job->indepth_scan = 1;  
         /*
          * Add the pre-scan job
          */
         hb_add( fPreviewLibhb, job );
-        job->x264opts = x264opts_tmp;
+        job->advanced_opts = x264opts_tmp;
     }                  
     /* Go ahead and perform the actual encoding preview scan */
     job->indepth_scan = 0;

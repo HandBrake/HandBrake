@@ -387,8 +387,8 @@
 		
         job->mux        = [currentPreset muxer];
         job->vcodec     = [currentPreset videoCodec];
-        job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */  
-        strcpy(job->x264opts, [[currentPreset videoCodecOptions] UTF8String]);
+        job->advanced_opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */  
+        strcpy(job->advanced_opts, [[currentPreset videoCodecOptions] UTF8String]);
         job->chapter_markers = 1;
         job->vquality = -1.0;
 

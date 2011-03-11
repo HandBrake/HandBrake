@@ -152,7 +152,7 @@ gint ghb_find_subtitle_track(
 gint ghb_pick_subtitle_track(signal_user_data_t *ud);
 gint ghb_find_cc_track(gint titleindex);
 gint ghb_longest_title(void);
-gchar* ghb_build_x264opts_string(GValue *settings);
+gchar* ghb_build_advanced_opts_string(GValue *settings);
 GdkPixbuf* ghb_get_preview_image(
 	gint titleindex, gint index, signal_user_data_t *ud,
 	gint *width, gint *height);

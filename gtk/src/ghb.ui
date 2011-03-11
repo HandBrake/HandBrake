@@ -531,7 +531,7 @@
 
   <object class="GtkWindow" id="hb_window">
     <property name="visible">True</property>
-    <property name="resizable">False</property>
+    <property name="resizable">True</property>
     <property name="title" translatable="yes">HandBrake</property>
     <property name="default_width">500</property>
     <property name="default_height">400</property>
@@ -1841,7 +1841,7 @@
 
 x264's scale is logarithmic and lower values coorespond to higher quality.  So small decreases in value will result in progressively larger increases in the resulting file size.  A value of 0 means lossless and will result in a file size that is larger than the original source, unless the source was also lossless.
 
-FFmpeg's and Theora's scale is more linear.  These encoders do not have a lossless mode.</property>
+FFMpeg's and Theora's scale is more linear.  These encoders do not have a lossless mode.</property>
                                 <property name="adjustment">adjustment5</property>
                                 <property name="digits">3</property>
                                 <property name="value_pos">GTK_POS_TOP</property>
@@ -1866,7 +1866,7 @@ FFmpeg's and Theora's scale is more linear.  These encoders do not have a lossle
 
 x264's scale is logarithmic and lower values coorespond to higher quality.  So small decreases in value will result in progressively larger increases in the resulting file size.  A value of 0 means lossless and will result in a file size that is larger than the original source, unless the source was also lossless.
 
-FFmpeg's and Theora's scale is more linear.  These encoders do not have a lossless mode.</property>
+FFMpeg's and Theora's scale is more linear.  These encoders do not have a lossless mode.</property>
                                 <property name="label" translatable="yes">Constant Quality:</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
@@ -2584,6 +2584,12 @@ For source audio that has a wide dynamic range (very loud and very soft sequence
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkHBox" id="advanced_tab">
+                    <property name="orientation">vertical</property>
+                    <property name="visible">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <child>
+
                   <object class="GtkVBox" id="x264_tab">
                     <property name="orientation">vertical</property>
                     <property name="visible">True</property>
@@ -3475,12 +3481,98 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                     </child>
                   </object>
                   <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="padding">0</property>
+                    <property name="position">0</property>
+                  </packing>
+
+                    </child>
+                    <child>
+                      <object class="GtkVBox" id="lavc_mpeg4_tab">
+                        <property name="orientation">vertical</property>
+                        <property name="visible">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <child>
+                          <object class="GtkHBox" id="hbox86">
+                            <property name="visible">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="spacing">2</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkFrame" id="frame18">
+                            <property name="visible">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="label_xalign">0</property>
+                            <property name="shadow_type">none</property>
+                            <child>
+                              <object class="GtkAlignment" id="alignment33">
+                                <property name="visible">True</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="top_padding">6</property>
+                                <property name="bottom_padding">2</property>
+                                <property name="left_padding">12</property>
+                                <property name="right_padding">2</property>
+                                <child>
+                                  <object class="GtkScrolledWindow" id="scrolledwindow7">
+                                    <property name="height_request">40</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                                    <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                                    <property name="shadow_type">etched-in</property>
+                                    <child>
+                                      <object class="GtkTextView" id="lavcOption">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                            <property name="tooltip-text" translatable="yes">Your selected options will appear here. 
+    You can edit these and add additional options.</property>
+                                        <property name="wrap_mode">GTK_WRAP_CHAR</property>
+                                        <property name="accepts_tab">False</property>
+                                        <signal handler="lavc_focus_out_cb" name="focus_out_event"/>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child type="label">
+                              <object class="GtkLabel" id="label75">
+                                <property name="visible">True</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Current FFMpeg MPEG-4 Advanced Option String&lt;/b&gt;&lt;/small&gt;</property>
+                                <property name="use_markup">True</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="padding">2</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="padding">0</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
                   </packing>
                 </child>
                 <child type="tab">
-                  <object class="GtkLabel" id="x264_tab_label">
+                  <object class="GtkLabel" id="advanced_tab_label">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">H.264</property>
+                    <property name="label" translatable="yes">Advanced</property>
                   </object>
                   <packing>
                     <property name="position">4</property>
@@ -3559,7 +3651,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
 
               </object>
               <packing>
-                <property name="expand">False</property>
+                <property name="expand">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -3603,6 +3695,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                 </child>
               </object>
               <packing>
+                <property name="expand">False</property>
                 <property name="position">2</property>
               </packing>
             </child>

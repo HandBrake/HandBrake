@@ -2824,24 +2824,54 @@ init_ui_combo_boxes(GtkBuilder *builder)
 	}
 }
 	
-static const char * turbo_opts = 
+static const char * turbo_lavc_opts = "";
+
+static const char * turbo_x264_opts = 
 	"ref=1:subme=2:me=dia:analyse=none:trellis=0:"
 	"no-fast-pskip=0:8x8dct=0";
 
-// Construct the x264 options string
+// Construct the advanced options string
 // The result is allocated, so someone must free it at some point.
 gchar*
-ghb_build_x264opts_string(GValue *settings)
+ghb_build_advanced_opts_string(GValue *settings)
 {
 	gchar *result;
-	gchar *opts = ghb_settings_get_string(settings, "x264Option");
-	if (opts != NULL)
+
+	gint vcodec = ghb_settings_combo_int(settings, "VideoEncoder");
+
+	switch (vcodec)
 	{
-		result = opts;
-	}
-	else
-	{
-		result = g_strdup("");
+		case HB_VCODEC_X264:
+		{
+			gchar *opts = ghb_settings_get_string(settings, "x264Option");
+			if (opts != NULL)
+			{
+				result = opts;
+			}
+			else
+			{
+				result = g_strdup("");
+			}
+		} break;
+
+		case HB_VCODEC_FFMPEG:
+		{
+			gchar *opts = ghb_settings_get_string(settings, "lavcOption");
+			if (opts != NULL)
+			{
+				result = opts;
+			}
+			else
+			{
+				result = g_strdup("");
+			}
+		} break;
+
+		case HB_VCODEC_THEORA:
+		default:
+		{
+			result = g_strdup("");
+		} break;
 	}
 	return result;
 }
@@ -4369,7 +4399,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	hb_list_t  * list;
 	hb_title_t * title;
 	hb_job_t   * job;
-	static gchar *x264opts;
+	static gchar *advanced_opts;
 	gint sub_id = 0;
 	gboolean tweaks = FALSE;
 	gchar *detel_str = NULL;
@@ -4784,17 +4814,17 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		}
 	}
 
-	// TODO: libhb holds onto a reference to the x264opts and is not
+	// TODO: libhb holds onto a reference to the advanced_opts and is not
 	// finished with it until encoding the job is done.  But I can't
 	// find a way to get at the job before it is removed in order to
 	// free up the memory I am allocating here.
 	// The short story is THIS LEAKS.
-	x264opts = ghb_build_x264opts_string(js);
+	advanced_opts = ghb_build_advanced_opts_string(js);
 	
-	if( *x264opts == '\0' )
+	if( advanced_opts && *advanced_opts == '\0' )
 	{
-		g_free(x264opts);
-		x264opts = NULL;
+		g_free(advanced_opts);
+		advanced_opts = NULL;
 	}
 
 	if (job->indepth_scan == 1)
@@ -4807,7 +4837,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		 */
 		job->pass = -1;
 		job->indepth_scan = 1;
-		job->x264opts = NULL;
+		job->advanced_opts = NULL;
 
 		/*
 		 * Add the pre-scan job
@@ -4829,48 +4859,60 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 
 		/*
 		 * If turbo options have been selected then append them
-		 * to the x264opts now (size includes one ':' and the '\0')
+		 * to the advanced_opts now (size includes one ':' and the '\0')
 		 */
 		if( ghb_settings_get_boolean(js, "VideoTurboTwoPass") )
 		{
-			gchar *tmp_x264opts;
+			gchar *tmp_advanced_opts;
 			gchar *extra_opts;
-			gint badapt;
 
-			badapt = ghb_lookup_badapt(x264opts);
-			if (badapt == 2)
+			if (job->vcodec == HB_VCODEC_X264)
 			{
-				extra_opts = g_strdup_printf("%s", turbo_opts);
+				gint badapt;
+
+				badapt = ghb_lookup_badapt(advanced_opts);
+				if (badapt == 2)
+				{
+					extra_opts = g_strdup_printf("%s", turbo_x264_opts);
+				}
+				else
+				{
+					extra_opts = g_strdup_printf("%s:weightb=0", turbo_x264_opts);
+				}
+			}
+			else if (job->vcodec == HB_VCODEC_FFMPEG)
+			{
+				extra_opts = g_strdup_printf("%s", turbo_lavc_opts);
 			}
 			else
 			{
-				extra_opts = g_strdup_printf("%s:weightb=0", turbo_opts);
+				extra_opts = g_strdup("");
 			}
-	
-			if ( x264opts )
+
+			if ( advanced_opts )
 			{
-				tmp_x264opts = g_strdup_printf("%s:%s", x264opts, extra_opts);
+				tmp_advanced_opts = g_strdup_printf("%s:%s", advanced_opts, extra_opts);
 			} 
 			else 
 			{
 				/*
-				 * No x264opts to modify, but apply the turbo options
+				 * No advanced_opts to modify, but apply the turbo options
 				 * anyway as they may be modifying defaults
 				 */
-				tmp_x264opts = g_strdup_printf("%s", extra_opts);
+				tmp_advanced_opts = g_strdup_printf("%s", extra_opts);
 			}
 			g_free(extra_opts);
 
-			job->x264opts = tmp_x264opts;
+			job->advanced_opts = tmp_advanced_opts;
 		}
 		else
 		{
-			job->x264opts = x264opts;
+			job->advanced_opts = advanced_opts;
 		}
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
 		hb_add( h, job );
-		//if (job->x264opts != NULL)
-		//	g_free(job->x264opts);
+		//if (job->advanced_opts != NULL)
+		//	g_free(job->advanced_opts);
 
 		job->pass = 2;
 		/*
@@ -4880,21 +4922,21 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		 * attribute of the job).
 		 */
 		job->indepth_scan = 0;
-		job->x264opts = x264opts;
+		job->advanced_opts = advanced_opts;
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
 		hb_add( h, job );
-		//if (job->x264opts != NULL)
-		//	g_free(job->x264opts);
+		//if (job->advanced_opts != NULL)
+		//	g_free(job->advanced_opts);
 	}
 	else
 	{
-		job->x264opts = x264opts;
+		job->advanced_opts = advanced_opts;
 		job->indepth_scan = 0;
 		job->pass = 0;
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
 		hb_add( h, job );
-		//if (job->x264opts != NULL)
-		//	g_free(job->x264opts);
+		//if (job->advanced_opts != NULL)
+		//	g_free(job->advanced_opts);
 	}
 
 	// clean up audio list

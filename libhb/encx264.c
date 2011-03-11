@@ -133,7 +133,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.i_log_level  = X264_LOG_INFO;
     
     /*
-       	This section passes the string x264opts to libx264 for parsing into
+        This section passes the string advanced_opts to libx264 for parsing into
         parameter names and values.
 
         The string is set up like this:
@@ -147,11 +147,11 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         Merritt implemented in the Mplayer/Mencoder project.
      */
 
-    if( job->x264opts != NULL && *job->x264opts != '\0' )
+    if( job->advanced_opts != NULL && *job->advanced_opts != '\0' )
     {
         char *x264opts, *x264opts_start;
 
-        x264opts = x264opts_start = strdup(job->x264opts);
+        x264opts = x264opts_start = strdup(job->advanced_opts);
 
         while( x264opts_start && *x264opts )
         {
@@ -176,7 +176,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
             /* Here's where the strings are passed to libx264 for parsing. */
             ret = x264_param_parse( &param, name, value );
 
-            /* 	Let x264 sanity check the options for us*/
+            /* Let x264 sanity check the options for us*/
             if( ret == X264_PARAM_BAD_NAME )
                 hb_log( "x264 options: Unknown suboption %s", name );
             if( ret == X264_PARAM_BAD_VALUE )

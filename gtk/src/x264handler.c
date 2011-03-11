@@ -1064,3 +1064,29 @@ sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 	return result;
 }
 
+G_MODULE_EXPORT gboolean
+lavc_focus_out_cb(GtkWidget *widget, GdkEventFocus *event, 
+	signal_user_data_t *ud)
+{
+	ghb_widget_to_setting(ud->settings, widget);
+
+#if 0
+	gchar *options, *sopts;
+	****************************************************************
+	When there are lavc widget in the future, this will be populated
+	****************************************************************
+	options = ghb_settings_get_string(ud->settings, "x264Option");
+	sopts = sanitize_x264opts(ud, options);
+	ignore_options_update = TRUE;
+	if (sopts != NULL && strcmp(sopts, options) != 0)
+	{
+		ghb_ui_update(ud, "x264Option", ghb_string_value(sopts));
+		ghb_x264_parse_options(ud, sopts);
+	}
+	g_free(options);
+	g_free(sopts);
+	ignore_options_update = FALSE;
+#endif
+	return FALSE;
+}
+

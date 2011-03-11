@@ -2625,9 +2625,9 @@ fWorkingCount = 0;
          * which will determine which subtitles to enable, if any.
          */
         job->pass = -1;
-        x264opts_tmp = job->x264opts;
+        x264opts_tmp = job->advanced_opts;
         
-        job->x264opts = NULL;
+        job->advanced_opts = NULL;
         
         job->indepth_scan = 1;  
 
@@ -2636,7 +2636,7 @@ fWorkingCount = 0;
          * Add the pre-scan job
          */
         hb_add( fQueueEncodeLibhb, job );
-        job->x264opts = x264opts_tmp;
+        job->advanced_opts = x264opts_tmp;
     }
 
     
@@ -2652,8 +2652,8 @@ fWorkingCount = 0;
         
         job->pass = 2;
         
-        job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */  
-        strcpy(job->x264opts, [[queueToApply objectForKey:@"x264Option"] UTF8String]);
+        job->advanced_opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */  
+        strcpy(job->advanced_opts, [[queueToApply objectForKey:@"x264Option"] UTF8String]);
         
         hb_add( fQueueEncodeLibhb, job );
         
@@ -3026,9 +3026,9 @@ fWorkingCount = 0;
 		
 		/* Below Sends x264 options to the core library if x264 is selected*/
 		/* Lets use this as per Nyx, Thanks Nyx!*/
-		job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */
+		job->advanced_opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */
 		/* For previews we ignore the turbo option for the first pass of two since we only use 1 pass */
-		strcpy(job->x264opts, [[fAdvancedOptions optionsString] UTF8String]);
+		strcpy(job->advanced_opts, [[fAdvancedOptions optionsString] UTF8String]);
 
         
     }
@@ -3479,7 +3479,7 @@ bool one_burned = FALSE;
 		
 		/* Below Sends x264 options to the core library if x264 is selected*/
 		/* Lets use this as per Nyx, Thanks Nyx!*/
-		job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */
+		job->advanced_opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */
 		/* Turbo first pass if two pass and Turbo First pass is selected */
 		if( [[queueToApply objectForKey:@"VideoTwoPass"] intValue] == 1 && [[queueToApply objectForKey:@"VideoTurboTwoPass"] intValue] == 1 )
 		{
@@ -3488,11 +3488,11 @@ bool one_burned = FALSE;
 			/* append the "Turbo" string variable to the existing opts string.
              Note: the "Turbo" string must be appended, not prepended to work properly*/
 			NSString *firstPassOptStringCombined = [[queueToApply objectForKey:@"x264Option"] stringByAppendingString:firstPassOptStringTurbo];
-			strcpy(job->x264opts, [firstPassOptStringCombined UTF8String]);
+			strcpy(job->advanced_opts, [firstPassOptStringCombined UTF8String]);
 		}
 		else
 		{
-			strcpy(job->x264opts, [[queueToApply objectForKey:@"x264Option"] UTF8String]);
+			strcpy(job->advanced_opts, [[queueToApply objectForKey:@"x264Option"] UTF8String]);
 		}
         
     }

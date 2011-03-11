@@ -349,6 +349,8 @@
 		<real>0.60</real>
 		<key>VideoTargetSize</key>
 		<integer>700</integer>
+		<key>lavcOption</key>
+		<string></string>
 		<key>x264Option</key>
 		<string></string>
 	</dict>
