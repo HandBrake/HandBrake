@@ -387,6 +387,7 @@ static hb_buffer_t * process_delay_list( hb_work_private_t * pv, hb_buffer_t * b
                 // output buffers have rearranged start times.
                 int64_t start = get_frame_start( pv, pv->frameno_out );
                 buf->renderOffset = start - pv->dts_delay;
+                buf = buf->next;
             }
             buf = pv->delay_head;
             pv->delay_head = pv->delay_tail = NULL;
