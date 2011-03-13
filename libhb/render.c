@@ -29,7 +29,7 @@ struct hb_work_private_s
     int                  chapter_val;
     int                  count_frames;      // frames output so far
     double               frame_rate;        // 90KHz ticks per frame (for CFR/PFR)
-    double               out_last_stop;     // where last frame ended (for CFR/PFR)
+    uint64_t             out_last_stop;     // where last frame ended (for CFR/PFR)
     int                  drops;             // frames dropped (for CFR/PFR)
     int                  dups;              // frames duped (for CFR/PFR)
 };
@@ -266,6 +266,14 @@ static void adjust_frame_rate( hb_work_private_t *pv, hb_buffer_t **buf_out )
 
     while ( out && out->size > 0 )
     {
+        if ( pv->job->cfr == 0 )
+        {
+            ++pv->count_frames;
+            pv->out_last_stop = out->stop;
+            out = out->next;
+            continue;
+        }
+
         // this frame has to start where the last one stopped.
         out->start = pv->out_last_stop;
 
@@ -375,10 +383,7 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         {
             tail->next = in;
             *buf_out = head;
-            if ( job->cfr )
-            {
-                adjust_frame_rate( pv, buf_out );
-            }
+            adjust_frame_rate( pv, buf_out );
         } else {
             *buf_out = in;
         }     
@@ -692,7 +697,7 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     }
 
-    if ( buf_out && *buf_out && job->cfr )
+    if ( buf_out && *buf_out )
     {
         adjust_frame_rate( pv, buf_out );
     }
@@ -712,7 +717,8 @@ void renderClose( hb_work_object_t * w )
     hb_interjob_t * interjob = hb_interjob_get( w->private_data->job->h );
     
     /* Preserve dropped frame count for more accurate framerates in 2nd passes. */
-    interjob->render_dropped = pv->dropped_frames;
+    interjob->out_frame_count = pv->count_frames;
+    interjob->total_time = pv->out_last_stop;
 
     hb_log("render: lost time: %"PRId64" (%i frames)", pv->total_lost_time, pv->dropped_frames);
     hb_log("render: gained time: %"PRId64" (%i frames) (%"PRId64" not accounted for)", pv->total_gained_time, pv->extended_frames, pv->total_lost_time - pv->total_gained_time);

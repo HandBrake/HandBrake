@@ -218,7 +218,6 @@ void syncVideoClose( hb_work_object_t * w )
         hb_interjob_t * interjob = hb_interjob_get( job->h );
         interjob->frame_count = pv->common->count_frames;
         interjob->last_job = job->sequence_id;
-        interjob->total_time = sync->next_start;
     }
 
     if (sync->drops || sync->dups )
@@ -404,6 +403,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pv->common->first_pts[0] = INT64_MAX - 1;
         cur->start = sync->next_start;
         cur->stop = cur->start + 90000. / ((double)job->vrate / (double)job->vrate_base);
+        sync->next_start += cur->stop - cur->start;;
 
         /* Make sure last frame is reflected in frame count */
         pv->common->count_frames++;

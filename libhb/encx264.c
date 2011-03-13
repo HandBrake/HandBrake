@@ -98,7 +98,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.i_threads    = ( hb_get_cpu_count() * 3 / 2 );
     param.i_width      = job->width;
     param.i_height     = job->height;
-    if( job->pass == 2 )
+    if( job->pass == 2 && job->cfr != 1 )
     {
         hb_interjob_t * interjob = hb_interjob_get( job->h );
         param.i_fps_num = interjob->vrate;

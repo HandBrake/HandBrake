@@ -376,17 +376,13 @@ void hb_display_job_info( hb_job_t * job )
 /* Corrects framerates when actual duration and frame count numbers are known. */
 void correct_framerate( hb_job_t * job )
 {
-    int real_frames;
-
     hb_interjob_t * interjob = hb_interjob_get( job->h );
 
     if( ( job->sequence_id & 0xFFFFFF ) != ( interjob->last_job & 0xFFFFFF) )
         return; // Interjob information is for a different encode.
 
     // compute actual output vrate from first pass
-    real_frames = interjob->frame_count - interjob->render_dropped;
-
-    interjob->vrate = job->vrate_base * ( (double)real_frames * 90000 / interjob->total_time );
+    interjob->vrate = job->vrate_base * ( (double)interjob->out_frame_count * 90000 / interjob->total_time );
     interjob->vrate_base = job->vrate_base;
 }
 
