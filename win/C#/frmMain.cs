@@ -19,10 +19,8 @@ namespace Handbrake
     using Functions;
 
     using HandBrake.ApplicationServices.EventArgs;
+    using HandBrake.ApplicationServices.Model.General;
     using HandBrake.ApplicationServices.Utilities;
-    using HandBrake.Framework.Model;
-    using HandBrake.Framework.Services;
-    using HandBrake.Framework.Views;
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
@@ -41,6 +39,7 @@ namespace Handbrake
     /// </summary>
     public partial class frmMain : Form
     {
+        #region Private Varibles
         // Objects which may be used by one or more other objects *************
         private IQueueProcessor queueProcessor = new QueueProcessor(Program.InstanceId);
         private PresetService presetHandler = new PresetService();
@@ -65,6 +64,8 @@ namespace Handbrake
 
         // Delegates **********************************************************
         private delegate void UpdateWindowHandler();
+
+        #endregion
 
         // Applicaiton Startup ************************************************
 
@@ -216,7 +217,7 @@ namespace Handbrake
 
                 if (info.NewVersionAvailable)
                 {
-                    UpdateInfo updateWindow = new UpdateInfo(info.BuildInformation, Settings.Default.hb_version, Settings.Default.hb_build.ToString());
+                    UpdateInfo updateWindow = new UpdateInfo(info, Settings.Default.hb_version, Settings.Default.hb_build.ToString());
                     updateWindow.ShowDialog();
                 }
             }
@@ -2452,9 +2453,9 @@ namespace Handbrake
                 // Get the information about the new build, if any, and close the window
                 info = UpdateService.EndCheckForUpdates(result);
 
-                if (info.NewVersionAvailable && info.BuildInformation != null)
+                if (info.NewVersionAvailable)
                 {
-                    UpdateInfo updateWindow = new UpdateInfo(info.BuildInformation, Settings.Default.hb_version, Settings.Default.hb_build.ToString());
+                    UpdateInfo updateWindow = new UpdateInfo(info, Settings.Default.hb_version, Settings.Default.hb_build.ToString());
                     updateWindow.ShowDialog();
                 }
                 else

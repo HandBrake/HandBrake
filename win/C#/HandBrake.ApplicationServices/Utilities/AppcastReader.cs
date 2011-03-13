@@ -3,7 +3,7 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace HandBrake.Framework.Services
+namespace HandBrake.ApplicationServices.Utilities
 {
     using System;
     using System.IO;
@@ -15,7 +15,7 @@ namespace HandBrake.Framework.Services
     /// <summary>
     /// Appcast Reader - Used for parsing HandBrakes update file
     /// </summary>
-    public class AppcastReader : IAppcastReader
+    public class AppcastReader
     {
         /// <summary>
         /// Gets Information about an update to HandBrake

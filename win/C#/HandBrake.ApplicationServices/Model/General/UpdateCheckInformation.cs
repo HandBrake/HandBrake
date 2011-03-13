@@ -3,10 +3,9 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace HandBrake.Framework.Model
+namespace HandBrake.ApplicationServices.Model.General
 {
     using System;
-    using HandBrake.Framework.Services.Interfaces;
 
     /// <summary>
     /// Provides information about an update check.
@@ -27,9 +26,24 @@ namespace HandBrake.Framework.Model
         }
 
         /// <summary>
-        /// Gets or sets information about the new build, if any. This will be null if there is no new verison.
+        /// Gets or sets Information about an update to HandBrake
         /// </summary>
-        public IAppcastReader BuildInformation { get; set; }
+        public Uri DescriptionUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets HandBrake's version from the appcast.xml file.
+        /// </summary>
+        public string Version { get; set; }
+
+        /// <summary>
+        /// Gets or sets HandBrake's Build from the appcast.xml file.
+        /// </summary>
+        public string Build { get; set; }
+
+        /// <summary>
+        /// Gets or sets the URL for update file.
+        /// </summary>
+        public string DownloadFile { get; set; }
 
         /// <summary>
         /// Gets or sets the error that occurred, if any. This will be null if no error occured.

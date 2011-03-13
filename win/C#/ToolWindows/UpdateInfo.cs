@@ -3,12 +3,13 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace HandBrake.Framework.Views
+namespace Handbrake.ToolWindows
 {
     using System;
     using System.Windows.Forms;
 
-    using HandBrake.Framework.Services.Interfaces;
+    using HandBrake.ApplicationServices.Model.General;
+    using HandBrake.Framework.Views;
 
     /// <summary>
     /// A window to display update information.
@@ -18,7 +19,7 @@ namespace HandBrake.Framework.Views
         /// <summary>
         /// An instance of the Appcast Reader
         /// </summary>
-        private readonly IAppcastReader appcast;
+        private readonly UpdateCheckInformation appcast;
 
         /// <summary>
         /// The Current Version
@@ -42,7 +43,7 @@ namespace HandBrake.Framework.Views
         /// <param name="currentBuild">
         /// The current Build.
         /// </param>
-        public UpdateInfo(IAppcastReader reader, string currentVersion, string currentBuild)
+        public UpdateInfo(UpdateCheckInformation reader, string currentVersion, string currentBuild)
         {
             InitializeComponent();
 

@@ -3,7 +3,7 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace HandBrake.Framework.Views
+namespace Handbrake.ToolWindows
 {
     partial class UpdateInfo
     {
@@ -52,9 +52,11 @@ namespace HandBrake.Framework.Views
             this.button_container = new System.Windows.Forms.SplitContainer();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.button_container)).BeginInit();
             this.button_container.Panel1.SuspendLayout();
             this.button_container.Panel2.SuspendLayout();
             this.button_container.SuspendLayout();
@@ -132,7 +134,7 @@ namespace HandBrake.Framework.Views
             // 
             // PictureBox1
             // 
-            this.PictureBox1.Image = global::HandBrake.Framework.Properties.Resources.logo64;
+            this.PictureBox1.Image = global::Handbrake.Properties.Resources.logo64;
             resources.ApplyResources(this.PictureBox1, "PictureBox1");
             this.PictureBox1.Name = "PictureBox1";
             this.PictureBox1.TabStop = false;
@@ -196,6 +198,7 @@ namespace HandBrake.Framework.Views
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.panel1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.MaximizeBox = false;
             this.Name = "UpdateInfo";
             this.panel1.ResumeLayout(false);
@@ -203,11 +206,13 @@ namespace HandBrake.Framework.Views
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.button_container.Panel1.ResumeLayout(false);
             this.button_container.Panel1.PerformLayout();
             this.button_container.Panel2.ResumeLayout(false);
             this.button_container.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.button_container)).EndInit();
             this.button_container.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

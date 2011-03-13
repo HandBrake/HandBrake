@@ -113,6 +113,8 @@
     <Compile Include="Model\Encoding\SubtitleTrack.cs" />
     <Compile Include="Model\Encoding\VideoEncoder.cs" />
     <Compile Include="Model\Encoding\VideoEncodeRateMode.cs" />
+    <Compile Include="Model\General\UpdateCheckInformation.cs" />
+    <Compile Include="Model\General\UpdateCheckResult.cs" />
     <Compile Include="Model\Preset.cs" />
     <Compile Include="Model\QueueTask.cs" />
     <Compile Include="Model\Encoding\SubtitleType.cs" />
@@ -139,6 +141,8 @@
     <Compile Include="Services\QueueManager.cs" />
     <Compile Include="Services\QueueProcessor.cs" />
     <Compile Include="Services\ScanService.cs" />
+    <Compile Include="Services\UpdateService.cs" />
+    <Compile Include="Utilities\AppcastReader.cs" />
     <Compile Include="Utilities\PlistUtility.cs" />
     <Compile Include="Utilities\QueryParserUtility.cs" />
     <Compile Include="Utilities\UtilityService.cs" />

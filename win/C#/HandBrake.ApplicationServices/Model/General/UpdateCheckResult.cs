@@ -3,7 +3,7 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace HandBrake.Framework.Model
+namespace HandBrake.ApplicationServices.Model.General
 {
     using System;
     using System.Threading;
@@ -14,7 +14,7 @@ namespace HandBrake.Framework.Model
     public class UpdateCheckResult : IAsyncResult
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="HandBrake.Framework.Model.UpdateCheckResult"/> class.
+        /// Initializes a new instance of the <see cref="UpdateCheckResult"/> class.
         /// </summary>
         /// <param name="asyncState">
         /// The async state.
@@ -22,7 +22,7 @@ namespace HandBrake.Framework.Model
         /// <param name="info">
         /// The info.
         /// </param>
-        public UpdateCheckResult(object asyncState, UpdateCheckInformation info)
+        public UpdateCheckResult(object asyncState, ApplicationServices.Model.General.UpdateCheckInformation info)
         {
             this.AsyncState = asyncState;
             this.Result = info;
@@ -36,7 +36,7 @@ namespace HandBrake.Framework.Model
         /// <summary>
         /// Gets the result of the update check.
         /// </summary>
-        public UpdateCheckInformation Result { get; private set; }
+        public ApplicationServices.Model.General.UpdateCheckInformation Result { get; private set; }
 
         /// <summary>
         /// Gets AsyncWaitHandle.

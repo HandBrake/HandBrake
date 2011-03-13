@@ -4,7 +4,7 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace HandBrake.Framework.Views
+namespace Handbrake.ToolWindows
 {
     partial class DownloadUpdate
     {
@@ -76,7 +76,7 @@ namespace HandBrake.Framework.Views
             // 
             // PictureBox1
             // 
-            this.PictureBox1.Image = global::HandBrake.Framework.Properties.Resources.download;
+            this.PictureBox1.Image = global::Handbrake.Properties.Resources.Download;
             resources.ApplyResources(this.PictureBox1, "PictureBox1");
             this.PictureBox1.Name = "PictureBox1";
             this.tableLayoutPanel1.SetRowSpan(this.PictureBox1, 3);
@@ -87,7 +87,7 @@ namespace HandBrake.Framework.Views
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DownloadUpdate";
