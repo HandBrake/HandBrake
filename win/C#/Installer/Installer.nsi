@@ -8,15 +8,15 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "HandBrake"
-!define PRODUCT_VERSION "0.9.5"
-!define PRODUCT_VERSION_NUMBER "0.9.5"
+!define PRODUCT_VERSION "0.9.6"
+!define PRODUCT_VERSION_NUMBER "0.9.6"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Handbrake.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 
 ;Required .NET framework
-!define MIN_FRA_MAJOR "3"
-!define MIN_FRA_MINOR "5"
+!define MIN_FRA_MAJOR "4"
+!define MIN_FRA_MINOR "0"
 !define MIN_FRA_BUILD "*"
 
 SetCompressor lzma
@@ -100,18 +100,18 @@ Section "Handbrake" SEC01
   Call CheckFramework
      StrCmp $0 "1" +3
         StrCpy $InstallDotNET "Yes"
-      MessageBox MB_OK|MB_ICONINFORMATION "${PRODUCT_NAME} requires that the .NET Framework 3.5 SP1 is installed. The latest .NET Framework will be downloaded and installed automatically during installation of ${PRODUCT_NAME}."
+      MessageBox MB_OK|MB_ICONINFORMATION "${PRODUCT_NAME} requires that the .NET Framework 4.0 is installed. The latest .NET Framework will be downloaded and installed automatically during installation of ${PRODUCT_NAME}."
      Pop $0
 
   ; Get .NET if required
   ${If} $InstallDotNET == "Yes"
      SetDetailsView hide
-     inetc::get /caption "Downloading .NET Framework 3.5" /canceltext "Cancel" "http://www.microsoft.com/downloads/info.aspx?na=90&p=&SrcDisplayLang=en&SrcCategoryId=&SrcFamilyId=ab99342f-5d1a-413d-8319-81da479ab0d7&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2f0%2f6%2f1%2f061f001c-8752-4600-a198-53214c69b51f%2fdotnetfx35setup.exe" "$INSTDIR\dotnetfx.exe" /end
+     inetc::get /caption "Downloading .NET Framework 4.0" /canceltext "Cancel" "http://www.microsoft.com/downloads/info.aspx?na=41&SrcFamilyId=9CFB2D51-5FF4-4491-B0E5-B386F32C0992&SrcDisplayLang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2f1%2fB%2fE%2f1BE39E79-7E39-46A3-96FF-047F95396215%2fdotNetFx40_Full_setup.exe" "$INSTDIR\dotnetfx.exe" /end
      Pop $1
 
      ${If} $1 != "OK"
            Delete "$INSTDIR\dotnetfx.exe"
-           Abort "Installation cancelled, ${PRODUCT_NAME} requires the .NET 3.5 Framework"
+           Abort "Installation cancelled, ${PRODUCT_NAME} requires the .NET 4.0 Framework"
      ${EndIf}
 
      ExecWait "$INSTDIR\dotnetfx.exe"
@@ -133,7 +133,6 @@ Section "Handbrake" SEC01
   File "Growl.CoreLibrary.dll"
   File "Handbrake.exe.config"
   File "HandBrake.ApplicationServices.dll"
-  File "HandBrake.Framework.dll"
   File "Microsoft.WindowsAPICodePack.Shell.dll"
   File "Microsoft.WindowsAPICodePack.dll"
   File "HandBrakeInterop.dll"

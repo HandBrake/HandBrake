@@ -10,8 +10,6 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Text.RegularExpressions;
     using System.Xml;
 
-    using HandBrake.Framework.Services.Interfaces;
-
     /// <summary>
     /// Appcast Reader - Used for parsing HandBrakes update file
     /// </summary>

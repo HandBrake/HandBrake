@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrakeCS", "HandBrakeCS.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrake.ApplicationServices", "HandBrake.ApplicationServices\HandBrake.ApplicationServices.csproj", "{087A2BA8-BAC2-4577-A46F-07FF9D420016}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrake.Framework", "HandBrake.Framework\HandBrake.Framework.csproj", "{49AD42C1-BF9B-4D78-A644-020878FAADE6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrakeWPF", "HandBrakeWPF\HandBrakeWPF.csproj", "{DADE66CB-0E12-4959-ADE5-0ACD31D27C59}"
 EndProject
 Global
@@ -81,30 +79,6 @@ Global
 		{087A2BA8-BAC2-4577-A46F-07FF9D420016}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{087A2BA8-BAC2-4577-A46F-07FF9D420016}.Release|x64.ActiveCfg = Release|Any CPU
 		{087A2BA8-BAC2-4577-A46F-07FF9D420016}.Release|x86.ActiveCfg = Release|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.Install|Any CPU.ActiveCfg = Release|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.Install|Any CPU.Build.0 = Release|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.Install|Mixed Platforms.ActiveCfg = NightlyBuild|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.Install|Mixed Platforms.Build.0 = NightlyBuild|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.Install|x64.ActiveCfg = NightlyBuild|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.Install|x86.ActiveCfg = Release|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.NightlyBuild|Any CPU.ActiveCfg = Release|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.NightlyBuild|Any CPU.Build.0 = Release|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.NightlyBuild|Mixed Platforms.ActiveCfg = NightlyBuild|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.NightlyBuild|Mixed Platforms.Build.0 = NightlyBuild|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.NightlyBuild|x64.ActiveCfg = NightlyBuild|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.NightlyBuild|x86.ActiveCfg = Release|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.Release|x64.ActiveCfg = Release|Any CPU
-		{49AD42C1-BF9B-4D78-A644-020878FAADE6}.Release|x86.ActiveCfg = Release|Any CPU
 		{DADE66CB-0E12-4959-ADE5-0ACD31D27C59}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{DADE66CB-0E12-4959-ADE5-0ACD31D27C59}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{DADE66CB-0E12-4959-ADE5-0ACD31D27C59}.Debug|Mixed Platforms.Build.0 = Debug|x86

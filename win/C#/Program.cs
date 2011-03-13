@@ -13,9 +13,9 @@ namespace Handbrake
 
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Services;
-    using HandBrake.Framework.Views;
 
     using Handbrake.Properties;
+    using Handbrake.ToolWindows;
 
     /// <summary>
     /// HandBrake Starts Here

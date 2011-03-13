@@ -1,4 +1,4 @@
-﻿namespace HandBrake.Framework.Views
+﻿namespace Handbrake.ToolWindows
 {
     partial class ExceptionWindow
     {
@@ -70,7 +70,7 @@
             // 
             // PictureBox1
             // 
-            this.PictureBox1.Image = global::HandBrake.Framework.Properties.Resources.ErrorX;
+            this.PictureBox1.Image = Properties.Resources.ErrorX;
             resources.ApplyResources(this.PictureBox1, "PictureBox1");
             this.PictureBox1.Name = "PictureBox1";
             this.PictureBox1.TabStop = false;
@@ -129,7 +129,7 @@
             this.btn_copy.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             resources.ApplyResources(this.btn_copy, "btn_copy");
             this.btn_copy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_copy.Image = global::HandBrake.Framework.Properties.Resources.copy;
+            this.btn_copy.Image = Properties.Resources.copy;
             this.btn_copy.Name = "btn_copy";
             this.btn_copy.UseVisualStyleBackColor = false;
             this.btn_copy.Click += new System.EventHandler(this.BtnCopyClick);
@@ -141,7 +141,7 @@
             // 
             // mnu_copy_log
             // 
-            this.mnu_copy_log.Image = global::HandBrake.Framework.Properties.Resources.copy;
+            this.mnu_copy_log.Image = Properties.Resources.copy;
             this.mnu_copy_log.Name = "mnu_copy_log";
             resources.ApplyResources(this.mnu_copy_log, "mnu_copy_log");
             this.mnu_copy_log.Click += new System.EventHandler(this.MnuCopyLogClick);

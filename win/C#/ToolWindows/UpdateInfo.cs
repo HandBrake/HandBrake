@@ -9,7 +9,6 @@ namespace Handbrake.ToolWindows
     using System.Windows.Forms;
 
     using HandBrake.ApplicationServices.Model.General;
-    using HandBrake.Framework.Views;
 
     /// <summary>
     /// A window to display update information.

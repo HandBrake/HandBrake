@@ -13,9 +13,9 @@ namespace Handbrake
     using System.Threading;
     using System.Windows.Forms;
 
-    using HandBrake.Framework.Services;
-    using HandBrake.Framework.Services.Interfaces;
     using HandBrake.ApplicationServices.Services.Interfaces;
+
+    using Handbrake.Functions;
 
     using Model;
     using Timer = System.Threading.Timer;
@@ -36,11 +36,6 @@ namespace Handbrake
         /// The Scan Object
         /// </summary>
         private readonly IScan scan;
-
-        /// <summary>
-        /// The Error service
-        /// </summary>
-        private readonly IErrorService errorService = new ErrorService();
 
         /// <summary>
         /// The current position in the log file
@@ -182,7 +177,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                errorService.ShowError("Error during load.", exc.ToString());
+                Main.ShowExceptiowWindow("Error during load.", exc.ToString());
             }
         }
 
@@ -287,7 +282,7 @@ namespace Handbrake
             catch (Exception exc)
             {
                 windowTimer.Dispose();
-                errorService.ShowError("GetLog() Error", exc.ToString());
+                Main.ShowExceptiowWindow("GetLog() Error.", exc.ToString());
             }
 
             return appendText;

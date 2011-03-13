@@ -277,6 +277,12 @@
     <Compile Include="ToolWindows\DownloadUpdate.Designer.cs">
       <DependentUpon>DownloadUpdate.cs</DependentUpon>
     </Compile>
+    <Compile Include="ToolWindows\ExceptionWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ToolWindows\ExceptionWindow.designer.cs">
+      <DependentUpon>ExceptionWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="ToolWindows\PreviewOverlay.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -363,6 +369,9 @@
     <EmbeddedResource Include="ToolWindows\DownloadUpdate.resx">
       <DependentUpon>DownloadUpdate.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolWindows\ExceptionWindow.resx">
+      <DependentUpon>ExceptionWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ToolWindows\PreviewOverlay.resx">
       <DependentUpon>PreviewOverlay.cs</DependentUpon>
@@ -487,10 +496,6 @@
       <Project>{087A2BA8-BAC2-4577-A46F-07FF9D420016}</Project>
       <Name>HandBrake.ApplicationServices</Name>
     </ProjectReference>
-    <ProjectReference Include="HandBrake.Framework\HandBrake.Framework.csproj">
-      <Project>{49AD42C1-BF9B-4D78-A644-020878FAADE6}</Project>
-      <Name>HandBrake.Framework</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -508,18 +513,16 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'NightlyBuild' ">
     <PostBuildEvent>
-	cd ../../
-	copy Installer\MakeNightly.nsi bin\NightlyBuild /Y
-	copy handbrakepineapple.ico bin\NightlyBuild /Y
-	xcopy doc bin\NightlyBuild\doc /I /Y
-	cd bin\NightlyBuild
-	makensis MakeNightly.nsi
-	</PostBuildEvent>
+      copy "$(ProjectDir)\Installer\MakeNightly.nsi" "$(ProjectDir)\bin\x86\NightlyBuild" /Y
+      copy "$(ProjectDir)\handbrakepineapple.ico" "$(ProjectDir)\bin\x86\NightlyBuild" /Y
+      xcopy "$(ProjectDir)\doc" "$(ProjectDir)\bin\x86\NightlyBuild\doc" /I /Y
+      makensis "$(ProjectDir)\bin\x86\NightlyBuild\MakeNightly.nsi"
+    </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
 	subwcrev.exe "$(ProjectDir)." "$(ProjectDir)Properties\AssemblyInfo.cs.tmpl" "$(ProjectDir)Properties\AssemblyInfo.cs"
 	subwcrev.exe "$(ProjectDir)." "$(ProjectDir)Properties\AssemblyInfo.cs.tmpl" "$(ProjectDir)Properties\AssemblyInfo.cs"
-subwcrev.exe "$(ProjectDir)." "$(ProjectDir)Installer\MakeNightly.nsi.tmpl" "$(ProjectDir)Installer\MakeNightly.nsi"</PreBuildEvent>
+  subwcrev.exe "$(ProjectDir)." "$(ProjectDir)Installer\MakeNightly.nsi.tmpl" "$(ProjectDir)Installer\MakeNightly.nsi"</PreBuildEvent>
   </PropertyGroup>
 </Project>

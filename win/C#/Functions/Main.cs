@@ -16,23 +16,18 @@ namespace Handbrake.Functions
     using System.Windows.Forms;
     using System.Xml.Serialization;
 
-    using HandBrake.Framework.Services;
-    using HandBrake.Framework.Services.Interfaces;
+
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
-    using Model;
+
+    using Handbrake.ToolWindows;
 
     /// <summary>
     /// Useful functions which various screens can use.
     /// </summary>
     public static class Main
     {
-        /// <summary>
-        /// The Error Service
-        /// </summary>
-        private static readonly IErrorService errorService = new ErrorService();
-
         /// <summary>
         /// The XML Serializer
         /// </summary>
@@ -706,7 +701,9 @@ namespace Handbrake.Functions
         /// </param>
         public static void ShowExceptiowWindow(string shortError, string longError)
         {
-            errorService.ShowError(shortError, longError);
+            ExceptionWindow window = new ExceptionWindow();
+            window.Setup(shortError, longError);
+            window.ShowDialog();
         }
 
         /// <summary>
