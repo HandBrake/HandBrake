@@ -360,8 +360,8 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
         {
             if( !( m->width && m->height && m->rate ) )
             {
-                m->width  = m->info->sequence->display_width;
-                m->height = m->info->sequence->display_height;
+                m->width  = m->info->sequence->picture_width;
+                m->height = m->info->sequence->picture_height;
                 m->rate   = m->info->sequence->frame_period;
                 if ( m->aspect_ratio <= 0 && m->height &&
                      m->info->sequence->pixel_height )
@@ -408,13 +408,13 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
             if( m->got_iframe )
             {
                 int crop[4] = {0};
-                if ( m->info->sequence->display_width < m->info->sequence->width )
+                if ( m->info->sequence->picture_width < m->info->sequence->width )
                 {
-                    crop[3] = m->info->sequence->width - m->info->sequence->display_width;
+                    crop[3] = m->info->sequence->width - m->info->sequence->picture_width;
                 }
-                if ( m->info->sequence->display_height < m->info->sequence->height )
+                if ( m->info->sequence->picture_height < m->info->sequence->height )
                 {
-                    crop[1] = m->info->sequence->height - m->info->sequence->display_height;
+                    crop[1] = m->info->sequence->height - m->info->sequence->picture_height;
                 }
                 buf  = hb_copy_frame( m->job, 
                                       m->info->sequence->width,
