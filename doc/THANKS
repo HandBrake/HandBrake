@@ -1,0 +1,70 @@
+THANKS file for HandBrake <http://handbrake.fr/>
+
+Several people noticeably contributed to MediaFork and HandBrake development
+without writing code (submitting/checking translations, DVD samples, etc).
+Let's thank them here!
+
+Chris (audley)
+ + Inspiration and example of patching mpeg4ip for iPod atom support
+
+Omar Ahmad Bhatti
+ + Intensive beta testing, suggestions. Convinced me to port HandBrake
+   to OS X, which finally was a pretty good idea.
+
+Hanna Bauer
+Adrien Marquette
+Norbert Rittel
+ + German translation
+
+Paul Bénéchet
+Luidgi Esposito
+Andrea Gianarro
+Emilio Gelosi
+ + Italian translation
+
+Adam
+ + Polish translation
+
+Nik Roby
+ + Russian translation
+
+Leendert
+ + Dutch translation
+
+Eric Kornblum
+ + Sent me a sample DVD with LPCM tracks
+
+migol Superkid
+ + Spanish translation
+
+pgjw
+ + Portuguese translation
+
+cygma
+ + Japanese translation
+
+Michelle De Sio
+ + Sent me a sample DVD with MPEG audio tracks
+
+Ian Rickard
+ + Enhanced icon
+
+Sébastien Noël
+ + Debian packages (http://www.twolife.org/debian/repository.php)
+
+People who sent me an iTunes gift certificate: a BIG thanks!
+
+Paul (baggss)
+ + Forum Moderator
+ 
+Du'Wayne Caviness (Cavalicious)
+ + Forum Moderator
+ 
+Edward Jackson. (TedJ)
+ + Forum Moderator
+ 
+Chuck (cvk_b)
+ + Testing Team Member
+
+Nate Thompson (nightstrm)
+ + Forum Moderator

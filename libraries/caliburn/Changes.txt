@@ -1,0 +1,166 @@
+V1.1 Release
+-Fixed an issue in the WPF version of InteractionNode.
+-Fixed an event invocation order issue and a parameter update issue related to routed messages.
+-Updated Spring.NET to version 1.3.0.
+-Made DefaultWindowManager more friendly to WPF's NavigationWindow.
+-Fixed a bug with non-modal window shutdown in DefaultWindowManager.
+-Fixed a core bug in custom attribute discovery.
+-Enabled routed messages to declare default handlers.  Now ActionMessage declares a default handler for its DataContext.  This solves several Menu routing issues.
+-Fixed the apparently completely broken MEF adapter.
+-Greatly improved the flexibility of the DefaultViewStrategy.
+-Fixed a bug in the WPF DispatcherImpelmentation.
+-Fixed a bug in PresenterManager and MultiPresenterManager which caused screen changes to the same screen.
+-Enabled view chaching for Silverlight.
+-Fixed some bugs in the LOB samples.
+-Added Hyperlink/HyerlinkButton element defaults.
+-Update StructureMap to version 2.6.1.
+-Updated Windsor to version 2.1.1.
+-Added official support for .NET 4.0.
+-Fixed a bug in MultiPresenterManager for .NET 4.0.
+-Updated to MEF Preview 9.
+-Applied a patch from Adam Connelly to add AddRange to BindableCollection and IObservableCollection.
+-Update Ninject to official 2.0 release.
+-Fixed a bug in the Disable IAvailabilityEffect which was preventing it from handling ContentElements in WPF correctly.
+-Fixed a bug in the AvailabilityEffectConverter related to resolving custom effects from the container.
+-Enabled actions to search for handlers by routing through TemplatedParents in WPF.
+-Fixed a bug with expression tree method calls in .NET 4.0.
+-Enabled the dispatcher's default DispatcherPriority to be configured.
+-Applied a patch by varely to fix binding validation against properties with underscores in their name.
+-Updated Prism to the October 2009 release.
+-Updated the AutofacAdapter to support AutoFac 2.0.
+-Changed IsolatedStorageStateManager to use GetUserStoreForDomain for WPF and GetUserStoreForApplication for Silverlight. The method which gets the storage file is now overridable as well.
+-Changed Presenters to raise lifecycle events after initialization/activation/etc are complete.
+-Ensured that PresenterManagers do not call initialize/activate when CurrentPresenter is set unless they themselves are initialized/activated.
+-Fixed a bug with WPF Parameter instances raising value changes after being removed from the tree.
+-Fixed bugs in PropertyPathMonitor
+-Fixed a bug in the Autofac adapter related to singleton registration.
+-Enabled strong-named bulds of but only for .NET 4.0 and SL4.
+-Fixed a memory leak related to the DependenciesAttribute.
+-Fixed a bug in DefaultViewLocator.MakeInterface related to generic types.
+-Updated Unity to the latest version.
+-Updated Prism to the latest version.
+-Fixed a bug in the MessageBinder.
+-Fixed a bug in the contact manager sample.
+
+V1.1 Release Candidate
+-Added pre-initialization hooks to CaliburnApplication via Marco Amendola's patch.
+-Redesign of IThreadPool.  AsynchronousAction will now pass itself as state when enqueing the background task.
+-Closed ticket #4672 by making PropertyChangedBase.PropertyChanged virtual.
+-Applied jagregory's patch to add single key gestures to WPF and Caliburn.
+-Applied marcoamendola's patch for enabling property path syntax with Preview and Dependency attributes. So you can now do things like [Dependencies("Model.IsValid")].
+-Applied marcoamendola's patch enabling type hinting for polymorphic databinding in Caliburn.Testability.
+-Applied etobi's patch to greatly improve Caliburn's parameter parsing in ActionMessages and CommandMessages. See http://caliburn.codeplex.com/WorkItem/View.aspx?WorkItemId=4644 for an explanation.
+-Closed ticket #4826. DefaultWindowManager now sets WindowStartupLocation to CenterOwner for UserControls hosted in windows. Title was enhanced to databind to IPresenter.DisplayName if model implements this interface.
+-Closed ticket #4833. Fixed an issue with ViewMetadata and invalid Windows in DefaultViewStrategy.
+-Fixed a bug with DefaultWindowManager which caused errors when creating main windows from a user control.
+-Improved the flexibility of the DefaultViewStrategy. It no longer requires separate namespaces for ViewModels/Views.
+-Closed ticket #4865. Fixed a bug in MultiPresenterManager which affects multiple presenter shutdown.
+-Applied sedovav's fix to the Spring adapter.
+-Enhanced DefaultViewStrategy's exception to report searched for types when view location fails.
+-Applied cheesus' recommendations to add unwire capability to IEventHandler.
+-Improved PresenterManager and MultiPresenterManager such that all changes to CurrentPresenter go through ChangeCurrentPresenterCore.
+-Bug fixes and improvements to DependenciesAttribute, PreviewAttribute, DependencyObserver and PropertyPathMonitory.
+-Added strongly-typed property change notification to PropertyChangedBase.
+-Fixed a bug in the SimpleContainer related to generic component registration.
+-Added ILifecycleNotifier.AttemptingShutdown which gets fired before the CanShutdownCore method on PresenterBase is called. 
+-Fixed a bug in AsnychronousAction related to IPreExecute, BlocksInteraction and AffectsTriggers.
+-Added IWindowManager and DefaultWindowManager for SL3 and SL4.
+-Fixed a few bugs in property change testing.
+-Fixed a bug in the MEFAdapter.
+-Fixed a bug in the design-time support for Availability Effects in the AvailabilityEffectConverter.
+-Updated to Castle Windsor 2.1, Dynamic Proxy 2.2. Added official Windsor support for Silverlight 3.0 and 4.0
+-Fixed a minor bug in View Contexts.
+-Enabled WPF Action parameters to bind to default event/property by specifying only an element name as the arg.
+-Added the Silverlight Navigation Sample to How Tos.
+-Created three different build-*.cmd for the major build scenarios.
+
+V1 RTW
+-The DefaultBinder will now throw on type activation failure.
+-Made a change to the implementation of PresentationFrameworkModule.IsInDesignMode.
+-Removed Silverlight Windsor support because it apparently never worked.
+-Fixed some inconsistencies between the implementations of IStateManager by transforming various implementation methods into extension methods and adding a missing concept.
+-Fixed an inconsistency in the Open extension method. Added an extension point to the DefaultViewStrategy that will make it easier to work with proxied models.
+-A minor change to allow custom "rewriting" of the type that the DefaultBinder inspects. This will help with proxy scenarios. Just override GetModelType and return the underlying type. The same is true for DefaultViewStrategy. For the ActionFactory, override SelectMethods.
+-Fixed bugs in the View.Context and View.Strategy attached properties.
+-Fixed a bug in the AttachedEventTriggerParser.cs. We no longer query against dynamic assemblies.
+-Fixed a bug in the DefaultWindowManager. Fixed some compile errors in the LOB samples that resulted from some recent API fixes.
+-Added an IContainer interface which is a combination of IServiceLocator and IConfigurator. Implemented this on all the Adapters and registered this interface will all underlying containers. Fixed some bugs in the container adapter implementations.
+-Added an interface, IExtendedPresenter, which represents all presenter related capabilities. It is implemented by PresenterBase.
+-Fixed a major inconsistency with the IDispatcher and Execute APIs.
+-Added an extension point to MultiPresenter and MultiPresenterManager to allow a subclass to alter the default partial shutdown behavior.
+-Added the ability for a module to execute custom code just after framework startup by using the AfterStart method. Fixed some API inconsistencies in modules
+-Added a CancelResult exception which can be thrown or passed from an IResult in order to stop the enumeration of multiple results. This exception will not be bubbled up.
+-Added Prism integration!!!
+-Added WPF and Silverlight samples demonstrating how to configure Prism with Caliburn!!
+-Fixed a problem with the build file.
+-Fixed a bug in the way the MessageParserBase was parsing parameters.
+-Fixed a bug in the DefaultBinder which caused convention binding of IPresenter properties to fail if the property was readonly.
+-Made some improvements to AttachedEventTriggerParser.
+-Fixed the NinjectAdapter and the StructureMapAdapter.
+-Fixed databinding conventions in data templates for items controls.
+-Fixed a compilation error in the BackgroundProcessing how to.
+-Renamed DependencyHelper to DependencyObserver and made it a publicly available component. 
+-Fixed some bugs with Dependent Actions, where triggers were being re-evaluated even when their own dependencies had not changed. 
+-Enabled PreviewAttribute to work with Methods AND Properties. So you can now have a Save action and a CanSave *Property* which is hooked up. If you follow this naming convention, the filter will be added automatically. Finally, used the new DependencyObserver to allow Preview properties to be re-evaluated when a PropertyChange notification is raised for the preview property. As always, this works for Actions and Commands.
+-Made an improvement to AttachedEventTriggerParser so that it only investigates types which inherit from DependencyObject for events.
+-Enabled View.Context to flow through to the ItemTemplate of an ItemsControl when using convention bindings.
+-Made Caliburn/Prism integration even smoother.
+-Made more methods of DefaultBinder protected virtual.
+-Fixed a bug in the LOB sample. 
+-Made some minor improvements to IExtendedPresenter.
+-Fixed a bug in AttachedEventTriggerParser. It now searches DependencyObject descendants *and* static classes for events.
+-Fixed more problems with the SpringAdapter. Discovered some issues with the MEFAdapter. Added container unit tests to cover additional scenarios.
+-Update MEF to Preview 8
+-Update to the latest build of Ninject 2.
+
+V1 RC3
+-Updated the StructureMap.dll to version 2.5.3.
+-Made a slight alteration to CoreConfiguration that makes it more friendly when run in a unit test.
+-Added an AutofacAdapter for .NET 3.5, Silverlight 2.0 and Silverlight 3.0.
+-Fixed bugs in the DefaultWindowManager.
+-Added IPresenterNode which allows presenters to be hooked up with a reference to their parent. All implementors of IPresenterHost now wire themselves when opening children and unwire themselves during a shutdown.
+-Created the IBinder interface. This replaces the functionality that was in the extension method AttachTo. This interface is meant to provide a pluggable way to change the behavior of Model/View wire-up.
+-Updated DefaultBinder to allow for convention-based action wire-up.
+-Fixed a bug in auto-registration with CommandAttribute.
+-Fixed several bugs with CaliburnApplication
+-Fixed a bug where certain module scenarios would cause the PresentationFrameworkModule to be configured twice.
+-Fixed some inconsistencies in the DefaultWindowManager and CaliburnApplication.silverlight.cs.
+-Removed a pesky attribute in the WPF ContactManager's .config file that was causing bugs for some people.
+-Removed Message.Attach2nd, Message.Attach3rd and Message.Attach4th. You can now attach an arbitrary number of messages with Message.Attach by separating each message with a semicolon. This caused a breaking change to the IParser implementation, but it is unlikely that will affect many people.
+-Fixed some bugs in Parameter.silverlight.cs related to event defaults for elements that are bound.
+-Improved the BackgroundProcessing sample.
+-Fixed some bugs in parsing of parameters for messages. There were certain scenarios where the parser could not differentiate between string literals and references to control.  To pass literals as a message parameter (short syntax only), you must surround it with single quotes.
+-Added AttachedEventTriggerParser. We can all now use attached event triggers in the short syntax. Usage is as follows: cal:Message.Attach="[AttachedEvent ButtonBase.Click] = [Action MyAction]" The caveat is that we cannot map namespaces from xaml into the parser. To work around this problem, we search through all AppDomain assemblies by default. If you would like to optimize this, simply inherit from AttachedEventTriggerParser and override GetSearchableAssemblies. Then register your ITriggerParser with IParser under the name "AttachedEvent"
+-Enabled the DefaultViewStrategy to handle custom contexts without the need of a ViewStrategyAttribute. If a context is the DefaultViewStrategy will treat the view name as a folder name by adding an "s" and search that folder for views with the context as their name.
+-Fixed various bugs in DefaultViewStrategy.
+-Fixed various bugs in AsynchronousAction and in the BackgroundProcessing sample.
+-Updated MEF to Preview 7.
+-Changed IMessageBinder.BindOutcome to IMessageBinder.CreateResult.
+-Enabled the DefaultBinder to look for properties named with the pattern Can + Action and wire up the IsEnabled property automatically.
+-Fixed the signatures of extension methods for IWindowManager.
+-Fixed a bug in binding validation that occurs when properties are overridden on a bound type.
+-Provided a way for a presenter to pass a dialog result to the view on close.
+-Made some improvements to exception messages in the case of parameter count mismatch during invocation.
+-Updated Caliburn's build to work with Silverlight 3.0.40818.0 service release.
+-Extended the IDispatcher to allow async UI invocation.
+
+V1 RC2
+-Added the official xmlns for caliburn: http://www.caliburnproject.org
+-Added a Completed event to IResult (renamed from IExecutableResult)
+-Renamed CompositeResult to SequentialResult
+-Added a Starting event to IBackgroundTask.
+-The filter interfaces have been renamed IPreExecuteFilter -> IPreProcessor, IPostExecuteFilter -> IPostProcessor, IRescueFilter -> IRescue, IInstanceAwareFilter -> IHandlerAware. Also, IMethodBinder was renamed to IMessageBinder and IMessageSupportingMethodBinding was renamed to IRoutedMessageWithOutcome (which caused a change in the IResult interface). The property ReturnPath on ActionMessage was renamed to OutcomePath.
+-Enabled Unity, Castle, Ninject and MEF Adapters for Silverlight.
+-Improvements to DefaultViewStrategy
+-Added parameter and results of message to be bound to Resources.
+-Enabled parameter special files to be "dotted" on. ie: $eventArgs.My.Property
+-Additional attached properties are necessary: Attach, Attach2nd, Attach3rd and Attach4th
+-IPresenterHost's Presenters is now an instance of IObservableCollection<IPresenter>
+-Introduced IAssemblySource as a way for any component to be made aware of inspectable assemblies.
+-Reworked ComponentInfo
+-Added the IWindowManager service for WPF. This enables a model-centric mechanism for showing dialogs and non-modal windows.
+-Added the IViewAware interface which can be implemented by a model/presenter if it wishes to be aware of its view.
+-Updated the build to compile for .NET 3.5, Silverlight 2.0 and Silverlight 3.0
+-Updated all samples so that they has both SL2 and SL3 projects.
+-Many more small features and API improvements...
+-Fixed tons of bugs...
