@@ -28,7 +28,7 @@ struct hb_work_private_s
     int64_t              chapter_time;
     int                  chapter_val;
     int                  count_frames;      // frames output so far
-    double               frame_rate;        // 90KHz ticks per frame (for CFR/PFR)
+    double               frame_rate;        // 90kHz ticks per frame (for CFR/PFR)
     uint64_t             out_last_stop;     // where last frame ended (for CFR/PFR)
     int                  drops;             // frames dropped (for CFR/PFR)
     int                  dups;              // frames duped (for CFR/PFR)
@@ -716,7 +716,7 @@ void renderClose( hb_work_object_t * w )
 
     hb_interjob_t * interjob = hb_interjob_get( w->private_data->job->h );
     
-    /* Preserve dropped frame count for more accurate framerates in 2nd passes. */
+    /* Preserve output frame count and time for more accurate framerates in 2nd passes. */
     interjob->out_frame_count = pv->count_frames;
     interjob->total_time = pv->out_last_stop;
 

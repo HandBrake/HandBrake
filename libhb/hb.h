@@ -81,7 +81,7 @@ typedef struct hb_interjob_s
     int last_job;          /* job->sequence_id & 0xFFFFFF */
     int frame_count;       /* number of frames counted by sync */
     int out_frame_count;   /* number of frames counted by render */
-    uint64_t total_time;   /* real length in 90khz (i.e. / 90000 */
+    uint64_t total_time;   /* real length in 90kHz ticks (i.e. seconds / 90000) */
     int vrate;             /* actual measured output vrate from 1st pass */
     int vrate_base;        /* actual measured output vrate_base from 1st pass */
 
