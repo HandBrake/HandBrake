@@ -105,27 +105,39 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <returns>
         /// The create cli log header.
         /// </returns>
-        public static string CreateCliLogHeader(QueueTask encJob)
+        public static StringBuilder CreateCliLogHeader(QueueTask encJob)
         {
             StringBuilder logHeader = new StringBuilder();
 
-            logHeader.AppendLine(String.Format("# {0}", Init.HandBrakeGuiVersionString));
-            logHeader.AppendLine(String.Format("# Running: {0}", Environment.OSVersion));
-            logHeader.AppendLine(String.Format("# CPU: {0}", SystemInfo.GetCpuCount));
-            logHeader.AppendLine(String.Format("# Ram: {0} MB", SystemInfo.TotalPhysicalMemory));
-            logHeader.AppendLine(String.Format("# Screen: {0}x{1}", SystemInfo.ScreenBounds.Bounds.Width, SystemInfo.ScreenBounds.Bounds.Height));
-            logHeader.AppendLine(String.Format("# Temp Dir: {0}", Path.GetTempPath()));
-            logHeader.AppendLine(String.Format("# Install Dir: {0}", Application.StartupPath));
-            logHeader.AppendLine(String.Format("# Data Dir: {0}\n", Application.UserAppDataPath));
+            logHeader.AppendLine(String.Format("{0}", Init.HandBrakeGuiVersionString));
+            logHeader.AppendLine(String.Format("OS: {0}", Environment.OSVersion));
+            logHeader.AppendLine(String.Format("CPU: {0}", SystemInfo.GetCpuCount));
+            logHeader.Append(String.Format("Ram: {0} MB, ", SystemInfo.TotalPhysicalMemory));
+            logHeader.AppendLine(String.Format("Screen: {0}x{1}", SystemInfo.ScreenBounds.Bounds.Width, SystemInfo.ScreenBounds.Bounds.Height));
+            logHeader.AppendLine(String.Format("Temp Dir: {0}", Path.GetTempPath()));
+            logHeader.AppendLine(String.Format("Install Dir: {0}", Application.StartupPath));
+            logHeader.AppendLine(String.Format("Data Dir: {0}\n", Application.UserAppDataPath));
 
             if (encJob != null)
             {
-                logHeader.AppendLine(String.Format("# CLI Query: {0}", encJob.Query));
-                logHeader.AppendLine(String.Format("# User Query: {0}", encJob.CustomQuery));
+                logHeader.AppendLine(String.Format("CLI Query: {0}", encJob.Query));
+                logHeader.AppendLine(String.Format("User Query: {0}", encJob.CustomQuery));
             }
             logHeader.AppendLine("-------------------------------------------");
 
-            return logHeader.ToString();
+            return logHeader;
+        }
+
+        /// <summary>
+        /// Return the standard log format line of text for a given log message
+        /// </summary>
+        /// <param name="message">The Log Message</param>
+        /// <returns>
+        /// A Log Message in the format: "[hh:mm:ss] message"
+        /// </returns>
+        public static string LogLine(string message)
+        {
+            return string.Format("[{0}] {1}", DateTime.Now.TimeOfDay, message);
         }
     }
 }
