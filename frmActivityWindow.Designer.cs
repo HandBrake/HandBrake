@@ -44,6 +44,7 @@ namespace Handbrake
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btn_copy = new System.Windows.Forms.ToolStripButton();
             this.logSelector = new System.Windows.Forms.ToolStripComboBox();
+            this.btn_openLogDirectory = new System.Windows.Forms.ToolStripButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.rightClickMenu.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -68,7 +69,7 @@ namespace Handbrake
             this.mnu_copy_log,
             this.mnu_openLogFolder});
             this.rightClickMenu.Name = "rightClickMenu";
-            this.rightClickMenu.Size = new System.Drawing.Size(254, 48);
+            this.rightClickMenu.Size = new System.Drawing.Size(178, 48);
             // 
             // mnu_copy_log
             // 
@@ -82,8 +83,8 @@ namespace Handbrake
             // 
             this.mnu_openLogFolder.Image = global::Handbrake.Properties.Resources.folder;
             this.mnu_openLogFolder.Name = "mnu_openLogFolder";
-            this.mnu_openLogFolder.Size = new System.Drawing.Size(253, 22);
-            this.mnu_openLogFolder.Text = "Open Individual Log File Directory";
+            this.mnu_openLogFolder.Size = new System.Drawing.Size(177, 22);
+            this.mnu_openLogFolder.Text = "Open Log Directory";
             this.mnu_openLogFolder.Click += new System.EventHandler(this.MnuOpenLogFolderClick);
             // 
             // ToolTip
@@ -95,7 +96,8 @@ namespace Handbrake
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btn_copy,
-            this.logSelector});
+            this.logSelector,
+            this.btn_openLogDirectory});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -109,20 +111,30 @@ namespace Handbrake
             this.btn_copy.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_copy.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_copy.Name = "btn_copy";
-            this.btn_copy.Size = new System.Drawing.Size(122, 22);
-            this.btn_copy.Text = "Copy to clipboard";
+            this.btn_copy.Size = new System.Drawing.Size(55, 22);
+            this.btn_copy.Text = "Copy";
             this.btn_copy.Click += new System.EventHandler(this.BtnCopyClick);
             // 
             // logSelector
             // 
             this.logSelector.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.logSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.logSelector.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.logSelector.Items.AddRange(new object[] {
             "Scan Log",
             "Encode Log"});
             this.logSelector.Name = "logSelector";
             this.logSelector.Size = new System.Drawing.Size(121, 25);
             this.logSelector.SelectedIndexChanged += new System.EventHandler(this.LogSelectorClick);
+            // 
+            // btn_openLogDirectory
+            // 
+            this.btn_openLogDirectory.Image = global::Handbrake.Properties.Resources.folder;
+            this.btn_openLogDirectory.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btn_openLogDirectory.Name = "btn_openLogDirectory";
+            this.btn_openLogDirectory.Size = new System.Drawing.Size(130, 22);
+            this.btn_openLogDirectory.Text = "Open Log Directory";
+            this.btn_openLogDirectory.Click += new System.EventHandler(this.btn_openLogDirectory_Click);
             // 
             // panel1
             // 
@@ -169,5 +181,6 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripMenuItem mnu_copy_log;
         private System.Windows.Forms.ToolStripMenuItem mnu_openLogFolder;
         private System.Windows.Forms.ToolStripComboBox logSelector;
+        private System.Windows.Forms.ToolStripButton btn_openLogDirectory;
     }
 }

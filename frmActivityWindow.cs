@@ -129,6 +129,8 @@ namespace Handbrake
                                     ? "Activity Window (Scan Log)"
                                     : "Activity Window (Encode Log)";
 
+                    this.logSelector.SelectedIndex = mode == ActivityLogMode.Scan ? 0 : 1;
+
                     if (mode == ActivityLogMode.Scan)
                     {
                         scan.ScanCompleted += stopWindowRefresh;
@@ -410,16 +412,26 @@ namespace Handbrake
         /// </param>
         private void MnuOpenLogFolderClick(object sender, EventArgs e)
         {
+            btn_openLogDirectory_Click(sender, e);
+        }
+
+        /// <summary>
+        /// Open the Log Directory
+        /// </summary>
+        /// <param name="sender">The Sender</param>
+        /// <param name="e">The Evennt Args</param>
+        private void btn_openLogDirectory_Click(object sender, EventArgs e)
+        {
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
             string windir = Environment.GetEnvironmentVariable("WINDIR");
             Process prc = new Process
-                              {
-                                  StartInfo =
-                                      {
-                                          FileName = windir + @"\explorer.exe",
-                                          Arguments = logDir
-                                      }
-                              };
+            {
+                StartInfo =
+                {
+                    FileName = windir + @"\explorer.exe",
+                    Arguments = logDir
+                }
+            };
             prc.Start();
         }
 
@@ -468,5 +480,7 @@ namespace Handbrake
             this.Dispose();
             base.OnClosing(e);
         }
+
+        
     }
 }

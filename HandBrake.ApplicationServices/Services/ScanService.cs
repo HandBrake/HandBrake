@@ -25,11 +25,6 @@ namespace HandBrake.ApplicationServices.Services
         #region Private Variables
 
         /// <summary>
-        /// A Lock object
-        /// </summary>
-        private static readonly object locker = new object();
-
-        /// <summary>
         /// The CLI data parser
         /// </summary>
         private Parser readData;
@@ -40,14 +35,14 @@ namespace HandBrake.ApplicationServices.Services
         private StringBuilder logBuffer;
 
         /// <summary>
-        /// The line number thats been read to in the log file
-        /// </summary>
-        private int logFilePosition;
-
-        /// <summary>
         /// The Process belonging to the CLI
         /// </summary>
         private Process hbProc;
+
+        /// <summary>
+        /// The Log File Header
+        /// </summary>
+        StringBuilder header = UtilityService.CreateCliLogHeader(null);
 
         #endregion
 
@@ -56,6 +51,7 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         public ScanService()
         {
+            this.logBuffer = new StringBuilder();
         }
 
         #region Events
@@ -96,16 +92,7 @@ namespace HandBrake.ApplicationServices.Services
         {
             get
             {
-                if (IsScanning)
-                    return readData.Buffer.ToString();
-
-                if (logBuffer == null)
-                {
-                    ResetLogReader(false);
-                    ReadLastScanFile();
-                }
-
-                return logBuffer != null ? logBuffer.ToString() : string.Empty;
+                return string.IsNullOrEmpty(this.logBuffer.ToString()) ? header + "No log data available..." : header + this.logBuffer.ToString();
             }
         }
 
@@ -165,7 +152,7 @@ namespace HandBrake.ApplicationServices.Services
                     this.ScanStared(this, new EventArgs());
                 }
 
-                ResetLogReader(true);
+                logBuffer = new StringBuilder();
 
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
                 string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
@@ -261,73 +248,6 @@ namespace HandBrake.ApplicationServices.Services
                 if (this.ScanCompleted != null)
                     this.ScanCompleted(this, new ScanCompletedEventArgs(false, exc, "An Error has occured in ScanService.ScanSource()"));
             }
-        }
-
-        /// <summary>
-        /// Read the log file
-        /// </summary>
-        private void ReadLastScanFile()
-        {
-            lock (locker)
-            {
-                // last_encode_log.txt is the primary log file. Since .NET can't read this file whilst the CLI is outputing to it (Not even in read only mode),
-                // we'll need to make a copy of it.
-                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
-                                "\\HandBrake\\logs";
-                string logFile = Path.Combine(logDir, string.Format("last_scan_log{0}.txt", Init.InstanceId == 0 ? string.Empty : Init.InstanceId.ToString()));
-                string logFile2 = Path.Combine(logDir, string.Format("tmp_appReadable_log{0}.txt", Init.InstanceId == 0 ? string.Empty : Init.InstanceId.ToString()));
-
-                try
-                {
-                    // Make sure the application readable log file does not already exist. FileCopy fill fail if it does.
-                    if (File.Exists(logFile2))
-                        File.Delete(logFile2);
-
-                    // Copy the log file.
-                    if (File.Exists(logFile))
-                        File.Copy(logFile, logFile2, true);
-                    else
-                    {
-                        ResetLogReader(true);
-                        return;
-                    }
-
-                    // Start the Reader
-                    // Only use text which continues on from the last read line
-                    StreamReader sr = new StreamReader(logFile2);
-                    string line;
-                    int i = 1;
-                    while ((line = sr.ReadLine()) != null)
-                    {
-                        if (i > logFilePosition)
-                        {
-                            logBuffer.AppendLine(line);
-                            logFilePosition++;
-                        }
-                        i++;
-                    }
-                    sr.Close();
-                    sr.Dispose();
-                }
-                catch (Exception exc)
-                {
-                    ResetLogReader(true);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Reset the Log Reader
-        /// </summary>
-        /// <param name="addHeader">
-        /// The add Header.
-        /// </param>
-        private void ResetLogReader(bool addHeader)
-        {
-            logFilePosition = 0;
-            logBuffer = new StringBuilder();
-            if (addHeader)
-                logBuffer.AppendLine(UtilityService.CreateCliLogHeader(null));
         }
 
         /// <summary>

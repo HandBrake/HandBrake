@@ -57,6 +57,11 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         static readonly object fileWriterLock = new object();
 
+        /// <summary>
+        /// The Log File Header
+        /// </summary>
+        StringBuilder header = UtilityService.CreateCliLogHeader(null);
+
         #endregion
 
         /// <summary>
@@ -65,6 +70,7 @@ namespace HandBrake.ApplicationServices.Services
         public Encode()
         {
             this.EncodeStarted += this.EncodeEncodeStarted;
+            this.logBuffer = new StringBuilder();
             GrowlCommunicator.Register();
         }
 
@@ -104,20 +110,8 @@ namespace HandBrake.ApplicationServices.Services
         public string ActivityLog
         {
             get
-            {
-                if (this.IsEncoding == false)
-                {
-                    try
-                    {
-                        ReadFile(); // Read the last log file back in if it exists
-                    }
-                    catch (Exception exc)
-                    {
-                        return exc.ToString();
-                    }
-                }
-
-                return string.IsNullOrEmpty(this.logBuffer.ToString()) ? "No log data available..." : this.logBuffer.ToString();
+            {   
+                return string.IsNullOrEmpty(this.logBuffer.ToString()) ? header + "No log data available..." : header + this.logBuffer.ToString();
             }
         }
 
@@ -396,56 +390,6 @@ namespace HandBrake.ApplicationServices.Services
         }
 
         /// <summary>
-        /// Read the log file
-        /// </summary>
-        private void ReadFile()
-        {
-            logBuffer = new StringBuilder();
-            lock (logBuffer)
-            {
-                // last_encode_log.txt is the primary log file. Since .NET can't read this file whilst the CLI is outputing to it (Not even in read only mode),
-                // we'll need to make a copy of it.
-                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
-                string logFile = Path.Combine(logDir, string.Format("last_encode_log{0}.txt", Init.InstanceId));
-                string logFile2 = Path.Combine(logDir, string.Format("tmp_appReadable_log{0}.txt", Init.InstanceId));
-                int logFilePosition = 0;
-
-                try
-                {
-                    // Copy the log file.
-                    if (File.Exists(logFile))
-                        File.Copy(logFile, logFile2, true);
-                    else
-                        return;
-
-                    // Start the Reader
-                    // Only use text which continues on from the last read line
-                    using (StreamReader sr = new StreamReader(logFile2))
-                    {
-                        string line;
-                        int i = 1;
-                        while ((line = sr.ReadLine()) != null)
-                        {
-                            if (i > logFilePosition)
-                            {
-                                logBuffer.AppendLine(line);
-                                logFilePosition++;
-                            }
-                            i++;
-                        }
-                        sr.Close();
-                    }
-                }
-                catch (Exception exc)
-                {
-                    logBuffer.Append(
-                        Environment.NewLine + "Unable to read Log file..." + Environment.NewLine + exc +
-                        Environment.NewLine);
-                }
-            }
-        }
-
-        /// <summary>
         /// Setup the logging.
         /// </summary>
         /// <param name="encodeQueueTask">
@@ -466,9 +410,7 @@ namespace HandBrake.ApplicationServices.Services
                 if (File.Exists(logFile2)) File.Delete(logFile2);
 
                 fileWriter = new StreamWriter(logFile) { AutoFlush = true };
-
                 fileWriter.WriteLine(UtilityService.CreateCliLogHeader(encodeQueueTask));
-                logBuffer.AppendLine(UtilityService.CreateCliLogHeader(encodeQueueTask));
             }
             catch (Exception)
             {
