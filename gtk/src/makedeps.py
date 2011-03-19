@@ -47,7 +47,7 @@ dep_map = (
 	DepEntry("PictureAutoCrop", "PictureLeftCrop", "FALSE", False, False),
 	DepEntry("PictureAutoCrop", "PictureRightCrop", "FALSE", False, False),
 	DepEntry("VideoEncoder", "x264_tab", "x264", False, True),
-	DepEntry("VideoEncoder", "lavc_mpeg4_tab", "ffmpeg", False, True),
+	DepEntry("VideoEncoder", "lavc_mpeg4_tab", "ffmpeg|ffmpeg2", False, True),
 	DepEntry("VideoEncoder", "Mp4iPodCompatible", "x264", False, False),
 	DepEntry("AudioEncoderActual", "AudioBitrate", "ac3pass|dtspass", True, False),
 	DepEntry("AudioEncoderActual", "AudioSamplerate", "ac3pass|dtspass", True, False),

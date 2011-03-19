@@ -47,7 +47,7 @@ void encavcodecClose( hb_work_object_t * );
 hb_work_object_t hb_encavcodec =
 {
     WORK_ENCAVCODEC,
-    "MPEG-4 encoder (libavcodec)",
+    "FFMPEG encoder (libavcodec)",
     encavcodecInit,
     encavcodecWork,
     encavcodecClose
@@ -57,17 +57,34 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 {
     AVCodec * codec;
     AVCodecContext * context;
-    int rate_num, rate_den;
+    AVRational fps;
 
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
 
     pv->job = job;
 
-    codec = avcodec_find_encoder( CODEC_ID_MPEG4 );
+    switch ( w->codec_param )
+    {
+        case CODEC_ID_MPEG4:
+        {
+            hb_log("encavcodecInit: MPEG-4 ASP encoder");
+        } break;
+        case CODEC_ID_MPEG2VIDEO:
+        {
+            hb_log("encavcodecInit: MPEG-2 encoder");
+        } break;
+        default:
+        {
+            hb_error("encavcodecInit: unsupported encoder!");
+            return 1;
+        }
+    }
+
+    codec = avcodec_find_encoder( w->codec_param  );
     if( !codec )
     {
-        hb_log( "hb_work_encavcodec_init: avcodec_find_encoder "
+        hb_log( "encavcodecInit: avcodec_find_encoder "
                 "failed" );
     }
     context = avcodec_alloc_context3( codec );
@@ -79,45 +96,64 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     if( job->pass == 2 )
     {
         hb_interjob_t * interjob = hb_interjob_get( job->h );
-        rate_num = interjob->vrate_base;
-        rate_den = interjob->vrate;
+        fps.den = interjob->vrate_base;
+        fps.num = interjob->vrate;
     }
     else
     {
-        rate_num = job->vrate_base;
-        rate_den = job->vrate;
+        fps.den = job->vrate_base;
+        fps.num = job->vrate;
     }
 
-    // If the rate_den is 27000000, there's a good chance this is
+    // If the fps.num is 27000000, there's a good chance this is
     // a standard rate that we have in our hb_video_rates table.
     // Because of rounding errors and approximations made while 
     // measuring framerate, the actual value may not be exact.  So
     // we look for rates that are "close" and make an adjustment
-    // to rate_num.
-    if (rate_den == 27000000)
+    // to fps.den.
+    if (fps.num == 27000000)
     {
         int ii;
         for (ii = 0; ii < hb_video_rates_count; ii++)
         {
-            if (abs(rate_num - hb_video_rates[ii].rate) < 10)
+            if (abs(fps.den - hb_video_rates[ii].rate) < 10)
             {
-                rate_num = hb_video_rates[ii].rate;
+                fps.den = hb_video_rates[ii].rate;
                 break;
             }
         }
     }
-    hb_reduce(&rate_num, &rate_den, rate_num, rate_den);
-    if ((rate_num & ~0xFFFF) || (rate_den & ~0xFFFF))
+    hb_reduce(&fps.den, &fps.num, fps.den, fps.num);
+
+    // Check that the framerate is supported.  If not, pick the closest.
+    // The mpeg2 codec only supports a specific list of frame rates.
+    if (codec->supported_framerates)
     {
+        AVRational supported_fps;
+        supported_fps = codec->supported_framerates[av_find_nearest_q_idx(fps, codec->supported_framerates)];
+        if (supported_fps.num != fps.num || supported_fps.den != fps.den)
+        {
+            hb_log( "encavcodec: framerate %d / %d is not supported. Using %d / %d.", 
+                    fps.num, fps.den, supported_fps.num, supported_fps.den );
+            fps = supported_fps;
+        }
+    }
+    else if ((fps.num & ~0xFFFF) || (fps.den & ~0xFFFF))
+    {
+        // This may only be required for mpeg4 video. But since
+        // our only supported options are mpeg2 and mpeg4, there is
+        // no need to check codec type.
         hb_log( "encavcodec: truncating framerate %d / %d", 
-                rate_num, rate_den );
+                fps.num, fps.den );
+        while ((fps.num & ~0xFFFF) || (fps.den & ~0xFFFF))
+        {
+            fps.num >>= 1;
+            fps.den >>= 1;
+        }
     }
-    while ((rate_num & ~0xFFFF) || (rate_den & ~0xFFFF))
-    {
-        rate_num >>= 1;
-        rate_den >>= 1;
-    }
-    context->time_base = (AVRational) { rate_num, rate_den };
+
+    context->time_base.den = fps.num;
+    context->time_base.num = fps.den;
     context->gop_size  = 10 * (int)( (double)job->vrate / (double)job->vrate_base + 0.5 );
 
     /*
@@ -178,7 +214,9 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     {
         /* Rate control */
         context->bit_rate = 1000 * job->vbitrate;
-        context->bit_rate_tolerance = 10 * context->bit_rate;
+        // ffmpeg's mpeg2 encoder requires that the bit_rate_tolerance be >=
+        // bitrate * fps
+        context->bit_rate_tolerance = context->bit_rate * av_q2d(fps) + 1;
     }
     else
     {
@@ -257,10 +295,11 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     if( hb_avcodec_open( context, codec ) )
     {
-        hb_log( "hb_work_encavcodec_init: avcodec_open failed" );
+        hb_log( "encavcodecInit: avcodec_open failed" );
     }
     pv->context = context;
 
+    job->areBframes = 0;
     if ( context->has_b_frames )
     {
         job->areBframes = 1;
@@ -284,7 +323,7 @@ void encavcodecClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
 
-    if( pv->context )
+    if( pv->context && pv->context->codec )
     {
         hb_deep_log( 2, "encavcodec: closing libavcodec" );
         avcodec_flush_buffers( pv->context );
@@ -506,6 +545,12 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             }
             buf = process_delay_list( pv, buf );
         }
+
+        if( job->pass == 1 )
+        {
+            /* Write stats */
+            fprintf( pv->file, "%s", pv->context->stats_out );
+        }
     }
     else
     {
@@ -515,12 +560,6 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
 
     av_free( frame );
-
-    if( job->pass == 1 )
-    {
-        /* Write stats */
-        fprintf( pv->file, "%s", pv->context->stats_out );
-    }
 
     *buf_out = buf;
 

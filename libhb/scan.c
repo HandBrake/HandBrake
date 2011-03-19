@@ -275,7 +275,7 @@ static void ScanFunc( void * _data )
 
         job->keep_ratio = 1;
 
-        job->vcodec     = HB_VCODEC_FFMPEG;
+        job->vcodec     = HB_VCODEC_FFMPEG_MPEG4;
         job->vquality   = -1.0;
         job->vbitrate   = 1000;
         job->pass       = 0;

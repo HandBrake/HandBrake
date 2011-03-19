@@ -154,7 +154,7 @@ static int MP4Init( hb_mux_object_t * m )
 			MP4AddIPodUUID(m->file, mux_data->track);
 		}
     }
-    else /* FFmpeg or XviD */
+    else if ( job->vcodec == HB_VCODEC_FFMPEG_MPEG4 ) /* FFmpeg MPEG-4 */
     {
         MP4SetVideoProfileLevel( m->file, MPEG4_SP_L3 );
         mux_data->track = MP4AddVideoTrack( m->file, 90000,
@@ -181,6 +181,37 @@ static int MP4Init( hb_mux_object_t * m )
             *job->die = 1;
             return 0;
         }
+    }
+    else if ( job->vcodec == HB_VCODEC_FFMPEG_MPEG2 ) /* FFmpeg MPEG-2 */
+    {
+        mux_data->track = MP4AddVideoTrack( m->file, 90000,
+                MP4_INVALID_DURATION, job->width, job->height,
+                MP4_MPEG2_VIDEO_TYPE );
+        if (mux_data->track == MP4_INVALID_TRACK_ID)
+        {
+            hb_error("muxmp4.c: MP4AddVideoTrack failed!");
+            *job->die = 1;
+            return 0;
+        }
+
+        /* Tune track chunk duration */
+        if( !MP4TuneTrackDurationPerChunk( m, mux_data->track ))
+        {
+            return 0;
+        }
+
+        /* VOL from FFmpeg */
+        if (!(MP4SetTrackESConfiguration( m->file, mux_data->track,
+                job->config.mpeg4.bytes, job->config.mpeg4.length )))
+        {
+            hb_error("muxmp4.c: MP4SetTrackESConfiguration failed!");
+            *job->die = 1;
+            return 0;
+        }
+    }
+    else
+    {
+        hb_error("muxmp4.c: Unsupported video encoder!");
     }
 
     // COLR atom for color and gamma correction.
@@ -887,7 +918,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         /* Video */
 
         if( job->vcodec == HB_VCODEC_X264 ||
-            job->vcodec == HB_VCODEC_FFMPEG )
+            ( job->vcodec & HB_VCODEC_FFMPEG_MASK ) )
         {
             if ( buf && buf->start < buf->renderOffset )
             {
@@ -907,7 +938,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             return 0;
 
         if( job->vcodec == HB_VCODEC_X264 ||
-            job->vcodec == HB_VCODEC_FFMPEG )
+            ( job->vcodec & HB_VCODEC_FFMPEG_MASK ) )
         {
             // x264 supplies us with DTS, so offset is PTS - DTS
             offset = buf->start - buf->renderOffset;
@@ -945,7 +976,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         }
 
         if( job->vcodec == HB_VCODEC_X264 ||
-            job->vcodec == HB_VCODEC_FFMPEG )
+            ( job->vcodec & HB_VCODEC_FFMPEG_MASK ) )
         {
             // x264 supplies us with DTS
             if ( m->delay_buf )
@@ -1017,7 +1048,8 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     }
 
     /* Here's where the sample actually gets muxed. */
-    if( ( job->vcodec == HB_VCODEC_X264 || job->vcodec == HB_VCODEC_FFMPEG )
+    if( ( job->vcodec == HB_VCODEC_X264 ||
+        ( job->vcodec & HB_VCODEC_FFMPEG_MASK ) )
         && mux_data == job->mux_data )
     {
         /* Compute dependency flags.

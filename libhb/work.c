@@ -264,8 +264,12 @@ void hb_display_job_info( hb_job_t * job )
         /* Video encoder */
         switch( job->vcodec )
         {
-            case HB_VCODEC_FFMPEG:
-                hb_log( "   + encoder: FFmpeg" );
+            case HB_VCODEC_FFMPEG_MPEG4:
+                hb_log( "   + encoder: FFmpeg MPEG-4" );
+                break;
+
+            case HB_VCODEC_FFMPEG_MPEG2:
+                hb_log( "   + encoder: FFmpeg MPEG-2" );
                 break;
 
             case HB_VCODEC_X264:
@@ -452,7 +456,7 @@ static void do_job( hb_job_t * job )
     {
         hb_set_anamorphic_size(job, &job->width, &job->height, &job->anamorphic.par_width, &job->anamorphic.par_height);
 
-        if( job->vcodec == HB_VCODEC_FFMPEG )
+        if( job->vcodec & HB_VCODEC_FFMPEG_MASK )
         {
             /* Just to make working with ffmpeg even more fun,
                lavc's MPEG-4 encoder can't handle PAR values >= 255,
@@ -722,8 +726,13 @@ static void do_job( hb_job_t * job )
         /* Video encoder */
         switch( job->vcodec )
         {
-        case HB_VCODEC_FFMPEG:
+        case HB_VCODEC_FFMPEG_MPEG4:
             w = hb_get_work( WORK_ENCAVCODEC );
+            w->codec_param = CODEC_ID_MPEG4;
+            break;
+        case HB_VCODEC_FFMPEG_MPEG2:
+            w = hb_get_work( WORK_ENCAVCODEC );
+            w->codec_param = CODEC_ID_MPEG2VIDEO;
             break;
         case HB_VCODEC_X264:
             w = hb_get_work( WORK_ENCX264 );
@@ -993,7 +1002,7 @@ static void do_job( hb_job_t * job )
         w = muxer;
     }
 
-    hb_buffer_t      * buf_in, * buf_out;
+    hb_buffer_t      * buf_in, * buf_out = NULL;
 
     while ( !*job->die && !*w->done && w->status != HB_WORK_DONE )
     {

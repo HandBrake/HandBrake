@@ -61,7 +61,7 @@ static char * decomb_opt            = 0;
 static int    rotate                = 0;
 static char * rotate_opt            = 0;
 static int    grayscale   = 0;
-static int    vcodec      = HB_VCODEC_FFMPEG;
+static int    vcodec      = HB_VCODEC_FFMPEG_MPEG4;
 static hb_list_t * audios = NULL;
 static hb_audio_config_t * audio = NULL;
 static int    num_audio_tracks = 0;
@@ -3169,7 +3169,15 @@ static int ParseOptions( int argc, char ** argv )
             case 'e':
                 if( !strcasecmp( optarg, "ffmpeg" ) )
                 {
-                    vcodec = HB_VCODEC_FFMPEG;
+                    vcodec = HB_VCODEC_FFMPEG_MPEG4;
+                }
+                else if( !strcasecmp( optarg, "ffmpeg4" ) )
+                {
+                    vcodec = HB_VCODEC_FFMPEG_MPEG4;
+                }
+                else if( !strcasecmp( optarg, "ffmpeg2" ) )
+                {
+                    vcodec = HB_VCODEC_FFMPEG_MPEG2;
                 }
                 else if( !strcasecmp( optarg, "x264" ) )
                 {

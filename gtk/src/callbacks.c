@@ -4618,7 +4618,8 @@ format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 			}
 		} break;
 
-		case HB_VCODEC_FFMPEG:
+		case HB_VCODEC_FFMPEG_MPEG4:
+		case HB_VCODEC_FFMPEG_MPEG2:
 		{
 			return g_strdup_printf("QP: %d", (int)val);
 		} break;

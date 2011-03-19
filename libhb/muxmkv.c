@@ -103,8 +103,15 @@ static int MKVInit( hb_mux_object_t * m )
             if (job->areBframes)
                 track->minCache = 1;
             break;
-        case HB_VCODEC_FFMPEG:
+        case HB_VCODEC_FFMPEG_MPEG4:
             track->codecID = MK_VCODEC_MP4ASP;
+            track->codecPrivate = job->config.mpeg4.bytes;
+            track->codecPrivateSize = job->config.mpeg4.length;
+            if (job->areBframes)
+                track->minCache = 1;
+            break;
+        case HB_VCODEC_FFMPEG_MPEG2:
+            track->codecID = MK_VCODEC_MPEG2;
             track->codecPrivate = job->config.mpeg4.bytes;
             track->codecPrivateSize = job->config.mpeg4.length;
             if (job->areBframes)
@@ -451,7 +458,7 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     mk_addFrameData(m->file, mux_data->track, buf->data, buf->size);
     mk_setFrameFlags(m->file, mux_data->track, timecode,
                      (((job->vcodec == HB_VCODEC_X264 || 
-                        job->vcodec == HB_VCODEC_FFMPEG) && 
+                        (job->vcodec & HB_VCODEC_FFMPEG_MASK)) && 
                        mux_data == job->mux_data) ? 
                             (buf->frametype == HB_FRAME_IDR) : 
                             ((buf->frametype & HB_FRAME_KEY) != 0)), 0 );

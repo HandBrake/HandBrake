@@ -223,9 +223,12 @@ struct hb_job_s
          advanced_opts:     string of extra advanced encoder options
          areBframes:        boolean to note if b-frames are included in advanced_opts */
 #define HB_VCODEC_MASK   0x0000FF
-#define HB_VCODEC_FFMPEG 0x000001
-#define HB_VCODEC_X264   0x000002
-#define HB_VCODEC_THEORA 0x000004
+#define HB_VCODEC_X264   0x000001
+#define HB_VCODEC_THEORA 0x000002
+#define HB_VCODEC_FFMPEG_MPEG4 0x000010
+#define HB_VCODEC_FFMPEG       HB_VCODEC_FFMPEG_MPEG4
+#define HB_VCODEC_FFMPEG_MPEG2 0x000020
+#define HB_VCODEC_FFMPEG_MASK  0x0000F0
 
     int             vcodec;
     float           vquality;

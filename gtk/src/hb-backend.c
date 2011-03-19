@@ -239,7 +239,8 @@ combo_opts_t denoise_opts =
 static options_map_t d_vcodec_opts[] =
 {
 	{"H.264 (x264)",    "x264",   HB_VCODEC_X264, ""},
-	{"MPEG-4 (FFmpeg)", "ffmpeg", HB_VCODEC_FFMPEG, ""},
+	{"MPEG-4 (FFmpeg)", "ffmpeg", HB_VCODEC_FFMPEG_MPEG4, ""},
+	{"MPEG-2 (FFmpeg)", "ffmpeg2",HB_VCODEC_FFMPEG_MPEG2, ""},
 	{"VP3 (Theora)",    "theora", HB_VCODEC_THEORA, ""},
 };
 combo_opts_t vcodec_opts =
@@ -736,7 +737,8 @@ ghb_vquality_range(
 			*inverted = TRUE;
 		} break;
 
-		case HB_VCODEC_FFMPEG:
+		case HB_VCODEC_FFMPEG_MPEG2:
+		case HB_VCODEC_FFMPEG_MPEG4:
 		{
 			*min = 1;
 			*max = 31;
@@ -2854,7 +2856,8 @@ ghb_build_advanced_opts_string(GValue *settings)
 			}
 		} break;
 
-		case HB_VCODEC_FFMPEG:
+		case HB_VCODEC_FFMPEG_MPEG2:
+		case HB_VCODEC_FFMPEG_MPEG4:
 		{
 			gchar *opts = ghb_settings_get_string(settings, "lavcOption");
 			if (opts != NULL)
@@ -4014,7 +4017,7 @@ ghb_validate_video(signal_user_data_t *ud)
 			return FALSE;
 		}
 		g_free(message);
-		vcodec = HB_VCODEC_FFMPEG;
+		vcodec = HB_VCODEC_FFMPEG_MPEG4;
 		ghb_ui_update(ud, "VideoEncoder", ghb_int64_value(vcodec));
 	}
 	return TRUE;
@@ -4339,7 +4342,8 @@ ghb_validate_vquality(GValue *settings)
 				max = 30;
 			} break;
 
-			case HB_VCODEC_FFMPEG:
+			case HB_VCODEC_FFMPEG_MPEG2:
+			case HB_VCODEC_FFMPEG_MPEG4:
 			{
 				min = 1;
 				max = 8;
@@ -4620,7 +4624,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	if ((job->mux == HB_MUX_MP4 ) && (job->vcodec == HB_VCODEC_THEORA))
 	{
 		// mp4/theora combination is not supported.
-		job->vcodec = HB_VCODEC_FFMPEG;
+		job->vcodec = HB_VCODEC_FFMPEG_MPEG4;
 	}
 	if ((job->vcodec == HB_VCODEC_X264) && (job->mux == HB_MUX_MP4))
 	{
@@ -4880,7 +4884,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 					extra_opts = g_strdup_printf("%s:weightb=0", turbo_x264_opts);
 				}
 			}
-			else if (job->vcodec == HB_VCODEC_FFMPEG)
+			else if (job->vcodec == HB_VCODEC_FFMPEG_MPEG4)
 			{
 				extra_opts = g_strdup_printf("%s", turbo_lavc_opts);
 			}
