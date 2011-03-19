@@ -65,13 +65,13 @@ static const stream2codec_t st2codec[256] = {
 
     st(0x1b, V, WORK_DECAVCODECV,  CODEC_ID_H264,  "H.264"),
 
-    st(0x80, N, HB_ACODEC_MPGA,    CODEC_ID_PCM_BLURAY, "DigiCipher II Video"),
+    st(0x80, N, HB_ACODEC_MPGA,    CODEC_ID_PCM_BLURAY, "DigiCipher II Video/LPCM"),
     st(0x81, A, HB_ACODEC_AC3,     0,              "AC-3"),
     st(0x82, A, HB_ACODEC_DCA,     0,              "HDMV DTS"),
     st(0x83, A, HB_ACODEC_LPCM,    0,              "LPCM/TrueHD"),
     st(0x84, A, 0,                 0,              "SDDS/EAC3"),
-    st(0x85, U, 0,                 0,              "ATSC Program ID"),
-    st(0x86, A, HB_ACODEC_DCA,     0,              "DTS-HD"),
+    st(0x85, U, 0,                 0,              "ATSC Program ID/DTS-HD HRA"),
+    st(0x86, A, HB_ACODEC_DCA,     0,              "DTS-HD MA"),
     st(0x87, A, HB_ACODEC_MPGA,    CODEC_ID_EAC3,  "EAC3"),
 
     st(0x8a, A, HB_ACODEC_DCA,     0,              "DTS"),
@@ -690,7 +690,18 @@ hb_stream_t * hb_bd_stream_open( hb_title_t *title )
         if ( d->ts_stream_type[d->ts_number_pids] == 0x86 &&
              title->reg_desc == STR4_TO_UINT32("HDMV") )
         {
-            // This is an interleaved DTS-HD/DTS stream and the esid of
+            // This is an interleaved DTS-HD MA/DTS stream and the esid of
+            // the DTS is 0x71
+            d->ts_multiplexed[d->ts_number_pids] = 0x71;
+            d->ts_stream_type[d->ts_number_pids] = 0x82;
+        }
+        if ( d->ts_stream_type[d->ts_number_pids] == 0x85 &&
+             title->reg_desc == STR4_TO_UINT32("HDMV") )
+        {
+            // DTS-HD HRA audio in bluray has an stype of 0x85
+            // which conflicts with ATSC Program ID
+            // To distinguish, Bluray streams have a reg_desc of HDMV
+            // This is an interleaved DTS-HD HRA/DTS stream and the esid of
             // the DTS is 0x71
             d->ts_multiplexed[d->ts_number_pids] = 0x71;
             d->ts_stream_type[d->ts_number_pids] = 0x82;
@@ -1663,7 +1674,20 @@ static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
             }
             if ( st2codec[stype].kind == A && stype == 0x86 )
             {
-                // This is an interleaved DTS-HD/DTS stream and the esid of
+                // This is an interleaved DTS-HD MA/DTS stream and the esid of
+                // the DTS is 0x71
+                stream->ts_multiplexed[idx] = 0x71;
+                stype = 0x82;
+                stream->ts_stream_type[idx] = 0x82;
+                kind = A;
+            }
+            if ( stype == 0x85 &&
+                 stream->pmt_info.reg_desc == STR4_TO_UINT32("HDMV") )
+            {
+                // DTS-HD HRA audio in bluray has an stype of 0x85
+                // which conflicts with ATSC Program ID
+                // To distinguish, Bluray streams have a reg_desc of HDMV
+                // This is an interleaved DTS-HD HRA/DTS stream and the esid of
                 // the DTS is 0x71
                 stream->ts_multiplexed[idx] = 0x71;
                 stype = 0x82;
