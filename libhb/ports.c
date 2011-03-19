@@ -230,10 +230,10 @@ int hb_get_cpu_count()
 void hb_get_temporary_directory( char path[512] )
 {
     char base[512];
+    char *p;
 
     /* Create the base */
 #if defined( SYS_CYGWIN ) || defined( SYS_MINGW )
-    char *p;
     int i_size = GetTempPath( 512, base );
     if( i_size <= 0 || i_size >= 512 )
     {
@@ -245,7 +245,11 @@ void hb_get_temporary_directory( char path[512] )
     while( ( p = strchr( base, '\\' ) ) )
         *p = '/';
 #else
-    strcpy( base, "/tmp" );
+    if( (p = getenv( "TMPDIR" ) ) != NULL ||
+        (p = getenv( "TEMP" ) ) != NULL )
+        strcpy( base, p );
+    else
+        strcpy( base, "/tmp" );
 #endif
     /* I prefer to remove evntual last '/' (for cygwin) */
     if( base[strlen(base)-1] == '/' )
