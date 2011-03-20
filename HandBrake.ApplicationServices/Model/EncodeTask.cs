@@ -278,7 +278,7 @@ namespace HandBrake.ApplicationServices.Model
         /// <summary>
         /// Chapter Names
         /// </summary>
-        public Dictionary<int, string> ChapterNames { get; set; }
+        public List<string> ChapterNames { get; set; }
 
         #endregion
 
