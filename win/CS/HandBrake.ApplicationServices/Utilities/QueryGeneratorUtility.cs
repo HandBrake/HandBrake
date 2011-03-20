@@ -556,9 +556,17 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="chapters">The List of chapters</param>
         /// <param name="filePathName">Path to save the csv file</param>
         /// <returns>True if successful </returns>
-        private static bool ChapterCsvSave(Dictionary<int, string> chapters, string filePathName)
+        private static bool ChapterCsvSave(List<string> chapters, string filePathName)
         {
-            string csv = chapters.Aggregate(string.Empty, (current, row) => current + (row.Key + "," + row.Value.Replace(",", "\\,") + Environment.NewLine));
+            string csv = string.Empty;
+            int counter = 0;
+
+            foreach (string name in chapters)
+            {
+                csv += counter + "," + name.Replace(",", "\\,") + Environment.NewLine;
+                counter ++;
+            }
+
 
             StreamWriter file = new StreamWriter(filePathName);
             file.Write(csv);
