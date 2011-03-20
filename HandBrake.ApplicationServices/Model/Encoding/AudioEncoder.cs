@@ -18,13 +18,13 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         [Description("AC3 (ffmpeg)")]
         Ac3,
 
-        [Description("Passthrough (AC3/DTS)")]
+        [Description("Passthru")]
         Passthrough,
 
-        [Description("Passthrough (AC3)")]
+        [Description("AC3 Passthru")]
         Ac3Passthrough,
 
-        [Description("Passthrough (DTS)")]
+        [Description("DTS Passthru")]
         DtsPassthrough,
 
         [Description("Vorbis (vorbis)")]

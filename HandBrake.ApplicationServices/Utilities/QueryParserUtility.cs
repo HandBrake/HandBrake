@@ -375,7 +375,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
                     if (trackSamplerates != null)
                         if (trackSamplerates.Length >= (x + 1)) // Audio SampleRate
-                            track.SampleRate = double.Parse(trackSamplerates[x].Trim());
+                            track.SampleRate = double.Parse(trackSamplerates[x].Replace("Auto", "0").Trim());
 
                     if (trackDRCvalues != null)
                         if (trackDRCvalues.Length >= (x + 1)) // Audio DRC Values
