@@ -52,6 +52,7 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets EndPoint.
         /// </summary>
         public int EndPoint { get; set; }
+
         #endregion
 
         #region Destination
@@ -90,22 +91,22 @@ namespace HandBrake.ApplicationServices.Model
         /// <summary>
         /// Gets or sets Width.
         /// </summary>
-        public int Width { get; set; }
+        public int? Width { get; set; }
 
         /// <summary>
         /// Gets or sets Height.
         /// </summary>
-        public int Height { get; set; }
+        public int? Height { get; set; }
 
         /// <summary>
         /// Gets or sets MaxWidth.
         /// </summary>
-        public int MaxWidth { get; set; }
+        public int? MaxWidth { get; set; }
 
         /// <summary>
         /// Gets or sets MaxHeight.
         /// </summary>
-        public int MaxHeight { get; set; }
+        public int? MaxHeight { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether CustomCropping.
@@ -125,7 +126,7 @@ namespace HandBrake.ApplicationServices.Model
         /// <summary>
         /// Gets or sets DisplayWidth.
         /// </summary>
-        public double DisplayWidth { get; set; }
+        public double? DisplayWidth { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether KeepDisplayAspect.
@@ -145,7 +146,7 @@ namespace HandBrake.ApplicationServices.Model
         /// <summary>
         /// Gets or sets Modulus.
         /// </summary>
-        public int Modulus { get; set; }
+        public int? Modulus { get; set; }
         #endregion
 
         #region Filters
@@ -221,7 +222,7 @@ namespace HandBrake.ApplicationServices.Model
         /// <summary>
         /// Gets or sets Quality.
         /// </summary>
-        public double? Quality { get; set; }
+        public double Quality { get; set; }
 
         /// <summary>
         /// Gets or sets VideoBitrate.
@@ -273,6 +274,11 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets ChapterMarkersFilePath.
         /// </summary>
         public string ChapterMarkersFilePath { get; set; }
+
+        /// <summary>
+        /// Chapter Names
+        /// </summary>
+        public Dictionary<int, string> ChapterNames { get; set; }
 
         #endregion
 

@@ -56,22 +56,22 @@ namespace HandBrake.ApplicationServices.Utilities
                     switch (key)
                     {
                         case "AudioBitrate":
-                            track.Bitrate = value;
+                            track.Bitrate = int.Parse(value);
                             break;
                         case "AudioEncoder":
-                            track.Encoder = value.Replace("AAC (CoreAudio)", "AAC (faac)");
+                            track.Encoder = Converters.GetAudioEncoder(value.Trim());
                             break;
                         case "AudioMixdown":
-                            track.MixDown = value;
+                            track.MixDown = Converters.GetAudioMixDown(value.Trim());
                             break;
                         case "AudioSamplerate":
-                            track.SampleRate = value;
+                            track.SampleRate = double.Parse(value);
                             break;
                         case "AudioTrack":
-                            track.Track = value;
+                            track.Track = int.Parse(value);
                             break;
                         case "AudioTrackDRCSlider":
-                            track.DRC = value;
+                            track.DRC = double.Parse(value);
                             break;
                     }
                 }
@@ -285,15 +285,11 @@ namespace HandBrake.ApplicationServices.Utilities
             // Kill any Quality values we don't need.
             switch (qualityMode)
             {
-                case "0": // FileSize
-                    parsed.Quality = null;
-                    parsed.VideoBitrate = null;
-                    break;
                 case "1": // Avg Bitrate
-                    parsed.Quality = null;
+                    parsed.VideoEncodeRateType = VideoEncodeRateMode.AverageBitrate;
                     break;
                 case "2": // CQ
-                    parsed.VideoBitrate = null;
+                    parsed.VideoEncodeRateType = VideoEncodeRateMode.ConstantQuality;
                     break;
             }
             #endregion
@@ -532,7 +528,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
             // Video Settings
             AddEncodeElement(xmlWriter, "VideoAvgBitrate", "string", parsed.VideoBitrate.ToString());
-            AddEncodeElement(xmlWriter, "VideoEncoder", "string", Converters.GetGUIVideoEncoder(parsed.VideoEncoder));
+            AddEncodeElement(xmlWriter, "VideoEncoder", "string", EnumHelper.GetDescription(parsed.VideoEncoder));
             AddEncodeElement(xmlWriter, "VideoFramerate", "string", parsed.Framerate.ToString());
             AddEncodeElement(xmlWriter, "VideFrameratePFR", "integer", parsed.FramerateMode == FramerateMode.PFR ? "1" : "0");
             AddEncodeElement(xmlWriter, "VideoGrayScale", "integer", parsed.Grayscale ? "1" : "0");
@@ -637,22 +633,22 @@ namespace HandBrake.ApplicationServices.Utilities
             xmlWriter.WriteStartElement("dict");
 
             xmlWriter.WriteElementString("key", "AudioBitrate");
-            xmlWriter.WriteElementString("string", audioTrack.Bitrate);
+            xmlWriter.WriteElementString("string", audioTrack.Bitrate.ToString());
 
             xmlWriter.WriteElementString("key", "AudioEncoder");
-            xmlWriter.WriteElementString("string", audioTrack.Encoder);
+            xmlWriter.WriteElementString("string", EnumHelper.GetDescription(audioTrack.Encoder));
 
             xmlWriter.WriteElementString("key", "AudioMixdown");
-            xmlWriter.WriteElementString("string", audioTrack.MixDown);
+            xmlWriter.WriteElementString("string", EnumHelper.GetDescription(audioTrack.MixDown));
 
             xmlWriter.WriteElementString("key", "AudioSamplerate");
-            xmlWriter.WriteElementString("string", audioTrack.SampleRate);
+            xmlWriter.WriteElementString("string", audioTrack.SampleRate.ToString());
 
             xmlWriter.WriteElementString("key", "AudioTrack");
-            xmlWriter.WriteElementString("integer", audioTrack.Track);
+            xmlWriter.WriteElementString("integer", audioTrack.Track.ToString());
 
             xmlWriter.WriteElementString("key", "AudioTrackDRCSlider");
-            xmlWriter.WriteElementString("real", audioTrack.DRC);
+            xmlWriter.WriteElementString("real", audioTrack.DRC.ToString());
 
             xmlWriter.WriteElementString("key", "AudioTrackDescription");
             xmlWriter.WriteElementString("string", "Unknown");

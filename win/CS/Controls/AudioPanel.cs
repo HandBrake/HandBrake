@@ -12,6 +12,7 @@ namespace Handbrake.Controls
     using System.Windows.Forms;
 
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Utilities;
 
@@ -116,9 +117,9 @@ namespace Handbrake.Controls
                 newTrack.Cells[1].Value = "Automatic";
                 newTrack.Cells[2].Value = track.Encoder;
                 newTrack.Cells[3].Value = track.MixDown;
-                newTrack.Cells[4].Value = track.Encoder.Contains(AC3Passthru) || track.Encoder.Contains(DTSPassthru) ? "Auto" : track.SampleRate;
-                newTrack.Cells[5].Value = track.Encoder.Contains(AC3Passthru) || track.Encoder.Contains(DTSPassthru) ? "Auto" : track.Bitrate;
-                newTrack.Cells[6].Value = track.Encoder.Contains(AC3Passthru) || track.Encoder.Contains(DTSPassthru) ? string.Empty : track.DRC;
+                newTrack.Cells[4].Value = (track.Encoder == AudioEncoder.Ac3Passthrough || track.Encoder == AudioEncoder.DtsPassthrough) ? "Auto" : track.SampleRate.ToString();
+                newTrack.Cells[5].Value = (track.Encoder == AudioEncoder.Ac3Passthrough || track.Encoder == AudioEncoder.DtsPassthrough) ? "Auto" : track.Bitrate.ToString();
+                newTrack.Cells[6].Value = (track.Encoder == AudioEncoder.Ac3Passthrough || track.Encoder == AudioEncoder.DtsPassthrough) ? string.Empty : track.DRC.ToString();
                 AddTrackForPreset(newTrack);
             }
 

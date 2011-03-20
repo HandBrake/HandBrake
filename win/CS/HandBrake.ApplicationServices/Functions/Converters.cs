@@ -43,6 +43,8 @@ namespace HandBrake.ApplicationServices.Functions
             return converted;
         }
 
+        #region Audio
+
         /// <summary>
         /// Get the GUI equiv to a CLI mixdown
         /// </summary>
@@ -64,6 +66,56 @@ namespace HandBrake.ApplicationServices.Functions
                     return "6 Channel Discrete";
                 default:
                     return "Automatic";
+            }
+        }
+
+        /// <summary>
+        /// Get the GUI equiv to a CLI mixdown
+        /// </summary>
+        /// <param name="mixdown">The Audio Mixdown</param>
+        /// <returns>The GUI representation of the mixdown</returns>
+        public static Mixdown GetAudioMixDown(string mixdown)
+        {
+            switch (mixdown.Trim())
+            {
+                case "Mono":
+                    return Mixdown.Mono;
+                case "Stereo":
+                    return Mixdown.Stereo;
+                case "Dolby Surround":
+                    return Mixdown.DolbySurround;
+                case "Dolby Pro Logic II":
+                    return Mixdown.DolbyProLogicII;
+                case "6 Channel Discrete":
+                    return Mixdown.SixChannelDiscrete;
+                default:
+                    return Mixdown.Auto;
+            }
+        }
+
+        /// <summary>
+        /// Return the CLI Mixdown name
+        /// </summary>
+        /// <param name="selectedAudio">GUI mixdown name</param>
+        /// <returns>CLI mixdown name</returns>
+        public static string GetCliMixDown(Mixdown selectedAudio)
+        {
+            switch (selectedAudio)
+            {
+                case Mixdown.Auto:
+                    return "auto";
+                case Mixdown.Mono:
+                    return "mono";
+                case Mixdown.Stereo:
+                    return "stereo";
+                case Mixdown.DolbySurround:
+                    return "dpl1";
+                case Mixdown.DolbyProLogicII:
+                    return "dpl2";
+                case Mixdown.SixChannelDiscrete:
+                    return "6ch";
+                default:
+                    return "auto";
             }
         }
 
@@ -94,6 +146,94 @@ namespace HandBrake.ApplicationServices.Functions
         }
 
         /// <summary>
+        /// Get the GUI equiv to a CLI audio encoder
+        /// </summary>
+        /// <param name="audioEnc">The Audio Encoder</param>
+        /// <returns>The GUI representation of that audio encoder</returns>
+        public static AudioEncoder GetAudioEncoderFromCliString(string audioEnc)
+        {
+            switch (audioEnc)
+            {
+                case "faac":
+                    return AudioEncoder.Faac;
+                case "lame":
+                    return AudioEncoder.Lame;
+                case "vorbis":
+                    return AudioEncoder.Vorbis;
+                case "ac3":
+                    return AudioEncoder.Ac3;
+                case "copy:ac3":
+                    return AudioEncoder.Ac3Passthrough;
+                case "copy:dts":
+                    return AudioEncoder.DtsPassthrough;
+                default:
+                    return AudioEncoder.Faac;
+            }
+        }
+
+        /// <summary>
+        /// Get the GUI equiv to a GUI audio encoder string
+        /// </summary>
+        /// <param name="audioEnc">The Audio Encoder</param>
+        /// <returns>The GUI representation of that audio encoder</returns>
+        public static AudioEncoder GetAudioEncoder(string audioEnc)
+        {
+            switch (audioEnc)
+            {
+                case "AAC (faac)":
+                    return AudioEncoder.Faac;
+                case "AAC (CoreAudio)":
+                    return AudioEncoder.Faac;
+                case "MP3 (lame)":
+                    return AudioEncoder.Lame;
+                case "Vorbis (vorbis)":
+                    return AudioEncoder.Vorbis;
+                case "AC3 (ffmpeg)":
+                    return AudioEncoder.Ac3;
+                case "AC3 Passthru":
+                    return AudioEncoder.Ac3Passthrough;
+                case "DTS Passthru":
+                    return AudioEncoder.DtsPassthrough;
+                default:
+                    return AudioEncoder.Faac;
+            }
+        }
+
+        /// <summary>
+        /// Get the CLI Audio Encoder name
+        /// </summary>
+        /// <param name="selectedEncoder">
+        /// String The GUI Encode name
+        /// </param>
+        /// <returns>
+        /// String CLI encoder name
+        /// </returns>
+        public static string GetCliAudioEncoder(AudioEncoder selectedEncoder)
+        {
+            switch (selectedEncoder)
+            {
+                case AudioEncoder.Faac:
+                    return "faac";
+                case AudioEncoder.Lame:
+                    return "lame";
+                case AudioEncoder.Vorbis:
+                    return "vorbis";
+                case AudioEncoder.Ac3Passthrough:
+                    return "copy:ac3";
+                case AudioEncoder.DtsPassthrough:
+                    return "copy:dts";
+                case AudioEncoder.Ac3:
+                    return "ac3";
+                default:
+                    return "faac";
+            }
+        }
+
+        #endregion
+
+        #region Video 
+
+        /// <summary>
         /// Get the Video Encoder for a given string
         /// </summary>
         /// <param name="encoder">
@@ -118,29 +258,32 @@ namespace HandBrake.ApplicationServices.Functions
         }
 
         /// <summary>
-        /// Get a GUI name for a given video Encoder.
+        /// Get the Video Encoder for a given string
         /// </summary>
         /// <param name="encoder">
-        /// A VideoEncoder Enum object
+        /// The encoder name
         /// </param>
         /// <returns>
-        /// A GUI encoder name, default is x264
+        /// VideoEncoder enum object
         /// </returns>
-        public static string GetGUIVideoEncoder(VideoEncoder encoder)
+        public static string GetVideoEncoder(VideoEncoder encoder)
         {
             switch (encoder)
             {
                 case VideoEncoder.FFMpeg:
-                    return "MPEG-4 (FFmpeg)";
+                    return "ffmpeg";
                 case VideoEncoder.X264:
-                    return "H.264 (x264)";
+                    return "x264";
                 case VideoEncoder.Theora:
-                    return "VP3 (Theora)";
+                    return "theora";
                 default:
-                    return "H.264 (x264)";
+                    return "x264";
             }
         }
 
+        #endregion
+
+        #region File Format
 
         /// <summary>
         /// Get the OutputFormat Enum for a given string
@@ -185,5 +328,7 @@ namespace HandBrake.ApplicationServices.Functions
                     return "mkv";
             }
         }
+
+        #endregion
     }
 }

@@ -14,6 +14,7 @@ namespace Handbrake
     using System.Windows.Forms;
     using Functions;
 
+    using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services;
@@ -368,7 +369,7 @@ namespace Handbrake
                     if (audio != string.Empty)
                         audio += ", " + track.Encoder;
                     else
-                        audio = track.Encoder;
+                        audio = EnumHelper.GetDescription(track.Encoder);
                 }
                 item.SubItems.Add(audio); // Audio
 
@@ -425,7 +426,7 @@ namespace Handbrake
                     if (audio != string.Empty) 
                         audio += ", " + track.Encoder;
                     else
-                        audio = track.Encoder;
+                        audio = EnumHelper.GetDescription(track.Encoder);
                 }
 
                 // found query is a global varible        

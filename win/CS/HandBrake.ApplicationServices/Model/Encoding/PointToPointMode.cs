@@ -12,6 +12,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
     {
         Chapters = 0,
         Seconds,
-        Frames
+        Frames,
+        Preview,
     }
 }
