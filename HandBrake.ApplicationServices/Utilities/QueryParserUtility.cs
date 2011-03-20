@@ -359,27 +359,27 @@ namespace HandBrake.ApplicationServices.Utilities
                     AudioTrack track = new AudioTrack();
                     if (trackData != null)
                         if (trackData.Length >= (x + 1)) // Audio Track
-                            track.Track = trackData[x].Trim();
+                            track.Track = int.Parse(trackData[x].Trim());
 
                     if (trackMixes != null)
                         if (trackMixes.Length >= (x + 1)) // Audio Mix
-                            track.MixDown = Converters.GetMixDown(trackMixes[x].Trim());
+                            track.MixDown = Converters.GetAudioMixDown(Converters.GetMixDown(trackMixes[x].Trim()));
 
                     if (trackEncoders != null)
                         if (trackEncoders.Length >= (x + 1)) // Audio Mix
-                            track.Encoder = Converters.GetGUIAudioEncoder(trackEncoders[x].Trim());
+                            track.Encoder = Converters.GetAudioEncoderFromCliString(trackEncoders[x].Trim());
 
                     if (trackBitrates != null)
                         if (trackBitrates.Length >= (x + 1)) // Audio Encoder
-                            track.Bitrate = trackBitrates[x].Trim() == "auto" ? "Auto" : trackBitrates[x].Trim();
+                            track.Bitrate = int.Parse(trackBitrates[x].Trim() == "auto" ? "0" : trackBitrates[x].Trim());
 
                     if (trackSamplerates != null)
                         if (trackSamplerates.Length >= (x + 1)) // Audio SampleRate
-                            track.SampleRate = trackSamplerates[x].Trim() == "0" ? "Auto" : trackSamplerates[x].Trim();
+                            track.SampleRate = double.Parse(trackSamplerates[x].Trim());
 
                     if (trackDRCvalues != null)
                         if (trackDRCvalues.Length >= (x + 1)) // Audio DRC Values
-                            track.DRC = trackDRCvalues[x].Trim();
+                            track.DRC = double.Parse(trackDRCvalues[x].Trim());
 
                     allAudioTrackInfo.Add(track);
                 }

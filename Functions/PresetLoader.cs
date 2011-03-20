@@ -118,28 +118,32 @@ namespace Handbrake.Functions
                                                                      : CheckState.Unchecked;
 
             // Set the Width and height as Required.
-            if (presetQuery.Width != 0)
+            if (presetQuery.Width.HasValue)
             {
-                mainWindow.PictureSettings.text_width.Value = presetQuery.Width;
+                mainWindow.PictureSettings.text_width.Value = presetQuery.Width.Value;
             }
 
-            if (presetQuery.Height != 0)
+            if (presetQuery.Height.HasValue)
             {
-                mainWindow.PictureSettings.text_height.Value = presetQuery.Height;
+                mainWindow.PictureSettings.text_height.Value = presetQuery.Height.Value;
             }
 
             // Max Width/Height override Width/Height
-            if (presetQuery.MaxWidth != 0)
+            if (presetQuery.MaxWidth.HasValue)
             {
-                mainWindow.PictureSettings.text_width.Value = presetQuery.MaxWidth;
+                mainWindow.PictureSettings.text_width.Value = presetQuery.MaxWidth.Value;
             }
 
-            if (presetQuery.MaxHeight != 0)
+            if (presetQuery.MaxHeight.HasValue)
             {
-                mainWindow.PictureSettings.text_height.Value = presetQuery.MaxHeight;
+                mainWindow.PictureSettings.text_height.Value = presetQuery.MaxHeight.Value;
             }
 
-            mainWindow.PictureSettings.PresetMaximumResolution = new Size(presetQuery.MaxWidth, presetQuery.MaxHeight);
+            if (presetQuery.MaxHeight.HasValue && presetQuery.MaxWidth.HasValue)
+            {
+                mainWindow.PictureSettings.PresetMaximumResolution = new Size(
+                    presetQuery.MaxWidth.Value, presetQuery.MaxHeight.Value);
+            }
 
             // Case where both height and max height are 0 - For built-in presets
             if (presetQuery.MaxHeight == 0 && presetQuery.Height == 0)
