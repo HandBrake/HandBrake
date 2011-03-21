@@ -2753,30 +2753,16 @@ fWorkingCount = 0;
     [fVidQualityMatrix selectCellAtRow:[[queueToApply objectForKey:@"VideoQualityType"] intValue] column:0];
     
     [fVidBitrateField setStringValue:[queueToApply objectForKey:@"VideoAvgBitrate"]];
-    /* Since we are now using RF Values for the slider, we detect if the preset uses an old quality float.
-     * So, check to see if the quality value is less than 1.0 which should indicate the old ".062" type
-     * quality preset. Caveat: in the case of x264, where the RF scale starts at 0, it would misinterpret
-     * a preset that uses 0.0 - 0.99 for RF as an old style preset. Not sure how to get around that one yet,
-     * though it should be a corner case since it would pretty much be a preset for lossless encoding. */
-    if ([[queueToApply objectForKey:@"VideoQualitySlider"] floatValue] < 1.0)
+    
+    if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_THEORA)
     {
-        /* For the quality slider we need to convert the old percent's to the new rf scales */
-        float rf =  (([fVidQualitySlider maxValue] - [fVidQualitySlider minValue]) * [[queueToApply objectForKey:@"VideoQualitySlider"] floatValue]);
-        [fVidQualitySlider setFloatValue:rf];
-        
+        /* Since theora's qp value goes up from left to right, we can just set the slider float value */
+        [fVidQualitySlider setFloatValue:[[queueToApply objectForKey:@"VideoQualitySlider"] floatValue]];
     }
     else
     {
-        /* Since theora's qp value goes up from left to right, we can just set the slider float value */
-        if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_THEORA)
-        {
-            [fVidQualitySlider setFloatValue:[[queueToApply objectForKey:@"VideoQualitySlider"] floatValue]];
-        }
-        else
-        {
-            /* since ffmpeg and x264 use an "inverted" slider (lower qp/rf values indicate a higher quality) we invert the value on the slider */
-            [fVidQualitySlider setFloatValue:([fVidQualitySlider maxValue] + [fVidQualitySlider minValue]) - [[queueToApply objectForKey:@"VideoQualitySlider"] floatValue]];
-        }
+        /* Since ffmpeg and x264 use an "inverted" slider (lower qp/rf values indicate a higher quality) we invert the value on the slider */
+        [fVidQualitySlider setFloatValue:([fVidQualitySlider maxValue] + [fVidQualitySlider minValue]) - [[queueToApply objectForKey:@"VideoQualitySlider"] floatValue]];
     }
     
     [self videoMatrixChanged:nil];
@@ -5522,30 +5508,15 @@ return YES;
 
         [fVidBitrateField setStringValue:[chosenPreset objectForKey:@"VideoAvgBitrate"]];
         
-        /* Since we are now using RF Values for the slider, we detect if the preset uses an old quality float.
-         * So, check to see if the quality value is less than 1.0 which should indicate the old ".062" type
-         * quality preset. Caveat: in the case of x264, where the RF scale starts at 0, it would misinterpret
-         * a preset that uses 0.0 - 0.99 for RF as an old style preset. Not sure how to get around that one yet,
-         * though it should be a corner case since it would pretty much be a preset for lossless encoding. */
-        if ([[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue] < 1.0)
+        if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_THEORA)
         {
-            /* For the quality slider we need to convert the old percent's to the new rf scales */
-            float rf =  (([fVidQualitySlider maxValue] - [fVidQualitySlider minValue]) * [[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue]);
-            [fVidQualitySlider setFloatValue:rf];
-            
+            /* Since theora's qp value goes up from left to right, we can just set the slider float value */
+            [fVidQualitySlider setFloatValue:[[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue]];
         }
         else
         {
-            /* Since theora's qp value goes up from left to right, we can just set the slider float value */
-            if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_THEORA)
-            {
-                [fVidQualitySlider setFloatValue:[[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue]];
-            }
-            else
-            {
-                /* since ffmpeg and x264 use an "inverted" slider (lower qp/rf values indicate a higher quality) we invert the value on the slider */
-                [fVidQualitySlider setFloatValue:([fVidQualitySlider maxValue] + [fVidQualitySlider minValue]) - [[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue]];
-            }
+            /* Since ffmpeg and x264 use an "inverted" slider (lower qp/rf values indicate a higher quality) we invert the value on the slider */
+            [fVidQualitySlider setFloatValue:([fVidQualitySlider maxValue] + [fVidQualitySlider minValue]) - [[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue]];
         }
         
         [self videoMatrixChanged:nil];

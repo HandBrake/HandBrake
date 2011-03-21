@@ -212,7 +212,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     // the user to override.
     if( job->vquality < 0.0 )
     {
-        /* Rate control */
+        /* Average bitrate */
         context->bit_rate = 1000 * job->vbitrate;
         // ffmpeg's mpeg2 encoder requires that the bit_rate_tolerance be >=
         // bitrate * fps
@@ -224,20 +224,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         // These settings produce better image quality than
         // what was previously used
         context->flags |= CODEC_FLAG_QSCALE;
-        if (job->vquality < 1.0)
-        {
-            float vquality;
-            vquality = 31 - job->vquality * 31;
-            // A value of 0 has undefined behavior
-            // and ffmpeg qp has integral increments
-            if (vquality < 1.0)
-                vquality = 1.0;
-            context->global_quality = FF_QP2LAMBDA * vquality + 0.5;
-        }
-        else
-        {
-            context->global_quality = FF_QP2LAMBDA * job->vquality + 0.5;
-        }
+        context->global_quality = FF_QP2LAMBDA * job->vquality + 0.5;
         hb_log( "encavcodec: encoding at constant quantizer %d",
                 context->global_quality );
     }

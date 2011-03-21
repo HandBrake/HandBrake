@@ -352,7 +352,7 @@ void muxClose( hb_work_object_t * w )
                             i, track->frames, track->bytes,
                             90000.0 * track->bytes / mux->pts / 125,
                             track->mf.flen );
-                    if( !i && ( job->vquality < 0.0 || job->vquality > 1.0 ) )
+                    if( !i && job->vquality < 0 )
                     {
                         /* Video */
                         hb_deep_log( 2, "mux: video bitrate error, %+"PRId64" bytes",

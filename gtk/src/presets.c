@@ -2749,42 +2749,6 @@ import_xlat_preset(GValue *dict)
 		}
 		g_free(str);
 	}
-
-	gdouble vquality;
-	const GValue *gval;
-
-	vquality = ghb_value_double(preset_dict_get_value(dict, "VideoQualitySlider"));
-	if (vquality > 0.0 && vquality < 1.0)
-	{
-		gint vcodec;
-
-		gval = preset_dict_get_value(dict, "VideoEncoder");
-		vcodec = ghb_lookup_combo_int("VideoEncoder", gval);
-		switch (vcodec)
-		{
-			case HB_VCODEC_X264:
-			{
-				vquality = 51. - vquality * 51.;
-			} break;
-
-			case HB_VCODEC_FFMPEG:
-			{
-				vquality = 31. - vquality * 30.;
-			} break;
-
-			case HB_VCODEC_THEORA:
-			{
-				vquality = vquality * 63.;
-			} break;
-
-			default:
-			{
-				vquality = 0.;
-			} break;
-		}
-		ghb_dict_insert(dict, g_strdup("VideoQualitySlider"), 
-						ghb_double_value_new(vquality));
-	}
 }
 
 static void

@@ -96,15 +96,7 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
     else
     {
         ti.target_bitrate = 0;
-        
-        if( job->vquality > 0 && job->vquality < 1 )
-        {
-            ti.quality = 63 * job->vquality;            
-        }
-        else
-        {
-            ti.quality = job->vquality;
-        }
+        ti.quality = job->vquality;
     }
 
     keyframe_frequency = 10 * (int)( (double)job->vrate / (double)job->vrate_base + 0.5 );
