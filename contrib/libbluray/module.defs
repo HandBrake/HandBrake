@@ -1,4 +1,4 @@
-$(eval $(call import.MODULE.defs,LIBBLURAY,libbluray))
+$(eval $(call import.MODULE.defs,LIBBLURAY,libbluray,LIBXML2))
 $(eval $(call import.CONTRIB.defs,LIBBLURAY))
 
 LIBBLURAY.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libbluray-0.0.1-pre-129-g67ee7bc.tar.gz

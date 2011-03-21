@@ -88,8 +88,9 @@ define import.CONTRIB.defs
     $(1).CONFIGURE.env.CXXFLAGS = CXXFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra)"
     $(1).CONFIGURE.env.CPPFLAGS = CPPFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra)"
     $(1).CONFIGURE.env.LDFLAGS  = LDFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver)"
+    $(1).CONFIGURE.env.PKG_CONFIG_PATH  = PKG_CONFIG_PATH="$$(call fn.ABSOLUTE,$$(CONTRIB.build/))lib/pkgconfig"
 
-    $(1).CONFIGURE.env.args = !CC !CFLAGS !CXX !CXXFLAGS !CPPFLAGS !LDFLAGS
+    $(1).CONFIGURE.env.args = !CC !CFLAGS !CXX !CXXFLAGS !CPPFLAGS !LDFLAGS !PKG_CONFIG_PATH
     $(1).CONFIGURE.env = $$(call fn.ARGS,$(1).CONFIGURE.env,$$($(1).CONFIGURE.env.args))
 
     $(1).CONFIGURE.target = $$($(1).build/).stamp.configure
