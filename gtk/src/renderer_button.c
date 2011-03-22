@@ -80,9 +80,9 @@ custom_cell_renderer_button_get_type (void)
 static void
 custom_cell_renderer_button_init (CustomCellRendererButton *cellbutton)
 {
-	GTK_CELL_RENDERER(cellbutton)->mode = GTK_CELL_RENDERER_MODE_ACTIVATABLE;
-	GTK_CELL_RENDERER(cellbutton)->xpad = 2;
-	GTK_CELL_RENDERER(cellbutton)->ypad = 2;
+	g_object_set(cellbutton, "mode", GTK_CELL_RENDERER_MODE_ACTIVATABLE, NULL);
+	g_object_set(cellbutton, "xpad", 2, NULL);
+	g_object_set(cellbutton, "ypad", 2, NULL);
 }
 
 /***************************************************************************
