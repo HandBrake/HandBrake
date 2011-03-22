@@ -4410,7 +4410,7 @@ ghb_inhibit_gsm(signal_user_data_t *ud)
 		return;
 	}
 	widget = GHB_WIDGET(ud->builder, "hb_window");
-	xid = GDK_DRAWABLE_XID(gtk_widget_get_window(widget));
+	xid = GDK_WINDOW_XID(gtk_widget_get_window(widget));
 	res = dbus_g_proxy_call(proxy, "Inhibit", &error,
 							G_TYPE_STRING, "ghb",
 							G_TYPE_UINT, xid,

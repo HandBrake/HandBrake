@@ -177,7 +177,7 @@ ghb_preview_init(signal_user_data_t *ud)
 #endif
 
 #if !defined(_WIN32)
-	ud->preview->xid = GDK_DRAWABLE_XID(gtk_widget_get_window(ud->preview->view));
+	ud->preview->xid = GDK_WINDOW_XID(gtk_widget_get_window(ud->preview->view));
 #else
 	ud->preview->xid = GDK_WINDOW_HWND(gtk_widget_get_window(ud->preview->view));
 #endif
