@@ -4410,7 +4410,7 @@ ghb_inhibit_gsm(signal_user_data_t *ud)
 		return;
 	}
 	widget = GHB_WIDGET(ud->builder, "hb_window");
-	xid = GDK_DRAWABLE_XID(widget->window);
+	xid = GDK_DRAWABLE_XID(gtk_widget_get_window(widget));
 	res = dbus_g_proxy_call(proxy, "Inhibit", &error,
 							G_TYPE_STRING, "ghb",
 							G_TYPE_UINT, xid,
@@ -4849,7 +4849,7 @@ status_activate_cb(GtkStatusIcon *si, signal_user_data_t *ud)
 	GdkWindowState state;
 
 	window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-	state = gdk_window_get_state(GTK_WIDGET(window)->window);
+	state = gdk_window_get_state(gtk_widget_get_window(GTK_WIDGET(window)));
 	if ((state & GDK_WINDOW_STATE_ICONIFIED) ||
 		(ud->hb_visibility != GDK_VISIBILITY_UNOBSCURED))
 	{

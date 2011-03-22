@@ -165,7 +165,7 @@ ghb_preview_init(signal_user_data_t *ud)
 	GstElement *xover;
 
 #if GTK_CHECK_VERSION(2,18,0)
-	if (!gdk_window_ensure_native(ud->preview->view->window))
+	if (!gdk_window_ensure_native(gtk_widget_get_window(ud->preview->view)))
 	{
 		g_message("Couldn't create native window for GstXOverlay. Disabling live preview.");
 		GtkWidget *widget = GHB_WIDGET(ud->builder, "live_preview_box");
@@ -177,9 +177,9 @@ ghb_preview_init(signal_user_data_t *ud)
 #endif
 
 #if !defined(_WIN32)
-	ud->preview->xid = GDK_DRAWABLE_XID(ud->preview->view->window);
+	ud->preview->xid = GDK_DRAWABLE_XID(gtk_widget_get_window(ud->preview->view));
 #else
-	ud->preview->xid = GDK_WINDOW_HWND(ud->preview->view->window);
+	ud->preview->xid = GDK_WINDOW_HWND(gtk_widget_get_window(ud->preview->view));
 #endif
 	ud->preview->play = gst_element_factory_make("playbin", "play");
 	xover = gst_element_factory_make("gconfvideosink", "xover");
@@ -766,7 +766,7 @@ ghb_set_preview_image(signal_user_data_t *ud)
 		ud->preview->width = preview_width;
 		ud->preview->height = preview_height;
 	}
-    _draw_pixbuf(widget->window, ud->preview->pix);
+    _draw_pixbuf(gtk_widget_get_window(widget), ud->preview->pix);
 
 	gchar *text = g_strdup_printf("%d x %d", width, height);
 	widget = GHB_WIDGET (ud->builder, "preview_dims");
@@ -856,7 +856,7 @@ preview_expose_cb(
 
 	if (ud->preview->pix != NULL)
 	{
-        _draw_pixbuf(widget->window, ud->preview->pix);
+        _draw_pixbuf(gtk_widget_get_window(widget), ud->preview->pix);
 	}
 	return TRUE;
 }

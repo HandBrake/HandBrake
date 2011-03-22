@@ -382,7 +382,7 @@ ghb_compositor_zlist_insert (
         for (link = cc->drawables; link != NULL; link = link->next)
         {
             gtk_widget_realize(GTK_WIDGET(link->data));
-            gdk_window_set_composited(GTK_WIDGET(link->data)->window, TRUE);
+            gdk_window_set_composited(gtk_widget_get_window(GTK_WIDGET(link->data)), TRUE);
         }
     }
 }
@@ -489,6 +489,8 @@ ghb_compositor_realize (GtkWidget *widget)
             | GDK_LEAVE_NOTIFY_MASK;
 
     visible_window = !GTK_WIDGET_NO_WINDOW (widget);
+
+    GdkWindow *window;
     if (visible_window)
     {
         attributes.visual = gtk_widget_get_visual (widget);
@@ -497,20 +499,22 @@ ghb_compositor_realize (GtkWidget *widget)
 
         attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
-        widget->window = gdk_window_new(gtk_widget_get_parent_window (widget),
-                                        &attributes, attributes_mask);
-        gdk_window_set_user_data (widget->window, widget);
+        window = gdk_window_new(gtk_widget_get_parent_window (widget),
+                                &attributes, attributes_mask);
+        gtk_widget_set_window(widget, window);
+        gdk_window_set_user_data(window, widget);
     }
     else
     {
-        widget->window = gtk_widget_get_parent_window (widget);
-        g_object_ref (widget->window);
+        window = gtk_widget_get_parent_window (widget);
+        gtk_widget_set_window(widget, window);
+        g_object_ref (window);
     }
 
-    widget->style = gtk_style_attach (widget->style, widget->window);
+    widget->style = gtk_style_attach (widget->style, window);
 
     if (visible_window)
-        gtk_style_set_background(widget->style, widget->window, 
+        gtk_style_set_background(widget->style, window, 
                                 GTK_STATE_NORMAL);
 }
 
@@ -580,7 +584,7 @@ ghb_compositor_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
     {
         if (!GTK_WIDGET_NO_WINDOW (widget))
         {
-            gdk_window_move_resize (widget->window,
+            gdk_window_move_resize (gtk_widget_get_window(widget),
                 allocation->x + GTK_CONTAINER (widget)->border_width,
                 allocation->y + GTK_CONTAINER (widget)->border_width,
                 child_allocation.width,
@@ -607,7 +611,7 @@ ghb_compositor_blend (GtkWidget *widget, GdkEventExpose *event)
 
     if (compositor->children == NULL) return;
     /* create a cairo context to draw to the window */
-    cr = gdk_cairo_create (widget->window);
+    cr = gdk_cairo_create (gtk_widget_get_window(widget));
 
     for (link = compositor->children; link != NULL; link = link->next)
     {
@@ -622,7 +626,7 @@ ghb_compositor_blend (GtkWidget *widget, GdkEventExpose *event)
                 continue;
 
             /* the source data is the (composited) event box */
-            gdk_cairo_set_source_pixmap (cr, child->window,
+            gdk_cairo_set_source_pixmap (cr, gtk_widget_get_window(child),
                                         child->allocation.x,
                                         child->allocation.y);
             /* draw no more than our expose event intersects our child */
