@@ -115,7 +115,7 @@ x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		options = ghb_settings_get_string(ud->settings, "x264Option");
 		ignore_options_update = TRUE;
 		ghb_x264_parse_options(ud, options);
-		if (!GTK_WIDGET_HAS_FOCUS(textview))
+		if (!gtk_widget_has_focus(textview))
 		{
 			gchar *sopts;
 

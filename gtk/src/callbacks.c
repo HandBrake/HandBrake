@@ -123,7 +123,7 @@ dep_check(signal_user_data_t *ud, const gchar *name, gboolean *out_hide)
 		widget_name = ghb_value_string(ghb_array_get_nth(data, 0));
 		widget = GHB_WIDGET(ud->builder, widget_name);
 		dep_object = gtk_builder_get_object(ud->builder, name);
-		if (widget != NULL && !GTK_WIDGET_SENSITIVE(widget))
+		if (widget != NULL && !gtk_widget_is_sensitive(widget))
 			continue;
 		if (dep_object == NULL)
 		{
@@ -1781,7 +1781,7 @@ scale_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
-	if (GTK_WIDGET_SENSITIVE(widget))
+	if (gtk_widget_is_sensitive(widget))
 		ghb_set_scale (ud, GHB_PIC_KEEP_WIDTH);
 	update_preview = TRUE;
 	gchar *text;
@@ -1801,7 +1801,7 @@ scale_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
-	if (GTK_WIDGET_SENSITIVE(widget))
+	if (gtk_widget_is_sensitive(widget))
 		ghb_set_scale (ud, GHB_PIC_KEEP_HEIGHT);
 	update_preview = TRUE;
 	gchar *text;
@@ -1824,7 +1824,7 @@ crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
-	if (GTK_WIDGET_SENSITIVE(widget))
+	if (gtk_widget_is_sensitive(widget))
 		ghb_set_scale (ud, 0);
 
 	crop[0] = ghb_settings_get_int(ud->settings, "PictureTopCrop");
@@ -1863,7 +1863,7 @@ display_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
-	if (GTK_WIDGET_SENSITIVE(widget))
+	if (gtk_widget_is_sensitive(widget))
 		ghb_set_scale (ud, GHB_PIC_KEEP_DISPLAY_WIDTH);
 
 	update_preview = TRUE;
@@ -1877,7 +1877,7 @@ display_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
-	if (GTK_WIDGET_SENSITIVE(widget))
+	if (gtk_widget_is_sensitive(widget))
 		ghb_set_scale (ud, GHB_PIC_KEEP_DISPLAY_HEIGHT);
 
 	update_preview = TRUE;
@@ -1891,7 +1891,7 @@ par_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
-	if (GTK_WIDGET_SENSITIVE(widget))
+	if (gtk_widget_is_sensitive(widget))
 		ghb_set_scale (ud, GHB_PIC_KEEP_PAR);
 
 	update_preview = TRUE;
@@ -1905,7 +1905,7 @@ scale_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
-	if (GTK_WIDGET_SENSITIVE(widget))
+	if (gtk_widget_is_sensitive(widget))
 		ghb_set_scale (ud, 0);
 	update_preview = TRUE;
 	
@@ -1946,7 +1946,7 @@ show_crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget, NULL);
 	ghb_live_reset(ud);
-	if (GTK_WIDGET_SENSITIVE(widget))
+	if (gtk_widget_is_sensitive(widget))
 		ghb_set_scale (ud, 0);
 	update_preview = TRUE;
 }
@@ -1962,7 +1962,7 @@ generic_entry_changed_cb(GtkEntry *entry, signal_user_data_t *ud)
 	// I don't want to process upon every keystroke, so I prevent processing
 	// while the widget has focus.
 	g_debug("generic_entry_changed_cb ()");
-	if (!GTK_WIDGET_HAS_FOCUS((GtkWidget*)entry))
+	if (!gtk_widget_has_focus((GtkWidget*)entry))
 	{
 		ghb_widget_to_setting(ud->settings, (GtkWidget*)entry);
 	}
