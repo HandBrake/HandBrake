@@ -210,7 +210,7 @@ ghb_widget_value(GtkWidget *widget)
 		return NULL;
 	}
 
-	type = GTK_WIDGET_TYPE(widget);
+	type = G_OBJECT_TYPE(widget);
 	name = ghb_get_setting_key(widget);
 	g_debug("ghb_widget_value widget (%s)\n", name);
 	if (type == GTK_TYPE_ENTRY)
@@ -494,7 +494,7 @@ update_widget(GtkWidget *widget, const GValue *value)
 	str = ghb_value_string(value);
 	ival = ghb_value_int(value);
 	dval = ghb_value_double(value);
-	type = GTK_OBJECT_TYPE(widget);
+	type = G_OBJECT_TYPE(widget);
 	if (type == GTK_TYPE_ENTRY)
 	{
 		g_debug("entry");

@@ -1644,7 +1644,7 @@ init_combo_box(GtkBuilder *builder, const gchar *name)
 							   G_TYPE_STRING, G_TYPE_DOUBLE, G_TYPE_STRING);
 	gtk_combo_box_set_model(combo, GTK_TREE_MODEL(store));
 
-	if (GTK_WIDGET_TYPE(combo) == GTK_TYPE_COMBO_BOX)
+	if (G_OBJECT_TYPE(combo) == GTK_TYPE_COMBO_BOX)
 	{
 		gtk_cell_layout_clear(GTK_CELL_LAYOUT(combo));
     	cell = GTK_CELL_RENDERER(gtk_cell_renderer_text_new());

@@ -205,7 +205,7 @@ ghb_check_dependency(
 
 	if (widget != NULL)
 	{
-		type = GTK_WIDGET_TYPE(widget);
+		type = G_OBJECT_TYPE(widget);
 		if (type == GTK_TYPE_COMBO_BOX || type == GTK_TYPE_COMBO_BOX_ENTRY)
 			if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) < 0) return;
 		name = ghb_get_setting_key(widget);

@@ -291,7 +291,7 @@ showtype(const gchar *msg, GtkWidget *widget)
     GType type;
     gchar *str;
 
-    type = GTK_WIDGET_TYPE(widget);
+    type = G_OBJECT_TYPE(widget);
     if (type == GTK_TYPE_DRAWING_AREA)
         str = "drawing area";
     else if (type == GTK_TYPE_ALIGNMENT)
