@@ -11,7 +11,7 @@
  * any later version.
  */
 
-#include <gtk/gtk.h>
+#include "ghbcompat.h"
 #include <string.h>
 #include "settings.h"
 #include "values.h"

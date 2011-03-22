@@ -11,7 +11,7 @@
  * any later version.
  */
 
-#include <gtk/gtk.h>
+#include "ghbcompat.h"
 #include "hb.h"
 #include "settings.h"
 #include "hb-backend.h"

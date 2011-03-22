@@ -1,4 +1,4 @@
-#include <gtk/gtk.h>
+#include "ghbcompat.h"
 #include "icon_tools.h"
 #include "values.h"
 #include "resources.h"

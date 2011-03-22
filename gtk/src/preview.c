@@ -15,7 +15,7 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <glib-object.h>
-#include <gtk/gtk.h>
+#include "ghbcompat.h"
 
 #if !defined(_WIN32)
 #include <gdk/gdkx.h>

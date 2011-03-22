@@ -16,7 +16,7 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <string.h>
-#include <gtk/gtk.h>
+#include "ghbcompat.h"
 #include "settings.h"
 #include "hb-backend.h"
 #include "values.h"

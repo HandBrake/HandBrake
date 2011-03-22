@@ -19,7 +19,7 @@
 
 #include <config.h>
 #include <stdlib.h>
-#include <gtk/gtk.h>
+#include "ghbcompat.h"
 #include <glib/gi18n-lib.h>
 #include <gtk/gtkmarshal.h>
 //#include <gtk/gtkeditable.h>

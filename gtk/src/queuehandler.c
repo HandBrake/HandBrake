@@ -11,8 +11,7 @@
  * any later version.
  */
 
-#include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
+#include "ghbcompat.h"
 #include <glib/gstdio.h>
 #include <gio/gio.h>
 #include "hb.h"

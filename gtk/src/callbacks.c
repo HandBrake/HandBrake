@@ -30,6 +30,8 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
+#include "ghbcompat.h"
+
 #if !defined(_NO_UPDATE_CHECK)
 #if defined(_OLD_WEBKIT)
 #include <webkit.h>
@@ -50,8 +52,6 @@
 #include <dbt.h>
 #endif
 
-#include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
 #include <glib/gstdio.h>
 #include <gio/gio.h>
 

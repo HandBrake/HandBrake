@@ -27,7 +27,7 @@
 
 #include <config.h>
 #include <stdlib.h>
-#include <gtk/gtk.h>
+#include "ghbcompat.h"
 #include <gtk/gtkprivate.h>
 #include <gtk/gtkmarshal.h>
 #include "ghbcompositor.h"

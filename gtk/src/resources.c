@@ -15,7 +15,7 @@
 #include <glib-object.h>
 #include <glib/gstdio.h>
 #include <string.h>
-#include <gtk/gtk.h>
+#include "ghbcompat.h"
 #include "settings.h"
 #include "plist.h"
 #include "resources.h"

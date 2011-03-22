@@ -19,7 +19,7 @@
 #include <glib-object.h>
 #include <glib/gstdio.h>
 #include <string.h>
-#include <gtk/gtk.h>
+#include "ghbcompat.h"
 #include "hb.h"
 #include "settings.h"
 #include "callbacks.h"

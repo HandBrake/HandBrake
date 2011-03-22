@@ -25,7 +25,7 @@
 #include <limits.h>
 #include <math.h>
 #include "hb.h"
-#include <gtk/gtk.h>
+#include "ghbcompat.h"
 #include <glib/gstdio.h>
 #include "hb-backend.h"
 #include "settings.h"

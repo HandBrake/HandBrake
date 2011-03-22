@@ -32,7 +32,7 @@
 
 #include <config.h>
 
-#include <gtk/gtk.h>
+#include "ghbcompat.h"
 
 #if defined(_ENABLE_GST)
 #include <gst/gst.h>
