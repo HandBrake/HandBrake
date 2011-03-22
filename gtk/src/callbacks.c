@@ -3479,7 +3479,7 @@ chapter_edited_cb(
 	chapters = ghb_settings_get_value(ud->settings, "chapter_list");
 	chapter = ghb_array_get_nth(chapters, index-1);
 	g_value_set_string(chapter, text);
-	if ((chapter_edit_key == GDK_Return || chapter_edit_key == GDK_Down) &&
+	if ((chapter_edit_key == GDK_KEY_Return || chapter_edit_key == GDK_KEY_Down) &&
 		gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter))
 	{
 		GtkTreeViewColumn *column;
@@ -3512,7 +3512,7 @@ chapter_edited_cb(
 		column = gtk_tree_view_get_column(treeview, 2);
 		gtk_tree_view_set_cursor(treeview, treepath, column, TRUE);
 	}
-	else if (chapter_edit_key == GDK_Up && row > 0)
+	else if (chapter_edit_key == GDK_KEY_Up && row > 0)
 	{
 		GtkTreeViewColumn *column;
 		gtk_tree_path_prev(treepath);
