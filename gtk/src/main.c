@@ -786,7 +786,6 @@ main (int argc, char *argv[])
 		dvd_device = argv[1];
 	}
 	
-	gtk_set_locale ();
 	gtk_init (&argc, &argv);
 	gtk_rc_parse_string(hud_rcstyle);
 	g_type_class_unref(g_type_class_ref(GTK_TYPE_BUTTON));
