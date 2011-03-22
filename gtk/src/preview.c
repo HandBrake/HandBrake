@@ -707,6 +707,16 @@ live_preview_seek_cb(GtkWidget *widget, signal_user_data_t *ud)
 #endif
 }
 
+static void _draw_pixbuf(GdkWindow *window, GdkPixbuf *pixbuf)
+{
+    cairo_t *cr;
+
+    cr = gdk_cairo_create(window);
+    gdk_cairo_set_source_pixbuf(cr, pixbuf, 0, 0);
+    cairo_paint(cr);
+	cairo_destroy(cr);
+}
+
 void
 ghb_set_preview_image(signal_user_data_t *ud)
 {
@@ -756,9 +766,7 @@ ghb_set_preview_image(signal_user_data_t *ud)
 		ud->preview->width = preview_width;
 		ud->preview->height = preview_height;
 	}
-	gdk_draw_pixbuf(
-		widget->window, NULL, ud->preview->pix, 0, 0, 0, 0,
-		-1, -1, GDK_RGB_DITHER_NONE, 0, 0);
+    _draw_pixbuf(widget->window, ud->preview->pix);
 
 	gchar *text = g_strdup_printf("%d x %d", width, height);
 	widget = GHB_WIDGET (ud->builder, "preview_dims");
@@ -848,9 +856,7 @@ preview_expose_cb(
 
 	if (ud->preview->pix != NULL)
 	{
-		gdk_draw_pixbuf(
-			widget->window, NULL, ud->preview->pix, 0, 0, 0, 0,
-			-1, -1, GDK_RGB_DITHER_NONE, 0, 0);
+        _draw_pixbuf(widget->window, ud->preview->pix);
 	}
 	return TRUE;
 }
