@@ -1,4 +1,4 @@
-#include <gtk/gtkmarshal.h>
+#include "marshalers.h"
 #include "renderer_button.h"
 
 /* Some boring function declarations: GObject type system stuff */
@@ -15,13 +15,13 @@ static void     custom_cell_renderer_button_set_property  (GObject              
 static void     custom_cell_renderer_button_finalize (GObject *gobject);
 
 // My customized part that adds "clicked" signal
-static gint
+static gboolean
 custom_cell_renderer_button_activate (GtkCellRenderer      *cell,
 				   GdkEvent             *event,
 				   GtkWidget            *widget,
 				   const gchar          *path,
-				   GdkRectangle         *background_area,
-				   GdkRectangle         *cell_area,
+				   GdkRectangle   *background_area,
+				   GdkRectangle   *cell_area,
 				   GtkCellRendererState  flags);
 
 enum {
@@ -119,7 +119,7 @@ custom_cell_renderer_button_class_init (CustomCellRendererButtonClass *klass)
 			  G_SIGNAL_RUN_LAST,
 			  G_STRUCT_OFFSET (CustomCellRendererButtonClass, clicked),
 			  NULL, NULL,
-			  gtk_marshal_VOID__STRING,
+			  ghb_marshal_VOID__STRING,
 			  G_TYPE_NONE, 1,
 			  G_TYPE_STRING);
 }
@@ -195,13 +195,13 @@ custom_cell_renderer_button_new (void)
 	return g_object_new(CUSTOM_TYPE_CELL_RENDERER_BUTTON, NULL);
 }
 
-static gint
+static gboolean
 custom_cell_renderer_button_activate (GtkCellRenderer      *cell,
 				   GdkEvent             *event,
 				   GtkWidget            *widget,
 				   const gchar          *path,
-				   GdkRectangle         *background_area,
-				   GdkRectangle         *cell_area,
+				   GdkRectangle   *background_area,
+				   GdkRectangle   *cell_area,
 				   GtkCellRendererState  flags)
 {
 	CustomCellRendererButton *cellbutton;

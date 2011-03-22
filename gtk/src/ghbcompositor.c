@@ -28,8 +28,6 @@
 #include <config.h>
 #include <stdlib.h>
 #include "ghbcompat.h"
-#include <gtk/gtkprivate.h>
-#include <gtk/gtkmarshal.h>
 #include "ghbcompositor.h"
 
 enum {
@@ -116,7 +114,7 @@ ghb_compositor_class_init (GhbCompositorClass *class)
                             "Position in Z-List",
                             "Sets the blending order of the child.",
                             0, 65535, 0,
-                            GTK_PARAM_READWRITE));
+                            G_PARAM_READWRITE));
 
     gtk_container_class_install_child_property (container_class,
                         CHILD_PROP_OPACITY,
@@ -124,7 +122,7 @@ ghb_compositor_class_init (GhbCompositorClass *class)
                             "Opacity",
                             "Sets the opacity of the child.",
                             0.0, 1.0, 1.0,
-                            GTK_PARAM_READWRITE));
+                            G_PARAM_READWRITE));
 
 }
 

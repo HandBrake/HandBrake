@@ -21,13 +21,6 @@
 #include <stdlib.h>
 #include "ghbcompat.h"
 #include <glib/gi18n-lib.h>
-#include <gtk/gtkmarshal.h>
-//#include <gtk/gtkeditable.h>
-//#include <gtk/gtkentry.h>
-//#include <gtk/gtkintl.h>
-//#include <gtk/gtkprivate.h>
-//#include <gtk/gtktreeprivate.h>
-//#include <gtk/gtkalias.h>
 
 #include "marshalers.h"
 #include "ghbcellrenderertext.h"
