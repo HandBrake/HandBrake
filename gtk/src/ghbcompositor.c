@@ -225,8 +225,11 @@ ghb_compositor_set_child_property(
         break;
     }
 
-    if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (compositor))
+    if (gtk_widget_get_visible (child) && 
+        gtk_widget_get_visible (GTK_WIDGET(compositor)))
+    {
         gtk_widget_queue_resize (child);
+    }
 
 }
 
@@ -415,12 +418,12 @@ ghb_compositor_remove(GtkContainer *container, GtkWidget *child)
         cc = (GhbCompositorChild*)link->data;
         if (cc->widget == child)
         {
-            gboolean was_visible = GTK_WIDGET_VISIBLE( child );
+            gboolean was_visible = gtk_widget_get_visible( child );
             gtk_widget_unparent(child);
             compositor->children = g_list_remove(compositor->children, child);
             g_free(child);
 
-            if (was_visible && GTK_WIDGET_VISIBLE (container))
+            if (was_visible && gtk_widget_get_visible (GTK_WIDGET(container)))
                 gtk_widget_queue_resize(GTK_WIDGET(container));
             break;
         }
@@ -538,7 +541,7 @@ ghb_compositor_size_request(
     for (link = compositor->children; link != NULL; link = link->next)
     {
         cc = (GhbCompositorChild*)link->data;
-        if (GTK_WIDGET_VISIBLE(cc->widget))
+        if (gtk_widget_get_visible(cc->widget))
         {
             gtk_widget_size_request(cc->widget, NULL);
             gtk_widget_get_child_requisition(cc->widget, &child_requisition);
@@ -621,8 +624,8 @@ ghb_compositor_blend (GtkWidget *widget, GdkEventExpose *event)
         {
             /* get our child */
             child = GTK_WIDGET(draw->data);
-            if (!GTK_WIDGET_VISIBLE(cc->widget) || 
-                !GTK_WIDGET_VISIBLE(child))
+            if (!gtk_widget_get_visible(cc->widget) || 
+                !gtk_widget_get_visible(child))
                 continue;
 
             /* the source data is the (composited) event box */

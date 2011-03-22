@@ -1158,7 +1158,7 @@ preview_motion_cb(
 			g_source_destroy(source);
 	}
 	widget = GHB_WIDGET(ud->builder, "preview_hud");
-	if (!GTK_WIDGET_VISIBLE(widget))
+	if (!gtk_widget_get_visible(widget))
 	{
 		gtk_widget_show(widget);
 	}
@@ -1222,7 +1222,7 @@ preview_hud_size_alloc_cb(
 	GdkDrawable *shape;
 
 	//g_message("preview_hud_size_alloc_cb()");
-	if (GTK_WIDGET_VISIBLE(widget) && allocation->height > 50)
+	if (gtk_widget_get_visible(widget) && allocation->height > 50)
 	{
 		shape = ghb_curved_rect_mask(allocation->width, 
 									allocation->height, allocation->height/4);
@@ -1243,7 +1243,7 @@ preview_configure_cb(
 	gint x, y;
 
 	//g_message("preview_configure_cb()");
-	if (GTK_WIDGET_VISIBLE(widget))
+	if (gtk_widget_get_visible(widget))
 	{
 		gtk_window_get_position(GTK_WINDOW(widget), &x, &y);
 		ghb_settings_set_int(ud->settings, "preview_x", x);
@@ -1264,7 +1264,7 @@ settings_configure_cb(
 	gint x, y;
 
 	//g_message("settings_configure_cb()");
-	if (GTK_WIDGET_VISIBLE(widget))
+	if (gtk_widget_get_visible(widget))
 	{
 		gtk_window_get_position(GTK_WINDOW(widget), &x, &y);
 		ghb_settings_set_int(ud->settings, "settings_x", x);
