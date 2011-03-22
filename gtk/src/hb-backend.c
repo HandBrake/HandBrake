@@ -4368,8 +4368,7 @@ ghb_validate_vquality(GValue *settings)
 						"Lossless h.264 is not well supported by\n"
 						"many players and editors.\n\n"
                         "It will produce enormous output files.\n\n"
-						"Are you sure you wish to use this setting?",
-						(gint)vquality, min, max);
+						"Are you sure you wish to use this setting?");
 			if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, 
 									"Cancel", "Continue"))
 			{
