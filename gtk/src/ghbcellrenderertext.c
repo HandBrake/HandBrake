@@ -1621,7 +1621,7 @@ get_size (GtkCellRenderer *cell,
 	}
       if (y_offset)
 	{
-	  *y_offset = cell_yalign * (cell_area->height - (rect.height + (2 * cell->ypad)));
+	  *y_offset = cell_yalign * (cell_area->height - (rect.height + (2 * cell_ypad)));
 	  *y_offset = MAX (*y_offset, 0);
 	}
     }
