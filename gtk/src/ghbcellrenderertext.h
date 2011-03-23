@@ -21,7 +21,7 @@
 #define __GHB_CELL_RENDERER_TEXT_H__
 
 #include <pango/pango.h>
-#include <gtk/gtkcellrenderer.h>
+#include <gtk/gtk.h>
 
 
 G_BEGIN_DECLS

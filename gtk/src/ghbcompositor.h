@@ -28,7 +28,7 @@
 #define __GHB_COMPOSITOR_H__
 
 
-#include <gtk/gtkbin.h>
+#include <gtk/gtk.h>
 
 
 G_BEGIN_DECLS

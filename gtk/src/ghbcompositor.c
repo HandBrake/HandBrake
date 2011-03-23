@@ -276,7 +276,7 @@ ghb_compositor_get_child_property(
 static void
 ghb_compositor_init (GhbCompositor *compositor)
 {
-    GTK_WIDGET_UNSET_FLAGS (compositor, GTK_NO_WINDOW);
+    gtk_widget_set_has_window(GTK_WIDGET(compositor), TRUE);
 }
 
 GtkWidget*
@@ -310,7 +310,7 @@ showtype(const gchar *msg, GtkWidget *widget)
 static GList*
 find_drawables(GList *drawables, GtkWidget *widget)
 {
-    if (!GTK_WIDGET_NO_WINDOW(widget))
+    if (gtk_widget_get_has_window(widget))
     {
         drawables = g_list_append(drawables, widget);
         return drawables;
@@ -323,7 +323,7 @@ find_drawables(GList *drawables, GtkWidget *widget)
         // Look for a child with a window
         for (link = children; link != NULL; link = link->next)
         {
-            if (!GTK_WIDGET_NO_WINDOW(GTK_WIDGET(link->data)))
+            if (gtk_widget_get_has_window(GTK_WIDGET(link->data)))
             {
                 drawables = g_list_append(drawables, link->data);
             }
@@ -360,7 +360,7 @@ ghb_compositor_zlist_insert (
 
     g_return_if_fail (GHB_IS_COMPOSITOR (compositor));
     g_return_if_fail (GTK_IS_WIDGET (child));
-    g_return_if_fail (child->parent == NULL);
+    g_return_if_fail (gtk_widget_get_parent(child) == NULL);
 
     gtk_widget_set_parent(child, GTK_WIDGET(compositor));
 
@@ -472,14 +472,17 @@ ghb_compositor_realize (GtkWidget *widget)
     gint border_width;
     gboolean visible_window;
 
-    GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+    gtk_widget_set_realized(widget, TRUE);
 
-    border_width = GTK_CONTAINER (widget)->border_width;
+    border_width = gtk_container_get_border_width(GTK_CONTAINER (widget));
 
-    attributes.x = widget->allocation.x + border_width;
-    attributes.y = widget->allocation.y + border_width;
-    attributes.width = widget->allocation.width - 2*border_width;
-    attributes.height = widget->allocation.height - 2*border_width;
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(widget, &allocation);
+
+    attributes.x = allocation.x + border_width;
+    attributes.y = allocation.y + border_width;
+    attributes.width = allocation.width - 2*border_width;
+    attributes.height = allocation.height - 2*border_width;
     attributes.window_type = GDK_WINDOW_CHILD;
     attributes.event_mask = gtk_widget_get_events (widget)
             | GDK_BUTTON_MOTION_MASK
@@ -489,7 +492,7 @@ ghb_compositor_realize (GtkWidget *widget)
             | GDK_ENTER_NOTIFY_MASK
             | GDK_LEAVE_NOTIFY_MASK;
 
-    visible_window = !GTK_WIDGET_NO_WINDOW (widget);
+    visible_window = gtk_widget_get_has_window(widget);
 
     GdkWindow *window;
     if (visible_window)
@@ -548,8 +551,8 @@ ghb_compositor_size_request(
         }
     }
 
-    requisition->width = width + GTK_CONTAINER (widget)->border_width * 2;
-    requisition->height = height + GTK_CONTAINER (widget)->border_width * 2;
+    requisition->width = width + gtk_container_get_border_width(GTK_CONTAINER (widget)) * 2;
+    requisition->height = height + gtk_container_get_border_width(GTK_CONTAINER (widget)) * 2;
 }
 
 static void
@@ -563,12 +566,12 @@ ghb_compositor_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
     widget->allocation = *allocation;
     compositor = GHB_COMPOSITOR (widget);
 
-    if (GTK_WIDGET_NO_WINDOW (widget))
+    if (!gtk_widget_get_has_window(widget))
     {
         child_allocation.x = allocation->x + 
-                            GTK_CONTAINER(widget)->border_width;
+                         gtk_container_get_border_width(GTK_CONTAINER(widget));
         child_allocation.y = allocation->y + 
-                            GTK_CONTAINER(widget)->border_width;
+                         gtk_container_get_border_width(GTK_CONTAINER(widget));
     }
     else
     {
@@ -577,17 +580,17 @@ ghb_compositor_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
     }
 
     child_allocation.width = MAX (allocation->width - 
-                                GTK_CONTAINER (widget)->border_width * 2, 0);
+                 gtk_container_get_border_width(GTK_CONTAINER (widget)) * 2, 0);
     child_allocation.height = MAX (allocation->height - 
-                                GTK_CONTAINER (widget)->border_width * 2, 0);
+                 gtk_container_get_border_width(GTK_CONTAINER (widget)) * 2, 0);
 
-    if (GTK_WIDGET_REALIZED (widget))
+    if (gtk_widget_get_realized(widget))
     {
-        if (!GTK_WIDGET_NO_WINDOW (widget))
+        if (gtk_widget_get_has_window(widget))
         {
             gdk_window_move_resize (gtk_widget_get_window(widget),
-                allocation->x + GTK_CONTAINER (widget)->border_width,
-                allocation->y + GTK_CONTAINER (widget)->border_width,
+                allocation->x + gtk_container_get_border_width(GTK_CONTAINER (widget)),
+                allocation->y + gtk_container_get_border_width(GTK_CONTAINER (widget)),
                 child_allocation.width,
                 child_allocation.height);
         }
@@ -595,7 +598,7 @@ ghb_compositor_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
     for (link = compositor->children; link != NULL; link = link->next)
     {
         cc = (GhbCompositorChild*)link->data;
-    	if (GTK_WIDGET_REALIZED (cc->widget))
+    	if (gtk_widget_get_realized (cc->widget))
         	gtk_widget_size_allocate (cc->widget, &child_allocation);
     }
 }
@@ -650,7 +653,7 @@ ghb_compositor_expose (GtkWidget *widget, GdkEventExpose *event)
 {
     if (GTK_WIDGET_DRAWABLE (widget))
     {
-        if (!GTK_WIDGET_NO_WINDOW (widget))
+        if (gtk_widget_get_has_window(widget))
             ghb_compositor_blend (widget, event);
 
         GTK_WIDGET_CLASS(

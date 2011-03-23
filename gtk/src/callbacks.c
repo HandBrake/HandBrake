@@ -20,6 +20,9 @@
 #include <sys/stat.h>
 #include <time.h>
 
+#include <glib/gstdio.h>
+#include <gio/gio.h>
+
 #if !defined(_WIN32)
 #include <poll.h>
 #define G_UDEV_API_IS_SUBJECT_TO_CHANGE 1
@@ -51,9 +54,6 @@
 #include <winsock2.h>
 #include <dbt.h>
 #endif
-
-#include <glib/gstdio.h>
-#include <gio/gio.h>
 
 #include "hb.h"
 #include "callbacks.h"

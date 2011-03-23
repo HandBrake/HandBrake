@@ -1519,13 +1519,10 @@ get_size (GtkCellRenderer *cell,
 
   gint cell_width, cell_height, cell_xpad, cell_ypad;
   gfloat cell_xalign, cell_yalign;
-  g_object_get(cell, 
-                "width", &cell_width, 
-                "height", &cell_height, 
-                "xpad", &cell_xpad, 
-                "ypad", &cell_ypad,
-                "xalign", &cell_xalign, 
-                "yalign", &cell_yalign, NULL);
+
+  gtk_cell_renderer_get_fixed_size(cell, &cell_width, &cell_height);
+  gtk_cell_renderer_get_alignment(cell, &cell_xalign, &cell_yalign);
+  gtk_cell_renderer_get_padding(cell, &cell_xpad, &cell_ypad);
 
   if (celltext->calc_fixed_height)
     {
@@ -1571,43 +1568,19 @@ get_size (GtkCellRenderer *cell,
   else
     layout = get_layout (celltext, widget, FALSE, 0);
 
-  pango_layout_get_extents (layout, NULL, &rect);
-  pango_extents_to_pixels (&rect, NULL);
-
-  if (height)
-    *height = cell_ypad * 2 + rect.height;
-
-  /* The minimum size for ellipsized labels is ~ 3 chars */
-  if (width)
-    {
-      if (priv->ellipsize || priv->width_chars > 0)
-	{
-	  PangoContext *context;
-	  PangoFontMetrics *metrics;
-	  gint char_width;
-
-	  context = pango_layout_get_context (layout);
-	  metrics = pango_context_get_metrics (context, widget->style->font_desc, pango_context_get_language (context));
-
-	  char_width = pango_font_metrics_get_approximate_char_width (metrics);
-	  pango_font_metrics_unref (metrics);
-	  
-	  *width = cell_xpad * 2 + (PANGO_PIXELS (char_width) * MAX (priv->width_chars, 3));
-	}
-      else
-	{
-	  *width = cell_xpad * 2 + rect.x + rect.width;
-	}	  
-    }
+  pango_layout_get_pixel_extents(layout, NULL, &rect);
 
   if (cell_area)
     {
+      rect.height = MIN(rect.height, cell_area->height - 2 * cell_ypad);
+      rect.width = MIN(rect.width, cell_area->width - 2 * cell_xpad);
+
       if (x_offset)
 	{
 	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-	    *x_offset = (1.0 - cell_xalign) * (cell_area->width - (rect.x + rect.width + (2 * cell_xpad)));
+	    *x_offset = (1.0 - cell_xalign) * (cell_area->width - (2 * cell_xpad));
 	  else 
-	    *x_offset = cell_xalign * (cell_area->width - (rect.x + rect.width + (2 * cell_xpad)));
+	    *x_offset = cell_xalign * (cell_area->width - (2 * cell_xpad));
 
 	  if ((priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE) || priv->wrap_width != -1)
 	    *x_offset = MAX(*x_offset, 0);
@@ -1623,6 +1596,12 @@ get_size (GtkCellRenderer *cell,
       if (x_offset) *x_offset = 0;
       if (y_offset) *y_offset = 0;
     }
+
+  if (height)
+    *height = cell_ypad * 2 + rect.height;
+
+  if (width)
+    *width = cell_xpad * 2 + rect.width;
 
   g_object_unref (layout);
 }
@@ -1665,11 +1644,8 @@ ghb_cell_renderer_text_render (GtkCellRenderer      *cell,
 
   gboolean sensitive;
   gint xpad, ypad;
-  g_object_get(cell, 
-        "sensitive", &sensitive, 
-        "xpad", &xpad, 
-        "ypad", &ypad, 
-        NULL);
+
+  sensitive = gtk_cell_renderer_get_sensitive(cell);
   if (!sensitive) 
     {
       state = GTK_STATE_INSENSITIVE;
@@ -1693,6 +1669,8 @@ ghb_cell_renderer_text_render (GtkCellRenderer      *cell,
       else
 	state = GTK_STATE_NORMAL;
     }
+
+  gtk_cell_renderer_get_padding(cell, &xpad, &ypad);
 
   if (celltext->background_set && 
       (flags & GTK_CELL_RENDERER_SELECTED) == 0)
