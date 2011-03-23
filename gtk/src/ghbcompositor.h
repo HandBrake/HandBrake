@@ -46,13 +46,13 @@ typedef struct _GhbCompositorChild  GhbCompositorChild;
 
 struct _GhbCompositor
 {
-    GtkContainer  container;
+    GtkBin       bin;
     GList        *children;
 };
 
 struct _GhbCompositorClass
 {
-    GtkContainerClass parent_class;
+    GtkBinClass parent_class;
 };
 
 struct _GhbCompositorChild
