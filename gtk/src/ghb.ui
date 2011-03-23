@@ -3876,7 +3876,6 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
-    <property name="has_separator">False</property>
     <signal name="delete_event" handler="gtk_widget_hide_on_delete"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox6">
@@ -4698,7 +4697,6 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
     <property name="modal">True</property>
     <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
-    <property name="has_separator">False</property>
     <signal handler="gtk_widget_hide_on_delete" name="delete_event"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox7">
@@ -4790,7 +4788,6 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
     <property name="modal">True</property>
     <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
-    <property name="has_separator">False</property>
     <signal handler="gtk_widget_hide_on_delete" name="delete_event"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox2">
@@ -4931,7 +4928,6 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
     <property name="modal">True</property>
     <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
-    <property name="has_separator">False</property>
     <signal handler="gtk_widget_hide_on_delete" name="delete_event"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox3">
@@ -5380,7 +5376,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
-    <property name="allow-grow">False</property>
+    <property name="resizable">False</property>
     <property name="transient-for">preview_window</property>
     <property name="events">GDK_STRUCTURE_MASK</property>
     <signal handler="settings_configure_cb" name="configure-event"/>
@@ -6913,7 +6909,6 @@ libx264 authors:
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
-    <property name="has_separator">False</property>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox8">
         <property name="orientation">vertical</property>
@@ -7079,7 +7074,6 @@ libx264 authors:
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
-    <property name="has_separator">False</property>
     <signal handler="chooser_file_selected_cb" name="selection-changed"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox9">
