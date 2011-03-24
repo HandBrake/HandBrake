@@ -14,7 +14,9 @@
 #define GDK_KEY_Return GDK_Return
 #define GDK_KEY_Down GDK_Down
 #define GDK_KEY_Up GDK_Up
+#endif
 
+#if !GTK_CHECK_VERSION(2, 20, 0)
 // Replace simple accessor functions added to newer gtk versions
 static inline void gtk_widget_set_realized(GtkWidget *widget, gboolean realized)
 {
