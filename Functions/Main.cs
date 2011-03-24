@@ -244,20 +244,20 @@ namespace Handbrake.Functions
                     destinationFilename += ".mkv";
 
                 // Now work out the path where the file will be stored.
-                // First case: If the destination box doesn't already contain a path, make one.
-                if (!mainWindow.text_destination.Text.Contains(Path.DirectorySeparatorChar.ToString()))
+                // If there is an auto name path, use it...
+                if (Properties.Settings.Default.autoNamePath.Trim() == "{source_path}" && !string.IsNullOrEmpty(mainWindow.sourcePath))
                 {
-                    // If there is an auto name path, use it...
-                    if (Properties.Settings.Default.autoNamePath.Trim() == "{source_path}" && !string.IsNullOrEmpty(mainWindow.sourcePath))
+                    autoNamePath = Path.Combine(Path.GetDirectoryName(mainWindow.sourcePath), destinationFilename);
+                    if (autoNamePath == mainWindow.sourcePath)
                     {
-                        autoNamePath = Path.Combine(Path.GetDirectoryName(mainWindow.sourcePath), destinationFilename);
-                        if (autoNamePath == mainWindow.sourcePath)
-                        {
-                            // Append out_ to files that already exist or is the source file
-                            autoNamePath = Path.Combine(Path.GetDirectoryName(mainWindow.sourcePath), "output_" + destinationFilename);
-                        }
+                        // Append out_ to files that already exist or is the source file
+                        autoNamePath = Path.Combine(Path.GetDirectoryName(mainWindow.sourcePath), "output_" + destinationFilename);
                     }
-                    else if (Properties.Settings.Default.autoNamePath.Trim() != string.Empty && Properties.Settings.Default.autoNamePath.Trim() != "Click 'Browse' to set the default location")
+                }
+                // Second case: If the destination box doesn't already contain a path, make one.
+                else if (!mainWindow.text_destination.Text.Contains(Path.DirectorySeparatorChar.ToString()))
+                {
+                    if (Properties.Settings.Default.autoNamePath.Trim() != string.Empty && Properties.Settings.Default.autoNamePath.Trim() != "Click 'Browse' to set the default location")
                     {
                         autoNamePath = Path.Combine(Properties.Settings.Default.autoNamePath, destinationFilename);
                     }
