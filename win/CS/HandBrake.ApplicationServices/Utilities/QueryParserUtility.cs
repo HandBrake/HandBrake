@@ -194,7 +194,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
                 if (displayWidth.Success)
                     parsed.DisplayWidth =
-                        double.Parse(displayWidth.Groups[0].Value.Replace("--display-width ", string.Empty));
+                        double.Parse(displayWidth.Groups[0].Value.Replace("--display-width ", string.Empty), Culture);
 
                 if (pixelAspect.Success)
                     parsed.PixelAspectX = int.Parse(pixelAspect.Groups[1].Value.Replace("--pixel-aspect ", string.Empty));
@@ -375,11 +375,11 @@ namespace HandBrake.ApplicationServices.Utilities
 
                     if (trackSamplerates != null)
                         if (trackSamplerates.Length >= (x + 1)) // Audio SampleRate
-                            track.SampleRate = double.Parse(trackSamplerates[x].Replace("Auto", "0").Trim());
+                            track.SampleRate = double.Parse(trackSamplerates[x].Replace("Auto", "0").Trim(), Culture);
 
                     if (trackDRCvalues != null)
                         if (trackDRCvalues.Length >= (x + 1)) // Audio DRC Values
-                            track.DRC = double.Parse(trackDRCvalues[x].Trim());
+                            track.DRC = double.Parse(trackDRCvalues[x].Trim(), Culture);
 
                     allAudioTrackInfo.Add(track);
                 }
