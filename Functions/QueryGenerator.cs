@@ -545,12 +545,12 @@ namespace Handbrake.Functions
             switch (mainWindow.drp_videoEncoder.SelectedIndex)
             {
                 case 0: // ffmpeg
-                    advancedOptions = string.IsNullOrEmpty(mainWindow.x264Panel.X264Query)
+                    advancedOptions = string.IsNullOrEmpty(mainWindow.x264Panel.X264Query.Trim())
                         ? string.Empty
                         : mainWindow.x264Panel.X264Query;
                     break;
                 case 1: // x264
-                    advancedOptions = string.IsNullOrEmpty(mainWindow.x264Panel.X264Query)
+                    advancedOptions = string.IsNullOrEmpty(mainWindow.x264Panel.X264Query.Trim())
                         ? string.Empty
                         : mainWindow.x264Panel.X264Query;
                     break;
