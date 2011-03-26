@@ -235,10 +235,21 @@ namespace Handbrake.Functions
                 // Add the appropriate file extension
                 if (mainWindow.drop_format.SelectedIndex == 0)
                 {
-                    destinationFilename += Properties.Settings.Default.useM4v == 0 || Properties.Settings.Default.useM4v == 2 || mainWindow.Check_ChapterMarkers.Checked ||
+                    switch (Properties.Settings.Default.useM4v)
+                    {
+                        case 0: // Automatic
+                            destinationFilename += mainWindow.Check_ChapterMarkers.Checked ||
                                            mainWindow.AudioSettings.RequiresM4V() || mainWindow.Subtitles.RequiresM4V()
                                                ? ".m4v"
                                                : ".mp4";
+                            break;
+                        case 1: // Always MP4
+                            destinationFilename += ".mp4";
+                            break;
+                        case 2: // Always M4V
+                            destinationFilename += ".m4v";
+                            break;
+                    }                   
                 }
                 else if (mainWindow.drop_format.SelectedIndex == 1)
                     destinationFilename += ".mkv";
@@ -268,10 +279,6 @@ namespace Handbrake.Functions
                 {
                     // Use the path and change the file extension to match the previous destination
                     autoNamePath = Path.Combine(Path.GetDirectoryName(mainWindow.text_destination.Text), destinationFilename);
-
-                    if (Path.HasExtension(mainWindow.text_destination.Text))
-                        autoNamePath = Path.ChangeExtension(autoNamePath,
-                                                            Path.GetExtension(mainWindow.text_destination.Text));
                 }
             }
 
