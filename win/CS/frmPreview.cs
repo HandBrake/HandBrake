@@ -77,6 +77,8 @@ namespace Handbrake
 
             encodeQueue.EncodeStarted += this.EncodeQueueEncodeStarted;
             encodeQueue.EncodeCompleted += this.EncodeQueueEncodeEnded;
+
+            defaultPlayer.Checked = Properties.Settings.Default.defaultPlayer;
         }
 
         #region Event Handlers
@@ -154,6 +156,12 @@ namespace Handbrake
             lbl_progress.Text = e.PercentComplete + "%";
             progressBar.Value = (int)Math.Round(e.PercentComplete);
         }
+
+        private void DefaultPlayerCheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.defaultPlayer = defaultPlayer.Checked;
+            Properties.Settings.Default.Save();
+        }
         #endregion
 
         #region Encode Sample
@@ -219,36 +227,46 @@ namespace Handbrake
             {
                 if (File.Exists(this.currentlyPlaying))
                 {
-                    // Attempt to find VLC if it doesn't exist in the default set location.
-                    string vlcPath;
+                    string args = "\"" + this.currentlyPlaying + "\"";
 
-                    if (8 == IntPtr.Size ||
-                        (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"))))
-                        vlcPath = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
-                    else
-                        vlcPath = Environment.GetEnvironmentVariable("ProgramFiles");
-
-     
-                    if (!File.Exists(Properties.Settings.Default.VLC_Path))
+                    if (defaultPlayer.Checked)
                     {
-                        if (File.Exists(vlcPath))
-                        {
-                            Properties.Settings.Default.VLC_Path = "C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe";
-                            Properties.Settings.Default.Save(); // Save this new path if it does
-                        }
-                        else
-                        {
-                            MessageBox.Show(this,
-                                            "Unable to detect VLC Player. \nPlease make sure VLC is installed and the directory specified in HandBrake's options is correct. (See: \"Tools Menu > Options > Picture Tab\") ",
-                                            "VLC", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        }
+                        Process.Start(args);
                     }
-
-                    if (File.Exists(Properties.Settings.Default.VLC_Path))
+                    else
                     {
-                        string args = "\"" + this.currentlyPlaying + "\"";
-                        ProcessStartInfo vlc = new ProcessStartInfo(Properties.Settings.Default.VLC_Path, args);
-                        Process.Start(vlc);
+
+                        // Attempt to find VLC if it doesn't exist in the default set location.
+                        string vlcPath;
+
+                        if (8 == IntPtr.Size ||
+                            (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432")))) vlcPath = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
+                        else vlcPath = Environment.GetEnvironmentVariable("ProgramFiles");
+
+
+                        if (!File.Exists(Properties.Settings.Default.VLC_Path))
+                        {
+                            if (File.Exists(vlcPath))
+                            {
+                                Properties.Settings.Default.VLC_Path = "C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe";
+                                Properties.Settings.Default.Save(); // Save this new path if it does
+                            }
+                            else
+                            {
+                                MessageBox.Show(
+                                    this,
+                                    "Unable to detect VLC Player. \nPlease make sure VLC is installed and the directory specified in HandBrake's options is correct. (See: \"Tools Menu > Options > Picture Tab\") ",
+                                    "VLC",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Warning);
+                            }
+                        }
+
+                        if (File.Exists(Properties.Settings.Default.VLC_Path))
+                        {
+                            ProcessStartInfo vlc = new ProcessStartInfo(Properties.Settings.Default.VLC_Path, args);
+                            Process.Start(vlc);
+                        }
                     }
                 }
                 else
