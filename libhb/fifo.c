@@ -537,7 +537,7 @@ void hb_fifo_push_list_element( hb_fifo_t *fifo, hb_buffer_t *buffer_list )
     hb_buffer_t *container = hb_buffer_init( 0 );
     // XXX: Using an arbitrary hb_buffer_t pointer (other than 'next')
     //      to carry the list inside a single "container" buffer
-    container->next_subpicture = buffer_list;
+    container->sub = buffer_list;
     
     hb_fifo_push( fifo, container );
 }
@@ -548,7 +548,7 @@ hb_buffer_t *hb_fifo_get_list_element( hb_fifo_t *fifo )
     hb_buffer_t *container = hb_fifo_get( fifo );
     // XXX: Using an arbitrary hb_buffer_t pointer (other than 'next')
     //      to carry the list inside a single "container" buffer
-    hb_buffer_t *buffer_list = container->next_subpicture;
+    hb_buffer_t *buffer_list = container->sub;
     hb_buffer_close( &container );
     
     return buffer_list;

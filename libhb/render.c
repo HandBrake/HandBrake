@@ -70,9 +70,8 @@ static uint8_t *getV(uint8_t *data, int width, int height, int x, int y)
 // Draws the specified PICTURESUB subtitle on the specified video packet.
 // Disposes the subtitle afterwards.
 static void ApplySub( hb_job_t * job, hb_buffer_t * buf,
-                      hb_buffer_t ** _sub )
+                      hb_buffer_t * sub )
 {
-    hb_buffer_t * sub = *_sub;
     hb_title_t * title = job->title;
     int i, j, offset_top, offset_left, margin_top, margin_percent;
     uint8_t * lum, * alpha, * out, * sub_chromaU, * sub_chromaV;
@@ -200,8 +199,17 @@ static void ApplySub( hb_job_t * job, hb_buffer_t * buf,
         sub_chromaV += sub->width;
         out   += title->width;
     }
+}
 
-    hb_buffer_close( _sub );
+// Draws the specified PICTURESUB subtitle on the specified video packet.
+static void ApplySubs( hb_job_t * job, hb_buffer_t * buf,
+                      hb_buffer_t * sub )
+{
+    while ( sub )
+    {
+        ApplySub( job, buf, sub );
+        sub = sub->next;
+    }
 }
 
 // delete the buffer 'out' from the chain of buffers whose head is 'buf_out'.
@@ -405,6 +413,7 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     if( in->sub )
     {
         hb_fifo_push_list_element( pv->subtitle_queue, in->sub );
+        in->sub = NULL;
     }
     else
     {
@@ -483,26 +492,9 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 pv->dropped_frames++;
 
                 /* Pop the frame's subtitle list and dispose of it. */
-                hb_buffer_t * sub_list = hb_fifo_get_list_element( pv->subtitle_queue );
-                hb_buffer_t * sub;
-                hb_buffer_t * sub_next;
-                for ( sub = sub_list; sub; sub = sub_next )
-                {
-                    sub_next = sub->next;
-                    // XXX: Prevent hb_buffer_close from killing the whole list
-                    //      before we finish iterating over it
-                    sub->next = NULL;
-                    
-                    hb_buffer_t * subpicture_list = sub;
-                    hb_buffer_t * subpicture;
-                    hb_buffer_t * subpicture_next;
-                    for ( subpicture = subpicture_list; subpicture; subpicture = subpicture_next )
-                    {
-                        subpicture_next = subpicture->next_subpicture;
-                        
-                        hb_buffer_close( &subpicture );
-                    }
-                }
+                hb_buffer_t * sub = hb_fifo_get_list_element( pv->subtitle_queue );
+                if ( sub )
+                    hb_buffer_close( &sub );
                 
                 buf_tmp_in = NULL;
                 break;
@@ -530,25 +522,11 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     /* Apply subtitles and dispose them */
     if( buf_tmp_in )
     {
-        hb_buffer_t * sub_list = hb_fifo_get_list_element( pv->subtitle_queue );
-        hb_buffer_t * sub;
-        hb_buffer_t * sub_next;
-        for ( sub = sub_list; sub; sub = sub_next )
+        hb_buffer_t * sub = hb_fifo_get_list_element( pv->subtitle_queue );
+        if ( sub )
         {
-            sub_next = sub->next;
-            // XXX: Prevent hb_buffer_close inside ApplySub from killing the whole list
-            //      before we finish iterating over it
-            sub->next = NULL;
-            
-            hb_buffer_t * subpicture_list = sub;
-            hb_buffer_t * subpicture;
-            hb_buffer_t * subpicture_next;
-            for ( subpicture = subpicture_list; subpicture; subpicture = subpicture_next )
-            {
-                subpicture_next = subpicture->next_subpicture;
-                
-                ApplySub( job, buf_tmp_in, &subpicture );
-            }
+            ApplySubs( job, buf_tmp_in, sub );
+            hb_buffer_close( &sub );
         }
     }
 

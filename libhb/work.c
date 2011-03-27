@@ -428,7 +428,6 @@ static void do_job( hb_job_t * job )
 
     hb_audio_t   * audio;
     hb_subtitle_t * subtitle;
-    hb_attachment_t * attachment;
     unsigned int subtitle_highest = 0;
     unsigned int subtitle_highest_id = 0;
     unsigned int subtitle_lowest = -1;
@@ -869,21 +868,6 @@ static void do_job( hb_job_t * job )
                 w = hb_get_work( WORK_DECSSASUB );
                 w->fifo_in  = subtitle->fifo_in;
                 w->fifo_out = subtitle->fifo_raw;
-                w->subtitle = subtitle;
-                hb_list_add( job->list_work, w );
-            }
-
-            if( !job->indepth_scan && 
-                subtitle->format == PICTURESUB
-                && subtitle->config.dest == PASSTHRUSUB )
-            {
-                /*
-                 * Passing through a subtitle picture, this will have to
-                 * be rle encoded before muxing.
-                 */
-                w = hb_get_work( WORK_ENCVOBSUB );
-                w->fifo_in  = subtitle->fifo_sync;
-                w->fifo_out = subtitle->fifo_out;
                 w->subtitle = subtitle;
                 hb_list_add( job->list_work, w );
             }

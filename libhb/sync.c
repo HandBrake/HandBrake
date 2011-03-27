@@ -71,6 +71,7 @@ typedef struct
     
     /* Subtitles */
     hb_buffer_t * sub_list;   /* list of subtitles to be passed thru or rendered */
+    hb_buffer_t * sub_tail;   /* list of subtitles to be passed thru or rendered */
 } hb_sync_video_t;
 
 struct hb_work_private_s
@@ -311,10 +312,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 subtitle = hb_list_item( job->list_subtitle, i );
                 if( subtitle->config.dest == PASSTHRUSUB )
                 {
-                    if( subtitle->source == VOBSUB ) 
-                        hb_fifo_push( subtitle->fifo_sync, hb_buffer_init( 0 ) );
-                    else
-                        hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
+                    hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
                 }
             }
             return HB_WORK_DONE;
@@ -381,10 +379,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 subtitle = hb_list_item( job->list_subtitle, i );
                 if( subtitle->config.dest == PASSTHRUSUB )
                 {
-                    if( subtitle->source == VOBSUB ) 
-                        hb_fifo_push( subtitle->fifo_sync, hb_buffer_init( 0 ) );
-                    else
-                        hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
+                    hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
                 }
             }
             return HB_WORK_DONE;
@@ -426,10 +421,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             subtitle = hb_list_item( job->list_subtitle, i );
             if( subtitle->config.dest == PASSTHRUSUB )
             {
-                if( subtitle->source == VOBSUB ) 
-                    hb_fifo_push( subtitle->fifo_sync, hb_buffer_init( 0 ) );
-                else
-                    hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
+                hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
             }
         }
         pv->common->start_found = 1;
@@ -456,10 +448,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             subtitle = hb_list_item( job->list_subtitle, i );
             if( subtitle->config.dest == PASSTHRUSUB )
             {
-                if( subtitle->source == VOBSUB ) 
-                    hb_fifo_push( subtitle->fifo_sync, hb_buffer_init( 0 ) );
-                else
-                    hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
+                hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
             }
         }
         return HB_WORK_DONE;
@@ -487,10 +476,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             subtitle = hb_list_item( job->list_subtitle, i );
             if( subtitle->config.dest == PASSTHRUSUB )
             {
-                if( subtitle->source == VOBSUB ) 
-                    hb_fifo_push( subtitle->fifo_sync, hb_buffer_init( 0 ) );
-                else
-                    hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
+                hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
             }
         }
         return HB_WORK_DONE;
@@ -567,8 +553,6 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     //       incorrect in some cases where the SSA subtitle decoder is used.
     //       Enable the SUBSYNC_VERBOSE_TIMING flag below to debug.
     
-#define SUBSYNC_ALGORITHM_SIMULTANEOUS 1
-#define SUBSYNC_ALGORITHM_CLASSIC 0
 
 /*
  * Enables logging of three kinds of events:
@@ -582,8 +566,6 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
  */
 #define SUBSYNC_VERBOSE_TIMING 0
     
-#if SUBSYNC_ALGORITHM_SIMULTANEOUS
-    #define sub_list sync->sub_list
     /*
      * 1. Find all subtitles that need to be burned into the current video frame
      *    and attach them to the frame.
@@ -591,6 +573,8 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
      */
     for( i = 0; i < hb_list_count( job->list_subtitle ); i++)
     {
+        int64_t sub_start, sub_stop, duration;
+
         subtitle = hb_list_item( job->list_subtitle, i );
         
         // If this subtitle track's packets are to be passed thru, do so immediately
@@ -598,26 +582,32 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         {
             while ( ( sub = hb_fifo_get( subtitle->fifo_raw ) ) != NULL )
             {
-                if ( subtitle->source == VOBSUB )
-                {
-                    hb_fifo_push( subtitle->fifo_sync, sub );
-                }
-                else
-                {
-                    hb_fifo_push( subtitle->fifo_out, sub );
-                }
+                // Need to re-write subtitle timestamps to account
+                // for any slippage.
+                hb_lock( pv->common->mutex );
+                sub_start = sub->start - pv->common->video_pts_slip;
+                hb_unlock( pv->common->mutex );
+                duration = sub->stop - sub->start;
+                sub_stop = sub_start + duration;
+
+                sub->start = sub_start;
+                sub->stop = sub_stop;
+
+                hb_fifo_push( subtitle->fifo_out, sub );
             }
         }
         // If this subtitle track's packets are to be rendered, identify the
         // packets that need to be rendered on the current video frame
         else if( subtitle->config.dest == RENDERSUB )
         {
-            // Migrate subtitles from 'subtitle->fifo_raw' to 'sub_list' immediately.
+            // Migrate subtitles from 'subtitle->fifo_raw' to 'sub_list' 
+            // immediately. This make it so we can scan the list for
+            // all overlapping subtitles that apply to the current
+            // frame.
+            //
             // Note that the size of 'sub_list' is unbounded.
-            while ( ( sub = hb_fifo_see( subtitle->fifo_raw ) ) != NULL )
+            while ( ( sub = hb_fifo_get( subtitle->fifo_raw ) ) != NULL )
             {
-                sub = hb_fifo_get( subtitle->fifo_raw );  // pop
-                
                 #if SUBSYNC_VERBOSE_TIMING
                     printf( "\nSUB*** (%"PRId64"/%"PRId64":%"PRId64") @ %"PRId64"/%"PRId64":%"PRId64" (lead by %"PRId64"ms)\n",
                         sub->start/90, sub->start/90/1000/60, sub->start/90/1000%60,
@@ -629,51 +619,52 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     }
                 #endif
                 
-                // Prepend to sub_list
-                hb_buffer_t *sub_list_next = sub_list;
-                sub_list = sub;
-                sub_list->next = sub_list_next;
+                // Append to sub_list
+                if ( sync->sub_tail )
+                    sync->sub_tail->next = sub;
+                else
+                    sync->sub_list = sub;
+                sync->sub_tail = sub;
             }
             
-            hb_buffer_t *last_sub = NULL;
-            for ( sub = sub_list; sub != NULL; )
+            hb_buffer_t *prev_sub = NULL;
+            hb_buffer_t *cur_sub_tail = NULL;
+            for ( sub = sync->sub_list; sub != NULL; )
             {
-                // NOTE: Strictly speaking this sequence check is probably unnecessary.
-                //       It is a holdover behavior inherited from the classic subsync algorithm.
-                if ( sub->sequence > cur->sequence )
-                {
-                    // Subtitle sequence in the future
-                    
-                    // (Keep the subtitle in the stream)
-                    last_sub = sub;
-                    sub = sub->next;
-                    continue;
-                }
-                
-                if ( cur->start < sub->start )
+                // Need to re-write subtitle timestamps to account
+                // for any slippage.
+                hb_lock( pv->common->mutex );
+                sub_start = sub->start - pv->common->video_pts_slip;
+                hb_unlock( pv->common->mutex );
+                duration = sub->stop - sub->start;
+                sub_stop = sub_start + duration;
+
+                if ( cur->start < sub_start )
                 {
                     // Subtitle starts in the future
-                    
-                    // (Keep the subtitle in the stream)
-                    last_sub = sub;
-                    sub = sub->next;
-                    continue;
+                    break;
                 }
                 else
                 {
-                    // Subtitle starts in the past...
-                    
-                    if ( cur->start < sub->stop )
+                    // Subtitle starts now or in the past...
+                    if ( cur->start < sub_stop )
                     {
-                        // Subtitle starts in the past and finishes in the future
+                        // Subtitle finishes in the future
                         
-                        // Attach a copy of the subtitle packet to the current video packet
-                        // to be burned in by the 'render' work-object.
-                        // (Can't just alias it because we don't know when the 'render'
-                        //  work-object will dispose of it.)
-                        hb_buffer_t * old_sublist_head = cur->sub;
-                        cur->sub = copy_subtitle( sub );
-                        cur->sub->next = old_sublist_head;
+                        // Append a copy of the subtitle packet to the 
+                        // current video packet to be burned in by 
+                        // the 'render' work-object.
+                        // (Can't just alias it because we will have
+                        // to attach to multiple video frames and have
+                        // no easy way of synchronizing disposal)
+                        hb_buffer_t * sub_copy = copy_subtitle( sub );
+                        sub_copy->start = sub_start;
+                        sub_copy->stop = sub_stop;
+                        if ( cur_sub_tail )
+                            cur_sub_tail->next = sub_copy;
+                        else
+                            cur->sub = sub_copy;
+                        cur_sub_tail = sub_copy;
                         
                         #if SUBSYNC_VERBOSE_TIMING
                             if (!(sub->new_chap & 0x01))
@@ -692,9 +683,8 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                         #endif
                         
                         // (Keep the subtitle in the stream)
-                        last_sub = sub;
+                        prev_sub = sub;
                         sub = sub->next;
-                        continue;
                     }
                     else
                     {
@@ -712,363 +702,31 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                         #endif
                         
                         // Remove it from the stream...
-                        if (last_sub != NULL)
+                        if (prev_sub != NULL)
                         {
-                            last_sub->next = sub->next;
+                            prev_sub->next = sub->next;
                         }
-                        if (sub_list == sub)
+                        if (sync->sub_list == sub)
                         {
-                            sub_list = sub->next;
+                            sync->sub_list = sub->next;
+                            if ( sync->sub_list == NULL )
+                                sync->sub_tail = NULL;
                         }
                         
                         // ...and trash it
                         hb_buffer_t *next_sub = sub->next;
-                        // XXX: Prevent hb_buffer_close from killing the whole list
-                        //      before we finish iterating over it
+                        // Prevent hb_buffer_close from killing the whole list
+                        // before we finish iterating over it
                         sub->next = NULL;
-                        
-                        hb_buffer_t * subpicture_list = sub;
-                        hb_buffer_t * subpicture;
-                        hb_buffer_t * subpicture_next;
-                        for ( subpicture = subpicture_list; subpicture; subpicture = subpicture_next )
-                        {
-                            subpicture_next = subpicture->next_subpicture;
-                            
-                            hb_buffer_close( &subpicture );
-                        }
-                        
-                        // (last_sub remains the same)
-                        sub = next_sub;
-                        continue;
-                    }
-                }
-            }
-        }
-    } // end subtitles
-    #undef sub_list
-
-#elif SUBSYNC_ALGORITHM_CLASSIC
-    // NOTE: This algorithm does not correctly support the simultaneous display of temporally overlapping subtitles.
-    
-    /*
-     * Look for a subtitle for this frame.
-     *
-     * If found then it will be tagged onto a video buffer of the correct time and 
-     * sent in to the render pipeline. This only needs to be done for VOBSUBs which
-     * get rendered, other types of subtitles can just sit in their raw_queue until
-     * delt with at muxing.
-     */
-    for( i = 0; i < hb_list_count( job->list_subtitle ); i++)
-    {
-        int64_t sub_start, sub_stop, duration;
-        subtitle = hb_list_item( job->list_subtitle, i );
-
-        /*
-         * Rewrite timestamps on subtitles that need it (on raw queue).
-         */
-        // NOTE: It's probably fine to use this logic for passthru VOBSUBs as well,
-        //       but I am currently preserving backwards compatibility with the old
-        //       VOBSUB behavior, which uses the more complex logic following this if-statement.
-        if( subtitle->config.dest == PASSTHRUSUB && subtitle->source != VOBSUB )
-        {
-            /*
-             * Rewrite timestamps on subtitles that came from Closed Captions
-             * since they are using the MPEG2 timestamps.
-             */
-            while( ( sub = hb_fifo_see( subtitle->fifo_raw ) ) )
-            {
-                hb_lock( pv->common->mutex );
-                sub_start = sub->start - pv->common->video_pts_slip;
-                hb_unlock( pv->common->mutex );
-                duration = sub->stop - sub->start;
-                sub_stop = sub_start + duration;
-
-                /*
-                 * Rewrite the timestamps as and when the video
-                 * (cur->start) reaches the same timestamp as a
-                 * closed caption (sub->start).
-                 *
-                 * What about discontinuity boundaries - not delt
-                 * with here - Van?
-                 *
-                 * Bypass the sync fifo altogether.
-                 */
-                if( sub->size <= 0 )
-                {
-                    sub = hb_fifo_get( subtitle->fifo_raw );
-                    hb_fifo_push( subtitle->fifo_out, sub );
-                    sub = NULL;
-                    break;
-                } else {
-                    /*
-                     * Sync the subtitles to the incoming video, and use
-                     * the matching converted video timestamp.
-                     *
-                     * Note that it doesn't appear that we need to convert 
-                     * timestamps, I guess that they were already correct,
-                     * so just push them through for rendering.
-                     *
-                     */
-                    if( sub_start <= start )
-                    {
-                        sub = hb_fifo_get( subtitle->fifo_raw );
-                        sub->start = sub_start;
-                        sub->stop = sub_stop;
-                        hb_fifo_push( subtitle->fifo_out, sub );
-                    } else {
-                        // sub too early. Leave it in the fifo.
-                        sub = NULL;
-                        break;
-                    }
-                }
-            }
-            
-            continue;
-        }
-
-        // For rendered subtitles (and, for backward compatibility, passthru VOBSUBs),
-        // delay pushing subtitle packets through the pipeline until the video catches up
-        if( subtitle->config.dest == RENDERSUB || subtitle->source == VOBSUB ) 
-        {
-            hb_buffer_t * sub2;
-            while( ( sub = hb_fifo_see( subtitle->fifo_raw ) ) )
-            {
-                if( sub->size == 0 )
-                {
-                    /*
-                     * EOF, pass it through immediately.
-                     */
-                    break;
-                }
-
-                hb_lock( pv->common->mutex );
-                sub_start = sub->start - pv->common->video_pts_slip;
-                hb_unlock( pv->common->mutex );
-                duration = sub->stop - sub->start;
-                sub_stop = sub_start + duration;
-
-                /* If two DVD subtitles overlap, make the first one stop
-                   when the second one starts */
-                // TODO: Consider removing this entirely. Currently retained
-                //       to preserve old DVD subtitle behavior.
-                if ( subtitle->source == VOBSUB )
-                {
-                    sub2 = hb_fifo_see2( subtitle->fifo_raw );
-                    if( sub2 && sub->stop > sub2->start )
-                    {
-                        sub->stop = sub2->start;
-                    }
-                }
-
-                
-                // hb_log("0x%x: video seq: %"PRId64" subtitle sequence: %"PRId64,
-                //       sub, cur->sequence, sub->sequence);
-                
-                if( sub->sequence > cur->sequence )
-                {
-                    /*
-                     * The video is behind where we are, so wait until
-                     * it catches up to the same reader point on the
-                     * DVD. Then our PTS should be in the same region
-                     * as the video.
-                     */
-                    sub = NULL;
-                    break;
-                }
-                
-                #if SUBSYNC_VERBOSE_TIMING
-                    if (!(sub->new_chap & 0x02))
-                    {
-                        printf( "\nSUB*** (%"PRId64"/%"PRId64":%"PRId64") @ %"PRId64"/%"PRId64":%"PRId64" (lead by %"PRId64"ms)\n",
-                            sub->start/90, sub->start/90/1000/60, sub->start/90/1000%60,
-                            cur->start/90, cur->start/90/1000/60, cur->start/90/1000%60,
-                            (sub->start - cur->start)/90);
-                        
-                        sub->new_chap |= 0x02;
-                    }
-                #endif
-                
-                if( sub_stop > start ) 
-                {
-                    // CONDITION: cur->start < sub->stop
-                    
-                    /*
-                     * The stop time is in the future, so fall through
-                     * and we'll deal with it in the next block of
-                     * code.
-                     */
-
-                    /*
-                     * There is a valid subtitle, is it time to display it?
-                     */
-                    if( sub_stop > sub_start)
-                    {
-                        // CONDITION: {cur->start, sub->start} < sub->stop
-                        
-                        /*
-                         * Normal subtitle which ends after it starts, 
-                         * check to see that the current video is between 
-                         * the start and end.
-                         */
-                        if( start > sub_start &&
-                            start < sub_stop )
-                        {
-                            // CONDITION: sub->start < cur->start < sub->stop
-                            
-                            /*
-                            * We should be playing this, so leave the
-                            * subtitle in place.
-                            *
-                            * fall through to display
-                            */
-                        }
-                        else
-                        {
-                            // CONDITION: cur->start < sub->start < sub->stop
-                            
-                            /*
-                             * Defer until the play point is within 
-                             * the subtitle
-                             */
-                            sub = NULL;
-                        }
-                    }
-                    else
-                    {
-                        // CONDITION: cur->start < sub->stop < sub->start
-                        
-                        /*
-                         * The end of the subtitle is less than the start, 
-                         * this is a sign of a PTS discontinuity.
-                         */
-                        if( sub_start > start )
-                        {
-                            // CONDITION: cur->start < sub->stop < sub->start
-                            
-                            /*
-                             * we haven't reached the start time yet, or
-                             * we have jumped backwards after having
-                             * already started this subtitle.
-                             */
-                            if( start < sub_stop )
-                            {
-                                // CONDITION: cur->start < sub->stop < sub->start
-                                
-                                /*
-                                 * We have jumped backwards and so should
-                                 * continue displaying this subtitle.
-                                 *
-                                 * fall through to display.
-                                 */
-                            }
-                            else
-                            {
-                                // CONDITION: Mathematically impossible to get here
-                                
-                                /*
-                                 * Defer until the play point is 
-                                 * within the subtitle
-                                 */
-                                sub = NULL;
-                            }
-                        } else {
-                            // CONDITION: Mathematically impossible to get here
-                            
-                            /*
-                            * Play this subtitle as the start is 
-                            * greater than our video point.
-                            *
-                            * fall through to display/
-                            */
-                        }
-                    }
-                	break;
-                }
-                else
-                {
-                    // CONDITION: sub->stop < cur->start
-                    
-                    #if SUBSYNC_VERBOSE_TIMING
-                        printf( "\nSUB--- (%"PRId64"/%"PRId64":%"PRId64") @ %"PRId64"/%"PRId64":%"PRId64" (lag by %"PRId64"ms)\n",
-                            sub->start/90, sub->start/90/1000/60, sub->start/90/1000%60,
-                            cur->start/90, cur->start/90/1000/60, cur->start/90/1000%60,
-                            (cur->start - sub->stop)/90 );
-                    #endif
-                    
-                    /*
-                     * The subtitle is older than this picture, trash it
-                     */
-                    sub = hb_fifo_get( subtitle->fifo_raw );
-                    hb_buffer_close( &sub );
-                }
-            }
-            
-            /* If we have a subtitle for this picture, copy it */
-            if( sub )
-            {
-                #if SUBSYNC_VERBOSE_TIMING
-                    if (!(sub->new_chap & 0x01))
-                    {
-                        printf( "\nSUB+++ (%"PRId64"/%"PRId64":%"PRId64") @ %"PRId64"/%"PRId64":%"PRId64" (lag by %"PRId64"ms)\n",
-                            sub->start/90, sub->start/90/1000/60, sub->start/90/1000%60,
-                            cur->start/90, cur->start/90/1000/60, cur->start/90/1000%60,
-                            (cur->start - sub->start)/90 );
-                        
-                        sub->new_chap |= 0x01;
-                    }
-                #endif
-                
-                if( sub->size > 0 )
-                {
-                    if( subtitle->config.dest == RENDERSUB )
-                    {
-                        /*
-                         * Tack onto the video buffer for rendering.
-                         * 
-                         * Note that there may be multiple subtitles
-                         * whose time intervals overlap which must display
-                         * on the same frame.
-                         */
-                        hb_buffer_t * old_sublist_head = cur->sub;
-                        
-                        /* FIXME: we should avoid this memcpy */
-                        cur->sub = copy_subtitle( sub );
-                        cur->sub->next = old_sublist_head;
-                        cur->sub->start = sub_start;
-                        cur->sub->stop = sub_stop;
-                            
-                        // Leave the subtitle on the raw queue
-                        // (until it no longer needs to be displayed)
-                    } else {
-                        /*
-                         * Pass-Through, pop it off of the raw queue, 
-                         */
-                        sub = hb_fifo_get( subtitle->fifo_raw );
-                        sub->start = sub_start;
-                        sub->stop = sub_stop;
-                        hb_fifo_push( subtitle->fifo_sync, sub );
-                    }
-                } else {
-                    /*
-                    * EOF - consume for rendered, else pass through
-                    */
-                    if( subtitle->config.dest == RENDERSUB )
-                    {
-                        sub = hb_fifo_get( subtitle->fifo_raw );
                         hb_buffer_close( &sub );
-                    } else {
-                        sub = hb_fifo_get( subtitle->fifo_raw );
-                        sub->start = sub_start;
-                        sub->stop = sub_stop;
-                        hb_fifo_push( subtitle->fifo_sync, sub );
+                        
+                        // (prev_sub remains the same)
+                        sub = next_sub;
                     }
                 }
             }
         }
     } // end subtitles
-#else
-    #error "Must select a subtitle sync algorithm."
-#endif
 
     /*
      * Adjust the pts of the current frame so that it's contiguous
@@ -1112,27 +770,21 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     return HB_WORK_OK;
 }
 
-static hb_buffer_t * copy_subtitle( hb_buffer_t * src_list )
+static hb_buffer_t * copy_subtitle( hb_buffer_t * src_sub )
 {
-    hb_buffer_t * dst_list = NULL;
+    hb_buffer_t * dst_sub = hb_buffer_init( src_sub->size );
+
+    dst_sub->x      = src_sub->x;
+    dst_sub->y      = src_sub->y;
+    dst_sub->width  = src_sub->width;
+    dst_sub->height = src_sub->height;
+    dst_sub->start = src_sub->start;
+    dst_sub->stop = src_sub->stop;
+    dst_sub->next = NULL;
     
-    hb_buffer_t * src;
-    hb_buffer_t * dst;
-    hb_buffer_t ** dst_ptr = &dst_list;
-    for ( src = src_list, dst_ptr = &dst_list;
-          src;
-          src = src->next_subpicture, dst_ptr = &dst->next_subpicture )
-    {
-        (*dst_ptr)  = hb_buffer_init( src->size );
-        dst         = (*dst_ptr); 
-        dst->x      = src->x;
-        dst->y      = src->y;
-        dst->width  = src->width;
-        dst->height = src->height;
-        memcpy( dst->data, src->data, src->size );
-    }
+    memcpy( dst_sub->data, src_sub->data, src_sub->size );
     
-    return dst_list;
+    return dst_sub;
 }
 
 // sync*Init does nothing because sync has a special initializer

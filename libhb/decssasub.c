@@ -454,6 +454,9 @@ static hb_buffer_t *ssa_decode_line_to_picture( hb_work_object_t * w, uint8_t *i
         out->y = frame->dst_y;
         out->width = frame->w;
         out->height = frame->h;
+        out->start = in_start;
+        out->stop = in_stop;
+        out->sequence = in_sequence;
         
         int i;
         int numPixels = frame->w * frame->h;
@@ -477,17 +480,12 @@ static hb_buffer_t *ssa_decode_line_to_picture( hb_work_object_t * w, uint8_t *i
         free(rgba);
         
         *outSubpictureListTailPtr = out;
-        outSubpictureListTailPtr = &out->next_subpicture;
+        outSubpictureListTailPtr = &out->next;
     }
     
     // NOTE: The subpicture list is actually considered a single packet by most other code
     hb_buffer_t *out = outSubpictureList;
     
-    // Copy metadata from the input packet to the output packet
-    out->start = in_start;
-    out->stop = in_stop;
-    out->sequence = in_sequence;
-
     return out;
     
 fail:
