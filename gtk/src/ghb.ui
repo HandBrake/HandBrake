@@ -1709,7 +1709,7 @@
                                     <child>
                                       <object class="GtkComboBox" id="VideoEncoder">
                                         <property name="visible">True</property>
-                                        <property name="tooltip-text" translatable="yes">Avaliable video encoders.</property>
+                                        <property name="tooltip-text" translatable="yes">Available video encoders.</property>
                                         <signal handler="vcodec_changed_cb" name="changed"/>
                                       </object>
                                     </child>
