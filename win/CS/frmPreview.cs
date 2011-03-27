@@ -8,18 +8,13 @@ namespace Handbrake
     using System;
     using System.Diagnostics;
     using System.IO;
-    using System.Runtime.InteropServices;
     using System.Threading;
-    using System.Windows;
     using System.Windows.Forms;
     using Functions;
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
-
-    using QTOControlLib;
-    using QTOLibrary;
 
     using MessageBox = System.Windows.Forms.MessageBox;
 
@@ -36,11 +31,6 @@ namespace Handbrake
         private readonly frmMain mainWindow;
 
         /// <summary>
-        /// True if QT is not installed
-        /// </summary>
-        private readonly bool noQt;
-
-        /// <summary>
         /// The encode queue
         /// </summary>
         private readonly IEncode encodeQueue = new Encode();
@@ -50,60 +40,6 @@ namespace Handbrake
         /// </summary>
         private string currentlyPlaying = string.Empty;
 
-        /// <summary>
-        /// Play With VLC tracker
-        /// </summary>
-        private bool playWithVlc;
-
-        /// <summary>
-        /// A Thread for the video player
-        /// </summary>
-        private Thread player;
-
-        #endregion
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="frmPreview"/> class.
-        /// </summary>
-        /// <param name="mw">
-        /// The mw.
-        /// </param>
-        public frmPreview(frmMain mw)
-        {
-            try
-            {
-                InitializeComponent();
-            }
-            catch (Exception)
-            {
-                this.noQt = true;
-
-                int borderWidth = (this.Width - this.ClientSize.Width) / 2;
-                int titlebarAndBorder = this.Height - this.ClientSize.Height;
-
-                this.Height = toolBar.Height + titlebarAndBorder + 1;
-                btn_playQT.Enabled = false;
-                btn_playQT.Visible = false;
-            }
-
-            this.mainWindow = mw;
-
-            cb_preview.SelectedIndex = 0;
-            cb_duration.SelectedIndex = 1;
-
-            cb_preview.Items.Clear();
-            for (int i = 1; i <= Properties.Settings.Default.previewScanCount; i++)
-            {
-                cb_preview.Items.Add(i.ToString());
-            }
-
-            cb_preview.SelectedIndex = 0;
-
-            encodeQueue.EncodeStarted += this.EncodeQueueEncodeStarted;
-            encodeQueue.EncodeCompleted += this.EncodeQueueEncodeEnded;
-        }
-
-        #region Delegates
         /// <summary>
         /// Update UI Delegate
         /// </summary>
@@ -115,11 +51,33 @@ namespace Handbrake
         /// </param>
         private delegate void UpdateUiHandler(object sender, EventArgs e);
 
-        /// <summary>
-        /// The Open Movie Handler
-        /// </summary>
-        private delegate void OpenMovieHandler();
         #endregion
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="frmPreview"/> class.
+        /// </summary>
+        /// <param name="mw">
+        /// The mw.
+        /// </param>
+        public frmPreview(frmMain mw)
+        {
+            InitializeComponent();
+            this.mainWindow = mw;
+
+            startPoint.SelectedIndex = 0;
+            endPoint.SelectedIndex = 1;
+
+            startPoint.Items.Clear();
+            for (int i = 1; i <= Properties.Settings.Default.previewScanCount; i++)
+            {
+                startPoint.Items.Add(i.ToString());
+            }
+
+            startPoint.SelectedIndex = 0;
+
+            encodeQueue.EncodeStarted += this.EncodeQueueEncodeStarted;
+            encodeQueue.EncodeCompleted += this.EncodeQueueEncodeEnded;
+        }
 
         #region Event Handlers
         /// <summary>
@@ -157,14 +115,10 @@ namespace Handbrake
                     return;
                 }
 
-                ProgressBarStatus.Visible = false;
-                lbl_encodeStatus.Visible = false;
-
-                if (!this.noQt)
-                    btn_playQT.Enabled = true;
-                btn_playVLC.Enabled = true;
-
+                btn_play.Enabled = true;
                 this.Text = this.Text.Replace(" (Encoding)", string.Empty);
+                progressBar.Value = 0;
+                lbl_progress.Text = "0.00%";
 
                 // Get the sample filename
                 if (this.mainWindow.text_destination.Text != string.Empty)
@@ -172,11 +126,7 @@ namespace Handbrake
                         this.mainWindow.text_destination.Text.Replace(".mp4", "_sample.mp4").Replace(".m4v", "_sample.m4v").
                             Replace(".mkv", "_sample.mkv");
 
-                // Play back in QT or VLC
-                if (!playWithVlc)
-                    Play();
-                else
-                    PlayVlc();
+                this.Play();
             }
             catch (Exception exc)
             {
@@ -201,107 +151,12 @@ namespace Handbrake
                 return;
             }
 
-            lbl_encodeStatus.Text = e.PercentComplete + "%";
-            ProgressBarStatus.Value = (int)Math.Round(e.PercentComplete);
+            lbl_progress.Text = e.PercentComplete + "%";
+            progressBar.Value = (int)Math.Round(e.PercentComplete);
         }
         #endregion
 
         #region Encode Sample
-
-        /// <summary>
-        /// Play with VLC
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void PlayVlcClick(object sender, EventArgs e)
-        {
-            ProgressBarStatus.Visible = true;
-            ProgressBarStatus.Value = 0;
-            lbl_encodeStatus.Visible = true;
-            playWithVlc = true;
-            this.panel1.Visible = false;
-            
-            try
-            {
-                if (!this.noQt)
-                    QTControl.URL = string.Empty;
-
-                if (File.Exists(this.currentlyPlaying))
-                    File.Delete(this.currentlyPlaying);
-            }
-            catch (Exception)
-            {
-                MessageBox.Show(this, "Unable to delete previous preview file. You may need to restart the application.",
-                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-            btn_playQT.Enabled = false;
-            btn_playVLC.Enabled = false;
-            this.Text += " (Encoding)";
-            int duration;
-            int.TryParse(cb_duration.Text, out duration);
-            string query = QueryGenerator.GeneratePreviewQuery(this.mainWindow, duration, cb_preview.Text);
-            ThreadPool.QueueUserWorkItem(this.CreatePreview, query);
-        }
-
-        /// <summary>
-        /// Encode and Play with QT
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void PlayQtClick(object sender, EventArgs e)
-        {
-            playWithVlc = false;
-            this.panel1.Visible = true;
-            if (this.noQt)
-            {
-                MessageBox.Show(this,
-                                "It would appear QuickTime 7 is not installed or not accessible. Please (re)install QuickTime.",
-                                "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (this.mainWindow.text_destination.Text.Contains(".mkv"))
-            {
-                MessageBox.Show(this,
-                                "The QuickTime Control does not support MKV files, It is recommended you use the VLC option instead.",
-                                "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            else
-            {
-                ProgressBarStatus.Visible = true;
-                ProgressBarStatus.Value = 0;
-                lbl_encodeStatus.Visible = true;
-                try
-                {
-                    QTControl.URL = string.Empty;
-                    if (File.Exists(this.currentlyPlaying))
-                        File.Delete(this.currentlyPlaying);
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show(this,
-                                    "Unable to delete previous preview file. You may need to restart the application.",
-                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-
-                btn_playQT.Enabled = false;
-                btn_playVLC.Enabled = false;
-                this.Text += " (Encoding)";
-                int duration;
-                int.TryParse(cb_duration.Text, out duration);
-                string query = QueryGenerator.GeneratePreviewQuery(this.mainWindow, duration, cb_preview.Text);
-
-                ThreadPool.QueueUserWorkItem(this.CreatePreview, query);
-            }
-        }
 
         /// <summary>
         /// Create the Preview.
@@ -332,19 +187,32 @@ namespace Handbrake
 
         #region Playback
 
-        /// <summary>
-        /// Play the video back in the QuickTime control
-        /// </summary>
-        private void Play()
+        private void btn_play_Click(object sender, EventArgs e)
         {
-            this.player = new Thread(OpenMovie) { IsBackground = true };
-            this.player.Start();
+            try
+            {
+                btn_play.Enabled = false;
+                if (File.Exists(this.currentlyPlaying))
+                    File.Delete(this.currentlyPlaying);
+            }
+            catch (Exception)
+            {
+                btn_play.Enabled = true;
+                MessageBox.Show(this, "Unable to delete previous preview file. You may need to restart the application.",
+                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            this.Text += " (Encoding)";
+            int duration;
+            int.TryParse(endPoint.Text, out duration);
+            string query = QueryGenerator.GeneratePreviewQuery(this.mainWindow, duration, startPoint.Text);
+            ThreadPool.QueueUserWorkItem(this.CreatePreview, query);
         }
 
         /// <summary>
         /// Play the video back in an external VLC Player
         /// </summary>
-        private void PlayVlc()
+        private void Play()
         {
             // Launch VLC and Play video.
             if (this.currentlyPlaying != string.Empty)
@@ -360,10 +228,7 @@ namespace Handbrake
                     else
                         vlcPath = Environment.GetEnvironmentVariable("ProgramFiles");
 
-                    vlcPath = vlcPath != null
-                                  ? vlcPath + @"\VideoLAN\VLC\vlc.exe"
-                                  : @"C:\Program Files (x86)\VideoLAN\VLC\vlc.exe";
-
+     
                     if (!File.Exists(Properties.Settings.Default.VLC_Path))
                     {
                         if (File.Exists(vlcPath))
@@ -390,38 +255,6 @@ namespace Handbrake
                     MessageBox.Show(this,
                                     "Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details.",
                                     "VLC", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        /// <summary>
-        /// QT control - Open the file
-        /// </summary>
-        [STAThread]
-        private void OpenMovie()
-        {
-            try
-            {
-                if (InvokeRequired)
-                {
-                    BeginInvoke(new OpenMovieHandler(OpenMovie));
-                    return;
-                }
-                QTControl.URL = this.currentlyPlaying;
-                QTControl.SetSizing(QTSizingModeEnum.qtControlFitsMovie, true);
-                QTControl.URL = this.currentlyPlaying;
-                QTControl.Show();
-
-                this.ClientSize = QTControl.Size;
-                this.Height += toolBar.Height;
-            }
-            catch (COMException ex)
-            {
-                QTUtils qtu = new QTUtils();
-                Main.ShowExceptiowWindow("Unable to open movie.", ex + Environment.NewLine + qtu.QTErrorFromErrorCode(ex.ErrorCode));
-            }
-            catch (Exception ex)
-            {
-                Main.ShowExceptiowWindow("Unable to open movie.", ex.ToString());
             }
         }
 

@@ -145,9 +145,6 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AxInterop.QTOControlLib">
-      <HintPath>libraries\AxInterop.QTOControlLib.dll</HintPath>
-    </Reference>
     <Reference Include="Growl.Connector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=980c2339411be384, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>libraries\Growl.Connector.dll</HintPath>
@@ -213,17 +210,17 @@
     <Compile Include="Controls\x264Panel.Designer.cs">
       <DependentUpon>x264Panel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Functions\ToolStripRenderOverride.cs" />
-    <Compile Include="Model\ActivityLogMode.cs" />
-    <Compile Include="Model\QueryPictureSettingsMode.cs" />
-    <Compile Include="Model\QueryEncodeMode.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="frmPreview.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmPreview.Designer.cs">
       <DependentUpon>frmPreview.cs</DependentUpon>
     </Compile>
+    <Compile Include="Functions\ToolStripRenderOverride.cs" />
+    <Compile Include="Model\ActivityLogMode.cs" />
+    <Compile Include="Model\QueryPictureSettingsMode.cs" />
+    <Compile Include="Model\QueryEncodeMode.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="frmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -466,22 +463,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="QTOControlLib">
-      <Guid>{7B92F833-027D-402B-BFF9-A67697366F4E}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-    </COMReference>
-    <COMReference Include="QTOLibrary">
-      <Guid>{29866AED-1E14-417D-BA0F-1A2BE6F5A19E}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-    </COMReference>
     <COMReference Include="stdole">
       <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
       <VersionMajor>2</VersionMajor>

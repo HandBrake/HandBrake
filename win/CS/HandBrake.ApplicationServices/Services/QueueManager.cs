@@ -52,11 +52,6 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private int lastJobId;
 
-        /// <summary>
-        /// The instance Id of this HandBrake instance.
-        /// </summary>
-        private int instanceId;
-
         #endregion
 
         /// <summary>
@@ -67,8 +62,6 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         public QueueManager(int instanceId)
         {
-            this.instanceId = instanceId;
-
             // If this is the first instance, just use the main queue file, otherwise add the instance id to the filename.
             this.queueFile = instanceId == 0 ? "hb_queue_recovery.xml" : string.Format("hb_queue_recovery{0}.xml", instanceId);
         }
