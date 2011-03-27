@@ -561,5 +561,17 @@ namespace Handbrake.Properties {
                 this["batchMaxDuration"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool defaultPlayer {
+            get {
+                return ((bool)(this["defaultPlayer"]));
+            }
+            set {
+                this["defaultPlayer"] = value;
+            }
+        }
     }
 }

@@ -137,5 +137,8 @@
     <Setting Name="batchMaxDuration" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">47</Value>
     </Setting>
+    <Setting Name="defaultPlayer" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -39,6 +39,7 @@
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.lbl_progress = new System.Windows.Forms.Label();
             this.btn_play = new System.Windows.Forms.Button();
+            this.defaultPlayer = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // startPoint
@@ -127,11 +128,23 @@
             this.btn_play.UseVisualStyleBackColor = true;
             this.btn_play.Click += new System.EventHandler(this.btn_play_Click);
             // 
+            // defaultPlayer
+            // 
+            this.defaultPlayer.AutoSize = true;
+            this.defaultPlayer.Location = new System.Drawing.Point(12, 62);
+            this.defaultPlayer.Name = "defaultPlayer";
+            this.defaultPlayer.Size = new System.Drawing.Size(151, 17);
+            this.defaultPlayer.TabIndex = 45;
+            this.defaultPlayer.Text = "Use system default player";
+            this.defaultPlayer.UseVisualStyleBackColor = true;
+            this.defaultPlayer.CheckedChanged += new System.EventHandler(this.DefaultPlayerCheckedChanged);
+            // 
             // frmPreview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(369, 91);
+            this.Controls.Add(this.defaultPlayer);
             this.Controls.Add(this.btn_play);
             this.Controls.Add(this.lbl_progress);
             this.Controls.Add(this.progressBar);
@@ -161,6 +174,7 @@
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Label lbl_progress;
         private System.Windows.Forms.Button btn_play;
+        private System.Windows.Forms.CheckBox defaultPlayer;
 
     }
 }
