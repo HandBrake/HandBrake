@@ -88,6 +88,7 @@
     <Compile Include="EventArgs\QueueProgressEventArgs.cs" />
     <Compile Include="EventArgs\ScanCompletedEventArgs.cs" />
     <Compile Include="EventArgs\ScanProgressEventArgs.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Functions\Converters.cs" />
     <Compile Include="Functions\EnumHelper.cs" />
     <Compile Include="Functions\GrowlCommunicator.cs" />
@@ -130,6 +131,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Services\Encode.cs" />
     <Compile Include="Services\Interfaces\IEncode.cs" />
     <Compile Include="Services\Interfaces\IQueueManager.cs" />
@@ -143,10 +149,11 @@
     <Compile Include="Services\ScanService.cs" />
     <Compile Include="Services\UpdateService.cs" />
     <Compile Include="Utilities\AppcastReader.cs" />
+    <Compile Include="Utilities\GeneralUtilities.cs" />
+    <Compile Include="Utilities\LanguageUtilities.cs" />
     <Compile Include="Utilities\PlistUtility.cs" />
     <Compile Include="Utilities\QueryGeneratorUtility.cs" />
     <Compile Include="Utilities\QueryParserUtility.cs" />
-    <Compile Include="Utilities\UtilityService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -161,6 +168,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Resources\logo64.png" />
   </ItemGroup>
   <ItemGroup />

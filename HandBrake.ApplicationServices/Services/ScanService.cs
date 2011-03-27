@@ -42,7 +42,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// The Log File Header
         /// </summary>
-        StringBuilder header = UtilityService.CreateCliLogHeader(null);
+        StringBuilder header = GeneralUtilities.CreateCliLogHeader(null);
 
         #endregion
 
@@ -223,7 +223,7 @@ namespace HandBrake.ApplicationServices.Services
                     // Only write the log file to disk if it's less than 100MB.
                     if (this.readData.Buffer.Length < 100000000)
                     {
-                        scanLog.WriteLine(UtilityService.CreateCliLogHeader(null));
+                        scanLog.WriteLine(GeneralUtilities.CreateCliLogHeader(null));
                         scanLog.Write(this.readData.Buffer);
                         logBuffer.AppendLine(this.readData.Buffer.ToString());
                     }

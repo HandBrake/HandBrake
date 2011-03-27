@@ -16,7 +16,7 @@ namespace Handbrake.Functions
     using System.Windows.Forms;
     using System.Xml.Serialization;
 
-
+    using HandBrake.ApplicationServices.Extensions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -32,35 +32,6 @@ namespace Handbrake.Functions
         /// The XML Serializer
         /// </summary>
         private static readonly XmlSerializer Ser = new XmlSerializer(typeof(List<QueueTask>));
-
-        /// <summary>
-        /// Calculate the duration of the selected title and chapters
-        /// </summary>
-        /// <param name="chapterStart">
-        /// The chapter Start.
-        /// </param>
-        /// <param name="chapterEnd">
-        /// The chapter End.
-        /// </param>
-        /// <param name="selectedTitle">
-        /// The selected Title.
-        /// </param>
-        /// <returns>
-        /// The calculated duration.
-        /// </returns>
-        public static TimeSpan CalculateDuration(int chapterStart, int chapterEnd, Title selectedTitle)
-        {
-            TimeSpan duration = TimeSpan.FromSeconds(0.0);
-            chapterStart++;
-            chapterEnd++;
-            if (chapterStart != 0 && chapterEnd != 0 && chapterEnd <= selectedTitle.Chapters.Count)
-            {
-                for (int i = chapterStart; i <= chapterEnd; i++)
-                    duration += selectedTitle.Chapters[i - 1].Duration;
-            }
-
-            return duration;
-        }
 
         /// <summary>
         /// Set's up the DataGridView on the Chapters tab (frmMain)
@@ -207,7 +178,7 @@ namespace Handbrake.Functions
                     sourceName = sourceName.Replace("_", " ");
 
                 if (Properties.Settings.Default.AutoNameTitleCase)
-                    sourceName = TitleCase(sourceName);
+                    sourceName = sourceName.ToTitleCase();
 
                 // Get the Selected Title Number
                 string[] titlesplit = mainWindow.drp_dvdtitle.Text.Split(' ');
@@ -471,230 +442,6 @@ namespace Handbrake.Functions
             {
                 return Process.GetProcessesByName("HandBrake").Length > 0 ? true : false;
             }
-        }
-
-        /// <summary>
-        /// Map languages and their iso639_2 value into a IDictionary
-        /// </summary>
-        /// <returns>A Dictionary containing the language and iso code</returns>
-        public static IDictionary<string, string> MapLanguages()
-        {
-            IDictionary<string, string> languageMap = new Dictionary<string, string>
-                                                          {
-                                                              {"Any", "und"}, 
-                                                              {"Afar", "aar"}, 
-                                                              {"Abkhazian", "abk"}, 
-                                                              {"Afrikaans", "afr"}, 
-                                                              {"Akan", "aka"}, 
-                                                              {"Albanian", "sqi"}, 
-                                                              {"Amharic", "amh"}, 
-                                                              {"Arabic", "ara"}, 
-                                                              {"Aragonese", "arg"}, 
-                                                              {"Armenian", "hye"}, 
-                                                              {"Assamese", "asm"}, 
-                                                              {"Avaric", "ava"}, 
-                                                              {"Avestan", "ave"}, 
-                                                              {"Aymara", "aym"}, 
-                                                              {"Azerbaijani", "aze"}, 
-                                                              {"Bashkir", "bak"}, 
-                                                              {"Bambara", "bam"}, 
-                                                              {"Basque", "eus"}, 
-                                                              {"Belarusian", "bel"}, 
-                                                              {"Bengali", "ben"}, 
-                                                              {"Bihari", "bih"}, 
-                                                              {"Bislama", "bis"}, 
-                                                              {"Bosnian", "bos"}, 
-                                                              {"Breton", "bre"}, 
-                                                              {"Bulgarian", "bul"}, 
-                                                              {"Burmese", "mya"}, 
-                                                              {"Catalan", "cat"}, 
-                                                              {"Chamorro", "cha"}, 
-                                                              {"Chechen", "che"}, 
-                                                              {"Chinese", "zho"}, 
-                                                              {"Church Slavic", "chu"}, 
-                                                              {"Chuvash", "chv"}, 
-                                                              {"Cornish", "cor"}, 
-                                                              {"Corsican", "cos"}, 
-                                                              {"Cree", "cre"}, 
-                                                              {"Czech", "ces"}, 
-                                                              {"Dansk", "dan"}, 
-                                                              {"Divehi", "div"}, 
-                                                              {"Nederlands", "nld"}, 
-                                                              {"Dzongkha", "dzo"}, 
-                                                              {"English", "eng"}, 
-                                                              {"Esperanto", "epo"}, 
-                                                              {"Estonian", "est"}, 
-                                                              {"Ewe", "ewe"}, 
-                                                              {"Faroese", "fao"}, 
-                                                              {"Fijian", "fij"}, 
-                                                              {"Suomi", "fin"}, 
-                                                              {"Francais", "fra"}, 
-                                                              {"Western Frisian", "fry"}, 
-                                                              {"Fulah", "ful"}, 
-                                                              {"Georgian", "kat"}, 
-                                                              {"Deutsch", "deu"}, 
-                                                              {"Gaelic (Scots)", "gla"}, 
-                                                              {"Irish", "gle"}, 
-                                                              {"Galician", "glg"}, 
-                                                              {"Manx", "glv"}, 
-                                                              {"Greek Modern", "ell"}, 
-                                                              {"Guarani", "grn"}, 
-                                                              {"Gujarati", "guj"}, 
-                                                              {"Haitian", "hat"}, 
-                                                              {"Hausa", "hau"}, 
-                                                              {"Hebrew", "heb"}, 
-                                                              {"Herero", "her"}, 
-                                                              {"Hindi", "hin"}, 
-                                                              {"Hiri Motu", "hmo"}, 
-                                                              {"Magyar", "hun"}, 
-                                                              {"Igbo", "ibo"}, 
-                                                              {"Islenska", "isl"}, 
-                                                              {"Ido", "ido"}, 
-                                                              {"Sichuan Yi", "iii"}, 
-                                                              {"Inuktitut", "iku"}, 
-                                                              {"Interlingue", "ile"}, 
-                                                              {"Interlingua", "ina"}, 
-                                                              {"Indonesian", "ind"}, 
-                                                              {"Inupiaq", "ipk"}, 
-                                                              {"Italiano", "ita"}, 
-                                                              {"Javanese", "jav"}, 
-                                                              {"Japanese", "jpn"}, 
-                                                              {"Kalaallisut", "kal"}, 
-                                                              {"Kannada", "kan"}, 
-                                                              {"Kashmiri", "kas"}, 
-                                                              {"Kanuri", "kau"}, 
-                                                              {"Kazakh", "kaz"}, 
-                                                              {"Central Khmer", "khm"}, 
-                                                              {"Kikuyu", "kik"}, 
-                                                              {"Kinyarwanda", "kin"}, 
-                                                              {"Kirghiz", "kir"}, 
-                                                              {"Komi", "kom"}, 
-                                                              {"Kongo", "kon"}, 
-                                                              {"Korean", "kor"}, 
-                                                              {"Kuanyama", "kua"}, 
-                                                              {"Kurdish", "kur"}, 
-                                                              {"Lao", "lao"}, 
-                                                              {"Latin", "lat"}, 
-                                                              {"Latvian", "lav"}, 
-                                                              {"Limburgan", "lim"}, 
-                                                              {"Lingala", "lin"}, 
-                                                              {"Lithuanian", "lit"}, 
-                                                              {"Luxembourgish", "ltz"}, 
-                                                              {"Luba-Katanga", "lub"}, 
-                                                              {"Ganda", "lug"}, 
-                                                              {"Macedonian", "mkd"}, 
-                                                              {"Marshallese", "mah"}, 
-                                                              {"Malayalam", "mal"}, 
-                                                              {"Maori", "mri"}, 
-                                                              {"Marathi", "mar"}, 
-                                                              {"Malay", "msa"}, 
-                                                              {"Malagasy", "mlg"}, 
-                                                              {"Maltese", "mlt"}, 
-                                                              {"Moldavian", "mol"}, 
-                                                              {"Mongolian", "mon"}, 
-                                                              {"Nauru", "nau"}, 
-                                                              {"Navajo", "nav"}, 
-                                                              {"Ndebele, South", "nbl"}, 
-                                                              {"Ndebele, North", "nde"}, 
-                                                              {"Ndonga", "ndo"}, 
-                                                              {"Nepali", "nep"}, 
-                                                              {"Norwegian Nynorsk", "nno"}, 
-                                                              {"Norwegian Bokmål", "nob"}, 
-                                                              {"Norsk", "nor"}, 
-                                                              {"Chichewa; Nyanja", "nya"}, 
-                                                              {"Occitan", "oci"}, 
-                                                              {"Ojibwa", "oji"}, 
-                                                              {"Oriya", "ori"}, 
-                                                              {"Oromo", "orm"}, 
-                                                              {"Ossetian", "oss"}, 
-                                                              {"Panjabi", "pan"}, 
-                                                              {"Persian", "fas"}, 
-                                                              {"Pali", "pli"}, 
-                                                              {"Polish", "pol"}, 
-                                                              {"Portugues", "por"}, 
-                                                              {"Pushto", "pus"}, 
-                                                              {"Quechua", "que"}, 
-                                                              {"Romansh", "roh"}, 
-                                                              {"Romanian", "ron"}, 
-                                                              {"Rundi", "run"}, 
-                                                              {"Russian", "rus"}, 
-                                                              {"Sango", "sag"}, 
-                                                              {"Sanskrit", "san"}, 
-                                                              {"Serbian", "srp"}, 
-                                                              {"Hrvatski", "hrv"}, 
-                                                              {"Sinhala", "sin"}, 
-                                                              {"Slovak", "slk"}, 
-                                                              {"Slovenian", "slv"}, 
-                                                              {"Northern Sami", "sme"}, 
-                                                              {"Samoan", "smo"}, 
-                                                              {"Shona", "sna"}, 
-                                                              {"Sindhi", "snd"}, 
-                                                              {"Somali", "som"}, 
-                                                              {"Sotho Southern", "sot"}, 
-                                                              {"Espanol", "spa"}, 
-                                                              {"Sardinian", "srd"}, 
-                                                              {"Swati", "ssw"}, 
-                                                              {"Sundanese", "sun"}, 
-                                                              {"Swahili", "swa"}, 
-                                                              {"Svenska", "swe"}, 
-                                                              {"Tahitian", "tah"}, 
-                                                              {"Tamil", "tam"}, 
-                                                              {"Tatar", "tat"}, 
-                                                              {"Telugu", "tel"}, 
-                                                              {"Tajik", "tgk"}, 
-                                                              {"Tagalog", "tgl"}, 
-                                                              {"Thai", "tha"}, 
-                                                              {"Tibetan", "bod"}, 
-                                                              {"Tigrinya", "tir"}, 
-                                                              {"Tonga", "ton"}, 
-                                                              {"Tswana", "tsn"}, 
-                                                              {"Tsonga", "tso"}, 
-                                                              {"Turkmen", "tuk"}, 
-                                                              {"Turkish", "tur"}, 
-                                                              {"Twi", "twi"}, 
-                                                              {"Uighur", "uig"}, 
-                                                              {"Ukrainian", "ukr"}, 
-                                                              {"Urdu", "urd"}, 
-                                                              {"Uzbek", "uzb"}, 
-                                                              {"Venda", "ven"}, 
-                                                              {"Vietnamese", "vie"}, 
-                                                              {"Volapük", "vol"}, 
-                                                              {"Welsh", "cym"}, 
-                                                              {"Walloon", "wln"}, 
-                                                              {"Wolof", "wol"}, 
-                                                              {"Xhosa", "xho"}, 
-                                                              {"Yiddish", "yid"}, 
-                                                              {"Yoruba", "yor"}, 
-                                                              {"Zhuang", "zha"}, 
-                                                              {"Zulu", "zul"}
-                                                          };
-            return languageMap;
-        }
-
-        /// <summary>
-        /// Change a string to Title Case/
-        /// </summary>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// A string in title case.
-        /// </returns>
-        public static string TitleCase(string input)
-        {
-            string[] tokens = input.Split(' ');
-            StringBuilder sb = new StringBuilder(input.Length);
-            foreach (string s in tokens)
-            {
-                if (!string.IsNullOrEmpty(s))
-                {
-                    sb.Append(s[0].ToString().ToUpper());
-                    sb.Append(s.Substring(1).ToLower());
-                    sb.Append(" ");
-                }
-            }
-
-            return sb.ToString().Trim();
         }
 
         /// <summary>

@@ -60,7 +60,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// The Log File Header
         /// </summary>
-        StringBuilder header = UtilityService.CreateCliLogHeader(null);
+        StringBuilder header = GeneralUtilities.CreateCliLogHeader(null);
 
         #endregion
 
@@ -410,7 +410,7 @@ namespace HandBrake.ApplicationServices.Services
                 if (File.Exists(logFile2)) File.Delete(logFile2);
 
                 fileWriter = new StreamWriter(logFile) { AutoFlush = true };
-                fileWriter.WriteLine(UtilityService.CreateCliLogHeader(encodeQueueTask));
+                fileWriter.WriteLine(GeneralUtilities.CreateCliLogHeader(encodeQueueTask));
             }
             catch (Exception)
             {

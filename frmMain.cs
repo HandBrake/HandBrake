@@ -91,7 +91,7 @@ namespace Handbrake
                 // We have a drive, selected as a folder.
                 if (this.sourcePath.EndsWith("\\"))
                 {
-                    drives = UtilityService.GetDrives();
+                    drives = GeneralUtilities.GetDrives();
                     foreach (DriveInformation item in drives)
                     {
                         if (item.RootDirectory.Contains(this.sourcePath))
@@ -152,7 +152,7 @@ namespace Handbrake
             // Clear the log files in the background
             if (Settings.Default.clearOldLogs)
             {
-                Thread clearLog = new Thread(() => UtilityService.ClearLogFiles(30));
+                Thread clearLog = new Thread(() => GeneralUtilities.ClearLogFiles(30));
                 clearLog.Start();
             }
 
@@ -1531,9 +1531,7 @@ namespace Handbrake
             }
 
             // Update the Duration
-            lbl_duration.Text =
-                Main.CalculateDuration(drop_chapterStart.SelectedIndex, drop_chapterFinish.SelectedIndex, selectedTitle)
-                    .ToString();
+            lbl_duration.Text = this.selectedTitle.CalculateDuration(drop_chapterStart.SelectedIndex, drop_chapterFinish.SelectedIndex).ToString();
 
             // Run the Autonaming function
             if (Properties.Settings.Default.autoNaming)
@@ -2337,7 +2335,7 @@ namespace Handbrake
                     return;
                 }
 
-                drives = UtilityService.GetDrives();
+                drives = GeneralUtilities.GetDrives();
 
                 List<ToolStripMenuItem> menuItems = new List<ToolStripMenuItem>();
                 foreach (DriveInformation drive in drives)
