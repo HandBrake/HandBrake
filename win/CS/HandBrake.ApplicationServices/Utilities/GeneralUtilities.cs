@@ -18,7 +18,7 @@ namespace HandBrake.ApplicationServices.Utilities
     /// <summary>
     /// A Set of Static Utilites
     /// </summary>
-    public class UtilityService
+    public class GeneralUtilities
     {
         /// <summary>
         /// The Default Log Directory
@@ -139,5 +139,6 @@ namespace HandBrake.ApplicationServices.Utilities
         {
             return string.Format("[{0}] {1}", DateTime.Now.TimeOfDay, message);
         }
+
     }
 }

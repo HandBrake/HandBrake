@@ -223,6 +223,26 @@ namespace HandBrake.ApplicationServices.Parsing
         }
 
         /// <summary>
+        /// Calcuate the Duration
+        /// </summary>
+        /// <param name="startPoint">The Start Point (Chapters)</param>
+        /// <param name="endPoint">The End Point (Chapters)</param>
+        /// <returns>A Timespan</returns>
+        public TimeSpan CalculateDuration(int startPoint, int endPoint)
+        {
+            TimeSpan duration = TimeSpan.FromSeconds(0.0);
+            startPoint++;
+            endPoint++;
+            if (startPoint != 0 && endPoint != 0 && endPoint <= this.Chapters.Count)
+            {
+                for (int i = startPoint; i <= endPoint; i++)
+                    duration += this.Chapters[i - 1].Duration;
+            }
+
+            return duration;
+        }
+
+        /// <summary>
         /// Override of the ToString method to provide an easy way to use this object in the UI
         /// </summary>
         /// <returns>A string representing this track in the format: {title #} (00:00:00)</returns>

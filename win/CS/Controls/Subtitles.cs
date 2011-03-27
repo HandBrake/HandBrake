@@ -10,12 +10,9 @@ namespace Handbrake.Controls
     using System.IO;
     using System.Linq;
     using System.Windows.Forms;
-    using Functions;
 
-    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
-
-    using Model;
+    using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>
     /// The Subtitles Tab
@@ -48,7 +45,7 @@ namespace Handbrake.Controls
         {
             InitializeComponent();
 
-            langMap = Main.MapLanguages();
+            langMap = LanguageUtilities.MapLanguages();
             foreach (string key in langMap.Keys)
                 srt_lang.Items.Add(key);
 
