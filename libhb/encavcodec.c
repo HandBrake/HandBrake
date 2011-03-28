@@ -486,6 +486,7 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             int64_t frameno = pv->context->coded_frame->pts;
             buf->start  = get_frame_start( pv, frameno );
             buf->stop  = get_frame_stop( pv, frameno );
+            buf->flags &= ~HB_FRAME_REF;
             switch ( pv->context->coded_frame->pict_type )
             {
                 case FF_P_TYPE:
@@ -512,6 +513,7 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 case FF_SI_TYPE:
                 case FF_I_TYPE:
                 {
+                    buf->flags |= HB_FRAME_REF;
                     if ( pv->context->coded_frame->key_frame )
                     {
                         buf->frametype = HB_FRAME_IDR;
@@ -525,9 +527,14 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 default:
                 {
                     if ( pv->context->coded_frame->key_frame )
+                    {
+                        buf->flags |= HB_FRAME_REF;
                         buf->frametype = HB_FRAME_KEY;
+                    }
                     else
+                    {
                         buf->frametype = HB_FRAME_REF;
+                    }
                 } break;
             }
             buf = process_delay_list( pv, buf );
