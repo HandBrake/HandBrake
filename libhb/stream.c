@@ -2947,6 +2947,7 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title )
         // we're opening for read. scan passed out codec params that
         // indexed its stream so we need to remap them so they point
         // to this stream.
+        stream->ffmpeg_video_id = title->video_id;
         ffmpeg_remap_stream( stream, title );
         av_log_set_level( AV_LOG_ERROR );
     }
