@@ -2283,8 +2283,10 @@ fWorkingCount = 0;
     
     [queueFileJob setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
     /* Chapter Markers*/
-    /* If we have only one chapter or a title without chapters, set chapter markers to off */
-    if ([fSrcChapterStartPopUp indexOfSelectedItem] ==  [fSrcChapterEndPopUp indexOfSelectedItem])
+    /* If we are encoding by chapters and we have only one chapter or a title without chapters, set chapter markers to off.
+       Leave them on if we're doing point to point encoding, as libhb supports chapters when doing p2p. */
+    if ([fEncodeStartStopPopUp indexOfSelectedItem] == 0 &&
+        [fSrcChapterStartPopUp indexOfSelectedItem] == [fSrcChapterEndPopUp indexOfSelectedItem])
     {
         [queueFileJob setObject:[NSNumber numberWithInt:0] forKey:@"ChapterMarkers"];
     }
@@ -4397,16 +4399,9 @@ bool one_burned = FALSE;
     
     //[self calculateBitrate: sender];
     
-    if ( [fSrcChapterStartPopUp indexOfSelectedItem] ==  [fSrcChapterEndPopUp indexOfSelectedItem] )
-    {
-    /* Disable chapter markers for any source with less than two chapters as it makes no sense. */
-    [fCreateChapterMarkers setEnabled: NO];
-    [fCreateChapterMarkers setState: NSOffState];
-    }
-    else
-    {
-    [fCreateChapterMarkers setEnabled: YES];
-    }
+    /* We're changing the chapter range - we may need to flip the m4v/mp4 extension */
+    if ([fDstFormatPopUp indexOfSelectedItem] == 0)
+        [self autoSetM4vExtension: sender];
 }
 
 - (IBAction) startEndSecValueChanged: (id) sender
@@ -4542,10 +4537,14 @@ bool one_burned = FALSE;
     
     NSString * extension = @"mp4";
     
-	BOOL anyCodecAC3 = [fAudioDelegate anyCodecMatches: HB_ACODEC_AC3] || [fAudioDelegate anyCodecMatches: HB_ACODEC_AC3_PASS];
+    BOOL anyCodecAC3 = [fAudioDelegate anyCodecMatches: HB_ACODEC_AC3] || [fAudioDelegate anyCodecMatches: HB_ACODEC_AC3_PASS];
+    /* Chapter markers are enabled if the checkbox is ticked and we are doing p2p or we have > 1 chapter */
+    BOOL chapterMarkers = ([fCreateChapterMarkers state] == NSOnState) &&
+                          ([fEncodeStartStopPopUp indexOfSelectedItem] != 0 ||
+                           [fSrcChapterStartPopUp indexOfSelectedItem] < [fSrcChapterEndPopUp indexOfSelectedItem]);
 	
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultMpegExtension"] isEqualToString: @".m4v"] || 
-        ((YES == anyCodecAC3 || [fCreateChapterMarkers state] == NSOnState) && 
+        ((YES == anyCodecAC3 || YES == chapterMarkers) &&
          [[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultMpegExtension"] isEqualToString: @"Auto"] ))
     {
         extension = @"m4v";
