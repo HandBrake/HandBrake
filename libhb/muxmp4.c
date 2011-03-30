@@ -1107,64 +1107,75 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     {
         if( mux_data->sub_format == TEXTSUB )
         {
-            /* Write an empty sample */
-            if ( mux_data->sum_dur < buf->start )
+            /* MPEG4 timed text does not allow overlapping samples; upstream
+               code should coalesce overlapping subtitle lines. */
+            if( buf->start < mux_data->sum_dur )
             {
-                uint8_t empty[2] = {0,0};
+                hb_log("MP4Mux: skipping overlapping subtitle, "
+                       "start %"PRId64", stop %"PRId64", sum_dur %"PRId64,
+                       buf->start, buf->stop, m->sum_dur);
+            }
+            else
+            {
+                /* Write an empty sample */
+                if ( mux_data->sum_dur < buf->start )
+                {
+                    uint8_t empty[2] = {0,0};
+                    if( !MP4WriteSample( m->file,
+                                        mux_data->track,
+                                        empty,
+                                        2,
+                                        buf->start - mux_data->sum_dur,
+                                        0,
+                                        1 ))
+                    {
+                        hb_error("Failed to write to output file, disk full?");
+                        *job->die = 1;
+                    }
+                    mux_data->sum_dur += buf->start - mux_data->sum_dur;
+                }
+                uint8_t styleatom[2048];;
+                uint16_t stylesize = 0;
+                uint8_t buffer[2048];
+                uint16_t buffersize = 0;
+                uint8_t output[2048];
+
+                *buffer = '\0';
+
+                /*
+                 * Copy the subtitle into buffer stripping markup and creating
+                 * style atoms for them.
+                 */
+                hb_muxmp4_process_subtitle_style( buf->data,
+                                                  buffer,
+                                                  styleatom, &stylesize );
+
+                buffersize = strlen((char*)buffer);
+
+                hb_deep_log(3, "MuxMP4:Sub:%fs:%"PRId64":%"PRId64":%"PRId64": %s",
+                            (float)buf->start / 90000, buf->start, buf->stop,
+                            (buf->stop - buf->start), buffer);
+
+                /* Write the subtitle sample */
+                memcpy( output + 2, buffer, buffersize );
+                memcpy( output + 2 + buffersize, styleatom, stylesize);
+                output[0] = ( buffersize >> 8 ) & 0xff;
+                output[1] = buffersize & 0xff;
+
                 if( !MP4WriteSample( m->file,
-                                    mux_data->track,
-                                    empty,
-                                    2,
-                                    buf->start - mux_data->sum_dur,
-                                    0,
-                                    1 ))
+                                     mux_data->track,
+                                     output,
+                                     buffersize + stylesize + 2,
+                                     buf->stop - buf->start,
+                                     0,
+                                     1 ))
                 {
                     hb_error("Failed to write to output file, disk full?");
                     *job->die = 1;
-                } 
-                mux_data->sum_dur += buf->start - mux_data->sum_dur;
+                }
+
+                mux_data->sum_dur += (buf->stop - buf->start);
             }
-            uint8_t styleatom[2048];;
-            uint16_t stylesize = 0;
-            uint8_t buffer[2048];
-            uint16_t buffersize = 0;
-            uint8_t output[2048];
-
-            *buffer = '\0';
-
-            /*
-             * Copy the subtitle into buffer stripping markup and creating
-             * style atoms for them.
-             */
-            hb_muxmp4_process_subtitle_style( buf->data,
-                                              buffer,
-                                              styleatom, &stylesize );
-
-            buffersize = strlen((char*)buffer);
-
-            hb_deep_log(3, "MuxMP4:Sub:%fs:%"PRId64":%"PRId64":%"PRId64": %s",
-                        (float)buf->start / 90000, buf->start, buf->stop, 
-                        (buf->stop - buf->start), buffer);
-
-            /* Write the subtitle sample */
-            memcpy( output + 2, buffer, buffersize );
-            memcpy( output + 2 + buffersize, styleatom, stylesize);
-            output[0] = ( buffersize >> 8 ) & 0xff;
-            output[1] = buffersize & 0xff;
-
-            if( !MP4WriteSample( m->file,
-                                 mux_data->track,
-                                 output,
-                                 buffersize + stylesize + 2,
-                                 buf->stop - buf->start,
-                                 0,
-                                 1 ))
-            {
-                hb_error("Failed to write to output file, disk full?");
-                *job->die = 1;
-            }
-
-            mux_data->sum_dur += (buf->stop - buf->start);
         }
         else if( mux_data->sub_format == PICTURESUB )
         {
