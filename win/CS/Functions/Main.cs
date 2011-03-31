@@ -13,6 +13,7 @@ namespace Handbrake.Functions
     using System.Security.Cryptography;
     using System.Text;
     using System.Text.RegularExpressions;
+    using System.Threading;
     using System.Windows.Forms;
     using System.Xml.Serialization;
 
@@ -220,7 +221,7 @@ namespace Handbrake.Functions
                         case 2: // Always M4V
                             destinationFilename += ".m4v";
                             break;
-                    }                   
+                    }
                 }
                 else if (mainWindow.drop_format.SelectedIndex == 1)
                     destinationFilename += ".mkv";
@@ -273,7 +274,7 @@ namespace Handbrake.Functions
                 hash = SHA1.Create().ComputeHash(stream);
             }
             string base64Hash = Convert.ToBase64String(hash);
-         
+
             // Compare the hash with the last known hash. If it's the same, return.
             if (Properties.Settings.Default.CliExeHash == base64Hash)
             {
@@ -283,12 +284,12 @@ namespace Handbrake.Functions
             // It's not the same, so start the CLI to get it's version data.
             Process cliProcess = new Process();
             ProcessStartInfo handBrakeCli = new ProcessStartInfo("HandBrakeCLI.exe", " -u -v0")
-                                                {
-                                                    UseShellExecute = false,
-                                                    RedirectStandardError = true,
-                                                    RedirectStandardOutput = true,
-                                                    CreateNoWindow = true
-                                                };
+                {
+                    UseShellExecute = false,
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true
+                };
             cliProcess.StartInfo = handBrakeCli;
 
             try
@@ -332,16 +333,14 @@ namespace Handbrake.Functions
                 }
 
                 Properties.Settings.Default.CliExeHash = base64Hash;
-
                 Properties.Settings.Default.Save();
             }
             catch (Exception e)
             {
-                Properties.Settings.Default.hb_build = 0;
-                Properties.Settings.Default.CliExeHash = null;
-                Properties.Settings.Default.Save();
-
                 ShowExceptiowWindow("Unable to retrieve version information from the CLI.", e.ToString());
+                // Probably corrupted config. Delete config and let the user restart.
+                RecoverFromCorruptedLocalApplicationConfig();
+                Application.Exit();
             }
         }
 
@@ -498,6 +497,32 @@ namespace Handbrake.Functions
             }
 
             return "Unknown";
+        }
+
+        /// <summary>
+        /// Remove the Local Applicaiton Data. 
+        /// This should only be used if something bad happens which corrupts the data.
+        /// </summary>
+        public static void RecoverFromCorruptedLocalApplicationConfig()
+        {
+            try
+            {
+                MessageBox.Show(
+                    "HandBrake has attempted to recover from a corrupted config file. \nYou may neeed to reset your preferences.\n\n Please restart HandBrake",
+                    "Warning",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                string directory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\HandBrake";
+                if (Directory.Exists(directory))
+                {
+                    File.SetAttributes(directory, FileAttributes.Normal);
+                    Directory.Delete(directory, true);
+                }
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }

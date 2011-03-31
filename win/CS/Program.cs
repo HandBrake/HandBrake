@@ -57,18 +57,26 @@ namespace Handbrake
             }
 
             // Attempt to upgrade / keep the users settings between versions
-            if (Settings.Default.UpdateRequired)
+            try
             {
-                Settings.Default.Upgrade();
-                // Reset some settings
-                Settings.Default.UpdateRequired = false;
-                Settings.Default.CliExeHash = null;
-                Settings.Default.hb_build = 0;
-                Settings.Default.hb_platform = null;
-                Settings.Default.hb_version = null;
+                if (Settings.Default.UpdateRequired)
+                {
+                    Settings.Default.Upgrade();
+                    // Reset some settings
+                    Settings.Default.UpdateRequired = false;
+                    Settings.Default.CliExeHash = null;
+                    Settings.Default.hb_build = 0;
+                    Settings.Default.hb_platform = null;
+                    Settings.Default.hb_version = null;
 
-                // Re-detect the CLI version data.
-                Functions.Main.SetCliVersionData();
+                    // Re-detect the CLI version data.
+                    Functions.Main.SetCliVersionData();
+                }
+            }
+            catch (Exception)
+            {
+                Functions.Main.RecoverFromCorruptedLocalApplicationConfig();
+                return;
             }
 
             // Check were not running on a screen that's going to cause some funnies to happen.
