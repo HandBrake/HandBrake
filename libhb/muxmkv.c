@@ -48,6 +48,7 @@ static int MKVInit( hb_mux_object_t * m )
 
     uint8_t         *avcC = NULL;
     uint8_t         default_track_flag = 1;
+    uint8_t         need_fonts = 0;
     int             avcC_len, i, j;
     ogg_packet      *ogg_headers[3];
     mk_TrackConfig *track;
@@ -309,7 +310,15 @@ static int MKVInit( hb_mux_object_t * m )
                 track->codecPrivateSize = len + 1;
                 break;
             case TEXTSUB:
-                track->codecID = MK_SUBTITLE_UTF8;
+                if (subtitle->source == SSASUB)
+                {
+                    track->codecID = MK_SUBTITLE_SSA;
+                    need_fonts = 1;
+                    track->codecPrivate = subtitle->extradata;
+                    track->codecPrivateSize = subtitle->extradata_size;
+                }
+                else
+                    track->codecID = MK_SUBTITLE_UTF8;
                 break;
             default:
                 continue;
@@ -329,6 +338,27 @@ static int MKVInit( hb_mux_object_t * m )
         track->language = subtitle->iso639_2;
 
         mux_data->track = mk_createTrack(m->file, track);
+    }
+
+    if (need_fonts)
+    {
+        hb_list_t * list_attachment = job->title->list_attachment;
+        int i;
+        for ( i = 0; i < hb_list_count(list_attachment); i++ )
+        {
+            hb_attachment_t * attachment = hb_list_item( list_attachment, i );
+
+            if ( attachment->type == FONT_TTF_ATTACH )
+            {
+                mk_createAttachment(
+                    m->file,
+                    attachment->name,
+                    NULL,
+                    "application/x-truetype-font",
+                    attachment->data,
+                    attachment->size);
+            }
+        }
     }
 
     if( mk_writeHeader( m->file, "HandBrake " HB_PROJECT_VERSION) < 0 )
