@@ -169,13 +169,17 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
     
     /* Set the queue status field in the queue window */
     NSMutableString * string;
-    if (fPendingCount == 1)
+    if (fPendingCount == 0)
+    {
+        string = [NSMutableString stringWithFormat: NSLocalizedString( @"No encode pending", @"" )];
+    }
+    else if (fPendingCount == 1)
     {
         string = [NSMutableString stringWithFormat: NSLocalizedString( @"%d encode pending", @"" ), fPendingCount];
     }
     else
     {
-        string = [NSMutableString stringWithFormat: NSLocalizedString( @"%d encode(s) pending", @"" ), fPendingCount];
+        string = [NSMutableString stringWithFormat: NSLocalizedString( @"%d encodes pending", @"" ), fPendingCount];
     }
     [fQueueCountField setStringValue:string];
     
