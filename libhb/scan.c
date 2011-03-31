@@ -605,17 +605,14 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                 if( buf_es->id == title->video_id && vid_buf == NULL )
                 {
                     vid_decoder->work( vid_decoder, &buf_es, &vid_buf );
-                    if ( vid_buf && vidskip && --vidskip > 0 )
+                    // we're dropping frames to get the video decoder in sync
+                    // when the video stream doesn't contain IDR frames
+                    while (vid_buf && --vidskip >= 0)
                     {
-                        // we're dropping frames to get the video decoder in sync
-                        // when the video stream doesn't contain IDR frames
-                        while (vid_buf && --vidskip >= 0)
-                        {
-                            hb_buffer_t * next = vid_buf->next;
-                            vid_buf->next = NULL;
-                            hb_buffer_close( &vid_buf );
-                            vid_buf = next;
-                        }
+                        hb_buffer_t * next = vid_buf->next;
+                        vid_buf->next = NULL;
+                        hb_buffer_close( &vid_buf );
+                        vid_buf = next;
                     }
                 }
                 else if( ! AllAudioOK( title ) ) 
