@@ -1901,7 +1901,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             }
             
             /* if we are a stream, select the first title */
-            if (title->type == HB_STREAM_TYPE)
+            if (title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE)
             {
                 [fSrcTitlePopUp selectItemAtIndex: 0];
             }
@@ -4195,7 +4195,8 @@ bool one_burned = FALSE;
         hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
 
     /* If we are a stream type and a batch scan, grok the output file name from title->name upon title change */
-    if (title->type == HB_STREAM_TYPE && hb_list_count( list ) > 1 )
+    if ((title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE) &&
+        hb_list_count( list ) > 1 )
     {
         /* we set the default name according to the new title->name */
         [fDstFile2Field setStringValue: [NSString stringWithFormat:

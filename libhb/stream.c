@@ -3271,7 +3271,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream )
 
     // 'Barebones Title'
     hb_title_t *title = hb_title_init( stream->path, 0 );
-    title->type = HB_STREAM_TYPE;
+    title->type = HB_FF_STREAM_TYPE;
     title->index = 1;
 
     // Copy part of the stream path to the title name
@@ -3308,6 +3308,9 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream )
             }
             title->video_id = i;
             stream->ffmpeg_video_id = i;
+
+            if ( context->codec_id == CODEC_ID_H264 )
+                title->flags |= HBTF_NO_IDR;
 
             // We have to use the 'internal' avcodec decoder because
             // it needs to share the codec context from this video

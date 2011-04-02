@@ -385,7 +385,7 @@ static void PrintTitleInfo( hb_title_t * title )
     {
         fprintf( stderr, "  + Main Feature\n" );
     }
-    if ( title->type == HB_STREAM_TYPE )
+    if ( title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE )
     {
         fprintf( stderr, "  + stream: %s\n", title->path );
     }

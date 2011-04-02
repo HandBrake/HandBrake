@@ -1343,7 +1343,7 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	gchar *text;
 
 	ghb_settings_set_string(ud->settings, "source", tinfo->path);
-	if (tinfo->type == HB_STREAM_TYPE)
+	if (tinfo->type == HB_STREAM_TYPE || tinfo->type == HB_FF_STREAM_TYPE)
 	{
 		GtkWidget *widget = GHB_WIDGET (ud->builder, "source_title");
 		if (tinfo->name != NULL && tinfo->name[0] != 0)

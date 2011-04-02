@@ -555,8 +555,8 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             }
             // If it's a BD, we can relax this a bit. Since seeks will
             // at least get us to a recovery point.
-            if (data->bd)
-                vidskip = 4;
+            if (data->bd || title->type == HB_FF_STREAM_TYPE)
+                vidskip = 2;
         }
 
         for( j = 0; j < 10240 ; j++ )

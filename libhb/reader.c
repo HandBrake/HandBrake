@@ -236,7 +236,8 @@ static void ReaderFunc( void * _r )
         if ( !( r->dvd = hb_dvd_init( r->title->path ) ) )
             return;
     }
-    else if ( r->title->type == HB_STREAM_TYPE )
+    else if ( r->title->type == HB_STREAM_TYPE ||
+              r->title->type == HB_FF_STREAM_TYPE )
     {
         if ( !( r->stream = hb_stream_open( r->title->path, r->title ) ) )
             return;

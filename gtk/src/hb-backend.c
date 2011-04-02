@@ -1888,7 +1888,7 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
 	for (ii = 0; ii < count; ii++)
 	{
 		title = (hb_title_t*)hb_list_item(list, ii);
-		if (title->type == HB_STREAM_TYPE)
+		if (title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE)
 		{
 			if (title->duration != 0)
 			{

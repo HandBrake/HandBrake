@@ -573,7 +573,7 @@ struct hb_metadata_s
 
 struct hb_title_s
 {
-    enum { HB_DVD_TYPE, HB_BD_TYPE, HB_STREAM_TYPE } type;
+    enum { HB_DVD_TYPE, HB_BD_TYPE, HB_STREAM_TYPE, HB_FF_STREAM_TYPE } type;
     uint32_t    reg_desc;
     char        path[1024];
     char        name[1024];
