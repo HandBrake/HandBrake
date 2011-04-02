@@ -1111,6 +1111,16 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                code should coalesce overlapping subtitle lines. */
             if( buf->start < mux_data->sum_dur )
             {
+                if ( buf->stop - mux_data->sum_dur > 90*500 )
+                {
+                    hb_log("MP4Mux: shortening overlapping subtitle, "
+                           "start %"PRId64", stop %"PRId64", sum_dur %"PRId64,
+                           buf->start, buf->stop, m->sum_dur);
+                    buf->start = mux_data->sum_dur;
+                }
+            }
+            if( buf->start < mux_data->sum_dur )
+            {
                 hb_log("MP4Mux: skipping overlapping subtitle, "
                        "start %"PRId64", stop %"PRId64", sum_dur %"PRId64,
                        buf->start, buf->stop, m->sum_dur);
