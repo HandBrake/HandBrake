@@ -435,7 +435,7 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
             break;
         }
 
-        hb_log( "scan: id=%x, lang=%s, 3cc=%s ext=%i", audio->id,
+        hb_log( "scan: id=0x%x, lang=%s, 3cc=%s ext=%i", audio->id,
                 audio->config.lang.description, audio->config.lang.iso639_2,
                 lang_extension );
 
@@ -549,7 +549,7 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
             break;
         }
 
-        hb_log( "scan: id=%x, lang=%s, 3cc=%s", subtitle->id,
+        hb_log( "scan: id=0x%x, lang=%s, 3cc=%s", subtitle->id,
                 subtitle->lang, subtitle->iso639_2 );
 
         hb_list_add( title->list_subtitle, subtitle );

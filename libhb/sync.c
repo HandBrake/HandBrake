@@ -959,7 +959,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     if ( sync->first_drop )
     {
         // we were dropping old data but input buf time is now current
-        hb_log( "sync: audio %d time went backwards %d ms, dropped %d frames "
+        hb_log( "sync: audio 0x%x time went backwards %d ms, dropped %d frames "
                 "(next %"PRId64", current %"PRId64")", w->audio->id,
                 (int)( sync->next_start - sync->first_drop ) / 90,
                 sync->drop_count, sync->first_drop, (int64_t)sync->next_start );
@@ -973,7 +973,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             // there's a gap of more than a minute between the last
             // frame and this. assume we got a corrupted timestamp
             // and just drop the next buf.
-            hb_log( "sync: %d minute time gap in audio %d - dropping buf"
+            hb_log( "sync: %d minute time gap in audio 0x%x - dropping buf"
                     "  start %"PRId64", next %"PRId64,
                     (int)((start - sync->next_start) / (90000*60)),
                     w->audio->id, start, (int64_t)sync->next_start );
@@ -988,7 +988,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
          */
         if( w->audio->config.out.codec == HB_ACODEC_DCA_PASS )
         {
-            hb_log( "sync: audio gap %d ms. Skipping frames. Audio %d"
+            hb_log( "sync: audio gap %d ms. Skipping frames. Audio 0x%x"
                     "  start %"PRId64", next %"PRId64,
                     (int)((start - sync->next_start) / 90),
                     w->audio->id, start, (int64_t)sync->next_start );
@@ -999,7 +999,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             *buf_out = buf;
             return HB_WORK_OK;
         }
-        hb_log( "sync: adding %d ms of silence to audio %d"
+        hb_log( "sync: adding %d ms of silence to audio 0x%x"
                 "  start %"PRId64", next %"PRId64,
                 (int)((start - sync->next_start) / 90),
                 w->audio->id, start, (int64_t)sync->next_start );
@@ -1151,7 +1151,7 @@ static hb_buffer_t * OutputAudioFrame( hb_audio_t *audio, hb_buffer_t *buf,
         if( src_process( sync->state, &sync->data ) )
         {
             /* XXX If this happens, we're screwed */
-            hb_log( "sync: audio %d src_process failed", audio->id );
+            hb_log( "sync: audio 0x%x src_process failed", audio->id );
         }
         hb_buffer_close( &buf_raw );
 

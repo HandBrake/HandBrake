@@ -302,14 +302,14 @@ void hb_display_job_info( hb_job_t * job )
             if( subtitle->source == SRTSUB )
             {
                 /* For SRT, print offset and charset too */
-                hb_log( " * subtitle track %i, %s (id %x) %s [%s] -> %s%s, offset: %"PRId64", charset: %s",
+                hb_log( " * subtitle track %i, %s (id 0x%x) %s [%s] -> %s%s, offset: %"PRId64", charset: %s",
                         subtitle->track, subtitle->lang, subtitle->id, "Text", "SRT", "Pass-Through",
                         subtitle->config.default_track ? ", Default" : "",
                         subtitle->config.offset, subtitle->config.src_codeset );
             }
             else
             {
-                hb_log( " * subtitle track %i, %s (id %x) %s [%s] -> %s%s%s", subtitle->track, subtitle->lang, subtitle->id,
+                hb_log( " * subtitle track %i, %s (id 0x%x) %s [%s] -> %s%s%s", subtitle->track, subtitle->lang, subtitle->id,
                         subtitle->format == PICTURESUB ? "Picture" : "Text",
                         hb_subsource_name( subtitle->source ),
                         job->indepth_scan ? "Foreign Audio Search" :
@@ -331,7 +331,7 @@ void hb_display_job_info( hb_job_t * job )
             if( audio->config.out.name )
                 hb_log( "   + name: %s", audio->config.out.name );
 
-            hb_log( "   + decoder: %s (track %d, id %x)", audio->config.lang.description, audio->config.in.track + 1, audio->id );
+            hb_log( "   + decoder: %s (track %d, id 0x%x)", audio->config.lang.description, audio->config.in.track + 1, audio->id );
 
             if( ( audio->config.in.codec == HB_ACODEC_AC3 ) || ( audio->config.in.codec == HB_ACODEC_DCA) )
             {

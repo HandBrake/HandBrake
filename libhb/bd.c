@@ -310,7 +310,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
         snprintf( audio->config.lang.iso639_2, 
                   sizeof( audio->config.lang.iso639_2 ), "%s", lang->iso639_2);
 
-        hb_log( "bd: audio id=%x, lang=%s, 3cc=%s", audio->id,
+        hb_log( "bd: audio id=0x%x, lang=%s, 3cc=%s", audio->id,
                 audio->config.lang.description, audio->config.lang.iso639_2 );
 
         audio->config.in.track = ii;
