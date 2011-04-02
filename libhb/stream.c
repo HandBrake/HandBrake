@@ -1421,6 +1421,20 @@ int hb_stream_read( hb_stream_t * src_stream, hb_buffer_t * b )
     return hb_ts_stream_decode( src_stream, b );
 }
 
+void ffmpeg_flush_stream_buffers( hb_stream_t *stream )
+{
+    int i;
+    AVFormatContext *ic = stream->ffmpeg_ic;
+
+    for ( i = 0; i < ic->nb_streams; i++ )
+    {
+        if ( ic->streams[i]->codec && ic->streams[i]->codec->codec )
+        {
+            avcodec_flush_buffers( ic->streams[i]->codec );
+        }
+    }
+}
+
 int64_t ffmpeg_initial_timestamp( hb_stream_t * stream )
 {
     AVStream *s = stream->ffmpeg_ic->streams[stream->ffmpeg_video_id];
@@ -1462,6 +1476,7 @@ int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
     if ( chapter_num > 1 && pos > 0 )
     {
         av_seek_frame( stream->ffmpeg_ic, -1, pos, 0);
+        ffmpeg_flush_stream_buffers( stream );
     }
     return 1;
 }
@@ -3598,10 +3613,12 @@ static int ffmpeg_seek( hb_stream_t *stream, float frac )
         }
         av_seek_frame( ic, -1, pos, 0 );
         stream->need_keyframe = 1;
+        ffmpeg_flush_stream_buffers( stream );
     }
     else
     {
         av_seek_frame( ic, -1, 0LL, AVSEEK_FLAG_BACKWARD );
+        ffmpeg_flush_stream_buffers( stream );
     }
     return 1;
 }
@@ -3611,10 +3628,13 @@ static int ffmpeg_seek_ts( hb_stream_t *stream, int64_t ts )
 {
     AVFormatContext *ic = stream->ffmpeg_ic;
     int64_t pos;
+    int ret;
 
     pos = ts * AV_TIME_BASE / 90000 + ffmpeg_initial_timestamp( stream );
     stream->need_keyframe = 1;
     // Seek to the nearest timestamp before that requested where
     // there is an I-frame
-    return av_seek_frame( ic, -1, pos, AVSEEK_FLAG_BACKWARD );
+    ret = av_seek_frame( ic, -1, pos, AVSEEK_FLAG_BACKWARD );
+    ffmpeg_flush_stream_buffers( stream );
+    return ret;
 }
