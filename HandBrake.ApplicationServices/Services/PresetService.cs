@@ -8,12 +8,10 @@ namespace HandBrake.ApplicationServices.Services
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
-    using System.Windows.Data;
     using System.Xml.Serialization;
 
     using HandBrake.ApplicationServices.Model;
@@ -250,7 +248,7 @@ namespace HandBrake.ApplicationServices.Services
                                 Category = category,
                                 Name = presetName[0].Replace("+", string.Empty).Trim(),
                                 Query = presetName[2],
-                                Version = Init.Version,
+                                Version = Properties.Settings.Default.HandBrakeVersion,
                                 CropSettings = pic,
                                 Description = string.Empty, // Maybe one day we will populate this.
                                 IsBuildIn = true
@@ -276,7 +274,7 @@ namespace HandBrake.ApplicationServices.Services
             // Update built-in Presets if the built-in Presets belong to an older version.
             if (this.presets.Count != 0)
             {
-                if (this.presets[0].Version != Init.Version)
+                if (this.presets[0].Version != Properties.Settings.Default.HandBrakeVersion)
                 {
                     this.UpdateBuiltInPresets(string.Empty);
                     return true;

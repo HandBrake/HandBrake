@@ -28,6 +28,11 @@ namespace HandBrake.ApplicationServices.Services
         #region Private Variables
 
         /// <summary>
+        /// The User Setting Service
+        /// </summary>
+        private IUserSettingService userSettingService = new UserSettingService();
+
+        /// <summary>
         /// The Log Buffer
         /// </summary>
         private StringBuilder logBuffer;
@@ -159,7 +164,7 @@ namespace HandBrake.ApplicationServices.Services
                     }
                 }
 
-                if (Init.PreventSleep)
+                if (Properties.Settings.Default.PreventSleep)
                 {
                     Win32.PreventSleep();
                 }
@@ -170,7 +175,7 @@ namespace HandBrake.ApplicationServices.Services
                     RedirectStandardOutput = true,
                     RedirectStandardError = enableLogging ? true : false,
                     UseShellExecute = false,
-                    CreateNoWindow = !Init.ShowCliForInGuiEncodeStatus ? true : false
+                    CreateNoWindow = !Properties.Settings.Default.ShowCLI ? true : false
                 };
 
                 this.HbProcess = new Process { StartInfo = cliStart };
@@ -194,7 +199,7 @@ namespace HandBrake.ApplicationServices.Services
                 }
 
                 // Set the Process Priority
-                switch (Init.ProcessPriority)
+                switch (Properties.Settings.Default.ProcessPriority)
                 {
                     case "Realtime":
                         this.HbProcess.PriorityClass = ProcessPriorityClass.RealTime;
@@ -304,7 +309,7 @@ namespace HandBrake.ApplicationServices.Services
             {
                 string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
                                 "\\HandBrake\\logs";
-                string tempLogFile = Path.Combine(logDir, string.Format("last_encode_log{0}.txt", Init.InstanceId));
+                string tempLogFile = Path.Combine(logDir, string.Format("last_encode_log{0}.txt", GeneralUtilities.GetInstanceCount));
 
                 string encodeDestinationPath = Path.GetDirectoryName(destination);
                 string destinationFile = Path.GetFileName(destination);
@@ -319,13 +324,12 @@ namespace HandBrake.ApplicationServices.Services
                 File.Copy(tempLogFile, Path.Combine(logDir, encodeLogFile));
 
                 // Save a copy of the log file in the same location as the enocde.
-                if (Init.SaveLogWithVideo)
+                if (Properties.Settings.Default.SaveLogWithVideo)
                     File.Copy(tempLogFile, Path.Combine(encodeDestinationPath, encodeLogFile));
 
                 // Save a copy of the log file to a user specified location
-                if (Directory.Exists(Init.SaveLogPath))
-                    if (Init.SaveLogPath != String.Empty && Init.SaveLogToSpecifiedPath)
-                        File.Copy(tempLogFile, Path.Combine(Init.SaveLogPath, encodeLogFile));
+                if (Directory.Exists(Properties.Settings.Default.SaveLogCopyDirectory) && Properties.Settings.Default.SaveLogToCopyDirectory)
+                    File.Copy(tempLogFile, Path.Combine(Properties.Settings.Default.SaveLogCopyDirectory, encodeLogFile));
             }
             catch (Exception exc)
             {
@@ -354,7 +358,7 @@ namespace HandBrake.ApplicationServices.Services
                 windowsSeven.SetTaskBarProgressToNoProgress();
             }
 
-            if (Init.PreventSleep)
+            if (Properties.Settings.Default.PreventSleep)
             {
                 Win32.AllowSleep();
             }
@@ -398,8 +402,8 @@ namespace HandBrake.ApplicationServices.Services
         private void SetupLogging(QueueTask encodeQueueTask)
         {
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
-            string logFile = Path.Combine(logDir, string.Format("last_encode_log{0}.txt", Init.InstanceId));
-            string logFile2 = Path.Combine(logDir, string.Format("tmp_appReadable_log{0}.txt", Init.InstanceId));
+            string logFile = Path.Combine(logDir, string.Format("last_encode_log{0}.txt", GeneralUtilities.GetInstanceCount));
+            string logFile2 = Path.Combine(logDir, string.Format("tmp_appReadable_log{0}.txt", GeneralUtilities.GetInstanceCount));
 
             try
             {

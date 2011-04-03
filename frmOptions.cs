@@ -12,9 +12,10 @@ namespace Handbrake
     using System.Windows.Forms;
 
     using HandBrake.ApplicationServices;
+    using HandBrake.ApplicationServices.Services;
+    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
-    using Handbrake.Functions;
     using Handbrake.Properties;
 
     /// <summary>
@@ -22,7 +23,9 @@ namespace Handbrake
     /// </summary>
     public partial class frmOptions : Form
     {
-        private frmMain mainWindow;
+        private readonly frmMain mainWindow;
+
+        private readonly IUserSettingService userSettingService = new UserSettingService();
         private bool optionsWindowLoading = true;
 
         public frmOptions(frmMain mw)
@@ -64,13 +67,13 @@ namespace Handbrake
             }
 
             // On Encode Completeion Action
-            drp_completeOption.Text = Properties.Settings.Default.CompletionOption;
+            drp_completeOption.Text = userSettingService.GetUserSettingString("WhenCompleteAction");
 
             // Growl.
-            if (Properties.Settings.Default.growlEncode)
+            if (userSettingService.GetUserSettingBoolean(UserSettingConstants.GrowlEncode))
                 check_growlEncode.CheckState = CheckState.Checked;
 
-            if (Properties.Settings.Default.growlQueue)
+            if (userSettingService.GetUserSettingBoolean(UserSettingConstants.GrowlQueue))
                 check_GrowlQueue.CheckState = CheckState.Checked;
 
             // Enable auto naming feature.
@@ -127,23 +130,23 @@ namespace Handbrake
             // #############################
 
             // Priority level for encodes
-            drp_Priority.Text = Properties.Settings.Default.processPriority;
+            drp_Priority.Text = userSettingService.GetUserSettingString(UserSettingConstants.ProcessPriority);
 
-            check_preventSleep.Checked = Properties.Settings.Default.preventSleep;
+            check_preventSleep.Checked = userSettingService.GetUserSettingBoolean(UserSettingConstants.PreventSleep);
 
             // Log Verbosity Level
-            cb_logVerboseLvl.SelectedIndex = Properties.Settings.Default.verboseLevel;
+            cb_logVerboseLvl.SelectedIndex = userSettingService.GetUserSettingInt(UserSettingConstants.Verbosity);
 
             // Save logs in the same directory as encoded files
-            if (Properties.Settings.Default.saveLogWithVideo)
+            if (userSettingService.GetUserSettingBoolean(UserSettingConstants.SaveLogWithVideo))
                 check_saveLogWithVideo.CheckState = CheckState.Checked;
 
             // Save Logs in a specified path
-            if (Properties.Settings.Default.saveLogToSpecifiedPath)
+            if (userSettingService.GetUserSettingBoolean(UserSettingConstants.SaveLogToCopyDirectory))
                 check_logsInSpecifiedLocation.CheckState = CheckState.Checked;
 
             // The saved log path
-            text_logPath.Text = Properties.Settings.Default.saveLogPath;
+            text_logPath.Text = userSettingService.GetUserSettingString(UserSettingConstants.SaveLogCopyDirectory);
 
             check_clearOldLogs.Checked = Properties.Settings.Default.clearOldLogs;
 
@@ -172,13 +175,13 @@ namespace Handbrake
                 check_disablePresetNotification.CheckState = CheckState.Checked;
 
             // Show CLI Window
-            check_showCliForInGUIEncode.Checked = Properties.Settings.Default.showCliForInGuiEncodeStatus;
+            check_showCliForInGUIEncode.Checked = userSettingService.GetUserSettingBoolean(UserSettingConstants.ShowCLI);
 
             // Set the preview count
             drop_previewScanCount.SelectedItem = Properties.Settings.Default.previewScanCount.ToString();
 
             // x264 step
-            string step = Properties.Settings.Default.x264cqstep.ToString(new CultureInfo("en-US"));
+            string step = userSettingService.GetUserSettingString(UserSettingConstants.X264Step).ToString(new CultureInfo("en-US"));
             switch (step)
             {
                 case "1":
@@ -196,7 +199,7 @@ namespace Handbrake
             }
 
             // Use Experimental dvdnav
-            if (Properties.Settings.Default.noDvdNav)
+            if (userSettingService.GetUserSettingBoolean(UserSettingConstants.DisableLibDvdNav))
                 check_dvdnav.CheckState = CheckState.Checked;
 
             optionsWindowLoading = false;
@@ -232,17 +235,17 @@ namespace Handbrake
 
         private void drp_completeOption_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.CompletionOption = drp_completeOption.Text;
+            userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, drp_completeOption.Text);
         }
 
         private void check_GrowlQueue_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.growlQueue = check_GrowlQueue.Checked;
+            userSettingService.SetUserSetting(UserSettingConstants.GrowlQueue, check_GrowlQueue.Checked);
         }
 
         private void check_growlEncode_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.growlEncode = check_growlEncode.Checked;
+            userSettingService.SetUserSetting(UserSettingConstants.GrowlEncode, check_growlEncode.Checked);
         }
 
         private void check_autoNaming_CheckedChanged(object sender, EventArgs e)
@@ -354,27 +357,27 @@ namespace Handbrake
 
         private void drp_Priority_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.processPriority = drp_Priority.Text;
+            userSettingService.SetUserSetting(UserSettingConstants.ProcessPriority, drp_Priority.Text);
         }
 
         private void check_preventSleep_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.preventSleep = check_preventSleep.Checked;
+            userSettingService.SetUserSetting(UserSettingConstants.PreventSleep, check_preventSleep.Checked);
         }
 
         private void cb_logVerboseLvl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.verboseLevel = cb_logVerboseLvl.SelectedIndex;
+            userSettingService.SetUserSetting(UserSettingConstants.Verbosity, cb_logVerboseLvl.SelectedIndex);
         }
 
         private void check_saveLogWithVideo_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.saveLogWithVideo = check_saveLogWithVideo.Checked;
+            userSettingService.SetUserSetting(UserSettingConstants.SaveLogWithVideo, check_saveLogWithVideo.Checked);
         }
 
         private void check_logsInSpecifiedLocation_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.saveLogToSpecifiedPath = check_logsInSpecifiedLocation.Checked;
+            userSettingService.SetUserSetting(UserSettingConstants.SaveLogToCopyDirectory, check_logsInSpecifiedLocation.Checked);
         }
 
         private void btn_saveLog_Click(object sender, EventArgs e)
@@ -387,7 +390,7 @@ namespace Handbrake
 
         private void text_logPath_TextChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.saveLogPath = text_logPath.Text;
+            userSettingService.SetUserSetting(UserSettingConstants.SaveLogCopyDirectory, text_logPath.Text);
         }
 
         private void btn_viewLogs_Click(object sender, EventArgs e)
@@ -450,7 +453,7 @@ namespace Handbrake
 
         private void check_showCliForInGUIEncode_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.showCliForInGuiEncodeStatus = check_showCliForInGUIEncode.Checked;
+            userSettingService.SetUserSetting(UserSettingConstants.ShowCLI, check_showCliForInGUIEncode.Checked);
         }
 
         private void drop_previewScanCount_SelectedIndexChanged(object sender, EventArgs e)
@@ -463,16 +466,16 @@ namespace Handbrake
             switch (drop_x264step.SelectedIndex)
             {
                 case 0:
-                    Properties.Settings.Default.x264cqstep = 1.0;
+                    userSettingService.SetUserSetting(UserSettingConstants.X264Step, 1.0);
                     break;
                 case 1:
-                    Properties.Settings.Default.x264cqstep = 0.50;
+                    userSettingService.SetUserSetting(UserSettingConstants.X264Step, 0.5);
                     break;
                 case 2:
-                    Properties.Settings.Default.x264cqstep = 0.25;
+                    userSettingService.SetUserSetting(UserSettingConstants.X264Step, 0.25);
                     break;
                 case 3:
-                    Properties.Settings.Default.x264cqstep = 0.20;
+                    userSettingService.SetUserSetting(UserSettingConstants.X264Step, 0.2);
                     break;
             }
             mainWindow.setQualityFromSlider();
@@ -480,41 +483,15 @@ namespace Handbrake
 
         private void check_dvdnav_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.noDvdNav = check_dvdnav.Checked;
+            userSettingService.SetUserSetting(UserSettingConstants.DisableLibDvdNav, check_dvdnav.Checked);
         }
 
         #endregion
 
         private void btn_close_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
-            UpdateApplicationServicesSettings();
-
+            Properties.Settings.Default.Save();
             this.Close();
-        }
-
-        /// <summary>
-        /// Initialize App Services
-        /// </summary>
-        private static void UpdateApplicationServicesSettings()
-        {
-            string versionId = String.Format(
-                "Windows GUI {1} {0}", Settings.Default.hb_build, Settings.Default.hb_version);
-            Init.SetupSettings(
-                versionId,
-                Settings.Default.hb_version,
-                Settings.Default.hb_build,
-                Program.InstanceId,
-                Settings.Default.CompletionOption,
-                Settings.Default.noDvdNav,
-                Settings.Default.growlEncode,
-                Settings.Default.growlQueue,
-                Settings.Default.processPriority,
-                Settings.Default.saveLogPath,
-                Settings.Default.saveLogToSpecifiedPath,
-                Settings.Default.saveLogWithVideo,
-                Settings.Default.showCliForInGuiEncodeStatus,
-                Settings.Default.preventSleep);
         }
     }
 }

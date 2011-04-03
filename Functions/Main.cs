@@ -17,10 +17,13 @@ namespace Handbrake.Functions
     using System.Windows.Forms;
     using System.Xml.Serialization;
 
+    using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Extensions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Utilities;
 
     using Handbrake.ToolWindows;
 
@@ -33,6 +36,8 @@ namespace Handbrake.Functions
         /// The XML Serializer
         /// </summary>
         private static readonly XmlSerializer Ser = new XmlSerializer(typeof(List<QueueTask>));
+
+        private static readonly IUserSettingService UserSettingService = new UserSettingService();
 
         /// <summary>
         /// Set's up the DataGridView on the Chapters tab (frmMain)
@@ -313,13 +318,13 @@ namespace Handbrake.Functions
                         int buildValue;
                         int.TryParse(build, out buildValue);
 
-                        Properties.Settings.Default.hb_build = buildValue;
-                        Properties.Settings.Default.hb_version = version;
+                        UserSettingService.SetUserSetting(UserSettingConstants.HandBrakeBuild, buildValue);
+                        UserSettingService.SetUserSetting(UserSettingConstants.HandBrakeVersion, version);
                     }
 
                     if (platform.Success)
                     {
-                        Properties.Settings.Default.hb_platform = platform.Value.Replace("-", string.Empty).Trim();
+                        UserSettingService.SetUserSetting(UserSettingConstants.HandBrakePlatform,  platform.Value.Replace("-", string.Empty).Trim());
                     }
 
                     if (cliProcess.TotalProcessorTime.Seconds > 10) // Don't wait longer than 10 seconds.
@@ -332,11 +337,15 @@ namespace Handbrake.Functions
                     }
                 }
 
-                Properties.Settings.Default.CliExeHash = base64Hash;
-                Properties.Settings.Default.Save();
+                UserSettingService.SetUserSetting(UserSettingConstants.HandBrakeExeHash, base64Hash);
             }
             catch (Exception e)
             {
+                UserSettingService.SetUserSetting(UserSettingConstants.HandBrakeBuild, string.Empty);
+                UserSettingService.SetUserSetting(UserSettingConstants.HandBrakePlatform, string.Empty);
+                UserSettingService.SetUserSetting(UserSettingConstants.HandBrakeVersion, string.Empty);
+                UserSettingService.SetUserSetting(UserSettingConstants.HandBrakeExeHash, string.Empty);
+
                 ShowExceptiowWindow("Unable to retrieve version information from the CLI.", e.ToString());
                 // Probably corrupted config. Delete config and let the user restart.
                 RecoverFromCorruptedLocalApplicationConfig();
@@ -421,25 +430,13 @@ namespace Handbrake.Functions
             }
             else
             {
-                if (IsMultiInstance) return; // Don't tamper with the files if we are multi instance
+                if (GeneralUtilities.IsMultiInstance) return; // Don't tamper with the files if we are multi instance
 
                 foreach (string file in queueFiles)
                 {
                     if (File.Exists(Path.Combine(appDataPath, file)))
                         File.Delete(Path.Combine(appDataPath, file));
                 }
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether HandBrake is running in multi instance mode
-        /// </summary>
-        /// <returns>True if the UI has another instance running</returns>
-        public static bool IsMultiInstance
-        {
-            get
-            {
-                return Process.GetProcessesByName("HandBrake").Length > 0 ? true : false;
             }
         }
 

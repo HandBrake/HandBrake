@@ -7,11 +7,9 @@ namespace Handbrake
 {
     using System;
     using System.Diagnostics;
-    using System.Drawing;
     using System.IO;
     using System.Windows.Forms;
 
-    using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Services;
 
     using Handbrake.Properties;
@@ -62,13 +60,9 @@ namespace Handbrake
                 if (Settings.Default.UpdateRequired)
                 {
                     Settings.Default.Upgrade();
-                    // Reset some settings
                     Settings.Default.UpdateRequired = false;
-                    Settings.Default.CliExeHash = null;
-                    Settings.Default.hb_build = 0;
-                    Settings.Default.hb_platform = null;
-                    Settings.Default.hb_version = null;
-
+                    Settings.Default.Save();
+                
                     // Re-detect the CLI version data.
                     Functions.Main.SetCliVersionData();
                 }
@@ -103,24 +97,10 @@ namespace Handbrake
                     x.UpdateBuiltInPresets(string.Empty);
                 }
 
-                InitializeApplicationServices();
-
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new frmMain(args));
             }
-        }
-
-        /// <summary>
-        /// Initialize App Services
-        /// </summary>
-        private static void InitializeApplicationServices()
-        {
-            string versionId = String.Format("Windows GUI {1} {0}", Settings.Default.hb_build, Settings.Default.hb_version);
-            Init.SetupSettings(versionId, Settings.Default.hb_version, Settings.Default.hb_build, InstanceId, Settings.Default.CompletionOption, Settings.Default.noDvdNav,
-                               Settings.Default.growlEncode, Settings.Default.growlQueue,
-                               Settings.Default.processPriority, Settings.Default.saveLogPath, Settings.Default.saveLogToSpecifiedPath,
-                               Settings.Default.saveLogWithVideo, Settings.Default.showCliForInGuiEncodeStatus, Settings.Default.preventSleep);
         }
 
         /// <summary>

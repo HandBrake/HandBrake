@@ -159,7 +159,7 @@ namespace HandBrake.ApplicationServices.Services
                                 "\\HandBrake\\logs";
                 string dvdInfoPath = Path.Combine(
                     logDir,
-                    string.Format("last_scan_log{0}.txt", Init.InstanceId == 0 ? string.Empty : Init.InstanceId.ToString()));
+                    string.Format("last_scan_log{0}.txt", GeneralUtilities.GetInstanceCount));
 
                 // Make we don't pick up a stale last_encode_log.txt (and that we have rights to the file)
                 if (File.Exists(dvdInfoPath))
@@ -168,7 +168,7 @@ namespace HandBrake.ApplicationServices.Services
                 }
 
                 string extraArguments = string.Empty;
-                if (Init.DisableDvdNav)
+                if (Properties.Settings.Default.DisableLibDvdNav)
                 {
                     extraArguments = " --no-dvdnav";
                 }

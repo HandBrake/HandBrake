@@ -11,6 +11,10 @@ namespace Handbrake.Functions
     using System.IO;
     using System.Windows.Forms;
 
+    using HandBrake.ApplicationServices;
+    using HandBrake.ApplicationServices.Services;
+    using HandBrake.ApplicationServices.Services.Interfaces;
+
     using Handbrake.Model;
 
     /// <summary>
@@ -18,6 +22,9 @@ namespace Handbrake.Functions
     /// </summary>
     public class QueryGenerator
     {
+        private static readonly IUserSettingService UserSettingService = new UserSettingService();
+
+
         public static string GenerateQueryForPreset(frmMain mainWindow, QueryPictureSettingsMode mode, bool filters, int width, int height)
         {
             string query = string.Empty;
@@ -112,7 +119,7 @@ namespace Handbrake.Functions
                 query += " -t " + titleInfo[0];
             }
 
-            if (!Properties.Settings.Default.noDvdNav && mainWindow.drop_angle.Items.Count != 0)
+            if (!UserSettingService.GetUserSettingBoolean(UserSettingConstants.DisableLibDvdNav) && mainWindow.drop_angle.Items.Count != 0)
                 query += " --angle " + mainWindow.drop_angle.SelectedItem;
 
             // Decide what part of the video we want to encode.
@@ -310,7 +317,7 @@ namespace Handbrake.Functions
             // Video Quality Setting
             if (mainWindow.radio_cq.Checked)
             {
-                double cqStep = Properties.Settings.Default.x264cqstep;
+                double cqStep = UserSettingService.GetUserSettingDouble(UserSettingConstants.X264Step);
                 double value;
                 switch (mainWindow.drp_videoEncoder.Text)
                 {
@@ -568,10 +575,10 @@ namespace Handbrake.Functions
             string query = string.Empty;
 
             // Verbosity Level
-            query += " --verbose=" + Properties.Settings.Default.verboseLevel;
+            query += " --verbose=" + UserSettingService.GetUserSettingInt(UserSettingConstants.Verbosity);
 
             // LibDVDNav
-            if (Properties.Settings.Default.noDvdNav)
+            if (UserSettingService.GetUserSettingBoolean(UserSettingConstants.DisableLibDvdNav))
                 query += " --no-dvdnav";
 
             return query;

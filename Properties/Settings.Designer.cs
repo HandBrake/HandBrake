@@ -25,18 +25,6 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Below Normal")]
-        public string processPriority {
-            get {
-                return ((string)(this["processPriority"]));
-            }
-            set {
-                this["processPriority"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool updateStatus {
             get {
@@ -44,18 +32,6 @@ namespace Handbrake.Properties {
             }
             set {
                 this["updateStatus"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("{hb_version}")]
-        public string hb_version {
-            get {
-                return ((string)(this["hb_version"]));
-            }
-            set {
-                this["hb_version"] = value;
             }
         }
         
@@ -73,18 +49,6 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Do Nothing")]
-        public string CompletionOption {
-            get {
-                return ((string)(this["CompletionOption"]));
-            }
-            set {
-                this["CompletionOption"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string defaultPreset {
             get {
@@ -92,18 +56,6 @@ namespace Handbrake.Properties {
             }
             set {
                 this["defaultPreset"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int hb_build {
-            get {
-                return ((int)(this["hb_build"]));
-            }
-            set {
-                this["hb_build"] = value;
             }
         }
         
@@ -181,42 +133,6 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool saveLogToSpecifiedPath {
-            get {
-                return ((bool)(this["saveLogToSpecifiedPath"]));
-            }
-            set {
-                this["saveLogToSpecifiedPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string saveLogPath {
-            get {
-                return ((string)(this["saveLogPath"]));
-            }
-            set {
-                this["saveLogPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool saveLogWithVideo {
-            get {
-                return ((bool)(this["saveLogWithVideo"]));
-            }
-            set {
-                this["saveLogWithVideo"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\VideoLAN\\vlc\\vlc.exe")]
         public string VLC_Path {
             get {
@@ -248,42 +164,6 @@ namespace Handbrake.Properties {
             }
             set {
                 this["QueryEditorTab"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.25")]
-        public double x264cqstep {
-            get {
-                return ((double)(this["x264cqstep"]));
-            }
-            set {
-                this["x264cqstep"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int verboseLevel {
-            get {
-                return ((int)(this["verboseLevel"]));
-            }
-            set {
-                this["verboseLevel"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool noDvdNav {
-            get {
-                return ((bool)(this["noDvdNav"]));
-            }
-            set {
-                this["noDvdNav"] = value;
             }
         }
         
@@ -385,42 +265,6 @@ namespace Handbrake.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string hb_platform {
-            get {
-                return ((string)(this["hb_platform"]));
-            }
-            set {
-                this["hb_platform"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool growlQueue {
-            get {
-                return ((bool)(this["growlQueue"]));
-            }
-            set {
-                this["growlQueue"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool growlEncode {
-            get {
-                return ((bool)(this["growlEncode"]));
-            }
-            set {
-                this["growlEncode"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string CliExeHash {
             get {
                 return ((string)(this["CliExeHash"]));
@@ -456,19 +300,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool showCliForInGuiEncodeStatus {
-            get {
-                return ((bool)(this["showCliForInGuiEncodeStatus"]));
-            }
-            set {
-                this["showCliForInGuiEncodeStatus"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool AutoNameTitleCase {
             get {
                 return ((bool)(this["AutoNameTitleCase"]));
@@ -480,7 +312,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool AutoNameRemoveUnderscore {
             get {
                 return ((bool)(this["AutoNameRemoveUnderscore"]));
@@ -511,18 +343,6 @@ namespace Handbrake.Properties {
             }
             set {
                 this["ActivityWindowLastMode"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool preventSleep {
-            get {
-                return ((bool)(this["preventSleep"]));
-            }
-            set {
-                this["preventSleep"] = value;
             }
         }
         

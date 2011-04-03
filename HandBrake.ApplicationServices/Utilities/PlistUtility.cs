@@ -516,7 +516,7 @@ namespace HandBrake.ApplicationServices.Utilities
             AddEncodeElement(xmlWriter, "PictureWidth", "integer", parsed.Width.ToString());
 
             // Preset Information
-            AddEncodeElement(xmlWriter, "PresetBuildNumber", "string", Init.Build.ToString());
+            AddEncodeElement(xmlWriter, "PresetBuildNumber", "string", Properties.Settings.Default.HandBrakeBuild.ToString());
             AddEncodeElement(xmlWriter, "PresetDescription", "string", "No Description");
             AddEncodeElement(xmlWriter, "PresetName", "string", preset.Name);
             AddEncodeElement(xmlWriter, "Type", "integer", "1"); // 1 is user preset, 0 is built in

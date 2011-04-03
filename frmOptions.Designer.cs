@@ -60,10 +60,10 @@ namespace Handbrake
             this.label13 = new System.Windows.Forms.Label();
             this.text_an_path = new System.Windows.Forms.TextBox();
             this.tab_picture = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.label29 = new System.Windows.Forms.Label();
             this.btn_vlcPath = new System.Windows.Forms.Button();
+            this.label29 = new System.Windows.Forms.Label();
             this.txt_vlcPath = new System.Windows.Forms.TextBox();
+            this.label36 = new System.Windows.Forms.Label();
             this.tab_audio_sub = new System.Windows.Forms.TabPage();
             this.radio_preferredAudioAndSubs = new System.Windows.Forms.RadioButton();
             this.check_AddCCTracks = new System.Windows.Forms.CheckBox();
@@ -138,11 +138,11 @@ namespace Handbrake
             this.label27 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label37 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
-            this.tableLayoutPanel2.SuspendLayout();
             this.tab_audio_sub.SuspendLayout();
             this.tab_cli.SuspendLayout();
             this.tab_advanced.SuspendLayout();
@@ -468,47 +468,17 @@ namespace Handbrake
             // 
             // tab_picture
             // 
-            this.tab_picture.Controls.Add(this.tableLayoutPanel2);
+            this.tab_picture.Controls.Add(this.btn_vlcPath);
+            this.tab_picture.Controls.Add(this.label29);
+            this.tab_picture.Controls.Add(this.txt_vlcPath);
+            this.tab_picture.Controls.Add(this.label36);
             this.tab_picture.Location = new System.Drawing.Point(4, 22);
             this.tab_picture.Name = "tab_picture";
             this.tab_picture.Padding = new System.Windows.Forms.Padding(10);
             this.tab_picture.Size = new System.Drawing.Size(580, 357);
             this.tab_picture.TabIndex = 5;
-            this.tab_picture.Text = "Picture";
+            this.tab_picture.Text = "Preview";
             this.tab_picture.UseVisualStyleBackColor = true;
-            // 
-            // tableLayoutPanel2
-            // 
-            this.tableLayoutPanel2.AutoSize = true;
-            this.tableLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel2.ColumnCount = 4;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.Controls.Add(this.label29, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.btn_vlcPath, 3, 0);
-            this.tableLayoutPanel2.Controls.Add(this.txt_vlcPath, 2, 0);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(10, 10);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 2;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(560, 28);
-            this.tableLayoutPanel2.TabIndex = 84;
-            // 
-            // label29
-            // 
-            this.label29.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label29.AutoSize = true;
-            this.label29.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label29.Location = new System.Drawing.Point(3, 5);
-            this.label29.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
-            this.label29.Name = "label29";
-            this.tableLayoutPanel2.SetRowSpan(this.label29, 2);
-            this.label29.Size = new System.Drawing.Size(59, 13);
-            this.label29.TabIndex = 79;
-            this.label29.Text = "VLC Path:";
             // 
             // btn_vlcPath
             // 
@@ -516,7 +486,7 @@ namespace Handbrake
             this.btn_vlcPath.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_vlcPath.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_vlcPath.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_vlcPath.Location = new System.Drawing.Point(489, 3);
+            this.btn_vlcPath.Location = new System.Drawing.Point(479, 11);
             this.btn_vlcPath.Name = "btn_vlcPath";
             this.btn_vlcPath.Size = new System.Drawing.Size(68, 22);
             this.btn_vlcPath.TabIndex = 83;
@@ -524,16 +494,37 @@ namespace Handbrake
             this.btn_vlcPath.UseVisualStyleBackColor = true;
             this.btn_vlcPath.Click += new System.EventHandler(this.btn_vlcPath_Click);
             // 
+            // label29
+            // 
+            this.label29.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label29.AutoSize = true;
+            this.label29.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label29.Location = new System.Drawing.Point(13, 15);
+            this.label29.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(59, 13);
+            this.label29.TabIndex = 79;
+            this.label29.Text = "VLC Path:";
+            // 
             // txt_vlcPath
             // 
             this.txt_vlcPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_vlcPath.Location = new System.Drawing.Point(88, 3);
+            this.txt_vlcPath.Location = new System.Drawing.Point(78, 12);
             this.txt_vlcPath.Name = "txt_vlcPath";
             this.txt_vlcPath.Size = new System.Drawing.Size(395, 21);
             this.txt_vlcPath.TabIndex = 81;
             this.ToolTip.SetToolTip(this.txt_vlcPath, "The path where VLC is installed on this system.\r\nThis is used for the video previ" +
                     "ew feature.");
             this.txt_vlcPath.TextChanged += new System.EventHandler(this.txt_vlcPath_TextChanged);
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(75, 36);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(255, 13);
+            this.label36.TabIndex = 85;
+            this.label36.Text = "This path is used for the view preview feature only.";
             // 
             // tab_audio_sub
             // 
@@ -549,7 +540,7 @@ namespace Handbrake
             this.tab_audio_sub.Padding = new System.Windows.Forms.Padding(3);
             this.tab_audio_sub.Size = new System.Drawing.Size(580, 357);
             this.tab_audio_sub.TabIndex = 6;
-            this.tab_audio_sub.Text = "Audio / Subtitles";
+            this.tab_audio_sub.Text = "Audio and Subtitles";
             this.tab_audio_sub.UseVisualStyleBackColor = true;
             // 
             // radio_preferredAudioAndSubs
@@ -660,7 +651,7 @@ namespace Handbrake
             this.tab_cli.Padding = new System.Windows.Forms.Padding(10);
             this.tab_cli.Size = new System.Drawing.Size(580, 357);
             this.tab_cli.TabIndex = 2;
-            this.tab_cli.Text = "CLI / System / Logging";
+            this.tab_cli.Text = "System and Logging";
             this.tab_cli.UseVisualStyleBackColor = true;
             // 
             // label11
@@ -681,7 +672,7 @@ namespace Handbrake
             this.check_preventSleep.AutoSize = true;
             this.check_preventSleep.Location = new System.Drawing.Point(73, 45);
             this.check_preventSleep.Name = "check_preventSleep";
-            this.check_preventSleep.Size = new System.Drawing.Size(266, 17);
+            this.check_preventSleep.Size = new System.Drawing.Size(260, 17);
             this.check_preventSleep.TabIndex = 91;
             this.check_preventSleep.Text = "Prevent the system from sleeping when encoding.";
             this.ToolTip.SetToolTip(this.check_preventSleep, "Prevent system from sleeping during encoding.");
@@ -694,7 +685,7 @@ namespace Handbrake
             this.check_clearOldLogs.AutoSize = true;
             this.check_clearOldLogs.Location = new System.Drawing.Point(73, 234);
             this.check_clearOldLogs.Name = "check_clearOldLogs";
-            this.check_clearOldLogs.Size = new System.Drawing.Size(166, 17);
+            this.check_clearOldLogs.Size = new System.Drawing.Size(162, 17);
             this.check_clearOldLogs.TabIndex = 90;
             this.check_clearOldLogs.Text = "Clear logs older than 30 days";
             this.ToolTip.SetToolTip(this.check_clearOldLogs, "Clear logs which are older than 30 days.\r\nThis only applies to HandBrakes Applica" +
@@ -789,7 +780,7 @@ namespace Handbrake
             this.check_logsInSpecifiedLocation.AutoSize = true;
             this.check_logsInSpecifiedLocation.Location = new System.Drawing.Point(73, 139);
             this.check_logsInSpecifiedLocation.Name = "check_logsInSpecifiedLocation";
-            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(306, 17);
+            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(305, 17);
             this.check_logsInSpecifiedLocation.TabIndex = 87;
             this.check_logsInSpecifiedLocation.Text = "Put a copy of individual encode logs in a specified location:";
             this.ToolTip.SetToolTip(this.check_logsInSpecifiedLocation, "Place a copy of the encode log in the same folder as the encoded movie.");
@@ -891,7 +882,7 @@ namespace Handbrake
             this.tab_advanced.Padding = new System.Windows.Forms.Padding(10);
             this.tab_advanced.Size = new System.Drawing.Size(580, 357);
             this.tab_advanced.TabIndex = 4;
-            this.tab_advanced.Text = "Advanced / Other";
+            this.tab_advanced.Text = "Advanced";
             this.tab_advanced.UseVisualStyleBackColor = true;
             // 
             // check_showCliForInGUIEncode
@@ -1086,11 +1077,11 @@ namespace Handbrake
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(51, 19);
+            this.label8.Location = new System.Drawing.Point(51, 11);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(115, 13);
+            this.label8.Size = new System.Drawing.Size(50, 13);
             this.label8.TabIndex = 61;
-            this.label8.Text = "HandBrake Options";
+            this.label8.Text = "Options";
             // 
             // pictureBox2
             // 
@@ -1444,6 +1435,7 @@ namespace Handbrake
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.White;
+            this.panel1.Controls.Add(this.label37);
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.label8);
             this.panel1.Controls.Add(this.pictureBox2);
@@ -1453,6 +1445,16 @@ namespace Handbrake
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(615, 65);
             this.panel1.TabIndex = 62;
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Location = new System.Drawing.Point(51, 27);
+            this.label37.Margin = new System.Windows.Forms.Padding(3);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(202, 13);
+            this.label37.TabIndex = 105;
+            this.label37.Text = "Configure the HandBrake user interface.";
             // 
             // panel2
             // 
@@ -1484,14 +1486,12 @@ namespace Handbrake
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "HandBrake Options";
+            this.Text = "Options";
             this.tab_options.ResumeLayout(false);
             this.tab_general.ResumeLayout(false);
             this.tab_general.PerformLayout();
             this.tab_picture.ResumeLayout(false);
             this.tab_picture.PerformLayout();
-            this.tableLayoutPanel2.ResumeLayout(false);
-            this.tableLayoutPanel2.PerformLayout();
             this.tab_audio_sub.ResumeLayout(false);
             this.tab_audio_sub.PerformLayout();
             this.tab_cli.ResumeLayout(false);
@@ -1584,7 +1584,6 @@ namespace Handbrake
         private System.Windows.Forms.Button btn_viewLogs;
         private System.Windows.Forms.Button btn_clearLogs;
         internal System.Windows.Forms.ComboBox drop_updateCheckDays;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         internal System.Windows.Forms.ComboBox drp_Priority;
         private System.Windows.Forms.CheckBox check_promptOnUnmatchingQueries;
         private System.Windows.Forms.TabPage tab_audio_sub;
@@ -1611,5 +1610,7 @@ namespace Handbrake
         private System.Windows.Forms.Label label34;
         internal System.Windows.Forms.Label label35;
         internal System.Windows.Forms.ComboBox cb_mp4FileMode;
+        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.Label label37;
     }
 }
