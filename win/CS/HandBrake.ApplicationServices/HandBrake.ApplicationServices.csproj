@@ -96,7 +96,6 @@
     <Compile Include="Functions\System.cs" />
     <Compile Include="Functions\Win32.cs" />
     <Compile Include="Functions\Win7.cs" />
-    <Compile Include="Init.cs" />
     <Compile Include="Model\DriveInformation.cs" />
     <Compile Include="Model\Encoding\AudioTrack.cs" />
     <Compile Include="Model\Encoding\Anamorphic.cs" />
@@ -142,12 +141,15 @@
     <Compile Include="Services\Interfaces\IQueueProcessor.cs" />
     <Compile Include="Services\Interfaces\IScan.cs" />
     <Compile Include="Services\Interfaces\IPresetService.cs" />
+    <Compile Include="Services\Interfaces\IUserSettingService.cs" />
     <Compile Include="Services\LibScan.cs" />
     <Compile Include="Services\PresetService.cs" />
     <Compile Include="Services\QueueManager.cs" />
     <Compile Include="Services\QueueProcessor.cs" />
     <Compile Include="Services\ScanService.cs" />
     <Compile Include="Services\UpdateService.cs" />
+    <Compile Include="Services\UserSettingService.cs" />
+    <Compile Include="UserSettingConstants.cs" />
     <Compile Include="Utilities\AppcastReader.cs" />
     <Compile Include="Utilities\GeneralUtilities.cs" />
     <Compile Include="Utilities\LanguageUtilities.cs" />

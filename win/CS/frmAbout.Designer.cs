@@ -63,9 +63,9 @@ namespace Handbrake
             this.label1.Location = new System.Drawing.Point(125, 36);
             this.label1.Margin = new System.Windows.Forms.Padding(3);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(224, 13);
+            this.label1.Size = new System.Drawing.Size(196, 13);
             this.label1.TabIndex = 33;
-            this.label1.Text = "Copyright  2003-2011 HandBrake Developers";
+            this.label1.Text = "Copyright  2003-2011 HandBrake Team";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // PictureBox1

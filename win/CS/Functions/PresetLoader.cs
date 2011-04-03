@@ -8,14 +8,19 @@ namespace Handbrake.Functions
     using System.Drawing;
     using System.Windows.Forms;
 
+    using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.ApplicationServices.Services;
+    using HandBrake.ApplicationServices.Services.Interfaces;
 
     /// <summary>
     /// Load a preset into the main Window
     /// </summary>
     public class PresetLoader
     {
+        private static readonly IUserSettingService UserSettingService = new UserSettingService();
+
         /// <summary>
         /// This function takes in a Query which has been parsed by QueryParser and
         /// set's all the GUI widgets correctly.
@@ -300,7 +305,7 @@ namespace Handbrake.Functions
                     sliderValue = 32 - (int)value;
                     break;
                 case VideoEncoder.X264:
-                    double cqStep = Properties.Settings.Default.x264cqstep;
+                    double cqStep = UserSettingService.GetUserSettingDouble(UserSettingConstants.X264Step);
                     sliderValue = (int)((51.0 / cqStep) - (value / cqStep));
                     break;
                 case VideoEncoder.Theora:

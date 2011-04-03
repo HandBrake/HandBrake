@@ -698,7 +698,7 @@ namespace Handbrake
             // mnu_killCLI
             // 
             this.mnu_killCLI.Name = "mnu_killCLI";
-            this.mnu_killCLI.Size = new System.Drawing.Size(152, 22);
+            this.mnu_killCLI.Size = new System.Drawing.Size(138, 22);
             this.mnu_killCLI.Text = "Cancel Scan";
             this.mnu_killCLI.Visible = false;
             this.mnu_killCLI.Click += new System.EventHandler(this.mnu_killCLI_Click);
@@ -707,7 +707,7 @@ namespace Handbrake
             // 
             this.mnu_exit.Name = "mnu_exit";
             this.mnu_exit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.mnu_exit.Size = new System.Drawing.Size(152, 22);
+            this.mnu_exit.Size = new System.Drawing.Size(138, 22);
             this.mnu_exit.Text = "E&xit";
             this.mnu_exit.Click += new System.EventHandler(this.mnu_exit_Click);
             // 

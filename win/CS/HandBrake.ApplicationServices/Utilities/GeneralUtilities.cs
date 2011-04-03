@@ -109,7 +109,7 @@ namespace HandBrake.ApplicationServices.Utilities
         {
             StringBuilder logHeader = new StringBuilder();
 
-            logHeader.AppendLine(String.Format("{0}", Init.HandBrakeGuiVersionString));
+            logHeader.AppendLine(String.Format("HandBrake {0} {1}", Properties.Settings.Default.HandBrakeVersion, Properties.Settings.Default.HandBrakeBuild));
             logHeader.AppendLine(String.Format("OS: {0}", Environment.OSVersion));
             logHeader.AppendLine(String.Format("CPU: {0}", SystemInfo.GetCpuCount));
             logHeader.Append(String.Format("Ram: {0} MB, ", SystemInfo.TotalPhysicalMemory));
@@ -140,5 +140,27 @@ namespace HandBrake.ApplicationServices.Utilities
             return string.Format("[{0}] {1}", DateTime.Now.TimeOfDay, message);
         }
 
+        /// <summary>
+        /// Gets a value indicating whether HandBrake is running in multi instance mode
+        /// </summary>
+        /// <returns>True if the UI has another instance running</returns>
+        public static bool IsMultiInstance
+        {
+            get
+            {
+                return Process.GetProcessesByName("HandBrake").Length > 0 ? true : false;
+            }
+        }
+
+        /// <summary>
+        /// Gets the number of HandBrake instances running.
+        /// </summary>
+        public static string GetInstanceCount
+        {
+            get
+            {
+                return Process.GetProcessesByName("HandBrake").Length == 0 ? string.Empty : Process.GetProcessesByName("HandBrake").Length.ToString();
+            }
+        }
     }
 }

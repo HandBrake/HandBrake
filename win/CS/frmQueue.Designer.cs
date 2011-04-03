@@ -54,12 +54,12 @@ namespace Handbrake
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.SaveFile = new System.Windows.Forms.SaveFileDialog();
             this.list_queue = new System.Windows.Forms.ListView();
-            this.Title = new System.Windows.Forms.ColumnHeader();
-            this.Chapters = new System.Windows.Forms.ColumnHeader();
-            this.Source = new System.Windows.Forms.ColumnHeader();
-            this.Destination = new System.Windows.Forms.ColumnHeader();
-            this.EncoderVideo = new System.Windows.Forms.ColumnHeader();
-            this.Audio = new System.Windows.Forms.ColumnHeader();
+            this.Title = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Chapters = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Source = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Destination = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.EncoderVideo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Audio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.mnu_queue = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnu_up = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_Down = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,6 +79,7 @@ namespace Handbrake
             this.toolStrip1.SuspendLayout();
             this.mnu_queue.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -477,6 +478,7 @@ namespace Handbrake
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

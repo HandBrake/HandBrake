@@ -22,5 +22,209 @@ namespace HandBrake.ApplicationServices.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int Verbosity {
+            get {
+                return ((int)(this["Verbosity"]));
+            }
+            set {
+                this["Verbosity"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
+        public double X264Step {
+            get {
+                return ((double)(this["X264Step"]));
+            }
+            set {
+                this["X264Step"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Do Nothing")]
+        public string WhenCompleteAction {
+            get {
+                return ((string)(this["WhenCompleteAction"]));
+            }
+            set {
+                this["WhenCompleteAction"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool GrowlEncode {
+            get {
+                return ((bool)(this["GrowlEncode"]));
+            }
+            set {
+                this["GrowlEncode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool GrowlQueue {
+            get {
+                return ((bool)(this["GrowlQueue"]));
+            }
+            set {
+                this["GrowlQueue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Below Normal")]
+        public string ProcessPriority {
+            get {
+                return ((string)(this["ProcessPriority"]));
+            }
+            set {
+                this["ProcessPriority"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool PreventSleep {
+            get {
+                return ((bool)(this["PreventSleep"]));
+            }
+            set {
+                this["PreventSleep"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowCLI {
+            get {
+                return ((bool)(this["ShowCLI"]));
+            }
+            set {
+                this["ShowCLI"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SaveLogToCopyDirectory {
+            get {
+                return ((bool)(this["SaveLogToCopyDirectory"]));
+            }
+            set {
+                this["SaveLogToCopyDirectory"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SaveLogWithVideo {
+            get {
+                return ((bool)(this["SaveLogWithVideo"]));
+            }
+            set {
+                this["SaveLogWithVideo"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SaveLogCopyDirectory {
+            get {
+                return ((string)(this["SaveLogCopyDirectory"]));
+            }
+            set {
+                this["SaveLogCopyDirectory"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string HandBrakeVersion {
+            get {
+                return ((string)(this["HandBrakeVersion"]));
+            }
+            set {
+                this["HandBrakeVersion"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int HandBrakeBuild {
+            get {
+                return ((int)(this["HandBrakeBuild"]));
+            }
+            set {
+                this["HandBrakeBuild"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string InstanceId {
+            get {
+                return ((string)(this["InstanceId"]));
+            }
+            set {
+                this["InstanceId"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DisableLibDvdNav {
+            get {
+                return ((bool)(this["DisableLibDvdNav"]));
+            }
+            set {
+                this["DisableLibDvdNav"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string HandBrakePlatform {
+            get {
+                return ((string)(this["HandBrakePlatform"]));
+            }
+            set {
+                this["HandBrakePlatform"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string HandBrakeExeHash {
+            get {
+                return ((string)(this["HandBrakeExeHash"]));
+            }
+            set {
+                this["HandBrakeExeHash"] = value;
+            }
+        }
     }
 }

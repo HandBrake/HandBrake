@@ -14,6 +14,7 @@ namespace Handbrake
     using System.Windows.Forms;
     using Functions;
 
+    using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
@@ -43,6 +44,8 @@ namespace Handbrake
         /// </summary>
         private readonly frmMain mainWindow;
 
+        private readonly IUserSettingService userSettingService = new UserSettingService();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="frmQueue"/> class.
         /// </summary>
@@ -67,7 +70,7 @@ namespace Handbrake
             queue.EncodeService.EncodeStarted += this.queue_EncodeStarted;
             queue.EncodeService.EncodeCompleted += this.queue_EncodeEnded;
 
-            drp_completeOption.Text = Properties.Settings.Default.CompletionOption;
+            drp_completeOption.Text = userSettingService.GetUserSettingString(UserSettingConstants.WhenCompleteAction);
         }
 
         /// <summary>
@@ -705,9 +708,7 @@ namespace Handbrake
         /// </param>
         private void CompleteOptionChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.CompletionOption = drp_completeOption.Text;
-            HandBrake.ApplicationServices.Init.CompletionOption = drp_completeOption.Text;
-            Properties.Settings.Default.Save();
+            userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, drp_completeOption.Text);
         }
     }
 }

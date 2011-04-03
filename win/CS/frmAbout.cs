@@ -8,11 +8,17 @@ namespace Handbrake
     using System;
     using System.Windows.Forms;
 
+    using HandBrake.ApplicationServices;
+    using HandBrake.ApplicationServices.Services;
+    using HandBrake.ApplicationServices.Services.Interfaces;
+
     /// <summary>
     /// The About Window
     /// </summary>
     public partial class frmAbout : Form
     {
+        IUserSettingService userSettingService = new UserSettingService();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="frmAbout"/> class.
         /// </summary>
@@ -20,8 +26,8 @@ namespace Handbrake
         {
             InitializeComponent();
 
-            string nightly = Properties.Settings.Default.hb_version.Contains("svn") ? " (SVN / Nightly Build)" : string.Empty;
-            lbl_GUIBuild.Text = Properties.Settings.Default.hb_version + " (" + Properties.Settings.Default.hb_build + ") " + nightly;
+            string nightly = userSettingService.GetUserSettingString(UserSettingConstants.HandBrakeVersion).Contains("svn") ? " (SVN / Nightly Build)" : string.Empty;
+            lbl_GUIBuild.Text = userSettingService.GetUserSettingString(UserSettingConstants.HandBrakeVersion) + " (" + userSettingService.GetUserSettingString(UserSettingConstants.HandBrakeBuild) + ") " + nightly;
         }
 
         /// <summary>
