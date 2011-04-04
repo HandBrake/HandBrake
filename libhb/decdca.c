@@ -270,7 +270,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
         {
             for ( k = 0; k < pv->out_discrete_channels; k++ )
             {
-                samples_out[(pv->out_discrete_channels*j)+k]   = samples_in[(256*k)+j] * 16384;
+                samples_out[(pv->out_discrete_channels*j)+k]   = samples_in[(256*k)+j] * 32767;
             }
         }
 
