@@ -172,7 +172,7 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 	gint mux;
 
 	const GValue *pref_audio;
-	const GValue *audio, *drc;
+	const GValue *audio, *drc, *gain;
 	gint acodec, bitrate, mix;
 	gdouble rate;
 	gint count, ii, list_count;
@@ -227,6 +227,7 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 		rate = ghb_settings_combo_double(audio, "AudioSamplerate");
 		mix = ghb_settings_combo_int(audio, "AudioMixdown");
 		drc = ghb_settings_get_value(audio, "AudioTrackDRCSlider");
+		gain = ghb_settings_get_value(audio, "AudioTrackGain");
 		// If there are multiple audios using the same codec, then
 		// select sequential tracks for each.  The hash keeps track 
 		// of the tracks used for each codec.
@@ -294,6 +295,7 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 			ghb_settings_set_string(settings, "AudioMixdown",
 				ghb_lookup_combo_string("AudioMixdown", ghb_int_value(mix)));
 			ghb_settings_set_value(settings, "AudioTrackDRCSlider", drc);
+			ghb_settings_set_value(settings, "AudioTrackGain", gain);
 			ghb_add_audio(ud, settings);
 			ghb_adjust_audio_rate_combos(ud);
 		}
@@ -354,9 +356,9 @@ ghb_audio_list_refresh_selected(signal_user_data_t *ud)
 	if (gtk_tree_selection_get_selected(selection, &store, &iter))
 	{
 		const gchar *track, *codec, *br, *sr, *mix;
-		gchar *s_drc;
+		gchar *s_drc, *s_gain;
 		gint itrack;
-		gdouble drc;
+		gdouble drc, gain;
 		// Get the row number
 		treepath = gtk_tree_model_get_path (store, &iter);
 		indices = gtk_tree_path_get_indices (treepath);
@@ -375,6 +377,8 @@ ghb_audio_list_refresh_selected(signal_user_data_t *ud)
 		br = ghb_settings_combo_option(asettings, "AudioBitrate");
 		sr = ghb_settings_combo_option(asettings, "AudioSamplerate");
 		mix = ghb_settings_combo_option(asettings, "AudioMixdown");
+		gain = ghb_settings_get_double(asettings, "AudioTrackGain");
+		s_gain = g_strdup_printf("%.fdB", gain);
 
 		drc = ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
 		if (drc < 1.0)
@@ -389,9 +393,11 @@ ghb_audio_list_refresh_selected(signal_user_data_t *ud)
 			2, br,
 			3, sr,
 			4, mix,
-			5, s_drc,
+			5, s_gain,
+			6, s_drc,
 			-1);
 		g_free(s_drc);
+		g_free(s_gain);
 	}
 }
 
@@ -535,23 +541,47 @@ audio_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_live_reset(ud);
 }
 
+G_MODULE_EXPORT gchar*
+format_drc_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
+{
+	if (val < 1.0)
+		return g_strdup_printf("%-7s", "Off");
+	else
+		return g_strdup_printf("%-7.1f", val);
+}
+
 G_MODULE_EXPORT void
 drc_widget_changed_cb(GtkWidget *widget, gdouble val, signal_user_data_t *ud)
 {
 	GValue *asettings;
-	GtkLabel *label;
-	gchar *drc;
 
 	g_debug("drc_widget_changed_cb ()");
-	if (block_updates) return;
 
-	label = GTK_LABEL(GHB_WIDGET(ud->builder, "drc_label"));
-	if (val < 1.0)
-		drc = g_strdup_printf("Off");
-	else
-		drc = g_strdup_printf("%.1f", val);
-	gtk_label_set_text(label, drc);
-	g_free(drc);
+	if (block_updates) return;
+	ghb_check_dependency(ud, widget, NULL);
+	asettings = get_selected_asettings(ud);
+	if (asettings != NULL)
+	{
+		ghb_widget_to_setting(asettings, widget);
+		ghb_audio_list_refresh_selected(ud);
+	}
+	ghb_live_reset(ud);
+}
+
+G_MODULE_EXPORT gchar*
+format_gain_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
+{
+	return g_strdup_printf("%ddB", (int)val);
+}
+
+G_MODULE_EXPORT void
+gain_widget_changed_cb(GtkWidget *widget, gdouble val, signal_user_data_t *ud)
+{
+	GValue *asettings;
+
+	g_debug("gain_widget_changed_cb ()");
+
+	if (block_updates) return;
 	ghb_check_dependency(ud, widget, NULL);
 	asettings = get_selected_asettings(ud);
 	if (asettings != NULL)
@@ -591,9 +621,10 @@ add_to_audio_list(signal_user_data_t *ud, GValue *settings)
 	GtkListStore *store;
 	GtkTreeSelection *selection;
 	const gchar *track, *codec, *br, *sr, *mix;
-	gchar *s_drc;
+	gchar *s_drc, *s_gain;
 	gint itrack;
 	gdouble drc;
+	gdouble gain;
 	
 	g_debug("add_to_audio_list ()");
 	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list"));
@@ -606,6 +637,8 @@ add_to_audio_list(signal_user_data_t *ud, GValue *settings)
 	br = ghb_settings_combo_option(settings, "AudioBitrate");
 	sr = ghb_settings_combo_option(settings, "AudioSamplerate");
 	mix = ghb_settings_combo_option(settings, "AudioMixdown");
+	gain = ghb_settings_get_double(settings, "AudioTrackGain");
+	s_gain = g_strdup_printf("%.fdB", gain);
 
 	drc = ghb_settings_get_double(settings, "AudioTrackDRCSlider");
 	if (drc < 1.0)
@@ -621,10 +654,12 @@ add_to_audio_list(signal_user_data_t *ud, GValue *settings)
 		2, br,
 		3, sr,
 		4, mix,
-		5, s_drc,
+		5, s_gain,
+		6, s_drc,
 		-1);
 	gtk_tree_selection_select_iter(selection, &iter);
 	g_free(s_drc);
+	g_free(s_gain);
 }
 
 G_MODULE_EXPORT void
@@ -667,6 +702,7 @@ audio_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t 
 		ghb_ui_update(ud, "AudioSamplerate", ghb_settings_get_value(asettings, "AudioSamplerate"));
 		ghb_ui_update(ud, "AudioMixdown", ghb_settings_get_value(asettings, "AudioMixdown"));
 		ghb_ui_update(ud, "AudioTrackDRCSlider", ghb_settings_get_value(asettings, "AudioTrackDRCSlider"));
+		ghb_ui_update(ud, "AudioTrackGain", ghb_settings_get_value(asettings, "AudioTrackGain"));
 		block_updates = FALSE;
 		widget = GHB_WIDGET (ud->builder, "audio_remove");
 		gtk_widget_set_sensitive(widget, TRUE);
@@ -726,10 +762,35 @@ audio_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	ghb_settings_take_value(asettings, "AudioSamplerate", ghb_widget_value(widget));
 	widget = GHB_WIDGET(ud->builder, "AudioMixdown");
 	ghb_settings_take_value(asettings, "AudioMixdown", ghb_widget_value(widget));
+	widget = GHB_WIDGET(ud->builder, "AudioTrackGain");
+	ghb_settings_take_value(asettings, "AudioTrackGain", ghb_widget_value(widget));
 	widget = GHB_WIDGET(ud->builder, "AudioTrackDRCSlider");
 	ghb_settings_take_value(asettings, "AudioTrackDRCSlider", ghb_widget_value(widget));
 
 	ghb_add_audio(ud, asettings);
+}
+
+G_MODULE_EXPORT void
+audio_advanced_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	GtkWidget *dialog;
+
+	g_debug("audio_advanced_clicked_cb ()");
+	dialog = GHB_WIDGET(ud->builder, "audio_dialog");
+	if (gtk_widget_get_visible(dialog))
+		gtk_widget_hide(dialog);
+	else
+		gtk_widget_show(dialog);
+}
+
+G_MODULE_EXPORT void
+audio_advanced_ok_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	GtkWidget *dialog;
+
+	g_debug("audio_advanced_clicked_cb ()");
+	dialog = GHB_WIDGET(ud->builder, "audio_dialog");
+	gtk_widget_hide(dialog);
 }
 
 G_MODULE_EXPORT void
@@ -788,7 +849,7 @@ ghb_set_audio(signal_user_data_t *ud, GValue *settings)
 	gint acodec_code;
 
 	GValue *alist;
-	GValue *track, *audio, *acodec, *acodec_actual, *bitrate, *rate, *mix, *drc;
+	GValue *track, *audio, *acodec, *acodec_actual, *bitrate, *rate, *mix, *drc, *gain;
 	gint count, ii;
 	
 	g_debug("set_audio");
@@ -806,6 +867,7 @@ ghb_set_audio(signal_user_data_t *ud, GValue *settings)
 		bitrate = ghb_settings_get_value(audio, "AudioBitrate");
 		rate = ghb_settings_get_value(audio, "AudioSamplerate");
 		mix = ghb_settings_get_value(audio, "AudioMixdown");
+		gain = ghb_settings_get_value(audio, "AudioTrackGain");
 		drc = ghb_settings_get_value(audio, "AudioTrackDRCSlider");
 		acodec_code = ghb_lookup_combo_int("AudioEncoder", acodec);
 
@@ -820,6 +882,7 @@ ghb_set_audio(signal_user_data_t *ud, GValue *settings)
 			ghb_settings_set_value(settings, "AudioBitrate", bitrate);
 			ghb_settings_set_value(settings, "AudioSamplerate", rate);
 			ghb_settings_set_value(settings, "AudioMixdown", mix);
+			ghb_settings_set_value(settings, "AudioTrackGain", gain);
 			ghb_settings_set_value(settings, "AudioTrackDRCSlider", drc);
 			ghb_add_audio(ud, settings);
 			ghb_adjust_audio_rate_combos(ud);

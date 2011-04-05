@@ -4588,19 +4588,6 @@ format_deblock_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT gchar*
-format_drc_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
-{
-	if (val <= 0.0)
-	{
-		return g_strdup_printf("Off");
-	}
-	else
-	{
-		return g_strdup_printf("%.1f", val);
-	}
-}
-
-G_MODULE_EXPORT gchar*
 format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 {
 	gint vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");

@@ -4684,6 +4684,9 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		acodec = ghb_settings_combo_int(asettings, "AudioEncoder");
 		audio.out.codec = ghb_select_audio_codec(js, aconfig, acodec);
 
+		audio.out.gain = 
+			ghb_settings_get_double(asettings, "AudioTrackGain");
+
         audio.out.dynamic_range_compression = 
 			ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
         if (audio.out.dynamic_range_compression < 1.0)

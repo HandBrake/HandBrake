@@ -523,9 +523,9 @@ audio_list_refresh(signal_user_data_t *ud)
 		do
 		{
 			const gchar *track, *codec, *br, *sr, *mix;
-			gchar *s_drc;
+			gchar *s_drc, *s_gain;
 			gint itrack;
-			gdouble drc;
+			gdouble drc, gain;
 			GValue *asettings;
 
 			audio_list = ghb_settings_get_value(ud->settings, "audio_list");
@@ -539,6 +539,8 @@ audio_list_refresh(signal_user_data_t *ud)
 			br = ghb_settings_combo_option(asettings, "AudioBitrate");
 			sr = ghb_settings_combo_option(asettings, "AudioSamplerate");
 			mix = ghb_settings_combo_option(asettings, "AudioMixdown");
+			gain = ghb_settings_get_double(asettings, "AudioTrackGain");
+			s_gain = g_strdup_printf("%.fdB", gain);
 
 			drc = ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
 			if (drc < 1.0)
@@ -553,9 +555,11 @@ audio_list_refresh(signal_user_data_t *ud)
 				2, br,
 				3, sr,
 				4, mix,
-				5, s_drc,
+				5, s_gain,
+				6, s_drc,
 				-1);
 			g_free(s_drc);
+			g_free(s_gain);
 			done = !gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter);
 			row++;
 		} while (!done);

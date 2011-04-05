@@ -333,9 +333,9 @@ bind_audio_tree_model (signal_user_data_t *ud)
 	selection = gtk_tree_view_get_selection (treeview);
 	// 12 columns in model.  6 are visible, the other 6 are for storing
 	// values that I need
-	treestore = gtk_list_store_new(6, G_TYPE_STRING, G_TYPE_STRING, 
+	treestore = gtk_list_store_new(7, G_TYPE_STRING, G_TYPE_STRING, 
 								   G_TYPE_STRING, G_TYPE_STRING, 
-								   G_TYPE_STRING, G_TYPE_STRING);
+								   G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 	gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
 
 	cell = gtk_cell_renderer_text_new();
@@ -371,7 +371,12 @@ bind_audio_tree_model (signal_user_data_t *ud)
 
 	cell = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(
-									_("DRC"), cell, "text", 5, NULL);
+									_("Gain"), cell, "text", 5, NULL);
+    gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
+
+	cell = gtk_cell_renderer_text_new();
+	column = gtk_tree_view_column_new_with_attributes(
+									_("DRC"), cell, "text", 6, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
 	g_signal_connect(selection, "changed", audio_list_selection_changed_cb, ud);

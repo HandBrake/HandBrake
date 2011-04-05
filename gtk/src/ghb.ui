@@ -257,6 +257,14 @@
     <property name="page_size">0</property>
     <property name="value">1</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment35">
+    <property name="upper">20</property>
+    <property name="lower">-20</property>
+    <property name="page_increment">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_size">0</property>
+    <property name="value">0.0</property>
+  </object>
   <object class="GtkAdjustment" id="preview_progress_adj">
     <property name="upper">100</property>
     <property name="lower">0</property>
@@ -2052,6 +2060,32 @@ FFMpeg's and Theora's scale is more linear.  These encoders do not have a lossle
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
+                                <child>
+                                  <object class="GtkLabel" id="labela3">
+                                    <property name="visible">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="label" translatable="yes"></property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="audio_advanced">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">Change advanced audio settings.</property>
+                                    <signal handler="audio_advanced_clicked_cb" name="clicked"/>
+                                    <property name="label">Advanced Audio</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">3</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -2062,50 +2096,7 @@ FFMpeg's and Theora's scale is more linear.  These encoders do not have a lossle
                                 <property name="visible">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="n_rows">2</property>
-                                <property name="n_columns">7</property>
-                                <child>
-                                  <object class="GtkComboBox" id="AudioTrack">
-                                    <property name="width_request">180</property>
-                                    <property name="visible">True</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="tooltip-text" translatable="yes">List of audio tracks available from your source.</property>
-                                    <signal handler="audio_track_changed_cb" name="changed"/>
-                                  </object>
-                                  <packing>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkComboBox" id="AudioEncoder">
-                                    <property name="visible">True</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="tooltip-text" translatable="yes">Set the audio codec to encode this track with.</property>
-                                    <signal handler="audio_codec_changed_cb" name="changed"/>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="right_attach">2</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                    <property name="x_options">GTK_FILL</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkComboBox" id="AudioSamplerate">
-                                    <property name="visible">True</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="tooltip-text" translatable="yes">Set the sample rate of the output audio track.</property>
-                                    <signal handler="audio_widget_changed_cb" name="changed"/>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">3</property>
-                                    <property name="right_attach">4</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                    <property name="x_options">GTK_FILL</property>
-                                  </packing>
-                                </child>
+                                <property name="n_columns">4</property>
                                 <child>
                                   <object class="GtkLabel" id="label35">
                                     <property name="visible">True</property>
@@ -2113,6 +2104,10 @@ FFMpeg's and Theora's scale is more linear.  These encoders do not have a lossle
                                     <property name="label" translatable="yes">Track</property>
                                   </object>
                                   <packing>
+                                    <property name="top_attach">0</property>
+                                    <property name="bottom_attach">1</property>
+                                    <property name="left_attach">0</property>
+                                    <property name="right_attach">1</property>
                                     <property name="x_options">GTK_FILL</property>
                                   </packing>
                                 </child>
@@ -2123,6 +2118,8 @@ FFMpeg's and Theora's scale is more linear.  These encoders do not have a lossle
                                     <property name="label" translatable="yes">Codec</property>
                                   </object>
                                   <packing>
+                                    <property name="top_attach">0</property>
+                                    <property name="bottom_attach">1</property>
                                     <property name="left_attach">1</property>
                                     <property name="right_attach">2</property>
                                     <property name="x_options">GTK_FILL</property>
@@ -2137,23 +2134,12 @@ FFMpeg's and Theora's scale is more linear.  These encoders do not have a lossle
                                     <property name="justify">GTK_JUSTIFY_CENTER</property>
                                   </object>
                                   <packing>
+                                    <property name="top_attach">0</property>
+                                    <property name="bottom_attach">1</property>
                                     <property name="left_attach">2</property>
                                     <property name="right_attach">3</property>
                                     <property name="x_options">GTK_FILL</property>
                                     <property name="x_padding">10</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label38">
-                                    <property name="visible">True</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="label" translatable="yes">Sample Rate</property>
-                                    <property name="justify">GTK_JUSTIFY_CENTER</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">3</property>
-                                    <property name="right_attach">4</property>
-                                    <property name="x_options"/>
                                   </packing>
                                 </child>
                                 <child>
@@ -2163,73 +2149,40 @@ FFMpeg's and Theora's scale is more linear.  These encoders do not have a lossle
                                     <property name="label" translatable="yes">Mix</property>
                                   </object>
                                   <packing>
-                                    <property name="left_attach">4</property>
-                                    <property name="right_attach">5</property>
+                                    <property name="top_attach">0</property>
+                                    <property name="bottom_attach">1</property>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
                                     <property name="x_options">GTK_FILL</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel" id="label39">
+                                  <object class="GtkComboBox" id="AudioTrack">
+                                    <property name="width_request">180</property>
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="label" translatable="yes">DRC</property>
+                                    <property name="tooltip-text" translatable="yes">List of audio tracks available from your source.</property>
+                                    <signal handler="audio_track_changed_cb" name="changed"/>
                                   </object>
                                   <packing>
-                                    <property name="left_attach">5</property>
-                                    <property name="right_attach">7</property>
-                                    <property name="x_options">GTK_FILL</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkComboBox" id="AudioMixdown">
-                                    <property name="visible">True</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="tooltip-text" translatable="yes">Set the mixdown of the output audio track.</property>
-                                    <signal handler="audio_mix_changed_cb" name="changed"/>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">4</property>
-                                    <property name="right_attach">5</property>
                                     <property name="top_attach">1</property>
                                     <property name="bottom_attach">2</property>
-                                    <property name="x_options">GTK_FILL</property>
+                                    <property name="left_attach">0</property>
+                                    <property name="right_attach">1</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkScaleButton" id="AudioTrackDRCSlider">
+                                  <object class="GtkComboBox" id="AudioEncoder">
                                     <property name="visible">True</property>
-                                    <property name="orientation">1</property>
-                                    <property name="icons">audio-volume-muted
-audio-volume-high
-audio-volume-low
-audio-volume-medium</property>
-                                    <property name="adjustment">adjustment28</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="tooltip-markup" translatable="yes">&lt;b&gt;Dynamic Range Compression:&lt;/b&gt; Adjust the dynamic range of the output audio track. 
-
-For source audio that has a wide dynamic range (very loud and very soft sequences), DRC allows you to 'compress' the range by making loud sections softer and soft sections louder.</property>
-                                    <signal handler="drc_widget_changed_cb" name="value_changed"/>
+                                    <property name="tooltip-text" translatable="yes">Set the audio codec to encode this track with.</property>
+                                    <signal handler="audio_codec_changed_cb" name="changed"/>
                                   </object>
                                   <packing>
-                                    <property name="left_attach">5</property>
-                                    <property name="right_attach">6</property>
                                     <property name="top_attach">1</property>
                                     <property name="bottom_attach">2</property>
-                                    <property name="x_options">GTK_FILL</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="drc_label">
-                                    <property name="visible">True</property>
-                                    <property name="width-chars">3</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="label" translatable="yes">Off</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">6</property>
-                                    <property name="right_attach">7</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
                                     <property name="x_options">GTK_FILL</property>
                                   </packing>
                                 </child>
@@ -2241,10 +2194,25 @@ For source audio that has a wide dynamic range (very loud and very soft sequence
                                     <signal handler="audio_widget_changed_cb" name="changed"/>
                                   </object>
                                   <packing>
-                                    <property name="left_attach">2</property>
-                                    <property name="right_attach">3</property>
                                     <property name="top_attach">1</property>
                                     <property name="bottom_attach">2</property>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="x_options">GTK_FILL</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="AudioMixdown">
+                                    <property name="visible">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">Set the mixdown of the output audio track.</property>
+                                    <signal handler="audio_mix_changed_cb" name="changed"/>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
                                     <property name="x_options">GTK_FILL</property>
                                   </packing>
                                 </child>
@@ -3868,6 +3836,179 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
     </child>
 
   </object>
+
+  <object class="GtkDialog" id="audio_dialog">
+    <property name="border_width">5</property>
+    <property name="title" translatable="yes">Advanced Audio Settings</property>
+    <property name="modal">False</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="type_hint">dialog</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="skip_pager_hint">True</property>
+    <signal name="delete_event" handler="gtk_widget_hide_on_delete"/>
+    <child internal-child="vbox">
+      <object class="GtkVBox" id="dialog-vbox10">
+        <property name="orientation">vertical</property>
+        <property name="visible">True</property>
+        <property name="spacing">2</property>
+        <child>
+          <object class="GtkHBox" id="hbox55">
+            <property name="visible">True</property>
+            <property name="spacing">4</property>
+            <child>
+              <object class="GtkImage" id="image5">
+                <property name="visible">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="icon_name">hb-icon</property>
+                <property name="icon-size">6</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTable" id="table14">
+                <property name="visible">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="n_rows">3</property>
+                <property name="n_columns">3</property>
+                <property name="row_spacing">5</property>
+                <child>
+                  <object class="GtkLabel" id="sr_label">
+                    <property name="visible">True</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">Sample Rate:</property>
+                    <property name="use_markup">True</property>
+                  </object>
+                  <packing>
+					<property name="top_attach">0</property>
+					<property name="bottom_attach">1</property>
+					<property name="left_attach">0</property>
+					<property name="right_attach">1</property>
+                    <property name="x_options">GTK_FILL</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="AudioSamplerate">
+                    <property name="visible">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="tooltip-text" translatable="yes">Set the sample rate of the output audio track.</property>
+                    <signal handler="audio_widget_changed_cb" name="changed"/>
+                  </object>
+                  <packing>
+					<property name="top_attach">0</property>
+					<property name="bottom_attach">1</property>
+					<property name="left_attach">2</property>
+					<property name="right_attach">2</property>
+                    <property name="x_options">GTK_FILL</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="gain_label">
+                    <property name="visible">True</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">Gain:</property>
+                    <property name="use_markup">True</property>
+                  </object>
+                  <packing>
+					<property name="top_attach">1</property>
+					<property name="bottom_attach">2</property>
+					<property name="left_attach">0</property>
+					<property name="right_attach">1</property>
+                    <property name="x_options">GTK_FILL</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkHScale" id="AudioTrackGain">
+                    <property name="visible">True</property>
+                    <property name="width-request">200</property>
+                    <property name="orientation">horizontal</property>
+                    <property name="adjustment">adjustment35</property>
+                    <property name="value_pos">right</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="tooltip-markup" translatable="yes">&lt;b&gt;Audio Gain:&lt;/b&gt; Adjust the amplification or attenuation of the output audio track.</property>
+                    <signal handler="gain_widget_changed_cb" name="value_changed"/>
+                    <signal name="format_value" handler="format_gain_cb"/>
+                  </object>
+                  <packing>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">3</property>
+                    <property name="x_options">GTK_FILL|GTK_EXPAND</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="drc_label">
+                    <property name="visible">True</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">Dynamic Range Compression:</property>
+                    <property name="use_markup">True</property>
+                  </object>
+                  <packing>
+					<property name="top_attach">2</property>
+					<property name="bottom_attach">3</property>
+					<property name="left_attach">0</property>
+					<property name="right_attach">1</property>
+                    <property name="x_options">GTK_FILL</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkHScale" id="AudioTrackDRCSlider">
+                    <property name="visible">True</property>
+                    <property name="width-request">100</property>
+                    <property name="orientation">horizontal</property>
+                    <property name="value_pos">right</property>
+                    <property name="adjustment">adjustment28</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="tooltip-markup" translatable="yes">&lt;b&gt;Dynamic Range Compression:&lt;/b&gt; Adjust the dynamic range of the output audio track. 
+
+For source audio that has a wide dynamic range (very loud and very soft sequences), DRC allows you to 'compress' the range by making loud sections softer and soft sections louder.</property>
+                    <signal handler="drc_widget_changed_cb" name="value_changed"/>
+                    <signal name="format_value" handler="format_drc_cb"/>
+                  </object>
+                  <packing>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">3</property>
+                    <property name="x_options">GTK_FILL|GTK_EXPAND</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child internal-child="action_area">
+          <object class="GtkHButtonBox" id="dialog-action_area10">
+            <property name="visible">True</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="advanced_audio_ok">
+                <property name="label" translatable="yes">gtk-ok</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="audio_advanced_ok_cb"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-5">advanced_audio_ok</action-widget>
+    </action-widgets>
+  </object>
+
   <object class="GtkDialog" id="prefs_dialog">
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Preferences</property>

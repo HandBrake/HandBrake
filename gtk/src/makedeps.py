@@ -54,6 +54,8 @@ dep_map = (
 	DepEntry("AudioEncoderActual", "AudioMixdown", "ac3pass|dtspass", True, False),
 	DepEntry("AudioEncoderActual", "AudioTrackDRCSlider", "ac3pass|dtspass", True, False),
 	DepEntry("AudioEncoderActual", "drc_label", "ac3pass|dtspass", True, False),
+	DepEntry("AudioEncoderActual", "AudioTrackGain", "ac3pass|dtspass", True, False),
+	DepEntry("AudioEncoderActual", "gain_label", "ac3pass|dtspass", True, False),
 	DepEntry("x264_bframes", "x264_bpyramid", "<2", True, False),
 	DepEntry("x264_bframes", "x264_direct", "0", True, False),
 	DepEntry("x264_bframes", "x264_b_adapt", "0", True, False),

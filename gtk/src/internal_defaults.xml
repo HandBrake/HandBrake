@@ -300,6 +300,8 @@
 				<integer>1</integer>
 				<key>AudioTrackDescription</key>
 				<string></string>
+				<key>AudioTrackGain</key>
+				<real>0</real>
 				<key>AudioTrackDRCSlider</key>
 				<real>0</real>
 				<key>AudioMixdown</key>
