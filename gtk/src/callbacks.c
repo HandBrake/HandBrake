@@ -23,6 +23,8 @@
 #include <glib/gstdio.h>
 #include <gio/gio.h>
 
+#include "ghbcompat.h"
+
 #if !defined(_WIN32)
 #include <poll.h>
 #define G_UDEV_API_IS_SUBJECT_TO_CHANGE 1
@@ -32,8 +34,6 @@
 
 #include <netinet/in.h>
 #include <netdb.h>
-
-#include "ghbcompat.h"
 
 #if !defined(_NO_UPDATE_CHECK)
 #if defined(_OLD_WEBKIT)
