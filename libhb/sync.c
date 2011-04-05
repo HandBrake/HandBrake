@@ -47,6 +47,8 @@ typedef struct
     /* AC-3 */
     int          ac3_size;
     uint8_t    * ac3_buf;
+
+    double       gain_factor;
 } hb_sync_audio_t;
 
 typedef struct
@@ -1024,6 +1026,8 @@ hb_work_object_t hb_sync_audio =
     syncAudioClose
 };
 
+#define LVL_PLUS1DB 1.122462048
+
 static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
 {
     hb_work_object_t  * w;
@@ -1101,6 +1105,9 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
                 w->audio->config.out.mixdown), &error );
         sync->data.end_of_input = 0;
     }
+
+    sync->gain_factor = pow(LVL_PLUS1DB, w->audio->config.out.gain);
+
     hb_list_add( job->list_work, w );
 }
 
@@ -1110,54 +1117,81 @@ static hb_buffer_t * OutputAudioFrame( hb_audio_t *audio, hb_buffer_t *buf,
     int64_t start = (int64_t)sync->next_start;
     double duration = buf->stop - buf->start;
 
-    if( audio->config.in.samplerate == audio->config.out.samplerate ||
-        audio->config.out.codec == HB_ACODEC_AC3_PASS ||
-        audio->config.out.codec == HB_ACODEC_DCA_PASS )
+    if ( !( audio->config.out.codec & HB_ACODEC_PASS_FLAG ) )
     {
-        /*
-         * If we don't have to do sample rate conversion or this audio is 
-         * pass-thru just send the input buffer downstream after adjusting
-         * its timestamps to make the output stream continuous.
-         */
-    }
-    else
-    {
-        /* Not pass-thru - do sample rate conversion */
-        int count_in, count_out;
-        hb_buffer_t * buf_raw = buf;
-        int channel_count = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown) *
-                            sizeof( float );
-
-        count_in  = buf_raw->size / channel_count;
-        /*
-         * When using stupid rates like 44.1 there will always be some
-         * truncation error. E.g., a 1536 sample AC3 frame will turn into a
-         * 1536*44.1/48.0 = 1411.2 sample frame. If we just truncate the .2
-         * the error will build up over time and eventually the audio will
-         * substantially lag the video. libsamplerate will keep track of the
-         * fractional sample & give it to us when appropriate if we give it
-         * an extra sample of space in the output buffer.
-         */
-        count_out = ( duration * audio->config.out.samplerate ) / 90000 + 1;
-
-        sync->data.input_frames = count_in;
-        sync->data.output_frames = count_out;
-        sync->data.src_ratio = (double)audio->config.out.samplerate /
-                               (double)audio->config.in.samplerate;
-
-        buf = hb_buffer_init( count_out * channel_count );
-        sync->data.data_in  = (float *) buf_raw->data;
-        sync->data.data_out = (float *) buf->data;
-        if( src_process( sync->state, &sync->data ) )
+        // Audio is not passthru.  Check if we need to modify the audio
+        // in any way.
+        if( audio->config.in.samplerate != audio->config.out.samplerate )
         {
-            /* XXX If this happens, we're screwed */
-            hb_log( "sync: audio 0x%x src_process failed", audio->id );
-        }
-        hb_buffer_close( &buf_raw );
+            /* do sample rate conversion */
+            int count_in, count_out;
+            hb_buffer_t * buf_raw = buf;
+            int channel_count = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown) *
+                                sizeof( float );
 
-        buf->size = sync->data.output_frames_gen * channel_count;
-        duration = (double)( sync->data.output_frames_gen * 90000 ) /
-                   audio->config.out.samplerate;
+            count_in  = buf_raw->size / channel_count;
+            /*
+             * When using stupid rates like 44.1 there will always be some
+             * truncation error. E.g., a 1536 sample AC3 frame will turn into a
+             * 1536*44.1/48.0 = 1411.2 sample frame. If we just truncate the .2
+             * the error will build up over time and eventually the audio will
+             * substantially lag the video. libsamplerate will keep track of the
+             * fractional sample & give it to us when appropriate if we give it
+             * an extra sample of space in the output buffer.
+             */
+            count_out = ( duration * audio->config.out.samplerate ) / 90000 + 1;
+
+            sync->data.input_frames = count_in;
+            sync->data.output_frames = count_out;
+            sync->data.src_ratio = (double)audio->config.out.samplerate /
+                                   (double)audio->config.in.samplerate;
+
+            buf = hb_buffer_init( count_out * channel_count );
+            sync->data.data_in  = (float *) buf_raw->data;
+            sync->data.data_out = (float *) buf->data;
+            if( src_process( sync->state, &sync->data ) )
+            {
+                /* XXX If this happens, we're screwed */
+                hb_log( "sync: audio 0x%x src_process failed", audio->id );
+            }
+            hb_buffer_close( &buf_raw );
+
+            buf->size = sync->data.output_frames_gen * channel_count;
+            duration = (double)( sync->data.output_frames_gen * 90000 ) /
+                       audio->config.out.samplerate;
+        }
+        if( audio->config.out.gain > 0.0 )
+        {
+            int count, ii;
+
+            count  = buf->size / sizeof(float);
+            for ( ii = 0; ii < count; ii++ )
+            {
+                double sample;
+
+                sample = (double)*(((float*)buf->data)+ii);
+                sample *= sync->gain_factor;
+                if (sample > 0)
+                    sample = MIN(sample, 32767.0);
+                else
+                    sample = MAX(sample, -32768.0);
+                *(((float*)buf->data)+ii) = sample;
+            }
+        }
+        else if( audio->config.out.gain < 0.0 )
+        {
+            int count, ii;
+
+            count  = buf->size / sizeof(float);
+            for ( ii = 0; ii < count; ii++ )
+            {
+                double sample;
+
+                sample = (double)*(((float*)buf->data)+ii);
+                sample *= sync->gain_factor;
+                *(((float*)buf->data)+ii) = sample;
+            }
+        }
     }
     buf->frametype = HB_FRAME_AUDIO;
     buf->start = start;

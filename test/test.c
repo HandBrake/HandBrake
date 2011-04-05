@@ -67,6 +67,7 @@ static hb_audio_config_t * audio = NULL;
 static int    num_audio_tracks = 0;
 static char * mixdowns    = NULL;
 static char * dynamic_range_compression = NULL;
+static char * audio_gain  = NULL;
 static char * atracks     = NULL;
 static char * arates      = NULL;
 static char * abitrates   = NULL;
@@ -346,6 +347,7 @@ int main( int argc, char ** argv )
     }
     if( mixdowns ) free( mixdowns );
     if( dynamic_range_compression ) free( dynamic_range_compression );
+    if( audio_gain ) free( audio_gain );
     if( atracks ) free( atracks );
     if( arates ) free( arates );
     if( abitrates ) free( abitrates );
@@ -1864,6 +1866,33 @@ static int HandleEvents( hb_handle_t * h )
             }
             /* Audio DRC */
 
+            /* Audio Gain */
+            i = 0;
+            if ( audio_gain )
+            {
+                double gain;
+                char * token = strtok(audio_gain, ",");
+                if (token == NULL)
+                    token = audio_gain;
+                while ( token != NULL )
+                {
+                    gain = atof(token);
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    if( audio != NULL )
+                    {
+                        audio->out.gain = gain;
+                        if( (++i) >= num_audio_tracks )
+                            break;  /* We have more inputs than audio tracks, oops */
+                    } 
+                    else
+                    {
+                        fprintf(stderr, "Ignoring gain, no audio tracks\n");
+                    }
+                    token = strtok(NULL, ",");
+                }
+            }
+            /* Audio Gain */
+
             /* Audio Track Names */
             i = 0;
             if ( anames )
@@ -2543,6 +2572,10 @@ static void ShowHelp()
     "                            making soft sounds louder. Range is 1.0 to 4.0\n"
     "                            (too loud), with 1.5 - 2.5 being a useful range.\n"
     "                            Separated by commas for more than one audio track.\n"
+    "        --gain <float>      Amplify or attenuate audio before encoding.  Does\n"
+    "                            NOT work with audio passthru (copy). Values are in\n"
+    "                            dB.  Negative values attenuate, positive values\n"
+    "                            amplify. A 1 dB difference is barely audible.\n"
     "    -A, --aname <string>    Audio track name(s),\n"
     "                            Separated by commas for more than one audio track.\n"
     "\n"
@@ -2787,6 +2820,7 @@ static int ParseOptions( int argc, char ** argv )
     #define SCAN_ONLY           276
     #define MAIN_FEATURE        277
     #define MIN_DURATION        278
+    #define AUDIO_GAIN          279
     
     for( ;; )
     {
@@ -2814,6 +2848,7 @@ static int ParseOptions( int argc, char ** argv )
             { "audio",       required_argument, NULL,    'a' },
             { "mixdown",     required_argument, NULL,    '6' },
             { "drc",         required_argument, NULL,    'D' },
+            { "gain",        required_argument, NULL,    AUDIO_GAIN },
             { "subtitle",    required_argument, NULL,    's' },
             { "subtitle-forced", optional_argument,   NULL,    'F' },
             { "subtitle-burned", optional_argument,   NULL,    SUB_BURNED },
@@ -3014,6 +3049,12 @@ static int ParseOptions( int argc, char ** argv )
                 if( optarg != NULL )
                 {
                     dynamic_range_compression = strdup( optarg );
+                }
+                break;
+            case AUDIO_GAIN:
+                if( optarg != NULL )
+                {
+                    audio_gain = strdup( optarg );
                 }
                 break;
             case 's':

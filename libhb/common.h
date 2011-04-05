@@ -399,6 +399,7 @@ struct hb_audio_config_s
             int bitrate;    /* Output bitrate (kbps) */
             int mixdown;    /* The mixdown format to be used for this audio track (see HB_AMIXDOWN_*) */
             double dynamic_range_compression; /* Amount of DRC that gets applied to this track */
+            double gain;    /* Gain in dB. negative is quieter */
             char * name;    /* Output track name */
     } out;
 

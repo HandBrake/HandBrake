@@ -1222,6 +1222,7 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
         audio->config.out.bitrate = audiocfg->out.bitrate;
         audio->config.out.dynamic_range_compression = audiocfg->out.dynamic_range_compression;
         audio->config.out.mixdown = audiocfg->out.mixdown;
+        audio->config.out.gain = audiocfg->out.gain;
     }
 
     hb_list_add(job->list_audio, audio);

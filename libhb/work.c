@@ -347,6 +347,10 @@ void hb_display_job_info( hb_job_t * job )
                         break;
                     }
                 }
+                if ( audio->config.out.gain != 0.0 )
+                {
+                    hb_log( "   + gain: %.fdB", audio->config.out.gain );
+                }
             }
 
             if ( audio->config.out.dynamic_range_compression && (audio->config.out.codec != HB_ACODEC_AC3_PASS) && (audio->config.out.codec != HB_ACODEC_DCA_PASS))
