@@ -69,6 +69,7 @@ struct hb_buffer_s
     int           id;           // ID of the track that the packet comes from
     int64_t       start;        // Video and subtitle packets: start time of frame/subtitle
     int64_t       stop;         // Video and subtitle packets: stop time of frame/subtitle
+    uint8_t       discontinuity;
     int           new_chap;     // Video packets: if non-zero, is the index of the chapter whose boundary was crossed
 
 #define HB_FRAME_IDR    0x01

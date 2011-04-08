@@ -218,6 +218,14 @@ int hb_demux_ts( hb_buffer_t *buf_ps, hb_list_t *list_es, hb_psdemux_t *state )
 {
     if ( state )
     {
+        if ( buf_ps->discontinuity )
+        {
+            // Buffer has been flagged as a discontinuity.  This happens
+            // when a blueray changes clips.
+            ++state->scr_changes;
+            state->last_scr = buf_ps->start;
+        }
+
         // we're keeping track of timing (i.e., not in scan)
         // check if there's a new pcr in this packet
         if ( buf_ps->stop >= 0 )

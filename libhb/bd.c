@@ -471,6 +471,7 @@ int hb_bd_read( hb_bd_t * d, hb_buffer_t * b )
     BD_EVENT event;
     uint64_t pos;
 
+    b->discontinuity = 0;
     while ( 1 )
     {
         if ( d->next_chap != d->chapter )
@@ -505,6 +506,10 @@ int hb_bd_read( hb_bd_t * d, hb_buffer_t * b )
                     // The muxers expect to only get chapter 2 and above
                     // They write chapter 1 when chapter 2 is detected.
                     d->next_chap = event.param;
+                    break;
+
+                case BD_EVENT_PLAYITEM:
+                    b->discontinuity = 1;
                     break;
 
                 default:
