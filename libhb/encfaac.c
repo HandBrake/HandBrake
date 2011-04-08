@@ -207,6 +207,12 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     uint64_t pts, pos;
     hb_list_getbytes( pv->list, pv->buf, pv->input_samples * sizeof( float ),
                       &pts, &pos );
+
+    int i;
+    float *fltBuf = (float*)pv->buf;
+    for ( i = 0; i < pv->input_samples; i++ )
+        fltBuf[i] *= 32768.0;
+        
     int size = faacEncEncode( pv->faac, (int32_t *)pv->buf, pv->input_samples,
                               pv->obuf, pv->output_bytes );
 

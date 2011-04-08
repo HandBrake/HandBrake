@@ -1172,9 +1172,9 @@ static hb_buffer_t * OutputAudioFrame( hb_audio_t *audio, hb_buffer_t *buf,
                 sample = (double)*(((float*)buf->data)+ii);
                 sample *= sync->gain_factor;
                 if (sample > 0)
-                    sample = MIN(sample, 32767.0);
+                    sample = MIN(sample, 1.0);
                 else
-                    sample = MAX(sample, -32768.0);
+                    sample = MAX(sample, -1.0);
                 *(((float*)buf->data)+ii) = sample;
             }
         }

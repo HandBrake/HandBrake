@@ -111,7 +111,6 @@ struct hb_work_private_s
     void*           buffer;
     struct SwsContext *sws_context; // if we have to rescale or convert color space
     hb_downmix_t    *downmix;
-    hb_sample_t     *downmix_buffer;
     int cadence[12];
     hb_chan_map_t   *out_map;
 };
@@ -205,6 +204,7 @@ static int decavcodecInit( hb_work_object_t * w, hb_job_t * job )
     pv->parser = av_parser_init( codec_id );
 
     pv->context = avcodec_alloc_context();
+    hb_ff_set_sample_fmt( pv->context, codec );
     hb_avcodec_open( pv->context, codec );
 
     if ( w->audio != NULL )
@@ -304,11 +304,6 @@ static void closePrivData( hb_work_private_t ** ppv )
         if ( pv->downmix )
         {
             hb_downmix_close( &(pv->downmix) );
-        }
-        if ( pv->downmix_buffer )
-        {
-            free( pv->downmix_buffer );
-            pv->downmix_buffer = NULL;
         }
         free( pv );
     }
@@ -528,6 +523,7 @@ static int decavcodecBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
 
     AVCodecParserContext *parser = av_parser_init( codec->id );
     AVCodecContext *context = avcodec_alloc_context();
+    hb_ff_set_sample_fmt( context, codec );
     hb_avcodec_open( context, codec );
     uint8_t *buffer = av_malloc( AVCODEC_MAX_AUDIO_FRAME_SIZE );
     int out_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
@@ -1160,6 +1156,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         // There's a mis-feature in ffmpeg that causes the context to be 
         // incorrectly initialized the 1st time avcodec_open is called.
         // If you close it and open a 2nd time, it finishes the job.
+        hb_ff_set_sample_fmt( pv->context, codec );
         hb_avcodec_open( pv->context, codec );
         hb_avcodec_close( pv->context );
         hb_avcodec_open( pv->context, codec );
@@ -1280,6 +1277,7 @@ static void init_ffmpeg_context( hb_work_object_t *w )
     if ( ! pv->context->codec )
     {
         AVCodec *codec = avcodec_find_decoder( pv->context->codec_id );
+        hb_ff_set_sample_fmt( pv->context, codec );
         hb_avcodec_open( pv->context, codec );
     }
     // set up our best guess at the frame duration.
@@ -1491,7 +1489,7 @@ static int decavcodecviInfo( hb_work_object_t *w, hb_work_info_t *info )
 static hb_buffer_t * downmixAudio( 
     hb_audio_t *audio, 
     hb_work_private_t *pv, 
-    int16_t *buffer, 
+    hb_sample_t *buffer, 
     int channels,
     int nsamples )
 {
@@ -1499,20 +1497,12 @@ static hb_buffer_t * downmixAudio(
 
     if ( pv->downmix )
     {
-        pv->downmix_buffer = realloc(pv->downmix_buffer, nsamples * sizeof(hb_sample_t));
-        
-        int i;
-        for( i = 0; i < nsamples; ++i )
-        {
-            pv->downmix_buffer[i] = buffer[i];
-        }
-
         int n_ch_samples = nsamples / channels;
         int out_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
 
         buf = hb_buffer_init( n_ch_samples * out_channels * sizeof(float) );
         hb_sample_t *samples = (hb_sample_t *)buf->data;
-        hb_downmix(pv->downmix, samples, pv->downmix_buffer, n_ch_samples);
+        hb_downmix(pv->downmix, samples, buffer, n_ch_samples);
     }
     else
     {
@@ -1540,7 +1530,7 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
 
     while ( pos < size )
     {
-        int16_t *buffer = pv->buffer;
+        float *buffer = pv->buffer;
         if ( buffer == NULL )
         {
             pv->buffer = av_malloc( AVCODEC_MAX_AUDIO_FRAME_SIZE );
@@ -1556,7 +1546,7 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
 
         int out_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
         int nsamples;
-        int len = avcodec_decode_audio3( context, buffer, &out_size, &avp );
+        int len = avcodec_decode_audio3( context, (int16_t*)buffer, &out_size, &avp );
         if ( len < 0 )
         {
             return;
@@ -1574,7 +1564,7 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
         {
             // We require signed 16-bit ints for the output format. If
             // we got something different convert it.
-            if ( context->sample_fmt != SAMPLE_FMT_S16 )
+            if ( context->sample_fmt != AV_SAMPLE_FMT_FLT )
             {
                 // Note: av_audio_convert seems to be a work-in-progress but
                 //       looks like it will eventually handle general audio
@@ -1583,27 +1573,31 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
                 //       anything more complicated than a one-for-one format
                 //       conversion we'd probably want to cache the converter
                 //       context in the pv.
-                int isamp = av_get_bits_per_sample_fmt( context->sample_fmt ) / 8;
-                AVAudioConvert *ctx = av_audio_convert_alloc( SAMPLE_FMT_S16, 1,
-                                                              context->sample_fmt, 1,
-                                                              NULL, 0 );
-                // get output buffer size (in 2-byte samples) then malloc a buffer
-                nsamples = out_size / isamp;
-                buffer = av_malloc( nsamples * 2 );
+                int isamp;
+                AVAudioConvert *ctx;
 
-                // we're doing straight sample format conversion which behaves as if
-                // there were only one channel.
+                isamp = av_get_bits_per_sample_fmt( context->sample_fmt ) / 8;
+                ctx = av_audio_convert_alloc( AV_SAMPLE_FMT_FLT, 1,
+                                              context->sample_fmt, 1,
+                                              NULL, 0 );
+
+                // get output buffer size then malloc a buffer
+                nsamples = out_size / isamp;
+                buffer = av_malloc( nsamples * sizeof(hb_sample_t) );
+
+                // we're doing straight sample format conversion which 
+                // behaves as if there were only one channel.
                 const void * const ibuf[6] = { pv->buffer };
                 void * const obuf[6] = { buffer };
                 const int istride[6] = { isamp };
-                const int ostride[6] = { 2 };
+                const int ostride[6] = { sizeof(hb_sample_t) };
 
                 av_audio_convert( ctx, obuf, ostride, ibuf, istride, nsamples );
                 av_audio_convert_free( ctx );
             }
             else
             {
-                nsamples = out_size / 2;
+                nsamples = out_size / sizeof(hb_sample_t);
             }
 
             if ( pts == AV_NOPTS_VALUE )

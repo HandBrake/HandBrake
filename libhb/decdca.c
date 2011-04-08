@@ -84,7 +84,7 @@ static int decdcaInit( hb_work_object_t * w, hb_job_t * job )
     /* will only be actually used if we're not doing AC3 passthru */
     pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
 
-    pv->level     = 32768.0;
+    pv->level     = 1.0;
 
     return 0;
 }
@@ -268,7 +268,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
         {
             for ( k = 0; k < pv->out_discrete_channels; k++ )
             {
-                samples_out[(pv->out_discrete_channels*j)+k]   = samples_in[(256*k)+j] * 32767;
+                samples_out[(pv->out_discrete_channels*j)+k]   = samples_in[(256*k)+j];
             }
         }
 

@@ -50,6 +50,7 @@ int enclameInit( hb_work_object_t * w, hb_job_t * job )
 
     pv->lame = lame_init();
     // use ABR
+    lame_set_scale( pv->lame, 32768.0 );
     lame_set_VBR( pv->lame, vbr_abr );
     lame_set_VBR_mean_bitrate_kbps( pv->lame, audio->config.out.bitrate );
     lame_set_in_samplerate( pv->lame, audio->config.out.samplerate );
@@ -120,7 +121,6 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     hb_list_getbytes( pv->list, pv->buf, pv->input_samples * sizeof( float ),
                       &pts, &pos);
 
-    memset(samples, 0, 2*1152*sizeof(float));
     for( i = 0; i < 1152; i++ )
     {
         for( j = 0; j < pv->out_discrete_channels; j++ )

@@ -280,14 +280,6 @@ static OSStatus inInputDataProc( AudioConverterRef converter, UInt32 *npackets,
 
     *npackets = buffers->mBuffers[0].mDataByteSize / pv->isamplesiz;
 
-    /* transform data from [-32768,32767] to [-1.0,1.0] */
-    float *fdata = buffers->mBuffers[0].mData;
-    int i;
-
-    for( i = 0; i < *npackets * pv->nchannels; i++ ) {
-        fdata[i] = fdata[i] / 32768.f;
-    }
-
     pv->ibytes -= buffers->mBuffers[0].mDataByteSize;
 
     return noErr;

@@ -106,7 +106,7 @@ static int deca52Init( hb_work_object_t * w, hb_job_t * job )
     /* will only be actually used if we're not doing AC3 passthru */
     pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
 
-    pv->level     = 32768.0;
+    pv->level     = 1.0;
     pv->dynamic_range_compression = audio->config.out.dynamic_range_compression;
 
     return 0;

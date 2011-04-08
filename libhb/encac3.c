@@ -18,7 +18,6 @@ struct hb_work_private_s
     unsigned long    output_bytes;
     hb_list_t      * list;
     uint8_t        * buf;
-    float          * samples;
 };
 
 int  encac3Init( hb_work_object_t *, hb_job_t * );
@@ -53,7 +52,6 @@ int encac3Init( hb_work_object_t * w, hb_job_t * job )
     pv->output_bytes = AC3_MAX_CODED_FRAME_SIZE;
 
     pv->buf = malloc( pv->input_samples * sizeof( float ) );
-    pv->samples = malloc( pv->input_samples * sizeof( float ) );
 
     codec = avcodec_find_encoder( CODEC_ID_AC3 );
     if( !codec )
@@ -127,12 +125,6 @@ void encac3Close( hb_work_object_t * w )
             pv->buf = NULL;
         }
 
-        if ( pv->samples )
-        {
-            free( pv->samples );
-            pv->samples = NULL;
-        }
-
         if ( pv->list )
             hb_list_empty( &pv->list );
 
@@ -147,7 +139,6 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     uint64_t pts, pos;
     hb_audio_t * audio = w->audio;
     hb_buffer_t * buf;
-    int ii;
 
     if( hb_list_bytes( pv->list ) < pv->input_samples * sizeof( float ) )
     {
@@ -188,15 +179,9 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
                         (float*)pv->buf, AC3_SAMPLES_PER_FRAME);
     }
     
-    for (ii = 0; ii < pv->input_samples; ii++)
-    {
-        // ffmpeg float samples are -1.0 to 1.0
-        pv->samples[ii] = ((float*)pv->buf)[ii] / 32768.0;
-    }
-
     buf = hb_buffer_init( pv->output_bytes );
     buf->size = avcodec_encode_audio( pv->context, buf->data, buf->alloc,
-                                      (short*)pv->samples );
+                                      (short*)pv->buf );
 
     buf->start = pts + 90000 * pos / pv->out_discrete_channels / sizeof( float ) / audio->config.out.samplerate;
     buf->stop  = buf->start + 90000 * AC3_SAMPLES_PER_FRAME / audio->config.out.samplerate;

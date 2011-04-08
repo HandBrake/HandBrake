@@ -198,7 +198,7 @@ static hb_buffer_t *Decode( hb_work_object_t *w )
         case 16: // 2 byte, big endian, signed (the right shift sign extends)
             while ( --count >= 0 )
             {
-                *odat++ = ( (int)( frm[0] << 24 ) >> 16 ) | frm[1];
+                *odat++ = (float)(( (int)( frm[0] << 24 ) >> 16 ) | frm[1]) / 32768.0;
                 frm += 2;
             }
             break;
@@ -209,9 +209,9 @@ static hb_buffer_t *Decode( hb_work_object_t *w )
             while ( --count >= 0 )
             {
                 *odat++ = (float)( ( (int)( frm[0] << 24 ) >> 12 ) |
-                                   ( frm[1] << 4 ) | ( frm[2] >> 4 ) ) / 16.;
+                                   ( frm[1] << 4 ) | ( frm[2] >> 4 ) ) / (16. * 32768.0);
                 *odat++ = (float)( ( (int)( frm[2] << 28 ) >> 16 ) |
-                                   ( frm[3] << 8 ) | frm[4] ) / 16.;
+                                   ( frm[3] << 8 ) | frm[4] ) / (16. * 32768.0);
                 frm += 5;
             }
             break;
@@ -227,13 +227,13 @@ static hb_buffer_t *Decode( hb_work_object_t *w )
             while ( --count >= 0 )
             {
                 *odat++ = (float)( ( (int)( frm[0] << 24 ) >> 8 ) |
-                            ( frm[1] << 8 ) | frm[8] ) / 256.;
+                            ( frm[1] << 8 ) | frm[8] ) / (256. * 32768.0);
                 *odat++ = (float)( ( (int)( frm[2] << 24 ) >> 8 ) |
-                            ( frm[3] << 8 ) | frm[9] ) / 256.;
+                            ( frm[3] << 8 ) | frm[9] ) / (256. * 32768.0);
                 *odat++ = (float)( ( (int)( frm[4] << 24 ) >> 8 ) |
-                            ( frm[5] << 8 ) | frm[10] ) / 256.;
+                            ( frm[5] << 8 ) | frm[10] ) / (256. * 32768.0);
                 *odat++ = (float)( ( (int)( frm[6] << 24 ) >> 8 ) |
-                            ( frm[7] << 8 ) | frm[11] ) / 256.;
+                            ( frm[7] << 8 ) | frm[11] ) / (256. * 32768.0);
                 frm += 12;
             }
             break;

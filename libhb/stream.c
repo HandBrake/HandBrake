@@ -2837,6 +2837,7 @@ static void ffmpeg_add_codec( hb_stream_t *stream, int stream_index )
     context->error_recognition = 1;
     context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
     AVCodec *codec = avcodec_find_decoder( context->codec_id );
+    hb_ff_set_sample_fmt( context, codec );
     hb_avcodec_open( context, codec );
 }
 

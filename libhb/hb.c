@@ -241,6 +241,29 @@ int hb_ff_layout_xlat(int64_t ff_channel_layout, int channels)
     return hb_layout;
 }
 
+// Set sample format to AV_SAMPLE_FMT_FLT if supported.
+// If it is not supported, we will have to translate using
+// av_audio_convert.
+void hb_ff_set_sample_fmt(AVCodecContext *context, AVCodec *codec)
+{
+    if ( codec && codec->sample_fmts )
+    {
+        if ( codec->type != AVMEDIA_TYPE_AUDIO )
+            return; // Not audio
+
+        const enum AVSampleFormat *fmt;
+
+        for ( fmt = codec->sample_fmts; *fmt != -1; fmt++ )
+        {
+            if ( *fmt == AV_SAMPLE_FMT_FLT )
+            {
+                context->sample_fmt = AV_SAMPLE_FMT_FLT;
+                break;
+            }
+        }
+    }
+}
+
 /**
  * Registers work objects, by adding the work object to a liked list.
  * @param w Handle to hb_work_object_t to register.

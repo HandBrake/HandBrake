@@ -242,9 +242,10 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     {
         for( j = 0; j < pv->out_discrete_channels; j++)
         {
-            buffer[j][i] = ((float *) pv->buf)[(pv->out_discrete_channels * i + pv->channel_map[j])] / 32768.f;
+            buffer[j][i] = ((float *) pv->buf)[(pv->out_discrete_channels * i + pv->channel_map[j])];
         }
     }
+
     vorbis_analysis_wrote( &pv->vd, OGGVORBIS_FRAME_SIZE );
 
     /* Try to extract again */
