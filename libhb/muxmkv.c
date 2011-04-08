@@ -10,6 +10,7 @@
 #include <ogg/ogg.h>
 
 #include "hb.h"
+#include "lang.h"
 
 /* Scale factor to apply to timecodes to convert from HandBrake's
  * 1/90000s to nanoseconds as expected by libmkv */
@@ -51,7 +52,8 @@ static int MKVInit( hb_mux_object_t * m )
     uint8_t         need_fonts = 0;
     int             avcC_len, i, j;
     ogg_packet      *ogg_headers[3];
-    mk_TrackConfig *track;
+    mk_TrackConfig  *track;
+    iso639_lang_t   *lang;
 
     track = calloc(1, sizeof(mk_TrackConfig));
 
@@ -249,7 +251,9 @@ static int MKVInit( hb_mux_object_t * m )
         }
         track->flagEnabled = 1;
         track->trackType = MK_TRACK_AUDIO;
-        track->language = audio->config.lang.iso639_2;
+        // MKV lang codes should be ISO-639-2/B
+        lang =  lang_for_code2( audio->config.lang.iso639_2 );
+        track->language = lang->iso639_2b ? lang->iso639_2b : lang->iso639_2;
         track->extra.audio.samplingFreq = (float)audio->config.out.samplerate;
         if (audio->config.out.codec == HB_ACODEC_AC3_PASS ||
             audio->config.out.codec == HB_ACODEC_DCA_PASS)
@@ -332,10 +336,12 @@ static int MKVInit( hb_mux_object_t * m )
         subtitle->mux_data = mux_data;
         mux_data->subtitle = 1;
         mux_data->sub_format = subtitle->format;
-        
+
         track->flagEnabled = 1;
         track->trackType = MK_TRACK_SUBTITLE;
-        track->language = subtitle->iso639_2;
+        // MKV lang codes should be ISO-639-2/B
+        lang =  lang_for_code2( subtitle->iso639_2 );
+        track->language = lang->iso639_2b ? lang->iso639_2b : lang->iso639_2;
 
         mux_data->track = mk_createTrack(m->file, track);
     }
