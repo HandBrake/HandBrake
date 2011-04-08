@@ -639,7 +639,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
                                               w, h, PIX_FMT_YUV420P,
                                               SWS_LANCZOS|SWS_ACCURATE_RND);
         }
-        sws_scale( pv->sws_context, frame->data, frame->linesize, 0, h,
+        sws_scale( pv->sws_context, (const uint8_t* const *)frame->data, frame->linesize, 0, h,
                    dstpic.data, dstpic.linesize );
     }
     else

@@ -547,7 +547,8 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
         // Scale pic_crop into pic_render according to the context set up in renderInit
         sws_scale(pv->context,
-                  pv->pic_tmp_crop.data, pv->pic_tmp_crop.linesize,
+                  (const uint8_t* const *)pv->pic_tmp_crop.data, 
+                  pv->pic_tmp_crop.linesize,
                   0, title->height - (job->crop[0] + job->crop[1]),
                   pv->pic_tmp_out.data,  pv->pic_tmp_out.linesize);
 

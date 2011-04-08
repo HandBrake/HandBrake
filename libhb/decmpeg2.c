@@ -296,7 +296,7 @@ static hb_buffer_t *hb_copy_frame( hb_job_t *job, int width, int height,
     struct SwsContext *context = hb_sws_get_context( src_w, src_h, pixfmt,
                                                  dst_w, dst_h, PIX_FMT_YUV420P,
                                                  SWS_LANCZOS|SWS_ACCURATE_RND);
-    sws_scale( context, pic_crop.data, pic_crop.linesize, 0, src_h, out.data, out.linesize );
+    sws_scale( context, (const uint8_t* const *)pic_crop.data, pic_crop.linesize, 0, src_h, out.data, out.linesize );
     sws_freeContext( context );
 
     return buf;

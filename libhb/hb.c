@@ -724,7 +724,7 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
 
     // Scale
     sws_scale(context,
-              pic_crop.data, pic_crop.linesize,
+              (const uint8_t* const *)pic_crop.data, pic_crop.linesize,
               0, title->height - (job->crop[0] + job->crop[1]),
               pic_scale.data, pic_scale.linesize);
 
@@ -738,7 +738,7 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
 
     // Create preview
     sws_scale(context,
-              pic_scale.data, pic_scale.linesize,
+              (const uint8_t* const *)pic_scale.data, pic_scale.linesize,
               0, job->height,
               pic_preview.data, pic_preview.linesize);
 
