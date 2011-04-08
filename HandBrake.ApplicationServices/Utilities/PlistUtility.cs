@@ -68,7 +68,7 @@ namespace HandBrake.ApplicationServices.Utilities
                             track.SampleRate = double.Parse(value);
                             break;
                         case "AudioTrack":
-                            track.Track = int.Parse(value);
+                            track.SourceTrack = value;
                             break;
                         case "AudioTrackDRCSlider":
                             track.DRC = double.Parse(value);
@@ -528,7 +528,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
             // Video Settings
             AddEncodeElement(xmlWriter, "VideoAvgBitrate", "string", parsed.VideoBitrate.ToString());
-            AddEncodeElement(xmlWriter, "VideoEncoder", "string", EnumHelper.GetDescription(parsed.VideoEncoder));
+            AddEncodeElement(xmlWriter, "VideoEncoder", "string", EnumHelper<Enum>.GetDescription(parsed.VideoEncoder));
             AddEncodeElement(xmlWriter, "VideoFramerate", "string", parsed.Framerate.ToString());
             AddEncodeElement(xmlWriter, "VideFrameratePFR", "integer", parsed.FramerateMode == FramerateMode.PFR ? "1" : "0");
             AddEncodeElement(xmlWriter, "VideoGrayScale", "integer", parsed.Grayscale ? "1" : "0");
@@ -636,10 +636,10 @@ namespace HandBrake.ApplicationServices.Utilities
             xmlWriter.WriteElementString("string", audioTrack.Bitrate.ToString());
 
             xmlWriter.WriteElementString("key", "AudioEncoder");
-            xmlWriter.WriteElementString("string", EnumHelper.GetDescription(audioTrack.Encoder));
+            xmlWriter.WriteElementString("string", EnumHelper<Enum>.GetDescription(audioTrack.Encoder));
 
             xmlWriter.WriteElementString("key", "AudioMixdown");
-            xmlWriter.WriteElementString("string", EnumHelper.GetDescription(audioTrack.MixDown));
+            xmlWriter.WriteElementString("string", EnumHelper<Enum>.GetDescription(audioTrack.MixDown));
 
             xmlWriter.WriteElementString("key", "AudioSamplerate");
             xmlWriter.WriteElementString("string", audioTrack.SampleRate.ToString());

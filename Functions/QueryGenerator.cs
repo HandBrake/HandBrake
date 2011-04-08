@@ -9,9 +9,12 @@ namespace Handbrake.Functions
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Windows.Forms;
 
     using HandBrake.ApplicationServices;
+    using HandBrake.ApplicationServices.Functions;
+    using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
@@ -363,152 +366,53 @@ namespace Handbrake.Functions
 
         private static string AudioSettingsQuery(frmMain mainWindow)
         {
-            string query = string.Empty;
+            // Queries for each option
+            string tracks = string.Empty;
+            string encoders = string.Empty;
+            string mixdowns = string.Empty;
+            string samplerates = string.Empty;
+            string bitrates = string.Empty;
+            string drvValues = string.Empty;
+            string gainValues = string.Empty;
 
-            DataGridView audioTracks = mainWindow.AudioSettings.GetAudioPanel();
-            List<string> tracks = new List<string>();
-            List<string> codecs = new List<string>();
-            List<string> mixdowns = new List<string>();
-            List<string> samplerates = new List<string>();
-            List<string> bitrates = new List<string>();
-            List<string> drcs = new List<string>();
+            // If we have no audio tracks, set the query to none
+            if (mainWindow.AudioSettings.AudioTracks.ToList().Count == 0)
+            {
+                return " -a none";
+            }
 
-            // No Audio
-            if (audioTracks.Rows.Count == 0)
-                query += " -a none ";
-
-            // Gather information about each audio track and store them in the declared lists.
-            foreach (DataGridViewRow row in audioTracks.Rows)
+            // Generate the sub queries
+            foreach (AudioTrack audioTrack in mainWindow.AudioSettings.AudioTracks)
             {
                 // Audio Track (-a)
-                if (row.Cells[1].Value.ToString() == "Automatic")
-                    tracks.Add("1");
-                else if (row.Cells[1].Value.ToString() != "None")
-                {
-                    string[] tempSub = row.Cells[1].Value.ToString().Split(' ');
-                    tracks.Add(tempSub[0]);
-                }
+                string track = audioTrack.Track.HasValue ? audioTrack.Track.ToString() : "1"; // Default to "1"
+                tracks += string.IsNullOrEmpty(tracks) ? track : string.Format(",{0}", track);
 
-                // Audio Codec (-E)
-                if (row.Cells[2].Value.ToString() != String.Empty)
-                    codecs.Add(GetAudioEncoder(row.Cells[2].Value.ToString()));
+                // Audio Encoder  (-E)
+                encoders += string.IsNullOrEmpty(encoders)
+                              ? GetAudioEncoder(EnumHelper<AudioEncoder>.GetDescription(audioTrack.Encoder))
+                              : string.Format(",{0}", GetAudioEncoder(EnumHelper<AudioEncoder>.GetDescription(audioTrack.Encoder)));
 
-                // Audio Mixdown (-6)
-                if (row.Cells[3].Value.ToString() != String.Empty)
-                    mixdowns.Add(GetMixDown(row.Cells[3].Value.ToString()));
+                // Audio Mixdowns (-6)
+                mixdowns += string.IsNullOrEmpty(mixdowns)
+                              ? GetMixDown(EnumHelper<Mixdown>.GetDescription(audioTrack.MixDown))
+                              : string.Format(",{0}", GetMixDown(EnumHelper<Mixdown>.GetDescription(audioTrack.MixDown)));
 
-                // Sample Rate (-R)
-                if (row.Cells[4].Value.ToString() != String.Empty)
-                    samplerates.Add(row.Cells[4].Value.ToString());
+                // Audio Samplerates (-R)
+                string rate = audioTrack.SampleRate == 0 ? "Auto" : audioTrack.SampleRate.ToString(); // Default to "Auto"
+                samplerates += string.IsNullOrEmpty(samplerates) ? rate : string.Format(",{0}", rate);
 
-                // Audio Bitrate (-B)
-                if (row.Cells[5].Value.ToString() != String.Empty)
-                    bitrates.Add(row.Cells[5].Value.ToString().Replace("Auto", "auto"));
+                // Audio Bitrates (-B)
+                bitrates += string.IsNullOrEmpty(bitrates) ? audioTrack.Bitrate.ToString() : string.Format(",{0}", audioTrack.Bitrate);
 
-                // DRC (-D)
-                if (row.Cells[6].Value.ToString() != String.Empty)
-                    drcs.Add(row.Cells[6].Value.ToString());
+                // Audio DRC Values
+                drvValues += string.IsNullOrEmpty(drvValues) ? audioTrack.DRC.ToString() : string.Format(",{0}", audioTrack.DRC);
+
+                // Audio Gain Control
+                gainValues += string.IsNullOrEmpty(gainValues) ? audioTrack.Gain.ToString() : string.Format(",{0}", audioTrack.Gain);
             }
 
-            // Audio Track (-a)
-            string audioItems = string.Empty;
-            bool firstLoop = true;
-
-            foreach (string item in tracks)
-            {
-                if (firstLoop)
-                {
-                    audioItems = item;
-                    firstLoop = false;
-                }
-                else
-                    audioItems += "," + item;
-            }
-            if (audioItems.Trim() != String.Empty)
-                query += " -a " + audioItems;
-            firstLoop = true;
-            audioItems = string.Empty; // Reset for another pass.
-
-            // Audio Codec (-E)
-            foreach (string item in codecs)
-            {
-                if (firstLoop)
-                {
-                    audioItems = item;
-                    firstLoop = false;
-                }
-                else
-                    audioItems += "," + item;
-            }
-            if (audioItems.Trim() != String.Empty)
-                query += " -E " + audioItems;
-            firstLoop = true;
-            audioItems = string.Empty; // Reset for another pass.
-
-            // Audio Mixdown (-6)
-            foreach (string item in mixdowns)
-            {
-                if (firstLoop)
-                {
-                    audioItems = item;
-                    firstLoop = false;
-                }
-                else
-                    audioItems += "," + item;
-            }
-            if (audioItems.Trim() != String.Empty)
-                query += " -6 " + audioItems;
-            firstLoop = true;
-            audioItems = string.Empty; // Reset for another pass.
-
-            // Sample Rate (-R)
-            foreach (string item in samplerates)
-            {
-                if (firstLoop)
-                {
-                    audioItems = item;
-                    firstLoop = false;
-                }
-                else
-                    audioItems += "," + item;
-            }
-            if (audioItems.Trim() != String.Empty)
-                query += " -R " + audioItems;
-            firstLoop = true;
-            audioItems = string.Empty; // Reset for another pass.
-
-            // Audio Bitrate (-B)
-            foreach (string item in bitrates)
-            {
-                if (firstLoop)
-                {
-                    audioItems = item;
-                    firstLoop = false;
-                }
-                else
-                    audioItems += "," + item;
-            }
-            if (audioItems.Trim() != String.Empty)
-                query += " -B " + audioItems;
-            firstLoop = true;
-            audioItems = string.Empty; // Reset for another pass.
-
-            // DRC (-D)
-            foreach (var itm in drcs)
-            {
-                string item = itm.ToString(new CultureInfo("en-US"));
-                if (firstLoop)
-                {
-                    audioItems = item;
-                    firstLoop = false;
-                }
-                else
-                    audioItems += "," + item;
-            }
-            if (audioItems.Trim() != String.Empty)
-                query += " -D " + audioItems;
-
-            return query;
+            return string.Format(" -a {0} -E {1} -B {2} -6 {3} -R {4} -D {5} --gain={6}", tracks, encoders, bitrates, mixdowns, samplerates, drvValues, gainValues);
         }
 
         private static string ChapterMarkersQuery(frmMain mainWindow)

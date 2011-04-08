@@ -7,9 +7,12 @@ namespace HandBrake.ApplicationServices.Model.Encoding
 {
     using System.ComponentModel;
 
+    using HandBrake.ApplicationServices.Converters;
+
     /// <summary>
     /// The Mixdown Mode
     /// </summary>
+    [TypeConverter(typeof(EnumToDescConveter))]
     public enum Mixdown
     {
         [Description("Dolby Pro Logic II")]
@@ -28,6 +31,12 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         DolbySurround,
 
         [Description("6 Channel Discrete")]
-        SixChannelDiscrete
+        SixChannelDiscrete,
+
+        [Description("AC3 Passthru")]
+        Ac3Passthrough,
+
+        [Description("DTS Passthru")]
+        DtsPassthrough,
     }
 }

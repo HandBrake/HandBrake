@@ -359,7 +359,7 @@ namespace HandBrake.ApplicationServices.Utilities
                     AudioTrack track = new AudioTrack();
                     if (trackData != null)
                         if (trackData.Length >= (x + 1)) // Audio Track
-                            track.Track = int.Parse(trackData[x].Trim());
+                            track.SourceTrack = trackData[x].Trim();
 
                     if (trackMixes != null)
                         if (trackMixes.Length >= (x + 1)) // Audio Mix

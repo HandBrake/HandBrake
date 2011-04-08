@@ -16,17 +16,58 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         public AudioTrack()
         {
             // Default Values
-            this.Track = 1;
+            this.Encoder = AudioEncoder.Faac;
             this.MixDown = Mixdown.DolbyProLogicII;
             this.SampleRate = 48;
             this.Bitrate = 160;
             this.DRC = 1;
+            this.SourceTrack = "Automatic";
         }
 
         /// <summary>
-        /// Gets or sets Audio Track Name
+        /// Gets the Audio Track Name
         /// </summary>
-        public int Track { get; set; }
+        public int? Track
+        {
+            get
+            {
+                string[] tempSub = SourceTrack.Split(' ');
+                int value;
+                if (int.TryParse(tempSub[0], out value))
+                {
+                    return value;
+                }
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets the The UI display value for sample rate
+        /// </summary>
+        public string SampleRateDisplayValue
+        {
+            get
+            {
+                return SampleRate == 0 ? "Auto" : SampleRate.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Gets the The UI display value for bit rate
+        /// </summary>
+        public string BitRateDisplayValue
+        {
+            get
+            {
+                return Bitrate == 0 ? "Auto" : Bitrate.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the Source Track
+        /// Used for display purposes only.
+        /// </summary>
+        public string SourceTrack { get; set; }
 
         /// <summary>
         /// Gets or sets Audio Mixdown
@@ -52,5 +93,10 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         /// Gets or sets Dynamic Range Compression
         /// </summary>
         public double DRC { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Gain for the audio track
+        /// </summary>
+        public int Gain { get; set; }
     }
 }

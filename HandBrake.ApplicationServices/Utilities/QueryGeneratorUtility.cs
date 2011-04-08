@@ -136,7 +136,7 @@ namespace HandBrake.ApplicationServices.Utilities
         {
             string query = string.Empty;
 
-            query += string.Format(" -f {0} ", EnumHelper.GetDescription(task.OutputFormat).ToLower());
+            query += string.Format(" -f {0} ", EnumHelper<Enum>.GetDescription(task.OutputFormat).ToLower());
 
             // These are output settings features
             if (task.LargeFile)
@@ -373,7 +373,12 @@ namespace HandBrake.ApplicationServices.Utilities
             // Gather information about each audio track and store them in the declared lists.
             foreach (AudioTrack track in audioTracks)
             {
-                tracks.Add(track.Track);
+                if (track.Track == null)
+                {
+                    continue;
+                }
+
+                tracks.Add(track.Track.Value);
 
                 // Audio Codec (-E)
                 codecs.Add(track.Encoder);

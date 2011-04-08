@@ -12,7 +12,10 @@ namespace HandBrake.ApplicationServices.Functions
     /// <summary>
     /// Enum Helpers
     /// </summary>
-    public class EnumHelper
+    /// <typeparam name="T">
+    /// The Type Parameter
+    /// </typeparam>
+    public class EnumHelper<T>
     {
         /// <summary>
         /// Get the description of an Enum
@@ -23,13 +26,32 @@ namespace HandBrake.ApplicationServices.Functions
         /// <returns>
         /// The Description string
         /// </returns>
-        public static string GetDescription(Enum value)
+        public static string GetDescription(T value)
         {
             FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
             DescriptionAttribute[] attributes =
                   (DescriptionAttribute[])fieldInfo.GetCustomAttributes(
                   typeof(DescriptionAttribute), false);
             return (attributes.Length > 0) ? attributes[0].Description : value.ToString();
+        }
+
+        /// <summary>
+        /// Get the Enumeration for a given Enum Description
+        /// </summary>
+        /// <param name="description">The String description</param>
+        /// <returns>The Enum Value</returns>
+        public static T GetValue(string description)
+        {
+            foreach (T val in Enum.GetValues(typeof(T)))
+            {
+                string currDescription = GetDescription(val);
+                if (currDescription == description)
+                {
+                    return val;
+                }
+            }
+
+            throw new ArgumentOutOfRangeException("The Description for the enum was not recognized.");
         }
     }
 }

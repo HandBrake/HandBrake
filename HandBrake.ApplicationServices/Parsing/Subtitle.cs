@@ -5,6 +5,7 @@
 
 namespace HandBrake.ApplicationServices.Parsing
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Text.RegularExpressions;
@@ -75,7 +76,7 @@ namespace HandBrake.ApplicationServices.Parsing
         {
             get
             {
-                return EnumHelper.GetDescription(this.SubtitleType);
+                return EnumHelper<Enum>.GetDescription(this.SubtitleType);
             }
         }
 
