@@ -7,6 +7,9 @@ namespace HandBrake.ApplicationServices.Model.Encoding
 {
     using System.ComponentModel;
 
+    using HandBrake.ApplicationServices.Converters;
+
+    [TypeConverter(typeof(EnumToDescConveter))]
     public enum AudioEncoder
     {
         [Description("AAC (faac)")]

@@ -372,7 +372,7 @@ namespace Handbrake
                     if (audio != string.Empty)
                         audio += ", " + track.Encoder;
                     else
-                        audio = EnumHelper.GetDescription(track.Encoder);
+                        audio = EnumHelper<AudioEncoder>.GetDescription(track.Encoder);
                 }
                 item.SubItems.Add(audio); // Audio
 
@@ -429,7 +429,7 @@ namespace Handbrake
                     if (audio != string.Empty) 
                         audio += ", " + track.Encoder;
                     else
-                        audio = EnumHelper.GetDescription(track.Encoder);
+                        audio = EnumHelper<AudioEncoder>.GetDescription(track.Encoder);
                 }
 
                 // found query is a global varible        
