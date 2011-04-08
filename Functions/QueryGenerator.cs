@@ -470,8 +470,7 @@ namespace Handbrake.Functions
                     break;
             }
 
-
-            return " -x " + advancedOptions;
+            return !string.IsNullOrEmpty(advancedOptions) ? " -x " + advancedOptions : string.Empty;
         }
 
         private static string ExtraSettings()
