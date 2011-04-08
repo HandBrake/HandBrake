@@ -226,12 +226,10 @@ namespace Handbrake.Controls
                     if (drp_audioEncoder.Text.Contains(AC3Passthru) || drp_audioEncoder.Text.Contains(DTSPassthru))
                     {
                         drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = tb_drc.Enabled = false;
-                        lbl_bitrate.Enabled = lbl_drc.Enabled = lbl_drcHeader.Enabled = lbl_mixdown.Enabled = lbl_sampleRate.Enabled = false;
                     }
                     else
                     {
                         drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = tb_drc.Enabled = true;
-                        lbl_bitrate.Enabled = lbl_drc.Enabled = lbl_drcHeader.Enabled = lbl_mixdown.Enabled = lbl_sampleRate.Enabled = true;
                     }
 
                     // Update an item in the Audio list if required.
@@ -270,6 +268,12 @@ namespace Handbrake.Controls
             }
 
             audioList.Refresh();
+
+            if (audioList.SelectedRows.Count == 1)
+            {
+                AudioTrack item = audioList.SelectedRows[0].DataBoundItem as AudioTrack;
+                if (item != null) lbl_audioTrack.Text = track.SourceTrack;
+            }
         }
 
         /// <summary>
@@ -302,11 +306,11 @@ namespace Handbrake.Controls
                     tb_drc.Value = drcCalculated;
                     lbl_drc.Text = track.DRC.ToString();
 
-                    AudioTrackGroup.Text = "Selected Track: " + track.SourceTrack;
+                    lbl_audioTrack.Text = track.SourceTrack;
                 }
             }
             else
-                AudioTrackGroup.Text = "Selected Track: None (Click \"Add Track\" to add)";
+                lbl_audioTrack.Text = "(Click \"Add Track\" to add)";
         }
 
         #endregion
