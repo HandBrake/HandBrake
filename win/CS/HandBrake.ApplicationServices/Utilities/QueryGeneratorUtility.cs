@@ -298,26 +298,26 @@ namespace HandBrake.ApplicationServices.Utilities
 
             switch (task.VideoEncodeRateType)
             {
-                case VideoEncodeRateMode.ConstantQuality:
+                case VideoEncodeRateMode.AverageBitrate:
                     if (task.VideoBitrate.HasValue)
                         query += string.Format(" -b {0}", task.VideoBitrate.Value);
                     break;
-                case VideoEncodeRateMode.AverageBitrate:
+                case VideoEncodeRateMode.ConstantQuality:
                     double value;
                     switch (task.VideoEncoder)
                     {
                         case VideoEncoder.FFMpeg:
-                            value = 31 - (task.Quality - 1);
+                            value = 31 - (task.Quality.Value - 1);
                             query += string.Format(" -q {0}", value.ToString(new CultureInfo("en-US")));
                             break;
                         case VideoEncoder.X264:
                             CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
-                            value = 51 - (task.Quality * x264CqStep);
+                            value = 51 - (task.Quality.Value * x264CqStep);
                             value = Math.Round(value, 2);
                             query += string.Format(" -q {0}", value.ToString(culture));
                             break;
                         case VideoEncoder.Theora:
-                            value = task.Quality;
+                            value = task.Quality.Value;
                             query += string.Format(" -q {0}", value.ToString(new CultureInfo("en-US")));
                             break;
                     }

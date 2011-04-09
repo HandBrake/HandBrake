@@ -892,7 +892,7 @@ namespace Handbrake
             this.check_showCliForInGUIEncode.BackColor = System.Drawing.Color.Transparent;
             this.check_showCliForInGUIEncode.Location = new System.Drawing.Point(81, 129);
             this.check_showCliForInGUIEncode.Name = "check_showCliForInGUIEncode";
-            this.check_showCliForInGUIEncode.Size = new System.Drawing.Size(324, 17);
+            this.check_showCliForInGUIEncode.Size = new System.Drawing.Size(330, 17);
             this.check_showCliForInGUIEncode.TabIndex = 96;
             this.check_showCliForInGUIEncode.Text = "Show CLI window (Allows you to cleanly exit encode with ctrl-c)";
             this.ToolTip.SetToolTip(this.check_showCliForInGUIEncode, resources.GetString("check_showCliForInGUIEncode.ToolTip"));
@@ -946,7 +946,7 @@ namespace Handbrake
             this.check_trayStatusAlerts.BackColor = System.Drawing.Color.Transparent;
             this.check_trayStatusAlerts.Location = new System.Drawing.Point(81, 37);
             this.check_trayStatusAlerts.Name = "check_trayStatusAlerts";
-            this.check_trayStatusAlerts.Size = new System.Drawing.Size(288, 17);
+            this.check_trayStatusAlerts.Size = new System.Drawing.Size(296, 17);
             this.check_trayStatusAlerts.TabIndex = 93;
             this.check_trayStatusAlerts.Text = "Display status messages from tray icon (balloon popups)";
             this.ToolTip.SetToolTip(this.check_trayStatusAlerts, "Minimize the window to the system tray rather than the task bar.\r\nThe system tray" +
@@ -962,7 +962,7 @@ namespace Handbrake
             this.check_mainMinimize.BackColor = System.Drawing.Color.Transparent;
             this.check_mainMinimize.Location = new System.Drawing.Point(81, 14);
             this.check_mainMinimize.Name = "check_mainMinimize";
-            this.check_mainMinimize.Size = new System.Drawing.Size(221, 17);
+            this.check_mainMinimize.Size = new System.Drawing.Size(230, 17);
             this.check_mainMinimize.TabIndex = 82;
             this.check_mainMinimize.Text = "Minimize to system tray (Requires Restart)";
             this.ToolTip.SetToolTip(this.check_mainMinimize, "Minimize the window to the system tray rather than the task bar.\r\nThe system tray" +
@@ -976,7 +976,7 @@ namespace Handbrake
             this.check_promptOnUnmatchingQueries.AutoSize = true;
             this.check_promptOnUnmatchingQueries.Location = new System.Drawing.Point(100, 83);
             this.check_promptOnUnmatchingQueries.Name = "check_promptOnUnmatchingQueries";
-            this.check_promptOnUnmatchingQueries.Size = new System.Drawing.Size(300, 17);
+            this.check_promptOnUnmatchingQueries.Size = new System.Drawing.Size(305, 17);
             this.check_promptOnUnmatchingQueries.TabIndex = 63;
             this.check_promptOnUnmatchingQueries.Text = "Prompt when a manual query does not match GUI settings";
             this.check_promptOnUnmatchingQueries.UseVisualStyleBackColor = true;
@@ -989,7 +989,7 @@ namespace Handbrake
             this.check_dvdnav.BackColor = System.Drawing.Color.Transparent;
             this.check_dvdnav.Location = new System.Drawing.Point(82, 247);
             this.check_dvdnav.Name = "check_dvdnav";
-            this.check_dvdnav.Size = new System.Drawing.Size(277, 17);
+            this.check_dvdnav.Size = new System.Drawing.Size(276, 17);
             this.check_dvdnav.TabIndex = 90;
             this.check_dvdnav.Text = "Disable LibDVDNav. (libdvdread will be used instead)";
             this.check_dvdnav.UseVisualStyleBackColor = false;
@@ -1002,7 +1002,7 @@ namespace Handbrake
             this.check_queryEditorTab.BackColor = System.Drawing.Color.Transparent;
             this.check_queryEditorTab.Location = new System.Drawing.Point(81, 60);
             this.check_queryEditorTab.Name = "check_queryEditorTab";
-            this.check_queryEditorTab.Size = new System.Drawing.Size(236, 17);
+            this.check_queryEditorTab.Size = new System.Drawing.Size(241, 17);
             this.check_queryEditorTab.TabIndex = 84;
             this.check_queryEditorTab.Text = "Enable \"Query Editor\" tab (Requires Restart)";
             this.ToolTip.SetToolTip(this.check_queryEditorTab, "Enables the Query Editor tab on the main window. Requires program restart to take" +
@@ -1054,7 +1054,7 @@ namespace Handbrake
             this.check_disablePresetNotification.BackColor = System.Drawing.Color.Transparent;
             this.check_disablePresetNotification.Location = new System.Drawing.Point(81, 106);
             this.check_disablePresetNotification.Name = "check_disablePresetNotification";
-            this.check_disablePresetNotification.Size = new System.Drawing.Size(216, 17);
+            this.check_disablePresetNotification.Size = new System.Drawing.Size(222, 17);
             this.check_disablePresetNotification.TabIndex = 91;
             this.check_disablePresetNotification.Text = "Disable built-in preset update notification";
             this.ToolTip.SetToolTip(this.check_disablePresetNotification, "Disables the notification you recieve when presets are updated when a new version" +

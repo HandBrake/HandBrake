@@ -181,7 +181,7 @@ namespace Handbrake
             drop_previewScanCount.SelectedItem = Properties.Settings.Default.previewScanCount.ToString();
 
             // x264 step
-            string step = userSettingService.GetUserSettingString(UserSettingConstants.X264Step).ToString(new CultureInfo("en-US"));
+            string step = userSettingService.GetUserSettingDouble(UserSettingConstants.X264Step).ToString(new CultureInfo("en-US"));
             switch (step)
             {
                 case "1":

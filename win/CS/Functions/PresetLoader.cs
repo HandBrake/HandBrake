@@ -206,21 +206,21 @@ namespace Handbrake.Functions
                     break;
             }
 
-            if (presetQuery.VideoBitrate != null)
-            {
-                mainWindow.radio_avgBitrate.Checked = true;
-                mainWindow.text_bitrate.Text = presetQuery.VideoBitrate.ToString();
-            }
-
             // Quality
             if (presetQuery.Quality != null)
             {
                 mainWindow.radio_cq.Checked = true;
-                mainWindow.slider_videoQuality.Value = QualityToSliderValue(
-                    presetQuery.VideoEncoder, presetQuery.Quality);
+                mainWindow.slider_videoQuality.Value = QualityToSliderValue(presetQuery.VideoEncoder, presetQuery.Quality);
+                mainWindow.check_2PassEncode.CheckState = CheckState.Unchecked;
+                mainWindow.check_turbo.CheckState = CheckState.Unchecked;
             }
-
-            mainWindow.check_2PassEncode.CheckState = presetQuery.TwoPass ? CheckState.Checked : CheckState.Unchecked;
+            else if (presetQuery.VideoBitrate != null)
+            {
+                mainWindow.radio_avgBitrate.Checked = true;
+                mainWindow.text_bitrate.Text = presetQuery.VideoBitrate.ToString();
+                mainWindow.check_2PassEncode.CheckState = presetQuery.TwoPass ? CheckState.Checked : CheckState.Unchecked;
+                mainWindow.check_turbo.CheckState = presetQuery.TurboFirstPass ? CheckState.Checked : CheckState.Unchecked;
+            }              
 
             if (presetQuery.Framerate != null)
             {
@@ -235,7 +235,6 @@ namespace Handbrake.Functions
             if (presetQuery.Framerate != null)
             {
                 // Constant or Peak Framerate for a set framerate.
-
                 if (presetQuery.FramerateMode == FramerateMode.CFR)
                     mainWindow.radio_constantFramerate.Checked = true;
                 else
@@ -249,8 +248,6 @@ namespace Handbrake.Functions
                 else
                     mainWindow.radio_peakAndVariable.Checked = true;
             }
-
-            mainWindow.check_turbo.CheckState = presetQuery.TurboFirstPass ? CheckState.Checked : CheckState.Unchecked;
 
             #endregion
 
