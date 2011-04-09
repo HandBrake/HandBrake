@@ -222,7 +222,7 @@ namespace HandBrake.ApplicationServices.Model
         /// <summary>
         /// Gets or sets Quality.
         /// </summary>
-        public double Quality { get; set; }
+        public double? Quality { get; set; }
 
         /// <summary>
         /// Gets or sets VideoBitrate.
