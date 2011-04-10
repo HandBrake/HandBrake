@@ -35,6 +35,7 @@ typedef struct
     uint8_t        saw_audio;       // != 0 if we've seen audio
 
     int            start_found;     // found pts_to_start point
+    int64_t        pts_to_start;
     uint64_t       st_first;
 } hb_reader_t;
 
@@ -72,6 +73,13 @@ hb_thread_t * hb_reader_init( hb_job_t * job )
 
     if ( !job->pts_to_start )
         r->start_found = 1;
+    else
+    {
+        // The frame at the actual start time may not be an i-frame
+        // so can't be decoded without starting a little early.
+        // sync.c will drop early frames.
+        r->pts_to_start = MAX(0, job->pts_to_start - 180000);
+    }
 
     return hb_thread_init( "reader", ReaderFunc, r,
                            HB_NORMAL_PRIORITY );
@@ -265,6 +273,8 @@ static void ReaderFunc( void * _r )
         }
         else if ( r->job->pts_to_start )
         {
+            // Note, bd seeks always put us to an i-frame.  no need
+            // to start decoding early using r->pts_to_start
             hb_bd_seek_pts( r->bd, r->job->pts_to_start );
             r->job->pts_to_start = 0;
             r->start_found = 1;
@@ -334,7 +344,11 @@ static void ReaderFunc( void * _r )
         if ( hb_stream_read( r->stream, ps ) )
         {
             if ( ps->start > 0 )
+            {
                 pts_to_start += ps->start;
+                r->pts_to_start += ps->start;
+                r->job->pts_to_start += ps->start;
+            }
         }
         
         if ( hb_stream_seek_ts( r->stream, pts_to_start ) >= 0 )
@@ -519,7 +533,7 @@ static void ReaderFunc( void * _r )
                         UpdateState( r, start );
 
                     if ( !r->start_found &&
-                        start >= r->job->pts_to_start )
+                        start >= r->pts_to_start )
                     {
                         // pts_to_start point found
                         r->start_found = 1;

@@ -914,7 +914,30 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         while ( !pv->common->start_found && 
                 buf->start >= pv->common->audio_pts_thresh )
         {
-            hb_cond_timedwait( pv->common->next_frame, pv->common->mutex, 200 );
+            hb_cond_timedwait( pv->common->next_frame, pv->common->mutex, 10 );
+            // There is an unfortunate unavoidable deadlock that can occur.
+            // Since we need to wait for a specific frame in syncVideoWork,
+            // syncAudioWork can be stalled indefinitely.  The video decoder
+            // often drops multiple of the initial frames after starting
+            // because they require references that have not been decoded yet.
+            // This allows a lot of audio to be queued in the fifo and the
+            // audio fifo fills before we get a single video frame.  So we
+            // must drop some audio to unplug the pipeline and allow the first
+            // video frame to be decoded.
+            if ( hb_fifo_is_full(w->fifo_in) )
+            {
+                hb_buffer_t *tmp;
+                tmp = buf = hb_fifo_get( w->fifo_in );
+                while ( tmp )
+                {
+                    tmp = hb_fifo_get( w->fifo_in );
+                    if ( tmp )
+                    {
+                        hb_buffer_close( &buf );
+                        buf = tmp;
+                    }
+                }
+            }
         }
         start = buf->start - pv->common->audio_pts_slip;
     }
