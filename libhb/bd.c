@@ -72,6 +72,32 @@ int hb_bd_title_count( hb_bd_t * d )
     return d->title_count;
 }
 
+static int bd_audio_equal( BLURAY_CLIP_INFO *a, BLURAY_CLIP_INFO *b )
+{
+    int ii, jj, equal;
+
+    if ( a->audio_stream_count != b->audio_stream_count )
+        return 0;
+
+    for ( ii = 0; ii < a->audio_stream_count; ii++ )
+    {
+        BLURAY_STREAM_INFO * s = &a->audio_streams[ii];
+        equal = 0;
+        for ( jj = 0; jj < b->audio_stream_count; jj++ )
+        {
+            if ( s->pid == b->audio_streams[jj].pid &&
+                 s->coding_type == b->audio_streams[jj].coding_type)
+            {
+                equal = 1;
+                break;
+            }
+        }
+        if ( !equal )
+            return 0;
+    }
+    return 1;
+}
+
 /***********************************************************************
  * hb_bd_title_scan
  **********************************************************************/
@@ -80,7 +106,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
 
     hb_title_t   * title;
     hb_chapter_t * chapter;
-    int            ii;
+    int            ii, jj;
     BLURAY_TITLE_INFO * ti = NULL;
 
     hb_log( "bd: scanning title %d", tt );
@@ -121,6 +147,8 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
         hb_log( "bd: stream has no video" );
         goto fail;
     }
+
+    hb_deep_log( 2, "bd: Playlist %05d", ti->playlist);
 
     uint64_t pkt_count = 0;
     for ( ii = 0; ii < ti->clip_count; ii++ )
@@ -219,18 +247,38 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     hb_log( "bd: aspect = %g", title->container_aspect );
 
     /* Detect audio */
-    // The BD may have clips that have no audio tracks, so scan
-    // the list of clips for one that has audio.
+    // All BD clips are not all required to have the same audio.
+    // But clips that have seamless transition are required
+    // to have the same audio as the previous clip.
+    // So find the clip that has the most other clips with the 
+    // matching audio.
+    // Max primary BD audios is 32
+    uint8_t counts[32] = {0,};
+    uint8_t matches[32] = {0,};
     int most_audio = 0;
     int audio_clip_index = 0;
     for ( ii = 0; ii < ti->clip_count; ii++ )
     {
-        if ( most_audio < ti->clips[ii].audio_stream_count )
+        if ( matches[ii] ) continue;
+        for ( jj = 0; jj < ti->clip_count; jj++ )
         {
-            most_audio = ti->clips[ii].audio_stream_count;
+            if ( matches[jj] ) continue;
+            if ( bd_audio_equal( &ti->clips[ii], &ti->clips[jj] ) )
+            {
+                matches[ii] = matches[jj] = 1;
+                counts[ii]++;
+            }
+        }
+    }
+    for ( ii = 0; ii < ti->clip_count; ii++ )
+    {
+        if ( most_audio < counts[ii] )
+        {
+            most_audio = counts[ii];
             audio_clip_index = ii;
         }
     }
+
     // Add all the audios found in the above clip.
     for ( ii = 0; ii < ti->clips[audio_clip_index].audio_stream_count; ii++ )
     {
@@ -240,12 +288,8 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
 
         bdaudio = &ti->clips[audio_clip_index].audio_streams[ii];
 
-        hb_log( "bd: checking audio %d", ii + 1 );
-
         audio = calloc( sizeof( hb_audio_t ), 1 );
-
         audio->id = bdaudio->pid;
-
         audio->config.in.stream_type = bdaudio->coding_type;
         switch( bdaudio->coding_type )
         {
@@ -280,8 +324,8 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
 
             default:
                 audio->config.in.codec = 0;
-                hb_log( "scan: unknown audio codec (%x)",
-                        bdaudio->coding_type );
+                hb_log( "scan: unknown audio pid 0x%x codec 0x%x",
+                        bdaudio->pid, bdaudio->coding_type );
                 break;
         }
 
@@ -509,6 +553,7 @@ int hb_bd_read( hb_bd_t * d, hb_buffer_t * b )
                     break;
 
                 case BD_EVENT_PLAYITEM:
+                    hb_deep_log(2, "bd: Playitem %u", event.param);
                     b->discontinuity = 1;
                     break;
 
