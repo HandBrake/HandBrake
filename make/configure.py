@@ -760,7 +760,7 @@ class Project( Action ):
             self.build = time.strftime('%Y%m%d') + '00'
             self.title = '%s %s (%s)' % (self.name,self.version,self.build)
         elif repo.type == 'developer':
-            self.version = 'svn%d' % (repo.rev)
+            self.version = '%dsvn' % (repo.rev)
             url_ctype = '_unstable'
             url_ntype = 'unstable'
             self.build = time.strftime('%Y%m%d') + '01'
