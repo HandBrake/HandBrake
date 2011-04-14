@@ -2491,8 +2491,9 @@ static void ShowHelp()
 
 
     "### Video Options------------------------------------------------------------\n\n"
-    "    -e, --encoder <string>  Set video library encoder (ffmpeg,x264,theora)\n"
-    "                            (default: ffmpeg)\n"
+    "    -e, --encoder <string>  Set video library encoder\n"
+    "                            Options: ffmpeg4,ffmpeg2,x264,theora\n"
+    "                            (default: ffmpeg4)\n"
     "    -x, --encopts <string>  Specify advanced encoder options in the\n"
     "                            same style as mencoder (x264 and ffmpeg only):\n"
     "                            option1=value1:option2=value2\n"
