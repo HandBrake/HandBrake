@@ -9,6 +9,7 @@ namespace Handbrake
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
+    using System.IO;
     using System.Windows.Forms;
 
     using HandBrake.ApplicationServices;
@@ -76,7 +77,15 @@ namespace Handbrake
             if (userSettingService.GetUserSettingBoolean(UserSettingConstants.GrowlQueue))
                 check_GrowlQueue.CheckState = CheckState.Checked;
 
-            // Enable auto naming feature.
+            check_sendFileTo.Checked = this.userSettingService.GetUserSettingBoolean(UserSettingConstants.SendFile);
+            lbl_sendFileTo.Text = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSettingString(UserSettingConstants.SendFileTo));
+            txt_SendFileArgs.Text = this.userSettingService.GetUserSettingString(UserSettingConstants.SendFileToArgs);
+
+            // #############################
+            // Output Settings
+            // #############################
+
+            // Enable auto naming feature.)
             if (Properties.Settings.Default.autoNaming)
                 check_autoNaming.CheckState = CheckState.Checked;
 
@@ -248,6 +257,29 @@ namespace Handbrake
             userSettingService.SetUserSetting(UserSettingConstants.GrowlEncode, check_growlEncode.Checked);
         }
 
+        private void btn_SendFileToPath_Click(object sender, EventArgs e)
+        {
+            openExecutable.ShowDialog();
+            if (!string.IsNullOrEmpty(openExecutable.FileName))
+            {
+                this.userSettingService.SetUserSetting(UserSettingConstants.SendFileTo, openExecutable.FileName);
+                lbl_sendFileTo.Text = Path.GetFileNameWithoutExtension(openExecutable.FileName);
+            }
+        }
+
+        private void check_sendFileTo_CheckedChanged(object sender, EventArgs e)
+        {
+            this.userSettingService.SetUserSetting(UserSettingConstants.SendFile, check_sendFileTo.Checked);
+        }
+
+        private void txt_SendFileArgs_TextChanged(object sender, EventArgs e)
+        {
+            this.userSettingService.SetUserSetting(UserSettingConstants.SendFileToArgs, txt_SendFileArgs.Text);
+        }
+
+        #endregion
+
+        #region Output File
         private void check_autoNaming_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.autoNaming = check_autoNaming.Checked;
@@ -309,9 +341,9 @@ namespace Handbrake
 
         private void btn_vlcPath_Click(object sender, EventArgs e)
         {
-            openFile_vlc.ShowDialog();
-            if (openFile_vlc.FileName != string.Empty)
-                txt_vlcPath.Text = openFile_vlc.FileName;
+            openExecutable.ShowDialog();
+            if (openExecutable.FileName != string.Empty)
+                txt_vlcPath.Text = openExecutable.FileName;
         }
 
         private void txt_vlcPath_TextChanged(object sender, EventArgs e)
