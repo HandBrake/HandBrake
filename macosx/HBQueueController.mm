@@ -1246,27 +1246,27 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         /* for framerate look to see if we are using vfr detelecine */
         if ([[item objectForKey:@"JobIndexVideoFramerate"] intValue] == 0)
         {
-            if ([[item objectForKey:@"PictureDetelecine"] intValue] == 1)
+            if ([[item objectForKey:@"VideoframerateMode"] isEqualToString:@"vfr"])
             {
                 /* we are using same as source with vfr detelecine */
-                videoInfo = [NSString stringWithFormat:@"%@ Framerate: Same as source (vfr detelecine)", videoInfo];
+                videoInfo = [NSString stringWithFormat:@"%@ Framerate: Same as source (Variable Frame Rate)", videoInfo];
             }
             else
             {
                 /* we are using a variable framerate without dropping frames */
-                videoInfo = [NSString stringWithFormat:@"%@ Framerate: Same as source (variable)", videoInfo];
+                videoInfo = [NSString stringWithFormat:@"%@ Framerate: Same as source (Constant Frame Rate)", videoInfo];
             }
         }
         else
         {
             /* we have a specified, constant framerate */
-            if ([[item objectForKey:@"VideoFrameratePFR"] intValue] == 1)
+            if ([[item objectForKey:@"VideoframerateMode"] isEqualToString:@"pfr"])
             {
-            videoInfo = [NSString stringWithFormat:@"%@ Framerate: %@ (peak framerate)", videoInfo ,[item objectForKey:@"VideoFramerate"]];
+            videoInfo = [NSString stringWithFormat:@"%@ Framerate: %@ (Peak Frame Rate)", videoInfo ,[item objectForKey:@"VideoFramerate"]];
             }
             else
             {
-            videoInfo = [NSString stringWithFormat:@"%@ Framerate: %@ (constant framerate)", videoInfo ,[item objectForKey:@"VideoFramerate"]];
+            videoInfo = [NSString stringWithFormat:@"%@ Framerate: %@ (Constant Frame Rate)", videoInfo ,[item objectForKey:@"VideoFramerate"]];
             }
         }
         

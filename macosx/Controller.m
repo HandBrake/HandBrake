@@ -590,7 +590,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		fCreateChapterMarkers,fVidTurboPassCheck,fDstMp4LargeFileCheck,fSubForcedCheck,fPresetsOutlineView,
         fDstMp4HttpOptFileCheck,fDstMp4iPodFileCheck,fVidQualityRFField,fVidQualityRFLabel,
         fEncodeStartStopPopUp,fSrcTimeStartEncodingField,fSrcTimeEndEncodingField,fSrcFrameStartEncodingField,
-        fSrcFrameEndEncodingField, fLoadChaptersButton, fSaveChaptersButton, fFrameratePfrCheck};
+        fSrcFrameEndEncodingField, fLoadChaptersButton, fSaveChaptersButton, fFramerateMatrix};
     
     for( unsigned i = 0;
         i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -2331,7 +2331,24 @@ fWorkingCount = 0;
 	[queueFileJob setObject:[NSNumber numberWithFloat:[fVidQualityRFField floatValue]] forKey:@"VideoQualitySlider"];
     /* Framerate */
     [queueFileJob setObject:[fVidRatePopUp titleOfSelectedItem] forKey:@"VideoFramerate"];
-    [queueFileJob setObject:[NSNumber numberWithInt:[fFrameratePfrCheck state]] forKey:@"VideoFrameratePFR"];
+    /* Frame Rate Mode */
+    if ([fFramerateMatrix selectedRow] == 1) // if selected we are cfr regardless of the frame rate popup
+    {
+        [queueFileJob setObject:@"cfr" forKey:@"VideoframerateMode"];
+    }
+    else
+    {
+        if ([fVidRatePopUp indexOfSelectedItem] == 0) // Same as source frame rate
+        {
+            [queueFileJob setObject:@"vfr" forKey:@"VideoframerateMode"];
+        }
+        else
+        {
+            [queueFileJob setObject:@"pfr" forKey:@"VideoframerateMode"];
+        }
+        
+    }
+    
     
 	/* 2 Pass Encoding */
 	[queueFileJob setObject:[NSNumber numberWithInt:[fVidTwoPassCheck state]] forKey:@"VideoTwoPass"];
@@ -3022,7 +3039,7 @@ fWorkingCount = 0;
     }
 
     /* Video settings */
-   /* Set vfr to 0 as it's only on if using same as source in the framerate popup
+    /* Set vfr to 0 as it's only on if using same as source in the framerate popup
      * and detelecine is on, so we handle that in the logic below
      */
     job->vfr = 0;
@@ -3034,7 +3051,7 @@ fWorkingCount = 0;
         /* We are not same as source so we set job->cfr to 1 
          * to enable constant frame rate since user has specified
          * a specific framerate*/
-        if ([fFrameratePfrCheck state] == 1)
+        if ([fFramerateMatrix selectedRow] == 0) // we are pfr if a specific framerate is set
         {
             job->cfr = 2;
         }
@@ -3051,12 +3068,10 @@ fWorkingCount = 0;
         /* We are same as source so we set job->cfr to 0 
          * to enable true same as source framerate */
         job->cfr = 0;
-        /* If we are same as source and we have detelecine on, we need to turn on
-         * job->vfr
-         */
-        if ([fPictureController detelecine] == 1)
+        /* If the user specifies cfr then ... */
+        if ([fFramerateMatrix selectedRow] == 1) // we are cfr
         {
-            job->vfr = 1;
+            job->cfr = 1;
         }
     }
 
@@ -3520,7 +3535,7 @@ bool one_burned = FALSE;
     /* Set vfr to 0 as it's only on if using same as source in the framerate popup
      * and detelecine is on, so we handle that in the logic below
      */
-    job->vfr = 0;
+     
     if( [[queueToApply objectForKey:@"JobIndexVideoFramerate"] intValue] > 0 )
     {
         /* a specific framerate has been chosen */
@@ -3530,7 +3545,7 @@ bool one_burned = FALSE;
          * to enable constant frame rate since user has specified
          * a specific framerate*/
         
-        if ([[queueToApply objectForKey:@"VideoFrameratePFR"] intValue] == 1)
+        if ([[queueToApply objectForKey:@"VideoframerateMode"] isEqualToString:@"pfr"])
         {
             job->cfr = 2;
         }
@@ -3547,12 +3562,10 @@ bool one_burned = FALSE;
         /* We are same as source so we set job->cfr to 0 
          * to enable true same as source framerate */
         job->cfr = 0;
-        /* If we are same as source and we have detelecine on, we need to turn on
-         * job->vfr
-         */
-        if ([[queueToApply objectForKey:@"PictureDetelecine"] intValue] == 1)
+        /* If the user specifies cfr then ... */
+        if ([[queueToApply objectForKey:@"VideoframerateMode"] isEqualToString:@"cfr"]) // we are cfr
         {
-            job->vfr = 1;
+            job->cfr = 1;
         }
     }
     
@@ -4646,14 +4659,17 @@ the user is using "Custom" settings by determining the sender*/
 - (IBAction ) videoFrameRateChanged: (id) sender
 {
     /* Hide and set the PFR Checkbox to OFF if we are set to Same as Source */
-    if ([fVidRatePopUp indexOfSelectedItem] == 0)
+    /* Depending on whether or not Same as source is selected modify the title for
+     * fFramerateVfrPfrCell*/
+    if ([fVidRatePopUp indexOfSelectedItem] == 0) // We are Same as Source
     {
-        [fFrameratePfrCheck setHidden:YES];
-        [fFrameratePfrCheck setState:0];
+        [fFramerateVfrPfrCell setTitle:@"Variable Framerate (VFR)"];
     }
     else
     {
-        [fFrameratePfrCheck setHidden:NO];
+        [fFramerateVfrPfrCell setTitle:@"Peak Framerate (PFR)"];
+
+
     }
     
     /* We call method method to calculatePictureSizing to error check detelecine*/
@@ -5529,13 +5545,30 @@ return YES;
         if ([[chosenPreset objectForKey:@"VideoFramerate"] isEqualToString:@"Same as source"])
         {
             [fVidRatePopUp selectItemAtIndex: 0];
+            /* Now set the Video Frame Rate Mode to either vfr or cfr according to the preset */
+            if (![chosenPreset objectForKey:@"VideoframerateMode"] || [[chosenPreset objectForKey:@"VideoframerateMode"] isEqualToString:@"vfr"])
+            {
+                [fFramerateMatrix selectCellAtRow: 0 column: 0]; // we want vfr
+            }
+            else
+            {
+                [fFramerateMatrix selectCellAtRow: 1 column: 0]; // we want cfr
+            }
         }
         else
         {
             [fVidRatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"VideoFramerate"]];
+            /* Now set the Video Frame Rate Mode to either pfr or cfr according to the preset */
+            if ([[chosenPreset objectForKey:@"VideoframerateMode"] isEqualToString:@"pfr"] || [[chosenPreset objectForKey:@"VideoFrameratePFR"] intValue] == 1)
+            {
+                [fFramerateMatrix selectCellAtRow: 0 column: 0]; // we want pfr
+            }
+            else
+            {
+                [fFramerateMatrix selectCellAtRow: 1 column: 0]; // we want cfr
+            }
         }
-        /* Set PFR */
-        [fFrameratePfrCheck setState:[[chosenPreset objectForKey:@"VideoFrameratePFR"] intValue]];
+        
         [self videoFrameRateChanged:nil];
         
         /* 2 Pass Encoding */
@@ -5994,15 +6027,32 @@ return YES;
         [preset setObject:[NSNumber numberWithFloat:[fVidQualityRFField floatValue]] forKey:@"VideoQualitySlider"];
         
         /* Video framerate */
+        /* Set the Video Frame Rate Mode */
+        if ([fFramerateMatrix selectedRow] == 1)
+        {
+            [preset setObject:@"cfr" forKey:@"VideoframerateMode"];
+        }
+        /* Set the actual framerate from popup overriding the cfr setting as needed */
         if ([fVidRatePopUp indexOfSelectedItem] == 0) // Same as source is selected
         {
             [preset setObject:@"Same as source" forKey:@"VideoFramerate"];
+            
+            if ([fFramerateMatrix selectedRow] == 0)
+            {
+                [preset setObject:@"vfr" forKey:@"VideoframerateMode"];
+            }
         }
         else // we can record the actual titleOfSelectedItem
         {
             [preset setObject:[fVidRatePopUp titleOfSelectedItem] forKey:@"VideoFramerate"];
+            
+            if ([fFramerateMatrix selectedRow] == 0)
+            {
+                [preset setObject:@"pfr" forKey:@"VideoframerateMode"];
+            }
         }
-        [preset setObject:[NSNumber numberWithInt:[fFrameratePfrCheck state]] forKey:@"VideoFrameratePFR"];
+        
+
         
         /* 2 Pass Encoding */
         [preset setObject:[NSNumber numberWithInt:[fVidTwoPassCheck state]] forKey:@"VideoTwoPass"];

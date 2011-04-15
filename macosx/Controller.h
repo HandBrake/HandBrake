@@ -117,8 +117,14 @@ BOOL                        fIsDragging;
     IBOutlet NSButton            * fDstMp4iPodFileCheck;
 	
     /* Video box */
-    IBOutlet NSButton            * fFrameratePfrCheck;
     
+    /* Framerate */
+    /* Radio Button Framerate Controls */
+    IBOutlet NSMatrix            * fFramerateMatrix;
+    IBOutlet NSButtonCell        * fFramerateVfrPfrCell;
+    IBOutlet NSButtonCell        * fFramerateCfrCell;
+    
+    /* Video Encoder */
     IBOutlet NSTextField         * fVidRateField;
     IBOutlet NSPopUpButton       * fVidRatePopUp;
     IBOutlet NSTextField         * fVidEncoderField;
