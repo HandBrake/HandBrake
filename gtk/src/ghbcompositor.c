@@ -418,8 +418,10 @@ ghb_compositor_remove(GtkContainer *container, GtkWidget *child)
         {
             gboolean was_visible = gtk_widget_get_visible( child );
             gtk_widget_unparent(child);
-            compositor->children = g_list_remove(compositor->children, child);
-            g_free(child);
+            compositor->children = g_list_remove_link(
+                                            compositor->children, link);
+            g_list_free(link);
+            g_free(cc);
 
             if (was_visible && gtk_widget_get_visible (GTK_WIDGET(container)))
                 gtk_widget_queue_resize(GTK_WIDGET(container));
