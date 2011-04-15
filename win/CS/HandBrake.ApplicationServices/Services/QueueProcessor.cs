@@ -203,6 +203,9 @@ namespace HandBrake.ApplicationServices.Services
                 MessageBox.Show(e.Exception + e.ErrorInformation);
             }
 
+            // Post-Processing
+            SendToApplication(this.QueueManager.LastProcessedJob.Destination);
+
             // Handling Log Data 
             this.EncodeService.ProcessLogs(this.QueueManager.LastProcessedJob.Destination);
 
@@ -238,6 +241,20 @@ namespace HandBrake.ApplicationServices.Services
 
                 // Run the After encode completeion work
                 Finish();
+            }
+        }
+
+        /// <summary>
+        /// Send a file to a 3rd party application after encoding has completed.
+        /// </summary>
+        /// <param name="file"> The file path</param>
+        private static void SendToApplication(string file)
+        {
+            if (Properties.Settings.Default.SendFile && !string.IsNullOrEmpty(Properties.Settings.Default.SendFileTo))
+            {
+                string args = string.Format("{0} \"{1}\"", Properties.Settings.Default.SendFileToArgs, file);
+                ProcessStartInfo vlc = new ProcessStartInfo(Properties.Settings.Default.SendFileTo, args);
+                Process.Start(vlc);
             }
         }
 
