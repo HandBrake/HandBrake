@@ -116,6 +116,7 @@
     <Compile Include="Model\Encoding\VideoEncodeRateMode.cs" />
     <Compile Include="Model\General\UpdateCheckInformation.cs" />
     <Compile Include="Model\General\UpdateCheckResult.cs" />
+    <Compile Include="Model\ModelBase.cs" />
     <Compile Include="Model\Preset.cs" />
     <Compile Include="Model\QueueTask.cs" />
     <Compile Include="Model\Encoding\SubtitleType.cs" />

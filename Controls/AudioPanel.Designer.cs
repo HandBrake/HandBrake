@@ -54,14 +54,16 @@ namespace Handbrake.Controls
             this.AudioMenuRowHeightHack = new System.Windows.Forms.ImageList(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.lbl_audioTrack = new System.Windows.Forms.Label();
-            this.DRC = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Bitrate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Samplerate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Mixdown = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AudioCodec = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.audioList = new System.Windows.Forms.DataGridView();
             this.ToolTips = new System.Windows.Forms.ToolTip(this.components);
+            this.btn_AdvancedAudio = new System.Windows.Forms.Button();
+            this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AudioCodec = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Mixdown = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Samplerate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Bitrate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DRC = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Gain = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.audioMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tb_drc)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.audioList)).BeginInit();
@@ -281,66 +283,6 @@ namespace Handbrake.Controls
             this.lbl_audioTrack.TabIndex = 69;
             this.lbl_audioTrack.Text = "None";
             // 
-            // DRC
-            // 
-            this.DRC.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.DRC.DataPropertyName = "DRC";
-            this.DRC.FillWeight = 96.36334F;
-            this.DRC.HeaderText = "DRC";
-            this.DRC.Name = "DRC";
-            this.DRC.ReadOnly = true;
-            this.DRC.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.DRC.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Bitrate
-            // 
-            this.Bitrate.DataPropertyName = "BitRateDisplayValue";
-            this.Bitrate.FillWeight = 49.69727F;
-            this.Bitrate.HeaderText = "Bitrate";
-            this.Bitrate.Name = "Bitrate";
-            this.Bitrate.ReadOnly = true;
-            this.Bitrate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Bitrate.Width = 75;
-            // 
-            // Samplerate
-            // 
-            this.Samplerate.DataPropertyName = "SampleRateDisplayValue";
-            this.Samplerate.FillWeight = 49.69727F;
-            this.Samplerate.HeaderText = "Samplerate";
-            this.Samplerate.Name = "Samplerate";
-            this.Samplerate.ReadOnly = true;
-            this.Samplerate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Samplerate.Width = 75;
-            // 
-            // Mixdown
-            // 
-            this.Mixdown.DataPropertyName = "Mixdown";
-            this.Mixdown.FillWeight = 49.69727F;
-            this.Mixdown.HeaderText = "Mixdown";
-            this.Mixdown.Name = "Mixdown";
-            this.Mixdown.ReadOnly = true;
-            this.Mixdown.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Mixdown.Width = 150;
-            // 
-            // AudioCodec
-            // 
-            this.AudioCodec.DataPropertyName = "Encoder";
-            this.AudioCodec.HeaderText = "Audio Codec";
-            this.AudioCodec.Name = "AudioCodec";
-            this.AudioCodec.ReadOnly = true;
-            this.AudioCodec.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.AudioCodec.Width = 120;
-            // 
-            // Source
-            // 
-            this.Source.DataPropertyName = "SourceTrack";
-            this.Source.FillWeight = 49.69727F;
-            this.Source.HeaderText = "Source";
-            this.Source.Name = "Source";
-            this.Source.ReadOnly = true;
-            this.Source.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Source.Width = 170;
-            // 
             // audioList
             // 
             this.audioList.AllowUserToAddRows = false;
@@ -355,7 +297,8 @@ namespace Handbrake.Controls
             this.Mixdown,
             this.Samplerate,
             this.Bitrate,
-            this.DRC});
+            this.DRC,
+            this.Gain});
             this.audioList.ContextMenuStrip = this.audioMenu;
             this.audioList.GridColor = System.Drawing.Color.White;
             this.audioList.Location = new System.Drawing.Point(16, 114);
@@ -373,10 +316,91 @@ namespace Handbrake.Controls
             this.ToolTips.SetToolTip(this.audioList, "The audio tracks to be encoded into the output file.");
             this.audioList.SelectionChanged += new System.EventHandler(this.audioList_SelectionChanged);
             // 
+            // btn_AdvancedAudio
+            // 
+            this.btn_AdvancedAudio.BackColor = System.Drawing.Color.Transparent;
+            this.btn_AdvancedAudio.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_AdvancedAudio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_AdvancedAudio.Location = new System.Drawing.Point(630, 38);
+            this.btn_AdvancedAudio.Name = "btn_AdvancedAudio";
+            this.btn_AdvancedAudio.Size = new System.Drawing.Size(71, 23);
+            this.btn_AdvancedAudio.TabIndex = 70;
+            this.btn_AdvancedAudio.Text = "Advanced";
+            this.btn_AdvancedAudio.UseVisualStyleBackColor = false;
+            this.btn_AdvancedAudio.Click += new System.EventHandler(this.btn_AdvancedAudio_Click);
+            // 
+            // Source
+            // 
+            this.Source.DataPropertyName = "SourceTrack";
+            this.Source.FillWeight = 49.69727F;
+            this.Source.HeaderText = "Source";
+            this.Source.Name = "Source";
+            this.Source.ReadOnly = true;
+            this.Source.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Source.Width = 170;
+            // 
+            // AudioCodec
+            // 
+            this.AudioCodec.DataPropertyName = "Encoder";
+            this.AudioCodec.HeaderText = "Audio Codec";
+            this.AudioCodec.Name = "AudioCodec";
+            this.AudioCodec.ReadOnly = true;
+            this.AudioCodec.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.AudioCodec.Width = 120;
+            // 
+            // Mixdown
+            // 
+            this.Mixdown.DataPropertyName = "Mixdown";
+            this.Mixdown.FillWeight = 49.69727F;
+            this.Mixdown.HeaderText = "Mixdown";
+            this.Mixdown.Name = "Mixdown";
+            this.Mixdown.ReadOnly = true;
+            this.Mixdown.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Mixdown.Width = 150;
+            // 
+            // Samplerate
+            // 
+            this.Samplerate.DataPropertyName = "SampleRateDisplayValue";
+            this.Samplerate.FillWeight = 49.69727F;
+            this.Samplerate.HeaderText = "Samplerate";
+            this.Samplerate.Name = "Samplerate";
+            this.Samplerate.ReadOnly = true;
+            this.Samplerate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Samplerate.Width = 75;
+            // 
+            // Bitrate
+            // 
+            this.Bitrate.DataPropertyName = "BitRateDisplayValue";
+            this.Bitrate.FillWeight = 49.69727F;
+            this.Bitrate.HeaderText = "Bitrate";
+            this.Bitrate.Name = "Bitrate";
+            this.Bitrate.ReadOnly = true;
+            this.Bitrate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Bitrate.Width = 75;
+            // 
+            // DRC
+            // 
+            this.DRC.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.DRC.DataPropertyName = "DRC";
+            this.DRC.FillWeight = 96.36334F;
+            this.DRC.HeaderText = "DRC";
+            this.DRC.Name = "DRC";
+            this.DRC.ReadOnly = true;
+            this.DRC.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.DRC.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Gain
+            // 
+            this.Gain.DataPropertyName = "Gain";
+            this.Gain.HeaderText = "Gain (dB)";
+            this.Gain.Name = "Gain";
+            this.Gain.Width = 60;
+            // 
             // AudioPanel
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.BackColor = System.Drawing.Color.Transparent;
+            this.Controls.Add(this.btn_AdvancedAudio);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lbl_audioTrack);
             this.Controls.Add(this.drp_audioTrack);
@@ -421,13 +445,15 @@ namespace Handbrake.Controls
         internal System.Windows.Forms.ComboBox drp_audioBitrate;
         internal System.Windows.Forms.Label label1;
         internal System.Windows.Forms.Label lbl_audioTrack;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DRC;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Bitrate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Samplerate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Mixdown;
-        private System.Windows.Forms.DataGridViewTextBoxColumn AudioCodec;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Source;
         private System.Windows.Forms.DataGridView audioList;
         private System.Windows.Forms.ToolTip ToolTips;
+        private System.Windows.Forms.Button btn_AdvancedAudio;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Source;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AudioCodec;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Mixdown;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Samplerate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Bitrate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DRC;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Gain;
     }
 }
