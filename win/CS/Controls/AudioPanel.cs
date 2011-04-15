@@ -18,6 +18,8 @@ namespace Handbrake.Controls
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Utilities;
 
+    using Handbrake.ToolWindows;
+
     using AudioTrack = HandBrake.ApplicationServices.Model.Encoding.AudioTrack;
 
     /// <summary>
@@ -33,6 +35,7 @@ namespace Handbrake.Controls
         private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
         private const string AC3Passthru = "AC3 Passthru";
         private const string DTSPassthru = "DTS Passthru";
+        AdvancedAudio advancedAudio = new AdvancedAudio();
 
         private readonly BindingList<AudioTrack> audioTracks = new BindingList<AudioTrack>();
 
@@ -50,6 +53,8 @@ namespace Handbrake.Controls
 
             drp_audioMix.SelectedItem = "Dolby Pro Logic II";
             drp_audioSample.SelectedIndex = 1;
+
+           
         }
 
         /// <summary>
@@ -307,10 +312,15 @@ namespace Handbrake.Controls
                     lbl_drc.Text = track.DRC.ToString();
 
                     lbl_audioTrack.Text = track.SourceTrack;
+
+                    // Set the Advanced Control.
+                    if (!advancedAudio.IsDisposed)
+                        advancedAudio.Track = track;
                 }
             }
             else
                 lbl_audioTrack.Text = "(Click \"Add Track\" to add)";
+
         }
 
         #endregion
@@ -691,5 +701,17 @@ namespace Handbrake.Controls
         }
 
         #endregion
+
+        private void btn_AdvancedAudio_Click(object sender, EventArgs e)
+        {
+            if (advancedAudio.IsDisposed)
+            {
+                advancedAudio = new AdvancedAudio { Track = this.audioList.SelectedRows[0].DataBoundItem as AudioTrack };
+            }
+
+            advancedAudio.Show();
+        }
+
+       
     }
 }

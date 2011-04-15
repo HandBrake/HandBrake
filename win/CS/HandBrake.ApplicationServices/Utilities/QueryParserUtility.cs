@@ -98,6 +98,7 @@ namespace HandBrake.ApplicationServices.Utilities
             Match audioBitrates = Regex.Match(input, @"-B ([0-9a-zA-Z,]*)"); // Auto = a-z
             Match audioSampleRates = Regex.Match(input, @"-R ([0-9a-zA-Z.,]*)"); // Auto = a-z
             Match drcValues = Regex.Match(input, @"-D ([0-9.,]*)");
+            Match gainValues = Regex.Match(input, @"--gain=([0-9.,-]*)");
 
             // Chapters Tab
             Match chapterMarkers = Regex.Match(input, @" -m");
@@ -338,6 +339,7 @@ namespace HandBrake.ApplicationServices.Utilities
                 string[] trackBitrates = null;
                 string[] trackSamplerates = null;
                 string[] trackDRCvalues = null;
+                string[] trackGainValues = null;
 
                 if (audioTracks.Success)
                     trackData = audioTracks.ToString().Replace("-a ", string.Empty).Split(',');
@@ -351,6 +353,8 @@ namespace HandBrake.ApplicationServices.Utilities
                     trackSamplerates = audioSampleRates.ToString().Replace("-R ", string.Empty).Split(',');
                 if (drcValues.Success)
                     trackDRCvalues = drcValues.ToString().Replace("-D ", string.Empty).Split(',');
+                if (gainValues.Success)
+                    trackGainValues = gainValues.ToString().Replace("--gain=", string.Empty).Split(',');
 
                 // Create new Audio Track Classes and store them in the ArrayList
                 List<AudioTrack> allAudioTrackInfo = new List<AudioTrack>();
@@ -380,6 +384,10 @@ namespace HandBrake.ApplicationServices.Utilities
                     if (trackDRCvalues != null)
                         if (trackDRCvalues.Length >= (x + 1)) // Audio DRC Values
                             track.DRC = double.Parse(trackDRCvalues[x].Trim(), Culture);
+
+                    if (trackGainValues != null)
+                        if (trackGainValues.Length >= (x + 1)) // Audio DRC Values
+                            track.Gain = int.Parse(trackGainValues[x].Trim());
 
                     allAudioTrackInfo.Add(track);
                 }

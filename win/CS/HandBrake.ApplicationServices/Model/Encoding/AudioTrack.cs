@@ -8,8 +8,15 @@ namespace HandBrake.ApplicationServices.Model.Encoding
     /// <summary>
     /// An Audio Track for the Audio Panel
     /// </summary>
-    public class AudioTrack
+    public class AudioTrack : ModelBase
     {
+        #region Private Variables
+        /// <summary>
+        /// The gain value
+        /// </summary>
+        private int gain;
+        #endregion
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioTrack"/> class. 
         /// </summary>
@@ -97,6 +104,20 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         /// <summary>
         /// Gets or sets the Gain for the audio track
         /// </summary>
-        public int Gain { get; set; }
+        public int Gain
+        {
+            get
+            {
+                return this.gain;
+            }
+            set
+            {
+                if (!object.Equals(value, this.gain))
+                {
+                    this.gain = value;
+                    this.OnPropertyChanged("Gain");
+                }
+            }
+        }
     }
 }
