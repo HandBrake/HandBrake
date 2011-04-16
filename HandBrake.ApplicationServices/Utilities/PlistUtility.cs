@@ -68,7 +68,7 @@ namespace HandBrake.ApplicationServices.Utilities
                             track.SampleRate = double.Parse(value);
                             break;
                         case "AudioTrack":
-                            track.SourceTrack = value;
+                           //track.SourceTrack = value;
                             break;
                         case "AudioTrackDRCSlider":
                             track.DRC = double.Parse(value);

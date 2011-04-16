@@ -49,8 +49,6 @@ namespace Handbrake.Controls
             this.drp_audioBitrate = new System.Windows.Forms.ComboBox();
             this.drp_audioSample = new System.Windows.Forms.ComboBox();
             this.AudioMenuRowHeightHack = new System.Windows.Forms.ImageList(this.components);
-            this.label1 = new System.Windows.Forms.Label();
-            this.lbl_audioTrack = new System.Windows.Forms.Label();
             this.audioList = new System.Windows.Forms.DataGridView();
             this.ToolTips = new System.Windows.Forms.ToolTip(this.components);
             this.btn_AdvancedAudio = new System.Windows.Forms.Button();
@@ -61,6 +59,8 @@ namespace Handbrake.Controls
             this.Bitrate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DRC = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Gain = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.audioList_MoveToBottom = new System.Windows.Forms.ToolStripMenuItem();
+            this.audioList_MoveToTop = new System.Windows.Forms.ToolStripMenuItem();
             this.audioMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.audioList)).BeginInit();
             this.SuspendLayout();
@@ -68,24 +68,26 @@ namespace Handbrake.Controls
             // audioMenu
             // 
             this.audioMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.audioList_MoveToTop,
             this.audioList_moveup,
             this.audioList_movedown,
+            this.audioList_MoveToBottom,
             this.toolStripSeparator2,
             this.audioList_remove});
             this.audioMenu.Name = "audioMenu";
-            this.audioMenu.Size = new System.Drawing.Size(139, 76);
+            this.audioMenu.Size = new System.Drawing.Size(165, 142);
             // 
             // audioList_moveup
             // 
             this.audioList_moveup.Name = "audioList_moveup";
-            this.audioList_moveup.Size = new System.Drawing.Size(138, 22);
+            this.audioList_moveup.Size = new System.Drawing.Size(164, 22);
             this.audioList_moveup.Text = "Move Up";
             this.audioList_moveup.Click += new System.EventHandler(this.AudioList_moveup_Click);
             // 
             // audioList_movedown
             // 
             this.audioList_movedown.Name = "audioList_movedown";
-            this.audioList_movedown.Size = new System.Drawing.Size(138, 22);
+            this.audioList_movedown.Size = new System.Drawing.Size(164, 22);
             this.audioList_movedown.Text = "Move Down";
             this.audioList_movedown.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.audioList_movedown.Click += new System.EventHandler(this.AudioList_movedown_Click);
@@ -93,12 +95,12 @@ namespace Handbrake.Controls
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(135, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(161, 6);
             // 
             // audioList_remove
             // 
             this.audioList_remove.Name = "audioList_remove";
-            this.audioList_remove.Size = new System.Drawing.Size(138, 22);
+            this.audioList_remove.Size = new System.Drawing.Size(164, 22);
             this.audioList_remove.Text = "Remove";
             this.audioList_remove.Click += new System.EventHandler(this.AudioList_remove_Click);
             // 
@@ -150,7 +152,7 @@ namespace Handbrake.Controls
             "AC3 Passthru",
             "AC3 (ffmpeg)",
             "DTS Passthru"});
-            this.drp_audioEncoder.Location = new System.Drawing.Point(191, 87);
+            this.drp_audioEncoder.Location = new System.Drawing.Point(191, 66);
             this.drp_audioEncoder.Name = "drp_audioEncoder";
             this.drp_audioEncoder.Size = new System.Drawing.Size(111, 21);
             this.drp_audioEncoder.TabIndex = 52;
@@ -168,7 +170,7 @@ namespace Handbrake.Controls
             "Dolby Surround",
             "Dolby Pro Logic II",
             "6 Channel Discrete"});
-            this.drp_audioMix.Location = new System.Drawing.Point(309, 87);
+            this.drp_audioMix.Location = new System.Drawing.Point(309, 66);
             this.drp_audioMix.Name = "drp_audioMix";
             this.drp_audioMix.Size = new System.Drawing.Size(147, 21);
             this.drp_audioMix.TabIndex = 54;
@@ -181,7 +183,7 @@ namespace Handbrake.Controls
             this.drp_audioTrack.FormattingEnabled = true;
             this.drp_audioTrack.Items.AddRange(new object[] {
             "Automatic"});
-            this.drp_audioTrack.Location = new System.Drawing.Point(16, 87);
+            this.drp_audioTrack.Location = new System.Drawing.Point(16, 66);
             this.drp_audioTrack.Name = "drp_audioTrack";
             this.drp_audioTrack.Size = new System.Drawing.Size(170, 21);
             this.drp_audioTrack.TabIndex = 50;
@@ -203,7 +205,7 @@ namespace Handbrake.Controls
             "112",
             "128",
             "160"});
-            this.drp_audioBitrate.Location = new System.Drawing.Point(534, 87);
+            this.drp_audioBitrate.Location = new System.Drawing.Point(534, 66);
             this.drp_audioBitrate.Name = "drp_audioBitrate";
             this.drp_audioBitrate.Size = new System.Drawing.Size(67, 21);
             this.drp_audioBitrate.TabIndex = 58;
@@ -221,7 +223,7 @@ namespace Handbrake.Controls
             "32",
             "24",
             "22.05"});
-            this.drp_audioSample.Location = new System.Drawing.Point(461, 87);
+            this.drp_audioSample.Location = new System.Drawing.Point(461, 66);
             this.drp_audioSample.Name = "drp_audioSample";
             this.drp_audioSample.Size = new System.Drawing.Size(67, 21);
             this.drp_audioSample.TabIndex = 56;
@@ -233,27 +235,6 @@ namespace Handbrake.Controls
             this.AudioMenuRowHeightHack.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
             this.AudioMenuRowHeightHack.ImageSize = new System.Drawing.Size(1, 18);
             this.AudioMenuRowHeightHack.TransparentColor = System.Drawing.Color.Transparent;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(13, 66);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(94, 13);
-            this.label1.TabIndex = 68;
-            this.label1.Text = "Selected Track:";
-            // 
-            // lbl_audioTrack
-            // 
-            this.lbl_audioTrack.AutoSize = true;
-            this.lbl_audioTrack.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_audioTrack.Location = new System.Drawing.Point(113, 66);
-            this.lbl_audioTrack.Name = "lbl_audioTrack";
-            this.lbl_audioTrack.Size = new System.Drawing.Size(32, 13);
-            this.lbl_audioTrack.TabIndex = 69;
-            this.lbl_audioTrack.Text = "None";
             // 
             // audioList
             // 
@@ -273,7 +254,7 @@ namespace Handbrake.Controls
             this.Gain});
             this.audioList.ContextMenuStrip = this.audioMenu;
             this.audioList.GridColor = System.Drawing.Color.White;
-            this.audioList.Location = new System.Drawing.Point(16, 114);
+            this.audioList.Location = new System.Drawing.Point(16, 94);
             this.audioList.Name = "audioList";
             this.audioList.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.audioList.RowHeadersVisible = false;
@@ -283,7 +264,7 @@ namespace Handbrake.Controls
             this.audioList.ShowCellToolTips = false;
             this.audioList.ShowEditingIcon = false;
             this.audioList.ShowRowErrors = false;
-            this.audioList.Size = new System.Drawing.Size(685, 180);
+            this.audioList.Size = new System.Drawing.Size(685, 200);
             this.audioList.TabIndex = 67;
             this.ToolTips.SetToolTip(this.audioList, "The audio tracks to be encoded into the output file.");
             this.audioList.SelectionChanged += new System.EventHandler(this.audioList_SelectionChanged);
@@ -293,7 +274,7 @@ namespace Handbrake.Controls
             this.btn_AdvancedAudio.BackColor = System.Drawing.Color.Transparent;
             this.btn_AdvancedAudio.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_AdvancedAudio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_AdvancedAudio.Location = new System.Drawing.Point(607, 86);
+            this.btn_AdvancedAudio.Location = new System.Drawing.Point(607, 65);
             this.btn_AdvancedAudio.Name = "btn_AdvancedAudio";
             this.btn_AdvancedAudio.Size = new System.Drawing.Size(94, 23);
             this.btn_AdvancedAudio.TabIndex = 70;
@@ -303,7 +284,7 @@ namespace Handbrake.Controls
             // 
             // Source
             // 
-            this.Source.DataPropertyName = "SourceTrack";
+            this.Source.DataPropertyName = "TrackDisplay";
             this.Source.FillWeight = 49.69727F;
             this.Source.HeaderText = "Source";
             this.Source.Name = "Source";
@@ -369,12 +350,24 @@ namespace Handbrake.Controls
             this.Gain.ReadOnly = true;
             this.Gain.Width = 60;
             // 
+            // audioList_MoveToBottom
+            // 
+            this.audioList_MoveToBottom.Name = "audioList_MoveToBottom";
+            this.audioList_MoveToBottom.Size = new System.Drawing.Size(164, 22);
+            this.audioList_MoveToBottom.Text = "Move To Bottom";
+            this.audioList_MoveToBottom.Click += new System.EventHandler(this.audioList_MoveToBottom_Click);
+            // 
+            // audioList_MoveToTop
+            // 
+            this.audioList_MoveToTop.Name = "audioList_MoveToTop";
+            this.audioList_MoveToTop.Size = new System.Drawing.Size(164, 22);
+            this.audioList_MoveToTop.Text = "Move to Top";
+            this.audioList_MoveToTop.Click += new System.EventHandler(this.audioList_MoveToTop_Click);
+            // 
             // AudioPanel
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.BackColor = System.Drawing.Color.Transparent;
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.lbl_audioTrack);
             this.Controls.Add(this.drp_audioTrack);
             this.Controls.Add(this.btn_AdvancedAudio);
             this.Controls.Add(this.drp_audioSample);
@@ -411,8 +404,6 @@ namespace Handbrake.Controls
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem audioList_remove;
         internal System.Windows.Forms.ComboBox drp_audioBitrate;
-        internal System.Windows.Forms.Label label1;
-        internal System.Windows.Forms.Label lbl_audioTrack;
         private System.Windows.Forms.DataGridView audioList;
         private System.Windows.Forms.ToolTip ToolTips;
         private System.Windows.Forms.Button btn_AdvancedAudio;
@@ -423,5 +414,7 @@ namespace Handbrake.Controls
         private System.Windows.Forms.DataGridViewTextBoxColumn Bitrate;
         private System.Windows.Forms.DataGridViewTextBoxColumn DRC;
         private System.Windows.Forms.DataGridViewTextBoxColumn Gain;
+        private System.Windows.Forms.ToolStripMenuItem audioList_MoveToTop;
+        private System.Windows.Forms.ToolStripMenuItem audioList_MoveToBottom;
     }
 }

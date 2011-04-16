@@ -12,17 +12,17 @@ namespace HandBrake.ApplicationServices.Parsing
     /// <summary>
     /// An object represending an AudioTrack associated with a Title, in a DVD
     /// </summary>
-    public class AudioTrack
+    public class Audio
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AudioTrack"/> class.
+        /// Initializes a new instance of the <see cref="Audio"/> class.
         /// </summary>
-        public AudioTrack()
-        {       
+        public Audio()
+        {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AudioTrack"/> class.
+        /// Initializes a new instance of the <see cref="Audio"/> class.
         /// </summary>
         /// <param name="trackNumber">
         /// The track number.
@@ -45,7 +45,7 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <param name="bitrate">
         /// The bitrate.
         /// </param>
-        public AudioTrack(int trackNumber, string language, string languageCode, string description, string format, int sampleRate, int bitrate)
+        public Audio(int trackNumber, string language, string languageCode, string description, string format, int sampleRate, int bitrate)
         {
             this.TrackNumber = trackNumber;
             this.Language = language;
@@ -54,6 +54,17 @@ namespace HandBrake.ApplicationServices.Parsing
             this.Format = format;
             this.SampleRate = sampleRate;
             this.Bitrate = bitrate;
+        }
+
+        /// <summary>
+        /// Gets A Dummy Not Found Track
+        /// </summary>
+        public static Audio NoneFound
+        {
+            get
+            {
+                return new Audio { Description = "None Found" };
+            }
         }
 
         /// <summary>
@@ -100,7 +111,7 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <returns>
         /// An Audio Track obkect
         /// </returns>
-        public static AudioTrack Parse(StringReader output)
+        public static Audio Parse(StringReader output)
         {
             string audioTrack = output.ReadLine();
             Match m = Regex.Match(audioTrack, @"^    \+ ([0-9]*), ([A-Za-z0-9,\s]*) \((.*)\) \((.*)\)");
@@ -115,13 +126,13 @@ namespace HandBrake.ApplicationServices.Parsing
 
             if (track.Success)
             {
-                var thisTrack = new AudioTrack
+                var thisTrack = new Audio
                                     {
-                                        TrackNumber = int.Parse(track.Groups[1].Value.Trim()), 
-                                        Language = track.Groups[2].Value, 
+                                        TrackNumber = int.Parse(track.Groups[1].Value.Trim()),
+                                        Language = track.Groups[2].Value,
                                         Format = m.Groups[3].Value,
-                                        Description = subformat, 
-                                        SampleRate = int.Parse(samplerateVal), 
+                                        Description = subformat,
+                                        SampleRate = int.Parse(samplerateVal),
                                         Bitrate = int.Parse(bitrateVal),
                                         LanguageCode = iso639_2.Value.Replace("iso639-2: ", string.Empty).Replace(")", string.Empty)
                                     };
@@ -140,12 +151,12 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <returns>
         /// An array of audio tracks
         /// </returns>
-        public static AudioTrack[] ParseList(StringReader output)
+        public static Audio[] ParseList(StringReader output)
         {
-            var tracks = new List<AudioTrack>();
+            var tracks = new List<Audio>();
             while (true)
             {
-                AudioTrack thisTrack = Parse(output);
+                Audio thisTrack = Parse(output);
                 if (thisTrack != null)
                     tracks.Add(thisTrack);
                 else
@@ -160,10 +171,17 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <returns>A string formatted as: {track #} {language} ({format}) ({sub-format})</returns>
         public override string ToString()
         {
-            if (Description == null)
-                return string.Format("{0} {1} ({2})", TrackNumber, Language, Format);
+            if (this.Description == NoneFound.Description)
+            {
+                return this.Description;
+            }
 
-            return string.Format("{0} {1} ({2}) ({3})", TrackNumber, Language, Format, Description);
+            if (this.Description == null)
+            {
+                return string.Format("{0} {1} ({2})", this.TrackNumber, this.Language, this.Format);
+            }
+
+            return string.Format("{0} {1} ({2}) ({3})", this.TrackNumber, this.Language, this.Format, this.Description);
         }
     }
 }

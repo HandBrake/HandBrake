@@ -5,6 +5,8 @@
 
 namespace HandBrake.ApplicationServices.Model.Encoding
 {
+    using HandBrake.ApplicationServices.Parsing;
+
     /// <summary>
     /// An Audio Track for the Audio Panel
     /// </summary>
@@ -20,6 +22,11 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         ///  The DRC Value
         /// </summary>
         private double drc;
+
+        /// <summary>
+        /// The Scanned Audio Track
+        /// </summary>
+        private Audio scannedTrack;
         #endregion
 
         /// <summary>
@@ -33,7 +40,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             this.SampleRate = 48;
             this.Bitrate = 160;
             this.DRC = 1;
-            this.SourceTrack = "Automatic";
+            this.ScannedTrack = new Audio();
         }
 
         /// <summary>
@@ -43,13 +50,40 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         {
             get
             {
-                string[] tempSub = SourceTrack.Split(' ');
-                int value;
-                if (int.TryParse(tempSub[0], out value))
+                if (this.ScannedTrack != null)
                 {
-                    return value;
+                    return this.ScannedTrack.TrackNumber;
                 }
+
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the Scanned Audio Tracks
+        /// </summary>
+        public Audio ScannedTrack
+        {
+            get
+            {
+                return this.scannedTrack;
+            }
+
+            set
+            {
+                this.scannedTrack = value;
+                this.OnPropertyChanged("ScannedTrack");
+            }
+        }
+
+        /// <summary>
+        /// Gets the Display Value for this model.
+        /// </summary>
+        public string TrackDisplay
+        {
+            get
+            {
+                return this.ScannedTrack.ToString();
             }
         }
 
@@ -60,7 +94,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         {
             get
             {
-                return SampleRate == 0 ? "Auto" : SampleRate.ToString();
+                return this.SampleRate == 0 ? "Auto" : this.SampleRate.ToString();
             }
         }
 
@@ -71,15 +105,9 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         {
             get
             {
-                return Bitrate == 0 ? "Auto" : Bitrate.ToString();
+                return this.Bitrate == 0 ? "Auto" : this.Bitrate.ToString();
             }
         }
-
-        /// <summary>
-        /// Gets or sets the Source Track
-        /// Used for display purposes only.
-        /// </summary>
-        public string SourceTrack { get; set; }
 
         /// <summary>
         /// Gets or sets Audio Mixdown
@@ -110,6 +138,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             {
                 return this.drc;
             }
+
             set
             {
                 if (!object.Equals(value, this.drc))
@@ -129,6 +158,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             {
                 return this.gain;
             }
+
             set
             {
                 if (!object.Equals(value, this.gain))

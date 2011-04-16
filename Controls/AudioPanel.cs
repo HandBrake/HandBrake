@@ -8,7 +8,6 @@ namespace Handbrake.Controls
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Globalization;
     using System.Linq;
     using System.Windows.Forms;
 
@@ -20,24 +19,17 @@ namespace Handbrake.Controls
 
     using Handbrake.ToolWindows;
 
-    using AudioTrack = HandBrake.ApplicationServices.Model.Encoding.AudioTrack;
-
     /// <summary>
     /// The AudioPanel Control
     /// </summary>
     public partial class AudioPanel : UserControl
     {
-        /**
-         * TODO - There is a lot of old code in here that access the datagrid that can be refactored to work with 
-         *        the new AudioTrack BindingList.
-         */
-
-        private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
+        #region Private Variables
+        private readonly BindingList<AudioTrack> audioTracks = new BindingList<AudioTrack>();
         private const string AC3Passthru = "AC3 Passthru";
         private const string DTSPassthru = "DTS Passthru";
-        AdvancedAudio advancedAudio = new AdvancedAudio();
-
-        private readonly BindingList<AudioTrack> audioTracks = new BindingList<AudioTrack>();
+        private AdvancedAudio advancedAudio = new AdvancedAudio();
+        #endregion
 
         #region Constructor and Events
 
@@ -48,13 +40,18 @@ namespace Handbrake.Controls
         {
             InitializeComponent();
 
+            this.ScannedTracks = new BindingList<Audio>
+                {
+                    Audio.NoneFound 
+                };
+
             this.audioList.AutoGenerateColumns = false;
             this.audioList.DataSource = audioTracks;
 
             drp_audioMix.SelectedItem = "Dolby Pro Logic II";
             drp_audioSample.SelectedIndex = 1;
 
-           
+            drp_audioTrack.DataSource = this.ScannedTracks;
         }
 
         /// <summary>
@@ -66,10 +63,12 @@ namespace Handbrake.Controls
 
         #region Properties
 
+        public BindingList<Audio> ScannedTracks { get; set; }
+
         /// <summary>
         /// Gets the AudioTracks Collection
         /// </summary>
-        public IEnumerable<AudioTrack> AudioTracks
+        public BindingList<AudioTrack> AudioTracks
         {
             get
             {
@@ -115,21 +114,21 @@ namespace Handbrake.Controls
         /// <returns>True if m4v is required</returns>
         public bool RequiresM4V()
         {
-            return true;
+            return this.AudioTracks.Any(item => item.Encoder == AudioEncoder.Ac3Passthrough || item.Encoder == AudioEncoder.DtsPassthrough || item.Encoder == AudioEncoder.Ac3);
         }
 
         /// <summary>
         /// Load an arraylist of AudioTrack items into the list.
         /// </summary>
-        /// <param name="audioTracks">List of audio tracks</param>
-        public void LoadTracks(List<AudioTrack> audioTracks)
+        /// <param name="tracks">List of audio tracks</param>
+        public void LoadTracks(List<AudioTrack> tracks)
         {
             ClearAudioList();
 
-            if (audioTracks == null)
+            if (tracks == null)
                 return;
 
-            foreach (AudioTrack track in audioTracks)
+            foreach (AudioTrack track in tracks)
             {
                 this.audioTracks.Add(track);
             }
@@ -150,15 +149,21 @@ namespace Handbrake.Controls
             if (selectedTitle.AudioTracks.Count == 0)
             {
                 audioList.Rows.Clear();
-                drp_audioTrack.Items.Clear();
-                drp_audioTrack.Items.Add("None Found");
+                this.ScannedTracks.Clear();
+                this.ScannedTracks.Add(Audio.NoneFound);
+                this.drp_audioTrack.Refresh();
                 drp_audioTrack.SelectedIndex = 0;
                 return;
             }
 
             // Setup the Audio track source dropdown with the new audio tracks.
-            drp_audioTrack.Items.Clear();
-            drp_audioTrack.Items.AddRange(selectedTitle.AudioTracks.ToArray());
+            this.ScannedTracks.Clear();
+            foreach (var item in selectedTitle.AudioTracks)
+            {
+                this.ScannedTracks.Add(item);
+            }
+            this.drp_audioTrack.Refresh();
+            drp_audioTrack.SelectedIndex = 0;
 
             // Add any tracks the preset has, if there is a preset and no audio tracks in the list currently
             if (audioList.Rows.Count == 0 && preset != null)
@@ -206,17 +211,17 @@ namespace Handbrake.Controls
                 case "drp_audioTrack":
                     if (audioList.Rows.Count != 0 && audioList.SelectedRows.Count != 0)
                     {
-                        track.SourceTrack = drp_audioTrack.Text;
+                        track.ScannedTrack = drp_audioTrack.SelectedItem as Audio;
 
                         // If the track isn't AC3, and the encoder is, change it.
-                        if (track.Encoder == AudioEncoder.Ac3Passthrough && !track.SourceTrack.Contains("(AC3)"))
+                        if (track.Encoder == AudioEncoder.Ac3Passthrough && !track.ScannedTrack.Format.Contains("AC3"))
                         {
                             // Switch to AAC
                             drp_audioEncoder.SelectedIndex = 0;
                         }
 
                         // If the track isn't DTS, and the encoder is, change it.
-                        if (track.Encoder == AudioEncoder.DtsPassthrough && !track.SourceTrack.Contains("DTS"))
+                        if (track.Encoder == AudioEncoder.DtsPassthrough && !track.ScannedTrack.Format.Contains("DTS"))
                         {
                             // Switch to AAC
                             drp_audioEncoder.SelectedIndex = 0;
@@ -264,12 +269,6 @@ namespace Handbrake.Controls
             }
 
             audioList.Refresh();
-
-            if (audioList.SelectedRows.Count == 1)
-            {
-                AudioTrack item = audioList.SelectedRows[0].DataBoundItem as AudioTrack;
-                if (item != null) lbl_audioTrack.Text = track.SourceTrack;
-            }
         }
 
         /// <summary>
@@ -289,21 +288,17 @@ namespace Handbrake.Controls
                 AudioTrack track = audioList.SelectedRows[0].DataBoundItem as AudioTrack;
                 if (track != null)
                 {
-                    drp_audioTrack.SelectedItem = track.SourceTrack;
+                    drp_audioTrack.SelectedItem = track.ScannedTrack;
                     drp_audioEncoder.SelectedItem = EnumHelper<AudioEncoder>.GetDescription(track.Encoder);
                     drp_audioMix.SelectedItem = EnumHelper<Mixdown>.GetDescription(track.MixDown);
                     drp_audioSample.SelectedItem = track.SampleRate;
                     drp_audioBitrate.SelectedItem = track.Bitrate;
-                    lbl_audioTrack.Text = track.SourceTrack;
 
                     // Set the Advanced Control.
                     if (!advancedAudio.IsDisposed)
                         advancedAudio.Track = track;
                 }
             }
-            else
-                lbl_audioTrack.Text = "(Click \"Add Track\" to add)";
-
         }
 
         #endregion
@@ -341,7 +336,7 @@ namespace Handbrake.Controls
             // Create the Model
             AudioTrack track = new AudioTrack
                 {
-                    SourceTrack = this.drp_audioTrack.Text,
+                    ScannedTrack = this.drp_audioTrack.SelectedItem as Audio,
                     Encoder = EnumHelper<AudioEncoder>.GetValue(this.drp_audioEncoder.Text),
                     MixDown = EnumHelper<Mixdown>.GetValue(this.drp_audioMix.Text),
                     SampleRate = samplerate,
@@ -422,6 +417,26 @@ namespace Handbrake.Controls
             RemoveTrack();
         }
 
+        /// <summary>
+        /// Move to Top
+        /// </summary>
+        /// <param name="sender">The Sender</param>
+        /// <param name="e">The Event Args</param>
+        private void audioList_MoveToTop_Click(object sender, EventArgs e)
+        {
+            MoveTo(true);
+        }
+
+        /// <summary>
+        /// Move to Bottom
+        /// </summary>
+        /// <param name="sender">The Sender</param>
+        /// <param name="e">The Event Args</param>
+        private void audioList_MoveToBottom_Click(object sender, EventArgs e)
+        {
+            this.MoveTo(false);
+        }
+
         #endregion
 
         #region Private Functions
@@ -431,6 +446,12 @@ namespace Handbrake.Controls
         /// </summary>
         private void AutomaticTrackSelection()
         {
+            if (drp_audioTrack.SelectedItem.ToString() == Audio.NoneFound.Description)
+            {
+                this.AudioTracks.Clear();
+                return;
+            }
+
             // Handle Native Language and "Dub Foreign language audio" and "Use Foreign language audio and Subtitles" Options
             if (Properties.Settings.Default.NativeLanguage == "Any")
             {
@@ -439,7 +460,7 @@ namespace Handbrake.Controls
                 {
                     if (this.drp_audioTrack.SelectedItem != null)
                     {
-                        track.SourceTrack = this.drp_audioTrack.SelectedItem.ToString();
+                        track.ScannedTrack = this.drp_audioTrack.SelectedItem as HandBrake.ApplicationServices.Parsing.Audio;
                     }
                 }
             }
@@ -466,13 +487,14 @@ namespace Handbrake.Controls
 
                         if (drp_audioTrack.SelectedItem != null)
                             foreach (AudioTrack track in this.audioTracks)
-                                track.SourceTrack = drp_audioTrack.SelectedItem.ToString();
+                                track.ScannedTrack =
+                                    drp_audioTrack.SelectedItem as HandBrake.ApplicationServices.Parsing.Audio;
                         else
                         {
                             drp_audioTrack.SelectedIndex = 0;
                             if (drp_audioTrack.SelectedItem != null)
                                 foreach (AudioTrack track in this.audioTracks)
-                                    track.SourceTrack = drp_audioTrack.SelectedItem.ToString();
+                                    track.ScannedTrack = drp_audioTrack.SelectedItem as HandBrake.ApplicationServices.Parsing.Audio;
                         }
 
                         break;
@@ -483,7 +505,7 @@ namespace Handbrake.Controls
 
                         if (drp_audioTrack.SelectedItem != null)
                             foreach (AudioTrack track in this.audioTracks)
-                                track.SourceTrack = drp_audioTrack.SelectedItem.ToString();
+                                track.ScannedTrack = drp_audioTrack.SelectedItem as HandBrake.ApplicationServices.Parsing.Audio;
                         break;
                 }
             }
@@ -542,6 +564,7 @@ namespace Handbrake.Controls
             if (audioList.SelectedRows.Count == 0) return;
 
             DataGridViewRow item = audioList.SelectedRows[0];
+            AudioTrack track = item.DataBoundItem as AudioTrack;
             int index = item.Index;
 
             if (up) index--;
@@ -549,10 +572,30 @@ namespace Handbrake.Controls
 
             if (index < audioList.Rows.Count || (audioList.Rows.Count > index && index >= 0))
             {
-                audioList.Rows.Remove(item);
-                audioList.Rows.Insert(index, item);
-                audioList.ClearSelection();
-                item.Selected = true;
+                this.AudioTracks.Remove(track);
+                this.audioTracks.Insert(index, track);
+                this.audioList.ClearSelection();
+                this.audioList.Rows[index].Selected = true;
+            }
+        }
+
+        private void MoveTo(bool top)
+        {
+            if (audioList.SelectedRows.Count == 0) return;
+
+            DataGridViewRow item = audioList.SelectedRows[0];
+            AudioTrack track = item.DataBoundItem as AudioTrack;
+            int index = item.Index;
+
+            if (top) index = 0;
+            else index = this.audioList.Rows.Count - 1;
+
+            if (index < audioList.Rows.Count || (audioList.Rows.Count > index && index >= 0))
+            {
+                this.AudioTracks.Remove(track);
+                this.audioTracks.Insert(index, track);
+                this.audioList.ClearSelection();
+                this.audioList.Rows[index].Selected = true;
             }
         }
 
@@ -683,6 +726,13 @@ namespace Handbrake.Controls
 
         private void btn_AdvancedAudio_Click(object sender, EventArgs e)
         {
+            if (audioList.SelectedRows.Count == 0)
+            {
+                MessageBox.Show(
+                    "Please select an audio track.", "No Track Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (advancedAudio.IsDisposed)
             {
                 advancedAudio = new AdvancedAudio { Track = this.audioList.SelectedRows[0].DataBoundItem as AudioTrack };
@@ -690,7 +740,5 @@ namespace Handbrake.Controls
 
             advancedAudio.Show();
         }
-
-       
     }
 }

@@ -361,9 +361,9 @@ namespace HandBrake.ApplicationServices.Utilities
                 for (int x = 0; x < encoderCount; x++)
                 {
                     AudioTrack track = new AudioTrack();
-                    if (trackData != null)
-                        if (trackData.Length >= (x + 1)) // Audio Track
-                            track.SourceTrack = trackData[x].Trim();
+                    //if (trackData != null)
+                    //    if (trackData.Length >= (x + 1)) // Audio Track
+                    //        track.ScannedTrack = trackData[x].Trim();
 
                     if (trackMixes != null)
                         if (trackMixes.Length >= (x + 1)) // Audio Mix
