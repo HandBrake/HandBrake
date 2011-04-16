@@ -6,6 +6,7 @@
 namespace Handbrake.ToolWindows
 {
     using System;
+    using System.Globalization;
     using System.Windows.Forms;
 
     using HandBrake.ApplicationServices.Model.Encoding;
@@ -15,6 +16,12 @@ namespace Handbrake.ToolWindows
     /// </summary>
     public partial class AdvancedAudio : Form
     {
+        // Culture Info
+        private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
+
+        /// <summary>
+        /// The Advanced Audio Panel
+        /// </summary>
         public AdvancedAudio()
         {
             InitializeComponent();
@@ -55,6 +62,15 @@ namespace Handbrake.ToolWindows
                 }
 
                 lbl_GainValue.Text = string.Format("{0} dB", track.Gain);
+
+                // Set the DRC Control
+                double drcValue = 0;
+                int drcCalculated;
+                if (track.DRC != 0)
+                    drcValue = ((track.DRC * 10) + 1) - 10;
+                int.TryParse(drcValue.ToString(Culture), out drcCalculated);
+                tb_drc.Value = drcCalculated;
+                lbl_drc.Text = track.DRC.ToString();
             }
         }
 
@@ -93,12 +109,36 @@ namespace Handbrake.ToolWindows
 
             lbl_GainValue.Text = string.Format("{0} dB", gain);
 
+            // Figure out the DRC Value
+            double drcValue = 0;
+            int drcCalculated;
+            if (track.DRC != 0)
+                drcValue = ((track.DRC * 10) + 1) - 10;
+            int.TryParse(drcValue.ToString(Culture), out drcCalculated);
+            tb_drc.Value = drcCalculated;
+
             // Set the model.
             if (this.track == null)
             {
                 return;
             }
             this.Track.Gain = gain;
+        }
+
+        /// <summary>
+        /// The Dynamic Range Controller
+        /// </summary>
+        /// <param name="sender">The Sender</param>
+        /// <param name="e">The Event Args</param>
+        private void tb_drc_Scroll(object sender, EventArgs e)
+        {
+            double value;
+            if (tb_drc.Value == 0) value = 0;
+            else
+                value = ((tb_drc.Value - 1) / 10.0) + 1;
+
+            lbl_drc.Text = value.ToString();
+            track.DRC = value;
         }
     }
 }

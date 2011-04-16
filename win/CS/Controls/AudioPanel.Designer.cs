@@ -35,7 +35,6 @@ namespace Handbrake.Controls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AudioPanel));
             this.audioMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.audioList_moveup = new System.Windows.Forms.ToolStripMenuItem();
             this.audioList_movedown = new System.Windows.Forms.ToolStripMenuItem();
@@ -43,8 +42,6 @@ namespace Handbrake.Controls
             this.audioList_remove = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_RemoveAudioTrack = new System.Windows.Forms.Button();
             this.btn_addAudioTrack = new System.Windows.Forms.Button();
-            this.lbl_drc = new System.Windows.Forms.Label();
-            this.tb_drc = new System.Windows.Forms.TrackBar();
             this.label68 = new System.Windows.Forms.Label();
             this.drp_audioEncoder = new System.Windows.Forms.ComboBox();
             this.drp_audioMix = new System.Windows.Forms.ComboBox();
@@ -65,7 +62,6 @@ namespace Handbrake.Controls
             this.DRC = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Gain = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.audioMenu.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tb_drc)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.audioList)).BeginInit();
             this.SuspendLayout();
             // 
@@ -131,30 +127,6 @@ namespace Handbrake.Controls
             this.btn_addAudioTrack.Text = "Add Track";
             this.btn_addAudioTrack.UseVisualStyleBackColor = false;
             this.btn_addAudioTrack.Click += new System.EventHandler(this.AddAudioTrack_Click);
-            // 
-            // lbl_drc
-            // 
-            this.lbl_drc.AutoSize = true;
-            this.lbl_drc.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_drc.Location = new System.Drawing.Point(666, 90);
-            this.lbl_drc.Name = "lbl_drc";
-            this.lbl_drc.Size = new System.Drawing.Size(13, 13);
-            this.lbl_drc.TabIndex = 62;
-            this.lbl_drc.Text = "0";
-            // 
-            // tb_drc
-            // 
-            this.tb_drc.BackColor = System.Drawing.SystemColors.Window;
-            this.tb_drc.LargeChange = 0;
-            this.tb_drc.Location = new System.Drawing.Point(608, 84);
-            this.tb_drc.Margin = new System.Windows.Forms.Padding(0);
-            this.tb_drc.Maximum = 31;
-            this.tb_drc.Name = "tb_drc";
-            this.tb_drc.Size = new System.Drawing.Size(57, 45);
-            this.tb_drc.TabIndex = 60;
-            this.tb_drc.TickFrequency = 10;
-            this.ToolTips.SetToolTip(this.tb_drc, resources.GetString("tb_drc.ToolTip"));
-            this.tb_drc.Scroll += new System.EventHandler(this.ControlChanged);
             // 
             // label68
             // 
@@ -321,9 +293,9 @@ namespace Handbrake.Controls
             this.btn_AdvancedAudio.BackColor = System.Drawing.Color.Transparent;
             this.btn_AdvancedAudio.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_AdvancedAudio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_AdvancedAudio.Location = new System.Drawing.Point(630, 38);
+            this.btn_AdvancedAudio.Location = new System.Drawing.Point(607, 86);
             this.btn_AdvancedAudio.Name = "btn_AdvancedAudio";
-            this.btn_AdvancedAudio.Size = new System.Drawing.Size(71, 23);
+            this.btn_AdvancedAudio.Size = new System.Drawing.Size(94, 23);
             this.btn_AdvancedAudio.TabIndex = 70;
             this.btn_AdvancedAudio.Text = "Advanced";
             this.btn_AdvancedAudio.UseVisualStyleBackColor = false;
@@ -394,31 +366,29 @@ namespace Handbrake.Controls
             this.Gain.DataPropertyName = "Gain";
             this.Gain.HeaderText = "Gain (dB)";
             this.Gain.Name = "Gain";
+            this.Gain.ReadOnly = true;
             this.Gain.Width = 60;
             // 
             // AudioPanel
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.BackColor = System.Drawing.Color.Transparent;
-            this.Controls.Add(this.btn_AdvancedAudio);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lbl_audioTrack);
             this.Controls.Add(this.drp_audioTrack);
+            this.Controls.Add(this.btn_AdvancedAudio);
             this.Controls.Add(this.drp_audioSample);
             this.Controls.Add(this.audioList);
             this.Controls.Add(this.label68);
             this.Controls.Add(this.drp_audioBitrate);
             this.Controls.Add(this.drp_audioMix);
             this.Controls.Add(this.btn_addAudioTrack);
-            this.Controls.Add(this.lbl_drc);
             this.Controls.Add(this.btn_RemoveAudioTrack);
             this.Controls.Add(this.drp_audioEncoder);
-            this.Controls.Add(this.tb_drc);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "AudioPanel";
             this.Size = new System.Drawing.Size(720, 310);
             this.audioMenu.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.tb_drc)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.audioList)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -429,8 +399,6 @@ namespace Handbrake.Controls
 
         private System.Windows.Forms.Button btn_RemoveAudioTrack;
         private System.Windows.Forms.Button btn_addAudioTrack;
-        internal System.Windows.Forms.Label lbl_drc;
-        internal System.Windows.Forms.TrackBar tb_drc;
         internal System.Windows.Forms.Label label68;
         internal System.Windows.Forms.ComboBox drp_audioEncoder;
         internal System.Windows.Forms.ComboBox drp_audioMix;
