@@ -230,11 +230,13 @@ namespace Handbrake.Controls
                     // Configure the widgets with values
                     if (drp_audioEncoder.Text.Contains(AC3Passthru) || drp_audioEncoder.Text.Contains(DTSPassthru))
                     {
-                        drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = tb_drc.Enabled = false;
+                        drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = false;
+                        track.Gain = 0;
+                        track.DRC = 0;
                     }
                     else
                     {
-                        drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = tb_drc.Enabled = true;
+                        drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = true;
                     }
 
                     // Update an item in the Audio list if required.
@@ -258,17 +260,6 @@ namespace Handbrake.Controls
                     int.TryParse(drp_audioBitrate.Text, out bitrate);
 
                     track.Bitrate = bitrate;
-                    break;
-                case "tb_drc":
-                    double value;
-                    if (tb_drc.Value == 0) value = 0;
-                    else
-                        value = ((tb_drc.Value - 1) / 10.0) + 1;
-
-                    lbl_drc.Text = value.ToString();
-                    track.DRC = value;
-                    audioList.Select();
-                    audioList.Refresh();
                     break;
             }
 
@@ -303,14 +294,6 @@ namespace Handbrake.Controls
                     drp_audioMix.SelectedItem = EnumHelper<Mixdown>.GetDescription(track.MixDown);
                     drp_audioSample.SelectedItem = track.SampleRate;
                     drp_audioBitrate.SelectedItem = track.Bitrate;
-                    double drcValue = 0;
-                    int drcCalculated;
-                    if (track.DRC != 0)
-                        drcValue = ((track.DRC * 10) + 1) - 10;
-                    int.TryParse(drcValue.ToString(Culture), out drcCalculated);
-                    tb_drc.Value = drcCalculated;
-                    lbl_drc.Text = track.DRC.ToString();
-
                     lbl_audioTrack.Text = track.SourceTrack;
 
                     // Set the Advanced Control.
@@ -349,10 +332,6 @@ namespace Handbrake.Controls
             }
 
             // Get Some Values
-            double drcValue = 0;
-            if (tb_drc.Value != 0)
-                drcValue = ((tb_drc.Value - 1) / 10.0) + 1;
-
             int bitrate;
             double samplerate;
 
@@ -368,7 +347,7 @@ namespace Handbrake.Controls
                     SampleRate = samplerate,
                     Bitrate = bitrate,
                     Gain = 0,
-                    DRC = drcValue
+                    DRC = 0,
                 };
 
             this.audioTracks.Add(track);

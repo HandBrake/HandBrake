@@ -486,7 +486,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Import Project="$(ProgramFiles)\MSBuild\Microsoft\StyleCop\v4.4\Microsoft.StyleCop.targets" />
+  <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.5\StyleCop.targets" />
   <PropertyGroup Condition=" '$(Configuration)' == 'Install' ">
     <PostBuildEvent>
 	makensis Installer.nsi

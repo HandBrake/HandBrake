@@ -15,6 +15,11 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         /// The gain value
         /// </summary>
         private int gain;
+
+        /// <summary>
+        ///  The DRC Value
+        /// </summary>
+        private double drc;
         #endregion
 
         /// <summary>
@@ -99,7 +104,21 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         /// <summary>
         /// Gets or sets Dynamic Range Compression
         /// </summary>
-        public double DRC { get; set; }
+        public double DRC
+        {
+            get
+            {
+                return this.drc;
+            }
+            set
+            {
+                if (!object.Equals(value, this.drc))
+                {
+                    this.drc = value;
+                    this.OnPropertyChanged("DRC");
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the Gain for the audio track

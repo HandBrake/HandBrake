@@ -123,14 +123,6 @@
   <metadata name="ToolTips.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>330, 16</value>
   </metadata>
-  <data name="tb_drc.ToolTip" xml:space="preserve">
-    <value>Dynamic Range Compression
-Adjust the dynamic range of the output audio track.
-
-For source audio that has a wide dynamic range (very loud and very soft
-sequences), DRC allows you to 'compress' the range by making loud
-sections softer and soft sections louder</value>
-  </data>
   <metadata name="AudioMenuRowHeightHack.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>35, 17</value>
   </metadata>
@@ -154,5 +146,8 @@ sections softer and soft sections louder</value>
   </metadata>
   <metadata name="Gain.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
+  </metadata>
+  <metadata name="ToolTips.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>330, 16</value>
   </metadata>
 </root>
