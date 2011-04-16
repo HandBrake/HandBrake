@@ -4467,15 +4467,16 @@ bool one_burned = FALSE;
     NSMenuItem *menuItem;
     /* These video encoders are available to all of our current muxers, so lets list them once here */
     menuItem = [[fVidEncoderPopUp menu] addItemWithTitle:@"MPEG-4 (FFmpeg)" action: NULL keyEquivalent: @""];
-    [menuItem setTag: HB_VCODEC_FFMPEG];
+    [menuItem setTag: HB_VCODEC_FFMPEG_MPEG4];
+    menuItem = [[fVidEncoderPopUp menu] addItemWithTitle:@"MPEG-2 (FFmpeg)" action: NULL keyEquivalent: @""];
+    [menuItem setTag: HB_VCODEC_FFMPEG_MPEG2];
+    menuItem = [[fVidEncoderPopUp menu] addItemWithTitle:@"H.264 (x264)" action: NULL keyEquivalent: @""];
+    [menuItem setTag: HB_VCODEC_X264];
     
     switch( format )
     {
         case 0:
 			[self autoSetM4vExtension: nil];
-            /* Add additional video encoders here */
-            menuItem = [[fVidEncoderPopUp menu] addItemWithTitle:@"H.264 (x264)" action: NULL keyEquivalent: @""];
-            [menuItem setTag: HB_VCODEC_X264];
             /* We show the mp4 option checkboxes here since we are mp4 */
             [fCreateChapterMarkers setEnabled: YES];
 			[fDstMp4LargeFileCheck setHidden: NO];
@@ -4486,8 +4487,6 @@ bool one_burned = FALSE;
             case 1:
             ext = "mkv";
             /* Add additional video encoders here */
-            menuItem = [[fVidEncoderPopUp menu] addItemWithTitle:@"H.264 (x264)" action: NULL keyEquivalent: @""];
-            [menuItem setTag: HB_VCODEC_X264];
             menuItem = [[fVidEncoderPopUp menu] addItemWithTitle:@"VP3 (Theora)" action: NULL keyEquivalent: @""];
             [menuItem setTag: HB_VCODEC_THEORA];
             /* We enable the create chapters checkbox here */
@@ -4607,7 +4606,7 @@ the user is using "Custom" settings by determining the sender*/
         [self autoSetM4vExtension: sender];
     }
 
-    if (videoEncoder == HB_VCODEC_FFMPEG)
+    if (videoEncoder != HB_VCODEC_X264)
     {
         /* We set the iPod atom checkbox to disabled and uncheck it as its only for x264 in the mp4
          container. Format is taken care of in formatPopUpChanged method by hiding and unchecking
@@ -4737,8 +4736,8 @@ the user is using "Custom" settings by determining the sender*/
         [fVidQualitySlider setNumberOfTickMarks:(([fVidQualitySlider maxValue] - [fVidQualitySlider minValue]) * fractionalGranularity) + 1];
         qpRFLabelString = @"RF:";
     }
-    /* ffmpeg  1-31 */
-    if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_FFMPEG )
+    /* ffmpeg MPEG-2/4 1-31 */
+    if ([[fVidEncoderPopUp selectedItem] tag] & HB_VCODEC_FFMPEG_MASK )
     {
         [fVidQualitySlider setMinValue:1.0];
         [fVidQualitySlider setMaxValue:31.0];
