@@ -120,7 +120,7 @@
     <Compile Include="Model\Preset.cs" />
     <Compile Include="Model\QueueTask.cs" />
     <Compile Include="Model\Encoding\SubtitleType.cs" />
-    <Compile Include="Parsing\AudioTrack.cs" />
+    <Compile Include="Parsing\Audio.cs" />
     <Compile Include="Parsing\Chapter.cs" />
     <Compile Include="Parsing\Source.cs" />
     <Compile Include="Parsing\Parser.cs" />

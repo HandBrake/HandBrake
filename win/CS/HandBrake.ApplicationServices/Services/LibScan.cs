@@ -16,7 +16,7 @@ namespace HandBrake.ApplicationServices.Services
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop;
 
-    using AudioTrack = HandBrake.ApplicationServices.Parsing.AudioTrack;
+    using AudioTrack = HandBrake.ApplicationServices.Parsing.Audio;
     using Cropping = HandBrake.ApplicationServices.Model.Encoding.Cropping;
     using ScanProgressEventArgs = HandBrake.Interop.ScanProgressEventArgs;
     using Size = System.Drawing.Size;

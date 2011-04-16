@@ -30,7 +30,7 @@ namespace HandBrake.ApplicationServices.Parsing
         /// </summary>
         public Title()
         {
-            this.AudioTracks = new List<AudioTrack>();
+            this.AudioTracks = new List<Audio>();
             this.Chapters = new List<Chapter>();
             this.Subtitles = new List<Subtitle>();
         }
@@ -45,7 +45,7 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <summary>
         /// Gets or sets a Collection of audio tracks associated with this Title
         /// </summary>
-        public List<AudioTrack> AudioTracks { get; set; }
+        public List<Audio> AudioTracks { get; set; }
 
         /// <summary>
         /// Gets or sets a Collection of subtitles associated with this Title
@@ -193,7 +193,7 @@ namespace HandBrake.ApplicationServices.Parsing
 
             thisTitle.Chapters.AddRange(Chapter.ParseList(output));
 
-            thisTitle.AudioTracks.AddRange(AudioTrack.ParseList(output));
+            thisTitle.AudioTracks.AddRange(Audio.ParseList(output));
 
             thisTitle.Subtitles.AddRange(Subtitle.ParseList(output));
 
