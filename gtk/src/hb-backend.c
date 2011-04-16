@@ -3518,6 +3518,26 @@ picture_settings_deps(signal_user_data_t *ud)
 }
 
 void
+ghb_limit_rational( gint *num, gint *den, gint limit )
+{
+    if (*num < limit && *den < limit)
+        return;
+
+    if (*num > *den)
+    {
+        gdouble factor = (double)limit / *num;
+        *num = limit;
+        *den = factor * *den;
+    }
+    else
+    {
+        gdouble factor = (double)limit / *den;
+        *den = limit;
+        *num = factor * *num;
+    }
+}
+
+void
 ghb_set_scale(signal_user_data_t *ud, gint mode)
 {
 	hb_list_t  * list;
@@ -3795,9 +3815,9 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	gint disp_width, dar_width, dar_height;
 	gchar *str;
 
-	disp_width = (gdouble)(width * par_width / par_height) + 0.5;
+	disp_width = ((gdouble)par_width / par_height) * width + 0.5;
 	hb_reduce(&dar_width, &dar_height, disp_width, height);
-		
+    ghb_limit_rational(&par_width, &par_height, 65535);
 	gint iaspect = dar_width * 9 / dar_height;
 	if (dar_width > 2 * dar_height)
 	{
