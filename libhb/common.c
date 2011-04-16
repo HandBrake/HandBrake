@@ -412,6 +412,62 @@ void hb_reduce( int *x, int *y, int num, int den )
 }
 
 /**********************************************************************
+ * hb_reduce64
+ **********************************************************************
+ * Given a numerator (num) and a denominator (den), reduce them to an
+ * equivalent fraction and store the result in x and y.
+ *********************************************************************/
+void hb_reduce64( int64_t *x, int64_t *y, int64_t num, int64_t den )
+{
+    // find the greatest common divisor of num & den by Euclid's algorithm
+    int64_t n = num, d = den;
+    while ( d )
+    {
+        int64_t t = d;
+        d = n % d;
+        n = t;
+    }
+
+    // at this point n is the gcd. if it's non-zero remove it from num
+    // and den. Otherwise just return the original values.
+    if ( n )
+    {
+        num /= n;
+        den /= n;
+    }
+
+    *x = num;
+    *y = den;
+
+}
+
+void hb_limit_rational64( int64_t *x, int64_t *y, int64_t num, int64_t den, int64_t limit )
+{
+    hb_reduce64( &num, &den, num, den );
+    if ( num < limit && den < limit )
+    {
+        *x = num;
+        *y = den;
+        return;
+    }
+
+    if ( num > den )
+    {
+        double div = (double)limit / num;
+        num = limit;
+        den *= div;
+    }
+    else
+    {
+        double div = (double)limit / den;
+        den = limit;
+        num *= div;
+    }
+    *x = num;
+    *y = den;
+}
+
+/**********************************************************************
  * hb_fix_aspect
  **********************************************************************
  * Given the output width (if HB_KEEP_WIDTH) or height

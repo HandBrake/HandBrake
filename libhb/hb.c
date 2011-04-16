@@ -1025,8 +1025,12 @@ void hb_set_anamorphic_size( hb_job_t * job,
             /* The film AR is the source's display width / cropped source height.
                The output display width is the output height * film AR.
                The output PAR is the output display width / output storage width. */
-            pixel_aspect_width = height * cropped_width * pixel_aspect_width;
-            pixel_aspect_height = width * cropped_height * pixel_aspect_height;
+            int64_t par_w, par_h;
+            par_w = (int64_t)height * cropped_width * pixel_aspect_width;
+            par_h = (int64_t)width * cropped_height * pixel_aspect_height;
+            hb_limit_rational64( &par_w, &par_h, par_w, par_h, 65535);
+            pixel_aspect_width = par_w;
+            pixel_aspect_height = par_h;
 
             /* Pass the results back to the caller */
             *output_width = width;

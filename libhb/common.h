@@ -91,6 +91,8 @@ void      * hb_list_item( hb_list_t *, int );
 void        hb_list_close( hb_list_t ** );
 
 void hb_reduce( int *x, int *y, int num, int den );
+void hb_reduce64( int64_t *x, int64_t *y, int64_t num, int64_t den );
+void hb_limit_rational64( int64_t *x, int64_t *y, int64_t num, int64_t den, int64_t limit );
 
 #define HB_KEEP_WIDTH  0
 #define HB_KEEP_HEIGHT 1
