@@ -378,7 +378,7 @@ ghb_audio_list_refresh_selected(signal_user_data_t *ud)
 		sr = ghb_settings_combo_option(asettings, "AudioSamplerate");
 		mix = ghb_settings_combo_option(asettings, "AudioMixdown");
 		gain = ghb_settings_get_double(asettings, "AudioTrackGain");
-		s_gain = g_strdup_printf("%.fdB", gain);
+		s_gain = g_strdup_printf("%ddB", (int)gain);
 
 		drc = ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
 		if (drc < 1.0)
@@ -571,6 +571,8 @@ drc_widget_changed_cb(GtkWidget *widget, gdouble val, signal_user_data_t *ud)
 G_MODULE_EXPORT gchar*
 format_gain_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 {
+	if ( val >= 21.0 )
+		return g_strdup_printf("*11*", (int)val);
 	return g_strdup_printf("%ddB", (int)val);
 }
 
@@ -638,7 +640,7 @@ add_to_audio_list(signal_user_data_t *ud, GValue *settings)
 	sr = ghb_settings_combo_option(settings, "AudioSamplerate");
 	mix = ghb_settings_combo_option(settings, "AudioMixdown");
 	gain = ghb_settings_get_double(settings, "AudioTrackGain");
-	s_gain = g_strdup_printf("%.fdB", gain);
+	s_gain = g_strdup_printf("%ddB", (int)gain);
 
 	drc = ghb_settings_get_double(settings, "AudioTrackDRCSlider");
 	if (drc < 1.0)
