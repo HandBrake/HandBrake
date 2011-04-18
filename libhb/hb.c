@@ -412,6 +412,7 @@ hb_handle_t * hb_init( int verbose, int update_check )
 	hb_register( &hb_muxer );
 #ifdef __APPLE__
 	hb_register( &hb_encca_aac );
+	hb_register( &hb_encca_haac );
 #endif
 	hb_register( &hb_encac3 );
     
@@ -513,6 +514,7 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
 	hb_register( &hb_muxer );
 #ifdef __APPLE__
 	hb_register( &hb_encca_aac );
+	hb_register( &hb_encca_haac );
 #endif
 	hb_register( &hb_encac3 );
 
@@ -1939,4 +1941,57 @@ void hb_set_state( hb_handle_t * h, hb_state_t * s )
 hb_interjob_t * hb_interjob_get( hb_handle_t * h )
 {
     return h->interjob;
+}
+
+/************************************************************************
+ * encca_haac_available()
+ ************************************************************************
+ * Returns whether the Core Audio HE-AAC encoder is available for use
+ * on the system. Under 10.5, if the encoder is available, register it.
+ * The registration is actually only performed on the first call.
+ ************************************************************************/
+int encca_haac_available()
+{
+#ifdef __APPLE__
+    static int encca_haac_available = -1;
+
+    if (encca_haac_available != -1)
+        return encca_haac_available;
+
+    encca_haac_available = 0;
+
+    long minorVersion, majorVersion, quickTimeVersion;
+    Gestalt(gestaltSystemVersionMajor, &majorVersion);
+    Gestalt(gestaltSystemVersionMinor, &minorVersion);
+    Gestalt(gestaltQuickTime, &quickTimeVersion);
+
+    if (majorVersion > 10 || (majorVersion == 10 && minorVersion >= 6))
+    {
+        // OS X 10.6+ - ca_haac is available and ready to use
+        encca_haac_available = 1;
+    }
+    else if (majorVersion == 10 && minorVersion >= 5 && quickTimeVersion >= 0x07630000)
+    {
+        // OS X 10.5, QuickTime 7.6.3+ - register the component
+        ComponentDescription cd;
+        cd.componentType         = kAudioEncoderComponentType;
+        cd.componentSubType      = kAudioFormatMPEG4AAC_HE;
+        cd.componentManufacturer = kAudioUnitManufacturer_Apple;
+        cd.componentFlags        = 0;
+        cd.componentFlagsMask    = 0;
+        ComponentResult (*ComponentRoutine) (ComponentParameters * cp, Handle componentStorage);
+        void *handle = dlopen("/System/Library/Components/AudioCodecs.component/Contents/MacOS/AudioCodecs", RTLD_LAZY|RTLD_LOCAL);
+        if (handle)
+        {
+            ComponentRoutine = dlsym(handle, "ACMP4AACHighEfficiencyEncoderEntry");
+            if (ComponentRoutine)
+                if (RegisterComponent(&cd, ComponentRoutine, 0, NULL, NULL, NULL))
+                    encca_haac_available = 1;
+        }
+    }
+
+    return encca_haac_available;
+#else
+    return 0;
+#endif
 }

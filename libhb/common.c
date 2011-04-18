@@ -118,15 +118,14 @@ ffac3
 24kHz       318 (320)           318 (320)           318 (320)
 48kHz       636 (640)           636 (640)           636 (640)
 
-Core Audio  (core audio api provides range of allowed bitrates)
-24kHz       16-64               32-128              80-320      
-44.1kHz                         64-320              160-768      
-48kHz       32-256              64-320              160-768                 
+Core Audio AAC (core audio api provides range of allowed bitrates)
+24kHz       16-64               32-128              80-320
+32kHz       24-96               48-192              128-448
+48kHz       32-256              64-320              160-768
 
-Core Audio  (minimum limits found in testing)
-24kHz       16                  32                  96
-44.1kHz     32                  64                  160
-48kHz       40                  80                  240
+Core Audio HE-AAC (core audio api provides range of allowed bitrates)
+32kHz       12-40               24-80               64-192
+48kHz       16-40               32-80               80-192
 */
 
 void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, int *low, int *high)
@@ -149,21 +148,11 @@ void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, in
             break;
 
         case HB_ACODEC_CA_AAC:
-            if (samplerate > 44100)
-            {
-                *low = channels * 40;
-                *high = 256;
-                if (channels == 2)
-                    *high = 320;
-                if (channels == 6)
-                {
-                    *high = 768;
-                }
-            }
-            else if (samplerate > 24000)
+            if (samplerate > 32000)
             {
                 *low = channels * 32;
-                *high = 256;
+                if (channels == 1)
+                    *high = 256;
                 if (channels == 2)
                     *high = 320;
                 if (channels == 6)
@@ -172,13 +161,47 @@ void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, in
                     *high = 768;
                 }
             }
+            else if (samplerate > 24000)
+            {
+                *low = channels * 24;
+                *high = channels * 96;
+                if (channels == 6)
+                {
+                    *low = 128;
+                    *high = 448;
+                }
+            }
             else
             {
                 *low = channels * 16;
                 *high = channels * 64;
                 if (channels == 6)
                 {
+                    *low = 80;
                     *high = 320;
+                }
+            }
+            break;
+
+        case HB_ACODEC_CA_HAAC:
+            if (samplerate > 32000)
+            {
+                *low = channels * 16;
+                *high = channels * 40;
+                if (channels == 6)
+                {
+                    *low = 80;
+                    *high = 192;
+                }
+            }
+            else
+            {
+                *low = channels * 12;
+                *high = channels * 40;
+                if (channels == 6)
+                {
+                    *low = 64;
+                    *high = 192;
                 }
             }
             break;
@@ -279,6 +302,9 @@ int hb_get_default_audio_bitrate( uint32_t codec, int samplerate, int mixdown )
                 bitrate = 224;
             else
                 bitrate = 640;
+            break;
+        case HB_ACODEC_CA_HAAC:
+            bitrate = channels * 32;
             break;
         default:
             bitrate = channels * 80;
@@ -610,6 +636,9 @@ int hb_calc_bitrate( hb_job_t * job, int size )
             case HB_ACODEC_AC3:
             case HB_ACODEC_DCA:
                 samples_per_frame = 1536;
+                break;
+            case HB_ACODEC_CA_HAAC:
+                samples_per_frame = 2048;
                 break;
             default:
                 return 0;

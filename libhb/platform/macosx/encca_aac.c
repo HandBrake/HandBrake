@@ -6,7 +6,11 @@
 #include <AudioToolbox/AudioToolbox.h>
 #include <CoreAudio/CoreAudio.h>
 
-int     encCoreAudioInit( hb_work_object_t *, hb_job_t * );
+enum AAC_MODE { AAC_MODE_LC, AAC_MODE_HE };
+
+int     encCoreAudioInitLC( hb_work_object_t *, hb_job_t * );
+int     encCoreAudioInitHE( hb_work_object_t *, hb_job_t * );
+int     encCoreAudioInit( hb_work_object_t *, hb_job_t *, enum AAC_MODE mode );
 int     encCoreAudioWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
 void    encCoreAudioClose( hb_work_object_t * );
 
@@ -14,7 +18,16 @@ hb_work_object_t hb_encca_aac =
 {
     WORK_ENC_CA_AAC,
     "AAC encoder (Apple)",
-    encCoreAudioInit,
+    encCoreAudioInitLC,
+    encCoreAudioWork,
+    encCoreAudioClose
+};
+
+hb_work_object_t hb_encca_haac =
+{
+    WORK_ENC_CA_HAAC,
+    "HE-AAC encoder (Apple)",
+    encCoreAudioInitHE,
     encCoreAudioWork,
     encCoreAudioClose
 };
@@ -93,11 +106,26 @@ static long ReadESDSDescExt(void* descExt, UInt8 **buffer, UInt32 *size, int ver
 }
 
 /***********************************************************************
+ * hb_work_encCoreAudio_init switches
+ ***********************************************************************
+ *
+ **********************************************************************/
+int encCoreAudioInitLC( hb_work_object_t * w, hb_job_t * job )
+{
+    return encCoreAudioInit( w, job, AAC_MODE_LC );
+}
+
+int encCoreAudioInitHE( hb_work_object_t * w, hb_job_t * job )
+{
+    return encCoreAudioInit( w, job, AAC_MODE_HE );
+}
+
+/***********************************************************************
  * hb_work_encCoreAudio_init
  ***********************************************************************
  *
  **********************************************************************/
-int encCoreAudioInit( hb_work_object_t * w, hb_job_t * job )
+int encCoreAudioInit( hb_work_object_t * w, hb_job_t * job, enum AAC_MODE mode )
 {
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     hb_audio_t * audio = w->audio;
@@ -122,7 +150,16 @@ int encCoreAudioInit( hb_work_object_t * w, hb_job_t * job )
     input.mBitsPerChannel = 32;
 
     bzero( &output, sizeof( AudioStreamBasicDescription ) );
-    output.mFormatID = kAudioFormatMPEG4AAC;
+    switch ( mode ) 
+    {
+        case AAC_MODE_HE:
+            output.mFormatID = kAudioFormatMPEG4AAC_HE;
+            break;
+        case AAC_MODE_LC:
+        default:
+            output.mFormatID = kAudioFormatMPEG4AAC;
+            break;
+    }
     output.mSampleRate = ( Float64 ) audio->config.out.samplerate;
     output.mChannelsPerFrame = pv->nchannels;
     // let CoreAudio decide the rest...
@@ -133,7 +170,16 @@ int encCoreAudioInit( hb_work_object_t * w, hb_job_t * job )
     {
         // Retry without the samplerate
         bzero( &output, sizeof( AudioStreamBasicDescription ) );
-        output.mFormatID = kAudioFormatMPEG4AAC;
+        switch ( mode )
+        {
+            case AAC_MODE_HE:
+                output.mFormatID = kAudioFormatMPEG4AAC_HE;
+                break;
+            case AAC_MODE_LC:
+            default:
+                output.mFormatID = kAudioFormatMPEG4AAC;
+                break;
+        }
         output.mChannelsPerFrame = pv->nchannels;
 
         err = AudioConverterNew( &input, &output, &pv->converter );
@@ -161,7 +207,7 @@ int encCoreAudioInit( hb_work_object_t * w, hb_job_t * job )
     // set encoder bitrate control mode to constrained variable
     tmp = kAudioCodecBitRateControlMode_VariableConstrained;
     AudioConverterSetProperty( pv->converter, kAudioCodecPropertyBitRateControlMode,
-                              sizeof( tmp ), &tmp );
+                               sizeof( tmp ), &tmp );
 
     // get available bitrates
     AudioValueRange *bitrates;
@@ -180,8 +226,11 @@ int encCoreAudioInit( hb_work_object_t * w, hb_job_t * job )
     if( tmp > bitrates[bitrateCounts-1].mMinimum )
         tmp = bitrates[bitrateCounts-1].mMinimum;
     free( bitrates );
+    if( tmp != audio->config.out.bitrate * 1000 )
+        hb_log( "encca_aac: sanitizing track %d audio bitrate %d to %"PRIu32"", 
+                audio->config.out.track, audio->config.out.bitrate, tmp/1000 );
     AudioConverterSetProperty( pv->converter, kAudioConverterEncodeBitRate,
-                              sizeof( tmp ), &tmp );
+                               sizeof( tmp ), &tmp );
 
     // get real input
     tmpsiz = sizeof( input );
@@ -256,7 +305,7 @@ static OSStatus inInputDataProc( AudioConverterRef converter, UInt32 *npackets,
     {
         *npackets = 0;
         hb_log( "CoreAudio: no data to use in inInputDataProc" );
-        return noErr;
+        return 1;
     }
 
     if( pv->buf != NULL )

@@ -8,6 +8,14 @@ extern "C" {
 #include "project.h"
 #include "common.h"
 
+#ifdef __APPLE__
+#include <CoreServices/CoreServices.h> // for Gestalt
+#include <AudioToolbox/AudioToolbox.h>
+#include <dlfcn.h>
+#endif
+/* Whether the Core Audio HE-AAC encoder is available on the system. */
+int encca_haac_available();
+
 /* hb_init()
    Initializes a libhb session (launches his own thread, detects CPUs,
    etc) */

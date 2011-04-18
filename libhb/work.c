@@ -127,6 +127,7 @@ hb_work_object_t * hb_codec_encoder( int codec )
         case HB_ACODEC_LAME:   return hb_get_work( WORK_ENCLAME );
         case HB_ACODEC_VORBIS: return hb_get_work( WORK_ENCVORBIS );
         case HB_ACODEC_CA_AAC: return hb_get_work( WORK_ENC_CA_AAC );
+        case HB_ACODEC_CA_HAAC:return hb_get_work( WORK_ENC_CA_HAAC );
         case HB_ACODEC_AC3:    return hb_get_work( WORK_ENCAC3 );
     }
     return NULL;
@@ -369,8 +370,9 @@ void hb_display_job_info( hb_job_t * job )
                     ( audio->config.out.codec == HB_ACODEC_FAAC ) ?  "faac" : 
                     ( ( audio->config.out.codec == HB_ACODEC_LAME ) ?  "lame" : 
                     ( ( audio->config.out.codec == HB_ACODEC_CA_AAC ) ?  "ca_aac" : 
+                    ( ( audio->config.out.codec == HB_ACODEC_CA_HAAC ) ?  "ca_haac" : 
                     ( ( audio->config.out.codec == HB_ACODEC_AC3 ) ?  "ffac3" : 
-                    "vorbis"  ) ) ) );
+                    "vorbis"  ) ) ) ) );
                 hb_log( "     + bitrate: %d kbps, samplerate: %d Hz", audio->config.out.bitrate, audio->config.out.samplerate );            
             }
         }
@@ -555,6 +557,23 @@ static void do_job( hb_job_t * job )
             hb_log( "Bitrate %d not supported.  Reducing to 640Kbps.",
                     audio->config.out.bitrate );
             audio->config.out.bitrate = 640;
+        }
+        if( audio->config.out.codec == HB_ACODEC_CA_HAAC )
+        {
+            if( !encca_haac_available() )
+            {
+                // user chose Core Audio HE-AAC but the encoder is unavailable
+                hb_log( "Core Audio HE-AAC unavailable. Using Core Audio AAC for track %d",
+                        audio->config.out.track );
+                audio->config.out.codec = HB_ACODEC_CA_AAC;
+            }
+            else if( audio->config.out.samplerate < 32000 )
+            {
+                // Core Audio HE-AAC doesn't support samplerates < 32 kHz
+                hb_log( "Sample rate %d not supported (ca_haac). Using 32kHz for track %d",
+                        audio->config.out.samplerate, audio->config.out.track );
+                audio->config.out.samplerate = 32000;
+            }
         }
         /* Adjust output track number, in case we removed one.
          * Output tracks sadly still need to be in sequential order.

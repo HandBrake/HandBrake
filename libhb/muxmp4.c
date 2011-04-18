@@ -420,11 +420,13 @@ rate_found2:
             }
         } 
         else if( audio->config.out.codec == HB_ACODEC_FAAC ||
-                 audio->config.out.codec == HB_ACODEC_CA_AAC ) 
+                 audio->config.out.codec == HB_ACODEC_CA_AAC ||
+                 audio->config.out.codec == HB_ACODEC_CA_HAAC ) 
         {
+            int samples_per_frame = ( audio->config.out.codec == HB_ACODEC_CA_HAAC ) ? 2048 : 1024;
             mux_data->track = MP4AddAudioTrack(
                 m->file,
-                audio->config.out.samplerate, 1024, MP4_MPEG4_AUDIO_TYPE );
+                audio->config.out.samplerate, samples_per_frame, MP4_MPEG4_AUDIO_TYPE );
 
             /* Tune track chunk duration */
             MP4TuneTrackDurationPerChunk( m, mux_data->track );

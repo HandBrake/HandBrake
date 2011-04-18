@@ -2538,7 +2538,7 @@ static void ShowHelp()
 #ifdef __APPLE_CC__
     fprintf( out,
     "    -E, --aencoder <string> Audio encoder(s)\n"
-    "                                (ca_aac/faac/lame/vorbis/ac3/copy/copy:ac3/copy:dts)\n"
+    "                                (ca_aac/ca_haac/faac/lame/vorbis/ac3/copy/copy:ac3/copy:dts)\n"
     "                            copy, copy:ac3 and copy:dts meaning passthrough.\n"
     "                            copy will passthrough either ac3 or dts.\n"
     "                            Separated by commas for more than one audio track.\n"
@@ -3593,6 +3593,10 @@ static int get_acodec_for_string( char *codec )
     else if( !strcasecmp( codec, "ca_aac") )
     {
         return HB_ACODEC_CA_AAC;
+    }
+    else if( !strcasecmp( codec, "ca_haac") )
+    {
+        return HB_ACODEC_CA_HAAC;
     }
 #endif
     else

@@ -75,6 +75,15 @@ static NSMutableArray *masterBitRateArray = nil;
 									  [NSNumber numberWithBool: YES], keyAudioMKV,
 									  [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
 									  nil]];
+		if (encca_haac_available()) {
+			[masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
+									  NSLocalizedString(@"HE-AAC (CoreAudio)", @"HE-AAC (CoreAudio)"), keyAudioCodecName,
+									  [NSNumber numberWithInt: HB_ACODEC_CA_HAAC], keyAudioCodec,
+									  [NSNumber numberWithBool: YES], keyAudioMP4,
+									  [NSNumber numberWithBool: YES], keyAudioMKV,
+									  [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
+									  nil]];
+		}
 		[masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
 									  NSLocalizedString(@"AAC (faac)", @"AAC (faac)"), keyAudioCodecName,
 									  [NSNumber numberWithInt: HB_ACODEC_FAAC], keyAudioCodec,
