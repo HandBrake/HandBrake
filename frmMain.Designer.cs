@@ -39,7 +39,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -255,8 +255,9 @@ namespace Handbrake
             this.drp_videoEncoder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drp_videoEncoder.FormattingEnabled = true;
             this.drp_videoEncoder.Items.AddRange(new object[] {
-            "MPEG-4 (FFmpeg)",
             "H.264 (x264)",
+            "MPEG-4 (FFmpeg)",
+            "MPEG-2 (FFmpeg)",
             "VP3 (Theora)"});
             this.drp_videoEncoder.Location = new System.Drawing.Point(125, 35);
             this.drp_videoEncoder.Name = "drp_videoEncoder";
@@ -286,7 +287,7 @@ namespace Handbrake
             this.check_turbo.Enabled = false;
             this.check_turbo.Location = new System.Drawing.Point(495, 134);
             this.check_turbo.Name = "check_turbo";
-            this.check_turbo.Size = new System.Drawing.Size(99, 17);
+            this.check_turbo.Size = new System.Drawing.Size(101, 17);
             this.check_turbo.TabIndex = 9;
             this.check_turbo.Text = "Turbo first Pass";
             this.ToolTip.SetToolTip(this.check_turbo, "Makes the first pass of a 2 pass encode faster.");
@@ -386,9 +387,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewCellStyle2.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle2;
             this.number.Frozen = true;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
@@ -556,7 +557,7 @@ namespace Handbrake
             this.radio_cq.BackColor = System.Drawing.Color.Transparent;
             this.radio_cq.Location = new System.Drawing.Point(366, 37);
             this.radio_cq.Name = "radio_cq";
-            this.radio_cq.Size = new System.Drawing.Size(105, 17);
+            this.radio_cq.Size = new System.Drawing.Size(110, 17);
             this.radio_cq.TabIndex = 3;
             this.radio_cq.Text = "Constant Quality:";
             this.ToolTip.SetToolTip(this.radio_cq, resources.GetString("radio_cq.ToolTip"));
@@ -570,7 +571,7 @@ namespace Handbrake
             this.radio_avgBitrate.Checked = true;
             this.radio_avgBitrate.Location = new System.Drawing.Point(367, 108);
             this.radio_avgBitrate.Name = "radio_avgBitrate";
-            this.radio_avgBitrate.Size = new System.Drawing.Size(112, 17);
+            this.radio_avgBitrate.Size = new System.Drawing.Size(116, 17);
             this.radio_avgBitrate.TabIndex = 4;
             this.radio_avgBitrate.TabStop = true;
             this.radio_avgBitrate.Text = "Avg Bitrate (kbps):";
@@ -584,7 +585,7 @@ namespace Handbrake
             this.check_2PassEncode.BackColor = System.Drawing.Color.Transparent;
             this.check_2PassEncode.Location = new System.Drawing.Point(385, 134);
             this.check_2PassEncode.Name = "check_2PassEncode";
-            this.check_2PassEncode.Size = new System.Drawing.Size(106, 17);
+            this.check_2PassEncode.Size = new System.Drawing.Size(104, 17);
             this.check_2PassEncode.TabIndex = 10;
             this.check_2PassEncode.Text = "2-Pass Encoding";
             this.ToolTip.SetToolTip(this.check_2PassEncode, resources.GetString("check_2PassEncode.ToolTip"));
@@ -872,7 +873,7 @@ namespace Handbrake
             this.radio_constantFramerate.Checked = true;
             this.radio_constantFramerate.Location = new System.Drawing.Point(0, 0);
             this.radio_constantFramerate.Name = "radio_constantFramerate";
-            this.radio_constantFramerate.Size = new System.Drawing.Size(117, 17);
+            this.radio_constantFramerate.Size = new System.Drawing.Size(122, 17);
             this.radio_constantFramerate.TabIndex = 17;
             this.radio_constantFramerate.TabStop = true;
             this.radio_constantFramerate.Text = "Constant Framerate";
@@ -884,7 +885,7 @@ namespace Handbrake
             this.radio_peakAndVariable.BackColor = System.Drawing.Color.Transparent;
             this.radio_peakAndVariable.Location = new System.Drawing.Point(0, 23);
             this.radio_peakAndVariable.Name = "radio_peakAndVariable";
-            this.radio_peakAndVariable.Size = new System.Drawing.Size(113, 17);
+            this.radio_peakAndVariable.Size = new System.Drawing.Size(116, 17);
             this.radio_peakAndVariable.TabIndex = 19;
             this.radio_peakAndVariable.Text = "Variable Framerate";
             this.radio_peakAndVariable.UseVisualStyleBackColor = false;

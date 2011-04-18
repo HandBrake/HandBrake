@@ -196,13 +196,16 @@ namespace Handbrake.Functions
             switch (presetQuery.VideoEncoder)
             {
                 case VideoEncoder.X264:
-                    mainWindow.drp_videoEncoder.SelectedIndex = 1;
-                    break;
-                case VideoEncoder.FFMpeg:
                     mainWindow.drp_videoEncoder.SelectedIndex = 0;
                     break;
-                case VideoEncoder.Theora:
+                case VideoEncoder.FFMpeg:
+                    mainWindow.drp_videoEncoder.SelectedIndex = 1;
+                    break;
+                case VideoEncoder.FFMpeg2:
                     mainWindow.drp_videoEncoder.SelectedIndex = 2;
+                    break;
+                case VideoEncoder.Theora:
+                    mainWindow.drp_videoEncoder.SelectedIndex = 3;
                     break;
             }
 
@@ -299,6 +302,7 @@ namespace Handbrake.Functions
             switch (videoEncoder)
             {
                 case VideoEncoder.FFMpeg:
+                case VideoEncoder.FFMpeg2:
                     sliderValue = 32 - (int)value;
                     break;
                 case VideoEncoder.X264:

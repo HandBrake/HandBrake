@@ -18,6 +18,9 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         [Description("MPEG-4 (FFMpeg)")]
         FFMpeg,
 
+        [Description("MPEG-2 (FFMpeg)")]
+        FFMpeg2,
+
         [Description("VP3 (Theora)")]
         Theora
     }

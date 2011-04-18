@@ -248,6 +248,8 @@ namespace HandBrake.ApplicationServices.Functions
             {
                 case "ffmpeg":
                     return VideoEncoder.FFMpeg;
+                case "ffmpeg2":
+                    return VideoEncoder.FFMpeg2;
                 case "x264":
                     return VideoEncoder.X264;
                 case "theora":
@@ -272,6 +274,8 @@ namespace HandBrake.ApplicationServices.Functions
             {
                 case VideoEncoder.FFMpeg:
                     return "ffmpeg";
+                case VideoEncoder.FFMpeg2:
+                    return "ffmpeg2";
                 case VideoEncoder.X264:
                     return "x264";
                 case VideoEncoder.Theora:
