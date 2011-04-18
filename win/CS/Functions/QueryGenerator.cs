@@ -302,6 +302,9 @@ namespace Handbrake.Functions
                 case "MPEG-4 (FFmpeg)":
                     query += " -e ffmpeg";
                     break;
+                case "MPEG-2 (FFmpeg)":
+                    query += " -e ffmpeg2";
+                    break;
                 case "H.264 (x264)":
                     query += " -e x264";
                     break;
@@ -325,6 +328,7 @@ namespace Handbrake.Functions
                 switch (mainWindow.drp_videoEncoder.Text)
                 {
                     case "MPEG-4 (FFmpeg)":
+                    case "MPEG-2 (FFmpeg)":
                         value = 31 - (mainWindow.slider_videoQuality.Value - 1);
                         query += " -q " + value.ToString(new CultureInfo("en-US"));
                         break;

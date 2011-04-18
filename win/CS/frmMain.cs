@@ -1748,6 +1748,7 @@ namespace Handbrake
             switch (drp_videoEncoder.Text)
             {
                 case "MPEG-4 (FFmpeg)":
+                case "MPEG-2 (FFmpeg)":
                     if (slider_videoQuality.Value > 31)
                         slider_videoQuality.Value = 20; // Just reset to 70% QP 10 on encode change.
                     slider_videoQuality.Minimum = 1;
@@ -1862,6 +1863,7 @@ namespace Handbrake
             switch (drp_videoEncoder.Text)
             {
                 case "MPEG-4 (FFmpeg)":
+                case "MPEG-2 (FFmpeg)":
                     lbl_SliderValue.Text = "QP:" + (32 - slider_videoQuality.Value);
                     break;
                 case "H.264 (x264)":

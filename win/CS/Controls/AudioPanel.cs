@@ -8,6 +8,7 @@ namespace Handbrake.Controls
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Drawing;
     using System.Linq;
     using System.Windows.Forms;
 
@@ -73,6 +74,32 @@ namespace Handbrake.Controls
             get
             {
                 return this.audioTracks;
+            }
+        }
+
+        /// <summary>
+        /// Gets the Estimated Bitrate for Tracks and Passthru Tracks
+        /// Returns a Size object (Encoded Tracks, Passthru Trask)
+        /// </summary>
+        public Size EstimatedBitrate
+        {
+            get
+            {
+                int encodedTracks = 0;
+                int passthruTracks = 0;
+                foreach (AudioTrack track in this.AudioTracks)
+                {
+                    if (track.Encoder == AudioEncoder.Ac3Passthrough || track.Encoder == AudioEncoder.DtsPassthrough)
+                    {
+                        passthruTracks += track.ScannedTrack.Bitrate;
+                    } 
+                    else
+                    {
+                        encodedTracks += track.Bitrate;
+                    }
+                }
+
+                return new Size(encodedTracks, passthruTracks);
             }
         }
 
