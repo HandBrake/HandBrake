@@ -439,12 +439,16 @@ ghb_compositor_forall(
 {
     GhbCompositor *compositor = GHB_COMPOSITOR (container);
     GhbCompositorChild *cc;
-    GList *link;
+    GList *link, *next;
 
     for (link = compositor->children; link != NULL; link = link->next)
     {
+        // The callback may cause the link to be removed from the list.
+        // So find next before calling callback
+        next = link->next;
         cc = (GhbCompositorChild*)link->data;
         (*callback)(cc->widget, data);
+        link = next;
     }
 }
 
@@ -643,7 +647,7 @@ ghb_compositor_blend (GtkWidget *widget, GdkEventExpose *event)
             /* composite, with an opacity */
             cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
             cairo_paint_with_alpha (cr, cc->opacity);
-            cairo_reset_clip(cr);
+            gdk_cairo_reset_clip(cr, gtk_widget_get_window(widget));
         }
     }
     /* we're done */
