@@ -201,6 +201,10 @@
 		<string>notify</string>
 		<key>SrtDir</key>
 		<string></string>
+		<key>window_width</key>
+		<integer>1</integer>
+		<key>window_height</key>
+		<integer>1</integer>
 	</dict>
 	<key>XlatPresets</key>
 	<dict>

@@ -538,7 +538,7 @@
   </object>
 
   <object class="GtkWindow" id="hb_window">
-    <property name="visible">True</property>
+    <property name="visible">False</property>
     <property name="resizable">True</property>
     <property name="title" translatable="yes">HandBrake</property>
     <property name="default_width">500</property>
@@ -548,6 +548,7 @@
     <signal handler="hb_visibility_event_cb" name="visibility_notify_event"/>
     <signal handler="window_destroy_event_cb" name="destroy_event"/>
     <signal handler="window_delete_event_cb" name="delete_event"/>
+    <signal handler="window_configure_cb" name="configure-event"/>
     <child>
       <object class="GtkVBox" id="vbox48">
         <property name="orientation">vertical</property>
@@ -3373,7 +3374,7 @@ The deblocking filter has two adjustable parameters, "strength" (Alpha) and "thr
                         </child>
                       </object>
 					  <packing>
-						<property name="expand">True</property>
+						<property name="expand">False</property>
 						<property name="position">0</property>
 					  </packing>
                     </child>

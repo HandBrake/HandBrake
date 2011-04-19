@@ -948,7 +948,7 @@ main (int argc, char *argv[])
 	// Ugly hack to keep subtitle table from bouncing around as I change
 	// which set of controls are visible
 	GtkRequisition req;
-	gint height;
+	gint width, height;
 	
 	widget = GHB_WIDGET(ud->builder, "SrtCodeset");
 	gtk_widget_size_request( widget, &req );
@@ -962,11 +962,15 @@ main (int argc, char *argv[])
 	widget = GHB_WIDGET (ud->builder, "hb_window");
 
 	GdkGeometry geo = { 
-		-1, -1, 1024, 768, 200, 200, 10, 10, 0, 0, GDK_GRAVITY_NORTH_WEST
+		-1, -1, 1024, 768, -1, -1, 10, 10, 0, 0, GDK_GRAVITY_NORTH_WEST
 	};
 	GdkWindowHints geo_mask;
 	geo_mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE | GDK_HINT_BASE_SIZE;
 	gtk_window_set_geometry_hints( GTK_WINDOW(widget), widget, &geo, geo_mask);
+	width = ghb_settings_get_int(ud->settings, "window_width");
+	height = ghb_settings_get_int(ud->settings, "window_height");
+	gtk_window_resize(GTK_WINDOW(widget), width, height);
+	gtk_widget_show(widget);
 
 	// Everything should be go-to-go.  Lets rock!
 

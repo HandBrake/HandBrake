@@ -4912,3 +4912,29 @@ ghb_notify_done(signal_user_data_t *ud)
 							"Cancel", (GSourceFunc)quit_cb, ud, 60);
 	}
 }
+
+G_MODULE_EXPORT gboolean
+window_configure_cb(
+	GtkWidget *widget,
+	GdkEventConfigure *event,
+	signal_user_data_t *ud)
+{
+	//g_message("preview_configure_cb()");
+	if (gtk_widget_get_visible(widget))
+	{
+		gint w, h;
+		w = ghb_settings_get_int(ud->settings, "window_width");
+		h = ghb_settings_get_int(ud->settings, "window_height");
+
+		if ( w != event->width || h != event->height )
+		{
+			ghb_settings_set_int(ud->settings, "window_width", event->width);
+			ghb_settings_set_int(ud->settings, "window_height", event->height);
+			ghb_pref_set(ud->settings, "window_width");
+			ghb_pref_set(ud->settings, "window_height");
+			ghb_prefs_store();
+		}
+	}
+	return FALSE;
+}
+
