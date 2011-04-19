@@ -610,7 +610,6 @@ namespace Handbrake
 
         private void BtnRemovePreset_Click(object sender, EventArgs e)
         {
-            throw new Exception();
             if (treeView_presets.SelectedNode == null)
             {
                 return;
