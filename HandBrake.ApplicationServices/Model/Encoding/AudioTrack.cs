@@ -83,7 +83,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         {
             get
             {
-                return this.ScannedTrack.ToString();
+                return this.ScannedTrack == null ? string.Empty : this.ScannedTrack.ToString();
             }
         }
 
