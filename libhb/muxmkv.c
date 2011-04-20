@@ -452,16 +452,8 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         }
 
         duration = buf->stop * TIMECODE_SCALE - timecode;
-        if( mux_data->sub_format == TEXTSUB )
-        {
-            mk_addFrameData(m->file, mux_data->track, buf->data, buf->size);
-            mk_setFrameFlags(m->file, mux_data->track, timecode, 1, duration);
-        }
-        else
-        {
-            mk_addFrameData(m->file, mux_data->track, buf->data, buf->size);
-            mk_setFrameFlags(m->file, mux_data->track, timecode, 1, duration);
-        }
+        mk_addFrameData(m->file, mux_data->track, buf->data, buf->size);
+        mk_setFrameFlags(m->file, mux_data->track, timecode, 1, duration);
         mk_flushFrame(m->file, mux_data->track);
         hb_buffer_close( &buf );
         return 0;
