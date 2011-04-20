@@ -66,13 +66,14 @@ namespace Handbrake
             // btn_add
             // 
             this.btn_add.BackColor = System.Drawing.Color.Transparent;
+            this.btn_add.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btn_add.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_add.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_add.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_add.Location = new System.Drawing.Point(185, 133);
             this.btn_add.Name = "btn_add";
             this.btn_add.Size = new System.Drawing.Size(57, 22);
-            this.btn_add.TabIndex = 2;
+            this.btn_add.TabIndex = 3;
             this.btn_add.Text = "Add";
             this.btn_add.UseVisualStyleBackColor = false;
             this.btn_add.Click += new System.EventHandler(this.BtnAddClick);
@@ -80,13 +81,14 @@ namespace Handbrake
             // btn_cancel
             // 
             this.btn_cancel.BackColor = System.Drawing.Color.Transparent;
+            this.btn_cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btn_cancel.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_cancel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_cancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_cancel.Location = new System.Drawing.Point(248, 133);
             this.btn_cancel.Name = "btn_cancel";
             this.btn_cancel.Size = new System.Drawing.Size(57, 22);
-            this.btn_cancel.TabIndex = 3;
+            this.btn_cancel.TabIndex = 4;
             this.btn_cancel.Text = "Cancel";
             this.btn_cancel.UseVisualStyleBackColor = false;
             this.btn_cancel.Click += new System.EventHandler(this.BtnCancelClick);
@@ -94,11 +96,13 @@ namespace Handbrake
             // check_useFilters
             // 
             this.check_useFilters.AutoSize = true;
+            this.check_useFilters.Checked = true;
+            this.check_useFilters.CheckState = System.Windows.Forms.CheckState.Checked;
             this.check_useFilters.Location = new System.Drawing.Point(130, 106);
             this.check_useFilters.Name = "check_useFilters";
-            this.check_useFilters.Size = new System.Drawing.Size(112, 17);
-            this.check_useFilters.TabIndex = 1;
-            this.check_useFilters.Text = "Use Picture Filters";
+            this.check_useFilters.Size = new System.Drawing.Size(119, 17);
+            this.check_useFilters.TabIndex = 2;
+            this.check_useFilters.Text = "Save Filter Settings";
             this.toolTip.SetToolTip(this.check_useFilters, "Save Picture Width/Height and Crop Values");
             this.check_useFilters.UseVisualStyleBackColor = true;
             // 
@@ -112,7 +116,7 @@ namespace Handbrake
             this.cb_usePictureSettings.Location = new System.Drawing.Point(130, 79);
             this.cb_usePictureSettings.Name = "cb_usePictureSettings";
             this.cb_usePictureSettings.Size = new System.Drawing.Size(172, 21);
-            this.cb_usePictureSettings.TabIndex = 6;
+            this.cb_usePictureSettings.TabIndex = 1;
             // 
             // label2
             // 
@@ -136,10 +140,12 @@ namespace Handbrake
             // 
             // frmAddPreset
             // 
+            this.AcceptButton = this.btn_add;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.CancelButton = this.btn_cancel;
             this.ClientSize = new System.Drawing.Size(319, 166);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);

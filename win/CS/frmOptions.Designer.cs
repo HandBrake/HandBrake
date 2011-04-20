@@ -424,7 +424,7 @@ namespace Handbrake
             this.check_autoNaming.AutoSize = true;
             this.check_autoNaming.Location = new System.Drawing.Point(111, 13);
             this.check_autoNaming.Name = "check_autoNaming";
-            this.check_autoNaming.Size = new System.Drawing.Size(176, 17);
+            this.check_autoNaming.Size = new System.Drawing.Size(171, 17);
             this.check_autoNaming.TabIndex = 72;
             this.check_autoNaming.Text = "Automatically name output files";
             this.ToolTip.SetToolTip(this.check_autoNaming, "Automatically name output files");
@@ -626,7 +626,7 @@ namespace Handbrake
             this.radio_preferredAudioAndSubs.AutoSize = true;
             this.radio_preferredAudioAndSubs.Location = new System.Drawing.Point(200, 99);
             this.radio_preferredAudioAndSubs.Name = "radio_preferredAudioAndSubs";
-            this.radio_preferredAudioAndSubs.Size = new System.Drawing.Size(254, 17);
+            this.radio_preferredAudioAndSubs.Size = new System.Drawing.Size(250, 17);
             this.radio_preferredAudioAndSubs.TabIndex = 93;
             this.radio_preferredAudioAndSubs.TabStop = true;
             this.radio_preferredAudioAndSubs.Text = "Use Preferred Language for Audio and Subtitles";
@@ -639,7 +639,7 @@ namespace Handbrake
             this.check_AddCCTracks.AutoSize = true;
             this.check_AddCCTracks.Location = new System.Drawing.Point(200, 131);
             this.check_AddCCTracks.Name = "check_AddCCTracks";
-            this.check_AddCCTracks.Size = new System.Drawing.Size(199, 17);
+            this.check_AddCCTracks.Size = new System.Drawing.Size(198, 17);
             this.check_AddCCTracks.TabIndex = 92;
             this.check_AddCCTracks.Text = "Add Closed Captions when available";
             this.ToolTip.SetToolTip(this.check_AddCCTracks, "Add any CC tracks if they exist");
@@ -672,7 +672,7 @@ namespace Handbrake
             this.radio_foreignAndSubs.AutoSize = true;
             this.radio_foreignAndSubs.Location = new System.Drawing.Point(200, 76);
             this.radio_foreignAndSubs.Name = "radio_foreignAndSubs";
-            this.radio_foreignAndSubs.Size = new System.Drawing.Size(358, 17);
+            this.radio_foreignAndSubs.Size = new System.Drawing.Size(347, 17);
             this.radio_foreignAndSubs.TabIndex = 90;
             this.radio_foreignAndSubs.TabStop = true;
             this.radio_foreignAndSubs.Text = "Use foreign language audio and add first preferred language subtitle.";
@@ -697,7 +697,7 @@ namespace Handbrake
             this.radio_dub.AutoSize = true;
             this.radio_dub.Location = new System.Drawing.Point(200, 53);
             this.radio_dub.Name = "radio_dub";
-            this.radio_dub.Size = new System.Drawing.Size(164, 17);
+            this.radio_dub.Size = new System.Drawing.Size(167, 17);
             this.radio_dub.TabIndex = 89;
             this.radio_dub.TabStop = true;
             this.radio_dub.Text = "DUB Foreign Language Audio";
@@ -1547,6 +1547,7 @@ namespace Handbrake
             // 
             // frmOptions
             // 
+            this.AcceptButton = this.btn_close;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
