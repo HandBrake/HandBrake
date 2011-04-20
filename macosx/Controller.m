@@ -3039,10 +3039,7 @@ fWorkingCount = 0;
     }
 
     /* Video settings */
-    /* Set vfr to 0 as it's only on if using same as source in the framerate popup
-     * and detelecine is on, so we handle that in the logic below
-     */
-    job->vfr = 0;
+    
     if( [fVidRatePopUp indexOfSelectedItem] > 0 )
     {
         /* a specific framerate has been chosen */
@@ -3532,10 +3529,6 @@ bool one_burned = FALSE;
     /* Video settings */
     /* Framerate */
     
-    /* Set vfr to 0 as it's only on if using same as source in the framerate popup
-     * and detelecine is on, so we handle that in the logic below
-     */
-     
     if( [[queueToApply objectForKey:@"JobIndexVideoFramerate"] intValue] > 0 )
     {
         /* a specific framerate has been chosen */
