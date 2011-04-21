@@ -358,7 +358,7 @@ namespace Handbrake.Functions
             {
                 // If we use Same as Source, we can either output CFR or VFR
                 query += mainWindow.radio_constantFramerate.Checked ? " --cfr " : " --vfr ";
-            } 
+            }
             else
             {
                 // We have a hard framerate set, so we can either be Constant or peak (VFR) framerate
@@ -457,21 +457,17 @@ namespace Handbrake.Functions
         private static string X264Query(frmMain mainWindow)
         {
             string advancedOptions = string.Empty;
-            switch (mainWindow.drp_videoEncoder.SelectedIndex)
+            if (mainWindow.drp_videoEncoder.SelectedItem.ToString().Contains("FFmpeg"))
             {
-                case 0: // ffmpeg
-                    advancedOptions = string.IsNullOrEmpty(mainWindow.advancedEncoderOpts.AdavancedQuery.Trim())
-                        ? string.Empty
-                        : mainWindow.advancedEncoderOpts.AdavancedQuery;
-                    break;
-                case 1: // x264
-                    advancedOptions = string.IsNullOrEmpty(mainWindow.x264Panel.X264Query.Trim())
-                        ? string.Empty
-                        : mainWindow.x264Panel.X264Query;
-                    break;
-                case 2: // VP3
-                    advancedOptions = string.Empty;
-                    break;
+                advancedOptions = string.IsNullOrEmpty(mainWindow.advancedEncoderOpts.AdavancedQuery.Trim())
+                       ? string.Empty
+                       : mainWindow.advancedEncoderOpts.AdavancedQuery;
+            }
+            else if (mainWindow.drp_videoEncoder.SelectedItem.ToString().Contains("x264"))
+            {
+                advancedOptions = string.IsNullOrEmpty(mainWindow.x264Panel.X264Query.Trim())
+                       ? string.Empty
+                       : mainWindow.x264Panel.X264Query;
             }
 
             return !string.IsNullOrEmpty(advancedOptions) ? " -x " + advancedOptions : string.Empty;
