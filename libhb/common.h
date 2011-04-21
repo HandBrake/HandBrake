@@ -239,7 +239,6 @@ struct hb_job_s
     int             pfr_vrate_base;
     int             vrate;
     int             vrate_base;
-    int             vfr;
     int             cfr;
     int             pass;
     char            *advanced_opts;
