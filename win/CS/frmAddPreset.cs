@@ -70,6 +70,9 @@ namespace Handbrake
                     pictureSettingsMode = QueryPictureSettingsMode.None;
                     break;
                 case 1:
+                    pictureSettingsMode = QueryPictureSettingsMode.Custom;
+                    break;
+                case 2:
                     pictureSettingsMode = QueryPictureSettingsMode.SourceMaximum;
                     break;
                 default:
@@ -77,8 +80,7 @@ namespace Handbrake
                     break;
             }
 
-            string query = QueryGenerator.GenerateQueryForPreset(mainWindow, pictureSettingsMode, check_useFilters.Checked, 0, 0);
-
+            string query = QueryGenerator.GenerateQueryForPreset(mainWindow, pictureSettingsMode, check_useFilters.Checked, Convert.ToInt32(maxWidth.Value), Convert.ToInt32(maxHeight.Value));
 
             Preset preset = new Preset
                 {
@@ -111,6 +113,27 @@ namespace Handbrake
         {
             this.DialogResult = DialogResult.Cancel;
             this.Close();
+        }
+
+        /// <summary>
+        /// Picutre Settings option changed.
+        /// </summary>
+        /// <param name="sender">The Sender</param>
+        /// <param name="e">The Event Args</param>
+        private void cb_usePictureSettings_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cb_usePictureSettings.SelectedItem.ToString().Contains("Custom"))
+            {
+                maxWidth.Visible = true;
+                maxHeight.Visible = true;
+                lbl_x.Visible = true;
+            } 
+            else
+            {
+                maxWidth.Visible = false;
+                maxHeight.Visible = false;
+                lbl_x.Visible = false;
+            }
         }
     }
 }

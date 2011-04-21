@@ -45,6 +45,11 @@ namespace Handbrake
             this.cb_usePictureSettings = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.lbl_x = new System.Windows.Forms.Label();
+            this.maxWidth = new System.Windows.Forms.NumericUpDown();
+            this.maxHeight = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.maxWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.maxHeight)).BeginInit();
             this.SuspendLayout();
             // 
             // lbl_name
@@ -70,7 +75,7 @@ namespace Handbrake
             this.btn_add.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_add.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_add.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_add.Location = new System.Drawing.Point(185, 133);
+            this.btn_add.Location = new System.Drawing.Point(182, 157);
             this.btn_add.Name = "btn_add";
             this.btn_add.Size = new System.Drawing.Size(57, 22);
             this.btn_add.TabIndex = 3;
@@ -85,7 +90,7 @@ namespace Handbrake
             this.btn_cancel.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_cancel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_cancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_cancel.Location = new System.Drawing.Point(248, 133);
+            this.btn_cancel.Location = new System.Drawing.Point(245, 157);
             this.btn_cancel.Name = "btn_cancel";
             this.btn_cancel.Size = new System.Drawing.Size(57, 22);
             this.btn_cancel.TabIndex = 4;
@@ -98,7 +103,7 @@ namespace Handbrake
             this.check_useFilters.AutoSize = true;
             this.check_useFilters.Checked = true;
             this.check_useFilters.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.check_useFilters.Location = new System.Drawing.Point(130, 106);
+            this.check_useFilters.Location = new System.Drawing.Point(130, 134);
             this.check_useFilters.Name = "check_useFilters";
             this.check_useFilters.Size = new System.Drawing.Size(119, 17);
             this.check_useFilters.TabIndex = 2;
@@ -112,11 +117,13 @@ namespace Handbrake
             this.cb_usePictureSettings.FormattingEnabled = true;
             this.cb_usePictureSettings.Items.AddRange(new object[] {
             "None",
+            "Custom",
             "Source Maximum"});
             this.cb_usePictureSettings.Location = new System.Drawing.Point(130, 79);
             this.cb_usePictureSettings.Name = "cb_usePictureSettings";
             this.cb_usePictureSettings.Size = new System.Drawing.Size(172, 21);
             this.cb_usePictureSettings.TabIndex = 1;
+            this.cb_usePictureSettings.SelectedIndexChanged += new System.EventHandler(this.cb_usePictureSettings_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -138,6 +145,49 @@ namespace Handbrake
             this.label3.TabIndex = 8;
             this.label3.Text = "Use Picture Size:";
             // 
+            // lbl_x
+            // 
+            this.lbl_x.AutoSize = true;
+            this.lbl_x.Location = new System.Drawing.Point(211, 110);
+            this.lbl_x.Name = "lbl_x";
+            this.lbl_x.Size = new System.Drawing.Size(13, 13);
+            this.lbl_x.TabIndex = 11;
+            this.lbl_x.Text = "X";
+            // 
+            // maxWidth
+            // 
+            this.maxWidth.Location = new System.Drawing.Point(130, 107);
+            this.maxWidth.Maximum = new decimal(new int[] {
+            32000,
+            0,
+            0,
+            0});
+            this.maxWidth.Name = "maxWidth";
+            this.maxWidth.Size = new System.Drawing.Size(74, 21);
+            this.maxWidth.TabIndex = 12;
+            this.maxWidth.Value = new decimal(new int[] {
+            1280,
+            0,
+            0,
+            0});
+            // 
+            // maxHeight
+            // 
+            this.maxHeight.Location = new System.Drawing.Point(229, 107);
+            this.maxHeight.Maximum = new decimal(new int[] {
+            32000,
+            0,
+            0,
+            0});
+            this.maxHeight.Name = "maxHeight";
+            this.maxHeight.Size = new System.Drawing.Size(73, 21);
+            this.maxHeight.TabIndex = 13;
+            this.maxHeight.Value = new decimal(new int[] {
+            720,
+            0,
+            0,
+            0});
+            // 
             // frmAddPreset
             // 
             this.AcceptButton = this.btn_add;
@@ -146,7 +196,10 @@ namespace Handbrake
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.CancelButton = this.btn_cancel;
-            this.ClientSize = new System.Drawing.Size(319, 166);
+            this.ClientSize = new System.Drawing.Size(319, 191);
+            this.Controls.Add(this.maxHeight);
+            this.Controls.Add(this.maxWidth);
+            this.Controls.Add(this.lbl_x);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cb_usePictureSettings);
@@ -168,6 +221,8 @@ namespace Handbrake
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Add New Preset";
             this.TopMost = true;
+            ((System.ComponentModel.ISupportInitialize)(this.maxWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.maxHeight)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -184,5 +239,8 @@ namespace Handbrake
         private System.Windows.Forms.ComboBox cb_usePictureSettings;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lbl_x;
+        private System.Windows.Forms.NumericUpDown maxWidth;
+        private System.Windows.Forms.NumericUpDown maxHeight;
     }
 }
