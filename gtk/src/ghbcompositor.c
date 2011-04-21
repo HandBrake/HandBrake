@@ -307,34 +307,25 @@ showtype(const gchar *msg, GtkWidget *widget)
 }
 #endif
 
-static GList*
-find_drawables(GList *drawables, GtkWidget *widget)
+static void
+find_drawables(GtkWidget *widget, gpointer data)
 {
+    GList *drawables, **pdrawables;
+    pdrawables = (GList**)data;
+    drawables = *pdrawables;
+
     if (gtk_widget_get_has_window(widget))
     {
         drawables = g_list_append(drawables, widget);
-        return drawables;
+        *pdrawables = drawables;
+        return;
     }
     if (GTK_IS_CONTAINER(widget))
     {
-        GList *children, *link;
-
-        children = gtk_container_get_children(GTK_CONTAINER(widget));
-        // Look for a child with a window
-        for (link = children; link != NULL; link = link->next)
-        {
-            if (gtk_widget_get_has_window(GTK_WIDGET(link->data)))
-            {
-                drawables = g_list_append(drawables, link->data);
-            }
-            else
-            {
-                drawables = find_drawables(drawables, GTK_WIDGET(link->data));
-            }
-        }
+        gtk_container_forall(GTK_CONTAINER(widget), find_drawables, data);
     }
-    return drawables;
 }
+
 
 /**
  * ghb_compositor_zlist_insert:
@@ -378,7 +369,8 @@ ghb_compositor_zlist_insert (
     {
         GList *link;
 
-        cc->drawables = find_drawables(NULL, cc->widget);
+        cc->drawables = NULL;
+        find_drawables(cc->widget, &cc->drawables);
 
         for (link = cc->drawables; link != NULL; link = link->next)
         {
