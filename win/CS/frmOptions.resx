@@ -132,6 +132,14 @@ Note, the file itself is identical. This simply changes the default extension fo
     <value>This is the default location where your encoded files will be stored if "Automatically name output files" is enabled.
 You can enter {source_path} instead of a path to use the same path as the source file.</value>
   </data>
+  <data name="label34.ToolTip" xml:space="preserve">
+    <value>{source_path} = Use the same directory as the source is in.
+This option has to be used on it's own and can not be used as part of a path.
+
+{source_folder_name} = Uses the folder name where the source is stored.
+You can insert this anywhere in your path. e.g.  c:\movies\{source_folder_name}
+It will substitute the name of the folder where the source is located.</value>
+  </data>
   <data name="check_showCliForInGUIEncode.ToolTip" xml:space="preserve">
     <value>Shows the CLI window when encoding.
 You may wish to enable this as you'll be able to cleanly exit the CLI using ctrl-c

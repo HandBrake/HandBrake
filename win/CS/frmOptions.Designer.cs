@@ -424,7 +424,7 @@ namespace Handbrake
             this.check_autoNaming.AutoSize = true;
             this.check_autoNaming.Location = new System.Drawing.Point(111, 13);
             this.check_autoNaming.Name = "check_autoNaming";
-            this.check_autoNaming.Size = new System.Drawing.Size(171, 17);
+            this.check_autoNaming.Size = new System.Drawing.Size(176, 17);
             this.check_autoNaming.TabIndex = 72;
             this.check_autoNaming.Text = "Automatically name output files";
             this.ToolTip.SetToolTip(this.check_autoNaming, "Automatically name output files");
@@ -513,12 +513,10 @@ namespace Handbrake
             this.label34.Location = new System.Drawing.Point(182, 72);
             this.label34.Margin = new System.Windows.Forms.Padding(3);
             this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(167, 13);
+            this.label34.Size = new System.Drawing.Size(278, 13);
             this.label34.TabIndex = 102;
-            this.label34.Text = "Available Options: {source_path}";
-            this.ToolTip.SetToolTip(this.label34, "{source_path} = Use the same directory as the source is in.\r\nNote: you can not us" +
-                    "e {source_path} within a path.  It has to be the only text in the path above to " +
-                    "work.");
+            this.label34.Text = "Available Options: {source_path} {source_folder_name}";
+            this.ToolTip.SetToolTip(this.label34, resources.GetString("label34.ToolTip"));
             // 
             // check_TitleCase
             // 

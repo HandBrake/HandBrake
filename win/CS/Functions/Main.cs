@@ -175,12 +175,13 @@ namespace Handbrake.Functions
             if (mainWindow.drp_dvdtitle.Text != "Automatic")
             {
                 // Get the Source Name and remove any invalid characters
-
                 string sourceName = Path.GetInvalidFileNameChars().Aggregate(Path.GetFileNameWithoutExtension(mainWindow.SourceName), (current, character) => current.Replace(character.ToString(), string.Empty));
 
+                // Remove Underscores
                 if (Properties.Settings.Default.AutoNameRemoveUnderscore)
                     sourceName = sourceName.Replace("_", " ");
 
+                // Switch to "Title Case"
                 if (Properties.Settings.Default.AutoNameTitleCase)
                     sourceName = sourceName.ToTitleCase();
 
@@ -195,7 +196,9 @@ namespace Handbrake.Functions
                 if (chapterFinish != chapterStart && chapterFinish != string.Empty)
                     combinedChapterTag = chapterStart + "-" + chapterFinish;
 
-                // Get the destination filename.
+                /*
+                 * File Name
+                 */ 
                 string destinationFilename;
                 if (Properties.Settings.Default.autoNameFormat != string.Empty)
                 {
@@ -207,7 +210,9 @@ namespace Handbrake.Functions
                 else
                     destinationFilename = sourceName + "_T" + dvdTitle + "_C" + combinedChapterTag;
 
-                // Add the appropriate file extension
+                /*
+                 * File Extension
+                 */ 
                 if (mainWindow.drop_format.SelectedIndex == 0)
                 {
                     switch (Properties.Settings.Default.useM4v)
@@ -229,7 +234,10 @@ namespace Handbrake.Functions
                 else if (mainWindow.drop_format.SelectedIndex == 1)
                     destinationFilename += ".mkv";
 
-                // Now work out the path where the file will be stored.
+                /*
+                 * File Destination Path
+                 */ 
+
                 // If there is an auto name path, use it...
                 if (Properties.Settings.Default.autoNamePath.Trim() == "{source_path}" && !string.IsNullOrEmpty(mainWindow.sourcePath))
                 {
@@ -240,9 +248,21 @@ namespace Handbrake.Functions
                         autoNamePath = Path.Combine(Path.GetDirectoryName(mainWindow.sourcePath), "output_" + destinationFilename);
                     }
                 }
-                // Second case: If the destination box doesn't already contain a path, make one.
+                else if (Properties.Settings.Default.autoNamePath.Contains("{source_folder_name}") && !string.IsNullOrEmpty(mainWindow.sourcePath))
+                {
+                    // Second Case: We have a Path, with "{source_folder}" in it, therefore we need to replace it with the folder name from the source.
+                    string path = Path.GetDirectoryName(mainWindow.sourcePath);
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        string[] filesArray = path.Split(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+                        string sourceFolder = filesArray[filesArray.Length - 1];
+
+                        autoNamePath = Path.Combine(Properties.Settings.Default.autoNamePath.Replace("{source_folder_name}", sourceFolder), destinationFilename);
+                    }
+                }
                 else if (!mainWindow.text_destination.Text.Contains(Path.DirectorySeparatorChar.ToString()))
                 {
+                    // Third case: If the destination box doesn't already contain a path, make one.
                     if (Properties.Settings.Default.autoNamePath.Trim() != string.Empty && Properties.Settings.Default.autoNamePath.Trim() != "Click 'Browse' to set the default location")
                     {
                         autoNamePath = Path.Combine(Properties.Settings.Default.autoNamePath, destinationFilename);
