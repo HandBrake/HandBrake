@@ -435,12 +435,9 @@ static int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     {
         uint8_t *parser_output_buffer;
         int parser_output_buffer_len;
-        int64_t cur = pv->pts_next;
+        int64_t cur;
 
-        if ( in->start != -1 )
-        {
-            cur = in->start;
-        }
+        cur = in->start;
 
         if ( pv->parser != NULL )
         {
@@ -1528,6 +1525,9 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
     int pos = 0;
     int loop_limit = 256;
 
+    if ( pts != -1 )
+        pv->pts_next = pts;
+
     while ( pos < size )
     {
         float *buffer = pv->buffer;
@@ -1541,7 +1541,7 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
         av_init_packet( &avp );
         avp.data = data + pos;
         avp.size = size - pos;
-        avp.pts = pts;
+        avp.pts = pv->pts_next;
         avp.dts = AV_NOPTS_VALUE;
 
         int out_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
@@ -1600,17 +1600,12 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
                 nsamples = out_size / sizeof(hb_sample_t);
             }
 
-            if ( pts == AV_NOPTS_VALUE )
-            {
-                pts = pv->pts_next;
-            }
-
             hb_buffer_t * buf;
-            double pts_next = pts + nsamples * pv->duration;
+            double pts_next = pv->pts_next + nsamples * pv->duration;
             buf = downmixAudio( audio, pv, buffer, context->channels, nsamples );
             if ( buf )
             {
-                buf->start = pts;
+                buf->start = pv->pts_next;
                 buf->stop = pts_next;
                 hb_list_add( pv->list, buf );
             }
@@ -1625,7 +1620,7 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
                     buf = downmixAudio( ff_audio, ff_pv, buffer, context->channels, nsamples );
                     if ( buf )
                     {
-                        buf->start = pts;
+                        buf->start = pv->pts_next;
                         buf->stop = pts_next;
                         hb_list_add( ff_pv->list, buf );
                     }

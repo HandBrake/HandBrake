@@ -119,7 +119,13 @@ static hb_fifo_t *size_to_pool( int size )
 hb_buffer_t * hb_buffer_init( int size )
 {
     hb_buffer_t * b;
-    hb_fifo_t *buffer_pool = size_to_pool( size );
+    // Certain libraries (hrm ffmpeg) expect buffers passed to them to
+    // end on certain alignments (ffmpeg is 8). So allocate some extra bytes.
+    // Note that we can't simply align the end of our buffer because
+    // sometimes we feed data to these libraries starting from arbitrary
+    // points within the buffer.
+    int alloc = size + 16;
+    hb_fifo_t *buffer_pool = size_to_pool( alloc );
 
     if( buffer_pool )
     {
@@ -150,7 +156,7 @@ hb_buffer_t * hb_buffer_init( int size )
     }
 
     b->size  = size;
-    b->alloc  = buffer_pool? buffer_pool->buffer_size : size;
+    b->alloc  = buffer_pool ? buffer_pool->buffer_size : alloc;
 
     if (size)
     {

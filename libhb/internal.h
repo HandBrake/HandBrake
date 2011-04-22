@@ -69,6 +69,7 @@ struct hb_buffer_s
     int           id;           // ID of the track that the packet comes from
     int64_t       start;        // Video and subtitle packets: start time of frame/subtitle
     int64_t       stop;         // Video and subtitle packets: stop time of frame/subtitle
+    int64_t       pcr;
     uint8_t       discontinuity;
     int           new_chap;     // Video packets: if non-zero, is the index of the chapter whose boundary was crossed
 
@@ -191,13 +192,14 @@ typedef struct {
     int64_t last_pts;       /* last pts we saw */
     int     scr_changes;    /* number of SCR discontinuities */
     int     dts_drops;      /* number of drops because DTS too far from SCR */
+    int     new_chap;
 } hb_psdemux_t;
 
-typedef int (*hb_muxer_t)(hb_buffer_t *, hb_list_t *, hb_psdemux_t*);
+typedef void (*hb_muxer_t)(hb_buffer_t *, hb_list_t *, hb_psdemux_t*);
 
-int hb_demux_ps( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );
-int hb_demux_ss( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );
-int hb_demux_null( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );
+void hb_demux_ps( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );
+void hb_demux_ts( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );
+void hb_demux_null( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );
 
 extern const hb_muxer_t hb_demux[];
 
@@ -229,7 +231,7 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t *, int title, uint64_t min_duration );
 int          hb_dvd_start( hb_dvd_t *, hb_title_t *title, int chapter );
 void         hb_dvd_stop( hb_dvd_t * );
 int          hb_dvd_seek( hb_dvd_t *, float );
-int          hb_dvd_read( hb_dvd_t *, hb_buffer_t * );
+hb_buffer_t * hb_dvd_read( hb_dvd_t * );
 int          hb_dvd_chapter( hb_dvd_t * );
 int          hb_dvd_is_break( hb_dvd_t * d );
 void         hb_dvd_close( hb_dvd_t ** );
@@ -245,7 +247,7 @@ void          hb_bd_stop( hb_bd_t * d );
 int           hb_bd_seek( hb_bd_t * d, float f );
 int           hb_bd_seek_pts( hb_bd_t * d, uint64_t pts );
 int           hb_bd_seek_chapter( hb_bd_t * d, int chapter );
-int           hb_bd_read( hb_bd_t * d, hb_buffer_t * b );
+hb_buffer_t * hb_bd_read( hb_bd_t * d );
 int           hb_bd_chapter( hb_bd_t * d );
 void          hb_bd_close( hb_bd_t ** _d );
 void          hb_bd_set_angle( hb_bd_t * d, int angle );
@@ -255,13 +257,13 @@ hb_stream_t * hb_bd_stream_open( hb_title_t *title );
 hb_stream_t * hb_stream_open( char * path, hb_title_t *title );
 void		 hb_stream_close( hb_stream_t ** );
 hb_title_t * hb_stream_title_scan( hb_stream_t *);
-int          hb_stream_read( hb_stream_t *, hb_buffer_t *);
+hb_buffer_t * hb_stream_read( hb_stream_t * );
 int          hb_stream_seek( hb_stream_t *, float );
 int          hb_stream_seek_ts( hb_stream_t * stream, int64_t ts );
 int          hb_stream_seek_chapter( hb_stream_t *, int );
 int          hb_stream_chapter( hb_stream_t * );
 
-int          hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt, hb_buffer_t *obuf );
+hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt );
 
 
 void       * hb_ffmpeg_context( int codec_param );

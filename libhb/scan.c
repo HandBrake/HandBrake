@@ -461,14 +461,13 @@ static void most_common_info( info_list_t *info_list, hb_work_info_t *info )
 static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 {
     int             i, npreviews = 0;
-    hb_buffer_t   * buf_ps, * buf_es;
+    hb_buffer_t   * buf, * buf_es;
     hb_list_t     * list_es;
     int progressive_count = 0;
     int interlaced_preview_count = 0;
     info_list_t * info_list = calloc( data->preview_count+1, sizeof(*info_list) );
     crop_record_t *crops = calloc( 1, sizeof(*crops) );
 
-    buf_ps   = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
     list_es  = hb_list_init();
 
     hb_log( "scan: decoding previews for title %d", title->index );
@@ -563,7 +562,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         {
             if (data->bd)
             {
-              if( !hb_bd_read( data->bd, buf_ps ) )
+              if( (buf = hb_bd_read( data->bd )) == NULL )
               {
                   if ( vid_buf )
                   {
@@ -573,9 +572,9 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                   goto skip_preview;
               }
             }
-            if (data->dvd)
+            else if (data->dvd)
             {
-              if( !hb_dvd_read( data->dvd, buf_ps ) )
+              if( (buf = hb_dvd_read( data->dvd )) == NULL )
               {
                   if ( vid_buf )
                   {
@@ -587,7 +586,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             }
             else if (data->stream)
             {
-              if ( !hb_stream_read(data->stream,buf_ps) )
+              if ( (buf = hb_stream_read( data->stream )) == NULL )
               {
                   if ( vid_buf )
                   {
@@ -597,7 +596,15 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                   goto skip_preview;
               }
             }
-            (hb_demux[title->demuxer])(buf_ps, list_es, 0 );
+            else
+            {
+                // Silence compiler warning
+                buf = NULL;
+                hb_error( "Error: This can't happen!" );
+                goto skip_preview;
+            }
+
+            (hb_demux[title->demuxer])(buf, list_es, 0 );
 
             while( ( buf_es = hb_list_item( list_es, 0 ) ) )
             {
@@ -900,7 +907,6 @@ skip_preview:
         }
     }
 
-    hb_buffer_close( &buf_ps );
     while( ( buf_es = hb_list_item( list_es, 0 ) ) )
     {
         hb_list_rem( list_es, buf_es );
@@ -957,7 +963,7 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
     if ( audio->priv.scan_cache == NULL )
         audio->priv.scan_cache = hb_fifo_init( 16, 16 );
 
-    if ( hb_fifo_size_bytes( audio->priv.scan_cache ) >= 4096 )
+    if ( hb_fifo_size_bytes( audio->priv.scan_cache ) >= 16384 )
     {
         hb_buffer_t * tmp;
         tmp = hb_fifo_get( audio->priv.scan_cache );

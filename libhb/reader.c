@@ -256,13 +256,11 @@ static void ReaderFunc( void * _r )
         return;
     }
 
-    hb_buffer_t *ps = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
     if (r->bd)
     {
         if( !hb_bd_start( r->bd, r->title ) )
         {
             hb_bd_close( &r->bd );
-            hb_buffer_close( &ps );
             return;
         }
         if ( r->job->start_at_preview )
@@ -312,7 +310,6 @@ static void ReaderFunc( void * _r )
         if( !hb_dvd_start( r->dvd, r->title, start ) )
         {
             hb_dvd_close( &r->dvd );
-            hb_buffer_close( &ps );
             return;
         }
         if (r->job->angle)
@@ -341,13 +338,13 @@ static void ReaderFunc( void * _r )
         
         // Find out what the first timestamp of the stream is
         // and then seek to the appropriate offset from it
-        if ( hb_stream_read( r->stream, ps ) )
+        if ( ( buf = hb_stream_read( r->stream ) ) )
         {
-            if ( ps->start > 0 )
+            if ( buf->start > 0 )
             {
-                pts_to_start += ps->start;
-                r->pts_to_start += ps->start;
-                r->job->pts_to_start += ps->start;
+                pts_to_start += buf->start;
+                r->pts_to_start += buf->start;
+                r->job->pts_to_start += buf->start;
             }
         }
         
@@ -408,21 +405,21 @@ static void ReaderFunc( void * _r )
 
         if (r->bd)
         {
-          if( !hb_bd_read( r->bd, ps ) )
+          if( (buf = hb_bd_read( r->bd )) == NULL )
           {
               break;
           }
         }
         else if (r->dvd)
         {
-          if( !hb_dvd_read( r->dvd, ps ) )
+          if( (buf = hb_dvd_read( r->dvd )) == NULL )
           {
               break;
           }
         }
         else if (r->stream)
         {
-          if ( !hb_stream_read( r->stream, ps ) )
+          if ( (buf = hb_stream_read( r->stream )) == NULL )
           {
             break;
           }
@@ -431,11 +428,11 @@ static void ReaderFunc( void * _r )
             // We will inspect the timestamps of each frame in sync
             // to skip from this seek point to the timestamp we
             // want to start at.
-            if ( ps->start > 0 && ps->start < r->job->pts_to_start )
+            if ( buf->start > 0 && buf->start < r->job->pts_to_start )
             {
-                r->job->pts_to_start -= ps->start;
+                r->job->pts_to_start -= buf->start;
             }
-            else if ( ps->start >= r->job->pts_to_start )
+            else if ( buf->start >= r->job->pts_to_start )
             {
                 r->job->pts_to_start = 0;
                 r->start_found = 1;
@@ -465,7 +462,7 @@ static void ReaderFunc( void * _r )
             hb_set_state( r->job->h, &state );
         }
 
-        (hb_demux[r->title->demuxer])( ps, list, &r->demux );
+        (hb_demux[r->title->demuxer])( buf, list, &r->demux );
 
         while( ( buf = hb_list_item( list, 0 ) ) )
         {
@@ -486,7 +483,7 @@ static void ReaderFunc( void * _r )
                     // offset will get computed correctly.
                     id_to_st( r, buf, 1 );
                     r->saw_video = 1;
-                    hb_log( "reader: first SCR %"PRId64" id %d DTS %"PRId64,
+                    hb_log( "reader: first SCR %"PRId64" id 0x%x DTS %"PRId64,
                             r->demux.last_scr, buf->id, buf->renderOffset );
                 }
                 else
@@ -604,7 +601,6 @@ static void ReaderFunc( void * _r )
     }
 
     hb_list_empty( &list );
-    hb_buffer_close( &ps );
     if (r->bd)
     {
         hb_bd_stop( r->bd );

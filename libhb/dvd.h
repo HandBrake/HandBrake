@@ -76,7 +76,7 @@ struct hb_dvd_func_s
     int           (* start)       ( hb_dvd_t *, hb_title_t *, int );
     void          (* stop)        ( hb_dvd_t * );
     int           (* seek)        ( hb_dvd_t *, float );
-    int           (* read)        ( hb_dvd_t *, hb_buffer_t * );
+    hb_buffer_t * (* read)        ( hb_dvd_t * );
     int           (* chapter)     ( hb_dvd_t * );
     int           (* angle_count) ( hb_dvd_t * );
     void          (* set_angle)   ( hb_dvd_t *, int );

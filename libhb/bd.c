@@ -72,6 +72,56 @@ int hb_bd_title_count( hb_bd_t * d )
     return d->title_count;
 }
 
+static void add_audio(int track, hb_list_t *list_audio, BLURAY_STREAM_INFO *bdaudio, int substream_type, uint32_t codec, uint32_t codec_param)
+{
+    hb_audio_t * audio;
+    iso639_lang_t * lang;
+
+    audio = calloc( sizeof( hb_audio_t ), 1 );
+
+    audio->id = (substream_type << 16) | bdaudio->pid;
+    audio->config.in.stream_type = bdaudio->coding_type;
+    audio->config.in.substream_type = substream_type;
+    audio->config.in.codec = codec;
+    audio->config.in.codec_param = codec_param;
+    audio->config.lang.type = 0;
+
+    lang = lang_for_code2( (char*)bdaudio->lang );
+
+    int stream_type = bdaudio->coding_type;
+    snprintf( audio->config.lang.description, 
+        sizeof( audio->config.lang.description ), "%s (%s)",
+        strlen(lang->native_name) ? lang->native_name : lang->eng_name,
+        audio->config.in.codec == HB_ACODEC_AC3 ? "AC3" : 
+        ( audio->config.in.codec == HB_ACODEC_DCA ? "DTS" : 
+        ( audio->config.in.codec == HB_ACODEC_MPGA ? 
+            ( stream_type == BLURAY_STREAM_TYPE_AUDIO_LPCM ? "BD LPCM" : 
+            ( stream_type == BLURAY_STREAM_TYPE_AUDIO_AC3PLUS ? "E-AC3" : 
+            ( stream_type == BLURAY_STREAM_TYPE_AUDIO_TRUHD ? "TrueHD" : 
+            ( stream_type == BLURAY_STREAM_TYPE_AUDIO_DTSHD ? "DTS-HD HRA" : 
+            ( stream_type == BLURAY_STREAM_TYPE_AUDIO_DTSHD_MASTER ? "DTS-HD MA" : 
+            ( stream_type == BLURAY_STREAM_TYPE_AUDIO_MPEG1 ? "MPEG1" : 
+            ( stream_type == BLURAY_STREAM_TYPE_AUDIO_MPEG2 ? "MPEG2" : 
+                                                           "Unknown FFmpeg" 
+            ) ) ) ) ) ) ) : "Unknown" 
+        ) ) );
+
+    snprintf( audio->config.lang.simple, 
+              sizeof( audio->config.lang.simple ), "%s",
+              strlen(lang->native_name) ? lang->native_name : 
+                                          lang->eng_name );
+
+    snprintf( audio->config.lang.iso639_2, 
+              sizeof( audio->config.lang.iso639_2 ), "%s", lang->iso639_2);
+
+    hb_log( "bd: audio id=0x%x, lang=%s, 3cc=%s", audio->id,
+            audio->config.lang.description, audio->config.lang.iso639_2 );
+
+    audio->config.in.track = track;
+    hb_list_add( list_audio, audio );
+    return;
+}
+
 static int bd_audio_equal( BLURAY_CLIP_INFO *a, BLURAY_CLIP_INFO *b )
 {
     int ii, jj, equal;
@@ -182,11 +232,11 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     title->video_id = bdvideo->pid;
     title->video_stream_type = bdvideo->coding_type;
 
-    hb_log( "bd: video id=%x, stream type=%s, format %s", title->video_id,
+    hb_log( "bd: video id=0x%x, stream type=%s, format %s", title->video_id,
             bdvideo->coding_type == BLURAY_STREAM_TYPE_VIDEO_MPEG1 ? "MPEG1" :
             bdvideo->coding_type == BLURAY_STREAM_TYPE_VIDEO_MPEG2 ? "MPEG2" :
             bdvideo->coding_type == BLURAY_STREAM_TYPE_VIDEO_VC1 ? "VC-1" :
-            bdvideo->coding_type == BLURAY_STREAM_TYPE_VIDEO_H264 ? "H264" :
+            bdvideo->coding_type == BLURAY_STREAM_TYPE_VIDEO_H264 ? "H.264" :
             "Unknown",
             bdvideo->format == BLURAY_VIDEO_FORMAT_480I ? "480i" :
             bdvideo->format == BLURAY_VIDEO_FORMAT_576I ? "576i" :
@@ -227,7 +277,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
             break;
 
         default:
-            hb_log( "scan: unknown video codec (%x)",
+            hb_log( "scan: unknown video codec (0x%x)",
                     bdvideo->coding_type );
             goto fail;
     }
@@ -282,83 +332,61 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     // Add all the audios found in the above clip.
     for ( ii = 0; ii < ti->clips[audio_clip_index].audio_stream_count; ii++ )
     {
-        hb_audio_t * audio;
-        iso639_lang_t * lang;
         BLURAY_STREAM_INFO * bdaudio;
 
         bdaudio = &ti->clips[audio_clip_index].audio_streams[ii];
 
-        audio = calloc( sizeof( hb_audio_t ), 1 );
-        audio->id = bdaudio->pid;
-        audio->config.in.stream_type = bdaudio->coding_type;
         switch( bdaudio->coding_type )
         {
-            case BLURAY_STREAM_TYPE_AUDIO_AC3:
             case BLURAY_STREAM_TYPE_AUDIO_TRUHD:
-                audio->config.in.codec = HB_ACODEC_AC3;
-                audio->config.in.codec_param = 0;
-                break;
-
-            case BLURAY_STREAM_TYPE_AUDIO_LPCM:
-                audio->config.in.codec = HB_ACODEC_MPGA;
-                audio->config.in.codec_param = CODEC_ID_PCM_BLURAY;
-                break;
-
-            case BLURAY_STREAM_TYPE_AUDIO_AC3PLUS:
-                audio->config.in.codec = HB_ACODEC_MPGA;
-                audio->config.in.codec_param = CODEC_ID_EAC3;
-                break;
-
-            case BLURAY_STREAM_TYPE_AUDIO_MPEG1:
-            case BLURAY_STREAM_TYPE_AUDIO_MPEG2:
-                audio->config.in.codec = HB_ACODEC_MPGA;
-                audio->config.in.codec_param = CODEC_ID_MP2;
+                // Add 2 audio tracks.  One for TrueHD and one for AC-3
+                add_audio(ii, title->list_audio, bdaudio, 
+                          HB_SUBSTREAM_BD_AC3, HB_ACODEC_AC3, 0);
+                add_audio(ii, title->list_audio, bdaudio, 
+                    HB_SUBSTREAM_BD_TRUEHD, HB_ACODEC_MPGA, CODEC_ID_TRUEHD);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_DTS:
-            case BLURAY_STREAM_TYPE_AUDIO_DTSHD:
+                add_audio(ii, title->list_audio, bdaudio, 0, HB_ACODEC_DCA, 0);
+                break;
+
+            case BLURAY_STREAM_TYPE_AUDIO_MPEG2:
+            case BLURAY_STREAM_TYPE_AUDIO_MPEG1:
+                add_audio(ii, title->list_audio, bdaudio, 0, 
+                          HB_ACODEC_MPGA, CODEC_ID_MP2);
+                break;
+
+            case BLURAY_STREAM_TYPE_AUDIO_AC3PLUS:
+                add_audio(ii, title->list_audio, bdaudio, 0, 
+                          HB_ACODEC_MPGA, CODEC_ID_EAC3);
+                break;
+
+            case BLURAY_STREAM_TYPE_AUDIO_LPCM:
+                add_audio(ii, title->list_audio, bdaudio, 0, 
+                          HB_ACODEC_MPGA, CODEC_ID_PCM_BLURAY);
+                break;
+
+            case BLURAY_STREAM_TYPE_AUDIO_AC3:
+                add_audio(ii, title->list_audio, bdaudio, 0, HB_ACODEC_AC3, 0);
+                break;
+
             case BLURAY_STREAM_TYPE_AUDIO_DTSHD_MASTER:
-                audio->config.in.codec = HB_ACODEC_DCA;
-                audio->config.in.codec_param = 0;
+            case BLURAY_STREAM_TYPE_AUDIO_DTSHD:
+                // Add 2 audio tracks.  One for DTS-HD and one for DTS
+                add_audio(ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_DTS, 
+                          HB_ACODEC_DCA, 0);
+                // DTS-HD is special.  The substreams must be concatinated
+                // DTS-core followed by DTS-hd-extensions.  Setting
+                // a substream id of 0 says use all substreams.
+                add_audio(ii, title->list_audio, bdaudio, 0,
+                          HB_ACODEC_MPGA, CODEC_ID_DTS);
                 break;
 
             default:
-                audio->config.in.codec = 0;
                 hb_log( "scan: unknown audio pid 0x%x codec 0x%x",
                         bdaudio->pid, bdaudio->coding_type );
                 break;
         }
-
-        audio->config.lang.type = 0;
-        lang = lang_for_code2( (char*)bdaudio->lang );
-
-        snprintf( audio->config.lang.description, 
-            sizeof( audio->config.lang.description ), "%s (%s)",
-            strlen(lang->native_name) ? lang->native_name : 
-                                              lang->eng_name,
-            audio->config.in.codec == HB_ACODEC_AC3 ? "AC3" : 
-            ( audio->config.in.codec == HB_ACODEC_DCA ? "DTS" : 
-            ( audio->config.in.codec == HB_ACODEC_MPGA ? 
-                ( audio->config.in.codec_param == CODEC_ID_PCM_BLURAY ? "LPCM" :
-                ( audio->config.in.codec_param == CODEC_ID_EAC3 ? "E-AC3" :
-                ( audio->config.in.codec_param == CODEC_ID_MP2 ? "MPEG" :
-                                                               "Unknown FFMpeg" 
-                ) ) ) : "Unknown" 
-            ) ) );
-
-        snprintf( audio->config.lang.simple, 
-                  sizeof( audio->config.lang.simple ), "%s",
-                  strlen(lang->native_name) ? lang->native_name : 
-                                              lang->eng_name );
-
-        snprintf( audio->config.lang.iso639_2, 
-                  sizeof( audio->config.lang.iso639_2 ), "%s", lang->iso639_2);
-
-        hb_log( "bd: audio id=0x%x, lang=%s, 3cc=%s", audio->id,
-                audio->config.lang.description, audio->config.lang.iso639_2 );
-
-        audio->config.in.track = ii;
-        hb_list_add( title->list_audio, audio );
     }
 
     /* Chapters */
@@ -507,20 +535,23 @@ int hb_bd_seek_chapter( hb_bd_t * d, int c )
  ***********************************************************************
  *
  **********************************************************************/
-int hb_bd_read( hb_bd_t * d, hb_buffer_t * b )
+hb_buffer_t * hb_bd_read( hb_bd_t * d )
 {
     int result;
     int error_count = 0;
     uint8_t buf[192];
     BD_EVENT event;
     uint64_t pos;
+    hb_buffer_t * b;
+    uint8_t discontinuity;
+    int new_chap = 0;
 
-    b->discontinuity = 0;
+    discontinuity = 0;
     while ( 1 )
     {
         if ( d->next_chap != d->chapter )
         {
-            b->new_chap = d->chapter = d->next_chap;
+            new_chap = d->chapter = d->next_chap;
         }
         result = next_packet( d->bd, buf );
         if ( result < 0 )
@@ -553,8 +584,8 @@ int hb_bd_read( hb_bd_t * d, hb_buffer_t * b )
                     break;
 
                 case BD_EVENT_PLAYITEM:
+                    discontinuity = 1;
                     hb_deep_log(2, "bd: Playitem %u", event.param);
-                    b->discontinuity = 1;
                     break;
 
                 default:
@@ -562,13 +593,15 @@ int hb_bd_read( hb_bd_t * d, hb_buffer_t * b )
             }
         }
         // buf+4 to skip the BD timestamp at start of packet
-        result = hb_ts_decode_pkt( d->stream, buf+4, b );
-        if ( result )
+        b = hb_ts_decode_pkt( d->stream, buf+4 );
+        if ( b )
         {
-            return 1;
+            b->discontinuity = discontinuity;
+            b->new_chap = new_chap;
+            return b;
         }
     }
-    return 0;
+    return NULL;
 }
 
 /***********************************************************************

@@ -22,7 +22,7 @@ static hb_title_t  * hb_dvdnav_title_scan( hb_dvd_t * d, int t, uint64_t min_dur
 static int           hb_dvdnav_start( hb_dvd_t * d, hb_title_t *title, int chapter );
 static void          hb_dvdnav_stop( hb_dvd_t * d );
 static int           hb_dvdnav_seek( hb_dvd_t * d, float f );
-static int           hb_dvdnav_read( hb_dvd_t * d, hb_buffer_t * b );
+static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * d );
 static int           hb_dvdnav_chapter( hb_dvd_t * d );
 static void          hb_dvdnav_close( hb_dvd_t ** _d );
 static int           hb_dvdnav_angle_count( hb_dvd_t * d );
@@ -1482,18 +1482,20 @@ static int hb_dvdnav_seek( hb_dvd_t * e, float f )
  ***********************************************************************
  *
  **********************************************************************/
-static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
+static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
 {
     hb_dvdnav_t * d = &(e->dvdnav);
     int result, event, len;
     int chapter = 0;
     int error_count = 0;
+    hb_buffer_t *b = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
 
     while ( 1 )
     {
         if (d->stopped)
         {
-            return 0;
+            hb_buffer_close( &b );
+            return NULL;
         }
         result = dvdnav_get_next_block( d->dvdnav, b->data, &event, &len );
         if ( result == DVDNAV_STATUS_ERR )
@@ -1503,13 +1505,15 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
             {
                 hb_error( "dvd: dvdnav_sector_search failed - %s",
                         dvdnav_err_to_string(d->dvdnav) );
-                return 0;
+                hb_buffer_close( &b );
+                return NULL;
             }
             error_count++;
             if (error_count > 500)
             {
                 hb_error("dvdnav: Error, too many consecutive read errors");
-                return 0;
+                hb_buffer_close( &b );
+                return NULL;
             }
             continue;
         }
@@ -1525,7 +1529,7 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
                 b->new_chap = chapter;
             chapter = 0;
             error_count = 0;
-            return 1;
+            return b;
 
         case DVDNAV_NOP:
             /*
@@ -1600,7 +1604,8 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
                 if (tt != d->title)
                 {
                     // Transition to another title signals that we are done.
-                    return 0;
+                    hb_buffer_close( &b );
+                    return NULL;
                 }
             }
             break;
@@ -1622,7 +1627,8 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
                 if (tt != d->title)
                 {
                     // Transition to another title signals that we are done.
-                    return 0;
+                    hb_buffer_close( &b );
+                    return NULL;
                 }
                 c = FindChapterIndex(d->list_chapter, pgcn, pgn);
                 if (c != d->chapter)
@@ -1631,13 +1637,15 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
                     {
                         // Some titles end with a 'link' back to the beginning so
                         // a transition to an earlier chapter means we're done.
-                        return 0;
+                        hb_buffer_close( &b );
+                        return NULL;
                     }
                     chapter = d->chapter = c;
                 }
                 else if ( cell_event->cellN <= d->cell )
                 {
-                    return 0;
+                    hb_buffer_close( &b );
+                    return NULL;
                 }
                 d->cell = cell_event->cellN;
             }
@@ -1661,7 +1669,7 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
             if (chapter > 1)
                 b->new_chap = chapter;
             chapter = 0;
-            return 1;
+            return b;
 
             break;
 
@@ -1678,13 +1686,15 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
             * Playback should end here. 
             */
             d->stopped = 1;
-            return 0;
+            hb_buffer_close( &b );
+            return NULL;
 
         default:
             break;
         }
     }
-    return 0;
+    hb_buffer_close( &b );
+    return NULL;
 }
 
 /***********************************************************************

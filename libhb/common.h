@@ -328,6 +328,11 @@ struct hb_job_s
 #define HB_ACODEC_DCA_PASS  (HB_ACODEC_DCA | HB_ACODEC_PASS_FLAG)
 #define HB_ACODEC_ANY       (HB_ACODEC_MASK | HB_ACODEC_PASS_FLAG)
 
+#define HB_SUBSTREAM_BD_TRUEHD  0x72
+#define HB_SUBSTREAM_BD_AC3     0x76
+#define HB_SUBSTREAM_BD_DTSHD   0x72
+#define HB_SUBSTREAM_BD_DTS     0x71
+
 /* Audio Mixdown */
 /* define some masks, used to extract the various information from the HB_AMIXDOWN_XXXX values */
 #define HB_AMIXDOWN_DCA_FORMAT_MASK             0x00FFF000
@@ -410,7 +415,9 @@ struct hb_audio_config_s
     {
         int track;                /* Input track number */
         PRIVATE uint32_t codec;   /* Input audio codec */
+        PRIVATE uint32_t reg_desc; /* registration descriptor of source */
         PRIVATE uint32_t stream_type; /* stream type from source stream */
+        PRIVATE uint32_t substream_type; /* substream for multiplexed streams */
         PRIVATE uint32_t codec_param; /* per-codec config info */
         PRIVATE uint32_t version; /* Bitsream version */
         PRIVATE uint32_t mode;    /* Bitstream mode, codec dependent encoding */
