@@ -38,6 +38,7 @@ namespace Handbrake.ToolWindows
             {
                 return this.track;
             }
+
             set
             {
                 this.track = value;
@@ -71,6 +72,8 @@ namespace Handbrake.ToolWindows
                 int.TryParse(drcValue.ToString(Culture), out drcCalculated);
                 tb_drc.Value = drcCalculated;
                 lbl_drc.Text = track.DRC.ToString();
+                tb_drc.Enabled = track.TrackDisplay.Contains("(AC3)");
+
             }
         }
 

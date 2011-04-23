@@ -424,7 +424,7 @@ namespace Handbrake
             this.check_autoNaming.AutoSize = true;
             this.check_autoNaming.Location = new System.Drawing.Point(111, 13);
             this.check_autoNaming.Name = "check_autoNaming";
-            this.check_autoNaming.Size = new System.Drawing.Size(176, 17);
+            this.check_autoNaming.Size = new System.Drawing.Size(171, 17);
             this.check_autoNaming.TabIndex = 72;
             this.check_autoNaming.Text = "Automatically name output files";
             this.ToolTip.SetToolTip(this.check_autoNaming, "Automatically name output files");

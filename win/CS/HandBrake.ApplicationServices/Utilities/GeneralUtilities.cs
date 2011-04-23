@@ -123,6 +123,7 @@ namespace HandBrake.ApplicationServices.Utilities
                 logHeader.AppendLine(String.Format("CLI Query: {0}", encJob.Query));
                 logHeader.AppendLine(String.Format("User Query: {0}", encJob.CustomQuery));
             }
+
             logHeader.AppendLine("-------------------------------------------");
 
             return logHeader;
