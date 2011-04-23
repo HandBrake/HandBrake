@@ -286,6 +286,15 @@ namespace Handbrake.Controls
 
                     // Update an item in the Audio list if required.
                     track.Encoder = EnumHelper<AudioEncoder>.GetValue(drp_audioEncoder.Text);
+
+                    // Just make sure we don't have the wrong mixdown set, if we do fix it.
+                    if (track.MixDown == HandBrake.ApplicationServices.Model.Encoding.Mixdown.Ac3Passthrough || track.MixDown == HandBrake.ApplicationServices.Model.Encoding.Mixdown.DtsPassthrough)
+                    {
+                        if (track.Encoder != AudioEncoder.Ac3Passthrough && track.Encoder != AudioEncoder.DtsPassthrough)
+                        {
+                            drp_audioMix.SelectedItem = "Dolby Pro Logic II";
+                        }
+                    }
                     break;
                 case "drp_audioMix":
                     SetBitrate();
