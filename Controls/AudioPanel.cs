@@ -157,6 +157,16 @@ namespace Handbrake.Controls
 
             foreach (AudioTrack track in tracks)
             {
+                if (track.Encoder == AudioEncoder.Ac3Passthrough)
+                {
+                    track.MixDown = HandBrake.ApplicationServices.Model.Encoding.Mixdown.Ac3Passthrough;
+                }
+
+                if (track.Encoder == AudioEncoder.DtsPassthrough)
+                {
+                    track.MixDown = HandBrake.ApplicationServices.Model.Encoding.Mixdown.DtsPassthrough;
+                }
+
                 this.audioTracks.Add(track);
             }
 
@@ -185,12 +195,14 @@ namespace Handbrake.Controls
 
             // Setup the Audio track source dropdown with the new audio tracks.
             this.ScannedTracks.Clear();
+            this.drp_audioTrack.SelectedItem = null;
             foreach (var item in selectedTitle.AudioTracks)
             {
                 this.ScannedTracks.Add(item);
             }
+
+            drp_audioTrack.SelectedItem = this.ScannedTracks.FirstOrDefault();
             this.drp_audioTrack.Refresh();
-            drp_audioTrack.SelectedIndex = 0;
 
             // Add any tracks the preset has, if there is a preset and no audio tracks in the list currently
             if (audioList.Rows.Count == 0 && preset != null)
@@ -198,6 +210,7 @@ namespace Handbrake.Controls
                 EncodeTask parsed = QueryParserUtility.Parse(preset.Query);
                 foreach (AudioTrack audioTrack in parsed.AudioTracks)
                 {
+                    audioTrack.ScannedTrack = drp_audioTrack.SelectedItem as Audio;
                     this.audioTracks.Add(audioTrack);
                 }
             }
@@ -236,7 +249,7 @@ namespace Handbrake.Controls
             switch (ctl.Name)
             {
                 case "drp_audioTrack":
-                    if (audioList.Rows.Count != 0 && audioList.SelectedRows.Count != 0)
+                    if (audioList.Rows.Count != 0 && audioList.SelectedRows.Count != 0 && drp_audioTrack.SelectedItem != null)
                     {
                         track.ScannedTrack = drp_audioTrack.SelectedItem as Audio;
 
@@ -346,7 +359,7 @@ namespace Handbrake.Controls
             if (drp_audioTrack.Text == "None Found")
             {
                 MessageBox.Show(
-                    "Your source appears to have no audio tracks that HandBrake supports.",
+                    "Your source appears to have no audio tracks, or no tracks in a format that HandBrake supports.",
                     "Warning",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -487,7 +500,7 @@ namespace Handbrake.Controls
                 {
                     if (this.drp_audioTrack.SelectedItem != null)
                     {
-                        track.ScannedTrack = this.drp_audioTrack.SelectedItem as HandBrake.ApplicationServices.Parsing.Audio;
+                        track.ScannedTrack = this.drp_audioTrack.SelectedItem as Audio;
                     }
                 }
             }
@@ -515,13 +528,13 @@ namespace Handbrake.Controls
                         if (drp_audioTrack.SelectedItem != null)
                             foreach (AudioTrack track in this.audioTracks)
                                 track.ScannedTrack =
-                                    drp_audioTrack.SelectedItem as HandBrake.ApplicationServices.Parsing.Audio;
+                                    drp_audioTrack.SelectedItem as Audio;
                         else
                         {
                             drp_audioTrack.SelectedIndex = 0;
                             if (drp_audioTrack.SelectedItem != null)
                                 foreach (AudioTrack track in this.audioTracks)
-                                    track.ScannedTrack = drp_audioTrack.SelectedItem as HandBrake.ApplicationServices.Parsing.Audio;
+                                    track.ScannedTrack = drp_audioTrack.SelectedItem as Audio;
                         }
 
                         break;
@@ -532,7 +545,7 @@ namespace Handbrake.Controls
 
                         if (drp_audioTrack.SelectedItem != null)
                             foreach (AudioTrack track in this.audioTracks)
-                                track.ScannedTrack = drp_audioTrack.SelectedItem as HandBrake.ApplicationServices.Parsing.Audio;
+                                track.ScannedTrack = drp_audioTrack.SelectedItem as Audio;
                         break;
                 }
             }
@@ -718,8 +731,6 @@ namespace Handbrake.Controls
             drp_audioMix.Items.Add("6 Channel Discrete");
             drp_audioMix.Items.Add(AC3Passthru);
             drp_audioMix.Items.Add(DTSPassthru);
-
-            drp_audioMix.SelectedItem = "Dolby Pro Logic II";
 
             switch (drp_audioEncoder.Text)
             {
