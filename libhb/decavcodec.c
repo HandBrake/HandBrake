@@ -445,6 +445,8 @@ static int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     &parser_output_buffer, &parser_output_buffer_len,
                     in->data + pos, in->size - pos, cur, cur, 0 );
             cur = pv->parser->pts;
+            if ( cur == AV_NOPTS_VALUE )
+                cur = -1;
         }
         else
         {
