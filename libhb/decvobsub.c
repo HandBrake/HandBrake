@@ -240,7 +240,7 @@ static void ParseControls( hb_work_object_t * w )
             switch( command )
             {
                 case 0x00: // 0x00 - FSTA_DSP - Forced Start Display, no arguments
-                    pv->pts_start = pv->pts + date * 900;
+                    pv->pts_start = pv->pts + date * 1024;
                     pv->pts_forced = 1;
 
                     /*
@@ -262,13 +262,13 @@ static void ParseControls( hb_work_object_t * w )
                     break;
 
                 case 0x01: // 0x01 - STA_DSP - Start Display, no arguments
-                    pv->pts_start = pv->pts + date * 900;
+                    pv->pts_start = pv->pts + date * 1024;
                     pv->pts_forced  = 0;
                     break;
 
                 case 0x02: // 0x02 - STP_DSP - Stop Display, no arguments
                     if(!pv->pts_stop)
-                        pv->pts_stop = pv->pts + date * 900;
+                        pv->pts_stop = pv->pts + date * 1024;
                     break;
 
                 case 0x03: // 0x03 - SET_COLOR - Set Colour indices
@@ -345,7 +345,7 @@ static void ParseControls( hb_work_object_t * w )
                     // fading-out
                     if( currAlpha < lastAlpha && !pv->pts_stop )
                     {
-                        pv->pts_stop = pv->pts + date * 900;
+                        pv->pts_stop = pv->pts + date * 1024;
                     }
 
                     i += 2;
