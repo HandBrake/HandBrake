@@ -2033,7 +2033,16 @@ static void add_audio_to_title(hb_title_t *title, int id)
 
     }
     set_audio_description( audio, lang_for_code( 0 ) );
-    hb_list_add( title->list_audio, audio );
+
+    // Sort by id when adding to the list
+    int i;
+    for ( i = 0; i < hb_list_count( title->list_audio ); i++ )
+    {
+        hb_audio_t *tmp = hb_list_item( title->list_audio, i );
+        if ( audio->id < tmp->id )
+            break;
+    }
+    hb_list_insert( title->list_audio, i, audio );
 }
 
 static void hb_ps_stream_find_audio_ids(hb_stream_t *stream, hb_title_t *title)

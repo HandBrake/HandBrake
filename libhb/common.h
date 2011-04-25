@@ -86,6 +86,7 @@ typedef struct hb_lock_s hb_lock_t;
 hb_list_t * hb_list_init();
 int         hb_list_count( hb_list_t * );
 void        hb_list_add( hb_list_t *, void * );
+void        hb_list_insert( hb_list_t * l, int pos, void * p );
 void        hb_list_rem( hb_list_t *, void * );
 void      * hb_list_item( hb_list_t *, int );
 void        hb_list_close( hb_list_t ** );

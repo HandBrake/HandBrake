@@ -748,6 +748,40 @@ void hb_list_add( hb_list_t * l, void * p )
 }
 
 /**********************************************************************
+ * hb_list_insert
+ **********************************************************************
+ * Adds an item at the specifiec position in the list, making it bigger
+ * if necessary.
+ * Can safely be called with a NULL pointer to add, it will be ignored.
+ *********************************************************************/
+void hb_list_insert( hb_list_t * l, int pos, void * p )
+{
+    if( !p )
+    {
+        return;
+    }
+
+    if( l->items_count == l->items_alloc )
+    {
+        /* We need a bigger boat */
+        l->items_alloc += HB_LIST_DEFAULT_SIZE;
+        l->items        = realloc( l->items,
+                                   l->items_alloc * sizeof( void * ) );
+    }
+
+    if ( l->items_count != pos )
+    {
+        /* Shift all items after it sizeof( void * ) bytes earlier */
+        memmove( &l->items[pos+1], &l->items[pos],
+                 ( l->items_count - pos ) * sizeof( void * ) );
+    }
+
+
+    l->items[pos] = p;
+    (l->items_count)++;
+}
+
+/**********************************************************************
  * hb_list_rem
  **********************************************************************
  * Remove an item from the list. Bad things will happen if called
