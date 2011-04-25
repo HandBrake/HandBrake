@@ -316,6 +316,19 @@ static int index_of_pid(hb_stream_t *stream, int pid)
     return -1;
 }
 
+static int index_of_substream(hb_stream_t *stream, int pid, int substream_type)
+{
+    int ii;
+    int idx = index_of_pid( stream, pid );
+
+    for ( ii = 0; ii < stream->ts[idx].number_substreams; ii++ )
+    {
+        if ( stream->ts[idx].substream_type[ii] == substream_type )
+            return ii;
+    }
+    return -1;
+}
+
 static int index_of_video(hb_stream_t *stream)
 {
     int i;
@@ -730,23 +743,28 @@ hb_stream_t * hb_bd_stream_open( hb_title_t *title )
     {
         int pid = audio->id & 0xFFFF;
         int idx = index_of_pid( d, pid );
+        int substream_type = audio->config.in.substream_type;
 
         if ( idx < 0 )
         {
             // New pid
             d->ts[d->ts_number_pids].pid = audio->id & 0xFFFF;
             d->ts[d->ts_number_pids].stream_type = audio->config.in.stream_type;
-            d->ts[d->ts_number_pids].substream_type[0] = audio->config.in.substream_type;
+            d->ts[d->ts_number_pids].substream_type[0] = substream_type;
             d->ts[d->ts_number_pids].number_substreams = 1;
             d->ts[d->ts_number_pids].stream_kind = A;
             d->ts_number_pids++;
         }
         else if ( d->ts[idx].number_substreams < kMaxNumberDecodeSubStreams )
         {
-            d->ts[idx].substream_type[d->ts[idx].number_substreams] = 
-                                            audio->config.in.substream_type;
-            d->ts[idx].number_substreams++;
-            d->ts[idx].stream_kind = A;
+            // Only add substream if it has not already been added.
+            if ( index_of_substream( d, pid, substream_type ) < 0 )
+            {
+                d->ts[idx].substream_type[d->ts[idx].number_substreams] = 
+                                                                substream_type;
+                d->ts[idx].number_substreams++;
+                d->ts[idx].stream_kind = A;
+            }
         }
         else
         {
