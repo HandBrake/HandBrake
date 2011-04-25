@@ -16,7 +16,7 @@
 
 @interface HBDVDDetector (Private)
 
-- (NSString *)bsdNameForPath;
+- (NSString *)bsdName;
 - (BOOL)pathHasVideoTS;
 - (BOOL)deviceIsDVD;
 - (io_service_t)getIOKitServiceForBSDName;
@@ -58,21 +58,13 @@
 
 - (BOOL)isVideoDVD
 {
-    if( !bsdName )
-    {
-        bsdName = [[self bsdNameForPath] retain];
-    }
     return ( [self pathHasVideoTS] && [self deviceIsDVD] );
 }
 
 
 - (NSString *)devicePath
 {
-    if( !bsdName )
-    {
-        bsdName = [[self bsdNameForPath] retain];
-    }
-    return [NSString stringWithFormat:@"/dev/%@", bsdName];
+    return [NSString stringWithFormat:@"/dev/%@", [self bsdName]];
 }
 
 @end
@@ -80,12 +72,17 @@
 
 @implementation HBDVDDetector (Private)
 
-- (NSString *)bsdNameForPath
+- (NSString *)bsdName
 {
+    if ( bsdName )
+    {
+        return bsdName;
+    }
+
     OSStatus err;
     FSRef ref;
     err = FSPathMakeRef( (const UInt8 *) [path fileSystemRepresentation],
-                         &ref, NULL );	
+                         &ref, NULL );
     if( err != noErr )
     {
         return nil;
@@ -123,7 +120,8 @@
         return nil;
     }
 
-    return [NSString stringWithUTF8String:(const char *)volumeParms.vMDeviceID];
+    bsdName = [[NSString stringWithUTF8String:(const char *)volumeParms.vMDeviceID] retain];
+    return bsdName;
 }
 
 
@@ -157,16 +155,16 @@
 - (io_service_t)getIOKitServiceForBSDName
 {
     CFMutableDictionaryRef  matchingDict;
-    matchingDict = IOBSDNameMatching( kIOMasterPortDefault, 0, [bsdName UTF8String] );
+    matchingDict = IOBSDNameMatching( kIOMasterPortDefault, 0, [[self bsdName] UTF8String] );
     if( matchingDict == NULL )
     {
         return IO_OBJECT_NULL;
     }
-	
+
     // Fetch the object with the matching BSD node name. There should only be
     // one match, so IOServiceGetMatchingService is used instead of
     // IOServiceGetMatchingServices to simplify the code.
-    return IOServiceGetMatchingService( kIOMasterPortDefault, matchingDict );    
+    return IOServiceGetMatchingService( kIOMasterPortDefault, matchingDict );
 }
 
 
