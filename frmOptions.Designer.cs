@@ -424,7 +424,7 @@ namespace Handbrake
             this.check_autoNaming.AutoSize = true;
             this.check_autoNaming.Location = new System.Drawing.Point(111, 13);
             this.check_autoNaming.Name = "check_autoNaming";
-            this.check_autoNaming.Size = new System.Drawing.Size(171, 17);
+            this.check_autoNaming.Size = new System.Drawing.Size(176, 17);
             this.check_autoNaming.TabIndex = 72;
             this.check_autoNaming.Text = "Automatically name output files";
             this.ToolTip.SetToolTip(this.check_autoNaming, "Automatically name output files");
@@ -624,7 +624,7 @@ namespace Handbrake
             this.radio_preferredAudioAndSubs.AutoSize = true;
             this.radio_preferredAudioAndSubs.Location = new System.Drawing.Point(200, 99);
             this.radio_preferredAudioAndSubs.Name = "radio_preferredAudioAndSubs";
-            this.radio_preferredAudioAndSubs.Size = new System.Drawing.Size(250, 17);
+            this.radio_preferredAudioAndSubs.Size = new System.Drawing.Size(254, 17);
             this.radio_preferredAudioAndSubs.TabIndex = 93;
             this.radio_preferredAudioAndSubs.TabStop = true;
             this.radio_preferredAudioAndSubs.Text = "Use Preferred Language for Audio and Subtitles";
@@ -637,7 +637,7 @@ namespace Handbrake
             this.check_AddCCTracks.AutoSize = true;
             this.check_AddCCTracks.Location = new System.Drawing.Point(200, 131);
             this.check_AddCCTracks.Name = "check_AddCCTracks";
-            this.check_AddCCTracks.Size = new System.Drawing.Size(198, 17);
+            this.check_AddCCTracks.Size = new System.Drawing.Size(199, 17);
             this.check_AddCCTracks.TabIndex = 92;
             this.check_AddCCTracks.Text = "Add Closed Captions when available";
             this.ToolTip.SetToolTip(this.check_AddCCTracks, "Add any CC tracks if they exist");
@@ -670,7 +670,7 @@ namespace Handbrake
             this.radio_foreignAndSubs.AutoSize = true;
             this.radio_foreignAndSubs.Location = new System.Drawing.Point(200, 76);
             this.radio_foreignAndSubs.Name = "radio_foreignAndSubs";
-            this.radio_foreignAndSubs.Size = new System.Drawing.Size(347, 17);
+            this.radio_foreignAndSubs.Size = new System.Drawing.Size(358, 17);
             this.radio_foreignAndSubs.TabIndex = 90;
             this.radio_foreignAndSubs.TabStop = true;
             this.radio_foreignAndSubs.Text = "Use foreign language audio and add first preferred language subtitle.";
@@ -695,7 +695,7 @@ namespace Handbrake
             this.radio_dub.AutoSize = true;
             this.radio_dub.Location = new System.Drawing.Point(200, 53);
             this.radio_dub.Name = "radio_dub";
-            this.radio_dub.Size = new System.Drawing.Size(167, 17);
+            this.radio_dub.Size = new System.Drawing.Size(164, 17);
             this.radio_dub.TabIndex = 89;
             this.radio_dub.TabStop = true;
             this.radio_dub.Text = "DUB Foreign Language Audio";
@@ -748,7 +748,7 @@ namespace Handbrake
             this.check_preventSleep.AutoSize = true;
             this.check_preventSleep.Location = new System.Drawing.Point(73, 45);
             this.check_preventSleep.Name = "check_preventSleep";
-            this.check_preventSleep.Size = new System.Drawing.Size(260, 17);
+            this.check_preventSleep.Size = new System.Drawing.Size(266, 17);
             this.check_preventSleep.TabIndex = 91;
             this.check_preventSleep.Text = "Prevent the system from sleeping when encoding.";
             this.ToolTip.SetToolTip(this.check_preventSleep, "Prevent system from sleeping during encoding.");
@@ -761,7 +761,7 @@ namespace Handbrake
             this.check_clearOldLogs.AutoSize = true;
             this.check_clearOldLogs.Location = new System.Drawing.Point(73, 234);
             this.check_clearOldLogs.Name = "check_clearOldLogs";
-            this.check_clearOldLogs.Size = new System.Drawing.Size(162, 17);
+            this.check_clearOldLogs.Size = new System.Drawing.Size(166, 17);
             this.check_clearOldLogs.TabIndex = 90;
             this.check_clearOldLogs.Text = "Clear logs older than 30 days";
             this.ToolTip.SetToolTip(this.check_clearOldLogs, "Clear logs which are older than 30 days.\r\nThis only applies to HandBrakes Applica" +
@@ -856,7 +856,7 @@ namespace Handbrake
             this.check_logsInSpecifiedLocation.AutoSize = true;
             this.check_logsInSpecifiedLocation.Location = new System.Drawing.Point(73, 139);
             this.check_logsInSpecifiedLocation.Name = "check_logsInSpecifiedLocation";
-            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(305, 17);
+            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(306, 17);
             this.check_logsInSpecifiedLocation.TabIndex = 87;
             this.check_logsInSpecifiedLocation.Text = "Put a copy of individual encode logs in a specified location:";
             this.ToolTip.SetToolTip(this.check_logsInSpecifiedLocation, "Place a copy of the encode log in the same folder as the encoded movie.");

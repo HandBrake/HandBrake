@@ -169,6 +169,14 @@ namespace HandBrake.ApplicationServices.Services
                     Win32.PreventSleep();
                 }
 
+                // Make sure the path exists, attempt to create it if it doesn't
+                string path = Directory.GetParent(queueTask.Destination).ToString();
+                if (!Directory.Exists(path))
+                {
+                    // TODO - Better handle a directoryNotFound exception.
+                    Directory.CreateDirectory(path);
+                }
+
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
                 ProcessStartInfo cliStart = new ProcessStartInfo(handbrakeCLIPath, queueTask.Query)
                 {

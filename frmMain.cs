@@ -1113,9 +1113,32 @@ namespace Handbrake
             if (!Directory.Exists(Path.GetDirectoryName(jobDestination)))
             {
                 if (showError)
-                    MessageBox.Show(string.Format("Destination Path does not exist.\nPath: {0}\n\nThis item was not added to the Queue.", Path.GetDirectoryName(jobDestination)), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                {
+                    DialogResult result =
+                        MessageBox.Show(
+                            string.Format("Destination Path does not exist.\nPath: {0}\n\n Would you like to create it now?", Path.GetDirectoryName(jobDestination)),
+                            "Warning",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        // Make sure the path exists, attempt to create it if it doesn't
+                        string path = Directory.GetParent(jobDestination).ToString();
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+                    } 
+                    else
+                    {
+                        return false;
+                    }
+                }
+
                 return false;
             }
+        
 
             // Make sure we don't have a duplciate on the queue.
             if (this.queueProcessor.QueueManager.CheckForDestinationPathDuplicates(jobDestination))
