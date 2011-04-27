@@ -582,8 +582,18 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         // If this subtitle track's packets are to be passed thru, do so immediately
         if( subtitle->config.dest == PASSTHRUSUB )
         {
-            while ( ( sub = hb_fifo_get( subtitle->fifo_raw ) ) != NULL )
+            while ( ( sub = hb_fifo_see( subtitle->fifo_raw ) ) != NULL )
             {
+                if ( sub->stop == -1 && hb_fifo_size( subtitle->fifo_raw ) < 2 )
+                    break;
+
+                sub = hb_fifo_get( subtitle->fifo_raw );
+                if ( sub->stop == -1 )
+                {
+                    hb_buffer_t *next;
+                    next = hb_fifo_see( subtitle->fifo_raw );
+                    sub->stop = next->start;
+                }
                 // Need to re-write subtitle timestamps to account
                 // for any slippage.
                 hb_lock( pv->common->mutex );
@@ -633,13 +643,25 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             hb_buffer_t *cur_sub_tail = NULL;
             for ( sub = sync->sub_list; sub != NULL; )
             {
+                if ( sub->next && sub->stop == -1 )
+                {
+                    sub->stop = sub->next->start;
+                }
+
                 // Need to re-write subtitle timestamps to account
                 // for any slippage.
                 hb_lock( pv->common->mutex );
                 sub_start = sub->start - pv->common->video_pts_slip;
                 hb_unlock( pv->common->mutex );
-                duration = sub->stop - sub->start;
-                sub_stop = sub_start + duration;
+                if ( sub->stop != -1 )
+                {
+                    duration = sub->stop - sub->start;
+                    sub_stop = sub_start + duration;
+                }
+                else
+                {
+                    sub_stop = -1;
+                }
 
                 if ( cur->start < sub_start )
                 {
@@ -649,7 +671,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 else
                 {
                     // Subtitle starts now or in the past...
-                    if ( cur->start < sub_stop )
+                    if ( cur->start < sub_stop || sub_stop == -1 )
                     {
                         // Subtitle finishes in the future
                         

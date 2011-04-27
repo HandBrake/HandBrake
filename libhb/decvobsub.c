@@ -208,7 +208,7 @@ static void ParseControls( hb_work_object_t * w )
     int date, next;
 
     pv->pts_start = 0;
-    pv->pts_stop  = 0;
+    pv->pts_stop  = -1;
     pv->pts_forced  = 0;
 
     pv->alpha[3] = 0;
@@ -267,7 +267,7 @@ static void ParseControls( hb_work_object_t * w )
                     break;
 
                 case 0x02: // 0x02 - STP_DSP - Stop Display, no arguments
-                    if(!pv->pts_stop)
+                    if(pv->pts_stop == -1)
                         pv->pts_stop = pv->pts + date * 1024;
                     break;
 
@@ -343,7 +343,7 @@ static void ParseControls( hb_work_object_t * w )
                     }
 
                     // fading-out
-                    if( currAlpha < lastAlpha && !pv->pts_stop )
+                    if( currAlpha < lastAlpha && pv->pts_stop == -1 )
                     {
                         pv->pts_stop = pv->pts + date * 1024;
                     }
@@ -376,12 +376,6 @@ static void ParseControls( hb_work_object_t * w )
             break;
         }
         i = next;
-    }
-
-    if( !pv->pts_stop )
-    {
-        /* Show it for 3 seconds */
-        pv->pts_stop = pv->pts_start + 3 * 90000;
     }
 }
 
