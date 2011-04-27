@@ -296,6 +296,12 @@ static hb_buffer_t *hb_copy_frame( hb_job_t *job, int width, int height,
     struct SwsContext *context = hb_sws_get_context( src_w, src_h, pixfmt,
                                                  dst_w, dst_h, PIX_FMT_YUV420P,
                                                  SWS_LANCZOS|SWS_ACCURATE_RND);
+    if ( context == NULL )
+    {
+        hb_buffer_close( &buf );
+        return NULL;
+    }
+
     sws_scale( context, (const uint8_t* const *)pic_crop.data, pic_crop.linesize, 0, src_h, out.data, out.linesize );
     sws_freeContext( context );
 
@@ -424,6 +430,9 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                                       m->info->display_fbuf->buf[0],
                                       m->info->display_fbuf->buf[1],
                                       m->info->display_fbuf->buf[2] );
+                if ( buf == NULL )
+                    continue;
+
                 buf->sequence = buf_es->sequence;
 
                 hb_buffer_t *cc_buf = NULL;
