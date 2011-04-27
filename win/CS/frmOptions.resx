@@ -120,6 +120,9 @@
   <metadata name="ToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>132, 18</value>
   </metadata>
+  <metadata name="ToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>132, 18</value>
+  </metadata>
   <data name="cb_mp4FileMode.ToolTip" xml:space="preserve">
     <value>The default file extension for MP4 Files.
 Automatic   - This will use M4v when AC3 Audio, SRT Subtitles or Chapters are present, otherwise MP4.
@@ -130,7 +133,8 @@ Note, the file itself is identical. This simply changes the default extension fo
   </data>
   <data name="text_an_path.ToolTip" xml:space="preserve">
     <value>This is the default location where your encoded files will be stored if "Automatically name output files" is enabled.
-You can enter {source_path} instead of a path to use the same path as the source file.</value>
+
+Hover over the "Available Options" text below for a more detailed description of the available advanced options.</value>
   </data>
   <data name="label34.ToolTip" xml:space="preserve">
     <value>{source_path} = Use the same directory as the source is in.
