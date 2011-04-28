@@ -1129,14 +1129,16 @@ namespace Handbrake
                         {
                             Directory.CreateDirectory(path);
                         }
-                    } 
+                    }
                     else
                     {
                         return false;
                     }
                 }
-
-                return false;
+                else
+                {
+                    return false;
+                }
             }
         
 
