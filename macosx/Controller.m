@@ -2334,17 +2334,17 @@ fWorkingCount = 0;
     /* Frame Rate Mode */
     if ([fFramerateMatrix selectedRow] == 1) // if selected we are cfr regardless of the frame rate popup
     {
-        [queueFileJob setObject:@"cfr" forKey:@"VideoframerateMode"];
+        [queueFileJob setObject:@"cfr" forKey:@"VideoFramerateMode"];
     }
     else
     {
         if ([fVidRatePopUp indexOfSelectedItem] == 0) // Same as source frame rate
         {
-            [queueFileJob setObject:@"vfr" forKey:@"VideoframerateMode"];
+            [queueFileJob setObject:@"vfr" forKey:@"VideoFramerateMode"];
         }
         else
         {
-            [queueFileJob setObject:@"pfr" forKey:@"VideoframerateMode"];
+            [queueFileJob setObject:@"pfr" forKey:@"VideoFramerateMode"];
         }
         
     }
@@ -3538,7 +3538,7 @@ bool one_burned = FALSE;
          * to enable constant frame rate since user has specified
          * a specific framerate*/
         
-        if ([[queueToApply objectForKey:@"VideoframerateMode"] isEqualToString:@"pfr"])
+        if ([[queueToApply objectForKey:@"VideoFramerateMode"] isEqualToString:@"pfr"])
         {
             job->cfr = 2;
         }
@@ -3556,7 +3556,7 @@ bool one_burned = FALSE;
          * to enable true same as source framerate */
         job->cfr = 0;
         /* If the user specifies cfr then ... */
-        if ([[queueToApply objectForKey:@"VideoframerateMode"] isEqualToString:@"cfr"]) // we are cfr
+        if ([[queueToApply objectForKey:@"VideoFramerateMode"] isEqualToString:@"cfr"]) // we are cfr
         {
             job->cfr = 1;
         }
@@ -5538,7 +5538,7 @@ return YES;
         {
             [fVidRatePopUp selectItemAtIndex: 0];
             /* Now set the Video Frame Rate Mode to either vfr or cfr according to the preset */
-            if (![chosenPreset objectForKey:@"VideoframerateMode"] || [[chosenPreset objectForKey:@"VideoframerateMode"] isEqualToString:@"vfr"])
+            if (![chosenPreset objectForKey:@"VideoFramerateMode"] || [[chosenPreset objectForKey:@"VideoFramerateMode"] isEqualToString:@"vfr"])
             {
                 [fFramerateMatrix selectCellAtRow: 0 column: 0]; // we want vfr
             }
@@ -5551,7 +5551,7 @@ return YES;
         {
             [fVidRatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"VideoFramerate"]];
             /* Now set the Video Frame Rate Mode to either pfr or cfr according to the preset */
-            if ([[chosenPreset objectForKey:@"VideoframerateMode"] isEqualToString:@"pfr"] || [[chosenPreset objectForKey:@"VideoFrameratePFR"] intValue] == 1)
+            if ([[chosenPreset objectForKey:@"VideoFramerateMode"] isEqualToString:@"pfr"] || [[chosenPreset objectForKey:@"VideoFrameratePFR"] intValue] == 1)
             {
                 [fFramerateMatrix selectCellAtRow: 0 column: 0]; // we want pfr
             }
@@ -6022,7 +6022,7 @@ return YES;
         /* Set the Video Frame Rate Mode */
         if ([fFramerateMatrix selectedRow] == 1)
         {
-            [preset setObject:@"cfr" forKey:@"VideoframerateMode"];
+            [preset setObject:@"cfr" forKey:@"VideoFramerateMode"];
         }
         /* Set the actual framerate from popup overriding the cfr setting as needed */
         if ([fVidRatePopUp indexOfSelectedItem] == 0) // Same as source is selected
@@ -6031,7 +6031,7 @@ return YES;
             
             if ([fFramerateMatrix selectedRow] == 0)
             {
-                [preset setObject:@"vfr" forKey:@"VideoframerateMode"];
+                [preset setObject:@"vfr" forKey:@"VideoFramerateMode"];
             }
         }
         else // we can record the actual titleOfSelectedItem
@@ -6040,7 +6040,7 @@ return YES;
             
             if ([fFramerateMatrix selectedRow] == 0)
             {
-                [preset setObject:@"pfr" forKey:@"VideoframerateMode"];
+                [preset setObject:@"pfr" forKey:@"VideoFramerateMode"];
             }
         }
         

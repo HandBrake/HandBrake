@@ -1246,7 +1246,7 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         /* for framerate look to see if we are using vfr detelecine */
         if ([[item objectForKey:@"JobIndexVideoFramerate"] intValue] == 0)
         {
-            if ([[item objectForKey:@"VideoframerateMode"] isEqualToString:@"vfr"])
+            if ([[item objectForKey:@"VideoFramerateMode"] isEqualToString:@"vfr"])
             {
                 /* we are using same as source with vfr detelecine */
                 videoInfo = [NSString stringWithFormat:@"%@ Framerate: Same as source (Variable Frame Rate)", videoInfo];
@@ -1260,7 +1260,7 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         else
         {
             /* we have a specified, constant framerate */
-            if ([[item objectForKey:@"VideoframerateMode"] isEqualToString:@"pfr"])
+            if ([[item objectForKey:@"VideoFramerateMode"] isEqualToString:@"pfr"])
             {
             videoInfo = [NSString stringWithFormat:@"%@ Framerate: %@ (Peak Frame Rate)", videoInfo ,[item objectForKey:@"VideoFramerate"]];
             }
