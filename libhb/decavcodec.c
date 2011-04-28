@@ -1022,7 +1022,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
 
     int codec_id = w->codec_param;
     pv->parser = av_parser_init( codec_id );
-    pv->context = avcodec_alloc_context2( CODEC_TYPE_VIDEO );
+    pv->context = avcodec_alloc_context2( AVMEDIA_TYPE_VIDEO );
 
     /* we have to wrap ffmpeg's get_buffer to be able to set the pts (?!) */
     pv->context->opaque = pv;

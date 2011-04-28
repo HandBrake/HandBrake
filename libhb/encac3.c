@@ -62,21 +62,21 @@ int encac3Init( hb_work_object_t * w, hb_job_t * job )
     context = avcodec_alloc_context();
     avcodec_get_context_defaults3(context, codec);
 
-    context->channel_layout = CH_LAYOUT_STEREO;
+    context->channel_layout = AV_CH_LAYOUT_STEREO;
     switch( audio->config.out.mixdown )
     {
         case HB_AMIXDOWN_MONO:
-            context->channel_layout = CH_LAYOUT_MONO;
+            context->channel_layout = AV_CH_LAYOUT_MONO;
             break;
 
         case HB_AMIXDOWN_STEREO:
         case HB_AMIXDOWN_DOLBY:
         case HB_AMIXDOWN_DOLBYPLII:
-            context->channel_layout = CH_LAYOUT_STEREO;
+            context->channel_layout = AV_CH_LAYOUT_STEREO;
             break;
 
         case HB_AMIXDOWN_6CH:
-            context->channel_layout = CH_LAYOUT_5POINT0|CH_LOW_FREQUENCY;
+            context->channel_layout = AV_CH_LAYOUT_5POINT1;
             break;
 
         default:

@@ -154,43 +154,43 @@ int hb_ff_layout_xlat(int64_t ff_channel_layout, int channels)
 
     switch (ff_channel_layout)
     {
-        case CH_LAYOUT_MONO:
+        case AV_CH_LAYOUT_MONO:
             hb_layout = HB_INPUT_CH_LAYOUT_MONO;
             break;
-        case CH_LAYOUT_STEREO:
+        case AV_CH_LAYOUT_STEREO:
             hb_layout = HB_INPUT_CH_LAYOUT_STEREO;
             break;
-        case CH_LAYOUT_SURROUND:
+        case AV_CH_LAYOUT_SURROUND:
             hb_layout = HB_INPUT_CH_LAYOUT_3F;
             break;
-        case CH_LAYOUT_4POINT0:
+        case AV_CH_LAYOUT_4POINT0:
             hb_layout = HB_INPUT_CH_LAYOUT_3F1R;
             break;
-        case CH_LAYOUT_2_2:
+        case AV_CH_LAYOUT_2_2:
             hb_layout = HB_INPUT_CH_LAYOUT_2F2R;
             break;
-        case CH_LAYOUT_QUAD:
+        case AV_CH_LAYOUT_QUAD:
             hb_layout = HB_INPUT_CH_LAYOUT_2F2R;
             break;
-        case CH_LAYOUT_5POINT0:
+        case AV_CH_LAYOUT_5POINT0:
             hb_layout = HB_INPUT_CH_LAYOUT_3F2R;
             break;
-        case CH_LAYOUT_5POINT1:
+        case AV_CH_LAYOUT_5POINT1:
             hb_layout = HB_INPUT_CH_LAYOUT_3F2R|HB_INPUT_CH_LAYOUT_HAS_LFE;
             break;
-        case CH_LAYOUT_5POINT0_BACK:
+        case AV_CH_LAYOUT_5POINT0_BACK:
             hb_layout = HB_INPUT_CH_LAYOUT_3F2R;
             break;
-        case CH_LAYOUT_5POINT1_BACK:
+        case AV_CH_LAYOUT_5POINT1_BACK:
             hb_layout = HB_INPUT_CH_LAYOUT_3F2R|HB_INPUT_CH_LAYOUT_HAS_LFE;
             break;
-        case CH_LAYOUT_7POINT0:
+        case AV_CH_LAYOUT_7POINT0:
             hb_layout = HB_INPUT_CH_LAYOUT_3F4R;
             break;
-        case CH_LAYOUT_7POINT1:
+        case AV_CH_LAYOUT_7POINT1:
             hb_layout = HB_INPUT_CH_LAYOUT_3F4R|HB_INPUT_CH_LAYOUT_HAS_LFE;
             break;
-        case CH_LAYOUT_STEREO_DOWNMIX:
+        case AV_CH_LAYOUT_STEREO_DOWNMIX:
             hb_layout = HB_INPUT_CH_LAYOUT_STEREO;
             break;
         default:

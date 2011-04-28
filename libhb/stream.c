@@ -166,7 +166,6 @@ struct hb_stream_s
 
     AVFormatContext *ffmpeg_ic;
     AVPacket *ffmpeg_pkt;
-    double ffmpeg_tsconv[MAX_STREAMS];
     uint8_t ffmpeg_video_id;
 
     struct
@@ -3265,7 +3264,7 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title )
         int i;
         for (i = 0; i < ic->nb_streams; ++i )
         {
-            if ( ic->streams[i]->codec->codec_type == CODEC_TYPE_VIDEO )
+            if ( ic->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO )
             {
                 break;
             }
@@ -3597,7 +3596,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream )
     int i;
     for (i = 0; i < ic->nb_streams; ++i )
     {
-        if ( ic->streams[i]->codec->codec_type == CODEC_TYPE_VIDEO &&
+        if ( ic->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO &&
              avcodec_find_decoder( ic->streams[i]->codec->codec_id ) &&
              title->video_codec == 0 )
         {
@@ -3621,16 +3620,16 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream )
             title->video_codec = WORK_DECAVCODECVI;
             title->video_codec_param = ffmpeg_codec_param( stream, i );
         }
-        else if ( ic->streams[i]->codec->codec_type == CODEC_TYPE_AUDIO &&
+        else if ( ic->streams[i]->codec->codec_type == AVMEDIA_TYPE_AUDIO &&
                   avcodec_find_decoder( ic->streams[i]->codec->codec_id ) )
         {
             add_ffmpeg_audio( title, stream, i );
         }
-        else if ( ic->streams[i]->codec->codec_type == CODEC_TYPE_SUBTITLE )
+        else if ( ic->streams[i]->codec->codec_type == AVMEDIA_TYPE_SUBTITLE )
         {
             add_ffmpeg_subtitle( title, stream, i );
         }
-        else if ( ic->streams[i]->codec->codec_type == CODEC_TYPE_ATTACHMENT )
+        else if ( ic->streams[i]->codec->codec_type == AVMEDIA_TYPE_ATTACHMENT )
         {
             add_ffmpeg_attachment( title, stream, i );
         }
@@ -3738,7 +3737,7 @@ static int ffmpeg_is_keyframe( hb_stream_t *stream )
         default:
             break;
     }
-    return ( stream->ffmpeg_pkt->flags & PKT_FLAG_KEY );
+    return ( stream->ffmpeg_pkt->flags & AV_PKT_FLAG_KEY );
 }
 
 static hb_buffer_t * ffmpeg_read( hb_stream_t *stream )
@@ -3758,7 +3757,7 @@ static hb_buffer_t * ffmpeg_read( hb_stream_t *stream )
         // XXX the following conditional is to handle avi files that
         // use M$ 'packed b-frames' and occasionally have negative
         // sizes for the null frames these require.
-        if ( err != AVERROR_NOMEM || stream->ffmpeg_pkt->size >= 0 )
+        if ( err != AVERROR(ENOMEM) || stream->ffmpeg_pkt->size >= 0 )
             // eof
             return NULL;
     }
@@ -3806,15 +3805,10 @@ static hb_buffer_t * ffmpeg_read( hb_stream_t *stream )
     }
     buf->id = stream->ffmpeg_pkt->stream_index;
 
-    // if we haven't done it already, compute a conversion factor to go
-    // from the ffmpeg timebase for the stream to HB's 90KHz timebase.
-    double tsconv = stream->ffmpeg_tsconv[stream->ffmpeg_pkt->stream_index];
-    if ( ! tsconv )
-    {
-        AVStream *s = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt->stream_index];
-        tsconv = 90000. * (double)s->time_base.num / (double)s->time_base.den;
-        stream->ffmpeg_tsconv[stream->ffmpeg_pkt->stream_index] = tsconv;
-    }
+    // compute a conversion factor to go from the ffmpeg
+    // timebase for the stream to HB's 90kHz timebase.
+    AVStream *s = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt->stream_index];
+    double tsconv = 90000. * (double)s->time_base.num / (double)s->time_base.den;
 
     buf->start = av_to_hb_pts( stream->ffmpeg_pkt->pts, tsconv );
     buf->renderOffset = av_to_hb_pts( stream->ffmpeg_pkt->dts, tsconv );
@@ -3849,15 +3843,15 @@ static hb_buffer_t * ffmpeg_read( hb_stream_t *stream )
     codec_type = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt->stream_index]->codec->codec_type;
     switch ( codec_type )
     {
-        case CODEC_TYPE_VIDEO:
+        case AVMEDIA_TYPE_VIDEO:
             buf->type = VIDEO_BUF;
             break;
 
-        case CODEC_TYPE_AUDIO:
+        case AVMEDIA_TYPE_AUDIO:
             buf->type = AUDIO_BUF;
             break;
 
-        case CODEC_TYPE_SUBTITLE:
+        case AVMEDIA_TYPE_SUBTITLE:
             buf->type = SUBTITLE_BUF;
             break;
 
