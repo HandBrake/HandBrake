@@ -269,8 +269,7 @@ namespace Handbrake.Controls
                     }
                     break;
                 case "drp_audioEncoder":
-                    SetMixDown();
-                    SetBitrate();
+                    SetMixDown(EnumHelper<Mixdown>.GetDescription(track.MixDown));
 
                     // Configure the widgets with values
                     if (drp_audioEncoder.Text.Contains(AC3Passthru) || drp_audioEncoder.Text.Contains(DTSPassthru))
@@ -287,19 +286,22 @@ namespace Handbrake.Controls
                     // Update an item in the Audio list if required.
                     track.Encoder = EnumHelper<AudioEncoder>.GetValue(drp_audioEncoder.Text);
 
-                    // Just make sure we don't have the wrong mixdown set, if we do fix it.
-                    if (track.MixDown == HandBrake.ApplicationServices.Model.Encoding.Mixdown.Ac3Passthrough || track.MixDown == HandBrake.ApplicationServices.Model.Encoding.Mixdown.DtsPassthrough)
-                    {
-                        if (track.Encoder != AudioEncoder.Ac3Passthrough && track.Encoder != AudioEncoder.DtsPassthrough)
-                        {
-                            drp_audioMix.SelectedItem = "Dolby Pro Logic II";
-                        }
-                    }
+                    //// Just make sure we don't have the wrong mixdown set, if we do fix it.
+                    //if (track.MixDown == HandBrake.ApplicationServices.Model.Encoding.Mixdown.Ac3Passthrough || track.MixDown == HandBrake.ApplicationServices.Model.Encoding.Mixdown.DtsPassthrough)
+                    //{
+                    //    if (track.Encoder != AudioEncoder.Ac3Passthrough && track.Encoder != AudioEncoder.DtsPassthrough)
+                    //    {
+                    //        drp_audioMix.SelectedItem = "Dolby Pro Logic II";
+                    //    }
+                    //}
                     break;
                 case "drp_audioMix":
                     SetBitrate();
 
-                    track.MixDown = EnumHelper<Mixdown>.GetValue(drp_audioMix.Text);
+                    if (drp_audioMix.SelectedItem != null)
+                    {
+                        track.MixDown = EnumHelper<Mixdown>.GetValue(drp_audioMix.Text);
+                    }
 
                     break;
                 case "drp_audioSample":
@@ -730,7 +732,10 @@ namespace Handbrake.Controls
         /// <summary>
         /// Set the mixdown dropdown
         /// </summary>
-        private void SetMixDown()
+        /// <param name="currentMixdown">
+        /// The current Mixdown.
+        /// </param>
+        private void SetMixDown(string currentMixdown)
         {
             drp_audioMix.Items.Clear();
             drp_audioMix.Items.Add("Mono");
@@ -746,19 +751,23 @@ namespace Handbrake.Controls
                 case "AAC (faac)":
                     drp_audioMix.Items.Remove(AC3Passthru);
                     drp_audioMix.Items.Remove(DTSPassthru);
+                    drp_audioMix.SelectedItem = currentMixdown ?? "Dolby Pro Logic II";
                     break;
                 case "MP3 (lame)":
                     drp_audioMix.Items.Remove("6 Channel Discrete");
                     drp_audioMix.Items.Remove(AC3Passthru);
                     drp_audioMix.Items.Remove(DTSPassthru);
+                    drp_audioMix.SelectedItem = currentMixdown ?? "Dolby Pro Logic II";
                     break;
                 case "Vorbis (vorbis)":
                     drp_audioMix.Items.Remove(AC3Passthru);
                     drp_audioMix.Items.Remove(DTSPassthru);
+                    drp_audioMix.SelectedItem = currentMixdown ?? "Dolby Pro Logic II";
                     break;
                 case "AC3 (ffmpeg)":
                     drp_audioMix.Items.Remove(AC3Passthru);
                     drp_audioMix.Items.Remove(DTSPassthru);
+                    drp_audioMix.SelectedItem = currentMixdown ?? "Dolby Pro Logic II";
                     break;
                 case "AC3 Passthru":
                     drp_audioMix.SelectedItem = AC3Passthru;
@@ -766,6 +775,11 @@ namespace Handbrake.Controls
                 case "DTS Passthru":
                     drp_audioMix.SelectedItem = DTSPassthru;
                     break;
+            }
+
+            if (drp_audioMix.SelectedItem == null)
+            {
+                drp_audioMix.SelectedItem = "Dolby Pro Logic II";
             }
         }
 
