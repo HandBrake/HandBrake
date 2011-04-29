@@ -5887,9 +5887,10 @@ return YES;
     [fPresetNewPicSettingsPopUp addItemWithTitle:@"None"];
     [fPresetNewPicSettingsPopUp addItemWithTitle:@"Custom"];
     [fPresetNewPicSettingsPopUp addItemWithTitle:@"Source Maximum (post source scan)"];
-    [fPresetNewPicSettingsPopUp selectItemAtIndex: 0];	
-    /* Uncheck the preset use filters checkbox */
-    [fPresetNewPicFiltersCheck setState:NSOffState];
+    /* Use current width and height by default (Custom) */
+    [fPresetNewPicSettingsPopUp selectItemAtIndex: 1];
+    /* Save the current filters in the preset by default */
+    [fPresetNewPicFiltersCheck setState:NSOnState];
     // fPresetNewFolderCheck
     [fPresetNewFolderCheck setState:NSOffState];
     /* Erase info from the input fields*/
