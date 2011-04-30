@@ -105,7 +105,12 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         {
             get
             {
-                return this.Bitrate == 0 ? "Auto" : this.Bitrate.ToString();
+                if (this.Encoder == AudioEncoder.Ac3Passthrough || this.Encoder == AudioEncoder.DtsPassthrough)
+                {
+                    return "Auto";
+                }
+
+                return this.Bitrate.ToString();
             }
         }
 

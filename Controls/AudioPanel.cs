@@ -92,7 +92,7 @@ namespace Handbrake.Controls
                     if (track.Encoder == AudioEncoder.Ac3Passthrough || track.Encoder == AudioEncoder.DtsPassthrough)
                     {
                         passthruTracks += track.ScannedTrack.Bitrate;
-                    } 
+                    }
                     else
                     {
                         encodedTracks += track.Bitrate;
@@ -286,17 +286,9 @@ namespace Handbrake.Controls
                     // Update an item in the Audio list if required.
                     track.Encoder = EnumHelper<AudioEncoder>.GetValue(drp_audioEncoder.Text);
 
-                    //// Just make sure we don't have the wrong mixdown set, if we do fix it.
-                    //if (track.MixDown == HandBrake.ApplicationServices.Model.Encoding.Mixdown.Ac3Passthrough || track.MixDown == HandBrake.ApplicationServices.Model.Encoding.Mixdown.DtsPassthrough)
-                    //{
-                    //    if (track.Encoder != AudioEncoder.Ac3Passthrough && track.Encoder != AudioEncoder.DtsPassthrough)
-                    //    {
-                    //        drp_audioMix.SelectedItem = "Dolby Pro Logic II";
-                    //    }
-                    //}
                     break;
                 case "drp_audioMix":
-                    SetBitrate();
+                    SetBitrate(track.Bitrate);
 
                     if (drp_audioMix.SelectedItem != null)
                     {
@@ -342,8 +334,8 @@ namespace Handbrake.Controls
                     drp_audioTrack.SelectedItem = track.ScannedTrack;
                     drp_audioEncoder.SelectedItem = EnumHelper<AudioEncoder>.GetDescription(track.Encoder);
                     drp_audioMix.SelectedItem = EnumHelper<Mixdown>.GetDescription(track.MixDown);
-                    drp_audioSample.SelectedItem = track.SampleRate;
-                    drp_audioBitrate.SelectedItem = track.Bitrate;
+                    drp_audioSample.SelectedItem = track.SampleRateDisplayValue;
+                    drp_audioBitrate.SelectedItem = track.BitRateDisplayValue;
 
                     // Set the Advanced Control.
                     if (!advancedAudio.IsDisposed)
@@ -653,7 +645,10 @@ namespace Handbrake.Controls
         /// <summary>
         /// Set the bitrate dropdown
         /// </summary>
-        private void SetBitrate()
+        /// <param name="currentValue">
+        /// The current Value.
+        /// </param>
+        private void SetBitrate(int currentValue)
         {
             int max = 0;
             string defaultRate = "160";
@@ -725,8 +720,16 @@ namespace Handbrake.Controls
                 drp_audioBitrate.Items.Add("768");
             }
 
-            // Set the default bit-rate
-            drp_audioBitrate.SelectedItem = defaultRate;
+            // Set the Current Value, or default value if the value is out of bounds
+
+            if (currentValue <= max && currentValue != 0)
+            {
+                drp_audioBitrate.SelectedItem = currentValue.ToString();
+            }
+            else
+            {
+                drp_audioBitrate.SelectedItem = defaultRate;
+            }
         }
 
         /// <summary>

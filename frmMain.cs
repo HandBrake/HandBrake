@@ -589,8 +589,7 @@ namespace Handbrake
 
             // Now enable the save menu if the selected preset is a user preset
             if (treeView_presets.SelectedNode != null)
-                if (presetHandler.CheckIfPresetExists(treeView_presets.SelectedNode.Text))
-                    pmnu_saveChanges.Enabled = true;
+                    pmnu_saveChanges.Enabled = presetHandler.CanUpdatePreset(treeView_presets.SelectedNode.Text);
 
             treeView_presets.Select();
         }
@@ -674,7 +673,7 @@ namespace Handbrake
         /// <param name="e">
         /// The e.
         /// </param>
-        private void treeview_presets_mouseUp(object sender, MouseEventArgs e)
+        private void treeview_presets_mouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
                 treeView_presets.SelectedNode = treeView_presets.GetNodeAt(e.Location);
@@ -1140,7 +1139,7 @@ namespace Handbrake
                     return false;
                 }
             }
-        
+
 
             // Make sure we don't have a duplciate on the queue.
             if (this.queueProcessor.QueueManager.CheckForDestinationPathDuplicates(jobDestination))
