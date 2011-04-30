@@ -73,6 +73,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             {
                 this.scannedTrack = value;
                 this.OnPropertyChanged("ScannedTrack");
+                this.OnPropertyChanged("TrackDisplay");
             }
         }
 
