@@ -1,4 +1,4 @@
-﻿/*  PlistPresetHandler.cs $
+﻿/*  PlistUtility.cs $
     This file is part of the HandBrake source code.
     Homepage: <http://handbrake.fr/>.
     It may be used under the terms of the GNU General Public License. */
@@ -65,7 +65,7 @@ namespace HandBrake.ApplicationServices.Utilities
                             track.MixDown = Converters.GetAudioMixDown(value.Trim());
                             break;
                         case "AudioSamplerate":
-                            track.SampleRate = double.Parse(value);
+                            track.SampleRate = value == "Auto" ? 0 : double.Parse(value);
                             break;
                         case "AudioTrack":
                            //track.SourceTrack = value;
@@ -92,7 +92,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
                 switch (key)
                 {
-                    // Output Settings
+                        // Output Settings
                     case "FileFormat":
                         parsed.OutputFormat = Converters.GetFileFormat(value);
                         break;
@@ -106,7 +106,7 @@ namespace HandBrake.ApplicationServices.Utilities
                         parsed.IPod5GSupport = value == "1";
                         break;
 
-                    // Picture Settings
+                        // Picture Settings
                     case "PictureAutoCrop":
                         // Not used
                         break;
@@ -134,35 +134,38 @@ namespace HandBrake.ApplicationServices.Utilities
                     case "PicturePAR":
                         switch (value)
                         {
-                                
                             case "0":
                                 parsed.Anamorphic = Anamorphic.None;
                                 break;
                             default:
                                 parsed.Anamorphic = Anamorphic.Strict;
                                 break;
-                                case "2":
+                            case "2":
                                 parsed.Anamorphic = Anamorphic.Loose;
                                 break;
-                                case "3":
+                            case "3":
                                 parsed.Anamorphic = Anamorphic.Custom;
                                 break;
-
                         }
                         break;
 
-                    // Filters
+                        // Filters
                     case "PictureDeblock":
                         parsed.Deblock = int.Parse(value);
                         break;
                     case "PictureDecomb":
                         parsed.Decomb = Decomb.Off;
                         // Don't place custom here as it's handled in the filter panel
-                        if (value == "2") parsed.Decomb = Decomb.Default;
+                        if (value == "2")
+                        {
+                            parsed.Decomb = Decomb.Default;
+                        }
                         break;
                     case "PictureDecombCustom":
                         if (value != string.Empty)
+                        {
                             parsed.CustomDecomb = value;
+                        }
                         break;
                     case "PictureDecombDeinterlace":
                         // Not Used
@@ -173,7 +176,7 @@ namespace HandBrake.ApplicationServices.Utilities
                             case "0":
                                 parsed.Deinterlace = Deinterlace.Off;
                                 break;
-                            // Don't place custom here as it's handled in the filter panel
+                                // Don't place custom here as it's handled in the filter panel
                             case "2":
                                 parsed.Deinterlace = Deinterlace.Fast;
                                 break;
@@ -187,7 +190,9 @@ namespace HandBrake.ApplicationServices.Utilities
                         break;
                     case "PictureDeinterlaceCustom":
                         if (value != string.Empty)
+                        {
                             parsed.CustomDeinterlace = value;
+                        }
                         break;
                     case "PictureDenoise":
                         switch (value)
@@ -195,7 +200,7 @@ namespace HandBrake.ApplicationServices.Utilities
                             case "0":
                                 parsed.Denoise = Denoise.Off;
                                 break;
-                            // Don't place custom here as it's handled in the filter panel
+                                // Don't place custom here as it's handled in the filter panel
                             case "2":
                                 parsed.Denoise = Denoise.Weak;
                                 break;
@@ -210,26 +215,44 @@ namespace HandBrake.ApplicationServices.Utilities
                         break;
                     case "PictureDenoiseCustom":
                         if (value != string.Empty)
+                        {
                             parsed.CustomDenoise = value;
+                        }
                         break;
                     case "PictureDetelecine":
                         parsed.Detelecine = Detelecine.Off;
-                        if (value == "1") parsed.Detelecine = Detelecine.Default;
+                        if (value == "1")
+                        {
+                            parsed.Detelecine = Detelecine.Default;
+                        }
                         break;
                     case "PictureDetelecineCustom":
                         if (value != string.Empty)
+                        {
                             parsed.CustomDetelecine = value;
+                        }
                         break;
 
-                    // Video Tab
+                        // Video Tab
                     case "VideoAvgBitrate":
-                        parsed.VideoBitrate = int.Parse(value);
+                        if (!string.IsNullOrEmpty(value))
+                        {
+                            parsed.VideoBitrate = int.Parse(value);
+                        }
                         break;
                     case "VideoEncoder":
                         parsed.VideoEncoder = Converters.GetVideoEncoder(value);
                         break;
                     case "VideoFramerate":
-                        parsed.Framerate = int.Parse(value);
+
+                        if (value == "Same as source")
+                        {
+                            parsed.Framerate = null;
+                        }
+                        else if (!string.IsNullOrEmpty(value))
+                        {
+                            parsed.Framerate = int.Parse(value);
+                        }
                         break;
                     case "VideoGrayScale":
                         parsed.Grayscale = value == "1";
@@ -247,17 +270,17 @@ namespace HandBrake.ApplicationServices.Utilities
                         parsed.TwoPass = value == "1";
                         break;
 
-                    // Chapter Markers Tab
+                        // Chapter Markers Tab
                     case "ChapterMarkers":
                         parsed.IncludeChapterMarkers = value == "1";
                         break;
 
-                    // Advanced x264 tab
+                        // Advanced x264 tab
                     case "x264Option":
                         parsed.AdvancedEncoderOptions = value;
                         break;
 
-                    // Preset Information
+                        // Preset Information
                     case "PresetBuildNumber":
                         parsed.PresetBuildNumber = int.Parse(value);
                         break;

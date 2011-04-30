@@ -589,7 +589,7 @@ namespace Handbrake
 
             // Now enable the save menu if the selected preset is a user preset
             if (treeView_presets.SelectedNode != null)
-                    pmnu_saveChanges.Enabled = presetHandler.CanUpdatePreset(treeView_presets.SelectedNode.Text);
+                pmnu_saveChanges.Enabled = presetHandler.CanUpdatePreset(treeView_presets.SelectedNode.Text);
 
             treeView_presets.Select();
         }
@@ -634,7 +634,6 @@ namespace Handbrake
             treeView_presets.Select();
         }
 
-
         private void MnuSetDefaultPreset_Click(object sender, EventArgs e)
         {
             if (treeView_presets.SelectedNode != null)
@@ -648,7 +647,7 @@ namespace Handbrake
         }
 
         private void MnuImportPreset_Click(object sender, EventArgs e)
-        {
+        {         
             this.ImportPreset();
         }
 
@@ -800,22 +799,43 @@ namespace Handbrake
         /// </summary>
         private void ImportPreset()
         {
+            if (this.selectedTitle == null)
+            {
+                MessageBox.Show(
+                            "Please scan a source before trying to import a preset.",
+                            "Error",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                return;
+            }
+
             if (openPreset.ShowDialog() == DialogResult.OK)
             {
                 EncodeTask parsed = PlistPresetHandler.Import(openPreset.FileName);
-                if (presetHandler.CheckIfPresetExists(parsed.PresetName + " (Imported)"))
+                if (presetHandler.CheckIfPresetExists(parsed.PresetName))
                 {
+                    if (!presetHandler.CanUpdatePreset(parsed.PresetName))
+                    {
+                        MessageBox.Show(
+                            "You can not import a preset with the same name as a built-in preset.",
+                            "Error",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                        return;
+                    }
+
                     DialogResult result =
                         MessageBox.Show("This preset appears to already exist. Would you like to overwrite it?",
                                         "Overwrite preset?",
                                         MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
                     {
+
                         PresetLoader.LoadPreset(this, parsed, parsed.PresetName);
 
                         Preset preset = new Preset
                             {
-                                Name = parsed.PresetName + " (Imported)",
+                                Name = parsed.PresetName,
                                 Query = QueryGenerator.GenerateFullQuery(this),
                                 CropSettings = parsed.UsesPictureSettings
                             };
@@ -829,16 +849,17 @@ namespace Handbrake
 
                     Preset preset = new Preset
                     {
-                        Name = parsed.PresetName + " (Imported)",
+                        Name = parsed.PresetName,
                         Query = QueryGenerator.GenerateFullQuery(this),
-                        CropSettings = parsed.UsesPictureSettings
+                        CropSettings = parsed.UsesPictureSettings,
                     };
 
                     if (presetHandler.Add(preset))
                     {
-                        TreeNode preset_treeview = new TreeNode(parsed.PresetName + " (Imported)")
+                        TreeNode preset_treeview = new TreeNode(parsed.PresetName)
                                                        {
-                                                           ForeColor = Color.Black
+                                                           ForeColor = Color.Black,
+                                                           Tag = preset,
                                                        };
                         treeView_presets.Nodes.Add(preset_treeview);
                     }
@@ -851,6 +872,16 @@ namespace Handbrake
         /// </summary>
         private void ExportPreset()
         {
+            if (this.selectedTitle == null)
+            {
+                MessageBox.Show(
+                            "Please scan a source before trying to export a preset.",
+                            "Error",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                return;
+            }
+
             SaveFileDialog savefiledialog = new SaveFileDialog { Filter = "plist|*.plist" };
 
             if (treeView_presets.SelectedNode != null)
