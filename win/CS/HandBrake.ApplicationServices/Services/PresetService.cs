@@ -294,6 +294,20 @@ namespace HandBrake.ApplicationServices.Services
             return name == string.Empty || this.presets.Any(item => item.Name == name);
         }
 
+        /// <summary>
+        /// Returns a value if the preset can be updated / resaved
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <returns>
+        /// True if it's not a built-in preset, false otherwise.
+        /// </returns>
+        public bool CanUpdatePreset(string name)
+        {
+            return this.presets.Where(preset => preset.Name == name).Any(preset => preset.IsBuildIn == false);
+        }
+
         #endregion
 
         #region Private Helpers
