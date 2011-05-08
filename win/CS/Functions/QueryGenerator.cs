@@ -27,6 +27,10 @@ namespace Handbrake.Functions
     {
         private static readonly IUserSettingService UserSettingService = new UserSettingService();
 
+        /// <summary>
+        /// The Culture
+        /// </summary>
+        private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
 
         public static string GenerateQueryForPreset(frmMain mainWindow, QueryPictureSettingsMode mode, bool filters, int width, int height)
         {
@@ -407,13 +411,13 @@ namespace Handbrake.Functions
                 samplerates += string.IsNullOrEmpty(samplerates) ? rate : string.Format(",{0}", rate);
 
                 // Audio Bitrates (-B)
-                bitrates += string.IsNullOrEmpty(bitrates) ? audioTrack.Bitrate.ToString() : string.Format(",{0}", audioTrack.Bitrate);
+                bitrates += string.IsNullOrEmpty(bitrates) ? audioTrack.Bitrate.ToString(Culture) : string.Format(",{0}", audioTrack.Bitrate);
 
                 // Audio DRC Values
-                drvValues += string.IsNullOrEmpty(drvValues) ? audioTrack.DRC.ToString() : string.Format(",{0}", audioTrack.DRC);
+                drvValues += string.IsNullOrEmpty(drvValues) ? audioTrack.DRC.ToString(Culture) : string.Format(",{0}", audioTrack.DRC.ToString(Culture));
 
                 // Audio Gain Control
-                gainValues += string.IsNullOrEmpty(gainValues) ? audioTrack.Gain.ToString() : string.Format(",{0}", audioTrack.Gain);
+                gainValues += string.IsNullOrEmpty(gainValues) ? audioTrack.Gain.ToString(Culture) : string.Format(",{0}", audioTrack.Gain.ToString(Culture));
             }
 
             return string.Format(" -a {0} -E {1} -B {2} -6 {3} -R {4} -D {5} --gain={6}", tracks, encoders, bitrates, mixdowns, samplerates, drvValues, gainValues);
