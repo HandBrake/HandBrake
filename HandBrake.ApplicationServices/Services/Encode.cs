@@ -28,11 +28,6 @@ namespace HandBrake.ApplicationServices.Services
         #region Private Variables
 
         /// <summary>
-        /// The User Setting Service
-        /// </summary>
-        private IUserSettingService userSettingService = new UserSettingService();
-
-        /// <summary>
         /// The Log Buffer
         /// </summary>
         private StringBuilder logBuffer;
@@ -67,6 +62,11 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         StringBuilder header = GeneralUtilities.CreateCliLogHeader(null);
 
+        /// <summary>
+        /// The Start time of the current Encode;
+        /// </summary>
+        private DateTime startTime;
+
         #endregion
 
         /// <summary>
@@ -100,11 +100,6 @@ namespace HandBrake.ApplicationServices.Services
         #region Properties
 
         /// <summary>
-        /// Gets or sets The HB Process
-        /// </summary>
-        protected Process HbProcess { get; set; }
-
-        /// <summary>
         /// Gets a value indicating whether IsEncoding.
         /// </summary>
         public bool IsEncoding { get; private set; }
@@ -115,10 +110,15 @@ namespace HandBrake.ApplicationServices.Services
         public string ActivityLog
         {
             get
-            {   
+            {
                 return string.IsNullOrEmpty(this.logBuffer.ToString()) ? header + "No log data available..." : header + this.logBuffer.ToString();
             }
         }
+
+        /// <summary>
+        /// Gets or sets The HB Process
+        /// </summary>
+        protected Process HbProcess { get; set; }
 
         #endregion
 
@@ -189,6 +189,8 @@ namespace HandBrake.ApplicationServices.Services
                 this.HbProcess = new Process { StartInfo = cliStart };
 
                 this.HbProcess.Start();
+
+                this.startTime = DateTime.Now;
 
                 if (enableLogging)
                 {
@@ -529,18 +531,21 @@ namespace HandBrake.ApplicationServices.Services
                 EstimatedTimeLeft = Converters.EncodeToTimespan(timeRemaining),
                 PercentComplete = percentComplete,
                 Task = currentTask,
-                TaskCount = taskCount
+                TaskCount = taskCount,
+                ElapsedTime = DateTime.Now - this.startTime,
             };
 
             if (this.EncodeStatusChanged != null)
+            {
                 this.EncodeStatusChanged(this, eventArgs);
+            }
 
-            if (windowsSeven.IsWindowsSeven)
+            if (this.windowsSeven.IsWindowsSeven)
             {
                 int percent;
                 int.TryParse(Math.Round(percentComplete).ToString(), out percent);
 
-                windowsSeven.SetTaskBarProgress(percent);
+                this.windowsSeven.SetTaskBarProgress(percent);
             }
         }
 

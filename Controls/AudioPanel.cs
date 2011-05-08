@@ -412,6 +412,12 @@ namespace Handbrake.Controls
         private void RemoveAudioTrack_Click(object sender, EventArgs e)
         {
             RemoveTrack();
+
+            if (this.AudioTracks.Count == 0)
+            {
+                drp_audioMix.Enabled =
+                    drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = true;
+            }
         }
 
         #endregion

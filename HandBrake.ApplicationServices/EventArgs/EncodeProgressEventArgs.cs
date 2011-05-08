@@ -41,5 +41,10 @@ namespace HandBrake.ApplicationServices.EventArgs
         /// Gets or sets TaskCount.
         /// </summary>
         public int TaskCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets ElapsedTime.
+        /// </summary>
+        public TimeSpan ElapsedTime { get; set; }
     }
 }

@@ -46,6 +46,8 @@ namespace Handbrake
 
         private readonly IUserSettingService userSettingService = new UserSettingService();
 
+        private DateTime startTime;
+    
         /// <summary>
         /// Initializes a new instance of the <see cref="frmQueue"/> class.
         /// </summary>
@@ -136,11 +138,14 @@ namespace Handbrake
 
             lbl_encodeStatus.Text =
                 string.Format(
-                "Encoding: Pass {0} of {1}, {2:00.00}% Time Remaining: {3}",
+                "Encoding: Pass {0} of {1},  {2:00.00}%,  Time Remaining: {3},  Elapsed: {4:hh\\:mm\\:ss}",
                 e.Task,
                 e.TaskCount,
                 e.PercentComplete,
-                e.EstimatedTimeLeft);
+                e.EstimatedTimeLeft,
+                e.ElapsedTime);
+
+            UpdateStatusLabel();
         }
 
         /// <summary>
@@ -224,6 +229,7 @@ namespace Handbrake
             if (!queue.IsProcessing)
             {
                 SetUiEncodeStarted();
+                startTime = DateTime.Now;
             }
 
             lbl_encodeStatus.Text = "Encoding ...";
@@ -242,6 +248,7 @@ namespace Handbrake
         private void BtnPauseClick(object sender, EventArgs e)
         {
             queue.Pause();
+       
             MessageBox.Show(
                 "No further items on the queue will start. The current encode process will continue until it is finished. \nClick 'Encode' when you wish to continue encoding the queue.",
                 "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -309,7 +316,7 @@ namespace Handbrake
             lbl_dest.Text = "-";
             lbl_encodeOptions.Text = "-";
 
-            lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
+            UpdateStatusLabel();
         }
 
         /// <summary>
@@ -348,22 +355,7 @@ namespace Handbrake
                 item.SubItems.Add(chapters); // Chapters
                 item.SubItems.Add(queueItem.Source); // Source
                 item.SubItems.Add(queueItem.Destination); // Destination
-
-                switch (parsed.VideoEncoder)
-                {
-                    case VideoEncoder.FFMpeg:
-                        item.SubItems.Add("MPEG-4 (FFmpeg)");
-                        break;
-                    default:
-                    case VideoEncoder.X264:
-                        item.SubItems.Add("H.264 (x264)");
-                        break;
-                    case VideoEncoder.Theora:
-                        item.SubItems.Add("VP3 (Theroa)");
-                        break;
-                }
-
-                 // Video
+                item.SubItems.Add(EnumHelper<VideoEncoder>.GetDescription(parsed.VideoEncoder));
 
                 // Display The Audio Track Information
                 string audio = string.Empty;
@@ -392,7 +384,28 @@ namespace Handbrake
             }
 
             RedrawQueue();
-            lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
+            UpdateStatusLabel();
+        }
+
+        private void UpdateStatusLabel()
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new UpdateHandler(UpdateStatusLabel));
+                return;
+            }
+            TimeSpan span = DateTime.Now - startTime;
+
+            if (queue.IsProcessing)
+            {
+                lbl_encodesPending.Text = string.Format(
+                "{0} encodes(s) pending, Time Elasped {1:hh\\:mm\\:ss}", list_queue.Items.Count, span);
+            } 
+            else
+            {
+                lbl_encodesPending.Text = string.Format(
+                "{0} encodes(s) pending", list_queue.Items.Count);
+            }
         }
 
         /// <summary>

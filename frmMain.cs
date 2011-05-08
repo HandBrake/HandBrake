@@ -2373,13 +2373,15 @@ namespace Handbrake
                 return;
             }
 
+
             lbl_encode.Text =
                 string.Format(
-                "{0:00.00}%,  FPS: {1:000.0},  Avg FPS: {2:000.0},  Time Remaining: {3},  Encode(s) Pending {4}",
+                "{0:00.00}%,  FPS: {1:000.0},  Avg FPS: {2:000.0},  Time Remaining: {3},  Elapsed: {4:hh\\:mm\\:ss},  Pending Jobs {5}",
                 e.PercentComplete,
                 e.CurrentFrameRate,
                 e.AverageFrameRate,
                 e.EstimatedTimeLeft,
+                e.ElapsedTime,
                 this.queueProcessor.QueueManager.Count);
 
             ProgressBarStatus.Value = (int)Math.Round(e.PercentComplete);
