@@ -73,11 +73,6 @@ namespace Handbrake.ToolWindows
                 tb_drc.Value = drcCalculated;
                 lbl_drc.Text = track.DRC.ToString(Culture);
                 tb_drc.Enabled = track.TrackDisplay.Contains("(AC3)");
-
-                if (!tb_drc.Enabled)
-                {
-                    Console.WriteLine("test");
-                }
             }
         }
 
