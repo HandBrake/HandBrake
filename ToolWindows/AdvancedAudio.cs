@@ -20,7 +20,7 @@ namespace Handbrake.ToolWindows
         private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
 
         /// <summary>
-        /// The Advanced Audio Panel
+        /// Initializes a new instance of the <see cref="AdvancedAudio"/> class. 
         /// </summary>
         public AdvancedAudio()
         {
@@ -71,9 +71,13 @@ namespace Handbrake.ToolWindows
                     drcValue = ((track.DRC * 10) + 1) - 10;
                 int.TryParse(drcValue.ToString(Culture), out drcCalculated);
                 tb_drc.Value = drcCalculated;
-                lbl_drc.Text = track.DRC.ToString();
+                lbl_drc.Text = track.DRC.ToString(Culture);
                 tb_drc.Enabled = track.TrackDisplay.Contains("(AC3)");
 
+                if (!tb_drc.Enabled)
+                {
+                    Console.WriteLine("test");
+                }
             }
         }
 
@@ -140,7 +144,7 @@ namespace Handbrake.ToolWindows
             else
                 value = ((tb_drc.Value - 1) / 10.0) + 1;
 
-            lbl_drc.Text = value.ToString();
+            lbl_drc.Text = value.ToString(Culture);
             track.DRC = value;
         }
     }

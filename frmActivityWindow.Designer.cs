@@ -75,7 +75,7 @@ namespace Handbrake
             // 
             this.mnu_copy_log.Image = global::Handbrake.Properties.Resources.copy;
             this.mnu_copy_log.Name = "mnu_copy_log";
-            this.mnu_copy_log.Size = new System.Drawing.Size(253, 22);
+            this.mnu_copy_log.Size = new System.Drawing.Size(177, 22);
             this.mnu_copy_log.Text = "Copy";
             this.mnu_copy_log.Click += new System.EventHandler(this.MnuCopyLogClick);
             // 
