@@ -673,7 +673,7 @@ namespace Handbrake
             // 
             // DVD_Open
             // 
-            this.DVD_Open.Description = "Select the \"VIDEO_TS\" folder from your DVD Drive.";
+            this.DVD_Open.Description = "Select a VIDEO_TS folder or a folder which contains a collection of video files.";
             // 
             // File_Open
             // 

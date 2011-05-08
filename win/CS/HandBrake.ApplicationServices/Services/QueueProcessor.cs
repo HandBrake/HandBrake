@@ -265,7 +265,9 @@ namespace HandBrake.ApplicationServices.Services
         {
             // Growl
             if (Properties.Settings.Default.GrowlQueue)
+            {
                 GrowlCommunicator.Notify("Queue Completed", "Put down that cocktail...\nyour Handbrake queue is done.");
+            }
 
             // Do something whent he encode ends.
             switch (Properties.Settings.Default.WhenCompleteAction)

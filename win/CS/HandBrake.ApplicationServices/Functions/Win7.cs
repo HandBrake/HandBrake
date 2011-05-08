@@ -23,9 +23,10 @@ namespace HandBrake.ApplicationServices.Functions
         /// </summary>
         public Win7()
         {
-            if (IsWindowsSeven)
+            if (this.IsWindowsSeven)
             {
-                windowsTaskbar = TaskbarManager.Instance;
+                this.windowsTaskbar = TaskbarManager.Instance;
+                this.windowsTaskbar.ApplicationId = "HandBrake";
             }
         }
 
@@ -36,8 +37,7 @@ namespace HandBrake.ApplicationServices.Functions
         {
             get
             {
-                OperatingSystem os = Environment.OSVersion;
-                return os.Version.Major >= 6 && os.Version.Minor >= 1;
+                return TaskbarManager.IsPlatformSupported;
             }
         }
 
@@ -49,12 +49,13 @@ namespace HandBrake.ApplicationServices.Functions
         /// </param>
         public void SetTaskBarProgress(int percentage)
         {
-            if (!IsWindowsSeven)
+            if (!this.IsWindowsSeven)
             {
                 return;
             }
-            windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-            windowsTaskbar.SetProgressValue(percentage, 100);
+
+            this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
+            this.windowsTaskbar.SetProgressValue(percentage, 100);
         }
 
         /// <summary>
@@ -62,12 +63,12 @@ namespace HandBrake.ApplicationServices.Functions
         /// </summary>
         public void SetTaskBarProgressToNoProgress()
         {
-            if (!IsWindowsSeven)
+            if (!this.IsWindowsSeven)
             {
                 return;
             }
 
-            windowsTaskbar.SetProgressState(TaskbarProgressBarState.NoProgress);
+            this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.NoProgress);
         }
     }
 }

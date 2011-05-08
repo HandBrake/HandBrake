@@ -12,6 +12,7 @@ namespace HandBrake.ApplicationServices.Services
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
+    using System.Windows;
     using System.Xml.Serialization;
 
     using HandBrake.ApplicationServices.Model;
@@ -253,6 +254,7 @@ namespace HandBrake.ApplicationServices.Services
                                 Description = string.Empty, // Maybe one day we will populate this.
                                 IsBuildIn = true
                             };
+
                         this.presets.Add(newPreset);
                     }
                 }
@@ -321,15 +323,22 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         private static void RecoverFromCorruptedPresetFile(string file)
         {
-            // Recover from Error.
-            if (File.Exists(file))
+            try
             {
-                string disabledFile = file + ".old";
-                File.Move(file, disabledFile);
+                // Recover from Error.
                 if (File.Exists(file))
                 {
-                    File.Delete(file);
+                    string disabledFile = file + ".old";
+                    File.Move(file, disabledFile);
+                    if (File.Exists(file))
+                    {
+                        File.Delete(file);
+                    }
                 }
+            } 
+            catch(IOException)
+            {
+                // Give up
             }
         }
 
@@ -341,7 +350,7 @@ namespace HandBrake.ApplicationServices.Services
             // First clear the Presets arraylists
             this.presets.Clear();
 
-            // Load in the users Presets from UserPresets.xml
+            // Load in the Presets from Presets.xml
             try
             {
                 if (File.Exists(this.builtInPresetFile))
