@@ -125,6 +125,9 @@ namespace HandBrake.ApplicationServices.Services
                 if (preset.Name == update.Name)
                 {
                     preset.Query = update.Query;
+
+                    // Update the presets file
+                    this.UpdatePresetFiles();
                     break;
                 }
             }
