@@ -39,7 +39,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             this.MixDown = Mixdown.DolbyProLogicII;
             this.SampleRate = 48;
             this.Bitrate = 160;
-            this.DRC = 1;
+            this.DRC = 0;
             this.ScannedTrack = new Audio();
         }
 
