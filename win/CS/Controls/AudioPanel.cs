@@ -51,7 +51,9 @@ namespace Handbrake.Controls
 
             drp_audioMix.SelectedItem = "Dolby Pro Logic II";
             drp_audioSample.SelectedIndex = 1;
-
+            drp_audioBitrate.SelectedItem = "160";
+            drp_audioEncoder.SelectedItem = "AAC (faac)";
+            
             drp_audioTrack.DataSource = this.ScannedTracks;
         }
 
