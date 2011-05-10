@@ -172,6 +172,11 @@ namespace Handbrake.Functions
         {
             string query = string.Empty;
 
+            if (string.IsNullOrEmpty(mainWindow.text_destination.Text))
+            {
+                return string.Empty;
+            }
+
             if (mode != QueryEncodeMode.Preview)
                 query += string.Format(" -o \"{0}\" ", mainWindow.text_destination.Text);
             else
@@ -411,7 +416,9 @@ namespace Handbrake.Functions
                 samplerates += string.IsNullOrEmpty(samplerates) ? rate : string.Format(",{0}", rate);
 
                 // Audio Bitrates (-B)
-                bitrates += string.IsNullOrEmpty(bitrates) ? audioTrack.Bitrate.ToString(Culture) : string.Format(",{0}", audioTrack.Bitrate);
+                bitrates += string.IsNullOrEmpty(bitrates)
+                                ? audioTrack.Bitrate.ToString(Culture)
+                                : string.Format(",{0}", audioTrack.Bitrate);
 
                 // Audio DRC Values
                 drvValues += string.IsNullOrEmpty(drvValues) ? audioTrack.DRC.ToString(Culture) : string.Format(",{0}", audioTrack.DRC.ToString(Culture));

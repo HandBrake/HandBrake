@@ -160,11 +160,13 @@ namespace Handbrake.Controls
                 if (track.Encoder == AudioEncoder.Ac3Passthrough)
                 {
                     track.MixDown = HandBrake.ApplicationServices.Model.Encoding.Mixdown.Ac3Passthrough;
+                    track.Bitrate = 0;
                 }
 
                 if (track.Encoder == AudioEncoder.DtsPassthrough)
                 {
                     track.MixDown = HandBrake.ApplicationServices.Model.Encoding.Mixdown.DtsPassthrough;
+                    track.Bitrate = 0;
                 }
 
                 this.audioTracks.Add(track);
