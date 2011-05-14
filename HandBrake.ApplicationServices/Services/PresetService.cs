@@ -279,11 +279,15 @@ namespace HandBrake.ApplicationServices.Services
             // Update built-in Presets if the built-in Presets belong to an older version.
             if (this.presets.Count != 0)
             {
-                if (this.presets[0].Version != Properties.Settings.Default.HandBrakeVersion)
+                List<Preset> preset = this.presets.Where(p => p.IsBuildIn).ToList();
+                if (preset.Count > 0)
                 {
-                    this.UpdateBuiltInPresets(string.Empty);
-                    return true;
-                }
+                    if (preset[0].Version != Properties.Settings.Default.HandBrakeVersion)
+                    {
+                        this.UpdateBuiltInPresets(string.Empty);
+                        return true;
+                    }
+                }       
             }
 
             return false;
