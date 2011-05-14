@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\EnumToDescConverter.cs" />
+    <Compile Include="Exceptions\GeneralApplicationException.cs" />
     <Compile Include="EventArgs\EncodeCompletedEventArgs.cs" />
     <Compile Include="EventArgs\EncodeProgressEventArgs.cs" />
     <Compile Include="EventArgs\QueueProgressEventArgs.cs" />

@@ -10,6 +10,7 @@ namespace HandBrake.ApplicationServices.Services
     using System.Windows.Forms;
 
     using HandBrake.ApplicationServices.EventArgs;
+    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -200,14 +201,17 @@ namespace HandBrake.ApplicationServices.Services
             if (!e.Successful)
             {
                 this.Pause();
-                MessageBox.Show(e.Exception + e.ErrorInformation);
+                throw new GeneralApplicationException(e.ErrorInformation, e.Exception.Message, e.Exception);
             }
-
-            // Post-Processing
-            SendToApplication(this.QueueManager.LastProcessedJob.Destination);
 
             // Handling Log Data 
             this.EncodeService.ProcessLogs(this.QueueManager.LastProcessedJob.Destination);
+
+            // Post-Processing
+            if (e.Successful)
+            {
+                SendToApplication(this.QueueManager.LastProcessedJob.Destination);
+            }
 
             // Move onto the next job.
             this.ProcessNextJob();

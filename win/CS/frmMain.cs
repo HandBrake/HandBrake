@@ -598,6 +598,16 @@ namespace Handbrake
 
         private void BtnAddPreset_Click(object sender, EventArgs e)
         {
+            if (this.selectedTitle == null)
+            {
+                MessageBox.Show(
+                            "Please scan a source before trying to import a preset.",
+                            "Error",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                return;
+            }
+
             Form preset = new frmAddPreset(this, presetHandler);
             if (preset.ShowDialog() == DialogResult.OK)
             {
@@ -846,7 +856,6 @@ namespace Handbrake
                 else
                 {
                     PresetLoader.LoadPreset(this, parsed, parsed.PresetName);
-
                     Preset preset = new Preset
                     {
                         Name = parsed.PresetName,
@@ -1138,39 +1147,6 @@ namespace Handbrake
                     MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
-
-            // Make sure the destination path exists.
-            if (!Directory.Exists(Path.GetDirectoryName(jobDestination)))
-            {
-                if (showError)
-                {
-                    DialogResult result =
-                        MessageBox.Show(
-                            string.Format("Destination Path does not exist.\nPath: {0}\n\n Would you like to create it now?", Path.GetDirectoryName(jobDestination)),
-                            "Warning",
-                            MessageBoxButtons.YesNo,
-                            MessageBoxIcon.Question);
-
-                    if (result == DialogResult.Yes)
-                    {
-                        // Make sure the path exists, attempt to create it if it doesn't
-                        string path = Directory.GetParent(jobDestination).ToString();
-                        if (!Directory.Exists(path))
-                        {
-                            Directory.CreateDirectory(path);
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
 
             // Make sure we don't have a duplciate on the queue.
             if (this.queueProcessor.QueueManager.CheckForDestinationPathDuplicates(jobDestination))

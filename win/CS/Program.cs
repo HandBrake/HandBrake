@@ -10,6 +10,7 @@ namespace Handbrake
     using System.IO;
     using System.Windows.Forms;
 
+    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Services;
 
     using Handbrake.Properties;
@@ -111,10 +112,24 @@ namespace Handbrake
         private static void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             try
-            {
+            {   
                 ExceptionWindow window = new ExceptionWindow();
-                window.Setup("An Unknown Error has occured.", e.ExceptionObject.ToString());
-                window.ShowDialog();              
+
+                if (e.ExceptionObject.GetType() == typeof(GeneralApplicationException))
+                {
+                    GeneralApplicationException applicationException = e.ExceptionObject as GeneralApplicationException;
+                    if (applicationException != null)
+                    {
+                        window.Setup(
+                            applicationException.Error + Environment.NewLine + applicationException.Solution,
+                            e.ExceptionObject + "\n\n ---- \n\n" + applicationException.ActualException);
+                    }
+                }
+                else
+                {
+                    window.Setup("An Unknown Error has occured.", e.ExceptionObject.ToString());
+                }
+                window.ShowDialog();      
             }
             catch (Exception)
             {
@@ -124,7 +139,6 @@ namespace Handbrake
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
-
         }
 
         public static int InstanceId;
