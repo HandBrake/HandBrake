@@ -14,6 +14,7 @@ namespace HandBrake.ApplicationServices.Services
     using System.Windows.Forms;
 
     using HandBrake.ApplicationServices.EventArgs;
+    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
@@ -95,6 +96,12 @@ namespace HandBrake.ApplicationServices.Services
         /// Encode process has progressed
         /// </summary>
         public event EncodeProgessStatus EncodeStatusChanged;
+
+        /// <summary>
+        /// An event for a failed encode.
+        /// </summary>
+        public event EventHandler EncodeFailed;
+
         #endregion
 
         #region Properties
@@ -139,27 +146,22 @@ namespace HandBrake.ApplicationServices.Services
             {
                 QueueTask queueTask = encodeQueueTask;
 
-                if (queueTask == null)
-                {
-                    throw new ArgumentNullException("QueueTask was null");
-                }
-
-                if (IsEncoding)
+                if (this.IsEncoding)
                 {
                     throw new Exception("HandBrake is already encodeing.");
                 }
 
-                IsEncoding = true;
+                this.IsEncoding = true;
 
                 if (enableLogging)
                 {
                     try
                     {
-                        SetupLogging(queueTask);
+                        this.SetupLogging(queueTask);
                     }
                     catch (Exception)
                     {
-                        IsEncoding = false;
+                        this.IsEncoding = false;
                         throw;
                     }
                 }
@@ -173,8 +175,15 @@ namespace HandBrake.ApplicationServices.Services
                 string path = Directory.GetParent(queueTask.Destination).ToString();
                 if (!Directory.Exists(path))
                 {
-                    // TODO - Better handle a directoryNotFound exception.
-                    Directory.CreateDirectory(path);
+                    try
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    catch (Exception)
+                    {
+                        throw new Exception(
+                            "Unable to create directory for the encoded output. Please verify the drive and path is correct.");
+                    }
                 }
 
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
@@ -194,12 +203,12 @@ namespace HandBrake.ApplicationServices.Services
 
                 if (enableLogging)
                 {
-                    this.HbProcess.ErrorDataReceived += HbProcErrorDataReceived;
+                    this.HbProcess.ErrorDataReceived += this.HbProcErrorDataReceived;
                     this.HbProcess.BeginErrorReadLine();
                 }
 
-                this.processId = HbProcess.Id;
-                this.processHandle = HbProcess.Handle;
+                this.processId = this.HbProcess.Id;
+                this.processHandle = this.HbProcess.Handle;
 
                 // Set the process Priority
                 if (this.processId != -1)
@@ -233,12 +242,16 @@ namespace HandBrake.ApplicationServices.Services
 
                 // Fire the Encode Started Event
                 if (this.EncodeStarted != null)
+                {
                     this.EncodeStarted(this, new EventArgs());
+                }
             }
             catch (Exception exc)
             {
                 if (this.EncodeCompleted != null)
-                    this.EncodeCompleted(this, new EncodeCompletedEventArgs(false, exc, "An Error has occured in EncodeService.Run()"));
+                {
+                    this.EncodeCompleted(this, new EncodeCompletedEventArgs(false, exc, "An Error occured when trying to encode this source. "));
+                }
             }
         }
 
@@ -275,12 +288,19 @@ namespace HandBrake.ApplicationServices.Services
             if (exc == null)
             {
                 if (this.EncodeCompleted != null)
+                {
                     this.EncodeCompleted(this, new EncodeCompletedEventArgs(true, null, string.Empty));
+                }
             }
             else
             {
                 if (this.EncodeCompleted != null)
-                    this.EncodeCompleted(this, new EncodeCompletedEventArgs(false, exc, "An Error has occured."));
+                {
+                    this.EncodeCompleted(
+                        this,
+                        new EncodeCompletedEventArgs(
+                            false, exc, "An Unknown Error has occured when trying to Stop this encode."));
+                }
             }
         }
 
