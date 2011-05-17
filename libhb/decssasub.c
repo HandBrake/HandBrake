@@ -549,8 +549,8 @@ static hb_buffer_t *ssa_decode_line_to_picture( hb_work_object_t * w, uint8_t *i
             int srcA = srcRgba[3];
             
             *dstY = (srcYuv >> 16) & 0xff;
-            *dstU = (srcYuv >> 8 ) & 0xff;
-            *dstV = (srcYuv >> 0 ) & 0xff;
+            *dstV = (srcYuv >> 8 ) & 0xff;
+            *dstU = (srcYuv >> 0 ) & 0xff;
             *dstA = srcA / 16;  // HB's max alpha value is 16
         }
         

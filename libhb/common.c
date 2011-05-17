@@ -1502,7 +1502,7 @@ hb_attachment_t *hb_attachment_copy(const hb_attachment_t *src)
 /**********************************************************************
  * hb_yuv2rgb
  **********************************************************************
- * Converts a YCbCr pixel to an RGB pixel.
+ * Converts a YCrCb pixel to an RGB pixel.
  * 
  * This conversion is lossy (due to rounding and clamping).
  * 
@@ -1515,12 +1515,12 @@ int hb_yuv2rgb(int yuv)
     int r, g, b;
 
     y  = (yuv >> 16) & 0xff;
-    Cb = (yuv >>  8) & 0xff;
-    Cr = (yuv      ) & 0xff;
+    Cr = (yuv >>  8) & 0xff;
+    Cb = (yuv      ) & 0xff;
 
-    r = 1.164 * (y - 16)                      + 2.018 * (Cb - 128);
-    g = 1.164 * (y - 16) - 0.813 * (Cr - 128) - 0.391 * (Cb - 128);
-    b = 1.164 * (y - 16) + 1.596 * (Cr - 128);
+    r = 1.164 * (y - 16)                      + 1.596 * (Cr - 128);
+    g = 1.164 * (y - 16) - 0.392 * (Cb - 128) - 0.813 * (Cr - 128);
+    b = 1.164 * (y - 16) + 2.017 * (Cb - 128);
     
     r = (r < 0) ? 0 : r;
     g = (g < 0) ? 0 : g;
@@ -1536,7 +1536,7 @@ int hb_yuv2rgb(int yuv)
 /**********************************************************************
  * hb_rgb2yuv
  **********************************************************************
- * Converts an RGB pixel to a YCbCr pixel.
+ * Converts an RGB pixel to a YCrCb pixel.
  * 
  * This conversion is lossy (due to rounding and clamping).
  * 
@@ -1564,7 +1564,7 @@ int hb_rgb2yuv(int rgb)
     Cb = (Cb > 255) ? 255 : Cb;
     Cr = (Cr > 255) ? 255 : Cr;
     
-    return (y << 16) | (Cb << 8) | Cr;
+    return (y << 16) | (Cr << 8) | Cb;
 }
 
 const char * hb_subsource_name( int source )
