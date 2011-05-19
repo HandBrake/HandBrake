@@ -91,7 +91,15 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 			[aDict setObject: [[anAudio mixdown] objectForKey: keyAudioMixdownName] forKey: [prefix stringByAppendingString: @"Mixdown"]];
 			[aDict setObject: [[anAudio sampleRate] objectForKey: keyAudioSampleRateName] forKey: [prefix stringByAppendingString: @"Samplerate"]];
 			[aDict setObject: [[anAudio bitRate] objectForKey: keyAudioBitrateName] forKey: [prefix stringByAppendingString: @"Bitrate"]];
-			[aDict setObject: [anAudio drc] forKey: [prefix stringByAppendingString: @"TrackDRCSlider"]];
+		
+			if ((HB_ACODEC_AC3 == [[[anAudio track] objectForKey: keyAudioInputCodec] intValue]) &&
+			    (HB_ACODEC_AC3_PASS != [[[anAudio codec] objectForKey: keyAudioCodec] intValue])) {
+				[aDict setObject: [anAudio drc] forKey: [prefix stringByAppendingString: @"TrackDRCSlider"]];
+			}
+			else {
+				// source isn't AC3 or output is passthru - the DRC dial is disabled so don't apply its value
+				[aDict setObject: [NSNumber numberWithInt:0] forKey: [prefix stringByAppendingString: @"TrackDRCSlider"]];
+			}
 		
 			prefix = [NSString stringWithFormat: @"JobAudio%d", counter + 1];
 			[aDict setObject: [[anAudio codec] objectForKey: keyAudioCodec] forKey: [prefix stringByAppendingString: @"Encoder"]];
