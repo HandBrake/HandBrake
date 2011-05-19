@@ -4655,11 +4655,11 @@ the user is using "Custom" settings by determining the sender*/
      * fFramerateVfrPfrCell*/
     if ([fVidRatePopUp indexOfSelectedItem] == 0) // We are Same as Source
     {
-        [fFramerateVfrPfrCell setTitle:@"Variable Framerate (VFR)"];
+        [fFramerateVfrPfrCell setTitle:@"Variable Framerate"];
     }
     else
     {
-        [fFramerateVfrPfrCell setTitle:@"Peak Framerate (PFR)"];
+        [fFramerateVfrPfrCell setTitle:@"Peak Framerate (VFR)"];
 
 
     }

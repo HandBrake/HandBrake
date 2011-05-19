@@ -733,7 +733,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 													<object class="NSButtonCell" id="329026312">
 														<int key="NSCellFlags">-2080244224</int>
 														<int key="NSCellFlags2">131072</int>
-														<string key="NSContents">Variable Framerate (VFR)</string>
+														<string key="NSContents">Variable Framerate</string>
 														<reference key="NSSupport" ref="26"/>
 														<reference key="NSControlView" ref="888819828"/>
 														<int key="NSTag">1</int>
@@ -748,7 +748,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 													<object class="NSButtonCell" id="995154792">
 														<int key="NSCellFlags">67239424</int>
 														<int key="NSCellFlags2">131072</int>
-														<string key="NSContents">Constant Framerate (CFR)</string>
+														<string key="NSContents">Constant Framerate</string>
 														<reference key="NSSupport" ref="26"/>
 														<reference key="NSControlView" ref="888819828"/>
 														<int key="NSButtonFlags">1211912703</int>
