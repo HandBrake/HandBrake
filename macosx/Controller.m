@@ -2871,15 +2871,11 @@ fWorkingCount = 0;
     
     /* Filters */
     
-    /* We only allow *either* Decomb or Deinterlace. So check for the PictureDecombDeinterlace key.
-     * also, older presets may not have this key, in which case we also check to see if that preset had  PictureDecomb
-     * specified, in which case we use decomb and ignore any possible Deinterlace settings as using both was less than
-     * sane.
-     */
+    /* We only allow *either* Decomb or Deinterlace. So check for the PictureDecombDeinterlace key. */
     [fPictureController setUseDecomb:1];
     [fPictureController setDecomb:0];
     [fPictureController setDeinterlace:0];
-    if ([[queueToApply objectForKey:@"PictureDecombDeinterlace"] intValue] == 1 || [[queueToApply objectForKey:@"PictureDecomb"] intValue] > 0)
+    if ([[queueToApply objectForKey:@"PictureDecombDeinterlace"] intValue] == 1)
     {
         /* we are using decomb */
         /* Decomb */
@@ -5692,15 +5688,11 @@ return YES;
         {
             /* Filters */
             
-            /* We only allow *either* Decomb or Deinterlace. So check for the PictureDecombDeinterlace key.
-             * also, older presets may not have this key, in which case we also check to see if that preset had  PictureDecomb
-             * specified, in which case we use decomb and ignore any possible Deinterlace settings as using both was less than
-             * sane.
-             */
+            /* We only allow *either* Decomb or Deinterlace. So check for the PictureDecombDeinterlace key. */
             [fPictureController setUseDecomb:1];
             [fPictureController setDecomb:0];
             [fPictureController setDeinterlace:0];
-            if ([[chosenPreset objectForKey:@"PictureDecombDeinterlace"] intValue] == 1 || [[chosenPreset objectForKey:@"PictureDecomb"] intValue] > 0)
+            if ([[chosenPreset objectForKey:@"PictureDecombDeinterlace"] intValue] == 1)
             {
                 /* we are using decomb */
                 /* Decomb */
