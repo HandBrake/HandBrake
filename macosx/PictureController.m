@@ -72,7 +72,6 @@
 - (IBAction) resizeInspectorForTab: (id)sender
 {
     NSRect frame = [[self window] frame];
-    NSPoint windowOrigin = [[self window] frame].origin;
     NSSize screenSize = [[[self window] screen] frame].size;
     NSPoint screenOrigin = [[[self window] screen] frame].origin;
     

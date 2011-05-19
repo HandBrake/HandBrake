@@ -1591,9 +1591,7 @@
 {   
     
     /* special case for scaleToScreen */
-    NSSize screenSize = [[[self window] screen] visibleFrame].size;
     NSSize areaSize = [fPictureViewArea frame].size;
-    NSSize pictureSize = [fPictureView frame].size;
     CGFloat viewSizeAspect = viewSize.width / viewSize.height;
     
     if (viewSize.width > areaSize.width || viewSize.height > areaSize.height)
@@ -1613,7 +1611,6 @@
     }
     
     [fPictureView setFrameSize:viewSize];
-    NSSize newAreaSize = [fPictureViewArea frame].size;
     
     
     // center it vertically and horizontally

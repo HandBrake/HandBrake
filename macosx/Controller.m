@@ -3013,7 +3013,6 @@ fWorkingCount = 0;
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
             [fSrcTitlePopUp indexOfSelectedItem] );
     hb_job_t * job = title->job;
-    hb_audio_config_t * audio;
     /* set job->angle for libdvdnav */
     job->angle = [fSrcAnglePopUp indexOfSelectedItem] + 1;
     /* Chapter selection */
@@ -4588,7 +4587,6 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction) videoEncoderPopUpChanged: (id) sender
 {
-    hb_job_t * job = fTitle->job;
     int videoEncoder = [[fVidEncoderPopUp selectedItem] tag];
     
     [fAdvancedOptions setHidden:YES];
@@ -4807,7 +4805,6 @@ the user is using "Custom" settings by determining the sender*/
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
             [fSrcTitlePopUp indexOfSelectedItem] );
     hb_job_t * job = title->job;
-    hb_audio_config_t * audio;
     /* For  hb_calc_bitrate in addition to the Target Size in MB out of the
      * Target Size Field, we also need the job info for the Muxer, the Chapters
      * as well as all of the audio track info.
