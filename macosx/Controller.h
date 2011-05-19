@@ -204,7 +204,6 @@ BOOL                        fIsDragging;
 	NSMutableArray               * UserPresets;
 	NSMutableArray               * UserPresetssortedArray;
 	NSMutableDictionary          * chosenPreset;
-    int                            curUserPresetChosenNum;
 	 
 	NSMutableDictionary          *presetHbDefault; // this is 1 in "Default" preset key
 	NSMutableDictionary          *presetUserDefault;// this is 2 in "Default" preset key

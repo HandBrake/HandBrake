@@ -2978,8 +2978,6 @@ fWorkingCount = 0;
         //[fPresetsOutlineView selectRow:[[queueToApply objectForKey:@"PresetIndexNum"] intValue]];
 		/* Change UI to show "Custom" settings are being used */
 		//[fPresetSelectedDisplay setStringValue: [[queueToApply objectForKey:@"PresetName"] stringValue]];
-        
-		curUserPresetChosenNum = nil;
 	}
     else
     {
@@ -2987,8 +2985,6 @@ fWorkingCount = 0;
 		[fPresetsOutlineView deselectRow:[fPresetsOutlineView selectedRow]];
 		/* Change UI to show "Custom" settings are being used */
 		[fPresetSelectedDisplay setStringValue: @"Custom"];
-        
-		//curUserPresetChosenNum = nil;
     }
     
     /* We need to set this bool back to NO, in case the user wants to do a scan */
@@ -3089,7 +3085,7 @@ fWorkingCount = 0;
     NSMutableArray *subtitlesArray = [[NSMutableArray alloc] initWithArray:[fSubtitlesDelegate getSubtitleArray] copyItems:YES];
     
     
-int subtitle = nil;
+int subtitle;
 int force;
 int burned;
 int def;
@@ -3588,7 +3584,7 @@ bool one_burned = FALSE;
  * to the source tracks position in title->list_subtitle.
  */
 
-int subtitle = nil;
+int subtitle;
 int force;
 int burned;
 int def;
@@ -4575,8 +4571,6 @@ the user is using "Custom" settings by determining the sender*/
 		[fPresetsOutlineView deselectRow:[fPresetsOutlineView selectedRow]];
 		/* Change UI to show "Custom" settings are being used */
 		[fPresetSelectedDisplay setStringValue: @"Custom"];
-
-		curUserPresetChosenNum = nil;
 	}
 [self calculateBitrate:nil];
 }
