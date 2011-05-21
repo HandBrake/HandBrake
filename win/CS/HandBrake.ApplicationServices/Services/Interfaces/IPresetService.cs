@@ -15,9 +15,9 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
     public interface IPresetService
     {
         /// <summary>
-        /// Gets or sets a Collection of presets.
+        /// Gets a Collection of presets.
         /// </summary>
-        ObservableCollection<Preset> Presets { get; set; }
+        ObservableCollection<Preset> Presets { get; }
 
         /// <summary>
         /// Add a new preset to the system

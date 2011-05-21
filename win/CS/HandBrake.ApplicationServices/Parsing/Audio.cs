@@ -6,9 +6,6 @@
 namespace HandBrake.ApplicationServices.Parsing
 {
     using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Text.RegularExpressions;
 
     /// <summary>
     /// An object represending an AudioTrack associated with a Title, in a DVD
