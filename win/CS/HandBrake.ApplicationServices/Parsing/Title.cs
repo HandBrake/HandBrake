@@ -193,7 +193,7 @@ namespace HandBrake.ApplicationServices.Parsing
 
             thisTitle.Chapters.AddRange(Chapter.ParseList(output));
 
-            thisTitle.AudioTracks.AddRange(Audio.ParseList(output));
+            thisTitle.AudioTracks.AddRange(AudioHelper.ParseList(output));
 
             thisTitle.Subtitles.AddRange(Subtitle.ParseList(output));
 

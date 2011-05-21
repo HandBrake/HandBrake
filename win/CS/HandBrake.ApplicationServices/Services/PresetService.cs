@@ -267,8 +267,20 @@ namespace HandBrake.ApplicationServices.Services
                         this.presets.Add(newPreset);
                     }
                 }
+
+                // Verify we have presets.
+                if (this.presets.Count == 0)
+                {
+                    throw new GeneralApplicationException("Failed to load built-in presets.", "Restarting HandBrake may resolve this issue", null);
+                }
+
                 presetInput.Close();
                 presetInput.Dispose();
+            } 
+            else
+            {
+                // Something really bad must have happened if the file is missing.
+                throw new GeneralApplicationException("Preset Export Failed. Unable to load in Presets.", "Please restart HandBrake", null);
             }
 
             // Finally, Create a new or update the current Presets.xml file
