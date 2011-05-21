@@ -15,6 +15,7 @@ namespace HandBrake.ApplicationServices.Services
     using System.Windows;
     using System.Xml.Serialization;
 
+    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
@@ -372,10 +373,11 @@ namespace HandBrake.ApplicationServices.Services
                     reader.Close();
                 }
             }
-            catch (Exception)
+            catch (Exception exc)
             {
                 RecoverFromCorruptedPresetFile(this.builtInPresetFile);
                 this.UpdateBuiltInPresets(string.Empty);
+                throw new GeneralApplicationException("HandBrake has detected corruption in the presets file and has attempted to rebuild this file.", "Please restart HandBrake before continuing.", exc);              
             }
 
             // Load in the users Presets from UserPresets.xml
@@ -393,9 +395,10 @@ namespace HandBrake.ApplicationServices.Services
                     reader.Close();
                 }
             }
-            catch (Exception)
+            catch (Exception exc)
             {
                 RecoverFromCorruptedPresetFile(this.userPresetFile);
+                throw new GeneralApplicationException("HandBrake has detected corruption in the presets file and has attempted to rebuild this file.", "Please restart HandBrake before continuing.", exc);    
             }
         }
 
@@ -422,7 +425,7 @@ namespace HandBrake.ApplicationServices.Services
             }
             catch (Exception exc)
             {
-                throw new Exception("Unable to write to the file. Please make sure the location has the correct permissions for file writing.\n Error Information: \n\n", exc);
+                throw new GeneralApplicationException("Unable to write to the presets file.", "The details section below may indicate why this error has occured.", exc);
             }
         }
 
