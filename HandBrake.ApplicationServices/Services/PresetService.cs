@@ -11,6 +11,7 @@ namespace HandBrake.ApplicationServices.Services
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Text.RegularExpressions;
     using System.Windows;
     using System.Xml.Serialization;
@@ -222,55 +223,56 @@ namespace HandBrake.ApplicationServices.Services
 
             if (File.Exists(presetsPath))
             {
-                StreamReader presetInput = new StreamReader(presetsPath);
-
-                string category = String.Empty;
-
-                while (!presetInput.EndOfStream)
+                using (StreamReader presetInput = new StreamReader(presetsPath))
                 {
-                    string line = presetInput.ReadLine();
+                    StringBuilder contents = new StringBuilder();
 
-                    // Found the beginning of a preset block 
-                    if (line != null && line.Contains("<") && !line.Contains("<<"))
+                    string category = String.Empty;
+
+                    while (!presetInput.EndOfStream)
                     {
-                        category = line.Replace("<", string.Empty).Trim();
-                    }
+                        string line = presetInput.ReadLine();
+                        contents.AppendLine(line);
 
-                    // Found a preset
-                    if (line != null && line.Contains("+"))
-                    {
-                        Regex r = new Regex("(:  )"); // Split on hyphens. 
-                        string[] presetName = r.Split(line);
-
-                        bool pic = false;
-                        if (presetName[2].Contains("crop"))
+                        // Found the beginning of a preset block )
+                        if (line != null && line.Contains("<") && !line.Contains("<<"))
                         {
-                            pic = true;
+                            category = line.Replace("<", string.Empty).Trim();
                         }
 
-                        Preset newPreset = new Preset
-                            {
-                                Category = category,
-                                Name = presetName[0].Replace("+", string.Empty).Trim(),
-                                Query = presetName[2],
-                                Version = Properties.Settings.Default.HandBrakeVersion,
-                                CropSettings = pic,
-                                Description = string.Empty, // Maybe one day we will populate this.
-                                IsBuildIn = true
-                            };
+                        // Found a preset
+                        if (line != null && line.Contains("+"))
+                        {
+                            Regex r = new Regex("(:  )"); // Split on hyphens. 
+                            string[] presetName = r.Split(line);
 
-                        this.presets.Add(newPreset);
+                            bool pic = false;
+                            if (presetName[2].Contains("crop"))
+                            {
+                                pic = true;
+                            }
+
+                            Preset newPreset = new Preset
+                                {
+                                    Category = category,
+                                    Name = presetName[0].Replace("+", string.Empty).Trim(),
+                                    Query = presetName[2],
+                                    Version = Properties.Settings.Default.HandBrakeVersion,
+                                    CropSettings = pic,
+                                    Description = string.Empty, // Maybe one day we will populate this.
+                                    IsBuildIn = true
+                                };
+
+                            this.presets.Add(newPreset);
+                        }
+                    }
+
+                    // Verify we have presets.
+                    if (this.presets.Count == 0)
+                    {
+                        throw new GeneralApplicationException("Failed to load built-in presets.", "Restarting HandBrake may resolve this issue", new Exception(contents.ToString()));
                     }
                 }
-
-                // Verify we have presets.
-                if (this.presets.Count == 0)
-                {
-                    throw new GeneralApplicationException("Failed to load built-in presets.", "Restarting HandBrake may resolve this issue", null);
-                }
-
-                presetInput.Close();
-                presetInput.Dispose();
             } 
             else
             {
