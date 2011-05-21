@@ -70,18 +70,13 @@ namespace HandBrake.ApplicationServices.Services
         }
 
         /// <summary>
-        /// Gets or sets a Collection of presets.
+        /// Gets a Collection of presets.
         /// </summary>
         public ObservableCollection<Preset> Presets
         {
             get
             {
                 return this.presets;
-            }
-
-            set
-            {
-                this.presets = value;
             }
         }
 

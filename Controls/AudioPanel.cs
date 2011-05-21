@@ -43,7 +43,7 @@ namespace Handbrake.Controls
 
             this.ScannedTracks = new BindingList<Audio>
                 {
-                    Audio.NoneFound 
+                    AudioHelper.NoneFound 
                 };
 
             this.audioList.AutoGenerateColumns = false;
@@ -191,7 +191,7 @@ namespace Handbrake.Controls
             {
                 audioList.Rows.Clear();
                 this.ScannedTracks.Clear();
-                this.ScannedTracks.Add(Audio.NoneFound);
+                this.ScannedTracks.Add(AudioHelper.NoneFound);
                 this.drp_audioTrack.Refresh();
                 drp_audioTrack.SelectedIndex = 0;
                 return;
@@ -499,7 +499,7 @@ namespace Handbrake.Controls
         /// </summary>
         private void AutomaticTrackSelection()
         {
-            if (drp_audioTrack.SelectedItem.ToString() == Audio.NoneFound.Description)
+            if (drp_audioTrack.SelectedItem.ToString() == AudioHelper.NoneFound.Description)
             {
                 this.AudioTracks.Clear();
                 return;
