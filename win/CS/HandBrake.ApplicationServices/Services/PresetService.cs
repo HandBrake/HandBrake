@@ -64,7 +64,7 @@ namespace HandBrake.ApplicationServices.Services
             // If the preset file doesn't exist. Create it.
             if (!File.Exists(this.builtInPresetFile))
             {
-                this.UpdateBuiltInPresets(string.Empty);
+                this.UpdateBuiltInPresets();
             }
 
             this.LoadPresets();
@@ -204,10 +204,10 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="cliPath">
         /// The Path to the CLI, leave blank for current folder.
         /// </param>
-        public void UpdateBuiltInPresets(string cliPath)
+        public void UpdateBuiltInPresets()
         {
             // Create a new tempory file and execute the CLI to get the built in Presets.
-            string handbrakeCLIPath = Path.Combine(cliPath, "HandBrakeCLI.exe");
+            string handbrakeCLIPath = Path.Combine(System.Windows.Forms.Application.StartupPath, "HandBrakeCLI.exe");
             string presetsPath = Path.Combine(Path.GetTempPath(), "temp_presets.dat");
             string strCmdLine = String.Format(@"cmd /c """"{0}"" --preset-list >""{1}"" 2>&1""", handbrakeCLIPath, presetsPath);
 
@@ -299,7 +299,7 @@ namespace HandBrake.ApplicationServices.Services
                 {
                     if (preset[0].Version != Properties.Settings.Default.HandBrakeVersion)
                     {
-                        this.UpdateBuiltInPresets(string.Empty);
+                        this.UpdateBuiltInPresets();
                         return true;
                     }
                 }       
@@ -390,7 +390,7 @@ namespace HandBrake.ApplicationServices.Services
             catch (Exception exc)
             {
                 RecoverFromCorruptedPresetFile(this.builtInPresetFile);
-                this.UpdateBuiltInPresets(string.Empty);
+                this.UpdateBuiltInPresets();
                 throw new GeneralApplicationException("HandBrake has detected corruption in the presets file and has attempted to rebuild this file.", "Please restart HandBrake before continuing.", exc);              
             }
 
