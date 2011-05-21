@@ -74,7 +74,7 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <param name="cliPath">
         /// The Path to the CLI, leave blank for current folder.
         /// </param>
-        void UpdateBuiltInPresets(string cliPath);
+        void UpdateBuiltInPresets();
 
         /// <summary>
         /// Check if the built in Presets stored are not out of date.

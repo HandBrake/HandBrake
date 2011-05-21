@@ -668,7 +668,7 @@ namespace Handbrake
 
         private void MnuResetBuiltInPresets_Click(object sender, EventArgs e)
         {
-            presetHandler.UpdateBuiltInPresets(string.Empty);
+            presetHandler.UpdateBuiltInPresets();
             LoadPresetPanel();
             treeView_presets.ExpandAll();
         }
