@@ -60,7 +60,12 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         public PresetService()
         {
-            // this.Presets = CollectionViewSource.GetDefaultView(this.presets);
+            // If the preset file doesn't exist. Create it.
+            if (!File.Exists(this.builtInPresetFile))
+            {
+                this.UpdateBuiltInPresets(string.Empty);
+            }
+
             this.LoadPresets();
         }
 
@@ -371,7 +376,7 @@ namespace HandBrake.ApplicationServices.Services
                     }
 
                     reader.Close();
-                }
+                } 
             }
             catch (Exception exc)
             {

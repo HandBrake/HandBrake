@@ -92,12 +92,6 @@ namespace Handbrake
                 if (!Directory.Exists(logDir))
                     Directory.CreateDirectory(logDir);
 
-                if (!File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\presets.xml")))
-                {
-                    PresetService x = new PresetService();
-                    x.UpdateBuiltInPresets(string.Empty);
-                }
-
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new frmMain(args));
