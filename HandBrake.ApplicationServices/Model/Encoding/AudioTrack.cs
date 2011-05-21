@@ -5,6 +5,9 @@
 
 namespace HandBrake.ApplicationServices.Model.Encoding
 {
+    using System;
+    using System.ComponentModel;
+
     using HandBrake.ApplicationServices.Parsing;
 
     /// <summary>
@@ -26,6 +29,8 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         /// <summary>
         /// The Scanned Audio Track
         /// </summary>
+        [NonSerialized]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         private Audio scannedTrack;
         #endregion
 
@@ -62,6 +67,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         /// <summary>
         /// Gets or sets the Scanned Audio Tracks
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Audio ScannedTrack
         {
             get
