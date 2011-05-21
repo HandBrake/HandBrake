@@ -95,7 +95,6 @@ static int    crop[4]     = { -1,-1,-1,-1 };
 static int    vrate       = 0;
 static float  vquality    = -1.0;
 static int    vbitrate    = 0;
-static int    size        = 0;
 static int    mux         = 0;
 static int    anamorphic_mode  = 0;
 static int    modulus       = 0;
@@ -1962,13 +1961,6 @@ static int HandleEvents( hb_handle_t * h )
                 i++;
             }
 
-            if( size )
-            {
-                job->vbitrate = hb_calc_bitrate( job, size );
-                fprintf( stderr, "Calculated bitrate: %d kbps\n",
-                         job->vbitrate );
-            }
-
             if( subtracks )
             {
                 char * token;
@@ -2498,7 +2490,6 @@ static void ShowHelp()
     "                            same style as mencoder (x264 and ffmpeg only):\n"
     "                            option1=value1:option2=value2\n"
     "    -q, --quality <number>  Set video quality\n"
-    "    -S, --size <MB>         Set target size\n"
     "    -b, --vb <kb/s>         Set video bitrate (default: 1000)\n"
     "    -2, --two-pass          Use two-pass mode\n"
     "    -T, --turbo             When using 2-pass use the turbo options\n"
@@ -2885,7 +2876,6 @@ static int ParseOptions( int argc, char ** argv )
 
             { "vb",          required_argument, NULL,    'b' },
             { "quality",     required_argument, NULL,    'q' },
-            { "size",        required_argument, NULL,    'S' },
             { "ab",          required_argument, NULL,    'B' },
             { "rate",        required_argument, NULL,    'r' },
             { "arate",       required_argument, NULL,    'R' },
@@ -3293,9 +3283,6 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'q':
                 vquality = atof( optarg );
-                break;
-            case 'S':
-                size = atoi( optarg );
                 break;
             case 'B':
                 if( optarg != NULL )
