@@ -8,6 +8,8 @@ using System.Windows.Forms;
 
 namespace Handbrake
 {
+    using System.Collections.ObjectModel;
+
     partial class frmMain
     {
         /// <summary>
@@ -823,7 +825,6 @@ namespace Handbrake
             this.AudioSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AudioSettings.Location = new System.Drawing.Point(0, 0);
             this.AudioSettings.Name = "AudioSettings";
-            this.AudioSettings.ScannedTracks = ((System.ComponentModel.BindingList<HandBrake.ApplicationServices.Parsing.Audio>)(resources.GetObject("AudioSettings.ScannedTracks")));
             this.AudioSettings.Size = new System.Drawing.Size(715, 310);
             this.AudioSettings.TabIndex = 0;
             // 
