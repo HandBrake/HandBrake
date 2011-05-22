@@ -7,6 +7,7 @@ namespace Handbrake.Controls
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Drawing;
     using System.Linq;
@@ -41,7 +42,7 @@ namespace Handbrake.Controls
         {
             InitializeComponent();
 
-            this.ScannedTracks = new BindingList<Audio>
+            this.ScannedTracks = new ObservableCollection<Audio>
                 {
                     AudioHelper.NoneFound 
                 };
@@ -66,7 +67,7 @@ namespace Handbrake.Controls
 
         #region Properties
 
-        public BindingList<Audio> ScannedTracks { get; set; }
+        public ObservableCollection<Audio> ScannedTracks { get; set; }
 
         /// <summary>
         /// Gets the AudioTracks Collection
@@ -200,10 +201,8 @@ namespace Handbrake.Controls
             // Setup the Audio track source dropdown with the new audio tracks.
             this.ScannedTracks.Clear();
             this.drp_audioTrack.SelectedItem = null;
-            foreach (var item in selectedTitle.AudioTracks)
-            {
-                this.ScannedTracks.Add(item);
-            }
+            this.ScannedTracks = new ObservableCollection<Audio>(selectedTitle.AudioTracks);
+            drp_audioTrack.DataSource = this.ScannedTracks;
 
             drp_audioTrack.SelectedItem = this.ScannedTracks.FirstOrDefault();
             this.drp_audioTrack.Refresh();
