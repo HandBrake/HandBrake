@@ -42,7 +42,7 @@ namespace Handbrake.Controls
         {
             InitializeComponent();
 
-            this.ScannedTracks = new ObservableCollection<Audio>
+            this.ScannedTracks = new BindingList<Audio>
                 {
                     AudioHelper.NoneFound 
                 };
@@ -54,7 +54,7 @@ namespace Handbrake.Controls
             drp_audioSample.SelectedIndex = 1;
             drp_audioBitrate.SelectedItem = "160";
             drp_audioEncoder.SelectedItem = "AAC (faac)";
-            
+
             drp_audioTrack.DataSource = this.ScannedTracks;
         }
 
@@ -67,7 +67,7 @@ namespace Handbrake.Controls
 
         #region Properties
 
-        public ObservableCollection<Audio> ScannedTracks { get; set; }
+        public BindingList<Audio> ScannedTracks { get; set; }
 
         /// <summary>
         /// Gets the AudioTracks Collection
@@ -201,7 +201,7 @@ namespace Handbrake.Controls
             // Setup the Audio track source dropdown with the new audio tracks.
             this.ScannedTracks.Clear();
             this.drp_audioTrack.SelectedItem = null;
-            this.ScannedTracks = new ObservableCollection<Audio>(selectedTitle.AudioTracks);
+            this.ScannedTracks = new BindingList<Audio>(selectedTitle.AudioTracks);
             drp_audioTrack.DataSource = this.ScannedTracks;
 
             drp_audioTrack.SelectedItem = this.ScannedTracks.FirstOrDefault();
@@ -404,6 +404,63 @@ namespace Handbrake.Controls
         }
 
         /// <summary>
+        /// Add all the Audio Tracks that are not currently on the Lust
+        /// </summary>
+        /// <param name="sender">The Sender</param>
+        /// <param name="e">The EventArgs</param>
+        private void mnu_AddAll_Click(object sender, EventArgs e)
+        {
+            if (drp_audioTrack.Text == "None Found")
+            {
+                MessageBox.Show(
+                    "Your source appears to have no audio tracks, or no tracks in a format that HandBrake supports.",
+                    "Warning",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            bool trackAdded = false;
+            foreach (Audio sourceTrack in this.ScannedTracks)
+            {
+                // Check if the Track already exists on the list. If it does, skip to the next
+                bool foundTrack = false;
+                foreach (AudioTrack currentTrack in this.AudioTracks)
+                {
+                    if (currentTrack.Track.HasValue && currentTrack.Track.Value == sourceTrack.TrackNumber)
+                    {
+                        // Set a flag to indicate we've found a track
+                        foundTrack = true;
+                        continue;
+                    }
+                }
+
+                if (foundTrack)
+                {
+                    // Skip to the nxet Source Track, We already have this one in the list.
+                    continue;
+                }
+
+                // Create the Model
+                AudioTrack track = new AudioTrack
+                {
+                    ScannedTrack = sourceTrack,
+                };
+
+                this.audioTracks.Add(track);
+                trackAdded = true;
+            }
+
+            // If we added a track, then fire the event
+            if (trackAdded)
+            {
+                // The Audio List has changed to raise the event.
+                if (this.AudioListChanged != null)
+                    this.AudioListChanged(this, new EventArgs());
+            }
+        }
+
+        /// <summary>
         /// The Remove Track button event handler
         /// </summary>
         /// <param name="sender">
@@ -568,7 +625,7 @@ namespace Handbrake.Controls
         /// </summary>
         private void ClearAudioList()
         {
-            this.audioTracks.Clear();
+            this.AudioTracks.Clear();
 
             if (this.AudioListChanged != null)
                 this.AudioListChanged(this, new EventArgs());
