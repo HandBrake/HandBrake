@@ -133,6 +133,7 @@ Section "Handbrake" SEC01
   File "Microsoft.WindowsAPICodePack.Shell.dll"
   File "Microsoft.WindowsAPICodePack.dll"
   File "HandBrakeInterop.dll"
+  File "SplitButton.dll"
 
   ;File "Caliburn.Castle.dll"
   ;File "Caliburn.Core.dll"
@@ -195,6 +196,7 @@ Section Uninstall
   Delete "$INSTDIR\Microsoft.WindowsAPICodePack.Shell.dll"
   Delete "$INSTDIR\Microsoft.WindowsAPICodePack.dll"
   Delete "$INSTDIR\HandBrakeInterop.dll"
+  Delete "$INSTDIR\SplitButton.dll"
 
   Delete "$INSTDIR\Caliburn.Castle.dll"
   Delete "$INSTDIR\Caliburn.Core.dll"
