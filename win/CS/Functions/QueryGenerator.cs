@@ -107,16 +107,21 @@ namespace Handbrake.Functions
         private static string SourceQuery(frmMain mainWindow, int mode, int duration, string preview)
         {
             string query = string.Empty;
+            string sourcePath = string.Empty;
+
+            sourcePath = mainWindow.selectedTitle != null && File.Exists(mainWindow.selectedTitle.SourceName)
+                             ? mainWindow.selectedTitle.SourceName.Trim()
+                             : mainWindow.sourcePath;
 
             if (!string.IsNullOrEmpty(mainWindow.sourcePath) && mainWindow.sourcePath.Trim() != "Select \"Source\" to continue")
             {
                 if (mainWindow.sourcePath.EndsWith("\\"))
                 {
-                    query = " -i " + mainWindow.sourcePath;
+                    query = " -i " + sourcePath;
                 }
                 else
                 {
-                    query = " -i " + '"' + mainWindow.sourcePath + '"';
+                    query = " -i " + '"' + sourcePath + '"';
                 }
             }
 
