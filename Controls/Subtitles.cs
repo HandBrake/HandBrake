@@ -203,17 +203,18 @@ namespace Handbrake.Controls
                             BtnAddSubTrackClick(this, new EventArgs());
                         }
                     }
+                }
+            }
 
-                    if (drp_subtitleTracks.SelectedIndex == 0 && Properties.Settings.Default.useClosedCaption)
+
+            if (Properties.Settings.Default.useClosedCaption)
+            {
+                foreach (object item in drp_subtitleTracks.Items)
+                {
+                    if (item.ToString().Contains("Closed"))
                     {
-                        foreach (object item in drp_subtitleTracks.Items)
-                        {
-                            if (item.ToString().Contains("Closed"))
-                            {
-                                drp_subtitleTracks.SelectedItem = item;
-                                BtnAddSubTrackClick(this, new EventArgs());
-                            }
-                        }
+                        drp_subtitleTracks.SelectedItem = item;
+                        BtnAddSubTrackClick(this, new EventArgs());
                     }
                 }
             }
