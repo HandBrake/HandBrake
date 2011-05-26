@@ -5089,11 +5089,6 @@ the user is using "Custom" settings by determining the sender*/
 	[fPictureController showPictureWindow:sender];
 }
 
-- (void) picturePanelFullScreen
-{
-	[fPictureController setToFullScreenMode];
-}
-
 - (void) picturePanelWindowed
 {
 	[fPictureController setToWindowedMode];

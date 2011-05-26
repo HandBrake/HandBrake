@@ -444,7 +444,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 	//	If this is not the last track in the array we need to remove it.  We then need to see if a new
 	//	one needs to be added (in the case when we were at maximum count and this switching makes it
 	//	so we are no longer at maximum.
-	unsigned int index = [audioArray indexOfObject: newNoneTrack];
+	NSUInteger index = [audioArray indexOfObject: newNoneTrack];
 
 	if (NSNotFound != index && index < [self countOfAudioArray] - 1) {
 		[self removeObjectFromAudioArrayAtIndex: index];

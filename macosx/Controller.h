@@ -292,7 +292,6 @@ BOOL                        fIsDragging;
                      returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 
 - (IBAction) showPicturePanel: (id) sender;
-- (void) picturePanelFullScreen;
 - (void) picturePanelWindowed;
 - (IBAction) showPreviewWindow: (id) sender;
 - (void)pictureSettingsDidChange;
