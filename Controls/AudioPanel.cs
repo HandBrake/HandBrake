@@ -190,7 +190,7 @@ namespace Handbrake.Controls
         {
             if (selectedTitle.AudioTracks.Count == 0)
             {
-                audioList.Rows.Clear();
+                this.AudioTracks.Clear();
                 this.ScannedTracks.Clear();
                 this.ScannedTracks.Add(AudioHelper.NoneFound);
                 this.drp_audioTrack.Refresh();
@@ -201,7 +201,7 @@ namespace Handbrake.Controls
             // Setup the Audio track source dropdown with the new audio tracks.
             this.ScannedTracks.Clear();
             this.drp_audioTrack.SelectedItem = null;
-            this.ScannedTracks = new BindingList<Audio>(selectedTitle.AudioTracks);
+            this.ScannedTracks = new BindingList<Audio>(selectedTitle.AudioTracks.ToList());
             drp_audioTrack.DataSource = this.ScannedTracks;
 
             drp_audioTrack.SelectedItem = this.ScannedTracks.FirstOrDefault();
@@ -218,7 +218,10 @@ namespace Handbrake.Controls
                 }
             }
 
-            this.AutomaticTrackSelection();
+            if (this.AudioTracks.Count > 0)
+            {
+                this.AutomaticTrackSelection();
+            }
         }
 
         #endregion
@@ -555,7 +558,7 @@ namespace Handbrake.Controls
         /// </summary>
         private void AutomaticTrackSelection()
         {
-            if (drp_audioTrack.SelectedItem.ToString() == AudioHelper.NoneFound.Description)
+            if (drp_audioTrack.SelectedItem != null && drp_audioTrack.SelectedItem.ToString() == AudioHelper.NoneFound.Description)
             {
                 this.AudioTracks.Clear();
                 return;
