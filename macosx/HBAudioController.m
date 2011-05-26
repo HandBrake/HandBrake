@@ -18,6 +18,14 @@ NSString *keyAudioInputCodec = @"keyAudioInputCodec";
 NSString *keyAudioInputChannelLayout = @"keyAudioInputChannelLayout";
 NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
+
+@interface HBAudioController ()
+
+@property (nonatomic, readwrite, retain) NSArray *masterTrackArray;
+
+@end // interface HBAudioController
+
+
 @implementation HBAudioController
 
 #pragma mark -
@@ -511,26 +519,26 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 		int i, count = hb_list_count(list);
 
 		//	Reinitialize the master list of available audio tracks from this title
-		[masterTrackArray release];
-		masterTrackArray = [[NSMutableArray alloc] init];
+		NSMutableArray *newTrackArray = [NSMutableArray array];
 		[noneTrack release];
 		noneTrack = [[NSDictionary dictionaryWithObjectsAndKeys:
 					 [NSNumber numberWithInt: 0], keyAudioTrackIndex,
 					 NSLocalizedString(@"None", @"None"), keyAudioTrackName,
 					 [NSNumber numberWithInt: 0], keyAudioInputCodec,
 							 nil] retain];
-		[masterTrackArray addObject: noneTrack];
+		[newTrackArray addObject: noneTrack];
 		for (i = 0; i < count; i++) {
 			audio = (hb_audio_config_t *) hb_list_audio_config_item(list, i);
-			[masterTrackArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-										  [NSNumber numberWithInt: i + 1], keyAudioTrackIndex,
-										  [NSString stringWithFormat: @"%d: %s", i, audio->lang.description], keyAudioTrackName,
-										  [NSNumber numberWithInt: audio->in.bitrate / 1000], keyAudioInputBitrate,
-										  [NSNumber numberWithInt: audio->in.samplerate], keyAudioInputSampleRate,
-										  [NSNumber numberWithInt: audio->in.codec], keyAudioInputCodec,
-										  [NSNumber numberWithInt: audio->in.channel_layout], keyAudioInputChannelLayout,
-										  nil]];
+			[newTrackArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
+									   [NSNumber numberWithInt: i + 1], keyAudioTrackIndex,
+									   [NSString stringWithFormat: @"%d: %s", i, audio->lang.description], keyAudioTrackName,
+									   [NSNumber numberWithInt: audio->in.bitrate / 1000], keyAudioInputBitrate,
+									   [NSNumber numberWithInt: audio->in.samplerate], keyAudioInputSampleRate,
+									   [NSNumber numberWithInt: audio->in.codec], keyAudioInputCodec,
+									   [NSNumber numberWithInt: audio->in.channel_layout], keyAudioInputChannelLayout,
+									   nil]];
 		}
+		self.masterTrackArray = newTrackArray;
 	}
 
 	//	Reinitialize the configured list of audio tracks

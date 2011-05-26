@@ -400,8 +400,6 @@ static NSMutableArray *masterBitRateArray = nil;
 @synthesize mixdowns;
 @synthesize bitRates;
 
-- (NSArray *) tracks	{	return [controller masterTrackArray];	}
-
 - (NSArray *) sampleRates	{	return masterSampleRateArray;	}
 
 - (void) dealloc
@@ -471,8 +469,7 @@ static NSMutableArray *masterBitRateArray = nil;
 - (void) setTrackFromIndex: (int) aValue
 
 {
-	[self setTrack: [[self tracks] dictionaryWithObject: [NSNumber numberWithInt: aValue] matchingKey: keyAudioTrackIndex]];
-	return;
+	[self setTrack: [self.controller.masterTrackArray dictionaryWithObject: [NSNumber numberWithInt: aValue] matchingKey: keyAudioTrackIndex]];
 }
 
 //	This returns whether it is able to set the actual codec desired.

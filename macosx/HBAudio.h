@@ -45,7 +45,6 @@ extern NSString *keyAudioBitrate;
 @property (nonatomic, retain) NSNumber *videoContainerTag;
 @property (nonatomic, assign) HBAudioController *controller;
 
-@property (nonatomic, readonly) NSArray *tracks;
 @property (nonatomic, retain) NSMutableArray *codecs;
 @property (nonatomic, retain) NSMutableArray *mixdowns;
 @property (nonatomic, readonly) NSArray *sampleRates;
