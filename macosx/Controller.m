@@ -4967,20 +4967,12 @@ the user is using "Custom" settings by determining the sender*/
 #pragma mark - Audio and Subtitles
 
 
-#pragma mark -
-
-- (BOOL) hasValidPresetSelected
-
-{
-	return ([fPresetsOutlineView selectedRow] >= 0 && [[[fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]] objectForKey:@"Folder"] intValue] != 1);
-}
-
 //	This causes all audio tracks from the title to be used based on the current preset
 - (IBAction) addAllAudioTracks: (id) sender
 
 {
-	[fAudioDelegate	addAllTracksFromPreset: [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]]];
-	return;
+    [fAudioDelegate	addAllTracksFromPreset:[self selectedPreset]];
+    return;
 }
 
 - (IBAction) browseImportSrtFile: (id) sender
@@ -5340,8 +5332,8 @@ return YES;
 - (BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray *)items toPasteboard:(NSPasteboard *)pboard
 {
 	// Dragging is only allowed for custom presets.
-    //[[[fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]] objectForKey:@"Default"] intValue] != 1
-	if ([[[fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]] objectForKey:@"Type"] intValue] == 0) // 0 is built in preset
+    //[[[self selectedPreset] objectForKey:@"Default"] intValue] != 1
+    if ([[[self selectedPreset] objectForKey:@"Type"] intValue] == 0) // 0 is built in preset
     {
         return NO;
     }
@@ -5446,12 +5438,12 @@ return YES;
 
 - (IBAction)selectPreset:(id)sender
 {
-    
-	if (YES == [self hasValidPresetSelected])
+
+    if (YES == [self hasValidPresetSelected])
     {
-        chosenPreset = [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]];
+        chosenPreset = [self selectedPreset];
         [fPresetSelectedDisplay setStringValue:[chosenPreset objectForKey:@"PresetName"]];
-        
+
         if ([[chosenPreset objectForKey:@"Default"] intValue] == 1)
         {
             [fPresetSelectedDisplay setStringValue:[NSString stringWithFormat:@"%@ (Default)", [chosenPreset objectForKey:@"PresetName"]]];
@@ -5780,35 +5772,47 @@ return YES;
 }
 
 
+- (BOOL)hasValidPresetSelected
+{
+    return ([fPresetsOutlineView selectedRow] >= 0 && [[[self selectedPreset] objectForKey:@"Folder"] intValue] != 1);
+}
+
+
+- (id)selectedPreset
+{
+    return [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]];
+}
+
+
 #pragma mark -
 #pragma mark Manage Presets
 
 - (void) loadPresets {
-	/* We declare the default NSFileManager into fileManager */
-	NSFileManager * fileManager = [NSFileManager defaultManager];
-	/*We define the location of the user presets file */
+    /* We declare the default NSFileManager into fileManager */
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    /*We define the location of the user presets file */
     UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
-	UserPresetsFile = [[UserPresetsFile stringByExpandingTildeInPath]retain];
+    UserPresetsFile = [[UserPresetsFile stringByExpandingTildeInPath]retain];
     /* We check for the presets.plist */
-	if ([fileManager fileExistsAtPath:UserPresetsFile] == 0)
-	{
-		[fileManager createFileAtPath:UserPresetsFile contents:nil attributes:nil];
-	}
+    if ([fileManager fileExistsAtPath:UserPresetsFile] == 0)
+    {
+        [fileManager createFileAtPath:UserPresetsFile contents:nil attributes:nil];
+    }
 
-	UserPresets = [[NSMutableArray alloc] initWithContentsOfFile:UserPresetsFile];
-	if (nil == UserPresets)
-	{
-		UserPresets = [[NSMutableArray alloc] init];
-		[self addFactoryPresets:nil];
-	}
-	[fPresetsOutlineView reloadData];
+    UserPresets = [[NSMutableArray alloc] initWithContentsOfFile:UserPresetsFile];
+    if (nil == UserPresets)
+    {
+        UserPresets = [[NSMutableArray alloc] init];
+        [self addFactoryPresets:nil];
+    }
+    [fPresetsOutlineView reloadData];
     
     [self checkBuiltInsForUpdates];
 }
 
 - (void) checkBuiltInsForUpdates {
     
-	BOOL updateBuiltInPresets = NO;
+    BOOL updateBuiltInPresets = NO;
     int i = 0;
     NSEnumerator *enumerator = [UserPresets objectEnumerator];
     id tempObject;
@@ -6099,15 +6103,15 @@ return YES;
         return;
     }
     /* Alert user before deleting preset */
-	int status;
+    int status;
     status = NSRunAlertPanel(@"Warning!", @"Are you sure that you want to delete the selected preset?", @"OK", @"Cancel", nil);
-    
-    if ( status == NSAlertDefaultReturn ) 
+
+    if ( status == NSAlertDefaultReturn )
     {
-        int presetToModLevel = [fPresetsOutlineView levelForItem: [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]]];
-        NSDictionary *presetToMod = [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]];
+        int presetToModLevel = [fPresetsOutlineView levelForItem: [self selectedPreset]];
+        NSDictionary *presetToMod = [self selectedPreset];
         NSDictionary *presetToModParent = [fPresetsOutlineView parentForItem: presetToMod];
-        
+
         NSEnumerator *enumerator;
         NSMutableArray *presetsArrayToMod;
         NSMutableArray *tempArray;
@@ -6174,17 +6178,17 @@ return YES;
         if (nil == presetsToExport)
         {
             presetsToExport = [[NSMutableArray alloc] init];
-            
+
             /* now get and add selected presets to export */
-            
+
         }
-		if (YES == [self hasValidPresetSelected])
+        if (YES == [self hasValidPresetSelected])
         {
-            [presetsToExport addObject:[fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]]];
+            [presetsToExport addObject:[self selectedPreset]];
             [presetsToExport writeToFile:exportPresetsFile atomically:YES];
-            
+
         }
-        
+
     }
 }
 
@@ -6352,24 +6356,24 @@ return YES;
 - (IBAction)setDefaultPreset:(id)sender
 {
 /* We need to determine if the item is a folder */
-   if ([[[fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]] objectForKey:@"Folder"] intValue] == 1)
+   if ([[[self selectedPreset] objectForKey:@"Folder"] intValue] == 1)
    {
    return;
    }
 
     int i = 0;
     NSEnumerator *enumerator = [UserPresets objectEnumerator];
-	id tempObject;
-	/* First make sure the old user specified default preset is removed */
+    id tempObject;
+    /* First make sure the old user specified default preset is removed */
     while (tempObject = [enumerator nextObject])
-	{
-		NSMutableDictionary *thisPresetDict = tempObject;
-		if ([[tempObject objectForKey:@"Default"] intValue] != 1) // if not the default HB Preset, set to 0
-		{
-			[[UserPresets objectAtIndex:i] setObject:[NSNumber numberWithInt:0] forKey:@"Default"];	
-		}
+    {
+        NSMutableDictionary *thisPresetDict = tempObject;
+        if ([[tempObject objectForKey:@"Default"] intValue] != 1) // if not the default HB Preset, set to 0
+        {
+            [[UserPresets objectAtIndex:i] setObject:[NSNumber numberWithInt:0] forKey:@"Default"];	
+        }
 		
-		/* if we run into a folder, go to level 1 and iterate through the children arrays for the default */
+        /* if we run into a folder, go to level 1 and iterate through the children arrays for the default */
         if ([thisPresetDict objectForKey:@"ChildrenArray"])
         {
             NSEnumerator *enumerator = [[thisPresetDict objectForKey:@"ChildrenArray"] objectEnumerator];
@@ -6399,20 +6403,20 @@ return YES;
                 }
                 ii++;
             }
-            
+
         }
-        i++; 
+        i++;
 	}
-    
-    
-    int presetToModLevel = [fPresetsOutlineView levelForItem: [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]]];
-    NSDictionary *presetToMod = [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]];
+
+
+    int presetToModLevel = [fPresetsOutlineView levelForItem: [self selectedPreset]];
+    NSDictionary *presetToMod = [self selectedPreset];
     NSDictionary *presetToModParent = [fPresetsOutlineView parentForItem: presetToMod];
-    
-    
+
+
     NSMutableArray *presetsArrayToMod;
     NSMutableArray *tempArray;
-    
+
     /* If we are a root level preset, we are modding the UserPresets array */
     if (presetToModLevel == 0)
     {

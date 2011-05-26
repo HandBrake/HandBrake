@@ -361,7 +361,10 @@ BOOL                        fIsDragging;
 - (NSString *)outlineView:(NSOutlineView *)fPresetsOutlineView toolTipForCell:(NSCell *)cell rect:(NSRectPointer)rect tableColumn:(NSTableColumn *)tc item:(id)item mouseLocation:(NSPoint)mouseLocation;
 - (void) checkBuiltInsForUpdates;
 /* We use this to actually select the preset and act accordingly */
-- (IBAction)selectPreset:(id)sender;    
+- (IBAction)selectPreset:(id)sender;
+
+@property (nonatomic, readonly) BOOL hasValidPresetSelected;
+- (id)selectedPreset;
 
 /* Export / Import Presets */
 - (IBAction) browseExportPresetFile: (id) sender;
@@ -418,7 +421,6 @@ BOOL                        fIsDragging;
                  returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 
 + (unsigned int) maximumNumberOfAllowedAudioTracks;
-@property (nonatomic, readonly) BOOL hasValidPresetSelected; 
 - (IBAction) addAllAudioTracks: (id) sender;
 
 @end
