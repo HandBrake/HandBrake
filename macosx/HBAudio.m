@@ -392,6 +392,7 @@ static NSMutableArray *masterBitRateArray = nil;
 @synthesize sampleRate;
 @synthesize bitRate;
 @synthesize drc;
+@synthesize gain;
 @synthesize videoContainerTag;
 @synthesize controller;
 
@@ -417,6 +418,7 @@ static NSMutableArray *masterBitRateArray = nil;
 	[self setSampleRate: nil];
 	[self setBitRate: nil];
 	[self setDrc: nil];
+    [self setGain: nil];
 	[self setVideoContainerTag: nil];
 	[self setCodecs: nil];
 	[self setMixdowns: nil];
@@ -538,6 +540,22 @@ static NSMutableArray *masterBitRateArray = nil;
 	return retval;
 }
 
+//	Because we have indicated that the binding for the gain validates immediately we can implement the
+//	key value binding method to ensure the gain stays in our accepted range.
+ 
+- (BOOL) validateGain: (id *) ioValue error: (NSError *) outError
+{
+	BOOL retval = YES;
+	
+	if (nil != *ioValue) {
+		if (0.0 < [*ioValue floatValue] && 1.0 > [*ioValue floatValue]) {
+			*ioValue = [NSNumber numberWithFloat: 0.0];
+		}
+	}
+	
+	return retval;
+}
+
 #pragma mark -
 #pragma mark Bindings Support
 
@@ -576,6 +594,20 @@ static NSMutableArray *masterBitRateArray = nil;
 	return retval;
 }
 
+- (BOOL) PassThruDisabled
+
+{
+	BOOL retval = [self enabled];
+	
+	if (YES == retval) {
+		int myCodecCodec = [[[self codec] objectForKey: keyAudioCodec] intValue];
+		if (HB_ACODEC_AC3_PASS == myCodecCodec || HB_ACODEC_DCA_PASS == myCodecCodec) {
+			retval = NO;
+		}
+	}
+	return retval;
+}
+
 + (NSSet *) keyPathsForValuesAffectingValueForKey: (NSString *) key
 
 {
@@ -584,6 +616,9 @@ static NSMutableArray *masterBitRateArray = nil;
 	if (YES == [key isEqualToString: @"enabled"]) {
 		retval = [NSSet setWithObjects: @"track", nil];
 		}
+    else if (YES == [key isEqualToString: @"PassThruDisabled"]) {
+		retval = [NSSet setWithObjects: @"track", @"codec", nil];
+	}
 	else if (YES == [key isEqualToString: @"AC3Enabled"]) {
 		retval = [NSSet setWithObjects: @"track", @"codec", nil];
 	}

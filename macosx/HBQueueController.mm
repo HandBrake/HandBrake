@@ -1063,19 +1063,23 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
 		NSString *base;
 		NSString *detailString;
 		NSNumber *drc;
+        NSNumber *gain;
 		for (unsigned int i = 1; i <= ourMaximumNumberOfAudioTracks; i++) {
 			base = [NSString stringWithFormat: @"Audio%d", i];
 			if (0 < [[item objectForKey: [base stringByAppendingString: @"Track"]] intValue]) {
 				audioCodecSummary = [NSString stringWithFormat: @"%@", [item objectForKey: [base stringByAppendingString: @"Encoder"]]];
 				drc = [item objectForKey: [base stringByAppendingString: @"TrackDRCSlider"]];
-				detailString = [NSString stringWithFormat: @"%@ Encoder: %@ Mixdown: %@ SampleRate: %@(khz) Bitrate: %@(kbps), DRC: %@",
+                gain = [item objectForKey: [base stringByAppendingString: @"TrackGainSlider"]];
+				detailString = [NSString stringWithFormat: @"%@ Encoder: %@ Mixdown: %@ SampleRate: %@(khz) Bitrate: %@(kbps), DRC: %@, Gain: %@",
 								[item objectForKey: [base stringByAppendingString: @"TrackDescription"]],
 								[item objectForKey: [base stringByAppendingString: @"Encoder"]],
 								[item objectForKey: [base stringByAppendingString: @"Mixdown"]],
 								[item objectForKey: [base stringByAppendingString: @"Samplerate"]],
 								[item objectForKey: [base stringByAppendingString: @"Bitrate"]],
-								(0.0 < [drc floatValue]) ? drc : @"Off"
-								];
+                                (0.0 < [drc floatValue]) ? (NSObject *)drc : (NSObject *)@"Off",
+								(0.0 != [gain floatValue]) ? (NSObject *)gain : (NSObject *)@"Off"
+								]
+                                ;
 				[audioDetails addObject: detailString];
 			}
 		}

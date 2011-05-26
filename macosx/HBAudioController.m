@@ -91,6 +91,17 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 			[aDict setObject: [[anAudio mixdown] objectForKey: keyAudioMixdownName] forKey: [prefix stringByAppendingString: @"Mixdown"]];
 			[aDict setObject: [[anAudio sampleRate] objectForKey: keyAudioSampleRateName] forKey: [prefix stringByAppendingString: @"Samplerate"]];
 			[aDict setObject: [[anAudio bitRate] objectForKey: keyAudioBitrateName] forKey: [prefix stringByAppendingString: @"Bitrate"]];
+            
+            // output is not passthru so apply gain
+            if (HB_ACODEC_AC3_PASS != [[[anAudio codec] objectForKey: keyAudioCodec] intValue] && HB_ACODEC_DCA_PASS != [[[anAudio codec] objectForKey: keyAudioCodec] intValue])
+            {
+                [aDict setObject: [anAudio gain] forKey: [prefix stringByAppendingString: @"TrackGainSlider"]];
+            }
+            else
+            {
+                // output is passthru - the Gain dial is disabled so don't apply its value
+				[aDict setObject: [NSNumber numberWithInt:0] forKey: [prefix stringByAppendingString: @"TrackGainSlider"]];
+            }
 		
 			if ((HB_ACODEC_AC3 == [[[anAudio track] objectForKey: keyAudioInputCodec] intValue]) &&
 			    (HB_ACODEC_AC3_PASS != [[[anAudio codec] objectForKey: keyAudioCodec] intValue])) {
@@ -143,6 +154,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 			audio->out.bitrate = [[[anAudio bitRate] objectForKey: keyAudioBitrate] intValue];
 			audio->out.samplerate = [sampleRateToUse intValue];
 			audio->out.dynamic_range_compression = [[anAudio drc] floatValue];
+            audio->out.gain = [[anAudio gain] floatValue];
         
 			hb_audio_add(aJob, audio);
 			free(audio);
@@ -168,6 +180,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 			[dict setObject: [[anAudio sampleRate] objectForKey: keyAudioSampleRateName] forKey: @"AudioSamplerate"];
 			[dict setObject: [[anAudio bitRate] objectForKey: keyAudioBitrateName] forKey: @"AudioBitrate"];
 			[dict setObject: [anAudio drc] forKey: @"AudioTrackDRCSlider"];
+            [dict setObject: [anAudio gain] forKey: @"AudioTrackGainSlider"];
 			[anArray addObject: dict];
 			[dict release];
 		}
@@ -201,6 +214,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 			[newAudio setSampleRateFromName: [aQueue objectForKey: [base stringByAppendingString: @"Samplerate"]]];
 			[newAudio setBitRateFromName: [aQueue objectForKey: [base stringByAppendingString: @"Bitrate"]]];
 			[newAudio setDrc: [aQueue objectForKey: [base stringByAppendingString: @"TrackDRCSlider"]]];
+            [newAudio setGain: [aQueue objectForKey: [base stringByAppendingString: @"TrackGainSlider"]]];
 			[newAudio release];
 		}
 	}
@@ -230,6 +244,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 									   [aPreset objectForKey: [base stringByAppendingString: @"Samplerate"]], @"AudioSamplerate",
 									   [aPreset objectForKey: [base stringByAppendingString: @"Bitrate"]], @"AudioBitrate",
 									   [aPreset objectForKey: [base stringByAppendingString: @"TrackDRCSlider"]], @"AudioTrackDRCSlider",
+                                       [aPreset objectForKey: [base stringByAppendingString: @"TrackGainSlider"]], @"AudioTrackGainSlider",
 									   nil]];
 			}
 		}
@@ -243,7 +258,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
 {
 	NSEnumerator *enumerator = [templateAudioArray objectEnumerator];
-	NSDictionary *dict;
+	NSMutableDictionary *dict;
 	NSString *key;
 	int maximumNumberOfAllowedAudioTracks = [HBController maximumNumberOfAllowedAudioTracks];
 	
@@ -269,6 +284,16 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 					fallenBack = YES;
 				}
 			}
+            // If our preset does not contain a drc or gain value set it to a default of 0.0
+            if (![dict objectForKey: @"AudioTrackDRCSlider"])
+            {
+                [dict setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackDRCSlider"];
+            }
+            if (![dict objectForKey: @"AudioTrackGainSlider"])
+            {
+                [dict setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackGainSlider"];
+            }
+            
 			//	If our preset wants us to support a codec that the track does not support, instead
 			//	of changing the codec we remove the audio instead.
 			if (YES == [newAudio setCodecFromName: key]) {
@@ -278,6 +303,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 					[newAudio setBitRateFromName: [dict objectForKey: @"AudioBitrate"]];
 					}
 				[newAudio setDrc: [dict objectForKey: @"AudioTrackDRCSlider"]];
+                [newAudio setGain: [dict objectForKey: @"AudioTrackGainSlider"]];
 			}
 			else {
 				[self removeObjectFromAudioArrayAtIndex: [self countOfAudioArray] - 1];
@@ -325,6 +351,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 		@"Auto",                         @"AudioSamplerate",
 		@"160",                          @"AudioBitrate",
 		[NSNumber numberWithFloat: 0.0], @"AudioTrackDRCSlider",
+        [NSNumber numberWithFloat: 0.0], @"AudioTrackGainSlider",
 		nil]], @"AudioList", nil] retain];
 	}
 	return retval;
@@ -403,6 +430,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 	[newAudio setVideoContainerTag: [self videoContainerTag]];
 	[newAudio setTrack: noneTrack];
 	[newAudio setDrc: [NSNumber numberWithFloat: 0.0]];
+    [newAudio setGain: [NSNumber numberWithFloat: 0.0]];
 	[newAudio release];	
 	return;
 }

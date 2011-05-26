@@ -27,6 +27,7 @@ extern NSString *keyAudioBitrate;
 	NSDictionary *sampleRate;
 	NSDictionary *bitRate;
 	NSNumber *drc;
+    NSNumber *gain;
 	NSNumber *videoContainerTag;
 	HBAudioController *controller;
 	NSMutableArray *codecs;
@@ -40,6 +41,7 @@ extern NSString *keyAudioBitrate;
 @property (nonatomic, retain) NSDictionary *sampleRate;
 @property (nonatomic, retain) NSDictionary *bitRate;
 @property (nonatomic, retain) NSNumber *drc;
+@property (nonatomic, retain) NSNumber *gain;
 @property (nonatomic, retain) NSNumber *videoContainerTag;
 @property (nonatomic, assign) HBAudioController *controller;
 

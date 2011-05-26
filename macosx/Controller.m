@@ -2405,9 +2405,10 @@ fWorkingCount = 0;
     [queueFileJob setObject:[NSString stringWithFormat:@"%d",[fPictureController deblock]] forKey:@"PictureDeblock"];
     
     [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController grayscale]] forKey:@"VideoGrayScale"];
-    
+    [self writeToActivityLog: "createQueueFileItem: Getting Audio from prepareAudioForQueueFileJob ..."];
     /*Audio*/
-	[fAudioDelegate prepareAudioForQueueFileJob: queueFileJob];	
+	[fAudioDelegate prepareAudioForQueueFileJob: queueFileJob];
+    [self writeToActivityLog: "createQueueFileItem: Returned getting audio from prepareAudioForQueueFileJob"];	
     
 	/* Subtitles*/
     NSMutableArray *subtitlesArray = [[NSMutableArray alloc] initWithArray:[fSubtitlesDelegate getSubtitleArray] copyItems:YES];
@@ -3724,6 +3725,7 @@ bool one_burned = FALSE;
 			/* We go ahead and assign values to our audio->out.<properties> */
 			audio->out.track = audio->in.track;
 			audio->out.dynamic_range_compression = [[queueToApply objectForKey: [prefix stringByAppendingString: @"TrackDRCSlider"]] floatValue];
+            audio->out.gain = [[queueToApply objectForKey: [prefix stringByAppendingString: @"TrackGainSlider"]] floatValue];
 			prefix = [NSString stringWithFormat: @"JobAudio%d", counter + 1];
 			audio->out.codec = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Encoder"]] intValue];
 			audio->out.mixdown = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Mixdown"]] intValue];
