@@ -4889,9 +4889,13 @@ ghb_notify_done(signal_user_data_t *ud)
 	notification = notify_notification_new(
 		"Encode Complete",
 		"Put down that cocktail, Your HandBrake queue is done!",
-		"hb-icon",
-		NULL);
+		"hb-icon"
+#if NOTIFY_CHECK_VERSION(0, 7, 0)
+		);
+#else
+		,NULL);
 	notify_notification_attach_to_status_icon(notification, si);
+#endif
 	g_signal_connect(notification, "closed", (GCallback)notify_closed_cb, ud);
 	notify_notification_show(notification, NULL);
 #endif
