@@ -138,10 +138,12 @@ namespace Handbrake
 
             lbl_encodeStatus.Text =
                 string.Format(
-                "Encoding: Pass {0} of {1},  {2:00.00}%,  Time Remaining: {3},  Elapsed: {4:hh\\:mm\\:ss}",
+                "Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:hh\\:mm\\:ss}",
                 e.Task,
                 e.TaskCount,
                 e.PercentComplete,
+                e.CurrentFrameRate,
+                e.AverageFrameRate,
                 e.EstimatedTimeLeft,
                 e.ElapsedTime);
 
