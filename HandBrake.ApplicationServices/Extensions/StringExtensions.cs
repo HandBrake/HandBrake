@@ -7,6 +7,9 @@ namespace HandBrake.ApplicationServices.Extensions
 {
     using System.Text;
 
+    /// <summary>
+    /// String Extensions
+    /// </summary>
     public static class StringExtensions
     {
         /// <summary>

@@ -94,6 +94,7 @@
     <Compile Include="Functions\Converters.cs" />
     <Compile Include="Functions\EnumHelper.cs" />
     <Compile Include="Functions\GrowlCommunicator.cs" />
+    <Compile Include="Functions\InteropModelCreator.cs" />
     <Compile Include="Functions\PlistHelper.cs" />
     <Compile Include="Functions\System.cs" />
     <Compile Include="Functions\Win32.cs" />

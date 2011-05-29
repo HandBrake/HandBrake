@@ -103,19 +103,7 @@ namespace HandBrake.ApplicationServices.Services
                 }
 
                 // Make sure the path exists, attempt to create it if it doesn't
-                string path = Directory.GetParent(queueTask.Destination).ToString();
-                if (!Directory.Exists(path))
-                {
-                    try
-                    {
-                        Directory.CreateDirectory(path);
-                    }
-                    catch (Exception)
-                    {
-                        throw new Exception(
-                            "Unable to create directory for the encoded output. Please verify the drive and path is correct.");
-                    }
-                }
+                this.VerifyEncodeDestinationPath(queueTask);
 
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
                 ProcessStartInfo cliStart = new ProcessStartInfo(handbrakeCLIPath, queueTask.Query)

@@ -6,7 +6,9 @@
 namespace HandBrake.ApplicationServices.Services
 {
     using System;
+    using System.Diagnostics;
     using System.Text;
+    using System.Threading;
 
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
@@ -39,6 +41,11 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private HandBrakeInstance instance;
 
+        /// <summary>
+        /// A flag to indicate if logging is enabled or not.
+        /// </summary>
+        private bool loggingEnabled;
+
         #endregion
 
         /// <summary>
@@ -68,8 +75,80 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         public void Start(QueueTask job, bool enableLogging)
         {
-            throw new NotImplementedException("This will be implemented later.");
+            throw new NotImplementedException("This Method has not been completed yet");
+
             this.startTime = DateTime.Now;
+            this.loggingEnabled = enableLogging;
+
+            try
+            {
+                // Sanity Checking and Setup
+                if (this.IsEncoding)
+                {
+                    throw new Exception("HandBrake is already encodeing.");
+                }
+
+                this.IsEncoding = true;
+
+                // Get an EncodeJob object for the Interop Library
+                EncodeJob encodeJob = InteropModelCreator.GetEncodeJob(job);
+
+                // Enable logging if required.
+                if (enableLogging)
+                {
+                    try
+                    {
+                        this.SetupLogging(job);
+                    }
+                    catch (Exception)
+                    {
+                        this.IsEncoding = false;
+                        throw;
+                    }
+                }
+
+                // Prvent the system from sleeping if the user asks
+                if (Properties.Settings.Default.PreventSleep)
+                {
+                    Win32.PreventSleep();
+                }
+
+                // Verify the Destination Path Exists, and if not, create it.
+                this.VerifyEncodeDestinationPath(job);
+
+                // Start the Encode
+                this.instance.StartEncode(encodeJob);
+
+                // Set the Process Priority
+                switch (Properties.Settings.Default.ProcessPriority)
+                {
+                    case "Realtime":
+                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
+                        break;
+                    case "High":
+                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
+                        break;
+                    case "Above Normal":
+                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
+                        break;
+                    case "Normal":
+                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Normal;
+                        break;
+                    case "Low":
+                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Idle;
+                        break;
+                    default:
+                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
+                        break;
+                }
+
+                // Fire the Encode Started Event
+                this.Invoke_encodeStarted(EventArgs.Empty);
+            }
+            catch (Exception exc)
+            {
+                this.Invoke_encodeCompleted(new EncodeCompletedEventArgs(false, exc, "An Error has occured in EncodeService.Run()"));
+            }
         }
 
         /// <summary>
@@ -119,9 +198,12 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         private void HandBrakeInstanceErrorLogged(object sender, MessageLoggedEventArgs e)
         {
-            lock (logLock)
+            if (this.loggingEnabled)
             {
-                this.LogBuffer.AppendLine(e.Message);
+                lock (logLock)
+                {
+                    this.LogBuffer.AppendLine(e.Message);
+                }
             }
         }
 
@@ -136,9 +218,12 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         private void HandBrakeInstanceMessageLogged(object sender, MessageLoggedEventArgs e)
         {
-            lock (logLock)
+            if (this.loggingEnabled)
             {
-                this.LogBuffer.AppendLine(e.Message);
+                lock (logLock)
+                {
+                    this.LogBuffer.AppendLine(e.Message);
+                }
             }
         }
 
