@@ -139,6 +139,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Services\Base\EncodeBase.cs" />
     <Compile Include="Services\Encode.cs" />
     <Compile Include="Services\Interfaces\IEncode.cs" />
     <Compile Include="Services\Interfaces\IQueueManager.cs" />
@@ -146,6 +147,7 @@
     <Compile Include="Services\Interfaces\IScan.cs" />
     <Compile Include="Services\Interfaces\IPresetService.cs" />
     <Compile Include="Services\Interfaces\IUserSettingService.cs" />
+    <Compile Include="Services\LibEncode.cs" />
     <Compile Include="Services\LibScan.cs" />
     <Compile Include="Services\PresetService.cs" />
     <Compile Include="Services\QueueManager.cs" />
