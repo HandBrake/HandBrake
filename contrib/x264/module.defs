@@ -1,15 +1,15 @@
 $(eval $(call import.MODULE.defs,X264,x264,PTHREADW32))
 $(eval $(call import.CONTRIB.defs,X264))
 
-X264.FETCH.url = http://download.handbrake.fr/handbrake/contrib/x264-r1937-aa21558.tar.gz
+X264.FETCH.url = http://download.handbrake.fr/handbrake/contrib/x264-r1995-c1e60b9.tar.gz
 X264.EXTRACT.tarbase = x264
 
 X264.CONFIGURE.deps   =
 X264.CONFIGURE.shared =
 X264.CONFIGURE.static =
 
-X264.CONFIGURE.extra = --disable-gpac
-X264.CONFIGURE.extra += --disable-avs --disable-lavf --disable-ffms --disable-swscale
+X264.CONFIGURE.extra = --disable-cli --enable-static --enable-strip
+X264.CONFIGURE.extra += --disable-gpac --disable-avs --disable-lavf --disable-ffms --disable-swscale
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
     X264.CONFIGURE.extra += --cross-prefix=$(BUILD.spec)-
