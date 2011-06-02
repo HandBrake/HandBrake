@@ -205,7 +205,8 @@ namespace Handbrake.Functions
                     destinationFilename = Properties.Settings.Default.autoNameFormat;
                     destinationFilename = destinationFilename.Replace("{source}", sourceName)
                                                              .Replace("{title}", dvdTitle)
-                                                             .Replace("{chapters}", combinedChapterTag);
+                                                             .Replace("{chapters}", combinedChapterTag)
+                                                             .Replace("{date}", DateTime.Now.Date.ToShortDateString().Replace('/', '-'));
                 }
                 else
                     destinationFilename = sourceName + "_T" + dvdTitle + "_C" + combinedChapterTag;
@@ -239,9 +240,12 @@ namespace Handbrake.Functions
                  */ 
 
                 // If there is an auto name path, use it...
-                if (Properties.Settings.Default.autoNamePath.Trim() == "{source_path}" && !string.IsNullOrEmpty(mainWindow.sourcePath))
+                if (Properties.Settings.Default.autoNamePath.Trim().StartsWith("{source_path}") && !string.IsNullOrEmpty(mainWindow.sourcePath))
                 {
-                    autoNamePath = Path.Combine(Path.GetDirectoryName(mainWindow.sourcePath), destinationFilename);
+                    string savedPath = Properties.Settings.Default.autoNamePath.Trim().Replace("{source_path}\\", string.Empty).Replace("{source_path}", string.Empty);
+                    string requestedPath = Path.Combine(Path.GetDirectoryName(mainWindow.sourcePath), savedPath);
+
+                    autoNamePath = Path.Combine(requestedPath, destinationFilename);
                     if (autoNamePath == mainWindow.sourcePath)
                     {
                         // Append out_ to files that already exist or is the source file
