@@ -313,7 +313,7 @@ namespace Handbrake
                     "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
-            if (text_an_path.Text.ToLower().Contains("{source_path}") && text_an_path.Text.ToLower() != "{source_path}")
+            if (text_an_path.Text.ToLower().Contains("{source_path}") && !text_an_path.Text.StartsWith("{source_path}"))
             {
                 MessageBox.Show("Note you can not use the {source_path} within a path. {source_path} is the full source file path.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }

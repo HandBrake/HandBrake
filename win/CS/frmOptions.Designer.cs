@@ -415,9 +415,9 @@ namespace Handbrake
             this.label7.Location = new System.Drawing.Point(182, 126);
             this.label7.Margin = new System.Windows.Forms.Padding(3);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(225, 13);
+            this.label7.Size = new System.Drawing.Size(260, 13);
             this.label7.TabIndex = 81;
-            this.label7.Text = "Available Options: {source} {title} {chapters}";
+            this.label7.Text = "Available Options: {source} {title} {chapters} {date}";
             // 
             // check_autoNaming
             // 
@@ -513,9 +513,9 @@ namespace Handbrake
             this.label34.Location = new System.Drawing.Point(182, 72);
             this.label34.Margin = new System.Windows.Forms.Padding(3);
             this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(278, 13);
+            this.label34.Size = new System.Drawing.Size(344, 13);
             this.label34.TabIndex = 102;
-            this.label34.Text = "Available Options: {source_path} {source_folder_name}";
+            this.label34.Text = "Available Options: {source_path} or {source_folder_name} (Not Both)";
             this.ToolTip.SetToolTip(this.label34, resources.GetString("label34.ToolTip"));
             // 
             // check_TitleCase
@@ -748,7 +748,7 @@ namespace Handbrake
             this.check_preventSleep.AutoSize = true;
             this.check_preventSleep.Location = new System.Drawing.Point(73, 45);
             this.check_preventSleep.Name = "check_preventSleep";
-            this.check_preventSleep.Size = new System.Drawing.Size(266, 17);
+            this.check_preventSleep.Size = new System.Drawing.Size(260, 17);
             this.check_preventSleep.TabIndex = 91;
             this.check_preventSleep.Text = "Prevent the system from sleeping when encoding.";
             this.ToolTip.SetToolTip(this.check_preventSleep, "Prevent system from sleeping during encoding.");
@@ -761,7 +761,7 @@ namespace Handbrake
             this.check_clearOldLogs.AutoSize = true;
             this.check_clearOldLogs.Location = new System.Drawing.Point(73, 234);
             this.check_clearOldLogs.Name = "check_clearOldLogs";
-            this.check_clearOldLogs.Size = new System.Drawing.Size(166, 17);
+            this.check_clearOldLogs.Size = new System.Drawing.Size(162, 17);
             this.check_clearOldLogs.TabIndex = 90;
             this.check_clearOldLogs.Text = "Clear logs older than 30 days";
             this.ToolTip.SetToolTip(this.check_clearOldLogs, "Clear logs which are older than 30 days.\r\nThis only applies to HandBrakes Applica" +
@@ -856,7 +856,7 @@ namespace Handbrake
             this.check_logsInSpecifiedLocation.AutoSize = true;
             this.check_logsInSpecifiedLocation.Location = new System.Drawing.Point(73, 139);
             this.check_logsInSpecifiedLocation.Name = "check_logsInSpecifiedLocation";
-            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(306, 17);
+            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(305, 17);
             this.check_logsInSpecifiedLocation.TabIndex = 87;
             this.check_logsInSpecifiedLocation.Text = "Put a copy of individual encode logs in a specified location:";
             this.ToolTip.SetToolTip(this.check_logsInSpecifiedLocation, "Place a copy of the encode log in the same folder as the encoded movie.");

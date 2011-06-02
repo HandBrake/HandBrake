@@ -142,7 +142,8 @@ This option has to be used on it's own and can not be used as part of a path.
 
 {source_folder_name} = Uses the folder name where the source is stored.
 You can insert this anywhere in your path. e.g.  c:\movies\{source_folder_name}
-It will substitute the name of the folder where the source is located.</value>
+It will substitute the name of the folder where the source is located.
+Note, this can't be used with the {source_path} option!</value>
   </data>
   <data name="check_showCliForInGUIEncode.ToolTip" xml:space="preserve">
     <value>Shows the CLI window when encoding.
