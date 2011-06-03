@@ -58,7 +58,7 @@ struct preview_s
 	gint frame;
 	gint state;
 	gboolean pause;
-	gboolean encoded[10];
+	gboolean encoded[30];
 	gint encode_frame;
 	gint live_id;
 	gchar *current;
