@@ -73,6 +73,9 @@ namespace Handbrake.ToolWindows
                 tb_drc.Value = drcCalculated;
                 lbl_drc.Text = track.DRC.ToString(Culture);
                 tb_drc.Enabled = track.TrackDisplay.Contains("(AC3)");
+
+                // Se the Track Name
+                audioTrackName.Text = this.track.TrackName;
             }
         }
 
@@ -141,6 +144,16 @@ namespace Handbrake.ToolWindows
 
             lbl_drc.Text = value.ToString(Culture);
             track.DRC = value;
+        }
+
+        /// <summary>
+        /// Set the Audio Track Name Variable
+        /// </summary>
+        /// <param name="sender">The Sender</param>
+        /// <param name="e">The event args</param>
+        private void audioTrackName_TextChanged(object sender, EventArgs e)
+        {
+            this.Track.TrackName = audioTrackName.Text;
         }
     }
 }
