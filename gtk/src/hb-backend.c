@@ -4698,6 +4698,18 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		audio.in.track = ghb_settings_get_int(asettings, "AudioTrack");
 		audio.out.track = tcount;
 
+		char * aname = ghb_settings_get_string(asettings, "AudioTrackName");
+		if (aname && *aname)
+		{
+			// This leaks, but there is no easy way to clean up 
+			// presently
+			audio.out.name = aname;
+		}
+		else
+		{
+			g_free(aname);
+		}
+
         aconfig = (hb_audio_config_t *) hb_list_audio_config_item(
 									title->list_audio, audio.in.track );
 

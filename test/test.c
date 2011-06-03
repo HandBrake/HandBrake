@@ -72,7 +72,7 @@ static char * atracks     = NULL;
 static char * arates      = NULL;
 static char * abitrates   = NULL;
 static char * acodecs     = NULL;
-static char * anames      = NULL;
+static char ** anames      = NULL;
 #ifdef __APPLE_CC__
 static int    default_acodec = HB_ACODEC_CA_AAC;
 #else
@@ -351,7 +351,6 @@ int main( int argc, char ** argv )
     if( arates ) free( arates );
     if( abitrates ) free( abitrates );
     if( acodecs ) free( acodecs );
-    if( anames ) free( anames );
     if (native_language ) free (native_language );
 	if( advanced_opts ) free (advanced_opts );
 	if( advanced_opts2 ) free (advanced_opts2 );
@@ -1893,27 +1892,25 @@ static int HandleEvents( hb_handle_t * h )
             /* Audio Gain */
 
             /* Audio Track Names */
-            i = 0;
             if ( anames )
             {
-                char * token = strtok(anames, ",");
-                if (token == NULL)
-                    token = anames;
-                while ( token != NULL )
+                char * token;
+                for ( i = 0; anames[i] != NULL && i < num_audio_tracks; i++ )
                 {
-                    audio = hb_list_audio_config_item(job->list_audio, i);
-                    if( audio != NULL )
+                    token = anames[i];
+                    if ( *token )
                     {
-                        audio->out.name = strdup(token);
-                        if( (++i) >= num_audio_tracks )
-                            break;  /* We have more names than audio tracks, oops */
+                        audio = hb_list_audio_config_item(job->list_audio, i);
+                        if( audio != NULL )
+                        {
+                            audio->out.name = strdup(token);
+                        }
+                        else
+                        {
+                            fprintf(stderr, "Ignoring aname '%s', no audio track\n",
+                                    token);
+                        }
                     }
-                    else
-                    {
-                        fprintf(stderr, "Ignoring aname '%s', no audio track\n",
-                                token);
-                    }
-                    token = strtok(NULL, ",");
                 }
             }
             if( i < num_audio_tracks && i == 1 )
@@ -1923,7 +1920,7 @@ static int HandleEvents( hb_handle_t * h )
                 for ( ; i < num_audio_tracks; i++)
                 {
                     audio = hb_list_audio_config_item(job->list_audio, i);
-                    audio->out.name = strdup(anames);
+                    audio->out.name = strdup(anames[0]);
                 }
             }
             /* Audio Track Names */
@@ -3305,7 +3302,7 @@ static int ParseOptions( int argc, char ** argv )
             case 'A':
                 if( optarg != NULL )
                 {
-                    anames = strdup( optarg );
+                    anames = str_split( optarg, ',' );
                 }
                 break;
             case PREVIEWS:

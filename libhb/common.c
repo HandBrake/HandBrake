@@ -1228,6 +1228,10 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
         audio->config.out.mixdown = audiocfg->out.mixdown;
         audio->config.out.gain = audiocfg->out.gain;
     }
+    if (audiocfg->out.name && *audiocfg->out.name)
+    {
+        audio->config.out.name = audiocfg->out.name;
+    }
 
     hb_list_add(job->list_audio, audio);
     return 1;

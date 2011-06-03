@@ -3869,9 +3869,44 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
               <object class="GtkTable" id="table14">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="n_rows">3</property>
+                <property name="n_rows">4</property>
                 <property name="n_columns">3</property>
                 <property name="row_spacing">5</property>
+                <child>
+                  <object class="GtkLabel" id="audio_name_label">
+                    <property name="visible">True</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">Audio Track Name:</property>
+                    <property name="use_markup">True</property>
+                  </object>
+                  <packing>
+					<property name="top_attach">0</property>
+					<property name="bottom_attach">1</property>
+					<property name="left_attach">0</property>
+					<property name="right_attach">1</property>
+                    <property name="x_options">GTK_FILL</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="AudioTrackName">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="max_length">40</property>
+                    <property name="activates_default">True</property>
+                    <property name="width_chars">30</property>
+                    <property name="truncate_multiline">True</property>
+                    <property name="tooltip-text" translatable="yes">Set the audio track name. Players may use this in the audio selection list.</property>
+                    <signal handler="audio_widget_changed_cb" name="changed"/>
+                  </object>
+                  <packing>
+					<property name="top_attach">0</property>
+					<property name="bottom_attach">1</property>
+					<property name="left_attach">1</property>
+					<property name="right_attach">3</property>
+                    <property name="x_options">GTK_FILL</property>
+                  </packing>
+                </child>
                 <child>
                   <object class="GtkLabel" id="sr_label">
                     <property name="visible">True</property>
@@ -3880,8 +3915,8 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                     <property name="use_markup">True</property>
                   </object>
                   <packing>
-					<property name="top_attach">0</property>
-					<property name="bottom_attach">1</property>
+					<property name="top_attach">1</property>
+					<property name="bottom_attach">2</property>
 					<property name="left_attach">0</property>
 					<property name="right_attach">1</property>
                     <property name="x_options">GTK_FILL</property>
@@ -3895,9 +3930,9 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                     <signal handler="audio_widget_changed_cb" name="changed"/>
                   </object>
                   <packing>
-					<property name="top_attach">0</property>
-					<property name="bottom_attach">1</property>
-					<property name="left_attach">2</property>
+					<property name="top_attach">1</property>
+					<property name="bottom_attach">2</property>
+					<property name="left_attach">1</property>
 					<property name="right_attach">2</property>
                     <property name="x_options">GTK_FILL</property>
                   </packing>
@@ -3910,8 +3945,8 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                     <property name="use_markup">True</property>
                   </object>
                   <packing>
-					<property name="top_attach">1</property>
-					<property name="bottom_attach">2</property>
+					<property name="top_attach">2</property>
+					<property name="bottom_attach">3</property>
 					<property name="left_attach">0</property>
 					<property name="right_attach">1</property>
                     <property name="x_options">GTK_FILL</property>
@@ -3930,8 +3965,8 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                     <signal name="format_value" handler="format_gain_cb"/>
                   </object>
                   <packing>
-                    <property name="top_attach">1</property>
-                    <property name="bottom_attach">2</property>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
                     <property name="left_attach">1</property>
                     <property name="right_attach">3</property>
                     <property name="x_options">GTK_FILL|GTK_EXPAND</property>
@@ -3945,8 +3980,8 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                     <property name="use_markup">True</property>
                   </object>
                   <packing>
-					<property name="top_attach">2</property>
-					<property name="bottom_attach">3</property>
+					<property name="top_attach">3</property>
+					<property name="bottom_attach">4</property>
 					<property name="left_attach">0</property>
 					<property name="right_attach">1</property>
                     <property name="x_options">GTK_FILL</property>
@@ -3967,8 +4002,8 @@ For source audio that has a wide dynamic range (very loud and very soft sequence
                     <signal name="format_value" handler="format_drc_cb"/>
                   </object>
                   <packing>
-                    <property name="top_attach">2</property>
-                    <property name="bottom_attach">3</property>
+                    <property name="top_attach">3</property>
+                    <property name="bottom_attach">4</property>
                     <property name="left_attach">1</property>
                     <property name="right_attach">3</property>
                     <property name="x_options">GTK_FILL|GTK_EXPAND</property>

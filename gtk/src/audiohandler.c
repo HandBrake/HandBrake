@@ -572,7 +572,7 @@ G_MODULE_EXPORT gchar*
 format_gain_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 {
 	if ( val >= 21.0 )
-		return g_strdup_printf("*11*", (int)val);
+		return g_strdup_printf("*11*");
 	return g_strdup_printf("%ddB", (int)val);
 }
 
@@ -701,6 +701,7 @@ audio_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t 
 		ghb_settings_set_value(ud->settings, "AudioEncoderActual", ghb_settings_get_value(asettings, "AudioEncoderActual"));
 		ghb_check_dependency(ud, NULL, "AudioEncoderActual");
 		ghb_ui_update(ud, "AudioBitrate", ghb_settings_get_value(asettings, "AudioBitrate"));
+		ghb_ui_update(ud, "AudioTrackName", ghb_settings_get_value(asettings, "AudioTrackName"));
 		ghb_ui_update(ud, "AudioSamplerate", ghb_settings_get_value(asettings, "AudioSamplerate"));
 		ghb_ui_update(ud, "AudioMixdown", ghb_settings_get_value(asettings, "AudioMixdown"));
 		ghb_ui_update(ud, "AudioTrackDRCSlider", ghb_settings_get_value(asettings, "AudioTrackDRCSlider"));
@@ -726,6 +727,12 @@ ghb_add_audio(signal_user_data_t *ud, GValue *settings)
 	track = ghb_settings_combo_option(settings, "AudioTrack");
 	ghb_settings_set_string(settings, "AudioTrackDescription", track);
 
+	GValue *aname;
+	aname = ghb_dict_lookup(settings, "AudioTrackName");
+	if (aname == NULL)
+	{
+		ghb_settings_set_string(settings, "AudioTrackName", "");
+	}
 	audio_list = ghb_settings_get_value(ud->settings, "audio_list");
 	if (audio_list == NULL)
 	{
