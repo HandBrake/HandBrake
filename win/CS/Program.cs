@@ -10,6 +10,7 @@ namespace Handbrake
     using System.IO;
     using System.Windows.Forms;
 
+    using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Services;
 
@@ -60,10 +61,20 @@ namespace Handbrake
             {
                 if (Settings.Default.UpdateRequired)
                 {
-                    Settings.Default.Upgrade();
-                    Settings.Default.UpdateRequired = false;
-                    Settings.Default.Save();
-                
+                    // Upgrading user settings seems to be problematic from 0.9.5 -> Current, 
+                    // Seems to be seeing user.config corrupation from time to time.
+                    // So I'm going to only allow this for users using svn builds.
+                    // Going from major to major will require the user to reset.
+                    // Going from svn to svn will attempt the upgrade.
+                    UserSettingService service = new UserSettingService();
+                    string version = service.GetUserSettingString(UserSettingConstants.HandBrakeVersion);
+                    if (version.Contains("svn"))
+                    {
+                        Settings.Default.Upgrade();
+                        Settings.Default.UpdateRequired = false;
+                        Settings.Default.Save();
+                    }
+
                     // Re-detect the CLI version data.
                     Functions.Main.SetCliVersionData();
                 }

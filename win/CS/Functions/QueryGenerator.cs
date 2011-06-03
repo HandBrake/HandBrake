@@ -392,6 +392,7 @@ namespace Handbrake.Functions
             string bitrates = string.Empty;
             string drvValues = string.Empty;
             string gainValues = string.Empty;
+            string trackNames = string.Empty;
 
             // If we have no audio tracks, set the query to none
             if (mainWindow.AudioSettings.AudioTracks.ToList().Count == 0)
@@ -430,9 +431,28 @@ namespace Handbrake.Functions
 
                 // Audio Gain Control
                 gainValues += string.IsNullOrEmpty(gainValues) ? audioTrack.Gain.ToString(Culture) : string.Format(",{0}", audioTrack.Gain.ToString(Culture));
+
+                trackNames += string.IsNullOrEmpty(trackNames)
+                                ? string.IsNullOrEmpty(audioTrack.TrackName) ? "\" \"" : string.Format("\"{0}\"", audioTrack.TrackName.Trim())
+                                : string.IsNullOrEmpty(audioTrack.TrackName) ? ",\" \"" : string.Format(",\"{0}\"", audioTrack.TrackName.Trim());
             }
 
-            return string.Format(" -a {0} -E {1} -B {2} -6 {3} -R {4} -D {5} --gain={6}", tracks, encoders, bitrates, mixdowns, samplerates, drvValues, gainValues);
+            string audioQuery = string.Format(
+                " -a {0} -E {1} -B {2} -6 {3} -R {4} -D {5} --gain={6}",
+                tracks,
+                encoders,
+                bitrates,
+                mixdowns,
+                samplerates,
+                drvValues,
+                gainValues);
+
+            if (!string.IsNullOrEmpty(trackNames.Trim()) && trackNames.Trim() != ",")
+            {
+                audioQuery += string.Format(" --aname={0}", trackNames);
+            }
+
+            return audioQuery;
         }
 
         private static string ChapterMarkersQuery(frmMain mainWindow)

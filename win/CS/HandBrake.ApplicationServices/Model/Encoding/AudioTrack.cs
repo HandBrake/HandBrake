@@ -142,6 +142,11 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         public double SampleRate { get; set; }
 
         /// <summary>
+        /// Gets or sets TrackName.
+        /// </summary>
+        public string TrackName { get; set; }
+
+        /// <summary>
         /// Gets or sets Dynamic Range Compression
         /// </summary>
         public double DRC

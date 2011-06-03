@@ -36,6 +36,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.lbl_drc = new System.Windows.Forms.Label();
             this.tb_drc = new System.Windows.Forms.TrackBar();
+            this.label3 = new System.Windows.Forms.Label();
+            this.audioTrackName = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.gainTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tb_drc)).BeginInit();
             this.SuspendLayout();
@@ -75,7 +77,7 @@
             this.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_close.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(207, 133);
+            this.btn_close.Location = new System.Drawing.Point(206, 199);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(71, 22);
             this.btn_close.TabIndex = 5;
@@ -114,11 +116,31 @@
             this.tb_drc.TabIndex = 61;
             this.tb_drc.Scroll += new System.EventHandler(this.tb_drc_Scroll);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(12, 134);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(77, 13);
+            this.label3.TabIndex = 62;
+            this.label3.Text = "Track Name:";
+            // 
+            // audioTrackName
+            // 
+            this.audioTrackName.Location = new System.Drawing.Point(15, 150);
+            this.audioTrackName.Name = "audioTrackName";
+            this.audioTrackName.Size = new System.Drawing.Size(228, 21);
+            this.audioTrackName.TabIndex = 63;
+            this.audioTrackName.TextChanged += new System.EventHandler(this.audioTrackName_TextChanged);
+            // 
             // AdvancedAudio
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(289, 164);
+            this.ClientSize = new System.Drawing.Size(289, 233);
+            this.Controls.Add(this.audioTrackName);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.tb_drc);
             this.Controls.Add(this.lbl_drc);
             this.Controls.Add(this.label2);
@@ -129,7 +151,6 @@
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AdvancedAudio";
@@ -156,5 +177,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lbl_drc;
         internal System.Windows.Forms.TrackBar tb_drc;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox audioTrackName;
     }
 }
