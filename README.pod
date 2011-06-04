@@ -26,7 +26,9 @@
  This contains our wiki, tickets and code timeline.<br />
  
  <h3> Freenode </h3>
- <b>IRC:</a> <a href="irc://irc.freenode.net/#handbrake">#Handbrake on Freenode </a>
+ <b>IRC:</a> <a href="irc://irc.freenode.net/#handbrake">#Handbrake on Freenode </a></b>
+
+ Note that accessing IRC through freenode's webchat is disabled for spam concerns.<br />
  
 </p>
 
