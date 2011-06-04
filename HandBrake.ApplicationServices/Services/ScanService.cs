@@ -92,7 +92,7 @@ namespace HandBrake.ApplicationServices.Services
         {
             get
             {
-                return string.IsNullOrEmpty(this.logBuffer.ToString()) ? header + "No log data available..." : header + this.logBuffer.ToString();
+                return string.IsNullOrEmpty(this.logBuffer.ToString()) ? this.header + "No log data available..." : this.header + this.logBuffer.ToString();
             }
         }
 
@@ -125,8 +125,10 @@ namespace HandBrake.ApplicationServices.Services
                     this.readData.OnScanProgress -= this.OnScanProgress;
                 }
 
-                if (hbProc != null && !hbProc.HasExited)
-                    hbProc.Kill();
+                if (this.hbProc != null && !this.hbProc.HasExited)
+                {
+                    this.hbProc.Kill();
+                }
             }
             catch
             {
@@ -146,13 +148,13 @@ namespace HandBrake.ApplicationServices.Services
         {
             try
             {
-                IsScanning = true;
+                this.IsScanning = true;
                 if (this.ScanStared != null)
                 {
                     this.ScanStared(this, new EventArgs());
                 }
 
-                logBuffer = new StringBuilder();
+                this.logBuffer = new StringBuilder();
 
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
                 string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
@@ -187,22 +189,7 @@ namespace HandBrake.ApplicationServices.Services
                         StartInfo =
                             {
                                 FileName = handbrakeCLIPath,
-                                Arguments = String.Format(@" -i ""{0}"" -t{1} {2} -v ", sourcePath, title, extraArguments),
-                                RedirectStandardOutput = true,
-                                RedirectStandardError = true,
-                                UseShellExecute = false,
-                                CreateNoWindow = true
-                            }
-                    };
-
-                string command = String.Format(@" -i {0} -t{1} {2} -v ", source, title, extraArguments);
-
-                this.hbProc = new Process
-                    {
-                        StartInfo =
-                            {
-                                FileName = handbrakeCLIPath,
-                                Arguments = command,
+                                Arguments = string.Format(@" -i {0} -t{1} {2} -v ", source, title, extraArguments),
                                 RedirectStandardOutput = true,
                                 RedirectStandardError = true,
                                 UseShellExecute = false,
@@ -225,7 +212,7 @@ namespace HandBrake.ApplicationServices.Services
                     {
                         scanLog.WriteLine(GeneralUtilities.CreateCliLogHeader(null));
                         scanLog.Write(this.readData.Buffer);
-                        logBuffer.AppendLine(this.readData.Buffer.ToString());
+                        this.logBuffer.AppendLine(this.readData.Buffer.ToString());
                     }
                     else
                     {
@@ -234,7 +221,7 @@ namespace HandBrake.ApplicationServices.Services
                     }
                 }
 
-                IsScanning = false;
+                this.IsScanning = false;
 
                 if (this.ScanCompleted != null)
                 {
