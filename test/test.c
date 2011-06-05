@@ -3369,7 +3369,7 @@ static int ParseOptions( int argc, char ** argv )
     return 0;
 }
 
-char * str_printf(const char *fmt, ...)
+static char * str_printf(const char *fmt, ...)
 {
     /* Guess we need no more than 100 bytes. */
     int len;

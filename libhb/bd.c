@@ -436,6 +436,7 @@ int hb_bd_main_feature( hb_bd_t * d, hb_list_t * list_title )
     int ii;
     uint64_t longest_duration = 0;
     int highest_rank = 0;
+    int most_chapters = 0;
     int rank[8] = {0, 1, 3, 2, 6, 5, 7, 4};
     BLURAY_TITLE_INFO * ti;
 
@@ -455,6 +456,14 @@ int hb_bd_main_feature( hb_bd_t * d, hb_list_t * list_title )
                     longest = title->index;
                     longest_duration = title->duration;
                     highest_rank = rank[bdvideo->format];
+                    most_chapters = ti->chapter_count;
+                }
+                else if (highest_rank == rank[bdvideo->format] &&
+                         title->duration == longest_duration &&
+                         ti->chapter_count > most_chapters)
+                {
+                    longest = title->index;
+                    most_chapters = ti->chapter_count;
                 }
             }
             bd_free_title_info( ti );
@@ -586,6 +595,10 @@ hb_buffer_t * hb_bd_read( hb_bd_t * d )
                 case BD_EVENT_PLAYITEM:
                     discontinuity = 1;
                     hb_deep_log(2, "bd: Playitem %u", event.param);
+                    break;
+
+                case BD_EVENT_STILL:
+                    bd_read_skip_still( d->bd );
                     break;
 
                 default:
