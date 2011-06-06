@@ -1232,7 +1232,7 @@ cleanup:
 static void work_loop( void * _w )
 {
     hb_work_object_t * w = _w;
-    hb_buffer_t      * buf_in, * buf_out;
+    hb_buffer_t      * buf_in = NULL, * buf_out = NULL;
 
     while( !*w->done && w->status != HB_WORK_DONE )
     {
