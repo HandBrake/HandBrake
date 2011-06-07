@@ -15,6 +15,7 @@ struct hb_bd_s
     char         * path;
     BLURAY       * bd;
     int            title_count;
+    BLURAY_TITLE_INFO  ** title_info;
     uint64_t       pkt_count;
     hb_stream_t  * stream;
     int            chapter;
@@ -25,6 +26,7 @@ struct hb_bd_s
  * Local prototypes
  **********************************************************************/
 static int           next_packet( BLURAY *bd, uint8_t *pkt );
+static int title_info_compare_mpls(const void *, const void *);
 
 /***********************************************************************
  * hb_bd_init
@@ -34,6 +36,7 @@ static int           next_packet( BLURAY *bd, uint8_t *pkt );
 hb_bd_t * hb_bd_init( char * path )
 {
     hb_bd_t * d;
+    int ii;
 
     d = calloc( sizeof( hb_bd_t ), 1 );
 
@@ -54,6 +57,12 @@ hb_bd_t * hb_bd_init( char * path )
         hb_log( "bd: not a bd - trying as a stream/file instead" );
         goto fail;
     }
+    d->title_info = calloc( sizeof( BLURAY_TITLE_INFO* ) , d->title_count );
+    for ( ii = 0; ii < d->title_count; ii++ )
+    {
+        d->title_info[ii] = bd_get_title_info( d->bd, ii );
+    }
+    qsort(d->title_info, d->title_count, sizeof( BLURAY_TITLE_INFO* ), title_info_compare_mpls );
     d->path = strdup( path );
 
     return d;
@@ -181,7 +190,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     title->vts = 0;
     title->ttn = 0;
 
-    ti = bd_get_title_info( d->bd, tt - 1 );
+    ti = d->title_info[tt - 1];
     if ( ti == NULL )
     {
         hb_log( "bd: invalid title" );
@@ -198,7 +207,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
         goto fail;
     }
 
-    hb_deep_log( 2, "bd: Playlist %05d", ti->playlist);
+    hb_deep_log( 2, "bd: playlist %05d.MPLS", ti->playlist);
 
     uint64_t pkt_count = 0;
     for ( ii = 0; ii < ti->clip_count; ii++ )
@@ -422,7 +431,6 @@ fail:
     title = NULL;
 
 cleanup:
-    if ( ti ) bd_free_title_info( ti );
 
     return title;
 }
@@ -443,7 +451,7 @@ int hb_bd_main_feature( hb_bd_t * d, hb_list_t * list_title )
     for ( ii = 0; ii < hb_list_count( list_title ); ii++ )
     {
         hb_title_t * title = hb_list_item( list_title, ii );
-        ti = bd_get_title_info( d->bd, title->index - 1 );
+        ti = d->title_info[title->index - 1];
         if ( ti ) 
         {
             BLURAY_STREAM_INFO * bdvideo = &ti->clips[0].video_streams[0];
@@ -466,7 +474,6 @@ int hb_bd_main_feature( hb_bd_t * d, hb_list_t * list_title )
                     most_chapters = ti->chapter_count;
                 }
             }
-            bd_free_title_info( ti );
         }
         else if ( title->duration > longest_duration )
         {
@@ -489,7 +496,7 @@ int hb_bd_start( hb_bd_t * d, hb_title_t *title )
     d->pkt_count = title->block_count;
 
     // Calling bd_get_event initializes libbluray event queue.
-    bd_select_title( d->bd, title->index - 1 );
+    bd_select_title( d->bd, d->title_info[title->index - 1]->idx );
     bd_get_event( d->bd, &event );
     d->chapter = 1;
     d->stream = hb_bd_stream_open( title );
@@ -636,7 +643,14 @@ int hb_bd_chapter( hb_bd_t * d )
 void hb_bd_close( hb_bd_t ** _d )
 {
     hb_bd_t * d = *_d;
+    int ii;
 
+    if ( d->title_info )
+    {
+        for ( ii = 0; ii < d->title_count; ii++ )
+            bd_free_title_info( d->title_info[ii] );
+        free( d->title_info );
+    }
     if( d->stream ) hb_stream_close( &d->stream );
     if( d->bd ) bd_close( d->bd );
 
@@ -764,3 +778,12 @@ static int next_packet( BLURAY *bd, uint8_t *pkt )
     }
 }
 
+static int title_info_compare_mpls(const void *va, const void *vb)
+{
+    BLURAY_TITLE_INFO *a, *b;
+
+    a = *(BLURAY_TITLE_INFO**)va;
+    b = *(BLURAY_TITLE_INFO**)vb;
+
+    return a->playlist - b->playlist;
+}
