@@ -38,10 +38,11 @@ Index: libavcodec/h264.c
 ===================================================================
 --- ffmpeg.orig/libavcodec/h264.c	(revision 22823)
 +++ ffmpeg/libavcodec/h264.c	(working copy)
-@@ -2772,7 +2772,7 @@
+@@ -2772,8 +2772,8 @@
  
      if(!(s->flags2 & CODEC_FLAG2_CHUNKS) && !s->current_picture_ptr){
-         if (avctx->skip_frame >= AVDISCARD_NONREF || s->hurry_up) return 0;
+         if (avctx->skip_frame >= AVDISCARD_NONREF)
+             return 0;
 -        av_log(avctx, AV_LOG_ERROR, "no frame!\n");
 +        av_log(avctx, AV_LOG_DEBUG, "no frame!\n");
          return -1;
@@ -57,6 +58,6 @@ Index: libavcodec/h264_refs.c
           */
 -        av_log(h->s.avctx, AV_LOG_ERROR,
 +        av_log(h->s.avctx, AV_LOG_DEBUG,
-                "number of reference frames exceeds max (probably "
+                "number of reference frames (%d+%d) exceeds max (%d; probably "
                 "corrupt input), discarding one\n");
  

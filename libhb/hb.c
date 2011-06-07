@@ -257,6 +257,7 @@ void hb_ff_set_sample_fmt(AVCodecContext *context, AVCodec *codec)
         {
             if ( *fmt == AV_SAMPLE_FMT_FLT )
             {
+                context->request_sample_fmt = AV_SAMPLE_FMT_FLT;
                 context->sample_fmt = AV_SAMPLE_FMT_FLT;
                 break;
             }

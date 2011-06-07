@@ -1,0 +1,16 @@
+diff --git a/libavutil/mem.c b/libavutil/mem.c
+index 27bb30b..6f29363 100644
+--- a/libavutil/mem.c
++++ b/libavutil/mem.c
+@@ -80,6 +80,11 @@ void *av_malloc(size_t size)
+     ptr = (char*)ptr + diff;
+     ((char*)ptr)[-1]= diff;
+ #elif HAVE_POSIX_MEMALIGN
++#if defined(__APPLE__)
++    if (size == 0)
++        ptr = NULL;
++    else
++#endif
+     if (posix_memalign(&ptr,32,size))
+         ptr = NULL;
+ #elif HAVE_MEMALIGN

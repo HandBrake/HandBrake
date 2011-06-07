@@ -1077,7 +1077,12 @@ static int setup_extradata( hb_work_object_t *w, hb_buffer_t *in )
         // we haven't been inflicted with M$ - allocate a little space as
         // a marker and return success.
         pv->context->extradata_size = 0;
-        pv->context->extradata = av_malloc(pv->context->extradata_size);
+        // av_malloc uses posix_memalign which is allowed to
+        // return NULL when allocating 0 bytes.  We use extradata == NULL
+        // to trigger initialization of extradata and the decoder, so 
+        // we can not set it to NULL here. So allocate a small
+        // buffer instead.
+        pv->context->extradata = av_malloc(1);
         return 0;
     }
 
