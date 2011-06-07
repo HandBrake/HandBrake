@@ -121,6 +121,7 @@ hb_work_object_t * hb_codec_decoder( int codec )
 
 hb_work_object_t * hb_codec_encoder( int codec )
 {
+    hb_work_object_t * w;
     switch( codec )
     {
         case HB_ACODEC_FAAC:   return hb_get_work( WORK_ENCFAAC );
@@ -128,7 +129,18 @@ hb_work_object_t * hb_codec_encoder( int codec )
         case HB_ACODEC_VORBIS: return hb_get_work( WORK_ENCVORBIS );
         case HB_ACODEC_CA_AAC: return hb_get_work( WORK_ENC_CA_AAC );
         case HB_ACODEC_CA_HAAC:return hb_get_work( WORK_ENC_CA_HAAC );
-        case HB_ACODEC_AC3:    return hb_get_work( WORK_ENCAC3 );
+        case HB_ACODEC_FFAAC:
+        {
+            w = hb_get_work( WORK_ENCAVCODEC_AUDIO );
+            w->codec_param = CODEC_ID_AAC;
+            return w;
+        }
+        case HB_ACODEC_AC3:
+        {
+            w = hb_get_work( WORK_ENCAVCODEC_AUDIO );
+            w->codec_param = CODEC_ID_AC3;
+            return w;
+        }
     }
     return NULL;
 }
@@ -371,8 +383,9 @@ void hb_display_job_info( hb_job_t * job )
                     ( ( audio->config.out.codec == HB_ACODEC_LAME ) ?  "lame" : 
                     ( ( audio->config.out.codec == HB_ACODEC_CA_AAC ) ?  "ca_aac" : 
                     ( ( audio->config.out.codec == HB_ACODEC_CA_HAAC ) ?  "ca_haac" : 
+                    ( ( audio->config.out.codec == HB_ACODEC_FFAAC ) ?  "ffaac" : 
                     ( ( audio->config.out.codec == HB_ACODEC_AC3 ) ?  "ffac3" : 
-                    "vorbis"  ) ) ) ) );
+                    "vorbis"  ) ) ) ) ) );
                 hb_log( "     + bitrate: %d kbps, samplerate: %d Hz", audio->config.out.bitrate, audio->config.out.samplerate );            
             }
         }

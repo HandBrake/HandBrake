@@ -262,6 +262,9 @@ void hb_ff_set_sample_fmt(AVCodecContext *context, AVCodec *codec)
                 break;
             }
         }
+        if ( *fmt == -1 )
+            context->sample_fmt = codec->sample_fmts[0];
+
     }
 }
 
@@ -415,7 +418,7 @@ hb_handle_t * hb_init( int verbose, int update_check )
 	hb_register( &hb_encca_aac );
 	hb_register( &hb_encca_haac );
 #endif
-	hb_register( &hb_encac3 );
+	hb_register( &hb_encavcodeca );
     
     return h;
 }
@@ -517,7 +520,7 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
 	hb_register( &hb_encca_aac );
 	hb_register( &hb_encca_haac );
 #endif
-	hb_register( &hb_encac3 );
+	hb_register( &hb_encavcodeca );
 
 	return h;
 }

@@ -222,6 +222,22 @@ void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, in
             }
             break;
 
+        case HB_ACODEC_FFAAC:
+            *low = 32 * channels;
+            if (samplerate > 24000)
+            {
+                *high = 160 * channels;
+                if (*high > 768)
+                    *high = 768;
+            }
+            else
+            {
+                *high = 96 * channels;
+                if (*high > 480)
+                    *high = 480;
+            }
+            break;
+
         case HB_ACODEC_VORBIS:
             *high = channels * 80;
             if (samplerate > 24000)

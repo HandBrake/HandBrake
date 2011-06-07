@@ -321,6 +321,7 @@ struct hb_job_s
 #define HB_ACODEC_FFMPEG    0x00008000
 #define HB_ACODEC_CA_AAC    0x00010000
 #define HB_ACODEC_CA_HAAC   0x00020000
+#define HB_ACODEC_FFAAC     0x00040000
 #define HB_ACODEC_PASS_FLAG 0x40000000
 #define HB_ACODEC_PASS_MASK (HB_ACODEC_AC3 | HB_ACODEC_DCA)
 #define HB_ACODEC_AC3_PASS  (HB_ACODEC_AC3 | HB_ACODEC_PASS_FLAG)
@@ -791,7 +792,7 @@ extern hb_work_object_t hb_encvorbis;
 extern hb_work_object_t hb_muxer;
 extern hb_work_object_t hb_encca_aac;
 extern hb_work_object_t hb_encca_haac;
-extern hb_work_object_t hb_encac3;
+extern hb_work_object_t hb_encavcodeca;
 
 #define FILTER_OK      0
 #define FILTER_DELAY   1

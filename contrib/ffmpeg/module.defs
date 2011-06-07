@@ -19,6 +19,7 @@ FFMPEG.CONFIGURE.extra = \
     --disable-dxva2 \
     --enable-bzlib \
     --enable-encoder=ac3 \
+    --enable-encoder=aac \
     --enable-encoder=mpeg4 \
     --enable-encoder=mpeg2video \
     --enable-encoder=snow \

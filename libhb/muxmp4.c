@@ -420,6 +420,7 @@ rate_found2:
             }
         } 
         else if( audio->config.out.codec == HB_ACODEC_FAAC ||
+                 audio->config.out.codec == HB_ACODEC_FFAAC ||
                  audio->config.out.codec == HB_ACODEC_CA_AAC ||
                  audio->config.out.codec == HB_ACODEC_CA_HAAC ) 
         {

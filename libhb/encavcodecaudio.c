@@ -1,4 +1,4 @@
-/* $Id: encac3.c,v 1.23 2005/10/13 23:47:06 titer Exp $
+/* $Id: encavcodeca.c,v 1.23 2005/10/13 23:47:06 titer Exp $
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.fr/>.
@@ -7,6 +7,7 @@
 #include "hb.h"
 #include "hbffmpeg.h"
 #include "downmix.h"
+#include "libavcodec/audioconvert.h"
 
 struct hb_work_private_s
 {
@@ -14,29 +15,27 @@ struct hb_work_private_s
     AVCodecContext * context;
 
     int              out_discrete_channels;
+    int              samples_per_frame;
     unsigned long    input_samples;
     unsigned long    output_bytes;
     hb_list_t      * list;
     uint8_t        * buf;
 };
 
-int  encac3Init( hb_work_object_t *, hb_job_t * );
-int  encac3Work( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
-void encac3Close( hb_work_object_t * );
+static int  encavcodecaInit( hb_work_object_t *, hb_job_t * );
+static int  encavcodecaWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
+static void encavcodecaClose( hb_work_object_t * );
 
-#define AC3_SAMPLES_PER_FRAME 1536
-#define AC3_MAX_CODED_FRAME_SIZE 3840
-
-hb_work_object_t hb_encac3 =
+hb_work_object_t hb_encavcodeca =
 {
-    WORK_ENCAC3,
-    "AC-3 encoder (libavcodec)",
-    encac3Init,
-    encac3Work,
-    encac3Close
+    WORK_ENCAVCODEC_AUDIO,
+    "AVCodec Audio encoder (libavcodec)",
+    encavcodecaInit,
+    encavcodecaWork,
+    encavcodecaClose
 };
 
-int encac3Init( hb_work_object_t * w, hb_job_t * job )
+static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
 {
     AVCodec * codec;
     AVCodecContext * context;
@@ -48,19 +47,23 @@ int encac3Init( hb_work_object_t * w, hb_job_t * job )
     pv->job = job;
 
     pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
-    pv->input_samples = AC3_SAMPLES_PER_FRAME * pv->out_discrete_channels;
-    pv->output_bytes = AC3_MAX_CODED_FRAME_SIZE;
 
-    pv->buf = malloc( pv->input_samples * sizeof( float ) );
-
-    codec = avcodec_find_encoder( CODEC_ID_AC3 );
+    codec = avcodec_find_encoder( w->codec_param );
     if( !codec )
     {
-        hb_log( "encac3Init: avcodec_find_encoder "
+        hb_log( "encavcodecaInit: avcodec_find_encoder "
                 "failed" );
+        return 1;
     }
     context = avcodec_alloc_context();
     avcodec_get_context_defaults3(context, codec);
+
+    int ret = av_set_string3( context, "stereo_mode", "ms_off", 1, NULL );
+    /* Let avutil sanity check the options for us*/
+    if( ret == AVERROR(ENOENT) )
+        hb_log( "avcodec options: Unknown option %s", "stereo_mode" );
+    if( ret == AVERROR(EINVAL) )
+        hb_log( "avcodec options: Bad argument %s=%s", "stereo_mode", "ms_off" ? "ms_off" : "(null)" );
 
     context->channel_layout = AV_CH_LAYOUT_STEREO;
     switch( audio->config.out.mixdown )
@@ -80,22 +83,40 @@ int encac3Init( hb_work_object_t * w, hb_job_t * job )
             break;
 
         default:
-            hb_log(" encac3Init: bad mixdown" );
+            hb_log(" encavcodecaInit: bad mixdown" );
             break;
     }
 
     context->bit_rate = audio->config.out.bitrate * 1000;
     context->sample_rate = audio->config.out.samplerate;
     context->channels = pv->out_discrete_channels;
-    context->sample_fmt = AV_SAMPLE_FMT_FLT;
+    // Try to set format to float.  Fallback to whatever is supported.
+    hb_ff_set_sample_fmt( context, codec );
 
     if( hb_avcodec_open( context, codec ) )
     {
-        hb_log( "encac3Init: avcodec_open failed" );
+        hb_log( "encavcodecaInit: avcodec_open failed" );
+        return 1;
     }
     pv->context = context;
 
+    pv->samples_per_frame = context->frame_size;
+    pv->input_samples = pv->samples_per_frame * pv->out_discrete_channels;
+
+    // Set a reasonable maximum output size
+    pv->output_bytes = context->frame_size * 
+        (av_get_bits_per_sample_fmt(context->sample_fmt) / 8) * 
+        context->channels;
+
+    pv->buf = malloc( pv->input_samples * sizeof( float ) );
+
     pv->list = hb_list_init();
+
+    if ( w->codec_param == CODEC_ID_AAC && context->extradata )
+    {
+        memcpy( w->config->aac.bytes, context->extradata, context->extradata_size );
+        w->config->aac.length = context->extradata_size;
+    }
 
     return 0;
 }
@@ -105,7 +126,7 @@ int encac3Init( hb_work_object_t * w, hb_job_t * job )
  ***********************************************************************
  *
  **********************************************************************/
-void encac3Close( hb_work_object_t * w )
+static void encavcodecaClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
 
@@ -113,7 +134,7 @@ void encac3Close( hb_work_object_t * w )
     {
         if( pv->context )
         {
-            hb_deep_log( 2, "encac3: closing libavcodec" );
+            hb_deep_log( 2, "encavcodeca: closing libavcodec" );
             if ( pv->context->codec )
                 avcodec_flush_buffers( pv->context );
             hb_avcodec_close( pv->context );
@@ -176,7 +197,34 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
                 break;
         }
         hb_layout_remap( map, &hb_smpte_chan_map, layout, 
-                        (float*)pv->buf, AC3_SAMPLES_PER_FRAME);
+                        (float*)pv->buf, pv->samples_per_frame);
+    }
+
+    // Do we need to convert our internal float format?
+    if ( pv->context->sample_fmt != AV_SAMPLE_FMT_FLT )
+    {
+        int isamp, osamp;
+        AVAudioConvert *ctx;
+
+        isamp = av_get_bits_per_sample_fmt( AV_SAMPLE_FMT_FLT ) / 8;
+        osamp = av_get_bits_per_sample_fmt( pv->context->sample_fmt ) / 8;
+        ctx = av_audio_convert_alloc( pv->context->sample_fmt, 1,
+                                      AV_SAMPLE_FMT_FLT, 1,
+                                      NULL, 0 );
+
+        // get output buffer size then malloc a buffer
+        //nsamples = out_size / isamp;
+        //buffer = av_malloc( nsamples * sizeof(hb_sample_t) );
+
+        // we're doing straight sample format conversion which 
+        // behaves as if there were only one channel.
+        const void * const ibuf[6] = { pv->buf };
+        void * const obuf[6] = { pv->buf };
+        const int istride[6] = { isamp };
+        const int ostride[6] = { osamp };
+
+        av_audio_convert( ctx, obuf, ostride, ibuf, istride, pv->input_samples );
+        av_audio_convert_free( ctx );
     }
     
     buf = hb_buffer_init( pv->output_bytes );
@@ -184,7 +232,7 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
                                       (short*)pv->buf );
 
     buf->start = pts + 90000 * pos / pv->out_discrete_channels / sizeof( float ) / audio->config.out.samplerate;
-    buf->stop  = buf->start + 90000 * AC3_SAMPLES_PER_FRAME / audio->config.out.samplerate;
+    buf->stop  = buf->start + 90000 * pv->samples_per_frame / audio->config.out.samplerate;
 
     buf->frametype = HB_FRAME_AUDIO;
 
@@ -195,7 +243,7 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     }
     else if (buf->size < 0)
     {
-        hb_log( "encac3: avcodec_encode_audio failed" );
+        hb_log( "encavcodeca: avcodec_encode_audio failed" );
         hb_buffer_close( &buf );
         return NULL;
     }
@@ -208,7 +256,7 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
  ***********************************************************************
  *
  **********************************************************************/
-int encac3Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
+static int encavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     hb_buffer_t ** buf_out )
 {
     hb_work_private_t * pv = w->private_data;
