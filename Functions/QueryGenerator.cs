@@ -433,8 +433,8 @@ namespace Handbrake.Functions
                 gainValues += string.IsNullOrEmpty(gainValues) ? audioTrack.Gain.ToString(Culture) : string.Format(",{0}", audioTrack.Gain.ToString(Culture));
 
                 trackNames += string.IsNullOrEmpty(trackNames)
-                                ? string.IsNullOrEmpty(audioTrack.TrackName) ? "\" \"" : string.Format("\"{0}\"", audioTrack.TrackName.Trim())
-                                : string.IsNullOrEmpty(audioTrack.TrackName) ? ",\" \"" : string.Format(",\"{0}\"", audioTrack.TrackName.Trim());
+                                ? string.IsNullOrEmpty(audioTrack.TrackName) ? "\"\"" : string.Format("\"{0}\"", audioTrack.TrackName.Trim())
+                                : string.IsNullOrEmpty(audioTrack.TrackName) ? ",\"\"" : string.Format(",\"{0}\"", audioTrack.TrackName.Trim());
             }
 
             string audioQuery = string.Format(
@@ -447,7 +447,7 @@ namespace Handbrake.Functions
                 drvValues,
                 gainValues);
 
-            if (!string.IsNullOrEmpty(trackNames.Trim()) && trackNames.Trim() != ",")
+            if (!string.IsNullOrEmpty(trackNames.Trim()) && !string.IsNullOrEmpty(trackNames.Replace("\"", string.Empty).Replace(",", string.Empty).Trim()))
             {
                 audioQuery += string.Format(" --aname={0}", trackNames);
             }
