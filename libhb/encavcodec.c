@@ -489,29 +489,29 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             buf->flags &= ~HB_FRAME_REF;
             switch ( pv->context->coded_frame->pict_type )
             {
-                case FF_P_TYPE:
+                case AV_PICTURE_TYPE_P:
                 {
                     buf->frametype = HB_FRAME_P;
                 } break;
 
-                case FF_B_TYPE:
+                case AV_PICTURE_TYPE_B:
                 {
                     buf->frametype = HB_FRAME_B;
                 } break;
 
-                case FF_S_TYPE:
+                case AV_PICTURE_TYPE_S:
                 {
                     buf->frametype = HB_FRAME_P;
                 } break;
 
-                case FF_SP_TYPE:
+                case AV_PICTURE_TYPE_SP:
                 {
                     buf->frametype = HB_FRAME_P;
                 } break;
 
-                case FF_BI_TYPE:
-                case FF_SI_TYPE:
-                case FF_I_TYPE:
+                case AV_PICTURE_TYPE_BI:
+                case AV_PICTURE_TYPE_SI:
+                case AV_PICTURE_TYPE_I:
                 {
                     buf->flags |= HB_FRAME_REF;
                     if ( pv->context->coded_frame->key_frame )

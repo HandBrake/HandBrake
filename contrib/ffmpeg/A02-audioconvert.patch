@@ -1,8 +1,8 @@
-Index: libavcodec/Makefile
-===================================================================
---- ffmpeg.orig/libavcodec/Makefile	(revision 22823)
-+++ ffmpeg/libavcodec/Makefile	(working copy)
-@@ -3,7 +3,7 @@
+diff --git a/libavcodec/Makefile b/libavcodec/Makefile
+index b772bf1..17c4649 100644
+--- a/libavcodec/Makefile
++++ b/libavcodec/Makefile
+@@ -3,7 +3,7 @@ include $(SUBDIR)../config.mak
  NAME = avcodec
  FFLIBS = avutil
  

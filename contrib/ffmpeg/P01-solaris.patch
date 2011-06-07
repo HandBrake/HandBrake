@@ -1,8 +1,8 @@
-Index: configure
-===================================================================
---- ffmpeg.orig/configure	(revision 22823)
-+++ ffmpeg/configure	(working copy)
-@@ -54,6 +54,9 @@
+diff --git a/configure b/configure
+index 2a1883b..ab0c8b3 100755
+--- a/configure
++++ b/configure
+@@ -54,6 +54,9 @@ if test "$E1" != 0 || test "$E2" = 0; then
      exit 1
  fi
  
@@ -12,7 +12,7 @@ Index: configure
  show_help(){
  cat <<EOF
  Usage: configure [options]
-@@ -2387,7 +2390,7 @@
+@@ -2595,7 +2598,7 @@ EOF
  check_cc <<EOF || die "endian test failed"
  unsigned int endian = 'B' << 24 | 'I' << 16 | 'G' << 8 | 'E';
  EOF

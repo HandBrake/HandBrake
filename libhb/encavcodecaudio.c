@@ -105,7 +105,7 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
 
     // Set a reasonable maximum output size
     pv->output_bytes = context->frame_size * 
-        (av_get_bits_per_sample_fmt(context->sample_fmt) / 8) * 
+        av_get_bytes_per_sample(context->sample_fmt) * 
         context->channels;
 
     pv->buf = malloc( pv->input_samples * sizeof( float ) );
@@ -206,8 +206,8 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
         int isamp, osamp;
         AVAudioConvert *ctx;
 
-        isamp = av_get_bits_per_sample_fmt( AV_SAMPLE_FMT_FLT ) / 8;
-        osamp = av_get_bits_per_sample_fmt( pv->context->sample_fmt ) / 8;
+        isamp = av_get_bytes_per_sample( AV_SAMPLE_FMT_FLT );
+        osamp = av_get_bytes_per_sample( pv->context->sample_fmt );
         ctx = av_audio_convert_alloc( pv->context->sample_fmt, 1,
                                       AV_SAMPLE_FMT_FLT, 1,
                                       NULL, 0 );

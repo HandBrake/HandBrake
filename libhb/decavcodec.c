@@ -1583,7 +1583,7 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
                 int isamp;
                 AVAudioConvert *ctx;
 
-                isamp = av_get_bits_per_sample_fmt( context->sample_fmt ) / 8;
+                isamp = av_get_bytes_per_sample( context->sample_fmt );
                 ctx = av_audio_convert_alloc( AV_SAMPLE_FMT_FLT, 1,
                                               context->sample_fmt, 1,
                                               NULL, 0 );

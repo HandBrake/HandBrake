@@ -1,8 +1,34 @@
-Index: libavcodec/mpegvideo.c
-===================================================================
---- ffmpeg.orig/libavcodec/mpegvideo.c	(revision 22823)
-+++ ffmpeg/libavcodec/mpegvideo.c	(working copy)
-@@ -867,19 +867,18 @@
+diff --git a/libavcodec/h264.c b/libavcodec/h264.c
+index 0aa923f..15bf61d 100644
+--- a/libavcodec/h264.c
++++ b/libavcodec/h264.c
+@@ -3644,7 +3644,7 @@ static int decode_frame(AVCodecContext *avctx,
+     if(!(s->flags2 & CODEC_FLAG2_CHUNKS) && !s->current_picture_ptr){
+         if (avctx->skip_frame >= AVDISCARD_NONREF)
+             return 0;
+-        av_log(avctx, AV_LOG_ERROR, "no frame!\n");
++        av_log(avctx, AV_LOG_DEBUG, "no frame!\n");
+         return -1;
+     }
+ 
+diff --git a/libavcodec/h264_refs.c b/libavcodec/h264_refs.c
+index a025f7d..eda5e41 100644
+--- a/libavcodec/h264_refs.c
++++ b/libavcodec/h264_refs.c
+@@ -628,7 +628,7 @@ int ff_h264_execute_ref_pic_marking(H264Context *h, MMCO *mmco, int mmco_count){
+          * stream. Need to discard one frame. Prevents overrun of the
+          * short_ref and long_ref buffers.
+          */
+-        av_log(h->s.avctx, AV_LOG_ERROR,
++        av_log(h->s.avctx, AV_LOG_DEBUG,
+                "number of reference frames (%d+%d) exceeds max (%d; probably "
+                "corrupt input), discarding one\n",
+                h->long_ref_count, h->short_ref_count, h->sps.ref_frame_count);
+diff --git a/libavcodec/mpegvideo.c b/libavcodec/mpegvideo.c
+index 6a45da8..dc25c4d 100644
+--- a/libavcodec/mpegvideo.c
++++ b/libavcodec/mpegvideo.c
+@@ -986,19 +986,18 @@ int ff_find_unused_picture(MpegEncContext *s, int shared){
      }
  
      av_log(s->avctx, AV_LOG_FATAL, "Internal error, picture buffer overflow\n");
@@ -34,30 +60,3 @@ Index: libavcodec/mpegvideo.c
  }
  
  static void update_noise_reduction(MpegEncContext *s){
-Index: libavcodec/h264.c
-===================================================================
---- ffmpeg.orig/libavcodec/h264.c	(revision 22823)
-+++ ffmpeg/libavcodec/h264.c	(working copy)
-@@ -2772,8 +2772,8 @@
- 
-     if(!(s->flags2 & CODEC_FLAG2_CHUNKS) && !s->current_picture_ptr){
-         if (avctx->skip_frame >= AVDISCARD_NONREF)
-             return 0;
--        av_log(avctx, AV_LOG_ERROR, "no frame!\n");
-+        av_log(avctx, AV_LOG_DEBUG, "no frame!\n");
-         return -1;
-     }
- 
-Index: libavcodec/h264_refs.c
-===================================================================
---- ffmpeg.orig/libavcodec/h264_refs.c	(revision 22823)
-+++ ffmpeg/libavcodec/h264_refs.c	(working copy)
-@@ -608,7 +608,7 @@
-          * stream. Need to discard one frame. Prevents overrun of the
-          * short_ref and long_ref buffers.
-          */
--        av_log(h->s.avctx, AV_LOG_ERROR,
-+        av_log(h->s.avctx, AV_LOG_DEBUG,
-                "number of reference frames (%d+%d) exceeds max (%d; probably "
-                "corrupt input), discarding one\n");
- 
