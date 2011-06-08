@@ -99,9 +99,19 @@ void hb_avcodec_init()
     av_register_all();
 }
 
-int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec)
+int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec, int thread_count)
 {
     int ret;
+
+    if ( ( thread_count == HB_FFMPEG_THREADS_AUTO || thread_count > 0 ) && 
+         ( codec->type == AVMEDIA_TYPE_VIDEO ) )
+    {
+        avctx->thread_count = ( thread_count == HB_FFMPEG_THREADS_AUTO ) ? 
+                                hb_get_cpu_count() / 2 + 1 : thread_count;
+        avctx->thread_type = FF_THREAD_FRAME|FF_THREAD_SLICE;
+        avctx->thread_safe_callbacks = 1;
+    }
+
     ret = avcodec_open(avctx, codec);
     return ret;
 }

@@ -1119,7 +1119,7 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
         c->channels    = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT( w->audio->config.in.channel_layout );
         c->sample_fmt  = AV_SAMPLE_FMT_FLT;
 
-        if( hb_avcodec_open( c, codec ) < 0 )
+        if( hb_avcodec_open( c, codec, 0 ) < 0 )
         {
             hb_log( "sync: avcodec_open failed" );
             return;

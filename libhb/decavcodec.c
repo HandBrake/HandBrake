@@ -204,8 +204,9 @@ static int decavcodecInit( hb_work_object_t * w, hb_job_t * job )
     pv->parser = av_parser_init( codec_id );
 
     pv->context = avcodec_alloc_context();
+    avcodec_get_context_defaults3(pv->context, codec);
     hb_ff_set_sample_fmt( pv->context, codec );
-    hb_avcodec_open( pv->context, codec );
+    hb_avcodec_open( pv->context, codec, 0 );
 
     if ( w->audio != NULL )
     {
@@ -522,8 +523,9 @@ static int decavcodecBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
 
     AVCodecParserContext *parser = av_parser_init( codec->id );
     AVCodecContext *context = avcodec_alloc_context();
+    avcodec_get_context_defaults3(context, codec);
     hb_ff_set_sample_fmt( context, codec );
-    hb_avcodec_open( context, codec );
+    hb_avcodec_open( context, codec, 0 );
     uint8_t *buffer = av_malloc( AVCODEC_MAX_AUDIO_FRAME_SIZE );
     int out_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
     unsigned char *pbuffer;
@@ -1161,9 +1163,9 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         // incorrectly initialized the 1st time avcodec_open is called.
         // If you close it and open a 2nd time, it finishes the job.
         hb_ff_set_sample_fmt( pv->context, codec );
-        hb_avcodec_open( pv->context, codec );
+        hb_avcodec_open( pv->context, codec, 0 );
         hb_avcodec_close( pv->context );
-        hb_avcodec_open( pv->context, codec );
+        hb_avcodec_open( pv->context, codec, HB_FFMPEG_THREADS_AUTO );
     }
 
     if( in->start >= 0 )
@@ -1282,7 +1284,7 @@ static void init_ffmpeg_context( hb_work_object_t *w )
     {
         AVCodec *codec = avcodec_find_decoder( pv->context->codec_id );
         hb_ff_set_sample_fmt( pv->context, codec );
-        hb_avcodec_open( pv->context, codec );
+        hb_avcodec_open( pv->context, codec, HB_FFMPEG_THREADS_AUTO );
     }
     // set up our best guess at the frame duration.
     // the frame rate in the codec is usually bogus but it's sometimes

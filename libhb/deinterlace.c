@@ -653,7 +653,7 @@ hb_filter_private_t * hb_deinterlace_init( int pix_fmt,
                     avctx_enc->flags |= CODEC_FLAG_QPEL;
             }
 
-            hb_avcodec_open(avctx_enc, enc);
+            hb_avcodec_open(avctx_enc, enc, 0);
         }
 
         pv->mcdeint_frame       = avcodec_alloc_frame();

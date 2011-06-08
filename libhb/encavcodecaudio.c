@@ -93,7 +93,7 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     // Try to set format to float.  Fallback to whatever is supported.
     hb_ff_set_sample_fmt( context, codec );
 
-    if( hb_avcodec_open( context, codec ) )
+    if( hb_avcodec_open( context, codec, 0 ) )
     {
         hb_log( "encavcodecaInit: avcodec_open failed" );
         return 1;

@@ -280,7 +280,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
-    if( hb_avcodec_open( context, codec ) )
+    if( hb_avcodec_open( context, codec, 0 ) )
     {
         hb_log( "encavcodecInit: avcodec_open failed" );
     }
