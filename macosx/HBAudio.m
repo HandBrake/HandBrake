@@ -85,6 +85,13 @@ static NSMutableArray *masterBitRateArray = nil;
 									  nil]];
 		}
 		[masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
+									  NSLocalizedString(@"AAC (ffmpeg)", @"AAC (ffmpeg)"), keyAudioCodecName,
+									  [NSNumber numberWithInt: HB_ACODEC_FFAAC], keyAudioCodec,
+									  [NSNumber numberWithBool: YES], keyAudioMP4,
+									  [NSNumber numberWithBool: YES], keyAudioMKV,
+									  [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
+									  nil]];
+		[masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
 									  NSLocalizedString(@"AAC (faac)", @"AAC (faac)"), keyAudioCodecName,
 									  [NSNumber numberWithInt: HB_ACODEC_FAAC], keyAudioCodec,
 									  [NSNumber numberWithBool: YES], keyAudioMP4,

@@ -252,6 +252,7 @@ combo_opts_t vcodec_opts =
 static options_map_t d_acodec_opts[] =
 {
 	{"AAC (faac)",      "faac",    HB_ACODEC_FAAC,     "faac"},
+	{"AAC (ffmpeg)",    "ffaac",   HB_ACODEC_FFAAC,    "ffaac"},
 	{"MP3 (lame)",      "lame",    HB_ACODEC_LAME,     "lame"},
 	{"Vorbis",          "vorbis",  HB_ACODEC_VORBIS,   "vorbis"},
 	{"AC3 (ffmpeg)",    "ac3",     HB_ACODEC_AC3,      "ac3"},
@@ -1555,6 +1556,7 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	ghb_value_free(gval);
 
 	grey_combo_box_item(builder, "x264_analyse", 4, TRUE);
+	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_FFAAC, FALSE);
 	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_FAAC, FALSE);
 	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_LAME, FALSE);
 	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_VORBIS, FALSE);
@@ -4145,6 +4147,10 @@ ghb_select_audio_codec(GValue *settings, hb_audio_config_t *aconfig, gint acodec
 		{
 			return HB_ACODEC_FAAC;
 		}
+		else if (acodec & HB_ACODEC_FFAAC)
+		{
+			return HB_ACODEC_FFAAC;
+		}
 		else
 		{
 			return HB_ACODEC_FAAC;
@@ -4171,6 +4177,10 @@ ghb_select_audio_codec(GValue *settings, hb_audio_config_t *aconfig, gint acodec
 		else if (acodec & HB_ACODEC_FAAC)
 		{
 			return HB_ACODEC_FAAC;
+		}
+		else if (acodec & HB_ACODEC_FFAAC)
+		{
+			return HB_ACODEC_FFAAC;
 		}
 		else
 		{

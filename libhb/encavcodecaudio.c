@@ -174,7 +174,8 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     {
         map = &hb_ac3_chan_map;
     }
-    else if ( audio->config.in.codec == HB_ACODEC_DCA )
+    else if ( audio->config.in.codec == HB_ACODEC_DCA ||
+              audio->config.in.codec == HB_ACODEC_LPCM )
     {
         map = &hb_qt_chan_map;
     }

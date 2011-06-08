@@ -3569,6 +3569,10 @@ static int get_acodec_for_string( char *codec )
     {
         return HB_ACODEC_FAAC;
     }
+    else if( !strcasecmp( codec, "ffaac" ) )
+    {
+        return HB_ACODEC_FFAAC;
+    }
     else if( !strcasecmp( codec, "vorbis") )
     {
         return HB_ACODEC_VORBIS;
