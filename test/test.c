@@ -20,6 +20,7 @@
 #endif
 
 #include "hb.h"
+#include "lang.h"
 #include "parsecsv.h"
 
 #if defined( __APPLE_CC__ )
@@ -473,6 +474,27 @@ static int test_sub_list( char ** list, int pos )
         if ( idx == pos )
             return 1;
     }
+    return 0;
+}
+
+static int cmp_lang( char * lang, const char * code )
+{
+    iso639_lang_t * iso639;
+
+    iso639 = lang_for_code2( code );
+
+    if ( iso639 == NULL )
+        return 0;
+    if ( iso639->eng_name && !strcasecmp( lang, iso639->eng_name ) )
+        return 1;
+    if ( iso639->native_name && !strcasecmp( lang, iso639->native_name ) )
+        return 1;
+    if ( iso639->iso639_1 && !strcasecmp( lang, iso639->iso639_1 ) )
+        return 1;
+    if ( iso639->iso639_2 && !strcasecmp( lang, iso639->iso639_2 ) )
+        return 1;
+    if ( iso639->iso639_2b && !strcasecmp( lang, iso639->iso639_2b ) )
+        return 1;
     return 0;
 }
 
@@ -1528,15 +1550,11 @@ static int HandleEvents( hb_handle_t * h )
                 {
                     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
                     {
-                        char audio_lang[4];
                         int track = i;
                         
                         audio = hb_list_audio_config_item( title->list_audio, i );
                         
-                        strncpy( audio_lang, audio->lang.iso639_2, sizeof( audio_lang ) );
-                        
-                        if( strncasecmp( native_language, audio_lang, 
-                                         sizeof( audio_lang ) ) == 0 &&
+                        if( cmp_lang( native_language, audio->lang.iso639_2 ) &&
                             audio->lang.type != 3 && // Directors 1
                             audio->lang.type != 4)   // Directors 2
                         {
@@ -2100,16 +2118,11 @@ static int HandleEvents( hb_handle_t * h )
 
             if( native_language )
             {
-                char audio_lang[4];
-                
                 audio = hb_list_audio_config_item(job->list_audio, 0);
                 
                 if( audio ) 
                 {
-                    strncpy( audio_lang, audio->lang.iso639_2, sizeof( audio_lang ) );
-                    
-                    if( strncasecmp( native_language, audio_lang, 
-                                     sizeof( audio_lang ) ) != 0 )
+                    if( !cmp_lang( native_language, audio->lang.iso639_2 ) )
                     {
                         /*
                          * Audio language is not the same as our native language. 
@@ -2123,7 +2136,7 @@ static int HandleEvents( hb_handle_t * h )
                         {
                             subtitle = hb_list_item( title->list_subtitle, i );
                             matched_track = i;
-                            if( strcmp( subtitle->iso639_2, native_language ) == 0 )
+                            if (cmp_lang(native_language, subtitle->iso639_2))
                             {  
                                 /*
                                  * Found the first matching subtitle in our
@@ -2652,7 +2665,7 @@ static void ShowHelp()
     "                            If \"number\" is omitted, the first track is default.\n"
     "                            \"number\" is an index into the subtitle list\n"
     "                            specified with '--subtitle'.\n"
-    "    -N, --native-language   Specifiy the your language preference. When the first\n"
+    "    -N, --native-language   Specifiy your language preference. When the first\n"
     "          <string>          audio track does not match your native language then\n"
     "                            select the first subtitle that does. When used in\n"
     "                            conjunction with --native-dub the audio track is\n"
