@@ -2015,77 +2015,270 @@ FFMpeg's and Theora's scale is more linear.  These encoders do not have a lossle
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="spacing">2</property>
                             <child>
-                              <object class="GtkHBox" id="hbox58">
+                              <object class="GtkTable" id="table16">
                                 <property name="visible">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="spacing">5</property>
+                                <property name="n_rows">2</property>
+                                <property name="n_columns">3</property>
+                                <property name="row_spacing">5</property>
+                                <property name="column_spacing">5</property>
                                 <child>
-                                  <object class="GtkButton" id="audio_add">
+                                  <object class="GtkAlignment" id="alignment47">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="tooltip-text" translatable="yes">Add new audio settings to the list</property>
-                                    <property name="relief">GTK_RELIEF_NONE</property>
-                                    <signal handler="audio_add_clicked_cb" name="clicked"/>
+                                    <property name="yalign">0</property>
+                                    <property name="yscale">0</property>
                                     <child>
-                                      <object class="GtkImage" id="image4">
+                                      <object class="GtkButton" id="audio_add">
                                         <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="stock">gtk-add</property>
+                                        <property name="tooltip-text" translatable="yes">Add new audio settings to the list</property>
+                                        <property name="relief">GTK_RELIEF_NONE</property>
+                                        <signal handler="audio_add_clicked_cb" name="clicked"/>
+                                        <child>
+                                          <object class="GtkImage" id="image4">
+                                            <property name="visible">True</property>
+                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="stock">gtk-add</property>
+                                          </object>
+                                        </child>
                                       </object>
                                     </child>
                                   </object>
                                   <packing>
-                                    <property name="expand">False</property>
+                                    <property name="top_attach">0</property>
+                                    <property name="bottom_attach">1</property>
+                                    <property name="left_attach">0</property>
+                                    <property name="right_attach">1</property>
+                                    <property name="x_options">GTK_FILL</property>
+                                    <property name="y_options">GTK_FILL</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkButton" id="audio_remove">
+                                  <object class="GtkAlignment" id="alignment37">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="tooltip-text" translatable="yes">Remove the selected audio settings</property>
-                                    <property name="relief">GTK_RELIEF_NONE</property>
-                                    <signal handler="audio_remove_clicked_cb" name="clicked"/>
+                                    <property name="yalign">0</property>
+                                    <property name="yscale">0</property>
                                     <child>
-                                      <object class="GtkImage" id="image8">
+                                      <object class="GtkButton" id="audio_remove">
                                         <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="stock">gtk-remove</property>
+                                        <property name="tooltip-text" translatable="yes">Remove the selected audio settings</property>
+                                        <property name="relief">GTK_RELIEF_NONE</property>
+                                        <signal handler="audio_remove_clicked_cb" name="clicked"/>
+                                        <child>
+                                          <object class="GtkImage" id="image8">
+                                            <property name="visible">True</property>
+                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="stock">gtk-remove</property>
+                                          </object>
+                                        </child>
                                       </object>
                                     </child>
                                   </object>
                                   <packing>
-                                    <property name="expand">False</property>
-                                    <property name="position">1</property>
+                                    <property name="top_attach">0</property>
+                                    <property name="bottom_attach">1</property>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="x_options">GTK_FILL</property>
+                                    <property name="y_options">GTK_FILL</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel" id="labela3">
+                                  <object class="GtkExpander" id="expander1">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="label" translatable="yes"></property>
+                                    <property name="expanded">False</property>
+                                    <property name="label">Advanced</property>
+                                    <child>
+                                      <object class="GtkTable" id="table14">
+                                        <property name="visible">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="n_rows">2</property>
+                                        <property name="n_columns">5</property>
+                                        <property name="row_spacing">5</property>
+                                        <child>
+                                          <object class="GtkLabel" id="audio_name_label">
+                                            <property name="visible">True</property>
+                                            <property name="xalign">1</property>
+                                            <property name="label" translatable="yes">Track Name:</property>
+                                            <property name="use_markup">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="top_attach">0</property>
+                                            <property name="bottom_attach">1</property>
+                                            <property name="left_attach">0</property>
+                                            <property name="right_attach">1</property>
+                                            <property name="x_options">GTK_FILL</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkAlignment" id="alignment25">
+                                            <property name="visible">True</property>
+                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="xalign">0</property>
+                                            <child>
+                                              <object class="GtkEntry" id="AudioTrackName">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                                <property name="max_length">40</property>
+                                                <property name="activates_default">True</property>
+                                                <property name="width_chars">20</property>
+                                                <property name="truncate_multiline">True</property>
+                                                <property name="tooltip-text" translatable="yes">Set the audio track name. Players may use this in the audio selection list.</property>
+                                                <signal handler="audio_widget_changed_cb" name="changed"/>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="top_attach">0</property>
+                                            <property name="bottom_attach">1</property>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="x_options">GTK_FILL</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="fill_label1">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes"></property>
+                                            <property name="use_markup">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="top_attach">0</property>
+                                            <property name="bottom_attach">1</property>
+                                            <property name="left_attach">2</property>
+                                            <property name="right_attach">3</property>
+                                            <property name="x_options">GTK_FILL|GTK_EXPAND</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="sr_label">
+                                            <property name="visible">True</property>
+                                            <property name="xalign">1</property>
+                                            <property name="label" translatable="yes">Sample Rate:</property>
+                                            <property name="use_markup">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="top_attach">1</property>
+                                            <property name="bottom_attach">2</property>
+                                            <property name="left_attach">0</property>
+                                            <property name="right_attach">1</property>
+                                            <property name="x_options">GTK_FILL</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkAlignment" id="alignment34">
+                                            <property name="visible">True</property>
+                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="xalign">0</property>
+                                            <property name="xscale">0</property>
+                                            <child>
+                                              <object class="GtkComboBox" id="AudioSamplerate">
+                                                <property name="visible">True</property>
+                                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                                <property name="tooltip-text" translatable="yes">Set the sample rate of the output audio track.</property>
+                                                <signal handler="audio_widget_changed_cb" name="changed"/>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="top_attach">1</property>
+                                            <property name="bottom_attach">2</property>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="x_options">GTK_FILL</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="gain_label">
+                                            <property name="visible">True</property>
+                                            <property name="xalign">1</property>
+                                            <property name="label" translatable="yes">Gain:</property>
+                                            <property name="use_markup">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="top_attach">0</property>
+                                            <property name="bottom_attach">1</property>
+                                            <property name="left_attach">3</property>
+                                            <property name="right_attach">4</property>
+                                            <property name="x_options">GTK_FILL</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkHScale" id="AudioTrackGain">
+                                            <property name="visible">True</property>
+                                            <property name="width-request">200</property>
+                                            <property name="orientation">horizontal</property>
+                                            <property name="adjustment">adjustment35</property>
+                                            <property name="value_pos">right</property>
+                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="tooltip-markup" translatable="yes">&lt;b&gt;Audio Gain:&lt;/b&gt; Adjust the amplification or attenuation of the output audio track.</property>
+                                            <signal handler="gain_widget_changed_cb" name="value_changed"/>
+                                            <signal name="format_value" handler="format_gain_cb"/>
+                                          </object>
+                                          <packing>
+                                            <property name="top_attach">0</property>
+                                            <property name="bottom_attach">1</property>
+                                            <property name="left_attach">4</property>
+                                            <property name="right_attach">5</property>
+                                            <property name="x_options">GTK_FILL</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="drc_label">
+                                            <property name="visible">True</property>
+                                            <property name="xalign">1</property>
+                                            <property name="label" translatable="yes">Dynamic Range Compression:</property>
+                                            <property name="use_markup">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="top_attach">1</property>
+                                            <property name="bottom_attach">2</property>
+                                            <property name="left_attach">3</property>
+                                            <property name="right_attach">4</property>
+                                            <property name="x_options">GTK_FILL</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkHScale" id="AudioTrackDRCSlider">
+                                            <property name="visible">True</property>
+                                            <property name="width-request">100</property>
+                                            <property name="orientation">horizontal</property>
+                                            <property name="value_pos">right</property>
+                                            <property name="adjustment">adjustment28</property>
+                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="tooltip-markup" translatable="yes">&lt;b&gt;Dynamic Range Compression:&lt;/b&gt; Adjust the dynamic range of the output audio track. 
+
+                        For source audio that has a wide dynamic range (very loud and very soft sequences), DRC allows you to 'compress' the range by making loud sections softer and soft sections louder.</property>
+                                            <signal handler="drc_widget_changed_cb" name="value_changed"/>
+                                            <signal name="format_value" handler="format_drc_cb"/>
+                                          </object>
+                                          <packing>
+                                            <property name="top_attach">1</property>
+                                            <property name="bottom_attach">2</property>
+                                            <property name="left_attach">4</property>
+                                            <property name="right_attach">5</property>
+                                            <property name="x_options">GTK_FILL</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
-                                    <property name="expand">True</property>
-                                    <property name="position">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkButton" id="audio_advanced">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="tooltip-text" translatable="yes">Change advanced audio settings.</property>
-                                    <signal handler="audio_advanced_clicked_cb" name="clicked"/>
-                                    <property name="label">Advanced Audio</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="position">3</property>
+                                    <property name="top_attach">0</property>
+                                    <property name="bottom_attach">2</property>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="x_options">GTK_FILL|GTK_EXPAND</property>
+                                    <property name="y_options"></property>
                                   </packing>
                                 </child>
                               </object>
@@ -2221,7 +2414,7 @@ FFMpeg's and Theora's scale is more linear.  These encoders do not have a lossle
                               </object>
                               <packing>
                                 <property name="expand">False</property>
-                                <property name="position">1</property>
+                                <property name="position">2</property>
                               </packing>
                             </child>
                             <child>
@@ -2241,7 +2434,7 @@ FFMpeg's and Theora's scale is more linear.  These encoders do not have a lossle
                                 </child>
                               </object>
                               <packing>
-                                <property name="position">2</property>
+                                <property name="position">3</property>
                               </packing>
                             </child>
                           </object>
@@ -3837,213 +4030,6 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
       </object>
     </child>
 
-  </object>
-
-  <object class="GtkDialog" id="audio_dialog">
-    <property name="border_width">5</property>
-    <property name="title" translatable="yes">Advanced Audio Settings</property>
-    <property name="modal">False</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="type_hint">dialog</property>
-    <property name="skip_taskbar_hint">True</property>
-    <property name="skip_pager_hint">True</property>
-    <signal name="delete_event" handler="gtk_widget_hide_on_delete"/>
-    <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox10">
-        <property name="orientation">vertical</property>
-        <property name="visible">True</property>
-        <property name="spacing">2</property>
-        <child>
-          <object class="GtkHBox" id="hbox55">
-            <property name="visible">True</property>
-            <property name="spacing">4</property>
-            <child>
-              <object class="GtkImage" id="image5">
-                <property name="visible">True</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="icon_name">hb-icon</property>
-                <property name="icon-size">6</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkTable" id="table14">
-                <property name="visible">True</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="n_rows">4</property>
-                <property name="n_columns">3</property>
-                <property name="row_spacing">5</property>
-                <child>
-                  <object class="GtkLabel" id="audio_name_label">
-                    <property name="visible">True</property>
-                    <property name="xalign">1</property>
-                    <property name="label" translatable="yes">Audio Track Name:</property>
-                    <property name="use_markup">True</property>
-                  </object>
-                  <packing>
-					<property name="top_attach">0</property>
-					<property name="bottom_attach">1</property>
-					<property name="left_attach">0</property>
-					<property name="right_attach">1</property>
-                    <property name="x_options">GTK_FILL</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="AudioTrackName">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="max_length">40</property>
-                    <property name="activates_default">True</property>
-                    <property name="width_chars">30</property>
-                    <property name="truncate_multiline">True</property>
-                    <property name="tooltip-text" translatable="yes">Set the audio track name. Players may use this in the audio selection list.</property>
-                    <signal handler="audio_widget_changed_cb" name="changed"/>
-                  </object>
-                  <packing>
-					<property name="top_attach">0</property>
-					<property name="bottom_attach">1</property>
-					<property name="left_attach">1</property>
-					<property name="right_attach">3</property>
-                    <property name="x_options">GTK_FILL</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="sr_label">
-                    <property name="visible">True</property>
-                    <property name="xalign">1</property>
-                    <property name="label" translatable="yes">Sample Rate:</property>
-                    <property name="use_markup">True</property>
-                  </object>
-                  <packing>
-					<property name="top_attach">1</property>
-					<property name="bottom_attach">2</property>
-					<property name="left_attach">0</property>
-					<property name="right_attach">1</property>
-                    <property name="x_options">GTK_FILL</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBox" id="AudioSamplerate">
-                    <property name="visible">True</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="tooltip-text" translatable="yes">Set the sample rate of the output audio track.</property>
-                    <signal handler="audio_widget_changed_cb" name="changed"/>
-                  </object>
-                  <packing>
-					<property name="top_attach">1</property>
-					<property name="bottom_attach">2</property>
-					<property name="left_attach">1</property>
-					<property name="right_attach">2</property>
-                    <property name="x_options">GTK_FILL</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="gain_label">
-                    <property name="visible">True</property>
-                    <property name="xalign">1</property>
-                    <property name="label" translatable="yes">Gain:</property>
-                    <property name="use_markup">True</property>
-                  </object>
-                  <packing>
-					<property name="top_attach">2</property>
-					<property name="bottom_attach">3</property>
-					<property name="left_attach">0</property>
-					<property name="right_attach">1</property>
-                    <property name="x_options">GTK_FILL</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkHScale" id="AudioTrackGain">
-                    <property name="visible">True</property>
-                    <property name="width-request">200</property>
-                    <property name="orientation">horizontal</property>
-                    <property name="adjustment">adjustment35</property>
-                    <property name="value_pos">right</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="tooltip-markup" translatable="yes">&lt;b&gt;Audio Gain:&lt;/b&gt; Adjust the amplification or attenuation of the output audio track.</property>
-                    <signal handler="gain_widget_changed_cb" name="value_changed"/>
-                    <signal name="format_value" handler="format_gain_cb"/>
-                  </object>
-                  <packing>
-                    <property name="top_attach">2</property>
-                    <property name="bottom_attach">3</property>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">3</property>
-                    <property name="x_options">GTK_FILL|GTK_EXPAND</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="drc_label">
-                    <property name="visible">True</property>
-                    <property name="xalign">1</property>
-                    <property name="label" translatable="yes">Dynamic Range Compression:</property>
-                    <property name="use_markup">True</property>
-                  </object>
-                  <packing>
-					<property name="top_attach">3</property>
-					<property name="bottom_attach">4</property>
-					<property name="left_attach">0</property>
-					<property name="right_attach">1</property>
-                    <property name="x_options">GTK_FILL</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkHScale" id="AudioTrackDRCSlider">
-                    <property name="visible">True</property>
-                    <property name="width-request">100</property>
-                    <property name="orientation">horizontal</property>
-                    <property name="value_pos">right</property>
-                    <property name="adjustment">adjustment28</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="tooltip-markup" translatable="yes">&lt;b&gt;Dynamic Range Compression:&lt;/b&gt; Adjust the dynamic range of the output audio track. 
-
-For source audio that has a wide dynamic range (very loud and very soft sequences), DRC allows you to 'compress' the range by making loud sections softer and soft sections louder.</property>
-                    <signal handler="drc_widget_changed_cb" name="value_changed"/>
-                    <signal name="format_value" handler="format_drc_cb"/>
-                  </object>
-                  <packing>
-                    <property name="top_attach">3</property>
-                    <property name="bottom_attach">4</property>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">3</property>
-                    <property name="x_options">GTK_FILL|GTK_EXPAND</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area10">
-            <property name="visible">True</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="advanced_audio_ok">
-                <property name="label" translatable="yes">gtk-ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="audio_advanced_ok_cb"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="-5">advanced_audio_ok</action-widget>
-    </action-widgets>
   </object>
 
   <object class="GtkDialog" id="prefs_dialog">
