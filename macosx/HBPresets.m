@@ -189,12 +189,12 @@
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:2] forKey:@"VideoQualityType"];
-    [preset setObject:@"700" forKey:@"VideoTargetSize"];
     [preset setObject:@"2500" forKey:@"VideoAvgBitrate"];
     [preset setObject:[NSNumber numberWithFloat:20.0] forKey:@"VideoQualitySlider"];
 
     /* Video framerate */
     [preset setObject:@"Same as source" forKey:@"VideoFramerate"];
+    [preset setObject:@"vfr" forKey:@"VideoFramerateMode"];
 
     /* GrayScale */
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
@@ -300,11 +300,11 @@
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
-    [preset setObject:@"700" forKey:@"VideoTargetSize"];
     [preset setObject:@"2500" forKey:@"VideoAvgBitrate"];
 
     /* Video framerate */
     [preset setObject:@"Same as source" forKey:@"VideoFramerate"];
+    [preset setObject:@"vfr" forKey:@"VideoFramerateMode"];
 
     /* GrayScale */
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
@@ -410,12 +410,12 @@
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:2] forKey:@"VideoQualityType"];
-    [preset setObject:@"700" forKey:@"VideoTargetSize"];
     [preset setObject:@"2500" forKey:@"VideoAvgBitrate"];
     [preset setObject:[NSNumber numberWithFloat:20.0] forKey:@"VideoQualitySlider"];
 
     /* Video framerate */
     [preset setObject:@"Same as source" forKey:@"VideoFramerate"];
+    [preset setObject:@"vfr" forKey:@"VideoFramerateMode"];
 
     /* GrayScale */
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
@@ -522,13 +522,12 @@
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:2] forKey:@"VideoQualityType"];
-    [preset setObject:@"700" forKey:@"VideoTargetSize"];
     [preset setObject:@"2500" forKey:@"VideoAvgBitrate"];
     [preset setObject:[NSNumber numberWithFloat:20.0] forKey:@"VideoQualitySlider"];
 
     /* Video framerate */
     [preset setObject:@"29.97 (NTSC Video)" forKey:@"VideoFramerate"];
-    [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoFrameratePFR"];
+    [preset setObject:@"pfr" forKey:@"VideoFramerateMode"];
     
     /* GrayScale */
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
@@ -621,13 +620,12 @@
 	
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:2] forKey:@"VideoQualityType"];
-    [preset setObject:@"700" forKey:@"VideoTargetSize"];
     [preset setObject:@"2500" forKey:@"VideoAvgBitrate"];
     [preset setObject:[NSNumber numberWithFloat:20.0] forKey:@"VideoQualitySlider"];
 	
     /* Video framerate */
     [preset setObject:@"29.97 (NTSC Video)" forKey:@"VideoFramerate"];
-    [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoFrameratePFR"];
+    [preset setObject:@"pfr" forKey:@"VideoFramerateMode"];
     
     /* GrayScale */
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
@@ -720,13 +718,12 @@
 	
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:2] forKey:@"VideoQualityType"];
-    [preset setObject:@"700" forKey:@"VideoTargetSize"];
     [preset setObject:@"2500" forKey:@"VideoAvgBitrate"];
     [preset setObject:[NSNumber numberWithFloat:20.0] forKey:@"VideoQualitySlider"];
 	
     /* Video framerate */
     [preset setObject:@"29.97 (NTSC Video)" forKey:@"VideoFramerate"];
-    [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoFrameratePFR"];
+    [preset setObject:@"pfr" forKey:@"VideoFramerateMode"];
     
     /* GrayScale */
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
@@ -830,11 +827,11 @@
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
-    [preset setObject:@"700"  forKey:@"VideoTargetSize"];
     [preset setObject:@"1000" forKey:@"VideoAvgBitrate"];
 
     /* Video framerate */
     [preset setObject:@"Same as source" forKey:@"VideoFramerate"];
+    [preset setObject:@"vfr" forKey:@"VideoFramerateMode"];
 
     /* GrayScale */
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
@@ -911,6 +908,9 @@
     /* File Format */
     [preset setObject:@"MP4 file" forKey:@"FileFormat"];
 
+    /* 64-bit MP4 file */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Mp4LargeFile"];
+
     /* Chapter Markers*/
      [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
 
@@ -922,12 +922,12 @@
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:2] forKey:@"VideoQualityType"];
-    [preset setObject:@"700" forKey:@"VideoTargetSize"];
     [preset setObject:@"1800" forKey:@"VideoAvgBitrate"];
     [preset setObject:[NSNumber numberWithFloat:20.0] forKey:@"VideoQualitySlider"];
 
     /* Video framerate */
     [preset setObject:@"Same as source" forKey:@"VideoFramerate"];
+    [preset setObject:@"vfr" forKey:@"VideoFramerateMode"];
 
     /* GrayScale */
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
@@ -1031,12 +1031,12 @@
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:2] forKey:@"VideoQualityType"];
-    [preset setObject:@"700" forKey:@"VideoTargetSize"];
     [preset setObject:@"960" forKey:@"VideoAvgBitrate"];
     [preset setObject:[NSNumber numberWithFloat:20.0] forKey:@"VideoQualitySlider"];
 
     /* Video framerate */
     [preset setObject:@"Same as source" forKey:@"VideoFramerate"];
+    [preset setObject:@"vfr" forKey:@"VideoFramerateMode"];
 
     /* GrayScale */
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
@@ -1124,11 +1124,11 @@
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
-    [preset setObject:@"700" forKey:@"VideoTargetSize"];
     [preset setObject:@"960" forKey:@"VideoAvgBitrate"];
 
     /* Video framerate */
     [preset setObject:@"Same as source" forKey:@"VideoFramerate"];
+    [preset setObject:@"vfr" forKey:@"VideoFramerateMode"];
 
     /* GrayScale */
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
@@ -1216,11 +1216,11 @@
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
-    [preset setObject:@"700" forKey:@"VideoTargetSize"];
     [preset setObject:@"1500" forKey:@"VideoAvgBitrate"];
 
     /* Video framerate */
     [preset setObject:@"Same as source" forKey:@"VideoFramerate"];
+    [preset setObject:@"vfr" forKey:@"VideoFramerateMode"];
 
     /* GrayScale */
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
@@ -1308,11 +1308,11 @@
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
-    [preset setObject:@"700" forKey:@"VideoTargetSize"];
     [preset setObject:@"700" forKey:@"VideoAvgBitrate"];
 
     /* Video framerate */
     [preset setObject:@"Same as source" forKey:@"VideoFramerate"];
+    [preset setObject:@"vfr" forKey:@"VideoFramerateMode"];
 
     /* GrayScale */
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
@@ -1396,16 +1396,16 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
-    [preset setObject:@"ref=2:bframes=2:subme=6:mixed-refs=0:weightb=0:8x8dct=0:trellis=0" forKey:@"x264Option"];
+    [preset setObject:@"ref=1:weightp=1:subq=2:rc-lookahead=10:trellis=0:8x8dct=0" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:2] forKey:@"VideoQualityType"];
-    [preset setObject:@"700" forKey:@"VideoTargetSize"];
     [preset setObject:@"1500" forKey:@"VideoAvgBitrate"];
     [preset setObject:[NSNumber numberWithFloat:20.0] forKey:@"VideoQualitySlider"];
 
     /* Video framerate */
     [preset setObject:@"Same as source" forKey:@"VideoFramerate"];
+    [preset setObject:@"vfr" forKey:@"VideoFramerateMode"];
 
     /* GrayScale */
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];

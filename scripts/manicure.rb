@@ -287,6 +287,8 @@ class Display
         commandString << "x264"
       when /Theora/
         commandString << "theora"
+      when /MPEG/
+        commandString << "ffmpeg2"
       end
     end
 
@@ -311,10 +313,13 @@ class Display
       else
         commandString << " -r " << hash["VideoFramerate"]
       end
-      
-      if hash["VideoFrameratePFR"] == 1
+      # not same as source: pfr, else default (cfr)
+      if hash["VideoFramerateMode"] == "pfr"
         commandString << " --pfr "
       end
+    # same as source: cfr, else default (vfr)
+    elsif hash["VideoFramerateMode"] == "cfr"
+      commandString << " --cfr "
     end
     
     #Audio tracks
@@ -536,6 +541,8 @@ class Display
         commandString << "x264"
       when /Theora/
         commandString << "theora"
+      when /MPEG/
+        commandString << "ffmpeg2"
       end
     end
 
@@ -560,10 +567,13 @@ class Display
       else
         commandString << " -r " << hash["VideoFramerate"]
       end
-      
-      if hash["VideoFrameratePFR"] == 1
+      # not same as source: pfr, else default (cfr)
+      if hash["VideoFramerateMode"] == "pfr"
         commandString << " --pfr "
       end
+    # same as source: cfr, else default (vfr)
+    elsif hash["VideoFramerateMode"] == "cfr"
+      commandString << " --cfr "
     end
     
     #Audio tracks
@@ -779,6 +789,8 @@ class Display
         commandString << "HB_VCODEC_X264;\n    "
       when /Theora/
         commandString << "HB_VCODEC_THEORA;\n    "        
+      when /MPEG/
+        commandString << "HB_VCODEC_FFMPEG_MPEG2;\n    "
       end
     end
 
@@ -802,12 +814,15 @@ class Display
         commandString << "job->vrate_base = " << "1080000\n    "
       # Gotta add the rest of the framerates for completion's sake.
       end
-      
-      if hash["VideoFrameratePFR"] == 1
+      # not same as source: pfr, else default (cfr)
+      if hash["VideoFramerateMode"] == "pfr"
         commandString << "job->cfr = 2;\n    "
       else
         commandString << "job->cfr = 1;\n    "
       end
+    # same as source: cfr, else default (vfr)
+    elsif hash["VideoFramerateMode"] == "cfr"
+      commandString << "job->cfr = 1;\n    "
     end
     
     #Audio tracks
@@ -1061,6 +1076,8 @@ class Display
         commandString << "x264 "
       when /Theora/
         commandString << "theora "
+      when /MPEG/
+        commandString << "ffmpeg2 "
       end
     end
 
@@ -1085,10 +1102,13 @@ class Display
       else
         commandString << " -r " << hash["VideoFramerate"]
       end
-      
-      if hash["VideoFrameratePFR"] == 1
+      # not same as source: pfr, else default (cfr)
+      if hash["VideoFramerateMode"] == "pfr"
         commandString << " --pfr "
       end
+    # same as source: cfr, else default (vfr)
+    elsif hash["VideoFramerateMode"] == "cfr"
+      commandString << " --cfr "
     end
     
     #Audio tracks

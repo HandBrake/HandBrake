@@ -93,14 +93,14 @@
 				<string>H.264 (x264)</string>
 				<key>VideoFramerate</key>
 				<string>Same as source</string>
+				<key>VideoFramerateMode</key>
+				<string>vfr</string>
 				<key>VideoGrayScale</key>
 				<integer>0</integer>
 				<key>VideoQualitySlider</key>
 				<real>20</real>
 				<key>VideoQualityType</key>
 				<integer>2</integer>
-				<key>VideoTargetSize</key>
-				<string>700</string>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
@@ -178,14 +178,14 @@
 				<string>H.264 (x264)</string>
 				<key>VideoFramerate</key>
 				<string>Same as source</string>
+				<key>VideoFramerateMode</key>
+				<string>vfr</string>
 				<key>VideoGrayScale</key>
 				<integer>0</integer>
 				<key>VideoQualitySlider</key>
 				<real>0.64709997177124023</real>
 				<key>VideoQualityType</key>
 				<integer>1</integer>
-				<key>VideoTargetSize</key>
-				<string>700</string>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
@@ -263,14 +263,14 @@
 				<string>H.264 (x264)</string>
 				<key>VideoFramerate</key>
 				<string>Same as source</string>
+				<key>VideoFramerateMode</key>
+				<string>vfr</string>
 				<key>VideoGrayScale</key>
 				<integer>0</integer>
 				<key>VideoQualitySlider</key>
 				<real>20</real>
 				<key>VideoQualityType</key>
 				<integer>2</integer>
-				<key>VideoTargetSize</key>
-				<string>700</string>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
@@ -350,16 +350,14 @@
 				<string>H.264 (x264)</string>
 				<key>VideoFramerate</key>
 				<string>29.97 (NTSC Video)</string>
-				<key>VideoFrameratePFR</key>
-				<integer>1</integer>
+				<key>VideoFramerateMode</key>
+				<string>pfr</string>
 				<key>VideoGrayScale</key>
 				<integer>0</integer>
 				<key>VideoQualitySlider</key>
 				<real>20</real>
 				<key>VideoQualityType</key>
 				<integer>2</integer>
-				<key>VideoTargetSize</key>
-				<string>700</string>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
@@ -439,16 +437,14 @@
 				<string>H.264 (x264)</string>
 				<key>VideoFramerate</key>
 				<string>29.97 (NTSC Video)</string>
-				<key>VideoFrameratePFR</key>
-				<integer>1</integer>
+				<key>VideoFramerateMode</key>
+				<string>pfr</string>
 				<key>VideoGrayScale</key>
 				<integer>0</integer>
 				<key>VideoQualitySlider</key>
 				<real>20</real>
 				<key>VideoQualityType</key>
 				<integer>2</integer>
-				<key>VideoTargetSize</key>
-				<string>700</string>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
@@ -542,14 +538,14 @@
 				<string>H.264 (x264)</string>
 				<key>VideoFramerate</key>
 				<string>Same as source</string>
+				<key>VideoFramerateMode</key>
+				<string>vfr</string>
 				<key>VideoGrayScale</key>
 				<integer>0</integer>
 				<key>VideoQualitySlider</key>
 				<real>20</real>
 				<key>VideoQualityType</key>
 				<integer>2</integer>
-				<key>VideoTargetSize</key>
-				<string>700</string>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
@@ -643,16 +639,14 @@
 				<string>H.264 (x264)</string>
 				<key>VideoFramerate</key>
 				<string>29.97 (NTSC Video)</string>
-				<key>VideoFrameratePFR</key>
-				<integer>1</integer>
+				<key>VideoFramerateMode</key>
+				<string>pfr</string>
 				<key>VideoGrayScale</key>
 				<integer>0</integer>
 				<key>VideoQualitySlider</key>
 				<real>20</real>
 				<key>VideoQualityType</key>
 				<integer>2</integer>
-				<key>VideoTargetSize</key>
-				<string>700</string>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
@@ -743,20 +737,20 @@
 				<string>H.264 (x264)</string>
 				<key>VideoFramerate</key>
 				<string>Same as source</string>
+				<key>VideoFramerateMode</key>
+				<string>vfr</string>
 				<key>VideoGrayScale</key>
 				<integer>0</integer>
 				<key>VideoQualitySlider</key>
 				<real>20</real>
 				<key>VideoQualityType</key>
 				<integer>2</integer>
-				<key>VideoTargetSize</key>
-				<string>700</string>
 				<key>VideoTurboTwoPass</key>
 				<integer>0</integer>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
-				<string>ref=2:bframes=2:subme=6:mixed-refs=0:weightb=0:8x8dct=0:trellis=0</string>
+				<string>ref=1:weightp=1:subq=2:rc-lookahead=10:trellis=0:8x8dct=0</string>
 			</dict>
 			<dict>
 				<key>AudioList</key>
@@ -796,6 +790,8 @@
 				<integer>0</integer>
 				<key>FileFormat</key>
 				<string>MP4 file</string>
+				<key>Mp4LargeFile</key>
+				<integer>1</integer>
 				<key>PictureAutoCrop</key>
 				<integer>1</integer>
 				<key>PictureBottomCrop</key>
@@ -844,14 +840,14 @@
 				<string>H.264 (x264)</string>
 				<key>VideoFramerate</key>
 				<string>Same as source</string>
+				<key>VideoFramerateMode</key>
+				<string>vfr</string>
 				<key>VideoGrayScale</key>
 				<integer>0</integer>
 				<key>VideoQualitySlider</key>
 				<real>20</real>
 				<key>VideoQualityType</key>
 				<integer>2</integer>
-				<key>VideoTargetSize</key>
-				<string>700</string>
 				<key>VideoTurboTwoPass</key>
 				<integer>0</integer>
 				<key>VideoTwoPass</key>
@@ -944,14 +940,14 @@
 				<string>MPEG-4 (FFmpeg)</string>
 				<key>VideoFramerate</key>
 				<string>Same as source</string>
+				<key>VideoFramerateMode</key>
+				<string>vfr</string>
 				<key>VideoGrayScale</key>
 				<integer>0</integer>
 				<key>VideoQualitySlider</key>
 				<real>0.64709997177124023</real>
 				<key>VideoQualityType</key>
 				<integer>1</integer>
-				<key>VideoTargetSize</key>
-				<string>700</string>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
@@ -1043,14 +1039,14 @@
 				<string>H.264 (x264)</string>
 				<key>VideoFramerate</key>
 				<string>Same as source</string>
+				<key>VideoFramerateMode</key>
+				<string>vfr</string>
 				<key>VideoGrayScale</key>
 				<integer>0</integer>
 				<key>VideoQualitySlider</key>
 				<real>0.64709997177124023</real>
 				<key>VideoQualityType</key>
 				<integer>1</integer>
-				<key>VideoTargetSize</key>
-				<string>700</string>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
@@ -1128,14 +1124,14 @@
 				<string>H.264 (x264)</string>
 				<key>VideoFramerate</key>
 				<string>Same as source</string>
+				<key>VideoFramerateMode</key>
+				<string>vfr</string>
 				<key>VideoGrayScale</key>
 				<integer>0</integer>
 				<key>VideoQualitySlider</key>
 				<real>0.64709997177124023</real>
 				<key>VideoQualityType</key>
 				<integer>1</integer>
-				<key>VideoTargetSize</key>
-				<string>700</string>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
@@ -1213,14 +1209,14 @@
 				<string>H.264 (x264)</string>
 				<key>VideoFramerate</key>
 				<string>Same as source</string>
+				<key>VideoFramerateMode</key>
+				<string>vfr</string>
 				<key>VideoGrayScale</key>
 				<integer>0</integer>
 				<key>VideoQualitySlider</key>
 				<real>0.64709997177124023</real>
 				<key>VideoQualityType</key>
 				<integer>1</integer>
-				<key>VideoTargetSize</key>
-				<string>700</string>
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
