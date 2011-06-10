@@ -1112,12 +1112,54 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
         short          * zeros;
 
         codec = avcodec_find_encoder( CODEC_ID_AC3 );
-        c     = avcodec_alloc_context();
+        c     = avcodec_alloc_context3( codec );
 
         c->bit_rate    = w->audio->config.in.bitrate;
         c->sample_rate = w->audio->config.in.samplerate;
         c->channels    = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT( w->audio->config.in.channel_layout );
         c->sample_fmt  = AV_SAMPLE_FMT_FLT;
+
+        switch( w->audio->config.in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK )
+        {
+            case HB_INPUT_CH_LAYOUT_MONO:
+                c->channel_layout = AV_CH_LAYOUT_MONO;
+                break;
+
+            case HB_INPUT_CH_LAYOUT_STEREO:
+            case HB_INPUT_CH_LAYOUT_DOLBY:
+                c->channel_layout = AV_CH_LAYOUT_STEREO;
+                break;
+
+            case HB_INPUT_CH_LAYOUT_3F2R:
+                c->channel_layout = AV_CH_LAYOUT_5POINT0;
+                break;
+
+            case HB_INPUT_CH_LAYOUT_3F1R:
+                c->channel_layout = AV_CH_LAYOUT_4POINT0;
+                break;
+
+            case HB_INPUT_CH_LAYOUT_3F:
+                c->channel_layout = AV_CH_LAYOUT_SURROUND;
+                break;
+
+            case HB_INPUT_CH_LAYOUT_2F1R:
+                c->channel_layout = AV_CH_LAYOUT_2_1;
+                break;
+
+            case HB_INPUT_CH_LAYOUT_2F2R:
+                c->channel_layout = AV_CH_LAYOUT_QUAD;
+                break;
+
+            default:
+                c->channel_layout = AV_CH_LAYOUT_STEREO;
+                hb_log("sync: unrecognized channel layout" );
+                break;
+        }
+
+        if ( w->audio->config.in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE )
+        {
+            c->channel_layout |= AV_CH_LOW_FREQUENCY;
+        }
 
         if( hb_avcodec_open( c, codec, 0 ) < 0 )
         {

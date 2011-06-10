@@ -55,8 +55,7 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
                 "failed" );
         return 1;
     }
-    context = avcodec_alloc_context();
-    avcodec_get_context_defaults3(context, codec);
+    context = avcodec_alloc_context3(codec);
 
     int ret = av_set_string3( context, "stereo_mode", "ms_off", 1, NULL );
     /* Let avutil sanity check the options for us*/
@@ -83,7 +82,7 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
             break;
 
         default:
-            hb_log(" encavcodecaInit: bad mixdown" );
+            hb_log("encavcodecaInit: bad mixdown" );
             break;
     }
 

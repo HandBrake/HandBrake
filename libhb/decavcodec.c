@@ -203,8 +203,7 @@ static int decavcodecInit( hb_work_object_t * w, hb_job_t * job )
     codec = avcodec_find_decoder( codec_id );
     pv->parser = av_parser_init( codec_id );
 
-    pv->context = avcodec_alloc_context();
-    avcodec_get_context_defaults3(pv->context, codec);
+    pv->context = avcodec_alloc_context3(codec);
     hb_ff_set_sample_fmt( pv->context, codec );
     hb_avcodec_open( pv->context, codec, 0 );
 
@@ -522,8 +521,7 @@ static int decavcodecBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     info->name =  strncpy( codec_name, codec->name, sizeof(codec_name)-1 );
 
     AVCodecParserContext *parser = av_parser_init( codec->id );
-    AVCodecContext *context = avcodec_alloc_context();
-    avcodec_get_context_defaults3(context, codec);
+    AVCodecContext *context = avcodec_alloc_context3(codec);
     hb_ff_set_sample_fmt( context, codec );
     hb_avcodec_open( context, codec, 0 );
     uint8_t *buffer = av_malloc( AVCODEC_MAX_AUDIO_FRAME_SIZE );
@@ -1150,6 +1148,9 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     // first frame because of M$ VC1 braindamage).
     if ( pv->context->extradata == NULL )
     {
+        AVCodec *codec = avcodec_find_decoder( w->codec_param );
+        avcodec_get_context_defaults3( pv->context, codec );
+        hb_ff_set_sample_fmt( pv->context, codec );
         if ( setup_extradata( w, in ) )
         {
             // we didn't find the headers needed to set up extradata.
@@ -1158,11 +1159,9 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             hb_buffer_close( &in );
             return HB_WORK_OK;
         }
-        AVCodec *codec = avcodec_find_decoder( w->codec_param );
         // There's a mis-feature in ffmpeg that causes the context to be 
         // incorrectly initialized the 1st time avcodec_open is called.
         // If you close it and open a 2nd time, it finishes the job.
-        hb_ff_set_sample_fmt( pv->context, codec );
         hb_avcodec_open( pv->context, codec, 0 );
         hb_avcodec_close( pv->context );
         // disable threaded decoding for scan, can cause crashes
