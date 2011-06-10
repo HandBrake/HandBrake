@@ -1165,7 +1165,8 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         hb_ff_set_sample_fmt( pv->context, codec );
         hb_avcodec_open( pv->context, codec, 0 );
         hb_avcodec_close( pv->context );
-        hb_avcodec_open( pv->context, codec, HB_FFMPEG_THREADS_AUTO );
+        // disable threaded decoding for scan, can cause crashes
+        hb_avcodec_open( pv->context, codec, pv->job ? HB_FFMPEG_THREADS_AUTO : 0 );
     }
 
     if( in->start >= 0 )
@@ -1284,7 +1285,8 @@ static void init_ffmpeg_context( hb_work_object_t *w )
     {
         AVCodec *codec = avcodec_find_decoder( pv->context->codec_id );
         hb_ff_set_sample_fmt( pv->context, codec );
-        hb_avcodec_open( pv->context, codec, HB_FFMPEG_THREADS_AUTO );
+        // disable threaded decoding for scan, can cause crashes
+        hb_avcodec_open( pv->context, codec, pv->job ? HB_FFMPEG_THREADS_AUTO : 0 );
     }
     // set up our best guess at the frame duration.
     // the frame rate in the codec is usually bogus but it's sometimes

@@ -111,6 +111,10 @@ int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec, int thread_count)
         avctx->thread_type = FF_THREAD_FRAME|FF_THREAD_SLICE;
         avctx->thread_safe_callbacks = 1;
     }
+    else
+    {
+        avctx->thread_count = 1;
+    }
 
     ret = avcodec_open(avctx, codec);
     return ret;
