@@ -551,7 +551,7 @@ format_drc_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-drc_widget_changed_cb(GtkWidget *widget, gdouble val, signal_user_data_t *ud)
+drc_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	GValue *asettings;
 
@@ -577,7 +577,7 @@ format_gain_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-gain_widget_changed_cb(GtkWidget *widget, gdouble val, signal_user_data_t *ud)
+gain_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	GValue *asettings;
 
