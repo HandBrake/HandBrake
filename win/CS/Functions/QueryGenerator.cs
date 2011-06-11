@@ -568,6 +568,8 @@ namespace Handbrake.Functions
             {
                 case "AAC (faac)":
                     return "faac";
+                case "AAC (ffmpeg)":
+                    return "ffaac";
                 case "MP3 (lame)":
                     return "lame";
                 case "Vorbis (vorbis)":

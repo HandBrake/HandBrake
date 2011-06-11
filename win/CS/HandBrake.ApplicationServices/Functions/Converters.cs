@@ -140,6 +140,8 @@ namespace HandBrake.ApplicationServices.Functions
                     return "AC3 Passthru";
                 case "copy:dts":
                     return "DTS Passthru";
+                case "ffaac":
+                    return "AAC (ffmpeg)";
                 default:
                     return "AAC (faac)";
             }
@@ -156,6 +158,8 @@ namespace HandBrake.ApplicationServices.Functions
             {
                 case "faac":
                     return AudioEncoder.Faac;
+                case "ffaac":
+                    return AudioEncoder.ffaac;
                 case "lame":
                     return AudioEncoder.Lame;
                 case "vorbis":
@@ -182,6 +186,8 @@ namespace HandBrake.ApplicationServices.Functions
             {
                 case "AAC (faac)":
                     return AudioEncoder.Faac;
+                case "AAC (ffmpeg)":
+                    return AudioEncoder.ffaac;
                 case "AAC (CoreAudio)":
                     return AudioEncoder.Faac;
                 case "MP3 (lame)":
@@ -214,6 +220,8 @@ namespace HandBrake.ApplicationServices.Functions
             {
                 case AudioEncoder.Faac:
                     return "faac";
+                case AudioEncoder.ffaac:
+                    return "ffaac";
                 case AudioEncoder.Lame:
                     return "lame";
                 case AudioEncoder.Vorbis:
@@ -224,6 +232,7 @@ namespace HandBrake.ApplicationServices.Functions
                     return "copy:dts";
                 case AudioEncoder.Ac3:
                     return "ac3";
+ 
                 default:
                     return "faac";
             }

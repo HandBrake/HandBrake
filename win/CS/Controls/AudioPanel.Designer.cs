@@ -151,6 +151,7 @@ namespace Handbrake.Controls
             this.drp_audioEncoder.FormattingEnabled = true;
             this.drp_audioEncoder.Items.AddRange(new object[] {
             "AAC (faac)",
+            "AAC (ffmpeg)",
             "MP3 (lame)",
             "Vorbis (vorbis)",
             "AC3 Passthru",
