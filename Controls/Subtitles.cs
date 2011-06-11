@@ -243,6 +243,12 @@ namespace Handbrake.Controls
         /// </param>
         private void BtnAddSubTrackClick(object sender, EventArgs e)
         {
+            if (drp_subtitleTracks.SelectedItem == null)
+            {
+                MessageBox.Show("No Subtitle Track Selected.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             // Logic
             string forcedVal = check_forced.CheckState == CheckState.Checked ? "Yes" : "No";
             string defaultSub = check_default.CheckState == CheckState.Checked ? "Yes" : "No";
@@ -362,7 +368,6 @@ namespace Handbrake.Controls
                     srt_offset.Value = track.SrtOffset;
                     srt_charcode.SelectedItem = track.SrtCharCode;
                     check_default.CheckState = track.Default ? CheckState.Checked : CheckState.Unchecked;
-                    SubGroupBox.Text = "Selected Track: " + track.Track;
                 }
                 else // We have Bitmap/CC
                 {
@@ -375,12 +380,8 @@ namespace Handbrake.Controls
                     check_forced.CheckState = track.Forced ? CheckState.Checked : CheckState.Unchecked;
                     check_burned.CheckState = track.Burned ? CheckState.Checked : CheckState.Unchecked;
                     check_default.CheckState = track.Default ? CheckState.Checked : CheckState.Unchecked;
-                    SubGroupBox.Text = "Selected Track: " +
-                                       lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[0].Text;
                 }
             }
-            else
-                SubGroupBox.Text = "Selected Track: None (Click \"Add\" to add another track to the list)";
         }
 
         #endregion
