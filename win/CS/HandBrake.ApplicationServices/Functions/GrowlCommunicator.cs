@@ -105,9 +105,10 @@ namespace HandBrake.ApplicationServices.Functions
             if (growl == null)
             {
                 growl = new GrowlConnector
-                            {
-                                EncryptionAlgorithm = Cryptography.SymmetricAlgorithmType.PlainText
-                            };
+                    {
+                        EncryptionAlgorithm = Cryptography.SymmetricAlgorithmType.PlainText,
+                        KeyHashAlgorithm = Cryptography.HashAlgorithmType.SHA1
+                    };
 
                 application = new Application("Handbrake")
                                   {
