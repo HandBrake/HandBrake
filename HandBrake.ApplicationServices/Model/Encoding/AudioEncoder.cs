@@ -15,6 +15,9 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         [Description("AAC (faac)")]
         Faac = 0,
 
+        [Description("AAC (ffmpeg)")]
+        ffaac,
+
         [Description("MP3 (lame)")]
         Lame,
 

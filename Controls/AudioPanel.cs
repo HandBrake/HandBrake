@@ -122,6 +122,7 @@ namespace Handbrake.Controls
 
             drp_audioEncoder.Items.Clear();
             drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.Faac));
+            drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.ffaac));
             drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.Lame));
             drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.Ac3Passthrough));
             drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.Ac3));
@@ -737,9 +738,10 @@ namespace Handbrake.Controls
             switch (drp_audioEncoder.Text)
             {
                 case "AAC (faac)":
+                case "AAC (ffmpeg)":
                     max = drp_audioMix.Text.Contains("6 Channel") ? 768 : 320;
                     defaultRate = "160";
-                    break;
+                    break;  
                 case "MP3 (lame)":
                     max = 320;
                     defaultRate = "160";
@@ -821,6 +823,7 @@ namespace Handbrake.Controls
             switch (drp_audioEncoder.Text)
             {
                 case "AAC (faac)":
+                case "AAC (ffmpeg)":
                     drp_audioMix.Items.Remove(AC3Passthru);
                     drp_audioMix.Items.Remove(DTSPassthru);
                     drp_audioMix.SelectedItem = currentMixdown ?? "Dolby Pro Logic II";
