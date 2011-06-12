@@ -1,6 +1,6 @@
-<StyleCopSettings Version="105">
+<StyleCopSettings Version="4.3">
   <Analyzers>
-    <Analyzer AnalyzerId="StyleCop.CSharp.SpacingRules">
+    <Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.SpacingRules">
       <Rules>
         <Rule Name="TabsMustNotBeUsed">
           <RuleSettings>
