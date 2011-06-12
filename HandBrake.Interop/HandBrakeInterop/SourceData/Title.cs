@@ -4,15 +4,15 @@
 	   Homepage: <http://handbrake.fr>.
 	   It may be used under the terms of the GNU General Public License. */
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Text.RegularExpressions;
-using HandBrake.Interop;
-
 namespace HandBrake.SourceData
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using System.IO;
+	using System.Text.RegularExpressions;
+	using HandBrake.Interop;
+
 	/// <summary>
 	/// An object that represents a single Title of a DVD
 	/// </summary>
@@ -24,7 +24,7 @@ namespace HandBrake.SourceData
 		private readonly List<Subtitle> subtitles;
 		
 		/// <summary>
-		/// The constructor for this object
+		/// Initializes a new instance of the Title class.
 		/// </summary>
 		public Title()
 		{
@@ -39,7 +39,7 @@ namespace HandBrake.SourceData
 		public InputType InputType { get; set; }
 
 		/// <summary>
-		/// Collection of chapters in this Title
+		/// Gets a collection of chapters in this Title
 		/// </summary>
 		public List<Chapter> Chapters
 		{
@@ -47,7 +47,7 @@ namespace HandBrake.SourceData
 		}
 
 		/// <summary>
-		/// Collection of audio tracks associated with this Title
+		/// Gets a collection of audio tracks associated with this Title
 		/// </summary>
 		public List<AudioTrack> AudioTracks
 		{
@@ -55,7 +55,7 @@ namespace HandBrake.SourceData
 		}
 
 		/// <summary>
-		/// Collection of subtitles associated with this Title
+		/// Gets a collection of subtitles associated with this Title
 		/// </summary>
 		public List<Subtitle> Subtitles
 		{
@@ -63,22 +63,22 @@ namespace HandBrake.SourceData
 		}
 
 		/// <summary>
-		/// The track number of this Title (1-based).
+		/// Gets or sets the track number of this Title (1-based).
 		/// </summary>
 		public int TitleNumber { get; set; }
 
 		/// <summary>
-		/// The length in time of this Title
+		/// Gets or sets the length in time of this Title
 		/// </summary>
 		public TimeSpan Duration { get; set; }
 
 		/// <summary>
-		/// The resolution (width/height) of this Title
+		/// Gets or sets the resolution (width/height) of this Title
 		/// </summary>
 		public Size Resolution { get; set; }
 
 		/// <summary>
-		/// The aspect ratio of this Title
+		/// Gets or sets the aspect ratio of this Title
 		/// </summary>
 		public double AspectRatio { get; set; }
 
@@ -88,17 +88,12 @@ namespace HandBrake.SourceData
 		public int AngleCount { get; set; }
 
 		/// <summary>
-		/// Par Value
+		/// Gets or sets the pixel aspect ratio.
 		/// </summary>
 		public Size ParVal { get; set; }
 
 		/// <summary>
-		/// The automatically detected crop region for this Title.
-		/// This is an int array with 4 items in it as so:
-		/// 0: 
-		/// 1: 
-		/// 2: 
-		/// 3: 
+		/// Gets or sets the automatically detected crop region for this Title.
 		/// </summary>
 		public Cropping AutoCropDimensions { get; set; }
 
@@ -113,7 +108,7 @@ namespace HandBrake.SourceData
 		public double Framerate { get; set; }
 
 		/// <summary>
-		/// The total number of frames in this title.
+		/// Gets the total number of frames in this title.
 		/// </summary>
 		public int Frames
 		{
@@ -133,6 +128,9 @@ namespace HandBrake.SourceData
 								 this.Duration.Minutes, this.Duration.Seconds);
 		}
 
+		/// <summary>
+		/// Gets the display string for this title.
+		/// </summary>
 		public string Display
 		{
 			get

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel.DataAnnotations;
-
-namespace HandBrake.SourceData
+﻿namespace HandBrake.SourceData
 {
+	using System.ComponentModel.DataAnnotations;
+
 	public enum InputType
 	{
 		[Display(Name = "File")]

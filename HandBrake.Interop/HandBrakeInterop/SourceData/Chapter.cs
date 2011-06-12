@@ -4,25 +4,22 @@
 	   Homepage: <http://handbrake.fr>.
 	   It may be used under the terms of the GNU General Public License. */
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
-
 namespace HandBrake.SourceData
 {
+	using System;
+
 	/// <summary>
 	/// An object representing a Chapter aosciated with a Title, in a DVD
 	/// </summary>
 	public class Chapter
 	{
 		/// <summary>
-		/// The number of this Chapter, in regards to its parent Title
+		/// Gets or sets the number of this Chapter, in regards to its parent Title
 		/// </summary>
 		public int ChapterNumber { get; set; }
 
 		/// <summary>
-		/// The length in time this Chapter spans
+		/// Gets or sets the length in time this Chapter spans
 		/// </summary>
 		public TimeSpan Duration { get; set; }
 

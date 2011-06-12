@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-
-namespace HandBrake.Interop
+﻿namespace HandBrake.Interop
 {
+	using System.ComponentModel.DataAnnotations;
+
 	public enum VideoEncoder
 	{
 		[Display(Name = "H.264 (x264)")]

@@ -118,7 +118,7 @@
 		public event EventHandler<EncodeCompletedEventArgs> EncodeCompleted;
 
 		/// <summary>
-		/// Destructor.
+		/// Finalizes an instance of the HandBrakeInstance class.
 		/// </summary>
 		~HandBrakeInstance()
 		{
@@ -126,7 +126,7 @@
 		}
 
 		/// <summary>
-		/// The list of titles on this instance.
+		/// Gets the list of titles on this instance.
 		/// </summary>
 		public List<Title> Titles
 		{
@@ -137,7 +137,7 @@
 		}
 
 		/// <summary>
-		/// The number of previews created during scan.
+		/// Gets the number of previews created during scan.
 		/// </summary>
 		public int PreviewCount
 		{
@@ -161,7 +161,7 @@
 		/// <summary>
 		/// Initializes this instance.
 		/// </summary>
-		/// <param name="verbosity"></param>
+		/// <param name="verbosity">The code for the logging verbosity to use.</param>
 		public void Initialize(int verbosity)
 		{
 			HandBrakeUtils.RegisterLogger();
@@ -736,10 +736,6 @@
 					this.EncodeProgress(this, progressEventArgs);
 				}
 			}
-			else if (state.state == NativeConstants.HB_STATE_MUXING)
-			{
-				//System.Diagnostics.Debug.WriteLine("Muxing...");
-			}
 			else if (state.state == NativeConstants.HB_STATE_WORKDONE)
 			{
 				InteropUtilities.FreeMemory(this.encodeAllocatedMemory);
@@ -1082,7 +1078,7 @@
 
 			foreach (Tuple<AudioEncoding, int> outputTrack in outputTrackList)
 			{
-				audioList.Add(ConvertAudioBack(outputTrack.Item1, titleAudio[outputTrack.Item2 - 1], outputTrack.Item2, numTracks++, allocatedMemory));
+				audioList.Add(ConvertAudioBack(outputTrack.Item1, titleAudio[outputTrack.Item2 - 1], numTracks++, allocatedMemory));
 			}
 
 			NativeList nativeAudioList = InteropUtilities.ConvertListBack<hb_audio_s>(audioList);
@@ -1166,7 +1162,6 @@
 						subtitleConfig.src_codeset = srtSubtitle.CharacterCode;
 						subtitleConfig.src_filename = srtSubtitle.FileName;
 						subtitleConfig.offset = srtSubtitle.Offset;
-						//subtitleConfig.dest = hb_subtitle_config_s_subdest.PASSTHRUSUB;
 						subtitleConfig.default_track = srtSubtitle.Default ? 1 : 0;
 
 						int srtAddSucceded = HBFunctions.hb_srt_add(ref nativeJob, ref subtitleConfig, srtSubtitle.LanguageCode);
@@ -1309,15 +1304,13 @@
 		/// </summary>
 		/// <param name="encoding">The encoding to apply.</param>
 		/// <param name="baseStruct">The base native structure.</param>
-		/// <param name="track"></param>
-		/// <param name="outputTrack"></param>
+		/// <param name="outputTrack">The output track number (0-based).</param>
 		/// <param name="allocatedMemory">The collection of allocated memory.</param>
 		/// <returns>The resulting native audio structure.</returns>
-		private hb_audio_s ConvertAudioBack(AudioEncoding encoding, hb_audio_s baseStruct, int track, int outputTrack, List<IntPtr> allocatedMemory)
+		private hb_audio_s ConvertAudioBack(AudioEncoding encoding, hb_audio_s baseStruct, int outputTrack, List<IntPtr> allocatedMemory)
 		{
 			hb_audio_s nativeAudio = baseStruct;
 
-			//nativeAudio.config.input.track = track;
 			nativeAudio.config.output.track = outputTrack;
 
 			if (encoding.Encoder == AudioEncoder.Passthrough)
@@ -1557,7 +1550,7 @@
 
 			if (profile.KeepDisplayAspect)
 			{
-				if (profile.Width == 0 && profile.Height == 0 || profile.Width == 0)
+				if ((profile.Width == 0 && profile.Height == 0) || profile.Width == 0)
 				{
 					width = (int)((double)height * croppedAspectRatio);
 					if (profile.MaxWidth > 0 && width > profile.MaxWidth)

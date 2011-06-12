@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel.DataAnnotations;
-
-namespace HandBrake.Interop
+﻿namespace HandBrake.Interop
 {
+	using System.ComponentModel.DataAnnotations;
+
 	public enum VideoRangeType
 	{
 		[Display(Name = "Chapters")]
