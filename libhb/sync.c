@@ -1043,7 +1043,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             pv->common->audio_pts_slip += (start - sync->next_start);
             pv->common->video_pts_slip += (start - sync->next_start);
             hb_unlock( pv->common->mutex );
-            *buf_out = buf;
+            *buf_out = OutputAudioFrame( w->audio, buf, sync );
             return HB_WORK_OK;
         }
         hb_log( "sync: adding %d ms of silence to audio 0x%x"
