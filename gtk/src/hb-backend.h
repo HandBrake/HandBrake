@@ -175,7 +175,7 @@ gdouble ghb_lookup_combo_double(const gchar *name, const GValue *gval);
 const gchar* ghb_lookup_combo_option(const gchar *name, const GValue *gval);
 const gchar* ghb_lookup_combo_string(const gchar *name, const GValue *gval);
 gchar* ghb_get_tmp_dir();
-gint ghb_select_audio_codec(GValue *settings, hb_audio_config_t *aconfig, gint acodec);
+gint ghb_select_audio_codec(gint mux, hb_audio_config_t *aconfig, gint acodec);
 gint ghb_find_closest_audio_rate(gint rate);
 GValue* ghb_lookup_acodec_value(gint val);
 

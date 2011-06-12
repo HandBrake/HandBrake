@@ -96,7 +96,8 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 			}
 			else
 			{
-				select_acodec = ghb_select_audio_codec(ud->settings, aconfig, acodec);
+				gint mux = ghb_settings_get_int(ud->settings, "FileFormat");
+				select_acodec = ghb_select_audio_codec(mux, aconfig, acodec);
 				if (acodec != HB_ACODEC_ANY)
 				{
 					ghb_ui_update(ud, "AudioEncoder", ghb_int64_value(select_acodec));

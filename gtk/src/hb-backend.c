@@ -1537,7 +1537,7 @@ void
 ghb_grey_combo_options(GtkBuilder *builder)
 {
 	GtkWidget *widget;
-	gint container, track, titleindex, acodec;
+	gint mux, track, titleindex, acodec;
     hb_audio_config_t *aconfig = NULL;
 	GValue *gval;
 	
@@ -1552,7 +1552,7 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	aconfig = get_hb_audio(h_scan, titleindex, track);
 	widget = GHB_WIDGET (builder, "FileFormat");
 	gval = ghb_widget_value(widget);
-	container = ghb_lookup_combo_int("FileFormat", gval);
+	mux = ghb_lookup_combo_int("FileFormat", gval);
 	ghb_value_free(gval);
 
 	grey_combo_box_item(builder, "x264_analyse", 4, TRUE);
@@ -1562,13 +1562,19 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_VORBIS, FALSE);
 
 	gboolean allow_dca = TRUE;
-	allow_dca = (container != HB_MUX_MP4);
+	allow_dca = (mux != HB_MUX_MP4);
 
 	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_AC3_PASS, FALSE);
 	if (allow_dca)
+    {
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_PASS, FALSE);
+		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_HD_PASS, FALSE);
+    }
 	else
+    {
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_PASS, TRUE);
+		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_HD_PASS, TRUE);
+    }
 
 	if (aconfig && aconfig->in.codec != HB_ACODEC_AC3)
 	{
@@ -1578,6 +1584,10 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	{
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_PASS, TRUE);
 	}
+	if (aconfig && aconfig->in.codec != HB_ACODEC_DCA_HD)
+	{
+		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_HD_PASS, TRUE);
+	}
 	grey_combo_box_item(builder, "VideoEncoder", HB_VCODEC_THEORA, FALSE);
 
 	widget = GHB_WIDGET (builder, "AudioEncoder");
@@ -1585,7 +1595,7 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	acodec = ghb_lookup_combo_int("AudioEncoder", gval);
 	ghb_value_free(gval);
 	grey_combo_box_item(builder, "AudioMixdown", 0, TRUE);
-	if (container == HB_MUX_MP4)
+	if (mux == HB_MUX_MP4)
 	{
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_VORBIS, TRUE);
 		grey_combo_box_item(builder, "VideoEncoder", HB_VCODEC_THEORA, TRUE);
@@ -1596,16 +1606,17 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	gboolean allow_dolby = TRUE;
 	gboolean allow_dpl2 = TRUE;
 	gboolean allow_6ch = TRUE;
-	allow_mono = TRUE;
 	allow_6ch = acodec & ~HB_ACODEC_LAME;
 	if (aconfig)
 	{
+		acodec = ghb_select_audio_codec(mux, aconfig, acodec);
 		gint best = hb_get_best_mixdown(acodec, aconfig->in.channel_layout, 0);
 
 		allow_stereo = best >= HB_AMIXDOWN_STEREO;
 		allow_dolby = best >= HB_AMIXDOWN_DOLBY;
 		allow_dpl2 = best >= HB_AMIXDOWN_DOLBYPLII;
 		allow_6ch = best >= HB_AMIXDOWN_6CH;
+		allow_mono = best >= HB_AMIXDOWN_MONO;
 	}
 	grey_combo_box_item(builder, "AudioMixdown", HB_AMIXDOWN_MONO, !allow_mono);
 	grey_combo_box_item(builder, "AudioMixdown", HB_AMIXDOWN_STEREO, !allow_stereo);
@@ -4124,10 +4135,8 @@ ghb_validate_subtitles(signal_user_data_t *ud)
 }
 
 gint
-ghb_select_audio_codec(GValue *settings, hb_audio_config_t *aconfig, gint acodec)
+ghb_select_audio_codec(gint mux, hb_audio_config_t *aconfig, gint acodec)
 {
-	gint mux = ghb_settings_combo_int(settings, "FileFormat");
-
 	guint32 in_codec = aconfig ? aconfig->in.codec : HB_ACODEC_MASK;
 	if (mux == HB_MUX_MP4)
 	{
@@ -4724,7 +4733,8 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 									title->list_audio, audio.in.track );
 
 		acodec = ghb_settings_combo_int(asettings, "AudioEncoder");
-		audio.out.codec = ghb_select_audio_codec(js, aconfig, acodec);
+
+		audio.out.codec = ghb_select_audio_codec(job->mux, aconfig, acodec);
 
 		audio.out.gain = 
 			ghb_settings_get_double(asettings, "AudioTrackGain");
