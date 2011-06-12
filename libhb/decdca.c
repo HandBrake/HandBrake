@@ -5,6 +5,8 @@
    It may be used under the terms of the GNU General Public License. */
 
 #include "hb.h"
+#include "downmix.h"
+
 #include "dca.h"
 
 struct hb_work_private_s
@@ -357,6 +359,8 @@ static int decdcaBSInfo( hb_work_object_t *w, const hb_buffer_t *b,
     {
         info->channel_layout |= HB_INPUT_CH_LAYOUT_HAS_LFE;
     }
+
+    info->channel_map = &hb_qt_chan_map;
 
     return 1;
 }

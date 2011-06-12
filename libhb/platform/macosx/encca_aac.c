@@ -192,11 +192,20 @@ int encCoreAudioInit( hb_work_object_t * w, hb_job_t * job, enum AAC_MODE mode )
         }
     }
 
-    if( ( audio->config.out.mixdown == HB_AMIXDOWN_6CH ) && ( audio->config.in.codec == HB_ACODEC_AC3) )
+    if( ( audio->config.out.mixdown == HB_AMIXDOWN_6CH ) && ( audio->config.in.channel_map != &hb_qt_chan_map ) )
     {
-        SInt32 channelMap[6] = { 2, 1, 3, 4, 5, 0 };
-        AudioConverterSetProperty( pv->converter, kAudioConverterChannelMap,
-                                   sizeof( channelMap ), channelMap );
+        if( audio->config.in.channel_map == &hb_ac3_chan_map )
+        {
+            SInt32 channelMap[6] = { 2, 1, 3, 4, 5, 0 };
+            AudioConverterSetProperty( pv->converter, kAudioConverterChannelMap,
+                                       sizeof( channelMap ), channelMap );
+        }
+        else if( audio->config.in.channel_map == &hb_smpte_chan_map )
+        {
+            SInt32 channelMap[6] = { 2, 0, 1, 4, 5, 3 };
+            AudioConverterSetProperty( pv->converter, kAudioConverterChannelMap,
+                                       sizeof( channelMap ), channelMap );
+        }
     }
 
     // set encoder quality to maximum

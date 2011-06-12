@@ -5,6 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
 
 #include "hb.h"
+#include "downmix.h"
 
 #include "a52dec/a52.h"
 #include "libavutil/crc.h"
@@ -463,6 +464,8 @@ static int deca52BSInfo( hb_work_object_t *w, const hb_buffer_t *b,
     {
         info->channel_layout |= HB_INPUT_CH_LAYOUT_HAS_LFE;
     }
+
+    info->channel_map = &hb_ac3_chan_map;
 
     return 1;
 }

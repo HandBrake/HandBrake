@@ -112,7 +112,6 @@ struct hb_work_private_s
     struct SwsContext *sws_context; // if we have to rescale or convert color space
     hb_downmix_t    *downmix;
     int cadence[12];
-    hb_chan_map_t   *out_map;
 };
 
 static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *data, int size, int64_t pts );
@@ -209,22 +208,12 @@ static int decavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     if ( w->audio != NULL )
     {
-        if ( w->audio->config.out.codec == HB_ACODEC_AC3 )
-        {
-            // ffmpegs audio encoder expect an smpte chan map as input.
-            // So we need to map the decoders output to smpte.
-            pv->out_map = &hb_smpte_chan_map;
-        }
-        else
-        {
-            pv->out_map = &hb_qt_chan_map;
-        }
         if ( hb_need_downmix( w->audio->config.in.channel_layout, 
                               w->audio->config.out.mixdown) )
         {
             pv->downmix = hb_downmix_init(w->audio->config.in.channel_layout, 
                                           w->audio->config.out.mixdown);
-            hb_downmix_set_chan_map( pv->downmix, &hb_smpte_chan_map, pv->out_map );
+            hb_downmix_set_chan_map( pv->downmix, &hb_smpte_chan_map, &hb_smpte_chan_map );
         }
 
         pv->ff_audio_list = hb_list_init();
@@ -238,22 +227,12 @@ static int decavcodecInit( hb_work_object_t * w, hb_job_t * job )
             ff_pv->list  = hb_list_init();
             ff_pv->job   = job;
 
-            if ( audio->config.out.codec == HB_ACODEC_AC3 )
-            {
-                // ffmpegs audio encoder expect an smpte chan map as input.
-                // So we need to map the decoders output to smpte.
-                ff_pv->out_map = &hb_smpte_chan_map;
-            }
-            else
-            {
-                ff_pv->out_map = &hb_qt_chan_map;
-            }
             if ( hb_need_downmix( audio->config.in.channel_layout, 
                                   audio->config.out.mixdown) )
             {
                 ff_pv->downmix = hb_downmix_init(audio->config.in.channel_layout, 
                                               audio->config.out.mixdown);
-                hb_downmix_set_chan_map( ff_pv->downmix, &hb_smpte_chan_map, ff_pv->out_map );
+                hb_downmix_set_chan_map( ff_pv->downmix, &hb_smpte_chan_map, &hb_smpte_chan_map );
             }
         }
     }
@@ -573,6 +552,8 @@ static int decavcodecBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
         }
         buf = buf->next;
     }
+
+    info->channel_map = &hb_smpte_chan_map;
 
     av_free( buffer );
     if ( parser != NULL )
@@ -1375,22 +1356,12 @@ static int decavcodecviInit( hb_work_object_t * w, hb_job_t * job )
 
     if ( w->audio != NULL )
     {
-        if ( w->audio->config.out.codec == HB_ACODEC_AC3 )
-        {
-            // ffmpegs audio encoder expect an smpte chan map as input.
-            // So we need to map the decoders output to smpte.
-            pv->out_map = &hb_smpte_chan_map;
-        }
-        else
-        {
-            pv->out_map = &hb_qt_chan_map;
-        }
         if ( hb_need_downmix( w->audio->config.in.channel_layout, 
                               w->audio->config.out.mixdown) )
         {
             pv->downmix = hb_downmix_init(w->audio->config.in.channel_layout, 
                                           w->audio->config.out.mixdown);
-            hb_downmix_set_chan_map( pv->downmix, &hb_smpte_chan_map, pv->out_map );
+            hb_downmix_set_chan_map( pv->downmix, &hb_smpte_chan_map, &hb_smpte_chan_map );
         }
 
         pv->ff_audio_list = hb_list_init();
@@ -1405,22 +1376,12 @@ static int decavcodecviInit( hb_work_object_t * w, hb_job_t * job )
             ff_pv->job   = job;
             ff_pv->pts_next = -1;
 
-            if ( audio->config.out.codec == HB_ACODEC_AC3 )
-            {
-                // ffmpegs audio encoder expect an smpte chan map as input.
-                // So we need to map the decoders output to smpte.
-                ff_pv->out_map = &hb_smpte_chan_map;
-            }
-            else
-            {
-                ff_pv->out_map = &hb_qt_chan_map;
-            }
             if ( hb_need_downmix( audio->config.in.channel_layout, 
                                   audio->config.out.mixdown) )
             {
                 ff_pv->downmix = hb_downmix_init(audio->config.in.channel_layout, 
                                               audio->config.out.mixdown);
-                hb_downmix_set_chan_map( ff_pv->downmix, &hb_smpte_chan_map, ff_pv->out_map );
+                hb_downmix_set_chan_map( ff_pv->downmix, &hb_smpte_chan_map, &hb_smpte_chan_map );
             }
         }
     }
@@ -1514,16 +1475,7 @@ static hb_buffer_t * downmixAudio(
     else
     {
         buf = hb_buffer_init( nsamples * sizeof(float) );
-        float *fl32 = (float *)buf->data;
-        int i;
-        for( i = 0; i < nsamples; ++i )
-        {
-            fl32[i] = buffer[i];
-        }
-        int n_ch_samples = nsamples / channels;
-        hb_layout_remap( &hb_smpte_chan_map, pv->out_map,
-                         audio->config.in.channel_layout, 
-                         fl32, n_ch_samples );
+        memcpy(buf->data, buffer, nsamples * sizeof(float) );
     }
 
     return buf;

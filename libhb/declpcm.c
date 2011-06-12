@@ -5,6 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
 
 #include "hb.h"
+#include "downmix.h"
 
 struct hb_work_private_s
 {
@@ -267,6 +268,7 @@ static int declpcmBSInfo( hb_work_object_t *w, const hb_buffer_t *b,
     info->bitrate = bitrate;
     info->flags = ( b->data[3] << 16 ) | ( b->data[4] << 8 ) | b->data[5];
     info->channel_layout = hdr2layout[nchannels - 1];
+    info->channel_map = &hb_qt_chan_map;
 
     return 1;
 }

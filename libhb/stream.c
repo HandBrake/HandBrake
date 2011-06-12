@@ -3336,6 +3336,7 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
             audio->config.in.bitrate = codec->bit_rate? codec->bit_rate : 1;
             audio->config.in.samplerate = codec->sample_rate;
             audio->config.in.channel_layout = layout;
+            audio->config.in.channel_map = &hb_smpte_chan_map;
         }
 
         tag = av_metadata_get( st->metadata, "language", NULL, 0 );

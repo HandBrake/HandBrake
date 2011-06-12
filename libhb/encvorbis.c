@@ -120,8 +120,8 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
             pv->channel_map[0] = 0;
             break;
         case 6:
-            // Vorbis use the following channels map = L C R Ls Rs Lfe
-            if( audio->config.in.codec == HB_ACODEC_AC3 )
+            // Vorbis uses the following channel map = L C R Ls Rs Lfe
+            if( audio->config.in.channel_map == &hb_ac3_chan_map )
             {
                 pv->channel_map[0] = 1;
                 pv->channel_map[1] = 2;
@@ -130,7 +130,16 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
                 pv->channel_map[4] = 5;
                 pv->channel_map[5] = 0;
             }
-            else
+            else if( audio->config.in.channel_map == &hb_smpte_chan_map )
+            {
+                pv->channel_map[0] = 0;
+                pv->channel_map[1] = 2;
+                pv->channel_map[2] = 1;
+                pv->channel_map[3] = 4;
+                pv->channel_map[4] = 5;
+                pv->channel_map[5] = 3;
+            }
+            else // &hb_qt_chan_map
             {
                 pv->channel_map[0] = 1;
                 pv->channel_map[1] = 0;

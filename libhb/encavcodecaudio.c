@@ -168,17 +168,7 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     hb_list_getbytes( pv->list, pv->buf, pv->input_samples * sizeof( float ),
                       &pts, &pos);
 
-    hb_chan_map_t *map = NULL;
-    if ( audio->config.in.codec == HB_ACODEC_AC3 )
-    {
-        map = &hb_ac3_chan_map;
-    }
-    else if ( audio->config.in.codec == HB_ACODEC_DCA ||
-              audio->config.in.codec == HB_ACODEC_LPCM )
-    {
-        map = &hb_qt_chan_map;
-    }
-    if ( map )
+    if ( audio->config.in.channel_map != &hb_smpte_chan_map )
     {
         int layout;
         switch (audio->config.out.mixdown)
@@ -196,7 +186,7 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
                 layout = HB_INPUT_CH_LAYOUT_3F2R | HB_INPUT_CH_LAYOUT_HAS_LFE;
                 break;
         }
-        hb_layout_remap( map, &hb_smpte_chan_map, layout, 
+        hb_layout_remap( audio->config.in.channel_map, &hb_smpte_chan_map, layout, 
                         (float*)pv->buf, pv->samples_per_frame);
     }
 

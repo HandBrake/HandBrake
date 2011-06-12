@@ -82,6 +82,7 @@ typedef struct hb_lock_s hb_lock_t;
 #else
 #define PRIVATE const
 #endif
+#include "downmix.h"
 
 hb_list_t * hb_list_init();
 int         hb_list_count( hb_list_t * );
@@ -423,10 +424,9 @@ struct hb_audio_config_s
         PRIVATE uint32_t mode;    /* Bitstream mode, codec dependent encoding */
         PRIVATE int samplerate; /* Input sample rate (Hz) */
         PRIVATE int bitrate;    /* Input bitrate (kbps) */
-        PRIVATE int channel_layout;
-        /* channel_layout is the channel layout of this audio this is used to
-        * provide a common way of describing the source audio
-        */
+        PRIVATE int channel_layout; /* channel_layout is the channel layout of this audio this is used to
+                                     * provide a common way of describing the source audio */
+        PRIVATE hb_chan_map_t * channel_map; /* source channel map, set by the audio decoder */
     } in;
 
     /* Misc. */
@@ -715,6 +715,7 @@ typedef struct hb_work_info_s
         };
         struct {    // info only valid for audio decoders
             int     channel_layout;
+            hb_chan_map_t * channel_map;
         };
     };
 } hb_work_info_t;
