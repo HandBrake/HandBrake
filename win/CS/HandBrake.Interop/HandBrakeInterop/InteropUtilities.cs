@@ -45,6 +45,7 @@
 		/// <summary>
 		/// Creats a new, empty native HandBrake list.
 		/// </summary>
+		/// <param name="capacity">The capacity of the new list.</param>
 		/// <returns>The new native list.</returns>
 		public static NativeList CreateNativeList(int capacity)
 		{

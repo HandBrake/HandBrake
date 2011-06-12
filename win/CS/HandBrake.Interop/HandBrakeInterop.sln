@@ -16,23 +16,33 @@ Global
 		CategoryFile = HandBrakeInterop.vsmdi
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Mixed Platforms = Debug|Mixed Platforms
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Release|Mixed Platforms = Release|Mixed Platforms
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug|x64.ActiveCfg = Debug|x64
 		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug|x64.Build.0 = Debug|x64
 		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug|x86.ActiveCfg = Debug|x86
 		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug|x86.Build.0 = Debug|x86
+		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Release|Mixed Platforms.Build.0 = Release|x86
 		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Release|x64.ActiveCfg = Release|x64
 		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Release|x64.Build.0 = Release|x64
 		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Release|x86.ActiveCfg = Release|x86
 		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Release|x86.Build.0 = Release|x86
+		{D721824C-CAFA-40B1-83C9-83E4B1215D60}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D721824C-CAFA-40B1-83C9-83E4B1215D60}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{D721824C-CAFA-40B1-83C9-83E4B1215D60}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{D721824C-CAFA-40B1-83C9-83E4B1215D60}.Debug|x64.Build.0 = Debug|Any CPU
 		{D721824C-CAFA-40B1-83C9-83E4B1215D60}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D721824C-CAFA-40B1-83C9-83E4B1215D60}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D721824C-CAFA-40B1-83C9-83E4B1215D60}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D721824C-CAFA-40B1-83C9-83E4B1215D60}.Release|x64.ActiveCfg = Release|Any CPU
 		{D721824C-CAFA-40B1-83C9-83E4B1215D60}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection

@@ -200,7 +200,7 @@
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>-->
-  <Target Name="AfterBuild">
+  <!--<Target Name="AfterBuild">
     <Copy SourceFiles="..\..\Lib\$(Platform)\hb.dll" DestinationFolder="$(OutDir)" />
-  </Target>
+  </Target>-->
 </Project>

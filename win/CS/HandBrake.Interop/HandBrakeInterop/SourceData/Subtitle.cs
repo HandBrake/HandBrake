@@ -4,10 +4,6 @@
 	   Homepage: <http://handbrake.fr>.
 	   It may be used under the terms of the GNU General Public License. */
 
-using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
-
 namespace HandBrake.SourceData
 {
 	/// <summary>
@@ -16,22 +12,28 @@ namespace HandBrake.SourceData
 	public class Subtitle
 	{
 		/// <summary>
-		/// The track number of this Subtitle
+		/// Gets or sets the track number of this Subtitle
 		/// </summary>
 		public int TrackNumber { get; set; }
 
 		/// <summary>
-		/// The language (if detected) of this Subtitle
+		/// Gets or sets the language (if detected) of this Subtitle
 		/// </summary>
 		public string Language { get; set; }
 
 		/// <summary>
-		/// Langauage Code
+		/// Gets or sets the Langauage Code.
 		/// </summary>
 		public string LanguageCode { get; set; }
 
+		/// <summary>
+		/// Gets or sets the subtitle type.
+		/// </summary>
 		public SubtitleType SubtitleType { get; set; }
 
+		/// <summary>
+		/// Gets or sets the subtitle source.
+		/// </summary>
 		public SubtitleSource SubtitleSource { get; set; }
 
 		/// <summary>

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using HandBrake.SourceData;
-
-namespace HandBrake.Interop
+﻿namespace HandBrake.Interop
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using HandBrake.SourceData;
+
 	public static class HandBrakeUtils
 	{
 		/// <summary>

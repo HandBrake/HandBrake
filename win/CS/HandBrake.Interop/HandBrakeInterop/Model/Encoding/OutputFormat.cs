@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-
-namespace HandBrake.Interop
+﻿namespace HandBrake.Interop
 {
+	using System.ComponentModel.DataAnnotations;
+
 	public enum OutputFormat
 	{
 		[Display(Name = "MP4")]

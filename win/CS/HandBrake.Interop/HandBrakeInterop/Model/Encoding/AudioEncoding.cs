@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace HandBrake.Interop
+﻿namespace HandBrake.Interop
 {
+	using System;
+
 	public class AudioEncoding
 	{
 		public int InputNumber { get; set; }
@@ -14,10 +11,11 @@ namespace HandBrake.Interop
 		/// Gets or sets the bitrate (in kbps) of this track.
 		/// </summary>
 		public int Bitrate { get; set; }
+
 		public Mixdown Mixdown { get; set; }
 
 		/// <summary>
-		/// Obsolete. Use SampleRateRaw instead.
+		/// Gets or sets the sample rate. Obsolete. Use SampleRateRaw instead.
 		/// </summary>
 		[Obsolete("This property is ignored and only exists for backwards compatibility. Use SampleRateRaw instead.")]
 		public string SampleRate { get; set; }

@@ -4,11 +4,6 @@
 	   Homepage: <http://handbrake.fr>.
 	   It may be used under the terms of the GNU General Public License. */
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
-
 namespace HandBrake.SourceData
 {
 	/// <summary>
@@ -17,7 +12,7 @@ namespace HandBrake.SourceData
 	public class AudioTrack
 	{
 		/// <summary>
-		/// The track number of this Audio Track
+		/// Gets or sets the track number of this Audio Track
 		/// </summary>
 		public int TrackNumber { get; set; }
 
@@ -27,12 +22,18 @@ namespace HandBrake.SourceData
 		public AudioCodec Codec { get; set; }
 
 		/// <summary>
-		/// The language (if detected) of this Audio Track
+		/// Gets or sets the language (if detected) of this Audio Track
 		/// </summary>
 		public string Language { get; set; }
 
+		/// <summary>
+		/// Gets or sets the language code for this audio track.
+		/// </summary>
 		public string LanguageCode { get; set; }
 
+		/// <summary>
+		/// Gets or sets the description for this audio track.
+		/// </summary>
 		public string Description { get; set; }
 
 		/// <summary>
@@ -41,15 +42,18 @@ namespace HandBrake.SourceData
 		public int ChannelLayout { get; set; }
 
 		/// <summary>
-		/// The frequency (in Hz) of this Audio Track
+		/// Gets or sets the frequency (in Hz) of this Audio Track
 		/// </summary>
 		public int SampleRate { get; set; }
 
 		/// <summary>
-		/// The bitrate (in bits/sec) of this Audio Track.
+		/// Gets or sets the bitrate (in bits/sec) of this Audio Track.
 		/// </summary>
 		public int Bitrate { get; set; }
 
+		/// <summary>
+		/// Gets the display string for this audio track.
+		/// </summary>
 		public string Display
 		{
 			get
@@ -58,6 +62,9 @@ namespace HandBrake.SourceData
 			}
 		}
 
+		/// <summary>
+		/// Gets the display string for this audio track (not including track number)
+		/// </summary>
 		public string NoTrackDisplay
 		{
 			get
