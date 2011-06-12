@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrakeInterop", "HandBrakeInterop\HandBrakeInterop.csproj", "{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrakeInterop.Test", "HandBrakeInterop.Test\HandBrakeInterop.Test.csproj", "{D721824C-CAFA-40B1-83C9-83E4B1215D60}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F9A6B796-8476-4F7D-BD4E-A1B73A42E2F7}"
+	ProjectSection(SolutionItems) = preProject
+		HandBrakeInterop.vsmdi = HandBrakeInterop.vsmdi
+		Local.testsettings = Local.testsettings
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = HandBrakeInterop.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug|x64.ActiveCfg = Debug|x64
+		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug|x64.Build.0 = Debug|x64
+		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug|x86.ActiveCfg = Debug|x86
+		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Debug|x86.Build.0 = Debug|x86
+		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Release|x64.ActiveCfg = Release|x64
+		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Release|x64.Build.0 = Release|x64
+		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Release|x86.ActiveCfg = Release|x86
+		{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}.Release|x86.Build.0 = Release|x86
+		{D721824C-CAFA-40B1-83C9-83E4B1215D60}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D721824C-CAFA-40B1-83C9-83E4B1215D60}.Debug|x64.Build.0 = Debug|Any CPU
+		{D721824C-CAFA-40B1-83C9-83E4B1215D60}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D721824C-CAFA-40B1-83C9-83E4B1215D60}.Release|x64.ActiveCfg = Release|Any CPU
+		{D721824C-CAFA-40B1-83C9-83E4B1215D60}.Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
