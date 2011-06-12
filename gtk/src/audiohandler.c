@@ -79,6 +79,8 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 	{
 		sr = aconfig ? aconfig->in.samplerate : 48000;
 	}
+	if (aconfig)
+		select_acodec = ghb_select_audio_codec(mux, aconfig, select_acodec);
 	gboolean codec_defined_bitrate = FALSE;
 	if (ghb_audio_is_passthru (select_acodec))
 	{
