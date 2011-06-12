@@ -1568,12 +1568,10 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	if (allow_dca)
     {
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_PASS, FALSE);
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_HD_PASS, FALSE);
     }
 	else
     {
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_PASS, TRUE);
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_HD_PASS, TRUE);
     }
 
 	if (aconfig && aconfig->in.codec != HB_ACODEC_AC3)
@@ -1583,10 +1581,6 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	if (aconfig && aconfig->in.codec != HB_ACODEC_DCA)
 	{
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_PASS, TRUE);
-	}
-	if (aconfig && aconfig->in.codec != HB_ACODEC_DCA_HD)
-	{
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_HD_PASS, TRUE);
 	}
 	grey_combo_box_item(builder, "VideoEncoder", HB_VCODEC_THEORA, FALSE);
 
