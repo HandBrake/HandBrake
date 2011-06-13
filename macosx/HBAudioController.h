@@ -20,13 +20,13 @@ extern NSString *HBMixdownChangedNotification;
 
 @interface HBAudioController : NSObject
 
-	{
-	id					myController;
-	NSMutableArray		*audioArray;		//	the configured audio information
-	NSArray				*masterTrackArray;	//	the master list of audio tracks from the title
-	NSDictionary		*noneTrack;			//	this represents no audio track selection
-	NSNumber			*videoContainerTag;	//	initially is the default HB_MUX_MP4
-	}
+{
+    id                             myController;
+    NSMutableArray               * audioArray;        // the configured audio information
+    NSArray                      * masterTrackArray;  // the master list of audio tracks from the title
+    NSDictionary                 * noneTrack;         // this represents no audio track selection
+    NSNumber                     * videoContainerTag; // initially is the default HB_MUX_MP4
+}
 
 @property (nonatomic, readonly, retain) NSArray *masterTrackArray;
 @property (nonatomic, readonly) NSDictionary *noneTrack;

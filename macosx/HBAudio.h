@@ -21,18 +21,18 @@ extern NSString *keyAudioBitrate;
 @interface HBAudio : NSObject
 
 {
-	NSDictionary *track;
-	NSDictionary *codec;
-	NSDictionary *mixdown;
-	NSDictionary *sampleRate;
-	NSDictionary *bitRate;
-	NSNumber *drc;
-    NSNumber *gain;
-	NSNumber *videoContainerTag;
-	HBAudioController *controller;
-	NSMutableArray *codecs;
-	NSMutableArray *mixdowns;
-	NSMutableArray *bitRates;
+    NSDictionary                 * track;
+    NSDictionary                 * codec;
+    NSDictionary                 * mixdown;
+    NSDictionary                 * sampleRate;
+    NSDictionary                 * bitRate;
+    NSNumber                     * drc;
+    NSNumber                     * gain;
+    NSNumber                     * videoContainerTag;
+    HBAudioController            * controller;
+    NSMutableArray               * codecs;
+    NSMutableArray               * mixdowns;
+    NSMutableArray               * bitRates;
 }
 
 @property (nonatomic, retain) NSDictionary *track;
@@ -58,4 +58,3 @@ extern NSString *keyAudioBitrate;
 - (void) setBitRateFromName: (NSString *) aValue;
 
 @end
-
