@@ -90,7 +90,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     for (unsigned int counter = 0; counter < audioArrayCount; counter++)
     {
         HBAudio *anAudio = [self objectInAudioArrayAtIndex: counter];
-        if (YES == [anAudio enabled])
+        if ([anAudio enabled])
         {
             NSString *prefix = [NSString stringWithFormat: @"Audio%d", counter + 1];
             NSNumber *sampleRateToUse = (0 == [[[anAudio sampleRate] objectForKey: keyAudioSamplerate] intValue]) ?
@@ -155,7 +155,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     for (i = 0; i < audioArrayCount; i++)
     {
         HBAudio *anAudio = [self objectInAudioArrayAtIndex: i];
-        if (YES == [anAudio enabled])
+        if ([anAudio enabled])
         {
             NSNumber *sampleRateToUse = (0 == [[[anAudio sampleRate] objectForKey: keyAudioSamplerate] intValue]) ?
             [[anAudio track] objectForKey: keyAudioInputSampleRate] :
@@ -189,7 +189,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     for (i = 0; i < audioArrayCount; i++)
     {
         HBAudio *anAudio = [self objectInAudioArrayAtIndex: i];
-        if (YES == [anAudio enabled])
+        if ([anAudio enabled])
         {
             NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity: 7];
             [dict setObject: [[anAudio track] objectForKey: keyAudioTrackIndex] forKey: @"AudioTrack"];
@@ -252,7 +252,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 {
     NSArray *retval = [aPreset objectForKey: @"AudioList"];
 
-    if (nil == retval)
+    if (!retval)
     {
         int maximumNumberOfAllowedAudioTracks = [HBController maximumNumberOfAllowedAudioTracks];
         NSString *base;
@@ -298,15 +298,15 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
             [newAudio setTrackFromIndex: trackIndex];
             key = [dict objectForKey: @"AudioEncoder"];
             if (0 == aType &&
-                YES == [[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] &&
-                YES == [key isEqualToString: @"AAC (faac)"])
+                [[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] &&
+                [key isEqualToString: @"AAC (faac)"])
             {
                 key = @"AAC (CoreAudio)";
             }
-            if (YES == [[NSUserDefaults standardUserDefaults] boolForKey: @"AC3PassthruDefaultsToAC3"] &&
-                YES == [key isEqualToString: @"AC3 Passthru"])
+            if ([[NSUserDefaults standardUserDefaults] boolForKey: @"AC3PassthruDefaultsToAC3"] &&
+                [key isEqualToString: @"AC3 Passthru"])
             {
-                if (NO == [newAudio setCodecFromName: key])
+                if (![newAudio setCodecFromName: key])
                 {
                     key = @"AC3";
                     fallenBack = YES;
@@ -326,11 +326,11 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
             // If our preset wants us to support a codec that the track does not support, instead
             // of changing the codec we remove the audio instead.
-            if (YES == [newAudio setCodecFromName: key])
+            if ([newAudio setCodecFromName: key])
             {
                 [newAudio setMixdownFromName: [dict objectForKey: @"AudioMixdown"]];
                 [newAudio setSampleRateFromName: [dict objectForKey: @"AudioSamplerate"]];
-                if (NO == fallenBack)
+                if (!fallenBack)
                 {
                     [newAudio setBitRateFromName: [dict objectForKey: @"AudioBitrate"]];
                 }
@@ -357,10 +357,10 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     BOOL found = NO;
 
     // We search for the prefix noting that our titles have the format %d: %s where the %s is the prefix
-    for (unsigned int i = 1; i < count && NO == found; i++) // Note that we skip the "None" track
+    for (unsigned int i = 1; i < count && !found; i++) // Note that we skip the "None" track
     {
         languageTitle = [[masterTrackArray objectAtIndex: i] objectForKey: keyAudioTrackName];
-        if (YES == [[languageTitle substringFromIndex: [languageTitle rangeOfString: @" "].location + 1] hasPrefix: prefix])
+        if ([[languageTitle substringFromIndex: [languageTitle rangeOfString: @" "].location + 1] hasPrefix: prefix])
         {
             retval = i;
             found = YES;
@@ -376,7 +376,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 {
     static NSMutableDictionary *retval = nil;
 
-    if (nil == retval)
+    if (!retval)
     {
         retval = [[NSMutableDictionary dictionaryWithObjectsAndKeys:
                    [NSArray arrayWithObject:
@@ -404,7 +404,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     [self _clearAudioArray];
 
     [self _processPresetAudioArray: whatToUse forTrack: preferredLanguage andType: [[aPreset objectForKey: @"Type"] intValue]];
-    if (YES == allTracks)
+    if (allTracks)
     {
         unsigned int count = [masterTrackArray count];
         for (unsigned int i = 1; i < count; i++)
@@ -423,7 +423,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
 {
     int count = [self countOfAudioArray];
-    if (0 == count || NO == [[self objectInAudioArrayAtIndex: 0] enabled])
+    if (0 == count || ![[self objectInAudioArrayAtIndex: 0] enabled])
     {
         [self addTracksFromPreset: [self _defaultPreset] allTracks: NO];
     }
@@ -452,10 +452,10 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 {
     BOOL retval = NO;
     unsigned int audioArrayCount = [self countOfAudioArray];
-    for (unsigned int i = 0; i < audioArrayCount && NO == retval; i++)
+    for (unsigned int i = 0; i < audioArrayCount && !retval; i++)
     {
         HBAudio *anAudio = [self objectInAudioArrayAtIndex: i];
-        if (YES == [anAudio enabled] && aCodecValue == [[[anAudio codec] objectForKey: keyAudioCodec] intValue])
+        if ([anAudio enabled] && aCodecValue == [[[anAudio codec] objectForKey: keyAudioCodec] intValue])
         {
             retval = YES;
         }
@@ -509,7 +509,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
         if (0 < count)
         {
             HBAudio *lastAudio = [self objectInAudioArrayAtIndex: count - 1];
-            if (YES == [lastAudio enabled])
+            if ([lastAudio enabled])
             {
                 needToAdd = YES;
             }
@@ -520,7 +520,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
         }
     }
 
-    if (YES == needToAdd)
+    if (needToAdd)
     {
         [self addNewAudioTrack];
     }
@@ -587,7 +587,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     // Reinitialize the configured list of audio tracks
     [self _clearAudioArray];
 
-    if (NO == [myController hasValidPresetSelected])
+    if (![myController hasValidPresetSelected])
     {
         [self _ensureAtLeastOneNonEmptyTrackExists];
     }
