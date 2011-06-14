@@ -55,7 +55,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     [audioArray release];
     [self setVideoContainerTag: nil];
     [super dealloc];
-    return;
 }
 
 - (void) setHBController: (id) aController
@@ -67,7 +66,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     /* register that we are interested in changes made to the video container */
     [center addObserver: self selector: @selector(containerChanged:) name: HBContainerChangedNotification object: aController];
     [center addObserver: self selector: @selector(titleChanged:) name: HBTitleChangedNotification object: aController];
-    return;
 }
 
 - (void) _clearAudioArray
@@ -77,7 +75,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     {
         [self removeObjectFromAudioArrayAtIndex: 0];
     }
-    return;
 }
 
 #pragma mark -
@@ -133,7 +130,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
             [aDict setObject: [[anAudio bitRate] objectForKey: keyAudioBitrate] forKey: [prefix stringByAppendingString: @"Bitrate"]];
         }
     }
-    return;
 }
 
 - (void) prepareAudioForJob: (hb_job_t *) aJob
@@ -177,7 +173,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
             free(audio);
         }
     }
-    return;
 }
 
 - (void) prepareAudioForPreset: (NSMutableArray *) anArray
@@ -204,7 +199,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
             [dict release];
         }
     }
-    return;
 }
 
 - (void) addTracksFromQueue: (NSMutableDictionary *) aQueue
@@ -241,8 +235,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     }
 
     [self switchingTrackFromNone: nil]; // see if we need to add one to the list
-
-    return;
 }
 
 // This routine takes the preset and will return the value for the key AudioList
@@ -344,7 +336,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
             [newAudio release];
         }
     }
-    return;
 }
 
 // This matches the FIRST track with the specified prefix, otherwise it uses the defaultIfNotFound value
@@ -415,8 +406,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
             }
         }
     }
-
-    return;
 }
 
 - (void) _ensureAtLeastOneNonEmptyTrackExists
@@ -428,7 +417,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
         [self addTracksFromPreset: [self _defaultPreset] allTracks: NO];
     }
     [self switchingTrackFromNone: nil]; // this ensures there is a None track at the end of the list
-    return;
 }
 
 - (void) addTracksFromPreset: (NSMutableDictionary *) aPreset
@@ -436,7 +424,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 {
     [self addTracksFromPreset: aPreset allTracks: NO];
     [self _ensureAtLeastOneNonEmptyTrackExists];
-    return;
 }
 
 - (void) addAllTracksFromPreset: (NSMutableDictionary *) aPreset
@@ -444,7 +431,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 {
     [self addTracksFromPreset: aPreset allTracks: YES];
     [self _ensureAtLeastOneNonEmptyTrackExists];
-    return;
 }
 
 - (BOOL) anyCodecMatches: (int) aCodecValue
@@ -474,7 +460,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     [newAudio setDrc: [NSNumber numberWithFloat: 0.0]];
     [newAudio setGain: [NSNumber numberWithFloat: 0.0]];
     [newAudio release];
-    return;
 }
 
 #pragma mark -
@@ -493,7 +478,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
         [self removeObjectFromAudioArrayAtIndex: index];
     }
     [self switchingTrackFromNone: nil]; // see if we need to add one to the list
-    return;
 }
 
 - (void) switchingTrackFromNone: (HBAudio *) noLongerNoneTrack
@@ -524,7 +508,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     {
         [self addNewAudioTrack];
     }
-    return;
 }
 
 // This gets called whenever the video container changes.
@@ -543,7 +526,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     {
         [audioObject setVideoContainerTag: [self videoContainerTag]];
     }
-    return;
 }
 
 - (void) titleChanged: (NSNotification *) aNotification
@@ -591,7 +573,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
     {
         [self _ensureAtLeastOneNonEmptyTrackExists];
     }
-    return;
 }
 
 #pragma mark -
@@ -613,14 +594,12 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
 {
     [audioArray insertObject: audioObject atIndex: index];
-    return;
 }
 
 - (void) removeObjectFromAudioArrayAtIndex: (unsigned int) index
 
 {
     [audioArray removeObjectAtIndex: index];
-    return;
 }
 
 @end

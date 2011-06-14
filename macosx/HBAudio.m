@@ -198,7 +198,6 @@ static NSMutableArray *masterBitRateArray = nil;
 
         [pool release];
     }
-    return;
 }
 
 // Ensure the list of codecs is accurate
@@ -268,8 +267,6 @@ static NSMutableArray *masterBitRateArray = nil;
             [self setCodec: nil];
         }
     }
-
-    return;
 }
 
 - (void) updateMixdowns: (BOOL) shouldSetDefault
@@ -337,8 +334,6 @@ static NSMutableArray *masterBitRateArray = nil;
     {
         [self setMixdown: [permittedMixdowns lastObject]];
     }
-
-    return;
 }
 
 - (void) updateBitRates: (BOOL) shouldSetDefault
@@ -425,8 +420,6 @@ static NSMutableArray *masterBitRateArray = nil;
     {
         [self setBitRate: [permittedBitRates lastObject]];
     }
-
-    return;
 }
 
 - (id) init
@@ -485,7 +478,6 @@ static NSMutableArray *masterBitRateArray = nil;
     [self setMixdowns: nil];
     [self setBitRates: nil];
     [super dealloc];
-    return;
 }
 
 #pragma mark -
@@ -532,7 +524,6 @@ static NSMutableArray *masterBitRateArray = nil;
     {
         [self updateBitRates: NO];
     }
-    return;
 }
 
 #pragma mark -
@@ -566,7 +557,6 @@ static NSMutableArray *masterBitRateArray = nil;
     {
         [self setMixdown: dict];
     }
-    return;
 }
 
 - (void) setSampleRateFromName: (NSString *) aValue
@@ -578,7 +568,6 @@ static NSMutableArray *masterBitRateArray = nil;
     {
         [self setSampleRate: dict];
     }
-    return;
 }
 
 - (void) setBitRateFromName: (NSString *) aValue
@@ -590,7 +579,6 @@ static NSMutableArray *masterBitRateArray = nil;
     {
         [self setBitRate: dict];
     }
-    return;
 }
 
 
