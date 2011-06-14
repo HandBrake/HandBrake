@@ -1226,7 +1226,7 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
      */
     audio->config.out.track = hb_list_count(job->list_audio) + 1;
     audio->config.out.codec = audiocfg->out.codec;
-    if( (audiocfg->out.codec & HB_ACODEC_MASK) == audio->config.in.codec &&
+    if( (audiocfg->out.codec & HB_ACODEC_MASK) == (audio->config.in.codec & HB_ACODEC_MASK) &&
         (audiocfg->out.codec & HB_ACODEC_PASS_FLAG ) )
     {
         /* Pass-through, copy from input. */

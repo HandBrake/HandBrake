@@ -74,7 +74,7 @@ static int decavcodecBSInfo( hb_work_object_t *, const hb_buffer_t *, hb_work_in
 hb_work_object_t hb_decavcodec =
 {
     WORK_DECAVCODEC,
-    "MPGA decoder (libavcodec)",
+    "Audio decoder (libavcodec)",
     decavcodecInit,
     decavcodecWork,
     decavcodecClose,
@@ -1327,23 +1327,6 @@ static void init_ffmpeg_context( hb_work_object_t *w )
     pv->brokenByMicrosoft = 1;
 }
 
-static void prepare_ffmpeg_buffer( hb_buffer_t * in )
-{
-    // ffmpeg requires an extra 8 bytes of zero at the end of the buffer and
-    // will seg fault in odd, data dependent ways if it's not there. (my guess
-    // is this is a case of a local performance optimization creating a global
-    // performance degradation since all the time wasted by extraneous data
-    // copies & memory zeroing has to be huge compared to the minor reduction
-    // in inner-loop instructions this affords - modern cpus bottleneck on
-    // memory bandwidth not instruction bandwidth).
-    if ( in->size + FF_INPUT_BUFFER_PADDING_SIZE > in->alloc )
-    {
-        // have to realloc to add the padding
-        hb_buffer_realloc( in, in->size + FF_INPUT_BUFFER_PADDING_SIZE );
-    }
-    memset( in->data + in->size, 0, FF_INPUT_BUFFER_PADDING_SIZE );
-}
-
 static int decavcodecviInit( hb_work_object_t * w, hb_job_t * job )
 {
 
@@ -1429,7 +1412,6 @@ static int decavcodecviWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pv->new_chap = in->new_chap;
         pv->chap_time = pts >= 0? pts : pv->pts_next;
     }
-    prepare_ffmpeg_buffer( in );
     decodeFrame( pv, in->data, in->size, in->sequence, in->start, in->renderOffset );
     hb_buffer_close( &in );
     *buf_out = link_buf_list( pv );
@@ -1475,7 +1457,7 @@ static hb_buffer_t * downmixAudio(
     else
     {
         buf = hb_buffer_init( nsamples * sizeof(float) );
-        memcpy(buf->data, buffer, nsamples * sizeof(float) );
+        memcpy( buf->data, buffer, nsamples * sizeof(float) );
     }
 
     return buf;
@@ -1524,7 +1506,34 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
         pos += len;
         if( out_size > 0 )
         {
-            // We require signed 16-bit ints for the output format. If
+            int isamp = av_get_bytes_per_sample( context->sample_fmt );
+            nsamples = out_size / isamp;
+            double pts_next = pv->pts_next + nsamples * pv->duration;
+
+            // DTS-HD can be passed through to mkv
+            if( audio->config.out.codec & HB_ACODEC_PASS_FLAG )
+            {
+                // Note that even though we are doing passthru, we had
+                // to decode so that we know the stop time and the
+                // pts of the next audio packet.
+                hb_buffer_t * buf;
+
+                buf = hb_buffer_init( avp.size );
+                memcpy( buf->data, avp.data, len );
+                buf->start = pv->pts_next;
+                buf->stop  = pts_next;
+                hb_list_add( pv->list, buf );
+
+                if ( hb_list_count( audio->priv.ff_audio_list ) == 0 )
+                {
+                    pv->pts_next = pts_next;
+                    continue;
+                }
+                // Fall through and process the list of other audio
+                // pipelines that use this ffmpeg audio stream.
+            }
+
+            // We require signed floats for the output format. If
             // we got something different convert it.
             if ( context->sample_fmt != AV_SAMPLE_FMT_FLT )
             {
@@ -1535,16 +1544,13 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
                 //       anything more complicated than a one-for-one format
                 //       conversion we'd probably want to cache the converter
                 //       context in the pv.
-                int isamp;
                 AVAudioConvert *ctx;
 
-                isamp = av_get_bytes_per_sample( context->sample_fmt );
                 ctx = av_audio_convert_alloc( AV_SAMPLE_FMT_FLT, 1,
                                               context->sample_fmt, 1,
                                               NULL, 0 );
 
                 // get output buffer size then malloc a buffer
-                nsamples = out_size / isamp;
                 buffer = av_malloc( nsamples * sizeof(hb_sample_t) );
 
                 // we're doing straight sample format conversion which 
@@ -1557,16 +1563,11 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
                 av_audio_convert( ctx, obuf, ostride, ibuf, istride, nsamples );
                 av_audio_convert_free( ctx );
             }
-            else
-            {
-                nsamples = out_size / sizeof(hb_sample_t);
-            }
 
-            hb_buffer_t * buf;
-            double pts_next = pv->pts_next + nsamples * pv->duration;
-            buf = downmixAudio( audio, pv, buffer, context->channels, nsamples );
-            if ( buf )
+            if ( !( audio->config.out.codec & HB_ACODEC_PASS_FLAG ) )
             {
+                hb_buffer_t * buf;
+                buf = downmixAudio( audio, pv, buffer, context->channels, nsamples );
                 buf->start = pv->pts_next;
                 buf->stop = pts_next;
                 hb_list_add( pv->list, buf );
@@ -1579,13 +1580,20 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
                 hb_work_private_t *ff_pv = hb_list_item( pv->ff_audio_list, i );
                 if ( ff_pv )
                 {
-                    buf = downmixAudio( ff_audio, ff_pv, buffer, context->channels, nsamples );
-                    if ( buf )
+                    hb_buffer_t * buf;
+
+                    if ( !( ff_audio->config.out.codec & HB_ACODEC_PASS_FLAG ) )
                     {
-                        buf->start = pv->pts_next;
-                        buf->stop = pts_next;
-                        hb_list_add( ff_pv->list, buf );
+                        buf = downmixAudio( ff_audio, ff_pv, buffer, context->channels, nsamples );
                     }
+                    else
+                    {
+                        buf = hb_buffer_init( avp.size );
+                        memcpy( buf->data, avp.data, len );
+                    }
+                    buf->start = pv->pts_next;
+                    buf->stop  = pts_next;
+                    hb_list_add( ff_pv->list, buf );
                 }
             }
             pv->pts_next = pts_next;
@@ -1639,7 +1647,6 @@ static int decavcodecaiWork( hb_work_object_t *w, hb_buffer_t **buf_in,
     {
         pv->pts_next = in->start;
     }
-    prepare_ffmpeg_buffer( in );
     decodeAudio( w->audio, pv, in->data, in->size, pv->pts_next );
     writeAudioFifos( w );
     *buf_out = link_buf_list( pv );

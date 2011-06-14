@@ -1033,7 +1033,8 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
          * Or in the case of DCA, skip some frames from the
          * other streams.
          */
-        if( w->audio->config.out.codec == HB_ACODEC_DCA_PASS )
+        if( w->audio->config.out.codec == HB_ACODEC_DCA_PASS ||
+            w->audio->config.out.codec == HB_ACODEC_DCA_HD_PASS )
         {
             hb_log( "sync: audio gap %d ms. Skipping frames. Audio 0x%x"
                     "  start %"PRId64", next %"PRId64,
@@ -1093,8 +1094,7 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
     w->audio = hb_list_item( title->list_audio, i );
     w->fifo_in = w->audio->priv.fifo_raw;
 
-    if( w->audio->config.out.codec == HB_ACODEC_AC3_PASS ||
-        w->audio->config.out.codec == HB_ACODEC_DCA_PASS )
+    if ( w->audio->config.out.codec & HB_ACODEC_PASS_FLAG )
     {
         w->fifo_out = w->audio->priv.fifo_out;
     }

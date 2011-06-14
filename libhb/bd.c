@@ -103,7 +103,7 @@ static void add_audio(int track, hb_list_t *list_audio, BLURAY_STREAM_INFO *bdau
         strlen(lang->native_name) ? lang->native_name : lang->eng_name,
         audio->config.in.codec == HB_ACODEC_AC3 ? "AC3" : 
         ( audio->config.in.codec == HB_ACODEC_DCA ? "DTS" : 
-        ( audio->config.in.codec == HB_ACODEC_MPGA ? 
+        ( ( audio->config.in.codec & HB_ACODEC_FF_MASK ) ? 
             ( stream_type == BLURAY_STREAM_TYPE_AUDIO_LPCM ? "BD LPCM" : 
             ( stream_type == BLURAY_STREAM_TYPE_AUDIO_AC3PLUS ? "E-AC3" : 
             ( stream_type == BLURAY_STREAM_TYPE_AUDIO_TRUHD ? "TrueHD" : 
@@ -352,7 +352,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
                 add_audio(ii, title->list_audio, bdaudio, 
                           HB_SUBSTREAM_BD_AC3, HB_ACODEC_AC3, 0);
                 add_audio(ii, title->list_audio, bdaudio, 
-                    HB_SUBSTREAM_BD_TRUEHD, HB_ACODEC_MPGA, CODEC_ID_TRUEHD);
+                    HB_SUBSTREAM_BD_TRUEHD, HB_ACODEC_FFMPEG, CODEC_ID_TRUEHD);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_DTS:
@@ -362,17 +362,17 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
             case BLURAY_STREAM_TYPE_AUDIO_MPEG2:
             case BLURAY_STREAM_TYPE_AUDIO_MPEG1:
                 add_audio(ii, title->list_audio, bdaudio, 0, 
-                          HB_ACODEC_MPGA, CODEC_ID_MP2);
+                          HB_ACODEC_FFMPEG, CODEC_ID_MP2);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_AC3PLUS:
                 add_audio(ii, title->list_audio, bdaudio, 0, 
-                          HB_ACODEC_MPGA, CODEC_ID_EAC3);
+                          HB_ACODEC_FFMPEG, CODEC_ID_EAC3);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_LPCM:
                 add_audio(ii, title->list_audio, bdaudio, 0, 
-                          HB_ACODEC_MPGA, CODEC_ID_PCM_BLURAY);
+                          HB_ACODEC_FFMPEG, CODEC_ID_PCM_BLURAY);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_AC3:
@@ -388,7 +388,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
                 // DTS-core followed by DTS-hd-extensions.  Setting
                 // a substream id of 0 says use all substreams.
                 add_audio(ii, title->list_audio, bdaudio, 0,
-                          HB_ACODEC_MPGA, CODEC_ID_DTS);
+                          HB_ACODEC_DCA_HD, CODEC_ID_DTS);
                 break;
 
             default:

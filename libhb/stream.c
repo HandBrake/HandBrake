@@ -45,8 +45,8 @@ typedef struct {
 static const stream2codec_t st2codec[256] = {
     st(0x01, V, WORK_DECMPEG2,     0,              "MPEG1"),
     st(0x02, V, WORK_DECMPEG2,     0,              "MPEG2"),
-    st(0x03, A, HB_ACODEC_MPGA,    CODEC_ID_MP2,   "MPEG1"),
-    st(0x04, A, HB_ACODEC_MPGA,    CODEC_ID_MP2,   "MPEG2"),
+    st(0x03, A, HB_ACODEC_FFMPEG,  CODEC_ID_MP2,   "MPEG1"),
+    st(0x04, A, HB_ACODEC_FFMPEG,  CODEC_ID_MP2,   "MPEG2"),
     st(0x05, N, 0,                 0,              "ISO 13818-1 private section"),
     st(0x06, U, 0,                 0,              "ISO 13818-1 PES private data"),
     st(0x07, N, 0,                 0,              "ISO 13522 MHEG"),
@@ -57,23 +57,23 @@ static const stream2codec_t st2codec[256] = {
     st(0x0c, N, 0,                 0,              "ISO 13818-6 Stream descriptors"),
     st(0x0d, N, 0,                 0,              "ISO 13818-6 Sections"),
     st(0x0e, N, 0,                 0,              "ISO 13818-1 auxiliary"),
-    st(0x0f, A, HB_ACODEC_MPGA,    CODEC_ID_AAC,   "AAC"),
+    st(0x0f, A, HB_ACODEC_FFMPEG,  CODEC_ID_AAC,   "AAC"),
     st(0x10, V, WORK_DECAVCODECV,  CODEC_ID_MPEG4, "MPEG4"),
-    st(0x11, A, HB_ACODEC_MPGA,    CODEC_ID_AAC_LATM, "LATM AAC"),
+    st(0x11, A, HB_ACODEC_FFMPEG,  CODEC_ID_AAC_LATM, "LATM AAC"),
     st(0x12, U, 0,                 0,              "MPEG4 generic"),
 
     st(0x14, N, 0,                 0,              "ISO 13818-6 DSM-CC download"),
 
     st(0x1b, V, WORK_DECAVCODECV,  CODEC_ID_H264,  "H.264"),
 
-    st(0x80, N, HB_ACODEC_MPGA,    CODEC_ID_PCM_BLURAY, "Digicipher II Video"),
+    st(0x80, N, HB_ACODEC_FFMPEG,  CODEC_ID_PCM_BLURAY, "Digicipher II Video"),
     st(0x81, A, HB_ACODEC_AC3,     0,              "AC3"),
     st(0x82, A, HB_ACODEC_DCA,     0,              "DTS"),
     st(0x83, A, HB_ACODEC_LPCM,    0,              "LPCM"),
     st(0x84, U, 0,                 0,              "SDDS"),
     st(0x85, U, 0,                 0,              "ATSC Program ID"),
     st(0x86, A, HB_ACODEC_DCA,     0,              "DTS-HD MA"),
-    st(0x87, A, HB_ACODEC_MPGA,    CODEC_ID_EAC3,  "E-AC3"),
+    st(0x87, A, HB_ACODEC_FFMPEG,  CODEC_ID_EAC3,  "E-AC3"),
 
     st(0x8a, A, HB_ACODEC_DCA,     0,              "DTS"),
 
@@ -1705,7 +1705,8 @@ static void set_ts_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
     // For streams demuxed and decoded by ffmpeg, we have a cached context.
     // Use it to get the name and profile information.  Obtaining
     // the profile requires that ffmpeg has already probed the stream.
-    else if ( audio->config.in.codec == HB_ACODEC_FFMPEG &&
+    else if ( ( audio->config.in.codec & HB_ACODEC_FF_MASK ) &&
+              ( audio->config.in.codec & HB_ACODEC_FF_I_FLAG ) &&
          ( cc = hb_ffmpeg_context( audio->config.in.codec_param ) ) &&
          avcodec_find_decoder( cc->codec_id ) )
     {
@@ -1726,7 +1727,8 @@ static void set_ts_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
     }
     // For streams demuxed by us and decoded by ffmpeg, we can lookup the
     // decoder name.
-    else if ( audio->config.in.codec == HB_ACODEC_MPGA &&
+    else if ( ( audio->config.in.codec & HB_ACODEC_FF_MASK ) &&
+              !( audio->config.in.codec & HB_ACODEC_FF_I_FLAG ) &&
               avcodec_find_decoder( audio->config.in.codec_param ) )
     {
         codec_name = avcodec_find_decoder( audio->config.in.codec_param )->name;
@@ -1735,9 +1737,9 @@ static void set_ts_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
     {
         codec_name = audio->config.in.codec == HB_ACODEC_AC3 ? "AC3" :
                      audio->config.in.codec == HB_ACODEC_DCA ? "DTS" :
-                     audio->config.in.codec == HB_ACODEC_MPGA ? "MPEG" : 
+                     audio->config.in.codec == HB_ACODEC_DCA_HD ? "DTS-HD" :
                      audio->config.in.codec == HB_ACODEC_LPCM ? "LPCM" : 
-                     audio->config.in.codec == HB_ACODEC_FFMPEG ? "FFmpeg" :
+                     (audio->config.in.codec & HB_ACODEC_FF_MASK) ? "FFmpeg" :
                      "Unknown";
     }
     snprintf( audio->config.lang.description,
@@ -1745,7 +1747,8 @@ static void set_ts_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
               strlen(lang->native_name) ? lang->native_name : lang->eng_name,
               codec_name );
 
-    if (audio->config.in.codec == HB_ACODEC_FFMPEG)
+    if ( ( audio->config.in.codec & HB_ACODEC_FF_MASK) &&
+         ( audio->config.in.codec & HB_ACODEC_FF_I_FLAG ) )
     {
         int layout = audio->config.in.channel_layout;
         char *desc = audio->config.lang.description +
@@ -1776,7 +1779,8 @@ static void set_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
     // For streams demuxed and decoded by ffmpeg, we have a cached context.
     // Use it to get the name and profile information.  Obtaining
     // the profile requires that ffmpeg has already probed the stream.
-    if ( audio->config.in.codec == HB_ACODEC_FFMPEG &&
+    if ( ( audio->config.in.codec & HB_ACODEC_FF_MASK ) &&
+         ( audio->config.in.codec & HB_ACODEC_FF_I_FLAG ) &&
          ( cc = hb_ffmpeg_context( audio->config.in.codec_param ) ) &&
          avcodec_find_decoder( cc->codec_id ) )
     {
@@ -1792,7 +1796,8 @@ static void set_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
     }
     // For streams demuxed by us and decoded by ffmpeg, we can lookup the
     // decoder name.
-    else if ( audio->config.in.codec == HB_ACODEC_MPGA &&
+    else if ( ( audio->config.in.codec & HB_ACODEC_FF_MASK ) &&
+              !( audio->config.in.codec & HB_ACODEC_FF_I_FLAG ) &&
               avcodec_find_decoder( audio->config.in.codec_param ) )
     {
         codec_name = avcodec_find_decoder( audio->config.in.codec_param )->name;
@@ -1801,9 +1806,8 @@ static void set_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
     {
         codec_name = audio->config.in.codec == HB_ACODEC_AC3 ? "AC3" :
                      audio->config.in.codec == HB_ACODEC_DCA ? "DTS" :
-                     audio->config.in.codec == HB_ACODEC_MPGA ? "MPEG" : 
                      audio->config.in.codec == HB_ACODEC_LPCM ? "LPCM" : 
-                     audio->config.in.codec == HB_ACODEC_FFMPEG ? "FFmpeg" :
+                     (audio->config.in.codec & HB_ACODEC_FF_MASK) ? "FFmpeg" :
                      "Unknown";
     }
     snprintf( audio->config.lang.description,
@@ -1811,7 +1815,8 @@ static void set_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
               strlen(lang->native_name) ? lang->native_name : lang->eng_name,
               codec_name );
 
-    if (audio->config.in.codec == HB_ACODEC_FFMPEG)
+    if ( ( audio->config.in.codec & HB_ACODEC_FF_MASK) &&
+         ( audio->config.in.codec & HB_ACODEC_FF_I_FLAG ) )
     {
         int layout = audio->config.in.channel_layout;
         char *desc = audio->config.lang.description +
@@ -1875,7 +1880,7 @@ static void hb_ts_stream_set_audio_list(
             // To distinguish, Bluray streams have a reg_desc of HDMV
             stream->ts[i].stream_kind = A;
             add_audio(i, list_audio, stream, 0,
-                      HB_ACODEC_MPGA, CODEC_ID_PCM_BLURAY );
+                      HB_ACODEC_FFMPEG, CODEC_ID_PCM_BLURAY );
             continue;
         }
 
@@ -1896,7 +1901,7 @@ static void hb_ts_stream_set_audio_list(
                       HB_ACODEC_AC3, 0 );
             stream->ts[i].substream_type[1] = HB_SUBSTREAM_BD_TRUEHD;
             add_audio(i, list_audio, stream, HB_SUBSTREAM_BD_TRUEHD, 
-                      HB_ACODEC_MPGA, CODEC_ID_TRUEHD );
+                      HB_ACODEC_FFMPEG, CODEC_ID_TRUEHD );
             stream->ts[i].number_substreams = 2;
             continue;
         }
@@ -1910,7 +1915,7 @@ static void hb_ts_stream_set_audio_list(
             add_audio(i, list_audio, stream, HB_SUBSTREAM_BD_DTS, 
                       HB_ACODEC_DCA, 0 );
             stream->ts[i].substream_type[1] = 0;
-            add_audio(i, list_audio, stream, 0, HB_ACODEC_MPGA, CODEC_ID_DTS );
+            add_audio(i, list_audio, stream, 0, HB_ACODEC_DCA_HD, CODEC_ID_DTS );
             stream->ts[i].number_substreams = 2;
             continue;
         }
@@ -1927,7 +1932,7 @@ static void hb_ts_stream_set_audio_list(
             add_audio(i, list_audio, stream, HB_SUBSTREAM_BD_DTS, 
                       HB_ACODEC_DCA, 0 );
             stream->ts[i].substream_type[1] = 0;
-            add_audio(i, list_audio, stream, 0, HB_ACODEC_MPGA, CODEC_ID_DTS );
+            add_audio(i, list_audio, stream, 0, HB_ACODEC_DCA_HD, CODEC_ID_DTS );
             stream->ts[i].number_substreams = 2;
             continue;
         }
@@ -1938,7 +1943,7 @@ static void hb_ts_stream_set_audio_list(
             // which conflicts with SDDS
             // To distinguish, Bluray streams have a reg_desc of HDMV
             stream->ts[i].stream_kind = A;
-            add_audio(i, list_audio, stream, 0, HB_ACODEC_MPGA, CODEC_ID_EAC3 );
+            add_audio(i, list_audio, stream, 0, HB_ACODEC_FFMPEG, CODEC_ID_EAC3 );
             continue;
         }
 
@@ -1982,7 +1987,7 @@ static void hb_ts_stream_set_audio_list(
                 // 0xC0 - 0xCF are the normal containers for ISO-standard
                 // media (mpeg2 audio and mpeg4 AAC).
                 add_audio(i, list_audio, stream, 0, 
-                          HB_ACODEC_MPGA, CODEC_ID_MP2 );
+                          HB_ACODEC_FFMPEG, CODEC_ID_MP2 );
             }
             else
             {
@@ -2010,7 +2015,7 @@ static void add_audio_to_title(hb_title_t *title, int id)
     switch ( id >> 12 )
     {
         case 0x0:
-            audio->config.in.codec = HB_ACODEC_MPGA;
+            audio->config.in.codec = HB_ACODEC_FFMPEG;
             hb_log("add_audio_to_title: added MPEG audio stream 0x%x", id);
             break;
         case 0x2:
@@ -3189,7 +3194,7 @@ static void ffmpeg_remap_stream( hb_stream_t *stream, hb_title_t *title )
     hb_audio_t *audio;
     for ( i = 0; ( audio = hb_list_item( title->list_audio, i ) ); ++i )
     {
-        if ( audio->config.in.codec == HB_ACODEC_FFMPEG )
+        if ( audio->config.in.codec & HB_ACODEC_FF_MASK )
         {
             ffmpeg_add_codec( stream,
                               audio->config.in.codec_param >> ffmpeg_sl_bits );
@@ -3330,7 +3335,16 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
         }
         else
         {
-            audio->config.in.codec = HB_ACODEC_FFMPEG;
+            if ( codec->codec_id == CODEC_ID_DTS &&
+               ( codec->profile == FF_PROFILE_DTS_HD_MA ||
+                 codec->profile == FF_PROFILE_DTS_HD_HRA ) )
+            {
+                audio->config.in.codec = HB_ACODEC_DCA_HD | HB_ACODEC_FF_I_FLAG;
+            }
+            else
+            {
+                audio->config.in.codec = HB_ACODEC_FFMPEG | HB_ACODEC_FF_I_FLAG;
+            }
             audio->config.in.codec_param = ffmpeg_codec_param( stream, id );
 
             audio->config.in.bitrate = codec->bit_rate? codec->bit_rate : 1;

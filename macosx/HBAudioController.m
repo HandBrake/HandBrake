@@ -105,7 +105,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
             [aDict setObject: [[anAudio bitRate] objectForKey: keyAudioBitrateName] forKey: [prefix stringByAppendingString: @"Bitrate"]];
 
             // output is not passthru so apply gain
-            if (HB_ACODEC_AC3_PASS != [[[anAudio codec] objectForKey: keyAudioCodec] intValue] && HB_ACODEC_DCA_PASS != [[[anAudio codec] objectForKey: keyAudioCodec] intValue])
+            if (!([[[anAudio codec] objectForKey: keyAudioCodec] intValue] & HB_ACODEC_PASS_FLAG))
             {
                 [aDict setObject: [anAudio gain] forKey: [prefix stringByAppendingString: @"TrackGainSlider"]];
             }

@@ -135,6 +135,13 @@ static NSMutableArray *masterBitRateArray = nil;
                                       [NSNumber numberWithInt: HB_ACODEC_DCA], keyAudioMustMatchTrack,
                                       nil]];
         [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
+                                      NSLocalizedString(@"DTS-HD Passthru", @"DTS-HD Passthru"), keyAudioCodecName,
+                                      [NSNumber numberWithInt: HB_ACODEC_DCA_HD_PASS], keyAudioCodec,
+                                      [NSNumber numberWithBool: NO], keyAudioMP4,
+                                      [NSNumber numberWithBool: YES], keyAudioMKV,
+                                      [NSNumber numberWithInt: HB_ACODEC_DCA_HD], keyAudioMustMatchTrack,
+                                      nil]];
+        [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
                                       NSLocalizedString(@"Vorbis (vorbis)", @"Vorbis (vorbis)"), keyAudioCodecName,
                                       [NSNumber numberWithInt: HB_ACODEC_VORBIS], keyAudioCodec,
                                       [NSNumber numberWithBool: NO], keyAudioMP4,
@@ -150,6 +157,10 @@ static NSMutableArray *masterBitRateArray = nil;
         [masterMixdownArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
                                         NSLocalizedString(@"DTS Passthru", @"DTS Passthru"), keyAudioMixdownName,
                                         [NSNumber numberWithInt: HB_ACODEC_DCA_PASS], keyAudioMixdown,
+                                        nil]];
+        [masterMixdownArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
+                                        NSLocalizedString(@"DTS-HD Passthru", @"DTS-HD Passthru"), keyAudioMixdownName,
+                                        [NSNumber numberWithInt: HB_ACODEC_DCA_HD_PASS], keyAudioMixdown,
                                         nil]];
         for (i = 0; i < hb_audio_mixdowns_count; i++)
         {
@@ -639,7 +650,7 @@ static NSMutableArray *masterBitRateArray = nil;
     if (YES == retval)
     {
         int myMixdown = [[[self mixdown] objectForKey: keyAudioMixdown] intValue];
-        if (HB_ACODEC_AC3_PASS == myMixdown || HB_ACODEC_DCA_PASS == myMixdown)
+        if (myMixdown & HB_ACODEC_PASS_FLAG)
         {
             retval = NO;
         }
@@ -672,7 +683,7 @@ static NSMutableArray *masterBitRateArray = nil;
     if (YES == retval)
     {
         int myCodecCodec = [[[self codec] objectForKey: keyAudioCodec] intValue];
-        if (HB_ACODEC_AC3_PASS == myCodecCodec || HB_ACODEC_DCA_PASS == myCodecCodec)
+        if (myCodecCodec & HB_ACODEC_PASS_FLAG)
         {
             retval = NO;
         }

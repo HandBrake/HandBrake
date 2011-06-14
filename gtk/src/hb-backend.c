@@ -251,14 +251,15 @@ combo_opts_t vcodec_opts =
 
 static options_map_t d_acodec_opts[] =
 {
-	{"AAC (faac)",      "faac",    HB_ACODEC_FAAC,     "faac"},
-	{"AAC (ffmpeg)",    "ffaac",   HB_ACODEC_FFAAC,    "ffaac"},
-	{"MP3 (lame)",      "lame",    HB_ACODEC_LAME,     "lame"},
-	{"Vorbis",          "vorbis",  HB_ACODEC_VORBIS,   "vorbis"},
-	{"AC3 (ffmpeg)",    "ac3",     HB_ACODEC_AC3,      "ac3"},
-	{"AC3 (pass-thru)", "ac3pass", HB_ACODEC_AC3_PASS, "ac3pass"},
-	{"DTS (pass-thru)", "dtspass", HB_ACODEC_DCA_PASS, "dtspass"},
-	{"Choose For Me",   "auto",    HB_ACODEC_ANY,      "auto"},
+	{"AAC (faac)",         "faac",      HB_ACODEC_FAAC,        "faac"},
+	{"AAC (ffmpeg)",       "ffaac",     HB_ACODEC_FFAAC,       "ffaac"},
+	{"MP3 (lame)",         "lame",      HB_ACODEC_LAME,        "lame"},
+	{"Vorbis",             "vorbis",    HB_ACODEC_VORBIS,      "vorbis"},
+	{"AC3 (ffmpeg)",       "ac3",       HB_ACODEC_AC3,         "ac3"},
+	{"AC3 (pass-thru)",    "ac3pass",   HB_ACODEC_AC3_PASS,    "ac3pass"},
+	{"DTS (pass-thru)",    "dtspass",   HB_ACODEC_DCA_PASS,    "dtspass"},
+	{"DTS-HD (pass-thru)", "dtshdpass", HB_ACODEC_DCA_HD_PASS, "dtshdpass"},
+	{"Choose For Me",      "auto",      HB_ACODEC_ANY,         "auto"},
 };
 combo_opts_t acodec_opts =
 {
@@ -1568,10 +1569,12 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	if (allow_dca)
     {
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_PASS, FALSE);
+		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_HD_PASS, FALSE);
     }
 	else
     {
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_PASS, TRUE);
+		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_HD_PASS, TRUE);
     }
 
 	if (aconfig && aconfig->in.codec != HB_ACODEC_AC3)
@@ -1581,6 +1584,10 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	if (aconfig && aconfig->in.codec != HB_ACODEC_DCA)
 	{
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_PASS, TRUE);
+	}
+	if (aconfig && aconfig->in.codec != HB_ACODEC_DCA_HD)
+	{
+		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_HD_PASS, TRUE);
 	}
 	grey_combo_box_item(builder, "VideoEncoder", HB_VCODEC_THEORA, FALSE);
 

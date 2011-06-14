@@ -3565,7 +3565,7 @@ static int get_acodec_for_string( char *codec )
     }
     else if( !strcasecmp( codec, "copy" ) )
     {
-        return HB_ACODEC_AC3_PASS | HB_ACODEC_DCA_PASS;
+        return HB_ACODEC_AC3_PASS | HB_ACODEC_DCA_PASS | HB_ACODEC_DCA_HD_PASS;
     }
     else if( !strcasecmp( codec, "copy:ac3" ) )
     {
@@ -3574,6 +3574,10 @@ static int get_acodec_for_string( char *codec )
     else if( !strcasecmp( codec, "copy:dts" ) || !strcasecmp( codec, "copy:dca" ) )
     {
         return HB_ACODEC_DCA_PASS;
+    }
+    else if( !strcasecmp( codec, "copy:dtshd" ) )
+    {
+        return HB_ACODEC_DCA_HD_PASS;
     }
     else if( !strcasecmp( codec, "lame" ) )
     {

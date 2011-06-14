@@ -508,7 +508,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
             case 0x02:
             case 0x03:
                 audio->id    = 0xc0 + position;
-                audio->config.in.codec = HB_ACODEC_MPGA;
+                audio->config.in.codec = HB_ACODEC_FFMPEG;
                 break;
 
             case 0x04:
@@ -559,7 +559,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
             strlen(lang->native_name) ? lang->native_name : lang->eng_name,
             audio->config.in.codec == HB_ACODEC_AC3 ? "AC3" : ( audio->config.in.codec ==
                 HB_ACODEC_DCA ? "DTS" : ( audio->config.in.codec ==
-                HB_ACODEC_MPGA ? "MPEG" : "LPCM" ) ) );
+                HB_ACODEC_FFMPEG ? "MPEG" : "LPCM" ) ) );
         snprintf( audio->config.lang.simple, sizeof( audio->config.lang.simple ), "%s",
                   strlen(lang->native_name) ? lang->native_name : lang->eng_name );
         snprintf( audio->config.lang.iso639_2, sizeof( audio->config.lang.iso639_2 ), "%s",

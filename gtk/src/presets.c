@@ -2001,6 +2001,7 @@ static value_map_t acodec_xlat[] =
 	{"AAC (CoreAudio)", "faac"},
 	{"AC3 Passthru", "ac3pass"},
 	{"DTS Passthru", "dtspass"},
+	{"DTS-HD Passthru", "dtshdpass"},
 	{"MP3 (lame)", "lame"},
 	{"Vorbis (vorbis)", "vorbis"},
 	{NULL,NULL}
@@ -2049,6 +2050,8 @@ value_map_t mix_xlat[] =
 	{"Dolby Pro Logic II", "dpl2"},
 	{"6-channel discrete", "6ch"},
 	{"AC3 Passthru", "none"},
+	{"DTS Passthru", "none"},
+	{"DTS-HD Passthru", "none"},
 	{NULL, NULL}
 };
 
