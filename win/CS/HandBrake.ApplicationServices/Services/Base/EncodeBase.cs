@@ -46,7 +46,7 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// <summary>
         /// The Log File Header
         /// </summary>
-        private StringBuilder header = GeneralUtilities.CreateCliLogHeader(null);
+        private StringBuilder header = GeneralUtilities.CreateCliLogHeader();
 
         #endregion
 
@@ -244,8 +244,11 @@ namespace HandBrake.ApplicationServices.Services.Base
             try
             {
                 this.logBuffer = new StringBuilder();
+                this.logBuffer.AppendLine(String.Format("CLI Query: {0}", encodeQueueTask.Query));
+                this.logBuffer.AppendLine(String.Format("User Query: {0}", encodeQueueTask.CustomQuery));
+                this.logBuffer.AppendLine();
 
-                // Clear the current Encode Logs
+                // Clear the current Encode Logs)
                 if (File.Exists(logFile))
                 {
                     File.Delete(logFile);
@@ -257,7 +260,10 @@ namespace HandBrake.ApplicationServices.Services.Base
                 }
 
                 this.fileWriter = new StreamWriter(logFile) { AutoFlush = true };
-                this.fileWriter.WriteLine(GeneralUtilities.CreateCliLogHeader(encodeQueueTask));
+                this.fileWriter.WriteLine(GeneralUtilities.CreateCliLogHeader());
+                this.fileWriter.WriteLine(String.Format("CLI Query: {0}", encodeQueueTask.Query));
+                this.fileWriter.WriteLine(String.Format("User Query: {0}", encodeQueueTask.CustomQuery));
+                this.fileWriter.WriteLine();
             }
             catch (Exception)
             {

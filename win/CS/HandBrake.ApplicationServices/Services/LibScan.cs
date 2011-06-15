@@ -118,11 +118,18 @@ namespace HandBrake.ApplicationServices.Services
         /// Scan a Source Path.
         /// Title 0: scan all
         /// </summary>
-        /// <param name="sourcePath">Path to the file to scan</param>
-        /// <param name="title">int title number. 0 for scan all</param>
-        public void Scan(string sourcePath, int title)
+        /// <param name="sourcePath">
+        /// Path to the file to scan
+        /// </param>
+        /// <param name="title">
+        /// int title number. 0 for scan all
+        /// </param>
+        /// <param name="previewCount">
+        /// The preview Count.
+        /// </param>
+        public void Scan(string sourcePath, int title, int previewCount)
         {
-            Thread t = new Thread(unused => this.ScanSource(sourcePath, title));
+            Thread t = new Thread(unused => this.ScanSource(sourcePath, title, previewCount));
             t.Start();
         }
 
@@ -141,12 +148,21 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Start a scan for a given source path and title
         /// </summary>
-        /// <param name="sourcePath">Path to the source file</param>
-        /// <param name="title">the title number to look at</param>
-        private void ScanSource(object sourcePath, int title)
+        /// <param name="sourcePath">
+        /// Path to the source file
+        /// </param>
+        /// <param name="title">
+        /// the title number to look at
+        /// </param>
+        /// <param name="previewCount">
+        /// The preview Count.
+        /// </param>
+        private void ScanSource(object sourcePath, int title, int previewCount)
         {
             try
             {
+                // TODO Support Preview Count
+
                 IsScanning = true;
                 if (this.ScanStared != null)
                     this.ScanStared(this, new EventArgs());

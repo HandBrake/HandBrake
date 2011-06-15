@@ -99,13 +99,10 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <summary>
         /// Add the CLI Query to the Log File.
         /// </summary>
-        /// <param name="encJob">
-        /// The Encode Job Object
-        /// </param>
         /// <returns>
         /// The create cli log header.
         /// </returns>
-        public static StringBuilder CreateCliLogHeader(QueueTask encJob)
+        public static StringBuilder CreateCliLogHeader()
         {
             StringBuilder logHeader = new StringBuilder();
 
@@ -117,12 +114,6 @@ namespace HandBrake.ApplicationServices.Utilities
             logHeader.AppendLine(String.Format("Temp Dir: {0}", Path.GetTempPath()));
             logHeader.AppendLine(String.Format("Install Dir: {0}", Application.StartupPath));
             logHeader.AppendLine(String.Format("Data Dir: {0}\n", Application.UserAppDataPath));
-
-            if (encJob != null)
-            {
-                logHeader.AppendLine(String.Format("CLI Query: {0}", encJob.Query));
-                logHeader.AppendLine(String.Format("User Query: {0}", encJob.CustomQuery));
-            }
 
             logHeader.AppendLine("-------------------------------------------");
 
