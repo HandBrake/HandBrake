@@ -19,7 +19,6 @@
  * 
  * @author David Foster (davidfstr)
  */
-
 #include <stdlib.h>
 #include <stdio.h>
 #include "hb.h"
@@ -574,15 +573,7 @@ static void ssa_log(int level, const char *fmt, va_list args, void *data)
 {
     if ( level < 5 )      // same as default verbosity when no callback is set
     {
-        char *msg;
-        if ( vasprintf( &msg, fmt, args ) < 0 )
-        {
-            hb_log( "decssasub: could not report libass message\n" );
-            return;
-        }
-        hb_log( "[ass] %s", msg );  // no need for extra '\n' because libass sends it
-        
-        free( msg );
+        hb_valog( 1, "[ass]", fmt, args );
     }
 }
 

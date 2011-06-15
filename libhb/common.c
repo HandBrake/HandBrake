@@ -852,56 +852,24 @@ void hb_list_close( hb_list_t ** _l )
     *_l = NULL;
 }
 
+int global_verbosity_level; //Necessary for hb_deep_log
 /**********************************************************************
- * hb_log
+ * hb_valog
  **********************************************************************
  * If verbose mode is one, print message with timestamp. Messages
  * longer than 180 characters are stripped ;p
  *********************************************************************/
-void hb_log( char * log, ... )
+void hb_valog( hb_debug_level_t level, const char * prefix, const char * log, va_list args)
 {
     char        string[362]; /* 360 chars + \n + \0 */
     time_t      _now;
     struct tm * now;
-    va_list     args;
 
     if( !getenv( "HB_DEBUG" ) )
     {
         /* We don't want to print it */
         return;
     }
-
-    /* Get the time */
-    _now = time( NULL );
-    now  = localtime( &_now );
-    sprintf( string, "[%02d:%02d:%02d] ",
-             now->tm_hour, now->tm_min, now->tm_sec );
-
-    /* Convert the message to a string */
-    va_start( args, log );
-    vsnprintf( string + 11, 349, log, args );
-    va_end( args );
-
-    /* Add the end of line */
-    strcat( string, "\n" );
-
-    /* Print it */
-    fprintf( stderr, "%s", string );
-}
-
-int global_verbosity_level; //Necessary for hb_deep_log
-/**********************************************************************
- * hb_deep_log
- **********************************************************************
- * If verbose mode is >= level, print message with timestamp. Messages
- * longer than 360 characters are stripped ;p
- *********************************************************************/
-void hb_deep_log( hb_debug_level_t level, char * log, ... )
-{
-    char        string[362]; /* 360 chars + \n + \0 */
-    time_t      _now;
-    struct tm * now;
-    va_list     args;
 
     if( global_verbosity_level < level )
     {
@@ -912,19 +880,57 @@ void hb_deep_log( hb_debug_level_t level, char * log, ... )
     /* Get the time */
     _now = time( NULL );
     now  = localtime( &_now );
-    sprintf( string, "[%02d:%02d:%02d] ",
-             now->tm_hour, now->tm_min, now->tm_sec );
+    if ( prefix && *prefix )
+    {
+        // limit the prefix length
+        snprintf( string, 40, "[%02d:%02d:%02d] %s ",
+                 now->tm_hour, now->tm_min, now->tm_sec, prefix );
+    }
+    else
+    {
+        sprintf( string, "[%02d:%02d:%02d] ",
+                 now->tm_hour, now->tm_min, now->tm_sec );
+    }
+    int end = strlen( string );
 
     /* Convert the message to a string */
-    va_start( args, log );
-    vsnprintf( string + 11, 349, log, args );
-    va_end( args );
+    vsnprintf( string + end, 361 - end, log, args );
 
     /* Add the end of line */
     strcat( string, "\n" );
 
     /* Print it */
     fprintf( stderr, "%s", string );
+}
+
+/**********************************************************************
+ * hb_log
+ **********************************************************************
+ * If verbose mode is one, print message with timestamp. Messages
+ * longer than 180 characters are stripped ;p
+ *********************************************************************/
+void hb_log( char * log, ... )
+{
+    va_list     args;
+
+    va_start( args, log );
+    hb_valog( 0, NULL, log, args );
+    va_end( args );
+}
+
+/**********************************************************************
+ * hb_deep_log
+ **********************************************************************
+ * If verbose mode is >= level, print message with timestamp. Messages
+ * longer than 360 characters are stripped ;p
+ *********************************************************************/
+void hb_deep_log( hb_debug_level_t level, char * log, ... )
+{
+    va_list     args;
+
+    va_start( args, log );
+    hb_valog( level, NULL, log, args );
+    va_end( args );
 }
 
 /**********************************************************************

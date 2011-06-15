@@ -15,6 +15,7 @@ typedef enum hb_debug_level_s
     HB_HOUSEKEEPING_LOG = 2, // stuff we hate scrolling through  
     HB_GRANULAR_LOG     = 3  // sample-by-sample
 } hb_debug_level_t;
+void hb_valog( hb_debug_level_t level, const char * prefix, const char * log, va_list args) HB_WPRINTF(3,0);
 void hb_deep_log( hb_debug_level_t level, char * log, ... ) HB_WPRINTF(2,3);
 void hb_error( char * fmt, ...) HB_WPRINTF(1,2);
 
