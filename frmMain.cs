@@ -2040,7 +2040,7 @@ namespace Handbrake
             // Start the Scan
             try
             {
-                SourceScan.Scan(sourcePath, title);
+                SourceScan.Scan(sourcePath, title, Properties.Settings.Default.previewScanCount);
             }
             catch (Exception exc)
             {

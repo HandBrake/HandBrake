@@ -71,9 +71,16 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// Scan a Source Path.
         /// Title 0: scan all
         /// </summary>
-        /// <param name="sourcePath">Path to the file to scan</param>
-        /// <param name="title">int title number. 0 for scan all</param>
-        void Scan(string sourcePath, int title);
+        /// <param name="sourcePath">
+        /// Path to the file to scan
+        /// </param>
+        /// <param name="title">
+        /// int title number. 0 for scan all
+        /// </param>
+        /// <param name="previewCount">
+        /// The preview Count.
+        /// </param>
+        void Scan(string sourcePath, int title, int previewCount);
 
         /// <summary>
         /// Kill the scan

@@ -42,7 +42,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// The Log File Header
         /// </summary>
-        StringBuilder header = GeneralUtilities.CreateCliLogHeader(null);
+        StringBuilder header = GeneralUtilities.CreateCliLogHeader();
 
         #endregion
 
@@ -104,11 +104,18 @@ namespace HandBrake.ApplicationServices.Services
         /// Scan a Source Path.
         /// Title 0: scan all
         /// </summary>
-        /// <param name="sourcePath">Path to the file to scan</param>
-        /// <param name="title">int title number. 0 for scan all</param>
-        public void Scan(string sourcePath, int title)
+        /// <param name="sourcePath">
+        /// Path to the file to scan
+        /// </param>
+        /// <param name="title">
+        /// int title number. 0 for scan all
+        /// </param>
+        /// <param name="previewCount">
+        /// The preview Count.
+        /// </param>
+        public void Scan(string sourcePath, int title, int previewCount)
         {
-            Thread t = new Thread(unused => this.ScanSource(sourcePath, title));
+            Thread t = new Thread(unused => this.ScanSource(sourcePath, title, previewCount));
             t.Start();
         }
 
@@ -142,9 +149,16 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Start a scan for a given source path and title
         /// </summary>
-        /// <param name="sourcePath">Path to the source file</param>
-        /// <param name="title">the title number to look at</param>
-        private void ScanSource(object sourcePath, int title)
+        /// <param name="sourcePath">
+        /// Path to the source file
+        /// </param>
+        /// <param name="title">
+        /// the title number to look at
+        /// </param>
+        /// <param name="previewCount">
+        /// The preview Count.
+        /// </param>
+        private void ScanSource(object sourcePath, int title, int previewCount)
         {
             try
             {
@@ -170,9 +184,16 @@ namespace HandBrake.ApplicationServices.Services
                 }
 
                 string extraArguments = string.Empty;
+
+                if (previewCount != 10)
+                {
+                    extraArguments += " --previews " + previewCount;
+                }
+
+
                 if (Properties.Settings.Default.DisableLibDvdNav)
                 {
-                    extraArguments = " --no-dvdnav";
+                    extraArguments += " --no-dvdnav";
                 }
 
                 if (title > 0)
@@ -210,7 +231,7 @@ namespace HandBrake.ApplicationServices.Services
                     // Only write the log file to disk if it's less than 100MB.
                     if (this.readData.Buffer.Length < 100000000)
                     {
-                        scanLog.WriteLine(GeneralUtilities.CreateCliLogHeader(null));
+                        scanLog.WriteLine(GeneralUtilities.CreateCliLogHeader());
                         scanLog.Write(this.readData.Buffer);
                         this.logBuffer.AppendLine(this.readData.Buffer.ToString());
                     }
