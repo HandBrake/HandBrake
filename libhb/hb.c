@@ -127,6 +127,17 @@ int hb_avcodec_close(AVCodecContext *avctx)
     return ret;
 }
 
+static int handle_jpeg(enum PixelFormat *format)
+{
+    switch (*format) {
+    case PIX_FMT_YUVJ420P: *format = PIX_FMT_YUV420P; return 1;
+    case PIX_FMT_YUVJ422P: *format = PIX_FMT_YUV422P; return 1;
+    case PIX_FMT_YUVJ444P: *format = PIX_FMT_YUV444P; return 1;
+    case PIX_FMT_YUVJ440P: *format = PIX_FMT_YUV440P; return 1;
+    default:                                          return 0;
+    }
+}
+
 struct SwsContext*
 hb_sws_get_context(int srcW, int srcH, enum PixelFormat srcFormat,
                    int dstW, int dstH, enum PixelFormat dstFormat,
@@ -134,20 +145,33 @@ hb_sws_get_context(int srcW, int srcH, enum PixelFormat srcFormat,
 {
     struct SwsContext * ctx;
 
-#if 0
-    // sws_getContext is being depricated.  But it appears that
-    // the new method isn't quite wrung out yet.  So when it is
-    // this code should be fixed up and enabled.
     ctx = sws_alloc_context();
     if ( ctx )
     {
+        int srcRange, dstRange;
+
+        srcRange = handle_jpeg(&srcFormat);
+        dstRange = handle_jpeg(&dstFormat);
+        flags |= SWS_FULL_CHR_H_INT | SWS_FULL_CHR_H_INP;
+
         av_set_int(ctx, "srcw", srcW);
         av_set_int(ctx, "srch", srcH);
+        av_set_int(ctx, "src_range", srcRange);
         av_set_int(ctx, "src_format", srcFormat);
         av_set_int(ctx, "dstw", dstW);
         av_set_int(ctx, "dsth", dstH);
+        av_set_int(ctx, "dst_range", dstRange);
         av_set_int(ctx, "dst_format", dstFormat);
         av_set_int(ctx, "sws_flags", flags);
+
+        sws_setColorspaceDetails( ctx, 
+                      sws_getCoefficients( SWS_CS_DEFAULT ), // src colorspace
+                      srcRange, // src range 0 = MPG, 1 = JPG
+                      sws_getCoefficients( SWS_CS_DEFAULT ), // dst colorspace
+                      dstRange, // dst range 0 = MPG, 1 = JPG
+                      0,         // brightness
+                      1 << 16,   // contrast
+                      1 << 16 ); // saturation
 
         if (sws_init_context(ctx, NULL, NULL) < 0) {
             fprintf(stderr, "Cannot initialize resampling context\n");
@@ -155,10 +179,6 @@ hb_sws_get_context(int srcW, int srcH, enum PixelFormat srcFormat,
             ctx = NULL;
         } 
     }
-#else
-    ctx = sws_getContext(srcW, srcH, srcFormat, dstW, dstH, dstFormat, 
-                         flags, NULL, NULL, NULL);
-#endif
     return ctx;
 }
 
