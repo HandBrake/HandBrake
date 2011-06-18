@@ -187,8 +187,7 @@ namespace Handbrake
                 return;
             }
 
-            QueueTask task = new QueueTask((string)state);
-            encodeQueue.Start(task, false);
+            encodeQueue.Start((QueueTask)state, false);
         }
 
         #endregion
@@ -214,7 +213,8 @@ namespace Handbrake
             int duration;
             int.TryParse(endPoint.Text, out duration);
             string query = QueryGenerator.GeneratePreviewQuery(this.mainWindow, duration, startPoint.Text);
-            ThreadPool.QueueUserWorkItem(this.CreatePreview, query);
+            QueueTask task = new QueueTask(query) { Destination = this.mainWindow.text_destination.Text };
+            ThreadPool.QueueUserWorkItem(this.CreatePreview, task);
         }
 
         /// <summary>
