@@ -5,6 +5,7 @@
 
 namespace HandBrake.ApplicationServices.Functions
 {
+    using System;
     using System.Collections.Generic;
 
     using HandBrake.ApplicationServices.Model;
@@ -12,6 +13,12 @@ namespace HandBrake.ApplicationServices.Functions
     using HandBrake.Interop;
 
     using Cropping = HandBrake.Interop.Cropping;
+    using Decomb = HandBrake.ApplicationServices.Model.Encoding.Decomb;
+    using Deinterlace = HandBrake.ApplicationServices.Model.Encoding.Deinterlace;
+    using Denoise = HandBrake.ApplicationServices.Model.Encoding.Denoise;
+    using Detelecine = HandBrake.ApplicationServices.Model.Encoding.Detelecine;
+    using OutputFormat = HandBrake.ApplicationServices.Model.Encoding.OutputFormat;
+    using VideoEncoder = HandBrake.ApplicationServices.Model.Encoding.VideoEncoder;
 
     /// <summary>
     /// A Utility Class to Convert a 
@@ -21,8 +28,6 @@ namespace HandBrake.ApplicationServices.Functions
         /*
          * TODO: This conversion class needs to be finished off before libencode will work.
          */
-
-
 
         /// <summary>
         /// Get an EncodeJob model for a LibHB Encode.
@@ -98,11 +103,77 @@ namespace HandBrake.ApplicationServices.Functions
             profile.CustomDenoise = work.CustomDenoise;
             profile.CustomDetelecine = work.CustomDetelecine;
             profile.Deblock = work.Deblock;
-            //profile.Decomb = work.Decomb;
-            //profile.Deinterlace = work.Deinterlace;
-            //profile.Denoise = work.Denoise;
-            //profile.Detelecine = work.Detelecine;
-            //profile.DisplayWidth = work.DisplayWidth;
+            switch (work.Decomb)
+            {
+                case Decomb.Default:
+                    profile.Decomb = Interop.Decomb.Default;
+                    break;
+                case Decomb.Custom:
+                    profile.Decomb = Interop.Decomb.Custom;
+                    break;
+                case Decomb.Off:
+                    profile.Decomb = Interop.Decomb.Off;
+                    break;
+            }
+
+            switch (work.Deinterlace)
+            {
+                case Deinterlace.Fast:
+                    profile.Deinterlace = Interop.Deinterlace.Fast;
+                    break;
+                case Deinterlace.Slow:
+                    profile.Deinterlace = Interop.Deinterlace.Slow;
+                    break;
+                case Deinterlace.Slower:
+                    profile.Deinterlace = Interop.Deinterlace.Slower;
+                    break;
+                case Deinterlace.Slowest:
+                    profile.Deinterlace = Interop.Deinterlace.Slower;
+                    break;
+                case Deinterlace.Custom:
+                    profile.Deinterlace = Interop.Deinterlace.Custom;
+                    break;
+                case Deinterlace.Off:
+                    profile.Deinterlace = Interop.Deinterlace.Off;
+                    break;
+            }
+
+
+            switch (work.Denoise)
+            {
+                case Denoise.Off:
+                    profile.Denoise = Interop.Denoise.Off;
+                    break;
+                case Denoise.Custom:
+                    profile.Denoise = Interop.Denoise.Custom;
+                    break;
+                case Denoise.Strong:
+                    profile.Denoise = Interop.Denoise.Strong;
+                    break;
+                case Denoise.Medium:
+                    profile.Denoise = Interop.Denoise.Medium;
+                    break;
+                case Denoise.Weak:
+                    profile.Denoise = Interop.Denoise.Weak;
+                    break;
+            }
+
+            switch (work.Detelecine)
+            {
+                case Detelecine.Default:
+                    profile.Detelecine = Interop.Detelecine.Default;
+                    break;
+                case Detelecine.Custom:
+                    profile.Detelecine = Interop.Detelecine.Custom;
+                    break;
+                case Detelecine.Off:
+                    profile.Detelecine = Interop.Detelecine.Off;
+                    break;
+            }
+
+            profile.DisplayWidth = work.DisplayWidth.HasValue
+                                       ? int.Parse(Math.Round(work.DisplayWidth.Value, 0).ToString())
+                                       : 0;
             profile.Framerate = work.Framerate.HasValue ? work.Framerate.Value : 0;
             profile.Grayscale = work.Grayscale;
             profile.Height = work.Height.HasValue ? work.Height.Value : 0;
@@ -114,16 +185,60 @@ namespace HandBrake.ApplicationServices.Functions
             profile.MaxWidth = work.MaxWidth.HasValue ? work.MaxWidth.Value : 0;
             profile.Modulus = work.Modulus.HasValue ? work.Modulus.Value : 16;
             profile.Optimize = work.OptimizeMP4;
-            //profile.OutputFormat = work.OutputFormat;
+            switch (work.OutputFormat)
+            {
+                case OutputFormat.Mp4:
+                case OutputFormat.M4V:
+                    profile.OutputFormat = Interop.OutputFormat.Mp4;
+                    break;
+                case OutputFormat.Mkv:
+                    profile.OutputFormat = Interop.OutputFormat.Mkv;
+                    break;
+            }
             profile.PeakFramerate = work.FramerateMode == FramerateMode.PFR;
             profile.PixelAspectX = work.PixelAspectX;
             profile.PixelAspectY = work.PixelAspectY;
-            //profile.PreferredExtension = work.OutputFormat;
+
+            switch (work.OutputFormat)
+            {
+                case OutputFormat.Mp4:
+                    profile.PreferredExtension = Interop.OutputExtension.Mp4;
+                    break;
+                case OutputFormat.M4V:
+                    profile.PreferredExtension = Interop.OutputExtension.M4v;
+                    break;
+            }
             profile.Quality = work.Quality.HasValue ? work.Quality.Value : 0;
             profile.UseDisplayWidth = true;
             profile.VideoBitrate = work.VideoBitrate.HasValue ? work.VideoBitrate.Value : 0;
-            //profile.VideoEncodeRateType = work.VideoEncodeRateType;
-            //profile.VideoEncoder = work.VideoEncoder;
+
+            switch (work.VideoEncodeRateType)
+            {
+                case VideoEncodeRateMode.AverageBitrate:
+                    profile.VideoEncodeRateType = VideoEncodeRateType.AverageBitrate;
+                    break;
+                case VideoEncodeRateMode.ConstantQuality:
+                    profile.VideoEncodeRateType = VideoEncodeRateType.ConstantQuality;
+                    break;
+            }
+
+            switch (work.VideoEncoder)
+            {
+                case VideoEncoder.X264:
+                    profile.VideoEncoder = Interop.VideoEncoder.X264;
+                    break;
+                case VideoEncoder.FFMpeg:
+                    profile.VideoEncoder = Interop.VideoEncoder.FFMpeg;
+                    break;
+                case VideoEncoder.FFMpeg2:
+                    profile.VideoEncoder = Interop.VideoEncoder.FFMpeg; // TODO Fix This.
+                    break;
+                case VideoEncoder.Theora:
+                    profile.VideoEncoder = Interop.VideoEncoder.Theora;
+                    break;
+
+            }
+
             profile.Width = work.Width.HasValue ? work.Width.Value : 0;
             profile.X264Options = work.AdvancedEncoderOptions;
 
@@ -142,7 +257,19 @@ namespace HandBrake.ApplicationServices.Functions
             }
 
             job.OutputPath = work.Destination;
-            //job.RangeType = work.PointToPointMode;
+            switch (work.PointToPointMode)
+            {
+                case PointToPointMode.Chapters:
+                    job.RangeType = VideoRangeType.Chapters;
+                    break;
+                case PointToPointMode.Seconds:
+                    job.RangeType = VideoRangeType.Seconds;
+                    break;
+                case PointToPointMode.Frames:
+                    job.RangeType = VideoRangeType.Frames;
+                    break;
+            }
+
 
             if (work.PointToPointMode == PointToPointMode.Seconds)
             {
@@ -151,7 +278,7 @@ namespace HandBrake.ApplicationServices.Functions
             }
 
             job.SourcePath = work.Source;
-           // job.SourceType = work.Type;
+            // job.SourceType = work.Type;
             job.Title = work.Title;
             job.Subtitles = new Subtitles { SourceSubtitles = new List<SourceSubtitle>(), SrtSubtitles = new List<SrtSubtitle>() };
             foreach (SubtitleTrack track in work.SubtitleTracks)
