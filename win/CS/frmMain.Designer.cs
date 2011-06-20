@@ -826,7 +826,7 @@ namespace Handbrake
             this.AudioSettings.Location = new System.Drawing.Point(0, 0);
             this.AudioSettings.Name = "AudioSettings";
             this.AudioSettings.ScannedTracks = ((System.ComponentModel.BindingList<HandBrake.ApplicationServices.Parsing.Audio>)(resources.GetObject("AudioSettings.ScannedTracks")));
-            this.AudioSettings.Size = new System.Drawing.Size(715, 310);
+            this.AudioSettings.Size = new System.Drawing.Size(720, 310);
             this.AudioSettings.TabIndex = 0;
             // 
             // AudioMenuRowHeightHack
@@ -1892,7 +1892,6 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripButton tb_preview;
         private System.Diagnostics.Process hbproc;
         private TabPage tab_subtitles;
-        internal Handbrake.Controls.AudioPanel AudioSettings;
         internal Handbrake.Controls.Subtitles Subtitles;
         internal Handbrake.Controls.Filters Filters;
         private ToolStripStatusLabel lbl_updateCheck;
@@ -1952,5 +1951,6 @@ namespace Handbrake
         internal RadioButton radio_constantFramerate;
         private Panel panel1;
         internal Controls.AdvancedEncoderOpts advancedEncoderOpts;
+        public Controls.AudioPanel AudioSettings;
     }
 }

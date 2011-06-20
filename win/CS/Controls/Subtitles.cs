@@ -227,6 +227,7 @@ namespace Handbrake.Controls
         {
             lv_subList.Items.Clear();
             subList.Clear();
+            srtFiles.Clear();
         }
         #endregion
 
