@@ -1,70 +1,27 @@
 THANKS file for HandBrake <http://handbrake.fr/>
 
-Several people noticeably contributed to MediaFork and HandBrake development
-without writing code (submitting/checking translations, DVD samples, etc).
-Let's thank them here!
+Hosting:
 
-Chris (audley)
- + Inspiration and example of patching mpeg4ip for iPod atom support
+Github (http://github.com)
+SourceForge(http://sourceforge.net/projects/handbrake)
+Eric Petit (Running the servers behind HandBrake.fr)
+Freenode IRC (http://freenode.net/)
 
-Omar Ahmad Bhatti
- + Intensive beta testing, suggestions. Convinced me to port HandBrake
-   to OS X, which finally was a pretty good idea.
+Software:
 
-Hanna Bauer
-Adrien Marquette
-Norbert Rittel
- + German translation
+ReviewBoard (http://www.reviewboard.org/)
+PhpBB (http://www.phpbb.com/)
+hlscript (http://badmofo.org/hlscript/)
 
-Paul Bénéchet
-Luidgi Esposito
-Andrea Gianarro
-Emilio Gelosi
- + Italian translation
+Forum Moderators:
 
-Adam
- + Polish translation
-
-Nik Roby
- + Russian translation
-
-Leendert
- + Dutch translation
-
-Eric Kornblum
- + Sent me a sample DVD with LPCM tracks
-
-migol Superkid
- + Spanish translation
-
-pgjw
- + Portuguese translation
-
-cygma
- + Japanese translation
-
-Michelle De Sio
- + Sent me a sample DVD with MPEG audio tracks
-
-Ian Rickard
- + Enhanced icon
-
-Sébastien Noël
- + Debian packages (http://www.twolife.org/debian/repository.php)
-
-People who sent me an iTunes gift certificate: a BIG thanks!
-
-Paul (baggss)
- + Forum Moderator
- 
-Du'Wayne Caviness (Cavalicious)
- + Forum Moderator
- 
+Paul (baggss), 
+Du'Wayne Caviness (Cavalicious) 
 Edward Jackson. (TedJ)
- + Forum Moderator
- 
 Chuck (cvk_b)
- + Testing Team Member
-
 Nate Thompson (nightstrm)
- + Forum Moderator
+
+Other:
+
+Thanks to all of you who have contributed time, patches, testing, uploaded test files etc. 
+There are too many to name here, but we do appreciate the effort.
