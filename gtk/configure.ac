@@ -128,6 +128,12 @@ fi
 
 AM_CONDITIONAL([MINGW], [test "x$mingw_flag" = "xyes"])
 
+PKG_CHECK_MODULES(libappindicator, appindicator-0.1, have_appind=yes, have_appind=no)
+if test "x$have_appind" = "xyes" ; then
+    GHB_PACKAGES="$GHB_PACKAGES appindicator-0.1"
+    CXXFLAGS="$CXXFLAGS -D_USE_APP_IND"
+    CFLAGS="$CFLAGS -D_USE_APP_IND"
+fi
 PKG_CHECK_MODULES(GHB, [$GHB_PACKAGES])
 
 AC_PATH_PROG(BUILD_PKG_CONFIG, pkg-config, no)

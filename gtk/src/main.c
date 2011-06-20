@@ -47,6 +47,10 @@
 #define pipe(phandles)	_pipe (phandles, 4096, _O_BINARY)
 #endif
 
+#if defined(_USE_APP_IND)
+#include <libappindicator/app-indicator.h>
+#endif
+
 #include <glib/gstdio.h>
 #include <gio/gio.h>
 #include "hb.h"
@@ -943,6 +947,22 @@ main (int argc, char *argv[])
 					status_icon_query_tooltip_cb, ud);
 #else
 	gtk_status_icon_set_tooltip(si, "HandBrake");
+#endif
+#if defined(_USE_APP_IND)
+	GtkUIManager * uim = GHB_OBJECT(ud->builder, "uimanager1");
+
+	GtkMenu *ai_menu = gtk_ui_manager_get_widget (uim, "/ui/tray_menu");
+	ud->ai = app_indicator_new("HandBrake", "hb-icon", APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
+	app_indicator_set_menu( ud->ai, ai_menu );
+	app_indicator_set_label( ud->ai, "", "99.99%");
+	if (ghb_settings_get_boolean(ud->settings, "show_status"))
+	{
+		app_indicator_set_status( ud->ai, APP_INDICATOR_STATUS_ACTIVE );
+	}
+	else
+	{
+		app_indicator_set_status( ud->ai, APP_INDICATOR_STATUS_PASSIVE );
+	}
 #endif
 
 	// Ugly hack to keep subtitle table from bouncing around as I change

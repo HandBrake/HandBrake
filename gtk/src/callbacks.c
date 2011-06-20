@@ -55,6 +55,10 @@
 #include <dbt.h>
 #endif
 
+#if defined(_USE_APP_IND)
+#include <libappindicator/app-indicator.h>
+#endif
+
 #include "hb.h"
 #include "callbacks.h"
 #include "queuehandler.h"
@@ -2745,6 +2749,13 @@ ghb_backend_events(signal_user_data_t *ud)
 		si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
 		gtk_status_icon_set_tooltip(si, status_str);
 #endif
+#if defined(_USE_APP_IND)
+		char * ai_status_str= g_strdup_printf(
+			"%.2f%%",
+			100.0 * status.queue.progress);
+		app_indicator_set_label( ud->ai, ai_status_str, "99.99%");
+		g_free(ai_status_str);
+#endif
 		gtk_label_set_text (work_status, status_str);
 		gtk_progress_bar_set_fraction (progress, status.queue.progress);
 		g_free(status_str);
@@ -2782,6 +2793,13 @@ ghb_backend_events(signal_user_data_t *ud)
 
 		si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
 		gtk_status_icon_set_tooltip(si, status_str);
+#endif
+#if defined(_USE_APP_IND)
+		char * ai_status_str= g_strdup_printf(
+			"%.2f%%",
+			100.0 * status.queue.progress);
+		app_indicator_set_label( ud->ai, ai_status_str, "99.99%");
+		g_free(ai_status_str);
 #endif
 		gtk_label_set_text (work_status, status_str);
 		gtk_progress_bar_set_fraction (progress, status.queue.progress);
@@ -2866,6 +2884,9 @@ ghb_backend_events(signal_user_data_t *ud)
 
 		si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
 		gtk_status_icon_set_tooltip(si, "HandBrake");
+#endif
+#if defined(_USE_APP_IND)
+		app_indicator_set_label( ud->ai, "", "99.99%");
 #endif
 	}
 	else if (status.queue.state & GHB_STATE_MUXING)
@@ -3613,6 +3634,16 @@ show_status_cb(GtkWidget *widget, signal_user_data_t *ud)
 	si = GTK_STATUS_ICON(GHB_OBJECT (ud->builder, "hb_status"));
 	gtk_status_icon_set_visible(si,
 			ghb_settings_get_boolean(ud->settings, "show_status"));
+#if defined(_USE_APP_IND)
+	if (ghb_settings_get_boolean(ud->settings, "show_status"))
+	{
+		app_indicator_set_status( ud->ai, APP_INDICATOR_STATUS_ACTIVE );
+	}
+	else
+	{
+		app_indicator_set_status( ud->ai, APP_INDICATOR_STATUS_PASSIVE );
+	}
+#endif
 }
 
 G_MODULE_EXPORT void
@@ -4831,6 +4862,27 @@ hb_visibility_event_cb(
 
 G_MODULE_EXPORT void
 status_activate_cb(GtkStatusIcon *si, signal_user_data_t *ud)
+{
+	GtkWindow *window;
+	GdkWindowState state;
+
+	window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+	state = gdk_window_get_state(gtk_widget_get_window(GTK_WIDGET(window)));
+	if ((state & GDK_WINDOW_STATE_ICONIFIED) ||
+		(ud->hb_visibility != GDK_VISIBILITY_UNOBSCURED))
+	{
+		gtk_window_present(window);
+		gtk_window_set_skip_taskbar_hint(window, FALSE);
+	}
+	else
+	{
+		gtk_window_set_skip_taskbar_hint(window, TRUE);
+		gtk_window_iconify(window);
+	}
+}
+
+G_MODULE_EXPORT void
+show_hide_toggle_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GtkWindow *window;
 	GdkWindowState state;

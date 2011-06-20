@@ -445,6 +445,13 @@
             <signal handler="guide_activate_cb" name="activate"/>
           </object>
         </child>
+        <child>
+          <object class="GtkAction" id="show_hide">
+            <property name="name">show_hide</property>
+            <property name="label" translatable="yes">_Minimize/Maximize</property>
+            <signal handler="show_hide_toggle_cb" name="activate"/>
+          </object>
+        </child>
       </object>
     </child>
     <ui>
@@ -475,6 +482,12 @@
           <menuitem action="guide"/>
         </menu>
       </menubar>
+      <popup name="tray_menu">
+          <menuitem action="show_hide"/>
+          <menuitem action="queue_pause_menu"/>
+          <menuitem action="quit1"/>
+          <menuitem action="about"/>
+      </popup>
     </ui>
   </object>
   <object class="GtkListStore" id="device_list">
