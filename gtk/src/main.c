@@ -935,19 +935,6 @@ main (int argc, char *argv[])
 	ghb_volname_cache_init();
 	g_thread_create((GThreadFunc)ghb_cache_volnames, ud, FALSE, NULL);
 
-	GtkStatusIcon *si;
-	si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
-
-	gtk_status_icon_set_visible(si,
-			ghb_settings_get_boolean(ud->settings, "show_status"));
-
-#if GTK_CHECK_VERSION(2, 16, 0)
-	gtk_status_icon_set_has_tooltip(si, TRUE);
-	g_signal_connect(si, "query-tooltip", 
-					status_icon_query_tooltip_cb, ud);
-#else
-	gtk_status_icon_set_tooltip(si, "HandBrake");
-#endif
 #if defined(_USE_APP_IND)
 	GtkUIManager * uim = GTK_UI_MANAGER(GHB_OBJECT(ud->builder, "uimanager1"));
 
@@ -963,6 +950,24 @@ main (int argc, char *argv[])
 	{
 		app_indicator_set_status( ud->ai, APP_INDICATOR_STATUS_PASSIVE );
 	}
+	GtkStatusIcon *si;
+	si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
+
+	gtk_status_icon_set_visible(si, FALSE );
+#else
+	GtkStatusIcon *si;
+	si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
+
+	gtk_status_icon_set_visible(si,
+			ghb_settings_get_boolean(ud->settings, "show_status"));
+
+#if GTK_CHECK_VERSION(2, 16, 0)
+	gtk_status_icon_set_has_tooltip(si, TRUE);
+	g_signal_connect(si, "query-tooltip", 
+					status_icon_query_tooltip_cb, ud);
+#else
+	gtk_status_icon_set_tooltip(si, "HandBrake");
+#endif
 #endif
 
 	// Ugly hack to keep subtitle table from bouncing around as I change

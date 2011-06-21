@@ -2788,18 +2788,19 @@ ghb_backend_events(signal_user_data_t *ud)
 		status_str = working_status_string(ud, &status.queue);
 		label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_status"));
 		gtk_label_set_text (label, status_str);
-#if !GTK_CHECK_VERSION(2, 16, 0)
-		GtkStatusIcon *si;
-
-		si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
-		gtk_status_icon_set_tooltip(si, status_str);
-#endif
 #if defined(_USE_APP_IND)
 		char * ai_status_str= g_strdup_printf(
 			"%.2f%%",
 			100.0 * status.queue.progress);
 		app_indicator_set_label( ud->ai, ai_status_str, "99.99%");
 		g_free(ai_status_str);
+#else
+#if !GTK_CHECK_VERSION(2, 16, 0)
+		GtkStatusIcon *si;
+
+		si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
+		gtk_status_icon_set_tooltip(si, status_str);
+#endif
 #endif
 		gtk_label_set_text (work_status, status_str);
 		gtk_progress_bar_set_fraction (progress, status.queue.progress);
@@ -2879,14 +2880,15 @@ ghb_backend_events(signal_user_data_t *ud)
 			ghb_settings_set_int(js, "job_status", qstatus);
 		ghb_save_queue(ud->queue);
 		ud->cancel_encode = GHB_CANCEL_NONE;
+#if defined(_USE_APP_IND)
+		app_indicator_set_label( ud->ai, "", "99.99%");
+#else
 #if !GTK_CHECK_VERSION(2, 16, 0)
 		GtkStatusIcon *si;
 
 		si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
 		gtk_status_icon_set_tooltip(si, "HandBrake");
 #endif
-#if defined(_USE_APP_IND)
-		app_indicator_set_label( ud->ai, "", "99.99%");
 #endif
 	}
 	else if (status.queue.state & GHB_STATE_MUXING)
@@ -3629,11 +3631,6 @@ show_status_cb(GtkWidget *widget, signal_user_data_t *ud)
 	const gchar *name = ghb_get_setting_key(widget);
 	ghb_pref_save(ud->settings, name);
 
-	GtkStatusIcon *si;
-
-	si = GTK_STATUS_ICON(GHB_OBJECT (ud->builder, "hb_status"));
-	gtk_status_icon_set_visible(si,
-			ghb_settings_get_boolean(ud->settings, "show_status"));
 #if defined(_USE_APP_IND)
 	if (ghb_settings_get_boolean(ud->settings, "show_status"))
 	{
@@ -3643,6 +3640,12 @@ show_status_cb(GtkWidget *widget, signal_user_data_t *ud)
 	{
 		app_indicator_set_status( ud->ai, APP_INDICATOR_STATUS_PASSIVE );
 	}
+#else
+	GtkStatusIcon *si;
+
+	si = GTK_STATUS_ICON(GHB_OBJECT (ud->builder, "hb_status"));
+	gtk_status_icon_set_visible(si,
+			ghb_settings_get_boolean(ud->settings, "show_status"));
 #endif
 }
 
