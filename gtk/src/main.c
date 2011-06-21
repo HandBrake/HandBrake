@@ -949,9 +949,9 @@ main (int argc, char *argv[])
 	gtk_status_icon_set_tooltip(si, "HandBrake");
 #endif
 #if defined(_USE_APP_IND)
-	GtkUIManager * uim = GHB_OBJECT(ud->builder, "uimanager1");
+	GtkUIManager * uim = GTK_UI_MANAGER(GHB_OBJECT(ud->builder, "uimanager1"));
 
-	GtkMenu *ai_menu = gtk_ui_manager_get_widget (uim, "/ui/tray_menu");
+	GtkMenu *ai_menu = GTK_MENU(gtk_ui_manager_get_widget(uim, "/ui/tray_menu"));
 	ud->ai = app_indicator_new("HandBrake", "hb-icon", APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
 	app_indicator_set_menu( ud->ai, ai_menu );
 	app_indicator_set_label( ud->ai, "", "99.99%");
