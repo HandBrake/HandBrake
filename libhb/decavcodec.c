@@ -107,6 +107,7 @@ struct hb_work_private_s
     uint32_t        decode_errors;
     int             brokenByMicrosoft; // video stream may contain packed b-frames
     hb_buffer_t*    delayq[HEAP_SIZE];
+    int             queue_primed;
     pts_heap_t      pts_heap;
     void*           buffer;
     struct SwsContext *sws_context; // if we have to rescale or convert color space
@@ -665,7 +666,7 @@ static void log_chapter( hb_work_private_t *pv, int chap_num, int64_t pts )
 static void flushDelayQueue( hb_work_private_t *pv )
 {
     hb_buffer_t *buf;
-    int slot = pv->nframes & (HEAP_SIZE-1);
+    int slot = pv->queue_primed ? pv->nframes & (HEAP_SIZE-1) : 0;
 
     // flush all the video packets left on our timestamp-reordering delay q
     while ( ( buf = pv->delayq[slot] ) != NULL )
@@ -906,6 +907,7 @@ static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size, int sequ
         int slot = pv->nframes & (HEAP_SIZE-1);
         if ( ( buf = pv->delayq[slot] ) != NULL )
         {
+            pv->queue_primed = 1;
             buf->start = heap_pop( &pv->pts_heap );
 
             if ( pv->new_chap && buf->start >= pv->chap_time )
