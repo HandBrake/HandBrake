@@ -754,20 +754,20 @@ hb_stream_t * hb_bd_stream_open( hb_title_t *title )
             d->ts[d->ts_number_pids].stream_kind = A;
             d->ts_number_pids++;
         }
-        else if ( d->ts[idx].number_substreams < kMaxNumberDecodeSubStreams )
+        // Only add substream if it has not already been added.
+        else if ( index_of_substream( d, pid, substream_type ) < 0 )
         {
-            // Only add substream if it has not already been added.
-            if ( index_of_substream( d, pid, substream_type ) < 0 )
+            if ( d->ts[idx].number_substreams < kMaxNumberDecodeSubStreams )
             {
                 d->ts[idx].substream_type[d->ts[idx].number_substreams] = 
-                                                                substream_type;
+                                        substream_type;
                 d->ts[idx].number_substreams++;
                 d->ts[idx].stream_kind = A;
             }
-        }
-        else
-        {
-            hb_error( "hb_bd_stream_open: Too many substreams. Dropping audio 0x%x.", audio->id );
+            else
+            {
+                hb_error( "hb_bd_stream_open: Too many substreams. Dropping audio 0x%x.", audio->id );
+            }
         }
     }
 
