@@ -5319,7 +5319,7 @@ ghb_get_preview_image(
 		if (dstHeight > s_h * factor / 100)
 		{
 			dstHeight = s_h * factor / 100;
-			dstWidth = dstWidth * dstHeight / orig_h;
+			dstWidth = orig_w * dstHeight / orig_h;
 		}
 		xscale *= (gdouble)dstWidth / orig_w;
 		yscale *= (gdouble)dstHeight / orig_h;
