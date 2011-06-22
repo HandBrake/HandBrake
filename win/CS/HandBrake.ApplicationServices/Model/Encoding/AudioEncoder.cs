@@ -33,6 +33,9 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         [Description("DTS Passthru")]
         DtsPassthrough,
 
+        [Description("DTS-HD Passthru")]
+        DtsHDPassthrough,
+
         [Description("Vorbis (vorbis)")]
         Vorbis
     }

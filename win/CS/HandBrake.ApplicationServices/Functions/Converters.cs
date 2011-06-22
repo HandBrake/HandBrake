@@ -88,6 +88,8 @@ namespace HandBrake.ApplicationServices.Functions
                     return Mixdown.DolbyProLogicII;
                 case "6 Channel Discrete":
                     return Mixdown.SixChannelDiscrete;
+                case "Passthru":
+                    return Mixdown.Passthrough;
                 default:
                     return Mixdown.Auto;
             }
@@ -103,6 +105,7 @@ namespace HandBrake.ApplicationServices.Functions
             switch (selectedAudio)
             {
                 case Mixdown.Auto:
+                case Mixdown.Passthrough:
                     return "auto";
                 case Mixdown.Mono:
                     return "mono";
@@ -140,6 +143,8 @@ namespace HandBrake.ApplicationServices.Functions
                     return "AC3 Passthru";
                 case "copy:dts":
                     return "DTS Passthru";
+                case "copy:dtshd":
+                    return "DTS-HD Passthru";
                 case "ffaac":
                     return "AAC (ffmpeg)";
                 default:
@@ -170,6 +175,8 @@ namespace HandBrake.ApplicationServices.Functions
                     return AudioEncoder.Ac3Passthrough;
                 case "copy:dts":
                     return AudioEncoder.DtsPassthrough;
+                case "copy:dtshd":
+                    return AudioEncoder.DtsHDPassthrough;
                 default:
                     return AudioEncoder.Faac;
             }
@@ -200,6 +207,8 @@ namespace HandBrake.ApplicationServices.Functions
                     return AudioEncoder.Ac3Passthrough;
                 case "DTS Passthru":
                     return AudioEncoder.DtsPassthrough;
+                case "DTS-HD Passthru":
+                    return AudioEncoder.DtsHDPassthrough;
                 default:
                     return AudioEncoder.Faac;
             }
@@ -230,6 +239,8 @@ namespace HandBrake.ApplicationServices.Functions
                     return "copy:ac3";
                 case AudioEncoder.DtsPassthrough:
                     return "copy:dts";
+                case AudioEncoder.DtsHDPassthrough:
+                    return "copy:dtshd";
                 case AudioEncoder.Ac3:
                     return "ac3";
  

@@ -28,8 +28,7 @@ namespace Handbrake.Controls
     {
         #region Private Variables
         private readonly BindingList<AudioTrack> audioTracks = new BindingList<AudioTrack>();
-        private const string AC3Passthru = "AC3 Passthru";
-        private const string DTSPassthru = "DTS Passthru";
+        private const string Passthru = "Passthru";
         private AdvancedAudio advancedAudio = new AdvancedAudio();
         #endregion
 
@@ -130,6 +129,7 @@ namespace Handbrake.Controls
             if (path.Contains("MKV"))
             {
                 drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.DtsPassthrough));
+                drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.DtsHDPassthrough));
                 drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.Vorbis));
             }
 
@@ -145,7 +145,7 @@ namespace Handbrake.Controls
         /// <returns>True if m4v is required</returns>
         public bool RequiresM4V()
         {
-            return this.AudioTracks.Any(item => item.Encoder == AudioEncoder.Ac3Passthrough || item.Encoder == AudioEncoder.DtsPassthrough || item.Encoder == AudioEncoder.Ac3);
+            return this.AudioTracks.Any(item => item.Encoder == AudioEncoder.Ac3Passthrough || item.Encoder == AudioEncoder.Ac3);
         }
 
         /// <summary>
@@ -161,15 +161,9 @@ namespace Handbrake.Controls
 
             foreach (AudioTrack track in tracks)
             {
-                if (track.Encoder == AudioEncoder.Ac3Passthrough)
+                if (track.Encoder == AudioEncoder.Ac3Passthrough || track.Encoder == AudioEncoder.DtsPassthrough || track.Encoder == AudioEncoder.DtsHDPassthrough)
                 {
-                    track.MixDown = HandBrake.ApplicationServices.Model.Encoding.Mixdown.Ac3Passthrough;
-                    track.Bitrate = 0;
-                }
-
-                if (track.Encoder == AudioEncoder.DtsPassthrough)
-                {
-                    track.MixDown = HandBrake.ApplicationServices.Model.Encoding.Mixdown.DtsPassthrough;
+                    track.MixDown = HandBrake.ApplicationServices.Model.Encoding.Mixdown.Passthrough;
                     track.Bitrate = 0;
                 }
 
@@ -279,7 +273,7 @@ namespace Handbrake.Controls
                     SetMixDown(EnumHelper<Mixdown>.GetDescription(track.MixDown));
 
                     // Configure the widgets with values
-                    if (drp_audioEncoder.Text.Contains(AC3Passthru) || drp_audioEncoder.Text.Contains(DTSPassthru))
+                    if (drp_audioEncoder.Text.Contains(Passthru))
                     {
                         drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = false;
                         track.Gain = 0;
@@ -754,16 +748,13 @@ namespace Handbrake.Controls
                     defaultRate = "640";
                     max = 640;
                     break;
-                case AC3Passthru:
-                    drp_audioBitrate.Items.Add("Auto");
-                    defaultRate = "Auto";
-                    drp_audioSample.SelectedItem = "Auto";
-                    break;
-                case DTSPassthru:
-                    drp_audioBitrate.Items.Add("Auto");
-                    defaultRate = "Auto";
-                    drp_audioSample.SelectedItem = "Auto";
-                    break;
+            }
+
+            if (drp_audioEncoder.Text.Contains(Passthru))
+            {
+                drp_audioBitrate.Items.Add("Auto");
+                defaultRate = "Auto";
+                drp_audioSample.SelectedItem = "Auto";
             }
 
             // Re-add appropiate options
@@ -817,38 +808,32 @@ namespace Handbrake.Controls
             drp_audioMix.Items.Add("Dolby Surround");
             drp_audioMix.Items.Add("Dolby Pro Logic II");
             drp_audioMix.Items.Add("6 Channel Discrete");
-            drp_audioMix.Items.Add(AC3Passthru);
-            drp_audioMix.Items.Add(DTSPassthru);
+            drp_audioMix.Items.Add(Passthru);
 
             switch (drp_audioEncoder.Text)
             {
                 case "AAC (faac)":
                 case "AAC (ffmpeg)":
-                    drp_audioMix.Items.Remove(AC3Passthru);
-                    drp_audioMix.Items.Remove(DTSPassthru);
+                    drp_audioMix.Items.Remove(Passthru);
                     drp_audioMix.SelectedItem = currentMixdown ?? "Dolby Pro Logic II";
                     break;
                 case "MP3 (lame)":
                     drp_audioMix.Items.Remove("6 Channel Discrete");
-                    drp_audioMix.Items.Remove(AC3Passthru);
-                    drp_audioMix.Items.Remove(DTSPassthru);
+                    drp_audioMix.Items.Remove(Passthru);
                     drp_audioMix.SelectedItem = currentMixdown ?? "Dolby Pro Logic II";
                     break;
                 case "Vorbis (vorbis)":
-                    drp_audioMix.Items.Remove(AC3Passthru);
-                    drp_audioMix.Items.Remove(DTSPassthru);
+                    drp_audioMix.Items.Remove(Passthru);
                     drp_audioMix.SelectedItem = currentMixdown ?? "Dolby Pro Logic II";
                     break;
                 case "AC3 (ffmpeg)":
-                    drp_audioMix.Items.Remove(AC3Passthru);
-                    drp_audioMix.Items.Remove(DTSPassthru);
+                    drp_audioMix.Items.Remove(Passthru);
                     drp_audioMix.SelectedItem = currentMixdown ?? "Dolby Pro Logic II";
                     break;
                 case "AC3 Passthru":
-                    drp_audioMix.SelectedItem = AC3Passthru;
-                    break;
                 case "DTS Passthru":
-                    drp_audioMix.SelectedItem = DTSPassthru;
+                case "DTS-HD Passthru":
+                    drp_audioMix.SelectedItem = Passthru;
                     break;
             }
 
