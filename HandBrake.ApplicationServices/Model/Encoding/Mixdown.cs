@@ -33,10 +33,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         [Description("6 Channel Discrete")]
         SixChannelDiscrete,
 
-        [Description("AC3 Passthru")]
-        Ac3Passthrough,
-
-        [Description("DTS Passthru")]
-        DtsPassthrough,
+        [Description("Passthru")]
+        Passthrough,
     }
 }

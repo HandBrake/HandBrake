@@ -409,13 +409,13 @@ namespace Handbrake.Functions
 
                 // Audio Encoder  (-E)
                 encoders += string.IsNullOrEmpty(encoders)
-                              ? GetAudioEncoder(EnumHelper<AudioEncoder>.GetDescription(audioTrack.Encoder))
-                              : string.Format(",{0}", GetAudioEncoder(EnumHelper<AudioEncoder>.GetDescription(audioTrack.Encoder)));
+                              ? Converters.GetCliAudioEncoder(audioTrack.Encoder)
+                              : string.Format(",{0}", Converters.GetCliAudioEncoder(audioTrack.Encoder));
 
                 // Audio Mixdowns (-6)
                 mixdowns += string.IsNullOrEmpty(mixdowns)
-                              ? GetMixDown(EnumHelper<Mixdown>.GetDescription(audioTrack.MixDown))
-                              : string.Format(",{0}", GetMixDown(EnumHelper<Mixdown>.GetDescription(audioTrack.MixDown)));
+                              ? Converters.GetCliMixDown(audioTrack.MixDown)
+                              : string.Format(",{0}", Converters.GetCliMixDown(audioTrack.MixDown));
 
                 // Audio Samplerates (-R)
                 string rate = audioTrack.SampleRate == 0 ? "Auto" : audioTrack.SampleRate.ToString(); // Default to "Auto"
@@ -526,64 +526,6 @@ namespace Handbrake.Functions
         #endregion
 
         #region Helpers
-
-        /// <summary>
-        /// Return the CLI Mixdown name
-        /// </summary>
-        /// <param name="selectedAudio">GUI mixdown name</param>
-        /// <returns>CLI mixdown name</returns>
-        private static string GetMixDown(string selectedAudio)
-        {
-            switch (selectedAudio)
-            {
-                case "Automatic":
-                    return "auto";
-                case "Mono":
-                    return "mono";
-                case "Stereo":
-                    return "stereo";
-                case "Dolby Surround":
-                    return "dpl1";
-                case "Dolby Pro Logic II":
-                    return "dpl2";
-                case "6 Channel Discrete":
-                    return "6ch";
-                default:
-                    return "auto";
-            }
-        }
-
-        /// <summary>
-        /// Get the CLI Audio Encoder name
-        /// </summary>
-        /// <param name="selectedEncoder">
-        /// String The GUI Encode name
-        /// </param>
-        /// <returns>
-        /// String CLI encoder name
-        /// </returns>
-        private static string GetAudioEncoder(string selectedEncoder)
-        {
-            switch (selectedEncoder)
-            {
-                case "AAC (faac)":
-                    return "faac";
-                case "AAC (ffmpeg)":
-                    return "ffaac";
-                case "MP3 (lame)":
-                    return "lame";
-                case "Vorbis (vorbis)":
-                    return "vorbis";
-                case "AC3 Passthru":
-                    return "copy:ac3";
-                case "DTS Passthru":
-                    return "copy:dts";
-                case "AC3 (ffmpeg)":
-                    return "ac3";
-                default:
-                    return string.Empty;
-            }
-        }
 
         /// <summary>
         /// Create a CSV file with the data from the Main Window Chapters tab

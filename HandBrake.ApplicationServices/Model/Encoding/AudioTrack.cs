@@ -112,7 +112,8 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         {
             get
             {
-                if (this.Encoder == AudioEncoder.Ac3Passthrough || this.Encoder == AudioEncoder.DtsPassthrough)
+                if (this.Encoder == AudioEncoder.Ac3Passthrough || this.Encoder == AudioEncoder.DtsPassthrough ||
+                    this.Encoder == AudioEncoder.DtsHDPassthrough)
                 {
                     return "Auto";
                 }
