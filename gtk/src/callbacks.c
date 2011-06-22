@@ -3632,14 +3632,17 @@ show_status_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_pref_save(ud->settings, name);
 
 #if defined(_USE_APP_IND)
-	if (ghb_settings_get_boolean(ud->settings, "show_status"))
-	{
-		app_indicator_set_status( ud->ai, APP_INDICATOR_STATUS_ACTIVE );
-	}
-	else
-	{
-		app_indicator_set_status( ud->ai, APP_INDICATOR_STATUS_PASSIVE );
-	}
+    if (ud->ai)
+    {
+        if (ghb_settings_get_boolean(ud->settings, "show_status"))
+        {
+            app_indicator_set_status(ud->ai, APP_INDICATOR_STATUS_ACTIVE);
+        }
+        else
+        {
+            app_indicator_set_status(ud->ai, APP_INDICATOR_STATUS_PASSIVE);
+        }
+    }
 #else
 	GtkStatusIcon *si;
 
