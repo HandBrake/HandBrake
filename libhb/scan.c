@@ -177,6 +177,7 @@ static void ScanFunc( void * _data )
         p.title_cur   = title->index;
         p.title_count = data->dvd ? hb_dvd_title_count( data->dvd ) : 
                         data->bd ? hb_bd_title_count( data->bd ) :
+                        data->batch ? hb_batch_title_count( data->batch ) :
                                    hb_list_count(data->list_title);
         hb_set_state( data->h, &state );
 #undef p
