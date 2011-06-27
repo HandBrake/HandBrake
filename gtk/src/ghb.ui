@@ -84,7 +84,7 @@
   <object class="GtkAdjustment" id="adjustment19">
     <property name="upper">10</property>
     <property name="lower">1</property>
-    <property name="page_increment">10</property>
+    <property name="page_increment">1</property>
     <property name="step_increment">1</property>
     <property name="page_size">0</property>
     <property name="value">1</property>
