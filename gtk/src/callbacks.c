@@ -1498,6 +1498,7 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	update_chapter_list (ud);
 	ghb_adjust_audio_rate_combos(ud);
 	ghb_set_pref_audio(titleindex, ud);
+	ghb_grey_combo_options (ud->builder);
 	ghb_set_pref_subtitle(titleindex, ud);
 
 	// Unfortunately, there is no way to query how many frames were
