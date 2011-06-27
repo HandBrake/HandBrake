@@ -1577,15 +1577,15 @@ ghb_grey_combo_options(GtkBuilder *builder)
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_HD_PASS, TRUE);
     }
 
-	if (aconfig && aconfig->in.codec != HB_ACODEC_AC3)
+	if (aconfig && (aconfig->in.codec & HB_ACODEC_MASK) != HB_ACODEC_AC3)
 	{
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_AC3_PASS, TRUE);
 	}
-	if (aconfig && aconfig->in.codec != HB_ACODEC_DCA)
+	if (aconfig && (aconfig->in.codec & HB_ACODEC_MASK) != HB_ACODEC_DCA)
 	{
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_PASS, TRUE);
 	}
-	if (aconfig && aconfig->in.codec != HB_ACODEC_DCA_HD)
+	if (aconfig && (aconfig->in.codec & HB_ACODEC_MASK) != HB_ACODEC_DCA_HD)
 	{
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_HD_PASS, TRUE);
 	}
@@ -4257,7 +4257,7 @@ ghb_validate_audio(signal_user_data_t *ud)
 			}
 			g_free(message);
 			if ((codec & HB_ACODEC_AC3) ||
-				aconfig->in.codec == HB_ACODEC_DCA)
+				(aconfig->in.codec & HB_ACODEC_MASK) == HB_ACODEC_DCA)
 			{
 				codec = HB_ACODEC_AC3;
 			}
