@@ -1344,7 +1344,7 @@ int hb_srt_add( const hb_job_t * job,
     return retval;
 }
 
-char * hb_strdup_printf( char * fmt, ... )
+char * hb_strdup_printf( const char * fmt, ... )
 {
     int       len;
     va_list   ap;

@@ -2510,7 +2510,7 @@ static void ShowHelp()
     "    -r, --rate              Set video framerate (" );
     for( i = 0; i < hb_video_rates_count; i++ )
     {
-        fprintf( out, hb_video_rates[i].string );
+        fprintf( out, "%s", hb_video_rates[i].string );
         if( i != hb_video_rates_count - 1 )
             fprintf( out, "/" );
     }
@@ -2565,7 +2565,7 @@ static void ShowHelp()
     "    -R, --arate             Set audio samplerate(s) (" );
     for( i = 0; i < hb_audio_rates_count; i++ )
     {
-        fprintf( out, hb_audio_rates[i].string );
+        fprintf( out, "%s", hb_audio_rates[i].string );
         if( i != hb_audio_rates_count - 1 )
             fprintf( out, "/" );
     }
@@ -3383,41 +3383,6 @@ static int ParseOptions( int argc, char ** argv )
     return 0;
 }
 
-static char * str_printf(const char *fmt, ...)
-{
-    /* Guess we need no more than 100 bytes. */
-    int len;
-    va_list ap;
-    int size = 100;
-    char *tmp, *str = NULL;
-
-    str = (char*)malloc(size);
-    while (1) 
-    {
-        /* Try to print in the allocated space. */
-        va_start(ap, fmt);
-        len = vsnprintf(str, size, fmt, ap);
-        va_end(ap);
-
-        /* If that worked, return the string. */
-        if (len > -1 && len < size) {
-            return str;
-        }
-
-        /* Else try again with more space. */
-        if (len > -1)    /* glibc 2.1 */
-            size = len+1; /* precisely what is needed */
-        else           /* glibc 2.0 */
-            size *= 2;  /* twice the old size */
-
-        tmp = (char*)realloc(str, size);
-        if (tmp == NULL) {
-            return str;
-        }
-        str = tmp;
-    }
-}
-
 static int CheckOptions( int argc, char ** argv )
 {
 #if defined( __APPLE_CC__ )
@@ -3442,14 +3407,14 @@ static int CheckOptions( int argc, char ** argv )
                 // And add our extra path
                 if ( home != NULL )
                 {
-                    path = str_printf("%s/lib:%s:%s:%s%s", home, 
+                    path = hb_strdup_printf("%s/lib:%s:%s:%s%s", home, 
                                       DEFAULT_DYLD_PATH, 
                                       EXTRA_VLC_DYLD_PATH, 
                                       home, EXTRA_VLC_DYLD_PATH);
                 }
                 else
                 {
-                    path = str_printf("%s:%s", DEFAULT_DYLD_PATH, EXTRA_VLC_DYLD_PATH);
+                    path = hb_strdup_printf("%s:%s", DEFAULT_DYLD_PATH, EXTRA_VLC_DYLD_PATH);
                 }
                 if ( path != NULL )
                     result = setenv("DYLD_FALLBACK_LIBRARY_PATH", path, 1);
@@ -3459,12 +3424,12 @@ static int CheckOptions( int argc, char ** argv )
                 // add our extra path
                 if ( home != NULL )
                 {
-                    path = str_printf("%s:%s:%s%s", dylib_path, EXTRA_VLC_DYLD_PATH,
+                    path = hb_strdup_printf("%s:%s:%s%s", dylib_path, EXTRA_VLC_DYLD_PATH,
                                                         home, EXTRA_VLC_DYLD_PATH);
                 }
                 else
                 {
-                    path = str_printf("%s:%s", dylib_path, EXTRA_VLC_DYLD_PATH);
+                    path = hb_strdup_printf("%s:%s", dylib_path, EXTRA_VLC_DYLD_PATH);
                 }
                 if ( path != NULL )
                     result = setenv("DYLD_FALLBACK_LIBRARY_PATH", path, 1);

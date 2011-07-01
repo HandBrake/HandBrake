@@ -840,7 +840,7 @@ typedef void hb_error_handler_t( const char *errmsg );
 
 extern void hb_register_error_handler( hb_error_handler_t * handler );
 
-char * hb_strdup_printf( char * fmt, ... );
+char * hb_strdup_printf(const char *fmt, ...) HB_WPRINTF(1, 2);
 
 int hb_yuv2rgb(int yuv);
 int hb_rgb2yuv(int rgb);
