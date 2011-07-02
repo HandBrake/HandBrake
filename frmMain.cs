@@ -1725,20 +1725,24 @@ namespace Handbrake
 
             AudioSettings.SetContainer(drop_format.Text);
 
-            if (drop_format.Text.Contains("MP4"))
+            if (drop_format.Text.Contains("MP4") && drp_videoEncoder.Items.Contains("VP3 (Theora)"))
             {
-                if (drp_videoEncoder.Items.Contains("VP3 (Theora)"))
+                drp_videoEncoder.Items.Remove("VP3 (Theora)");
+                if (drp_videoEncoder.SelectedItem == null)
                 {
-                    drp_videoEncoder.Items.Remove("VP3 (Theora)");
-                    drp_videoEncoder.SelectedIndex = 1;
+                    drp_videoEncoder.SelectedIndex = 0;
                 }
             }
-            else if (drop_format.Text.Contains("MKV"))
+            else if (drop_format.Text.Contains("MKV") && !drp_videoEncoder.Items.Contains("VP3 (Theora)"))
+            {
                 drp_videoEncoder.Items.Add("VP3 (Theora)");
+            }
         }
 
         public void SetExtension(string newExtension)
         {
+            setContainerOpts();
+
             if (newExtension == ".mp4" || newExtension == ".m4v")
                 if (Check_ChapterMarkers.Checked || AudioSettings.RequiresM4V() || Subtitles.RequiresM4V() || Properties.Settings.Default.useM4v == 2)
                     newExtension = Properties.Settings.Default.useM4v == 1 ? ".mp4" : ".m4v";
@@ -1752,8 +1756,6 @@ namespace Handbrake
         // Video Tab
         private void drp_videoEncoder_SelectedIndexChanged(object sender, EventArgs e)
         {
-            setContainerOpts();
-
             // Turn off some options which are H.264 only when the user selects a non h.264 encoder
             if (drp_videoEncoder.Text.Contains("H.264"))
             {
