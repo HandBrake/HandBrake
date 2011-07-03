@@ -825,7 +825,7 @@ namespace Handbrake
             this.AudioSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AudioSettings.Location = new System.Drawing.Point(0, 0);
             this.AudioSettings.Name = "AudioSettings";
-            this.AudioSettings.ScannedTracks = ((System.ComponentModel.BindingList<HandBrake.ApplicationServices.Parsing.Audio>)(resources.GetObject("AudioSettings.ScannedTracks")));
+            this.AudioSettings.ScannedTracks = null;
             this.AudioSettings.Size = new System.Drawing.Size(720, 310);
             this.AudioSettings.TabIndex = 0;
             // 
@@ -1433,15 +1433,18 @@ namespace Handbrake
             this.MnuCheckForUpdates,
             this.toolStripSeparator11,
             this.MnuAboutHandBrake});
+            this.toolStripDropDownButton1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.toolStripDropDownButton1.Image = global::Handbrake.Properties.Resources.Help24;
             this.toolStripDropDownButton1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Margin = new System.Windows.Forms.Padding(0, 1, 8, 2);
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
             this.toolStripDropDownButton1.Size = new System.Drawing.Size(69, 36);
             this.toolStripDropDownButton1.Text = "Help";
             // 
             // MnuUserGuide
             // 
+            this.MnuUserGuide.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MnuUserGuide.Image = global::Handbrake.Properties.Resources.info16;
             this.MnuUserGuide.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.MnuUserGuide.Name = "MnuUserGuide";
@@ -1456,6 +1459,7 @@ namespace Handbrake
             // 
             // MnuCheckForUpdates
             // 
+            this.MnuCheckForUpdates.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MnuCheckForUpdates.Name = "MnuCheckForUpdates";
             this.MnuCheckForUpdates.Size = new System.Drawing.Size(192, 24);
             this.MnuCheckForUpdates.Text = "Check for Updates";
@@ -1468,6 +1472,7 @@ namespace Handbrake
             // 
             // MnuAboutHandBrake
             // 
+            this.MnuAboutHandBrake.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MnuAboutHandBrake.Image = global::Handbrake.Properties.Resources.hb16;
             this.MnuAboutHandBrake.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.MnuAboutHandBrake.Name = "MnuAboutHandBrake";
