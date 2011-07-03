@@ -31,6 +31,9 @@ namespace Handbrake
     using Handbrake.ToolWindows;
 
     using Model;
+
+    using Ookii.Dialogs.Wpf;
+
     using Properties;
 
     using Main = Handbrake.Functions.Main;
@@ -391,7 +394,6 @@ namespace Handbrake
         }
 
         #endregion
-
         #region Tools Menu
 
         /// <summary>
@@ -1316,11 +1318,12 @@ namespace Handbrake
         // Source
         private void BtnFolderScanClicked(object sender, EventArgs e)
         {
+            VistaFolderBrowserDialog modernFolderDialog = new VistaFolderBrowserDialog { ShowNewFolderButton = true, RootFolder = Environment.SpecialFolder.DesktopDirectory };
             this.btn_source.HideDropDown();
-            if (DVD_Open.ShowDialog() == DialogResult.OK)
+            if (modernFolderDialog.ShowDialog() == true)
             {
                 this.selectedSourceType = SourceType.Folder;
-                SelectSource(DVD_Open.SelectedPath, 0);
+                SelectSource(modernFolderDialog.SelectedPath, 0);
             }
             else
                 UpdateSourceLabel();
@@ -1379,16 +1382,18 @@ namespace Handbrake
         private void FolderTitleSpecificScanClick(object sender, EventArgs e)
         {
             this.btn_source.HideDropDown();
-            if (DVD_Open.ShowDialog() == DialogResult.OK)
+
+            VistaFolderBrowserDialog modernFolderDialog = new VistaFolderBrowserDialog { ShowNewFolderButton = true, RootFolder = Environment.SpecialFolder.DesktopDirectory };
+            if (modernFolderDialog.ShowDialog() == true)
             {
                 this.selectedSourceType = SourceType.Folder;
 
-                int sourceTitle = 0;
+                int sourceTitle;
                 TitleSpecificScan title = new TitleSpecificScan();
                 if (title.ShowDialog() == DialogResult.OK)
                 {
                     sourceTitle = title.Title;
-                    SelectSource(DVD_Open.SelectedPath, sourceTitle);
+                    SelectSource(modernFolderDialog.SelectedPath, sourceTitle);
                 }
             }
             else

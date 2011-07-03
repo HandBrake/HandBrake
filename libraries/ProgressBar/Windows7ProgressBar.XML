@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Windows7ProgressBar</name>
+    </assembly>
+    <members>
+        <member name="T:wyDay.Controls.Windows7Taskbar">
+            <summary>
+            The primary coordinator of the Windows 7 taskbar-related activities.
+            </summary>
+        </member>
+        <member name="M:wyDay.Controls.Windows7Taskbar.SetProgressState(System.IntPtr,wyDay.Controls.ThumbnailProgressState)">
+            <summary>
+            Sets the progress state of the specified window's
+            taskbar button.
+            </summary>
+            <param name="hwnd">The window handle.</param>
+            <param name="state">The progress state.</param>
+        </member>
+        <member name="M:wyDay.Controls.Windows7Taskbar.SetProgressValue(System.IntPtr,System.UInt64,System.UInt64)">
+            <summary>
+            Sets the progress value of the specified window's
+            taskbar button.
+            </summary>
+            <param name="hwnd">The window handle.</param>
+            <param name="current">The current value.</param>
+            <param name="maximum">The maximum value.</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:wyDay.Controls.Windows7ProgressBar" -->
+        <member name="M:wyDay.Controls.Windows7ProgressBar.Increment(System.Int32)">
+            <summary>
+            Advances the current position of the progress bar by the specified amount.
+            </summary>
+            <param name="value">The amount by which to increment the progress bar's current position.</param>
+        </member>
+        <member name="M:wyDay.Controls.Windows7ProgressBar.PerformStep">
+            <summary>
+            Advances the current position of the progress bar by the amount of the System.Windows.Forms.ProgressBar.Step property.
+            </summary>
+        </member>
+        <member name="P:wyDay.Controls.Windows7ProgressBar.ShowInTaskbar">
+            <summary>
+            Show progress in taskbar
+            </summary>
+        </member>
+        <member name="P:wyDay.Controls.Windows7ProgressBar.Value">
+            <summary>
+            Gets or sets the current position of the progress bar.
+            </summary>
+            <returns>The position within the range of the progress bar. The default is 0.</returns>
+        </member>
+        <member name="P:wyDay.Controls.Windows7ProgressBar.Style">
+            <summary>
+            Gets or sets the manner in which progress should be indicated on the progress bar.
+            </summary>
+            <returns>One of the ProgressBarStyle values. The default is ProgressBarStyle.Blocks</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:wyDay.Controls.Windows7ProgressBar.State" -->
+        <!-- Badly formed XML comment ignored for member "T:wyDay.Controls.ProgressBarState" -->
+        <member name="F:wyDay.Controls.ProgressBarState.Normal">
+            <summary>
+            Indicates normal progress
+            </summary>
+        </member>
+        <member name="F:wyDay.Controls.ProgressBarState.Error">
+            <summary>
+            Indicates an error in the progress
+            </summary>
+        </member>
+        <member name="F:wyDay.Controls.ProgressBarState.Pause">
+            <summary>
+            Indicates paused progress
+            </summary>
+        </member>
+        <member name="T:wyDay.Controls.ThumbnailProgressState">
+            <summary>
+            Represents the thumbnail progress bar state.
+            </summary>
+        </member>
+        <member name="F:wyDay.Controls.ThumbnailProgressState.NoProgress">
+            <summary>
+            No progress is displayed.
+            </summary>
+        </member>
+        <member name="F:wyDay.Controls.ThumbnailProgressState.Indeterminate">
+            <summary>
+            The progress is indeterminate (marquee).
+            </summary>
+        </member>
+        <member name="F:wyDay.Controls.ThumbnailProgressState.Normal">
+            <summary>
+            Normal progress is displayed.
+            </summary>
+        </member>
+        <member name="F:wyDay.Controls.ThumbnailProgressState.Error">
+            <summary>
+            An error occurred (red).
+            </summary>
+        </member>
+        <member name="F:wyDay.Controls.ThumbnailProgressState.Paused">
+            <summary>
+            The operation is paused (yellow).
+            </summary>
+        </member>
+    </members>
+</doc>

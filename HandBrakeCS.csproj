@@ -155,6 +155,9 @@
       <HintPath>libraries\Growl.CoreLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Ookii.Dialogs.Wpf">
+      <HintPath>libraries\OokiiDialogs\Ookii.Dialogs.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
