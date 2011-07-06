@@ -1252,16 +1252,24 @@ static int hb_dvdnav_main_feature( hb_dvd_t * e, hb_list_t * list_title )
     uint64_t longest_duration_root = 0;
     uint64_t longest_duration_title = 0;
     uint64_t longest_duration_fallback = 0;
+    hb_title_t * title;
+    int index;
 
+    hb_deep_log( 2, "dvdnav: Searching menus for main feature" );
     for ( ii = 0; ii < hb_list_count( list_title ); ii++ )
     {
-        hb_title_t * title = hb_list_item( list_title, ii );
+        title = hb_list_item( list_title, ii );
         if ( title->duration > longest_duration_fallback )
         {
             longest_duration_fallback = title->duration;
             longest_fallback = title->index;
         }
     }
+    index = find_title( list_title, longest_fallback );
+    title = hb_list_item( list_title, index );
+    hb_deep_log( 2, "dvdnav: Longest title %d duration %02d:%02d:%02d",
+                longest_fallback, title->hours, title->minutes, 
+                title->seconds );
 
     dvdnav_reset( d->dvdnav );
     skip_some( d->dvdnav, 500 );
@@ -1269,12 +1277,18 @@ static int hb_dvdnav_main_feature( hb_dvd_t * e, hb_list_t * list_title )
     longest_root = try_menu( d, list_title, DVD_MENU_Root, longest_duration_fallback );
     if ( longest_root >= 0 )
     {
-        hb_title_t * hbtitle;
-        int index;
         index = find_title( list_title, longest_root );
-        hbtitle = hb_list_item( list_title, index );
-        if ( hbtitle )
-            longest_duration_root = hbtitle->duration;
+        title = hb_list_item( list_title, index );
+        if ( title )
+        {
+            longest_duration_root = title->duration;
+            hb_deep_log( 2, "dvdnav: Found root title %d duration %02d:%02d:%02d",
+                        longest_root, title->hours, title->minutes, title->seconds );
+        }
+    }
+    else
+    {
+        hb_deep_log( 2, "dvdnav: No root menu title found" );
     }
     if ( longest_root < 0 || 
          (float)longest_duration_fallback * 0.7 > longest_duration_root)
@@ -1282,12 +1296,19 @@ static int hb_dvdnav_main_feature( hb_dvd_t * e, hb_list_t * list_title )
         longest_title = try_menu( d, list_title, DVD_MENU_Title, longest_duration_fallback );
         if ( longest_title >= 0 )
         {
-            hb_title_t * hbtitle;
-            int index;
             index = find_title( list_title, longest_title );
-            hbtitle = hb_list_item( list_title, index );
-            if ( hbtitle )
-                longest_duration_title = hbtitle->duration;
+            title = hb_list_item( list_title, index );
+            if ( title )
+            {
+                longest_duration_title = title->duration;
+                hb_deep_log( 2, "dvdnav: found title %d duration %02d:%02d:%02d",
+                            longest_title, title->hours, title->minutes, 
+                            title->seconds );
+            }
+        }
+        else
+        {
+            hb_deep_log( 2, "dvdnav: No title menu title found" );
         }
     }
 
@@ -1308,6 +1329,7 @@ static int hb_dvdnav_main_feature( hb_dvd_t * e, hb_list_t * list_title )
     {
         longest = longest_fallback;
     }
+    hb_deep_log( 2, "dvdnav: Main feature search using title %d", longest );
     return longest;
 }
 
