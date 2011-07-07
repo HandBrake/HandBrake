@@ -312,28 +312,22 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     // So find the clip that has the most other clips with the 
     // matching audio.
     // Max primary BD audios is 32
-    uint8_t counts[32] = {0,};
-    uint8_t matches[32] = {0,};
+    int matches;
     int most_audio = 0;
     int audio_clip_index = 0;
     for ( ii = 0; ii < ti->clip_count; ii++ )
     {
-        if ( matches[ii] ) continue;
+        matches = 0;
         for ( jj = 0; jj < ti->clip_count; jj++ )
         {
-            if ( matches[jj] ) continue;
             if ( bd_audio_equal( &ti->clips[ii], &ti->clips[jj] ) )
             {
-                matches[ii] = matches[jj] = 1;
-                counts[ii]++;
+                matches++;
             }
         }
-    }
-    for ( ii = 0; ii < ti->clip_count; ii++ )
-    {
-        if ( most_audio < counts[ii] )
+        if ( matches > most_audio )
         {
-            most_audio = counts[ii];
+            most_audio = matches;
             audio_clip_index = ii;
         }
     }
