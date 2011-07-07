@@ -134,6 +134,7 @@ Section "Handbrake" SEC01
   File "Microsoft.WindowsAPICodePack.dll"
   File "HandBrakeInterop.dll"
   File "SplitButton.dll"
+  File "Ookii.Dialogs.Wpf.dll"
 
   ;File "Caliburn.Castle.dll"
   ;File "Caliburn.Core.dll"
@@ -205,6 +206,7 @@ Section Uninstall
   Delete "$INSTDIR\Castle.MicroKernel.dll"
   Delete "$INSTDIR\Castle.Windsor.dll"
   Delete "$INSTDIR\Microsoft.Practices.ServiceLocation.dll"
+  Delete "$INSTDIR\Ookii.Dialogs.Wpf.dll"
 
   Delete "$INSTDIR\doc\AUTHORS"
   Delete "$INSTDIR\doc\COPYING"
