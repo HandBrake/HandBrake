@@ -809,9 +809,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
     goto cleanup;
 
 fail:
-    hb_list_close( &title->list_audio );
-    free( title );
-    title = NULL;
+    hb_title_close( &title );
 
 cleanup:
     if( ifo ) ifoClose( ifo );
