@@ -1273,9 +1273,12 @@ static int hb_dvdnav_main_feature( hb_dvd_t * e, hb_list_t * list_title )
     }
     index = find_title( list_title, longest_fallback );
     title = hb_list_item( list_title, index );
-    hb_deep_log( 2, "dvdnav: Longest title %d duration %02d:%02d:%02d",
-                longest_fallback, title->hours, title->minutes, 
-                title->seconds );
+    if ( title )
+    {
+        hb_deep_log( 2, "dvdnav: Longest title %d duration %02d:%02d:%02d",
+                    longest_fallback, title->hours, title->minutes, 
+                    title->seconds );
+    }
 
     dvdnav_reset( d->dvdnav );
     skip_some( d->dvdnav, 500 );
