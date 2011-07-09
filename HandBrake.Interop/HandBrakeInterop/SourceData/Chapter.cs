@@ -1,14 +1,17 @@
-/*  Chapter.cs $
-	
-	   This file is part of the HandBrake source code.
-	   Homepage: <http://handbrake.fr>.
-	   It may be used under the terms of the GNU General Public License. */
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Chapter.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   An object representing a Chapter aosciated with a Title, in a DVD
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.SourceData
+namespace HandBrake.Interop.SourceData
 {
-	using System;
+    using System;
 
-	/// <summary>
+    /// <summary>
 	/// An object representing a Chapter aosciated with a Title, in a DVD
 	/// </summary>
 	public class Chapter

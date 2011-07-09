@@ -1,8 +1,17 @@
-﻿namespace HandBrake.Interop
-{
-	using System.ComponentModel.DataAnnotations;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Mixdown.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Defines the Mixdown type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
-	public enum Mixdown
+namespace HandBrake.Interop.Model.Encoding
+{
+    using System.ComponentModel.DataAnnotations;
+
+    public enum Mixdown
 	{
 		[Display(Name = "Dolby Pro Logic II")]
 		DolbyProLogicII = 0,

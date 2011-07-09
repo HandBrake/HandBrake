@@ -1,4 +1,13 @@
-﻿namespace HandBrake.Interop
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="HandBrakeInstance.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   A wrapper for a HandBrake instance.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace HandBrake.Interop
 {
 	using System;
 	using System.Collections.Generic;
@@ -9,7 +18,11 @@
 	using System.Timers;
 	using System.Threading;
 	using System.Windows.Media.Imaging;
-	using HandBrake.SourceData;
+
+	using HandBrake.Interop.HbLib;
+	using HandBrake.Interop.Model;
+	using HandBrake.Interop.Model.Encoding;
+	using HandBrake.Interop.SourceData;
 	using HandBrake.Interop;
 
 	/// <summary>
