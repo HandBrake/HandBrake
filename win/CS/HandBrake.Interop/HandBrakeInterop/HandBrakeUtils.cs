@@ -1,11 +1,23 @@
-﻿namespace HandBrake.Interop
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="HandBrakeUtils.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Defines the HandBrakeUtils type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace HandBrake.Interop
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
-	using HandBrake.SourceData;
 
-	public static class HandBrakeUtils
+	using HandBrake.Interop.HbLib;
+	using HandBrake.Interop.Model;
+	using HandBrake.Interop.Model.Encoding;
+	using HandBrake.Interop.SourceData;
+
+    public static class HandBrakeUtils
 	{
 		/// <summary>
 		/// Estimated overhead in bytes for each frame in output container.

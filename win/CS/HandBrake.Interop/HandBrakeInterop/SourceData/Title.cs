@@ -1,19 +1,22 @@
-/*  Title.cs $
-	
-	   This file is part of the HandBrake source code.
-	   Homepage: <http://handbrake.fr>.
-	   It may be used under the terms of the GNU General Public License. */
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Title.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   An object that represents a single Title of a DVD
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.SourceData
+namespace HandBrake.Interop.SourceData
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Globalization;
-	using System.IO;
-	using System.Text.RegularExpressions;
-	using HandBrake.Interop;
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
 
-	/// <summary>
+    using HandBrake.Interop;
+    using HandBrake.Interop.Model;
+
+    /// <summary>
 	/// An object that represents a single Title of a DVD
 	/// </summary>
 	public class Title

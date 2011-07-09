@@ -1,12 +1,22 @@
-﻿namespace HandBrake.Interop
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Converters.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Defines the Converters type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace HandBrake.Interop
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-	using HandBrake.SourceData;
 
-	public static class Converters
+	using HandBrake.Interop.HbLib;
+	using HandBrake.Interop.Model.Encoding;
+	using HandBrake.Interop.SourceData;
+
+    public static class Converters
 	{
 		private static Dictionary<double, int> vrates = new Dictionary<double, int>
 		{

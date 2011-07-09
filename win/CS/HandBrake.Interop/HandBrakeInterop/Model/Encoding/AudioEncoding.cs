@@ -1,8 +1,17 @@
-﻿namespace HandBrake.Interop
-{
-	using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="AudioEncoding.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Defines the AudioEncoding type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
-	public class AudioEncoding
+namespace HandBrake.Interop.Model.Encoding
+{
+    using System;
+
+    public class AudioEncoding
 	{
 		public int InputNumber { get; set; }
 		public AudioEncoder Encoder { get; set; }

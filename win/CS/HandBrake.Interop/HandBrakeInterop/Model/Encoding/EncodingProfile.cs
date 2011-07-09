@@ -1,8 +1,19 @@
-﻿namespace HandBrake.Interop
-{
-	using System.Collections.Generic;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="EncodingProfile.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Defines the EncodingProfile type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
-	public class EncodingProfile
+namespace HandBrake.Interop.Model.Encoding
+{
+    using System.Collections.Generic;
+
+    using HandBrake.Interop.Model;
+
+    public class EncodingProfile
 	{
 		public EncodingProfile()
 		{
