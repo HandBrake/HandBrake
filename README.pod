@@ -30,6 +30,11 @@
 
  Note that accessing IRC through freenode's webchat is disabled for spam concerns.<br />
  
+  <h3> Submitting a Patch </h3>
+  
+ There are several ways you can submit a patch. Please see the <a href="http://handbrake.fr/contribute.php"> Contribute </a> page for details. <br /><br />
+ 
+ Note: Submitting git diffs to our ReviewBoard can be tricky, please feel free to post the diff on our pastebin site and provide a link on the Forums or IRC.<br /><br />
 </p>
 
 
