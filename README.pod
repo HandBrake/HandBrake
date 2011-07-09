@@ -16,9 +16,6 @@
  
  Please note: The Subversion tags have not been copied across. This is just a mirror of the trunk directory.<br /><br />
  
- If you wish to contribute code, please provide it to us in patch forum.<br />
- This can be posted on our code review site: https://reviews.handbrake.fr<br />
- Alternatively, start a thread in our <a href="https://forum.handbrake.fr/viewforum.php?f=4">Developmenet Forum</a>
  
  <h3> Trac </h3>
  
@@ -32,7 +29,7 @@
  
   <h3> Submitting a Patch </h3>
   
- There are several ways you can submit a patch. Please see the <a href="http://handbrake.fr/contribute.php"> Contribute </a> page for details. <br /><br />
+ There are several ways you can contribute code back to the HandBrake repository.<br /><br /> Please see the <a href="http://handbrake.fr/contribute.php"> Contribute </a> page for details. <br /><br />
  
  Note: Submitting git diffs to our ReviewBoard can be tricky, please feel free to post the diff on our pastebin site and provide a link on the Forums or IRC.<br /><br />
 </p>
