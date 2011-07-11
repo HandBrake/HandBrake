@@ -4,17 +4,5 @@ $(eval $(call import.CONTRIB.defs,LIBDVDREAD))
 LIBDVDREAD.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libdvdread-svn1168.tar.gz
 LIBDVDREAD.EXTRACT.tarbase = libdvdread
 
-ifeq (max,$(GCC.g))
-ifeq (none,$(GCC.O))
-	LIBDVDREAD.CONFIGURE.env.CFLAGS = CFLAGS="-g -O0"
-else
-	LIBDVDREAD.CONFIGURE.env.CFLAGS = CFLAGS="-g"
-endif
-else
-ifeq (none,$(GCC.O))
-	LIBDVDREAD.CONFIGURE.env.CFLAGS = CFLAGS="-O0"
-endif
-endif
-
 LIBDVDREAD.CONFIGURE.extra = --enable-local-dlfcn
 LIBDVDREAD.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; autoreconf -fiv;

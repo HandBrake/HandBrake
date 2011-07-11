@@ -49,8 +49,19 @@ FONTCONFIG.CONFIGURE.env.CC       = CC="$(FONTCONFIG.GCC.gcc) $(FONTCONFIG.cc_ar
 # The following lines override the original lines in /make/include/contrib.defs,
 # but have '*archs' removed (and '$(1)' presubstituted for 'FONTCONFIG').
 # 
-FONTCONFIG.CONFIGURE.env.CFLAGS   = CFLAGS="$(call fn.ARGS,FONTCONFIG.GCC,*sysroot *minver ?extra)"
-FONTCONFIG.CONFIGURE.env.CXXFLAGS = CXXFLAGS="$(call fn.ARGS,FONTCONFIG.GCC,*sysroot *minver ?extra)"
+ifeq (max,$(FONTCONFIG.GCC.g))
+    ifeq (none,$(FONTCONFIG.GCC.O))
+        FONTCONFIG.CONFIGURE.env.CFLAGS   = CFLAGS="$(call fn.ARGS,FONTCONFIG.GCC,*sysroot *minver ?extra .g .O)"
+        FONTCONFIG.CONFIGURE.env.CXXFLAGS = CXXFLAGS="$(call fn.ARGS,FONTCONFIG.GCC,*sysroot *minver ?extra .g .O)"
+    else
+        FONTCONFIG.CONFIGURE.env.CFLAGS   = CFLAGS="$(call fn.ARGS,FONTCONFIG.GCC,*sysroot *minver ?extra .g)"
+        FONTCONFIG.CONFIGURE.env.CXXFLAGS = CXXFLAGS="$(call fn.ARGS,FONTCONFIG.GCC,*sysroot *minver ?extra .g)"
+    endif
+else
+    FONTCONFIG.CONFIGURE.env.CFLAGS   = CFLAGS="$(call fn.ARGS,FONTCONFIG.GCC,*sysroot *minver ?extra)"
+    FONTCONFIG.CONFIGURE.env.CXXFLAGS = CXXFLAGS="$(call fn.ARGS,FONTCONFIG.GCC,*sysroot *minver ?extra)"
+endif
+
 FONTCONFIG.CONFIGURE.env.CPPFLAGS = CPPFLAGS="$(call fn.ARGS,FONTCONFIG.GCC,*sysroot *minver ?extra)"
 FONTCONFIG.CONFIGURE.env.LDFLAGS  = LDFLAGS="$(call fn.ARGS,FONTCONFIG.GCC,*sysroot *minver)"
 

@@ -4,17 +4,11 @@ $(eval $(call import.CONTRIB.defs,LIBDVDNAV))
 LIBDVDNAV.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libdvdnav-svn1168.tar.gz
 LIBDVDNAV.EXTRACT.tarbase = libdvdnav
 
-ifneq (max,$(GCC.g))
-ifeq (none,$(GCC.O))
-	LIBDVDNAV.CONFIGURE.env.CFLAGS = CFLAGS="-DNDEBUG -O0"
+ifneq (max,$(LIBDVDNAV.GCC.g))
+ifeq (none,$(LIBDVDNAV.GCC.O))
+    LIBDVDNAV.CONFIGURE.env.CFLAGS   = CFLAGS="$(call fn.ARGS,LIBDVDNAV.GCC,*sysroot *minver ?extra .O) -DNDEBUG"
 else
-	LIBDVDNAV.CONFIGURE.env.CFLAGS = CFLAGS="-DNDEBUG"
-endif
-else
-ifeq (none,$(GCC.O))
-	LIBDVDNAV.CONFIGURE.env.CFLAGS = CFLAGS="-g -O0"
-else
-	LIBDVDNAV.CONFIGURE.env.CFLAGS = CFLAGS="-g"
+    LIBDVDNAV.CONFIGURE.env.CFLAGS   = CFLAGS="$(call fn.ARGS,LIBDVDNAV.GCC,*sysroot *minver ?extra) -DNDEBUG"
 endif
 endif
 

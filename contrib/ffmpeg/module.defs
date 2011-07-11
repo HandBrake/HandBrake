@@ -48,14 +48,20 @@ else
     FFMPEG.CONFIGURE.extra += --enable-pthreads
 endif
 
-ifneq (max,$(GCC.g))
+ifneq (max,$(FFMPEG.GCC.g))
 	FFMPEG.CONFIGURE.extra += --disable-debug
 else
 	FFMPEG.CONFIGURE.extra += --enable-debug
 endif
 
-ifeq (none,$(GCC.O))
+ifeq (none,$(FFMPEG.GCC.O))
+#
+# gcc on darwin i386 fails to find enough registers when 
+# optimizations are disabled
+#
+ifneq (darwin-i386,$(BUILD.system)-$(BUILD.machine))
 	FFMPEG.CONFIGURE.extra += --disable-optimizations
+endif
 endif
 
 #

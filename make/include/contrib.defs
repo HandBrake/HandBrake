@@ -83,9 +83,22 @@ define import.CONTRIB.defs
     $(1).CONFIGURE.args = !sete @dir !bootstrap !env !exe @host @prefix !deps !shared !static !extra
 
     $(1).CONFIGURE.env.CC       = CC=$$($(1).GCC.gcc)
-    $(1).CONFIGURE.env.CFLAGS   = CFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra)"
     $(1).CONFIGURE.env.CXX      = CXX=$$($(1).GCC.gxx)
-    $(1).CONFIGURE.env.CXXFLAGS = CXXFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra)"
+    ##
+    ## Only add debug and optimization flags to contribs when 
+    ## debug=max or optimizations=none.  Otherwise, use the contribs defaults
+    ifeq (max,$$($(1).GCC.g))
+        ifeq (none,$$($(1).GCC.O))
+            $(1).CONFIGURE.env.CFLAGS   = CFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra .g .O)"
+            $(1).CONFIGURE.env.CXXFLAGS = CXXFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra .g .O)"
+        else
+            $(1).CONFIGURE.env.CFLAGS   = CFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra .g)"
+            $(1).CONFIGURE.env.CXXFLAGS = CXXFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra .g)"
+        endif
+    else
+        $(1).CONFIGURE.env.CFLAGS   = CFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra)"
+        $(1).CONFIGURE.env.CXXFLAGS = CXXFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra)"
+    endif
     $(1).CONFIGURE.env.CPPFLAGS = CPPFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra)"
     $(1).CONFIGURE.env.LDFLAGS  = LDFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver)"
     $(1).CONFIGURE.env.PKG_CONFIG_PATH  = PKG_CONFIG_PATH="$$(call fn.ABSOLUTE,$$(CONTRIB.build/))lib/pkgconfig"
