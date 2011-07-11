@@ -5,7 +5,11 @@ LIBDVDNAV.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libdvdnav-s
 LIBDVDNAV.EXTRACT.tarbase = libdvdnav
 
 ifneq (max,$(GCC.g))
+ifeq (none,$(GCC.O))
+	LIBDVDNAV.CONFIGURE.env.CFLAGS = CFLAGS="-DNDEBUG -O0"
+else
 	LIBDVDNAV.CONFIGURE.env.CFLAGS = CFLAGS="-DNDEBUG"
+endif
 else
 ifeq (none,$(GCC.O))
 	LIBDVDNAV.CONFIGURE.env.CFLAGS = CFLAGS="-g -O0"

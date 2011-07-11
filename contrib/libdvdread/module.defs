@@ -10,6 +10,10 @@ ifeq (none,$(GCC.O))
 else
 	LIBDVDREAD.CONFIGURE.env.CFLAGS = CFLAGS="-g"
 endif
+else
+ifeq (none,$(GCC.O))
+	LIBDVDREAD.CONFIGURE.env.CFLAGS = CFLAGS="-O0"
+endif
 endif
 
 LIBDVDREAD.CONFIGURE.extra = --enable-local-dlfcn
