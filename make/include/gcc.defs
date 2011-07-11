@@ -17,7 +17,9 @@ GCC.pic     = 0
 ifndef GCC.g
 	GCC.g       = none
 endif
-GCC.O       = none
+ifndef GCC.O
+    GCC.O       = none
+endif
 GCC.D       =
 GCC.I       =
 GCC.muldefs = 0

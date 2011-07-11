@@ -1483,9 +1483,10 @@ int main ()
             doc.add( 'HAS.iconv', 1 )
 
     doc.addMake( '' )
-    doc.addMake( '## define debug mode before other includes' )
+    doc.addMake( '## define debug mode and optimize before other includes' )
     doc.addMake( '## since it is tested in some module.defs' )
     doc.add( 'GCC.g', debugMode.mode )
+    doc.add( 'GCC.O', optimizeMode.mode )
     doc.addBlank()
     doc.addMake( '## include definitions' )
     doc.addMake( 'include $(SRC/)make/include/main.defs' )
@@ -1509,7 +1510,6 @@ int main ()
         doc.add( 'GCC.minver', '' )
     doc.add( 'GCC.ldsysroot', '$(GCC.sysroot)' )
     doc.add( 'GCC.ldminver', '$(GCC.minver)' )
-    doc.add( 'GCC.O', optimizeMode.mode )
 
     if options.enable_asm and not Tools.yasm.fail:
         asm = ''
