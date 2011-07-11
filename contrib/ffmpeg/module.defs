@@ -48,6 +48,16 @@ else
     FFMPEG.CONFIGURE.extra += --enable-pthreads
 endif
 
+ifneq (max,$(GCC.g))
+	FFMPEG.CONFIGURE.extra += --disable-debug
+else
+	FFMPEG.CONFIGURE.extra += --enable-debug
+endif
+
+ifeq (none,$(GCC.O))
+	FFMPEG.CONFIGURE.extra += --disable-optimizations
+endif
+
 #
 # MPC8 Doesn't compile on SPARC
 #
