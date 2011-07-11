@@ -6,6 +6,12 @@ LIBDVDNAV.EXTRACT.tarbase = libdvdnav
 
 ifneq (max,$(GCC.g))
 	LIBDVDNAV.CONFIGURE.env.CFLAGS = CFLAGS="-DNDEBUG"
+else
+ifeq (none,$(GCC.O))
+	LIBDVDNAV.CONFIGURE.env.CFLAGS = CFLAGS="-g -O0"
+else
+	LIBDVDNAV.CONFIGURE.env.CFLAGS = CFLAGS="-g"
+endif
 endif
 
 LIBDVDNAV.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; autoreconf -fiv;
