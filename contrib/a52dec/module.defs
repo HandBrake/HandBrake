@@ -5,4 +5,9 @@ A52DEC.FETCH.url = http://download.handbrake.fr/handbrake/contrib/a52dec-0.7.4.t
 A52DEC.EXTRACT.tarbase = a52dec
 A52DEC.INSTALL.strip = liba52.a
 
+# a52dec overrides whatever optimization flags you try to set :(
+ifeq (max,$(GCC.g))
+	A52DEC.CONFIGURE.env.CFLAGS = CFLAGS="-g"
+endif
+
 A52DEC.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; autoreconf -fiv;
