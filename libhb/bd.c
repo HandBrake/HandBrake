@@ -420,9 +420,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     goto cleanup;
 
 fail:
-    hb_list_close( &title->list_audio );
-    free( title );
-    title = NULL;
+    hb_title_close( &title );
 
 cleanup:
 
@@ -647,6 +645,7 @@ void hb_bd_close( hb_bd_t ** _d )
     }
     if( d->stream ) hb_stream_close( &d->stream );
     if( d->bd ) bd_close( d->bd );
+    if( d->path ) free( d->path );
 
     free( d );
     *_d = NULL;
