@@ -726,7 +726,7 @@ namespace Handbrake.Controls
                         break;
 
                     case 2:
-                        query = query + colon + "analyse=some";
+                        query = query + colon + "analyse=i4x4,i8x8";
                         break;
 
                     case 3:
