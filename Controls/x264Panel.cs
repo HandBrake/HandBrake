@@ -577,7 +577,7 @@ namespace Handbrake.Controls
                                     break;
 
                                 case 2:
-                                    thisOpt = "analyse=some";
+                                    thisOpt = "analyse=i4x4,i8x8";
                                     break;
 
                                 case 3:
