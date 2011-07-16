@@ -66,12 +66,14 @@ static int    vcodec      = HB_VCODEC_FFMPEG_MPEG4;
 static hb_list_t * audios = NULL;
 static hb_audio_config_t * audio = NULL;
 static int    num_audio_tracks = 0;
+static int    allowed_audio_copy = HB_ACODEC_PASS_MASK;
 static char * mixdowns    = NULL;
 static char * dynamic_range_compression = NULL;
 static char * audio_gain  = NULL;
 static char * atracks     = NULL;
 static char * arates      = NULL;
 static char * abitrates   = NULL;
+static char * acodec_fallback = NULL;
 static char * acodecs     = NULL;
 static char ** anames      = NULL;
 #ifdef __APPLE_CC__
@@ -1952,10 +1954,19 @@ static int HandleEvents( hb_handle_t * h )
                      ( audio->out.codec & HB_ACODEC_PASS_FLAG ) &&
                     !( audio->out.codec & audio->in.codec ) )
                 {
-                    // AC3 passthru not possible, fallback to AC3 encoder.
-                    fprintf( stderr, "AC3 passthru requested and input codec is not AC3 for track %d, using AC3 encoder\n",
-                        audio->out.track );
-                    audio->out.codec = HB_ACODEC_AC3;
+                    // AC3 passthru not possible, use fallback
+                    if ( acodec_fallback )
+                    {
+                        fprintf( stderr, "AC3 passthru requested and input codec is not AC3 for track %d, using fallback\n",
+                            audio->out.track );
+                        audio->out.codec = get_acodec_for_string( acodec_fallback);
+                    }
+                    else
+                    {
+                        fprintf( stderr, "AC3 passthru requested and input codec is not AC3 for track %d, using AC3 encoder\n",
+                            audio->out.track );
+                        audio->out.codec = HB_ACODEC_AC3;
+                    }
                     audio->out.mixdown = hb_get_default_mixdown( audio->out.codec, audio->in.channel_layout );
                     audio->out.bitrate = hb_get_default_audio_bitrate( audio->out.codec, audio->out.samplerate,
                         audio->out.mixdown );
@@ -1966,12 +1977,21 @@ static int HandleEvents( hb_handle_t * h )
                     audio->out.codec &= (audio->in.codec | HB_ACODEC_PASS_FLAG);
                     if ( !( audio->out.codec & HB_ACODEC_MASK ) )
                     {
-                        // Passthru not possible, drop audio.
-                        fprintf( stderr, "Passthru requested and input codec is not the same as output codec for track %d, dropping track\n",
-                            audio->out.track );
-                        hb_audio_t * item = hb_list_item( job->list_audio, i );
-                        hb_list_rem( job->list_audio, item );
-                        continue;
+                        if ( acodec_fallback )
+                        {
+                            fprintf( stderr, "Passthru requested and input codec is not compatible for track %d, using fallback\n",
+                                audio->out.track );
+                            audio->out.codec = get_acodec_for_string( acodec_fallback);
+                        }
+                        else
+                        {
+                            // Passthru not possible, drop audio.
+                            fprintf( stderr, "Passthru requested and input codec is not the same as output codec for track %d, dropping track\n",
+                                audio->out.track );
+                            hb_audio_t * item = hb_list_item( job->list_audio, i );
+                            hb_list_rem( job->list_audio, item );
+                            continue;
+                        }
                     }
                 }
                 i++;
@@ -2555,6 +2575,13 @@ static void ShowHelp()
     "                            (default: faac for mp4, lame for mkv)\n" );
 #endif
     fprintf( out,
+    "        --audio-copy-mask   Set audio codecs that are permitted when\n"
+    "                <string>    \"copy\" audio encoder option is specified.\n"
+    "                            Separated by commas for mutiple allowed options.\n");
+    fprintf( out,
+    "        --audio-fallback    Set audio codec to use when it is not possible\n"
+    "                <string>    to copy an audio track without re-encoding.\n");
+    fprintf( out,
     "    -B, --ab <kb/s>         Set audio bitrate(s) (default: depends on the\n"
     "                            selected codec, mixdown and samplerate)\n"
     "                            Separated by commas for more than one audio track.\n"
@@ -2795,6 +2822,20 @@ static char** str_split( char *str, char delem )
     return ret;
 }
 
+static void str_vfree( char **strv )
+{
+    int i;
+
+    if (strv == NULL)
+        return;
+
+    for ( i = 0; strv[i]; i++ )
+    {
+        free( strv[i] );
+    }
+    free( strv );
+}
+
 /****************************************************************************
  * ParseOptions:
  ****************************************************************************/
@@ -2824,6 +2865,8 @@ static int ParseOptions( int argc, char ** argv )
     #define MAIN_FEATURE        277
     #define MIN_DURATION        278
     #define AUDIO_GAIN          279
+    #define ALLOWED_AUDIO_COPY  280
+    #define AUDIO_FALLBACK      281
     
     for( ;; )
     {
@@ -2909,6 +2952,8 @@ static int ParseOptions( int argc, char ** argv )
 #if defined( __APPLE_CC__ )
             { "no-vlc-dylib-path", no_argument, &no_vlc_dylib,    1 },
 #endif
+            { "audio-copy-mask", required_argument, NULL, ALLOWED_AUDIO_COPY },
+            { "audio-fallback",  required_argument, NULL, AUDIO_FALLBACK },
             { 0, 0, 0, 0 }
           };
 
@@ -3365,6 +3410,26 @@ static int ParseOptions( int argc, char ** argv )
                     stop_at_pts *= 90000LL;
                 }
                 break;
+            case ALLOWED_AUDIO_COPY:
+            {
+                int i;
+                char **allowed = str_split( optarg, ',' );
+
+                allowed_audio_copy = 0;
+                for ( i = 0; allowed[i]; i++ )
+                {
+                    if ( !strcmp( allowed[i], "ac3" ) )
+                        allowed_audio_copy |= HB_ACODEC_AC3;
+                    if ( !strcmp( allowed[i], "dts" ) )
+                        allowed_audio_copy |= HB_ACODEC_DCA;
+                    if ( !strcmp( allowed[i], "dtshd" ) )
+                        allowed_audio_copy |= HB_ACODEC_DCA_HD;
+                }
+                str_vfree( allowed );
+            } break;
+            case AUDIO_FALLBACK:
+                acodec_fallback = strdup( optarg );
+                break;
             case 'M':
                 if( atoi( optarg ) == 601 )
                     color_matrix = 1;
@@ -3530,7 +3595,7 @@ static int get_acodec_for_string( char *codec )
     }
     else if( !strcasecmp( codec, "copy" ) )
     {
-        return HB_ACODEC_AC3_PASS | HB_ACODEC_DCA_PASS | HB_ACODEC_DCA_HD_PASS;
+        return (HB_ACODEC_PASS_MASK & allowed_audio_copy) | HB_ACODEC_PASS_FLAG;
     }
     else if( !strcasecmp( codec, "copy:ac3" ) )
     {
