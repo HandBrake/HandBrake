@@ -103,12 +103,7 @@
     <Compile Include="Model\Encoding\FramerateMode.cs" />
     <Compile Include="Model\Encoding\Mixdown.cs" />
     <Compile Include="Model\Encoding\PointToPointMode.cs" />
-    <Compile Include="Model\Encoding\Cropping.cs" />
     <Compile Include="Model\EncodeTask.cs" />
-    <Compile Include="Model\Encoding\Decomb.cs" />
-    <Compile Include="Model\Encoding\Deinterlace.cs" />
-    <Compile Include="Model\Encoding\Denoise.cs" />
-    <Compile Include="Model\Encoding\Detelecine.cs" />
     <Compile Include="Model\Encoding\OutputFormat.cs" />
     <Compile Include="Model\Encoding\SubtitleTrack.cs" />
     <Compile Include="Model\Encoding\VideoEncoder.cs" />
@@ -184,6 +179,7 @@
     <ProjectReference Include="..\HandBrake.Interop\HandBrakeInterop\HandBrakeInterop.csproj">
       <Project>{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}</Project>
       <Name>HandBrakeInterop</Name>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

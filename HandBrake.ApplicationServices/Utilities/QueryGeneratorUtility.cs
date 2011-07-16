@@ -7,15 +7,18 @@ namespace HandBrake.ApplicationServices.Utilities
 {
     using System;
     using System.Collections.Generic;
-    using System.Data;
     using System.Globalization;
     using System.IO;
-    using System.Linq;
-    using System.Windows.Forms;
 
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.Interop.Model.Encoding;
+
+    using Anamorphic = HandBrake.ApplicationServices.Model.Encoding.Anamorphic;
+    using AudioEncoder = HandBrake.ApplicationServices.Model.Encoding.AudioEncoder;
+    using Mixdown = HandBrake.ApplicationServices.Model.Encoding.Mixdown;
+    using VideoEncoder = HandBrake.ApplicationServices.Model.Encoding.VideoEncoder;
 
     /*
      * TODO:

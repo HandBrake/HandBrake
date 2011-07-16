@@ -11,6 +11,36 @@ namespace HandBrake.Interop.Model
 {
 	public class Cropping
 	{
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Cropping"/> class. 
+        /// </summary>
+        public Cropping()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Cropping"/> class. 
+        /// </summary>
+        /// <param name="top">
+        /// The Top Value
+        /// </param>
+        /// <param name="bottom">
+        /// The Bottom Value
+        /// </param>
+        /// <param name="left">
+        /// The Left Value
+        /// </param>
+        /// <param name="right">
+        /// The Right Value
+        /// </param>
+        public Cropping(int top, int bottom, int left, int right)
+        {
+            this.Top = top;
+            this.Bottom = bottom;
+            this.Left = left;
+            this.Right = right;
+        }
+
 		public int Top { get; set; }
 		public int Bottom { get; set; }
 		public int Left { get; set; }

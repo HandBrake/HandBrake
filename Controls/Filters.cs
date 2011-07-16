@@ -9,6 +9,7 @@ namespace Handbrake.Controls
     using System.Windows.Forms;
 
     using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.Interop.Model.Encoding;
 
     /// <summary>
     /// The Filters Panel

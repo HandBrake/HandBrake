@@ -6,7 +6,6 @@
 namespace HandBrake.ApplicationServices.Utilities
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Text.RegularExpressions;
@@ -14,6 +13,10 @@ namespace HandBrake.ApplicationServices.Utilities
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.Interop.Model;
+    using HandBrake.Interop.Model.Encoding;
+
+    using Anamorphic = HandBrake.ApplicationServices.Model.Encoding.Anamorphic;
 
     /// <summary>
     /// Parse a CLI Query
@@ -233,9 +236,6 @@ namespace HandBrake.ApplicationServices.Utilities
                             break;
                         case "slower":
                             parsed.Deinterlace = Deinterlace.Slower;
-                            break;
-                        case "slowest":
-                            parsed.Deinterlace = Deinterlace.Slowest;
                             break;
                         default:
                             parsed.Deinterlace = Deinterlace.Custom;
