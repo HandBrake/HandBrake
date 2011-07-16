@@ -1988,6 +1988,7 @@ typedef struct
 
 static value_map_t vcodec_xlat[] =
 {
+	{"MPEG-2 (FFmpeg)", "ffmpeg2"},
 	{"MPEG-4 (FFmpeg)", "ffmpeg"},
 	{"MPEG-4 (XviD)", "ffmpeg"},
 	{"H.264 (x264)", "x264"},
@@ -1997,11 +1998,15 @@ static value_map_t vcodec_xlat[] =
 
 static value_map_t acodec_xlat[] =
 {
+	{"AAC (ffmpeg)", "ffaac"},
 	{"AAC (faac)", "faac"},
 	{"AAC (CoreAudio)", "faac"},
+	{"HE-AAC (CoreAudio)", "faac"},
+	{"AC3 (ffmpeg)", "ac3"},
 	{"AC3 Passthru", "ac3pass"},
 	{"DTS Passthru", "dtspass"},
 	{"DTS-HD Passthru", "dtshdpass"},
+	{"Auto Passthru", "auto"},
 	{"MP3 (lame)", "lame"},
 	{"Vorbis (vorbis)", "vorbis"},
 	{NULL,NULL}
