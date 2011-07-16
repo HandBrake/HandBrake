@@ -18,7 +18,6 @@ namespace HandBrake.ApplicationServices.Utilities
     using Anamorphic = HandBrake.ApplicationServices.Model.Encoding.Anamorphic;
     using AudioEncoder = HandBrake.ApplicationServices.Model.Encoding.AudioEncoder;
     using Mixdown = HandBrake.ApplicationServices.Model.Encoding.Mixdown;
-    using VideoEncoder = HandBrake.ApplicationServices.Model.Encoding.VideoEncoder;
 
     /*
      * TODO:

@@ -21,8 +21,11 @@ namespace Handbrake
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.Interop.Model.Encoding;
 
     using Model;
+
+    using AudioEncoder = HandBrake.ApplicationServices.Model.Encoding.AudioEncoder;
 
     /// <summary>
     /// The Queue Window
@@ -354,14 +357,14 @@ namespace Handbrake
                 item.SubItems.Add(chapters); // Chapters
                 item.SubItems.Add(queueItem.Source); // Source
                 item.SubItems.Add(queueItem.Destination); // Destination
-                item.SubItems.Add(EnumHelper<VideoEncoder>.GetDescription(parsed.VideoEncoder));
+                item.SubItems.Add(EnumHelper<VideoEncoder>.GetDisplayValue(parsed.VideoEncoder));
 
                 // Display The Audio Track Information
                 string audio = string.Empty;
                 foreach (AudioTrack track in parsed.AudioTracks)
                 {
                     if (audio != string.Empty)
-                        audio += ", " + track.Encoder;
+                        audio += ", " + EnumHelper<AudioEncoder>.GetDescription(track.Encoder);
                     else
                         audio = EnumHelper<AudioEncoder>.GetDescription(track.Encoder);
                 }
@@ -429,7 +432,7 @@ namespace Handbrake
                 foreach (AudioTrack track in parsed.AudioTracks)
                 {
                     if (audio != string.Empty)
-                        audio += ", " + track.Encoder;
+                        audio += ", " + EnumHelper<AudioEncoder>.GetDescription(track.Encoder);
                     else
                         audio = EnumHelper<AudioEncoder>.GetDescription(track.Encoder);
                 }
@@ -438,8 +441,11 @@ namespace Handbrake
                 lbl_encodeStatus.Text = "Encoding ...";
                 lbl_source.Text = queue.QueueManager.LastProcessedJob.Source + "(Title: " + title + " Chapters: " + chapterlbl + ")";
                 lbl_dest.Text = queue.QueueManager.LastProcessedJob.Destination;
-                lbl_encodeOptions.Text = "Video: " + parsed.VideoEncoder + " Audio: " + audio + Environment.NewLine +
-                                    "x264 Options: " + parsed.AdvancedEncoderOptions;
+                lbl_encodeOptions.Text = string.Format("Video: {0},  Audio: {1}\nx264 Options: {2}",
+                    EnumHelper<VideoEncoder>.GetDisplayValue(parsed.VideoEncoder),
+                    audio, 
+                    parsed.AdvancedEncoderOptions);
+
             }
             catch (Exception)
             {

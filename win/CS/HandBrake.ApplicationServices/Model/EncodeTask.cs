@@ -13,7 +13,6 @@ namespace HandBrake.ApplicationServices.Model
 
     using Anamorphic = HandBrake.ApplicationServices.Model.Encoding.Anamorphic;
     using OutputFormat = HandBrake.ApplicationServices.Model.Encoding.OutputFormat;
-    using VideoEncoder = HandBrake.ApplicationServices.Model.Encoding.VideoEncoder;
 
     /// <summary>
     /// An Encode Task

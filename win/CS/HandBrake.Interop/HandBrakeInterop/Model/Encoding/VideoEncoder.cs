@@ -19,6 +19,9 @@ namespace HandBrake.Interop.Model.Encoding
 		[Display(Name = "MPEG-4 (FFMpeg)")]
 		FFMpeg,
 
+        [Display(Name = "MPEG-2 (FFMpeg)")]
+        FFMpeg2,
+
 		[Display(Name = "VP3 (Theora)")]
 		Theora
 	}

@@ -13,6 +13,10 @@ namespace Handbrake.Functions
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.Interop.Model.Encoding;
+
+    using Anamorphic = HandBrake.ApplicationServices.Model.Encoding.Anamorphic;
+    using OutputFormat = HandBrake.ApplicationServices.Model.Encoding.OutputFormat;
 
     /// <summary>
     /// Load a preset into the main Window

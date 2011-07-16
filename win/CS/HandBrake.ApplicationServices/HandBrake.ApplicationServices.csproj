@@ -64,6 +64,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -106,7 +107,6 @@
     <Compile Include="Model\EncodeTask.cs" />
     <Compile Include="Model\Encoding\OutputFormat.cs" />
     <Compile Include="Model\Encoding\SubtitleTrack.cs" />
-    <Compile Include="Model\Encoding\VideoEncoder.cs" />
     <Compile Include="Model\General\UpdateCheckInformation.cs" />
     <Compile Include="Model\General\UpdateCheckResult.cs" />
     <Compile Include="Model\ModelBase.cs" />
