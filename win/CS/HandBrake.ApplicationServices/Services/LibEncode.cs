@@ -15,6 +15,7 @@ namespace HandBrake.ApplicationServices.Services
     using HandBrake.ApplicationServices.Services.Base;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop;
+    using HandBrake.Interop.Model;
 
     using EncodeCompletedEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeCompletedEventArgs;
     using EncodeProgressEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeProgressEventArgs;

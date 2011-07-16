@@ -53,9 +53,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libraries\Growl.CoreLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="HandBrakeInterop">
-      <HintPath>..\libraries\HandBrakeInterop.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libraries\Microsoft.WindowsAPICodePack.dll</HintPath>
@@ -183,7 +180,12 @@
     </None>
     <None Include="Resources\logo64.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\HandBrake.Interop\HandBrakeInterop\HandBrakeInterop.csproj">
+      <Project>{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}</Project>
+      <Name>HandBrakeInterop</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.5\StyleCop.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
