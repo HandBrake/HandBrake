@@ -2002,6 +2002,7 @@ static value_map_t acodec_xlat[] =
 	{"AAC (faac)", "faac"},
 	{"AAC (CoreAudio)", "faac"},
 	{"HE-AAC (CoreAudio)", "faac"},
+	{"AC3", "ac3"},			// Backwards compatibility with mac ui
 	{"AC3 (ffmpeg)", "ac3"},
 	{"AC3 Passthru", "ac3pass"},
 	{"DTS Passthru", "dtspass"},
