@@ -143,16 +143,7 @@ namespace HandBrake.ApplicationServices.Functions
             profile.Quality = work.Quality.HasValue ? work.Quality.Value : 0;
             profile.UseDisplayWidth = true;
             profile.VideoBitrate = work.VideoBitrate.HasValue ? work.VideoBitrate.Value : 0;
-
-            switch (work.VideoEncodeRateType)
-            {
-                case VideoEncodeRateMode.AverageBitrate:
-                    profile.VideoEncodeRateType = VideoEncodeRateType.AverageBitrate;
-                    break;
-                case VideoEncodeRateMode.ConstantQuality:
-                    profile.VideoEncodeRateType = VideoEncodeRateType.ConstantQuality;
-                    break;
-            }
+            profile.VideoEncodeRateType = work.VideoEncodeRateType;
 
             switch (work.VideoEncoder)
             {

@@ -301,11 +301,11 @@ namespace HandBrake.ApplicationServices.Utilities
 
             switch (task.VideoEncodeRateType)
             {
-                case VideoEncodeRateMode.AverageBitrate:
+                case VideoEncodeRateType.AverageBitrate:
                     if (task.VideoBitrate.HasValue)
                         query += string.Format(" -b {0}", task.VideoBitrate.Value);
                     break;
-                case VideoEncodeRateMode.ConstantQuality:
+                case VideoEncodeRateType.ConstantQuality:
                     double value;
                     switch (task.VideoEncoder)
                     {
