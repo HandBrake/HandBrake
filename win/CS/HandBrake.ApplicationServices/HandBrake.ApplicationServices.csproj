@@ -55,6 +55,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NightlyBuild|x86'">
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\NightlyBuild\</OutputPath>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <PlatformTarget>x64</PlatformTarget>
