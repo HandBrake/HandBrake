@@ -15,9 +15,9 @@ namespace HandBrake.ApplicationServices.Services
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop;
+    using HandBrake.Interop.Model;
 
     using AudioTrack = HandBrake.ApplicationServices.Parsing.Audio;
-    using Cropping = HandBrake.ApplicationServices.Model.Encoding.Cropping;
     using ScanProgressEventArgs = HandBrake.Interop.ScanProgressEventArgs;
     using Size = System.Drawing.Size;
 
@@ -283,12 +283,7 @@ namespace HandBrake.ApplicationServices.Services
                         AspectRatio = title.AspectRatio, 
                         AngleCount = title.AngleCount, 
                         ParVal = new Size(title.ParVal.Width, title.ParVal.Height), 
-                        AutoCropDimensions =
-                            new Cropping(
-                            title.AutoCropDimensions.Top, 
-                            title.AutoCropDimensions.Bottom, 
-                            title.AutoCropDimensions.Left, 
-                            title.AutoCropDimensions.Right), 
+                        AutoCropDimensions = title.AutoCropDimensions,
                         Fps = title.Framerate
                     };
 

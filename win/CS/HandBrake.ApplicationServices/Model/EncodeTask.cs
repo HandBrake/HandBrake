@@ -8,6 +8,12 @@ namespace HandBrake.ApplicationServices.Model
     using System.Collections.Generic;
 
     using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.Interop.Model;
+    using HandBrake.Interop.Model.Encoding;
+
+    using Anamorphic = HandBrake.ApplicationServices.Model.Encoding.Anamorphic;
+    using OutputFormat = HandBrake.ApplicationServices.Model.Encoding.OutputFormat;
+    using VideoEncoder = HandBrake.ApplicationServices.Model.Encoding.VideoEncoder;
 
     /// <summary>
     /// An Encode Task

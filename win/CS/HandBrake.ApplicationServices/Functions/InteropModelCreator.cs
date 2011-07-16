@@ -13,10 +13,6 @@ namespace HandBrake.ApplicationServices.Functions
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
 
-    using Decomb = HandBrake.ApplicationServices.Model.Encoding.Decomb;
-    using Deinterlace = HandBrake.ApplicationServices.Model.Encoding.Deinterlace;
-    using Denoise = HandBrake.ApplicationServices.Model.Encoding.Denoise;
-    using Detelecine = HandBrake.ApplicationServices.Model.Encoding.Detelecine;
     using OutputFormat = HandBrake.ApplicationServices.Model.Encoding.OutputFormat;
     using VideoEncoder = HandBrake.ApplicationServices.Model.Encoding.VideoEncoder;
 
@@ -103,74 +99,10 @@ namespace HandBrake.ApplicationServices.Functions
             profile.CustomDenoise = work.CustomDenoise;
             profile.CustomDetelecine = work.CustomDetelecine;
             profile.Deblock = work.Deblock;
-            switch (work.Decomb)
-            {
-                case Decomb.Default:
-                    profile.Decomb = Interop.Model.Encoding.Decomb.Default;
-                    break;
-                case Decomb.Custom:
-                    profile.Decomb = Interop.Model.Encoding.Decomb.Custom;
-                    break;
-                case Decomb.Off:
-                    profile.Decomb = Interop.Model.Encoding.Decomb.Off;
-                    break;
-            }
-
-            switch (work.Deinterlace)
-            {
-                case Deinterlace.Fast:
-                    profile.Deinterlace = Interop.Model.Encoding.Deinterlace.Fast;
-                    break;
-                case Deinterlace.Slow:
-                    profile.Deinterlace = Interop.Model.Encoding.Deinterlace.Slow;
-                    break;
-                case Deinterlace.Slower:
-                    profile.Deinterlace = Interop.Model.Encoding.Deinterlace.Slower;
-                    break;
-                case Deinterlace.Slowest:
-                    profile.Deinterlace = Interop.Model.Encoding.Deinterlace.Slower;
-                    break;
-                case Deinterlace.Custom:
-                    profile.Deinterlace = Interop.Model.Encoding.Deinterlace.Custom;
-                    break;
-                case Deinterlace.Off:
-                    profile.Deinterlace = Interop.Model.Encoding.Deinterlace.Off;
-                    break;
-            }
-
-
-            switch (work.Denoise)
-            {
-                case Denoise.Off:
-                    profile.Denoise = Interop.Model.Encoding.Denoise.Off;
-                    break;
-                case Denoise.Custom:
-                    profile.Denoise = Interop.Model.Encoding.Denoise.Custom;
-                    break;
-                case Denoise.Strong:
-                    profile.Denoise = Interop.Model.Encoding.Denoise.Strong;
-                    break;
-                case Denoise.Medium:
-                    profile.Denoise = Interop.Model.Encoding.Denoise.Medium;
-                    break;
-                case Denoise.Weak:
-                    profile.Denoise = Interop.Model.Encoding.Denoise.Weak;
-                    break;
-            }
-
-            switch (work.Detelecine)
-            {
-                case Detelecine.Default:
-                    profile.Detelecine = Interop.Model.Encoding.Detelecine.Default;
-                    break;
-                case Detelecine.Custom:
-                    profile.Detelecine = Interop.Model.Encoding.Detelecine.Custom;
-                    break;
-                case Detelecine.Off:
-                    profile.Detelecine = Interop.Model.Encoding.Detelecine.Off;
-                    break;
-            }
-
+            profile.Decomb = work.Decomb;
+            profile.Deinterlace = work.Deinterlace;
+            profile.Denoise = work.Denoise;
+            profile.Detelecine = work.Detelecine;
             profile.DisplayWidth = work.DisplayWidth.HasValue
                                        ? int.Parse(Math.Round(work.DisplayWidth.Value, 0).ToString())
                                        : 0;

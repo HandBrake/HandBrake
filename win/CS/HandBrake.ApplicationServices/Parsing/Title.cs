@@ -7,13 +7,15 @@ namespace HandBrake.ApplicationServices.Parsing
 {
     using System;
     using System.Collections.Generic;
-    using System.Drawing;
     using System.Globalization;
     using System.IO;
     using System.Text.RegularExpressions;
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.Interop.Model;
+
+    using Size = System.Drawing.Size;
 
     /// <summary>
     /// An object that represents a single Title of a DVD
