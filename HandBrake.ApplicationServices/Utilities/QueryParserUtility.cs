@@ -310,7 +310,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
                 if (videoBitrate.Success)
                 {
-                    parsed.VideoEncodeRateType = VideoEncodeRateMode.AverageBitrate;
+                    parsed.VideoEncodeRateType = VideoEncodeRateType.AverageBitrate;
                     parsed.VideoBitrate = int.Parse(videoBitrate.ToString().Replace("-b ", string.Empty));
                 }
 

@@ -312,10 +312,10 @@ namespace HandBrake.ApplicationServices.Utilities
             switch (qualityMode)
             {
                 case "1": // Avg Bitrate
-                    parsed.VideoEncodeRateType = VideoEncodeRateMode.AverageBitrate;
+                    parsed.VideoEncodeRateType = VideoEncodeRateType.AverageBitrate;
                     break;
                 case "2": // CQ
-                    parsed.VideoEncodeRateType = VideoEncodeRateMode.ConstantQuality;
+                    parsed.VideoEncodeRateType = VideoEncodeRateType.ConstantQuality;
                     break;
             }
             #endregion

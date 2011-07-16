@@ -107,7 +107,6 @@
     <Compile Include="Model\Encoding\OutputFormat.cs" />
     <Compile Include="Model\Encoding\SubtitleTrack.cs" />
     <Compile Include="Model\Encoding\VideoEncoder.cs" />
-    <Compile Include="Model\Encoding\VideoEncodeRateMode.cs" />
     <Compile Include="Model\General\UpdateCheckInformation.cs" />
     <Compile Include="Model\General\UpdateCheckResult.cs" />
     <Compile Include="Model\ModelBase.cs" />
