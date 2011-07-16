@@ -458,10 +458,10 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'NightlyBuild' ">
     <PostBuildEvent>
-      copy "$(ProjectDir)Installer\MakeNightly.nsi" "$(ProjectDir)bin\NightlyBuild" /Y
-      copy "$(ProjectDir)handbrakepineapple.ico" "$(ProjectDir)bin\NightlyBuild" /Y
-      xcopy "$(ProjectDir)doc" "$(ProjectDir)bin\NightlyBuild\doc" /I /Y
-      makensis "$(ProjectDir)bin\NightlyBuild\MakeNightly.nsi"
+      copy "$(ProjectDir)Installer\MakeNightly.nsi" "$(ProjectDir)bin\x86\NightlyBuild" /Y
+      copy "$(ProjectDir)handbrakepineapple.ico" "$(ProjectDir)bin\x86\NightlyBuild" /Y
+      xcopy "$(ProjectDir)doc" "$(ProjectDir)bin\x86\NightlyBuild\doc" /I /Y
+      makensis "$(ProjectDir)bin\x86\NightlyBuild\MakeNightly.nsi"
     </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
