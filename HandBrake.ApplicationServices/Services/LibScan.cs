@@ -270,10 +270,10 @@ namespace HandBrake.ApplicationServices.Services
         /// <returns>
         /// The convert titles.
         /// </returns>
-        private static List<Title> ConvertTitles(IEnumerable<SourceData.Title> titles)
+        private static List<Title> ConvertTitles(IEnumerable<Interop.SourceData.Title> titles)
         {
             List<Title> titleList = new List<Title>();
-            foreach (SourceData.Title title in titles)
+            foreach (Interop.SourceData.Title title in titles)
             {
                 Title converted = new Title
                     {
@@ -292,41 +292,41 @@ namespace HandBrake.ApplicationServices.Services
                         Fps = title.Framerate
                     };
 
-                foreach (SourceData.Chapter chapter in title.Chapters)
+                foreach (Interop.SourceData.Chapter chapter in title.Chapters)
                 {
                     converted.Chapters.Add(new Chapter(chapter.ChapterNumber, string.Empty, chapter.Duration));
                 }
 
-                foreach (SourceData.AudioTrack track in title.AudioTracks)
+                foreach (Interop.SourceData.AudioTrack track in title.AudioTracks)
                 {
                     converted.AudioTracks.Add(new AudioTrack(track.TrackNumber, track.Language, track.LanguageCode, track.Description, string.Empty, track.SampleRate, track.Bitrate));
                 }
 
-                foreach (SourceData.Subtitle track in title.Subtitles)
+                foreach (Interop.SourceData.Subtitle track in title.Subtitles)
                 {
                     SubtitleType convertedType = new SubtitleType();
 
                     switch (track.SubtitleSource)
                     {
-                        case SourceData.SubtitleSource.VobSub:
+                        case Interop.SourceData.SubtitleSource.VobSub:
                             convertedType = SubtitleType.VobSub;
                             break;
-                        case SourceData.SubtitleSource.UTF8:
+                        case Interop.SourceData.SubtitleSource.UTF8:
                             convertedType = SubtitleType.UTF8Sub;
                             break;
-                        case SourceData.SubtitleSource.TX3G:
+                        case Interop.SourceData.SubtitleSource.TX3G:
                             convertedType = SubtitleType.TX3G;
                             break;
-                        case SourceData.SubtitleSource.SSA:
+                        case Interop.SourceData.SubtitleSource.SSA:
                             convertedType = SubtitleType.SSA;
                             break;
-                        case SourceData.SubtitleSource.SRT:
+                        case Interop.SourceData.SubtitleSource.SRT:
                             convertedType = SubtitleType.SRT;
                             break;
-                        case SourceData.SubtitleSource.CC608:
+                        case Interop.SourceData.SubtitleSource.CC608:
                             convertedType = SubtitleType.CC;
                             break;
-                        case SourceData.SubtitleSource.CC708:
+                        case Interop.SourceData.SubtitleSource.CC708:
                             convertedType = SubtitleType.CC;
                             break;
                     }

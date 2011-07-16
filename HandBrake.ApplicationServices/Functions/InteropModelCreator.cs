@@ -10,9 +10,9 @@ namespace HandBrake.ApplicationServices.Functions
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
-    using HandBrake.Interop;
+    using HandBrake.Interop.Model;
+    using HandBrake.Interop.Model.Encoding;
 
-    using Cropping = HandBrake.Interop.Cropping;
     using Decomb = HandBrake.ApplicationServices.Model.Encoding.Decomb;
     using Deinterlace = HandBrake.ApplicationServices.Model.Encoding.Deinterlace;
     using Denoise = HandBrake.ApplicationServices.Model.Encoding.Denoise;
@@ -58,16 +58,16 @@ namespace HandBrake.ApplicationServices.Functions
             switch (work.Anamorphic)
             {
                 case Model.Encoding.Anamorphic.Custom:
-                    profile.Anamorphic = Interop.Anamorphic.Custom;
+                    profile.Anamorphic = Interop.Model.Encoding.Anamorphic.Custom;
                     break;
                 case Model.Encoding.Anamorphic.Strict:
-                    profile.Anamorphic = Interop.Anamorphic.Strict;
+                    profile.Anamorphic = Interop.Model.Encoding.Anamorphic.Strict;
                     break;
                 case Model.Encoding.Anamorphic.Loose:
-                    profile.Anamorphic = Interop.Anamorphic.Loose;
+                    profile.Anamorphic = Interop.Model.Encoding.Anamorphic.Loose;
                     break;
                 case Model.Encoding.Anamorphic.None:
-                    profile.Anamorphic = Interop.Anamorphic.None;
+                    profile.Anamorphic = Interop.Model.Encoding.Anamorphic.None;
                     break;
             }
 
@@ -89,7 +89,7 @@ namespace HandBrake.ApplicationServices.Functions
                 profile.AudioEncodings.Add(newTrack);
             }
 
-            profile.Cropping = new Cropping
+            profile.Cropping = new HandBrake.Interop.Model.Cropping
                 {
                     Top = work.Cropping.Top,
                     Bottom = work.Cropping.Bottom,
@@ -106,35 +106,35 @@ namespace HandBrake.ApplicationServices.Functions
             switch (work.Decomb)
             {
                 case Decomb.Default:
-                    profile.Decomb = Interop.Decomb.Default;
+                    profile.Decomb = Interop.Model.Encoding.Decomb.Default;
                     break;
                 case Decomb.Custom:
-                    profile.Decomb = Interop.Decomb.Custom;
+                    profile.Decomb = Interop.Model.Encoding.Decomb.Custom;
                     break;
                 case Decomb.Off:
-                    profile.Decomb = Interop.Decomb.Off;
+                    profile.Decomb = Interop.Model.Encoding.Decomb.Off;
                     break;
             }
 
             switch (work.Deinterlace)
             {
                 case Deinterlace.Fast:
-                    profile.Deinterlace = Interop.Deinterlace.Fast;
+                    profile.Deinterlace = Interop.Model.Encoding.Deinterlace.Fast;
                     break;
                 case Deinterlace.Slow:
-                    profile.Deinterlace = Interop.Deinterlace.Slow;
+                    profile.Deinterlace = Interop.Model.Encoding.Deinterlace.Slow;
                     break;
                 case Deinterlace.Slower:
-                    profile.Deinterlace = Interop.Deinterlace.Slower;
+                    profile.Deinterlace = Interop.Model.Encoding.Deinterlace.Slower;
                     break;
                 case Deinterlace.Slowest:
-                    profile.Deinterlace = Interop.Deinterlace.Slower;
+                    profile.Deinterlace = Interop.Model.Encoding.Deinterlace.Slower;
                     break;
                 case Deinterlace.Custom:
-                    profile.Deinterlace = Interop.Deinterlace.Custom;
+                    profile.Deinterlace = Interop.Model.Encoding.Deinterlace.Custom;
                     break;
                 case Deinterlace.Off:
-                    profile.Deinterlace = Interop.Deinterlace.Off;
+                    profile.Deinterlace = Interop.Model.Encoding.Deinterlace.Off;
                     break;
             }
 
@@ -142,32 +142,32 @@ namespace HandBrake.ApplicationServices.Functions
             switch (work.Denoise)
             {
                 case Denoise.Off:
-                    profile.Denoise = Interop.Denoise.Off;
+                    profile.Denoise = Interop.Model.Encoding.Denoise.Off;
                     break;
                 case Denoise.Custom:
-                    profile.Denoise = Interop.Denoise.Custom;
+                    profile.Denoise = Interop.Model.Encoding.Denoise.Custom;
                     break;
                 case Denoise.Strong:
-                    profile.Denoise = Interop.Denoise.Strong;
+                    profile.Denoise = Interop.Model.Encoding.Denoise.Strong;
                     break;
                 case Denoise.Medium:
-                    profile.Denoise = Interop.Denoise.Medium;
+                    profile.Denoise = Interop.Model.Encoding.Denoise.Medium;
                     break;
                 case Denoise.Weak:
-                    profile.Denoise = Interop.Denoise.Weak;
+                    profile.Denoise = Interop.Model.Encoding.Denoise.Weak;
                     break;
             }
 
             switch (work.Detelecine)
             {
                 case Detelecine.Default:
-                    profile.Detelecine = Interop.Detelecine.Default;
+                    profile.Detelecine = Interop.Model.Encoding.Detelecine.Default;
                     break;
                 case Detelecine.Custom:
-                    profile.Detelecine = Interop.Detelecine.Custom;
+                    profile.Detelecine = Interop.Model.Encoding.Detelecine.Custom;
                     break;
                 case Detelecine.Off:
-                    profile.Detelecine = Interop.Detelecine.Off;
+                    profile.Detelecine = Interop.Model.Encoding.Detelecine.Off;
                     break;
             }
 
@@ -189,10 +189,10 @@ namespace HandBrake.ApplicationServices.Functions
             {
                 case OutputFormat.Mp4:
                 case OutputFormat.M4V:
-                    profile.OutputFormat = Interop.OutputFormat.Mp4;
+                    profile.OutputFormat = Interop.Model.Encoding.OutputFormat.Mp4;
                     break;
                 case OutputFormat.Mkv:
-                    profile.OutputFormat = Interop.OutputFormat.Mkv;
+                    profile.OutputFormat = Interop.Model.Encoding.OutputFormat.Mkv;
                     break;
             }
             profile.PeakFramerate = work.FramerateMode == FramerateMode.PFR;
@@ -202,10 +202,10 @@ namespace HandBrake.ApplicationServices.Functions
             switch (work.OutputFormat)
             {
                 case OutputFormat.Mp4:
-                    profile.PreferredExtension = Interop.OutputExtension.Mp4;
+                    profile.PreferredExtension = Interop.Model.Encoding.OutputExtension.Mp4;
                     break;
                 case OutputFormat.M4V:
-                    profile.PreferredExtension = Interop.OutputExtension.M4v;
+                    profile.PreferredExtension = Interop.Model.Encoding.OutputExtension.M4v;
                     break;
             }
             profile.Quality = work.Quality.HasValue ? work.Quality.Value : 0;
@@ -225,16 +225,16 @@ namespace HandBrake.ApplicationServices.Functions
             switch (work.VideoEncoder)
             {
                 case VideoEncoder.X264:
-                    profile.VideoEncoder = Interop.VideoEncoder.X264;
+                    profile.VideoEncoder = Interop.Model.Encoding.VideoEncoder.X264;
                     break;
                 case VideoEncoder.FFMpeg:
-                    profile.VideoEncoder = Interop.VideoEncoder.FFMpeg;
+                    profile.VideoEncoder = Interop.Model.Encoding.VideoEncoder.FFMpeg;
                     break;
                 case VideoEncoder.FFMpeg2:
-                    profile.VideoEncoder = Interop.VideoEncoder.FFMpeg; // TODO Fix This.
+                    profile.VideoEncoder = Interop.Model.Encoding.VideoEncoder.FFMpeg; // TODO Fix This.
                     break;
                 case VideoEncoder.Theora:
-                    profile.VideoEncoder = Interop.VideoEncoder.Theora;
+                    profile.VideoEncoder = Interop.Model.Encoding.VideoEncoder.Theora;
                     break;
 
             }
