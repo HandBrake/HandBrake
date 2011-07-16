@@ -8,7 +8,11 @@ namespace HandBrake.ApplicationServices.Functions
     using System;
     using System.Text.RegularExpressions;
 
-    using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.Interop.Model.Encoding;
+
+    using AudioEncoder = HandBrake.ApplicationServices.Model.Encoding.AudioEncoder;
+    using Mixdown = HandBrake.ApplicationServices.Model.Encoding.Mixdown;
+    using OutputFormat = HandBrake.ApplicationServices.Model.Encoding.OutputFormat;
 
     /// <summary>
     /// A class to convert various things to native C# objects

@@ -14,7 +14,6 @@ namespace HandBrake.ApplicationServices.Functions
     using HandBrake.Interop.Model.Encoding;
 
     using OutputFormat = HandBrake.ApplicationServices.Model.Encoding.OutputFormat;
-    using VideoEncoder = HandBrake.ApplicationServices.Model.Encoding.VideoEncoder;
 
     /// <summary>
     /// A Utility Class to Convert a 

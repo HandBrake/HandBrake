@@ -554,7 +554,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
             // Video Settings
             AddEncodeElement(xmlWriter, "VideoAvgBitrate", "string", parsed.VideoBitrate.ToString());
-            AddEncodeElement(xmlWriter, "VideoEncoder", "string", EnumHelper<Enum>.GetDescription(parsed.VideoEncoder));
+            AddEncodeElement(xmlWriter, "VideoEncoder", "string", EnumHelper<VideoEncoder>.GetDisplayValue(parsed.VideoEncoder));
             AddEncodeElement(xmlWriter, "VideoFramerate", "string", parsed.Framerate.ToString());
             AddEncodeElement(xmlWriter, "VideFrameratePFR", "integer", parsed.FramerateMode == FramerateMode.PFR ? "1" : "0");
             AddEncodeElement(xmlWriter, "VideoGrayScale", "integer", parsed.Grayscale ? "1" : "0");

@@ -377,8 +377,8 @@ namespace Handbrake
             this.lbl_encodesPending.Size = new System.Drawing.Size(115, 17);
             this.lbl_encodesPending.Text = "0 encode(s) pending";
             this.lbl_encodesPending.ToolTipText = "- Displays the number of jobs remaining to process.\r\n- Displays the time for the " +
-                "current processing session. \r\n  (Note, this is reset every time you press encode" +
-                ", including after a pause)";
+    "current processing session. \r\n  (Note, this is reset every time you press encode" +
+    ", including after a pause)";
             // 
             // OpenFile
             // 

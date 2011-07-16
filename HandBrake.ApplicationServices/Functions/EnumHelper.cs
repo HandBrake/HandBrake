@@ -7,6 +7,7 @@ namespace HandBrake.ApplicationServices.Functions
 {
     using System;
     using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
     using System.Reflection;
 
     /// <summary>
@@ -33,6 +34,19 @@ namespace HandBrake.ApplicationServices.Functions
                   (DescriptionAttribute[])fieldInfo.GetCustomAttributes(
                   typeof(DescriptionAttribute), false);
             return (attributes.Length > 0) ? attributes[0].Description : value.ToString();
+        }
+
+        /// <summary>
+        /// Get the Display Value of the Enum Model
+        /// </summary>
+        /// <param name="value">An Enum with Display Attributes</param>
+        /// <returns>A string name</returns>
+        public static string GetDisplayValue(T value)
+        {
+            FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
+            DisplayAttribute[] attributes = (DisplayAttribute[])fieldInfo.GetCustomAttributes(typeof(DisplayAttribute), false);
+
+            return (attributes.Length > 0) ? attributes[0].Name : value.ToString();
         }
 
         /// <summary>
