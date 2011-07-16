@@ -9,6 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrakeWPF", "HandBrakeWP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrakeInterop", "HandBrake.Interop\HandBrakeInterop\HandBrakeInterop.csproj", "{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5CB7BC74-449C-4E95-98AB-E1E4387E514B}"
+	ProjectSection(SolutionItems) = preProject
+		build.xml = build.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
