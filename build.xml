@@ -12,7 +12,6 @@
   
   <!-- Setup -->
   <PropertyGroup>
-    <DestFolder>Deploy\</DestFolder>
     <Configuration>Release</Configuration>
   </PropertyGroup>
   
@@ -42,10 +41,10 @@
   
   <!-- Events -->
   <Target Name="NightlyPostBuildEvent">
-    <Exec Command="copy $(ProjectDir)Installer\MakeNightly.nsi $(ProjectDir)bin\x86\Release /Y" />
-    <Exec Command="copy $(ProjectDir)handbrakepineapple.ico $(ProjectDir)bin\x86\Release /Y" />
-    <Exec Command="xcopy $(ProjectDir)doc $(ProjectDir)bin\x86\Release\doc /I /Y" />
-    <Exec Command="makensis $(ProjectDir)bin\x86\Release\MakeNightly.nsi" />
+    <Exec Command="copy $(ProjectDir)Installer\MakeNightly.nsi $(ProjectDir)bin\$(Platform)\Release /Y" />
+    <Exec Command="copy $(ProjectDir)handbrakepineapple.ico $(ProjectDir)bin\$(Platform)\Release /Y" />
+    <Exec Command="xcopy $(ProjectDir)doc $(ProjectDir)bin\$(Platform)\Release\doc /I /Y" />
+    <Exec Command="makensis $(ProjectDir)bin\$(Platform)\Release\MakeNightly.nsi" />
   </Target>
 
 </Project>
