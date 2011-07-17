@@ -1,6 +1,51 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+﻿<!--
+  build.xml
+  This file is part of the HandBrake source code.
+  Homepage: <http://handbrake.fr>.
+  It may be used under the terms of the GNU General Public License
+  
+  HandBrake Build Scipt for usage with Jenkins.
+  Usage: msbuild build.xml /p:Platform=x86
+  Reuqires: HandBrakeCli.exe to be in the release folder.
+-->
+<Project DefaultTargets="NightlyBuild" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  
+  <!-- Setup -->
+  <PropertyGroup>
+    <DestFolder>Deploy\</DestFolder>
+    <Configuration>Release</Configuration>
+  </PropertyGroup>
+  
+  <!-- Build all the main cproj files.-->
+  <ItemGroup>
+    <ProjectsToBuild Include="HandBrake.Interop\HandBrakeInterop\*proj" Exclude="$(MSBuildProjectFile)"/>
+    <ProjectsToBuild Include="HandBrake.ApplicationServices\*proj" Exclude="$(MSBuildProjectFile)"/> 
+    <ProjectsToBuild Include="HandBrakeCS.*proj" Exclude="$(MSBuildProjectFile)"/>
+  </ItemGroup>
 
-  <!-- TODO -->
+  <!-- Dependencies -->
+  <PropertyGroup>
+    <NightlyDependsOn>Nightly;NightlyPostBuildEvent</NightlyDependsOn>
+  </PropertyGroup>
+  
+  <!-- Builds -->
+  <Target Name="NightlyBuild" DependsOnTargets="$(NightlyDependsOn)"/>
+
+  <!-- Build Components -->
+  <Target Name="Nightly">
+    <MSBuild Projects ="@(ProjectsToBuild)"
+             ContinueOnError ="false"
+             Properties="Configuration=$(Configuration)" >
+      <Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
+    </MSBuild>
+  </Target>
+  
+  <!-- Events -->
+  <Target Name="NightlyPostBuildEvent">
+    <Exec Command="copy $(ProjectDir)Installer\MakeNightly.nsi $(ProjectDir)bin\x86\Release /Y" />
+    <Exec Command="copy $(ProjectDir)handbrakepineapple.ico $(ProjectDir)bin\x86\Release /Y" />
+    <Exec Command="xcopy $(ProjectDir)doc $(ProjectDir)bin\x86\Release\doc /I /Y" />
+    <Exec Command="makensis $(ProjectDir)bin\x86\Release\MakeNightly.nsi" />
+  </Target>
+
 </Project>
