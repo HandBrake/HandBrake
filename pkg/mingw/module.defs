@@ -1,4 +1,4 @@
-PKG.cli.zip = $(PKG.out/)$(HB.name)-$(HB.version)-Win_CLI.zip
+PKG.cli.zip = $(PKG.out/)$(HB.name)-$(HB.version)-$(BUILD.machine)-Win_CLI.zip
 
 PKG.mingw.lib = $(SRC/)libraries
 
