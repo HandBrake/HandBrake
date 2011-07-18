@@ -175,20 +175,10 @@ namespace Handbrake
             // Load the user's default settings or Normal Preset
             if (Settings.Default.defaultPreset != string.Empty && presetHandler.GetPreset(Properties.Settings.Default.defaultPreset) != null)
             {
-                string query = presetHandler.GetPreset(Settings.Default.defaultPreset).Query;
-                if (query != null)
-                {
-                    x264Panel.Reset2Defaults();
-
-                    EncodeTask presetQuery = QueryParserUtility.Parse(query);
-                    PresetLoader.LoadPreset(this, presetQuery, Settings.Default.defaultPreset);
-
-                    x264Panel.StandardizeOptString();
-                    x264Panel.SetCurrentSettingsInPanel();
-                }
+                this.loadPreset(Settings.Default.defaultPreset);
             }
             else
-                loadNormalPreset();
+                loadPreset("Normal");
 
             // Register with Growl (if not using Growl for the encoding completion action, this wont hurt anything)
             GrowlCommunicator.Register();
@@ -652,7 +642,7 @@ namespace Handbrake
             {
                 Settings.Default.defaultPreset = treeView_presets.SelectedNode.Text;
                 Settings.Default.Save();
-                MessageBox.Show("New default preset set.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("New default preset set: " + treeView_presets.SelectedNode.Text, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
                 MessageBox.Show("Please select a preset first.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -794,14 +784,17 @@ namespace Handbrake
         /// <summary>
         /// Load the Normal Preset
         /// </summary>
-        private void loadNormalPreset()
+        /// <param name="presetName">
+        /// The preset name.
+        /// </param>
+        private void loadPreset(string presetName)
         {
             foreach (TreeNode treenode in treeView_presets.Nodes)
             {
                 foreach (TreeNode node in treenode.Nodes)
                 {
-                    if (node.Text.Equals("Normal"))
-                        treeView_presets.SelectedNode = treeView_presets.Nodes[treenode.Index].Nodes[0];
+                    if (node.Text.Equals(presetName))
+                        treeView_presets.SelectedNode = node;
                 }
             }
         }
