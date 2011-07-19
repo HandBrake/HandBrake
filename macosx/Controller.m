@@ -4520,9 +4520,6 @@ bool one_burned = FALSE;
             [fVidEncoderPopUp selectItemAtIndex:0];
             [self videoEncoderPopUpChanged:nil];
 
-            /* changing the format may mean that we can / can't offer mono or 6ch, */
-            /* so call audioTrackPopUpChanged for both audio tracks to update the mixdown popups */
-
             /* We call the method to properly enable/disable turbo 2 pass */
             [self twoPassCheckboxChanged: sender];
             /* We call method method to change UI to reflect whether a preset is used or not*/

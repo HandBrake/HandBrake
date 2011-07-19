@@ -280,6 +280,9 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
     while (nil != (dict = [enumerator nextObject]))
     {
+        // copy the dictionary since we may need to alter it
+        dict = [NSMutableDictionary dictionaryWithDictionary:dict];
+
         if ([self countOfAudioArray] < maximumNumberOfAllowedAudioTracks)
         {
             BOOL fallenBack = NO;
@@ -288,19 +291,20 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
             [self insertObject: newAudio inAudioArrayAtIndex: [self countOfAudioArray]];
             [newAudio setVideoContainerTag: [self videoContainerTag]];
             [newAudio setTrackFromIndex: trackIndex];
+
             key = [dict objectForKey: @"AudioEncoder"];
             if (0 == aType &&
                 [[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] &&
                 [key isEqualToString: @"AAC (faac)"])
             {
-                key = @"AAC (CoreAudio)";
+                [dict setObject: @"AAC (CoreAudio)" forKey: @"AudioEncoder"];
             }
             if ([[NSUserDefaults standardUserDefaults] boolForKey: @"AC3PassthruDefaultsToAC3"] &&
                 [key isEqualToString: @"AC3 Passthru"])
             {
                 if (![newAudio setCodecFromName: key])
                 {
-                    key = @"AC3";
+                    [dict setObject: @"AC3" forKey: @"AudioEncoder"];
                     fallenBack = YES;
                 }
             }
@@ -316,9 +320,18 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
                 [dict setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackGainSlider"];
             }
 
+            // map legacy passthru mixdowns
+            key = [dict objectForKey: @"AudioMixdown"];
+            if ([key isEqualToString: @"AC3 Passthru"] ||
+                [key isEqualToString: @"DTS Passthru"] ||
+                [key isEqualToString: @"DTS-HD Passthru"])
+            {
+                [dict setObject: @"None" forKey: @"AudioMixdown"];
+            }
+
             // If our preset wants us to support a codec that the track does not support, instead
             // of changing the codec we remove the audio instead.
-            if ([newAudio setCodecFromName: key])
+            if ([newAudio setCodecFromName: [dict objectForKey: @"AudioEncoder"]])
             {
                 [newAudio setMixdownFromName: [dict objectForKey: @"AudioMixdown"]];
                 [newAudio setSampleRateFromName: [dict objectForKey: @"AudioSamplerate"]];

@@ -2058,6 +2058,7 @@ value_map_t mix_xlat[] =
 	{"AC3 Passthru", "none"},
 	{"DTS Passthru", "none"},
 	{"DTS-HD Passthru", "none"},
+	{"None", "none"},
 	{NULL, NULL}
 };
 

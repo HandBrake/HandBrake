@@ -151,16 +151,8 @@ static NSMutableArray *masterBitRateArray = nil;
 
         masterMixdownArray = [[NSMutableArray alloc] init]; // knowingly leaked
         [masterMixdownArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                        NSLocalizedString(@"AC3 Passthru", @"AC3 Passthru"), keyAudioMixdownName,
-                                        [NSNumber numberWithInt: HB_ACODEC_AC3_PASS], keyAudioMixdown,
-                                        nil]];
-        [masterMixdownArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                        NSLocalizedString(@"DTS Passthru", @"DTS Passthru"), keyAudioMixdownName,
-                                        [NSNumber numberWithInt: HB_ACODEC_DCA_PASS], keyAudioMixdown,
-                                        nil]];
-        [masterMixdownArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                        NSLocalizedString(@"DTS-HD Passthru", @"DTS-HD Passthru"), keyAudioMixdownName,
-                                        [NSNumber numberWithInt: HB_ACODEC_DCA_HD_PASS], keyAudioMixdown,
+                                        NSLocalizedString(@"None", @"None"), keyAudioMixdownName,
+                                        [NSNumber numberWithInt: 0], keyAudioMixdown,
                                         nil]];
         for (i = 0; i < hb_audio_mixdowns_count; i++)
         {
@@ -290,13 +282,13 @@ static NSMutableArray *masterBitRateArray = nil;
 
         // Basically with the way the mixdowns are stored, the assumption from the libhb point of view
         // currently is that all mixdowns from the best down to mono are supported.
-        if (currentMixdown <= theBestMixdown)
+        if (currentMixdown && currentMixdown <= theBestMixdown)
         {
             shouldAdd = YES;
         }
-        else if (0 == theBestMixdown && codecCodec == currentMixdown)
+        else if (0 == currentMixdown && (codecCodec & HB_ACODEC_PASS_FLAG))
         {
-            // 0 means passthrough, add the current mixdown if it matches the passthrough codec
+            // "None" mixdown (passthru)
             shouldAdd = YES;
         }
         else
@@ -308,12 +300,6 @@ static NSMutableArray *masterBitRateArray = nil;
         {
             [permittedMixdowns addObject: dict];
         }
-    }
-
-    if (0 == theDefaultMixdown)
-    {
-        // a mixdown of 0 means passthrough
-        theDefaultMixdown = codecCodec;
     }
 
     if (![self enabled])
@@ -638,8 +624,9 @@ static NSMutableArray *masterBitRateArray = nil;
     if (retval)
     {
         int myMixdown = [[[self mixdown] objectForKey: keyAudioMixdown] intValue];
-        if (myMixdown & HB_ACODEC_PASS_FLAG)
+        if (0 == myMixdown)
         {
+            // "None" mixdown (passthru)
             retval = NO;
         }
     }
