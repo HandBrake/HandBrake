@@ -302,6 +302,7 @@ static int decdcaBSInfo( hb_work_object_t *w, const hb_buffer_t *b,
     if ( i >= b->size - 7 )
     {
         /* didn't find DCA sync */
+        dca_free( state );
         return 0;
     }
 
@@ -362,5 +363,6 @@ static int decdcaBSInfo( hb_work_object_t *w, const hb_buffer_t *b,
 
     info->channel_map = &hb_qt_chan_map;
 
+    dca_free( state );
     return 1;
 }

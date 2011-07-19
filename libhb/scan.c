@@ -188,6 +188,16 @@ static void ScanFunc( void * _data )
         {
             /* TODO: free things */
             hb_list_rem( data->list_title, title );
+            for( j = 0; j < hb_list_count( title->list_audio ); j++)
+            {
+                audio = hb_list_item( title->list_audio, j );
+                if ( audio->priv.scan_cache )
+                {
+                    hb_fifo_flush( audio->priv.scan_cache );
+                    hb_fifo_close( &audio->priv.scan_cache );
+                }
+            }
+            hb_title_close( &title );
             continue;
         }
 
@@ -195,6 +205,11 @@ static void ScanFunc( void * _data )
         for( j = 0; j < hb_list_count( title->list_audio ); )
         {
             audio = hb_list_item( title->list_audio, j );
+            if ( audio->priv.scan_cache )
+            {
+                hb_fifo_flush( audio->priv.scan_cache );
+                hb_fifo_close( &audio->priv.scan_cache );
+            }
             if( !audio->config.in.bitrate )
             {
                 hb_log( "scan: removing audio 0x%x because no bitrate found",
@@ -202,11 +217,6 @@ static void ScanFunc( void * _data )
                 hb_list_rem( title->list_audio, audio );
                 free( audio );
                 continue;
-            }
-            if ( audio->priv.scan_cache )
-            {
-                hb_fifo_flush( audio->priv.scan_cache );
-                hb_fifo_close( &audio->priv.scan_cache );
             }
             j++;
         }
@@ -449,7 +459,6 @@ static void most_common_info( info_list_t *info_list, hb_work_info_t *info )
             biggest = i;
     }
     *info = info_list[biggest].info;
-    free( info_list );
 }
 
 /***********************************************************************
@@ -497,6 +506,8 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 
         if ( *data->die )
         {
+            free( info_list );
+            free( crops );
             return 0;
         }
         if (data->bd)
@@ -639,6 +650,8 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         if( ! vid_buf )
         {
             hb_log( "scan: could not get a decoded picture" );
+            vid_decoder->close( vid_decoder );
+            free( vid_decoder );
             continue;
         }
 
@@ -659,12 +672,13 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             free( vid_decoder );
             continue;
         }
-        vid_decoder->close( vid_decoder );
-        free( vid_decoder );
 
         remember_info( info_list, &vid_info );
 
-        title->video_codec_name = strdup( vid_info.name );
+        if ( title->video_codec_name == NULL )
+        {
+            title->video_codec_name = strdup( vid_info.name );
+        }
         title->width = vid_info.width;
         title->height = vid_info.height;
         title->rate = vid_info.rate;
@@ -813,6 +827,9 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         ++npreviews;
 
 skip_preview:
+        vid_decoder->close( vid_decoder );
+        free( vid_decoder );
+
         /* Make sure we found audio rates and bitrates */
         for( j = 0; j < hb_list_count( title->list_audio ); j++ )
         {
@@ -886,7 +903,6 @@ skip_preview:
             title->crop[2] = EVEN( crops->l[i] );
             title->crop[3] = EVEN( crops->r[i] );
         }
-        free( crops );
 
         hb_log( "scan: %d previews, %dx%d, %.3f fps, autocrop = %d/%d/%d/%d, "
                 "aspect %s, PAR %d:%d",
@@ -907,6 +923,8 @@ skip_preview:
             title->detected_interlacing = 0;
         }
     }
+    free( crops );
+    free( info_list );
 
     while( ( buf_es = hb_list_item( list_es, 0 ) ) )
     {
@@ -996,6 +1014,7 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
     if ( !info.bitrate )
     {
         /* didn't find any info */
+        free( w );
         return;
     }
     hb_fifo_flush( audio->priv.scan_cache );

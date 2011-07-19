@@ -57,6 +57,7 @@ hb_batch_t * hb_batch_init( char * path )
         hb_list_add( d->list_file, filename );
     }
 
+    closedir( dir );
     if ( hb_list_count( d->list_file ) == 0 )
     {
         hb_list_close( &d->list_file );

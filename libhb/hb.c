@@ -1402,6 +1402,7 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
             hb_list_add( title_copy->list_attachment, hb_attachment_copy(attachment) );
         }
     }
+    title_copy->video_codec_name = strdup( title->video_codec_name );
 
     /*
      * The following code is confusing, there are two ways in which
@@ -1746,6 +1747,8 @@ void hb_close( hb_handle_t ** _h )
     hb_list_close( &h->jobs );
     hb_lock_close( &h->state_lock );
     hb_lock_close( &h->pause_lock );
+
+    free( h->interjob );
 
     free( h );
     *_h = NULL;

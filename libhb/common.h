@@ -624,7 +624,7 @@ struct hb_title_s
     int         video_codec;            /* worker object id of video codec */
     uint32_t    video_stream_type;      /* stream type from source stream */
     int         video_codec_param;      /* codec specific config */
-    const char  *video_codec_name;
+    char        *video_codec_name;
     int         video_bitrate;
     const char  *container_name;
     int         data_rate;

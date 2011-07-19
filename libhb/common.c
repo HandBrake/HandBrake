@@ -1131,6 +1131,11 @@ void hb_title_close( hb_title_t ** _t )
         free( t->metadata );
     }
 
+    if ( t->video_codec_name )
+    {
+        free( t->video_codec_name );
+    }
+
     free( t );
     *_t = NULL;
 }

@@ -68,6 +68,7 @@ static void flushDelayQueue( hb_work_private_t *pv );
 static int  decavcodecInit( hb_work_object_t *, hb_job_t * );
 static int  decavcodecWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
 static void decavcodecClose( hb_work_object_t * );
+static void decavcodeciClose( hb_work_object_t * );
 static int decavcodecInfo( hb_work_object_t *, hb_work_info_t * );
 static int decavcodecBSInfo( hb_work_object_t *, const hb_buffer_t *, hb_work_info_t * );
 
@@ -246,7 +247,7 @@ static int decavcodecInit( hb_work_object_t * w, hb_job_t * job )
  ***********************************************************************
  *
  **********************************************************************/
-static void closePrivData( hb_work_private_t ** ppv )
+static void closePrivData( hb_work_private_t ** ppv, int free_av_context )
 {
     hb_work_private_t * pv = *ppv;
 
@@ -271,6 +272,10 @@ static void closePrivData( hb_work_private_t ** ppv )
         if ( pv->context && pv->context->codec )
         {
             hb_avcodec_close( pv->context );
+        }
+        if ( free_av_context )
+        {
+            av_free( pv->context );
         }
         if ( pv->list )
         {
@@ -302,10 +307,30 @@ static void decavcodecClose( hb_work_object_t * w )
             while ( ( ff_pv = hb_list_item( pv->list, 0 ) ) != NULL )
             {
                 hb_list_rem( pv->ff_audio_list, ff_pv );
-                closePrivData( &ff_pv );
+                closePrivData( &ff_pv, 0 );
             }
         }
-        closePrivData( &pv );
+        closePrivData( &pv, 1 );
+        w->private_data = NULL;
+    }
+}
+
+static void decavcodeciClose( hb_work_object_t * w )
+{
+    hb_work_private_t * pv = w->private_data;
+
+    if ( pv )
+    {
+        if ( pv->ff_audio_list != NULL )
+        {
+            hb_work_private_t * ff_pv;
+            while ( ( ff_pv = hb_list_item( pv->list, 0 ) ) != NULL )
+            {
+                hb_list_rem( pv->ff_audio_list, ff_pv );
+                closePrivData( &ff_pv, 0 );
+            }
+        }
+        closePrivData( &pv, 0 );
         w->private_data = NULL;
     }
 }
@@ -560,6 +585,7 @@ static int decavcodecBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     if ( parser != NULL )
         av_parser_close( parser );
     hb_avcodec_close( context );
+    av_free( context );
     return ret;
 }
 
@@ -1662,7 +1688,7 @@ hb_work_object_t hb_decavcodecvi =
     "Video decoder (ffmpeg streams)",
     decavcodecviInit,
     decavcodecviWork,
-    decavcodecClose,
+    decavcodeciClose,
     decavcodecviInfo,
     decavcodecvBSInfo
 };
@@ -1673,7 +1699,7 @@ hb_work_object_t hb_decavcodecai =
     "Audio decoder (ffmpeg streams)",
     decavcodecviInit,
     decavcodecaiWork,
-    decavcodecClose,
+    decavcodeciClose,
     decavcodecInfo,
     decavcodecBSInfo
 };
