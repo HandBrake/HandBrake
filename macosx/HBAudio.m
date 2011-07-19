@@ -121,7 +121,7 @@ static NSMutableArray *masterBitRateArray = nil;
                                       [NSNumber numberWithInt: HB_ACODEC_AC3], keyAudioMustMatchTrack,
                                       nil]];
         [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                      NSLocalizedString(@"AC3", @"AC3"), keyAudioCodecName,
+                                      NSLocalizedString(@"AC3 (ffmpeg)", @"AC3 (ffmpeg)"), keyAudioCodecName,
                                       [NSNumber numberWithInt: HB_ACODEC_AC3], keyAudioCodec,
                                       [NSNumber numberWithBool: YES], keyAudioMP4,
                                       [NSNumber numberWithBool: YES], keyAudioMKV,

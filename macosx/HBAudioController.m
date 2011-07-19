@@ -304,10 +304,15 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
             {
                 if (![newAudio setCodecFromName: key])
                 {
-                    [dict setObject: @"AC3" forKey: @"AudioEncoder"];
+                    [dict setObject: @"AC3 (ffmpeg)" forKey: @"AudioEncoder"];
                     fallenBack = YES;
                 }
             }
+            if ([key isEqualToString: @"AC3"])
+            {
+                [dict setObject: @"AC3 (ffmpeg)" forKey: @"AudioEncoder"];
+            }
+
             // If our preset does not contain a drc or gain value set it to a default of 0.0
             if (![dict objectForKey: @"AudioTrackDRCSlider"])
 
