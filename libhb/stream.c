@@ -1113,7 +1113,7 @@ static int isIframe( hb_stream_t *stream, const uint8_t *buf, int adapt_len )
  * scan the next MB of 'stream' to find the next start packet for
  * the Packetized Elementary Stream associated with TS PID 'pid'.
  */
-static const uint8_t *hb_ts_stream_getPEStype(hb_stream_t *stream, uint32_t pid)
+static const uint8_t *hb_ts_stream_getPEStype(hb_stream_t *stream, uint32_t pid, int *out_adapt_len)
 {
     int npack = 300000; // max packets to read
 
@@ -1153,8 +1153,8 @@ static const uint8_t *hb_ts_stream_getPEStype(hb_stream_t *stream, uint32_t pid)
             continue;
         }
 
+        int adapt_len = 0;
         /* skip over the TS hdr to return a pointer to the PES hdr */
-        int udata = 4;
         switch (buf[3] & 0x30)
         {
             case 0x00: // illegal
@@ -1162,18 +1162,19 @@ static const uint8_t *hb_ts_stream_getPEStype(hb_stream_t *stream, uint32_t pid)
                 continue;
 
             case 0x30: // adaptation
-                if (buf[4] > 182)
+                adapt_len = buf[4] + 1;
+                if (adapt_len > 184)
                 {
                     hb_log("hb_ts_stream_getPEStype: invalid adaptation field length %d for PID 0x%x", buf[4], pid);
                     continue;
                 }
-                udata += buf[4] + 1;
                 break;
         }
         /* PES hdr has to begin with an mpeg start code */
-        if (buf[udata+0] == 0x00 && buf[udata+1] == 0x00 && buf[udata+2] == 0x01)
+        if (buf[adapt_len+4] == 0x00 && buf[adapt_len+5] == 0x00 && buf[adapt_len+6] == 0x01)
         {
-            return &buf[udata];
+            *out_adapt_len = adapt_len;
+            return buf;
         }
     }
 
@@ -1260,27 +1261,29 @@ static struct pts_pos hb_sample_pts(hb_stream_t *stream, uint64_t fpos)
     if ( stream->hb_stream_type == transport )
     {
         const uint8_t *buf;
+        int adapt_len;
         fseeko( stream->file_handle, fpos, SEEK_SET );
         align_to_next_packet( stream );
         int pid = stream->ts[index_of_video(stream)].pid;
-        buf = hb_ts_stream_getPEStype( stream, pid );
+        buf = hb_ts_stream_getPEStype( stream, pid, &adapt_len );
         if ( buf == NULL )
         {
             hb_log("hb_sample_pts: couldn't find video packet near %"PRIu64, fpos);
             return pp;
         }
-        if ( ( buf[7] >> 7 ) != 1 )
+        const uint8_t *pes = buf + 4 + adapt_len;
+        if ( ( pes[7] >> 7 ) != 1 )
         {
             hb_log("hb_sample_pts: no PTS in video packet near %"PRIu64, fpos);
             return pp;
         }
-        pp.pts = ( ( (uint64_t)buf[9] >> 1 ) & 7 << 30 ) |
-                 ( (uint64_t)buf[10] << 22 ) |
-                 ( ( (uint64_t)buf[11] >> 1 ) << 15 ) |
-                 ( (uint64_t)buf[12] << 7 ) |
-                 ( (uint64_t)buf[13] >> 1 );
+        pp.pts = ( ( (uint64_t)pes[9] >> 1 ) & 7 << 30 ) |
+                 ( (uint64_t)pes[10] << 22 ) |
+                 ( ( (uint64_t)pes[11] >> 1 ) << 15 ) |
+                 ( (uint64_t)pes[12] << 7 ) |
+                 ( (uint64_t)pes[13] >> 1 );
 
-        if ( isIframe( stream, buf, -4 ) )
+        if ( isIframe( stream, buf, adapt_len ) )
         {
             if (  stream->ts_IDRs < 255 )
             {
@@ -1967,21 +1970,24 @@ static void hb_ts_stream_set_audio_list(
         fseeko(stream->file_handle, 0, SEEK_SET);
         align_to_next_packet(stream);
 
-        buf = hb_ts_stream_getPEStype(stream, stream->ts[i].pid);
+        int adapt_len;
+        buf = hb_ts_stream_getPEStype(stream, stream->ts[i].pid, &adapt_len);
+
+        const uint8_t *pes = buf + 4 + adapt_len;
 
         /* check that we found a PES header */
-        if (buf && buf[0] == 0x00 && buf[1] == 0x00 && buf[2] == 0x01)
+        if (buf && pes[0] == 0x00 && pes[1] == 0x00 && pes[2] == 0x01)
         {
             // 0xbd ("private stream 1") is the normal container for non-ISO
             // media - AC3/DCA/PCM/etc.
-            if ( buf[3] == 0xbd )
+            if ( pes[3] == 0xbd )
             {
                 // XXX assume unknown stream types are AC-3 (if they're not
                 // audio we'll find that out during the scan but if they're
                 // some other type of audio we'll end up ignoring them).
                 add_audio(i, list_audio, stream, 0, HB_ACODEC_AC3, 0 );
             }
-            else if ((buf[3] & 0xe0) == 0xc0)
+            else if ((pes[3] & 0xe0) == 0xc0)
             {
                 // XXX assume unknown stream types are MPEG audio
                 // 0xC0 - 0xCF are the normal containers for ISO-standard
@@ -1993,7 +1999,7 @@ static void hb_ts_stream_set_audio_list(
             {
                 hb_log("transport stream pid 0x%x (type 0x%x, substream 0x%x) "
                         "isn't audio", stream->ts[i].pid,
-                        stream->ts[i].stream_type, buf[3]);
+                        stream->ts[i].stream_type, pes[3]);
             }
         }
         else
