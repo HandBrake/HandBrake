@@ -91,5 +91,24 @@ namespace HandBrake.ApplicationServices.Services
 
             return value;
         }
+
+        /// <summary>
+        /// Get an StringCollection type user setting
+        /// </summary>
+        /// <param name="name">
+        /// The setting name
+        /// </param>
+        /// <returns>
+        /// The settings value
+        /// </returns>
+        public System.Collections.Specialized.StringCollection GetUserSettingStringCollection(string name)
+        {
+            System.Collections.Specialized.StringCollection value;
+
+            value = (System.Collections.Specialized.StringCollection) Properties.Settings.Default[name];
+
+            return value;
+        }
+
     }
 }
