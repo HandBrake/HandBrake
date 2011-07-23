@@ -120,6 +120,23 @@
   <metadata name="ToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>132, 18</value>
   </metadata>
+  <metadata name="ToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>132, 18</value>
+  </metadata>
+  <data name="cb_subtitleMode.ToolTip" xml:space="preserve">
+    <value>"All" - all languages available in original order; 
+"Selected" - The Preferred and the extra selected languages; 
+"Only Preferred" - Only the Preferred language; 
+"First" - The first available;
+"None" - No language selected;</value>
+  </data>
+  <data name="cb_audioMode.ToolTip" xml:space="preserve">
+    <value>"All" - all languages available in original order; 
+"Selected" - The Preferred and the extra selected languages; 
+"Only Preferred" - Only the Preferred language; 
+"First" - The first available;
+"None" - No language selected;</value>
+  </data>
   <data name="cb_mp4FileMode.ToolTip" xml:space="preserve">
     <value>The default file extension for MP4 Files.
 Automatic   - This will use M4v when AC3 Audio, SRT Subtitles or Chapters are present, otherwise MP4.
@@ -142,6 +159,9 @@ You can insert this anywhere in your path. e.g.  c:\movies\{source_folder_name}
 It will substitute the name of the folder where the source is located.
 Note, this can't be used with the {source_path} option!</value>
   </data>
+  <metadata name="ToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>132, 18</value>
+  </metadata>
   <data name="check_showCliForInGUIEncode.ToolTip" xml:space="preserve">
     <value>Shows the CLI window when encoding.
 You may wish to enable this as you'll be able to cleanly exit the CLI using ctrl-c
