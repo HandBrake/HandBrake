@@ -6,6 +6,7 @@
 namespace Handbrake.Controls
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
@@ -213,7 +214,7 @@ namespace Handbrake.Controls
                 }
             }
 
-            if (this.AudioTracks.Count > 0)
+            if (selectedTitle.AudioTracks.Count > 0)
             {
                 this.AutomaticTrackSelection();
             }
@@ -553,69 +554,115 @@ namespace Handbrake.Controls
         /// </summary>
         private void AutomaticTrackSelection()
         {
+            // Sanity check that we have Audio Tracks and if not, clear the track list.
             if (drp_audioTrack.SelectedItem != null && drp_audioTrack.SelectedItem.ToString() == AudioHelper.NoneFound.Description)
             {
                 this.AudioTracks.Clear();
                 return;
             }
 
-            // Handle Native Language and "Dub Foreign language audio" and "Use Foreign language audio and Subtitles" Options
+            // Remove all old Audiotracks before adding new ones. 
+            this.AudioTracks.Clear();
+
+            // Array with the Index numbers of the prefered and additional languages. 
+            // This allows to have for each language the order in which they appear in the DVD list.
+            Dictionary<String, ArrayList> languageIndex = new Dictionary<String, ArrayList>();
+
+            // This is used to keep the Prefered Language in the front and the other languages in order.
+            ArrayList languageOrder = new ArrayList();
+
+            // New DUB Settings
+            int mode = Properties.Settings.Default.DubModeAudio;
+
             if (Properties.Settings.Default.NativeLanguage == "Any")
+                mode = 2;
+
+            // Native Language is not 'Any', so initialising the Language Dictionary
+            if (mode >= 3)
             {
-                drp_audioTrack.SelectedIndex = 0;
-                foreach (AudioTrack track in this.audioTracks)
+                languageIndex.Add(Properties.Settings.Default.NativeLanguage, new ArrayList());
+                languageOrder.Add(Properties.Settings.Default.NativeLanguage);
+
+                foreach (string item in Properties.Settings.Default.SelectedLanguages)
                 {
-                    if (this.drp_audioTrack.SelectedItem != null)
+                    if (!languageIndex.ContainsKey(item))
                     {
-                        track.ScannedTrack = this.drp_audioTrack.SelectedItem as Audio;
+                        languageIndex.Add(item, new ArrayList());
+                        languageOrder.Add(item);
                     }
                 }
-            }
-            else
-            {
-                int mode = Properties.Settings.Default.DubMode;
-                switch (mode)
+
+                bool elementFound = false;
+                int i = 0;
+                foreach (object item in drp_audioTrack.Items)
                 {
-                    case 1:
-                    case 3:
-                        // Dub Foreign Language Audio 
-                        // Select the prefered language audio, or the first track if it doesn't exist.
-                        int i = 0;
-                        foreach (object item in drp_audioTrack.Items)
+                    foreach (KeyValuePair<String, ArrayList> kvp in languageIndex)
+                    {
+                        if (item.ToString().Contains(kvp.Key))
                         {
-                            if (item.ToString().Contains(Properties.Settings.Default.NativeLanguage))
+                            // Only the first Element if the "Only One Audio"-option is chosen.
+                            if (!Properties.Settings.Default.addOnlyOneAudioPerLanguage || kvp.Value.Count == 0)
                             {
-                                drp_audioTrack.SelectedIndex = i;
-                                break;
+                                kvp.Value.Add(i);
                             }
 
-                            i++;
+                            elementFound = true;
                         }
+                    }
 
-                        if (drp_audioTrack.SelectedItem != null)
-                            foreach (AudioTrack track in this.audioTracks)
-                                track.ScannedTrack =
-                                    drp_audioTrack.SelectedItem as Audio;
-                        else
-                        {
-                            drp_audioTrack.SelectedIndex = 0;
-                            if (drp_audioTrack.SelectedItem != null)
-                                foreach (AudioTrack track in this.audioTracks)
-                                    track.ScannedTrack = drp_audioTrack.SelectedItem as Audio;
-                        }
-
-                        break;
-                    case 2:
-                    default:
-                        // Select the first track which is hopefully the default and foreign track.
-                        drp_audioTrack.SelectedIndex = 0;
-
-                        if (drp_audioTrack.SelectedItem != null)
-                            foreach (AudioTrack track in this.audioTracks)
-                                track.ScannedTrack = drp_audioTrack.SelectedItem as Audio;
-                        break;
+                    i++;
                 }
+
+                // If there are no selected languages found, the first available will be taken.
+                if (!elementFound)
+                    mode = 2;
             }
+            
+            switch (mode)
+            {
+                case 1: // Adding all audio tracks
+                    this.mnu_AddAll_Click(this, EventArgs.Empty);
+                    break;
+                case 2: // Adding only the first Audio Track
+                    drp_audioTrack.SelectedIndex = 0;
+                    if (drp_audioTrack.SelectedItem != null)
+                        this.AddAudioTrack_Click(this, EventArgs.Empty);
+                    break;
+                case 3:
+                    foreach (string item in languageOrder)
+                    {
+                        if (languageIndex[item].Count > 0)
+                        {
+                            foreach (int i in languageIndex[item])
+                            {
+                                drp_audioTrack.SelectedIndex = i;
+                                if (drp_audioTrack.SelectedItem != null)
+                                {
+                                    this.AddAudioTrack_Click(this, EventArgs.Empty);
+                                    audioList.ClearSelection();
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 4:
+                    if (languageIndex[(string)languageOrder[0]].Count > 0)
+                    {
+                        foreach (int i in languageIndex[(string)languageOrder[0]])
+                        {
+                            drp_audioTrack.SelectedIndex = i;
+                            if (drp_audioTrack.SelectedItem != null)
+                            {
+                                this.AddAudioTrack_Click(this, EventArgs.Empty);
+                                audioList.ClearSelection();
+                            }
+                        }
+                    }
+                    break;
+            }
+
+            // Revert the selection back tio the first item.
+            drp_audioTrack.SelectedIndex = 0;
         }
 
         /// <summary>

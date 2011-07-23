@@ -35,8 +35,24 @@ namespace Handbrake
             mainWindow = mw;
 
             IDictionary<string, string> langList = LanguageUtilities.MapLanguages();
+
+            foreach (string selectedItem in Properties.Settings.Default.SelectedLanguages)
+            {
+                // removing wrong keys when a new Language list comes out.
+                if(langList.ContainsKey(selectedItem))
+                    listBox_selectedLanguages.Items.Add(selectedItem);
+            }
+
             foreach (string item in langList.Keys)
+            {
                 drop_preferredLang.Items.Add(item);
+
+                // In the available languages should be no "Any" and no selected language.
+                if ((item != "Any") && (!Properties.Settings.Default.SelectedLanguages.Contains(item)))
+                {
+                        listBox_availableLanguages.Items.Add(item);
+                }
+            }
 
             // #############################
             // General
@@ -119,19 +135,82 @@ namespace Handbrake
 
             drop_preferredLang.SelectedItem = Properties.Settings.Default.NativeLanguage;
 
-            switch (Settings.Default.DubMode)
+            if (Settings.Default.DubMode != 255)
             {
+                switch (Settings.Default.DubMode)
+                {
+                    case 0:
+                        Settings.Default.DubModeAudio = 2;
+                        Settings.Default.DubModeSubtitle = 0;
+                        Settings.Default.DubMode = 255;
+                        break;
+                    case 1:
+                        Settings.Default.DubModeAudio = 4;
+                        Settings.Default.DubModeSubtitle = 0;
+                        Settings.Default.DubMode = 255;
+                        break;
+                    case 2:
+                        Settings.Default.DubModeAudio = 2;
+                        Settings.Default.DubModeSubtitle = 4;
+                        Settings.Default.DubMode = 255;
+                        break;
+                    case 3:
+                        Settings.Default.DubModeAudio = 4;
+                        Settings.Default.DubModeSubtitle = 4;
+                        Settings.Default.DubMode = 255;
+                        break;
+                    default:
+                        Settings.Default.DubMode = 255;
+                        break;
+                }
+            }
+
+            switch (Settings.Default.DubModeAudio)
+            {
+                case 0:
+                    radio_Audio_None.Checked = true;
+                    break;
                 case 1:
-                    radio_dub.Checked = true;
+                    radio_Audio_All.Checked = true;
                     break;
                 case 2:
-                    radio_foreignAndSubs.Checked = true;
+                    radio_Audio_First.Checked = true;
                     break;
                 case 3:
-                    radio_preferredAudioAndSubs.Checked = true;
+                    radio_Audio_Selected.Checked = true;
+                    break;
+                case 4:
+                    radio_Audio_PrefOnly.Checked = true;
+                    break;
+                default:
+                    radio_Audio_None.Checked = true;
                     break;
             }
 
+            switch (Settings.Default.DubModeSubtitle)
+            {
+                case 0:
+                    radio_Subtitle_None.Checked = true;
+                    break;
+                case 1:
+                    radio_Subtitle_All.Checked = true;
+                    break;
+                case 2:
+                    radio_Subtitle_First.Checked = true;
+                    break;
+                case 3:
+                    radio_Subtitle_Selected.Checked = true;
+                    break;
+                case 4:
+                    radio_Subtitle_PrefOnly.Checked = true;
+                    break;
+                default:
+                    radio_Subtitle_None.Checked = true;
+                    break;
+            }
+
+            check_AddOnlyOneAudioPerLanguage.Checked = Properties.Settings.Default.addOnlyOneAudioPerLanguage;
+            
             check_AddCCTracks.Checked = Properties.Settings.Default.useClosedCaption;
 
             // #############################
@@ -321,7 +400,6 @@ namespace Handbrake
 
         private void cb_mp4FileMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-
             Properties.Settings.Default.useM4v = cb_mp4FileMode.SelectedIndex;
         }
 
@@ -358,24 +436,214 @@ namespace Handbrake
         private void drop_preferredLang_SelectedIndexChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.NativeLanguage = drop_preferredLang.SelectedItem.ToString();
+
+            if (Properties.Settings.Default.NativeLanguage == "Any")
+            {
+                this.groupBox1.Enabled = false;
+                this.groupBox2.Enabled = false;
+                this.groupBox3.Visible = true;
+            }
+            else
+            {   
+                this.groupBox1.Enabled = true;
+                this.groupBox2.Enabled = true;
+                this.groupBox3.Visible = false;
+            }
         }
 
-        private void radio_dub_CheckedChanged(object sender, EventArgs e)
+        private void button_removeLanguage_Click(object sender, EventArgs e)
         {
-            if (radio_dub.Checked)
-                Properties.Settings.Default.DubMode = 1;
+            if (listBox_selectedLanguages.SelectedItems.Count > 0)
+            {
+                String[] movedItems = new String[listBox_selectedLanguages.SelectedItems.Count];
+
+                listBox_selectedLanguages.SelectedItems.CopyTo(movedItems, 0);
+
+                listBox_availableLanguages.Items.AddRange(movedItems);
+
+                listBox_selectedLanguages.SelectedItems.Clear();
+                foreach (string item in movedItems)
+                {
+                    listBox_selectedLanguages.Items.Remove(item);
+
+                    if (Properties.Settings.Default.SelectedLanguages.Contains(item))
+                        Properties.Settings.Default.SelectedLanguages.Remove(item);
+                }
+            }
         }
 
-        private void radio_foreignAndSubs_CheckedChanged(object sender, EventArgs e)
+        private void button_addLanguage_Click(object sender, EventArgs e)
         {
-            if (radio_foreignAndSubs.Checked)
-                Properties.Settings.Default.DubMode = 2;
+            if (listBox_availableLanguages.SelectedItems.Count > 0)
+            {
+                String[] movedItems = new String[listBox_availableLanguages.SelectedItems.Count];
+
+                listBox_availableLanguages.SelectedItems.CopyTo(movedItems, 0);
+
+                listBox_selectedLanguages.Items.AddRange(movedItems);
+                Properties.Settings.Default.SelectedLanguages.AddRange(movedItems);
+
+                listBox_availableLanguages.SelectedItems.Clear();
+                foreach (string item in movedItems)
+                {
+                    listBox_availableLanguages.Items.Remove(item);
+                }
+            }
         }
 
-        private void radio_preferredAudioAndSubs_CheckedChanged(object sender, EventArgs e)
+        private void button_clearLanguage_Click(object sender, EventArgs e)
         {
-            if (radio_preferredAudioAndSubs.Checked)
-                Properties.Settings.Default.DubMode = 3;
+            if (listBox_selectedLanguages.Items.Count > 0)
+            {
+                String[] movedItems = new String[listBox_selectedLanguages.Items.Count];
+
+                listBox_selectedLanguages.Items.CopyTo(movedItems, 0);
+
+                listBox_availableLanguages.Items.AddRange(movedItems);
+
+                foreach (string item in movedItems)
+                {
+                    listBox_selectedLanguages.Items.Remove(item);
+
+                    if (Properties.Settings.Default.SelectedLanguages.Contains(item))
+                        Properties.Settings.Default.SelectedLanguages.Remove(item);
+                }
+            }
+        }
+
+        private void button_moveLanguageUp_Click(object sender, EventArgs e)
+        {
+            int ilevel = 0;
+            if (listBox_selectedLanguages.SelectedItems.Count > 0)
+            {
+                ListBox.SelectedIndexCollection selectedItems = listBox_selectedLanguages.SelectedIndices;
+                int[] index_selectedItems = new int[selectedItems.Count];
+
+                for (int i = 0; i < selectedItems.Count; i++)
+                    index_selectedItems[i] = selectedItems[i];
+
+                for (int i = 0; i < index_selectedItems.Length; i++)
+                {
+                    ilevel = index_selectedItems[i];
+
+                    if ((ilevel - 1 >= 0) && (ilevel - 1 >= i))
+                    {
+                        String lvitem = (String)listBox_selectedLanguages.Items[ilevel];
+                        listBox_selectedLanguages.Items.Remove(lvitem);
+                        listBox_selectedLanguages.Items.Insert(ilevel - 1, lvitem);
+                        listBox_selectedLanguages.SetSelected(ilevel - 1, true);
+
+                        // Do the same on the Property.
+                        Properties.Settings.Default.SelectedLanguages.Remove(lvitem);
+                        Properties.Settings.Default.SelectedLanguages.Insert(ilevel - 1, lvitem);
+                    }
+                }
+            }         
+        }
+
+        private void button_moveLanguageDown_Click(object sender, EventArgs e)
+        {
+            int ilevel = 0;
+            if (listBox_selectedLanguages.SelectedItems.Count > 0)
+            {
+                ListBox.SelectedIndexCollection selectedItems = listBox_selectedLanguages.SelectedIndices;
+                int[] index_selectedItems = new int[selectedItems.Count];
+
+                for (int i = 0; i < selectedItems.Count; i++)
+                    index_selectedItems[i] = selectedItems[i];
+
+                for (int i = index_selectedItems.Length - 1; i >= 0 ; i--)
+                {
+                    ilevel = index_selectedItems[i];
+
+                    if ((ilevel + 1 >= 0) && (ilevel + 1 <= listBox_selectedLanguages.Items.Count - (index_selectedItems.Length - i)))
+                    {
+                        String lvitem = (String)listBox_selectedLanguages.Items[ilevel];
+                        listBox_selectedLanguages.Items.Remove(lvitem);
+                        listBox_selectedLanguages.Items.Insert(ilevel + 1, lvitem);
+                        listBox_selectedLanguages.SetSelected(ilevel + 1, true);
+
+                        // Do the same on the Property.
+                        Properties.Settings.Default.SelectedLanguages.Remove(lvitem);
+                        Properties.Settings.Default.SelectedLanguages.Insert(ilevel + 1, lvitem);
+                    }
+                }
+            }          
+        }
+
+        private void listBox_selectedLanguages_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            this.button_removeLanguage_Click(this, new EventArgs());
+        }
+
+        private void listBox_availableLanguages_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            this.button_addLanguage_Click(this, new EventArgs());
+        }
+
+        private void radio_Audio_None_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radio_Audio_None.Checked)
+                Properties.Settings.Default.DubModeAudio = 0;
+        }
+
+        private void radio_Audio_All_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radio_Audio_All.Checked)
+                Properties.Settings.Default.DubModeAudio = 1;
+        }
+
+        private void radio_Audio_First_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radio_Audio_First.Checked)
+                Properties.Settings.Default.DubModeAudio = 2;
+        }
+
+        private void radio_Audio_Selected_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radio_Audio_Selected.Checked)
+                Properties.Settings.Default.DubModeAudio = 3;
+        }
+
+        private void radio_Audio_PrefOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radio_Audio_PrefOnly.Checked)
+                Properties.Settings.Default.DubModeAudio = 4;
+        }
+
+        private void radio_Subtitle_None_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radio_Subtitle_None.Checked)
+                Properties.Settings.Default.DubModeSubtitle = 0;
+        }
+
+        private void radio_Subtitle_All_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radio_Subtitle_All.Checked)
+                Properties.Settings.Default.DubModeSubtitle = 1;
+        }
+
+        private void radio_Subtitle_First_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radio_Subtitle_First.Checked)
+                Properties.Settings.Default.DubModeSubtitle = 2;
+        }
+
+        private void radio_Subtitle_Selected_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radio_Subtitle_Selected.Checked)
+                Properties.Settings.Default.DubModeSubtitle = 3;
+        }
+
+        private void radio_Subtitle_PrefOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radio_Subtitle_PrefOnly.Checked)
+                Properties.Settings.Default.DubModeSubtitle = 4;
+        }
+
+        private void check_AddOnlyOneAudioPerLanguage_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.addOnlyOneAudioPerLanguage = check_AddOnlyOneAudioPerLanguage.Checked;
         }
 
         private void check_AddCCTracks_CheckedChanged(object sender, EventArgs e)

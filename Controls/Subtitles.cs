@@ -6,6 +6,7 @@
 namespace Handbrake.Controls
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -190,23 +191,114 @@ namespace Handbrake.Controls
         /// </summary>
         public void AutomaticSubtitleSelection()
         {
-            // Handle Native Language and "Dub Foreign language audio" and "Use Foreign language audio and Subtitles" Options
-            if (Properties.Settings.Default.NativeLanguage != "Any")
+            // Avoid trying to add elements when no subtitles are there.
+            if (drp_subtitleTracks.Items.Count < 2)
             {
-                if (Properties.Settings.Default.DubMode != 1) // We need to add a subtitle track if this is false.
-                {
-                    foreach (object item in drp_subtitleTracks.Items)
-                    {
-                        if (item.ToString().Contains(Properties.Settings.Default.NativeLanguage))
-                        {
-                            drp_subtitleTracks.SelectedItem = item;
-                            BtnAddSubTrackClick(this, new EventArgs());
-                        }
-                    }
-                }
+                return;
             }
 
+            this.Clear();
 
+            // Array with the Index numbers of the prefered and additional languages. 
+            // This allows to have for each language the order in which they appear in the DVD list.
+            Dictionary<String, ArrayList> languageIndex = new Dictionary<String, ArrayList>();
+
+            // This is used to keep the Prefered Language in the front and the other languages in order.
+            ArrayList languageOrder = new ArrayList();
+
+            // New DUB Settings
+            int mode = Properties.Settings.Default.DubModeSubtitle;
+
+            if (Properties.Settings.Default.NativeLanguage == "Any")
+                mode = 0;
+
+            // Native Language is not 'Any', so initialising the Language Dictionary
+            if (mode >= 3)
+            {
+                languageIndex.Add(Properties.Settings.Default.NativeLanguage, new ArrayList());
+                languageOrder.Add(Properties.Settings.Default.NativeLanguage);
+
+                foreach (string item in Properties.Settings.Default.SelectedLanguages)
+                {
+                    if (!languageIndex.ContainsKey(item))
+                    {
+                        languageIndex.Add(item, new ArrayList());
+                        languageOrder.Add(item);
+                    }
+                }
+
+                bool elementFound = false;
+                int i = 0;
+                foreach (object item in drp_subtitleTracks.Items)
+                {
+                    foreach (KeyValuePair<String, ArrayList> kvp in languageIndex)
+                    {
+                        if (item.ToString().Contains(kvp.Key))
+                        {
+                            kvp.Value.Add(i);
+                            elementFound = true;
+                        }
+                    }
+
+                    i++;
+                }
+
+                // If there are no selected languages found, the first available will be taken.
+                if (!elementFound)
+                    mode = 2;
+            }
+
+            switch (mode)
+            {
+                case 1: // Adding all audio tracks
+                    for (int i = 1; i < drp_subtitleTracks.Items.Count; i++)
+                    {
+                        drp_subtitleTracks.SelectedIndex = i;
+                        this.BtnAddSubTrackClick(this, new EventArgs());
+                    }
+                    break;
+                case 2: // Adding only the first Audio Track
+                    drp_subtitleTracks.SelectedIndex = 1;
+                    if (drp_subtitleTracks.SelectedItem != null)
+                        this.BtnAddSubTrackClick(this, new EventArgs());
+                    break;
+                case 3:
+                    foreach (string item in languageOrder)
+                    {
+                        if (languageIndex[item].Count > 0)
+                        {
+                            foreach (int i in languageIndex[item])
+                            {
+                                drp_subtitleTracks.SelectedIndex = i;
+                                if (drp_subtitleTracks.SelectedItem != null)
+                                {
+                                    this.BtnAddSubTrackClick(this, new EventArgs());
+                                    //subList.ClearSelection();
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 4:
+                    if (languageIndex[(string)languageOrder[0]].Count > 0)
+                    {
+                        foreach (int i in languageIndex[(string)languageOrder[0]])
+                        {
+                            drp_subtitleTracks.SelectedIndex = i;
+                            if (drp_subtitleTracks.SelectedItem != null)
+                            {
+                                this.BtnAddSubTrackClick(this, new EventArgs());
+                                //subList.ClearSelection();
+                            }
+                        }
+                    }
+                    break;
+            }
+
+            // Revert the selection back tio the first item.
+            drp_subtitleTracks.SelectedIndex = 0;
+
+            // Add Closed Captions if the user has the option enabled.
             if (Properties.Settings.Default.useClosedCaption)
             {
                 foreach (object item in drp_subtitleTracks.Items)
@@ -214,7 +306,7 @@ namespace Handbrake.Controls
                     if (item.ToString().Contains("Closed"))
                     {
                         drp_subtitleTracks.SelectedItem = item;
-                        BtnAddSubTrackClick(this, new EventArgs());
+                        BtnAddSubTrackClick(this, EventArgs.Empty);
                     }
                 }
             }

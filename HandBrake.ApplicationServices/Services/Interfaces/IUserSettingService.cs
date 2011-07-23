@@ -65,5 +65,17 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// The settings value
         /// </returns>
         double GetUserSettingDouble(string name);
+
+        /// <summary>
+        /// Get an StringCollection type user setting
+        /// </summary>
+        /// <param name="name">
+        /// The setting name
+        /// </param>
+        /// <returns>
+        /// The settings value
+        /// </returns>
+        System.Collections.Specialized.StringCollection GetUserSettingStringCollection(string name);
+
     }
 }
