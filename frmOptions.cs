@@ -39,7 +39,7 @@ namespace Handbrake
             foreach (string selectedItem in Properties.Settings.Default.SelectedLanguages)
             {
                 // removing wrong keys when a new Language list comes out.
-                if(langList.ContainsKey(selectedItem))
+                if (langList.ContainsKey(selectedItem))
                     listBox_selectedLanguages.Items.Add(selectedItem);
             }
 
@@ -50,7 +50,7 @@ namespace Handbrake
                 // In the available languages should be no "Any" and no selected language.
                 if ((item != "Any") && (!Properties.Settings.Default.SelectedLanguages.Contains(item)))
                 {
-                        listBox_availableLanguages.Items.Add(item);
+                    listBox_availableLanguages.Items.Add(item);
                 }
             }
 
@@ -165,52 +165,11 @@ namespace Handbrake
                 }
             }
 
-            switch (Settings.Default.DubModeAudio)
-            {
-                case 0:
-                    radio_Audio_None.Checked = true;
-                    break;
-                case 1:
-                    radio_Audio_All.Checked = true;
-                    break;
-                case 2:
-                    radio_Audio_First.Checked = true;
-                    break;
-                case 3:
-                    radio_Audio_Selected.Checked = true;
-                    break;
-                case 4:
-                    radio_Audio_PrefOnly.Checked = true;
-                    break;
-                default:
-                    radio_Audio_None.Checked = true;
-                    break;
-            }
-
-            switch (Settings.Default.DubModeSubtitle)
-            {
-                case 0:
-                    radio_Subtitle_None.Checked = true;
-                    break;
-                case 1:
-                    radio_Subtitle_All.Checked = true;
-                    break;
-                case 2:
-                    radio_Subtitle_First.Checked = true;
-                    break;
-                case 3:
-                    radio_Subtitle_Selected.Checked = true;
-                    break;
-                case 4:
-                    radio_Subtitle_PrefOnly.Checked = true;
-                    break;
-                default:
-                    radio_Subtitle_None.Checked = true;
-                    break;
-            }
+            cb_audioMode.SelectedIndex = Settings.Default.DubModeAudio;
+            cb_subtitleMode.SelectedIndex = Settings.Default.DubModeSubtitle;
 
             check_AddOnlyOneAudioPerLanguage.Checked = Properties.Settings.Default.addOnlyOneAudioPerLanguage;
-            
+
             check_AddCCTracks.Checked = Properties.Settings.Default.useClosedCaption;
 
             // #############################
@@ -435,19 +394,23 @@ namespace Handbrake
 
         private void drop_preferredLang_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.NativeLanguage = drop_preferredLang.SelectedItem.ToString();
+            Settings.Default.NativeLanguage = drop_preferredLang.SelectedItem.ToString();
 
-            if (Properties.Settings.Default.NativeLanguage == "Any")
+            if (Settings.Default.NativeLanguage == "Any")
             {
-                this.groupBox1.Enabled = false;
-                this.groupBox2.Enabled = false;
-                this.groupBox3.Visible = true;
+                cb_audioMode.Enabled = false;
+                cb_subtitleMode.Enabled = false;
+                check_AddOnlyOneAudioPerLanguage.Enabled = false;
+
+                audioSelectionPanel.Enabled = false;
             }
             else
-            {   
-                this.groupBox1.Enabled = true;
-                this.groupBox2.Enabled = true;
-                this.groupBox3.Visible = false;
+            {
+                cb_audioMode.Enabled = true;
+                cb_subtitleMode.Enabled = true;
+                check_AddOnlyOneAudioPerLanguage.Enabled = true;
+
+                audioSelectionPanel.Enabled = true;
             }
         }
 
@@ -538,7 +501,7 @@ namespace Handbrake
                         Properties.Settings.Default.SelectedLanguages.Insert(ilevel - 1, lvitem);
                     }
                 }
-            }         
+            }
         }
 
         private void button_moveLanguageDown_Click(object sender, EventArgs e)
@@ -552,7 +515,7 @@ namespace Handbrake
                 for (int i = 0; i < selectedItems.Count; i++)
                     index_selectedItems[i] = selectedItems[i];
 
-                for (int i = index_selectedItems.Length - 1; i >= 0 ; i--)
+                for (int i = index_selectedItems.Length - 1; i >= 0; i--)
                 {
                     ilevel = index_selectedItems[i];
 
@@ -568,7 +531,7 @@ namespace Handbrake
                         Properties.Settings.Default.SelectedLanguages.Insert(ilevel + 1, lvitem);
                     }
                 }
-            }          
+            }
         }
 
         private void listBox_selectedLanguages_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -581,66 +544,6 @@ namespace Handbrake
             this.button_addLanguage_Click(this, new EventArgs());
         }
 
-        private void radio_Audio_None_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radio_Audio_None.Checked)
-                Properties.Settings.Default.DubModeAudio = 0;
-        }
-
-        private void radio_Audio_All_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radio_Audio_All.Checked)
-                Properties.Settings.Default.DubModeAudio = 1;
-        }
-
-        private void radio_Audio_First_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radio_Audio_First.Checked)
-                Properties.Settings.Default.DubModeAudio = 2;
-        }
-
-        private void radio_Audio_Selected_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radio_Audio_Selected.Checked)
-                Properties.Settings.Default.DubModeAudio = 3;
-        }
-
-        private void radio_Audio_PrefOnly_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radio_Audio_PrefOnly.Checked)
-                Properties.Settings.Default.DubModeAudio = 4;
-        }
-
-        private void radio_Subtitle_None_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radio_Subtitle_None.Checked)
-                Properties.Settings.Default.DubModeSubtitle = 0;
-        }
-
-        private void radio_Subtitle_All_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radio_Subtitle_All.Checked)
-                Properties.Settings.Default.DubModeSubtitle = 1;
-        }
-
-        private void radio_Subtitle_First_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radio_Subtitle_First.Checked)
-                Properties.Settings.Default.DubModeSubtitle = 2;
-        }
-
-        private void radio_Subtitle_Selected_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radio_Subtitle_Selected.Checked)
-                Properties.Settings.Default.DubModeSubtitle = 3;
-        }
-
-        private void radio_Subtitle_PrefOnly_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radio_Subtitle_PrefOnly.Checked)
-                Properties.Settings.Default.DubModeSubtitle = 4;
-        }
-
         private void check_AddOnlyOneAudioPerLanguage_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Default.addOnlyOneAudioPerLanguage = check_AddOnlyOneAudioPerLanguage.Checked;
@@ -649,6 +552,16 @@ namespace Handbrake
         private void check_AddCCTracks_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Default.useClosedCaption = check_AddCCTracks.Checked;
+        }
+
+        private void cb_audioMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Settings.Default.DubModeAudio = cb_audioMode.SelectedIndex;
+        }
+
+        private void cb_subtitleMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Settings.Default.DubModeSubtitle = cb_subtitleMode.SelectedIndex;
         }
 
         #endregion
