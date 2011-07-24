@@ -110,5 +110,7 @@ namespace HandBrake.ApplicationServices
         /// Send file to arguments
         /// </summary>
         public const string SendFileToArgs = "SendFileToArgs";
+
+        public const string MinScanDuration = "MinTitleScanDuration";
     }
 }

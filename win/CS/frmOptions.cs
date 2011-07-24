@@ -245,6 +245,9 @@ namespace Handbrake
                     break;
             }
 
+            // Min Title Length
+            ud_minTitleLength.Value = this.userSettingService.GetUserSettingInt(UserSettingConstants.MinScanDuration); 
+
             // Use Experimental dvdnav
             if (userSettingService.GetUserSettingBoolean(UserSettingConstants.DisableLibDvdNav))
                 check_dvdnav.CheckState = CheckState.Checked;
@@ -697,6 +700,15 @@ namespace Handbrake
         private void check_dvdnav_CheckedChanged(object sender, EventArgs e)
         {
             userSettingService.SetUserSetting(UserSettingConstants.DisableLibDvdNav, check_dvdnav.Checked);
+        }
+
+        private void ud_minTitleLength_ValueChanged(object sender, EventArgs e)
+        {
+            int value;
+            if (int.TryParse(ud_minTitleLength.Value.ToString(), out value))
+            {
+                this.userSettingService.SetUserSetting(UserSettingConstants.MinScanDuration, value);
+            }
         }
 
         #endregion

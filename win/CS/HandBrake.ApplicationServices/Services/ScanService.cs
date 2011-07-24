@@ -196,6 +196,8 @@ namespace HandBrake.ApplicationServices.Services
                     extraArguments += " --no-dvdnav";
                 }
 
+                extraArguments += string.Format(" --min-duration={0}", Properties.Settings.Default.MinTitleScanDuration);
+
                 if (title > 0)
                 {
                     extraArguments += " --scan ";
