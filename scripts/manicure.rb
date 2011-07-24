@@ -343,6 +343,12 @@ class Display
           audioEncoders << "copy:ac3"
         when /AC3/
           audioEncoders << "ac3"
+        when /DTS Pass/
+          audioEncoders << "copy:dts"
+        when /DTS-HD Pass/
+          audioEncoders << "copy:dtshd"
+        when "AAC (ffmpeg)"
+          audioEncoders << "ffaac"
         when /AAC/
           audioEncoders << "faac"
         when /Vorbis/
@@ -363,7 +369,7 @@ class Display
         audioMixdowns << "dpl2"
       when /discrete/
         audioMixdowns << "6ch"
-      when /Passthru/
+      when /None/
         audioMixdowns << "auto"
       end
       
@@ -597,6 +603,12 @@ class Display
           audioEncoders << "copy:ac3"
         when /AC3/
           audioEncoders << "ac3"
+        when /DTS Pass/
+          audioEncoders << "copy:dts"
+        when /DTS-HD Pass/
+          audioEncoders << "copy:dtshd"
+        when "AAC (ffmpeg)"
+          audioEncoders << "ffaac"
         when /AAC/
           audioEncoders << "faac"
         when /Vorbis/
@@ -617,7 +629,7 @@ class Display
         audioMixdowns << "dpl2"
       when /discrete/
         audioMixdowns << "6ch"
-      when /Passthru/
+      when /None/
         audioMixdowns << "auto"
       end
       
@@ -846,6 +858,12 @@ class Display
           audioEncoders << "copy:ac3"
         when /AC3/
           audioEncoders << "ac3"
+        when /DTS Pass/
+          audioEncoders << "copy:dts"
+        when /DTS-HD Pass/
+          audioEncoders << "copy:dtshd"
+        when "AAC (ffmpeg)"
+          audioEncoders << "ffaac"
         when /AAC/
           audioEncoders << "faac"
         when /Vorbis/
@@ -866,7 +884,7 @@ class Display
         audioMixdowns << "dpl2"
       when /discrete/
         audioMixdowns << "6ch"
-      when /Passthru/
+      when /None/
         audioMixdowns << "auto"
       end
 
@@ -1132,6 +1150,12 @@ class Display
           audioEncoders << "copy:ac3"
         when /AC3/
           audioEncoders << "ac3"
+        when /DTS Pass/
+          audioEncoders << "copy:dts"
+        when /DTS-HD Pass/
+          audioEncoders << "copy:dtshd"
+        when "AAC (ffmpeg)"
+          audioEncoders << "ffaac"
         when /AAC/
           audioEncoders << "faac"
         when /Vorbis/
@@ -1152,7 +1176,7 @@ class Display
         audioMixdowns << "dpl2"
       when /discrete/
         audioMixdowns << "6ch"
-      when /Passthru/
+      when /None/
         audioMixdowns << "auto"
       end
       

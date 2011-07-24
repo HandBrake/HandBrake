@@ -245,7 +245,7 @@
     NSMutableDictionary *audioTrack2Array = [[NSMutableDictionary alloc] init];
     [audioTrack2Array setObject:[NSNumber numberWithInt:1] forKey:@"AudioTrack"];
     [audioTrack2Array setObject:@"AC3 Passthru" forKey:@"AudioEncoder"];
-    [audioTrack2Array setObject:@"AC3 Passthru" forKey:@"AudioMixdown"];
+    [audioTrack2Array setObject:@"None" forKey:@"AudioMixdown"];
     [audioTrack2Array setObject:@"Auto" forKey:@"AudioSamplerate"];
     [audioTrack2Array setObject:@"160" forKey:@"AudioBitrate"];
     /* Note: we ignore specified bitrate for AC3 Passthru in libhb and use
@@ -357,7 +357,7 @@
     NSMutableDictionary *audioTrack2Array = [[NSMutableDictionary alloc] init];
     [audioTrack2Array setObject:[NSNumber numberWithInt:1] forKey:@"AudioTrack"];
     [audioTrack2Array setObject:@"AC3 Passthru" forKey:@"AudioEncoder"];
-    [audioTrack2Array setObject:@"AC3 Passthru" forKey:@"AudioMixdown"];
+    [audioTrack2Array setObject:@"None" forKey:@"AudioMixdown"];
     [audioTrack2Array setObject:@"Auto" forKey:@"AudioSamplerate"];
     [audioTrack2Array setObject:@"160" forKey:@"AudioBitrate"];
     /* Note: we ignore specified bitrate for AC3 Passthru in libhb and use
@@ -665,7 +665,7 @@
     NSMutableDictionary *audioTrack2Array = [[NSMutableDictionary alloc] init];
     [audioTrack2Array setObject:[NSNumber numberWithInt:1] forKey:@"AudioTrack"];
     [audioTrack2Array setObject:@"AC3 Passthru" forKey:@"AudioEncoder"];
-    [audioTrack2Array setObject:@"AC3 Passthru" forKey:@"AudioMixdown"];
+    [audioTrack2Array setObject:@"None" forKey:@"AudioMixdown"];
     [audioTrack2Array setObject:@"Auto" forKey:@"AudioSamplerate"];
     [audioTrack2Array setObject:@"160" forKey:@"AudioBitrate"];
     /* Note: we ignore specified bitrate for AC3 Passthru in libhb and use
@@ -870,7 +870,7 @@
     NSMutableDictionary *audioTrack2Array = [[NSMutableDictionary alloc] init];
     [audioTrack2Array setObject:[NSNumber numberWithInt:1] forKey:@"AudioTrack"];
     [audioTrack2Array setObject:@"AC3 Passthru" forKey:@"AudioEncoder"];
-    [audioTrack2Array setObject:@"AC3 Passthru" forKey:@"AudioMixdown"];
+    [audioTrack2Array setObject:@"None" forKey:@"AudioMixdown"];
     [audioTrack2Array setObject:@"Auto" forKey:@"AudioSamplerate"];
     [audioTrack2Array setObject:@"160" forKey:@"AudioBitrate"];
     /* Note: we ignore specified bitrate for AC3 Passthru in libhb and use

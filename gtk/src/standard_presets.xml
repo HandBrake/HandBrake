@@ -28,7 +28,7 @@
 						<key>AudioEncoder</key>
 						<string>AC3 Passthru</string>
 						<key>AudioMixdown</key>
-						<string>AC3 Passthru</string>
+						<string>None</string>
 						<key>AudioSamplerate</key>
 						<string>Auto</string>
 						<key>AudioTrack</key>
@@ -471,7 +471,7 @@
 						<key>AudioEncoder</key>
 						<string>AC3 Passthru</string>
 						<key>AudioMixdown</key>
-						<string>AC3 Passthru</string>
+						<string>None</string>
 						<key>AudioSamplerate</key>
 						<string>Auto</string>
 						<key>AudioTrack</key>
@@ -572,7 +572,7 @@
 						<key>AudioEncoder</key>
 						<string>AC3 Passthru</string>
 						<key>AudioMixdown</key>
-						<string>AC3 Passthru</string>
+						<string>None</string>
 						<key>AudioSamplerate</key>
 						<string>Auto</string>
 						<key>AudioTrack</key>
@@ -947,7 +947,7 @@
 						<key>AudioEncoder</key>
 						<string>AC3 Passthru</string>
 						<key>AudioMixdown</key>
-						<string>AC3 Passthru</string>
+						<string>None</string>
 						<key>AudioSamplerate</key>
 						<string>Auto</string>
 						<key>AudioTrack</key>
