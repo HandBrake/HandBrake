@@ -7,9 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using HandBrake.Interop.Model.Encoding;
+
 namespace HandBrake.Interop
 {
-    public static class Utilities
+	public static class Utilities
 	{
 		public static int GreatestCommonFactor(int a, int b)
 		{
@@ -31,6 +33,16 @@ namespace HandBrake.Interop
 			{
 				return GreatestCommonFactor(a, b % a);
 			}
+		}
+
+		/// <summary>
+		/// Determines if the given audio encoder is a passthrough encoder choice.
+		/// </summary>
+		/// <param name="encoder">The audio encoder to examine.</param>
+		/// <returns>True if the encoder is passthrough.</returns>
+		public static bool IsPassthrough(AudioEncoder encoder)
+		{
+			return encoder == AudioEncoder.Ac3Passthrough || encoder == AudioEncoder.Passthrough;
 		}
 	}
 }

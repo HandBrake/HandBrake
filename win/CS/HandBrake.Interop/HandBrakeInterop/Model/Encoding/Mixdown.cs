@@ -9,9 +9,9 @@
 
 namespace HandBrake.Interop.Model.Encoding
 {
-    using System.ComponentModel.DataAnnotations;
+	using System.ComponentModel.DataAnnotations;
 
-    public enum Mixdown
+	public enum Mixdown
 	{
 		[Display(Name = "Dolby Pro Logic II")]
 		DolbyProLogicII = 0,

@@ -104,6 +104,9 @@ namespace HandBrake.Interop.HbLib
 
 		/// int
 		public int channel_layout;
+
+		// hb_chan_map_t *
+		public IntPtr channel_map;
 	}
 
 	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]

@@ -16,6 +16,8 @@ namespace HandBrake.Interop.SourceData
 
 		Dts,
 
+		DtsHD,
+
 		Other
 	}
 }

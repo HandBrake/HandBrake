@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using HandBrake.Interop;
+using HandBrake.Interop.Model;
+using HandBrake.Interop.Model.Encoding;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace HandBrakeInterop.Test

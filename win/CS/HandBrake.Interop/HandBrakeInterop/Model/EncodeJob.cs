@@ -9,13 +9,13 @@
 
 namespace HandBrake.Interop.Model
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Xml.Serialization;
+	using System;
+	using System.Collections.Generic;
+	using System.Xml.Serialization;
 
-    using HandBrake.Interop.Model.Encoding;
+	using HandBrake.Interop.Model.Encoding;
 
-    public class EncodeJob
+	public class EncodeJob
 	{
 		public SourceType SourceType { get; set; }
 		public string SourcePath { get; set; }

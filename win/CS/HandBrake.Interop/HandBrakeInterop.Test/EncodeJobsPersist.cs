@@ -7,6 +7,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using HandBrake.Interop;
+using HandBrake.Interop.Model;
 
 namespace HandBrakeInterop.Test
 {
