@@ -16,6 +16,7 @@ struct hb_work_private_s
 
     int              out_discrete_channels;
     int              samples_per_frame;
+    int              layout;
     unsigned long    input_samples;
     unsigned long    output_bytes;
     hb_list_t      * list;
@@ -69,16 +70,19 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     {
         case HB_AMIXDOWN_MONO:
             context->channel_layout = AV_CH_LAYOUT_MONO;
+            pv->layout = HB_INPUT_CH_LAYOUT_MONO;
             break;
 
         case HB_AMIXDOWN_STEREO:
         case HB_AMIXDOWN_DOLBY:
         case HB_AMIXDOWN_DOLBYPLII:
             context->channel_layout = AV_CH_LAYOUT_STEREO;
+            pv->layout = HB_INPUT_CH_LAYOUT_STEREO;
             break;
 
         case HB_AMIXDOWN_6CH:
             context->channel_layout = AV_CH_LAYOUT_5POINT1;
+            pv->layout = HB_INPUT_CH_LAYOUT_3F2R | HB_INPUT_CH_LAYOUT_HAS_LFE;
             break;
 
         default:
@@ -168,26 +172,14 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     hb_list_getbytes( pv->list, pv->buf, pv->input_samples * sizeof( float ),
                       &pts, &pos);
 
-    if ( audio->config.in.channel_map != &hb_smpte_chan_map )
+    // XXX: ffaac fails to remap from the internal libav* channel map (SMPTE) to the native AAC channel map
+    //      do it here - this hack should be removed if Libav fixes the bug
+    hb_chan_map_t * out_map = ( w->codec_param == CODEC_ID_AAC ) ? &hb_qt_chan_map : &hb_smpte_chan_map;
+
+    if ( audio->config.in.channel_map != out_map )
     {
-        int layout;
-        switch (audio->config.out.mixdown)
-        {
-            case HB_AMIXDOWN_MONO:
-                layout = HB_INPUT_CH_LAYOUT_MONO;
-                break;
-            case HB_AMIXDOWN_STEREO:
-            case HB_AMIXDOWN_DOLBY:
-            case HB_AMIXDOWN_DOLBYPLII:
-                layout = HB_INPUT_CH_LAYOUT_STEREO;
-                break;
-            case HB_AMIXDOWN_6CH:
-            default:
-                layout = HB_INPUT_CH_LAYOUT_3F2R | HB_INPUT_CH_LAYOUT_HAS_LFE;
-                break;
-        }
-        hb_layout_remap( audio->config.in.channel_map, &hb_smpte_chan_map, layout, 
-                        (float*)pv->buf, pv->samples_per_frame);
+        hb_layout_remap( audio->config.in.channel_map, out_map, pv->layout,
+                         (float*)pv->buf, pv->samples_per_frame );
     }
 
     // Do we need to convert our internal float format?
