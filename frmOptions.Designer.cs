@@ -71,6 +71,17 @@ namespace Handbrake
             this.txt_vlcPath = new System.Windows.Forms.TextBox();
             this.label36 = new System.Windows.Forms.Label();
             this.tab_audio_sub = new System.Windows.Forms.TabPage();
+            this.label39 = new System.Windows.Forms.Label();
+            this.audioSelectionPanel = new System.Windows.Forms.Panel();
+            this.label46 = new System.Windows.Forms.Label();
+            this.listBox_selectedLanguages = new System.Windows.Forms.ListBox();
+            this.button_moveLanguageDown = new System.Windows.Forms.Button();
+            this.listBox_availableLanguages = new System.Windows.Forms.ListBox();
+            this.button_addLanguage = new System.Windows.Forms.Button();
+            this.button_moveLanguageUp = new System.Windows.Forms.Button();
+            this.label47 = new System.Windows.Forms.Label();
+            this.button_removeLanguage = new System.Windows.Forms.Button();
+            this.button_clearLanguage = new System.Windows.Forms.Button();
             this.label45 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label44 = new System.Windows.Forms.Label();
@@ -82,11 +93,8 @@ namespace Handbrake
             this.check_AddCCTracks = new System.Windows.Forms.CheckBox();
             this.label43 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
-            this.button_clearLanguage = new System.Windows.Forms.Button();
             this.label15 = new System.Windows.Forms.Label();
-            this.button_removeLanguage = new System.Windows.Forms.Button();
             this.drop_preferredLang = new System.Windows.Forms.ComboBox();
-            this.button_addLanguage = new System.Windows.Forms.Button();
             this.tab_cli = new System.Windows.Forms.TabPage();
             this.label11 = new System.Windows.Forms.Label();
             this.check_preventSleep = new System.Windows.Forms.CheckBox();
@@ -105,6 +113,8 @@ namespace Handbrake
             this.text_logPath = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.tab_advanced = new System.Windows.Forms.TabPage();
+            this.ud_minTitleLength = new System.Windows.Forms.NumericUpDown();
+            this.label40 = new System.Windows.Forms.Label();
             this.check_showCliForInGUIEncode = new System.Windows.Forms.CheckBox();
             this.drop_previewScanCount = new System.Windows.Forms.ComboBox();
             this.label33 = new System.Windows.Forms.Label();
@@ -155,25 +165,18 @@ namespace Handbrake
             this.label37 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.label46 = new System.Windows.Forms.Label();
-            this.label47 = new System.Windows.Forms.Label();
-            this.audioSelectionPanel = new System.Windows.Forms.Panel();
-            this.listBox_availableLanguages = new System.Windows.Forms.ListBox();
-            this.listBox_selectedLanguages = new System.Windows.Forms.ListBox();
-            this.button_moveLanguageDown = new System.Windows.Forms.Button();
-            this.button_moveLanguageUp = new System.Windows.Forms.Button();
-            this.label39 = new System.Windows.Forms.Label();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_outputFiles.SuspendLayout();
             this.tab_picture.SuspendLayout();
             this.tab_audio_sub.SuspendLayout();
+            this.audioSelectionPanel.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tab_cli.SuspendLayout();
             this.tab_advanced.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ud_minTitleLength)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            this.audioSelectionPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // btn_close
@@ -443,7 +446,7 @@ namespace Handbrake
             this.check_autoNaming.AutoSize = true;
             this.check_autoNaming.Location = new System.Drawing.Point(111, 13);
             this.check_autoNaming.Name = "check_autoNaming";
-            this.check_autoNaming.Size = new System.Drawing.Size(176, 17);
+            this.check_autoNaming.Size = new System.Drawing.Size(171, 17);
             this.check_autoNaming.TabIndex = 72;
             this.check_autoNaming.Text = "Automatically name output files";
             this.ToolTip.SetToolTip(this.check_autoNaming, "Automatically name output files");
@@ -638,6 +641,123 @@ namespace Handbrake
             this.tab_audio_sub.Text = "Audio and Subtitles";
             this.tab_audio_sub.UseVisualStyleBackColor = true;
             // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Location = new System.Drawing.Point(16, 62);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(92, 13);
+            this.label39.TabIndex = 109;
+            this.label39.Text = "Additional Tracks:";
+            // 
+            // audioSelectionPanel
+            // 
+            this.audioSelectionPanel.Controls.Add(this.label46);
+            this.audioSelectionPanel.Controls.Add(this.listBox_selectedLanguages);
+            this.audioSelectionPanel.Controls.Add(this.button_moveLanguageDown);
+            this.audioSelectionPanel.Controls.Add(this.listBox_availableLanguages);
+            this.audioSelectionPanel.Controls.Add(this.button_addLanguage);
+            this.audioSelectionPanel.Controls.Add(this.button_moveLanguageUp);
+            this.audioSelectionPanel.Controls.Add(this.label47);
+            this.audioSelectionPanel.Controls.Add(this.button_removeLanguage);
+            this.audioSelectionPanel.Controls.Add(this.button_clearLanguage);
+            this.audioSelectionPanel.Location = new System.Drawing.Point(125, 59);
+            this.audioSelectionPanel.Name = "audioSelectionPanel";
+            this.audioSelectionPanel.Size = new System.Drawing.Size(381, 166);
+            this.audioSelectionPanel.TabIndex = 108;
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Location = new System.Drawing.Point(1, 3);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(105, 13);
+            this.label46.TabIndex = 99;
+            this.label46.Text = "Available Languages";
+            // 
+            // listBox_selectedLanguages
+            // 
+            this.listBox_selectedLanguages.Location = new System.Drawing.Point(202, 19);
+            this.listBox_selectedLanguages.Name = "listBox_selectedLanguages";
+            this.listBox_selectedLanguages.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listBox_selectedLanguages.Size = new System.Drawing.Size(137, 134);
+            this.listBox_selectedLanguages.TabIndex = 95;
+            this.listBox_selectedLanguages.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBox_selectedLanguages_MouseDoubleClick);
+            // 
+            // button_moveLanguageDown
+            // 
+            this.button_moveLanguageDown.Image = global::Handbrake.Properties.Resources.arrow_down;
+            this.button_moveLanguageDown.Location = new System.Drawing.Point(345, 90);
+            this.button_moveLanguageDown.Name = "button_moveLanguageDown";
+            this.button_moveLanguageDown.Size = new System.Drawing.Size(25, 27);
+            this.button_moveLanguageDown.TabIndex = 102;
+            this.ToolTip.SetToolTip(this.button_moveLanguageDown, "Move selected languages down in the order.");
+            this.button_moveLanguageDown.UseVisualStyleBackColor = true;
+            this.button_moveLanguageDown.Click += new System.EventHandler(this.button_moveLanguageDown_Click);
+            // 
+            // listBox_availableLanguages
+            // 
+            this.listBox_availableLanguages.Location = new System.Drawing.Point(4, 19);
+            this.listBox_availableLanguages.Name = "listBox_availableLanguages";
+            this.listBox_availableLanguages.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listBox_availableLanguages.Size = new System.Drawing.Size(137, 134);
+            this.listBox_availableLanguages.Sorted = true;
+            this.listBox_availableLanguages.TabIndex = 94;
+            this.listBox_availableLanguages.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBox_availableLanguages_MouseDoubleClick);
+            // 
+            // button_addLanguage
+            // 
+            this.button_addLanguage.Image = global::Handbrake.Properties.Resources.arrow_right;
+            this.button_addLanguage.Location = new System.Drawing.Point(147, 34);
+            this.button_addLanguage.Name = "button_addLanguage";
+            this.button_addLanguage.Size = new System.Drawing.Size(49, 28);
+            this.button_addLanguage.TabIndex = 96;
+            this.ToolTip.SetToolTip(this.button_addLanguage, "Add Language to selected languages.");
+            this.button_addLanguage.UseVisualStyleBackColor = true;
+            this.button_addLanguage.Click += new System.EventHandler(this.button_addLanguage_Click);
+            // 
+            // button_moveLanguageUp
+            // 
+            this.button_moveLanguageUp.Image = global::Handbrake.Properties.Resources.arrow_up;
+            this.button_moveLanguageUp.Location = new System.Drawing.Point(345, 57);
+            this.button_moveLanguageUp.Name = "button_moveLanguageUp";
+            this.button_moveLanguageUp.Size = new System.Drawing.Size(25, 27);
+            this.button_moveLanguageUp.TabIndex = 101;
+            this.ToolTip.SetToolTip(this.button_moveLanguageUp, "Move selected languages up in the order.");
+            this.button_moveLanguageUp.UseVisualStyleBackColor = true;
+            this.button_moveLanguageUp.Click += new System.EventHandler(this.button_moveLanguageUp_Click);
+            // 
+            // label47
+            // 
+            this.label47.AutoSize = true;
+            this.label47.Location = new System.Drawing.Point(199, 3);
+            this.label47.Name = "label47";
+            this.label47.Size = new System.Drawing.Size(103, 13);
+            this.label47.TabIndex = 100;
+            this.label47.Text = "Selected Languages";
+            // 
+            // button_removeLanguage
+            // 
+            this.button_removeLanguage.Image = global::Handbrake.Properties.Resources.arrow_left;
+            this.button_removeLanguage.Location = new System.Drawing.Point(147, 68);
+            this.button_removeLanguage.Name = "button_removeLanguage";
+            this.button_removeLanguage.Size = new System.Drawing.Size(49, 28);
+            this.button_removeLanguage.TabIndex = 97;
+            this.ToolTip.SetToolTip(this.button_removeLanguage, "Remove language from selected languages.");
+            this.button_removeLanguage.UseVisualStyleBackColor = true;
+            this.button_removeLanguage.Click += new System.EventHandler(this.button_removeLanguage_Click);
+            // 
+            // button_clearLanguage
+            // 
+            this.button_clearLanguage.Location = new System.Drawing.Point(147, 102);
+            this.button_clearLanguage.Name = "button_clearLanguage";
+            this.button_clearLanguage.Size = new System.Drawing.Size(49, 28);
+            this.button_clearLanguage.TabIndex = 98;
+            this.button_clearLanguage.Text = "Clear";
+            this.ToolTip.SetToolTip(this.button_clearLanguage, "Clear the list of selected languages.");
+            this.button_clearLanguage.UseVisualStyleBackColor = true;
+            this.button_clearLanguage.Click += new System.EventHandler(this.button_clearLanguage_Click);
+            // 
             // label45
             // 
             this.label45.AutoSize = true;
@@ -746,7 +866,7 @@ namespace Handbrake
             this.check_AddCCTracks.AutoSize = true;
             this.check_AddCCTracks.Location = new System.Drawing.Point(79, 79);
             this.check_AddCCTracks.Name = "check_AddCCTracks";
-            this.check_AddCCTracks.Size = new System.Drawing.Size(199, 17);
+            this.check_AddCCTracks.Size = new System.Drawing.Size(198, 17);
             this.check_AddCCTracks.TabIndex = 92;
             this.check_AddCCTracks.Text = "Add Closed Captions when available";
             this.ToolTip.SetToolTip(this.check_AddCCTracks, "Add any CC tracks if they exist regardless of language settings");
@@ -777,17 +897,6 @@ namespace Handbrake
             this.label31.TabIndex = 91;
             this.label31.Text = "Automatic Audio and Subtitle Selection:";
             // 
-            // button_clearLanguage
-            // 
-            this.button_clearLanguage.Location = new System.Drawing.Point(147, 102);
-            this.button_clearLanguage.Name = "button_clearLanguage";
-            this.button_clearLanguage.Size = new System.Drawing.Size(49, 28);
-            this.button_clearLanguage.TabIndex = 98;
-            this.button_clearLanguage.Text = "Clear";
-            this.ToolTip.SetToolTip(this.button_clearLanguage, "Clear the list of selected languages.");
-            this.button_clearLanguage.UseVisualStyleBackColor = true;
-            this.button_clearLanguage.Click += new System.EventHandler(this.button_clearLanguage_Click);
-            // 
             // label15
             // 
             this.label15.AutoSize = true;
@@ -796,17 +905,6 @@ namespace Handbrake
             this.label15.Size = new System.Drawing.Size(107, 13);
             this.label15.TabIndex = 88;
             this.label15.Text = "Preferred Language:";
-            // 
-            // button_removeLanguage
-            // 
-            this.button_removeLanguage.Image = global::Handbrake.Properties.Resources.arrow_left;
-            this.button_removeLanguage.Location = new System.Drawing.Point(147, 68);
-            this.button_removeLanguage.Name = "button_removeLanguage";
-            this.button_removeLanguage.Size = new System.Drawing.Size(49, 28);
-            this.button_removeLanguage.TabIndex = 97;
-            this.ToolTip.SetToolTip(this.button_removeLanguage, "Remove language from selected languages.");
-            this.button_removeLanguage.UseVisualStyleBackColor = true;
-            this.button_removeLanguage.Click += new System.EventHandler(this.button_removeLanguage_Click);
             // 
             // drop_preferredLang
             // 
@@ -818,17 +916,6 @@ namespace Handbrake
             this.drop_preferredLang.TabIndex = 87;
             this.ToolTip.SetToolTip(this.drop_preferredLang, "The primary selected language. If set to \"Any\" no advance options are available.");
             this.drop_preferredLang.SelectedIndexChanged += new System.EventHandler(this.drop_preferredLang_SelectedIndexChanged);
-            // 
-            // button_addLanguage
-            // 
-            this.button_addLanguage.Image = global::Handbrake.Properties.Resources.arrow_right;
-            this.button_addLanguage.Location = new System.Drawing.Point(147, 34);
-            this.button_addLanguage.Name = "button_addLanguage";
-            this.button_addLanguage.Size = new System.Drawing.Size(49, 28);
-            this.button_addLanguage.TabIndex = 96;
-            this.ToolTip.SetToolTip(this.button_addLanguage, "Add Language to selected languages.");
-            this.button_addLanguage.UseVisualStyleBackColor = true;
-            this.button_addLanguage.Click += new System.EventHandler(this.button_addLanguage_Click);
             // 
             // tab_cli
             // 
@@ -874,7 +961,7 @@ namespace Handbrake
             this.check_preventSleep.AutoSize = true;
             this.check_preventSleep.Location = new System.Drawing.Point(73, 45);
             this.check_preventSleep.Name = "check_preventSleep";
-            this.check_preventSleep.Size = new System.Drawing.Size(266, 17);
+            this.check_preventSleep.Size = new System.Drawing.Size(260, 17);
             this.check_preventSleep.TabIndex = 91;
             this.check_preventSleep.Text = "Prevent the system from sleeping when encoding.";
             this.ToolTip.SetToolTip(this.check_preventSleep, "Prevent system from sleeping during encoding.");
@@ -887,7 +974,7 @@ namespace Handbrake
             this.check_clearOldLogs.AutoSize = true;
             this.check_clearOldLogs.Location = new System.Drawing.Point(73, 234);
             this.check_clearOldLogs.Name = "check_clearOldLogs";
-            this.check_clearOldLogs.Size = new System.Drawing.Size(166, 17);
+            this.check_clearOldLogs.Size = new System.Drawing.Size(162, 17);
             this.check_clearOldLogs.TabIndex = 90;
             this.check_clearOldLogs.Text = "Clear logs older than 30 days";
             this.ToolTip.SetToolTip(this.check_clearOldLogs, "Clear logs which are older than 30 days.\r\nThis only applies to HandBrakes Applica" +
@@ -982,7 +1069,7 @@ namespace Handbrake
             this.check_logsInSpecifiedLocation.AutoSize = true;
             this.check_logsInSpecifiedLocation.Location = new System.Drawing.Point(73, 139);
             this.check_logsInSpecifiedLocation.Name = "check_logsInSpecifiedLocation";
-            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(306, 17);
+            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(305, 17);
             this.check_logsInSpecifiedLocation.TabIndex = 87;
             this.check_logsInSpecifiedLocation.Text = "Put a copy of individual encode logs in a specified location:";
             this.ToolTip.SetToolTip(this.check_logsInSpecifiedLocation, "Place a copy of the encode log in the same folder as the encoded movie.");
@@ -1065,6 +1152,8 @@ namespace Handbrake
             // 
             // tab_advanced
             // 
+            this.tab_advanced.Controls.Add(this.ud_minTitleLength);
+            this.tab_advanced.Controls.Add(this.label40);
             this.tab_advanced.Controls.Add(this.check_showCliForInGUIEncode);
             this.tab_advanced.Controls.Add(this.drop_previewScanCount);
             this.tab_advanced.Controls.Add(this.label33);
@@ -1087,6 +1176,24 @@ namespace Handbrake
             this.tab_advanced.Text = "Advanced";
             this.tab_advanced.UseVisualStyleBackColor = true;
             // 
+            // ud_minTitleLength
+            // 
+            this.ud_minTitleLength.Location = new System.Drawing.Point(292, 204);
+            this.ud_minTitleLength.Name = "ud_minTitleLength";
+            this.ud_minTitleLength.Size = new System.Drawing.Size(85, 21);
+            this.ud_minTitleLength.TabIndex = 99;
+            this.ud_minTitleLength.ValueChanged += new System.EventHandler(this.ud_minTitleLength_ValueChanged);
+            // 
+            // label40
+            // 
+            this.label40.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label40.AutoSize = true;
+            this.label40.Location = new System.Drawing.Point(79, 206);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(206, 13);
+            this.label40.TabIndex = 97;
+            this.label40.Text = "Minimum length of title to scan (seconds):";
+            // 
             // check_showCliForInGUIEncode
             // 
             this.check_showCliForInGUIEncode.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -1094,7 +1201,7 @@ namespace Handbrake
             this.check_showCliForInGUIEncode.BackColor = System.Drawing.Color.Transparent;
             this.check_showCliForInGUIEncode.Location = new System.Drawing.Point(81, 129);
             this.check_showCliForInGUIEncode.Name = "check_showCliForInGUIEncode";
-            this.check_showCliForInGUIEncode.Size = new System.Drawing.Size(330, 17);
+            this.check_showCliForInGUIEncode.Size = new System.Drawing.Size(324, 17);
             this.check_showCliForInGUIEncode.TabIndex = 96;
             this.check_showCliForInGUIEncode.Text = "Show CLI window (Allows you to cleanly exit encode with ctrl-c)";
             this.ToolTip.SetToolTip(this.check_showCliForInGUIEncode, resources.GetString("check_showCliForInGUIEncode.ToolTip"));
@@ -1111,7 +1218,7 @@ namespace Handbrake
             "20",
             "25",
             "30"});
-            this.drop_previewScanCount.Location = new System.Drawing.Point(273, 173);
+            this.drop_previewScanCount.Location = new System.Drawing.Point(292, 173);
             this.drop_previewScanCount.Name = "drop_previewScanCount";
             this.drop_previewScanCount.Size = new System.Drawing.Size(85, 21);
             this.drop_previewScanCount.TabIndex = 95;
@@ -1148,7 +1255,7 @@ namespace Handbrake
             this.check_trayStatusAlerts.BackColor = System.Drawing.Color.Transparent;
             this.check_trayStatusAlerts.Location = new System.Drawing.Point(81, 37);
             this.check_trayStatusAlerts.Name = "check_trayStatusAlerts";
-            this.check_trayStatusAlerts.Size = new System.Drawing.Size(296, 17);
+            this.check_trayStatusAlerts.Size = new System.Drawing.Size(288, 17);
             this.check_trayStatusAlerts.TabIndex = 93;
             this.check_trayStatusAlerts.Text = "Display status messages from tray icon (balloon popups)";
             this.ToolTip.SetToolTip(this.check_trayStatusAlerts, "Minimize the window to the system tray rather than the task bar.\r\nThe system tray" +
@@ -1164,7 +1271,7 @@ namespace Handbrake
             this.check_mainMinimize.BackColor = System.Drawing.Color.Transparent;
             this.check_mainMinimize.Location = new System.Drawing.Point(81, 14);
             this.check_mainMinimize.Name = "check_mainMinimize";
-            this.check_mainMinimize.Size = new System.Drawing.Size(230, 17);
+            this.check_mainMinimize.Size = new System.Drawing.Size(221, 17);
             this.check_mainMinimize.TabIndex = 82;
             this.check_mainMinimize.Text = "Minimize to system tray (Requires Restart)";
             this.ToolTip.SetToolTip(this.check_mainMinimize, "Minimize the window to the system tray rather than the task bar.\r\nThe system tray" +
@@ -1178,7 +1285,7 @@ namespace Handbrake
             this.check_promptOnUnmatchingQueries.AutoSize = true;
             this.check_promptOnUnmatchingQueries.Location = new System.Drawing.Point(100, 83);
             this.check_promptOnUnmatchingQueries.Name = "check_promptOnUnmatchingQueries";
-            this.check_promptOnUnmatchingQueries.Size = new System.Drawing.Size(305, 17);
+            this.check_promptOnUnmatchingQueries.Size = new System.Drawing.Size(300, 17);
             this.check_promptOnUnmatchingQueries.TabIndex = 63;
             this.check_promptOnUnmatchingQueries.Text = "Prompt when a manual query does not match GUI settings";
             this.check_promptOnUnmatchingQueries.UseVisualStyleBackColor = true;
@@ -1189,9 +1296,9 @@ namespace Handbrake
             this.check_dvdnav.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_dvdnav.AutoSize = true;
             this.check_dvdnav.BackColor = System.Drawing.Color.Transparent;
-            this.check_dvdnav.Location = new System.Drawing.Point(82, 247);
+            this.check_dvdnav.Location = new System.Drawing.Point(82, 274);
             this.check_dvdnav.Name = "check_dvdnav";
-            this.check_dvdnav.Size = new System.Drawing.Size(276, 17);
+            this.check_dvdnav.Size = new System.Drawing.Size(277, 17);
             this.check_dvdnav.TabIndex = 90;
             this.check_dvdnav.Text = "Disable LibDVDNav. (libdvdread will be used instead)";
             this.check_dvdnav.UseVisualStyleBackColor = false;
@@ -1204,7 +1311,7 @@ namespace Handbrake
             this.check_queryEditorTab.BackColor = System.Drawing.Color.Transparent;
             this.check_queryEditorTab.Location = new System.Drawing.Point(81, 60);
             this.check_queryEditorTab.Name = "check_queryEditorTab";
-            this.check_queryEditorTab.Size = new System.Drawing.Size(241, 17);
+            this.check_queryEditorTab.Size = new System.Drawing.Size(236, 17);
             this.check_queryEditorTab.TabIndex = 84;
             this.check_queryEditorTab.Text = "Enable \"Query Editor\" tab (Requires Restart)";
             this.ToolTip.SetToolTip(this.check_queryEditorTab, "Enables the Query Editor tab on the main window. Requires program restart to take" +
@@ -1217,7 +1324,7 @@ namespace Handbrake
             this.label32.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label32.AutoSize = true;
             this.label32.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label32.Location = new System.Drawing.Point(13, 248);
+            this.label32.Location = new System.Drawing.Point(13, 275);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(33, 13);
             this.label32.TabIndex = 89;
@@ -1232,7 +1339,7 @@ namespace Handbrake
             "0.50",
             "0.25",
             "0.20"});
-            this.drop_x264step.Location = new System.Drawing.Point(273, 210);
+            this.drop_x264step.Location = new System.Drawing.Point(292, 237);
             this.drop_x264step.Name = "drop_x264step";
             this.drop_x264step.Size = new System.Drawing.Size(85, 21);
             this.drop_x264step.TabIndex = 86;
@@ -1243,7 +1350,7 @@ namespace Handbrake
             // 
             this.label30.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(78, 213);
+            this.label30.Location = new System.Drawing.Point(78, 240);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(189, 13);
             this.label30.TabIndex = 87;
@@ -1256,7 +1363,7 @@ namespace Handbrake
             this.check_disablePresetNotification.BackColor = System.Drawing.Color.Transparent;
             this.check_disablePresetNotification.Location = new System.Drawing.Point(81, 106);
             this.check_disablePresetNotification.Name = "check_disablePresetNotification";
-            this.check_disablePresetNotification.Size = new System.Drawing.Size(222, 17);
+            this.check_disablePresetNotification.Size = new System.Drawing.Size(216, 17);
             this.check_disablePresetNotification.TabIndex = 91;
             this.check_disablePresetNotification.Text = "Disable built-in preset update notification";
             this.ToolTip.SetToolTip(this.check_disablePresetNotification, "Disables the notification you recieve when presets are updated when a new version" +
@@ -1269,7 +1376,7 @@ namespace Handbrake
             this.label28.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label28.AutoSize = true;
             this.label28.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label28.Location = new System.Drawing.Point(8, 213);
+            this.label28.Location = new System.Drawing.Point(8, 240);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(38, 13);
             this.label28.TabIndex = 85;
@@ -1669,90 +1776,6 @@ namespace Handbrake
             this.pictureBox2.TabIndex = 60;
             this.pictureBox2.TabStop = false;
             // 
-            // label46
-            // 
-            this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(1, 3);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(105, 13);
-            this.label46.TabIndex = 99;
-            this.label46.Text = "Available Languages";
-            // 
-            // label47
-            // 
-            this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(199, 3);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(103, 13);
-            this.label47.TabIndex = 100;
-            this.label47.Text = "Selected Languages";
-            // 
-            // audioSelectionPanel
-            // 
-            this.audioSelectionPanel.Controls.Add(this.label46);
-            this.audioSelectionPanel.Controls.Add(this.listBox_selectedLanguages);
-            this.audioSelectionPanel.Controls.Add(this.button_moveLanguageDown);
-            this.audioSelectionPanel.Controls.Add(this.listBox_availableLanguages);
-            this.audioSelectionPanel.Controls.Add(this.button_addLanguage);
-            this.audioSelectionPanel.Controls.Add(this.button_moveLanguageUp);
-            this.audioSelectionPanel.Controls.Add(this.label47);
-            this.audioSelectionPanel.Controls.Add(this.button_removeLanguage);
-            this.audioSelectionPanel.Controls.Add(this.button_clearLanguage);
-            this.audioSelectionPanel.Location = new System.Drawing.Point(125, 59);
-            this.audioSelectionPanel.Name = "audioSelectionPanel";
-            this.audioSelectionPanel.Size = new System.Drawing.Size(381, 166);
-            this.audioSelectionPanel.TabIndex = 108;
-            // 
-            // listBox_availableLanguages
-            // 
-            this.listBox_availableLanguages.Location = new System.Drawing.Point(4, 19);
-            this.listBox_availableLanguages.Name = "listBox_availableLanguages";
-            this.listBox_availableLanguages.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBox_availableLanguages.Size = new System.Drawing.Size(137, 134);
-            this.listBox_availableLanguages.Sorted = true;
-            this.listBox_availableLanguages.TabIndex = 94;
-            this.listBox_availableLanguages.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBox_availableLanguages_MouseDoubleClick);
-            // 
-            // listBox_selectedLanguages
-            // 
-            this.listBox_selectedLanguages.Location = new System.Drawing.Point(202, 19);
-            this.listBox_selectedLanguages.Name = "listBox_selectedLanguages";
-            this.listBox_selectedLanguages.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBox_selectedLanguages.Size = new System.Drawing.Size(137, 134);
-            this.listBox_selectedLanguages.TabIndex = 95;
-            this.listBox_selectedLanguages.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBox_selectedLanguages_MouseDoubleClick);
-            // 
-            // button_moveLanguageDown
-            // 
-            this.button_moveLanguageDown.Image = global::Handbrake.Properties.Resources.arrow_down;
-            this.button_moveLanguageDown.Location = new System.Drawing.Point(345, 90);
-            this.button_moveLanguageDown.Name = "button_moveLanguageDown";
-            this.button_moveLanguageDown.Size = new System.Drawing.Size(25, 27);
-            this.button_moveLanguageDown.TabIndex = 102;
-            this.ToolTip.SetToolTip(this.button_moveLanguageDown, "Move selected languages down in the order.");
-            this.button_moveLanguageDown.UseVisualStyleBackColor = true;
-            this.button_moveLanguageDown.Click += new System.EventHandler(this.button_moveLanguageDown_Click);
-            // 
-            // button_moveLanguageUp
-            // 
-            this.button_moveLanguageUp.Image = global::Handbrake.Properties.Resources.arrow_up;
-            this.button_moveLanguageUp.Location = new System.Drawing.Point(345, 57);
-            this.button_moveLanguageUp.Name = "button_moveLanguageUp";
-            this.button_moveLanguageUp.Size = new System.Drawing.Size(25, 27);
-            this.button_moveLanguageUp.TabIndex = 101;
-            this.ToolTip.SetToolTip(this.button_moveLanguageUp, "Move selected languages up in the order.");
-            this.button_moveLanguageUp.UseVisualStyleBackColor = true;
-            this.button_moveLanguageUp.Click += new System.EventHandler(this.button_moveLanguageUp_Click);
-            // 
-            // label39
-            // 
-            this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(16, 62);
-            this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(92, 13);
-            this.label39.TabIndex = 109;
-            this.label39.Text = "Additional Tracks:";
-            // 
             // frmOptions
             // 
             this.AcceptButton = this.btn_close;
@@ -1783,17 +1806,18 @@ namespace Handbrake
             this.tab_picture.PerformLayout();
             this.tab_audio_sub.ResumeLayout(false);
             this.tab_audio_sub.PerformLayout();
+            this.audioSelectionPanel.ResumeLayout(false);
+            this.audioSelectionPanel.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.tab_cli.ResumeLayout(false);
             this.tab_cli.PerformLayout();
             this.tab_advanced.ResumeLayout(false);
             this.tab_advanced.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ud_minTitleLength)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            this.audioSelectionPanel.ResumeLayout(false);
-            this.audioSelectionPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1928,5 +1952,7 @@ namespace Handbrake
         private System.Windows.Forms.ListBox listBox_availableLanguages;
         private System.Windows.Forms.Button button_moveLanguageUp;
         private System.Windows.Forms.Label label39;
+        private System.Windows.Forms.NumericUpDown ud_minTitleLength;
+        private System.Windows.Forms.Label label40;
     }
 }
