@@ -816,8 +816,7 @@ namespace Handbrake
             this.drop_preferredLang.Name = "drop_preferredLang";
             this.drop_preferredLang.Size = new System.Drawing.Size(118, 21);
             this.drop_preferredLang.TabIndex = 87;
-            this.ToolTip.SetToolTip(this.drop_preferredLang, "The number of processor\'s / processor cores. Unless your having problems, leave o" +
-        "n Automatic.");
+            this.ToolTip.SetToolTip(this.drop_preferredLang, "The primary selected language. If set to \"Any\" no advance options are available.");
             this.drop_preferredLang.SelectedIndexChanged += new System.EventHandler(this.drop_preferredLang_SelectedIndexChanged);
             // 
             // button_addLanguage
