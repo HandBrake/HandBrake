@@ -1345,10 +1345,10 @@ namespace HandBrake.Interop
 				nativeAudio.config.output.codec = Converters.AudioEncoderToNative(encoding.Encoder);
 			}
 
-			if (encoding.Encoder != AudioEncoder.Passthrough && encoding.Encoder != AudioEncoder.Ac3Passthrough && encoding.Encoder != AudioEncoder.DtsPassthrough)
+			if (!Utilities.IsPassthrough(encoding.Encoder))
 			{
 				nativeAudio.config.output.bitrate = encoding.Bitrate;
-				nativeAudio.config.output.dynamic_range_compression = 0.0;
+				nativeAudio.config.output.dynamic_range_compression = encoding.Drc;
 				nativeAudio.config.output.gain = encoding.Gain;
 
 				if (encoding.Mixdown == Mixdown.Auto)

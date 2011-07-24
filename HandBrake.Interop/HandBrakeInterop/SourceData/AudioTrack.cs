@@ -9,7 +9,7 @@
 
 namespace HandBrake.Interop.SourceData
 {
-    /// <summary>
+	/// <summary>
 	/// An object represending an AudioTrack associated with a Title, in a DVD
 	/// </summary>
 	public class AudioTrack

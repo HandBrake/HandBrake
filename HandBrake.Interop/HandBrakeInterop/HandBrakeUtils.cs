@@ -17,7 +17,7 @@ namespace HandBrake.Interop
 	using HandBrake.Interop.Model.Encoding;
 	using HandBrake.Interop.SourceData;
 
-    public static class HandBrakeUtils
+	public static class HandBrakeUtils
 	{
 		/// <summary>
 		/// Estimated overhead in bytes for each frame in output container.
@@ -212,7 +212,6 @@ namespace HandBrake.Interop
 				case AudioEncoder.Ac3:
 				case AudioEncoder.Passthrough:
 				case AudioEncoder.Ac3Passthrough:
-				case AudioEncoder.DtsPassthrough:
 					return 1536;
 			}
 
@@ -240,9 +239,7 @@ namespace HandBrake.Interop
 				int samplesPerFrame = HandBrakeUtils.GetAudioSamplesPerFrame(encoding.Encoder);
 				int audioBitrate;
 
-				if (encoding.Encoder == AudioEncoder.Passthrough ||
-					encoding.Encoder == AudioEncoder.Ac3Passthrough ||
-					encoding.Encoder == AudioEncoder.DtsPassthrough)
+				if (Utilities.IsPassthrough(encoding.Encoder))
 				{
 					// Input bitrate is in bits/second.
 					audioBitrate = track.Bitrate / 8;

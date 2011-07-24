@@ -16,7 +16,7 @@ namespace HandBrake.Interop
 	using HandBrake.Interop.Model.Encoding;
 	using HandBrake.Interop.SourceData;
 
-    public static class Converters
+	public static class Converters
 	{
 		private static Dictionary<double, int> vrates = new Dictionary<double, int>
 		{
@@ -83,14 +83,17 @@ namespace HandBrake.Interop
 			throw new ArgumentException("Unrecognized mixdown: " + mixdown, "mixdown");
 		}
 
+		/// <summary>
+		/// Gets the native code for the given encoder.
+		/// </summary>
+		/// <param name="encoder">The audio encoder to convert. Cannot be AudioEncoder.Passthrough.</param>
+		/// <returns>The native code for the encoder.</returns>
 		public static uint AudioEncoderToNative(AudioEncoder encoder)
 		{
 			switch (encoder)
 			{
 				case AudioEncoder.Ac3Passthrough:
 					return NativeConstants.HB_ACODEC_AC3_PASS;
-				case AudioEncoder.DtsPassthrough:
-					return NativeConstants.HB_ACODEC_DCA_PASS;
 				case AudioEncoder.Faac:
 					return NativeConstants.HB_ACODEC_FAAC;
 				case AudioEncoder.Lame:
@@ -112,6 +115,8 @@ namespace HandBrake.Interop
 					return AudioCodec.Ac3;
 				case NativeConstants.HB_ACODEC_DCA:
 					return AudioCodec.Dts;
+				case NativeConstants.HB_ACODEC_DCA_HD:
+					return AudioCodec.DtsHD;
 				default:
 					return AudioCodec.Other;
 			}
