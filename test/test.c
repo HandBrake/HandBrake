@@ -135,7 +135,7 @@ static int64_t stop_at_pts    = 0;
 static int    stop_at_frame = 0;
 static char * stop_at_string = NULL;
 static char * stop_at_token = NULL;
-static uint64_t min_title_duration = 900000LL;
+static uint64_t min_title_duration = 10;
 
 /* Exit cleanly on Ctrl-C */
 static volatile int die = 0;
@@ -245,7 +245,7 @@ int main( int argc, char ** argv )
         titleindex = 0;
     }
 
-    hb_scan( h, input, titleindex, preview_count, store_previews, min_title_duration );
+    hb_scan( h, input, titleindex, preview_count, store_previews, min_title_duration * 90000LL );
 
     /* Wait... */
     while( !die )
@@ -2486,6 +2486,8 @@ static void ShowHelp()
     "    -i, --input <string>    Set input device\n"
     "    -t, --title <number>    Select a title to encode (0 to scan all titles only,\n"
     "                            default: 1)\n"
+    "        --min-duration      Set the minimum title duration (in seconds). Shorter\n"
+    "                            titles will not be scanned (default: 10)."
     "        --scan              Scan selected title only.\n"
     "        --main-feature      Detect and select the main feature title.\n"
     "    -c, --chapters <string> Select chapters (e.g. \"1-3\" for chapters\n"
