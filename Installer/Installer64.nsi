@@ -56,7 +56,7 @@ OutFile "HandBrake-${PRODUCT_VERSION_NUMBER}-Win_GUI.exe"
 !insertmacro VersionCompare
 !include LogicLib.nsh
 
-InstallDir "$PROGRAMFILES\Handbrake"
+InstallDir "$PROGRAMFILES64\Handbrake"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show

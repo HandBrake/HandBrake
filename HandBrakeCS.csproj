@@ -306,6 +306,8 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="Installer\Installer64.nsi" />
+    <None Include="Installer\MakeNightly64.nsi.tmpl" />
     <None Include="Installer\MakeNightly.nsi.tmpl" />
     <None Include="Installer\MakeNightly.nsi" />
     <None Include="Installer\Installer.nsi" />
@@ -418,8 +420,10 @@
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.5\StyleCop.targets" />
   <PropertyGroup>
     <PreBuildEvent>
-	subwcrev.exe "$(ProjectDir)." "$(ProjectDir)Properties\AssemblyInfo.cs.tmpl" "$(ProjectDir)Properties\AssemblyInfo.cs"
-	subwcrev.exe "$(ProjectDir)." "$(ProjectDir)Properties\AssemblyInfo.cs.tmpl" "$(ProjectDir)Properties\AssemblyInfo.cs"
-  subwcrev.exe "$(ProjectDir)." "$(ProjectDir)Installer\MakeNightly.nsi.tmpl" "$(ProjectDir)Installer\MakeNightly.nsi"</PreBuildEvent>
+      subwcrev.exe "$(ProjectDir)." "$(ProjectDir)Properties\AssemblyInfo.cs.tmpl" "$(ProjectDir)Properties\AssemblyInfo.cs"
+      subwcrev.exe "$(ProjectDir)." "$(ProjectDir)Properties\AssemblyInfo.cs.tmpl" "$(ProjectDir)Properties\AssemblyInfo.cs"
+      subwcrev.exe "$(ProjectDir)." "$(ProjectDir)Installer\MakeNightly.nsi.tmpl" "$(ProjectDir)Installer\MakeNightly.nsi"
+      subwcrev.exe "$(ProjectDir)." "$(ProjectDir)Installer\MakeNightly64.nsi.tmpl" "$(ProjectDir)Installer\MakeNightly64.nsi"
+    </PreBuildEvent>
   </PropertyGroup>
 </Project>
