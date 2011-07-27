@@ -299,8 +299,6 @@ struct hb_job_s
     hb_fifo_t     * fifo_render;  /* Raw pictures, scaled */
     hb_fifo_t     * fifo_mpeg4;   /* MPEG-4 video ES */
 
-    hb_thread_t   * reader;
-
     hb_list_t     * list_work;
 
     hb_esconfig_t config;
@@ -324,7 +322,6 @@ struct hb_job_s
 #define HB_ACODEC_FFMPEG    0x00020000
 #define HB_ACODEC_DCA_HD    0x00040000
 #define HB_ACODEC_FF_MASK   0x00060000
-#define HB_ACODEC_FF_I_FLAG 0x80000000
 #define HB_ACODEC_PASS_FLAG 0x40000000
 #define HB_ACODEC_PASS_MASK (HB_ACODEC_DCA_HD | HB_ACODEC_AC3 | HB_ACODEC_DCA)
 #define HB_ACODEC_AC3_PASS  (HB_ACODEC_AC3 | HB_ACODEC_PASS_FLAG)
@@ -465,8 +462,6 @@ struct hb_audio_s
         hb_esconfig_t config;
         hb_mux_data_t * mux_data;
         hb_fifo_t     * scan_cache;
-
-        hb_list_t     * ff_audio_list;
     } priv;
 };
 #endif
@@ -599,6 +594,7 @@ struct hb_title_s
     uint64_t    block_end;
     uint64_t    block_count;
     int         angle_count;
+    void        *opaque_priv;
 
     /* Visual-friendly duration */
     int         hours;
@@ -714,7 +710,6 @@ typedef struct hb_work_info_s
             int     height;
             int     pixel_aspect_width;
             int     pixel_aspect_height;
-            double  aspect;
         };
         struct {    // info only valid for audio decoders
             int     channel_layout;
@@ -785,10 +780,8 @@ extern hb_work_object_t hb_encx264;
 extern hb_work_object_t hb_enctheora;
 extern hb_work_object_t hb_deca52;
 extern hb_work_object_t hb_decdca;
-extern hb_work_object_t hb_decavcodec;
+extern hb_work_object_t hb_decavcodeca;
 extern hb_work_object_t hb_decavcodecv;
-extern hb_work_object_t hb_decavcodecvi;
-extern hb_work_object_t hb_decavcodecai;
 extern hb_work_object_t hb_declpcm;
 extern hb_work_object_t hb_encfaac;
 extern hb_work_object_t hb_enclame;
@@ -797,6 +790,7 @@ extern hb_work_object_t hb_muxer;
 extern hb_work_object_t hb_encca_aac;
 extern hb_work_object_t hb_encca_haac;
 extern hb_work_object_t hb_encavcodeca;
+extern hb_work_object_t hb_reader;
 
 #define FILTER_OK      0
 #define FILTER_DELAY   1

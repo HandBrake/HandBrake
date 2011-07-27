@@ -95,11 +95,16 @@ hb_title_t * hb_batch_title_scan( hb_batch_t * d, int t )
     if ( filename == NULL )
         return NULL;
 
-    stream = hb_stream_open( filename, 0 );
+    hb_log( "batch: scanning %s", filename );
+    title = hb_title_init( filename, 0 );
+    stream = hb_stream_open( filename, title, 1 );
     if ( stream == NULL )
+    {
+        hb_title_close( &title );
         return NULL;
+    }
 
-    title = hb_stream_title_scan( stream );
+    title = hb_stream_title_scan( stream, title );
     hb_stream_close( &stream );
     if ( title != NULL )
     {

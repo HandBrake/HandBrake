@@ -124,6 +124,7 @@ typedef struct {
 
 struct hb_stream_s
 {
+    int     scan;
     int     frames;             /* video frames so far */
     int     errors;             /* total errors so far */
     int     last_error_frame;   /* frame # at last error message */
@@ -164,7 +165,8 @@ struct hb_stream_s
     hb_stream_type_t hb_stream_type;
     hb_title_t *title;
 
-    AVFormatContext *ffmpeg_ic;
+    AVFormatContext *ffmpeg_info_ic;
+    AVFormatContext *ffmpeg_reader_ic;
     AVPacket *ffmpeg_pkt;
     uint8_t ffmpeg_video_id;
 
@@ -209,10 +211,10 @@ static void hb_ts_stream_set_audio_list(hb_list_t *list_audio, hb_stream_t *stre
 static void hb_ps_stream_find_audio_ids(hb_stream_t *stream, hb_title_t *title);
 static off_t align_to_next_packet(hb_stream_t *stream);
 
-static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title );
+static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan );
 static void ffmpeg_close( hb_stream_t *d );
-static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream );
-static hb_buffer_t *ffmpeg_read( hb_stream_t *stream );
+static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title );
+hb_buffer_t *hb_ffmpeg_read( hb_stream_t *stream );
 static int ffmpeg_seek( hb_stream_t *stream, float frac );
 static int ffmpeg_seek_ts( hb_stream_t *stream, int64_t ts );
 
@@ -610,7 +612,7 @@ static int audio_inactive( hb_stream_t *stream, int idx )
  ***********************************************************************
  *
  **********************************************************************/
-hb_stream_t * hb_stream_open( char *path, hb_title_t *title )
+hb_stream_t * hb_stream_open( char *path, hb_title_t *title, int scan )
 {
     FILE *f = fopen( path, "rb" );
     if ( f == NULL )
@@ -634,7 +636,7 @@ hb_stream_t * hb_stream_open( char *path, hb_title_t *title )
      * (even if we have saved state, the stream may have changed).
      */
     hb_stream_t *ss = hb_stream_lookup( path );
-    if ( title && ss && ss->hb_stream_type != ffmpeg )
+    if ( !scan && ss && ss->hb_stream_type != ffmpeg )
     {
         /*
          * copy the saved state since we might be encoding the same stream
@@ -643,6 +645,7 @@ hb_stream_t * hb_stream_open( char *path, hb_title_t *title )
         memcpy( d, ss, sizeof(*d) );
         d->file_handle = f;
         d->title = title;
+        d->scan = scan;
         d->path = strdup( path );
 
         if ( d->hb_stream_type == transport )
@@ -680,6 +683,7 @@ hb_stream_t * hb_stream_open( char *path, hb_title_t *title )
     }
     d->file_handle = f;
     d->title = title;
+    d->scan = scan;
     d->path = strdup( path );
     if (d->path != NULL )
     {
@@ -689,7 +693,7 @@ hb_stream_t * hb_stream_open( char *path, hb_title_t *title )
         }
         fclose( d->file_handle );
         d->file_handle = NULL;
-        if ( ffmpeg_open( d, title ) )
+        if ( ffmpeg_open( d, title, scan ) )
         {
             return d;
         }
@@ -831,7 +835,7 @@ void hb_stream_close( hb_stream_t ** _d )
      * if the stream was opened for a scan, cache the result, otherwise delete
      * the state.
      */
-    if ( stream->title == NULL )
+    if ( stream->scan )
     {
         hb_stream_delete_dynamic( stream );
         if ( stream_state_list == NULL )
@@ -868,13 +872,13 @@ static void hb_stream_delete_entry(hb_stream_t *stream, int indx)
  ***********************************************************************
  *
  **********************************************************************/
-hb_title_t * hb_stream_title_scan(hb_stream_t *stream)
+hb_title_t * hb_stream_title_scan(hb_stream_t *stream, hb_title_t * title)
 {
     if ( stream->hb_stream_type == ffmpeg )
-        return ffmpeg_title_scan( stream );
+        return ffmpeg_title_scan( stream, title );
 
     // 'Barebones Title'
-    hb_title_t *aTitle = hb_title_init( stream->path, 0 );
+    hb_title_t *aTitle = title;
     aTitle->type = HB_STREAM_TYPE;
     aTitle->index = 1;
 
@@ -1388,7 +1392,7 @@ hb_buffer_t * hb_stream_read( hb_stream_t * src_stream )
 {
     if ( src_stream->hb_stream_type == ffmpeg )
     {
-        return ffmpeg_read( src_stream );
+        return hb_ffmpeg_read( src_stream );
     }
     if ( src_stream->hb_stream_type == dvd_program )
     {
@@ -1483,28 +1487,15 @@ hb_buffer_t * hb_stream_read( hb_stream_t * src_stream )
     return hb_ts_stream_decode( src_stream );
 }
 
-void ffmpeg_flush_stream_buffers( hb_stream_t *stream )
-{
-    int i;
-    AVFormatContext *ic = stream->ffmpeg_ic;
-
-    for ( i = 0; i < ic->nb_streams; i++ )
-    {
-        if ( ic->streams[i]->codec && ic->streams[i]->codec->codec )
-        {
-            avcodec_flush_buffers( ic->streams[i]->codec );
-        }
-    }
-}
-
 int64_t ffmpeg_initial_timestamp( hb_stream_t * stream )
 {
-    AVStream *s = stream->ffmpeg_ic->streams[stream->ffmpeg_video_id];
-    if ( s->nb_index_entries < 1 )
+    AVFormatContext *ic = stream->ffmpeg_info_ic;
+    if ( ic->start_time != AV_NOPTS_VALUE && ic->start_time > 0 )
+        return ic->start_time;
+    else
         return 0;
-
-    return s->index_entries[0].timestamp;
 }
+
 int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
 {
 
@@ -1537,8 +1528,11 @@ int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
 
     if ( chapter_num > 1 && pos > 0 )
     {
-        av_seek_frame( stream->ffmpeg_ic, -1, pos, 0);
-        ffmpeg_flush_stream_buffers( stream );
+        AVStream *st = stream->ffmpeg_info_ic->streams[stream->ffmpeg_video_id];
+        // timebase must be adjusted to match timebase of stream we are
+        // using for seeking.
+        pos = av_rescale(pos, st->time_base.den, AV_TIME_BASE * (int64_t)st->time_base.num);
+        avformat_seek_file( stream->ffmpeg_reader_ic, stream->ffmpeg_video_id, 0, pos, pos, AVSEEK_FLAG_BACKWARD);
     }
     return 1;
 }
@@ -1655,7 +1649,6 @@ static void set_ts_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
      * formatting routine in scan.c do all the stuff below.
      */
     const char *codec_name;
-    AVCodecContext *cc;
 
     // Names for streams we know about.
     if ( audio->config.in.stream_type == 0x80 && 
@@ -1705,24 +1698,6 @@ static void set_ts_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
         // To distinguish, Bluray streams have a reg_desc of HDMV
         codec_name = "E-AC3";
     }
-    // For streams demuxed and decoded by ffmpeg, we have a cached context.
-    // Use it to get the name and profile information.  Obtaining
-    // the profile requires that ffmpeg has already probed the stream.
-    else if ( ( audio->config.in.codec & HB_ACODEC_FF_MASK ) &&
-              ( audio->config.in.codec & HB_ACODEC_FF_I_FLAG ) &&
-         ( cc = hb_ffmpeg_context( audio->config.in.codec_param ) ) &&
-         avcodec_find_decoder( cc->codec_id ) )
-    {
-        AVCodec *codec = avcodec_find_decoder( cc->codec_id );
-        codec_name = codec->name;
-
-        const char *profile_name;
-        profile_name = av_get_profile_name( codec, cc->profile );
-        if ( profile_name )
-        {
-            codec_name = profile_name;
-        }
-    }
     else if ( st2codec[audio->config.in.stream_type].kind == A )
     {
         codec_name = stream_type_name(audio->config.in.reg_desc,
@@ -1731,7 +1706,6 @@ static void set_ts_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
     // For streams demuxed by us and decoded by ffmpeg, we can lookup the
     // decoder name.
     else if ( ( audio->config.in.codec & HB_ACODEC_FF_MASK ) &&
-              !( audio->config.in.codec & HB_ACODEC_FF_I_FLAG ) &&
               avcodec_find_decoder( audio->config.in.codec_param ) )
     {
         codec_name = avcodec_find_decoder( audio->config.in.codec_param )->name;
@@ -1750,25 +1724,13 @@ static void set_ts_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
               strlen(lang->native_name) ? lang->native_name : lang->eng_name,
               codec_name );
 
-    if ( ( audio->config.in.codec & HB_ACODEC_FF_MASK) &&
-         ( audio->config.in.codec & HB_ACODEC_FF_I_FLAG ) )
-    {
-        int layout = audio->config.in.channel_layout;
-        char *desc = audio->config.lang.description +
-                        strlen( audio->config.lang.description );
-        sprintf( desc, " (%d.%d ch)",
-                 HB_INPUT_CH_LAYOUT_GET_DISCRETE_FRONT_COUNT(layout) +
-                     HB_INPUT_CH_LAYOUT_GET_DISCRETE_REAR_COUNT(layout),
-                 HB_INPUT_CH_LAYOUT_GET_DISCRETE_LFE_COUNT(layout) );
-    }
-
     snprintf( audio->config.lang.simple, sizeof( audio->config.lang.simple ), "%s",
               strlen(lang->native_name) ? lang->native_name : lang->eng_name );
     snprintf( audio->config.lang.iso639_2, sizeof( audio->config.lang.iso639_2 ),
               "%s", lang->iso639_2);
 }
 
-static void set_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
+static void set_audio_description( hb_stream_t * stream, hb_audio_t *audio, iso639_lang_t *lang )
 {
     /* XXX
      * This is a duplicate of code in dvd.c - it should get factored out
@@ -1777,14 +1739,17 @@ static void set_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
      * formatting routine in scan.c do all the stuff below.
      */
     const char *codec_name;
-    AVCodecContext *cc;
+    AVCodecContext *cc = NULL;
+
+    if ( stream && stream->ffmpeg_info_ic )
+    {
+        cc = stream->ffmpeg_info_ic->streams[audio->id]->codec;
+    }
 
     // For streams demuxed and decoded by ffmpeg, we have a cached context.
     // Use it to get the name and profile information.  Obtaining
     // the profile requires that ffmpeg has already probed the stream.
-    if ( ( audio->config.in.codec & HB_ACODEC_FF_MASK ) &&
-         ( audio->config.in.codec & HB_ACODEC_FF_I_FLAG ) &&
-         ( cc = hb_ffmpeg_context( audio->config.in.codec_param ) ) &&
+    if ( ( audio->config.in.codec & HB_ACODEC_FF_MASK ) && cc &&
          avcodec_find_decoder( cc->codec_id ) )
     {
         AVCodec *codec = avcodec_find_decoder( cc->codec_id );
@@ -1800,7 +1765,6 @@ static void set_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
     // For streams demuxed by us and decoded by ffmpeg, we can lookup the
     // decoder name.
     else if ( ( audio->config.in.codec & HB_ACODEC_FF_MASK ) &&
-              !( audio->config.in.codec & HB_ACODEC_FF_I_FLAG ) &&
               avcodec_find_decoder( audio->config.in.codec_param ) )
     {
         codec_name = avcodec_find_decoder( audio->config.in.codec_param )->name;
@@ -1818,8 +1782,7 @@ static void set_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
               strlen(lang->native_name) ? lang->native_name : lang->eng_name,
               codec_name );
 
-    if ( ( audio->config.in.codec & HB_ACODEC_FF_MASK) &&
-         ( audio->config.in.codec & HB_ACODEC_FF_I_FLAG ) )
+    if ( audio->config.in.channel_layout )
     {
         int layout = audio->config.in.channel_layout;
         char *desc = audio->config.lang.description +
@@ -2042,7 +2005,7 @@ static void add_audio_to_title(hb_title_t *title, int id)
             return;
 
     }
-    set_audio_description( audio, lang_for_code( 0 ) );
+    set_audio_description( NULL, audio, lang_for_code( 0 ) );
 
     // Sort by id when adding to the list
     int i;
@@ -3124,182 +3087,78 @@ static void hb_ts_stream_reset(hb_stream_t *stream)
 // ------------------------------------------------------------------
 // Support for reading media files via the ffmpeg libraries.
 
-static void ffmpeg_add_codec( hb_stream_t *stream, int stream_index )
+static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
 {
-    // add a codec to the context here so it will be there when we
-    // read the first packet.
-    AVCodecContext *context = stream->ffmpeg_ic->streams[stream_index]->codec;
-    context->workaround_bugs = FF_BUG_AUTODETECT;
-    context->error_recognition = 1;
-    context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
-    AVCodec *codec = avcodec_find_decoder( context->codec_id );
-    hb_ff_set_sample_fmt( context, codec );
-}
-
-// The ffmpeg stream reader / parser shares a lot of state with the 
-// decoder via a codec context kept in the AVStream of the reader's
-// AVFormatContext. Since decoding is done in a different thread we
-// have to somehow pass this codec context to the decoder and we have
-// to do it before the first packet is read (so we can't put the info
-// in the buf we'll send downstream). Decoders don't have any way to
-// get to the stream directly (they're not passed the title or job
-// pointers during a scan) so this is a back door for the decoder to
-// get the codec context. We just stick the stream pointer in the next
-// slot an array of pointers maintained as a circular list then return
-// the index into the list combined with the ffmpeg stream index as the
-// codec_param that will be passed to the decoder init routine. We make
-// the list 'big' (enough for 1024 simultaneously open ffmpeg streams)
-// so that we don't have to do a complicated allocator or worry about
-// deleting entries on close. 
-//
-// Entries can only be added to this list during a scan and are never
-// deleted so the list access doesn't require locking.
-static hb_stream_t **ffmpeg_streams;    // circular list of stream pointers
-static int ffmpeg_stream_cur;           // where we put the last stream pointer
-#define ffmpeg_sl_bits (10)             // log2 stream list size (in entries)
-#define ffmpeg_sl_size (1 << ffmpeg_sl_bits)
-
-// add a stream to the list & return the appropriate codec_param to access it
-static int ffmpeg_codec_param( hb_stream_t *stream, int stream_index )
-{
-    if ( !ffmpeg_streams )
-    {
-        ffmpeg_streams = calloc( ffmpeg_sl_size, sizeof(stream) );
-    }
-
-    // the title scan adds all the ffmpeg media streams at once so we
-    // only add a new entry to our stream list if the stream is different
-    // than last time.
-    int slot = ffmpeg_stream_cur;
-    if ( ffmpeg_streams[slot] != stream )
-    {
-        // new stream - put it in the next slot of the stream list
-        slot = ++ffmpeg_stream_cur & (ffmpeg_sl_size - 1);
-        ffmpeg_streams[slot] = stream;
-    }
-
-    ffmpeg_add_codec( stream, stream_index );
-
-    return ( stream_index << ffmpeg_sl_bits ) | slot;
-}
-
-// we're about to open 'title' to convert it - remap the stream associated
-// with the video & audio codec params of the title to refer to 'stream'
-// (the original scan stream was closed and no longer exists).
-static void ffmpeg_remap_stream( hb_stream_t *stream, hb_title_t *title )
-{
-    // all the video & audio came from the same stream so remapping
-    // the video's stream slot takes care of everything.
-    int slot = title->video_codec_param & (ffmpeg_sl_size - 1);
-    ffmpeg_streams[slot] = stream;
-
-    // add codecs for all the streams used by the title
-    ffmpeg_add_codec( stream, title->video_codec_param >> ffmpeg_sl_bits );
-
-    int i;
-    hb_audio_t *audio;
-    for ( i = 0; ( audio = hb_list_item( title->list_audio, i ) ); ++i )
-    {
-        if ( audio->config.in.codec & HB_ACODEC_FF_MASK )
-        {
-            ffmpeg_add_codec( stream,
-                              audio->config.in.codec_param >> ffmpeg_sl_bits );
-        }
-    }
-}
-
-void *hb_ffmpeg_context( int codec_param )
-{
-    if ( ffmpeg_streams == NULL )
-        return NULL;
-
-    int slot = codec_param & (ffmpeg_sl_size - 1);
-    int stream_index = codec_param >> ffmpeg_sl_bits;
-    return ffmpeg_streams[slot]->ffmpeg_ic->streams[stream_index]->codec;
-}
-
-void *hb_ffmpeg_avstream( int codec_param )
-{
-    if ( ffmpeg_streams == NULL )
-        return NULL;
-
-    int slot = codec_param & (ffmpeg_sl_size - 1);
-    int stream_index = codec_param >> ffmpeg_sl_bits;
-    return ffmpeg_streams[slot]->ffmpeg_ic->streams[stream_index];
-}
-
-static AVFormatContext *ffmpeg_deferred_close;
-
-static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title )
-{
-    if ( ffmpeg_deferred_close )
-    {
-        av_close_input_file( ffmpeg_deferred_close );
-        ffmpeg_deferred_close = NULL;
-    }
-    AVFormatContext *ic;
+    AVFormatContext *info_ic = NULL, *reader_ic = NULL;
 
     av_log_set_level( AV_LOG_ERROR );
-    if ( av_open_input_file( &ic, stream->path, NULL, 0, NULL ) < 0 )
+
+    // FFMpeg has issues with seeking.  After av_find_stream_info, the
+    // streams are left in an indeterminate position.  So a seek is
+    // necessary to force things back to the beginning of the stream.
+    // But then the seek fails for some stream types.  So the safest thing
+    // to do seems to be to open 2 AVFormatContext.  One for probing info
+    // and the other for reading.
+    if ( av_open_input_file( &info_ic, stream->path, NULL, 0, NULL ) < 0 )
     {
         return 0;
     }
-    if ( av_find_stream_info( ic ) < 0 )
+    if ( av_find_stream_info( info_ic ) < 0 )
         goto fail;
 
-    stream->ffmpeg_ic = ic;
+    title->opaque_priv = (void*)info_ic;
+    stream->ffmpeg_info_ic = info_ic;
+    if ( av_open_input_file( &reader_ic, stream->path, NULL, 0, NULL ) < 0 )
+    {
+        goto fail;
+    }
+    stream->ffmpeg_reader_ic = reader_ic;
     stream->hb_stream_type = ffmpeg;
     stream->ffmpeg_pkt = malloc(sizeof(*stream->ffmpeg_pkt));
     av_init_packet( stream->ffmpeg_pkt );
     stream->chapter_end = INT64_MAX;
 
-    if ( title )
+    if ( !scan )
     {
         // we're opening for read. scan passed out codec params that
         // indexed its stream so we need to remap them so they point
         // to this stream.
         stream->ffmpeg_video_id = title->video_id;
-        ffmpeg_remap_stream( stream, title );
         av_log_set_level( AV_LOG_ERROR );
     }
     else
     {
         // we're opening for scan. let ffmpeg put some info into the
         // log about what we've got.
+        stream->ffmpeg_video_id = title->video_id;
         av_log_set_level( AV_LOG_INFO );
-        av_dump_format( ic, 0, stream->path, 0 );
+        av_dump_format( info_ic, 0, stream->path, 0 );
         av_log_set_level( AV_LOG_ERROR );
 
         // accept this file if it has at least one video stream we can decode
         int i;
-        for (i = 0; i < ic->nb_streams; ++i )
+        for (i = 0; i < info_ic->nb_streams; ++i )
         {
-            if ( ic->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO )
+            if ( info_ic->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO )
             {
                 break;
             }
         }
-        if ( i >= ic->nb_streams )
+        if ( i >= info_ic->nb_streams )
             goto fail;
     }
     return 1;
 
   fail:
-    av_close_input_file( ic );
+    if ( info_ic ) av_close_input_file( info_ic );
+    if ( reader_ic ) av_close_input_file( reader_ic );
     return 0;
 }
 
 static void ffmpeg_close( hb_stream_t *d )
 {
-    // XXX since we're sharing the CodecContext with the downstream
-    // decoder proc we can't close the stream. We need to reference count
-    // this so we can close it when both are done with their instance but
-    // for now just defer the close until the next stream open or close.
-    if ( ffmpeg_deferred_close )
-    {
-        av_close_input_file( ffmpeg_deferred_close );
-    }
-    ffmpeg_deferred_close = d->ffmpeg_ic;
+    av_close_input_file( d->ffmpeg_info_ic );
+    av_close_input_file( d->ffmpeg_reader_ic );
     if ( d->ffmpeg_pkt != NULL )
     {
         free( d->ffmpeg_pkt );
@@ -3309,7 +3168,7 @@ static void ffmpeg_close( hb_stream_t *d )
 
 static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
 {
-    AVStream *st = stream->ffmpeg_ic->streams[id];
+    AVStream *st = stream->ffmpeg_info_ic->streams[id];
     AVCodecContext *codec = st->codec;
     AVMetadataTag *tag;
     int layout;
@@ -3345,13 +3204,13 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
                ( codec->profile == FF_PROFILE_DTS_HD_MA ||
                  codec->profile == FF_PROFILE_DTS_HD_HRA ) )
             {
-                audio->config.in.codec = HB_ACODEC_DCA_HD | HB_ACODEC_FF_I_FLAG;
+                audio->config.in.codec = HB_ACODEC_DCA_HD;
             }
             else
             {
-                audio->config.in.codec = HB_ACODEC_FFMPEG | HB_ACODEC_FF_I_FLAG;
+                audio->config.in.codec = HB_ACODEC_FFMPEG;
             }
-            audio->config.in.codec_param = ffmpeg_codec_param( stream, id );
+            audio->config.in.codec_param = codec->codec_id;
 
             audio->config.in.bitrate = codec->bit_rate? codec->bit_rate : 1;
             audio->config.in.samplerate = codec->sample_rate;
@@ -3360,7 +3219,7 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
         }
 
         tag = av_metadata_get( st->metadata, "language", NULL, 0 );
-        set_audio_description( audio, 
+        set_audio_description( stream, audio, 
             lang_for_code2( tag ? tag->value : "und" ) );
 
         hb_list_add( title->list_audio, audio );
@@ -3491,7 +3350,7 @@ static int ffmpeg_parse_vobsub_extradata( AVCodecContext *codec, hb_subtitle_t *
 
 static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id )
 {
-    AVStream *st = stream->ffmpeg_ic->streams[id];
+    AVStream *st = stream->ffmpeg_info_ic->streams[id];
     AVCodecContext *codec = st->codec;
     
     hb_subtitle_t *subtitle = calloc( 1, sizeof(*subtitle) );
@@ -3560,7 +3419,7 @@ static char *get_ffmpeg_metadata_value( AVMetadata *m, char *key )
 
 static void add_ffmpeg_attachment( hb_title_t *title, hb_stream_t *stream, int id )
 {
-    AVStream *st = stream->ffmpeg_ic->streams[id];
+    AVStream *st = stream->ffmpeg_info_ic->streams[id];
     AVCodecContext *codec = st->codec;
     
     enum attachtype type;
@@ -3586,12 +3445,11 @@ static void add_ffmpeg_attachment( hb_title_t *title, hb_stream_t *stream, int i
     hb_list_add(title->list_attachment, attachment);
 }
 
-static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream )
+static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
 {
-    AVFormatContext *ic = stream->ffmpeg_ic;
+    AVFormatContext *ic = stream->ffmpeg_info_ic;
 
     // 'Barebones Title'
-    hb_title_t *title = hb_title_init( stream->path, 0 );
     title->type = HB_FF_STREAM_TYPE;
     title->index = 1;
 
@@ -3629,16 +3487,18 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream )
             }
             title->video_id = i;
             stream->ffmpeg_video_id = i;
+            if ( ic->streams[i]->sample_aspect_ratio.num &&
+                 ic->streams[i]->sample_aspect_ratio.den )
+            {
+                title->pixel_aspect_width = ic->streams[i]->sample_aspect_ratio.num;
+                title->pixel_aspect_height = ic->streams[i]->sample_aspect_ratio.den;
+            }
 
             if ( context->codec_id == CODEC_ID_H264 )
                 title->flags |= HBTF_NO_IDR;
 
-            // We have to use the 'internal' avcodec decoder because
-            // it needs to share the codec context from this video
-            // stream. The parser internal to av_read_frame
-            // passes a bunch of state info to the decoder via the context.
-            title->video_codec = WORK_DECAVCODECVI;
-            title->video_codec_param = ffmpeg_codec_param( stream, i );
+            title->video_codec = WORK_DECAVCODECV;
+            title->video_codec_param = context->codec_id;
         }
         else if ( ic->streams[i]->codec->codec_type == AVMEDIA_TYPE_AUDIO &&
                   avcodec_find_decoder( ic->streams[i]->codec->codec_id ) )
@@ -3718,7 +3578,7 @@ static int ffmpeg_is_keyframe( hb_stream_t *stream )
 {
     uint8_t *pkt;
 
-    switch ( stream->ffmpeg_ic->streams[stream->ffmpeg_video_id]->codec->codec_id )
+    switch ( stream->ffmpeg_info_ic->streams[stream->ffmpeg_video_id]->codec->codec_id )
     {
         case CODEC_ID_VC1:
             // XXX the VC1 codec doesn't mark key frames so to get previews
@@ -3740,7 +3600,7 @@ static int ffmpeg_is_keyframe( hb_stream_t *stream )
             // there are bframes or not so we have to look at the sequence
             // header to get that.
             pkt = stream->ffmpeg_pkt->data;
-            uint8_t *seqhdr = stream->ffmpeg_ic->streams[stream->ffmpeg_video_id]->codec->extradata;
+            uint8_t *seqhdr = stream->ffmpeg_info_ic->streams[stream->ffmpeg_video_id]->codec->extradata;
             int pshift = 2;
             if ( ( seqhdr[3] & 0x02 ) == 0 )
                 // no FINTERPFLAG
@@ -3760,13 +3620,13 @@ static int ffmpeg_is_keyframe( hb_stream_t *stream )
     return ( stream->ffmpeg_pkt->flags & AV_PKT_FLAG_KEY );
 }
 
-static hb_buffer_t * ffmpeg_read( hb_stream_t *stream )
+hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
 {
     int err;
     hb_buffer_t * buf;
 
   again:
-    if ( ( err = av_read_frame( stream->ffmpeg_ic, stream->ffmpeg_pkt )) < 0 )
+    if ( ( err = av_read_frame( stream->ffmpeg_reader_ic, stream->ffmpeg_pkt )) < 0 )
     {
         // av_read_frame can return EAGAIN.  In this case, it expects
         // to be called again to get more data.
@@ -3818,7 +3678,7 @@ static hb_buffer_t * ffmpeg_read( hb_stream_t *stream )
         {
             hb_log( "ffmpeg_read: pkt too big: %d bytes", stream->ffmpeg_pkt->size );
             av_free_packet( stream->ffmpeg_pkt );
-            return ffmpeg_read( stream );
+            return hb_ffmpeg_read( stream );
         }
         buf = hb_buffer_init( stream->ffmpeg_pkt->size );
         memcpy( buf->data, stream->ffmpeg_pkt->data, stream->ffmpeg_pkt->size );
@@ -3827,7 +3687,7 @@ static hb_buffer_t * ffmpeg_read( hb_stream_t *stream )
 
     // compute a conversion factor to go from the ffmpeg
     // timebase for the stream to HB's 90kHz timebase.
-    AVStream *s = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt->stream_index];
+    AVStream *s = stream->ffmpeg_info_ic->streams[stream->ffmpeg_pkt->stream_index];
     double tsconv = 90000. * (double)s->time_base.num / (double)s->time_base.den;
 
     buf->start = av_to_hb_pts( stream->ffmpeg_pkt->pts, tsconv );
@@ -3859,8 +3719,8 @@ static hb_buffer_t * ffmpeg_read( hb_stream_t *stream )
      */
     enum CodecID ffmpeg_pkt_codec;
     enum AVMediaType codec_type;
-    ffmpeg_pkt_codec = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt->stream_index]->codec->codec_id;
-    codec_type = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt->stream_index]->codec->codec_type;
+    ffmpeg_pkt_codec = stream->ffmpeg_info_ic->streams[stream->ffmpeg_pkt->stream_index]->codec->codec_id;
+    codec_type = stream->ffmpeg_info_ic->streams[stream->ffmpeg_pkt->stream_index]->codec->codec_type;
     switch ( codec_type )
     {
         case AVMEDIA_TYPE_VIDEO:
@@ -3923,38 +3783,37 @@ static hb_buffer_t * ffmpeg_read( hb_stream_t *stream )
 
 static int ffmpeg_seek( hb_stream_t *stream, float frac )
 {
-    AVFormatContext *ic = stream->ffmpeg_ic;
+    AVFormatContext *ic = stream->ffmpeg_reader_ic;
     if ( frac > 0. )
     {
-        int64_t pos = (double)ic->duration * (double)frac;
-        if ( ic->start_time != AV_NOPTS_VALUE && ic->start_time > 0 )
-        {
-            pos += ic->start_time;
-        }
-        av_seek_frame( ic, -1, pos, 0 );
-        stream->need_keyframe = 1;
-        ffmpeg_flush_stream_buffers( stream );
+        int64_t pos = (double)stream->ffmpeg_info_ic->duration * (double)frac +
+                ffmpeg_initial_timestamp( stream );
+        avformat_seek_file( ic, -1, 0, pos, pos, AVSEEK_FLAG_BACKWARD);
     }
     else
     {
-        av_seek_frame( ic, -1, 0LL, AVSEEK_FLAG_BACKWARD );
-        ffmpeg_flush_stream_buffers( stream );
+        int64_t pos = ffmpeg_initial_timestamp( stream );
+        avformat_seek_file( ic, -1, 0, pos, pos, AVSEEK_FLAG_BACKWARD);
     }
+    stream->need_keyframe = 1;
     return 1;
 }
 
 // Assumes that we are always seeking forward
 static int ffmpeg_seek_ts( hb_stream_t *stream, int64_t ts )
 {
-    AVFormatContext *ic = stream->ffmpeg_ic;
+    AVFormatContext *ic = stream->ffmpeg_reader_ic;
     int64_t pos;
     int ret;
 
     pos = ts * AV_TIME_BASE / 90000 + ffmpeg_initial_timestamp( stream );
+    AVStream *st = stream->ffmpeg_info_ic->streams[stream->ffmpeg_video_id];
+    // timebase must be adjusted to match timebase of stream we are
+    // using for seeking.
+    pos = av_rescale(pos, st->time_base.den, AV_TIME_BASE * (int64_t)st->time_base.num);
     stream->need_keyframe = 1;
     // Seek to the nearest timestamp before that requested where
     // there is an I-frame
-    ret = av_seek_frame( ic, -1, pos, AVSEEK_FLAG_BACKWARD );
-    ffmpeg_flush_stream_buffers( stream );
+    ret = avformat_seek_file( ic, stream->ffmpeg_video_id, 0, pos, pos, 0);
     return ret;
 }

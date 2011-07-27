@@ -6,6 +6,20 @@
 
 #include "hb.h"
 
+static int  hb_reader_init( hb_work_object_t * w, hb_job_t * job );
+static void hb_reader_close( hb_work_object_t * w );
+
+hb_work_object_t hb_reader =
+{
+    WORK_READER,
+    "Reader",
+    hb_reader_init,
+    NULL,
+    hb_reader_close,
+    NULL,
+    NULL
+};
+
 typedef struct
 {
     double average; // average time between packets
@@ -15,7 +29,7 @@ typedef struct
     int valid;      // Stream timing is not valid until next scr.
 } stream_timing_t;
 
-typedef struct
+struct hb_work_private_s
 {
     hb_job_t     * job;
     hb_title_t   * title;
@@ -37,25 +51,51 @@ typedef struct
     int            start_found;     // found pts_to_start point
     int64_t        pts_to_start;
     uint64_t       st_first;
-} hb_reader_t;
+};
 
 /***********************************************************************
  * Local prototypes
  **********************************************************************/
-static void        ReaderFunc( void * );
 static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id );
-static void UpdateState( hb_reader_t  * r, int64_t start);
+static void UpdateState( hb_work_private_t  * r, int64_t start);
 
 /***********************************************************************
  * hb_reader_init
  ***********************************************************************
  *
  **********************************************************************/
-hb_thread_t * hb_reader_init( hb_job_t * job )
+static int hb_reader_open( hb_work_private_t * r )
 {
-    hb_reader_t * r;
+    if ( r->title->type == HB_BD_TYPE )
+    {
+        if ( !( r->bd = hb_bd_init( r->title->path ) ) )
+            return 1;
+    }
+    else if ( r->title->type == HB_DVD_TYPE )
+    {
+        if ( !( r->dvd = hb_dvd_init( r->title->path ) ) )
+            return 1;
+    }
+    else if ( r->title->type == HB_STREAM_TYPE ||
+              r->title->type == HB_FF_STREAM_TYPE )
+    {
+        if ( !( r->stream = hb_stream_open( r->title->path, r->title, 0 ) ) )
+            return 1;
+    }
+    else
+    {
+        // Unknown type, should never happen
+        return 1;
+    }
+    return 0;
+}
 
-    r = calloc( sizeof( hb_reader_t ), 1 );
+static int hb_reader_init( hb_work_object_t * w, hb_job_t * job )
+{
+    hb_work_private_t * r;
+
+    r = calloc( sizeof( hb_work_private_t ), 1 );
+    w->private_data = r;
 
     r->job   = job;
     r->title = job->title;
@@ -81,11 +121,47 @@ hb_thread_t * hb_reader_init( hb_job_t * job )
         r->pts_to_start = MAX(0, job->pts_to_start - 180000);
     }
 
-    return hb_thread_init( "reader", ReaderFunc, r,
-                           HB_NORMAL_PRIORITY );
+    // The stream needs to be open before starting the reader thead
+    // to prevent a race with decoders that may share information
+    // with the reader. Specifically avcodec needs this.
+    if ( hb_reader_open( r ) )
+    {
+        free( r->stream_timing );
+        free( r );
+        return 1;
+    }
+    return 0;
 }
 
-static void push_buf( const hb_reader_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
+
+static void hb_reader_close( hb_work_object_t * w )
+{
+    hb_work_private_t * r = w->private_data;
+
+    if (r->bd)
+    {
+        hb_bd_stop( r->bd );
+        hb_bd_close( &r->bd );
+    }
+    else if (r->dvd)
+    {
+        hb_dvd_stop( r->dvd );
+        hb_dvd_close( &r->dvd );
+    }
+    else if (r->stream)
+    {
+        hb_stream_close(&r->stream);
+    }
+
+    if ( r->stream_timing )
+    {
+        free( r->stream_timing );
+    }
+
+    free( r );
+}
+
+static void push_buf( const hb_work_private_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
 {
     while ( !*r->die && !r->job->done )
     {
@@ -102,7 +178,7 @@ static void push_buf( const hb_reader_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
     }
 }
 
-static int is_audio( hb_reader_t *r, int id )
+static int is_audio( hb_work_private_t *r, int id )
 {
     int i;
     hb_audio_t *audio;
@@ -127,7 +203,7 @@ static int is_audio( hb_reader_t *r, int id )
 
 // find the per-stream timing state for 'buf'
 
-static stream_timing_t *find_st( hb_reader_t *r, const hb_buffer_t *buf )
+static stream_timing_t *find_st( hb_work_private_t *r, const hb_buffer_t *buf )
 {
     stream_timing_t *st = r->stream_timing;
     for ( ; st->id != -1; ++st )
@@ -140,7 +216,7 @@ static stream_timing_t *find_st( hb_reader_t *r, const hb_buffer_t *buf )
 
 // find or create the per-stream timing state for 'buf'
 
-static stream_timing_t *id_to_st( hb_reader_t *r, const hb_buffer_t *buf, int valid )
+static stream_timing_t *id_to_st( hb_work_private_t *r, const hb_buffer_t *buf, int valid )
 {
     stream_timing_t *st = r->stream_timing;
     while ( st->id != buf->id && st->id != -1)
@@ -177,7 +253,7 @@ static stream_timing_t *id_to_st( hb_reader_t *r, const hb_buffer_t *buf, int va
 // update the average inter-packet time of the stream associated with 'buf'
 // using a recursive low-pass filter with a 16 packet time constant.
 
-static void update_ipt( hb_reader_t *r, const hb_buffer_t *buf )
+static void update_ipt( hb_work_private_t *r, const hb_buffer_t *buf )
 {
     stream_timing_t *st = id_to_st( r, buf, 1 );
     double dt = buf->renderOffset - st->last;
@@ -194,7 +270,7 @@ static void update_ipt( hb_reader_t *r, const hb_buffer_t *buf )
 // such that 'buf' will follow the previous packet of this stream separated
 // by the average packet time of the stream.
 
-static void new_scr_offset( hb_reader_t *r, hb_buffer_t *buf )
+static void new_scr_offset( hb_work_private_t *r, hb_buffer_t *buf )
 {
     stream_timing_t *st = id_to_st( r, buf, 1 );
     int64_t last;
@@ -224,37 +300,16 @@ static void new_scr_offset( hb_reader_t *r, hb_buffer_t *buf )
  ***********************************************************************
  *
  **********************************************************************/
-static void ReaderFunc( void * _r )
+void ReadLoop( void * _w )
 {
-    hb_reader_t  * r = _r;
+    hb_work_object_t * w = _w;
+    hb_work_private_t  * r = w->private_data;
     hb_fifo_t   ** fifos;
     hb_buffer_t  * buf;
     hb_list_t    * list;
     int            n;
     int            chapter = -1;
     int            chapter_end = r->job->chapter_end;
-
-    if ( r->title->type == HB_BD_TYPE )
-    {
-        if ( !( r->bd = hb_bd_init( r->title->path ) ) )
-            return;
-    }
-    else if ( r->title->type == HB_DVD_TYPE )
-    {
-        if ( !( r->dvd = hb_dvd_init( r->title->path ) ) )
-            return;
-    }
-    else if ( r->title->type == HB_STREAM_TYPE ||
-              r->title->type == HB_FF_STREAM_TYPE )
-    {
-        if ( !( r->stream = hb_stream_open( r->title->path, r->title ) ) )
-            return;
-    }
-    else
-    {
-        // Unknown type, should never happen
-        return;
-    }
 
     if (r->bd)
     {
@@ -601,37 +656,15 @@ static void ReaderFunc( void * _r )
     }
 
     hb_list_empty( &list );
-    if (r->bd)
-    {
-        hb_bd_stop( r->bd );
-        hb_bd_close( &r->bd );
-    }
-    else if (r->dvd)
-    {
-        hb_dvd_stop( r->dvd );
-        hb_dvd_close( &r->dvd );
-    }
-    else if (r->stream)
-    {
-        hb_stream_close(&r->stream);
-    }
-
-    if ( r->stream_timing )
-    {
-        free( r->stream_timing );
-    }
 
     hb_log( "reader: done. %d scr changes", r->demux.scr_changes );
     if ( r->demux.dts_drops )
     {
         hb_log( "reader: %d drops because DTS out of range", r->demux.dts_drops );
     }
-
-    free( r );
-    _r = NULL;
 }
 
-static void UpdateState( hb_reader_t  * r, int64_t start)
+static void UpdateState( hb_work_private_t  * r, int64_t start)
 {
     hb_state_t state;
     uint64_t now;

@@ -116,10 +116,7 @@ hb_work_object_t * hb_codec_decoder( int codec )
         default:
             if ( codec & HB_ACODEC_FF_MASK )
             {
-                if ( codec & HB_ACODEC_FF_I_FLAG )
-                    return hb_get_work( WORK_DECAVCODECAI );
-                else
-                    return hb_get_work( WORK_DECAVCODEC );
+                return hb_get_work( WORK_DECAVCODEC );
             }
             break;
     }
@@ -414,27 +411,6 @@ void correct_framerate( hb_job_t * job )
     interjob->vrate_base = job->vrate_base;
 }
 
-static int check_ff_audio( hb_list_t *list_audio, hb_audio_t *ff_audio )
-{
-    int i;
-
-    for( i = 0; i < hb_list_count( list_audio ); i++ )
-    {
-        hb_audio_t * audio = hb_list_item( list_audio, i );
-
-        if ( audio == ff_audio )
-            break;
-
-        if ( ( audio->config.in.codec & HB_ACODEC_FF_MASK ) &&
-             audio->id == ff_audio->id )
-        {
-            hb_list_add( audio->priv.ff_audio_list, ff_audio );
-            return 1;
-        }
-    }
-    return 0;
-}
-
 /**
  * Job initialization rountine.
  * Initializes fifos.
@@ -719,19 +695,7 @@ static void do_job( hb_job_t * job )
         audio->priv.fifo_raw  = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
         audio->priv.fifo_sync = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
         audio->priv.fifo_out  = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
-
-        audio->priv.ff_audio_list = hb_list_init();
-        if ( audio->config.in.codec & HB_ACODEC_FF_MASK )
-        {
-            if ( !check_ff_audio( title->list_audio, audio ) )
-            {
-                audio->priv.fifo_in   = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
-            }
-        }
-        else
-        {
-            audio->priv.fifo_in   = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
-        }
+        audio->priv.fifo_in   = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
     }
 
     }
@@ -980,8 +944,15 @@ static void do_job( hb_job_t * job )
     hb_display_job_info( job );
 
     /* Init read & write threads */
-    job->reader = hb_reader_init( job );
-
+    hb_work_object_t *reader = hb_get_work(WORK_READER);
+    if ( reader->init( reader, job ) )
+    {
+        hb_error( "Failure to initialise thread '%s'", reader->name );
+        *job->die = 1;
+        goto cleanup;
+    }
+    reader->done = &job->done;
+    reader->thread = hb_thread_init( reader->name, ReadLoop, reader, HB_NORMAL_PRIORITY );
 
     job->done = 0;
 
@@ -1111,8 +1082,12 @@ cleanup:
     hb_list_close( &job->list_work );
 
     /* Stop the read thread */
-    if( job->reader != NULL )
-        hb_thread_close( &job->reader );
+    if( reader->thread != NULL )
+    {
+        hb_thread_close( &reader->thread );
+        reader->close( reader );
+    }
+    free( reader );
 
     /* Close fifos */
     hb_fifo_close( &job->fifo_mpeg2 );

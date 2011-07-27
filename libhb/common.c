@@ -1058,6 +1058,8 @@ hb_title_t * hb_title_init( char * path, int index )
     t->video_id      = 0xE0;
     t->video_codec   = WORK_DECMPEG2;
     t->angle_count   = 1;
+    t->pixel_aspect_width = 1;
+    t->pixel_aspect_height = 1;
 
     return t;
 }
@@ -1077,10 +1079,6 @@ void hb_title_close( hb_title_t ** _t )
 
     while( ( audio = hb_list_item( t->list_audio, 0 ) ) )
     {
-        if ( audio->priv.ff_audio_list != NULL )
-        {
-            hb_list_close( &audio->priv.ff_audio_list );
-        }
         hb_list_rem( t->list_audio, audio );
         free( audio );
     }

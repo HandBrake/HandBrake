@@ -149,14 +149,21 @@ static void ScanFunc( void * _data )
             }
         }
     }
-    else if ( (data->stream = hb_stream_open( data->path, 0 ) ) != NULL )
-    {
-        hb_list_add( data->list_title, hb_stream_title_scan( data->stream ) );
-    }
     else
     {
-        hb_log( "scan: unrecognized file type" );
-        return;
+        hb_title_t * title = hb_title_init( data->path, 0 );
+        if ( (data->stream = hb_stream_open( data->path, title, 1 ) ) != NULL )
+        {
+            title = hb_stream_title_scan( data->stream, title );
+            if ( title )
+                hb_list_add( data->list_title, title );
+        }
+        else
+        {
+            hb_title_close( &title );
+            hb_log( "scan: unrecognized file type" );
+            return;
+        }
     }
 
     for( i = 0; i < hb_list_count( data->list_title ); )
@@ -338,17 +345,17 @@ static inline int clampBlack( int x )
     return x < 16 ? 16 : x;
 }
 
-static int row_all_dark( hb_title_t *title, uint8_t* luma, int row )
+static int row_all_dark( hb_work_info_t *info, uint8_t* luma, int row )
 {
-    luma += title->width * row;
+    luma += info->width * row;
 
     // compute the average luma value of the row
     int i, avg = 0;
-    for ( i = 0; i < title->width; ++i )
+    for ( i = 0; i < info->width; ++i )
     {
         avg += clampBlack( luma[i] );
     }
-    avg /= title->width;
+    avg /= info->width;
     if ( avg >= DARK )
         return 0;
 
@@ -356,7 +363,7 @@ static int row_all_dark( hb_title_t *title, uint8_t* luma, int row )
     // all pixels are within +-16 of the average (this range is fairly coarse
     // but there's a lot of quantization noise for luma values near black
     // so anything less will fail to crop because of the noise).
-    for ( i = 0; i < title->width; ++i )
+    for ( i = 0; i < info->width; ++i )
     {
         if ( absdiff( avg, clampBlack( luma[i] ) ) > 16 )
             return 0;
@@ -364,11 +371,11 @@ static int row_all_dark( hb_title_t *title, uint8_t* luma, int row )
     return 1;
 }
 
-static int column_all_dark( hb_title_t *title, uint8_t* luma, int top, int bottom,
+static int column_all_dark( hb_work_info_t *info, uint8_t* luma, int top, int bottom,
                             int col )
 {
-    int stride = title->width;
-    int height = title->height - top - bottom;
+    int stride = info->width;
+    int height = info->height - top - bottom;
     luma += stride * top + col;
 
     // compute the average value of the column
@@ -495,7 +502,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
     }
     else if (data->batch)
     {
-        data->stream = hb_stream_open( title->path, title );
+        data->stream = hb_stream_open( title->path, title, 1 );
     }
 
     for( i = 0; i < data->preview_count; i++ )
@@ -670,22 +677,13 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             }
             vid_decoder->close( vid_decoder );
             free( vid_decoder );
+            hb_log( "scan: could not get a video information" );
             continue;
         }
 
         remember_info( info_list, &vid_info );
 
-        if ( title->video_codec_name == NULL )
-        {
-            title->video_codec_name = strdup( vid_info.name );
-        }
-        title->width = vid_info.width;
-        title->height = vid_info.height;
-        title->rate = vid_info.rate;
-        title->rate_base = vid_info.rate_base;
-        title->video_bitrate = vid_info.bitrate;
-
-        if( title->rate_base == 1126125 )
+        if( vid_info.rate_base == 1126125 )
         {
             /* Frame FPS is 23.976 (meaning it's progressive), so
                start keeping track of how many are reporting at
@@ -700,7 +698,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                    which means we should be conservative and use
                    29.97 as the title's FPS for now.
                 */
-                title->rate_base = 900900;
+                vid_info.rate_base = 900900;
             }
             else
             {
@@ -711,16 +709,16 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                 {
                     hb_deep_log( 2, "Title's mostly NTSC Film, setting fps to 23.976");
                 }
-                title->rate_base = 1126125;
+                vid_info.rate_base = 1126125;
             }
         }
-        else if( title->rate_base == 900900 && progressive_count >= 6 )
+        else if( vid_info.rate_base == 900900 && progressive_count >= 6 )
         {
             /*
              * We've already deduced that the frame rate is 23.976, so set it
              * back again.
              */
-            title->rate_base = 1126125;
+            vid_info.rate_base = 1126125;
         }
 
         while( ( buf_es = hb_list_item( list_es, 0 ) ) )
@@ -730,7 +728,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         }
 
         /* Check preview for interlacing artifacts */
-        if( hb_detect_comb( vid_buf, title->width, title->height, 10, 30, 9, 10, 30, 9 ) )
+        if( hb_detect_comb( vid_buf, vid_info.width, vid_info.height, 10, 30, 9, 10, 30, 9 ) )
         {
             hb_deep_log( 2, "Interlacing detected in preview frame %i", i+1);
             interlaced_preview_count++;
@@ -744,7 +742,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             file_preview = fopen( filename, "wb" );
             if( file_preview )
             {
-                fwrite( vid_buf->data, title->width * title->height * 3 / 2,
+                fwrite( vid_buf->data, vid_info.width * vid_info.height * 3 / 2,
                         1, file_preview );
                 fclose( file_preview );
             }
@@ -758,7 +756,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 
 #define Y    vid_buf->data
         int top, bottom, left, right;
-        int h4 = title->height / 4, w4 = title->width / 4;
+        int h4 = vid_info.height / 4, w4 = vid_info.width / 4;
 
         // When widescreen content is matted to 16:9 or 4:3 there's sometimes
         // a thin border on the outer edge of the matte. On TV content it can be
@@ -768,11 +766,11 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         // we can crop the matte. The border width depends on the resolution
         // (12 pixels on 1080i looks visually the same as 4 pixels on 480i)
         // so we allow the border to be up to 1% of the frame height.
-        const int border = title->height / 100;
+        const int border = vid_info.height / 100;
 
         for ( top = border; top < h4; ++top )
         {
-            if ( ! row_all_dark( title, Y, top ) )
+            if ( ! row_all_dark( &vid_info, Y, top ) )
                 break;
         }
         if ( top <= border )
@@ -781,7 +779,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             // didn't check are dark or if we shouldn't crop at all.
             for ( top = 0; top < border; ++top )
             {
-                if ( ! row_all_dark( title, Y, top ) )
+                if ( ! row_all_dark( &vid_info, Y, top ) )
                     break;
             }
             if ( top >= border )
@@ -791,14 +789,14 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         }
         for ( bottom = border; bottom < h4; ++bottom )
         {
-            if ( ! row_all_dark( title, Y, title->height - 1 - bottom ) )
+            if ( ! row_all_dark( &vid_info, Y, vid_info.height - 1 - bottom ) )
                 break;
         }
         if ( bottom <= border )
         {
             for ( bottom = 0; bottom < border; ++bottom )
             {
-                if ( ! row_all_dark( title, Y, title->height - 1 - bottom ) )
+                if ( ! row_all_dark( &vid_info, Y, vid_info.height - 1 - bottom ) )
                     break;
             }
             if ( bottom >= border )
@@ -808,12 +806,12 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         }
         for ( left = 0; left < w4; ++left )
         {
-            if ( ! column_all_dark( title, Y, top, bottom, left ) )
+            if ( ! column_all_dark( &vid_info, Y, top, bottom, left ) )
                 break;
         }
         for ( right = 0; right < w4; ++right )
         {
-            if ( ! column_all_dark( title, Y, top, bottom, title->width - 1 - right ) )
+            if ( ! column_all_dark( &vid_info, Y, top, bottom, vid_info.width - 1 - right ) )
                 break;
         }
 
@@ -856,35 +854,46 @@ skip_preview:
         hb_work_info_t vid_info;
         most_common_info( info_list, &vid_info );
 
+        if ( title->video_codec_name == NULL )
+        {
+            title->video_codec_name = strdup( vid_info.name );
+        }
         title->width = vid_info.width;
         title->height = vid_info.height;
-        title->pixel_aspect_width = vid_info.pixel_aspect_width;
-        title->pixel_aspect_height = vid_info.pixel_aspect_height;
+        if ( vid_info.rate && vid_info.rate_base )
+        {
+            title->rate = vid_info.rate;
+            title->rate_base = vid_info.rate_base;
+        }
+        title->video_bitrate = vid_info.bitrate;
+
+        if( vid_info.pixel_aspect_width && vid_info.pixel_aspect_height )
+        {
+            title->pixel_aspect_width = vid_info.pixel_aspect_width;
+            title->pixel_aspect_height = vid_info.pixel_aspect_height;
+        }
 
         // compute the aspect ratio based on the storage dimensions and the
         // pixel aspect ratio (if supplied) or just storage dimensions if no PAR.
         title->aspect = (double)title->width / (double)title->height;
-        if( title->pixel_aspect_width && title->pixel_aspect_height )
-        {
-            title->aspect *= (double)title->pixel_aspect_width /
-                             (double)title->pixel_aspect_height;
+        title->aspect *= (double)title->pixel_aspect_width /
+                         (double)title->pixel_aspect_height;
 
-            // For unknown reasons some French PAL DVDs put the original
-            // content's aspect ratio into the mpeg PAR even though it's
-            // the wrong PAR for the DVD. Apparently they rely on the fact
-            // that DVD players ignore the content PAR and just use the
-            // aspect ratio from the DVD metadata. So, if the aspect computed
-            // from the PAR is different from the container's aspect we use
-            // the container's aspect & recompute the PAR from it.
-            if( title->container_aspect && (int)(title->aspect * 9) != (int)(title->container_aspect * 9) )
-            {
-                hb_log("scan: content PAR gives wrong aspect %.2f; "
-                       "using container aspect %.2f", title->aspect,
-                       title->container_aspect );
-                title->aspect = title->container_aspect;
-                hb_reduce( &title->pixel_aspect_width, &title->pixel_aspect_height,
-                           (int)(title->aspect * title->height + 0.5), title->width );
-            }
+        // For unknown reasons some French PAL DVDs put the original
+        // content's aspect ratio into the mpeg PAR even though it's
+        // the wrong PAR for the DVD. Apparently they rely on the fact
+        // that DVD players ignore the content PAR and just use the
+        // aspect ratio from the DVD metadata. So, if the aspect computed
+        // from the PAR is different from the container's aspect we use
+        // the container's aspect & recompute the PAR from it.
+        if( title->container_aspect && (int)(title->aspect * 9) != (int)(title->container_aspect * 9) )
+        {
+            hb_log("scan: content PAR gives wrong aspect %.2f; "
+                   "using container aspect %.2f", title->aspect,
+                   title->container_aspect );
+            title->aspect = title->container_aspect;
+            hb_reduce( &title->pixel_aspect_width, &title->pixel_aspect_height,
+                       (int)(title->aspect * title->height + 0.5), title->width );
         }
 
         // don't try to crop unless we got at least 3 previews

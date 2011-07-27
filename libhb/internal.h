@@ -174,7 +174,7 @@ hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die,
                             int store_previews, uint64_t min_duration );
 hb_thread_t * hb_work_init( hb_list_t * jobs,
                             volatile int * die, int * error, hb_job_t ** job );
-hb_thread_t  * hb_reader_init( hb_job_t * );
+void ReadLoop( void * _w );
 hb_work_object_t * hb_muxer_init( hb_job_t * );
 hb_work_object_t * hb_get_work( int );
 hb_work_object_t * hb_codec_decoder( int );
@@ -255,9 +255,9 @@ void          hb_bd_set_angle( hb_bd_t * d, int angle );
 int           hb_bd_main_feature( hb_bd_t * d, hb_list_t * list_title );
 
 hb_stream_t * hb_bd_stream_open( hb_title_t *title );
-hb_stream_t * hb_stream_open( char * path, hb_title_t *title );
+hb_stream_t * hb_stream_open( char * path, hb_title_t *title, int scan );
 void		 hb_stream_close( hb_stream_t ** );
-hb_title_t * hb_stream_title_scan( hb_stream_t *);
+hb_title_t * hb_stream_title_scan( hb_stream_t *, hb_title_t *);
 hb_buffer_t * hb_stream_read( hb_stream_t * );
 int          hb_stream_seek( hb_stream_t *, float );
 int          hb_stream_seek_ts( hb_stream_t * stream, int64_t ts );
@@ -266,9 +266,6 @@ int          hb_stream_chapter( hb_stream_t * );
 
 hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt );
 
-
-void       * hb_ffmpeg_context( int codec_param );
-void       * hb_ffmpeg_avstream( int codec_param );
 
 #define STR4_TO_UINT32(p) \
     ((((const uint8_t*)(p))[0] << 24) | \
@@ -353,8 +350,6 @@ enum
     WORK_DECDCA,
     WORK_DECAVCODEC,
     WORK_DECAVCODECV,
-    WORK_DECAVCODECVI,
-    WORK_DECAVCODECAI,
     WORK_DECLPCM,
     WORK_ENCFAAC,
     WORK_ENCLAME,
@@ -362,7 +357,8 @@ enum
     WORK_ENC_CA_AAC,
     WORK_ENC_CA_HAAC,
     WORK_ENCAVCODEC_AUDIO,
-    WORK_MUX
+    WORK_MUX,
+    WORK_READER
 };
 
 enum
