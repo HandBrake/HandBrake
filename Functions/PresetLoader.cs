@@ -148,11 +148,9 @@ namespace Handbrake.Functions
                 mainWindow.PictureSettings.text_height.Value = presetQuery.MaxHeight.Value;
             }
 
-            if (presetQuery.MaxHeight.HasValue && presetQuery.MaxWidth.HasValue)
-            {
-                mainWindow.PictureSettings.PresetMaximumResolution = new Size(
-                    presetQuery.MaxWidth.Value, presetQuery.MaxHeight.Value);
-            }
+           mainWindow.PictureSettings.PresetMaximumResolution = new Size(
+                    presetQuery.MaxWidth.HasValue ? presetQuery.MaxWidth.Value : 0,
+                    presetQuery.MaxHeight.HasValue ? presetQuery.MaxHeight.Value : 0);
 
             // Case where both height and max height are 0 - For built-in presets
             if (presetQuery.MaxHeight == 0 && presetQuery.Height == 0)
