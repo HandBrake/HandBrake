@@ -199,7 +199,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 ret = av_set_string3( context, name, value, 1, NULL );
 
                 /* Let avutil sanity check the options for us*/
-                if( ret == AVERROR(ENOENT) )
+                if( ret == AVERROR_OPTION_NOT_FOUND )
                     hb_log( "avcodec options: Unknown option %s", name );
                 if( ret == AVERROR(EINVAL) )
                     hb_log( "avcodec options: Bad argument %s=%s", name, value ? value : "(null)" );
