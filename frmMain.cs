@@ -384,6 +384,7 @@ namespace Handbrake
         }
 
         #endregion
+
         #region Tools Menu
 
         /// <summary>
@@ -1471,7 +1472,7 @@ namespace Handbrake
                     drop_chapterFinish.Text = drop_chapterFinish.Items[drop_chapterFinish.Items.Count - 1].ToString();
 
                 // Populate the Audio Channels Dropdown
-                AudioSettings.SetTrackListFromPreset(selectedTitle, this.currentlySelectedPreset);
+                AudioSettings.SetTrackListAfterTitleChange(selectedTitle, this.currentlySelectedPreset);
 
                 // Populate the Subtitles dropdown
                 Subtitles.SetSubtitleTrackAuto(selectedTitle.Subtitles.ToArray());
