@@ -42,7 +42,6 @@ namespace Handbrake.Controls
             this.audioList_MoveToBottom = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.audioList_remove = new System.Windows.Forms.ToolStripMenuItem();
-            this.btn_RemoveAudioTrack = new System.Windows.Forms.Button();
             this.label68 = new System.Windows.Forms.Label();
             this.drp_audioEncoder = new System.Windows.Forms.ComboBox();
             this.drp_audioMix = new System.Windows.Forms.ComboBox();
@@ -63,9 +62,13 @@ namespace Handbrake.Controls
             this.btn_addAudioTrack = new wyDay.Controls.SplitButton();
             this.AddTrackMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnu_AddAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.btn_RemoveTrack = new wyDay.Controls.SplitButton();
+            this.RemoveTrackMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnu_ClearAll = new System.Windows.Forms.ToolStripMenuItem();
             this.audioMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.audioList)).BeginInit();
             this.AddTrackMenu.SuspendLayout();
+            this.RemoveTrackMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // audioMenu
@@ -120,19 +123,6 @@ namespace Handbrake.Controls
             this.audioList_remove.Size = new System.Drawing.Size(164, 22);
             this.audioList_remove.Text = "Remove";
             this.audioList_remove.Click += new System.EventHandler(this.AudioList_remove_Click);
-            // 
-            // btn_RemoveAudioTrack
-            // 
-            this.btn_RemoveAudioTrack.BackColor = System.Drawing.Color.Transparent;
-            this.btn_RemoveAudioTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_RemoveAudioTrack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_RemoveAudioTrack.Location = new System.Drawing.Point(114, 37);
-            this.btn_RemoveAudioTrack.Name = "btn_RemoveAudioTrack";
-            this.btn_RemoveAudioTrack.Size = new System.Drawing.Size(71, 23);
-            this.btn_RemoveAudioTrack.TabIndex = 64;
-            this.btn_RemoveAudioTrack.Text = "Remove";
-            this.btn_RemoveAudioTrack.UseVisualStyleBackColor = false;
-            this.btn_RemoveAudioTrack.Click += new System.EventHandler(this.RemoveAudioTrack_Click);
             // 
             // label68
             // 
@@ -380,9 +370,38 @@ namespace Handbrake.Controls
             // mnu_AddAll
             // 
             this.mnu_AddAll.Name = "mnu_AddAll";
-            this.mnu_AddAll.Size = new System.Drawing.Size(152, 22);
+            this.mnu_AddAll.Size = new System.Drawing.Size(113, 22);
             this.mnu_AddAll.Text = "Add All";
             this.mnu_AddAll.Click += new System.EventHandler(this.mnu_AddAll_Click);
+            // 
+            // btn_RemoveTrack
+            // 
+            this.btn_RemoveTrack.AutoSize = true;
+            this.btn_RemoveTrack.ContextMenuStrip = this.RemoveTrackMenu;
+            this.btn_RemoveTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_RemoveTrack.ForeColor = System.Drawing.Color.DarkOrange;
+            this.btn_RemoveTrack.Location = new System.Drawing.Point(114, 37);
+            this.btn_RemoveTrack.Name = "btn_RemoveTrack";
+            this.btn_RemoveTrack.Size = new System.Drawing.Size(82, 23);
+            this.btn_RemoveTrack.SplitMenuStrip = this.RemoveTrackMenu;
+            this.btn_RemoveTrack.TabIndex = 73;
+            this.btn_RemoveTrack.Text = "Remove";
+            this.btn_RemoveTrack.UseVisualStyleBackColor = true;
+            this.btn_RemoveTrack.Click += new System.EventHandler(this.Btn_remove_track_click);
+            // 
+            // RemoveTrackMenu
+            // 
+            this.RemoveTrackMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnu_ClearAll});
+            this.RemoveTrackMenu.Name = "audioMenu";
+            this.RemoveTrackMenu.Size = new System.Drawing.Size(119, 26);
+            // 
+            // mnu_ClearAll
+            // 
+            this.mnu_ClearAll.Name = "mnu_ClearAll";
+            this.mnu_ClearAll.Size = new System.Drawing.Size(152, 22);
+            this.mnu_ClearAll.Text = "Clear All";
+            this.mnu_ClearAll.Click += new System.EventHandler(this.Mnu_clear_all_click);
             // 
             // AudioPanel
             // 
@@ -391,19 +410,20 @@ namespace Handbrake.Controls
             this.Controls.Add(this.drp_audioTrack);
             this.Controls.Add(this.btn_AdvancedAudio);
             this.Controls.Add(this.drp_audioSample);
+            this.Controls.Add(this.btn_RemoveTrack);
             this.Controls.Add(this.audioList);
             this.Controls.Add(this.label68);
             this.Controls.Add(this.btn_addAudioTrack);
             this.Controls.Add(this.drp_audioBitrate);
             this.Controls.Add(this.drp_audioMix);
             this.Controls.Add(this.drp_audioEncoder);
-            this.Controls.Add(this.btn_RemoveAudioTrack);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "AudioPanel";
             this.Size = new System.Drawing.Size(720, 310);
             this.audioMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.audioList)).EndInit();
             this.AddTrackMenu.ResumeLayout(false);
+            this.RemoveTrackMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -411,7 +431,6 @@ namespace Handbrake.Controls
 
         #endregion
 
-        private System.Windows.Forms.Button btn_RemoveAudioTrack;
         internal System.Windows.Forms.Label label68;
         internal System.Windows.Forms.ComboBox drp_audioEncoder;
         internal System.Windows.Forms.ComboBox drp_audioMix;
@@ -439,5 +458,8 @@ namespace Handbrake.Controls
         private wyDay.Controls.SplitButton btn_addAudioTrack;
         private System.Windows.Forms.ContextMenuStrip AddTrackMenu;
         private System.Windows.Forms.ToolStripMenuItem mnu_AddAll;
+        private wyDay.Controls.SplitButton btn_RemoveTrack;
+        private System.Windows.Forms.ContextMenuStrip RemoveTrackMenu;
+        private System.Windows.Forms.ToolStripMenuItem mnu_ClearAll;
     }
 }

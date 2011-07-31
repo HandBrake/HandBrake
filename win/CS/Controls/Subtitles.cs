@@ -254,13 +254,13 @@ namespace Handbrake.Controls
                     for (int i = 1; i < drp_subtitleTracks.Items.Count; i++)
                     {
                         drp_subtitleTracks.SelectedIndex = i;
-                        this.BtnAddSubTrackClick(this, new EventArgs());
+                        this.btn_addSubtitleTrack_Click(this, new EventArgs());
                     }
                     break;
                 case 2: // Adding only the first Audio Track
                     drp_subtitleTracks.SelectedIndex = 1;
                     if (drp_subtitleTracks.SelectedItem != null)
-                        this.BtnAddSubTrackClick(this, new EventArgs());
+                        this.btn_addSubtitleTrack_Click(this, new EventArgs());
                     break;
                 case 3:
                     foreach (string item in languageOrder)
@@ -272,7 +272,7 @@ namespace Handbrake.Controls
                                 drp_subtitleTracks.SelectedIndex = i;
                                 if (drp_subtitleTracks.SelectedItem != null)
                                 {
-                                    this.BtnAddSubTrackClick(this, new EventArgs());
+                                    this.btn_addSubtitleTrack_Click(this, new EventArgs());
                                     //subList.ClearSelection();
                                 }
                             }
@@ -287,7 +287,7 @@ namespace Handbrake.Controls
                             drp_subtitleTracks.SelectedIndex = i;
                             if (drp_subtitleTracks.SelectedItem != null)
                             {
-                                this.BtnAddSubTrackClick(this, new EventArgs());
+                                this.btn_addSubtitleTrack_Click(this, new EventArgs());
                                 //subList.ClearSelection();
                             }
                         }
@@ -306,7 +306,7 @@ namespace Handbrake.Controls
                     if (item.ToString().Contains("Closed"))
                     {
                         drp_subtitleTracks.SelectedItem = item;
-                        BtnAddSubTrackClick(this, EventArgs.Empty);
+                        btn_addSubtitleTrack_Click(this, EventArgs.Empty);
                     }
                 }
             }
@@ -326,15 +326,15 @@ namespace Handbrake.Controls
         #region Primary Controls
 
         /// <summary>
-        /// Add a Subtitle track.
+        /// Add a subtitle Track
         /// </summary>
         /// <param name="sender">
-        /// The sender.
+        /// The Sender
         /// </param>
         /// <param name="e">
-        /// The e.
+        /// The Event Args
         /// </param>
-        private void BtnAddSubTrackClick(object sender, EventArgs e)
+        private void btn_addSubtitleTrack_Click(object sender, EventArgs e)
         {
             if (drp_subtitleTracks.SelectedItem == null)
             {
@@ -372,20 +372,92 @@ namespace Handbrake.Controls
                                    : drp_subtitleTracks.SelectedItem.ToString();
 
             SubtitleTrack track = new SubtitleTrack
-                                     {
-                                         Track = trackName,
-                                         Forced = check_forced.Checked,
-                                         Burned = check_burned.Checked,
-                                         Default = check_default.Checked,
-                                         SrtLang = srtLangVal,
-                                         SrtCharCode = srtCode,
-                                         SrtOffset = srtOffsetMs,
-                                         SrtPath = srtPath,
-                                         SrtFileName = srtFile
-                                     };
+            {
+                Track = trackName,
+                Forced = check_forced.Checked,
+                Burned = check_burned.Checked,
+                Default = check_default.Checked,
+                SrtLang = srtLangVal,
+                SrtCharCode = srtCode,
+                SrtOffset = srtOffsetMs,
+                SrtPath = srtPath,
+                SrtFileName = srtFile
+            };
 
             lv_subList.Items.Add(track.ListView);
             subList.Add(track);
+        }
+
+        /// <summary>
+        /// Add all audio tracks.
+        /// </summary>
+        /// <param name="sender">
+        /// The Sender
+        /// </param>
+        /// <param name="e">
+        /// The Event Args
+        /// </param>
+        private void mnu_AddAll_Click(object sender, EventArgs e)
+        {
+            // TODO - Might need to be a bit more clever with this. Will wait and see if this causes any problems.
+            foreach (object item in drp_subtitleTracks.Items)
+            {
+                if (!item.ToString().Contains("Foreign Audio Search"))
+                {
+                    drp_subtitleTracks.SelectedItem = item;
+                    btn_addSubtitleTrack_Click(this, EventArgs.Empty);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add all closed caption tracks
+        /// </summary>
+        /// <param name="sender">
+        /// The Sender
+        /// </param>
+        /// <param name="e">
+        /// The Event Args
+        /// </param>
+        private void mnu_AddAllCC_Click(object sender, EventArgs e)
+        {
+            foreach (object item in drp_subtitleTracks.Items)
+            {
+                if (item.ToString().Contains("Closed"))
+                {
+                    drp_subtitleTracks.SelectedItem = item;
+                    btn_addSubtitleTrack_Click(this, EventArgs.Empty);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Clear all tracks.
+        /// </summary>
+        /// <param name="sender">
+        /// The Sender
+        /// </param>
+        /// <param name="e">
+        /// The Event Args
+        /// </param>
+        private void mnu_ClearAll_Click(object sender, EventArgs e)
+        {
+            lv_subList.Items.Clear();
+            subList.Clear();
+        }
+
+        /// <summary>
+        /// Remvoe a track
+        /// </summary>
+        /// <param name="sender">
+        /// The Sender
+        /// </param>
+        /// <param name="e">
+        /// The Event Args
+        /// </param>
+        private void btn_RemoveTrack_Click(object sender, EventArgs e)
+        {
+            this.RemoveSelectedTrack();
         }
 
         /// <summary>
@@ -415,20 +487,6 @@ namespace Handbrake.Controls
             drp_subtitleTracks.Items.Add(Path.GetFileName(openFileDialog.FileName));
             drp_subtitleTracks.SelectedItem = Path.GetFileName(openFileDialog.FileName);
             srtFiles.Add(Path.GetFileName(openFileDialog.FileName), openFileDialog.FileName);
-        }
-
-        /// <summary>
-        /// Remove a subtitle track
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void BtnRemoveSubTrackClick(object sender, EventArgs e)
-        {
-            this.RemoveSelectedTrack();
         }
 
         /// <summary>

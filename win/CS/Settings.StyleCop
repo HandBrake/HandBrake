@@ -1,22 +1,17 @@
-<StyleCopSettings Version="4.3">
+<StyleCopSettings Version="105">
   <Parsers>
-    <Parser ParserId="Microsoft.StyleCop.CSharp.CsParser">
+    <Parser ParserId="StyleCop.CSharp.CsParser">
       <ParserSettings>
         <BooleanProperty Name="AnalyzeDesignerFiles">False</BooleanProperty>
       </ParserSettings>
     </Parser>
   </Parsers>
   <Analyzers>
-    <Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.DocumentationRules">
+    <Analyzer AnalyzerId="StyleCop.CSharp.DocumentationRules">
       <Rules>
         <Rule Name="PropertyDocumentationMustHaveValueText">
           <RuleSettings>
             <BooleanProperty Name="Enabled">True</BooleanProperty>
-          </RuleSettings>
-        </Rule>
-        <Rule Name="DocumentationTextMustMeetMinimumCharacterLength">
-          <RuleSettings>
-            <BooleanProperty Name="Enabled">False</BooleanProperty>
           </RuleSettings>
         </Rule>
         <Rule Name="DocumentationTextMustContainWhitespace">
@@ -59,18 +54,13 @@
             <BooleanProperty Name="Enabled">False</BooleanProperty>
           </RuleSettings>
         </Rule>
-        <Rule Name="ElementsMustBeDocumented">
-          <RuleSettings>
-            <BooleanProperty Name="Enabled">False</BooleanProperty>
-          </RuleSettings>
-        </Rule>
       </Rules>
       <AnalyzerSettings>
         <StringProperty Name="CompanyName">HandBrake Project (http://handbrake.fr)</StringProperty>
         <StringProperty Name="Copyright">This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.</StringProperty>
       </AnalyzerSettings>
     </Analyzer>
-    <Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.MaintainabilityRules">
+    <Analyzer AnalyzerId="StyleCop.CSharp.MaintainabilityRules">
       <Rules>
         <Rule Name="StatementMustNotUseUnnecessaryParenthesis">
           <RuleSettings>
@@ -95,7 +85,7 @@
       </Rules>
       <AnalyzerSettings />
     </Analyzer>
-    <Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.SpacingRules">
+    <Analyzer AnalyzerId="StyleCop.CSharp.SpacingRules">
       <Rules>
         <Rule Name="OpeningCurlyBracketsMustBeSpacedCorrectly">
           <RuleSettings>
@@ -115,7 +105,7 @@
       </Rules>
       <AnalyzerSettings />
     </Analyzer>
-    <Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.LayoutRules">
+    <Analyzer AnalyzerId="StyleCop.CSharp.LayoutRules">
       <Rules>
         <Rule Name="SingleLineCommentsMustNotBeFollowedByBlankLine">
           <RuleSettings>
@@ -145,7 +135,7 @@
       </Rules>
       <AnalyzerSettings />
     </Analyzer>
-    <Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.ReadabilityRules">
+    <Analyzer AnalyzerId="StyleCop.CSharp.ReadabilityRules">
       <Rules>
         <Rule Name="BlockStatementsMustNotContainEmbeddedComments">
           <RuleSettings>
@@ -190,7 +180,7 @@
       </Rules>
       <AnalyzerSettings />
     </Analyzer>
-    <Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.NamingRules">
+    <Analyzer AnalyzerId="StyleCop.CSharp.NamingRules">
       <Rules>
         <Rule Name="FieldNamesMustNotUseHungarianNotation">
           <RuleSettings>
@@ -215,7 +205,7 @@
       </Rules>
       <AnalyzerSettings />
     </Analyzer>
-    <Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.OrderingRules">
+    <Analyzer AnalyzerId="StyleCop.CSharp.OrderingRules">
       <Rules>
         <Rule Name="ElementsMustBeOrderedByAccess">
           <RuleSettings>
