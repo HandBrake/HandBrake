@@ -460,15 +460,15 @@ namespace Handbrake.Controls
         }
 
         /// <summary>
-        /// The Remove Track button event handler
+        /// Remove an Audio Track
         /// </summary>
         /// <param name="sender">
-        /// The sender.
+        /// The Sender
         /// </param>
         /// <param name="e">
-        /// The e.
+        /// The Event Args
         /// </param>
-        private void RemoveAudioTrack_Click(object sender, EventArgs e)
+        private void Btn_remove_track_click(object sender, EventArgs e)
         {
             RemoveTrack();
 
@@ -477,6 +477,20 @@ namespace Handbrake.Controls
                 drp_audioMix.Enabled =
                     drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = true;
             }
+        }
+
+        /// <summary>
+        /// Clear all audio tracks
+        /// </summary>
+        /// <param name="sender">
+        /// The Sender
+        /// </param>
+        /// <param name="e">
+        /// The Event Args
+        /// </param>
+        private void Mnu_clear_all_click(object sender, EventArgs e)
+        {
+            this.ClearAudioList();
         }
 
         #endregion
@@ -617,7 +631,7 @@ namespace Handbrake.Controls
                 if (!elementFound)
                     mode = 2;
             }
-            
+
             switch (mode)
             {
                 case 1: // Adding all audio tracks
@@ -671,6 +685,8 @@ namespace Handbrake.Controls
         private void ClearAudioList()
         {
             this.AudioTracks.Clear();
+
+            drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = true;
 
             if (this.AudioListChanged != null)
                 this.AudioListChanged(this, new EventArgs());
@@ -782,7 +798,7 @@ namespace Handbrake.Controls
                 case "AAC (ffmpeg)":
                     max = drp_audioMix.Text.Contains("6 Channel") ? 768 : 320;
                     defaultRate = "160";
-                    break;  
+                    break;
                 case "MP3 (lame)":
                     max = 320;
                     defaultRate = "160";

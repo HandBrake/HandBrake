@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.btn_addTrack = new System.Windows.Forms.Button();
-            this.btn_RemoveSubTrack = new System.Windows.Forms.Button();
             this.lv_subList = new System.Windows.Forms.ListView();
             this.col_Source = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.col_forced = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -55,36 +53,18 @@
             this.btn_srtAdd = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.btn_addSubtitleTrack = new wyDay.Controls.SplitButton();
+            this.SubtitleTrackMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnu_AddAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_AddAllCC = new System.Windows.Forms.ToolStripMenuItem();
+            this.SubtitleRemoveButtonMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnu_ClearAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.btn_RemoveTrack = new wyDay.Controls.SplitButton();
             this.subMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.srt_offset)).BeginInit();
+            this.SubtitleTrackMenu.SuspendLayout();
+            this.SubtitleRemoveButtonMenu.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // btn_addTrack
-            // 
-            this.btn_addTrack.BackColor = System.Drawing.Color.Transparent;
-            this.btn_addTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_addTrack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_addTrack.Location = new System.Drawing.Point(16, 38);
-            this.btn_addTrack.Name = "btn_addTrack";
-            this.btn_addTrack.Size = new System.Drawing.Size(57, 23);
-            this.btn_addTrack.TabIndex = 68;
-            this.btn_addTrack.Text = "Add";
-            this.toolTip.SetToolTip(this.btn_addTrack, "Add a new subtitle track to the list below");
-            this.btn_addTrack.UseVisualStyleBackColor = false;
-            this.btn_addTrack.Click += new System.EventHandler(this.BtnAddSubTrackClick);
-            // 
-            // btn_RemoveSubTrack
-            // 
-            this.btn_RemoveSubTrack.BackColor = System.Drawing.Color.Transparent;
-            this.btn_RemoveSubTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_RemoveSubTrack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_RemoveSubTrack.Location = new System.Drawing.Point(79, 38);
-            this.btn_RemoveSubTrack.Name = "btn_RemoveSubTrack";
-            this.btn_RemoveSubTrack.Size = new System.Drawing.Size(73, 23);
-            this.btn_RemoveSubTrack.TabIndex = 69;
-            this.btn_RemoveSubTrack.Text = "Remove";
-            this.btn_RemoveSubTrack.UseVisualStyleBackColor = false;
-            this.btn_RemoveSubTrack.Click += new System.EventHandler(this.BtnRemoveSubTrackClick);
             // 
             // lv_subList
             // 
@@ -316,7 +296,7 @@
             this.btn_srtAdd.BackColor = System.Drawing.Color.Transparent;
             this.btn_srtAdd.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_srtAdd.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_srtAdd.Location = new System.Drawing.Point(158, 38);
+            this.btn_srtAdd.Location = new System.Drawing.Point(179, 38);
             this.btn_srtAdd.Name = "btn_srtAdd";
             this.btn_srtAdd.Size = new System.Drawing.Size(88, 23);
             this.btn_srtAdd.TabIndex = 73;
@@ -330,27 +310,95 @@
             this.openFileDialog.DefaultExt = "srt";
             this.openFileDialog.Filter = "SRT Files |*.srt";
             // 
+            // btn_addSubtitleTrack
+            // 
+            this.btn_addSubtitleTrack.AutoSize = true;
+            this.btn_addSubtitleTrack.ContextMenuStrip = this.SubtitleTrackMenu;
+            this.btn_addSubtitleTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_addSubtitleTrack.ForeColor = System.Drawing.Color.DarkOrange;
+            this.btn_addSubtitleTrack.Location = new System.Drawing.Point(16, 38);
+            this.btn_addSubtitleTrack.Name = "btn_addSubtitleTrack";
+            this.btn_addSubtitleTrack.Size = new System.Drawing.Size(69, 23);
+            this.btn_addSubtitleTrack.SplitMenuStrip = this.SubtitleTrackMenu;
+            this.btn_addSubtitleTrack.TabIndex = 80;
+            this.btn_addSubtitleTrack.Text = "Add";
+            this.btn_addSubtitleTrack.UseVisualStyleBackColor = true;
+            this.btn_addSubtitleTrack.Click += new System.EventHandler(this.btn_addSubtitleTrack_Click);
+            // 
+            // SubtitleTrackMenu
+            // 
+            this.SubtitleTrackMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnu_AddAll,
+            this.mnu_AddAllCC});
+            this.SubtitleTrackMenu.Name = "audioMenu";
+            this.SubtitleTrackMenu.Size = new System.Drawing.Size(196, 48);
+            // 
+            // mnu_AddAll
+            // 
+            this.mnu_AddAll.Name = "mnu_AddAll";
+            this.mnu_AddAll.Size = new System.Drawing.Size(195, 22);
+            this.mnu_AddAll.Text = "Add All";
+            this.mnu_AddAll.Click += new System.EventHandler(this.mnu_AddAll_Click);
+            // 
+            // mnu_AddAllCC
+            // 
+            this.mnu_AddAllCC.Name = "mnu_AddAllCC";
+            this.mnu_AddAllCC.Size = new System.Drawing.Size(195, 22);
+            this.mnu_AddAllCC.Text = "Add all Closed Caption";
+            this.mnu_AddAllCC.Click += new System.EventHandler(this.mnu_AddAllCC_Click);
+            // 
+            // SubtitleRemoveButtonMenu
+            // 
+            this.SubtitleRemoveButtonMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnu_ClearAll});
+            this.SubtitleRemoveButtonMenu.Name = "audioMenu";
+            this.SubtitleRemoveButtonMenu.Size = new System.Drawing.Size(153, 48);
+            // 
+            // mnu_ClearAll
+            // 
+            this.mnu_ClearAll.Name = "mnu_ClearAll";
+            this.mnu_ClearAll.Size = new System.Drawing.Size(152, 22);
+            this.mnu_ClearAll.Text = "Clear All";
+            this.mnu_ClearAll.Click += new System.EventHandler(this.mnu_ClearAll_Click);
+            // 
+            // btn_RemoveTrack
+            // 
+            this.btn_RemoveTrack.AutoSize = true;
+            this.btn_RemoveTrack.ContextMenuStrip = this.SubtitleRemoveButtonMenu;
+            this.btn_RemoveTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_RemoveTrack.ForeColor = System.Drawing.Color.DarkOrange;
+            this.btn_RemoveTrack.Location = new System.Drawing.Point(91, 38);
+            this.btn_RemoveTrack.Name = "btn_RemoveTrack";
+            this.btn_RemoveTrack.Size = new System.Drawing.Size(82, 23);
+            this.btn_RemoveTrack.SplitMenuStrip = this.SubtitleRemoveButtonMenu;
+            this.btn_RemoveTrack.TabIndex = 82;
+            this.btn_RemoveTrack.Text = "Remove";
+            this.btn_RemoveTrack.UseVisualStyleBackColor = true;
+            this.btn_RemoveTrack.Click += new System.EventHandler(this.btn_RemoveTrack_Click);
+            // 
             // Subtitles
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.BackColor = System.Drawing.Color.Transparent;
             this.Controls.Add(this.drp_subtitleTracks);
             this.Controls.Add(this.srt_offset);
-            this.Controls.Add(this.btn_addTrack);
             this.Controls.Add(this.srt_lang);
+            this.Controls.Add(this.btn_RemoveTrack);
             this.Controls.Add(this.srt_charcode);
+            this.Controls.Add(this.btn_addSubtitleTrack);
             this.Controls.Add(this.label68);
-            this.Controls.Add(this.btn_RemoveSubTrack);
             this.Controls.Add(this.lv_subList);
-            this.Controls.Add(this.btn_srtAdd);
             this.Controls.Add(this.check_forced);
             this.Controls.Add(this.check_burned);
             this.Controls.Add(this.check_default);
+            this.Controls.Add(this.btn_srtAdd);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "Subtitles";
             this.Size = new System.Drawing.Size(719, 300);
             this.subMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.srt_offset)).EndInit();
+            this.SubtitleTrackMenu.ResumeLayout(false);
+            this.SubtitleRemoveButtonMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -358,8 +406,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Button btn_RemoveSubTrack;
-        private System.Windows.Forms.Button btn_addTrack;
         internal System.Windows.Forms.ListView lv_subList;
         private System.Windows.Forms.ColumnHeader col_Source;
         private System.Windows.Forms.ColumnHeader col_forced;
@@ -384,5 +430,12 @@
         internal System.Windows.Forms.ComboBox drp_subtitleTracks;
         private System.Windows.Forms.ColumnHeader col_srtLang;
         private System.Windows.Forms.ToolTip toolTip;
+        private wyDay.Controls.SplitButton btn_addSubtitleTrack;
+        private System.Windows.Forms.ContextMenuStrip SubtitleTrackMenu;
+        private System.Windows.Forms.ToolStripMenuItem mnu_AddAll;
+        private System.Windows.Forms.ToolStripMenuItem mnu_AddAllCC;
+        private System.Windows.Forms.ContextMenuStrip SubtitleRemoveButtonMenu;
+        private System.Windows.Forms.ToolStripMenuItem mnu_ClearAll;
+        private wyDay.Controls.SplitButton btn_RemoveTrack;
     }
 }
