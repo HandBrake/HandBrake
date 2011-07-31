@@ -182,7 +182,7 @@ namespace Handbrake.Controls
         /// </summary>
         /// <param name="selectedTitle">The selected title</param>
         /// <param name="preset">A preset</param>
-        public void SetTrackListFromPreset(Title selectedTitle, Preset preset)
+        public void SetTrackListAfterTitleChange(Title selectedTitle, Preset preset)
         {
             if (selectedTitle.AudioTracks.Count == 0)
             {
@@ -572,6 +572,20 @@ namespace Handbrake.Controls
             if (drp_audioTrack.SelectedItem != null && drp_audioTrack.SelectedItem.ToString() == AudioHelper.NoneFound.Description)
             {
                 this.AudioTracks.Clear();
+                return;
+            }
+
+            // If the Native Language is not set. Just set Track information in each output track.
+            if (Properties.Settings.Default.NativeLanguage == "Any")
+            {
+                drp_audioTrack.SelectedIndex = 0;
+                foreach (AudioTrack track in this.audioTracks)
+                {
+                    if (this.drp_audioTrack.SelectedItem != null)
+                    {
+                        track.ScannedTrack = this.drp_audioTrack.SelectedItem as Audio;
+                    }
+                }
                 return;
             }
 
