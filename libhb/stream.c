@@ -57,7 +57,7 @@ static const stream2codec_t st2codec[256] = {
     st(0x0c, N, 0,                 0,              "ISO 13818-6 Stream descriptors"),
     st(0x0d, N, 0,                 0,              "ISO 13818-6 Sections"),
     st(0x0e, N, 0,                 0,              "ISO 13818-1 auxiliary"),
-    st(0x0f, A, HB_ACODEC_FFMPEG,  CODEC_ID_AAC,   "AAC"),
+    st(0x0f, A, HB_ACODEC_FFAAC,   CODEC_ID_AAC,   "AAC"),
     st(0x10, V, WORK_DECAVCODECV,  CODEC_ID_MPEG4, "MPEG4"),
     st(0x11, A, HB_ACODEC_FFMPEG,  CODEC_ID_AAC_LATM, "LATM AAC"),
     st(0x12, U, 0,                 0,              "MPEG4 generic"),
@@ -1984,7 +1984,7 @@ static void add_audio_to_title(hb_title_t *title, int id)
     switch ( id >> 12 )
     {
         case 0x0:
-            audio->config.in.codec = HB_ACODEC_FFMPEG;
+            audio->config.in.codec = HB_ACODEC_MP3;
             hb_log("add_audio_to_title: added MPEG audio stream 0x%x", id);
             break;
         case 0x2:
@@ -3204,6 +3204,17 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
             {
                 audio->config.in.codec = HB_ACODEC_DCA_HD;
             }
+            else if ( codec->codec_id == CODEC_ID_AAC )
+            {
+                int len = MIN(codec->extradata_size, HB_CONFIG_MAX_SIZE);
+                memcpy(audio->priv.config.aac.bytes, codec->extradata, len);
+                audio->priv.config.aac.length = len;
+                audio->config.in.codec = HB_ACODEC_FFAAC;
+            }
+            else if ( codec->codec_id == CODEC_ID_MP3 )
+            {
+                audio->config.in.codec = HB_ACODEC_MP3;
+            }
             else
             {
                 audio->config.in.codec = HB_ACODEC_FFMPEG;
@@ -3212,6 +3223,7 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
 
             audio->config.in.bitrate = codec->bit_rate? codec->bit_rate : 1;
             audio->config.in.samplerate = codec->sample_rate;
+            audio->config.in.samples_per_frame = codec->frame_size;
             audio->config.in.channel_layout = layout;
             audio->config.in.channel_map = &hb_smpte_chan_map;
         }
@@ -3698,7 +3710,7 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
     {
         buf->renderOffset = buf->start;
     }
-    
+
     /* 
      * Fill out buf->stop for subtitle packets
      * 

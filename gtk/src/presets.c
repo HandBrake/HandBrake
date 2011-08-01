@@ -2004,6 +2004,8 @@ static value_map_t acodec_xlat[] =
 	{"HE-AAC (CoreAudio)", "faac"},
 	{"AC3", "ac3"},			// Backwards compatibility with mac ui
 	{"AC3 (ffmpeg)", "ac3"},
+	{"MP3 Passthru", "mp3pass"},
+	{"AAC Passthru", "aacpass"},
 	{"AC3 Passthru", "ac3pass"},
 	{"DTS Passthru", "dtspass"},
 	{"DTS-HD Passthru", "dtshdpass"},
@@ -2055,10 +2057,10 @@ value_map_t mix_xlat[] =
 	{"Dolby Surround", "dpl1"},
 	{"Dolby Pro Logic II", "dpl2"},
 	{"6-channel discrete", "6ch"},
-	{"AC3 Passthru", "none"},
-	{"DTS Passthru", "none"},
-	{"DTS-HD Passthru", "none"},
 	{"None", "none"},
+	{"AC3 Passthru", "none"},    // Backwards compatibility with mac ui
+	{"DTS Passthru", "none"},    // Backwards compatibility with mac ui
+	{"DTS-HD Passthru", "none"}, // Backwards compatibility with mac ui
 	{NULL, NULL}
 };
 

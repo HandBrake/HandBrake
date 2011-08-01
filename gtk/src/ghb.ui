@@ -1716,7 +1716,7 @@
                                   <object class="GtkLabel" id="label46">
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Video Codec:</property>
+                                    <property name="label" translatable="yes">Video Encoder:</property>
                                     <property name="width_chars">11</property>
                                   </object>
                                   <packing>
@@ -2113,9 +2113,10 @@ FFMpeg's and Theora's scale is more linear.  These encoders do not have a lossle
                                       <object class="GtkTable" id="table14">
                                         <property name="visible">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="n_rows">2</property>
+                                        <property name="n_rows">4</property>
                                         <property name="n_columns">5</property>
                                         <property name="row_spacing">5</property>
+                                        <property name="column_spacing">5</property>
                                         <child>
                                           <object class="GtkLabel" id="audio_name_label">
                                             <property name="visible">True</property>
@@ -2228,7 +2229,7 @@ FFMpeg's and Theora's scale is more linear.  These encoders do not have a lossle
                                         <child>
                                           <object class="GtkHScale" id="AudioTrackGain">
                                             <property name="visible">True</property>
-                                            <property name="width-request">200</property>
+                                            <property name="width-request">150</property>
                                             <property name="orientation">horizontal</property>
                                             <property name="adjustment">adjustment35</property>
                                             <property name="value_pos">right</property>
@@ -2282,6 +2283,141 @@ FFMpeg's and Theora's scale is more linear.  These encoders do not have a lossle
                                             <property name="x_options">GTK_FILL</property>
                                           </packing>
                                         </child>
+                                        <child>
+                                          <object class="GtkHBox" id="hbox40">
+                                            <property name="visible">True</property>
+                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="spacing">5</property>
+                                            <child>
+                                              <object class="GtkLabel" id="labela3">
+                                                <property name="visible">True</property>
+                                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                                <property name="xalign">1</property>
+                                                <property name="label" translatable="yes">Auto Passthru:</property>
+                                              </object>
+                                              <packing>
+                                                <property name="position">0</property>
+                                                <property name="expand">False</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkCheckButton" id="AudioAllowMP3Pass">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                                <property name="tooltip-text" translatable="yes">Enable this if your playback device supports AAC. This permits AAC passthru to be selected when automatic passthru selection is enabled.</property>
+                                                <property name="label" translatable="yes">MP3</property>
+                                                <property name="active">True</property>
+                                                <property name="draw_indicator">True</property>
+                                                <signal handler="global_audio_widget_changed_cb" name="toggled"/>
+                                              </object>
+                                              <packing>
+                                                <property name="position">1</property>
+                                                <property name="expand">False</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkCheckButton" id="AudioAllowAACPass">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                                <property name="tooltip-text" translatable="yes">Enable this if your playback device supports AAC. This permits AAC passthru to be selected when automatic passthru selection is enabled.</property>
+                                                <property name="label" translatable="yes">AAC</property>
+                                                <property name="active">True</property>
+                                                <property name="draw_indicator">True</property>
+                                                <signal handler="global_audio_widget_changed_cb" name="toggled"/>
+                                              </object>
+                                              <packing>
+                                                <property name="position">2</property>
+                                                <property name="expand">False</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkCheckButton" id="AudioAllowAC3Pass">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                                <property name="tooltip-text" translatable="yes">Enable this if your playback device supports AC-3. This permits AC-3 passthru to be selected when automatic passthru selection is enabled.</property>
+                                                <property name="label" translatable="yes">AC-3</property>
+                                                <property name="active">True</property>
+                                                <property name="draw_indicator">True</property>
+                                                <signal handler="global_audio_widget_changed_cb" name="toggled"/>
+                                              </object>
+                                              <packing>
+                                                <property name="position">3</property>
+                                                <property name="expand">False</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkCheckButton" id="AudioAllowDTSPass">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                                <property name="tooltip-text" translatable="yes">Enable this if your playback device supports DTS. This permits DTS passthru to be selected when automatic passthru selection is enabled.</property>
+                                                <property name="label" translatable="yes">DTS</property>
+                                                <property name="active">True</property>
+                                                <property name="draw_indicator">True</property>
+                                                <signal handler="global_audio_widget_changed_cb" name="toggled"/>
+                                              </object>
+                                              <packing>
+                                                <property name="position">4</property>
+                                                <property name="expand">False</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkCheckButton" id="AudioAllowDTSHDPass">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                                <property name="tooltip-text" translatable="yes">Enable this if your playback device supports DTS-HD. This permits DTS-HD passthru to be selected when automatic passthru selection is enabled.</property>
+                                                <property name="label" translatable="yes">DTS-HD</property>
+                                                <property name="active">True</property>
+                                                <property name="draw_indicator">True</property>
+                                                <signal handler="global_audio_widget_changed_cb" name="toggled"/>
+                                              </object>
+                                              <packing>
+                                                <property name="position">5</property>
+                                                <property name="expand">False</property>
+                                              </packing>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="top_attach">2</property>
+                                            <property name="bottom_attach">3</property>
+                                            <property name="left_attach">0</property>
+                                            <property name="right_attach">4</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="labela4">
+                                            <property name="visible">True</property>
+                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="xalign">1</property>
+                                            <property name="label" translatable="yes">Passthru Fallback:</property>
+                                          </object>
+                                          <packing>
+                                            <property name="top_attach">3</property>
+                                            <property name="bottom_attach">4</property>
+                                            <property name="left_attach">0</property>
+                                            <property name="right_attach">1</property>
+                                            <property name="x_options">GTK_FILL</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkComboBox" id="AudioEncoderFallback">
+                                            <property name="visible">True</property>
+                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="tooltip-text" translatable="yes">Set the audio codec to encode with when a suitable track can not be found for audio passthru.</property>
+                                            <signal handler="global_audio_widget_changed_cb" name="changed"/>
+                                          </object>
+                                          <packing>
+                                            <property name="top_attach">3</property>
+                                            <property name="bottom_attach">4</property>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="x_options">GTK_FILL</property>
+                                          </packing>
+                                        </child>
                                       </object>
                                     </child>
                                   </object>
@@ -2323,7 +2459,7 @@ FFMpeg's and Theora's scale is more linear.  These encoders do not have a lossle
                                   <object class="GtkLabel" id="label68">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="label" translatable="yes">Codec</property>
+                                    <property name="label" translatable="yes">Encoder</property>
                                   </object>
                                   <packing>
                                     <property name="top_attach">0</property>

@@ -295,6 +295,18 @@
 		<true />
 		<key>Mp4LargeFile</key>
 		<false />
+		<key>AudioAllowMP3Pass</key>
+		<true />
+		<key>AudioAllowAACPass</key>
+		<true />
+		<key>AudioAllowAC3Pass</key>
+		<true />
+		<key>AudioAllowDTSPass</key>
+		<true />
+		<key>AudioAllowDTSHDPass</key>
+		<true />
+		<key>AudioEncoderFallback</key>
+		<string>ac3</string>
 		<key>AudioList</key>
 		<array>
 			<dict>

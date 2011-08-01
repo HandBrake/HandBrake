@@ -241,7 +241,7 @@ int encCoreAudioInit( hb_work_object_t * w, hb_job_t * job, enum AAC_MODE mode )
 
     // set sizes
     pv->isamplesiz  = input.mBytesPerPacket;
-    pv->isamples    = output.mFramesPerPacket;
+    pv->isamples    = audio->config.out.samples_per_frame = output.mFramesPerPacket;
     pv->osamplerate = output.mSampleRate;
 
     // set channel map and layout (for remapping)

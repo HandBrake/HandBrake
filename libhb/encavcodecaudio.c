@@ -103,7 +103,7 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     }
     pv->context = context;
 
-    pv->samples_per_frame = context->frame_size;
+    audio->config.out.samples_per_frame = pv->samples_per_frame = context->frame_size;
     pv->input_samples = pv->samples_per_frame * pv->out_discrete_channels;
 
     // Set a reasonable maximum output size

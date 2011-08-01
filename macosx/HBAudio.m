@@ -107,8 +107,15 @@ static NSMutableArray *masterBitRateArray = nil;
                                       [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
                                       nil]];
         [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                      NSLocalizedString(@"MP3 (lame)", @"MP3 (lame)"), keyAudioCodecName,
-                                      [NSNumber numberWithInt: HB_ACODEC_LAME], keyAudioCodec,
+                                      NSLocalizedString(@"AAC Passthru", @"AAC Passthru"), keyAudioCodecName,
+                                      [NSNumber numberWithInt: HB_ACODEC_AAC_PASS], keyAudioCodec,
+                                      [NSNumber numberWithBool: YES], keyAudioMP4,
+                                      [NSNumber numberWithBool: YES], keyAudioMKV,
+                                      [NSNumber numberWithInt: HB_ACODEC_FFAAC], keyAudioMustMatchTrack,
+                                      nil]];
+        [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
+                                      NSLocalizedString(@"AC3 (ffmpeg)", @"AC3 (ffmpeg)"), keyAudioCodecName,
+                                      [NSNumber numberWithInt: HB_ACODEC_AC3], keyAudioCodec,
                                       [NSNumber numberWithBool: YES], keyAudioMP4,
                                       [NSNumber numberWithBool: YES], keyAudioMKV,
                                       [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
@@ -121,25 +128,32 @@ static NSMutableArray *masterBitRateArray = nil;
                                       [NSNumber numberWithInt: HB_ACODEC_AC3], keyAudioMustMatchTrack,
                                       nil]];
         [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                      NSLocalizedString(@"AC3 (ffmpeg)", @"AC3 (ffmpeg)"), keyAudioCodecName,
-                                      [NSNumber numberWithInt: HB_ACODEC_AC3], keyAudioCodec,
-                                      [NSNumber numberWithBool: YES], keyAudioMP4,
-                                      [NSNumber numberWithBool: YES], keyAudioMKV,
-                                      [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
-                                      nil]];
-        [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
                                       NSLocalizedString(@"DTS Passthru", @"DTS Passthru"), keyAudioCodecName,
                                       [NSNumber numberWithInt: HB_ACODEC_DCA_PASS], keyAudioCodec,
-                                      [NSNumber numberWithBool: NO], keyAudioMP4,
+                                      [NSNumber numberWithBool: YES], keyAudioMP4,
                                       [NSNumber numberWithBool: YES], keyAudioMKV,
                                       [NSNumber numberWithInt: HB_ACODEC_DCA], keyAudioMustMatchTrack,
                                       nil]];
         [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
                                       NSLocalizedString(@"DTS-HD Passthru", @"DTS-HD Passthru"), keyAudioCodecName,
                                       [NSNumber numberWithInt: HB_ACODEC_DCA_HD_PASS], keyAudioCodec,
-                                      [NSNumber numberWithBool: NO], keyAudioMP4,
+                                      [NSNumber numberWithBool: YES], keyAudioMP4,
                                       [NSNumber numberWithBool: YES], keyAudioMKV,
                                       [NSNumber numberWithInt: HB_ACODEC_DCA_HD], keyAudioMustMatchTrack,
+                                      nil]];
+        [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
+                                      NSLocalizedString(@"MP3 (lame)", @"MP3 (lame)"), keyAudioCodecName,
+                                      [NSNumber numberWithInt: HB_ACODEC_LAME], keyAudioCodec,
+                                      [NSNumber numberWithBool: YES], keyAudioMP4,
+                                      [NSNumber numberWithBool: YES], keyAudioMKV,
+                                      [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
+                                      nil]];
+        [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
+                                      NSLocalizedString(@"MP3 Passthru", @"MP3 Passthru"), keyAudioCodecName,
+                                      [NSNumber numberWithInt: HB_ACODEC_MP3_PASS], keyAudioCodec,
+                                      [NSNumber numberWithBool: YES], keyAudioMP4,
+                                      [NSNumber numberWithBool: YES], keyAudioMKV,
+                                      [NSNumber numberWithInt: HB_ACODEC_MP3], keyAudioMustMatchTrack,
                                       nil]];
         [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
                                       NSLocalizedString(@"Vorbis (vorbis)", @"Vorbis (vorbis)"), keyAudioCodecName,

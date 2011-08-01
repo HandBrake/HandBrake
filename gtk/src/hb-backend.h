@@ -137,7 +137,7 @@ hb_audio_config_t* ghb_get_scan_audio_info(gint titleindex, gint audioindex);
 void ghb_set_passthru_bitrate_opts(GtkBuilder *builder, gint bitrate);
 void ghb_set_default_bitrate_opts(
 	GtkBuilder *builder, gint first_rate, gint last_rate);
-void ghb_grey_combo_options(GtkBuilder *builder);
+void ghb_grey_combo_options(signal_user_data_t *ud);
 void ghb_update_ui_combo_box(
 	signal_user_data_t *ud, const gchar *name, gint user_data, gboolean all);
 gchar* ghb_get_source_audio_lang(gint titleindex, gint track);
@@ -175,7 +175,6 @@ gdouble ghb_lookup_combo_double(const gchar *name, const GValue *gval);
 const gchar* ghb_lookup_combo_option(const gchar *name, const GValue *gval);
 const gchar* ghb_lookup_combo_string(const gchar *name, const GValue *gval);
 gchar* ghb_get_tmp_dir();
-gint ghb_select_audio_codec(gint mux, hb_audio_config_t *aconfig, gint acodec);
 gint ghb_find_closest_audio_rate(gint rate);
 GValue* ghb_lookup_acodec_value(gint val);
 

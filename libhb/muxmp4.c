@@ -257,228 +257,206 @@ static int MP4Init( hb_mux_object_t * m )
         MP4SetTrackFloatProperty(m->file, mux_data->track, "tkhd.width", job->width * (width / height));
     }
 
-	/* add the audio tracks */
+    /* add the audio tracks */
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
         mux_data = calloc(1, sizeof( hb_mux_data_t ) );
         audio->priv.mux_data = mux_data;
 
-        if( audio->config.out.codec == HB_ACODEC_AC3_PASS )
+        switch ( audio->config.out.codec & HB_ACODEC_MASK )
         {
-            uint8_t bsid = audio->config.in.version;
-            uint8_t bsmod = audio->config.in.mode;
-            uint8_t acmod = audio->config.flags.ac3 & 0x7;
-            uint8_t lfeon = (audio->config.flags.ac3 & A52_LFE) ? 1 : 0;
-            uint8_t bit_rate_code = 0;
-            int ii, jj;
-            int freq = audio->config.in.samplerate;
-            int bitrate = audio->config.in.bitrate;
-            int sr_shift, sr_code;
-
-            for (ii = 0; ii < 3; ii++)
+            case HB_ACODEC_AC3:
             {
-                for (jj = 0; jj < 3; jj++)
+                uint8_t bsid;
+                uint8_t bsmod;
+                uint8_t acmod;
+                uint8_t lfeon;
+                uint8_t bit_rate_code = 0;
+                int ii, jj;
+                int freq;
+                int bitrate;
+                int sr_shift, sr_code;
+
+                if ( audio->config.out.codec & HB_ACODEC_PASS_FLAG )
                 {
-                    if ((ac3_sample_rate_tab[jj] >> ii) == freq)
+                    bsmod = audio->config.in.mode;
+                    acmod = audio->config.flags.ac3 & 0x7;
+                    lfeon = (audio->config.flags.ac3 & A52_LFE) ? 1 : 0;
+                    freq = audio->config.in.samplerate;
+                    bitrate = audio->config.in.bitrate;
+                }
+                else
+                {
+                    bsmod = 0;
+                    freq = audio->config.out.samplerate;
+                    bitrate = audio->config.out.bitrate * 1000;
+                    switch( audio->config.out.mixdown )
                     {
-                        goto rate_found1;
+                        case HB_AMIXDOWN_MONO:
+                            acmod = 1;
+                            lfeon = 0;
+                            break;
+
+                        case HB_AMIXDOWN_STEREO:
+                        case HB_AMIXDOWN_DOLBY:
+                        case HB_AMIXDOWN_DOLBYPLII:
+                            acmod = 2;
+                            lfeon = 0;
+                            break;
+
+                        case HB_AMIXDOWN_6CH:
+                            acmod = 7;
+                            lfeon = 1;
+                            break;
+
+                        default:
+                            hb_log(" MP4Init: bad mixdown" );
+                            acmod = 2;
+                            lfeon = 0;
+                            break;
                     }
                 }
-            }
-            hb_error("Unknown AC3 samplerate");
-            ii = jj = 0;
-rate_found1:
-            sr_shift = ii;
-            sr_code = jj;
-            for (ii = 0; ii < 19; ii++)
-            {
-                if ((ac3_bitrate_tab[ii] >> sr_shift)*1000 == bitrate)
-                    break;
-            }
-            if ( ii >= 19 )
-            {
-                hb_error("Unknown AC3 bitrate");
-                ii = 0;
-            }
-            bit_rate_code = ii;
 
-            mux_data->track = MP4AddAC3AudioTrack(
-                m->file,
-                audio->config.in.samplerate, 
-                sr_code,
-                bsid,
-                bsmod,
-                acmod,
-                lfeon,
-                bit_rate_code);
-
-            /* Tune track chunk duration */
-            MP4TuneTrackDurationPerChunk( m, mux_data->track );
-
-            if (audio->config.out.name == NULL) {
-                MP4SetTrackBytesProperty(
-                    m->file, mux_data->track,
-                    "udta.name.value",
-                    (const uint8_t*)"Surround", strlen("Surround"));
-            }
-            else {
-                MP4SetTrackBytesProperty(
-                    m->file, mux_data->track,
-                    "udta.name.value",
-                    (const uint8_t*)(audio->config.out.name),
-                    strlen(audio->config.out.name));
-            }
-        }
-        else if( audio->config.out.codec == HB_ACODEC_AC3 )
-        {
-            uint8_t bsid = 8;
-            uint8_t bsmod = 0;
-            uint8_t acmod = 2;
-            uint8_t lfeon = 0;
-            uint8_t bit_rate_code = 0;
-            int ii, jj;
-            int freq = audio->config.out.samplerate;
-            int bitrate = audio->config.out.bitrate;
-            int sr_shift, sr_code;
-
-            for (ii = 0; ii < 3; ii++)
-            {
-                for (jj = 0; jj < 3; jj++)
+                for (ii = 0; ii < 3; ii++)
                 {
-                    if ((ac3_sample_rate_tab[jj] >> ii) == freq)
+                    for (jj = 0; jj < 3; jj++)
                     {
-                        goto rate_found2;
+                        if ((ac3_sample_rate_tab[jj] >> ii) == freq)
+                        {
+                            goto rate_found1;
+                        }
                     }
                 }
-            }
-            hb_error("Unknown AC3 samplerate");
-            ii = jj = 0;
-rate_found2:
-            sr_shift = ii;
-            sr_code = jj;
-            bsid = 8 + ii;
-            for (ii = 0; ii < 19; ii++)
+                hb_error("Unknown AC3 samplerate");
+                ii = jj = 0;
+    rate_found1:
+                sr_shift = ii;
+                sr_code = jj;
+                bsid = 8 + ii;
+                for (ii = 0; ii < 19; ii++)
+                {
+                    if ((ac3_bitrate_tab[ii] >> sr_shift)*1000 == bitrate)
+                        break;
+                }
+                if ( ii >= 19 )
+                {
+                    hb_error("Unknown AC3 bitrate");
+                    ii = 0;
+                }
+                bit_rate_code = ii;
+
+                mux_data->track = MP4AddAC3AudioTrack(
+                    m->file,
+                    freq,
+                    sr_code,
+                    bsid,
+                    bsmod,
+                    acmod,
+                    lfeon,
+                    bit_rate_code);
+
+                /* Tune track chunk duration */
+                MP4TuneTrackDurationPerChunk( m, mux_data->track );
+
+                if (audio->config.out.name == NULL) {
+                    MP4SetTrackBytesProperty(
+                        m->file, mux_data->track,
+                        "udta.name.value",
+                        (const uint8_t*)"Surround", strlen("Surround"));
+                }
+                else {
+                    MP4SetTrackBytesProperty(
+                        m->file, mux_data->track,
+                        "udta.name.value",
+                        (const uint8_t*)(audio->config.out.name),
+                        strlen(audio->config.out.name));
+                }
+            } break;
+
+            case HB_ACODEC_FAAC:
+            case HB_ACODEC_FFAAC:
+            case HB_ACODEC_CA_AAC:
+            case HB_ACODEC_CA_HAAC:
+            case HB_ACODEC_LAME:
+            case HB_ACODEC_MP3:
+            case HB_ACODEC_DCA_HD:
+            case HB_ACODEC_DCA:
             {
-                if ((ac3_bitrate_tab[ii] >> sr_shift) == bitrate)
-                    break;
-            }
-            if ( ii >= 19 )
+                uint8_t audio_type;
+                int samplerate, samples_per_frame, channels, config_len;
+                uint8_t *config_bytes = NULL;
+
+                switch ( audio->config.out.codec & HB_ACODEC_MASK )
+                {
+                    case HB_ACODEC_FAAC:
+                    case HB_ACODEC_FFAAC:
+                    case HB_ACODEC_CA_AAC:
+                    case HB_ACODEC_CA_HAAC:
+                    {
+                        audio_type = MP4_MPEG4_AUDIO_TYPE;
+                        config_bytes = audio->priv.config.aac.bytes;
+                        config_len = audio->priv.config.aac.length;
+                    } break;
+                    case HB_ACODEC_LAME:
+                    case HB_ACODEC_MP3:
+                    {
+                        audio_type = MP4_MPEG2_AUDIO_TYPE;
+                    } break;
+                    case HB_ACODEC_DCA:
+                    case HB_ACODEC_DCA_HD:
+                    {
+                        audio_type = 0xA9;
+                    } break;
+                }
+                if( audio->config.out.codec & HB_ACODEC_PASS_FLAG )
+                {
+                    samplerate = audio->config.in.samplerate;
+                    samples_per_frame = audio->config.in.samples_per_frame;
+                    channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(
+                                            audio->config.in.channel_layout );
+                }
+                else
+                {
+                    samplerate = audio->config.out.samplerate;
+                    samples_per_frame = audio->config.out.samples_per_frame;
+                    channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(
+                                            audio->config.out.mixdown );
+                }
+                mux_data->track = MP4AddAudioTrack( m->file, samplerate, 
+                                                samples_per_frame, audio_type );
+
+                /* Tune track chunk duration */
+                MP4TuneTrackDurationPerChunk( m, mux_data->track );
+
+                if (audio->config.out.name == NULL) {
+                    MP4SetTrackBytesProperty(
+                        m->file, mux_data->track,
+                        "udta.name.value",
+                        (const uint8_t*)"Stereo", strlen("Stereo"));
+                }
+                else {
+                    MP4SetTrackBytesProperty(
+                        m->file, mux_data->track,
+                        "udta.name.value",
+                        (const uint8_t*)(audio->config.out.name),
+                        strlen(audio->config.out.name));
+                }
+
+                MP4SetAudioProfileLevel( m->file, 0x0F );
+                if ( config_bytes )
+                {
+                    MP4SetTrackESConfiguration( m->file, mux_data->track,
+                                                config_bytes, config_len );
+                }
+                /* Set the correct number of channels for this track */
+                MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.*.channels", channels);
+            } break;
+
+            default:
             {
-                hb_error("Unknown AC3 bitrate");
-                ii = 0;
-            }
-            bit_rate_code = ii;
-
-            switch( audio->config.out.mixdown )
-            {
-                case HB_AMIXDOWN_MONO:
-                    acmod = 1;
-                    break;
-
-                case HB_AMIXDOWN_STEREO:
-                case HB_AMIXDOWN_DOLBY:
-                case HB_AMIXDOWN_DOLBYPLII:
-                    acmod = 2;
-                    break;
-
-                case HB_AMIXDOWN_6CH:
-                    acmod = 7;
-                    lfeon = 1;
-                    break;
-
-                default:
-                    hb_log(" MP4Init: bad mixdown" );
-                    break;
-            }
-
-            mux_data->track = MP4AddAC3AudioTrack(
-                m->file,
-                audio->config.out.samplerate, 
-                sr_code,
-                bsid,
-                bsmod,
-                acmod,
-                lfeon,
-                bit_rate_code);
-
-            /* Tune track chunk duration */
-            MP4TuneTrackDurationPerChunk( m, mux_data->track );
-
-            if (audio->config.out.name == NULL) {
-                MP4SetTrackBytesProperty(
-                    m->file, mux_data->track,
-                    "udta.name.value",
-                    (const uint8_t*)"Surround", strlen("Surround"));
-            }
-            else {
-                MP4SetTrackBytesProperty(
-                    m->file, mux_data->track,
-                    "udta.name.value",
-                    (const uint8_t*)(audio->config.out.name),
-                    strlen(audio->config.out.name));
-            }
-        } 
-        else if( audio->config.out.codec == HB_ACODEC_FAAC ||
-                 audio->config.out.codec == HB_ACODEC_FFAAC ||
-                 audio->config.out.codec == HB_ACODEC_CA_AAC ||
-                 audio->config.out.codec == HB_ACODEC_CA_HAAC ) 
-        {
-            int samples_per_frame = ( audio->config.out.codec == HB_ACODEC_CA_HAAC ) ? 2048 : 1024;
-            mux_data->track = MP4AddAudioTrack(
-                m->file,
-                audio->config.out.samplerate, samples_per_frame, MP4_MPEG4_AUDIO_TYPE );
-
-            /* Tune track chunk duration */
-            MP4TuneTrackDurationPerChunk( m, mux_data->track );
-
-            if (audio->config.out.name == NULL) {
-                MP4SetTrackBytesProperty(
-                    m->file, mux_data->track,
-                    "udta.name.value",
-                    (const uint8_t*)"Stereo", strlen("Stereo"));
-            }
-            else {
-                MP4SetTrackBytesProperty(
-                    m->file, mux_data->track,
-                    "udta.name.value",
-                    (const uint8_t*)(audio->config.out.name),
-                    strlen(audio->config.out.name));
-            }
-
-            MP4SetAudioProfileLevel( m->file, 0x0F );
-            MP4SetTrackESConfiguration(
-                m->file, mux_data->track,
-                audio->priv.config.aac.bytes, audio->priv.config.aac.length );
-
-            /* Set the correct number of channels for this track */
-             MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.mp4a.channels", (uint16_t)HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown));
-        } else if( audio->config.out.codec == HB_ACODEC_LAME ) {
-            mux_data->track = MP4AddAudioTrack(
-                m->file,
-                audio->config.out.samplerate, 1152, MP4_MPEG2_AUDIO_TYPE );
-
-            /* Tune track chunk duration */
-            MP4TuneTrackDurationPerChunk( m, mux_data->track );
-
-            if (audio->config.out.name == NULL) {
-                MP4SetTrackBytesProperty(
-                    m->file, mux_data->track,
-                    "udta.name.value",
-                    (const uint8_t*)"Stereo", strlen("Stereo"));
-            }
-            else {
-                MP4SetTrackBytesProperty(
-                    m->file, mux_data->track,
-                    "udta.name.value",
-                    (const uint8_t*)(audio->config.out.name),
-                    strlen(audio->config.out.name));
-            }
-
-            MP4SetAudioProfileLevel( m->file, 0x0F );
-
-            /* Set the correct number of channels for this track */
-             MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.mp4a.channels", (uint16_t)HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown));
+                hb_log("MP4Mux: Unsupported audio codec %x", audio->config.out.codec);
+            } break;
         }
 
         /* Set the language for this track */

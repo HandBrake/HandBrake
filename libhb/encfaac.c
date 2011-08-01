@@ -99,6 +99,7 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
     pv->obuf = malloc( pv->output_bytes );
     pv->framedur = 90000.0 * pv->input_samples /
                    ( audio->config.out.samplerate * pv->out_discrete_channels );
+    audio->config.out.samples_per_frame = pv->input_samples / pv->out_discrete_channels;
 
     cfg                = faacEncGetCurrentConfiguration( pv->faac );
     cfg->mpegVersion   = MPEG4;

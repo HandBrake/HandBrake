@@ -414,6 +414,7 @@ static int deca52BSInfo( hb_work_object_t *w, const hb_buffer_t *b,
     info->flags = flags;
     info->version = raw >> 3;    /* bsid is the first 5 bits */
     info->mode = raw & 0x7;      /* bsmod is the following 3 bits */
+    info->samples_per_frame = 1536;
 
     if ( (flags & A52_CHANNEL_MASK) == A52_DOLBY )
     {

@@ -378,6 +378,8 @@ void hb_display_job_info( hb_job_t * job )
             if( audio->config.out.codec & HB_ACODEC_PASS_FLAG )
             {
                 hb_log( "   + %s passthrough", 
+                    (audio->config.out.codec == HB_ACODEC_MP3_PASS) ? "MP3" :
+                    (audio->config.out.codec == HB_ACODEC_AAC_PASS) ? "AAC" :
                     (audio->config.out.codec == HB_ACODEC_AC3_PASS) ? "AC3" :
                     (audio->config.out.codec == HB_ACODEC_DCA_PASS) ? "DTS" :
                                                                       "DTS-HD");

@@ -76,6 +76,7 @@ int enclameInit( hb_work_object_t * w, hb_job_t * job )
     pv->input_samples = 1152 * pv->out_discrete_channels;
     pv->output_bytes = LAME_MAXMP3BUFFER;
     pv->buf  = malloc( pv->input_samples * sizeof( float ) );
+    audio->config.out.samples_per_frame = 1152;
 
     pv->list = hb_list_init();
     pv->pts  = -1;

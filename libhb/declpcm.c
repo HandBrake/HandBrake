@@ -259,6 +259,7 @@ static int declpcmBSInfo( hb_work_object_t *w, const hb_buffer_t *b,
 
     int rate = hdr2samplerate[ ( b->data[4] >> 4 ) & 0x3 ];
     int bitrate = rate * sample_size * nchannels;
+    int64_t duration = b->data[0] * 150;
 
     memset( info, 0, sizeof(*info) );
 
@@ -269,6 +270,7 @@ static int declpcmBSInfo( hb_work_object_t *w, const hb_buffer_t *b,
     info->flags = ( b->data[3] << 16 ) | ( b->data[4] << 8 ) | b->data[5];
     info->channel_layout = hdr2layout[nchannels - 1];
     info->channel_map = &hb_qt_chan_map;
+    info->samples_per_frame = ( duration * rate ) / 90000;
 
     return 1;
 }

@@ -439,6 +439,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                                              &out_size, &avp );
                 if ( len > 0 && context->sample_rate > 0 )
                 {
+                    int isamp = av_get_bytes_per_sample( context->sample_fmt );
                     info->bitrate = context->bit_rate;
                     info->rate = context->sample_rate;
                     info->rate_base = 1;
@@ -446,6 +447,11 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                         hb_ff_layout_xlat(context->channel_layout, 
                                           context->channels);
                     ret = 1;
+                    if ( context->channels && isamp )
+                    {
+                        info->samples_per_frame = out_size / 
+                                                  (isamp * context->channels);
+                    }
                     break;
                 }
             }

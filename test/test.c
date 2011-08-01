@@ -2563,17 +2563,39 @@ static void ShowHelp()
 #ifdef __APPLE_CC__
     fprintf( out,
     "    -E, --aencoder <string> Audio encoder(s)\n"
-    "                                (ca_aac/ca_haac/faac/lame/vorbis/ac3/copy/copy:ac3/copy:dts)\n"
-    "                            copy, copy:ac3 and copy:dts meaning passthrough.\n"
-    "                            copy will passthrough either ac3 or dts.\n"
+    "                               ca_aac\n"
+    "                               ca_haac\n"
+    "                               faac\n"
+    "                               lame\n"
+    "                               vorbis\n"
+    "                               ac3\n"
+    "                               copy\n"
+    "                               copy:aac\n"
+    "                               copy:ac3\n"
+    "                               copy:dts\n"
+    "                               copy:dtshd\n"
+    "                               copy:mp3\n"
+    "                            copy* will passthrough the corresponding\n"
+    "                            audio unmodified to the muxer if it is a\n"
+    "                            supported passthrough audio type.\n"
     "                            Separated by commas for more than one audio track.\n"
     "                            (default: ca_aac)\n" );
 #else
     fprintf( out,
     "    -E, --aencoder <string> Audio encoder(s):\n"
-    "                                (faac/lame/vorbis/ac3/copy/copy:ac3/copy:dts)\n"
-    "                            copy, copy:ac3 and copy:dts meaning passthrough.\n"
-    "                            copy will passthrough either ac3 or dts.\n"
+    "                               faac\n"
+    "                               lame\n"
+    "                               vorbis\n"
+    "                               ac3\n"
+    "                               copy\n"
+    "                               copy:aac\n"
+    "                               copy:ac3\n"
+    "                               copy:dts\n"
+    "                               copy:dtshd\n"
+    "                               copy:mp3\n"
+    "                            copy* will passthrough the corresponding\n"
+    "                            audio unmodified to the muxer if it is a\n"
+    "                            supported passthrough audio type.\n"
     "                            Separated by commas for more than one audio track.\n"
     "                            (default: faac for mp4, lame for mkv)\n" );
 #endif
@@ -3427,6 +3449,10 @@ static int ParseOptions( int argc, char ** argv )
                         allowed_audio_copy |= HB_ACODEC_DCA;
                     if ( !strcmp( allowed[i], "dtshd" ) )
                         allowed_audio_copy |= HB_ACODEC_DCA_HD;
+                    if ( !strcmp( allowed[i], "mp3" ) )
+                        allowed_audio_copy |= HB_ACODEC_MP3;
+                    if ( !strcmp( allowed[i], "aac" ) )
+                        allowed_audio_copy |= HB_ACODEC_FFAAC;
                 }
                 str_vfree( allowed );
             } break;
@@ -3600,6 +3626,10 @@ static int get_acodec_for_string( char *codec )
     {
         return (HB_ACODEC_PASS_MASK & allowed_audio_copy) | HB_ACODEC_PASS_FLAG;
     }
+    else if( !strcasecmp( codec, "copy:aac" ) )
+    {
+        return HB_ACODEC_AAC_PASS;
+    }
     else if( !strcasecmp( codec, "copy:ac3" ) )
     {
         return HB_ACODEC_AC3_PASS;
@@ -3611,6 +3641,10 @@ static int get_acodec_for_string( char *codec )
     else if( !strcasecmp( codec, "copy:dtshd" ) )
     {
         return HB_ACODEC_DCA_HD_PASS;
+    }
+    else if( !strcasecmp( codec, "copy:mp3" ) )
+    {
+        return HB_ACODEC_MP3_PASS;
     }
     else if( !strcasecmp( codec, "lame" ) )
     {

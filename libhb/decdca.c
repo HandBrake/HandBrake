@@ -311,6 +311,7 @@ static int decdcaBSInfo( hb_work_object_t *w, const hb_buffer_t *b,
     info->rate_base = 1;
     info->bitrate = bitrate;
     info->flags = flags;
+    info->samples_per_frame = frame_length;
 
     if ( ( flags & DCA_CHANNEL_MASK) == DCA_DOLBY )
     {

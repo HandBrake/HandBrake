@@ -14,8 +14,6 @@
 #endif
 #define INT64_MIN (-9223372036854775807LL-1)
 
-#define AC3_SAMPLES_PER_FRAME 1536
-
 typedef struct
 {
     hb_lock_t * mutex;
@@ -44,9 +42,10 @@ typedef struct
     SRC_STATE  * state;
     SRC_DATA     data;
 
-    /* AC-3 */
-    int          ac3_size;
-    uint8_t    * ac3_buf;
+    int          silence_size;
+    uint8_t    * silence_buf;
+
+    int          drop_video_to_sync;
 
     double       gain_factor;
 } hb_sync_audio_t;
@@ -261,7 +260,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_subtitle_t     * subtitle;
     hb_sync_video_t   * sync = &pv->type.video;
     int i;
-    int64_t start, next_start;
+    int64_t next_start;
 
     *buf_out = NULL;
     next = *buf_in;
@@ -456,16 +455,12 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_DONE;
     }
 
-    hb_lock( pv->common->mutex );
-    start = cur->start - pv->common->video_pts_slip;
-    hb_unlock( pv->common->mutex );
-
     /* Check for end of point-to-point pts encoding */
     if( job->pts_to_stop && sync->next_start >= job->pts_to_stop )
     {
         // Drop an empty buffer into our output to ensure that things
         // get flushed all the way out.
-        hb_log( "sync: reached pts %"PRId64", exiting early", start );
+        hb_log( "sync: reached pts %"PRId64", exiting early", cur->start );
         hb_buffer_close( &sync->cur );
         hb_buffer_close( &next );
         *buf_out = hb_buffer_init( 0 );
@@ -487,7 +482,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     if( sync->first_frame )
     {
         /* This is our first frame */
-        if ( start > 0 )
+        if ( cur->start > 0 )
         {
             /*
              * The first pts from a dvd should always be zero but
@@ -497,8 +492,8 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
              * as if it started at zero so that our audio timing will
              * be in sync.
              */
-            hb_log( "sync: first pts is %"PRId64, start );
-            start = 0;
+            hb_log( "sync: first pts is %"PRId64, cur->start );
+            cur->start = 0;
         }
         sync->first_frame = 0;
     }
@@ -514,7 +509,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
      * can deal with overlaps of up to a frame time but anything larger
      * we handle by dropping frames here.
      */
-    if ( next_start - start <= 0 )
+    if ( next_start - cur->start <= 0 )
     {
         if ( sync->first_drop == 0 )
         {
@@ -533,8 +528,8 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     {
         hb_log( "sync: video time didn't advance - dropped %d frames "
                 "(delta %d ms, current %"PRId64", next %"PRId64", dur %d)",
-                sync->drop_count, (int)( start - sync->first_drop ) / 90,
-                start, next_start, (int)( next_start - start ) );
+                sync->drop_count, (int)( cur->start - sync->first_drop ) / 90,
+                cur->start, next_start, (int)( next_start - cur->start ) );
         sync->first_drop = 0;
         sync->drop_count = 0;
     }
@@ -766,14 +761,16 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
      * explicit stop time from the start time of the next frame.
      */
     *buf_out = cur;
+    int64_t duration = next_start - cur->start;
     sync->cur = cur = next;
     cur->sub = NULL;
-    int64_t duration = next_start - start;
+    cur->start -= pv->common->video_pts_slip;
+    cur->stop -= pv->common->video_pts_slip;
     sync->pts_skip = 0;
     if ( duration <= 0 )
     {
         hb_log( "sync: invalid video duration %"PRId64", start %"PRId64", next %"PRId64"",
-                duration, start, next_start );
+                duration, cur->start, next_start );
     }
 
     (*buf_out)->start = sync->next_start;
@@ -837,11 +834,11 @@ void syncAudioClose( hb_work_object_t * w )
     hb_work_private_t * pv    = w->private_data;
     hb_sync_audio_t   * sync  = &pv->type.audio;
 
-    if( w->audio->config.out.codec == HB_ACODEC_AC3_PASS )
+    if( sync->silence_buf )
     {
-        free( sync->ac3_buf );
+        free( sync->silence_buf );
     }
-    else
+    if ( sync->state )
     {
         src_delete( sync->state );
     }
@@ -985,29 +982,26 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_DONE;
     }
 
-    if ( start - sync->next_start < 0 )
+    // audio time went backwards.
+    // If our output clock is more than a half frame ahead of the
+    // input clock drop this frame to move closer to sync.
+    // Otherwise drop frames until the input clock matches the output clock.
+    if ( sync->next_start - start > 90*15 )
     {
-        // audio time went backwards.
-        // If our output clock is more than a half frame ahead of the
-        // input clock drop this frame to move closer to sync.
-        // Otherwise drop frames until the input clock matches the output clock.
-        if ( sync->first_drop || sync->next_start - start > 90*15 )
+        // Discard data that's in the past.
+        if ( sync->first_drop == 0 )
         {
-            // Discard data that's in the past.
-            if ( sync->first_drop == 0 )
-            {
-                sync->first_drop = sync->next_start;
-            }
-            ++sync->drop_count;
-            hb_buffer_close( &buf );
-            return HB_WORK_OK;
+            sync->first_drop = start;
         }
+        ++sync->drop_count;
+        hb_buffer_close( &buf );
+        return HB_WORK_OK;
     }
     if ( sync->first_drop )
     {
         // we were dropping old data but input buf time is now current
         hb_log( "sync: audio 0x%x time went backwards %d ms, dropped %d frames "
-                "(next %"PRId64", current %"PRId64")", w->audio->id,
+                "(start %"PRId64", next %"PRId64")", w->audio->id,
                 (int)( sync->next_start - sync->first_drop ) / 90,
                 sync->drop_count, sync->first_drop, (int64_t)sync->next_start );
         sync->first_drop = 0;
@@ -1033,8 +1027,7 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
          * Or in the case of DCA, skip some frames from the
          * other streams.
          */
-        if( w->audio->config.out.codec == HB_ACODEC_DCA_PASS ||
-            w->audio->config.out.codec == HB_ACODEC_DCA_HD_PASS )
+        if ( sync->drop_video_to_sync )
         {
             hb_log( "sync: audio gap %d ms. Skipping frames. Audio 0x%x"
                     "  start %"PRId64", next %"PRId64,
@@ -1103,21 +1096,41 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
         w->fifo_out = w->audio->priv.fifo_sync;
     }
 
-    if( w->audio->config.out.codec == HB_ACODEC_AC3_PASS )
+    if( w->audio->config.out.codec == HB_ACODEC_AC3_PASS ||
+        w->audio->config.out.codec == HB_ACODEC_AAC_PASS )
     {
-        /* Have a silent AC-3 frame ready in case we have to fill a
+        /* Have a silent AC-3/AAC frame ready in case we have to fill a
            gap */
         AVCodec        * codec;
         AVCodecContext * c;
         short          * zeros;
 
-        codec = avcodec_find_encoder( CODEC_ID_AC3 );
+        switch ( w->audio->config.out.codec )
+        {
+            case HB_ACODEC_AC3_PASS:
+            {
+                codec = avcodec_find_encoder( CODEC_ID_AC3 );
+            } break;
+            case HB_ACODEC_AAC_PASS:
+            {
+                codec = avcodec_find_encoder( CODEC_ID_AAC );
+            } break;
+            case HB_ACODEC_MP3_PASS:
+            {
+                codec = avcodec_find_encoder( CODEC_ID_MP3 );
+            } break;
+            default:
+            {
+                // Never gets here
+            } break;
+        }
+
         c     = avcodec_alloc_context3( codec );
 
         c->bit_rate    = w->audio->config.in.bitrate;
         c->sample_rate = w->audio->config.in.samplerate;
         c->channels    = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT( w->audio->config.in.channel_layout );
-        c->sample_fmt  = AV_SAMPLE_FMT_FLT;
+        hb_ff_set_sample_fmt( c, codec );
 
         switch( w->audio->config.in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK )
         {
@@ -1167,14 +1180,26 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
             return;
         }
 
-        zeros          = calloc( AC3_SAMPLES_PER_FRAME *
-                                 sizeof( float ) * c->channels, 1 );
-        sync->ac3_size = w->audio->config.in.bitrate * AC3_SAMPLES_PER_FRAME /
-                             w->audio->config.in.samplerate / 8;
-        sync->ac3_buf  = malloc( sync->ac3_size );
+        int input_size = c->frame_size * av_get_bytes_per_sample( c->sample_fmt ) * c->channels;
+        zeros = calloc( 1, input_size );
+        // Allocate enough space for the encoded silence
+        // The output should be < the input
+        sync->silence_buf  = malloc( input_size );
 
-        if( avcodec_encode_audio( c, sync->ac3_buf, sync->ac3_size,
-                                  zeros ) != sync->ac3_size )
+        // There is some delay in getting output from some audio encoders.
+        // So encode a few packets till we get output.
+        int ii;
+        for ( ii = 0; ii < 10; ii++ )
+        {
+            sync->silence_size = avcodec_encode_audio( c, sync->silence_buf, 
+                                    input_size, zeros );
+
+            if (sync->silence_size)
+            {
+                break;
+            }
+        }
+        if (!sync->silence_size)
         {
             hb_log( "sync: avcodec_encode_audio failed" );
         }
@@ -1185,12 +1210,19 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
     }
     else
     {
-        /* Initialize libsamplerate */
-        int error;
-        sync->state = src_new( SRC_SINC_MEDIUM_QUALITY, 
-            HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(
-                w->audio->config.out.mixdown), &error );
-        sync->data.end_of_input = 0;
+        if( w->audio->config.out.codec & HB_ACODEC_PASS_FLAG )
+        {
+            sync->drop_video_to_sync = 1;
+        }
+        else
+        {
+            /* Not passthru, Initialize libsamplerate */
+            int error;
+            sync->state = src_new( SRC_SINC_MEDIUM_QUALITY, 
+                HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(
+                    w->audio->config.out.mixdown), &error );
+            sync->data.end_of_input = 0;
+        }
     }
 
     sync->gain_factor = pow(LVL_PLUS1DB, w->audio->config.out.gain);
@@ -1293,29 +1325,39 @@ static void InsertSilence( hb_work_object_t * w, int64_t duration )
     hb_sync_audio_t *sync = &pv->type.audio;
     hb_buffer_t     *buf;
     hb_fifo_t       *fifo;
+    int frame_dur, frame_count;
 
     // to keep pass-thru and regular audio in sync we generate silence in
-    // AC3 frame-sized units. If the silence duration isn't an integer multiple
-    // of the AC3 frame duration we will truncate or round up depending on
+    // frame-sized units. If the silence duration isn't an integer multiple
+    // of the frame duration we will truncate or round up depending on
     // which minimizes the timing error.
-    const int frame_dur = ( 90000 * AC3_SAMPLES_PER_FRAME ) /
-                          w->audio->config.in.samplerate;
-    int frame_count = ( duration + (frame_dur >> 1) ) / frame_dur;
+    if( w->audio->config.out.codec & HB_ACODEC_PASS_FLAG )
+    {
+        frame_dur = ( 90000 * w->audio->config.in.samples_per_frame ) /
+                                            w->audio->config.in.samplerate;
+    }
+    else
+    {
+        frame_dur = ( 90000 * w->audio->config.out.samples_per_frame ) /
+                                            w->audio->config.in.samplerate;
+    }
+    frame_count = ( duration + (frame_dur >> 1) ) / frame_dur;
 
     while ( --frame_count >= 0 )
     {
-        if( w->audio->config.out.codec == HB_ACODEC_AC3_PASS )
+        if( w->audio->config.out.codec & HB_ACODEC_PASS_FLAG )
         {
-            buf        = hb_buffer_init( sync->ac3_size );
+            buf        = hb_buffer_init( sync->silence_size );
             buf->start = sync->next_start;
             buf->stop  = buf->start + frame_dur;
-            memcpy( buf->data, sync->ac3_buf, buf->size );
+            memcpy( buf->data, sync->silence_buf, buf->size );
             fifo = w->audio->priv.fifo_out;
         }
         else
         {
-            buf = hb_buffer_init( AC3_SAMPLES_PER_FRAME * sizeof( float ) *
-                                     HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(
+            buf = hb_buffer_init( w->audio->config.out.samples_per_frame * 
+                                   sizeof( float ) *
+                                   HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(
                                          w->audio->config.out.mixdown) );
             buf->start = sync->next_start;
             buf->stop  = buf->start + frame_dur;

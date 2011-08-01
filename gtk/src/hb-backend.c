@@ -57,7 +57,7 @@ static gint index_str_size = 0;
 static void 
 index_str_init(gint max_index)
 {
-	int ii;
+	gint ii;
 
 	if (max_index+1 > index_str_size)
 	{
@@ -256,15 +256,31 @@ static options_map_t d_acodec_opts[] =
 	{"MP3 (lame)",         "lame",      HB_ACODEC_LAME,        "lame"},
 	{"Vorbis",             "vorbis",    HB_ACODEC_VORBIS,      "vorbis"},
 	{"AC3 (ffmpeg)",       "ac3",       HB_ACODEC_AC3,         "ac3"},
-	{"AC3 (pass-thru)",    "ac3pass",   HB_ACODEC_AC3_PASS,    "ac3pass"},
-	{"DTS (pass-thru)",    "dtspass",   HB_ACODEC_DCA_PASS,    "dtspass"},
-	{"DTS-HD (pass-thru)", "dtshdpass", HB_ACODEC_DCA_HD_PASS, "dtshdpass"},
-	{"Choose For Me",      "auto",      HB_ACODEC_ANY,         "auto"},
+	{"MP3 Passthru",       "mp3pass",   HB_ACODEC_MP3_PASS,    "mp3pass"},
+	{"AAC Passthru",       "aacpass",   HB_ACODEC_AAC_PASS,    "aacpass"},
+	{"AC3 Passthru",       "ac3pass",   HB_ACODEC_AC3_PASS,    "ac3pass"},
+	{"DTS Passthru",       "dtspass",   HB_ACODEC_DCA_PASS,    "dtspass"},
+	{"DTS-HD Passthru",    "dtshdpass", HB_ACODEC_DCA_HD_PASS, "dtshdpass"},
+	{"Auto Passthru",      "auto",      HB_ACODEC_ANY,         "auto"},
 };
 combo_opts_t acodec_opts =
 {
 	sizeof(d_acodec_opts)/sizeof(options_map_t),
 	d_acodec_opts
+};
+
+static options_map_t d_acodec_fallback_opts[] =
+{
+	{"AAC (faac)",         "faac",      HB_ACODEC_FAAC,        "faac"},
+	{"AAC (ffmpeg)",       "ffaac",     HB_ACODEC_FFAAC,       "ffaac"},
+	{"MP3 (lame)",         "lame",      HB_ACODEC_LAME,        "lame"},
+	{"Vorbis",             "vorbis",    HB_ACODEC_VORBIS,      "vorbis"},
+	{"AC3 (ffmpeg)",       "ac3",       HB_ACODEC_AC3,         "ac3"},
+};
+combo_opts_t acodec_fallback_opts =
+{
+	sizeof(d_acodec_fallback_opts)/sizeof(options_map_t),
+	d_acodec_fallback_opts
 };
 
 static options_map_t d_direct_opts[] =
@@ -418,6 +434,7 @@ combo_name_map_t combo_name_map[] =
 	{"VideoEncoder", &vcodec_opts},
 	{"AudioEncoder", &acodec_opts},
 	{"AudioEncoderActual", &acodec_opts},
+	{"AudioEncoderFallback", &acodec_fallback_opts},
 	{"x264_direct", &direct_opts},
 	{"x264_b_adapt", &badapt_opts},
 	{"x264_bpyramid", &bpyramid_opts},
@@ -1535,71 +1552,75 @@ grey_combo_box_item(GtkBuilder *builder, const gchar *name, gint value, gboolean
 }
 
 void
-ghb_grey_combo_options(GtkBuilder *builder)
+ghb_grey_combo_options(signal_user_data_t *ud)
 {
 	GtkWidget *widget;
-	gint mux, track, titleindex, acodec;
-    hb_audio_config_t *aconfig = NULL;
+	gint mux, track, titleindex, acodec, fallback;
+	hb_audio_config_t *aconfig = NULL;
 	GValue *gval;
 	
-	widget = GHB_WIDGET (builder, "title");
+	widget = GHB_WIDGET (ud->builder, "title");
 	gval = ghb_widget_value(widget);
 	titleindex = ghb_lookup_combo_int("title", gval);
 	ghb_value_free(gval);
-	widget = GHB_WIDGET (builder, "AudioTrack");
+	widget = GHB_WIDGET (ud->builder, "AudioTrack");
 	gval = ghb_widget_value(widget);
 	track = ghb_lookup_combo_int("AudioTrack", gval);
 	ghb_value_free(gval);
 	aconfig = get_hb_audio(h_scan, titleindex, track);
-	widget = GHB_WIDGET (builder, "FileFormat");
+	widget = GHB_WIDGET (ud->builder, "FileFormat");
 	gval = ghb_widget_value(widget);
 	mux = ghb_lookup_combo_int("FileFormat", gval);
 	ghb_value_free(gval);
 
-	grey_combo_box_item(builder, "x264_analyse", 4, TRUE);
-	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_FFAAC, FALSE);
-	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_FAAC, FALSE);
-	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_LAME, FALSE);
-	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_VORBIS, FALSE);
+	grey_combo_box_item(ud->builder, "x264_analyse", 4, TRUE);
+	grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_FFAAC, FALSE);
+	grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_FAAC, FALSE);
+	grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_LAME, FALSE);
+	grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_VORBIS, FALSE);
 
-	gboolean allow_dca = TRUE;
-	allow_dca = (mux != HB_MUX_MP4);
+	grey_combo_box_item(ud->builder, "AudioEncoderFallback", HB_ACODEC_FFAAC, FALSE);
+	grey_combo_box_item(ud->builder, "AudioEncoderFallback", HB_ACODEC_FAAC, FALSE);
+	grey_combo_box_item(ud->builder, "AudioEncoderFallback", HB_ACODEC_LAME, FALSE);
+	grey_combo_box_item(ud->builder, "AudioEncoderFallback", HB_ACODEC_VORBIS, FALSE);
 
-	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_AC3_PASS, FALSE);
-	if (allow_dca)
-    {
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_PASS, FALSE);
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_HD_PASS, FALSE);
-    }
-	else
-    {
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_PASS, TRUE);
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_HD_PASS, TRUE);
-    }
-
+	grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_MP3_PASS, FALSE);
+	grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_AAC_PASS, FALSE);
+	grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_AC3_PASS, FALSE);
+	grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_DCA_PASS, FALSE);
+	grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_DCA_HD_PASS, FALSE);
+	if (aconfig && (aconfig->in.codec & HB_ACODEC_MASK) != HB_ACODEC_MP3)
+	{
+		grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_MP3_PASS, TRUE);
+	}
+	if (aconfig && (aconfig->in.codec & HB_ACODEC_MASK) != HB_ACODEC_FFAAC)
+	{
+		grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_AAC_PASS, TRUE);
+	}
 	if (aconfig && (aconfig->in.codec & HB_ACODEC_MASK) != HB_ACODEC_AC3)
 	{
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_AC3_PASS, TRUE);
+		grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_AC3_PASS, TRUE);
 	}
 	if (aconfig && (aconfig->in.codec & HB_ACODEC_MASK) != HB_ACODEC_DCA)
 	{
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_PASS, TRUE);
+		grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_DCA_PASS, TRUE);
 	}
 	if (aconfig && (aconfig->in.codec & HB_ACODEC_MASK) != HB_ACODEC_DCA_HD)
 	{
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA_HD_PASS, TRUE);
+		grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_DCA_HD_PASS, TRUE);
 	}
-	grey_combo_box_item(builder, "VideoEncoder", HB_VCODEC_THEORA, FALSE);
+	grey_combo_box_item(ud->builder, "VideoEncoder", HB_VCODEC_THEORA, FALSE);
 
-	widget = GHB_WIDGET (builder, "AudioEncoder");
+	widget = GHB_WIDGET (ud->builder, "AudioEncoder");
 	gval = ghb_widget_value(widget);
 	acodec = ghb_lookup_combo_int("AudioEncoder", gval);
 	ghb_value_free(gval);
-	grey_combo_box_item(builder, "AudioMixdown", 0, TRUE);
+	grey_combo_box_item(ud->builder, "AudioMixdown", 0, TRUE);
 	if (mux == HB_MUX_MP4)
 	{
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_VORBIS, TRUE);
-		grey_combo_box_item(builder, "VideoEncoder", HB_VCODEC_THEORA, TRUE);
+		grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_VORBIS, TRUE);
+		grey_combo_box_item(ud->builder, "AudioEncoderFallback", HB_ACODEC_VORBIS, TRUE);
+		grey_combo_box_item(ud->builder, "VideoEncoder", HB_VCODEC_THEORA, TRUE);
 	}
 
 	gboolean allow_mono = TRUE;
@@ -1610,7 +1631,9 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	allow_6ch = acodec & ~HB_ACODEC_LAME;
 	if (aconfig)
 	{
-		acodec = ghb_select_audio_codec(mux, aconfig, acodec);
+		acodec = ghb_allowed_passthru_mask(ud->settings, acodec);
+		fallback = ghb_settings_combo_int(ud->settings, "AudioEncoderFallback");
+		acodec = ghb_select_audio_codec(mux, aconfig, acodec, fallback);
 		gint best = hb_get_best_mixdown(acodec, aconfig->in.channel_layout, 0);
 
 		allow_stereo = best >= HB_AMIXDOWN_STEREO;
@@ -1619,17 +1642,17 @@ ghb_grey_combo_options(GtkBuilder *builder)
 		allow_6ch = best >= HB_AMIXDOWN_6CH;
 		allow_mono = best >= HB_AMIXDOWN_MONO;
 	}
-	grey_combo_box_item(builder, "AudioMixdown", HB_AMIXDOWN_MONO, !allow_mono);
-	grey_combo_box_item(builder, "AudioMixdown", HB_AMIXDOWN_STEREO, !allow_stereo);
-	grey_combo_box_item(builder, "AudioMixdown", HB_AMIXDOWN_DOLBY, !allow_dolby);
-	grey_combo_box_item(builder, "AudioMixdown", HB_AMIXDOWN_DOLBYPLII, !allow_dpl2);
-	grey_combo_box_item(builder, "AudioMixdown", HB_AMIXDOWN_6CH, !allow_6ch);
+	grey_combo_box_item(ud->builder, "AudioMixdown", HB_AMIXDOWN_MONO, !allow_mono);
+	grey_combo_box_item(ud->builder, "AudioMixdown", HB_AMIXDOWN_STEREO, !allow_stereo);
+	grey_combo_box_item(ud->builder, "AudioMixdown", HB_AMIXDOWN_DOLBY, !allow_dolby);
+	grey_combo_box_item(ud->builder, "AudioMixdown", HB_AMIXDOWN_DOLBYPLII, !allow_dpl2);
+	grey_combo_box_item(ud->builder, "AudioMixdown", HB_AMIXDOWN_6CH, !allow_6ch);
 }
 
 gint
 ghb_get_best_mix(hb_audio_config_t *aconfig, gint acodec, gint mix)
 {
-	int layout;
+	gint layout;
 	layout = aconfig ? aconfig->in.channel_layout : 
 						HB_INPUT_CH_LAYOUT_3F2R | HB_INPUT_CH_LAYOUT_HAS_LFE;
 	return hb_get_best_mixdown( acodec, layout, mix );
@@ -2780,6 +2803,7 @@ ghb_update_ui_combo_box(
 		generic_opts_set(ud->builder, "PictureDenoise", &denoise_opts);
 		generic_opts_set(ud->builder, "VideoEncoder", &vcodec_opts);
 		small_opts_set(ud->builder, "AudioEncoder", &acodec_opts);
+		small_opts_set(ud->builder, "AudioEncoderFallback", &acodec_fallback_opts);
 		small_opts_set(ud->builder, "x264_direct", &direct_opts);
 		small_opts_set(ud->builder, "x264_b_adapt", &badapt_opts);
 		small_opts_set(ud->builder, "x264_bpyramid", &bpyramid_opts);
@@ -4135,70 +4159,6 @@ ghb_validate_subtitles(signal_user_data_t *ud)
 	return TRUE;
 }
 
-gint
-ghb_select_audio_codec(gint mux, hb_audio_config_t *aconfig, gint acodec)
-{
-	guint32 in_codec = aconfig ? aconfig->in.codec : HB_ACODEC_MASK;
-	if (mux == HB_MUX_MP4)
-	{
-		if ((acodec & in_codec & HB_ACODEC_AC3))
-		{
-			return acodec & (in_codec | HB_ACODEC_PASS_FLAG);
-		}
-		else if (acodec & HB_ACODEC_AC3)
-		{
-			return HB_ACODEC_AC3;
-		}
-		else if (acodec & HB_ACODEC_LAME)
-		{
-			return HB_ACODEC_LAME;
-		}
-		else if (acodec & HB_ACODEC_FAAC)
-		{
-			return HB_ACODEC_FAAC;
-		}
-		else if (acodec & HB_ACODEC_FFAAC)
-		{
-			return HB_ACODEC_FFAAC;
-		}
-		else
-		{
-			return HB_ACODEC_FAAC;
-		}
-	}
-	else
-	{
-		if ((acodec & in_codec & HB_ACODEC_PASS_MASK))
-		{
-			return acodec & (in_codec | HB_ACODEC_PASS_FLAG);
-		}
-		else if (acodec & HB_ACODEC_AC3)
-		{
-			return HB_ACODEC_AC3;
-		}
-		else if (acodec & HB_ACODEC_VORBIS)
-		{
-			return HB_ACODEC_VORBIS;
-		}
-		else if (acodec & HB_ACODEC_LAME)
-		{
-			return HB_ACODEC_LAME;
-		}
-		else if (acodec & HB_ACODEC_FAAC)
-		{
-			return HB_ACODEC_FAAC;
-		}
-		else if (acodec & HB_ACODEC_FFAAC)
-		{
-			return HB_ACODEC_FFAAC;
-		}
-		else
-		{
-			return HB_ACODEC_LAME;
-		}
-	}
-}
-
 gboolean
 ghb_validate_audio(signal_user_data_t *ud)
 {
@@ -4282,11 +4242,6 @@ ghb_validate_audio(signal_user_data_t *ud)
 			{
 				a_unsup = "Vorbis";
 				codec = HB_ACODEC_FAAC;
-			}
-			if (codec == HB_ACODEC_DCA)
-			{
-				a_unsup = "DTS";
-				codec = HB_ACODEC_AC3;
 			}
 		}
 		if (a_unsup)
@@ -4711,7 +4666,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		GValue *asettings;
 	    hb_audio_config_t audio;
 	    hb_audio_config_t *aconfig;
-		gint acodec;
+		gint acodec, fallback;
 
 		hb_audio_config_init(&audio);
 		asettings = ghb_array_get_nth(audio_list, ii);
@@ -4735,7 +4690,9 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 
 		acodec = ghb_settings_combo_int(asettings, "AudioEncoder");
 
-		audio.out.codec = ghb_select_audio_codec(job->mux, aconfig, acodec);
+		acodec = ghb_allowed_passthru_mask(js, acodec);
+		fallback = ghb_settings_combo_int(js, "AudioEncoderFallback");
+		audio.out.codec = ghb_select_audio_codec(job->mux, aconfig, acodec, fallback);
 
 		audio.out.gain = 
 			ghb_settings_get_double(asettings, "AudioTrackGain");

@@ -111,6 +111,7 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
     }
 
     pv->input_samples = pv->out_discrete_channels * OGGVORBIS_FRAME_SIZE;
+    audio->config.out.samples_per_frame = OGGVORBIS_FRAME_SIZE;
     pv->buf = malloc( pv->input_samples * sizeof( float ) );
 
     pv->list = hb_list_init();

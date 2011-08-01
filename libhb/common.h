@@ -321,9 +321,12 @@ struct hb_job_s
 #define HB_ACODEC_FFAAC     0x00010000
 #define HB_ACODEC_FFMPEG    0x00020000
 #define HB_ACODEC_DCA_HD    0x00040000
-#define HB_ACODEC_FF_MASK   0x00060000
+#define HB_ACODEC_MP3       0x00080000
+#define HB_ACODEC_FF_MASK   0x000f0000
 #define HB_ACODEC_PASS_FLAG 0x40000000
-#define HB_ACODEC_PASS_MASK (HB_ACODEC_DCA_HD | HB_ACODEC_AC3 | HB_ACODEC_DCA)
+#define HB_ACODEC_PASS_MASK (HB_ACODEC_MP3 | HB_ACODEC_FFAAC | HB_ACODEC_DCA_HD | HB_ACODEC_AC3 | HB_ACODEC_DCA)
+#define HB_ACODEC_MP3_PASS  (HB_ACODEC_MP3 | HB_ACODEC_PASS_FLAG)
+#define HB_ACODEC_AAC_PASS  (HB_ACODEC_FFAAC | HB_ACODEC_PASS_FLAG)
 #define HB_ACODEC_AC3_PASS  (HB_ACODEC_AC3 | HB_ACODEC_PASS_FLAG)
 #define HB_ACODEC_DCA_PASS  (HB_ACODEC_DCA | HB_ACODEC_PASS_FLAG)
 #define HB_ACODEC_DCA_HD_PASS  (HB_ACODEC_DCA_HD | HB_ACODEC_PASS_FLAG)
@@ -404,6 +407,7 @@ struct hb_audio_config_s
                                  * are ignored.
                                  */
             int samplerate; /* Output sample rate (Hz) */
+            int samples_per_frame; /* Number of samples per frame */
             int bitrate;    /* Output bitrate (kbps) */
             int mixdown;    /* The mixdown format to be used for this audio track (see HB_AMIXDOWN_*) */
             double dynamic_range_compression; /* Amount of DRC that gets applied to this track */
@@ -423,6 +427,7 @@ struct hb_audio_config_s
         PRIVATE uint32_t version; /* Bitsream version */
         PRIVATE uint32_t mode;    /* Bitstream mode, codec dependent encoding */
         PRIVATE int samplerate; /* Input sample rate (Hz) */
+        PRIVATE int samples_per_frame; /* Number of samples per frame */
         PRIVATE int bitrate;    /* Input bitrate (kbps) */
         PRIVATE int channel_layout; /* channel_layout is the channel layout of this audio this is used to
                                      * provide a common way of describing the source audio */
@@ -714,6 +719,7 @@ typedef struct hb_work_info_s
         struct {    // info only valid for audio decoders
             int     channel_layout;
             hb_chan_map_t * channel_map;
+            int samples_per_frame;
         };
     };
 } hb_work_info_t;

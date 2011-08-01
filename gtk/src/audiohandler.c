@@ -25,6 +25,130 @@ static GValue* get_selected_asettings(signal_user_data_t *ud);
 
 static gboolean block_updates = FALSE;
 
+gint
+ghb_select_audio_codec(int mux, hb_audio_config_t *aconfig, gint acodec, gint fallback)
+{
+	guint32 in_codec = aconfig ? aconfig->in.codec : HB_ACODEC_MASK;
+	if (mux == HB_MUX_MP4)
+	{
+		if (acodec & HB_ACODEC_PASS_FLAG)
+		{
+			if ((acodec & in_codec & HB_ACODEC_MASK & ~HB_ACODEC_VORBIS))
+			{
+				return acodec & (in_codec | HB_ACODEC_PASS_FLAG);
+			}
+			else if (fallback & (HB_ACODEC_AC3 | HB_ACODEC_LAME | HB_ACODEC_FAAC | HB_ACODEC_FFAAC))
+			{
+				return fallback;
+			}
+			else
+			{
+				return HB_ACODEC_FAAC;
+			}
+		}
+		else if (acodec & HB_ACODEC_AC3)
+		{
+			return HB_ACODEC_AC3;
+		}
+		else if (acodec & HB_ACODEC_LAME)
+		{
+			return HB_ACODEC_LAME;
+		}
+		else if (acodec & HB_ACODEC_FAAC)
+		{
+			return HB_ACODEC_FAAC;
+		}
+		else if (acodec & HB_ACODEC_FFAAC)
+		{
+			return HB_ACODEC_FFAAC;
+		}
+		else if (fallback & (HB_ACODEC_AC3 | HB_ACODEC_LAME | HB_ACODEC_FAAC | HB_ACODEC_FFAAC))
+		{
+			return fallback;
+		}
+		else
+		{
+			return HB_ACODEC_FAAC;
+		}
+	}
+	else
+	{
+		if (acodec & HB_ACODEC_PASS_FLAG)
+		{
+			if ((acodec & in_codec & HB_ACODEC_PASS_MASK))
+			{
+				return acodec & (in_codec | HB_ACODEC_PASS_FLAG);
+			}
+			else if (fallback)
+			{
+				return fallback;
+			}
+			else
+			{
+				return HB_ACODEC_FAAC;
+			}
+		}
+		else if (acodec & HB_ACODEC_AC3)
+		{
+			return HB_ACODEC_AC3;
+		}
+		else if (acodec & HB_ACODEC_LAME)
+		{
+			return HB_ACODEC_LAME;
+		}
+		else if (acodec & HB_ACODEC_VORBIS)
+		{
+			return HB_ACODEC_VORBIS;
+		}
+		else if (acodec & HB_ACODEC_FAAC)
+		{
+			return HB_ACODEC_FAAC;
+		}
+		else if (acodec & HB_ACODEC_FFAAC)
+		{
+			return HB_ACODEC_FFAAC;
+		}
+		else if (fallback )
+		{
+			return fallback;
+		}
+		else
+		{
+			return HB_ACODEC_LAME;
+		}
+	}
+}
+
+int ghb_allowed_passthru_mask(GValue *settings, int acodec)
+{
+	gint ret = acodec;
+
+	if (acodec == HB_ACODEC_ANY)
+	{
+		if (!ghb_settings_get_boolean(settings, "AudioAllowMP3Pass"))
+		{
+			ret &= ~HB_ACODEC_MP3;
+		}
+		if (!ghb_settings_get_boolean(settings, "AudioAllowAACPass"))
+		{
+			ret &= ~HB_ACODEC_FFAAC;
+		}
+		if (!ghb_settings_get_boolean(settings, "AudioAllowAC3Pass"))
+		{
+			ret &= ~HB_ACODEC_AC3;
+		}
+		if (!ghb_settings_get_boolean(settings, "AudioAllowDTSPass"))
+		{
+			ret &= ~HB_ACODEC_DCA;
+		}
+		if (!ghb_settings_get_boolean(settings, "AudioAllowDTSHDPass"))
+		{
+			ret &= ~HB_ACODEC_DCA_HD;
+		}
+	}
+	return ret;
+}
+
 void
 ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 {
@@ -32,7 +156,7 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 	hb_audio_config_t *aconfig;
 	GtkWidget *widget;
 	GValue *gval;
-	int mux;
+	gint mux;
 	gint bitrate;
 	gint sr = 48000;
 	
@@ -62,25 +186,15 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 	gval = ghb_widget_value(widget);
 	sr = ghb_lookup_combo_int("AudioSamplerate", gval);
 
-	select_acodec = acodec;
-	if (mux == HB_MUX_MP4)
-	{
-		select_acodec &= ~HB_ACODEC_DCA;
-	}
-	if ((select_acodec & HB_ACODEC_MASK) == 0)
-	{
-		// Unsuported codec in this container.
-		select_acodec |= HB_ACODEC_AC3;
-		acodec = select_acodec;
-	}
 
 	aconfig = ghb_get_scan_audio_info(titleindex, track);
 	if (sr == 0)
 	{
 		sr = aconfig ? aconfig->in.samplerate : 48000;
 	}
-	if (aconfig)
-		select_acodec = ghb_select_audio_codec(mux, aconfig, select_acodec);
+	gint fallback = ghb_settings_combo_int(ud->settings, "AudioEncoderFallback");
+	select_acodec = ghb_allowed_passthru_mask(ud->settings, acodec);
+	select_acodec = ghb_select_audio_codec(mux, aconfig, select_acodec, fallback);
 	gboolean codec_defined_bitrate = FALSE;
 	if (ghb_audio_is_passthru (select_acodec))
 	{
@@ -89,44 +203,33 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 			bitrate = aconfig->in.bitrate / 1000;
 
 			// Set the values for bitrate and samplerate to the input rates
-			if (aconfig->in.codec & select_acodec & HB_ACODEC_PASS_MASK)
-			{
-				ghb_set_passthru_bitrate_opts (ud->builder, bitrate);
-				ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(0));
-				select_acodec &= aconfig->in.codec | HB_ACODEC_PASS_FLAG;
-				codec_defined_bitrate = TRUE;
-			}
-			else
-			{
-				gint mux = ghb_settings_get_int(ud->settings, "FileFormat");
-				select_acodec = ghb_select_audio_codec(mux, aconfig, acodec);
-				if (acodec != HB_ACODEC_ANY)
-				{
-					ghb_ui_update(ud, "AudioEncoder", ghb_int64_value(select_acodec));
-				}
-
-				mix = ghb_get_best_mix( aconfig, select_acodec, mix);
-				bitrate = hb_get_default_audio_bitrate(select_acodec, sr, mix);
-				ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix));
-			}
+			ghb_set_passthru_bitrate_opts (ud->builder, bitrate);
+			mix = 0;
+			ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix));
+			select_acodec &= aconfig->in.codec | HB_ACODEC_PASS_FLAG;
+			codec_defined_bitrate = TRUE;
 			ghb_ui_update(ud, "AudioSamplerate", ghb_int64_value(0));
 		}
 		else
 		{
 			ghb_ui_update(ud, "AudioSamplerate", ghb_int64_value(0));
-			ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(0));
+			mix = 0;
+			ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix));
 			bitrate = 448;
-			mix = ghb_get_best_mix( aconfig, select_acodec, 0);
 		}
 		ghb_ui_update(ud, "AudioTrackDRCSlider", ghb_double_value(0));
 	}
 	else
 	{
+		if (mix == 0)
+			mix = ghb_get_best_mix( aconfig, select_acodec, 0);
 		bitrate = hb_get_best_audio_bitrate(select_acodec, bitrate, sr, mix);
+		ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix));
 	}
 	if (!codec_defined_bitrate)
 	{
 		int low, high;
+		mix = ghb_get_best_mix( aconfig, select_acodec, mix);
 		hb_get_audio_bitrate_limits(select_acodec, sr, mix, &low, &high);
 		ghb_set_default_bitrate_opts (ud->builder, low, high);
 	}
@@ -182,14 +285,7 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 	
 	g_debug("set_pref_audio");
 	mux = ghb_settings_combo_int(ud->settings, "FileFormat");
-	if (mux == HB_MUX_MP4)
-	{
-		fallback_acodec = HB_ACODEC_FAAC;
-	}
-	else
-	{
-		fallback_acodec = HB_ACODEC_LAME;
-	}
+	fallback_acodec = ghb_settings_combo_int(ud->settings, "AudioEncoderFallback");
 	track_indices = g_hash_table_new_full(g_int_hash, g_int_equal, 
 						free_audio_hash_key_value, free_audio_hash_key_value);
 	// Clear the audio list
@@ -208,24 +304,12 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 	count = ghb_array_len(pref_audio);
 	for (ii = 0; ii < count; ii++)
 	{
-		int select_acodec;
+		gint select_acodec;
 
 		audio = ghb_array_get_nth(pref_audio, ii);
-		select_acodec = acodec = ghb_settings_combo_int(audio, "AudioEncoder");
-		if (mux == HB_MUX_MP4)
-		{
-			select_acodec &= ~HB_ACODEC_DCA;
-		}
-		if ((select_acodec & HB_ACODEC_MASK) == 0)
-		{
-			// Unsuported codec in this container.
-			select_acodec |= HB_ACODEC_AC3;
-			acodec = select_acodec;
-		}
-		if ( ghb_audio_can_passthru( select_acodec ) )
-		{
-			fallback_acodec = HB_ACODEC_AC3;
-		}
+		acodec = ghb_settings_combo_int(audio, "AudioEncoder");
+		select_acodec = ghb_allowed_passthru_mask(ud->settings, acodec);
+		select_acodec = ghb_select_audio_codec(mux, NULL, select_acodec, fallback_acodec);
 		bitrate = ghb_settings_combo_int(audio, "AudioBitrate");
 		rate = ghb_settings_combo_double(audio, "AudioSamplerate");
 		mix = ghb_settings_combo_int(audio, "AudioMixdown");
@@ -260,17 +344,13 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 				}
 				else
 				{
-					int channels, min_rate, max_rate;
+					int channels;
 					select_acodec = fallback_acodec;
 					mix = ghb_get_best_mix(aconfig, select_acodec, mix);
 					channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(mix);
 					bitrate = aconfig->in.bitrate / 1000;
-					min_rate = channels * 64;
-					max_rate = channels * 160;
-					if (bitrate < min_rate)
-						bitrate = min_rate;
-					if (bitrate > max_rate)
-						bitrate = max_rate;
+					bitrate = hb_get_best_audio_bitrate(select_acodec, bitrate,
+							aconfig->in.samplerate, mix);
 					rate = 0;
 				}
 			}
@@ -417,7 +497,7 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	if (block_updates)
 	{
 		prev_acodec = acodec_code;
-		ghb_grey_combo_options (ud->builder);
+		ghb_grey_combo_options (ud);
 		return;
 	}
 
@@ -469,7 +549,7 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix_code));
 	}
 	ghb_adjust_audio_rate_combos(ud);
-	ghb_grey_combo_options (ud->builder);
+	ghb_grey_combo_options (ud);
 	ghb_check_dependency(ud, widget, NULL);
 	prev_acodec = acodec_code;
 	if (asettings != NULL)
@@ -488,11 +568,15 @@ audio_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	GValue *asettings;
 
 	g_debug("audio_track_changed_cb ()");
-	if (block_updates) return;
+	if (block_updates)
+	{
+		ghb_grey_combo_options (ud);
+		return;
+	}
 
 	ghb_adjust_audio_rate_combos(ud);
 	ghb_check_dependency(ud, widget, NULL);
-	ghb_grey_combo_options(ud->builder);
+	ghb_grey_combo_options(ud);
 	asettings = get_selected_asettings(ud);
 	if (asettings != NULL)
 	{
@@ -541,6 +625,19 @@ audio_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		ghb_widget_to_setting(asettings, widget);
 		ghb_audio_list_refresh_selected(ud);
 	}
+	ghb_live_reset(ud);
+}
+
+G_MODULE_EXPORT void
+global_audio_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	g_debug("global_audio_widget_changed_cb ()");
+	if (block_updates) return;
+
+	ghb_check_dependency(ud, widget, NULL);
+	ghb_widget_to_setting(ud->settings, widget);
+	ghb_adjust_audio_rate_combos(ud);
+	ghb_audio_list_refresh_selected(ud);
 	ghb_live_reset(ud);
 }
 
