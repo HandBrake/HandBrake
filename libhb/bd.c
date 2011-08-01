@@ -520,6 +520,7 @@ int hb_bd_seek( hb_bd_t * d, float f )
 
     bd_seek(d->bd, packet * 192);
     d->next_chap = bd_get_current_chapter( d->bd ) + 1;
+    hb_ts_stream_reset(d->stream);
     return 1;
 }
 

@@ -255,6 +255,7 @@ void          hb_bd_set_angle( hb_bd_t * d, int angle );
 int           hb_bd_main_feature( hb_bd_t * d, hb_list_t * list_title );
 
 hb_stream_t * hb_bd_stream_open( hb_title_t *title );
+void hb_ts_stream_reset(hb_stream_t *stream);
 hb_stream_t * hb_stream_open( char * path, hb_title_t *title, int scan );
 void		 hb_stream_close( hb_stream_t ** );
 hb_title_t * hb_stream_title_scan( hb_stream_t *, hb_title_t *);

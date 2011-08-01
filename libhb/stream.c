@@ -206,7 +206,6 @@ static void hb_stream_duration(hb_stream_t *stream, hb_title_t *inTitle);
 static void hb_ts_stream_init(hb_stream_t *stream);
 static void hb_ts_stream_find_pids(hb_stream_t *stream);
 static hb_buffer_t * hb_ts_stream_decode(hb_stream_t *stream);
-static void hb_ts_stream_reset(hb_stream_t *stream);
 static void hb_ts_stream_set_audio_list(hb_list_t *list_audio, hb_stream_t *stream);
 static void hb_ps_stream_find_audio_ids(hb_stream_t *stream, hb_title_t *title);
 static off_t align_to_next_packet(hb_stream_t *stream);
@@ -1579,6 +1578,7 @@ int hb_stream_seek( hb_stream_t * stream, float f )
         // We need to drop the current decoder output and move
         // forwards to the next transport stream packet.
         hb_ts_stream_reset(stream);
+        align_to_next_packet(stream);
         if ( f > 0 )
         {
             if ( stream->ts_IDRs )
@@ -3054,7 +3054,7 @@ static hb_buffer_t * hb_ts_stream_decode( hb_stream_t *stream )
     return NULL;
 }
 
-static void hb_ts_stream_reset(hb_stream_t *stream)
+void hb_ts_stream_reset(hb_stream_t *stream)
 {
     int i;
 
@@ -3080,8 +3080,6 @@ static void hb_ts_stream_reset(hb_stream_t *stream)
     stream->errors = 0;
     stream->last_error_frame = -10000;
     stream->last_error_count = 0;
-
-    align_to_next_packet(stream);
 }
 
 // ------------------------------------------------------------------
