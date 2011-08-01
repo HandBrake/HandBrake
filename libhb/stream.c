@@ -408,7 +408,6 @@ static int hb_stream_check_for_ps(hb_stream_t *stream)
     uint8_t buf[2048*4];
     uint8_t sc_buf[4];
     int pos = 0;
-    int hits = 0;
 
     fseek(stream->file_handle, 0, SEEK_SET);
 
@@ -427,16 +426,19 @@ static int hb_stream_check_for_ps(hb_stream_t *stream)
             {
                 int pes_offset, prev, data_len;
                 uint8_t sid;
+                uint8_t *b = buf+offset;
 
-                if ( ++hits == 3 )
-                    return 1;
-                pes_offset = 14 + (buf[13] & 0x7);
-                sid = buf[pes_offset+3];
-                data_len = (buf[pes_offset+4] << 8) + buf[pes_offset+5];
+                // Skip the pack header
+                pes_offset = 14 + (b[13] & 0x7);
+                b +=  pes_offset;
+                // Get the next stream id
+                sid = b[3];
+                data_len = (b[4] << 8) + b[5];
                 if ( data_len && sid > 0xba && sid < 0xf9 )
                 {
                     prev = ftell( stream->file_handle );
-                    pos = pes_offset + 6 + data_len + prev;
+                    pos = prev - ( sizeof(buf) - offset );
+                    pos += pes_offset + 6 + data_len;
                     fseek( stream->file_handle, pos, SEEK_SET );
                     if ( fread(sc_buf, 1, 4, stream->file_handle) != 4 )
                         return 0;
