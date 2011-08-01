@@ -3097,7 +3097,7 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
     // But then the seek fails for some stream types.  So the safest thing
     // to do seems to be to open 2 AVFormatContext.  One for probing info
     // and the other for reading.
-    if ( av_open_input_file( &info_ic, stream->path, NULL, 0, NULL ) < 0 )
+    if ( avformat_open_input( &info_ic, stream->path, NULL, NULL ) < 0 )
     {
         return 0;
     }
@@ -3106,7 +3106,7 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
 
     title->opaque_priv = (void*)info_ic;
     stream->ffmpeg_info_ic = info_ic;
-    if ( av_open_input_file( &reader_ic, stream->path, NULL, 0, NULL ) < 0 )
+    if ( avformat_open_input( &reader_ic, stream->path, NULL, NULL ) < 0 )
     {
         goto fail;
     }
@@ -3168,7 +3168,7 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
 {
     AVStream *st = stream->ffmpeg_info_ic->streams[id];
     AVCodecContext *codec = st->codec;
-    AVMetadataTag *tag;
+    AVDictionaryEntry *tag;
     int layout;
 
     // scan will ignore any audio without a bitrate. Since we've already
@@ -3216,7 +3216,7 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
             audio->config.in.channel_map = &hb_smpte_chan_map;
         }
 
-        tag = av_metadata_get( st->metadata, "language", NULL, 0 );
+        tag = av_dict_get( st->metadata, "language", NULL, 0 );
         set_audio_description( stream, audio, 
             lang_for_code2( tag ? tag->value : "und" ) );
 
@@ -3386,10 +3386,10 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
             return;
     }
     
-    AVMetadataTag *tag;
+    AVDictionaryEntry *tag;
     iso639_lang_t *language;
 
-    tag = av_metadata_get( st->metadata, "language", NULL, 0 );
+    tag = av_dict_get( st->metadata, "language", NULL, 0 );
     language = lang_for_code2( tag ? tag->value : "und" );
     strcpy( subtitle->lang, language->eng_name );
     strncpy( subtitle->iso639_2, language->iso639_2, 4 );
@@ -3402,10 +3402,10 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
     hb_list_add(title->list_subtitle, subtitle);
 }
 
-static char *get_ffmpeg_metadata_value( AVMetadata *m, char *key )
+static char *get_ffmpeg_metadata_value( AVDictionary *m, char *key )
 {
-    AVMetadataTag *tag = NULL;
-    while ( (tag = av_metadata_get(m, "", tag, AV_METADATA_IGNORE_SUFFIX)) )
+    AVDictionaryEntry *tag = NULL;
+    while ( (tag = av_dict_get(m, "", tag, AV_DICT_IGNORE_SUFFIX)) )
     {
         if ( !strcmp( key, tag->key ) )
         {
@@ -3525,7 +3525,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
         for( i = 0; i < ic->nb_chapters; i++ )
             if( ( m = ic->chapters[i] ) != NULL )
             {
-                AVMetadataTag *tag;
+                AVDictionaryEntry *tag;
                 hb_chapter_t * chapter;
                 chapter = calloc( sizeof( hb_chapter_t ), 1 );
                 chapter->index    = i+1;
@@ -3534,7 +3534,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                 chapter->hours    = chapter->duration / 90000 / 3600;
                 chapter->minutes  = ( ( chapter->duration / 90000 ) % 3600 ) / 60;
                 chapter->seconds  = ( chapter->duration / 90000 ) % 60;
-                tag = av_metadata_get( m->metadata, "title", NULL, 0 );
+                tag = av_dict_get( m->metadata, "title", NULL, 0 );
                 strcpy( chapter->title, tag ? tag->value : "" );
                 hb_deep_log( 2, "Added chapter %i, name='%s', dur=%"PRIu64", (%02i:%02i:%02i)",
                             chapter->index, chapter->title,

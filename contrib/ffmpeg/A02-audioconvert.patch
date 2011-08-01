@@ -1,5 +1,5 @@
 diff --git a/libavcodec/Makefile b/libavcodec/Makefile
-index b772bf1..17c4649 100644
+index 0cfa08c..f9c407e 100644
 --- a/libavcodec/Makefile
 +++ b/libavcodec/Makefile
 @@ -3,7 +3,7 @@ include $(SUBDIR)../config.mak

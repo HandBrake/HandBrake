@@ -1,8 +1,8 @@
 diff --git a/libavcodec/h264.c b/libavcodec/h264.c
-index 0aa923f..15bf61d 100644
+index 2c000a3..93850d6 100644
 --- a/libavcodec/h264.c
 +++ b/libavcodec/h264.c
-@@ -3644,7 +3644,7 @@ static int decode_frame(AVCodecContext *avctx,
+@@ -3908,7 +3908,7 @@ static int decode_frame(AVCodecContext *avctx,
      if(!(s->flags2 & CODEC_FLAG2_CHUNKS) && !s->current_picture_ptr){
          if (avctx->skip_frame >= AVDISCARD_NONREF)
              return 0;
@@ -25,7 +25,7 @@ index a025f7d..eda5e41 100644
                 "corrupt input), discarding one\n",
                 h->long_ref_count, h->short_ref_count, h->sps.ref_frame_count);
 diff --git a/libavcodec/mpegvideo.c b/libavcodec/mpegvideo.c
-index 6a45da8..dc25c4d 100644
+index 4978d28..bb9509f 100644
 --- a/libavcodec/mpegvideo.c
 +++ b/libavcodec/mpegvideo.c
 @@ -986,19 +986,18 @@ int ff_find_unused_picture(MpegEncContext *s, int shared){
