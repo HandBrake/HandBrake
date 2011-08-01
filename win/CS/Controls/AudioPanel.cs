@@ -576,6 +576,7 @@ namespace Handbrake.Controls
             }
 
             // If the Native Language is not set. Just set Track information in each output track.
+            // Presets have control over audio selected
             if (Properties.Settings.Default.NativeLanguage == "Any")
             {
                 drp_audioTrack.SelectedIndex = 0;
@@ -586,6 +587,7 @@ namespace Handbrake.Controls
                         track.ScannedTrack = this.drp_audioTrack.SelectedItem as Audio;
                     }
                 }
+
                 return;
             }
 
@@ -601,9 +603,6 @@ namespace Handbrake.Controls
 
             // New DUB Settings
             int mode = Properties.Settings.Default.DubModeAudio;
-
-            if (Properties.Settings.Default.NativeLanguage == "Any")
-                mode = 2;
 
             // Native Language is not 'Any', so initialising the Language Dictionary
             if (mode >= 3)
