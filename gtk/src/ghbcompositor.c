@@ -634,7 +634,14 @@ ghb_compositor_blend (GtkWidget *widget, GdkEventExpose *event)
             /* draw no more than our expose event intersects our child */
             region = gdk_region_rectangle (&child->allocation);
             gdk_region_intersect (region, event->region);
+
+            GdkRegion *dregion = gdk_drawable_get_visible_region(
+                                            gtk_widget_get_window(child));
+            gdk_region_offset(dregion, child->allocation.x, child->allocation.y);
+            gdk_region_intersect (region, dregion);
+
             gdk_cairo_region (cr, region);
+            gdk_region_destroy(region);
             cairo_clip (cr);
             /* composite, with an opacity */
             cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
