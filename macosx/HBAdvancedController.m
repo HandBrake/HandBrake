@@ -159,8 +159,9 @@
     [fX264optSubmePopUp addItemWithTitle:[NSString stringWithFormat:@"8: RD refine in I/P-frames"]];
     [fX264optSubmePopUp addItemWithTitle:[NSString stringWithFormat:@"9: RD refine in all frames"]];
     [fX264optSubmePopUp addItemWithTitle:[NSString stringWithFormat:@"10: QPRD in all frames"]];
+    [fX264optSubmePopUp addItemWithTitle:[NSString stringWithFormat:@"11: No early terminations in analysis"]];
     toolTip =
-        @"This setting controls both subpixel-precision motion estimation and mode decision methods.\n\nSubpixel motion estimation is used for refining motion estimates beyond mere pixel accuracy, improving compression.\n\nMode decision is the method used to choose how to encode each block of the frame: a very important decision.\n\nSAD is the fastest method, followed by SATD, RD, RD refinement, and the slowest, QPRD.\n\n6 or higher is strongly recommended: Psy-RD, a very powerful psy optimization that helps retain detail, requires RD.\n\n10, the most powerful and slowest option, requires trellis=2.";
+        @"This setting controls both subpixel-precision motion estimation and mode decision methods.\n\nSubpixel motion estimation is used for refining motion estimates beyond mere pixel accuracy, improving compression.\n\nMode decision is the method used to choose how to encode each block of the frame: a very important decision.\n\nSAD is the fastest method, followed by SATD, RD, RD refinement, and the slowest, QPRD.\n\n6 or higher is strongly recommended: Psy-RD, a very powerful psy optimization that helps retain detail, requires RD.\n\n11 disables all early terminations in analysis.\n\n10 and 11, the most powerful and slowest options, require adaptive quantization (aq-mode > 0) and trellis 2 (always).";
     [fX264optSubmePopUp setToolTip: toolTip];
     [fX264optSubmeLabel setToolTip: toolTip];
     

@@ -359,6 +359,7 @@ static options_map_t d_subme_opts[] =
 	{"8: RD refine in I/P-frames", "8", 8, "8"},
 	{"9: RD refine in all frames", "9", 9, "9"},
 	{"10: QPRD in all frames",     "10", 10, "10"},
+	{"11: No early terminations in analysis", "11", 11, "11"},
 };
 combo_opts_t subme_opts =
 {

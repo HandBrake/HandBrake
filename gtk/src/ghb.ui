@@ -3248,7 +3248,9 @@ SAD is the fastest method, followed by SATD, RD, RD refinement, and the slowest,
 
 6 or higher is strongly recommended: Psy-RD, a very powerful psy optimization that helps retain detail, requires RD.
 
-10, the most powerful and slowest option, requires trellis=2.</property>
+11 disables all early terminations in analysis.
+
+10 and 11, the most powerful and slowest options, require adaptive quantization (aq-mode > 0) and trellis 2 (always).</property>
                                                 <signal handler="x264_widget_changed_cb" name="changed"/>
                                               </object>
                                               <packing>

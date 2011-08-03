@@ -988,7 +988,7 @@ sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 		x264_remove_opt(split, x264_psy_syns);
 	}
 	gint trell = ghb_settings_combo_int(ud->settings, "x264_trellis");
-	if (subme == 10)
+	if (subme >= 10)
 	{
 		gint aqmode = ghb_lookup_aqmode(options);
 		if (trell != 2 || aqmode == 0)
