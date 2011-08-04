@@ -461,8 +461,10 @@ static int hb_stream_check_for_dvd_ps(const uint8_t *buf)
 {
     // DVD program streams should have a Pack header every 2048 bytes.
     // check that we have 4 of these in a row.
-    return check_ps_sync(&buf[0*2048]) && check_ps_sync(&buf[1*2048]) &&
-           check_ps_sync(&buf[2*2048]) && check_ps_sync(&buf[3*2048]);
+    return check_ps_sync(&buf[0*2048]) && check_ps_sc(&buf[0*2048]) && 
+           check_ps_sync(&buf[1*2048]) && check_ps_sc(&buf[1*2048]) &&
+           check_ps_sync(&buf[2*2048]) && check_ps_sc(&buf[2*2048]) && 
+           check_ps_sync(&buf[3*2048]) && check_ps_sc(&buf[3*2048]);
 }
 
 static int hb_stream_get_type(hb_stream_t *stream)
