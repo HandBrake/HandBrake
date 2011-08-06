@@ -364,7 +364,8 @@ namespace Handbrake.Controls
             "7: RD in all frames",
             "8: RD refine in I/P-frames",
             "9: RD refine in all frames",
-            "10: QPRD in all frames"});
+            "10: QPRD in all frames",
+            "11: No early terminations in analysis"});
             this.drop_subpixelMotionEstimation.Location = new System.Drawing.Point(417, 105);
             this.drop_subpixelMotionEstimation.Name = "drop_subpixelMotionEstimation";
             this.drop_subpixelMotionEstimation.Size = new System.Drawing.Size(139, 21);
