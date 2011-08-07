@@ -129,10 +129,10 @@ namespace Handbrake.Controls
             drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.Ac3Passthrough));
             drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.Ac3));
             drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.DtsPassthrough));
+            drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.DtsHDPassthrough));
 
             if (path.Contains("MKV"))
             {
-                drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.DtsHDPassthrough));
                 drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.Vorbis));
             }
 
