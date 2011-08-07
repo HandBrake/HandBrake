@@ -72,16 +72,6 @@ namespace HandBrake.ApplicationServices.Model
         public QueueItemStatus Status { get; set; }
 
         /// <summary>
-        /// Gets or sets StartTime.
-        /// </summary>
-        public DateTime StartTime { get; set; }
-
-        /// <summary>
-        /// Gets or sets ElaspedEncodeTime.
-        /// </summary>
-        public TimeSpan ElaspedEncodeTime { get; set; }
-
-        /// <summary>
         /// Gets or sets the Encode Task.
         /// </summary>
         public EncodeTask Task { get; set; }
