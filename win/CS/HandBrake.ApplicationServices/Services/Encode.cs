@@ -169,7 +169,6 @@ namespace HandBrake.ApplicationServices.Services
             }
             catch (Exception exc)
             {
-                TimeSpan time = DateTime.Now.Subtract(this.currentTask.StartTime);
                 this.Invoke_encodeCompleted(
                     new EncodeCompletedEventArgs(
                         false, exc, "An Error occured when trying to encode this source. "));

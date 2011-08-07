@@ -212,7 +212,6 @@ namespace HandBrake.ApplicationServices.Services
                 if (job != null)
                 {
                     job.Status = QueueItemStatus.InProgress;
-                    job.StartTime = DateTime.Now;
                     this.LastProcessedJob = job;
                     InvokeQueueChanged(EventArgs.Empty);
                 }
