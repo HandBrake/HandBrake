@@ -30,6 +30,7 @@ namespace HandBrake.ApplicationServices.Services
         /// The encode Service.
         /// </param>
         /// <exception cref="ArgumentNullException">
+        /// Services are not setup
         /// </exception>
         public QueueProcessor(IQueueManager queueManager, IEncode encodeService)
         {
@@ -177,7 +178,6 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         public void Pause()
         {
-            this.EncodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
             this.InvokeQueuePaused(EventArgs.Empty);
             this.IsProcessing = false;
         }
@@ -193,6 +193,8 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         private void EncodeServiceEncodeCompleted(object sender, EncodeCompletedEventArgs e)
         {
+            this.QueueManager.LastProcessedJob.Status = QueueItemStatus.Completed;
+
             // Growl
             if (Properties.Settings.Default.GrowlEncode)
                 GrowlCommunicator.Notify("Encode Completed",
@@ -200,6 +202,7 @@ namespace HandBrake.ApplicationServices.Services
 
             if (!e.Successful)
             {
+                this.QueueManager.LastProcessedJob.Status = QueueItemStatus.Error;
                 this.Pause();
                 throw new GeneralApplicationException(e.ErrorInformation, e.Exception.Message, e.Exception);
             }
@@ -214,7 +217,16 @@ namespace HandBrake.ApplicationServices.Services
             }
 
             // Move onto the next job.
-            this.ProcessNextJob();
+            if (this.IsProcessing)
+            {
+                this.ProcessNextJob();
+            } 
+            else 
+            {
+                this.EncodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
+                this.InvokeQueueCompleted(EventArgs.Empty);
+                this.QueueManager.BackupQueue(string.Empty);
+            }
         }
 
         /// <summary>

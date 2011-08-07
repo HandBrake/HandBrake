@@ -13,6 +13,7 @@ namespace HandBrake.ApplicationServices.Services
     using System.Windows.Forms;
     using System.Xml.Serialization;
 
+    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
@@ -114,7 +115,7 @@ namespace HandBrake.ApplicationServices.Services
         {
             get
             {
-                return this.queue.Count;
+                return this.queue.Where(item => item.Status == QueueItemStatus.Waiting).Count();
             }
         }
 
@@ -168,6 +169,35 @@ namespace HandBrake.ApplicationServices.Services
         }
 
         /// <summary>
+        /// Reset a Queued Item from Error or Completed to Waiting
+        /// </summary>
+        /// <param name="job">
+        /// The job.
+        /// </param>
+        public void ResetJobStatusToWaiting(QueueTask job)
+        {
+            if (job.Status != QueueItemStatus.Error && job.Status != QueueItemStatus.Completed)
+            {
+                throw new GeneralApplicationException("Job Error", "Unable to reset job status as it is not in an Error or Completed state", null);
+            }
+
+            job.Status = QueueItemStatus.Waiting;
+        }
+
+        /// <summary>
+        /// Clear down the Queue´s completed items
+        /// </summary>
+        public void ClearCompleted()
+        {
+            List<QueueTask> deleteList = this.queue.Where(task => task.Status == QueueItemStatus.Completed).ToList();
+            foreach (QueueTask item in deleteList)
+            {
+                this.queue.Remove(item);
+            }
+            this.InvokeQueueChanged(EventArgs.Empty);
+        }
+
+        /// <summary>
         /// Get the first job on the queue for processing.
         /// This also removes the job from the Queue and sets the LastProcessedJob
         /// </summary>
@@ -178,9 +208,14 @@ namespace HandBrake.ApplicationServices.Services
         {
             if (this.queue.Count > 0)
             {
-                QueueTask job = this.queue[0];
-                this.LastProcessedJob = job;
-                this.Remove(job); // Remove the item which we are about to pass out.
+                QueueTask job = this.queue.FirstOrDefault(q => q.Status == QueueItemStatus.Waiting);
+                if (job != null)
+                {
+                    job.Status = QueueItemStatus.InProgress;
+                    job.StartTime = DateTime.Now;
+                    this.LastProcessedJob = job;
+                    InvokeQueueChanged(EventArgs.Empty);
+                }
 
                 return job;
             }
@@ -233,10 +268,12 @@ namespace HandBrake.ApplicationServices.Services
             string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
             string tempPath = !string.IsNullOrEmpty(exportPath) ? exportPath : appDataPath + string.Format(this.queueFile, string.Empty);
 
+
             using (FileStream strm = new FileStream(tempPath, FileMode.Create, FileAccess.Write))
             {
+                List<QueueTask> tasks = queue.Where(item => item.Status != QueueItemStatus.Completed).ToList();
                 XmlSerializer serializer = new XmlSerializer(typeof(List<QueueTask>));
-                serializer.Serialize(strm, queue);
+                serializer.Serialize(strm, tasks);
                 strm.Close();
                 strm.Dispose();
             }
@@ -265,7 +302,18 @@ namespace HandBrake.ApplicationServices.Services
 
                         if (list != null)
                             foreach (QueueTask item in list)
-                                this.queue.Add(item);
+                            {
+                                if (item.Status != QueueItemStatus.Completed)
+                                {
+                                    // Reset InProgress/Error to Waiting so it can be processed
+                                    if (item.Status == QueueItemStatus.InProgress)
+                                    {
+                                        item.Status = QueueItemStatus.Waiting;
+                                    }
+
+                                    this.queue.Add(item);
+                                }
+                            }
 
                         this.InvokeQueueChanged(EventArgs.Empty);
                     }

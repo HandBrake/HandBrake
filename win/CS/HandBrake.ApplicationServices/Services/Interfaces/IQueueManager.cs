@@ -56,6 +56,19 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         void Remove(QueueTask job);
 
         /// <summary>
+        /// Reset a Queued Item from Error or Completed to Waiting
+        /// </summary>
+        /// <param name="job">
+        /// The job.
+        /// </param>
+        void ResetJobStatusToWaiting(QueueTask job);
+
+        /// <summary>
+        /// Clear down the Queue´s completed items
+        /// </summary>
+        void ClearCompleted();
+
+        /// <summary>
         /// Get the first job on the queue for processing.
         /// This also removes the job from the Queue and sets the LastProcessedJob
         /// </summary>

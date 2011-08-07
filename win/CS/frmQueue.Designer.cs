@@ -54,6 +54,7 @@ namespace Handbrake
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.SaveFile = new System.Windows.Forms.SaveFileDialog();
             this.list_queue = new System.Windows.Forms.ListView();
+            this.Status = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Title = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Chapters = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Source = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -67,6 +68,7 @@ namespace Handbrake
             this.mnu_edit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_delete = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuClearCompleted = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lbl_encodesPending = new System.Windows.Forms.ToolStripStatusLabel();
             this.OpenFile = new System.Windows.Forms.OpenFileDialog();
@@ -76,6 +78,7 @@ namespace Handbrake
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.mnu_Retry = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.mnu_queue.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -257,6 +260,7 @@ namespace Handbrake
             // list_queue
             // 
             this.list_queue.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.Status,
             this.Title,
             this.Chapters,
             this.Source,
@@ -276,6 +280,11 @@ namespace Handbrake
             this.list_queue.UseCompatibleStateImageBehavior = false;
             this.list_queue.View = System.Windows.Forms.View.Details;
             this.list_queue.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ListQueueDeleteKey);
+            // 
+            // Status
+            // 
+            this.Status.Text = "Job Status";
+            this.Status.Width = 80;
             // 
             // Title
             // 
@@ -314,48 +323,57 @@ namespace Handbrake
             this.mnu_Down,
             this.toolStripSeparator3,
             this.mnu_edit,
+            this.mnu_Retry,
             this.toolStripSeparator4,
+            this.mnuClearCompleted,
             this.mnu_delete});
             this.mnu_queue.Name = "mnu_queue";
-            this.mnu_queue.Size = new System.Drawing.Size(139, 104);
+            this.mnu_queue.Size = new System.Drawing.Size(164, 148);
             // 
             // mnu_up
             // 
             this.mnu_up.Name = "mnu_up";
-            this.mnu_up.Size = new System.Drawing.Size(138, 22);
+            this.mnu_up.Size = new System.Drawing.Size(163, 22);
             this.mnu_up.Text = "Move Up";
             this.mnu_up.Click += new System.EventHandler(this.MnuUpClick);
             // 
             // mnu_Down
             // 
             this.mnu_Down.Name = "mnu_Down";
-            this.mnu_Down.Size = new System.Drawing.Size(138, 22);
+            this.mnu_Down.Size = new System.Drawing.Size(163, 22);
             this.mnu_Down.Text = "Move Down";
             this.mnu_Down.Click += new System.EventHandler(this.MnuDownClick);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(135, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(160, 6);
             // 
             // mnu_edit
             // 
             this.mnu_edit.Name = "mnu_edit";
-            this.mnu_edit.Size = new System.Drawing.Size(138, 22);
+            this.mnu_edit.Size = new System.Drawing.Size(163, 22);
             this.mnu_edit.Text = "Edit";
             this.mnu_edit.Click += new System.EventHandler(this.MnuEditClick);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(135, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(160, 6);
             // 
             // mnu_delete
             // 
             this.mnu_delete.Name = "mnu_delete";
-            this.mnu_delete.Size = new System.Drawing.Size(138, 22);
+            this.mnu_delete.Size = new System.Drawing.Size(163, 22);
             this.mnu_delete.Text = "Delete";
             this.mnu_delete.Click += new System.EventHandler(this.MnuDeleteClick);
+            // 
+            // mnuClearCompleted
+            // 
+            this.mnuClearCompleted.Name = "mnuClearCompleted";
+            this.mnuClearCompleted.Size = new System.Drawing.Size(163, 22);
+            this.mnuClearCompleted.Text = "Clear Completed";
+            this.mnuClearCompleted.Click += new System.EventHandler(this.mnuClearCompleted_Click);
             // 
             // statusStrip1
             // 
@@ -459,6 +477,13 @@ namespace Handbrake
             this.panel1.Size = new System.Drawing.Size(15, 214);
             this.panel1.TabIndex = 0;
             // 
+            // mnu_Retry
+            // 
+            this.mnu_Retry.Name = "mnu_Retry";
+            this.mnu_Retry.Size = new System.Drawing.Size(163, 22);
+            this.mnu_Retry.Text = "Retry Encode";
+            this.mnu_Retry.Click += new System.EventHandler(this.mnu_Retry_Click);
+            // 
             // frmQueue
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -531,5 +556,8 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripComboBox drp_completeOption;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.ColumnHeader Status;
+        private System.Windows.Forms.ToolStripMenuItem mnuClearCompleted;
+        private System.Windows.Forms.ToolStripMenuItem mnu_Retry;
     }
 }
