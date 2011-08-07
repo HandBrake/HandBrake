@@ -165,7 +165,6 @@ namespace Handbrake
             this.label37 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.label48 = new System.Windows.Forms.Label();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_outputFiles.SuspendLayout();
@@ -627,7 +626,6 @@ namespace Handbrake
             // 
             // tab_audio_sub
             // 
-            this.tab_audio_sub.Controls.Add(this.label48);
             this.tab_audio_sub.Controls.Add(this.label39);
             this.tab_audio_sub.Controls.Add(this.audioSelectionPanel);
             this.tab_audio_sub.Controls.Add(this.label45);
@@ -646,7 +644,7 @@ namespace Handbrake
             // label39
             // 
             this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(16, 82);
+            this.label39.Location = new System.Drawing.Point(6, 68);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(92, 13);
             this.label39.TabIndex = 109;
@@ -663,7 +661,7 @@ namespace Handbrake
             this.audioSelectionPanel.Controls.Add(this.label47);
             this.audioSelectionPanel.Controls.Add(this.button_removeLanguage);
             this.audioSelectionPanel.Controls.Add(this.button_clearLanguage);
-            this.audioSelectionPanel.Location = new System.Drawing.Point(125, 79);
+            this.audioSelectionPanel.Location = new System.Drawing.Point(125, 68);
             this.audioSelectionPanel.Name = "audioSelectionPanel";
             this.audioSelectionPanel.Size = new System.Drawing.Size(381, 166);
             this.audioSelectionPanel.TabIndex = 108;
@@ -764,11 +762,11 @@ namespace Handbrake
             // 
             this.label45.AutoSize = true;
             this.label45.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label45.Location = new System.Drawing.Point(253, 57);
+            this.label45.Location = new System.Drawing.Point(249, 37);
             this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(84, 11);
+            this.label45.Size = new System.Drawing.Size(107, 11);
             this.label45.TabIndex = 107;
-            this.label45.Text = "(Primary language)";
+            this.label45.Text = "Primary Audio Language";
             // 
             // groupBox2
             // 
@@ -785,7 +783,7 @@ namespace Handbrake
             this.groupBox2.Size = new System.Drawing.Size(537, 106);
             this.groupBox2.TabIndex = 106;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Add Automatically";
+            this.groupBox2.Text = "Add Additional Tracks";
             // 
             // label44
             // 
@@ -817,7 +815,7 @@ namespace Handbrake
             "Prefered Only"});
             this.cb_subtitleMode.Location = new System.Drawing.Point(79, 52);
             this.cb_subtitleMode.Name = "cb_subtitleMode";
-            this.cb_subtitleMode.Size = new System.Drawing.Size(132, 21);
+            this.cb_subtitleMode.Size = new System.Drawing.Size(147, 21);
             this.cb_subtitleMode.TabIndex = 107;
             this.ToolTip.SetToolTip(this.cb_subtitleMode, resources.GetString("cb_subtitleMode.ToolTip"));
             this.cb_subtitleMode.SelectedIndexChanged += new System.EventHandler(this.cb_subtitleMode_SelectedIndexChanged);
@@ -828,13 +826,11 @@ namespace Handbrake
             this.cb_audioMode.FormattingEnabled = true;
             this.cb_audioMode.Items.AddRange(new object[] {
             "None",
-            "All",
-            "First",
-            "Selected",
-            "Prefered Only"});
+            "All Remaining Tracks",
+            "All for Selected Languages"});
             this.cb_audioMode.Location = new System.Drawing.Point(79, 25);
             this.cb_audioMode.Name = "cb_audioMode";
-            this.cb_audioMode.Size = new System.Drawing.Size(132, 21);
+            this.cb_audioMode.Size = new System.Drawing.Size(147, 21);
             this.cb_audioMode.TabIndex = 106;
             this.ToolTip.SetToolTip(this.cb_audioMode, resources.GetString("cb_audioMode.ToolTip"));
             this.cb_audioMode.SelectedIndexChanged += new System.EventHandler(this.cb_audioMode_SelectedIndexChanged);
@@ -854,7 +850,7 @@ namespace Handbrake
             // check_AddOnlyOneAudioPerLanguage
             // 
             this.check_AddOnlyOneAudioPerLanguage.AutoSize = true;
-            this.check_AddOnlyOneAudioPerLanguage.Location = new System.Drawing.Point(221, 27);
+            this.check_AddOnlyOneAudioPerLanguage.Location = new System.Drawing.Point(232, 27);
             this.check_AddOnlyOneAudioPerLanguage.Name = "check_AddOnlyOneAudioPerLanguage";
             this.check_AddOnlyOneAudioPerLanguage.Size = new System.Drawing.Size(192, 17);
             this.check_AddOnlyOneAudioPerLanguage.TabIndex = 93;
@@ -868,7 +864,7 @@ namespace Handbrake
             this.check_AddCCTracks.AutoSize = true;
             this.check_AddCCTracks.Location = new System.Drawing.Point(79, 79);
             this.check_AddCCTracks.Name = "check_AddCCTracks";
-            this.check_AddCCTracks.Size = new System.Drawing.Size(198, 17);
+            this.check_AddCCTracks.Size = new System.Drawing.Size(199, 17);
             this.check_AddCCTracks.TabIndex = 92;
             this.check_AddCCTracks.Text = "Add Closed Captions when available";
             this.ToolTip.SetToolTip(this.check_AddCCTracks, "Add any CC tracks if they exist regardless of language settings");
@@ -902,7 +898,7 @@ namespace Handbrake
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(16, 52);
+            this.label15.Location = new System.Drawing.Point(6, 35);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(107, 13);
             this.label15.TabIndex = 88;
@@ -912,7 +908,7 @@ namespace Handbrake
             // 
             this.drop_preferredLang.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drop_preferredLang.FormattingEnabled = true;
-            this.drop_preferredLang.Location = new System.Drawing.Point(129, 52);
+            this.drop_preferredLang.Location = new System.Drawing.Point(125, 32);
             this.drop_preferredLang.Name = "drop_preferredLang";
             this.drop_preferredLang.Size = new System.Drawing.Size(118, 21);
             this.drop_preferredLang.TabIndex = 87;
@@ -1783,15 +1779,6 @@ namespace Handbrake
             this.pictureBox2.TabIndex = 60;
             this.pictureBox2.TabStop = false;
             // 
-            // label48
-            // 
-            this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(16, 28);
-            this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(296, 13);
-            this.label48.TabIndex = 110;
-            this.label48.Text = "Note: These settings will override settings stored in presets.";
-            // 
             // frmOptions
             // 
             this.AcceptButton = this.btn_close;
@@ -1970,6 +1957,5 @@ namespace Handbrake
         private System.Windows.Forms.Label label39;
         private System.Windows.Forms.NumericUpDown ud_minTitleLength;
         private System.Windows.Forms.Label label40;
-        private System.Windows.Forms.Label label48;
     }
 }
