@@ -128,10 +128,10 @@ namespace Handbrake.Controls
             drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.Mp3Passthru));
             drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.Ac3Passthrough));
             drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.Ac3));
-            
+            drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.DtsPassthrough));
+
             if (path.Contains("MKV"))
             {
-                drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.DtsPassthrough));
                 drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.DtsHDPassthrough));
                 drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.Vorbis));
             }
@@ -261,36 +261,12 @@ namespace Handbrake.Controls
                     {
                         track.ScannedTrack = drp_audioTrack.SelectedItem as Audio;
 
-                        // If the track isn't AC3, and the encoder is, change it.
-                        if (track.Encoder == AudioEncoder.Ac3Passthrough && !track.ScannedTrack.Format.Contains("AC3"))
+                        // Correct bad passthru option
+                        if (this.IsIncompatiblePassthru(track))
                         {
-                            // Switch to AAC
-                            drp_audioEncoder.SelectedIndex = 0;
-                        }
-
-                        // If the track isn't DTS, and the encoder is, change it.
-                        if (track.Encoder == AudioEncoder.DtsPassthrough && !track.ScannedTrack.Format.Contains("DTS"))
-                        {
-                            // Switch to AAC
-                            drp_audioEncoder.SelectedIndex = 0;
-                        }
-
-                        // If the track isn't AAC, and the encoder is, change it.
-                        if (track.Encoder == AudioEncoder.AacPassthru && !track.ScannedTrack.Format.Contains("aac"))
-                        {
-                            // Switch to AAC
-                            drp_audioEncoder.SelectedIndex = 0;
-                        }
-
-
-                        // If the track isn't MP3, and the encoder is, change it.
-                        if (track.Encoder == AudioEncoder.Mp3Passthru && !track.ScannedTrack.Format.Contains("mp3"))
-                        {
-                            // Switch to AAC
-                            drp_audioEncoder.SelectedIndex = 0;
-                        }
-
-
+                            AudioEncoder encoder = GetCompatiblePassthru(track);
+                            drp_audioEncoder.SelectedItem = EnumHelper<AudioEncoder>.GetDescription(encoder);
+                        } 
                     }
                     break;
                 case "drp_audioEncoder":
@@ -311,6 +287,12 @@ namespace Handbrake.Controls
                     // Update an item in the Audio list if required.
                     track.Encoder = EnumHelper<AudioEncoder>.GetValue(drp_audioEncoder.Text);
 
+                    // Correct bad passthru option
+                    if (this.IsIncompatiblePassthru(track))
+                    {
+                        AudioEncoder encoder = GetCompatiblePassthru(track);
+                        drp_audioEncoder.SelectedItem = EnumHelper<AudioEncoder>.GetDescription(encoder);
+                    }
                     break;
                 case "drp_audioMix":
                     SetBitrate(track.Bitrate);
@@ -965,6 +947,78 @@ namespace Handbrake.Controls
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// For a given Audio Track, is the chosen Passthru option supported
+        /// </summary>
+        /// <param name="track">
+        /// The track.
+        /// </param>
+        /// <returns>
+        /// True if it is.
+        /// </returns>
+        private bool IsIncompatiblePassthru(AudioTrack track)
+        {
+            // If the track isn't AC3, and the encoder is, change it.
+            if (track.Encoder == AudioEncoder.Ac3Passthrough && !track.ScannedTrack.Format.Contains("AC3"))
+            {
+                return true;
+            }
+
+            // If the track isn't DTS, and the encoder is, change it.
+            if (track.Encoder == AudioEncoder.DtsPassthrough && !track.ScannedTrack.Format.Contains("DTS"))
+            {
+                return true;
+            }
+
+            // If the track isn't AAC, and the encoder is, change it.
+            if (track.Encoder == AudioEncoder.AacPassthru && !track.ScannedTrack.Format.Contains("aac"))
+            {
+                return true;
+            }
+
+            // If the track isn't MP3, and the encoder is, change it.
+            if (track.Encoder == AudioEncoder.Mp3Passthru && !track.ScannedTrack.Format.Contains("mp3"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Get a compatible passthru, or default to aac.
+        /// </summary>
+        /// <param name="track">
+        /// The track.
+        /// </param>
+        /// <returns>
+        /// AN Audio encoder.
+        /// </returns>
+        private AudioEncoder GetCompatiblePassthru(AudioTrack track)
+        {
+            if (track.ScannedTrack.Format.Contains("AC3"))
+            {
+                return AudioEncoder.Ac3Passthrough;
+            }
+
+            if (track.ScannedTrack.Format.Contains("DTS"))
+            {
+                return AudioEncoder.DtsPassthrough;
+            }
+
+            if (track.ScannedTrack.Format.Contains("aac"))
+            {
+                return AudioEncoder.AacPassthru;
+            }
+
+            if (track.ScannedTrack.Format.Contains("mp3"))
+            {
+                return AudioEncoder.Mp3Passthru;
+            }
+
+            return AudioEncoder.Faac;
         }
 
         #endregion
