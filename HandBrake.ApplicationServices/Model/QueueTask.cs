@@ -5,6 +5,8 @@
 
 namespace HandBrake.ApplicationServices.Model
 {
+    using System;
+
     /// <summary>
     /// The QueueTask.
     /// </summary>
@@ -63,6 +65,21 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets a value indicating whether if this is a user or GUI generated query
         /// </summary>
         public bool CustomQuery { get; set; }
+
+        /// <summary>
+        /// Gets or sets Status.
+        /// </summary>
+        public QueueItemStatus Status { get; set; }
+
+        /// <summary>
+        /// Gets or sets StartTime.
+        /// </summary>
+        public DateTime StartTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets ElaspedEncodeTime.
+        /// </summary>
+        public TimeSpan ElaspedEncodeTime { get; set; }
 
         /// <summary>
         /// Gets or sets the Encode Task.

@@ -40,6 +40,11 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private DateTime startTime;
 
+        /// <summary>
+        /// The Current Task
+        /// </summary>
+        private QueueTask currentTask;
+
         #endregion
 
         /// <summary>
@@ -75,7 +80,7 @@ namespace HandBrake.ApplicationServices.Services
         {
             try
             {
-                QueueTask queueTask = encodeQueueTask;
+                this.currentTask = encodeQueueTask;
 
                 if (this.IsEncoding)
                 {
@@ -88,7 +93,7 @@ namespace HandBrake.ApplicationServices.Services
                 {
                     try
                     {
-                        this.SetupLogging(queueTask);
+                        this.SetupLogging(currentTask);
                     }
                     catch (Exception)
                     {
@@ -103,10 +108,10 @@ namespace HandBrake.ApplicationServices.Services
                 }
 
                 // Make sure the path exists, attempt to create it if it doesn't
-                this.VerifyEncodeDestinationPath(queueTask);
+                this.VerifyEncodeDestinationPath(currentTask);
 
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
-                ProcessStartInfo cliStart = new ProcessStartInfo(handbrakeCLIPath, queueTask.Query)
+                ProcessStartInfo cliStart = new ProcessStartInfo(handbrakeCLIPath, currentTask.Query)
                 {
                     RedirectStandardOutput = true,
                     RedirectStandardError = enableLogging ? true : false,
@@ -164,7 +169,10 @@ namespace HandBrake.ApplicationServices.Services
             }
             catch (Exception exc)
             {
-                this.Invoke_encodeCompleted(new EncodeCompletedEventArgs(false, exc, "An Error occured when trying to encode this source. "));
+                TimeSpan time = DateTime.Now.Subtract(this.currentTask.StartTime);
+                this.Invoke_encodeCompleted(
+                    new EncodeCompletedEventArgs(
+                        false, exc, "An Error occured when trying to encode this source. "));
             }
         }
 
@@ -266,6 +274,7 @@ namespace HandBrake.ApplicationServices.Services
                 // This exception doesn't warrent user interaction, but it should be logged (TODO)
             }
 
+            this.currentTask.Status = QueueItemStatus.Completed;
             this.Invoke_encodeCompleted(new EncodeCompletedEventArgs(true, null, string.Empty));
         }
 

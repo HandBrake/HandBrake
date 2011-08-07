@@ -47,6 +47,9 @@ namespace Handbrake
         /// </summary>
         private readonly frmMain mainWindow;
 
+        /// <summary>
+        /// The User setting service
+        /// </summary>
         private readonly IUserSettingService userSettingService = new UserSettingService();
 
         /// <summary>
@@ -136,6 +139,8 @@ namespace Handbrake
                 this.BeginInvoke(new EncodeProgessStatus(EncodeQueue_EncodeStatusChanged), new[] { sender, e });
                 return;
             }
+
+            this.queue.QueueManager.LastProcessedJob.ElaspedEncodeTime = e.ElapsedTime;
 
             lbl_encodeStatus.Text =
                 string.Format(
@@ -299,6 +304,7 @@ namespace Handbrake
             btn_pause.Visible = false;
             btn_encode.Enabled = true;
 
+            this.RedrawQueue();
             ResetEncodeText();
         }
 
@@ -353,7 +359,9 @@ namespace Handbrake
                         chapters = chapters + " - " + parsed.EndPoint;
                 }
 
-                ListViewItem item = new ListViewItem { Tag = queueItem, Text = title };
+                ListViewItem item = new ListViewItem
+                    { Tag = queueItem, Text = EnumHelper<QueueItemStatus>.GetDescription(queueItem.Status) };
+                item.SubItems.Add(title);
                 item.SubItems.Add(chapters); // Chapters
                 item.SubItems.Add(queueItem.Source); // Source
                 item.SubItems.Add(queueItem.Destination); // Destination
@@ -389,6 +397,9 @@ namespace Handbrake
             UpdateStatusLabel();
         }
 
+        /// <summary>
+        /// Update the Display
+        /// </summary>
         private void UpdateStatusLabel()
         {
             if (InvokeRequired)
@@ -397,7 +408,7 @@ namespace Handbrake
                 return;
             }
 
-            lbl_encodesPending.Text = string.Format("{0} encodes(s) pending", list_queue.Items.Count);
+            lbl_encodesPending.Text = string.Format("{0} encodes(s) pending", this.queue.QueueManager.Count);
         }
 
         /// <summary>
@@ -717,6 +728,57 @@ namespace Handbrake
         private void CompleteOptionChanged(object sender, EventArgs e)
         {
             userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, drp_completeOption.Text);
+        }
+
+        /// <summary>
+        /// Clear all completed items
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void mnuClearCompleted_Click(object sender, EventArgs e)
+        {
+            this.queue.QueueManager.ClearCompleted();
+        }
+
+        /// <summary>
+        /// Retry Job Menu Item
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void mnu_Retry_Click(object sender, EventArgs e)
+        {
+            if (list_queue.SelectedIndices.Count != 0)
+            {
+                lock (queue)
+                {
+                    lock (list_queue)
+                    {
+                        QueueTask index = list_queue.SelectedItems[0].Tag as QueueTask;
+
+                        try
+                        {
+                            queue.QueueManager.ResetJobStatusToWaiting(index);
+                        } 
+                        catch (Exception)
+                        {
+                            MessageBox.Show(
+                                "Can only retry a job if it is in an Error or Completed state.",
+                                "Notice",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+                        }
+                        RedrawQueue();
+                    }
+                }
+            }
         }
     }
 }

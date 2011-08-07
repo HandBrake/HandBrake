@@ -412,7 +412,7 @@ namespace Handbrake.Functions
 
                 return queueFiles;
             }
-            catch (Exception)
+            catch (Exception exc)
             {
                 return new List<string>(); // Keep quiet about the error.
             }
