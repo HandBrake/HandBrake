@@ -123,10 +123,12 @@ namespace Handbrake.Controls
             drp_audioEncoder.Items.Clear();
             drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.Faac));
             drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.ffaac));
+            drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.AacPassthru));
             drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.Lame));
+            drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.Mp3Passthru));
             drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.Ac3Passthrough));
             drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.Ac3));
-
+            
             if (path.Contains("MKV"))
             {
                 drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDescription(AudioEncoder.DtsPassthrough));
@@ -162,7 +164,8 @@ namespace Handbrake.Controls
 
             foreach (AudioTrack track in tracks)
             {
-                if (track.Encoder == AudioEncoder.Ac3Passthrough || track.Encoder == AudioEncoder.DtsPassthrough || track.Encoder == AudioEncoder.DtsHDPassthrough)
+                if (track.Encoder == AudioEncoder.Ac3Passthrough || track.Encoder == AudioEncoder.DtsPassthrough ||
+                    track.Encoder == AudioEncoder.DtsHDPassthrough || track.Encoder == AudioEncoder.AacPassthru || track.Encoder == AudioEncoder.Mp3Passthru)
                 {
                     track.MixDown = HandBrake.ApplicationServices.Model.Encoding.Mixdown.Passthrough;
                     track.Bitrate = 0;
@@ -271,6 +274,23 @@ namespace Handbrake.Controls
                             // Switch to AAC
                             drp_audioEncoder.SelectedIndex = 0;
                         }
+
+                        // If the track isn't AAC, and the encoder is, change it.
+                        if (track.Encoder == AudioEncoder.AacPassthru && !track.ScannedTrack.Format.Contains("aac"))
+                        {
+                            // Switch to AAC
+                            drp_audioEncoder.SelectedIndex = 0;
+                        }
+
+
+                        // If the track isn't MP3, and the encoder is, change it.
+                        if (track.Encoder == AudioEncoder.Mp3Passthru && !track.ScannedTrack.Format.Contains("mp3"))
+                        {
+                            // Switch to AAC
+                            drp_audioEncoder.SelectedIndex = 0;
+                        }
+
+
                     }
                     break;
                 case "drp_audioEncoder":
@@ -914,6 +934,8 @@ namespace Handbrake.Controls
                 case "AC3 Passthru":
                 case "DTS Passthru":
                 case "DTS-HD Passthru":
+                case "AAC Passthru":
+                case "MP3 Passthru":
                     drp_audioMix.SelectedItem = Passthru;
                     break;
             }
