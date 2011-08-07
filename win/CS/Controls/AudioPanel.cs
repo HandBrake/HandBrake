@@ -184,10 +184,13 @@ namespace Handbrake.Controls
         /// <param name="preset">A preset</param>
         public void SetTrackListAfterTitleChange(Title selectedTitle, Preset preset)
         {
+            // Reset
+            this.AudioTracks.Clear();
+            this.ScannedTracks.Clear();
+
             if (selectedTitle.AudioTracks.Count == 0)
             {
-                this.AudioTracks.Clear();
-                this.ScannedTracks.Clear();
+                
                 this.ScannedTracks.Add(AudioHelper.NoneFound);
                 this.drp_audioTrack.Refresh();
                 drp_audioTrack.SelectedIndex = 0;
@@ -195,7 +198,7 @@ namespace Handbrake.Controls
             }
 
             // Setup the Audio track source dropdown with the new audio tracks.
-            this.ScannedTracks.Clear();
+           // this.ScannedTracks.Clear();
             this.drp_audioTrack.SelectedItem = null;
             this.ScannedTracks = new BindingList<Audio>(selectedTitle.AudioTracks.ToList());
             drp_audioTrack.DataSource = this.ScannedTracks;
@@ -432,6 +435,12 @@ namespace Handbrake.Controls
                         foundTrack = true;
                         continue;
                     }
+
+                    if (Properties.Settings.Default.addOnlyOneAudioPerLanguage && currentTrack.TrackDisplay.Contains(sourceTrack.Language))
+                    {
+                        foundTrack = true;
+                        continue;
+                    }
                 }
 
                 if (foundTrack)
@@ -575,8 +584,7 @@ namespace Handbrake.Controls
                 return;
             }
 
-            // If the Native Language is not set. Just set Track information in each output track.
-            // Presets have control over audio selected
+            // Handle Preferred Language
             if (Properties.Settings.Default.NativeLanguage == "Any")
             {
                 drp_audioTrack.SelectedIndex = 0;
@@ -589,27 +597,36 @@ namespace Handbrake.Controls
                 }
 
                 return;
+            } 
+            else
+            {
+                foreach (Audio item in drp_audioTrack.Items)
+                {
+                    if (item.Language.Contains(Properties.Settings.Default.NativeLanguage))
+                    {
+                        drp_audioTrack.SelectedItem = item;
+                        break;
+                    }
+                }
+                
+                foreach (AudioTrack track in this.audioTracks)
+                {
+                    if (this.drp_audioTrack.SelectedItem != null)
+                    {
+                        track.ScannedTrack = this.drp_audioTrack.SelectedItem as Audio;
+                    }
+                }
             }
-
-            // Remove all old Audiotracks before adding new ones. 
-            this.AudioTracks.Clear();
 
             // Array with the Index numbers of the prefered and additional languages. 
             // This allows to have for each language the order in which they appear in the DVD list.
             Dictionary<String, ArrayList> languageIndex = new Dictionary<String, ArrayList>();
 
-            // This is used to keep the Prefered Language in the front and the other languages in order.
-            ArrayList languageOrder = new ArrayList();
-
-            // New DUB Settings
+            // Now add any additional Langauges tracks on top of the presets tracks.
             int mode = Properties.Settings.Default.DubModeAudio;
-
-            // Native Language is not 'Any', so initialising the Language Dictionary
-            if (mode >= 3)
+            ArrayList languageOrder = new ArrayList();    // This is used to keep the Prefered Language in the front and the other languages in order. TODO this is no longer required, refactor this.
+            if (mode > 0)
             {
-                languageIndex.Add(Properties.Settings.Default.NativeLanguage, new ArrayList());
-                languageOrder.Add(Properties.Settings.Default.NativeLanguage);
-
                 foreach (string item in Properties.Settings.Default.SelectedLanguages)
                 {
                     if (!languageIndex.ContainsKey(item))
@@ -640,22 +657,20 @@ namespace Handbrake.Controls
                     i++;
                 }
 
-                // If there are no selected languages found, the first available will be taken.
+                // There are no additional Languages, so we don't need to continue processing.
                 if (!elementFound)
-                    mode = 2;
+                {
+                   // return;
+                }
             }
 
             switch (mode)
             {
-                case 1: // Adding all audio tracks
+                case 1: // Adding all remaining audio tracks
                     this.mnu_AddAll_Click(this, EventArgs.Empty);
                     break;
-                case 2: // Adding only the first Audio Track
-                    drp_audioTrack.SelectedIndex = 0;
-                    if (drp_audioTrack.SelectedItem != null)
-                        this.AddAudioTrack_Click(this, EventArgs.Empty);
-                    break;
-                case 3:
+                case 2: // Add Langauges tracks for the additional languages selected, in-order.
+                    audioList.ClearSelection();
                     foreach (string item in languageOrder)
                     {
                         if (languageIndex[item].Count > 0)
@@ -665,31 +680,21 @@ namespace Handbrake.Controls
                                 drp_audioTrack.SelectedIndex = i;
                                 if (drp_audioTrack.SelectedItem != null)
                                 {
-                                    this.AddAudioTrack_Click(this, EventArgs.Empty);
-                                    audioList.ClearSelection();
+                                    Audio track = drp_audioTrack.SelectedItem as Audio;
+                                    if (track != null)
+                                    {
+                                        if (!TrackExists(track))
+                                        {
+                                            this.AddAudioTrack_Click(this, EventArgs.Empty);
+                                            audioList.ClearSelection();
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                     break;
-                case 4:
-                    if (languageIndex[(string)languageOrder[0]].Count > 0)
-                    {
-                        foreach (int i in languageIndex[(string)languageOrder[0]])
-                        {
-                            drp_audioTrack.SelectedIndex = i;
-                            if (drp_audioTrack.SelectedItem != null)
-                            {
-                                this.AddAudioTrack_Click(this, EventArgs.Empty);
-                                audioList.ClearSelection();
-                            }
-                        }
-                    }
-                    break;
             }
-
-            // Revert the selection back tio the first item.
-            drp_audioTrack.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -917,6 +922,27 @@ namespace Handbrake.Controls
             {
                 drp_audioMix.SelectedItem = "Dolby Pro Logic II";
             }
+        }
+
+        /// <summary>
+        /// Check if a track already exists
+        /// </summary>
+        /// <param name="sourceTrack">
+        /// The source track.
+        /// </param>
+        /// <returns>
+        /// True if it does
+        /// </returns>
+        private bool TrackExists(Audio sourceTrack)
+        {
+            foreach (AudioTrack currentTrack in this.AudioTracks)
+            {
+                if (currentTrack.Track.HasValue && currentTrack.Track.Value == sourceTrack.TrackNumber)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         #endregion
