@@ -140,8 +140,6 @@ namespace Handbrake
                 return;
             }
 
-            this.queue.QueueManager.LastProcessedJob.ElaspedEncodeTime = e.ElapsedTime;
-
             lbl_encodeStatus.Text =
                 string.Format(
                 "Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:hh\\:mm\\:ss}",
