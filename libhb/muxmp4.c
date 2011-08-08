@@ -218,23 +218,19 @@ static int MP4Init( hb_mux_object_t * m )
     // Per the notes at:
     //   http://developer.apple.com/quicktime/icefloe/dispatch019.html#colr
     //   http://forum.doom9.org/showthread.php?t=133982#post1090068
-    // the user can set it from job->color_matrix, otherwise by default
+    // the user can set it from job->color_matrix_code, otherwise by default
     // we say anything that's likely to be HD content is ITU BT.709 and
     // DVD, SD TV & other content is ITU BT.601.  We look at the title height
     // rather than the job height here to get uncropped input dimensions.
-    if( job->color_matrix == 1 )
+    if( job->color_matrix_code == 3 )
     {
-        // ITU BT.601 DVD or SD TV content
-        MP4AddColr(m->file, mux_data->track, 6, 1, 6);
+        // Custom
+        MP4AddColr(m->file, mux_data->track, job->color_prim, job->color_transfer, job->color_matrix);        
     }
-    else if( job->color_matrix == 2 )
+    else if( ( job->color_matrix_code == 2 ) || 
+             ( job->color_matrix_code == 0 && ( job->title->width >= 1280 || job->title->height >= 720 ) ) )
     {
         // ITU BT.709 HD content
-        MP4AddColr(m->file, mux_data->track, 1, 1, 1);        
-    }
-    else if ( job->title->width >= 1280 || job->title->height >= 720 )
-    {
-        // we guess that 720p or above is ITU BT.709 HD content
         MP4AddColr(m->file, mux_data->track, 1, 1, 1);
     }
     else

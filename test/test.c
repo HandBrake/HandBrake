@@ -123,7 +123,7 @@ static char * preset_name   = 0;
 static int    cfr           = 0;
 static int    mp4_optimize  = 0;
 static int    ipod_atom     = 0;
-static int    color_matrix  = 0;
+static int    color_matrix_code = 0;
 static int    preview_count = 10;
 static int    store_previews = 0;
 static int    start_at_preview = 0;
@@ -2229,9 +2229,9 @@ static int HandleEvents( hb_handle_t * h )
 
             job->file = strdup( output );
 
-            if( color_matrix )
+            if( color_matrix_code )
             {
-                job->color_matrix = color_matrix;
+                job->color_matrix_code = color_matrix_code;
             }
 
             if( advanced_opts != NULL && *advanced_opts != '\0' )
@@ -3461,9 +3461,9 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'M':
                 if( atoi( optarg ) == 601 )
-                    color_matrix = 1;
+                    color_matrix_code = 1;
                 else if( atoi( optarg ) == 709 )
-                    color_matrix = 2;
+                    color_matrix_code = 2;
                 break;
             case MIN_DURATION:
                 min_title_duration = strtol( optarg, NULL, 0 );

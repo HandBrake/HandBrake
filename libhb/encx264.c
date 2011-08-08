@@ -132,6 +132,31 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     param.i_log_level  = X264_LOG_INFO;
     
+    /* set up the VUI color model & gamma to match what the COLR atom
+     * set in muxmp4.c says. See libhb/muxmp4.c for notes. */
+    if( job->color_matrix_code == 3 )
+    {
+        // Custom
+        param.vui.i_colorprim = job->color_prim;
+        param.vui.i_transfer  = job->color_transfer;
+        param.vui.i_colmatrix = job->color_matrix;
+    }
+    else if( ( job->color_matrix_code == 2 ) || 
+             ( job->color_matrix_code == 0 && ( job->title->width >= 1280 || job->title->height >= 720 ) ) )
+    {
+        // ITU BT.709 HD content
+        param.vui.i_colorprim = 1;
+        param.vui.i_transfer  = 1;
+        param.vui.i_colmatrix = 1;
+    }
+    else
+    {
+        // ITU BT.601 DVD or SD TV content
+        param.vui.i_colorprim = 6;
+        param.vui.i_transfer  = 1;
+        param.vui.i_colmatrix = 6;
+    }
+
     /*
         This section passes the string advanced_opts to libx264 for parsing into
         parameter names and values.
@@ -185,6 +210,13 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         free(x264opts_start);
     }
     
+    /* Reload colorimetry settings in case custom values were set
+     * in the advanced_opts string */
+    job->color_matrix_code = 3;
+    job->color_prim = param.vui.i_colorprim;
+    job->color_transfer = param.vui.i_transfer;
+    job->color_matrix = param.vui.i_colmatrix;
+
     /* B-frames are on by default.*/
     job->areBframes = 1;
     
@@ -226,37 +258,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
             snprintf( max, 40, "%d", param.i_keyint_max );
 
         hb_log( "encx264: min-keyint: %s, keyint: %s", min, max );
-    }
-
-    /* set up the VUI color model & gamma to match what the COLR atom
-     * set in muxmp4.c says. See libhb/muxmp4.c for notes. */
-    if( job->color_matrix == 1 )
-    {
-        // ITU BT.601 DVD or SD TV content
-        param.vui.i_colorprim = 6;
-        param.vui.i_transfer = 1;
-        param.vui.i_colmatrix = 6;
-    }
-    else if( job->color_matrix == 2 )
-    {
-        // ITU BT.709 HD content
-        param.vui.i_colorprim = 1;
-        param.vui.i_transfer = 1;
-        param.vui.i_colmatrix = 1;
-    }
-    else if ( job->title->width >= 1280 || job->title->height >= 720 )
-    {
-        // we guess that 720p or above is ITU BT.709 HD content
-        param.vui.i_colorprim = 1;
-        param.vui.i_transfer = 1;
-        param.vui.i_colmatrix = 1;
-    }
-    else
-    {
-        // ITU BT.601 DVD or SD TV content
-        param.vui.i_colorprim = 6;
-        param.vui.i_transfer = 1;
-        param.vui.i_colmatrix = 6;
     }
 
     if( job->anamorphic.mode )

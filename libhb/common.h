@@ -243,6 +243,9 @@ struct hb_job_s
     int             pass;
     char            *advanced_opts;
     int             areBframes;
+    int             color_matrix_code;
+    int             color_prim;
+    int             color_transfer;
     int             color_matrix;
 
     /* List of audio settings. */

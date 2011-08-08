@@ -194,8 +194,8 @@ void hb_display_job_info( hb_job_t * job )
             if( job->mp4_optimize )
                 hb_log( "     + optimized for progressive web downloads");
             
-            if( job->color_matrix )
-                hb_log( "     + custom color matrix: %s", job->color_matrix == 1 ? "ITU Bt.601 (SD)" : "ITU Bt.709 (HD)");
+            if( job->color_matrix_code )
+                hb_log( "     + custom color matrix: %s", job->color_matrix_code == 1 ? "ITU Bt.601 (SD)" : job->color_matrix_code == 2 ? "ITU Bt.709 (HD)" : "Custom" );
             break;
 
         case HB_MUX_MKV:
