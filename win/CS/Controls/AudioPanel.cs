@@ -192,8 +192,7 @@ namespace Handbrake.Controls
             this.ScannedTracks.Clear();
 
             if (selectedTitle.AudioTracks.Count == 0)
-            {
-                
+            {    
                 this.ScannedTracks.Add(AudioHelper.NoneFound);
                 this.drp_audioTrack.Refresh();
                 drp_audioTrack.SelectedIndex = 0;
@@ -960,6 +959,12 @@ namespace Handbrake.Controls
         /// </returns>
         private bool IsIncompatiblePassthru(AudioTrack track)
         {
+            if (track.ScannedTrack == null || string.IsNullOrEmpty(track.ScannedTrack.Format))
+            {
+                return false;
+            }
+
+
             // If the track isn't AC3, and the encoder is, change it.
             if (track.Encoder == AudioEncoder.Ac3Passthrough && !track.ScannedTrack.Format.Contains("AC3"))
             {
