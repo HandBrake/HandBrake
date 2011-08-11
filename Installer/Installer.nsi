@@ -70,7 +70,7 @@ Function .onInit
   Pop $R0
 
   StrCmp $R0 0 +3
-  MessageBox MB_OK|MB_ICONEXCLAMATION "The installer is already running."
+  MessageBox MB_OK|MB_ICONEXCLAMATION "The installer is already running." /SD IDOK
   Abort
 
   ;Remove previous version
@@ -81,13 +81,16 @@ Function .onInit
 
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
   "${PRODUCT_NAME} is already installed. $\n$\nClick `OK` to remove the \
-  previous version or `Cancel` to continue." \
+  previous version or `Cancel` to continue." /SD IDOK \
   IDOK uninst
   goto done
 
  ;Run the uninstaller
   uninst:
+   IfSilent +3
    Exec $INSTDIR\uninst.exe
+   goto done
+   Exec '"$INSTDIR\uninst.exe" /S'
   done:
 FunctionEnd
 
@@ -100,7 +103,7 @@ Section "Handbrake" SEC01
   Call CheckFramework
      StrCmp $0 "1" +3
         StrCpy $InstallDotNET "Yes"
-      MessageBox MB_OK|MB_ICONINFORMATION "${PRODUCT_NAME} requires that the .NET Framework 4.0 is installed. The latest .NET Framework will be downloaded and installed automatically during installation of ${PRODUCT_NAME}."
+      MessageBox MB_OK|MB_ICONINFORMATION "${PRODUCT_NAME} requires that the .NET Framework 4.0 is installed. The latest .NET Framework will be downloaded and installed automatically during installation of ${PRODUCT_NAME}." /SD IDOK
      Pop $0
 
   ; Get .NET if required
@@ -171,11 +174,11 @@ SectionEnd
 
 Function un.onUninstSuccess
   HideWindow
-  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) was successfully removed from your computer."
+  MessageBox MB_ICONINFORMATION|MB_OK "$(^Name) was successfully removed from your computer." /SD IDOK
 FunctionEnd
 
 Function un.onInit
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to completely remove $(^Name) and all of its components?" IDYES +2
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to completely remove $(^Name) and all of its components?" /SD IDYES IDYES +2
   Abort
 FunctionEnd
 
