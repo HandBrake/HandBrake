@@ -291,13 +291,18 @@ void hb_display_job_info( hb_job_t * job )
 
             case HB_VCODEC_X264:
                 hb_log( "   + encoder: x264" );
-                if( job->advanced_opts != NULL && *job->advanced_opts != '\0' )
-                    hb_log( "     + options: %s", job->advanced_opts);
                 break;
 
             case HB_VCODEC_THEORA:
                 hb_log( "   + encoder: Theora" );
                 break;
+        }
+
+        if ( job->advanced_opts && *job->advanced_opts &&
+             ( ( job->vcodec & HB_VCODEC_FFMPEG_MASK ) ||
+               job->vcodec == HB_VCODEC_X264 ) )
+        {
+            hb_log( "     + options: %s", job->advanced_opts);
         }
 
         if( job->vquality >= 0 )

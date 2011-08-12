@@ -127,6 +127,20 @@ int hb_avcodec_close(AVCodecContext *avctx)
     return ret;
 }
 
+int hb_av_set_string( AVCodecContext *c, AVCodec *codec, const char *name, const char *val )
+{
+    void * priv_context = NULL;
+
+    if ( c && codec && codec->priv_class && c->priv_data )
+        priv_context = c->priv_data;
+
+    int ret = av_set_string3( c, name, val, 1, NULL );
+    if ( ret == AVERROR_OPTION_NOT_FOUND && priv_context )
+        ret = av_set_string3( priv_context, name, val, 1, NULL );
+
+    return ret;
+}
+
 static int handle_jpeg(enum PixelFormat *format)
 {
     switch (*format) {

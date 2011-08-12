@@ -18,3 +18,4 @@ hb_sws_get_context(int srcW, int srcH, enum PixelFormat srcFormat,
                    int dstW, int dstH, enum PixelFormat dstFormat,
                    int flags);
 void hb_ff_set_sample_fmt(AVCodecContext *context, AVCodec *codec);
+int hb_av_set_string( AVCodecContext *c, AVCodec *codec, const char *name, const char *val );

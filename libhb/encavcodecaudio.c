@@ -58,12 +58,17 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     }
     context = avcodec_alloc_context3(codec);
 
-    int ret = av_set_string3( context, "stereo_mode", "ms_off", 1, NULL );
-    /* Let avutil sanity check the options for us*/
-    if( ret == AVERROR(ENOENT) )
-        hb_log( "avcodec options: Unknown option %s", "stereo_mode" );
-    if( ret == AVERROR(EINVAL) )
-        hb_log( "avcodec options: Bad argument %s=%s", "stereo_mode", "ms_off" ? "ms_off" : "(null)" );
+    if ( w->codec_param == CODEC_ID_AAC )
+    {
+        int ret = hb_av_set_string( context, codec, "stereo_mode", "ms_off" );
+        /* Let avutil sanity check the options for us*/
+        if( ret == AVERROR_OPTION_NOT_FOUND )
+            hb_log( "avcodec options: Unknown option %s", "stereo_mode" );
+
+        if( ret == AVERROR(EINVAL) )
+            hb_log( "avcodec options: Bad argument %s=%s", 
+                    "stereo_mode", "ms_off" ? "ms_off" : "(null)" );
+    }
 
     context->channel_layout = AV_CH_LAYOUT_STEREO;
     switch( audio->config.out.mixdown )

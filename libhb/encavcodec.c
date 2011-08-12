@@ -196,13 +196,15 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 }
 
                 /* Here's where the strings are passed to avutil for parsing. */
-                ret = av_set_string3( context, name, value, 1, NULL );
+                ret = hb_av_set_string( context, codec, name, value );
 
                 /* Let avutil sanity check the options for us*/
                 if( ret == AVERROR_OPTION_NOT_FOUND )
                     hb_log( "avcodec options: Unknown option %s", name );
+
                 if( ret == AVERROR(EINVAL) )
-                    hb_log( "avcodec options: Bad argument %s=%s", name, value ? value : "(null)" );
+                    hb_log( "avcodec options: Bad argument %s=%s", 
+                            name, value ? value : "(null)" );
             }
         }
         free(opts_start);
