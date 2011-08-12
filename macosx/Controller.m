@@ -1443,7 +1443,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
     /* If Alert Window or Window and Growl has been selected */
     if( [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window"] ||
-       [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"] )
+        [[[NSUserDefaults standardUserDefaults] stringForKey:@"AlertWhenDone"] isEqualToString: @"Alert Window And Growl"] )
     {
         /*On Screen Notification*/
         int status;
