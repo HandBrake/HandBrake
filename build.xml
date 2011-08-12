@@ -24,21 +24,26 @@
 
   <!-- Dependencies -->
   <PropertyGroup>
-    <NightlyDependsOn>Nightly;NightlyPostBuildEvent</NightlyDependsOn>
+    <NightlyDependsOn>BuildRelease;NightlyPostBuildEvent</NightlyDependsOn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <InstallDependsOn>BuildRelease;CreateReleasePostBuildEvent</InstallDependsOn>
   </PropertyGroup>
   
   <!-- Builds -->
   <Target Name="NightlyBuild" DependsOnTargets="$(NightlyDependsOn)"/>
-
+  <Target Name="ReleaseInstaller" DependsOnTargets="$(InstallDependsOn)"/>
+  
   <!-- Build Components -->
-  <Target Name="Nightly">
+  <Target Name="BuildRelease">
     <MSBuild Projects ="@(ProjectsToBuild)"
              ContinueOnError ="false"
              Properties="Configuration=$(Configuration)" >
       <Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
     </MSBuild>
   </Target>
-  
+
   <!-- Events -->
   <Target Name="NightlyPostBuildEvent">
     <Exec Command="copy $(ProjectDir)Installer\MakeNightly.nsi $(ProjectDir)bin\$(Platform)\Release /Y" Condition="$(Platform) == 'x86'" />
@@ -49,6 +54,17 @@
     
     <Exec Command="makensis $(ProjectDir)bin\$(Platform)\Release\MakeNightly.nsi" Condition="$(Platform) == 'x86'" />
     <Exec Command="makensis $(ProjectDir)bin\$(Platform)\Release\MakeNightly64.nsi" Condition="$(Platform) == 'x64'" />
+  </Target>
+
+  <Target Name="CreateReleasePostBuildEvent">
+    <Exec Command="copy $(ProjectDir)Installer\Installer.nsi $(ProjectDir)bin\$(Platform)\Release /Y" Condition="$(Platform) == 'x86'" />
+    <Exec Command="copy $(ProjectDir)Installer\Installer64.nsi $(ProjectDir)bin\$(Platform)\Release /Y" Condition="$(Platform) == 'x64'" />
+
+    <Exec Command="copy $(ProjectDir)handbrakepineapple.ico $(ProjectDir)bin\$(Platform)\Release /Y" />
+    <Exec Command="xcopy $(ProjectDir)doc $(ProjectDir)bin\$(Platform)\Release\doc /I /Y" />
+
+    <Exec Command="makensis $(ProjectDir)bin\$(Platform)\Release\Installer.nsi" Condition="$(Platform) == 'x86'" />
+    <Exec Command="makensis $(ProjectDir)bin\$(Platform)\Release\Installer64.nsi" Condition="$(Platform) == 'x64'" />
   </Target>
 
 </Project>
