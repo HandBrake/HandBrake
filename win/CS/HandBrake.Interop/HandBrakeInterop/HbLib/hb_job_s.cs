@@ -95,6 +95,12 @@ namespace HandBrake.Interop.HbLib
 		/// int
 		public int areBframes;
 
+    	public int color_matrix_code;
+
+    	public int color_prim;
+
+    	public int color_transfer;
+
 		/// int
 		public int color_matrix;
 

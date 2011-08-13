@@ -18,6 +18,10 @@ namespace HandBrake.Interop.SourceData
 
 		DtsHD,
 
+		Mp3,
+
+		Aac,
+
 		Other
 	}
 }

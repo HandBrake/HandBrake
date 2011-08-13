@@ -117,6 +117,14 @@ namespace HandBrake.Interop
 					return AudioCodec.Dts;
 				case NativeConstants.HB_ACODEC_DCA_HD:
 					return AudioCodec.DtsHD;
+				case NativeConstants.HB_ACODEC_LAME:
+				case NativeConstants.HB_ACODEC_MP3:
+					return AudioCodec.Mp3;
+				case NativeConstants.HB_ACODEC_FAAC:
+				case NativeConstants.HB_ACODEC_FFAAC:
+				case NativeConstants.HB_ACODEC_CA_AAC:
+				case NativeConstants.HB_ACODEC_CA_HAAC:
+					return AudioCodec.Aac;
 				default:
 					return AudioCodec.Other;
 			}

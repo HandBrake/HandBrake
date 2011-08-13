@@ -1329,10 +1329,12 @@ namespace HandBrake.Interop
 			if (encoding.Encoder == AudioEncoder.Passthrough)
 			{
 				// If we've been given a general "Passthrough" codec, see if it's valid for this input track.
-				if ((baseStruct.config.input.codec & NativeConstants.HB_ACODEC_PASS_MASK) > 0)
+				uint audioCodec = baseStruct.config.input.codec & NativeConstants.HB_ACODEC_PASS_MASK;
+				if (audioCodec > 0)
 				{
 					// We can do passthrough for this input.
-					nativeAudio.config.output.codec = nativeAudio.config.input.codec | NativeConstants.HB_ACODEC_PASS_FLAG;
+					//nativeAudio.config.output.codec = NativeConstants.HB_ACODEC_PASS_MASK | NativeConstants.HB_ACODEC_PASS_FLAG;
+					nativeAudio.config.output.codec = audioCodec | NativeConstants.HB_ACODEC_PASS_FLAG;
 				}
 				else
 				{

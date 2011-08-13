@@ -54,6 +54,8 @@ namespace HandBrake.Interop.HbLib
 		/// int
 		public int samplerate;
 
+		public int samples_per_frame;
+
 		/// int
 		public int bitrate;
 
@@ -98,6 +100,8 @@ namespace HandBrake.Interop.HbLib
 
 		/// int
 		public int samplerate;
+
+		public int samples_per_frame;
 
 		/// int
 		public int bitrate;

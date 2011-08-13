@@ -10,10 +10,10 @@
 
 namespace HandBrake.Interop.HbLib
 {
-    using System;
-    using System.Runtime.InteropServices;
+	using System;
+	using System.Runtime.InteropServices;
 
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 	public struct hb_title_s
 	{
 		/// Anonymous_990d28ea_6cf3_4fbc_8143_4df9513e9550
@@ -55,6 +55,8 @@ namespace HandBrake.Interop.HbLib
 
 		/// int
 		public int angle_count;
+
+		public IntPtr opaque_priv;
 
 		/// int
 		public int hours;
