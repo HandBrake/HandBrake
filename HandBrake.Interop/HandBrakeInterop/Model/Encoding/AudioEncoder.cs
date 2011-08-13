@@ -9,9 +9,9 @@
 
 namespace HandBrake.Interop.Model.Encoding
 {
-    using System.ComponentModel.DataAnnotations;
+	using System.ComponentModel.DataAnnotations;
 
-    public enum AudioEncoder
+	public enum AudioEncoder
 	{
 		[Display(Name = "AAC (faac)")]
 		Faac = 0,
@@ -22,7 +22,7 @@ namespace HandBrake.Interop.Model.Encoding
 		[Display(Name = "AC3 (ffmpeg)")]
 		Ac3,
 
-		[Display(Name = "Passthrough (AC3/DTS)")]
+		[Display(Name = "Passthrough")]
 		Passthrough,
 
 		[Display(Name = "Passthrough (AC3)")]
