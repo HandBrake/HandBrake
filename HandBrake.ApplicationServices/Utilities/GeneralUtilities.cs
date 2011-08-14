@@ -140,7 +140,7 @@ namespace HandBrake.ApplicationServices.Utilities
         {
             get
             {
-                return Process.GetProcessesByName("HandBrake").Length > 0 ? true : false;
+                return Process.GetProcessesByName("HandBrake").Length > 1 ? true : false;
             }
         }
 
