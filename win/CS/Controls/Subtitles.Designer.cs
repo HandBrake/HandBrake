@@ -205,6 +205,7 @@
             this.srt_offset.Name = "srt_offset";
             this.srt_offset.Size = new System.Drawing.Size(58, 21);
             this.srt_offset.TabIndex = 79;
+            this.toolTip.SetToolTip(this.srt_offset, "Adjust the offset in milliseconds between video and srt timestamps");
             this.srt_offset.ValueChanged += new System.EventHandler(this.SrtOffsetValueChanged);
             // 
             // srt_lang

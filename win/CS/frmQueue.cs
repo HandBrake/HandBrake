@@ -532,6 +532,26 @@ namespace Handbrake
             DeleteSelectedItems();
         }
 
+        /// <summary>
+        /// Clear down the Queue
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The EventArgs.
+        /// </param>
+        private void mnuClearAll_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show(
+                        "Are you sure you wish to clear down the queue?",
+                        "Clear the Queue", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                queue.QueueManager.Clear();
+            }
+        }
+
         /* Keyboard Shortcuts */
 
         /// <summary>

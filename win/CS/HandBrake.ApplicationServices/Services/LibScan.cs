@@ -161,16 +161,14 @@ namespace HandBrake.ApplicationServices.Services
         {
             try
             {
-                // TODO Support Preview Count
-
                 IsScanning = true;
                 if (this.ScanStared != null)
                     this.ScanStared(this, new EventArgs());
 
                 if (title != 0)
-                    instance.StartScan(sourcePath.ToString(), 10, title);
+                    instance.StartScan(sourcePath.ToString(), previewCount, title);
                 else
-                    instance.StartScan(sourcePath.ToString(), 10);
+                    instance.StartScan(sourcePath.ToString(), previewCount);
             }
             catch (Exception exc)
             {

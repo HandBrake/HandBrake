@@ -69,6 +69,11 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         void ClearCompleted();
 
         /// <summary>
+        /// Clear down all Queue Items
+        /// </summary>
+        void Clear();
+
+        /// <summary>
         /// Get the first job on the queue for processing.
         /// This also removes the job from the Queue and sets the LastProcessedJob
         /// </summary>

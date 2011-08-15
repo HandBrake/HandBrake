@@ -198,6 +198,19 @@ namespace HandBrake.ApplicationServices.Services
         }
 
         /// <summary>
+        /// Clear down all Queue Items
+        /// </summary>
+        public void Clear()
+        {
+            List<QueueTask> deleteList = this.queue.ToList();
+            foreach (QueueTask item in deleteList)
+            {
+                this.queue.Remove(item);
+            }
+            this.InvokeQueueChanged(EventArgs.Empty);
+        }
+
+        /// <summary>
         /// Get the first job on the queue for processing.
         /// This also removes the job from the Queue and sets the LastProcessedJob
         /// </summary>
