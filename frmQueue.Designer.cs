@@ -66,9 +66,10 @@ namespace Handbrake
             this.mnu_Down = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_edit = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_Retry = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.mnu_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuClearCompleted = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lbl_encodesPending = new System.Windows.Forms.ToolStripStatusLabel();
             this.OpenFile = new System.Windows.Forms.OpenFileDialog();
@@ -78,7 +79,8 @@ namespace Handbrake
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.mnu_Retry = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuClearAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStrip1.SuspendLayout();
             this.mnu_queue.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -325,10 +327,12 @@ namespace Handbrake
             this.mnu_edit,
             this.mnu_Retry,
             this.toolStripSeparator4,
+            this.mnuClearAll,
             this.mnuClearCompleted,
+            this.toolStripSeparator5,
             this.mnu_delete});
             this.mnu_queue.Name = "mnu_queue";
-            this.mnu_queue.Size = new System.Drawing.Size(164, 148);
+            this.mnu_queue.Size = new System.Drawing.Size(164, 176);
             // 
             // mnu_up
             // 
@@ -356,17 +360,17 @@ namespace Handbrake
             this.mnu_edit.Text = "Edit";
             this.mnu_edit.Click += new System.EventHandler(this.MnuEditClick);
             // 
+            // mnu_Retry
+            // 
+            this.mnu_Retry.Name = "mnu_Retry";
+            this.mnu_Retry.Size = new System.Drawing.Size(163, 22);
+            this.mnu_Retry.Text = "Retry Encode";
+            this.mnu_Retry.Click += new System.EventHandler(this.mnu_Retry_Click);
+            // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(160, 6);
-            // 
-            // mnu_delete
-            // 
-            this.mnu_delete.Name = "mnu_delete";
-            this.mnu_delete.Size = new System.Drawing.Size(163, 22);
-            this.mnu_delete.Text = "Delete";
-            this.mnu_delete.Click += new System.EventHandler(this.MnuDeleteClick);
             // 
             // mnuClearCompleted
             // 
@@ -374,6 +378,13 @@ namespace Handbrake
             this.mnuClearCompleted.Size = new System.Drawing.Size(163, 22);
             this.mnuClearCompleted.Text = "Clear Completed";
             this.mnuClearCompleted.Click += new System.EventHandler(this.mnuClearCompleted_Click);
+            // 
+            // mnu_delete
+            // 
+            this.mnu_delete.Name = "mnu_delete";
+            this.mnu_delete.Size = new System.Drawing.Size(163, 22);
+            this.mnu_delete.Text = "Delete";
+            this.mnu_delete.Click += new System.EventHandler(this.MnuDeleteClick);
             // 
             // statusStrip1
             // 
@@ -477,12 +488,17 @@ namespace Handbrake
             this.panel1.Size = new System.Drawing.Size(15, 214);
             this.panel1.TabIndex = 0;
             // 
-            // mnu_Retry
+            // mnuClearAll
             // 
-            this.mnu_Retry.Name = "mnu_Retry";
-            this.mnu_Retry.Size = new System.Drawing.Size(163, 22);
-            this.mnu_Retry.Text = "Retry Encode";
-            this.mnu_Retry.Click += new System.EventHandler(this.mnu_Retry_Click);
+            this.mnuClearAll.Name = "mnuClearAll";
+            this.mnuClearAll.Size = new System.Drawing.Size(163, 22);
+            this.mnuClearAll.Text = "Clear All";
+            this.mnuClearAll.Click += new System.EventHandler(this.mnuClearAll_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(160, 6);
             // 
             // frmQueue
             // 
@@ -559,5 +575,7 @@ namespace Handbrake
         private System.Windows.Forms.ColumnHeader Status;
         private System.Windows.Forms.ToolStripMenuItem mnuClearCompleted;
         private System.Windows.Forms.ToolStripMenuItem mnu_Retry;
+        private System.Windows.Forms.ToolStripMenuItem mnuClearAll;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
     }
 }

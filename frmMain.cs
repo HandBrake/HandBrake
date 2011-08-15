@@ -310,7 +310,6 @@ namespace Handbrake
         private void changePresetLabel(object sender, EventArgs e)
         {
             labelPreset.Text = "Output Settings (Preset: Custom)";
-            this.currentlySelectedPreset = null;
         }
 
         private static void frmMain_DragEnter(object sender, DragEventArgs e)
