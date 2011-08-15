@@ -322,12 +322,10 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
             // If our preset does not contain a drc or gain value set it to a default of 0.0
             if (![dict objectForKey: @"AudioTrackDRCSlider"])
-
             {
                 [dict setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackDRCSlider"];
             }
             if (![dict objectForKey: @"AudioTrackGainSlider"])
-
             {
                 [dict setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackGainSlider"];
             }
