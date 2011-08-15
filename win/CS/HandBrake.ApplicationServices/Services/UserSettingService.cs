@@ -155,6 +155,7 @@ namespace HandBrake.ApplicationServices.Services
             userSettings[UserSettingConstants.SendFile] = false;
             userSettings[UserSettingConstants.MinScanDuration] = 10;
             userSettings[UserSettingConstants.HandBrakeBuild] = 0;
+            userSettings[UserSettingConstants.HandBrakeVersion] = string.Empty;
         }
     }
 }
