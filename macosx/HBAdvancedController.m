@@ -599,22 +599,16 @@
             {
                 [[fX264optPsyRDSlider animator] setHidden:YES];
                 [[fX264optPsyRDLabel animator] setHidden:YES];
-                if ( [fX264optPsyRDSlider floatValue] < 1.0 )
-                {
-                    [fX264optPsyRDSlider setFloatValue:1.0];
-                    [[fX264optPsyRDSlider cell] performClick:self];            
-                }
+                [fX264optPsyRDSlider setFloatValue:1.0];
+                [[fX264optPsyRDSlider cell] performClick:self];
             }
 
             if( [fX264optPsyTrellisSlider isHidden] == false)
             {
                 [[fX264optPsyTrellisSlider animator] setHidden:YES];
                 [[fX264optPsyTrellisLabel animator] setHidden:YES];
-                if ( [fX264optPsyTrellisSlider floatValue] > 0.0 )
-                {
-                    [fX264optPsyTrellisSlider setFloatValue:0.0];
-                    [[fX264optPsyTrellisSlider cell] performClick:self];
-                }
+                [fX264optPsyTrellisSlider setFloatValue:0.0];
+                [[fX264optPsyTrellisSlider cell] performClick:self];
             }
         }
         else
