@@ -131,7 +131,7 @@ namespace Handbrake.Functions
                 query += " -t " + titleInfo[0];
             }
 
-            if (!UserSettingService.GetUserSettingBoolean(UserSettingConstants.DisableLibDvdNav) && mainWindow.drop_angle.Items.Count != 0)
+            if (!UserSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav) && mainWindow.drop_angle.Items.Count != 0)
                 query += " --angle " + mainWindow.drop_angle.SelectedItem;
 
             // Decide what part of the video we want to encode.
@@ -337,7 +337,7 @@ namespace Handbrake.Functions
             // Video Quality Setting
             if (mainWindow.radio_cq.Checked)
             {
-                double cqStep = UserSettingService.GetUserSettingDouble(UserSettingConstants.X264Step);
+                double cqStep = UserSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
                 double value;
                 switch (mainWindow.drp_videoEncoder.Text)
                 {
@@ -514,10 +514,10 @@ namespace Handbrake.Functions
             string query = string.Empty;
 
             // Verbosity Level
-            query += " --verbose=" + UserSettingService.GetUserSettingInt(UserSettingConstants.Verbosity);
+            query += " --verbose=" + UserSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity);
 
             // LibDVDNav
-            if (UserSettingService.GetUserSettingBoolean(UserSettingConstants.DisableLibDvdNav))
+            if (UserSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav))
                 query += " --no-dvdnav";
 
             return query;

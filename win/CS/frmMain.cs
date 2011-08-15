@@ -134,9 +134,9 @@ namespace Handbrake
             // Update the users config file with the CLI version data.
             Main.SetCliVersionData();
 
-            if (userSettingService.GetUserSettingString(UserSettingConstants.HandBrakeVersion).Contains("svn"))
+            if (userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion).Contains("svn"))
             {
-                this.Text += " " + userSettingService.GetUserSettingString(UserSettingConstants.HandBrakeVersion);
+                this.Text += " " + userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion);
             }
 
             // Check for new versions, if update checking is enabled
@@ -147,10 +147,11 @@ namespace Handbrake
                     // Set when the last update was
                     Settings.Default.lastUpdateCheckDate = DateTime.Now;
                     Settings.Default.Save();
-                    string url = this.userSettingService.GetUserSettingString(UserSettingConstants.HandBrakeBuild).EndsWith("1")
+                    string url = this.userSettingService.GetUserSetting<int>(UserSettingConstants.HandBrakeBuild).ToString().EndsWith("1")
                                                   ? Settings.Default.appcast_unstable
                                                   : Settings.Default.appcast;
-                    UpdateService.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDone), false, url, userSettingService.GetUserSettingInt(UserSettingConstants.HandBrakeBuild), Settings.Default.skipversion, userSettingService.GetUserSettingString(UserSettingConstants.HandBrakeVersion));
+                    UpdateService.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDone), false, url, userSettingService.GetUserSetting<int>(UserSettingConstants.HandBrakeBuild),
+                        Settings.Default.skipversion, userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion));
                 }
             }
 
@@ -212,7 +213,7 @@ namespace Handbrake
 
                 if (info.NewVersionAvailable)
                 {
-                    UpdateInfo updateWindow = new UpdateInfo(info, userSettingService.GetUserSettingString(UserSettingConstants.HandBrakeVersion), userSettingService.GetUserSettingString(UserSettingConstants.HandBrakeBuild));
+                    UpdateInfo updateWindow = new UpdateInfo(info, userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion), userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeBuild));
                     updateWindow.ShowDialog();
                 }
             }
@@ -453,10 +454,10 @@ namespace Handbrake
             lbl_updateCheck.Visible = true;
             Settings.Default.lastUpdateCheckDate = DateTime.Now;
             Settings.Default.Save();
-            string url = userSettingService.GetUserSettingString(UserSettingConstants.HandBrakeBuild).EndsWith("1")
+            string url = userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeBuild).EndsWith("1")
                                                   ? Settings.Default.appcast_unstable
                                                   : Settings.Default.appcast;
-            UpdateService.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDoneMenu), false, url, userSettingService.GetUserSettingInt(UserSettingConstants.HandBrakeBuild), Settings.Default.skipversion, userSettingService.GetUserSettingString(UserSettingConstants.HandBrakeVersion));
+            UpdateService.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDoneMenu), false, url, userSettingService.GetUserSetting<int>(UserSettingConstants.HandBrakeBuild), Settings.Default.skipversion, userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion));
         }
 
         /// <summary>
@@ -947,7 +948,7 @@ namespace Handbrake
         {
             if (btn_start.Text == "Stop")
             {
-                DialogResult result = !userSettingService.GetUserSettingBoolean(UserSettingConstants.ShowCLI)
+                DialogResult result = !userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowCLI)
                              ? MessageBox.Show(
                                  "Are you sure you wish to cancel the encode?\n\nPlease note: Stopping this encode will render the file unplayable. ",
                                  "Cancel Encode?",
@@ -964,7 +965,7 @@ namespace Handbrake
                     // Pause The Queue
                     this.queueProcessor.Pause();
 
-                    if (userSettingService.GetUserSettingBoolean(UserSettingConstants.ShowCLI))
+                    if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowCLI))
                         this.queueProcessor.EncodeService.SafelyStop();
                     else
                         this.queueProcessor.EncodeService.Stop();
@@ -1435,7 +1436,7 @@ namespace Handbrake
 
                 // Populate the Angles dropdown
                 drop_angle.Items.Clear();
-                if (!userSettingService.GetUserSettingBoolean(UserSettingConstants.DisableLibDvdNav))
+                if (!userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav))
                 {
                     drop_angle.Visible = true;
                     lbl_angle.Visible = true;
@@ -1790,11 +1791,11 @@ namespace Handbrake
                 case "H.264 (x264)":
                     slider_videoQuality.Minimum = 0;
                     slider_videoQuality.TickFrequency = 1;
-                    double cqStep = userSettingService.GetUserSettingDouble(UserSettingConstants.X264Step);
+                    double cqStep = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
                     double multiplier = 1.0 / cqStep;
                     double value = slider_videoQuality.Value * multiplier;
 
-                    slider_videoQuality.Maximum = (int)(51 / userSettingService.GetUserSettingDouble(UserSettingConstants.X264Step));
+                    slider_videoQuality.Maximum = (int)(51 / userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step));
 
                     if (value < slider_videoQuality.Maximum)
                         slider_videoQuality.Value = slider_videoQuality.Maximum - (int)value;
@@ -1861,7 +1862,7 @@ namespace Handbrake
         {
             if (cachedCqStep == 0)
             {
-                cachedCqStep = userSettingService.GetUserSettingDouble(UserSettingConstants.X264Step);
+                cachedCqStep = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
             }
 
             // Work out the current RF value.
@@ -1869,13 +1870,13 @@ namespace Handbrake
             double rfValue = 51.0 - slider_videoQuality.Value * cqStep;
 
             // Change the maximum value for the slider
-            slider_videoQuality.Maximum = (int)(51 / userSettingService.GetUserSettingDouble(UserSettingConstants.X264Step));
+            slider_videoQuality.Maximum = (int)(51 / userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step));
 
             // Reset the CQ slider to RF0
             slider_videoQuality.Value = slider_videoQuality.Maximum;
 
             // Reset the CQ slider back to the previous value as close as possible
-            double cqStepNew = userSettingService.GetUserSettingDouble(UserSettingConstants.X264Step);
+            double cqStepNew = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
             double rfValueCurrent = 51.0 - slider_videoQuality.Value * cqStepNew;
             while (rfValueCurrent < rfValue)
             {
@@ -1884,12 +1885,12 @@ namespace Handbrake
             }
 
             // Cache the CQ step for the next calculation
-            this.cachedCqStep = userSettingService.GetUserSettingDouble(UserSettingConstants.X264Step);
+            this.cachedCqStep = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
         }
 
         private void slider_videoQuality_Scroll(object sender, EventArgs e)
         {
-            double cqStep = userSettingService.GetUserSettingDouble(UserSettingConstants.X264Step);
+            double cqStep = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
             switch (drp_videoEncoder.Text)
             {
                 case "MPEG-4 (FFmpeg)":
@@ -2494,7 +2495,7 @@ namespace Handbrake
 
                 if (info.NewVersionAvailable)
                 {
-                    UpdateInfo updateWindow = new UpdateInfo(info, userSettingService.GetUserSettingString(UserSettingConstants.HandBrakeVersion), userSettingService.GetUserSettingString(UserSettingConstants.HandBrakeBuild));
+                    UpdateInfo updateWindow = new UpdateInfo(info, userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion), userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeBuild));
                     updateWindow.ShowDialog();
                 }
                 else

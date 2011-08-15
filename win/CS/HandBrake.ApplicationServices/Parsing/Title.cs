@@ -13,6 +13,8 @@ namespace HandBrake.ApplicationServices.Parsing
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.ApplicationServices.Services;
+    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model;
 
     using Size = System.Drawing.Size;
@@ -26,6 +28,11 @@ namespace HandBrake.ApplicationServices.Parsing
         /// The Culture Info
         /// </summary>
         private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
+
+        /// <summary>
+        /// The User Setting Service
+        /// </summary>
+        private static IUserSettingService userSettingService = new UserSettingService();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Title"/> class. 
@@ -151,7 +158,7 @@ namespace HandBrake.ApplicationServices.Parsing
             }
        
             // Multi-Angle Support if LibDvdNav is enabled
-            if (!Properties.Settings.Default.DisableLibDvdNav)
+            if (!userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav))
             {
                 m = Regex.Match(nextLine, @"  \+ angle\(s\) ([0-9])");
                 if (m.Success)

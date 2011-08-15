@@ -33,6 +33,11 @@ namespace HandBrake.ApplicationServices.Services
         private static readonly object logLock = new object();
 
         /// <summary>
+        /// The User Setting Service
+        /// </summary>
+        private IUserSettingService userSettingService = new UserSettingService();
+
+        /// <summary>
         /// The Start time of the current Encode;
         /// </summary>
         private DateTime startTime;
@@ -109,7 +114,7 @@ namespace HandBrake.ApplicationServices.Services
                 }
 
                 // Prvent the system from sleeping if the user asks
-                if (Properties.Settings.Default.PreventSleep)
+                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep) )
                 {
                     Win32.PreventSleep();
                 }
@@ -121,7 +126,7 @@ namespace HandBrake.ApplicationServices.Services
                 this.instance.StartEncode(encodeJob);
 
                 // Set the Process Priority
-                switch (Properties.Settings.Default.ProcessPriority)
+                switch (this.userSettingService.GetUserSetting<string>(UserSettingConstants.ProcessPriority))
                 {
                     case "Realtime":
                         Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
@@ -280,7 +285,7 @@ namespace HandBrake.ApplicationServices.Services
                 this.WindowsSeven.SetTaskBarProgressToNoProgress();
             }
 
-            if (Properties.Settings.Default.PreventSleep)
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep))
             {
                 Win32.AllowSleep();
             }

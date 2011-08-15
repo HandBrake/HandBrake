@@ -23,48 +23,18 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         void SetUserSetting(string name, object value);
 
         /// <summary>
-        /// Get an Integer type user setting
+        /// Get user setting for a given key.
         /// </summary>
         /// <param name="name">
-        /// The setting name
+        /// The name.
         /// </param>
+        /// <typeparam name="T">
+        /// The Type of the setting
+        /// </typeparam>
         /// <returns>
-        /// The settings value
+        /// The user setting
         /// </returns>
-        int GetUserSettingInt(string name);
-
-        /// <summary>
-        /// Get an String type user setting
-        /// </summary>
-        /// <param name="name">
-        /// The setting name
-        /// </param>
-        /// <returns>
-        /// The settings value
-        /// </returns>
-        string GetUserSettingString(string name);
-
-        /// <summary>
-        /// Get an Boolean type user setting
-        /// </summary>
-        /// <param name="name">
-        /// The setting name
-        /// </param>
-        /// <returns>
-        /// The settings value
-        /// </returns>
-        bool GetUserSettingBoolean(string name);
-
-        /// <summary>
-        /// Get an Double type user setting
-        /// </summary>
-        /// <param name="name">
-        /// The setting name
-        /// </param>
-        /// <returns>
-        /// The settings value
-        /// </returns>
-        double GetUserSettingDouble(string name);
+        T GetUserSetting<T>(string name);
 
         /// <summary>
         /// Get an StringCollection type user setting
@@ -76,6 +46,5 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// The settings value
         /// </returns>
         System.Collections.Specialized.StringCollection GetUserSettingStringCollection(string name);
-
     }
 }

@@ -40,6 +40,11 @@ namespace HandBrake.ApplicationServices.Services
         private static readonly XmlSerializer Ser = new XmlSerializer(typeof(List<Preset>));
 
         /// <summary>
+        /// The User Setting Service
+        /// </summary>
+        private IUserSettingService userSettingService = new UserSettingService();
+
+        /// <summary>
         /// The User Preset file
         /// </summary>
         private readonly string userPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\user_presets.xml";
@@ -257,7 +262,7 @@ namespace HandBrake.ApplicationServices.Services
                                     Category = category,
                                     Name = presetName[0].Replace("+", string.Empty).Trim(),
                                     Query = presetName[2],
-                                    Version = Properties.Settings.Default.HandBrakeVersion,
+                                    Version = this.userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion),
                                     CropSettings = pic,
                                     Description = string.Empty, // Maybe one day we will populate this.
                                     IsBuildIn = true
@@ -297,7 +302,7 @@ namespace HandBrake.ApplicationServices.Services
                 List<Preset> preset = this.presets.Where(p => p.IsBuildIn).ToList();
                 if (preset.Count > 0)
                 {
-                    if (preset[0].Version != Properties.Settings.Default.HandBrakeVersion)
+                    if (preset[0].Version != this.userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion))
                     {
                         this.UpdateBuiltInPresets();
                         return true;

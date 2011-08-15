@@ -26,6 +26,11 @@ namespace HandBrake.ApplicationServices.Services
         #region Private Variables
 
         /// <summary>
+        /// The User Setting Service
+        /// </summary>
+        private IUserSettingService userSettingService = new UserSettingService();
+
+        /// <summary>
         /// Gets The Process Handle
         /// </summary>
         private IntPtr processHandle;
@@ -102,7 +107,7 @@ namespace HandBrake.ApplicationServices.Services
                     }
                 }
 
-                if (Properties.Settings.Default.PreventSleep)
+                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep))
                 {
                     Win32.PreventSleep();
                 }
@@ -116,7 +121,7 @@ namespace HandBrake.ApplicationServices.Services
                     RedirectStandardOutput = true,
                     RedirectStandardError = enableLogging ? true : false,
                     UseShellExecute = false,
-                    CreateNoWindow = !Properties.Settings.Default.ShowCLI ? true : false
+                    CreateNoWindow = !this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowCLI) ? true : false
                 };
 
                 this.HbProcess = new Process { StartInfo = cliStart };
@@ -142,7 +147,7 @@ namespace HandBrake.ApplicationServices.Services
                 }
 
                 // Set the Process Priority
-                switch (Properties.Settings.Default.ProcessPriority)
+                switch (this.userSettingService.GetUserSetting<string>(UserSettingConstants.ProcessPriority))
                 {
                     case "Realtime":
                         this.HbProcess.PriorityClass = ProcessPriorityClass.RealTime;
@@ -253,7 +258,7 @@ namespace HandBrake.ApplicationServices.Services
                 this.WindowsSeven.SetTaskBarProgressToNoProgress();
             }
 
-            if (Properties.Settings.Default.PreventSleep)
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep))
             {
                 Win32.AllowSleep();
             }

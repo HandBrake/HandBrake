@@ -67,7 +67,7 @@ namespace Handbrake
                     // Going from major to major will require the user to reset.
                     // Going from svn to svn will attempt the upgrade.
                     UserSettingService service = new UserSettingService();
-                    string version = service.GetUserSettingString(UserSettingConstants.HandBrakeVersion);
+                    string version = service.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion);
                     if (version.Contains("svn"))
                     {
                         Settings.Default.Upgrade();

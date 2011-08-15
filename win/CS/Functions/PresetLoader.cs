@@ -307,7 +307,7 @@ namespace Handbrake.Functions
                     sliderValue = 32 - (int)value;
                     break;
                 case VideoEncoder.X264:
-                    double cqStep = UserSettingService.GetUserSettingDouble(UserSettingConstants.X264Step);
+                    double cqStep = UserSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
                     sliderValue = (int)((51.0 / cqStep) - (value / cqStep));
                     break;
                 case VideoEncoder.Theora:

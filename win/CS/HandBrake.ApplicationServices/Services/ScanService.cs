@@ -44,6 +44,11 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         StringBuilder header = GeneralUtilities.CreateCliLogHeader();
 
+        /// <summary>
+        /// The User Setting Service
+        /// </summary>
+        private IUserSettingService userSettingService = new UserSettingService();
+
         #endregion
 
         /// <summary>
@@ -190,13 +195,12 @@ namespace HandBrake.ApplicationServices.Services
                     extraArguments += " --previews " + previewCount;
                 }
 
-
-                if (Properties.Settings.Default.DisableLibDvdNav)
+                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav))
                 {
                     extraArguments += " --no-dvdnav";
                 }
 
-                extraArguments += string.Format(" --min-duration={0}", Properties.Settings.Default.MinTitleScanDuration);
+                extraArguments += string.Format(" --min-duration={0}", this.userSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration));
 
                 if (title > 0)
                 {
