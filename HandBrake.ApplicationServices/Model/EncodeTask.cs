@@ -11,7 +11,6 @@ namespace HandBrake.ApplicationServices.Model
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
 
-    using Anamorphic = HandBrake.ApplicationServices.Model.Encoding.Anamorphic;
     using OutputFormat = HandBrake.ApplicationServices.Model.Encoding.OutputFormat;
 
     /// <summary>

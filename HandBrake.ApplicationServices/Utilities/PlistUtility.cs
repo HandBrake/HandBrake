@@ -17,8 +17,6 @@ namespace HandBrake.ApplicationServices.Utilities
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.Interop.Model.Encoding;
 
-    using Anamorphic = HandBrake.ApplicationServices.Model.Encoding.Anamorphic;
-
     /// <summary>
     /// Plist Preset Converter
     /// </summary>

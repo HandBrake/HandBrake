@@ -48,24 +48,8 @@ namespace HandBrake.ApplicationServices.Functions
             EncodeJob job = new EncodeJob();
             EncodingProfile profile = new EncodingProfile();
             job.EncodingProfile = profile;
-           
 
-            switch (work.Anamorphic)
-            {
-                case Model.Encoding.Anamorphic.Custom:
-                    profile.Anamorphic = Interop.Model.Encoding.Anamorphic.Custom;
-                    break;
-                case Model.Encoding.Anamorphic.Strict:
-                    profile.Anamorphic = Interop.Model.Encoding.Anamorphic.Strict;
-                    break;
-                case Model.Encoding.Anamorphic.Loose:
-                    profile.Anamorphic = Interop.Model.Encoding.Anamorphic.Loose;
-                    break;
-                case Model.Encoding.Anamorphic.None:
-                    profile.Anamorphic = Interop.Model.Encoding.Anamorphic.None;
-                    break;
-            }
-
+            profile.Anamorphic = work.Anamorphic;
 
             profile.AudioEncodings = new List<AudioEncoding>();
             foreach (AudioTrack track in work.AudioTracks)
