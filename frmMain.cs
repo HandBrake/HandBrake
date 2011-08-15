@@ -454,7 +454,7 @@ namespace Handbrake
             lbl_updateCheck.Visible = true;
             Settings.Default.lastUpdateCheckDate = DateTime.Now;
             Settings.Default.Save();
-            string url = userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeBuild).EndsWith("1")
+            string url = userSettingService.GetUserSetting<int>(UserSettingConstants.HandBrakeBuild).ToString().EndsWith("1")
                                                   ? Settings.Default.appcast_unstable
                                                   : Settings.Default.appcast;
             UpdateService.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDoneMenu), false, url, userSettingService.GetUserSetting<int>(UserSettingConstants.HandBrakeBuild), Settings.Default.skipversion, userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion));
