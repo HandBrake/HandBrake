@@ -16,14 +16,11 @@ namespace HandBrake.ApplicationServices.Utilities
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
 
-    using Anamorphic = HandBrake.ApplicationServices.Model.Encoding.Anamorphic;
-
     /// <summary>
     /// Parse a CLI Query
     /// </summary>
     public class QueryParserUtility
     {
-
         /**
          * TODO
          * - Add support for PointToPointMode = Seconds or Frames
