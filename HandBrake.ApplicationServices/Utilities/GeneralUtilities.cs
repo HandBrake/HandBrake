@@ -14,12 +14,19 @@ namespace HandBrake.ApplicationServices.Utilities
 
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Services;
+    using HandBrake.ApplicationServices.Services.Interfaces;
 
     /// <summary>
     /// A Set of Static Utilites
     /// </summary>
     public class GeneralUtilities
     {
+        /// <summary>
+        /// The User Setting Service
+        /// </summary>
+        private static IUserSettingService userSettingService = new UserSettingService();
+
         /// <summary>
         /// The Default Log Directory
         /// </summary>
@@ -106,7 +113,7 @@ namespace HandBrake.ApplicationServices.Utilities
         {
             StringBuilder logHeader = new StringBuilder();
 
-            logHeader.AppendLine(String.Format("HandBrake {0} {1}", Properties.Settings.Default.HandBrakeVersion, Properties.Settings.Default.HandBrakeBuild));
+            logHeader.AppendLine(String.Format("HandBrake {0} {1}", userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion), userSettingService.GetUserSetting<int>(UserSettingConstants.HandBrakeBuild)));
             logHeader.AppendLine(String.Format("OS: {0}", Environment.OSVersion));
             logHeader.AppendLine(String.Format("CPU: {0}", SystemInfo.GetCpuCount));
             logHeader.Append(String.Format("Ram: {0} MB, ", SystemInfo.TotalPhysicalMemory));

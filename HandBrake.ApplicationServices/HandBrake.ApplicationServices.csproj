@@ -77,6 +77,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\SerializableDictionary.cs" />
     <Compile Include="Converters\EnumToDescConverter.cs" />
     <Compile Include="Exceptions\GeneralApplicationException.cs" />
     <Compile Include="EventArgs\EncodeCompletedEventArgs.cs" />

@@ -8,7 +8,6 @@ namespace HandBrake.ApplicationServices.Services.Base
     using System;
     using System.IO;
     using System.Text;
-    using System.Threading;
 
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Functions;
@@ -27,6 +26,11 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// A Lock for the filewriter
         /// </summary>
         private static readonly object fileWriterLock = new object();
+
+        /// <summary>
+        /// The User Setting Service
+        /// </summary>
+        private IUserSettingService userSettingService = new UserSettingService();
 
         /// <summary>
         /// Windows 7 API Pack wrapper
@@ -210,17 +214,17 @@ namespace HandBrake.ApplicationServices.Services.Base
                 File.Copy(tempLogFile, Path.Combine(logDir, encodeLogFile));
 
                 // Save a copy of the log file in the same location as the enocde.
-                if (Properties.Settings.Default.SaveLogWithVideo)
+                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogWithVideo))
                 {
                     File.Copy(tempLogFile, Path.Combine(encodeDestinationPath, encodeLogFile));
                 }
 
                 // Save a copy of the log file to a user specified location
-                if (Directory.Exists(Properties.Settings.Default.SaveLogCopyDirectory) &&
-                    Properties.Settings.Default.SaveLogToCopyDirectory)
+                if (Directory.Exists(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SaveLogCopyDirectory)) &&
+                    this.userSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogToCopyDirectory))
                 {
                     File.Copy(
-                        tempLogFile, Path.Combine(Properties.Settings.Default.SaveLogCopyDirectory, encodeLogFile));
+                        tempLogFile, Path.Combine(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SaveLogCopyDirectory), encodeLogFile));
                 }
             }
             catch (Exception)

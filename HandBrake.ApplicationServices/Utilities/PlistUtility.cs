@@ -15,6 +15,8 @@ namespace HandBrake.ApplicationServices.Utilities
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.ApplicationServices.Services;
+    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model.Encoding;
 
     /// <summary>
@@ -22,6 +24,11 @@ namespace HandBrake.ApplicationServices.Utilities
     /// </summary>
     public class PlistPresetHandler
     {
+        /// <summary>
+        /// The User Setting Service
+        /// </summary>
+        private static IUserSettingService userSettingService = new UserSettingService();
+
         /**
          * TODO:
          * - Update with the new vfr,pfr,cfr keys
@@ -540,7 +547,7 @@ namespace HandBrake.ApplicationServices.Utilities
             AddEncodeElement(xmlWriter, "PictureWidth", "integer", parsed.Width.ToString());
 
             // Preset Information
-            AddEncodeElement(xmlWriter, "PresetBuildNumber", "string", Properties.Settings.Default.HandBrakeBuild.ToString());
+            AddEncodeElement(xmlWriter, "PresetBuildNumber", "string", userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeBuild));
             AddEncodeElement(xmlWriter, "PresetDescription", "string", "No Description");
             AddEncodeElement(xmlWriter, "PresetName", "string", preset.Name);
             AddEncodeElement(xmlWriter, "Type", "integer", "1"); // 1 is user preset, 0 is built in

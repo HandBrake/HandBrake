@@ -84,18 +84,18 @@ namespace Handbrake
             }
 
             // On Encode Completeion Action
-            drp_completeOption.Text = userSettingService.GetUserSettingString("WhenCompleteAction");
+            drp_completeOption.Text = userSettingService.GetUserSetting<string>("WhenCompleteAction");
 
             // Growl.
-            if (userSettingService.GetUserSettingBoolean(UserSettingConstants.GrowlEncode))
+            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlEncode))
                 check_growlEncode.CheckState = CheckState.Checked;
 
-            if (userSettingService.GetUserSettingBoolean(UserSettingConstants.GrowlQueue))
+            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlQueue))
                 check_GrowlQueue.CheckState = CheckState.Checked;
 
-            check_sendFileTo.Checked = this.userSettingService.GetUserSettingBoolean(UserSettingConstants.SendFile);
-            lbl_sendFileTo.Text = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSettingString(UserSettingConstants.SendFileTo));
-            txt_SendFileArgs.Text = this.userSettingService.GetUserSettingString(UserSettingConstants.SendFileToArgs);
+            check_sendFileTo.Checked = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.SendFile);
+            lbl_sendFileTo.Text = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo));
+            txt_SendFileArgs.Text = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileToArgs);
 
             // #############################
             // Output Settings
@@ -177,23 +177,23 @@ namespace Handbrake
             // #############################
 
             // Priority level for encodes
-            drp_Priority.Text = userSettingService.GetUserSettingString(UserSettingConstants.ProcessPriority);
+            drp_Priority.Text = userSettingService.GetUserSetting<string>(UserSettingConstants.ProcessPriority);
 
-            check_preventSleep.Checked = userSettingService.GetUserSettingBoolean(UserSettingConstants.PreventSleep);
+            check_preventSleep.Checked = userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep);
 
             // Log Verbosity Level
-            cb_logVerboseLvl.SelectedIndex = userSettingService.GetUserSettingInt(UserSettingConstants.Verbosity);
+            cb_logVerboseLvl.SelectedIndex = userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity);
 
             // Save logs in the same directory as encoded files
-            if (userSettingService.GetUserSettingBoolean(UserSettingConstants.SaveLogWithVideo))
+            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogWithVideo))
                 check_saveLogWithVideo.CheckState = CheckState.Checked;
 
             // Save Logs in a specified path
-            if (userSettingService.GetUserSettingBoolean(UserSettingConstants.SaveLogToCopyDirectory))
+            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogToCopyDirectory))
                 check_logsInSpecifiedLocation.CheckState = CheckState.Checked;
 
             // The saved log path
-            text_logPath.Text = userSettingService.GetUserSettingString(UserSettingConstants.SaveLogCopyDirectory);
+            text_logPath.Text = userSettingService.GetUserSetting<string>(UserSettingConstants.SaveLogCopyDirectory);
 
             check_clearOldLogs.Checked = Properties.Settings.Default.clearOldLogs;
 
@@ -222,13 +222,13 @@ namespace Handbrake
                 check_disablePresetNotification.CheckState = CheckState.Checked;
 
             // Show CLI Window
-            check_showCliForInGUIEncode.Checked = userSettingService.GetUserSettingBoolean(UserSettingConstants.ShowCLI);
+            check_showCliForInGUIEncode.Checked = userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowCLI);
 
             // Set the preview count
             drop_previewScanCount.SelectedItem = Properties.Settings.Default.previewScanCount.ToString();
 
             // x264 step
-            string step = userSettingService.GetUserSettingDouble(UserSettingConstants.X264Step).ToString(new CultureInfo("en-US"));
+            string step = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step).ToString(new CultureInfo("en-US"));
             switch (step)
             {
                 case "1":
@@ -246,10 +246,10 @@ namespace Handbrake
             }
 
             // Min Title Length
-            ud_minTitleLength.Value = this.userSettingService.GetUserSettingInt(UserSettingConstants.MinScanDuration); 
+            ud_minTitleLength.Value = this.userSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration); 
 
             // Use Experimental dvdnav
-            if (userSettingService.GetUserSettingBoolean(UserSettingConstants.DisableLibDvdNav))
+            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav))
                 check_dvdnav.CheckState = CheckState.Checked;
 
             optionsWindowLoading = false;
