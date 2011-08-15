@@ -25,7 +25,7 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <summary>
         /// The User Setting Service
         /// </summary>
-        private static IUserSettingService userSettingService = new UserSettingService();
+        private static IUserSettingService userSettingService = ServiceManager.UserSettingService;
 
         /// <summary>
         /// The Default Log Directory

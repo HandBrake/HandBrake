@@ -45,7 +45,7 @@ namespace Handbrake
     {
         #region Private Varibles
         // Objects which may be used by one or more other objects *************
-        private IUserSettingService userSettingService = new UserSettingService();
+        private IUserSettingService userSettingService = ServiceManager.UserSettingService;
         private IQueueProcessor queueProcessor = new QueueProcessor(Program.InstanceId);
         private PresetService presetHandler = new PresetService();
 

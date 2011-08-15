@@ -6,6 +6,7 @@
 namespace HandBrake.ApplicationServices.Collections
 {
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
 
@@ -60,7 +61,16 @@ namespace HandBrake.ApplicationServices.Collections
                 reader.ReadEndElement();
 
                 reader.ReadStartElement("value");
-                TValue value = (TValue)valueSerializer.Deserialize(reader);
+                TValue value;
+                if (reader.Name.Contains("ArrayOfString"))
+                {
+                    XmlSerializer scSerializer = new XmlSerializer(typeof(StringCollection));
+                    value = (TValue)scSerializer.Deserialize(reader);
+                }
+                else
+                {
+                    value = (TValue)valueSerializer.Deserialize(reader);
+                }
                 reader.ReadEndElement();
 
                 this.Add(key, value);
@@ -92,8 +102,18 @@ namespace HandBrake.ApplicationServices.Collections
 
                 writer.WriteStartElement("value");
                 TValue value = this[key];
-                valueSerializer.Serialize(writer, value);
-                writer.WriteEndElement();
+
+                if (value.GetType() == typeof(StringCollection))
+                {
+                    XmlSerializer scSerializer = new XmlSerializer(typeof(StringCollection));
+                    scSerializer.Serialize(writer, value);
+                    writer.WriteEndElement();
+                }
+                else
+                {
+                    valueSerializer.Serialize(writer, value);
+                    writer.WriteEndElement();
+                }
 
                 writer.WriteEndElement();
             }

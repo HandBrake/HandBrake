@@ -13,6 +13,7 @@ namespace Handbrake
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Services;
+    using HandBrake.ApplicationServices.Services.Interfaces;
 
     using Handbrake.Properties;
     using Handbrake.ToolWindows;
@@ -66,7 +67,7 @@ namespace Handbrake
                     // So I'm going to only allow this for users using svn builds.
                     // Going from major to major will require the user to reset.
                     // Going from svn to svn will attempt the upgrade.
-                    UserSettingService service = new UserSettingService();
+                    IUserSettingService service = ServiceManager.UserSettingService;
                     string version = service.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion);
                     if (version.Contains("svn"))
                     {

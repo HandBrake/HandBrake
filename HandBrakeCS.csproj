@@ -323,6 +323,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="handbrakepineapple.ico" />
+    <Content Include="defaultsettings.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\AssemblyInfo.cs.tmpl" />
     <None Include="Resources\logo64.png" />
     <None Include="Resources\logo128.png" />

@@ -9,6 +9,7 @@ namespace HandBrake.ApplicationServices.Services
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.IO;
+    using System.Windows.Forms;
     using System.Xml.Serialization;
 
     using HandBrake.ApplicationServices.Collections;
@@ -139,7 +140,22 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private void LoadDefaults()
         {
-            // TODO, maybe extract this out to a file.
+            string defaults = Path.Combine(Application.StartupPath, "defaultsettings.xml");
+            if (File.Exists(defaults))
+            {
+                using (StreamReader reader = new StreamReader(defaults))
+                {
+                    SerializableDictionary<string, object> data = (SerializableDictionary<string, object>)serializer.Deserialize(reader);
+                    this.userSettings = data;
+                }
+            }
+        }
+
+        /// <summary>
+        /// This is just a utility method for creating a defaults xml file. Don't use this!!!
+        /// </summary>
+        private void SetAllDefaults()
+        {
             userSettings = new SerializableDictionary<string, object>();
             userSettings[UserSettingConstants.X264Step] = 0.25;
             userSettings[UserSettingConstants.Verbosity] = 1;
@@ -156,6 +172,41 @@ namespace HandBrake.ApplicationServices.Services
             userSettings[UserSettingConstants.MinScanDuration] = 10;
             userSettings[UserSettingConstants.HandBrakeBuild] = 0;
             userSettings[UserSettingConstants.HandBrakeVersion] = string.Empty;
+            userSettings["updateStatus"] = true;
+            userSettings["tooltipEnable"] = true;
+            userSettings["defaultPreset"] = string.Empty;
+            userSettings["skipversion"] = 0;
+            userSettings["autoNaming"] = true;
+            userSettings["autoNamePath"] = string.Empty;
+            userSettings["appcast"] = "http://handbrake.fr/appcast.xml";
+            userSettings["appcast_unstable"] = "http://handbrake.fr/appcast_unstable.xml";
+            userSettings["autoNameFormat"] = "{source}-{title}";
+            userSettings["VLC_Path"] = "C:\\Program Files\\VideoLAN\\vlc\\vlc.exe";
+            userSettings["MainWindowMinimize"] = true;
+            userSettings["QueryEditorTab"] = false;
+            userSettings["presetNotification"] = false;
+            userSettings["trayIconAlerts"] = true;
+            userSettings["lastUpdateCheckDate"] = DateTime.Today;
+            userSettings["daysBetweenUpdateCheck"] = 7;
+            userSettings["useM4v"] = 0;
+            userSettings["PromptOnUnmatchingQueries"] = true;
+            userSettings["NativeLanguage"] = "Any";
+            userSettings["DubMode"] = 255;
+            userSettings["CliExeHash"] = string.Empty;
+            userSettings["previewScanCount"] = 10;
+            userSettings["clearOldLogs"] = true;
+            userSettings["AutoNameTitleCase"] = true;
+            userSettings["AutoNameRemoveUnderscore"] = true;
+            userSettings["ActivityWindowLastMode"] = 0;
+            userSettings["useClosedCaption"] = false;
+            userSettings["batchMinDuration"] = 35;
+            userSettings["batchMaxDuration"] = 65;
+            userSettings["defaultPlayer"] = false;
+            userSettings["SelectedLanguages"] = new StringCollection();
+            userSettings["DubModeAudio"] = 0;
+            userSettings["DubModeSubtitle"] = 0;
+            userSettings["addOnlyOneAudioPerLanguage"] = true;
+            userSettings["MinTitleLength"] = 10;
         }
     }
 }

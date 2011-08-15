@@ -35,7 +35,7 @@ namespace Handbrake.Functions
         /// </summary>
         private static readonly XmlSerializer Ser = new XmlSerializer(typeof(List<QueueTask>));
 
-        private static readonly IUserSettingService UserSettingService = new UserSettingService();
+        private static readonly IUserSettingService UserSettingService = ServiceManager.UserSettingService;
 
         /// <summary>
         /// Set's up the DataGridView on the Chapters tab (frmMain)

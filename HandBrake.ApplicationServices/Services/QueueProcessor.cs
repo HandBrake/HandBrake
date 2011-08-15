@@ -23,7 +23,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// The User Setting Service
         /// </summary>
-        private static IUserSettingService userSettingService = new UserSettingService();
+        private static IUserSettingService userSettingService = ServiceManager.UserSettingService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QueueProcessor"/> class.
