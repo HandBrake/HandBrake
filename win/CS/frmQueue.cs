@@ -50,7 +50,7 @@ namespace Handbrake
         /// <summary>
         /// The User setting service
         /// </summary>
-        private readonly IUserSettingService userSettingService = new UserSettingService();
+        private readonly IUserSettingService userSettingService = ServiceManager.UserSettingService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="frmQueue"/> class.

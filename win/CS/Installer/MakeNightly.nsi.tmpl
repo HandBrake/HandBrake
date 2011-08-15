@@ -138,6 +138,7 @@ Section "Handbrake" SEC01
   File "HandBrakeInterop.dll"
   File "SplitButton.dll"
   File "Ookii.Dialogs.Wpf.dll"
+  File "defaultsettings.xml"
 
   ; Copy the standard doc set into the doc folder
   SetOutPath "$INSTDIR\doc"
@@ -193,6 +194,7 @@ Section Uninstall
   Delete "$INSTDIR\HandBrakeInterop.dll"
   Delete "$INSTDIR\SplitButton.dll"
   Delete "$INSTDIR\Ookii.Dialogs.Wpf.dll"
+  Delete "$INSTDIR\defaultsettings.dll"
 
   Delete "$INSTDIR\doc\AUTHORS"
   Delete "$INSTDIR\doc\COPYING"

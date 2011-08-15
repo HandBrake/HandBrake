@@ -17,7 +17,7 @@ namespace Handbrake
     /// </summary>
     public partial class frmAbout : Form
     {
-        IUserSettingService userSettingService = new UserSettingService();
+        IUserSettingService userSettingService = ServiceManager.UserSettingService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="frmAbout"/> class.

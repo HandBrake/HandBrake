@@ -11,7 +11,6 @@ namespace Handbrake.Functions
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
-    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model.Encoding;
 
@@ -22,7 +21,10 @@ namespace Handbrake.Functions
     /// </summary>
     public class PresetLoader
     {
-        private static readonly IUserSettingService UserSettingService = new UserSettingService();
+        /// <summary>
+        /// The User Setting Service.
+        /// </summary>
+        private static readonly IUserSettingService UserSettingService = ServiceManager.UserSettingService;
 
         /// <summary>
         /// This function takes in a Query which has been parsed by QueryParser and

@@ -30,7 +30,7 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// <summary>
         /// The User Setting Service
         /// </summary>
-        private IUserSettingService userSettingService = new UserSettingService();
+        private IUserSettingService userSettingService = ServiceManager.UserSettingService;
 
         /// <summary>
         /// Windows 7 API Pack wrapper

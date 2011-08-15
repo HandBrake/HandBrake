@@ -35,7 +35,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// The User Setting Service
         /// </summary>
-        private IUserSettingService userSettingService = new UserSettingService();
+        private IUserSettingService userSettingService = ServiceManager.UserSettingService;
 
         /// <summary>
         /// The Start time of the current Encode;

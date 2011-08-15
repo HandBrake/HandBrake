@@ -25,7 +25,7 @@ namespace Handbrake.Functions
     /// </summary>
     public class QueryGenerator
     {
-        private static readonly IUserSettingService UserSettingService = new UserSettingService();
+        private static readonly IUserSettingService UserSettingService = ServiceManager.UserSettingService;
 
         /// <summary>
         /// The Culture

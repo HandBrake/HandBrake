@@ -1,0 +1,411 @@
+<?xml version="1.0"?>
+<dictionary>
+  <item>
+    <key>
+      <string>X264Step</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:double" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">0.25</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>Verbosity</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">1</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>WhenCompleteAction</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">Do nothing</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>GrowlEncode</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>GrowlQueue</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>ProcessPriority</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">Below Normal</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>PreventSleep</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">true</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>ShowCLI</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>SaveLogToCopyDirectory</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>SaveLogWithVideo</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>DisableLibDvdNav</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>SendFile</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>MinTitleScanDuration</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">10</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>HandBrakeBuild</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">2011080601</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>HandBrakeVersion</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">svn4156</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>updateStatus</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">true</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>tooltipEnable</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">true</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>defaultPreset</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance" />
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>skipversion</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">0</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>autoNaming</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">true</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>autoNamePath</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance" />
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>appcast</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">http://handbrake.fr/appcast.xml</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>appcast_unstable</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">http://handbrake.fr/appcast_unstable.xml</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>autoNameFormat</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">{source}-{title}</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>VLC_Path</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">C:\Program Files\VideoLAN\vlc\vlc.exe</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>MainWindowMinimize</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">true</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>QueryEditorTab</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>presetNotification</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>trayIconAlerts</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">true</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>lastUpdateCheckDate</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:dateTime" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">2011-08-15T00:00:00+01:00</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>daysBetweenUpdateCheck</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">7</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>useM4v</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">0</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>PromptOnUnmatchingQueries</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">true</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>NativeLanguage</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">Any</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>DubMode</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">255</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>CliExeHash</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance" />
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>previewScanCount</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">10</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>clearOldLogs</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">true</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>AutoNameTitleCase</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">true</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>AutoNameRemoveUnderscore</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">true</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>ActivityWindowLastMode</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">0</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>useClosedCaption</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>batchMinDuration</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">35</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>batchMaxDuration</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">65</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>defaultPlayer</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>SelectedLanguages</string>
+    </key>
+    <value>
+      <ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>DubModeAudio</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">0</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>DubModeSubtitle</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">0</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>addOnlyOneAudioPerLanguage</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">true</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>MinTitleLength</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">10</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>HandBrakeExeHash</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">RQuM6TVXbXkdih1PmGTf+h178Ho=</anyType>
+    </value>
+  </item>
+</dictionary>

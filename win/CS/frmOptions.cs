@@ -26,7 +26,7 @@ namespace Handbrake
     {
         private readonly frmMain mainWindow;
 
-        private readonly IUserSettingService userSettingService = new UserSettingService();
+        private readonly IUserSettingService userSettingService = ServiceManager.UserSettingService;
         private bool optionsWindowLoading = true;
 
         public frmOptions(frmMain mw)

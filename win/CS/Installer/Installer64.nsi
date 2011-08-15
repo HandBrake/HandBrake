@@ -138,6 +138,7 @@ Section "Handbrake" SEC01
   File "HandBrakeInterop.dll"
   File "SplitButton.dll"
   File "Ookii.Dialogs.Wpf.dll"
+  File "defaultsettings.xml"
 
   ;File "Caliburn.Castle.dll"
   ;File "Caliburn.Core.dll"
@@ -201,6 +202,7 @@ Section Uninstall
   Delete "$INSTDIR\Microsoft.WindowsAPICodePack.dll"
   Delete "$INSTDIR\HandBrakeInterop.dll"
   Delete "$INSTDIR\SplitButton.dll"
+  Delete "$INSTDIR\defaultsettings.dll"
 
   Delete "$INSTDIR\Caliburn.Castle.dll"
   Delete "$INSTDIR\Caliburn.Core.dll"
