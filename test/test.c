@@ -398,6 +398,10 @@ static void PrintTitleInfo( hb_title_t * title )
                 title->vts, title->ttn, title->cell_start, title->cell_end,
                 title->block_count );
     }
+    else if( title->type == HB_BD_TYPE )
+    {
+        fprintf( stderr, "  + playlist: %05d.MPLS\n", title->playlist );
+    }
     if (title->angle_count > 1)
         fprintf( stderr, "  + angle(s) %d\n", title->angle_count );
     fprintf( stderr, "  + duration: %02d:%02d:%02d\n",

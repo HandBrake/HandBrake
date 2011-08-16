@@ -1946,16 +1946,30 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
                 g_free(tmp);
 			}
 		}
+		else if (title->type == HB_BD_TYPE)
+		{
+			if (title->duration != 0)
+			{
+				titles[ii] = g_strdup_printf("%d (%05d.MPLS) - %02dh%02dm%02ds",
+					title->index, title->playlist, title->hours, 
+					title->minutes, title->seconds);
+			}
+			else
+			{
+				titles[ii] = g_strdup_printf("%d (%05d.MPLS) - Unknown Length",
+					title->index, title->playlist);
+			}
+		}
 		else
 		{
 			if (title->duration != 0)
 			{
-				titles[ii]  = g_strdup_printf ("%d - %02dh%02dm%02ds",
+				titles[ii]  = g_strdup_printf("%d - %02dh%02dm%02ds",
 					title->index, title->hours, title->minutes, title->seconds);
 			}
 			else
 			{
-				titles[ii]  = g_strdup_printf ("%d - Unknown Length", 
+				titles[ii]  = g_strdup_printf("%d - Unknown Length",
 										title->index);
 			}
 		}

@@ -1894,10 +1894,20 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                     feature_title = i;
                 }
                 
-                [fSrcTitlePopUp addItemWithTitle: [NSString
-                                                   stringWithFormat: @"%@ %d - %02dh%02dm%02ds",
-                                                   currentSource, title->index, title->hours, title->minutes,
-                                                   title->seconds]];
+                if( title->type == HB_BD_TYPE )
+                {
+                    [fSrcTitlePopUp addItemWithTitle: [NSString
+                                                       stringWithFormat: @"%@ %d (%05d.MPLS) - %02dh%02dm%02ds",
+                                                       currentSource, title->index, title->playlist,
+                                                       title->hours, title->minutes, title->seconds]];
+                }
+                else
+                {
+                    [fSrcTitlePopUp addItemWithTitle: [NSString
+                                                       stringWithFormat: @"%@ %d - %02dh%02dm%02ds",
+                                                       currentSource, title->index,
+                                                       title->hours, title->minutes, title->seconds]];
+                }
             }
             
             /* if we are a stream, select the first title */

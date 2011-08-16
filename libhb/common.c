@@ -1049,6 +1049,7 @@ hb_title_t * hb_title_init( char * path, int index )
     t = calloc( sizeof( hb_title_t ), 1 );
 
     t->index         = index;
+    t->playlist      = -1;
     t->list_audio    = hb_list_init();
     t->list_chapter  = hb_list_init();
     t->list_subtitle = hb_list_init();

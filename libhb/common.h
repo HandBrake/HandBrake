@@ -594,6 +594,7 @@ struct hb_title_s
     char        path[1024];
     char        name[1024];
     int         index;
+    int         playlist;
     int         vts;
     int         ttn;
     int         cell_start;
