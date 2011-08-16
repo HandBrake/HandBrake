@@ -11,9 +11,6 @@ namespace HandBrake.ApplicationServices.Parsing
     using System.IO;
     using System.Text.RegularExpressions;
 
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Model.Encoding;
-    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model;
 
@@ -65,6 +62,11 @@ namespace HandBrake.ApplicationServices.Parsing
         /// Gets or sets The track number of this Title
         /// </summary>
         public int TitleNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets Playlist.
+        /// </summary>
+        public string Playlist { get; set; }
 
         /// <summary>
         /// Gets or sets the length in time of this Title
@@ -147,6 +149,14 @@ namespace HandBrake.ApplicationServices.Parsing
             if (m.Success)
             {
                 thisTitle.SourceName = nextLine.Replace("+ stream:", string.Empty).Trim();
+                nextLine = output.ReadLine();
+            }
+
+            // Playlist
+            m = Regex.Match(nextLine, @"^  \+ playlist:");
+            if (m.Success)
+            {
+                thisTitle.Playlist = nextLine.Replace("+ playlist:", string.Empty).Trim();
                 nextLine = output.ReadLine();
             }
 
@@ -257,7 +267,12 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <returns>A string representing this track in the format: {title #} (00:00:00)</returns>
         public override string ToString()
         {
-            return string.Format("{0} ({1:00}:{2:00}:{3:00})", TitleNumber, Duration.Hours, Duration.Minutes, Duration.Seconds);
+            if (!string.IsNullOrEmpty(this.Playlist))
+            {
+                this.Playlist = string.Format(" {0}", this.Playlist);
+            }
+
+            return string.Format("{0}{1} ({2:00}:{3:00}:{4:00})", TitleNumber, Playlist, Duration.Hours, Duration.Minutes, Duration.Seconds);
         }
     }
 }
