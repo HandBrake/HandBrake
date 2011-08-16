@@ -614,6 +614,9 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                   hb_log( "Warning: Could not read data for preview %d, skipped", i + 1 );
                   goto skip_preview;
               }
+              int count = hb_stream_recovery_count( data->stream );
+              if ( count )
+                vidskip = count - 1;
             }
             else
             {

@@ -48,7 +48,7 @@ static const stream2codec_t st2codec[256] = {
     st(0x03, A, HB_ACODEC_FFMPEG,  CODEC_ID_MP2,   "MPEG1"),
     st(0x04, A, HB_ACODEC_FFMPEG,  CODEC_ID_MP2,   "MPEG2"),
     st(0x05, N, 0,                 0,              "ISO 13818-1 private section"),
-    st(0x06, U, 0,                 0,              "ISO 13818-1 PES private data"),
+    st(0x06, N, 0,                 0,              "ISO 13818-1 PES private data"),
     st(0x07, N, 0,                 0,              "ISO 13522 MHEG"),
     st(0x08, N, 0,                 0,              "ISO 13818-1 DSM-CC"),
     st(0x09, N, 0,                 0,              "ISO 13818-1 auxiliary"),
@@ -158,6 +158,7 @@ struct hb_stream_s
 #define         TS_HAS_RAP  (1 << 1)    // Random Access Point bit seen
 #define         TS_HAS_RSEI (1 << 2)    // "Restart point" SEI seen
     uint8_t ts_IDRs;            // # IDRs found during duration scan
+    int     recovery_frames;
 
 
     char    *path;
@@ -199,6 +200,13 @@ struct hb_stream_s
     } pmt_info;
 };
 
+typedef struct {
+    uint8_t *buf;
+    uint32_t val;
+    int pos;
+    int size;
+} bitbuf_t;
+
 /***********************************************************************
  * Local prototypes
  **********************************************************************/
@@ -216,6 +224,10 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title );
 hb_buffer_t *hb_ffmpeg_read( hb_stream_t *stream );
 static int ffmpeg_seek( hb_stream_t *stream, float frac );
 static int ffmpeg_seek_ts( hb_stream_t *stream, int64_t ts );
+static inline unsigned int get_bits(bitbuf_t *bb, int bits);
+static inline void set_buf(bitbuf_t *bb, uint8_t* buf, int bufsize, int clear);
+static inline int buf_eob(bitbuf_t *bb);
+static inline int read_ue(bitbuf_t *bb );
 
 /*
  * streams have a bunch of state that's learned during the scan. We don't
@@ -1033,6 +1045,95 @@ static void skip_to_next_pack( hb_stream_t *src_stream )
     }
 }
 
+static void CreateDecodedNAL( uint8_t **dst, int *dst_len,
+                              const uint8_t *src, int src_len )
+{
+    const uint8_t *end = &src[src_len];
+    uint8_t *d = malloc( src_len );
+
+    *dst = d;
+
+    if( d )
+    {
+        while( src < end )
+        {
+            if( src < end - 3 && src[0] == 0x00 && src[1] == 0x00 &&
+                src[2] == 0x01 )
+            {
+                // Next start code found
+                break;
+            }
+            if( src < end - 3 && src[0] == 0x00 && src[1] == 0x00 &&
+                src[2] == 0x03 )
+            {
+                *d++ = 0x00;
+                *d++ = 0x00;
+
+                src += 3;
+                continue;
+            }
+            *d++ = *src++;
+        }
+    }
+    *dst_len = d - *dst;
+}
+
+static int isRecoveryPoint( const uint8_t *buf, int len )
+{
+    uint8_t *nal;
+    int nal_len;
+    int ii, type, size, start;
+    int recovery_frames = 0;
+
+    CreateDecodedNAL( &nal, &nal_len, buf, len );
+
+    for ( ii = 0; ii+1 < nal_len; )
+    {
+        start = ii;
+        type = 0;
+        while ( ii+1 < nal_len )
+        {
+            type += nal[ii++];
+            if ( nal[ii-1] != 0xff )
+                break;
+        }
+        size = 0;
+        while ( ii+1 < nal_len )
+        {
+            size += nal[ii++];
+            if ( nal[ii-1] != 0xff )
+                break;
+        }
+
+        if ( ii + size + 1 > nal_len )
+        {
+            // Is it an SEI recovery point?
+            if ( type == 6 )
+            {
+                // Recovery point found, but can't parse the entire NAL.
+                // So return an arbitrary recovery_frames count.
+                recovery_frames = 3;
+            }
+            break;
+        }
+
+        // Is it an SEI recovery point?
+        if ( type == 6 )
+        {
+            bitbuf_t bb;
+            set_buf(&bb, nal+ii, size, 0);
+            int count = read_ue( &bb );
+            recovery_frames = count + 3;
+            break;
+        }
+
+        ii += size;
+    }
+
+    free( nal );
+    return recovery_frames;
+}
+
 static int isIframe( hb_stream_t *stream, const uint8_t *buf, int adapt_len )
 {
     // For mpeg2: look for a gop start or i-frame picture start
@@ -1042,7 +1143,8 @@ static int isIframe( hb_stream_t *stream, const uint8_t *buf, int adapt_len )
     uint32_t strid = 0;
 
 
-    if ( stream->ts[0].stream_type <= 2 )
+    int vid = index_of_video(stream);
+    if ( stream->ts[vid].stream_type <= 2 )
     {
         // This section of the code handles MPEG-1 and MPEG-2 video streams
         for (i = 13 + adapt_len; i < 188; i++)
@@ -1076,7 +1178,7 @@ static int isIframe( hb_stream_t *stream, const uint8_t *buf, int adapt_len )
         // didn't find an I-frame
         return 0;
     }
-    if ( stream->ts[0].stream_type == 0x1b )
+    if ( stream->ts[vid].stream_type == 0x1b )
     {
         // we have an h.264 stream 
         for (i = 13 + adapt_len; i < 188; i++)
@@ -1087,14 +1189,23 @@ static int isIframe( hb_stream_t *stream, const uint8_t *buf, int adapt_len )
                 // we found a start code - remove the ref_idc from the nal type
                 uint8_t nal_type = strid & 0x1f;
                 if ( nal_type == 0x05 )
+                {
                     // h.264 IDR picture start
                     return 1;
+                }
+                else if ( nal_type == 0x06 )
+                {
+                    int off = i + 1;
+                    int recovery_frames = isRecoveryPoint( buf+off, 188-off );
+                    if ( recovery_frames )
+                        return recovery_frames;
+                }
             }
         }
         // didn't find an I-frame
         return 0;
     }
-    if ( stream->ts[0].stream_type == 0xea )
+    if ( stream->ts[vid].stream_type == 0xea )
     {
         // we have an vc1 stream 
         for (i = 13 + adapt_len; i < 188; i++)
@@ -1297,6 +1408,23 @@ static struct pts_pos hb_sample_pts(hb_stream_t *stream, uint64_t fpos)
                 ++stream->ts_IDRs;
             }
         }
+        pp.pos = ftello(stream->file_handle);
+        if ( !stream->ts_IDRs )
+        {
+            // Scan a little more to see if we will stumble upon one
+            int ii;
+            for ( ii = 0; ii < 10; ii++ )
+            {
+                buf = hb_ts_stream_getPEStype( stream, pid, &adapt_len );
+                if ( buf == NULL )
+                    break;
+                if ( isIframe( stream, buf, adapt_len ) )
+                {
+                    ++stream->ts_IDRs;
+                    break;
+                }
+            }
+        }
     }
     else
     {
@@ -1308,8 +1436,8 @@ static struct pts_pos hb_sample_pts(hb_stream_t *stream, uint64_t fpos)
             skip_to_next_pack( stream );
         }
         pp.pts = hb_ps_stream_getVideoPTS( stream );
+        pp.pos = ftello(stream->file_handle);
     }
-    pp.pos = ftello(stream->file_handle);
     return pp;
 }
 
@@ -1583,19 +1711,10 @@ int hb_stream_seek( hb_stream_t * stream, float f )
         // forwards to the next transport stream packet.
         hb_ts_stream_reset(stream);
         align_to_next_packet(stream);
-        if ( f > 0 )
+        if ( stream->ts_IDRs )
         {
-            if ( stream->ts_IDRs )
-            {
-                // the stream has IDRs so look for one.
-                stream->need_keyframe = 1;
-            }
-        }
-        else
-        {
-            // we're at the beginning - say we have video sync so that we
-            // won't drop initial SPS & PPS data on an AVC stream.
-            stream->need_keyframe = 0;
+            // the stream has IDRs so look for one.
+            stream->need_keyframe = 1;
         }
     }
     else if ( stream->hb_stream_type == program )
@@ -2148,13 +2267,6 @@ static off_t align_to_next_packet(hb_stream_t *stream)
     return start - orig + pos;
 }
 
-
-typedef struct {
-    uint8_t *buf;
-    uint32_t val;
-    int pos;
-} bitbuf_t;
-
 static const unsigned int bitmask[] = {
     0x0,0x1,0x3,0x7,0xf,0x1f,0x3f,0x7f,0xff,
     0x1ff,0x3ff,0x7ff,0xfff,0x1fff,0x3fff,0x7fff,0xffff,
@@ -2165,15 +2277,16 @@ static inline void set_buf(bitbuf_t *bb, uint8_t* buf, int bufsize, int clear)
 {
     bb->pos = 0;
     bb->buf = buf;
+    bb->size = bufsize;
     bb->val = (bb->buf[0] << 24) | (bb->buf[1] << 16) |
               (bb->buf[2] << 8) | bb->buf[3];
     if (clear)
         memset(bb->buf, 0, bufsize);
 }
 
-static inline int buf_size(bitbuf_t *bb)
+static inline int buf_eob(bitbuf_t *bb)
 {
-    return bb->pos >> 3;
+    return bb->pos >> 3 == bb->size;
 }
 
 static inline unsigned int get_bits(bitbuf_t *bb, int bits)
@@ -2203,6 +2316,17 @@ static inline unsigned int get_bits(bitbuf_t *bb, int bits)
     }
 
     return val;
+}
+
+static inline int read_ue(bitbuf_t *bb )
+{
+    int ii = 0;
+
+    while( get_bits( bb, 1 ) == 0 && !buf_eob( bb ) && ii < 32 )
+    {
+        ii++;
+    }
+    return( ( 1 << ii) - 1 + get_bits( bb, ii ) );
 }
 
 // extract what useful information we can from the elementary stream
@@ -2757,6 +2881,13 @@ static void hb_ts_stream_append_pkt(hb_stream_t *stream, int idx, const uint8_t 
     stream->ts[idx].buf->size += len;
 }
 
+int hb_stream_recovery_count( hb_stream_t *stream )
+{
+    int count = stream->recovery_frames;
+    stream->recovery_frames = 0;
+    return count;
+}
+
 /***********************************************************************
  * hb_ts_stream_decode
  ***********************************************************************
@@ -2926,7 +3057,9 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt )
         {
             // we're looking for the first video frame because we're
             // doing random access during 'scan'
-            if ( curstream != video_index || !isIframe( stream, pkt, adapt_len ) )
+            if ( curstream == video_index )
+                stream->recovery_frames = isIframe( stream, pkt, adapt_len );
+            if ( curstream != video_index || !stream->recovery_frames )
             {
                 // not the video stream or didn't find an I frame
                 // but we'll only wait 255 video frames for an I frame.

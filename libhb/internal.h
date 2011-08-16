@@ -264,6 +264,7 @@ int          hb_stream_seek( hb_stream_t *, float );
 int          hb_stream_seek_ts( hb_stream_t * stream, int64_t ts );
 int          hb_stream_seek_chapter( hb_stream_t *, int );
 int          hb_stream_chapter( hb_stream_t * );
+int          hb_stream_recovery_count( hb_stream_t * );
 
 hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt );
 
