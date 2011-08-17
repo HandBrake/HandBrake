@@ -126,18 +126,12 @@
 - (void)windowWillClose:(NSNotification *)aNotification
 {
     /* Upon Closing the picture window, we make sure we clean up any
-     * preview movie that might be playing
+     * preview movie that might be playing or encoding
      */
-    hb_stop( fPreviewLibhb );
-    isEncoding = NO;
-    // Show the picture view
-    [fPictureView setHidden:NO];
-    [fMovieView pause:nil];
+    [self pictureSliderChanged:nil];
     [fMovieTimer invalidate];
     [fMovieTimer release];
-    [fMovieView setHidden:YES];
-	[fMovieView setMovie:nil];
-
+    
     hudTimerSeconds = 0;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"PreviewWindowIsOpen"];
 }
@@ -443,6 +437,9 @@
 
 - (IBAction) pictureSliderChanged: (id) sender
 {
+    /* Run cancelCreateMoviePreview in case a preview is being encoded and then cancel if so */
+    [self cancelCreateMoviePreview:nil];
+    
     // Show the picture view
     [fPictureView setHidden:NO];
     [fMovieView pause:nil];
