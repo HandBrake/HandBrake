@@ -9,15 +9,18 @@ namespace Handbrake.Controls
     using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Drawing;
     using System.Linq;
     using System.Windows.Forms;
 
+    using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
     using Handbrake.ToolWindows;
@@ -31,6 +34,10 @@ namespace Handbrake.Controls
         private readonly BindingList<AudioTrack> audioTracks = new BindingList<AudioTrack>();
         private const string Passthru = "Passthru";
         private AdvancedAudio advancedAudio = new AdvancedAudio();
+        /// <summary>
+        /// The User Setting Service.
+        /// </summary>
+        private readonly IUserSettingService UserSettingService = ServiceManager.UserSettingService;
         #endregion
 
         #region Constructor and Events
@@ -437,7 +444,7 @@ namespace Handbrake.Controls
                         continue;
                     }
 
-                    if (Properties.Settings.Default.addOnlyOneAudioPerLanguage && currentTrack.TrackDisplay.Contains(sourceTrack.Language))
+                    if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AddOnlyOneAudioPerLanguage) && currentTrack.TrackDisplay.Contains(sourceTrack.Language))
                     {
                         foundTrack = true;
                         continue;
@@ -586,7 +593,7 @@ namespace Handbrake.Controls
             }
 
             // Handle Preferred Language
-            if (Properties.Settings.Default.NativeLanguage == "Any")
+            if (this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage) == "Any")
             {
                 drp_audioTrack.SelectedIndex = 0;
                 foreach (AudioTrack track in this.audioTracks)
@@ -603,7 +610,7 @@ namespace Handbrake.Controls
             {
                 foreach (Audio item in drp_audioTrack.Items)
                 {
-                    if (item.Language.Contains(Properties.Settings.Default.NativeLanguage))
+                    if (item.Language.Contains(this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage)))
                     {
                         drp_audioTrack.SelectedItem = item;
                         break;
@@ -624,11 +631,11 @@ namespace Handbrake.Controls
             Dictionary<String, ArrayList> languageIndex = new Dictionary<String, ArrayList>();
 
             // Now add any additional Langauges tracks on top of the presets tracks.
-            int mode = Properties.Settings.Default.DubModeAudio;
+            int mode = this.UserSettingService.GetUserSetting<int>(UserSettingConstants.DubModeAudio);
             ArrayList languageOrder = new ArrayList();    // This is used to keep the Prefered Language in the front and the other languages in order. TODO this is no longer required, refactor this.
             if (mode > 0)
             {
-                foreach (string item in Properties.Settings.Default.SelectedLanguages)
+                foreach (string item in this.UserSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages))
                 {
                     if (!languageIndex.ContainsKey(item))
                     {
@@ -646,7 +653,7 @@ namespace Handbrake.Controls
                         if (item.ToString().Contains(kvp.Key))
                         {
                             // Only the first Element if the "Only One Audio"-option is chosen.
-                            if (!Properties.Settings.Default.addOnlyOneAudioPerLanguage || kvp.Value.Count == 0)
+                            if (!this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AddOnlyOneAudioPerLanguage) || kvp.Value.Count == 0)
                             {
                                 kvp.Value.Add(i);
                             }

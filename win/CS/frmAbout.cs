@@ -26,8 +26,8 @@ namespace Handbrake
         {
             InitializeComponent();
 
-            string nightly = userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion).Contains("svn") ? " (SVN / Nightly Build)" : string.Empty;
-            lbl_GUIBuild.Text = userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion) + " (" + userSettingService.GetUserSetting<int>(UserSettingConstants.HandBrakeBuild) + ") " + nightly;
+            string nightly = userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion).Contains("svn") ? " (SVN / Nightly Build)" : string.Empty;
+            lbl_GUIBuild.Text = userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion) + " (" + userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild) + ") " + nightly;
         }
 
         /// <summary>

@@ -12,7 +12,6 @@ namespace Handbrake
 
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Exceptions;
-    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     using Handbrake.Properties;
@@ -57,34 +56,8 @@ namespace Handbrake
                 return;
             }
 
-            // Attempt to upgrade / keep the users settings between versions
-            try
-            {
-                if (Settings.Default.UpdateRequired)
-                {
-                    // Upgrading user settings seems to be problematic from 0.9.5 -> Current, 
-                    // Seems to be seeing user.config corrupation from time to time.
-                    // So I'm going to only allow this for users using svn builds.
-                    // Going from major to major will require the user to reset.
-                    // Going from svn to svn will attempt the upgrade.
-                    IUserSettingService service = ServiceManager.UserSettingService;
-                    string version = service.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion);
-                    if (version.Contains("svn"))
-                    {
-                        Settings.Default.Upgrade();
-                        Settings.Default.UpdateRequired = false;
-                        Settings.Default.Save();
-                    }
-
-                    // Re-detect the CLI version data.
-                    Functions.Main.SetCliVersionData();
-                }
-            }
-            catch (Exception)
-            {
-                Functions.Main.RecoverFromCorruptedLocalApplicationConfig();
-                return;
-            }
+            // Make sure the GUI knows what CLI version it's attached to.
+            Functions.Main.SetCliVersionData();
 
             // Check were not running on a screen that's going to cause some funnies to happen.
             Screen scr = Screen.PrimaryScreen;
@@ -97,7 +70,7 @@ namespace Handbrake
                     "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-            } 
+            }
             else
             {
                 string logDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\logs");
@@ -118,7 +91,7 @@ namespace Handbrake
         private static void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             try
-            {   
+            {
                 ExceptionWindow window = new ExceptionWindow();
 
                 if (e.ExceptionObject.GetType() == typeof(GeneralApplicationException))
@@ -135,7 +108,7 @@ namespace Handbrake
                 {
                     window.Setup("An Unknown Error has occured.", e.ExceptionObject.ToString());
                 }
-                window.ShowDialog();      
+                window.ShowDialog();
             }
             catch (Exception)
             {

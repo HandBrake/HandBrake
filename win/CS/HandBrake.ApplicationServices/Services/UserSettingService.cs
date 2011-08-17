@@ -104,6 +104,12 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private void Save()
         {
+            string directory = Path.GetDirectoryName(this.settingsFile);
+            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
             using (FileStream strm = new FileStream(this.settingsFile, FileMode.Create, FileAccess.Write))
             {
                 serializer.Serialize(strm, this.userSettings);
@@ -157,21 +163,21 @@ namespace HandBrake.ApplicationServices.Services
         private void SetAllDefaults()
         {
             userSettings = new SerializableDictionary<string, object>();
-            userSettings[UserSettingConstants.X264Step] = 0.25;
-            userSettings[UserSettingConstants.Verbosity] = 1;
-            userSettings[UserSettingConstants.WhenCompleteAction] = "Do Nothing";
-            userSettings[UserSettingConstants.GrowlEncode] = false;
-            userSettings[UserSettingConstants.GrowlQueue] = false;
-            userSettings[UserSettingConstants.ProcessPriority] = "Below Normal";
-            userSettings[UserSettingConstants.PreventSleep] = true;
-            userSettings[UserSettingConstants.ShowCLI] = false;
-            userSettings[UserSettingConstants.SaveLogToCopyDirectory] = false;
-            userSettings[UserSettingConstants.SaveLogWithVideo] = false;
-            userSettings[UserSettingConstants.DisableLibDvdNav] = false;
-            userSettings[UserSettingConstants.SendFile] = false;
-            userSettings[UserSettingConstants.MinScanDuration] = 10;
-            userSettings[UserSettingConstants.HandBrakeBuild] = 0;
-            userSettings[UserSettingConstants.HandBrakeVersion] = string.Empty;
+            userSettings[ASUserSettingConstants.X264Step] = 0.25;
+            userSettings[ASUserSettingConstants.Verbosity] = 1;
+            userSettings[ASUserSettingConstants.WhenCompleteAction] = "Do Nothing";
+            userSettings[ASUserSettingConstants.GrowlEncode] = false;
+            userSettings[ASUserSettingConstants.GrowlQueue] = false;
+            userSettings[ASUserSettingConstants.ProcessPriority] = "Below Normal";
+            userSettings[ASUserSettingConstants.PreventSleep] = true;
+            userSettings[ASUserSettingConstants.ShowCLI] = false;
+            userSettings[ASUserSettingConstants.SaveLogToCopyDirectory] = false;
+            userSettings[ASUserSettingConstants.SaveLogWithVideo] = false;
+            userSettings[ASUserSettingConstants.DisableLibDvdNav] = false;
+            userSettings[ASUserSettingConstants.SendFile] = false;
+            userSettings[ASUserSettingConstants.MinScanDuration] = 10;
+            userSettings[ASUserSettingConstants.HandBrakeBuild] = 0;
+            userSettings[ASUserSettingConstants.HandBrakeVersion] = string.Empty;
             userSettings["updateStatus"] = true;
             userSettings["tooltipEnable"] = true;
             userSettings["defaultPreset"] = string.Empty;

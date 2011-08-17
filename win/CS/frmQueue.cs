@@ -76,7 +76,7 @@ namespace Handbrake
             queue.EncodeService.EncodeStarted += this.queue_EncodeStarted;
             queue.EncodeService.EncodeCompleted += this.queue_EncodeEnded;
 
-            drp_completeOption.Text = userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction);
+            drp_completeOption.Text = userSettingService.GetUserSetting<string>(ASUserSettingConstants.WhenCompleteAction);
         }
 
         /// <summary>
@@ -745,7 +745,7 @@ namespace Handbrake
         /// </param>
         private void CompleteOptionChanged(object sender, EventArgs e)
         {
-            userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, drp_completeOption.Text);
+            userSettingService.SetUserSetting(ASUserSettingConstants.WhenCompleteAction, drp_completeOption.Text);
         }
 
         /// <summary>

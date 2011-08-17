@@ -201,7 +201,7 @@ namespace HandBrake.ApplicationServices.Services
             this.QueueManager.LastProcessedJob.Status = QueueItemStatus.Completed;
 
             // Growl
-            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlEncode))
+            if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.GrowlEncode))
                 GrowlCommunicator.Notify("Encode Completed",
                                          "Put down that cocktail...\nyour Handbrake encode is done.");
 
@@ -271,10 +271,10 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="file"> The file path</param>
         private static void SendToApplication(string file)
         {
-            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.SendFile) && !string.IsNullOrEmpty(userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo)))
+            if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SendFile) && !string.IsNullOrEmpty(userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileTo)))
             {
-                string args = string.Format("{0} \"{1}\"", userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileToArgs), file);
-                ProcessStartInfo vlc = new ProcessStartInfo(userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo), args);
+                string args = string.Format("{0} \"{1}\"", userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileToArgs), file);
+                ProcessStartInfo vlc = new ProcessStartInfo(userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileTo), args);
                 Process.Start(vlc);
             }
         }
@@ -285,13 +285,13 @@ namespace HandBrake.ApplicationServices.Services
         private static void Finish()
         {
             // Growl
-            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlQueue))
+            if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.GrowlQueue))
             {
                 GrowlCommunicator.Notify("Queue Completed", "Put down that cocktail...\nyour Handbrake queue is done.");
             }
 
             // Do something whent he encode ends.
-            switch (userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction))
+            switch (userSettingService.GetUserSetting<string>(ASUserSettingConstants.WhenCompleteAction))
             {
                 case "Shutdown":
                     Process.Start("Shutdown", "-s -t 60");

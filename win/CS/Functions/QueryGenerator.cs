@@ -20,6 +20,8 @@ namespace Handbrake.Functions
 
     using Handbrake.Model;
 
+    using UserSettingConstants = Handbrake.UserSettingConstants;
+
     /// <summary>
     /// Generate a CLI Query for HandBrakeCLI
     /// </summary>
@@ -131,7 +133,7 @@ namespace Handbrake.Functions
                 query += " -t " + titleInfo[0];
             }
 
-            if (!UserSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav) && mainWindow.drop_angle.Items.Count != 0)
+            if (!UserSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav) && mainWindow.drop_angle.Items.Count != 0)
                 query += " --angle " + mainWindow.drop_angle.SelectedItem;
 
             // Decide what part of the video we want to encode.
@@ -162,7 +164,7 @@ namespace Handbrake.Functions
                     query += string.Format(" --start-at frame:{0} --stop-at frame:{1}", mainWindow.drop_chapterStart.Text, calculatedDuration);
                     break;
                 case 3: // Preview
-                    query += " --previews " + Properties.Settings.Default.previewScanCount + " ";
+                    query += " --previews " + UserSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount) + " ";
                     query += " --start-at-preview " + preview;
                     query += " --stop-at duration:" + duration + " ";
                     break;
@@ -337,7 +339,7 @@ namespace Handbrake.Functions
             // Video Quality Setting
             if (mainWindow.radio_cq.Checked)
             {
-                double cqStep = UserSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
+                double cqStep = UserSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step);
                 double value;
                 switch (mainWindow.drp_videoEncoder.Text)
                 {
@@ -514,10 +516,10 @@ namespace Handbrake.Functions
             string query = string.Empty;
 
             // Verbosity Level
-            query += " --verbose=" + UserSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity);
+            query += " --verbose=" + UserSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity);
 
             // LibDVDNav
-            if (UserSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav))
+            if (UserSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav))
                 query += " --no-dvdnav";
 
             return query;

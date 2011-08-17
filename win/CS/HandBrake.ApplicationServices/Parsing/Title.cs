@@ -168,7 +168,7 @@ namespace HandBrake.ApplicationServices.Parsing
             }
        
             // Multi-Angle Support if LibDvdNav is enabled
-            if (!userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav))
+            if (!userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav))
             {
                 m = Regex.Match(nextLine, @"  \+ angle\(s\) ([0-9])");
                 if (m.Success)

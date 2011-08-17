@@ -13,6 +13,7 @@ namespace Handbrake
     using System.Threading;
     using System.Windows.Forms;
 
+    using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     using Handbrake.Functions;
@@ -36,6 +37,11 @@ namespace Handbrake
         /// The Scan Object
         /// </summary>
         private readonly IScan scan;
+
+        /// <summary>
+        /// The User Setting Service.
+        /// </summary>
+        private readonly IUserSettingService UserSettingService = ServiceManager.UserSettingService;
 
         /// <summary>
         /// The current position in the log file
@@ -122,8 +128,7 @@ namespace Handbrake
                     this.mode = setMode;
 
                     Array values = Enum.GetValues(typeof(ActivityLogMode));
-                    Properties.Settings.Default.ActivityWindowLastMode = (int)values.GetValue(Convert.ToInt32(setMode));
-                    Properties.Settings.Default.Save();
+                    this.UserSettingService.SetUserSetting(UserSettingConstants.ActivityWindowLastMode, (int)values.GetValue(Convert.ToInt32(setMode)));
 
                     this.Text = mode == ActivityLogMode.Scan
                                     ? "Activity Window (Scan Log)"
@@ -173,7 +178,8 @@ namespace Handbrake
                 else
                 {
                     // Otherwise, use the last mode the window was in.
-                    ActivityLogMode activitLogMode = (ActivityLogMode)Enum.ToObject(typeof(ActivityLogMode), Properties.Settings.Default.ActivityWindowLastMode);
+                    ActivityLogMode activitLogMode = (ActivityLogMode)Enum.ToObject(typeof(ActivityLogMode), 
+                        this.UserSettingService.GetUserSetting<int>(UserSettingConstants.ActivityWindowLastMode));
                     this.logSelector.SelectedIndex = activitLogMode == ActivityLogMode.Scan ? 0 : 1;
                 }
             }

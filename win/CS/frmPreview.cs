@@ -12,6 +12,7 @@ namespace Handbrake
     using System.Windows.Forms;
     using Functions;
 
+    using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -41,6 +42,11 @@ namespace Handbrake
         private string currentlyPlaying = string.Empty;
 
         /// <summary>
+        /// The User Setting Service.
+        /// </summary>
+        private static readonly IUserSettingService UserSettingService = ServiceManager.UserSettingService;
+
+        /// <summary>
         /// Update UI Delegate
         /// </summary>
         /// <param name="sender">
@@ -68,7 +74,7 @@ namespace Handbrake
             endPoint.SelectedIndex = 1;
 
             startPoint.Items.Clear();
-            for (int i = 1; i <= Properties.Settings.Default.previewScanCount; i++)
+            for (int i = 1; i <= UserSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount); i++)
             {
                 startPoint.Items.Add(i.ToString());
             }
@@ -78,7 +84,7 @@ namespace Handbrake
             encodeQueue.EncodeStarted += this.EncodeQueueEncodeStarted;
             encodeQueue.EncodeCompleted += this.EncodeQueueEncodeEnded;
 
-            defaultPlayer.Checked = Properties.Settings.Default.defaultPlayer;
+            defaultPlayer.Checked = UserSettingService.GetUserSetting<bool>(UserSettingConstants.DefaultPlayer);
         }
 
         #region Event Handlers
@@ -159,8 +165,7 @@ namespace Handbrake
 
         private void DefaultPlayerCheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.defaultPlayer = defaultPlayer.Checked;
-            Properties.Settings.Default.Save();
+            UserSettingService.SetUserSetting(UserSettingConstants.DefaultPlayer, defaultPlayer.Checked);
         }
         #endregion
 
@@ -244,11 +249,11 @@ namespace Handbrake
                         else vlcPath = Environment.GetEnvironmentVariable("ProgramFiles");
 
 
-                        if (!File.Exists(Properties.Settings.Default.VLC_Path))
+                        if (!File.Exists(UserSettingService.GetUserSetting<string>(UserSettingConstants.VLC_Path)))
                         {
                             if (File.Exists(vlcPath))
                             {
-                                Properties.Settings.Default.VLC_Path = "C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe";
+                                UserSettingService.SetUserSetting(UserSettingConstants.VLC_Path, "C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe");
                                 Properties.Settings.Default.Save(); // Save this new path if it does
                             }
                             else
@@ -262,9 +267,9 @@ namespace Handbrake
                             }
                         }
 
-                        if (File.Exists(Properties.Settings.Default.VLC_Path))
+                        if (File.Exists(UserSettingService.GetUserSetting<string>(UserSettingConstants.VLC_Path)))
                         {
-                            ProcessStartInfo vlc = new ProcessStartInfo(Properties.Settings.Default.VLC_Path, args);
+                            ProcessStartInfo vlc = new ProcessStartInfo(UserSettingService.GetUserSetting<string>(UserSettingConstants.VLC_Path), args);
                             Process.Start(vlc);
                         }
                     }

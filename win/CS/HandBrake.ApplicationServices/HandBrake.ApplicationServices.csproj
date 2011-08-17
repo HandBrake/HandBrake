@@ -145,7 +145,7 @@
     <Compile Include="Services\ScanService.cs" />
     <Compile Include="Services\UpdateService.cs" />
     <Compile Include="Services\UserSettingService.cs" />
-    <Compile Include="UserSettingConstants.cs" />
+    <Compile Include="ASUserSettingConstants.cs" />
     <Compile Include="Utilities\AppcastReader.cs" />
     <Compile Include="Utilities\GeneralUtilities.cs" />
     <Compile Include="Utilities\LanguageUtilities.cs" />

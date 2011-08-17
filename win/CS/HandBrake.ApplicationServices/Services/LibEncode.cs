@@ -114,7 +114,7 @@ namespace HandBrake.ApplicationServices.Services
                 }
 
                 // Prvent the system from sleeping if the user asks
-                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep) )
+                if (this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.PreventSleep) )
                 {
                     Win32.PreventSleep();
                 }
@@ -126,7 +126,7 @@ namespace HandBrake.ApplicationServices.Services
                 this.instance.StartEncode(encodeJob);
 
                 // Set the Process Priority
-                switch (this.userSettingService.GetUserSetting<string>(UserSettingConstants.ProcessPriority))
+                switch (this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.ProcessPriority))
                 {
                     case "Realtime":
                         Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
@@ -285,7 +285,7 @@ namespace HandBrake.ApplicationServices.Services
                 this.WindowsSeven.SetTaskBarProgressToNoProgress();
             }
 
-            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep))
+            if (this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.PreventSleep))
             {
                 Win32.AllowSleep();
             }
