@@ -7,11 +7,19 @@ namespace Handbrake.Controls
 {
     using System.Windows.Forms;
 
+    using HandBrake.ApplicationServices;
+    using HandBrake.ApplicationServices.Services.Interfaces;
+
     /// <summary>
     /// The x264 Panel
     /// </summary>
     public partial class AdvancedEncoderOpts : UserControl
     {
+        /// <summary>
+        /// The User Setting Service.
+        /// </summary>
+        private readonly IUserSettingService UserSettingService = ServiceManager.UserSettingService;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AdvancedEncoderOpts"/> class. 
         /// </summary>
@@ -19,7 +27,7 @@ namespace Handbrake.Controls
         {
             InitializeComponent();
 
-            if (Properties.Settings.Default.tooltipEnable)
+            if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.TooltipEnable))
                 ToolTip.Active = true;
         }
 
@@ -39,6 +47,9 @@ namespace Handbrake.Controls
             }
         }
 
+        /// <summary>
+        /// Sets a value indicating whether IsDisabled.
+        /// </summary>
         public bool IsDisabled
         {
             set

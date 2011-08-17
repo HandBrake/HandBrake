@@ -8,11 +8,14 @@ namespace Handbrake.Controls
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.IO;
     using System.Linq;
     using System.Windows.Forms;
 
+    using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>
@@ -36,6 +39,11 @@ namespace Handbrake.Controls
         /// The Subtitle List
         /// </summary>
         private readonly List<SubtitleTrack> subList = new List<SubtitleTrack>();
+
+        /// <summary>
+        /// The User Setting Service.
+        /// </summary>
+        private static readonly IUserSettingService UserSettingService = ServiceManager.UserSettingService;
 
         #endregion
 
@@ -207,18 +215,18 @@ namespace Handbrake.Controls
             ArrayList languageOrder = new ArrayList();
 
             // New DUB Settings
-            int mode = Properties.Settings.Default.DubModeSubtitle;
+            int mode = UserSettingService.GetUserSetting<int>(UserSettingConstants.DubModeSubtitle);
 
-            if (Properties.Settings.Default.NativeLanguage == "Any")
+            if (UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage) == "Any")
                 mode = 0;
 
             // Native Language is not 'Any', so initialising the Language Dictionary
             if (mode >= 3)
             {
-                languageIndex.Add(Properties.Settings.Default.NativeLanguage, new ArrayList());
-                languageOrder.Add(Properties.Settings.Default.NativeLanguage);
+                languageIndex.Add(UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage), new ArrayList());
+                languageOrder.Add(UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage));
 
-                foreach (string item in Properties.Settings.Default.SelectedLanguages)
+                foreach (string item in UserSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages))
                 {
                     if (!languageIndex.ContainsKey(item))
                     {
@@ -299,7 +307,7 @@ namespace Handbrake.Controls
             drp_subtitleTracks.SelectedIndex = 0;
 
             // Add Closed Captions if the user has the option enabled.
-            if (Properties.Settings.Default.useClosedCaption)
+            if (UserSettingService.GetUserSetting<bool>(UserSettingConstants.UseClosedCaption))
             {
                 foreach (object item in drp_subtitleTracks.Items)
                 {

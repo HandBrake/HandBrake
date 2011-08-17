@@ -134,29 +134,29 @@ namespace Handbrake
             // Update the users config file with the CLI version data.
             Main.SetCliVersionData();
 
-            if (userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion).Contains("svn"))
+            if (userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion).Contains("svn"))
             {
-                this.Text += " " + userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion);
+                this.Text += " " + userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion);
             }
 
             // Check for new versions, if update checking is enabled
-            if (Settings.Default.updateStatus)
+            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.UpdateStatus))
             {
-                if (DateTime.Now.Subtract(Settings.Default.lastUpdateCheckDate).TotalDays > Properties.Settings.Default.daysBetweenUpdateCheck)
+                if (DateTime.Now.Subtract(userSettingService.GetUserSetting<DateTime>(UserSettingConstants.LastUpdateCheckDate)).TotalDays 
+                    > userSettingService.GetUserSetting<int>(UserSettingConstants.DaysBetweenUpdateCheck))
                 {
                     // Set when the last update was
-                    Settings.Default.lastUpdateCheckDate = DateTime.Now;
-                    Settings.Default.Save();
-                    string url = this.userSettingService.GetUserSetting<int>(UserSettingConstants.HandBrakeBuild).ToString().EndsWith("1")
-                                                  ? Settings.Default.appcast_unstable
-                                                  : Settings.Default.appcast;
-                    UpdateService.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDone), false, url, userSettingService.GetUserSetting<int>(UserSettingConstants.HandBrakeBuild),
-                        Settings.Default.skipversion, userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion));
+                    this.userSettingService.SetUserSetting(UserSettingConstants.LastUpdateCheckDate, DateTime.Now);
+                    string url = this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild).ToString().EndsWith("1")
+                                                  ? userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast_unstable)
+                                                  : userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast);
+                    UpdateService.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDone), false, url, userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild),
+                        userSettingService.GetUserSetting<int>(UserSettingConstants.Skipversion), userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion));
                 }
             }
 
             // Clear the log files in the background
-            if (Settings.Default.clearOldLogs)
+            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs))
             {
                 Thread clearLog = new Thread(() => GeneralUtilities.ClearLogFiles(30));
                 clearLog.Start();
@@ -168,15 +168,16 @@ namespace Handbrake
             lbl_encode.Text = string.Empty;
             drop_mode.SelectedIndex = 0;
             queueWindow = new frmQueue(this.queueProcessor, this); // Prepare the Queue
-            if (!Settings.Default.QueryEditorTab)
+            if (!userSettingService.GetUserSetting<bool>(UserSettingConstants.QueryEditorTab))
                 tabs_panel.TabPages.RemoveAt(7); // Remove the query editor tab if the user does not want it enabled.
-            if (Settings.Default.tooltipEnable)
+            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.TooltipEnable))
                 ToolTip.Active = true;
 
             // Load the user's default settings or Normal Preset
-            if (Settings.Default.defaultPreset != string.Empty && presetHandler.GetPreset(Properties.Settings.Default.defaultPreset) != null)
+            if (userSettingService.GetUserSetting<string>(UserSettingConstants.DefaultPreset) != string.Empty
+                && presetHandler.GetPreset(userSettingService.GetUserSetting<string>(UserSettingConstants.DefaultPreset)) != null)
             {
-                this.loadPreset(Settings.Default.defaultPreset);
+                this.loadPreset(userSettingService.GetUserSetting<string>(UserSettingConstants.DefaultPreset));
             }
             else
                 loadPreset("Normal");
@@ -213,7 +214,8 @@ namespace Handbrake
 
                 if (info.NewVersionAvailable)
                 {
-                    UpdateInfo updateWindow = new UpdateInfo(info, userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion), userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeBuild));
+                    UpdateInfo updateWindow = new UpdateInfo(info, userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion), 
+                        userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeBuild));
                     updateWindow.ShowDialog();
                 }
             }
@@ -235,7 +237,7 @@ namespace Handbrake
             RegisterPresetEventHandler();
 
             // Handle Window Resize
-            if (Settings.Default.MainWindowMinimize)
+            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.MainWindowMinimize))
                 this.Resize += this.frmMain_Resize;
 
             // Handle Encode Start / Finish / Pause
@@ -452,12 +454,13 @@ namespace Handbrake
         private void MnuCheckForUpdates_Click(object sender, EventArgs e)
         {
             lbl_updateCheck.Visible = true;
-            Settings.Default.lastUpdateCheckDate = DateTime.Now;
-            Settings.Default.Save();
-            string url = userSettingService.GetUserSetting<int>(UserSettingConstants.HandBrakeBuild).ToString().EndsWith("1")
-                                                  ? Settings.Default.appcast_unstable
-                                                  : Settings.Default.appcast;
-            UpdateService.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDoneMenu), false, url, userSettingService.GetUserSetting<int>(UserSettingConstants.HandBrakeBuild), Settings.Default.skipversion, userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion));
+            this.userSettingService.SetUserSetting(UserSettingConstants.LastUpdateCheckDate, DateTime.Now);
+            string url = userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild).ToString().EndsWith("1")
+                                                  ? userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast_unstable)
+                                                  : userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast);
+            UpdateService.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDoneMenu), false,
+                url, userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild), 
+                userSettingService.GetUserSetting<int>(UserSettingConstants.Skipversion), userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion));
         }
 
         /// <summary>
@@ -641,8 +644,7 @@ namespace Handbrake
         {
             if (treeView_presets.SelectedNode != null)
             {
-                Settings.Default.defaultPreset = treeView_presets.SelectedNode.Text;
-                Settings.Default.Save();
+                this.userSettingService.SetUserSetting(UserSettingConstants.DefaultPreset, treeView_presets.SelectedNode.Text);
                 MessageBox.Show("New default preset set: " + treeView_presets.SelectedNode.Text, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
@@ -948,7 +950,7 @@ namespace Handbrake
         {
             if (btn_start.Text == "Stop")
             {
-                DialogResult result = !userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowCLI)
+                DialogResult result = !userSettingService.GetUserSetting<bool>(ASUserSettingConstants.ShowCLI)
                              ? MessageBox.Show(
                                  "Are you sure you wish to cancel the encode?\n\nPlease note: Stopping this encode will render the file unplayable. ",
                                  "Cancel Encode?",
@@ -965,7 +967,7 @@ namespace Handbrake
                     // Pause The Queue
                     this.queueProcessor.Pause();
 
-                    if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowCLI))
+                    if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.ShowCLI))
                         this.queueProcessor.EncodeService.SafelyStop();
                     else
                         this.queueProcessor.EncodeService.Stop();
@@ -986,7 +988,7 @@ namespace Handbrake
                     string query = string.Empty;
 
                     // Check to make sure the generated query matches the GUI settings
-                    if (Properties.Settings.Default.PromptOnUnmatchingQueries && !string.IsNullOrEmpty(specifiedQuery) &&
+                    if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PromptOnUnmatchingQueries) && !string.IsNullOrEmpty(specifiedQuery) &&
                         generatedQuery != specifiedQuery)
                     {
                         DialogResult result = MessageBox.Show("The query under the \"Query Editor\" tab " +
@@ -1082,7 +1084,7 @@ namespace Handbrake
         /// <param name="e">The EventArgs</param>
         private void MnuAddMultiToQueueClick(object sender, EventArgs e)
         {
-            if (!Settings.Default.autoNaming)
+            if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
             {
                 MessageBox.Show("Destination Auto Naming must be enabled in preferences for this feature to work.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -1436,7 +1438,7 @@ namespace Handbrake
 
                 // Populate the Angles dropdown
                 drop_angle.Items.Clear();
-                if (!userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav))
+                if (!userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav))
                 {
                     drop_angle.Visible = true;
                     lbl_angle.Visible = true;
@@ -1483,7 +1485,7 @@ namespace Handbrake
                     labelSource.Text = Path.GetFileName(selectedTitle.SourceName);
 
             // Run the AutoName & ChapterNaming functions
-            if (Properties.Settings.Default.autoNaming)
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
             {
                 string autoPath = Main.AutoName(this);
                 if (autoPath != null)
@@ -1565,7 +1567,7 @@ namespace Handbrake
             lbl_duration.Text = this.selectedTitle.CalculateDuration(drop_chapterStart.SelectedIndex, drop_chapterFinish.SelectedIndex).ToString();
 
             // Run the Autonaming function
-            if (Properties.Settings.Default.autoNaming)
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
                 text_destination.Text = Main.AutoName(this);
 
             // Disable chapter markers if only 1 chapter is selected.
@@ -1679,7 +1681,8 @@ namespace Handbrake
                 {
                     case 1:
                         if (!Path.GetExtension(DVD_Save.FileName).Equals(".mp4", StringComparison.InvariantCultureIgnoreCase))
-                            if (Properties.Settings.Default.useM4v == 2 || Properties.Settings.Default.useM4v == 0)
+                            if (this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v) == 2 || 
+                                this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v) == 0)
                                 DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", ".m4v").Replace(".mkv", ".m4v");
                             else
                                 DVD_Save.FileName = DVD_Save.FileName.Replace(".m4v", ".mp4").Replace(".mkv", ".mp4");
@@ -1743,8 +1746,8 @@ namespace Handbrake
             setContainerOpts();
 
             if (newExtension == ".mp4" || newExtension == ".m4v")
-                if (Check_ChapterMarkers.Checked || AudioSettings.RequiresM4V() || Subtitles.RequiresM4V() || Properties.Settings.Default.useM4v == 2)
-                    newExtension = Properties.Settings.Default.useM4v == 1 ? ".mp4" : ".m4v";
+                if (Check_ChapterMarkers.Checked || AudioSettings.RequiresM4V() || Subtitles.RequiresM4V() || this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v) == 2)
+                    newExtension = this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v) == 1 ? ".mp4" : ".m4v";
                 else
                     newExtension = ".mp4";
 
@@ -1791,11 +1794,11 @@ namespace Handbrake
                 case "H.264 (x264)":
                     slider_videoQuality.Minimum = 0;
                     slider_videoQuality.TickFrequency = 1;
-                    double cqStep = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
+                    double cqStep = userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step);
                     double multiplier = 1.0 / cqStep;
                     double value = slider_videoQuality.Value * multiplier;
 
-                    slider_videoQuality.Maximum = (int)(51 / userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step));
+                    slider_videoQuality.Maximum = (int)(51 / userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step));
 
                     if (value < slider_videoQuality.Maximum)
                         slider_videoQuality.Value = slider_videoQuality.Maximum - (int)value;
@@ -1862,7 +1865,7 @@ namespace Handbrake
         {
             if (cachedCqStep == 0)
             {
-                cachedCqStep = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
+                cachedCqStep = userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step);
             }
 
             // Work out the current RF value.
@@ -1870,13 +1873,13 @@ namespace Handbrake
             double rfValue = 51.0 - slider_videoQuality.Value * cqStep;
 
             // Change the maximum value for the slider
-            slider_videoQuality.Maximum = (int)(51 / userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step));
+            slider_videoQuality.Maximum = (int)(51 / userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step));
 
             // Reset the CQ slider to RF0
             slider_videoQuality.Value = slider_videoQuality.Maximum;
 
             // Reset the CQ slider back to the previous value as close as possible
-            double cqStepNew = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
+            double cqStepNew = userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step);
             double rfValueCurrent = 51.0 - slider_videoQuality.Value * cqStepNew;
             while (rfValueCurrent < rfValue)
             {
@@ -1885,12 +1888,12 @@ namespace Handbrake
             }
 
             // Cache the CQ step for the next calculation
-            this.cachedCqStep = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
+            this.cachedCqStep = userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step);
         }
 
         private void slider_videoQuality_Scroll(object sender, EventArgs e)
         {
-            double cqStep = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
+            double cqStep = userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step);
             switch (drp_videoEncoder.Text)
             {
                 case "MPEG-4 (FFmpeg)":
@@ -2041,7 +2044,7 @@ namespace Handbrake
             // Start the Scan
             try
             {
-                SourceScan.Scan(sourcePath, title, Properties.Settings.Default.previewScanCount);
+                SourceScan.Scan(sourcePath, title, this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount));
             }
             catch (Exception exc)
             {
@@ -2294,7 +2297,7 @@ namespace Handbrake
                 btn_start.Image = Properties.Resources.Play;
 
                 // If the window is minimized, display the notification in a popup.
-                if (Properties.Settings.Default.trayIconAlerts)
+                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.TrayIconAlerts))
                     if (FormWindowState.Minimized == this.WindowState)
                     {
                         notifyIcon.BalloonTipText = lbl_encode.Text;
@@ -2407,7 +2410,7 @@ namespace Handbrake
         private void LoadPresetPanel()
         {
             if (presetHandler.CheckIfPresetsAreOutOfDate())
-                if (!Settings.Default.presetNotification)
+                if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification))
                     MessageBox.Show(this,
                                     "HandBrake has determined your built-in presets are out of date... These presets will now be updated.",
                                     "Preset Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -2495,7 +2498,7 @@ namespace Handbrake
 
                 if (info.NewVersionAvailable)
                 {
-                    UpdateInfo updateWindow = new UpdateInfo(info, userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion), userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeBuild));
+                    UpdateInfo updateWindow = new UpdateInfo(info, userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion), userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeBuild));
                     updateWindow.ShowDialog();
                 }
                 else

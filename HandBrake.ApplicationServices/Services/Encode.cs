@@ -107,7 +107,7 @@ namespace HandBrake.ApplicationServices.Services
                     }
                 }
 
-                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep))
+                if (this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.PreventSleep))
                 {
                     Win32.PreventSleep();
                 }
@@ -121,7 +121,7 @@ namespace HandBrake.ApplicationServices.Services
                     RedirectStandardOutput = true,
                     RedirectStandardError = enableLogging ? true : false,
                     UseShellExecute = false,
-                    CreateNoWindow = !this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowCLI) ? true : false
+                    CreateNoWindow = !this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.ShowCLI) ? true : false
                 };
 
                 this.HbProcess = new Process { StartInfo = cliStart };
@@ -147,7 +147,7 @@ namespace HandBrake.ApplicationServices.Services
                 }
 
                 // Set the Process Priority
-                switch (this.userSettingService.GetUserSetting<string>(UserSettingConstants.ProcessPriority))
+                switch (this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.ProcessPriority))
                 {
                     case "Realtime":
                         this.HbProcess.PriorityClass = ProcessPriorityClass.RealTime;
@@ -258,7 +258,7 @@ namespace HandBrake.ApplicationServices.Services
                 this.WindowsSeven.SetTaskBarProgressToNoProgress();
             }
 
-            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep))
+            if (this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.PreventSleep))
             {
                 Win32.AllowSleep();
             }

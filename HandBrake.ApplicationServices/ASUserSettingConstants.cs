@@ -8,7 +8,7 @@ namespace HandBrake.ApplicationServices
     /// <summary>
     /// Constants for the User Settings Service
     /// </summary>
-    public class UserSettingConstants
+    public class ASUserSettingConstants
     {
         /// <summary>
         /// The Verbosity
@@ -80,7 +80,6 @@ namespace HandBrake.ApplicationServices
         /// </summary>
         public const string HandBrakePlatform = "HandBrakePlatform";
 
-
         /// <summary>
         /// HandBrakes CLI Exe SHA1 Hash
         /// </summary>
@@ -111,6 +110,9 @@ namespace HandBrake.ApplicationServices
         /// </summary>
         public const string SendFileToArgs = "SendFileToArgs";
 
+        /// <summary>
+        /// Min Title Scan Duration
+        /// </summary>
         public const string MinScanDuration = "MinTitleScanDuration";
     }
 }

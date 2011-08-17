@@ -9,6 +9,9 @@ namespace Handbrake.Controls
     using System.Globalization;
     using System.Windows.Forms;
 
+    using HandBrake.ApplicationServices;
+    using HandBrake.ApplicationServices.Services.Interfaces;
+
     /// <summary>
     /// The x264 Panel
     /// </summary>
@@ -18,6 +21,11 @@ namespace Handbrake.Controls
          * TODO This code was ported from the obj-c MacGUI code. It's really messy and could really do with being cleaned up
          * at some point.
          */
+
+        /// <summary>
+        /// The User Setting Service.
+        /// </summary>
+        private readonly IUserSettingService UserSettingService = ServiceManager.UserSettingService;
 
         private CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
 
@@ -29,7 +37,7 @@ namespace Handbrake.Controls
         {
             InitializeComponent();
 
-            if (Properties.Settings.Default.tooltipEnable)
+            if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.TooltipEnable))
                 ToolTip.Active = true;
 
             Reset2Defaults();

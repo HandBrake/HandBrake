@@ -8,18 +8,29 @@ namespace Handbrake.ToolWindows
     using System;
     using System.Windows.Forms;
 
+    using HandBrake.ApplicationServices;
+    using HandBrake.ApplicationServices.Services.Interfaces;
+
     /// <summary>
     /// Title Specific Scan
     /// </summary>
     public partial class BatchAdd : Form
     {
+        /// <summary>
+        /// The User Setting Service.
+        /// </summary>
+        private readonly IUserSettingService UserSettingService = ServiceManager.UserSettingService;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BatchAdd"/> class.
+        /// </summary>
         public BatchAdd()
         {
             InitializeComponent();
 
             // Get the Default values for batch encoding.
-            this.minDuration.Text = Properties.Settings.Default.batchMinDuration.ToString();
-            this.maxDuration.Text = Properties.Settings.Default.batchMaxDuration.ToString();
+            this.minDuration.Text = this.UserSettingService.GetUserSetting<int>(UserSettingConstants.BatchMinDuration).ToString();
+            this.maxDuration.Text = this.UserSettingService.GetUserSetting<int>(UserSettingConstants.BatchMaxDuration).ToString();
         }
 
         /// <summary>

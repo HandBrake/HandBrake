@@ -7,13 +7,13 @@ namespace Handbrake
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Windows.Forms;
 
     using HandBrake.ApplicationServices;
-    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
@@ -36,7 +36,7 @@ namespace Handbrake
 
             IDictionary<string, string> langList = LanguageUtilities.MapLanguages();
 
-            foreach (string selectedItem in Properties.Settings.Default.SelectedLanguages)
+            foreach (string selectedItem in this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages))
             {
                 // removing wrong keys when a new Language list comes out.
                 if (langList.ContainsKey(selectedItem))
@@ -48,7 +48,7 @@ namespace Handbrake
                 drop_preferredLang.Items.Add(item);
 
                 // In the available languages should be no "Any" and no selected language.
-                if ((item != "Any") && (!Properties.Settings.Default.SelectedLanguages.Contains(item)))
+                if ((item != "Any") && (!this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages).Contains(item)))
                 {
                     listBox_availableLanguages.Items.Add(item);
                 }
@@ -59,18 +59,18 @@ namespace Handbrake
             // #############################
 
             // Enable Tooltips.
-            if (Properties.Settings.Default.tooltipEnable)
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.TooltipEnable))
             {
                 check_tooltip.CheckState = CheckState.Checked;
                 ToolTip.Active = true;
             }
 
             // Update Check
-            if (Properties.Settings.Default.updateStatus)
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UpdateStatus))
                 check_updateCheck.CheckState = CheckState.Checked;
 
             // Days between update checks
-            switch (Properties.Settings.Default.daysBetweenUpdateCheck)
+            switch (this.userSettingService.GetUserSetting<int>(UserSettingConstants.DaysBetweenUpdateCheck))
             {
                 case 1:
                     drop_updateCheckDays.SelectedIndex = 0;
@@ -87,148 +87,149 @@ namespace Handbrake
             drp_completeOption.Text = userSettingService.GetUserSetting<string>("WhenCompleteAction");
 
             // Growl.
-            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlEncode))
+            if (userSettingService.GetUserSetting<bool>(HandBrake.ApplicationServices.ASUserSettingConstants.GrowlEncode))
                 check_growlEncode.CheckState = CheckState.Checked;
 
-            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlQueue))
+            if (userSettingService.GetUserSetting<bool>(HandBrake.ApplicationServices.ASUserSettingConstants.GrowlQueue))
                 check_GrowlQueue.CheckState = CheckState.Checked;
 
-            check_sendFileTo.Checked = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.SendFile);
-            lbl_sendFileTo.Text = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo));
-            txt_SendFileArgs.Text = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileToArgs);
+            check_sendFileTo.Checked = this.userSettingService.GetUserSetting<bool>(HandBrake.ApplicationServices.ASUserSettingConstants.SendFile);
+            lbl_sendFileTo.Text = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSetting<string>(HandBrake.ApplicationServices.ASUserSettingConstants.SendFileTo));
+            txt_SendFileArgs.Text = this.userSettingService.GetUserSetting<string>(HandBrake.ApplicationServices.ASUserSettingConstants.SendFileToArgs);
 
             // #############################
             // Output Settings
             // #############################
 
             // Enable auto naming feature.)
-            if (Properties.Settings.Default.autoNaming)
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
                 check_autoNaming.CheckState = CheckState.Checked;
 
             // Store the auto name path
-            text_an_path.Text = Properties.Settings.Default.autoNamePath;
+            text_an_path.Text = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath);
             if (text_an_path.Text == string.Empty)
                 text_an_path.Text = "Click 'Browse' to set the default location";
 
             // Store auto name format
-            txt_autoNameFormat.Text = Properties.Settings.Default.autoNameFormat;
+            txt_autoNameFormat.Text = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat);
 
             // Use iPod/iTunes friendly .m4v extension for MP4 files.
-            cb_mp4FileMode.SelectedIndex = Properties.Settings.Default.useM4v;
+            cb_mp4FileMode.SelectedIndex = this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v);
 
             // Remove Underscores
-            check_removeUnderscores.Checked = Properties.Settings.Default.AutoNameRemoveUnderscore;
+            check_removeUnderscores.Checked = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameRemoveUnderscore);
 
             // Title case
-            check_TitleCase.Checked = Properties.Settings.Default.AutoNameTitleCase;
+            check_TitleCase.Checked = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameTitleCase);
 
             // #############################
             // Picture Tab
             // #############################
 
             // VLC Path
-            txt_vlcPath.Text = Properties.Settings.Default.VLC_Path;
+            txt_vlcPath.Text = this.userSettingService.GetUserSetting<string>(UserSettingConstants.VLC_Path);
 
             // #############################
             // Audio and Subtitles Tab
             // #############################
 
-            drop_preferredLang.SelectedItem = Properties.Settings.Default.NativeLanguage;
+            drop_preferredLang.SelectedItem = this.userSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage);
 
-            if (Settings.Default.DubMode != 255)
-            {
-                switch (Settings.Default.DubMode)
-                {
-                    case 0:
-                        Settings.Default.DubModeAudio = 2;
-                        Settings.Default.DubModeSubtitle = 0;
-                        Settings.Default.DubMode = 255;
-                        break;
-                    case 1:
-                        Settings.Default.DubModeAudio = 4;
-                        Settings.Default.DubModeSubtitle = 0;
-                        Settings.Default.DubMode = 255;
-                        break;
-                    case 2:
-                        Settings.Default.DubModeAudio = 2;
-                        Settings.Default.DubModeSubtitle = 4;
-                        Settings.Default.DubMode = 255;
-                        break;
-                    case 3:
-                        Settings.Default.DubModeAudio = 4;
-                        Settings.Default.DubModeSubtitle = 4;
-                        Settings.Default.DubMode = 255;
-                        break;
-                    default:
-                        Settings.Default.DubMode = 255;
-                        break;
-                }
-            }
+            //if (this.userSettingService.GetUserSetting<int>(UserSettingConstants.DubMode) != 255)
+            //{
+            //    switch (this.userSettingService.GetUserSetting<int>(UserSettingConstants.DubMode))
+            //    {
+            //        case 0:
+            //            Settings.Default.DubModeAudio = 2;
+            //            Settings.Default.DubModeSubtitle = 0;
+            //            Settings.Default.DubMode = 255;
+            //            break;
+            //        case 1:
+            //            Settings.Default.DubModeAudio = 4;
+            //            Settings.Default.DubModeSubtitle = 0;
+            //            Settings.Default.DubMode = 255;
+            //            break;
+            //        case 2:
+            //            Settings.Default.DubModeAudio = 2;
+            //            Settings.Default.DubModeSubtitle = 4;
+            //            Settings.Default.DubMode = 255;
+            //            break;
+            //        case 3:
+            //            Settings.Default.DubModeAudio = 4;
+            //            Settings.Default.DubModeSubtitle = 4;
+            //            Settings.Default.DubMode = 255;
+            //            break;
+            //        default:
+            //            Settings.Default.DubMode = 255;
+            //            break;
+            //    }
+            //}
 
-            cb_audioMode.SelectedIndex = Settings.Default.DubModeAudio;
-            cb_subtitleMode.SelectedIndex = Settings.Default.DubModeSubtitle;
+            cb_audioMode.SelectedIndex = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DubModeAudio);
+            cb_subtitleMode.SelectedIndex = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DubModeSubtitle);
 
-            check_AddOnlyOneAudioPerLanguage.Checked = Properties.Settings.Default.addOnlyOneAudioPerLanguage;
+            check_AddOnlyOneAudioPerLanguage.Checked =
+                this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AddOnlyOneAudioPerLanguage);
 
-            check_AddCCTracks.Checked = Properties.Settings.Default.useClosedCaption;
+            check_AddCCTracks.Checked = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseClosedCaption);
 
             // #############################
             // CLI
             // #############################
 
             // Priority level for encodes
-            drp_Priority.Text = userSettingService.GetUserSetting<string>(UserSettingConstants.ProcessPriority);
+            drp_Priority.Text = userSettingService.GetUserSetting<string>(ASUserSettingConstants.ProcessPriority);
 
-            check_preventSleep.Checked = userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep);
+            check_preventSleep.Checked = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.PreventSleep);
 
             // Log Verbosity Level
-            cb_logVerboseLvl.SelectedIndex = userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity);
+            cb_logVerboseLvl.SelectedIndex = userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity);
 
             // Save logs in the same directory as encoded files
-            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogWithVideo))
+            if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SaveLogWithVideo))
                 check_saveLogWithVideo.CheckState = CheckState.Checked;
 
             // Save Logs in a specified path
-            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogToCopyDirectory))
+            if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SaveLogToCopyDirectory))
                 check_logsInSpecifiedLocation.CheckState = CheckState.Checked;
 
             // The saved log path
-            text_logPath.Text = userSettingService.GetUserSetting<string>(UserSettingConstants.SaveLogCopyDirectory);
+            text_logPath.Text = userSettingService.GetUserSetting<string>(ASUserSettingConstants.SaveLogCopyDirectory);
 
-            check_clearOldLogs.Checked = Properties.Settings.Default.clearOldLogs;
+            check_clearOldLogs.Checked = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs);
 
             // #############################
             // Advanced
             // #############################
 
             // Minimise to Tray
-            if (Properties.Settings.Default.trayIconAlerts)
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.TrayIconAlerts))
                 check_trayStatusAlerts.CheckState = CheckState.Checked;
 
             // Tray Balloon popups
-            if (Properties.Settings.Default.MainWindowMinimize)
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.MainWindowMinimize))
                 check_mainMinimize.CheckState = CheckState.Checked;
 
             // Enable / Disable Query editor tab
-            if (Properties.Settings.Default.QueryEditorTab)
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.QueryEditorTab))
                 check_queryEditorTab.CheckState = CheckState.Checked;
             check_promptOnUnmatchingQueries.Enabled = check_queryEditorTab.Checked;
 
             // Prompt on inconsistant queries
-            check_promptOnUnmatchingQueries.Checked = Properties.Settings.Default.PromptOnUnmatchingQueries;
+            check_promptOnUnmatchingQueries.Checked = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PromptOnUnmatchingQueries);
 
             // Preset update notification
-            if (Properties.Settings.Default.presetNotification)
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification))
                 check_disablePresetNotification.CheckState = CheckState.Checked;
 
             // Show CLI Window
-            check_showCliForInGUIEncode.Checked = userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowCLI);
+            check_showCliForInGUIEncode.Checked = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.ShowCLI);
 
             // Set the preview count
-            drop_previewScanCount.SelectedItem = Properties.Settings.Default.previewScanCount.ToString();
+            drop_previewScanCount.SelectedItem = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount).ToString();
 
             // x264 step
-            string step = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step).ToString(new CultureInfo("en-US"));
+            string step = userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step).ToString(new CultureInfo("en-US"));
             switch (step)
             {
                 case "1":
@@ -246,10 +247,10 @@ namespace Handbrake
             }
 
             // Min Title Length
-            ud_minTitleLength.Value = this.userSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration); 
+            ud_minTitleLength.Value = this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.MinScanDuration); 
 
             // Use Experimental dvdnav
-            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav))
+            if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav))
                 check_dvdnav.CheckState = CheckState.Checked;
 
             optionsWindowLoading = false;
@@ -259,7 +260,7 @@ namespace Handbrake
 
         private void check_updateCheck_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.updateStatus = check_updateCheck.Checked;
+            this.userSettingService.SetUserSetting(UserSettingConstants.UpdateStatus, check_updateCheck.Checked);
         }
 
         private void drop_updateCheckDays_SelectedIndexChanged(object sender, EventArgs e)
@@ -267,35 +268,35 @@ namespace Handbrake
             switch (drop_updateCheckDays.SelectedIndex)
             {
                 case 0:
-                    Properties.Settings.Default.daysBetweenUpdateCheck = 1;
+                    this.userSettingService.SetUserSetting(UserSettingConstants.DaysBetweenUpdateCheck, 1);
                     break;
                 case 1:
-                    Properties.Settings.Default.daysBetweenUpdateCheck = 7;
+                    this.userSettingService.SetUserSetting(UserSettingConstants.DaysBetweenUpdateCheck, 7);
                     break;
                 case 2:
-                    Properties.Settings.Default.daysBetweenUpdateCheck = 30;
+                    this.userSettingService.SetUserSetting(UserSettingConstants.DaysBetweenUpdateCheck, 30);
                     break;
             }
         }
 
         private void check_tooltip_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.tooltipEnable = check_tooltip.Checked;
+            this.userSettingService.SetUserSetting(UserSettingConstants.TooltipEnable, check_tooltip.Checked);
         }
 
         private void drp_completeOption_SelectedIndexChanged(object sender, EventArgs e)
         {
-            userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, drp_completeOption.Text);
+            userSettingService.SetUserSetting(ASUserSettingConstants.WhenCompleteAction, drp_completeOption.Text);
         }
 
         private void check_GrowlQueue_CheckedChanged(object sender, EventArgs e)
         {
-            userSettingService.SetUserSetting(UserSettingConstants.GrowlQueue, check_GrowlQueue.Checked);
+            userSettingService.SetUserSetting(ASUserSettingConstants.GrowlQueue, check_GrowlQueue.Checked);
         }
 
         private void check_growlEncode_CheckedChanged(object sender, EventArgs e)
         {
-            userSettingService.SetUserSetting(UserSettingConstants.GrowlEncode, check_growlEncode.Checked);
+            userSettingService.SetUserSetting(ASUserSettingConstants.GrowlEncode, check_growlEncode.Checked);
         }
 
         private void btn_SendFileToPath_Click(object sender, EventArgs e)
@@ -303,19 +304,19 @@ namespace Handbrake
             openExecutable.ShowDialog();
             if (!string.IsNullOrEmpty(openExecutable.FileName))
             {
-                this.userSettingService.SetUserSetting(UserSettingConstants.SendFileTo, openExecutable.FileName);
+                this.userSettingService.SetUserSetting(ASUserSettingConstants.SendFileTo, openExecutable.FileName);
                 lbl_sendFileTo.Text = Path.GetFileNameWithoutExtension(openExecutable.FileName);
             }
         }
 
         private void check_sendFileTo_CheckedChanged(object sender, EventArgs e)
         {
-            this.userSettingService.SetUserSetting(UserSettingConstants.SendFile, check_sendFileTo.Checked);
+            this.userSettingService.SetUserSetting(ASUserSettingConstants.SendFile, check_sendFileTo.Checked);
         }
 
         private void txt_SendFileArgs_TextChanged(object sender, EventArgs e)
         {
-            this.userSettingService.SetUserSetting(UserSettingConstants.SendFileToArgs, txt_SendFileArgs.Text);
+            this.userSettingService.SetUserSetting(ASUserSettingConstants.SendFileToArgs, txt_SendFileArgs.Text);
         }
 
         #endregion
@@ -323,12 +324,12 @@ namespace Handbrake
         #region Output File
         private void check_autoNaming_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.autoNaming = check_autoNaming.Checked;
+            this.userSettingService.SetUserSetting(UserSettingConstants.AutoNaming, check_autoNaming.Checked);
         }
 
         private void txt_autoNameFormat_TextChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.autoNameFormat = txt_autoNameFormat.Text;
+            this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameFormat, txt_autoNameFormat.Text);
         }
 
         private void btn_browse_Click(object sender, EventArgs e)
@@ -341,11 +342,11 @@ namespace Handbrake
         {
             if (text_an_path.Text == string.Empty)
             {
-                Properties.Settings.Default.autoNamePath = string.Empty;
+                this.userSettingService.SetUserSetting(UserSettingConstants.AutoNamePath, string.Empty);
                 text_an_path.Text = "Click 'Browse' to set the default location";
             }
             else
-                Properties.Settings.Default.autoNamePath = text_an_path.Text;
+                this.userSettingService.SetUserSetting(UserSettingConstants.AutoNamePath, text_an_path.Text);
 
             if (text_an_path.Text.ToLower() == "{source_path}" && !optionsWindowLoading)
             {
@@ -362,17 +363,17 @@ namespace Handbrake
 
         private void cb_mp4FileMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.useM4v = cb_mp4FileMode.SelectedIndex;
+            this.userSettingService.SetUserSetting(UserSettingConstants.UseM4v, cb_mp4FileMode.SelectedIndex);
         }
 
         private void check_removeUnderscores_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.AutoNameRemoveUnderscore = check_removeUnderscores.Checked;
+            this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameRemoveUnderscore, check_removeUnderscores.Checked);
         }
 
         private void check_TitleCase_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.AutoNameTitleCase = check_TitleCase.Checked;
+            this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameTitleCase, check_TitleCase.Checked);
         }
 
         #endregion
@@ -388,7 +389,7 @@ namespace Handbrake
 
         private void txt_vlcPath_TextChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.VLC_Path = txt_vlcPath.Text;
+            this.userSettingService.SetUserSetting(UserSettingConstants.VLC_Path, txt_vlcPath.Text);
         }
 
         #endregion
@@ -397,9 +398,9 @@ namespace Handbrake
 
         private void drop_preferredLang_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Settings.Default.NativeLanguage = drop_preferredLang.SelectedItem.ToString();
+            this.userSettingService.SetUserSetting(UserSettingConstants.NativeLanguage, drop_preferredLang.SelectedItem.ToString());
 
-            if (Settings.Default.NativeLanguage == "Any")
+            if (this.userSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage) == "Any")
             {
                 cb_audioMode.Enabled = false;
                 cb_subtitleMode.Enabled = false;
@@ -432,8 +433,12 @@ namespace Handbrake
                 {
                     listBox_selectedLanguages.Items.Remove(item);
 
-                    if (Properties.Settings.Default.SelectedLanguages.Contains(item))
-                        Properties.Settings.Default.SelectedLanguages.Remove(item);
+                    StringCollection languages = this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages);
+                    if (languages.Contains(item))
+                    {
+                        languages.Remove(item);
+                        this.userSettingService.SetUserSetting(UserSettingConstants.SelectedLanguages, languages);
+                    }
                 }
             }
         }
@@ -447,8 +452,11 @@ namespace Handbrake
                 listBox_availableLanguages.SelectedItems.CopyTo(movedItems, 0);
 
                 listBox_selectedLanguages.Items.AddRange(movedItems);
-                Properties.Settings.Default.SelectedLanguages.AddRange(movedItems);
 
+                StringCollection languages = this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages);
+                languages.AddRange(movedItems);
+                this.userSettingService.SetUserSetting(UserSettingConstants.SelectedLanguages, languages);
+      
                 listBox_availableLanguages.SelectedItems.Clear();
                 foreach (string item in movedItems)
                 {
@@ -471,8 +479,12 @@ namespace Handbrake
                 {
                     listBox_selectedLanguages.Items.Remove(item);
 
-                    if (Properties.Settings.Default.SelectedLanguages.Contains(item))
-                        Properties.Settings.Default.SelectedLanguages.Remove(item);
+                    StringCollection languages = this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages);
+                    if (languages.Contains(item))
+                    {
+                        languages.Remove(item);
+                        this.userSettingService.SetUserSetting(UserSettingConstants.SelectedLanguages, languages);
+                    }
                 }
             }
         }
@@ -500,8 +512,10 @@ namespace Handbrake
                         listBox_selectedLanguages.SetSelected(ilevel - 1, true);
 
                         // Do the same on the Property.
-                        Properties.Settings.Default.SelectedLanguages.Remove(lvitem);
-                        Properties.Settings.Default.SelectedLanguages.Insert(ilevel - 1, lvitem);
+                        StringCollection languages = this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages);
+                        languages.Remove(lvitem);
+                        languages.Insert(ilevel - 1, lvitem);
+                        this.userSettingService.SetUserSetting(UserSettingConstants.SelectedLanguages, languages);
                     }
                 }
             }
@@ -530,8 +544,10 @@ namespace Handbrake
                         listBox_selectedLanguages.SetSelected(ilevel + 1, true);
 
                         // Do the same on the Property.
-                        Properties.Settings.Default.SelectedLanguages.Remove(lvitem);
-                        Properties.Settings.Default.SelectedLanguages.Insert(ilevel + 1, lvitem);
+                        StringCollection languages = this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages);
+                        languages.Remove(lvitem);
+                        languages.Insert(ilevel + 1, lvitem);
+                        this.userSettingService.SetUserSetting(UserSettingConstants.SelectedLanguages, languages);
                     }
                 }
             }
@@ -549,22 +565,22 @@ namespace Handbrake
 
         private void check_AddOnlyOneAudioPerLanguage_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.addOnlyOneAudioPerLanguage = check_AddOnlyOneAudioPerLanguage.Checked;
+            this.userSettingService.SetUserSetting(UserSettingConstants.AddOnlyOneAudioPerLanguage, check_AddOnlyOneAudioPerLanguage.Checked);
         }
 
         private void check_AddCCTracks_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Default.useClosedCaption = check_AddCCTracks.Checked;
+            this.userSettingService.SetUserSetting(UserSettingConstants.UseClosedCaption, check_AddCCTracks.Checked);
         }
 
         private void cb_audioMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Settings.Default.DubModeAudio = cb_audioMode.SelectedIndex;
+            this.userSettingService.SetUserSetting(UserSettingConstants.DubModeAudio, cb_audioMode.SelectedIndex);
         }
 
         private void cb_subtitleMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Settings.Default.DubModeSubtitle = cb_subtitleMode.SelectedIndex;
+            this.userSettingService.SetUserSetting(UserSettingConstants.DubModeSubtitle, cb_subtitleMode.SelectedIndex);
         }
 
         #endregion
@@ -573,27 +589,27 @@ namespace Handbrake
 
         private void drp_Priority_SelectedIndexChanged(object sender, EventArgs e)
         {
-            userSettingService.SetUserSetting(UserSettingConstants.ProcessPriority, drp_Priority.Text);
+            userSettingService.SetUserSetting(ASUserSettingConstants.ProcessPriority, drp_Priority.Text);
         }
 
         private void check_preventSleep_CheckedChanged(object sender, EventArgs e)
         {
-            userSettingService.SetUserSetting(UserSettingConstants.PreventSleep, check_preventSleep.Checked);
+            userSettingService.SetUserSetting(ASUserSettingConstants.PreventSleep, check_preventSleep.Checked);
         }
 
         private void cb_logVerboseLvl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            userSettingService.SetUserSetting(UserSettingConstants.Verbosity, cb_logVerboseLvl.SelectedIndex);
+            userSettingService.SetUserSetting(ASUserSettingConstants.Verbosity, cb_logVerboseLvl.SelectedIndex);
         }
 
         private void check_saveLogWithVideo_CheckedChanged(object sender, EventArgs e)
         {
-            userSettingService.SetUserSetting(UserSettingConstants.SaveLogWithVideo, check_saveLogWithVideo.Checked);
+            userSettingService.SetUserSetting(ASUserSettingConstants.SaveLogWithVideo, check_saveLogWithVideo.Checked);
         }
 
         private void check_logsInSpecifiedLocation_CheckedChanged(object sender, EventArgs e)
         {
-            userSettingService.SetUserSetting(UserSettingConstants.SaveLogToCopyDirectory, check_logsInSpecifiedLocation.Checked);
+            userSettingService.SetUserSetting(ASUserSettingConstants.SaveLogToCopyDirectory, check_logsInSpecifiedLocation.Checked);
         }
 
         private void btn_saveLog_Click(object sender, EventArgs e)
@@ -606,7 +622,7 @@ namespace Handbrake
 
         private void text_logPath_TextChanged(object sender, EventArgs e)
         {
-            userSettingService.SetUserSetting(UserSettingConstants.SaveLogCopyDirectory, text_logPath.Text);
+            userSettingService.SetUserSetting(ASUserSettingConstants.SaveLogCopyDirectory, text_logPath.Text);
         }
 
         private void btn_viewLogs_Click(object sender, EventArgs e)
@@ -633,7 +649,7 @@ namespace Handbrake
 
         private void check_clearOldLogs_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.clearOldLogs = check_clearOldLogs.Checked;
+            userSettingService.SetUserSetting(UserSettingConstants.ClearOldLogs, check_clearOldLogs.Checked);
         }
 
         #endregion
@@ -642,39 +658,39 @@ namespace Handbrake
 
         private void check_mainMinimize_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.MainWindowMinimize = check_mainMinimize.Checked;
+            userSettingService.SetUserSetting(UserSettingConstants.MainWindowMinimize, check_mainMinimize.Checked);
             check_trayStatusAlerts.Enabled = check_mainMinimize.Checked;
         }
 
         private void check_trayStatusAlerts_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.trayIconAlerts = check_trayStatusAlerts.Checked;
+            userSettingService.SetUserSetting(UserSettingConstants.TrayIconAlerts, check_trayStatusAlerts.Checked);
         }
 
         private void check_queryEditorTab_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.QueryEditorTab = check_queryEditorTab.Checked;
+            userSettingService.SetUserSetting(UserSettingConstants.QueryEditorTab, check_queryEditorTab.Checked);
             check_promptOnUnmatchingQueries.Enabled = check_queryEditorTab.Checked;
         }
 
         private void check_promptOnUnmatchingQueries_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.PromptOnUnmatchingQueries = check_promptOnUnmatchingQueries.Checked;
+            userSettingService.SetUserSetting(UserSettingConstants.PromptOnUnmatchingQueries, check_promptOnUnmatchingQueries.Checked);
         }
 
         private void check_disablePresetNotification_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.presetNotification = check_disablePresetNotification.Checked;
+            userSettingService.SetUserSetting(UserSettingConstants.PresetNotification, check_disablePresetNotification.Checked);
         }
 
         private void check_showCliForInGUIEncode_CheckedChanged(object sender, EventArgs e)
         {
-            userSettingService.SetUserSetting(UserSettingConstants.ShowCLI, check_showCliForInGUIEncode.Checked);
+            userSettingService.SetUserSetting(ASUserSettingConstants.ShowCLI, check_showCliForInGUIEncode.Checked);
         }
 
         private void drop_previewScanCount_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.previewScanCount = int.Parse(drop_previewScanCount.SelectedItem.ToString());
+            userSettingService.SetUserSetting(UserSettingConstants.PreviewScanCount, int.Parse(drop_previewScanCount.SelectedItem.ToString()));
         }
 
         private void x264step_SelectedIndexChanged(object sender, EventArgs e)
@@ -682,16 +698,16 @@ namespace Handbrake
             switch (drop_x264step.SelectedIndex)
             {
                 case 0:
-                    userSettingService.SetUserSetting(UserSettingConstants.X264Step, 1.0);
+                    userSettingService.SetUserSetting(ASUserSettingConstants.X264Step, 1.0);
                     break;
                 case 1:
-                    userSettingService.SetUserSetting(UserSettingConstants.X264Step, 0.5);
+                    userSettingService.SetUserSetting(ASUserSettingConstants.X264Step, 0.5);
                     break;
                 case 2:
-                    userSettingService.SetUserSetting(UserSettingConstants.X264Step, 0.25);
+                    userSettingService.SetUserSetting(ASUserSettingConstants.X264Step, 0.25);
                     break;
                 case 3:
-                    userSettingService.SetUserSetting(UserSettingConstants.X264Step, 0.2);
+                    userSettingService.SetUserSetting(ASUserSettingConstants.X264Step, 0.2);
                     break;
             }
             mainWindow.setQualityFromSlider();
@@ -699,7 +715,7 @@ namespace Handbrake
 
         private void check_dvdnav_CheckedChanged(object sender, EventArgs e)
         {
-            userSettingService.SetUserSetting(UserSettingConstants.DisableLibDvdNav, check_dvdnav.Checked);
+            userSettingService.SetUserSetting(ASUserSettingConstants.DisableLibDvdNav, check_dvdnav.Checked);
         }
 
         private void ud_minTitleLength_ValueChanged(object sender, EventArgs e)
@@ -707,7 +723,7 @@ namespace Handbrake
             int value;
             if (int.TryParse(ud_minTitleLength.Value.ToString(), out value))
             {
-                this.userSettingService.SetUserSetting(UserSettingConstants.MinScanDuration, value);
+                this.userSettingService.SetUserSetting(ASUserSettingConstants.MinScanDuration, value);
             }
         }
 

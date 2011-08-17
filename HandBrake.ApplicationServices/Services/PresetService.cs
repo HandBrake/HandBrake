@@ -262,7 +262,7 @@ namespace HandBrake.ApplicationServices.Services
                                     Category = category,
                                     Name = presetName[0].Replace("+", string.Empty).Trim(),
                                     Query = presetName[2],
-                                    Version = this.userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion),
+                                    Version = this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion),
                                     CropSettings = pic,
                                     Description = string.Empty, // Maybe one day we will populate this.
                                     IsBuildIn = true
@@ -302,7 +302,7 @@ namespace HandBrake.ApplicationServices.Services
                 List<Preset> preset = this.presets.Where(p => p.IsBuildIn).ToList();
                 if (preset.Count > 0)
                 {
-                    if (preset[0].Version != this.userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion))
+                    if (preset[0].Version != this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion))
                     {
                         this.UpdateBuiltInPresets();
                         return true;

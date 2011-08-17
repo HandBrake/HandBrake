@@ -214,17 +214,17 @@ namespace HandBrake.ApplicationServices.Services.Base
                 File.Copy(tempLogFile, Path.Combine(logDir, encodeLogFile));
 
                 // Save a copy of the log file in the same location as the enocde.
-                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogWithVideo))
+                if (this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SaveLogWithVideo))
                 {
                     File.Copy(tempLogFile, Path.Combine(encodeDestinationPath, encodeLogFile));
                 }
 
                 // Save a copy of the log file to a user specified location
-                if (Directory.Exists(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SaveLogCopyDirectory)) &&
-                    this.userSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogToCopyDirectory))
+                if (Directory.Exists(this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SaveLogCopyDirectory)) &&
+                    this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SaveLogToCopyDirectory))
                 {
                     File.Copy(
-                        tempLogFile, Path.Combine(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SaveLogCopyDirectory), encodeLogFile));
+                        tempLogFile, Path.Combine(this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SaveLogCopyDirectory), encodeLogFile));
                 }
             }
             catch (Exception)

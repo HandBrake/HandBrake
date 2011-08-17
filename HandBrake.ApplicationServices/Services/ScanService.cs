@@ -195,12 +195,12 @@ namespace HandBrake.ApplicationServices.Services
                     extraArguments += " --previews " + previewCount;
                 }
 
-                if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav))
+                if (this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav))
                 {
                     extraArguments += " --no-dvdnav";
                 }
 
-                extraArguments += string.Format(" --min-duration={0}", this.userSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration));
+                extraArguments += string.Format(" --min-duration={0}", this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.MinScanDuration));
 
                 if (title > 0)
                 {

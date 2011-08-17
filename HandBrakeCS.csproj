@@ -223,6 +223,7 @@
     <Compile Include="ToolWindows\UpdateInfo.Designer.cs">
       <DependentUpon>UpdateInfo.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserSettingConstants.cs" />
     <EmbeddedResource Include="Controls\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
       <SubType>Designer</SubType>

@@ -19,7 +19,6 @@ namespace Handbrake.Functions
     using HandBrake.ApplicationServices.Extensions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
-    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
@@ -35,6 +34,9 @@ namespace Handbrake.Functions
         /// </summary>
         private static readonly XmlSerializer Ser = new XmlSerializer(typeof(List<QueueTask>));
 
+        /// <summary>
+        /// The User Setting Service
+        /// </summary>
         private static readonly IUserSettingService UserSettingService = ServiceManager.UserSettingService;
 
         /// <summary>
@@ -178,11 +180,11 @@ namespace Handbrake.Functions
                 string sourceName = Path.GetInvalidFileNameChars().Aggregate(Path.GetFileNameWithoutExtension(mainWindow.SourceName), (current, character) => current.Replace(character.ToString(), string.Empty));
 
                 // Remove Underscores
-                if (Properties.Settings.Default.AutoNameRemoveUnderscore)
+                if (UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameRemoveUnderscore))
                     sourceName = sourceName.Replace("_", " ");
 
                 // Switch to "Title Case"
-                if (Properties.Settings.Default.AutoNameTitleCase)
+                if (UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameTitleCase))
                     sourceName = sourceName.ToTitleCase();
 
                 // Get the Selected Title Number
@@ -200,9 +202,9 @@ namespace Handbrake.Functions
                  * File Name
                  */ 
                 string destinationFilename;
-                if (Properties.Settings.Default.autoNameFormat != string.Empty)
+                if (UserSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != string.Empty)
                 {
-                    destinationFilename = Properties.Settings.Default.autoNameFormat;
+                    destinationFilename = UserSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat);
                     destinationFilename = destinationFilename.Replace("{source}", sourceName)
                                                              .Replace("{title}", dvdTitle)
                                                              .Replace("{chapters}", combinedChapterTag)
@@ -216,7 +218,7 @@ namespace Handbrake.Functions
                  */ 
                 if (mainWindow.drop_format.SelectedIndex == 0)
                 {
-                    switch (Properties.Settings.Default.useM4v)
+                    switch (UserSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v))
                     {
                         case 0: // Automatic
                             destinationFilename += mainWindow.Check_ChapterMarkers.Checked ||
@@ -240,9 +242,9 @@ namespace Handbrake.Functions
                  */ 
 
                 // If there is an auto name path, use it...
-                if (Properties.Settings.Default.autoNamePath.Trim().StartsWith("{source_path}") && !string.IsNullOrEmpty(mainWindow.sourcePath))
+                if (UserSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim().StartsWith("{source_path}") && !string.IsNullOrEmpty(mainWindow.sourcePath))
                 {
-                    string savedPath = Properties.Settings.Default.autoNamePath.Trim().Replace("{source_path}\\", string.Empty).Replace("{source_path}", string.Empty);
+                    string savedPath = UserSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim().Replace("{source_path}\\", string.Empty).Replace("{source_path}", string.Empty);
                     string requestedPath = Path.Combine(Path.GetDirectoryName(mainWindow.sourcePath), savedPath);
 
                     autoNamePath = Path.Combine(requestedPath, destinationFilename);
@@ -252,7 +254,7 @@ namespace Handbrake.Functions
                         autoNamePath = Path.Combine(Path.GetDirectoryName(mainWindow.sourcePath), "output_" + destinationFilename);
                     }
                 }
-                else if (Properties.Settings.Default.autoNamePath.Contains("{source_folder_name}") && !string.IsNullOrEmpty(mainWindow.sourcePath))
+                else if (UserSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Contains("{source_folder_name}") && !string.IsNullOrEmpty(mainWindow.sourcePath))
                 {
                     // Second Case: We have a Path, with "{source_folder}" in it, therefore we need to replace it with the folder name from the source.
                     string path = Path.GetDirectoryName(mainWindow.sourcePath);
@@ -261,15 +263,16 @@ namespace Handbrake.Functions
                         string[] filesArray = path.Split(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
                         string sourceFolder = filesArray[filesArray.Length - 1];
 
-                        autoNamePath = Path.Combine(Properties.Settings.Default.autoNamePath.Replace("{source_folder_name}", sourceFolder), destinationFilename);
+                        autoNamePath = Path.Combine(UserSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Replace("{source_folder_name}", sourceFolder), destinationFilename);
                     }
                 }
                 else if (!mainWindow.text_destination.Text.Contains(Path.DirectorySeparatorChar.ToString()))
                 {
                     // Third case: If the destination box doesn't already contain a path, make one.
-                    if (Properties.Settings.Default.autoNamePath.Trim() != string.Empty && Properties.Settings.Default.autoNamePath.Trim() != "Click 'Browse' to set the default location")
+                    if (UserSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim() != string.Empty &&
+                        UserSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim() != "Click 'Browse' to set the default location")
                     {
-                        autoNamePath = Path.Combine(Properties.Settings.Default.autoNamePath, destinationFilename);
+                        autoNamePath = Path.Combine(UserSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath), destinationFilename);
                     }
                     else // ...otherwise, output to the source directory
                         autoNamePath = null;
@@ -303,7 +306,7 @@ namespace Handbrake.Functions
             string base64Hash = Convert.ToBase64String(hash);
 
             // Compare the hash with the last known hash. If it's the same, return.
-            if (Properties.Settings.Default.CliExeHash == base64Hash)
+            if (UserSettingService.GetUserSetting<string>(UserSettingConstants.CliExeHash) == base64Hash)
             {
                 return;
             }
@@ -340,13 +343,13 @@ namespace Handbrake.Functions
                         int buildValue;
                         int.TryParse(build, out buildValue);
 
-                        UserSettingService.SetUserSetting(UserSettingConstants.HandBrakeBuild, buildValue);
-                        UserSettingService.SetUserSetting(UserSettingConstants.HandBrakeVersion, version);
+                        UserSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeBuild, buildValue);
+                        UserSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeVersion, version);
                     }
 
                     if (platform.Success)
                     {
-                        UserSettingService.SetUserSetting(UserSettingConstants.HandBrakePlatform,  platform.Value.Replace("-", string.Empty).Trim());
+                        UserSettingService.SetUserSetting(ASUserSettingConstants.HandBrakePlatform, platform.Value.Replace("-", string.Empty).Trim());
                     }
 
                     if (cliProcess.TotalProcessorTime.Seconds > 10) // Don't wait longer than 10 seconds.
@@ -359,18 +362,16 @@ namespace Handbrake.Functions
                     }
                 }
 
-                UserSettingService.SetUserSetting(UserSettingConstants.HandBrakeExeHash, base64Hash);
+                UserSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeExeHash, base64Hash);
             }
             catch (Exception e)
             {
-                UserSettingService.SetUserSetting(UserSettingConstants.HandBrakeBuild, string.Empty);
-                UserSettingService.SetUserSetting(UserSettingConstants.HandBrakePlatform, string.Empty);
-                UserSettingService.SetUserSetting(UserSettingConstants.HandBrakeVersion, string.Empty);
-                UserSettingService.SetUserSetting(UserSettingConstants.HandBrakeExeHash, string.Empty);
+                UserSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeBuild, string.Empty);
+                UserSettingService.SetUserSetting(ASUserSettingConstants.HandBrakePlatform, string.Empty);
+                UserSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeVersion, string.Empty);
+                UserSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeExeHash, string.Empty);
 
                 ShowExceptiowWindow("Unable to retrieve version information from the CLI.", e.ToString());
-                // Probably corrupted config. Delete config and let the user restart.
-                RecoverFromCorruptedLocalApplicationConfig();
                 Application.Exit();
             }
         }
@@ -516,32 +517,6 @@ namespace Handbrake.Functions
             }
 
             return "Unknown";
-        }
-
-        /// <summary>
-        /// Remove the Local Applicaiton Data. 
-        /// This should only be used if something bad happens which corrupts the data.
-        /// </summary>
-        public static void RecoverFromCorruptedLocalApplicationConfig()
-        {
-            try
-            {
-                MessageBox.Show(
-                    "HandBrake has attempted to recover from a corrupted config file. \nYou may neeed to reset your preferences.\n\n Please restart HandBrake",
-                    "Warning",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                string directory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\HandBrake";
-                if (Directory.Exists(directory))
-                {
-                    File.SetAttributes(directory, FileAttributes.Normal);
-                    Directory.Delete(directory, true);
-                }
-            }
-            catch (Exception)
-            {
-            }
         }
     }
 }

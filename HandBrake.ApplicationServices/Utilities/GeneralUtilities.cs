@@ -113,7 +113,7 @@ namespace HandBrake.ApplicationServices.Utilities
         {
             StringBuilder logHeader = new StringBuilder();
 
-            logHeader.AppendLine(String.Format("HandBrake {0} {1}", userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeVersion), userSettingService.GetUserSetting<int>(UserSettingConstants.HandBrakeBuild)));
+            logHeader.AppendLine(String.Format("HandBrake {0} {1}", userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion), userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild)));
             logHeader.AppendLine(String.Format("OS: {0}", Environment.OSVersion));
             logHeader.AppendLine(String.Format("CPU: {0}", SystemInfo.GetCpuCount));
             logHeader.Append(String.Format("Ram: {0} MB, ", SystemInfo.TotalPhysicalMemory));
