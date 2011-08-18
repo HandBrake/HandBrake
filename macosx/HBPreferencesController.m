@@ -64,7 +64,6 @@
         @"0.25",            @"x264CqSliderFractional",
         @"YES",             @"AlertBuiltInPresetUpdate",
         @"MetaX",           @"SendCompletedEncodeToApp",
-		@"YES",				@"AC3PassthruDefaultsToAC3",
         nil]];
 }
 

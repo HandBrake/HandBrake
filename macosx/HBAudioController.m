@@ -293,12 +293,15 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
             [newAudio setTrackFromIndex: trackIndex];
 
             key = [dict objectForKey: @"AudioEncoder"];
+
+            // map faac to ca_aac for built-in presets (can be disabled in preferences)
             if (0 == aType &&
                 [[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] &&
                 [key isEqualToString: @"AAC (faac)"])
             {
                 [dict setObject: @"AAC (CoreAudio)" forKey: @"AudioEncoder"];
             }
+
             // Auto Passthru not yet implemented - fallback to AC3 Passthru as it is
             // compatible with all source codecs (via the AC3 encoder fallback)
             if ([key isEqualToString: @"Auto Passthru"])
@@ -306,8 +309,17 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
                 [dict setObject: @"AC3 Passthru" forKey: @"AudioEncoder"];
                 key = @"AC3 Passthru";
             }
-            if ([[NSUserDefaults standardUserDefaults] boolForKey: @"AC3PassthruDefaultsToAC3"] &&
-                [key isEqualToString: @"AC3 Passthru"])
+
+            // passthru fallbacks
+            if ([key isEqualToString: @"AAC Passthru"])
+            {
+                if (![newAudio setCodecFromName: key])
+                {
+                    [dict setObject: @"AAC (CoreAudio)" forKey: @"AudioEncoder"];
+                    fallenBack = YES;
+                }
+            }
+            else if ([key isEqualToString: @"AC3 Passthru"])
             {
                 if (![newAudio setCodecFromName: key])
                 {
@@ -315,6 +327,16 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
                     fallenBack = YES;
                 }
             }
+            else if ([key isEqualToString: @"MP3 Passthru"])
+            {
+                if (![newAudio setCodecFromName: key])
+                {
+                    [dict setObject: @"MP3 (lame)" forKey: @"AudioEncoder"];
+                    fallenBack = YES;
+                }
+            }
+
+            // map legacy encoder names
             if ([key isEqualToString: @"AC3"])
             {
                 [dict setObject: @"AC3 (ffmpeg)" forKey: @"AudioEncoder"];
