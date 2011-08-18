@@ -125,12 +125,18 @@
 
 - (void)windowWillClose:(NSNotification *)aNotification
 {
-    /* Upon Closing the picture window, we make sure we clean up any
-     * preview movie that might be playing or encoding
+    /* Upon closing the preview window, we make sure we clean up any
+     * preview movie that might be playing or encoding. However, first
+     * make sure we have a preview picture before calling pictureSliderChanged
+     * to go back to still previews .. just in case nothing is loaded up like in
+     * a Launch, cancel new scan then quit type scenario.
      */
-    [self pictureSliderChanged:nil];
-    [fMovieTimer invalidate];
-    [fMovieTimer release];
+    if (fPicture)
+    {
+        [self pictureSliderChanged:nil];
+        [fMovieTimer invalidate];
+        [fMovieTimer release];
+    }
     
     hudTimerSeconds = 0;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"PreviewWindowIsOpen"];
