@@ -1965,54 +1965,102 @@ static int HandleEvents( hb_handle_t * h )
             }
             /* Audio Track Names */
 
-            /* Fix up passthru that needs to fallback to ac3 encode */
+            /* Sanitize passthru (drop/fallback if necessary) */
             for( i = 0; i < hb_list_count( job->list_audio ); )
             {
                 audio = hb_list_audio_config_item( job->list_audio, i );
-                if ( ( audio->out.codec & HB_ACODEC_AC3 ) &&
-                     ( audio->out.codec & HB_ACODEC_PASS_FLAG ) &&
-                    !( audio->out.codec & audio->in.codec ) )
+                // check whether we're doing passthru
+                if( audio->out.codec & HB_ACODEC_PASS_FLAG )
                 {
-                    // AC3 passthru not possible, use fallback
-                    if ( acodec_fallback )
+                    // compute the output passthru codec
+                    // required to make 'copy' work
+                    // doesn't break codec-specific passthru
+                    int out_codec = ( audio->out.codec & ( audio->in.codec | HB_ACODEC_PASS_FLAG ) );
+                    // check whether passthru is possible or not
+                    if( !( out_codec & audio->in.codec ) )
                     {
-                        fprintf( stderr, "AC3 passthru requested and input codec is not AC3 for track %d, using fallback\n",
-                            audio->out.track );
-                        audio->out.codec = get_acodec_for_string( acodec_fallback);
-                    }
-                    else
-                    {
-                        fprintf( stderr, "AC3 passthru requested and input codec is not AC3 for track %d, using AC3 encoder\n",
-                            audio->out.track );
-                        audio->out.codec = HB_ACODEC_AC3;
-                    }
-                    audio->out.mixdown = hb_get_default_mixdown( audio->out.codec, audio->in.channel_layout );
-                    audio->out.bitrate = hb_get_default_audio_bitrate( audio->out.codec, audio->out.samplerate,
-                        audio->out.mixdown );
-                }
-                // fix 'copy' to select a specific codec
-                if ( audio->out.codec & HB_ACODEC_PASS_FLAG )
-                {
-                    audio->out.codec &= (audio->in.codec | HB_ACODEC_PASS_FLAG);
-                    if ( !( audio->out.codec & HB_ACODEC_MASK ) )
-                    {
-                        if ( acodec_fallback )
+                        // first, check whether we're doing a codec-specific passthru
+                        // for which we have a corresponding encoder
+                        // note: Auto Passthru with a single codec in the passthru
+                        // mask is assimilated to codec-specific passthru
+                        if( audio->out.codec == HB_ACODEC_AAC_PASS )
                         {
-                            fprintf( stderr, "Passthru requested and input codec is not compatible for track %d, using fallback\n",
-                                audio->out.track );
-                            audio->out.codec = get_acodec_for_string( acodec_fallback);
+                            fprintf( stderr, "AAC passthru requested and input codec is not AAC for track %d, using AAC encoder\n",
+                                     audio->out.track );
+#ifdef __APPLE_CC__
+                            audio->out.codec = HB_ACODEC_CA_AAC;
+#else
+                            audio->out.codec = HB_ACODEC_FAAC;
+#endif
+                        }
+                        else if( audio->out.codec == HB_ACODEC_AC3_PASS )
+                        {
+                            fprintf( stderr, "AC3 passthru requested and input codec is not AC3 for track %d, using AC3 encoder\n",
+                                     audio->out.track );
+                            audio->out.codec = HB_ACODEC_AC3;
+                        }
+                        else if( audio->out.codec == HB_ACODEC_MP3_PASS )
+                        {
+                            fprintf( stderr, "MP3 passthru requested and input codec is not MP3 for track %d, using MP3 encoder\n",
+                                     audio->out.track );
+                            audio->out.codec = HB_ACODEC_LAME;
+                        }
+                        // we're doing either DTS, DTS-HD or Auto Passthru
+                        else if( ( acodec_fallback ) &&
+                                 ( audio->out.codec != HB_ACODEC_DCA_PASS ) &&
+                                 ( audio->out.codec != HB_ACODEC_DCA_HD_PASS ) )
+                        {
+                            // we're doing Auto Passthru and there's a fallback
+                            fprintf( stderr, "Auto passthru requested and input codec is not compatible for track %d, using fallback\n",
+                                     audio->out.track );
+                            audio->out.codec = get_acodec_for_string( acodec_fallback );
+                        }
+                        // we didn't find a suitable fallback
+                        // check whether we have an encoder for
+                        // one of the allowed passthru codecs
+                        else if( audio->out.codec & HB_ACODEC_AAC_PASS )
+                        {
+                            fprintf( stderr, "Auto passthru requested and input codec is not compatible for track %d, using AAC encoder\n",
+                                     audio->out.track );
+#ifdef __APPLE_CC__
+                            audio->out.codec = HB_ACODEC_CA_AAC;
+#else
+                            audio->out.codec = HB_ACODEC_FAAC;
+#endif
+                        }
+                        else if( audio->out.codec & HB_ACODEC_AC3_PASS )
+                        {
+                            fprintf( stderr, "Auto passthru requested and input codec is not compatible for track %d, using AC3 encoder\n",
+                                     audio->out.track );
+                            audio->out.codec = HB_ACODEC_AC3;
+                        }
+                        else if( audio->out.codec & HB_ACODEC_MP3_PASS )
+                        {
+                            fprintf( stderr, "Auto passthru requested and input codec is not compatible for track %d, using MP3 encoder\n",
+                                     audio->out.track );
+                            audio->out.codec = HB_ACODEC_LAME;
                         }
                         else
                         {
                             // Passthru not possible, drop audio.
                             fprintf( stderr, "Passthru requested and input codec is not the same as output codec for track %d, dropping track\n",
-                                audio->out.track );
+                                     audio->out.track );
                             hb_audio_t * item = hb_list_item( job->list_audio, i );
                             hb_list_rem( job->list_audio, item );
                             continue;
                         }
+                        // we didn't drop the track, set the mixdown and bitrate from libhb defaults
+                        audio->out.mixdown = hb_get_default_mixdown( audio->out.codec, audio->in.channel_layout );
+                        audio->out.bitrate = hb_get_default_audio_bitrate( audio->out.codec, audio->out.samplerate,
+                                                                           audio->out.mixdown );
+                    }
+                    else
+                    {
+                        // passthru is possible
+                        audio->out.codec = out_codec;
                     }
                 }
+                // we didn't drop the track
                 i++;
             }
 
