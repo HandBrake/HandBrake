@@ -540,6 +540,7 @@ static int HandleEvents( hb_handle_t * h )
             int arate = 0;
             int mixdown = HB_AMIXDOWN_DOLBYPLII;
             double d_r_c = 0;
+            double gain = 0;
             /* Audio argument string parsing variables */
 
             list = hb_get_titles( h );
@@ -1894,7 +1895,6 @@ static int HandleEvents( hb_handle_t * h )
             i = 0;
             if ( audio_gain )
             {
-                double gain;
                 char * token = strtok(audio_gain, ",");
                 if (token == NULL)
                     token = audio_gain;
@@ -1913,6 +1913,20 @@ static int HandleEvents( hb_handle_t * h )
                         fprintf(stderr, "Ignoring gain, no audio tracks\n");
                     }
                     token = strtok(NULL, ",");
+                }
+            }
+            if (i < num_audio_tracks)
+            {
+                /* We have fewer inputs than audio tracks, use no gain for the remaining
+                 * tracks. Unless we only have one input, then use the same gain for all
+                 * tracks.
+                 */
+                if (i != 1)
+                    gain = 0;
+                for (; i < num_audio_tracks; i++)
+                {
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    audio->out.gain = gain;
                 }
             }
             /* Audio Gain */
