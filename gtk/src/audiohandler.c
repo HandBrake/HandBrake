@@ -33,11 +33,11 @@ ghb_select_audio_codec(int mux, hb_audio_config_t *aconfig, gint acodec, gint fa
 	{
 		if (acodec & HB_ACODEC_PASS_FLAG)
 		{
-			if ((acodec & in_codec & HB_ACODEC_MASK & ~HB_ACODEC_VORBIS))
+			if ((acodec & in_codec & HB_ACODEC_PASS_MASK & ~HB_ACODEC_VORBIS))
 			{
 				return acodec & (in_codec | HB_ACODEC_PASS_FLAG);
 			}
-			else if (fallback & (HB_ACODEC_AC3 | HB_ACODEC_LAME | HB_ACODEC_FAAC | HB_ACODEC_FFAAC))
+			else if (fallback)
 			{
 				return fallback;
 			}
@@ -62,7 +62,7 @@ ghb_select_audio_codec(int mux, hb_audio_config_t *aconfig, gint acodec, gint fa
 		{
 			return HB_ACODEC_FFAAC;
 		}
-		else if (fallback & (HB_ACODEC_AC3 | HB_ACODEC_LAME | HB_ACODEC_FAAC | HB_ACODEC_FFAAC))
+		else if (fallback)
 		{
 			return fallback;
 		}
@@ -149,6 +149,36 @@ int ghb_allowed_passthru_mask(GValue *settings, int acodec)
 	return ret;
 }
 
+static int ghb_select_fallback( GValue *settings, int mux, int acodec )
+{
+	gint fallback;
+
+	switch ( acodec )
+	{
+		case HB_ACODEC_MP3_PASS:
+			return HB_ACODEC_LAME;
+
+		case HB_ACODEC_AAC_PASS:
+			return HB_ACODEC_FAAC;
+
+		case HB_ACODEC_AC3_PASS:
+			return HB_ACODEC_AC3;
+
+		default:
+			fallback = ghb_settings_combo_int(settings, 
+											"AudioEncoderFallback");
+	}
+	if ( mux == HB_MUX_MP4 )
+	{
+		if ( !(fallback & (HB_ACODEC_AC3 | HB_ACODEC_LAME | 
+							HB_ACODEC_FAAC | HB_ACODEC_FFAAC)))
+		{
+			fallback = HB_ACODEC_FAAC;
+		}
+	}
+	return fallback;
+}
+
 void
 ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 {
@@ -192,7 +222,7 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 	{
 		sr = aconfig ? aconfig->in.samplerate : 48000;
 	}
-	gint fallback = ghb_settings_combo_int(ud->settings, "AudioEncoderFallback");
+	gint fallback = ghb_select_fallback( ud->settings, mux, acodec );
 	select_acodec = ghb_allowed_passthru_mask(ud->settings, acodec);
 	select_acodec = ghb_select_audio_codec(mux, aconfig, select_acodec, fallback);
 	gboolean codec_defined_bitrate = FALSE;
@@ -271,7 +301,7 @@ ghb_get_user_audio_lang(signal_user_data_t *ud, gint titleindex, gint track)
 void
 ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 {
-	gint fallback_acodec, track;
+	gint track;
 	gchar *source_lang = NULL;
 	hb_audio_config_t *aconfig;
 	GHashTable *track_indices;
@@ -285,7 +315,6 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 	
 	g_debug("set_pref_audio");
 	mux = ghb_settings_combo_int(ud->settings, "FileFormat");
-	fallback_acodec = ghb_settings_combo_int(ud->settings, "AudioEncoderFallback");
 	track_indices = g_hash_table_new_full(g_int_hash, g_int_equal, 
 						free_audio_hash_key_value, free_audio_hash_key_value);
 	// Clear the audio list
@@ -305,11 +334,13 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 	for (ii = 0; ii < count; ii++)
 	{
 		gint select_acodec;
+		gint fallback;
 
 		audio = ghb_array_get_nth(pref_audio, ii);
 		acodec = ghb_settings_combo_int(audio, "AudioEncoder");
+		fallback = ghb_select_fallback( ud->settings, mux, acodec );
 		select_acodec = ghb_allowed_passthru_mask(ud->settings, acodec);
-		select_acodec = ghb_select_audio_codec(mux, NULL, select_acodec, fallback_acodec);
+		select_acodec = ghb_select_audio_codec(mux, NULL, select_acodec, fallback);
 		bitrate = ghb_settings_combo_int(audio, "AudioBitrate");
 		rate = ghb_settings_combo_double(audio, "AudioSamplerate");
 		mix = ghb_settings_combo_int(audio, "AudioMixdown");
@@ -319,7 +350,7 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 		// select sequential tracks for each.  The hash keeps track 
 		// of the tracks used for each codec.
 		track = ghb_find_audio_track(titleindex, source_lang, 
-								select_acodec, fallback_acodec, track_indices);
+								select_acodec, fallback, track_indices);
 		// Check to see if:
 		// 1. pref codec is passthru
 		// 2. source codec is not passthru
@@ -331,12 +362,12 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 			if (!(aconfig->in.codec & select_acodec & HB_ACODEC_PASS_MASK))
 			{
 				if (acodec != HB_ACODEC_ANY)
-					acodec = fallback_acodec;
+					acodec = fallback;
 				// If we can't substitute the passthru with a suitable
 				// encoder and
 				// If there's more audio to process, or we've already
 				// placed one in the list, then we can skip this one
-				if (!(select_acodec & fallback_acodec) && 
+				if (!(select_acodec & fallback) && 
 					((ii + 1 < count) || (list_count != 0)))
 				{
 					// Skip this audio
@@ -345,7 +376,7 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 				else
 				{
 					int channels;
-					select_acodec = fallback_acodec;
+					select_acodec = fallback;
 					mix = ghb_get_best_mix(aconfig, select_acodec, mix);
 					channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(mix);
 					bitrate = aconfig->in.bitrate / 1000;
