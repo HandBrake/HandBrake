@@ -820,7 +820,7 @@ init_settings_from_dict(
 	GHashTableIter iter;
 	gchar *key;
 	GValue *gval, *val;
-	
+
 	ghb_dict_iter_init(&iter, internal);
 	// middle (void*) cast prevents gcc warning "defreferencing type-punned
 	// pointer will break strict-aliasing rules"
@@ -2411,6 +2411,7 @@ import_value_xlat2(
 			}
 		}
 		g_free(str);
+		return ghb_value_dup(def_val);
 	}
 	else
 	{

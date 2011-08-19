@@ -968,7 +968,7 @@ static const gchar*
 lookup_mix_string(const GValue *mix)
 {
 	gint ii;
-	gchar *result = "None";
+	gchar *result = "none";
 
 
 	if (G_VALUE_TYPE(mix) == G_TYPE_STRING)
@@ -1082,10 +1082,10 @@ lookup_audio_rate_int(const GValue *rate)
 }
 
 static const gchar*
-lookup_audio_rate_option(const GValue *rate)
+lookup_audio_rate(const GValue *rate, const char *def)
 {
 	gint ii;
-	const gchar *result = "Same as source";
+	const gchar *result = def;
 
 	if (G_VALUE_TYPE(rate) == G_TYPE_STRING)
 	{
@@ -1119,6 +1119,18 @@ lookup_audio_rate_option(const GValue *rate)
 	return result;
 }
 
+static const gchar*
+lookup_audio_rate_option(const GValue *rate)
+{
+    return lookup_audio_rate(rate, "Same as Source");
+}
+
+static const gchar*
+lookup_audio_rate_string(const GValue *rate)
+{
+    return lookup_audio_rate(rate, "source");
+}
+
 gint
 ghb_find_closest_audio_rate(gint rate)
 {
@@ -1144,7 +1156,7 @@ static gint
 lookup_audio_bitrate_int(const GValue *rate)
 {
 	gint ii;
-	gint result = 0;
+	gint result = 160;
 
 	if (G_VALUE_TYPE(rate) == G_TYPE_STRING)
 	{
@@ -1182,7 +1194,7 @@ static const gchar*
 lookup_audio_bitrate_option(const GValue *rate)
 {
 	gint ii;
-	const gchar *result = "Same as source";
+	const gchar *result = "160";
 
 	if (G_VALUE_TYPE(rate) == G_TYPE_STRING)
 	{
@@ -2743,7 +2755,7 @@ ghb_lookup_combo_string(const gchar *name, const GValue *gval)
 	if (strcmp(name, "AudioBitrate") == 0)
 		return lookup_audio_bitrate_option(gval);
 	else if (strcmp(name, "AudioSamplerate") == 0)
-		return lookup_audio_rate_option(gval);
+		return lookup_audio_rate_string(gval);
 	else if (strcmp(name, "VideoFramerate") == 0)
 		return lookup_video_rate_option(gval);
 	else if (strcmp(name, "AudioMixdown") == 0)
