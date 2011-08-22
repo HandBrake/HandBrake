@@ -2002,8 +2002,8 @@ static value_map_t acodec_xlat[] =
 	{"AAC (faac)", "faac"},
 	{"AAC (CoreAudio)", "faac"},
 	{"HE-AAC (CoreAudio)", "faac"},
-	{"AC3", "ac3"},			// Backwards compatibility with mac ui
 	{"AC3 (ffmpeg)", "ac3"},
+	{"AC3", "ac3"},			// Backwards compatibility with mac ui
 	{"MP3 Passthru", "mp3pass"},
 	{"AAC Passthru", "aacpass"},
 	{"AC3 Passthru", "ac3pass"},
@@ -2345,6 +2345,12 @@ export_value_xlat(GValue *dict)
 	GValue *alist;
 	GValue *adict;
 
+	key = "AudioEncoderFallback";
+	lin_val = ghb_dict_lookup(dict, key);
+	gval = export_value_xlat2(acodec_xlat, lin_val, G_TYPE_STRING);
+	if (gval)
+		ghb_dict_insert(dict, g_strdup(key), gval);
+
 	alist = ghb_dict_lookup(dict, "AudioList");
 	count = ghb_array_len(alist);
 	for (ii = 0; ii < count; ii++)
@@ -2562,6 +2568,12 @@ import_value_xlat(GValue *dict)
 	GValue *adict;
 	GValue *adefaults;
 	GValue *adeflist;
+
+	key = "AudioEncoderFallback";
+	mac_val = ghb_dict_lookup(dict, key);
+	gval = import_value_xlat2(adefaults, acodec_xlat, key, mac_val);
+	if (gval)
+		ghb_dict_insert(dict, g_strdup(key), gval);
 
 	adeflist = ghb_dict_lookup(defaults, "AudioList");
 	if (adeflist)
