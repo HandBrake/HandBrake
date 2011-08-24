@@ -183,18 +183,13 @@
     
     /* we set the preview length popup in seconds */
     [fPreviewMovieLengthPopUp removeAllItems];
-    [fPreviewMovieLengthPopUp addItemWithTitle: @"5"];
-    [fPreviewMovieLengthPopUp addItemWithTitle: @"10"];
     [fPreviewMovieLengthPopUp addItemWithTitle: @"15"];
-    [fPreviewMovieLengthPopUp addItemWithTitle: @"20"];
-    [fPreviewMovieLengthPopUp addItemWithTitle: @"25"];
     [fPreviewMovieLengthPopUp addItemWithTitle: @"30"];
-    [fPreviewMovieLengthPopUp addItemWithTitle: @"35"];
-    [fPreviewMovieLengthPopUp addItemWithTitle: @"40"];
     [fPreviewMovieLengthPopUp addItemWithTitle: @"45"];
-    [fPreviewMovieLengthPopUp addItemWithTitle: @"50"];
-    [fPreviewMovieLengthPopUp addItemWithTitle: @"55"];
     [fPreviewMovieLengthPopUp addItemWithTitle: @"60"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"90"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"105"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"120"];
     
     /* adjust the preview slider length */
     /* We use our advance pref to determine how many previews we scanned */
@@ -1205,6 +1200,26 @@
             [fMovieView setHidden:NO];
             [fMoviePlaybackControlBox setHidden: NO];
             [fPictureControlBox setHidden: YES];
+            
+            // get and enable subtitles
+            NSArray *subtitlesArray;
+            subtitlesArray = [aMovie tracksOfMediaType: @"sbtl"];
+            if( subtitlesArray && [subtitlesArray count] )
+            {
+                // enable the first TX3G subtitle track
+                [[subtitlesArray objectAtIndex: 0] setEnabled: YES];
+            }
+            else
+            {
+                // Perian subtitles
+                subtitlesArray = [aMovie tracksOfMediaType: QTMediaTypeVideo];
+                if( subtitlesArray && ( [subtitlesArray count] >= 2 ) )
+                {
+                    // track 0 should be video, other video tracks should
+                    // be subtitles; force-enable the first subs track
+                    [[subtitlesArray objectAtIndex: 1] setEnabled: YES];
+                }
+            }
             
             // to actually play the movie
             
