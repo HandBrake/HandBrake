@@ -2571,7 +2571,7 @@ import_value_xlat(GValue *dict)
 
 	key = "AudioEncoderFallback";
 	mac_val = ghb_dict_lookup(dict, key);
-	gval = import_value_xlat2(adefaults, acodec_xlat, key, mac_val);
+	gval = import_value_xlat2(defaults, acodec_xlat, key, mac_val);
 	if (gval)
 		ghb_dict_insert(dict, g_strdup(key), gval);
 
@@ -3062,7 +3062,7 @@ replace_standard_presets()
 	store_presets();
 }
 
-static void
+static int
 update_standard_presets(signal_user_data_t *ud)
 {
 	gint count, ii;
@@ -3081,7 +3081,7 @@ update_standard_presets(signal_user_data_t *ud)
 		{
 			// Old preset that doesn't have a Type
 			replace_standard_presets();
-			return;
+			return 1;
 		}
 			
 		type = ghb_value_int(gval);
@@ -3092,7 +3092,7 @@ update_standard_presets(signal_user_data_t *ud)
 			{
 				// Old preset that doesn't have a build number
 				replace_standard_presets();
-				return;
+				return 1;
 			}
 
 			build = ghb_value_int64(gval);
@@ -3100,11 +3100,11 @@ update_standard_presets(signal_user_data_t *ud)
 			{
 				// Build number does not match
 				replace_standard_presets();
-				return;
+				return 1;
 			}
 		}
 	}
-	return;
+	return 0;
 }
 
 void
@@ -3131,8 +3131,12 @@ ghb_presets_load(signal_user_data_t *ud)
 		import_xlat_presets(presetsPlist);
 		store_presets();
 	}
-	update_standard_presets(ud);
-	import_xlat_presets(presetsPlist);
+	else
+	{
+		if (!update_standard_presets(ud))
+			import_xlat_presets(presetsPlist);
+	}
+ 
 }
 
 static void
