@@ -12,6 +12,7 @@ namespace Handbrake.Functions
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
 
     using OutputFormat = HandBrake.ApplicationServices.Model.Encoding.OutputFormat;
@@ -33,14 +34,14 @@ namespace Handbrake.Functions
         /// <param name="mainWindow">
         /// FrmMain window
         /// </param>
-        /// <param name="presetQuery">
-        /// The Parsed CLI Query
+        /// <param name="preset">
+        /// The preset.
         /// </param>
-        /// <param name="name">
-        /// Name of the preset
-        /// </param>
-        public static void LoadPreset(frmMain mainWindow, EncodeTask presetQuery, string name)
+        public static void LoadPreset(frmMain mainWindow, Preset preset)
         {
+            // Send the query from the file to the Query Parser class
+            EncodeTask presetQuery = QueryParserUtility.Parse(preset.Query);
+
             #region Source
 
             // Reset some vaules to stock first to prevent errors.
@@ -95,7 +96,7 @@ namespace Handbrake.Functions
             #region Picture
 
             mainWindow.PictureSettings.check_autoCrop.Checked = true;
-            if (presetQuery.IsCustomCropping)
+            if (preset.CropSettings)
             {
                 mainWindow.PictureSettings.check_customCrop.Checked = true;
                 mainWindow.PictureSettings.crop_top.Value = presetQuery.Cropping.Top;
@@ -282,7 +283,7 @@ namespace Handbrake.Functions
             mainWindow.x264Panel.X264Query = presetQuery.AdvancedEncoderOptions;
 
             // Set the preset name
-            mainWindow.labelPreset.Text = "Output Settings (Preset: " + name + ")";
+            mainWindow.labelPreset.Text = "Output Settings (Preset: " + preset.Name + ")";
 
             #endregion
         }

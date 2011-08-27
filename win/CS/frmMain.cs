@@ -766,11 +766,8 @@ namespace Handbrake
                         // Ok, Reset all the H264 widgets before changing the preset
                         x264Panel.Reset2Defaults();
 
-                        // Send the query from the file to the Query Parser class
-                        EncodeTask presetQuery = QueryParserUtility.Parse(query);
-
                         // Now load the preset
-                        PresetLoader.LoadPreset(this, presetQuery, presetName);
+                        PresetLoader.LoadPreset(this, preset);
 
                         // The x264 widgets will need updated, so do this now:
                         x264Panel.StandardizeOptString();
@@ -838,9 +835,6 @@ namespace Handbrake
                                         MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
                     {
-
-                        PresetLoader.LoadPreset(this, parsed, parsed.PresetName);
-
                         Preset preset = new Preset
                             {
                                 Name = parsed.PresetName,
@@ -848,19 +842,22 @@ namespace Handbrake
                                 CropSettings = parsed.UsesPictureSettings
                             };
 
+                        PresetLoader.LoadPreset(this, preset);
+
                         presetHandler.Update(preset);
                     }
                 }
                 else
                 {
-                    PresetLoader.LoadPreset(this, parsed, parsed.PresetName);
+                   
                     Preset preset = new Preset
                     {
                         Name = parsed.PresetName,
                         Query = QueryGenerator.GenerateFullQuery(this),
                         CropSettings = parsed.UsesPictureSettings,
                     };
-
+                    PresetLoader.LoadPreset(this, preset);
+                    
                     if (presetHandler.Add(preset))
                     {
                         TreeNode preset_treeview = new TreeNode(parsed.PresetName)
@@ -2144,11 +2141,15 @@ namespace Handbrake
                     // Setup UI
                     if (queueEdit.Query != null)
                     {
-                        // Send the query from the file to the Query Parser class
-                        EncodeTask presetQuery = QueryParserUtility.Parse(queueEdit.Query);
+                        Preset preset = new Preset
+                        {
+                            Name = "Loaded Back From Queue",
+                            Query = queueEdit.Query,
+                            CropSettings = true,
+                        };
 
                         // Now load the preset
-                        PresetLoader.LoadPreset(this, presetQuery, "Load Back From Queue");
+                        PresetLoader.LoadPreset(this, preset);
 
                         // Set the destination path
                         this.text_destination.Text = queueEdit.Destination;
