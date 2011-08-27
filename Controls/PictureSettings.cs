@@ -12,6 +12,7 @@ namespace Handbrake.Controls
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>
     /// The Picture Settings Panel
@@ -101,14 +102,21 @@ namespace Handbrake.Controls
             lbl_src_res.Text = sourceTitle.Resolution.Width + " x " + sourceTitle.Resolution.Height;
 
             // Set the Recommended Cropping values, but only if a preset doesn't have hard set picture settings.
-            if ((CurrentlySelectedPreset != null && CurrentlySelectedPreset.CropSettings == false) || CurrentlySelectedPreset == null)
+            EncodeTask presetQuery = null;
+            if (this.CurrentlySelectedPreset != null)
+                presetQuery = QueryParserUtility.Parse(CurrentlySelectedPreset.Query);
+
+            if ((CurrentlySelectedPreset != null && CurrentlySelectedPreset.CropSettings == false) || 
+                CurrentlySelectedPreset == null || 
+                (presetQuery != null && !presetQuery.HasCropping)
+                )
             {
                 crop_top.Value = GetCropMod2Clean(sourceTitle.AutoCropDimensions.Top);
                 crop_bottom.Value = GetCropMod2Clean(sourceTitle.AutoCropDimensions.Bottom);
                 crop_left.Value = GetCropMod2Clean(sourceTitle.AutoCropDimensions.Left);
                 crop_right.Value = GetCropMod2Clean(sourceTitle.AutoCropDimensions.Right);
             }
-
+ 
             SetPresetCropWarningLabel(CurrentlySelectedPreset);
 
             // Set the Resolution Boxes
