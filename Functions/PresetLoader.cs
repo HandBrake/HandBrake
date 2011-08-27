@@ -96,7 +96,7 @@ namespace Handbrake.Functions
             #region Picture
 
             mainWindow.PictureSettings.check_autoCrop.Checked = true;
-            if (preset.CropSettings)
+            if (preset.CropSettings && presetQuery.HasCropping)
             {
                 mainWindow.PictureSettings.check_customCrop.Checked = true;
                 mainWindow.PictureSettings.crop_top.Value = presetQuery.Cropping.Top;
