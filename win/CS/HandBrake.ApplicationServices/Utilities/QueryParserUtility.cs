@@ -175,9 +175,12 @@ namespace HandBrake.ApplicationServices.Utilities
                             int.Parse(actCropValues[1]),
                             int.Parse(actCropValues[2]),
                             int.Parse(actCropValues[3]));
+                        parsed.HasCropping = true;
                     }
                     catch (Exception)
                     {
+                        parsed.Cropping = null;
+                        parsed.HasCropping = false;
                         // No need to do anything.
                     }
                 }

@@ -118,6 +118,11 @@ namespace HandBrake.ApplicationServices.Model
         public Cropping Cropping { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether HasCropping.
+        /// </summary>
+        public bool HasCropping { get; set; }
+
+        /// <summary>
         /// Gets or sets Anamorphic.
         /// </summary>
         public Anamorphic Anamorphic { get; set; }
