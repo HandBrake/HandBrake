@@ -1225,10 +1225,39 @@
 									  <object class="GtkTable" id="table11">
 										<property name="visible">True</property>
 										<property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-										<property name="n_rows">3</property>
+										<property name="n_rows">4</property>
 										<property name="n_columns">2</property>
 										<property name="homogeneous">True</property>
 
+										<child>
+										  <object class="GtkLabel" id="labela5">
+											<property name="visible">True</property>
+											<property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+											<property name="xalign">0</property>
+											<property name="label" translatable="yes">Source Codec:</property>
+										  </object>
+										  <packing>
+											<property name="left_attach">0</property>
+											<property name="right_attach">1</property>
+											<property name="top_attach">0</property>
+											<property name="bottom_attach">1</property>
+											<property name="x_options">GTK_EXPAND|GTK_FILL</property>
+										  </packing>
+										</child>
+										<child>
+										  <object class="GtkLabel" id="source_codec">
+											<property name="visible">True</property>
+											<property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+											<property name="label" translatable="yes">--</property>
+										  </object>
+										  <packing>
+											<property name="left_attach">1</property>
+											<property name="right_attach">2</property>
+											<property name="top_attach">0</property>
+											<property name="bottom_attach">1</property>
+											<property name="x_options">GTK_EXPAND|GTK_FILL</property>
+										  </packing>
+										</child>
 										<child>
 										  <object class="GtkLabel" id="label23">
 											<property name="visible">True</property>
@@ -1239,8 +1268,8 @@
 										  <packing>
 											<property name="left_attach">0</property>
 											<property name="right_attach">1</property>
-											<property name="top_attach">0</property>
-											<property name="bottom_attach">1</property>
+											<property name="top_attach">1</property>
+											<property name="bottom_attach">2</property>
 											<property name="x_options">GTK_EXPAND|GTK_FILL</property>
 										  </packing>
 										</child>
@@ -1253,8 +1282,8 @@
 										  <packing>
 											<property name="left_attach">1</property>
 											<property name="right_attach">2</property>
-											<property name="top_attach">0</property>
-											<property name="bottom_attach">1</property>
+											<property name="top_attach">1</property>
+											<property name="bottom_attach">2</property>
 											<property name="x_options">GTK_EXPAND|GTK_FILL</property>
 										  </packing>
 										</child>
@@ -1268,8 +1297,8 @@
 										  <packing>
 											<property name="left_attach">0</property>
 											<property name="right_attach">1</property>
-											<property name="top_attach">1</property>
-											<property name="bottom_attach">2</property>
+											<property name="top_attach">2</property>
+											<property name="bottom_attach">3</property>
 											<property name="x_options">GTK_EXPAND|GTK_FILL</property>
 										  </packing>
 										</child>
@@ -1282,8 +1311,8 @@
 										  <packing>
 											<property name="left_attach">1</property>
 											<property name="right_attach">2</property>
-											<property name="top_attach">1</property>
-											<property name="bottom_attach">2</property>
+											<property name="top_attach">2</property>
+											<property name="bottom_attach">3</property>
 											<property name="x_options">GTK_EXPAND|GTK_FILL</property>
 										  </packing>
 										</child>
@@ -1297,8 +1326,8 @@
 										  <packing>
 											<property name="left_attach">0</property>
 											<property name="right_attach">1</property>
-											<property name="top_attach">2</property>
-											<property name="bottom_attach">3</property>
+											<property name="top_attach">3</property>
+											<property name="bottom_attach">4</property>
 											<property name="x_options">GTK_EXPAND|GTK_FILL</property>
 										  </packing>
 										</child>
@@ -1311,8 +1340,8 @@
 										  <packing>
 											<property name="left_attach">1</property>
 											<property name="right_attach">2</property>
-											<property name="top_attach">2</property>
-											<property name="bottom_attach">3</property>
+											<property name="top_attach">3</property>
+											<property name="bottom_attach">4</property>
 											<property name="x_options">GTK_EXPAND|GTK_FILL</property>
 										  </packing>
 										</child>

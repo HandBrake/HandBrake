@@ -68,6 +68,7 @@ typedef struct
 	gchar *name;
 	gint index;
 	gint type;
+	char *video_codec_name;
 	gint width;
 	gint height;
 	gint crop[4];

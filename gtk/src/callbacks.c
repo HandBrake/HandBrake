@@ -1376,6 +1376,11 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	ud->dont_clear_presets = TRUE;
 	ud->scale_busy = TRUE;
 	update_title_duration(ud);
+	widget = GHB_WIDGET (ud->builder, "source_codec");
+	if ( tinfo->video_codec_name )
+		gtk_label_set_text (GTK_LABEL(widget), tinfo->video_codec_name);
+	else
+		gtk_label_set_text (GTK_LABEL(widget), "Unknown");
 	widget = GHB_WIDGET (ud->builder, "source_dimensions");
 	text = g_strdup_printf ("%d x %d", tinfo->width, tinfo->height);
 	gtk_label_set_text (GTK_LABEL(widget), text);

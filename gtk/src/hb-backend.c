@@ -3474,6 +3474,7 @@ ghb_get_title_info(ghb_title_info_t *tinfo, gint titleindex)
 	title = hb_list_item( list, titleindex );
 	if (title == NULL) return FALSE;	// Bad titleindex
 	tinfo->index = titleindex;
+	tinfo->video_codec_name = title->video_codec_name;
 	tinfo->width = title->width;
 	tinfo->height = title->height;
 	memcpy(tinfo->crop, title->crop, 4 * sizeof(int));
