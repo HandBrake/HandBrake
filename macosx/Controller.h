@@ -266,6 +266,8 @@ BOOL                        fIsDragging;
 - (void)     updateUI: (NSTimer *) timer;
 - (void)     enableUI: (bool) enable;
 - (IBAction) encodeStartStopPopUpChanged: (id) sender;
+
+
 - (IBAction) titlePopUpChanged: (id) sender;
 - (IBAction) chapterPopUpChanged: (id) sender;
 - (IBAction) startEndSecValueChanged: (id) sender;
@@ -297,6 +299,12 @@ BOOL                        fIsDragging;
 - (void)pictureSettingsDidChange;
 - (IBAction) calculatePictureSizing: (id) sender;
 - (IBAction) openMainWindow: (id) sender;
+
+/* Add All titles to the queue */
+- (IBAction) addAllTitlesToQueue: (id) sender;
+- (void) addAllTitlesToQueueAlertDone: (NSWindow *) sheet
+                           returnCode: (int) returnCode contextInfo: (void *) contextInfo;
+- (void) doAddAllTitlesToQueue;
 
 /* Queue File Stuff */
 - (void) loadQueueFile;

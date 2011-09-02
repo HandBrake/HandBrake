@@ -1329,7 +1329,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
     if (fHandle)
     {
-        if (action == @selector(addToQueue:) || action == @selector(showPicturePanel:) || action == @selector(showAddPresetPanel:))
+        if (action == @selector(addToQueue:) || action == @selector(addAllTitlesToQueue:) || action == @selector(showPicturePanel:) || action == @selector(showAddPresetPanel:))
             return SuccessfulScan && [fWindow attachedSheet] == nil;
         
         if (action == @selector(browseSources:))
@@ -4194,6 +4194,45 @@ bool one_burned = FALSE;
     {
         hb_pause( fQueueEncodeLibhb );
     }
+}
+
+#pragma mark -
+#pragma mark Batch Queue Titles Methods
+- (IBAction) addAllTitlesToQueue: (id) sender
+{
+    NSBeginCriticalAlertSheet( NSLocalizedString( @"You are about to add ALL titles to the queue!", @"" ), 
+                              NSLocalizedString( @"Cancel", @"" ), NSLocalizedString( @"Yes, I want to add all titles to the queue.", @"" ), nil, fWindow, self,
+                              @selector( addAllTitlesToQueueAlertDone:returnCode:contextInfo: ),
+                              NULL, NULL, [NSString stringWithFormat:
+                                           NSLocalizedString( @"Current settings will be applied to all %d titles. Are you sure you want to do this?", @"" ),[fSrcTitlePopUp numberOfItems]] );
+}
+
+- (void) addAllTitlesToQueueAlertDone: (NSWindow *) sheet
+                           returnCode: (int) returnCode contextInfo: (void *) contextInfo
+{
+    if( returnCode == NSAlertAlternateReturn )
+        [self doAddAllTitlesToQueue];
+}
+
+- (void) doAddAllTitlesToQueue
+{
+    
+    /* first get the currently selected index so we can choose it again after cycling through the available titles. */
+    int currentlySelectedTitle = [fSrcTitlePopUp indexOfSelectedItem];
+    
+    /* For each title in the fSrcTitlePopUp select it ... */
+    for( int i = 0; i < [fSrcTitlePopUp numberOfItems]; i++ )
+    {
+        [fSrcTitlePopUp selectItemAtIndex:i];
+        /* Now call titlePopUpChanged to load it up ... */
+        [self titlePopUpChanged:nil];
+        /* now add the title to the queue */
+        [self addToQueue:nil];   
+    }
+    /* Now that we are done, reselect the previously selected title.*/
+    [fSrcTitlePopUp selectItemAtIndex: currentlySelectedTitle];
+    /* Now call titlePopUpChanged to load it up ... */
+    [self titlePopUpChanged:nil]; 
 }
 
 #pragma mark -
