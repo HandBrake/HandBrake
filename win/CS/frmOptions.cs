@@ -731,7 +731,6 @@ namespace Handbrake
 
         private void btn_close_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.Save();
             this.Close();
         }
     }
