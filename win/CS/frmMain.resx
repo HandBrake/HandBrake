@@ -233,6 +233,33 @@ to make bitrate allocation decisions.</value>
   <metadata name="frmMainMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>106, 15</value>
   </metadata>
+  <data name="AudioSettings.ScannedTracks" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAElTeXN0ZW0sIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0
+        cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5BQEAAACrAVN5c3RlbS5Db21wb25lbnRN
+        b2RlbC5CaW5kaW5nTGlzdGAxW1tIYW5kQnJha2UuQXBwbGljYXRpb25TZXJ2aWNlcy5QYXJzaW5nLkF1
+        ZGlvLCBIYW5kQnJha2UuQXBwbGljYXRpb25TZXJ2aWNlcywgVmVyc2lvbj0wLjkuNS40MTk0LCBDdWx0
+        dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPW51bGxdXQgAAAAJYWRkTmV3UG9zFnJhaXNlTGlzdENo
+        YW5nZWRFdmVudHMWcmFpc2VJdGVtQ2hhbmdlZEV2ZW50cwhhbGxvd05ldwlhbGxvd0VkaXQLYWxsb3dS
+        ZW1vdmUPdXNlclNldEFsbG93TmV3EkNvbGxlY3Rpb25gMStpdGVtcwAAAAAAAAADCAEBAQEBAakBU3lz
+        dGVtLkNvbGxlY3Rpb25zLkdlbmVyaWMuTGlzdGAxW1tIYW5kQnJha2UuQXBwbGljYXRpb25TZXJ2aWNl
+        cy5QYXJzaW5nLkF1ZGlvLCBIYW5kQnJha2UuQXBwbGljYXRpb25TZXJ2aWNlcywgVmVyc2lvbj0wLjku
+        NS40MTk0LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPW51bGxdXQIAAAD/////AQABAQEA
+        CQMAAAAMBAAAAFdIYW5kQnJha2UuQXBwbGljYXRpb25TZXJ2aWNlcywgVmVyc2lvbj0wLjkuNS40MTk0
+        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPW51bGwEAwAAAKkBU3lzdGVtLkNvbGxlY3Rp
+        b25zLkdlbmVyaWMuTGlzdGAxW1tIYW5kQnJha2UuQXBwbGljYXRpb25TZXJ2aWNlcy5QYXJzaW5nLkF1
+        ZGlvLCBIYW5kQnJha2UuQXBwbGljYXRpb25TZXJ2aWNlcywgVmVyc2lvbj0wLjkuNS40MTk0LCBDdWx0
+        dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPW51bGxdXQMAAAAGX2l0ZW1zBV9zaXplCF92ZXJzaW9u
+        BAAALUhhbmRCcmFrZS5BcHBsaWNhdGlvblNlcnZpY2VzLlBhcnNpbmcuQXVkaW9bXQQAAAAICAkFAAAA
+        AQAAAAEAAAAHBQAAAAABAAAABAAAAAQrSGFuZEJyYWtlLkFwcGxpY2F0aW9uU2VydmljZXMuUGFyc2lu
+        Zy5BdWRpbwQAAAAJBgAAAA0DBQYAAAArSGFuZEJyYWtlLkFwcGxpY2F0aW9uU2VydmljZXMuUGFyc2lu
+        Zy5BdWRpbwcAAAAcPFRyYWNrTnVtYmVyPmtfX0JhY2tpbmdGaWVsZBk8TGFuZ3VhZ2U+a19fQmFja2lu
+        Z0ZpZWxkHTxMYW5ndWFnZUNvZGU+a19fQmFja2luZ0ZpZWxkHDxEZXNjcmlwdGlvbj5rX19CYWNraW5n
+        RmllbGQXPEZvcm1hdD5rX19CYWNraW5nRmllbGQbPFNhbXBsZVJhdGU+a19fQmFja2luZ0ZpZWxkGDxC
+        aXRyYXRlPmtfX0JhY2tpbmdGaWVsZAABAQEBAAAICAgEAAAAAAAAAAoKBgcAAAAKTm9uZSBGb3VuZAoA
+        AAAAAAAAAAs=
+</value>
+  </data>
   <metadata name="AudioMenuRowHeightHack.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 54</value>
   </metadata>
