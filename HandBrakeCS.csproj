@@ -312,15 +312,6 @@
     <None Include="Installer\MakeNightly.nsi.tmpl" />
     <None Include="Installer\MakeNightly.nsi" />
     <None Include="Installer\Installer.nsi" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="handbrakepineapple.ico" />

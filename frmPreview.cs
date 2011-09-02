@@ -254,7 +254,6 @@ namespace Handbrake
                             if (File.Exists(vlcPath))
                             {
                                 UserSettingService.SetUserSetting(UserSettingConstants.VLC_Path, "C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe");
-                                Properties.Settings.Default.Save(); // Save this new path if it does
                             }
                             else
                             {
