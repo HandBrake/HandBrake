@@ -205,8 +205,8 @@ namespace HandBrake.ApplicationServices.Services
             userSettings["AutoNameRemoveUnderscore"] = true;
             userSettings["ActivityWindowLastMode"] = 0;
             userSettings["useClosedCaption"] = false;
-            userSettings["batchMinDuration"] = 35;
-            userSettings["batchMaxDuration"] = 65;
+            userSettings["batchMinDuration"] = "00:18:00";
+            userSettings["batchMaxDuration"] = "02:30:00";
             userSettings["defaultPlayer"] = false;
             userSettings["SelectedLanguages"] = new StringCollection();
             userSettings["DubModeAudio"] = 0;

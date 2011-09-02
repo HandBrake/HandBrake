@@ -341,7 +341,7 @@
       <string>batchMinDuration</string>
     </key>
     <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">35</anyType>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">00:18:00</anyType>
     </value>
   </item>
   <item>
@@ -349,7 +349,7 @@
       <string>batchMaxDuration</string>
     </key>
     <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">65</anyType>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">02:30:00</anyType>
     </value>
   </item>
   <item>

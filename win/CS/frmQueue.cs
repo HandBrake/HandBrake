@@ -702,23 +702,6 @@ namespace Handbrake
                 queue.QueueManager.RestoreQueue(OpenFile.FileName);
         }
 
-        /// <summary>
-        /// Readd current job to queue
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void MnuReaddClick(object sender, EventArgs e)
-        {
-            if (queue.QueueManager.LastProcessedJob != null && !queue.QueueManager.LastProcessedJob.IsEmpty)
-            {
-                queue.QueueManager.Add(queue.QueueManager.LastProcessedJob);
-            }
-        }
-
         /* Overrides */
 
         /// <summary>

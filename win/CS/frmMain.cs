@@ -14,6 +14,7 @@ namespace Handbrake
     using System.IO;
     using System.Linq;
     using System.Threading;
+    using System.Windows;
     using System.Windows.Forms;
 
     using Functions;
@@ -36,7 +37,12 @@ namespace Handbrake
 
     using Properties;
 
+    using Application = System.Windows.Forms.Application;
+    using DataFormats = System.Windows.Forms.DataFormats;
+    using DragDropEffects = System.Windows.Forms.DragDropEffects;
+    using DragEventArgs = System.Windows.Forms.DragEventArgs;
     using Main = Handbrake.Functions.Main;
+    using MessageBox = System.Windows.Forms.MessageBox;
 
     /// <summary>
     /// The Main Window
@@ -1075,34 +1081,101 @@ namespace Handbrake
         }
 
         /// <summary>
+        /// Add All Scanned Titles
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The EventArgs.
+        /// </param>
+        private void mnu_AddAllTitles_Click(object sender, EventArgs e)
+        {
+            AddRangeOfTitles(false);
+        }
+
+        /// <summary>
+        /// Add a range of scanned titles
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The EventArgs.
+        /// </param>
+        private void mnu_AddTittleRange_Click(object sender, EventArgs e)
+        {
+            AddRangeOfTitles(true);
+        }
+
+        /// <summary>
         /// Add Multiple Items to the Queue at once.
         /// </summary>
-        /// <param name="sender">The Sender</param>
-        /// <param name="e">The EventArgs</param>
-        private void MnuAddMultiToQueueClick(object sender, EventArgs e)
+        /// <param name="addRange">
+        /// The add Range.
+        /// </param>
+        private void AddRangeOfTitles(bool addRange)
         {
             if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
             {
-                MessageBox.Show("Destination Auto Naming must be enabled in preferences for this feature to work.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "You need to enable 'Auto Naming' in options to use this feature.",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
                 return;
             }
 
             if (this.SourceScan.SouceData == null)
             {
-                MessageBox.Show("You must first scan a source or collection of source to use this feature.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "You must first scan a source before you can use this feature. Select the 'Source' button on the toolbar.",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
                 return;
             }
 
-            BatchAdd batchAdd = new BatchAdd();
-            if (batchAdd.ShowDialog() == DialogResult.OK)
+            bool errors = false;
+            if (addRange) // Add Range
             {
-                int min = batchAdd.Min;
-                int max = batchAdd.Max;
-                bool errors = false;
-
-                foreach (Title title in this.SourceScan.SouceData.Titles)
+                BatchAdd batchAdd = new BatchAdd(this.SourceScan.SouceData);
+                if (batchAdd.ShowDialog() == DialogResult.OK)
                 {
-                    if (title.Duration.TotalMinutes > min && title.Duration.TotalMinutes < max)
+                    TimeSpan min = batchAdd.Min;
+                    TimeSpan max = batchAdd.Max;
+
+                    foreach (Title title in this.SourceScan.SouceData.Titles)
+                    {
+                        if (title.Duration.TotalSeconds > min.TotalSeconds && title.Duration.TotalSeconds < max.TotalSeconds)
+                        {
+                            // Add to Queue
+                            this.drp_dvdtitle.SelectedItem = title;
+
+                            if (!this.AddItemToQueue(false))
+                            {
+                                errors = true;
+                            }
+                        }
+                    }
+                }
+            }
+            else // Add All
+            {
+
+                string warning = string.Format(
+                    "You are about to add *ALL* titles to the queue. \nCurrent settings will be applied to *ALL {0} Titles*. \n\nAre you sure you want to do this?", this.SourceScan.SouceData.Titles.Count);
+
+                DialogResult question =
+                    MessageBox.Show(
+                        warning,
+                        "Warning",
+                        MessageBoxButtons.YesNoCancel,
+                        MessageBoxIcon.Warning);
+
+                if (question == DialogResult.Yes)
+                {
+                    foreach (Title title in this.SourceScan.SouceData.Titles)
                     {
                         // Add to Queue
                         this.drp_dvdtitle.SelectedItem = title;
@@ -1113,16 +1186,17 @@ namespace Handbrake
                         }
                     }
                 }
-
-                if (errors)
-                {
-                    MessageBox.Show(
-                        "One or more items could not be added to the queue. You should check your queue and manually add any missing jobs.",
-                        "Warning",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
             }
+
+            if (errors)
+            {
+                MessageBox.Show(
+                    "One or more items could not be added to the queue. You should check your queue and manually add any missing jobs.",
+                    "Warning",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+            
         }
 
         private bool AddItemToQueue(bool showError)
@@ -2590,7 +2664,6 @@ namespace Handbrake
         }
 
         #endregion
-
 
         // This is the END of the road ****************************************
     }
