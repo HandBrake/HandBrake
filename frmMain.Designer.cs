@@ -141,7 +141,9 @@ namespace Handbrake
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
             this.btn_start = new System.Windows.Forms.ToolStripButton();
-            this.btn_add2Queue = new System.Windows.Forms.ToolStripButton();
+            this.btn_add2Queue = new System.Windows.Forms.ToolStripSplitButton();
+            this.mnu_AddAllTitles = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_AddTittleRange = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_showQueue = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.tb_preview = new System.Windows.Forms.ToolStripButton();
@@ -1312,14 +1314,35 @@ namespace Handbrake
             // 
             // btn_add2Queue
             // 
+            this.btn_add2Queue.DropDownButtonWidth = 20;
+            this.btn_add2Queue.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnu_AddAllTitles,
+            this.mnu_AddTittleRange});
             this.btn_add2Queue.Image = global::Handbrake.Properties.Resources.AddToQueue;
             this.btn_add2Queue.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_add2Queue.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_add2Queue.Name = "btn_add2Queue";
-            this.btn_add2Queue.Size = new System.Drawing.Size(117, 36);
+            this.btn_add2Queue.Size = new System.Drawing.Size(138, 36);
             this.btn_add2Queue.Text = "Add to Queue";
             this.btn_add2Queue.ToolTipText = "Add a new item to the Queue";
-            this.btn_add2Queue.Click += new System.EventHandler(this.btn_add2Queue_Click);
+            this.btn_add2Queue.ButtonClick += new System.EventHandler(this.btn_add2Queue_Click);
+            // 
+            // mnu_AddAllTitles
+            // 
+            this.mnu_AddAllTitles.Name = "mnu_AddAllTitles";
+            this.mnu_AddAllTitles.Size = new System.Drawing.Size(152, 22);
+            this.mnu_AddAllTitles.Text = "Add All";
+            this.mnu_AddAllTitles.ToolTipText = "Add all titles to the queue.\r\nUse caution with this feature as incorrect usage ma" +
+    "y result in a queue of failed encodes.";
+            this.mnu_AddAllTitles.Click += new System.EventHandler(this.mnu_AddAllTitles_Click);
+            // 
+            // mnu_AddTittleRange
+            // 
+            this.mnu_AddTittleRange.Name = "mnu_AddTittleRange";
+            this.mnu_AddTittleRange.Size = new System.Drawing.Size(152, 22);
+            this.mnu_AddTittleRange.Text = "Add Range";
+            this.mnu_AddTittleRange.Visible = false;
+            this.mnu_AddTittleRange.Click += new System.EventHandler(this.mnu_AddTittleRange_Click);
             // 
             // btn_showQueue
             // 
@@ -1860,7 +1883,6 @@ namespace Handbrake
         internal System.Windows.Forms.Button btn_clear;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton btn_start;
-        private System.Windows.Forms.ToolStripButton btn_add2Queue;
         private System.Windows.Forms.ToolStripButton btn_showQueue;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton btn_ActivityWindow;
@@ -1958,5 +1980,8 @@ namespace Handbrake
         private Panel panel1;
         internal Controls.AdvancedEncoderOpts advancedEncoderOpts;
         public Controls.AudioPanel AudioSettings;
+        private ToolStripSplitButton btn_add2Queue;
+        private ToolStripMenuItem mnu_AddAllTitles;
+        private ToolStripMenuItem mnu_AddTittleRange;
     }
 }
