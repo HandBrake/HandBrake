@@ -2668,7 +2668,7 @@ static void ShowHelp()
     fprintf( out,
     "        --audio-copy-mask   Set audio codecs that are permitted when\n"
     "                <string>    \"copy\" audio encoder option is specified.\n"
-    "                            Separated by commas for mutiple allowed options.\n");
+    "                            Separated by commas for multiple allowed options.\n");
     fprintf( out,
     "        --audio-fallback    Set audio codec to use when it is not possible\n"
     "                <string>    to copy an audio track without re-encoding.\n");
