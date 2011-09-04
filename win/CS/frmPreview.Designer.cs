@@ -65,18 +65,14 @@
             // 
             this.endPoint.FormattingEnabled = true;
             this.endPoint.Items.AddRange(new object[] {
-            "5",
             "10",
-            "15",
-            "20",
-            "25",
             "30",
-            "35",
-            "40",
             "45",
-            "50",
-            "55",
-            "60"});
+            "60",
+            "75",
+            "90",
+            "105",
+            "120"});
             this.endPoint.Location = new System.Drawing.Point(289, 6);
             this.endPoint.Name = "endPoint";
             this.endPoint.Size = new System.Drawing.Size(70, 21);
