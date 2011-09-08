@@ -232,6 +232,7 @@ namespace HandBrake.ApplicationServices.Services
                 return job;
             }
 
+            this.BackupQueue(string.Empty);
             return null;
         }
 
