@@ -401,9 +401,11 @@ namespace Handbrake.Functions
                     using (FileStream strm = new FileStream(Path.Combine(file.DirectoryName, file.Name), FileMode.Open, FileAccess.Read))
                     {
                         List<QueueTask> list = Ser.Deserialize(strm) as List<QueueTask>;
-                        if (list != null)
+                        
+                        if (list != null && list.Count != 0)
                         {
-                            if (list.Count != 0)
+                            List<QueueTask> tasks = list.Where(l => l.Status != QueueItemStatus.Completed).ToList();
+                            if (tasks.Count != 0)
                             {
                                 queueFiles.Add(file.Name);
                             }
