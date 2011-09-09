@@ -540,10 +540,9 @@ static void do_job( hb_job_t * job )
     {
         audio = hb_list_item( title->list_audio, i );
         if( ( audio->config.out.codec & HB_ACODEC_PASS_FLAG ) && 
-            !( audio->config.in.codec & audio->config.out.codec &
-                                        HB_ACODEC_PASS_MASK ) )
+           !( audio->config.in.codec & audio->config.out.codec & HB_ACODEC_PASS_MASK ) )
         {
-            hb_log( "Passthru requested and input codec is not the same as output codec for track %d",
+            hb_log( "Passthru requested and input codec is not the same as output codec for track %d, dropping track",
                     audio->config.out.track );
             hb_list_rem( title->list_audio, audio );
             free( audio );
@@ -582,8 +581,8 @@ static void do_job( hb_job_t * job )
         }
         /* Adjust output track number, in case we removed one.
          * Output tracks sadly still need to be in sequential order.
-         */
-        audio->config.out.track = i++;
+         * Note: out.track starts at 1, i starts at 0 */
+        audio->config.out.track = ++i;
     }
 
     int requested_mixdown = 0;
