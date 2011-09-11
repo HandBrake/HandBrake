@@ -9,6 +9,7 @@ namespace Handbrake.Controls
     using System.Collections;
     using System.Collections.Generic;
     using System.Collections.Specialized;
+    using System.ComponentModel;
     using System.IO;
     using System.Linq;
     using System.Windows.Forms;
@@ -60,6 +61,17 @@ namespace Handbrake.Controls
 
             srt_charcode.SelectedIndex = 28;
             srt_lang.SelectedIndex = 40;
+        }
+
+        /// <summary>
+        /// Gets SubtitlesList.
+        /// </summary>
+        public List<SubtitleTrack> SubtitlesList
+        {
+            get
+            {
+                return subList;
+            }
         }
 
         #region Public Methods

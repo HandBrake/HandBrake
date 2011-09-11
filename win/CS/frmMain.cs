@@ -21,6 +21,7 @@ namespace Handbrake
 
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.EventArgs;
+    using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Model.General;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Functions;
@@ -845,7 +846,7 @@ namespace Handbrake
                         Preset preset = new Preset
                             {
                                 Name = parsed.PresetName,
-                                Query = QueryGenerator.GenerateFullQuery(this),
+                                Query = QueryGenerator.GenerateFullQuery(this).Query,
                                 CropSettings = parsed.UsesPictureSettings
                             };
 
@@ -860,7 +861,7 @@ namespace Handbrake
                     Preset preset = new Preset
                     {
                         Name = parsed.PresetName,
-                        Query = QueryGenerator.GenerateFullQuery(this),
+                        Query = QueryGenerator.GenerateFullQuery(this).Query,
                         CropSettings = parsed.UsesPictureSettings,
                     };
                     PresetLoader.LoadPreset(this, preset);
@@ -982,18 +983,17 @@ namespace Handbrake
                 // If we have a custom query, then we'll want to figure out what the new source and destination is, otherwise we'll just use the gui components.
                 string jobSourcePath = !string.IsNullOrEmpty(rtf_query.Text) ? Main.GetSourceFromQuery(rtf_query.Text) : sourcePath;
                 string jobDestination = !string.IsNullOrEmpty(rtf_query.Text) ? Main.GetDestinationFromQuery(rtf_query.Text) : text_destination.Text;
+                QueueTask task = QueryGenerator.GenerateFullQuery(this);
 
                 if (this.queueProcessor.QueueManager.Count != 0 || (!string.IsNullOrEmpty(jobSourcePath) && !string.IsNullOrEmpty(jobDestination)))
                 {
-                    string generatedQuery = QueryGenerator.GenerateFullQuery(this);
                     string specifiedQuery = rtf_query.Text != string.Empty
                                                 ? rtf_query.Text
-                                                : QueryGenerator.GenerateFullQuery(this);
-                    string query = string.Empty;
+                                                : task.Query;
 
                     // Check to make sure the generated query matches the GUI settings
                     if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PromptOnUnmatchingQueries) && !string.IsNullOrEmpty(specifiedQuery) &&
-                        generatedQuery != specifiedQuery)
+                        task.Query != specifiedQuery)
                     {
                         DialogResult result = MessageBox.Show("The query under the \"Query Editor\" tab " +
                                                               "does not match the current GUI settings.\n\nBecause the manual query takes " +
@@ -1009,12 +1009,12 @@ namespace Handbrake
                         {
                             case DialogResult.Yes:
                                 // Replace the manual query with the generated one
-                                query = generatedQuery;
-                                rtf_query.Text = generatedQuery;
+        
+                                rtf_query.Text = task.Query;
                                 break;
                             case DialogResult.No:
                                 // Use the manual query
-                                query = specifiedQuery;
+                                task.Query = specifiedQuery;
                                 break;
                             case DialogResult.Cancel:
                                 // Don't start the encode
@@ -1023,7 +1023,7 @@ namespace Handbrake
                     }
                     else
                     {
-                        query = specifiedQuery;
+                        task.Query = specifiedQuery;
                     }
 
                     DialogResult overwrite = DialogResult.Yes;
@@ -1038,16 +1038,10 @@ namespace Handbrake
 
                     if (overwrite == DialogResult.Yes)
                     {
-                        QueueTask task = new QueueTask(query)
-                            {
-                                Title = this.GetTitle(),
-                                Source = jobSourcePath,
-                                Destination = jobDestination,
-                                CustomQuery = (this.rtf_query.Text != string.Empty)
-                            };
+                        
 
                         if (this.queueProcessor.QueueManager.Count == 0)
-                            this.queueProcessor.QueueManager.Add(task);
+                            this.queueProcessor.QueueManager.Add(QueryGenerator.GenerateFullQuery(this));
 
                         queueWindow.SetQueue();
                         if (this.queueProcessor.QueueManager.Count > 1)
@@ -1202,10 +1196,6 @@ namespace Handbrake
 
         private bool AddItemToQueue(bool showError)
         {
-            string query = QueryGenerator.GenerateFullQuery(this);
-            if (!string.IsNullOrEmpty(rtf_query.Text))
-                query = rtf_query.Text;
-
             // If we have a custom query, then we'll want to figure out what the new source and destination is, otherwise we'll just use the gui components.
             string jobSourcePath = !string.IsNullOrEmpty(rtf_query.Text) ? Main.GetSourceFromQuery(rtf_query.Text) : sourcePath;
             string jobDestination = !string.IsNullOrEmpty(rtf_query.Text) ? Main.GetDestinationFromQuery(rtf_query.Text) : text_destination.Text;
@@ -1242,14 +1232,8 @@ namespace Handbrake
             }
 
             // Add the job.
-            QueueTask task = new QueueTask(query)
-            {
-                Title = this.GetTitle(),
-                Source = jobSourcePath,
-                Destination = jobDestination,
-                CustomQuery = (this.rtf_query.Text != string.Empty)
-            };
-            this.queueProcessor.QueueManager.Add(task);
+
+            this.queueProcessor.QueueManager.Add(QueryGenerator.GenerateFullQuery(this));
 
             lbl_encode.Text = this.queueProcessor.QueueManager.Count + " encode(s) pending in the queue";
 
@@ -2083,7 +2067,7 @@ namespace Handbrake
         // Query Editor Tab
         private void btn_generate_Query_Click(object sender, EventArgs e)
         {
-            rtf_query.Text = QueryGenerator.GenerateFullQuery(this);
+            rtf_query.Text = QueryGenerator.GenerateFullQuery(this).Query;
         }
 
         private void btn_clear_Click(object sender, EventArgs e)
@@ -2540,7 +2524,7 @@ namespace Handbrake
         /// <returns>
         /// The title.
         /// </returns>
-        private int GetTitle()
+        public int GetTitle()
         {
             int title = 0;
             if (drp_dvdtitle.SelectedItem != null)

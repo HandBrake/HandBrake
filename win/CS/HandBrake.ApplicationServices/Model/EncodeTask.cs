@@ -293,6 +293,16 @@ namespace HandBrake.ApplicationServices.Model
         /// </summary>
         public string AdvancedEncoderOptions { get; set; }
 
+        /// <summary>
+        /// Gets or sets Verbosity.
+        /// </summary>
+        public int Verbosity { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether disableLibDvdNav.
+        /// </summary>
+        public bool DisableLibDvdNav { get; set; }
+
         #endregion
 
         #region Preset Information (TODO This should probably be dropped)
