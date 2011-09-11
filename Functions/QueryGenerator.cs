@@ -14,12 +14,16 @@ namespace Handbrake.Functions
 
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Functions;
+    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.Interop.Model;
+    using HandBrake.Interop.Model.Encoding;
 
     using Handbrake.Model;
 
+    using OutputFormat = HandBrake.ApplicationServices.Model.Encoding.OutputFormat;
     using UserSettingConstants = Handbrake.UserSettingConstants;
 
     /// <summary>
@@ -56,17 +60,34 @@ namespace Handbrake.Functions
             return query;
         }
 
-        public static string GenerateFullQuery(frmMain mainWindow)
+        public static QueueTask GenerateFullQuery(frmMain mainWindow)
         {
+            // Create the CLI Query
             string query = string.Empty;
-
             query += SourceQuery(mainWindow, mainWindow.drop_mode.SelectedIndex, 0, null);
-
             query += DestinationQuery(mainWindow, QueryEncodeMode.Standard);
-
             query += GenerateTabbedComponentsQuery(mainWindow, true, QueryPictureSettingsMode.UserInterfaceSettings, 0, 0);
 
-            return query;
+            // Create the Queue Task and setup the EncodeTask model object.
+            Preset preset = mainWindow.treeView_presets.SelectedNode.Tag as Preset;
+            bool isCustom = true;
+            if (preset != null && preset.IsBuildIn)
+            {
+                isCustom = false;
+            }
+
+            EncodeTask task = CreateEncodeTaskObject(mainWindow);
+            QueueTask queueTask = new QueueTask(query)
+            {
+                Source = task.Source,
+                Destination = task.Destination,
+                Title = mainWindow.GetTitle(),
+                CustomQuery = (mainWindow.rtf_query.Text != string.Empty) || isCustom,
+                Task = task,
+                Query = query,
+            };
+
+            return queueTask;
         }
 
         #region Individual Query Sections
@@ -523,6 +544,184 @@ namespace Handbrake.Functions
                 query += " --no-dvdnav";
 
             return query;
+        }
+
+        #endregion
+
+        #region EncodeTask
+
+        /// <summary>
+        /// Create the EncodeTask model from the currently selected control options.
+        /// </summary>
+        /// <param name="frmMain">
+        /// The frm main.
+        /// </param>
+        /// <returns>
+        /// An EncodeTask Object
+        /// </returns>
+        private static EncodeTask CreateEncodeTaskObject(frmMain frmMain)
+        {
+            EncodeTask task = new EncodeTask();
+            
+            // Source, Destination and Output Settings
+            task.Destination = frmMain.text_destination.Text;
+            string sourcePath = frmMain.selectedTitle != null && File.Exists(frmMain.selectedTitle.SourceName)
+                             ? frmMain.selectedTitle.SourceName.Trim()
+                             : frmMain.sourcePath;
+            if (!string.IsNullOrEmpty(sourcePath) && sourcePath.Trim() != "Select \"Source\" to continue")
+            {
+                task.Source = sourcePath;
+            }
+
+            if (frmMain.drp_dvdtitle.Text != string.Empty)
+            {
+                string[] titleInfo = frmMain.drp_dvdtitle.Text.Split(' ');
+                int title;
+                int.TryParse(titleInfo[0], out title);
+                task.Title = title;
+            }
+
+
+            int start, end, angle;
+            int.TryParse(frmMain.drop_chapterStart.Text, out start);
+            int.TryParse(frmMain.drop_chapterFinish.Text, out end);
+            int.TryParse(frmMain.drop_angle.Text, out angle);
+            task.StartPoint = start;
+            task.EndPoint = end;
+            task.Angle = angle;
+
+            switch (frmMain.drop_mode.SelectedIndex)
+            {
+                case 0: // Chapters
+                    task.PointToPointMode = PointToPointMode.Chapters;
+                    break;
+                case 1: // Seconds
+                    task.PointToPointMode = PointToPointMode.Seconds;
+                    break;
+                case 2: // Frames
+                    task.PointToPointMode = PointToPointMode.Frames;
+                    break;
+                default:
+                    break;
+            }           
+
+            task.OutputFormat = EnumHelper<OutputFormat>.GetValue(frmMain.drop_format.Text.Replace(" File", string.Empty).Trim());
+            task.LargeFile = frmMain.check_largeFile.Checked;
+            task.IPod5GSupport = frmMain.check_largeFile.Checked;
+            task.OptimizeMP4 = frmMain.check_optimiseMP4.Checked;
+
+            // Picture Settings
+            int width, height;
+            int.TryParse(frmMain.PictureSettings.crop_top.Text, out width);
+            int.TryParse(frmMain.PictureSettings.crop_top.Text, out height);
+            task.Width = width;
+            task.Height = height;
+            int top, bottom, left, right;
+            int.TryParse(frmMain.PictureSettings.crop_top.Text, out top);
+            int.TryParse(frmMain.PictureSettings.crop_top.Text, out bottom);
+            int.TryParse(frmMain.PictureSettings.crop_top.Text, out left);
+            int.TryParse(frmMain.PictureSettings.crop_top.Text, out right);
+            task.Cropping = new Cropping(top, bottom, left, right);
+
+            int modulus, displayWidth, parX, parY;
+            int.TryParse(frmMain.PictureSettings.drp_modulus.SelectedItem.ToString(), out modulus);
+            int.TryParse(frmMain.PictureSettings.updownDisplayWidth.Text, out displayWidth);
+            int.TryParse(frmMain.PictureSettings.updownParWidth.Text, out parX);
+            int.TryParse(frmMain.PictureSettings.updownParHeight.Text, out parY);
+            switch (frmMain.PictureSettings.drp_anamorphic.SelectedIndex)
+            {
+                  case 0:
+                    task.Anamorphic = Anamorphic.None;
+                    task.Modulus = modulus;
+                    break;
+                case 1:
+                    task.Anamorphic = Anamorphic.Strict;
+                    break;
+                case 2:
+                    task.Anamorphic = Anamorphic.Loose;
+                    task.Modulus = modulus;
+                    break;
+                case 3:
+                    task.Anamorphic = Anamorphic.Custom;
+                    task.Modulus = modulus;
+                    task.DisplayWidth = displayWidth;
+                    task.KeepDisplayAspect = frmMain.PictureSettings.check_KeepAR.Checked;
+                    task.PixelAspectX = parX;
+                    task.PixelAspectY = parY;
+                    break;
+            }
+
+            // Filter Settings
+            task.Deblock = frmMain.Filters.Deblock;
+            task.Decomb = frmMain.Filters.Decomb;
+            task.CustomDecomb = frmMain.Filters.CustomDecombValue;
+            task.Deinterlace = frmMain.Filters.Deinterlace;
+            task.CustomDeinterlace = frmMain.Filters.CustomDeInterlaceValue;
+            task.Deblock = frmMain.Filters.Deblock;
+            task.Denoise = frmMain.Filters.Denoise;
+            task.CustomDenoise = frmMain.Filters.CustomDenoiseValue;
+            task.Detelecine = frmMain.Filters.Detelecine;
+            task.CustomDetelecine = frmMain.Filters.CustomDeTelecineValue;
+            task.Grayscale = frmMain.Filters.GrayScale;
+
+            // Video Settings
+            task.VideoEncoder = EnumHelper<VideoEncoder>.GetValue(frmMain.drp_videoEncoder.Text);
+            int videoBitrate;
+            int.TryParse(frmMain.text_bitrate.Text, out videoBitrate);
+            task.VideoBitrate = videoBitrate;
+            task.VideoEncodeRateType = frmMain.radio_cq.Checked
+                                           ? VideoEncodeRateType.ConstantQuality
+                                           : VideoEncodeRateType.AverageBitrate;
+            task.TwoPass = frmMain.check_2PassEncode.Checked;
+            task.TurboFirstPass = frmMain.check_turbo.Checked;
+            double framerate;
+            double.TryParse(frmMain.drp_videoFramerate.Text, out framerate);
+            task.Framerate = framerate;
+            task.FramerateMode = frmMain.drp_videoFramerate.SelectedIndex == 0
+                                     ? (frmMain.radio_constantFramerate.Checked ? FramerateMode.CFR : FramerateMode.VFR)
+                                     : (frmMain.radio_constantFramerate.Checked ? FramerateMode.CFR : FramerateMode.PFR);
+
+            if (frmMain.radio_cq.Checked)
+            {
+                double cqStep = UserSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step);
+                switch (frmMain.drp_videoEncoder.Text)
+                {
+                    case "MPEG-4 (FFmpeg)":
+                    case "MPEG-2 (FFmpeg)":
+                        task.Quality = 31 - (frmMain.slider_videoQuality.Value - 1);
+                        break;
+                    case "H.264 (x264)":
+                        double value = 51 - (frmMain.slider_videoQuality.Value * cqStep);
+                        task.Quality = Math.Round(value, 2);
+                        break;
+                    case "VP3 (Theora)":
+                        task.Quality = frmMain.slider_videoQuality.Value;
+                        break;
+                }
+            }
+
+            // Audio
+            task.AudioTracks = new List<AudioTrack>(frmMain.AudioSettings.AudioTracks);
+
+            // Subtitles
+            task.SubtitleTracks = new List<SubtitleTrack>(frmMain.Subtitles.SubtitlesList);
+
+            // Chapters
+            task.IncludeChapterMarkers = frmMain.Check_ChapterMarkers.Checked;
+            task.ChapterNames = new List<string>();
+            foreach (DataGridViewRow row in frmMain.data_chpt.Rows)
+            {
+                task.ChapterNames.Add(row.Cells[1].Value.ToString());
+            }
+
+            // Advanced Options
+            task.AdvancedEncoderOptions = X264Query(frmMain).Replace("-x", string.Empty).Trim();
+
+            // Extra Settings
+            task.Verbosity = UserSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity);
+            task.DisableLibDvdNav = UserSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav);
+
+            return task;
         }
 
         #endregion

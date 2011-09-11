@@ -8,6 +8,7 @@ namespace Handbrake.Controls
     using System;
     using System.Windows.Forms;
 
+    using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.Interop.Model.Encoding;
 
@@ -33,6 +34,120 @@ namespace Handbrake.Controls
             drop_denoise.SelectedIndex = 0;
             drop_detelecine.SelectedIndex = 0;
         }
+
+        #region Properties
+
+        /// <summary>
+        /// Gets Decomb.
+        /// </summary>
+        public Decomb Decomb
+        {
+            get
+            {
+                return EnumHelper<Decomb>.GetValue(drop_decomb.Text);
+            }
+        }
+
+        /// <summary>
+        /// Gets CustomDecombValue.
+        /// </summary>
+        public string CustomDecombValue
+        {
+            get
+            {
+                return text_customDC.Text;
+            }
+        }
+
+        /// <summary>
+        /// Gets Deinterlace.
+        /// </summary>
+        public Deinterlace Deinterlace
+        {
+            get
+            {
+                return EnumHelper<Deinterlace>.GetValue(drop_deinterlace.Text);
+            }
+        }
+
+        /// <summary>
+        /// Gets CustomDeInterlaceValue.
+        /// </summary>
+        public string CustomDeInterlaceValue
+        {
+            get
+            {
+                return text_customDI.Text;
+            }
+        }
+
+        /// <summary>
+        /// Gets Detelecine.
+        /// </summary>
+        public Detelecine Detelecine
+        {
+            get
+            {
+                return EnumHelper<Detelecine>.GetValue(drop_detelecine.Text);
+            }
+        }
+
+        /// <summary>
+        /// Gets CustomDeTelecineValue.
+        /// </summary>
+        public string CustomDeTelecineValue
+        {
+            get
+            {
+                return text_customDT.Text;
+            }
+        }
+
+        /// <summary>
+        /// Gets Denoise.
+        /// </summary>
+        public Denoise Denoise
+        {
+            get
+            {
+                return EnumHelper<Denoise>.GetValue(drop_denoise.Text);
+            }
+        }
+
+        /// <summary>
+        /// Gets CustomDenoiseValue.
+        /// </summary>
+        public string CustomDenoiseValue 
+        {
+            get
+            {
+                return text_customDN.Text;
+            }
+        }
+
+        /// <summary>
+        /// Gets Deblock.
+        /// </summary>
+        public int Deblock
+        {
+            get
+            {
+                return slider_deblock.Value;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether GrayScale.
+        /// </summary>
+        public bool GrayScale
+        {
+            get
+            {
+                return check_grayscale.Checked;
+            }
+        }
+
+        #endregion
 
         /// <summary>
         /// Gets the CLI query for the query generator.

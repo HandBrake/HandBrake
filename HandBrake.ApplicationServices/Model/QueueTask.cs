@@ -5,18 +5,11 @@
 
 namespace HandBrake.ApplicationServices.Model
 {
-    using HandBrake.ApplicationServices.Utilities;
-
     /// <summary>
     /// The QueueTask.
     /// </summary>
     public class QueueTask
     {
-        /// <summary>
-        /// The Encode task backing field.
-        /// </summary>
-        private EncodeTask task;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="QueueTask"/> class.
         /// </summary>
@@ -71,20 +64,9 @@ namespace HandBrake.ApplicationServices.Model
         public QueueItemStatus Status { get; set; }
 
         /// <summary>
-        /// Gets the Encode Task.
+        /// Gets or sets the Encode Task.
         /// </summary>
-        public EncodeTask Task
-        {
-            get
-            {
-                if (this.task == null)
-                {
-                    task = QueryParserUtility.Parse(this.Query);
-                }
-
-                return this.task;
-            }
-        }
+        public EncodeTask Task { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether or not this instance is empty.

@@ -31,11 +31,6 @@ namespace HandBrake.ApplicationServices.Model
         public bool CropSettings { get; set; }
 
         /// <summary>
-        /// Gets or sets the Settings for this encode/preset. Can be used in place of Query property.
-        /// </summary>
-        public EncodeTask EncodeSettings { get; set; }
-
-        /// <summary>
         /// Gets or sets The version number which associates this preset with a HB build
         /// </summary>
         public string Version { get; set; }
