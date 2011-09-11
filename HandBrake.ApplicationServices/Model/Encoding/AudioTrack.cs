@@ -9,6 +9,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
     using System.ComponentModel;
 
     using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.Interop.Model.Encoding;
 
     /// <summary>
     /// An Audio Track for the Audio Panel

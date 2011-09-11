@@ -7,6 +7,7 @@ namespace HandBrake.ApplicationServices.Services
 {
     using System;
     using System.Diagnostics;
+    using System.IO;
     using System.Windows.Forms;
 
     using HandBrake.ApplicationServices.EventArgs;
@@ -62,7 +63,7 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         public QueueProcessor(int instanceId)
         {
-            this.EncodeService = new Encode();
+            this.EncodeService = File.Exists("hb.dll") ? (IEncode)new LibEncode() : new Encode();
             this.QueueManager = new QueueManager(instanceId);
         }
 

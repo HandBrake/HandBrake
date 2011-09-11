@@ -10,8 +10,6 @@ namespace HandBrake.ApplicationServices.Functions
 
     using HandBrake.Interop.Model.Encoding;
 
-    using AudioEncoder = HandBrake.ApplicationServices.Model.Encoding.AudioEncoder;
-    using Mixdown = HandBrake.ApplicationServices.Model.Encoding.Mixdown;
     using OutputFormat = HandBrake.ApplicationServices.Model.Encoding.OutputFormat;
 
     /// <summary>

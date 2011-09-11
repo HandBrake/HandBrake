@@ -15,9 +15,6 @@ namespace HandBrake.ApplicationServices.Utilities
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.Interop.Model.Encoding;
 
-    using AudioEncoder = HandBrake.ApplicationServices.Model.Encoding.AudioEncoder;
-    using Mixdown = HandBrake.ApplicationServices.Model.Encoding.Mixdown;
-
     /*
      * TODO:
      * 1. Handle Subittles

@@ -41,7 +41,7 @@ namespace HandBrake.ApplicationServices.Functions
         /// </summary>
         /// <param name="value">An Enum with Display Attributes</param>
         /// <returns>A string name</returns>
-        public static string GetDisplayValue(T value)
+        public static string GetDisplay(T value)
         {
             FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
             DisplayAttribute[] attributes = (DisplayAttribute[])fieldInfo.GetCustomAttributes(typeof(DisplayAttribute), false);
@@ -59,7 +59,8 @@ namespace HandBrake.ApplicationServices.Functions
             foreach (T val in Enum.GetValues(typeof(T)))
             {
                 string currDescription = GetDescription(val);
-                if (currDescription == description)
+                string currDisplay = GetDisplay(val);
+                if (currDescription == description || currDisplay == description)
                 {
                     return val;
                 }
