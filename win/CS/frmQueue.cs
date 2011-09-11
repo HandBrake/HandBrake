@@ -9,23 +9,15 @@ namespace Handbrake
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
-    using System.IO;
-    using System.Linq;
     using System.Windows.Forms;
-    using Functions;
 
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
-    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
-
-    using Model;
-
-    using AudioEncoder = HandBrake.ApplicationServices.Model.Encoding.AudioEncoder;
 
     /// <summary>
     /// The Queue Window
@@ -363,7 +355,7 @@ namespace Handbrake
                 item.SubItems.Add(chapters); // Chapters
                 item.SubItems.Add(queueItem.Source); // Source
                 item.SubItems.Add(queueItem.Destination); // Destination
-                item.SubItems.Add(EnumHelper<VideoEncoder>.GetDisplayValue(parsed.VideoEncoder));
+                item.SubItems.Add(EnumHelper<VideoEncoder>.GetDisplay(parsed.VideoEncoder));
 
                 // Display The Audio Track Information
                 string audio = string.Empty;
@@ -451,7 +443,7 @@ namespace Handbrake
                 lbl_source.Text = queue.QueueManager.LastProcessedJob.Source + "(Title: " + title + " Chapters: " + chapterlbl + ")";
                 lbl_dest.Text = queue.QueueManager.LastProcessedJob.Destination;
                 lbl_encodeOptions.Text = string.Format("Video: {0},  Audio: {1}\nx264 Options: {2}",
-                    EnumHelper<VideoEncoder>.GetDisplayValue(parsed.VideoEncoder),
+                    EnumHelper<VideoEncoder>.GetDisplay(parsed.VideoEncoder),
                     audio, 
                     parsed.AdvancedEncoderOptions);
 

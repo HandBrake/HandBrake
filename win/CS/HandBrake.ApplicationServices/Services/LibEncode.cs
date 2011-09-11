@@ -7,8 +7,6 @@ namespace HandBrake.ApplicationServices.Services
 {
     using System;
     using System.Diagnostics;
-    using System.Text;
-    using System.Threading;
 
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
@@ -60,7 +58,7 @@ namespace HandBrake.ApplicationServices.Services
         public LibEncode()
         {
             // Setup the HandBrake Instance
-            this.instance = new HandBrakeInstance();
+            this.instance = ServiceManager.HandBrakeInstance;
             this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
             this.instance.EncodeProgress += this.InstanceEncodeProgress;
 
@@ -81,8 +79,6 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         public void Start(QueueTask job, bool enableLogging)
         {
-            throw new NotImplementedException("This Method has not been completed yet");
-
             this.startTime = DateTime.Now;
             this.loggingEnabled = enableLogging;
 

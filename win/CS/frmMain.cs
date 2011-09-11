@@ -136,6 +136,7 @@ namespace Handbrake
 
             // We can use LibHB, if the library hb.dll exists.
             this.SourceScan = File.Exists("hb.dll") ? (IScan)new LibScan() : new ScanService();
+            lbl_libhb_warning.Visible = File.Exists("hb.dll") ? true : false;
 
             // Update the users config file with the CLI version data.
             Main.SetCliVersionData();

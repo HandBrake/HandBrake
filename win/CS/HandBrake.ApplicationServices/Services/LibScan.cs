@@ -59,7 +59,7 @@ namespace HandBrake.ApplicationServices.Services
         {
             logging = new StringBuilder();
 
-            instance = new HandBrakeInstance();
+            instance = ServiceManager.HandBrakeInstance;
             instance.Initialize(1);
             instance.ScanProgress += this.InstanceScanProgress;
             instance.ScanCompleted += this.InstanceScanCompleted;

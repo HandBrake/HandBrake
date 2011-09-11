@@ -46,12 +46,18 @@ namespace HandBrake.ApplicationServices.Functions
 
             // Which will be converted to this EncodeJob Model.
             EncodeJob job = new EncodeJob();
+
+
+
+
+
             EncodingProfile profile = new EncodingProfile();
             job.EncodingProfile = profile;
 
             profile.Anamorphic = work.Anamorphic;
 
             profile.AudioEncodings = new List<AudioEncoding>();
+            job.ChosenAudioTracks = new List<int>();
             foreach (AudioTrack track in work.AudioTracks)
             {
                 AudioEncoding newTrack = new AudioEncoding
@@ -59,16 +65,19 @@ namespace HandBrake.ApplicationServices.Functions
                         Bitrate = track.Bitrate,
                         Drc = track.DRC,
                         Gain = track.Gain,
-                        //Encoder = track.Encoder,
-                        // InputNumber = track.Track,
-                        //Mixdown = track.MixDown,
-                        //SampleRateRaw = track.SampleRate
+                        Encoder = track.Encoder,
+                        InputNumber = track.Track.HasValue ? track.Track.Value : 0,
+                        Mixdown = track.MixDown,
+                        SampleRateRaw = GetSampleRateRaw(track.SampleRate),         
                     };
 
                 profile.AudioEncodings.Add(newTrack);
+                if (track.Track != null)
+                {
+                    job.ChosenAudioTracks.Add(track.Track.Value);
+                }
             }
-
-            profile.Cropping = new HandBrake.Interop.Model.Cropping
+            profile.Cropping = new Cropping
                 {
                     Top = work.Cropping.Top,
                     Bottom = work.Cropping.Bottom,
@@ -117,34 +126,17 @@ namespace HandBrake.ApplicationServices.Functions
             switch (work.OutputFormat)
             {
                 case OutputFormat.Mp4:
-                    profile.PreferredExtension = Interop.Model.Encoding.OutputExtension.Mp4;
+                    profile.PreferredExtension = OutputExtension.Mp4;
                     break;
                 case OutputFormat.M4V:
-                    profile.PreferredExtension = Interop.Model.Encoding.OutputExtension.M4v;
+                    profile.PreferredExtension = OutputExtension.M4v;
                     break;
             }
             profile.Quality = work.Quality.HasValue ? work.Quality.Value : 0;
             profile.UseDisplayWidth = true;
             profile.VideoBitrate = work.VideoBitrate.HasValue ? work.VideoBitrate.Value : 0;
             profile.VideoEncodeRateType = work.VideoEncodeRateType;
-
-            switch (work.VideoEncoder)
-            {
-                case VideoEncoder.X264:
-                    profile.VideoEncoder = Interop.Model.Encoding.VideoEncoder.X264;
-                    break;
-                case VideoEncoder.FFMpeg:
-                    profile.VideoEncoder = Interop.Model.Encoding.VideoEncoder.FFMpeg;
-                    break;
-                case VideoEncoder.FFMpeg2:
-                    profile.VideoEncoder = Interop.Model.Encoding.VideoEncoder.FFMpeg; // TODO Fix This.
-                    break;
-                case VideoEncoder.Theora:
-                    profile.VideoEncoder = Interop.Model.Encoding.VideoEncoder.Theora;
-                    break;
-
-            }
-
+            profile.VideoEncoder = work.VideoEncoder;
             profile.Width = work.Width.HasValue ? work.Width.Value : 0;
             profile.X264Options = work.AdvancedEncoderOptions;
 
@@ -161,6 +153,9 @@ namespace HandBrake.ApplicationServices.Functions
                 job.FramesEnd = work.EndPoint;
                 job.FramesStart = work.StartPoint;
             }
+
+            job.CustomChapterNames = work.ChapterNames;
+            job.UseDefaultChapterNames = work.IncludeChapterMarkers;
 
             job.OutputPath = work.Destination;
             switch (work.PointToPointMode)
@@ -186,14 +181,38 @@ namespace HandBrake.ApplicationServices.Functions
             job.SourcePath = work.Source;
             // job.SourceType = work.Type;
             job.Title = work.Title;
+
+            // TODO Setup subtitles
             job.Subtitles = new Subtitles { SourceSubtitles = new List<SourceSubtitle>(), SrtSubtitles = new List<SrtSubtitle>() };
-            foreach (SubtitleTrack track in work.SubtitleTracks)
-            {
-                // TODO
-            }
+            //foreach (SubtitleTrack track in work.SubtitleTracks)
+            //{
+            //    // TODO
+            //}
 
 
             return job;
+        }
+
+        /// <summary>
+        /// Get the Raw Sample Rate
+        /// </summary>
+        /// <param name="rate">
+        /// The rate.
+        /// </param>
+        /// <returns>
+        /// The Raw sample rate as an int
+        /// </returns>
+        private static int GetSampleRateRaw(double rate)
+        {
+            if (rate == 22.05)
+                return 22050;
+            else if (rate == 24)
+                return 24000;
+            else if (rate == 44.1)
+                return 32000;
+            else if (rate == 48)
+                return 48000;
+            else return 48000;
         }
     }
 }

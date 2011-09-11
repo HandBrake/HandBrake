@@ -5,18 +5,17 @@
 
 namespace HandBrake.ApplicationServices.Model
 {
-    using System;
+    using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>
     /// The QueueTask.
     /// </summary>
     public class QueueTask
     {
-        /*
-         * TODO
-         * - Update the Query property to generate the query from the EncodeTask object.
-         * - Remove Sourcee, Destination and Title when they are no longer used.
-         */
+        /// <summary>
+        /// The Encode task backing field.
+        /// </summary>
+        private EncodeTask task;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QueueTask"/> class.
@@ -72,9 +71,20 @@ namespace HandBrake.ApplicationServices.Model
         public QueueItemStatus Status { get; set; }
 
         /// <summary>
-        /// Gets or sets the Encode Task.
+        /// Gets the Encode Task.
         /// </summary>
-        public EncodeTask Task { get; set; }
+        public EncodeTask Task
+        {
+            get
+            {
+                if (this.task == null)
+                {
+                    task = QueryParserUtility.Parse(this.Query);
+                }
+
+                return this.task;
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether or not this instance is empty.

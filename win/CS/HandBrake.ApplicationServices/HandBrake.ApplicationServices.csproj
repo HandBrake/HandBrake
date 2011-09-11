@@ -96,9 +96,7 @@
     <Compile Include="Functions\Win7.cs" />
     <Compile Include="Model\DriveInformation.cs" />
     <Compile Include="Model\Encoding\AudioTrack.cs" />
-    <Compile Include="Model\Encoding\AudioEncoder.cs" />
     <Compile Include="Model\Encoding\FramerateMode.cs" />
-    <Compile Include="Model\Encoding\Mixdown.cs" />
     <Compile Include="Model\Encoding\PointToPointMode.cs" />
     <Compile Include="Model\EncodeTask.cs" />
     <Compile Include="Model\Encoding\OutputFormat.cs" />
