@@ -386,6 +386,7 @@ namespace HandBrake.ApplicationServices.Services
                     List<Preset> list = (List<Preset>)Ser.Deserialize(reader);
                     foreach (Preset preset in list)
                     {
+                        preset.IsBuildIn = true; // Older versions did not have this flag so explicitly make sure it is set.
                         this.presets.Add(preset);
                     }
 
