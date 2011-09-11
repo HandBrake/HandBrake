@@ -11,7 +11,10 @@ namespace HandBrake.Interop.Model.Encoding
 {
 	using System.ComponentModel.DataAnnotations;
 
-	public enum Mixdown
+    /// <summary>
+    /// The Audio Mixdown Enumeration
+    /// </summary>
+    public enum Mixdown
 	{
 		[Display(Name = "Dolby Pro Logic II")]
 		DolbyProLogicII = 0,
@@ -29,6 +32,9 @@ namespace HandBrake.Interop.Model.Encoding
 		DolbySurround,
 
 		[Display(Name = "6 Channel Discrete")]
-		SixChannelDiscrete
+		SixChannelDiscrete,
+
+        [Display(Name = "Passthru")]
+        Passthrough,
 	}
 }
