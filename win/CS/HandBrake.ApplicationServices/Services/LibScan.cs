@@ -14,8 +14,8 @@ namespace HandBrake.ApplicationServices.Services
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop;
-    using HandBrake.Interop.Model;
 
     using AudioTrack = HandBrake.ApplicationServices.Parsing.Audio;
     using ScanProgressEventArgs = HandBrake.Interop.ScanProgressEventArgs;
@@ -85,6 +85,11 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         public event ScanProgessStatus ScanStatusChanged;
 
+        /// <summary>
+        /// The Log File Header
+        /// </summary>
+        StringBuilder header = GeneralUtilities.CreateCliLogHeader();
+
         #endregion
 
         #region Properties
@@ -106,7 +111,7 @@ namespace HandBrake.ApplicationServices.Services
         {
             get
             {
-                return logging.ToString();
+                return string.IsNullOrEmpty(this.logging.ToString()) ? this.header + "No log data available..." : this.header + this.logging.ToString();
             }
         }
 
@@ -161,6 +166,8 @@ namespace HandBrake.ApplicationServices.Services
         {
             try
             {
+                this.logging.Clear();
+
                 IsScanning = true;
                 if (this.ScanStared != null)
                     this.ScanStared(this, new EventArgs());

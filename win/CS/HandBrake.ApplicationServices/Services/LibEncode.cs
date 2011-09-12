@@ -87,7 +87,7 @@ namespace HandBrake.ApplicationServices.Services
                 // Sanity Checking and Setup
                 if (this.IsEncoding)
                 {
-                    throw new Exception("HandBrake is already encodeing.");
+                    throw new Exception("HandBrake is already encoding.");
                 }
 
                 this.IsEncoding = true;
@@ -204,7 +204,7 @@ namespace HandBrake.ApplicationServices.Services
             {
                 lock (logLock)
                 {
-                    this.LogBuffer.AppendLine(e.Message);
+                    this.ProcessLogMessage(e.Message);
                 }
             }
         }
@@ -224,7 +224,7 @@ namespace HandBrake.ApplicationServices.Services
             {
                 lock (logLock)
                 {
-                    this.LogBuffer.AppendLine(e.Message);
+                    this.ProcessLogMessage(e.Message);
                 }
             }
         }
@@ -245,7 +245,7 @@ namespace HandBrake.ApplicationServices.Services
                 AverageFrameRate = e.AverageFrameRate,
                 CurrentFrameRate = e.CurrentFrameRate,
                 EstimatedTimeLeft = e.EstimatedTimeLeft,
-                PercentComplete = e.FractionComplete,
+                PercentComplete = e.FractionComplete * 100,
                 Task = e.Pass,
                 ElapsedTime = DateTime.Now - this.startTime,
             };
@@ -274,7 +274,10 @@ namespace HandBrake.ApplicationServices.Services
         {
             this.IsEncoding = false;
 
-            this.Invoke_encodeCompleted(new EncodeCompletedEventArgs(e.Error, null, string.Empty));
+            this.Invoke_encodeCompleted(
+                e.Error
+                    ? new EncodeCompletedEventArgs(false, null, string.Empty)
+                    : new EncodeCompletedEventArgs(true, null, string.Empty));
 
             if (this.WindowsSeven.IsWindowsSeven)
             {
@@ -285,6 +288,8 @@ namespace HandBrake.ApplicationServices.Services
             {
                 Win32.AllowSleep();
             }
+
+            this.ShutdownFileWriter();
         }
         #endregion
     }

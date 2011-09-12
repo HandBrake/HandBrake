@@ -132,7 +132,7 @@ namespace Handbrake.Controls
         {
             get
             {
-                return slider_deblock.Value;
+                return this.slider_deblock.Value != 4 ? this.slider_deblock.Value : 0;
             }
         }
 
