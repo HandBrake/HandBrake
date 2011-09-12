@@ -85,7 +85,7 @@ namespace HandBrake.ApplicationServices.Functions
                     Right = work.Cropping.Right
                 };
 
-            profile.CustomCropping = true;
+            profile.CustomCropping = true; // TODO deal with this better
             profile.CustomDecomb = work.CustomDecomb;
             profile.CustomDeinterlace = work.CustomDeinterlace;
             profile.CustomDenoise = work.CustomDenoise;

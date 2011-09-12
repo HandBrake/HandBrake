@@ -235,8 +235,8 @@ namespace HandBrake.ApplicationServices.Services
                 // Write the Buffer out to file.
                 using (StreamWriter scanLog = new StreamWriter(dvdInfoPath))
                 {
-                    // Only write the log file to disk if it's less than 100MB.
-                    if (this.readData.Buffer.Length < 100000000)
+                    // Only write the log file to disk if it's less than 50MB.
+                    if (this.readData.Buffer.Length < 50000000)
                     {
                         scanLog.WriteLine(GeneralUtilities.CreateCliLogHeader());
                         scanLog.WriteLine(query);

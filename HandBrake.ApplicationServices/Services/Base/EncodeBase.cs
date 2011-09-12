@@ -241,6 +241,7 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// </param>
         protected void SetupLogging(QueueTask encodeQueueTask)
         {
+            ShutdownFileWriter();
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
             string logFile = Path.Combine(logDir, string.Format("last_encode_log{0}.txt", GeneralUtilities.GetInstanceCount));
             string logFile2 = Path.Combine(logDir, string.Format("tmp_appReadable_log{0}.txt", GeneralUtilities.GetInstanceCount));
