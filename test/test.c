@@ -2564,7 +2564,7 @@ static void ShowHelp()
     "    -t, --title <number>    Select a title to encode (0 to scan all titles only,\n"
     "                            default: 1)\n"
     "        --min-duration      Set the minimum title duration (in seconds). Shorter\n"
-    "                            titles will not be scanned (default: 10)."
+    "                            titles will not be scanned (default: 10).\n"
     "        --scan              Scan selected title only.\n"
     "        --main-feature      Detect and select the main feature title.\n"
     "    -c, --chapters <string> Select chapters (e.g. \"1-3\" for chapters\n"
