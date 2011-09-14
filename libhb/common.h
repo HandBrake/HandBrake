@@ -622,7 +622,7 @@ struct hb_title_s
     int         rate;
     int         rate_base;
     int         crop[4];
-    enum { HB_MPEG2_PS_DEMUXER = 0, HB_MPEG2_TS_DEMUXER, HB_NULL_DEMUXER } demuxer;
+    enum { HB_DVD_DEMUXER, HB_MPEG_DEMUXER, HB_NULL_DEMUXER } demuxer;
     int         detected_interlacing;
     int         pcr_pid;                /* PCR PID for TS streams */
     int         video_id;               /* demuxer stream id for video */
@@ -750,6 +750,7 @@ struct hb_work_object_s
      * other work objects. */
     int              (* bsinfo)  ( hb_work_object_t *, const hb_buffer_t *, 
                                    hb_work_info_t * );
+    void             (* flush)   ( hb_work_object_t * );
 
     hb_fifo_t         * fifo_in;
     hb_fifo_t         * fifo_out;

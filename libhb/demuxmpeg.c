@@ -36,7 +36,7 @@ static inline void check_mpeg_scr( hb_psdemux_t *state, int64_t scr, int tol )
     // 'tol'ms between the last scr & this or if this scr goes back
     // by more than half a frame time.
     int64_t scr_delta = scr - state->last_scr;
-    if ( scr_delta > 90*tol || scr_delta < -90*10 )
+    if ( state->last_scr == -1 || scr_delta > 90*tol || scr_delta < -90*10 )
     {
         ++state->scr_changes;
         state->last_pts = -1;
@@ -64,7 +64,7 @@ static inline void restore_chap( hb_psdemux_t *state, hb_buffer_t *buf )
 
 /* Basic MPEG demuxer */
 
-void hb_demux_ps( hb_buffer_t * buf, hb_list_t * list_es, hb_psdemux_t* state )
+void hb_demux_dvd_ps( hb_buffer_t * buf, hb_list_t * list_es, hb_psdemux_t* state )
 {
     hb_buffer_t * buf_es;
     int           pos = 0;
@@ -241,7 +241,7 @@ void hb_demux_ps( hb_buffer_t * buf, hb_list_t * list_es, hb_psdemux_t* state )
 // stripped off and buf has all the info gleaned from them: id is set,
 // start contains the pts (if any), renderOffset contains the dts (if any)
 // and stop contains the pcr (if it changed).
-void hb_demux_ts( hb_buffer_t *buf, hb_list_t *list_es, hb_psdemux_t *state )
+void hb_demux_mpeg( hb_buffer_t *buf, hb_list_t *list_es, hb_psdemux_t *state )
 {
     while ( buf )
     {
@@ -263,6 +263,10 @@ void hb_demux_ts( hb_buffer_t *buf, hb_list_t *list_es, hb_psdemux_t *state )
                 // we have a new pcr
                 check_mpeg_scr( state, buf->pcr, 300 );
                 buf->pcr = -1;
+                // Some streams have consistantly bad PCRs or SCRs
+                // So filter out the offset
+                if ( buf->start >= 0 )
+                    state->scr_delta = buf->start - state->last_scr;
             }
             if ( buf->start >= 0 )
             {
@@ -275,7 +279,7 @@ void hb_demux_ts( hb_buffer_t *buf, hb_list_t *list_es, hb_psdemux_t *state )
                 // We try to protect against that here by sanity checking
                 // timestamps against the current reference clock and discarding
                 // packets where the DTS is "too far" from its clock.
-                int64_t fdelta = buf->start - state->last_scr;
+                int64_t fdelta = buf->start - state->last_scr - state->scr_delta;
                 if ( fdelta < -300 * 90000LL || fdelta > 300 * 90000LL )
                 {
                     // packet too far behind or ahead of its clock reference
@@ -328,7 +332,7 @@ void hb_demux_null( hb_buffer_t * buf, hb_list_t * list_es, hb_psdemux_t* state 
             // if we don't have a time offset yet, 
             // use this timestamp as the offset.
             if ( state->scr_changes == 0 &&
-                 ( buf->start >= 0 || buf->renderOffset >= 0 ) )
+                 ( buf->start != -1 || buf->renderOffset != -1 ) )
             {
                 ++state->scr_changes;
                 state->last_scr = buf->start >= 0 ? buf->start : buf->renderOffset;
@@ -347,4 +351,4 @@ void hb_demux_null( hb_buffer_t * buf, hb_list_t * list_es, hb_psdemux_t* state 
     }
 }
 
-const hb_muxer_t hb_demux[] = { hb_demux_ps, hb_demux_ts, hb_demux_null };
+const hb_muxer_t hb_demux[] = { hb_demux_dvd_ps, hb_demux_mpeg, hb_demux_null };

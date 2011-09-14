@@ -183,7 +183,7 @@ hb_buffer_t * hb_buffer_init( int size )
 
 void hb_buffer_realloc( hb_buffer_t * b, int size )
 {
-    if ( size > b->alloc )
+    if ( size > b->alloc || b->data == NULL )
     {
         uint32_t orig = b->alloc;
         size = size_to_pool( size )->buffer_size;

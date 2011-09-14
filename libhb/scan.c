@@ -468,6 +468,13 @@ static void most_common_info( info_list_t *info_list, hb_work_info_t *info )
     *info = info_list[biggest].info;
 }
 
+static int is_close_to( int val, int target, int thresh )
+{
+    int diff = val - target;
+    diff = diff < 0 ? -diff : diff;
+    return diff < thresh;
+}
+
 /***********************************************************************
  * DecodePreviews
  ***********************************************************************
@@ -481,6 +488,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
     hb_buffer_t   * buf, * buf_es;
     hb_list_t     * list_es;
     int progressive_count = 0;
+    int pulldown_count = 0;
     int interlaced_preview_count = 0;
     info_list_t * info_list = calloc( data->preview_count+1, sizeof(*info_list) );
     crop_record_t *crops = calloc( 1, sizeof(*crops) );
@@ -504,6 +512,19 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
     {
         data->stream = hb_stream_open( title->path, title, 1 );
     }
+
+    int vcodec = title->video_codec? title->video_codec : WORK_DECMPEG2;
+#if defined(USE_FF_MPEG2)
+    if (vcodec == WORK_DECMPEG2)
+    {
+        vcodec = WORK_DECAVCODECV;
+        title->video_codec_param = CODEC_ID_MPEG2VIDEO;
+    }
+#endif
+    hb_work_object_t *vid_decoder = hb_get_work( vcodec );
+    vid_decoder->codec_param = title->video_codec_param;
+    vid_decoder->title = title;
+    vid_decoder->init( vid_decoder, NULL );
 
     for( i = 0; i < data->preview_count; i++ )
     {
@@ -544,18 +565,9 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 
         hb_deep_log( 2, "scan: preview %d", i + 1 );
 
-        int vcodec = title->video_codec? title->video_codec : WORK_DECMPEG2;
-#if defined(USE_FF_MPEG2)
-        if (vcodec == WORK_DECMPEG2)
-        {
-            vcodec = WORK_DECAVCODECV;
-            title->video_codec_param = CODEC_ID_MPEG2VIDEO;
-        }
-#endif
-        hb_work_object_t *vid_decoder = hb_get_work( vcodec );
-        vid_decoder->codec_param = title->video_codec_param;
-        vid_decoder->title = title;
-        vid_decoder->init( vid_decoder, NULL );
+        if ( vid_decoder->flush )
+            vid_decoder->flush( vid_decoder );
+
         hb_buffer_t * vid_buf = NULL;
         int vidskip = 0;
 
@@ -660,8 +672,6 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         if( ! vid_buf )
         {
             hb_log( "scan: could not get a decoded picture" );
-            vid_decoder->close( vid_decoder );
-            free( vid_decoder );
             continue;
         }
 
@@ -678,50 +688,25 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             {
                 hb_buffer_close( &vid_buf );
             }
-            vid_decoder->close( vid_decoder );
-            free( vid_decoder );
             hb_log( "scan: could not get a video information" );
             continue;
         }
 
         remember_info( info_list, &vid_info );
 
-        if( vid_info.rate_base == 1126125 )
+        if( is_close_to( vid_info.rate_base, 900900, 100 ) &&
+            ( vid_buf->flags & PIC_FLAG_REPEAT_FIRST_FIELD ) )
         {
-            /* Frame FPS is 23.976 (meaning it's progressive), so
-               start keeping track of how many are reporting at
-               that speed. When enough show up that way, we want
-               to make that the overall title FPS.
-            */
-            progressive_count++;
-
-            if( progressive_count < 6 )
-            {
-                /* Not enough frames are reporting as progressive,
-                   which means we should be conservative and use
-                   29.97 as the title's FPS for now.
-                */
-                vid_info.rate_base = 900900;
-            }
-            else
-            {
-                /* A majority of the scan frames are progressive. Make that
-                    the title's FPS, and announce it once to the log.
-                */
-                if( progressive_count == 6 )
-                {
-                    hb_deep_log( 2, "Title's mostly NTSC Film, setting fps to 23.976");
-                }
-                vid_info.rate_base = 1126125;
-            }
+            /* Potentially soft telecine material */
+            pulldown_count++;
         }
-        else if( vid_info.rate_base == 900900 && progressive_count >= 6 )
+
+        if( is_close_to( vid_info.rate_base, 1126125, 100 ) )
         {
-            /*
-             * We've already deduced that the frame rate is 23.976, so set it
-             * back again.
-             */
-            vid_info.rate_base = 1126125;
+            // Frame FPS is 23.976 (meaning it's progressive), so start keeping
+            // track of how many are reporting at that speed. When enough 
+            // show up that way, we want to make that the overall title FPS.
+            progressive_count++;
         }
 
         while( ( buf_es = hb_list_item( list_es, 0 ) ) )
@@ -828,9 +813,6 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         ++npreviews;
 
 skip_preview:
-        vid_decoder->close( vid_decoder );
-        free( vid_decoder );
-
         /* Make sure we found audio rates and bitrates */
         for( j = 0; j < hb_list_count( title->list_audio ); j++ )
         {
@@ -845,6 +827,8 @@ skip_preview:
             hb_buffer_close( &vid_buf );
         }
     }
+    vid_decoder->close( vid_decoder );
+    free( vid_decoder );
 
     if ( data->batch && data->stream )
     {
@@ -865,6 +849,21 @@ skip_preview:
         title->height = vid_info.height;
         if ( vid_info.rate && vid_info.rate_base )
         {
+            if( is_close_to( vid_info.rate_base, 900900, 100 ) )
+            {
+                if( pulldown_count >= npreviews / 3 )
+                {
+                    vid_info.rate_base = 1126125;
+                    hb_deep_log( 2, "Pulldown detected, setting fps to 23.976" );
+                }
+                if( progressive_count >= npreviews / 2 )
+                {
+                    // We've already deduced that the frame rate is 23.976,
+                    // so set it back again.
+                    vid_info.rate_base = 1126125;
+                    hb_deep_log( 2, "Title's mostly NTSC Film, setting fps to 23.976" );
+                }
+            }
             title->rate = vid_info.rate;
             title->rate_base = vid_info.rate_base;
         }

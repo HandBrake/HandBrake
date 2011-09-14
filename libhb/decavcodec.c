@@ -50,13 +50,13 @@ static int decavcodecaBSInfo( hb_work_object_t *, const hb_buffer_t *, hb_work_i
 
 hb_work_object_t hb_decavcodeca =
 {
-    WORK_DECAVCODEC,
-    "Audio decoder (libavcodec)",
-    decavcodecaInit,
-    decavcodecaWork,
-    decavcodecClose,
-    decavcodecaInfo,
-    decavcodecaBSInfo
+    .id = WORK_DECAVCODEC,
+    .name = "Audio decoder (libavcodec)",
+    .init = decavcodecaInit,
+    .work = decavcodecaWork,
+    .close = decavcodecClose,
+    .info = decavcodecaInfo,
+    .bsinfo = decavcodecaBSInfo
 };
 
 #define HEAP_SIZE 8
@@ -482,6 +482,8 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
         buf = buf->next;
     }
 
+    info->profile = context->profile;
+    info->level = context->level;
     info->channel_map = &hb_smpte_chan_map;
 
     av_free( buffer );
@@ -1277,15 +1279,42 @@ static int decavcodecvBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     return 0;
 }
 
+static void decavcodecvFlush( hb_work_object_t *w )
+{
+    hb_work_private_t *pv = w->private_data;
+
+    if ( pv->context->codec )
+    {
+        flushDelayQueue( pv );
+        hb_buffer_t *buf = link_buf_list( pv );
+        hb_buffer_close( &buf );
+        if ( pv->title->opaque_priv == NULL )
+        {
+            pv->video_codec_opened = 0;
+            hb_avcodec_close( pv->context );
+            if ( pv->parser )
+            {
+                av_parser_close(pv->parser);
+            }
+            pv->parser = av_parser_init( w->codec_param );
+        }
+        else
+        {
+            avcodec_flush_buffers( pv->context );
+        }
+    }
+}
+
 hb_work_object_t hb_decavcodecv =
 {
-    WORK_DECAVCODECV,
-    "Video decoder (libavcodec)",
-    decavcodecvInit,
-    decavcodecvWork,
-    decavcodecClose,
-    decavcodecvInfo,
-    decavcodecvBSInfo
+    .id = WORK_DECAVCODECV,
+    .name = "Video decoder (libavcodec)",
+    .init = decavcodecvInit,
+    .work = decavcodecvWork,
+    .close = decavcodecClose,
+    .flush = decavcodecvFlush,
+    .info = decavcodecvInfo,
+    .bsinfo = decavcodecvBSInfo
 };
 
 static hb_buffer_t * downmixAudio( 

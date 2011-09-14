@@ -190,6 +190,7 @@ hb_work_object_t * hb_sync_init( hb_job_t * job );
  **********************************************************************/
 typedef struct {
     int64_t last_scr;       /* unadjusted SCR from most recent pack */
+    int64_t scr_delta;
     int64_t last_pts;       /* last pts we saw */
     int     scr_changes;    /* number of SCR discontinuities */
     int     dts_drops;      /* number of drops because DTS too far from SCR */

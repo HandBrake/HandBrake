@@ -871,13 +871,22 @@ static int decmpeg2Info( hb_work_object_t *w, hb_work_info_t *info )
     return 0;
 }
 
+static void decmpeg2Flush( hb_work_object_t *w )
+{
+    hb_work_private_t * pv = w->private_data;
+
+    mpeg2_reset( pv->libmpeg2->libmpeg2, 0 );
+    pv->libmpeg2->got_iframe = 0;
+}
+
 hb_work_object_t hb_decmpeg2 =
 {
-    WORK_DECMPEG2,
-    "MPEG-2 decoder (libmpeg2)",
-    decmpeg2Init,
-    decmpeg2Work,
-    decmpeg2Close,
-    decmpeg2Info
+    .id = WORK_DECMPEG2,
+    .name = "MPEG-2 decoder (libmpeg2)",
+    .init = decmpeg2Init,
+    .work = decmpeg2Work,
+    .close = decmpeg2Close,
+    .flush = decmpeg2Flush,
+    .info = decmpeg2Info
 };
 

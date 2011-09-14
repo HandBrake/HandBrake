@@ -111,6 +111,8 @@ static int hb_reader_init( hb_work_object_t * w, hb_job_t * job )
     r->stream_timing[0].valid = 1;
     r->stream_timing[1].id = -1;
 
+    r->demux.last_scr = -1;
+
     if ( !job->pts_to_start )
         r->start_found = 1;
     else
@@ -200,19 +202,6 @@ static int is_audio( hb_work_private_t *r, int id )
 // average inter-packet time (since we position the new packet at the end
 // of the previous packet). The next four routines keep track of this
 // per-stream timing.
-
-// find the per-stream timing state for 'buf'
-
-static stream_timing_t *find_st( hb_work_private_t *r, const hb_buffer_t *buf )
-{
-    stream_timing_t *st = r->stream_timing;
-    for ( ; st->id != -1; ++st )
-    {
-        if ( st->id == buf->id )
-            return st;
-    }
-    return NULL;
-}
 
 // find or create the per-stream timing state for 'buf'
 
