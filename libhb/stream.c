@@ -977,7 +977,6 @@ hb_stream_t * hb_bd_stream_open( hb_title_t *title )
         update_ts_streams( d, pid, stream_id_ext, stream_type, A, NULL );
     }
 
-    d->ts_flags = TS_HAS_RAP | TS_HAS_PCR;
     // When scanning, title->job == NULL.  We don't need to wait for
     // a PCR when scanning. In fact, it trips us up on the first
     // preview of every title since we would have to read quite a
@@ -985,6 +984,7 @@ hb_stream_t * hb_bd_stream_open( hb_title_t *title )
     if ( title->job )
     {
         // BD PCR PID is specified to always be 0x1001
+        d->ts_flags = TS_HAS_RAP | TS_HAS_PCR;
         update_ts_streams( d, 0x1001, 0, -1, P, NULL );
     }
 
