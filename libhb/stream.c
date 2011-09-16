@@ -2266,6 +2266,8 @@ static void hb_ts_stream_init(hb_stream_t *stream)
                     ts_stream_type( stream, i ),
                     stream->ts.list[i].is_pcr ? " (PCR)" : "");
         }
+        if ( ts_stream_kind( stream, i ) == N )
+            hb_stream_delete_ts_entry(stream, i);
     }
 }
 
@@ -2325,6 +2327,7 @@ static void hb_ps_stream_init(hb_stream_t *stream)
                     stream_type_name2(stream,
                                      &stream->pes.list[i]),
                     stream->pes.list[i].stream_type );
+            hb_stream_delete_ps_entry(stream, i);
         }
     }
 }
