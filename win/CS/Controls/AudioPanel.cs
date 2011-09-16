@@ -404,6 +404,10 @@ namespace Handbrake.Controls
                     DRC = 0,
                 };
 
+            // Force an update of the mixdown control
+            this.SetMixDown(EnumHelper<Mixdown>.GetDisplay(track.MixDown));
+            this.SetBitrate(track.Bitrate);
+
             this.audioTracks.Add(track);
 
             // The Audio List has changed to raise the event.
