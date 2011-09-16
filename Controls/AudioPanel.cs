@@ -167,7 +167,7 @@ namespace Handbrake.Controls
         {
             ClearAudioList();
 
-            if (tracks == null)
+            if (tracks == null || (drp_audioTrack.SelectedItem != null && drp_audioTrack.SelectedItem.ToString() == AudioHelper.NoneFound.Description))
                 return;
 
             foreach (AudioTrack track in tracks)
@@ -248,6 +248,9 @@ namespace Handbrake.Controls
         /// </param>
         private void ControlChanged(object sender, EventArgs e)
         {
+            Control ctl = (Control)sender;
+
+            // Some Sanity Checking
             if (audioList.SelectedRows.Count == 0)
             {
                 return;
@@ -259,8 +262,7 @@ namespace Handbrake.Controls
                 return;
             }
 
-            Control ctl = (Control)sender;
-
+            // Handle the changed control and selected audio track.
             switch (ctl.Name)
             {
                 case "drp_audioTrack":
@@ -980,7 +982,8 @@ namespace Handbrake.Controls
             }
 
             // If the track isn't DTS, and the encoder is, change it.
-            if (track.Encoder == AudioEncoder.DtsPassthrough && !track.ScannedTrack.Format.Contains("DTS"))
+            if (track.Encoder == AudioEncoder.DtsPassthrough || track.Encoder == AudioEncoder.DtsHDPassthrough 
+                && !track.ScannedTrack.Format.Contains("DTS"))
             {
                 return true;
             }
