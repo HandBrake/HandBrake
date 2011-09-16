@@ -28,7 +28,7 @@ namespace HandBrake.Interop.Model.Encoding
 		[Display(Name = "Passthrough")]
 		Passthrough,
 
-		[Display(Name = "Passthrough (AC3)")]
+		[Display(Name = "AC3 Passthru")]
 		Ac3Passthrough,
 
         [Display(Name = "DTS Passthru")]
