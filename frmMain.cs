@@ -2209,8 +2209,9 @@ namespace Handbrake
 
                         // Now load the preset
                         PresetLoader.LoadPreset(this, preset);
+                        this.AudioSettings.LoadTracks(queueEdit.Task.AudioTracks);
 
-                        // Set the destination path
+                        // Set the destination path);
                         this.text_destination.Text = queueEdit.Destination;
 
                         // The x264 widgets will need updated, so do this now:

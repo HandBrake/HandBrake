@@ -182,7 +182,12 @@ namespace Handbrake.Controls
                 this.audioTracks.Add(track);
             }
 
-            this.AutomaticTrackSelection();
+            if (tracks.Count == 0 || tracks[0].ScannedTrack.TrackNumber == 0)
+            {
+                this.AutomaticTrackSelection();
+            }
+
+           
 
             if (this.AudioListChanged != null)
                 this.AudioListChanged(this, new EventArgs());
