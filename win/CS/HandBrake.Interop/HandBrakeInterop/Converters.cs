@@ -94,12 +94,22 @@ namespace HandBrake.Interop
 			{
 				case AudioEncoder.Ac3Passthrough:
 					return NativeConstants.HB_ACODEC_AC3_PASS;
+                case AudioEncoder.Ac3:
+                    return NativeConstants.HB_ACODEC_AC3;
 				case AudioEncoder.Faac:
 					return NativeConstants.HB_ACODEC_FAAC;
+                case AudioEncoder.ffaac:
+			        return NativeConstants.HB_ACODEC_FFAAC;
+                case AudioEncoder.AacPassthru:
+			        return NativeConstants.HB_ACODEC_AAC_PASS;
 				case AudioEncoder.Lame:
 					return NativeConstants.HB_ACODEC_LAME;
-				case AudioEncoder.Ac3:
-					return NativeConstants.HB_ACODEC_AC3;
+                case AudioEncoder.Mp3Passthru:
+                    return NativeConstants.HB_ACODEC_MP3_PASS;
+                case AudioEncoder.DtsPassthrough:
+			        return NativeConstants.HB_ACODEC_DCA_PASS;
+                case AudioEncoder.DtsHDPassthrough:
+			        return NativeConstants.HB_ACODEC_DCA_HD_PASS;
 				case AudioEncoder.Vorbis:
 					return NativeConstants.HB_ACODEC_VORBIS;
 			}
