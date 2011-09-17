@@ -10,13 +10,6 @@ namespace HandBrakeWPF
     /// </summary>
     public partial class App 
     {
-        /*
-         * TODO:
-         * - Setup Castle Windsor support for services.
-         * 
-         * 
-         */
-
         /// <summary>
         /// Initializes a new instance of the <see cref="App"/> class.
         /// </summary>

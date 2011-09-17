@@ -5,7 +5,7 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using Caliburn.PresentationFramework.ApplicationModel;
+    using Caliburn.Micro;
 
     /// <summary>
     /// The Options View Model

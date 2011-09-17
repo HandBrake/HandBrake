@@ -1,7 +1,6 @@
 ﻿namespace HandBrakeWPF.ViewModels
 {
-    using Caliburn.PresentationFramework.ApplicationModel;
-    using Caliburn.PresentationFramework.Screens;
+    using Caliburn.Micro;
 
     /// <summary>
     /// A Base Class for the View Models which contains reusable code.

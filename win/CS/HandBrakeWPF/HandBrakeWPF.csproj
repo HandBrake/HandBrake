@@ -36,26 +36,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Caliburn.Core">
-      <HintPath>..\libraries\caliburn\Caliburn.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Caliburn.DynamicProxy">
-      <HintPath>..\libraries\caliburn\Caliburn.DynamicProxy.dll</HintPath>
-    </Reference>
-    <Reference Include="Caliburn.FluentValidation">
-      <HintPath>..\libraries\caliburn\Caliburn.FluentValidation.dll</HintPath>
-    </Reference>
-    <Reference Include="Caliburn.MEF">
-      <HintPath>..\libraries\caliburn\Caliburn.MEF.dll</HintPath>
-    </Reference>
-    <Reference Include="Caliburn.PresentationFramework">
-      <HintPath>..\libraries\caliburn\Caliburn.PresentationFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="Caliburn.ShellFramework">
-      <HintPath>..\libraries\caliburn\Caliburn.ShellFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="Caliburn.Windsor">
-      <HintPath>..\libraries\caliburn\Caliburn.Windsor.dll</HintPath>
+    <Reference Include="Caliburn.Micro">
+      <HintPath>..\libraries\caliburn\Caliburn.Micro.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Core">
       <HintPath>..\libraries\caliburn\Castle.Core.dll</HintPath>
@@ -66,32 +48,17 @@
     <Reference Include="Common.Logging">
       <HintPath>..\libraries\caliburn\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="FluentValidation">
-      <HintPath>..\libraries\caliburn\FluentValidation.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Composite">
-      <HintPath>..\libraries\caliburn\Microsoft.Practices.Composite.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Composite.Presentation">
-      <HintPath>..\libraries\caliburn\Microsoft.Practices.Composite.Presentation.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.CoreEx">
-      <HintPath>..\libraries\caliburn\System.CoreEx.dll</HintPath>
-    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Interactive">
-      <HintPath>..\libraries\caliburn\System.Interactive.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive">
-      <HintPath>..\libraries\caliburn\System.Reactive.dll</HintPath>
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\libraries\caliburn\System.Windows.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -107,7 +74,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Services\MefBootstrapper.cs" />
+    <Compile Include="Startup\CastleBootstrapper.cs" />
+    <Compile Include="Startup\MefBootstrapper.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AddPresetViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IMainViewModel.cs" />
@@ -181,6 +149,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -245,9 +214,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Views\Images\ActivityWindow.png" />
   </ItemGroup>
