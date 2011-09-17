@@ -32,11 +32,6 @@ namespace HandBrake.Interop
 		private const int PictureAutoSizeModulus = 2;
 
 		/// <summary>
-		/// Modulus used for picture size when using non-anamorphic.
-		/// </summary>
-		private const int NonAnamorphicAutoSizeModulus = 16;
-
-		/// <summary>
 		/// The number of MS between status polls when scanning.
 		/// </summary>
 		private const double ScanPollIntervalMs = 200;

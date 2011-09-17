@@ -15,8 +15,15 @@ namespace HandBrake.Interop
 		public const int JobPaddingBytes = 24688;
 		public const int AudioPaddingBytes = 24632;
 #else
-		public const int JobPaddingBytes = 24640;
-		public const int AudioPaddingBytes = 24604;
+	    /// <summary>
+	    /// Job Padding Bytes
+	    /// </summary>
+	    public const int JobPaddingBytes = 24640;
+
+	    /// <summary>
+	    /// Audio Padding Bytes
+	    /// </summary>
+	    public const int AudioPaddingBytes = 24604;
 #endif
 	}
 }

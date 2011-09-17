@@ -11,8 +11,14 @@ namespace HandBrake.Interop
 {
 	using System;
 
-	public class EncodeCompletedEventArgs : EventArgs
+    /// <summary>
+    /// Encode Completed Event Args
+    /// </summary>
+    public class EncodeCompletedEventArgs : EventArgs
 	{
-		public bool Error { get; set; }
+	    /// <summary>
+	    /// Gets or sets a value indicating whether Error.
+	    /// </summary>
+	    public bool Error { get; set; }
 	}
 }

@@ -11,9 +11,19 @@ namespace HandBrake.Interop
 {
 	using System;
 
-	public class ScanProgressEventArgs : EventArgs
+    /// <summary>
+    /// The Scan Progress Event Args
+    /// </summary>
+    public class ScanProgressEventArgs : EventArgs
 	{
-		public int CurrentTitle { get; set; }
-		public int Titles { get; set; }
+	    /// <summary>
+	    /// Gets or sets CurrentTitle.
+	    /// </summary>
+	    public int CurrentTitle { get; set; }
+
+	    /// <summary>
+	    /// Gets or sets Titles.
+	    /// </summary>
+	    public int Titles { get; set; }
 	}
 }
