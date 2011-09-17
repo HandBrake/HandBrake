@@ -11,8 +11,14 @@ namespace HandBrake.Interop
 {
 	using System;
 
+	/// <summary>
+	/// The Message Logged Event Args
+	/// </summary>
 	public class MessageLoggedEventArgs : EventArgs
 	{
+		/// <summary>
+		/// Gets or sets Message.
+		/// </summary>
 		public string Message { get; set; }
 	}
 }

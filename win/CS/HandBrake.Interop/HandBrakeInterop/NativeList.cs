@@ -12,7 +12,7 @@ namespace HandBrake.Interop
 	using System;
 	using System.Collections.Generic;
 
-    /// <summary>
+	/// <summary>
 	/// Represents a HandBrake style native list.
 	/// </summary>
 	public class NativeList
