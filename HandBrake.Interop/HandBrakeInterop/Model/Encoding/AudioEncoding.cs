@@ -9,11 +9,21 @@
 
 namespace HandBrake.Interop.Model.Encoding
 {
-    using System;
+	using System;
 
-    public class AudioEncoding
+	/// <summary>
+	/// The Audio Encoding Model
+	/// </summary>
+	public class AudioEncoding
 	{
+		/// <summary>
+		/// Gets or sets InputNumber.
+		/// </summary>
 		public int InputNumber { get; set; }
+
+		/// <summary>
+		/// Gets or sets Encoder.
+		/// </summary>
 		public AudioEncoder Encoder { get; set; }
 
 		/// <summary>
@@ -21,6 +31,9 @@ namespace HandBrake.Interop.Model.Encoding
 		/// </summary>
 		public int Bitrate { get; set; }
 
+		/// <summary>
+		/// Gets or sets Mixdown.
+		/// </summary>
 		public Mixdown Mixdown { get; set; }
 
 		/// <summary>
@@ -34,8 +47,19 @@ namespace HandBrake.Interop.Model.Encoding
 		/// </summary>
 		public int SampleRateRaw { get; set; }
 
+		/// <summary>
+		/// Gets or sets Gain.
+		/// </summary>
 		public int Gain { get; set; }
+
+		/// <summary>
+		/// Gets or sets Drc.
+		/// </summary>
 		public double Drc { get; set; }
+
+		/// <summary>
+		/// Gets or sets Name.
+		/// </summary>
 		public string Name { get; set; }
 	}
 }

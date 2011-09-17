@@ -14,18 +14,14 @@ namespace HandBrake.Interop
 	using System.IO;
 	using System.Linq;
 	using System.Runtime.InteropServices;
-	using System.Text;
-	using System.Timers;
-	using System.Threading;
 	using System.Windows.Media.Imaging;
 
 	using HandBrake.Interop.HbLib;
 	using HandBrake.Interop.Model;
 	using HandBrake.Interop.Model.Encoding;
 	using HandBrake.Interop.SourceData;
-	using HandBrake.Interop;
 
-	/// <summary>
+    /// <summary>
 	/// A wrapper for a HandBrake instance.
 	/// </summary>
 	public class HandBrakeInstance : IDisposable
