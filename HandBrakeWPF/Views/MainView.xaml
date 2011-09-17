@@ -1,9 +1,7 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-        xmlns:Views="clr-namespace:HandBrakeWPF.Views"
-        xmlns:Data="clr-namespace:System.Windows.Data;assembly=PresentationFramework" 
-        xmlns:RoutedMessaging="clr-namespace:Caliburn.PresentationFramework.RoutedMessaging;assembly=Caliburn.PresentationFramework" 
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Data="clr-namespace:System.Windows.Data;assembly=PresentationFramework" 
+        xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro" xmlns:Controls="clr-namespace:HandBrakeWPF.Views.Controls" 
         Title="{Data:Binding Path=WindowTitle}" Height="655" Width="1015" FontSize="11">
 
     <Grid>
@@ -14,30 +12,30 @@
                 <Menu Height="23" VerticalAlignment="Top" HorizontalAlignment="Stretch">
                     <MenuItem Header="File">
                         <MenuItem Header="Cancel Scan" />
-                        <MenuItem Header="Exit" RoutedMessaging:Message.Attach="[Event Click] = [Action ExitApplication]" />
+                        <MenuItem Header="Exit" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
                     </MenuItem>
 
                     <MenuItem Header="Tools">
-                        <MenuItem Header="Show Queue" RoutedMessaging:Message.Attach="[Event Click] = [Action ExitApplication]" />
-                        <MenuItem Header="Activity Window" RoutedMessaging:Message.Attach="[Event Click] = [Action ExitApplication]" />
+                        <MenuItem Header="Show Queue" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
+                        <MenuItem Header="Activity Window" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
                     </MenuItem>
 
                     <MenuItem Header="Presets">
-                        <MenuItem Header="Reset Built-in Presets" RoutedMessaging:Message.Attach="[Event Click] = [Action ExitApplication]" />
-                        <MenuItem Header="Delete Built-in Presets" RoutedMessaging:Message.Attach="[Event Click] = [Action ExitApplication]" />
+                        <MenuItem Header="Reset Built-in Presets" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
+                        <MenuItem Header="Delete Built-in Presets" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
                         <Separator />
-                        <MenuItem Header="Save As New Preset" RoutedMessaging:Message.Attach="[Event Click] = [Action ExitApplication]" />
-                        <MenuItem Header="Import" RoutedMessaging:Message.Attach="[Event Click] = [Action ExitApplication]" />
-                        <MenuItem Header="Export" RoutedMessaging:Message.Attach="[Event Click] = [Action ExitApplication]" />
-                        <MenuItem Header="Set as Default" RoutedMessaging:Message.Attach="[Event Click] = [Action ExitApplication]" />
+                        <MenuItem Header="Save As New Preset" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
+                        <MenuItem Header="Import" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
+                        <MenuItem Header="Export" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
+                        <MenuItem Header="Set as Default" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
                     </MenuItem>
 
                     <MenuItem Header="Help">
-                        <MenuItem Header="HandBrake User Guide" RoutedMessaging:Message.Attach="[Event Click] = [Action ExitApplication]" />
+                        <MenuItem Header="HandBrake User Guide" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
                         <Separator />
-                        <MenuItem Header="Check for Updates" RoutedMessaging:Message.Attach="[Event Click] = [Action ExitApplication]" />
+                        <MenuItem Header="Check for Updates" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
                         <Separator />
-                        <MenuItem Header="About..." RoutedMessaging:Message.Attach="[Event Click] = [Action AboutApplication]" />
+                        <MenuItem Header="About..." Micro:Message.Attach="[Event Click] = [Action AboutApplication]" />
                     </MenuItem>
                 </Menu>
 
@@ -144,22 +142,22 @@
                     <!-- Tab Control -->
                     <TabControl HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="725" Height="330" Margin="10,10,10,10" Name="tabControl" >
                         <TabItem Header="Picture" Name="pictureTab">
-                            <Views:PictureSettingsView x:Name="pictureSettingsView"></Views:PictureSettingsView>
+                            <Controls:PictureSettingsView x:Name="pictureSettingsView"></Controls:PictureSettingsView>
                         </TabItem>
                         <TabItem Header="Video Filters" Name="filtersTab">
-                            <Views:FiltersView></Views:FiltersView>
+                            <Controls:FiltersView></Controls:FiltersView>
                         </TabItem>
                         <TabItem Header="Video" Name="videoTab">
-                            <Views:VideoView></Views:VideoView>
+                            <Controls:VideoView></Controls:VideoView>
                         </TabItem>
                         <TabItem Header="Audio" Name="audioTab">
-                            <Views:AudioView></Views:AudioView>
+                            <Controls:AudioView></Controls:AudioView>
                         </TabItem>
                         <TabItem Header="Chapters" Name="chaptersTab">
-                            <Views:ChaptersView></Views:ChaptersView>
+                            <Controls:ChaptersView></Controls:ChaptersView>
                         </TabItem>
                         <TabItem Header="Advanced" Name="advancedTab">
-                            <Views:AdvancedView></Views:AdvancedView>
+                            <Controls:AdvancedView></Controls:AdvancedView>
                         </TabItem>
                     </TabControl>
 

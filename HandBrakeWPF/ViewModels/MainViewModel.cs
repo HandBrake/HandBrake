@@ -12,7 +12,7 @@ namespace HandBrakeWPF.ViewModels
     using System.IO;
     using System.Windows;
 
-    using Caliburn.PresentationFramework.ApplicationModel;
+    using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;

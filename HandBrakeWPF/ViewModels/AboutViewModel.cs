@@ -5,7 +5,7 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using Caliburn.PresentationFramework.ApplicationModel;
+    using Caliburn.Micro;
 
     /// <summary>
     /// The About View Model
@@ -15,6 +15,5 @@ namespace HandBrakeWPF.ViewModels
         public AboutViewModel(IWindowManager windowManager) : base(windowManager)
         {
         }
-
     }
 }
