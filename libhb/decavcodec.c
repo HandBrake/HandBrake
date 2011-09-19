@@ -527,10 +527,11 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
     int w, h;
     if ( ! pv->job )
     {
-        // if the dimensions are odd, drop the lsb since h264 requires that
-        // both width and height be even.
-        w = ( context->width >> 1 ) << 1;
-        h = ( context->height >> 1 ) << 1;
+        // HandBrake's video pipeline uses yuv420 color.  This means all
+        // dimensions must be even.  So we must adjust the dimensions
+        // of incoming video if not even.
+        w = context->width & ~1;
+        h = context->height & ~1;
     }
     else
     {
@@ -549,11 +550,12 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
 
         if ( ! pv->sws_context )
         {
-            pv->sws_context = hb_sws_get_context( context->width, context->height, context->pix_fmt,
+            pv->sws_context = hb_sws_get_context( w, h, context->pix_fmt,
                                               w, h, PIX_FMT_YUV420P,
                                               SWS_LANCZOS|SWS_ACCURATE_RND);
         }
-        sws_scale( pv->sws_context, (const uint8_t* const *)frame->data, frame->linesize, 0, h,
+        sws_scale( pv->sws_context, (const uint8_t* const *)frame->data, 
+                   frame->linesize, 0, h,
                    dstpic.data, dstpic.linesize );
     }
     else
@@ -1276,8 +1278,11 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     memset( info, 0, sizeof(*info) );
 
     info->bitrate = pv->context->bit_rate;
-    info->width = pv->context->width;
-    info->height = pv->context->height;
+    // HandBrake's video pipeline uses yuv420 color.  This means all
+    // dimensions must be even.  So we must adjust the dimensions
+    // of incoming video if not even.
+    info->width = pv->context->width & ~1;
+    info->height = pv->context->height & ~1;
 
     info->pixel_aspect_width = pv->context->sample_aspect_ratio.num;
     info->pixel_aspect_height = pv->context->sample_aspect_ratio.den;
