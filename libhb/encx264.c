@@ -422,16 +422,7 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
         switch( pic_out->i_type )
         {
             case X264_TYPE_IDR:
-                buf->frametype = HB_FRAME_IDR;
-                /* if we have a chapter marker pending and this
-                   frame's presentation time stamp is at or after
-                   the marker's time stamp, use this as the
-                   chapter start. */
-                if( pv->next_chap != 0 && pv->next_chap <= pic_out->i_pts )
-                {
-                    pv->next_chap = 0;
-                    buf->new_chap = pv->chap_mark;
-                }
+                // Handled in b_keyframe check below.
                 break;
 
             case X264_TYPE_I:
@@ -469,6 +460,23 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
             buf->flags &= ~HB_FRAME_REF;
         else
             buf->flags |= HB_FRAME_REF;
+
+        // PIR has no IDR frames, but x264 marks recovery points
+        // as keyframes.  So fake an IDR at these points. This flag
+        // is also set for real IDR frames.
+        if( pic_out->b_keyframe )
+        {
+            buf->frametype = HB_FRAME_IDR;
+            /* if we have a chapter marker pending and this
+               frame's presentation time stamp is at or after
+               the marker's time stamp, use this as the
+               chapter start. */
+            if( pv->next_chap != 0 && pv->next_chap <= pic_out->i_pts )
+            {
+                pv->next_chap = 0;
+                buf->new_chap = pv->chap_mark;
+            }
+        }
 
         buf->size += size;
     }
