@@ -149,7 +149,6 @@ struct hb_stream_s
     int     packetsize;         /* Transport Stream packet size */
 
     int     need_keyframe;      // non-zero if want to start at a keyframe
-    hb_buffer_t *fwrite_buf;      /* PS buffer (set by hb_ts_stream_decode) */
 
     int      chapter;           /* Chapter that we are currently in */
     int64_t  chapter_end;       /* HB time that the current chapter ends */
@@ -189,8 +188,6 @@ struct hb_stream_s
 #define         TS_HAS_PCR  (1 << 0)    // at least one PCR seen
 #define         TS_HAS_RAP  (1 << 1)    // Random Access Point bit seen
 #define         TS_HAS_RSEI (1 << 2)    // "Restart point" SEI seen
-    int     recovery_frames;
-
 
     char    *path;
     FILE    *file_handle;
@@ -272,6 +269,7 @@ static int ffmpeg_seek( hb_stream_t *stream, float frac );
 static int ffmpeg_seek_ts( hb_stream_t *stream, int64_t ts );
 static inline unsigned int bits_get(bitbuf_t *bb, int bits);
 static inline void bits_init(bitbuf_t *bb, uint8_t* buf, int bufsize, int clear);
+static inline unsigned int bits_peek(bitbuf_t *bb, int bits);
 static inline int bits_eob(bitbuf_t *bb);
 static inline int bits_read_ue(bitbuf_t *bb );
 static void pes_add_audio_to_title(hb_stream_t *s, int i, hb_title_t *t, int sort);
@@ -983,8 +981,13 @@ hb_stream_t * hb_bd_stream_open( hb_title_t *title )
     // lot of data before finding the PCR.
     if ( title->job )
     {
+        /* BD has PCRs, but the BD index always points to a packet
+         * after a PCR packet, so we will not see the initial PCR
+         * after any seek.  So don't set the flag that causes us
+         * to drop packets till we see a PCR. */
+        //d->ts_flags = TS_HAS_RAP | TS_HAS_PCR;
+
         // BD PCR PID is specified to always be 0x1001
-        d->ts_flags = TS_HAS_RAP | TS_HAS_PCR;
         update_ts_streams( d, 0x1001, 0, -1, P, NULL );
     }
 
@@ -1246,28 +1249,11 @@ static int isRecoveryPoint( const uint8_t *buf, int len )
                 break;
         }
 
-        if ( ii + size + 1 > nal_len )
+        if( type == 6 )
         {
-            // Is it an SEI recovery point?
-            if ( type == 6 )
-            {
-                // Recovery point found, but can't parse the entire NAL.
-                // So return an arbitrary recovery_frames count.
-                recovery_frames = 3;
-            }
+            recovery_frames = 1;
             break;
         }
-
-        // Is it an SEI recovery point?
-        if ( type == 6 )
-        {
-            bitbuf_t bb;
-            bits_init(&bb, nal+ii, size, 0);
-            int count = bits_read_ue( &bb );
-            recovery_frames = count + 3;
-            break;
-        }
-
         ii += size;
     }
 
@@ -1332,6 +1318,11 @@ static int isIframe( hb_stream_t *stream, const uint8_t *buf, int len )
             {
                 // we found a start code - remove the ref_idc from the nal type
                 uint8_t nal_type = strid & 0x1f;
+                if ( nal_type == 0x01 )
+                {
+                    // Found slice and no recovery point
+                    return 0;
+                }
                 if ( nal_type == 0x05 )
                 {
                     // h.264 IDR picture start
@@ -1826,20 +1817,20 @@ int hb_stream_seek( hb_stream_t * stream, float f )
         // forwards to the next transport stream packet.
         hb_ts_stream_reset(stream);
         align_to_next_packet(stream);
-        if ( stream->has_IDRs )
+        if ( !stream->has_IDRs )
         {
-            // the stream has IDRs so look for one.
-            stream->need_keyframe = 1;
+            // the stream has no IDRs so don't look for one.
+            stream->need_keyframe = 0;
         }
     }
     else if ( stream->hb_stream_type == program )
     {
         hb_ps_stream_reset(stream);
         skip_to_next_pack( stream );
-        if ( stream->has_IDRs )
+        if ( !stream->has_IDRs )
         {
-            // the stream has IDRs so look for one.
-            stream->need_keyframe = 1;
+            // the stream has no IDRs so don't look for one.
+            stream->need_keyframe = 0;
         }
     }
 
@@ -3393,9 +3384,8 @@ static hb_buffer_t * hb_ps_stream_decode( hb_stream_t *stream )
         {
             // we're looking for the first video frame because we're
             // doing random access during 'scan'
-            if ( buf->type == VIDEO_BUF )
-                stream->recovery_frames = isIframe( stream, buf->data, buf->size );
-            if ( buf->type != VIDEO_BUF || !stream->recovery_frames )
+            if ( buf->type != VIDEO_BUF ||
+                 !isIframe( stream, buf->data, buf->size ) )
             {
                 // not the video stream or didn't find an I frame
                 // but we'll only wait 255 video frames for an I frame.
@@ -4320,21 +4310,6 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream)
  }
 
 
-static void fwrite64( hb_buffer_t * buf, void *data, int len )
-{
-    if ( len > 0 )
-    {
-        int pos = buf->size;
-        if ( pos + len > buf->alloc )
-        {
-            int size = MAX(buf->alloc * 2, pos + len);
-            hb_buffer_realloc(buf, size);
-        }
-        memcpy( &(buf->data[pos]), data, len );
-        buf->size += len;
-    }
-}
-
 // convert a PES PTS or DTS to an int64
 static int64_t pes_timestamp( const uint8_t *buf )
 {
@@ -4360,7 +4335,7 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
         return NULL;
     }
 
-    uint8_t *tdat = b->data;
+    uint8_t *tdat = b->data + pes_info.header_len;
     int size = b->size - pes_info.header_len;
 
     if ( size <= 0 )
@@ -4369,8 +4344,27 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
         return NULL;
     }
 
-    // Check all substreams to see if this packet matches
     int pes_idx;
+    pes_idx = stream->ts.list[curstream].pes_list;
+    if( stream->need_keyframe )
+    {
+        // we're looking for the first video frame because we're
+        // doing random access during 'scan'
+        int kind = stream->pes.list[pes_idx].stream_kind;
+        if( kind != V || !isIframe( stream, tdat, size ) )
+        {
+            // not the video stream or didn't find an I frame
+            // but we'll only wait 255 video frames for an I frame.
+            if ( kind != V || ++stream->need_keyframe < 512 )
+            {
+                b->size = 0;
+                return NULL;
+            }
+        }
+        stream->need_keyframe = 0;
+    }
+
+    // Check all substreams to see if this packet matches
     for ( pes_idx = stream->ts.list[curstream].pes_list; pes_idx != -1;
           pes_idx = stream->pes.list[pes_idx].next )
     {
@@ -4392,8 +4386,6 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
             buf->next = tmp;
             buf = tmp;
         }
-
-        buf->size = 0;
 
         buf->id = get_id( &stream->pes.list[pes_idx] );
         switch (stream->pes.list[pes_idx].stream_kind)
@@ -4450,8 +4442,7 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
             buf->start = pes_info.pts;
             buf->renderOffset = pes_info.dts;
         }
-
-        fwrite64( buf, tdat + pes_info.header_len, size );
+        memcpy( buf->data, tdat, size );
     }
 
     b->size = 0;
@@ -4471,13 +4462,6 @@ static void hb_ts_stream_append_pkt(hb_stream_t *stream, int idx, const uint8_t 
     memcpy( stream->ts.list[idx].buf->data + stream->ts.list[idx].buf->size,
             buf, len);
     stream->ts.list[idx].buf->size += len;
-}
-
-int hb_stream_recovery_count( hb_stream_t *stream )
-{
-    int count = stream->recovery_frames;
-    stream->recovery_frames = 0;
-    return count;
 }
 
 /***********************************************************************
@@ -4646,25 +4630,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt )
             return NULL;
         }
 
-        if ( stream->need_keyframe && video_index >= 0 )
-        {
-            // we're looking for the first video frame because we're
-            // doing random access during 'scan'
-            if ( curstream == video_index )
-                stream->recovery_frames = ts_isIframe( stream, pkt, adapt_len );
-            if ( curstream != video_index || !stream->recovery_frames )
-            {
-                // not the video stream or didn't find an I frame
-                // but we'll only wait 255 video frames for an I frame.
-                if ( curstream != video_index || ++stream->need_keyframe < 512 )
-                {
-                    return NULL;
-                }
-            }
-            stream->need_keyframe = 0;
-        }
-
-        // If we were skipping a bad packet, start fresh on this new PES packet..
+        // If we were skipping a bad packet, start fresh on this new PES packet
         if (stream->ts.list[curstream].skipbad == 1)
         {
             stream->ts.list[curstream].skipbad = 0;
@@ -4776,7 +4742,7 @@ void hb_ts_stream_reset(hb_stream_t *stream)
         stream->ts.list[i].continuity = -1;
     }
 
-    stream->need_keyframe = 0;
+    stream->need_keyframe = 1;
 
     stream->ts.found_pcr = 0;
     stream->ts.pcr_out = 0;
@@ -4792,7 +4758,7 @@ void hb_ts_stream_reset(hb_stream_t *stream)
 
 void hb_ps_stream_reset(hb_stream_t *stream)
 {
-    stream->need_keyframe = 0;
+    stream->need_keyframe = 1;
 
     stream->pes.found_scr = 0;
     stream->pes.scr = -1;

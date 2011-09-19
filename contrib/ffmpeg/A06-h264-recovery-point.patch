@@ -1,0 +1,55 @@
+diff --git a/libavcodec/h264.c b/libavcodec/h264.c
+index d047448..e96a129 100644
+--- a/libavcodec/h264.c
++++ b/libavcodec/h264.c
+@@ -3654,9 +3654,18 @@ static int decode_nal_units(H264Context *h, const uint8_t *buf, int buf_size){
+             if((err = decode_slice_header(hx, h)))
+                break;
+ 
++            if (h->sei_recovery_frame_cnt >= 0) {
++                h->recovery_frame = (h->frame_num + h->sei_recovery_frame_cnt) %
++                                    (1 << h->sps.log2_max_frame_num);
++            }
++
+             s->current_picture_ptr->key_frame |=
+-                    (hx->nal_unit_type == NAL_IDR_SLICE) ||
+-                    (h->sei_recovery_frame_cnt >= 0);
++                    (hx->nal_unit_type == NAL_IDR_SLICE);
++
++            if (h->recovery_frame == h->frame_num) {
++                s->current_picture_ptr->key_frame |= 1;
++                h->recovery_frame = -1;
++            }
+ 
+             if (h->current_slice == 1) {
+                 if(!(s->flags2 & CODEC_FLAG2_CHUNKS)) {
+diff --git a/libavcodec/h264.h b/libavcodec/h264.h
+index 122a54a..cd044b0 100644
+--- a/libavcodec/h264.h
++++ b/libavcodec/h264.h
+@@ -575,6 +575,13 @@ typedef struct H264Context{
+      * frames.
+      */
+     int sei_recovery_frame_cnt;
++    /**
++     * recovery_frame is the frame_num at which the next frame should
++     * be fully constructed.
++     *
++     * Set to -1 when not expecting a recovery point.
++     */
++    int recovery_frame;
+ 
+     int luma_weight_flag[2];   ///< 7.4.3.2 luma_weight_lX_flag
+     int chroma_weight_flag[2]; ///< 7.4.3.2 chroma_weight_lX_flag
+diff --git a/libavcodec/h264_sei.c b/libavcodec/h264_sei.c
+index 4f52bbe..8d3c40b 100644
+--- a/libavcodec/h264_sei.c
++++ b/libavcodec/h264_sei.c
+@@ -38,6 +38,7 @@ static const uint8_t sei_num_clock_ts_table[9]={
+ };
+ 
+ void ff_h264_reset_sei(H264Context *h) {
++    h->recovery_frame               = -1;
+     h->sei_recovery_frame_cnt       = -1;
+     h->sei_dpb_output_delay         =  0;
+     h->sei_cpb_removal_delay        = -1;

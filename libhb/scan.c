@@ -569,25 +569,6 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             vid_decoder->flush( vid_decoder );
 
         hb_buffer_t * vid_buf = NULL;
-        int vidskip = 0;
-
-        if ( title->flags & HBTF_NO_IDR )
-        {
-            // title doesn't have IDR frames so we decode but drop one second's
-            // worth of frames to allow the decoder to converge.
-            if ( ! title->rate_base )
-            {
-                vidskip = 30;
-            }
-            else
-            {
-                vidskip = (double)title->rate / (double)title->rate_base + 0.5;
-            }
-            // If it's a BD, we can relax this a bit. Since seeks will
-            // at least get us to a recovery point.
-            if (data->bd || title->type == HB_FF_STREAM_TYPE)
-                vidskip = 2;
-        }
 
         for( j = 0; j < 10240 ; j++ )
         {
@@ -626,9 +607,6 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                   hb_log( "Warning: Could not read data for preview %d, skipped", i + 1 );
                   goto skip_preview;
               }
-              int count = hb_stream_recovery_count( data->stream );
-              if ( count )
-                vidskip = count - 1;
             }
             else
             {
@@ -646,15 +624,6 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                 if( buf_es->id == title->video_id && vid_buf == NULL )
                 {
                     vid_decoder->work( vid_decoder, &buf_es, &vid_buf );
-                    // we're dropping frames to get the video decoder in sync
-                    // when the video stream doesn't contain IDR frames
-                    while (vid_buf && --vidskip >= 0)
-                    {
-                        hb_buffer_t * next = vid_buf->next;
-                        vid_buf->next = NULL;
-                        hb_buffer_close( &vid_buf );
-                        vid_buf = next;
-                    }
                 }
                 else if( ! AllAudioOK( title ) ) 
                 {

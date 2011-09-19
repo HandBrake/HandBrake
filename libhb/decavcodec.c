@@ -93,6 +93,7 @@ struct hb_work_private_s
     struct SwsContext *sws_context; // if we have to rescale or convert color space
     hb_downmix_t    *downmix;
     int cadence[12];
+    int wait_for_keyframe;
 };
 
 static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *data, int size, int64_t pts );
@@ -170,6 +171,7 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
 
+    pv->wait_for_keyframe = 60;
     pv->job   = job;
     if ( job )
         pv->title = job->title;
@@ -702,8 +704,9 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
  * until enough packets have been decoded so that the timestamps can be
  * correctly rewritten, if this is necessary.
  */
-static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size, int sequence, int64_t pts, int64_t dts )
+static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequence, int64_t pts, int64_t dts )
 {
+    hb_work_private_t *pv = w->private_data;
     int got_picture, oldlevel = 0;
     AVFrame frame;
     AVPacket avp;
@@ -726,6 +729,23 @@ static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size, int sequ
     if ( global_verbosity_level <= 1 )
     {
         av_log_set_level( oldlevel );
+    }
+    if( got_picture && pv->wait_for_keyframe > 0 )
+    {
+        // Libav is inconsistant about how it flags keyframes.  For many
+        // codecs it simply sets frame.key_frame.  But for others, it only
+        // sets frame.pict_type. And for yet others neither gets set at all
+        // (qtrle).
+        int key = frame.key_frame ||
+                  ( w->codec_param != CODEC_ID_H264 &&
+                    ( frame.pict_type == AV_PICTURE_TYPE_I ||
+                      frame.pict_type == 0 ) );
+        if( !key )
+        {
+            pv->wait_for_keyframe--;
+            return 0;
+        }
+        pv->wait_for_keyframe = 0;
     }
     if( got_picture )
     {
@@ -894,14 +914,14 @@ static void decodeVideo( hb_work_object_t *w, uint8_t *data, int size, int seque
 
         if ( pout_len > 0 )
         {
-            decodeFrame( pv, pout, pout_len, sequence, parser_pts, parser_dts );
+            decodeFrame( w, pout, pout_len, sequence, parser_pts, parser_dts );
         }
     } while ( pos < size );
 
     /* the stuff above flushed the parser, now flush the decoder */
     if ( size <= 0 )
     {
-        while ( decodeFrame( pv, NULL, 0, sequence, AV_NOPTS_VALUE, AV_NOPTS_VALUE ) )
+        while ( decodeFrame( w, NULL, 0, sequence, AV_NOPTS_VALUE, AV_NOPTS_VALUE ) )
         {
         }
         flushDelayQueue( pv );
@@ -1303,6 +1323,7 @@ static void decavcodecvFlush( hb_work_object_t *w )
             avcodec_flush_buffers( pv->context );
         }
     }
+    pv->wait_for_keyframe = 60;
 }
 
 hb_work_object_t hb_decavcodecv =
