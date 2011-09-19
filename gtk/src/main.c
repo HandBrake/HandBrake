@@ -997,6 +997,102 @@ main (int argc, char *argv[])
 	gtk_window_resize(GTK_WINDOW(widget), width, height);
 	gtk_widget_show(widget);
 
+	/*
+ 	 * Filter objects in GtkBuilder xml
+ 	 * Unfortunately, GtkFilter is poorly supported by GtkBuilder,
+ 	 * so a lot of the setup must happen in code.
+		SourceFilterAll
+		SourceFilterVideo
+		SourceFilterTS
+		SourceFilterMPG
+		SourceFilterEVO
+		SourceFilterVOB
+		SourceFilterMKV
+		SourceFilterMP4
+		SourceFilterAVI
+		SourceFilterMOV
+		SourceFilterOGG
+		SourceFilterFLV
+		SourceFilterWMV
+	*/
+	// Add filters to source chooser
+	GtkFileFilter *filter;
+	GtkFileChooser *chooser;
+	chooser = GTK_FILE_CHOOSER(GHB_WIDGET(ud->builder, "source_dialog"));
+	filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterAll"));
+	gtk_file_filter_set_name(filter, "All");
+	gtk_file_filter_add_pattern(filter, "*");
+	gtk_file_chooser_add_filter(chooser, filter);
+	filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterVideo"));
+	gtk_file_filter_set_name(filter, "Video");
+	gtk_file_filter_add_mime_type(filter, "video/*");
+	gtk_file_chooser_add_filter(chooser, filter);
+	filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterTS"));
+	gtk_file_filter_set_name(filter, "TS");
+	gtk_file_filter_add_pattern(filter, "*.ts");
+	gtk_file_filter_add_pattern(filter, "*.TS");
+	gtk_file_filter_add_pattern(filter, "*.m2ts");
+	gtk_file_filter_add_pattern(filter, "*.M2TS");
+	gtk_file_chooser_add_filter(chooser, filter);
+	filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterMPG"));
+	gtk_file_filter_set_name(filter, "MPG");
+	gtk_file_filter_add_pattern(filter, "*.mpg");
+	gtk_file_filter_add_pattern(filter, "*.MPG");
+	gtk_file_filter_add_pattern(filter, "*.mepg");
+	gtk_file_filter_add_pattern(filter, "*.MEPG");
+	gtk_file_chooser_add_filter(chooser, filter);
+	filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterEVO"));
+	gtk_file_filter_set_name(filter, "EVO");
+	gtk_file_filter_add_pattern(filter, "*.evo");
+	gtk_file_filter_add_pattern(filter, "*.EVO");
+	gtk_file_chooser_add_filter(chooser, filter);
+	filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterVOB"));
+	gtk_file_filter_set_name(filter, "VOB");
+	gtk_file_filter_add_pattern(filter, "*.vob");
+	gtk_file_filter_add_pattern(filter, "*.VOB");
+	gtk_file_chooser_add_filter(chooser, filter);
+	filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterMKV"));
+	gtk_file_filter_set_name(filter, "MKV");
+	gtk_file_filter_add_pattern(filter, "*.mkv");
+	gtk_file_filter_add_pattern(filter, "*.MKV");
+	gtk_file_chooser_add_filter(chooser, filter);
+	filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterMP4"));
+	gtk_file_filter_set_name(filter, "MP4");
+	gtk_file_filter_add_pattern(filter, "*.mp4");
+	gtk_file_filter_add_pattern(filter, "*.MP4");
+	gtk_file_filter_add_pattern(filter, "*.m4v");
+	gtk_file_filter_add_pattern(filter, "*.M4V");
+	gtk_file_chooser_add_filter(chooser, filter);
+	filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterMOV"));
+	gtk_file_filter_set_name(filter, "MOV");
+	gtk_file_filter_add_pattern(filter, "*.mov");
+	gtk_file_filter_add_pattern(filter, "*.MOV");
+	gtk_file_chooser_add_filter(chooser, filter);
+	filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterAVI"));
+	gtk_file_filter_set_name(filter, "AVI");
+	gtk_file_filter_add_pattern(filter, "*.avi");
+	gtk_file_filter_add_pattern(filter, "*.AVI");
+	gtk_file_chooser_add_filter(chooser, filter);
+	filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterOGG"));
+	gtk_file_filter_set_name(filter, "OGG");
+	gtk_file_filter_add_pattern(filter, "*.ogg");
+	gtk_file_filter_add_pattern(filter, "*.OGG");
+	gtk_file_filter_add_pattern(filter, "*.ogv");
+	gtk_file_filter_add_pattern(filter, "*.OGV");
+	gtk_file_filter_add_pattern(filter, "*.ogm");
+	gtk_file_filter_add_pattern(filter, "*.OGM");
+	gtk_file_chooser_add_filter(chooser, filter);
+	filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterFLV"));
+	gtk_file_filter_set_name(filter, "FLV");
+	gtk_file_filter_add_pattern(filter, "*.flv");
+	gtk_file_filter_add_pattern(filter, "*.FLV");
+	gtk_file_chooser_add_filter(chooser, filter);
+	filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterWMV"));
+	gtk_file_filter_set_name(filter, "WMV");
+	gtk_file_filter_add_pattern(filter, "*.wmv");
+	gtk_file_filter_add_pattern(filter, "*.WMV");
+	gtk_file_chooser_add_filter(chooser, filter);
+
 	// Everything should be go-to-go.  Lets rock!
 
 	gtk_main ();

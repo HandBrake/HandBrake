@@ -298,6 +298,32 @@
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="stock">gtk-add</property>
   </object>
+  <object class="GtkFileFilter" id="SourceFilterAll">
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterTS">
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterMPG">
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterEVO">
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterVOB">
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterMKV">
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterAVI">
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterMP4">
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterMOV">
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterOGG">
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterFLV">
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterWMV">
+  </object>
+  <object class="GtkFileFilter" id="SourceFilterVideo">
+  </object>
   <object class="GtkUIManager" id="uimanager1">
     <child>
       <object class="GtkActionGroup" id="actiongroup1">
