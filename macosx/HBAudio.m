@@ -70,104 +70,51 @@ static NSMutableArray *masterBitRateArray = nil;
 {
     if ([HBAudio class] == self)
     {
-        int i;
+        int i, audioMustMatch, shouldAdd;
+        BOOL muxMKV, muxMP4;
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         NSDictionary *dict;
 
         masterCodecArray = [[NSMutableArray alloc] init]; // knowingly leaked
-        [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                      NSLocalizedString(@"AAC (CoreAudio)", @"AAC (CoreAudio)"), keyAudioCodecName,
-                                      [NSNumber numberWithInt: HB_ACODEC_CA_AAC], keyAudioCodec,
-                                      [NSNumber numberWithBool: YES], keyAudioMP4,
-                                      [NSNumber numberWithBool: YES], keyAudioMKV,
-                                      [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
-                                      nil]];
-        if (encca_haac_available())
+        for( i = 0; i < hb_audio_encoders_count; i++ )
         {
-            [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                          NSLocalizedString(@"HE-AAC (CoreAudio)", @"HE-AAC (CoreAudio)"), keyAudioCodecName,
-                                          [NSNumber numberWithInt: HB_ACODEC_CA_HAAC], keyAudioCodec,
-                                          [NSNumber numberWithBool: YES], keyAudioMP4,
-                                          [NSNumber numberWithBool: YES], keyAudioMKV,
-                                          [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
-                                          nil]];
+            if( ( hb_audio_encoders[i].encoder & HB_ACODEC_PASS_FLAG ) &&
+                ( hb_audio_encoders[i].encoder != HB_ACODEC_AUTO_PASS ) )
+            {
+                audioMustMatch = ( hb_audio_encoders[i].encoder & ~HB_ACODEC_PASS_FLAG );
+            }
+            else
+            {
+                audioMustMatch = 0;
+            }
+            // Auto Passthru disabled until we have GUI widgets for it
+            shouldAdd = ( hb_audio_encoders[i].encoder != HB_ACODEC_AUTO_PASS ) &&
+                        ( ( hb_audio_encoders[i].encoder != HB_ACODEC_CA_HAAC ) || encca_haac_available() );
+            muxMKV = ( hb_audio_encoders[i].muxers & HB_MUX_MKV ) ? YES : NO;
+            muxMP4 = ( hb_audio_encoders[i].muxers & HB_MUX_MP4 ) ? YES : NO;
+            if( shouldAdd && audioMustMatch )
+            {
+                [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
+                                              [NSString stringWithUTF8String: hb_audio_encoders[i].human_readable_name], keyAudioCodecName,
+                                              [NSNumber numberWithInt: hb_audio_encoders[i].encoder], keyAudioCodec,
+                                              [NSNumber numberWithBool: muxMP4], keyAudioMP4,
+                                              [NSNumber numberWithBool: muxMKV], keyAudioMKV,
+                                              [NSNumber numberWithInt: audioMustMatch], keyAudioMustMatchTrack,
+                                              nil]];
+            }
+            else if( shouldAdd )
+            {
+                [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
+                                              [NSString stringWithUTF8String: hb_audio_encoders[i].human_readable_name], keyAudioCodecName,
+                                              [NSNumber numberWithInt: hb_audio_encoders[i].encoder], keyAudioCodec,
+                                              [NSNumber numberWithBool: muxMP4], keyAudioMP4,
+                                              [NSNumber numberWithBool: muxMKV], keyAudioMKV,
+                                              [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
+                                              nil]];
+            }
         }
-        [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                      NSLocalizedString(@"AAC (ffmpeg)", @"AAC (ffmpeg)"), keyAudioCodecName,
-                                      [NSNumber numberWithInt: HB_ACODEC_FFAAC], keyAudioCodec,
-                                      [NSNumber numberWithBool: YES], keyAudioMP4,
-                                      [NSNumber numberWithBool: YES], keyAudioMKV,
-                                      [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
-                                      nil]];
-        [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                      NSLocalizedString(@"AAC (faac)", @"AAC (faac)"), keyAudioCodecName,
-                                      [NSNumber numberWithInt: HB_ACODEC_FAAC], keyAudioCodec,
-                                      [NSNumber numberWithBool: YES], keyAudioMP4,
-                                      [NSNumber numberWithBool: YES], keyAudioMKV,
-                                      [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
-                                      nil]];
-        [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                      NSLocalizedString(@"AAC Passthru", @"AAC Passthru"), keyAudioCodecName,
-                                      [NSNumber numberWithInt: HB_ACODEC_AAC_PASS], keyAudioCodec,
-                                      [NSNumber numberWithBool: YES], keyAudioMP4,
-                                      [NSNumber numberWithBool: YES], keyAudioMKV,
-                                      [NSNumber numberWithInt: HB_ACODEC_FFAAC], keyAudioMustMatchTrack,
-                                      nil]];
-        [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                      NSLocalizedString(@"AC3 (ffmpeg)", @"AC3 (ffmpeg)"), keyAudioCodecName,
-                                      [NSNumber numberWithInt: HB_ACODEC_AC3], keyAudioCodec,
-                                      [NSNumber numberWithBool: YES], keyAudioMP4,
-                                      [NSNumber numberWithBool: YES], keyAudioMKV,
-                                      [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
-                                      nil]];
-        [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                      NSLocalizedString(@"AC3 Passthru", @"AC3 Passthru"), keyAudioCodecName,
-                                      [NSNumber numberWithInt: HB_ACODEC_AC3_PASS], keyAudioCodec,
-                                      [NSNumber numberWithBool: YES], keyAudioMP4,
-                                      [NSNumber numberWithBool: YES], keyAudioMKV,
-                                      [NSNumber numberWithInt: HB_ACODEC_AC3], keyAudioMustMatchTrack,
-                                      nil]];
-        [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                      NSLocalizedString(@"DTS Passthru", @"DTS Passthru"), keyAudioCodecName,
-                                      [NSNumber numberWithInt: HB_ACODEC_DCA_PASS], keyAudioCodec,
-                                      [NSNumber numberWithBool: YES], keyAudioMP4,
-                                      [NSNumber numberWithBool: YES], keyAudioMKV,
-                                      [NSNumber numberWithInt: HB_ACODEC_DCA], keyAudioMustMatchTrack,
-                                      nil]];
-        [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                      NSLocalizedString(@"DTS-HD Passthru", @"DTS-HD Passthru"), keyAudioCodecName,
-                                      [NSNumber numberWithInt: HB_ACODEC_DCA_HD_PASS], keyAudioCodec,
-                                      [NSNumber numberWithBool: YES], keyAudioMP4,
-                                      [NSNumber numberWithBool: YES], keyAudioMKV,
-                                      [NSNumber numberWithInt: HB_ACODEC_DCA_HD], keyAudioMustMatchTrack,
-                                      nil]];
-        [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                      NSLocalizedString(@"MP3 (lame)", @"MP3 (lame)"), keyAudioCodecName,
-                                      [NSNumber numberWithInt: HB_ACODEC_LAME], keyAudioCodec,
-                                      [NSNumber numberWithBool: YES], keyAudioMP4,
-                                      [NSNumber numberWithBool: YES], keyAudioMKV,
-                                      [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
-                                      nil]];
-        [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                      NSLocalizedString(@"MP3 Passthru", @"MP3 Passthru"), keyAudioCodecName,
-                                      [NSNumber numberWithInt: HB_ACODEC_MP3_PASS], keyAudioCodec,
-                                      [NSNumber numberWithBool: YES], keyAudioMP4,
-                                      [NSNumber numberWithBool: YES], keyAudioMKV,
-                                      [NSNumber numberWithInt: HB_ACODEC_MP3], keyAudioMustMatchTrack,
-                                      nil]];
-        [masterCodecArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                      NSLocalizedString(@"Vorbis (vorbis)", @"Vorbis (vorbis)"), keyAudioCodecName,
-                                      [NSNumber numberWithInt: HB_ACODEC_VORBIS], keyAudioCodec,
-                                      [NSNumber numberWithBool: NO], keyAudioMP4,
-                                      [NSNumber numberWithBool: YES], keyAudioMKV,
-                                      [NSNumber numberWithBool: NO], keyAudioMustMatchTrack,
-                                      nil]];
 
         masterMixdownArray = [[NSMutableArray alloc] init]; // knowingly leaked
-        [masterMixdownArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
-                                        NSLocalizedString(@"None", @"None"), keyAudioMixdownName,
-                                        [NSNumber numberWithInt: 0], keyAudioMixdown,
-                                        nil]];
         for (i = 0; i < hb_audio_mixdowns_count; i++)
         {
             [masterMixdownArray addObject: [NSDictionary dictionaryWithObjectsAndKeys:
@@ -296,11 +243,11 @@ static NSMutableArray *masterBitRateArray = nil;
 
         // Basically with the way the mixdowns are stored, the assumption from the libhb point of view
         // currently is that all mixdowns from the best down to mono are supported.
-        if (currentMixdown && currentMixdown <= theBestMixdown)
+        if ((currentMixdown != HB_AMIXDOWN_NONE) && (currentMixdown <= theBestMixdown))
         {
             shouldAdd = YES;
         }
-        else if (0 == currentMixdown && (codecCodec & HB_ACODEC_PASS_FLAG))
+        else if ((currentMixdown == HB_AMIXDOWN_NONE) && (codecCodec & HB_ACODEC_PASS_FLAG))
         {
             // "None" mixdown (passthru)
             shouldAdd = YES;
@@ -638,7 +585,7 @@ static NSMutableArray *masterBitRateArray = nil;
     if (retval)
     {
         int myMixdown = [[[self mixdown] objectForKey: keyAudioMixdown] intValue];
-        if (0 == myMixdown)
+        if (myMixdown == HB_AMIXDOWN_NONE)
         {
             // "None" mixdown (passthru)
             retval = NO;

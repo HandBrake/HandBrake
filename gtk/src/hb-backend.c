@@ -236,53 +236,6 @@ combo_opts_t denoise_opts =
 	d_denoise_opts
 };
 
-static options_map_t d_vcodec_opts[] =
-{
-	{"H.264 (x264)",    "x264",   HB_VCODEC_X264, ""},
-	{"MPEG-4 (FFmpeg)", "ffmpeg", HB_VCODEC_FFMPEG_MPEG4, ""},
-	{"MPEG-2 (FFmpeg)", "ffmpeg2",HB_VCODEC_FFMPEG_MPEG2, ""},
-	{"VP3 (Theora)",    "theora", HB_VCODEC_THEORA, ""},
-};
-combo_opts_t vcodec_opts =
-{
-	sizeof(d_vcodec_opts)/sizeof(options_map_t),
-	d_vcodec_opts
-};
-
-static options_map_t d_acodec_opts[] =
-{
-	{"AAC (faac)",         "faac",      HB_ACODEC_FAAC,        "faac"},
-	{"AAC (ffmpeg)",       "ffaac",     HB_ACODEC_FFAAC,       "ffaac"},
-	{"MP3 (lame)",         "lame",      HB_ACODEC_LAME,        "lame"},
-	{"Vorbis",             "vorbis",    HB_ACODEC_VORBIS,      "vorbis"},
-	{"AC3 (ffmpeg)",       "ac3",       HB_ACODEC_AC3,         "ac3"},
-	{"MP3 Passthru",       "mp3pass",   HB_ACODEC_MP3_PASS,    "mp3pass"},
-	{"AAC Passthru",       "aacpass",   HB_ACODEC_AAC_PASS,    "aacpass"},
-	{"AC3 Passthru",       "ac3pass",   HB_ACODEC_AC3_PASS,    "ac3pass"},
-	{"DTS Passthru",       "dtspass",   HB_ACODEC_DCA_PASS,    "dtspass"},
-	{"DTS-HD Passthru",    "dtshdpass", HB_ACODEC_DCA_HD_PASS, "dtshdpass"},
-	{"Auto Passthru",      "auto",      HB_ACODEC_ANY,         "auto"},
-};
-combo_opts_t acodec_opts =
-{
-	sizeof(d_acodec_opts)/sizeof(options_map_t),
-	d_acodec_opts
-};
-
-static options_map_t d_acodec_fallback_opts[] =
-{
-	{"AAC (faac)",         "faac",      HB_ACODEC_FAAC,        "faac"},
-	{"AAC (ffmpeg)",       "ffaac",     HB_ACODEC_FFAAC,       "ffaac"},
-	{"MP3 (lame)",         "lame",      HB_ACODEC_LAME,        "lame"},
-	{"Vorbis",             "vorbis",    HB_ACODEC_VORBIS,      "vorbis"},
-	{"AC3 (ffmpeg)",       "ac3",       HB_ACODEC_AC3,         "ac3"},
-};
-combo_opts_t acodec_fallback_opts =
-{
-	sizeof(d_acodec_fallback_opts)/sizeof(options_map_t),
-	d_acodec_fallback_opts
-};
-
 static options_map_t d_direct_opts[] =
 {
 	{"None",      "none",     0, "none"},
@@ -432,10 +385,6 @@ combo_name_map_t combo_name_map[] =
 	{"PictureDecomb", &decomb_opts},
 	{"PictureDetelecine", &detel_opts},
 	{"PictureDenoise", &denoise_opts},
-	{"VideoEncoder", &vcodec_opts},
-	{"AudioEncoder", &acodec_opts},
-	{"AudioEncoderActual", &acodec_opts},
-	{"AudioEncoderFallback", &acodec_fallback_opts},
 	{"x264_direct", &direct_opts},
 	{"x264_b_adapt", &badapt_opts},
 	{"x264_bpyramid", &bpyramid_opts},
@@ -1229,6 +1178,111 @@ lookup_audio_bitrate_option(const GValue *rate)
 }
 
 static gint
+lookup_hb_encoder_int(const GValue *enc, hb_encoder_t *encoders, int len)
+{
+	gint ii;
+
+	if (G_VALUE_TYPE(enc) == G_TYPE_STRING)
+	{
+		gchar *str = ghb_value_string(enc);
+		for (ii = 0; ii < len; ii++)
+		{
+			if (strcmp(encoders[ii].human_readable_name, str) == 0 ||
+				strcmp(encoders[ii].short_name, str) == 0)
+			{
+				g_free(str);
+				return encoders[ii].encoder;
+			}
+		}
+		g_free(str);
+	}
+	else if (G_VALUE_TYPE(enc) == G_TYPE_INT ||
+			 G_VALUE_TYPE(enc) == G_TYPE_INT64 ||
+			 G_VALUE_TYPE(enc) == G_TYPE_DOUBLE)
+	{
+		int val = ghb_value_int(enc);
+		for (ii = 0; ii < len; ii++)
+		{
+			if (encoders[ii].encoder == val)
+			{
+				return encoders[ii].encoder;
+			}
+		}
+	}
+	return 0;
+}
+
+static const gchar*
+lookup_hb_encoder_option(const GValue *enc, hb_encoder_t *encoders, int len)
+{
+	gint ii;
+
+	if (G_VALUE_TYPE(enc) == G_TYPE_STRING)
+	{
+		gchar *str = ghb_value_string(enc);
+		for (ii = 0; ii < len; ii++)
+		{
+			if (strcmp(encoders[ii].human_readable_name, str) == 0 ||
+				strcmp(encoders[ii].short_name, str) == 0)
+			{
+				g_free(str);
+				return encoders[ii].human_readable_name;
+			}
+		}
+		g_free(str);
+	}
+	else if (G_VALUE_TYPE(enc) == G_TYPE_INT ||
+			 G_VALUE_TYPE(enc) == G_TYPE_INT64 ||
+			 G_VALUE_TYPE(enc) == G_TYPE_DOUBLE)
+	{
+		int val = ghb_value_int(enc);
+		for (ii = 0; ii < len; ii++)
+		{
+			if (encoders[ii].encoder == val)
+			{
+				return encoders[ii].human_readable_name;
+			}
+		}
+	}
+	return 0;
+}
+
+static const gchar*
+lookup_hb_encoder_string(const GValue *enc, hb_encoder_t *encoders, int len)
+{
+	gint ii;
+
+	if (G_VALUE_TYPE(enc) == G_TYPE_STRING)
+	{
+		gchar *str = ghb_value_string(enc);
+		for (ii = 0; ii < len; ii++)
+		{
+			if (strcmp(encoders[ii].human_readable_name, str) == 0 ||
+				strcmp(encoders[ii].short_name, str) == 0)
+			{
+				g_free(str);
+				return encoders[ii].short_name;
+			}
+		}
+		g_free(str);
+	}
+	else if (G_VALUE_TYPE(enc) == G_TYPE_INT ||
+			 G_VALUE_TYPE(enc) == G_TYPE_INT64 ||
+			 G_VALUE_TYPE(enc) == G_TYPE_DOUBLE)
+	{
+		int val = ghb_value_int(enc);
+		for (ii = 0; ii < len; ii++)
+		{
+			if (encoders[ii].encoder == val)
+			{
+				return encoders[ii].short_name;
+			}
+		}
+	}
+	return 0;
+}
+
+static gint
 lookup_audio_lang_int(const GValue *rate)
 {
 	gint ii;
@@ -1281,15 +1335,15 @@ ghb_lookup_acodec_value(gint val)
 	GValue *value = NULL;
 	gint ii;
 
-	for (ii = 0; ii < acodec_opts.count; ii++)
+	for (ii = 0; ii < hb_audio_encoders_count; ii++)
 	{
-		if ((int)acodec_opts.map[ii].ivalue == val)
+		if ((int)hb_audio_encoders[ii].encoder == val)
 		{
-			value = ghb_string_value_new(acodec_opts.map[ii].shortOpt);
+			value = ghb_string_value_new(hb_audio_encoders[ii].short_name);
 			return value;
 		}
 	}
-	value = ghb_string_value_new("auto");
+	value = ghb_string_value_new("copy");
 	return value;
 }
 
@@ -1644,9 +1698,9 @@ ghb_grey_combo_options(signal_user_data_t *ud)
 	allow_6ch = acodec & ~HB_ACODEC_LAME;
 	if (aconfig)
 	{
-		acodec = ghb_allowed_passthru_mask(ud->settings, acodec);
 		fallback = ghb_settings_combo_int(ud->settings, "AudioEncoderFallback");
-		acodec = ghb_select_audio_codec(mux, aconfig, acodec, fallback);
+		gint copy_mask = ghb_get_copy_mask(ud->settings);
+		acodec = ghb_select_audio_codec(mux, aconfig, acodec, fallback, copy_mask);
 		gint best = hb_get_best_mixdown(acodec, aconfig->in.channel_layout, 0);
 
 		allow_stereo = best >= HB_AMIXDOWN_STEREO;
@@ -1792,6 +1846,60 @@ video_rate_opts_set(GtkBuilder *builder, const gchar *name, hb_rate_t *rates, gi
 }
 
 static void
+hb_encoder_opts_set_with_mask(
+	GtkBuilder *builder,
+	const gchar *name,
+	hb_encoder_t *encoders,
+	int len,
+	int mask,
+	int neg_mask)
+{
+	GtkTreeIter iter;
+	GtkListStore *store;
+	gint ii;
+	gchar *str;
+	
+	g_debug("hb_encoder_opts_set ()\n");
+	store = get_combo_box_store(builder, name);
+	gtk_list_store_clear(store);
+	for (ii = 0; ii < len; ii++)
+	{
+		if ((mask & encoders[ii].encoder) &&
+			!(neg_mask & encoders[ii].encoder))
+		{
+			gtk_list_store_append(store, &iter);
+			str = g_strdup_printf("<small>%s</small>",
+				encoders[ii].human_readable_name);
+			gtk_list_store_set(store, &iter, 
+							   0, str,
+							   1, TRUE, 
+							   2, encoders[ii].short_name, 
+							   3, (gdouble)encoders[ii].encoder, 
+							   4, encoders[ii].short_name, 
+							   -1);
+			g_free(str);
+		}
+	}
+}
+
+static void
+hb_encoder_opts_set(
+	GtkBuilder *builder,
+	const gchar *name,
+	hb_encoder_t *encoders,
+	int len)
+{
+	hb_encoder_opts_set_with_mask(builder, name, encoders, len, ~0, 0);
+}
+
+static void
+acodec_fallback_opts_set(GtkBuilder *builder, const gchar *name)
+{
+	hb_encoder_opts_set_with_mask(builder, name, hb_audio_encoders, 
+							hb_audio_encoders_count, ~0, HB_ACODEC_PASS_FLAG);
+}
+
+static void
 mix_opts_set(GtkBuilder *builder, const gchar *name)
 {
 	GtkTreeIter iter;
@@ -1802,14 +1910,6 @@ mix_opts_set(GtkBuilder *builder, const gchar *name)
 	g_debug("mix_opts_set ()\n");
 	store = get_combo_box_store(builder, name);
 	gtk_list_store_clear(store);
-	gtk_list_store_append(store, &iter);
-	gtk_list_store_set(store, &iter, 
-					   0, "<small>None</small>", 
-					   1, TRUE, 
-					   2, "none", 
-					   3, 0.0, 
-					   4, "none", 
-					   -1);
 	for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
 	{
 		gtk_list_store_append(store, &iter);
@@ -2689,6 +2789,14 @@ ghb_lookup_combo_int(const gchar *name, const GValue *gval)
 		return lookup_audio_lang_int(gval);
 	else if (strcmp(name, "PreferredLanguage") == 0)
 		return lookup_audio_lang_int(gval);
+	else if (strcmp(name, "VideoEncoder") == 0)
+		return lookup_hb_encoder_int(gval, hb_video_encoders, hb_video_encoders_count);
+	else if (strcmp(name, "AudioEncoder") == 0)
+		return lookup_hb_encoder_int(gval, hb_audio_encoders, hb_audio_encoders_count);
+	else if (strcmp(name, "AudioEncoderFallback") == 0)
+		return lookup_hb_encoder_int(gval, hb_audio_encoders, hb_audio_encoders_count);
+	else if (strcmp(name, "AudioEncoderActual") == 0)
+		return lookup_hb_encoder_int(gval, hb_audio_encoders, hb_audio_encoders_count);
 	else
 	{
 		return lookup_generic_int(find_combo_table(name), gval);
@@ -2714,6 +2822,14 @@ ghb_lookup_combo_double(const gchar *name, const GValue *gval)
 		return lookup_audio_lang_int(gval);
 	else if (strcmp(name, "PreferredLanguage") == 0)
 		return lookup_audio_lang_int(gval);
+	else if (strcmp(name, "VideoEncoder") == 0)
+		return lookup_hb_encoder_int(gval, hb_video_encoders, hb_video_encoders_count);
+	else if (strcmp(name, "AudioEncoder") == 0)
+		return lookup_hb_encoder_int(gval, hb_audio_encoders, hb_audio_encoders_count);
+	else if (strcmp(name, "AudioEncoderFallback") == 0)
+		return lookup_hb_encoder_int(gval, hb_audio_encoders, hb_audio_encoders_count);
+	else if (strcmp(name, "AudioEncoderActual") == 0)
+		return lookup_hb_encoder_int(gval, hb_audio_encoders, hb_audio_encoders_count);
 	else
 	{
 		return lookup_generic_double(find_combo_table(name), gval);
@@ -2739,6 +2855,14 @@ ghb_lookup_combo_option(const gchar *name, const GValue *gval)
 		return lookup_audio_lang_option(gval);
 	else if (strcmp(name, "PreferredLanguage") == 0)
 		return lookup_audio_lang_option(gval);
+	else if (strcmp(name, "VideoEncoder") == 0)
+		return lookup_hb_encoder_option(gval, hb_video_encoders, hb_video_encoders_count);
+	else if (strcmp(name, "AudioEncoder") == 0)
+		return lookup_hb_encoder_option(gval, hb_audio_encoders, hb_audio_encoders_count);
+	else if (strcmp(name, "AudioEncoderFallback") == 0)
+		return lookup_hb_encoder_option(gval, hb_audio_encoders, hb_audio_encoders_count);
+	else if (strcmp(name, "AudioEncoderActual") == 0)
+		return lookup_hb_encoder_option(gval, hb_audio_encoders, hb_audio_encoders_count);
 	else
 	{
 		return lookup_generic_option(find_combo_table(name), gval);
@@ -2764,6 +2888,14 @@ ghb_lookup_combo_string(const gchar *name, const GValue *gval)
 		return lookup_audio_lang_option(gval);
 	else if (strcmp(name, "PreferredLanguage") == 0)
 		return lookup_audio_lang_option(gval);
+	else if (strcmp(name, "VideoEncoder") == 0)
+		return lookup_hb_encoder_string(gval, hb_video_encoders, hb_video_encoders_count);
+	else if (strcmp(name, "AudioEncoder") == 0)
+		return lookup_hb_encoder_string(gval, hb_audio_encoders, hb_audio_encoders_count);
+	else if (strcmp(name, "AudioEncoderFallback") == 0)
+		return lookup_hb_encoder_string(gval, hb_audio_encoders, hb_audio_encoders_count);
+	else if (strcmp(name, "AudioEncoderActual") == 0)
+		return lookup_hb_encoder_string(gval, hb_audio_encoders, hb_audio_encoders_count);
 	else
 	{
 		return lookup_generic_string(find_combo_table(name), gval);
@@ -2809,6 +2941,9 @@ ghb_update_ui_combo_box(
 		audio_samplerate_opts_set(ud->builder, "AudioSamplerate", hb_audio_rates, hb_audio_rates_count);
 		video_rate_opts_set(ud->builder, "VideoFramerate", hb_video_rates, hb_video_rates_count);
 		mix_opts_set(ud->builder, "AudioMixdown");
+		hb_encoder_opts_set(ud->builder, "VideoEncoder", hb_video_encoders, hb_video_encoders_count);
+		hb_encoder_opts_set(ud->builder, "AudioEncoder", hb_audio_encoders, hb_audio_encoders_count);
+		acodec_fallback_opts_set(ud->builder, "AudioEncoderFallback");
 		language_opts_set(ud->builder, "SrtLanguage");
 		language_opts_set(ud->builder, "PreferredLanguage");
 		srt_codeset_opts_set(ud->builder, "SrtCodeset");
@@ -2828,9 +2963,6 @@ ghb_update_ui_combo_box(
 		generic_opts_set(ud->builder, "PictureDetelecine", &detel_opts);
 		generic_opts_set(ud->builder, "PictureDecomb", &decomb_opts);
 		generic_opts_set(ud->builder, "PictureDenoise", &denoise_opts);
-		generic_opts_set(ud->builder, "VideoEncoder", &vcodec_opts);
-		small_opts_set(ud->builder, "AudioEncoder", &acodec_opts);
-		small_opts_set(ud->builder, "AudioEncoderFallback", &acodec_fallback_opts);
 		small_opts_set(ud->builder, "x264_direct", &direct_opts);
 		small_opts_set(ud->builder, "x264_b_adapt", &badapt_opts);
 		small_opts_set(ud->builder, "x264_bpyramid", &bpyramid_opts);
@@ -2850,6 +2982,12 @@ ghb_update_ui_combo_box(
 			video_rate_opts_set(ud->builder, "VideoFramerate", hb_video_rates, hb_video_rates_count);
 		else if (strcmp(name, "AudioMixdown") == 0)
 			mix_opts_set(ud->builder, "AudioMixdown");
+		else if (strcmp(name, "VideoEncoder") == 0)
+			hb_encoder_opts_set(ud->builder, "VideoEncoder", hb_video_encoders, hb_video_encoders_count);
+		else if (strcmp(name, "AudioEncoder") == 0)
+			hb_encoder_opts_set(ud->builder, "AudioEncoder", hb_audio_encoders, hb_audio_encoders_count);
+		else if (strcmp(name, "AudioEncoderFallback") == 0)
+			acodec_fallback_opts_set(ud->builder, "AudioEncoderFallback");
 		else if (strcmp(name, "SrtLanguage") == 0)
 			language_opts_set(ud->builder, "SrtLanguage");
 		else if (strcmp(name, "PreferredLanguage") == 0)
@@ -2885,6 +3023,9 @@ init_ui_combo_boxes(GtkBuilder *builder)
 	init_combo_box(builder, "SrtCodeset");
 	init_combo_box(builder, "title");
 	init_combo_box(builder, "AudioTrack");
+	init_combo_box(builder, "VideoEncoder");
+	init_combo_box(builder, "AudioEncoder");
+	init_combo_box(builder, "AudioEncoderFallback");
 	for (ii = 0; combo_name_map[ii].name != NULL; ii++)
 	{
 		init_combo_box(builder, combo_name_map[ii].name);
@@ -4236,7 +4377,7 @@ ghb_validate_audio(signal_user_data_t *ud)
 		asettings = ghb_array_get_nth(audio_list, ii);
 		gint track = ghb_settings_combo_int(asettings, "AudioTrack");
 		gint codec = ghb_settings_combo_int(asettings, "AudioEncoder");
-		if (codec == HB_ACODEC_ANY)
+		if (codec == HB_ACODEC_AUTO_PASS)
 			continue;
 
         aconfig = (hb_audio_config_t *) hb_list_audio_config_item(
@@ -4730,9 +4871,9 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 
 		acodec = ghb_settings_combo_int(asettings, "AudioEncoder");
 
-		acodec = ghb_allowed_passthru_mask(js, acodec);
 		fallback = ghb_settings_combo_int(js, "AudioEncoderFallback");
-		audio.out.codec = ghb_select_audio_codec(job->mux, aconfig, acodec, fallback);
+		gint copy_mask = ghb_get_copy_mask(js);
+		audio.out.codec = ghb_select_audio_codec(job->mux, aconfig, acodec, fallback, copy_mask);
 
 		audio.out.gain = 
 			ghb_settings_get_double(asettings, "AudioTrackGain");

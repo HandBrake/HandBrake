@@ -279,28 +279,18 @@ void hb_display_job_info( hb_job_t * job )
     if( !job->indepth_scan )
     {
         /* Video encoder */
-        switch( job->vcodec )
+        for( i = 0; i < hb_video_encoders_count; i++ )
         {
-            case HB_VCODEC_FFMPEG_MPEG4:
-                hb_log( "   + encoder: FFmpeg MPEG-4" );
+            if( hb_video_encoders[i].encoder == job->vcodec )
+            {
+                hb_log( "   + encoder: %s", hb_video_encoders[i].human_readable_name );
                 break;
-
-            case HB_VCODEC_FFMPEG_MPEG2:
-                hb_log( "   + encoder: FFmpeg MPEG-2" );
-                break;
-
-            case HB_VCODEC_X264:
-                hb_log( "   + encoder: x264" );
-                break;
-
-            case HB_VCODEC_THEORA:
-                hb_log( "   + encoder: Theora" );
-                break;
+            }
         }
 
-        if ( job->advanced_opts && *job->advanced_opts &&
-             ( ( job->vcodec & HB_VCODEC_FFMPEG_MASK ) ||
-               job->vcodec == HB_VCODEC_X264 ) )
+        if( job->advanced_opts && *job->advanced_opts &&
+            ( ( job->vcodec & HB_VCODEC_FFMPEG_MASK ) ||
+              ( job->vcodec == HB_VCODEC_X264 ) ) )
         {
             hb_log( "     + options: %s", job->advanced_opts);
         }
@@ -360,46 +350,44 @@ void hb_display_job_info( hb_job_t * job )
                 hb_log( "     + bitrate: %d kbps, samplerate: %d Hz", audio->config.in.bitrate / 1000, audio->config.in.samplerate );
             }
 
-            if( !(audio->config.out.codec & HB_ACODEC_PASS_FLAG) )
+            if( audio->config.out.codec & HB_ACODEC_PASS_FLAG )
             {
-                for (j = 0; j < hb_audio_mixdowns_count; j++)
+                for( j = 0; j < hb_audio_encoders_count; j++ )
                 {
-                    if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown) {
+                    if( hb_audio_encoders[j].encoder == audio->config.out.codec )
+                    {
+                        hb_log( "   + %s", hb_audio_encoders[j].human_readable_name );
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                for( j = 0; j < hb_audio_mixdowns_count; j++ )
+                {
+                    if( hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown )
+                    {
                         hb_log( "   + mixdown: %s", hb_audio_mixdowns[j].human_readable_name );
                         break;
                     }
                 }
-                if ( audio->config.out.gain != 0.0 )
+                if( audio->config.out.gain != 0.0 )
                 {
                     hb_log( "   + gain: %.fdB", audio->config.out.gain );
                 }
-            }
-
-            if ( audio->config.out.dynamic_range_compression && (audio->config.in.codec == HB_ACODEC_AC3) && (audio->config.out.codec != HB_ACODEC_AC3_PASS) )
-            {
-                hb_log("   + dynamic range compression: %f", audio->config.out.dynamic_range_compression);
-            }
-            
-            if( audio->config.out.codec & HB_ACODEC_PASS_FLAG )
-            {
-                hb_log( "   + %s passthrough", 
-                    (audio->config.out.codec == HB_ACODEC_MP3_PASS) ? "MP3" :
-                    (audio->config.out.codec == HB_ACODEC_AAC_PASS) ? "AAC" :
-                    (audio->config.out.codec == HB_ACODEC_AC3_PASS) ? "AC3" :
-                    (audio->config.out.codec == HB_ACODEC_DCA_PASS) ? "DTS" :
-                                                                      "DTS-HD");
-            }
-            else
-            {
-                hb_log( "   + encoder: %s", 
-                    ( audio->config.out.codec == HB_ACODEC_FAAC ) ?  "faac" : 
-                    ( ( audio->config.out.codec == HB_ACODEC_LAME ) ?  "lame" : 
-                    ( ( audio->config.out.codec == HB_ACODEC_CA_AAC ) ?  "ca_aac" : 
-                    ( ( audio->config.out.codec == HB_ACODEC_CA_HAAC ) ?  "ca_haac" : 
-                    ( ( audio->config.out.codec == HB_ACODEC_FFAAC ) ?  "ffaac" : 
-                    ( ( audio->config.out.codec == HB_ACODEC_AC3 ) ?  "ffac3" : 
-                    "vorbis"  ) ) ) ) ) );
-                hb_log( "     + bitrate: %d kbps, samplerate: %d Hz", audio->config.out.bitrate, audio->config.out.samplerate );            
+                if( ( audio->config.out.dynamic_range_compression != 0.0 ) && ( audio->config.in.codec == HB_ACODEC_AC3 ) )
+                {
+                    hb_log( "   + dynamic range compression: %f", audio->config.out.dynamic_range_compression );
+                }
+                for( j = 0; j < hb_audio_encoders_count; j++ )
+                {
+                    if( hb_audio_encoders[j].encoder == audio->config.out.codec )
+                    {
+                        hb_log( "   + encoder: %s", hb_audio_encoders[j].human_readable_name );
+                        hb_log( "     + bitrate: %d kbps, samplerate: %d Hz", audio->config.out.bitrate, audio->config.out.samplerate );
+                        break;
+                    }
+                }
             }
         }
     }
@@ -530,16 +518,23 @@ static void do_job( hb_job_t * job )
      */
     if( !job->indepth_scan )
     {
-    // if we are doing passthru, and the input codec is not the same as the output
-    // codec, then remove this audio from the job. If we're not doing passthru and
-    // the input codec is the 'internal' ffmpeg codec, make sure that only one
-    // audio references that audio stream since the codec context is specific to
-    // the audio id & multiple copies of the same stream will garble the audio
-    // or cause aborts.
+    // apply Auto Passthru settings
+    hb_autopassthru_apply_settings( job, title );
+    // sanitize audio settings
     for( i = 0; i < hb_list_count( title->list_audio ); )
     {
         audio = hb_list_item( title->list_audio, i );
-        if( ( audio->config.out.codec & HB_ACODEC_PASS_FLAG ) && 
+        if( audio->config.out.codec == HB_ACODEC_AUTO_PASS )
+        {
+            // Auto Passthru should have been handled above
+            // remove track to avoid a crash
+            hb_log( "Auto Passthru error, dropping track %d",
+                    audio->config.out.track  );
+            hb_list_rem( title->list_audio, audio );
+            free( audio );
+            continue;
+        }
+        if( ( audio->config.out.codec & HB_ACODEC_PASS_FLAG ) &&
            !( audio->config.in.codec & audio->config.out.codec & HB_ACODEC_PASS_MASK ) )
         {
             hb_log( "Passthru requested and input codec is not the same as output codec for track %d, dropping track",

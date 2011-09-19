@@ -302,14 +302,6 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
                 [dict setObject: @"AAC (CoreAudio)" forKey: @"AudioEncoder"];
             }
 
-            // Auto Passthru not yet implemented - fallback to AC3 Passthru as it is
-            // compatible with all source codecs (via the AC3 encoder fallback)
-            if ([key isEqualToString: @"Auto Passthru"])
-            {
-                [dict setObject: @"AC3 Passthru" forKey: @"AudioEncoder"];
-                key = @"AC3 Passthru";
-            }
-
             // passthru fallbacks
             if ([key isEqualToString: @"AAC Passthru"])
             {

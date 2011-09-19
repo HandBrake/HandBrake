@@ -26,127 +26,69 @@ static GValue* get_selected_asettings(signal_user_data_t *ud);
 static gboolean block_updates = FALSE;
 
 gint
-ghb_select_audio_codec(int mux, hb_audio_config_t *aconfig, gint acodec, gint fallback)
+ghb_select_audio_codec(gint mux, hb_audio_config_t *aconfig, gint acodec, gint fallback, gint copy_mask)
 {
 	guint32 in_codec = aconfig ? aconfig->in.codec : HB_ACODEC_MASK;
-	if (mux == HB_MUX_MP4)
+	if (acodec == HB_ACODEC_AUTO_PASS)
 	{
-		if (acodec & HB_ACODEC_PASS_FLAG)
+		return hb_autopassthru_get_encoder(in_codec, copy_mask, fallback, mux);
+	}
+
+	gint ii;
+	// Sanitize fallback
+	for (ii = 0; ii < hb_audio_encoders_count; ii++)
+	{
+		if (hb_audio_encoders[ii].encoder == fallback &&
+			!(hb_audio_encoders[ii].muxers & mux))
 		{
-			if ((acodec & in_codec & HB_ACODEC_PASS_MASK & ~HB_ACODEC_VORBIS))
-			{
-				return acodec & (in_codec | HB_ACODEC_PASS_FLAG);
-			}
-			else if (fallback)
-			{
-				return fallback;
-			}
+			if ( mux == HB_MUX_MKV )
+				fallback = HB_ACODEC_LAME;
 			else
-			{
-				return HB_ACODEC_FAAC;
-			}
+				fallback = HB_ACODEC_FAAC;
+			break;
 		}
-		else if (acodec & HB_ACODEC_AC3)
-		{
-			return HB_ACODEC_AC3;
-		}
-		else if (acodec & HB_ACODEC_LAME)
-		{
-			return HB_ACODEC_LAME;
-		}
-		else if (acodec & HB_ACODEC_FAAC)
-		{
-			return HB_ACODEC_FAAC;
-		}
-		else if (acodec & HB_ACODEC_FFAAC)
-		{
-			return HB_ACODEC_FFAAC;
-		}
-		else if (fallback)
+	}
+	if ((acodec & HB_ACODEC_PASS_FLAG) &&
+		!(acodec & in_codec & HB_ACODEC_PASS_MASK))
+	{
+		return fallback;
+	}
+	for (ii = 0; ii < hb_audio_encoders_count; ii++)
+	{
+		if (hb_audio_encoders[ii].encoder == acodec &&
+			!(hb_audio_encoders[ii].muxers & mux))
 		{
 			return fallback;
 		}
-		else
-		{
-			return HB_ACODEC_FAAC;
-		}
 	}
-	else
-	{
-		if (acodec & HB_ACODEC_PASS_FLAG)
-		{
-			if ((acodec & in_codec & HB_ACODEC_PASS_MASK))
-			{
-				return acodec & (in_codec | HB_ACODEC_PASS_FLAG);
-			}
-			else if (fallback)
-			{
-				return fallback;
-			}
-			else
-			{
-				return HB_ACODEC_FAAC;
-			}
-		}
-		else if (acodec & HB_ACODEC_AC3)
-		{
-			return HB_ACODEC_AC3;
-		}
-		else if (acodec & HB_ACODEC_LAME)
-		{
-			return HB_ACODEC_LAME;
-		}
-		else if (acodec & HB_ACODEC_VORBIS)
-		{
-			return HB_ACODEC_VORBIS;
-		}
-		else if (acodec & HB_ACODEC_FAAC)
-		{
-			return HB_ACODEC_FAAC;
-		}
-		else if (acodec & HB_ACODEC_FFAAC)
-		{
-			return HB_ACODEC_FFAAC;
-		}
-		else if (fallback )
-		{
-			return fallback;
-		}
-		else
-		{
-			return HB_ACODEC_LAME;
-		}
-	}
+	return acodec;
 }
 
-int ghb_allowed_passthru_mask(GValue *settings, int acodec)
+int ghb_get_copy_mask(GValue *settings)
 {
-	gint ret = acodec;
+	gint mask = 0;
 
-	if (acodec == HB_ACODEC_ANY)
-	{
-		if (!ghb_settings_get_boolean(settings, "AudioAllowMP3Pass"))
-		{
-			ret &= ~HB_ACODEC_MP3;
-		}
-		if (!ghb_settings_get_boolean(settings, "AudioAllowAACPass"))
-		{
-			ret &= ~HB_ACODEC_FFAAC;
-		}
-		if (!ghb_settings_get_boolean(settings, "AudioAllowAC3Pass"))
-		{
-			ret &= ~HB_ACODEC_AC3;
-		}
-		if (!ghb_settings_get_boolean(settings, "AudioAllowDTSPass"))
-		{
-			ret &= ~HB_ACODEC_DCA;
-		}
-		if (!ghb_settings_get_boolean(settings, "AudioAllowDTSHDPass"))
-		{
-			ret &= ~HB_ACODEC_DCA_HD;
-		}
-	}
-	return ret;
+    if (ghb_settings_get_boolean(settings, "AudioAllowMP3Pass"))
+    {
+        mask |= HB_ACODEC_MP3;
+    }
+    if (ghb_settings_get_boolean(settings, "AudioAllowAACPass"))
+    {
+        mask |= HB_ACODEC_FFAAC;
+    }
+    if (ghb_settings_get_boolean(settings, "AudioAllowAC3Pass"))
+    {
+        mask |= HB_ACODEC_AC3;
+    }
+    if (ghb_settings_get_boolean(settings, "AudioAllowDTSPass"))
+    {
+        mask |= HB_ACODEC_DCA;
+    }
+    if (ghb_settings_get_boolean(settings, "AudioAllowDTSHDPass"))
+    {
+        mask |= HB_ACODEC_DCA_HD;
+    }
+	return mask;
 }
 
 static int ghb_select_fallback( GValue *settings, int mux, int acodec )
@@ -223,8 +165,8 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 		sr = aconfig ? aconfig->in.samplerate : 48000;
 	}
 	gint fallback = ghb_select_fallback( ud->settings, mux, acodec );
-	select_acodec = ghb_allowed_passthru_mask(ud->settings, acodec);
-	select_acodec = ghb_select_audio_codec(mux, aconfig, select_acodec, fallback);
+	gint copy_mask = ghb_get_copy_mask(ud->settings);
+	select_acodec = ghb_select_audio_codec(mux, aconfig, acodec, fallback, copy_mask);
 	gboolean codec_defined_bitrate = FALSE;
 	if (ghb_audio_is_passthru (select_acodec))
 	{
@@ -339,8 +281,8 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 		audio = ghb_array_get_nth(pref_audio, ii);
 		acodec = ghb_settings_combo_int(audio, "AudioEncoder");
 		fallback = ghb_select_fallback( ud->settings, mux, acodec );
-		select_acodec = ghb_allowed_passthru_mask(ud->settings, acodec);
-		select_acodec = ghb_select_audio_codec(mux, NULL, select_acodec, fallback);
+		gint copy_mask = ghb_get_copy_mask(ud->settings);
+		select_acodec = ghb_select_audio_codec(mux, NULL, acodec, fallback, copy_mask);
 		bitrate = ghb_settings_combo_int(audio, "AudioBitrate");
 		rate = ghb_settings_combo_double(audio, "AudioSamplerate");
 		mix = ghb_settings_combo_int(audio, "AudioMixdown");
@@ -361,7 +303,7 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 			// HB_ACODEC_* are bit fields.  Treat acodec as mask
 			if (!(aconfig->in.codec & select_acodec & HB_ACODEC_PASS_MASK))
 			{
-				if (acodec != HB_ACODEC_ANY)
+				if (acodec != HB_ACODEC_AUTO_PASS)
 					acodec = fallback;
 				// If we can't substitute the passthru with a suitable
 				// encoder and

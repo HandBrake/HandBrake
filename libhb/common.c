@@ -41,14 +41,42 @@ int hb_audio_bitrates_count = sizeof( hb_audio_bitrates ) /
 static hb_error_handler_t *error_handler = NULL;
 
 hb_mixdown_t hb_audio_mixdowns[] =
-{ { "Mono",               "HB_AMIXDOWN_MONO",      "mono",   HB_AMIXDOWN_MONO      },
+{ { "None",               "HB_AMIXDOWN_NONE",      "none",   HB_AMIXDOWN_NONE      },
+  { "Mono",               "HB_AMIXDOWN_MONO",      "mono",   HB_AMIXDOWN_MONO      },
   { "Stereo",             "HB_AMIXDOWN_STEREO",    "stereo", HB_AMIXDOWN_STEREO    },
   { "Dolby Surround",     "HB_AMIXDOWN_DOLBY",     "dpl1",   HB_AMIXDOWN_DOLBY     },
   { "Dolby Pro Logic II", "HB_AMIXDOWN_DOLBYPLII", "dpl2",   HB_AMIXDOWN_DOLBYPLII },
-  { "6-channel discrete", "HB_AMIXDOWN_6CH",       "6ch",    HB_AMIXDOWN_6CH       }
-};
+  { "6-channel discrete", "HB_AMIXDOWN_6CH",       "6ch",    HB_AMIXDOWN_6CH       } };
 int hb_audio_mixdowns_count = sizeof( hb_audio_mixdowns ) /
                               sizeof( hb_mixdown_t );
+
+hb_encoder_t hb_video_encoders[] =
+{ { "H.264 (x264)",       "x264",       HB_VCODEC_X264,         HB_MUX_MP4|HB_MUX_MKV },
+  { "MPEG-4 (FFmpeg)",    "ffmpeg4",    HB_VCODEC_FFMPEG_MPEG4, HB_MUX_MP4|HB_MUX_MKV },
+  { "MPEG-2 (FFmpeg)",    "ffmpeg2",    HB_VCODEC_FFMPEG_MPEG2, HB_MUX_MP4|HB_MUX_MKV },
+  { "VP3 (Theora)",       "theora",     HB_VCODEC_THEORA,                  HB_MUX_MKV } };
+int hb_video_encoders_count = sizeof( hb_video_encoders ) /
+                              sizeof( hb_encoder_t );
+
+hb_encoder_t hb_audio_encoders[] =
+{
+#ifdef __APPLE__
+  { "AAC (CoreAudio)",    "ca_aac",     HB_ACODEC_CA_AAC,       HB_MUX_MP4|HB_MUX_MKV },
+  { "HE-AAC (CoreAudio)", "ca_haac",    HB_ACODEC_CA_HAAC,      HB_MUX_MP4|HB_MUX_MKV },
+#endif
+  { "AAC (faac)",         "faac",       HB_ACODEC_FAAC,         HB_MUX_MP4|HB_MUX_MKV },
+  { "AAC (ffmpeg)",       "ffaac",      HB_ACODEC_FFAAC,        HB_MUX_MP4|HB_MUX_MKV },
+  { "AAC Passthru",       "copy:aac",   HB_ACODEC_AAC_PASS,     HB_MUX_MP4|HB_MUX_MKV },
+  { "AC3 (ffmpeg)",       "ffac3",      HB_ACODEC_AC3,          HB_MUX_MP4|HB_MUX_MKV },
+  { "AC3 Passthru",       "copy:ac3",   HB_ACODEC_AC3_PASS,     HB_MUX_MP4|HB_MUX_MKV },
+  { "DTS Passthru",       "copy:dts",   HB_ACODEC_DCA_PASS,     HB_MUX_MP4|HB_MUX_MKV },
+  { "DTS-HD Passthru",    "copy:dtshd", HB_ACODEC_DCA_HD_PASS,  HB_MUX_MP4|HB_MUX_MKV },
+  { "MP3 (lame)",         "lame",       HB_ACODEC_LAME,         HB_MUX_MP4|HB_MUX_MKV },
+  { "MP3 Passthru",       "copy:mp3",   HB_ACODEC_MP3_PASS,     HB_MUX_MP4|HB_MUX_MKV },
+  { "Vorbis (vorbis)",    "vorbis",     HB_ACODEC_VORBIS,                  HB_MUX_MKV },
+  { "Auto Passthru",      "copy",       HB_ACODEC_AUTO_PASS,    HB_MUX_MP4|HB_MUX_MKV } };
+int hb_audio_encoders_count = sizeof( hb_audio_encoders ) /
+                              sizeof( hb_encoder_t );
 
 int hb_mixdown_get_mixdown_from_short_name( const char * short_name )
 {
@@ -74,6 +102,106 @@ const char * hb_mixdown_get_short_name_from_mixdown( int amixdown )
         }
     }
     return "";
+}
+
+void hb_autopassthru_apply_settings( hb_job_t * job, hb_title_t * title )
+{
+    int i, j;
+    hb_audio_t * audio;
+    for( i = 0; i < hb_list_count( title->list_audio ); )
+    {
+        audio = hb_list_item( title->list_audio, i );
+        if( audio->config.out.codec == HB_ACODEC_AUTO_PASS )
+        {
+            audio->config.out.codec = hb_autopassthru_get_encoder( audio->config.in.codec,
+                                                                   job->acodec_copy_mask,
+                                                                   job->acodec_fallback,
+                                                                   job->mux );
+            if( !( audio->config.out.codec & HB_ACODEC_PASS_FLAG ) &&
+                !( audio->config.out.codec & HB_ACODEC_MASK ) )
+            {
+                hb_log( "Auto Passthru: passthru not possible and no valid fallback specified, dropping track %d",
+                        audio->config.out.track );
+                hb_list_rem( title->list_audio, audio );
+                free( audio );
+                continue;
+            }
+            audio->config.out.samplerate = audio->config.in.samplerate;
+            if( !( audio->config.out.codec & HB_ACODEC_PASS_FLAG ) )
+            {
+                if( audio->config.out.codec == job->acodec_fallback )
+                {
+                    hb_log( "Auto Passthru: passthru not possible for track %d, using fallback",
+                            audio->config.out.track );
+                }
+                else
+                {
+                    hb_log( "Auto Passthru: passthru and fallback not possible for track %d, using default encoder",
+                            audio->config.out.track );
+                }
+                audio->config.out.mixdown = hb_get_default_mixdown( audio->config.out.codec,
+                                                                    audio->config.in.channel_layout );
+                audio->config.out.bitrate = hb_get_default_audio_bitrate( audio->config.out.codec,
+                                                                          audio->config.out.samplerate,
+                                                                          audio->config.out.mixdown );
+            }
+            else
+            {
+                for( j = 0; j < hb_audio_encoders_count; j++ )
+                {
+                    if( hb_audio_encoders[j].encoder == audio->config.out.codec )
+                    {
+                        hb_log( "Auto Passthru: using %s for track %d",
+                                hb_audio_encoders[j].human_readable_name,
+                                audio->config.out.track );
+                        break;
+                    }
+                }
+            }
+        }
+        /* Adjust output track number, in case we removed one.
+         * Output tracks sadly still need to be in sequential order.
+         * Note: out.track starts at 1, i starts at 0 */
+        audio->config.out.track = ++i;
+    }
+}
+
+int hb_autopassthru_get_encoder( int in_codec, int copy_mask, int fallback, int muxer )
+{
+    int i;
+    int out_codec = ( copy_mask & in_codec ) | HB_ACODEC_PASS_FLAG;
+    // sanitize fallback encoder and selected passthru
+    // note: invalid fallbacks are caught in work.c
+    for( i = 0; i < hb_audio_encoders_count; i++ )
+    {
+        if( ( hb_audio_encoders[i].encoder == fallback ) &&
+           !( hb_audio_encoders[i].muxers & muxer ) )
+        {
+            // fallback not possible with current muxer
+            // use the default audio encoder instead
+#ifndef __APPLE__
+            if( muxer == HB_MUX_MKV )
+                // Lame is the default for MKV
+                fallback = HB_ACODEC_LAME;
+            else
+#endif          // Core Audio or faac
+                fallback = hb_audio_encoders[0].encoder;
+            break;
+        }
+    }
+    for( i = 0; i < hb_audio_encoders_count; i++ )
+    {
+        if( ( hb_audio_encoders[i].encoder == out_codec ) &&
+           !( hb_audio_encoders[i].muxers & muxer ) )
+        {
+            // selected passthru not possible with current muxer
+            out_codec = fallback;
+            break;
+        }
+    }
+    if( !( out_codec & HB_ACODEC_PASS_MASK ) )
+        return fallback;
+    return out_codec;
 }
 
 // Given an input bitrate, find closest match in the set of allowed bitrates
@@ -338,7 +466,7 @@ int hb_get_best_mixdown( uint32_t codec, int layout, int mixdown )
     if (codec & HB_ACODEC_PASS_FLAG)
     {
         // Audio pass-thru.  No mixdown.
-        return 0;
+        return HB_AMIXDOWN_NONE;
     }
     switch (layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK)
     {
@@ -1226,24 +1354,24 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
     if( (audiocfg->in.bitrate != -1) && (audiocfg->in.codec != 0xDEADBEEF) )
     {
         /* This most likely means the client didn't call hb_audio_config_init
-         * so bail.
-         */
+         * so bail. */
         return 0;
     }
 
     /* Really shouldn't ignore the passed out track, but there is currently no
-     * way to handle duplicates or out-of-order track numbers.
-     */
+     * way to handle duplicates or out-of-order track numbers. */
     audio->config.out.track = hb_list_count(job->list_audio) + 1;
     audio->config.out.codec = audiocfg->out.codec;
-    if( (audiocfg->out.codec & HB_ACODEC_MASK) == (audio->config.in.codec & HB_ACODEC_MASK) &&
-        (audiocfg->out.codec & HB_ACODEC_PASS_FLAG ) )
+    if((audiocfg->out.codec & HB_ACODEC_PASS_FLAG) &&
+       ((audiocfg->out.codec == HB_ACODEC_AUTO_PASS) ||
+        (audiocfg->out.codec & audio->config.in.codec & HB_ACODEC_PASS_MASK)))
     {
         /* Pass-through, copy from input. */
         audio->config.out.samplerate = audio->config.in.samplerate;
         audio->config.out.bitrate = audio->config.in.bitrate;
-        audio->config.out.dynamic_range_compression = 0;
         audio->config.out.mixdown = 0;
+        audio->config.out.dynamic_range_compression = 0;
+        audio->config.out.gain = 0;
     }
     else
     {

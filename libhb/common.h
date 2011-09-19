@@ -56,6 +56,7 @@ typedef struct hb_handle_s hb_handle_t;
 typedef struct hb_list_s hb_list_t;
 typedef struct hb_rate_s hb_rate_t;
 typedef struct hb_mixdown_s hb_mixdown_t;
+typedef struct hb_encoder_s hb_encoder_t;
 typedef struct hb_job_s  hb_job_t;
 typedef struct hb_title_s hb_title_t;
 typedef struct hb_chapter_s hb_chapter_t;
@@ -126,6 +127,14 @@ struct hb_mixdown_s
     int    amixdown;
 };
 
+struct hb_encoder_s
+{
+    char * human_readable_name; // note: used in presets
+    char * short_name;          // note: used in CLI
+    int    encoder;             // HB_*CODEC_* define
+    int    muxers;              // supported muxers
+};
+
 struct hb_subtitle_config_s
 {
     enum subdest { RENDERSUB, PASSTHRUSUB } dest;
@@ -149,8 +158,14 @@ extern hb_rate_t    hb_audio_bitrates[];
 extern int          hb_audio_bitrates_count;
 extern hb_mixdown_t hb_audio_mixdowns[];
 extern int          hb_audio_mixdowns_count;
+extern hb_encoder_t hb_video_encoders[];
+extern int          hb_video_encoders_count;
+extern hb_encoder_t hb_audio_encoders[];
+extern int          hb_audio_encoders_count;
 int hb_mixdown_get_mixdown_from_short_name( const char * short_name );
 const char * hb_mixdown_get_short_name_from_mixdown( int amixdown );
+void hb_autopassthru_apply_settings( hb_job_t * job, hb_title_t * title );
+int hb_autopassthru_get_encoder( int in_codec, int copy_mask, int fallback, int muxer );
 int hb_get_best_mixdown( uint32_t codec, int layout, int mixdown );
 int hb_get_default_mixdown( uint32_t codec, int layout );
 int hb_find_closest_audio_bitrate(int bitrate);
@@ -250,6 +265,8 @@ struct hb_job_s
 
     /* List of audio settings. */
     hb_list_t     * list_audio;
+    int             acodec_copy_mask; // Auto Passthru allowed codecs
+    int             acodec_fallback;  // Auto Passthru fallback encoder
 
     /* Subtitles */
     hb_list_t     * list_subtitle;
@@ -328,6 +345,7 @@ struct hb_job_s
 #define HB_ACODEC_FF_MASK   0x000f0000
 #define HB_ACODEC_PASS_FLAG 0x40000000
 #define HB_ACODEC_PASS_MASK (HB_ACODEC_MP3 | HB_ACODEC_FFAAC | HB_ACODEC_DCA_HD | HB_ACODEC_AC3 | HB_ACODEC_DCA)
+#define HB_ACODEC_AUTO_PASS (HB_ACODEC_PASS_MASK | HB_ACODEC_PASS_FLAG)
 #define HB_ACODEC_MP3_PASS  (HB_ACODEC_MP3 | HB_ACODEC_PASS_FLAG)
 #define HB_ACODEC_AAC_PASS  (HB_ACODEC_FFAAC | HB_ACODEC_PASS_FLAG)
 #define HB_ACODEC_AC3_PASS  (HB_ACODEC_AC3 | HB_ACODEC_PASS_FLAG)
@@ -346,6 +364,7 @@ struct hb_job_s
 #define HB_AMIXDOWN_A52_FORMAT_MASK             0x00000FF0
 #define HB_AMIXDOWN_DISCRETE_CHANNEL_COUNT_MASK 0x0000000F
 /* define the HB_AMIXDOWN_XXXX values */
+#define HB_AMIXDOWN_NONE                        0x00000000
 #define HB_AMIXDOWN_MONO                        0x01000001
 // DCA_FORMAT of DCA_MONO                  = 0    = 0x000
 // A52_FORMAT of A52_MONO                  = 1    = 0x01

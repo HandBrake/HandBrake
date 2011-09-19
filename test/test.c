@@ -1969,107 +1969,53 @@ static int HandleEvents( hb_handle_t * h )
             for( i = 0; i < hb_list_count( job->list_audio ); )
             {
                 audio = hb_list_audio_config_item( job->list_audio, i );
-                // check whether we're doing passthru
-                if( audio->out.codec & HB_ACODEC_PASS_FLAG )
+                if( audio->out.codec == HB_ACODEC_AUTO_PASS )
                 {
-                    // compute the output passthru codec
-                    // required to make 'copy' work
-                    // doesn't break codec-specific passthru
-                    int out_codec = ( audio->out.codec & ( audio->in.codec | HB_ACODEC_PASS_FLAG ) );
-                    // check whether passthru is possible or not
-                    if( !( out_codec & audio->in.codec & HB_ACODEC_PASS_MASK ) )
+                    // Auto Passthru
+                    job->acodec_copy_mask = allowed_audio_copy;
+                    job->acodec_fallback = acodec_fallback ? get_acodec_for_string( acodec_fallback ) : 0;
+                    // sanitize the fallback; -1 isn't a valid HB_ACODEC_* value
+                    if( job->acodec_fallback == -1 )
+                        job->acodec_fallback = 0;
+                }
+                else if( ( audio->out.codec & HB_ACODEC_PASS_FLAG ) &&
+                        !( audio->out.codec & audio->in.codec & HB_ACODEC_PASS_MASK ) )
+                {
+                    if( audio->out.codec == HB_ACODEC_AAC_PASS )
                     {
-                        // first, check whether we're doing a codec-specific passthru
-                        // for which we have a corresponding encoder
-                        // note: Auto Passthru with a single codec in the passthru
-                        // mask is assimilated to codec-specific passthru
-                        if( audio->out.codec == HB_ACODEC_AAC_PASS )
-                        {
-                            fprintf( stderr, "AAC passthru requested and input codec is not AAC for track %d, using AAC encoder\n",
-                                     audio->out.track );
+                        fprintf( stderr, "AAC Passthru requested and input codec is not AAC for track %d, using AAC encoder\n",
+                                 audio->out.track );
 #ifdef __APPLE_CC__
-                            audio->out.codec = HB_ACODEC_CA_AAC;
+                        audio->out.codec = HB_ACODEC_CA_AAC;
 #else
-                            audio->out.codec = HB_ACODEC_FAAC;
+                        audio->out.codec = HB_ACODEC_FAAC;
 #endif
-                        }
-                        else if( audio->out.codec == HB_ACODEC_AC3_PASS )
-                        {
-                            fprintf( stderr, "AC3 passthru requested and input codec is not AC3 for track %d, using AC3 encoder\n",
-                                     audio->out.track );
-                            audio->out.codec = HB_ACODEC_AC3;
-                        }
-                        else if( audio->out.codec == HB_ACODEC_MP3_PASS )
-                        {
-                            fprintf( stderr, "MP3 passthru requested and input codec is not MP3 for track %d, using MP3 encoder\n",
-                                     audio->out.track );
-                            audio->out.codec = HB_ACODEC_LAME;
-                        }
-                        // we're doing either DTS, DTS-HD or Auto Passthru
-                        else if( ( audio->out.codec != HB_ACODEC_DCA_PASS ) &&
-                                 ( audio->out.codec != HB_ACODEC_DCA_HD_PASS ) )
-                        {
-                            // we're doing Auto Passthru, check if there's a fallback
-                            if( acodec_fallback )
-                            {
-                                fprintf( stderr, "Auto passthru requested and input codec is not compatible for track %d, using fallback\n",
-                                         audio->out.track );
-                                audio->out.codec = get_acodec_for_string( acodec_fallback );
-                            }
-                            // we didn't find a suitable fallback
-                            // check whether we have an encoder for
-                            // one of the allowed passthru codecs
-                            else if( audio->out.codec & HB_ACODEC_AAC_PASS )
-                            {
-                                fprintf( stderr, "Auto passthru requested and input codec is not compatible for track %d, AAC Passthru allowed: using AAC encoder\n",
-                                         audio->out.track );
-#ifdef __APPLE_CC__
-                                audio->out.codec = HB_ACODEC_CA_AAC;
-#else
-                                audio->out.codec = HB_ACODEC_FAAC;
-#endif
-                            }
-                            else if( audio->out.codec & HB_ACODEC_AC3_PASS )
-                            {
-                                fprintf( stderr, "Auto passthru requested and input codec is not compatible for track %d, AC3 Passthru allowed: using AC3 encoder\n",
-                                         audio->out.track );
-                                audio->out.codec = HB_ACODEC_AC3;
-                            }
-                            else if( audio->out.codec & HB_ACODEC_MP3_PASS )
-                            {
-                                fprintf( stderr, "Auto passthru requested and input codec is not compatible for track %d, MP3 Passthru allowed: using MP3 encoder\n",
-                                         audio->out.track );
-                                audio->out.codec = HB_ACODEC_LAME;
-                            }
-                            else
-                            {
-                                // Passthru not possible, drop audio.
-                                fprintf( stderr, "Auto passthru requested, input codec is not compatible for track %d and no valid fallback specified: dropping track\n",
-                                         audio->out.track );
-                                hb_audio_t * item = hb_list_item( job->list_audio, i );
-                                hb_list_rem( job->list_audio, item );
-                                continue;
-                            }
-                        }
-                        else
-                        {
-                            // Passthru not possible, drop audio.
-                            fprintf( stderr, "Passthru requested and input codec is not the same as output codec for track %d, dropping track\n",
-                                     audio->out.track );
-                            hb_audio_t * item = hb_list_item( job->list_audio, i );
-                            hb_list_rem( job->list_audio, item );
-                            continue;
-                        }
-                        // we didn't drop the track, set the mixdown and bitrate from libhb defaults
-                        audio->out.mixdown = hb_get_default_mixdown( audio->out.codec, audio->in.channel_layout );
-                        audio->out.bitrate = hb_get_default_audio_bitrate( audio->out.codec, audio->out.samplerate,
-                                                                           audio->out.mixdown );
+                    }
+                    else if( audio->out.codec == HB_ACODEC_AC3_PASS )
+                    {
+                        fprintf( stderr, "AC3 Passthru requested and input codec is not AC3 for track %d, using AC3 encoder\n",
+                                 audio->out.track );
+                        audio->out.codec = HB_ACODEC_AC3;
+                    }
+                    else if( audio->out.codec == HB_ACODEC_MP3_PASS )
+                    {
+                        fprintf( stderr, "MP3 Passthru requested and input codec is not MP3 for track %d, using MP3 encoder\n",
+                                 audio->out.track );
+                        audio->out.codec = HB_ACODEC_LAME;
                     }
                     else
                     {
-                        // passthru is possible
-                        audio->out.codec = out_codec;
+                        // Passthru not possible, drop audio.
+                        fprintf( stderr, "Passthru requested and input codec is not the same as output codec for track %d, dropping track\n",
+                                 audio->out.track );
+                        hb_audio_t * item = hb_list_item( job->list_audio, i );
+                        hb_list_rem( job->list_audio, item );
+                        continue;
                     }
+                    // we didn't drop the track, set the mixdown and bitrate from libhb defaults
+                    audio->out.mixdown = hb_get_default_mixdown( audio->out.codec, audio->in.channel_layout );
+                    audio->out.bitrate = hb_get_default_audio_bitrate( audio->out.codec, audio->out.samplerate,
+                                                                       audio->out.mixdown );
                 }
                 // we didn't drop the track
                 i++;
@@ -2541,7 +2487,7 @@ void SigHandler( int i_signal )
  ****************************************************************************/
 static void ShowHelp()
 {
-    int i;
+    int i, j;
     FILE* const out = stdout;
 
     fprintf( out,
@@ -2595,8 +2541,25 @@ static void ShowHelp()
 
     "### Video Options------------------------------------------------------------\n\n"
     "    -e, --encoder <string>  Set video library encoder\n"
-    "                            Options: ffmpeg4,ffmpeg2,x264,theora\n"
-    "                            (default: ffmpeg4)\n"
+    "                            Options: " );
+    for( i = 0; i < hb_video_encoders_count; i++ )
+    {
+        fprintf( out, "%s", hb_video_encoders[i].short_name );
+        if( i != hb_video_encoders_count - 1 )
+            fprintf( out, "/" );
+        else
+            fprintf( out, "\n" );
+    }
+    for( i = 0; i < hb_video_encoders_count; i++ )
+    {
+        if( hb_video_encoders[i].encoder == vcodec )
+        {
+            fprintf( out, "                            (default: %s)\n",
+                     hb_video_encoders[i].short_name );
+            break;
+        }
+    }
+    fprintf( out,
     "    -x, --encopts <string>  Specify advanced encoder options in the\n"
     "                            same style as mencoder (x264 and ffmpeg only):\n"
     "                            option1=value1:option2=value2\n"
@@ -2632,58 +2595,42 @@ static void ShowHelp()
     "\n"
     "### Audio Options-----------------------------------------------------------\n\n"
     "    -a, --audio <string>    Select audio track(s), separated by commas\n"
-    "                            More than one output track can be used for one\n"
-    "                            input.\n"
     "                            (\"none\" for no audio, \"1,2,3\" for multiple\n"
-    "                             tracks, default: first one)\n" );
-
+    "                             tracks, default: first one).\n"
+    "                            Multiple output tracks can be used for one input.\n"
+    "    -E, --aencoder <string> Audio encoder(s):\n" );
+    for( i = 0; i < hb_audio_encoders_count; i++ )
+    {
+        fprintf( out, "                               %s\n",
+                 hb_audio_encoders[i].short_name );
+    }
+    fprintf( out,
+    "                            copy:* will passthrough the corresponding\n"
+    "                            audio unmodified to the muxer if it is a\n"
+    "                            supported passthrough audio type.\n"
+    "                            Separated by commas for more than one audio track.\n"
 #ifdef __APPLE_CC__
-    fprintf( out,
-    "    -E, --aencoder <string> Audio encoder(s)\n"
-    "                               ca_aac\n"
-    "                               ca_haac\n"
-    "                               faac\n"
-    "                               lame\n"
-    "                               vorbis\n"
-    "                               ac3\n"
-    "                               copy\n"
-    "                               copy:aac\n"
-    "                               copy:ac3\n"
-    "                               copy:dts\n"
-    "                               copy:dtshd\n"
-    "                               copy:mp3\n"
-    "                            copy* will passthrough the corresponding\n"
-    "                            audio unmodified to the muxer if it is a\n"
-    "                            supported passthrough audio type.\n"
-    "                            Separated by commas for more than one audio track.\n"
-    "                            (default: ca_aac)\n" );
+    "                            (default: ca_aac)\n"
 #else
-    fprintf( out,
-    "    -E, --aencoder <string> Audio encoder(s):\n"
-    "                               faac\n"
-    "                               lame\n"
-    "                               vorbis\n"
-    "                               ac3\n"
-    "                               copy\n"
-    "                               copy:aac\n"
-    "                               copy:ac3\n"
-    "                               copy:dts\n"
-    "                               copy:dtshd\n"
-    "                               copy:mp3\n"
-    "                            copy* will passthrough the corresponding\n"
-    "                            audio unmodified to the muxer if it is a\n"
-    "                            supported passthrough audio type.\n"
-    "                            Separated by commas for more than one audio track.\n"
-    "                            (default: faac for mp4, lame for mkv)\n" );
+    "                            (default: faac for mp4, lame for mkv)\n"
 #endif
-    fprintf( out,
-    "        --audio-copy-mask   Set audio codecs that are permitted when\n"
-    "                <string>    \"copy\" audio encoder option is specified.\n"
-    "                            Separated by commas for multiple allowed options.\n");
-    fprintf( out,
+    "        --audio-copy-mask   Set audio codecs that are permitted when the\n"
+    "                <string>    \"copy\" audio encoder option is specified\n"
+    "                            (" );
+    for( i = 0, j = 0; i < hb_audio_encoders_count; i++ )
+    {
+        if( !strncmp( hb_audio_encoders[i].short_name, "copy:", 5 ) )
+        {
+            if( j != 0 )
+                fprintf( out, "/" );
+            fprintf( out, "%s", hb_audio_encoders[i].short_name + 5 );
+            j = 1;
+        }
+    }
+    fprintf( out, ", default: all).\n"
+    "                            Separated by commas for multiple allowed options.\n"
     "        --audio-fallback    Set audio codec to use when it is not possible\n"
-    "                <string>    to copy an audio track without re-encoding.\n");
-    fprintf( out,
+    "                <string>    to copy an audio track without re-encoding.\n"
     "    -B, --ab <kb/s>         Set audio bitrate(s) (default: depends on the\n"
     "                            selected codec, mixdown and samplerate)\n"
     "                            Separated by commas for more than one audio track.\n"
@@ -3357,32 +3304,23 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 break;
             case 'e':
-                if( !strcasecmp( optarg, "ffmpeg" ) )
+            {
+                int i;
+                for( i = 0, vcodec = 0; i < hb_video_encoders_count; i++ )
                 {
-                    vcodec = HB_VCODEC_FFMPEG_MPEG4;
+                    if( !strcasecmp( hb_video_encoders[i].short_name, optarg ) )
+                    {
+                        vcodec = hb_video_encoders[i].encoder;
+                        break;
+                    }
                 }
-                else if( !strcasecmp( optarg, "ffmpeg4" ) )
-                {
-                    vcodec = HB_VCODEC_FFMPEG_MPEG4;
-                }
-                else if( !strcasecmp( optarg, "ffmpeg2" ) )
-                {
-                    vcodec = HB_VCODEC_FFMPEG_MPEG2;
-                }
-                else if( !strcasecmp( optarg, "x264" ) )
-                {
-                    vcodec = HB_VCODEC_X264;
-                }
-                else if( !strcasecmp( optarg, "theora" ) )
-                {
-                    vcodec = HB_VCODEC_THEORA;
-                }
-                else
+                if( !vcodec )
                 {
                     fprintf( stderr, "invalid codec (%s)\n", optarg );
                     return -1;
                 }
                 break;
+            }
             case 'E':
                 if( optarg != NULL )
                 {
@@ -3514,23 +3452,26 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case ALLOWED_AUDIO_COPY:
             {
-                int i;
+                int i, j;
                 char **allowed = str_split( optarg, ',' );
 
                 allowed_audio_copy = 0;
-                for ( i = 0; allowed[i]; i++ )
+                for( i = 0; allowed[i]; i++ )
                 {
-                    if ( !strcmp( allowed[i], "ac3" ) )
-                        allowed_audio_copy |= HB_ACODEC_AC3;
-                    if ( !strcmp( allowed[i], "dts" ) )
-                        allowed_audio_copy |= HB_ACODEC_DCA;
-                    if ( !strcmp( allowed[i], "dtshd" ) )
-                        allowed_audio_copy |= HB_ACODEC_DCA_HD;
-                    if ( !strcmp( allowed[i], "mp3" ) )
-                        allowed_audio_copy |= HB_ACODEC_MP3;
-                    if ( !strcmp( allowed[i], "aac" ) )
-                        allowed_audio_copy |= HB_ACODEC_FFAAC;
+                    for( j = 0; j < hb_audio_encoders_count; j++ )
+                    {
+                        char * encoder = hb_audio_encoders[j].short_name;
+                        // skip "copy:"
+                        if( strlen( encoder ) > 5 )
+                            encoder += 5;
+                        if( !strcmp( allowed[i], encoder ) )
+                        {
+                            allowed_audio_copy |= hb_audio_encoders[j].encoder;
+                            break;
+                        }
+                    }
                 }
+                allowed_audio_copy &= HB_ACODEC_PASS_MASK;
                 str_vfree( allowed );
             } break;
             case AUDIO_FALLBACK:
@@ -3695,64 +3636,16 @@ static int CheckOptions( int argc, char ** argv )
 
 static int get_acodec_for_string( char *codec )
 {
-    if( !strcasecmp( codec, "ac3" ) )
+    int i, acodec;
+    for( i = 0, acodec = 0; i < hb_audio_encoders_count; i++ )
     {
-        return HB_ACODEC_AC3;
+        if( !strcasecmp( hb_audio_encoders[i].short_name, codec ) )
+        {
+            acodec = hb_audio_encoders[i].encoder;
+            break;
+        }
     }
-    else if( !strcasecmp( codec, "copy" ) )
-    {
-        return (HB_ACODEC_PASS_MASK & allowed_audio_copy) | HB_ACODEC_PASS_FLAG;
-    }
-    else if( !strcasecmp( codec, "copy:aac" ) )
-    {
-        return HB_ACODEC_AAC_PASS;
-    }
-    else if( !strcasecmp( codec, "copy:ac3" ) )
-    {
-        return HB_ACODEC_AC3_PASS;
-    }
-    else if( !strcasecmp( codec, "copy:dts" ) || !strcasecmp( codec, "copy:dca" ) )
-    {
-        return HB_ACODEC_DCA_PASS;
-    }
-    else if( !strcasecmp( codec, "copy:dtshd" ) )
-    {
-        return HB_ACODEC_DCA_HD_PASS;
-    }
-    else if( !strcasecmp( codec, "copy:mp3" ) )
-    {
-        return HB_ACODEC_MP3_PASS;
-    }
-    else if( !strcasecmp( codec, "lame" ) )
-    {
-        return HB_ACODEC_LAME;
-    }
-    else if( !strcasecmp( codec, "faac" ) )
-    {
-        return HB_ACODEC_FAAC;
-    }
-    else if( !strcasecmp( codec, "ffaac" ) )
-    {
-        return HB_ACODEC_FFAAC;
-    }
-    else if( !strcasecmp( codec, "vorbis") )
-    {
-        return HB_ACODEC_VORBIS;
-    }
-#ifdef __APPLE__
-    else if( !strcasecmp( codec, "ca_aac") )
-    {
-        return HB_ACODEC_CA_AAC;
-    }
-    else if( !strcasecmp( codec, "ca_haac") )
-    {
-        return HB_ACODEC_CA_HAAC;
-    }
-#endif
-    else
-    {
-        return -1;
-    }
+    return acodec ? acodec : -1;
 }
 
 static int is_sample_rate_valid(int rate)

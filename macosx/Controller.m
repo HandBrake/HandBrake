@@ -2415,12 +2415,25 @@ fWorkingCount = 0;
     [queueFileJob setObject:[NSString stringWithFormat:@"%d",[fPictureController deblock]] forKey:@"PictureDeblock"];
     
     [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController grayscale]] forKey:@"VideoGrayScale"];
-    [self writeToActivityLog: "createQueueFileItem: Getting Audio from prepareAudioForQueueFileJob ..."];
-    /*Audio*/
-	[fAudioDelegate prepareAudioForQueueFileJob: queueFileJob];
-    [self writeToActivityLog: "createQueueFileItem: Returned getting audio from prepareAudioForQueueFileJob"];	
     
-	/* Subtitles*/
+    /* Auto Passthru */
+    /* For the time being, values are hardcoded. */
+    [queueFileJob setObject: [NSNumber numberWithInt: 1] forKey: @"AudioAllowAACPass"];
+    [queueFileJob setObject: [NSNumber numberWithInt: 1] forKey: @"AudioAllowAC3Pass"];
+    [queueFileJob setObject: [NSNumber numberWithInt: 1] forKey: @"AudioAllowDTSHDPass"];
+    [queueFileJob setObject: [NSNumber numberWithInt: 1] forKey: @"AudioAllowDTSPass"];
+    [queueFileJob setObject: [NSNumber numberWithInt: 1] forKey: @"AudioAllowMP3Pass"];
+    // just in case we need it for display purposes
+    [queueFileJob setObject: @"AC3 (ffmpeg)" forKey: @"AudioEncoderFallback"];
+    // actual fallback encoder
+    [queueFileJob setObject: [NSNumber numberWithInt: HB_ACODEC_AC3] forKey: @"JobAudioEncoderFallback"];
+    
+    /* Audio */
+    [self writeToActivityLog: "createQueueFileItem: Getting Audio from prepareAudioForQueueFileJob ..."];
+    [fAudioDelegate prepareAudioForQueueFileJob: queueFileJob];
+    [self writeToActivityLog: "createQueueFileItem: Returned getting audio from prepareAudioForQueueFileJob"];
+    
+	/* Subtitles */
     NSMutableArray *subtitlesArray = [[NSMutableArray alloc] initWithArray:[fSubtitlesDelegate getSubtitleArray] copyItems:YES];
     [queueFileJob setObject:[NSArray arrayWithArray: subtitlesArray] forKey:@"SubtitleList"];
     [subtitlesArray autorelease];
@@ -2815,11 +2828,13 @@ fWorkingCount = 0;
     /* Turbo 1st pass for 2 Pass Encoding */
     [fVidTurboPassCheck setState:[[queueToApply objectForKey:@"VideoTurboTwoPass"] intValue]];
     
-    /*Audio*/
+    /* Auto Passthru */
+    /* For the time being, there are no GUI elements for this;
+     * everything is hardcoded. */
     
-    
+    /* Audio */
     /* Now lets add our new tracks to the audio list here */
-	[fAudioDelegate addTracksFromQueue: queueToApply];
+    [fAudioDelegate addTracksFromQueue: queueToApply];
     
     /*Subtitles*/
     /* Crashy crashy right now, working on it */
@@ -3220,8 +3235,13 @@ bool one_burned = FALSE;
    
     
     
-[subtitlesArray autorelease];    
+[subtitlesArray autorelease];
     
+    
+    /* Auto Passthru */
+    /* For the time being, values are hardcoded. */
+    job->acodec_copy_mask = HB_ACODEC_PASS_MASK;
+    job->acodec_fallback = HB_ACODEC_AC3;
     
     /* Audio tracks and mixdowns */
 	[fAudioDelegate prepareAudioForJob: job];
@@ -3716,11 +3736,34 @@ bool one_burned = FALSE;
 
 #pragma mark -
 
-   
+    /* Auto Passthru */
+    job->acodec_copy_mask = 0;
+    if( [[queueToApply objectForKey: @"AudioAllowAACPass"] intValue] == 1 )
+    {
+        job->acodec_copy_mask |= HB_ACODEC_FFAAC;
+    }
+    if( [[queueToApply objectForKey: @"AudioAllowAC3Pass"] intValue] == 1 )
+    {
+        job->acodec_copy_mask |= HB_ACODEC_AC3;
+    }
+    if( [[queueToApply objectForKey: @"AudioAllowDTSHDPass"] intValue] == 1 )
+    {
+        job->acodec_copy_mask |= HB_ACODEC_DCA_HD;
+    }
+    if( [[queueToApply objectForKey: @"AudioAllowDTSPass"] intValue] == 1 )
+    {
+        job->acodec_copy_mask |= HB_ACODEC_DCA;
+    }
+    if( [[queueToApply objectForKey: @"AudioAllowMP3Pass"] intValue] == 1 )
+    {
+        job->acodec_copy_mask |= HB_ACODEC_MP3;
+    }
+    job->acodec_fallback = [[queueToApply objectForKey: @"JobAudioEncoderFallback"] intValue];
+    
     /* Audio tracks and mixdowns */
-    /* Lets make sure there arent any erroneous audio tracks in the job list, so lets make sure its empty*/
+    /* Lets make sure there arent any erroneous audio tracks in the job list, so lets make sure its empty */
     int audiotrack_count = hb_list_count(job->list_audio);
-    for( int i = 0; i < audiotrack_count;i++)
+    for( int i = 0; i < audiotrack_count; i++ )
     {
         hb_audio_t * temp_audio = (hb_audio_t*) hb_list_item( job->list_audio, 0 );
         hb_list_rem(job->list_audio, temp_audio);
@@ -4059,8 +4102,8 @@ bool one_burned = FALSE;
 {
     /* Let libhb do the job */
     hb_start( fQueueEncodeLibhb );
-    /*set the fEncodeState State */
-	fEncodeState = 1;
+    /* set the fEncodeState State */
+    fEncodeState = 1;
 }
 
 
@@ -4500,13 +4543,17 @@ bool one_burned = FALSE;
     /* Note: we now store the video encoder int values from common.c in the tags of each popup for easy retrieval later */
     [fVidEncoderPopUp removeAllItems];
     NSMenuItem *menuItem;
-    /* These video encoders are available to all of our current muxers, so lets list them once here */
-    menuItem = [[fVidEncoderPopUp menu] addItemWithTitle:@"MPEG-4 (FFmpeg)" action: NULL keyEquivalent: @""];
-    [menuItem setTag: HB_VCODEC_FFMPEG_MPEG4];
-    menuItem = [[fVidEncoderPopUp menu] addItemWithTitle:@"MPEG-2 (FFmpeg)" action: NULL keyEquivalent: @""];
-    [menuItem setTag: HB_VCODEC_FFMPEG_MPEG2];
-    menuItem = [[fVidEncoderPopUp menu] addItemWithTitle:@"H.264 (x264)" action: NULL keyEquivalent: @""];
-    [menuItem setTag: HB_VCODEC_X264];
+    int i;
+    for( i = 0; i < hb_video_encoders_count; i++ )
+    {
+        if( ( ( format == 0 ) && ( hb_video_encoders[i].muxers & HB_MUX_MP4 ) ) ||
+            ( ( format == 1 ) && ( hb_video_encoders[i].muxers & HB_MUX_MKV ) ) )
+        {
+            menuItem = [[fVidEncoderPopUp menu] addItemWithTitle: [NSString stringWithUTF8String: hb_video_encoders[i].human_readable_name]
+                                                          action: NULL keyEquivalent: @""];
+            [menuItem setTag: hb_video_encoders[i].encoder];
+        }
+    }
     
     switch( format )
     {
@@ -4519,11 +4566,8 @@ bool one_burned = FALSE;
             [fDstMp4iPodFileCheck setHidden: NO];
             break;
             
-            case 1:
+        case 1:
             ext = "mkv";
-            /* Add additional video encoders here */
-            menuItem = [[fVidEncoderPopUp menu] addItemWithTitle:@"VP3 (Theora)" action: NULL keyEquivalent: @""];
-            [menuItem setTag: HB_VCODEC_THEORA];
             /* We enable the create chapters checkbox here */
 			[fCreateChapterMarkers setEnabled: YES];
 			break;
@@ -5592,8 +5636,12 @@ return YES;
         /* Turbo 1st pass for 2 Pass Encoding */
         [fVidTurboPassCheck setState:[[chosenPreset objectForKey:@"VideoTurboTwoPass"] intValue]];
         
-        /*Audio*/
-		[fAudioDelegate addTracksFromPreset: chosenPreset];
+        /* Auto Passthru */
+        /* For the time being, there are no GUI elements for this;
+         * everything is hardcoded. */
+        
+        /* Audio */
+        [fAudioDelegate addTracksFromPreset: chosenPreset];
         
         /*Subtitles*/
         [fSubPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Subtitles"]];
@@ -6112,7 +6160,16 @@ return YES;
         [preset setObject:[fPictureController decombCustomString] forKey:@"PictureDecombCustom"];
         [preset setObject:[NSNumber numberWithInt:[fPictureController grayscale]] forKey:@"VideoGrayScale"];
         
-        /*Audio*/
+        /* Auto Pasthru */
+        /* For the time being, values are hardcoded. */
+        [preset setObject: [NSNumber numberWithInt: 1] forKey: @"AudioAllowAACPass"];
+        [preset setObject: [NSNumber numberWithInt: 1] forKey: @"AudioAllowAC3Pass"];
+        [preset setObject: [NSNumber numberWithInt: 1] forKey: @"AudioAllowDTSHDPass"];
+        [preset setObject: [NSNumber numberWithInt: 1] forKey: @"AudioAllowDTSPass"];
+        [preset setObject: [NSNumber numberWithInt: 1] forKey: @"AudioAllowMP3Pass"];
+        [preset setObject: @"AC3 (ffmpeg)" forKey: @"AudioEncoderFallback"];
+        
+        /* Audio */
         NSMutableArray *audioListArray = [[NSMutableArray alloc] init];
 		[fAudioDelegate prepareAudioForPreset: audioListArray];
         

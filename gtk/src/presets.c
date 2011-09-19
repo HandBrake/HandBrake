@@ -1989,8 +1989,9 @@ typedef struct
 static value_map_t vcodec_xlat[] =
 {
 	{"MPEG-2 (FFmpeg)", "ffmpeg2"},
+	{"MPEG-4 (FFmpeg)", "ffmpeg4"},
 	{"MPEG-4 (FFmpeg)", "ffmpeg"},
-	{"MPEG-4 (XviD)", "ffmpeg"},
+	{"MPEG-4 (XviD)", "ffmpeg4"},
 	{"H.264 (x264)", "x264"},
 	{"VP3 (Theora)", "theora"},
 	{NULL,NULL}
@@ -2002,13 +2003,20 @@ static value_map_t acodec_xlat[] =
 	{"AAC (faac)", "faac"},
 	{"AAC (CoreAudio)", "faac"},
 	{"HE-AAC (CoreAudio)", "faac"},
+	{"AC3 (ffmpeg)", "ffac3"},
 	{"AC3 (ffmpeg)", "ac3"},
 	{"AC3", "ac3"},			// Backwards compatibility with mac ui
+	{"MP3 Passthru", "copy:mp3"},
 	{"MP3 Passthru", "mp3pass"},
+	{"AAC Passthru", "copy:aac"},
 	{"AAC Passthru", "aacpass"},
+	{"AC3 Passthru", "copy:ac3"},
 	{"AC3 Passthru", "ac3pass"},
+	{"DTS Passthru", "copy:dts"},
 	{"DTS Passthru", "dtspass"},
+	{"DTS-HD Passthru", "copy:dtshd"},
 	{"DTS-HD Passthru", "dtshdpass"},
+	{"Auto Passthru", "copy"},
 	{"Auto Passthru", "auto"},
 	{"MP3 (lame)", "lame"},
 	{"Vorbis (vorbis)", "vorbis"},
