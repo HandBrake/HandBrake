@@ -196,16 +196,17 @@ hb_sws_get_context(int srcW, int srcH, enum PixelFormat srcFormat,
     return ctx;
 }
 
-int hb_ff_layout_xlat(int64_t ff_channel_layout, int channels)
+int hb_ff_layout_xlat( int64_t ff_channel_layout, int channels )
 {
     int hb_layout;
 
-    switch (ff_channel_layout)
+    switch( ff_channel_layout )
     {
         case AV_CH_LAYOUT_MONO:
             hb_layout = HB_INPUT_CH_LAYOUT_MONO;
             break;
         case AV_CH_LAYOUT_STEREO:
+        case AV_CH_LAYOUT_STEREO_DOWNMIX:
             hb_layout = HB_INPUT_CH_LAYOUT_STEREO;
             break;
         case AV_CH_LAYOUT_SURROUND:
@@ -215,20 +216,14 @@ int hb_ff_layout_xlat(int64_t ff_channel_layout, int channels)
             hb_layout = HB_INPUT_CH_LAYOUT_3F1R;
             break;
         case AV_CH_LAYOUT_2_2:
-            hb_layout = HB_INPUT_CH_LAYOUT_2F2R;
-            break;
         case AV_CH_LAYOUT_QUAD:
             hb_layout = HB_INPUT_CH_LAYOUT_2F2R;
             break;
         case AV_CH_LAYOUT_5POINT0:
-            hb_layout = HB_INPUT_CH_LAYOUT_3F2R;
-            break;
-        case AV_CH_LAYOUT_5POINT1:
-            hb_layout = HB_INPUT_CH_LAYOUT_3F2R|HB_INPUT_CH_LAYOUT_HAS_LFE;
-            break;
         case AV_CH_LAYOUT_5POINT0_BACK:
             hb_layout = HB_INPUT_CH_LAYOUT_3F2R;
             break;
+        case AV_CH_LAYOUT_5POINT1:
         case AV_CH_LAYOUT_5POINT1_BACK:
             hb_layout = HB_INPUT_CH_LAYOUT_3F2R|HB_INPUT_CH_LAYOUT_HAS_LFE;
             break;
@@ -237,9 +232,6 @@ int hb_ff_layout_xlat(int64_t ff_channel_layout, int channels)
             break;
         case AV_CH_LAYOUT_7POINT1:
             hb_layout = HB_INPUT_CH_LAYOUT_3F4R|HB_INPUT_CH_LAYOUT_HAS_LFE;
-            break;
-        case AV_CH_LAYOUT_STEREO_DOWNMIX:
-            hb_layout = HB_INPUT_CH_LAYOUT_STEREO;
             break;
         default:
             hb_layout = HB_INPUT_CH_LAYOUT_STEREO;
@@ -250,12 +242,19 @@ int hb_ff_layout_xlat(int64_t ff_channel_layout, int channels)
     // about this. So we will make a best guess based on the number
     // of channels.
     int chans = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT( hb_layout );
-    if ( chans == channels )
+    if( ff_channel_layout && chans == channels )
     {
         return hb_layout;
     }
-    hb_log( "Channels reported by ffmpeg (%d) != computed layout channels (%d).", channels, chans );
-    switch (channels)
+    if( !ff_channel_layout )
+    {
+        hb_log( "No channel layout reported by Libav; guessing one from channel count." );
+    }
+    else
+    {
+        hb_log( "Channels reported by Libav (%d) != computed layout channels (%d). Guessing layout from channel count.", channels, chans );
+    }
+    switch( channels )
     {
         case 1:
             hb_layout = HB_INPUT_CH_LAYOUT_MONO;
@@ -282,7 +281,7 @@ int hb_ff_layout_xlat(int64_t ff_channel_layout, int channels)
             hb_layout = HB_INPUT_CH_LAYOUT_3F4R|HB_INPUT_CH_LAYOUT_HAS_LFE;
             break;
         default:
-            hb_log("Unsupported number of audio channels (%d).\n", channels);
+            hb_log( "Unsupported number of audio channels (%d).", channels );
             hb_layout = 0;
             break;
     }
