@@ -171,7 +171,7 @@ int hb_autopassthru_get_encoder( int in_codec, int copy_mask, int fallback, int 
     int i;
     int out_codec = ( copy_mask & in_codec ) | HB_ACODEC_PASS_FLAG;
     // sanitize fallback encoder and selected passthru
-    // note: invalid fallbacks are caught in work.c
+    // note: invalid fallbacks are caught in hb_autopassthru_apply_settings
     for( i = 0; i < hb_audio_encoders_count; i++ )
     {
         if( ( hb_audio_encoders[i].encoder == fallback ) &&

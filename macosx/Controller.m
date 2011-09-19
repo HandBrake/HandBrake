@@ -3761,7 +3761,7 @@ bool one_burned = FALSE;
     job->acodec_fallback = [[queueToApply objectForKey: @"JobAudioEncoderFallback"] intValue];
     
     /* Audio tracks and mixdowns */
-    /* Lets make sure there arent any erroneous audio tracks in the job list, so lets make sure its empty */
+    /* Lets make sure there arent any erroneous audio tracks in the job list, so lets make sure it's empty */
     int audiotrack_count = hb_list_count(job->list_audio);
     for( int i = 0; i < audiotrack_count; i++ )
     {
