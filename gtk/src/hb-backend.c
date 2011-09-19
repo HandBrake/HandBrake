@@ -3661,6 +3661,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		keep_height = FALSE;
 	}
 	// Step needs to be at least 2 because odd widths cause scaler crash
+	// subsampled chroma requires even crop values.
 	step = mod;
 	widget = GHB_WIDGET (ud->builder, "scale_width");
 	gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 16);
@@ -3680,13 +3681,13 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	else
 	{
 		widget = GHB_WIDGET (ud->builder, "PictureTopCrop");
-		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 1, 16);
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 2, 16);
 		widget = GHB_WIDGET (ud->builder, "PictureBottomCrop");
-		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 1, 16);
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 2, 16);
 		widget = GHB_WIDGET (ud->builder, "PictureLeftCrop");
-		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 1, 16);
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 2, 16);
 		widget = GHB_WIDGET (ud->builder, "PictureRightCrop");
-		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 1, 16);
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 2, 16);
 	}
 	ghb_title_info_t tinfo;
 	ghb_get_title_info (&tinfo, titleindex);
@@ -3712,6 +3713,9 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	{
 		gint need1, need2;
 
+		// Note: until we allow color formats other than yuv420 in the
+		// pipeline, title width and height will always be even
+		//
 		// Adjust the cropping to accomplish the desired width and height
 		crop_width = tinfo.width - crop[2] - crop[3];
 		crop_height = tinfo.height - crop[0] - crop[1];
@@ -3719,13 +3723,21 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		height = MOD_DOWN(crop_height, mod);
 
 		need1 = (crop_height - height) / 2;
+		// If the top crop would fall on an odd boundary, crop the extra
+		// line from the bottom
+		need1 &= ~0x01;
 		need2 = crop_height - height - need1;
 		crop[0] += need1;
 		crop[1] += need2;
+
 		need1 = (crop_width - width) / 2;
+		// If the top crop would fall on an odd boundary, crop the extra
+		// column from the right
+		need1 &= ~0x01;
 		need2 = crop_width - width - need1;
 		crop[2] += need1;
 		crop[3] += need2;
+
 		ghb_ui_update(ud, "PictureTopCrop", ghb_int64_value(crop[0]));
 		ghb_ui_update(ud, "PictureBottomCrop", ghb_int64_value(crop[1]));
 		ghb_ui_update(ud, "PictureLeftCrop", ghb_int64_value(crop[2]));
