@@ -3864,17 +3864,19 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		height = MOD_DOWN(crop_height, mod);
 
 		need1 = (crop_height - height) / 2;
-		// If the top crop would fall on an odd boundary, crop the extra
-		// line from the bottom
-		need1 &= ~0x01;
+		// If the top crop would fall on an odd boundary, crop an extra
+		// line from the top
+		if ((crop[0] + need1) & 1)
+			need1++;
 		need2 = crop_height - height - need1;
 		crop[0] += need1;
 		crop[1] += need2;
 
 		need1 = (crop_width - width) / 2;
-		// If the top crop would fall on an odd boundary, crop the extra
-		// column from the right
-		need1 &= ~0x01;
+		// If the left crop would fall on an odd boundary, crop an extra
+		// column from the left
+		if ((crop[2] + need1) & 1)
+			need1++;
 		need2 = crop_width - width - need1;
 		crop[2] += need1;
 		crop[3] += need2;
