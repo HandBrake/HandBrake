@@ -972,13 +972,6 @@ do_source_dialog(GtkButton *button, gboolean single, signal_user_data_t *ud)
 	dialog = GHB_WIDGET(ud->builder, "source_dialog");
 	source_dialog_extra_widgets(ud, dialog);
 
-	// Gtk has a really stupid bug.  If the file chooser is showing
-	// hidden files AND there is no filter set, it will not select
-	// the filename when gtk_file_chooser_set_filename is called.
-	// So add a completely unnessary filter to prevent this behavior.
-	GtkFileFilter *filter;
-	filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterAll"));
-	gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
 	gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), sourcename);
 	response = gtk_dialog_run(GTK_DIALOG (dialog));
 	gtk_widget_hide(dialog);

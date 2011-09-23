@@ -1093,6 +1093,13 @@ main (int argc, char *argv[])
 	gtk_file_filter_add_pattern(filter, "*.WMV");
 	gtk_file_chooser_add_filter(chooser, filter);
 
+	// Gtk has a really stupid bug.  If the file chooser is showing
+	// hidden files AND there is no filter set, it will not select
+	// the filename when gtk_file_chooser_set_filename is called.
+	// So add a completely unnessary filter to prevent this behavior.
+	filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterAll"));
+	gtk_file_chooser_set_filter(chooser, filter);
+
 	// Everything should be go-to-go.  Lets rock!
 
 	gtk_main ();
