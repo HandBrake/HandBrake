@@ -796,9 +796,13 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         {
             flags |= PIC_FLAG_PROGRESSIVE_FRAME;
         }
-        if ( frame.repeat_pict )
+        if ( frame.repeat_pict == 1 )
         {
             flags |= PIC_FLAG_REPEAT_FIRST_FIELD;
+        }
+        if ( frame.repeat_pict == 2 )
+        {
+            flags |= PIC_FLAG_REPEAT_FRAME;
         }
 
         hb_buffer_t *buf;

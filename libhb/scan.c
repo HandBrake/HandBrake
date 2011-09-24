@@ -489,6 +489,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
     hb_list_t     * list_es;
     int progressive_count = 0;
     int pulldown_count = 0;
+    int doubled_frame_count = 0;
     int interlaced_preview_count = 0;
     info_list_t * info_list = calloc( data->preview_count+1, sizeof(*info_list) );
     crop_record_t *crops = calloc( 1, sizeof(*crops) );
@@ -670,6 +671,14 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             pulldown_count++;
         }
 
+        if( vid_buf->s.flags & PIC_FLAG_REPEAT_FRAME )
+        {
+            // AVCHD-Lite specifies that all streams are
+            // 50 or 60 fps.  To produce 25 or 30 fps, camera
+            // makers are repeating all frames.
+            doubled_frame_count++;
+        }
+
         if( is_close_to( vid_info.rate_base, 1126125, 100 ) )
         {
             // Frame FPS is 23.976 (meaning it's progressive), so start keeping
@@ -818,23 +827,30 @@ skip_preview:
         title->height = vid_info.height;
         if ( vid_info.rate && vid_info.rate_base )
         {
+            title->rate = vid_info.rate;
+            title->rate_base = vid_info.rate_base;
             if( is_close_to( vid_info.rate_base, 900900, 100 ) )
             {
                 if( pulldown_count >= npreviews / 3 )
                 {
-                    vid_info.rate_base = 1126125;
+                    title->rate_base = 1126125;
                     hb_deep_log( 2, "Pulldown detected, setting fps to 23.976" );
                 }
                 if( progressive_count >= npreviews / 2 )
                 {
                     // We've already deduced that the frame rate is 23.976,
                     // so set it back again.
-                    vid_info.rate_base = 1126125;
+                    title->rate_base = 1126125;
                     hb_deep_log( 2, "Title's mostly NTSC Film, setting fps to 23.976" );
                 }
             }
-            title->rate = vid_info.rate;
-            title->rate_base = vid_info.rate_base;
+            if( doubled_frame_count >= 3 * npreviews / 4 )
+            {
+                // We've detected that a significant number of the frames
+                // have been doubled in duration by repeat flags.
+                title->rate_base = 2 * vid_info.rate_base;
+                hb_deep_log( 2, "Repeat frames detected, setting fps to %.3f", (float)title->rate / title->rate_base );
+            }
         }
         title->video_bitrate = vid_info.bitrate;
 

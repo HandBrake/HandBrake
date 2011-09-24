@@ -384,6 +384,8 @@ enum
 #define PIC_FLAG_PROGRESSIVE_FRAME 16
 #endif
 
+#define PIC_FLAG_REPEAT_FRAME 512
+
 extern hb_work_object_t * hb_objects;
 
 #define HB_WORK_IDLE     0
