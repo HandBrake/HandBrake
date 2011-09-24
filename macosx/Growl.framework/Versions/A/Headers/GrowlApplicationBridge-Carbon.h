@@ -2,7 +2,7 @@
 //  GrowlApplicationBridge-Carbon.h
 //  Growl
 //
-//  Created by Mac-arena the Bored Zo on Wed Jun 18 2004.
+//  Created by Peter Hosey on Wed Jun 18 2004.
 //  Based on GrowlApplicationBridge.h by Evan Schoenberg.
 //  This source code is in the public domain. You may freely link it into any
 //    program.
@@ -15,7 +15,7 @@
 #include <Carbon/Carbon.h>
 
 #ifndef GROWL_EXPORT
-#define GROWL_EXPORT __attribute__((visibility("default")))
+#define GROWL_EXPORT __attribute__((visibility("default"))) DEPRECATED_ATTRIBUTE
 #endif
 
 /*!	@header GrowlApplicationBridge-Carbon.h
