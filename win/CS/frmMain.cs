@@ -182,10 +182,9 @@ namespace Handbrake
                 ToolTip.Active = true;
 
             // Load the user's default settings or Normal Preset
-            if (userSettingService.GetUserSetting<string>(UserSettingConstants.DefaultPreset) != string.Empty
-                && presetHandler.GetPreset(userSettingService.GetUserSetting<string>(UserSettingConstants.DefaultPreset)) != null)
+            if (this.presetHandler.DefaultPreset != null)
             {
-                this.loadPreset(userSettingService.GetUserSetting<string>(UserSettingConstants.DefaultPreset));
+                this.loadPreset(this.presetHandler.DefaultPreset.Name);
             }
             else
                 loadPreset("Normal");
@@ -569,12 +568,7 @@ namespace Handbrake
         /// </param>
         private void pmnu_delete_click(object sender, EventArgs e)
         {
-            if (treeView_presets.SelectedNode != null)
-            {
-                presetHandler.Remove((Preset)treeView_presets.SelectedNode.Tag);
-                treeView_presets.Nodes.Remove(treeView_presets.SelectedNode);
-            }
-            treeView_presets.Select();
+            BtnRemovePreset_Click(sender, e);
         }
 
         /// <summary>
@@ -639,21 +633,41 @@ namespace Handbrake
                 }
                 else
                 {
+                   Preset preset = treeView_presets.SelectedNode.Tag as Preset;
+                   if (preset != null && preset.IsDefault)
+                   {
+                       MessageBox.Show(
+                           "Your default preset can not be deleted. It is a required preset.",
+                           "Warning",
+                           MessageBoxButtons.OK,
+                           MessageBoxIcon.Information);
+                   }
+
                     // Delete the selected item.
                     presetHandler.Remove((Preset)treeView_presets.SelectedNode.Tag);
                 }
-                treeView_presets.Nodes.Remove(treeView_presets.SelectedNode);
+
+                this.LoadPresetPanel();
             }
 
             treeView_presets.Select();
+            treeView_presets.ExpandAll();
         }
 
         private void MnuSetDefaultPreset_Click(object sender, EventArgs e)
         {
             if (treeView_presets.SelectedNode != null)
             {
-                this.userSettingService.SetUserSetting(UserSettingConstants.DefaultPreset, treeView_presets.SelectedNode.Text);
-                MessageBox.Show("New default preset set: " + treeView_presets.SelectedNode.Text, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Preset preset = treeView_presets.SelectedNode.Tag as Preset;
+                if (preset != null)
+                {
+                    MessageBox.Show(
+                        "New default preset set: " + treeView_presets.SelectedNode.Text,
+                        "Alert",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                    this.presetHandler.SetDefault(preset);
+                }
             }
             else
                 MessageBox.Show("Please select a preset first.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -1548,7 +1562,7 @@ namespace Handbrake
                     text_destination.Text = autoPath;
                 else
                     MessageBox.Show(
-                        "You currently have \"Automatically name output files\" enabled for the destination file box, but you do not have a valid default directory set.\n\nYou should set a \"Default Path\" in HandBrakes preferences. (See 'Tools' menu -> 'Options' -> 'General' Tab -> 'Default Path')",
+                        "You currently have \"Automatically name output files\" enabled for the destination file box, but you do not have a valid default directory set.\n\nYou should set a \"Default Path\" in HandBrakes preferences. (See 'Tools' menu -> 'Options' -> 'Output Files' Tab -> 'Default Path')",
                         "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 

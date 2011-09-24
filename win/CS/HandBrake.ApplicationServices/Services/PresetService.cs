@@ -13,7 +13,6 @@ namespace HandBrake.ApplicationServices.Services
     using System.Linq;
     using System.Text;
     using System.Text.RegularExpressions;
-    using System.Windows;
     using System.Xml.Serialization;
 
     using HandBrake.ApplicationServices.Exceptions;
@@ -87,9 +86,20 @@ namespace HandBrake.ApplicationServices.Services
         }
 
         /// <summary>
-        /// The last preset added.
+        /// Gets or sets LastPresetAdded.
         /// </summary>
         public Preset LastPresetAdded { get; set; }
+
+        /// <summary>
+        /// Gets the DefaultPreset.
+        /// </summary>
+        public Preset DefaultPreset
+        {
+            get
+            {
+                return this.presets.FirstOrDefault(p => p.IsDefault);
+            }
+        }
 
         #region Public Methods
 
@@ -148,6 +158,11 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         public void Remove(Preset preset)
         {
+            if (preset == null || preset.IsDefault)
+            {
+                return;
+            }
+
             this.presets.Remove(preset);
             this.UpdatePresetFiles();
         }
@@ -163,11 +178,35 @@ namespace HandBrake.ApplicationServices.Services
             List<Preset> removeList = this.presets.Where(p => p.Category == category).ToList();
             foreach (Preset preset in removeList)
             {
+                if (preset.IsDefault)
+                {
+                    // Skip default preset
+                    continue;
+                }
+
                 this.presets.Remove(preset);
             }
 
             this.UpdatePresetFiles();
         }
+
+        /// <summary>
+        /// Set Default Preset
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        public void SetDefault(Preset name)
+        {
+            foreach (Preset preset in this.presets)
+            {
+                preset.IsDefault = false;
+            }
+
+            name.IsDefault = true;
+            this.UpdatePresetFiles();
+        }
+
 
         /// <summary>
         /// Get a Preset
@@ -267,6 +306,11 @@ namespace HandBrake.ApplicationServices.Services
                                     Description = string.Empty, // Maybe one day we will populate this.
                                     IsBuildIn = true
                                 };
+
+                            if (newPreset.Name == "Normal")
+                            {
+                                newPreset.IsDefault = true;
+                            }
 
                             this.presets.Add(newPreset);
                         }

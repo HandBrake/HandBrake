@@ -12,7 +12,6 @@ namespace Handbrake
     {
         public const string UpdateStatus = "updateStatus";
         public const string TooltipEnable = "tooltipEnable";
-        public const string DefaultPreset = "defaultPreset";
         public const string Skipversion = "skipversion";
         public const string AutoNaming = "autoNaming";
         public const string AutoNamePath = "autoNamePath";
