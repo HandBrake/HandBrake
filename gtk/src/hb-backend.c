@@ -1642,21 +1642,37 @@ ghb_grey_combo_options(signal_user_data_t *ud)
 	ghb_value_free(gval);
 
 	grey_combo_box_item(ud->builder, "x264_analyse", 4, TRUE);
-	grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_FFAAC, FALSE);
-	grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_FAAC, FALSE);
-	grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_LAME, FALSE);
-	grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_VORBIS, FALSE);
+	for (ii = 0; ii < hb_audio_encoders_count; ii++)
+	{
+		if (!(mux & hb_audio_encoders[ii].muxers))
+		{
+			grey_combo_box_item(ud->builder, "AudioEncoder", 
+				hb_audio_encoders[ii].encoder, TRUE);
+			grey_combo_box_item(ud->builder, "AudioEncoderFallback",
+				hb_audio_encoders[ii].encoder, TRUE);
+		}
+        else
+        {
+			grey_combo_box_item(ud->builder, "AudioEncoder", 
+				hb_audio_encoders[ii].encoder, FALSE);
+			grey_combo_box_item(ud->builder, "AudioEncoderFallback",
+				hb_audio_encoders[ii].encoder, FALSE);
+        }
+	}
+	for (ii = 0; ii < hb_video_encoders_count; ii++)
+	{
+		if (!(mux & hb_video_encoders[ii].muxers))
+		{
+			grey_combo_box_item(ud->builder, "VideoEncoder", 
+				hb_video_encoders[ii].encoder, TRUE);
+		}
+        else
+		{
+			grey_combo_box_item(ud->builder, "VideoEncoder", 
+				hb_video_encoders[ii].encoder, FALSE);
+		}
+	}
 
-	grey_combo_box_item(ud->builder, "AudioEncoderFallback", HB_ACODEC_FFAAC, FALSE);
-	grey_combo_box_item(ud->builder, "AudioEncoderFallback", HB_ACODEC_FAAC, FALSE);
-	grey_combo_box_item(ud->builder, "AudioEncoderFallback", HB_ACODEC_LAME, FALSE);
-	grey_combo_box_item(ud->builder, "AudioEncoderFallback", HB_ACODEC_VORBIS, FALSE);
-
-	grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_MP3_PASS, FALSE);
-	grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_AAC_PASS, FALSE);
-	grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_AC3_PASS, FALSE);
-	grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_DCA_PASS, FALSE);
-	grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_DCA_HD_PASS, FALSE);
 	if (aconfig && (aconfig->in.codec & HB_ACODEC_MASK) != HB_ACODEC_MP3)
 	{
 		grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_MP3_PASS, TRUE);
@@ -1677,31 +1693,12 @@ ghb_grey_combo_options(signal_user_data_t *ud)
 	{
 		grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_DCA_HD_PASS, TRUE);
 	}
-	grey_combo_box_item(ud->builder, "VideoEncoder", HB_VCODEC_THEORA, FALSE);
 
 	widget = GHB_WIDGET (ud->builder, "AudioEncoder");
 	gval = ghb_widget_value(widget);
 	acodec = ghb_lookup_combo_int("AudioEncoder", gval);
 	ghb_value_free(gval);
 	grey_combo_box_item(ud->builder, "AudioMixdown", 0, TRUE);
-	for (ii = 0; ii < hb_audio_encoders_count; ii++)
-	{
-		if (!(mux & hb_audio_encoders[ii].muxers))
-		{
-			grey_combo_box_item(ud->builder, "AudioEncoder", 
-				hb_audio_encoders[ii].encoder, TRUE);
-			grey_combo_box_item(ud->builder, "AudioEncoderFallback",
-				hb_audio_encoders[ii].encoder, TRUE);
-		}
-	}
-	for (ii = 0; ii < hb_video_encoders_count; ii++)
-	{
-		if (!(mux & hb_video_encoders[ii].muxers))
-		{
-			grey_combo_box_item(ud->builder, "VideoEncoder", 
-				hb_video_encoders[ii].encoder, TRUE);
-		}
-	}
 
 	gboolean allow_mono = TRUE;
 	gboolean allow_stereo = TRUE;
