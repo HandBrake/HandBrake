@@ -839,6 +839,7 @@ namespace Handbrake
             if (openPreset.ShowDialog() == DialogResult.OK)
             {
                 EncodeTask parsed = PlistPresetHandler.Import(openPreset.FileName);
+                PresetLoader.LoadPreset(this, parsed);
                 if (presetHandler.CheckIfPresetExists(parsed.PresetName))
                 {
                     if (!presetHandler.CanUpdatePreset(parsed.PresetName))
@@ -864,8 +865,6 @@ namespace Handbrake
                                 CropSettings = parsed.UsesPictureSettings
                             };
 
-                        PresetLoader.LoadPreset(this, preset);
-
                         presetHandler.Update(preset);
                     }
                 }
@@ -878,7 +877,6 @@ namespace Handbrake
                         Query = QueryGenerator.GenerateFullQuery(this).Query,
                         CropSettings = parsed.UsesPictureSettings,
                     };
-                    PresetLoader.LoadPreset(this, preset);
                     
                     if (presetHandler.Add(preset))
                     {
