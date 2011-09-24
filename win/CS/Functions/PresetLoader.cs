@@ -28,6 +28,21 @@ namespace Handbrake.Functions
         private static readonly IUserSettingService UserSettingService = ServiceManager.UserSettingService;
 
         /// <summary>
+        /// Load an Encode task as a Preset
+        /// </summary>
+        /// <param name="mainWindow">
+        /// The main window.
+        /// </param>
+        /// <param name="encodeTask">
+        /// The encode task.
+        /// </param>
+        public static void LoadPreset(frmMain mainWindow, EncodeTask encodeTask)
+         {
+             Preset preset = new Preset { Name = "Unknown", Task = encodeTask };
+             LoadPreset(mainWindow, preset);
+         }
+
+        /// <summary>
         /// This function takes in a Query which has been parsed by QueryParser and
         /// set's all the GUI widgets correctly.
         /// </summary>
@@ -37,10 +52,10 @@ namespace Handbrake.Functions
         /// <param name="preset">
         /// The preset.
         /// </param>
-        public static void LoadPreset(frmMain mainWindow, Preset preset)
+         public static void LoadPreset(frmMain mainWindow, Preset preset)
         {
             // Send the query from the file to the Query Parser class
-            EncodeTask presetQuery = QueryParserUtility.Parse(preset.Query);
+            EncodeTask presetQuery = preset.Task ?? QueryParserUtility.Parse(preset.Query);
 
             #region Source
 

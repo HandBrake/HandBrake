@@ -69,7 +69,14 @@ namespace Handbrake.Functions
             query += GenerateTabbedComponentsQuery(mainWindow, true, QueryPictureSettingsMode.UserInterfaceSettings, 0, 0);
 
             // Create the Queue Task and setup the EncodeTask model object.
-            Preset preset = mainWindow.treeView_presets.SelectedNode.Tag as Preset;
+
+
+            Preset preset = null;
+            if (mainWindow.treeView_presets.SelectedNode != null)
+            {
+                preset = mainWindow.treeView_presets.SelectedNode.Tag as Preset;
+            }
+
             bool isCustom = true;
             if (preset != null && preset.IsBuildIn)
             {

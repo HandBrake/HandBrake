@@ -51,6 +51,11 @@ namespace HandBrake.ApplicationServices.Model
         public bool IsDefault { get; set; }
 
         /// <summary>
+        /// Gets or sets task.
+        /// </summary>
+        public EncodeTask Task { get; set; }
+
+        /// <summary>
         ///  Override the ToString Method
         /// </summary>
         /// <returns>
