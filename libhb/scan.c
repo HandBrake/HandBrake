@@ -671,7 +671,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             pulldown_count++;
         }
 
-        if( vid_buf->s.flags & PIC_FLAG_REPEAT_FRAME )
+        if( vid_buf->flags & PIC_FLAG_REPEAT_FRAME )
         {
             // AVCHD-Lite specifies that all streams are
             // 50 or 60 fps.  To produce 25 or 30 fps, camera
