@@ -217,7 +217,13 @@ static int parse_timing_from_ssa_packet( char *in_data, int64_t *in_start, int64
      */
     int start_hr, start_min, start_sec, start_centi;
     int   end_hr,   end_min,   end_sec,   end_centi;
-    int numPartsRead = sscanf( (char *) in_data, "Dialogue: %*128[^,],"
+    // SSA subtitles have an empty layer field (bare ',').  The scanf
+    // format specifier "%*128[^,]" will not match on a bare ','.  There
+    // must be at least one non ',' character in the match.  So the format
+    // specifier is placed directly next to the ':' so that the next
+    // expected ' ' after the ':' will be the character it matches on 
+    // when there is no layer field.
+    int numPartsRead = sscanf( (char *) in_data, "Dialogue:%*128[^,],"
         "%d:%d:%d.%d,"  // Start
         "%d:%d:%d.%d,", // End
         &start_hr, &start_min, &start_sec, &start_centi,
@@ -367,7 +373,13 @@ static hb_buffer_t * ssa_to_mkv_ssa( hb_work_object_t * w,  hb_buffer_t * in )
 
         // Convert the SSA line to MKV-SSA format
         char *layerField = malloc( len );
-        int numPartsRead = sscanf( curLine, "Dialogue: %128[^,],", layerField );
+        // SSA subtitles have an empty layer field (bare ',').  The scanf
+        // format specifier "%*128[^,]" will not match on a bare ','.  There
+        // must be at least one non ',' character in the match.  So the format
+        // specifier is placed directly next to the ':' so that the next
+        // expected ' ' after the ':' will be the character it matches on 
+        // when there is no layer field.
+        int numPartsRead = sscanf( curLine, "Dialogue:%128[^,],", layerField );
         if ( numPartsRead != 1 )
         {
             free( layerField );
@@ -387,8 +399,13 @@ static hb_buffer_t * ssa_to_mkv_ssa( hb_work_object_t * w,  hb_buffer_t * in )
         out->start = in_start;
         out->stop = in_stop;
 
+        // The sscanf conversion above will result in an extra space
+        // before the layerField.  Strip the space.
+        char *stripLayerField = layerField;
+        for(; *stripLayerField == ' '; stripLayerField++);
+
         sprintf( mkvOut, "%d,%s,%s", 
-                 pv->readOrder++, layerField, styleToTextFields );
+                 pv->readOrder++, stripLayerField, styleToTextFields );
         
         free( layerField );
 
@@ -438,7 +455,13 @@ static hb_buffer_t *ssa_decode_line_to_picture( hb_work_object_t * w, uint8_t *i
     int mkvInSize;
     {
         char *layerField = malloc( in_size );
-        int numPartsRead = sscanf( (char *) in_data, "Dialogue: %128[^,],", layerField );
+        // SSA subtitles have an empty layer field (bare ',').  The scanf
+        // format specifier "%*128[^,]" will not match on a bare ','.  There
+        // must be at least one non ',' character in the match.  So the format
+        // specifier is placed directly next to the ':' so that the next
+        // expected ' ' after the ':' will be the character it matches on 
+        // when there is no layer field.
+        int numPartsRead = sscanf( (char *) in_data, "Dialogue:%128[^,],", layerField );
         if ( numPartsRead != 1 )
             goto fail;
         
@@ -448,11 +471,16 @@ static hb_buffer_t *ssa_decode_line_to_picture( hb_work_object_t * w, uint8_t *i
             goto fail;
         }
         
+        // The sscanf conversion above will result in an extra space
+        // before the layerField.  Strip the space.
+        char *stripLayerField = layerField;
+        for(; *stripLayerField == ' '; stripLayerField++);
+
         mkvIn = malloc( in_size + 1 );
         mkvIn[0] = '\0';
         sprintf(mkvIn, "%d", pv->readOrder++);    // ReadOrder: make this up
         strcat( mkvIn, "," );
-        strcat( mkvIn, layerField );
+        strcat( mkvIn, stripLayerField );
         strcat( mkvIn, "," );
         strcat( mkvIn, (char *) styleToTextFields );
         
