@@ -1625,7 +1625,8 @@ ghb_grey_combo_options(signal_user_data_t *ud)
 	gint mux, track, titleindex, acodec, fallback;
 	hb_audio_config_t *aconfig = NULL;
 	GValue *gval;
-	
+	int ii;
+
 	widget = GHB_WIDGET (ud->builder, "title");
 	gval = ghb_widget_value(widget);
 	titleindex = ghb_lookup_combo_int("title", gval);
@@ -1683,11 +1684,23 @@ ghb_grey_combo_options(signal_user_data_t *ud)
 	acodec = ghb_lookup_combo_int("AudioEncoder", gval);
 	ghb_value_free(gval);
 	grey_combo_box_item(ud->builder, "AudioMixdown", 0, TRUE);
-	if (mux == HB_MUX_MP4)
+	for (ii = 0; ii < hb_audio_encoders_count; ii++)
 	{
-		grey_combo_box_item(ud->builder, "AudioEncoder", HB_ACODEC_VORBIS, TRUE);
-		grey_combo_box_item(ud->builder, "AudioEncoderFallback", HB_ACODEC_VORBIS, TRUE);
-		grey_combo_box_item(ud->builder, "VideoEncoder", HB_VCODEC_THEORA, TRUE);
+		if (!(mux & hb_audio_encoders[ii].muxers))
+		{
+			grey_combo_box_item(ud->builder, "AudioEncoder", 
+				hb_audio_encoders[ii].encoder, TRUE);
+			grey_combo_box_item(ud->builder, "AudioEncoderFallback",
+				hb_audio_encoders[ii].encoder, TRUE);
+		}
+	}
+	for (ii = 0; ii < hb_video_encoders_count; ii++)
+	{
+		if (!(mux & hb_video_encoders[ii].muxers))
+		{
+			grey_combo_box_item(ud->builder, "VideoEncoder", 
+				hb_video_encoders[ii].encoder, TRUE);
+		}
 	}
 
 	gboolean allow_mono = TRUE;
