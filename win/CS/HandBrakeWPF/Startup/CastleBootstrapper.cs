@@ -11,6 +11,8 @@
     using Castle.MicroKernel.Registration;
     using Castle.Windsor;
 
+    using HandBrake.ApplicationServices;
+
     using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -32,6 +34,10 @@
             this.windsorContainer = new WindsorContainer();
             this.windsorContainer.Register(Component.For<IWindowManager>().ImplementedBy<WindowManager>());
             this.windsorContainer.Register(Component.For<IEventAggregator>().ImplementedBy<EventAggregator>());
+
+            // Initialise the ApplicationServices IWindsorInstaller
+            this.windsorContainer.Register(Component.For<IWindsorInstaller>().ImplementedBy<ServicesWindsorInstaller>());
+            this.windsorContainer.Install(windsorContainer.ResolveAll<IWindsorInstaller>());
 
             // Shell
             this.windsorContainer.Register(Component.For<IMainViewModel>().ImplementedBy<MainViewModel>().LifeStyle.Is(LifestyleType.Singleton));

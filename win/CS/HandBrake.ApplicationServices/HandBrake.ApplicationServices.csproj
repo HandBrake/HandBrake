@@ -41,6 +41,13 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\libraries\caliburn\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor">
+      <HintPath>..\libraries\caliburn\Castle.Windsor.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Growl.Connector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=980c2339411be384, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libraries\Growl.Connector.dll</HintPath>
@@ -122,6 +129,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ServiceManager.cs" />
+    <Compile Include="ServicesWindsorInstaller.cs" />
     <Compile Include="Services\Base\EncodeBase.cs" />
     <Compile Include="Services\Encode.cs" />
     <Compile Include="Services\Interfaces\IEncode.cs" />
