@@ -14,14 +14,12 @@ namespace Handbrake
     using System.IO;
     using System.Linq;
     using System.Threading;
-    using System.Windows;
     using System.Windows.Forms;
 
     using Functions;
 
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.EventArgs;
-    using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Model.General;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Functions;

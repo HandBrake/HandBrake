@@ -15,7 +15,6 @@ namespace HandBrake.ApplicationServices.Utilities
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
-    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model.Encoding;
 
@@ -81,6 +80,9 @@ namespace HandBrake.ApplicationServices.Utilities
                         case "AudioTrackDRCSlider":
                             track.DRC = double.Parse(value);
                             break;
+                        case "AudioTrackGainSlider":
+                            track.Gain = int.Parse(value);
+                            break;
                     }
                 }
                 audioTracks.Add(track);
@@ -102,7 +104,7 @@ namespace HandBrake.ApplicationServices.Utilities
                 {
                         // Output Settings
                     case "FileFormat":
-                        parsed.OutputFormat = Converters.GetFileFormat(value);
+                        parsed.OutputFormat = Converters.GetFileFormat(value.Replace("file", string.Empty).Trim());
                         break;
                     case "Mp4HttpOptimize":
                         parsed.OptimizeMP4 = value == "1";
@@ -116,7 +118,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
                         // Picture Settings
                     case "PictureAutoCrop":
-                        // Not used
+                        parsed.HasCropping = value != "1";
                         break;
                     case "PictureTopCrop":
                         parsed.Cropping.Top = int.Parse(value);
@@ -249,7 +251,7 @@ namespace HandBrake.ApplicationServices.Utilities
                         }
                         break;
                     case "VideoEncoder":
-                        parsed.VideoEncoder = Converters.GetVideoEncoder(value);
+                        parsed.VideoEncoder = EnumHelper<VideoEncoder>.GetValue(value);
                         break;
                     case "VideoFramerate":
 
@@ -259,7 +261,21 @@ namespace HandBrake.ApplicationServices.Utilities
                         }
                         else if (!string.IsNullOrEmpty(value))
                         {
-                            parsed.Framerate = int.Parse(value);
+                            parsed.Framerate = double.Parse(value);
+                        }
+                        break;
+                    case "VideoFramerateMode":
+                        switch (value)
+                        {
+                            case "vfr":
+                                parsed.FramerateMode = FramerateMode.VFR;
+                                break;
+                            case "cfr":
+                                parsed.FramerateMode = FramerateMode.CFR;
+                                break;
+                            default:
+                                parsed.FramerateMode = FramerateMode.PFR;
+                                break;
                         }
                         break;
                     case "VideoGrayScale":
