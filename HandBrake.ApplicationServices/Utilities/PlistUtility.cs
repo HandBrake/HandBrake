@@ -28,12 +28,6 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </summary>
         private static IUserSettingService userSettingService = ServiceManager.UserSettingService;
 
-        /**
-         * TODO:
-         * - Update with the new vfr,pfr,cfr keys
-         * - Clean up this code, it's pretty nasty right now.
-         **/
-
         #region Import
 
         public static EncodeTask Import(string filename)
