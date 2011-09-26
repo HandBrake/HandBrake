@@ -161,6 +161,8 @@ struct hb_stream_s
         int     pcr_in;         // sequence number of most recent input pcr
         int64_t pcr;            // most recent input pcr
         int64_t pcr_current;    // circular buffer of output pcrs
+        int64_t last_timestamp; // used for discontinuity detection when
+                                // there are no PCRs
 
         uint8_t *packet;        // buffer for one TS packet
         hb_ts_stream_t *list;
@@ -4412,8 +4414,21 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
         // checked at once.
         int64_t bufpcr = b->pcr;
         int64_t curpcr = stream->ts.pcr_current;
-        if ( b->cur < stream->ts.pcr_out &&
-             bufpcr != -1 && curpcr != -1 && curpcr - bufpcr > 200*90LL )
+        if ( stream->ts.found_pcr &&  b->cur < stream->ts.pcr_out &&
+             bufpcr != -1 && curpcr != -1 && 
+             (uint64_t)( curpcr - bufpcr ) > 200*90LL )
+        {
+            // we've sent up a new pcr but have a packet referenced to an
+            // old pcr and the difference was enough to trigger a discontinuity
+            // correction. smash the timestamps or we'll mess up the correction.
+            buf->start = -1;
+            buf->renderOffset = -1;
+            buf->stop = -1;
+            buf->pcr = -1;
+        }
+        else if ( b->cur < stream->ts.pcr_out &&
+                  bufpcr != -1 && curpcr != -1 && 
+                  ( curpcr - bufpcr > 200*90LL || bufpcr - curpcr > 200*90LL ) )
         {
             // we've sent up a new pcr but have a packet referenced to an
             // old pcr and the difference was enough to trigger a discontinuity
@@ -4641,6 +4656,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt )
             ++stream->frames;
 
             // if we don't have a pcr yet use the dts from this frame
+            // to attempt to detect discontinuities
             if ( !stream->ts.found_pcr )
             {
                 // PES must begin with an mpeg start code & contain
@@ -4652,8 +4668,16 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt )
                     return NULL;
                 }
                 // if we have a dts use it otherwise use the pts
-                stream->ts.pcr = pes_timestamp( pes + ( pes[7] & 0x40?14:9 ) );
-                ++stream->ts.pcr_in;
+                int64_t timestamp;
+                timestamp = pes_timestamp( pes + ( pes[7] & 0x40?14:9 ) );
+                if( stream->ts.last_timestamp < 0 ||
+                    timestamp - stream->ts.last_timestamp > 90 * 600 ||
+                    stream->ts.last_timestamp - timestamp > 90 * 600 )
+                {
+                    stream->ts.pcr = timestamp;
+                    ++stream->ts.pcr_in;
+                }
+                stream->ts.last_timestamp = timestamp;
             }
         }
 
@@ -4749,6 +4773,7 @@ void hb_ts_stream_reset(hb_stream_t *stream)
     stream->ts.pcr_in = 0;
     stream->ts.pcr = -1;
     stream->ts.pcr_current = -1;
+    stream->ts.last_timestamp = -1;
 
     stream->frames = 0;
     stream->errors = 0;

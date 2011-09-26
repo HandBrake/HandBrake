@@ -22,6 +22,7 @@ hb_work_object_t hb_reader =
 
 typedef struct
 {
+    int    startup;
     double average; // average time between packets
     int64_t last;   // last timestamp seen on this stream
     int id;         // stream id
@@ -109,6 +110,7 @@ static int hb_reader_init( hb_work_object_t * w, hb_job_t * job )
                                            (double)job->vrate;
     r->stream_timing[0].last = -r->stream_timing[0].average;
     r->stream_timing[0].valid = 1;
+    r->stream_timing[0].startup = 10;
     r->stream_timing[1].id = -1;
 
     r->demux.last_scr = -1;
@@ -228,6 +230,7 @@ static stream_timing_t *id_to_st( hb_work_private_t *r, const hb_buffer_t *buf, 
         }
         st->id = buf->id;
         st->average = 30.*90.;
+        st->startup = 10;
         st->last = -st->average;
         if ( ( st->is_audio = is_audio( r, buf->id ) ) != 0 )
         {
@@ -245,11 +248,26 @@ static stream_timing_t *id_to_st( hb_work_private_t *r, const hb_buffer_t *buf, 
 static void update_ipt( hb_work_private_t *r, const hb_buffer_t *buf )
 {
     stream_timing_t *st = id_to_st( r, buf, 1 );
+
+    if( buf->renderOffset < 0 )
+    {
+        st->last += st->average;
+        return;
+    }
+
     double dt = buf->renderOffset - st->last;
     // Protect against spurious bad timestamps
     if ( dt > -5 * 90000LL && dt < 5 * 90000LL )
     {
-        st->average += ( dt - st->average ) * (1./32.);
+        if( st->startup )
+        {
+            st->average += ( dt - st->average ) * (1./2.);
+            st->startup--;
+        }
+        else
+        {
+            st->average += ( dt - st->average ) * (1./32.);
+        }
         st->last = buf->renderOffset;
     }
     st->valid = 1;
@@ -281,7 +299,6 @@ static void new_scr_offset( hb_work_private_t *r, hb_buffer_t *buf )
     //hb_log("id %x last %ld avg %g nxt %ld renderOffset %ld scr_offset %ld",
     //    buf->id, last, st->average, nxt, buf->renderOffset, r->scr_offset);
     r->scr_changes = r->demux.scr_changes;
-    st->last = nxt;
 }
 
 /***********************************************************************
@@ -587,15 +604,16 @@ void ReadLoop( void * _w )
                 }
                 if ( buf->renderOffset != -1 )
                 {
-                    if ( r->scr_changes == r->demux.scr_changes )
-                    {
-                        // This packet is referenced to the same SCR as the last.
-                        // Adjust timestamp to remove the System Clock Reference
-                        // offset then update the average inter-packet time
-                        // for this stream.
-                        buf->renderOffset -= r->scr_offset;
-                        update_ipt( r, buf );
-                    }
+                    // This packet is referenced to the same SCR as the last.
+                    // Adjust timestamp to remove the System Clock Reference
+                    // offset then update the average inter-packet time
+                    // for this stream.
+                    buf->renderOffset -= r->scr_offset;
+                    update_ipt( r, buf );
+                }
+                else
+                {
+                    update_ipt( r, buf );
                 }
                 if ( !r->start_found )
                 {
