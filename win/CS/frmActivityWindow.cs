@@ -14,6 +14,7 @@ namespace Handbrake
     using System.Windows.Forms;
 
     using HandBrake.ApplicationServices;
+    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     using Handbrake.Functions;
@@ -185,7 +186,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                Main.ShowExceptiowWindow("Error during load.", exc.ToString());
+                throw new GeneralApplicationException("Error Loading the Activity Window", string.Empty, exc);
             }
         }
 
@@ -290,7 +291,7 @@ namespace Handbrake
             catch (Exception exc)
             {
                 windowTimer.Dispose();
-                Main.ShowExceptiowWindow("GetLog() Error.", exc.ToString());
+                throw new GeneralApplicationException("Failed to Get Log.", string.Empty, exc);
             }
 
             return appendText;
