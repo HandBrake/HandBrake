@@ -1282,6 +1282,8 @@ static int hb_dvdnav_main_feature( hb_dvd_t * e, hb_list_t * list_title )
     uint64_t longest_duration_root = 0;
     uint64_t longest_duration_title = 0;
     uint64_t longest_duration_fallback = 0;
+    uint64_t avg_duration = 0;
+    int avg_cnt = 0;
     hb_title_t * title;
     int index;
 
@@ -1294,7 +1296,15 @@ static int hb_dvdnav_main_feature( hb_dvd_t * e, hb_list_t * list_title )
             longest_duration_fallback = title->duration;
             longest_fallback = title->index;
         }
+        if ( title->duration > 90000L * 60 * 30 )
+        {
+            avg_duration += title->duration;
+            avg_cnt++;
+        }
     }
+    if ( avg_cnt )
+        avg_duration /= avg_cnt;
+
     index = find_title( list_title, longest_fallback );
     title = hb_list_item( list_title, index );
     if ( title )
@@ -1381,10 +1391,17 @@ static int hb_dvdnav_main_feature( hb_dvd_t * e, hb_list_t * list_title )
         longest_duration = longest_duration_title;
         longest = longest_title;
     }
-    if ((float)longest_duration_fallback * 0.7 > longest_duration)
+    if ((float)longest_duration_fallback * 0.7 > longest_duration &&
+        longest_duration < 90000L * 60 * 30 )
     {
-        longest = longest_fallback;
-        hb_deep_log( 2, "dvdnav: Using longest title %d", longest );
+        float factor = (float)avg_duration / longest_duration;
+        if ( factor > 1 )
+            factor = 1 / factor;
+        if ( avg_cnt > 10 && factor < 0.7 )
+        {
+            longest = longest_fallback;
+            hb_deep_log( 2, "dvdnav: Using longest title %d", longest );
+        }
     }
     return longest;
 }

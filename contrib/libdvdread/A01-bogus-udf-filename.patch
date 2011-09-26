@@ -1,0 +1,37 @@
+Index: dvd_udf.c
+===================================================================
+--- libdvdread/src/dvd_udf.c	(revision 1233)
++++ libdvdread/src/dvd_udf.c	(working copy)
+@@ -329,16 +329,17 @@
+ static int Unicodedecode( uint8_t *data, int len, char *target )
+ {
+   int p = 1, i = 0;
++  int err = 0;
+ 
+   if( ( data[ 0 ] == 8 ) || ( data[ 0 ] == 16 ) ) do {
+-    if( data[ 0 ] == 16 ) p++;  /* Ignore MSB of unicode16 */
++    if( data[ 0 ] == 16 ) err |= data[p++];  /* character cannot be converted to 8bit, return error */
+     if( p < len ) {
+       target[ i++ ] = data[ p++ ];
+     }
+   } while( p < len );
+ 
+   target[ i ] = '\0';
+-  return 0;
++  return !err;
+ }
+ 
+ static int UDFDescriptor( uint8_t *data, uint16_t *TagID )
+@@ -490,8 +491,9 @@
+   L_FI = GETN1(19);
+   UDFLongAD(&data[20], FileICB);
+   L_IU = GETN2(36);
+-  if (L_FI) Unicodedecode(&data[38 + L_IU], L_FI, FileName);
+-  else FileName[0] = '\0';
++  if (L_FI) {
++    if (!Unicodedecode(&data[38 + L_IU], L_FI, FileName)) FileName[0] = 0;
++  } else FileName[0] = '\0';
+   return 4 * ((38 + L_FI + L_IU + 3) / 4);
+ }
+ 
+
