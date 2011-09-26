@@ -95,6 +95,7 @@ static int    subtitle_scan = 0;
 static int    width       = 0;
 static int    height      = 0;
 static int    crop[4]     = { -1,-1,-1,-1 };
+static int    loose_crop  = -1;
 static int    vrate       = 0;
 static float  vquality    = -1.0;
 static int    vbitrate    = 0;
@@ -502,6 +503,52 @@ static int cmp_lang( char * lang, const char * code )
     if ( iso639->iso639_2b && !strcasecmp( lang, iso639->iso639_2b ) )
         return 1;
     return 0;
+}
+
+static void apply_loose_crop(int total, int * v1, int * v2, int mod, int max)
+{
+    /* number of extra pixels which must be cropped to reach next modulus */
+    int add = (total - *v1 - *v2) % mod;
+
+    if (add)
+    {
+        /* number of pixels which must be uncropped to reach previous modulus */
+        int sub = mod - add;
+
+        /* less than maximum (or can't reduce), increase the crop size */
+        if (add <= max || sub > (*v1 + *v2))
+        {
+            int add1 = add / 2;
+            if ((*v1 + add1) & 1) // avoid odd crop if possible
+                ++add1;
+            int add2 = (add - add1);
+
+            *v1 += add1;
+            *v2 += add2;
+        }
+
+        /* more than maximum, reduce the crop size instead */
+        else
+        {
+            int sub1 = sub / 2;
+            if (sub1 > *v1)
+                sub1 = *v1;
+            else if ((*v1 - sub1) & 1) // avoid odd crop if possible
+                ++sub1;
+
+            int sub2 = sub - sub1;
+            if (sub2 > *v2)
+            {
+                sub1 += (sub2 - *v2);
+                if ((*v1 - sub1) & 1) // avoid odd crop if possible
+                    ++sub1;
+                sub2 = sub - sub1;
+            }
+
+            *v1 -= sub1;
+            *v2 -= sub2;
+        }
+    }
 }
 
 static int HandleEvents( hb_handle_t * h )
@@ -1268,6 +1315,13 @@ static int HandleEvents( hb_handle_t * h )
                 crop[2] >= 0 && crop[3] >= 0 )
             {
                 memcpy( job->crop, crop, 4 * sizeof( int ) );
+            }
+
+            if( loose_crop >= 0 )
+            {
+                int mod = modulus > 0 ? modulus : 16;
+                apply_loose_crop(title->height, &job->crop[0], &job->crop[1], mod, loose_crop);
+                apply_loose_crop(title->width, &job->crop[2], &job->crop[3], mod, loose_crop);
             }
 
             job->deinterlace = deinterlace;
@@ -2663,6 +2717,9 @@ static void ShowHelp()
     "    -w, --width <number>    Set picture width\n"
     "    -l, --height <number>   Set picture height\n"
     "        --crop <T:B:L:R>    Set cropping values (default: autocrop)\n"
+    "        --loose-crop        Always crop to a multiple of the modulus\n"
+    "          <#>               Specifies the maximum number of extra pixels\n"
+    "                            which may be cropped (default: 15)\n"
     "    -Y, --maxHeight <#>     Set maximum height\n"
     "    -X, --maxWidth <#>      Set maximum width\n"
     "    --strict-anamorphic     Store pixel aspect ratio in video stream\n"
@@ -2916,7 +2973,8 @@ static int ParseOptions( int argc, char ** argv )
     #define AUDIO_GAIN          279
     #define ALLOWED_AUDIO_COPY  280
     #define AUDIO_FALLBACK      281
-    
+    #define LOOSE_CROP          282
+
     for( ;; )
     {
         static struct option long_options[] =
@@ -2976,6 +3034,7 @@ static int ParseOptions( int argc, char ** argv )
             { "width",       required_argument, NULL,    'w' },
             { "height",      required_argument, NULL,    'l' },
             { "crop",        required_argument, NULL,    'n' },
+            { "loose-crop",  optional_argument, NULL, LOOSE_CROP },
 
             { "vb",          required_argument, NULL,    'b' },
             { "quality",     required_argument, NULL,    'q' },
@@ -3346,6 +3405,9 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 break;
             }
+            case LOOSE_CROP:
+                loose_crop = optarg ? atoi(optarg) : 15;
+                break;
             case 'r':
             {
                 int i;
