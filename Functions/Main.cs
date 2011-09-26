@@ -16,6 +16,7 @@ namespace Handbrake.Functions
     using System.Xml.Serialization;
 
     using HandBrake.ApplicationServices;
+    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Extensions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
@@ -135,7 +136,7 @@ namespace Handbrake.Functions
         /// <param name="mainWindow">Main Window</param>
         /// <param name="filePathName">Path to save the csv file</param>
         /// <returns>True if successful </returns>
-        public static bool SaveChapterMarkersToCsv(frmMain mainWindow, string filePathName)
+        public static void SaveChapterMarkersToCsv(frmMain mainWindow, string filePathName)
         {
             try
             {
@@ -152,12 +153,10 @@ namespace Handbrake.Functions
                 file.Write(csv);
                 file.Close();
                 file.Dispose();
-                return true;
             }
             catch (Exception exc)
             {
-                ShowExceptiowWindow("Unable to save Chapter Makrers file! \nChapter marker names will NOT be saved in your encode", exc.ToString());
-                return false;
+                throw new GeneralApplicationException("Unable to save Chapter Makrers file! ", "Chapter marker names will NOT be saved in your encode.", exc);
             }
         }
 
@@ -371,7 +370,10 @@ namespace Handbrake.Functions
                 UserSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeVersion, string.Empty);
                 UserSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeExeHash, string.Empty);
 
-                ShowExceptiowWindow("Unable to retrieve version information from the CLI.", e.ToString());
+                ExceptionWindow window = new ExceptionWindow();
+                window.Setup("Unable to Initialise HandBrake \nThis error is unrecoverable. Maybe try restarting.", e.ToString());
+                window.ShowDialog();       
+
                 Application.Exit();
             }
         }
@@ -463,22 +465,6 @@ namespace Handbrake.Functions
                         File.Delete(Path.Combine(appDataPath, file));
                 }
             }
-        }
-
-        /// <summary>
-        /// Show the Exception Window
-        /// </summary>
-        /// <param name="shortError">
-        /// The short error.
-        /// </param>
-        /// <param name="longError">
-        /// The long error.
-        /// </param>
-        public static void ShowExceptiowWindow(string shortError, string longError)
-        {
-            ExceptionWindow window = new ExceptionWindow();
-            window.Setup(shortError, longError);
-            window.ShowDialog();
         }
 
         /// <summary>

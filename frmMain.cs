@@ -20,6 +20,7 @@ namespace Handbrake
 
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.EventArgs;
+    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model.General;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.ApplicationServices.Functions;
@@ -227,7 +228,7 @@ namespace Handbrake
             catch (Exception ex)
             {
                 if ((bool)result.AsyncState)
-                    Main.ShowExceptiowWindow("Unable to check for updates, Please try again later.", ex.ToString());
+                    throw new GeneralApplicationException("Unable to check for updates.", "Please try again later. The service may currently be down or inaccessible. ", ex);
             }
         }
 
@@ -2651,7 +2652,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                Main.ShowExceptiowWindow("HandBrake was not able to shutdown properly. You may need to forcefully quit HandBrake CLI from TaskManager if it's still running.", exc.ToString());
+                throw new GeneralApplicationException("HandBrake was not able to shutdown properly.", " You may need to forcefully quit HandBrake CLI from TaskManager if it's still running ", exc);
             }
             finally
             {

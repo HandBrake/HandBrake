@@ -13,7 +13,9 @@ namespace Handbrake
     using Functions;
 
     using HandBrake.ApplicationServices;
+    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Model.General;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
@@ -138,7 +140,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                Main.ShowExceptiowWindow("An Unexpected error has occured", exc.ToString());
+                throw new GeneralApplicationException("An Unexpected error has occured", " Your encode may not have completed sucessfully.", exc);
             }
         }
 
