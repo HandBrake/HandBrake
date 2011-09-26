@@ -68,6 +68,14 @@ namespace HandBrake.ApplicationServices.Services
         }
 
         #region Events
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QueueManager"/> class.
+        /// </summary>
+        public QueueManager()
+        {
+        }
+
         /// <summary>
         /// Fires when a job is Added, Removed or Re-Ordered.
         /// Should be used for triggering an update of the Queue Window.
