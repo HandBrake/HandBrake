@@ -1100,6 +1100,12 @@ main (int argc, char *argv[])
 	filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterAll"));
 	gtk_file_chooser_set_filter(chooser, filter);
 
+	PangoFontDescription *font_desc;
+	font_desc = pango_font_description_from_string ("monospace 10");
+	textview = GTK_TEXT_VIEW(GHB_WIDGET (ud->builder, "activity_view"));
+	gtk_widget_modify_font(GTK_WIDGET(textview), font_desc);      
+	pango_font_description_free (font_desc);      
+
 	// Everything should be go-to-go.  Lets rock!
 
 	gtk_main ();
