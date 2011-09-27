@@ -1634,3 +1634,36 @@ const char * hb_subsource_name( int source )
     }
 }
 
+void hb_hexdump( hb_debug_level_t level, const char * label, const uint8_t * data, int len )
+{
+    int ii;
+    char line[80], *p;
+
+    p = line;
+    if( label )
+        hb_deep_log(level, "++++ %s ++++", label);
+    else
+        hb_deep_log(level, "++++++++++++");
+    for( ii = 0; ii < len; ii++ )
+    {
+        if( ( ii & 0x0f ) == 0x0f )
+        {
+            p += sprintf( p, "%02x", data[ii] );
+            hb_deep_log( level, "    %s", line );
+            p = line;
+        }
+        else if( ( ii & 0x07 ) == 0x07 )
+        {
+            p += sprintf( p, "%02x  ", data[ii] );
+        }
+        else
+        {
+            p += sprintf( p, "%02x ", data[ii] );
+        }
+    }
+    if( p != line )
+    {
+        hb_deep_log( level, "    %s", line );
+    }
+}
+
