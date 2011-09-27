@@ -1358,6 +1358,12 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
         return 0;
     }
 
+    /* Set the job's "in track" to the value passed in audiocfg.
+     * HandBrakeCLI assumes this value is preserved in the jobs
+     * audio list, but in.track in the title's audio list is not 
+     * required to be the same. */
+    audio->config.in.track = audiocfg->in.track;
+
     /* Really shouldn't ignore the passed out track, but there is currently no
      * way to handle duplicates or out-of-order track numbers. */
     audio->config.out.track = hb_list_count(job->list_audio) + 1;
