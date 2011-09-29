@@ -6,6 +6,7 @@
 
 #include <stdarg.h>
 #include <time.h>
+#include <ctype.h>
 #include <sys/time.h>
 
 #include "common.h"
@@ -1643,8 +1644,12 @@ const char * hb_subsource_name( int source )
 void hb_hexdump( hb_debug_level_t level, const char * label, const uint8_t * data, int len )
 {
     int ii;
-    char line[80], *p;
+    char line[80], ascii[19], *p;
 
+    ascii[18] = 0;
+    ascii[0] = '|';
+    ascii[17] = '|';
+    memset(&ascii[1], '.', 16);
     p = line;
     if( label )
         hb_deep_log(level, "++++ %s ++++", label);
@@ -1655,7 +1660,8 @@ void hb_hexdump( hb_debug_level_t level, const char * label, const uint8_t * dat
         if( ( ii & 0x0f ) == 0x0f )
         {
             p += sprintf( p, "%02x", data[ii] );
-            hb_deep_log( level, "    %s", line );
+            hb_deep_log( level, "    %-50s%20s", line, ascii );
+            memset(&ascii[1], '.', 16);
             p = line;
         }
         else if( ( ii & 0x07 ) == 0x07 )
@@ -1666,10 +1672,15 @@ void hb_hexdump( hb_debug_level_t level, const char * label, const uint8_t * dat
         {
             p += sprintf( p, "%02x ", data[ii] );
         }
+        if( isgraph( data[ii] ) )
+            ascii[(ii & 0x0f) + 1] = data[ii];
+        else
+            ascii[(ii & 0x0f) + 1] = '.';
     }
+    ascii[ii] = 0;
     if( p != line )
     {
-        hb_deep_log( level, "    %s", line );
+        hb_deep_log( level, "    %-50s%20s", line, ascii );
     }
 }
 
