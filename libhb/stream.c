@@ -159,8 +159,9 @@ struct hb_stream_s
         uint8_t found_pcr;      // non-zero if we've found at least one pcr
         int     pcr_out;        // sequence number of most recent output pcr
         int     pcr_in;         // sequence number of most recent input pcr
+        int     pcr_discontinuity; // sequence number of last discontinuity
+        int     pcr_current;    // last discontinuity sent to reader
         int64_t pcr;            // most recent input pcr
-        int64_t pcr_current;    // circular buffer of output pcrs
         int64_t last_timestamp; // used for discontinuity detection when
                                 // there are no PCRs
 
@@ -4405,30 +4406,22 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
                 break;
         }
 
-        // check if this packet was referenced to an older pcr and if that
-        // pcr was significantly different than the one we're using now.
-        // (the reason for the uint cast on the pcr difference is that the
-        // difference is significant if it advanced by more than 200ms or if
-        // it went backwards by any amount. The negative numbers look like
-        // huge unsigned ints so the cast allows both conditions to be
-        // checked at once.
-        int64_t bufpcr = b->pcr;
-        int64_t curpcr = stream->ts.pcr_current;
-        if ( stream->ts.found_pcr &&  b->cur < stream->ts.pcr_out &&
-             bufpcr != -1 && curpcr != -1 && 
-             (uint64_t)( curpcr - bufpcr ) > 200*90LL )
+        if( b->cur > stream->ts.pcr_out )
         {
-            // we've sent up a new pcr but have a packet referenced to an
-            // old pcr and the difference was enough to trigger a discontinuity
-            // correction. smash the timestamps or we'll mess up the correction.
-            buf->start = -1;
-            buf->renderOffset = -1;
-            buf->stop = -1;
+            // we have a new pcr
+            stream->ts.pcr_out = b->cur;
+            buf->pcr = b->pcr;
+            if( b->cur >= stream->ts.pcr_discontinuity )
+                stream->ts.pcr_current = stream->ts.pcr_discontinuity;
+        }
+        else
+        {
             buf->pcr = -1;
         }
-        else if ( b->cur < stream->ts.pcr_out &&
-                  bufpcr != -1 && curpcr != -1 && 
-                  ( curpcr - bufpcr > 200*90LL || bufpcr - curpcr > 200*90LL ) )
+
+        // check if this packet was referenced to an older pcr and if that
+        // pcr was prior to a discontinuity.
+        if( b->cur < stream->ts.pcr_current )
         {
             // we've sent up a new pcr but have a packet referenced to an
             // old pcr and the difference was enough to trigger a discontinuity
@@ -4440,18 +4433,6 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
         }
         else
         {
-            if ( stream->ts.pcr_out != stream->ts.pcr_in )
-            {
-                // we have a new pcr
-                stream->ts.pcr_out = stream->ts.pcr_in;
-                buf->pcr = stream->ts.pcr;
-                stream->ts.pcr_current = stream->ts.pcr;
-            }
-            else
-            {
-                buf->pcr = -1;
-            }
-
             // put the PTS & possible DTS into 'start' & 'renderOffset'
             // then strip off the PES header.
             buf->start = pes_info.pts;
@@ -4541,14 +4522,26 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt )
         // get the PCR (Program Clock Reference)
         if ( adapt_len > 7 && ( pkt[5] & 0x10 ) != 0 )
         {
-            stream->ts.pcr = ( (uint64_t)pkt[6] << (33 - 8) ) |
-                             ( (uint64_t)pkt[7] << (33 - 16) ) |
-                             ( (uint64_t)pkt[8] << (33 - 24) ) |
-                             ( (uint64_t)pkt[9] << (33 - 32) ) |
-                             ( pkt[10] >> 7 );
+            int64_t pcr;
+            pcr =    ( (uint64_t)pkt[6] << (33 - 8) ) |
+                     ( (uint64_t)pkt[7] << (33 - 16) ) |
+                     ( (uint64_t)pkt[8] << (33 - 24) ) |
+                     ( (uint64_t)pkt[9] << (33 - 32) ) |
+                     ( pkt[10] >> 7 );
             ++stream->ts.pcr_in;
             stream->ts.found_pcr = 1;
             stream->ts_flags |= TS_HAS_PCR;
+            // Check for a pcr discontinuity.
+            // The reason for the uint cast on the pcr difference is that the
+            // difference is significant if it advanced by more than 200ms or
+            // if it went backwards by any amount. The negative numbers look
+            // like huge unsigned ints so the cast allows both conditions to
+            // be checked at once.
+            if ( (uint64_t)( pcr - stream->ts.pcr ) > 200*90LL )
+            {
+                stream->ts.pcr_discontinuity = stream->ts.pcr_in;
+            }
+            stream->ts.pcr = pcr;
         }
     }
 
@@ -4676,6 +4669,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt )
                 {
                     stream->ts.pcr = timestamp;
                     ++stream->ts.pcr_in;
+                    stream->ts.pcr_discontinuity = stream->ts.pcr_in;
                 }
                 stream->ts.last_timestamp = timestamp;
             }
