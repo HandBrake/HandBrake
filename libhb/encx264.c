@@ -83,7 +83,12 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     memset( pv->filename, 0, 1024 );
     hb_get_tempory_filename( job->h, pv->filename, "x264.log" );
 
-    x264_param_default( &param );
+    if( x264_param_default_preset( &param, job->x264_preset, job->x264_tune ) < 0 )
+    {
+        free( pv );
+        pv = NULL;
+        return 1;
+    }
     
     /* Enable metrics */
     param.analyse.b_psnr = 1;
@@ -209,7 +214,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         }
         free(x264opts_start);
     }
-    
+
     /* Reload colorimetry settings in case custom values were set
      * in the advanced_opts string */
     job->color_matrix_code = 3;
@@ -217,26 +222,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     job->color_transfer = param.vui.i_transfer;
     job->color_matrix = param.vui.i_colmatrix;
 
-    /* B-frames are on by default.*/
-    job->areBframes = 1;
-    
-    if( param.i_bframe && param.i_bframe_pyramid )
-    {
-        /* Note b-pyramid here, so the initial delay can be doubled */
-        job->areBframes = 2;
-    }
-    else if( !param.i_bframe )
-    {
-        /*
-         When B-frames are enabled, the max frame count increments
-         by 1 (regardless of the number of B-frames). If you don't
-         change the duration of the video track when you mux, libmp4
-         barfs.  So, check if the x264opts aren't using B-frames, and
-         when they aren't, set the boolean job->areBframes as false.
-         */
-        job->areBframes = 0;
-    }
-    
     /* For 25 fps sources, HandBrake's explicit keyints will match the x264 defaults:
        min-keyint 25 (same as auto), keyint 250 */
     if( param.i_keyint_min != 25 || param.i_keyint_max != 250 )
@@ -295,11 +280,44 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
+    /* Apply profile settings after explicit settings, if present. */
+    if( job->x264_profile )
+    {
+        if( x264_param_apply_profile( &param, job->x264_profile ) < 0 )
+        {
+            free( pv );
+            pv = NULL;
+            return 1;
+        }
+    }
+
+    /* B-frames are on by default.*/
+    job->areBframes = 1;
+    
+    if( param.i_bframe && param.i_bframe_pyramid )
+    {
+        /* Note b-pyramid here, so the initial delay can be doubled */
+        job->areBframes = 2;
+    }
+    else if( !param.i_bframe )
+    {
+        /*
+         When B-frames are enabled, the max frame count increments
+         by 1 (regardless of the number of B-frames). If you don't
+         change the duration of the video track when you mux, libmp4
+         barfs.  So, check if the x264opts aren't using B-frames, and
+         when they aren't, set the boolean job->areBframes as false.
+         */
+        job->areBframes = 0;
+    }
+    
     hb_deep_log( 2, "encx264: opening libx264 (pass %d)", job->pass );
     pv->x264 = x264_encoder_open( &param );
     if ( pv->x264 == NULL )
     {
         hb_error("encx264: x264_encoder_open failed.");
+        free( pv );
+        pv = NULL;
         return 1;
     }
 
@@ -608,3 +626,19 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     *buf_out = x264_encode( w, in );
     return HB_WORK_OK;
 }
+
+const char * const * hb_x264_presets()
+{
+    return x264_preset_names;
+}
+
+const char * const * hb_x264_tunes()
+{
+    return x264_tune_names;
+}
+
+const char * const * hb_x264_profiles()
+{
+    return x264_profile_names;
+}
+

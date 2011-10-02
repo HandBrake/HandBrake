@@ -114,6 +114,9 @@ static int    chapter_markers = 0;
 static char * marker_file   = NULL;
 static char	  *advanced_opts = NULL;
 static char	  *advanced_opts2 = NULL;
+static char       *x264_profile = NULL;
+static char       *x264_preset = NULL;
+static char       *x264_tune = NULL;
 static int	  maxHeight		= 0;
 static int	  maxWidth		= 0;
 static int    turbo_opts_enabled = 0;
@@ -361,6 +364,9 @@ int main( int argc, char ** argv )
     if (preset_name) free (preset_name);
     if( stop_at_string ) free( stop_at_string );
     if( start_at_string ) free( start_at_string );
+    free( x264_profile );
+    free( x264_preset );
+    free( x264_tune );
 
     // write a carriage return to stdout - avoids overlap / line wrapping when stderr is redirected
     fprintf( stdout, "\n" );
@@ -2319,6 +2325,9 @@ static int HandleEvents( hb_handle_t * h )
             {
                 job->advanced_opts =  NULL;
             }
+            job->x264_profile = x264_profile;
+            job->x264_preset = x264_preset;
+            job->x264_tune = x264_tune;
             if (maxWidth)
                 job->maxWidth = maxWidth;
             if (maxHeight)
@@ -2541,8 +2550,10 @@ void SigHandler( int i_signal )
  ****************************************************************************/
 static void ShowHelp()
 {
-    int i, j;
+    int i, j, len;
     FILE* const out = stdout;
+    const char * const *x264_opts;
+    char tmp[80];
 
     fprintf( out,
     "Syntax: HandBrakeCLI [options] -i <device> -o <file>\n"
@@ -2614,9 +2625,73 @@ static void ShowHelp()
         }
     }
     fprintf( out,
+    "        --x264-preset       When using x264, selects the x264 preset:\n"
+    "          <string>          ");
+    x264_opts = hb_x264_presets();
+    tmp[0] = 0;
+    len = 0;
+    while( x264_opts && *x264_opts )
+    {
+        strncat( tmp, *x264_opts++, 79 - len );
+        if( *x264_opts )
+            strcat( tmp, "/" );
+        len = strlen( tmp );
+        if( len > 40 && *x264_opts )
+        {
+            fprintf( out, "%s\n                            ", tmp );
+            len = 0;
+            tmp[0] = 0;
+        }
+    }
+    if( len )
+        fprintf( out, "%s\n", tmp );
+    fprintf( out,
+    "        --x264-tune         When using x264, selects the x264 tuning:\n"
+    "          <string>          ");
+    x264_opts = hb_x264_tunes();
+    tmp[0] = 0;
+    len = 0;
+    while( x264_opts && *x264_opts )
+    {
+        strncat( tmp, *x264_opts++, 79 - len );
+        if( *x264_opts )
+            strcat( tmp, "/" );
+        len = strlen( tmp );
+        if( len > 40 && *x264_opts )
+        {
+            fprintf( out, "%s\n                            ", tmp );
+            len = 0;
+            tmp[0] = 0;
+        }
+    }
+    if( len )
+        fprintf( out, "%s\n", tmp );
+    fprintf( out,
     "    -x, --encopts <string>  Specify advanced encoder options in the\n"
     "                            same style as mencoder (x264 and ffmpeg only):\n"
     "                            option1=value1:option2=value2\n"
+    "        --x264-profile      When using x264, ensures compliance with the\n"
+    "          <string>          specified h.264 profile:\n"
+    "                            ");
+    x264_opts = hb_x264_profiles();
+    tmp[0] = 0;
+    len = 0;
+    while( x264_opts && *x264_opts )
+    {
+        strncat( tmp, *x264_opts++, 79 - len );
+        if( *x264_opts )
+            strcat( tmp, "/" );
+        len = strlen( tmp );
+        if( len > 40 && *x264_opts )
+        {
+            fprintf( out, "%s\n                            ", tmp );
+            len = 0;
+            tmp[0] = 0;
+        }
+    }
+    if( len )
+        fprintf( out, "%s\n", tmp );
+    fprintf( out,
     "    -q, --quality <number>  Set video quality\n"
     "    -b, --vb <kb/s>         Set video bitrate (default: 1000)\n"
     "    -2, --two-pass          Use two-pass mode\n"
@@ -2974,7 +3049,10 @@ static int ParseOptions( int argc, char ** argv )
     #define ALLOWED_AUDIO_COPY  280
     #define AUDIO_FALLBACK      281
     #define LOOSE_CROP          282
-
+    #define X264_PROFILE        283
+    #define X264_PRESET         284
+    #define X264_TUNE           285
+    
     for( ;; )
     {
         static struct option long_options[] =
@@ -3042,6 +3120,9 @@ static int ParseOptions( int argc, char ** argv )
             { "rate",        required_argument, NULL,    'r' },
             { "arate",       required_argument, NULL,    'R' },
             { "encopts",     required_argument, NULL,    'x' },
+            { "x264-profile", required_argument, NULL,   X264_PROFILE },
+            { "x264-preset", required_argument, NULL,    X264_PRESET },
+            { "x264-tune",   required_argument, NULL,    X264_TUNE },
             { "turbo",       no_argument,       NULL,    'T' },
             { "maxHeight",   required_argument, NULL,    'Y' },
             { "maxWidth",    required_argument, NULL,    'X' },
@@ -3450,6 +3531,15 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'x':
                 advanced_opts = strdup( optarg );
+                break;
+            case X264_PROFILE:
+                x264_profile = strdup( optarg );
+                break;
+            case X264_PRESET:
+                x264_preset = strdup( optarg );
+                break;
+            case X264_TUNE:
+                x264_tune = strdup( optarg );
                 break;
             case 'T':
                 turbo_opts_enabled = 1;

@@ -257,6 +257,9 @@ struct hb_job_s
     int             cfr;
     int             pass;
     char            *advanced_opts;
+    char            *x264_profile;
+    char            *x264_preset;
+    char            *x264_tune;
     int             areBframes;
     int             color_matrix_code;
     int             color_prim;
@@ -870,5 +873,10 @@ int hb_yuv2rgb(int yuv);
 int hb_rgb2yuv(int rgb);
 
 const char * hb_subsource_name( int source );
+
+// x264 preset/tune/profile helpers
+const char * const * hb_x264_presets();
+const char * const * hb_x264_tunes();
+const char * const * hb_x264_profiles();
 
 #endif
