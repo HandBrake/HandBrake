@@ -61,14 +61,25 @@ $(PKG.cli.deb): $(PKG.gui.tmp.deb)
 # Debian source package rules
 #
 pkg.push.src.deb:: $(PKG.src.deb.stamp)
+	(cd $(STAGE.out.src/)oneiric && dput handbrake-snapshots handbrake_$(HB.version)ppa1~oneiric1_source.changes )
 	(cd $(STAGE.out.src/)natty && dput handbrake-snapshots handbrake_$(HB.version)ppa1~natty1_source.changes )
 	(cd $(STAGE.out.src/)maverick && dput handbrake-snapshots handbrake_$(HB.version)ppa1~maverick1_source.changes )
 	(cd $(STAGE.out.src/)lucid && dput handbrake-snapshots handbrake_$(HB.version)ppa1~lucid1_source.changes )
-	(cd $(STAGE.out.src/)karmic && dput handbrake-snapshots handbrake_$(HB.version)ppa1~karmic1_source.changes )
 
 $(PKG.src.deb.stamp): GNUmakefile
 	-$(RM.exe) -rf $(STAGE.out.src/)
 	make contrib.fetch
+	svn co -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)oneiric/$(PKG.deb.basename)
+	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)oneiric/$(PKG.deb.basename)
+	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)oneiric/$(PKG.deb.basename)
+	$(CP.exe) $(STAGE.out.src/)oneiric/$(PKG.deb.basename)/debian/control.oneiric $(STAGE.out.src/)oneiric/$(PKG.deb.basename)/debian/control
+	echo "handbrake ($(HB.version)ppa1~oneiric1) oneiric; urgency=low" > $(STAGE.out.src/)oneiric/$(PKG.deb.basename)/debian/changelog
+	echo "  * Snapshot" >> $(STAGE.out.src/)oneiric/$(PKG.deb.basename)/debian/changelog
+	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)oneiric/$(PKG.deb.basename)/debian/changelog
+	echo "" >> $(STAGE.out.src/)oneiric/$(PKG.deb.basename)/debian/changelog
+	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)oneiric/$(PKG.deb.basename)/debian/changelog
+	$(TAR.exe) czf $(STAGE.out.src/)oneiric/$(PKG.src.deb.tar) -C $(STAGE.out.src/)oneiric $(PKG.deb.basename)
+	(cd $(STAGE.out.src/)oneiric/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
 	svn co -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)natty/$(PKG.deb.basename)
 	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)natty/$(PKG.deb.basename)
 	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)natty/$(PKG.deb.basename)
@@ -102,17 +113,6 @@ $(PKG.src.deb.stamp): GNUmakefile
 	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)lucid/$(PKG.deb.basename)/debian/changelog
 	$(TAR.exe) czf $(STAGE.out.src/)lucid/$(PKG.src.deb.tar) -C $(STAGE.out.src/)lucid $(PKG.deb.basename)
 	(cd $(STAGE.out.src/)lucid/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
-	svn co -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)karmic/$(PKG.deb.basename)
-	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)karmic/$(PKG.deb.basename)
-	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)karmic/$(PKG.deb.basename)
-	$(CP.exe) $(STAGE.out.src/)karmic/$(PKG.deb.basename)/debian/control.karmic $(STAGE.out.src/)karmic/$(PKG.deb.basename)/debian/control
-	echo "handbrake ($(HB.version)ppa1~karmic1) karmic; urgency=low" > $(STAGE.out.src/)karmic/$(PKG.deb.basename)/debian/changelog
-	echo "  * Snapshot" >> $(STAGE.out.src/)karmic/$(PKG.deb.basename)/debian/changelog
-	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)karmic/$(PKG.deb.basename)/debian/changelog
-	echo "" >> $(STAGE.out.src/)karmic/$(PKG.deb.basename)/debian/changelog
-	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)karmic/$(PKG.deb.basename)/debian/changelog
-	$(TAR.exe) czf $(STAGE.out.src/)karmic/$(PKG.src.deb.tar) -C $(STAGE.out.src/)karmic $(PKG.deb.basename)
-	(cd $(STAGE.out.src/)karmic/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
 	$(TOUCH.exe) $(PKG.src.deb.stamp)
 
 
