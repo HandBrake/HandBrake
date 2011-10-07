@@ -5549,7 +5549,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
   <object class="GtkWindow" id="activity_window">
     <property name="visible">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="type_hint">GDK_WINDOW_TYPE_HINT_UTILITY</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
     <property name="transient-for">hb_window</property>
@@ -5608,7 +5608,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="title" translatable="yes">HandBrake Queue</property>
     <property name="icon_name">hb-queue</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="type_hint">GDK_WINDOW_TYPE_HINT_UTILITY</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
     <property name="transient-for">hb_window</property>
@@ -5743,7 +5743,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
     <property name="visible">False</property>
     <property name="title" translatable="yes">Picture Settings</property>
     <property name="window_position">GTK_WIN_POS_NONE</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="type_hint">GDK_WINDOW_TYPE_HINT_UTILITY</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
     <property name="resizable">False</property>
@@ -7038,6 +7038,7 @@ The classic deinterlace filter is applied to all frames. Frames that are not int
     <property name="title" translatable="yes">Preview</property>
     <property name="window_position">GTK_WIN_POS_CENTER</property>
     <property name="skip_taskbar_hint">True</property>
+    <property name="type_hint">GDK_WINDOW_TYPE_HINT_UTILITY</property>
     <property name="skip_pager_hint">True</property>
     <property name="resizable">False</property>
     <property name="transient-for">hb_window</property>
