@@ -1104,6 +1104,13 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             }
             else
             {
+                int64_t duration;
+
+                if( buf->stop < 0 )
+                    duration = 90000L * 10;
+                else
+                    duration = buf->stop - buf->start;
+
                 /* Write an empty sample */
                 if ( mux_data->sum_dur < buf->start )
                 {
@@ -1141,7 +1148,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
 
                 hb_deep_log(3, "MuxMP4:Sub:%fs:%"PRId64":%"PRId64":%"PRId64": %s",
                             (float)buf->start / 90000, buf->start, buf->stop,
-                            (buf->stop - buf->start), buffer);
+                            duration, buffer);
 
                 /* Write the subtitle sample */
                 memcpy( output + 2, buffer, buffersize );
@@ -1153,7 +1160,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                                      mux_data->track,
                                      output,
                                      buffersize + stylesize + 2,
-                                     buf->stop - buf->start,
+                                     duration,
                                      0,
                                      1 ))
                 {
@@ -1161,11 +1168,18 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                     *job->die = 1;
                 }
 
-                mux_data->sum_dur += (buf->stop - buf->start);
+                mux_data->sum_dur += duration;
             }
         }
         else if( mux_data->sub_format == PICTURESUB )
         {
+            int64_t duration;
+
+            if( buf->stop < 0 )
+                duration = 90000L * 10;
+            else
+                duration = buf->stop - buf->start;
+
             /* Write an empty sample */
             if ( mux_data->sum_dur < buf->start )
             {
@@ -1187,7 +1201,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                                  mux_data->track,
                                  buf->data,
                                  buf->size,
-                                 buf->stop - buf->start,
+                                 duration,
                                  0,
                                  1 ))
             {
@@ -1195,7 +1209,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                 *job->die = 1;
             }
 
-            mux_data->sum_dur += (buf->stop - buf->start);
+            mux_data->sum_dur += duration;
         }
     }
     else
