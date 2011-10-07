@@ -175,7 +175,7 @@ namespace Handbrake.Controls
                 if (track.Encoder == AudioEncoder.Ac3Passthrough || track.Encoder == AudioEncoder.DtsPassthrough ||
                     track.Encoder == AudioEncoder.DtsHDPassthrough || track.Encoder == AudioEncoder.AacPassthru || track.Encoder == AudioEncoder.Mp3Passthru)
                 {
-                    track.MixDown = HandBrake.Interop.Model.Encoding.Mixdown.Passthrough;
+                    track.MixDown = HandBrake.Interop.Model.Encoding.Mixdown.None;
                     track.Bitrate = 0;
                 }
 

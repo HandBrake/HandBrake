@@ -91,7 +91,7 @@ namespace HandBrake.ApplicationServices.Functions
                 case "6 Channel Discrete":
                     return Mixdown.SixChannelDiscrete;
                 case "Passthru":
-                    return Mixdown.Passthrough;
+                    return Mixdown.None;
                 default:
                     return Mixdown.Auto;
             }
@@ -107,7 +107,7 @@ namespace HandBrake.ApplicationServices.Functions
             switch (selectedAudio)
             {
                 case Mixdown.Auto:
-                case Mixdown.Passthrough:
+                case Mixdown.None:
                     return "auto";
                 case Mixdown.Mono:
                     return "mono";
