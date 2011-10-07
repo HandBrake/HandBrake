@@ -19,7 +19,7 @@ namespace HandBrake.Interop.Model.Encoding
 		[Display(Name = "Dolby Pro Logic II")]
 		DolbyProLogicII = 0,
 
-		[Display(Name = "Auto")]
+		[Display(Name = "Automatic")]
 		Auto,
 
 		[Display(Name = "Mono")]
@@ -34,7 +34,7 @@ namespace HandBrake.Interop.Model.Encoding
 		[Display(Name = "6 Channel Discrete")]
 		SixChannelDiscrete,
 
-        [Display(Name = "Passthru")]
-        Passthrough,
+        [Display(Name = "None")]
+        None,
 	}
 }
