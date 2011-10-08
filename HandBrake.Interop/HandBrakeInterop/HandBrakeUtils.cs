@@ -17,10 +17,10 @@ namespace HandBrake.Interop
 	using HandBrake.Interop.Model.Encoding;
 	using HandBrake.Interop.SourceData;
 
-    /// <summary>
-    /// HandBrake Interop Utilities
-    /// </summary>
-    public static class HandBrakeUtils
+	/// <summary>
+	/// HandBrake Interop Utilities
+	/// </summary>
+	public static class HandBrakeUtils
 	{
 		/// <summary>
 		/// Estimated overhead in bytes for each frame in output container.
@@ -47,10 +47,10 @@ namespace HandBrake.Interop
 		/// </summary>
 		public static event EventHandler<MessageLoggedEventArgs> ErrorLogged;
 
-	    /// <summary>
-	    /// Register the logger.
-	    /// </summary>
-	    public static void RegisterLogger()
+		/// <summary>
+		/// Register the logger.
+		/// </summary>
+		public static void RegisterLogger()
 		{
 			// Register the logger if we have not already
 			if (loggingCallback == null)
@@ -211,18 +211,18 @@ namespace HandBrake.Interop
 			switch (encoder)
 			{
 				case AudioEncoder.Faac:
-                case AudioEncoder.ffaac:
-                case AudioEncoder.AacPassthru:
+				case AudioEncoder.ffaac:
+				case AudioEncoder.AacPassthru:
 				case AudioEncoder.Vorbis:
 					return 1024;
 				case AudioEncoder.Lame:
-                case AudioEncoder.Mp3Passthru:
+				case AudioEncoder.Mp3Passthru:
 					return 1152;
 				case AudioEncoder.Ac3:
 				case AudioEncoder.Passthrough:
 				case AudioEncoder.Ac3Passthrough:
-                case AudioEncoder.DtsPassthrough:
-                case AudioEncoder.DtsHDPassthrough:
+				case AudioEncoder.DtsPassthrough:
+				case AudioEncoder.DtsHDPassthrough:
 					return 1536;
 			}
 

@@ -32,6 +32,8 @@ namespace HandBrake.Interop.HbLib
 		/// int
 		public int index;
 
+		public int playlist;
+
 		/// int
 		public int vts;
 
@@ -98,10 +100,7 @@ namespace HandBrake.Interop.HbLib
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4, ArraySubType = UnmanagedType.I4)]
 		public int[] crop;
 
-		//public fixed int crop[4];
-
-		/// Anonymous_618ebeca_0ad9_4a71_9a49_18e50ac2e9db
-		public Anonymous_618ebeca_0ad9_4a71_9a49_18e50ac2e9db demuxer;
+		public hb_title_demuxer_anon demuxer;
 
 		/// int
 		public int detected_interlacing;
@@ -153,5 +152,25 @@ namespace HandBrake.Interop.HbLib
 
 		/// uint32_t->unsigned int
 		public uint flags;
+	}
+
+	public enum hb_title_type_anon
+	{
+		HB_DVD_TYPE,
+
+		HB_BD_TYPE,
+
+		HB_STREAM_TYPE,
+
+		HB_FF_STREAM_TYPE,
+	}
+
+	public enum hb_title_demuxer_anon
+	{
+		HB_DVD_DEMUXER = 0,
+
+		HB_MPEG_DEMUXER,
+
+		HB_NULL_DEMUXER,
 	}
 }

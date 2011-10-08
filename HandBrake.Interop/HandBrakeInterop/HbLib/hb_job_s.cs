@@ -10,10 +10,10 @@
 
 namespace HandBrake.Interop.HbLib
 {
-    using System;
-    using System.Runtime.InteropServices;
+	using System;
+	using System.Runtime.InteropServices;
 
-    [StructLayout(LayoutKind.Sequential)]
+	[StructLayout(LayoutKind.Sequential)]
 	public struct hb_job_s
 	{
 		/// int
@@ -92,20 +92,29 @@ namespace HandBrake.Interop.HbLib
 
 		public IntPtr advanced_opts;
 
+		public IntPtr x264_profile;
+
+		public IntPtr x264_preset;
+
+		public IntPtr x264_tune;
+
 		/// int
 		public int areBframes;
 
-    	public int color_matrix_code;
+		public int color_matrix_code;
 
-    	public int color_prim;
+		public int color_prim;
 
-    	public int color_transfer;
+		public int color_transfer;
 
 		/// int
 		public int color_matrix;
 
 		/// hb_list_t*
 		public IntPtr list_audio;
+
+		public int acodec_copy_mask;
+		public int acodec_fallback;
 
 		/// hb_list_t*
 		public IntPtr list_subtitle;

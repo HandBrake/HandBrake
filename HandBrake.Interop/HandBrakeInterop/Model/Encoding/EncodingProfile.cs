@@ -9,11 +9,11 @@
 
 namespace HandBrake.Interop.Model.Encoding
 {
-    using System.Collections.Generic;
+	using System.Collections.Generic;
 
-    using HandBrake.Interop.Model;
+	using HandBrake.Interop.Model;
 
-    public class EncodingProfile
+	public class EncodingProfile
 	{
 		public EncodingProfile()
 		{
@@ -54,6 +54,9 @@ namespace HandBrake.Interop.Model.Encoding
 
 		public VideoEncoder VideoEncoder { get; set; }
 		public string X264Options { get; set; }
+		public string X264Profile { get; set; }
+		public string X264Preset { get; set; }
+		public string X264Tune { get; set; }
 		public VideoEncodeRateType VideoEncodeRateType { get; set; }
 		public double Quality { get; set; }
 		public int TargetSize { get; set; }
@@ -64,6 +67,7 @@ namespace HandBrake.Interop.Model.Encoding
 		public bool PeakFramerate { get; set; }
 
 		public List<AudioEncoding> AudioEncodings { get; set; }
+		public AudioEncoder AudioEncoderFallback { get; set; }
 
 		public EncodingProfile Clone()
 		{
@@ -103,6 +107,9 @@ namespace HandBrake.Interop.Model.Encoding
 
 				VideoEncoder = this.VideoEncoder,
 				X264Options = this.X264Options,
+				X264Profile = this.X264Profile,
+				X264Preset = this.X264Preset,
+				X264Tune = this.X264Tune,
 				VideoEncodeRateType = this.VideoEncodeRateType,
 				Quality = this.Quality,
 				TargetSize = this.TargetSize,
