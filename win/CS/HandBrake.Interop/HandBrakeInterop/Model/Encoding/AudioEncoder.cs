@@ -9,41 +9,47 @@
 
 namespace HandBrake.Interop.Model.Encoding
 {
-	using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations;
 
-	public enum AudioEncoder
-	{
-		[Display(Name = "AAC (faac)")]
-		Faac = 0,
+    /// <summary>
+    /// The audio encoder.
+    /// </summary>
+    public enum AudioEncoder
+    {
+        [Display(Name = "AAC (faac)")]
+        Faac = 0,
 
-		[Display(Name = "AAC (ffmpeg)")]
-		ffaac,
+        [Display(Name = "AAC (ffmpeg)")]
+        ffaac,
 
-		[Display(Name = "MP3 (lame)")]
-		Lame,
+        [Display(Name = "MP3 (lame)")]
+        Lame,
 
-		[Display(Name = "AC3 (ffmpeg)")]
-		Ac3,
+        [Display(Name = "AC3 (ffmpeg)")]
+        Ac3,
 
-		[Display(Name = "Passthrough")]
-		Passthrough,
+        [Display(Name = "Passthrough")]
+        Passthrough,
 
-		[Display(Name = "AC3 Passthru")]
-		Ac3Passthrough,
+        [Display(Name = "AC3 Passthru")]
+        Ac3Passthrough,
 
-		[Display(Name = "DTS Passthru")]
-		DtsPassthrough,
+        [Display(Name = "DTS Passthru")]
+        DtsPassthrough,
 
-		[Display(Name = "DTS-HD Passthru")]
-		DtsHDPassthrough,
+        [Display(Name = "DTS-HD Passthru")]
+        DtsHDPassthrough,
 
-		[Display(Name = "AAC Passthru")]
-		AacPassthru,
+        [Display(Name = "AAC Passthru")]
+        AacPassthru,
 
-		[Display(Name = "MP3 Passthru")]
-		Mp3Passthru,
+        [Display(Name = "MP3 Passthru")]
+        Mp3Passthru,
 
-		[Display(Name = "Vorbis (vorbis)")]
-		Vorbis
-	}
+        [Display(Name = "Vorbis (vorbis)")]
+        Vorbis,
+
+        [Display(Name = "Flac (ffmpeg)")]
+        ffflac
+    }
 }
