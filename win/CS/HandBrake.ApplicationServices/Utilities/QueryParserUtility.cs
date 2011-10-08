@@ -108,7 +108,7 @@ namespace HandBrake.ApplicationServices.Utilities
             Match advanced = Regex.Match(input, @"-x ([.,/a-zA-Z0-9=:-]*)");
             Match x264Preset = Regex.Match(input, @"--x264-preset([=a-zA-Z0-9\s]*)");
             Match x264Tune = Regex.Match(input, @"--x264-tune([=a-zA-Z0-9\s]*)");
-            Match x264Profile = Regex.Match(input, @"-x264-profile([=a-zA-Z0-9\s]*)");
+            Match x264Profile = Regex.Match(input, @"--x264-profile([=a-zA-Z0-9\s]*)");
 
             #endregion
 
