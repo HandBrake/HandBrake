@@ -10,6 +10,7 @@ namespace HandBrake.ApplicationServices.Model
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
+    using HandBrake.Interop.Model.Encoding.x264;
 
     using OutputFormat = HandBrake.ApplicationServices.Model.Encoding.OutputFormat;
 
@@ -292,6 +293,21 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets AdvancedEncoderOptions.
         /// </summary>
         public string AdvancedEncoderOptions { get; set; }
+
+        /// <summary>
+        /// Gets or sets x264Preset.
+        /// </summary>
+        public x264Preset x264Preset { get; set; }
+
+        /// <summary>
+        /// Gets or sets x264Profile.
+        /// </summary>
+        public x264Profile x264Profile { get; set; }
+
+        /// <summary>
+        /// Gets or sets X264Tune.
+        /// </summary>
+        public x264Tune X264Tune { get; set; }
 
         /// <summary>
         /// Gets or sets Verbosity.

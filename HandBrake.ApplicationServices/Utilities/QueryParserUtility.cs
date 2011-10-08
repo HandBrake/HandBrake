@@ -106,6 +106,9 @@ namespace HandBrake.ApplicationServices.Utilities
 
             // Advanced Tab
             Match advanced = Regex.Match(input, @"-x ([.,/a-zA-Z0-9=:-]*)");
+            Match x264Preset = Regex.Match(input, @"--x264-preset([=a-zA-Z0-9\s]*)");
+            Match x264Tune = Regex.Match(input, @"--x264-tune([=a-zA-Z0-9\s]*)");
+            Match x264Profile = Regex.Match(input, @"-x264-profile([=a-zA-Z0-9\s]*)");
 
             #endregion
 
@@ -407,6 +410,18 @@ namespace HandBrake.ApplicationServices.Utilities
 
                 if (advanced.Success)
                     parsed.AdvancedEncoderOptions = advanced.ToString().Replace("-x ", string.Empty);
+
+                if (x264Preset.Success)
+                    parsed.x264Preset =
+                        Converters.Getx264PresetFromCli(x264Preset.ToString().Replace("--x264-preset", string.Empty).Replace("=", string.Empty).Trim());
+
+                if (x264Profile.Success)
+                    parsed.x264Preset =
+                        Converters.Getx264PresetFromCli(x264Profile.ToString().Replace("--x264-profile", string.Empty).Replace("=", string.Empty).Trim());
+               
+                if (x264Tune.Success)
+                    parsed.x264Preset =
+                        Converters.Getx264PresetFromCli(x264Tune.ToString().Replace("--x264-tune", string.Empty).Replace("=", string.Empty).Trim());
 
                 #endregion
             }
