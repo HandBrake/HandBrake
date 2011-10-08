@@ -17,12 +17,13 @@ namespace HandBrake.Interop.Model.Encoding
 	public class AudioEncoding
 	{
 		/// <summary>
-		/// Gets or sets InputNumber.
+		/// Gets or sets the chosen track to apply the encoding to.
 		/// </summary>
+		/// <remarks>1-based index. 0 means apply to all tracks.</remarks>
 		public int InputNumber { get; set; }
 
 		/// <summary>
-		/// Gets or sets Encoder.
+		/// Gets or sets the encoder to use.
 		/// </summary>
 		public AudioEncoder Encoder { get; set; }
 
@@ -32,7 +33,7 @@ namespace HandBrake.Interop.Model.Encoding
 		public int Bitrate { get; set; }
 
 		/// <summary>
-		/// Gets or sets Mixdown.
+		/// Gets or sets the mixdown.
 		/// </summary>
 		public Mixdown Mixdown { get; set; }
 

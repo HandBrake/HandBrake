@@ -16,8 +16,8 @@ namespace HandBrake.Interop.Model.Encoding
 		[Display(Name = "AAC (faac)")]
 		Faac = 0,
 
-        [Display(Name = "AAC (ffmpeg)")]
-        ffaac,
+		[Display(Name = "AAC (ffmpeg)")]
+		ffaac,
 
 		[Display(Name = "MP3 (lame)")]
 		Lame,
@@ -31,17 +31,17 @@ namespace HandBrake.Interop.Model.Encoding
 		[Display(Name = "AC3 Passthru")]
 		Ac3Passthrough,
 
-        [Display(Name = "DTS Passthru")]
-        DtsPassthrough,
+		[Display(Name = "DTS Passthru")]
+		DtsPassthrough,
 
-        [Display(Name = "DTS-HD Passthru")]
-        DtsHDPassthrough,
+		[Display(Name = "DTS-HD Passthru")]
+		DtsHDPassthrough,
 
-        [Display(Name = "AAC Passthru")]
-        AacPassthru,
+		[Display(Name = "AAC Passthru")]
+		AacPassthru,
 
-        [Display(Name = "MP3 Passthru")]
-        Mp3Passthru,
+		[Display(Name = "MP3 Passthru")]
+		Mp3Passthru,
 
 		[Display(Name = "Vorbis (vorbis)")]
 		Vorbis

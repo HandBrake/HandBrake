@@ -18,10 +18,10 @@ namespace HandBrake.Interop
 
 	public static class Converters
 	{
-	    /// <summary>
-	    /// Video Frame Rates
-	    /// </summary>
-	    private static Dictionary<double, int> vrates = new Dictionary<double, int>
+		/// <summary>
+		/// Video Frame Rates
+		/// </summary>
+		private static Dictionary<double, int> vrates = new Dictionary<double, int>
 		{
 			{5, 5400000},
 			{10, 2700000},
@@ -33,19 +33,19 @@ namespace HandBrake.Interop
 			{29.97, 900900}
 		};
 
-	    /// <summary>
-        /// Convert Framerate to Video Rates
-	    /// </summary>
-	    /// <param name="framerate">
-	    /// The framerate.
-	    /// </param>
-	    /// <returns>
-	    /// The vrate if a valid framerate is passed in.
-	    /// </returns>
-	    /// <exception cref="ArgumentException">
-	    /// Thrown when framerate is invalid.
-	    /// </exception>
-	    public static int FramerateToVrate(double framerate)
+		/// <summary>
+		/// Convert Framerate to Video Rates
+		/// </summary>
+		/// <param name="framerate">
+		/// The framerate.
+		/// </param>
+		/// <returns>
+		/// The vrate if a valid framerate is passed in.
+		/// </returns>
+		/// <exception cref="ArgumentException">
+		/// Thrown when framerate is invalid.
+		/// </exception>
+		public static int FramerateToVrate(double framerate)
 		{
 			if (!vrates.ContainsKey(framerate))
 			{
@@ -55,19 +55,19 @@ namespace HandBrake.Interop
 			return vrates[framerate];
 		}
 
-	    /// <summary>
-	    /// Convert a Mixdown object to HandBrakes native mixdown constant.
-	    /// </summary>
-	    /// <param name="mixdown">
-	    /// The mixdown.
-	    /// </param>
-	    /// <returns>
-	    /// NativeContstant that represents the mixdown.
-	    /// </returns>
-	    /// <exception cref="ArgumentException">
-	    /// Thrown for an invalid mixodown.
-	    /// </exception>
-	    public static int MixdownToNative(Mixdown mixdown)
+		/// <summary>
+		/// Convert a Mixdown object to HandBrakes native mixdown constant.
+		/// </summary>
+		/// <param name="mixdown">
+		/// The mixdown.
+		/// </param>
+		/// <returns>
+		/// NativeContstant that represents the mixdown.
+		/// </returns>
+		/// <exception cref="ArgumentException">
+		/// Thrown for an invalid mixodown.
+		/// </exception>
+		public static int MixdownToNative(Mixdown mixdown)
 		{
 			if (mixdown == Mixdown.Auto)
 			{
@@ -76,6 +76,8 @@ namespace HandBrake.Interop
 
 			switch (mixdown)
 			{
+				case Mixdown.None:
+					return NativeConstants.HB_AMIXDOWN_NONE;
 				case Mixdown.DolbyProLogicII:
 					return NativeConstants.HB_AMIXDOWN_DOLBYPLII;
 				case Mixdown.DolbySurround:
@@ -91,22 +93,24 @@ namespace HandBrake.Interop
 			return 0;
 		}
 
-	    /// <summary>
-	    /// Convert an native internal handbrake mixdown to a local mixdown enum.
-	    /// </summary>
-	    /// <param name="mixdown">
-	    /// The mixdown.
-	    /// </param>
-	    /// <returns>
-	    /// A mixdown object.
-	    /// </returns>
-	    /// <exception cref="ArgumentException">
-	    /// thrown when mixdown is invalid.
-	    /// </exception>
-	    public static Mixdown NativeToMixdown(int mixdown)
+		/// <summary>
+		/// Convert an native internal handbrake mixdown to a local mixdown enum.
+		/// </summary>
+		/// <param name="mixdown">
+		/// The mixdown.
+		/// </param>
+		/// <returns>
+		/// A mixdown object.
+		/// </returns>
+		/// <exception cref="ArgumentException">
+		/// thrown when mixdown is invalid.
+		/// </exception>
+		public static Mixdown NativeToMixdown(int mixdown)
 		{
 			switch (mixdown)
 			{
+				case NativeConstants.HB_AMIXDOWN_NONE:
+					return Mixdown.None;
 				case NativeConstants.HB_AMIXDOWN_MONO:
 					return Mixdown.Mono;
 				case NativeConstants.HB_AMIXDOWN_STEREO:
@@ -125,30 +129,32 @@ namespace HandBrake.Interop
 		/// <summary>
 		/// Gets the native code for the given encoder.
 		/// </summary>
-		/// <param name="encoder">The audio encoder to convert. Cannot be AudioEncoder.Passthrough.</param>
+		/// <param name="encoder">The audio encoder to convert.</param>
 		/// <returns>The native code for the encoder.</returns>
 		public static uint AudioEncoderToNative(AudioEncoder encoder)
 		{
 			switch (encoder)
 			{
+				case AudioEncoder.Passthrough:
+					return NativeConstants.HB_ACODEC_AUTO_PASS;
 				case AudioEncoder.Ac3Passthrough:
 					return NativeConstants.HB_ACODEC_AC3_PASS;
-                case AudioEncoder.Ac3:
-                    return NativeConstants.HB_ACODEC_AC3;
+				case AudioEncoder.Ac3:
+					return NativeConstants.HB_ACODEC_AC3;
 				case AudioEncoder.Faac:
 					return NativeConstants.HB_ACODEC_FAAC;
-                case AudioEncoder.ffaac:
-			        return NativeConstants.HB_ACODEC_FFAAC;
-                case AudioEncoder.AacPassthru:
-			        return NativeConstants.HB_ACODEC_AAC_PASS;
+				case AudioEncoder.ffaac:
+					return NativeConstants.HB_ACODEC_FFAAC;
+				case AudioEncoder.AacPassthru:
+					return NativeConstants.HB_ACODEC_AAC_PASS;
 				case AudioEncoder.Lame:
 					return NativeConstants.HB_ACODEC_LAME;
-                case AudioEncoder.Mp3Passthru:
-                    return NativeConstants.HB_ACODEC_MP3_PASS;
-                case AudioEncoder.DtsPassthrough:
-			        return NativeConstants.HB_ACODEC_DCA_PASS;
-                case AudioEncoder.DtsHDPassthrough:
-			        return NativeConstants.HB_ACODEC_DCA_HD_PASS;
+				case AudioEncoder.Mp3Passthru:
+					return NativeConstants.HB_ACODEC_MP3_PASS;
+				case AudioEncoder.DtsPassthrough:
+					return NativeConstants.HB_ACODEC_DCA_PASS;
+				case AudioEncoder.DtsHDPassthrough:
+					return NativeConstants.HB_ACODEC_DCA_HD_PASS;
 				case AudioEncoder.Vorbis:
 					return NativeConstants.HB_ACODEC_VORBIS;
 			}
@@ -156,16 +162,16 @@ namespace HandBrake.Interop
 			return 0;
 		}
 
-	    /// <summary>
-	    /// Convert Native HB Internal Audio int to a AudioCodec model.
-	    /// </summary>
-	    /// <param name="codec">
-	    /// The codec.
-	    /// </param>
-	    /// <returns>
-	    /// An AudioCodec object.
-	    /// </returns>
-	    public static AudioCodec NativeToAudioCodec(uint codec)
+		/// <summary>
+		/// Convert Native HB Internal Audio int to a AudioCodec model.
+		/// </summary>
+		/// <param name="codec">
+		/// The codec.
+		/// </param>
+		/// <returns>
+		/// An AudioCodec object.
+		/// </returns>
+		public static AudioCodec NativeToAudioCodec(uint codec)
 		{
 			switch (codec)
 			{

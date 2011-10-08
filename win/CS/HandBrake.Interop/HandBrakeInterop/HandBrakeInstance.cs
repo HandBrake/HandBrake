@@ -21,7 +21,7 @@ namespace HandBrake.Interop
 	using HandBrake.Interop.Model.Encoding;
 	using HandBrake.Interop.SourceData;
 
-    /// <summary>
+	/// <summary>
 	/// A wrapper for a HandBrake instance.
 	/// </summary>
 	public class HandBrakeInstance : IDisposable
@@ -431,6 +431,24 @@ namespace HandBrake.Interop
 			string x264Options = job.EncodingProfile.X264Options ?? string.Empty;
 			IntPtr originalX264Options = Marshal.StringToHGlobalAnsi(x264Options);
 			this.encodeAllocatedMemory.Add(originalX264Options);
+
+			if (!string.IsNullOrEmpty(job.EncodingProfile.X264Profile))
+			{
+				nativeJob.x264_profile = Marshal.StringToHGlobalAnsi(job.EncodingProfile.X264Profile);
+				this.encodeAllocatedMemory.Add(nativeJob.x264_profile);
+			}
+
+			if (!string.IsNullOrEmpty(job.EncodingProfile.X264Preset))
+			{
+				nativeJob.x264_preset = Marshal.StringToHGlobalAnsi(job.EncodingProfile.X264Preset);
+				this.encodeAllocatedMemory.Add(nativeJob.x264_preset);
+			}
+
+			if (!string.IsNullOrEmpty(job.EncodingProfile.X264Tune))
+			{
+				nativeJob.x264_tune = Marshal.StringToHGlobalAnsi(job.EncodingProfile.X264Tune);
+				this.encodeAllocatedMemory.Add(nativeJob.x264_tune);
+			}
 
 			if (this.subtitleScan)
 			{
@@ -1079,6 +1097,8 @@ namespace HandBrake.Interop
 			int numTracks = 0;
 
 			List<Tuple<AudioEncoding, int>> outputTrackList = this.GetOutputTracks(job, title);
+			nativeJob.acodec_fallback = (int)Converters.AudioEncoderToNative(profile.AudioEncoderFallback);
+			nativeJob.acodec_copy_mask = (int)NativeConstants.HB_ACODEC_ANY;
 
 			foreach (Tuple<AudioEncoding, int> outputTrack in outputTrackList)
 			{
@@ -1237,7 +1257,12 @@ namespace HandBrake.Interop
 					// Add this encoding for all chosen tracks
 					foreach (int chosenTrack in job.ChosenAudioTracks)
 					{
-						list.Add(new Tuple<AudioEncoding, int>(encoding, chosenTrack));
+						// In normal cases we'll never have a chosen audio track that doesn't exist but when batch encoding
+						// we just choose the first audio track without checking if it exists.
+						if (chosenTrack <= title.AudioTracks.Count)
+						{
+							list.Add(new Tuple<AudioEncoding, int>(encoding, chosenTrack));
+						}
 					}
 				}
 				else if (encoding.InputNumber <= job.ChosenAudioTracks.Count)
@@ -1316,27 +1341,7 @@ namespace HandBrake.Interop
 			hb_audio_s nativeAudio = baseStruct;
 
 			nativeAudio.config.output.track = outputTrack;
-
-			if (encoding.Encoder == AudioEncoder.Passthrough)
-			{
-				// If we've been given a general "Passthrough" codec, see if it's valid for this input track.
-				uint audioCodec = baseStruct.config.input.codec & NativeConstants.HB_ACODEC_PASS_MASK;
-				if (audioCodec > 0)
-				{
-					// We can do passthrough for this input.
-					//nativeAudio.config.output.codec = NativeConstants.HB_ACODEC_PASS_MASK | NativeConstants.HB_ACODEC_PASS_FLAG;
-					nativeAudio.config.output.codec = audioCodec | NativeConstants.HB_ACODEC_PASS_FLAG;
-				}
-				else
-				{
-					// We can't do passthrough for this input. Set it to a DTS passthrough, which will cause the track to be dropped.
-					nativeAudio.config.output.codec = NativeConstants.HB_ACODEC_DCA_PASS;
-				}
-			}
-			else
-			{
-				nativeAudio.config.output.codec = Converters.AudioEncoderToNative(encoding.Encoder);
-			}
+			nativeAudio.config.output.codec = Converters.AudioEncoderToNative(encoding.Encoder);
 
 			if (!Utilities.IsPassthrough(encoding.Encoder))
 			{
