@@ -23,21 +23,21 @@ namespace HandBrake.Interop.Model.Encoding.x264
         Animation,
 
         [Display(Name = "Grain")]
-        grain,
+        Grain,
 
         [Display(Name = "Still Image")]
-        stillimage,
+        Stillimage,
 
         [Display(Name = "PSNR")]
-        psnr,
+        Psnr,
 
         [Display(Name = "SSIM")]
-        ssim,
+        Ssim,
 
         [Display(Name = "Fast Decode")]
-        fastdecode,
+        Fastdecode,
 
         [Display(Name = "Zero Latency")]
-        zerolatency,
+        Zerolatency,
     }
 }
