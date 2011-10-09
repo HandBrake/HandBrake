@@ -33,7 +33,7 @@ namespace Handbrake.Controls
     {
         #region Private Variables
         private readonly BindingList<AudioTrack> audioTracks = new BindingList<AudioTrack>();
-        private const string Passthru = "Passthru";
+        private const string None = "None";
         private AdvancedAudio advancedAudio = new AdvancedAudio();
         /// <summary>
         /// The User Setting Service.
@@ -287,7 +287,7 @@ namespace Handbrake.Controls
                     SetMixDown(EnumHelper<Mixdown>.GetDisplay(track.MixDown));
 
                     // Configure the widgets with values
-                    if (drp_audioEncoder.Text.Contains(Passthru))
+                    if (drp_audioEncoder.Text.Contains("Passthru"))
                     {
                         drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = false;
                         track.Gain = 0;
@@ -851,7 +851,7 @@ namespace Handbrake.Controls
                     break;
             }
 
-            if (drp_audioEncoder.Text.Contains(Passthru))
+            if (drp_audioEncoder.Text.Contains("Passthru"))
             {
                 drp_audioBitrate.Items.Add("Auto");
                 defaultRate = "Auto";
@@ -909,26 +909,26 @@ namespace Handbrake.Controls
             drp_audioMix.Items.Add("Dolby Surround");
             drp_audioMix.Items.Add("Dolby Pro Logic II");
             drp_audioMix.Items.Add("6 Channel Discrete");
-            drp_audioMix.Items.Add(Passthru);
+            drp_audioMix.Items.Add(None);
 
             switch (drp_audioEncoder.Text)
             {
                 case "AAC (faac)":
                 case "AAC (ffmpeg)":
-                    drp_audioMix.Items.Remove(Passthru);
+                    drp_audioMix.Items.Remove(None);
                     drp_audioMix.SelectedItem = currentMixdown ?? "Dolby Pro Logic II";
                     break;
                 case "MP3 (lame)":
                     drp_audioMix.Items.Remove("6 Channel Discrete");
-                    drp_audioMix.Items.Remove(Passthru);
+                    drp_audioMix.Items.Remove(None);
                     drp_audioMix.SelectedItem = currentMixdown ?? "Dolby Pro Logic II";
                     break;
                 case "Vorbis (vorbis)":
-                    drp_audioMix.Items.Remove(Passthru);
+                    drp_audioMix.Items.Remove(None);
                     drp_audioMix.SelectedItem = currentMixdown ?? "Dolby Pro Logic II";
                     break;
                 case "AC3 (ffmpeg)":
-                    drp_audioMix.Items.Remove(Passthru);
+                    drp_audioMix.Items.Remove(None);
                     drp_audioMix.SelectedItem = currentMixdown ?? "Dolby Pro Logic II";
                     break;
                 case "AC3 Passthru":
@@ -936,7 +936,7 @@ namespace Handbrake.Controls
                 case "DTS-HD Passthru":
                 case "AAC Passthru":
                 case "MP3 Passthru":
-                    drp_audioMix.SelectedItem = Passthru;
+                    drp_audioMix.SelectedItem = None;
                     break;
             }
 
