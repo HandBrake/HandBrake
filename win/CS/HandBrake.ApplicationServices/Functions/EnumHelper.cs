@@ -6,6 +6,8 @@
 namespace HandBrake.ApplicationServices.Functions
 {
     using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Reflection;
@@ -67,6 +69,26 @@ namespace HandBrake.ApplicationServices.Functions
             }
 
             throw new ArgumentOutOfRangeException("The Description for the enum was not recognized.");
+        }
+
+        /// <summary>
+        /// Get a list of string names for each enum value.
+        /// </summary>
+        /// <param name="enumType">
+        /// The enum type.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of the enum
+        /// </typeparam>
+        /// <returns>
+        /// A collection of strings that represent all the enum values
+        /// </returns>
+        public static IEnumerable<string> GetEnumDisplayValues(Type enumType)
+        {
+            var strings = new Collection<string>();
+            foreach (T e in Enum.GetValues(enumType))
+                strings.Add(GetDisplay(e));
+            return strings;
         }
     }
 }
