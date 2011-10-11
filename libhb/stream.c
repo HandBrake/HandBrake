@@ -859,6 +859,10 @@ hb_stream_t * hb_stream_open( char *path, hb_title_t *title, int scan )
         }
         return d;
     }
+    else if( title && !( title->flags & HBTF_NO_IDR ) )
+    {
+        d->has_IDRs = 1;
+    }
 
     /*
      * opening for scan - delete any saved state then (re)scan the stream.
@@ -1103,6 +1107,8 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream, hb_title_t * title)
         update_ts_streams( stream, stream->pmt_info.PCR_PID, 0, -1, P, NULL );
     }
 
+    // IDRs will be search for in hb_stream_duration
+    stream->has_IDRs = 0;
     hb_stream_duration(stream, title);
 
     // One Chapter
