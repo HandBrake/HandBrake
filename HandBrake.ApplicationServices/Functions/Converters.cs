@@ -141,7 +141,7 @@ namespace HandBrake.ApplicationServices.Functions
                     return "MP3 (lame)";
                 case "vorbis":
                     return "Vorbis (vorbis)";
-                case "ac3":
+                case "ffac3":
                     return "AC3 (ffmpeg)";
                 case "copy:ac3":
                     return "AC3 Passthru";
@@ -179,7 +179,7 @@ namespace HandBrake.ApplicationServices.Functions
                     return AudioEncoder.Lame;
                 case "vorbis":
                     return AudioEncoder.Vorbis;
-                case "ac3":
+                case "ffac3":
                     return AudioEncoder.Ac3;
                 case "ffflac":
                     return AudioEncoder.ffflac;
@@ -264,7 +264,7 @@ namespace HandBrake.ApplicationServices.Functions
                 case AudioEncoder.DtsHDPassthrough:
                     return "copy:dtshd";
                 case AudioEncoder.Ac3:
-                    return "ac3";
+                    return "ffac3";
                 case AudioEncoder.AacPassthru:
                     return "copy:aac";
                 case AudioEncoder.Mp3Passthru:
