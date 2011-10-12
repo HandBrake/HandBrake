@@ -32,13 +32,27 @@ namespace Handbrake.Controls
     public partial class AudioPanel : UserControl
     {
         #region Private Variables
-        private readonly BindingList<AudioTrack> audioTracks = new BindingList<AudioTrack>();
-        private const string None = "None";
-        private AdvancedAudio advancedAudio = new AdvancedAudio();
+
         /// <summary>
         /// The User Setting Service.
         /// </summary>
         private readonly IUserSettingService UserSettingService = ServiceManager.UserSettingService;
+
+        /// <summary>
+        /// Audio Tracks
+        /// </summary>
+        private readonly BindingList<AudioTrack> audioTracks = new BindingList<AudioTrack>();
+
+        /// <summary>
+        /// Mixdown
+        /// </summary>
+        private const string None = "None";
+
+        /// <summary>
+        /// The Advanced Audio Backing object
+        /// </summary>
+        private AdvancedAudio advancedAudio = new AdvancedAudio();
+
         #endregion
 
         #region Constructor and Events
@@ -75,7 +89,10 @@ namespace Handbrake.Controls
 
         #region Properties
 
-        public BindingList<Audio> ScannedTracks { get; set; }
+        /// <summary>
+        /// Gets or sets ScannedTracks.
+        /// </summary>
+        private BindingList<Audio> ScannedTracks { get; set; }
 
         /// <summary>
         /// Gets the AudioTracks Collection
@@ -85,32 +102,6 @@ namespace Handbrake.Controls
             get
             {
                 return this.audioTracks;
-            }
-        }
-
-        /// <summary>
-        /// Gets the Estimated Bitrate for Tracks and Passthru Tracks
-        /// Returns a Size object (Encoded Tracks, Passthru Trask)
-        /// </summary>
-        public Size EstimatedBitrate
-        {
-            get
-            {
-                int encodedTracks = 0;
-                int passthruTracks = 0;
-                foreach (AudioTrack track in this.AudioTracks)
-                {
-                    if (track.Encoder == AudioEncoder.Ac3Passthrough || track.Encoder == AudioEncoder.DtsPassthrough)
-                    {
-                        passthruTracks += track.ScannedTrack.Bitrate;
-                    }
-                    else
-                    {
-                        encodedTracks += track.Bitrate;
-                    }
-                }
-
-                return new Size(encodedTracks, passthruTracks);
             }
         }
 
@@ -142,6 +133,7 @@ namespace Handbrake.Controls
             if (path.Contains("MKV"))
             {
                 drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDisplay(AudioEncoder.Vorbis));
+                drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDisplay(AudioEncoder.ffflac));
             }
 
             if (!drp_audioEncoder.Text.Contains(oldval))
@@ -185,9 +177,7 @@ namespace Handbrake.Controls
             if (tracks.Count == 0 || tracks[0].ScannedTrack.TrackNumber == 0)
             {
                 this.AutomaticTrackSelection();
-            }
-
-           
+            }  
 
             if (this.AudioListChanged != null)
                 this.AudioListChanged(this, new EventArgs());
@@ -296,6 +286,12 @@ namespace Handbrake.Controls
                     else
                     {
                         drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = true;
+                    }
+
+                    if (drp_audioEncoder.Text.Contains("Flac"))
+                    {
+                        drp_audioBitrate.Enabled = false;
+                        track.Bitrate = 0;
                     }
 
                     // Update an item in the Audio list if required.
@@ -819,7 +815,7 @@ namespace Handbrake.Controls
             string defaultRate = "160";
 
             // Remove defaults
-            drp_audioBitrate.Items.Remove("Auto");
+            drp_audioBitrate.Items.Remove("Auto");         
             drp_audioBitrate.Items.Remove("192");
             drp_audioBitrate.Items.Remove("224");
             drp_audioBitrate.Items.Remove("256");
@@ -828,6 +824,7 @@ namespace Handbrake.Controls
             drp_audioBitrate.Items.Remove("448");
             drp_audioBitrate.Items.Remove("640");
             drp_audioBitrate.Items.Remove("768");
+            drp_audioBitrate.Items.Remove("0");
 
             // Find Max and Defaults based on encoders
             switch (drp_audioEncoder.Text)
@@ -848,6 +845,11 @@ namespace Handbrake.Controls
                 case "AC3 (ffmpeg)":
                     defaultRate = "640";
                     max = 640;
+                    break;
+                case "Flac (ffmpeg)":
+                    defaultRate = "0";
+                    drp_audioBitrate.Items.Add("0");
+                    max = 0;
                     break;
             }
 
