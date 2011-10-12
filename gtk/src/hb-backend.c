@@ -3219,21 +3219,30 @@ audio_bitrate_opts_add(GtkBuilder *builder, const gchar *name, gint rate)
 	
 	g_debug("audio_bitrate_opts_add ()\n");
 
-	if (rate < 8) return;
+	if (rate >= 0 && rate < 8) return;
 
 	if (ghb_audio_bitrates[hb_audio_bitrates_count].string)
 	{
 		g_free(ghb_audio_bitrates[hb_audio_bitrates_count].string);
 	}
 	ghb_audio_bitrates[hb_audio_bitrates_count].rate = rate;
-	ghb_audio_bitrates[hb_audio_bitrates_count].string = 
-		g_strdup_printf("%d", rate);
+	if (rate < 0)
+	{
+		ghb_audio_bitrates[hb_audio_bitrates_count].string = 
+			g_strdup_printf("N/A");
+	}
+	else
+	{
+		ghb_audio_bitrates[hb_audio_bitrates_count].string = 
+			g_strdup_printf("%d", rate);
+	}
 	ghb_audio_bitrates_count = hb_audio_bitrates_count + 1;
 
 	store = get_combo_box_store(builder, name);
 	if (!find_combo_item_by_int(GTK_TREE_MODEL(store), rate, &iter))
 	{
-		str = g_strdup_printf ("<small>%d</small>", rate);
+		str = g_strdup_printf ("<small>%s</small>",
+						ghb_audio_bitrates[hb_audio_bitrates_count].string);
 		gtk_list_store_append(store, &iter);
 		gtk_list_store_set(store, &iter, 
 						   0, str, 
@@ -3247,11 +3256,12 @@ audio_bitrate_opts_add(GtkBuilder *builder, const gchar *name, gint rate)
 }
 
 static void
-audio_bitrate_opts_clean(
+audio_bitrate_opts_update(
 	GtkBuilder *builder, 
 	const gchar *name, 
 	gint first_rate, 
-	gint last_rate)
+	gint last_rate,
+	gint extra_rate)
 {
 	GtkTreeIter iter;
 	GtkListStore *store;
@@ -3270,12 +3280,14 @@ audio_bitrate_opts_clean(
 		do
 		{
 			gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, 3, &ivalue, -1);
-			if (search_rates(
+			if (ivalue != first_rate && ivalue != last_rate && 
+				!(ivalue == extra_rate && extra_rate >= first_rate) &&
+				search_rates(
 				ghb_audio_bitrates, ivalue, ghb_audio_bitrates_count) < 0)
 			{
 				done = !gtk_list_store_remove(store, &iter);
 			}
-			else if (ivalue < first || ivalue > last)
+			else if ((int)ivalue < first || (int)ivalue > last)
 			{
 				ii++;
 				gtk_list_store_set(store, &iter, 1, FALSE, -1);
@@ -3289,6 +3301,8 @@ audio_bitrate_opts_clean(
 			}
 		} while (!done);
 	}
+	if (extra_rate >= first_rate)
+		audio_bitrate_opts_add(builder, name, extra_rate);
 }
 
 static void
@@ -3327,18 +3341,13 @@ audio_bitrate_opts_set(GtkBuilder *builder, const gchar *name)
 }
 
 void
-ghb_set_passthru_bitrate_opts(GtkBuilder *builder, gint bitrate)
-{
-	audio_bitrate_opts_add(builder, "AudioBitrate", bitrate);
-}
-
-void
-ghb_set_default_bitrate_opts(
+ghb_set_bitrate_opts(
 	GtkBuilder *builder, 
 	gint first_rate, 
-	gint last_rate)
+	gint last_rate,
+	gint extra_rate)
 {
-	audio_bitrate_opts_clean(builder, "AudioBitrate", first_rate, last_rate);
+	audio_bitrate_opts_update(builder, "AudioBitrate", first_rate, last_rate, extra_rate);
 }
 
 static ghb_status_t hb_status;
@@ -4906,17 +4915,28 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 			// Make sure the mixdown is valid and pick a new one if not.
 			audio.out.mixdown = ghb_get_best_mix(aconfig, audio.out.codec, 
 													audio.out.mixdown);
-			audio.out.bitrate = 
-				ghb_settings_combo_int(asettings, "AudioBitrate");
+			double quality = ghb_settings_get_double(asettings, "AudioTrackQuality");
+			if (ghb_settings_get_boolean(asettings, "AudioTrackQualityEnable") &&
+				quality >= 0)
+			{
+				audio.out.quality = quality;
+				audio.out.bitrate = -1;
+			}
+			else
+			{
+				audio.out.quality = -1;
+				audio.out.bitrate = 
+					ghb_settings_combo_int(asettings, "AudioBitrate");
+
+				audio.out.bitrate = hb_get_best_audio_bitrate(
+					audio.out.codec, audio.out.bitrate, 
+					audio.out.samplerate, audio.out.mixdown);
+			}
 			gint srate = ghb_settings_combo_int(asettings, "AudioSamplerate");
 			if (srate == 0)	// 0 is same as source
 				audio.out.samplerate = aconfig->in.samplerate;
 			else
 				audio.out.samplerate = srate;
-
-			audio.out.bitrate = hb_get_best_audio_bitrate(
-				audio.out.codec, audio.out.bitrate, 
-				audio.out.samplerate, audio.out.mixdown);
 		}
 
 		// Add it to the jobs audio list

@@ -20,6 +20,7 @@
 #include "values.h"
 #include "callbacks.h"
 #include "presets.h"
+#include "audiohandler.h"
 #include "ghb-dvd.h"
 
 G_MODULE_EXPORT void
@@ -400,7 +401,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	count = ghb_array_len(audio_list);
 	for (ii = 0; ii < count; ii++)
 	{
-		gchar *bitrate, *samplerate, *track;
+		gchar *quality = NULL, *samplerate, *track;
 		const gchar *acodec, *mix;
 		GValue *asettings;
 		gdouble sr;
@@ -408,7 +409,19 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		asettings = ghb_array_get_nth(audio_list, ii);
 
 		acodec = ghb_settings_combo_option(asettings, "AudioEncoderActual");
-		bitrate = ghb_settings_get_string(asettings, "AudioBitrate");
+		double q = ghb_settings_get_double(asettings, "AudioTrackQuality");
+		if (ghb_settings_get_boolean(asettings, "AudioTrackQualityEnable") &&
+			q >= 0)
+		{
+			int codec = ghb_settings_combo_int(asettings, "AudioEncoderActual");
+			quality = ghb_format_quality("Quality: ", codec, q);
+		}
+		else
+		{
+			const char *br;
+			br = ghb_settings_combo_option(asettings, "AudioBitrate");
+			quality = g_strdup_printf("Bitrate: %s", br);
+		}
 		sr = ghb_settings_get_double(asettings, "AudioSamplerate");
 		samplerate = ghb_settings_get_string(asettings, "AudioSamplerate");
 		if ((int)sr == 0)
@@ -429,10 +442,10 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 			g_string_append_printf(str, "\t");
 
 		g_string_append_printf(str,
-			"<small> %s, Encoder: %s, Mixdown: %s, SampleRate: %s, Bitrate: %s</small>\n",
-			 track, acodec, mix, samplerate, bitrate);
+			"<small> %s, Encoder: %s, Mixdown: %s, SampleRate: %s, %s</small>\n",
+			 track, acodec, mix, samplerate, quality);
 		g_free(track);
-		g_free(bitrate);
+		g_free(quality);
 		g_free(samplerate);
 	}
 
@@ -503,67 +516,6 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	g_free(vol_name);
 	g_free(dest);
 	g_free(preset);
-}
-
-void
-audio_list_refresh(signal_user_data_t *ud)
-{
-	GtkTreeView *treeview;
-	GtkTreeIter iter;
-	GtkListStore *store;
-	gboolean done;
-	gint row = 0;
-	const GValue *audio_list;
-
-	g_debug("ghb_audio_list_refresh ()");
-	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list"));
-	store = GTK_LIST_STORE(gtk_tree_view_get_model(treeview));
-	if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(store), &iter))
-	{
-		do
-		{
-			const gchar *track, *codec, *br, *sr, *mix;
-			gchar *s_drc, *s_gain;
-			gint itrack;
-			gdouble drc, gain;
-			GValue *asettings;
-
-			audio_list = ghb_settings_get_value(ud->settings, "audio_list");
-			if (row >= ghb_array_len(audio_list))
-				return;
-			asettings = ghb_array_get_nth(audio_list, row);
-
-			track = ghb_settings_combo_option(asettings, "AudioTrack");
-			itrack = ghb_settings_combo_int(asettings, "AudioTrack");
-			codec = ghb_settings_combo_option(asettings, "AudioEncoderActual");
-			br = ghb_settings_combo_option(asettings, "AudioBitrate");
-			sr = ghb_settings_combo_option(asettings, "AudioSamplerate");
-			mix = ghb_settings_combo_option(asettings, "AudioMixdown");
-			gain = ghb_settings_get_double(asettings, "AudioTrackGain");
-			s_gain = g_strdup_printf("%.fdB", gain);
-
-			drc = ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
-			if (drc < 1.0)
-				s_drc = g_strdup("Off");
-			else
-				s_drc = g_strdup_printf("%.1f", drc);
-
-			gtk_list_store_set(GTK_LIST_STORE(store), &iter, 
-				// These are displayed in list
-				0, track,
-				1, codec,
-				2, br,
-				3, sr,
-				4, mix,
-				5, s_gain,
-				6, s_drc,
-				-1);
-			g_free(s_drc);
-			g_free(s_gain);
-			done = !gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter);
-			row++;
-		} while (!done);
-	}
 }
 
 static gboolean
@@ -711,7 +663,7 @@ validate_settings(signal_user_data_t *ud)
 	{
 		return FALSE;
 	}
-	audio_list_refresh(ud);
+	ghb_audio_list_refresh(ud);
 	return TRUE;
 }
 

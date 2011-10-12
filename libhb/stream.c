@@ -4923,8 +4923,8 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
             else if ( codec->codec_id == CODEC_ID_AAC )
             {
                 int len = MIN(codec->extradata_size, HB_CONFIG_MAX_SIZE);
-                memcpy(audio->priv.config.aac.bytes, codec->extradata, len);
-                audio->priv.config.aac.length = len;
+                memcpy(audio->priv.config.extradata.bytes, codec->extradata, len);
+                audio->priv.config.extradata.length = len;
                 audio->config.in.codec = HB_ACODEC_FFAAC;
             }
             else if ( codec->codec_id == CODEC_ID_MP3 )
@@ -4948,6 +4948,7 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
         set_audio_description( stream, audio,
             lang_for_code2( tag ? tag->value : "und" ) );
 
+        audio->config.in.track = id;
         hb_list_add( title->list_audio, audio );
     }
 }
@@ -5127,6 +5128,7 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
     memcpy( subtitle->extradata, codec->extradata, codec->extradata_size );
     subtitle->extradata_size = codec->extradata_size;
 
+    subtitle->track = id;
     hb_list_add(title->list_subtitle, subtitle);
 }
 

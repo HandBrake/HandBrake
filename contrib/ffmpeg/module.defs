@@ -18,6 +18,7 @@ FFMPEG.CONFIGURE.extra = \
     --disable-vaapi \
     --disable-dxva2 \
     --enable-bzlib \
+    --enable-encoder=flac \
     --enable-encoder=ac3 \
     --enable-encoder=aac \
     --enable-encoder=mpeg4 \

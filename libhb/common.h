@@ -172,6 +172,12 @@ int hb_find_closest_audio_bitrate(int bitrate);
 void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, int *low, int *high);
 int hb_get_best_audio_bitrate( uint32_t codec, int bitrate, int samplerate, int mixdown);
 int hb_get_default_audio_bitrate( uint32_t codec, int samplerate, int mixdown );
+void hb_get_audio_quality_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
+float hb_get_best_audio_quality( uint32_t codec, float quality);
+float hb_get_default_audio_quality( uint32_t codec );
+void hb_get_audio_compression_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
+float hb_get_best_audio_compression( uint32_t codec, float compression);
+float hb_get_default_audio_compression( uint32_t codec );
 
 /******************************************************************************
  * hb_job_t: settings to be filled by the UI
@@ -332,7 +338,7 @@ struct hb_job_s
 
 /* Audio starts here */
 /* Audio Codecs */
-#define HB_ACODEC_MASK      0x000FFF00
+#define HB_ACODEC_MASK      0x001FFF00
 #define HB_ACODEC_FAAC      0x00000100
 #define HB_ACODEC_LAME      0x00000200
 #define HB_ACODEC_VORBIS    0x00000400
@@ -345,7 +351,8 @@ struct hb_job_s
 #define HB_ACODEC_FFMPEG    0x00020000
 #define HB_ACODEC_DCA_HD    0x00040000
 #define HB_ACODEC_MP3       0x00080000
-#define HB_ACODEC_FF_MASK   0x000f0000
+#define HB_ACODEC_FFFLAC    0x00100000
+#define HB_ACODEC_FF_MASK   0x001f0000
 #define HB_ACODEC_PASS_FLAG 0x40000000
 #define HB_ACODEC_PASS_MASK (HB_ACODEC_MP3 | HB_ACODEC_FFAAC | HB_ACODEC_DCA_HD | HB_ACODEC_AC3 | HB_ACODEC_DCA)
 #define HB_ACODEC_AUTO_PASS (HB_ACODEC_PASS_MASK | HB_ACODEC_PASS_FLAG)
@@ -431,10 +438,12 @@ struct hb_audio_config_s
                                  * HB_ACODEC_AC3 means pass-through, then bitrate and samplerate
                                  * are ignored.
                                  */
-            int samplerate; /* Output sample rate (Hz) */
-            int samples_per_frame; /* Number of samples per frame */
-            int bitrate;    /* Output bitrate (kbps) */
-            int mixdown;    /* The mixdown format to be used for this audio track (see HB_AMIXDOWN_*) */
+            int samplerate;         /* Output sample rate (Hz) */
+            int samples_per_frame;  /* Number of samples per frame */
+            int bitrate;            /* Output bitrate (kbps) */
+            float quality;          /* Output quality */
+            float compression_level;  /* Output compression level */
+            int mixdown;            /* The mixdown format to be used for this audio track (see HB_AMIXDOWN_*) */
             double dynamic_range_compression; /* Amount of DRC that gets applied to this track */
             double gain;    /* Gain in dB. negative is quieter */
             char * name;    /* Output track name */

@@ -237,7 +237,6 @@ ghb_check_dependency(
 			continue;
 		}
 		sensitive = dep_check(ud, dep_name, &hide);
-		g_free(dep_name);
 		if (GTK_IS_ACTION(dep_object))
 		{
 			gtk_action_set_sensitive(GTK_ACTION(dep_object), sensitive);
@@ -248,13 +247,20 @@ ghb_check_dependency(
 			gtk_widget_set_sensitive(GTK_WIDGET(dep_object), sensitive);
 			if (!sensitive && hide)
 			{
-				gtk_widget_hide(GTK_WIDGET(dep_object));
+				if (gtk_widget_get_visible(GTK_WIDGET(dep_object)))
+				{
+					gtk_widget_hide(GTK_WIDGET(dep_object));
+				}
 			}
 			else
 			{
-				gtk_widget_show_now(GTK_WIDGET(dep_object));
+				if (!gtk_widget_get_visible(GTK_WIDGET(dep_object)))
+				{
+					gtk_widget_show_now(GTK_WIDGET(dep_object));
+				}
 			}
 		}
+		g_free(dep_name);
 	}
 }
 

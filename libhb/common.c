@@ -75,6 +75,7 @@ hb_encoder_t hb_audio_encoders[] =
   { "MP3 (lame)",         "lame",       HB_ACODEC_LAME,         HB_MUX_MP4|HB_MUX_MKV },
   { "MP3 Passthru",       "copy:mp3",   HB_ACODEC_MP3_PASS,     HB_MUX_MP4|HB_MUX_MKV },
   { "Vorbis (vorbis)",    "vorbis",     HB_ACODEC_VORBIS,                  HB_MUX_MKV },
+  { "FLAC (ffmpeg)",      "ffflac",     HB_ACODEC_FFFLAC,                  HB_MUX_MKV },
   { "Auto Passthru",      "copy",       HB_ACODEC_AUTO_PASS,    HB_MUX_MP4|HB_MUX_MKV } };
 int hb_audio_encoders_count = sizeof( hb_audio_encoders ) /
                               sizeof( hb_encoder_t );
@@ -211,6 +212,10 @@ int hb_find_closest_audio_bitrate(int bitrate)
     int ii;
     int result;
 
+    // Check if bitrate mode was disabled
+    if( bitrate <= 0 )
+        return bitrate;
+
     // result is highest rate if none found during search.
     // rate returned will always be <= rate asked for.
     result = hb_audio_bitrates[0].rate;
@@ -262,8 +267,19 @@ void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, in
     int channels;
 
     channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(mixdown);
-    switch (codec)
+    if( codec & HB_ACODEC_PASS_FLAG )
     {
+        // Bitrates don't apply to "lossless" audio (Passthru, FLAC)
+        *low = *high = -1;
+        return;
+    }
+    switch( codec )
+    {
+        case HB_ACODEC_FFFLAC:
+            // Bitrates don't apply to "lossless" audio (Passthru, FLAC)
+            *high = *low = -1;
+            break;
+
         case HB_ACODEC_AC3:
             *low = 32 * channels;
             if (samplerate > 24000)
@@ -432,6 +448,9 @@ int hb_get_default_audio_bitrate( uint32_t codec, int samplerate, int mixdown )
     int bitrate, channels;
     int sr_shift;
 
+    if( codec & HB_ACODEC_PASS_FLAG )
+        return -1;
+
     channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(mixdown);
 
     // Min bitrate is established such that we get good quality
@@ -440,6 +459,10 @@ int hb_get_default_audio_bitrate( uint32_t codec, int samplerate, int mixdown )
 
     switch ( codec )
     {
+        case HB_ACODEC_FFFLAC:
+            bitrate = -1;
+            sr_shift = 0;
+            break;
         case HB_ACODEC_AC3:
             if (channels == 1)
                 bitrate = 96;
@@ -453,10 +476,154 @@ int hb_get_default_audio_bitrate( uint32_t codec, int samplerate, int mixdown )
             break;
         default:
             bitrate = channels * 80;
+            break;
     }
     bitrate >>= sr_shift;
     bitrate = hb_get_best_audio_bitrate( codec, bitrate, samplerate, mixdown );
     return bitrate;
+}
+
+// Get limits and hints for the UIs.
+//
+// granularity sets the minimum step increments that should be used
+// (it's ok to round up to some nice multiple if you like)
+//
+// direction says whether 'low' limit is highest or lowest 
+// quality (direction 0 == lowest value is worst quality)
+void hb_get_audio_quality_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction)
+{
+    switch( codec )
+    {
+        case HB_ACODEC_LAME:
+            *direction = 1;
+            *granularity = 0.5;
+            *low = 0.;
+            *high = 10.0;
+            break;
+
+        case HB_ACODEC_VORBIS:
+            *direction = 0;
+            *granularity = 0.05;
+            *low = 0.;
+            *high = 1.0;
+            break;
+
+        case HB_ACODEC_CA_AAC:
+            *direction = 0;
+            *granularity = 9;
+            *low = 0.;
+            *high = 127.0;
+            break;
+
+        default:
+            *direction = 0;
+            *granularity = 1;
+            *low = *high = -1.;
+            break;
+    }
+}
+
+float hb_get_best_audio_quality( uint32_t codec, float quality)
+{
+    float low, high, granularity;
+    int direction;
+
+    hb_get_audio_quality_limits(codec, &low, &high, &granularity, &direction);
+    if (quality > high)
+        quality = high;
+    if (quality < low)
+        quality = low;
+    return quality;
+}
+
+float hb_get_default_audio_quality( uint32_t codec )
+{
+    float quality;
+    switch( codec )
+    {
+        case HB_ACODEC_LAME:
+            quality = 2.;
+            break;
+
+        case HB_ACODEC_VORBIS:
+            quality = .5;
+            break;
+
+        case HB_ACODEC_CA_AAC:
+            quality = 91.;
+            break;
+
+        default:
+            quality = -1.;
+            break;
+    }
+    return quality;
+}
+
+// Get limits and hints for the UIs.
+//
+// granularity sets the minimum step increments that should be used
+// (it's ok to round up to some nice multiple if you like)
+//
+// direction says whether 'low' limit is highest or lowest 
+// compression level (direction 0 == lowest value is worst compression level)
+void hb_get_audio_compression_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction)
+{
+    switch( codec )
+    {
+        case HB_ACODEC_FFFLAC:
+            *direction = 0;
+            *granularity = 1;
+            *high = 12;
+            *low = 0;
+            break;
+
+        case HB_ACODEC_LAME:
+            *direction = 1;
+            *granularity = 1;
+            *high = 9;
+            *low = 0;
+            break;
+
+        default:
+            *direction = 0;
+            *granularity = 1;
+            *low = *high = -1;
+            break;
+    }
+}
+
+float hb_get_best_audio_compression( uint32_t codec, float compression)
+{
+    float low, high, granularity;
+    int direction;
+
+    hb_get_audio_compression_limits( codec, &low, &high, &granularity, &direction );
+    if( compression > high )
+        compression = high;
+    if( compression < low )
+        compression = low;
+    return compression;
+}
+
+float hb_get_default_audio_compression( uint32_t codec )
+{
+    float compression;
+    switch( codec )
+    {
+        case HB_ACODEC_FFFLAC:
+            compression = 5;
+            break;
+
+        case HB_ACODEC_LAME:
+            compression = 2;
+            break;
+
+        default:
+            compression = -1;
+            break;
+    }
+    return compression;
 }
 
 int hb_get_best_mixdown( uint32_t codec, int layout, int mixdown )
@@ -527,7 +694,7 @@ int hb_get_best_mixdown( uint32_t codec, int layout, int mixdown )
     }
     // return the best that is not greater than the requested mixdown
     // 0 means the caller requested the best available mixdown
-    if( best_mixdown > mixdown && mixdown != 0 )
+    if( best_mixdown > mixdown && mixdown > 0 )
         best_mixdown = mixdown;
     
     return best_mixdown;
@@ -539,6 +706,7 @@ int hb_get_default_mixdown( uint32_t codec, int layout )
     switch (codec)
     {
         // the AC3 encoder defaults to the best mixdown up to 6-channel
+        case HB_ACODEC_FFFLAC:
         case HB_ACODEC_AC3:
             mixdown = HB_AMIXDOWN_6CH;
             break;
@@ -1328,11 +1496,14 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg)
     /* Initalize some sensable defaults */
     audiocfg->in.track = audiocfg->out.track = 0;
     audiocfg->out.codec = HB_ACODEC_FAAC;
-    audiocfg->out.bitrate = 128;
-    audiocfg->out.samplerate = 44100;
-    audiocfg->out.mixdown = HB_AMIXDOWN_DOLBYPLII;
+    audiocfg->out.bitrate = -1;
+    audiocfg->out.quality = -1;
+    audiocfg->out.compression_level = -1;
+    audiocfg->out.samplerate = -1;
+    audiocfg->out.mixdown = -1;
     audiocfg->out.dynamic_range_compression = 0;
     audiocfg->out.name = NULL;
+
 }
 
 /**********************************************************************
@@ -1386,6 +1557,8 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
         audio->config.out.codec &= ~HB_ACODEC_PASS_FLAG;
         audio->config.out.samplerate = audiocfg->out.samplerate;
         audio->config.out.bitrate = audiocfg->out.bitrate;
+        audio->config.out.compression_level = audiocfg->out.compression_level;
+        audio->config.out.quality = audiocfg->out.quality;
         audio->config.out.dynamic_range_compression = audiocfg->out.dynamic_range_compression;
         audio->config.out.mixdown = audiocfg->out.mixdown;
         audio->config.out.gain = audiocfg->out.gain;

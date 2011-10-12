@@ -163,6 +163,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
             /* We go ahead and assign values to our audio->out.<properties> */
             audio->out.track = audio->in.track;
             audio->out.codec = [[[anAudio codec] objectForKey: keyAudioCodec] intValue];
+            audio->out.compression_level = hb_get_default_audio_compression(audio->out.codec);
             audio->out.mixdown = [[[anAudio mixdown] objectForKey: keyAudioMixdown] intValue];
             audio->out.bitrate = [[[anAudio bitRate] objectForKey: keyAudioBitrate] intValue];
             audio->out.samplerate = [sampleRateToUse intValue];

@@ -35,6 +35,19 @@ struct hb_mux_data_s
     int       sub_format;
 };
 
+static uint8_t * create_flac_header( uint8_t *data, int size )
+{
+    uint8_t * out;
+    uint8_t header[8] = {
+        0x66, 0x4C, 0x61, 0x43, 0x80, 0x00, 0x00, 0x22
+    };
+
+    out = malloc( size + 8 );
+    memcpy( out, header, 8 );
+    memcpy( out + 8, data, size );
+    return out;
+}
+
 /**********************************************************************
  * MKVInit
  **********************************************************************
@@ -228,12 +241,22 @@ static int MKVInit( hb_mux_object_t * m )
                     track->codecPrivateSize = cp_size;
                 }
                 break;
+            case HB_ACODEC_FFFLAC:
+                if( audio->priv.config.extradata.bytes )
+                {
+                    track->codecPrivate = create_flac_header( 
+                            audio->priv.config.extradata.bytes,
+                            audio->priv.config.extradata.length );
+                    track->codecPrivateSize = audio->priv.config.extradata.length + 8;
+                }
+                track->codecID = MK_ACODEC_FLAC;
+                break;
             case HB_ACODEC_FAAC:
             case HB_ACODEC_FFAAC:
             case HB_ACODEC_CA_AAC:
             case HB_ACODEC_CA_HAAC:
-                track->codecPrivate = audio->priv.config.aac.bytes;
-                track->codecPrivateSize = audio->priv.config.aac.length;
+                track->codecPrivate = audio->priv.config.extradata.bytes;
+                track->codecPrivateSize = audio->priv.config.extradata.length;
                 track->codecID = MK_ACODEC_AAC;
                 break;
             default:
@@ -267,7 +290,8 @@ static int MKVInit( hb_mux_object_t * m )
         }
 //        track->defaultDuration = job->arate * 1000;
         mux_data->track = mk_createTrack(m->file, track);
-        if (audio->config.out.codec == HB_ACODEC_VORBIS && track->codecPrivate != NULL)
+        if ( audio->config.out.codec == HB_ACODEC_VORBIS ||
+             audio->config.out.codec == HB_ACODEC_FFFLAC )
           free(track->codecPrivate);
     }
 
@@ -543,6 +567,37 @@ static int MKVEnd( hb_mux_object_t * m )
         mk_createTagSimple( m->file, "DATE_RELEASED", md->release_date );
         // mk_createTagSimple( m->file, "", md->album );
         mk_createTagSimple( m->file, MK_TAG_GENRE, md->genre );
+    }
+
+    // Update and track private data that can change during
+    // encode.
+    int i;
+    for( i = 0; i < hb_list_count( title->list_audio ); i++ )
+    {
+        mk_Track  * track;
+        hb_audio_t    * audio;
+
+        audio = hb_list_item( title->list_audio, i );
+        track = audio->priv.mux_data->track;
+
+        switch (audio->config.out.codec & HB_ACODEC_MASK)
+        {
+            case HB_ACODEC_FFFLAC:
+                if( audio->priv.config.extradata.bytes )
+                {
+                    uint8_t *header;
+                    header = create_flac_header( 
+                            audio->priv.config.extradata.bytes,
+                            audio->priv.config.extradata.length );
+                    mk_updateTrackPrivateData( m->file, track,
+                        header,
+                        audio->priv.config.extradata.length + 8 );
+                    free( header );
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     if( mk_close(m->file) < 0 )

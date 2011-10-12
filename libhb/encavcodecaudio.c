@@ -95,7 +95,17 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
             break;
     }
 
-    context->bit_rate = audio->config.out.bitrate * 1000;
+    if( audio->config.out.bitrate > 0 )
+        context->bit_rate = audio->config.out.bitrate * 1000;
+    else if( audio->config.out.quality >= 0 )
+    {
+        context->global_quality = audio->config.out.quality * FF_QP2LAMBDA;
+        context->flags |= CODEC_FLAG_QSCALE;
+    }
+
+    if( audio->config.out.compression_level >= 0 )
+        context->compression_level = audio->config.out.compression_level;
+
     context->sample_rate = audio->config.out.samplerate;
     context->channels = pv->out_discrete_channels;
     // Try to set format to float.  Fallback to whatever is supported.
@@ -120,10 +130,10 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
 
     pv->list = hb_list_init();
 
-    if ( w->codec_param == CODEC_ID_AAC && context->extradata )
+    if ( context->extradata )
     {
-        memcpy( w->config->aac.bytes, context->extradata, context->extradata_size );
-        w->config->aac.length = context->extradata_size;
+        memcpy( w->config->extradata.bytes, context->extradata, context->extradata_size );
+        w->config->extradata.length = context->extradata_size;
     }
 
     return 0;
@@ -134,6 +144,19 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
  ***********************************************************************
  *
  **********************************************************************/
+// Some encoders (e.g. flac) require a final NULL encode in order to
+// finalize things.
+static void Finalize( hb_work_object_t * w )
+{
+    hb_work_private_t * pv = w->private_data;
+    hb_buffer_t * buf = hb_buffer_init( pv->output_bytes );
+
+    // Finalize with NULL input needed by FLAC to generate md5sum
+    // in context extradata
+    avcodec_encode_audio( pv->context, buf->data, buf->alloc, NULL );
+    hb_buffer_close( &buf );
+}
+
 static void encavcodecaClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
@@ -142,6 +165,7 @@ static void encavcodecaClose( hb_work_object_t * w )
     {
         if( pv->context )
         {
+            Finalize( w );
             hb_deep_log( 2, "encavcodeca: closing libavcodec" );
             if ( pv->context->codec )
                 avcodec_flush_buffers( pv->context );
@@ -238,6 +262,35 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     return buf;
 }
 
+static hb_buffer_t * Flush( hb_work_object_t * w )
+{
+    hb_work_private_t * pv = w->private_data;
+    hb_buffer_t *first, *buf, *last;
+
+    first = last = buf = Encode( w );
+    while( buf )
+    {
+        last = buf;
+        buf->next = Encode( w );
+        buf = buf->next;
+    }
+
+    if( last )
+    {
+        last->next = hb_buffer_init( pv->output_bytes );
+        buf = last->next;
+    }
+    else
+    {
+        first = buf = hb_buffer_init( pv->output_bytes );
+    }
+    // Finalize with NULL input needed by FLAC to generate md5sum
+    // in context extradata
+    avcodec_encode_audio( pv->context, buf->data, buf->alloc, NULL );
+    buf->size = 0;
+    return first;
+}
+
 /***********************************************************************
  * Work
  ***********************************************************************
@@ -252,9 +305,8 @@ static int encavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     if ( in->size <= 0 )
     {
         /* EOF on input - send it downstream & say we're done */
-        *buf_out = in;
-        *buf_in = NULL;
-       return HB_WORK_DONE;
+        *buf_out = Flush( w );
+        return HB_WORK_DONE;
     }
 
     if ( pv->context == NULL || pv->context->codec == NULL )

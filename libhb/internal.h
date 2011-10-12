@@ -307,7 +307,7 @@ union hb_esconfig_u
     {
         uint8_t bytes[HB_CONFIG_MAX_SIZE];
         int     length;
-    } aac;
+    } extradata;
 
     struct
     {

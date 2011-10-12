@@ -36,5 +36,7 @@ gchar* ghb_get_user_audio_lang(
 void ghb_audio_list_refresh_selected(signal_user_data_t *ud);
 gint ghb_select_audio_codec(gint mux, hb_audio_config_t *aconfig, gint acodec, gint fallback_acodec, gint copy_mask);
 int ghb_get_copy_mask(GValue *settings);
+void ghb_audio_list_refresh(signal_user_data_t *ud);
+char * ghb_format_quality( const char *prefix, int codec, double quality );
 
 #endif // _AUDIOHANDLER_H_

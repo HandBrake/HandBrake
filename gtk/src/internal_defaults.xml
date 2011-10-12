@@ -318,6 +318,10 @@
 				<integer>1</integer>
 				<key>AudioTrackDescription</key>
 				<string></string>
+				<key>AudioTrackQualityEnable</key>
+				<false />
+				<key>AudioTrackQuality</key>
+				<real>-1</real>
 				<key>AudioTrackGain</key>
 				<real>0</real>
 				<key>AudioTrackDRCSlider</key>

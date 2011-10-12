@@ -155,8 +155,8 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
         *job->die = 1;
         return 0;
     }
-    memcpy( w->config->aac.bytes, bytes, length );
-    w->config->aac.length = length;
+    memcpy( w->config->extradata.bytes, bytes, length );
+    w->config->extradata.length = length;
     free( bytes );
 
     pv->list = hb_list_init();

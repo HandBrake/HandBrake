@@ -56,16 +56,6 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
 
     hb_log( "encvorbis: opening libvorbis" );
 
-    /* 28kbps/channel seems to be the minimum for 6ch vorbis. */
-    int min_bitrate = 28 * pv->out_discrete_channels;
-    if (pv->out_discrete_channels > 2 && audio->config.out.bitrate < min_bitrate)
-    {
-        hb_log( "encvorbis: Selected bitrate (%d kbps) too low for %d channel audio.", audio->config.out.bitrate, pv->out_discrete_channels);
-        hb_log( "encvorbis: Resetting bitrate to %d kbps", min_bitrate);
-        /* Naughty! We shouldn't modify the audio from here. */
-        audio->config.out.bitrate = min_bitrate;
-    }
-
     /* init */
     for( i = 0; i < 3; i++ )
     {
@@ -74,12 +64,36 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
         memset( w->config->vorbis.headers[i], 0, sizeof( ogg_packet ) );
     }
     vorbis_info_init( &pv->vi );
-    if( vorbis_encode_setup_managed( &pv->vi, pv->out_discrete_channels,
-          audio->config.out.samplerate, -1, 1000 * audio->config.out.bitrate, -1 ) )
+
+    if( audio->config.out.bitrate > 0 )
     {
-        hb_error( "encvorbis: vorbis_encode_setup_managed failed.\n" );
-        *job->die = 1;
-        return 0;
+        /* 28kbps/channel seems to be the minimum for 6ch vorbis. */
+        int min_bitrate = 28 * pv->out_discrete_channels;
+        if (pv->out_discrete_channels > 2 && audio->config.out.bitrate < min_bitrate)
+        {
+            hb_log( "encvorbis: Selected bitrate (%d kbps) too low for %d channel audio.", audio->config.out.bitrate, pv->out_discrete_channels);
+            hb_log( "encvorbis: Resetting bitrate to %d kbps", min_bitrate);
+            /* Naughty! We shouldn't modify the audio from here. */
+            audio->config.out.bitrate = min_bitrate;
+        }
+
+        if( vorbis_encode_setup_managed( &pv->vi, pv->out_discrete_channels,
+              audio->config.out.samplerate, -1, 1000 * audio->config.out.bitrate, -1 ) )
+        {
+            hb_error( "encvorbis: vorbis_encode_setup_managed failed.\n" );
+            *job->die = 1;
+            return 0;
+        }
+    }
+    else if( audio->config.out.quality >= 0 )
+    {
+        if( vorbis_encode_setup_vbr( &pv->vi, pv->out_discrete_channels,
+              audio->config.out.samplerate, audio->config.out.quality ) )
+        {
+            hb_error( "encvorbis: vorbis_encode_setup_vbr failed.\n" );
+            *job->die = 1;
+            return 0;
+        }
     }
 
     if( vorbis_encode_ctl( &pv->vi, OV_ECTL_RATEMANAGE2_SET, NULL ) ||

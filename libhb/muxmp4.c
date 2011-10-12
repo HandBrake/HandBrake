@@ -379,8 +379,8 @@ static int MP4Init( hb_mux_object_t * m )
             case HB_ACODEC_DCA_HD:
             case HB_ACODEC_DCA:
             {
-                uint8_t audio_type;
-                int samplerate, samples_per_frame, channels, config_len;
+                uint8_t audio_type = MP4_MPEG4_AUDIO_TYPE;
+                int samplerate, samples_per_frame, channels, config_len = 0;
                 uint8_t *config_bytes = NULL;
 
                 switch ( audio->config.out.codec & HB_ACODEC_MASK )
@@ -391,8 +391,8 @@ static int MP4Init( hb_mux_object_t * m )
                     case HB_ACODEC_CA_HAAC:
                     {
                         audio_type = MP4_MPEG4_AUDIO_TYPE;
-                        config_bytes = audio->priv.config.aac.bytes;
-                        config_len = audio->priv.config.aac.length;
+                        config_bytes = audio->priv.config.extradata.bytes;
+                        config_len = audio->priv.config.extradata.length;
                     } break;
                     case HB_ACODEC_LAME:
                     case HB_ACODEC_MP3:

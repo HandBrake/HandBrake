@@ -72,7 +72,9 @@ static char * dynamic_range_compression = NULL;
 static char * audio_gain  = NULL;
 static char * atracks     = NULL;
 static char * arates      = NULL;
-static char * abitrates   = NULL;
+static char ** abitrates  = NULL;
+static char ** aqualities  = NULL;
+static char ** acompressions  = NULL;
 static char * acodec_fallback = NULL;
 static char * acodecs     = NULL;
 static char ** anames      = NULL;
@@ -156,6 +158,8 @@ static int  HandleEvents( hb_handle_t * h );
 
 static int get_acodec_for_string( char *codec );
 static int is_sample_rate_valid(int rate);
+static void str_vfree( char **strv );
+static char** str_split( char *str, char delem );
 
 #ifdef __APPLE_CC__
 static char* bsd_name_for_path(char *path);
@@ -356,7 +360,9 @@ int main( int argc, char ** argv )
     if( audio_gain ) free( audio_gain );
     if( atracks ) free( atracks );
     if( arates ) free( arates );
-    if( abitrates ) free( abitrates );
+    str_vfree( abitrates );
+    str_vfree( aqualities );
+    str_vfree( acompressions );
     if( acodecs ) free( acodecs );
     if (native_language ) free (native_language );
 	if( advanced_opts ) free (advanced_opts );
@@ -590,6 +596,8 @@ static int HandleEvents( hb_handle_t * h )
             /* Audio argument string parsing variables */
             int acodec = 0;
             int abitrate = 0;
+            float aquality = 0;
+            float acompression = 0;
             int arate = 0;
             int mixdown = HB_AMIXDOWN_DOLBYPLII;
             double d_r_c = 0;
@@ -705,7 +713,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !abitrates )
                     {
-                        abitrates = strdup("160,160");
+                        abitrates = str_split("160,160", ',');
                     }
                     if( !mixdowns )
                     {
@@ -751,7 +759,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !abitrates )
                     {
-                        abitrates = strdup("160");
+                        abitrates = str_split("160", ',');
                     }
                     if( !mixdowns )
                     {
@@ -792,7 +800,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !abitrates )
                     {
-                        abitrates = strdup("128");
+                        abitrates = str_split("128", ',');
                     }
                     if( !mixdowns )
                     {
@@ -836,7 +844,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !abitrates )
                     {
-                        abitrates = strdup("160");
+                        abitrates = str_split("160", ',');
                     }
                     if( !mixdowns )
                     {
@@ -880,7 +888,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !abitrates )
                     {
-                        abitrates = strdup("160");
+                        abitrates = str_split("160", ',');
                     }
                     if( !mixdowns )
                     {
@@ -922,7 +930,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !abitrates )
                     {
-                        abitrates = strdup("160,160");
+                        abitrates = str_split("160,160", ',');
                     }
                     if( !mixdowns )
                     {
@@ -970,7 +978,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !abitrates )
                     {
-                        abitrates = strdup("160,160");
+                        abitrates = str_split("160,160", ',');
                     }
                     if( !mixdowns )
                     {
@@ -1013,7 +1021,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !abitrates )
                     {
-                        abitrates = strdup("128");
+                        abitrates = str_split("128", ',');
                     }
                     if( !mixdowns )
                     {
@@ -1055,7 +1063,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !abitrates )
                     {
-                        abitrates = strdup("128");
+                        abitrates = str_split("128", ',');
                     }
                     if( !mixdowns )
                     {
@@ -1099,7 +1107,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !abitrates )
                     {
-                        abitrates = strdup("160");
+                        abitrates = str_split("160", ',');
                     }
                     if( !mixdowns )
                     {
@@ -1144,7 +1152,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !abitrates )
                     {
-                        abitrates = strdup("160,160");
+                        abitrates = str_split("160,160", ',');
                     }
                     if( !mixdowns )
                     {
@@ -1189,7 +1197,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !abitrates )
                     {
-                        abitrates = strdup("160");
+                        abitrates = str_split("160", ',');
                     }
                     if( !mixdowns )
                     {
@@ -1225,7 +1233,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !abitrates )
                     {
-                        abitrates = strdup("160");
+                        abitrates = str_split("160", ',');
                     }
                     if( !mixdowns )
                     {
@@ -1757,6 +1765,7 @@ static int HandleEvents( hb_handle_t * h )
             /* Audio Codecs */
 
             /* Sample Rate */
+            int auto_sample_rate = 0;
             i = 0;
             if( arates )
             {
@@ -1783,6 +1792,7 @@ static int HandleEvents( hb_handle_t * h )
                         if ( !strcasecmp( token, "auto" ) )
                         {
                             arate = audio->in.samplerate;
+                            auto_sample_rate = 1;
                         }
                         if (!is_sample_rate_valid(arate))
                         {
@@ -1806,11 +1816,15 @@ static int HandleEvents( hb_handle_t * h )
                 /* We have fewer inputs than audio tracks, use default sample rate.
                  * Unless we only have one input, then use that for all tracks.
                  */
-                if (i != 1)
-                    arate = audio->in.samplerate;
+                int use_default = 0;
+                if( i != 1 || auto_sample_rate )
+                    use_default = 1;
+
                 for ( ; i < num_audio_tracks; i++)
                 {
                     audio = hb_list_audio_config_item(job->list_audio, i);
+                    if( use_default )
+                        arate = audio->in.samplerate;
                     audio->out.samplerate = arate;
                 }
             }
@@ -1840,23 +1854,14 @@ static int HandleEvents( hb_handle_t * h )
                     token = strtok(NULL, ",");
                 }
             }
-            if (i < num_audio_tracks)
+            if (i < num_audio_tracks && i == 1)
             {
-                /* We have fewer inputs than audio tracks, use the default mixdown for the rest. Unless
-                 * we only have one input, then use that.
+                /* We have fewer inputs than audio tracks
+                 * and we only have one input, then use that.
                  */
-                int use_default = 0;
-                if (i != 1)
-                    use_default = 1;
-
                 for (; i < num_audio_tracks; i++)
                 {
                     audio = hb_list_audio_config_item(job->list_audio, i);
-                    if (use_default)
-                    {
-                        // Get default for this tracks codec and layout
-                        mixdown = hb_get_default_mixdown( audio->out.codec, audio->in.channel_layout );
-                    }
                     audio->out.mixdown = mixdown;
                 }
             }
@@ -1866,11 +1871,9 @@ static int HandleEvents( hb_handle_t * h )
             i = 0;
             if( abitrates )
             {
-                char * token = strtok(abitrates, ",");
-                if (token == NULL)
-                    token = abitrates;
-                while ( token != NULL )
+                for ( i = 0; abitrates[i] != NULL && i < num_audio_tracks; i++ )
                 {
+                    char * token = abitrates[i];
                     abitrate = atoi(token);
                     audio = hb_list_audio_config_item(job->list_audio, i);
 
@@ -1884,32 +1887,81 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         fprintf(stderr, "Ignoring bitrate %d, no audio tracks\n", abitrate);
                     }
-                    token = strtok(NULL, ",");
                 }
             }
-            if (i < num_audio_tracks)
+            if (i < num_audio_tracks && i == 1)
             {
-                /* We have fewer inputs than audio tracks, use the default bitrate
-                 * for the remaining tracks. Unless we only have one input, then use
+                /* We have fewer inputs than audio tracks,
+                 * and we only have one input, use
                  * that for all tracks.
                  */
-                int use_default = 0;
-                if (i != 1)
-                    use_default = 1;
-
                 for (; i < num_audio_tracks; i++)
                 {
                     audio = hb_list_audio_config_item(job->list_audio, i);
-                    if (use_default)
-                    {
-                        abitrate = hb_get_default_audio_bitrate( 
-                                        audio->out.codec, audio->out.samplerate,
-                                        audio->out.mixdown );
-                    }
                     audio->out.bitrate = abitrate;
                 }
             }
             /* Audio Bitrate */
+
+            /* Audio Quality */
+            i = 0;
+            if( aqualities )
+            {
+                for ( i = 0; aqualities[i] != NULL && i < num_audio_tracks; i++ )
+                {
+                    char * token = aqualities[i];
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    if( audio == NULL )
+                    {
+                        fprintf(stderr, "Ignoring quality %.3f, no audio tracks\n", aquality);
+                    }
+                    else if( *token != 0 )
+                    {
+                        aquality = atof(token);
+
+                        audio->out.quality = aquality;
+                        audio->out.bitrate = -1;
+                    }
+                }
+            }
+            if (i < num_audio_tracks && i == 1)
+            {
+                /* We have fewer inputs than audio tracks,
+                 * and we only have one input, use
+                 * that for all tracks.
+                 */
+                for (; i < num_audio_tracks; i++)
+                {
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    if( audio->out.bitrate <= 0 )
+                        audio->out.quality = aquality;
+                }
+            }
+            /* Audio Quality */
+
+            /* Audio Compression Level */
+            i = 0;
+            if( acompressions )
+            {
+                for ( i = 0; acompressions[i] != NULL && i < num_audio_tracks; i++ )
+                {
+                    char * token = acompressions[i];
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    if( audio == NULL )
+                    {
+                        fprintf(stderr, "Ignoring compression level %.2f, no audio tracks\n", acompression);
+                    }
+                    else if( *token != 0 )
+                    {
+                        acompression = atof(token);
+
+                        audio->out.compression_level = acompression;
+                    }
+                }
+            }
+            // Compression levels are codec specific values.  So don't
+            // try to apply to other tracks.
+            /* Audio Compression Level */
 
             /* Audio DRC */
             i = 0;
@@ -2763,6 +2815,12 @@ static void ShowHelp()
     "    -B, --ab <kb/s>         Set audio bitrate(s) (default: depends on the\n"
     "                            selected codec, mixdown and samplerate)\n"
     "                            Separated by commas for more than one audio track.\n"
+    "    -Q, --aq <quality>      Set audio quality metric (default: depends on the\n"
+    "                            selected codec)\n"
+    "                            Separated by commas for more than one audio track.\n"
+    "    -C, --ac <compression>  Set audio compression metric (default: depends on the\n"
+    "                            selected codec)\n"
+    "                            Separated by commas for more than one audio track.\n"
     "    -6, --mixdown <string>  Format(s) for surround sound downmixing\n"
     "                            Separated by commas for more than one audio track.\n"
     "                            (mono/stereo/dpl1/dpl2/6ch, default: up to 6ch for ac3,\n"
@@ -3117,6 +3175,8 @@ static int ParseOptions( int argc, char ** argv )
             { "vb",          required_argument, NULL,    'b' },
             { "quality",     required_argument, NULL,    'q' },
             { "ab",          required_argument, NULL,    'B' },
+            { "aq",          required_argument, NULL,    'Q' },
+            { "ac",          required_argument, NULL,    'C' },
             { "rate",        required_argument, NULL,    'r' },
             { "arate",       required_argument, NULL,    'R' },
             { "encopts",     required_argument, NULL,    'x' },
@@ -3152,7 +3212,7 @@ static int ParseOptions( int argc, char ** argv )
 
         cur_optind = optind;
         c = getopt_long( argc, argv,
-                         "hv::uC:f:4i:Io:t:c:m::M:a:A:6:s:UF::N:e:E:"
+                         "hv::uC:f:4i:Io:t:c:m::M:a:A:6:s:UF::N:e:E:Q:C:"
                          "2dD:7895gOw:l:n:b:q:S:B:r:R:x:TY:X:Z:z",
                          long_options, &option_index );
         if( c < 0 )
@@ -3524,10 +3584,13 @@ static int ParseOptions( int argc, char ** argv )
                 vquality = atof( optarg );
                 break;
             case 'B':
-                if( optarg != NULL )
-                {
-                    abitrates = strdup( optarg );
-                }
+                abitrates = str_split( optarg, ',' );
+                break;
+            case 'Q':
+                aqualities = str_split( optarg, ',' );
+                break;
+            case 'C':
+                acompressions = str_split( optarg, ',' );
                 break;
             case 'x':
                 advanced_opts = strdup( optarg );

@@ -200,33 +200,58 @@ int encCoreAudioInit( hb_work_object_t * w, hb_job_t * job, enum AAC_MODE mode )
     AudioConverterSetProperty( pv->converter, kAudioConverterCodecQuality,
                                sizeof( tmp ), &tmp );
 
-    // set encoder bitrate control mode to constrained variable
-    tmp = kAudioCodecBitRateControlMode_VariableConstrained;
-    AudioConverterSetProperty( pv->converter, kAudioCodecPropertyBitRateControlMode,
-                               sizeof( tmp ), &tmp );
+    if( audio->config.out.bitrate > 0 )
+    {
+        // set encoder bitrate control mode to constrained variable
+        tmp = kAudioCodecBitRateControlMode_VariableConstrained;
+        AudioConverterSetProperty( pv->converter, kAudioCodecPropertyBitRateControlMode,
+                                   sizeof( tmp ), &tmp );
 
-    // get available bitrates
-    AudioValueRange *bitrates;
-    ssize_t bitrateCounts;
-    err = AudioConverterGetPropertyInfo( pv->converter, kAudioConverterApplicableEncodeBitRates,
-                                         &tmpsiz, NULL);
-    bitrates = malloc( tmpsiz );
-    err = AudioConverterGetProperty( pv->converter, kAudioConverterApplicableEncodeBitRates,
-                                     &tmpsiz, bitrates);
-    bitrateCounts = tmpsiz / sizeof( AudioValueRange );
+        // get available bitrates
+        AudioValueRange *bitrates;
+        ssize_t bitrateCounts;
+        err = AudioConverterGetPropertyInfo( pv->converter, kAudioConverterApplicableEncodeBitRates,
+                                             &tmpsiz, NULL);
+        bitrates = malloc( tmpsiz );
+        err = AudioConverterGetProperty( pv->converter, kAudioConverterApplicableEncodeBitRates,
+                                         &tmpsiz, bitrates);
+        bitrateCounts = tmpsiz / sizeof( AudioValueRange );
 
-    // set bitrate
-    tmp = audio->config.out.bitrate * 1000;
-    if( tmp < bitrates[0].mMinimum )
-        tmp = bitrates[0].mMinimum;
-    if( tmp > bitrates[bitrateCounts-1].mMinimum )
-        tmp = bitrates[bitrateCounts-1].mMinimum;
-    free( bitrates );
-    if( tmp != audio->config.out.bitrate * 1000 )
-        hb_log( "encca_aac: sanitizing track %d audio bitrate %d to %"PRIu32"",
-                audio->config.out.track, audio->config.out.bitrate, tmp/1000 );
-    AudioConverterSetProperty( pv->converter, kAudioConverterEncodeBitRate,
-                               sizeof( tmp ), &tmp );
+        // set bitrate
+        tmp = audio->config.out.bitrate * 1000;
+        if( tmp < bitrates[0].mMinimum )
+            tmp = bitrates[0].mMinimum;
+        if( tmp > bitrates[bitrateCounts-1].mMinimum )
+            tmp = bitrates[bitrateCounts-1].mMinimum;
+        free( bitrates );
+        if( tmp != audio->config.out.bitrate * 1000 )
+            hb_log( "encca_aac: sanitizing track %d audio bitrate %d to %"PRIu32"",
+                    audio->config.out.track, audio->config.out.bitrate, tmp/1000 );
+        AudioConverterSetProperty( pv->converter, kAudioConverterEncodeBitRate,
+                                   sizeof( tmp ), &tmp );
+    }
+    else if( audio->config.out.quality >= 0 )
+    {
+        if( mode != AAC_MODE_LC )
+        {
+            hb_log( "encCoreAudioInit: internal error, VBR set but not applicable" );
+            return 1;
+        }
+        // set encoder bitrate control mode to variable
+        tmp = kAudioCodecBitRateControlMode_Variable;
+        AudioConverterSetProperty( pv->converter, kAudioCodecPropertyBitRateControlMode,
+                                   sizeof( tmp ), &tmp );
+
+        // set quality
+        tmp = audio->config.out.quality;
+        AudioConverterSetProperty( pv->converter, kAudioCodecPropertySoundQualityForVBR,
+                                   sizeof( tmp ), &tmp );
+    }
+    else
+    {
+        hb_log( "encCoreAudioInit: internal error, bitrate/quality not set" );
+        return 1;
+    }
 
     // get real input
     tmpsiz = sizeof( input );
@@ -272,14 +297,14 @@ int encCoreAudioInit( hb_work_object_t * w, hb_job_t * job, enum AAC_MODE mode )
     tmp = HB_CONFIG_MAX_SIZE;
     AudioConverterGetProperty( pv->converter,
                                kAudioConverterCompressionMagicCookie,
-                               &tmp, w->config->aac.bytes );
+                               &tmp, w->config->extradata.bytes );
     // CoreAudio returns a complete ESDS, but we only need
     // the DecoderSpecific info.
     UInt8* buffer = NULL;
-    ReadESDSDescExt(w->config->aac.bytes, &buffer, &tmpsiz, 0);
-    w->config->aac.length = tmpsiz;
-    memmove( w->config->aac.bytes, buffer,
-             w->config->aac.length );
+    ReadESDSDescExt(w->config->extradata.bytes, &buffer, &tmpsiz, 0);
+    w->config->extradata.length = tmpsiz;
+    memmove( w->config->extradata.bytes, buffer,
+             w->config->extradata.length );
 
     pv->list = hb_list_init();
     pv->buf = NULL;

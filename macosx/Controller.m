@@ -3781,6 +3781,7 @@ bool one_burned = FALSE;
             audio->out.gain = [[queueToApply objectForKey: [prefix stringByAppendingString: @"TrackGainSlider"]] floatValue];
 			prefix = [NSString stringWithFormat: @"JobAudio%d", counter + 1];
 			audio->out.codec = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Encoder"]] intValue];
+			audio->out.compression_level = hb_get_default_audio_compression(audio->out.codec);
 			audio->out.mixdown = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Mixdown"]] intValue];
 			audio->out.bitrate = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Bitrate"]] intValue];
 			audio->out.samplerate = [[queueToApply objectForKey: [prefix stringByAppendingString: @"Samplerate"]] intValue];

@@ -921,8 +921,8 @@ class Display
 
     commandString << "if( !abitrates )\n    "
     commandString << "{\n    "
-    commandString << "    abitrates = strdup(\"" << audioBitrates
-    commandString << "\");\n    "
+    commandString << "    abitrates = str_split(\"" << audioBitrates
+    commandString << "\", ',');\n    "
     commandString << "}\n    "
 
     commandString << "if( !mixdowns )\n    "

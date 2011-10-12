@@ -274,7 +274,8 @@ static NSMutableArray *masterBitRateArray = nil;
     // Select the proper one
     if (shouldSetDefault)
     {
-        [self setMixdown: [permittedMixdowns dictionaryWithObject: [NSNumber numberWithInt: theDefaultMixdown] matchingKey: keyAudioMixdown]];
+        [self setMixdown: [permittedMixdowns dictionaryWithObject: [NSNumber numberWithInt: theDefaultMixdown]
+                                                      matchingKey: keyAudioMixdown]];
     }
 
     if (![self mixdown] || ![permittedMixdowns containsObject: [self mixdown]])
@@ -295,7 +296,6 @@ static NSMutableArray *masterBitRateArray = nil;
 
     unsigned int count = [masterBitRateArray count];
     int trackInputBitRate = [[[self track] objectForKey: keyAudioInputBitrate] intValue];
-    BOOL limitsToTrackInputBitRate = ([[codec objectForKey: keyAudioCodec] intValue] & HB_ACODEC_PASS_FLAG) ? YES : NO;
     int theSampleRate = [[[self sampleRate] objectForKey: keyAudioSamplerate] intValue];
 
     if (0 == theSampleRate) // this means Auto
@@ -308,45 +308,46 @@ static NSMutableArray *masterBitRateArray = nil;
     hb_get_audio_bitrate_limits(ourCodec, theSampleRate, ourMixdown, &minBitRate, &maxBitRate);
     int theDefaultBitRate = hb_get_default_audio_bitrate(ourCodec, theSampleRate, ourMixdown);
 
-    for (unsigned int i = 0; i < count; i++)
+    BOOL codecIsPassthru = ([[codec objectForKey: keyAudioCodec] intValue] & HB_ACODEC_PASS_FLAG) ? YES : NO;
+    BOOL codecIsLossless = (theDefaultBitRate == -1) ? YES : NO;
+
+    if (codecIsPassthru)
     {
-        dict = [masterBitRateArray objectAtIndex: i];
-        currentBitRate = [[dict objectForKey: keyAudioBitrate] intValue];
-
-        // First ensure the bitrate falls within range of the codec
-        shouldAdd = (currentBitRate >= minBitRate && currentBitRate <= maxBitRate);
-
-        // Now make sure the mixdown is not limiting us to the track input bitrate
-        if (shouldAdd && limitsToTrackInputBitRate)
+        NSDictionary *sourceBitRate = [masterBitRateArray dictionaryWithObject: [NSNumber numberWithInt: trackInputBitRate]
+                                                                   matchingKey: keyAudioBitrate];
+        if (!sourceBitRate)
         {
-            if (currentBitRate != trackInputBitRate)
+            // the source bitrate isn't in the master array - create it
+            sourceBitRate = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSString stringWithFormat: @"%d", trackInputBitRate], keyAudioBitrateName,
+                             [NSNumber numberWithInt: trackInputBitRate], keyAudioBitrate,
+                             nil];
+        }
+        [permittedBitRates addObject: sourceBitRate];
+    }
+    else if (codecIsLossless)
+    {
+        NSDictionary *bitRateNotApplicable = [NSDictionary dictionaryWithObjectsAndKeys:
+                                              [NSString stringWithString: @"N/A"], keyAudioBitrateName,
+                                              [NSNumber numberWithInt: -1], keyAudioBitrate,
+                                              nil];
+        [permittedBitRates addObject: bitRateNotApplicable];
+    }
+    else
+    {
+        for (unsigned int i = 0; i < count; i++)
+        {
+            dict = [masterBitRateArray objectAtIndex: i];
+            currentBitRate = [[dict objectForKey: keyAudioBitrate] intValue];
+
+            // First ensure the bitrate falls within range of the codec
+            shouldAdd = (currentBitRate >= minBitRate && currentBitRate <= maxBitRate);
+
+            if (shouldAdd)
             {
-                shouldAdd = NO;
+                [permittedBitRates addObject: dict];
             }
         }
-
-        if (shouldAdd)
-        {
-            [permittedBitRates addObject: dict];
-        }
-    }
-
-    // There is a situation where we have a mixdown requirement to match the track input bit rate,
-    // but it does not fall into the range the codec supports.  Therefore, we force it here.
-    if (limitsToTrackInputBitRate && 0 == [permittedBitRates count])
-    {
-        NSDictionary *missingBitRate = [masterBitRateArray dictionaryWithObject: [NSNumber numberWithInt: trackInputBitRate] matchingKey: keyAudioBitrate];
-        if (!missingBitRate)
-        {
-            // We are in an even worse situation where the requested bit rate does not even exist in the underlying
-            // library of supported bitrates.  Of course since this value is ignored we can freely make a bogus one
-            // for the UI just to make the user a little more aware.
-            missingBitRate = [NSDictionary dictionaryWithObjectsAndKeys:
-                              [NSString stringWithFormat: @"%d", trackInputBitRate], keyAudioBitrateName,
-                              [NSNumber numberWithInt: trackInputBitRate], keyAudioBitrate,
-                              nil];
-        }
-        [permittedBitRates addObject: missingBitRate];
     }
 
     if (![self enabled])
@@ -479,7 +480,8 @@ static NSMutableArray *masterBitRateArray = nil;
 - (void) setTrackFromIndex: (int) aValue
 
 {
-    [self setTrack: [self.controller.masterTrackArray dictionaryWithObject: [NSNumber numberWithInt: aValue] matchingKey: keyAudioTrackIndex]];
+    [self setTrack: [self.controller.masterTrackArray dictionaryWithObject: [NSNumber numberWithInt: aValue]
+                                                               matchingKey: keyAudioTrackIndex]];
 }
 
 // This returns whether it is able to set the actual codec desired.
@@ -594,12 +596,29 @@ static NSMutableArray *masterBitRateArray = nil;
     return retval;
 }
 
+- (BOOL) bitrateEnabled
+
+{
+    BOOL retval = [self enabled];
+
+    if (retval)
+    {
+        int myCodecCodec = [[[self codec] objectForKey: keyAudioCodec] intValue];
+        int myCodecDefaultBitrate = hb_get_default_audio_bitrate(myCodecCodec, 0, 0);
+        if (myCodecDefaultBitrate < 0)
+        {
+            retval = NO;
+        }
+    }
+    return retval;
+}
+
 - (BOOL) AC3Enabled
 
 {
     BOOL retval = [self enabled];
 
-    if ( retval)
+    if (retval)
     {
         int myTrackCodec = [[[self track] objectForKey: keyAudioInputCodec] intValue];
         int myCodecCodec = [[[self codec] objectForKey: keyAudioCodec] intValue];
@@ -641,6 +660,10 @@ static NSMutableArray *masterBitRateArray = nil;
         retval = [NSSet setWithObjects: @"track", @"codec", nil];
     }
     else if ([key isEqualToString: @"AC3Enabled"])
+    {
+        retval = [NSSet setWithObjects: @"track", @"codec", nil];
+    }
+    else if ([key isEqualToString: @"bitrateEnabled"])
     {
         retval = [NSSet setWithObjects: @"track", @"codec", nil];
     }
