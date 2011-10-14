@@ -362,9 +362,9 @@ namespace Handbrake
                 foreach (AudioTrack track in parsed.AudioTracks)
                 {
                     if (audio != string.Empty)
-                        audio += ", " + EnumHelper<AudioEncoder>.GetDescription(track.Encoder);
+                        audio += ", " + EnumHelper<AudioEncoder>.GetDisplay(track.Encoder);
                     else
-                        audio = EnumHelper<AudioEncoder>.GetDescription(track.Encoder);
+                        audio = EnumHelper<AudioEncoder>.GetDisplay(track.Encoder);
                 }
                 item.SubItems.Add(audio); // Audio
 
@@ -433,9 +433,9 @@ namespace Handbrake
                 foreach (AudioTrack track in parsed.AudioTracks)
                 {
                     if (audio != string.Empty)
-                        audio += ", " + EnumHelper<AudioEncoder>.GetDescription(track.Encoder);
+                        audio += ", " + EnumHelper<AudioEncoder>.GetDisplay(track.Encoder);
                     else
-                        audio = EnumHelper<AudioEncoder>.GetDescription(track.Encoder);
+                        audio = EnumHelper<AudioEncoder>.GetDisplay(track.Encoder);
                 }
 
                 // found query is a global varible        
@@ -653,7 +653,7 @@ namespace Handbrake
         private void MnuBatchClick(object sender, EventArgs e)
         {
             SaveFile.FileName = string.Empty;
-            SaveFile.Filter = "Batch|.bat";
+            SaveFile.Filter = "Batch|*.bat";
             SaveFile.ShowDialog();
             if (SaveFile.FileName != String.Empty)
                 queue.QueueManager.WriteBatchScriptToFile(SaveFile.FileName);
