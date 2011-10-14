@@ -16,10 +16,10 @@ namespace HandBrake.Interop.Model.Encoding
 		[Display(Name = "H.264 (x264)")]
 		X264 = 0,
 
-		[Display(Name = "MPEG-4 (FFMpeg)")]
+		[Display(Name = "MPEG-4 (FFmpeg)")]
 		FFMpeg,
 
-        [Display(Name = "MPEG-2 (FFMpeg)")]
+        [Display(Name = "MPEG-2 (FFmpeg)")]
         FFMpeg2,
 
 		[Display(Name = "VP3 (Theora)")]
