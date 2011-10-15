@@ -4915,6 +4915,11 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 			// Make sure the mixdown is valid and pick a new one if not.
 			audio.out.mixdown = ghb_get_best_mix(aconfig, audio.out.codec, 
 													audio.out.mixdown);
+			gint srate = ghb_settings_combo_int(asettings, "AudioSamplerate");
+			if (srate == 0)	// 0 is same as source
+				audio.out.samplerate = aconfig->in.samplerate;
+			else
+				audio.out.samplerate = srate;
 			double quality = ghb_settings_get_double(asettings, "AudioTrackQuality");
 			if (ghb_settings_get_boolean(asettings, "AudioTrackQualityEnable") &&
 				quality >= 0)
@@ -4932,11 +4937,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 					audio.out.codec, audio.out.bitrate, 
 					audio.out.samplerate, audio.out.mixdown);
 			}
-			gint srate = ghb_settings_combo_int(asettings, "AudioSamplerate");
-			if (srate == 0)	// 0 is same as source
-				audio.out.samplerate = aconfig->in.samplerate;
-			else
-				audio.out.samplerate = srate;
 		}
 
 		// Add it to the jobs audio list
