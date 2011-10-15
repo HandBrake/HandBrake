@@ -4763,7 +4763,7 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
     {
         return 0;
     }
-    if ( av_find_stream_info( info_ic ) < 0 )
+    if ( avformat_find_stream_info( info_ic, NULL ) < 0 )
         goto fail;
 
     title->opaque_priv = (void*)info_ic;

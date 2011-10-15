@@ -37,7 +37,6 @@ void mcdeint_init( mcdeint_private_t * pv,
     /* Allocate mcdeint specific buffers */
     if( pv->mcdeint_mode >= 0 )
     {
-        avcodec_init();
         avcodec_register_all();
 
         AVCodec * enc = avcodec_find_encoder( CODEC_ID_SNOW );
@@ -47,7 +46,7 @@ void mcdeint_init( mcdeint_private_t * pv,
         {
             AVCodecContext * avctx_enc;
 
-            avctx_enc = pv->mcdeint_avctx_enc = avcodec_alloc_context();
+            avctx_enc = pv->mcdeint_avctx_enc = avcodec_alloc_context3( enc );
 
             avctx_enc->width                    = width;
             avctx_enc->height                   = height;
@@ -76,7 +75,7 @@ void mcdeint_init( mcdeint_private_t * pv,
                     avctx_enc->flags |= CODEC_FLAG_QPEL;
             }
 
-            hb_avcodec_open(avctx_enc, enc, 0);
+            hb_avcodec_open(avctx_enc, enc, NULL, 0);
         }
 
         pv->mcdeint_frame       = avcodec_alloc_frame();

@@ -58,16 +58,10 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     }
     context = avcodec_alloc_context3(codec);
 
+    AVDictionary *av_opts = NULL;
     if ( w->codec_param == CODEC_ID_AAC )
     {
-        int ret = hb_av_set_string( context, codec, "stereo_mode", "ms_off" );
-        /* Let avutil sanity check the options for us*/
-        if( ret == AVERROR_OPTION_NOT_FOUND )
-            hb_log( "avcodec options: Unknown option %s", "stereo_mode" );
-
-        if( ret == AVERROR(EINVAL) )
-            hb_log( "avcodec options: Bad argument %s=%s", 
-                    "stereo_mode", "ms_off" ? "ms_off" : "(null)" );
+        av_dict_set( &av_opts, "stereo_mode", "ms_off", 0 );
     }
 
     context->channel_layout = AV_CH_LAYOUT_STEREO;
@@ -111,11 +105,20 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     // Try to set format to float.  Fallback to whatever is supported.
     hb_ff_set_sample_fmt( context, codec );
 
-    if( hb_avcodec_open( context, codec, 0 ) )
+    if( hb_avcodec_open( context, codec, &av_opts, 0 ) )
     {
         hb_log( "encavcodecaInit: avcodec_open failed" );
         return 1;
     }
+    // avcodec_open populates the opts dictionary with the
+    // things it didn't recognize.
+    AVDictionaryEntry *t = NULL;
+    while( ( t = av_dict_get( av_opts, "", t, AV_DICT_IGNORE_SUFFIX ) ) )
+    {
+        hb_log( "encavcodecaInit: Unknown avcodec option %s", t->key );
+    }
+    av_dict_free( &av_opts );
+
     pv->context = context;
 
     audio->config.out.samples_per_frame = pv->samples_per_frame = context->frame_size;

@@ -99,7 +99,7 @@ void hb_avcodec_init()
     av_register_all();
 }
 
-int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec, int thread_count)
+int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec, AVDictionary **av_opts, int thread_count)
 {
     int ret;
 
@@ -116,7 +116,7 @@ int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec, int thread_count)
         avctx->thread_count = 1;
     }
 
-    ret = avcodec_open(avctx, codec);
+    ret = avcodec_open2(avctx, codec, av_opts);
     return ret;
 }
 
@@ -124,20 +124,6 @@ int hb_avcodec_close(AVCodecContext *avctx)
 {
     int ret;
     ret = avcodec_close(avctx);
-    return ret;
-}
-
-int hb_av_set_string( AVCodecContext *c, AVCodec *codec, const char *name, const char *val )
-{
-    void * priv_context = NULL;
-
-    if ( c && codec && codec->priv_class && c->priv_data )
-        priv_context = c->priv_data;
-
-    int ret = av_set_string3( c, name, val, 1, NULL );
-    if ( ret == AVERROR_OPTION_NOT_FOUND && priv_context )
-        ret = av_set_string3( priv_context, name, val, 1, NULL );
-
     return ret;
 }
 
@@ -166,17 +152,19 @@ hb_sws_get_context(int srcW, int srcH, enum PixelFormat srcFormat,
 
         srcRange = handle_jpeg(&srcFormat);
         dstRange = handle_jpeg(&dstFormat);
+        /* enable this when implemented in Libav
         flags |= SWS_FULL_CHR_H_INT | SWS_FULL_CHR_H_INP;
+         */
 
-        av_set_int(ctx, "srcw", srcW);
-        av_set_int(ctx, "srch", srcH);
-        av_set_int(ctx, "src_range", srcRange);
-        av_set_int(ctx, "src_format", srcFormat);
-        av_set_int(ctx, "dstw", dstW);
-        av_set_int(ctx, "dsth", dstH);
-        av_set_int(ctx, "dst_range", dstRange);
-        av_set_int(ctx, "dst_format", dstFormat);
-        av_set_int(ctx, "sws_flags", flags);
+        av_opt_set_int(ctx, "srcw", srcW, 0);
+        av_opt_set_int(ctx, "srch", srcH, 0);
+        av_opt_set_int(ctx, "src_range", srcRange, 0);
+        av_opt_set_int(ctx, "src_format", srcFormat, 0);
+        av_opt_set_int(ctx, "dstw", dstW, 0);
+        av_opt_set_int(ctx, "dsth", dstH, 0);
+        av_opt_set_int(ctx, "dst_range", dstRange, 0);
+        av_opt_set_int(ctx, "dst_format", dstFormat, 0);
+        av_opt_set_int(ctx, "sws_flags", flags, 0);
 
         sws_setColorspaceDetails( ctx, 
                       sws_getCoefficients( SWS_CS_DEFAULT ), // src colorspace
@@ -544,8 +532,7 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
     h->pause_lock = hb_lock_init();
 
     /* libavcodec */
-    avcodec_init();
-    avcodec_register_all();
+    hb_avcodec_init();
 
     /* Start library thread */
     hb_log( "hb_init: starting libhb thread" );

@@ -1,5 +1,5 @@
 diff --git a/libavcodec/pngdec.c b/libavcodec/pngdec.c
-index 7477f67..9e8e29b 100644
+index a40cebb..26239e2 100644
 --- a/libavcodec/pngdec.c
 +++ b/libavcodec/pngdec.c
 @@ -599,6 +599,18 @@ static int decode_frame(AVCodecContext *avctx,

@@ -1,16 +1,16 @@
 diff --git a/configure b/configure
-index 5e40e08..4e05487 100755
+index e01d9fd..d5d6aec 100755
 --- a/configure
 +++ b/configure
-@@ -2412,6 +2412,7 @@ case $target_os in
-         FFSERVERLDFLAGS=-Wl,-bind_at_load
+@@ -2413,6 +2413,7 @@ case $target_os in
+         AVSERVERLDFLAGS=-Wl,-bind_at_load
          objformat="macho"
          enabled x86_64 && objformat="macho64"
 +        enabled x86_64 && enable pic
          enabled_any pic shared ||
              { check_cflags -mdynamic-no-pic && add_asflags -mdynamic-no-pic; }
          ;;
-@@ -2523,7 +2524,7 @@ esac
+@@ -2530,7 +2531,7 @@ esac
  
  echo "config:$arch:$subarch:$cpu:$target_os:$cc_ident:$LIBAV_CONFIGURATION" >config.fate
  

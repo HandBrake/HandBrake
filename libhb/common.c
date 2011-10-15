@@ -682,6 +682,7 @@ int hb_get_best_mixdown( uint32_t codec, int layout, int mixdown )
                 switch (codec)
                 {
                     case HB_ACODEC_LAME:
+                    case HB_ACODEC_FFAAC:
                         best_mixdown = HB_AMIXDOWN_DOLBYPLII;
                         break;
 

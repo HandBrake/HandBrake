@@ -188,7 +188,7 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     if ( pv->title->opaque_priv )
     {
         AVFormatContext *ic = (AVFormatContext*)pv->title->opaque_priv;
-        pv->context = avcodec_alloc_context();
+        pv->context = avcodec_alloc_context3(codec);
         avcodec_copy_context( pv->context, ic->streams[w->audio->id]->codec);
         hb_ff_set_sample_fmt( pv->context, codec );
     }
@@ -199,7 +199,7 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         pv->context = avcodec_alloc_context3(codec);
         hb_ff_set_sample_fmt( pv->context, codec );
     }
-    if ( hb_avcodec_open( pv->context, codec, 0 ) )
+    if ( hb_avcodec_open( pv->context, codec, NULL, 0 ) )
     {
         hb_log( "decavcodecaInit: avcodec_open failed" );
         return 1;
@@ -419,7 +419,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     AVCodecParserContext *parser = av_parser_init( codec->id );
     AVCodecContext *context = avcodec_alloc_context3(codec);
     hb_ff_set_sample_fmt( context, codec );
-    if ( hb_avcodec_open( context, codec, 0 ) )
+    if ( hb_avcodec_open( context, codec, NULL, 0 ) )
     {
         return -1;
     }
@@ -988,13 +988,13 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
             hb_log( "decavcodecvInit: failed to find codec for id (%d)", w->codec_param );
             return 1;
         }
-        pv->context = avcodec_alloc_context();
+        pv->context = avcodec_alloc_context3(codec);
         avcodec_copy_context( pv->context, ic->streams[pv->title->video_id]->codec);
         pv->context->workaround_bugs = FF_BUG_AUTODETECT;
         pv->context->error_recognition = 1;
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
 
-        if ( hb_avcodec_open( pv->context, codec, pv->job ? HB_FFMPEG_THREADS_AUTO : 0 ) )
+        if ( hb_avcodec_open( pv->context, codec, NULL, pv->job ? HB_FFMPEG_THREADS_AUTO : 0 ) )
         {
             hb_log( "decavcodecvInit: avcodec_open failed" );
             return 1;
@@ -1010,8 +1010,9 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     }
     else
     {
+        AVCodec *codec = avcodec_find_decoder( w->codec_param );
         pv->parser = av_parser_init( w->codec_param );
-        pv->context = avcodec_alloc_context2( AVMEDIA_TYPE_VIDEO );
+        pv->context = avcodec_alloc_context3( codec );
         pv->context->workaround_bugs = FF_BUG_AUTODETECT;
         pv->context->error_recognition = 1;
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
@@ -1155,7 +1156,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             return HB_WORK_OK;
         }
         // disable threaded decoding for scan, can cause crashes
-        if ( hb_avcodec_open( pv->context, codec, pv->job ? HB_FFMPEG_THREADS_AUTO : 0 ) )
+        if ( hb_avcodec_open( pv->context, codec, NULL, pv->job ? HB_FFMPEG_THREADS_AUTO : 0 ) )
         {
             hb_log( "decavcodecvWork: avcodec_open failed" );
             *buf_out = hb_buffer_init( 0 );;

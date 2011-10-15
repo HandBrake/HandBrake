@@ -1,8 +1,8 @@
 diff --git a/libavcodec/Makefile b/libavcodec/Makefile
-index 0cfa08c..f9c407e 100644
+index 3c4e2f8..fe84b8c 100644
 --- a/libavcodec/Makefile
 +++ b/libavcodec/Makefile
-@@ -3,7 +3,7 @@ include $(SUBDIR)../config.mak
+@@ -1,7 +1,7 @@
  NAME = avcodec
  FFLIBS = avutil
  

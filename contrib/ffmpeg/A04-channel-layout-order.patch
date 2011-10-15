@@ -1,0 +1,86 @@
+diff --git a/libavcodec/Makefile b/libavcodec/Makefile
+index 3c4e2f8..5cfd1bf 100644
+--- a/libavcodec/Makefile
++++ b/libavcodec/Makefile
+@@ -142,7 +142,7 @@ OBJS-$(CONFIG_FFV1_DECODER)            += ffv1.o rangecoder.o
+ OBJS-$(CONFIG_FFV1_ENCODER)            += ffv1.o rangecoder.o
+ OBJS-$(CONFIG_FFVHUFF_DECODER)         += huffyuv.o
+ OBJS-$(CONFIG_FFVHUFF_ENCODER)         += huffyuv.o
+-OBJS-$(CONFIG_FLAC_DECODER)            += flacdec.o flacdata.o flac.o
++OBJS-$(CONFIG_FLAC_DECODER)            += flacdec.o flacdata.o flac.o vorbis_data.o
+ OBJS-$(CONFIG_FLAC_ENCODER)            += flacenc.o flacdata.o flac.o
+ OBJS-$(CONFIG_FLASHSV_DECODER)         += flashsv.o
+ OBJS-$(CONFIG_FLASHSV_ENCODER)         += flashsvenc.o
+diff --git a/libavcodec/flac.c b/libavcodec/flac.c
+index e6a427a..397155e 100644
+--- a/libavcodec/flac.c
++++ b/libavcodec/flac.c
+@@ -22,6 +22,7 @@
+ #include "libavutil/crc.h"
+ #include "flac.h"
+ #include "flacdata.h"
++#include "vorbis.h"
+ 
+ static const int8_t sample_size_table[] = { 0, 8, 12, 0, 16, 20, 24, 0 };
+ 
+@@ -54,9 +55,12 @@ int ff_flac_decode_frame_header(AVCodecContext *avctx, GetBitContext *gb,
+     fi->ch_mode = get_bits(gb, 4);
+     if (fi->ch_mode < FLAC_MAX_CHANNELS) {
+         fi->channels = fi->ch_mode + 1;
++        if (fi->ch_mode <= 5)
++            avctx->channel_layout = ff_vorbis_channel_layouts[fi->ch_mode];
+         fi->ch_mode = FLAC_CHMODE_INDEPENDENT;
+     } else if (fi->ch_mode <= FLAC_CHMODE_MID_SIDE) {
+         fi->channels = 2;
++        avctx->channel_layout = AV_CH_LAYOUT_STEREO;
+     } else {
+         av_log(avctx, AV_LOG_ERROR + log_level_offset,
+                "invalid channel mode: %d\n", fi->ch_mode);
+diff --git a/libavcodec/mlpdec.c b/libavcodec/mlpdec.c
+index c90285a..58235c8 100644
+--- a/libavcodec/mlpdec.c
++++ b/libavcodec/mlpdec.c
+@@ -133,6 +133,9 @@ typedef struct MLPDecodeContext {
+     //! Index of the last substream to decode - further substreams are skipped.
+     uint8_t     max_decoded_substream;
+ 
++    //! Stream needs channel reordering to comply with FFmpeg's channel order
++    uint8_t     needs_reordering;
++
+     //! number of PCM samples contained in each frame
+     int         access_unit_size;
+     //! next power of two above the number of samples in each frame
+@@ -326,6 +329,8 @@ static int read_major_sync(MLPDecodeContext *m, GetBitContext *gb)
+     for (substr = 0; substr < MAX_SUBSTREAMS; substr++)
+         m->substream[substr].restart_seen = 0;
+ 
++    m->needs_reordering = mh.channels_mlp >= 18 && mh.channels_mlp <= 20;
++
+     return 0;
+ }
+ 
+@@ -436,6 +441,24 @@ static int read_restart_header(MLPDecodeContext *m, GetBitContext *gbp,
+         s->ch_assign[ch_assign] = ch;
+     }
+ 
++    if (m->avctx->codec_id == CODEC_ID_MLP && m->needs_reordering) {
++        if (m->avctx->channel_layout == (AV_CH_LAYOUT_2_2|AV_CH_LOW_FREQUENCY) ||
++            m->avctx->channel_layout == AV_CH_LAYOUT_5POINT0) {
++            int i = s->ch_assign[4];
++            s->ch_assign[4] = s->ch_assign[3];
++            s->ch_assign[3] = s->ch_assign[2];
++            s->ch_assign[2] = i;
++        } else if (m->avctx->channel_layout == AV_CH_LAYOUT_5POINT1) {
++            FFSWAP(int, s->ch_assign[2], s->ch_assign[4]);
++            FFSWAP(int, s->ch_assign[3], s->ch_assign[5]);
++        }
++    }
++    if (m->avctx->codec_id == CODEC_ID_TRUEHD &&
++        m->avctx->channel_layout == AV_CH_LAYOUT_7POINT1) {
++        FFSWAP(int, s->ch_assign[4], s->ch_assign[6]);
++        FFSWAP(int, s->ch_assign[5], s->ch_assign[7]);
++    }
++
+     checksum = ff_mlp_restart_checksum(buf, get_bits_count(gbp) - start_count);
+ 
+     if (checksum != get_bits(gbp, 8))

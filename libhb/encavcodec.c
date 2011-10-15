@@ -167,6 +167,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         the left side of the equals sign in "name" and the right side into
         "value." Then you hand those strings off to avutil for interpretation.
      */
+    AVDictionary *av_opts = NULL;
     if( job->advanced_opts != NULL && *job->advanced_opts != '\0' )
     {
         char *opts, *opts_start;
@@ -179,7 +180,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             {
                 char *name = opts;
                 char *value;
-                int ret;
 
                 opts += strcspn( opts, ":" );
                 if( *opts )
@@ -196,15 +196,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 }
 
                 /* Here's where the strings are passed to avutil for parsing. */
-                ret = hb_av_set_string( context, codec, name, value );
-
-                /* Let avutil sanity check the options for us*/
-                if( ret == AVERROR_OPTION_NOT_FOUND )
-                    hb_log( "avcodec options: Unknown option %s", name );
-
-                if( ret == AVERROR(EINVAL) )
-                    hb_log( "avcodec options: Bad argument %s=%s", 
-                            name, value ? value : "(null)" );
+                av_dict_set( &av_opts, name, value, 0 );
             }
         }
         free(opts_start);
@@ -282,10 +274,19 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
-    if( hb_avcodec_open( context, codec, 0 ) )
+    if( hb_avcodec_open( context, codec, &av_opts, 0 ) )
     {
         hb_log( "encavcodecInit: avcodec_open failed" );
     }
+    // avcodec_open populates the opts dictionary with the
+    // things it didn't recognize.
+    AVDictionaryEntry *t = NULL;
+    while( ( t = av_dict_get( av_opts, "", t, AV_DICT_IGNORE_SUFFIX ) ) )
+    {
+        hb_log( "encavcodecInit: Unknown avcodec option %s", t->key );
+    }
+    av_dict_free( &av_opts );
+
     pv->context = context;
 
     job->areBframes = 0;
