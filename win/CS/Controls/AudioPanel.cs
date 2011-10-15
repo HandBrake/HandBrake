@@ -451,12 +451,6 @@ namespace Handbrake.Controls
                         foundTrack = true;
                         continue;
                     }
-
-                    if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AddOnlyOneAudioPerLanguage) && currentTrack.TrackDisplay.Contains(sourceTrack.Language))
-                    {
-                        foundTrack = true;
-                        continue;
-                    }
                 }
 
                 if (foundTrack)
