@@ -283,39 +283,6 @@ void hb_ts_stream_reset(hb_stream_t *stream);
 void hb_ps_stream_reset(hb_stream_t *stream);
 
 /*
- * streams have a bunch of state that's learned during the scan. We don't
- * want to throw away the state when scan does a close then relearn
- * everything when reader does an open. So we save the stream state on
- * the close following a scan and reuse it when 'reader' does an open.
- */
-static hb_list_t *stream_state_list;
-
-static hb_stream_t *hb_stream_lookup( const char *path )
-{
-    if ( stream_state_list == NULL )
-        return NULL;
-
-    hb_stream_t *ss;
-    int i = 0;
-
-    while ( ( ss = hb_list_item( stream_state_list, i++ ) ) != NULL )
-    {
-        if ( strcmp( path, ss->path ) == 0 )
-        {
-            break;
-        }
-    }
-    return ss;
-}
-
-static void hb_stream_state_delete( hb_stream_t *ss )
-{
-    hb_list_rem( stream_state_list, ss );
-    free( ss->path );
-    free( ss );
-}
-
-/*
  * logging routines.
  * these frontend hb_log because transport streams can have a lot of errors
  * so we want to rate limit messages. this routine limits the number of
@@ -749,6 +716,71 @@ static void hb_stream_delete_ps_entry(hb_stream_t *stream, int indx)
     }
 }
 
+static void prune_streams(hb_stream_t *d)
+{
+    if ( d->hb_stream_type == transport )
+    {
+        int ii, jj;
+        for ( ii = 0; ii < d->ts.count; ii++)
+        {
+            // If probing didn't find audio or video, and the pid
+            // is not the PCR, remove the track
+            if ( ts_stream_kind ( d, ii ) == U &&
+                 !d->ts.list[ii].is_pcr )
+            {
+                hb_stream_delete_ts_entry(d, ii);
+                continue;
+            }
+
+            if ( ts_stream_kind ( d, ii ) == A )
+            {
+                for ( jj = d->ts.list[ii].pes_list; jj != -1;
+                      jj = d->pes.list[jj].next )
+                {
+                    if ( audio_inactive( d, d->pes.list[jj].stream_id,
+                                         d->pes.list[jj].stream_id_ext ) )
+                    {
+                        hb_stream_delete_ps_entry(d, jj);
+                    }
+                }
+                if ( !d->ts.list[ii].is_pcr &&
+                     hb_stream_try_delete_ts_entry(d, ii) )
+                {
+                    continue;
+                }
+            }
+        }
+        // reset to beginning of file and reset some stream 
+        // state information
+        hb_stream_seek( d, 0. );
+    }
+    else if ( d->hb_stream_type == program )
+    {
+        int ii;
+        for ( ii = 0; ii < d->pes.count; ii++)
+        {
+            // If probing didn't find audio or video, remove the track
+            if ( d->pes.list[ii].stream_kind == U )
+            {
+                hb_stream_delete_ps_entry(d, ii);
+            }
+
+            if ( d->pes.list[ii].stream_kind == A &&
+                 audio_inactive( d, d->pes.list[ii].stream_id,
+                                 d->pes.list[ii].stream_id_ext ) )
+            {
+                // this PID isn't wanted (we don't have a codec for it
+                // or scan didn't find audio parameters)
+                hb_stream_delete_ps_entry(d, ii);
+                continue;
+            }
+        }
+        // reset to beginning of file and reset some stream 
+        // state information
+        hb_stream_seek( d, 0. );
+    }
+}
+
 /***********************************************************************
  * hb_stream_open
  ***********************************************************************
@@ -771,108 +803,15 @@ hb_stream_t * hb_stream_open( char *path, hb_title_t *title, int scan )
         return NULL;
     }
 
-    /*
-     * if we're opening the stream to read & convert, we need
-     * the state we saved when we scanned the stream. if we're
-     * opening the stream to scan it we want to rebuild the state
-     * (even if we have saved state, the stream may have changed).
-     */
-    hb_stream_t *ss = hb_stream_lookup( path );
-    if ( !scan && ss && ss->hb_stream_type != ffmpeg )
-    {
-        /*
-         * copy the saved state since we might be encoding the same stream
-         * multiple times.
-         */
-        memcpy( d, ss, sizeof(*d) );
-        d->file_handle = f;
-        d->title = title;
-        d->scan = scan;
-        d->path = strdup( path );
-
-        if ( d->hb_stream_type == transport )
-        {
-            d->ts.packet = malloc( d->packetsize );
-
-            int ii, jj;
-            for ( ii = 0; ii < d->ts.count; ii++)
-            {
-                // If probing didn't find audio or video, and the pid
-                // is not the PCR, remove the track
-                if ( ts_stream_kind ( d, ii ) == U &&
-                     !d->ts.list[ii].is_pcr )
-                {
-                    hb_stream_delete_ts_entry(d, ii);
-                    continue;
-                }
-
-                if ( ts_stream_kind ( d, ii ) == A )
-                {
-                    for ( jj = d->ts.list[ii].pes_list; jj != -1;
-                          jj = d->pes.list[jj].next )
-                    {
-                        if ( audio_inactive( d, d->pes.list[jj].stream_id,
-                                             d->pes.list[jj].stream_id_ext ) )
-                        {
-                            hb_stream_delete_ps_entry(d, jj);
-                        }
-                    }
-                    if ( !d->ts.list[ii].is_pcr &&
-                         hb_stream_try_delete_ts_entry(d, ii) )
-                    {
-                        continue;
-                    }
-                }
-                d->ts.list[ii].buf = hb_buffer_init(d->packetsize);
-                d->ts.list[ii].extra_buf = hb_buffer_init(d->packetsize);
-                d->ts.list[ii].buf->size = 0;
-                d->ts.list[ii].extra_buf->size = 0;
-            }
-            // reset to beginning of file and reset some stream 
-            // state information
-            hb_stream_seek( d, 0. );
-        }
-        else if ( d->hb_stream_type == program )
-        {
-            int ii;
-            for ( ii = 0; ii < d->pes.count; ii++)
-            {
-                // If probing didn't find audio or video, remove the track
-                if ( d->pes.list[ii].stream_kind == U )
-                {
-                    hb_stream_delete_ps_entry(d, ii);
-                }
-
-                if ( d->pes.list[ii].stream_kind == A &&
-                     audio_inactive( d, d->pes.list[ii].stream_id,
-                                     d->pes.list[ii].stream_id_ext ) )
-                {
-                    // this PID isn't wanted (we don't have a codec for it
-                    // or scan didn't find audio parameters)
-                    hb_stream_delete_ps_entry(d, ii);
-                    continue;
-                }
-            }
-            // reset to beginning of file and reset some stream 
-            // state information
-            hb_stream_seek( d, 0. );
-        }
-        return d;
-    }
-    else if( title && !( title->flags & HBTF_NO_IDR ) )
+    if( title && !( title->flags & HBTF_NO_IDR ) )
     {
         d->has_IDRs = 1;
     }
 
     /*
-     * opening for scan - delete any saved state then (re)scan the stream.
      * If it's something we can deal with (MPEG2 PS or TS) return a stream
      * reference structure & null otherwise.
      */
-    if ( ss != NULL )
-    {
-        hb_stream_state_delete( ss );
-    }
     d->file_handle = f;
     d->title = title;
     d->scan = scan;
@@ -881,6 +820,13 @@ hb_stream_t * hb_stream_open( char *path, hb_title_t *title, int scan )
     {
         if ( hb_stream_get_type( d ) != 0 )
         {
+            if( !scan )
+            {
+                prune_streams( d );
+            }
+            // reset to beginning of file and reset some stream 
+            // state information
+            hb_stream_seek( d, 0. );
             return d;
         }
         fclose( d->file_handle );
@@ -1036,23 +982,7 @@ void hb_stream_close( hb_stream_t ** _d )
                 (double)stream->frames );
     }
 
-    /*
-     * if the stream was opened for a scan, cache the result, otherwise delete
-     * the state.
-     */
-    if ( stream->scan )
-    {
-        hb_stream_delete_dynamic( stream );
-        if ( stream_state_list == NULL )
-        {
-            stream_state_list = hb_list_init();
-        }
-        hb_list_add( stream_state_list, stream );
-    }
-    else
-    {
-        hb_stream_delete( stream );
-    }
+    hb_stream_delete( stream );
     *_d = NULL;
 }
 
@@ -2226,48 +2156,59 @@ static void hb_ts_stream_init(hb_stream_t *stream)
     }
     hb_ts_resolve_pid_types(stream);
 
-    hb_log("Found the following PIDS");
-    hb_log("    Video PIDS : ");
-    for (i=0; i < stream->ts.count; i++)
+    if( stream->scan )
     {
-        if ( ts_stream_kind( stream, i ) == V )
+        hb_log("Found the following PIDS");
+        hb_log("    Video PIDS : ");
+        for (i=0; i < stream->ts.count; i++)
         {
-            hb_log( "      0x%x type %s (0x%x)%s",
-                    stream->ts.list[i].pid,
-                    stream_type_name2(stream, 
-                            &stream->pes.list[stream->ts.list[i].pes_list]),
-                    ts_stream_type( stream, i ),
-                    stream->ts.list[i].is_pcr ? " (PCR)" : "");
+            if ( ts_stream_kind( stream, i ) == V )
+            {
+                hb_log( "      0x%x type %s (0x%x)%s",
+                        stream->ts.list[i].pid,
+                        stream_type_name2(stream, 
+                                &stream->pes.list[stream->ts.list[i].pes_list]),
+                        ts_stream_type( stream, i ),
+                        stream->ts.list[i].is_pcr ? " (PCR)" : "");
+            }
+        }
+        hb_log("    Audio PIDS : ");
+        for (i = 0; i < stream->ts.count; i++)
+        {
+            if ( ts_stream_kind( stream, i ) == A )
+            {
+                hb_log( "      0x%x type %s (0x%x)%s",
+                        stream->ts.list[i].pid,
+                        stream_type_name2(stream,
+                                &stream->pes.list[stream->ts.list[i].pes_list]),
+                        ts_stream_type( stream, i ),
+                        stream->ts.list[i].is_pcr ? " (PCR)" : "");
+            }
+        }
+        hb_log("    Other PIDS : ");
+        for (i = 0; i < stream->ts.count; i++)
+        {
+            if ( ts_stream_kind( stream, i ) == N ||
+                 ts_stream_kind( stream, i ) == P )
+            {
+                hb_log( "      0x%x type %s (0x%x)%s",
+                        stream->ts.list[i].pid,
+                        stream_type_name2(stream,
+                                &stream->pes.list[stream->ts.list[i].pes_list]),
+                        ts_stream_type( stream, i ),
+                        stream->ts.list[i].is_pcr ? " (PCR)" : "");
+            }
+            if ( ts_stream_kind( stream, i ) == N )
+                hb_stream_delete_ts_entry(stream, i);
         }
     }
-    hb_log("    Audio PIDS : ");
-    for (i = 0; i < stream->ts.count; i++)
+    else
     {
-        if ( ts_stream_kind( stream, i ) == A )
+        for (i = 0; i < stream->ts.count; i++)
         {
-            hb_log( "      0x%x type %s (0x%x)%s",
-                    stream->ts.list[i].pid,
-                    stream_type_name2(stream,
-                            &stream->pes.list[stream->ts.list[i].pes_list]),
-                    ts_stream_type( stream, i ),
-                    stream->ts.list[i].is_pcr ? " (PCR)" : "");
+            if ( ts_stream_kind( stream, i ) == N )
+                hb_stream_delete_ts_entry(stream, i);
         }
-    }
-    hb_log("    Other PIDS : ");
-    for (i = 0; i < stream->ts.count; i++)
-    {
-        if ( ts_stream_kind( stream, i ) == N ||
-             ts_stream_kind( stream, i ) == P )
-        {
-            hb_log( "      0x%x type %s (0x%x)%s",
-                    stream->ts.list[i].pid,
-                    stream_type_name2(stream,
-                            &stream->pes.list[stream->ts.list[i].pes_list]),
-                    ts_stream_type( stream, i ),
-                    stream->ts.list[i].is_pcr ? " (PCR)" : "");
-        }
-        if ( ts_stream_kind( stream, i ) == N )
-            hb_stream_delete_ts_entry(stream, i);
     }
 }
 
@@ -2289,45 +2230,56 @@ static void hb_ps_stream_init(hb_stream_t *stream)
     hb_ps_stream_find_streams(stream);
     hb_ps_resolve_stream_types(stream);
 
-    hb_log("Found the following streams");
-    hb_log("    Video Streams : ");
-    for (i=0; i < stream->pes.count; i++)
+    if( stream->scan )
     {
-        if ( stream->pes.list[i].stream_kind == V )
+        hb_log("Found the following streams");
+        hb_log("    Video Streams : ");
+        for (i=0; i < stream->pes.count; i++)
         {
-            hb_log( "      0x%x-0x%x type %s (0x%x)",
-                    stream->pes.list[i].stream_id,
-                    stream->pes.list[i].stream_id_ext,
-                    stream_type_name2(stream,
-                                     &stream->pes.list[i]),
-                    stream->pes.list[i].stream_type);
+            if ( stream->pes.list[i].stream_kind == V )
+            {
+                hb_log( "      0x%x-0x%x type %s (0x%x)",
+                        stream->pes.list[i].stream_id,
+                        stream->pes.list[i].stream_id_ext,
+                        stream_type_name2(stream,
+                                         &stream->pes.list[i]),
+                        stream->pes.list[i].stream_type);
+            }
+        }
+        hb_log("    Audio Streams : ");
+        for (i = 0; i < stream->pes.count; i++)
+        {
+            if ( stream->pes.list[i].stream_kind == A )
+            {
+                hb_log( "      0x%x-0x%x type %s (0x%x)",
+                        stream->pes.list[i].stream_id,
+                        stream->pes.list[i].stream_id_ext,
+                        stream_type_name2(stream,
+                                         &stream->pes.list[i]),
+                        stream->pes.list[i].stream_type );
+            }
+        }
+        hb_log("    Other Streams : ");
+        for (i = 0; i < stream->pes.count; i++)
+        {
+            if ( stream->pes.list[i].stream_kind == N )
+            {
+                hb_log( "      0x%x-0x%x type %s (0x%x)",
+                        stream->pes.list[i].stream_id,
+                        stream->pes.list[i].stream_id_ext,
+                        stream_type_name2(stream,
+                                         &stream->pes.list[i]),
+                        stream->pes.list[i].stream_type );
+                hb_stream_delete_ps_entry(stream, i);
+            }
         }
     }
-    hb_log("    Audio Streams : ");
-    for (i = 0; i < stream->pes.count; i++)
+    else
     {
-        if ( stream->pes.list[i].stream_kind == A )
+        for (i = 0; i < stream->pes.count; i++)
         {
-            hb_log( "      0x%x-0x%x type %s (0x%x)",
-                    stream->pes.list[i].stream_id,
-                    stream->pes.list[i].stream_id_ext,
-                    stream_type_name2(stream,
-                                     &stream->pes.list[i]),
-                    stream->pes.list[i].stream_type );
-        }
-    }
-    hb_log("    Other Streams : ");
-    for (i = 0; i < stream->pes.count; i++)
-    {
-        if ( stream->pes.list[i].stream_kind == N )
-        {
-            hb_log( "      0x%x-0x%x type %s (0x%x)",
-                    stream->pes.list[i].stream_id,
-                    stream->pes.list[i].stream_id_ext,
-                    stream_type_name2(stream,
-                                     &stream->pes.list[i]),
-                    stream->pes.list[i].stream_type );
-            hb_stream_delete_ps_entry(stream, i);
+            if ( stream->pes.list[i].stream_kind == N )
+                hb_stream_delete_ps_entry(stream, i);
         }
     }
 }
