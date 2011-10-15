@@ -63,6 +63,14 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     {
         av_dict_set( &av_opts, "stereo_mode", "ms_off", 0 );
     }
+    if ( w->codec_param == CODEC_ID_AC3 )
+    {
+        if( audio->config.out.mixdown == HB_AMIXDOWN_DOLBY ||
+            audio->config.out.mixdown == HB_AMIXDOWN_DOLBYPLII )
+        {
+            av_dict_set( &av_opts, "dsur_mode", "on", 0 );
+        }
+    }
 
     context->channel_layout = AV_CH_LAYOUT_STEREO;
     switch( audio->config.out.mixdown )
