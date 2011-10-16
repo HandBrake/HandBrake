@@ -749,7 +749,7 @@ char * ghb_format_quality( const char *prefix, int codec, double quality )
 	int dir;
 	hb_get_audio_quality_limits(codec, &low, &high, &gran, &dir);
 
-	int digits;
+	int digits = 0;
 	float tmp = gran;
 	while (1)
 	{
