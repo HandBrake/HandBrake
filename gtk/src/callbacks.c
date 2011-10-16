@@ -76,7 +76,8 @@
 #include "ghbcellrenderertext.h"
 
 static void reset_chapter_list(signal_user_data_t *ud, GValue *settings);
-static void update_chapter_list(signal_user_data_t *ud);
+static void update_chapter_list_from_settings(GtkBuilder *builder, GValue *settings);
+static void update_chapter_list_settings(GValue *settings);
 static GList* dvd_device_list();
 static void prune_logs(signal_user_data_t *ud);
 void ghb_notify_done(signal_user_data_t *ud);
@@ -545,16 +546,16 @@ ghb_cache_volnames(signal_user_data_t *ud)
 }
 
 static const gchar*
-get_extension(signal_user_data_t *ud)
+get_extension(GValue *settings)
 {
 	int container;
 	const gchar *extension = "error";
 
-	container = ghb_settings_combo_int(ud->settings, "FileFormat");
+	container = ghb_settings_combo_int(settings, "FileFormat");
 	if (container == HB_MUX_MP4)
 	{
 		extension = "mp4";
-		if (ghb_settings_get_boolean(ud->settings, "UseM4v"))
+		if (ghb_settings_get_boolean(settings, "UseM4v"))
 		{
 			extension = "m4v";
 		}
@@ -567,44 +568,41 @@ get_extension(signal_user_data_t *ud)
 }
 
 static void
-set_destination(signal_user_data_t *ud)
+set_destination_settings(GValue *settings)
 {
-	g_debug("set_destination");
-	if (ghb_settings_get_boolean(ud->settings, "use_source_name"))
+	g_debug("set_destination_settings");
+	if (ghb_settings_get_boolean(settings, "use_source_name"))
 	{
 		GString *str = g_string_new("");
-		gchar *vol_name, *filename;
+		gchar *vol_name;
 		const gchar *extension;
 		gchar *new_name;
 		gint title;
 		
-		filename = ghb_settings_get_string(ud->settings, "dest_file");
-		extension = get_extension(ud);
-		vol_name = ghb_settings_get_string(ud->settings, "volume_label");
+		extension = get_extension(settings);
+		vol_name = ghb_settings_get_string(settings, "volume_label");
 		g_string_append_printf(str, "%s", vol_name);
-		title = ghb_settings_combo_int(ud->settings, "title");
+		title = ghb_settings_get_int(settings, "title_no");
 		if (title >= 0)
 		{
-			if (ghb_settings_get_boolean(
-					ud->settings, "title_no_in_destination"))
+			if (ghb_settings_get_boolean(settings, "title_no_in_destination"))
 			{
 
-				title = ghb_settings_combo_int(ud->settings, "title");
 				g_string_append_printf(str, " - %d", title+1);
 			}
-			if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0 && 
+			if (ghb_settings_combo_int(settings, "PtoPType") == 0 && 
 				ghb_settings_get_boolean(
-					ud->settings, "chapters_in_destination"))
+					settings, "chapters_in_destination"))
 			{
 				gint start, end;
 
 				if (!ghb_settings_get_boolean(
-						ud->settings, "title_no_in_destination"))
+						settings, "title_no_in_destination"))
 				{
 					g_string_append_printf(str, " -");
 				}
-				start = ghb_settings_get_int(ud->settings, "start_point");
-				end = ghb_settings_get_int(ud->settings, "end_point");
+				start = ghb_settings_get_int(settings, "start_point");
+				end = ghb_settings_get_int(settings, "end_point");
 				if (start == end)
 					g_string_append_printf(str, " Ch %d", start);
 				else
@@ -613,11 +611,18 @@ set_destination(signal_user_data_t *ud)
 		}
 		g_string_append_printf(str, ".%s", extension);
 		new_name = g_string_free(str, FALSE);
-		ghb_ui_update(ud, "dest_file", ghb_string_value(new_name));
-		g_free(filename);
+		ghb_settings_set_string(settings, "dest_file", new_name);
 		g_free(vol_name);
 		g_free(new_name);
 	}
+}
+
+static void
+set_destination(signal_user_data_t *ud)
+{
+	set_destination_settings(ud->settings);
+	ghb_ui_update(ud, "dest_file", 
+		ghb_settings_get_value(ud->settings, "dest_file"));
 }
 
 static gchar*
@@ -1064,7 +1069,7 @@ ghb_update_destination_extension(signal_user_data_t *ud)
 	if (busy)
 		return;
 	busy = TRUE;
-	extension = get_extension(ud);
+	extension = get_extension(ud->settings);
 	entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "dest_file"));
 	filename = g_strdup(gtk_entry_get_text(entry));
 	for (ii = 0; containers[ii] != NULL; ii++)
@@ -1488,6 +1493,90 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	ud->dont_clear_presets = FALSE;
 }
 
+void
+set_title_settings(GValue *settings, gint titleindex)
+{
+	ghb_title_info_t tinfo;
+
+	ghb_settings_set_int(settings, "title", titleindex);
+	ghb_settings_set_int(settings, "title_no", titleindex);
+
+	if (ghb_get_title_info (&tinfo, titleindex))
+	{
+		ghb_settings_set_int(settings, "source_width", tinfo.width);
+		ghb_settings_set_int(settings, "source_height", tinfo.height);
+		ghb_settings_set_string(settings, "source", tinfo.path);
+		if (tinfo.type == HB_STREAM_TYPE || tinfo.type == HB_FF_STREAM_TYPE)
+		{
+			if (tinfo.name != NULL && tinfo.name[0] != 0)
+			{
+				ghb_settings_set_string(settings, "volume_label", tinfo.name);
+			}
+			else
+			{
+				gchar *label = "No Title Found";
+				ghb_settings_set_string(settings, "volume_label", label);
+			}
+		}
+		ghb_settings_set_int(settings, "scale_width",
+							 tinfo.width - tinfo.crop[2] - tinfo.crop[3]);
+
+		// If anamorphic or keep_aspect, the hight will 
+		// be automatically calculated
+		gboolean keep_aspect;
+		gint pic_par;
+		keep_aspect = ghb_settings_get_boolean(settings, "PictureKeepRatio");
+		pic_par = ghb_settings_combo_int(settings, "PicturePAR");
+		if (!(keep_aspect || pic_par) || pic_par == 3)
+		{
+			ghb_settings_set_int(settings, "scale_height",
+							 tinfo.width - tinfo.crop[0] - tinfo.crop[1]);
+		}
+
+		ghb_set_scale_settings(settings, GHB_PIC_KEEP_PAR|GHB_PIC_USE_MAX);
+		ghb_settings_set_int(settings, "angle_count", tinfo.angle_count);
+	}
+	update_chapter_list_settings(settings);
+	ghb_set_pref_audio_settings(titleindex, settings);
+	ghb_set_pref_subtitle_settings(titleindex, settings);
+	set_destination_settings(settings);
+
+	char *dest_file, *dest_dir, *dest;
+	dest_file = ghb_settings_get_string(settings, "dest_file");
+	dest_dir = ghb_settings_get_string(settings, "dest_dir");
+	dest = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s", dest_dir, dest_file);
+	ghb_settings_set_string(settings, "destination", dest);
+	g_free(dest_file);
+	g_free(dest_dir);
+	g_free(dest);
+}
+
+void
+ghb_add_all_titles(signal_user_data_t *ud)
+{
+	gint ii;
+	gint count = ghb_get_title_count();
+
+	for (ii = 0; ii < count; ii++)
+	{
+		ghb_title_info_t tinfo;
+
+		GValue *settings = ghb_value_dup(ud->settings);
+		ghb_settings_set_boolean(settings, "use_source_name", TRUE);
+		if (ghb_get_title_info (&tinfo, ii))
+		{
+			if (tinfo.type == HB_DVD_TYPE ||
+				tinfo.type == HB_BD_TYPE)
+			{
+				ghb_settings_set_boolean(settings, 
+										"title_no_in_destination", TRUE);
+			}
+		}
+		set_title_settings(settings, ii);
+		ghb_queue_add(ud, settings, ii);
+	}
+}
+
 static gboolean update_preview = FALSE;
 
 G_MODULE_EXPORT void
@@ -1495,11 +1584,12 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	ghb_title_info_t tinfo;
 	gint titleindex;
-	
+
 	g_debug("title_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
 
 	titleindex = ghb_settings_combo_int(ud->settings, "title");
+	ghb_settings_set_int(ud->settings, "title_no", titleindex);
 	ghb_update_ui_combo_box (ud, "AudioTrack", titleindex, FALSE);
 	ghb_update_ui_combo_box (ud, "SubtitleTrack", titleindex, FALSE);
 
@@ -1508,11 +1598,12 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		show_title_info(ud, &tinfo);
 	}
 	ghb_check_dependency(ud, widget, NULL);
-	update_chapter_list (ud);
-	ghb_adjust_audio_rate_combos(ud);
-	ghb_set_pref_audio(titleindex, ud);
-	ghb_grey_combo_options (ud);
+	update_chapter_list_settings(ud->settings);
+	update_chapter_list_from_settings(ud->builder, ud->settings);
+	ghb_set_pref_audio_settings(titleindex, ud->settings);
+	ghb_set_pref_audio_from_settings(ud, ud->settings);
 	ghb_set_pref_subtitle(titleindex, ud);
+	ghb_grey_combo_options (ud);
 
 	// Unfortunately, there is no way to query how many frames were
 	// actually generated during the scan.
@@ -1631,7 +1722,6 @@ chapter_markers_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
-	ghb_update_destination_extension(ud);
 }
 
 G_MODULE_EXPORT void
@@ -3391,7 +3481,20 @@ reset_chapter_list(signal_user_data_t *ud, GValue *settings)
 }
 
 static void
-update_chapter_list(signal_user_data_t *ud)
+update_chapter_list_settings(GValue *settings)
+{
+	GValue *chapters;
+	gint titleindex;
+	
+	g_debug("update_chapter_list_settings ()");
+	titleindex = ghb_settings_get_int(settings, "title_no");
+	chapters = ghb_get_chapters(titleindex);
+	if (chapters)
+		ghb_settings_set_value(settings, "chapter_list", chapters);
+}
+
+static void
+update_chapter_list_from_settings(GtkBuilder *builder, GValue *settings)
 {
 	GtkTreeView *treeview;
 	GtkTreeIter iter;
@@ -3402,13 +3505,11 @@ update_chapter_list(signal_user_data_t *ud)
 	gint count;
 	
 	g_debug("update_chapter_list ()");
-	titleindex = ghb_settings_combo_int(ud->settings, "title");
-	chapters = ghb_get_chapters(titleindex);
+	titleindex = ghb_settings_get_int(settings, "title_no");
+	chapters = ghb_settings_get_value(settings, "chapter_list");
 	count = ghb_array_len(chapters);
-	if (chapters)
-		ghb_settings_set_value(ud->settings, "chapter_list", chapters);
 	
-	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "chapters_list"));
+	treeview = GTK_TREE_VIEW(GHB_WIDGET(builder, "chapters_list"));
 	store = GTK_LIST_STORE(gtk_tree_view_get_model(treeview));
 	ii = 0;
 	if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(store), &iter))

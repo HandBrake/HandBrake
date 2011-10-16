@@ -28,12 +28,10 @@
 #include "settings.h"
 
 void ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud);
-void ghb_clear_subtitle_list(signal_user_data_t *ud);
+void ghb_set_pref_subtitle_settings(gint titleindex, GValue *settings);
 void ghb_set_subtitle(signal_user_data_t *ud, gint track, GValue *settings);
 GValue* ghb_selected_subtitle_settings(signal_user_data_t *ud);
 gint ghb_selected_subtitle_row(signal_user_data_t *ud);
-void ghb_add_subtitle(
-	signal_user_data_t *ud, GValue *settings);
 void ghb_reset_subtitles(signal_user_data_t *ud, GValue *settings);
 void ghb_subtitle_prune(signal_user_data_t *ud);
 gboolean ghb_soft_in_subtitle_list(GValue *subtitle_list);

@@ -126,6 +126,7 @@ void ghb_backend_queue_scan(const gchar *path, gint titleindex);
 gboolean ghb_get_title_info(ghb_title_info_t *tinfo, gint titleindex);
 void ghb_par_init(signal_user_data_t *ud);
 void ghb_set_scale(signal_user_data_t *ud, gint mode);
+void ghb_set_scale_settings(GValue *settings, gint mode);
 GValue* ghb_get_chapters(gint titleindex);
 void ghb_get_chapter_duration(gint ti, gint ii, gint *hh, gint *mm, gint *ss);
 void ghb_part_duration(gint tt, gint sc, gint ec, gint *hh, gint *mm, gint *ss);
@@ -144,6 +145,7 @@ gchar* ghb_get_source_audio_lang(gint titleindex, gint track);
 gint ghb_find_audio_track(
 	gint titleindex, const gchar *lang, gint acodec, 
 	gint fallback_acodec, GHashTable *track_indices);
+const gchar* ghb_audio_track_description(gint track, int titleindex);
 void ghb_add_all_subtitles(signal_user_data_t *ud, gint titleindex);
 gint ghb_find_pref_subtitle_track(const gchar *lang);
 gint ghb_find_subtitle_track(
@@ -158,16 +160,17 @@ GdkPixbuf* ghb_get_preview_image(
 	gint *width, gint *height);
 gchar* ghb_dvd_volname(const gchar *device);
 gint ghb_get_title_number(gint titleindex);
-gint ghb_subtitle_track_source(signal_user_data_t *ud, gint track);
-const char* ghb_subtitle_track_source_name(signal_user_data_t *ud, gint track);
+int ghb_get_title_count();
+gint ghb_subtitle_track_source(GValue *settings, gint track);
+const char* ghb_subtitle_track_source_name(GValue *settings, gint track);
 const char* ghb_subtitle_source_name(gint source);
-gchar* ghb_subtitle_track_lang(signal_user_data_t *ud, gint track);
+gchar* ghb_subtitle_track_lang(GValue *settings, gint track);
 
 gboolean ghb_validate_vquality(GValue *settings);
-gboolean ghb_validate_audio(signal_user_data_t *ud);
-gboolean ghb_validate_subtitles(signal_user_data_t *ud);
-gboolean ghb_validate_video(signal_user_data_t *ud);
-gboolean ghb_validate_filters(signal_user_data_t *ud);
+gboolean ghb_validate_audio(GValue *settings);
+gboolean ghb_validate_subtitles(GValue *settings);
+gboolean ghb_validate_video(GValue *settings);
+gboolean ghb_validate_filters(GValue *settings);
 gboolean ghb_validate_filter_string(const gchar *str, gint max_fields);
 void ghb_hb_cleanup(gboolean partial);
 gint ghb_lookup_combo_int(const gchar *name, const GValue *gval);

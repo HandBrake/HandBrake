@@ -707,6 +707,28 @@ update_widget(GtkWidget *widget, const GValue *value)
 }
 
 int
+ghb_ui_update_from_settings(GtkBuilder *builder, const gchar *name, const GValue *settings)
+{
+	GObject *object;
+	GValue * value;
+
+	g_debug("ghb_ui_update_from_settings() %s", name);
+	if (name == NULL)
+		return 0;
+	value = ghb_settings_get_value(settings, name);
+	if (value == NULL)
+		return 0;
+	object = GHB_OBJECT(builder, name);
+	if (object == NULL)
+	{
+		g_debug("Failed to find widget for key: %s\n", name);
+		return -1;
+	}
+	update_widget((GtkWidget*)object, value);
+	return 0;
+}
+
+int
 ghb_ui_update(signal_user_data_t *ud, const gchar *name, const GValue *value)
 {
 	GObject *object;

@@ -519,7 +519,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 }
 
 static gboolean
-validate_settings(signal_user_data_t *ud)
+validate_settings(signal_user_data_t *ud, GValue *settings, gint batch)
 {
 	// Check to see if the dest file exists or is
 	// already in the queue
@@ -527,9 +527,9 @@ validate_settings(signal_user_data_t *ud)
 	gint count, ii;
 	gint titleindex;
 
-	titleindex = ghb_settings_combo_int(ud->settings, "title");
+	titleindex = ghb_settings_combo_int(settings, "title");
 	if (titleindex < 0) return FALSE;
-	dest = ghb_settings_get_string(ud->settings, "destination");
+	dest = ghb_settings_get_string(settings, "destination");
 	count = ghb_array_len(ud->queue);
 	for (ii = 0; ii < count; ii++)
 	{
@@ -585,41 +585,44 @@ validate_settings(signal_user_data_t *ud)
 		return FALSE;
 	}
 #endif
-	GFile *gfile;
-	GFileInfo *info;
-	guint64 size;
-	gchar *resolved = ghb_resolve_symlink(destdir);
-
-	gfile = g_file_new_for_path(resolved);
-	info = g_file_query_filesystem_info(gfile, 
-						G_FILE_ATTRIBUTE_FILESYSTEM_FREE, NULL, NULL);
-	if (info != NULL)
+	if (!batch)
 	{
-		if (g_file_info_has_attribute(info, G_FILE_ATTRIBUTE_FILESYSTEM_FREE))
+		GFile *gfile;
+		GFileInfo *info;
+		guint64 size;
+		gchar *resolved = ghb_resolve_symlink(destdir);
+
+		gfile = g_file_new_for_path(resolved);
+		info = g_file_query_filesystem_info(gfile, 
+							G_FILE_ATTRIBUTE_FILESYSTEM_FREE, NULL, NULL);
+		if (info != NULL)
 		{
-			size = g_file_info_get_attribute_uint64(info, 
-									G_FILE_ATTRIBUTE_FILESYSTEM_FREE);
-			
-			gint64 fsize = (guint64)10 * 1024 * 1024 * 1024;
-			if (size < fsize)
+			if (g_file_info_has_attribute(info, G_FILE_ATTRIBUTE_FILESYSTEM_FREE))
 			{
-				message = g_strdup_printf(
-							"Destination filesystem is almost full: %uM free\n\n"
-							"Encode may be incomplete if you proceed.\n",
-							(guint)(size / (1024L*1024L)));
-				if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, "Cancel", "Proceed"))
+				size = g_file_info_get_attribute_uint64(info, 
+										G_FILE_ATTRIBUTE_FILESYSTEM_FREE);
+				
+				gint64 fsize = (guint64)10 * 1024 * 1024 * 1024;
+				if (size < fsize)
 				{
-					g_free(dest);
+					message = g_strdup_printf(
+								"Destination filesystem is almost full: %uM free\n\n"
+								"Encode may be incomplete if you proceed.\n",
+								(guint)(size / (1024L*1024L)));
+					if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, "Cancel", "Proceed"))
+					{
+						g_free(dest);
+						g_free(message);
+						return FALSE;
+					}
 					g_free(message);
-					return FALSE;
 				}
-				g_free(message);
 			}
+			g_object_unref(info);
 		}
-		g_object_unref(info);
+		g_object_unref(gfile);
+		g_free(resolved);
 	}
-	g_object_unref(gfile);
-	g_free(resolved);
 	g_free(destdir);
 	if (g_file_test(dest, G_FILE_TEST_EXISTS))
 	{
@@ -639,44 +642,42 @@ validate_settings(signal_user_data_t *ud)
 	}
 	g_free(dest);
 	// Validate video quality is in a reasonable range
-	if (!ghb_validate_vquality(ud->settings))
+	if (!ghb_validate_vquality(settings))
 	{
 		return FALSE;
 	}
 	// Validate audio settings
-	if (!ghb_validate_audio(ud))
+	if (!ghb_validate_audio(settings))
 	{
 		return FALSE;
 	}
 	// Validate audio settings
-	if (!ghb_validate_subtitles(ud))
+	if (!ghb_validate_subtitles(settings))
 	{
 		return FALSE;
 	}
 	// Validate video settings
-	if (!ghb_validate_video(ud))
+	if (!ghb_validate_video(settings))
 	{
 		return FALSE;
 	}
 	// Validate filter settings
-	if (!ghb_validate_filters(ud))
+	if (!ghb_validate_filters(settings))
 	{
 		return FALSE;
 	}
-	ghb_audio_list_refresh(ud);
 	return TRUE;
 }
 
-static gboolean
-queue_add(signal_user_data_t *ud)
+gboolean
+ghb_queue_add(signal_user_data_t *ud, GValue *settings, gint batch)
 {
 	// Add settings to the queue
-	GValue *settings;
 	gint titleindex;
 	gint titlenum;
 	
 	g_debug("queue_add ()");
-	if (!validate_settings(ud))
+	if (!validate_settings(ud, settings, batch))
 	{
 		return FALSE;
 	}
@@ -684,7 +685,6 @@ queue_add(signal_user_data_t *ud)
 	if (ud->queue == NULL)
 		ud->queue = ghb_array_value_new(32);
 	// Make a copy of current settings to be used for the new job
-	settings = ghb_value_dup(ud->settings);
 	ghb_settings_set_int(settings, "job_status", GHB_QUEUE_PENDING);
 	ghb_settings_set_int(settings, "job_unique_id", 0);
 	titleindex = ghb_settings_combo_int(settings, "title");
@@ -702,7 +702,18 @@ G_MODULE_EXPORT void
 queue_add_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("queue_add_clicked_cb ()");
-	queue_add(ud);
+	GValue *settings = ghb_value_dup(ud->settings);
+	if (!ghb_queue_add(ud, settings, 0))
+		ghb_value_free(settings);
+	// Validation of settings may have changed audio list
+	ghb_audio_list_refresh(ud);
+}
+
+G_MODULE_EXPORT void
+queue_add_all_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	g_debug("queue_add_all_clicked_cb ()");
+	ghb_add_all_titles(ud);
 }
 
 G_MODULE_EXPORT void
@@ -1001,6 +1012,8 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
 	gtk_widget_set_sensitive(widget, show_start);
 	action = GHB_ACTION(ud->builder, "queue_add_menu");
 	gtk_action_set_sensitive(action, show_start);
+	action = GHB_ACTION(ud->builder, "queue_add_all_menu");
+	gtk_action_set_sensitive(action, show_start);
 
 	widget = GHB_WIDGET (ud->builder, "queue_start1");
 	if (show_stop)
@@ -1180,8 +1193,14 @@ queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	{
 		// The queue has no running or pending jobs.
 		// Add current settings to the queue, then run.
-		if (!queue_add(ud))
+		GValue *settings = ghb_value_dup(ud->settings);
+		if (!ghb_queue_add(ud, settings, 0))
+		{
+			ghb_value_free(settings);
 			return;
+		}
+		// Validation of settings may have changed audio list
+		ghb_audio_list_refresh(ud);
 	}
 	if (state == GHB_STATE_IDLE)
 	{

@@ -4230,14 +4230,11 @@ ghb_refresh_preset(signal_user_data_t *ud)
 			GtkWidget *qp = GHB_WIDGET(ud->builder, "VideoQualitySlider");
 			gtk_range_set_range (GTK_RANGE(qp), 0, 100);
 			gtk_scale_set_digits(GTK_SCALE(qp), 3);
-			// Clear the audio list prior to changing the preset.  Existing 
-			// audio can cause the container extension to be automatically 
-			// changed when it shouldn't be
-			ghb_clear_audio_list(ud);
 			ghb_set_preset_from_indices(ud, indices, len);
 			gint titleindex;
 			titleindex = ghb_settings_combo_int(ud->settings, "title");
-			ghb_set_pref_audio(titleindex, ud);
+			ghb_set_pref_audio_settings(titleindex, ud->settings);
+			ghb_set_pref_audio_from_settings(ud, ud->settings);
 			ghb_set_pref_subtitle(titleindex, ud);
 			ghb_settings_set_boolean(ud->settings, "preset_modified", FALSE);
 			if (ghb_get_title_info (&tinfo, titleindex))
@@ -4310,14 +4307,11 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 			GtkWidget *qp = GHB_WIDGET(ud->builder, "VideoQualitySlider");
 			gtk_range_set_range (GTK_RANGE(qp), 0, 100);
 			gtk_scale_set_digits(GTK_SCALE(qp), 3);
-			// Clear the audio list prior to changing the preset.  Existing 
-			// audio can cause the container extension to be automatically 
-			// changed when it shouldn't be
-			ghb_clear_audio_list(ud);
 			ghb_set_preset_from_indices(ud, indices, len);
 			gint titleindex;
 			titleindex = ghb_settings_combo_int(ud->settings, "title");
-			ghb_set_pref_audio(titleindex, ud);
+			ghb_set_pref_audio_settings(titleindex, ud->settings);
+			ghb_set_pref_audio_from_settings(ud, ud->settings);
 			ghb_set_pref_subtitle(titleindex, ud);
 			ghb_settings_set_boolean(ud->settings, "preset_modified", FALSE);
 			if (ghb_get_title_info (&tinfo, titleindex))

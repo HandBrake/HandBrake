@@ -395,6 +395,15 @@
           </object>
         </child>
         <child>
+          <object class="GtkAction" id="queue_add_all_menu">
+            <property name="sensitive">False</property>
+            <property name="icon-name">hb-add-queue</property>
+            <property name="name">queue_add_all_menu</property>
+            <property name="label">Add A_ll Queue</property>
+            <signal handler="queue_add_all_clicked_cb" name="activate"/>
+          </object>
+        </child>
+        <child>
           <object class="GtkAction" id="queue_start_menu">
             <property name="sensitive">False</property>
             <property name="icon-name">hb-play</property>
@@ -501,6 +510,7 @@
         </menu>
         <menu action="menuitem2">
           <menuitem action="queue_add_menu"/>
+          <menuitem action="queue_add_all_menu"/>
           <menuitem action="queue_start_menu"/>
           <menuitem action="queue_pause_menu"/>
         </menu>
@@ -4572,7 +4582,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                                 <property name="visible">True</property>
                                 <child>
                                   <object class="GtkCheckButton" id="use_source_name">
-                                    <property name="label" translatable="yes">Use automatic naming (uses DVD name)</property>
+                                    <property name="label" translatable="yes">Use automatic naming (uses modified source name)</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>

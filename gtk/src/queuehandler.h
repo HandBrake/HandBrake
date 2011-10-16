@@ -30,5 +30,6 @@
 
 void ghb_queue_buttons_grey(signal_user_data_t *ud);
 gboolean ghb_reload_queue(signal_user_data_t *ud);
+gboolean ghb_queue_add(signal_user_data_t *ud, GValue *settings, gint batch);
 
 #endif // _QUEUEHANDLER_H_

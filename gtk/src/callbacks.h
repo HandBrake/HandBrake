@@ -67,6 +67,7 @@ void ghb_volname_cache_init(void);
 void ghb_update_destination_extension(signal_user_data_t *ud);
 void ghb_update_pending(signal_user_data_t *ud);
 gboolean ghb_idle_scan(signal_user_data_t *ud);
+void ghb_add_all_titles(signal_user_data_t *ud);
 
 #endif // _CALLBACKS_H_
 

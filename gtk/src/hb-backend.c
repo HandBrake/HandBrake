@@ -1389,7 +1389,7 @@ ghb_hb_cleanup(gboolean partial)
 }
 
 gint
-ghb_subtitle_track_source(signal_user_data_t *ud, gint track)
+ghb_subtitle_track_source(GValue *settings, gint track)
 {
 	gint titleindex;
 
@@ -1397,7 +1397,7 @@ ghb_subtitle_track_source(signal_user_data_t *ud, gint track)
 		return SRTSUB;
 	if (track < 0)
 		return VOBSUB;
-	titleindex = ghb_settings_combo_int(ud->settings, "title");
+	titleindex = ghb_settings_combo_int(settings, "title");
 	if (titleindex < 0)
 		return VOBSUB;
 
@@ -1453,7 +1453,7 @@ ghb_subtitle_source_name(gint source)
 }
 
 const char*
-ghb_subtitle_track_source_name(signal_user_data_t *ud, gint track)
+ghb_subtitle_track_source_name(GValue *settings, gint track)
 {
 	gint titleindex;
 	const gchar * name = "Unknown";
@@ -1469,7 +1469,7 @@ ghb_subtitle_track_source_name(signal_user_data_t *ud, gint track)
 		goto done;
 	}
 
-	titleindex = ghb_settings_combo_int(ud->settings, "title");
+	titleindex = ghb_settings_combo_int(settings, "title");
 	if (titleindex < 0)
 		goto done;
 
@@ -1498,15 +1498,15 @@ done:
 }
 
 gchar*
-ghb_subtitle_track_lang(signal_user_data_t *ud, gint track)
+ghb_subtitle_track_lang(GValue *settings, gint track)
 {
 	gint titleindex;
 
-	titleindex = ghb_settings_combo_int(ud->settings, "title");
+	titleindex = ghb_settings_combo_int(settings, "title");
 	if (titleindex < 0)
 		goto fail;
 	if (track == -1)
-		return ghb_get_user_audio_lang(ud, titleindex, 0);
+		return ghb_get_user_audio_lang(settings, titleindex, 0);
 	if (track < 0)
 		goto fail;
 
@@ -2111,6 +2111,12 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
 	titles[ii] = NULL;
 }
 
+int
+ghb_get_title_count()
+{
+    return title_opts.count;
+}
+
 static gboolean
 find_combo_item_by_int(GtkTreeModel *store, gint value, GtkTreeIter *iter)
 {
@@ -2204,6 +2210,27 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 		audio_track_opts.map[ii].ivalue = ii;
 		audio_track_opts.map[ii].svalue = index_str[ii];
 	}
+}
+
+const gchar*
+ghb_audio_track_description(gint track, int titleindex)
+{
+	hb_list_t  * list = NULL;
+	hb_title_t * title = NULL;
+    hb_audio_config_t * audio;
+	gchar * desc = "Unknown";
+	
+	g_debug("ghb_audio_track_description ()\n");
+
+	if (h_scan == NULL) return desc;
+	list = hb_get_titles( h_scan );
+	title = (hb_title_t*)hb_list_item( list, titleindex );
+	if (title == NULL) return desc;
+	if (track >= hb_list_count( title->list_audio )) return desc;
+
+	audio = hb_list_audio_config_item(title->list_audio, track);
+	if (audio == NULL) return desc;
+	return audio->lang.description;
 }
 
 void
@@ -3166,12 +3193,13 @@ ghb_get_chapters(gint titleindex)
 	GValue *chapters = NULL;
 	
 	g_debug("ghb_get_chapters (title = %d)\n", titleindex);
-	if (h_scan == NULL) return NULL;
+	chapters = ghb_array_value_new(0);
+
+	if (h_scan == NULL) return chapters;
 	list = hb_get_titles( h_scan );
     title = (hb_title_t*)hb_list_item( list, titleindex );
-	if (title == NULL) return NULL;
+	if (title == NULL) return chapters;
 	count = hb_list_count( title->list_chapter );
-	chapters = ghb_array_value_new(count);
 	for (ii = 0; ii < count; ii++)
 	{
 		chapter = hb_list_item(title->list_chapter, ii);
@@ -3701,17 +3729,7 @@ picture_settings_deps(signal_user_data_t *ud)
 	GtkWidget *widget;
 
 	pic_par = ghb_settings_combo_int(ud->settings, "PicturePAR");
-	if (pic_par == 1)
-	{
-		ghb_ui_update(ud, "autoscale", ghb_boolean_value(TRUE));
-		ghb_ui_update(ud, "PictureModulus", ghb_int_value(2));
-		ghb_ui_update(ud, "PictureLooseCrop", ghb_boolean_value(TRUE));
-	}
 	enable_keep_aspect = (pic_par != 1 && pic_par != 2);
-	if (!enable_keep_aspect)
-	{
-		ghb_ui_update(ud, "PictureKeepRatio", ghb_boolean_value(TRUE));
-	}
 	keep_aspect = ghb_settings_get_boolean(ud->settings, "PictureKeepRatio");
 	autoscale = ghb_settings_get_boolean(ud->settings, "autoscale");
 
@@ -3764,7 +3782,7 @@ ghb_limit_rational( gint *num, gint *den, gint limit )
 }
 
 void
-ghb_set_scale(signal_user_data_t *ud, gint mode)
+ghb_set_scale_settings(GValue *settings, gint mode)
 {
 	hb_list_t  * list;
 	hb_title_t * title;
@@ -3777,14 +3795,24 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	gint aspect_n, aspect_d;
 	gboolean keep_width = (mode & GHB_PIC_KEEP_WIDTH);
 	gboolean keep_height = (mode & GHB_PIC_KEEP_HEIGHT);
-	gint step;
-	GtkWidget *widget;
 	gint mod;
 	gint max_width = 0;
 	gint max_height = 0;
 	
 	g_debug("ghb_set_scale ()\n");
-	picture_settings_deps(ud);
+
+	pic_par = ghb_settings_combo_int(settings, "PicturePAR");
+	if (pic_par == 1)
+	{
+		ghb_settings_set_boolean(settings, "autoscale", TRUE);
+		ghb_settings_set_int(settings, "PictureModulus", 2);
+		ghb_settings_set_boolean(settings, "PictureLooseCrop", TRUE);
+	}
+	if (pic_par == 1 || pic_par == 2)
+	{
+		ghb_settings_set_boolean(settings, "PictureKeepRatio", TRUE);
+	}
+
 	if (h_scan == NULL) return;
 	list = hb_get_titles( h_scan );
 	if( !hb_list_count( list ) )
@@ -3794,24 +3822,20 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	}
 	gint titleindex;
 
-	titleindex = ghb_settings_combo_int(ud->settings, "title");
+	titleindex = ghb_settings_combo_int(settings, "title");
 	title = hb_list_item( list, titleindex );
 	if (title == NULL) return;
 	job   = title->job;
 	if (job == NULL) return;
 
-	if (ud->scale_busy) return;
-	ud->scale_busy = TRUE;
-
 	// First configure widgets
-	mod = ghb_settings_combo_int(ud->settings, "PictureModulus");
-	pic_par = ghb_settings_combo_int(ud->settings, "PicturePAR");
-	keep_aspect = ghb_settings_get_boolean(ud->settings, "PictureKeepRatio");
-	autocrop = ghb_settings_get_boolean(ud->settings, "PictureAutoCrop");
-	autoscale = ghb_settings_get_boolean(ud->settings, "autoscale");
+	mod = ghb_settings_combo_int(settings, "PictureModulus");
+	keep_aspect = ghb_settings_get_boolean(settings, "PictureKeepRatio");
+	autocrop = ghb_settings_get_boolean(settings, "PictureAutoCrop");
+	autoscale = ghb_settings_get_boolean(settings, "autoscale");
 	// "Noscale" is a flag that says we prefer to crop extra to satisfy
 	// alignment constraints rather than scaling to satisfy them.
-	noscale = ghb_settings_get_boolean(ud->settings, "PictureLooseCrop");
+	noscale = ghb_settings_get_boolean(settings, "PictureLooseCrop");
 	// Align dimensions to either 16 or 2 pixels
 	// The scaler crashes if the dimensions are not divisible by 2
 	// x264 also will not accept dims that are not multiple of 2
@@ -3820,35 +3844,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		keep_width = FALSE;
 		keep_height = FALSE;
 	}
-	// Step needs to be at least 2 because odd widths cause scaler crash
-	// subsampled chroma requires even crop values.
-	step = mod;
-	widget = GHB_WIDGET (ud->builder, "scale_width");
-	gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 16);
-	widget = GHB_WIDGET (ud->builder, "scale_height");
-	gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 16);
-	if (noscale)
-	{
-		widget = GHB_WIDGET (ud->builder, "PictureTopCrop");
-		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 16);
-		widget = GHB_WIDGET (ud->builder, "PictureBottomCrop");
-		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 16);
-		widget = GHB_WIDGET (ud->builder, "PictureLeftCrop");
-		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 16);
-		widget = GHB_WIDGET (ud->builder, "PictureRightCrop");
-		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 16);
-	}
-	else
-	{
-		widget = GHB_WIDGET (ud->builder, "PictureTopCrop");
-		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 2, 16);
-		widget = GHB_WIDGET (ud->builder, "PictureBottomCrop");
-		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 2, 16);
-		widget = GHB_WIDGET (ud->builder, "PictureLeftCrop");
-		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 2, 16);
-		widget = GHB_WIDGET (ud->builder, "PictureRightCrop");
-		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 2, 16);
-	}
+
 	ghb_title_info_t tinfo;
 	ghb_get_title_info (&tinfo, titleindex);
 	if (autocrop)
@@ -3857,25 +3853,22 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		crop[1] = tinfo.crop[1];
 		crop[2] = tinfo.crop[2];
 		crop[3] = tinfo.crop[3];
-		ghb_ui_update(ud, "PictureTopCrop", ghb_int64_value(crop[0]));
-		ghb_ui_update(ud, "PictureBottomCrop", ghb_int64_value(crop[1]));
-		ghb_ui_update(ud, "PictureLeftCrop", ghb_int64_value(crop[2]));
-		ghb_ui_update(ud, "PictureRightCrop", ghb_int64_value(crop[3]));
+		ghb_settings_set_int(settings, "PictureTopCrop", crop[0]);
+		ghb_settings_set_int(settings, "PictureBottomCrop", crop[1]);
+		ghb_settings_set_int(settings, "PictureLeftCrop", crop[2]);
+		ghb_settings_set_int(settings, "PictureRightCrop", crop[3]);
 	}
 	else
 	{
-		crop[0] = ghb_settings_get_int(ud->settings, "PictureTopCrop");
-		crop[1] = ghb_settings_get_int(ud->settings, "PictureBottomCrop");
-		crop[2] = ghb_settings_get_int(ud->settings, "PictureLeftCrop");
-		crop[3] = ghb_settings_get_int(ud->settings, "PictureRightCrop");
+		crop[0] = ghb_settings_get_int(settings, "PictureTopCrop");
+		crop[1] = ghb_settings_get_int(settings, "PictureBottomCrop");
+		crop[2] = ghb_settings_get_int(settings, "PictureLeftCrop");
+		crop[3] = ghb_settings_get_int(settings, "PictureRightCrop");
 	}
 	if (noscale)
 	{
 		gint need1, need2;
 
-		// Note: until we allow color formats other than yuv420 in the
-		// pipeline, title width and height will always be even
-		//
 		// Adjust the cropping to accomplish the desired width and height
 		crop_width = tinfo.width - crop[2] - crop[3];
 		crop_height = tinfo.height - crop[0] - crop[1];
@@ -3883,27 +3876,17 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		height = MOD_DOWN(crop_height, mod);
 
 		need1 = (crop_height - height) / 2;
-		// If the top crop would fall on an odd boundary, crop an extra
-		// line from the top
-		if ((crop[0] + need1) & 1)
-			need1++;
 		need2 = crop_height - height - need1;
 		crop[0] += need1;
 		crop[1] += need2;
-
 		need1 = (crop_width - width) / 2;
-		// If the left crop would fall on an odd boundary, crop an extra
-		// column from the left
-		if ((crop[2] + need1) & 1)
-			need1++;
 		need2 = crop_width - width - need1;
 		crop[2] += need1;
 		crop[3] += need2;
-
-		ghb_ui_update(ud, "PictureTopCrop", ghb_int64_value(crop[0]));
-		ghb_ui_update(ud, "PictureBottomCrop", ghb_int64_value(crop[1]));
-		ghb_ui_update(ud, "PictureLeftCrop", ghb_int64_value(crop[2]));
-		ghb_ui_update(ud, "PictureRightCrop", ghb_int64_value(crop[3]));
+		ghb_settings_set_int(settings, "PictureTopCrop", crop[0]);
+		ghb_settings_set_int(settings, "PictureBottomCrop", crop[1]);
+		ghb_settings_set_int(settings, "PictureLeftCrop", crop[2]);
+		ghb_settings_set_int(settings, "PictureRightCrop", crop[3]);
 	}
 	hb_reduce(&aspect_n, &aspect_d, 
 				title->width * title->pixel_aspect_width, 
@@ -3917,14 +3900,14 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	}
 	else
 	{
-		width = ghb_settings_get_int(ud->settings, "scale_width");
-		height = ghb_settings_get_int(ud->settings, "scale_height");
+		width = ghb_settings_get_int(settings, "scale_width");
+		height = ghb_settings_get_int(settings, "scale_height");
 		if (mode & GHB_PIC_USE_MAX)
 		{
 			max_width = MOD_DOWN(
-				ghb_settings_get_int(ud->settings, "PictureWidth"), mod);
+				ghb_settings_get_int(settings, "PictureWidth"), mod);
 			max_height = MOD_DOWN(
-				ghb_settings_get_int(ud->settings, "PictureHeight"), mod);
+				ghb_settings_get_int(settings, "PictureHeight"), mod);
 		}
 	}
 	g_debug("max_width %d, max_height %d\n", max_width, max_height);
@@ -3954,23 +3937,24 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		job->height = height;
 		job->maxWidth = max_width;
 		job->maxHeight = max_height;
-		job->crop[0] = crop[0];	job->crop[1] = crop[1];
-		job->crop[2] = crop[2];	job->crop[3] = crop[3];
+		job->crop[0] = crop[0];
+		job->crop[1] = crop[1];
+		job->crop[2] = crop[2];
+		job->crop[3] = crop[3];
 		if (job->anamorphic.mode == 3 && !keep_aspect)
 		{
 			job->anamorphic.keep_display_aspect = 0;
 			if (mode & GHB_PIC_KEEP_PAR)
 			{
 				job->anamorphic.par_width = 
-					ghb_settings_get_int(ud->settings, "PicturePARWidth");
+					ghb_settings_get_int(settings, "PicturePARWidth");
 				job->anamorphic.par_height = 
-					ghb_settings_get_int(ud->settings, "PicturePARHeight");
+					ghb_settings_get_int(settings, "PicturePARHeight");
 			}
 			else
 			{
 				job->anamorphic.dar_width = 
-					ghb_settings_get_int(ud->settings, 
-										"PictureDisplayWidth");
+					ghb_settings_get_int(settings, "PictureDisplayWidth");
 				job->anamorphic.dar_height = height;
 			}
 		}
@@ -3981,27 +3965,22 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		// hb_set_anamorphic_size will adjust par, dar, and width/height
 		// to conform to job parameters that have been set, including 
 		// maxWidth and maxHeight
-		hb_set_anamorphic_size( job, &width, &height, 
-								&par_width, &par_height );
+		hb_set_anamorphic_size(job, &width, &height, &par_width, &par_height);
 		if (job->anamorphic.mode == 3 && !keep_aspect && 
 			mode & GHB_PIC_KEEP_PAR)
 		{
 			// hb_set_anamorphic_size reduces the par, which we
 			// don't want in this case because the user is
 			// explicitely specifying it.
-			par_width = ghb_settings_get_int(ud->settings, 
-											"PicturePARWidth");
-			par_height = ghb_settings_get_int(ud->settings, 
-												"PicturePARHeight");
+			par_width = ghb_settings_get_int(settings, "PicturePARWidth");
+			par_height = ghb_settings_get_int(settings, "PicturePARHeight");
 		}
 	}
 	else 
 	{
 		// Adjust dims according to max values
-		if (max_height)
-			height = MIN(height, max_height);
-		if (max_width)
-			width = MIN(width, max_width);
+		if (max_height) height = MIN(height, max_height);
+		if (max_width) width = MIN(width, max_width);
 
 		if (keep_aspect)
 		{
@@ -4049,15 +4028,87 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 			width = MIN(width, max_width);
 		par_width = par_height = 1;
 	}
-	ghb_ui_update(ud, "scale_width", ghb_int64_value(width));
-	ghb_ui_update(ud, "scale_height", ghb_int64_value(height));
+	ghb_settings_set_int(settings, "scale_width", width);
+	ghb_settings_set_int(settings, "scale_height", height);
 
-	gint disp_width, dar_width, dar_height;
-	gchar *str;
+	gint disp_width;
 
 	disp_width = ((gdouble)par_width / par_height) * width + 0.5;
-	hb_reduce(&dar_width, &dar_height, disp_width, height);
     ghb_limit_rational(&par_width, &par_height, 65535);
+
+	ghb_settings_set_int(settings, "PicturePARWidth", par_width);
+	ghb_settings_set_int(settings, "PicturePARHeight", par_height);
+	ghb_settings_set_int(settings, "PictureDisplayWidth", disp_width);
+	ghb_settings_set_int(settings, "PictureDisplayHeight", height);
+}
+
+void
+ghb_set_scale(signal_user_data_t *ud, gint mode)
+{
+	if (ud->scale_busy) return;
+	ud->scale_busy = TRUE;
+
+	ghb_set_scale_settings(ud->settings, mode);
+	picture_settings_deps(ud);
+
+	// Step needs to be at least 2 because odd widths cause scaler crash
+	// subsampled chroma requires even crop values.
+	GtkWidget *widget;
+	int mod = ghb_settings_combo_int(ud->settings, "PictureModulus");
+	widget = GHB_WIDGET (ud->builder, "scale_width");
+	gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), mod, 16);
+	widget = GHB_WIDGET (ud->builder, "scale_height");
+	gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), mod, 16);
+
+	// "Noscale" is a flag that says we prefer to crop extra to satisfy
+	// alignment constraints rather than scaling to satisfy them.
+	gboolean noscale = ghb_settings_get_boolean(ud->settings, "PictureLooseCrop");
+	if (noscale)
+	{
+		widget = GHB_WIDGET (ud->builder, "PictureTopCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), mod, 16);
+		widget = GHB_WIDGET (ud->builder, "PictureBottomCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), mod, 16);
+		widget = GHB_WIDGET (ud->builder, "PictureLeftCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), mod, 16);
+		widget = GHB_WIDGET (ud->builder, "PictureRightCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), mod, 16);
+	}
+	else
+	{
+		widget = GHB_WIDGET (ud->builder, "PictureTopCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 2, 16);
+		widget = GHB_WIDGET (ud->builder, "PictureBottomCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 2, 16);
+		widget = GHB_WIDGET (ud->builder, "PictureLeftCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 2, 16);
+		widget = GHB_WIDGET (ud->builder, "PictureRightCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 2, 16);
+	}
+
+	ghb_ui_update_from_settings(ud->builder, "autoscale", ud->settings);
+	ghb_ui_update_from_settings(ud->builder, "PictureModulus", ud->settings);
+	ghb_ui_update_from_settings(ud->builder, "PictureLooseCrop", ud->settings);
+	ghb_ui_update_from_settings(ud->builder, "PictureKeepRatio", ud->settings);
+
+	ghb_ui_update_from_settings(ud->builder, "PictureTopCrop", ud->settings);
+	ghb_ui_update_from_settings(ud->builder, "PictureBottomCrop", ud->settings);
+	ghb_ui_update_from_settings(ud->builder, "PictureLeftCrop", ud->settings);
+	ghb_ui_update_from_settings(ud->builder, "PictureRightCrop", ud->settings);
+
+	ghb_ui_update_from_settings(ud->builder, "scale_width", ud->settings);
+	ghb_ui_update_from_settings(ud->builder, "scale_height", ud->settings);
+
+	ghb_ui_update_from_settings(ud->builder, "PicturePARWidth", ud->settings);
+	ghb_ui_update_from_settings(ud->builder, "PicturePARHeight", ud->settings);
+	ghb_ui_update_from_settings(ud->builder, "PictureDisplayWidth", ud->settings);
+	ghb_ui_update_from_settings(ud->builder, "PictureDisplayHeight", ud->settings);
+	gint disp_width, disp_height, dar_width, dar_height;
+	gchar *str;
+
+	disp_width = ghb_settings_get_int(ud->settings, "PictureDisplayWidth");
+	disp_height = ghb_settings_get_int(ud->settings, "PictureDisplayHeight");
+	hb_reduce(&dar_width, &dar_height, disp_width, disp_height);
 	gint iaspect = dar_width * 9 / dar_height;
 	if (dar_width > 2 * dar_height)
 	{
@@ -4077,10 +4128,6 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	}
 	ghb_ui_update(ud, "display_aspect", ghb_string_value(str));
 	g_free(str);
-	ghb_ui_update(ud, "PicturePARWidth", ghb_int64_value(par_width));
-	ghb_ui_update(ud, "PicturePARHeight", ghb_int64_value(par_height));
-	ghb_ui_update(ud, "PictureDisplayWidth", ghb_int64_value(disp_width));
-	ghb_ui_update(ud, "PictureDisplayHeight", ghb_int64_value(height));
 	ud->scale_busy = FALSE;
 }
 
@@ -4178,18 +4225,18 @@ ghb_validate_filter_string(const gchar *str, gint max_fields)
 }
 
 gboolean
-ghb_validate_filters(signal_user_data_t *ud)
+ghb_validate_filters(GValue *settings)
 {
 	gchar *str;
 	gint index;
 	gchar *message;
 
-	gboolean decomb_deint = ghb_settings_get_boolean(ud->settings, "PictureDecombDeinterlace");
+	gboolean decomb_deint = ghb_settings_get_boolean(settings, "PictureDecombDeinterlace");
 	// deinte
-	index = ghb_settings_combo_int(ud->settings, "PictureDeinterlace");
+	index = ghb_settings_combo_int(settings, "PictureDeinterlace");
 	if (!decomb_deint && index == 1)
 	{
-		str = ghb_settings_get_string(ud->settings, "PictureDeinterlaceCustom");
+		str = ghb_settings_get_string(settings, "PictureDeinterlaceCustom");
 		if (!ghb_validate_filter_string(str, -1))
 		{
 			message = g_strdup_printf(
@@ -4203,10 +4250,10 @@ ghb_validate_filters(signal_user_data_t *ud)
 		g_free(str);
 	}
 	// detel
-	index = ghb_settings_combo_int(ud->settings, "PictureDetelecine");
+	index = ghb_settings_combo_int(settings, "PictureDetelecine");
 	if (index == 1)
 	{
-		str = ghb_settings_get_string(ud->settings, "PictureDetelecineCustom");
+		str = ghb_settings_get_string(settings, "PictureDetelecineCustom");
 		if (!ghb_validate_filter_string(str, -1))
 		{
 			message = g_strdup_printf(
@@ -4220,10 +4267,10 @@ ghb_validate_filters(signal_user_data_t *ud)
 		g_free(str);
 	}
 	// decomb
-	index = ghb_settings_combo_int(ud->settings, "PictureDecomb");
+	index = ghb_settings_combo_int(settings, "PictureDecomb");
 	if (decomb_deint && index == 1)
 	{
-		str = ghb_settings_get_string(ud->settings, "PictureDecombCustom");
+		str = ghb_settings_get_string(settings, "PictureDecombCustom");
 		if (!ghb_validate_filter_string(str, -1))
 		{
 			message = g_strdup_printf(
@@ -4237,10 +4284,10 @@ ghb_validate_filters(signal_user_data_t *ud)
 		g_free(str);
 	}
 	// denois
-	index = ghb_settings_combo_int(ud->settings, "PictureDenoise");
+	index = ghb_settings_combo_int(settings, "PictureDenoise");
 	if (index == 1)
 	{
-		str = ghb_settings_get_string(ud->settings, "PictureDenoiseCustom");
+		str = ghb_settings_get_string(settings, "PictureDenoiseCustom");
 		if (!ghb_validate_filter_string(str, -1))
 		{
 			message = g_strdup_printf(
@@ -4257,13 +4304,13 @@ ghb_validate_filters(signal_user_data_t *ud)
 }
 
 gboolean
-ghb_validate_video(signal_user_data_t *ud)
+ghb_validate_video(GValue *settings)
 {
 	gint vcodec, mux;
 	gchar *message;
 
-	mux = ghb_settings_combo_int(ud->settings, "FileFormat");
-	vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");
+	mux = ghb_settings_combo_int(settings, "FileFormat");
+	vcodec = ghb_settings_combo_int(settings, "VideoEncoder");
 	if ((mux == HB_MUX_MP4) && (vcodec == HB_VCODEC_THEORA))
 	{
 		// mp4/theora combination is not supported.
@@ -4277,14 +4324,13 @@ ghb_validate_video(signal_user_data_t *ud)
 			return FALSE;
 		}
 		g_free(message);
-		vcodec = HB_VCODEC_FFMPEG_MPEG4;
-		ghb_ui_update(ud, "VideoEncoder", ghb_int64_value(vcodec));
+		ghb_settings_set_int(settings, "VideoEncoder", HB_VCODEC_FFMPEG_MPEG4);
 	}
 	return TRUE;
 }
 
 gboolean
-ghb_validate_subtitles(signal_user_data_t *ud)
+ghb_validate_subtitles(GValue *settings)
 {
 	hb_list_t  * list;
 	hb_title_t * title;
@@ -4301,21 +4347,21 @@ ghb_validate_subtitles(signal_user_data_t *ud)
 
 	gint titleindex;
 
-	titleindex = ghb_settings_combo_int(ud->settings, "title");
+	titleindex = ghb_settings_combo_int(settings, "title");
     title = hb_list_item( list, titleindex );
 	if (title == NULL) return FALSE;
 
-	const GValue *slist, *settings;
+	const GValue *slist, *subtitle;
 	gint count, ii, source;
 	gboolean burned, one_burned = FALSE;
 
-	slist = ghb_settings_get_value(ud->settings, "subtitle_list");
+	slist = ghb_settings_get_value(settings, "subtitle_list");
 	count = ghb_array_len(slist);
 	for (ii = 0; ii < count; ii++)
 	{
-		settings = ghb_array_get_nth(slist, ii);
-		source = ghb_settings_get_int(settings, "SubtitleSource");
-		burned = ghb_settings_get_boolean(settings, "SubtitleBurned");
+		subtitle = ghb_array_get_nth(slist, ii);
+		source = ghb_settings_get_int(subtitle, "SubtitleSource");
+		burned = ghb_settings_get_boolean(subtitle, "SubtitleBurned");
 		if (burned && one_burned)
 		{
 			// MP4 can only handle burned vobsubs.  make sure there isn't
@@ -4340,7 +4386,7 @@ ghb_validate_subtitles(signal_user_data_t *ud)
 		{
 			gchar *filename;
 
-			filename = ghb_settings_get_string(settings, "SrtFile");
+			filename = ghb_settings_get_string(subtitle, "SrtFile");
 			if (!g_file_test(filename, G_FILE_TEST_IS_REGULAR))
 			{
 				message = g_strdup_printf(
@@ -4362,7 +4408,7 @@ ghb_validate_subtitles(signal_user_data_t *ud)
 }
 
 gboolean
-ghb_validate_audio(signal_user_data_t *ud)
+ghb_validate_audio(GValue *settings)
 {
 	hb_list_t  * list;
 	hb_title_t * title;
@@ -4380,15 +4426,15 @@ ghb_validate_audio(signal_user_data_t *ud)
 
 	gint titleindex;
 
-	titleindex = ghb_settings_combo_int(ud->settings, "title");
+	titleindex = ghb_settings_combo_int(settings, "title");
     title = hb_list_item( list, titleindex );
 	if (title == NULL) return FALSE;
-	gint mux = ghb_settings_combo_int(ud->settings, "FileFormat");
+	gint mux = ghb_settings_combo_int(settings, "FileFormat");
 
 	const GValue *audio_list;
 	gint count, ii;
 
-	audio_list = ghb_settings_get_value(ud->settings, "audio_list");
+	audio_list = ghb_settings_get_value(settings, "audio_list");
 	count = ghb_array_len(audio_list);
 	for (ii = 0; ii < count; ii++)
 	{
