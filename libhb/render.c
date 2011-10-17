@@ -27,11 +27,17 @@ struct hb_work_private_s
     uint64_t             total_gained_time;
     int64_t              chapter_time;
     int                  chapter_val;
-    int                  count_frames;      // frames output so far
-    double               frame_rate;        // 90kHz ticks per frame (for CFR/PFR)
-    uint64_t             out_last_stop;     // where last frame ended (for CFR/PFR)
-    int                  drops;             // frames dropped (for CFR/PFR)
-    int                  dups;              // frames duped (for CFR/PFR)
+    int                  count_frames;  // frames output so far
+    double               frame_rate;    // 90kHz ticks per frame (for CFR/PFR)
+    uint64_t             out_last_stop; // where last frame ended (for CFR/PFR)
+    int                  drops;         // frames dropped (for CFR/PFR)
+    int                  dups;          // frames duped (for CFR/PFR)
+    float                max_metric;    // highest motion metric since
+                                        // last output frame
+    float                frame_metric;  // motion metric of last frame
+    float                out_metric;    // motion metric of last output frame
+    int                  sync_parity;
+    unsigned             gamma_lut[256];
 };
 
 int  renderInit( hb_work_object_t *, hb_job_t * );
@@ -46,6 +52,19 @@ hb_work_object_t hb_render =
     renderWork,
     renderClose
 };
+
+// Create gamma lookup table.
+// Note that we are creating a scaled integer lookup table that will
+// not cause overflows in sse_block16() below.  This results in
+// small values being truncated to 0 which is ok for this usage.
+void build_gamma_lut( hb_work_private_t * pv )
+{
+    int i;
+    for( i = 0; i < 256; i++ )
+    {
+        pv->gamma_lut[i] = 4095 * pow( ( (float)i / (float)255 ), 2.2f );
+    }
+}
 
 /*
  * getU() & getV()
@@ -250,6 +269,52 @@ static hb_buffer_t *insert_buffer_in_chain( hb_buffer_t *pred, hb_buffer_t *succ
     return succ;
 }
 
+// Compute ths sum of squared errors for a 16x16 block
+// Gamma adjusts pixel values so that less visible diffreences
+// count less.
+static inline unsigned sse_block16( hb_work_private_t *pv, uint8_t *a, uint8_t *b, int stride )
+{
+    int x, y;
+    unsigned sum = 0;
+    int diff;
+    unsigned *g = pv->gamma_lut;
+
+    for( y = 0; y < 16; y++ )
+    {
+        for( x = 0; x < 16; x++ )
+        {
+            diff =  g[a[x]] - g[b[x]];
+            sum += diff * diff;
+        }
+        a += stride;
+        b += stride;
+    }
+    return sum;
+}
+
+// Sum of squared errors.  Computes and sums the SSEs for all
+// 16x16 blocks in the images.  Only checks the Y component.
+static float motion_metric( hb_work_private_t * pv, hb_buffer_t * a, hb_buffer_t * b )
+{
+    int bw = pv->job->width / 16;
+    int bh = pv->job->height / 16;
+    int stride = pv->job->width;
+    uint8_t * pa = a->data;
+    uint8_t * pb = b->data;
+    int x, y;
+    uint64_t sum = 0;
+
+    for( y = 0; y < bh; y++ )
+    {
+        for( x = 0; x < bw; x++ )
+        {
+            sum +=  sse_block16( pv, pa + y * 16 * stride + x * 16,
+                                 pb + y * 16 * stride + x * 16, stride );
+        }
+    }
+    return (float)sum / ( pv->job->width * pv->job->height );
+}
+
 // This section of the code implements video frame rate control.
 // Since filters are allowed to duplicate and drop frames (which
 // changes the timing), this has to be the last thing done in render.
@@ -267,7 +332,6 @@ static hb_buffer_t *insert_buffer_in_chain( hb_buffer_t *pred, hb_buffer_t *succ
 //       to keep the average under this value. Other than those drops, frame
 //       times are left alone.
 //
-
 static void adjust_frame_rate( hb_work_private_t *pv, hb_buffer_t **buf_out )
 {
     hb_buffer_t *out = *buf_out;
@@ -282,15 +346,18 @@ static void adjust_frame_rate( hb_work_private_t *pv, hb_buffer_t **buf_out )
             continue;
         }
 
-        // this frame has to start where the last one stopped.
-        out->start = pv->out_last_stop;
-
         // compute where this frame would stop if the frame rate were constant
         // (this is our target stopping time for CFR and earliest possible
         // stopping time for PFR).
         double cfr_stop = pv->frame_rate * ( pv->count_frames + 1 );
 
-        if ( cfr_stop - (double)out->stop >= pv->frame_rate )
+        hb_buffer_t * next = hb_fifo_see( pv->delay_queue );
+
+        float next_metric = 0;
+        if( next )
+            next_metric = motion_metric( pv, out, next );
+
+        if( pv->out_last_stop >= out->stop )
         {
             // This frame stops a frame time or more in the past - drop it
             // but don't lose its chapter mark.
@@ -301,8 +368,92 @@ static void adjust_frame_rate( hb_work_private_t *pv, hb_buffer_t **buf_out )
             }
             ++pv->drops;
             out = delete_buffer_from_chain( buf_out, out );
+            pv->frame_metric = next_metric;
+            if( next_metric > pv->max_metric )
+                pv->max_metric = next_metric;
             continue;
         }
+
+        if( out->start <= pv->out_last_stop &&
+            out->stop > pv->out_last_stop &&
+            next && next->stop < cfr_stop )
+        {
+            // This frame starts before the end of the last output
+            // frame and ends after the end of the last output
+            // frame (i.e. it straddles it).  Also the next frame
+            // ends before the end of the next output frame. If the
+            // next frame is not a duplicate, and we haven't seen
+            // a changed frame since the last output frame,
+            // then drop this frame.
+            //
+            // This causes us to sync to the pattern of progressive
+            // 23.976 fps content that has been upsampled to
+            // progressive 59.94 fps.
+            if( pv->out_metric > pv->max_metric &&
+                next_metric > pv->max_metric )
+            {
+                // Pattern: N R R N
+                //          o   c n
+                // N == new frame
+                // R == repeat frame
+                // o == last output frame
+                // c == current frame
+                // n == next frame
+                // We haven't seen a frame change since the last output
+                // frame and the next frame changes. Use the next frame,
+                // drop this one.
+                if ( out->new_chap )
+                {
+                    pv->chapter_time = out->start;
+                    pv->chapter_val = out->new_chap;
+                }
+                ++pv->drops;
+                out = delete_buffer_from_chain( buf_out, out );
+                pv->frame_metric = next_metric;
+                pv->max_metric = next_metric;
+                pv->sync_parity = 1;
+                continue;
+            }
+            else if( pv->sync_parity &&
+                     pv->out_metric < pv->max_metric &&
+                     pv->max_metric > pv->frame_metric &&
+                     pv->frame_metric < next_metric )
+            {
+                // Pattern: R N R N
+                //          o   c n
+                // N == new frame
+                // R == repeat frame
+                // o == last output frame
+                // c == current frame
+                // n == next frame
+                // If we see this pattern, we must not use the next
+                // frame when straddling the current frame.
+                pv->sync_parity = 0;
+            }
+            else if( pv->sync_parity )
+            {
+                // The pattern is indeterminate.  Continue dropping
+                // frames on the same schedule
+                if ( out->new_chap )
+                {
+                    pv->chapter_time = out->start;
+                    pv->chapter_val = out->new_chap;
+                }
+                ++pv->drops;
+                out = delete_buffer_from_chain( buf_out, out );
+                pv->frame_metric = next_metric;
+                pv->max_metric = next_metric;
+                pv->sync_parity = 1;
+                continue;
+            }
+        }
+
+        // this frame has to start where the last one stopped.
+        out->start = pv->out_last_stop;
+
+        pv->out_metric = pv->frame_metric;
+        pv->frame_metric = next_metric;
+        pv->max_metric = next_metric;
 
         // at this point we know that this frame doesn't push the average
         // rate over the limit so we just pass it on for PFR. For CFR we're
@@ -728,6 +879,7 @@ int renderInit( hb_work_object_t * w, hb_job_t * job )
     w->private_data = pv;
     uint32_t    swsflags;
 
+    build_gamma_lut( pv );
     swsflags = SWS_LANCZOS | SWS_ACCURATE_RND;
 
     /* Get title and title size */
@@ -763,6 +915,7 @@ int renderInit( hb_work_object_t * w, hb_job_t * job )
     pv->lost_time[0] = 0; pv->lost_time[1] = 0; pv->lost_time[2] = 0; pv->lost_time[3] = 0;
     pv->chapter_time = 0;
     pv->chapter_val  = 0;
+    pv->frame_metric = 1000; // Force first frame
 
     if ( job->cfr == 2 )
     {
