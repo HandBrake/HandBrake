@@ -74,6 +74,7 @@ struct hb_work_private_s
     hb_title_t      *title;
     AVCodecContext  *context;
     AVCodecParserContext *parser;
+    int             threads;
     int             video_codec_opened;
     hb_list_t       *list;
     double          duration;   // frame duration (for video)
@@ -91,6 +92,9 @@ struct hb_work_private_s
     pts_heap_t      pts_heap;
     void*           buffer;
     struct SwsContext *sws_context; // if we have to rescale or convert color space
+    int             sws_width;
+    int             sws_height;
+    int             sws_pix_fmt;
     hb_downmix_t    *downmix;
     int cadence[12];
     int wait_for_keyframe;
@@ -548,14 +552,23 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
         AVPicture dstpic;
         avpicture_fill( &dstpic, dst, PIX_FMT_YUV420P, w, h );
 
-        if ( ! pv->sws_context )
+        if ( ! pv->sws_context || 
+             pv->sws_width != context->width ||
+             pv->sws_height != context->height ||
+             pv->sws_pix_fmt != context->pix_fmt )
         {
-            pv->sws_context = hb_sws_get_context( w, h, context->pix_fmt,
-                                              w, h, PIX_FMT_YUV420P,
-                                              SWS_LANCZOS|SWS_ACCURATE_RND);
+            if( pv->sws_context )
+                sws_freeContext( pv->sws_context );
+            pv->sws_context = hb_sws_get_context( 
+                            context->width, context->height, context->pix_fmt,
+                            w, h, PIX_FMT_YUV420P,
+                            SWS_LANCZOS|SWS_ACCURATE_RND);
+            pv->sws_width = context->width;
+            pv->sws_height = context->height;
+            pv->sws_pix_fmt = context->pix_fmt;
         }
         sws_scale( pv->sws_context, (const uint8_t* const *)frame->data, 
-                   frame->linesize, 0, h,
+                   frame->linesize, 0, context->height,
                    dstpic.data, dstpic.linesize );
     }
     else
@@ -979,6 +992,11 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->title = w->title;
     pv->list = hb_list_init();
 
+    if( pv->job )
+    {
+        if( !pv->job->title || !pv->job->title->has_resolution_change )
+            pv->threads = HB_FFMPEG_THREADS_AUTO;
+    }
     if ( pv->title->opaque_priv )
     {
         AVFormatContext *ic = (AVFormatContext*)pv->title->opaque_priv;
@@ -994,7 +1012,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->context->error_recognition = 1;
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
 
-        if ( hb_avcodec_open( pv->context, codec, NULL, pv->job ? HB_FFMPEG_THREADS_AUTO : 0 ) )
+        if ( hb_avcodec_open( pv->context, codec, NULL, pv->threads ) )
         {
             hb_log( "decavcodecvInit: avcodec_open failed" );
             return 1;
@@ -1156,7 +1174,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             return HB_WORK_OK;
         }
         // disable threaded decoding for scan, can cause crashes
-        if ( hb_avcodec_open( pv->context, codec, NULL, pv->job ? HB_FFMPEG_THREADS_AUTO : 0 ) )
+        if ( hb_avcodec_open( pv->context, codec, NULL, pv->threads ) )
         {
             hb_log( "decavcodecvWork: avcodec_open failed" );
             *buf_out = hb_buffer_init( 0 );;

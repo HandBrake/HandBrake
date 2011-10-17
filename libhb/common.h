@@ -646,6 +646,7 @@ struct hb_title_s
 
     double      aspect;             // aspect ratio for the title's video
     double      container_aspect;   // aspect ratio from container (0 if none)
+    int         has_resolution_change;
     int         width;
     int         height;
     int         pixel_aspect_width;

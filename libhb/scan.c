@@ -468,6 +468,22 @@ static void most_common_info( info_list_t *info_list, hb_work_info_t *info )
     *info = info_list[biggest].info;
 }
 
+static int has_resolution_change( info_list_t *info_list )
+{
+    int w, h, i;
+
+    if( !info_list[0].count )
+        return 0;
+    w = info_list[0].info.width;
+    h = info_list[0].info.height;
+    for ( i = 1; info_list[i].count; ++i )
+    {
+        if ( w != info_list[i].info.width || h != info_list[i].info.height )
+            return 1;
+    }
+    return 0;
+}
+
 static int is_close_to( int val, int target, int thresh )
 {
     int diff = val - target;
@@ -819,6 +835,7 @@ skip_preview:
         hb_work_info_t vid_info;
         most_common_info( info_list, &vid_info );
 
+        title->has_resolution_change = has_resolution_change( info_list );
         if ( title->video_codec_name == NULL )
         {
             title->video_codec_name = strdup( vid_info.name );
