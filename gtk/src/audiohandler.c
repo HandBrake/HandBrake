@@ -865,7 +865,7 @@ char * ghb_format_quality( const char *prefix, int codec, double quality )
 }
 
 G_MODULE_EXPORT void
-quality_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+quality_widget_changed_cb(GtkWidget *widget, gdouble quality, signal_user_data_t *ud)
 {
 	GValue *asettings;
 
@@ -876,7 +876,6 @@ quality_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	int dir;
 	int codec = ghb_settings_combo_int(ud->settings, "AudioEncoderActual");
 	hb_get_audio_quality_limits(codec, &low, &high, &gran, &dir);
-	double quality = ghb_widget_double(widget);
 	if (dir)
 	{
 		// Quality values are inverted
@@ -898,7 +897,7 @@ quality_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-drc_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+drc_widget_changed_cb(GtkWidget *widget, gdouble drc, signal_user_data_t *ud)
 {
 	GValue *asettings;
 
@@ -907,7 +906,6 @@ drc_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_check_dependency(ud, widget, NULL);
 	if (block_updates) return;
 
-	double drc = ghb_widget_double(widget);
 	char *s_drc;
 	if (drc < 0.99)
 		s_drc = g_strdup("Off");
@@ -934,7 +932,7 @@ format_gain_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-gain_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+gain_widget_changed_cb(GtkWidget *widget, gdouble gain, signal_user_data_t *ud)
 {
 	GValue *asettings;
 
@@ -944,12 +942,11 @@ gain_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	if (block_updates) return;
 	asettings = get_selected_asettings(ud);
 
-	int gain = ghb_widget_int(widget);
 	char *s_gain;
 	if ( gain >= 21.0 )
 		s_gain = g_strdup_printf("*11*");
 	else
-		s_gain = g_strdup_printf("%ddB", gain);
+		s_gain = g_strdup_printf("%ddB", (int)gain);
 	ghb_ui_update( ud, "AudioTrackGainValue", ghb_string_value(s_gain));
 	g_free(s_gain);
 
