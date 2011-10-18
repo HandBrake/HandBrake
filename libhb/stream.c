@@ -4889,7 +4889,13 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
             }
             audio->config.in.codec_param = codec->codec_id;
 
-            audio->config.in.bitrate = codec->bit_rate? codec->bit_rate : 1;
+            int bps = av_get_bits_per_sample(codec->codec_id);
+            if( bps && codec->sample_rate && codec->channels )
+                audio->config.in.bitrate = bps * codec->sample_rate * codec->channels;
+            else if( codec->bit_rate )
+                audio->config.in.bitrate = codec->bit_rate;
+            else
+                audio->config.in.bitrate = 1;
             audio->config.in.samplerate = codec->sample_rate;
             audio->config.in.samples_per_frame = codec->frame_size;
             audio->config.in.channel_layout = layout;
