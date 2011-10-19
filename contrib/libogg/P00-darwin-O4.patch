@@ -1,0 +1,14 @@
+diff -ur libogg.orig/configure libogg/configure
+--- libogg.orig/configure	2005-11-27 23:26:32.000000000 -0500
++++ libogg/configure	2011-08-19 23:16:01.000000000 -0400
+@@ -19106,8 +19106,8 @@
+ 		;;
+ 	*-*-darwin*)
+ 		DEBUG="-fno-common -g -Wall -fsigned-char"
+-		CFLAGS="-fno-common -O4 -Wall -fsigned-char -ffast-math"
+-		PROFILE="-fno-common -O4 -Wall -pg -g -fsigned-char -ffast-math"
++		CFLAGS="-fno-common -O3 -Wall -fsigned-char -ffast-math"
++		PROFILE="-fno-common -O3 -Wall -pg -g -fsigned-char -ffast-math"
+ 		;;
+         *)
+                 DEBUG="-g -Wall -fsigned-char"

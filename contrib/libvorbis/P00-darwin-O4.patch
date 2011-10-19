@@ -1,0 +1,14 @@
+diff -ur libvorbis.orig/configure.in libvorbis/configure.in
+--- libvorbis.orig/configure.in	2005-11-28 00:43:26.000000000 -0500
++++ libvorbis/configure.in	2011-08-19 23:18:50.000000000 -0400
+@@ -161,8 +161,8 @@
+ 		PROFILE="-pg -g -O20 -D__NO_MATH_INLINES -fsigned-char -mv8" ;;
+ 	*-*-darwin*)
+ 		DEBUG="-DDARWIN -fno-common -force_cpusubtype_ALL -Wall -g -O0 -fsigned-char"
+-		CFLAGS="-DDARWIN -fno-common -force_cpusubtype_ALL -Wall -g -O4 -ffast-math -fsigned-char"
+-		PROFILE="-DDARWIN -fno-common -force_cpusubtype_ALL -Wall -g -pg -O4 -ffast-math -fsigned-char";;
++		CFLAGS="-DDARWIN -fno-common -force_cpusubtype_ALL -Wall -g -O3 -ffast-math -fsigned-char"
++		PROFILE="-DDARWIN -fno-common -force_cpusubtype_ALL -Wall -g -pg -O3 -ffast-math -fsigned-char";;
+ 	*)
+ 		DEBUG="-g -Wall -W -D__NO_MATH_INLINES -fsigned-char"
+ 		CFLAGS="-O20 -D__NO_MATH_INLINES -fsigned-char"
