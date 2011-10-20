@@ -57,7 +57,7 @@ hb_work_object_t hb_render =
 // Note that we are creating a scaled integer lookup table that will
 // not cause overflows in sse_block16() below.  This results in
 // small values being truncated to 0 which is ok for this usage.
-void build_gamma_lut( hb_work_private_t * pv )
+static void build_gamma_lut( hb_work_private_t * pv )
 {
     int i;
     for( i = 0; i < 256; i++ )
