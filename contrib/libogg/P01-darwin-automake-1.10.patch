@@ -1,0 +1,11 @@
+--- libogg-1.3.0.orig/Makefile.am	2011-08-04 10:37:15.000000000 -0700
++++ libogg-1.3.0/Makefile.am	2011-10-19 14:31:58.203289946 -0700
+@@ -2,7 +2,7 @@
+ 
+ 
+ #AUTOMAKE_OPTIONS = foreign 1.6 dist-zip
+-AUTOMAKE_OPTIONS = foreign 1.11 dist-zip dist-xz
++AUTOMAKE_OPTIONS = foreign 1.10 dist-zip
+ 
+ SUBDIRS = src include doc
+ 
