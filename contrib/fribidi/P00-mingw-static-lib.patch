@@ -1,0 +1,11 @@
+--- fribidi-0.19.2.orig/lib/fribidi-common.h	2007-04-05 09:13:24.000000000 -0700
++++ fribidi-0.19.2/lib/fribidi-common.h	2011-10-20 11:00:21.874917516 -0700
+@@ -54,7 +54,7 @@
+ /* FRIBIDI_ENTRY is a macro used to declare library entry points. */
+ #ifndef FRIBIDI_ENTRY
+ # if (defined(WIN32)) || (defined(_WIN32_WCE))
+-#  define FRIBIDI_ENTRY __declspec(dllimport)
++#  define FRIBIDI_ENTRY
+ # else /* !WIN32 */
+ #  define FRIBIDI_ENTRY		/* empty */
+ # endif	/* !WIN32 */

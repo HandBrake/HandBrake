@@ -1,9 +1,8 @@
-__deps__ := FONTCONFIG FREETYPE
+__deps__ := FONTCONFIG FREETYPE FRIBIDI
 $(eval $(call import.MODULE.defs,LIBASS,libass,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,LIBASS))
 
-LIBASS.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libass-0.9.9.tar.bz2
-LIBASS.EXTRACT.tarbase = libass-0.9.9
+LIBASS.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libass-0.10.0-1.tar.gz
 
 # Disable as many external dependencies as I can get away with
 # and tell configure where to find our version of freetype
@@ -12,4 +11,6 @@ LIBASS.CONFIGURE.extra = \
     FREETYPE_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lfreetype" \
     FREETYPE_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include/freetype2" \
     FONTCONFIG_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lfontconfig" \
-    FONTCONFIG_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include"
+    FONTCONFIG_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include" \
+    FRIBIDI_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lfribidi" \
+    FRIBIDI_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include/fribidi"

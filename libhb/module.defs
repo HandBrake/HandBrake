@@ -102,6 +102,12 @@ else
     LIBHB.GCC.l += iconv
 endif
 
+ifeq (1,$(FRIBIDI.enabled))
+    LIBHB.dll.libs += $(CONTRIB.build/)lib/libfribidi.a
+else
+	LIBHB.GCC.l += fribidi
+endif
+
 ifneq ($(HAS.pthread),1)
 LIBHB.dll.libs += $(CONTRIB.build/)lib/libpthreadGC2.a
 else

@@ -16,6 +16,11 @@ ifneq ($(HAS.bz2),1)
 endif
 endif
 
+ifneq (,$(filter $(BUILD.system),darwin cygwin mingw))
+    MODULES += contrib/fribidi
+endif
+
+
 MODULES += contrib/faac
 MODULES += contrib/ffmpeg
 MODULES += contrib/fontconfig

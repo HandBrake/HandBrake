@@ -1,0 +1,2 @@
+$(eval $(call import.MODULE.rules,FRIBIDI))
+$(eval $(call import.CONTRIB.rules,FRIBIDI))

@@ -1,0 +1,11 @@
+diff -Naur fribidi-0.19.2.orig/bin/Makefile.am fribidi-0.19.2/bin/Makefile.am
+--- fribidi-0.19.2.orig/bin/Makefile.am	2005-06-07 01:39:14.000000000 -0700
++++ fribidi-0.19.2/bin/Makefile.am	2011-10-20 10:19:14.380722654 -0700
+@@ -1,6 +1,6 @@
+ bin_PROGRAMS = fribidi
+ 
+-noinst_PROGRAMS = fribidi-benchmark fribidi-bidi-types fribidi-caprtl2utf8
++noinst_PROGRAMS = fribidi-bidi-types fribidi-caprtl2utf8
+ 
+ getopt_SOURCES = getopt.c getopt1.c getopt_int.h getopt.h gettext.h
+ 

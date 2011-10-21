@@ -1,0 +1,24 @@
+diff -Naur fribidi-0.19.2.orig/configure.ac fribidi-0.19.2/configure.ac
+--- fribidi-0.19.2.orig/configure.ac	2009-03-26 15:37:29.000000000 -0700
++++ fribidi-0.19.2/configure.ac	2011-10-20 14:15:40.000000000 -0700
+@@ -172,18 +172,8 @@
+ GLIB_MINVERSION=2.4
+ GLIB_LIBS=
+ GLIB_CFLAGS=
+-if test x$with_glib = xyes; then
+-	PKG_CHECK_MODULES(GLIB,$GLIB_PACKAGE >= $GLIB_MINVERSION)
+-	FRIBIDI_USE_GLIB=1
+-else
+-if test x$with_glib = xno; then
+-	FRIBIDI_USE_GLIB=0
+-else
+-	PKG_CHECK_MODULES(GLIB,$GLIB_PACKAGE >= $GLIB_MINVERSION,
+-		FRIBIDI_USE_GLIB=1,
+-		FRIBIDI_USE_GLIB=0)
+-fi
+-fi
++FRIBIDI_USE_GLIB=0
++
+ if test x$FRIBIDI_USE_GLIB = x0; then
+ 	GLIB_PACKAGE=
+ fi

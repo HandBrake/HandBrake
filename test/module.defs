@@ -32,6 +32,11 @@ ifeq (1,$(ZLIB.enabled))
 else
 	TEST.GCC.l += z
 endif
+ifeq (1,$(FRIBIDI.enabled))
+    TEST.libs += $(CONTRIB.build/)lib/libfribidi.a
+else
+	TEST.GCC.l += fribidi
+endif
 
 ###############################################################################
 
