@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBVORBIS,libvorbis,LIBOGG))
 $(eval $(call import.CONTRIB.defs,LIBVORBIS))
 
-LIBVORBIS.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libvorbis-aotuv_b5.tar.gz
-LIBVORBIS.EXTRACT.tarbase = libvorbis
+LIBVORBIS.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libvorbis-aotuv_b6.03.tar.bz2
+LIBVORBIS.EXTRACT.tarbase = aotuv-b6.03_20110424
 
 LIBVORBIS.CONFIGURE.extra = --with-ogg=$(call fn.ABSOLUTE,$(CONTRIB.build/)) HAVE_PKG_CONFIG="no"
 
-LIBVORBIS.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; autoreconf -fiv;
+LIBVORBIS.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -I m4 -fiv;

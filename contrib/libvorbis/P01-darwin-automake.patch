@@ -1,0 +1,9 @@
+--- aotuv-b6.03_20110424.orig/Makefile.am	2010-03-25 18:56:26.000000000 -0700
++++ aotuv-b6.03_20110424/Makefile.am	2011-10-19 16:59:21.274432667 -0700
+@@ -1,5 +1,6 @@
+ ## Process this file with automake to produce Makefile.in
+ 
++ACLOCAL_AMFLAGS= -I m4
+ AUTOMAKE_OPTIONS = 1.7 foreign dist-zip dist-bzip2
+ 
+ SUBDIRS = m4 include vq lib test doc

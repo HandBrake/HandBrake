@@ -279,7 +279,7 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt );
 /***********************************************************************
  * Work objects
  **********************************************************************/
-#define HB_CONFIG_MAX_SIZE 8192
+#define HB_CONFIG_MAX_SIZE (2*8192)
 union hb_esconfig_u
 {
 
