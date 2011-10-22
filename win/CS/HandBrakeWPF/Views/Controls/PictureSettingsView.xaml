@@ -1,10 +1,6 @@
 ﻿<UserControl x:Class="HandBrakeWPF.Views.Controls.PictureSettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:Controls="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit.Extended"
-             >
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
     <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 
@@ -21,9 +17,9 @@
             <!-- Row 2-->
             <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
                 <Label Content="Width:" Grid.Row="1" Grid.Column="0" />
-                <Controls:NumericUpDown Name="width" Minimum="0" Grid.Row="1" Grid.Column="1" Width="45"  />
+                <!--<Controls:NumericUpDown Name="width" Minimum="0" Grid.Row="1" Grid.Column="1" Width="45"  />-->
                 <Label Content="Height:" Grid.Row="1" Grid.Column="2" />
-                <Controls:NumericUpDown Name="height" Minimum="0" Grid.Row="1" Grid.Column="3" Width="45"  />
+                <!--<Controls:NumericUpDown Name="height" Minimum="0" Grid.Row="1" Grid.Column="3" Width="45"  />-->
                 <CheckBox Content="Keep Aspect Ratio" VerticalAlignment="Center" Margin="5,0,0,0" />
             </StackPanel>
 
@@ -52,9 +48,9 @@
 
                 <ComboBox Width="110" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
                 <ComboBox Width="110" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <Controls:NumericUpDown Width="45" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <!--<Controls:NumericUpDown Width="45" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
                 <Controls:NumericUpDown Width="45" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <Controls:NumericUpDown Width="45" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <Controls:NumericUpDown Width="45" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />-->
                 <Label Content="---" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
             </Grid>
         </StackPanel>
@@ -87,10 +83,10 @@
                 <Label Content="Left" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" />
                 <Label Content="Right" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" />
 
-                <Controls:NumericUpDown Width="45" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <!--<Controls:NumericUpDown Width="45" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="0,0,0,5" />
                 <Controls:NumericUpDown Width="45" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left" Margin="0,0,0,5" />
                 <Controls:NumericUpDown Width="45" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <Controls:NumericUpDown Width="45" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <Controls:NumericUpDown Width="45" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Margin="0,0,0,5" />-->
 
             </Grid>
             

@@ -16,18 +16,10 @@
                     </MenuItem>
 
                     <MenuItem Header="Tools">
+                        <MenuItem Header="Options" Micro:Message.Attach="[Event Click] = [Action OpenOptionsWindow]" />
+                       
                         <MenuItem Header="Show Queue" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
                         <MenuItem Header="Activity Window" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
-                    </MenuItem>
-
-                    <MenuItem Header="Presets">
-                        <MenuItem Header="Reset Built-in Presets" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
-                        <MenuItem Header="Delete Built-in Presets" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
-                        <Separator />
-                        <MenuItem Header="Save As New Preset" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
-                        <MenuItem Header="Import" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
-                        <MenuItem Header="Export" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
-                        <MenuItem Header="Set as Default" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
                     </MenuItem>
 
                     <MenuItem Header="Help">
@@ -35,7 +27,7 @@
                         <Separator />
                         <MenuItem Header="Check for Updates" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
                         <Separator />
-                        <MenuItem Header="About..." Micro:Message.Attach="[Event Click] = [Action AboutApplication]" />
+                        <MenuItem Header="About..." Micro:Message.Attach="[Event Click] = [Action OpenAboutApplication]" />
                     </MenuItem>
                 </Menu>
 

@@ -1,8 +1,333 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.OptionsView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="OptionsView" Height="300" Width="300">
-    <Grid>
-        
-    </Grid>
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:cal="http://www.caliburnproject.org"
+        Title="OptionsView" MinWidth="620" MinHeight="520" Width="620" Height="520">
+
+    <StackPanel Orientation="Vertical" Background="LightGray">
+        <!-- Header -->
+        <StackPanel Orientation="Horizontal"  Background="White" Height="50" >
+            <Image Source="Images/Preferences.png" Margin="10,0,5,0" Width="32" Height="32" VerticalAlignment="Center" />
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                <TextBlock Text="Options" FontWeight="Bold" />
+                <TextBlock Text="Preferences to control various features in HandBrake" />
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Options Panel-->
+        <TabControl Margin="10,10,10,10" Height="380">
+            <TabItem Header="General">
+                <StackPanel Orientation="Vertical">
+                    <Grid Margin="10,10,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="At Launch:" Grid.Column="0" FontWeight="Bold"/>
+
+                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                            <CheckBox Content="Check for Updates" />
+                            <ComboBox Name="checkForUpdateFrequency" Margin="25,0,0,0" HorizontalAlignment="Left" Width="120"></ComboBox>
+
+                            <CheckBox Content="Enable Tooltips" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="10,10,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="When Done:" Grid.Column="0" FontWeight="Bold"/>
+
+                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                            <ComboBox Name="whenDone" Width="120" HorizontalAlignment="Left"></ComboBox>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <CheckBox Content="Growl after Queue Completes"/>
+                                <CheckBox Content="Growl after Encode Completes" Margin="5,0,0,0" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <CheckBox Content="Send file to:" />
+                                <TextBlock Margin="5,0,0,0" Text="None" />
+                                <Button Content="Browse" Width="55"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock Margin="25,0,0,0" Text="Arguments" />
+                                <TextBox Name="SendToArguments" Width="180" />
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Output Files">
+                <StackPanel Orientation="Vertical">
+                    <Grid Margin="10,10,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Output Files:" Grid.Column="0" FontWeight="Bold"/>
+
+                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                            <CheckBox Content="Automatically name output files" />
+
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock Text="Arguments" />
+                                <TextBox Name="autoNameOutputPath" Width="180" />
+                                <Button Content="Browse" Width="55"/>
+                            </StackPanel>
+                            <TextBlock Text="Available Options: {source_path} or {source_folder_name} (Not Both)" />
+
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock Text="Format:" />
+                                <TextBox Name="autoNameFormat" Width="180" />
+                            </StackPanel>
+                            <TextBlock Text="Available Options: {source} {title} {chapters} {date}" />
+
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <CheckBox Content="Remove underscores from name"/>
+                                <CheckBox Content="Change case to Title Case" Margin="5,0,0,0" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock Text="MP4 File Extension:" />
+                                <ComboBox Name="mp4FileExtension" Width="120" HorizontalAlignment="Left"></ComboBox>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Preview">
+                <StackPanel Orientation="Vertical">
+                    <Grid Margin="10,10,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="VLC Path:" Grid.Column="0" FontWeight="Bold"/>
+
+                        <StackPanel Orientation="Vertical" Grid.Column="1">
+
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock Text="Arguments" />
+                                <TextBox Name="vlcPath" Width="180" />
+                                <Button Content="Browse" Width="55"/>
+                            </StackPanel>
+                            <TextBlock Text="This path is used for the view preview feature only." />
+
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Audio and Subtitles">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Automatic Audio and Subtitle Selection" Grid.Column="0" FontWeight="Bold"/>
+                    <Grid Margin="10,10,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Preferred Language:" Grid.Column="0"/>
+                        <StackPanel Orientation="Horizontal" Grid.Column="1">
+                            <ComboBox Name="primaryAudioLanguage" Width="120" />
+                            <TextBlock Text="Primary Audio Langauge" FontSize="10" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="10,10,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+
+                        <TextBlock Text="Additional Tracks:" Grid.Column="0"/>
+                        <StackPanel Orientation="Horizontal" Grid.Column="1">
+                            <Grid Margin="10,10,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Orientation="Vertical" Grid.Column="0">
+                                    <TextBlock Text="Available Langauges" Margin="0,0,0,5"/>
+                                    <ListBox Name="availableLanguages" Height="140"></ListBox>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Vertical" Grid.Column="1" Margin="10,0,10,0">
+                                    <Button Content="Move Left" VerticalAlignment="Center" Width="60"></Button>
+                                    <Button Content="Move Right" VerticalAlignment="Center" Width="60"></Button>
+                                    <Button Content="Clear" VerticalAlignment="Center" Width="60"></Button>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Vertical" Grid.Column="2">
+                                    <TextBlock Text="Available Langauges"  Margin="0,0,0,5"/>
+                                    <ListBox Name="selectedLangauges" Height="140"></ListBox>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Vertical" Grid.Column="3" Margin="10,0,10,0">
+                                    <Button Content="Move Up" VerticalAlignment="Center" Width="60"></Button>
+                                    <Button Content="Move Down" VerticalAlignment="Center" Width="60"></Button>
+                                </StackPanel>
+
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+
+                    <GroupBox Header="Add Additional Tracks" >
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Audio:" Margin="0,0,10,0" Width="100" />
+                                <ComboBox Name="autoAudioMode" Width="120" Margin="0,0,5,0" />
+                                <CheckBox Content="Add only one audio track per langauge" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Subtitle:" Margin="0,0,10,0" Width="100" />
+                                <ComboBox Name="autoSubtitleMode" Width="120" Margin="0,0,5,0" />
+                            </StackPanel>
+
+                            <CheckBox Content="Add Closed Captions when available" />
+                        </StackPanel>
+                    </GroupBox>
+
+
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="System and Logging">
+                <StackPanel Orientation="Vertical">
+                    <Grid Margin="10,10,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="CLI:" Grid.Column="0" FontWeight="Bold"/>
+                        <StackPanel Orientation="Horizontal" Grid.Column="1">
+                            <TextBlock Text="Priority Level:" />
+                            <ComboBox Name="processPriorityLevel" Width="120" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="10,10,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="System:" Grid.Column="0" FontWeight="Bold"/>
+                        <StackPanel Orientation="Horizontal" Grid.Column="1">
+                            <CheckBox Content="Prevent the system from sleeping while encoding" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="10,10,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Logs:" Grid.Column="0" FontWeight="Bold"/>
+
+                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                            <StackPanel Orientation="Horizontal" Grid.Column="1">
+                                <TextBlock Text="Log Verbosity Level:" />
+                                <ComboBox Name="logVerbosityLevel" Width="120" />
+                            </StackPanel>
+
+                            <CheckBox Content="Put a copy of individual encode logs in the same location as the encoded video" />
+                            <CheckBox Content="Put a copy of individual encode logs in a specified location: " />
+                            <StackPanel Orientation="Horizontal" Grid.Column="1">
+                                <TextBlock Text="Log Path:" />
+                                <TextBox Width="120" />
+                                <Button Content="Browse" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Grid.Column="1">
+                                <Button Content="View Log Directory" Margin="0,0,5,0" />
+                                <Button Content="Clear Log History" />
+                            </StackPanel>
+
+                            <CheckBox Content="Clear Log files older than 30 days " />
+                        </StackPanel>
+
+                    </Grid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Advanced">
+                <StackPanel Orientation="Vertical">
+                    <Grid Margin="10,10,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="GUI:" Grid.Column="0" FontWeight="Bold"/>
+                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                            <CheckBox Content="Minimize to system tray (Requires Restart)" />
+                            <CheckBox Content="Display status messages from tray icon (balloon popups)" />
+                            <CheckBox Content="Enable 'Query Editor' tab (Requires Restart)" />
+                            <CheckBox Content="Prompt when a manual query does not match GUI settings" Margin="10,0,0,0" />
+                            <CheckBox Content="Disable built-in preset update notification" />
+                            <CheckBox Content="Show CLI window (Allows you to cleanly exit encode with ctrl-c)" />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Number of picture previews to scan:" Width="210" />
+                                <ComboBox Name="numberOfPreviews" Width="120" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Minimum length of title to scan (seconds):" Width="210" />
+                                <TextBox Name="MinTitleLength"  Width="120"/>
+                                <!-- Find a control for this-->
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="10,10,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="x264:" Grid.Column="0" FontWeight="Bold"/>
+                        <StackPanel Orientation="Horizontal" Grid.Column="1">
+                            <TextBlock Text="Constant quality fractional granularity:" Width="210" />
+                            <ComboBox Name="x264Granularity" Width="120"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="10,10,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="DVD:" Grid.Column="0" FontWeight="Bold"/>
+
+                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                            <CheckBox Content="Disable LibDVDNav. (libdvdread will be used instead)" />
+                        </StackPanel>
+
+                    </Grid>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+
+        <Button Content="Close" IsDefault="True" cal:Message.Attach="[Event Click] = [Action Close]"
+                    HorizontalAlignment="Right" Padding="10,2" Margin="0,0,10,10" />
+
+
+    </StackPanel>
 </Window>

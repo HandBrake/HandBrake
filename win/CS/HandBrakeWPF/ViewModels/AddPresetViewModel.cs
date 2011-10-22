@@ -5,6 +5,8 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using System.ComponentModel.Composition;
+
     using Caliburn.Micro;
 
     /// <summary>
