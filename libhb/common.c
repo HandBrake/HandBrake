@@ -80,6 +80,21 @@ hb_encoder_t hb_audio_encoders[] =
 int hb_audio_encoders_count = sizeof( hb_audio_encoders ) /
                               sizeof( hb_encoder_t );
 
+/* Expose values for PInvoke */
+hb_rate_t* hb_get_video_rates() { return hb_video_rates; }
+int hb_get_video_rates_count() { return hb_video_rates_count; }
+hb_rate_t* hb_get_audio_rates() { return hb_audio_rates; }
+int hb_get_audio_rates_count() { return hb_audio_rates_count; }
+int hb_get_audio_rates_default() { return hb_audio_rates_default; }
+hb_rate_t* hb_get_audio_bitrates() { return hb_audio_bitrates; }
+int hb_get_audio_bitrates_count() { return hb_audio_bitrates_count; }
+hb_mixdown_t* hb_get_audio_mixdowns() { return hb_audio_mixdowns; }
+int hb_get_audio_mixdowns_count() { return hb_audio_mixdowns_count; }
+hb_encoder_t* hb_get_video_encoders() { return hb_video_encoders; }
+int hb_get_video_encoders_count() { return hb_video_encoders_count; }
+hb_encoder_t* hb_get_audio_encoders() { return hb_audio_encoders; }
+int hb_get_audio_encoders_count() { return hb_audio_encoders_count; }
+
 int hb_mixdown_get_mixdown_from_short_name( const char * short_name )
 {
     int i;
