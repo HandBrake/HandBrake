@@ -63,6 +63,13 @@ namespace HandBrakeWPF.ViewModels
 
         #region Properties
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainViewModel"/> class.
+        /// The viewmodel for HandBrakes main window.
+        /// </summary>
+        /// <param name="windowManager">
+        /// The window manager.
+        /// </param>
         [ImportingConstructor]
         public MainViewModel(IWindowManager windowManager) : base(windowManager) 
         {
@@ -184,11 +191,21 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
         }
 
-
         #region Menu and Taskbar
         
-        public void AboutApplication()
+        public void OpenAboutApplication()
         {
+            this.WindowManager.ShowWindow(new AboutViewModel(this.WindowManager));
+        }
+
+        public void OpenOptionsWindow()
+        {
+            this.WindowManager.ShowWindow(new OptionsViewModel(this.WindowManager));
+        }
+
+        public void OpenQueueWindow()
+        {
+            this.WindowManager.ShowWindow(new QueueViewModel(this.WindowManager));
         }
         
         /// <summary>
@@ -200,7 +217,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         #endregion
-
 
         #region Event Handlers
         /// <summary>

@@ -65,9 +65,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="WPFToolkit.Extended">
-      <HintPath>..\libraries\WPFToolkit.Extended.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -78,7 +75,9 @@
     <Compile Include="Startup\MefBootstrapper.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AddPresetViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IAboutViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IMainViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IOptionsViewModel.cs" />
     <Compile Include="ViewModels\PreviewViewModel.cs" />
     <Compile Include="ViewModels\QueueViewModel.cs" />
     <Compile Include="ViewModels\OptionsViewModel.cs" />
@@ -239,7 +238,7 @@
     <Resource Include="Views\Images\Help16.png" />
     <Resource Include="Views\Images\hb32.png" />
     <Resource Include="Views\Images\hb16.png" />
-    <Resource Include="Views\Images\General Preferences.png" />
+    <Resource Include="Views\Images\Preferences.png" />
     <Resource Include="Views\Images\folder.png" />
     <Resource Include="Views\Images\ErrorX.png" />
     <Resource Include="Views\Images\download.png" />
