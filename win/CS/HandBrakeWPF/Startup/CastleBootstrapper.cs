@@ -1,4 +1,13 @@
-﻿namespace HandBrakeWPF.Startup
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CastleBootstrapper.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   The Castle Bootstrapper
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace HandBrakeWPF.Startup
 {
     using System;
     using System.Collections.Generic;
@@ -43,21 +52,54 @@
             this.windsorContainer.Register(Component.For<IMainViewModel>().ImplementedBy<MainViewModel>().LifeStyle.Is(LifestyleType.Singleton));
         }
 
+        /// <summary>
+        /// Select Assemblies
+        /// </summary>
+        /// <returns>
+        /// A List of Assembly objects
+        /// </returns>
         protected override IEnumerable<Assembly> SelectAssemblies()
         {
             return AppDomain.CurrentDomain.GetAssemblies();
         }
 
+        /// <summary>
+        /// Get an Instance of a service
+        /// </summary>
+        /// <param name="service">
+        /// The service.
+        /// </param>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The Service Requested
+        /// </returns>
         protected override object GetInstance(Type service, string key)
         {
             return string.IsNullOrWhiteSpace(key) ? this.windsorContainer.Resolve(service) : this.windsorContainer.Resolve(key, new { });
         }
 
+        /// <summary>
+        /// Get all instances of a service
+        /// </summary>
+        /// <param name="service">
+        /// The service.
+        /// </param>
+        /// <returns>
+        /// A collection of instances of the requested service type.
+        /// </returns>
         protected override IEnumerable<object> GetAllInstances(Type service)
         {
             return this.windsorContainer.ResolveAll(service).Cast<object>();
         }
 
+        /// <summary>
+        /// Build Up
+        /// </summary>
+        /// <param name="instance">
+        /// The instance.
+        /// </param>
         protected override void BuildUp(object instance)
         {
             instance.GetType().GetProperties()
