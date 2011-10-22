@@ -19,14 +19,8 @@ The following are the recommended specifications for building on @value{OS.linux
 
 @itemize @bullet
 @item Intel 32-bit or 64-bit kernel
-@item Ubuntu 8.04, gcc 4.3.0, yasm 0.7.1
-@item Ubuntu 8.10, gcc 4.3.2, yasm 0.7.1
-@item Ubuntu 9.04, gcc 4.3.3, yasm 0.7.1
-@item Ubuntu 9.10, gcc 4.4.1, yasm 0.8.0
-@item Fedora 9, gcc 4.3.0, yasm 0.7.1
-@item Fedora 10, gcc 4.3.2, yasm 0.7.1
-@item Fedora 11, gcc 4.4.0, yasm 0.7.2
-@item Fedora 12, gcc 4.4.2, yasm 0.7.2
+@item Ubuntu 10.04, gcc 4.4.3, yasm 0.8.0
+@item Fedora 14, gcc 4.5.1, yasm 1.0.1
 @item gcc 4.0.0 or higher is reported to work
 @end itemize
 
@@ -36,7 +30,7 @@ The following are the recommended specifications for building on @value{OS.linux
 
 The @b{GTK UI} introduces some significant extra build requirements. If you intend to disable building the GUI with @command{configure --disable-gtk} you will not need many of these packages installed:
 
-Ubuntu 9.10 - 10.04 packages:
+Ubuntu 10.04 - 10.10 packages:
 @itemize @bullet
 @item subversion (cli/gui)
 @item yasm (cli/gui)
@@ -45,6 +39,7 @@ Ubuntu 9.10 - 10.04 packages:
 @item libtool (cli/gui)
 @item zlib1g-dev (cli/gui)
 @item libbz2-dev (cli/gui)
+@item libfribidi-dev (cli/gui)
 @item intltool (gui)
 @item libglib2.0-dev (gui)
 @item libdbus-glib-1-dev (gui)
@@ -56,13 +51,18 @@ Ubuntu 9.10 - 10.04 packages:
 @item libgstreamer-plugins-base0.10-dev (gui)
 @end itemize
 
+Ubuntu 11.04 - 11.10 packages:
+@itemize @bullet
+@item libappindicator-dev (gui)
+@end itemize
+
 To install these packages:
 @example
 sudo apt-get install subversion yasm build-essential \
-autoconf libtool zlib1g-dev libbz2-dev intltool libglib2.0-dev \
-libdbus-glib-1-dev libgtk2.0-dev libgudev-1.0-dev \
-libwebkit-dev libnotify-dev libgstreamer0.10-dev \
-libgstreamer-plugins-base0.10-dev
+autoconf libtool zlib1g-dev libbz2-dev libfribidi-dev \
+intltool libglib2.0-dev libdbus-glib-1-dev libgtk2.0-dev \
+libgudev-1.0-dev libwebkit-dev libnotify-dev libgstreamer0.10-dev \
+libgstreamer-plugins-base0.10-dev libappindicator-dev
 @end example
 
 Fedora 12 - 13 package groups:
@@ -84,6 +84,7 @@ Additional Fedora packages:
 @item yasm (cli/gui)
 @item zlib-devel (cli/gui)
 @item bzip2-devel (cli/gui)
+@item fribidi-devel (cli/gui)
 @item dbus-glib-devel (gui)
 @item libgudev1-devel (gui)
 @item webkitgtk-devel (gui)
@@ -94,7 +95,7 @@ Additional Fedora packages:
 
 To install these packages:
 @example
-sudo yum install yasm zlib-devel bzip2-devel \
+sudo yum install yasm zlib-devel bzip2-devel fribidi-devel \
 dbus-glib-devel libgudev1-devel webkitgtk-devel libnotify-devel \
 gstreamer-devel gstreamer-plugins-base-devel
 @end example
