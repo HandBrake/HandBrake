@@ -1,18 +1,18 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IAboutViewModel.cs" company="HandBrake Project (http://handbrake.fr)">
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="IViewModelBase.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   The About View Model Interface
+//   Defines the IViewModelBase type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
     /// <summary>
-    /// The About View Model Interface
+    /// The View Model base class interface
     /// </summary>
-    public interface IAboutViewModel
+    public interface IViewModelBase
     {
     }
 }

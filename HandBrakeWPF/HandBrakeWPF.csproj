@@ -78,6 +78,7 @@
     <Compile Include="ViewModels\Interfaces\IAboutViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IMainViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IOptionsViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IViewModelBase.cs" />
     <Compile Include="ViewModels\PreviewViewModel.cs" />
     <Compile Include="ViewModels\QueueViewModel.cs" />
     <Compile Include="ViewModels\OptionsViewModel.cs" />
