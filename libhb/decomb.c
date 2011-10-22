@@ -2,8 +2,8 @@
 
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.fr/>.
-   It may be used under the terms of the GNU General Public License. 
-   
+   It may be used under the terms of the GNU General Public License.
+
    The yadif algorithm was created by Michael Niedermayer.
    Tritical's work inspired much of the comb detection code:
    http://web.missouri.edu/~kes25c/
@@ -11,8 +11,8 @@
 
 /*****
 Parameters:
-    Mode : Spatial metric : Motion thresh : Spatial thresh : Block thresh :
-    Block width : Block height
+    Mode : Spatial metric : Motion thresh : Spatial thresh : Mask Filter Mode :
+    Block thresh : Block width : Block height
 
 Appended for EEDI2:
     Magnitude thresh : Variance thresh : Laplacian thresh : Dilation thresh :
@@ -20,9 +20,12 @@ Appended for EEDI2:
 
 Plus:
     Parity
-    
+
 Defaults:
-    7:2:6:9:80:16:16:10:20:20:4:2:50:24:1:-1
+    391:2:3:3:2:40:16:16:10:20:20:4:2:50:24:1:-1
+
+Original "Faster" settings:
+    7:2:6:9:1:80:16:16:10:20:20:4:2:50:24:1:-1
 *****/
 
 #define MODE_YADIF       1 // Use yadif
@@ -31,8 +34,14 @@ Defaults:
 #define MODE_EEDI2       8 // Use EEDI2 interpolation
 #define MODE_MCDEINT    16 // Post-process with mcdeint
 #define MODE_MASK       32 // Output combing masks instead of pictures
+#define MODE_GAMMA      128 // Scale gamma when decombing
+#define MODE_FILTER     256 // Filter combing mask
+#define MODE_COMPOSITE  512 // Overlay combing mask onto picture
 
-/***** 
+#define FILTER_CLASSIC 1
+#define FILTER_ERODE_DILATE 2
+
+/*****
 These modes can be layered. For example, Yadif (1) + EEDI2 (8) = 9,
 which will feed EEDI2 interpolations to yadif.
 
@@ -136,13 +145,16 @@ struct hb_filter_private_s
 
     // Decomb parameters
     int              mode;
+    int              filter_mode;
     int              spatial_metric;
     int              motion_threshold;
     int              spatial_threshold;
     int              block_threshold;
     int              block_width;
     int              block_height;
-    
+
+    float            gamma_lut[256];
+
     // EEDI2 parameters
     int              magnitude_threshold;
     int              variance_threshold;
@@ -155,7 +167,7 @@ struct hb_filter_private_s
 
     int              parity;
     int              tff;
-    
+
     int              yadif_ready;
 
     int              mcdeint_mode;
@@ -168,8 +180,14 @@ struct hb_filter_private_s
     uint8_t        * ref[4][3];
     int              ref_stride[3];
 
-    /* Make a buffer to store a comb mask. */
+    /* Make buffers to store a comb masks. */
     uint8_t        * mask[3];
+    uint8_t        * mask_filtered[3];
+    uint8_t        * mask_temp[3];
+    int              mask_box_x;
+    int              mask_box_y;
+    uint8_t          mask_box_color;
+
 
     uint8_t        * eedi_half[4][3];
     uint8_t        * eedi_full[5][3];
@@ -177,19 +195,19 @@ struct hb_filter_private_s
     int            * cy2;
     int            * cxy;
     int            * tmpc;
-    
+
     AVPicture        pic_in;
     AVPicture        pic_out;
     hb_buffer_t *    buf_out[2];
     hb_buffer_t *    buf_settings;
-    
+
     int              cpu_count;
 
     hb_thread_t    ** yadif_threads;         // Threads for Yadif - one per CPU
     hb_lock_t      ** yadif_begin_lock;      // Thread has work
     hb_lock_t      ** yadif_complete_lock;   // Thread has completed work
     yadif_arguments_t *yadif_arguments;      // Arguments to thread for work
-    
+
     hb_thread_t    ** decomb_threads;        // Threads for comb detection - one per CPU
     hb_lock_t      ** decomb_begin_lock;     // Thread has work
     hb_lock_t      ** decomb_complete_lock;  // Thread has completed work
@@ -232,7 +250,7 @@ int cubic_interpolate_pixel( int y0, int y1, int y2, int y3 )
     /* From http://www.neuron2.net/library/cubicinterp.html */
     int result = ( y0 * -3 ) + ( y1 * 23 ) + ( y2 * 23 ) + ( y3 * -3 );
     result /= 40;
-    
+
     if( result > 255 )
     {
         result = 255;
@@ -241,7 +259,7 @@ int cubic_interpolate_pixel( int y0, int y1, int y2, int y3 )
     {
         result = 0;
     }
-    
+
     return result;
 }
 
@@ -259,7 +277,7 @@ static void cubic_interpolate_line( uint8_t *dst,
     {
         int a, b, c, d;
         a = b = c = d = 0;
-        
+
         if( y >= 3 )
         {
             /* Normal top*/
@@ -278,12 +296,12 @@ static void cubic_interpolate_line( uint8_t *dst,
             a = cur[+refs];
             b = cur[+refs];
         }
-        
+
         if( y <= ( pv->height[plane] - 4 ) )
         {
             /* Normal bottom*/
             c = cur[+refs];
-            d = cur[3*refs];            
+            d = cur[3*refs];
         }
         else if( y == ( pv->height[plane] - 3 ) || y == ( pv->height[plane] - 2 ) )
         {
@@ -297,11 +315,35 @@ static void cubic_interpolate_line( uint8_t *dst,
             c = cur[-refs];
             d = cur[-refs];
         }
-        
+
         dst[0] = cubic_interpolate_pixel( a, b, c, d );
-        
+
         dst++;
         cur++;
+    }
+}
+
+void draw_mask_box( hb_filter_private_t * pv )
+{
+    int x = pv->mask_box_x;
+    int y = pv->mask_box_y;
+    int box_width = pv->block_width;
+    int box_height = pv->block_height;
+    int stride = pv->ref_stride[0];
+    uint8_t * mskp = ( pv->mode & MODE_FILTER ) ? pv->mask_filtered[0] : pv->mask[0];
+
+
+    int block_x, block_y;
+    for( block_x = 0; block_x < box_width; block_x++)
+    {
+        mskp[y*stride+x+block_x] = 128;
+        mskp[(y+box_height)*stride+x+block_x] = 128;
+    }
+
+    for( block_y = 0; block_y < box_height; block_y++)
+    {
+        mskp[stride*(y+block_y)+x] = 128;
+        mskp[stride*(y+block_y) + x + box_width] = 128;
     }
 }
 
@@ -310,32 +352,40 @@ void apply_mask_line( uint8_t * srcp,
                       int width )
 {
     int x;
-    
+
     for( x = 0; x < width; x++ )
     {
         if( mskp[x] == 255 )
         {
             srcp[x] = 255;
         }
+        if( mskp[x] == 128 )
+        {
+            srcp[x] = 128;
+        }
     }
 }
 
 void apply_mask( hb_filter_private_t * pv )
 {
+
+    /* draw_boxes */
+    draw_mask_box( pv );
+
     int plane, height;
-    
+
     for( plane = 0; plane < 3; plane++ )
     {
         uint8_t * srcp = ( pv->mode & MODE_MCDEINT ) ? pv->pic_in.data[plane] : pv->pic_out.data[plane];
-        uint8_t * mskp = pv->mask[plane];
-        
+        uint8_t * mskp = ( pv->mode & MODE_FILTER ) ? pv->mask_filtered[plane] : pv->mask[plane];
+
         for( height = 0; height < pv->height[plane]; height++ )
         {
-            if( pv->mode == MODE_MASK && plane == 0 )
+            if( !(pv->mode & MODE_COMPOSITE) && plane == 0 )
             {
                 memcpy( srcp, mskp, pv->width[plane] );
             }
-            else if( pv->mode == MODE_MASK )
+            else if( !(pv->mode & MODE_COMPOSITE) )
             {
                 memset( srcp, 128, pv->width[plane] );
             }
@@ -392,7 +442,7 @@ static void get_ref( uint8_t ** pic, hb_filter_private_t * pv, int frm )
         const uint8_t * ref = pv->ref[frm][i];
         int w = pv->width[i];
         int ref_stride = pv->ref_stride[i];
-        
+
         int y;
         for( y = 0; y < pv->height[i]; y++ )
         {
@@ -423,7 +473,7 @@ int blend_filter_pixel( int up2, int up1, int current, int down1, int down2 )
     {
         result = 0;
     }
-    
+
     return result;
 }
 
@@ -440,13 +490,13 @@ static void blend_filter_line( uint8_t *dst,
     for( x = 0; x < w; x++)
     {
         int a, b, c, d, e;
-        
+
         a = cur[-2*refs];
         b = cur[-refs];
         c = cur[0];
         d = cur[+refs];
         e = cur[2*refs];
-        
+
         if( y == 0 )
         {
             /* First line, so A and B don't exist.*/
@@ -469,11 +519,312 @@ static void blend_filter_line( uint8_t *dst,
             d = cur[0];
             e = cur[0];
         }
-                
+
         dst[0] = blend_filter_pixel( a, b, c, d, e );
 
         dst++;
         cur++;
+    }
+}
+
+void erode_combing_mask( hb_filter_private_t * pv )
+{
+    //Take in mask, output to mask_temp
+    int x, y, k;
+
+    uint8_t * cur;
+    uint8_t * dst;
+
+    int count;
+
+    int erosion_threshold = 2;
+
+    int ref;
+    for( k = 0; k < 1; k++ )
+    {
+        ref = pv->ref_stride[k];
+
+        for( y = 1; y < pv->height[k] -1; y++ )
+        {
+            cur = &pv->mask_temp[k][y*ref];
+            dst = &pv->mask_filtered[k][y*ref];
+
+            for( x = 1; x < pv->width[k]-1; x++ )
+            {
+                if( cur[0] == 0 )
+                {
+                    dst[0] = 0;
+                    cur++;
+                    dst++;
+                    continue;
+                }
+
+                count = 0;
+                if( cur[-ref-1] == 255 )
+                    ++count;
+                if( cur[-ref] == 255 )
+                    ++count;
+                if( cur[-ref+1] == 255 )
+                    ++count;
+                if( cur[-1] == 255 )
+                    ++count;
+                if( cur[+1] == 255 )
+                    ++count;
+                if( cur[ref-1] == 255 )
+                    ++count;
+                if( cur[ref] == 255 )
+                    ++count;
+                if( cur[ref+1] == 255 )
+                    ++count;
+
+                if( count < erosion_threshold )
+                    dst[0] = 0;
+                else
+                    dst[0] = 255;
+
+                cur++;
+                dst++;
+            }
+        }
+    }
+}
+
+void dilate_combing_mask( hb_filter_private_t * pv )
+{
+    //Take in mask_temp, output to mask
+    int x, y, k;
+
+    uint8_t * curp;
+    uint8_t * cur;
+    uint8_t * curn;
+    uint8_t * dst;
+
+    int count;
+
+    int dilation_threshold = 4;
+
+    int ref;
+    for( k = 0; k < 1; k++ )
+    {
+        ref = pv->ref_stride[k];
+
+        for( y = 1; y < pv->height[k] -1; y++ )
+        {
+            curp = &pv->mask_filtered[k][(y-1)*ref];
+            cur  = &pv->mask_filtered[k][y*ref];
+            curn = &pv->mask_filtered[k][(y+1)*ref];
+            dst = &pv->mask_temp[k][y*ref];
+
+            for( x = 1; x < pv->width[k]-1; x++ )
+            {
+                if( cur[0] == 255 )
+                {
+                    dst[0] = 255;
+                    curp++;
+                    cur++;
+                    curn++;
+                    dst++;
+                    continue;
+                }
+
+                count = 0;
+                if( curp[-1] == 255 )
+                    ++count;
+                if( curp[0] == 255 )
+                    ++count;
+                if( curp[+1] == 255 )
+                    ++count;
+                if( cur[-1] == 255 )
+                    ++count;
+                if( cur[+1] == 255 )
+                    ++count;
+                if( curn[-1] == 255 )
+                    ++count;
+                if( curn[0] == 255 )
+                    ++count;
+                if( curn[+1] == 255 )
+                    ++count;
+
+                if( count >= dilation_threshold )
+                    dst[0] = 255;
+                else
+                    dst[0] = 0;
+
+                curp++;
+                cur++;
+                curn++;
+                dst++;
+            }
+        }
+    }
+}
+
+
+void filter_combing_mask( hb_filter_private_t * pv )
+{
+    int x, y, k;
+
+    uint8_t * curp;
+    uint8_t * cur;
+    uint8_t * curn;
+    uint8_t * dst;
+
+    int h_count, v_count;
+
+    int ref;
+    for( k = 0; k < 1; k++ )
+    {
+        ref = pv->ref_stride[k];
+
+        for( y = 0; y < pv->height[k] -1; y++ )
+        {
+            curp = &pv->mask[k][(y-1)*ref];
+            cur = &pv->mask[k][y*ref];
+            curn = &pv->mask[k][(y+1)*ref];
+            dst = (pv->filter_mode == FILTER_CLASSIC ) ? &pv->mask_filtered[k][y*ref] : &pv->mask_temp[k][y*ref] ;
+
+            for( x = 0; x < pv->width[k]-1; x++ )
+            {
+
+                h_count = v_count = 0;
+                if( x == 0 )
+                {
+                    if( cur[0] == 255 && cur[1] == 255 )
+                        h_count++;
+                }
+                else if( x == pv->width[k]-1 )
+                {
+                    if( cur[-1] == 255 && cur[0] == 255 )
+                        h_count++;
+                }
+                else
+                {
+                    if(cur[-1] == 255 && cur[0] == 255 && cur[1] == 255 )
+                        h_count++;
+                }
+
+                if( y == 0 )
+                {
+                    if( cur[0] == 255 && curn[0] == 255 )
+                        v_count++;
+                }
+                else if( y == pv->height[k]-1 )
+                {
+                    if( curp[0] == 255 && cur[0] == 255 )
+                        v_count++;
+                }
+                else
+                {
+                    if( curp[0] == 255 && cur[0] == 255 && curn[0] == 255 )
+                        v_count++;
+                }
+
+                if( h_count && pv->filter_mode == FILTER_CLASSIC )
+                    dst[0] = 255;
+                else if( pv->filter_mode == FILTER_CLASSIC )
+                    dst[0] = 0;
+                else if( h_count && v_count )
+                    dst[0] = 255;
+                else
+                    dst[0] = 0;
+
+                curp++;
+                cur++;
+                curn++;
+                dst++;
+            }
+        }
+    }
+}
+
+int check_filtered_combing_mask( hb_filter_private_t * pv )
+{
+    /* Go through the mask in X*Y blocks. If any of these windows
+       have threshold or more combed pixels, consider the whole
+       frame to be combed and send it on to be deinterlaced.     */
+
+    /* Block mask threshold -- The number of pixels
+       in a block_width * block_height window of
+       he mask that need to show combing for the
+       whole frame to be seen as such.            */
+    int threshold       = pv->block_threshold;
+    int block_width     = pv->block_width;
+    int block_height    = pv->block_height;
+    int block_x, block_y;
+    int block_score = 0; int send_to_blend = 0;
+    uint8_t * mask_p;
+    int x, y, k;
+
+    for( k = 0; k < 1; k++ )
+    {
+        int ref_stride = pv->ref_stride[k];
+        pv->mask_box_x = -1;
+        pv->mask_box_y = -1;
+        pv->mask_box_color = 0;
+
+        for( y = 0; y < ( pv->height[k] - block_height ); y = y + block_height )
+        {
+            for( x = 0; x < ( pv->width[k] - block_width ); x = x + block_width )
+            {
+                block_score = 0;
+
+                for( block_y = 0; block_y < block_height; block_y++ )
+                {
+                    int mask_y = y + block_y;
+                    mask_p = &pv->mask_filtered[k][mask_y*ref_stride + x];
+
+                    for( block_x = 0; block_x < block_width; block_x++ )
+                    {
+
+                        if( mask_p[ 0 ] == 255 )
+                            block_score++;
+                        mask_p++;
+                    }
+                }
+
+                if( block_score >= ( threshold / 2 ) )
+                {
+#if 0
+                    hb_log("decomb: frame %i | score %i | type %s", pv->deinterlaced_frames + pv->blended_frames +  pv->unfiltered_frames + 1, block_score, pv->buf_settings->flags & 16 ? "Film" : "Video");
+#endif
+                    pv->mask_box_x = x;
+                    pv->mask_box_y = y;
+
+                   if ( block_score <= threshold && !( pv->buf_settings->flags & 16) )
+                    {
+                        /* Blend video content that scores between
+                           ( threshold / 2 ) and threshold.        */
+                        send_to_blend = 1;
+                        pv->mask_box_color = 2;
+                    }
+                    else if( block_score > threshold )
+                    {
+                        if( pv->buf_settings->flags & 16 )
+                        {
+                            /* Blend progressive content above the threshold.*/
+                            pv->mask_box_color = 2;
+                            return 2;
+                        }
+                        else
+                        {
+                            /* Yadif deinterlace video content above the threshold. */
+                            pv->mask_box_color = 1;
+                            return 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if( send_to_blend )
+    {
+        return 2;
+    }
+    else
+    {
+        /* Consider this frame to be uncombed. */
+        return 0;
     }
 }
 
@@ -503,12 +854,12 @@ int check_combing_mask( hb_filter_private_t * pv )
             for( x = 0; x < ( pv->width[k] - block_width ); x = x + block_width )
             {
                 block_score = 0;
-                
+
                 for( block_y = 0; block_y < block_height; block_y++ )
                 {
                     int mask_y = y + block_y;
                     mask_p = &pv->mask[k][mask_y*ref_stride + x];
-                    
+
                     for( block_x = 0; block_x < block_width; block_x++ )
                     {
                         /* We only want to mark a pixel in a block as combed
@@ -533,6 +884,28 @@ int check_combing_mask( hb_filter_private_t * pv )
                                 mask_p[  1 ] == 255 )
                                     block_score++;
                         }
+
+#if 0
+                         if( (y + block_y) == 0 )
+                         {
+                             if( mask_p[ 0 ] == 255 &&
+                                 mask_p[ ref_stride ] == 255 )
+                                     block_score++;
+                         }
+                         else if( (y + block_y) == (pv->height[k] -1) )
+                         {
+                             if( mask_p[ -ref_stride ] == 255 &&
+                                 mask_p[  0 ] == 255 )
+                                     block_score++;
+                         }
+                         else
+                         {
+                             if( mask_p[ -ref_stride ] == 255 &&
+                                 mask_p[  0 ] == 255 &&
+                                 mask_p[  +ref_stride ] == 255 )
+                                     block_score++;
+                         }
+#endif
                         mask_p++;
                     }
                 }
@@ -542,30 +915,37 @@ int check_combing_mask( hb_filter_private_t * pv )
 #if 0
                     hb_log("decomb: frame %i | score %i | type %s", pv->deinterlaced_frames + pv->blended_frames +  pv->unfiltered_frames + 1, block_score, pv->buf_settings->flags & 16 ? "Film" : "Video");
 #endif
+
+                    pv->mask_box_x = x;
+                    pv->mask_box_y = y;
+
                     if ( block_score <= threshold && !( pv->buf_settings->flags & 16) )
                     {
                         /* Blend video content that scores between
                            ( threshold / 2 ) and threshold.        */
                         send_to_blend = 1;
+                        pv->mask_box_color = 2;
                     }
                     else if( block_score > threshold )
                     {
                         if( pv->buf_settings->flags & 16 )
                         {
                             /* Blend progressive content above the threshold.*/
+                            pv->mask_box_color = 2;
                             return 2;
                         }
                         else
                         {
                             /* Yadif deinterlace video content above the threshold. */
+                            pv->mask_box_color = 1;
                             return 1;
                         }
                     }
                 }
             }
-        } 
+        }
     }
-    
+
     if( send_to_blend )
     {
         return 2;
@@ -577,15 +957,151 @@ int check_combing_mask( hb_filter_private_t * pv )
     }
 }
 
+void build_gamma_lut( hb_filter_private_t * pv )
+{
+    int i;
+    for( i = 0; i < 256; i++ )
+    {
+        pv->gamma_lut[i] = pow( ( (float)i / (float)255 ), 2.2f );
+    }
+}
+
+float scale_gamma( int pixel, hb_filter_private_t * pv )
+{
+    return pv->gamma_lut[pixel];
+}
+
+void detect_gamma_combed_segment( hb_filter_private_t * pv, int segment_start, int segment_stop )
+{
+    /* A mish-mash of various comb detection tricks
+       picked up from neuron2's Decomb plugin for
+       AviSynth and tritical's IsCombedT and
+       IsCombedTIVTC plugins.                       */
+
+    int x, y, k, width, height;
+
+    /* Comb scoring algorithm */
+    /* Motion threshold */
+    float mthresh         = (float)pv->motion_threshold / (float)255;
+    /* Spatial threshold */
+    float athresh         = (float)pv->spatial_threshold / (float)255;
+    float athresh6        = 6 *athresh;
+
+    /* One pas for Y, one pass for U, one pass for V */
+    for( k = 0; k < 1; k++ )
+    {
+        int ref_stride  = pv->ref_stride[k];
+        width           = pv->width[k];
+        height          = pv->height[k];
+
+        /* Comb detection has to start at y = 2 and end at
+           y = height - 2, because it needs to examine
+           2 pixels above and 2 below the current pixel.      */
+        if( segment_start < 2 )
+            segment_start = 2;
+        if( segment_stop > height - 2 )
+            segment_stop = height - 2;
+
+        for( y =  segment_start; y < segment_stop; y++ )
+        {
+            /* These are just to make the buffer locations easier to read. */
+            int up_2    = -2*ref_stride ;
+            int up_1    = -1*ref_stride;
+            int down_1 = ref_stride;
+            int down_2 = 2*ref_stride;
+
+            /* We need to examine a column of 5 pixels
+               in the prev, cur, and next frames.      */
+            uint8_t * cur = &pv->ref[1][k][y*ref_stride];
+            uint8_t * prev = &pv->ref[0][k][y*ref_stride];
+            uint8_t * next = &pv->ref[2][k][y*ref_stride];
+            uint8_t * mask = &pv->mask[k][y*ref_stride];
+
+            for( x = 0; x < width; x++ )
+            {
+                float up_diff   = pv->gamma_lut[cur[0]] - pv->gamma_lut[cur[up_1]];
+                float down_diff = pv->gamma_lut[cur[0]] - pv->gamma_lut[cur[down_1]];
+
+                if( ( up_diff >  athresh && down_diff >  athresh ) ||
+                    ( up_diff < -athresh && down_diff < -athresh ) )
+                {
+                    /* The pixel above and below are different,
+                       and they change in the same "direction" too.*/
+                    int motion = 0;
+                    if( mthresh > 0 )
+                    {
+                        /* Make sure there's sufficient motion between frame t-1 to frame t+1. */
+                        if( fabs( pv->gamma_lut[prev[0]]      - pv->gamma_lut[cur[0]] ) > mthresh &&
+                            fabs( pv->gamma_lut[cur[up_1]]    - pv->gamma_lut[next[up_1]]    ) > mthresh &&
+                            fabs( pv->gamma_lut[cur[down_1]]  - pv->gamma_lut[next[down_1]]    ) > mthresh )
+                                motion++;
+                        if( fabs( pv->gamma_lut[next[0]]      - pv->gamma_lut[cur[0]] ) > mthresh &&
+                            fabs( pv->gamma_lut[prev[up_1]]   - pv->gamma_lut[cur[up_1]] ) > mthresh &&
+                            fabs( pv->gamma_lut[prev[down_1]] - pv->gamma_lut[cur[down_1]] ) > mthresh )
+                                motion++;
+
+//                            hb_log("prev->cur motion: %f, mthresh: %f", fabs( scale_gamma( prev[0] ) - scale_gamma( cur[0] ) ), mthresh);
+                    }
+                    else
+                    {
+                        /* User doesn't want to check for motion,
+                           so move on to the spatial check.       */
+                        motion = 1;
+                    }
+
+                    if( motion || ( pv->deinterlaced_frames==0 && pv->blended_frames==0 && pv->unfiltered_frames==0) )
+                    {
+
+                        /* Tritical's noise-resistant combing scorer.
+                           The check is done on a bob+blur convolution. */
+                        float combing = fabs( pv->gamma_lut[cur[up_2]]
+                                         + ( 4 * pv->gamma_lut[cur[0]] )
+                                         + pv->gamma_lut[cur[down_2]]
+                                         - ( 3 * ( pv->gamma_lut[cur[up_1]]
+                                                 + pv->gamma_lut[cur[down_1]] ) ) );
+                        /* If the frame is sufficiently combed,
+                           then mark it down on the mask as 255. */
+
+ //                              hb_log("combing: %f, athresh6: %f", combing, athresh6);
+                        if( combing > athresh6 )
+                        {
+                            mask[0] = 255;
+                        }
+                        else
+                        {
+                            mask[0] = 0;
+                        }
+
+                    }
+                    else
+                    {
+                        mask[0] = 0;
+                    }
+                }
+                else
+                {
+                    mask[0] = 0;
+                }
+
+                cur++;
+                prev++;
+                next++;
+                mask++;
+            }
+        }
+    }
+}
+
+
 void detect_combed_segment( hb_filter_private_t * pv, int segment_start, int segment_stop )
 {
     /* A mish-mash of various comb detection tricks
        picked up from neuron2's Decomb plugin for
        AviSynth and tritical's IsCombedT and
        IsCombedTIVTC plugins.                       */
-       
+
     int x, y, k, width, height;
-    
+
     /* Comb scoring algorithm */
     int spatial_metric  = pv->spatial_metric;
     /* Motion threshold */
@@ -595,13 +1111,13 @@ void detect_combed_segment( hb_filter_private_t * pv, int segment_start, int seg
     int athresh_squared = athresh * athresh;
     int athresh6        = 6 *athresh;
 
-    /* One pas for Y, one pass for U, one pass for V */    
+    /* One pas for Y, one pass for U, one pass for V */
     for( k = 0; k < 1; k++ )
     {
         int ref_stride  = pv->ref_stride[k];
         width           = pv->width[k];
         height          = pv->height[k];
-        
+
         /* Comb detection has to start at y = 2 and end at
            y = height - 2, because it needs to examine
            2 pixels above and 2 below the current pixel.      */
@@ -609,7 +1125,7 @@ void detect_combed_segment( hb_filter_private_t * pv, int segment_start, int seg
             segment_start = 2;
         if( segment_stop > height - 2 )
             segment_stop = height - 2;
-            
+
         for( y =  segment_start; y < segment_stop; y++ )
         {
             /* These are just to make the buffer locations easier to read. */
@@ -617,19 +1133,19 @@ void detect_combed_segment( hb_filter_private_t * pv, int segment_start, int seg
             int up_1    = -1*ref_stride;
             int down_1 = ref_stride;
             int down_2 = 2*ref_stride;
-            
+
             /* We need to examine a column of 5 pixels
                in the prev, cur, and next frames.      */
             uint8_t * cur = &pv->ref[1][k][y*ref_stride];
             uint8_t * prev = &pv->ref[0][k][y*ref_stride];
             uint8_t * next = &pv->ref[2][k][y*ref_stride];
             uint8_t * mask = &pv->mask[k][y*ref_stride];
-            
+
             for( x = 0; x < width; x++ )
             {
                 int up_diff = cur[0] - cur[up_1];
                 int down_diff = cur[0] - cur[down_1];
-                
+
                 if( ( up_diff >  athresh && down_diff >  athresh ) ||
                     ( up_diff < -athresh && down_diff < -athresh ) )
                 {
@@ -654,7 +1170,7 @@ void detect_combed_segment( hb_filter_private_t * pv, int segment_start, int seg
                            so move on to the spatial check.       */
                         motion = 1;
                     }
-                           
+
                     if( motion || ( pv->deinterlaced_frames==0 && pv->blended_frames==0 && pv->unfiltered_frames==0) )
                     {
                            /* That means it's time for the spatial check.
@@ -678,9 +1194,9 @@ void detect_combed_segment( hb_filter_private_t * pv, int segment_start, int seg
                                It's better, but still noise senstive.      */
                                int combing = ( cur[up_1] - cur[0] ) *
                                              ( cur[down_1] - cur[0] );
-                               
+
                                if( combing > athresh_squared )
-                                   mask[0] = 255; 
+                                   mask[0] = 255;
                                else
                                    mask[0] = 0;
                         }
@@ -715,7 +1231,7 @@ void detect_combed_segment( hb_filter_private_t * pv, int segment_start, int seg
                 {
                     mask[0] = 0;
                 }
-                
+
                 cur++;
                 prev++;
                 next++;
@@ -752,7 +1268,7 @@ void eedi2_interpolate_plane( hb_filter_private_t * pv, int k )
 
     // edge mask
     eedi2_build_edge_mask( mskp, pitch, srcp, pitch,
-                     pv->magnitude_threshold, pv->variance_threshold, pv->laplacian_threshold, 
+                     pv->magnitude_threshold, pv->variance_threshold, pv->laplacian_threshold,
                      half_height, width );
     eedi2_erode_edge_mask( mskp, pitch, tmpp, pitch, pv->erosion_threshold, half_height, width );
     eedi2_dilate_edge_mask( tmpp, pitch, mskp, pitch, pv->dilation_threshold, half_height, width );
@@ -836,13 +1352,13 @@ void eedi2_filter_thread( void *thread_args_v )
              */
             run = 0;
             continue;
-        } 
+        }
 
         /*
          * Process plane
          */
             eedi2_interpolate_plane( pv, plane );
-        
+
         /*
          * Finished this segment, let everyone know.
          */
@@ -863,12 +1379,12 @@ void eedi2_planer( hb_filter_private_t * pv )
         int start_line = !pv->tff;
         eedi2_fill_half_height_buffer_plane( &pv->ref[1][i][pitch*start_line], pv->eedi_half[SRCPF][i], pitch, pv->height[i] );
     }
-    
+
     int plane;
     for( plane = 0; plane < 3; plane++ )
-    {  
+    {
         /*
-         * Let the thread for this plane know that we've setup work 
+         * Let the thread for this plane know that we've setup work
          * for it by releasing the begin lock (ensuring that the
          * complete lock is already locked so that we block when
          * we try to lock it again below).
@@ -924,7 +1440,7 @@ void decomb_filter_thread( void *thread_args_v )
              */
             run = 0;
             continue;
-        } 
+        }
 
         /*
          * Process segment (for now just from luma)
@@ -943,8 +1459,15 @@ void decomb_filter_thread( void *thread_args_v )
             } else {
                 segment_stop = ( h / pv->cpu_count ) * ( segment + 1 );
             }
-            
-            detect_combed_segment( pv, segment_start, segment_stop );
+
+            if( pv->mode & MODE_GAMMA )
+            {
+                detect_gamma_combed_segment( pv, segment_start, segment_stop );
+            }
+            else
+            {
+                detect_combed_segment( pv, segment_start, segment_stop );
+            }
         }
         /*
          * Finished this segment, let everyone know.
@@ -959,9 +1482,9 @@ int comb_segmenter( hb_filter_private_t * pv )
     int segment;
 
     for( segment = 0; segment < pv->cpu_count; segment++ )
-    {  
+    {
         /*
-         * Let the thread for this plane know that we've setup work 
+         * Let the thread for this plane know that we've setup work
          * for it by releasing the begin lock (ensuring that the
          * complete lock is already locked so that we block when
          * we try to lock it again below).
@@ -981,8 +1504,22 @@ int comb_segmenter( hb_filter_private_t * pv )
         hb_lock( pv->decomb_complete_lock[segment] );
         hb_unlock( pv->decomb_complete_lock[segment] );
     }
-    
-    return check_combing_mask( pv );
+
+    if( pv->mode & MODE_FILTER )
+    {
+        filter_combing_mask( pv );
+        if( pv->filter_mode == FILTER_ERODE_DILATE )
+        {
+            erode_combing_mask( pv );
+            dilate_combing_mask( pv );
+            erode_combing_mask( pv );
+        }
+        return check_filtered_combing_mask( pv );
+    }
+    else
+    {
+        return check_combing_mask( pv );
+    }
 }
 
 static void yadif_filter_line( uint8_t *dst,
@@ -1000,12 +1537,12 @@ static void yadif_filter_line( uint8_t *dst,
        to the other field in the current frame--the one not being filtered.  */
     uint8_t *prev2 = parity ? prev : cur ;
     uint8_t *next2 = parity ? cur  : next;
-    
+
     int w = pv->width[plane];
     int refs = pv->ref_stride[plane];
     int x;
     int eedi2_mode = ( pv->mode & MODE_EEDI2 );
-    
+
     /* We can replace spatial_pred with this interpolation*/
     uint8_t * eedi2_guess = &pv->eedi_full[DST2PF][plane][y*refs];
 
@@ -1024,7 +1561,7 @@ static void yadif_filter_line( uint8_t *dst,
         int d              = (prev2[0] + next2[0])>>1;
         /* Pixel below */
         int e              = cur[+refs];
-        
+
         /* How the current pixel changes between the adjacent fields */
         int temporal_diff0 = ABS(prev2[0] - next2[0]);
         /* The average of how much the pixels above and below change from the frame before to now. */
@@ -1035,7 +1572,7 @@ static void yadif_filter_line( uint8_t *dst,
         int diff           = MAX3(temporal_diff0>>1, temporal_diff1, temporal_diff2);
 
         int spatial_pred;
-        
+
         if( eedi2_mode )
         {
             /* Who needs yadif's spatial predictions when we can have EEDI2's? */
@@ -1044,10 +1581,10 @@ static void yadif_filter_line( uint8_t *dst,
         }
         else // Yadif spatial interpolation
         {
-            /* SAD of how the pixel-1, the pixel, and the pixel+1 change from the line above to below. */ 
+            /* SAD of how the pixel-1, the pixel, and the pixel+1 change from the line above to below. */
             int spatial_score  = ABS(cur[-refs-1] - cur[+refs-1]) + ABS(cur[-refs]-cur[+refs]) +
-                                         ABS(cur[-refs+1] - cur[+refs+1]) - 1;         
-            
+                                         ABS(cur[-refs+1] - cur[+refs+1]) - 1;
+
             /* Spatial pred is either a bilinear or cubic vertical interpolation. */
             if( ( pv->mode & MODE_CUBIC ) && !vertical_edge)
             {
@@ -1114,12 +1651,12 @@ static void yadif_filter_line( uint8_t *dst,
            comparing against lines in the adjacent fields. */
         int b = (prev2[-2*refs] + next2[-2*refs])>>1;
         int f = (prev2[+2*refs] + next2[+2*refs])>>1;
-        
+
         /* Find the median value */
         int max = MAX3(d-e, d-c, MIN(b-c, f-e));
         int min = MIN3(d-e, d-c, MAX(b-c, f-e));
         diff = MAX3( diff, min, -max );
-        
+
         if( spatial_pred > d + diff )
         {
             spatial_pred = d + diff;
@@ -1128,9 +1665,9 @@ static void yadif_filter_line( uint8_t *dst,
         {
             spatial_pred = d - diff;
         }
-        
+
         dst[0] = spatial_pred;
-                        
+
         dst++;
         cur++;
         prev++;
@@ -1176,7 +1713,7 @@ void yadif_decomb_filter_thread( void *thread_args_v )
              */
             run = 0;
             continue;
-        } 
+        }
 
         if( yadif_work->dst == NULL )
         {
@@ -1184,7 +1721,7 @@ void yadif_decomb_filter_thread( void *thread_args_v )
             hb_snooze(500);
             continue;
         }
-        
+
         is_combed = pv->yadif_arguments[segment].is_combed;
 
         /*
@@ -1230,7 +1767,7 @@ void yadif_decomb_filter_thread( void *thread_args_v )
                     /* Just apply vertical cubic interpolation */
                     uint8_t *cur  = &pv->ref[1][plane][y*ref_stride];
                     uint8_t *dst2 = &dst[plane][y*w];
-                    
+
                     cubic_interpolate_line( dst2, cur, plane, y, pv );
                 }
                 else if( pv->mode & MODE_YADIF && ( ( y ^ parity ) &  1 )  && ( is_combed == 1 ) )
@@ -1249,13 +1786,13 @@ void yadif_decomb_filter_thread( void *thread_args_v )
                         uint8_t *next = &pv->ref[2][plane][y*ref_stride];
                         uint8_t *dst2 = &dst[plane][y*w];
 
-                        yadif_filter_line( dst2, 
-                                           prev, 
-                                           cur, 
-                                           next, 
-                                           plane, 
+                        yadif_filter_line( dst2,
+                                           prev,
+                                           cur,
+                                           next,
+                                           plane,
                                            parity ^ tff,
-                                           y, 
+                                           y,
                                            pv );
                     }
                     else if( y == 0 )
@@ -1291,7 +1828,7 @@ void yadif_decomb_filter_thread( void *thread_args_v )
                 {
                     memcpy( &dst[plane][y*w],
                             &pv->ref[1][plane][y*ref_stride],
-                            w * sizeof(uint8_t) );              
+                            w * sizeof(uint8_t) );
                 }
             }
         }
@@ -1310,7 +1847,7 @@ static void yadif_filter( uint8_t ** dst,
 {
     /* If we're running comb detection, do it now, otherwise default to true. */
     int is_combed = pv->spatial_metric >= 0 ? comb_segmenter( pv ) : 1;
-    
+
     /* The comb detector suggests three different values:
        0: Don't comb this frame.
        1: Deinterlace this frame.
@@ -1340,7 +1877,7 @@ static void yadif_filter( uint8_t ** dst,
         /* No deinterlacer or mask chosen, pass the frame through. */
         is_combed = 0;
     }
-    
+
     if( is_combed == 1 )
     {
         pv->deinterlaced_frames++;
@@ -1353,13 +1890,13 @@ static void yadif_filter( uint8_t ** dst,
     {
         pv->unfiltered_frames++;
     }
-    
+
     if( is_combed == 1 && ( pv->mode & MODE_EEDI2 ) )
     {
         /* Generate an EEDI2 interpolation */
         eedi2_planer( pv );
     }
-    
+
     if( is_combed )
     {
         if( ( pv->mode & MODE_EEDI2 ) && !( pv->mode & MODE_YADIF ) && is_combed == 1 )
@@ -1388,7 +1925,7 @@ static void yadif_filter( uint8_t ** dst,
             int segment;
 
             for( segment = 0; segment < pv->cpu_count; segment++ )
-            {  
+            {
                 /*
                  * Setup the work for this plane.
                  */
@@ -1398,7 +1935,7 @@ static void yadif_filter( uint8_t ** dst,
                 pv->yadif_arguments[segment].is_combed = is_combed;
 
                 /*
-                 * Let the thread for this plane know that we've setup work 
+                 * Let the thread for this plane know that we've setup work
                  * for it by releasing the begin lock (ensuring that the
                  * complete lock is already locked so that we block when
                  * we try to lock it again below).
@@ -1427,19 +1964,19 @@ static void yadif_filter( uint8_t ** dst,
     else
     {
         /*  Just passing through... */
-        
+
         /* For mcdeint's benefit... */
         pv->yadif_arguments[0].is_combed = is_combed; // 0
-        
+
         int i;
         for( i = 0; i < 3; i++ )
         {
             uint8_t * ref = pv->ref[1][i];
             uint8_t * dest = dst[i];
-            
+
             int w = pv->width[i];
             int ref_stride = pv->ref_stride[i];
-            
+
             int y;
             for( y = 0; y < pv->height[i]; y++ )
             {
@@ -1449,10 +1986,10 @@ static void yadif_filter( uint8_t ** dst,
             }
         }
     }
-    
+
     if( pv->mode & MODE_MASK && pv->spatial_metric >= 0 )
     {
-        if( pv->mode == MODE_MASK || is_combed )
+        if( pv->mode == MODE_MASK || (pv->mode & MODE_MASK && pv->mode & MODE_GAMMA) || is_combed || (pv->mode & MODE_MASK && pv->mode & MODE_FILTER ))
         apply_mask( pv );
     }
 }
@@ -1476,6 +2013,8 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
     pv->width[1]  = pv->width[2]  = width >> 1;
     pv->height[1] = pv->height[2] = height >> 1;
 
+    build_gamma_lut( pv );
+
     pv->buf_out[0] = hb_video_buffer_init( width, height );
     pv->buf_out[1] = hb_video_buffer_init( width, height );
     pv->buf_settings = hb_buffer_init( 0 );
@@ -1486,14 +2025,16 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
 
     pv->yadif_ready    = 0;
 
-    pv->mode     = MODE_YADIF | MODE_BLEND | MODE_CUBIC;
+    pv->mode     = MODE_YADIF | MODE_BLEND | MODE_CUBIC | 
+                   MODE_GAMMA | MODE_FILTER;
+    pv->filter_mode = FILTER_ERODE_DILATE;
     pv->spatial_metric = 2;
-    pv->motion_threshold = 6;
-    pv->spatial_threshold = 9;
-    pv->block_threshold = 80;
+    pv->motion_threshold = 3;
+    pv->spatial_threshold = 3;
+    pv->block_threshold = 40;
     pv->block_width = 16;
     pv->block_height = 16;
-    
+
     pv->magnitude_threshold = 10;
     pv->variance_threshold = 20;
     pv->laplacian_threshold = 20;
@@ -1510,11 +2051,12 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
 
     if( settings )
     {
-        sscanf( settings, "%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d",
+        sscanf( settings, "%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d",
                 &pv->mode,
                 &pv->spatial_metric,
                 &pv->motion_threshold,
                 &pv->spatial_threshold,
+                &pv->filter_mode,
                 &pv->block_threshold,
                 &pv->block_width,
                 &pv->block_height,
@@ -1528,15 +2070,15 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
                 &pv->post_processing,
                 &pv->parity );
     }
-    
+
     pv->cpu_count = hb_get_cpu_count();
-    
+
 
     if( pv->mode & MODE_MCDEINT )
     {
         pv->mcdeint_mode = MCDEINT_MODE_ENABLED;
     }
-    
+
     /* Allocate yadif specific buffers */
     int i, j;
     for( i = 0; i < 3; i++ )
@@ -1553,7 +2095,7 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
         }
     }
 
-    /* Allocate a buffer to store a comb mask. */
+    /* Allocate buffers to store comb masks. */
     for( i = 0; i < 3; i++ )
     {
         int is_chroma = !!i;
@@ -1561,8 +2103,10 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
         int h = ((pv->height[0]+6+ 31) & (~31))>>is_chroma;
 
         pv->mask[i] = calloc( 1, w*h*sizeof(uint8_t) ) + 3*w;
+        pv->mask_filtered[i] = calloc( 1, w*h*sizeof(uint8_t) ) + 3*w;
+        pv->mask_temp[i] = calloc( 1, w*h*sizeof(uint8_t) ) + 3*w;
     }
-    
+
     if( pv->mode & MODE_EEDI2 )
     {
         /* Allocate half-height eedi2 buffers */
@@ -1593,7 +2137,7 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
             }
         }
     }
-    
+
      /*
       * Create yadif threads and locks.
       */
@@ -1624,7 +2168,7 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
 
              pv->yadif_arguments[i].stop = 0;
              pv->yadif_arguments[i].dst = NULL;
-             
+
              pv->yadif_threads[i] = hb_thread_init( "yadif_filter_segment",
                                                     yadif_decomb_filter_thread,
                                                     thread_args,
@@ -1635,7 +2179,7 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
              hb_error( "yadif could not create threads" );
          }
     }
-    
+
     /*
      * Create decomb threads and locks.
      */
@@ -1643,29 +2187,29 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
     pv->decomb_begin_lock = malloc( sizeof( hb_lock_t * ) * pv->cpu_count );
     pv->decomb_complete_lock = malloc( sizeof( hb_lock_t * ) * pv->cpu_count );
     pv->decomb_arguments = malloc( sizeof( decomb_arguments_t ) * pv->cpu_count );
-    
+
     for( i = 0; i < pv->cpu_count; i++ )
     {
         decomb_thread_arg_t *decomb_thread_args;
-    
+
         decomb_thread_args = malloc( sizeof( decomb_thread_arg_t ) );
-    
+
         if( decomb_thread_args )
         {
             decomb_thread_args->pv = pv;
             decomb_thread_args->segment = i;
-    
+
             pv->decomb_begin_lock[i] = hb_lock_init();
             pv->decomb_complete_lock[i] = hb_lock_init();
-    
+
             /*
              * Important to start off with the threads locked waiting
              * on input.
              */
             hb_lock( pv->decomb_begin_lock[i] );
-    
+
             pv->decomb_arguments[i].stop = 0;
-    
+
             pv->decomb_threads[i] = hb_thread_init( "decomb_filter_segment",
                                                    decomb_filter_thread,
                                                    decomb_thread_args,
@@ -1676,7 +2220,7 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
             hb_error( "decomb could not create threads" );
         }
     }
-    
+
     if( pv->mode & MODE_EEDI2 )
     {
         /*
@@ -1732,7 +2276,7 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
             }
         }
     }
-    
+
     mcdeint_init( &pv->mcdeint, pv->mcdeint_mode, mcdeint_qp, width, height );
 
     return pv;
@@ -1744,7 +2288,7 @@ void hb_decomb_close( hb_filter_private_t * pv )
     {
         return;
     }
-    
+
     hb_log("decomb: deinterlaced %i | blended %i | unfiltered %i | total %i", pv->deinterlaced_frames, pv->blended_frames, pv->unfiltered_frames, pv->deinterlaced_frames + pv->blended_frames + pv->unfiltered_frames);
 
     /* Cleanup frame buffers */
@@ -1772,18 +2316,31 @@ void hb_decomb_close( hb_filter_private_t * pv )
             *p = NULL;
         }
     }
-    
-    /* Cleanup combing mask. */
+
+    /* Cleanup combing masks. */
     for( i = 0; i<3*3; i++ )
     {
         uint8_t **p = &pv->mask[i/3];
+        uint8_t **p2 = &pv->mask_filtered[i/3];
+        uint8_t **p3 = &pv->mask_temp[i/3];
+
         if (*p)
         {
             free( *p - 3*pv->ref_stride[i/3] );
             *p = NULL;
         }
+        if (*p2)
+        {
+            free( *p2 - 3*pv->ref_stride[i/3] );
+            *p2 = NULL;
+        }
+        if (*p3)
+        {
+            free( *p3 - 3*pv->ref_stride[i/3] );
+            *p3 = NULL;
+        }
     }
-    
+
     if( pv->mode & MODE_EEDI2 )
     {
         /* Cleanup eedi-half  buffers */
@@ -1797,7 +2354,7 @@ void hb_decomb_close( hb_filter_private_t * pv )
                 {
                     free( *p - 3*pv->ref_stride[i] );
                     *p = NULL;
-                }            
+                }
             }
         }
 
@@ -1811,11 +2368,11 @@ void hb_decomb_close( hb_filter_private_t * pv )
                 {
                     free( *p - 3*pv->ref_stride[i] );
                     *p = NULL;
-                }            
+                }
             }
         }
     }
-    
+
     if( pv->post_processing > 1  && ( pv->mode & MODE_EEDI2 ) )
     {
         if (pv->cx2) eedi2_aligned_free(pv->cx2);
@@ -1823,7 +2380,7 @@ void hb_decomb_close( hb_filter_private_t * pv )
         if (pv->cxy) eedi2_aligned_free(pv->cxy);
         if (pv->tmpc) eedi2_aligned_free(pv->tmpc);
     }
-    
+
     for( i = 0; i < pv->cpu_count; i++)
     {
         /*
@@ -1836,7 +2393,7 @@ void hb_decomb_close( hb_filter_private_t * pv )
         hb_lock_close( &pv->yadif_begin_lock[i] );
         hb_lock_close( &pv->yadif_complete_lock[i] );
     }
-    
+
     /*
      * free memory for yadif structs
      */
@@ -1844,7 +2401,7 @@ void hb_decomb_close( hb_filter_private_t * pv )
     free( pv->yadif_begin_lock );
     free( pv->yadif_complete_lock );
     free( pv->yadif_arguments );
-    
+
     for( i = 0; i < pv->cpu_count; i++)
     {
         /*
@@ -1857,7 +2414,7 @@ void hb_decomb_close( hb_filter_private_t * pv )
         hb_lock_close( &pv->decomb_begin_lock[i] );
         hb_lock_close( &pv->decomb_complete_lock[i] );
     }
-    
+
     /*
      * free memory for decomb structs
      */
@@ -1865,7 +2422,7 @@ void hb_decomb_close( hb_filter_private_t * pv )
     free( pv->decomb_begin_lock );
     free( pv->decomb_complete_lock );
     free( pv->decomb_arguments );
-    
+
     if( pv->mode & MODE_EEDI2 )
     {
         for( i = 0; i < 3; i++)
@@ -1889,7 +2446,7 @@ void hb_decomb_close( hb_filter_private_t * pv )
         free( pv->eedi2_complete_lock );
         free( pv->eedi2_arguments );
     }
-    
+
     /* Cleanup mcdeint specific buffers */
     mcdeint_close( &pv->mcdeint );
 
@@ -1945,19 +2502,19 @@ int hb_decomb_work( const hb_buffer_t * cbuf_in,
         return FILTER_DELAY;
     }
 
-    /* Perform yadif filtering */        
+    /* Perform yadif filtering */
     int frame;
     for( frame = 0; frame <= ( ( pv->mode & MODE_MCDEINT ) ? 1 : 0 ) ; frame++ )
 // This would be what to use for bobbing: for( frame = 0; frame <= 0 ; frame++ )
     {
 
-#if 0        
+#if 0
         /* Perhaps skip the second run if the frame is uncombed? */
         if( frame && !pv->yadif_arguments[0].is_combed )
         {
             break;
         }
-#endif        
+#endif
         int parity = frame ^ tff ^ 1;
 
 // This will be for bobbing
