@@ -201,6 +201,7 @@ static options_map_t d_decomb_opts[] =
 	{"Off",    "off",   0, ""},
 	{"Custom", "custom", 1, ""},
 	{"Default","default",2, NULL},
+	{"Fast",   "fast",   3, "7:2:6:9:1:80"},
 };
 combo_opts_t decomb_opts =
 {

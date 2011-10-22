@@ -2105,6 +2105,7 @@ value_map_t decomb_xlat[] =
 	{"0", "off"},
 	{"1", "custom"},
 	{"2", "default"},
+	{"3", "fast"},
 	{NULL, NULL}
 };
 
