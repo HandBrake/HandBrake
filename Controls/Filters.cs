@@ -185,6 +185,9 @@ namespace Handbrake.Controls
                     case "Custom":
                         query += " --decomb=\"" + text_customDC.Text + "\"";
                         break;
+                    case "Fast":
+                        query += " --decomb=\"7:2:6:9:1:80\"";
+                        break;
                     default:
                         query += string.Empty;
                         break;
@@ -364,6 +367,9 @@ namespace Handbrake.Controls
                     break;
                 case Decomb.Default:
                     drop_decomb.SelectedIndex = 2;
+                    break;
+                case Decomb.Fast:
+                    drop_decomb.SelectedIndex = 3;
                     break;
                 default:
                     drop_decomb.SelectedIndex = 1;

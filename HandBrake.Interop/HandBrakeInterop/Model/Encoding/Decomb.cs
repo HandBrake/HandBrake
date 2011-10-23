@@ -13,6 +13,7 @@ namespace HandBrake.Interop.Model.Encoding
 	{
 		Off = 0,
 		Default,
-		Custom
+		Custom,
+        Fast
 	}
 }
