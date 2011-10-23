@@ -222,7 +222,8 @@ namespace HandBrake.ApplicationServices.Utilities
                     parsed.Decomb = Decomb.Default;
                     if (decombValue.Success)
                     {
-                        parsed.CustomDecomb = decombValue.ToString().Replace("--decomb=", string.Empty).Replace("\"", string.Empty);
+                        parsed.CustomDecomb = decombValue.ToString().Replace("--decomb=", string.Empty).Replace("\"", string.Empty).Trim();
+                        parsed.Decomb = parsed.CustomDecomb == "7:2:6:9:1:80" ? Decomb.Fast : Decomb.Custom;
                     }
                 }
 

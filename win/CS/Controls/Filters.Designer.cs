@@ -52,8 +52,8 @@
             // 
             // text_customDT
             // 
-            this.text_customDT.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.text_customDT.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.text_customDT.Location = new System.Drawing.Point(251, 3);
             this.text_customDT.Name = "text_customDT";
             this.text_customDT.Size = new System.Drawing.Size(115, 21);
@@ -74,8 +74,8 @@
             // 
             // drop_detelecine
             // 
-            this.drop_detelecine.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.drop_detelecine.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.drop_detelecine.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drop_detelecine.FormattingEnabled = true;
             this.drop_detelecine.Items.AddRange(new object[] {
@@ -90,8 +90,8 @@
             // 
             // text_customDC
             // 
-            this.text_customDC.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.text_customDC.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.text_customDC.Location = new System.Drawing.Point(251, 30);
             this.text_customDC.Name = "text_customDC";
             this.text_customDC.Size = new System.Drawing.Size(115, 21);
@@ -112,14 +112,15 @@
             // 
             // drop_decomb
             // 
-            this.drop_decomb.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.drop_decomb.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.drop_decomb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drop_decomb.FormattingEnabled = true;
             this.drop_decomb.Items.AddRange(new object[] {
             "Off",
             "Custom",
-            "Default"});
+            "Default",
+            "Fast"});
             this.drop_decomb.Location = new System.Drawing.Point(71, 30);
             this.drop_decomb.Name = "drop_decomb";
             this.drop_decomb.Size = new System.Drawing.Size(174, 21);
@@ -128,8 +129,8 @@
             // 
             // text_customDI
             // 
-            this.text_customDI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.text_customDI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.text_customDI.Location = new System.Drawing.Point(251, 57);
             this.text_customDI.Name = "text_customDI";
             this.text_customDI.Size = new System.Drawing.Size(115, 21);
@@ -150,8 +151,8 @@
             // 
             // drop_deinterlace
             // 
-            this.drop_deinterlace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.drop_deinterlace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.drop_deinterlace.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drop_deinterlace.FormattingEnabled = true;
             this.drop_deinterlace.Items.AddRange(new object[] {
@@ -168,8 +169,8 @@
             // 
             // text_customDN
             // 
-            this.text_customDN.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.text_customDN.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.text_customDN.Location = new System.Drawing.Point(251, 84);
             this.text_customDN.Name = "text_customDN";
             this.text_customDN.Size = new System.Drawing.Size(115, 21);
@@ -190,8 +191,8 @@
             // 
             // drop_denoise
             // 
-            this.drop_denoise.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.drop_denoise.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.drop_denoise.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drop_denoise.FormattingEnabled = true;
             this.drop_denoise.Items.AddRange(new object[] {
@@ -208,8 +209,8 @@
             // 
             // slider_deblock
             // 
-            this.slider_deblock.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.slider_deblock.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.slider_deblock.BackColor = System.Drawing.SystemColors.Window;
             this.slider_deblock.Location = new System.Drawing.Point(71, 111);
             this.slider_deblock.Maximum = 15;
