@@ -617,7 +617,7 @@ ghb_audio_list_refresh(signal_user_data_t *ud)
 			}
 			else
 			{
-				br = ghb_settings_combo_option(asettings, "AudioBitrate");
+				br = ghb_settings_get_string(asettings, "AudioBitrate");
 			}
 			sr = ghb_settings_combo_option(asettings, "AudioSamplerate");
 			mix = ghb_settings_combo_option(asettings, "AudioMixdown");

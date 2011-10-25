@@ -419,7 +419,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		else
 		{
 			const char *br;
-			br = ghb_settings_combo_option(asettings, "AudioBitrate");
+			br = ghb_settings_get_string(asettings, "AudioBitrate");
 			quality = g_strdup_printf("Bitrate: %s", br);
 		}
 		sr = ghb_settings_get_double(asettings, "AudioSamplerate");
