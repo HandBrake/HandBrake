@@ -105,7 +105,8 @@ $(PKG.src.deb.stamp): GNUmakefile
 	svn co -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)lucid/$(PKG.deb.basename)
 	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)lucid/$(PKG.deb.basename)
 	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)lucid/$(PKG.deb.basename)
-	$(CP.exe) $(STAGE.out.src/)lucid/$(PKG.deb.basename)/debian/control.karmic $(STAGE.out.src/)lucid/$(PKG.deb.basename)/debian/control
+	$(CP.exe) $(STAGE.out.src/)lucid/$(PKG.deb.basename)/debian/control.lucid $(STAGE.out.src/)lucid/$(PKG.deb.basename)/debian/control
+	$(CP.exe) $(STAGE.out.src/)lucid/$(PKG.deb.basename)/debian/rules.lucid $(STAGE.out.src/)lucid/$(PKG.deb.basename)/debian/rules
 	echo "handbrake ($(HB.version)ppa1~lucid1) lucid; urgency=low" > $(STAGE.out.src/)lucid/$(PKG.deb.basename)/debian/changelog
 	echo "  * Snapshot" >> $(STAGE.out.src/)lucid/$(PKG.deb.basename)/debian/changelog
 	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)lucid/$(PKG.deb.basename)/debian/changelog

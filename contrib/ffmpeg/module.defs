@@ -1,4 +1,4 @@
-$(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,BZIP2 ZLIB))
+$(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,YASM BZIP2 ZLIB))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
 FFMPEG.FETCH.url = http://download.handbrake.fr/handbrake/contrib/ffmpeg-v0.7-1318-g91038cd.tar.bz2
@@ -74,3 +74,9 @@ endif
 ifeq (solaris,$(BUILD.system))
     FFMPEG.CONFIGURE.extra += --disable-demuxer=mpc8
 endif
+
+ifeq (1,$(FEATURE.local_yasm))
+    FFMPEG.CONFIGURE.env = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+    FFMPEG.BUILD.env = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+endif
+

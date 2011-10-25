@@ -83,6 +83,10 @@ ifeq (1-linux,$(FEATURE.gtk)-$(BUILD.system))
     MODULES += gtk
 endif
 
+ifeq (1,$(FEATURE.local_yasm))
+    MODULES += contrib/yasm
+endif
+
 ###############################################################################
 
 MODULES += doc

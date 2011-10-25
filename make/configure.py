@@ -1091,6 +1091,11 @@ def createCLI():
     h = IfHost( 'Min OS X Version', '*-*-darwin*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--minver', default=None, action='store', metavar='VER',
         help=h )
+
+    h = IfHost( 'Build and use local yasm', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-local-yasm', default=False, action='store_true', help=h )
+    print "opt yasm"
+
     cli.add_option_group( grp )
 
     ## add tool locations
@@ -1246,6 +1251,7 @@ try:
         strip  = ToolProbe( 'STRIP.exe',  'strip' )
         tar    = ToolProbe( 'TAR.exe',    'gtar', 'tar' )
         wget   = ToolProbe( 'WGET.exe',   'wget', abort=False )
+        print "Probing yasm"
         yasm   = ToolProbe( 'YASM.exe',   'yasm', abort=False )
 
         xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', abort=False )
@@ -1455,6 +1461,7 @@ int main ()
     doc.add( 'PREFIX/', cfg.prefix_final + os.sep )
     
     doc.addBlank()
+    doc.add( 'FEATURE.local_yasm', int( options.enable_local_yasm ) )
     doc.add( 'FEATURE.asm',   'disabled' )
     doc.add( 'FEATURE.gtk',   int( not options.disable_gtk ))
     doc.add( 'FEATURE.gtk.update.checks',   int( not options.disable_gtk_update_checks ))
@@ -1511,8 +1518,10 @@ int main ()
     doc.add( 'GCC.ldsysroot', '$(GCC.sysroot)' )
     doc.add( 'GCC.ldminver', '$(GCC.minver)' )
 
-    if options.enable_asm and not Tools.yasm.fail:
+    print "enable_asm %d %d" % (options.enable_asm, options.enable_local_yasm)
+    if options.enable_asm and ( not Tools.yasm.fail or options.enable_local_yasm ):
         asm = ''
+        print "xxxxxxx enable_asm"
         if build.match( 'i?86-*' ):
             asm = 'x86'
             doc.add( 'LIBHB.GCC.D', 'HAVE_MMX', append=True )
