@@ -20,13 +20,13 @@ CROSS= --build $(DEB_BUILD_GNU_TYPE)
 endif
 
 PKGDESTDIR   = ../
-CONFIGURE    = ./configure --enable-local-yasm
+CONFIGURE    = ./configure
 BUILDDIR     = build
 FORCEVERSION = 
 
 $(BUILDDIR)/GNUmakefile: $(CONFIGURE)
 	dh_testdir
-	unset CFLAGS; unset CPPLAGS; unset CXXLAGS; $(CONFIGURE) --disable-gtk-update-checks --prefix=/usr
+	unset CFLAGS; unset CPPLAGS; unset CXXLAGS; $(CONFIGURE)  --enable-local-yasm --disable-gtk-update-checks --prefix=/usr
 
 build:  $(BUILDDIR)/GNUmakefile
 	dh_testdir
