@@ -175,7 +175,6 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
 
-    pv->wait_for_keyframe = 60;
     pv->job   = job;
     if ( job )
         pv->title = job->title;
@@ -985,6 +984,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     hb_work_private_t *pv = calloc( 1, sizeof( hb_work_private_t ) );
 
     w->private_data = pv;
+    pv->wait_for_keyframe = 60;
     pv->job   = job;
     if ( job )
         pv->title = job->title;
