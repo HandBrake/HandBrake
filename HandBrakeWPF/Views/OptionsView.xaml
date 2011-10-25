@@ -3,6 +3,24 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:cal="http://www.caliburnproject.org"
         Title="OptionsView" MinWidth="620" MinHeight="520" Width="620" Height="520">
 
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Foreground" Value="DarkOrange" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Padding" Value="5,1" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+        
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="0,0,0,5" />
+        </Style>
+        
+        <Style TargetType="StackPanel">
+            <Setter Property="Margin" Value="0,0,0,5" />
+        </Style>
+    </Window.Resources>
+    
+    
     <StackPanel Orientation="Vertical" Background="LightGray">
         <!-- Header -->
         <StackPanel Orientation="Horizontal"  Background="White" Height="50" >
