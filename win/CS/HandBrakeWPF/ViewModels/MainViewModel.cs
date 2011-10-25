@@ -217,7 +217,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenOptionsWindow()
         {
-            this.WindowManager.ShowWindow(new OptionsViewModel(this.WindowManager));
+            this.WindowManager.ShowWindow(new OptionsViewModel(this.WindowManager, this.userSettingService));
         }
 
         /// <summary>

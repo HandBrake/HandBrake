@@ -9,10 +9,18 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.ComponentModel;
     using System.ComponentModel.Composition;
+    using System.Globalization;
+    using System.IO;
 
     using Caliburn.Micro;
+
+    using HandBrake.ApplicationServices;
+    using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -25,9 +33,19 @@ namespace HandBrakeWPF.ViewModels
         #region Constants and Fields
 
         /// <summary>
+        /// Backing field for the user setting service.
+        /// </summary>
+        private readonly IUserSettingService userSettingService;
+
+        /// <summary>
+        /// A Property to block Saving while the screen is loading.
+        /// </summary>
+        private bool isLoading = true;
+
+        /// <summary>
         /// The add audio mode options.
         /// </summary>
-        private BindingList<string> addAudioModeOptions;
+        private BindingList<string> addAudioModeOptions = new BindingList<string>();
 
         /// <summary>
         /// The add closed captions.
@@ -42,7 +60,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The add subtitle mode options.
         /// </summary>
-        private BindingList<string> addSubtitleModeOptions;
+        private BindingList<string> addSubtitleModeOptions = new BindingList<string>();
 
         /// <summary>
         /// The arguments.
@@ -67,7 +85,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The available languages.
         /// </summary>
-        private BindingList<string> availableLanguages;
+        private BindingList<string> availableLanguages = new BindingList<string>();
 
         /// <summary>
         /// The change to title case.
@@ -82,12 +100,12 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The check for updates frequencies.
         /// </summary>
-        private BindingList<string> checkForUpdatesFrequencies;
+        private BindingList<string> checkForUpdatesFrequencies = new BindingList<string>();
 
         /// <summary>
         /// The check for updates frequency.
         /// </summary>
-        private bool checkForUpdatesFrequency;
+        private int checkForUpdatesFrequency;
 
         /// <summary>
         /// The clear old olgs.
@@ -97,7 +115,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The constant quality granularity.
         /// </summary>
-        private BindingList<string> constantQualityGranularity;
+        private BindingList<string> constantQualityGranularity = new BindingList<string>();
 
         /// <summary>
         /// The copy log to encode directory.
@@ -117,7 +135,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The disable p reset update check notification.
         /// </summary>
-        private bool disablePResetUpdateCheckNotification;
+        private bool disablePresetUpdateCheckNotification;
 
         /// <summary>
         /// The display status messages tray icon.
@@ -152,7 +170,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The log verbosity options.
         /// </summary>
-        private BindingList<string> logVerbosityOptions;
+        private BindingList<int> logVerbosityOptions = new BindingList<int>();
 
         /// <summary>
         /// The min length.
@@ -167,7 +185,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The mp 4 extension options.
         /// </summary>
-        private BindingList<string> mp4ExtensionOptions;
+        private BindingList<string> mp4ExtensionOptions = new BindingList<string>();
 
         /// <summary>
         /// The prevent sleep.
@@ -177,12 +195,12 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The preview pictures to scan.
         /// </summary>
-        private BindingList<int> previewPicturesToScan;
+        private BindingList<int> previewPicturesToScan = new BindingList<int>();
 
         /// <summary>
         /// The priority level options.
         /// </summary>
-        private BindingList<string> priorityLevelOptions;
+        private BindingList<string> priorityLevelOptions = new BindingList<string>();
 
         /// <summary>
         /// The prompt on different query.
@@ -197,27 +215,27 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The selected add audio mode.
         /// </summary>
-        private string selectedAddAudioMode;
+        private int selectedAddAudioMode;
 
         /// <summary>
         /// The selected add subtitle mode.
         /// </summary>
-        private string selectedAddSubtitleMode;
+        private int selectedAddSubtitleMode;
 
         /// <summary>
         /// The selected granulairty.
         /// </summary>
-        private bool selectedGranulairty;
+        private string selectedGranulairty;
 
         /// <summary>
         /// The selected mp 4 extension.
         /// </summary>
-        private string selectedMp4Extension;
+        private int selectedMp4Extension;
 
         /// <summary>
         /// The selected preferred languages.
         /// </summary>
-        private BindingList<string> selectedPreferredLanguages;
+        private BindingList<string> selectedPreferredLanguages = new BindingList<string>();
 
         /// <summary>
         /// The selected preferreed langauge.
@@ -237,7 +255,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The selected verbosity.
         /// </summary>
-        private string selectedVerbosity;
+        private int selectedVerbosity;
 
         /// <summary>
         /// The send file after encode.
@@ -267,7 +285,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The when done options.
         /// </summary>
-        private BindingList<string> whenDoneOptions;
+        private BindingList<string> whenDoneOptions = new BindingList<string>();
 
         #endregion
 
@@ -279,15 +297,19 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="windowManager">
         /// The window manager.
         /// </param>
-        public OptionsViewModel(IWindowManager windowManager)
+        /// <param name="userSettingService">
+        /// The user Setting Service.
+        /// </param>
+        public OptionsViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
             : base(windowManager)
         {
+            this.userSettingService = userSettingService;
+            this.Load();
         }
 
         #endregion
 
         #region Properties
-        /* General */
 
         /// <summary>
         /// Gets or sets AddAudioModeOptions.
@@ -373,8 +395,6 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange("Arguments");
             }
         }
-
-        /* Output Files */
 
         /// <summary>
         /// Gets or sets AutoNameDefaultPath.
@@ -498,7 +518,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets a value indicating whether CheckForUpdatesFrequency.
         /// </summary>
-        public bool CheckForUpdatesFrequency
+        public int CheckForUpdatesFrequency
         {
             get
             {
@@ -598,19 +618,19 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether DisablePResetUpdateCheckNotification.
+        /// Gets or sets a value indicating whether disablePresetUpdateCheckNotification.
         /// </summary>
-        public bool DisablePResetUpdateCheckNotification
+        public bool DisablePresetUpdateCheckNotification
         {
             get
             {
-                return this.disablePResetUpdateCheckNotification;
+                return this.disablePresetUpdateCheckNotification;
             }
 
             set
             {
-                this.disablePResetUpdateCheckNotification = value;
-                this.NotifyOfPropertyChange("DisablePResetUpdateCheckNotification");
+                this.disablePresetUpdateCheckNotification = value;
+                this.NotifyOfPropertyChange("DisablePresetUpdateCheckNotification");
             }
         }
 
@@ -719,7 +739,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets LogVerbosityOptions.
         /// </summary>
-        public BindingList<string> LogVerbosityOptions
+        public BindingList<int> LogVerbosityOptions
         {
             get
             {
@@ -872,7 +892,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets SelectedAddAudioMode.
         /// </summary>
-        public string SelectedAddAudioMode
+        public int SelectedAddAudioMode
         {
             get
             {
@@ -889,7 +909,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets SelectedAddSubtitleMode.
         /// </summary>
-        public string SelectedAddSubtitleMode
+        public int SelectedAddSubtitleMode
         {
             get
             {
@@ -906,7 +926,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets a value indicating whether SelectedGranulairty.
         /// </summary>
-        public bool SelectedGranulairty
+        public string SelectedGranulairty
         {
             get
             {
@@ -923,7 +943,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets SelectedMp4Extension.
         /// </summary>
-        public string SelectedMp4Extension
+        public int SelectedMp4Extension
         {
             get
             {
@@ -1008,7 +1028,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets SelectedVerbosity.
         /// </summary>
-        public string SelectedVerbosity
+        public int SelectedVerbosity
         {
             get
             {
@@ -1127,6 +1147,241 @@ namespace HandBrakeWPF.ViewModels
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Load User Settings
+        /// </summary>
+        public void Load()
+        {
+            // #############################
+            // Screen Setup
+            // #############################
+
+            IDictionary<string, string> langList = LanguageUtilities.MapLanguages();
+
+            foreach (string selectedItem in this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages))
+            {
+                // removing wrong keys when a new Language list comes out.
+                if (langList.ContainsKey(selectedItem))
+                {
+                    this.selectedPreferredLanguages.Add(selectedItem);
+                }
+            }
+
+            foreach (string item in langList.Keys)
+            {
+                this.selectedPreferredLanguages.Add(item);
+
+                // In the available languages should be no "Any" and no selected language.
+                if ((item != "Any") && (!this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages).Contains(item)))
+                {
+                    this.availableLanguages.Add(item);
+                }
+            }
+
+            // #############################
+            // General
+            // #############################
+
+            // Enable Tooltips.
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.TooltipEnable))
+            {
+                this.enableGuiTooltips = true;
+            }
+
+            // Update Check
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UpdateStatus))
+            {
+                this.checkForUpdates = true;
+            }
+   
+            // Days between update checks
+            this.checkForUpdatesFrequency =
+                        this.userSettingService.GetUserSetting<int>(UserSettingConstants.DaysBetweenUpdateCheck);
+
+            // On Encode Completeion Action
+            this.whenDoneOptions.Add("Do nothing");
+            this.whenDoneOptions.Add("Shutdown");
+            this.whenDoneOptions.Add("Suspend");
+            this.whenDoneOptions.Add("Hibernate");
+            this.whenDoneOptions.Add("Lock system");
+            this.whenDoneOptions.Add("Log off");
+            this.whenDoneOptions.Add("Quit HandBrake");
+            this.whenDone = userSettingService.GetUserSetting<string>("WhenCompleteAction");
+            
+            // Growl.
+            if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.GrowlEncode))
+            {
+                this.growlAfterEncode = true;
+            }
+
+            if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.GrowlQueue))
+            {
+                this.growlAfterQueue = true;
+            }
+
+            this.SendFileAfterEncode = this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SendFile);
+            this.sendFileTo = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileTo));
+            this.arguments = this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileToArgs);
+
+            // #############################
+            // Output Settings
+            // #############################
+
+            // Enable auto naming feature.)
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
+            {
+                this.AutomaticallyNameFiles = true;
+            }
+
+            // Store the auto name path
+            this.autoNameDefaultPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath);
+            if (string.IsNullOrEmpty(this.autoNameDefaultPath))
+                this.autoNameDefaultPath = "Click 'Browse' to set the default location";
+
+            // Store auto name format
+            this.autonameFormat = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat);
+
+            // Use iPod/iTunes friendly .m4v extension for MP4 files.
+            this.mp4ExtensionOptions.Add("Automatic");
+            this.mp4ExtensionOptions.Add("Always use MP4");
+            this.mp4ExtensionOptions.Add("Always use M4V");
+            this.selectedMp4Extension = this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v);
+
+            // Remove Underscores
+            this.removeUnderscores = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameRemoveUnderscore);
+
+            // Title case
+            this.changeToTitleCase = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameTitleCase);
+
+            // #############################
+            // Picture Tab
+            // #############################
+
+            // VLC Path
+            this.vlcPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.VLC_Path);
+
+            // #############################
+            // Audio and Subtitles Tab
+            // #############################
+
+            this.selectedPreferreedLangauge = this.userSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage);
+
+            this.AddAudioModeOptions.Add("None");
+            this.AddAudioModeOptions.Add("All Remaining Tracks");
+            this.AddAudioModeOptions.Add("All for Selected Languages");
+
+            this.AddSubtitleModeOptions.Add("None");
+            this.AddSubtitleModeOptions.Add("All");
+            this.AddSubtitleModeOptions.Add("First");
+            this.AddSubtitleModeOptions.Add("Selected");
+            this.AddSubtitleModeOptions.Add("Preferred Only");
+
+            this.selectedAddAudioMode = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DubModeAudio);
+            this.selectedAddSubtitleMode = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DubModeSubtitle);
+
+            this.addOnlyOneAudioTrackPerLanguage = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AddOnlyOneAudioPerLanguage);
+
+            this.addClosedCaptions = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseClosedCaption);
+
+            // #############################
+            // CLI
+            // #############################
+
+            // Priority level for encodes
+            this.priorityLevelOptions.Add("Realtime");
+            this.priorityLevelOptions.Add("High");
+            this.priorityLevelOptions.Add("Above Normal");
+            this.priorityLevelOptions.Add("Normal");
+            this.priorityLevelOptions.Add("Below Normal");
+            this.priorityLevelOptions.Add("Low");
+            this.selectedPriority = userSettingService.GetUserSetting<string>(ASUserSettingConstants.ProcessPriority);
+
+            this.preventSleep = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.PreventSleep);
+
+            // Log Verbosity Level
+            this.logVerbosityOptions.Add(0);
+            this.logVerbosityOptions.Add(1);
+            this.logVerbosityOptions.Add(2);
+            this.selectedVerbosity = userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity);
+
+            // Save logs in the same directory as encoded files
+            if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SaveLogWithVideo))
+            {
+                this.copyLogToEncodeDirectory = true;
+            }
+
+            // Save Logs in a specified path
+            if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SaveLogToCopyDirectory))
+            {
+                this.copyLogToSepcficedLocation = true;
+            }
+
+            // The saved log path
+            this.logDirectory = userSettingService.GetUserSetting<string>(ASUserSettingConstants.SaveLogCopyDirectory);
+
+            this.clearOldOlgs = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs);
+
+            // #############################
+            // Advanced
+            // #############################
+
+            // Minimise to Tray
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.TrayIconAlerts))
+            {
+                this.DisplayStatusMessagesTrayIcon = true;
+            }
+
+            // Tray Balloon popups
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.MainWindowMinimize))
+            {
+                this.minimiseToTray = true;
+            }
+
+            // Enable / Disable Query editor tab
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.QueryEditorTab))
+            {
+                this.enableQueryEditor = true;
+            }
+            
+            // Prompt on inconsistant queries
+            this.promptOnDifferentQuery = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PromptOnUnmatchingQueries);
+
+            // Preset update notification
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification))
+            {
+                this.disablePresetUpdateCheckNotification = true;
+            }
+
+            // Show CLI Window
+            this.showCliWindow = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.ShowCLI);
+
+            // Set the preview count
+            this.PreviewPicturesToScan.Add(10);
+            this.PreviewPicturesToScan.Add(15);
+            this.PreviewPicturesToScan.Add(20);
+            this.PreviewPicturesToScan.Add(25);
+            this.PreviewPicturesToScan.Add(30);
+            this.selectedPreviewCount = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
+
+            // x264 step
+            this.ConstantQualityGranularity.Add("1.0");
+            this.ConstantQualityGranularity.Add("0.50");
+            this.ConstantQualityGranularity.Add("0.25");
+            this.ConstantQualityGranularity.Add("0.20");
+            this.SelectedGranulairty = userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step).ToString(new CultureInfo("en-US"));
+
+            // Min Title Length
+            this.minLength = this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.MinScanDuration);
+
+            // Use Experimental dvdnav
+            if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav))
+            {
+                this.disableLibdvdNav = true;
+            }
+
+            this.isLoading = false;
+        }
 
         /// <summary>
         /// Close this window.
