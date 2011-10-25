@@ -5109,21 +5109,37 @@ static void add_ffmpeg_attachment( hb_title_t *title, hb_stream_t *stream, int i
     AVCodecContext *codec = st->codec;
 
     enum attachtype type;
+    const char *name = get_ffmpeg_metadata_value( st->metadata, "filename" );
     switch ( codec->codec_id )
     {
         case CODEC_ID_TTF:
+            // Libav sets codec ID based on mime type of the attachment
             type = FONT_TTF_ATTACH;
             break;
         default:
+        {
+            int len = strlen( name );
+            if( len >= 4 &&
+                ( !strcmp( name + len - 4, ".ttc" ) ||
+                  !strcmp( name + len - 4, ".TTC" ) ||
+                  !strcmp( name + len - 4, ".ttf" ) ||
+                  !strcmp( name + len - 4, ".TTF" ) ) )
+            {
+                // Some attachments don't have the right mime type.
+                // So also trigger on file name extension.
+                type = FONT_TTF_ATTACH;
+                break;
+            }
             // Ignore unrecognized attachment type
             return;
+        }
     }
 
     hb_attachment_t *attachment = calloc( 1, sizeof(*attachment) );
 
     // Copy the attachment name and data
     attachment->type = type;
-    attachment->name = strdup( get_ffmpeg_metadata_value( st->metadata, "filename" ) );
+    attachment->name = strdup( name );
     attachment->data = malloc( codec->extradata_size );
     memcpy( attachment->data, codec->extradata, codec->extradata_size );
     attachment->size = codec->extradata_size;
