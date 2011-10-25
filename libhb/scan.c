@@ -848,7 +848,7 @@ skip_preview:
             title->rate_base = vid_info.rate_base;
             if( is_close_to( vid_info.rate_base, 900900, 100 ) )
             {
-                if( pulldown_count >= npreviews / 3 )
+                if( pulldown_count >= npreviews / 4 )
                 {
                     title->rate_base = 1126125;
                     hb_deep_log( 2, "Pulldown detected, setting fps to 23.976" );
