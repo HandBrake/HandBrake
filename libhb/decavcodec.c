@@ -1009,7 +1009,9 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->context = avcodec_alloc_context3(codec);
         avcodec_copy_context( pv->context, ic->streams[pv->title->video_id]->codec);
         pv->context->workaround_bugs = FF_BUG_AUTODETECT;
-        pv->context->error_recognition = 1;
+        // Depricated but still used by Libav (twits!)
+        pv->context->error_recognition = FF_ER_CAREFUL;
+        pv->context->err_recognition = AV_EF_CRCCHECK;
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
 
         if ( hb_avcodec_open( pv->context, codec, NULL, pv->threads ) )
@@ -1032,7 +1034,9 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->parser = av_parser_init( w->codec_param );
         pv->context = avcodec_alloc_context3( codec );
         pv->context->workaround_bugs = FF_BUG_AUTODETECT;
-        pv->context->error_recognition = 1;
+        // Depricated but still used by Libav (twits!)
+        pv->context->error_recognition = FF_ER_CAREFUL;
+        pv->context->err_recognition = AV_EF_CRCCHECK;
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
         init_video_avcodec_context( pv );
     }
