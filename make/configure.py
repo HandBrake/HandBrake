@@ -1094,7 +1094,6 @@ def createCLI():
 
     h = IfHost( 'Build and use local yasm', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-local-yasm', default=False, action='store_true', help=h )
-    print "opt yasm"
 
     cli.add_option_group( grp )
 
@@ -1251,7 +1250,6 @@ try:
         strip  = ToolProbe( 'STRIP.exe',  'strip' )
         tar    = ToolProbe( 'TAR.exe',    'gtar', 'tar' )
         wget   = ToolProbe( 'WGET.exe',   'wget', abort=False )
-        print "Probing yasm"
         yasm   = ToolProbe( 'YASM.exe',   'yasm', abort=False )
 
         xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', abort=False )
@@ -1518,10 +1516,8 @@ int main ()
     doc.add( 'GCC.ldsysroot', '$(GCC.sysroot)' )
     doc.add( 'GCC.ldminver', '$(GCC.minver)' )
 
-    print "enable_asm %d %d" % (options.enable_asm, options.enable_local_yasm)
     if options.enable_asm and ( not Tools.yasm.fail or options.enable_local_yasm ):
         asm = ''
-        print "xxxxxxx enable_asm"
         if build.match( 'i?86-*' ):
             asm = 'x86'
             doc.add( 'LIBHB.GCC.D', 'HAVE_MMX', append=True )
