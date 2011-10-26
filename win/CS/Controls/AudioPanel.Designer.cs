@@ -157,6 +157,7 @@ namespace Handbrake.Controls
             // drp_audioMix
             // 
             this.drp_audioMix.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drp_audioMix.Enabled = false;
             this.drp_audioMix.FormattingEnabled = true;
             this.drp_audioMix.Items.AddRange(new object[] {
             "Automatic",
@@ -189,6 +190,7 @@ namespace Handbrake.Controls
             // drp_audioBitrate
             // 
             this.drp_audioBitrate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drp_audioBitrate.Enabled = false;
             this.drp_audioBitrate.FormattingEnabled = true;
             this.drp_audioBitrate.Items.AddRange(new object[] {
             "32",
@@ -211,6 +213,7 @@ namespace Handbrake.Controls
             // drp_audioSample
             // 
             this.drp_audioSample.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drp_audioSample.Enabled = false;
             this.drp_audioSample.FormattingEnabled = true;
             this.drp_audioSample.Items.AddRange(new object[] {
             "Auto",
@@ -336,6 +339,7 @@ namespace Handbrake.Controls
             // btn_AdvancedAudio
             // 
             this.btn_AdvancedAudio.BackColor = System.Drawing.Color.Transparent;
+            this.btn_AdvancedAudio.Enabled = false;
             this.btn_AdvancedAudio.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_AdvancedAudio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_AdvancedAudio.Location = new System.Drawing.Point(607, 65);
