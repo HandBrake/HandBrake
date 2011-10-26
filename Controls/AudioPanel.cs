@@ -136,7 +136,7 @@ namespace Handbrake.Controls
                 drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDisplay(AudioEncoder.ffflac));
             }
 
-            if (!drp_audioEncoder.Text.Contains(oldval))
+            if (!drp_audioEncoder.Items.Contains(oldval))
                 drp_audioEncoder.SelectedIndex = 0;
             else
                 drp_audioEncoder.SelectedItem = oldval;
@@ -248,14 +248,18 @@ namespace Handbrake.Controls
             // Some Sanity Checking
             if (audioList.SelectedRows.Count == 0)
             {
+                drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = false;
                 return;
             }
 
             AudioTrack track = audioList.SelectedRows[0].DataBoundItem as AudioTrack;
             if (track == null)
             {
+                drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = false;
                 return;
             }
+
+            drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = true;
 
             // Handle the changed control and selected audio track.
             switch (ctl.Name)
@@ -491,11 +495,11 @@ namespace Handbrake.Controls
         {
             RemoveTrack();
 
-            if (this.AudioTracks.Count == 0)
-            {
-                drp_audioMix.Enabled =
-                    drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = true;
-            }
+            //if (this.AudioTracks.Count == 0)
+            //{
+            //    drp_audioMix.Enabled =
+            //        drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = true;
+            //}
         }
 
         /// <summary>
@@ -714,7 +718,7 @@ namespace Handbrake.Controls
         {
             this.AudioTracks.Clear();
 
-            drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = true;
+            //drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = true;
 
             if (this.AudioListChanged != null)
                 this.AudioListChanged(this, new EventArgs());
