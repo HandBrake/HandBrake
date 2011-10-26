@@ -1880,8 +1880,6 @@ static int HandleEvents( hb_handle_t * h )
                     if( audio != NULL )
                     {
                         audio->out.bitrate = abitrate;
-                        if( (++i) >= num_audio_tracks )
-                            break;  /* We have more inputs than audio tracks, oops */
                     }
                     else 
                     {
