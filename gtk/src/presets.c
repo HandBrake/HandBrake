@@ -2019,6 +2019,7 @@ static value_map_t acodec_xlat[] =
 	{"Auto Passthru", "copy"},
 	{"Auto Passthru", "auto"},
 	{"MP3 (lame)", "lame"},
+	{"FLAC (ffmpeg)", "ffflac"},
 	{"Vorbis (vorbis)", "vorbis"},
 	{NULL,NULL}
 };
@@ -2409,7 +2410,8 @@ import_value_xlat2(
 		str = ghb_value_string(mac_val);
 		for (ii = 0; value_map[ii].mac_val; ii++)
 		{
-			if (strcmp(str, value_map[ii].mac_val) == 0)
+			if (strcmp(str, value_map[ii].mac_val) == 0 ||
+				strcmp(str, value_map[ii].lin_val) == 0)
 			{
 				sval = ghb_string_value_new(value_map[ii].lin_val);
 				g_free(str);
@@ -2437,7 +2439,8 @@ import_value_xlat2(
 		str = ghb_value_string(mac_val);
 		for (ii = 0; value_map[ii].mac_val; ii++)
 		{
-			if (strcmp(str, value_map[ii].mac_val) == 0)
+			if (strcmp(str, value_map[ii].mac_val) == 0 ||
+				strcmp(str, value_map[ii].lin_val) == 0)
 			{
 				sval = ghb_string_value_new(value_map[ii].lin_val);
 				g_free(str);
