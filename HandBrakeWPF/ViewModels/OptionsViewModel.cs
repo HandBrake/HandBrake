@@ -235,12 +235,12 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The selected preferred languages.
         /// </summary>
-        private BindingList<string> selectedPreferredLanguages = new BindingList<string>();
+        private BindingList<string> preferredLanguages = new BindingList<string>();
 
         /// <summary>
         /// The selected preferreed langauge.
         /// </summary>
-        private string selectedPreferreedLangauge;
+        private string selectedPreferredLangauge;
 
         /// <summary>
         /// The selected preview count.
@@ -286,6 +286,11 @@ namespace HandBrakeWPF.ViewModels
         /// The when done options.
         /// </summary>
         private BindingList<string> whenDoneOptions = new BindingList<string>();
+
+        /// <summary>
+        /// Selected Langauges
+        /// </summary>
+        private BindingList<string> selectedLangauges = new BindingList<string>();
 
         #endregion
 
@@ -958,35 +963,35 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets SelectedPreferredLanguages.
+        /// Gets or sets preferredLanguages.
         /// </summary>
-        public BindingList<string> SelectedPreferredLanguages
+        public BindingList<string> PreferredLanguages
         {
             get
             {
-                return this.selectedPreferredLanguages;
+                return this.preferredLanguages;
             }
 
             set
             {
-                this.selectedPreferredLanguages = value;
-                this.NotifyOfPropertyChange("SelectedPreferredLanguages");
+                this.preferredLanguages = value;
+                this.NotifyOfPropertyChange("preferredLanguages");
             }
         }
 
         /// <summary>
         /// Gets or sets SelectedPreferreedLangauge.
         /// </summary>
-        public string SelectedPreferreedLangauge
+        public string SelectedPreferredLangauge
         {
             get
             {
-                return this.selectedPreferreedLangauge;
+                return this.selectedPreferredLangauge;
             }
 
             set
             {
-                this.selectedPreferreedLangauge = value;
+                this.selectedPreferredLangauge = value;
                 this.NotifyOfPropertyChange("SelectedPreferreedLangauge");
             }
         }
@@ -1094,6 +1099,22 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets SelectedLangauges.
+        /// </summary>
+        public BindingList<string> SelectedLangauges
+        {
+            get
+            {
+                return this.selectedLangauges;
+            }
+            set
+            {
+                this.selectedLangauges = value;
+                this.NotifyOfPropertyChange("SelectedLangauges");
+            }
+        }
+
+        /// <summary>
         /// Gets or sets VLCPath.
         /// </summary>
         public string VLCPath
@@ -1154,50 +1175,30 @@ namespace HandBrakeWPF.ViewModels
         public void Load()
         {
             // #############################
-            // Screen Setup
-            // #############################
-
-            IDictionary<string, string> langList = LanguageUtilities.MapLanguages();
-
-            foreach (string selectedItem in this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages))
-            {
-                // removing wrong keys when a new Language list comes out.
-                if (langList.ContainsKey(selectedItem))
-                {
-                    this.selectedPreferredLanguages.Add(selectedItem);
-                }
-            }
-
-            foreach (string item in langList.Keys)
-            {
-                this.selectedPreferredLanguages.Add(item);
-
-                // In the available languages should be no "Any" and no selected language.
-                if ((item != "Any") && (!this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages).Contains(item)))
-                {
-                    this.availableLanguages.Add(item);
-                }
-            }
-
-            // #############################
             // General
             // #############################
 
-            // Enable Tooltips.
-            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.TooltipEnable))
-            {
-                this.enableGuiTooltips = true;
-            }
+            this.enableGuiTooltips = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.TooltipEnable);
+            this.checkForUpdates = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UpdateStatus);
 
-            // Update Check
-            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UpdateStatus))
-            {
-                this.checkForUpdates = true;
-            }
-   
             // Days between update checks
-            this.checkForUpdatesFrequency =
-                        this.userSettingService.GetUserSetting<int>(UserSettingConstants.DaysBetweenUpdateCheck);
+            this.checkForUpdatesFrequencies.Add("Daily");
+            this.checkForUpdatesFrequencies.Add("Weekly");
+            this.checkForUpdatesFrequencies.Add("Monthly");
+
+            // TODO Refactor this.
+            switch (this.userSettingService.GetUserSetting<int>(UserSettingConstants.DaysBetweenUpdateCheck))
+            {
+                case 1:
+                    this.checkForUpdatesFrequency = 1;
+                    break;
+                case 7:
+                    this.checkForUpdatesFrequency = 2;
+                    break;
+                case 30:
+                    this.checkForUpdatesFrequency = 3;
+                    break;
+            }
 
             // On Encode Completeion Action
             this.whenDoneOptions.Add("Do nothing");
@@ -1208,18 +1209,9 @@ namespace HandBrakeWPF.ViewModels
             this.whenDoneOptions.Add("Log off");
             this.whenDoneOptions.Add("Quit HandBrake");
             this.whenDone = userSettingService.GetUserSetting<string>("WhenCompleteAction");
-            
-            // Growl.
-            if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.GrowlEncode))
-            {
-                this.growlAfterEncode = true;
-            }
 
-            if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.GrowlQueue))
-            {
-                this.growlAfterQueue = true;
-            }
-
+            this.growlAfterEncode = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.GrowlEncode);
+            this.growlAfterQueue = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.GrowlQueue);
             this.SendFileAfterEncode = this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SendFile);
             this.sendFileTo = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileTo));
             this.arguments = this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileToArgs);
@@ -1231,7 +1223,7 @@ namespace HandBrakeWPF.ViewModels
             // Enable auto naming feature.)
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
             {
-                this.AutomaticallyNameFiles = true;
+                this.automaticallyNameFiles = true;
             }
 
             // Store the auto name path
@@ -1265,7 +1257,29 @@ namespace HandBrakeWPF.ViewModels
             // Audio and Subtitles Tab
             // #############################
 
-            this.selectedPreferreedLangauge = this.userSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage);
+            IDictionary<string, string> langList = LanguageUtilities.MapLanguages();
+
+            foreach (string selectedItem in this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages))
+            {
+                // removing wrong keys when a new Language list comes out.
+                if (langList.ContainsKey(selectedItem))
+                {
+                    this.selectedLangauges.Add(selectedItem);
+                }
+            }
+
+            foreach (string item in langList.Keys)
+            {
+                this.preferredLanguages.Add(item);
+
+                // In the available languages should be no "Any" and no selected language.
+                if ((item != "Any") && (!this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages).Contains(item)))
+                {
+                    this.availableLanguages.Add(item);
+                }
+            }
+
+            this.selectedPreferredLangauge = this.userSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage);
 
             this.AddAudioModeOptions.Add("None");
             this.AddAudioModeOptions.Add("All Remaining Tracks");
@@ -1305,17 +1319,9 @@ namespace HandBrakeWPF.ViewModels
             this.logVerbosityOptions.Add(2);
             this.selectedVerbosity = userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity);
 
-            // Save logs in the same directory as encoded files
-            if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SaveLogWithVideo))
-            {
-                this.copyLogToEncodeDirectory = true;
-            }
-
-            // Save Logs in a specified path
-            if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SaveLogToCopyDirectory))
-            {
-                this.copyLogToSepcficedLocation = true;
-            }
+            // Logs
+            this.copyLogToEncodeDirectory = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SaveLogWithVideo);
+            this.copyLogToSepcficedLocation = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SaveLogToCopyDirectory);
 
             // The saved log path
             this.logDirectory = userSettingService.GetUserSetting<string>(ASUserSettingConstants.SaveLogCopyDirectory);
@@ -1327,33 +1333,11 @@ namespace HandBrakeWPF.ViewModels
             // #############################
 
             // Minimise to Tray
-            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.TrayIconAlerts))
-            {
-                this.DisplayStatusMessagesTrayIcon = true;
-            }
-
-            // Tray Balloon popups
-            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.MainWindowMinimize))
-            {
-                this.minimiseToTray = true;
-            }
-
-            // Enable / Disable Query editor tab
-            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.QueryEditorTab))
-            {
-                this.enableQueryEditor = true;
-            }
-            
-            // Prompt on inconsistant queries
+            this.displayStatusMessagesTrayIcon = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.TrayIconAlerts);
+            this.minimiseToTray = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.MainWindowMinimize);
+            this.enableQueryEditor = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.QueryEditorTab);
             this.promptOnDifferentQuery = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PromptOnUnmatchingQueries);
-
-            // Preset update notification
-            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification))
-            {
-                this.disablePresetUpdateCheckNotification = true;
-            }
-
-            // Show CLI Window
+            this.disablePresetUpdateCheckNotification = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification);
             this.showCliWindow = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.ShowCLI);
 
             // Set the preview count
@@ -1369,16 +1353,13 @@ namespace HandBrakeWPF.ViewModels
             this.ConstantQualityGranularity.Add("0.50");
             this.ConstantQualityGranularity.Add("0.25");
             this.ConstantQualityGranularity.Add("0.20");
-            this.SelectedGranulairty = userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step).ToString(new CultureInfo("en-US"));
+            this.selectedGranulairty = userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step).ToString("0.00", new CultureInfo("en-US"));
 
             // Min Title Length
             this.minLength = this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.MinScanDuration);
 
             // Use Experimental dvdnav
-            if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav))
-            {
-                this.disableLibdvdNav = true;
-            }
+            this.disableLibdvdNav = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav);
 
             this.isLoading = false;
         }

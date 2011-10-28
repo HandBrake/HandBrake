@@ -1,7 +1,7 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.OptionsView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:cal="http://www.caliburnproject.org"
-        Title="OptionsView" MinWidth="620" MinHeight="520" Width="620" Height="520">
+        Title="OptionsView" MinWidth="620" MinHeight="540" Width="620" Height="520">
 
     <Window.Resources>
         <Style TargetType="Button">
@@ -9,18 +9,28 @@
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Padding" Value="5,1" />
             <Setter Property="FontSize" Value="12" />
+            <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
         
+        <Style TargetType="ComboBox">
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
         <Style TargetType="CheckBox">
-            <Setter Property="Margin" Value="0,0,0,5" />
+            <Setter Property="Margin" Value="0,0,5,5" />
         </Style>
         
-        <Style TargetType="StackPanel">
-            <Setter Property="Margin" Value="0,0,0,5" />
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,0,5,0" />
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,0,10,5" />
         </Style>
     </Window.Resources>
-    
-    
+
+
     <StackPanel Orientation="Vertical" Background="LightGray">
         <!-- Header -->
         <StackPanel Orientation="Horizontal"  Background="White" Height="50" >
@@ -32,7 +42,7 @@
         </StackPanel>
 
         <!-- Options Panel-->
-        <TabControl Margin="10,10,10,10" Height="380">
+        <TabControl Margin="10,10,10,10" Height="400">
             <TabItem Header="General">
                 <StackPanel Orientation="Vertical">
                     <Grid Margin="10,10,0,10">
@@ -44,10 +54,10 @@
                         <TextBlock Text="At Launch:" Grid.Column="0" FontWeight="Bold"/>
 
                         <StackPanel Orientation="Vertical" Grid.Column="1">
-                            <CheckBox Content="Check for Updates" />
-                            <ComboBox Name="checkForUpdateFrequency" Margin="25,0,0,0" HorizontalAlignment="Left" Width="120"></ComboBox>
+                            <CheckBox Content="Check for Updates" IsChecked="{Binding CheckForUpdates}" />
+                            <ComboBox Name="checkForUpdateFrequency" ItemsSource="{Binding CheckForUpdatesFrequencies}" SelectedIndex="{Binding CheckForUpdatesFrequency}" Margin="25,0,0,0" HorizontalAlignment="Left" Width="120"></ComboBox>
 
-                            <CheckBox Content="Enable Tooltips" />
+                            <CheckBox Content="Enable Tooltips" IsChecked="{Binding EnableGuiTooltips}" />
                         </StackPanel>
                     </Grid>
 
@@ -60,22 +70,22 @@
                         <TextBlock Text="When Done:" Grid.Column="0" FontWeight="Bold"/>
 
                         <StackPanel Orientation="Vertical" Grid.Column="1">
-                            <ComboBox Name="whenDone" Width="120" HorizontalAlignment="Left"></ComboBox>
+                            <ComboBox Name="whenDone" ItemsSource="{Binding WhenDoneOptions}" SelectedItem="{Binding WhenDone}" Width="120"  HorizontalAlignment="Left"></ComboBox>
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <CheckBox Content="Growl after Queue Completes"/>
-                                <CheckBox Content="Growl after Encode Completes" Margin="5,0,0,0" />
+                                <CheckBox Content="Growl after Queue Completes" IsChecked="{Binding GrowlAfterEncode}"/>
+                                <CheckBox Content="Growl after Encode Completes" IsChecked="{Binding GrowlAfterQueue}" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <CheckBox Content="Send file to:" />
-                                <TextBlock Margin="5,0,0,0" Text="None" />
+                                <CheckBox Content="Send file to:" IsChecked="{Binding SendFileAfterEncode}" />
+                                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text="{Binding SendFileTo}" />
                                 <Button Content="Browse" Width="55"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <TextBlock Margin="25,0,0,0" Text="Arguments" />
-                                <TextBox Name="SendToArguments" Width="180" />
+                                <TextBlock Margin="25,0,0,0" Text="Arguments:" />
+                                <TextBox Name="SendToArguments" Text="{Binding Arguments}" Width="180" />
                             </StackPanel>
 
                         </StackPanel>
@@ -94,29 +104,29 @@
                         <TextBlock Text="Output Files:" Grid.Column="0" FontWeight="Bold"/>
 
                         <StackPanel Orientation="Vertical" Grid.Column="1">
-                            <CheckBox Content="Automatically name output files" />
+                            <CheckBox Content="Automatically name output files" IsChecked="{Binding AutomaticallyNameFiles}" />
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <TextBlock Text="Arguments" />
-                                <TextBox Name="autoNameOutputPath" Width="180" />
+                                <TextBlock Text="Arguments: " />
+                                <TextBox Name="autoNameOutputPath" Text="{Binding AutoNameDefaultPath}" Width="180" />
                                 <Button Content="Browse" Width="55"/>
                             </StackPanel>
                             <TextBlock Text="Available Options: {source_path} or {source_folder_name} (Not Both)" />
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                 <TextBlock Text="Format:" />
-                                <TextBox Name="autoNameFormat" Width="180" />
+                                <TextBox Name="autoNameFormat" Text="{Binding AutonameFormat}" Width="180" />
                             </StackPanel>
                             <TextBlock Text="Available Options: {source} {title} {chapters} {date}" />
 
-                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <CheckBox Content="Remove underscores from name"/>
-                                <CheckBox Content="Change case to Title Case" Margin="5,0,0,0" />
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <CheckBox Content="Remove underscores from name" IsChecked="{Binding RemoveUnderscores}"/>
+                                <CheckBox Content="Change case to Title Case" IsChecked="{Binding ChangeToTitleCase}" Margin="5,0,0,0" />
                             </StackPanel>
 
-                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <TextBlock Text="MP4 File Extension:" />
-                                <ComboBox Name="mp4FileExtension" Width="120" HorizontalAlignment="Left"></ComboBox>
+                                <ComboBox Name="mp4FileExtension" Width="120" ItemsSource="{Binding Mp4ExtensionOptions}" SelectedIndex="{Binding SelectedMp4Extension}" HorizontalAlignment="Left"></ComboBox>
                             </StackPanel>
                         </StackPanel>
                     </Grid>
@@ -135,9 +145,9 @@
 
                         <StackPanel Orientation="Vertical" Grid.Column="1">
 
-                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <TextBlock Text="Arguments" />
-                                <TextBox Name="vlcPath" Width="180" />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Path:" />
+                                <TextBox Name="vlcPath" Text="{Binding VLCPath}"  Width="180" />
                                 <Button Content="Browse" Width="55"/>
                             </StackPanel>
                             <TextBlock Text="This path is used for the view preview feature only." />
@@ -158,7 +168,7 @@
 
                         <TextBlock Text="Preferred Language:" Grid.Column="0"/>
                         <StackPanel Orientation="Horizontal" Grid.Column="1">
-                            <ComboBox Name="primaryAudioLanguage" Width="120" />
+                            <ComboBox Name="primaryAudioLanguage" ItemsSource="{Binding PreferredLanguages}" SelectedItem="{Binding SelectedPreferredLangauge}" Width="120" />
                             <TextBlock Text="Primary Audio Langauge" FontSize="10" />
                         </StackPanel>
                     </Grid>
@@ -168,7 +178,6 @@
                             <ColumnDefinition Width="100" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-
 
                         <TextBlock Text="Additional Tracks:" Grid.Column="0"/>
                         <StackPanel Orientation="Horizontal" Grid.Column="1">
@@ -182,7 +191,7 @@
 
                                 <StackPanel Orientation="Vertical" Grid.Column="0">
                                     <TextBlock Text="Available Langauges" Margin="0,0,0,5"/>
-                                    <ListBox Name="availableLanguages" Height="140"></ListBox>
+                                    <ListBox Name="availableLanguages" ItemsSource="{Binding AvailableLanguages}" SelectionMode="Multiple" Height="140"></ListBox>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Vertical" Grid.Column="1" Margin="10,0,10,0">
@@ -192,8 +201,8 @@
                                 </StackPanel>
 
                                 <StackPanel Orientation="Vertical" Grid.Column="2">
-                                    <TextBlock Text="Available Langauges"  Margin="0,0,0,5"/>
-                                    <ListBox Name="selectedLangauges" Height="140"></ListBox>
+                                    <TextBlock Text="Selected Langauges"  Margin="0,0,0,5"/>
+                                    <ListBox Name="selectedLangauges" ItemsSource="{Binding SelectedLangauges}" SelectionMode="Multiple" Height="140" />
                                 </StackPanel>
 
                                 <StackPanel Orientation="Vertical" Grid.Column="3" Margin="10,0,10,0">
@@ -205,20 +214,20 @@
                         </StackPanel>
                     </Grid>
 
-                    <GroupBox Header="Add Additional Tracks" >
+                    <GroupBox Header="Add Additional Tracks" VerticalAlignment="Top" >
                         <StackPanel Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Audio:" Margin="0,0,10,0" Width="100" />
-                                <ComboBox Name="autoAudioMode" Width="120" Margin="0,0,5,0" />
-                                <CheckBox Content="Add only one audio track per langauge" />
+                                <ComboBox Name="autoAudioMode" ItemsSource="{Binding AddAudioModeOptions}" SelectedIndex="{Binding SelectedAddAudioMode}" Width="120" Margin="0,0,5,0" />
+                                <CheckBox Content="Add only one audio track per langauge" IsChecked="{Binding AddOnlyOneAudioTrackPerLanguage}" />
                             </StackPanel>
 
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                 <TextBlock Text="Subtitle:" Margin="0,0,10,0" Width="100" />
-                                <ComboBox Name="autoSubtitleMode" Width="120" Margin="0,0,5,0" />
+                                <ComboBox Name="autoSubtitleMode" ItemsSource="{Binding AddSubtitleModeOptions}" SelectedIndex="{Binding SelectedAddSubtitleMode}" Width="120" Margin="0,0,5,0" />
                             </StackPanel>
 
-                            <CheckBox Content="Add Closed Captions when available" />
+                            <CheckBox Content="Add Closed Captions when available" IsChecked="{Binding AddClosedCaptions}"/>
                         </StackPanel>
                     </GroupBox>
 
@@ -237,7 +246,7 @@
                         <TextBlock Text="CLI:" Grid.Column="0" FontWeight="Bold"/>
                         <StackPanel Orientation="Horizontal" Grid.Column="1">
                             <TextBlock Text="Priority Level:" />
-                            <ComboBox Name="processPriorityLevel" Width="120" />
+                            <ComboBox Name="processPriorityLevel" ItemsSource="{Binding PriorityLevelOptions}" SelectedItem="{Binding SelectedPriority}" Width="120" />
                         </StackPanel>
                     </Grid>
 
@@ -248,7 +257,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="System:" Grid.Column="0" FontWeight="Bold"/>
                         <StackPanel Orientation="Horizontal" Grid.Column="1">
-                            <CheckBox Content="Prevent the system from sleeping while encoding" />
+                            <CheckBox Content="Prevent the system from sleeping while encoding" IsChecked="{Binding PreventSleep}" />
                         </StackPanel>
                     </Grid>
 
@@ -263,14 +272,14 @@
                         <StackPanel Orientation="Vertical" Grid.Column="1">
                             <StackPanel Orientation="Horizontal" Grid.Column="1">
                                 <TextBlock Text="Log Verbosity Level:" />
-                                <ComboBox Name="logVerbosityLevel" Width="120" />
+                                <ComboBox Name="logVerbosityLevel" ItemsSource="{Binding LogVerbosityOptions}" SelectedItem="{Binding SelectedVerbosity}" Width="120" />
                             </StackPanel>
 
-                            <CheckBox Content="Put a copy of individual encode logs in the same location as the encoded video" />
-                            <CheckBox Content="Put a copy of individual encode logs in a specified location: " />
+                            <CheckBox Content="Put a copy of individual encode logs in the same location as the encoded video" IsChecked="{Binding CopyLogToEncodeDirectory}" />
+                            <CheckBox Content="Put a copy of individual encode logs in a specified location: " IsChecked="{Binding CopyLogToSepcficedLocation}" />
                             <StackPanel Orientation="Horizontal" Grid.Column="1">
                                 <TextBlock Text="Log Path:" />
-                                <TextBox Width="120" />
+                                <TextBox Width="120" Text="{Binding LogDirectory}" />
                                 <Button Content="Browse" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Grid.Column="1">
@@ -278,7 +287,7 @@
                                 <Button Content="Clear Log History" />
                             </StackPanel>
 
-                            <CheckBox Content="Clear Log files older than 30 days " />
+                            <CheckBox Content="Clear Log files older than 30 days " Margin="0,5,0,0" IsChecked="{Binding ClearOldOlgs}" />
                         </StackPanel>
 
                     </Grid>
@@ -295,19 +304,19 @@
 
                         <TextBlock Text="GUI:" Grid.Column="0" FontWeight="Bold"/>
                         <StackPanel Orientation="Vertical" Grid.Column="1">
-                            <CheckBox Content="Minimize to system tray (Requires Restart)" />
-                            <CheckBox Content="Display status messages from tray icon (balloon popups)" />
-                            <CheckBox Content="Enable 'Query Editor' tab (Requires Restart)" />
-                            <CheckBox Content="Prompt when a manual query does not match GUI settings" Margin="10,0,0,0" />
-                            <CheckBox Content="Disable built-in preset update notification" />
-                            <CheckBox Content="Show CLI window (Allows you to cleanly exit encode with ctrl-c)" />
+                            <CheckBox Content="Minimize to system tray (Requires Restart)" IsChecked="{Binding MinimiseToTray}" />
+                            <CheckBox Content="Display status messages from tray icon (balloon popups)" IsChecked="{Binding DisplayStatusMessagesTrayIcon}" />
+                            <CheckBox Content="Enable 'Query Editor' tab (Requires Restart)" IsChecked="{Binding EnableQueryEditor}" />
+                            <CheckBox Content="Prompt when a manual query does not match GUI settings" Margin="10,0,0,5" IsChecked="{Binding PromptOnDifferentQuery}" />
+                            <CheckBox Content="Disable built-in preset update notification" IsChecked="{Binding DisablePresetUpdateCheckNotification}" />
+                            <CheckBox Content="Show CLI window (Allows you to cleanly exit encode with ctrl-c)" IsChecked="{Binding ShowCliWindow}" />
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Number of picture previews to scan:" Width="210" />
-                                <ComboBox Name="numberOfPreviews" Width="120" />
+                                <ComboBox Name="numberOfPreviews" ItemsSource="{Binding PreviewPicturesToScan}" SelectedItem="{Binding SelectedPreviewCount}" Width="120" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Minimum length of title to scan (seconds):" Width="210" />
-                                <TextBox Name="MinTitleLength"  Width="120"/>
+                                <TextBox Name="MinTitleLength" Text="{Binding MinLength}"  Width="120"/>
                                 <!-- Find a control for this-->
                             </StackPanel>
 
@@ -322,7 +331,7 @@
                         <TextBlock Text="x264:" Grid.Column="0" FontWeight="Bold"/>
                         <StackPanel Orientation="Horizontal" Grid.Column="1">
                             <TextBlock Text="Constant quality fractional granularity:" Width="210" />
-                            <ComboBox Name="x264Granularity" Width="120"/>
+                            <ComboBox Name="x264Granularity" ItemsSource="{Binding ConstantQualityGranularity}" SelectedItem="{Binding SelectedGranulairty}" Width="120"/>
                         </StackPanel>
                     </Grid>
 
@@ -335,7 +344,7 @@
                         <TextBlock Text="DVD:" Grid.Column="0" FontWeight="Bold"/>
 
                         <StackPanel Orientation="Vertical" Grid.Column="1">
-                            <CheckBox Content="Disable LibDVDNav. (libdvdread will be used instead)" />
+                            <CheckBox Content="Disable LibDVDNav. (libdvdread will be used instead)" IsChecked="{Binding DisableLibdvdNav}" />
                         </StackPanel>
 
                     </Grid>
