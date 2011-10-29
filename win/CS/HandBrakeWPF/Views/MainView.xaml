@@ -4,6 +4,16 @@
         xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro" xmlns:Controls="clr-namespace:HandBrakeWPF.Views.Controls" 
         Title="{Data:Binding Path=WindowTitle}" Height="655" Width="1015" FontSize="11">
 
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Foreground" Value="DarkOrange" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Padding" Value="5,1" />
+            <Setter Property="FontSize" Value="11.5" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+    </Window.Resources>
+    
     <Grid>
         <StackPanel Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <!-- Menu and Taskbar-->

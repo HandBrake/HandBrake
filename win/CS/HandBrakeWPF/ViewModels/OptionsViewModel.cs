@@ -9,12 +9,16 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.ComponentModel.Composition;
+    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
+    using System.Windows;
 
     using Caliburn.Micro;
 
@@ -23,6 +27,8 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.ViewModels.Interfaces;
+
+    using Ookii.Dialogs.Wpf;
 
     /// <summary>
     /// The Options View Model
@@ -36,11 +42,6 @@ namespace HandBrakeWPF.ViewModels
         /// Backing field for the user setting service.
         /// </summary>
         private readonly IUserSettingService userSettingService;
-
-        /// <summary>
-        /// A Property to block Saving while the screen is loading.
-        /// </summary>
-        private bool isLoading = true;
 
         /// <summary>
         /// The add audio mode options.
@@ -268,6 +269,12 @@ namespace HandBrakeWPF.ViewModels
         private string sendFileTo;
 
         /// <summary>
+        /// The send file to Path.
+        /// </summary>
+        private string sendFileToPath;
+
+
+        /// <summary>
         /// The show cli window.
         /// </summary>
         private bool showCliWindow;
@@ -315,6 +322,374 @@ namespace HandBrakeWPF.ViewModels
         #endregion
 
         #region Properties
+
+        #region General
+
+        /// <summary>
+        /// Gets or sets a value indicating whether CheckForUpdates.
+        /// </summary>
+        public bool CheckForUpdates
+        {
+            get
+            {
+                return this.checkForUpdates;
+            }
+
+            set
+            {
+                this.checkForUpdates = value;
+                this.NotifyOfPropertyChange("CheckForUpdates");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets CheckForUpdatesFrequencies.
+        /// </summary>
+        public BindingList<string> CheckForUpdatesFrequencies
+        {
+            get
+            {
+                return this.checkForUpdatesFrequencies;
+            }
+
+            set
+            {
+                this.checkForUpdatesFrequencies = value;
+                this.NotifyOfPropertyChange("CheckForUpdatesFrequencies");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether CheckForUpdatesFrequency.
+        /// </summary>
+        public int CheckForUpdatesFrequency
+        {
+            get
+            {
+                return this.checkForUpdatesFrequency;
+            }
+
+            set
+            {
+                this.checkForUpdatesFrequency = value;
+                this.NotifyOfPropertyChange("CheckForUpdatesFrequency");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets Arguments.
+        /// </summary>
+        public string Arguments
+        {
+            get
+            {
+                return this.arguments;
+            }
+
+            set
+            {
+                this.arguments = value;
+                this.NotifyOfPropertyChange("Arguments");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether GrowlAfterEncode.
+        /// </summary>
+        public bool GrowlAfterEncode
+        {
+            get
+            {
+                return this.growlAfterEncode;
+            }
+
+            set
+            {
+                this.growlAfterEncode = value;
+                this.NotifyOfPropertyChange("GrowlAfterEncode");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether GrowlAfterQueue.
+        /// </summary>
+        public bool GrowlAfterQueue
+        {
+            get
+            {
+                return this.growlAfterQueue;
+            }
+
+            set
+            {
+                this.growlAfterQueue = value;
+                this.NotifyOfPropertyChange("GrowlAfterQueue");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether SendFileAfterEncode.
+        /// </summary>
+        public bool SendFileAfterEncode
+        {
+            get
+            {
+                return this.sendFileAfterEncode;
+            }
+
+            set
+            {
+                this.sendFileAfterEncode = value;
+                this.NotifyOfPropertyChange("SendFileAfterEncode");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets SendFileTo.
+        /// </summary>
+        public string SendFileTo
+        {
+            get
+            {
+                return this.sendFileTo;
+            }
+
+            set
+            {
+                this.sendFileTo = value;
+                this.NotifyOfPropertyChange("SendFileTo");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets SendFileToPath.
+        /// </summary>
+        public string SendFileToPath
+        {
+            get
+            {
+                return this.sendFileToPath;
+            }
+
+            set
+            {
+                this.sendFileToPath = value;
+                this.NotifyOfPropertyChange("SendFileToPath");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether EnableGuiTooltips.
+        /// </summary>
+        public bool EnableGuiTooltips
+        {
+            get
+            {
+                return this.enableGuiTooltips;
+            }
+
+            set
+            {
+                this.enableGuiTooltips = value;
+                this.NotifyOfPropertyChange("EnableGuiTooltips");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets WhenDone.
+        /// </summary>
+        public string WhenDone
+        {
+            get
+            {
+                return this.whenDone;
+            }
+
+            set
+            {
+                this.whenDone = value;
+                this.NotifyOfPropertyChange("WhenDone");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets WhenDoneOptions.
+        /// </summary>
+        public BindingList<string> WhenDoneOptions
+        {
+            get
+            {
+                return this.whenDoneOptions;
+            }
+
+            set
+            {
+                this.whenDoneOptions = value;
+                this.NotifyOfPropertyChange("WhenDoneOptions");
+            }
+        }
+        #endregion
+
+        #region Output Files
+
+        /// <summary>
+        /// Gets or sets AutoNameDefaultPath.
+        /// </summary>
+        public string AutoNameDefaultPath
+        {
+            get
+            {
+                return this.autoNameDefaultPath;
+            }
+
+            set
+            {
+                this.autoNameDefaultPath = value;
+                this.NotifyOfPropertyChange("AutoNameDefaultPath");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether AutomaticallyNameFiles.
+        /// </summary>
+        public bool AutomaticallyNameFiles
+        {
+            get
+            {
+                return this.automaticallyNameFiles;
+            }
+
+            set
+            {
+                this.automaticallyNameFiles = value;
+                this.NotifyOfPropertyChange("AutomaticallyNameFiles");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets AutonameFormat.
+        /// </summary>
+        public string AutonameFormat
+        {
+            get
+            {
+                return this.autonameFormat;
+            }
+
+            set
+            {
+                this.autonameFormat = value;
+                this.NotifyOfPropertyChange("AutonameFormat");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether ChangeToTitleCase.
+        /// </summary>
+        public bool ChangeToTitleCase
+        {
+            get
+            {
+                return this.changeToTitleCase;
+            }
+
+            set
+            {
+                this.changeToTitleCase = value;
+                this.NotifyOfPropertyChange("ChangeToTitleCase");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets Mp4ExtensionOptions.
+        /// </summary>
+        public BindingList<string> Mp4ExtensionOptions
+        {
+            get
+            {
+                return this.mp4ExtensionOptions;
+            }
+
+            set
+            {
+                this.mp4ExtensionOptions = value;
+                this.NotifyOfPropertyChange("Mp4ExtensionOptions");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether RemoveUnderscores.
+        /// </summary>
+        public bool RemoveUnderscores
+        {
+            get
+            {
+                return this.removeUnderscores;
+            }
+
+            set
+            {
+                this.removeUnderscores = value;
+                this.NotifyOfPropertyChange("RemoveUnderscores");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets SelectedMp4Extension.
+        /// </summary>
+        public int SelectedMp4Extension
+        {
+            get
+            {
+                return this.selectedMp4Extension;
+            }
+
+            set
+            {
+                this.selectedMp4Extension = value;
+                this.NotifyOfPropertyChange("SelectedMp4Extension");
+            }
+        }
+
+        #endregion
+
+        #region Preview
+        /// <summary>
+        /// Gets or sets VLCPath.
+        /// </summary>
+        public string VLCPath
+        {
+            get
+            {
+                return this.vlcPath;
+            }
+
+            set
+            {
+                this.vlcPath = value;
+                this.NotifyOfPropertyChange("VLCPath");
+            }
+        }
+        #endregion
+
+        #region Audio and Subtitles
+
+        /// <summary>
+        /// Gets or sets AvailableLanguages.
+        /// </summary>
+        public BindingList<string> AvailableLanguages
+        {
+            get
+            {
+                return this.availableLanguages;
+            }
+
+            set
+            {
+                this.availableLanguages = value;
+                this.NotifyOfPropertyChange("AvailableLanguages");
+            }
+        }
 
         /// <summary>
         /// Gets or sets AddAudioModeOptions.
@@ -385,191 +760,91 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets Arguments.
+        /// Gets or sets SelectedAddAudioMode.
         /// </summary>
-        public string Arguments
+        public int SelectedAddAudioMode
         {
             get
             {
-                return this.arguments;
+                return this.selectedAddAudioMode;
             }
 
             set
             {
-                this.arguments = value;
-                this.NotifyOfPropertyChange("Arguments");
+                this.selectedAddAudioMode = value;
+                this.NotifyOfPropertyChange("SelectedAddAudioMode");
             }
         }
 
         /// <summary>
-        /// Gets or sets AutoNameDefaultPath.
+        /// Gets or sets SelectedAddSubtitleMode.
         /// </summary>
-        public string AutoNameDefaultPath
+        public int SelectedAddSubtitleMode
         {
             get
             {
-                return this.autoNameDefaultPath;
+                return this.selectedAddSubtitleMode;
             }
 
             set
             {
-                this.autoNameDefaultPath = value;
-                this.NotifyOfPropertyChange("AutoNameDefaultPath");
+                this.selectedAddSubtitleMode = value;
+                this.NotifyOfPropertyChange("SelectedAddSubtitleMode");
             }
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether AutomaticallyNameFiles.
+        /// Gets or sets preferredLanguages.
         /// </summary>
-        public bool AutomaticallyNameFiles
+        public BindingList<string> PreferredLanguages
         {
             get
             {
-                return this.automaticallyNameFiles;
+                return this.preferredLanguages;
             }
 
             set
             {
-                this.automaticallyNameFiles = value;
-                this.NotifyOfPropertyChange("AutomaticallyNameFiles");
+                this.preferredLanguages = value;
+                this.NotifyOfPropertyChange("preferredLanguages");
             }
         }
 
         /// <summary>
-        /// Gets or sets AutonameFormat.
+        /// Gets or sets SelectedLangauges.
         /// </summary>
-        public string AutonameFormat
+        public BindingList<string> SelectedLangauges
         {
             get
             {
-                return this.autonameFormat;
+                return this.selectedLangauges;
             }
-
             set
             {
-                this.autonameFormat = value;
-                this.NotifyOfPropertyChange("AutonameFormat");
+                this.selectedLangauges = value;
+                this.NotifyOfPropertyChange("SelectedLangauges");
             }
         }
 
         /// <summary>
-        /// Gets or sets AvailableLanguages.
+        /// Gets or sets SelectedPreferreedLangauge.
         /// </summary>
-        public BindingList<string> AvailableLanguages
+        public string SelectedPreferredLangauge
         {
             get
             {
-                return this.availableLanguages;
+                return this.selectedPreferredLangauge;
             }
 
             set
             {
-                this.availableLanguages = value;
-                this.NotifyOfPropertyChange("AvailableLanguages");
+                this.selectedPreferredLangauge = value;
+                this.NotifyOfPropertyChange("SelectedPreferreedLangauge");
             }
         }
+        #endregion
 
-        /// <summary>
-        /// Gets or sets a value indicating whether ChangeToTitleCase.
-        /// </summary>
-        public bool ChangeToTitleCase
-        {
-            get
-            {
-                return this.changeToTitleCase;
-            }
-
-            set
-            {
-                this.changeToTitleCase = value;
-                this.NotifyOfPropertyChange("ChangeToTitleCase");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether CheckForUpdates.
-        /// </summary>
-        public bool CheckForUpdates
-        {
-            get
-            {
-                return this.checkForUpdates;
-            }
-
-            set
-            {
-                this.checkForUpdates = value;
-                this.NotifyOfPropertyChange("CheckForUpdates");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets CheckForUpdatesFrequencies.
-        /// </summary>
-        public BindingList<string> CheckForUpdatesFrequencies
-        {
-            get
-            {
-                return this.checkForUpdatesFrequencies;
-            }
-
-            set
-            {
-                this.checkForUpdatesFrequencies = value;
-                this.NotifyOfPropertyChange("CheckForUpdatesFrequencies");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether CheckForUpdatesFrequency.
-        /// </summary>
-        public int CheckForUpdatesFrequency
-        {
-            get
-            {
-                return this.checkForUpdatesFrequency;
-            }
-
-            set
-            {
-                this.checkForUpdatesFrequency = value;
-                this.NotifyOfPropertyChange("CheckForUpdatesFrequency");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether ClearOldOlgs.
-        /// </summary>
-        public bool ClearOldOlgs
-        {
-            get
-            {
-                return this.clearOldOlgs;
-            }
-
-            set
-            {
-                this.clearOldOlgs = value;
-                this.NotifyOfPropertyChange("ClearOldOlgs");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets ConstantQualityGranularity.
-        /// </summary>
-        public BindingList<string> ConstantQualityGranularity
-        {
-            get
-            {
-                return this.constantQualityGranularity;
-            }
-
-            set
-            {
-                this.constantQualityGranularity = value;
-                this.NotifyOfPropertyChange("ConstantQualityGranularity");
-            }
-        }
+        #region System and Logging
 
         /// <summary>
         /// Gets or sets a value indicating whether CopyLogToEncodeDirectory.
@@ -602,6 +877,162 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.copyLogToSepcficedLocation = value;
                 this.NotifyOfPropertyChange("CopyLogToSepcficedLocation");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether ClearOldOlgs.
+        /// </summary>
+        public bool ClearOldOlgs
+        {
+            get
+            {
+                return this.clearOldOlgs;
+            }
+
+            set
+            {
+                this.clearOldOlgs = value;
+                this.NotifyOfPropertyChange("ClearOldOlgs");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets LogDirectory.
+        /// </summary>
+        public string LogDirectory
+        {
+            get
+            {
+                return this.logDirectory;
+            }
+
+            set
+            {
+                this.logDirectory = value;
+                this.NotifyOfPropertyChange("LogDirectory");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether PreventSleep.
+        /// </summary>
+        public bool PreventSleep
+        {
+            get
+            {
+                return this.preventSleep;
+            }
+
+            set
+            {
+                this.preventSleep = value;
+                this.NotifyOfPropertyChange("PreventSleep");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets PriorityLevelOptions.
+        /// </summary>
+        public BindingList<string> PriorityLevelOptions
+        {
+            get
+            {
+                return this.priorityLevelOptions;
+            }
+
+            set
+            {
+                this.priorityLevelOptions = value;
+                this.NotifyOfPropertyChange("PriorityLevelOptions");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether SelectedGranulairty.
+        /// </summary>
+        public string SelectedGranulairty
+        {
+            get
+            {
+                return this.selectedGranulairty;
+            }
+
+            set
+            {
+                this.selectedGranulairty = value;
+                this.NotifyOfPropertyChange("SelectedGranulairty");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets SelectedPriority.
+        /// </summary>
+        public string SelectedPriority
+        {
+            get
+            {
+                return this.selectedPriority;
+            }
+
+            set
+            {
+                this.selectedPriority = value;
+                this.NotifyOfPropertyChange("SelectedPriority");
+            }
+        }
+        #endregion
+
+        #region Advanced
+
+        /// <summary>
+        /// Gets or sets a value indicating whether EnableQueryEditor.
+        /// </summary>
+        public bool EnableQueryEditor
+        {
+            get
+            {
+                return this.enableQueryEditor;
+            }
+
+            set
+            {
+                this.enableQueryEditor = value;
+                this.NotifyOfPropertyChange("EnableQueryEditor");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether PromptOnDifferentQuery.
+        /// </summary>
+        public bool PromptOnDifferentQuery
+        {
+            get
+            {
+                return this.promptOnDifferentQuery;
+            }
+
+            set
+            {
+                this.promptOnDifferentQuery = value;
+                this.NotifyOfPropertyChange("PromptOnDifferentQuery");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets ConstantQualityGranularity.
+        /// </summary>
+        public BindingList<string> ConstantQualityGranularity
+        {
+            get
+            {
+                return this.constantQualityGranularity;
+            }
+
+            set
+            {
+                this.constantQualityGranularity = value;
+                this.NotifyOfPropertyChange("ConstantQualityGranularity");
             }
         }
 
@@ -657,91 +1088,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether EnableGuiTooltips.
-        /// </summary>
-        public bool EnableGuiTooltips
-        {
-            get
-            {
-                return this.enableGuiTooltips;
-            }
-
-            set
-            {
-                this.enableGuiTooltips = value;
-                this.NotifyOfPropertyChange("EnableGuiTooltips");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether EnableQueryEditor.
-        /// </summary>
-        public bool EnableQueryEditor
-        {
-            get
-            {
-                return this.enableQueryEditor;
-            }
-
-            set
-            {
-                this.enableQueryEditor = value;
-                this.NotifyOfPropertyChange("EnableQueryEditor");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether GrowlAfterEncode.
-        /// </summary>
-        public bool GrowlAfterEncode
-        {
-            get
-            {
-                return this.growlAfterEncode;
-            }
-
-            set
-            {
-                this.growlAfterEncode = value;
-                this.NotifyOfPropertyChange("GrowlAfterEncode");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether GrowlAfterQueue.
-        /// </summary>
-        public bool GrowlAfterQueue
-        {
-            get
-            {
-                return this.growlAfterQueue;
-            }
-
-            set
-            {
-                this.growlAfterQueue = value;
-                this.NotifyOfPropertyChange("GrowlAfterQueue");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets LogDirectory.
-        /// </summary>
-        public string LogDirectory
-        {
-            get
-            {
-                return this.logDirectory;
-            }
-
-            set
-            {
-                this.logDirectory = value;
-                this.NotifyOfPropertyChange("LogDirectory");
-            }
-        }
-
-        /// <summary>
         /// Gets or sets LogVerbosityOptions.
         /// </summary>
         public BindingList<int> LogVerbosityOptions
@@ -793,40 +1139,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets Mp4ExtensionOptions.
-        /// </summary>
-        public BindingList<string> Mp4ExtensionOptions
-        {
-            get
-            {
-                return this.mp4ExtensionOptions;
-            }
-
-            set
-            {
-                this.mp4ExtensionOptions = value;
-                this.NotifyOfPropertyChange("Mp4ExtensionOptions");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether PreventSleep.
-        /// </summary>
-        public bool PreventSleep
-        {
-            get
-            {
-                return this.preventSleep;
-            }
-
-            set
-            {
-                this.preventSleep = value;
-                this.NotifyOfPropertyChange("PreventSleep");
-            }
-        }
-
-        /// <summary>
         /// Gets or sets PreviewPicturesToScan.
         /// </summary>
         public BindingList<int> PreviewPicturesToScan
@@ -840,159 +1152,6 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.previewPicturesToScan = value;
                 this.NotifyOfPropertyChange("PreviewPicturesToScan");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets PriorityLevelOptions.
-        /// </summary>
-        public BindingList<string> PriorityLevelOptions
-        {
-            get
-            {
-                return this.priorityLevelOptions;
-            }
-
-            set
-            {
-                this.priorityLevelOptions = value;
-                this.NotifyOfPropertyChange("PriorityLevelOptions");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether PromptOnDifferentQuery.
-        /// </summary>
-        public bool PromptOnDifferentQuery
-        {
-            get
-            {
-                return this.promptOnDifferentQuery;
-            }
-
-            set
-            {
-                this.promptOnDifferentQuery = value;
-                this.NotifyOfPropertyChange("PromptOnDifferentQuery");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether RemoveUnderscores.
-        /// </summary>
-        public bool RemoveUnderscores
-        {
-            get
-            {
-                return this.removeUnderscores;
-            }
-
-            set
-            {
-                this.removeUnderscores = value;
-                this.NotifyOfPropertyChange("RemoveUnderscores");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets SelectedAddAudioMode.
-        /// </summary>
-        public int SelectedAddAudioMode
-        {
-            get
-            {
-                return this.selectedAddAudioMode;
-            }
-
-            set
-            {
-                this.selectedAddAudioMode = value;
-                this.NotifyOfPropertyChange("SelectedAddAudioMode");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets SelectedAddSubtitleMode.
-        /// </summary>
-        public int SelectedAddSubtitleMode
-        {
-            get
-            {
-                return this.selectedAddSubtitleMode;
-            }
-
-            set
-            {
-                this.selectedAddSubtitleMode = value;
-                this.NotifyOfPropertyChange("SelectedAddSubtitleMode");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether SelectedGranulairty.
-        /// </summary>
-        public string SelectedGranulairty
-        {
-            get
-            {
-                return this.selectedGranulairty;
-            }
-
-            set
-            {
-                this.selectedGranulairty = value;
-                this.NotifyOfPropertyChange("SelectedGranulairty");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets SelectedMp4Extension.
-        /// </summary>
-        public int SelectedMp4Extension
-        {
-            get
-            {
-                return this.selectedMp4Extension;
-            }
-
-            set
-            {
-                this.selectedMp4Extension = value;
-                this.NotifyOfPropertyChange("SelectedMp4Extension");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets preferredLanguages.
-        /// </summary>
-        public BindingList<string> PreferredLanguages
-        {
-            get
-            {
-                return this.preferredLanguages;
-            }
-
-            set
-            {
-                this.preferredLanguages = value;
-                this.NotifyOfPropertyChange("preferredLanguages");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets SelectedPreferreedLangauge.
-        /// </summary>
-        public string SelectedPreferredLangauge
-        {
-            get
-            {
-                return this.selectedPreferredLangauge;
-            }
-
-            set
-            {
-                this.selectedPreferredLangauge = value;
-                this.NotifyOfPropertyChange("SelectedPreferreedLangauge");
             }
         }
 
@@ -1014,23 +1173,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets SelectedPriority.
-        /// </summary>
-        public string SelectedPriority
-        {
-            get
-            {
-                return this.selectedPriority;
-            }
-
-            set
-            {
-                this.selectedPriority = value;
-                this.NotifyOfPropertyChange("SelectedPriority");
-            }
-        }
-
-        /// <summary>
         /// Gets or sets SelectedVerbosity.
         /// </summary>
         public int SelectedVerbosity
@@ -1044,40 +1186,6 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.selectedVerbosity = value;
                 this.NotifyOfPropertyChange("SelectedVerbosity");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether SendFileAfterEncode.
-        /// </summary>
-        public bool SendFileAfterEncode
-        {
-            get
-            {
-                return this.sendFileAfterEncode;
-            }
-
-            set
-            {
-                this.sendFileAfterEncode = value;
-                this.NotifyOfPropertyChange("SendFileAfterEncode");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets SendFileTo.
-        /// </summary>
-        public string SendFileTo
-        {
-            get
-            {
-                return this.sendFileTo;
-            }
-
-            set
-            {
-                this.sendFileTo = value;
-                this.NotifyOfPropertyChange("SendFileTo");
             }
         }
 
@@ -1097,73 +1205,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange("ShowCliWindow");
             }
         }
-
-        /// <summary>
-        /// Gets or sets SelectedLangauges.
-        /// </summary>
-        public BindingList<string> SelectedLangauges
-        {
-            get
-            {
-                return this.selectedLangauges;
-            }
-            set
-            {
-                this.selectedLangauges = value;
-                this.NotifyOfPropertyChange("SelectedLangauges");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets VLCPath.
-        /// </summary>
-        public string VLCPath
-        {
-            get
-            {
-                return this.vlcPath;
-            }
-
-            set
-            {
-                this.vlcPath = value;
-                this.NotifyOfPropertyChange("VLCPath");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets WhenDone.
-        /// </summary>
-        public string WhenDone
-        {
-            get
-            {
-                return this.whenDone;
-            }
-
-            set
-            {
-                this.whenDone = value;
-                this.NotifyOfPropertyChange("WhenDone");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets WhenDoneOptions.
-        /// </summary>
-        public BindingList<string> WhenDoneOptions
-        {
-            get
-            {
-                return this.whenDoneOptions;
-            }
-
-            set
-            {
-                this.whenDoneOptions = value;
-                this.NotifyOfPropertyChange("WhenDoneOptions");
-            }
-        }
+        #endregion
 
         #endregion
 
@@ -1212,27 +1254,25 @@ namespace HandBrakeWPF.ViewModels
 
             this.growlAfterEncode = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.GrowlEncode);
             this.growlAfterQueue = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.GrowlQueue);
-            this.SendFileAfterEncode = this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SendFile);
-            this.sendFileTo = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileTo));
-            this.arguments = this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileToArgs);
+            this.sendFileAfterEncode = this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SendFile);
+            this.sendFileTo = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileTo)) ?? string.Empty;
+            this.sendFileToPath = this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileTo) ?? string.Empty;
+            this.arguments = this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileToArgs) ?? string.Empty;
 
             // #############################
             // Output Settings
             // #############################
 
             // Enable auto naming feature.)
-            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
-            {
-                this.automaticallyNameFiles = true;
-            }
+            this.automaticallyNameFiles = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming);
 
             // Store the auto name path
-            this.autoNameDefaultPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath);
+            this.autoNameDefaultPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath) ?? string.Empty;
             if (string.IsNullOrEmpty(this.autoNameDefaultPath))
                 this.autoNameDefaultPath = "Click 'Browse' to set the default location";
 
             // Store auto name format
-            this.autonameFormat = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat);
+            this.autonameFormat = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) ?? string.Empty;
 
             // Use iPod/iTunes friendly .m4v extension for MP4 files.
             this.mp4ExtensionOptions.Add("Automatic");
@@ -1251,7 +1291,7 @@ namespace HandBrakeWPF.ViewModels
             // #############################
 
             // VLC Path
-            this.vlcPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.VLC_Path);
+            this.vlcPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.VLC_Path) ?? string.Empty;
 
             // #############################
             // Audio and Subtitles Tab
@@ -1279,7 +1319,7 @@ namespace HandBrakeWPF.ViewModels
                 }
             }
 
-            this.selectedPreferredLangauge = this.userSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage);
+            this.selectedPreferredLangauge = this.userSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage) ?? string.Empty;
 
             this.AddAudioModeOptions.Add("None");
             this.AddAudioModeOptions.Add("All Remaining Tracks");
@@ -1324,7 +1364,7 @@ namespace HandBrakeWPF.ViewModels
             this.copyLogToSepcficedLocation = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SaveLogToCopyDirectory);
 
             // The saved log path
-            this.logDirectory = userSettingService.GetUserSetting<string>(ASUserSettingConstants.SaveLogCopyDirectory);
+            this.logDirectory = userSettingService.GetUserSetting<string>(ASUserSettingConstants.SaveLogCopyDirectory) ?? string.Empty;
 
             this.clearOldOlgs = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs);
 
@@ -1360,8 +1400,6 @@ namespace HandBrakeWPF.ViewModels
 
             // Use Experimental dvdnav
             this.disableLibdvdNav = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav);
-
-            this.isLoading = false;
         }
 
         /// <summary>
@@ -1369,9 +1407,181 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Close()
         {
+            this.Save();
             this.TryClose();
         }
 
+        /// <summary>
+        /// Browse - Send File To
+        /// </summary>
+        public void BrowseSendFileTo()
+        {
+            VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "All files (*.*)|*.*" };
+            dialog.ShowDialog();
+            this.SendFileTo = Path.GetFileNameWithoutExtension(dialog.FileName);
+            this.sendFileToPath = dialog.FileName;
+        }
+
+        /// <summary>
+        /// Browse Auto Name Path
+        /// </summary>
+        public void BrowseAutoNamePath()
+        {
+            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog { Description = "Please select a folder.", UseDescriptionForTitle = true };
+            dialog.ShowDialog();
+            this.AutoNameDefaultPath = dialog.SelectedPath;
+        }
+
+        /// <summary>
+        /// Browse VLC Path
+        /// </summary>
+        public void BrowseVlcPath()
+        {
+            VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "All files (*.exe)|*.exe" };
+            dialog.ShowDialog();
+            this.VLCPath = dialog.FileName;
+        }
+
+        /// <summary>
+        /// Audio List Move Left
+        /// </summary>
+        public void LanguageMoveLeft()
+        {
+            // TODO
+        }
+
+        /// <summary>
+        /// Audio List Move Right
+        /// </summary>
+        public void LanguageMoveRight()
+        {
+            // TODO
+        }
+
+        /// <summary>
+        /// Audio List Clear all selected languages
+        /// </summary>
+        public void LanguageClearAll()
+        {
+            this.SelectedLangauges.Clear();
+        }
+
+        /// <summary>
+        ///  Audio List Language Move UP
+        /// </summary>
+        public void LanguageMoveUp()
+        {
+            // TODO
+        }
+
+        /// <summary>
+        /// Audio List Language Move Down
+        /// </summary>
+        public void LanguageMoveDown()
+        {
+            // TODO
+        }
+
+        /// <summary>
+        /// Browse - Log Path
+        /// </summary>
+        public void BrowseLogPath()
+        {
+            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog { Description = "Please select a folder.", UseDescriptionForTitle = true };
+            dialog.ShowDialog();
+            this.LogDirectory = dialog.SelectedPath;
+        }
+
+        /// <summary>
+        /// View the Default Log Directory for HandBrake
+        /// </summary>
+        public void ViewLogDirectory()
+        {
+            string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+            string windir = Environment.GetEnvironmentVariable("WINDIR");
+            Process prc = new Process { StartInfo = { FileName = windir + @"\explorer.exe", Arguments = logDir } };
+            prc.Start();
+        }
+
+        /// <summary>
+        /// Clear HandBrakes log directory.
+        /// </summary>
+        public void ClearLogHistory()
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you wish to clear the log file directory?", "Clear Logs",
+                                                  MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                GeneralUtilities.ClearLogFiles(0);
+                MessageBox.Show("HandBrake's Log file directory has been cleared!", "Notice", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
         #endregion
+
+        /// <summary>
+        /// Save the settings selected
+        /// </summary>
+        private void Save()
+        {
+            /* General */
+            this.userSettingService.SetUserSetting(UserSettingConstants.UpdateStatus, this.CheckForUpdates);
+            this.userSettingService.SetUserSetting(UserSettingConstants.DaysBetweenUpdateCheck, this.CheckForUpdatesFrequency);
+            this.userSettingService.SetUserSetting(UserSettingConstants.TooltipEnable, this.EnableGuiTooltips);
+            this.userSettingService.SetUserSetting(ASUserSettingConstants.WhenCompleteAction, this.WhenDone);
+            this.userSettingService.SetUserSetting(ASUserSettingConstants.GrowlQueue, this.GrowlAfterQueue);
+            this.userSettingService.SetUserSetting(ASUserSettingConstants.GrowlEncode, this.GrowlAfterEncode);
+            this.userSettingService.SetUserSetting(ASUserSettingConstants.SendFileTo, this.SendFileToPath);
+            this.userSettingService.SetUserSetting(ASUserSettingConstants.SendFile, this.SendFileAfterEncode);
+            this.userSettingService.SetUserSetting(ASUserSettingConstants.SendFileToArgs, this.Arguments);
+
+            /* Output Files */
+            this.userSettingService.SetUserSetting(UserSettingConstants.AutoNaming, this.AutomaticallyNameFiles);
+            this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameFormat, this.AutonameFormat);
+            this.userSettingService.SetUserSetting(UserSettingConstants.AutoNamePath, this.AutoNameDefaultPath);
+            this.userSettingService.SetUserSetting(UserSettingConstants.UseM4v, this.SelectedMp4Extension);
+            this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameRemoveUnderscore, this.RemoveUnderscores);
+            this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameTitleCase, this.ChangeToTitleCase);
+
+            /* Previews */
+            this.userSettingService.SetUserSetting(UserSettingConstants.VLC_Path, this.VLCPath);
+
+            /* Audio and Subtitles */
+            this.userSettingService.SetUserSetting(UserSettingConstants.NativeLanguage, this.SelectedPreferredLangauge);
+            StringCollection collection = new StringCollection();
+            collection.AddRange(this.SelectedLangauges.ToArray());
+            this.userSettingService.SetUserSetting(UserSettingConstants.SelectedLanguages, collection);
+            this.userSettingService.SetUserSetting(UserSettingConstants.AddOnlyOneAudioPerLanguage, this.AddOnlyOneAudioTrackPerLanguage);
+            this.userSettingService.SetUserSetting(UserSettingConstants.UseClosedCaption, this.AddClosedCaptions);
+            this.userSettingService.SetUserSetting(UserSettingConstants.DubModeAudio, this.SelectedAddAudioMode);
+            this.userSettingService.SetUserSetting(UserSettingConstants.DubModeSubtitle, this.SelectedAddSubtitleMode);
+
+            /* System and Logging */
+            userSettingService.SetUserSetting(ASUserSettingConstants.ProcessPriority, this.SelectedPriority);
+            userSettingService.SetUserSetting(ASUserSettingConstants.PreventSleep, this.PreventSleep);
+            userSettingService.SetUserSetting(ASUserSettingConstants.Verbosity, this.SelectedVerbosity);
+            userSettingService.SetUserSetting(ASUserSettingConstants.SaveLogWithVideo, this.CopyLogToEncodeDirectory);
+            userSettingService.SetUserSetting(ASUserSettingConstants.SaveLogToCopyDirectory, this.CopyLogToSepcficedLocation);
+            userSettingService.SetUserSetting(ASUserSettingConstants.SaveLogCopyDirectory, this.LogDirectory);
+            userSettingService.SetUserSetting(UserSettingConstants.ClearOldLogs, this.ClearOldOlgs);
+
+            /* Advanced */
+            userSettingService.SetUserSetting(UserSettingConstants.MainWindowMinimize, this.MinimiseToTray);
+            userSettingService.SetUserSetting(UserSettingConstants.TrayIconAlerts, this.DisplayStatusMessagesTrayIcon);
+            userSettingService.SetUserSetting(UserSettingConstants.QueryEditorTab, this.EnableQueryEditor);
+            userSettingService.SetUserSetting(UserSettingConstants.PromptOnUnmatchingQueries, this.PromptOnDifferentQuery);
+            userSettingService.SetUserSetting(UserSettingConstants.PresetNotification, this.DisablePresetUpdateCheckNotification);
+            userSettingService.SetUserSetting(ASUserSettingConstants.ShowCLI, this.ShowCliWindow);
+            userSettingService.SetUserSetting(UserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
+            userSettingService.SetUserSetting(ASUserSettingConstants.X264Step, double.Parse(this.SelectedGranulairty));
+
+            int value;
+            if (int.TryParse(this.MinLength.ToString(), out value))
+            {
+                this.userSettingService.SetUserSetting(ASUserSettingConstants.MinScanDuration, value);
+            }
+
+            userSettingService.SetUserSetting(ASUserSettingConstants.DisableLibDvdNav, this.DisableLibdvdNav);
+        }
     }
 }
