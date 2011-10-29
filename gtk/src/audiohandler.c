@@ -389,7 +389,7 @@ ghb_set_pref_audio_settings(gint titleindex, GValue *settings)
 			// HB_ACODEC_* are bit fields.  Treat acodec as mask
 			if (!(aconfig->in.codec & select_acodec & HB_ACODEC_PASS_MASK))
 			{
-				if (acodec != HB_ACODEC_ANY)
+				if (acodec != HB_ACODEC_AUTO_PASS)
 					acodec = fallback;
 				// If we can't substitute the passthru with a suitable
 				// encoder and
