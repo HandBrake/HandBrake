@@ -11,10 +11,12 @@ namespace HandBrakeWPF.ViewModels
 {
     using Caliburn.Micro;
 
+    using HandBrakeWPF.ViewModels.Interfaces;
+
     /// <summary>
     /// The Log View Model
     /// </summary>
-    public class LogViewModel : ViewModelBase
+    public class LogViewModel : ViewModelBase, ILogViewModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LogViewModel"/> class.

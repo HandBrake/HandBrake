@@ -221,6 +221,15 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Open the Log Window
+        /// </summary>
+        public void OpenLogWindow()
+        {
+            this.WindowManager.ShowWindow(new LogViewModel(this.WindowManager));
+        }
+
+
+        /// <summary>
         /// Open the Queue Window.
         /// </summary>
         public void OpenQueueWindow()
