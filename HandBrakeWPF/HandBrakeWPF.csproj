@@ -75,6 +75,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Factories\ViewModelFactory.cs" />
+    <Compile Include="Helpers\ListBoxHelper.cs" />
     <Compile Include="Startup\CastleBootstrapper.cs" />
     <Compile Include="Startup\MefBootstrapper.cs" />
     <Compile Include="UserSettingConstants.cs" />
@@ -231,6 +232,10 @@
     <Content Include="defaultsettings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Views\Images\arrow_down.png" />
+    <Resource Include="Views\Images\arrow_left.png" />
+    <Resource Include="Views\Images\arrow_right.png" />
+    <Resource Include="Views\Images\arrow_up.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Views\Images\ActivityWindow.png" />
