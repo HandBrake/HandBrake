@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Runtime.InteropServices;
+
 namespace HandBrake.Interop
 {
 	using System;
@@ -114,66 +116,6 @@ namespace HandBrake.Interop
 		}
 
 		/// <summary>
-		/// Gets the default mixdown for the given audio encoder and channel layout.
-		/// </summary>
-		/// <param name="encoder">The output codec to be used.</param>
-		/// <param name="layout">The input channel layout.</param>
-		/// <returns>The default mixdown for the given codec and channel layout.</returns>
-		public static Mixdown GetDefaultMixdown(AudioEncoder encoder, int layout)
-		{
-			int defaultMixdown = HBFunctions.hb_get_default_mixdown(Converters.AudioEncoderToNative(encoder), layout);
-			return Converters.NativeToMixdown(defaultMixdown);
-		}
-
-		/// <summary>
-		/// Gets the bitrate limits for the given audio codec, sample rate and mixdown.
-		/// </summary>
-		/// <param name="encoder">The audio encoder used.</param>
-		/// <param name="sampleRate">The sample rate used (Hz).</param>
-		/// <param name="mixdown">The mixdown used.</param>
-		/// <returns>Limits on the audio bitrate for the given settings.</returns>
-		public static Limits GetBitrateLimits(AudioEncoder encoder, int sampleRate, Mixdown mixdown)
-		{
-			if (mixdown == Mixdown.Auto)
-			{
-				throw new ArgumentException("Mixdown cannot be Auto.");			
-			}
-
-			int low = 0;
-			int high = 0;
-
-			HBFunctions.hb_get_audio_bitrate_limits(Converters.AudioEncoderToNative(encoder), sampleRate, Converters.MixdownToNative(mixdown), ref low, ref high);
-
-			return new Limits { Low = low, High = high };
-		}
-
-		/// <summary>
-		/// Sanitizes a mixdown given the output codec and input channel layout.
-		/// </summary>
-		/// <param name="mixdown">The desired mixdown.</param>
-		/// <param name="encoder">The output encoder to be used.</param>
-		/// <param name="layout">The input channel layout.</param>
-		/// <returns>A sanitized mixdown value.</returns>
-		public static Mixdown SanitizeMixdown(Mixdown mixdown, AudioEncoder encoder, int layout)
-		{
-			int sanitizedMixdown = HBFunctions.hb_get_best_mixdown(Converters.AudioEncoderToNative(encoder), layout, Converters.MixdownToNative(mixdown));
-			return Converters.NativeToMixdown(sanitizedMixdown);
-		}
-
-		/// <summary>
-		/// Sanitizes an audio bitrate given the output codec, sample rate and mixdown.
-		/// </summary>
-		/// <param name="audioBitrate">The desired audio bitrate.</param>
-		/// <param name="encoder">The output encoder to be used.</param>
-		/// <param name="sampleRate">The output sample rate to be used.</param>
-		/// <param name="mixdown">The mixdown to be used.</param>
-		/// <returns>A sanitized audio bitrate.</returns>
-		public static int SanitizeAudioBitrate(int audioBitrate, AudioEncoder encoder, int sampleRate, Mixdown mixdown)
-		{
-			return HBFunctions.hb_get_best_audio_bitrate(Converters.AudioEncoderToNative(encoder), audioBitrate, sampleRate, Converters.MixdownToNative(mixdown));
-		}
-
-		/// <summary>
 		/// Gets the total number of seconds on the given encode job.
 		/// </summary>
 		/// <param name="job">The encode job to query.</param>
@@ -203,31 +145,31 @@ namespace HandBrake.Interop
 		/// <summary>
 		/// Gets the number of audio samples used per frame for the given audio encoder.
 		/// </summary>
-		/// <param name="encoder">The encoder to query.</param>
+		/// <param name="encoderName">The encoder to query.</param>
 		/// <returns>The number of audio samples used per frame for the given
 		/// audio encoder.</returns>
-		internal static int GetAudioSamplesPerFrame(AudioEncoder encoder)
+		internal static int GetAudioSamplesPerFrame(string encoderName)
 		{
-			switch (encoder)
+			switch (encoderName)
 			{
-				case AudioEncoder.Faac:
-				case AudioEncoder.ffaac:
-				case AudioEncoder.AacPassthru:
-				case AudioEncoder.Vorbis:
+				case "faac":
+				case "ffaac":
+				case "copy:aac":
+				case "vorbis":
 					return 1024;
-				case AudioEncoder.Lame:
-				case AudioEncoder.Mp3Passthru:
+				case "lame":
+				case "copy:mp3":
 					return 1152;
-				case AudioEncoder.Ac3:
-				case AudioEncoder.Passthrough:
-				case AudioEncoder.Ac3Passthrough:
-				case AudioEncoder.DtsPassthrough:
-				case AudioEncoder.DtsHDPassthrough:
+				case "ffac3":
+				case "copy":
+				case "copy:ac3":
+				case "copy:dts":
+				case "copy:dtshd":
 					return 1536;
 			}
 
-			System.Diagnostics.Debug.Assert(true, "Audio encoder unrecognized.");
-			return 0;
+			// Unknown encoder; make a guess.
+			return 1536;
 		}
 
 		/// <summary>
@@ -250,15 +192,35 @@ namespace HandBrake.Interop
 				int samplesPerFrame = HandBrakeUtils.GetAudioSamplesPerFrame(encoding.Encoder);
 				int audioBitrate;
 
-				if (Utilities.IsPassthrough(encoding.Encoder))
+				HBAudioEncoder audioEncoder = Encoders.GetAudioEncoder(encoding.Encoder);
+
+				if (audioEncoder.IsPassthrough)
 				{
 					// Input bitrate is in bits/second.
 					audioBitrate = track.Bitrate / 8;
 				}
+				else if (encoding.EncodeRateType == AudioEncodeRateType.Quality)
+				{
+					// Can't predict size of quality targeted audio encoding.
+					audioBitrate = 0;
+				}
 				else
 				{
+					int outputBitrate;
+					if (encoding.Bitrate > 0)
+					{
+						outputBitrate = encoding.Bitrate;
+					}
+					else
+					{
+						outputBitrate = Encoders.GetDefaultBitrate(
+							audioEncoder,
+							encoding.SampleRateRaw == 0 ? track.SampleRate : encoding.SampleRateRaw,
+							Encoders.SanitizeMixdown(Encoders.GetMixdown(encoding.Mixdown), audioEncoder, track.ChannelLayout));
+					}
+
 					// Output bitrate is in kbps.
-					audioBitrate = encoding.Bitrate * 1000 / 8;
+					audioBitrate = outputBitrate * 1000 / 8;
 				}
 
 				audioBytes += (long)(lengthSeconds * audioBitrate);

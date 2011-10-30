@@ -65,9 +65,9 @@ namespace HandBrake.ApplicationServices.Functions
                         Bitrate = track.Bitrate,
                         Drc = track.DRC,
                         Gain = track.Gain,
-                        Encoder = track.Encoder,
+                        Encoder = Converters.GetCliAudioEncoder(track.Encoder),
                         InputNumber = track.Track.HasValue ? track.Track.Value : 0,
-                        Mixdown = track.MixDown,
+                        Mixdown = Converters.GetCliMixDown(track.MixDown),
                         SampleRateRaw = GetSampleRateRaw(track.SampleRate),         
                     };
 
@@ -113,10 +113,10 @@ namespace HandBrake.ApplicationServices.Functions
             {
                 case OutputFormat.Mp4:
                 case OutputFormat.M4V:
-                    profile.OutputFormat = Interop.Model.Encoding.OutputFormat.Mp4;
+                    profile.OutputFormat = Container.Mp4;
                     break;
                 case OutputFormat.Mkv:
-                    profile.OutputFormat = Interop.Model.Encoding.OutputFormat.Mkv;
+                    profile.OutputFormat = Container.Mkv;
                     break;
             }
             profile.PeakFramerate = work.FramerateMode == FramerateMode.PFR;
@@ -136,7 +136,7 @@ namespace HandBrake.ApplicationServices.Functions
             profile.UseDisplayWidth = true;
             profile.VideoBitrate = work.VideoBitrate.HasValue ? work.VideoBitrate.Value : 0;
             profile.VideoEncodeRateType = work.VideoEncodeRateType;
-            profile.VideoEncoder = work.VideoEncoder;
+            profile.VideoEncoder = Converters.GetVideoEncoder(work.VideoEncoder);
             profile.Width = work.Width.HasValue ? work.Width.Value : 0;
             profile.X264Options = work.AdvancedEncoderOptions;
 

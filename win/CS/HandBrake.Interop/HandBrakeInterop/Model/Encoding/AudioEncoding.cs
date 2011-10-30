@@ -17,6 +17,15 @@ namespace HandBrake.Interop.Model.Encoding
 	public class AudioEncoding
 	{
 		/// <summary>
+		/// Initializes a new instance of the AudioEncoding class.
+		/// </summary>
+		public AudioEncoding()
+		{
+			// Initialize to -1 to differentiate a compression of 0 from uninitialized.
+			this.Compression = -1;
+		}
+
+		/// <summary>
 		/// Gets or sets the chosen track to apply the encoding to.
 		/// </summary>
 		/// <remarks>1-based index. 0 means apply to all tracks.</remarks>
@@ -25,7 +34,12 @@ namespace HandBrake.Interop.Model.Encoding
 		/// <summary>
 		/// Gets or sets the encoder to use.
 		/// </summary>
-		public AudioEncoder Encoder { get; set; }
+		public string Encoder { get; set; }
+
+		/// <summary>
+		/// Gets or sets the encode rate type (bitrate or quality).
+		/// </summary>
+		public AudioEncodeRateType EncodeRateType { get; set; }
 
 		/// <summary>
 		/// Gets or sets the bitrate (in kbps) of this track.
@@ -33,9 +47,19 @@ namespace HandBrake.Interop.Model.Encoding
 		public int Bitrate { get; set; }
 
 		/// <summary>
+		/// Gets or sets the target audio quality for this track.
+		/// </summary>
+		public float Quality { get; set; }
+
+		/// <summary>
+		/// Gets or sets the target audio compression for this track.
+		/// </summary>
+		public float Compression { get; set; }
+
+		/// <summary>
 		/// Gets or sets the mixdown.
 		/// </summary>
-		public Mixdown Mixdown { get; set; }
+		public string Mixdown { get; set; }
 
 		/// <summary>
 		/// Gets or sets the sample rate. Obsolete. Use SampleRateRaw instead.
