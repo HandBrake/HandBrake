@@ -675,6 +675,40 @@ namespace HandBrakeWPF.ViewModels
         #region Audio and Subtitles
 
         /// <summary>
+        /// Gets or sets preferredLanguages.
+        /// </summary>
+        public BindingList<string> PreferredLanguages
+        {
+            get
+            {
+                return this.preferredLanguages;
+            }
+
+            set
+            {
+                this.preferredLanguages = value;
+                this.NotifyOfPropertyChange("preferredLanguages");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets SelectedPreferreedLangauge.
+        /// </summary>
+        public string SelectedPreferredLangauge
+        {
+            get
+            {
+                return this.selectedPreferredLangauge;
+            }
+
+            set
+            {
+                this.selectedPreferredLangauge = value;
+                this.NotifyOfPropertyChange("SelectedPreferreedLangauge");
+            }
+        }
+
+        /// <summary>
         /// Gets or sets AvailableLanguages.
         /// </summary>
         public BindingList<string> AvailableLanguages
@@ -690,6 +724,32 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange("AvailableLanguages");
             }
         }
+
+        /// <summary>
+        /// Gets or sets SelectedLangauges.
+        /// </summary>
+        public BindingList<string> SelectedLangauges
+        {
+            get
+            {
+                return this.selectedLangauges;
+            }
+            set
+            {
+                this.selectedLangauges = value;
+                this.NotifyOfPropertyChange("SelectedLangauges");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets SelectedLangauges.
+        /// </summary>
+        public BindingList<string> SelectedAvailableToMove { get; set; }
+
+        /// <summary>
+        /// Gets or sets SelectedLangauges.
+        /// </summary>
+        public BindingList<string> SelectedLangaugesToMove { get; set; }
 
         /// <summary>
         /// Gets or sets AddAudioModeOptions.
@@ -793,55 +853,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets preferredLanguages.
-        /// </summary>
-        public BindingList<string> PreferredLanguages
-        {
-            get
-            {
-                return this.preferredLanguages;
-            }
-
-            set
-            {
-                this.preferredLanguages = value;
-                this.NotifyOfPropertyChange("preferredLanguages");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets SelectedLangauges.
-        /// </summary>
-        public BindingList<string> SelectedLangauges
-        {
-            get
-            {
-                return this.selectedLangauges;
-            }
-            set
-            {
-                this.selectedLangauges = value;
-                this.NotifyOfPropertyChange("SelectedLangauges");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets SelectedPreferreedLangauge.
-        /// </summary>
-        public string SelectedPreferredLangauge
-        {
-            get
-            {
-                return this.selectedPreferredLangauge;
-            }
-
-            set
-            {
-                this.selectedPreferredLangauge = value;
-                this.NotifyOfPropertyChange("SelectedPreferreedLangauge");
-            }
-        }
         #endregion
 
         #region System and Logging
@@ -1297,6 +1308,9 @@ namespace HandBrakeWPF.ViewModels
             // Audio and Subtitles Tab
             // #############################
 
+            this.SelectedAvailableToMove = new BindingList<string>();
+            this.SelectedLangaugesToMove = new BindingList<string>();
+
             IDictionary<string, string> langList = LanguageUtilities.MapLanguages();
 
             foreach (string selectedItem in this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages))
@@ -1447,7 +1461,15 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void LanguageMoveLeft()
         {
-            // TODO
+            if (this.AvailableLanguages.Count > 0)
+            {
+                List<string> copiedList = SelectedAvailableToMove.ToList();
+                foreach (string item in copiedList)
+                {
+                    this.AvailableLanguages.Remove(item);
+                    this.SelectedLangauges.Add(item);
+                }
+            }
         }
 
         /// <summary>
@@ -1455,7 +1477,15 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void LanguageMoveRight()
         {
-            // TODO
+            if (this.SelectedLangauges.Count > 0)
+            {
+                List<string> copiedList = SelectedLangaugesToMove.ToList();
+                foreach (string item in copiedList)
+                {
+                    this.SelectedLangauges.Remove(item);
+                    this.AvailableLanguages.Add(item);
+                }
+            }
         }
 
         /// <summary>
@@ -1463,6 +1493,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void LanguageClearAll()
         {
+            foreach (string item in this.SelectedLangauges)
+            {
+                this.AvailableLanguages.Add(item);
+            }
+
             this.SelectedLangauges.Clear();
         }
 
@@ -1471,7 +1506,19 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void LanguageMoveUp()
         {
-            // TODO
+            List<string> langauges = this.SelectedLangauges.ToList();
+            foreach (string item in langauges)
+            {
+                if (this.SelectedLangaugesToMove.Contains(item))
+                {
+                    int index = this.SelectedLangauges.IndexOf(item);
+                    if (index != 0)
+                    {
+                        this.SelectedLangauges.Remove(item);
+                        this.SelectedLangauges.Insert(index - 1, item);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -1479,7 +1526,20 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void LanguageMoveDown()
         {
-            // TODO
+            List<string> langauges = this.SelectedLangauges.ToList();
+            int count = this.SelectedLangauges.Count;
+            foreach (string item in langauges)
+            {
+                if (this.SelectedLangaugesToMove.Contains(item))
+                {
+                    int index = this.SelectedLangauges.IndexOf(item);
+                    if ((index + 1) != count)
+                    {
+                        this.SelectedLangauges.Remove(item);
+                        this.SelectedLangauges.Insert(index + 1, item);
+                    }
+                }
+            }
         }
 
         /// <summary>

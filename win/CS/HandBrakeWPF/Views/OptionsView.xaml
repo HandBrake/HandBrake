@@ -1,7 +1,7 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.OptionsView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:cal="http://www.caliburnproject.org"
-        Title="OptionsView" MinWidth="620" MinHeight="550" Width="620" Height="550">
+        xmlns:Helpers="clr-namespace:HandBrakeWPF.Helpers" Title="OptionsView" MinWidth="620" MinHeight="550" Width="620" Height="550">
 
     <Window.Resources>
         <Style TargetType="Button">
@@ -186,26 +186,36 @@
 
                                 <StackPanel Orientation="Vertical" Grid.Column="0">
                                     <TextBlock Text="Available Langauges" Margin="0,0,0,5"/>
-                                    <ListBox Name="availableLanguages" ItemsSource="{Binding AvailableLanguages}" SelectionMode="Multiple" Height="140"></ListBox>
+                                    <ListBox Name="availableLanguages" ItemsSource="{Binding AvailableLanguages}" Helpers:ListBoxHelper.SelectedItems="{Binding SelectedAvailableToMove}" 
+                                             SelectionMode="Extended" Width="140" Height="160"></ListBox>
                                 </StackPanel>
 
                                 <DockPanel Grid.Column="1" Margin="10,0,10,0">
                                     <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                        <Button Content="Move Left" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveLeft]" Width="60" />
-                                        <Button Content="Move Right" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveRight]" Width="60" />
+                                        <Button VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveLeft]" Width="60" >
+                                            <Image Source="Images/arrow_right.png" Width="24" Height="24" />
+                                        </Button>
+                                        <Button VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveRight]" Width="60" >
+                                            <Image Source="Images/arrow_left.png" Width="24" Height="24" />
+                                        </Button>
                                         <Button Content="Clear" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageClearAll]" Width="60" />
                                     </StackPanel>
                                 </DockPanel>
 
                                 <StackPanel Orientation="Vertical" Grid.Column="2">
                                     <TextBlock Text="Selected Langauges"  Margin="0,0,0,5"/>
-                                    <ListBox Name="selectedLangauges" ItemsSource="{Binding SelectedLangauges}" SelectionMode="Multiple" Height="140" />
+                                    <ListBox Name="selectedLangauges" ItemsSource="{Binding SelectedLangauges}" Helpers:ListBoxHelper.SelectedItems="{Binding SelectedLangaugesToMove}" 
+                                             SelectionMode="Extended" Width="140" Height="160" />
                                 </StackPanel>
 
                                 <DockPanel Grid.Column="3" Margin="10,0,10,0">
                                     <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                        <Button Content="Move Up" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveUp]" Width="60" />
-                                        <Button Content="Move Down" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveDown]" Width="60" />
+                                        <Button VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveUp]"  >
+                                            <Image Source="Images/arrow_up.png" Width="16" Height="16" />
+                                        </Button>
+                                        <Button VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveDown]"  >
+                                            <Image Source="Images/arrow_down.png" Width="16" Height="16" />
+                                        </Button>
                                     </StackPanel>
                                 </DockPanel>
 
