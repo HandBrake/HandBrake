@@ -78,6 +78,8 @@ namespace HandBrake.Interop.HbLib
 		/// double
 		public double container_aspect;
 
+		public int has_resolution_change;
+
 		/// int
 		public int width;
 

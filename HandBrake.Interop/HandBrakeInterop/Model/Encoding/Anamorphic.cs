@@ -9,9 +9,9 @@
 
 namespace HandBrake.Interop.Model.Encoding
 {
-    using System.ComponentModel.DataAnnotations;
+	using System.ComponentModel.DataAnnotations;
 
-    public enum Anamorphic
+	public enum Anamorphic
 	{
 		[Display(Name = "None")]
 		None = 0,

@@ -25,6 +25,11 @@ namespace HandBrake.Interop.SourceData
 		public AudioCodec Codec { get; set; }
 
 		/// <summary>
+		/// Gets or sets the audio codec ID for this track.
+		/// </summary>
+		public uint CodecId { get; set; }
+
+		/// <summary>
 		/// Gets or sets the language (if detected) of this Audio Track
 		/// </summary>
 		public string Language { get; set; }

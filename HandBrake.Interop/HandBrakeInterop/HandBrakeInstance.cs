@@ -102,6 +102,14 @@ namespace HandBrake.Interop
 		private List<IntPtr> encodeAllocatedMemory;
 
 		/// <summary>
+		/// Finalizes an instance of the HandBrakeInstance class.
+		/// </summary>
+		~HandBrakeInstance()
+		{
+			this.Dispose(false);
+		}
+
+		/// <summary>
 		/// Fires for progress updates when scanning.
 		/// </summary>
 		public event EventHandler<ScanProgressEventArgs> ScanProgress;
@@ -120,14 +128,6 @@ namespace HandBrake.Interop
 		/// Fires when an encode has completed.
 		/// </summary>
 		public event EventHandler<EncodeCompletedEventArgs> EncodeCompleted;
-
-		/// <summary>
-		/// Finalizes an instance of the HandBrakeInstance class.
-		/// </summary>
-		~HandBrakeInstance()
-		{
-			this.Dispose(false);
-		}
 
 		/// <summary>
 		/// Gets the list of titles on this instance.
@@ -160,6 +160,14 @@ namespace HandBrake.Interop
 			{
 				return this.featureTitle;
 			}
+		}
+
+		/// <summary>
+		/// Call before app shutdown. Performs global cleanup.
+		/// </summary>
+		public static void DisposeGlobal()
+		{
+			HBFunctions.hb_global_close();
 		}
 
 		/// <summary>
@@ -601,14 +609,6 @@ namespace HandBrake.Interop
 		}
 
 		/// <summary>
-		/// Call before app shutdown. Performs global cleanup.
-		/// </summary>
-		public static void DisposeGlobal()
-		{
-			HBFunctions.hb_global_close();
-		}
-
-		/// <summary>
 		/// Frees any resources associated with this object.
 		/// </summary>
 		/// <param name="disposing">True if managed objects as well as unmanaged should be disposed.</param>
@@ -624,6 +624,100 @@ namespace HandBrake.Interop
 			Marshal.WriteIntPtr(handlePtr, this.hbHandle);
 			HBFunctions.hb_close(handlePtr);
 			Marshal.FreeHGlobal(handlePtr);
+		}
+
+		/// <summary>
+		/// Calculates the output size for a non-anamorphic job.
+		/// </summary>
+		/// <param name="profile">The encoding profile for the job.</param>
+		/// <param name="title">The title being encoded.</param>
+		/// <returns>The dimensions of the final encode.</returns>
+		private static Size CalculateNonAnamorphicOutput(EncodingProfile profile, Title title)
+		{
+			int sourceWidth = title.Resolution.Width;
+			int sourceHeight = title.Resolution.Height;
+
+			int width = profile.Width;
+			int height = profile.Height;
+
+			Cropping crop;
+			if (profile.CustomCropping)
+			{
+				crop = profile.Cropping;
+			}
+			else
+			{
+				crop = title.AutoCropDimensions;
+			}
+
+			sourceWidth -= crop.Left;
+			sourceWidth -= crop.Right;
+
+			sourceHeight -= crop.Top;
+			sourceHeight -= crop.Bottom;
+
+			double croppedAspectRatio = ((double)sourceWidth * title.ParVal.Width) / (sourceHeight * title.ParVal.Height);
+
+			if (width == 0)
+			{
+				width = sourceWidth;
+			}
+
+			if (profile.MaxWidth > 0 && width > profile.MaxWidth)
+			{
+				width = profile.MaxWidth;
+			}
+
+			if (height == 0)
+			{
+				height = sourceHeight;
+			}
+
+			if (profile.MaxHeight > 0 && height > profile.MaxHeight)
+			{
+				height = profile.MaxHeight;
+			}
+
+			if (profile.KeepDisplayAspect)
+			{
+				if ((profile.Width == 0 && profile.Height == 0) || profile.Width == 0)
+				{
+					width = (int)((double)height * croppedAspectRatio);
+					if (profile.MaxWidth > 0 && width > profile.MaxWidth)
+					{
+						width = profile.MaxWidth;
+						height = (int)((double)width / croppedAspectRatio);
+						height = GetNearestValue(height, PictureAutoSizeModulus);
+					}
+
+					width = GetNearestValue(width, PictureAutoSizeModulus);
+				}
+				else if (profile.Height == 0)
+				{
+					height = (int)((double)width / croppedAspectRatio);
+					if (profile.MaxHeight > 0 && height > profile.MaxHeight)
+					{
+						height = profile.MaxHeight;
+						width = (int)((double)height * croppedAspectRatio);
+						width = GetNearestValue(width, PictureAutoSizeModulus);
+					}
+
+					height = GetNearestValue(height, PictureAutoSizeModulus);
+				}
+			}
+
+			return new Size(width, height);
+		}
+
+		/// <summary>
+		/// Gets the closest value to the given number divisible by the given modulus.
+		/// </summary>
+		/// <param name="number">The number to approximate.</param>
+		/// <param name="modulus">The modulus.</param>
+		/// <returns>The closest value to the given number divisible by the given modulus.</returns>
+		private static int GetNearestValue(int number, int modulus)
+		{
+			return modulus * ((number + modulus / 2) / modulus);
 		}
 
 		/// <summary>
@@ -1043,6 +1137,7 @@ namespace HandBrake.Interop
 						nativeJob.anamorphic.par_height = profile.PixelAspectY;
 						nativeJob.anamorphic.keep_display_aspect = 0;
 					}
+
 					break;
 				default:
 					break;
@@ -1054,20 +1149,13 @@ namespace HandBrake.Interop
 			nativeJob.maxWidth = profile.MaxWidth;
 			nativeJob.maxHeight = profile.MaxHeight;
 
-			switch (profile.VideoEncoder)
+			HBVideoEncoder videoEncoder = Encoders.VideoEncoders.FirstOrDefault(e => e.ShortName == profile.VideoEncoder);
+			if (videoEncoder == null)
 			{
-				case VideoEncoder.X264:
-					nativeJob.vcodec = NativeConstants.HB_VCODEC_X264;
-					break;
-				case VideoEncoder.Theora:
-					nativeJob.vcodec = NativeConstants.HB_VCODEC_THEORA;
-					break;
-				case VideoEncoder.FFMpeg:
-					nativeJob.vcodec = NativeConstants.HB_VCODEC_FFMPEG;
-					break;
-				default:
-					break;
+				throw new ArgumentException("Video encoder " + profile.VideoEncoder + " not recognized.");
 			}
+
+			nativeJob.vcodec = videoEncoder.Id;
 
 			if (profile.Framerate == 0)
 			{
@@ -1097,12 +1185,17 @@ namespace HandBrake.Interop
 			int numTracks = 0;
 
 			List<Tuple<AudioEncoding, int>> outputTrackList = this.GetOutputTracks(job, title);
-			nativeJob.acodec_fallback = (int)Converters.AudioEncoderToNative(profile.AudioEncoderFallback);
+
+			if (profile.AudioEncoderFallback != null)
+			{
+				nativeJob.acodec_fallback = Encoders.GetAudioEncoder(profile.AudioEncoderFallback).Id;
+			}
+
 			nativeJob.acodec_copy_mask = (int)NativeConstants.HB_ACODEC_ANY;
 
 			foreach (Tuple<AudioEncoding, int> outputTrack in outputTrackList)
 			{
-				audioList.Add(ConvertAudioBack(outputTrack.Item1, titleAudio[outputTrack.Item2 - 1], numTracks++, allocatedMemory));
+				audioList.Add(this.ConvertAudioBack(outputTrack.Item1, titleAudio[outputTrack.Item2 - 1], numTracks++, allocatedMemory));
 			}
 
 			NativeList nativeAudioList = InteropUtilities.ConvertListBack<hb_audio_s>(audioList);
@@ -1197,7 +1290,7 @@ namespace HandBrake.Interop
 				}
 			}
 
-			if (profile.OutputFormat == OutputFormat.Mp4)
+			if (profile.OutputFormat == Container.Mp4)
 			{
 				nativeJob.mux = NativeConstants.HB_MUX_MP4;
 			}
@@ -1339,25 +1432,13 @@ namespace HandBrake.Interop
 		private hb_audio_s ConvertAudioBack(AudioEncoding encoding, hb_audio_s baseStruct, int outputTrack, List<IntPtr> allocatedMemory)
 		{
 			hb_audio_s nativeAudio = baseStruct;
+			HBAudioEncoder encoder = Encoders.GetAudioEncoder(encoding.Encoder);
 
 			nativeAudio.config.output.track = outputTrack;
-			nativeAudio.config.output.codec = Converters.AudioEncoderToNative(encoding.Encoder);
+			nativeAudio.config.output.codec = (uint)encoder.Id;
 
-			if (!Utilities.IsPassthrough(encoding.Encoder))
+			if (!encoder.IsPassthrough)
 			{
-				nativeAudio.config.output.bitrate = encoding.Bitrate;
-				nativeAudio.config.output.dynamic_range_compression = encoding.Drc;
-				nativeAudio.config.output.gain = encoding.Gain;
-
-				if (encoding.Mixdown == Mixdown.Auto)
-				{
-					nativeAudio.config.output.mixdown = HBFunctions.hb_get_default_mixdown(nativeAudio.config.output.codec, nativeAudio.config.input.channel_layout);
-				}
-				else
-				{
-					nativeAudio.config.output.mixdown = Converters.MixdownToNative(encoding.Mixdown);
-				}
-
 				if (encoding.SampleRateRaw == 0)
 				{
 					nativeAudio.config.output.samplerate = nativeAudio.config.input.samplerate;
@@ -1366,6 +1447,43 @@ namespace HandBrake.Interop
 				{
 					nativeAudio.config.output.samplerate = encoding.SampleRateRaw;
 				}
+
+				HBMixdown mixdown = Encoders.GetMixdown(encoding.Mixdown);
+				nativeAudio.config.output.mixdown = mixdown.Id;
+
+				if (encoding.EncodeRateType == AudioEncodeRateType.Bitrate)
+				{
+					// Disable quality targeting.
+					nativeAudio.config.output.quality = -1;
+
+					if (encoding.Bitrate == 0)
+					{
+						// Bitrate of 0 means auto: choose the default for this codec, sample rate and mixdown.
+						nativeAudio.config.output.bitrate = HBFunctions.hb_get_default_audio_bitrate(
+							nativeAudio.config.output.codec,
+							nativeAudio.config.output.samplerate,
+							nativeAudio.config.output.mixdown);
+					}
+					else
+					{
+						nativeAudio.config.output.bitrate = encoding.Bitrate;
+					}
+				}
+				else if (encoding.EncodeRateType == AudioEncodeRateType.Quality)
+				{
+					// Bitrate of -1 signals quality targeting.
+					nativeAudio.config.output.bitrate = -1;
+					nativeAudio.config.output.quality = encoding.Quality;
+				}
+
+				// If this encoder supports compression level, pass it in.
+				if (encoder.SupportsCompression)
+				{
+					nativeAudio.config.output.compression_level = encoding.Compression;
+				}
+
+				nativeAudio.config.output.dynamic_range_compression = encoding.Drc;
+				nativeAudio.config.output.gain = encoding.Gain;
 			}
 
 			if (!string.IsNullOrEmpty(encoding.Name))
@@ -1479,6 +1597,7 @@ namespace HandBrake.Interop
 				{
 					TrackNumber = currentAudioTrack,
 					Codec = Converters.NativeToAudioCodec(audio.config.input.codec),
+					CodecId = audio.config.input.codec,
 					Language = audio.config.lang.simple,
 					LanguageCode = audio.config.lang.iso639_2,
 					Description = audio.config.lang.description,
@@ -1505,100 +1624,6 @@ namespace HandBrake.Interop
 			}
 
 			return newTitle;
-		}
-
-		/// <summary>
-		/// Calculates the output size for a non-anamorphic job.
-		/// </summary>
-		/// <param name="profile">The encoding profile for the job.</param>
-		/// <param name="title">The title being encoded.</param>
-		/// <returns>The dimensions of the final encode.</returns>
-		private static Size CalculateNonAnamorphicOutput(EncodingProfile profile, Title title)
-		{
-			int sourceWidth = title.Resolution.Width;
-			int sourceHeight = title.Resolution.Height;
-
-			int width = profile.Width;
-			int height = profile.Height;
-
-			Cropping crop;
-			if (profile.CustomCropping)
-			{
-				crop = profile.Cropping;
-			}
-			else
-			{
-				crop = title.AutoCropDimensions;
-			}
-
-			sourceWidth -= crop.Left;
-			sourceWidth -= crop.Right;
-
-			sourceHeight -= crop.Top;
-			sourceHeight -= crop.Bottom;
-
-			double croppedAspectRatio = ((double)sourceWidth * title.ParVal.Width) / (sourceHeight * title.ParVal.Height);
-
-			if (width == 0)
-			{
-				width = sourceWidth;
-			}
-
-			if (profile.MaxWidth > 0 && width > profile.MaxWidth)
-			{
-				width = profile.MaxWidth;
-			}
-
-			if (height == 0)
-			{
-				height = sourceHeight;
-			}
-
-			if (profile.MaxHeight > 0 && height > profile.MaxHeight)
-			{
-				height = profile.MaxHeight;
-			}
-
-			if (profile.KeepDisplayAspect)
-			{
-				if ((profile.Width == 0 && profile.Height == 0) || profile.Width == 0)
-				{
-					width = (int)((double)height * croppedAspectRatio);
-					if (profile.MaxWidth > 0 && width > profile.MaxWidth)
-					{
-						width = profile.MaxWidth;
-						height = (int)((double)width / croppedAspectRatio);
-						height = GetNearestValue(height, PictureAutoSizeModulus);
-					}
-
-					width = GetNearestValue(width, PictureAutoSizeModulus);
-				}
-				else if (profile.Height == 0)
-				{
-					height = (int)((double)width / croppedAspectRatio);
-					if (profile.MaxHeight > 0 && height > profile.MaxHeight)
-					{
-						height = profile.MaxHeight;
-						width = (int)((double)height * croppedAspectRatio);
-						width = GetNearestValue(width, PictureAutoSizeModulus);
-					}
-
-					height = GetNearestValue(height, PictureAutoSizeModulus);
-				}
-			}
-
-			return new Size(width, height);
-		}
-
-		/// <summary>
-		/// Gets the closest value to the given number divisible by the given modulus.
-		/// </summary>
-		/// <param name="number">The number to approximate.</param>
-		/// <param name="modulus">The modulus.</param>
-		/// <returns>The closest value to the given number divisible by the given modulus.</returns>
-		private static int GetNearestValue(int number, int modulus)
-		{
-			return modulus * ((number + modulus / 2) / modulus);
 		}
 	}
 }

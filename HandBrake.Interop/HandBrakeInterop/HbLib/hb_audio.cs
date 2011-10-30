@@ -10,10 +10,10 @@
 
 namespace HandBrake.Interop.HbLib
 {
-    using System;
-    using System.Runtime.InteropServices;
+	using System;
+	using System.Runtime.InteropServices;
 
-    [StructLayout(LayoutKind.Sequential)]
+	[StructLayout(LayoutKind.Sequential)]
 	public struct hb_audio_s
 	{
 		/// int
@@ -58,6 +58,10 @@ namespace HandBrake.Interop.HbLib
 
 		/// int
 		public int bitrate;
+
+		public float quality;
+
+		public float compression_level;
 
 		/// int
 		public int mixdown;

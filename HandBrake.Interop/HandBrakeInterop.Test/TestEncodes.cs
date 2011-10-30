@@ -54,7 +54,7 @@ namespace HandBrakeInterop.Test
 			}
 
 			string extension;
-			if (job.EncodingProfile.OutputFormat == OutputFormat.Mkv)
+			if (job.EncodingProfile.OutputFormat == Container.Mkv)
 			{
 				extension = ".mkv";
 			}

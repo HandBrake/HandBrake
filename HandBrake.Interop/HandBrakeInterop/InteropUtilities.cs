@@ -15,7 +15,7 @@ namespace HandBrake.Interop
 
 	using HandBrake.Interop.HbLib;
 
-    /// <summary>
+	/// <summary>
 	/// Helper utilities for native interop.
 	/// </summary>
 	public static class InteropUtilities
@@ -50,6 +50,29 @@ namespace HandBrake.Interop
 
 			return returnList;
 		}
+
+		/// <summary>
+		/// Converts the given native array to a managed collection.
+		/// </summary>
+		/// <typeparam name="T">The type of item in the list.</typeparam>
+		/// <param name="arrayPtr">The pointer to the array.</param>
+		/// <param name="count">The number of items in the array.</param>
+		/// <returns>The converted collection.</returns>
+		public static IEnumerable<T> ConvertArray<T>(IntPtr arrayPtr, int count)
+		{
+			IntPtr currentItem = arrayPtr;
+
+			var result = new List<T>();
+			for (int i = 0; i < count; i++)
+			{
+				T nativeEncoder = ReadStructure<T>(currentItem);
+				result.Add(nativeEncoder);
+
+				currentItem = IntPtr.Add(currentItem, Marshal.SizeOf(typeof(T)));
+			}
+
+			return result;
+		} 
 
 		/// <summary>
 		/// Creats a new, empty native HandBrake list.

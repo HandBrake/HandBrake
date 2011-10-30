@@ -62,6 +62,39 @@ namespace HandBrake.Interop.HbLib
 		public int rate;
 	}
 
+	[StructLayout(LayoutKind.Sequential)]
+	public struct hb_mixdown_s
+	{
+		/// char*
+		[MarshalAs(UnmanagedType.LPStr)]
+		public string human_readable_name;
+
+		/// char*
+		[MarshalAs(UnmanagedType.LPStr)]
+		public string internal_name;
+
+		/// char*
+		[MarshalAs(UnmanagedType.LPStr)]
+		public string short_name;
+
+		/// int
+		public int amixdown;
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct hb_encoder_s
+	{
+		[MarshalAs(UnmanagedType.LPStr)]
+		public string human_readable_name;
+
+		[MarshalAs(UnmanagedType.LPStr)]
+		public string short_name;
+
+		public int encoder;
+
+		public int muxers;
+	}
+
 	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 	public struct hb_metadata_s
 	{
@@ -189,25 +222,6 @@ namespace HandBrake.Interop.HbLib
 		/// int
 		[FieldOffset(0)]
 		public int dca;
-	}
-
-	[StructLayout(LayoutKind.Sequential)]
-	public struct hb_mixdown_s
-	{
-		/// char*
-		[MarshalAs(UnmanagedType.LPStr)]
-		public string human_readable_name;
-
-		/// char*
-		[MarshalAs(UnmanagedType.LPStr)]
-		public string internal_name;
-
-		/// char*
-		[MarshalAs(UnmanagedType.LPStr)]
-		public string short_name;
-
-		/// int
-		public int amixdown;
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
