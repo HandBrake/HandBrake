@@ -3933,7 +3933,10 @@ ghb_set_scale_settings(GValue *settings, gint mode)
 		job->anamorphic.dar_height = 0;
 
 		if (keep_height && pic_par == 2)
+		{
 			width = ((double)height * crop_width / crop_height);
+			width = MOD_ROUND(width, mod);
+		}
 		job->width = width;
 		job->height = height;
 		job->maxWidth = max_width;
