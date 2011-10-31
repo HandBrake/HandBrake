@@ -407,7 +407,7 @@ void hb_display_job_info( hb_job_t * job )
                         hb_log( "   + encoder: %s", hb_audio_encoders[j].human_readable_name );
                         if( audio->config.out.bitrate > 0 )
                             hb_log( "     + bitrate: %d kbps, samplerate: %d Hz", audio->config.out.bitrate, audio->config.out.samplerate );
-                        else if( audio->config.out.quality >= 0 )
+                        else if( audio->config.out.quality != -1 )
                             hb_log( "     + quality: %.2f, samplerate: %d Hz", audio->config.out.quality, audio->config.out.samplerate );
                         else if( audio->config.out.samplerate > 0 )
                             hb_log( "     + samplerate: %d Hz", audio->config.out.samplerate );
@@ -706,7 +706,7 @@ static void do_job( hb_job_t * job )
         }
         
         /* sense-check the requested quality */
-        if( audio->config.out.quality >= 0 )
+        if( audio->config.out.quality != -1 )
         {
             float best_quality = hb_get_best_audio_quality( 
                     audio->config.out.codec, audio->config.out.quality );
@@ -728,7 +728,7 @@ static void do_job( hb_job_t * job )
         }
         
         /* sense-check the requested bitrate */
-        if( audio->config.out.quality < 0 )
+        if( audio->config.out.quality == -1 )
         {
             if( audio->config.out.bitrate <= 0 )
             {

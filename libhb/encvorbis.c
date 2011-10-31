@@ -82,17 +82,17 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
         {
             hb_error( "encvorbis: vorbis_encode_setup_managed failed.\n" );
             *job->die = 1;
-            return 0;
+            return -1;
         }
     }
-    else if( audio->config.out.quality >= 0 )
+    else if( audio->config.out.quality != -1 )
     {
         if( vorbis_encode_setup_vbr( &pv->vi, pv->out_discrete_channels,
               audio->config.out.samplerate, audio->config.out.quality ) )
         {
             hb_error( "encvorbis: vorbis_encode_setup_vbr failed.\n" );
             *job->die = 1;
-            return 0;
+            return -1;
         }
     }
 
@@ -101,7 +101,7 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
     {
         hb_error( "encvorbis: vorbis_encode_ctl( ratemanage2_set ) OR vorbis_encode_setup_init failed.\n" );
         *job->die = 1;
-        return 0;
+        return -1;
     }
 
     /* add a comment */
