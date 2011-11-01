@@ -2164,7 +2164,15 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 		}
 	}
 	if (count > 100) count = 100;
-	if (audio_track_opts.map) g_free(audio_track_opts.map);
+	if (audio_track_opts.map)
+	{
+		for (ii = 0; ii < audio_track_opts.count; ii++)
+		{
+			if (audio_track_opts.map[ii].option)
+				g_free(audio_track_opts.map[ii].option);
+		}
+		g_free(audio_track_opts.map);
+	}
 	if (count > 0)
 	{
 		audio_track_opts.count = count;
@@ -2186,7 +2194,7 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 						   3, -1.0, 
 						   4, "none", 
 						   -1);
-		audio_track_opts.map[0].option = "No Audio";
+		audio_track_opts.map[0].option = g_strdup("No Audio");
 		audio_track_opts.map[0].shortOpt = "none";
 		audio_track_opts.map[0].ivalue = -1;
 		audio_track_opts.map[0].svalue = "none";
@@ -2197,7 +2205,8 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 	{
         audio = (hb_audio_config_t *) hb_list_audio_config_item( title->list_audio, ii );
 		gtk_list_store_append(store, &iter);
-		str = g_strdup_printf("<small>%s</small>", audio->lang.description);
+		char *tmp = g_strdup_printf("%d - %s", ii + 1, audio->lang.description);
+		str = g_strdup_printf("<small>%s</small>", tmp);
 		gtk_list_store_set(store, &iter, 
 						   0, str,
 						   1, TRUE, 
@@ -2206,7 +2215,8 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 						   4, index_str[ii], 
 						   -1);
 		g_free(str);
-		audio_track_opts.map[ii].option = audio->lang.description,
+		audio_track_opts.map[ii].option = g_strdup(tmp);
+		g_free(tmp);
 		audio_track_opts.map[ii].shortOpt = index_str[ii];
 		audio_track_opts.map[ii].ivalue = ii;
 		audio_track_opts.map[ii].svalue = index_str[ii];
