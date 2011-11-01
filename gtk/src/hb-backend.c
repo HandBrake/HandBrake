@@ -39,7 +39,7 @@
 
 typedef struct
 {
-	const gchar *option;
+	gchar *option;
 	const gchar *shortOpt;
 	gdouble ivalue;
 	const gchar *svalue;
@@ -2221,6 +2221,8 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 		audio_track_opts.map[ii].ivalue = ii;
 		audio_track_opts.map[ii].svalue = index_str[ii];
 	}
+	GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
+	gtk_combo_box_set_active (combo, 0);
 }
 
 const gchar*
@@ -2330,7 +2332,7 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 			else
 				lang = ghb_language_table[ii].eng_name;
 
-			subtitle_opts.map[ii+1].option = lang;
+			subtitle_opts.map[ii+1].option = (gchar*)lang;
 			subtitle_opts.map[ii+1].shortOpt = index_str[ii];
 			subtitle_opts.map[ii+1].ivalue = ii;
 			subtitle_opts.map[ii+1].svalue = ghb_language_table[ii].iso639_2;
@@ -2344,6 +2346,8 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 					-1);
 		}
 	}
+	GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
+	gtk_combo_box_set_active (combo, 0);
 }
 
 gint
