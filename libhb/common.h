@@ -391,7 +391,7 @@ struct hb_job_s
 #define HB_AMIXDOWN_DISCRETE_CHANNEL_COUNT_MASK 0x0000000F
 /* define the HB_AMIXDOWN_XXXX values */
 #define HB_AMIXDOWN_NONE                        0x00000000
-#define HB_AMIXDOWN_MONO                        0x01000001
+#define HB_AMIXDOWN_MONO                        0x01000011
 // DCA_FORMAT of DCA_MONO                  = 0    = 0x000
 // A52_FORMAT of A52_MONO                  = 1    = 0x01
 // discrete channel count of 1
