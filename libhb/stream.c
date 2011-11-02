@@ -92,7 +92,7 @@ static const stream2codec_t st2codec[256] = {
     // BD E-AC3 Secondary audio
     st(0xa1, U, 0,                 0,              "E-AC3"),
     // BD DTS-HD Secondary audio
-    st(0xa2, U, 0,                 0,              "DTS-HD MA"),
+    st(0xa2, U, 0,                 0,              "DTS-HD LBR"),
 
     st(0xea, V, WORK_DECAVCODECV,  CODEC_ID_VC1,   "VC-1"),
 };
@@ -4022,7 +4022,12 @@ static void hb_ts_resolve_pid_types(hb_stream_t *stream)
             stream->pes.list[pes_idx].codec_param = CODEC_ID_EAC3;
             continue;
         }
-        if ( ( stype == 0x85 || stype == 0xa2 ) &&
+        // 0xa2 is DTS-HD LBR used in HD-DVD and bluray for
+        // secondary audio streams. Libav can not decode yet.
+        // Having it in the audio list causes delays during scan
+        // while we try to get stream parameters. So skip 
+        // this type for now.
+        if ( stype == 0x85 &&
              stream->reg_desc == STR4_TO_UINT32("HDMV") )
         {
             // DTS-HD HRA audio in bluray has an stype of 0x85
