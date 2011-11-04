@@ -11,9 +11,7 @@ namespace HandBrake.Interop.SourceData
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
 
-    using HandBrake.Interop;
     using HandBrake.Interop.Model;
 
     /// <summary>
@@ -21,7 +19,6 @@ namespace HandBrake.Interop.SourceData
 	/// </summary>
 	public class Title
 	{
-		private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
 		private readonly List<AudioTrack> audioTracks;
 		private readonly List<Chapter> chapters;
 		private readonly List<Subtitle> subtitles;

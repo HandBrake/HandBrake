@@ -1407,7 +1407,7 @@ namespace HandBrakeWPF.ViewModels
             this.ConstantQualityGranularity.Add("0.50");
             this.ConstantQualityGranularity.Add("0.25");
             this.ConstantQualityGranularity.Add("0.20");
-            this.selectedGranulairty = userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step).ToString("0.00", new CultureInfo("en-US"));
+            this.selectedGranulairty = userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step).ToString("0.00", CultureInfo.InvariantCulture);
 
             // Min Title Length
             this.minLength = this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.MinScanDuration);

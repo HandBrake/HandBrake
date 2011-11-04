@@ -306,17 +306,16 @@ namespace HandBrake.ApplicationServices.Utilities
                     {
                         case VideoEncoder.FFMpeg:
                             value = 31 - (task.Quality.Value - 1);
-                            query += string.Format(" -q {0}", value.ToString(new CultureInfo("en-US")));
+                            query += string.Format(" -q {0}", value.ToString(CultureInfo.InvariantCulture));
                             break;
                         case VideoEncoder.X264:
-                            CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
                             value = 51 - (task.Quality.Value * x264CqStep);
                             value = Math.Round(value, 2);
-                            query += string.Format(" -q {0}", value.ToString(culture));
+                            query += string.Format(" -q {0}", value.ToString(CultureInfo.InvariantCulture));
                             break;
                         case VideoEncoder.Theora:
                             value = task.Quality.Value;
-                            query += string.Format(" -q {0}", value.ToString(new CultureInfo("en-US")));
+                            query += string.Format(" -q {0}", value.ToString(CultureInfo.InvariantCulture));
                             break;
                     }
                     break;

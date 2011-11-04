@@ -1970,7 +1970,7 @@ namespace Handbrake
                 case "H.264 (x264)":
                     double rfValue = 51.0 - slider_videoQuality.Value * cqStep;
                     rfValue = Math.Round(rfValue, 2);
-                    lbl_SliderValue.Text = "RF:" + rfValue.ToString(new CultureInfo("en-US"));
+                    lbl_SliderValue.Text = "RF:" + rfValue.ToString(CultureInfo.InvariantCulture);
 
                     if (rfValue == 0)
                     {
