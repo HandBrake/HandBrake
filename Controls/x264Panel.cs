@@ -27,8 +27,6 @@ namespace Handbrake.Controls
         /// </summary>
         private readonly IUserSettingService UserSettingService = ServiceManager.UserSettingService;
 
-        private CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
-
         /// <summary>
         /// Initializes a new instance of the <see cref="x264Panel"/> class. 
         /// Initializes a new instance of the x264 panel user control
@@ -480,7 +478,7 @@ namespace Handbrake.Controls
                             else
                             {
                                 double value = slider_adaptiveQuantStrength.Value * 0.1;
-                                string aqs = value.ToString("f1", culture);
+                                string aqs = value.ToString("f1", CultureInfo.InvariantCulture);
                                 thisOpt = "aq-strength=" + aqs;
                             }
                         }
@@ -493,8 +491,8 @@ namespace Handbrake.Controls
                                 double psyrd = slider_psyrd.Value * 0.1;
                                 double psytre = slider_psytrellis.Value * 0.05;
 
-                                string rd = psyrd.ToString("f2", culture);
-                                string rt = psytre.ToString("f2", culture);
+                                string rd = psyrd.ToString("f2", CultureInfo.InvariantCulture);
+                                string rt = psytre.ToString("f2", CultureInfo.InvariantCulture);
 
                                 thisOpt = "psy-rd=" + rd + "," + rt;
                             }
@@ -783,7 +781,7 @@ namespace Handbrake.Controls
                 else
                 {
                     double value = slider_adaptiveQuantStrength.Value * 0.1;
-                    string aqs = value.ToString("f1", culture);
+                    string aqs = value.ToString("f1", CultureInfo.InvariantCulture);
                     query += colon + "aq-strength=" + aqs;
                 }
             }
@@ -796,8 +794,8 @@ namespace Handbrake.Controls
                     double psyrd = slider_psyrd.Value * 0.1;
                     double psytre = slider_psytrellis.Value * 0.05;
 
-                    string rd = psyrd.ToString("f1", culture);
-                    string rt = psytre.ToString("f2", culture);
+                    string rd = psyrd.ToString("f1", CultureInfo.InvariantCulture);
+                    string rt = psytre.ToString("f2", CultureInfo.InvariantCulture);
 
                     query += colon + "psy-rd=" + rd + "," + rt;
                 }

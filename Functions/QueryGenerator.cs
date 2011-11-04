@@ -374,17 +374,16 @@ namespace Handbrake.Functions
                     case "MPEG-4 (FFmpeg)":
                     case "MPEG-2 (FFmpeg)":
                         value = 31 - (mainWindow.slider_videoQuality.Value - 1);
-                        query += " -q " + value.ToString(new CultureInfo("en-US"));
+                        query += " -q " + value.ToString(CultureInfo.InvariantCulture);
                         break;
                     case "H.264 (x264)":
-                        CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
                         value = 51 - (mainWindow.slider_videoQuality.Value * cqStep);
                         value = Math.Round(value, 2);
-                        query += " -q " + value.ToString(culture);
+                        query += " -q " + value.ToString(CultureInfo.InvariantCulture);
                         break;
                     case "VP3 (Theora)":
                         value = mainWindow.slider_videoQuality.Value;
-                        query += " -q " + value.ToString(new CultureInfo("en-US"));
+                        query += " -q " + value.ToString(CultureInfo.InvariantCulture);
                         break;
                 }
             }

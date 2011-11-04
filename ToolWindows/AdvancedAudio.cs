@@ -16,9 +16,6 @@ namespace Handbrake.ToolWindows
     /// </summary>
     public partial class AdvancedAudio : Form
     {
-        // Culture Info
-        private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
-
         /// <summary>
         /// Initializes a new instance of the <see cref="AdvancedAudio"/> class. 
         /// </summary>
@@ -69,9 +66,9 @@ namespace Handbrake.ToolWindows
                 int drcCalculated;
                 if (track.DRC != 0)
                     drcValue = ((track.DRC * 10) + 1) - 10;
-                int.TryParse(drcValue.ToString(Culture), out drcCalculated);
+                int.TryParse(drcValue.ToString(CultureInfo.InvariantCulture), out drcCalculated);
                 tb_drc.Value = drcCalculated;
-                lbl_drc.Text = track.DRC.ToString(Culture);
+                lbl_drc.Text = track.DRC.ToString(CultureInfo.InvariantCulture);
                 tb_drc.Enabled = track.TrackDisplay.Contains("(AC3)");
 
                 // Se the Track Name
@@ -119,7 +116,7 @@ namespace Handbrake.ToolWindows
             int drcCalculated;
             if (track.DRC != 0)
                 drcValue = ((track.DRC * 10) + 1) - 10;
-            int.TryParse(drcValue.ToString(Culture), out drcCalculated);
+            int.TryParse(drcValue.ToString(CultureInfo.InvariantCulture), out drcCalculated);
             tb_drc.Value = drcCalculated;
 
             // Set the model.
@@ -142,7 +139,7 @@ namespace Handbrake.ToolWindows
             else
                 value = ((tb_drc.Value - 1) / 10.0) + 1;
 
-            lbl_drc.Text = value.ToString(Culture);
+            lbl_drc.Text = value.ToString(CultureInfo.InvariantCulture);
             track.DRC = value;
         }
 

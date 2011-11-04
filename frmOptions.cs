@@ -229,7 +229,7 @@ namespace Handbrake
             drop_previewScanCount.SelectedItem = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount).ToString();
 
             // x264 step
-            string step = userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step).ToString(new CultureInfo("en-US"));
+            string step = userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step).ToString(CultureInfo.InvariantCulture);
             switch (step)
             {
                 case "1":
