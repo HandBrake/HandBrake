@@ -135,7 +135,6 @@ namespace HandBrake.ApplicationServices.Parsing
         /// </summary>
         public void ReadEncodeStatus()
         {
-            CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
             string tmp = base.ReadLine();
 
             Match m = Regex.Match(tmp, @"^Encoding: task ([0-9]*) of ([0-9]*), ([0-9]*\.[0-9]*) %( \(([0-9]*\.[0-9]*) fps, avg ([0-9]*\.[0-9]*) fps, ETA ([0-9]{2})h([0-9]{2})m([0-9]{2})s\))?");
@@ -143,9 +142,9 @@ namespace HandBrake.ApplicationServices.Parsing
             {
                 int currentTask = int.Parse(m.Groups[1].Value);
                 int totalTasks = int.Parse(m.Groups[2].Value);
-                float percent = float.Parse(m.Groups[3].Value, culture);
-                float currentFps = m.Groups[5].Value == string.Empty ? 0.0F : float.Parse(m.Groups[5].Value, culture);
-                float avgFps = m.Groups[6].Value == string.Empty ? 0.0F : float.Parse(m.Groups[6].Value, culture);
+                float percent = float.Parse(m.Groups[3].Value, CultureInfo.InvariantCulture);
+                float currentFps = m.Groups[5].Value == string.Empty ? 0.0F : float.Parse(m.Groups[5].Value, CultureInfo.InvariantCulture);
+                float avgFps = m.Groups[6].Value == string.Empty ? 0.0F : float.Parse(m.Groups[6].Value, CultureInfo.InvariantCulture);
                 string remaining = string.Empty;
                 if (m.Groups[7].Value != string.Empty)
                 {
