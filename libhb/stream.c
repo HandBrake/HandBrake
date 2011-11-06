@@ -3907,7 +3907,42 @@ static int do_probe( hb_pes_stream_t *pes, hb_buffer_t *buf )
     if ( fmt && score > AVPROBE_SCORE_MAX / 2 )
     {
         AVCodec *codec = avcodec_find_decoder_by_name( fmt->name );
-        if ( codec )
+        if( !codec )
+        {
+            int i;
+            static const struct {
+                const char *name; enum CodecID id;
+            } fmt_id_type[] = {
+                { "g722"     , CODEC_ID_ADPCM_G722 },
+                { "mlp"      , CODEC_ID_MLP        },
+                { "truehd"   , CODEC_ID_TRUEHD     },
+                { "shn"      , CODEC_ID_SHORTEN    },
+                { "aac"      , CODEC_ID_AAC        },
+                { "ac3"      , CODEC_ID_AC3        },
+                { "dts"      , CODEC_ID_DTS        },
+                { "eac3"     , CODEC_ID_EAC3       },
+                { "h264"     , CODEC_ID_H264       },
+                { "m4v"      , CODEC_ID_MPEG4      },
+                { "mp3"      , CODEC_ID_MP3        },
+                { "mpegvideo", CODEC_ID_MPEG2VIDEO },
+                { "cavsvideo", CODEC_ID_CAVS },
+                { "dnxhd"    , CODEC_ID_DNXHD },
+                { "h261"     , CODEC_ID_H261 },
+                { "h263"     , CODEC_ID_H263 },
+                { "mjpeg"    , CODEC_ID_MJPEG },
+                { "vc1"      , CODEC_ID_VC1 },
+                { 0 }
+            };
+            for( i = 0; fmt_id_type[i].name; i++ )
+            {
+                if( !strcmp(fmt->name, fmt_id_type[i].name ) )
+                {
+                    codec = avcodec_find_decoder( fmt_id_type[i].id );
+                    break;
+                }
+            }
+        }
+        if( codec )
         {
             pes->codec_param = codec->id;
             if ( codec->type == AVMEDIA_TYPE_VIDEO )
@@ -3955,7 +3990,7 @@ static int do_probe( hb_pes_stream_t *pes, hb_buffer_t *buf )
             {
                 pes->stream_kind = N;
             }
-            strncpy(pes->codec_name, fmt->name, 79);
+            strncpy(pes->codec_name, codec->name, 79);
             pes->codec_name[79] = 0;
         }
         else

@@ -64,20 +64,17 @@ int hb_process_initialized = 0;
 static void thread_func( void * );
 hb_title_t * hb_get_title_by_index( hb_handle_t *, int );
 
-hb_lock_t *hb_avcodec_lock;
 static int ff_lockmgr_cb(void **mutex, enum AVLockOp op)
 {
     switch ( op )
     {
         case AV_LOCK_CREATE:
         {
-            hb_avcodec_lock  = hb_lock_init();
-            *mutex = hb_avcodec_lock;
+            *mutex  = hb_lock_init();
         } break;
         case AV_LOCK_DESTROY:
         {
-            hb_lock_close( &hb_avcodec_lock );
-            *mutex = NULL;
+            hb_lock_close( (hb_lock_t**)mutex );
         } break;
         case AV_LOCK_OBTAIN:
         {
