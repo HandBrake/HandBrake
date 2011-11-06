@@ -1225,7 +1225,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Load User Settings
         /// </summary>
-        public void Load()
+        public override void OnLoad()
         {
             // #############################
             // General

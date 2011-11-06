@@ -19,6 +19,11 @@ namespace HandBrakeWPF.ViewModels
     public class ViewModelBase : Screen, IViewModelBase
     {
         /// <summary>
+        /// Backing Field to prevent the Load method being called more than once.
+        /// </summary>
+        private bool hasLoaded;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
         /// </summary>
         /// <param name="windowManager">
@@ -33,5 +38,27 @@ namespace HandBrakeWPF.ViewModels
         /// Gets WindowManager.
         /// </summary>
         public IWindowManager WindowManager { get; private set; }
+
+        /// <summary>
+        /// Perform any Initialisation for this ViewModelBase.
+        /// </summary>
+        public void Load()
+        {
+            if (!hasLoaded)
+            {
+                hasLoaded = true;
+
+                // Initialise the ViewModels OnLoad method if it exists.
+                this.OnLoad();              
+            }
+        }
+
+        /// <summary>
+        /// Load Method for the ViewModel
+        /// </summary>
+        public virtual void OnLoad()
+        {
+            // Impliment in the ViewModel to perform viewmodel specific code.
+        }
     }
 }

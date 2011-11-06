@@ -48,6 +48,9 @@
     <Reference Include="Common.Logging">
       <HintPath>..\libraries\caliburn\Common.Logging.dll</HintPath>
     </Reference>
+    <Reference Include="EagleBoost.Wpf.Presentation">
+      <HintPath>..\libraries\EagleBoost.Wpf.Presentation.dll</HintPath>
+    </Reference>
     <Reference Include="Ookii.Dialogs.Wpf">
       <HintPath>..\libraries\OokiiDialogs\Ookii.Dialogs.Wpf.dll</HintPath>
     </Reference>
