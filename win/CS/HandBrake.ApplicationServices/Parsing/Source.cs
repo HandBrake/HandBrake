@@ -49,5 +49,16 @@ namespace HandBrake.ApplicationServices.Parsing
 
             return thisDVD;
         }
+
+        /// <summary>
+        /// Copy this Source to another Source Model
+        /// </summary>
+        /// <param name="source">
+        /// The source.
+        /// </param>
+        public void CopyTo(Source source)
+        {
+            source.Titles = this.Titles;
+        }
     }
 }

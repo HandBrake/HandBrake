@@ -13,7 +13,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.ObjectModel;
     using System.ComponentModel.Composition;
     using System.Diagnostics;
-    using System.IO;
     using System.Windows;
 
     using Caliburn.Micro;
@@ -24,6 +23,8 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     using HandBrakeWPF.ViewModels.Interfaces;
+
+    using Ookii.Dialogs.Wpf;
 
     /// <summary>
     /// HandBrakes Main Window
@@ -42,6 +43,11 @@ namespace HandBrakeWPF.ViewModels
         /// The Source Scan Service.
         /// </summary>
         private readonly IScan scanService;
+
+        /// <summary>
+        /// The Encode Service
+        /// </summary>
+        private readonly IEncode encodeService;
 
         /// <summary>
         /// The Encode Service
@@ -68,6 +74,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private string programStatusLabel;
 
+        /// <summary>
+        /// Backing field for the scanned source.
+        /// </summary>
+        private Source scannedSource;
+
         #endregion
 
         /// <summary>
@@ -77,19 +88,32 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="windowManager">
         /// The window manager.
         /// </param>
-        /// <param name="userSettingService">The User Setting Service</param>
+        /// <param name="userSettingService">
+        /// The User Setting Service
+        /// </param>
+        /// <param name="scanService">
+        /// The scan Service.
+        /// </param>
+        /// <param name="encodeService">
+        /// The encode Service.
+        /// </param>
+        /// <param name="presetService">
+        /// The preset Service.
+        /// </param>
         [ImportingConstructor]
-        public MainViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
+        public MainViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService)
             : base(windowManager)
         {
             this.userSettingService = userSettingService;
-            // Setup Services (TODO - Bring Castle back into the project to wire these up for us)
-            this.scanService = File.Exists("hb.dll") ? (IScan)new LibScan() : new ScanService();
+            this.scanService = scanService;
+            this.encodeService = encodeService;
+            this.presetService = presetService;
             this.queueProcessor = new QueueProcessor(Process.GetProcessesByName("HandBrake").Length);
-            this.presetService = new PresetService();
 
             // Setup Properties
             this.WindowTitle = "HandBrake WPF Test Application";
+            this.CurrentTask = new EncodeTask();
+            this.ScannedSource = new Source();
 
             // Setup Events
             this.scanService.ScanStared += this.ScanStared;
@@ -142,7 +166,18 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets the Last Scanned Source
         /// This object contains information about the scanned source.
         /// </summary>
-        public Source ScannedSource { get; set; }
+        public Source ScannedSource
+        {
+            get
+            {
+                return this.scannedSource;
+            }
+            set
+            {
+                this.scannedSource = value;
+                this.NotifyOfPropertyChange("ScannedSource");
+            }
+        }
 
         /// <summary>
         /// Gets or sets the Source Label
@@ -160,6 +195,7 @@ namespace HandBrakeWPF.ViewModels
                 if (!object.Equals(this.sourceLabel, value))
                 {
                     this.sourceLabel = value;
+                    this.NotifyOfPropertyChange("SourceLabel");
                 }
             }
         }
@@ -180,11 +216,21 @@ namespace HandBrakeWPF.ViewModels
                 if (!object.Equals(this.programStatusLabel, value))
                 {
                     this.programStatusLabel = value;
+                    this.NotifyOfPropertyChange("ProgramStatusLabel");
                 }
             }
         }
 
         #endregion
+
+        #region Load and Shutdown Handling
+        /// <summary>
+        /// Initialise this view model.
+        /// </summary>
+        public override void OnLoad()
+        {
+            // TODO
+        }
 
         /// <summary>
         /// Shutdown this View
@@ -201,6 +247,7 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.EncodeService.EncodeStarted -= this.EncodeStarted;
             this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
         }
+        #endregion
 
         #region Menu and Taskbar
 
@@ -228,13 +275,80 @@ namespace HandBrakeWPF.ViewModels
             this.WindowManager.ShowWindow(new LogViewModel(this.WindowManager));
         }
 
-
         /// <summary>
         /// Open the Queue Window.
         /// </summary>
         public void OpenQueueWindow()
         {
             this.WindowManager.ShowWindow(new QueueViewModel(this.WindowManager));
+        }
+
+        /// <summary>
+        /// Launch the Help pages.
+        /// </summary>
+        public void LaunchHelp()
+        {
+            Process.Start("https://trac.handbrake.fr/wiki/HandBrakeGuide");
+        }
+
+        /// <summary>
+        /// Check for Updates.
+        /// </summary>
+        public void CheckForUpdates()
+        {
+            throw new NotImplementedException("Not Yet Implemented");
+        }
+
+        /// <summary>
+        /// Folder Scan
+        /// </summary>
+        public void FolderScan()
+        {
+            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog { Description = "Please select a folder.", UseDescriptionForTitle = true };
+            dialog.ShowDialog();
+            this.StartScan(dialog.SelectedPath, 0);
+        }
+
+        /// <summary>
+        /// File Scan
+        /// </summary>
+        public void FileScan()
+        {
+            VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "All files (*.*)|*.*" };
+            dialog.ShowDialog();
+            this.StartScan(dialog.FileName, 0);
+        }
+
+        /// <summary>
+        /// Cancel a Scan
+        /// </summary>
+        public void CancelScan()
+        {
+            this.scanService.Stop();
+        }
+
+        /// <summary>
+        /// Start an Encode
+        /// </summary>
+        public void StartEncode()
+        {
+            throw new NotImplementedException("Not Yet Implemented");
+        }
+
+        /// <summary>
+        /// Pause an Encode
+        /// </summary>
+        public void PauseEncode()
+        {
+            throw new NotImplementedException("Not Yet Implemented");
+        }
+
+        /// <summary>
+        /// Stop an Encode.
+        /// </summary>
+        public void StopEncode()
+        {
+            throw new NotImplementedException("Not Yet Implemented");
         }
 
         /// <summary>
@@ -246,6 +360,27 @@ namespace HandBrakeWPF.ViewModels
         }
 
         #endregion
+
+        #region Private Worker Methods
+
+        /// <summary>
+        /// Start a Scan
+        /// </summary>
+        /// <param name="filename">
+        /// The filename.
+        /// </param>
+        /// <param name="title">
+        /// The title.
+        /// </param>
+        public void StartScan(string filename, int title)
+        {
+            // TODO 
+            // 1. Disable GUI.
+            this.scanService.Scan(filename, title, this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount));
+        }
+
+        #endregion
+
 
         #region Event Handlers
         /// <summary>
@@ -275,8 +410,14 @@ namespace HandBrakeWPF.ViewModels
         {
             if (e.Successful)
             {
-                this.ScannedSource = this.scanService.SouceData;
+               this.scanService.SouceData.CopyTo(this.ScannedSource);
+               this.NotifyOfPropertyChange("ScannedSource");
+               this.NotifyOfPropertyChange("ScannedSource.Titles");
             }
+
+            this.SourceLabel = "Scan Completed";
+           
+            // TODO Re-enable GUI.
         }
 
         /// <summary>
