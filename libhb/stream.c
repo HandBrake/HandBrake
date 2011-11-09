@@ -197,8 +197,7 @@ struct hb_stream_s
     hb_stream_type_t hb_stream_type;
     hb_title_t *title;
 
-    AVFormatContext *ffmpeg_info_ic;
-    AVFormatContext *ffmpeg_reader_ic;
+    AVFormatContext *ffmpeg_ic;
     AVPacket *ffmpeg_pkt;
     uint8_t ffmpeg_video_id;
 
@@ -1665,7 +1664,7 @@ hb_buffer_t * hb_stream_read( hb_stream_t * src_stream )
 
 int64_t ffmpeg_initial_timestamp( hb_stream_t * stream )
 {
-    AVFormatContext *ic = stream->ffmpeg_info_ic;
+    AVFormatContext *ic = stream->ffmpeg_ic;
     if ( ic->start_time != AV_NOPTS_VALUE && ic->start_time > 0 )
         return ic->start_time;
     else
@@ -1704,11 +1703,11 @@ int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
 
     if ( chapter_num > 1 && pos > 0 )
     {
-        AVStream *st = stream->ffmpeg_info_ic->streams[stream->ffmpeg_video_id];
+        AVStream *st = stream->ffmpeg_ic->streams[stream->ffmpeg_video_id];
         // timebase must be adjusted to match timebase of stream we are
         // using for seeking.
         pos = av_rescale(pos, st->time_base.den, AV_TIME_BASE * (int64_t)st->time_base.num);
-        avformat_seek_file( stream->ffmpeg_reader_ic, stream->ffmpeg_video_id, 0, pos, pos, AVSEEK_FLAG_BACKWARD);
+        avformat_seek_file( stream->ffmpeg_ic, stream->ffmpeg_video_id, 0, pos, pos, AVSEEK_FLAG_BACKWARD);
     }
     return 1;
 }
@@ -1884,9 +1883,9 @@ static void set_audio_description(
     char codec_name_caps[80];
     AVCodecContext *cc = NULL;
 
-    if ( stream && stream->ffmpeg_info_ic )
+    if ( stream && stream->ffmpeg_ic )
     {
-        cc = stream->ffmpeg_info_ic->streams[audio->id]->codec;
+        cc = stream->ffmpeg_ic->streams[audio->id]->codec;
     }
 
     // Names for streams we know about.
@@ -4789,7 +4788,7 @@ void hb_ps_stream_reset(hb_stream_t *stream)
 
 static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
 {
-    AVFormatContext *info_ic = NULL, *reader_ic = NULL;
+    AVFormatContext *info_ic = NULL;
 
     av_log_set_level( AV_LOG_ERROR );
 
@@ -4807,12 +4806,7 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
         goto fail;
 
     title->opaque_priv = (void*)info_ic;
-    stream->ffmpeg_info_ic = info_ic;
-    if ( avformat_open_input( &reader_ic, stream->path, NULL, NULL ) < 0 )
-    {
-        goto fail;
-    }
-    stream->ffmpeg_reader_ic = reader_ic;
+    stream->ffmpeg_ic = info_ic;
     stream->hb_stream_type = ffmpeg;
     stream->ffmpeg_pkt = malloc(sizeof(*stream->ffmpeg_pkt));
     av_init_packet( stream->ffmpeg_pkt );
@@ -4851,14 +4845,12 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
 
   fail:
     if ( info_ic ) av_close_input_file( info_ic );
-    if ( reader_ic ) av_close_input_file( reader_ic );
     return 0;
 }
 
 static void ffmpeg_close( hb_stream_t *d )
 {
-    av_close_input_file( d->ffmpeg_info_ic );
-    av_close_input_file( d->ffmpeg_reader_ic );
+    av_close_input_file( d->ffmpeg_ic );
     if ( d->ffmpeg_pkt != NULL )
     {
         free( d->ffmpeg_pkt );
@@ -4868,7 +4860,7 @@ static void ffmpeg_close( hb_stream_t *d )
 
 static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
 {
-    AVStream *st = stream->ffmpeg_info_ic->streams[id];
+    AVStream *st = stream->ffmpeg_ic->streams[id];
     AVCodecContext *codec = st->codec;
     AVDictionaryEntry *tag;
     int layout;
@@ -5075,7 +5067,7 @@ static int ffmpeg_parse_vobsub_extradata( AVCodecContext *codec, hb_subtitle_t *
 
 static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id )
 {
-    AVStream *st = stream->ffmpeg_info_ic->streams[id];
+    AVStream *st = stream->ffmpeg_ic->streams[id];
     AVCodecContext *codec = st->codec;
 
     hb_subtitle_t *subtitle = calloc( 1, sizeof(*subtitle) );
@@ -5145,7 +5137,7 @@ static char *get_ffmpeg_metadata_value( AVDictionary *m, char *key )
 
 static void add_ffmpeg_attachment( hb_title_t *title, hb_stream_t *stream, int id )
 {
-    AVStream *st = stream->ffmpeg_info_ic->streams[id];
+    AVStream *st = stream->ffmpeg_ic->streams[id];
     AVCodecContext *codec = st->codec;
 
     enum attachtype type;
@@ -5189,7 +5181,7 @@ static void add_ffmpeg_attachment( hb_title_t *title, hb_stream_t *stream, int i
 
 static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
 {
-    AVFormatContext *ic = stream->ffmpeg_info_ic;
+    AVFormatContext *ic = stream->ffmpeg_ic;
 
     // 'Barebones Title'
     title->type = HB_FF_STREAM_TYPE;
@@ -5320,7 +5312,7 @@ static int ffmpeg_is_keyframe( hb_stream_t *stream )
 {
     uint8_t *pkt;
 
-    switch ( stream->ffmpeg_info_ic->streams[stream->ffmpeg_video_id]->codec->codec_id )
+    switch ( stream->ffmpeg_ic->streams[stream->ffmpeg_video_id]->codec->codec_id )
     {
         case CODEC_ID_VC1:
             // XXX the VC1 codec doesn't mark key frames so to get previews
@@ -5342,7 +5334,7 @@ static int ffmpeg_is_keyframe( hb_stream_t *stream )
             // there are bframes or not so we have to look at the sequence
             // header to get that.
             pkt = stream->ffmpeg_pkt->data;
-            uint8_t *seqhdr = stream->ffmpeg_info_ic->streams[stream->ffmpeg_video_id]->codec->extradata;
+            uint8_t *seqhdr = stream->ffmpeg_ic->streams[stream->ffmpeg_video_id]->codec->extradata;
             int pshift = 2;
             if ( ( seqhdr[3] & 0x02 ) == 0 )
                 // no FINTERPFLAG
@@ -5368,7 +5360,7 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
     hb_buffer_t * buf;
 
   again:
-    if ( ( err = av_read_frame( stream->ffmpeg_reader_ic, stream->ffmpeg_pkt )) < 0 )
+    if ( ( err = av_read_frame( stream->ffmpeg_ic, stream->ffmpeg_pkt )) < 0 )
     {
         // av_read_frame can return EAGAIN.  In this case, it expects
         // to be called again to get more data.
@@ -5429,7 +5421,7 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
 
     // compute a conversion factor to go from the ffmpeg
     // timebase for the stream to HB's 90kHz timebase.
-    AVStream *s = stream->ffmpeg_info_ic->streams[stream->ffmpeg_pkt->stream_index];
+    AVStream *s = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt->stream_index];
     double tsconv = 90000. * (double)s->time_base.num / (double)s->time_base.den;
 
     buf->start = av_to_hb_pts( stream->ffmpeg_pkt->pts, tsconv );
@@ -5461,8 +5453,8 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
      */
     enum CodecID ffmpeg_pkt_codec;
     enum AVMediaType codec_type;
-    ffmpeg_pkt_codec = stream->ffmpeg_info_ic->streams[stream->ffmpeg_pkt->stream_index]->codec->codec_id;
-    codec_type = stream->ffmpeg_info_ic->streams[stream->ffmpeg_pkt->stream_index]->codec->codec_type;
+    ffmpeg_pkt_codec = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt->stream_index]->codec->codec_id;
+    codec_type = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt->stream_index]->codec->codec_type;
     switch ( codec_type )
     {
         case AVMEDIA_TYPE_VIDEO:
@@ -5525,10 +5517,10 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
 
 static int ffmpeg_seek( hb_stream_t *stream, float frac )
 {
-    AVFormatContext *ic = stream->ffmpeg_reader_ic;
+    AVFormatContext *ic = stream->ffmpeg_ic;
     if ( frac > 0. )
     {
-        int64_t pos = (double)stream->ffmpeg_info_ic->duration * (double)frac +
+        int64_t pos = (double)stream->ffmpeg_ic->duration * (double)frac +
                 ffmpeg_initial_timestamp( stream );
         avformat_seek_file( ic, -1, 0, pos, pos, AVSEEK_FLAG_BACKWARD);
     }
@@ -5544,12 +5536,12 @@ static int ffmpeg_seek( hb_stream_t *stream, float frac )
 // Assumes that we are always seeking forward
 static int ffmpeg_seek_ts( hb_stream_t *stream, int64_t ts )
 {
-    AVFormatContext *ic = stream->ffmpeg_reader_ic;
+    AVFormatContext *ic = stream->ffmpeg_ic;
     int64_t pos;
     int ret;
 
     pos = ts * AV_TIME_BASE / 90000 + ffmpeg_initial_timestamp( stream );
-    AVStream *st = stream->ffmpeg_info_ic->streams[stream->ffmpeg_video_id];
+    AVStream *st = stream->ffmpeg_ic->streams[stream->ffmpeg_video_id];
     // timebase must be adjusted to match timebase of stream we are
     // using for seeking.
     pos = av_rescale(pos, st->time_base.den, AV_TIME_BASE * (int64_t)st->time_base.num);
