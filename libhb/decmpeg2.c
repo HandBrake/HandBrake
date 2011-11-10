@@ -242,6 +242,9 @@ static void extract_mpeg2_captions( hb_libmpeg2_t *m )
 
 static void next_tag( hb_libmpeg2_t *m, hb_buffer_t *buf_es )
 {
+    if( m->tags[m->cur_tag].cc_buf == m->last_cc1_buf )
+        m->last_cc1_buf = NULL;
+
     m->cur_tag = ( m->cur_tag + 1 ) & (NTAGS-1);
     if ( m->tags[m->cur_tag].start >= 0 || m->tags[m->cur_tag].cc_buf )
     {
