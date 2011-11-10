@@ -1,0 +1,21 @@
+Index: libdvdread/src/ifo_read.c
+===================================================================
+--- libdvdread/src/ifo_read.c	(revision 1243)
++++ libdvdread/src/ifo_read.c	(working copy)
+@@ -1190,7 +1190,15 @@
+     goto fail;
+   }
+   for(i = 0; i < vts_ptt_srpt->nr_of_srpts; i++) {
+-    B2N_32(data[i]);
++    /* Transformers 3 has PTT start bytes that point outside the SRPT PTT */
++    uint32_t start = data[i];
++    B2N_32(start);
++    if(start + sizeof(ptt_info_t) > vts_ptt_srpt->last_byte + 1) {
++      /* don't mess with any bytes beyond the end of the allocation */
++      vts_ptt_srpt->nr_of_srpts = i;
++      break;
++    }
++    data[i] = start;
+     /* assert(data[i] + sizeof(ptt_info_t) <= vts_ptt_srpt->last_byte + 1);
+        Magic Knight Rayearth Daybreak is mastered very strange and has
+        Titles with 0 PTTs. They all have a data[i] offsets beyond the end of
