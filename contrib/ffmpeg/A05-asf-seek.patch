@@ -1,0 +1,16 @@
+diff --git a/libavformat/asfdec.c b/libavformat/asfdec.c
+index 0245340..85b2649 100644
+--- a/libavformat/asfdec.c
++++ b/libavformat/asfdec.c
+@@ -1172,7 +1172,10 @@ static int64_t asf_read_pts(AVFormatContext *s, int stream_index, int64_t *ppos,
+             return AV_NOPTS_VALUE;
+         }
+ 
+-        pts= pkt->pts;
++        if (pkt->pts == AV_NOPTS_VALUE)
++            pts = pkt->dts;
++        else
++            pts = pkt->pts;
+ 
+         av_free_packet(pkt);
+         if(pkt->flags&AV_PKT_FLAG_KEY){
