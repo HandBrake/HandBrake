@@ -992,10 +992,13 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->title = w->title;
     pv->list = hb_list_init();
 
-    if( pv->job )
+    if( pv->job && pv->job->title )
     {
-        if( !pv->job->title || !pv->job->title->has_resolution_change )
+        if( !pv->job->title->has_resolution_change &&
+            w->codec_param != CODEC_ID_PRORES )
+        {
             pv->threads = HB_FFMPEG_THREADS_AUTO;
+        }
     }
     if ( pv->title->opaque_priv )
     {
