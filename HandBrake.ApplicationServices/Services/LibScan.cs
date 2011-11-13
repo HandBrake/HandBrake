@@ -50,6 +50,11 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private readonly StringBuilder logging;
 
+        /// <summary>
+        /// The Current source scan path.
+        /// </summary>
+        private string currentSourceScanPath;
+
         #endregion
 
         /// <summary>
@@ -168,14 +173,17 @@ namespace HandBrake.ApplicationServices.Services
             {
                 this.logging.Clear();
 
+                string source = sourcePath.ToString().EndsWith("\\") ? sourcePath.ToString() : "\"" + sourcePath + "\"";
+                currentSourceScanPath = source;
+
                 IsScanning = true;
                 if (this.ScanStared != null)
                     this.ScanStared(this, new EventArgs());
 
                 if (title != 0)
-                    instance.StartScan(sourcePath.ToString(), previewCount, title);
+                    instance.StartScan(source, previewCount, title);
                 else
-                    instance.StartScan(sourcePath.ToString(), previewCount);
+                    instance.StartScan(source, previewCount);
             }
             catch (Exception exc)
             {
@@ -200,7 +208,7 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         private void InstanceScanCompleted(object sender, EventArgs e)
         {
-            this.SouceData = new Source { Titles = ConvertTitles(this.instance.Titles) };
+            this.SouceData = new Source { Titles = ConvertTitles(this.instance.Titles), ScanPath = currentSourceScanPath};
 
             IsScanning = false;
 

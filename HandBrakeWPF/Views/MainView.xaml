@@ -60,12 +60,13 @@
 
                     <Separator />
 
-                    <Button Name="Start">
+                    <Button Name="Start" Micro:Message.Attach="[Event Click] = [Action StartEncode]">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="Images/Play.png" Height="32" Width="32" />
                             <Label Content="Start"  Margin="8,0,0,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
+                    
                     <Button Name="AddToQueue">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="Images/AddToQueue.png" Height="32" Width="32" />
@@ -111,7 +112,7 @@
 
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Title" Margin="8,0,0,0" />
-                            <ComboBox Name="Titles" Margin="8,0,0,0" MinWidth="100" ItemsSource="{Binding ScannedSource.Titles}" SelectedItem="{Binding Path=CurrentTask.Title}" />
+                            <ComboBox Name="Titles" Margin="8,0,0,0" MinWidth="100" ItemsSource="{Binding ScannedSource.Titles}" SelectedItem="{Binding Path=SelectedTitle}" />
 
                             <Label Content="Angle" Margin="8,0,0,0" />
                             <ComboBox Name="Angles" Margin="8,0,0,0" MinWidth="60"  SelectedItem="{Binding Path=CurrentTask.Angle}"/>
@@ -130,8 +131,8 @@
                         <Label Content="Destination" FontWeight="Bold" />
                         <StackPanel Orientation="Horizontal">
                             <Label Content="File" Margin="8,0,0,0" />
-                            <TextBox Name="Destination" Margin="8,0,0,0" Width="600" Text="{}" />
-                            <Button Name="DestinationBrowser" Margin="8,0,0,0" Padding="8,0,8,0" Content="Browse" />
+                            <TextBox Name="Destination" Margin="8,0,0,0" Width="600" Text="{Binding CurrentTask.Destination}" />
+                            <Button Name="DestinationBrowser" Margin="8,0,0,0" Padding="8,0,8,0" Content="Browse" Micro:Message.Attach="[Event Click] = [Action BrowseDestination]" />
                         </StackPanel>
                     </StackPanel>
 

@@ -192,7 +192,7 @@ namespace Handbrake.Functions
                     query += string.Format(" --start-at frame:{0} --stop-at frame:{1}", mainWindow.drop_chapterStart.Text, calculatedDuration);
                     break;
                 case 3: // Preview
-                    query += " --previews " + UserSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount) + " ";
+                    query += " --previews " + UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount) + " ";
                     query += " --start-at-preview " + preview;
                     query += " --stop-at duration:" + duration + " ";
                     break;

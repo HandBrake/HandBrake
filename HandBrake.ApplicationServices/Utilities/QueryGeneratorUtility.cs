@@ -13,39 +13,78 @@ namespace HandBrake.ApplicationServices.Utilities
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model.Encoding;
-
-    /*
-     * TODO:
-     * 1. Handle Subittles
-     * 2. Wireupt he Generate Query Methods.
-     * 3. Handle Settings Better.
-     * 4. Test and bug fix.
-     */ 
 
     /// <summary>
     /// Generate a CLI Query for HandBrakeCLI
     /// </summary>
     public class QueryGeneratorUtility
     {
-        public static string GenerateQuery()
-        {
-            throw new NotImplementedException("This class hasn't been finished yet.");
-            string query = string.Empty;
-            return query;
+        /// <summary>
+        /// Backing field for the user settings service.
+        /// </summary>
+        private static readonly IUserSettingService UserSettingService = ServiceManager.UserSettingService;
 
+        /// <summary>
+        /// Generate a CLI Query for an EncodeTask Model object
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        /// <returns>
+        /// A Cli Query
+        /// </returns>
+        public static string GenerateQuery(EncodeTask task)
+        {
+            string query = string.Empty;
+            query += SourceQuery(task, null, null);
+            query += DestinationQuery(task);
+            query += GenerateTabbedComponentsQuery(task, true);
+
+            return query;
         }
 
-        public static string GeneratePreviewQuery()
+        /// <summary>
+        /// Generate a Query for a Preview Encode
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        /// <param name="duration">
+        /// The duration.
+        /// </param>
+        /// <param name="startAtPreview">
+        /// The start At Preview.
+        /// </param>
+        /// <returns>
+        /// A Cli query suitable for generating a preview video.
+        /// </returns>
+        public static string GeneratePreviewQuery(EncodeTask task, int duration, string startAtPreview)
         {
-            throw new NotImplementedException("This class hasn't been finished yet.");
             string query = string.Empty;
+            query += SourceQuery(task, duration, startAtPreview);
+            query += DestinationQuery(task);
+            query += GenerateTabbedComponentsQuery(task, true);
+
             return query;
         }
 
         #region Individual Query Sections
 
-        private static string GenerateTabbedComponentsQuery(EncodeTask task, bool filters, int width, int height, int verbose, bool noDvdNav, double x264Step)
+        /// <summary>
+        /// Generate a Query from an Encode Task Object.
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        /// <param name="enableFilters">
+        /// The enableFilters.
+        /// </param>
+        /// <returns>
+        /// The CLI query for the Tabbed section of the main window UI
+        /// </returns>
+        private static string GenerateTabbedComponentsQuery(EncodeTask task, bool enableFilters)
         {
             string query = string.Empty;
 
@@ -53,14 +92,14 @@ namespace HandBrake.ApplicationServices.Utilities
             query += OutputSettingsQuery(task);
 
             // Filters Panel
-            if (filters)
+            if (enableFilters)
                 query += FiltersQuery(task);
 
             // Picture Settings
-            query += PictureSettingsQuery(task, width, height);
+            query += PictureSettingsQuery(task);
 
             // Video Settings
-            query += VideoSettingsQuery(task, x264Step);
+            query += VideoSettingsQuery(task);
 
             // Audio Settings
             query += AudioSettingsQuery(task);
@@ -71,16 +110,31 @@ namespace HandBrake.ApplicationServices.Utilities
             // Chapter Markers
             query += ChapterMarkersQuery(task);
 
-            // X264 Panel
-            query += X264Query(task);
+            // Advanced Panel
+            query += AdvancedQuery(task);
 
             // Extra Settings
-            query += ExtraSettings(verbose.ToString(), noDvdNav);
+            query += ExtraSettings();
 
             return query;
         }
 
-        private static string SourceQuery(EncodeTask task, int mode, int duration, string preview, string previewTotal)
+        /// <summary>
+        /// Generate the Command Line Arguments for the Source
+        /// </summary>
+        /// <param name="task">
+        /// The encode task.
+        /// </param>
+        /// <param name="duration">
+        /// The duration.
+        /// </param>
+        /// <param name="preview">
+        /// The preview.
+        /// </param>
+        /// <returns>
+        /// A Cli Query as a string
+        /// </returns>
+        private static string SourceQuery(EncodeTask task, int? duration, string preview)
         {
             string query = string.Empty;
 
@@ -107,17 +161,24 @@ namespace HandBrake.ApplicationServices.Utilities
                     query += string.Format(" --start-at frame:{0} --stop-at frame:{1}", task.StartPoint, calculatedDuration);
                     break;
                 case PointToPointMode.Preview: // Preview
-                    query += " --previews " + previewTotal + " ";
+                    query += " --previews " + UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount) + " ";
                     query += " --start-at-preview " + preview;
                     query += " --stop-at duration:" + duration + " ";
-                    break;
-                default:
                     break;
             }
 
             return query;
         }
 
+        /// <summary>
+        /// Generate the Command Line Arguments for the Destination File
+        /// </summary>
+        /// <param name="task">
+        /// The encode task.
+        /// </param>
+        /// <returns>
+        /// A Cli Query as a string
+        /// </returns>
         private static string DestinationQuery(EncodeTask task)
         {
             string query = string.Empty;
@@ -130,6 +191,15 @@ namespace HandBrake.ApplicationServices.Utilities
             return query;
         }
 
+        /// <summary>
+        /// Generate the Command Line Arguments for the Output Settings
+        /// </summary>
+        /// <param name="task">
+        /// The encode task.
+        /// </param>
+        /// <returns>
+        /// A Cli Query as a string
+        /// </returns>
         private static string OutputSettingsQuery(EncodeTask task)
         {
             string query = string.Empty;
@@ -149,7 +219,16 @@ namespace HandBrake.ApplicationServices.Utilities
             return query;
         }
 
-        private static string PictureSettingsQuery(EncodeTask task, int width, int height)
+        /// <summary>
+        /// Generate the Command Line Arguments for the Picture Settings tab
+        /// </summary>
+        /// <param name="task">
+        /// The encode task.
+        /// </param>
+        /// <returns>
+        /// A Cli Query as a string
+        /// </returns>
+        private static string PictureSettingsQuery(EncodeTask task)
         {
             string query = string.Empty;
 
@@ -162,7 +241,10 @@ namespace HandBrake.ApplicationServices.Utilities
                 else if (task.Height.HasValue) query += string.Format(" -h {0}", task.Height);
             }
 
-            query += string.Format(" --crop {0}:{1}:{2}:{3}", task.Cropping.Top, task.Cropping.Bottom, task.Cropping.Left, task.Cropping.Right);
+            if (task.HasCropping)
+            {
+                query += string.Format(" --crop {0}:{1}:{2}:{3}", task.Cropping.Top, task.Cropping.Bottom, task.Cropping.Left, task.Cropping.Right);
+            }
 
             switch (task.Anamorphic)
             {
@@ -190,9 +272,17 @@ namespace HandBrake.ApplicationServices.Utilities
             return query;
         }
 
+        /// <summary>
+        /// Generate the Command Line Arguments for the Filters Tab
+        /// </summary>
+        /// <param name="task">
+        /// The encode task.
+        /// </param>
+        /// <returns>
+        /// A Cli Query as a string
+        /// </returns>
         private static string FiltersQuery(EncodeTask task)
         {
-
             string query = string.Empty;
 
             switch (task.Detelecine) // DeTelecine
@@ -274,7 +364,16 @@ namespace HandBrake.ApplicationServices.Utilities
             return query;
         }
 
-        private static string VideoSettingsQuery(EncodeTask task, double x264CqStep)
+        /// <summary>
+        /// Generate the Command Line Arguments for the Video Settings Tab
+        /// </summary>
+        /// <param name="task">
+        /// The encode task.
+        /// </param>
+        /// <returns>
+        /// A Cli Query as a string
+        /// </returns>
+        private static string VideoSettingsQuery(EncodeTask task)
         {
             string query = string.Empty;
 
@@ -293,6 +392,8 @@ namespace HandBrake.ApplicationServices.Utilities
                     query += " -e x264";
                     break;
             }
+
+            double x264CqStep = UserSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step);
 
             switch (task.VideoEncodeRateType)
             {
@@ -319,7 +420,6 @@ namespace HandBrake.ApplicationServices.Utilities
                             break;
                     }
                     break;
-
             }
 
             if (task.TwoPass)
@@ -350,6 +450,15 @@ namespace HandBrake.ApplicationServices.Utilities
             return query;
         }
 
+        /// <summary>
+        /// Generate the Command Line Arguments for the Audio Settings Tab
+        /// </summary>
+        /// <param name="task">
+        /// The encode task.
+        /// </param>
+        /// <returns>
+        /// A Cli Query as a string
+        /// </returns>
         private static string AudioSettingsQuery(EncodeTask task)
         {
             string query = string.Empty;
@@ -494,12 +603,127 @@ namespace HandBrake.ApplicationServices.Utilities
             return query;
         }
 
+        /// <summary>
+        /// Generate the Command Line Arguments for the Subtitles Tab
+        /// </summary>
+        /// <param name="task">
+        /// The encode task.
+        /// </param>
+        /// <returns>
+        /// A Cli Query as a string
+        /// </returns>
         private static string SubtitlesQuery(EncodeTask task)
         {
-            // TODO
-            return string.Empty;
+            string query = string.Empty;
+            if (task.SubtitleTracks.Count != 0)
+            {
+                // BitMap and CC's
+                string subtitleTracks = String.Empty;
+                string subtitleForced = String.Empty;
+                string subtitleBurn = String.Empty;
+                string subtitleDefault = String.Empty;
+
+                // SRT
+                string srtFile = String.Empty;
+                string srtCodeset = String.Empty;
+                string srtOffset = String.Empty;
+                string srtLang = String.Empty;
+                string srtDefault = String.Empty;
+                int srtCount = 0;
+                int subCount = 0;
+
+                // Languages
+                IDictionary<string, string> langMap = LanguageUtilities.MapLanguages();
+
+                foreach (SubtitleTrack item in task.SubtitleTracks)
+                {
+                    string itemToAdd;
+
+                    if (item.IsSrtSubtitle) // We have an SRT file
+                    {
+                        srtCount++; // SRT track id.
+
+                        srtLang += srtLang == string.Empty ? langMap[item.SrtLang] : "," + langMap[item.SrtLang];
+                        srtCodeset += srtCodeset == string.Empty ? item.SrtCharCode : "," + item.SrtCharCode;
+
+                        if (item.Default)
+                            srtDefault = srtCount.ToString();
+
+                        itemToAdd = item.SrtPath;
+                        srtFile += srtFile == string.Empty ? itemToAdd : "," + itemToAdd;
+
+                        itemToAdd = item.SrtOffset.ToString();
+                        srtOffset += srtOffset == string.Empty ? itemToAdd : "," + itemToAdd;
+                    }
+                    else // We have Bitmap or CC
+                    {
+                        subCount++;
+
+                        // Find --subtitle <string>
+                        if (item.Track.Contains("Foreign Audio Search"))
+                            itemToAdd = "scan";
+                        else
+                        {
+                            string[] tempSub = item.Track.Split(' ');
+                            itemToAdd = tempSub[0];
+                        }
+
+                        subtitleTracks += subtitleTracks == string.Empty ? itemToAdd : "," + itemToAdd;
+
+                        // Find --subtitle-forced
+                        if (item.Forced)
+                            subtitleForced += subtitleForced == string.Empty ? subCount.ToString() : "," + subCount;
+
+                        // Find --subtitle-burn
+                        if (item.Burned)
+                            subtitleBurn = subCount.ToString();
+
+                        // Find --subtitle-default
+                        if (item.Default)
+                            subtitleDefault = subCount.ToString();
+                    }
+                }
+
+                // Build The CLI Subtitles Query
+                if (subtitleTracks != string.Empty)
+                {
+                    query += " --subtitle " + subtitleTracks;
+
+                    if (subtitleForced != string.Empty)
+                        query += " --subtitle-forced=" + subtitleForced;
+                    if (subtitleBurn != string.Empty)
+                        query += " --subtitle-burn=" + subtitleBurn;
+                    if (subtitleDefault != string.Empty)
+                        query += " --subtitle-default=" + subtitleDefault;
+                }
+
+                if (srtFile != string.Empty) // SRTs
+                {
+                    query += " --srt-file " + "\"" + srtFile + "\"";
+
+                    if (srtCodeset != string.Empty)
+                        query += " --srt-codeset " + srtCodeset;
+                    if (srtOffset != string.Empty)
+                        query += " --srt-offset " + srtOffset;
+                    if (srtLang != string.Empty)
+                        query += " --srt-lang " + srtLang;
+                    if (srtDefault != string.Empty)
+                        query += " --srt-default=" + srtDefault;
+                }
+            }
+
+            return query;
         }
 
+        /// <summary>
+        /// Generate the Command Line Arguments for the Chapter markers tab
+        /// </summary>
+        /// <param name="task">
+        /// The encode task.
+        /// </param>
+        /// <returns>
+        /// A Cli Query as a string
+        /// </returns>
         private static string ChapterMarkersQuery(EncodeTask task)
         {
             string query = string.Empty;
@@ -529,20 +753,45 @@ namespace HandBrake.ApplicationServices.Utilities
             return query;
         }
 
-        private static string X264Query(EncodeTask task)
+        /// <summary>
+        /// Generate the Command Line Arguments for the Advanced Encoder Options
+        /// </summary>
+        /// <param name="task">
+        /// The encode task.
+        /// </param>
+        /// <returns>
+        /// A Cli Query as a string
+        /// </returns>
+        private static string AdvancedQuery(EncodeTask task)
         {
+            if (task.VideoEncoder == VideoEncoder.X264)
+            {
+                return string.Format(
+                    " --x264-preset={0} --x264-tune={1} --x264-profile={2}",
+                    task.x264Preset.ToString().ToLower().Replace(" ", string.Empty),
+                    task.X264Tune.ToString().ToLower().Replace(" ", string.Empty),
+                    task.x264Profile.ToString().ToLower().Replace(" ", string.Empty));
+            }
+
             return string.IsNullOrEmpty(task.AdvancedEncoderOptions) ? string.Empty : string.Format(" -x {0}", task.AdvancedEncoderOptions);
         }
 
-        private static string ExtraSettings(string verboseLevel, bool disableLibDvdNav)
+        /// <summary>
+        /// Generate the Command Line Arguments for any additional advanced options.
+        /// </summary>
+        /// <returns>
+        /// A Cli Query as a string
+        /// </returns>
+        private static string ExtraSettings()
         {
             string query = string.Empty;
 
             // Verbosity Level
-            query += string.Format(" --verbose= {0}", string.IsNullOrEmpty(verboseLevel) ? "1" : verboseLevel);
+            int verbosity = UserSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity);
+            query += string.Format(" --verbose= {0}", verbosity);
 
             // LibDVDNav
-            if (disableLibDvdNav)
+            if (UserSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav))
                 query += " --no-dvdnav";
 
             return query;
@@ -558,7 +807,7 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="chapters">The List of chapters</param>
         /// <param name="filePathName">Path to save the csv file</param>
         /// <returns>True if successful </returns>
-        private static bool ChapterCsvSave(List<string> chapters, string filePathName)
+        private static bool ChapterCsvSave(IEnumerable<string> chapters, string filePathName)
         {
             string csv = string.Empty;
             int counter = 0;
@@ -566,9 +815,8 @@ namespace HandBrake.ApplicationServices.Utilities
             foreach (string name in chapters)
             {
                 csv += counter + "," + name.Replace(",", "\\,") + Environment.NewLine;
-                counter ++;
+                counter++;
             }
-
 
             StreamWriter file = new StreamWriter(filePathName);
             file.Write(csv);

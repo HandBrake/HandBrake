@@ -30,7 +30,6 @@ namespace Handbrake
         public const string NativeLanguage = "NativeLanguage";
         public const string DubMode = "DubMode";
         public const string CliExeHash = "CliExeHash";
-        public const string PreviewScanCount = "previewScanCount";
         public const string ClearOldLogs = "clearOldLogs";
         public const string AutoNameTitleCase = "AutoNameTitleCase";
         public const string AutoNameRemoveUnderscore = "AutoNameRemoveUnderscore";

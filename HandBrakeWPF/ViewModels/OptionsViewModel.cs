@@ -1400,7 +1400,7 @@ namespace HandBrakeWPF.ViewModels
             this.PreviewPicturesToScan.Add(20);
             this.PreviewPicturesToScan.Add(25);
             this.PreviewPicturesToScan.Add(30);
-            this.selectedPreviewCount = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
+            this.selectedPreviewCount = this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount);
 
             // x264 step
             this.ConstantQualityGranularity.Add("1.0");
@@ -1632,7 +1632,7 @@ namespace HandBrakeWPF.ViewModels
             userSettingService.SetUserSetting(UserSettingConstants.PromptOnUnmatchingQueries, this.PromptOnDifferentQuery);
             userSettingService.SetUserSetting(UserSettingConstants.PresetNotification, this.DisablePresetUpdateCheckNotification);
             userSettingService.SetUserSetting(ASUserSettingConstants.ShowCLI, this.ShowCliWindow);
-            userSettingService.SetUserSetting(UserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
+            userSettingService.SetUserSetting(ASUserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
             userSettingService.SetUserSetting(ASUserSettingConstants.X264Step, double.Parse(this.SelectedGranulairty));
 
             int value;
