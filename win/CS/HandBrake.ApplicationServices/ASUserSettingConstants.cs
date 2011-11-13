@@ -114,5 +114,10 @@ namespace HandBrake.ApplicationServices
         /// Min Title Scan Duration
         /// </summary>
         public const string MinScanDuration = "MinTitleScanDuration";
+
+        /// <summary>
+        /// Preview Scan Count
+        /// </summary>
+        public const string PreviewScanCount = "previewScanCount";
     }
 }

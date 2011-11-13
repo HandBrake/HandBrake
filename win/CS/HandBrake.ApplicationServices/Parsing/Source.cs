@@ -22,6 +22,12 @@ namespace HandBrake.ApplicationServices.Parsing
         }
 
         /// <summary>
+        /// Gets or sets ScanPath.
+        /// The Path used by the Scan Service.
+        /// </summary>
+        public string ScanPath { get; set; }
+
+        /// <summary>
         /// Gets or sets Titles. A list of titles from the source
         /// </summary>
         public List<Title> Titles { get; set; }
@@ -59,6 +65,7 @@ namespace HandBrake.ApplicationServices.Parsing
         public void CopyTo(Source source)
         {
             source.Titles = this.Titles;
+            source.ScanPath = this.ScanPath;
         }
     }
 }

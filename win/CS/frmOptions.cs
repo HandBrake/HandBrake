@@ -226,7 +226,7 @@ namespace Handbrake
             check_showCliForInGUIEncode.Checked = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.ShowCLI);
 
             // Set the preview count
-            drop_previewScanCount.SelectedItem = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount).ToString();
+            drop_previewScanCount.SelectedItem = this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount).ToString();
 
             // x264 step
             string step = userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step).ToString(CultureInfo.InvariantCulture);
@@ -690,7 +690,7 @@ namespace Handbrake
 
         private void drop_previewScanCount_SelectedIndexChanged(object sender, EventArgs e)
         {
-            userSettingService.SetUserSetting(UserSettingConstants.PreviewScanCount, int.Parse(drop_previewScanCount.SelectedItem.ToString()));
+            userSettingService.SetUserSetting(ASUserSettingConstants.PreviewScanCount, int.Parse(drop_previewScanCount.SelectedItem.ToString()));
         }
 
         private void x264step_SelectedIndexChanged(object sender, EventArgs e)

@@ -15,7 +15,6 @@ namespace Handbrake
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Model.General;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
@@ -76,7 +75,7 @@ namespace Handbrake
             endPoint.SelectedIndex = 1;
 
             startPoint.Items.Clear();
-            for (int i = 1; i <= UserSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount); i++)
+            for (int i = 1; i <= UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount); i++)
             {
                 startPoint.Items.Add(i.ToString());
             }

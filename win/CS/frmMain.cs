@@ -2111,7 +2111,7 @@ namespace Handbrake
             // Start the Scan
             try
             {
-                SourceScan.Scan(sourcePath, title, this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount));
+                SourceScan.Scan(sourcePath, title, this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount));
             }
             catch (Exception exc)
             {

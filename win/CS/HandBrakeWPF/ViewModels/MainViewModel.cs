@@ -13,14 +13,18 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.ObjectModel;
     using System.ComponentModel.Composition;
     using System.Diagnostics;
+    using System.IO;
     using System.Windows;
 
     using Caliburn.Micro;
 
+    using HandBrake.ApplicationServices;
+    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -78,6 +82,11 @@ namespace HandBrakeWPF.ViewModels
         /// Backing field for the scanned source.
         /// </summary>
         private Source scannedSource;
+
+        /// <summary>
+        /// Backing field for the selected title.
+        /// </summary>
+        private Title selectedTitle;
 
         #endregion
 
@@ -176,6 +185,27 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.scannedSource = value;
                 this.NotifyOfPropertyChange("ScannedSource");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets SelectedTitle.
+        /// </summary>
+        public Title SelectedTitle
+        {
+            get
+            {
+                return this.selectedTitle;
+            }
+            set
+            {
+                if (!object.Equals(this.selectedTitle, value))
+                {
+                    this.selectedTitle = value;
+                    // Use the Path on the Title, or the Source Scan path if one doesn't exist.
+                    this.CurrentTask.Source = !string.IsNullOrEmpty(this.selectedTitle.SourceName) ? this.selectedTitle.SourceName : this.ScannedSource.ScanPath;
+                    this.CurrentTask.Title = value.TitleNumber;
+                }
             }
         }
 
@@ -332,7 +362,37 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void StartEncode()
         {
-            throw new NotImplementedException("Not Yet Implemented");
+            // Santiy Checking.
+            if (this.ScannedSource == null || this.CurrentTask == null)
+            {
+                throw new GeneralApplicationException("You must first scan a source.", string.Empty, null);
+            }
+
+            if (string.IsNullOrEmpty(this.CurrentTask.Destination))
+            {
+                throw new GeneralApplicationException("The Destination field was empty.", "You must first set a destination for the encoded file.", null);
+            }
+
+            if (this.queueProcessor.IsProcessing)
+            {
+                throw new GeneralApplicationException("HandBrake is already encoding.", string.Empty, null);
+            }
+
+            if (File.Exists(this.CurrentTask.Destination))
+            {
+                // TODO: File Overwrite warning.
+            }
+
+            // Create the Queue Task and Start Processing
+            QueueTask task = new QueueTask(null)
+                {
+                    Destination = this.CurrentTask.Destination,
+                    Task = this.CurrentTask,
+                    Query = QueryGeneratorUtility.GenerateQuery(this.CurrentTask),
+                    CustomQuery = false
+                };
+            this.queueProcessor.QueueManager.Add(task);
+            this.queueProcessor.Start();
         }
 
         /// <summary>
@@ -340,7 +400,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void PauseEncode()
         {
-            throw new NotImplementedException("Not Yet Implemented");
+            this.queueProcessor.Pause();
         }
 
         /// <summary>
@@ -348,7 +408,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void StopEncode()
         {
-            throw new NotImplementedException("Not Yet Implemented");
+            this.encodeService.Stop();
         }
 
         /// <summary>
@@ -357,6 +417,22 @@ namespace HandBrakeWPF.ViewModels
         public void ExitApplication()
         {
             Application.Current.Shutdown();
+        }
+
+        #endregion
+
+        #region Main Window
+
+        /// <summary>
+        /// The Destination Path
+        /// </summary>
+        public void BrowseDestination()
+        {
+            VistaSaveFileDialog dialog = new VistaSaveFileDialog { Filter = "MP4 File (*.mp4)|Mkv File(*.mkv)" };
+            dialog.ShowDialog();
+            dialog.AddExtension = true;
+            this.CurrentTask.Destination = dialog.FileName;
+            this.NotifyOfPropertyChange("CurrentTask");
         }
 
         #endregion
@@ -376,11 +452,10 @@ namespace HandBrakeWPF.ViewModels
         {
             // TODO 
             // 1. Disable GUI.
-            this.scanService.Scan(filename, title, this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount));
+            this.scanService.Scan(filename, title, this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount));
         }
 
         #endregion
-
 
         #region Event Handlers
         /// <summary>
@@ -410,13 +485,13 @@ namespace HandBrakeWPF.ViewModels
         {
             if (e.Successful)
             {
-               this.scanService.SouceData.CopyTo(this.ScannedSource);
-               this.NotifyOfPropertyChange("ScannedSource");
-               this.NotifyOfPropertyChange("ScannedSource.Titles");
+                this.scanService.SouceData.CopyTo(this.ScannedSource);
+                this.NotifyOfPropertyChange("ScannedSource");
+                this.NotifyOfPropertyChange("ScannedSource.Titles");
             }
 
             this.SourceLabel = "Scan Completed";
-           
+
             // TODO Re-enable GUI.
         }
 
@@ -445,7 +520,15 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void EncodeStatusChanged(object sender, HandBrake.ApplicationServices.EventArgs.EncodeProgressEventArgs e)
         {
-            //
+            ProgramStatusLabel =
+                string.Format(
+                "{0:00.00}%,  FPS: {1:000.0},  Avg FPS: {2:000.0},  Time Remaining: {3},  Elapsed: {4:hh\\:mm\\:ss},  Pending Jobs {5}",
+                e.PercentComplete,
+                e.CurrentFrameRate,
+                e.AverageFrameRate,
+                e.EstimatedTimeLeft,
+                e.ElapsedTime,
+                this.queueProcessor.QueueManager.Count);
         }
 
         /// <summary>
