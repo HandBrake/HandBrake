@@ -196,6 +196,21 @@ void hb_buffer_realloc( hb_buffer_t * b, int size )
     }
 }
 
+void hb_buffer_reduce( hb_buffer_t * b, int size )
+{
+    if ( size < b->alloc / 8 || b->data == NULL )
+    {
+        uint32_t orig = b->alloc;
+        size = size_to_pool( size )->buffer_size;
+        b->data  = realloc( b->data, size );
+        b->alloc = size;
+
+        hb_lock(buffers.lock);
+        buffers.allocated += size - orig;
+        hb_unlock(buffers.lock);
+    }
+}
+
 // Frees the specified buffer list.
 void hb_buffer_close( hb_buffer_t ** _b )
 {

@@ -6,6 +6,7 @@
 
 #include "hb.h"
 
+#define MIN_BUFFERING (1024*1024*10)
 #define MAX_BUFFERING (1024*1024*50)
 
 struct hb_mux_object_s
@@ -48,6 +49,7 @@ typedef struct
                                   // allocated but the eof & rdy logic has to 
                                   // be changed to handle more than 32 tracks 
                                   // anyway so we keep it simple and fast.
+    int               buffered_size;
 } hb_mux_t;
 
 struct hb_work_private_s
@@ -120,6 +122,7 @@ static void mf_push( hb_mux_t * mux, int tk, hb_buffer_t *buf )
     uint32_t mask = track->mf.flen - 1;
     uint32_t in = track->mf.in;
 
+    hb_buffer_reduce( buf, buf->size );
     if ( track->buffered_size > MAX_BUFFERING )
     {
         mux->rdy = mux->allRdy;
@@ -152,11 +155,13 @@ static void mf_push( hb_mux_t * mux, int tk, hb_buffer_t *buf )
     }
     track->mf.fifo[in & mask] = buf;
     track->mf.in = in + 1;
-    track->buffered_size += buf->alloc;
+    track->buffered_size += buf->size;
+    mux->buffered_size += buf->size;
 }
 
-static hb_buffer_t *mf_pull( hb_track_t *track )
+static hb_buffer_t *mf_pull( hb_mux_t * mux, int tk )
 {
+    hb_track_t *track =mux->track[tk];
     hb_buffer_t *b = NULL;
     if ( track->mf.out != track->mf.in )
     {
@@ -164,7 +169,8 @@ static hb_buffer_t *mf_pull( hb_track_t *track )
         b = track->mf.fifo[track->mf.out & (track->mf.flen - 1)];
         ++track->mf.out;
 
-        track->buffered_size -= b->alloc;
+        track->buffered_size -= b->size;
+        mux->buffered_size -= b->size;
     }
     return b;
 }
@@ -190,13 +196,14 @@ static void MoveToInternalFifos( int tk, hb_mux_t *mux, hb_buffer_t * buf )
     }
 }
 
-static void OutputTrackChunk( hb_mux_t *mux, hb_track_t *track, hb_mux_object_t *m )
+static void OutputTrackChunk( hb_mux_t *mux, int tk, hb_mux_object_t *m )
 {
+    hb_track_t *track = mux->track[tk];
     hb_buffer_t *buf;
 
     while ( ( buf = mf_peek( track ) ) != NULL && buf->start < mux->pts )
     {
-        buf = mf_pull( track );
+        buf = mf_pull( mux, tk );
         track->frames += 1;
         track->bytes  += buf->size;
         m->mux( m, track->mux_data, buf );
@@ -247,14 +254,15 @@ static int muxWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     int more = mux->rdy;
     // all tracks have at least 'interleave' ticks of data. Output
     // all that we can in 'interleave' size chunks.
-    while ( (( mux->rdy & mux->allRdy ) == mux->allRdy && more) ||
+    while ( (( mux->rdy & mux->allRdy ) == mux->allRdy && 
+            more && mux->buffered_size > MIN_BUFFERING ) ||
             ( mux->eof == mux->allEof ) ) 
     {
         more = 0;
         for ( i = 0; i < mux->ntracks; ++i )
         {
             track = mux->track[i];
-            OutputTrackChunk( mux, track, mux->m );
+            OutputTrackChunk( mux, i, mux->m );
             if ( mf_full( track ) )
             {
                 // If the track's fifo is still full, advance
@@ -375,7 +383,7 @@ void muxClose( hb_work_object_t * w )
         {
             hb_buffer_t * b;
             track = mux->track[i];
-            while ( (b = mf_pull( track )) != NULL )
+            while ( (b = mf_pull( mux, i )) != NULL )
             {
                 hb_buffer_close( &b );
             }

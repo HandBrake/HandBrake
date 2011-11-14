@@ -111,6 +111,7 @@ void hb_buffer_pool_free( void );
 
 hb_buffer_t * hb_buffer_init( int size );
 void          hb_buffer_realloc( hb_buffer_t *, int size );
+void          hb_buffer_reduce( hb_buffer_t * b, int size );
 void          hb_buffer_close( hb_buffer_t ** );
 void          hb_buffer_copy_settings( hb_buffer_t * dst,
                                        const hb_buffer_t * src );
