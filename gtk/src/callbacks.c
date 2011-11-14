@@ -2923,7 +2923,7 @@ ghb_backend_events(signal_user_data_t *ud)
 		switch( status.queue.error )
 		{
 			case GHB_ERROR_NONE:
-				gtk_label_set_text (work_status, "Rip Done!");
+				gtk_label_set_text (work_status, "Encode Done!");
 				qstatus = GHB_QUEUE_DONE;
 				if (js != NULL)
 				{
@@ -2937,7 +2937,7 @@ ghb_backend_events(signal_user_data_t *ud)
 				}
 				break;
 			case GHB_ERROR_CANCELED:
-				gtk_label_set_text (work_status, "Rip Canceled.");
+				gtk_label_set_text (work_status, "Encode Canceled.");
 				qstatus = GHB_QUEUE_CANCELED;
 				if (js != NULL)
 				{
@@ -2951,7 +2951,7 @@ ghb_backend_events(signal_user_data_t *ud)
 				}
 				break;
 			default:
-				gtk_label_set_text (work_status, "Rip Failed.");
+				gtk_label_set_text (work_status, "Encode Failed.");
 				qstatus = GHB_QUEUE_CANCELED;
 				if (js != NULL)
 				{

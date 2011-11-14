@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=HandBrake
-GenericName=DVD Ripper
-Comment=Transcodes DVD and other media
+GenericName=Media Transcoder
+Comment=Transcodes DVD, Bluray, and other media
 Exec=ghb
 Icon=hb-icon
 Terminal=false
