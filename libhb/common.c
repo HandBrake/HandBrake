@@ -1566,6 +1566,8 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
         audio->config.out.mixdown = 0;
         audio->config.out.dynamic_range_compression = 0;
         audio->config.out.gain = 0;
+        audio->config.out.compression_level = -1;
+        audio->config.out.quality = -1;
     }
     else
     {
