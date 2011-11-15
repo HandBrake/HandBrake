@@ -1106,6 +1106,9 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             {
                 int64_t duration;
 
+                if( buf->start < 0 )
+                    buf->start = mux_data->sum_dur;
+
                 if( buf->stop < 0 )
                     duration = 90000L * 10;
                 else
@@ -1174,6 +1177,9 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         else if( mux_data->sub_format == PICTURESUB )
         {
             int64_t duration;
+
+            if( buf->start < 0 )
+                buf->start = mux_data->sum_dur;
 
             if( buf->stop < 0 )
                 duration = 90000L * 10;

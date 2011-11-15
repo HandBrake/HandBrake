@@ -61,7 +61,7 @@ int decsubInit( hb_work_object_t * w, hb_job_t * job )
     w->private_data = pv;
 
     pv->job = job;
-    pv->pts = -1;
+    pv->pts = 0;
     
     // Warn if the input color palette is empty
     int paletteEmpty = 1;
@@ -116,7 +116,10 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             pv->buf->id = in->id;
             pv->buf->sequence = in->sequence;
             pv->size_got = in->size;
-            pv->pts      = in->start;
+            if( in->start >= 0 )
+            {
+                pv->pts      = in->start;
+            }
         }
     }
     else
@@ -163,7 +166,12 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pv->size_sub = 0;
         pv->size_got = 0;
         pv->size_rle = 0;
-        pv->pts      = -1;
+
+        // If we don't get a valid next timestamp, use the stop time
+        // of the current sub as the start of the next.
+        // This can happen if reader invalidates timestamps while 
+        // waiting for an audio to update the SCR.
+        pv->pts      = pv->pts_stop;
     }
 
     return HB_WORK_OK;
@@ -207,7 +215,7 @@ static void ParseControls( hb_work_object_t * w )
     int command;
     int date, next;
 
-    pv->pts_start = 0;
+    pv->pts_start = -1;
     pv->pts_stop  = -1;
     pv->pts_forced  = 0;
 
@@ -376,6 +384,17 @@ static void ParseControls( hb_work_object_t * w )
             break;
         }
         i = next;
+    }
+    // Generate timestamps if they are not set
+    if( pv->pts_start == -1 )
+    {
+        // Set pts to end of last sub if the start time is unknown.
+        pv->pts_start = pv->pts;
+    }
+    if( pv->pts_stop == -1 )
+    {
+        // Set durtion to 10 sec if unknown.
+        pv->pts_stop = pv->pts + 90000L * 10;
     }
 }
 
