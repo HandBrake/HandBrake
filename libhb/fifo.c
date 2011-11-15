@@ -200,14 +200,11 @@ void hb_buffer_reduce( hb_buffer_t * b, int size )
 {
     if ( size < b->alloc / 8 || b->data == NULL )
     {
-        uint32_t orig = b->alloc;
-        size = size_to_pool( size )->buffer_size;
-        b->data  = realloc( b->data, size );
-        b->alloc = size;
+        hb_buffer_t * tmp = hb_buffer_init( size );
 
-        hb_lock(buffers.lock);
-        buffers.allocated += size - orig;
-        hb_unlock(buffers.lock);
+        hb_buffer_swap_copy( b, tmp );
+        memcpy( b->data, tmp->data, size );
+        hb_buffer_close( &tmp );
     }
 }
 
