@@ -363,14 +363,16 @@ namespace Handbrake.Controls
             }
 
             // Logic
-            string forcedVal = check_forced.CheckState == CheckState.Checked ? "Yes" : "No";
-            string defaultSub = check_default.CheckState == CheckState.Checked ? "Yes" : "No";
-            string burnedVal = check_burned.CheckState == CheckState.Checked &&
-                               (drp_subtitleTracks.Text.Contains("(VOBSUB)") || drp_subtitleTracks.Text.Contains("(SSA)"))
-                                   ? "Yes"
-                                   : "No";
             string srtCode = "-", srtLangVal = "-", srtPath = "-", srtFile = "-";
             int srtOffsetMs = 0;
+
+            // Make sure we only have 1 burned track. We'll always give the latest track added burned in.
+            if (check_burned.Checked)
+                this.SetBurnedToOffForAllTracks();
+
+            // Make sure we only have 1 default track
+            if (check_default.Checked)
+                this.SetDefaultToOffForAllTracks();
 
             if (drp_subtitleTracks.SelectedItem.ToString().Contains(".srt"))
             {
@@ -379,12 +381,6 @@ namespace Handbrake.Controls
                 srtLangVal = srt_lang.SelectedItem.ToString();
                 srtCode = srt_charcode.SelectedItem.ToString();
                 srtOffsetMs = (int)srt_offset.Value;
-                if (defaultSub == "Yes") this.SetDefaultToOffForAllSRTTracks();
-            }
-            else
-            {
-                if (defaultSub == "Yes") this.SetDefaultToOffForAllTracks();
-                if (burnedVal == "Yes") this.SetBurnedToOffForAllTracks();
             }
 
             string trackName = (drp_subtitleTracks.SelectedItem.ToString().Contains(".srt"))
@@ -666,10 +662,7 @@ namespace Handbrake.Controls
             if (lv_subList.Items.Count == 0 || lv_subList.SelectedIndices.Count == 0) return;
 
             if (check_default.Checked) // Make sure we only have 1 default track
-                if (lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[0].Text.Contains(".srt"))
-                    this.SetDefaultToOffForAllSRTTracks();
-                else
-                    this.SetDefaultToOffForAllTracks();
+                this.SetDefaultToOffForAllTracks();
 
             lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[3].Text = check_default.Checked ? "Yes" : "No";
             lv_subList.Select();
@@ -823,33 +816,10 @@ namespace Handbrake.Controls
             int c = 0;
             foreach (ListViewItem item in lv_subList.Items)
             {
-                if (subList[c].SrtPath == "-")
+                if (item.SubItems[3].Text == "Yes")
                 {
-                    if (item.SubItems[3].Text == "Yes")
-                    {
-                        item.SubItems[3].Text = "No";
-                        subList[c].Default = false;
-                    }
-                }
-                c++;
-            }
-        }
-
-        /// <summary>
-        /// Set all subtitle tracks so that they have no default.
-        /// </summary>
-        private void SetDefaultToOffForAllSRTTracks()
-        {
-            int c = 0;
-            foreach (ListViewItem item in lv_subList.Items)
-            {
-                if (!subList[c].IsSrtSubtitle)
-                {
-                    if (item.SubItems[3].Text == "Yes")
-                    {
-                        item.SubItems[3].Text = "No";
-                        subList[c].Default = false;
-                    }
+                    item.SubItems[3].Text = "No";
+                    subList[c].Default = false;
                 }
                 c++;
             }
