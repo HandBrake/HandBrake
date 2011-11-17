@@ -293,7 +293,9 @@ namespace HandBrake.ApplicationServices.Functions
         {
             switch (encoder)
             {
+                case "":
                 case "ffmpeg":
+                case "ffmpeg4":
                     return VideoEncoder.FFMpeg;
                 case "ffmpeg2":
                     return VideoEncoder.FFMpeg2;
@@ -320,7 +322,7 @@ namespace HandBrake.ApplicationServices.Functions
             switch (encoder)
             {
                 case VideoEncoder.FFMpeg:
-                    return "ffmpeg";
+                    return "ffmpeg4";
                 case VideoEncoder.FFMpeg2:
                     return "ffmpeg2";
                 case VideoEncoder.X264:
