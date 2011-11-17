@@ -344,7 +344,7 @@ namespace Handbrake.Functions
             switch (mainWindow.drp_videoEncoder.Text)
             {
                 case "MPEG-4 (FFmpeg)":
-                    query += " -e ffmpeg";
+                    query += " -e ffmpeg4";
                     break;
                 case "MPEG-2 (FFmpeg)":
                     query += " -e ffmpeg2";
