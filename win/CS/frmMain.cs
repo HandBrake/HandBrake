@@ -1243,8 +1243,8 @@ namespace Handbrake
             }
 
             // Add the job.
-
-            this.queueProcessor.QueueManager.Add(QueryGenerator.GenerateFullQuery(this));
+            QueueTask query = QueryGenerator.GenerateFullQuery(this);
+            this.queueProcessor.QueueManager.Add(query);
 
             lbl_encode.Text = this.queueProcessor.QueueManager.Count + " encode(s) pending in the queue";
 
