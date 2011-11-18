@@ -18,6 +18,17 @@
 #include <sys/stat.h>
 #include <dirent.h>
 
+/*
+ * It seems WinXP doesn't align the stack of new threads to 16 bytes.
+ * To prevent crashes in SSE functions, we need to force stack alignement
+ * of new threads.
+ */
+#if defined( __GNUC__ ) && (defined( _WIN32 ) || defined( __MINGW32__ ))
+#    define attribute_align_thread __attribute__((force_align_arg_pointer))
+#else
+#    define attribute_align_thread
+#endif
+
 #if defined( __GNUC__ ) && !(defined( _WIN32 ) || defined( __MINGW32__ ))
 #   define HB_WPRINTF(s,v) __attribute__((format(printf,s,v)))
 #else
