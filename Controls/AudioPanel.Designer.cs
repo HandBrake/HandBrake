@@ -35,6 +35,7 @@ namespace Handbrake.Controls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AudioPanel));
             this.audioMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.audioList_MoveToTop = new System.Windows.Forms.ToolStripMenuItem();
             this.audioList_moveup = new System.Windows.Forms.ToolStripMenuItem();
@@ -265,7 +266,7 @@ namespace Handbrake.Controls
             this.audioList.ShowRowErrors = false;
             this.audioList.Size = new System.Drawing.Size(685, 200);
             this.audioList.TabIndex = 67;
-            this.ToolTips.SetToolTip(this.audioList, "The audio tracks to be encoded into the output file.");
+            this.ToolTips.SetToolTip(this.audioList, resources.GetString("audioList.ToolTip"));
             this.audioList.SelectionChanged += new System.EventHandler(this.audioList_SelectionChanged);
             // 
             // Source
