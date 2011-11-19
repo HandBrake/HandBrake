@@ -361,6 +361,8 @@ namespace Handbrake.Controls
                     // Set the Advanced Control.
                     if (!advancedAudio.IsDisposed)
                         advancedAudio.Track = track;
+
+                    this.RefreshEnabledControls();
                 }
             }
         }
@@ -585,6 +587,28 @@ namespace Handbrake.Controls
         #endregion
 
         #region Private Functions
+
+        /// <summary>
+        /// Refresh the enabled controls
+        /// </summary>
+        private void RefreshEnabledControls()
+        {
+            // Configure the widgets with values
+            if (drp_audioEncoder.Text.Contains("Passthru"))
+            {
+                drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = false;
+            }
+            else
+            {
+                drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = true;
+            }
+
+            if (drp_audioEncoder.Text.Contains("Flac"))
+            {
+                drp_audioBitrate.Enabled = false;
+            }
+        }
+
 
         /// <summary>
         /// Attempt to automatically select the correct audio tracks based on the users settings.
