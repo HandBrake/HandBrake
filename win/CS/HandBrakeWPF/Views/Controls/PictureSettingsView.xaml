@@ -1,7 +1,8 @@
 ﻿<UserControl x:Class="HandBrakeWPF.Views.Controls.PictureSettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:NumericUpDown="clr-namespace:EagleBoost.Wpf.Presentation.Controls.NumericUpDown;assembly=EagleBoost.Wpf.Presentation">
+
     <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 
         <!-- Size Panel-->
@@ -17,9 +18,9 @@
             <!-- Row 2-->
             <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
                 <Label Content="Width:" Grid.Row="1" Grid.Column="0" />
-                <!--<Controls:NumericUpDown Name="width" Minimum="0" Grid.Row="1" Grid.Column="1" Width="45"  />-->
+                <NumericUpDown:NumericUpDown Name="width" Minimum="0" Grid.Row="1" Grid.Column="1" Width="45"  />
                 <Label Content="Height:" Grid.Row="1" Grid.Column="2" />
-                <!--<Controls:NumericUpDown Name="height" Minimum="0" Grid.Row="1" Grid.Column="3" Width="45"  />-->
+                <NumericUpDown:NumericUpDown Name="height" Minimum="0" Grid.Row="1" Grid.Column="3" Width="45"  />
                 <CheckBox Content="Keep Aspect Ratio" VerticalAlignment="Center" Margin="5,0,0,0" />
             </StackPanel>
 
@@ -48,9 +49,9 @@
 
                 <ComboBox Width="110" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
                 <ComboBox Width="110" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <!--<Controls:NumericUpDown Width="45" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <Controls:NumericUpDown Width="45" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <Controls:NumericUpDown Width="45" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />-->
+                <NumericUpDown:NumericUpDown Width="45" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <NumericUpDown:NumericUpDown Width="45" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <NumericUpDown:NumericUpDown Width="45" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
                 <Label Content="---" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
             </Grid>
         </StackPanel>
@@ -60,7 +61,7 @@
             <Label Content="Cropping" FontWeight="Bold" />
             <RadioButton Content="Automatic" Margin="10,0,0,0"/>
             <RadioButton Content="Custom" Margin="10,0,0,0" />
-            
+
             <Grid Margin="0,10,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -83,16 +84,13 @@
                 <Label Content="Left" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" />
                 <Label Content="Right" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" />
 
-                <!--<Controls:NumericUpDown Width="45" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <Controls:NumericUpDown Width="45" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <Controls:NumericUpDown Width="45" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <Controls:NumericUpDown Width="45" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Margin="0,0,0,5" />-->
+                <NumericUpDown:NumericUpDown Width="45" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <NumericUpDown:NumericUpDown Width="45" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <NumericUpDown:NumericUpDown Width="45" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <NumericUpDown:NumericUpDown Width="45" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Margin="0,0,0,5" />
 
             </Grid>
-            
-            
+
         </StackPanel>
-
-
     </StackPanel>
 </UserControl>

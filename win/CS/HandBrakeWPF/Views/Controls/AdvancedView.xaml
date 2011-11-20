@@ -5,7 +5,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Background="Beige">
-            
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Advanced" FontWeight="Bold" Margin="10,5,0,0" Grid.Row="0" ></TextBlock>
+
+        <TextBox Grid.Row="2" Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+
+        </TextBox>
+
     </Grid>
 </UserControl>
