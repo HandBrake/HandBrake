@@ -155,10 +155,8 @@
                             <Controls:PictureSettingsView x:Name="pictureSettingsView"></Controls:PictureSettingsView>
                         </TabItem>
                         <TabItem Header="Video Filters" Name="filtersTab">
-                            <Controls:FiltersView></Controls:FiltersView>
                         </TabItem>
                         <TabItem Header="Video" Name="videoTab">
-                            <Controls:VideoView></Controls:VideoView>
                         </TabItem>
                         <TabItem Header="Audio" Name="audioTab">
                             <Controls:AudioView></Controls:AudioView>

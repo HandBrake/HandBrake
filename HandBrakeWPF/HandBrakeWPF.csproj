@@ -129,23 +129,14 @@
     <Compile Include="Views\QueueView.xaml.cs">
       <DependentUpon>QueueView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controls\FiltersView.xaml.cs">
-      <DependentUpon>FiltersView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\PictureSettingsView.xaml.cs">
       <DependentUpon>PictureSettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controls\QueryEditorView.xaml.cs">
-      <DependentUpon>QueryEditorView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Controls\SubtitlesView.xaml.cs">
       <DependentUpon>SubtitlesView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Controls\VideoView.xaml.cs">
-      <DependentUpon>VideoView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\OptionsView.xaml.cs">
       <DependentUpon>OptionsView.xaml</DependentUpon>
@@ -213,10 +204,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Controls\FiltersView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -225,15 +212,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Controls\QueryEditorView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Controls\SubtitlesView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Controls\VideoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
