@@ -54,6 +54,8 @@
     <Reference Include="Ookii.Dialogs.Wpf">
       <HintPath>..\libraries\OokiiDialogs\Ookii.Dialogs.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -70,7 +72,6 @@
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -84,6 +85,8 @@
     <Compile Include="UserSettingConstants.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AddPresetViewModel.cs" />
+    <Compile Include="ViewModels\ErrorViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IErrorViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ILogViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IAboutViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IMainViewModel.cs" />
@@ -113,6 +116,9 @@
     </Compile>
     <Compile Include="Views\AddPresetView.xaml.cs">
       <DependentUpon>AddPresetView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ErrorView.xaml.cs">
+      <DependentUpon>ErrorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LogView.xaml.cs">
       <DependentUpon>LogView.xaml</DependentUpon>
@@ -190,6 +196,10 @@
     <Page Include="Views\AddPresetView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ErrorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LogView.xaml">
       <SubType>Designer</SubType>

@@ -13,6 +13,9 @@ namespace HandBrakeWPF.Factories
 
     using HandBrake.ApplicationServices.Services.Interfaces;
 
+    using HandBrakeWPF.ViewModels;
+    using HandBrakeWPF.ViewModels.Interfaces;
+
     /// <summary>
     /// The View Model Factory
     /// </summary>
@@ -41,6 +44,17 @@ namespace HandBrakeWPF.Factories
         {
             this.windowManager = windowManager;
             this.userSettingsService = userSettingsService;
+        }
+
+        /// <summary>
+        /// Create an ErrorViewModel
+        /// </summary>
+        /// <returns>
+        /// An Error ViewModel
+        /// </returns>
+        public IErrorViewModel CreateErrorViewModel()
+        {
+            return new ErrorViewModel();
         }
     }
 }
