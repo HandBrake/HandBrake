@@ -18,10 +18,21 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class ViewModelBase : Screen, IViewModelBase
     {
+        #region Constants and Fields
+
         /// <summary>
         /// Backing Field to prevent the Load method being called more than once.
         /// </summary>
         private bool hasLoaded;
+
+        /// <summary>
+        /// The title.
+        /// </summary>
+        private string title;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
@@ -34,22 +45,47 @@ namespace HandBrakeWPF.ViewModels
             this.WindowManager = windowManager;
         }
 
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets Details.
+        /// </summary>
+        public string Title
+        {
+            get
+            {
+                return this.title;
+            }
+
+            set
+            {
+                this.title = value;
+                this.NotifyOfPropertyChange("Title");
+            }
+        }
+
         /// <summary>
         /// Gets WindowManager.
         /// </summary>
         public IWindowManager WindowManager { get; private set; }
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>
         /// Perform any Initialisation for this ViewModelBase.
         /// </summary>
         public void Load()
         {
-            if (!hasLoaded)
+            if (!this.hasLoaded)
             {
-                hasLoaded = true;
+                this.hasLoaded = true;
 
                 // Initialise the ViewModels OnLoad method if it exists.
-                this.OnLoad();              
+                this.OnLoad();
             }
         }
 
@@ -60,5 +96,7 @@ namespace HandBrakeWPF.ViewModels
         {
             // Impliment in the ViewModel to perform viewmodel specific code.
         }
+
+        #endregion
     }
 }
