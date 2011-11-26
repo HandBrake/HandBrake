@@ -171,8 +171,38 @@ void hb_display_job_info( hb_job_t * job )
     
     hb_log( "   + %s", title->path );
 
-    hb_log( "   + title %d, chapter(s) %d to %d", title->index,
-            job->chapter_start, job->chapter_end );
+    if( job->pts_to_start || job->pts_to_stop )
+    {
+        int64_t stop;
+        int hr_start, min_start, hr_stop, min_stop;
+        float sec_start, sec_stop;
+
+        stop = job->pts_to_start + job->pts_to_stop;
+
+        hr_start = job->pts_to_start / (90000 * 60 * 60);
+        min_start = job->pts_to_start / (90000 * 60);
+        sec_start = (float)job->pts_to_start / 90000.0 - min_start * 60;
+        min_start %= 60;
+
+        hr_stop = stop / (90000 * 60 * 60);
+        min_stop = stop / (90000 * 60);
+        sec_stop = (float)stop / 90000.0 - min_stop * 60;
+        min_stop %= 60;
+
+        hb_log( "   + title %d, start %d:%d:%.2f stop %d:%d:%.2f", title->index,
+                hr_start, min_start, sec_start,
+                hr_stop, min_stop, sec_stop);
+    }
+    else if( job->frame_to_start || job->frame_to_stop )
+    {
+        hb_log( "   + title %d, frames %d to %d", title->index,
+                job->frame_to_start, job->frame_to_start + job->frame_to_stop );
+    }
+    else
+    {
+        hb_log( "   + title %d, chapter(s) %d to %d", title->index,
+                job->chapter_start, job->chapter_end );
+    }
 
     if( title->container_name != NULL )
         hb_log( "   + container: %s", title->container_name);
