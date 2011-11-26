@@ -13,7 +13,7 @@
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
     </Window.Resources>
-    
+
     <Grid>
         <StackPanel Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <!-- Menu and Taskbar-->
@@ -66,7 +66,7 @@
                             <Label Content="Start"  Margin="8,0,0,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
-                    
+
                     <Button Name="AddToQueue">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="Images/AddToQueue.png" Height="32" Width="32" />
@@ -89,7 +89,7 @@
                             <Label Content="Preview"  Margin="8,0,0,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
-                    <Button Name="ActivityWindow" Micro:Message.Attach="[Event Click] = [Action OpenLogWindow]"> 
+                    <Button Name="ActivityWindow" Micro:Message.Attach="[Event Click] = [Action OpenLogWindow]">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="Images/ActivityWindow.png" Height="32" Width="32" />
                             <Label Content="Activity Window"  Margin="8,0,0,0" VerticalAlignment="Center" />
@@ -97,10 +97,10 @@
                     </Button>
                 </ToolBar>
             </StackPanel>
-            
+
             <!-- Main Body-->
             <StackPanel Orientation="Horizontal">
-                
+
                 <!-- Main Controls-->
                 <StackPanel Orientation="Vertical">
                     <!-- Source -->
@@ -155,11 +155,127 @@
                             <Controls:PictureSettingsView x:Name="pictureSettingsView"></Controls:PictureSettingsView>
                         </TabItem>
                         <TabItem Header="Video Filters" Name="filtersTab">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="Filters" FontWeight="Bold" Margin="10,5,0,0" Grid.Row="0" ></TextBlock>
+
+                                <StackPanel Orientation="Vertical" Grid.Row="1" Margin="10,10,0,0">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100" />
+                                            <ColumnDefinition Width="130" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Text="Detelecine:" Grid.Row="0" Grid.Column="0" Margin="0,0,0,10" />
+                                        <ComboBox Width="120" Grid.Row="0" Grid.Column="1" Margin="0,0,0,10"/>
+                                        <TextBox Width="120" Grid.Row="0" Grid.Column="2" Margin="0,0,0,10"/>
+
+                                        <TextBlock Text="Decomb:" Grid.Row="1" Grid.Column="0" Margin="0,0,0,10"/>
+                                        <ComboBox Width="120" Grid.Row="1" Grid.Column="1" Margin="0,0,0,10"/>
+                                        <TextBox Width="120" Grid.Row="1" Grid.Column="2" Margin="0,0,0,10"/>
+
+                                        <TextBlock Text="Deinterlace:" Grid.Row="2" Grid.Column="0" Margin="0,0,0,10"/>
+                                        <ComboBox Width="120" Grid.Row="2" Grid.Column="1" Margin="0,0,0,10"/>
+                                        <TextBox Width="120" Grid.Row="2" Grid.Column="2" Margin="0,0,0,10"/>
+
+                                        <TextBlock Text="Denoise:" Grid.Row="3" Grid.Column="0" Margin="0,0,0,10"/>
+                                        <ComboBox Width="120" Grid.Row="3" Grid.Column="1" Margin="0,0,0,10"/>
+                                        <TextBox Width="120" Grid.Row="3" Grid.Column="2" Margin="0,0,0,10"/>
+
+                                        <TextBlock Text="Deblock:" Grid.Row="4" Grid.Column="0" Margin="0,0,0,10"/>
+                                        <Slider Width="120" Grid.Row="4" Grid.Column="1" Margin="0,0,0,10"/>
+                                        <TextBlock Text="Off" Grid.Row="4" Grid.Column="2" Margin="0,0,0,10"/>
+
+                                        <CheckBox Content="Grayscale" Grid.Row="5" Grid.Column="1" Margin="0,0,0,10"/>
+                                    </Grid>
+
+                                </StackPanel>
+
+                            </Grid>
                         </TabItem>
+                        
                         <TabItem Header="Video" Name="videoTab">
+                            <Grid Margin="10,5,0,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Orientation="Vertical" Grid.Column="0" >
+
+                                        <TextBlock Text="Video" FontWeight="Bold" Margin="0,0,0,10"/>
+                                        
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
+                                            <TextBlock Text="Video Codec:" Width="100" />
+                                            <ComboBox Width="120"/>
+                                        </StackPanel>
+                                        
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Franerate (FPS):" Width="100"/>
+                                            <StackPanel Orientation="Vertical">
+                                                <ComboBox Width="120" />
+                                                <RadioButton Content="Constant Framerate" />
+                                                <RadioButton Content="Variable Framerate" />
+                                                <RadioButton Content="Peak Framerate" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </StackPanel>
+
+
+                                    <StackPanel Orientation="Vertical" Grid.Column="1" >
+                                        <TextBlock Text="Quality" FontWeight="Bold" Margin="0,0,0,10"/>
+                                                              
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
+                                            <RadioButton Content="Constant Quality:" Margin="0,0,10,0"/>
+                                            <TextBlock Text="0" Width="25" />
+                                            <TextBlock Text="RF" FontWeight="Bold" />
+                                        </StackPanel>
+                                        
+                                        <Slider Width="240" Margin="0,0,0,20" />
+                                                        
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                            <RadioButton Content="Avg Bitrate (kbps):" Margin="0,0,10,0"/>
+                                            <TextBox Width="75" />
+                                        </StackPanel>
+
+                                        <StackPanel Orientation="Horizontal" Margin="30,0,0,0">
+                                            <CheckBox Content="2-Pass Encoding" Margin="0,0,10,0" />
+                                            <CheckBox Content="Turbo first pass" />
+                                        </StackPanel>
+
+                                    </StackPanel>
+
+
+                                </Grid>
+
+                            </Grid>
                         </TabItem>
                         <TabItem Header="Audio" Name="audioTab">
                             <Controls:AudioView></Controls:AudioView>
+                        </TabItem>
+                        <TabItem Header="Subtitles" Name="subtitlesTab">
+                            <Controls:SubtitlesView></Controls:SubtitlesView>
                         </TabItem>
                         <TabItem Header="Chapters" Name="chaptersTab">
                             <Controls:ChaptersView></Controls:ChaptersView>
@@ -188,8 +304,8 @@
                     </GroupBox>
                 </StackPanel>
 
-            </StackPanel>      
-  
+            </StackPanel>
+
             <!-- Status Bar -->
             <StatusBar Grid.Row="6" Height="30" Grid.ColumnSpan="2" VerticalAlignment="Bottom">
                 <Label Content="{Binding Path=ProgramStatusLabel}" FontSize="10" VerticalAlignment="Center" />
