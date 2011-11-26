@@ -248,7 +248,7 @@ namespace Handbrake.Controls
             // Some Sanity Checking
             if (audioList.SelectedRows.Count == 0)
             {
-                drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = false;
+                RefreshEnabledControls();
                 return;
             }
 
