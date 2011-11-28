@@ -45,18 +45,33 @@
                 <!-- ToolBar -->
                 <ToolBar Name="mainToolBar" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  SnapsToDevicePixels="False">
 
-                    <Button Name="Source">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="Images/Movies.png" Height="32" Width="32" />
-                            <Label Content="Source"  Margin="8,0,0,0" VerticalAlignment="Center" />
-                        </StackPanel>
-                        <Button.ContextMenu>
-                            <ContextMenu  >
-                                <MenuItem Header="Open Folder" Micro:Message.Attach="[Event Click] = [Action FolderScan]"/>
-                                <MenuItem Header="Open File" Micro:Message.Attach="[Event Click] = [Action FileScan]"/>
-                            </ContextMenu>
-                        </Button.ContextMenu>
-                    </Button>
+                    <Menu Background="Transparent" >
+                        <MenuItem>
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="Images/Movies.png" Height="32" Width="32" />
+                                    <Label Content="Source"  Margin="8,0,0,0" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </MenuItem.Header>
+
+                            <MenuItem Micro:Message.Attach="[Event Click] = [Action FolderScan]">
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="Images/folder.png" Height="20" Width="20" />
+                                        <Label Content="Open Folder"  Margin="8,0,0,0" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </MenuItem.Header>
+                            </MenuItem>
+                            <MenuItem Micro:Message.Attach="[Event Click] = [Action FileScan]">
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="Images/Movies.png" Height="20" Width="20" />
+                                        <Label Content="Open File"  Margin="8,0,0,0" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </MenuItem.Header>
+                            </MenuItem>
+                        </MenuItem>
+                    </Menu>
 
                     <Separator />
 
@@ -115,14 +130,14 @@
                             <ComboBox Name="Titles" Margin="8,0,0,0" MinWidth="100" ItemsSource="{Binding ScannedSource.Titles}" SelectedItem="{Binding Path=SelectedTitle}" />
 
                             <Label Content="Angle" Margin="8,0,0,0" />
-                            <ComboBox Name="Angles" Margin="8,0,0,0" MinWidth="60"  SelectedItem="{Binding Path=CurrentTask.Angle}"/>
+                            <ComboBox Name="Angles" Margin="8,0,0,0" MinWidth="60" ItemsSource="{Binding Angles}"  SelectedItem="{Binding SelectedAngle}"/>
 
-                            <ComboBox Name="PointToPointMode" Margin="8,0,0,0" MinWidth="80" SelectedItem="{Binding Path=CurrentTask.PointToPointMode}" />
-                            <ComboBox Name="StartPoint" Margin="8,0,0,0" MinWidth="60" SelectedItem="{Binding Path=CurrentTask.StartPoint}" />
+                            <ComboBox Name="PointToPointMode" Margin="8,0,0,0" MinWidth="80" ItemsSource="{Binding RangeMode}" SelectedItem="{Binding SelectedPointToPoint}" />
+                            <ComboBox Name="StartPoint" Margin="8,0,0,0" MinWidth="60" ItemsSource="{Binding StartEndRangeItems}" SelectedItem="{Binding SelectedStartPoint}" />
                             <Label Content="through" Margin="8,0,0,0" />
-                            <ComboBox Name="EndPoint" Margin="8,0,0,0" MinWidth="60" SelectedItem="{Binding Path=CurrentTask.EndPoint}" />
+                            <ComboBox Name="EndPoint" Margin="8,0,0,0" MinWidth="60" ItemsSource="{Binding StartEndRangeItems}" SelectedItem="{Binding SelectedEndPoint}" />
                             <Label Content="Duration" Margin="8,0,0,0" />
-                            <Label Content="--:--:--" Margin="8,0,0,0" />
+                            <Label Content="{Binding Duration}" Margin="8,0,0,0" />
                         </StackPanel>
                     </StackPanel>
 
@@ -207,7 +222,7 @@
 
                             </Grid>
                         </TabItem>
-                        
+
                         <TabItem Header="Video" Name="videoTab">
                             <Grid Margin="10,5,0,0">
                                 <Grid.RowDefinitions>
@@ -225,12 +240,12 @@
                                     <StackPanel Orientation="Vertical" Grid.Column="0" >
 
                                         <TextBlock Text="Video" FontWeight="Bold" Margin="0,0,0,10"/>
-                                        
+
                                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
                                             <TextBlock Text="Video Codec:" Width="100" />
                                             <ComboBox Width="120"/>
                                         </StackPanel>
-                                        
+
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="Franerate (FPS):" Width="100"/>
                                             <StackPanel Orientation="Vertical">
@@ -245,15 +260,15 @@
 
                                     <StackPanel Orientation="Vertical" Grid.Column="1" >
                                         <TextBlock Text="Quality" FontWeight="Bold" Margin="0,0,0,10"/>
-                                                              
+
                                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
                                             <RadioButton Content="Constant Quality:" Margin="0,0,10,0"/>
                                             <TextBlock Text="0" Width="25" />
                                             <TextBlock Text="RF" FontWeight="Bold" />
                                         </StackPanel>
-                                        
+
                                         <Slider Width="240" Margin="0,0,0,20" />
-                                                        
+
                                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                                             <RadioButton Content="Avg Bitrate (kbps):" Margin="0,0,10,0"/>
                                             <TextBox Width="75" />

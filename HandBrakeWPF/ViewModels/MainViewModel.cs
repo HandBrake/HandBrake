@@ -10,17 +10,23 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel.Composition;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
     using System.Windows;
 
     using Caliburn.Micro;
 
+    using Castle.Components.DictionaryAdapter;
+
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Exceptions;
+    using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -88,6 +94,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private Title selectedTitle;
 
+        /// <summary>
+        /// Backing field for duration
+        /// </summary>
+        private string duration;
+
         #endregion
 
         /// <summary>
@@ -117,7 +128,7 @@ namespace HandBrakeWPF.ViewModels
             this.scanService = scanService;
             this.encodeService = encodeService;
             this.presetService = presetService;
-            this.queueProcessor = new QueueProcessor(Process.GetProcessesByName("HandBrake").Length);
+            this.queueProcessor = IoC.Get<IQueueProcessor>(); // TODO Instance ID!
 
             // Setup Properties
             this.WindowTitle = "HandBrake WPF Test Application";
@@ -181,31 +192,11 @@ namespace HandBrakeWPF.ViewModels
             {
                 return this.scannedSource;
             }
+
             set
             {
                 this.scannedSource = value;
                 this.NotifyOfPropertyChange("ScannedSource");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets SelectedTitle.
-        /// </summary>
-        public Title SelectedTitle
-        {
-            get
-            {
-                return this.selectedTitle;
-            }
-            set
-            {
-                if (!object.Equals(this.selectedTitle, value))
-                {
-                    this.selectedTitle = value;
-                    // Use the Path on the Title, or the Source Scan path if one doesn't exist.
-                    this.CurrentTask.Source = !string.IsNullOrEmpty(this.selectedTitle.SourceName) ? this.selectedTitle.SourceName : this.ScannedSource.ScanPath;
-                    this.CurrentTask.Title = value.TitleNumber;
-                }
             }
         }
 
@@ -248,6 +239,175 @@ namespace HandBrakeWPF.ViewModels
                     this.programStatusLabel = value;
                     this.NotifyOfPropertyChange("ProgramStatusLabel");
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets RangeMode.
+        /// </summary>
+        public IEnumerable<PointToPointMode> RangeMode
+        {
+            get
+            {
+                return new List<PointToPointMode>
+                    {
+                        PointToPointMode.Chapters, PointToPointMode.Seconds, PointToPointMode.Frames 
+                    };
+            }
+        }
+
+        /// <summary>
+        /// Gets StartEndRangeItems.
+        /// </summary>
+        public IEnumerable<int> StartEndRangeItems
+        {
+            get
+            {
+                if (this.SelectedTitle == null)
+                {
+                    return null;
+                }
+
+                return this.SelectedTitle.Chapters.Select(item => item.ChapterNumber).Select(dummy => (int)dummy).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Gets Angles.
+        /// </summary>
+        public IEnumerable<int> Angles
+        {
+            get
+            {
+                if (this.SelectedTitle == null)
+                {
+                    return null;
+                }
+
+                List<int> items = new List<int>();
+                for (int i = 1; i <= this.selectedTitle.AngleCount + 1; i++)
+                {
+                    items.Add(i);
+                }
+                return items;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets Duration.
+        /// </summary>
+        public string Duration
+        {
+            get
+            {
+                return string.IsNullOrEmpty(duration) ? "--:--:--" : duration;
+            }
+            set
+            {
+                duration = value;
+                this.NotifyOfPropertyChange("Duration");
+            }
+        }
+
+        /* Properties for User Selections */
+
+        /// <summary>
+        /// Gets or sets SelectedTitle.
+        /// </summary>
+        public Title SelectedTitle
+        {
+            get
+            {
+                return this.selectedTitle;
+            }
+            set
+            {
+                if (!object.Equals(this.selectedTitle, value))
+                {
+                    this.selectedTitle = value;
+
+                    if (selectedTitle == null)
+                    {
+                        return;
+                    }
+
+                    // Use the Path on the Title, or the Source Scan path if one doesn't exist.
+                    this.CurrentTask.Source = !string.IsNullOrEmpty(this.selectedTitle.SourceName) ? this.selectedTitle.SourceName : this.ScannedSource.ScanPath;
+                    this.CurrentTask.Title = value.TitleNumber;
+                    this.NotifyOfPropertyChange("StartEndRangeItems");
+                    this.NotifyOfPropertyChange("SelectedTitle");
+                    this.NotifyOfPropertyChange("Angles");
+
+                    // Default the Start and End Point dropdowns
+                    this.SelectedStartPoint = 1;
+                    this.SelectedEndPoint = selectedTitle.Chapters.Last().ChapterNumber;
+                    this.SelectedPointToPoint = PointToPointMode.Chapters;
+                    this.SelectedAngle = 1;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets SelectedAngle.
+        /// </summary>
+        public int SelectedAngle
+        {
+            get
+            {
+                return this.CurrentTask.StartPoint;
+            }
+            set
+            {
+                this.CurrentTask.EndPoint = value;
+                this.NotifyOfPropertyChange("SelectedAngle");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets SelectedStartPoint.
+        /// </summary>
+        public int SelectedStartPoint
+        {
+            get
+            {
+                return this.CurrentTask.StartPoint;
+            }
+            set
+            {
+                this.CurrentTask.StartPoint = value;
+                this.NotifyOfPropertyChange("SelectedStartPoint");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets SelectedEndPoint.
+        /// </summary>
+        public int SelectedEndPoint
+        {
+            get
+            {
+                return this.CurrentTask.EndPoint;
+            }
+            set
+            {
+                this.CurrentTask.EndPoint = value;
+                this.NotifyOfPropertyChange("SelectedEndPoint");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets SelectedPointToPoint.
+        /// </summary>
+        public PointToPointMode SelectedPointToPoint
+        {
+            get
+            {
+                return this.CurrentTask.PointToPointMode;
+            }
+            set
+            {
+                this.CurrentTask.PointToPointMode = value;
+                this.NotifyOfPropertyChange("SelectedPointToPoint");
             }
         }
 
@@ -421,7 +581,7 @@ namespace HandBrakeWPF.ViewModels
 
         #endregion
 
-        #region Main Window
+        #region Main Window Public Methods
 
         /// <summary>
         /// The Destination Path
@@ -488,6 +648,8 @@ namespace HandBrakeWPF.ViewModels
                 this.scanService.SouceData.CopyTo(this.ScannedSource);
                 this.NotifyOfPropertyChange("ScannedSource");
                 this.NotifyOfPropertyChange("ScannedSource.Titles");
+                this.NotifyOfPropertyChange("T");
+                this.SelectedTitle = this.ScannedSource.Titles.Where(t => t.MainTitle).FirstOrDefault();
             }
 
             this.SourceLabel = "Scan Completed";
