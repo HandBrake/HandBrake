@@ -245,7 +245,11 @@ namespace Handbrake.Functions
                 if (UserSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim().StartsWith("{source_path}") && !string.IsNullOrEmpty(mainWindow.sourcePath))
                 {
                     string savedPath = UserSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim().Replace("{source_path}\\", string.Empty).Replace("{source_path}", string.Empty);
-                    string requestedPath = Path.Combine(Path.GetDirectoryName(mainWindow.sourcePath), savedPath);
+
+                    string directory = Directory.Exists(mainWindow.sourcePath)
+                                           ? mainWindow.sourcePath
+                                           : Path.GetDirectoryName(mainWindow.sourcePath);
+                    string requestedPath = Path.Combine(directory, savedPath);
 
                     autoNamePath = Path.Combine(requestedPath, destinationFilename);
                     if (autoNamePath == mainWindow.sourcePath)
