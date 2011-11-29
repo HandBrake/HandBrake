@@ -2559,13 +2559,13 @@ static int HandleEvents( hb_handle_t * h )
             switch( p.error )
             {
                 case HB_ERROR_NONE:
-                    fprintf( stderr, "\nRip done!\n" );
+                    fprintf( stderr, "\nEncode done!\n" );
                     break;
                 case HB_ERROR_CANCELED:
-                    fprintf( stderr, "\nRip canceled.\n" );
+                    fprintf( stderr, "\nEncode canceled.\n" );
                     break;
                 default:
-                    fprintf( stderr, "\nRip failed (error %x).\n",
+                    fprintf( stderr, "\nEncode failed (error %x).\n",
                              p.error );
             }
             die = 1;
