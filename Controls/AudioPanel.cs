@@ -609,7 +609,6 @@ namespace Handbrake.Controls
             }
         }
 
-
         /// <summary>
         /// Attempt to automatically select the correct audio tracks based on the users settings.
         /// </summary>
@@ -621,10 +620,10 @@ namespace Handbrake.Controls
                 this.AudioTracks.Clear();
                 return;
             }
-
-            // Handle Preferred Language
+  
             if (this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage) == "Any")
             {
+                // If we have Any as the preferred Language, just set the first track to all audio tracks.
                 drp_audioTrack.SelectedIndex = 0;
                 foreach (AudioTrack track in this.audioTracks)
                 {
@@ -634,10 +633,10 @@ namespace Handbrake.Controls
                     }
                 }
 
-                return;
             } 
             else
-            {
+            { 
+                // Otherwise, set all the tracks to the first track of the preferred language.
                 foreach (Audio item in drp_audioTrack.Items)
                 {
                     if (item.Language.Contains(this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage)))
@@ -663,7 +662,7 @@ namespace Handbrake.Controls
             // Now add any additional Langauges tracks on top of the presets tracks.
             int mode = this.UserSettingService.GetUserSetting<int>(UserSettingConstants.DubModeAudio);
             ArrayList languageOrder = new ArrayList();    // This is used to keep the Prefered Language in the front and the other languages in order. TODO this is no longer required, refactor this.
-            if (mode > 0)
+            if (mode > 1)
             {
                 foreach (string item in this.UserSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages))
                 {
@@ -706,7 +705,7 @@ namespace Handbrake.Controls
             {
                 case 1: // Adding all remaining audio tracks
                     this.mnu_AddAll_Click(this, EventArgs.Empty);
-                    break;
+                    break;   
                 case 2: // Add Langauges tracks for the additional languages selected, in-order.
                     audioList.ClearSelection();
                     foreach (string item in languageOrder)

@@ -229,14 +229,11 @@ namespace Handbrake.Controls
             // New DUB Settings
             int mode = UserSettingService.GetUserSetting<int>(UserSettingConstants.DubModeSubtitle);
 
-            if (UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage) == "Any")
-                mode = 0;
-
             // Native Language is not 'Any', so initialising the Language Dictionary
             if (mode >= 3)
             {
-                languageIndex.Add(UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage), new ArrayList());
-                languageOrder.Add(UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage));
+                languageIndex.Add(UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles), new ArrayList());
+                languageOrder.Add(UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles));
 
                 foreach (string item in UserSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages))
                 {
@@ -282,7 +279,7 @@ namespace Handbrake.Controls
                     if (drp_subtitleTracks.SelectedItem != null)
                         this.btn_addSubtitleTrack_Click(this, new EventArgs());
                     break;
-                case 3:
+                case 3: // Selected Languages Only
                     foreach (string item in languageOrder)
                     {
                         if (languageIndex[item].Count > 0)
@@ -293,13 +290,13 @@ namespace Handbrake.Controls
                                 if (drp_subtitleTracks.SelectedItem != null)
                                 {
                                     this.btn_addSubtitleTrack_Click(this, new EventArgs());
-                                    //subList.ClearSelection();
                                 }
                             }
                         }
                     }
                     break;
-                case 4:
+                case 4: // Prefered Only
+                case 5: // Prefered Only All
                     if (languageIndex[(string)languageOrder[0]].Count > 0)
                     {
                         foreach (int i in languageIndex[(string)languageOrder[0]])
@@ -308,7 +305,11 @@ namespace Handbrake.Controls
                             if (drp_subtitleTracks.SelectedItem != null)
                             {
                                 this.btn_addSubtitleTrack_Click(this, new EventArgs());
-                                //subList.ClearSelection();
+                                if (mode == 4)
+                                {
+                                    // Mode 4 is First, 5 is All
+                                    break;
+                                }
                             }
                         }
                     }

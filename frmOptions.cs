@@ -45,7 +45,8 @@ namespace Handbrake
 
             foreach (string item in langList.Keys)
             {
-                drop_preferredLang.Items.Add(item);
+                drop_preferredLangAudio.Items.Add(item);
+                drop_preferredLangSubtitles.Items.Add(item);
 
                 // In the available languages should be no "Any" and no selected language.
                 if ((item != "Any") && (!this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages).Contains(item)))
@@ -133,7 +134,8 @@ namespace Handbrake
             // Audio and Subtitles Tab
             // #############################
 
-            drop_preferredLang.SelectedItem = this.userSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage);
+            drop_preferredLangAudio.SelectedItem = this.userSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage);
+            drop_preferredLangSubtitles.SelectedItem = this.userSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles);
 
             //if (this.userSettingService.GetUserSetting<int>(UserSettingConstants.DubMode) != 255)
             //{
@@ -398,24 +400,12 @@ namespace Handbrake
 
         private void drop_preferredLang_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.userSettingService.SetUserSetting(UserSettingConstants.NativeLanguage, drop_preferredLang.SelectedItem.ToString());
+            this.userSettingService.SetUserSetting(UserSettingConstants.NativeLanguage, drop_preferredLangAudio.SelectedItem.ToString());
+        }
 
-            if (this.userSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage) == "Any")
-            {
-                cb_audioMode.Enabled = false;
-                cb_subtitleMode.Enabled = false;
-                check_AddOnlyOneAudioPerLanguage.Enabled = false;
-
-                audioSelectionPanel.Enabled = false;
-            }
-            else
-            {
-                cb_audioMode.Enabled = true;
-                cb_subtitleMode.Enabled = true;
-                check_AddOnlyOneAudioPerLanguage.Enabled = true;
-
-                audioSelectionPanel.Enabled = true;
-            }
+        private void drop_preferredLangSubtitles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.userSettingService.SetUserSetting(UserSettingConstants.NativeLanguageForSubtitles, drop_preferredLangSubtitles.SelectedItem.ToString());
         }
 
         private void button_removeLanguage_Click(object sender, EventArgs e)
@@ -733,5 +723,7 @@ namespace Handbrake
         {
             this.Close();
         }
+
+ 
     }
 }
