@@ -120,9 +120,6 @@
   <metadata name="ToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>132, 18</value>
   </metadata>
-  <metadata name="ToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>132, 18</value>
-  </metadata>
   <data name="cb_mp4FileMode.ToolTip" xml:space="preserve">
     <value>The default file extension for MP4 Files.
 Automatic   - This will use M4v when AC3 Audio, SRT Subtitles or Chapters are present, otherwise MP4.
