@@ -241,20 +241,24 @@ namespace Handbrake
                     }
                     else
                     {
-
-                        // Attempt to find VLC if it doesn't exist in the default set location.
-                        string vlcPath;
-
-                        if (8 == IntPtr.Size ||
-                            (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432")))) vlcPath = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
-                        else vlcPath = Environment.GetEnvironmentVariable("ProgramFiles");
-
-
                         if (!File.Exists(UserSettingService.GetUserSetting<string>(UserSettingConstants.VLC_Path)))
                         {
+                            // Attempt to find VLC if it doesn't exist in the default set location.
+                            string vlcPath;
+
+                            if (8 == IntPtr.Size || (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"))))
+                                vlcPath = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
+                            else
+                                vlcPath = Environment.GetEnvironmentVariable("ProgramFiles");
+
+                            if (!string.IsNullOrEmpty(vlcPath))
+                            {
+                                vlcPath = Path.Combine(vlcPath, "VideoLAN\\VLC\\vlc.exe");
+                            }
+
                             if (File.Exists(vlcPath))
                             {
-                                UserSettingService.SetUserSetting(UserSettingConstants.VLC_Path, "C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe");
+                                UserSettingService.SetUserSetting(UserSettingConstants.VLC_Path, vlcPath);
                             }
                             else
                             {
