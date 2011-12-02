@@ -163,8 +163,10 @@
 
                         <TextBlock Text="Preferred Language:" Grid.Column="0"/>
                         <StackPanel Orientation="Horizontal" Grid.Column="1">
+                            <TextBlock VerticalAlignment="Center"  Text="Audio: " FontSize="10" />
                             <ComboBox Name="primaryAudioLanguage" VerticalAlignment="Center"  ItemsSource="{Binding PreferredLanguages}" SelectedItem="{Binding SelectedPreferredLangauge}" Width="120" />
-                            <TextBlock VerticalAlignment="Center"  Text="Primary Audio Langauge" FontSize="10" />
+                            <TextBlock VerticalAlignment="Center"  Text="Subtitles: " FontSize="10" Margin="10,0,0,0" />
+                            <ComboBox Name="primarySubtitleLanguage" VerticalAlignment="Center"  ItemsSource="{Binding PreferredLanguages}" SelectedItem="{Binding SelectedPreferredSubtitleLangauge}" Width="120" />
                         </StackPanel>
                     </Grid>
 
