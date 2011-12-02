@@ -274,6 +274,14 @@
   </item>
   <item>
     <key>
+      <string>NativeLanguageForSubtitles</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">Any</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
       <string>DubMode</string>
     </key>
     <value>

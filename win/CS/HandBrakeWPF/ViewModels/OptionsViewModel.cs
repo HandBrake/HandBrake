@@ -239,9 +239,14 @@ namespace HandBrakeWPF.ViewModels
         private BindingList<string> preferredLanguages = new BindingList<string>();
 
         /// <summary>
-        /// The selected preferreed langauge.
+        /// The selected preferred langauge.
         /// </summary>
         private string selectedPreferredLangauge;
+
+        /// <summary>
+        /// The selected preferred subtitle language
+        /// </summary>
+        private string selectedPreferredSubtitleLangauge;
 
         /// <summary>
         /// The selected preview count.
@@ -705,6 +710,23 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.selectedPreferredLangauge = value;
                 this.NotifyOfPropertyChange("SelectedPreferreedLangauge");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets SelectedPreferredSubtitleLangauge.
+        /// </summary>
+        public string SelectedPreferredSubtitleLangauge
+        {
+            get
+            {
+                return this.selectedPreferredSubtitleLangauge;
+            }
+
+            set
+            {
+                this.selectedPreferredSubtitleLangauge = value;
+                this.NotifyOfPropertyChange("SelectedPreferredSubtitleLangauge");
             }
         }
 
@@ -1334,6 +1356,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.selectedPreferredLangauge = this.userSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage) ?? string.Empty;
+            this.selectedPreferredSubtitleLangauge = this.userSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles) ?? string.Empty;
 
             this.AddAudioModeOptions.Add("None");
             this.AddAudioModeOptions.Add("All Remaining Tracks");
@@ -1343,7 +1366,8 @@ namespace HandBrakeWPF.ViewModels
             this.AddSubtitleModeOptions.Add("All");
             this.AddSubtitleModeOptions.Add("First");
             this.AddSubtitleModeOptions.Add("Selected");
-            this.AddSubtitleModeOptions.Add("Preferred Only");
+            this.AddSubtitleModeOptions.Add("Prefered Only (First)");
+            this.AddSubtitleModeOptions.Add("Prefered Only (All)");
 
             this.selectedAddAudioMode = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DubModeAudio);
             this.selectedAddSubtitleMode = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DubModeSubtitle);
@@ -1608,6 +1632,7 @@ namespace HandBrakeWPF.ViewModels
 
             /* Audio and Subtitles */
             this.userSettingService.SetUserSetting(UserSettingConstants.NativeLanguage, this.SelectedPreferredLangauge);
+            this.userSettingService.SetUserSetting(UserSettingConstants.NativeLanguageForSubtitles, this.SelectedPreferredSubtitleLangauge);
             StringCollection collection = new StringCollection();
             collection.AddRange(this.SelectedLangauges.ToArray());
             this.userSettingService.SetUserSetting(UserSettingConstants.SelectedLanguages, collection);
