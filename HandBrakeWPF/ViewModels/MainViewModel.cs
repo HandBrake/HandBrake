@@ -588,9 +588,15 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void BrowseDestination()
         {
-            VistaSaveFileDialog dialog = new VistaSaveFileDialog { Filter = "MP4 File (*.mp4)|Mkv File(*.mkv)" };
+            VistaSaveFileDialog dialog = new VistaSaveFileDialog
+                {
+                    Filter = "mp4|*.mp4;*.m4v|mkv|*.mkv",
+                    AddExtension = true,
+                    OverwritePrompt = true,
+                    DefaultExt = ".mp4"
+                };
             dialog.ShowDialog();
-            dialog.AddExtension = true;
+
             this.CurrentTask.Destination = dialog.FileName;
             this.NotifyOfPropertyChange("CurrentTask");
         }

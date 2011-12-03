@@ -20,12 +20,12 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <CheckBox Content="Create chapter markers" Grid.Column="0" VerticalAlignment="Center" />
+            <CheckBox Content="Create chapter markers" IsChecked="{Binding IncludeChapterMarkers, RelativeSource={RelativeSource AncestorType=UserControl}}" Grid.Column="0" VerticalAlignment="Center" />
             <Button Content="Import" Grid.Column="2" Width="75" Margin="0,0,10,0" />
             <Button Content="Export" Grid.Column="3" Width="75" />
         </Grid>
-        
-        <DataGrid Grid.Row="2" Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+
+        <DataGrid Grid.Row="2" Margin="10" ItemsSource="{Binding Chapters, RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             
         </DataGrid>
         

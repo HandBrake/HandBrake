@@ -7,6 +7,7 @@ namespace HandBrake.ApplicationServices.Functions
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
@@ -154,7 +155,7 @@ namespace HandBrake.ApplicationServices.Functions
                 job.FramesStart = work.StartPoint;
             }
 
-            job.CustomChapterNames = work.ChapterNames;
+            job.CustomChapterNames = work.ChapterNames.Select(item => item.ChapterName).ToList();
             job.UseDefaultChapterNames = work.IncludeChapterMarkers;
 
             job.OutputPath = work.Destination;

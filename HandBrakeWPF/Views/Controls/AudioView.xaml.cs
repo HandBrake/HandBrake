@@ -10,7 +10,7 @@
 namespace HandBrakeWPF.Views.Controls
 {
     using System;
-    using System.ComponentModel;
+    using System.Collections.ObjectModel;
     using System.Windows;
     using System.Windows.Controls;
 
@@ -27,38 +27,49 @@ namespace HandBrakeWPF.Views.Controls
         public AudioView()
         {
             InitializeComponent();
-            this.AudioTracks = new BindingList<AudioTrack>();
         }
 
         /// <summary>
         /// The "Query" Dependancy Property
         /// </summary>
-        public static readonly DependencyProperty QueryProperty = DependencyProperty.Register("AudioTracks", typeof(BindingList<AudioTrack>), typeof(AudioView), new PropertyMetadata(null));
-
+        public static readonly DependencyProperty AudioTracksProperty = DependencyProperty.Register("AudioTracks", typeof(ObservableCollection<AudioTrack>), typeof(AudioView));
 
         /// <summary>
         /// Gets or sets State.
         /// </summary>
-        public BindingList<AudioTrack> AudioTracks
+        public ObservableCollection<AudioTrack> AudioTracks
         {
-            get { return (BindingList<AudioTrack>)this.GetValue(QueryProperty); }
-            set { this.SetValue(QueryProperty, value); }
+            get { return (ObservableCollection<AudioTrack>)this.GetValue(AudioTracksProperty); }
+            set { this.SetValue(AudioTracksProperty, value); }
         }
 
+
         /// <summary>
-        /// Add an audio track.
+        /// Add a new Track
         /// </summary>
-        public void Add()
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        public void Add(object sender, RoutedEventArgs e)
         {
             this.AudioTracks.Add(new AudioTrack());
         }
 
         /// <summary>
-        /// Remove an Audio Track
+        /// Remove a Track
         /// </summary>
-        public void Remove()
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        public void Remove(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException("Not Done Yet!");
+            throw new NotImplementedException();
         }
     }
 }

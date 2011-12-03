@@ -9,7 +9,8 @@
 
 namespace HandBrakeWPF.Views.Controls
 {
-    using System.ComponentModel;
+    using System;
+    using System.Collections.ObjectModel;
     using System.Windows;
     using System.Windows.Controls;
 
@@ -31,15 +32,57 @@ namespace HandBrakeWPF.Views.Controls
         /// <summary>
         /// The "Query" Dependancy Property
         /// </summary>
-        public static readonly DependencyProperty QueryProperty = DependencyProperty.Register("SubtitleTracks", typeof(BindingList<SubtitleTrack>), typeof(SubtitlesView), new PropertyMetadata(null));
+        public static readonly DependencyProperty SubtitleTracksProperty = DependencyProperty.Register("SubtitleTracks", typeof(ObservableCollection<SubtitleTrack>), typeof(SubtitlesView));
 
         /// <summary>
         /// Gets or sets State.
         /// </summary>
-        public BindingList<SubtitleTrack> AudioTracks
+        public ObservableCollection<SubtitleTrack> SubtitleTracks
         {
-            get { return (BindingList<SubtitleTrack>)this.GetValue(QueryProperty); }
-            set { this.SetValue(QueryProperty, value); }
+            get { return (ObservableCollection<SubtitleTrack>)this.GetValue(SubtitleTracksProperty); }
+            set { this.SetValue(SubtitleTracksProperty, value); }
+        }
+
+        /// <summary>
+        /// Add a new Track
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        public void Add(object sender, RoutedEventArgs e)
+        {
+            this.SubtitleTracks.Add(new SubtitleTrack());
+        }
+
+        /// <summary>
+        /// Remove a Track
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        public void Remove(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Import an SRT File.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        public void ImportSrt(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

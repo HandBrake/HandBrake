@@ -287,16 +287,16 @@
                             </Grid>
                         </TabItem>
                         <TabItem Header="Audio" Name="audioTab">
-                            <Controls:AudioView></Controls:AudioView>
+                            <Controls:AudioView AudioTracks="{Binding CurrentTask.AudioTracks, Mode=TwoWay}"></Controls:AudioView>
                         </TabItem>
                         <TabItem Header="Subtitles" Name="subtitlesTab">
-                            <Controls:SubtitlesView></Controls:SubtitlesView>
+                            <Controls:SubtitlesView SubtitleTracks="{Binding CurrentTask.SubtitleTracks, Mode=TwoWay}"></Controls:SubtitlesView>
                         </TabItem>
                         <TabItem Header="Chapters" Name="chaptersTab">
-                            <Controls:ChaptersView></Controls:ChaptersView>
+                            <Controls:ChaptersView IncludeChapterMarkers="{Binding CurrentTask.IncludeChapterMarkers, Mode=TwoWay}" Chapters="{Binding CurrentTask.ChapterNames, Mode=TwoWay}"></Controls:ChaptersView>
                         </TabItem>
                         <TabItem Header="Advanced" Name="advancedTab">
-                            <Controls:AdvancedView></Controls:AdvancedView>
+                            <Controls:AdvancedView Query="{Binding CurrentTask.AdvancedEncoderOptions, Mode=TwoWay}"></Controls:AdvancedView>
                         </TabItem>
                     </TabControl>
 
@@ -322,7 +322,7 @@
             </StackPanel>
 
             <!-- Status Bar -->
-            <StatusBar Grid.Row="6" Height="30" Grid.ColumnSpan="2" VerticalAlignment="Bottom">
+            <StatusBar Grid.Row="6" Height="28" Grid.ColumnSpan="2" VerticalAlignment="Bottom">
                 <Label Content="{Binding Path=ProgramStatusLabel}" FontSize="10" VerticalAlignment="Center" />
             </StatusBar>
 

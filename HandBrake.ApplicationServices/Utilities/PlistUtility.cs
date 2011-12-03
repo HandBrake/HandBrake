@@ -7,6 +7,7 @@ namespace HandBrake.ApplicationServices.Utilities
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.IO;
     using System.Text;
     using System.Windows.Forms;
@@ -42,7 +43,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
             #region Get a List of Audio Track Objects
             XmlNode audioListDict = root.ChildNodes[2].ChildNodes[0].FirstChild.ChildNodes[1];
-            List<AudioTrack> audioTracks = new List<AudioTrack>();
+            ObservableCollection<AudioTrack> audioTracks = new ObservableCollection<AudioTrack>();
 
             for (int i = 0; i < audioListDict.ChildNodes.Count; i++)
             {

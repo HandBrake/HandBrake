@@ -6,8 +6,10 @@
 namespace HandBrake.ApplicationServices.Model
 {
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
 
     using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.ApplicationServices.Parsing;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
@@ -25,6 +27,9 @@ namespace HandBrake.ApplicationServices.Model
         public EncodeTask()
         {
             this.Cropping = new Cropping();
+            this.AudioTracks = new ObservableCollection<AudioTrack>();
+            this.SubtitleTracks = new ObservableCollection<SubtitleTrack>();
+            this.ChapterNames = new ObservableCollection<ChapterMarker>();
         }
 
         #region Source
@@ -257,7 +262,7 @@ namespace HandBrake.ApplicationServices.Model
         /// <summary>
         /// Gets or sets AudioEncodings.
         /// </summary>
-        public List<AudioTrack> AudioTracks { get; set; }
+        public ObservableCollection<AudioTrack> AudioTracks { get; set; }
         #endregion
 
         #region Subtitles
@@ -265,7 +270,7 @@ namespace HandBrake.ApplicationServices.Model
         /// <summary>
         /// Gets or sets SubtitleTracks.
         /// </summary>
-        public List<SubtitleTrack> SubtitleTracks { get; set; }
+        public ObservableCollection<SubtitleTrack> SubtitleTracks { get; set; }
         #endregion
 
         #region Chapters
@@ -281,9 +286,9 @@ namespace HandBrake.ApplicationServices.Model
         public string ChapterMarkersFilePath { get; set; }
 
         /// <summary>
-        /// Chapter Names
+        /// Gets or sets ChapterNames.
         /// </summary>
-        public List<string> ChapterNames { get; set; }
+        public ObservableCollection<ChapterMarker> ChapterNames { get; set; }
 
         #endregion
 
