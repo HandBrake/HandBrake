@@ -103,6 +103,7 @@
     <Compile Include="Functions\Win7.cs" />
     <Compile Include="Model\DriveInformation.cs" />
     <Compile Include="Model\Encoding\AudioTrack.cs" />
+    <Compile Include="Model\Encoding\ChapterMarker.cs" />
     <Compile Include="Model\Encoding\FramerateMode.cs" />
     <Compile Include="Model\Encoding\PointToPointMode.cs" />
     <Compile Include="Model\EncodeTask.cs" />

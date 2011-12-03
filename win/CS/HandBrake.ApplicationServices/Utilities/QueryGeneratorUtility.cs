@@ -7,6 +7,7 @@ namespace HandBrake.ApplicationServices.Utilities
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Globalization;
     using System.IO;
 
@@ -463,7 +464,7 @@ namespace HandBrake.ApplicationServices.Utilities
         {
             string query = string.Empty;
 
-            List<AudioTrack> audioTracks = task.AudioTracks;
+            ObservableCollection<AudioTrack> audioTracks = task.AudioTracks;
 
             List<int> tracks = new List<int>();
             List<AudioEncoder> codecs = new List<AudioEncoder>();
@@ -807,14 +808,14 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="chapters">The List of chapters</param>
         /// <param name="filePathName">Path to save the csv file</param>
         /// <returns>True if successful </returns>
-        private static bool ChapterCsvSave(IEnumerable<string> chapters, string filePathName)
+        private static bool ChapterCsvSave(IEnumerable<ChapterMarker> chapters, string filePathName)
         {
             string csv = string.Empty;
             int counter = 0;
 
-            foreach (string name in chapters)
+            foreach (ChapterMarker name in chapters)
             {
-                csv += counter + "," + name.Replace(",", "\\,") + Environment.NewLine;
+                csv += counter + "," + name.ChapterName.Replace(",", "\\,") + Environment.NewLine;
                 counter++;
             }
 

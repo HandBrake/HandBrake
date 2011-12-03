@@ -7,6 +7,7 @@ namespace HandBrake.ApplicationServices.Utilities
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Globalization;
     using System.Text.RegularExpressions;
 
@@ -361,7 +362,7 @@ namespace HandBrake.ApplicationServices.Utilities
                     trackGainValues = gainValues.ToString().Replace("--gain=", string.Empty).Split(',');
 
                 // Create new Audio Track Classes and store them in the ArrayList
-                List<AudioTrack> allAudioTrackInfo = new List<AudioTrack>();
+                ObservableCollection<AudioTrack> allAudioTrackInfo = new ObservableCollection<AudioTrack>();
                 for (int x = 0; x < encoderCount; x++)
                 {
                     AudioTrack track = new AudioTrack();

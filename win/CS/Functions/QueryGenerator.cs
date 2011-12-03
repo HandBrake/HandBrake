@@ -7,6 +7,7 @@ namespace Handbrake.Functions
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -707,17 +708,19 @@ namespace Handbrake.Functions
             }
 
             // Audio
-            task.AudioTracks = new List<AudioTrack>(frmMain.AudioSettings.AudioTracks);
+            task.AudioTracks = new ObservableCollection<AudioTrack>(frmMain.AudioSettings.AudioTracks);
 
             // Subtitles
-            task.SubtitleTracks = new List<SubtitleTrack>(frmMain.Subtitles.SubtitlesList);
+            task.SubtitleTracks = new ObservableCollection<SubtitleTrack>(frmMain.Subtitles.SubtitlesList);
 
             // Chapters
             task.IncludeChapterMarkers = frmMain.Check_ChapterMarkers.Checked;
-            task.ChapterNames = new List<string>();
+            task.ChapterNames = new ObservableCollection<ChapterMarker>();
             foreach (DataGridViewRow row in frmMain.data_chpt.Rows)
             {
-                task.ChapterNames.Add(row.Cells[1].Value.ToString());
+                int number;
+                int.TryParse(row.Cells[0].Value.ToString(), out number);
+                task.ChapterNames.Add(new ChapterMarker(number, row.Cells[1].Value.ToString()));
             }
 
             // Advanced Options

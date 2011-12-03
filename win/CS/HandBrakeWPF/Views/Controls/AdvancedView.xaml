@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             x:Name="advancedView">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -14,9 +15,8 @@
 
         <TextBlock Text="Advanced" FontWeight="Bold" Margin="10,5,0,0" Grid.Row="0" ></TextBlock>
 
-        <TextBox Grid.Row="2" Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-
-        </TextBox>
+        <TextBox Grid.Row="2" Margin="10" Text="{Binding Query, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                 VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
 
     </Grid>
 </UserControl>

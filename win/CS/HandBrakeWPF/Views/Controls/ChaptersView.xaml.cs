@@ -11,10 +11,11 @@ namespace HandBrakeWPF.Views.Controls
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Windows;
     using System.Windows.Controls;
 
-    using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.ApplicationServices.Model.Encoding;
 
     /// <summary>
     /// Interaction logic for ChaptersView.xaml
@@ -30,17 +31,31 @@ namespace HandBrakeWPF.Views.Controls
         }
 
         /// <summary>
-        /// The "Query" Dependancy Property
+        /// The "Chapters" Dependancy Property
         /// </summary>
-        public static readonly DependencyProperty QueryProperty = DependencyProperty.Register("Chapters", typeof(IList<Chapter>), typeof(ChaptersView), new PropertyMetadata(null));
+        public static readonly DependencyProperty ChaptersProperty = DependencyProperty.Register("Chapters", typeof(ObservableCollection<ChapterMarker>), typeof(ChaptersView));
+
+        /// <summary>
+        /// The "EnableChapterMarkers" Dependancy Property
+        /// </summary>
+        public static readonly DependencyProperty IncludeChaptersProperty = DependencyProperty.Register("IncludeChapterMarkers", typeof(bool), typeof(ChaptersView));
 
         /// <summary>
         /// Gets or sets State.
         /// </summary>
-        public IList<Chapter> Query
+        public IList<ChapterMarker> Chapters
         {
-            get { return (IList<Chapter>)this.GetValue(QueryProperty); }
-            set { this.SetValue(QueryProperty, value); }
+            get { return (ObservableCollection<ChapterMarker>)this.GetValue(ChaptersProperty); }
+            set { this.SetValue(ChaptersProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether chapter markers are enabled.
+        /// </summary>
+        public bool IncludeChapterMarkers
+        {
+            get { return (bool)this.GetValue(IncludeChaptersProperty); }
+            set { this.SetValue(IncludeChaptersProperty, value); }
         }
 
         /// <summary>

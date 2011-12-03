@@ -28,15 +28,22 @@ namespace HandBrakeWPF.Views.Controls
         /// <summary>
         /// The "Query" Dependancy Property
         /// </summary>
-        public static readonly DependencyProperty QueryProperty = DependencyProperty.Register("Query", typeof(string), typeof(AdvancedView), new PropertyMetadata(null));
+        public static readonly DependencyProperty QueryProperty = DependencyProperty.Register("Query", typeof(string), typeof(AdvancedView));
 
         /// <summary>
         /// Gets or sets State.
         /// </summary>
         public string Query
         {
-            get { return (string)this.GetValue(QueryProperty); }
-            set { this.SetValue(QueryProperty, value); }
+            get
+            {
+                return (string)this.GetValue(QueryProperty);
+            }
+
+            set
+            {
+                this.SetValue(QueryProperty, value);
+            }
         }
     }
 }

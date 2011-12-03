@@ -155,7 +155,7 @@ namespace Handbrake.Controls
         /// Load an arraylist of AudioTrack items into the list.
         /// </summary>
         /// <param name="tracks">List of audio tracks</param>
-        public void LoadTracks(List<AudioTrack> tracks)
+        public void LoadTracks(ObservableCollection<AudioTrack> tracks)
         {
             ClearAudioList();
 
