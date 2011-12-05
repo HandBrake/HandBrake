@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 45;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -537,9 +537,10 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 0420;
 			};
 			buildConfigurationList = 4D4E7BC4087804870051572B /* Build configuration list for PBXProject "HandBrake" */;
-			compatibilityVersion = "Xcode 3.1";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -827,7 +828,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib",
 				);
 				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
-				PREBINDING = NO;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
 				SYMROOT = "$(EXTERNAL_BUILD)/macosx";
@@ -961,7 +961,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib",
 				);
 				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
-				PREBINDING = NO;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
 				SYMROOT = "$(EXTERNAL_BUILD)/macosx";
@@ -1095,7 +1094,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib",
 				);
 				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
-				PREBINDING = NO;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
 				SYMROOT = "$(EXTERNAL_BUILD)/macosx";
@@ -1229,7 +1227,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib",
 				);
 				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
-				PREBINDING = NO;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
 				SYMROOT = "$(EXTERNAL_BUILD)/macosx";
@@ -1354,7 +1351,6 @@
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
@@ -1365,7 +1361,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib",
 				);
 				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
-				PREBINDING = NO;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -1491,7 +1486,6 @@
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
@@ -1502,7 +1496,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib",
 				);
 				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
-				PREBINDING = NO;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -1628,7 +1621,6 @@
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
@@ -1639,7 +1631,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib",
 				);
 				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
-				PREBINDING = NO;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -1765,7 +1756,6 @@
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
@@ -1776,7 +1766,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib",
 				);
 				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
-				PREBINDING = NO;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -2035,7 +2024,6 @@
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
@@ -2046,7 +2034,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib",
 				);
 				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
-				PREBINDING = NO;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -2077,7 +2064,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib",
 				);
 				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
-				PREBINDING = NO;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
 				SYMROOT = "$(EXTERNAL_BUILD)/macosx";
