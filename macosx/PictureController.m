@@ -1136,6 +1136,7 @@ are maintained across different sources */
     [fDecombPopUp addItemWithTitle: @"Off"];
     [fDecombPopUp addItemWithTitle: @"Custom"];
     [fDecombPopUp addItemWithTitle: @"Default"];
+    [fDecombPopUp addItemWithTitle: @"Fast"];
     
     [fDecombPopUp selectItemAtIndex: fPictureFilterSettings.decomb];
     

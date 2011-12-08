@@ -3289,18 +3289,22 @@ bool one_burned = FALSE;
     if ([fPictureController useDecomb] == 1)
     {
         /* Decomb */
-        /* we add the custom string if present */
-        hb_filter_decomb.settings = NULL;
         if ([fPictureController decomb] == 1)
         {
             /* use a custom decomb string */
-            hb_filter_decomb.settings = (char *) [[fPictureController decombCustomString] UTF8String];
+            hb_filter_decomb.settings = [[fPictureController decombCustomString] UTF8String];
             hb_list_add( job->filters, &hb_filter_decomb );
         }
         if ([fPictureController decomb] == 2)
         {
-            /* Run old deinterlacer fd by default */
-            //hb_filter_decomb.settings = (char *) [[fPicSettingDecomb stringValue] UTF8String];
+            /* use libhb defaults */
+            hb_filter_decomb.settings = NULL;
+            hb_list_add( job->filters, &hb_filter_decomb );
+        }
+        if ([fPictureController decomb] == 3)
+        {
+            /* use old defaults (decomb fast) */
+            hb_filter_decomb.settings = "7:2:6:9:1:80";
             hb_list_add( job->filters, &hb_filter_decomb );
         }
     }
@@ -3814,17 +3818,22 @@ bool one_burned = FALSE;
     if ([[queueToApply objectForKey:@"PictureDecombDeinterlace"] intValue] == 1)
     {
         /* Decomb */
-        /* we add the custom string if present */
-        hb_filter_decomb.settings = NULL;
         if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 1)
         {
             /* use a custom decomb string */
-            hb_filter_decomb.settings = (char *) [[queueToApply objectForKey:@"PictureDecombCustom"] UTF8String];
+            hb_filter_decomb.settings = [[queueToApply objectForKey:@"PictureDecombCustom"] UTF8String];
             hb_list_add( job->filters, &hb_filter_decomb );
         }
         if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 2)
         {
-            /* Use libhb default */
+            /* use libhb defaults */
+            hb_filter_decomb.settings = NULL;
+            hb_list_add( job->filters, &hb_filter_decomb );
+        }
+        if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 3)
+        {
+            /* use old defaults (decomb fast) */
+            hb_filter_decomb.settings = "7:2:6:9:1:80";
             hb_list_add( job->filters, &hb_filter_decomb );
         }
         
@@ -4979,7 +4988,11 @@ the user is using "Custom" settings by determining the sender*/
     if ([fPictureController useDecomb] == 1)
     {
         /* Decomb */
-        if ([fPictureController decomb] == 2)
+        if ([fPictureController decomb] == 3)
+        {
+            videoFilters = [videoFilters stringByAppendingString:@" - Decomb (Fast)"];
+        }
+        else if ([fPictureController decomb] == 2)
         {
             videoFilters = [videoFilters stringByAppendingString:@" - Decomb (Default)"];
         }

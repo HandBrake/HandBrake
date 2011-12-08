@@ -1166,7 +1166,6 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         {
             if ([[item objectForKey:@"PictureDecomb"] intValue] != 0)
             {
-                pictureFiltersPresent = YES;
                 if( [[item objectForKey:@"PictureDecomb"] intValue] == 1)
                 {
                     pictureFiltersPresent = YES;
@@ -1176,6 +1175,11 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
                 {
                     pictureFiltersPresent = YES;
                     pictureFilters = [pictureFilters stringByAppendingString:@" - Decomb (Default)"];
+                }
+                else if( [[item objectForKey:@"PictureDecomb"] intValue] == 3)
+                {
+                    pictureFiltersPresent = YES;
+                    pictureFilters = [pictureFilters stringByAppendingString:@" - Decomb (Fast)"];
                 }
             }
         }
