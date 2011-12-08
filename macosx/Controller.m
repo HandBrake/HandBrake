@@ -3292,7 +3292,7 @@ bool one_burned = FALSE;
         if ([fPictureController decomb] == 1)
         {
             /* use a custom decomb string */
-            hb_filter_decomb.settings = [[fPictureController decombCustomString] UTF8String];
+            hb_filter_decomb.settings = (char *) [[fPictureController decombCustomString] UTF8String];
             hb_list_add( job->filters, &hb_filter_decomb );
         }
         if ([fPictureController decomb] == 2)
@@ -3821,7 +3821,7 @@ bool one_burned = FALSE;
         if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 1)
         {
             /* use a custom decomb string */
-            hb_filter_decomb.settings = [[queueToApply objectForKey:@"PictureDecombCustom"] UTF8String];
+            hb_filter_decomb.settings = (char *) [[queueToApply objectForKey:@"PictureDecombCustom"] UTF8String];
             hb_list_add( job->filters, &hb_filter_decomb );
         }
         if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 2)
