@@ -55,7 +55,7 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <param name="baseStream">
         /// The stream to parse from
         /// </param>
-        public Parser(Stream baseStream) : base(baseStream)
+        public Parser(Stream baseStream) : base(baseStream, Encoding.Default)
         {
         }
 
