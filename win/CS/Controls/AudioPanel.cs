@@ -174,6 +174,7 @@ namespace Handbrake.Controls
                 this.audioTracks.Add(track);
             }
 
+            // It's a Preset, if the TrackNumber is 0, so allow the Automatic Track Selection to run after we've setup the presets audio settings.
             if (tracks.Count == 0 || tracks[0].ScannedTrack.TrackNumber == 0)
             {
                 this.AutomaticTrackSelection();
@@ -203,14 +204,14 @@ namespace Handbrake.Controls
             }
 
             // Setup the Audio track source dropdown with the new audio tracks.
-           // this.ScannedTracks.Clear();
             this.drp_audioTrack.SelectedItem = null;
-            this.ScannedTracks = new BindingList<Audio>(selectedTitle.AudioTracks.ToList());
-            drp_audioTrack.DataSource = this.ScannedTracks;
+            foreach (Audio track in selectedTitle.AudioTracks)
+            {
+                this.ScannedTracks.Add(track);
+            }
 
             drp_audioTrack.SelectedItem = this.ScannedTracks.FirstOrDefault();
-            this.drp_audioTrack.Refresh();
-
+       
             // Add any tracks the preset has, if there is a preset and no audio tracks in the list currently
             if (audioList.Rows.Count == 0 && preset != null)
             {
@@ -255,7 +256,6 @@ namespace Handbrake.Controls
             AudioTrack track = audioList.SelectedRows[0].DataBoundItem as AudioTrack;
             if (track == null)
             {
-                drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = false;
                 return;
             }
 
@@ -283,14 +283,11 @@ namespace Handbrake.Controls
                     // Configure the widgets with values
                     if (drp_audioEncoder.Text.Contains("Passthru"))
                     {
-                        drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = false;
                         track.Gain = 0;
                         track.DRC = 0;
                     }
-                    else
-                    {
-                        drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = true;
-                    }
+
+                    this.RefreshEnabledControls();
 
                     if (drp_audioEncoder.Text.Contains("Flac"))
                     {

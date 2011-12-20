@@ -13,6 +13,7 @@ namespace HandBrake.ApplicationServices.Services
     using System.Windows.Forms;
 
     using HandBrake.ApplicationServices.EventArgs;
+    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
@@ -147,6 +148,32 @@ namespace HandBrake.ApplicationServices.Services
                 // We don't really need to notify the user of any errors here.
             }
         }
+
+        /// <summary>
+        /// Take a Scan Log file, and process it as if it were from the CLI.
+        /// </summary>
+        /// <param name="path">
+        /// The path to the log file.
+        /// </param>
+        public void DebugScanLog(string path)
+        {
+            try
+            {
+                StreamReader parseLog = new StreamReader(path);
+                this.readData = new Parser(parseLog.BaseStream);
+                this.SouceData = Source.Parse(this.readData);
+                this.SouceData.ScanPath = path;
+
+                if (this.ScanCompleted != null)
+                {
+                    this.ScanCompleted(this, new ScanCompletedEventArgs(true, null, string.Empty));
+                }
+            }
+            catch (Exception e)
+            {
+                throw new GeneralApplicationException("Debug Run Failed", string.Empty, e);
+            }
+        }
         #endregion
 
         #region Private Methods
@@ -268,7 +295,7 @@ namespace HandBrake.ApplicationServices.Services
                     this.ScanCompleted(this, new ScanCompletedEventArgs(false, exc, "An Error has occured in ScanService.ScanSource()"));
             }
         }
-
+        
         /// <summary>
         /// Fire an event when the scan process progresses
         /// </summary>

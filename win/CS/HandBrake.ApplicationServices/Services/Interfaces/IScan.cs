@@ -86,5 +86,13 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// Kill the scan
         /// </summary>
         void Stop();
+
+        /// <summary>
+        /// Take a Scan Log file, and process it as if it were from the CLI.
+        /// </summary>
+        /// <param name="path">
+        /// The path to the log file.
+        /// </param>
+        void DebugScanLog(string path);
     }
 }

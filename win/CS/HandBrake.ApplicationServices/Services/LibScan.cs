@@ -151,6 +151,20 @@ namespace HandBrake.ApplicationServices.Services
             instance.StopScan();
         }
 
+        /// <summary>
+        /// Debug a Scan Log (Only Available for CLI Mode, not LIBHB)
+        /// </summary>
+        /// <param name="path">
+        /// The path.
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// (Only Available for CLI Mode, not LIBHB)
+        /// </exception>
+        public void DebugScanLog(string path)
+        {
+            throw new NotImplementedException("Only Available when using the CLI mode. Not LibHB");
+        }
+
         #endregion
 
         #region Private Methods
