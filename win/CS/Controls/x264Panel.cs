@@ -150,7 +150,7 @@ namespace Handbrake.Controls
             }
 
             /* Change the option string to reflect the new standardized option string */
-            if (changedOptString != string.Empty)
+            if (!string.IsNullOrEmpty(changedOptString) && !rtf_x264Query.Text.Equals(changedOptString))
                 rtf_x264Query.Text = changedOptString;
         }
 
