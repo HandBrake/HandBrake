@@ -11,6 +11,7 @@
 #endif
 
 #define FIFO_TIMEOUT 200
+//#define HB_FIFO_DEBUG 1
 
 /* Fifo */
 struct hb_fifo_s
@@ -26,7 +27,19 @@ struct hb_fifo_s
     uint32_t       buffer_size;
     hb_buffer_t  * first;
     hb_buffer_t  * last;
+
+#if defined(HB_FIFO_DEBUG)
+    // Fifo list for debugging
+    hb_fifo_t    * next;
+#endif
 };
+
+#if defined(HB_FIFO_DEBUG)
+static hb_fifo_t fifo_list = 
+{
+    .next = NULL
+};
+#endif
 
 /* we round the requested buffer size up to the next power of 2 so there can
  * be at most 32 possible pools when the size is a 32 bit int. To avoid a lot
@@ -67,6 +80,147 @@ void hb_buffer_pool_init( void )
         buffers.pool[i] = buffers.pool[10];
     }
 }
+
+#if defined(HB_FIFO_DEBUG)
+
+static void dump_fifo(hb_fifo_t * f)
+{
+    hb_buffer_t * b = f->first;
+
+    if (b)
+    {
+        while (b)
+        {
+            fprintf(stderr, "%p:%d:%d\n", b, b->size, b->alloc);
+            b = b->next;
+        }
+        fprintf(stderr, "\n");
+    }
+}
+
+static void fifo_list_add( hb_fifo_t * f )
+{
+    hb_fifo_t *next = fifo_list.next;
+
+    fifo_list.next = f;
+    f->next = next;
+}
+
+static void fifo_list_rem( hb_fifo_t * f )
+{
+    hb_fifo_t *next, *prev;
+
+    prev = &fifo_list;
+    next = fifo_list.next;
+
+    while ( next && next != f )
+    {
+        prev = next;
+        next = next->next;
+    }
+    if ( next == f )
+    {
+        prev->next = f->next;
+    }
+}
+
+// These routines are useful for finding and debugging problems
+// with the fifos and buffer pools
+static void buffer_pool_validate( hb_fifo_t * f )
+{
+    hb_buffer_t *b;
+
+    hb_lock( f->lock );
+    b = f->first;
+    while (b)
+    {
+        if (b->alloc != f->buffer_size)
+        {
+            fprintf(stderr, "Invalid buffer pool size! buf %p size %d pool size %d\n", b, b->alloc, f->buffer_size);
+            dump_fifo( f );
+            *(char*)0 = 1;
+        }
+        b = b->next;
+    }
+
+    hb_unlock( f->lock );
+}
+
+static void buffer_pools_validate( void )
+{
+    int ii;
+    for ( ii = 10; ii < 26; ++ii )
+    {
+        buffer_pool_validate( buffers.pool[ii] );
+    }
+}
+
+void fifo_list_validate( void )
+{
+    hb_fifo_t *next = fifo_list.next;
+    hb_fifo_t *m;
+    hb_buffer_t *b, *c;
+    int count;
+
+    buffer_pools_validate();
+    while ( next )
+    {
+        count = 0;
+        hb_lock( next->lock );
+        b = next->first;
+
+        // Count the number of entries in this fifo
+        while (b)
+        {
+            c = b->next;
+            // check that the current buffer is not duplicated in this fifo
+            while (c)
+            {
+                if (c == b)
+                {
+                    fprintf(stderr, "Duplicate buffer in fifo!\n");
+                    dump_fifo(next);
+                    *(char*)0 = 1;
+                }
+                c = c->next;
+            }
+
+            // check that the current buffer is not duplicated in another fifo
+            m = next->next;
+            while (m)
+            {
+                hb_lock( m->lock );
+                c = m->first;
+                while (c)
+                {
+                    if (c == b)
+                    {
+                        fprintf(stderr, "Duplicate buffer in another fifo!\n");
+                        dump_fifo(next);
+                        *(char*)0 = 1;
+                    }
+                    c = c->next;
+                }
+                hb_unlock( m->lock );
+                m = m->next;
+            }
+
+            count++;
+            b = b->next;
+        }
+
+        if ( count != next->size )
+        {
+            fprintf(stderr, "Invalid fifo size! count %d size %d\n", count, next->size);
+            dump_fifo(next);
+            *(char*)0 = 1;
+        }
+        hb_unlock( next->lock );
+
+        next = next->next;
+    }
+}
+#endif
 
 void hb_buffer_pool_free( void )
 {
@@ -204,6 +358,7 @@ void hb_buffer_reduce( hb_buffer_t * b, int size )
 
         hb_buffer_swap_copy( b, tmp );
         memcpy( b->data, tmp->data, size );
+        tmp->next = NULL;
         hb_buffer_close( &tmp );
     }
 }
@@ -260,6 +415,11 @@ hb_fifo_t * hb_fifo_init( int capacity, int thresh )
     f->capacity   = capacity;
     f->thresh     = thresh;
     f->buffer_size = 0;
+
+#if defined(HB_FIFO_DEBUG)
+    // Add the fifo to the global fifo list
+    fifo_list_add( f );
+#endif
     return f;
 }
 
@@ -586,6 +746,12 @@ void hb_fifo_close( hb_fifo_t ** _f )
     hb_lock_close( &f->lock );
     hb_cond_close( &f->cond_empty );
     hb_cond_close( &f->cond_full );
+
+#if defined(HB_FIFO_DEBUG)
+    // Remove the fifo from the global fifo list
+    fifo_list_rem( f );
+#endif
+
     free( f );
 
     *_f = NULL;
