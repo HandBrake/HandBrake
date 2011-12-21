@@ -731,6 +731,10 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                             if ( sync->sub_list == NULL )
                                 sync->sub_tail = NULL;
                         }
+                        else if (sync->sub_tail == sub)
+                        {
+                            sync->sub_tail = prev_sub;
+                        }
                         
                         // ...and trash it
                         hb_buffer_t *next_sub = sub->next;
