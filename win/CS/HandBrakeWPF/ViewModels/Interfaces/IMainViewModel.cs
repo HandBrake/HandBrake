@@ -9,11 +9,18 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
+    using HandBrake.ApplicationServices.Model;
+
     /// <summary>
     /// The Main Window View Model
     /// </summary>
     public interface IMainViewModel
     {
+        /// <summary>
+        /// Sets SelectedPreset.
+        /// </summary>
+        Preset SelectedPreset { set; }
+
         /// <summary>
         /// Shutdown the Application
         /// </summary>

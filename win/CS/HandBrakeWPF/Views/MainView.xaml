@@ -1,6 +1,7 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Data="clr-namespace:System.Windows.Data;assembly=PresentationFramework" 
+        xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro" xmlns:Controls="clr-namespace:HandBrakeWPF.Views.Controls" 
         Title="{Data:Binding Path=WindowTitle}" Height="655" Width="1015" FontSize="11" Background="#FFF0F0F0">
 
@@ -12,6 +13,14 @@
             <Setter Property="FontSize" Value="11.5" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
+
+        <Style x:Key="textBlockOrangeStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="DarkOrange" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Padding" Value="5,5" />
+        </Style>
+
+        <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
     </Window.Resources>
 
     <Grid>
@@ -75,10 +84,17 @@
 
                     <Separator />
 
-                    <Button Name="Start" Micro:Message.Attach="[Event Click] = [Action StartEncode]">
+                    <Button Name="Start" Micro:Message.Attach="[Event Click] = [Action StartEncode]" Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="Images/Play.png" Height="32" Width="32" />
                             <Label Content="Start"  Margin="8,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Name="Stop" Micro:Message.Attach="[Event Click] = [Action StopEncode]" Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="Images/stop.png" Height="32" Width="32" />
+                            <Label Content="Stop"  Margin="8,0,0,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
@@ -306,15 +322,51 @@
                 <StackPanel Margin="5,5,5,5" Orientation="Vertical">
                     <GroupBox Header="Presets" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                         <StackPanel Orientation="Vertical">
-                            <TreeView ItemsSource="{Binding Presets}" Width="240" Height="460" >
+                            <TreeView ItemsSource="{Binding Presets}" Width="240" Height="460" SelectedItemChanged="TreeView_SelectedItemChanged">
 
                             </TreeView>
 
-                            <StackPanel Orientation="Horizontal">
-                                <Button Content="Add" Margin="5,5,5,5" />
-                                <Button Content="Remove" Margin="5,5,5,5" />
-                                <Button Content="Set Default" Margin="5,5,5,5" />
-                            </StackPanel>
+
+                            <ToolBar Name="presetsToolBar" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" UseLayoutRounding="False" Background="Transparent" 
+                                     SnapsToDevicePixels="False">
+                                <Button Micro:Message.Attach="[Event Click] = [Action PresetAdd]">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="Images/Add16.png" Height="16" Width="16" />
+                                            <TextBlock Text="Add" Style="{StaticResource textBlockOrangeStyle}"  Margin="2,0,0,0" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+
+                                <Button Micro:Message.Attach="[Event Click] = [Action PresetRemove]">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="Images/Close.png" Height="16" Width="16" />
+                                            <TextBlock Text="Remove" Style="{StaticResource textBlockOrangeStyle}"  Margin="2,0,0,0" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+
+                                <Menu Background="Transparent" >
+                                    <MenuItem ToolBar.OverflowMode="Never">
+                                        <MenuItem.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="Images/Options24.png" Height="16" Width="16" />
+                                                <TextBlock Text="Options" Style="{StaticResource textBlockOrangeStyle}" Margin="2,0,0,0" VerticalAlignment="Center" />
+                                            </StackPanel>
+                                        </MenuItem.Header>
+
+                                        <MenuItem Header="Set Default" Micro:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
+                                        <Separator />
+                                        <MenuItem Header="Import" Micro:Message.Attach="[Event Click] = [Action PresetImport]" />
+                                        <MenuItem Header="Export" Micro:Message.Attach="[Event Click] = [Action PresetExport]" />
+                                        <Separator />
+                                        <MenuItem Header="Reset Built-in Presets" Micro:Message.Attach="[Event Click] = [Action PresetReset]" />
+                                    </MenuItem>
+                                </Menu>
+   
+                                
+                            </ToolBar>
                         </StackPanel>
                     </GroupBox>
                 </StackPanel>

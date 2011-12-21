@@ -17,18 +17,15 @@ namespace HandBrakeWPF.ViewModels
     using System.IO;
     using System.Linq;
     using System.Windows;
+    using System.Windows.Media;
 
     using Caliburn.Micro;
 
-    using Castle.Components.DictionaryAdapter;
-
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Exceptions;
-    using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
-    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
@@ -98,6 +95,16 @@ namespace HandBrakeWPF.ViewModels
         /// Backing field for duration
         /// </summary>
         private string duration;
+
+        /// <summary>
+        /// Is Encoding Backing Field
+        /// </summary>
+        private bool isEncoding;
+
+        /// <summary>
+        /// Backing field for the selected preset.
+        /// </summary>
+        private Preset selectedPreset;
 
         #endregion
 
@@ -174,6 +181,22 @@ namespace HandBrakeWPF.ViewModels
             get
             {
                 return this.presetService.Presets;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets SelectedPreset.
+        /// </summary>
+        public Preset SelectedPreset
+        {
+            get
+            {
+                return this.selectedPreset;
+            }
+            set
+            {
+                this.selectedPreset = value;
+                this.NotifyOfPropertyChange("SelectedPreset");
             }
         }
 
@@ -306,6 +329,23 @@ namespace HandBrakeWPF.ViewModels
             {
                 duration = value;
                 this.NotifyOfPropertyChange("Duration");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether IsEncoding.
+        /// </summary>
+        public bool IsEncoding
+        {
+            get
+            {
+                return this.isEncoding;
+            }
+
+            set
+            {
+                this.isEncoding = value;
+                this.NotifyOfPropertyChange("IsEncoding");
             }
         }
 
@@ -553,6 +593,7 @@ namespace HandBrakeWPF.ViewModels
                 };
             this.queueProcessor.QueueManager.Add(task);
             this.queueProcessor.Start();
+            this.IsEncoding = true;
         }
 
         /// <summary>
@@ -601,6 +642,126 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange("CurrentTask");
         }
 
+        /// <summary>
+        /// Add a Preset
+        /// </summary>
+        public void PresetAdd()
+        {
+            throw new NotImplementedException("Still to do this");
+        }
+
+        /// <summary>
+        /// Remove a Preset
+        /// </summary>
+        public void PresetRemove()
+        {
+            if (this.selectedPreset != null)
+            {
+                this.presetService.Remove(this.selectedPreset);
+            }
+            else
+            {
+                MessageBox.Show("Please select a preset.", "Presets", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        /// <summary>
+        /// Set a default preset
+        /// </summary>
+        public void PresetSetDefault()
+        {
+            if (this.selectedPreset != null)
+            {
+                this.presetService.SetDefault(this.selectedPreset);
+                MessageBox.Show(string.Format("New Default Preset Set: {0}", this.selectedPreset.Name), "Presets", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else
+            {
+                MessageBox.Show("Please select a preset.", "Presets", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        /// <summary>
+        /// Import a Preset
+        /// </summary>
+        public void PresetImport()
+        {
+            VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "Plist (*.plist)|*.plist", CheckFileExists = true };
+            dialog.ShowDialog();
+            string filename = dialog.FileName;
+
+            if (!string.IsNullOrEmpty(filename))
+            {
+                EncodeTask parsed = PlistPresetHandler.Import(filename);
+                if (this.presetService.CheckIfPresetExists(parsed.PresetName))
+                {
+                    if (!presetService.CanUpdatePreset(parsed.PresetName))
+                    {
+                        MessageBox.Show(
+                            "You can not import a preset with the same name as a built-in preset.",
+                            "Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                        return;
+                    }
+
+                    MessageBoxResult result =
+                        MessageBox.Show(
+                            "This preset appears to already exist. Would you like to overwrite it?",
+                            "Overwrite preset?",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Warning);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        Preset preset = new Preset
+                            { Name = parsed.PresetName, CropSettings = parsed.UsesPictureSettings, Task = parsed };
+
+                        presetService.Update(preset);
+                    }
+                }
+                else
+                {
+                    Preset preset = new Preset
+                        { Name = parsed.PresetName, Task = parsed, CropSettings = parsed.UsesPictureSettings, };
+                    presetService.Add(preset);
+                }
+
+                this.NotifyOfPropertyChange("Presets");
+            }
+        }
+
+        /// <summary>
+        /// Export a Preset
+        /// </summary>
+        public void PresetExport()
+        {
+            VistaSaveFileDialog savefiledialog = new VistaSaveFileDialog { Filter = "plist|*.plist", CheckPathExists = true };
+            if (this.selectedPreset != null)
+            {
+                savefiledialog.ShowDialog();
+                string filename = savefiledialog.FileName;
+              
+                if (filename != null)
+                {
+                    PlistPresetHandler.Export(savefiledialog.FileName, this.selectedPreset);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a preset.", "Presets", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        /// <summary>
+        /// Reset built-in presets
+        /// </summary>
+        public void PresetReset()
+        {
+            this.presetService.UpdateBuiltInPresets();
+            this.NotifyOfPropertyChange("Presets");
+            this.SelectedPreset = this.presetService.DefaultPreset;
+        }
+
         #endregion
 
         #region Private Worker Methods
@@ -614,7 +775,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="title">
         /// The title.
         /// </param>
-        public void StartScan(string filename, int title)
+        private void StartScan(string filename, int title)
         {
             // TODO 
             // 1. Disable GUI.
@@ -654,7 +815,6 @@ namespace HandBrakeWPF.ViewModels
                 this.scanService.SouceData.CopyTo(this.ScannedSource);
                 this.NotifyOfPropertyChange("ScannedSource");
                 this.NotifyOfPropertyChange("ScannedSource.Titles");
-                this.NotifyOfPropertyChange("T");
                 this.SelectedTitle = this.ScannedSource.Titles.Where(t => t.MainTitle).FirstOrDefault();
             }
 
@@ -738,6 +898,8 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void QueueCompleted(object sender, EventArgs e)
         {
+            this.IsEncoding = false;
+
             // TODO Handle Updating the UI
         }
         #endregion

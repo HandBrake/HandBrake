@@ -20,6 +20,11 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         ObservableCollection<Preset> Presets { get; }
 
         /// <summary>
+        /// Gets DefaultPreset.
+        /// </summary>
+        Preset DefaultPreset { get; }
+
+        /// <summary>
         /// Add a new preset to the system
         /// </summary>
         /// <param name="preset">
@@ -30,6 +35,14 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// False if name already exists
         /// </returns>
         bool Add(Preset preset);
+
+        /// <summary>
+        /// Update a preset
+        /// </summary>
+        /// <param name="update">
+        /// The updated preset
+        /// </param>
+        void Update(Preset update);
 
         /// <summary>
         /// Remove a preset with a given name from either the built in or user preset list.
@@ -69,11 +82,27 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         void ClearAll();
 
         /// <summary>
+        /// Set Default Preset
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        void SetDefault(Preset name);
+
+        /// <summary>
+        /// Returns a value if the preset can be updated / resaved
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <returns>
+        /// True if it's not a built-in preset, false otherwise.
+        /// </returns>
+        bool CanUpdatePreset(string name);
+
+        /// <summary>
         /// Reads the CLI's CLI output format and load's them into the preset List Preset
         /// </summary>
-        /// <param name="cliPath">
-        /// The Path to the CLI, leave blank for current folder.
-        /// </param>
         void UpdateBuiltInPresets();
 
         /// <summary>
