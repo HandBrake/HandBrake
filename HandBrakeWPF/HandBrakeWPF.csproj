@@ -78,6 +78,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Helpers\ListBoxHelper.cs" />
     <Compile Include="Startup\CastleBootstrapper.cs" />
     <Compile Include="Startup\MefBootstrapper.cs" />
@@ -224,6 +225,11 @@
     <Content Include="defaultsettings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Views\Images\Close.png" />
+    <Resource Include="Views\Images\Help24.png" />
+    <Resource Include="Views\Images\Help32.png" />
+    <Resource Include="Views\Images\Add16.png" />
+    <Resource Include="Views\Images\Options24.png" />
     <Resource Include="Views\Images\arrow_down.png" />
     <Resource Include="Views\Images\arrow_left.png" />
     <Resource Include="Views\Images\arrow_right.png" />
@@ -273,6 +279,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Factories\" />
+    <Folder Include="Services\Interfaces\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.*\StyleCop.targets" />
