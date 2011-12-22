@@ -225,6 +225,7 @@
     <Content Include="defaultsettings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Views\Images\delete.png" />
     <Resource Include="Views\Images\Close.png" />
     <Resource Include="Views\Images\Help24.png" />
     <Resource Include="Views\Images\Help32.png" />
