@@ -293,7 +293,9 @@ namespace HandBrake.ApplicationServices.Utilities
 
                 #region Video Settings Tab
 
-                parsed.VideoEncoder = Converters.GetVideoEncoder(videoEncoder.ToString().Replace("-e ", string.Empty));
+                parsed.VideoEncoder = videoEncoder.Success
+                                          ? Converters.GetVideoEncoder(videoEncoder.ToString().Replace("-e ", string.Empty))
+                                          : VideoEncoder.FFMpeg;
 
                 if (videoFramerate.Success)
                 {
@@ -418,12 +420,12 @@ namespace HandBrake.ApplicationServices.Utilities
                         Converters.Getx264PresetFromCli(x264Preset.ToString().Replace("--x264-preset", string.Empty).Replace("=", string.Empty).Trim());
 
                 if (x264Profile.Success)
-                    parsed.x264Preset =
-                        Converters.Getx264PresetFromCli(x264Profile.ToString().Replace("--x264-profile", string.Empty).Replace("=", string.Empty).Trim());
+                    parsed.x264Profile =
+                        Converters.Getx264ProfileFromCli(x264Profile.ToString().Replace("--x264-profile", string.Empty).Replace("=", string.Empty).Trim());
                
                 if (x264Tune.Success)
-                    parsed.x264Preset =
-                        Converters.Getx264PresetFromCli(x264Tune.ToString().Replace("--x264-tune", string.Empty).Replace("=", string.Empty).Trim());
+                    parsed.X264Tune =
+                        Converters.Getx264TuneFromCli(x264Tune.ToString().Replace("--x264-tune", string.Empty).Replace("=", string.Empty).Trim());
 
                 #endregion
             }
