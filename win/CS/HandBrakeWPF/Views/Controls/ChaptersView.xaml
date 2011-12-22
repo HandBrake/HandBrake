@@ -21,12 +21,17 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <CheckBox Content="Create chapter markers" IsChecked="{Binding IncludeChapterMarkers, RelativeSource={RelativeSource AncestorType=UserControl}}" Grid.Column="0" VerticalAlignment="Center" />
-            <Button Content="Import" Grid.Column="2" Width="75" Margin="0,0,10,0" />
-            <Button Content="Export" Grid.Column="3" Width="75" />
+            <Button Content="Import" Name="import" Grid.Column="2" Width="75" Margin="0,0,10,0" Click="Import_Click" />
+            <Button Content="Export" Name="export" Grid.Column="3" Width="75" Click="Export_Click" />
         </Grid>
 
-        <DataGrid Grid.Row="2" Margin="10" ItemsSource="{Binding Chapters, RelativeSource={RelativeSource AncestorType=UserControl}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            
+        <DataGrid Grid.Row="2" Margin="10" ItemsSource="{Binding Chapters, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AutoGenerateColumns="False"
+                  CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Chapter Number" Width="150" Binding="{Binding ChapterNumber}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Chapter Name"  Width="*" Binding="{Binding ChapterName}" IsReadOnly="False" />
+            </DataGrid.Columns>
         </DataGrid>
         
         
