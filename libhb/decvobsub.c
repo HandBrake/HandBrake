@@ -167,11 +167,14 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pv->size_got = 0;
         pv->size_rle = 0;
 
-        // If we don't get a valid next timestamp, use the stop time
-        // of the current sub as the start of the next.
-        // This can happen if reader invalidates timestamps while 
-        // waiting for an audio to update the SCR.
-        pv->pts      = pv->pts_stop;
+        if ( pv->pts_stop != -1 )
+        {
+            // If we don't get a valid next timestamp, use the stop time
+            // of the current sub as the start of the next.
+            // This can happen if reader invalidates timestamps while 
+            // waiting for an audio to update the SCR.
+            pv->pts      = pv->pts_stop;
+        }
     }
 
     return HB_WORK_OK;
@@ -390,11 +393,6 @@ static void ParseControls( hb_work_object_t * w )
     {
         // Set pts to end of last sub if the start time is unknown.
         pv->pts_start = pv->pts;
-    }
-    if( pv->pts_stop == -1 )
-    {
-        // Set durtion to 10 sec if unknown.
-        pv->pts_stop = pv->pts + 90000L * 10;
     }
 }
 
