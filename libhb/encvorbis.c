@@ -87,8 +87,9 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
     }
     else if( audio->config.out.quality != -1 )
     {
+        // map VBR quality to Vorbis API (divide by 10)
         if( vorbis_encode_setup_vbr( &pv->vi, pv->out_discrete_channels,
-              audio->config.out.samplerate, audio->config.out.quality ) )
+              audio->config.out.samplerate, audio->config.out.quality/10 ) )
         {
             hb_error( "encvorbis: vorbis_encode_setup_vbr failed.\n" );
             *job->die = 1;

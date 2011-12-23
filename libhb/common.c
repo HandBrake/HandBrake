@@ -518,9 +518,9 @@ void hb_get_audio_quality_limits(uint32_t codec, float *low, float *high, float 
 
         case HB_ACODEC_VORBIS:
             *direction = 0;
-            *granularity = 0.05;
-            *low = -0.2;
-            *high = 1.0;
+            *granularity = 0.5;
+            *low = -2.0;
+            *high = 10.0;
             break;
 
         case HB_ACODEC_CA_AAC:
