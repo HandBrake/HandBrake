@@ -35,6 +35,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>handbrakepineapple.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Caliburn.Micro">
       <HintPath>..\libraries\caliburn\Caliburn.Micro.dll</HintPath>
@@ -80,12 +83,17 @@
     </ApplicationDefinition>
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Helpers\ListBoxHelper.cs" />
+    <Compile Include="Services\ErrorService.cs" />
+    <Compile Include="Services\Interfaces\IErrorService.cs" />
     <Compile Include="Startup\CastleBootstrapper.cs" />
     <Compile Include="Startup\MefBootstrapper.cs" />
     <Compile Include="UserSettingConstants.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AddPresetViewModel.cs" />
     <Compile Include="ViewModels\ErrorViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IAddPresetViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IQueueViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IPreviewViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IErrorViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ILogViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IAboutViewModel.cs" />
@@ -225,6 +233,7 @@
     <Content Include="defaultsettings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="handbrakepineapple.ico" />
     <Resource Include="Views\Images\delete.png" />
     <Resource Include="Views\Images\Close.png" />
     <Resource Include="Views\Images\Help24.png" />
@@ -280,7 +289,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Factories\" />
-    <Folder Include="Services\Interfaces\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.*\StyleCop.targets" />

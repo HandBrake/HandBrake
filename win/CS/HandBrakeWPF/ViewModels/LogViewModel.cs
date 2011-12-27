@@ -27,6 +27,7 @@ namespace HandBrakeWPF.ViewModels
         public LogViewModel(IWindowManager windowManager)
             : base(windowManager)
         {
+            this.Title = "Log Viewer";
         }
     }
 }

@@ -9,12 +9,13 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using Interfaces;
     using Caliburn.Micro;
 
     /// <summary>
     /// The About View Model
     /// </summary>
-    public class PreviewViewModel : ViewModelBase
+    public class PreviewViewModel : ViewModelBase, IPreviewViewModel
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PreviewViewModel"/> class.
@@ -24,6 +25,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public PreviewViewModel(IWindowManager windowManager) : base(windowManager)
         {
+            this.Title = "Preview";
         }
 
         /// <summary>

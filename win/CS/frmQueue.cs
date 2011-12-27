@@ -329,7 +329,7 @@ namespace Handbrake
             }
 
             list_queue.Items.Clear();
-            ReadOnlyCollection<QueueTask> theQueue = queue.QueueManager.Queue;
+            ObservableCollection<QueueTask> theQueue = queue.QueueManager.Queue;
             foreach (QueueTask queueItem in theQueue)
             {
                 string qItem = queueItem.Query;

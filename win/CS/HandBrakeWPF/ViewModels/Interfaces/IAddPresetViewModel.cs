@@ -1,27 +1,27 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AddPresetView.xaml.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="IAddPresetViewModel.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Interaction logic for VideoView.xaml
+//   The Add Preset View Model Interface
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Views
+namespace HandBrakeWPF.ViewModels.Interfaces
 {
-    using System.Windows;
+    using HandBrake.ApplicationServices.Model;
 
     /// <summary>
-    /// Interaction logic for VideoView.xaml
+    /// The Add Preset View Model
     /// </summary>
-    public partial class AddPresetView : Window
+    public interface IAddPresetViewModel
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AddPresetView"/> class.
+        /// Prepare the Preset window to create a Preset Object later.
         /// </summary>
-        public AddPresetView()
-        {
-            InitializeComponent();
-        }
+        /// <param name="task">
+        /// The Encode Task.
+        /// </param>
+        void Setup(EncodeTask task);
     }
 }
