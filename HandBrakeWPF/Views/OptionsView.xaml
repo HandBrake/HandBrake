@@ -1,7 +1,7 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.OptionsView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:cal="http://www.caliburnproject.org"
-        xmlns:Helpers="clr-namespace:HandBrakeWPF.Helpers" Title="OptionsView" MinWidth="620" MinHeight="550" Width="620" Height="550">
+        xmlns:Helpers="clr-namespace:HandBrakeWPF.Helpers" Title="{Binding Title}" MinWidth="620" MinHeight="550" Width="620" Height="550">
 
     <Window.Resources>
         <Style TargetType="Button">

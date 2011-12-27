@@ -1,6 +1,6 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.AboutView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro" Title="AboutView" 
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro" Title="{Binding Title}" 
         Height="320" Width="600">
 
     <Grid>

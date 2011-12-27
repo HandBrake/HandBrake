@@ -8,11 +8,11 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("HandBrake")]
-[assembly: AssemblyDescription("A WPF MVVM based GUI for HandBrake.")]
+[assembly: AssemblyDescription("HandBrake is an open-source, GPL-licensed, multiplatform, multithreaded video transcoder.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("HandBrake Team")]
 [assembly: AssemblyProduct("HandBrake")]
-[assembly: AssemblyCopyright("Copyright © HandBrake Team 2011")]
+[assembly: AssemblyCopyright("Copyright © HandBrake Team 2011-2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

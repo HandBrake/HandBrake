@@ -41,7 +41,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// The Queue of Job objects
         /// </summary>
-        private readonly List<QueueTask> queue = new List<QueueTask>();
+        private readonly ObservableCollection<QueueTask> queue = new ObservableCollection<QueueTask>();
 
         /// <summary>
         /// HandBrakes Queue file with a place holder for an extra string.
@@ -74,6 +74,7 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         public QueueManager()
         {
+            this.queueFile =  "hb_queue_recovery.xml"; // TODO need to support multi-instance here.
         }
 
         /// <summary>
@@ -130,11 +131,11 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Gets The current queue.
         /// </summary>
-        public ReadOnlyCollection<QueueTask> Queue
+        public ObservableCollection<QueueTask> Queue
         {
             get
             {
-                return this.queue.AsReadOnly();
+                return this.queue;
             }
         }
 

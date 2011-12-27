@@ -1,7 +1,7 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.LogView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="LogView" Height="600" Width="420">
+        Title="{Binding Title}" Height="600" Width="420">
     <Grid>
         <Grid>
             <Grid.RowDefinitions>

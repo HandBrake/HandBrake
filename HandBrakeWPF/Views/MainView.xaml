@@ -36,7 +36,7 @@
                     </MenuItem>
 
                     <MenuItem Header="Tools">
-                        <MenuItem Header="Show Queue" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
+                        <MenuItem Header="Show Queue" Micro:Message.Attach="[Event Click] = [Action OpenQueueWindow]" />
                         <MenuItem Header="Activity Window" Micro:Message.Attach="[Event Click] = [Action OpenLogWindow]" />
                         <Separator />
                         <MenuItem Header="Options" Micro:Message.Attach="[Event Click] = [Action OpenOptionsWindow]" />
@@ -98,14 +98,14 @@
                         </StackPanel>
                     </Button>
 
-                    <Button Name="AddToQueue">
+                    <Button Name="AddToQueue"  Micro:Message.Attach="[Event Click] = [Action AddToQueue]">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="Images/AddToQueue.png" Height="32" Width="32" />
                             <Label Content="Add To Queue"  Margin="8,0,0,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
-                    <Button Name="ShowQueue">
+                    <Button Name="ShowQueue"  Micro:Message.Attach="[Event Click] = [Action OpenQueueWindow]">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="Images/Queue.png" Height="32" Width="32" />
                             <Label Content="Show Queue"  Margin="8,0,0,0" VerticalAlignment="Center" />
@@ -114,12 +114,13 @@
 
                     <Separator />
 
-                    <Button Name="Preview">
+                    <Button Name="Preview" Micro:Message.Attach="[Event Click] = [Action OpenPreviewWindow]">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="Images/window.png" Height="32" Width="32" />
                             <Label Content="Preview"  Margin="8,0,0,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
+                    
                     <Button Name="ActivityWindow" Micro:Message.Attach="[Event Click] = [Action OpenLogWindow]">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="Images/ActivityWindow.png" Height="32" Width="32" />

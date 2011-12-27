@@ -30,7 +30,7 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <summary>
         /// Gets The current queue.
         /// </summary>
-        ReadOnlyCollection<QueueTask> Queue { get; }
+         ObservableCollection<QueueTask> Queue { get; }
 
         /// <summary>
         /// Gets the number of jobs in the queue

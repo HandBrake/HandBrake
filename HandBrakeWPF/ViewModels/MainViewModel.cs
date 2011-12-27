@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using HandBrakeWPF.Services.Interfaces;
+
 namespace HandBrakeWPF.ViewModels
 {
     using System;
@@ -65,6 +67,11 @@ namespace HandBrakeWPF.ViewModels
         /// The preset service
         /// </summary>
         private readonly IPresetService presetService;
+
+        /// <summary>
+        /// The Error Service Backing field.
+        /// </summary>
+        private readonly IErrorService errorService;
 
         /// <summary>
         /// HandBrakes Main Window Title
@@ -127,14 +134,19 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="presetService">
         /// The preset Service.
         /// </param>
+        /// <param name="errorService">
+        /// The Error Service
+        /// </param>
         [ImportingConstructor]
-        public MainViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService)
+        public MainViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService,
+            IErrorService errorService)
             : base(windowManager)
         {
             this.userSettingService = userSettingService;
             this.scanService = scanService;
             this.encodeService = encodeService;
             this.presetService = presetService;
+            this.errorService = errorService;
             this.queueProcessor = IoC.Get<IQueueProcessor>(); // TODO Instance ID!
 
             // Setup Properties
@@ -169,6 +181,27 @@ namespace HandBrakeWPF.ViewModels
                 if (!object.Equals(this.windowName, value))
                 {
                     this.windowName = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the Program Status Toolbar Label
+        /// This indicates the status of HandBrake
+        /// </summary>
+        public string ProgramStatusLabel
+        {
+            get
+            {
+                return string.IsNullOrEmpty(this.programStatusLabel) ? "Ready" : this.sourceLabel;
+            }
+
+            set
+            {
+                if (!object.Equals(this.programStatusLabel, value))
+                {
+                    this.programStatusLabel = value;
+                    this.NotifyOfPropertyChange("ProgramStatusLabel");
                 }
             }
         }
@@ -240,27 +273,6 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.sourceLabel = value;
                     this.NotifyOfPropertyChange("SourceLabel");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the Program Status Toolbar Label
-        /// This indicates the status of HandBrake
-        /// </summary>
-        public string ProgramStatusLabel
-        {
-            get
-            {
-                return string.IsNullOrEmpty(this.programStatusLabel) ? "Ready" : this.sourceLabel;
-            }
-
-            set
-            {
-                if (!object.Equals(this.programStatusLabel, value))
-                {
-                    this.programStatusLabel = value;
-                    this.NotifyOfPropertyChange("ProgramStatusLabel");
                 }
             }
         }
@@ -486,7 +498,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenAboutApplication()
         {
-            this.WindowManager.ShowWindow(new AboutViewModel(this.WindowManager, this.userSettingService));
+            this.WindowManager.ShowWindow(IoC.Get<IAboutViewModel>());
         }
 
         /// <summary>
@@ -494,7 +506,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenOptionsWindow()
         {
-            this.WindowManager.ShowWindow(new OptionsViewModel(this.WindowManager, this.userSettingService));
+            this.WindowManager.ShowWindow(IoC.Get<IOptionsViewModel>());
         }
 
         /// <summary>
@@ -502,7 +514,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenLogWindow()
         {
-            this.WindowManager.ShowWindow(new LogViewModel(this.WindowManager));
+            this.WindowManager.ShowWindow(IoC.Get<ILogViewModel>());
         }
 
         /// <summary>
@@ -510,9 +522,17 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenQueueWindow()
         {
-            this.WindowManager.ShowWindow(new QueueViewModel(this.WindowManager));
+            this.WindowManager.ShowWindow(IoC.Get<IQueueViewModel>());
         }
 
+        /// <summary>
+        /// Open the Queue Window.
+        /// </summary>
+        public void OpenPreviewWindow()
+        {
+            this.WindowManager.ShowWindow(IoC.Get<IPreviewViewModel>());
+        }
+        
         /// <summary>
         /// Launch the Help pages.
         /// </summary>
@@ -527,6 +547,30 @@ namespace HandBrakeWPF.ViewModels
         public void CheckForUpdates()
         {
             throw new NotImplementedException("Not Yet Implemented");
+        }
+
+        /// <summary>
+        /// Add the current task to the queue.
+        /// </summary>
+        public void AddToQueue()
+        {
+            if (this.ScannedSource == null || string.IsNullOrEmpty(this.ScannedSource.ScanPath) || this.ScannedSource.Titles.Count == 0)
+            {
+                this.errorService.ShowMessageBox("You must first scan a source and setup your job before adding to the queue.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            QueueTask task = new QueueTask
+                                 {
+                                     Task = this.CurrentTask,
+                                     Query = QueryGeneratorUtility.GenerateQuery(this.CurrentTask)
+                                 };
+            this.queueProcessor.QueueManager.Add(task);
+
+            if (!this.IsEncoding)
+            {
+                this.ProgramStatusLabel = string.Format("{0} Encodes Pending", this.queueProcessor.QueueManager.Count);
+            }
         }
 
         /// <summary>
@@ -565,22 +609,29 @@ namespace HandBrakeWPF.ViewModels
             // Santiy Checking.
             if (this.ScannedSource == null || this.CurrentTask == null)
             {
-                throw new GeneralApplicationException("You must first scan a source.", string.Empty, null);
+                this.errorService.ShowMessageBox("You must first scan a source.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
 
             if (string.IsNullOrEmpty(this.CurrentTask.Destination))
             {
-                throw new GeneralApplicationException("The Destination field was empty.", "You must first set a destination for the encoded file.", null);
+                this.errorService.ShowMessageBox("The Destination field was empty.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
 
             if (this.queueProcessor.IsProcessing)
             {
-                throw new GeneralApplicationException("HandBrake is already encoding.", string.Empty, null);
+                this.errorService.ShowMessageBox("HandBrake is already encoding.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
 
             if (File.Exists(this.CurrentTask.Destination))
             {
-                // TODO: File Overwrite warning.
+               MessageBoxResult result = this.errorService.ShowMessageBox("The current file already exists, do you wish to overwrite it?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question);
+               if (result == MessageBoxResult.No)
+               {
+                   return;
+               }
             }
 
             // Create the Queue Task and Start Processing
@@ -647,7 +698,9 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void PresetAdd()
         {
-            throw new NotImplementedException("Still to do this");
+            IAddPresetViewModel presetViewModel = IoC.Get<IAddPresetViewModel>();
+            presetViewModel.Setup(this.CurrentTask);
+            this.WindowManager.ShowWindow(presetViewModel);
         }
 
         /// <summary>

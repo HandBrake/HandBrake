@@ -14,5 +14,19 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     /// </summary>
     public interface IErrorViewModel
     {
+        /// <summary>
+        /// The Error Details
+        /// </summary>
+        string Details { set; }
+
+        /// <summary>
+        /// The Error Message
+        /// </summary>
+        string ErrorMessage { set; }
+
+        /// <summary>
+        /// The Error Solution
+        /// </summary>
+        string Solution { set; }
     }
 }

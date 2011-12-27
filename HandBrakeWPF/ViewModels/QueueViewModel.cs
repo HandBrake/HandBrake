@@ -9,21 +9,188 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using System.Windows;
+    using HandBrake.ApplicationServices.Model;
+    using Services.Interfaces;
+    using System.Collections.ObjectModel;
+    using HandBrake.ApplicationServices.Services.Interfaces;
+    using System.ComponentModel.Composition;
+    using Interfaces;
     using Caliburn.Micro;
 
     /// <summary>
     /// The Preview View Model
     /// </summary>
-    public class QueueViewModel : ViewModelBase
+    [Export(typeof(IQueueViewModel))]
+    public class QueueViewModel : ViewModelBase, IQueueViewModel
     {
+        #region Private Fields
+        /// <summary>
+        /// Queue Processor Backing field
+        /// </summary>
+        private readonly IQueueProcessor queueProcessor;
+
+        /// <summary>
+        /// The Error Service Backing field
+        /// </summary>
+        private readonly IErrorService errorService;
+
+        /// <summary>
+        /// Jobs pending backing field
+        /// </summary>
+        private string jobsPending;
+
+        /// <summary>
+        /// Job Status Backing field.
+        /// </summary>
+        private string jobStatus;
+
+        /// <summary>
+        /// IsEncoding Backing field
+        /// </summary>
+        private bool isEncoding;
+
+        #endregion
+
         /// <summary>
         /// Initializes a new instance of the <see cref="QueueViewModel"/> class.
         /// </summary>
         /// <param name="windowManager">
         /// The window manager.
         /// </param>
-        public QueueViewModel(IWindowManager windowManager) : base(windowManager)
+        /// <param name="queueProcessor"> 
+        /// The Queue Processor Service 
+        /// </param>
+        /// <param name="errorService"> 
+        /// The Error Service 
+        /// </param>
+        public QueueViewModel(IWindowManager windowManager, IQueueProcessor queueProcessor, IErrorService errorService)
+            : base(windowManager)
         {
+            this.queueProcessor = queueProcessor;
+            this.errorService = errorService;
+            this.Title = "Queue";
+            this.JobsPending = "No encodes pending";
+            this.JobStatus = "There are no jobs currently encoding";
+        }
+
+        public ObservableCollection<QueueTask> QueueJobs
+        {
+            get { return this.queueProcessor.QueueManager.Queue; }
+        }
+
+        /// <summary>
+        /// Gets or sets IsEncoding.
+        /// </summary>
+        public bool IsEncoding
+        {
+            get
+            {
+                return this.isEncoding;
+            }
+
+            set
+            {
+                this.isEncoding = value;
+                this.NotifyOfPropertyChange("IsEncoding");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets JobStatus.
+        /// </summary>
+        public string JobStatus
+        {
+            get
+            {
+                return this.jobStatus;
+            }
+
+            set
+            {
+                this.jobStatus = value;
+                this.NotifyOfPropertyChange("JobStatus");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets JobsPending.
+        /// </summary>
+        public string JobsPending
+        {
+            get
+            {
+                return this.jobsPending;
+            }
+
+            set
+            {
+                this.jobsPending = value;
+                this.NotifyOfPropertyChange("JobsPending");
+            }
+        }
+
+        /// <summary>
+        /// Start Encode
+        /// </summary>
+        public void StartEncode()
+        {
+            if (this.queueProcessor.QueueManager.Count == 0)
+            {
+                this.errorService.ShowMessageBox("There are no pending jobs.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            this.queueProcessor.Start();
+        }
+
+        /// <summary>
+        /// Pause Encode
+        /// </summary>
+        public void PauseEncode()
+        {
+            this.queueProcessor.Pause();
+        }
+
+        /// <summary>
+        /// Remove a Job from the queue
+        /// </summary>
+        /// <param name="task">
+        /// The Job to remove from the queue
+        /// </param>
+        public void RemoveJob(QueueTask task)
+        {
+            if (task.Status == QueueItemStatus.InProgress)
+            {
+                MessageBoxResult result = this.errorService.ShowMessageBox(
+                    "This encode is currently in progress. If you delete it, the encode will be stoped. Are you sure you wish to proceed?",
+                    "Warning", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    this.queueProcessor.QueueManager.Remove(task);
+                }
+            }
+            else
+            {
+                this.queueProcessor.QueueManager.Remove(task);
+            }
+
+            this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.QueueManager.Count);
+        }
+
+        public override void OnLoad()
+        {
+            this.queueProcessor.JobProcessingStarted += queueProcessor_JobProcessingStarted;
+            this.queueProcessor.QueueCompleted += queueProcessor_QueueCompleted;
+            this.queueProcessor.QueuePaused += queueProcessor_QueuePaused;
+            this.queueProcessor.QueueManager.QueueChanged += QueueManager_QueueChanged;
+
+            // Setup the window to the correct state.
+            this.IsEncoding = queueProcessor.EncodeService.IsEncoding;
+            this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.QueueManager.Count);
+
+            base.OnLoad();
         }
 
         /// <summary>
@@ -32,6 +199,52 @@ namespace HandBrakeWPF.ViewModels
         public void Close()
         {
             this.TryClose();
+        }
+
+        /// <summary>
+        /// Override the OnActive to run the Screen Loading code in the view model base.
+        /// </summary>
+        protected override void OnActivate()
+        {
+            this.Load();
+            base.OnActivate();
+        }
+
+        private void queueProcessor_QueuePaused(object sender, System.EventArgs e)
+        {
+            this.JobStatus = "Queue Paused";
+            this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.QueueManager.Count);
+        }
+
+        private void queueProcessor_QueueCompleted(object sender, System.EventArgs e)
+        {
+            this.JobStatus = "Queue Completed";
+            this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.QueueManager.Count);
+        }
+
+        private void queueProcessor_JobProcessingStarted(object sender, HandBrake.ApplicationServices.EventArgs.QueueProgressEventArgs e)
+        {
+            this.JobStatus = "Queue Started";
+            this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.QueueManager.Count);
+            this.queueProcessor.EncodeService.EncodeStatusChanged += EncodeService_EncodeStatusChanged;
+        }
+
+        private void EncodeService_EncodeStatusChanged(object sender, HandBrake.ApplicationServices.EventArgs.EncodeProgressEventArgs e)
+        {
+            this.JobStatus = string.Format(
+                "Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:hh\\:mm\\:ss}",
+                e.Task,
+                e.TaskCount,
+                e.PercentComplete,
+                e.CurrentFrameRate,
+                e.AverageFrameRate,
+                e.EstimatedTimeLeft,
+                e.ElapsedTime);
+        }
+
+        private void QueueManager_QueueChanged(object sender, System.EventArgs e)
+        {
+            // TODO
         }
     }
 }

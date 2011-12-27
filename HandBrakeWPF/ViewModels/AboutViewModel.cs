@@ -42,6 +42,7 @@ namespace HandBrakeWPF.ViewModels
             : base(windowManager)
         {
             this.userSettingService = userSettingService;
+            this.Title = "About HandBrake";
         }
 
         /// <summary>

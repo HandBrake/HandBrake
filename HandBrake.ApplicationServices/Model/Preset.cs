@@ -41,6 +41,11 @@ namespace HandBrake.ApplicationServices.Model
         public string Description { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether Picture Filters are used with this preset.
+        /// </summary>
+        public bool UsePictureFilters { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this is a built in preset
         /// </summary>
         public bool IsBuildIn { get; set; }
