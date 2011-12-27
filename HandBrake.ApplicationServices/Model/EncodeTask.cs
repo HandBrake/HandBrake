@@ -5,11 +5,10 @@
 
 namespace HandBrake.ApplicationServices.Model
 {
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Linq;
 
     using HandBrake.ApplicationServices.Model.Encoding;
-    using HandBrake.ApplicationServices.Parsing;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
@@ -362,6 +361,30 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets a value indicating whether UsesPictureSettings.
         /// </summary>
         public bool UsesPictureSettings { get; set; }
+        #endregion
+
+        #region Helpers
+
+        /// <summary>
+        /// Gets a value indicating whether M4v extension is required.
+        /// </summary>
+        public bool RequiresM4v
+        {
+            get
+            {
+                if (this.OutputFormat == OutputFormat.M4V || this.OutputFormat == OutputFormat.Mp4)
+                {
+                    bool audio = this.AudioTracks.Any(item => item.Encoder == AudioEncoder.Ac3Passthrough || 
+                        item.Encoder == AudioEncoder.Ac3 || item.Encoder == AudioEncoder.DtsPassthrough || item.Encoder == AudioEncoder.Passthrough);
+
+                    bool subtitles = this.SubtitleTracks.Any(track => track.SubtitleType != SubtitleType.VobSub);
+
+                    return audio || subtitles;
+                }
+
+                return false;
+            }
+        }
         #endregion
     }
 }

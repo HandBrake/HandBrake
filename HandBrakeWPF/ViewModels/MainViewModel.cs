@@ -83,6 +83,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private string sourceLabel;
 
+        public string sourcePath;
+        private string dvdDrivePath;
+        private string dvdDriveLabel;
+        private List<DriveInformation> drives;
+
         /// <summary>
         /// The Toolbar Status Label
         /// </summary>
@@ -274,6 +279,43 @@ namespace HandBrakeWPF.ViewModels
                     this.sourceLabel = value;
                     this.NotifyOfPropertyChange("SourceLabel");
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets SourceName.
+        /// </summary>
+        public string SourceName
+        {
+            get
+            {
+                if (this.selectedSourceType == SourceType.DvdDrive)
+                {
+                    return this.dvdDriveLabel;
+                }
+
+                if (selectedTitle != null && !string.IsNullOrEmpty(selectedTitle.SourceName))
+                {
+                    return Path.GetFileName(selectedTitle.SourceName);
+                }
+
+                // We have a drive, selected as a folder.
+                if (this.sourcePath.EndsWith("\\"))
+                {
+                    drives = GeneralUtilities.GetDrives();
+                    foreach (DriveInformation item in drives)
+                    {
+                        if (item.RootDirectory.Contains(this.sourcePath))
+                        {
+                            return item.VolumeLabel;
+                        }
+                    }
+                }
+
+                if (Path.GetFileNameWithoutExtension(this.sourcePath) != "VIDEO_TS")
+                    return Path.GetFileNameWithoutExtension(this.sourcePath);
+
+                return Path.GetFileNameWithoutExtension(Path.GetDirectoryName(this.sourcePath));
             }
         }
 
@@ -832,6 +874,7 @@ namespace HandBrakeWPF.ViewModels
         {
             // TODO 
             // 1. Disable GUI.
+            this.sourcePath = filename;
             this.scanService.Scan(filename, title, this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount));
         }
 

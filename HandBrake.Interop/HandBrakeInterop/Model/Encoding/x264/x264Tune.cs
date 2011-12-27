@@ -16,8 +16,11 @@ namespace HandBrake.Interop.Model.Encoding.x264
     /// </summary>
     public enum x264Tune
     {
+        [Display(Name = "None")]
+        None = 0,
+
         [Display(Name = "Film")]
-        Film = 0,
+        Film,
 
         [Display(Name = "Animation")]
         Animation,

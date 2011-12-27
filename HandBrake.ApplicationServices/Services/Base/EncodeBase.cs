@@ -94,7 +94,11 @@ namespace HandBrake.ApplicationServices.Services.Base
         {
             get
             {
-                return string.IsNullOrEmpty(this.logBuffer.ToString()) ? this.header + "No log data available..." : this.header + this.logBuffer.ToString();
+                string noLog =
+                    "No log data available... Log data will show when you start an encode. \n\nOpen the log file directory to get previous log files.";
+                return string.IsNullOrEmpty(this.logBuffer.ToString())
+                           ? this.header + noLog
+                           : this.header + this.logBuffer.ToString();
             }
         }
 

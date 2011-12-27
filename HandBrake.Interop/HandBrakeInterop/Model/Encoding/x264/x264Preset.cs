@@ -16,8 +16,11 @@ namespace HandBrake.Interop.Model.Encoding.x264
     /// </summary>
     public enum x264Preset
     {
+        [Display(Name = "None")]
+        None = 0,
+
         [Display(Name = "Ultrafast")]
-        Ultrafast = 0,
+        Ultrafast,
 
         [Display(Name = "Super Fast")]
         Superfast,

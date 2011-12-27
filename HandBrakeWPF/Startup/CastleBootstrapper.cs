@@ -61,6 +61,7 @@ namespace HandBrakeWPF.Startup
             this.windsorContainer.Register(Component.For<ILogViewModel>().ImplementedBy<LogViewModel>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IAboutViewModel>().ImplementedBy<AboutViewModel>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IOptionsViewModel>().ImplementedBy<OptionsViewModel>().LifeStyle.Is(LifestyleType.Singleton));
+            this.windsorContainer.Register(Component.For<IUpdateVersionService>().ImplementedBy<UpdateVersionService>().LifeStyle.Is(LifestyleType.Singleton));
         }
 
         /// <summary>

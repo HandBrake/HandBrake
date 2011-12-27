@@ -82,9 +82,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Helpers\AutoNameHelper.cs" />
     <Compile Include="Helpers\ListBoxHelper.cs" />
     <Compile Include="Services\ErrorService.cs" />
     <Compile Include="Services\Interfaces\IErrorService.cs" />
+    <Compile Include="Services\Interfaces\IUpdateVersionService.cs" />
+    <Compile Include="Services\UpdateVersionService.cs" />
     <Compile Include="Startup\CastleBootstrapper.cs" />
     <Compile Include="Startup\MefBootstrapper.cs" />
     <Compile Include="UserSettingConstants.cs" />
