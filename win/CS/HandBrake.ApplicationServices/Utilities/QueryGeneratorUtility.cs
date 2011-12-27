@@ -16,6 +16,7 @@ namespace HandBrake.ApplicationServices.Utilities
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model.Encoding;
+    using HandBrake.Interop.Model.Encoding.x264;
 
     /// <summary>
     /// Generate a CLI Query for HandBrakeCLI
@@ -767,11 +768,24 @@ namespace HandBrake.ApplicationServices.Utilities
         {
             if (task.VideoEncoder == VideoEncoder.X264)
             {
-                return string.Format(
-                    " --x264-preset={0} --x264-tune={1} --x264-profile={2}",
-                    task.x264Preset.ToString().ToLower().Replace(" ", string.Empty),
-                    task.X264Tune.ToString().ToLower().Replace(" ", string.Empty),
-                    task.x264Profile.ToString().ToLower().Replace(" ", string.Empty));
+                string query = string.Empty; 
+
+                if (task.x264Preset != x264Preset.None)
+                {
+                    query += string.Format("--x264-preset={0} ", task.x264Preset.ToString().ToLower().Replace(" ", string.Empty));
+                }
+
+                if (task.x264Profile != x264Profile.None)
+                {
+                    query += string.Format("--x264-profile={0} ", task.x264Profile.ToString().ToLower().Replace(" ", string.Empty));
+                }
+
+                if (task.X264Tune != x264Tune.None)
+                {
+                    query += string.Format("--x264-tune={0} ", task.X264Tune.ToString().ToLower().Replace(" ", string.Empty));
+                }
+
+                return query;
             }
 
             return string.IsNullOrEmpty(task.AdvancedEncoderOptions) ? string.Empty : string.Format(" -x {0}", task.AdvancedEncoderOptions);
