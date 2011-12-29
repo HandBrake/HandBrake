@@ -512,7 +512,14 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 
     list_es  = hb_list_init();
 
-    hb_log( "scan: decoding previews for title %d", title->index );
+    if( data->batch )
+    {
+        hb_log( "scan: decoding previews for title %d (%s)", title->index, title->path );
+    }
+    else
+    {
+        hb_log( "scan: decoding previews for title %d", title->index );
+    }
 
     if (data->bd)
     {
