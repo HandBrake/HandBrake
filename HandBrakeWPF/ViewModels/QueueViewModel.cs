@@ -65,7 +65,6 @@ namespace HandBrakeWPF.ViewModels
         /// The Error Service 
         /// </param>
         public QueueViewModel(IWindowManager windowManager, IQueueProcessor queueProcessor, IErrorService errorService)
-            : base(windowManager)
         {
             this.queueProcessor = queueProcessor;
             this.errorService = errorService;

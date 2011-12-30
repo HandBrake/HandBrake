@@ -23,7 +23,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="windowManager">
         /// The window manager.
         /// </param>
-        public PreviewViewModel(IWindowManager windowManager) : base(windowManager)
+        public PreviewViewModel(IWindowManager windowManager)
         {
             this.Title = "Preview";
         }

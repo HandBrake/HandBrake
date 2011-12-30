@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="HandBrakeWPF.Views.Controls.PictureSettingsView"
+﻿<UserControl x:Class="HandBrakeWPF.Views.PictureSettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:NumericUpDown="clr-namespace:EagleBoost.Wpf.Presentation.Controls.NumericUpDown;assembly=EagleBoost.Wpf.Presentation">

@@ -1,31 +1,36 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChaptersView.xaml.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="ChaptersViewModel.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Interaction logic for ChaptersView.xaml
+//   The Chapters View Model
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Views.Controls
+namespace HandBrakeWPF.ViewModels
 {
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.ComponentModel.Composition;
     using System.IO;
-    using System.Windows;
-    using System.Windows.Controls;
+
+    using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.ApplicationServices.Services.Interfaces;
+
+    using HandBrakeWPF.ViewModels.Interfaces;
 
     using Ookii.Dialogs.Wpf;
 
     /// <summary>
-    /// Interaction logic for ChaptersView.xaml
+    /// The Chapters View Model
     /// </summary>
-    public partial class ChaptersView : UserControl
+    [Export(typeof(IChaptersViewModel))]
+    public class ChaptersViewModel : ViewModelBase, IChaptersViewModel
     {
         /// <summary>
         /// Gets or sets SourceChapterList.
@@ -33,41 +38,28 @@ namespace HandBrakeWPF.Views.Controls
         private ObservableCollection<Chapter> SourceChapterList { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ChaptersView"/> class.
+        /// Initializes a new instance of the <see cref="ChaptersViewModel"/> class.
         /// </summary>
-        public ChaptersView()
+        /// <param name="windowManager">
+        /// The window manager.
+        /// </param>
+        /// <param name="userSettingService">
+        /// The user Setting Service.
+        /// </param>
+        public ChaptersViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
         {
-            InitializeComponent();
-            this.SourceChapterList = new ObservableCollection<Chapter>();
+            this.Chapters = new ObservableCollection<ChapterMarker>();
         }
-
-        /// <summary>
-        /// The "Chapters" Dependancy Property
-        /// </summary>
-        public static readonly DependencyProperty ChaptersProperty = DependencyProperty.Register("Chapters", typeof(ObservableCollection<ChapterMarker>), typeof(ChaptersView));
-
-        /// <summary>
-        /// The "EnableChapterMarkers" Dependancy Property
-        /// </summary>
-        public static readonly DependencyProperty IncludeChaptersProperty = DependencyProperty.Register("IncludeChapterMarkers", typeof(bool), typeof(ChaptersView));
 
         /// <summary>
         /// Gets or sets State.
         /// </summary>
-        public ObservableCollection<ChapterMarker> Chapters
-        {
-            get { return (ObservableCollection<ChapterMarker>)this.GetValue(ChaptersProperty); }
-            set { this.SetValue(ChaptersProperty, value); }
-        }
+        public ObservableCollection<ChapterMarker> Chapters { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether chapter markers are enabled.
         /// </summary>
-        public bool IncludeChapterMarkers
-        {
-            get { return (bool)this.GetValue(IncludeChaptersProperty); }
-            set { this.SetValue(IncludeChaptersProperty, value); }
-        }
+        public bool IncludeChapterMarkers { get; set; }
 
         /// <summary>
         /// Set the Source Chapters List
@@ -125,13 +117,7 @@ namespace HandBrakeWPF.Views.Controls
         /// <summary>
         /// Import a CSV file
         /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The RoutedEventArgs.
-        /// </param>
-        private void Import_Click(object sender, RoutedEventArgs e)
+        private void Import()
         {
             VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "CSV files (*.csv)|*.csv", CheckFileExists = true };
             dialog.ShowDialog();
@@ -178,13 +164,7 @@ namespace HandBrakeWPF.Views.Controls
         /// <summary>
         /// Export a CSV file.
         /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The RoutedEventArgs.
-        /// </param>
-        private void Export_Click(object sender, RoutedEventArgs e)
+        private void Export()
         {
             VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog { Filter = "Csv File|*.csv", DefaultExt = "csv", CheckPathExists = true };
             saveFileDialog.ShowDialog();

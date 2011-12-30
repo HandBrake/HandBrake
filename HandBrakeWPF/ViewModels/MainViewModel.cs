@@ -42,11 +42,6 @@ namespace HandBrakeWPF.ViewModels
         #region Private Variables and Services
 
         /// <summary>
-        /// The Backing field for the user setting service.
-        /// </summary>
-        private readonly IUserSettingService userSettingService;
-
-        /// <summary>
         /// The Source Scan Service.
         /// </summary>
         private readonly IScan scanService;
@@ -153,9 +148,7 @@ namespace HandBrakeWPF.ViewModels
         [ImportingConstructor]
         public MainViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService,
             IErrorService errorService)
-            : base(windowManager)
         {
-            this.userSettingService = userSettingService;
             this.scanService = scanService;
             this.encodeService = encodeService;
             this.presetService = presetService;
@@ -177,6 +170,44 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.EncodeService.EncodeStarted += this.EncodeStarted;
             this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeStatusChanged;
         }
+
+        #region View Model Properties
+        /// <summary>
+        /// Gets or sets PictureSettingsViewModel.
+        /// </summary>
+        public IPictureSettingsViewModel PictureSettingsViewModel { get; set; }
+
+        /// <summary>
+        /// Gets or sets AudioViewModel.
+        /// </summary>
+        public IAudioViewModel AudioViewModel { get; set; }
+
+        /// <summary>
+        /// Gets or sets SubtitleViewModel.
+        /// </summary>
+        public ISubtitlesViewModel SubtitleViewModel { get; set; }
+
+        /// <summary>
+        /// Gets or sets ChaptersViewModel.
+        /// </summary>
+        public IChaptersViewModel ChaptersViewModel { get; set; }
+
+        /// <summary>
+        /// Gets or sets AdvancedViewModel.
+        /// </summary>
+        public IAdvancedViewModel AdvancedViewModel { get; set; }
+
+        /// <summary>
+        /// Gets or sets VideoViewModel.
+        /// </summary>
+        public IVideoViewModel VideoViewModel { get; set; }
+
+        /// <summary>
+        /// Gets or sets FiltersViewModel.
+        /// </summary>
+        public IFiltersViewModel FiltersViewModel { get; set; }
+
+        #endregion
 
         #region Properties
         /// <summary>
@@ -934,7 +965,7 @@ namespace HandBrakeWPF.ViewModels
             // TODO 
             // 1. Disable GUI.
             this.sourcePath = filename;
-            this.scanService.Scan(filename, title, this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount));
+            this.scanService.Scan(filename, title, this.UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount));
         }
 
         /// <summary>
@@ -948,7 +979,7 @@ namespace HandBrakeWPF.ViewModels
             // Make sure the output extension is set correctly based on the users preferences and selection.
             if (newExtension == ".mp4" || newExtension == ".m4v")
             {
-                switch (this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v))
+                switch (this.UserSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v))
                 {
                     case 0: // Auto
                         newExtension = this.CurrentTask.RequiresM4v ? ".m4v" : ".mp4";

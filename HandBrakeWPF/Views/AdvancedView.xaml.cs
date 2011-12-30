@@ -7,9 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Views.Controls
+namespace HandBrakeWPF.Views
 {
-    using System.Windows;
     using System.Windows.Controls;
 
     /// <summary>
@@ -23,27 +22,6 @@ namespace HandBrakeWPF.Views.Controls
         public AdvancedView()
         {
             InitializeComponent();
-        }
-
-        /// <summary>
-        /// The "Query" Dependancy Property
-        /// </summary>
-        public static readonly DependencyProperty QueryProperty = DependencyProperty.Register("Query", typeof(string), typeof(AdvancedView));
-
-        /// <summary>
-        /// Gets or sets State.
-        /// </summary>
-        public string Query
-        {
-            get
-            {
-                return (string)this.GetValue(QueryProperty);
-            }
-
-            set
-            {
-                this.SetValue(QueryProperty, value);
-            }
         }
     }
 }

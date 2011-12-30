@@ -93,8 +93,22 @@
     <Compile Include="UserSettingConstants.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AddPresetViewModel.cs" />
+    <Compile Include="ViewModels\AudioViewModel.cs" />
+    <Compile Include="ViewModels\AdvancedViewModel.cs" />
+    <Compile Include="ViewModels\VideoViewModel.cs" />
+    <Compile Include="ViewModels\FiltersViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IFiltersViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IVideoViewModel.cs" />
+    <Compile Include="ViewModels\SubtitlesViewModel.cs" />
+    <Compile Include="ViewModels\ChaptersViewModel.cs" />
+    <Compile Include="ViewModels\PictureSettingsViewModel.cs" />
     <Compile Include="ViewModels\ErrorViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IAdvancedViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ISubtitlesViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IChaptersViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IPictureSettingsViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IAddPresetViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IAudioViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IQueueViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IPreviewViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IErrorViewModel.cs" />
@@ -116,17 +130,23 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="Views\Controls\AdvancedView.xaml.cs">
+    <Compile Include="Views\AdvancedView.xaml.cs">
       <DependentUpon>AdvancedView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controls\AudioView.xaml.cs">
+    <Compile Include="Views\AudioView.xaml.cs">
       <DependentUpon>AudioView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Controls\ChaptersView.xaml.cs">
-      <DependentUpon>ChaptersView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AddPresetView.xaml.cs">
       <DependentUpon>AddPresetView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ChaptersView.xaml.cs">
+      <DependentUpon>ChaptersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FiltersView.xaml.cs">
+      <DependentUpon>FiltersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SubtitlesView.xaml.cs">
+      <DependentUpon>SubtitlesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ErrorView.xaml.cs">
       <DependentUpon>ErrorView.xaml</DependentUpon>
@@ -143,14 +163,14 @@
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controls\PictureSettingsView.xaml.cs">
+    <Compile Include="Views\PictureSettingsView.xaml.cs">
       <DependentUpon>PictureSettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Controls\SubtitlesView.xaml.cs">
-      <DependentUpon>SubtitlesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\OptionsView.xaml.cs">
       <DependentUpon>OptionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VideoView.xaml.cs">
+      <DependentUpon>VideoView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -183,19 +203,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Controls\AdvancedView.xaml">
+    <Page Include="Views\AdvancedView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Controls\AudioView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Controls\ChaptersView.xaml">
+    <Page Include="Views\AudioView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddPresetView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ChaptersView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\FiltersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SubtitlesView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -219,15 +247,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Controls\PictureSettingsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Controls\SubtitlesView.xaml">
+    <Page Include="Views\PictureSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\OptionsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VideoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

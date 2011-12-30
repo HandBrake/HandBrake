@@ -62,6 +62,15 @@ namespace HandBrakeWPF.Startup
             this.windsorContainer.Register(Component.For<IAboutViewModel>().ImplementedBy<AboutViewModel>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IOptionsViewModel>().ImplementedBy<OptionsViewModel>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IUpdateVersionService>().ImplementedBy<UpdateVersionService>().LifeStyle.Is(LifestyleType.Singleton));
+
+            // Tab Components
+            this.windsorContainer.Register(Component.For<IAudioViewModel>().ImplementedBy<AudioViewModel>().LifeStyle.Is(LifestyleType.Singleton));
+            this.windsorContainer.Register(Component.For<IAdvancedViewModel>().ImplementedBy<AdvancedViewModel>().LifeStyle.Is(LifestyleType.Singleton));
+            this.windsorContainer.Register(Component.For<IPictureSettingsViewModel>().ImplementedBy<PictureSettingsViewModel>().LifeStyle.Is(LifestyleType.Singleton));
+            this.windsorContainer.Register(Component.For<IChaptersViewModel>().ImplementedBy<ChaptersViewModel>().LifeStyle.Is(LifestyleType.Singleton));
+            this.windsorContainer.Register(Component.For<ISubtitlesViewModel>().ImplementedBy<SubtitlesViewModel>().LifeStyle.Is(LifestyleType.Singleton));
+            this.windsorContainer.Register(Component.For<IFiltersViewModel>().ImplementedBy<FiltersViewModel>().LifeStyle.Is(LifestyleType.Singleton));
+            this.windsorContainer.Register(Component.For<IVideoViewModel>().ImplementedBy<VideoViewModel>().LifeStyle.Is(LifestyleType.Singleton));
         }
 
         /// <summary>

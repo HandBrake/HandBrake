@@ -318,10 +318,9 @@ namespace HandBrakeWPF.ViewModels
         /// The user Setting Service.
         /// </param>
         public OptionsViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
-            : base(windowManager)
         {
             this.Title = "Options";
-            this.userSettingService = userSettingService;
+            this.userSettingService = this.UserSettingService;
             this.Load();
         }
 
