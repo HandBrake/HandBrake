@@ -173,11 +173,14 @@
                         <Label Content="Output Settings (Preset: None)" FontWeight="Bold" />
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Container" Margin="8,0,0,0" />
-                            <ComboBox Name="Container" Margin="8,0,0,0" MinWidth="100" SelectedItem="{Binding Path=CurrentTask.OutputFormat}" />
+                            <ComboBox Name="Container" Margin="8,0,0,0" MinWidth="100" ItemsSource="{Binding OutputFormats}" SelectedItem="{Binding SelectedOutputFormat}" />
 
-                            <CheckBox Name="LargeFileMp4" Content="Large File Size" IsChecked="{Binding Path=CurrentTask.LargeFile}" VerticalAlignment="Center" Margin="8,0,0,0" />
-                            <CheckBox Name="WebOptimized" Content="Web Optimized" IsChecked="{Binding Path=CurrentTask.OptimizeMP4}" VerticalAlignment="Center" Margin="8,0,0,0" />
-                            <CheckBox Name="iPod5G" Content="iPod 5G Support" IsChecked="{Binding Path=CurrentTask.IPod5GSupport}" VerticalAlignment="Center" Margin="8,0,0,0" />
+                            <CheckBox Name="LargeFileMp4" Content="Large File Size" IsChecked="{Binding Path=CurrentTask.LargeFile}"
+                                      Visibility="{Binding IsMkv, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" VerticalAlignment="Center" Margin="8,0,0,0" />
+                            <CheckBox Name="WebOptimized" Content="Web Optimized" IsChecked="{Binding Path=CurrentTask.OptimizeMP4}"
+                                      Visibility="{Binding IsMkv, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" VerticalAlignment="Center" Margin="8,0,0,0" />
+                            <CheckBox Name="iPod5G" Content="iPod 5G Support" IsChecked="{Binding Path=CurrentTask.IPod5GSupport}"
+                                      Visibility="{Binding IsMkv, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" VerticalAlignment="Center" Margin="8,0,0,0" />
                         </StackPanel>
                     </StackPanel>
 
