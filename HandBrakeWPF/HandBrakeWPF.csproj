@@ -85,8 +85,10 @@
     <Compile Include="Helpers\AutoNameHelper.cs" />
     <Compile Include="Helpers\ListBoxHelper.cs" />
     <Compile Include="Services\ErrorService.cs" />
+    <Compile Include="Services\Interfaces\IJobContextService.cs" />
     <Compile Include="Services\Interfaces\IErrorService.cs" />
     <Compile Include="Services\Interfaces\IUpdateVersionService.cs" />
+    <Compile Include="Services\JobContextService.cs" />
     <Compile Include="Services\UpdateVersionService.cs" />
     <Compile Include="Startup\CastleBootstrapper.cs" />
     <Compile Include="Startup\MefBootstrapper.cs" />
@@ -318,9 +320,7 @@
       <Name>HandBrakeInterop</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Factories\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProgramFiles)\MSBuild\StyleCop\v4.*\StyleCop.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -13,6 +13,7 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrake.ApplicationServices.Services.Interfaces;
 
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -74,6 +75,10 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public IUserSettingService UserSettingService { get; set; }
 
+        /// <summary>
+        /// Gets or sets JobContextService.
+        /// </summary>
+        public IJobContextService JobContextService { get; set; }
         #endregion
 
         #region Public Methods
