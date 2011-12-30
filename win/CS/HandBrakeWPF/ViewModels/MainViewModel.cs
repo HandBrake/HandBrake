@@ -7,8 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using HandBrakeWPF.Services.Interfaces;
-
 namespace HandBrakeWPF.ViewModels
 {
     using System;
@@ -19,12 +17,10 @@ namespace HandBrakeWPF.ViewModels
     using System.IO;
     using System.Linq;
     using System.Windows;
-    using System.Windows.Media;
 
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices;
-    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
@@ -34,6 +30,8 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Ookii.Dialogs.Wpf;
+
+    using HandBrakeWPF.Services.Interfaces;
 
     /// <summary>
     /// HandBrakes Main Window
@@ -82,6 +80,16 @@ namespace HandBrakeWPF.ViewModels
         /// The Source Label
         /// </summary>
         private string sourceLabel;
+
+        /// <summary>
+        /// The Selected Output Format Backing Field
+        /// </summary>
+        private OutputFormat selectedOutputFormat;
+
+        /// <summary>
+        /// Is a MKV file backing field
+        /// </summary>
+        private bool isMkv;
 
         public string sourcePath;
         private string dvdDrivePath;
@@ -289,10 +297,11 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                if (this.selectedSourceType == SourceType.DvdDrive)
-                {
-                    return this.dvdDriveLabel;
-                }
+                // TODO
+                //if (this.selectedSourceType == SourceType.DvdDrive)
+                //{
+                //    return this.dvdDriveLabel;
+                //}
 
                 if (selectedTitle != null && !string.IsNullOrEmpty(selectedTitle.SourceName))
                 {
@@ -403,7 +412,39 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /* Properties for User Selections */
+        /// <summary>
+        /// Gets or sets a value indicating whether IsMkv.
+        /// </summary>
+        public bool IsMkv
+        {
+            get
+            {
+                return this.isMkv;
+            }
+            set
+            {
+                this.isMkv = value;
+                this.NotifyOfPropertyChange("IsMkv");
+            }
+        }
+
+        /// <summary>
+        /// Gets RangeMode.
+        /// </summary>
+        public IEnumerable<OutputFormat> OutputFormats
+        {
+            get
+            {
+                return new List<OutputFormat>
+                    {
+                        OutputFormat.Mp4, OutputFormat.Mkv
+                    };
+            }
+        }
+
+        #endregion
+
+        #region Properties for Settings
 
         /// <summary>
         /// Gets or sets SelectedTitle.
@@ -505,6 +546,25 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets SelectedOutputFormat.
+        /// </summary>
+        public OutputFormat SelectedOutputFormat
+        {
+            get
+            {
+                return this.selectedOutputFormat;
+            }
+            set
+            {
+                this.selectedOutputFormat = value;
+                this.NotifyOfPropertyChange("SelectedOutputFormat");
+                this.NotifyOfPropertyChange("IsMkv");
+                this.SetExtension(string.Format(".{0}", this.selectedOutputFormat.ToString().ToLower())); // TODO, tidy up
+            }
+        }
+
+
         #endregion
 
         #region Load and Shutdown Handling
@@ -574,7 +634,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.WindowManager.ShowWindow(IoC.Get<IPreviewViewModel>());
         }
-        
+
         /// <summary>
         /// Launch the Help pages.
         /// </summary>
@@ -669,11 +729,11 @@ namespace HandBrakeWPF.ViewModels
 
             if (File.Exists(this.CurrentTask.Destination))
             {
-               MessageBoxResult result = this.errorService.ShowMessageBox("The current file already exists, do you wish to overwrite it?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question);
-               if (result == MessageBoxResult.No)
-               {
-                   return;
-               }
+                MessageBoxResult result = this.errorService.ShowMessageBox("The current file already exists, do you wish to overwrite it?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.No)
+                {
+                    return;
+                }
             }
 
             // Create the Queue Task and Start Processing
@@ -733,6 +793,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.CurrentTask.Destination = dialog.FileName;
             this.NotifyOfPropertyChange("CurrentTask");
+            this.SetExtension(Path.GetExtension(dialog.FileName));
         }
 
         /// <summary>
@@ -808,16 +869,14 @@ namespace HandBrakeWPF.ViewModels
                             MessageBoxImage.Warning);
                     if (result == MessageBoxResult.Yes)
                     {
-                        Preset preset = new Preset
-                            { Name = parsed.PresetName, CropSettings = parsed.UsesPictureSettings, Task = parsed };
+                        Preset preset = new Preset { Name = parsed.PresetName, CropSettings = parsed.UsesPictureSettings, Task = parsed };
 
                         presetService.Update(preset);
                     }
                 }
                 else
                 {
-                    Preset preset = new Preset
-                        { Name = parsed.PresetName, Task = parsed, CropSettings = parsed.UsesPictureSettings, };
+                    Preset preset = new Preset { Name = parsed.PresetName, Task = parsed, CropSettings = parsed.UsesPictureSettings, };
                     presetService.Add(preset);
                 }
 
@@ -835,7 +894,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 savefiledialog.ShowDialog();
                 string filename = savefiledialog.FileName;
-              
+
                 if (filename != null)
                 {
                     PlistPresetHandler.Export(savefiledialog.FileName, this.selectedPreset);
@@ -859,7 +918,7 @@ namespace HandBrakeWPF.ViewModels
 
         #endregion
 
-        #region Private Worker Methods
+        #region Private Methods
 
         /// <summary>
         /// Start a Scan
@@ -876,6 +935,54 @@ namespace HandBrakeWPF.ViewModels
             // 1. Disable GUI.
             this.sourcePath = filename;
             this.scanService.Scan(filename, title, this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount));
+        }
+
+        /// <summary>
+        /// Make sure the correct file extension is set based on user preferences and setup the GUI for the file container selected.
+        /// </summary>
+        /// <param name="newExtension">
+        /// The new extension.
+        /// </param>
+        private void SetExtension(string newExtension)
+        {
+            // Make sure the output extension is set correctly based on the users preferences and selection.
+            if (newExtension == ".mp4" || newExtension == ".m4v")
+            {
+                switch (this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v))
+                {
+                    case 0: // Auto
+                        newExtension = this.CurrentTask.RequiresM4v ? ".m4v" : ".mp4";
+                        break;
+                    case 1: // MP4
+                        newExtension = ".mp4";  
+                        break;
+                    case 2: // M4v
+                        newExtension = ".m4v";
+                        break;
+                }
+
+                this.selectedOutputFormat = OutputFormat.Mp4;
+                this.IsMkv = false;
+            }
+
+            // Now disable controls that are not required. The Following are for MP4 only!
+            if (newExtension == ".mkv")
+            {
+                this.IsMkv = true;
+                this.CurrentTask.LargeFile = false;
+                this.CurrentTask.OptimizeMP4 = false;
+                this.CurrentTask.IPod5GSupport = false;
+                this.selectedOutputFormat = OutputFormat.Mkv;
+            }
+
+            // Update The browse file extension display
+            if (Path.HasExtension(newExtension))
+            {
+                this.CurrentTask.Destination = Path.ChangeExtension(this.CurrentTask.Destination, newExtension);
+            }
+
+            // Update the UI Display
+            this.NotifyOfPropertyChange("CurrentTask");
         }
 
         #endregion
