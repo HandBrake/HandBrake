@@ -11,6 +11,8 @@ namespace HandBrakeWPF.ViewModels
 {
     using Caliburn.Micro;
 
+    using HandBrake.ApplicationServices.Services.Interfaces;
+
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -37,12 +39,8 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
         /// </summary>
-        /// <param name="windowManager">
-        /// The window manager.
-        /// </param>
-        public ViewModelBase(IWindowManager windowManager)
+        public ViewModelBase()
         {
-            this.WindowManager = windowManager;
         }
 
         #endregion
@@ -67,9 +65,14 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets WindowManager.
+        /// Gets or sets WindowManager.
         /// </summary>
-        public IWindowManager WindowManager { get; private set; }
+        public IWindowManager WindowManager { get; set; }
+
+        /// <summary>
+        /// Gets or sets UserSettingService.
+        /// </summary>
+        public IUserSettingService UserSettingService { get; set; }
 
         #endregion
 

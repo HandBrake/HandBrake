@@ -25,11 +25,6 @@ namespace HandBrakeWPF.ViewModels
     public class AboutViewModel : ViewModelBase, IAboutViewModel
     {
         /// <summary>
-        /// Backing Field for the User setting service.
-        /// </summary>
-        private readonly IUserSettingService userSettingService;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="AboutViewModel"/> class.
         /// </summary>
         /// <param name="windowManager">
@@ -39,9 +34,7 @@ namespace HandBrakeWPF.ViewModels
         /// The user Setting Service.
         /// </param>
         public AboutViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
-            : base(windowManager)
         {
-            this.userSettingService = userSettingService;
             this.Title = "About HandBrake";
         }
 
@@ -52,11 +45,11 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                string nightly = userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion).Contains("svn") ? " (SVN / Nightly Build)" : string.Empty;
+                string nightly = UserSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion).Contains("svn") ? " (SVN / Nightly Build)" : string.Empty;
                 return string.Format(
                     "{0} ({1}) {2}",
-                    userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion),
-                    userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild),
+                    UserSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion),
+                    UserSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild),
                     nightly);
             }
         }

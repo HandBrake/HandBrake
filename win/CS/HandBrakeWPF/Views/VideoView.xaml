@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="HandBrakeWPF.Views.VideoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" >
+    <Grid Margin="10,5,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Vertical" Grid.Column="0" >
+
+                <TextBlock Text="Video" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
+                    <TextBlock Text="Video Codec:" Width="100" />
+                    <ComboBox Width="120"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Franerate (FPS):" Width="100"/>
+                    <StackPanel Orientation="Vertical">
+                        <ComboBox Width="120" />
+                        <RadioButton Content="Constant Framerate" />
+                        <RadioButton Content="Variable Framerate" />
+                        <RadioButton Content="Peak Framerate" />
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+
+
+            <StackPanel Orientation="Vertical" Grid.Column="1" >
+                <TextBlock Text="Quality" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
+                    <RadioButton Content="Constant Quality:" Margin="0,0,10,0"/>
+                    <TextBlock Text="0" Width="25" />
+                    <TextBlock Text="RF" FontWeight="Bold" />
+                </StackPanel>
+
+                <Slider Width="240" Margin="0,0,0,20" />
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <RadioButton Content="Avg Bitrate (kbps):" Margin="0,0,10,0"/>
+                    <TextBox Width="75" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="30,0,0,0">
+                    <CheckBox Content="2-Pass Encoding" Margin="0,0,10,0" />
+                    <CheckBox Content="Turbo first pass" />
+                </StackPanel>
+
+            </StackPanel>
+
+
+        </Grid>
+
+    </Grid>
+</UserControl>

@@ -69,7 +69,6 @@ namespace HandBrakeWPF.ViewModels
         /// The scan service.
         /// </param>
         public LogViewModel(IWindowManager windowManager, IEncode encodeService, IScan scanService)
-            : base(windowManager)
         {
             this.encodeService = encodeService;
             this.scanService = scanService;

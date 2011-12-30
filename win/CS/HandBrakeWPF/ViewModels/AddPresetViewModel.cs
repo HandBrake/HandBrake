@@ -7,17 +7,19 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Windows;
-using HandBrake.ApplicationServices.Model;
-using HandBrake.ApplicationServices.Services.Interfaces;
-using HandBrake.ApplicationServices.Utilities;
-using HandBrakeWPF.Services.Interfaces;
-
 namespace HandBrakeWPF.ViewModels
 {
     using System.ComponentModel.Composition;
-    using Interfaces;
+    using System.Windows;
+
     using Caliburn.Micro;
+
+    using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Utilities;
+
+    using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
     /// The Add Preset View Model
@@ -47,7 +49,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="errorService">
         /// The Error Service
         /// </param>
-        public AddPresetViewModel(IWindowManager windowManager, IPresetService presetService, IErrorService errorService) : base(windowManager)
+        public AddPresetViewModel(IWindowManager windowManager, IPresetService presetService, IErrorService errorService)
         {
             this.presetService = presetService;
             this.errorService = errorService;

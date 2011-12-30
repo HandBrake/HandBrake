@@ -46,7 +46,6 @@ namespace HandBrakeWPF.ViewModels
         /// Initializes a new instance of the <see cref="ErrorViewModel"/> class.
         /// </summary>
         public ErrorViewModel()
-            : base(null)
         {
             this.Title = "Error";
             this.ErrorMessage = "An Unknown Error has occured.";
