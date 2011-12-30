@@ -1050,6 +1050,8 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange("ScannedSource");
                 this.NotifyOfPropertyChange("ScannedSource.Titles");
                 this.SelectedTitle = this.ScannedSource.Titles.Where(t => t.MainTitle).FirstOrDefault();
+                this.JobContextService.CurrentSource = this.ScannedSource;
+                this.JobContextService.CurrentTask = this.CurrentTask;
             }
 
             this.SourceLabel = "Scan Completed";

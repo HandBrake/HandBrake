@@ -13,6 +13,8 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
+    using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -34,6 +36,20 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public PictureSettingsViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
         {
+        }
+
+        /// <summary>
+        /// Setup the window after a scan.
+        /// </summary>
+        /// <param name="selectedTitle">
+        /// The selected title.
+        /// </param>
+        /// <param name="currentTask">
+        /// The current task.
+        /// </param>
+        public void Setup(Title selectedTitle, EncodeTask currentTask)
+        {
+            
         }
     }
 }

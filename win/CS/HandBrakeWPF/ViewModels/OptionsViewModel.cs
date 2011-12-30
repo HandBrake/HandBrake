@@ -320,7 +320,7 @@ namespace HandBrakeWPF.ViewModels
         public OptionsViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
         {
             this.Title = "Options";
-            this.userSettingService = this.UserSettingService;
+            this.userSettingService = userSettingService;
             this.Load();
         }
 

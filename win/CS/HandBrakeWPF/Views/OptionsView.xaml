@@ -143,7 +143,7 @@
                                 <TextBox Name="vlcPath" Text="{Binding VLCPath}"  Width="180" />
                                 <Button Content="Browse" cal:Message.Attach="[Event Click] = [Action BrowseVlcPath]" Margin="5,0,0,0" Width="55"/>
                             </StackPanel>
-                            <TextBlock Text="This path is used for the view preview feature only." />
+                            <TextBlock Text="This path is used for the video preview feature only." />
 
                         </StackPanel>
                     </Grid>
