@@ -1,6 +1,4 @@
-## This rules file is processed only when xcode=1 method=terminal
-## which hands-off the build to Xcode which in turn may callback this
-## build system.
+## This file is processed only when shunting build through xcodebuild
 
 .PHONY: macosx.build macosx.clean macosx.install
 

@@ -1,4 +1,4 @@
-Build Guide for HandBrake svn3349 on Mac OS X
+Build Guide for HandBrake 4394svn on Mac OS X
 *********************************************
 
 Table of Contents
@@ -23,8 +23,11 @@ Table of Contents
 6 Building via Xcode.app
   6.1 Checkout Sources
   6.2 Build
-  6.3 External Targets
-  6.4 User-Defined Settings
+  6.3 Note: Debugging
+  6.4 Note: Finding Built Products
+  6.5 Note: Workspace Log Behaviors
+  6.6 External Target
+  6.7 User-Defined Settings
 7 Troubleshooting
 Appendix A Project Repository Details
 
@@ -46,29 +49,30 @@ possible:
 
    * Mac Intel hardware
 
-   * Mac OS X 10.5.7
+   * Mac OS X 10.7.2
 
-   * Xcode-3.1.2
+   * Xcode 4.2.1 (Build version 4D502)
 
-   * gcc 4.0.1 (Apple Inc. build 5490)
+   * llvm-gcc-4.2 (GCC) 4.2.1 (Based on Apple Inc. build 5658)
 
-   * yasm 0.8.0.2194 (for i386 and x86_64 architectures)
+   * yasm 1.1.0.2352
 
-     Note: It is recommended to use the platform distribution's bundled
-     compiler for maximum C++ compatibility. If you build with a custom
-     compiler it will likely introduce non-standard runtime
-     requirements. There are of course many valid reasons to build with
-     unbundled compilers, but be aware it is generally unsupported and
-     left as an exercise to the reader.
+     Note: It is recommended to use the platform distribution's
+     standard compiler for maximum C++ compatibility. If you build with
+     a custom compiler it will likely introduce non-standard runtime
+     requirements and have new/delete, exception and RTTI
+     incompatibilities. There are of course many valid reasons to build
+     with unbundled compilers, but be aware it is generally unsupported
+     and left as an exercise to the reader.
 
 The following general tools are used on various platforms and it is
 recommended you use these versions or similar:
 
-   * subversion - 1.6.2
+   * subversion - 1.6.16
 
-   * python - Python 2.4.6
+   * python - Python 2.7.1
 
-   * curl - curl 7.19.4 (or wget)
+   * curl - curl 7.21.4 (or wget)
 
    * m4 - GNU M4 1.4.6
 
@@ -76,9 +80,9 @@ recommended you use these versions or similar:
 
    * patch - Patch 2.5.8
 
-   * tar - GNU tar 1.15.1
+   * tar - GNU tar 1.26
 
-   * wget - GNU Wget 1.11.4 (or curl)
+   * wget - GNU Wget 1.13.4 (or curl)
 
 3 QuickStart
 ************
@@ -86,7 +90,7 @@ recommended you use these versions or similar:
 This chapter is for building from a terminal/shell environment in as
 few commands as possible. Upon completion of the following commands you
 should have a fresh build of HandBrake. Further instructions are
-available beginning with *Note overview:: which describes procedures
+available beginning with *note overview:: which describes procedures
 suitable for repeating builds. This chapter should be skipped by those
 seeking more than a minimalist build.
 
@@ -141,7 +145,7 @@ exactly the same branch.
 
 If you have write-access to the repository, then you may add the
 appropriate login/password information as needed. It is recommended to
-use Subversion 1.5.0 or higher. Lower versions should also work.
+use Subversion 1.6.0 or higher. Lower versions should also work.
 
 5.2 Configure
 =============
@@ -180,12 +184,6 @@ options are also documented here:
      All-in-one option which launches the build and logs output
      automatically.  Useful for novices and quick-start procedures.
 
-`--disable-xcode'
-     Disable shunting the build through `xcodebuild'. If this option is
-     applied, `HandBrakeCLI' will be produced in a similar fashion as
-     it is on other platforms; sans Xcode and the Cocoa application
-     will not be produced. Mac OS X only.
-
 `--disable-gtk'
      Disable building the GTK GUI on applicable platforms such as
      Linux.
@@ -205,6 +203,17 @@ options are also documented here:
      architectures. The available choices are hard-coded per platform
      and no sanity checks for the required tools are performed.
 
+`--disable-xcode'
+     Disable shunting the build through `xcodebuild'. If this option is
+     applied, `HandBrakeCLI' will be produced in a similar fashion as
+     it is on other platforms; sans Xcode and the Cocoa application
+     will not be produced. Mac OS X only.
+
+`--xcconfig=MODE'
+     Select Xcode project configuration file. The available modes are
+     the basenames of files located in `macosx/xcconfig/*.xcconfig'
+     which direct Xcode to build using various architecture and Mac OS
+     X deployment options. Mac OS X only.
 
 Clean-room procedures dictate that when certain factors change, old
 builds should be scrapped and new builds configured. This is the main
@@ -283,6 +292,10 @@ period.
      Build auto-generated project documentation. Various articles are
      produced and may be found in `build/doc/articles'.
 
+`make doc.post'
+     Build auto-generated project documentation and post produced
+     articles directly to source tree.
+
 `make report.help'
      Print list of available makefile vars report targets.  These
      reports detail var definitions and expanded values used by the
@@ -307,9 +320,11 @@ scoped targets:
 ---------------------
 
 Contrib modules such as `a52dec', `bzip2', `faac', `faad2', `ffmpeg',
-`lame', `libdca', `libdvdread', `libmkv', `libogg', `libsamplerate',
-`libtheora', `libvorbis', `mp4v2', `mpeg2dec', `x264' and `zlib' have
-the following scoped targets:
+`fontconfig', `freetype', `fribidi', `lame', `libass', `libbluray',
+`libdca', `libdvdnav', `libdvdread', `libdvdread', `libiconv',
+`libmkv', `libogg', `libsamplerate', `libtheora', `libvorbis',
+`libxml2', `mp4v2', `mpeg2dec', `x264', `yasm' and `zlib' have the
+following scoped targets:
 
 `make MODULE.fetch'
      Download source tarball from the Internet and save to
@@ -429,8 +444,8 @@ overwrite `GNUmakefile' and any customizations contained therein would
 be lost. Here is a short example of what the contents of
 `_SRC_/custom.defs' might contain:
 
-     ## bump to gcc-4.2 in current path
-     GCC.gcc = /usr/bin/gcc-4.2
+     ## bump to gcc-4.6 in current path
+     GCC.gcc = /usr/bin/gcc-4.6
 
      ## replace optimize for 'speed' with more aggressive settings
      GCC.args.O.speed = -O3 -fomit-frame-pointer -msse4.2
@@ -449,21 +464,22 @@ Binaries for all the architectures.
      make full use of Xcode.
 
 Create a dummy (container) build configuration and use it to launch a
-nested-build for each architecture serially; optionally you may
-substitute `make ub.build.serial' for `make ub.build.parallel' if your
-machine has the horsepower:
+nested-build for each architecture:
 
      ./configure --disable-xcode
      cd build/
-     make ub.build.serial
+     make ub.build
      make ub.combine
 
-To specify a subset of architectures to be built first create/edit
-`_SRC_/custom.defs' with the following override to build UB for `i386'
-and `x86_64' before invoking `make':
+The list of architectures is hard coded to HandBrake's desired product
+and currently is composed of combining the binaries produced from two
+xcconfigs: osx106.i386 and osx106.x86_64. The following example shows
+how to specify a different list of xcconfigs:
 
-     ## prefer i386 (order is important)
-     UB.archs = i386 x86_64
+     ./configure --disable-xcode
+     cd build/
+     make UB.xcconfigs="osx107.i386 osx107.x86_64" ub.build
+     make UB.xcconfigs="osx107.i386 osx107.x86_64" ub.combine
 
 6 Building via Xcode.app
 ************************
@@ -482,135 +498,151 @@ exactly the same branch.
 
 If you have write-access to the repository, then you may add the
 appropriate login/password information as needed. It is recommended to
-use Subversion 1.5.0 or higher. Lower versions should also work.
+use Subversion 1.6.0 or higher. Lower versions should also work.
 
 6.2 Build
 =========
 
-Open Xcode.app from a terminal by using the `open' command which passes
-your shell environment and its `PATH' setting to Xcode. Do not attempt
-to launch Xcode.app from Finder or by using Finder to open
-`HandBrake.xcodeproj' - doing so will defeat any custom path settings
-which contain required tools.
+Perform the following steps to build:
 
-     open `macosx/HandBrake.xcodeproj'
+   * Finder - navigate to `macosx/' in the HandBrake source tree
 
-Once the HandBrake Xcode project is open, perform the following steps
-to build the default configuration:
+   * Finder - open `HandBrake.xcodeproj'
 
-   * select active configuration standard
+   * Xcode workspace - select scheme HandBrake [RELEASE]
 
-   * select active target HandBrake
+   * Xcode menu - select Product -> Build
 
-   * click Build or Build and Go
+   * Xcode workspace - Show the Log navigator
 
-When using Build and Go, xcode launches the application under the gdb
-debugger.  gdb will encounter a trap when starting the program.  This
-trap is harmless and you should just 'continue'.  For the curious, the
-trap occurs because we add some values to the environment with setenv,
-then do a brain transplant with execv. Restarting the application with
-execv triggers the trap.
+   * Xcode workspace Log navigator - select top Build item
 
-The first build (on an empty `build' directory) will take a bit of
-time. You may use the Build Results window to observe progress. The
-most time-consuming part of the build is when the external build system
-(essentially the terminal method) is triggered by Xcode and a
-substantial amount of log transcript ensues. Much of that transcript
-are warnings and errors that are part of the normal build process for
-3rd-party contributed modules so in general you need not do anything.
-However, if Xcode itself reports the build failed, then you must take
-corrective action.
+6.3 Note: Debugging
+===================
 
-Unfortunately, due to limitations of Xcode we do not have hooks in
-place to offer finer-grained control over per-module make actions for
-the (external) build system. Thus, you will have to use terminal to
-accomplish those tasks. Just `cd' into the build directory which is
-associated with your active configuration and perform any necessary
-`make' commands. Be careful not to issue commands from the terminal
-simultaneously with Xcode tasks as that will confuse both Xcode and
-make and likely corrupt your build directory.
+When debugging, Xcode launches the application under the gdb debugger.
+gdb will encounter a trap when starting the program. This trap is
+harmless and you should just 'continue'. For the curious, the trap
+occurs because we add some values to the environment with setenv, then
+do a brain transplant with execv. Restarting the application with execv
+triggers the trap.
 
-When you click clean in Xcode it will not perform an external build
-clean. Basically HandBrakeCLI and HandBrake.app are the only products
-which have full Xcode iterative development flexibility.
+6.4 Note: Finding Built Products
+================================
 
-Each configuration uses a different `build' directory. This makes it
-possible to build each configuration and switch between them without
-losing their respective build state. The description of each
-configuration and the name convention for build directories are as
-follows:
+Under default Xcode.app options the products from a build are managed
+by the Xcode Organizer. Perform the following steps to open Finder at
+top of build tree and navigate to release products:
 
-`standard'
-     This configuration will build host native architecture. Build
-     directory is `build.standard' .  The standard variant produces
-     optimized code without debug information.
+   * Xcode menu - select Window -> Organizer
 
-`standard.i386'
-     This configuration will build i386 architecture. Build directory
-     is `build.standard.i386' .
+   * Xcode organizer - select Projects tab
 
-`standard.x86_64'
-     This configuration will build x86_64 architecture. Build directory
-     is `build.standard.x86_64' .
+   * Xcode organizer Projects - select HandBrake item
 
-`standard.ppc'
-     This configuration will build ppc architecture. Build directory is
-     `build.standard.ppc' .
+   * HandBrake item - click Derived Data location arrow (immediately
+     right of path)
 
-`standard.ppc64'
-     This configuration will build ppc64 architecture. Build directory
-     is `build.standard.ppc64' .
+   * Finder - navigate to Build -> Products -> release
 
-`debug'
-     This configuration will build host native architecture. Build
-     directory is `build.debug' .  The debug variant produces
-     unoptimized code with debug information.
+     Note: There is a bug with Xcode Organizer. The very first time an
+     Xcode project is opened the Project view Derived Data is
+     greyed-out. Workaround glitch by selecting any other tab and then
+     reselecting Projects tab.
 
-`debug.i386'
-     This configuration will build i386 architecture. Build directory
-     is `build.debug.i386' .  The debug variant produces unoptimized
-     code with debug information.
+6.5 Note: Workspace Log Behaviors
+=================================
 
-`debug.x86_64'
-     This configuration will build x86_64 architecture. Build directory
-     is `build.debug.x86_64' .  The debug variant produces unoptimized
-     code with debug information.
+The default Workspace behavior does not display latest Build log in the
+navigator and quickly becomes tedious. To automatically switch to Log
+navigator and show current log:
 
-`debug.ppc'
-     This configuration will build ppc architecture. Build directory is
-     `build.debug.ppc' .  The debug variant produces unoptimized code
-     with debug information.
+   * Xcode menu - select Behaviors -> Edit Behaviors
 
-`debug.ppc64'
-     This configuration will build ppc64 architecture. Build directory
-     is `build.debug.ppc64' .  The debug variant produces unoptimized
-     code with debug information.
+   * Xcode behaviors - select Build starts
 
-6.3 External Targets
-====================
+   * navigator - enable, select Show, select Log Navigator
 
-The following external targets appear in the Xcode project and perform
-build and clean actions.
+   * nagivate to - select current log
 
-`external'
-     Target maps to `make build' and `make clean' for everything Xcode
-     products depend upon from the external build system.
+     Note: The Log navigator supports some possibly confusing options.
+     It is recommended to only show results for the last build by
+     selecting Recent. If All is selected then it will look as though
+     Xcode is performing a build, but in reality it is bringing forward
+     log output from prior builds and it becomes impossible to tell if
+     any single log entry represents actual work performed or if it was
+     brought forward from history.
 
-`libhb'
-     Target maps to `make libhb.build' and `make libhb.clean'.
+     Note: When building external target, many 3rd-party contributed
+     modules have warnings and errors which may safely be ignored and
+     are ignored by the external build system. Ultimately, look to the
+     workspace status indicator for Build Succeeded.
 
-`contrib'
-     Target maps to `make contrib.build' and `make contrib.xclean'.
+6.6 External Target
+===================
 
+The external target mechanism is used to launch a full terminal-based
+build from within Xcode. Unfortunately, we do not have hooks in place
+to offer finer-grained control over per-module make actions. However,
+you can still use terminal to accomplish those tasks after launching
+the build at least once or doing a clean from within Xcode. Be careful
+to not issue terminal commands simultaneously with Xcode tasks.
 
-6.4 User-Defined Settings
+Invoking a clean from Xcode always destroys the entire external build
+tree and subsequently configures it. Changing settings in Xcode such as
+selecting xcconfig files should always be followed by a clean. This
+allows the external build system configuration to accurately reflect
+Xcode project changes.
+
+The following are some examples of using `make' from the terminal to
+effect various components of the external build. But first, you must
+open a terminal at the top of the external build output tree. Here we
+navigate to external build configured for release:
+
+   * Xcode menu - select Window -> Organizer
+
+   * Xcode organizer - select Projects tab
+
+   * Xcode organizer Projects - select HandBrake item
+
+   * HandBrake item - click Derived Data location arrow (immediately
+     right of path)
+
+   * Finder - navigate to Build -> Products -> release -> external
+
+Example; external build failed but error is buried in a parallelized
+log; redo build sequentially:
+
+     make xclean
+     make BUILD.jobs=1
+
+Example; build external x264 module:
+
+     make x264.clean
+     make x264
+
+Example; extract, configure, build and install external x264 module:
+
+     make x264.xclean
+     make x264.install
+
+Example; something in a big module is failing; redo build sequentially:
+
+     make ffmpeg.clean
+     make BUILD.jobs=1 ffmpeg
+
+6.7 User-Defined Settings
 =========================
 
-The following user defined settings are used in Xcode project for the
-external build system:
+The following user defined settings are visible in Xcode project and
+are used for the external build system.
 
 `EXTERNAL_BUILD'
-     Specifies the build (scratch) directory for each configuration.
+     Do not modify; used to specify the build (scratch) directory.
+
+`EXTERNAL_DRIVER'
+     Do not modify; used for internal/external build coordination and
+     must always be `xcode'.
 
 `EXTERNAL_JOBS'
      Specifies the concurrency factor for the external build system
@@ -618,14 +650,17 @@ external build system:
      external builds if your system has the horsepower and resources.
      Specifying a value greater than the number of CPU cores (or
      virtual cores) in your system is unlikely to produce gains and
-     will needlessly consume extra resources.
-
-`EXTERNAL_METHOD'
-     Do not modify; Used for internal/external build coordination and
-     must always be `xcode'.
+     will needlessly consume extra resources. A special string value of
+     auto sets the factor to the number of active CPUs on the host
+     system.
 
 `EXTERNAL_SRC'
-     Specifies the top-level source directory for HandBrake.
+     Do not modify; specifies the top-level source directory for
+     HandBrake, relative to Xcode project.
+
+`EXTERNAL_XCCONFIG'
+     Do not modify; specifies which xcconfig file is active. Defined
+     inside xcconfig file.
 
 
 7 Troubleshooting
@@ -664,7 +699,7 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    3349
-     date:   2010-06-02 09:49:18 -0700
+     rev:    4394
+     date:   2011-12-30 17:21:44 -0500
      type:   developer
 

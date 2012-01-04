@@ -9,102 +9,125 @@
 @c %**-------------------------------------------------------------------------
 @anchor{xcode.build}
 @section Build
-Open Xcode.app from a terminal by using the @command{open} command which passes your shell environment and its @samp{PATH} setting to Xcode. Do not attempt to launch Xcode.app from Finder or by using Finder to open @file{HandBrake.xcodeproj} -- doing so will defeat any custom path settings which contain required tools.
-
-@example
-open @file{macosx/HandBrake.xcodeproj}
-@end example
-
-Once the HandBrake Xcode project is open, perform the following steps to build the default configuration:
+Perform the following steps to build:
 
 @itemize
-@item select active configuration @b{standard}
-@item select active target @b{HandBrake}
-@item click @b{Build} or @b{Build and Go}
+@item Finder - navigate to @file{macosx/} in the @value{HB.name} source tree
+@item Finder - open @file{HandBrake.xcodeproj}
+@item Xcode workspace - select scheme @b{HandBrake [RELEASE]}
+@item Xcode menu - select Product -> Build
+@item Xcode workspace - Show the Log navigator
+@item Xcode workspace Log navigator - select top Build item
 @end itemize
 
-When using Build and Go, xcode launches the application under the gdb debugger.  gdb will encounter a trap when starting the program.  This trap is harmless and you should just 'continue'.  For the curious, the trap occurs because we add some values to the environment with setenv, then do a brain transplant with execv. Restarting the application with execv triggers the trap.
-
-The first build (on an empty @file{build} directory) will take a bit of time. You may use the Build Results window to observe progress. The most time-consuming part of the build is when the external build system (essentially the @b{terminal} method) is triggered by Xcode and a substantial amount of log transcript ensues. Much of that transcript are warnings and errors that are part of the normal build process for 3rd-party contributed modules so in general you need not do anything. However, if Xcode itself reports the build failed, then you must take corrective action.
-
-Unfortunately, due to limitations of Xcode we do not have hooks in place to offer finer-grained control over per-module make actions for the (external) build system. Thus, you will have to use @b{terminal} to accomplish those tasks. Just @command{cd} into the build directory which is associated with your active configuration and perform any necessary @command{make} commands. @b{Be careful not to issue commands from the terminal simultaneously with Xcode tasks} as that will confuse both Xcode and make and likely corrupt your build directory.
-
-When you click @b{clean} in Xcode it will not perform an external build clean. Basically @b{HandBrakeCLI} and @b{HandBrake.app} are the only products which have full Xcode iterative development flexibility.
-
-Each configuration uses a different @file{build} directory. This makes it possible to build each configuration and switch between them without losing their respective build state. The description of each configuration and the name convention for build directories are as follows:
-
-@table @samp
-@item standard
-This configuration will build @b{host native} architecture. Build directory is @file{build.standard} .
-The standard variant produces optimized code without debug information.
-
-@item standard.i386
-This configuration will build @b{i386} architecture. Build directory is @file{build.standard.i386} .
-
-@item standard.x86_64
-This configuration will build @b{x86_64} architecture. Build directory is @file{build.standard.x86_64} .
-
-@item standard.ppc
-This configuration will build @b{ppc} architecture. Build directory is @file{build.standard.ppc} .
-
-@item standard.ppc64
-This configuration will build @b{ppc64} architecture. Build directory is @file{build.standard.ppc64} .
-
-@item debug
-This configuration will build @b{host native architecture}. Build directory is @file{build.debug} .
-The debug variant produces unoptimized code with debug information.
-
-@item debug.i386
-This configuration will build @b{i386} architecture. Build directory is @file{build.debug.i386} .
-The debug variant produces unoptimized code with debug information.
-
-@item debug.x86_64
-This configuration will build @b{x86_64} architecture. Build directory is @file{build.debug.x86_64} .
-The debug variant produces unoptimized code with debug information.
-
-@item debug.ppc
-This configuration will build @b{ppc} architecture. Build directory is @file{build.debug.ppc} .
-The debug variant produces unoptimized code with debug information.
-
-@item debug.ppc64
-This configuration will build @b{ppc64} architecture. Build directory is @file{build.debug.ppc64} .
-The debug variant produces unoptimized code with debug information.
-@end table
+@c %**-------------------------------------------------------------------------
+@anchor{xcode.note.debug}
+@section Note: Debugging
+When debugging, Xcode launches the application under the gdb debugger. gdb will encounter a trap when starting the program. This trap is harmless and you should just 'continue'. For the curious, the trap occurs because we add some values to the environment with setenv, then do a brain transplant with execv. Restarting the application with execv triggers the trap.
 
 @c %**-------------------------------------------------------------------------
-@anchor{xcode.extenal}
-@section External Targets
-The following external targets appear in the Xcode project and perform @b{build} and @b{clean} actions.
+@anchor{xcode.note.products}
+@section Note: Finding Built Products
+Under default Xcode.app options the products from a build are managed by the Xcode Organizer. Perform the following steps to open Finder at top of build tree and navigate to release products:
 
-@table @samp
-@item external
-Target maps to @command{make build} and @command{make clean} for everything Xcode products depend upon from the external build system.
+@itemize
+@item Xcode menu - select Window -> Organizer
+@item Xcode organizer - select Projects tab
+@item Xcode organizer Projects - select @value{HB.name} item
+@item @value{HB.name} item - click Derived Data location arrow (immediately right of path)
+@item Finder - navigate to Build -> Products -> release
+@end itemize
 
-@item libhb
-Target maps to @command{make libhb.build} and @command{make libhb.clean}.
+@quotation Note
+There is a bug with Xcode Organizer. The very first time an Xcode project is opened the Project view Derived Data is greyed-out. Workaround glitch by selecting any other tab and then reselecting Projects tab.
+@end quotation
 
-@item contrib
-Target maps to @command{make contrib.build} and @command{make contrib.xclean}.
+@c %**-------------------------------------------------------------------------
+@anchor{xcode.note.behaviors}
+@section Note: Workspace Log Behaviors
+The default Workspace behavior does not display latest Build log in the navigator and quickly becomes tedious. To automatically switch to Log navigator and show current log:
 
-@end table
+@itemize
+@item Xcode menu - select Behaviors -> Edit Behaviors
+@item Xcode behaviors - select Build starts
+@item navigator - enable, select Show, select Log Navigator
+@item nagivate to - select current log
+@end itemize
+
+@quotation Note
+The Log navigator supports some possibly confusing options. It is recommended to only show results for the last build by selecting @b{Recent}. If @b{All} is selected then it will look as though Xcode is performing a build, but in reality it is bringing forward log output from prior builds and it becomes impossible to tell if any single log entry represents actual work performed or if it was brought forward from history.
+@end quotation
+
+@quotation Note
+When building external target, many 3rd-party contributed modules have warnings and errors which may safely be ignored and are ignored by the external build system. Ultimately, look to the workspace status indicator for @b{Build Succeeded}.
+@end quotation
+
+@c %**-------------------------------------------------------------------------
+@anchor{xcode.note.external}
+@section External Target
+The external target mechanism is used to launch a full terminal-based build from within Xcode. Unfortunately, we do not have hooks in place to offer finer-grained control over per-module make actions. However, you can still use @b{terminal} to accomplish those tasks after launching the build at least once or doing a clean from within Xcode. @b{Be careful to not issue terminal commands simultaneously with Xcode tasks.}
+
+Invoking a clean from Xcode always destroys the entire external build tree and subsequently configures it. Changing settings in Xcode such as selecting xcconfig files should always be followed by a clean. This allows the external build system configuration to accurately reflect Xcode project changes.
+
+The following are some examples of using @command{make} from the terminal to effect various components of the external build. But first, you must open a terminal at the top of the external build output tree. Here we navigate to external build configured for @b{release}:
+
+@itemize
+@item Xcode menu - select Window -> Organizer
+@item Xcode organizer - select Projects tab
+@item Xcode organizer Projects - select @value{HB.name} item
+@item @value{HB.name} item - click Derived Data location arrow (immediately right of path)
+@item Finder - navigate to Build -> Products -> release -> external
+@end itemize
+
+Example; external build failed but error is buried in a parallelized log; redo build sequentially:
+
+@example
+make xclean
+make BUILD.jobs=1
+@end example
+
+Example; build external x264 module:
+
+@example
+make x264.clean
+make x264
+@end example
+
+Example; extract, configure, build and install external x264 module:
+
+@example
+make x264.xclean
+make x264.install
+@end example
+
+Example; something in a big module is failing; redo build sequentially:
+
+@example
+make ffmpeg.clean
+make BUILD.jobs=1 ffmpeg
+@end example
 
 @c %**-------------------------------------------------------------------------
 @anchor{xcode.userdefined}
 @section User-Defined Settings
-The following user defined settings are used in Xcode project for the external build system:
+The following user defined settings are visible in Xcode project and are used
+for the external build system.
 
 @table @samp
 @item EXTERNAL_BUILD
-Specifies the build (scratch) directory for each configuration.
+Do not modify; used to specify the build (scratch) directory.
+
+@item EXTERNAL_DRIVER
+Do not modify; used for internal/external build coordination and must always be @samp{xcode}.
 
 @item EXTERNAL_JOBS
 Specifies the concurrency factor for the external build system when builds are launched from within Xcode.
-Modify for faster external builds if your system has the horsepower and resources. Specifying a value greater than the number of CPU cores (or virtual cores) in your system is unlikely to produce gains and will needlessly consume extra resources.
-
-@item EXTERNAL_METHOD
-Do not modify; Used for internal/external build coordination and must always be @samp{xcode}.
+Modify for faster external builds if your system has the horsepower and resources. Specifying a value greater than the number of CPU cores (or virtual cores) in your system is unlikely to produce gains and will needlessly consume extra resources. A special string value of @b{auto} sets the factor to the number of active CPUs on the host system.
 
 @item EXTERNAL_SRC
-Specifies the top-level source directory for @value{HB.name}.
+Do not modify; specifies the top-level source directory for @value{HB.name}, relative to Xcode project.
+
+@item EXTERNAL_XCCONFIG
+Do not modify; specifies which xcconfig file is active. Defined inside xcconfig file.
 
 @end table

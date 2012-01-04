@@ -52,25 +52,36 @@ else
     FFMPEG.CONFIGURE.extra += --enable-pthreads
 endif
 
-ifneq (max,$(FFMPEG.GCC.g))
-	FFMPEG.CONFIGURE.extra += --disable-debug
-else
+ifneq (none,$(FFMPEG.GCC.g))
 	FFMPEG.CONFIGURE.extra += --enable-debug
+else
+	FFMPEG.CONFIGURE.extra += --disable-debug
 endif
 
 ifeq (none,$(FFMPEG.GCC.O))
-#
-# gcc on darwin i386 fails to find enough registers when 
-# optimizations are disabled
-#
-ifneq (darwin-i386,$(BUILD.system)-$(BUILD.machine))
 	FFMPEG.CONFIGURE.extra += --disable-optimizations
 endif
+
+## enable compile verbosity
+FFMPEG.BUILD.extra = V=1
+
+##
+## llvm inline assembler (used in llvm-gcc and clang) runs out of registers
+## on darwin i386 - unclear if it is a source code or llvm bug.
+##
+ifeq (darwin-i386,$(BUILD.system)-$(BUILD.machine))
+    ## optimize mode hack: use clang
+    ifneq (none,$(FFMPEG.GCC.O))
+        FFMPEG.GCC.gcc = clang
+    endif
+
+    ## debug mode hack: omit frame pointer
+    ifneq (none,$(FFMPEG.GCC.g))
+        FFMPEG.GCC.args.extra += -fomit-frame-pointer
+    endif
 endif
 
-#
-# MPC8 Doesn't compile on SPARC
-#
+## MPC8 Doesn't compile on SPARC
 ifeq (solaris,$(BUILD.system))
     FFMPEG.CONFIGURE.extra += --disable-demuxer=mpc8
 endif
@@ -79,4 +90,3 @@ ifeq (1,$(FEATURE.local_yasm))
     FFMPEG.CONFIGURE.env = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
     FFMPEG.BUILD.env = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
 endif
-

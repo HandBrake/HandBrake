@@ -1,9 +1,10 @@
-UB.archs  = i386 x86_64 ppc ppc64
-UB.builds = $(wildcard $(foreach n,$(UB.archs),$(SRC/)build.$n))
-UB.first  = $(word 1,$(UB.archs))
-UB.other  = $(wordlist 2,999,$(UB.archs))
+UB.xcconfigs = osx106.i386 osx106.x86_64
+UB.builds    = $(wildcard $(foreach n,$(UB.xcconfigs),$(SRC/)build.$n))
+UB.first     = $(word 1,$(UB.xcconfigs))
+UB.more      = $(wordlist 2,999,$(UB.xcconfigs))
+UB.products/ = macosx/release/
 
-UB.BUILD = $(SRC/)configure --force --build=ub.$(1) --arch=$(1) --launch --launch-quiet
+UB.BUILD = $(SRC/)configure --force --build=ub.$(1) --xcconfig=$(1) --launch --launch-quiet
 
 ## linefeed is important
 define UB.BUILD.item
@@ -12,7 +13,7 @@ define UB.BUILD.item
 endef
 
 define UB.BUILD.SERIAL
-	$(foreach n,$(UB.archs),$(call UB.BUILD.item,$n))
+	$(foreach n,$(UB.xcconfigs),$(call UB.BUILD.item,$n))
 endef
 
 define UB.BUILD.PARALLEL
@@ -22,16 +23,16 @@ endef
 define UB.COMBINE
 	$(RM.exe) -fr ub.combine
 	$(MKDIR.exe) -p ub.combine
-	$(CP.exe) ub.$(UB.first)/HandBrakeCLI ub.combine/.
-	$(LIPO.exe) $(foreach n,$(UB.archs),ub.$n/HandBrakeCLI) -create -output ub.combine/HandBrakeCLI
-	$(CP.exe) -R ub.$(UB.first)/HandBrake.app ub.combine/.
-	$(LIPO.exe) $(foreach n,$(UB.archs),ub.$n/$(1)) -create -output ub.combine/$(1)
+	$(CP.exe) ub.$(UB.first)/$(UB.products/)HandBrakeCLI ub.combine/.
+	$(LIPO.exe) $(foreach n,$(UB.xcconfigs),ub.$n/$(UB.products/)HandBrakeCLI) -create -output ub.combine/HandBrakeCLI
+	$(CP.exe) -R ub.$(UB.first)/$(UB.products/)HandBrake.app ub.combine/.
+	$(LIPO.exe) $(foreach n,$(UB.xcconfigs),ub.$n/$(UB.products/)$(1)) -create -output ub.combine/$(1)
 	@lipo -info ub.combine/$(1)
 	@sync
 	@echo ""
-	@echo "$@: { $(UB.archs) } combined -> ub.combine/HandBrakeCLI"
+	@echo "$@: { $(UB.xcconfigs) } combined -> ub.combine/HandBrakeCLI"
 	@echo "$@: UB executable size: `du -sh ub.combine/HandBrakeCLI | awk '{ print $$1 }'`"
 	@echo ""
-	@echo "$@: { $(UB.archs) } combined -> ub.combine/HandBrake.app"
+	@echo "$@: { $(UB.xcconfigs) } combined -> ub.combine/HandBrake.app"
 	@echo "$@: UB executable size: `du -sh ub.combine/$(1) | awk '{ print $$1 }'`"
 endef

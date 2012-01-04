@@ -20,10 +20,10 @@ Building on @value{OS.osx} is well supported. It is the reference platform for @
 
 @itemize @bullet
 @item Mac Intel hardware
-@item @value{OS.osx} 10.5.7
-@item Xcode-3.1.2
-@item gcc 4.0.1 (Apple Inc. build 5490)
-@item yasm 0.8.0.2194 (for i386 and x86_64 architectures)
+@item @value{OS.osx} 10.7.2
+@item Xcode 4.2.1 (Build version 4D502)
+@item llvm-gcc-4.2 (GCC) 4.2.1 (Based on Apple Inc. build 5658)
+@item yasm 1.1.0.2352
 @end itemize
 
 @include building/prerequisites.bundled.texi
@@ -49,20 +49,22 @@ This section outlines convenience procedures for creating Universal Binaries for
 The dummy (container) build configuration uses @command{--disable-xcode}; but the nested architecture builds will all make full use of Xcode.
 @end quotation
 
-Create a dummy (container) build configuration and use it to launch a nested-build for each architecture @i{serially}; optionally you may substitute @command{make ub.build.serial} for @command{make ub.build.parallel} if your machine has the horsepower:
+Create a dummy (container) build configuration and use it to launch a nested-build for each architecture:
 
 @example
 ./configure --disable-xcode
 cd build/
-make ub.build.serial
+make ub.build
 make ub.combine
 @end example
 
-To specify a subset of architectures to be built first create/edit @file{_SRC_/custom.defs} with the following override to build UB for @samp{i386} and @samp{x86_64} before invoking @command{make}:
+The list of architectures is hard coded to @value{HB.name}'s desired product and currently is composed of combining the binaries produced from two xcconfigs: osx106.i386 and osx106.x86_64. The following example shows how to specify a different list of xcconfigs:
 
 @example
-## prefer i386 (order is important)
-UB.archs = i386 x86_64
+./configure --disable-xcode
+cd build/
+make UB.xcconfigs="osx107.i386 osx107.x86_64" ub.build
+make UB.xcconfigs="osx107.i386 osx107.x86_64" ub.combine
 @end example
 
 @c %**-------------------------------------------------------------------------

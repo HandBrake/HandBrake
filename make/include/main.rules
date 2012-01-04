@@ -3,10 +3,9 @@
 
 ###############################################################################
 
-## file-wide conditional to use xcode rules if xcode=1 method=terminal
-## xcodemake will set BUILD.method != terminal to prevent infinite recursion
-ifeq (1:terminal,$(FEATURE.xcode):$(BUILD.method))
-    include $(SRC/)macosx/module.xcode
+## shunt make through xcodebuild when FEATURE.xcode=1 and XCODE.driver is applicable
+ifeq (1:shunt,$(FEATURE.xcode):$(if $(filter bootstrap terminal,$(XCODE.driver)),shunt))
+    include $(SRC/)macosx/module.xcodebuild
 else
 
 ## only included using special report targets
@@ -40,19 +39,15 @@ include $(MODULES:%=$(SRC/)%/module.rules)
 
 ###############################################################################
 
-## target which causes re-configure if project-root is svn update'd
-$(BUILD/)GNUmakefile: $(wildcard $(SRC/).svn/entries)
-	$(SRC/)configure --force --conf-method=$(CONF.method) $(CONF.args)
-
-## target useful to force reconfigure; only helpful for build-system development
+## force reconfigure
 .PHONY: reconfigure
 reconfigure:
-	$(SRC/)configure --force --conf-method=$(CONF.method) $(CONF.args)
+	$(SRC/)configure --force $(CONF.args)
 
 ###############################################################################
 
-## target to build all dependency dirs
+## build all dependency dirs
 $(sort $(dir $(BUILD.out))):
 	$(MKDIR.exe) -p $@
 
-endif ## xcode=1 method=terminal
+endif ## FEATURE.xcode XCODE.driver

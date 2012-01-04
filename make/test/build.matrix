@@ -1,0 +1,156 @@
+#!/usr/bin/env ruby1.9
+
+## This script is used to launch a wide variety of builds for darwin.
+## It is unsupported and is meant for use only with build-system testing.
+
+require 'pathname'
+require 'thread'
+
+################################################################################
+
+class Printer < Mutex
+  def p(*args)
+    synchronize { super }
+  end
+
+  def puts(*args)
+    synchronize { super }
+  end
+end
+
+$out = Printer.new
+
+################################################################################
+
+class Build
+  def initialize(debug, xcconfig, method)
+    @debug     = debug
+    @xcconfig  = xcconfig
+    @method    = method
+    if @xcconfig
+      @dir = '_matrix.%s.%s.%s' % [@debug[0], @xcconfig, @method]
+    else
+      @dir = '_matrix.%s.%s' % [@debug[0], @method]
+    end
+    @configure = []
+    @make      = []
+  end
+
+  def doit
+    p = Pathname.new(@dir)
+    return if p.exist?
+    p.mkdir
+
+    @configure[0..0] += @debug[1].split
+    @configure[0..0] += ["--build=#{@dir}"]
+    @configure << ('--xcode-config=%s' % [@xcconfig]) if @xcconfig
+
+    if !@make.empty?
+      @make[0..0] += ['-C', @dir]
+    end
+
+    if !@configure.empty?
+      return if !run(@configure)
+    end
+    if !@make.empty?
+      return if !run(@make, true)
+    end
+  end
+
+private
+  def run(args, append=false)
+    s = args.join(' ')
+    $out.puts s
+    return Kernel.system('%s %s %s/matrix.log 2>&1' % [s, append ? '>>' : '>', @dir])
+  end
+end
+
+################################################################################
+
+class BuildTerminal < Build
+  def initialize(debug, xcconfig)
+    super(debug, xcconfig, 'term_make')
+    @configure += './configure --force --disable-xcode'.split
+    @make += 'make BUILD.jobs=1'.split
+  end
+end
+
+class BuildLaunch < Build
+  def initialize(debug, xcconfig)
+    super(debug, xcconfig, 'launch_make')
+    @configure += './configure --force --launch --launch-jobs=1 --disable-xcode'.split
+  end
+end
+
+class BuildTerminalXcode < Build
+  def initialize(debug, xcconfig)
+    super(debug, xcconfig, 'term_xcode')
+    @configure += './configure --force'.split
+    @make += 'make BUILD.jobs=1'.split
+  end
+end
+
+class BuildLaunchXcode < Build
+  def initialize(debug, xcconfig)
+    super(debug, xcconfig, 'launch_xcode')
+    @configure += './configure --force --launch --launch-jobs=1'.split
+  end
+end
+
+################################################################################
+
+## probe ncpu
+begin
+  case
+  when RUBY_PLATFORM =~ /darwin/
+    workload = `sysctl -n hw.activecpu 2>/dev/null`[0].to_i
+  end
+rescue
+  workload = 1
+end
+
+## create work queue
+queue = Queue.new
+
+## create xcconfig list
+xclist = []
+case
+when RUBY_PLATFORM =~ /darwin11/
+  xclist += 'native osx106.i386 osx106.x86_64 osx107.i386 osx107.x86_64'.split
+when RUBY_PLATFORM =~ /darwin10/
+  xclist += 'native osx106.i386 osx106.x86_64'.split
+end
+
+## fill queue
+[['release',''],['debug','--debug=max --optimize=none']].each do |debug|
+  [BuildTerminal, BuildLaunch].each do |kind|
+    queue << kind.new(debug, nil)
+  end
+  [BuildTerminalXcode, BuildLaunchXcode].each do |kind|
+    xclist.each do |xcconfig|
+      queue << kind.new(debug, xcconfig)
+    end
+  end
+end
+
+## process queue
+workers = (1..workload).map do |i|
+  queue << :finish
+  Thread.new() do |worker|
+    loop do
+      item = queue.pop
+      break if item == :finish
+
+      begin
+        item.doit
+      rescue SystemExit
+        break
+      rescue
+        puts 'whups'
+      end
+    end
+  end
+end
+
+## wait for all workers to finish
+workers.each(&:join)

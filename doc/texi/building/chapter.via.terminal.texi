@@ -37,9 +37,6 @@ This defaults to a reasonable platform-specific value.
 All-in-one option which launches the build and logs output automatically.
 Useful for novices and quick-start procedures.
 
-@item --disable-xcode
-Disable shunting the build through @command{xcodebuild}. If this option is applied, @command{HandBrakeCLI} will be produced in a similar fashion as it is on other platforms; sans Xcode and the Cocoa application will not be produced. @value{OS.osx} only.
-
 @item --disable-gtk
 Disable building the GTK GUI on applicable platforms such as @value{OS.linux}.
 
@@ -54,6 +51,11 @@ This generally maps to gcc options @samp{-g0}, @samp{-O0}, @samp{-O3}, @samp{-Os
 @item --arch=MODE
 Select build architecture. The available architectures vary by platform. Most platforms support exactly one architecture except @value{OS.osx} which has support for various universal binary architectures. The available choices are hard-coded per platform and no sanity checks for the required tools are performed.
 
+@item --disable-xcode
+Disable shunting the build through @command{xcodebuild}. If this option is applied, @command{HandBrakeCLI} will be produced in a similar fashion as it is on other platforms; sans Xcode and the Cocoa application will not be produced. @value{OS.osx} only.
+
+@item --xcconfig=MODE
+Select Xcode project configuration file. The available modes are the basenames of files located in @file{macosx/xcconfig/*.xcconfig} which direct Xcode to build using various architecture and @value{OS.osx} deployment options. @value{OS.osx} only.
 @end table
 
 Clean-room procedures dictate that when certain factors change, old builds should be scrapped and new builds configured. This is the main reason for requiring a scratch directory; to promote consistent, reliable and clean software builds. The following is a short list of some of the reasons why someone may choose to scrap an existing build:
@@ -114,6 +116,9 @@ Clean all build output including contrib modules. Configuration is retained.
 @item make doc
 Build auto-generated project documentation. Various articles are produced and may be found in @file{build/doc/articles}.
 
+@item make doc.post
+Build auto-generated project documentation and post produced articles directly to source tree.
+
 @item make report.help
 Print list of available makefile vars report targets.
 These reports detail var definitions and expanded values used by the build system.
@@ -140,7 +145,7 @@ Clean build output for @i{MODULE}.
 @anchor{terminal.targets.contrib}
 @subsection Contrib Modules
 
-Contrib modules such as @samp{a52dec}, @samp{bzip2}, @samp{faac}, @samp{faad2}, @samp{ffmpeg}, @samp{lame}, @samp{libdca}, @samp{libdvdread}, @samp{libmkv}, @samp{libogg}, @samp{libsamplerate}, @samp{libtheora}, @samp{libvorbis}, @samp{mp4v2}, @samp{mpeg2dec}, @samp{x264} and @samp{zlib} have the following scoped targets:
+Contrib modules such as @samp{a52dec}, @samp{bzip2}, @samp{faac}, @samp{faad2}, @samp{ffmpeg}, @samp{fontconfig}, @samp{freetype}, @samp{fribidi}, @samp{lame}, @samp{libass}, @samp{libbluray}, @samp{libdca}, @samp{libdvdnav}, @samp{libdvdread}, @samp{libdvdread}, @samp{libiconv}, @samp{libmkv}, @samp{libogg}, @samp{libsamplerate}, @samp{libtheora}, @samp{libvorbis}, @samp{libxml2}, @samp{mp4v2}, @samp{mpeg2dec}, @samp{x264}, @samp{yasm} and @samp{zlib} have the following scoped targets:
 
 @table @samp
 @item make @i{MODULE}.fetch
@@ -232,8 +237,8 @@ Custom makevar rules specific to a @file{build} directory.
 The purpose is to allow a place to store local build settings for testing, tweaking, and experimenting with build configuration without losing your settings if @command{configure} is invoked; ie: @command{configure} would overwrite @file{GNUmakefile} and any customizations contained therein would be lost. Here is a short example of what the contents of @file{_SRC_/custom.defs} might contain:
 
 @example
-## bump to gcc-4.2 in current path
-GCC.gcc = /usr/bin/gcc-4.2
+## bump to gcc-4.6 in current path
+GCC.gcc = /usr/bin/gcc-4.6
 
 ## replace optimize for 'speed' with more aggressive settings
 GCC.args.O.speed = -O3 -fomit-frame-pointer -msse4.2

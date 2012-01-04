@@ -7,22 +7,6 @@ MACOSX.build/ = $(BUILD/)macosx/
 MACOSX.m4.in  = $(wildcard $(MACOSX.src/)*.m4)
 MACOSX.m4.out = $(MACOSX.m4.in:$(MACOSX.src/)%.m4=$(MACOSX.build/)%)
 
-## optional special command to run post macro processing
-MACOSX.m4.post.Info.h = $(RM.exe) -f $(MACOSX.build/)HandBrake.build/Preprocessed-Info.plist
-
-MACOSX.targs = HandBrakeCLI HandBrake
-
-## configuration pattern: (standard|debug)[.ARCH]
-## eg. for native build, no debug --> standard
-## eg. for x86_64 build with debug of any level --> debug.x86_64
-MACOSX.conf  = $(MACOSX.map.g.$(MACOSX.GCC.g)).$(BUILD.arch)
-
-## this is a mapping to determine which basename config to use in xcodeproj
-MACOSX.map.g.none = standard
-MACOSX.map.g.min  = debug
-MACOSX.map.g.std  = debug
-MACOSX.map.g.max  = debug
-
 ###############################################################################
 
 BUILD.out += $(MACOSX.m4.out)
@@ -30,8 +14,20 @@ BUILD.out += $(MACOSX.m4.wc.out)
 
 ###############################################################################
 
-MACOSX.XCODE.exe     = xcodebuild
-MACOSX.XCODE.project = HandBrake.xcodeproj
+MACOSX.project = -project $(MACOSX.src/)HandBrake.xcodeproj
+
+## configuration: must be one of { release, debug }
+MACOSX.configuration = -configuration $(MACOSX.map.g.$(MACOSX.GCC.g))
+
+## mapping from symbolic debug value to xcode configuration
+MACOSX.map.g.none = release
+MACOSX.map.g.min  = debug
+MACOSX.map.g.std  = debug
+MACOSX.map.g.max  = debug
+
+## xcconfig: must be one of macosx/xcconfig/*.xcconfig
+MACOSX.xcconfig = $(foreach x,$(XCODE.xcconfig),-xcconfig $(MACOSX.src/)xcconfig/$(x))
+MACOSX.sdk      = $(foreach sdk,$(GCC.sysroot),-sdk $(sdk))
 
 ## launch a build thru xcode; which in turn will do a nested make against
 ## this build system with normal build rules enabled.
@@ -39,20 +35,23 @@ MACOSX.XCODE.project = HandBrake.xcodeproj
 ## $(1) = list of targets
 ## $(2) = list of goals to shunt thru xcodebuild->make
 ##
-XCODE.sysroot = $(foreach sdk,$(GCC.sysroot),-sdk $(sdk))
+
 MACOSX.XCODE = $(strip \
-    cd $(MACOSX.src/) && \
-	$(MACOSX.XCODE.exe) \
-        -project $(MACOSX.XCODE.project) \
-        -configuration $(MACOSX.conf) \
-	$(XCODE.sysroot) \
+    $(XCODEBUILD.exe) \
+        $(MACOSX.project) \
         $(foreach t,$(1),-target $t) \
-        EXTERNAL_SRC='$(XCODE.external.src)' \
-        EXTERNAL_BUILD='$(XCODE.external.build)' \
-        EXTERNAL_PREFIX='$(XCODE.external.prefix)' \
-        EXTERNAL_JOBS='$(BUILD.jobs)' \
-        EXTERNAL_METHOD='$(CONF.method)' \
-        EXTERNAL_CONFARGS='$(CONF.args)' \
+        $(MACOSX.configuration) \
+        $(MACOSX.xcconfig) \
+        \
+        SYMROOT='$(XCODE.symroot)' \
+        CONFIGURATION_BUILD_DIR='$(XCODE.symroot)' \
+        CONFIGURATION_TEMP_DIR='$(XCODE.symroot)' \
+        \
+        EXTERNAL_BUILD='$(abspath $(BUILD))' \
+        EXTERNAL_CONF_ARGS='$(CONF.args)' \
+        EXTERNAL_DRIVER='$(XCODE.driver)' \
         EXTERNAL_GOALS='$(3)' \
+        EXTERNAL_JOBS='$(BUILD.jobs)' \
         EXTERNAL_VARS='$(-*-command-variables-*-)' \
+        \
         $(2) )

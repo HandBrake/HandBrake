@@ -1,14 +1,16 @@
 .PHONY: ub.build ub.combine ub.clean
 
+ub.build: ub.build.serial
+
 ub.build.serial:
 	@$(UB.BUILD.SERIAL)
 
 ub.build.parallel:
 	@set -e; \
-	for arch in $(UB.archs); do \
-	    $(call UB.BUILD.PARALLEL,$$arch) & \
+	for xcconfig in $(UB.xcconfigs); do \
+	    $(call UB.BUILD.PARALLEL,$$xcconfig) & \
 	    children="$$children $$!"; \
-	    echo "pid $$!: $(call UB.BUILD.PARALLEL,$$arch)"; \
+	    echo "pid $$!: $(call UB.BUILD.PARALLEL,$$xcconfig)"; \
 	done; \
 	echo "waiting for background jobs to complete:$$children"; \
 	wait
@@ -16,5 +18,5 @@ ub.build.parallel:
 ub.combine:
 	$(call UB.COMBINE,HandBrake.app/Contents/MacOS/HandBrake)
 
-ub.clean:
-	$(RM.EXE) -fr $(foreach n,$(UB.archs.other),ub.$n)
+#ub.clean:
+#	$(RM.exe) -fr $(foreach n,$(UB.archs.other),ub.$n)

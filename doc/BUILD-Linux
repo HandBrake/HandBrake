@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn4306 (2011102201) on Linux
+Guide to Building HandBrake svn4394 (2012010401) on Linux
 *********************************************************
 
 Table of Contents
@@ -44,21 +44,22 @@ Linux; but is not necessarily the only configuration that is possible:
 
    * gcc 4.0.0 or higher is reported to work
 
-     Note: It is recommended to use the platform distribution's bundled
-     compiler for maximum C++ compatibility. If you build with a custom
-     compiler it will likely introduce non-standard runtime
-     requirements. There are of course many valid reasons to build with
-     unbundled compilers, but be aware it is generally unsupported and
-     left as an exercise to the reader.
+     Note: It is recommended to use the platform distribution's
+     standard compiler for maximum C++ compatibility. If you build with
+     a custom compiler it will likely introduce non-standard runtime
+     requirements and have new/delete, exception and RTTI
+     incompatibilities. There are of course many valid reasons to build
+     with unbundled compilers, but be aware it is generally unsupported
+     and left as an exercise to the reader.
 
 The following general tools are used on various platforms and it is
 recommended you use these versions or similar:
 
-   * subversion - 1.6.2
+   * subversion - 1.6.16
 
-   * python - Python 2.4.6
+   * python - Python 2.7.1
 
-   * curl - curl 7.19.4 (or wget)
+   * curl - curl 7.21.4 (or wget)
 
    * m4 - GNU M4 1.4.6
 
@@ -66,9 +67,9 @@ recommended you use these versions or similar:
 
    * patch - Patch 2.5.8
 
-   * tar - GNU tar 1.15.1
+   * tar - GNU tar 1.26
 
-   * wget - GNU Wget 1.11.4 (or curl)
+   * wget - GNU Wget 1.13.4 (or curl)
 
 The GTK UI introduces some significant extra build requirements. If you
 intend to disable building the GUI with `configure --disable-gtk' you
@@ -214,7 +215,7 @@ exactly the same branch.
 
 If you have write-access to the repository, then you may add the
 appropriate login/password information as needed. It is recommended to
-use Subversion 1.5.0 or higher. Lower versions should also work.
+use Subversion 1.6.0 or higher. Lower versions should also work.
 
 5.2 Configure
 =============
@@ -253,12 +254,6 @@ options are also documented here:
      All-in-one option which launches the build and logs output
      automatically.  Useful for novices and quick-start procedures.
 
-`--disable-xcode'
-     Disable shunting the build through `xcodebuild'. If this option is
-     applied, `HandBrakeCLI' will be produced in a similar fashion as
-     it is on other platforms; sans Xcode and the Cocoa application
-     will not be produced. Mac OS X only.
-
 `--disable-gtk'
      Disable building the GTK GUI on applicable platforms such as
      Linux.
@@ -278,6 +273,17 @@ options are also documented here:
      architectures. The available choices are hard-coded per platform
      and no sanity checks for the required tools are performed.
 
+`--disable-xcode'
+     Disable shunting the build through `xcodebuild'. If this option is
+     applied, `HandBrakeCLI' will be produced in a similar fashion as
+     it is on other platforms; sans Xcode and the Cocoa application
+     will not be produced. Mac OS X only.
+
+`--xcconfig=MODE'
+     Select Xcode project configuration file. The available modes are
+     the basenames of files located in `macosx/xcconfig/*.xcconfig'
+     which direct Xcode to build using various architecture and Mac OS
+     X deployment options. Mac OS X only.
 
 Clean-room procedures dictate that when certain factors change, old
 builds should be scrapped and new builds configured. This is the main
@@ -356,6 +362,10 @@ period.
      Build auto-generated project documentation. Various articles are
      produced and may be found in `build/doc/articles'.
 
+`make doc.post'
+     Build auto-generated project documentation and post produced
+     articles directly to source tree.
+
 `make report.help'
      Print list of available makefile vars report targets.  These
      reports detail var definitions and expanded values used by the
@@ -380,9 +390,11 @@ scoped targets:
 ---------------------
 
 Contrib modules such as `a52dec', `bzip2', `faac', `faad2', `ffmpeg',
-`lame', `libdca', `libdvdread', `libmkv', `libogg', `libsamplerate',
-`libtheora', `libvorbis', `mp4v2', `mpeg2dec', `x264' and `zlib' have
-the following scoped targets:
+`fontconfig', `freetype', `fribidi', `lame', `libass', `libbluray',
+`libdca', `libdvdnav', `libdvdread', `libdvdread', `libiconv',
+`libmkv', `libogg', `libsamplerate', `libtheora', `libvorbis',
+`libxml2', `mp4v2', `mpeg2dec', `x264', `yasm' and `zlib' have the
+following scoped targets:
 
 `make MODULE.fetch'
      Download source tarball from the Internet and save to
@@ -502,8 +514,8 @@ overwrite `GNUmakefile' and any customizations contained therein would
 be lost. Here is a short example of what the contents of
 `_SRC_/custom.defs' might contain:
 
-     ## bump to gcc-4.2 in current path
-     GCC.gcc = /usr/bin/gcc-4.2
+     ## bump to gcc-4.6 in current path
+     GCC.gcc = /usr/bin/gcc-4.6
 
      ## replace optimize for 'speed' with more aggressive settings
      GCC.args.O.speed = -O3 -fomit-frame-pointer -msse4.2
@@ -543,7 +555,7 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    4306
-     date:   2011-10-22 09:38:47 -0700
+     rev:    4394
+     date:   2011-12-30 17:21:44 -0500
      type:   developer
 
