@@ -166,6 +166,13 @@ static void Finalize( hb_work_object_t * w )
     // in context extradata
     avcodec_encode_audio( pv->context, buf->data, buf->alloc, NULL );
     hb_buffer_close( &buf );
+
+    // Then we need to recopy the header since it was modified
+    if ( pv->context->extradata )
+    {
+        memcpy( w->config->extradata.bytes, pv->context->extradata, pv->context->extradata_size );
+        w->config->extradata.length = pv->context->extradata_size;
+    }
 }
 
 static void encavcodecaClose( hb_work_object_t * w )
@@ -275,7 +282,6 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
 
 static hb_buffer_t * Flush( hb_work_object_t * w )
 {
-    hb_work_private_t * pv = w->private_data;
     hb_buffer_t *first, *buf, *last;
 
     first = last = buf = Encode( w );
@@ -288,17 +294,13 @@ static hb_buffer_t * Flush( hb_work_object_t * w )
 
     if( last )
     {
-        last->next = hb_buffer_init( pv->output_bytes );
-        buf = last->next;
+        last->next = hb_buffer_init( 0 );
     }
     else
     {
-        first = buf = hb_buffer_init( pv->output_bytes );
+        first = hb_buffer_init( 0 );
     }
-    // Finalize with NULL input needed by FLAC to generate md5sum
-    // in context extradata
-    avcodec_encode_audio( pv->context, buf->data, buf->alloc, NULL );
-    buf->size = 0;
+
     return first;
 }
 
