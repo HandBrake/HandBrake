@@ -2,13 +2,13 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">10K549</string>
-		<string key="IBDocument.InterfaceBuilderVersion">1306</string>
-		<string key="IBDocument.AppKitVersion">1038.36</string>
-		<string key="IBDocument.HIToolboxVersion">461.00</string>
+		<string key="IBDocument.SystemVersion">11C74</string>
+		<string key="IBDocument.InterfaceBuilderVersion">1938</string>
+		<string key="IBDocument.AppKitVersion">1138.23</string>
+		<string key="IBDocument.HIToolboxVersion">567.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">1306</string>
+			<string key="NS.object.0">1938</string>
 		</object>
 		<object class="NSArray" key="IBDocument.IntegratedClassDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -75,6 +75,7 @@
 				<object class="NSMutableString" key="NSViewClass">
 					<characters key="NS.bytes">View</characters>
 				</object>
+				<nil key="NSUserInterfaceItemIdentifier"/>
 				<string key="NSWindowContentMinSize">{213, 107}</string>
 				<object class="NSView" key="NSWindowView" id="168918359">
 					<reference key="NSNextResponder"/>
@@ -126,7 +127,6 @@
 							<string key="NSFrame">{{18, -26}, {930, 20}}</string>
 							<reference key="NSSuperview" ref="168918359"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView"/>
 							<int key="NSpiFlags">16396</int>
 							<double key="NSMaxValue">100</double>
 						</object>
@@ -136,7 +136,6 @@
 							<string key="NSFrame">{{13, 28}, {940, 343}}</string>
 							<reference key="NSSuperview" ref="168918359"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView" ref="738554558"/>
 							<object class="NSMutableArray" key="NSTabViewItems">
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="NSTabViewItem" id="107038816">
@@ -977,7 +976,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																		<string key="NSFrameSize">{884, 241}</string>
 																		<reference key="NSSuperview" ref="528259747"/>
 																		<reference key="NSWindow"/>
-																		<reference key="NSNextKeyView" ref="794651271"/>
+																		<reference key="NSNextKeyView" ref="496546489"/>
 																		<bool key="NSEnabled">YES</bool>
 																		<object class="NSTableHeaderView" key="NSHeaderView" id="146611085">
 																			<reference key="NSNextResponder" ref="230332532"/>
@@ -989,11 +988,9 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																			<reference key="NSTableView" ref="792464451"/>
 																		</object>
 																		<object class="_NSCornerView" key="NSCornerView" id="727606062">
-																			<reference key="NSNextResponder" ref="933946879"/>
+																			<nil key="NSNextResponder"/>
 																			<int key="NSvFlags">-2147483392</int>
 																			<string key="NSFrame">{{-26, 0}, {16, 17}}</string>
-																			<reference key="NSSuperview" ref="933946879"/>
-																			<reference key="NSWindow"/>
 																			<reference key="NSNextKeyView" ref="230332532"/>
 																		</object>
 																		<object class="NSMutableArray" key="NSTableColumns">
@@ -1055,9 +1052,10 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																							<reference ref="677045788"/>
 																						</object>
 																					</object>
+																					<int key="NSPreferredEdge">3</int>
 																					<bool key="NSUsesItemFromMenu">YES</bool>
 																					<bool key="NSAltersState">YES</bool>
-																					<int key="NSArrowPosition">2</int>
+																					<int key="NSArrowPosition">1</int>
 																				</object>
 																				<int key="NSResizingMask">3</int>
 																				<bool key="NSIsResizeable">YES</bool>
@@ -1113,9 +1111,10 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																							<reference ref="1058317103"/>
 																						</object>
 																					</object>
+																					<int key="NSPreferredEdge">3</int>
 																					<bool key="NSUsesItemFromMenu">YES</bool>
 																					<bool key="NSAltersState">YES</bool>
-																					<int key="NSArrowPosition">2</int>
+																					<int key="NSArrowPosition">1</int>
 																				</object>
 																				<int key="NSResizingMask">3</int>
 																				<bool key="NSIsResizeable">YES</bool>
@@ -1167,9 +1166,10 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																							<reference ref="106742036"/>
 																						</object>
 																					</object>
+																					<int key="NSPreferredEdge">3</int>
 																					<bool key="NSUsesItemFromMenu">YES</bool>
 																					<bool key="NSAltersState">YES</bool>
-																					<int key="NSArrowPosition">2</int>
+																					<int key="NSArrowPosition">1</int>
 																				</object>
 																				<int key="NSResizingMask">3</int>
 																				<bool key="NSIsResizeable">YES</bool>
@@ -1221,9 +1221,10 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																							<reference ref="713274619"/>
 																						</object>
 																					</object>
+																					<int key="NSPreferredEdge">3</int>
 																					<bool key="NSUsesItemFromMenu">YES</bool>
 																					<bool key="NSAltersState">YES</bool>
-																					<int key="NSArrowPosition">2</int>
+																					<int key="NSArrowPosition">1</int>
 																				</object>
 																				<int key="NSResizingMask">3</int>
 																				<bool key="NSIsResizeable">YES</bool>
@@ -1275,9 +1276,10 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																							<reference ref="452766579"/>
 																						</object>
 																					</object>
+																					<int key="NSPreferredEdge">3</int>
 																					<bool key="NSUsesItemFromMenu">YES</bool>
 																					<bool key="NSAltersState">YES</bool>
-																					<int key="NSArrowPosition">2</int>
+																					<int key="NSArrowPosition">1</int>
 																				</object>
 																				<int key="NSResizingMask">3</int>
 																				<bool key="NSIsResizeable">YES</bool>
@@ -1430,6 +1432,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																		<int key="NSDraggingSourceMaskForNonLocal">0</int>
 																		<bool key="NSAllowsTypeSelect">NO</bool>
 																		<int key="NSTableViewDraggingDestinationStyle">0</int>
+																		<int key="NSTableViewGroupRowStyle">1</int>
 																	</object>
 																</object>
 																<string key="NSFrame">{{1, 17}, {884, 241}}</string>
@@ -1479,18 +1482,16 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																<reference key="NSBGColor" ref="355843302"/>
 																<int key="NScvFlags">4</int>
 															</object>
-															<reference ref="727606062"/>
 														</object>
 														<string key="NSFrame">{{17, 17}, {886, 259}}</string>
 														<reference key="NSSuperview" ref="577274772"/>
 														<reference key="NSWindow"/>
-														<reference key="NSNextKeyView" ref="496546489"/>
-														<int key="NSsFlags">530</int>
+														<reference key="NSNextKeyView" ref="528259747"/>
+														<int key="NSsFlags">133650</int>
 														<reference key="NSVScroller" ref="496546489"/>
 														<reference key="NSHScroller" ref="821562152"/>
 														<reference key="NSContentView" ref="528259747"/>
 														<reference key="NSHeaderClipView" ref="230332532"/>
-														<reference key="NSCornerView" ref="727606062"/>
 														<bytes key="NSScrollAmts">QSAAAEEgAABB2AAAQdgAAA</bytes>
 													</object>
 													<object class="NSButton" id="883603583">
@@ -1872,6 +1873,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																<int key="NSDraggingSourceMaskForNonLocal">0</int>
 																<bool key="NSAllowsTypeSelect">NO</bool>
 																<int key="NSTableViewDraggingDestinationStyle">0</int>
+																<int key="NSTableViewGroupRowStyle">1</int>
 															</object>
 														</object>
 														<string key="NSFrame">{{1, 17}, {884, 241}}</string>
@@ -1920,12 +1922,11 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 												<string key="NSFrame">{{17, 17}, {886, 259}}</string>
 												<reference key="NSSuperview" ref="756255803"/>
 												<reference key="NSNextKeyView" ref="705918581"/>
-												<int key="NSsFlags">530</int>
+												<int key="NSsFlags">133650</int>
 												<reference key="NSVScroller" ref="40751315"/>
 												<reference key="NSHScroller" ref="892147391"/>
 												<reference key="NSContentView" ref="705918581"/>
 												<reference key="NSHeaderClipView" ref="139191276"/>
-												<reference key="NSCornerView" ref="10217663"/>
 												<bytes key="NSScrollAmts">QSAAAEEgAABBmAAAQZgAAA</bytes>
 											</object>
 											<object class="NSButton" id="377401502">
@@ -1969,7 +1970,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 													<bool key="EncodedWithXMLCoder">YES</bool>
 													<object class="NSView" id="815869140">
 														<reference key="NSNextResponder" ref="231506045"/>
-														<int key="NSvFlags">256</int>
+														<int key="NSvFlags">274</int>
 														<string key="NSFrameSize">{907, 290}</string>
 														<reference key="NSSuperview" ref="231506045"/>
 													</object>
@@ -2112,6 +2113,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																<int key="NSDraggingSourceMaskForNonLocal">0</int>
 																<bool key="NSAllowsTypeSelect">YES</bool>
 																<int key="NSTableViewDraggingDestinationStyle">0</int>
+																<int key="NSTableViewGroupRowStyle">1</int>
 															</object>
 														</object>
 														<string key="NSFrame">{{1, 17}, {869, 242}}</string>
@@ -2160,7 +2162,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 												<string key="NSFrame">{{17, 17}, {886, 260}}</string>
 												<reference key="NSSuperview" ref="440990725"/>
 												<reference key="NSNextKeyView" ref="272816362"/>
-												<int key="NSsFlags">18</int>
+												<int key="NSsFlags">133138</int>
 												<reference key="NSVScroller" ref="1046880533"/>
 												<reference key="NSHScroller" ref="1033243513"/>
 												<reference key="NSContentView" ref="272816362"/>
@@ -3059,14 +3061,15 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							</object>
 						</object>
 					</object>
-					<string key="NSFrame">{{7, 11}, {959, 558}}</string>
+					<string key="NSFrameSize">{959, 558}</string>
 					<reference key="NSSuperview"/>
 					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView" ref="586321835"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1920, 1178}}</string>
 				<string key="NSMinSize">{213, 129}</string>
-				<string key="NSMaxSize">{1e+13, 1e+13}</string>
+				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
+				<bool key="NSWindowIsRestorable">YES</bool>
 			</object>
 			<object class="NSMenu" id="840340181">
 				<string key="NSTitle">MainMenu</string>
@@ -3792,6 +3795,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<object class="NSMutableString" key="NSViewClass">
 					<characters key="NS.bytes">View</characters>
 				</object>
+				<nil key="NSUserInterfaceItemIdentifier"/>
 				<string key="NSWindowContentMinSize">{213, 107}</string>
 				<object class="NSView" key="NSWindowView" id="168254512">
 					<nil key="NSNextResponder"/>
@@ -3876,7 +3880,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1920, 1178}}</string>
 				<string key="NSMinSize">{213, 129}</string>
-				<string key="NSMaxSize">{1e+13, 1e+13}</string>
+				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
+				<bool key="NSWindowIsRestorable">YES</bool>
 			</object>
 			<object class="NSDrawer" id="972647787">
 				<nil key="NSNextResponder"/>
@@ -3966,6 +3971,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 										<int key="NSDraggingSourceMaskForNonLocal">0</int>
 										<bool key="NSAllowsTypeSelect">YES</bool>
 										<int key="NSTableViewDraggingDestinationStyle">0</int>
+										<int key="NSTableViewGroupRowStyle">1</int>
 										<float key="NSOutlineViewIndentationPerLevelKey">12</float>
 									</object>
 								</object>
@@ -4000,7 +4006,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<string key="NSFrame">{{4, 31}, {260, 508}}</string>
 						<reference key="NSSuperview" ref="621751818"/>
 						<reference key="NSNextKeyView" ref="421228634"/>
-						<int key="NSsFlags">18</int>
+						<int key="NSsFlags">133138</int>
 						<reference key="NSVScroller" ref="475123229"/>
 						<reference key="NSHScroller" ref="573337548"/>
 						<reference key="NSContentView" ref="421228634"/>
@@ -4144,6 +4150,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<object class="NSMutableString" key="NSViewClass">
 					<characters key="NS.bytes">View</characters>
 				</object>
+				<nil key="NSUserInterfaceItemIdentifier"/>
 				<string key="NSWindowContentMinSize">{338, 232}</string>
 				<object class="NSView" key="NSWindowView" id="69290042">
 					<nil key="NSNextResponder"/>
@@ -4475,7 +4482,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="NSView" id="956968044">
 									<reference key="NSNextResponder" ref="277759901"/>
-									<int key="NSvFlags">256</int>
+									<int key="NSvFlags">274</int>
 									<object class="NSMutableArray" key="NSSubviews">
 										<bool key="EncodedWithXMLCoder">YES</bool>
 										<object class="NSTextField" id="522324466">
@@ -4558,7 +4565,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1920, 1178}}</string>
 				<string key="NSMinSize">{338, 254}</string>
-				<string key="NSMaxSize">{1e+13, 1e+13}</string>
+				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
+				<bool key="NSWindowIsRestorable">YES</bool>
 			</object>
 			<object class="NSWindowTemplate" id="687953568">
 				<int key="NSWindowStyleMask">1</int>
@@ -4572,6 +4580,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<object class="NSMutableString" key="NSViewClass">
 					<characters key="NS.bytes">View</characters>
 				</object>
+				<nil key="NSUserInterfaceItemIdentifier"/>
 				<string key="NSWindowContentMinSize">{213, 107}</string>
 				<object class="NSView" key="NSWindowView" id="867624722">
 					<nil key="NSNextResponder"/>
@@ -4740,7 +4749,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1920, 1178}}</string>
 				<string key="NSMinSize">{213, 129}</string>
-				<string key="NSMaxSize">{1e+13, 1e+13}</string>
+				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
+				<bool key="NSWindowIsRestorable">YES</bool>
 			</object>
 			<object class="NSCustomObject" id="2258723">
 				<string key="NSClassName">HBController</string>
@@ -4800,6 +4810,16 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 			<object class="NSUserDefaultsController" id="869523098">
 				<bool key="NSSharedInstance">YES</bool>
 			</object>
+			<object class="NSView" id="412106376">
+				<nil key="NSNextResponder"/>
+				<int key="NSvFlags">256</int>
+				<string key="NSFrameSize">{125, 1}</string>
+			</object>
+			<object class="NSView" id="586026952">
+				<nil key="NSNextResponder"/>
+				<int key="NSvFlags">256</int>
+				<string key="NSFrameSize">{125, 1}</string>
+			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
 			<object class="NSMutableArray" key="connectionRecords">
@@ -4819,22 +4839,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="destination" ref="2258723"/>
 					</object>
 					<int key="connectionID">247</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">fWindow</string>
-						<reference key="source" ref="2258723"/>
-						<reference key="destination" ref="192660081"/>
-					</object>
-					<int key="connectionID">350</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">delegate</string>
-						<reference key="source" ref="192660081"/>
-						<reference key="destination" ref="2258723"/>
-					</object>
-					<int key="connectionID">433</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
@@ -4867,6 +4871,182 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="destination" ref="372804054"/>
 					</object>
 					<int key="connectionID">1195</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">performFindPanelAction:</string>
+						<reference key="source" ref="952684036"/>
+						<reference key="destination" ref="793630765"/>
+					</object>
+					<int key="connectionID">1823</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">startSpeaking:</string>
+						<reference key="source" ref="952684036"/>
+						<reference key="destination" ref="362189914"/>
+					</object>
+					<int key="connectionID">1824</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">toggleContinuousSpellChecking:</string>
+						<reference key="source" ref="952684036"/>
+						<reference key="destination" ref="6854324"/>
+					</object>
+					<int key="connectionID">1825</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">undo:</string>
+						<reference key="source" ref="952684036"/>
+						<reference key="destination" ref="587511664"/>
+					</object>
+					<int key="connectionID">1826</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">stopSpeaking:</string>
+						<reference key="source" ref="952684036"/>
+						<reference key="destination" ref="496049927"/>
+					</object>
+					<int key="connectionID">1827</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">performFindPanelAction:</string>
+						<reference key="source" ref="952684036"/>
+						<reference key="destination" ref="49300518"/>
+					</object>
+					<int key="connectionID">1828</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">redo:</string>
+						<reference key="source" ref="952684036"/>
+						<reference key="destination" ref="786616983"/>
+					</object>
+					<int key="connectionID">1829</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">performFindPanelAction:</string>
+						<reference key="source" ref="952684036"/>
+						<reference key="destination" ref="1069789051"/>
+					</object>
+					<int key="connectionID">1830</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">cut:</string>
+						<reference key="source" ref="952684036"/>
+						<reference key="destination" ref="84425921"/>
+					</object>
+					<int key="connectionID">1831</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">paste:</string>
+						<reference key="source" ref="952684036"/>
+						<reference key="destination" ref="741953332"/>
+					</object>
+					<int key="connectionID">1832</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">pasteAsPlainText:</string>
+						<reference key="source" ref="952684036"/>
+						<reference key="destination" ref="1006794292"/>
+					</object>
+					<int key="connectionID">1833</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">selectAll:</string>
+						<reference key="source" ref="952684036"/>
+						<reference key="destination" ref="695401358"/>
+					</object>
+					<int key="connectionID">1834</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">performFindPanelAction:</string>
+						<reference key="source" ref="952684036"/>
+						<reference key="destination" ref="323467360"/>
+					</object>
+					<int key="connectionID">1835</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">copy:</string>
+						<reference key="source" ref="952684036"/>
+						<reference key="destination" ref="979367247"/>
+					</object>
+					<int key="connectionID">1836</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">checkSpelling:</string>
+						<reference key="source" ref="952684036"/>
+						<reference key="destination" ref="301925013"/>
+					</object>
+					<int key="connectionID">1837</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">centerSelectionInVisibleArea:</string>
+						<reference key="source" ref="952684036"/>
+						<reference key="destination" ref="541561571"/>
+					</object>
+					<int key="connectionID">1838</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">showGuessPanel:</string>
+						<reference key="source" ref="952684036"/>
+						<reference key="destination" ref="981624971"/>
+					</object>
+					<int key="connectionID">1839</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">delete:</string>
+						<reference key="source" ref="952684036"/>
+						<reference key="destination" ref="494582096"/>
+					</object>
+					<int key="connectionID">1840</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">performClose:</string>
+						<reference key="source" ref="952684036"/>
+						<reference key="destination" ref="542310438"/>
+					</object>
+					<int key="connectionID">2509</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">unhideAllApplications:</string>
+						<reference key="source" ref="952684036"/>
+						<reference key="destination" ref="750596130"/>
+					</object>
+					<int key="connectionID">5281</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="192660081"/>
+						<reference key="destination" ref="2258723"/>
+					</object>
+					<int key="connectionID">433</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fWindow</string>
+						<reference key="source" ref="2258723"/>
+						<reference key="destination" ref="192660081"/>
+					</object>
+					<int key="connectionID">350</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -5101,166 +5281,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<int key="connectionID">1617</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">performFindPanelAction:</string>
-						<reference key="source" ref="952684036"/>
-						<reference key="destination" ref="793630765"/>
-					</object>
-					<int key="connectionID">1823</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">startSpeaking:</string>
-						<reference key="source" ref="952684036"/>
-						<reference key="destination" ref="362189914"/>
-					</object>
-					<int key="connectionID">1824</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">toggleContinuousSpellChecking:</string>
-						<reference key="source" ref="952684036"/>
-						<reference key="destination" ref="6854324"/>
-					</object>
-					<int key="connectionID">1825</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">undo:</string>
-						<reference key="source" ref="952684036"/>
-						<reference key="destination" ref="587511664"/>
-					</object>
-					<int key="connectionID">1826</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">stopSpeaking:</string>
-						<reference key="source" ref="952684036"/>
-						<reference key="destination" ref="496049927"/>
-					</object>
-					<int key="connectionID">1827</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">performFindPanelAction:</string>
-						<reference key="source" ref="952684036"/>
-						<reference key="destination" ref="49300518"/>
-					</object>
-					<int key="connectionID">1828</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">redo:</string>
-						<reference key="source" ref="952684036"/>
-						<reference key="destination" ref="786616983"/>
-					</object>
-					<int key="connectionID">1829</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">performFindPanelAction:</string>
-						<reference key="source" ref="952684036"/>
-						<reference key="destination" ref="1069789051"/>
-					</object>
-					<int key="connectionID">1830</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">cut:</string>
-						<reference key="source" ref="952684036"/>
-						<reference key="destination" ref="84425921"/>
-					</object>
-					<int key="connectionID">1831</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">paste:</string>
-						<reference key="source" ref="952684036"/>
-						<reference key="destination" ref="741953332"/>
-					</object>
-					<int key="connectionID">1832</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">pasteAsPlainText:</string>
-						<reference key="source" ref="952684036"/>
-						<reference key="destination" ref="1006794292"/>
-					</object>
-					<int key="connectionID">1833</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">selectAll:</string>
-						<reference key="source" ref="952684036"/>
-						<reference key="destination" ref="695401358"/>
-					</object>
-					<int key="connectionID">1834</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">performFindPanelAction:</string>
-						<reference key="source" ref="952684036"/>
-						<reference key="destination" ref="323467360"/>
-					</object>
-					<int key="connectionID">1835</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">copy:</string>
-						<reference key="source" ref="952684036"/>
-						<reference key="destination" ref="979367247"/>
-					</object>
-					<int key="connectionID">1836</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">checkSpelling:</string>
-						<reference key="source" ref="952684036"/>
-						<reference key="destination" ref="301925013"/>
-					</object>
-					<int key="connectionID">1837</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">centerSelectionInVisibleArea:</string>
-						<reference key="source" ref="952684036"/>
-						<reference key="destination" ref="541561571"/>
-					</object>
-					<int key="connectionID">1838</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">showGuessPanel:</string>
-						<reference key="source" ref="952684036"/>
-						<reference key="destination" ref="981624971"/>
-					</object>
-					<int key="connectionID">1839</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">delete:</string>
-						<reference key="source" ref="952684036"/>
-						<reference key="destination" ref="494582096"/>
-					</object>
-					<int key="connectionID">1840</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">parentWindow</string>
-						<reference key="source" ref="972647787"/>
-						<reference key="destination" ref="192660081"/>
-					</object>
-					<int key="connectionID">1842</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">contentView</string>
-						<reference key="source" ref="972647787"/>
-						<reference key="destination" ref="621751818"/>
-					</object>
-					<int key="connectionID">1844</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">fAddPresetPanel</string>
 						<reference key="source" ref="2258723"/>
@@ -5291,14 +5311,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="destination" ref="574185541"/>
 					</object>
 					<int key="connectionID">1883</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">toggle:</string>
-						<reference key="source" ref="972647787"/>
-						<reference key="destination" ref="854594899"/>
-					</object>
-					<int key="connectionID">1885</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -5485,14 +5497,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<int key="connectionID">2496</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">performClose:</string>
-						<reference key="source" ref="952684036"/>
-						<reference key="destination" ref="542310438"/>
-					</object>
-					<int key="connectionID">2509</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">fAdvancedView</string>
 						<reference key="source" ref="2258723"/>
@@ -5637,22 +5641,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<int key="connectionID">4187</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">dataSource</string>
-						<reference key="source" ref="807972370"/>
-						<reference key="destination" ref="2258723"/>
-					</object>
-					<int key="connectionID">4188</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">delegate</string>
-						<reference key="source" ref="807972370"/>
-						<reference key="destination" ref="2258723"/>
-					</object>
-					<int key="connectionID">4189</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
 						<string key="label">selectPreset:</string>
 						<reference key="source" ref="2258723"/>
@@ -5707,14 +5695,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="destination" ref="581806074"/>
 					</object>
 					<int key="connectionID">4581</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">checkForUpdates:</string>
-						<reference key="source" ref="159095366"/>
-						<reference key="destination" ref="985983659"/>
-					</object>
-					<int key="connectionID">4966</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -5893,14 +5873,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<int key="connectionID">5249</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">unhideAllApplications:</string>
-						<reference key="source" ref="952684036"/>
-						<reference key="destination" ref="750596130"/>
-					</object>
-					<int key="connectionID">5281</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">fSrcTimeStartEncodingField</string>
 						<reference key="source" ref="2258723"/>
@@ -6077,373 +6049,12 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<int key="connectionID">5675</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">contentArray: audioArray</string>
-						<reference key="source" ref="141316080"/>
-						<reference key="destination" ref="681233637"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="141316080"/>
-							<reference key="NSDestination" ref="681233637"/>
-							<string key="NSLabel">contentArray: audioArray</string>
-							<string key="NSBinding">contentArray</string>
-							<string key="NSKeyPath">audioArray</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5679</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
 						<string key="label">addAllAudioTracks:</string>
 						<reference key="source" ref="2258723"/>
 						<reference key="destination" ref="883603583"/>
 					</object>
 					<int key="connectionID">5709</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled: hasValidPresetSelected</string>
-						<reference key="source" ref="883603583"/>
-						<reference key="destination" ref="2258723"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="883603583"/>
-							<reference key="NSDestination" ref="2258723"/>
-							<string key="NSLabel">enabled: hasValidPresetSelected</string>
-							<string key="NSBinding">enabled</string>
-							<string key="NSKeyPath">hasValidPresetSelected</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5711</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">content: arrangedObjects.codecs</string>
-						<reference key="source" ref="200958136"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector" id="561471240">
-							<reference key="NSSource" ref="200958136"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">content: arrangedObjects.codecs</string>
-							<string key="NSBinding">content</string>
-							<string key="NSKeyPath">arrangedObjects.codecs</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5747</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">contentValues: arrangedObjects.codecs.keyAudioCodecName</string>
-						<reference key="source" ref="200958136"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector" id="357206672">
-							<reference key="NSSource" ref="200958136"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">contentValues: arrangedObjects.codecs.keyAudioCodecName</string>
-							<string key="NSBinding">contentValues</string>
-							<string key="NSKeyPath">arrangedObjects.codecs.keyAudioCodecName</string>
-							<reference key="NSPreviousConnector" ref="561471240"/>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5749</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">content: arrangedObjects.mixdowns</string>
-						<reference key="source" ref="590927656"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector" id="993421587">
-							<reference key="NSSource" ref="590927656"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">content: arrangedObjects.mixdowns</string>
-							<string key="NSBinding">content</string>
-							<string key="NSKeyPath">arrangedObjects.mixdowns</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5754</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">contentValues: arrangedObjects.mixdowns.keyAudioMixdownName</string>
-						<reference key="source" ref="590927656"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector" id="688037869">
-							<reference key="NSSource" ref="590927656"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">contentValues: arrangedObjects.mixdowns.keyAudioMixdownName</string>
-							<string key="NSBinding">contentValues</string>
-							<string key="NSKeyPath">arrangedObjects.mixdowns.keyAudioMixdownName</string>
-							<reference key="NSPreviousConnector" ref="993421587"/>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5756</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">content: arrangedObjects.sampleRates</string>
-						<reference key="source" ref="1063255"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector" id="389021487">
-							<reference key="NSSource" ref="1063255"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">content: arrangedObjects.sampleRates</string>
-							<string key="NSBinding">content</string>
-							<string key="NSKeyPath">arrangedObjects.sampleRates</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5760</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">contentValues: arrangedObjects.sampleRates.keyAudioSampleRateName</string>
-						<reference key="source" ref="1063255"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector" id="1059867876">
-							<reference key="NSSource" ref="1063255"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">contentValues: arrangedObjects.sampleRates.keyAudioSampleRateName</string>
-							<string key="NSBinding">contentValues</string>
-							<string key="NSKeyPath">arrangedObjects.sampleRates.keyAudioSampleRateName</string>
-							<reference key="NSPreviousConnector" ref="389021487"/>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5762</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">content: arrangedObjects.bitRates</string>
-						<reference key="source" ref="596723553"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector" id="526128549">
-							<reference key="NSSource" ref="596723553"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">content: arrangedObjects.bitRates</string>
-							<string key="NSBinding">content</string>
-							<string key="NSKeyPath">arrangedObjects.bitRates</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5766</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">contentValues: arrangedObjects.bitRates.keyAudioBitrateName</string>
-						<reference key="source" ref="596723553"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector" id="614736310">
-							<reference key="NSSource" ref="596723553"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">contentValues: arrangedObjects.bitRates.keyAudioBitrateName</string>
-							<string key="NSBinding">contentValues</string>
-							<string key="NSKeyPath">arrangedObjects.bitRates.keyAudioBitrateName</string>
-							<reference key="NSPreviousConnector" ref="526128549"/>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5768</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled: arrangedObjects.enabled</string>
-						<reference key="source" ref="200958136"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="200958136"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">enabled: arrangedObjects.enabled</string>
-							<string key="NSBinding">enabled</string>
-							<string key="NSKeyPath">arrangedObjects.enabled</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5774</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled: arrangedObjects.mixdownEnabled</string>
-						<reference key="source" ref="1063255"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="1063255"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">enabled: arrangedObjects.mixdownEnabled</string>
-							<string key="NSBinding">enabled</string>
-							<string key="NSKeyPath">arrangedObjects.mixdownEnabled</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5778</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">selectedObject: arrangedObjects.codec</string>
-						<reference key="source" ref="200958136"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="200958136"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">selectedObject: arrangedObjects.codec</string>
-							<string key="NSBinding">selectedObject</string>
-							<string key="NSKeyPath">arrangedObjects.codec</string>
-							<object class="NSDictionary" key="NSOptions">
-								<string key="NS.key.0">NSCreatesSortDescriptor</string>
-								<boolean value="NO" key="NS.object.0"/>
-							</object>
-							<reference key="NSPreviousConnector" ref="357206672"/>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5786</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">selectedObject: arrangedObjects.mixdown</string>
-						<reference key="source" ref="590927656"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="590927656"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">selectedObject: arrangedObjects.mixdown</string>
-							<string key="NSBinding">selectedObject</string>
-							<string key="NSKeyPath">arrangedObjects.mixdown</string>
-							<object class="NSDictionary" key="NSOptions">
-								<string key="NS.key.0">NSCreatesSortDescriptor</string>
-								<boolean value="NO" key="NS.object.0"/>
-							</object>
-							<reference key="NSPreviousConnector" ref="688037869"/>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5787</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">selectedObject: arrangedObjects.sampleRate</string>
-						<reference key="source" ref="1063255"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="1063255"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">selectedObject: arrangedObjects.sampleRate</string>
-							<string key="NSBinding">selectedObject</string>
-							<string key="NSKeyPath">arrangedObjects.sampleRate</string>
-							<object class="NSDictionary" key="NSOptions">
-								<string key="NS.key.0">NSCreatesSortDescriptor</string>
-								<boolean value="NO" key="NS.object.0"/>
-							</object>
-							<reference key="NSPreviousConnector" ref="1059867876"/>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5788</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">selectedObject: arrangedObjects.bitRate</string>
-						<reference key="source" ref="596723553"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="596723553"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">selectedObject: arrangedObjects.bitRate</string>
-							<string key="NSBinding">selectedObject</string>
-							<string key="NSKeyPath">arrangedObjects.bitRate</string>
-							<object class="NSDictionary" key="NSOptions">
-								<string key="NS.key.0">NSCreatesSortDescriptor</string>
-								<boolean value="NO" key="NS.object.0"/>
-							</object>
-							<reference key="NSPreviousConnector" ref="614736310"/>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5789</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: arrangedObjects.drc</string>
-						<reference key="source" ref="393032802"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="393032802"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">value: arrangedObjects.drc</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">arrangedObjects.drc</string>
-							<object class="NSDictionary" key="NSOptions">
-								<bool key="EncodedWithXMLCoder">YES</bool>
-								<object class="NSArray" key="dict.sortedKeys">
-									<bool key="EncodedWithXMLCoder">YES</bool>
-									<string>NSCreatesSortDescriptor</string>
-									<string>NSValidatesImmediately</string>
-								</object>
-								<object class="NSMutableArray" key="dict.values">
-									<bool key="EncodedWithXMLCoder">YES</bool>
-									<boolean value="NO"/>
-									<boolean value="YES"/>
-								</object>
-							</object>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5790</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: arrangedObjects.drc</string>
-						<reference key="source" ref="581296833"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="581296833"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">value: arrangedObjects.drc</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">arrangedObjects.drc</string>
-							<object class="NSDictionary" key="NSOptions">
-								<string key="NS.key.0">NSCreatesSortDescriptor</string>
-								<boolean value="NO" key="NS.object.0"/>
-							</object>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5791</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled: arrangedObjects.AC3Enabled</string>
-						<reference key="source" ref="393032802"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="393032802"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">enabled: arrangedObjects.AC3Enabled</string>
-							<string key="NSBinding">enabled</string>
-							<string key="NSKeyPath">arrangedObjects.AC3Enabled</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5792</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled: arrangedObjects.AC3Enabled</string>
-						<reference key="source" ref="581296833"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="581296833"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">enabled: arrangedObjects.AC3Enabled</string>
-							<string key="NSBinding">enabled</string>
-							<string key="NSKeyPath">arrangedObjects.AC3Enabled</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">5793</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -6526,52 +6137,140 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<int key="connectionID">5828</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: arrangedObjects.gain</string>
-						<reference key="source" ref="432964705"/>
-						<reference key="destination" ref="141316080"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="432964705"/>
-							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">value: arrangedObjects.gain</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">arrangedObjects.gain</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
+					<object class="IBActionConnection" key="connection">
+						<string key="label">addAllTitlesToQueue:</string>
+						<reference key="source" ref="2258723"/>
+						<reference key="destination" ref="232757118"/>
 					</object>
-					<int key="connectionID">5875</int>
+					<int key="connectionID">5899</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">parentWindow</string>
+						<reference key="source" ref="972647787"/>
+						<reference key="destination" ref="192660081"/>
+					</object>
+					<int key="connectionID">1842</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">contentView</string>
+						<reference key="source" ref="972647787"/>
+						<reference key="destination" ref="621751818"/>
+					</object>
+					<int key="connectionID">1844</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">toggle:</string>
+						<reference key="source" ref="972647787"/>
+						<reference key="destination" ref="854594899"/>
+					</object>
+					<int key="connectionID">1885</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">dataSource</string>
+						<reference key="source" ref="807972370"/>
+						<reference key="destination" ref="2258723"/>
+					</object>
+					<int key="connectionID">4188</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="807972370"/>
+						<reference key="destination" ref="2258723"/>
+					</object>
+					<int key="connectionID">4189</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">checkForUpdates:</string>
+						<reference key="source" ref="159095366"/>
+						<reference key="destination" ref="985983659"/>
+					</object>
+					<int key="connectionID">4966</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled: arrangedObjects.PassThruDisabled</string>
-						<reference key="source" ref="432964705"/>
+						<string key="label">contentArray: audioArray</string>
+						<reference key="source" ref="141316080"/>
+						<reference key="destination" ref="681233637"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="141316080"/>
+							<reference key="NSDestination" ref="681233637"/>
+							<string key="NSLabel">contentArray: audioArray</string>
+							<string key="NSBinding">contentArray</string>
+							<string key="NSKeyPath">audioArray</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5679</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: hasValidPresetSelected</string>
+						<reference key="source" ref="883603583"/>
+						<reference key="destination" ref="2258723"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="883603583"/>
+							<reference key="NSDestination" ref="2258723"/>
+							<string key="NSLabel">enabled: hasValidPresetSelected</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">hasValidPresetSelected</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5711</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: arrangedObjects.drc</string>
+						<reference key="source" ref="581296833"/>
 						<reference key="destination" ref="141316080"/>
 						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="432964705"/>
+							<reference key="NSSource" ref="581296833"/>
 							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">enabled: arrangedObjects.PassThruDisabled</string>
-							<string key="NSBinding">enabled</string>
-							<string key="NSKeyPath">arrangedObjects.PassThruDisabled</string>
+							<string key="NSLabel">value: arrangedObjects.drc</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">arrangedObjects.drc</string>
 							<object class="NSDictionary" key="NSOptions">
-								<string key="NS.key.0">NSRaisesForNotApplicableKeys</string>
+								<string key="NS.key.0">NSCreatesSortDescriptor</string>
 								<boolean value="NO" key="NS.object.0"/>
 							</object>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">5876</int>
+					<int key="connectionID">5791</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: arrangedObjects.gain</string>
-						<reference key="source" ref="7762140"/>
+						<string key="label">enabled: arrangedObjects.AC3Enabled</string>
+						<reference key="source" ref="581296833"/>
 						<reference key="destination" ref="141316080"/>
 						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="7762140"/>
+							<reference key="NSSource" ref="581296833"/>
 							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">value: arrangedObjects.gain</string>
+							<string key="NSLabel">enabled: arrangedObjects.AC3Enabled</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">arrangedObjects.AC3Enabled</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5793</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: arrangedObjects.drc</string>
+						<reference key="source" ref="393032802"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="393032802"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">value: arrangedObjects.drc</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">arrangedObjects.gain</string>
+							<string key="NSKeyPath">arrangedObjects.drc</string>
 							<object class="NSDictionary" key="NSOptions">
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="NSArray" key="dict.sortedKeys">
@@ -6588,39 +6287,303 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">5877</int>
+					<int key="connectionID">5790</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled: arrangedObjects.PassThruDisabled</string>
-						<reference key="source" ref="7762140"/>
+						<string key="label">enabled: arrangedObjects.AC3Enabled</string>
+						<reference key="source" ref="393032802"/>
 						<reference key="destination" ref="141316080"/>
 						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="7762140"/>
+							<reference key="NSSource" ref="393032802"/>
 							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">enabled: arrangedObjects.PassThruDisabled</string>
+							<string key="NSLabel">enabled: arrangedObjects.AC3Enabled</string>
 							<string key="NSBinding">enabled</string>
-							<string key="NSKeyPath">arrangedObjects.PassThruDisabled</string>
+							<string key="NSKeyPath">arrangedObjects.AC3Enabled</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">5878</int>
+					<int key="connectionID">5792</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">contentArray: masterTrackArray</string>
-						<reference key="source" ref="551130964"/>
-						<reference key="destination" ref="681233637"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="551130964"/>
-							<reference key="NSDestination" ref="681233637"/>
-							<string key="NSLabel">contentArray: masterTrackArray</string>
-							<string key="NSBinding">contentArray</string>
-							<string key="NSKeyPath">masterTrackArray</string>
+						<string key="label">content: arrangedObjects.bitRates</string>
+						<reference key="source" ref="596723553"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector" id="526128549">
+							<reference key="NSSource" ref="596723553"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">content: arrangedObjects.bitRates</string>
+							<string key="NSBinding">content</string>
+							<string key="NSKeyPath">arrangedObjects.bitRates</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">5882</int>
+					<int key="connectionID">5766</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">contentValues: arrangedObjects.bitRates.keyAudioBitrateName</string>
+						<reference key="source" ref="596723553"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector" id="614736310">
+							<reference key="NSSource" ref="596723553"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">contentValues: arrangedObjects.bitRates.keyAudioBitrateName</string>
+							<string key="NSBinding">contentValues</string>
+							<string key="NSKeyPath">arrangedObjects.bitRates.keyAudioBitrateName</string>
+							<reference key="NSPreviousConnector" ref="526128549"/>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5768</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">selectedObject: arrangedObjects.bitRate</string>
+						<reference key="source" ref="596723553"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="596723553"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">selectedObject: arrangedObjects.bitRate</string>
+							<string key="NSBinding">selectedObject</string>
+							<string key="NSKeyPath">arrangedObjects.bitRate</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSCreatesSortDescriptor</string>
+								<boolean value="NO" key="NS.object.0"/>
+							</object>
+							<reference key="NSPreviousConnector" ref="614736310"/>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5789</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: arrangedObjects.bitrateEnabled</string>
+						<reference key="source" ref="596723553"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="596723553"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">enabled: arrangedObjects.bitrateEnabled</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">arrangedObjects.bitrateEnabled</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5903</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">content: arrangedObjects.sampleRates</string>
+						<reference key="source" ref="1063255"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector" id="389021487">
+							<reference key="NSSource" ref="1063255"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">content: arrangedObjects.sampleRates</string>
+							<string key="NSBinding">content</string>
+							<string key="NSKeyPath">arrangedObjects.sampleRates</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5760</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">contentValues: arrangedObjects.sampleRates.keyAudioSampleRateName</string>
+						<reference key="source" ref="1063255"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector" id="1059867876">
+							<reference key="NSSource" ref="1063255"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">contentValues: arrangedObjects.sampleRates.keyAudioSampleRateName</string>
+							<string key="NSBinding">contentValues</string>
+							<string key="NSKeyPath">arrangedObjects.sampleRates.keyAudioSampleRateName</string>
+							<reference key="NSPreviousConnector" ref="389021487"/>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5762</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: arrangedObjects.mixdownEnabled</string>
+						<reference key="source" ref="1063255"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="1063255"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">enabled: arrangedObjects.mixdownEnabled</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">arrangedObjects.mixdownEnabled</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5778</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">selectedObject: arrangedObjects.sampleRate</string>
+						<reference key="source" ref="1063255"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="1063255"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">selectedObject: arrangedObjects.sampleRate</string>
+							<string key="NSBinding">selectedObject</string>
+							<string key="NSKeyPath">arrangedObjects.sampleRate</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSCreatesSortDescriptor</string>
+								<boolean value="NO" key="NS.object.0"/>
+							</object>
+							<reference key="NSPreviousConnector" ref="1059867876"/>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5788</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">content: arrangedObjects.mixdowns</string>
+						<reference key="source" ref="590927656"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector" id="993421587">
+							<reference key="NSSource" ref="590927656"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">content: arrangedObjects.mixdowns</string>
+							<string key="NSBinding">content</string>
+							<string key="NSKeyPath">arrangedObjects.mixdowns</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5754</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">contentValues: arrangedObjects.mixdowns.keyAudioMixdownName</string>
+						<reference key="source" ref="590927656"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector" id="688037869">
+							<reference key="NSSource" ref="590927656"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">contentValues: arrangedObjects.mixdowns.keyAudioMixdownName</string>
+							<string key="NSBinding">contentValues</string>
+							<string key="NSKeyPath">arrangedObjects.mixdowns.keyAudioMixdownName</string>
+							<reference key="NSPreviousConnector" ref="993421587"/>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5756</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">selectedObject: arrangedObjects.mixdown</string>
+						<reference key="source" ref="590927656"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="590927656"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">selectedObject: arrangedObjects.mixdown</string>
+							<string key="NSBinding">selectedObject</string>
+							<string key="NSKeyPath">arrangedObjects.mixdown</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSCreatesSortDescriptor</string>
+								<boolean value="NO" key="NS.object.0"/>
+							</object>
+							<reference key="NSPreviousConnector" ref="688037869"/>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5787</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: arrangedObjects.mixdownEnabled</string>
+						<reference key="source" ref="590927656"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="590927656"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">enabled: arrangedObjects.mixdownEnabled</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">arrangedObjects.mixdownEnabled</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5901</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">content: arrangedObjects.codecs</string>
+						<reference key="source" ref="200958136"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector" id="561471240">
+							<reference key="NSSource" ref="200958136"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">content: arrangedObjects.codecs</string>
+							<string key="NSBinding">content</string>
+							<string key="NSKeyPath">arrangedObjects.codecs</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5747</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">contentValues: arrangedObjects.codecs.keyAudioCodecName</string>
+						<reference key="source" ref="200958136"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector" id="357206672">
+							<reference key="NSSource" ref="200958136"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">contentValues: arrangedObjects.codecs.keyAudioCodecName</string>
+							<string key="NSBinding">contentValues</string>
+							<string key="NSKeyPath">arrangedObjects.codecs.keyAudioCodecName</string>
+							<reference key="NSPreviousConnector" ref="561471240"/>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5749</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: arrangedObjects.enabled</string>
+						<reference key="source" ref="200958136"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="200958136"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">enabled: arrangedObjects.enabled</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">arrangedObjects.enabled</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5774</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">selectedObject: arrangedObjects.codec</string>
+						<reference key="source" ref="200958136"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="200958136"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">selectedObject: arrangedObjects.codec</string>
+							<string key="NSBinding">selectedObject</string>
+							<string key="NSKeyPath">arrangedObjects.codec</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSCreatesSortDescriptor</string>
+								<boolean value="NO" key="NS.object.0"/>
+							</object>
+							<reference key="NSPreviousConnector" ref="357206672"/>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5786</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -6677,44 +6640,101 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<int key="connectionID">5892</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">addAllTitlesToQueue:</string>
-						<reference key="source" ref="2258723"/>
-						<reference key="destination" ref="232757118"/>
-					</object>
-					<int key="connectionID">5899</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled: arrangedObjects.mixdownEnabled</string>
-						<reference key="source" ref="590927656"/>
+						<string key="label">value: arrangedObjects.gain</string>
+						<reference key="source" ref="7762140"/>
 						<reference key="destination" ref="141316080"/>
 						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="590927656"/>
+							<reference key="NSSource" ref="7762140"/>
 							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">enabled: arrangedObjects.mixdownEnabled</string>
-							<string key="NSBinding">enabled</string>
-							<string key="NSKeyPath">arrangedObjects.mixdownEnabled</string>
+							<string key="NSLabel">value: arrangedObjects.gain</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">arrangedObjects.gain</string>
+							<object class="NSDictionary" key="NSOptions">
+								<bool key="EncodedWithXMLCoder">YES</bool>
+								<object class="NSArray" key="dict.sortedKeys">
+									<bool key="EncodedWithXMLCoder">YES</bool>
+									<string>NSCreatesSortDescriptor</string>
+									<string>NSValidatesImmediately</string>
+								</object>
+								<object class="NSMutableArray" key="dict.values">
+									<bool key="EncodedWithXMLCoder">YES</bool>
+									<boolean value="NO"/>
+									<boolean value="YES"/>
+								</object>
+							</object>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">5901</int>
+					<int key="connectionID">5877</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled: arrangedObjects.bitrateEnabled</string>
-						<reference key="source" ref="596723553"/>
+						<string key="label">enabled: arrangedObjects.PassThruDisabled</string>
+						<reference key="source" ref="7762140"/>
 						<reference key="destination" ref="141316080"/>
 						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="596723553"/>
+							<reference key="NSSource" ref="7762140"/>
 							<reference key="NSDestination" ref="141316080"/>
-							<string key="NSLabel">enabled: arrangedObjects.bitrateEnabled</string>
+							<string key="NSLabel">enabled: arrangedObjects.PassThruDisabled</string>
 							<string key="NSBinding">enabled</string>
-							<string key="NSKeyPath">arrangedObjects.bitrateEnabled</string>
+							<string key="NSKeyPath">arrangedObjects.PassThruDisabled</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">5903</int>
+					<int key="connectionID">5878</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: arrangedObjects.gain</string>
+						<reference key="source" ref="432964705"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="432964705"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">value: arrangedObjects.gain</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">arrangedObjects.gain</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5875</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: arrangedObjects.PassThruDisabled</string>
+						<reference key="source" ref="432964705"/>
+						<reference key="destination" ref="141316080"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="432964705"/>
+							<reference key="NSDestination" ref="141316080"/>
+							<string key="NSLabel">enabled: arrangedObjects.PassThruDisabled</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">arrangedObjects.PassThruDisabled</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSRaisesForNotApplicableKeys</string>
+								<boolean value="NO" key="NS.object.0"/>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5876</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">contentArray: masterTrackArray</string>
+						<reference key="source" ref="551130964"/>
+						<reference key="destination" ref="681233637"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="551130964"/>
+							<reference key="NSDestination" ref="681233637"/>
+							<string key="NSLabel">contentArray: masterTrackArray</string>
+							<string key="NSBinding">contentArray</string>
+							<string key="NSKeyPath">masterTrackArray</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">5882</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -7192,18 +7212,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="object" ref="10346684"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="NSView" id="412106376">
-								<nil key="NSNextResponder"/>
-								<int key="NSvFlags">256</int>
-								<string key="NSFrame">{{2, 2}, {125, 1}}</string>
-							</object>
 						</object>
 						<reference key="parent" ref="168918359"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">1624</int>
-						<reference key="object" ref="412106376"/>
-						<reference key="parent" ref="10346684"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">1627</int>
@@ -7219,18 +7229,8 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="object" ref="151388399"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<object class="NSView" id="586026952">
-								<nil key="NSNextResponder"/>
-								<int key="NSvFlags">256</int>
-								<string key="NSFrame">{{2, 2}, {125, 1}}</string>
-							</object>
 						</object>
 						<reference key="parent" ref="168918359"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">1629</int>
-						<reference key="object" ref="586026952"/>
-						<reference key="parent" ref="151388399"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">1882</int>
@@ -9582,392 +9582,209 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<reference key="object" ref="232757118"/>
 						<reference key="parent" ref="567182830"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1624</int>
+						<reference key="object" ref="412106376"/>
+						<reference key="parent" ref="0"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1629</int>
+						<reference key="object" ref="586026952"/>
+						<reference key="parent" ref="0"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<object class="NSArray" key="dict.sortedKeys">
 					<bool key="EncodedWithXMLCoder">YES</bool>
+					<string>-1.IBPluginDependency</string>
+					<string>-2.IBPluginDependency</string>
 					<string>-3.IBPluginDependency</string>
-					<string>-3.ImportedFromIB2</string>
 					<string>1123.IBPluginDependency</string>
-					<string>1123.ImportedFromIB2</string>
 					<string>1189.IBPluginDependency</string>
-					<string>1189.ImportedFromIB2</string>
 					<string>1190.IBPluginDependency</string>
-					<string>1190.ImportedFromIB2</string>
 					<string>1191.IBPluginDependency</string>
-					<string>1191.ImportedFromIB2</string>
-					<string>1192.IBEditorWindowLastContentRect</string>
 					<string>1192.IBPluginDependency</string>
-					<string>1192.ImportedFromIB2</string>
 					<string>1193.IBPluginDependency</string>
-					<string>1193.ImportedFromIB2</string>
 					<string>1198.IBPluginDependency</string>
-					<string>1198.ImportedFromIB2</string>
 					<string>1200.IBPluginDependency</string>
-					<string>1200.ImportedFromIB2</string>
-					<string>1209.IBEditorWindowLastContentRect</string>
 					<string>1209.IBPluginDependency</string>
-					<string>1209.ImportedFromIB2</string>
 					<string>136.IBPluginDependency</string>
-					<string>136.ImportedFromIB2</string>
 					<string>1373.IBPluginDependency</string>
-					<string>1373.ImportedFromIB2</string>
 					<string>1429.IBPluginDependency</string>
-					<string>1429.ImportedFromIB2</string>
 					<string>1431.IBPluginDependency</string>
-					<string>1431.ImportedFromIB2</string>
 					<string>1432.IBPluginDependency</string>
-					<string>1432.ImportedFromIB2</string>
 					<string>1433.IBPluginDependency</string>
-					<string>1433.ImportedFromIB2</string>
 					<string>1445.IBPluginDependency</string>
-					<string>1445.ImportedFromIB2</string>
 					<string>1474.IBAttributePlaceholdersKey</string>
 					<string>1474.IBPluginDependency</string>
-					<string>1474.ImportedFromIB2</string>
 					<string>1475.IBPluginDependency</string>
-					<string>1475.ImportedFromIB2</string>
 					<string>1476.IBPluginDependency</string>
-					<string>1476.ImportedFromIB2</string>
 					<string>1477.IBPluginDependency</string>
-					<string>1477.ImportedFromIB2</string>
 					<string>1478.IBPluginDependency</string>
-					<string>1478.ImportedFromIB2</string>
 					<string>1499.IBPluginDependency</string>
-					<string>1499.ImportedFromIB2</string>
 					<string>1505.IBPluginDependency</string>
-					<string>1505.ImportedFromIB2</string>
 					<string>1506.IBPluginDependency</string>
-					<string>1506.ImportedFromIB2</string>
 					<string>1507.IBPluginDependency</string>
-					<string>1507.ImportedFromIB2</string>
 					<string>1508.IBPluginDependency</string>
-					<string>1508.ImportedFromIB2</string>
 					<string>1509.IBPluginDependency</string>
-					<string>1509.ImportedFromIB2</string>
 					<string>1510.IBPluginDependency</string>
-					<string>1510.ImportedFromIB2</string>
 					<string>1511.IBPluginDependency</string>
-					<string>1511.ImportedFromIB2</string>
 					<string>1512.IBPluginDependency</string>
-					<string>1512.ImportedFromIB2</string>
 					<string>1513.IBPluginDependency</string>
-					<string>1513.ImportedFromIB2</string>
 					<string>1514.IBPluginDependency</string>
-					<string>1514.ImportedFromIB2</string>
 					<string>1515.IBPluginDependency</string>
-					<string>1515.ImportedFromIB2</string>
 					<string>1538.IBPluginDependency</string>
-					<string>1538.ImportedFromIB2</string>
 					<string>1539.IBPluginDependency</string>
-					<string>1539.ImportedFromIB2</string>
 					<string>1540.IBPluginDependency</string>
-					<string>1540.ImportedFromIB2</string>
 					<string>1541.IBPluginDependency</string>
-					<string>1541.ImportedFromIB2</string>
 					<string>1542.IBPluginDependency</string>
-					<string>1542.ImportedFromIB2</string>
 					<string>1543.IBPluginDependency</string>
-					<string>1543.ImportedFromIB2</string>
 					<string>1545.IBPluginDependency</string>
-					<string>1545.ImportedFromIB2</string>
 					<string>1546.IBPluginDependency</string>
-					<string>1546.ImportedFromIB2</string>
 					<string>1547.IBPluginDependency</string>
-					<string>1547.ImportedFromIB2</string>
 					<string>1548.IBPluginDependency</string>
-					<string>1548.ImportedFromIB2</string>
 					<string>1549.IBPluginDependency</string>
-					<string>1549.ImportedFromIB2</string>
 					<string>1550.IBPluginDependency</string>
-					<string>1550.ImportedFromIB2</string>
 					<string>1552.IBPluginDependency</string>
-					<string>1552.ImportedFromIB2</string>
 					<string>1553.IBPluginDependency</string>
-					<string>1553.ImportedFromIB2</string>
 					<string>1554.IBPluginDependency</string>
-					<string>1554.ImportedFromIB2</string>
 					<string>1555.IBPluginDependency</string>
-					<string>1555.ImportedFromIB2</string>
 					<string>1556.IBPluginDependency</string>
-					<string>1556.ImportedFromIB2</string>
 					<string>1557.IBPluginDependency</string>
-					<string>1557.ImportedFromIB2</string>
 					<string>1558.IBPluginDependency</string>
-					<string>1558.ImportedFromIB2</string>
 					<string>1559.IBPluginDependency</string>
-					<string>1559.ImportedFromIB2</string>
 					<string>1561.IBPluginDependency</string>
-					<string>1561.ImportedFromIB2</string>
 					<string>1562.IBPluginDependency</string>
-					<string>1562.IBViewBoundsToFrameTransform</string>
-					<string>1562.ImportedFromIB2</string>
 					<string>1623.IBPluginDependency</string>
-					<string>1623.ImportedFromIB2</string>
 					<string>1624.IBPluginDependency</string>
-					<string>1624.ImportedFromIB2</string>
 					<string>1627.IBPluginDependency</string>
-					<string>1627.ImportedFromIB2</string>
 					<string>1628.IBPluginDependency</string>
-					<string>1628.ImportedFromIB2</string>
 					<string>1629.IBPluginDependency</string>
-					<string>1629.ImportedFromIB2</string>
 					<string>1795.IBPluginDependency</string>
-					<string>1795.ImportedFromIB2</string>
-					<string>1796.IBEditorWindowLastContentRect</string>
 					<string>1796.IBPluginDependency</string>
-					<string>1796.ImportedFromIB2</string>
 					<string>1797.IBPluginDependency</string>
-					<string>1797.ImportedFromIB2</string>
 					<string>1798.IBPluginDependency</string>
-					<string>1798.ImportedFromIB2</string>
 					<string>1799.IBPluginDependency</string>
-					<string>1799.ImportedFromIB2</string>
 					<string>1800.IBPluginDependency</string>
-					<string>1800.ImportedFromIB2</string>
 					<string>1801.IBPluginDependency</string>
-					<string>1801.ImportedFromIB2</string>
 					<string>1802.IBPluginDependency</string>
-					<string>1802.ImportedFromIB2</string>
 					<string>1803.IBPluginDependency</string>
-					<string>1803.ImportedFromIB2</string>
 					<string>1804.IBPluginDependency</string>
-					<string>1804.ImportedFromIB2</string>
 					<string>1805.IBPluginDependency</string>
-					<string>1805.ImportedFromIB2</string>
 					<string>1806.IBPluginDependency</string>
-					<string>1806.ImportedFromIB2</string>
 					<string>1807.IBPluginDependency</string>
-					<string>1807.ImportedFromIB2</string>
 					<string>1808.IBPluginDependency</string>
-					<string>1808.ImportedFromIB2</string>
 					<string>1809.IBPluginDependency</string>
-					<string>1809.ImportedFromIB2</string>
 					<string>1810.IBPluginDependency</string>
-					<string>1810.ImportedFromIB2</string>
 					<string>1811.IBPluginDependency</string>
-					<string>1811.ImportedFromIB2</string>
 					<string>1812.IBPluginDependency</string>
-					<string>1812.ImportedFromIB2</string>
 					<string>1813.IBPluginDependency</string>
-					<string>1813.ImportedFromIB2</string>
 					<string>1814.IBPluginDependency</string>
-					<string>1814.ImportedFromIB2</string>
 					<string>1815.IBPluginDependency</string>
-					<string>1815.ImportedFromIB2</string>
 					<string>1816.IBPluginDependency</string>
-					<string>1816.ImportedFromIB2</string>
 					<string>1817.IBPluginDependency</string>
-					<string>1817.ImportedFromIB2</string>
 					<string>1818.IBPluginDependency</string>
-					<string>1818.ImportedFromIB2</string>
 					<string>1819.IBPluginDependency</string>
-					<string>1819.ImportedFromIB2</string>
 					<string>1820.IBPluginDependency</string>
-					<string>1820.ImportedFromIB2</string>
 					<string>1821.IBPluginDependency</string>
-					<string>1821.ImportedFromIB2</string>
 					<string>1822.IBPluginDependency</string>
-					<string>1822.ImportedFromIB2</string>
 					<string>1841.IBPluginDependency</string>
-					<string>1841.ImportedFromIB2</string>
-					<string>1843.IBEditorWindowLastContentRect</string>
 					<string>1843.IBPluginDependency</string>
-					<string>1843.IBViewEditorWindowController.showingLayoutRectangles</string>
-					<string>1843.ImportedFromIB2</string>
-					<string>1843.editorWindowContentRectSynchronizationRect</string>
-					<string>1867.IBEditorWindowLastContentRect</string>
 					<string>1867.IBPluginDependency</string>
 					<string>1867.IBWindowTemplateEditedContentRect</string>
-					<string>1867.ImportedFromIB2</string>
-					<string>1867.editorWindowContentRectSynchronizationRect</string>
 					<string>1868.IBPluginDependency</string>
-					<string>1868.ImportedFromIB2</string>
 					<string>1870.IBPluginDependency</string>
-					<string>1870.ImportedFromIB2</string>
 					<string>1871.IBPluginDependency</string>
-					<string>1871.ImportedFromIB2</string>
 					<string>1872.IBPluginDependency</string>
-					<string>1872.ImportedFromIB2</string>
 					<string>1882.IBPluginDependency</string>
-					<string>1882.ImportedFromIB2</string>
 					<string>1884.IBPluginDependency</string>
-					<string>1884.ImportedFromIB2</string>
 					<string>1900.IBPluginDependency</string>
-					<string>1900.ImportedFromIB2</string>
 					<string>1948.IBPluginDependency</string>
-					<string>1948.ImportedFromIB2</string>
-					<string>1949.IBEditorWindowLastContentRect</string>
 					<string>1949.IBPluginDependency</string>
-					<string>1949.ImportedFromIB2</string>
 					<string>1950.IBPluginDependency</string>
-					<string>1950.ImportedFromIB2</string>
 					<string>1951.IBPluginDependency</string>
-					<string>1951.ImportedFromIB2</string>
 					<string>1954.IBPluginDependency</string>
-					<string>1954.ImportedFromIB2</string>
 					<string>1955.IBPluginDependency</string>
-					<string>1955.ImportedFromIB2</string>
 					<string>196.IBPluginDependency</string>
-					<string>196.ImportedFromIB2</string>
 					<string>1985.IBPluginDependency</string>
-					<string>1985.ImportedFromIB2</string>
 					<string>1989.IBPluginDependency</string>
-					<string>1989.ImportedFromIB2</string>
 					<string>1990.IBPluginDependency</string>
-					<string>1990.ImportedFromIB2</string>
 					<string>1999.IBPluginDependency</string>
-					<string>1999.ImportedFromIB2</string>
 					<string>2.IBPluginDependency</string>
-					<string>2.ImportedFromIB2</string>
 					<string>2000.IBPluginDependency</string>
-					<string>2000.ImportedFromIB2</string>
 					<string>2001.IBPluginDependency</string>
-					<string>2001.ImportedFromIB2</string>
 					<string>2002.IBPluginDependency</string>
-					<string>2002.ImportedFromIB2</string>
 					<string>2003.IBPluginDependency</string>
-					<string>2003.ImportedFromIB2</string>
 					<string>2006.IBPluginDependency</string>
-					<string>2006.ImportedFromIB2</string>
 					<string>2008.IBPluginDependency</string>
-					<string>2008.ImportedFromIB2</string>
-					<string>2009.IBEditorWindowLastContentRect</string>
 					<string>2009.IBPluginDependency</string>
-					<string>2009.ImportedFromIB2</string>
 					<string>2010.IBPluginDependency</string>
-					<string>2010.ImportedFromIB2</string>
 					<string>2011.IBPluginDependency</string>
-					<string>2011.ImportedFromIB2</string>
 					<string>2012.IBPluginDependency</string>
-					<string>2012.ImportedFromIB2</string>
 					<string>2015.IBPluginDependency</string>
-					<string>2015.ImportedFromIB2</string>
 					<string>2016.IBPluginDependency</string>
-					<string>2016.ImportedFromIB2</string>
-					<string>21.IBEditorWindowLastContentRect</string>
 					<string>21.IBPluginDependency</string>
-					<string>21.IBViewEditorWindowController.showingLayoutRectangles</string>
 					<string>21.IBWindowTemplateEditedContentRect</string>
-					<string>21.ImportedFromIB2</string>
-					<string>21.editorWindowContentRectSynchronizationRect</string>
 					<string>2295.IBPluginDependency</string>
-					<string>2295.ImportedFromIB2</string>
 					<string>2361.IBPluginDependency</string>
-					<string>2361.ImportedFromIB2</string>
 					<string>2364.IBAttributePlaceholdersKey</string>
 					<string>2364.IBPluginDependency</string>
-					<string>2364.ImportedFromIB2</string>
 					<string>2368.IBPluginDependency</string>
-					<string>2368.ImportedFromIB2</string>
 					<string>2375.IBPluginDependency</string>
-					<string>2375.ImportedFromIB2</string>
-					<string>240.ImportedFromIB2</string>
+					<string>240.IBPluginDependency</string>
 					<string>2421.IBPluginDependency</string>
-					<string>2421.ImportedFromIB2</string>
 					<string>2443.IBPluginDependency</string>
-					<string>2443.ImportedFromIB2</string>
 					<string>2444.IBPluginDependency</string>
-					<string>2444.ImportedFromIB2</string>
 					<string>2445.IBPluginDependency</string>
-					<string>2445.ImportedFromIB2</string>
 					<string>2488.IBPluginDependency</string>
-					<string>2488.ImportedFromIB2</string>
 					<string>2494.IBPluginDependency</string>
-					<string>2494.ImportedFromIB2</string>
 					<string>2507.IBPluginDependency</string>
-					<string>2507.ImportedFromIB2</string>
 					<string>2508.IBPluginDependency</string>
-					<string>2508.ImportedFromIB2</string>
 					<string>2513.IBPluginDependency</string>
-					<string>2513.ImportedFromIB2</string>
 					<string>2518.IBPluginDependency</string>
-					<string>2518.ImportedFromIB2</string>
 					<string>2519.IBPluginDependency</string>
-					<string>2519.ImportedFromIB2</string>
 					<string>2670.IBPluginDependency</string>
-					<string>2670.ImportedFromIB2</string>
 					<string>2671.IBPluginDependency</string>
-					<string>2671.ImportedFromIB2</string>
 					<string>2672.IBPluginDependency</string>
-					<string>2672.ImportedFromIB2</string>
 					<string>2673.IBPluginDependency</string>
-					<string>2673.ImportedFromIB2</string>
 					<string>2698.IBPluginDependency</string>
-					<string>2698.ImportedFromIB2</string>
-					<string>2701.IBEditorWindowLastContentRect</string>
 					<string>2701.IBPluginDependency</string>
 					<string>2701.IBWindowTemplateEditedContentRect</string>
-					<string>2701.ImportedFromIB2</string>
-					<string>2701.editorWindowContentRectSynchronizationRect</string>
 					<string>2702.IBPluginDependency</string>
-					<string>2702.ImportedFromIB2</string>
 					<string>2703.IBPluginDependency</string>
-					<string>2703.ImportedFromIB2</string>
 					<string>2704.IBPluginDependency</string>
-					<string>2704.ImportedFromIB2</string>
 					<string>2705.IBPluginDependency</string>
-					<string>2705.ImportedFromIB2</string>
 					<string>2706.IBPluginDependency</string>
-					<string>2706.ImportedFromIB2</string>
 					<string>2707.IBPluginDependency</string>
-					<string>2707.ImportedFromIB2</string>
 					<string>2708.IBPluginDependency</string>
-					<string>2708.ImportedFromIB2</string>
 					<string>2716.IBPluginDependency</string>
-					<string>2716.ImportedFromIB2</string>
 					<string>2719.IBPluginDependency</string>
-					<string>2719.ImportedFromIB2</string>
 					<string>2720.IBPluginDependency</string>
-					<string>2720.ImportedFromIB2</string>
 					<string>2833.IBPluginDependency</string>
-					<string>2833.ImportedFromIB2</string>
 					<string>2837.IBPluginDependency</string>
-					<string>2837.ImportedFromIB2</string>
 					<string>2839.IBPluginDependency</string>
-					<string>2839.ImportedFromIB2</string>
 					<string>2840.IBPluginDependency</string>
-					<string>2840.ImportedFromIB2</string>
-					<string>29.IBEditorWindowLastContentRect</string>
 					<string>29.IBPluginDependency</string>
-					<string>29.ImportedFromIB2</string>
-					<string>29.editorWindowContentRectSynchronizationRect</string>
 					<string>2957.IBPluginDependency</string>
-					<string>2957.ImportedFromIB2</string>
 					<string>3203.IBPluginDependency</string>
-					<string>3203.ImportedFromIB2</string>
 					<string>3205.IBPluginDependency</string>
-					<string>3205.ImportedFromIB2</string>
 					<string>4179.IBPluginDependency</string>
-					<string>4179.ImportedFromIB2</string>
 					<string>4182.CustomClassName</string>
 					<string>4182.IBPluginDependency</string>
-					<string>4182.ImportedFromIB2</string>
 					<string>4183.IBPluginDependency</string>
-					<string>4183.ImportedFromIB2</string>
 					<string>4186.IBPluginDependency</string>
-					<string>4186.ImportedFromIB2</string>
 					<string>4317.IBPluginDependency</string>
-					<string>4317.ImportedFromIB2</string>
 					<string>4322.IBPluginDependency</string>
-					<string>4322.ImportedFromIB2</string>
 					<string>434.IBPluginDependency</string>
 					<string>434.IBWindowTemplateEditedContentRect</string>
-					<string>434.ImportedFromIB2</string>
-					<string>434.editorWindowContentRectSynchronizationRect</string>
 					<string>435.IBPluginDependency</string>
-					<string>435.ImportedFromIB2</string>
 					<string>436.IBPluginDependency</string>
-					<string>436.ImportedFromIB2</string>
 					<string>437.IBPluginDependency</string>
-					<string>437.ImportedFromIB2</string>
 					<string>438.IBPluginDependency</string>
-					<string>438.ImportedFromIB2</string>
 					<string>4579.IBAttributePlaceholdersKey</string>
 					<string>4579.IBPluginDependency</string>
-					<string>4579.ImportedFromIB2</string>
 					<string>4846.IBPluginDependency</string>
 					<string>4872.IBPluginDependency</string>
 					<string>4874.IBPluginDependency</string>
@@ -10038,44 +9855,33 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>4960.IBShouldRemoveOnLegacySave</string>
 					<string>4961.IBPluginDependency</string>
 					<string>4961.IBShouldRemoveOnLegacySave</string>
+					<string>4963.IBPluginDependency</string>
 					<string>4964.IBPluginDependency</string>
 					<string>4967.IBAttributePlaceholdersKey</string>
 					<string>4967.IBPluginDependency</string>
-					<string>4967.ImportedFromIB2</string>
 					<string>4968.IBPluginDependency</string>
 					<string>5130.IBPluginDependency</string>
 					<string>5131.IBPluginDependency</string>
-					<string>5132.IBEditorWindowLastContentRect</string>
 					<string>5132.IBPluginDependency</string>
-					<string>5132.editorWindowContentRectSynchronizationRect</string>
 					<string>5133.IBPluginDependency</string>
 					<string>5134.IBPluginDependency</string>
 					<string>5135.IBPluginDependency</string>
 					<string>5153.IBPluginDependency</string>
-					<string>5153.ImportedFromIB2</string>
 					<string>5154.IBPluginDependency</string>
 					<string>5157.IBPluginDependency</string>
 					<string>5167.IBPluginDependency</string>
-					<string>5167.ImportedFromIB2</string>
 					<string>5168.IBPluginDependency</string>
 					<string>5171.IBPluginDependency</string>
-					<string>5171.ImportedFromIB2</string>
 					<string>5172.IBPluginDependency</string>
 					<string>5174.IBPluginDependency</string>
-					<string>5174.ImportedFromIB2</string>
 					<string>5175.IBPluginDependency</string>
 					<string>5177.IBPluginDependency</string>
-					<string>5177.ImportedFromIB2</string>
 					<string>5178.IBPluginDependency</string>
 					<string>5180.IBPluginDependency</string>
-					<string>5180.ImportedFromIB2</string>
 					<string>5181.IBPluginDependency</string>
-					<string>5181.ImportedFromIB2</string>
 					<string>5182.IBPluginDependency</string>
 					<string>5183.IBPluginDependency</string>
-					<string>5183.ImportedFromIB2</string>
 					<string>5184.IBPluginDependency</string>
-					<string>5184.ImportedFromIB2</string>
 					<string>5185.IBPluginDependency</string>
 					<string>5188.IBPluginDependency</string>
 					<string>5192.IBPluginDependency</string>
@@ -10090,7 +9896,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>5217.IBPluginDependency</string>
 					<string>5219.IBPluginDependency</string>
 					<string>5225.IBPluginDependency</string>
-					<string>5226.IBEditorWindowLastContentRect</string>
 					<string>5226.IBPluginDependency</string>
 					<string>5227.IBPluginDependency</string>
 					<string>5232.IBPluginDependency</string>
@@ -10113,44 +9918,32 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>5279.IBNumberFormatterLocalizesFormatMetadataKey</string>
 					<string>5279.IBPluginDependency</string>
 					<string>5280.IBPluginDependency</string>
-					<string>5280.ImportedFromIB2</string>
 					<string>5491.IBPluginDependency</string>
-					<string>5491.ImportedFromIB2</string>
 					<string>5492.IBPluginDependency</string>
 					<string>5493.IBPluginDependency</string>
-					<string>5493.ImportedFromIB2</string>
 					<string>5494.IBPluginDependency</string>
 					<string>5505.IBPluginDependency</string>
-					<string>5505.ImportedFromIB2</string>
 					<string>5506.IBPluginDependency</string>
 					<string>5513.IBPluginDependency</string>
-					<string>5513.ImportedFromIB2</string>
 					<string>5514.IBPluginDependency</string>
-					<string>5515.IBEditorWindowLastContentRect</string>
 					<string>5515.IBPluginDependency</string>
-					<string>5515.ImportedFromIB2</string>
 					<string>5521.IBPluginDependency</string>
-					<string>5521.ImportedFromIB2</string>
 					<string>5522.IBPluginDependency</string>
 					<string>5523.IBPluginDependency</string>
-					<string>5523.ImportedFromIB2</string>
 					<string>5524.IBPluginDependency</string>
 					<string>5534.IBPluginDependency</string>
 					<string>5535.IBPluginDependency</string>
 					<string>5536.IBPluginDependency</string>
 					<string>5537.IBPluginDependency</string>
 					<string>5549.IBPluginDependency</string>
-					<string>5549.ImportedFromIB2</string>
 					<string>5550.IBPluginDependency</string>
 					<string>5551.IBPluginDependency</string>
-					<string>5551.ImportedFromIB2</string>
 					<string>5552.IBPluginDependency</string>
 					<string>5553.IBPluginDependency</string>
-					<string>5553.ImportedFromIB2</string>
 					<string>5554.IBPluginDependency</string>
 					<string>56.IBPluginDependency</string>
-					<string>56.ImportedFromIB2</string>
 					<string>5670.IBPluginDependency</string>
+					<string>5673.IBPluginDependency</string>
 					<string>5674.IBPluginDependency</string>
 					<string>5676.IBPluginDependency</string>
 					<string>5680.IBPluginDependency</string>
@@ -10168,34 +9961,25 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>5692.IBPluginDependency</string>
 					<string>5693.IBPluginDependency</string>
 					<string>5694.IBPluginDependency</string>
-					<string>5695.IBEditorWindowLastContentRect</string>
 					<string>5695.IBPluginDependency</string>
 					<string>5696.IBPluginDependency</string>
-					<string>57.IBEditorWindowLastContentRect</string>
 					<string>57.IBPluginDependency</string>
-					<string>57.ImportedFromIB2</string>
-					<string>57.editorWindowContentRectSynchronizationRect</string>
 					<string>5706.IBPluginDependency</string>
 					<string>5707.IBPluginDependency</string>
 					<string>5712.IBPluginDependency</string>
-					<string>5713.IBEditorWindowLastContentRect</string>
 					<string>5713.IBPluginDependency</string>
 					<string>5714.IBPluginDependency</string>
 					<string>5715.IBPluginDependency</string>
-					<string>5716.IBEditorWindowLastContentRect</string>
 					<string>5716.IBPluginDependency</string>
 					<string>5717.IBPluginDependency</string>
 					<string>5718.IBPluginDependency</string>
-					<string>5719.IBEditorWindowLastContentRect</string>
 					<string>5719.IBPluginDependency</string>
 					<string>5720.IBPluginDependency</string>
 					<string>5721.IBPluginDependency</string>
-					<string>5722.IBEditorWindowLastContentRect</string>
 					<string>5722.IBPluginDependency</string>
 					<string>5723.IBPluginDependency</string>
 					<string>5724.IBPluginDependency</string>
 					<string>58.IBPluginDependency</string>
-					<string>58.ImportedFromIB2</string>
 					<string>5808.IBPluginDependency</string>
 					<string>5809.IBPluginDependency</string>
 					<string>5810.IBPluginDependency</string>
@@ -10210,52 +9994,31 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>5874.IBPluginDependency</string>
 					<string>5879.IBPluginDependency</string>
 					<string>5897.IBPluginDependency</string>
-					<string>5897.ImportedFromIB2</string>
 					<string>970.IBPluginDependency</string>
-					<string>970.ImportedFromIB2</string>
 					<string>971.IBPluginDependency</string>
-					<string>971.ImportedFromIB2</string>
 					<string>973.IBPluginDependency</string>
-					<string>973.ImportedFromIB2</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>{{587, 747}, {211, 183}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>{{434, 673}, {281, 163}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSMutableDictionary">
 						<string key="NS.key.0">InitialTabViewItem</string>
 						<object class="IBInitialTabViewItemAttribute" key="NS.object.0">
@@ -10265,239 +10028,116 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAABEPMAAw+kAAA</bytes>
-					</object>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>{{476, 593}, {250, 243}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>{{454, 306}, {270, 550}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="0"/>
-					<integer value="1"/>
-					<string>{{720, 261}, {270, 550}}</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{329, 373}, {338, 318}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{329, 373}, {338, 318}}</string>
-					<integer value="1"/>
-					<string>{{421, 536}, {338, 318}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>{{520, 797}, {236, 133}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>{{828, 695}, {155, 54}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>{{132, 289}, {959, 558}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<boolean value="YES"/>
-					<string>{{132, 289}, {959, 558}}</string>
-					<integer value="1"/>
-					<string>{{65, 541}, {760, 550}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<object class="NSMutableDictionary">
 						<string key="NS.key.0">ToolTip</string>
 						<object class="IBToolTipAttribute" key="NS.object.0">
@@ -10507,112 +10147,58 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>{{72, 712}, {392, 144}}</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{72, 712}, {392, 144}}</string>
-					<integer value="1"/>
-					<string>{{303, 988}, {392, 144}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>{{325, 836}, {394, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>{{63, 836}, {394, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>HBPresetsOutlineView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{57, 766}, {300, 233}}</string>
-					<integer value="1"/>
-					<string>{{57, 766}, {300, 233}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<object class="NSMutableDictionary">
 						<string key="NS.key.0">ToolTip</string>
 						<object class="IBToolTipAttribute" key="NS.object.0">
@@ -10622,7 +10208,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -10693,6 +10278,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSMutableDictionary">
 						<string key="NS.key.0">ToolTip</string>
@@ -10703,41 +10289,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{304, 383}, {226, 63}}</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{923, 222}, {226, 63}}</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -10752,7 +10303,29 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{154, 542}, {700, 18}}</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -10775,43 +10348,30 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<boolean value="NO"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{551, 788}, {111, 4}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -10830,34 +10390,25 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{154, 542}, {700, 18}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{337, 663}, {229, 173}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
-					<string>{{75, 683}, {235, 153}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{154, 542}, {700, 18}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{154, 542}, {700, 18}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{359, 490}, {678, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{154, 542}, {700, 18}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -10872,13 +10423,10 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="unlocalizedProperties">
