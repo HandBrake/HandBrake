@@ -87,7 +87,8 @@ namespace Handbrake
                     Name = this.txt_preset_name.Text,
                     Query = query,
                     CropSettings = pictureSettingsMode != QueryPictureSettingsMode.None,
-                    Description = string.Empty
+                    Description = string.Empty,
+                    AudioPassthruSettings = mainWindow.AudioSettings.PassthruSettings          
                 };
 
             if (presetCode.Add(preset))

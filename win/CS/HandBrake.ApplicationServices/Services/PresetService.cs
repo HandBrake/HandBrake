@@ -3,6 +3,9 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
+using HandBrake.ApplicationServices.Model.Encoding;
+using HandBrake.ApplicationServices.Utilities;
+
 namespace HandBrake.ApplicationServices.Services
 {
     using System;
@@ -290,11 +293,7 @@ namespace HandBrake.ApplicationServices.Services
                             Regex r = new Regex("(:  )"); // Split on hyphens. 
                             string[] presetName = r.Split(line);
 
-                            bool pic = false;
-                            if (presetName[2].Contains("crop"))
-                            {
-                                pic = true;
-                            }
+                            bool pic = presetName[2].Contains("crop");
 
                             Preset newPreset = new Preset
                                 {
@@ -304,9 +303,12 @@ namespace HandBrake.ApplicationServices.Services
                                     Version = this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion),
                                     CropSettings = pic,
                                     Description = string.Empty, // Maybe one day we will populate this.
-                                    IsBuildIn = true
+                                    IsBuildIn = true,
+                                    Task = QueryParserUtility.Parse(presetName[2])
                                 };
 
+                            newPreset.AudioPassthruSettings = new AllowedPassthru(false); // We don't want to override the built-in preset
+                            
                             if (newPreset.Name == "Normal")
                             {
                                 newPreset.IsDefault = true;

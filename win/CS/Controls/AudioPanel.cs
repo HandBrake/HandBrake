@@ -78,6 +78,10 @@ namespace Handbrake.Controls
             drp_audioEncoder.SelectedItem = "AAC (faac)";
 
             drp_audioTrack.DataSource = this.ScannedTracks;
+
+            // Setup Auto-Passthru Settings
+            this.PassthruSettings = new AllowedPassthru();
+            this.SetPassthruSettings(this.PassthruSettings);
         }
 
         /// <summary>
@@ -105,6 +109,11 @@ namespace Handbrake.Controls
             }
         }
 
+        /// <summary>
+        /// Gets or sets PassthruSettings.
+        /// </summary>
+        public AllowedPassthru PassthruSettings { get; set; }
+
         #endregion
 
         #region Public Methods
@@ -118,6 +127,7 @@ namespace Handbrake.Controls
         public void SetContainer(string path)
         {
             string oldval = drp_audioEncoder.Text;
+            string fallbackOldVal = drp_passthruFallback.Text;
 
             drp_audioEncoder.Items.Clear();
             drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDisplay(AudioEncoder.Faac));
@@ -130,16 +140,31 @@ namespace Handbrake.Controls
             drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDisplay(AudioEncoder.DtsPassthrough));
             drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDisplay(AudioEncoder.DtsHDPassthrough));
 
+            drp_passthruFallback.Items.Clear();
+            drp_passthruFallback.Items.Add(EnumHelper<AudioEncoder>.GetDisplay(AudioEncoder.Faac));
+            drp_passthruFallback.Items.Add(EnumHelper<AudioEncoder>.GetDisplay(AudioEncoder.ffaac));
+            drp_passthruFallback.Items.Add(EnumHelper<AudioEncoder>.GetDisplay(AudioEncoder.Lame));
+            drp_passthruFallback.Items.Add(EnumHelper<AudioEncoder>.GetDisplay(AudioEncoder.Ac3));
+
             if (path.Contains("MKV"))
             {
                 drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDisplay(AudioEncoder.Vorbis));
                 drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDisplay(AudioEncoder.ffflac));
+
+                drp_passthruFallback.Items.Add(EnumHelper<AudioEncoder>.GetDisplay(AudioEncoder.Vorbis));
+                drp_passthruFallback.Items.Add(EnumHelper<AudioEncoder>.GetDisplay(AudioEncoder.ffflac));
             }
+
 
             if (!drp_audioEncoder.Items.Contains(oldval))
                 drp_audioEncoder.SelectedIndex = 0;
             else
                 drp_audioEncoder.SelectedItem = oldval;
+
+            if (!drp_passthruFallback.Items.Contains(fallbackOldVal))
+                drp_passthruFallback.SelectedIndex = 3;
+            else
+                drp_passthruFallback.SelectedItem = fallbackOldVal;
         }
 
         /// <summary>
@@ -154,10 +179,16 @@ namespace Handbrake.Controls
         /// <summary>
         /// Load an arraylist of AudioTrack items into the list.
         /// </summary>
-        /// <param name="tracks">List of audio tracks</param>
-        public void LoadTracks(ObservableCollection<AudioTrack> tracks)
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        public void LoadTracks(Preset preset)
         {
             ClearAudioList();
+
+            ObservableCollection<AudioTrack> tracks = preset.Task.AudioTracks;
+            this.PassthruSettings = preset.AudioPassthruSettings ?? new AllowedPassthru(false);
+            this.SetPassthruSettings(this.PassthruSettings);
 
             if (tracks == null || (drp_audioTrack.SelectedItem != null && drp_audioTrack.SelectedItem.ToString() == AudioHelper.NoneFound.Description))
                 return;
@@ -194,6 +225,10 @@ namespace Handbrake.Controls
             // Reset
             this.AudioTracks.Clear();
             this.ScannedTracks.Clear();
+
+            // Setup the passthru options
+            this.PassthruSettings = preset.AudioPassthruSettings ?? new AllowedPassthru(false);
+            this.SetPassthruSettings(this.PassthruSettings);
 
             if (selectedTitle.AudioTracks.Count == 0)
             {    
@@ -1043,31 +1078,66 @@ namespace Handbrake.Controls
         /// </returns>
         private AudioEncoder GetCompatiblePassthru(AudioTrack track)
         {
-            if (track.ScannedTrack.Format.Contains("AC3"))
+            if (track.ScannedTrack.Format.Contains("AC3") &&  this.check_ac3.Checked)
             {
                 return AudioEncoder.Ac3Passthrough;
             }
 
-            if (track.ScannedTrack.Format.Contains("DTS"))
+            if (track.ScannedTrack.Format.Contains("DTS") && this.check_dts.Checked)
             {
                 return AudioEncoder.DtsPassthrough;
             }
 
-            if (track.ScannedTrack.Format.Contains("aac"))
+            if (track.ScannedTrack.Format.Contains("DTS-HD") && this.check_dtshd.Checked)
+            {
+                return AudioEncoder.DtsPassthrough;
+            }
+
+            if (track.ScannedTrack.Format.Contains("aac") && this.check_aac.Checked)
             {
                 return AudioEncoder.AacPassthru;
             }
 
-            if (track.ScannedTrack.Format.Contains("mp3"))
+            if (track.ScannedTrack.Format.Contains("mp3") && this.check_mp3.Checked)
             {
                 return AudioEncoder.Mp3Passthru;
             }
 
-            return AudioEncoder.Faac;
+            return EnumHelper<AudioEncoder>.GetValue(drp_passthruFallback.SelectedItem.ToString()); 
+        }
+
+        /// <summary>
+        /// Setup the Passthru Settings Panel
+        /// </summary>
+        /// <param name="settings">
+        /// The settings.
+        /// </param>
+        private void SetPassthruSettings(AllowedPassthru settings)
+        {
+            if (settings == null)
+            {
+                settings = this.PassthruSettings;
+            }
+
+            this.check_aac.Checked = settings.AudioAllowAACPass;
+            this.check_mp3.Checked = settings.AudioAllowMP3Pass;
+            this.check_ac3.Checked = settings.AudioAllowAC3Pass;
+            this.check_dts.Checked = settings.AudioAllowDTSPass;
+            this.check_dtshd.Checked = settings.AudioAllowDTSHDPass;
+            this.drp_passthruFallback.SelectedItem = EnumHelper<AudioEncoder>.GetDisplay(settings.AudioEncoderFallback); 
         }
 
         #endregion
 
+        /// <summary>
+        /// Open the Advanced Audio Settings UI
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void btn_AdvancedAudio_Click(object sender, EventArgs e)
         {
             if (audioList.SelectedRows.Count == 0)
@@ -1083,6 +1153,58 @@ namespace Handbrake.Controls
             }
 
             advancedAudio.Show();
+        }
+
+        /// <summary>
+        /// Handle changes in the Checked Passthru Options
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The EventArgs.
+        /// </param>
+        private void autoPassthru_CheckedChanged(object sender, EventArgs e)
+        {
+            if (sender == this.check_mp3)
+            {
+                this.PassthruSettings.AudioAllowMP3Pass = this.check_mp3.Checked;
+            }
+
+            if (sender == this.check_aac)
+            {
+                this.PassthruSettings.AudioAllowAACPass = this.check_aac.Checked;
+            }
+
+            if (sender == this.check_ac3)
+            {
+                this.PassthruSettings.AudioAllowAC3Pass = this.check_ac3.Checked;
+            }
+
+            if (sender == this.check_dts)
+            {
+                this.PassthruSettings.AudioAllowDTSPass = this.check_dts.Checked;
+            }
+
+            if (sender == this.check_dtshd)
+            {
+                this.PassthruSettings.AudioAllowDTSHDPass = this.check_dtshd.Checked;
+            }
+        }
+
+        /// <summary>
+        /// Set the fallback encoder
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void drp_passthruFallback_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.PassthruSettings.AudioEncoderFallback =
+                EnumHelper<AudioEncoder>.GetValue(drp_passthruFallback.SelectedItem.ToString());
         }
     }
 }
