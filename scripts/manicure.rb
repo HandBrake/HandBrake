@@ -347,14 +347,20 @@ class Display
           audioEncoders << "copy:dts"
         when /DTS-HD Pass/
           audioEncoders << "copy:dtshd"
+        when /AAC Pass/
+          audioEncoders << "copy:aac"
         when "AAC (ffmpeg)"
           audioEncoders << "ffaac"
         when /AAC/
           audioEncoders << "faac"
         when /Vorbis/
           audioEncoders << "vorbis"
+        when /MP3 Pass/
+          audioEncoders << "copy:mp3"
         when /MP3/
           audioEncoders << "lame"
+        when /FLAC/
+          audioEncoders << "ffflac"
       end
       
       #Mixdowns
@@ -607,14 +613,20 @@ class Display
           audioEncoders << "copy:dts"
         when /DTS-HD Pass/
           audioEncoders << "copy:dtshd"
+        when /AAC Pass/
+          audioEncoders << "copy:aac"
         when "AAC (ffmpeg)"
           audioEncoders << "ffaac"
         when /AAC/
           audioEncoders << "faac"
         when /Vorbis/
           audioEncoders << "vorbis"
+        when /MP3 Pass/
+          audioEncoders << "copy:mp3"
         when /MP3/
           audioEncoders << "lame"
+        when /FLAC/
+          audioEncoders << "ffflac"
       end
       
       #Mixdowns
@@ -862,14 +874,20 @@ class Display
           audioEncoders << "copy:dts"
         when /DTS-HD Pass/
           audioEncoders << "copy:dtshd"
+        when /AAC Pass/
+          audioEncoders << "copy:aac"
         when "AAC (ffmpeg)"
           audioEncoders << "ffaac"
         when /AAC/
           audioEncoders << "faac"
         when /Vorbis/
           audioEncoders << "vorbis"
+        when /MP3 Pass/
+          audioEncoders << "copy:mp3"
         when /MP3/
           audioEncoders << "lame"
+        when /FLAC/
+          audioEncoders << "ffflac"
       end
 
       #Mixdowns
@@ -1154,14 +1172,20 @@ class Display
           audioEncoders << "copy:dts"
         when /DTS-HD Pass/
           audioEncoders << "copy:dtshd"
+        when /AAC Pass/
+          audioEncoders << "copy:aac"
         when "AAC (ffmpeg)"
           audioEncoders << "ffaac"
         when /AAC/
           audioEncoders << "faac"
         when /Vorbis/
           audioEncoders << "vorbis"
+        when /MP3 Pass/
+          audioEncoders << "copy:mp3"
         when /MP3/
           audioEncoders << "lame"
+        when /FLAC/
+          audioEncoders << "ffflac"
       end
       
       #Mixdowns
