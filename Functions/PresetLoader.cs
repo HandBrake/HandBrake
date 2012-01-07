@@ -37,10 +37,10 @@ namespace Handbrake.Functions
         /// The encode task.
         /// </param>
         public static void LoadPreset(frmMain mainWindow, EncodeTask encodeTask)
-         {
-             Preset preset = new Preset { Name = "Unknown", Task = encodeTask };
-             LoadPreset(mainWindow, preset);
-         }
+        {
+            Preset preset = new Preset { Name = "Unknown", Task = encodeTask };
+            LoadPreset(mainWindow, preset);
+        }
 
         /// <summary>
         /// This function takes in a Query which has been parsed by QueryParser and
@@ -52,10 +52,14 @@ namespace Handbrake.Functions
         /// <param name="preset">
         /// The preset.
         /// </param>
-         public static void LoadPreset(frmMain mainWindow, Preset preset)
+        public static void LoadPreset(frmMain mainWindow, Preset preset)
         {
             // Send the query from the file to the Query Parser class
             EncodeTask presetQuery = preset.Task ?? QueryParserUtility.Parse(preset.Query);
+            if (preset.Task == null)
+            {
+                preset.Task = presetQuery;
+            }
 
             #region Source
 
@@ -165,9 +169,9 @@ namespace Handbrake.Functions
                 mainWindow.PictureSettings.text_height.Value = presetQuery.MaxHeight.Value;
             }
 
-           mainWindow.PictureSettings.PresetMaximumResolution = new Size(
-                    presetQuery.MaxWidth.HasValue ? presetQuery.MaxWidth.Value : 0,
-                    presetQuery.MaxHeight.HasValue ? presetQuery.MaxHeight.Value : 0);
+            mainWindow.PictureSettings.PresetMaximumResolution = new Size(
+                     presetQuery.MaxWidth.HasValue ? presetQuery.MaxWidth.Value : 0,
+                     presetQuery.MaxHeight.HasValue ? presetQuery.MaxHeight.Value : 0);
 
             // Case where both height and max height are 0 - For built-in presets
             if (presetQuery.MaxHeight == 0 && presetQuery.Height == 0)
@@ -242,7 +246,7 @@ namespace Handbrake.Functions
                 mainWindow.text_bitrate.Text = presetQuery.VideoBitrate.ToString();
                 mainWindow.check_2PassEncode.CheckState = presetQuery.TwoPass ? CheckState.Checked : CheckState.Unchecked;
                 mainWindow.check_turbo.CheckState = presetQuery.TurboFirstPass ? CheckState.Checked : CheckState.Unchecked;
-            }              
+            }
 
             if (presetQuery.Framerate != null)
             {
@@ -289,7 +293,7 @@ namespace Handbrake.Functions
 
             #region Audio
 
-            mainWindow.AudioSettings.LoadTracks(presetQuery.AudioTracks);
+            mainWindow.AudioSettings.LoadTracks(preset);
 
             #endregion
 

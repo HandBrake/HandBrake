@@ -59,6 +59,7 @@ namespace Handbrake.Controls
             this.DRC = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Gain = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ToolTips = new System.Windows.Forms.ToolTip(this.components);
+            this.drp_passthruFallback = new System.Windows.Forms.ComboBox();
             this.btn_AdvancedAudio = new System.Windows.Forms.Button();
             this.btn_addAudioTrack = new wyDay.Controls.SplitButton();
             this.AddTrackMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -66,10 +67,18 @@ namespace Handbrake.Controls
             this.btn_RemoveTrack = new wyDay.Controls.SplitButton();
             this.RemoveTrackMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnu_ClearAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.check_dtshd = new System.Windows.Forms.CheckBox();
+            this.check_dts = new System.Windows.Forms.CheckBox();
+            this.check_ac3 = new System.Windows.Forms.CheckBox();
+            this.check_aac = new System.Windows.Forms.CheckBox();
+            this.check_mp3 = new System.Windows.Forms.CheckBox();
             this.audioMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.audioList)).BeginInit();
             this.AddTrackMenu.SuspendLayout();
             this.RemoveTrackMenu.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // audioMenu
@@ -337,6 +346,22 @@ namespace Handbrake.Controls
             this.Gain.ReadOnly = true;
             this.Gain.Width = 60;
             // 
+            // ToolTips
+            // 
+            this.ToolTips.AutomaticDelay = 1500;
+            // 
+            // drp_passthruFallback
+            // 
+            this.drp_passthruFallback.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drp_passthruFallback.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.drp_passthruFallback.FormattingEnabled = true;
+            this.drp_passthruFallback.Location = new System.Drawing.Point(327, 15);
+            this.drp_passthruFallback.Name = "drp_passthruFallback";
+            this.drp_passthruFallback.Size = new System.Drawing.Size(111, 19);
+            this.drp_passthruFallback.TabIndex = 75;
+            this.ToolTips.SetToolTip(this.drp_passthruFallback, "The Audio Encoder that will be used, if there is no suitable passthru option.");
+            this.drp_passthruFallback.SelectedIndexChanged += new System.EventHandler(this.drp_passthruFallback_SelectedIndexChanged);
+            // 
             // btn_AdvancedAudio
             // 
             this.btn_AdvancedAudio.BackColor = System.Drawing.Color.Transparent;
@@ -409,10 +434,104 @@ namespace Handbrake.Controls
             this.mnu_ClearAll.Text = "Clear All";
             this.mnu_ClearAll.Click += new System.EventHandler(this.Mnu_clear_all_click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.drp_passthruFallback);
+            this.groupBox1.Controls.Add(this.check_dtshd);
+            this.groupBox1.Controls.Add(this.check_dts);
+            this.groupBox1.Controls.Add(this.check_ac3);
+            this.groupBox1.Controls.Add(this.check_aac);
+            this.groupBox1.Controls.Add(this.check_mp3);
+            this.groupBox1.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox1.Location = new System.Drawing.Point(256, 19);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(445, 40);
+            this.groupBox1.TabIndex = 74;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Auto Passthru";
+            this.ToolTips.SetToolTip(this.groupBox1, resources.GetString("groupBox1.ToolTip"));
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(279, 18);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(42, 11);
+            this.label1.TabIndex = 76;
+            this.label1.Text = "Fallback:";
+            // 
+            // check_dtshd
+            // 
+            this.check_dtshd.AutoSize = true;
+            this.check_dtshd.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_dtshd.Location = new System.Drawing.Point(214, 17);
+            this.check_dtshd.Name = "check_dtshd";
+            this.check_dtshd.Size = new System.Drawing.Size(60, 15);
+            this.check_dtshd.TabIndex = 4;
+            this.check_dtshd.Text = "DTS-HD";
+            this.ToolTips.SetToolTip(this.check_dtshd, "Allow DTS-HD Passthru");
+            this.check_dtshd.UseVisualStyleBackColor = true;
+            this.check_dtshd.CheckedChanged += new System.EventHandler(this.autoPassthru_CheckedChanged);
+            // 
+            // check_dts
+            // 
+            this.check_dts.AutoSize = true;
+            this.check_dts.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_dts.Location = new System.Drawing.Point(163, 17);
+            this.check_dts.Name = "check_dts";
+            this.check_dts.Size = new System.Drawing.Size(43, 15);
+            this.check_dts.TabIndex = 3;
+            this.check_dts.Text = "DTS";
+            this.ToolTips.SetToolTip(this.check_dts, "Allow DTS Passthru");
+            this.check_dts.UseVisualStyleBackColor = true;
+            this.check_dts.CheckedChanged += new System.EventHandler(this.autoPassthru_CheckedChanged);
+            // 
+            // check_ac3
+            // 
+            this.check_ac3.AutoSize = true;
+            this.check_ac3.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_ac3.Location = new System.Drawing.Point(111, 17);
+            this.check_ac3.Name = "check_ac3";
+            this.check_ac3.Size = new System.Drawing.Size(43, 15);
+            this.check_ac3.TabIndex = 2;
+            this.check_ac3.Text = "AC3";
+            this.ToolTips.SetToolTip(this.check_ac3, "Allow AC3 Passthru");
+            this.check_ac3.UseVisualStyleBackColor = true;
+            this.check_ac3.CheckedChanged += new System.EventHandler(this.autoPassthru_CheckedChanged);
+            // 
+            // check_aac
+            // 
+            this.check_aac.AutoSize = true;
+            this.check_aac.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_aac.Location = new System.Drawing.Point(58, 17);
+            this.check_aac.Name = "check_aac";
+            this.check_aac.Size = new System.Drawing.Size(45, 15);
+            this.check_aac.TabIndex = 1;
+            this.check_aac.Text = "AAC";
+            this.ToolTips.SetToolTip(this.check_aac, "Allow AAC Passthru");
+            this.check_aac.UseVisualStyleBackColor = true;
+            this.check_aac.CheckedChanged += new System.EventHandler(this.autoPassthru_CheckedChanged);
+            // 
+            // check_mp3
+            // 
+            this.check_mp3.AutoSize = true;
+            this.check_mp3.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_mp3.Location = new System.Drawing.Point(6, 17);
+            this.check_mp3.Name = "check_mp3";
+            this.check_mp3.Size = new System.Drawing.Size(43, 15);
+            this.check_mp3.TabIndex = 0;
+            this.check_mp3.Text = "MP3";
+            this.ToolTips.SetToolTip(this.check_mp3, "Allow MP3 Passthru");
+            this.check_mp3.UseVisualStyleBackColor = true;
+            this.check_mp3.CheckedChanged += new System.EventHandler(this.autoPassthru_CheckedChanged);
+            // 
             // AudioPanel
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.BackColor = System.Drawing.Color.Transparent;
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.drp_audioTrack);
             this.Controls.Add(this.btn_AdvancedAudio);
             this.Controls.Add(this.drp_audioSample);
@@ -430,6 +549,8 @@ namespace Handbrake.Controls
             ((System.ComponentModel.ISupportInitialize)(this.audioList)).EndInit();
             this.AddTrackMenu.ResumeLayout(false);
             this.RemoveTrackMenu.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -467,5 +588,13 @@ namespace Handbrake.Controls
         private System.Windows.Forms.DataGridViewTextBoxColumn Bitrate;
         private System.Windows.Forms.DataGridViewTextBoxColumn DRC;
         private System.Windows.Forms.DataGridViewTextBoxColumn Gain;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox check_dtshd;
+        private System.Windows.Forms.CheckBox check_dts;
+        private System.Windows.Forms.CheckBox check_ac3;
+        private System.Windows.Forms.CheckBox check_aac;
+        private System.Windows.Forms.CheckBox check_mp3;
+        private System.Windows.Forms.Label label1;
+        internal System.Windows.Forms.ComboBox drp_passthruFallback;
     }
 }

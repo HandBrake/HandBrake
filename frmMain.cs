@@ -3,6 +3,8 @@
     Homepage: <http://handbrake.fr/>.
     It may be used under the terms of the GNU General Public License. */
 
+using HandBrake.ApplicationServices.Model.Encoding;
+
 namespace Handbrake
 {
     using System;
@@ -861,7 +863,9 @@ namespace Handbrake
                             {
                                 Name = parsed.PresetName,
                                 Query = QueryGenerator.GenerateFullQuery(this).Query,
-                                CropSettings = parsed.UsesPictureSettings
+                                CropSettings = parsed.UsesPictureSettings,
+                                Task = parsed,
+                                AudioPassthruSettings = new AllowedPassthru(false), // TODO at a future point, support this.
                             };
 
                         presetHandler.Update(preset);
@@ -870,11 +874,13 @@ namespace Handbrake
                 else
                 {
                    
-                    Preset preset = new Preset
+                    Preset preset = new Preset 
                     {
                         Name = parsed.PresetName,
                         Query = QueryGenerator.GenerateFullQuery(this).Query,
                         CropSettings = parsed.UsesPictureSettings,
+                        Task = parsed,
+                        AudioPassthruSettings = new AllowedPassthru(false), // TODO at a future point, support this.
                     };
                     
                     if (presetHandler.Add(preset))
@@ -2220,7 +2226,8 @@ namespace Handbrake
 
                         // Now load the preset
                         PresetLoader.LoadPreset(this, preset);
-                        this.AudioSettings.LoadTracks(queueEdit.Task.AudioTracks);
+                        preset.Task = queueEdit.Task;
+                        this.AudioSettings.LoadTracks(preset);
 
                         // Set the destination path);
                         this.text_destination.Text = queueEdit.Destination;

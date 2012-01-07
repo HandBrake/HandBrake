@@ -102,6 +102,7 @@
     <Compile Include="Functions\Win32.cs" />
     <Compile Include="Functions\Win7.cs" />
     <Compile Include="Model\DriveInformation.cs" />
+    <Compile Include="Model\Encoding\AllowedPassthru.cs" />
     <Compile Include="Model\Encoding\AudioTrack.cs" />
     <Compile Include="Model\Encoding\ChapterMarker.cs" />
     <Compile Include="Model\Encoding\FramerateMode.cs" />

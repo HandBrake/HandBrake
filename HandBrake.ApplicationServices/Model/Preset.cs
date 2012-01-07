@@ -5,6 +5,8 @@
 
 namespace HandBrake.ApplicationServices.Model
 {
+    using Encoding;
+
     /// <summary>
     /// A Preset for encoding with.
     /// </summary>
@@ -59,6 +61,11 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets task.
         /// </summary>
         public EncodeTask Task { get; set; }
+
+        /// <summary>
+        /// Gets or sets AudioPassthruSettings.
+        /// </summary>
+        public AllowedPassthru AudioPassthruSettings { get; set; }
 
         /// <summary>
         ///  Override the ToString Method
