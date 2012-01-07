@@ -186,8 +186,8 @@ namespace Handbrake.Controls
         {
             ClearAudioList();
 
-            ObservableCollection<AudioTrack> tracks = preset.Task.AudioTracks;
-            this.PassthruSettings = preset.AudioPassthruSettings ?? new AllowedPassthru(false);
+            ObservableCollection<AudioTrack> tracks = new ObservableCollection<AudioTrack>(preset.Task.AudioTracks);
+            this.PassthruSettings = preset.AudioPassthruSettings != null ? new AllowedPassthru(preset.AudioPassthruSettings) : new AllowedPassthru(false);
             this.SetPassthruSettings(this.PassthruSettings);
 
             if (tracks == null || (drp_audioTrack.SelectedItem != null && drp_audioTrack.SelectedItem.ToString() == AudioHelper.NoneFound.Description))
@@ -209,7 +209,10 @@ namespace Handbrake.Controls
             if (tracks.Count == 0 || tracks[0].ScannedTrack.TrackNumber == 0)
             {
                 this.AutomaticTrackSelection();
-            }  
+            }
+
+            // Make sure correct audio encoder is still selected.
+            this.CheckAndFixPassthruCompatibility();
 
             if (this.AudioListChanged != null)
                 this.AudioListChanged(this, new EventArgs());
@@ -225,10 +228,6 @@ namespace Handbrake.Controls
             // Reset
             this.AudioTracks.Clear();
             this.ScannedTracks.Clear();
-
-            // Setup the passthru options
-            this.PassthruSettings = preset.AudioPassthruSettings ?? new AllowedPassthru(false);
-            this.SetPassthruSettings(this.PassthruSettings);
 
             if (selectedTitle.AudioTracks.Count == 0)
             {    
@@ -262,6 +261,9 @@ namespace Handbrake.Controls
             {
                 this.AutomaticTrackSelection();
             }
+
+            // Make sure correct audio encoder is still selected.
+            this.CheckAndFixPassthruCompatibility();
         }
 
         #endregion
@@ -1104,6 +1106,21 @@ namespace Handbrake.Controls
             }
 
             return EnumHelper<AudioEncoder>.GetValue(drp_passthruFallback.SelectedItem.ToString()); 
+        }
+
+        /// <summary>
+        /// Fix any invalid passthru problems.
+        /// </summary>
+        private void CheckAndFixPassthruCompatibility()
+        {
+            // Make sure correct audio encoder is still selected.
+            foreach (AudioTrack track in this.audioTracks)
+            {
+                if (this.IsIncompatiblePassthru(track))
+                {
+                    track.Encoder = GetCompatiblePassthru(track);
+                }
+            }
         }
 
         /// <summary>

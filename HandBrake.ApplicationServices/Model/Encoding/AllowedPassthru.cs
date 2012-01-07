@@ -42,6 +42,22 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="AllowedPassthru"/> class.
+        /// </summary>
+        /// <param name="initialValue">
+        /// The initial value.
+        /// </param>
+        public AllowedPassthru(AllowedPassthru initialValue)
+        {
+            this.AudioAllowAACPass = initialValue.AudioAllowAACPass;
+            this.AudioAllowAC3Pass = initialValue.AudioAllowAC3Pass;
+            this.AudioAllowDTSHDPass = initialValue.AudioAllowDTSHDPass;
+            this.AudioAllowDTSPass = initialValue.AudioAllowDTSPass;
+            this.AudioAllowMP3Pass = initialValue.AudioAllowMP3Pass;
+            this.AudioEncoderFallback = initialValue.AudioEncoderFallback;
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether AudioAllowAACPass.
         /// </summary>
         public bool AudioAllowAACPass { get; set; }
