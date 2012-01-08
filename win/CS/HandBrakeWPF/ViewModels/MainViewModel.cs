@@ -1016,6 +1016,21 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange("CurrentTask");
         }
 
+        /// <summary>
+        /// Setup the UI tabs. Passes in any relevant models for setup.
+        /// </summary>
+        private void SetupTabs()
+        {
+            // Setup the Tabs
+            this.PictureSettingsViewModel.Setup(this.SelectedTitle, this.CurrentTask, this.SelectedPreset);
+            this.VideoViewModel.SetPreset(this.SelectedPreset);
+            this.FiltersViewModel.SetPreset(this.SelectedPreset);
+            this.AudioViewModel.SetPreset(this.SelectedPreset);
+            this.SubtitleViewModel.SetPreset(this.SelectedPreset);
+            this.ChaptersViewModel.Setup(this.SelectedPreset, this.SelectedTitle);
+            this.AdvancedViewModel.SetPreset(this.SelectedPreset);
+        }
+
         #endregion
 
         #region Event Handlers
@@ -1052,6 +1067,7 @@ namespace HandBrakeWPF.ViewModels
                 this.SelectedTitle = this.ScannedSource.Titles.Where(t => t.MainTitle).FirstOrDefault();
                 this.JobContextService.CurrentSource = this.ScannedSource;
                 this.JobContextService.CurrentTask = this.CurrentTask;
+                this.SetupTabs();
             }
 
             this.SourceLabel = "Scan Completed";

@@ -18,6 +18,7 @@ namespace HandBrakeWPF.ViewModels
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.Exceptions;
+    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -32,10 +33,16 @@ namespace HandBrakeWPF.ViewModels
     [Export(typeof(IChaptersViewModel))]
     public class ChaptersViewModel : ViewModelBase, IChaptersViewModel
     {
+        #region Constants and Fields
+
         /// <summary>
-        /// Gets or sets SourceChapterList.
+        /// The include chapter markers.
         /// </summary>
-        private ObservableCollection<Chapter> SourceChapterList { get; set; }
+        private bool includeChapterMarkers;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChaptersViewModel"/> class.
@@ -51,6 +58,10 @@ namespace HandBrakeWPF.ViewModels
             this.Chapters = new ObservableCollection<ChapterMarker>();
         }
 
+        #endregion
+
+        #region Public Properties
+
         /// <summary>
         /// Gets or sets State.
         /// </summary>
@@ -59,25 +70,45 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets a value indicating whether chapter markers are enabled.
         /// </summary>
-        public bool IncludeChapterMarkers { get; set; }
+        public bool IncludeChapterMarkers
+        {
+            get
+            {
+                return this.includeChapterMarkers;
+            }
+            set
+            {
+                this.includeChapterMarkers = value;
+                this.NotifyOfPropertyChange(() => this.IncludeChapterMarkers);
+            }
+        }
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
-        /// Set the Source Chapters List
+        /// Gets or sets SourceChapterList.
         /// </summary>
-        /// <param name="sourceChapters">
-        /// The source chapters.
-        /// </param>
-        public void SetSourceChapters(IEnumerable<Chapter> sourceChapters)
-        {
-            // Cache the chapters in this screen
-            this.SourceChapterList = new ObservableCollection<Chapter>(sourceChapters);
-            this.Chapters.Clear();
+        private ObservableCollection<Chapter> SourceChapterList { get; set; }
 
-            // Then Add new Chapter Markers.
-            foreach (Chapter chapter in SourceChapterList)
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Export a CSV file.
+        /// </summary>
+        public void Export()
+        {
+            var saveFileDialog = new VistaSaveFileDialog
+                {
+                   Filter = "Csv File|*.csv", DefaultExt = "csv", CheckPathExists = true 
+                };
+            saveFileDialog.ShowDialog();
+            if (!string.IsNullOrEmpty(saveFileDialog.FileName))
             {
-                ChapterMarker marker = new ChapterMarker(chapter.ChapterNumber, chapter.ChapterName);
-                this.Chapters.Add(marker);
+                this.ExportChaptersToCSV(saveFileDialog.FileName);
             }
         }
 
@@ -103,23 +134,26 @@ namespace HandBrakeWPF.ViewModels
                     csv += row.ChapterName.Replace(",", "\\,");
                     csv += Environment.NewLine;
                 }
-                StreamWriter file = new StreamWriter(filename);
+                var file = new StreamWriter(filename);
                 file.Write(csv);
                 file.Close();
                 file.Dispose();
             }
             catch (Exception exc)
             {
-                throw new GeneralApplicationException("Unable to save Chapter Makrers file! ", "Chapter marker names will NOT be saved in your encode.", exc);
+                throw new GeneralApplicationException(
+                    "Unable to save Chapter Makrers file! ", 
+                    "Chapter marker names will NOT be saved in your encode.", 
+                    exc);
             }
         }
 
         /// <summary>
         /// Import a CSV file
         /// </summary>
-        private void Import()
+        public void Import()
         {
-            VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "CSV files (*.csv)|*.csv", CheckFileExists = true };
+            var dialog = new VistaOpenFileDialog { Filter = "CSV files (*.csv)|*.csv", CheckFileExists = true };
             dialog.ShowDialog();
             string filename = dialog.FileName;
 
@@ -131,7 +165,7 @@ namespace HandBrakeWPF.ViewModels
             IDictionary<int, string> chapterMap = new Dictionary<int, string>();
             try
             {
-                StreamReader sr = new StreamReader(filename);
+                var sr = new StreamReader(filename);
                 string csv = sr.ReadLine();
                 while (csv != null)
                 {
@@ -152,26 +186,51 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Now iterate over each chatper we have, and set it's name
-            foreach (ChapterMarker item in Chapters)
+            foreach (ChapterMarker item in this.Chapters)
             {
                 string chapterName;
                 chapterMap.TryGetValue(item.ChapterNumber, out chapterName);
                 item.ChapterName = chapterName;
+
                 // TODO force a fresh of this property
             }
         }
 
         /// <summary>
-        /// Export a CSV file.
+        /// The set preset.
         /// </summary>
-        private void Export()
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        /// <param name="currentTitle">
+        /// The current Title.
+        /// </param>
+        public void Setup(Preset preset, Title currentTitle)
         {
-            VistaSaveFileDialog saveFileDialog = new VistaSaveFileDialog { Filter = "Csv File|*.csv", DefaultExt = "csv", CheckPathExists = true };
-            saveFileDialog.ShowDialog();
-            if (!string.IsNullOrEmpty(saveFileDialog.FileName))
+            this.IncludeChapterMarkers = preset.Task.IncludeChapterMarkers;
+            this.SetSourceChapters(currentTitle.Chapters);
+        }
+
+        /// <summary>
+        /// Set the Source Chapters List
+        /// </summary>
+        /// <param name="sourceChapters">
+        /// The source chapters.
+        /// </param>
+        public void SetSourceChapters(IEnumerable<Chapter> sourceChapters)
+        {
+            // Cache the chapters in this screen
+            this.SourceChapterList = new ObservableCollection<Chapter>(sourceChapters);
+            this.Chapters.Clear();
+
+            // Then Add new Chapter Markers.
+            foreach (Chapter chapter in this.SourceChapterList)
             {
-                this.ExportChaptersToCSV(saveFileDialog.FileName);
+                var marker = new ChapterMarker(chapter.ChapterNumber, chapter.ChapterName);
+                this.Chapters.Add(marker);
             }
         }
+
+        #endregion
     }
 }

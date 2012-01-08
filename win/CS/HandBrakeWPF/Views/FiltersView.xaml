@@ -35,22 +35,22 @@
 
                 <TextBlock Text="Detelecine:" Grid.Row="0" Grid.Column="0" Margin="0,0,0,10" />
                 <ComboBox Width="120" Grid.Row="0" ItemsSource="{Binding DetelecineOptions}" SelectedItem="{Binding SelectedDetelecine}" Grid.Column="1" Margin="0,0,0,10"/>
-                <TextBox Width="120" Grid.Row="0" Grid.Column="2" Margin="0,0,0,10"
+                <TextBox Width="120" Grid.Row="0" Grid.Column="2" Margin="0,0,0,10" Text="{Binding CustomDetelecine}"
                          Visibility="{Binding ShowDetelecineCustom, Converter={StaticResource boolToVisConverter}}"/>
 
                 <TextBlock Text="Decomb:" Grid.Row="1" Grid.Column="0" Margin="0,0,0,10"/>
                 <ComboBox Width="120" Grid.Row="1" ItemsSource="{Binding DecombOptions}" SelectedItem="{Binding SelectedDecomb}" Grid.Column="1" Margin="0,0,0,10"/>
-                <TextBox Width="120" Grid.Row="1" Grid.Column="2" Margin="0,0,0,10"
+                <TextBox Width="120" Grid.Row="1" Grid.Column="2" Margin="0,0,0,10" Text="{Binding CustomDecomb}"
                          Visibility="{Binding ShowDecombCustom, Converter={StaticResource boolToVisConverter}}" />
 
                 <TextBlock Text="Deinterlace:" Grid.Row="2" Grid.Column="0" Margin="0,0,0,10"/>
                 <ComboBox Width="120" Grid.Row="2" ItemsSource="{Binding DeInterlaceOptions}" SelectedItem="{Binding SelectedDeInterlace}" Grid.Column="1" Margin="0,0,0,10"/>
-                <TextBox Width="120" Grid.Row="2" Grid.Column="2" Margin="0,0,0,10"
+                <TextBox Width="120" Grid.Row="2" Grid.Column="2" Margin="0,0,0,10" Text="{Binding CustomDeinterlace}"
                          Visibility="{Binding ShowDeinterlaceCustom, Converter={StaticResource boolToVisConverter}}" />
 
                 <TextBlock Text="Denoise:" Grid.Row="3" Grid.Column="0" Margin="0,0,0,10"/>
                 <ComboBox Width="120" Grid.Row="3" ItemsSource="{Binding DenoiseOptions}" SelectedItem="{Binding SelectedDenoise}" Grid.Column="1" Margin="0,0,0,10"/>
-                <TextBox Width="120" Grid.Row="3" Grid.Column="2" Margin="0,0,0,10"
+                <TextBox Width="120" Grid.Row="3" Grid.Column="2" Margin="0,0,0,10" Text="{Binding CustomDenoise}"
                          Visibility="{Binding ShowDenoiseCustom, Converter={StaticResource boolToVisConverter}}" />
 
                 <TextBlock Text="Deblock:" Grid.Row="4" Grid.Column="0" Margin="0,0,0,10"/>

@@ -33,8 +33,6 @@
                 <DataGridTextColumn Header="Chapter Name"  Width="*" Binding="{Binding ChapterName}" IsReadOnly="False" />
             </DataGrid.Columns>
         </DataGrid>
-        
-        
-        
+
     </Grid>
 </UserControl>

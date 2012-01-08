@@ -98,7 +98,7 @@ namespace HandBrake.ApplicationServices.Services
         {
             get
             {
-                string noLog = "No log data available... Log data will show where after you scan a source. \n\nOpen the log file directory to get previous log files.";
+                string noLog = "No log data available... Log data will show here after you scan a source. \n\nOpen the log file directory to get previous log files.";
                 return string.IsNullOrEmpty(this.logBuffer.ToString()) ? this.header + noLog : this.header + this.logBuffer.ToString();
             }
         }

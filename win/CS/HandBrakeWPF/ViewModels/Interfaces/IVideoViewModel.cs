@@ -9,10 +9,19 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
+    using HandBrake.ApplicationServices.Model;
+
     /// <summary>
     /// The Video View Model Interface
     /// </summary>
     public interface IVideoViewModel
     {
+        /// <summary>
+        /// Set the selected preset
+        /// </summary>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        void SetPreset(Preset preset);
     }
 }

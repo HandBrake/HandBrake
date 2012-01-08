@@ -9,10 +9,23 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
+    using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Parsing;
+
     /// <summary>
     /// The Chapters View Model Interface
     /// </summary>
     public interface IChaptersViewModel
     {
+        /// <summary>
+        /// Set the selected preset
+        /// </summary>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        /// <param name="currentTitle">
+        /// The current Title.
+        /// </param>
+        void Setup(Preset preset, Title currentTitle);
     }
 }
