@@ -1,7 +1,12 @@
 ﻿<UserControl x:Class="HandBrakeWPF.Views.PictureSettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:NumericUpDown="clr-namespace:EagleBoost.Wpf.Presentation.Controls.NumericUpDown;assembly=EagleBoost.Wpf.Presentation">
+             xmlns:NumericUpDown="clr-namespace:EagleBoost.Wpf.Presentation.Controls.NumericUpDown;assembly=EagleBoost.Wpf.Presentation"
+             xmlns:Converters="clr-namespace:HandBrakeWPF.Converters">
+
+    <UserControl.Resources>
+        <Converters:BooleanConverter x:Key="boolConverter" />
+    </UserControl.Resources>
 
     <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 
@@ -12,16 +17,16 @@
             <!-- Row 1-->
             <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
                 <Label Content="Source" Grid.Row="0" Grid.Column="0" />
-                <Label Content="---" Name="sourceResolution" Grid.Row="0" Grid.Column="1" />
+                <Label Content="{Binding SourceInfo}" Name="sourceResolution" Grid.Row="0" Grid.Column="1" />
             </StackPanel>
 
             <!-- Row 2-->
             <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
                 <Label Content="Width:" Grid.Row="1" Grid.Column="0" />
-                <NumericUpDown:NumericUpDown Name="width" Minimum="0" Grid.Row="1" Grid.Column="1" Width="45"  />
+                <NumericUpDown:NumericUpDown Value="{Binding Width}" Minimum="0" Grid.Row="1" Grid.Column="1" Width="45"  />
                 <Label Content="Height:" Grid.Row="1" Grid.Column="2" />
-                <NumericUpDown:NumericUpDown Name="height" Minimum="0" Grid.Row="1" Grid.Column="3" Width="45"  />
-                <CheckBox Content="Keep Aspect Ratio" VerticalAlignment="Center" Margin="5,0,0,0" />
+                <NumericUpDown:NumericUpDown Value="{Binding Height}" Minimum="0" Grid.Row="1" Grid.Column="3" Width="45"  />
+                <CheckBox Content="Keep Aspect Ratio" IsChecked="{Binding MaintainAspectRatio}" VerticalAlignment="Center" Margin="5,0,0,0" />
             </StackPanel>
 
             <!-- Row 3-->
@@ -47,20 +52,20 @@
                 <Label Content="PAR Height:" Grid.Row="4" Grid.Column="0" />
                 <Label Content="Display Size:" Grid.Row="5" Grid.Column="0" />
 
-                <ComboBox Width="110" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <ComboBox Width="110" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="45" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="45" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="45" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <Label Content="---" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <ComboBox Width="110" Grid.Row="0" ItemsSource="{Binding AnamorphicModes}" SelectedItem="{Binding SelectedAnamorphicMode}" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <ComboBox Width="110" Grid.Row="1" ItemsSource="{Binding ModulusValues}" SelectedItem="{Binding SelectedModulus}" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <NumericUpDown:NumericUpDown Width="45" Value="{Binding DisplayWidth}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <NumericUpDown:NumericUpDown Width="45" Value="{Binding ParWidth}" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <NumericUpDown:NumericUpDown Width="45" Value="{Binding ParHeight}" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <Label Content="{Binding DisplaySize}" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
             </Grid>
         </StackPanel>
 
 
         <StackPanel Name="CropPanel" Margin="50,0,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Label Content="Cropping" FontWeight="Bold" />
-            <RadioButton Content="Automatic" Margin="10,0,0,0"/>
-            <RadioButton Content="Custom" Margin="10,0,0,0" />
+            <RadioButton Content="Automatic" IsChecked="{Binding IsCustomCrop, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="10,0,0,0"/>
+            <RadioButton Content="Custom" IsChecked="{Binding IsCustomCrop}" Margin="10,0,0,0" />
 
             <Grid Margin="0,10,0,0">
                 <Grid.RowDefinitions>
@@ -84,10 +89,10 @@
                 <Label Content="Left" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" />
                 <Label Content="Right" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" />
 
-                <NumericUpDown:NumericUpDown Width="45" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="45" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="45" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="45" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <NumericUpDown:NumericUpDown Width="45" Value="{Binding CropTop}" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <NumericUpDown:NumericUpDown Width="45" Value="{Binding CropBottom}" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <NumericUpDown:NumericUpDown Width="45" Value="{Binding CropLeft}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <NumericUpDown:NumericUpDown Width="45" Value="{Binding CropRight}" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Margin="0,0,0,5" />
 
             </Grid>
 

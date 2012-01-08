@@ -9,10 +9,26 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
+    using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Parsing;
+
     /// <summary>
     /// The Picture Settings View Model Interface
     /// </summary>
     public interface IPictureSettingsViewModel
     {
+        /// <summary>
+        /// Setup the window after a scan.
+        /// </summary>
+        /// <param name="selectedTitle">
+        /// The selected title.
+        /// </param>
+        /// <param name="currentTask">
+        /// The current task.
+        /// </param>
+        /// <param name="currentPreset">
+        /// The Current preset
+        /// </param>
+        void Setup(Title selectedTitle, EncodeTask currentTask, Preset currentPreset);
     }
 }

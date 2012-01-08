@@ -14,6 +14,7 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
+    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
@@ -56,6 +57,16 @@ namespace HandBrakeWPF.ViewModels
         /// Remove the Selected Track
         /// </summary>
         public void Remove()
+        {
+        }
+
+        /// <summary>
+        /// Set the selected preset.
+        /// </summary>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        public void SetPreset(Preset preset)
         {
         }
     }

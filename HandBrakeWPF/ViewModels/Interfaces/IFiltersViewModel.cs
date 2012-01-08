@@ -9,10 +9,19 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
+    using HandBrake.ApplicationServices.Model;
+
     /// <summary>
     /// The Filters View Model Interface
     /// </summary>
     public interface IFiltersViewModel
     {
+        /// <summary>
+        /// Setup a selected preset.
+        /// </summary>
+        /// <param name="preset">
+        /// The Current Preset.
+        /// </param>
+        void SetPreset(Preset preset);
     }
 }

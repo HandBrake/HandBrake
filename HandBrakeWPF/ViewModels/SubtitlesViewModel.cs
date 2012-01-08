@@ -20,6 +20,8 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrakeWPF.ViewModels.Interfaces;
 
+    using HandBrake.ApplicationServices.Model;
+
     /// <summary>
     /// The Subtitles View Model
     /// </summary>
@@ -44,6 +46,16 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets State.
         /// </summary>
         public ObservableCollection<SubtitleTrack> SubtitleTracks { get; set; }
+
+        /// <summary>
+        /// Set the currently selected preset.
+        /// </summary>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        public void SetPreset(Preset preset)
+        {  
+        }
 
         /// <summary>
         /// Add a new Track
