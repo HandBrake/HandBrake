@@ -34,7 +34,7 @@ ghb_show_hide_advanced_audio( signal_user_data_t *ud )
 	GtkWidget *widget;
 
 	g_debug("audio_advanced_clicked_cb ()");
-	widget = GHB_WIDGET(ud->builder, "AdvancedAudioExpander");
+	widget = GHB_WIDGET(ud->builder, "AdvancedAudioPassTable");
 	if (!ghb_settings_get_boolean(ud->settings, "AdvancedAutoPassthru"))
 		gtk_widget_hide(widget);
 	else
