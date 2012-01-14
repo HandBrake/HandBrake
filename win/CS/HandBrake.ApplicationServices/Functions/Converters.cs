@@ -157,7 +157,7 @@ namespace HandBrake.ApplicationServices.Functions
                     return "AAC (ffmpeg)";
                 case "ffflac":
                     return "Flac (ffmpeg)";
-                case "copy:*":
+                case "copy":
                     return "Auto Passthru";
                 default:
                     return "AAC (faac)";
@@ -195,7 +195,7 @@ namespace HandBrake.ApplicationServices.Functions
                     return AudioEncoder.Mp3Passthru;
                 case "copy:aac":
                     return AudioEncoder.AacPassthru;
-                case "copy:*":
+                case "copy":
                     return AudioEncoder.Passthrough;
                 default:
                     return AudioEncoder.Faac;
@@ -276,7 +276,7 @@ namespace HandBrake.ApplicationServices.Functions
                 case AudioEncoder.Mp3Passthru:
                     return "copy:mp3";
                 case AudioEncoder.Passthrough:
-                    return "copy:*";
+                    return "copy";
                 case AudioEncoder.ffflac:
                     return "ffflac";
                 default:
