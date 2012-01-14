@@ -304,6 +304,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private BindingList<string> selectedLangauges = new BindingList<string>();
 
+        /// <summary>
+        /// The backing field for show advanced passthru options for Audio
+        /// </summary>
+        private bool showAdvancedPassthruOpts;
+
         #endregion
 
         #region Constructors and Destructors
@@ -875,6 +880,22 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether ShowAdvancedPassthruOpts.
+        /// </summary>
+        public bool ShowAdvancedPassthruOpts
+        {
+            get
+            {
+                return this.showAdvancedPassthruOpts;
+            }
+            set
+            {
+                this.showAdvancedPassthruOpts = value;
+                this.NotifyOfPropertyChange(() => this.ShowAdvancedPassthruOpts);
+            }
+        }
+
         #endregion
 
         #region System and Logging
@@ -1375,6 +1396,7 @@ namespace HandBrakeWPF.ViewModels
             this.addOnlyOneAudioTrackPerLanguage = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AddOnlyOneAudioPerLanguage);
 
             this.addClosedCaptions = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseClosedCaption);
+            this.showAdvancedPassthruOpts = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedAudioPassthruOpts);
 
             // #############################
             // CLI
@@ -1640,6 +1662,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.UseClosedCaption, this.AddClosedCaptions);
             this.userSettingService.SetUserSetting(UserSettingConstants.DubModeAudio, this.SelectedAddAudioMode);
             this.userSettingService.SetUserSetting(UserSettingConstants.DubModeSubtitle, this.SelectedAddSubtitleMode);
+            this.userSettingService.SetUserSetting(UserSettingConstants.ShowAdvancedAudioPassthruOpts, this.ShowAdvancedPassthruOpts);
 
             /* System and Logging */
             userSettingService.SetUserSetting(ASUserSettingConstants.ProcessPriority, this.SelectedPriority);

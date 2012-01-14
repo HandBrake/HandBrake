@@ -155,13 +155,7 @@ Note: When a track is selected on this grid, the dropdown controls above will al
 If you want to add multiple tracks, you can hit the add button several times, then select each track
 and alter its settings after adding them.</value>
   </data>
-  <metadata name="AddTrackMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>427, 16</value>
-  </metadata>
-  <metadata name="RemoveTrackMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>561, 16</value>
-  </metadata>
-  <data name="groupBox1.ToolTip" xml:space="preserve">
+  <data name="gb_autoPassthru.ToolTip" xml:space="preserve">
     <value>Controls the behaviour of the Audio Codec dropdown when passthru options are selected.
 
 When an incorrect passthru option is selected, it will try to fall back to the correct one if the
@@ -172,4 +166,10 @@ If there is no suitable passthru option, it will use the "Fallkback" encoder.
 These settings are global to all Audio Tracks.
 These settings are stored in the presets.</value>
   </data>
+  <metadata name="AddTrackMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>427, 16</value>
+  </metadata>
+  <metadata name="RemoveTrackMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>561, 16</value>
+  </metadata>
 </root>

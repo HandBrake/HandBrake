@@ -44,5 +44,6 @@ namespace Handbrake
         public const string DubModeSubtitle = "DubModeSubtitle";
         public const string AddOnlyOneAudioPerLanguage = "addOnlyOneAudioPerLanguage";
         public const string MinTitleLength = "MinTitleLength";
+        public const string ShowAdvancedAudioPassthruOpts = "ShowAdvancedAudioPassthruOpts";
     }
 }

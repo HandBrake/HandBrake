@@ -71,6 +71,8 @@ namespace Handbrake
             this.txt_vlcPath = new System.Windows.Forms.TextBox();
             this.label36 = new System.Windows.Forms.Label();
             this.tab_audio_sub = new System.Windows.Forms.TabPage();
+            this.check_advPassthruOpts = new System.Windows.Forms.CheckBox();
+            this.label49 = new System.Windows.Forms.Label();
             this.label48 = new System.Windows.Forms.Label();
             this.drop_preferredLangSubtitles = new System.Windows.Forms.ComboBox();
             this.label39 = new System.Windows.Forms.Label();
@@ -188,7 +190,7 @@ namespace Handbrake
             this.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(527, 456);
+            this.btn_close.Location = new System.Drawing.Point(527, 503);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(72, 22);
             this.btn_close.TabIndex = 53;
@@ -226,7 +228,7 @@ namespace Handbrake
             this.tab_options.Location = new System.Drawing.Point(12, 74);
             this.tab_options.Name = "tab_options";
             this.tab_options.SelectedIndex = 0;
-            this.tab_options.Size = new System.Drawing.Size(588, 375);
+            this.tab_options.Size = new System.Drawing.Size(588, 423);
             this.tab_options.TabIndex = 58;
             // 
             // tab_general
@@ -247,7 +249,7 @@ namespace Handbrake
             this.tab_general.Location = new System.Drawing.Point(4, 22);
             this.tab_general.Name = "tab_general";
             this.tab_general.Padding = new System.Windows.Forms.Padding(10);
-            this.tab_general.Size = new System.Drawing.Size(580, 349);
+            this.tab_general.Size = new System.Drawing.Size(580, 397);
             this.tab_general.TabIndex = 3;
             this.tab_general.Text = "General";
             this.tab_general.UseVisualStyleBackColor = true;
@@ -417,7 +419,7 @@ namespace Handbrake
             this.tab_outputFiles.Location = new System.Drawing.Point(4, 22);
             this.tab_outputFiles.Name = "tab_outputFiles";
             this.tab_outputFiles.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_outputFiles.Size = new System.Drawing.Size(580, 349);
+            this.tab_outputFiles.Size = new System.Drawing.Size(580, 397);
             this.tab_outputFiles.TabIndex = 7;
             this.tab_outputFiles.Text = "Output Files";
             this.tab_outputFiles.UseVisualStyleBackColor = true;
@@ -575,7 +577,7 @@ namespace Handbrake
             this.tab_picture.Location = new System.Drawing.Point(4, 22);
             this.tab_picture.Name = "tab_picture";
             this.tab_picture.Padding = new System.Windows.Forms.Padding(10);
-            this.tab_picture.Size = new System.Drawing.Size(580, 349);
+            this.tab_picture.Size = new System.Drawing.Size(580, 397);
             this.tab_picture.TabIndex = 5;
             this.tab_picture.Text = "Preview";
             this.tab_picture.UseVisualStyleBackColor = true;
@@ -628,6 +630,8 @@ namespace Handbrake
             // 
             // tab_audio_sub
             // 
+            this.tab_audio_sub.Controls.Add(this.check_advPassthruOpts);
+            this.tab_audio_sub.Controls.Add(this.label49);
             this.tab_audio_sub.Controls.Add(this.label48);
             this.tab_audio_sub.Controls.Add(this.drop_preferredLangSubtitles);
             this.tab_audio_sub.Controls.Add(this.label39);
@@ -640,10 +644,34 @@ namespace Handbrake
             this.tab_audio_sub.Location = new System.Drawing.Point(4, 22);
             this.tab_audio_sub.Name = "tab_audio_sub";
             this.tab_audio_sub.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_audio_sub.Size = new System.Drawing.Size(580, 349);
+            this.tab_audio_sub.Size = new System.Drawing.Size(580, 397);
             this.tab_audio_sub.TabIndex = 6;
             this.tab_audio_sub.Text = "Audio and Subtitles";
             this.tab_audio_sub.UseVisualStyleBackColor = true;
+            // 
+            // check_advPassthruOpts
+            // 
+            this.check_advPassthruOpts.AutoSize = true;
+            this.check_advPassthruOpts.Location = new System.Drawing.Point(9, 365);
+            this.check_advPassthruOpts.Name = "check_advPassthruOpts";
+            this.check_advPassthruOpts.Size = new System.Drawing.Size(310, 17);
+            this.check_advPassthruOpts.TabIndex = 110;
+            this.check_advPassthruOpts.Text = "Show advanced audio passthru options. (Requires Restart)\r\n";
+            this.ToolTip.SetToolTip(this.check_advPassthruOpts, "Show advanced audio passthru options");
+            this.check_advPassthruOpts.UseVisualStyleBackColor = true;
+            this.check_advPassthruOpts.CheckedChanged += new System.EventHandler(this.check_advPassthruOpts_CheckedChanged);
+            // 
+            // label49
+            // 
+            this.label49.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label49.AutoSize = true;
+            this.label49.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label49.Location = new System.Drawing.Point(6, 346);
+            this.label49.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(109, 13);
+            this.label49.TabIndex = 112;
+            this.label49.Text = "Audio Tab Options";
             // 
             // label48
             // 
@@ -962,7 +990,7 @@ namespace Handbrake
             this.tab_cli.Location = new System.Drawing.Point(4, 22);
             this.tab_cli.Name = "tab_cli";
             this.tab_cli.Padding = new System.Windows.Forms.Padding(10);
-            this.tab_cli.Size = new System.Drawing.Size(580, 349);
+            this.tab_cli.Size = new System.Drawing.Size(580, 397);
             this.tab_cli.TabIndex = 2;
             this.tab_cli.Text = "System and Logging";
             this.tab_cli.UseVisualStyleBackColor = true;
@@ -1195,7 +1223,7 @@ namespace Handbrake
             this.tab_advanced.Location = new System.Drawing.Point(4, 22);
             this.tab_advanced.Name = "tab_advanced";
             this.tab_advanced.Padding = new System.Windows.Forms.Padding(10);
-            this.tab_advanced.Size = new System.Drawing.Size(580, 349);
+            this.tab_advanced.Size = new System.Drawing.Size(580, 397);
             this.tab_advanced.TabIndex = 4;
             this.tab_advanced.Text = "Advanced";
             this.tab_advanced.UseVisualStyleBackColor = true;
@@ -1812,7 +1840,7 @@ namespace Handbrake
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(614, 488);
+            this.ClientSize = new System.Drawing.Size(614, 535);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btn_close);
             this.Controls.Add(this.tab_options);
@@ -1985,5 +2013,7 @@ namespace Handbrake
         private System.Windows.Forms.Label label40;
         private System.Windows.Forms.Label label48;
         internal System.Windows.Forms.ComboBox drop_preferredLangSubtitles;
+        private System.Windows.Forms.CheckBox check_advPassthruOpts;
+        private System.Windows.Forms.Label label49;
     }
 }

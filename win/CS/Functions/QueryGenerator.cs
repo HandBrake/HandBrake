@@ -6,7 +6,6 @@
 namespace Handbrake.Functions
 {
     using System;
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Globalization;
     using System.IO;
@@ -17,7 +16,6 @@ namespace Handbrake.Functions
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
-    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
@@ -25,13 +23,15 @@ namespace Handbrake.Functions
     using Handbrake.Model;
 
     using OutputFormat = HandBrake.ApplicationServices.Model.Encoding.OutputFormat;
-    using UserSettingConstants = Handbrake.UserSettingConstants;
 
     /// <summary>
     /// Generate a CLI Query for HandBrakeCLI
     /// </summary>
     public class QueryGenerator
     {
+        /// <summary>
+        /// Backing field for the user setting service.
+        /// </summary>
         private static readonly IUserSettingService UserSettingService = ServiceManager.UserSettingService;
 
         /// <summary>
@@ -39,6 +39,27 @@ namespace Handbrake.Functions
         /// </summary>
         private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
 
+        /// <summary>
+        /// Generate a CLI Query (Usable by the preset system)
+        /// </summary>
+        /// <param name="mainWindow">
+        /// The main window.
+        /// </param>
+        /// <param name="mode">
+        /// The mode.
+        /// </param>
+        /// <param name="filters">
+        /// The filters.
+        /// </param>
+        /// <param name="width">
+        /// The width.
+        /// </param>
+        /// <param name="height">
+        /// The height.
+        /// </param>
+        /// <returns>
+        /// A CLI Query as a string.
+        /// </returns>
         public static string GenerateQueryForPreset(frmMain mainWindow, QueryPictureSettingsMode mode, bool filters, int width, int height)
         {
             string query = string.Empty;
@@ -48,6 +69,21 @@ namespace Handbrake.Functions
             return query;
         }
 
+        /// <summary>
+        /// Generate a CLI Query for a preview.
+        /// </summary>
+        /// <param name="mainWindow">
+        /// The main window.
+        /// </param>
+        /// <param name="duration">
+        /// The duration.
+        /// </param>
+        /// <param name="preview">
+        /// The preview.
+        /// </param>
+        /// <returns>
+        /// Preview CLI Query
+        /// </returns>
         public static string GeneratePreviewQuery(frmMain mainWindow, int duration, string preview)
         {
             string query = string.Empty;
@@ -61,6 +97,15 @@ namespace Handbrake.Functions
             return query;
         }
 
+        /// <summary>
+        /// Generate a QueueTask ready for Queuing. 
+        /// </summary>
+        /// <param name="mainWindow">
+        /// The main window
+        /// </param>
+        /// <returns>
+        /// A QueueTask object.
+        /// </returns>
         public static QueueTask GenerateFullQuery(frmMain mainWindow)
         {
             // Create the CLI Query
