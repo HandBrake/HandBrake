@@ -25,7 +25,7 @@ namespace HandBrake.Interop.Model.Encoding
         [Display(Name = "AC3 (ffmpeg)")]
         Ac3,
 
-        [Display(Name = "Passthrough")]
+        [Display(Name = "Auto Passthru")]
         Passthrough,
 
         [Display(Name = "AC3 Passthru")]
@@ -47,6 +47,6 @@ namespace HandBrake.Interop.Model.Encoding
         Vorbis,
 
         [Display(Name = "Flac (ffmpeg)")]
-        ffflac
+        ffflac,
     }
 }

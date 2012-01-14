@@ -507,6 +507,7 @@ namespace Handbrake.Functions
                 // Audio Gain Control
                 gainValues += string.IsNullOrEmpty(gainValues) ? audioTrack.Gain.ToString(Culture) : string.Format(",{0}", audioTrack.Gain.ToString(Culture));
 
+
                 trackNames += string.IsNullOrEmpty(trackNames)
                                 ? string.IsNullOrEmpty(audioTrack.TrackName) ? "\"\"" : string.Format("\"{0}\"", audioTrack.TrackName.Trim())
                                 : string.IsNullOrEmpty(audioTrack.TrackName) ? ",\"\"" : string.Format(",\"{0}\"", audioTrack.TrackName.Trim());
@@ -525,6 +526,44 @@ namespace Handbrake.Functions
             if (!string.IsNullOrEmpty(trackNames.Trim()) && !string.IsNullOrEmpty(trackNames.Replace("\"", string.Empty).Replace(",", string.Empty).Trim()))
             {
                 audioQuery += string.Format(" --aname={0}", trackNames);
+            }
+
+            // Passthru Settings
+            if (mainWindow.AudioSettings.PassthruSettings != null)
+            {
+                string fallbackEncoders = string.Empty;
+
+                if (mainWindow.AudioSettings.PassthruSettings.AudioAllowAACPass)
+                {
+                    fallbackEncoders += "aac";
+                }
+
+                if (mainWindow.AudioSettings.PassthruSettings.AudioAllowAC3Pass)
+                {
+                    fallbackEncoders += string.IsNullOrEmpty(fallbackEncoders) ? "ac3" : ",ac3";
+                }
+
+                if (mainWindow.AudioSettings.PassthruSettings.AudioAllowDTSHDPass)
+                {
+                    fallbackEncoders += string.IsNullOrEmpty(fallbackEncoders) ? "dtshd" : ",dtshd";
+                }
+
+                if (mainWindow.AudioSettings.PassthruSettings.AudioAllowDTSPass)
+                {
+                    fallbackEncoders += string.IsNullOrEmpty(fallbackEncoders) ? "dts" : ",dts";
+                }
+
+                if (mainWindow.AudioSettings.PassthruSettings.AudioAllowMP3Pass)
+                {
+                    fallbackEncoders += string.IsNullOrEmpty(fallbackEncoders) ? "mp3" : ",mp3";
+                }
+
+                if (!string.IsNullOrEmpty(fallbackEncoders))
+                {
+                    audioQuery += string.Format(" --audio-copy-mask {0}", fallbackEncoders);
+                }
+
+                audioQuery += string.Format(" --audio-fallback {0}", Converters.GetCliAudioEncoder(mainWindow.AudioSettings.PassthruSettings.AudioEncoderFallback));
             }
 
             return audioQuery;
@@ -614,7 +653,7 @@ namespace Handbrake.Functions
         private static EncodeTask CreateEncodeTaskObject(frmMain frmMain)
         {
             EncodeTask task = new EncodeTask();
-            
+
             // Source, Destination and Output Settings
             task.Destination = frmMain.text_destination.Text;
             string sourcePath = frmMain.selectedTitle != null && File.Exists(frmMain.selectedTitle.SourceName)
@@ -655,7 +694,7 @@ namespace Handbrake.Functions
                     break;
                 default:
                     break;
-            }           
+            }
 
             task.OutputFormat = EnumHelper<OutputFormat>.GetValue(frmMain.drop_format.Text.Replace(" File", string.Empty).Trim());
             task.LargeFile = frmMain.check_largeFile.Checked;
@@ -682,7 +721,7 @@ namespace Handbrake.Functions
             int.TryParse(frmMain.PictureSettings.updownParHeight.Text, out parY);
             switch (frmMain.PictureSettings.drp_anamorphic.SelectedIndex)
             {
-                  case 0:
+                case 0:
                     task.Anamorphic = Anamorphic.None;
                     task.Modulus = modulus;
                     break;
