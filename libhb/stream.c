@@ -464,11 +464,31 @@ static int check_ps_sc(const uint8_t *buf)
     int mark = buf[4] >> 4;
     if ( mark == 0x02 )
     {
+        // Check other marker bits to make it less likely
+        // that we are being spoofed.
+        if( ( buf[4] & 0xf1 ) != 0x21 ||
+            ( buf[6] & 0x01 ) != 0x01 ||
+            ( buf[8] & 0x01 ) != 0x01 ||
+            ( buf[9] & 0x80 ) != 0x80 ||
+            ( buf[11] & 0x01 ) != 0x01 )
+        {
+            return 0;
+        }
         // mpeg-1 pack header
         pos = 12;   // skip over the PACK
     }
     else
     {
+        // Check other marker bits to make it less likely
+        // that we are being spoofed.
+        if( ( buf[4] & 0xC4 ) != 0x44 ||
+            ( buf[6] & 0x04 ) != 0x04 ||
+            ( buf[8] & 0x04 ) != 0x04 ||
+            ( buf[9] & 0x01 ) != 0x01 ||
+            ( buf[12] & 0x03 ) != 0x03 )
+        {
+            return 0;
+        }
         // mpeg-2 pack header
         pos = 14 + ( buf[13] & 0x7 );   // skip over the PACK
     }
