@@ -175,6 +175,9 @@ namespace Handbrake
 
             check_AddCCTracks.Checked = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseClosedCaption);
 
+            check_advPassthruOpts.Checked =
+                this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedAudioPassthruOpts);
+
             // #############################
             // CLI
             // #############################
@@ -573,6 +576,11 @@ namespace Handbrake
             this.userSettingService.SetUserSetting(UserSettingConstants.DubModeSubtitle, cb_subtitleMode.SelectedIndex);
         }
 
+        private void check_advPassthruOpts_CheckedChanged(object sender, EventArgs e)
+        {
+            this.userSettingService.SetUserSetting(UserSettingConstants.ShowAdvancedAudioPassthruOpts, check_advPassthruOpts.Checked);
+        }
+
         #endregion
 
         #region CLI
@@ -723,7 +731,5 @@ namespace Handbrake
         {
             this.Close();
         }
-
- 
     }
 }

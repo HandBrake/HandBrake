@@ -60,6 +60,13 @@ namespace Handbrake.Controls
             this.Gain = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ToolTips = new System.Windows.Forms.ToolTip(this.components);
             this.drp_passthruFallback = new System.Windows.Forms.ComboBox();
+            this.gb_autoPassthru = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.check_dtshd = new System.Windows.Forms.CheckBox();
+            this.check_dts = new System.Windows.Forms.CheckBox();
+            this.check_ac3 = new System.Windows.Forms.CheckBox();
+            this.check_aac = new System.Windows.Forms.CheckBox();
+            this.check_mp3 = new System.Windows.Forms.CheckBox();
             this.btn_AdvancedAudio = new System.Windows.Forms.Button();
             this.btn_addAudioTrack = new wyDay.Controls.SplitButton();
             this.AddTrackMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -67,18 +74,11 @@ namespace Handbrake.Controls
             this.btn_RemoveTrack = new wyDay.Controls.SplitButton();
             this.RemoveTrackMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnu_ClearAll = new System.Windows.Forms.ToolStripMenuItem();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.check_dtshd = new System.Windows.Forms.CheckBox();
-            this.check_dts = new System.Windows.Forms.CheckBox();
-            this.check_ac3 = new System.Windows.Forms.CheckBox();
-            this.check_aac = new System.Windows.Forms.CheckBox();
-            this.check_mp3 = new System.Windows.Forms.CheckBox();
             this.audioMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.audioList)).BeginInit();
+            this.gb_autoPassthru.SuspendLayout();
             this.AddTrackMenu.SuspendLayout();
             this.RemoveTrackMenu.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // audioMenu
@@ -362,95 +362,23 @@ namespace Handbrake.Controls
             this.ToolTips.SetToolTip(this.drp_passthruFallback, "The Audio Encoder that will be used, if there is no suitable passthru option.");
             this.drp_passthruFallback.SelectedIndexChanged += new System.EventHandler(this.drp_passthruFallback_SelectedIndexChanged);
             // 
-            // btn_AdvancedAudio
+            // gb_autoPassthru
             // 
-            this.btn_AdvancedAudio.BackColor = System.Drawing.Color.Transparent;
-            this.btn_AdvancedAudio.Enabled = false;
-            this.btn_AdvancedAudio.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_AdvancedAudio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_AdvancedAudio.Location = new System.Drawing.Point(607, 65);
-            this.btn_AdvancedAudio.Name = "btn_AdvancedAudio";
-            this.btn_AdvancedAudio.Size = new System.Drawing.Size(94, 23);
-            this.btn_AdvancedAudio.TabIndex = 70;
-            this.btn_AdvancedAudio.Text = "Advanced";
-            this.btn_AdvancedAudio.UseVisualStyleBackColor = false;
-            this.btn_AdvancedAudio.Click += new System.EventHandler(this.btn_AdvancedAudio_Click);
-            // 
-            // btn_addAudioTrack
-            // 
-            this.btn_addAudioTrack.AutoSize = true;
-            this.btn_addAudioTrack.ContextMenuStrip = this.AddTrackMenu;
-            this.btn_addAudioTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_addAudioTrack.ForeColor = System.Drawing.Color.DarkOrange;
-            this.btn_addAudioTrack.Location = new System.Drawing.Point(16, 37);
-            this.btn_addAudioTrack.Name = "btn_addAudioTrack";
-            this.btn_addAudioTrack.Size = new System.Drawing.Size(92, 23);
-            this.btn_addAudioTrack.SplitMenuStrip = this.AddTrackMenu;
-            this.btn_addAudioTrack.TabIndex = 72;
-            this.btn_addAudioTrack.Text = "Add Track";
-            this.btn_addAudioTrack.UseVisualStyleBackColor = true;
-            this.btn_addAudioTrack.Click += new System.EventHandler(this.AddAudioTrack_Click);
-            // 
-            // AddTrackMenu
-            // 
-            this.AddTrackMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_AddAll});
-            this.AddTrackMenu.Name = "audioMenu";
-            this.AddTrackMenu.Size = new System.Drawing.Size(114, 26);
-            // 
-            // mnu_AddAll
-            // 
-            this.mnu_AddAll.Name = "mnu_AddAll";
-            this.mnu_AddAll.Size = new System.Drawing.Size(113, 22);
-            this.mnu_AddAll.Text = "Add All";
-            this.mnu_AddAll.Click += new System.EventHandler(this.mnu_AddAll_Click);
-            // 
-            // btn_RemoveTrack
-            // 
-            this.btn_RemoveTrack.AutoSize = true;
-            this.btn_RemoveTrack.ContextMenuStrip = this.RemoveTrackMenu;
-            this.btn_RemoveTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_RemoveTrack.ForeColor = System.Drawing.Color.DarkOrange;
-            this.btn_RemoveTrack.Location = new System.Drawing.Point(114, 37);
-            this.btn_RemoveTrack.Name = "btn_RemoveTrack";
-            this.btn_RemoveTrack.Size = new System.Drawing.Size(82, 23);
-            this.btn_RemoveTrack.SplitMenuStrip = this.RemoveTrackMenu;
-            this.btn_RemoveTrack.TabIndex = 73;
-            this.btn_RemoveTrack.Text = "Remove";
-            this.btn_RemoveTrack.UseVisualStyleBackColor = true;
-            this.btn_RemoveTrack.Click += new System.EventHandler(this.Btn_remove_track_click);
-            // 
-            // RemoveTrackMenu
-            // 
-            this.RemoveTrackMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_ClearAll});
-            this.RemoveTrackMenu.Name = "audioMenu";
-            this.RemoveTrackMenu.Size = new System.Drawing.Size(119, 26);
-            // 
-            // mnu_ClearAll
-            // 
-            this.mnu_ClearAll.Name = "mnu_ClearAll";
-            this.mnu_ClearAll.Size = new System.Drawing.Size(118, 22);
-            this.mnu_ClearAll.Text = "Clear All";
-            this.mnu_ClearAll.Click += new System.EventHandler(this.Mnu_clear_all_click);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.drp_passthruFallback);
-            this.groupBox1.Controls.Add(this.check_dtshd);
-            this.groupBox1.Controls.Add(this.check_dts);
-            this.groupBox1.Controls.Add(this.check_ac3);
-            this.groupBox1.Controls.Add(this.check_aac);
-            this.groupBox1.Controls.Add(this.check_mp3);
-            this.groupBox1.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(256, 19);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(445, 40);
-            this.groupBox1.TabIndex = 74;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Auto Passthru";
-            this.ToolTips.SetToolTip(this.groupBox1, resources.GetString("groupBox1.ToolTip"));
+            this.gb_autoPassthru.Controls.Add(this.label1);
+            this.gb_autoPassthru.Controls.Add(this.drp_passthruFallback);
+            this.gb_autoPassthru.Controls.Add(this.check_dtshd);
+            this.gb_autoPassthru.Controls.Add(this.check_dts);
+            this.gb_autoPassthru.Controls.Add(this.check_ac3);
+            this.gb_autoPassthru.Controls.Add(this.check_aac);
+            this.gb_autoPassthru.Controls.Add(this.check_mp3);
+            this.gb_autoPassthru.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gb_autoPassthru.Location = new System.Drawing.Point(256, 19);
+            this.gb_autoPassthru.Name = "gb_autoPassthru";
+            this.gb_autoPassthru.Size = new System.Drawing.Size(445, 40);
+            this.gb_autoPassthru.TabIndex = 74;
+            this.gb_autoPassthru.TabStop = false;
+            this.gb_autoPassthru.Text = "Auto Passthru";
+            this.ToolTips.SetToolTip(this.gb_autoPassthru, resources.GetString("gb_autoPassthru.ToolTip"));
             // 
             // label1
             // 
@@ -527,11 +455,83 @@ namespace Handbrake.Controls
             this.check_mp3.UseVisualStyleBackColor = true;
             this.check_mp3.CheckedChanged += new System.EventHandler(this.autoPassthru_CheckedChanged);
             // 
+            // btn_AdvancedAudio
+            // 
+            this.btn_AdvancedAudio.BackColor = System.Drawing.Color.Transparent;
+            this.btn_AdvancedAudio.Enabled = false;
+            this.btn_AdvancedAudio.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_AdvancedAudio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_AdvancedAudio.Location = new System.Drawing.Point(607, 65);
+            this.btn_AdvancedAudio.Name = "btn_AdvancedAudio";
+            this.btn_AdvancedAudio.Size = new System.Drawing.Size(94, 23);
+            this.btn_AdvancedAudio.TabIndex = 70;
+            this.btn_AdvancedAudio.Text = "Advanced";
+            this.btn_AdvancedAudio.UseVisualStyleBackColor = false;
+            this.btn_AdvancedAudio.Click += new System.EventHandler(this.btn_AdvancedAudio_Click);
+            // 
+            // btn_addAudioTrack
+            // 
+            this.btn_addAudioTrack.AutoSize = true;
+            this.btn_addAudioTrack.ContextMenuStrip = this.AddTrackMenu;
+            this.btn_addAudioTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_addAudioTrack.ForeColor = System.Drawing.Color.DarkOrange;
+            this.btn_addAudioTrack.Location = new System.Drawing.Point(16, 37);
+            this.btn_addAudioTrack.Name = "btn_addAudioTrack";
+            this.btn_addAudioTrack.Size = new System.Drawing.Size(92, 23);
+            this.btn_addAudioTrack.SplitMenuStrip = this.AddTrackMenu;
+            this.btn_addAudioTrack.TabIndex = 72;
+            this.btn_addAudioTrack.Text = "Add Track";
+            this.btn_addAudioTrack.UseVisualStyleBackColor = true;
+            this.btn_addAudioTrack.Click += new System.EventHandler(this.AddAudioTrack_Click);
+            // 
+            // AddTrackMenu
+            // 
+            this.AddTrackMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnu_AddAll});
+            this.AddTrackMenu.Name = "audioMenu";
+            this.AddTrackMenu.Size = new System.Drawing.Size(114, 26);
+            // 
+            // mnu_AddAll
+            // 
+            this.mnu_AddAll.Name = "mnu_AddAll";
+            this.mnu_AddAll.Size = new System.Drawing.Size(113, 22);
+            this.mnu_AddAll.Text = "Add All";
+            this.mnu_AddAll.Click += new System.EventHandler(this.mnu_AddAll_Click);
+            // 
+            // btn_RemoveTrack
+            // 
+            this.btn_RemoveTrack.AutoSize = true;
+            this.btn_RemoveTrack.ContextMenuStrip = this.RemoveTrackMenu;
+            this.btn_RemoveTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_RemoveTrack.ForeColor = System.Drawing.Color.DarkOrange;
+            this.btn_RemoveTrack.Location = new System.Drawing.Point(114, 37);
+            this.btn_RemoveTrack.Name = "btn_RemoveTrack";
+            this.btn_RemoveTrack.Size = new System.Drawing.Size(82, 23);
+            this.btn_RemoveTrack.SplitMenuStrip = this.RemoveTrackMenu;
+            this.btn_RemoveTrack.TabIndex = 73;
+            this.btn_RemoveTrack.Text = "Remove";
+            this.btn_RemoveTrack.UseVisualStyleBackColor = true;
+            this.btn_RemoveTrack.Click += new System.EventHandler(this.Btn_remove_track_click);
+            // 
+            // RemoveTrackMenu
+            // 
+            this.RemoveTrackMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnu_ClearAll});
+            this.RemoveTrackMenu.Name = "audioMenu";
+            this.RemoveTrackMenu.Size = new System.Drawing.Size(119, 26);
+            // 
+            // mnu_ClearAll
+            // 
+            this.mnu_ClearAll.Name = "mnu_ClearAll";
+            this.mnu_ClearAll.Size = new System.Drawing.Size(118, 22);
+            this.mnu_ClearAll.Text = "Clear All";
+            this.mnu_ClearAll.Click += new System.EventHandler(this.Mnu_clear_all_click);
+            // 
             // AudioPanel
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.BackColor = System.Drawing.Color.Transparent;
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.gb_autoPassthru);
             this.Controls.Add(this.drp_audioTrack);
             this.Controls.Add(this.btn_AdvancedAudio);
             this.Controls.Add(this.drp_audioSample);
@@ -547,10 +547,10 @@ namespace Handbrake.Controls
             this.Size = new System.Drawing.Size(720, 310);
             this.audioMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.audioList)).EndInit();
+            this.gb_autoPassthru.ResumeLayout(false);
+            this.gb_autoPassthru.PerformLayout();
             this.AddTrackMenu.ResumeLayout(false);
             this.RemoveTrackMenu.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -588,7 +588,7 @@ namespace Handbrake.Controls
         private System.Windows.Forms.DataGridViewTextBoxColumn Bitrate;
         private System.Windows.Forms.DataGridViewTextBoxColumn DRC;
         private System.Windows.Forms.DataGridViewTextBoxColumn Gain;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox gb_autoPassthru;
         private System.Windows.Forms.CheckBox check_dtshd;
         private System.Windows.Forms.CheckBox check_dts;
         private System.Windows.Forms.CheckBox check_ac3;

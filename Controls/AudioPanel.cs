@@ -82,6 +82,7 @@ namespace Handbrake.Controls
             // Setup Auto-Passthru Settings
             this.PassthruSettings = new AllowedPassthru();
             this.SetPassthruSettings(this.PassthruSettings);
+            this.gb_autoPassthru.Visible = this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedAudioPassthruOpts);
         }
 
         /// <summary>
@@ -155,7 +156,6 @@ namespace Handbrake.Controls
                 drp_passthruFallback.Items.Add(EnumHelper<AudioEncoder>.GetDisplay(AudioEncoder.ffflac));
             }
 
-
             if (!drp_audioEncoder.Items.Contains(oldval))
                 drp_audioEncoder.SelectedIndex = 0;
             else
@@ -190,19 +190,29 @@ namespace Handbrake.Controls
             this.PassthruSettings = preset.AudioPassthruSettings != null ? new AllowedPassthru(preset.AudioPassthruSettings) : new AllowedPassthru(false);
             this.SetPassthruSettings(this.PassthruSettings);
 
-            if (tracks == null || (drp_audioTrack.SelectedItem != null && drp_audioTrack.SelectedItem.ToString() == AudioHelper.NoneFound.Description))
+            if (this.drp_audioTrack.SelectedItem != null && this.drp_audioTrack.SelectedItem.ToString() == AudioHelper.NoneFound.Description)
                 return;
 
             foreach (AudioTrack track in tracks)
             {
+                AudioTrack audioTrack = new AudioTrack
+                {
+                    Encoder = track.Encoder,
+                    MixDown = track.MixDown,
+                    SampleRate = track.SampleRate,
+                    Bitrate = track.Bitrate,
+                    Gain = track.Gain,
+                    DRC = track.DRC,
+                };
+
                 if (track.Encoder == AudioEncoder.Ac3Passthrough || track.Encoder == AudioEncoder.DtsPassthrough ||
                     track.Encoder == AudioEncoder.DtsHDPassthrough || track.Encoder == AudioEncoder.AacPassthru || track.Encoder == AudioEncoder.Mp3Passthru)
                 {
-                    track.MixDown = HandBrake.Interop.Model.Encoding.Mixdown.None;
-                    track.Bitrate = 0;
+                    audioTrack.MixDown = HandBrake.Interop.Model.Encoding.Mixdown.None;
+                    audioTrack.Bitrate = 0;
                 }
 
-                this.audioTracks.Add(track);
+                this.audioTracks.Add(audioTrack);
             }
 
             // It's a Preset, if the TrackNumber is 0, so allow the Automatic Track Selection to run after we've setup the presets audio settings.
@@ -530,12 +540,6 @@ namespace Handbrake.Controls
         private void Btn_remove_track_click(object sender, EventArgs e)
         {
             RemoveTrack();
-
-            //if (this.AudioTracks.Count == 0)
-            //{
-            //    drp_audioMix.Enabled =
-            //        drp_audioBitrate.Enabled = drp_audioSample.Enabled = btn_AdvancedAudio.Enabled = true;
-            //}
         }
 
         /// <summary>
