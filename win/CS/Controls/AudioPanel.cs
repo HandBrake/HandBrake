@@ -156,6 +156,8 @@ namespace Handbrake.Controls
                 drp_passthruFallback.Items.Add(EnumHelper<AudioEncoder>.GetDisplay(AudioEncoder.ffflac));
             }
 
+            drp_audioEncoder.Items.Add(EnumHelper<AudioEncoder>.GetDisplay(AudioEncoder.Passthrough));
+
             if (!drp_audioEncoder.Items.Contains(oldval))
                 drp_audioEncoder.SelectedIndex = 0;
             else
