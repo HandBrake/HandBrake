@@ -3717,6 +3717,17 @@ hbfd_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
+advanced_audio_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	g_debug("advanced_audio_changed_cb");
+	ghb_widget_to_setting (ud->settings, widget);
+	ghb_check_dependency(ud, widget, NULL);
+	const gchar *name = ghb_get_setting_key(widget);
+	ghb_pref_save(ud->settings, name);
+	ghb_show_hide_advanced_audio( ud );
+}
+
+G_MODULE_EXPORT void
 pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("pref_changed_cb");

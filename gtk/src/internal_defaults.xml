@@ -125,6 +125,8 @@
 	</dict>
 	<key>Preferences</key>
 	<dict>
+		<key>AdvancedAutoPassthru</key>
+		<false />
 		<key>AutoScan</key>
 		<false />
 		<key>AddCC</key>

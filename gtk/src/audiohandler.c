@@ -29,6 +29,19 @@ static void ghb_clear_audio_list_ui(GtkBuilder *builder);
 static gboolean block_updates = FALSE;
 
 void
+ghb_show_hide_advanced_audio( signal_user_data_t *ud )
+{
+	GtkWidget *widget;
+
+	g_debug("audio_advanced_clicked_cb ()");
+	widget = GHB_WIDGET(ud->builder, "AdvancedAudioExpander");
+	if (!ghb_settings_get_boolean(ud->settings, "AdvancedAutoPassthru"))
+		gtk_widget_hide(widget);
+	else
+		gtk_widget_show(widget);
+}
+
+void
 check_list_full(signal_user_data_t *ud)
 {
 	GValue *audio_list;
@@ -83,32 +96,42 @@ int ghb_get_copy_mask(GValue *settings)
 {
 	gint mask = 0;
 
-    if (ghb_settings_get_boolean(settings, "AudioAllowMP3Pass"))
-    {
-        mask |= HB_ACODEC_MP3;
-    }
-    if (ghb_settings_get_boolean(settings, "AudioAllowAACPass"))
-    {
-        mask |= HB_ACODEC_FFAAC;
-    }
-    if (ghb_settings_get_boolean(settings, "AudioAllowAC3Pass"))
-    {
-        mask |= HB_ACODEC_AC3;
-    }
-    if (ghb_settings_get_boolean(settings, "AudioAllowDTSPass"))
-    {
-        mask |= HB_ACODEC_DCA;
-    }
-    if (ghb_settings_get_boolean(settings, "AudioAllowDTSHDPass"))
-    {
-        mask |= HB_ACODEC_DCA_HD;
-    }
+	if (!ghb_settings_get_boolean(settings, "AdvancedAutoPassthru"))
+	{
+		mask = 	HB_ACODEC_MP3 |
+				HB_ACODEC_FFAAC |
+				HB_ACODEC_AC3 |
+				HB_ACODEC_DCA |
+				HB_ACODEC_DCA_HD;
+		return mask;
+	}
+	if (ghb_settings_get_boolean(settings, "AudioAllowMP3Pass"))
+	{
+		mask |= HB_ACODEC_MP3;
+	}
+	if (ghb_settings_get_boolean(settings, "AudioAllowAACPass"))
+	{
+		mask |= HB_ACODEC_FFAAC;
+	}
+	if (ghb_settings_get_boolean(settings, "AudioAllowAC3Pass"))
+	{
+		mask |= HB_ACODEC_AC3;
+	}
+	if (ghb_settings_get_boolean(settings, "AudioAllowDTSPass"))
+	{
+		mask |= HB_ACODEC_DCA;
+	}
+	if (ghb_settings_get_boolean(settings, "AudioAllowDTSHDPass"))
+	{
+		mask |= HB_ACODEC_DCA_HD;
+	}
 	return mask;
 }
 
 static int ghb_select_fallback( GValue *settings, int mux, int acodec )
 {
-	gint fallback;
+	gint mask;
+	gint fallback = 0;
 
 	switch ( acodec )
 	{
@@ -122,16 +145,30 @@ static int ghb_select_fallback( GValue *settings, int mux, int acodec )
 			return HB_ACODEC_AC3;
 
 		default:
-			fallback = ghb_settings_combo_int(settings, 
-											"AudioEncoderFallback");
+		{
+			if (ghb_settings_get_boolean(settings, "AdvancedAutoPassthru"))
+				fallback = ghb_settings_combo_int(settings, 
+												"AudioEncoderFallback");
+		}
 	}
 	if ( mux == HB_MUX_MP4 )
 	{
-		if ( !(fallback & (HB_ACODEC_AC3 | HB_ACODEC_LAME | 
-							HB_ACODEC_FAAC | HB_ACODEC_FFAAC)))
-		{
-			fallback = HB_ACODEC_FAAC;
-		}
+		mask = 	HB_ACODEC_LAME |
+				HB_ACODEC_FFAAC |
+				HB_ACODEC_FAAC |
+				HB_ACODEC_AC3;
+	}
+	if ( mux == HB_MUX_MKV )
+	{
+		mask = 	HB_ACODEC_LAME |
+				HB_ACODEC_FFAAC |
+				HB_ACODEC_AC3 |
+				HB_ACODEC_DCA |
+				HB_ACODEC_DCA_HD;
+	}
+	if (!(fallback & mask ))
+	{
+		fallback = HB_ACODEC_LAME;
 	}
 	return fallback;
 }
@@ -1178,29 +1215,6 @@ audio_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 
 	ghb_add_audio_to_ui(ud->builder, asettings);
 	check_list_full(ud);
-}
-
-G_MODULE_EXPORT void
-audio_advanced_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
-{
-	GtkWidget *dialog;
-
-	g_debug("audio_advanced_clicked_cb ()");
-	dialog = GHB_WIDGET(ud->builder, "audio_dialog");
-	if (gtk_widget_get_visible(dialog))
-		gtk_widget_hide(dialog);
-	else
-		gtk_widget_show(dialog);
-}
-
-G_MODULE_EXPORT void
-audio_advanced_ok_cb(GtkWidget *xwidget, signal_user_data_t *ud)
-{
-	GtkWidget *dialog;
-
-	g_debug("audio_advanced_clicked_cb ()");
-	dialog = GHB_WIDGET(ud->builder, "audio_dialog");
-	gtk_widget_hide(dialog);
 }
 
 G_MODULE_EXPORT void
