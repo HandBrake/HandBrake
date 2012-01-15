@@ -793,6 +793,15 @@ namespace Handbrake.Functions
 
             // Audio
             task.AudioTracks = new ObservableCollection<AudioTrack>(frmMain.AudioSettings.AudioTracks);
+            task.AllowedPassthruOptions = new AllowedPassthru
+                {
+                    AudioAllowAACPass = frmMain.AudioSettings.PassthruSettings.AudioAllowAACPass,
+                    AudioAllowAC3Pass = frmMain.AudioSettings.PassthruSettings.AudioAllowAC3Pass,
+                    AudioAllowDTSHDPass = frmMain.AudioSettings.PassthruSettings.AudioAllowDTSHDPass,
+                    AudioAllowDTSPass = frmMain.AudioSettings.PassthruSettings.AudioAllowDTSPass,
+                    AudioAllowMP3Pass = frmMain.AudioSettings.PassthruSettings.AudioAllowMP3Pass,
+                    AudioEncoderFallback = frmMain.AudioSettings.PassthruSettings.AudioEncoderFallback
+                };
 
             // Subtitles
             task.SubtitleTracks = new ObservableCollection<SubtitleTrack>(frmMain.Subtitles.SubtitlesList);
