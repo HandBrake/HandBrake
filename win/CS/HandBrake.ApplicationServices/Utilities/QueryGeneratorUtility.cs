@@ -602,6 +602,44 @@ namespace HandBrake.ApplicationServices.Utilities
             if (audioItems.Trim() != String.Empty)
                 query += " -D " + audioItems;
 
+            // Passthru Settings
+            if (task.AllowedPassthruOptions != null)
+            {
+                string fallbackEncoders = string.Empty;
+
+                if (task.AllowedPassthruOptions.AudioAllowAACPass)
+                {
+                    fallbackEncoders += "aac";
+                }
+
+                if (task.AllowedPassthruOptions.AudioAllowAC3Pass)
+                {
+                    fallbackEncoders += string.IsNullOrEmpty(fallbackEncoders) ? "ac3" : ",ac3";
+                }
+
+                if (task.AllowedPassthruOptions.AudioAllowDTSHDPass)
+                {
+                    fallbackEncoders += string.IsNullOrEmpty(fallbackEncoders) ? "dtshd" : ",dtshd";
+                }
+
+                if (task.AllowedPassthruOptions.AudioAllowDTSPass)
+                {
+                    fallbackEncoders += string.IsNullOrEmpty(fallbackEncoders) ? "dts" : ",dts";
+                }
+
+                if (task.AllowedPassthruOptions.AudioAllowMP3Pass)
+                {
+                    fallbackEncoders += string.IsNullOrEmpty(fallbackEncoders) ? "mp3" : ",mp3";
+                }
+
+                if (!string.IsNullOrEmpty(fallbackEncoders))
+                {
+                    query += string.Format(" --audio-copy-mask {0}", fallbackEncoders);
+                }
+
+                query += string.Format(" --audio-fallback {0}", Converters.GetCliAudioEncoder(task.AllowedPassthruOptions.AudioEncoderFallback));
+            }
+
             return query;
         }
 
