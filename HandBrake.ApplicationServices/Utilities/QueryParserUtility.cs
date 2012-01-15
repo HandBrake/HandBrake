@@ -9,6 +9,7 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Globalization;
+    using System.Linq;
     using System.Text.RegularExpressions;
 
     using HandBrake.ApplicationServices.Functions;
@@ -100,6 +101,8 @@ namespace HandBrake.ApplicationServices.Utilities
             Match audioSampleRates = Regex.Match(input, @"-R ([0-9a-zA-Z.,]*)"); // Auto = a-z
             Match drcValues = Regex.Match(input, @"-D ([0-9.,]*)");
             Match gainValues = Regex.Match(input, @"--gain=([0-9.,-]*)");
+            Match fallbackEncoder = Regex.Match(input, @"--audio-fallback([a-zA-Z0-9:=\s]*)");
+            Match allowedPassthru = Regex.Match(input, @"--audio-copy-mask([a-zA-Z0-9:,=\s]*)");
 
             // Chapters Tab
             Match chapterMarkers = Regex.Match(input, @" -m");
@@ -139,7 +142,7 @@ namespace HandBrake.ApplicationServices.Utilities
                         parsed.EndPoint = parsed.StartPoint;
                     }
                 }
-             
+
                 #endregion
 
                 #region Output Settings
@@ -401,6 +404,23 @@ namespace HandBrake.ApplicationServices.Utilities
 
                 parsed.AudioTracks = allAudioTrackInfo;
 
+                if (fallbackEncoder.Success)
+                {
+                    parsed.AllowedPassthruOptions.AudioEncoderFallback =
+                        Converters.GetAudioEncoderFromCliString(fallbackEncoder.Groups[1].ToString().Trim());
+                }
+
+                if (allowedPassthru.Success)
+                {
+                    string[] allowedEncoders = allowedPassthru.Groups[1].ToString().Trim().Split(',');
+
+                    parsed.AllowedPassthruOptions.AudioAllowAACPass = allowedEncoders.Contains("aac");
+                    parsed.AllowedPassthruOptions.AudioAllowAC3Pass = allowedEncoders.Contains("ac3");
+                    parsed.AllowedPassthruOptions.AudioAllowDTSHDPass = allowedEncoders.Contains("dtshd");
+                    parsed.AllowedPassthruOptions.AudioAllowDTSPass = allowedEncoders.Contains("dts");
+                    parsed.AllowedPassthruOptions.AudioAllowMP3Pass = allowedEncoders.Contains("mp3");
+                }
+
                 #endregion
 
                 #region Chapters Tab
@@ -422,7 +442,7 @@ namespace HandBrake.ApplicationServices.Utilities
                 if (x264Profile.Success)
                     parsed.x264Profile =
                         Converters.Getx264ProfileFromCli(x264Profile.ToString().Replace("--x264-profile", string.Empty).Replace("=", string.Empty).Trim());
-               
+
                 if (x264Tune.Success)
                     parsed.X264Tune =
                         Converters.Getx264TuneFromCli(x264Tune.ToString().Replace("--x264-tune", string.Empty).Replace("=", string.Empty).Trim());

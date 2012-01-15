@@ -29,6 +29,7 @@ namespace HandBrake.ApplicationServices.Model
             this.AudioTracks = new ObservableCollection<AudioTrack>();
             this.SubtitleTracks = new ObservableCollection<SubtitleTrack>();
             this.ChapterNames = new ObservableCollection<ChapterMarker>();
+            this.AllowedPassthruOptions = new AllowedPassthru();
         }
 
         #region Source
@@ -262,6 +263,11 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets AudioEncodings.
         /// </summary>
         public ObservableCollection<AudioTrack> AudioTracks { get; set; }
+
+        /// <summary>
+        /// Gets or sets AllowedPassthruOptions.
+        /// </summary>
+        public AllowedPassthru AllowedPassthruOptions { get; set; }
         #endregion
 
         #region Subtitles
