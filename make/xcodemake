@@ -174,6 +174,11 @@ else
     jobs=--jobs=$EXTERNAL_JOBS
 fi
 
+## when driving from terminal; ensure $SYMROOT/external/ exists relative to SYMROOT
+if [ "$EXTERNAL_DRIVER" == "terminal" -a ! -e "$SYMROOT/external" ]; then
+    ln -s "$EXTERNAL_BUILD" "$SYMROOT/external"
+fi
+
 ## pull the trigger
 ## must set XCODE.driver to prevent inifinite recursion
 set -x
