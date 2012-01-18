@@ -1086,29 +1086,60 @@ namespace Handbrake.Controls
         /// </returns>
         private AudioEncoder GetCompatiblePassthru(AudioTrack track)
         {
-            if (track.ScannedTrack.Format.Contains("AC3") &&  this.check_ac3.Checked)
+            //
+            if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedAudioPassthruOpts))
             {
-                return AudioEncoder.Ac3Passthrough;
-            }
+                if (track.ScannedTrack.Format.Contains("AC3") && this.check_ac3.Checked)
+                {
+                    return AudioEncoder.Ac3Passthrough;
+                }
 
-            if (track.ScannedTrack.Format.Contains("DTS") && this.check_dts.Checked)
-            {
-                return AudioEncoder.DtsPassthrough;
-            }
+                if (track.ScannedTrack.Format.Contains("DTS") && this.check_dts.Checked)
+                {
+                    return AudioEncoder.DtsPassthrough;
+                }
 
-            if (track.ScannedTrack.Format.Contains("DTS-HD") && this.check_dtshd.Checked)
-            {
-                return AudioEncoder.DtsPassthrough;
-            }
+                if (track.ScannedTrack.Format.Contains("DTS-HD") && this.check_dtshd.Checked)
+                {
+                    return AudioEncoder.DtsPassthrough;
+                }
 
-            if (track.ScannedTrack.Format.Contains("aac") && this.check_aac.Checked)
-            {
-                return AudioEncoder.AacPassthru;
-            }
+                if (track.ScannedTrack.Format.Contains("aac") && this.check_aac.Checked)
+                {
+                    return AudioEncoder.AacPassthru;
+                }
 
-            if (track.ScannedTrack.Format.Contains("mp3") && this.check_mp3.Checked)
+                if (track.ScannedTrack.Format.Contains("mp3") && this.check_mp3.Checked)
+                {
+                    return AudioEncoder.Mp3Passthru;
+                }
+            }
+            else
             {
-                return AudioEncoder.Mp3Passthru;
+                if (track.ScannedTrack.Format.Contains("AC3"))
+                {
+                    return AudioEncoder.Ac3Passthrough;
+                }
+
+                if (track.ScannedTrack.Format.Contains("DTS"))
+                {
+                    return AudioEncoder.DtsPassthrough;
+                }
+
+                if (track.ScannedTrack.Format.Contains("DTS-HD"))
+                {
+                    return AudioEncoder.DtsPassthrough;
+                }
+
+                if (track.ScannedTrack.Format.Contains("aac"))
+                {
+                    return AudioEncoder.AacPassthru;
+                }
+
+                if (track.ScannedTrack.Format.Contains("mp3"))
+                {
+                    return AudioEncoder.Mp3Passthru;
+                }
             }
 
             return EnumHelper<AudioEncoder>.GetValue(drp_passthruFallback.SelectedItem.ToString()); 
