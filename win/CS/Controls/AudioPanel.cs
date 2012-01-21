@@ -321,7 +321,7 @@ namespace Handbrake.Controls
                         // Correct bad passthru option
                         if (this.IsIncompatiblePassthru(track))
                         {
-                            AudioEncoder encoder = GetCompatiblePassthru(track);
+                            AudioEncoder encoder = GetCompatiblePassthru(track, false);
                             drp_audioEncoder.SelectedItem = EnumHelper<AudioEncoder>.GetDisplay(encoder);
                         } 
                     }
@@ -350,7 +350,7 @@ namespace Handbrake.Controls
                     // Correct bad passthru option
                     if (this.IsIncompatiblePassthru(track))
                     {
-                        AudioEncoder encoder = GetCompatiblePassthru(track);
+                        AudioEncoder encoder = GetCompatiblePassthru(track, false);
                         drp_audioEncoder.SelectedItem = EnumHelper<AudioEncoder>.GetDisplay(encoder);
                     }
                     break;
@@ -844,6 +844,12 @@ namespace Handbrake.Controls
             }
         }
 
+        /// <summary>
+        /// Move to
+        /// </summary>
+        /// <param name="top">
+        /// The top.
+        /// </param>
         private void MoveTo(bool top)
         {
             if (audioList.SelectedRows.Count == 0) return;
@@ -1081,13 +1087,15 @@ namespace Handbrake.Controls
         /// <param name="track">
         /// The track.
         /// </param>
+        /// <param name="useAutoPassthruOptions">
+        /// The use Auto Passthru Options.
+        /// </param>
         /// <returns>
         /// AN Audio encoder.
         /// </returns>
-        private AudioEncoder GetCompatiblePassthru(AudioTrack track)
+        private AudioEncoder GetCompatiblePassthru(AudioTrack track, bool useAutoPassthruOptions)
         {
-            //
-            if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedAudioPassthruOpts))
+            if (useAutoPassthruOptions)
             {
                 if (track.ScannedTrack.Format.Contains("AC3") && this.check_ac3.Checked)
                 {
@@ -1155,7 +1163,7 @@ namespace Handbrake.Controls
             {
                 if (this.IsIncompatiblePassthru(track))
                 {
-                    track.Encoder = GetCompatiblePassthru(track);
+                    track.Encoder = GetCompatiblePassthru(track, true);
                 }
             }
         }
