@@ -1,82 +1,123 @@
-﻿/*  SubtitleTrack.cs $
-    This file is part of the HandBrake source code.
-    Homepage: <http://handbrake.fr>.
-    It may be used under the terms of the GNU General Public License. */
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SubtitleTrack.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Subtitle Information
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.ApplicationServices.Model.Encoding
 {
+    using System;
     using System.Windows.Forms;
+
+    using HandBrake.ApplicationServices.Parsing;
 
     /// <summary>
     /// Subtitle Information
     /// </summary>
-    public class SubtitleTrack
+    public class SubtitleTrack : ModelBase
     {
-        /// <summary>
-        /// Gets or sets Track.
-        /// </summary>
-        public string Track { get; set; }
+        #region Constants and Fields
 
         /// <summary>
-        /// Gets or sets a value indicating whether Forced.
+        /// The source track.
         /// </summary>
-        public bool Forced { get; set; }
+        private Subtitle sourceTrack;
+
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
-        /// Gets or sets a value indicating whether Burned.
+        ///   Gets or sets a value indicating whether Burned.
         /// </summary>
         public bool Burned { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether Default.
+        ///   Gets or sets a value indicating whether Default.
         /// </summary>
         public bool Default { get; set; }
 
-        #region SRT Specific Options
-
         /// <summary>
-        /// Gets or sets the SRT Language
+        ///   Gets or sets a value indicating whether Forced.
         /// </summary>
-        public string SrtLang { get; set; }
+        public bool Forced { get; set; }
 
         /// <summary>
-        /// Gets or sets the SRT Character Code
+        ///   Gets a value indicating whether this is an SRT subtitle.
+        /// </summary>
+        public bool IsSrtSubtitle
+        {
+            get
+            {
+                return this.SrtFileName != "-";
+            }
+        }
+
+        /// <summary>
+        ///   Gets or sets Track.
+        /// </summary>
+        [Obsolete("Use SourceTrack Instead")]
+        public string Track { get; set; }
+
+
+        /// <summary>
+        ///   Gets or sets SourceTrack.
+        /// </summary>
+        public Subtitle SourceTrack
+        {
+            get
+            {
+                return this.sourceTrack;
+            }
+
+            set
+            {
+                this.sourceTrack = value;
+                this.OnPropertyChanged("SourceTrack");
+                if (this.sourceTrack != null)
+                {
+                    this.Track = this.sourceTrack.ToString();
+                }
+            }
+        }
+
+        /// <summary>
+        ///   Gets or sets the SRT Character Code
         /// </summary>
         public string SrtCharCode { get; set; }
 
         /// <summary>
-        /// Gets or sets the SRT Offset
-        /// </summary>
-        public int SrtOffset { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Path to the SRT file
-        /// </summary>
-        public string SrtPath { get; set; }
-
-        /// <summary>
-        /// Gets or sets the SRT Filename
+        ///   Gets or sets the SRT Filename
         /// </summary>
         public string SrtFileName { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether this is an SRT subtitle.
+        ///   Gets or sets the SRT Language
         /// </summary>
-        public bool IsSrtSubtitle
-        {
-            get { return this.SrtFileName != "-"; }
-        }
-
-        #endregion
+        public string SrtLang { get; set; }
 
         /// <summary>
-        /// Gets or sets the type of the subtitle
+        ///   Gets or sets the SRT Offset
+        /// </summary>
+        public int SrtOffset { get; set; }
+
+        /// <summary>
+        ///   Gets or sets the Path to the SRT file
+        /// </summary>
+        public string SrtPath { get; set; }
+
+        /// <summary>
+        ///   Gets or sets the type of the subtitle
         /// </summary>
         public SubtitleType SubtitleType { get; set; }
 
         /// <summary>
-        /// Gets A ListViewItem Containing information about this subitlte
+        ///   Gets A ListViewItem Containing information about this subitlte
         /// </summary>
+        [Obsolete("Used only for the old forms gui. Will be removed.")]
         public ListViewItem ListView
         {
             get
@@ -91,5 +132,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
                 return listTrack;
             }
         }
+
+        #endregion
     }
 }

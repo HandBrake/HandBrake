@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Parsing;
 
     /// <summary>
     /// The Filters View Model Interface
@@ -19,9 +20,15 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <summary>
         /// Setup a selected preset.
         /// </summary>
+        /// <param name="title">
+        /// The title.
+        /// </param>
         /// <param name="preset">
         /// The Current Preset.
         /// </param>
-        void SetPreset(Preset preset);
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        void SetSource(Title title, Preset preset, EncodeTask task);
     }
 }

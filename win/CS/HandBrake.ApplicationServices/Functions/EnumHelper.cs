@@ -10,6 +10,7 @@ namespace HandBrake.ApplicationServices.Functions
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
     using System.Reflection;
 
     /// <summary>
@@ -69,6 +70,17 @@ namespace HandBrake.ApplicationServices.Functions
             }
 
             throw new ArgumentOutOfRangeException("The Description for the enum was not recognized.");
+        }
+
+        /// <summary>
+        /// Return a list of all the enum values.
+        /// </summary>
+        /// <returns>
+        /// An Enum Oject List
+        /// </returns>
+        public static IEnumerable<T> GetEnumList()
+        {
+            return Enum.GetValues(typeof(T)).Cast<T>().ToList();
         }
 
         /// <summary>

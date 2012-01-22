@@ -393,21 +393,20 @@ namespace HandBrakeWPF.ViewModels
         #region Public Methods
 
         /// <summary>
-        /// Setup the window after a scan.
+        /// Setup this window for a new source
         /// </summary>
-        /// <param name="selectedTitle">
-        /// The selected title.
+        /// <param name="title">
+        /// The title.
         /// </param>
-        /// <param name="currentTask">
-        /// The current task.
+        /// <param name="preset">
+        /// The preset.
         /// </param>
-        /// <param name="currentPreset">
-        /// The Current preset
+        /// <param name="task">
+        /// The task.
         /// </param>
-        public void Setup(Title selectedTitle, EncodeTask currentTask, Preset currentPreset)
+        public void SetSource(Title title, Preset preset, EncodeTask task)
         {
         }
-
         #endregion
     }
 }

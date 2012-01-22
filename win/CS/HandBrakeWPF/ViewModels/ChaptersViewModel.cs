@@ -103,7 +103,9 @@ namespace HandBrakeWPF.ViewModels
         {
             var saveFileDialog = new VistaSaveFileDialog
                 {
-                   Filter = "Csv File|*.csv", DefaultExt = "csv", CheckPathExists = true 
+                    Filter = "Csv File|*.csv",
+                    DefaultExt = "csv",
+                    CheckPathExists = true
                 };
             saveFileDialog.ShowDialog();
             if (!string.IsNullOrEmpty(saveFileDialog.FileName))
@@ -142,8 +144,8 @@ namespace HandBrakeWPF.ViewModels
             catch (Exception exc)
             {
                 throw new GeneralApplicationException(
-                    "Unable to save Chapter Makrers file! ", 
-                    "Chapter marker names will NOT be saved in your encode.", 
+                    "Unable to save Chapter Makrers file! ",
+                    "Chapter marker names will NOT be saved in your encode.",
                     exc);
             }
         }
@@ -197,18 +199,21 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// The set preset.
+        /// Setup this window for a new source
         /// </summary>
+        /// <param name="title">
+        /// The title.
+        /// </param>
         /// <param name="preset">
         /// The preset.
         /// </param>
-        /// <param name="currentTitle">
-        /// The current Title.
+        /// <param name="task">
+        /// The task.
         /// </param>
-        public void Setup(Preset preset, Title currentTitle)
+        public void SetSource(Title title, Preset preset, EncodeTask task)
         {
             this.IncludeChapterMarkers = preset.Task.IncludeChapterMarkers;
-            this.SetSourceChapters(currentTitle.Chapters);
+            this.SetSourceChapters(title.Chapters);
         }
 
         /// <summary>

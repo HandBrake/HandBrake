@@ -16,6 +16,7 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model.Encoding;
 
@@ -358,12 +359,18 @@ namespace HandBrakeWPF.ViewModels
         #endregion
 
         /// <summary>
-        /// Setup a selected preset.
+        /// Setup this window for a new source
         /// </summary>
-        /// <param name="preset">
-        /// The Current Preset.
+        /// <param name="title">
+        /// The title.
         /// </param>
-        public void SetPreset(Preset preset)
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        public void SetSource(Title title, Preset preset, EncodeTask task)
         {
             if (preset != null)
             {

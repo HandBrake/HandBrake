@@ -22,7 +22,6 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Button Content="Add" Name="AddTrack" Grid.Column="0" Width="75" Margin="0,0,10,0" cal:Message.Attach="[Event Click] = [Action Add]" />
-            <Button Content="Remove" Name="RemoveTrack" Grid.Column="1" Width="75" Margin="0,0,10,0" cal:Message.Attach="[Event Click] = [Action Remove]" />
             <Button Content="Import SRT" Grid.Column="2" Width="75" cal:Message.Attach="[Event Click] = [Action Import]" />
         </Grid>
 
@@ -71,21 +70,22 @@
                             <!-- Row 1-->
 
                             <TextBlock Text="Source" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Center" />
-                            <ComboBox Width="100" Grid.Column="1" Margin="5,0,5,0" Height="22" />
+                            <ComboBox Width="100" ItemsSource="{Binding DataContext.SourceTracks, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                                      SelectedItem="{Binding SourceTrack}" Grid.Column="1" Margin="5,0,5,0" Height="22" />
                             <TextBlock Text="Forced Only" FontWeight="Bold" Grid.Column="2" VerticalAlignment="Center" />
-                            <CheckBox Grid.Column="3" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                            <CheckBox Grid.Column="3" IsChecked="{Binding Forced}" VerticalAlignment="Center" Margin="5,0,5,0"/>
                             <TextBlock Text="Burn In" FontWeight="Bold" Grid.Column="4" VerticalAlignment="Center" />
-                            <CheckBox Grid.Column="5" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                            <CheckBox Grid.Column="5" IsChecked="{Binding Burned}" VerticalAlignment="Center" Margin="5,0,5,0"/>
                             <TextBlock Text="Default" FontWeight="Bold" Grid.Column="6" VerticalAlignment="Center" />
-                            <CheckBox Grid.Column="7" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                            <CheckBox Grid.Column="7" IsChecked="{Binding Default}" VerticalAlignment="Center" Margin="5,0,5,0"/>
 
                             <!-- Row 2-->
                             <TextBlock Text="Language" FontWeight="Bold" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center"/>
-                            <ComboBox Width="100" Grid.Column="1" Margin="5,0,5,0" Grid.Row="1" Height="22" />
+                            <ComboBox Width="100" Grid.Column="1" ItemsSource="{Binding DataContext.Langauges, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" SelectedItem="{Binding SrtLang}" Margin="5,0,5,0" Grid.Row="1" Height="22" />
                             <TextBlock Text="Char Code" FontWeight="Bold" Grid.Column="2" Grid.Row="1" VerticalAlignment="Center"/>
-                            <ComboBox Width="100" Grid.Column="3" Grid.Row="1" Margin="5,0,5,0" Height="22" />
-                            <TextBlock Text="Offset" FontWeight="Bold" Grid.Column="4" Grid.Row="1" VerticalAlignment="Center"/>
-                            <NumericUpDown:NumericUpDown Width="45" Grid.Row="1" Grid.Column="5" HorizontalAlignment="Left"  Margin="5,0,5,0" />
+                            <ComboBox Width="100" Grid.Column="3" ItemsSource="{Binding DataContext.CharacterCodes, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" SelectedItem="{Binding SrtCharCode}" Grid.Row="1" Margin="5,0,5,0" Height="22" />
+                            <TextBlock Text="Offset (ms)" FontWeight="Bold" Grid.Column="4" Grid.Row="1" VerticalAlignment="Center"/>
+                            <NumericUpDown:NumericUpDown Width="45" Value="{Binding SrtOffset}" Grid.Row="1" Grid.Column="5" HorizontalAlignment="Left"  Margin="5,0,5,0" />
 
                         </Grid>
 
@@ -93,7 +93,7 @@
                         <Image Source="Images/delete.png" Width="16" Height="16" Grid.Column="2" Margin="10,0,10,0">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseDown">
-                                    <cal:ActionMessage MethodName="RemoveJob">
+                                    <cal:ActionMessage MethodName="Remove">
                                         <cal:Parameter Value="{Binding}" />
                                     </cal:ActionMessage>
                                 </i:EventTrigger>

@@ -1,7 +1,11 @@
-﻿/*  AudioTrack.cs $
-    This file is part of the HandBrake source code.
-    Homepage: <http://handbrake.fr>.
-    It may be used under the terms of the GNU General Public License. */
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="AudioTrack.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   An Audio Track for the Audio Panel
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.ApplicationServices.Model.Encoding
 {
@@ -17,27 +21,56 @@ namespace HandBrake.ApplicationServices.Model.Encoding
     /// </summary>
     public class AudioTrack : ModelBase
     {
-        #region Private Variables
-        /// <summary>
-        /// The gain value
-        /// </summary>
-        private int gain;
+        #region Constants and Fields
 
         /// <summary>
-        ///  The DRC Value
+        ///   The bitrate.
+        /// </summary>
+        private int bitrate;
+
+        /// <summary>
+        ///   The DRC Value
         /// </summary>
         private double drc;
 
         /// <summary>
-        /// The Scanned Audio Track
+        ///   The encoder.
+        /// </summary>
+        private AudioEncoder encoder;
+
+        /// <summary>
+        ///   The gain value
+        /// </summary>
+        private int gain;
+
+        /// <summary>
+        ///   The mix down.
+        /// </summary>
+        private Mixdown mixDown;
+
+        /// <summary>
+        ///   The sample rate.
+        /// </summary>
+        private double sampleRate;
+
+        /// <summary>
+        ///   The Scanned Audio Track
         /// </summary>
         [NonSerialized]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         private Audio scannedTrack;
-        #endregion
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AudioTrack"/> class. 
+        /// The track name.
+        /// </summary>
+        private string trackName;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        ///   Initializes a new instance of the <see cref = "AudioTrack" /> class.
         /// </summary>
         public AudioTrack()
         {
@@ -50,82 +83,12 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             this.ScannedTrack = new Audio();
         }
 
-        /// <summary>
-        /// Gets the Audio Track Name
-        /// </summary>
-        public int? Track
-        {
-            get
-            {
-                if (this.ScannedTrack != null)
-                {
-                    return this.ScannedTrack.TrackNumber;
-                }
+        #endregion
 
-                return null;
-            }
-        }
+        #region Public Properties
 
         /// <summary>
-        /// Gets or sets the Scanned Audio Tracks
-        /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Audio ScannedTrack
-        {
-            get
-            {
-                return this.scannedTrack;
-            }
-
-            set
-            {
-                this.scannedTrack = value;
-                this.OnPropertyChanged("ScannedTrack");
-                this.OnPropertyChanged("TrackDisplay");
-            }
-        }
-
-        /// <summary>
-        /// Gets the Display Value for this model.
-        /// </summary>
-        public string TrackDisplay
-        {
-            get
-            {
-                return this.ScannedTrack == null ? string.Empty : this.ScannedTrack.ToString();
-            }
-        }
-
-        /// <summary>
-        /// Gets the The UI display value for sample rate
-        /// </summary>
-        public string SampleRateDisplayValue
-        {
-            get
-            {
-                return this.SampleRate == 0 ? "Auto" : this.SampleRate.ToString();
-            }
-        }
-
-        /// <summary>
-        /// Gets the The UI display value for bit rate
-        /// </summary>
-        public string BitRateDisplayValue
-        {
-            get
-            {
-                if (this.Encoder == AudioEncoder.Ac3Passthrough || this.Encoder == AudioEncoder.DtsPassthrough ||
-                    this.Encoder == AudioEncoder.DtsHDPassthrough)
-                {
-                    return "Auto";
-                }
-
-                return this.Bitrate.ToString();
-            }
-        }
-
-        /// <summary>
-        /// Gets AudioEncoderDisplayValue.
+        ///   Gets AudioEncoderDisplayValue.
         /// </summary>
         public string AudioEncoderDisplayValue
         {
@@ -136,7 +99,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         }
 
         /// <summary>
-        /// Gets AudioMixdownDisplayValue.
+        ///   Gets AudioMixdownDisplayValue.
         /// </summary>
         public string AudioMixdownDisplayValue
         {
@@ -146,34 +109,42 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             }
         }
 
-
         /// <summary>
-        /// Gets or sets Audio Mixdown
+        ///   Gets the The UI display value for bit rate
         /// </summary>
-        public Mixdown MixDown { get; set; }
+        public string BitRateDisplayValue
+        {
+            get
+            {
+                if (this.Encoder == AudioEncoder.Ac3Passthrough || this.Encoder == AudioEncoder.DtsPassthrough
+                    || this.Encoder == AudioEncoder.DtsHDPassthrough)
+                {
+                    return "Auto";
+                }
+
+                return this.Bitrate.ToString();
+            }
+        }
 
         /// <summary>
-        /// Gets or sets Audio Encoder
+        ///   Gets or sets Audio Bitrate
         /// </summary>
-        public AudioEncoder Encoder { get; set; }
+        public int Bitrate
+        {
+            get
+            {
+                return this.bitrate;
+            }
+
+            set
+            {
+                this.bitrate = value;
+                this.OnPropertyChanged("Bitrate");
+            }
+        }
 
         /// <summary>
-        /// Gets or sets Audio Bitrate
-        /// </summary>
-        public int Bitrate { get; set; }
-
-        /// <summary>
-        /// Gets or sets Audio SampleRate
-        /// </summary>
-        public double SampleRate { get; set; }
-
-        /// <summary>
-        /// Gets or sets TrackName.
-        /// </summary>
-        public string TrackName { get; set; }
-
-        /// <summary>
-        /// Gets or sets Dynamic Range Compression
+        ///   Gets or sets Dynamic Range Compression
         /// </summary>
         public double DRC
         {
@@ -193,7 +164,24 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         }
 
         /// <summary>
-        /// Gets or sets the Gain for the audio track
+        ///   Gets or sets Audio Encoder
+        /// </summary>
+        public AudioEncoder Encoder
+        {
+            get
+            {
+                return this.encoder;
+            }
+
+            set
+            {
+                this.encoder = value;
+                this.OnPropertyChanged("Encoder");
+            }
+        }
+
+        /// <summary>
+        ///   Gets or sets the Gain for the audio track
         /// </summary>
         public int Gain
         {
@@ -211,5 +199,115 @@ namespace HandBrake.ApplicationServices.Model.Encoding
                 }
             }
         }
+
+        /// <summary>
+        ///   Gets or sets Audio Mixdown
+        /// </summary>
+        public Mixdown MixDown
+        {
+            get
+            {
+                return this.mixDown;
+            }
+
+            set
+            {
+                this.mixDown = value;
+                this.OnPropertyChanged("MixDown");
+            }
+        }
+
+        /// <summary>
+        ///   Gets or sets Audio SampleRate
+        /// </summary>
+        public double SampleRate
+        {
+            get
+            {
+                return this.sampleRate;
+            }
+
+            set
+            {
+                this.sampleRate = value;
+                this.OnPropertyChanged("SampleRate");
+            }
+        }
+
+        /// <summary>
+        ///   Gets the The UI display value for sample rate
+        /// </summary>
+        public string SampleRateDisplayValue
+        {
+            get
+            {
+                return this.SampleRate == 0 ? "Auto" : this.SampleRate.ToString();
+            }
+        }
+
+        /// <summary>
+        ///   Gets or sets the Scanned Audio Tracks
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public Audio ScannedTrack
+        {
+            get
+            {
+                return this.scannedTrack;
+            }
+
+            set
+            {
+                this.scannedTrack = value;
+                this.OnPropertyChanged("ScannedTrack");
+                this.OnPropertyChanged("TrackDisplay");
+            }
+        }
+
+        /// <summary>
+        ///   Gets the Audio Track Name
+        /// </summary>
+        public int? Track
+        {
+            get
+            {
+                if (this.ScannedTrack != null)
+                {
+                    return this.ScannedTrack.TrackNumber;
+                }
+
+                return null;
+            }
+        }
+
+        /// <summary>
+        ///   Gets the Display Value for this model.
+        /// </summary>
+        public string TrackDisplay
+        {
+            get
+            {
+                return this.ScannedTrack == null ? string.Empty : this.ScannedTrack.ToString();
+            }
+        }
+
+        /// <summary>
+        ///   Gets or sets TrackName.
+        /// </summary>
+        public string TrackName
+        {
+            get
+            {
+                return this.trackName;
+            }
+
+            set
+            {
+                this.trackName = value;
+                this.OnPropertyChanged("TrackName");
+            }
+        }
+
+        #endregion
     }
 }

@@ -23,12 +23,12 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <param name="selectedTitle">
         /// The selected title.
         /// </param>
-        /// <param name="currentTask">
-        /// The current task.
-        /// </param>
         /// <param name="currentPreset">
         /// The Current preset
         /// </param>
-        void Setup(Title selectedTitle, EncodeTask currentTask, Preset currentPreset);
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        void SetSource(Title selectedTitle, Preset currentPreset, EncodeTask task);
     }
 }

@@ -14,6 +14,7 @@ namespace HandBrakeWPF.ViewModels
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model.Encoding.x264;
 
@@ -137,12 +138,18 @@ namespace HandBrakeWPF.ViewModels
         #region Public Methods
 
         /// <summary>
-        /// Set the selected preset
+        /// Setup this window for a new source
         /// </summary>
+        /// <param name="title">
+        /// The title.
+        /// </param>
         /// <param name="preset">
         /// The preset.
         /// </param>
-        public void SetPreset(Preset preset)
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        public void SetSource(Title title, Preset preset, EncodeTask task)
         {
             this.Query = preset.Task.AdvancedEncoderOptions;
             this.X264Preset = preset.Task.x264Preset;
