@@ -159,6 +159,7 @@ namespace HandBrakeWPF.ViewModels
             this.WindowTitle = "HandBrake WPF Test Application";
             this.CurrentTask = new EncodeTask();
             this.ScannedSource = new Source();
+            this.SelectedPreset = this.presetService.DefaultPreset;
 
             // Setup Events
             this.scanService.ScanStared += this.ScanStared;
@@ -1022,13 +1023,13 @@ namespace HandBrakeWPF.ViewModels
         private void SetupTabs()
         {
             // Setup the Tabs
-            this.PictureSettingsViewModel.Setup(this.SelectedTitle, this.CurrentTask, this.SelectedPreset);
-            this.VideoViewModel.SetPreset(this.SelectedPreset);
-            this.FiltersViewModel.SetPreset(this.SelectedPreset);
-            this.AudioViewModel.SetPreset(this.SelectedPreset);
-            this.SubtitleViewModel.SetPreset(this.SelectedPreset);
-            this.ChaptersViewModel.Setup(this.SelectedPreset, this.SelectedTitle);
-            this.AdvancedViewModel.SetPreset(this.SelectedPreset);
+            this.PictureSettingsViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+            this.VideoViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+            this.FiltersViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+            this.AudioViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+            this.SubtitleViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+            this.ChaptersViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+            this.AdvancedViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
         }
 
         #endregion
@@ -1059,18 +1060,23 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void ScanCompleted(object sender, HandBrake.ApplicationServices.EventArgs.ScanCompletedEventArgs e)
         {
-            if (e.Successful)
-            {
-                this.scanService.SouceData.CopyTo(this.ScannedSource);
-                this.NotifyOfPropertyChange("ScannedSource");
-                this.NotifyOfPropertyChange("ScannedSource.Titles");
-                this.SelectedTitle = this.ScannedSource.Titles.Where(t => t.MainTitle).FirstOrDefault();
-                this.JobContextService.CurrentSource = this.ScannedSource;
-                this.JobContextService.CurrentTask = this.CurrentTask;
-                this.SetupTabs();
-            }
+             Caliburn.Micro.Execute.OnUIThread(() =>
+                 {
+                     if (e.Successful)
+                     {
+                         this.scanService.SouceData.CopyTo(this.ScannedSource);
+                         this.NotifyOfPropertyChange("ScannedSource");
+                         this.NotifyOfPropertyChange("ScannedSource.Titles");
+                         this.SelectedTitle = this.ScannedSource.Titles.Where(t => t.MainTitle).FirstOrDefault();
+                         this.JobContextService.CurrentSource = this.ScannedSource;
+                         this.JobContextService.CurrentTask = this.CurrentTask;
+                         this.SetupTabs();
+                     }
 
-            this.SourceLabel = "Scan Completed";
+                     this.SourceLabel = "Scan Completed";
+
+                 });
+
 
             // TODO Re-enable GUI.
         }

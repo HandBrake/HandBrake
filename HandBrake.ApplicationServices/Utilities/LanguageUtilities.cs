@@ -3,10 +3,13 @@
     Homepage: <http://handbrake.fr/>.
     It may be used under the terms of the GNU General Public License. */
 
-using System.Collections.Generic;
-
 namespace HandBrake.ApplicationServices.Utilities
 {
+    using System.Collections.Generic;
+
+    /// <summary>
+    /// Language Utilities
+    /// </summary>
     public class LanguageUtilities
     {
         /// <summary>

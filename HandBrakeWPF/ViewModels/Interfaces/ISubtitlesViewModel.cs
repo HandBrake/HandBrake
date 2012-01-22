@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Parsing;
 
     /// <summary>
     /// The Subtiles View Model Interface
@@ -19,9 +20,15 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <summary>
         /// Set the selected preset
         /// </summary>
+        /// <param name="title">
+        /// The title.
+        /// </param>
         /// <param name="preset">
         /// The preset.
         /// </param>
-        void SetPreset(Preset preset);
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        void SetSource(Title title, Preset preset, EncodeTask task);
     }
 }

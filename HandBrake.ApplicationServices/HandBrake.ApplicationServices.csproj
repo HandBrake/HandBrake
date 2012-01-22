@@ -150,6 +150,7 @@
     <Compile Include="Services\UserSettingService.cs" />
     <Compile Include="ASUserSettingConstants.cs" />
     <Compile Include="Utilities\AppcastReader.cs" />
+    <Compile Include="Utilities\CharCodesUtilities.cs" />
     <Compile Include="Utilities\GeneralUtilities.cs" />
     <Compile Include="Utilities\LanguageUtilities.cs" />
     <Compile Include="Utilities\PlistUtility.cs" />

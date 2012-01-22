@@ -20,12 +20,15 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <summary>
         /// Set the selected preset
         /// </summary>
-        /// <param name="preset">
-        /// The preset.
-        /// </param>
         /// <param name="currentTitle">
         /// The current Title.
         /// </param>
-        void Setup(Preset preset, Title currentTitle);
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        void SetSource(Title currentTitle, Preset preset, EncodeTask task);
     }
 }
