@@ -5170,7 +5170,7 @@ static void add_ffmpeg_attachment( hb_title_t *title, hb_stream_t *stream, int i
             break;
         default:
         {
-            int len = strlen( name );
+            int len = name ? strlen( name ) : 0;
             if( len >= 4 &&
                 ( !strcmp( name + len - 4, ".ttc" ) ||
                   !strcmp( name + len - 4, ".TTC" ) ||
