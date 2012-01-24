@@ -87,9 +87,8 @@ static NSMutableArray *masterBitRateArray = nil;
             {
                 audioMustMatch = 0;
             }
-            // Auto Passthru disabled until we have GUI widgets for it
-            shouldAdd = ( hb_audio_encoders[i].encoder != HB_ACODEC_AUTO_PASS ) &&
-                        ( ( hb_audio_encoders[i].encoder != HB_ACODEC_CA_HAAC ) || encca_haac_available() );
+            // don't add HE-AAC encoder if it's unavailable
+            shouldAdd = ( hb_audio_encoders[i].encoder != HB_ACODEC_CA_HAAC ) || encca_haac_available();
             muxMKV = ( hb_audio_encoders[i].muxers & HB_MUX_MKV ) ? YES : NO;
             muxMP4 = ( hb_audio_encoders[i].muxers & HB_MUX_MP4 ) ? YES : NO;
             if( shouldAdd && audioMustMatch )

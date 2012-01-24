@@ -64,6 +64,7 @@
         @"0.25",            @"x264CqSliderFractional",
         @"YES",             @"AlertBuiltInPresetUpdate",
         @"MetaX",           @"SendCompletedEncodeToApp",
+        @"NO",              @"ShowAdvancedOptsForAutoPassthru",
         nil]];
 }
 

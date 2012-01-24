@@ -904,12 +904,23 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         /* check to see how many audio track lines to allow for */
 		unsigned int ourMaximumNumberOfAudioTracks = [HBController maximumNumberOfAllowedAudioTracks];
 		int actualCountOfAudioTracks = 0;
+        BOOL autoPassthruPresent = NO;
 		for (unsigned int i = 1; i <= ourMaximumNumberOfAudioTracks; i++) {
-			if (0 < [[queueItemToCheck objectForKey: [NSString stringWithFormat: @"Audio%dTrack", i]] intValue]) {
+			if (0 < [[queueItemToCheck objectForKey: [NSString stringWithFormat: @"Audio%dTrack", i]] intValue])
+            {
 				actualCountOfAudioTracks++;
 			}
+            if (HB_ACODEC_AUTO_PASS == [[queueItemToCheck objectForKey: [NSString stringWithFormat: @"JobAudio%dEncoder", i]] intValue])
+            {
+                autoPassthruPresent = YES;
+            }
 		}
 		itemHeightForDisplay += (actualCountOfAudioTracks * rowHeightNonTitle);
+        
+        if (autoPassthruPresent == YES)
+        {
+            itemHeightForDisplay += rowHeightNonTitle * 2;
+        }
         
         /* add in subtitle lines for each subtitle in the SubtitleList array */
         itemHeightForDisplay +=  rowHeightNonTitle * [[queueItemToCheck objectForKey:@"SubtitleList"] count];
@@ -1064,9 +1075,11 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
 		NSString *detailString;
 		NSNumber *drc;
         NSNumber *gain;
+        BOOL autoPassthruPresent = NO;
 		for (unsigned int i = 1; i <= ourMaximumNumberOfAudioTracks; i++) {
 			base = [NSString stringWithFormat: @"Audio%d", i];
-			if (0 < [[item objectForKey: [base stringByAppendingString: @"Track"]] intValue]) {
+			if (0 < [[item objectForKey: [base stringByAppendingString: @"Track"]] intValue])
+            {
 				audioCodecSummary = [NSString stringWithFormat: @"%@", [item objectForKey: [base stringByAppendingString: @"Encoder"]]];
 				drc = [item objectForKey: [base stringByAppendingString: @"TrackDRCSlider"]];
                 gain = [item objectForKey: [base stringByAppendingString: @"TrackGainSlider"]];
@@ -1081,6 +1094,11 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
 								]
                                 ;
 				[audioDetails addObject: detailString];
+                // check if we have an Auto Passthru output track
+                if ([[item objectForKey: [NSString stringWithFormat: @"Audio%dEncoder", i]] isEqualToString: @"Auto Passthru"])
+                {
+                    autoPassthruPresent = YES;
+                }
 			}
 		}
         
@@ -1316,8 +1334,65 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
 				[finalString appendString: @"\n" withAttributes: detailAttr];
 			}
 		}
-
-        /* Eighth Line Subtitle Details */
+        
+        /* Eigth Line Auto Passthru Details */
+        // only print Auto Passthru settings if we have an Auro Passthru output track
+        if (autoPassthruPresent == YES)
+        {
+            NSString *autoPassthruFallback = @"", *autoPassthruCodecs = @"";
+            autoPassthruFallback = [autoPassthruFallback stringByAppendingString: [item objectForKey: @"AudioEncoderFallback"]];
+            if (0 < [[item objectForKey: @"AudioAllowAACPass"] intValue])
+            {
+                autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @"AAC"];
+            }
+            if (0 < [[item objectForKey: @"AudioAllowAC3Pass"] intValue])
+            {
+                if (0 < [autoPassthruCodecs length])
+                {
+                    autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @", "];
+                }
+                autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @"AC3"];
+            }
+            if (0 < [[item objectForKey: @"AudioAllowDTSHDPass"] intValue])
+            {
+                if (0 < [autoPassthruCodecs length])
+                {
+                    autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @", "];
+                }
+                autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @"DTS-HD"];
+            }
+            if (0 < [[item objectForKey: @"AudioAllowDTSPass"] intValue])
+            {
+                if (0 < [autoPassthruCodecs length])
+                {
+                    autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @", "];
+                }
+                autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @"DTS"];
+            }
+            if (0 < [[item objectForKey: @"AudioAllowMP3Pass"] intValue])
+            {
+                if (0 < [autoPassthruCodecs length])
+                {
+                    autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @", "];
+                }
+                autoPassthruCodecs = [autoPassthruCodecs stringByAppendingString: @"MP3"];
+            }
+            [finalString appendString: @"Auto Passthru Codecs: " withAttributes: detailBoldAttr];
+            if (0 < [autoPassthruCodecs length])
+            {
+                [finalString appendString: autoPassthruCodecs withAttributes: detailAttr];
+            }
+            else
+            {
+                [finalString appendString: @"None" withAttributes: detailAttr];
+            }
+            [finalString appendString: @"\n" withAttributes: detailAttr];
+            [finalString appendString: @"Auto Passthru Fallback: " withAttributes: detailBoldAttr];
+            [finalString appendString: autoPassthruFallback withAttributes: detailAttr];
+            [finalString appendString: @"\n" withAttributes: detailAttr];
+        }
+        
+        /* Ninth Line Subtitle Details */
         
         int i = 0;
         NSEnumerator *enumerator = [[item objectForKey:@"SubtitleList"] objectEnumerator];

@@ -570,6 +570,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	[fVidTurboPassCheck setEnabled: NO];
 	[fVidTurboPassCheck setState: NSOffState];
     
+    /* Auto Passthru advanced options box */
+    [fAudioAutoPassthruBox setHidden:NO];
+    
     
 	/* lets get our default prefs here */
 	[self getDefaultPresets:nil];
@@ -1046,6 +1049,16 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* Send Fresh QueueFileArray to fQueueController to update queue window */
     [fQueueController setQueueArray: QueueFileArray];
     [self getQueueStats];
+    
+    /* Update the visibility of the Auto Passthru advanced options box */
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"ShowAdvancedOptsForAutoPassthru"] == YES)
+    {
+        [fAudioAutoPassthruBox setHidden:NO];
+    }
+    else
+    {
+        [fAudioAutoPassthruBox setHidden:YES];
+    }
     
 }
 
@@ -2417,16 +2430,32 @@ fWorkingCount = 0;
     [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController grayscale]] forKey:@"VideoGrayScale"];
     
     /* Auto Passthru */
-    /* For the time being, values are hardcoded. */
-    [queueFileJob setObject: [NSNumber numberWithInt: 1] forKey: @"AudioAllowAACPass"];
-    [queueFileJob setObject: [NSNumber numberWithInt: 1] forKey: @"AudioAllowAC3Pass"];
-    [queueFileJob setObject: [NSNumber numberWithInt: 1] forKey: @"AudioAllowDTSHDPass"];
-    [queueFileJob setObject: [NSNumber numberWithInt: 1] forKey: @"AudioAllowDTSPass"];
-    [queueFileJob setObject: [NSNumber numberWithInt: 1] forKey: @"AudioAllowMP3Pass"];
-    // just in case we need it for display purposes
-    [queueFileJob setObject: @"AC3 (ffmpeg)" forKey: @"AudioEncoderFallback"];
-    // actual fallback encoder
-    [queueFileJob setObject: [NSNumber numberWithInt: HB_ACODEC_AC3] forKey: @"JobAudioEncoderFallback"];
+    if ([fAudioAutoPassthruBox isHidden])
+    {
+        // every passthru is allowed, fallback is AC3
+        [queueFileJob setObject:[NSNumber numberWithInt:1] forKey: @"AudioAllowAACPass"];
+        [queueFileJob setObject:[NSNumber numberWithInt:1] forKey: @"AudioAllowAC3Pass"];
+        [queueFileJob setObject:[NSNumber numberWithInt:1] forKey: @"AudioAllowDTSHDPass"];
+        [queueFileJob setObject:[NSNumber numberWithInt:1] forKey: @"AudioAllowDTSPass"];
+        [queueFileJob setObject:[NSNumber numberWithInt:1] forKey: @"AudioAllowMP3Pass"];
+        // just in case we need it for display purposes
+        [queueFileJob setObject:@"AC3 (ffmpeg)" forKey: @"AudioEncoderFallback"];
+        // actual fallback encoder
+        [queueFileJob setObject:[NSNumber numberWithInt:HB_ACODEC_AC3] forKey: @"JobAudioEncoderFallback"];
+        
+    }
+    else
+    {
+        [queueFileJob setObject:[NSNumber numberWithInt:[fAudioAllowAACPassCheck state]] forKey: @"AudioAllowAACPass"];
+        [queueFileJob setObject:[NSNumber numberWithInt:[fAudioAllowAC3PassCheck state]] forKey: @"AudioAllowAC3Pass"];
+        [queueFileJob setObject:[NSNumber numberWithInt:[fAudioAllowDTSHDPassCheck state]] forKey: @"AudioAllowDTSHDPass"];
+        [queueFileJob setObject:[NSNumber numberWithInt:[fAudioAllowDTSPassCheck state]] forKey: @"AudioAllowDTSPass"];
+        [queueFileJob setObject:[NSNumber numberWithInt:[fAudioAllowMP3PassCheck state]] forKey: @"AudioAllowMP3Pass"];
+        // just in case we need it for display purposes
+        [queueFileJob setObject:[fAudioFallbackPopUp titleOfSelectedItem] forKey: @"AudioEncoderFallback"];
+        // actual fallback encoder
+        [queueFileJob setObject:[NSNumber numberWithInt:[[fAudioFallbackPopUp selectedItem] tag]] forKey: @"JobAudioEncoderFallback"];
+    }
     
     /* Audio */
     [self writeToActivityLog: "createQueueFileItem: Getting Audio from prepareAudioForQueueFileJob ..."];
@@ -2829,8 +2858,12 @@ fWorkingCount = 0;
     [fVidTurboPassCheck setState:[[queueToApply objectForKey:@"VideoTurboTwoPass"] intValue]];
     
     /* Auto Passthru */
-    /* For the time being, there are no GUI elements for this;
-     * everything is hardcoded. */
+    [fAudioAllowAACPassCheck setState:[[queueToApply objectForKey:@"AudioAllowAACPass"] intValue]];
+    [fAudioAllowAC3PassCheck setState:[[queueToApply objectForKey:@"AudioAllowAC3Pass"] intValue]];
+    [fAudioAllowDTSHDPassCheck setState:[[queueToApply objectForKey:@"AudioAllowDTSHDPass"] intValue]];
+    [fAudioAllowDTSPassCheck setState:[[queueToApply objectForKey:@"AudioAllowDTSPass"] intValue]];
+    [fAudioAllowMP3PassCheck setState:[[queueToApply objectForKey:@"AudioAllowMP3Pass"] intValue]];
+    [fAudioFallbackPopUp selectItemWithTitle:[queueToApply objectForKey:@"AudioEncoderFallback"]];
     
     /* Audio */
     /* Now lets add our new tracks to the audio list here */
@@ -3239,9 +3272,37 @@ bool one_burned = FALSE;
     
     
     /* Auto Passthru */
-    /* For the time being, values are hardcoded. */
-    job->acodec_copy_mask = HB_ACODEC_PASS_MASK;
-    job->acodec_fallback = HB_ACODEC_AC3;
+    if ([fAudioAutoPassthruBox isHidden])
+    {
+        // every passthru is allowed, fallback is AC3
+        job->acodec_copy_mask = HB_ACODEC_PASS_MASK;
+        job->acodec_fallback = HB_ACODEC_AC3;
+    }
+    else
+    {
+        job->acodec_copy_mask = 0;
+        if ([fAudioAllowAACPassCheck state] == NSOnState)
+        {
+            job->acodec_copy_mask |= HB_ACODEC_FFAAC;
+        }
+        if ([fAudioAllowAC3PassCheck state] == NSOnState)
+        {
+            job->acodec_copy_mask |= HB_ACODEC_AC3;
+        }
+        if ([fAudioAllowDTSHDPassCheck state] == NSOnState)
+        {
+            job->acodec_copy_mask |= HB_ACODEC_DCA_HD;
+        }
+        if ([fAudioAllowDTSPassCheck state] == NSOnState)
+        {
+            job->acodec_copy_mask |= HB_ACODEC_DCA;
+        }
+        if ([fAudioAllowMP3PassCheck state] == NSOnState)
+        {
+            job->acodec_copy_mask |= HB_ACODEC_MP3;
+        }
+        job->acodec_fallback = [[fAudioFallbackPopUp selectedItem] tag];
+    }
     
     /* Audio tracks and mixdowns */
 	[fAudioDelegate prepareAudioForJob: job];
@@ -4540,20 +4601,20 @@ bool one_burned = FALSE;
     NSString * string = [fDstFile2Field stringValue];
     int format = [fDstFormatPopUp indexOfSelectedItem];
     char * ext = NULL;
+    NSMenuItem *menuItem;
+    int i;
 	/* Initially set the large file (64 bit formatting) output checkbox to hidden */
     [fDstMp4LargeFileCheck setHidden: YES];
     [fDstMp4HttpOptFileCheck setHidden: YES];
     [fDstMp4iPodFileCheck setHidden: YES];
     
-    /* Update the Video Codec PopUp */
+    /* Update the Video Codec Popup */
     /* lets get the tag of the currently selected item first so we might reset it later */
     int selectedVidEncoderTag;
     selectedVidEncoderTag = [[fVidEncoderPopUp selectedItem] tag];
     
     /* Note: we now store the video encoder int values from common.c in the tags of each popup for easy retrieval later */
     [fVidEncoderPopUp removeAllItems];
-    NSMenuItem *menuItem;
-    int i;
     for( i = 0; i < hb_video_encoders_count; i++ )
     {
         if( ( ( format == 0 ) && ( hb_video_encoders[i].muxers & HB_MUX_MP4 ) ) ||
@@ -4563,6 +4624,46 @@ bool one_burned = FALSE;
                                                           action: NULL keyEquivalent: @""];
             [menuItem setTag: hb_video_encoders[i].encoder];
         }
+    }
+    
+    /* if we have a previously selected vid encoder tag, then try to select it */
+    if (selectedVidEncoderTag)
+    {
+        [fVidEncoderPopUp selectItemWithTag: selectedVidEncoderTag];
+    }
+    else
+    {
+        [fVidEncoderPopUp selectItemAtIndex: 0];
+    }
+    
+    /* Update the Auto Passtgru Fallback Codec Popup */
+    /* lets get the tag of the currently selected item first so we might reset it later */
+    int selectedAutoPassthruFallbackEncoderTag;
+    selectedAutoPassthruFallbackEncoderTag = [[fAudioFallbackPopUp selectedItem] tag];
+    
+    [fAudioFallbackPopUp removeAllItems];
+    for( i = 0; i < hb_audio_encoders_count; i++ )
+    {
+        if( !( hb_audio_encoders[i].encoder & HB_ACODEC_PASS_FLAG ) &&
+             ( ( ( format == 0 ) && ( hb_audio_encoders[i].muxers & HB_MUX_MP4 ) ) ||
+               ( ( format == 1 ) && ( hb_audio_encoders[i].muxers & HB_MUX_MKV ) ) ) )
+        {
+            menuItem = [[fAudioFallbackPopUp menu] addItemWithTitle: [NSString stringWithUTF8String: hb_audio_encoders[i].human_readable_name]
+                                                             action: NULL keyEquivalent: @""];
+            [menuItem setTag: hb_audio_encoders[i].encoder];
+        }
+    }
+    
+    /* if we have a previously selected auto passthru fallback encoder tag, then try to select it */
+    if (selectedAutoPassthruFallbackEncoderTag)
+    {
+        selectedAutoPassthruFallbackEncoderTag = [fAudioFallbackPopUp selectItemWithTag: selectedAutoPassthruFallbackEncoderTag];
+    }
+    /* if we had no previous fallback selected OR if selection failed
+     * select the default fallback encoder (AC3) */
+    if (!selectedAutoPassthruFallbackEncoderTag)
+    {
+        [fAudioFallbackPopUp selectItemWithTag: HB_ACODEC_AC3];
     }
     
     switch( format )
@@ -4596,17 +4697,6 @@ bool one_burned = FALSE;
 								 userInfo: [NSDictionary dictionaryWithObjectsAndKeys:
 											[NSNumber numberWithInt: [[fDstFormatPopUp selectedItem] tag]], keyContainerTag,
 											nil]]];
-	
-    /* if we have a previously selected vid encoder tag, then try to select it */
-    if (selectedVidEncoderTag)
-    {
-        [fVidEncoderPopUp selectItemWithTag: selectedVidEncoderTag];
-    }
-    else
-    {
-        [fVidEncoderPopUp selectItemAtIndex: 0];
-    }
-
 
     if( format == 0 )
         [self autoSetM4vExtension: sender];
@@ -5651,8 +5741,57 @@ return YES;
         [fVidTurboPassCheck setState:[[chosenPreset objectForKey:@"VideoTurboTwoPass"] intValue]];
         
         /* Auto Passthru */
-        /* For the time being, there are no GUI elements for this;
-         * everything is hardcoded. */
+        /* If the preset has Auto Passthru fields, use them;
+         * else assume every passthru is allowed and the fallback is AC3 */
+        id tempObject;
+        if ((tempObject = [chosenPreset objectForKey:@"AudioAllowAACPass"]) != nil)
+        {
+            [fAudioAllowAACPassCheck setState:[tempObject intValue]];
+        }
+        else
+        {
+            [fAudioAllowAACPassCheck setState:NSOnState];
+        }
+        if ((tempObject = [chosenPreset objectForKey:@"AudioAllowAC3Pass"]) != nil)
+        {
+            [fAudioAllowAC3PassCheck setState:[tempObject intValue]];
+        }
+        else
+        {
+            [fAudioAllowAC3PassCheck setState:NSOnState];
+        }
+        if ((tempObject = [chosenPreset objectForKey:@"AudioAllowDTSHDPass"]) != nil)
+        {
+            [fAudioAllowDTSHDPassCheck setState:[tempObject intValue]];
+        }
+        else
+        {
+            [fAudioAllowDTSHDPassCheck setState:NSOnState];
+        }
+        if ((tempObject = [chosenPreset objectForKey:@"AudioAllowDTSPass"]) != nil)
+        {
+            [fAudioAllowDTSPassCheck setState:[tempObject intValue]];
+        }
+        else
+        {
+            [fAudioAllowDTSPassCheck setState:NSOnState];
+        }
+        if ((tempObject = [chosenPreset objectForKey:@"AudioAllowMP3Pass"]) != nil)
+        {
+            [fAudioAllowMP3PassCheck setState:[tempObject intValue]];
+        }
+        else
+        {
+            [fAudioAllowMP3PassCheck setState:NSOnState];
+        }
+        if ((tempObject = [chosenPreset objectForKey:@"AudioEncoderFallback"]) != nil)
+        {
+            [fAudioFallbackPopUp selectItemWithTitle:tempObject];
+        }
+        else
+        {
+            [fAudioFallbackPopUp selectItemWithTitle:@"AC3 (ffmpeg)"];
+        }
         
         /* Audio */
         [fAudioDelegate addTracksFromPreset: chosenPreset];
@@ -6175,13 +6314,25 @@ return YES;
         [preset setObject:[NSNumber numberWithInt:[fPictureController grayscale]] forKey:@"VideoGrayScale"];
         
         /* Auto Pasthru */
-        /* For the time being, values are hardcoded. */
-        [preset setObject: [NSNumber numberWithInt: 1] forKey: @"AudioAllowAACPass"];
-        [preset setObject: [NSNumber numberWithInt: 1] forKey: @"AudioAllowAC3Pass"];
-        [preset setObject: [NSNumber numberWithInt: 1] forKey: @"AudioAllowDTSHDPass"];
-        [preset setObject: [NSNumber numberWithInt: 1] forKey: @"AudioAllowDTSPass"];
-        [preset setObject: [NSNumber numberWithInt: 1] forKey: @"AudioAllowMP3Pass"];
-        [preset setObject: @"AC3 (ffmpeg)" forKey: @"AudioEncoderFallback"];
+        if ([fAudioAutoPassthruBox isHidden])
+        {
+            // every passthru is allowed, fallback is AC3
+            [preset setObject:[NSNumber numberWithInt:1] forKey: @"AudioAllowAACPass"];
+            [preset setObject:[NSNumber numberWithInt:1] forKey: @"AudioAllowAC3Pass"];
+            [preset setObject:[NSNumber numberWithInt:1] forKey: @"AudioAllowDTSHDPass"];
+            [preset setObject:[NSNumber numberWithInt:1] forKey: @"AudioAllowDTSPass"];
+            [preset setObject:[NSNumber numberWithInt:1] forKey: @"AudioAllowMP3Pass"];
+            [preset setObject:@"AC3 (ffmpeg)" forKey: @"AudioEncoderFallback"];
+        }
+        else
+        {
+            [preset setObject:[NSNumber numberWithInt:[fAudioAllowAACPassCheck state]] forKey: @"AudioAllowAACPass"];
+            [preset setObject:[NSNumber numberWithInt:[fAudioAllowAC3PassCheck state]] forKey: @"AudioAllowAC3Pass"];
+            [preset setObject:[NSNumber numberWithInt:[fAudioAllowDTSHDPassCheck state]] forKey: @"AudioAllowDTSHDPass"];
+            [preset setObject:[NSNumber numberWithInt:[fAudioAllowDTSPassCheck state]] forKey: @"AudioAllowDTSPass"];
+            [preset setObject:[NSNumber numberWithInt:[fAudioAllowMP3PassCheck state]] forKey: @"AudioAllowMP3Pass"];
+            [preset setObject:[fAudioFallbackPopUp titleOfSelectedItem] forKey: @"AudioEncoderFallback"];
+        }
         
         /* Audio */
         NSMutableArray *audioListArray = [[NSMutableArray alloc] init];

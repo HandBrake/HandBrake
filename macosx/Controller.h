@@ -166,7 +166,17 @@ BOOL                        fIsDragging;
     
 	/* New Audio box */
 	IBOutlet HBAudioController   * fAudioDelegate;
-	    
+    
+    /* New Audio Auto Passthru box */
+    IBOutlet NSBox               * fAudioAutoPassthruBox;
+    IBOutlet NSButton            * fAudioAllowAACPassCheck;
+    IBOutlet NSButton            * fAudioAllowAC3PassCheck;
+    IBOutlet NSButton            * fAudioAllowDTSHDPassCheck;
+    IBOutlet NSButton            * fAudioAllowDTSPassCheck;
+    IBOutlet NSButton            * fAudioAllowMP3PassCheck;
+    IBOutlet NSButton            * fAudioFallbackPopUp;
+    
+    	    
     /* Chapters box */
     IBOutlet NSButton            * fCreateChapterMarkers;
     IBOutlet NSTableView         * fChapterTable;
