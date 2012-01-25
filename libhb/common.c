@@ -526,7 +526,7 @@ void hb_get_audio_quality_limits(uint32_t codec, float *low, float *high, float 
         case HB_ACODEC_CA_AAC:
             *direction = 0;
             *granularity = 9;
-            *low = 0.;
+            *low = 1.;
             *high = 127.0;
             break;
 
