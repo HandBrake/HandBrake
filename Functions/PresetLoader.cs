@@ -233,14 +233,14 @@ namespace Handbrake.Functions
             }
 
             // Quality
-            if (presetQuery.Quality != null)
+            if (presetQuery.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)
             {
                 mainWindow.radio_cq.Checked = true;
                 mainWindow.slider_videoQuality.Value = QualityToSliderValue(presetQuery.VideoEncoder, presetQuery.Quality);
                 mainWindow.check_2PassEncode.CheckState = CheckState.Unchecked;
                 mainWindow.check_turbo.CheckState = CheckState.Unchecked;
             }
-            else if (presetQuery.VideoBitrate != null)
+            else if (presetQuery.VideoEncodeRateType == VideoEncodeRateType.AverageBitrate)
             {
                 mainWindow.radio_avgBitrate.Checked = true;
                 mainWindow.text_bitrate.Text = presetQuery.VideoBitrate.ToString();
