@@ -561,7 +561,7 @@ float hb_get_default_audio_quality( uint32_t codec )
             break;
 
         case HB_ACODEC_VORBIS:
-            quality = .5;
+            quality = 5.;
             break;
 
         case HB_ACODEC_CA_AAC:
