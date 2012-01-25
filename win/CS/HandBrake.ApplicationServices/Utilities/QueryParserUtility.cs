@@ -328,6 +328,8 @@ namespace HandBrake.ApplicationServices.Utilities
                 {
                     float quality = float.Parse(videoQuality.ToString().Replace("-q ", string.Empty), Culture);
                     parsed.Quality = quality;
+
+                    parsed.VideoEncodeRateType = VideoEncodeRateType.ConstantQuality;
                 }
 
                 #endregion
