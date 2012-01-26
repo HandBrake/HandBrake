@@ -546,13 +546,14 @@ namespace Handbrake
                     "Do you wish to include picture settings when updating the preset: " +
                     treeView_presets.SelectedNode.Text, "Update Preset", MessageBoxButtons.YesNoCancel,
                     MessageBoxIcon.Question);
-
+            string query = QueryGenerator.GenerateQueryForPreset(
+                this, QueryPictureSettingsMode.SourceMaximum, true, 0, 0);
             Preset preset = new Preset
                 {
                     Name = this.treeView_presets.SelectedNode.Text,
-                    Query =
-                        QueryGenerator.GenerateQueryForPreset(this, QueryPictureSettingsMode.SourceMaximum, true, 0, 0),
-                    CropSettings = (result == DialogResult.Yes)
+                    Query = query,                  
+                    CropSettings = (result == DialogResult.Yes),
+                    Task = QueryParserUtility.Parse(query),
                 };
 
             presetHandler.Update(preset);
