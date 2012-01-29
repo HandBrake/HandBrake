@@ -198,7 +198,7 @@ namespace HandBrake.ApplicationServices.Services
             userSettings["PromptOnUnmatchingQueries"] = true;
             userSettings["NativeLanguage"] = "Any";
             userSettings["DubMode"] = 255;
-            userSettings["CliExeHash"] = string.Empty;
+            userSettings["HandBrakeExeHash"] = string.Empty;
             userSettings["previewScanCount"] = 10;
             userSettings["clearOldLogs"] = true;
             userSettings["AutoNameTitleCase"] = true;
@@ -213,6 +213,7 @@ namespace HandBrake.ApplicationServices.Services
             userSettings["DubModeSubtitle"] = 0;
             userSettings["addOnlyOneAudioPerLanguage"] = true;
             userSettings["MinTitleLength"] = 10;
+            userSettings["ShowAdvancedAudioPassthruOpts"] = false;
         }
     }
 }
