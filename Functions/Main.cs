@@ -310,7 +310,7 @@ namespace Handbrake.Functions
             string base64Hash = Convert.ToBase64String(hash);
 
             // Compare the hash with the last known hash. If it's the same, return.
-            if (UserSettingService.GetUserSetting<string>(UserSettingConstants.CliExeHash) == base64Hash)
+            if (UserSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeExeHash) == base64Hash)
             {
                 return;
             }
