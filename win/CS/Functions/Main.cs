@@ -397,17 +397,19 @@ namespace Handbrake.Functions
             {
                 string tempPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\");
                 List<string> queueFiles = new List<string>();
+                List<string> removeFiles = new List<string>();
 
                 DirectoryInfo info = new DirectoryInfo(tempPath);
-                FileInfo[] logFiles = info.GetFiles("*.xml");
+                IEnumerable<FileInfo> logFiles = info.GetFiles("*.xml").Where(f => f.Name.StartsWith("hb_queue_recovery"));
                 foreach (FileInfo file in logFiles)
                 {
-                    if (!file.Name.Contains("hb_queue_recovery"))
-                        continue;
-
-                    using (FileStream strm = new FileStream(Path.Combine(file.DirectoryName, file.Name), FileMode.Open, FileAccess.Read))
+                    using (FileStream strm = new FileStream(file.FullName, FileMode.Open, FileAccess.Read))
                     {
                         List<QueueTask> list = Ser.Deserialize(strm) as List<QueueTask>;
+                        if (list != null && list.Count == 0)
+                        {
+                            removeFiles.Add(file.FullName);
+                        }
                         
                         if (list != null && list.Count != 0)
                         {
@@ -418,6 +420,12 @@ namespace Handbrake.Functions
                             }
                         }
                     }
+                }
+
+                // Cleanup old/unused queue files for now.
+                foreach (string file in removeFiles)
+                {
+                    File.Delete(file);
                 }
 
                 return queueFiles;
