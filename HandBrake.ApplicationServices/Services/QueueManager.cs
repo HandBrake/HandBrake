@@ -315,6 +315,7 @@ namespace HandBrake.ApplicationServices.Services
 
             if (File.Exists(tempPath))
             {
+                bool invokeUpdate = false;
                 using (FileStream strm = new FileStream((!string.IsNullOrEmpty(importPath) ? importPath : tempPath), FileMode.Open, FileAccess.Read))
                 {
                     if (strm.Length != 0)
@@ -338,8 +339,13 @@ namespace HandBrake.ApplicationServices.Services
                                 }
                             }
 
-                        this.InvokeQueueChanged(EventArgs.Empty);
+                        invokeUpdate = true;
                     }
+                }
+
+                if (invokeUpdate)
+                {
+                    this.InvokeQueueChanged(EventArgs.Empty);
                 }
             }
         }
