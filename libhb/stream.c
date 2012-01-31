@@ -4885,10 +4885,10 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
     AVDictionaryEntry *tag;
     int layout;
 
-    // DTS: work around lack of 6.1 support in libhb
-    if( hb_ff_dts_request_5point1( codec ) )
+    // DTS: work around lack of 6.0/6.1 support in libhb
+    if( hb_ff_dts_disable_xch( codec ) )
     {
-        hb_deep_log( 2, "add_ffmpeg_audio: found DTS-ES 6.1, requesting 5.1 core" );
+        hb_deep_log( 2, "add_ffmpeg_audio: found DTS-ES, requesting DTS core" );
     }
 
     // scan will ignore any audio without a bitrate. Since we've already
