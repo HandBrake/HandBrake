@@ -3847,23 +3847,17 @@ static int probe_dts_profile( hb_pes_stream_t *pes )
     }
     switch (info.profile)
     {
+        /* When we improve handling of channels > 5.1, we should move
+         * DTS_ES down to use libav for decode */
         case FF_PROFILE_DTS:
+        case FF_PROFILE_DTS_ES:
         case FF_PROFILE_DTS_96_24:
             pes->codec = HB_ACODEC_DCA;
             pes->stream_type = 0x82;
             pes->stream_kind = A;
             break;
 
-        case FF_PROFILE_DTS_ES:
-            pes->stream_type = 0;
-            pes->stream_kind = A;
-            break;
-
         case FF_PROFILE_DTS_HD_HRA:
-            pes->stream_type = 0;
-            pes->stream_kind = A;
-            break;
-
         case FF_PROFILE_DTS_HD_MA:
             pes->stream_type = 0;
             pes->stream_kind = A;
@@ -4909,8 +4903,11 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
         {
             audio->config.in.codec = HB_ACODEC_AC3;
         }
+        /* When we improve handling of channels > 5.1, we should move
+         * DTS_ES down to use libav for decode */
         else if ( codec->codec_id == CODEC_ID_DTS &&
                 ( codec->profile == FF_PROFILE_DTS ||
+                  codec->profile == FF_PROFILE_DTS_ES ||
                   codec->profile == FF_PROFILE_DTS_96_24 ) )
         {
             audio->config.in.codec = HB_ACODEC_DCA;
@@ -4918,8 +4915,7 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
         else
         {
             if ( codec->codec_id == CODEC_ID_DTS &&
-               ( codec->profile == FF_PROFILE_DTS_ES ||
-                 codec->profile == FF_PROFILE_DTS_HD_MA ||
+               ( codec->profile == FF_PROFILE_DTS_HD_MA ||
                  codec->profile == FF_PROFILE_DTS_HD_HRA ) )
             {
                 audio->config.in.codec = HB_ACODEC_DCA_HD;
