@@ -306,7 +306,7 @@ void hb_ff_set_sample_fmt(AVCodecContext *context, AVCodec *codec)
 int hb_ff_dts_disable_xch( AVCodecContext *c )
 {
     if( ( c->codec_id == CODEC_ID_DTS ) &&
-        ( c->channel_layout & ( AV_CH_LAYOUT_5POINT0|AV_CH_BACK_CENTER ) ) )
+        ( ( c->channel_layout & ~AV_CH_LOW_FREQUENCY ) == ( AV_CH_LAYOUT_5POINT0|AV_CH_BACK_CENTER ) ) )
     {
         c->request_channels = --c->channels;
         c->channel_layout &= ~AV_CH_BACK_CENTER;

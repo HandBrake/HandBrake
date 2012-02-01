@@ -215,7 +215,7 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     }
     else if( ( !pv->context->channels || !pv->context->channel_layout ) &&
              ( w->audio->config.in.codec == HB_ACODEC_DCA_HD ) &&
-             ( ( w->audio->config.in.channel_layout & HB_INPUT_CH_LAYOUT_3F2R ) == HB_INPUT_CH_LAYOUT_3F2R ) )
+             ( ( w->audio->config.in.channel_layout & ~HB_INPUT_CH_LAYOUT_HAS_LFE ) == HB_INPUT_CH_LAYOUT_3F2R ) )
     {
         /* XXX: when we are demuxing the stream ourselves, it seems we have no
          * channel count/layout info in the context until we decode audio for
