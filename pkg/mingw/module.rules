@@ -8,6 +8,7 @@ $(PKG.cli.zip): | $(STAGE.out.cli/)
 $(STAGE.out.cli/):
 	-$(MKDIR.exe) -p $@
 	$(CP.exe) HandBrakeCLI.exe $(STAGE.out.cli/)
+	$(CP.exe) -R contrib/etc/fonts $(STAGE.out.cli/)/fonts/
 	$(call STAGE.doc,$(STAGE.out.cli/))
 
 
