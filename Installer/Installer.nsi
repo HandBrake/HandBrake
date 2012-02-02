@@ -140,7 +140,7 @@ Section "Handbrake" SEC01
   ; Copy the standard fonts config set into the fonts folder
   SetOutPath "$INSTDIR\fonts"
   SetOverwrite ifnewer
-  File "fonts\*.*"
+  File /r "fonts\*.*"
 SectionEnd
 
 Section -AdditionalIcons
@@ -173,7 +173,11 @@ Section Uninstall
   Delete "$INSTDIR\*.*"
   Delete "$INSTDIR\doc\*.*"
   Delete "$INSTDIR\fonts\*.*"
+  Delete "$INSTDIR\fonts\conf.d\*.*"
+  Delete "$INSTDIR\fonts\conf.avail\*.*"
   RMDir  "$INSTDIR\doc"
+  RMDIR  "$INSTDIR\fonts\conf.d"
+  RMDIR  "$INSTDIR\fonts\conf.avail"
   RMDIR  "$INSTDIR\fonts"
   Delete "$SMPROGRAMS\Handbrake\Uninstall.lnk"
   Delete "$DESKTOP\Handbrake.lnk"
