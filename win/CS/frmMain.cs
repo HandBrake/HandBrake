@@ -828,20 +828,10 @@ namespace Handbrake
         /// </summary>
         private void ImportPreset()
         {
-            if (this.selectedTitle == null)
-            {
-                MessageBox.Show(
-                            "Please scan a source before trying to import a preset.",
-                            "Error",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-                return;
-            }
-
             if (openPreset.ShowDialog() == DialogResult.OK)
             {
                 EncodeTask parsed = PlistPresetHandler.Import(openPreset.FileName);
-                PresetLoader.LoadPreset(this, parsed);
+
                 if (presetHandler.CheckIfPresetExists(parsed.PresetName))
                 {
                     if (!presetHandler.CanUpdatePreset(parsed.PresetName))
@@ -861,27 +851,26 @@ namespace Handbrake
                     if (result == DialogResult.Yes)
                     {
                         Preset preset = new Preset
-                            {
-                                Name = parsed.PresetName,
-                                Query = QueryGenerator.GenerateFullQuery(this).Query,
-                                CropSettings = parsed.UsesPictureSettings,
-                                Task = parsed,
-                                AudioPassthruSettings = new AllowedPassthru(false), // TODO at a future point, support this.
-                            };
+                        {
+                            Name = parsed.PresetName,
+                            Query = QueryGeneratorUtility.GenerateQuery(parsed),
+                            CropSettings = parsed.UsesPictureSettings,
+                            Description = string.Empty,
+                            AudioPassthruSettings = parsed.AllowedPassthruOptions
+                        };
 
                         presetHandler.Update(preset);
                     }
                 }
                 else
                 {
-                   
-                    Preset preset = new Preset 
+                    Preset preset = new Preset
                     {
                         Name = parsed.PresetName,
-                        Query = QueryGenerator.GenerateFullQuery(this).Query,
+                        Query = QueryGeneratorUtility.GenerateQuery(parsed),
                         CropSettings = parsed.UsesPictureSettings,
-                        Task = parsed,
-                        AudioPassthruSettings = new AllowedPassthru(false), // TODO at a future point, support this.
+                        Description = string.Empty,
+                        AudioPassthruSettings = parsed.AllowedPassthruOptions
                     };
                     
                     if (presetHandler.Add(preset))
