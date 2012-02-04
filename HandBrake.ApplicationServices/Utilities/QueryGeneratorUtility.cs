@@ -269,7 +269,11 @@ namespace HandBrake.ApplicationServices.Utilities
                         query += string.Format(" --pixel-aspect {0}:{1}", task.PixelAspectX, task.PixelAspectY);
                     break;
             }
-            query += " --modulus " + task.Modulus;
+
+            if (task.Modulus.HasValue)
+            {
+                query += " --modulus " + task.Modulus;
+            }
 
             return query;
         }

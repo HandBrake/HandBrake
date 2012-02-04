@@ -42,7 +42,7 @@ namespace HandBrake.ApplicationServices.Utilities
             string qualityMode = string.Empty;
 
             #region Get a List of Audio Track Objects
-            XmlNode audioListDict = root.ChildNodes[2].ChildNodes[0].FirstChild.ChildNodes[1];
+            XmlNode audioListDict = root.ChildNodes[2].ChildNodes[0].FirstChild.ChildNodes[13];
             ObservableCollection<AudioTrack> audioTracks = new ObservableCollection<AudioTrack>();
 
             for (int i = 0; i < audioListDict.ChildNodes.Count; i++)
@@ -76,7 +76,7 @@ namespace HandBrake.ApplicationServices.Utilities
                             track.DRC = double.Parse(value);
                             break;
                         case "AudioTrackGainSlider":
-                            track.Gain = int.Parse(value);
+                            track.Gain = int.Parse(value.Replace("0.0", "0"));
                             break;
                     }
                 }
@@ -90,7 +90,7 @@ namespace HandBrake.ApplicationServices.Utilities
             XmlNode presetSettings = root.ChildNodes[2].ChildNodes[0].FirstChild;
 
             // Start from 2 to avoid the audio settings which we don't need.
-            for (int i = 2; i < presetSettings.ChildNodes.Count; i += 2)
+            for (int i = 0; i < presetSettings.ChildNodes.Count; i += 2)
             {
                 string key = presetSettings.ChildNodes[i].InnerText;
                 string value = presetSettings.ChildNodes[i + 1].InnerText;
@@ -320,6 +320,26 @@ namespace HandBrake.ApplicationServices.Utilities
                         break;
                     case "UsesPictureSettings":
                         parsed.UsesPictureSettings = value == "1";
+                        break;
+
+                    // Allowed Passthru
+                    case "AudioAllowAACPass":
+                        parsed.AllowedPassthruOptions.AudioAllowAACPass = value == "1";
+                        break;
+                    case "AudioAllowAC3Pass":
+                        parsed.AllowedPassthruOptions.AudioAllowAC3Pass = value == "1";
+                        break;
+                    case "AudioAllowDTSHDPass":
+                        parsed.AllowedPassthruOptions.AudioAllowDTSHDPass = value == "1";
+                        break;
+                    case "AudioAllowDTSPass":
+                        parsed.AllowedPassthruOptions.AudioAllowDTSPass = value == "1";
+                        break;
+                    case "AudioAllowMP3Pass":
+                        parsed.AllowedPassthruOptions.AudioAllowMP3Pass = value == "1";
+                        break;
+                    case "AudioEncoderFallback":
+                        parsed.AllowedPassthruOptions.AudioEncoderFallback = EnumHelper<AudioEncoder>.GetValue(value);
                         break;
                 }
             }
