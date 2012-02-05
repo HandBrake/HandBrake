@@ -66,7 +66,7 @@ namespace HandBrake.ApplicationServices.Functions
                 case "dpl2":
                     return "Dolby Pro Logic II";
                 case "6ch":
-                    return "6 Channel Discrete";
+                    return "6-channel discrete";
                 default:
                     return "Automatic";
             }
@@ -89,7 +89,7 @@ namespace HandBrake.ApplicationServices.Functions
                     return Mixdown.DolbySurround;
                 case "Dolby Pro Logic II":
                     return Mixdown.DolbyProLogicII;
-                case "6 Channel Discrete":
+                case "6-channel discrete":
                     return Mixdown.SixChannelDiscrete;
                 case "None":
                 case "Passthru":

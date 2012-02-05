@@ -472,6 +472,13 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </param>
         private static void AddEncodeSettings(XmlTextWriter xmlWriter, EncodeTask parsed, Preset preset)
         {
+            AddEncodeElement(xmlWriter, "AudioAllowAACPass", "integer", parsed.AllowedPassthruOptions.AudioAllowAACPass ? "1" : "0");
+            AddEncodeElement(xmlWriter, "AudioAllowAC3Pass", "integer", parsed.AllowedPassthruOptions.AudioAllowAC3Pass ? "1" : "0");
+            AddEncodeElement(xmlWriter, "AudioAllowDTSHDPass", "integer", parsed.AllowedPassthruOptions.AudioAllowDTSHDPass ? "1" : "0");
+            AddEncodeElement(xmlWriter, "AudioAllowDTSPass", "integer", parsed.AllowedPassthruOptions.AudioAllowDTSPass ? "1" : "0");
+            AddEncodeElement(xmlWriter, "AudioAllowMP3Pass", "integer", parsed.AllowedPassthruOptions.AudioAllowMP3Pass ? "1" : "0");
+            AddEncodeElement(xmlWriter, "AudioEncoderFallback", "string", EnumHelper<AudioEncoder>.GetDisplay(parsed.AllowedPassthruOptions.AudioEncoderFallback));
+
             AddEncodeElement(xmlWriter, "ChapterMarkers", "integer", parsed.IncludeChapterMarkers ? "1" : "0");
             AddEncodeElement(xmlWriter, "Default", "integer", "0");
             AddEncodeElement(xmlWriter, "FileFormat", "string", Converters.GetFileFormat(parsed.OutputFormat) + " file");
@@ -698,13 +705,13 @@ namespace HandBrake.ApplicationServices.Utilities
             xmlWriter.WriteElementString("string", audioTrack.Bitrate.ToString());
 
             xmlWriter.WriteElementString("key", "AudioEncoder");
-            xmlWriter.WriteElementString("string", EnumHelper<Enum>.GetDescription(audioTrack.Encoder));
+            xmlWriter.WriteElementString("string", EnumHelper<AudioEncoder>.GetDisplay(audioTrack.Encoder));
 
             xmlWriter.WriteElementString("key", "AudioMixdown");
-            xmlWriter.WriteElementString("string", EnumHelper<Enum>.GetDescription(audioTrack.MixDown));
+            xmlWriter.WriteElementString("string", EnumHelper<Mixdown>.GetDisplay(audioTrack.MixDown));
 
             xmlWriter.WriteElementString("key", "AudioSamplerate");
-            xmlWriter.WriteElementString("string", audioTrack.SampleRate.ToString());
+            xmlWriter.WriteElementString("string", audioTrack.SampleRate.ToString().Replace("0", "Auto"));
 
             xmlWriter.WriteElementString("key", "AudioTrack");
             xmlWriter.WriteElementString("integer", audioTrack.Track.ToString());
@@ -715,6 +722,9 @@ namespace HandBrake.ApplicationServices.Utilities
             xmlWriter.WriteElementString("key", "AudioTrackDescription");
             xmlWriter.WriteElementString("string", "Unknown");
 
+            xmlWriter.WriteElementString("key", "AudioTrackGainSlider");
+            xmlWriter.WriteElementString("real", audioTrack.Gain.ToString());
+            
             xmlWriter.WriteEndElement();
         }
         #endregion

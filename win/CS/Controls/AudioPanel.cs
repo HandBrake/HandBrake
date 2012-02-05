@@ -977,7 +977,7 @@ namespace Handbrake.Controls
             drp_audioMix.Items.Add("Stereo");
             drp_audioMix.Items.Add("Dolby Surround");
             drp_audioMix.Items.Add("Dolby Pro Logic II");
-            drp_audioMix.Items.Add("6 Channel Discrete");
+            drp_audioMix.Items.Add("6-channel discrete");
             drp_audioMix.Items.Add(None);
 
             switch (drp_audioEncoder.Text)
@@ -988,7 +988,7 @@ namespace Handbrake.Controls
                     drp_audioMix.SelectedItem = currentMixdown ?? "Dolby Pro Logic II";
                     break;
                 case "MP3 (lame)":
-                    drp_audioMix.Items.Remove("6 Channel Discrete");
+                    drp_audioMix.Items.Remove("6-channel discrete");
                     drp_audioMix.Items.Remove(None);
                     drp_audioMix.SelectedItem = currentMixdown ?? "Dolby Pro Logic II";
                     break;
