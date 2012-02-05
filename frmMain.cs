@@ -553,6 +553,7 @@ namespace Handbrake
                     Name = this.treeView_presets.SelectedNode.Text,
                     Query = query,                  
                     CropSettings = (result == DialogResult.Yes),
+                    AudioPassthruSettings = this.AudioSettings.PassthruSettings,
                     Task = QueryParserUtility.Parse(query),
                 };
 

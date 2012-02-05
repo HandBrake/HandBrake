@@ -31,7 +31,7 @@ namespace HandBrake.Interop.Model.Encoding
 		[Display(Name = "Dolby Surround")]
 		DolbySurround,
 
-		[Display(Name = "6 Channel Discrete")]
+		[Display(Name = "6-channel discrete")]
 		SixChannelDiscrete,
 
         [Display(Name = "None")]

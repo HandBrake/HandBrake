@@ -146,6 +146,9 @@ namespace HandBrake.ApplicationServices.Services
                 {
                     preset.Query = update.Query;
                     preset.Task = update.Task;
+                    preset.AudioPassthruSettings = update.AudioPassthruSettings;
+                    preset.CropSettings = update.CropSettings;
+                    preset.UsePictureFilters = update.UsePictureFilters;
 
                     // Update the presets file
                     this.UpdatePresetFiles();

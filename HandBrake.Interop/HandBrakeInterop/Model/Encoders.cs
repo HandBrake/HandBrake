@@ -144,7 +144,7 @@ namespace HandBrake.Interop.Model
 		/// <returns>The highest possible mixdown for that audio encoder.</returns>
 		public static int GetMaxMixdownIndex(HBAudioEncoder audioEncoder)
 		{
-			// To find best case scenario, pass in highest number of channels and 6 channel discrete mixdown.
+			// To find best case scenario, pass in highest number of channels and 6-channel discrete mixdown.
 			int maxMixdownId = HBFunctions.hb_get_best_mixdown((uint)audioEncoder.Id, NativeConstants.HB_INPUT_CH_LAYOUT_3F4R, NativeConstants.HB_AMIXDOWN_6CH);
 
 			for (int i = 0; i < Mixdowns.Count; i++)

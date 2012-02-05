@@ -176,7 +176,7 @@ namespace Handbrake.Controls
             "Stereo",
             "Dolby Surround",
             "Dolby Pro Logic II",
-            "6 Channel Discrete"});
+            "6-channel discrete"});
             this.drp_audioMix.Location = new System.Drawing.Point(309, 66);
             this.drp_audioMix.Name = "drp_audioMix";
             this.drp_audioMix.Size = new System.Drawing.Size(147, 21);
