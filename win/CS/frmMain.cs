@@ -541,6 +541,16 @@ namespace Handbrake
         /// </param>
         private void pmnu_saveChanges_Click(object sender, EventArgs e)
         {
+            if (this.selectedTitle == null)
+            {
+                MessageBox.Show(
+                            "Please scan a source before trying to update a preset.",
+                            "Error",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                return;
+            }
+
             DialogResult result =
                 MessageBox.Show(
                     "Do you wish to include picture settings when updating the preset: " +
@@ -554,7 +564,7 @@ namespace Handbrake
                     Query = query,                  
                     CropSettings = (result == DialogResult.Yes),
                     AudioPassthruSettings = this.AudioSettings.PassthruSettings,
-                    Task = QueryParserUtility.Parse(query),
+                    Task = QueryParserUtility.Parse(query),                
                 };
 
             presetHandler.Update(preset);

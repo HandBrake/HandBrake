@@ -101,8 +101,8 @@ namespace HandBrake.ApplicationServices.Utilities
             Match audioSampleRates = Regex.Match(input, @"-R ([0-9a-zA-Z.,]*)"); // Auto = a-z
             Match drcValues = Regex.Match(input, @"-D ([0-9.,]*)");
             Match gainValues = Regex.Match(input, @"--gain=([0-9.,-]*)");
-            Match fallbackEncoder = Regex.Match(input, @"--audio-fallback([a-zA-Z0-9:=\s]*)");
-            Match allowedPassthru = Regex.Match(input, @"--audio-copy-mask([a-zA-Z0-9:,=\s]*)");
+            Match fallbackEncoder = Regex.Match(input, @"--audio-fallback([a-zA-Z0-9:=\s ]*)");
+            Match allowedPassthru = Regex.Match(input, @"--audio-copy-mask([a-zA-Z0-9:,=\s ]*)");
 
             // Chapters Tab
             Match chapterMarkers = Regex.Match(input, @" -m");
