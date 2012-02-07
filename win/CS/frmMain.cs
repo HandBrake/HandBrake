@@ -156,9 +156,9 @@ namespace Handbrake
                 {
                     // Set when the last update was
                     this.userSettingService.SetUserSetting(UserSettingConstants.LastUpdateCheckDate, DateTime.Now);
-                    string url = this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild).ToString().EndsWith("1")
-                                                  ? userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast_unstable)
-                                                  : userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast);
+                    string url = userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakePlatform).Contains("x86_64")
+                                                  ? userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast_x64)
+                                                  : userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast_i686);
                     UpdateService.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDone), false, url, userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild),
                         userSettingService.GetUserSetting<int>(UserSettingConstants.Skipversion), userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion));
                 }
@@ -463,9 +463,9 @@ namespace Handbrake
         {
             lbl_updateCheck.Visible = true;
             this.userSettingService.SetUserSetting(UserSettingConstants.LastUpdateCheckDate, DateTime.Now);
-            string url = userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild).ToString().EndsWith("1")
-                                                  ? userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast_unstable)
-                                                  : userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast);
+            string url = userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakePlatform).Contains("x86_64")
+                                                  ? userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast_x64)
+                                                  : userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast_i686);
             UpdateService.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDoneMenu), false,
                 url, userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild), 
                 userSettingService.GetUserSetting<int>(UserSettingConstants.Skipversion), userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion));

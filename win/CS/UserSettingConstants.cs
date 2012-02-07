@@ -15,8 +15,8 @@ namespace Handbrake
         public const string Skipversion = "skipversion";
         public const string AutoNaming = "autoNaming";
         public const string AutoNamePath = "autoNamePath";
-        public const string Appcast = "appcast";
-        public const string Appcast_unstable = "appcast_unstable";
+        public const string Appcast_i686 = "appcast_i686";
+        public const string Appcast_x64 = "appcast_x64";
         public const string AutoNameFormat = "autoNameFormat";
         public const string VLC_Path = "VLC_Path";
         public const string MainWindowMinimize = "MainWindowMinimize";
