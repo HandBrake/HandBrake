@@ -184,8 +184,8 @@ namespace HandBrake.ApplicationServices.Services
             userSettings["skipversion"] = 0;
             userSettings["autoNaming"] = true;
             userSettings["autoNamePath"] = string.Empty;
-            userSettings["appcast"] = "http://handbrake.fr/appcast.xml";
-            userSettings["appcast_unstable"] = "http://handbrake.fr/appcast_unstable.xml";
+            userSettings["appcast_i686"] = "http://handbrake.fr/appcast.i386.xml";
+            userSettings["appcast_x64"] = "http://handbrake.fr/appcast_unstable.x86_64.xml";
             userSettings["autoNameFormat"] = "{source}-{title}";
             userSettings["VLC_Path"] = "C:\\Program Files\\VideoLAN\\vlc\\vlc.exe";
             userSettings["MainWindowMinimize"] = true;
