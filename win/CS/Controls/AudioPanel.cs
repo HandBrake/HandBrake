@@ -898,7 +898,7 @@ namespace Handbrake.Controls
             {
                 case "AAC (faac)":
                 case "AAC (ffmpeg)":
-                    max = drp_audioMix.Text.Contains("6 Channel") ? 768 : 320;
+                    max = drp_audioMix.Text.Contains("6-channel") ? 768 : 320;
                     defaultRate = "160";
                     break;
                 case "MP3 (lame)":
