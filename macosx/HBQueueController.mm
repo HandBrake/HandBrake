@@ -1316,7 +1316,27 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         if ([[item objectForKey:@"VideoEncoder"] isEqualToString: @"H.264 (x264)"])
         {
             [finalString appendString: @"x264 Options: " withAttributes:detailBoldAttr];
-            [finalString appendString: [item objectForKey:@"x264Option"] withAttributes:detailAttr];
+            if ([item objectForKey:@"x264Option"])
+            {
+                [finalString appendString: [item objectForKey:@"x264Option"] withAttributes:detailAttr];
+            }
+            else
+            {
+                [finalString appendString: @"x264 defaults" withAttributes:detailAttr];   
+            }
+            [finalString appendString:@"\n" withAttributes:detailAttr];
+        }
+        else // we must be ffmpeg (lavc)
+        {
+            [finalString appendString: @"FFmpeg (lavc) Options: " withAttributes:detailBoldAttr];
+            if ([item objectForKey:@"lavcOption"])
+            {
+                [finalString appendString: [item objectForKey:@"lavcOption"] withAttributes:detailAttr];
+            }
+            else
+            {
+                [finalString appendString: @"FFmpeg (lavc) defaults" withAttributes:detailAttr];   
+            }
             [finalString appendString:@"\n" withAttributes:detailAttr];
         }
         

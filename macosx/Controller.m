@@ -2348,6 +2348,8 @@ fWorkingCount = 0;
 	[queueFileJob setObject:[fVidEncoderPopUp titleOfSelectedItem] forKey:@"VideoEncoder"];
 	/* x264 Option String */
 	[queueFileJob setObject:[fAdvancedOptions optionsString] forKey:@"x264Option"];
+    /* FFMpeg (lavc) Option String */
+    [queueFileJob setObject:[fAdvancedOptions optionsStringLavc] forKey:@"lavcOption"];
 
 	[queueFileJob setObject:[NSNumber numberWithInt:[[fVidQualityMatrix selectedCell] tag] + 1] forKey:@"VideoQualityType"];
 	[queueFileJob setObject:[fVidBitrateField stringValue] forKey:@"VideoAvgBitrate"];
@@ -3087,6 +3089,11 @@ fWorkingCount = 0;
 
         
     }
+    else
+    {
+        job->advanced_opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */
+        strcpy(job->advanced_opts, [[fAdvancedOptions optionsStringLavc] UTF8String]);
+    }
 
     /* Video settings */
     
@@ -3582,6 +3589,14 @@ bool one_burned = FALSE;
 			strcpy(job->advanced_opts, [[queueToApply objectForKey:@"x264Option"] UTF8String]);
 		}
         
+    }
+    else
+    {
+        if ([queueToApply objectForKey:@"lavcOption"])
+        {
+            job->advanced_opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */
+            strcpy(job->advanced_opts, [[queueToApply objectForKey:@"lavcOption"] UTF8String]);
+        }
     }
     
     
@@ -4778,6 +4793,11 @@ the user is using "Custom" settings by determining the sender*/
         [fAdvancedOptions setHidden:NO];
         [self autoSetM4vExtension: sender];
     }
+    else // we are FFmpeg (lavc)
+    {
+        [fAdvancedOptions setHidden:YES];   
+    }
+
 
     if (videoEncoder != HB_VCODEC_X264)
     {
@@ -5663,11 +5683,34 @@ return YES;
         
         /* Video encoder */
         [fVidEncoderPopUp selectItemWithTitle:[chosenPreset objectForKey:@"VideoEncoder"]];
+        [self videoEncoderPopUpChanged:nil];
         /* We set the advanced opt string here if applicable*/
-        [fAdvancedOptions setOptions:[chosenPreset objectForKey:@"x264Option"]];
+        if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_X264)
+        {
+            if ([chosenPreset objectForKey:@"x264Option"])
+            {
+                [fAdvancedOptions setOptions:[chosenPreset objectForKey:@"x264Option"]];
+            }
+            else
+            {
+                [fAdvancedOptions setOptions:@""];   
+            }
+            
+        }
+        else // we are ffmpeg encoder
+        {
+            if ([chosenPreset objectForKey:@"lavcOption"])
+            {
+                [fAdvancedOptions setLavcOptions:[chosenPreset objectForKey:@"lavcOption"]];
+            }
+            else
+            {
+                [fAdvancedOptions setLavcOptions:@""];   
+            }
+        }
         
         /* Lets run through the following functions to get variables set there */
-        [self videoEncoderPopUpChanged:nil];
+        //[self videoEncoderPopUpChanged:nil];
         /* Set the state of ipod compatible with Mp4iPodCompatible. Only for x264*/
         [fDstMp4iPodFileCheck setState:[[chosenPreset objectForKey:@"Mp4iPodCompatible"] intValue]];
         [self calculateBitrate:nil];
@@ -6242,6 +6285,7 @@ return YES;
         [preset setObject:[fVidEncoderPopUp titleOfSelectedItem] forKey:@"VideoEncoder"];
         /* x264 Option String */
         [preset setObject:[fAdvancedOptions optionsString] forKey:@"x264Option"];
+        [preset setObject:[fAdvancedOptions optionsStringLavc] forKey:@"lavcOption"];
         
         /* though there are actually only 0 - 1 types available in the ui we need to map to the old 0 - 2
          * set of indexes from when we had 0 == Target , 1 == Abr and 2 == Constant Quality for presets

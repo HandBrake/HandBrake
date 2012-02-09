@@ -38,10 +38,20 @@
     return [fDisplayX264Options stringValue];
 }
 
+- (NSString *) optionsStringLavc
+{
+    return [fDisplayLavcOptions stringValue];
+}
+
 - (void) setOptions: (NSString *)string
 {
     [fDisplayX264Options setStringValue:string];
     [self X264AdvancedOptionsSet:nil];
+}
+
+- (void) setLavcOptions: (NSString *)string
+{
+    [fDisplayLavcOptions setStringValue:string];
 }
 
 - (void) setHidden: (BOOL) hide
@@ -49,12 +59,10 @@
     if(hide)
     {
         [fOptionsBox setContentView:fEmptyView];
-        [fX264optViewTitleLabel setStringValue: @"Only Used With The x264 (H.264) Codec"];
     }
     else
     {
         [fOptionsBox setContentView:fX264optView];
-        [fX264optViewTitleLabel setStringValue: @""];
     }
     return;
 }

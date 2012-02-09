@@ -16,6 +16,9 @@
     IBOutlet NSTextField        * fX264optViewTitleLabel;
     IBOutlet NSTextField        * fDisplayX264OptionsLabel;
     IBOutlet NSTextField        * fDisplayX264Options;
+    IBOutlet NSTextField        * fDisplayLavcOptionsLabel;
+    IBOutlet NSTextField        * fDisplayLavcOptions;
+    
     IBOutlet NSTextField        * fX264optBframesLabel;
     IBOutlet NSPopUpButton      * fX264optBframesPopUp;
     IBOutlet NSTextField        * fX264optRefLabel;
@@ -59,7 +62,9 @@
 - (void) setView: (NSBox *) box;
 - (BOOL) loadMyNibFile;
 - (NSString *) optionsString;
+- (NSString *) optionsStringLavc;
 - (void) setOptions: (NSString *)string;
+- (void) setLavcOptions: (NSString *)string;
 - (void) enableUI: (bool) b;
 - (void) setHidden: (BOOL) hide;
 - (IBAction) X264AdvancedOptionsAnimate: (id) sender;
