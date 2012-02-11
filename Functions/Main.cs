@@ -423,9 +423,12 @@ namespace Handbrake.Functions
                 }
 
                 // Cleanup old/unused queue files for now.
-                foreach (string file in removeFiles)
+                if (!GeneralUtilities.IsMultiInstance)
                 {
-                    File.Delete(file);
+                    foreach (string file in removeFiles)
+                    {
+                        File.Delete(file);
+                    }
                 }
 
                 return queueFiles;
