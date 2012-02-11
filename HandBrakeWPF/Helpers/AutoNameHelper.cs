@@ -13,6 +13,8 @@ namespace HandBrakeWPF.Helpers
     using System.IO;
     using System.Linq;
 
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.Extensions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
@@ -23,22 +25,6 @@ namespace HandBrakeWPF.Helpers
     /// </summary>
     public class AutoNameHelper
     {
-        /// <summary>
-        /// Backing field for the user setting service
-        /// </summary>
-        private static IUserSettingService userSettingService;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AutoNameHelper"/> class.
-        /// </summary>
-        /// <param name="userSetting">
-        /// The user Setting.
-        /// </param>
-        public AutoNameHelper(IUserSettingService userSetting)
-        {
-            userSettingService = userSetting;
-        }
-
         /// <summary>
         /// Function which generates the filename and path automatically based on 
         /// the Source Name, DVD title and DVD Chapters
@@ -54,6 +40,13 @@ namespace HandBrakeWPF.Helpers
         /// </returns>
         public static string AutoName(EncodeTask task, string sourceOrLabelName)
         {
+
+            IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
+            if (task.Destination == null)
+            {
+                task.Destination = string.Empty;
+            }
+
             string autoNamePath = string.Empty;
             if (task.Title != 0) // TODO check.
             {

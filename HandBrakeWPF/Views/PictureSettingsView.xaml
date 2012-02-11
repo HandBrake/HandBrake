@@ -6,6 +6,7 @@
 
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="boolConverter" />
+        <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
     </UserControl.Resources>
 
     <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -16,26 +17,24 @@
 
             <!-- Row 1-->
             <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
-                <Label Content="Source" Grid.Row="0" Grid.Column="0" />
+                <Label Content="Source:" Grid.Row="0" Grid.Column="0" />
                 <Label Content="{Binding SourceInfo}" Name="sourceResolution" Grid.Row="0" Grid.Column="1" />
             </StackPanel>
 
             <!-- Row 2-->
             <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
                 <Label Content="Width:" Grid.Row="1" Grid.Column="0" />
-                <NumericUpDown:NumericUpDown Value="{Binding Width}" Minimum="0" Grid.Row="1" Grid.Column="1" Width="45"  />
+                <NumericUpDown:NumericUpDown Value="{Binding Width, Mode=TwoWay}" IsEnabled="{Binding WidthControlEnabled}" SmallChange="{Binding SelectedModulus, Mode=OneWay}"
+                                             Minimum="0" Grid.Row="1" Grid.Column="1" Width="60"  />
                 <Label Content="Height:" Grid.Row="1" Grid.Column="2" />
-                <NumericUpDown:NumericUpDown Value="{Binding Height}" Minimum="0" Grid.Row="1" Grid.Column="3" Width="45"  />
+                <NumericUpDown:NumericUpDown Value="{Binding Height, Mode=TwoWay}" IsEnabled="{Binding HeightControlEnabled}" SmallChange="{Binding SelectedModulus, Mode=OneWay}" 
+                                             Minimum="0" Grid.Row="1" Grid.Column="3" Width="60"  />
                 <CheckBox Content="Keep Aspect Ratio" IsChecked="{Binding MaintainAspectRatio}" VerticalAlignment="Center" Margin="5,0,0,0" />
             </StackPanel>
 
             <!-- Row 3-->
             <Grid Margin="5,15,5,0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
@@ -47,21 +46,51 @@
 
                 <Label Content="Anamorphic:" Grid.Row="0" Grid.Column="0" />
                 <Label Content="Modulus:" Grid.Row="1" Grid.Column="0" />
-                <Label Content="Display Width:" Grid.Row="2" Grid.Column="0" />
-                <Label Content="PAR Width:" Grid.Row="3" Grid.Column="0" />
-                <Label Content="PAR Height:" Grid.Row="4" Grid.Column="0" />
-                <Label Content="Display Size:" Grid.Row="5" Grid.Column="0" />
 
                 <ComboBox Width="110" Grid.Row="0" ItemsSource="{Binding AnamorphicModes}" SelectedItem="{Binding SelectedAnamorphicMode}" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
                 <ComboBox Width="110" Grid.Row="1" ItemsSource="{Binding ModulusValues}" SelectedItem="{Binding SelectedModulus}" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="45" Value="{Binding DisplayWidth}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="45" Value="{Binding ParWidth}" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="45" Value="{Binding ParHeight}" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <Label Content="{Binding DisplaySize}" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+            </Grid>
+            
+            <!-- Row 4-->
+            <Grid Margin="5,15,5,0" Visibility="{Binding ShowCustomAnamorphicControls, Converter={StaticResource boolToVisConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Label Content="Display Width:" Grid.Row="0" Grid.Column="0" />
+                <Label Content="PAR Width:" Grid.Row="1" Grid.Column="0" />
+                <Label Content="PAR Height:" Grid.Row="5" Grid.Column="0" />
+
+                <NumericUpDown:NumericUpDown Width="60" Value="{Binding DisplayWidth, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <NumericUpDown:NumericUpDown Width="60" Value="{Binding ParWidth, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <NumericUpDown:NumericUpDown Width="60" Value="{Binding ParHeight, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+            </Grid>
+            
+            <!-- Row 5-->
+            <Grid Margin="5,15,5,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Label Content="Display Size:" Grid.Row="0" Grid.Column="0" />
+
+                <Label Content="{Binding DisplaySize}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
             </Grid>
         </StackPanel>
 
-
+        <!-- Crop Panel -->
         <StackPanel Name="CropPanel" Margin="50,0,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Label Content="Cropping" FontWeight="Bold" />
             <RadioButton Content="Automatic" IsChecked="{Binding IsCustomCrop, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="10,0,0,0"/>
@@ -89,10 +118,14 @@
                 <Label Content="Left" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" />
                 <Label Content="Right" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" />
 
-                <NumericUpDown:NumericUpDown Width="45" Value="{Binding CropTop}" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="45" Value="{Binding CropBottom}" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="45" Value="{Binding CropLeft}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="45" Value="{Binding CropRight}" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <NumericUpDown:NumericUpDown Width="45" Value="{Binding CropTop, Mode=TwoWay}" IsEnabled="{Binding IsCustomCrop}" Grid.Row="1" Grid.Column="2" 
+                                             HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <NumericUpDown:NumericUpDown Width="45" Value="{Binding CropBottom, Mode=TwoWay}" IsEnabled="{Binding IsCustomCrop}" Grid.Row="3" Grid.Column="2" 
+                                             HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <NumericUpDown:NumericUpDown Width="45" Value="{Binding CropLeft, Mode=TwoWay}" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="1" 
+                                             HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <NumericUpDown:NumericUpDown Width="45" Value="{Binding CropRight, Mode=TwoWay}" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="3"
+                                             HorizontalAlignment="Left" Margin="0,0,0,5" />
 
             </Grid>
 

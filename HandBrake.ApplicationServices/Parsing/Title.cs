@@ -188,7 +188,7 @@ namespace HandBrake.ApplicationServices.Parsing
             {
                 thisTitle.Resolution = new Size(int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
                 thisTitle.ParVal = new Size(int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value));
-                thisTitle.AspectRatio = float.Parse(m.Groups[5].Value, CultureInfo.InvariantCulture);
+                thisTitle.AspectRatio = Math.Round(float.Parse(m.Groups[5].Value, CultureInfo.InvariantCulture), 2);
                 thisTitle.Fps = float.Parse(m.Groups[6].Value, CultureInfo.InvariantCulture);
             }
 
