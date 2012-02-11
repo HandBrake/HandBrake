@@ -27,6 +27,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Ookii.Dialogs.Wpf;
@@ -329,7 +330,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                // TODO
+                // TODO Disc Label
                 //if (this.selectedSourceType == SourceType.DvdDrive)
                 //{
                 //    return this.dvdDriveLabel;
@@ -510,6 +511,12 @@ namespace HandBrakeWPF.ViewModels
                     this.SelectedEndPoint = selectedTitle.Chapters.Last().ChapterNumber;
                     this.SelectedPointToPoint = PointToPointMode.Chapters;
                     this.SelectedAngle = 1;
+
+                    this.CurrentTask.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
+                    this.NotifyOfPropertyChange("CurrentTask");
+
+                    // Setup the tab controls
+                    this.SetupTabs();
                 }
             }
         }
@@ -1023,13 +1030,16 @@ namespace HandBrakeWPF.ViewModels
         private void SetupTabs()
         {
             // Setup the Tabs
-            this.PictureSettingsViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
-            this.VideoViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
-            this.FiltersViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
-            this.AudioViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
-            this.SubtitleViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
-            this.ChaptersViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
-            this.AdvancedViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+            if (this.selectedTitle != null)
+            {
+                this.PictureSettingsViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+                this.VideoViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+                this.FiltersViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+                this.AudioViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+                this.SubtitleViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+                this.ChaptersViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+                this.AdvancedViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
+            }
         }
 
         #endregion
