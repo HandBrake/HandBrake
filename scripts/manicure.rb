@@ -342,7 +342,7 @@ class Display
         when /AC3 Pass/
           audioEncoders << "copy:ac3"
         when /AC3/
-          audioEncoders << "ac3"
+          audioEncoders << "ffac3"
         when /DTS Pass/
           audioEncoders << "copy:dts"
         when /DTS-HD Pass/
@@ -608,7 +608,7 @@ class Display
         when /AC3 Pass/
           audioEncoders << "copy:ac3"
         when /AC3/
-          audioEncoders << "ac3"
+          audioEncoders << "ffac3"
         when /DTS Pass/
           audioEncoders << "copy:dts"
         when /DTS-HD Pass/
@@ -869,7 +869,7 @@ class Display
         when /AC3 Pass/
           audioEncoders << "copy:ac3"
         when /AC3/
-          audioEncoders << "ac3"
+          audioEncoders << "ffac3"
         when /DTS Pass/
           audioEncoders << "copy:dts"
         when /DTS-HD Pass/
@@ -1167,7 +1167,7 @@ class Display
         when /AC3 Pass/
           audioEncoders << "copy:ac3"
         when /AC3/
-          audioEncoders << "ac3"
+          audioEncoders << "ffac3"
         when /DTS Pass/
           audioEncoders << "copy:dts"
         when /DTS-HD Pass/
