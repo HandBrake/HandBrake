@@ -6,13 +6,22 @@
 namespace HandBrake.ApplicationServices.Functions
 {
     using System;
+    using System.ComponentModel;
+    using System.Diagnostics;
     using System.Runtime.InteropServices;
+    using System.Windows;
+    using System.Windows.Threading;
 
     /// <summary>
     /// Win32 API calls
     /// </summary>
     public class Win32
     {
+        /// <summary>
+        /// Used to force UI Thread.
+        /// </summary>
+        private static Action<Action> executor = action => action();
+
         /// <summary>
         /// Set the Forground Window
         /// </summary>
@@ -52,13 +61,21 @@ namespace HandBrake.ApplicationServices.Functions
         public struct MEMORYSTATUSEX
         {
             public int dwLength;
+
             public int dwMemoryLoad;
+
             public ulong ullTotalPhys;
+
             public ulong ullAvailPhys;
+
             public ulong ullTotalPageFile;
+
             public ulong ullAvailPageFile;
+
             public ulong ullTotalVirtual;
+
             public ulong ullAvailVirtual;
+
             public ulong ullAvailExtendedVirtual;
         }
 
@@ -73,7 +90,6 @@ namespace HandBrake.ApplicationServices.Functions
         /// </returns>
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool GlobalMemoryStatusEx(ref MEMORYSTATUSEX lpBuffer);
-
 
         /// <summary>
         /// Generate a Console Ctrl Event
@@ -112,7 +128,7 @@ namespace HandBrake.ApplicationServices.Functions
         }
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags);
+        private static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags);
 
         /// <summary>
         /// Execution State
@@ -121,8 +137,18 @@ namespace HandBrake.ApplicationServices.Functions
         public enum EXECUTION_STATE : uint
         {
             ES_SYSTEM_REQUIRED = 0x00000001,
+
             ES_CONTINUOUS = 0x80000000,
+
             ES_AWAYMODE_REQUIRED = 0x00000040
+        }
+
+        /// <summary>
+        /// Initializes static members of the <see cref="Win32"/> class.
+        /// </summary>
+        static Win32()
+        {
+            InitializeWithDispatcher();
         }
 
         /// <summary>
@@ -130,7 +156,10 @@ namespace HandBrake.ApplicationServices.Functions
         /// </summary>
         public static void PreventSleep()
         {
-            SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS | EXECUTION_STATE.ES_SYSTEM_REQUIRED | EXECUTION_STATE.ES_AWAYMODE_REQUIRED);
+            executor(
+                () => SetThreadExecutionState(
+                    EXECUTION_STATE.ES_CONTINUOUS | EXECUTION_STATE.ES_SYSTEM_REQUIRED
+                    | EXECUTION_STATE.ES_AWAYMODE_REQUIRED));
         }
 
         /// <summary>
@@ -138,7 +167,32 @@ namespace HandBrake.ApplicationServices.Functions
         /// </summary>
         public static void AllowSleep()
         {
-            SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS);
+            executor(
+                () => SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS));
+        }
+
+        /// <summary>
+        ///   Initializes the framework using the current dispatcher.
+        /// </summary>
+        public static void InitializeWithDispatcher()
+        {
+            var dispatcher = Dispatcher.CurrentDispatcher;
+
+            SetUIThreadMarshaller(action =>
+            {
+                if (dispatcher.CheckAccess())
+                    action();
+                else dispatcher.Invoke(action);
+            });
+        }
+
+        /// <summary>
+        /// Sets a custom UI thread marshaller.
+        /// </summary>
+        /// <param name="marshaller">The marshaller.</param>
+        public static void SetUIThreadMarshaller(Action<Action> marshaller)
+        {
+            executor = marshaller;
         }
     }
 }

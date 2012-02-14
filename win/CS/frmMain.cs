@@ -151,7 +151,7 @@ namespace Handbrake
             // Check for new versions, if update checking is enabled
             if (userSettingService.GetUserSetting<bool>(UserSettingConstants.UpdateStatus))
             {
-                if (DateTime.Now.Subtract(userSettingService.GetUserSetting<DateTime>(UserSettingConstants.LastUpdateCheckDate)).TotalDays 
+                if (DateTime.Now.Subtract(userSettingService.GetUserSetting<DateTime>(UserSettingConstants.LastUpdateCheckDate)).TotalDays
                     > userSettingService.GetUserSetting<int>(UserSettingConstants.DaysBetweenUpdateCheck))
                 {
                     // Set when the last update was
@@ -222,7 +222,7 @@ namespace Handbrake
 
                 if (info.NewVersionAvailable)
                 {
-                    UpdateInfo updateWindow = new UpdateInfo(info, userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion), 
+                    UpdateInfo updateWindow = new UpdateInfo(info, userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion),
                         userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeBuild));
                     updateWindow.ShowDialog();
                 }
@@ -467,7 +467,7 @@ namespace Handbrake
                                                   ? userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast_x64)
                                                   : userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast_i686);
             UpdateService.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDoneMenu), false,
-                url, userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild), 
+                url, userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild),
                 userSettingService.GetUserSetting<int>(UserSettingConstants.Skipversion), userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion));
         }
 
@@ -561,10 +561,10 @@ namespace Handbrake
             Preset preset = new Preset
                 {
                     Name = this.treeView_presets.SelectedNode.Text,
-                    Query = query,                  
+                    Query = query,
                     CropSettings = (result == DialogResult.Yes),
                     AudioPassthruSettings = this.AudioSettings.PassthruSettings,
-                    Task = QueryParserUtility.Parse(query),                
+                    Task = QueryParserUtility.Parse(query),
                 };
 
             presetHandler.Update(preset);
@@ -646,15 +646,15 @@ namespace Handbrake
                 }
                 else
                 {
-                   Preset preset = treeView_presets.SelectedNode.Tag as Preset;
-                   if (preset != null && preset.IsDefault)
-                   {
-                       MessageBox.Show(
-                           "Your default preset can not be deleted. It is a required preset.",
-                           "Warning",
-                           MessageBoxButtons.OK,
-                           MessageBoxIcon.Information);
-                   }
+                    Preset preset = treeView_presets.SelectedNode.Tag as Preset;
+                    if (preset != null && preset.IsDefault)
+                    {
+                        MessageBox.Show(
+                            "Your default preset can not be deleted. It is a required preset.",
+                            "Warning",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+                    }
 
                     // Delete the selected item.
                     presetHandler.Remove((Preset)treeView_presets.SelectedNode.Tag);
@@ -687,7 +687,7 @@ namespace Handbrake
         }
 
         private void MnuImportPreset_Click(object sender, EventArgs e)
-        {         
+        {
             this.ImportPreset();
         }
 
@@ -883,7 +883,7 @@ namespace Handbrake
                         Description = string.Empty,
                         AudioPassthruSettings = parsed.AllowedPassthruOptions
                     };
-                    
+
                     if (presetHandler.Add(preset))
                     {
                         TreeNode preset_treeview = new TreeNode(parsed.PresetName)
@@ -1027,7 +1027,7 @@ namespace Handbrake
                         {
                             case DialogResult.Yes:
                                 // Replace the manual query with the generated one
-        
+
                                 rtf_query.Text = task.Query;
                                 break;
                             case DialogResult.No:
@@ -1056,7 +1056,7 @@ namespace Handbrake
 
                     if (overwrite == DialogResult.Yes)
                     {
-                        
+
 
                         if (this.queueProcessor.QueueManager.Count == 0)
                             this.queueProcessor.QueueManager.Add(QueryGenerator.GenerateFullQuery(this));
@@ -1209,7 +1209,7 @@ namespace Handbrake
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
             }
-            
+
         }
 
         private bool AddItemToQueue(bool showError)
@@ -1501,58 +1501,64 @@ namespace Handbrake
             drop_chapterStart.Items.Clear();
             drop_chapterFinish.Items.Clear();
 
-            // If the dropdown is set to automatic nothing else needs to be done.
-            // Otheriwse if its not, title data has to be loaded from parsing.
-            if (drp_dvdtitle.Text != "Automatic")
+            if (string.IsNullOrEmpty(drp_dvdtitle.Text) || drp_dvdtitle.Text == "Automatic" || this.currentSource == null)
             {
-                selectedTitle = drp_dvdtitle.SelectedItem as Title;
-                lbl_duration.Text = selectedTitle.Duration.ToString();
-                PictureSettings.CurrentlySelectedPreset = this.currentlySelectedPreset;
-                PictureSettings.Source = selectedTitle; // Setup Picture Settings Tab Control
+                return;
+            }
 
-                // Populate the Angles dropdown
-                drop_angle.Items.Clear();
-                if (!userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav))
-                {
-                    drop_angle.Visible = true;
-                    lbl_angle.Visible = true;
+            selectedTitle = drp_dvdtitle.SelectedItem as Title;
+            if (selectedTitle == null)
+            {
+                return;
+            }
 
-                    for (int i = 1; i <= selectedTitle.AngleCount; i++)
-                        drop_angle.Items.Add(i.ToString());
+            lbl_duration.Text = selectedTitle.Duration.ToString();
+            PictureSettings.CurrentlySelectedPreset = this.currentlySelectedPreset;
+            PictureSettings.Source = selectedTitle; // Setup Picture Settings Tab Control
 
-                    if (drop_angle.Items.Count == 0)
-                    {
-                        drop_angle.Visible = false;
-                        lbl_angle.Visible = false;
-                    }
+            // Populate the Angles dropdown
+            drop_angle.Items.Clear();
+            if (!userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav))
+            {
+                drop_angle.Visible = true;
+                lbl_angle.Visible = true;
 
-                    if (drop_angle.Items.Count != 0)
-                        drop_angle.SelectedIndex = 0;
-                }
-                else
+                for (int i = 1; i <= selectedTitle.AngleCount; i++)
+                    drop_angle.Items.Add(i.ToString());
+
+                if (drop_angle.Items.Count == 0)
                 {
                     drop_angle.Visible = false;
                     lbl_angle.Visible = false;
                 }
 
-                // Populate the Start chapter Dropdown
-                drop_chapterStart.Items.Clear();
-                drop_chapterStart.Items.AddRange(selectedTitle.Chapters.ToArray());
-                if (drop_chapterStart.Items.Count > 0)
-                    drop_chapterStart.Text = drop_chapterStart.Items[0].ToString();
-
-                // Populate the Final Chapter Dropdown
-                drop_chapterFinish.Items.Clear();
-                drop_chapterFinish.Items.AddRange(selectedTitle.Chapters.ToArray());
-                if (drop_chapterFinish.Items.Count > 0)
-                    drop_chapterFinish.Text = drop_chapterFinish.Items[drop_chapterFinish.Items.Count - 1].ToString();
-
-                // Populate the Audio Channels Dropdown
-                AudioSettings.SetTrackListAfterTitleChange(selectedTitle, this.currentlySelectedPreset);
-
-                // Populate the Subtitles dropdown
-                Subtitles.SetSubtitleTrackAuto(selectedTitle.Subtitles.ToArray());
+                if (drop_angle.Items.Count != 0)
+                    drop_angle.SelectedIndex = 0;
             }
+            else
+            {
+                drop_angle.Visible = false;
+                lbl_angle.Visible = false;
+            }
+
+            // Populate the Start chapter Dropdown
+            drop_chapterStart.Items.Clear();
+            drop_chapterStart.Items.AddRange(selectedTitle.Chapters.ToArray());
+            if (drop_chapterStart.Items.Count > 0)
+                drop_chapterStart.Text = drop_chapterStart.Items[0].ToString();
+
+            // Populate the Final Chapter Dropdown
+            drop_chapterFinish.Items.Clear();
+            drop_chapterFinish.Items.AddRange(selectedTitle.Chapters.ToArray());
+            if (drop_chapterFinish.Items.Count > 0)
+                drop_chapterFinish.Text = drop_chapterFinish.Items[drop_chapterFinish.Items.Count - 1].ToString();
+
+            // Populate the Audio Channels Dropdown
+            AudioSettings.SetTrackListAfterTitleChange(selectedTitle, this.currentlySelectedPreset);
+
+            // Populate the Subtitles dropdown
+            Subtitles.SetSubtitleTrackAuto(selectedTitle.Subtitles.ToArray());
+
             // Update the source label if we have multiple streams
             if (selectedTitle != null)
                 if (!string.IsNullOrEmpty(selectedTitle.SourceName))
@@ -1755,7 +1761,7 @@ namespace Handbrake
                 {
                     case 1:
                         if (!Path.GetExtension(DVD_Save.FileName).Equals(".mp4", StringComparison.InvariantCultureIgnoreCase))
-                            if (this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v) == 2 || 
+                            if (this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v) == 2 ||
                                 this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v) == 0)
                                 DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", ".m4v").Replace(".mkv", ".m4v");
                             else
