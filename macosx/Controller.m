@@ -1738,33 +1738,34 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         {
             /*compatible vlc not found, so we set the bool to cancel scanning to 1 */
             cancelScanDecrypt = 1;
-            [self writeToActivityLog: "VLC app not found for decrypting physical dvd"];
+            [self writeToActivityLog: "libdvdcss.2.dylib not found for decrypting physical dvd"];
             int status;
-            status = NSRunAlertPanel(@"HandBrake could not find VLC or your VLC is incompatible (Note: 32 bit vlc is not compatible with 64 bit HandBrake and vice-versa).",@"Please download and install VLC media player if you wish to read encrypted DVDs.", @"Get VLC", @"Cancel Scan", @"Attempt Scan Anyway");
+            status = NSRunAlertPanel(@"HandBrake could not find a compatible version of libdvdcss (32-bit libdvdcss is not compatible with 64-bit HandBrake and vice-versa).",
+                                     @"Please download and install libdvdcss.pkg if you wish to read encrypted DVDs.", @"Get libdvdcss.pkg", @"Cancel Scan", @"Attempt Scan Anyway");
             [NSApp requestUserAttention:NSCriticalRequest];
             
             if (status == NSAlertDefaultReturn)
             {
                 /* User chose to go download vlc (as they rightfully should) so we send them to the vlc site */
-                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.videolan.org/vlc/download-macosx.html"]];
+                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://download.videolan.org/libdvdcss/last/macosx/"]];
             }
             else if (status == NSAlertAlternateReturn)
             {
                 /* User chose to cancel the scan */
-                [self writeToActivityLog: "cannot open physical dvd , scan cancelled"];
+                [self writeToActivityLog: "cannot open physical dvd, scan cancelled"];
             }
             else
             {
                 /* User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails */
                 cancelScanDecrypt = 0;
-                [self writeToActivityLog: "user overrode vlc warning -trying to open physical dvd without decryption"];
+                [self writeToActivityLog: "user overrode dvdcss warning - trying to open physical dvd without decryption"];
             }
             
         }
         else
         {
             /* VLC was found in /Applications so all is well, we can carry on using vlc's libdvdcss.dylib for decrypting if needed */
-            [self writeToActivityLog: "VLC app found for decrypting physical dvd"];
+            [self writeToActivityLog: "libdvdcss.2.dylib found for decrypting physical dvd"];
             vlcFound = 1;
             dlclose(dvdcss);
         }
