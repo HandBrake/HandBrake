@@ -10,6 +10,7 @@ namespace HandBrake.ApplicationServices.Services.Base
     using System.Text;
 
     using HandBrake.ApplicationServices.EventArgs;
+    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -59,7 +60,7 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// </summary>
         public EncodeBase()
         {
-            this.logBuffer = new StringBuilder();  
+            this.logBuffer = new StringBuilder();
         }
 
         #region Events
@@ -363,18 +364,18 @@ namespace HandBrake.ApplicationServices.Services.Base
         protected void VerifyEncodeDestinationPath(QueueTask task)
         {
             // Make sure the path exists, attempt to create it if it doesn't
-            string path = Directory.GetParent(task.Destination).ToString();
-            if (!Directory.Exists(path))
+            try
             {
-                try
+                string path = Directory.GetParent(task.Destination).ToString();
+                if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
                 }
-                catch (Exception)
-                {
-                    throw new Exception(
-                        "Unable to create directory for the encoded output. Please verify the drive and path is correct.");
-                }
+            }
+            catch (Exception exc)
+            {
+                throw new GeneralApplicationException(
+                    "Unable to create directory for the encoded output.", "Please verify that you have a valid path.", exc);
             }
         }
 

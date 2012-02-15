@@ -100,19 +100,21 @@ namespace Handbrake.Functions
             IDictionary<int, string> chapterMap = new Dictionary<int, string>();
             try
             {
-                StreamReader sr = new StreamReader(filename);
-                string csv = sr.ReadLine();
-                while (csv != null)
+                using (StreamReader sr = new StreamReader(filename))
                 {
-                    if (csv.Trim() != string.Empty)
+                    string csv = sr.ReadLine();
+                    while (csv != null)
                     {
-                        csv = csv.Replace("\\,", "<!comma!>");
-                        string[] contents = csv.Split(',');
-                        int chapter;
-                        int.TryParse(contents[0], out chapter);
-                        chapterMap.Add(chapter, contents[1].Replace("<!comma!>", ","));
+                        if (csv.Trim() != string.Empty)
+                        {
+                            csv = csv.Replace("\\,", "<!comma!>");
+                            string[] contents = csv.Split(',');
+                            int chapter;
+                            int.TryParse(contents[0], out chapter);
+                            chapterMap.Add(chapter, contents[1].Replace("<!comma!>", ","));
+                        }
+                        csv = sr.ReadLine();
                     }
-                    csv = sr.ReadLine();
                 }
             }
             catch (Exception)
@@ -156,7 +158,7 @@ namespace Handbrake.Functions
             }
             catch (Exception exc)
             {
-                throw new GeneralApplicationException("Unable to save Chapter Makrers file! ", "Chapter marker names will NOT be saved in your encode.", exc);
+                throw new GeneralApplicationException("Unable to save the chapter information to csv.", "The file may already be in use by another application.", exc);
             }
         }
 

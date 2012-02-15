@@ -322,7 +322,16 @@ namespace HandBrake.ApplicationServices.Services
                     {
                         XmlSerializer serializer = new XmlSerializer(typeof(List<QueueTask>));
 
-                        List<QueueTask> list = serializer.Deserialize(strm) as List<QueueTask>;
+                        List<QueueTask> list;
+
+                        try
+                        {
+                            list = serializer.Deserialize(strm) as List<QueueTask>; 
+                        }
+                        catch (Exception exc)
+                        {
+                            throw new GeneralApplicationException("Unable to restore queue file.", "The file may be corrupted or from an older incompatible version of HandBrake", exc);
+                        }
 
                         if (list != null)
                             foreach (QueueTask item in list)

@@ -416,7 +416,7 @@ namespace Handbrake
             this.ChaptersMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnu_resetChapters});
             this.ChaptersMenu.Name = "presets_menu";
-            this.ChaptersMenu.OwnerItem = this.btn_file_source;
+            this.ChaptersMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.ChaptersMenu.Size = new System.Drawing.Size(188, 26);
             this.ChaptersMenu.Text = ";";
             // 
