@@ -210,6 +210,10 @@ namespace HandBrake.ApplicationServices.Services
             {
                 this.QueueManager.LastProcessedJob.Status = QueueItemStatus.Error;
                 this.Pause();
+                if (e.Exception.GetType() == typeof(GeneralApplicationException))
+                {
+                    throw e.Exception;
+                }
                 throw new GeneralApplicationException(e.ErrorInformation, e.Exception.Message, e.Exception);
             }
 
