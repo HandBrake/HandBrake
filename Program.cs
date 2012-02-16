@@ -35,8 +35,7 @@ namespace Handbrake
 
             // Handle any unhandled exceptions
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
-            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException);
-
+   
             // Check that HandBrakeCLI is availabl.
             string failedInstall = "HandBrake is not installed properly. Please reinstall HandBrake. \n\n";
             string missingFiles = string.Empty;
