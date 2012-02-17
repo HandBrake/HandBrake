@@ -161,6 +161,7 @@ void hb_autopassthru_apply_settings( hb_job_t * job, hb_title_t * title )
                 audio->config.out.bitrate = hb_get_default_audio_bitrate( audio->config.out.codec,
                                                                           audio->config.out.samplerate,
                                                                           audio->config.out.mixdown );
+                audio->config.out.compression_level = hb_get_default_audio_compression( audio->config.out.codec );
             }
             else
             {
