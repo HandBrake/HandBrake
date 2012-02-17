@@ -2349,7 +2349,7 @@ fWorkingCount = 0;
 	[queueFileJob setObject:[fVidEncoderPopUp titleOfSelectedItem] forKey:@"VideoEncoder"];
 	/* x264 Option String */
 	[queueFileJob setObject:[fAdvancedOptions optionsString] forKey:@"x264Option"];
-    /* FFMpeg (lavc) Option String */
+    /* FFmpeg (lavc) Option String */
     [queueFileJob setObject:[fAdvancedOptions optionsStringLavc] forKey:@"lavcOption"];
 
 	[queueFileJob setObject:[NSNumber numberWithInt:[[fVidQualityMatrix selectedCell] tag] + 1] forKey:@"VideoQualityType"];
@@ -2727,8 +2727,16 @@ fWorkingCount = 0;
         
         job->pass = 2;
         
-        job->advanced_opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */  
-        strcpy(job->advanced_opts, [[queueToApply objectForKey:@"x264Option"] UTF8String]);
+        if( job->vcodec == HB_VCODEC_X264 )
+        {
+            job->advanced_opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */
+            strcpy(job->advanced_opts, [[queueToApply objectForKey:@"x264Option"] UTF8String]);
+        }
+        else
+        {
+            job->advanced_opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */
+            strcpy(job->advanced_opts, [[queueToApply objectForKey:@"lavcOption"] UTF8String]);
+        }
         
         hb_add( fQueueEncodeLibhb, job );
         
@@ -2817,6 +2825,7 @@ fWorkingCount = 0;
     /* We set the advanced opt string here if applicable*/
     [fVidEncoderPopUp selectItemWithTitle:[queueToApply objectForKey:@"VideoEncoder"]];
     [fAdvancedOptions setOptions:[queueToApply objectForKey:@"x264Option"]];
+    [fAdvancedOptions setLavcOptions:[queueToApply objectForKey:@"lavcOption"]];
     
     /* Lets run through the following functions to get variables set there */
     [self videoEncoderPopUpChanged:nil];
@@ -3079,7 +3088,7 @@ fWorkingCount = 0;
 
     job->chapter_markers = 0;
     
-	if( job->vcodec & HB_VCODEC_X264 )
+	if( job->vcodec == HB_VCODEC_X264 )
     {
 		
 		/* Below Sends x264 options to the core library if x264 is selected*/
@@ -3560,7 +3569,7 @@ bool one_burned = FALSE;
         job->chapter_markers = 0;
     }
     
-    if( job->vcodec & HB_VCODEC_X264 )
+    if( job->vcodec == HB_VCODEC_X264 )
     {
 		if ([[queueToApply objectForKey:@"Mp4iPodCompatible"] intValue] == 1)
 	    {
@@ -4930,7 +4939,7 @@ the user is using "Custom" settings by determining the sender*/
         [fVidQualitySlider setNumberOfTickMarks:(([fVidQualitySlider maxValue] - [fVidQualitySlider minValue]) * fractionalGranularity) + 1];
         qpRFLabelString = @"RF:";
     }
-    /* ffmpeg MPEG-2/4 1-31 */
+    /* FFmpeg MPEG-2/4 1-31 */
     if ([[fVidEncoderPopUp selectedItem] tag] & HB_VCODEC_FFMPEG_MASK )
     {
         [fVidQualitySlider setMinValue:1.0];
@@ -5686,28 +5695,21 @@ return YES;
         [fVidEncoderPopUp selectItemWithTitle:[chosenPreset objectForKey:@"VideoEncoder"]];
         [self videoEncoderPopUpChanged:nil];
         /* We set the advanced opt string here if applicable*/
-        if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_X264)
+        if ([chosenPreset objectForKey:@"x264Option"])
         {
-            if ([chosenPreset objectForKey:@"x264Option"])
-            {
-                [fAdvancedOptions setOptions:[chosenPreset objectForKey:@"x264Option"]];
-            }
-            else
-            {
-                [fAdvancedOptions setOptions:@""];   
-            }
-            
+            [fAdvancedOptions setOptions:[chosenPreset objectForKey:@"x264Option"]];
         }
-        else // we are ffmpeg encoder
+        else
         {
-            if ([chosenPreset objectForKey:@"lavcOption"])
-            {
-                [fAdvancedOptions setLavcOptions:[chosenPreset objectForKey:@"lavcOption"]];
-            }
-            else
-            {
-                [fAdvancedOptions setLavcOptions:@""];   
-            }
+            [fAdvancedOptions setOptions:@""];   
+        }
+        if ([chosenPreset objectForKey:@"lavcOption"])
+        {
+            [fAdvancedOptions setLavcOptions:[chosenPreset objectForKey:@"lavcOption"]];
+        }
+        else
+        {
+            [fAdvancedOptions setLavcOptions:@""];   
         }
         
         /* Lets run through the following functions to get variables set there */
@@ -6286,6 +6288,7 @@ return YES;
         [preset setObject:[fVidEncoderPopUp titleOfSelectedItem] forKey:@"VideoEncoder"];
         /* x264 Option String */
         [preset setObject:[fAdvancedOptions optionsString] forKey:@"x264Option"];
+        /* FFmpeg (lavc) Option String */
         [preset setObject:[fAdvancedOptions optionsStringLavc] forKey:@"lavcOption"];
         
         /* though there are actually only 0 - 1 types available in the ui we need to map to the old 0 - 2

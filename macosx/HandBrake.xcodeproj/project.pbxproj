@@ -309,6 +309,7 @@
 		27D6C73E14B102DA00B785E4 /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = external/contrib/lib/libvorbisenc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73F14B102DA00B785E4 /* libx264.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx264.a; path = external/contrib/lib/libx264.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C74014B102DA00B785E4 /* libxml2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxml2.a; path = external/contrib/lib/libxml2.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		34FF2FC014EEC363004C2400 /* HBAdvancedController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAdvancedController.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -506,6 +507,7 @@
 				273F208D14ADBE670021BE6D /* ChapterTitles.m */,
 				273F208E14ADBE670021BE6D /* Controller.h */,
 				273F208F14ADBE670021BE6D /* Controller.m */,
+				34FF2FC014EEC363004C2400 /* HBAdvancedController.h */,
 				273F209014ADBE670021BE6D /* HBAdvancedController.m */,
 				273F209114ADBE670021BE6D /* HBAudio.h */,
 				273F209214ADBE670021BE6D /* HBAudio.m */,
