@@ -123,13 +123,16 @@ const char * hb_mixdown_get_short_name_from_mixdown( int amixdown )
 
 void hb_autopassthru_apply_settings( hb_job_t * job, hb_title_t * title )
 {
-    int i, j;
+    int i, j, already_printed;
     hb_audio_t * audio;
-    for( i = 0; i < hb_list_count( title->list_audio ); )
+    for( i = 0, already_printed = 0; i < hb_list_count( title->list_audio ); )
     {
         audio = hb_list_item( title->list_audio, i );
         if( audio->config.out.codec == HB_ACODEC_AUTO_PASS )
         {
+            if( !already_printed )
+                hb_autopassthru_print_settings( job );
+            already_printed = 1;
             audio->config.out.codec = hb_autopassthru_get_encoder( audio->config.in.codec,
                                                                    job->acodec_copy_mask,
                                                                    job->acodec_fallback,
@@ -182,6 +185,50 @@ void hb_autopassthru_apply_settings( hb_job_t * job, hb_title_t * title )
          * Note: out.track starts at 1, i starts at 0 */
         audio->config.out.track = ++i;
     }
+}
+
+void hb_autopassthru_print_settings( hb_job_t * job )
+{
+    int i, codec_len;
+    char *mask = NULL, *tmp, *fallback = NULL;
+    for( i = 0; i < hb_audio_encoders_count; i++ )
+    {
+        if( ( hb_audio_encoders[i].encoder & HB_ACODEC_PASS_FLAG ) &&
+            ( hb_audio_encoders[i].encoder != HB_ACODEC_AUTO_PASS ) &&
+            ( hb_audio_encoders[i].encoder & job->acodec_copy_mask ) )
+        {
+            if( mask )
+            {
+                tmp = hb_strncat_dup( mask, ", ", 2 );
+                if( tmp )
+                {
+                    free( mask );
+                    mask = tmp;
+                }
+            }
+            // passthru name without " Passthru"
+            codec_len = strlen( hb_audio_encoders[i].human_readable_name ) - 9;
+            tmp = hb_strncat_dup( mask, hb_audio_encoders[i].human_readable_name, codec_len );
+            if( tmp )
+            {
+                free( mask );
+                mask = tmp;
+            }
+        }
+        else if( !( hb_audio_encoders[i].encoder & HB_ACODEC_PASS_FLAG ) &&
+                  ( hb_audio_encoders[i].encoder == job->acodec_fallback ) )
+        {
+            fallback = hb_audio_encoders[i].human_readable_name;
+        }
+    }
+    if( !mask )
+        hb_log( "Auto Passthru: no codecs allowed" );
+    else
+        hb_log( "Auto Passthru: allowed codecs are %s", mask );
+    if( !fallback )
+        hb_log( "Auto Passthru: no valid fallback specified" );
+    else
+        hb_log( "Auto Passthru: fallback is %s", fallback );
 }
 
 int hb_autopassthru_get_encoder( int in_codec, int copy_mask, int fallback, int muxer )
@@ -1714,6 +1761,31 @@ char * hb_strdup_printf( const char * fmt, ... )
         else
             str = tmp;
     }
+}
+
+char * hb_strncat_dup( const char * s1, const char * s2, size_t n )
+{
+    size_t len;
+    char * str;
+
+    len = 0;
+    if( s1 )
+        len += strlen( s1 );
+    if( s2 )
+        len += MAX( strlen( s2 ), n );
+    if( !len )
+        return NULL;
+
+    str = malloc( len + 1 );
+    if( !str )
+        return NULL;
+
+    if( s1 )
+        strcpy( str, s1 );
+    else
+        strcpy( str, "" );
+    strncat( str, s2, n );
+    return str;
 }
 
 /**********************************************************************
