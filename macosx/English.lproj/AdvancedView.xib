@@ -1573,7 +1573,7 @@
 						<object class="NSTextFieldCell" key="NSCell" id="246337895">
 							<int key="NSCellFlags">67239424</int>
 							<int key="NSCellFlags2">272629760</int>
-							<string key="NSContents">Current FFMpeg Advanced Option String:</string>
+							<string key="NSContents">Current FFmpeg Advanced Option String:</string>
 							<reference key="NSSupport" ref="755377161"/>
 							<reference key="NSControlView" ref="522658278"/>
 							<reference key="NSBackgroundColor" ref="1006136775"/>
