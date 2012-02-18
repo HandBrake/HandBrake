@@ -5,14 +5,23 @@
 
 namespace HandBrake.ApplicationServices.Model.Encoding
 {
+    using System.ComponentModel.DataAnnotations;
+
     /// <summary>
     /// Point to Point Mode
     /// </summary>
     public enum PointToPointMode
     {
+        [Display(Name = "Chapters")]
         Chapters = 0,
+
+        [Display(Name = "Seconds")]
         Seconds,
+
+        [Display(Name = "Frames")]
         Frames,
+
+        [Display(Name = "Preview")]
         Preview,
     }
 }

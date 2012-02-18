@@ -19,8 +19,8 @@ namespace HandBrakeWPF
         public const string Skipversion = "skipversion";
         public const string AutoNaming = "autoNaming";
         public const string AutoNamePath = "autoNamePath";
-        public const string Appcast = "appcast";
-        public const string Appcast_unstable = "appcast_unstable";
+        public const string Appcast_i686 = "appcast_i686";
+        public const string Appcast_x64 = "appcast_x64";
         public const string AutoNameFormat = "autoNameFormat";
         public const string VLC_Path = "VLC_Path";
         public const string MainWindowMinimize = "MainWindowMinimize";
@@ -34,7 +34,6 @@ namespace HandBrakeWPF
         public const string NativeLanguage = "NativeLanguage";
         public const string NativeLanguageForSubtitles = "NativeLanguageSubtitles";
         public const string DubMode = "DubMode";
-        public const string CliExeHash = "CliExeHash";
         public const string ClearOldLogs = "clearOldLogs";
         public const string AutoNameTitleCase = "AutoNameTitleCase";
         public const string AutoNameRemoveUnderscore = "AutoNameRemoveUnderscore";

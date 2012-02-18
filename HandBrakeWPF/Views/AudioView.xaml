@@ -29,6 +29,8 @@
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                    <Setter Property="Background" Value="WhiteSmoke" />
+                    <Setter Property="Margin" Value="0,0,0,1" />
                 </Style>
             </ListBox.ItemContainerStyle>
 

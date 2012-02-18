@@ -73,13 +73,16 @@ namespace HandBrakeWPF.ViewModels
             this.JobStatus = "There are no jobs currently encoding";
         }
 
+        /// <summary>
+        /// Gets QueueJobs.
+        /// </summary>
         public ObservableCollection<QueueTask> QueueJobs
         {
             get { return this.queueProcessor.QueueManager.Queue; }
         }
 
         /// <summary>
-        /// Gets or sets IsEncoding.
+        /// Gets or sets a value indicating whether IsEncoding.
         /// </summary>
         public bool IsEncoding
         {
@@ -178,6 +181,9 @@ namespace HandBrakeWPF.ViewModels
             this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.QueueManager.Count);
         }
 
+        /// <summary>
+        /// Handle the On Window Load
+        /// </summary>
         public override void OnLoad()
         {
             this.queueProcessor.JobProcessingStarted += queueProcessor_JobProcessingStarted;
@@ -209,18 +215,45 @@ namespace HandBrakeWPF.ViewModels
             base.OnActivate();
         }
 
+        /// <summary>
+        /// Handle the Queue Paused Event
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The EventArgs.
+        /// </param>
         private void queueProcessor_QueuePaused(object sender, System.EventArgs e)
         {
             this.JobStatus = "Queue Paused";
             this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.QueueManager.Count);
         }
 
+        /// <summary>
+        /// Handle the Queue Completed Event
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The EventArgs.
+        /// </param>
         private void queueProcessor_QueueCompleted(object sender, System.EventArgs e)
         {
             this.JobStatus = "Queue Completed";
             this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.QueueManager.Count);
         }
 
+        /// <summary>
+        /// Handle teh Job Processing Started Event
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The QueueProgressEventArgs.
+        /// </param>
         private void queueProcessor_JobProcessingStarted(object sender, HandBrake.ApplicationServices.EventArgs.QueueProgressEventArgs e)
         {
             this.JobStatus = "Queue Started";
@@ -228,6 +261,15 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.EncodeService.EncodeStatusChanged += EncodeService_EncodeStatusChanged;
         }
 
+        /// <summary>
+        /// Handle the Encode Status Changed Event.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The EncodeProgressEventArgs.
+        /// </param>
         private void EncodeService_EncodeStatusChanged(object sender, HandBrake.ApplicationServices.EventArgs.EncodeProgressEventArgs e)
         {
             this.JobStatus = string.Format(
@@ -241,6 +283,15 @@ namespace HandBrakeWPF.ViewModels
                 e.ElapsedTime);
         }
 
+        /// <summary>
+        /// Handle the Queue Changed Event.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void QueueManager_QueueChanged(object sender, System.EventArgs e)
         {
             // TODO

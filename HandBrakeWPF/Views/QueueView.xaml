@@ -10,6 +10,7 @@
 
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+        <Converters:FullPathToFileNameConverter x:Key="filePathToFilenameConverter" />
     </Window.Resources>
 
     <Grid >
@@ -44,14 +45,16 @@
         <ListBox Grid.Row="2" ItemsSource="{Binding QueueJobs}" SelectionMode="Extended" Background="LightGray" Margin="10,0,10,10">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="Background" Value="WhiteSmoke" />
+                    <Setter Property="Margin" Value="0,0,0,1" />
                 </Style>
             </ListBox.ItemContainerStyle>
-            
+
             <ListBox.ItemTemplate>
                 <DataTemplate>
 
-                    <Grid HorizontalAlignment="Stretch">
+                    <Grid HorizontalAlignment="Stretch" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
@@ -62,18 +65,30 @@
                         <Image Source="Images/Movies.png" Width="16" Height="16" Grid.Column="0" Margin="10,0,10,0" />
 
                         <!-- Settings -->
-                        <StackPanel Grid.Column="1" HorizontalAlignment="Stretch">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Source" FontWeight="Bold" />
-                                <TextBlock Text="{Binding Source}"/>
-                            </StackPanel>
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,5,0,5">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Title: " FontWeight="Bold" />
+                                    <TextBlock Text="{Binding Task.Title}"/>
 
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Destination" FontWeight="Bold" />
-                                <TextBlock Text="{Binding Source}"/>
-                            </StackPanel>
-                        </StackPanel>
+                                    <TextBlock Text="{Binding Task.PointToPointMode}" FontWeight="Bold" Margin="10,0,0,0" />
+                                    <TextBlock Text=": "  />
+                                    <TextBlock Text="{Binding Task.StartPoint}"/>
+                                    <TextBlock Text="to" Margin="5,0,5,0" />
+                                    <TextBlock Text="{Binding Task.EndPoint}"/>
+                                </StackPanel>
 
+                                <!-- TODO Support Drive Label Name-->
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Source: " FontWeight="Bold" />
+                                    <TextBlock Text="{Binding Task.Source, Converter={StaticResource filePathToFilenameConverter}}"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Destination: " FontWeight="Bold" />
+                                    <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}"/>
+                                </StackPanel>
+                            </StackPanel>
+         
                         <!-- Delete -->
                         <Image Source="Images/delete.png" Width="16" Height="16" Grid.Column="2" Margin="10,0,10,0">
                             <i:Interaction.Triggers>
@@ -84,7 +99,6 @@
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </Image>
-
                     </Grid>
 
 

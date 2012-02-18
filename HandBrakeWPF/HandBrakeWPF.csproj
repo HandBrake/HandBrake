@@ -85,8 +85,11 @@
     <Compile Include="Converters\BooleanConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\AudioEnumConverter.cs" />
+    <Compile Include="Converters\FullPathToFileNameConverter.cs" />
     <Compile Include="Helpers\AutoNameHelper.cs" />
     <Compile Include="Helpers\ListBoxHelper.cs" />
+    <Compile Include="Helpers\QueueRecoveryHelper.cs" />
+    <Compile Include="Helpers\UpdateCheckHelper.cs" />
     <Compile Include="Services\ErrorService.cs" />
     <Compile Include="Services\Interfaces\IJobContextService.cs" />
     <Compile Include="Services\Interfaces\IErrorService.cs" />
