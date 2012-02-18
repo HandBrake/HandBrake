@@ -147,28 +147,34 @@ namespace Handbrake.Functions
                                                                      ? CheckState.Checked
                                                                      : CheckState.Unchecked;
 
+            bool sizeSet = false;
             // Set the Width and height as Required.
             if (presetQuery.Width.HasValue)
             {
                 mainWindow.PictureSettings.text_width.Value = presetQuery.Width.Value;
+                sizeSet = true;
             }
 
             if (presetQuery.Height.HasValue)
             {
                 mainWindow.PictureSettings.text_height.Value = presetQuery.Height.Value;
+                sizeSet = true;
             }
 
             // Max Width/Height override Width/Height
             if (presetQuery.MaxWidth.HasValue)
             {
                 mainWindow.PictureSettings.text_width.Value = presetQuery.MaxWidth.Value;
+                sizeSet = true;
             }
 
             if (presetQuery.MaxHeight.HasValue)
             {
                 mainWindow.PictureSettings.text_height.Value = presetQuery.MaxHeight.Value;
+                sizeSet = true;
             }
 
+            mainWindow.PictureSettings.SizeSet = sizeSet;
             mainWindow.PictureSettings.PresetMaximumResolution = new Size(
                      presetQuery.MaxWidth.HasValue ? presetQuery.MaxWidth.Value : 0,
                      presetQuery.MaxHeight.HasValue ? presetQuery.MaxHeight.Value : 0);

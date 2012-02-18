@@ -26,6 +26,7 @@ namespace Handbrake.Controls
         private bool preventChangingDisplayWidth;
         private double cachedDar;
         private Title sourceTitle;
+        private Size presetMaximumResolution;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PictureSettings"/> class. 
@@ -67,11 +68,27 @@ namespace Handbrake.Controls
         /// </summary>
         public Preset CurrentlySelectedPreset { get; set; }
 
+        public bool SizeSet { get; set; }
+
         /// <summary>
         /// Gets or sets the maximum allowable size for the encoded resolution. Set a value to
         /// "0" if the maximum does not matter.
         /// </summary>
-        public Size PresetMaximumResolution { get; set; }
+        public Size PresetMaximumResolution
+        {
+            get
+            {
+                return this.presetMaximumResolution;
+            }
+            set
+            {
+                this.presetMaximumResolution = value;
+                if (presetMaximumResolution == new Size(0, 0) && !SizeSet && this.sourceTitle != null)
+                {
+                    text_width.Value = this.sourceTitle.Resolution.Width;
+                }
+            }
+        }
 
         /// <summary>
         /// Set the Preset Crop Warning Label
