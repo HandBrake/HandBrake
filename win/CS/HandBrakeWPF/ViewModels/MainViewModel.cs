@@ -23,7 +23,9 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.ApplicationServices.Model.General;
     using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
@@ -66,6 +68,11 @@ namespace HandBrakeWPF.ViewModels
         /// The Error Service Backing field.
         /// </summary>
         private readonly IErrorService errorService;
+
+        /// <summary>
+        /// Backing field for the user setting service.
+        /// </summary>
+        private readonly IUserSettingService userSettingService;
 
         /// <summary>
         /// HandBrakes Main Window Title
@@ -154,6 +161,7 @@ namespace HandBrakeWPF.ViewModels
             this.encodeService = encodeService;
             this.presetService = presetService;
             this.errorService = errorService;
+            this.userSettingService = userSettingService;
             this.queueProcessor = IoC.Get<IQueueProcessor>(); // TODO Instance ID!
 
             // Setup Properties
@@ -687,7 +695,14 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void CheckForUpdates()
         {
-            throw new NotImplementedException("Not Yet Implemented");
+            // TODO The update service needs refactoring.
+            this.userSettingService.SetUserSetting(UserSettingConstants.LastUpdateCheckDate, DateTime.Now);
+            string url = userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakePlatform).Contains("x86_64")
+                                                  ? userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast_x64)
+                                                  : userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast_i686);
+            UpdateService.BeginCheckForUpdates(UpdateCheckHelper.UpdateCheckDoneMenu, false,
+                url, userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild),
+                userSettingService.GetUserSetting<int>(UserSettingConstants.Skipversion));
         }
 
         /// <summary>
@@ -815,6 +830,26 @@ namespace HandBrakeWPF.ViewModels
         #endregion
 
         #region Main Window Public Methods
+
+        /// <summary>
+        /// Support dropping a file onto the main window to scan.
+        /// </summary>
+        /// <param name="e">
+        /// The DragEventArgs.
+        /// </param>
+        public void FilesDroppedOnWindow(DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] fileNames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
+                if (fileNames != null && fileNames.Count() >= 1 && File.Exists(fileNames[0]))
+                {
+                    this.StartScan(fileNames[0], 0);
+                }
+            }
+
+            e.Handled = true;
+        }
 
         /// <summary>
         /// The Destination Path
@@ -955,6 +990,17 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedPreset = this.presetService.DefaultPreset;
         }
 
+        /// <summary>
+        /// Set the selected preset.
+        /// </summary>
+        /// <param name="e">
+        /// The RoutedPropertyChangedEventArgs.
+        /// </param>
+        public void SetSelectedPreset(RoutedPropertyChangedEventArgs<object> e)
+        {
+            this.SelectedPreset = e.NewValue as Preset;
+        }
+
         #endregion
 
         #region Private Methods
@@ -993,7 +1039,7 @@ namespace HandBrakeWPF.ViewModels
                         newExtension = this.CurrentTask.RequiresM4v ? ".m4v" : ".mp4";
                         break;
                     case 1: // MP4
-                        newExtension = ".mp4";  
+                        newExtension = ".mp4";
                         break;
                     case 2: // M4v
                         newExtension = ".m4v";
@@ -1070,23 +1116,22 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void ScanCompleted(object sender, HandBrake.ApplicationServices.EventArgs.ScanCompletedEventArgs e)
         {
-             Caliburn.Micro.Execute.OnUIThread(() =>
-                 {
-                     if (e.Successful)
-                     {
-                         this.scanService.SouceData.CopyTo(this.ScannedSource);
-                         this.NotifyOfPropertyChange("ScannedSource");
-                         this.NotifyOfPropertyChange("ScannedSource.Titles");
-                         this.SelectedTitle = this.ScannedSource.Titles.Where(t => t.MainTitle).FirstOrDefault();
-                         this.JobContextService.CurrentSource = this.ScannedSource;
-                         this.JobContextService.CurrentTask = this.CurrentTask;
-                         this.SetupTabs();
-                     }
+            Caliburn.Micro.Execute.OnUIThread(() =>
+                {
+                    if (e.Successful)
+                    {
+                        this.scanService.SouceData.CopyTo(this.ScannedSource);
+                        this.NotifyOfPropertyChange("ScannedSource");
+                        this.NotifyOfPropertyChange("ScannedSource.Titles");
+                        this.SelectedTitle = this.ScannedSource.Titles.Where(t => t.MainTitle).FirstOrDefault()
+                                             ?? this.ScannedSource.Titles.FirstOrDefault();
+                        this.JobContextService.CurrentSource = this.ScannedSource;
+                        this.JobContextService.CurrentTask = this.CurrentTask;
+                        this.SetupTabs();
+                    }
 
-                     this.SourceLabel = "Scan Completed";
-
-                 });
-
+                    this.SourceLabel = "Scan Completed";
+                });
 
             // TODO Re-enable GUI.
         }

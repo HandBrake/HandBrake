@@ -3,7 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Data="clr-namespace:System.Windows.Data;assembly=PresentationFramework" 
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
-        Title="{Data:Binding Path=WindowTitle}" Height="655" Width="1015" FontSize="11" Background="#FFF0F0F0">
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" Title="{Data:Binding Path=WindowTitle}" Height="655" Width="1015" FontSize="11" Background="#FFF0F0F0"
+        AllowDrop="True">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Drop">
+            <Micro:ActionMessage MethodName="FilesDroppedOnWindow">
+                <Micro:Parameter Value="$eventArgs"></Micro:Parameter>
+            </Micro:ActionMessage>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 
     <Window.Resources>
         <Style TargetType="Button">
@@ -215,7 +224,15 @@
                 <StackPanel Margin="5,5,5,5" Orientation="Vertical">
                     <GroupBox Header="Presets" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                         <StackPanel Orientation="Vertical">
-                            <TreeView ItemsSource="{Binding Presets}" Width="240" Height="460" SelectedItemChanged="TreeView_SelectedItemChanged">
+                            <TreeView ItemsSource="{Binding Presets}" Width="240" Height="460">
+
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="SelectedItemChanged">
+                                        <Micro:ActionMessage MethodName="SetSelectedPreset">
+                                            <Micro:Parameter Value="$eventArgs"></Micro:Parameter>
+                                        </Micro:ActionMessage>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
 
                             </TreeView>
 

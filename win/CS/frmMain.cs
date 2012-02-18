@@ -160,7 +160,7 @@ namespace Handbrake
                                                   ? userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast_x64)
                                                   : userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast_i686);
                     UpdateService.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDone), false, url, userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild),
-                        userSettingService.GetUserSetting<int>(UserSettingConstants.Skipversion), userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion));
+                        userSettingService.GetUserSetting<int>(UserSettingConstants.Skipversion));
                 }
             }
 
@@ -468,7 +468,7 @@ namespace Handbrake
                                                   : userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast_i686);
             UpdateService.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDoneMenu), false,
                 url, userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild),
-                userSettingService.GetUserSetting<int>(UserSettingConstants.Skipversion), userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion));
+                userSettingService.GetUserSetting<int>(UserSettingConstants.Skipversion));
         }
 
         /// <summary>

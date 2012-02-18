@@ -18,6 +18,10 @@ namespace HandBrake.ApplicationServices.Services
     /// </summary>
     public class UpdateService
     {
+        /*
+         * TODO: Refactor this to use Caliburn Invocation
+         */ 
+
         /// <summary>
         /// Begins checking for an update to HandBrake.
         /// </summary>
@@ -36,10 +40,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="skipBuild">
         /// The skip Build.
         /// </param>
-        /// <param name="currentVersion">
-        /// The current Version.
-        /// </param>
-        public static void BeginCheckForUpdates(AsyncCallback callback, bool debug, string url, int currentBuild, int skipBuild, string currentVersion)
+        public static void BeginCheckForUpdates(AsyncCallback callback, bool debug, string url, int currentBuild, int skipBuild)
         {
             ThreadPool.QueueUserWorkItem(delegate
                 {
