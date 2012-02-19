@@ -4803,9 +4803,19 @@ the user is using "Custom" settings by determining the sender*/
         [fAdvancedOptions setHidden:NO];
         [self autoSetM4vExtension: sender];
     }
-    else // we are FFmpeg (lavc)
+    else // we are FFmpeg (lavc) or Theora
     {
-        [fAdvancedOptions setHidden:YES];   
+        [fAdvancedOptions setHidden:YES];
+        
+        // We Are Lavc
+        if ([[fVidEncoderPopUp selectedItem] tag] & HB_VCODEC_FFMPEG_MASK )
+        {
+            [fAdvancedOptions setLavcOptsEnabled:YES];
+        }
+        else /// We are Theora
+        {
+          [fAdvancedOptions setLavcOptsEnabled:NO];  
+        }
     }
 
 

@@ -1326,7 +1326,8 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
             }
             [finalString appendString:@"\n" withAttributes:detailAttr];
         }
-        else // we must be ffmpeg (lavc)
+        /*If we are not x264 and we are not Theora then we must be FFmpeg (lavc) */
+        else if (![[item objectForKey:@"VideoEncoder"] isEqualToString: @"VP3 (Theora)"])
         {
             [finalString appendString: @"FFmpeg (lavc) Options: " withAttributes:detailBoldAttr];
             if ([item objectForKey:@"lavcOption"])
@@ -1339,6 +1340,7 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
             }
             [finalString appendString:@"\n" withAttributes:detailAttr];
         }
+        
         
         
         
