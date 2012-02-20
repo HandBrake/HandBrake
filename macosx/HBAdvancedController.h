@@ -19,6 +19,8 @@
     IBOutlet NSTextField        * fDisplayLavcOptionsLabel;
     IBOutlet NSTextField        * fDisplayLavcOptions;
     
+    IBOutlet NSTextField        * fDisplayTheoraOptionsLabel;
+    
     IBOutlet NSTextField        * fX264optBframesLabel;
     IBOutlet NSPopUpButton      * fX264optBframesPopUp;
     IBOutlet NSTextField        * fX264optRefLabel;

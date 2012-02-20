@@ -71,13 +71,15 @@
 {
     if(lavc)
     {
-        [fDisplayLavcOptions setEnabled:YES];
-        [fDisplayLavcOptionsLabel setStringValue: [NSString stringWithFormat:@"Current FFmpeg Advanced Option String:"]];
+        [fDisplayLavcOptions setHidden:NO];
+        [fDisplayLavcOptionsLabel setHidden:NO];
+        [fDisplayTheoraOptionsLabel setHidden:YES];
     }
     else
     {
-        [fDisplayLavcOptions setEnabled:NO];
-        [fDisplayLavcOptionsLabel setStringValue: [NSString stringWithFormat:@"HandBrake does not currently support Theora Options"]];
+        [fDisplayLavcOptions setHidden:YES];
+        [fDisplayLavcOptionsLabel setHidden:YES];
+        [fDisplayTheoraOptionsLabel setHidden:NO];
     }
     return;
 }

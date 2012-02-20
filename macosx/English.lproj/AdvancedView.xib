@@ -1561,6 +1561,23 @@
 				<int key="NSvFlags">256</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
+					<object class="NSTextField" id="1067360024">
+						<reference key="NSNextResponder" ref="679064762"/>
+						<int key="NSvFlags">256</int>
+						<string key="NSFrame">{{199, 137}, {509, 17}}</string>
+						<reference key="NSSuperview" ref="679064762"/>
+						<reference key="NSWindow"/>
+						<bool key="NSEnabled">YES</bool>
+						<object class="NSTextFieldCell" key="NSCell" id="168605488">
+							<int key="NSCellFlags">67239424</int>
+							<int key="NSCellFlags2">138412032</int>
+							<string key="NSContents">HandBrake Does Not Support Advanced Theora Options</string>
+							<reference key="NSSupport" ref="755377161"/>
+							<reference key="NSControlView" ref="1067360024"/>
+							<reference key="NSBackgroundColor" ref="1006136775"/>
+							<reference key="NSTextColor" ref="555417541"/>
+						</object>
+					</object>
 					<object class="NSTextField" id="522658278">
 						<reference key="NSNextResponder" ref="679064762"/>
 						<int key="NSvFlags">256</int>
@@ -2123,6 +2140,14 @@
 					</object>
 					<int key="connectionID">456</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fDisplayTheoraOptionsLabel</string>
+						<reference key="source" ref="674763238"/>
+						<reference key="destination" ref="1067360024"/>
+					</object>
+					<int key="connectionID">459</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -2454,6 +2479,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="489160988"/>
 							<reference ref="522658278"/>
+							<reference ref="1067360024"/>
 						</object>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">empty</string>
@@ -3191,6 +3217,20 @@
 						<reference key="object" ref="246337895"/>
 						<reference key="parent" ref="522658278"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">457</int>
+						<reference key="object" ref="1067360024"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="168605488"/>
+						</object>
+						<reference key="parent" ref="679064762"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">458</int>
+						<reference key="object" ref="168605488"/>
+						<reference key="parent" ref="1067360024"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -3317,6 +3357,8 @@
 					<string>451.IBPluginDependency</string>
 					<string>453.IBPluginDependency</string>
 					<string>454.IBPluginDependency</string>
+					<string>457.IBPluginDependency</string>
+					<string>458.IBPluginDependency</string>
 					<string>46.IBAttributePlaceholdersKey</string>
 					<string>46.IBPluginDependency</string>
 					<string>49.IBAttributePlaceholdersKey</string>
@@ -3571,6 +3613,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSMutableDictionary">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<reference key="dict.sortedKeys" ref="0"/>
@@ -3700,7 +3744,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">456</int>
+			<int key="maxID">459</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3767,6 +3811,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>fDisplayLavcOptions</string>
 							<string>fDisplayLavcOptionsLabel</string>
+							<string>fDisplayTheoraOptionsLabel</string>
 							<string>fDisplayX264Options</string>
 							<string>fDisplayX264OptionsLabel</string>
 							<string>fEmptyView</string>
@@ -3812,6 +3857,7 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>NSTextField</string>
 							<string>NSTextField</string>
 							<string>NSTextField</string>
 							<string>NSTextField</string>
@@ -3864,6 +3910,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>fDisplayLavcOptions</string>
 							<string>fDisplayLavcOptionsLabel</string>
+							<string>fDisplayTheoraOptionsLabel</string>
 							<string>fDisplayX264Options</string>
 							<string>fDisplayX264OptionsLabel</string>
 							<string>fEmptyView</string>
@@ -3915,6 +3962,10 @@
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">fDisplayLavcOptionsLabel</string>
+								<string key="candidateClassName">NSTextField</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">fDisplayTheoraOptionsLabel</string>
 								<string key="candidateClassName">NSTextField</string>
 							</object>
 							<object class="IBToOneOutletInfo">
