@@ -2028,7 +2028,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (void) loadQueueFile {
 	/* We declare the default NSFileManager into fileManager */
 	NSFileManager * fileManager = [NSFileManager defaultManager];
-	/*We define the location of the user presets file */
+	/* We define the location of the user presets file */
     QueueFile = @"~/Library/Application Support/HandBrake/Queue.plist";
 	QueueFile = [[QueueFile stringByExpandingTildeInPath]retain];
     /* We check for the Queue.plist */
@@ -2729,13 +2729,11 @@ fWorkingCount = 0;
         
         if( job->vcodec == HB_VCODEC_X264 )
         {
-            job->advanced_opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */
-            strcpy(job->advanced_opts, [[queueToApply objectForKey:@"x264Option"] UTF8String]);
+            job->advanced_opts = strdup( [[queueToApply objectForKey:@"x264Option"] UTF8String] );
         }
-        else
+        else if( job->vcodec & HB_VCODEC_FFMPEG_MASK )
         {
-            job->advanced_opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */
-            strcpy(job->advanced_opts, [[queueToApply objectForKey:@"lavcOption"] UTF8String]);
+            job->advanced_opts = strdup( [[queueToApply objectForKey:@"lavcOption"] UTF8String] );
         }
         
         hb_add( fQueueEncodeLibhb, job );
@@ -3092,17 +3090,15 @@ fWorkingCount = 0;
     {
 		
 		/* Below Sends x264 options to the core library if x264 is selected*/
-		/* Lets use this as per Nyx, Thanks Nyx!*/
-		job->advanced_opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */
+		/* Lets use this as per Nyx, Thanks Nyx! */
 		/* For previews we ignore the turbo option for the first pass of two since we only use 1 pass */
-		strcpy(job->advanced_opts, [[fAdvancedOptions optionsString] UTF8String]);
+		job->advanced_opts = strdup( [[fAdvancedOptions optionsString] UTF8String] );
 
         
     }
-    else
+    else if( job->vcodec & HB_VCODEC_FFMPEG_MASK )
     {
-        job->advanced_opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */
-        strcpy(job->advanced_opts, [[fAdvancedOptions optionsStringLavc] UTF8String]);
+        job->advanced_opts = strdup( [[fAdvancedOptions optionsStringLavc] UTF8String] );
     }
 
     /* Video settings */
@@ -3114,7 +3110,7 @@ fWorkingCount = 0;
         job->vrate_base = hb_video_rates[[fVidRatePopUp indexOfSelectedItem]-1].rate;
         /* We are not same as source so we set job->cfr to 1 
          * to enable constant frame rate since user has specified
-         * a specific framerate*/
+         * a specific framerate */
         if ([fFramerateMatrix selectedRow] == 0) // we are pfr if a specific framerate is set
         {
             job->cfr = 2;
@@ -3581,31 +3577,29 @@ bool one_burned = FALSE;
         }
 		
 		
-		/* Below Sends x264 options to the core library if x264 is selected*/
-		/* Lets use this as per Nyx, Thanks Nyx!*/
-		job->advanced_opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */
+		/* Below Sends x264 options to the core library if x264 is selected */
+		/* Lets use this as per Nyx, Thanks Nyx! */
 		/* Turbo first pass if two pass and Turbo First pass is selected */
 		if( [[queueToApply objectForKey:@"VideoTwoPass"] intValue] == 1 && [[queueToApply objectForKey:@"VideoTurboTwoPass"] intValue] == 1 )
 		{
 			/* pass the "Turbo" string to be appended to the existing x264 opts string into a variable for the first pass */
 			NSString *firstPassOptStringTurbo = @":ref=1:subme=2:me=dia:analyse=none:trellis=0:no-fast-pskip=0:8x8dct=0:weightb=0";
 			/* append the "Turbo" string variable to the existing opts string.
-             Note: the "Turbo" string must be appended, not prepended to work properly*/
+             * Note: the "Turbo" string must be appended, not prepended to work properly */
 			NSString *firstPassOptStringCombined = [[queueToApply objectForKey:@"x264Option"] stringByAppendingString:firstPassOptStringTurbo];
-			strcpy(job->advanced_opts, [firstPassOptStringCombined UTF8String]);
+			job->advanced_opts = strdup( [firstPassOptStringCombined UTF8String] );
 		}
 		else
 		{
-			strcpy(job->advanced_opts, [[queueToApply objectForKey:@"x264Option"] UTF8String]);
+			job->advanced_opts = strdup( [[queueToApply objectForKey:@"x264Option"] UTF8String] );
 		}
         
     }
-    else
+    else if( job->vcodec & HB_VCODEC_FFMPEG_MASK )
     {
         if ([queueToApply objectForKey:@"lavcOption"])
         {
-            job->advanced_opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */
-            strcpy(job->advanced_opts, [[queueToApply objectForKey:@"lavcOption"] UTF8String]);
+            job->advanced_opts = strdup( [[queueToApply objectForKey:@"lavcOption"] UTF8String] );
         }
     }
     
@@ -4797,7 +4791,7 @@ the user is using "Custom" settings by determining the sender*/
     int videoEncoder = [[fVidEncoderPopUp selectedItem] tag];
     
     [fAdvancedOptions setHidden:YES];
-    /* If we are using x264 then show the x264 advanced panel*/
+    /* If we are using x264 then show the x264 advanced panel */
     if (videoEncoder == HB_VCODEC_X264)
     {
         [fAdvancedOptions setHidden:NO];
@@ -4808,7 +4802,7 @@ the user is using "Custom" settings by determining the sender*/
         [fAdvancedOptions setHidden:YES];
         
         // We Are Lavc
-        if ([[fVidEncoderPopUp selectedItem] tag] & HB_VCODEC_FFMPEG_MASK )
+        if ([[fVidEncoderPopUp selectedItem] tag] & HB_VCODEC_FFMPEG_MASK)
         {
             [fAdvancedOptions setLavcOptsEnabled:YES];
         }
@@ -4822,9 +4816,8 @@ the user is using "Custom" settings by determining the sender*/
     if (videoEncoder != HB_VCODEC_X264)
     {
         /* We set the iPod atom checkbox to disabled and uncheck it as its only for x264 in the mp4
-         container. Format is taken care of in formatPopUpChanged method by hiding and unchecking
-         anything other than MP4.
-         */ 
+         * container. Format is taken care of in formatPopUpChanged method by hiding and unchecking
+         * anything other than MP4. */ 
         [fDstMp4iPodFileCheck setEnabled: NO];
         [fDstMp4iPodFileCheck setState: NSOffState];
     }
@@ -6093,7 +6086,7 @@ return YES;
 - (void) loadPresets {
     /* We declare the default NSFileManager into fileManager */
     NSFileManager * fileManager = [NSFileManager defaultManager];
-    /*We define the location of the user presets file */
+    /* We define the location of the user presets file */
     UserPresetsFile = @"~/Library/Application Support/HandBrake/UserPresets.plist";
     UserPresetsFile = [[UserPresetsFile stringByExpandingTildeInPath]retain];
     /* We check for the presets.plist */

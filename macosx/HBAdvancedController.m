@@ -77,7 +77,7 @@
     else
     {
         [fDisplayLavcOptions setEnabled:NO];
-        [fDisplayLavcOptionsLabel setStringValue: [NSString stringWithFormat:@"Handbrake does not currently support Theora Options"]];
+        [fDisplayLavcOptionsLabel setStringValue: [NSString stringWithFormat:@"HandBrake does not currently support Theora Options"]];
     }
     return;
 }
