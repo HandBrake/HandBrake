@@ -2488,9 +2488,9 @@ FFMpeg's and Theora's scale is more linear.  These encoders do not have a lossle
                                                     <property name="visible">True</property>
                                                     <property name="orientation">vertical</property>
                                                     <property name="icons">audio-volume-muted
-    audio-volume-high
-    audio-volume-low
-    audio-volume-medium</property>
+audio-volume-high
+audio-volume-low
+audio-volume-medium</property>
                                                     <property name="adjustment">adjustment35</property>
                                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                     <property name="tooltip-markup" translatable="yes">&lt;b&gt;Audio Gain:&lt;/b&gt; Adjust the amplification or attenuation of the output audio track.</property>
@@ -2614,13 +2614,13 @@ FFMpeg's and Theora's scale is more linear.  These encoders do not have a lossle
                                                     <property name="visible">True</property>
                                                     <property name="orientation">vertical</property>
                                                     <property name="icons">weather-storm
-    weather-clear
-    weather-storm
-    weather-showers-scattered
-    weather-showers
-    weather-overcast
-    weather-few-clouds
-    weather-clear</property>
+weather-clear
+weather-storm
+weather-showers-scattered
+weather-showers
+weather-overcast
+weather-few-clouds
+weather-clear</property>
                                                     <property name="adjustment">audio_quality_adj</property>
                                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                     <property name="tooltip-markup" translatable="yes">&lt;b&gt;Quality:&lt;/b&gt; For output codec's that support it, adjust the quality of the output.</property>
