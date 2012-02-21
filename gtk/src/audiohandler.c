@@ -578,7 +578,7 @@ ghb_audio_list_refresh_selected(signal_user_data_t *ud)
 		codec = ghb_settings_combo_option(asettings, "AudioEncoderActual");
 		double quality = ghb_settings_get_double(asettings, "AudioTrackQuality");
 		if (ghb_settings_get_boolean(asettings, "AudioTrackQualityEnable") &&
-			quality >= 0)
+			quality != HB_INVALID_AUDIO_QUALITY)
 		{
 			int codec = ghb_settings_combo_int(asettings, "AudioEncoderActual");
 			s_quality = ghb_format_quality("Q/", codec, quality);
@@ -647,7 +647,7 @@ ghb_audio_list_refresh(signal_user_data_t *ud)
 			codec = ghb_settings_combo_option(asettings, "AudioEncoderActual");
 			double quality = ghb_settings_get_double(asettings, "AudioTrackQuality");
 			if (ghb_settings_get_boolean(asettings, "AudioTrackQualityEnable") &&
-				quality >= 0)
+				quality != HB_INVALID_AUDIO_QUALITY)
 			{
 				int codec = ghb_settings_combo_int(asettings, "AudioEncoderActual");
 				s_quality = ghb_format_quality("Q/", codec, quality);
@@ -1046,7 +1046,7 @@ ghb_add_audio_to_ui(GtkBuilder *builder, const GValue *settings)
 	codec = ghb_settings_combo_option(settings, "AudioEncoderActual");
 	double quality = ghb_settings_get_double(settings, "AudioTrackQuality");
 	if (ghb_settings_get_boolean(settings, "AudioTrackQualityEnable") &&
-		quality >= 0)
+		quality != HB_INVALID_AUDIO_QUALITY)
 	{
 		int codec = ghb_settings_combo_int(settings, "AudioEncoderActual");
 		s_quality = ghb_format_quality("Q/", codec, quality);

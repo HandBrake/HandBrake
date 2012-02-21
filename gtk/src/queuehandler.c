@@ -411,7 +411,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		acodec = ghb_settings_combo_option(asettings, "AudioEncoderActual");
 		double q = ghb_settings_get_double(asettings, "AudioTrackQuality");
 		if (ghb_settings_get_boolean(asettings, "AudioTrackQualityEnable") &&
-			q >= 0)
+			q != HB_INVALID_AUDIO_QUALITY)
 		{
 			int codec = ghb_settings_combo_int(asettings, "AudioEncoderActual");
 			quality = ghb_format_quality("Quality: ", codec, q);

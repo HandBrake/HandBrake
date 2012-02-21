@@ -456,6 +456,9 @@ struct hb_job_s
 #define HB_INPUT_CH_LAYOUT_GET_ENCODED_FRONT_COUNT( a )   ( ( a & HB_INPUT_CH_LAYOUT_ENCODED_FRONT_MASK ) >> 4 )
 #define HB_INPUT_CH_LAYOUT_GET_ENCODED_REAR_COUNT( a )   ( ( a & HB_INPUT_CH_LAYOUT_ENCODED_REAR_MASK ) )
 
+/* define an invalid VBR quality compatible with all VBR-capable codecs */
+#define HB_INVALID_AUDIO_QUALITY (-3.)
+
 struct hb_audio_config_s
 {
     /* Output */

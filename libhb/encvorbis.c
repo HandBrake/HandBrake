@@ -85,7 +85,7 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
             return -1;
         }
     }
-    else if( audio->config.out.quality != -1 )
+    else if( audio->config.out.quality != HB_INVALID_AUDIO_QUALITY )
     {
         // map VBR quality to Vorbis API (divide by 10)
         if( vorbis_encode_setup_vbr( &pv->vi, pv->out_discrete_channels,

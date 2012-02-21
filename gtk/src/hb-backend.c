@@ -4986,14 +4986,14 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 				audio.out.samplerate = srate;
 			double quality = ghb_settings_get_double(asettings, "AudioTrackQuality");
 			if (ghb_settings_get_boolean(asettings, "AudioTrackQualityEnable") &&
-				quality != -1)
+				quality != HB_INVALID_AUDIO_QUALITY)
 			{
 				audio.out.quality = quality;
 				audio.out.bitrate = -1;
 			}
 			else
 			{
-				audio.out.quality = -1;
+				audio.out.quality = HB_INVALID_AUDIO_QUALITY;
 				audio.out.bitrate = 
 					ghb_settings_combo_int(asettings, "AudioBitrate");
 

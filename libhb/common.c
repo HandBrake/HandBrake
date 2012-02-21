@@ -581,7 +581,7 @@ void hb_get_audio_quality_limits(uint32_t codec, float *low, float *high, float 
         default:
             *direction = 0;
             *granularity = 1;
-            *low = *high = -1.;
+            *low = *high = HB_INVALID_AUDIO_QUALITY;
             break;
     }
 }
@@ -617,7 +617,7 @@ float hb_get_default_audio_quality( uint32_t codec )
             break;
 
         default:
-            quality = -1.;
+            quality = HB_INVALID_AUDIO_QUALITY;
             break;
     }
     return quality;
@@ -1561,7 +1561,7 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg)
     audiocfg->in.track = audiocfg->out.track = 0;
     audiocfg->out.codec = HB_ACODEC_FAAC;
     audiocfg->out.bitrate = -1;
-    audiocfg->out.quality = -1;
+    audiocfg->out.quality = HB_INVALID_AUDIO_QUALITY;
     audiocfg->out.compression_level = -1;
     audiocfg->out.samplerate = -1;
     audiocfg->out.mixdown = -1;
@@ -1615,7 +1615,7 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
         audio->config.out.dynamic_range_compression = 0;
         audio->config.out.gain = 0;
         audio->config.out.compression_level = -1;
-        audio->config.out.quality = -1;
+        audio->config.out.quality = HB_INVALID_AUDIO_QUALITY;
     }
     else
     {

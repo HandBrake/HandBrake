@@ -437,7 +437,7 @@ void hb_display_job_info( hb_job_t * job )
                         hb_log( "   + encoder: %s", hb_audio_encoders[j].human_readable_name );
                         if( audio->config.out.bitrate > 0 )
                             hb_log( "     + bitrate: %d kbps, samplerate: %d Hz", audio->config.out.bitrate, audio->config.out.samplerate );
-                        else if( audio->config.out.quality != -1 )
+                        else if( audio->config.out.quality != HB_INVALID_AUDIO_QUALITY )
                             hb_log( "     + quality: %.2f, samplerate: %d Hz", audio->config.out.quality, audio->config.out.samplerate );
                         else if( audio->config.out.samplerate > 0 )
                             hb_log( "     + samplerate: %d Hz", audio->config.out.samplerate );
@@ -736,13 +736,13 @@ static void do_job( hb_job_t * job )
         }
         
         /* sense-check the requested quality */
-        if( audio->config.out.quality != -1 )
+        if( audio->config.out.quality != HB_INVALID_AUDIO_QUALITY )
         {
             float best_quality = hb_get_best_audio_quality( 
                     audio->config.out.codec, audio->config.out.quality );
             if( best_quality != audio->config.out.quality )
             {
-                if( best_quality == -1.0 )
+                if( best_quality == HB_INVALID_AUDIO_QUALITY )
                 {
                     hb_log( "work: quality mode not supported by codec" );
                 }
@@ -758,7 +758,7 @@ static void do_job( hb_job_t * job )
         }
         
         /* sense-check the requested bitrate */
-        if( audio->config.out.quality == -1 )
+        if( audio->config.out.quality == HB_INVALID_AUDIO_QUALITY )
         {
             if( audio->config.out.bitrate <= 0 )
             {
