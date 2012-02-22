@@ -2917,7 +2917,7 @@ static void ShowHelp()
     "          <string>          the subtitle has the forced flag set. The values in\n"
     "                            \"string\" are indexes into the subtitle list\n"
     "                            specified with '--subtitle'.\n"
-    "                            Separated by commas for more than one audio track.\n"
+    "                            Separated by commas for more than one subtitle track.\n"
     "                            Example: \"1,2,3\" for multiple tracks.\n"
     "                            If \"string\" is omitted, the first track is forced.\n"
     "        --subtitle-burn     \"Burn\" the selected subtitle into the video track\n"
