@@ -562,6 +562,10 @@ namespace Handbrake.Functions
                 {
                     audioQuery += string.Format(" --audio-copy-mask {0}", fallbackEncoders);
                 }
+                else
+                {
+                    audioQuery += " --audio-copy-mask none";
+                }
 
                 audioQuery += string.Format(" --audio-fallback {0}", Converters.GetCliAudioEncoder(mainWindow.AudioSettings.PassthruSettings.AudioEncoderFallback));
             }
