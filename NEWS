@@ -1,5 +1,119 @@
 NEWS file for HandBrake <http://handbrake.fr/>
 
+Changes betwen 0.9.5 and 0.9.6:
+
+Encoders:
+---------
+
+-> Video:
+
+   - updated libx264 (revision 2146)
+   - MPEG-2 encoder (from libavcodec)
+   - advanced options support for libavcodec encoders
+     format: option1=value1:option2=value2
+             -bf 2 -trellis 2 becomes bf=2:trellis=2
+
+-> Audio:
+
+   - new AAC encoder (from libavcodec) (experimental)
+     (supported mixdowns: Mono/Stereo/Dolby, 5.1 will come later)
+     (should be on par with faac in terms of quality, sometimes better)
+   - FLAC encoder (16-bit, MKV container only)
+
+   - Mac OS X: HE-AAC encoding support, via Core Audio
+
+   - quality-based variable bitrate encoding support
+     works with: Lame MP3, Vorbis, Core Audio AAC
+     only implemented in CLI and Linux GUI
+
+   - possibility to increase/decrease audio gain
+     high increases may cause clipping: use at your own risk!
+
+-> Audio Passthru:
+
+   - DTS Passthru to MP4 container (in addition to existing MKV support)
+     (supported by e.g. VLC, MPlayer)
+   - DTS-HD Passthru (MP4, MKV containers)
+   - MP3 Passthru (MP4, MKV containers)
+   - AAC Passthru (MP4, MKV containers)
+     (known issue: Magic Cookie not passed through from MPEG Program/Transport streams,
+      which will break playback in e.g. QuickTime Player)
+   - Auto Passthru: one encoder, multiple codecs
+     lets you define allowed codecs (from supported passthru codecs)
+     lets you pick a fallback encoder if passthru is not possible
+
+Decoders:
+---------
+
+-> Video:
+
+   - updated libav* libraries from Libav (http://libav.org/)
+     miscellaneous bugfixes and new features, including:
+     - frame-based multithreading for H.264, VP8
+     - 10-bit decoding support for H.264, DNxHD
+     - Apple ProRes decoding support
+
+-> Audio:
+
+   - libavcodec-decoded streams can now be decoded multiple times
+     previously, multiple decodes of the same source tracks were
+     not possible and audio output tracks had to be dropped
+
+Demuxers:
+---------
+
+   - improved MPEG Program/Transport stream support
+     support form MPEG-1 Program streams
+     support for HD-DVD EVOB streams
+   - WTV container support (via libavformat)
+
+Filters:
+--------
+
+   - new, much improved decomb filter (but slower)
+     new settings are default
+     old settings become decomb "Fast"
+
+Presets:
+--------
+
+   - removed obsolete legacy presets
+   - added new device presets for Android phones/tablets
+     recent and/or powerful devices recommended
+
+DVD Decryption:
+---------------
+
+-> Mac OS X:
+
+   - libdvdcss is now the preferred method for DVD decryption
+     already works with HandBrake 0.9.5
+     a .pkg installer is available from Videolan:
+     http://download.videolan.org/libdvdcss/last/macosx/
+
+   - VLC will not work for decryption as of version 2.0
+     and is therefore unsupported as of HandBrake 0.9.6
+
+-> Other platforms:
+
+   - same as usual (Linux: libdvdcss, Windows: 3rd party on-the-fly decrypter)
+
+Miscellaneous:
+--------------
+
+   - Target Size is gone, and isn't coming back
+     Don't bother complaining on the forums
+
+   - CLI: support for x264 presets, tunes and profiles
+     new --x264-preset, --x264-tune and --x264-profile options
+
+   - new Same as source, Constant Framerate option
+     for devices that don't support variable framerate
+     automatically picks a constant framerate closest to the detected source framerate
+
+   - Mac OS X: Mac OS X 10.5 "Leopard" no longer supported
+
+
 Changes between 0.9.4 and 0.9.5:
 
 * Core Library
