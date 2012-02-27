@@ -277,7 +277,10 @@ namespace HandBrake.ApplicationServices.Utilities
                         parsed.Grayscale = value == "1";
                         break;
                     case "VideoQualitySlider":
-                        parsed.Quality = double.Parse(value);
+                        if (!string.IsNullOrEmpty(value))
+                        {
+                            parsed.Quality = double.Parse(value);
+                        }
                         break;
                     case "VideoQualityType": // The Type of Quality Mode used
                         qualityMode = value;
