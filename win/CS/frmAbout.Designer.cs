@@ -65,7 +65,7 @@ namespace Handbrake
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(196, 13);
             this.label1.TabIndex = 33;
-            this.label1.Text = "Copyright  2003-2011 HandBrake Team";
+            this.label1.Text = "Copyright  2003-2012 HandBrake Team";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // PictureBox1
