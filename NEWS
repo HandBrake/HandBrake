@@ -189,7 +189,10 @@ Miscellaneous:
    - DVD: fix issues with some discs (e.g. True Grit, Thor, Transformers 3)
    - DVD: improved main feature detection
 
-   - updated libbluray (0.0.1-pre-213-ga869da8, late May 2011)Changes between 0.9.4 and 0.9.5:
+   - updated libbluray (0.0.1-pre-213-ga869da8, late May 2011)
+
+
+Changes between 0.9.4 and 0.9.5:
 
 * Core Library
   - BluRay disc structure support. (No decryption support) 
