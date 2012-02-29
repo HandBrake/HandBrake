@@ -493,7 +493,7 @@ namespace Handbrake.Functions
                               : string.Format(",{0}", Converters.GetCliMixDown(audioTrack.MixDown));
 
                 // Audio Samplerates (-R)
-                string rate = audioTrack.SampleRate == 0 ? "Auto" : audioTrack.SampleRate.ToString(); // Default to "Auto"
+                string rate = audioTrack.SampleRate == 0 ? "Auto" : audioTrack.SampleRate.ToString(CultureInfo.InvariantCulture); // Default to "Auto"
                 samplerates += string.IsNullOrEmpty(samplerates) ? rate : string.Format(",{0}", rate);
 
                 // Audio Bitrates (-B)
