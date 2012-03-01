@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:cal="http://www.caliburnproject.org"
              xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d" Title="{Binding Title}" 
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop" mc:Ignorable="d" Title="{Binding Title}" 
              Width="600" Height="400"
              Background="#FFF0F0F0">
 
@@ -42,7 +43,9 @@
             <TextBlock Text="{Binding JobStatus}" />
         </StackPanel>
 
-        <ListBox Grid.Row="2" ItemsSource="{Binding QueueJobs}" SelectionMode="Extended" Background="LightGray" Margin="10,0,10,10">
+        <ListBox Grid.Row="2" ItemsSource="{Binding QueueJobs}" SelectionMode="Extended" Background="LightGray" Margin="10,0,10,10"
+                 dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
+                 dd:DragDrop.DropHandler="{Binding}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -52,7 +55,7 @@
             </ListBox.ItemContainerStyle>
 
             <ListBox.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:Name="QueueItemTemplate">
 
                     <Grid HorizontalAlignment="Stretch" >
                         <Grid.ColumnDefinitions>

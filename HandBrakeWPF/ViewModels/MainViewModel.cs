@@ -168,7 +168,6 @@ namespace HandBrakeWPF.ViewModels
             this.WindowTitle = "HandBrake WPF Test Application";
             this.CurrentTask = new EncodeTask();
             this.ScannedSource = new Source();
-            this.SelectedPreset = this.presetService.DefaultPreset;
 
             // Setup Events
             this.scanService.ScanStared += this.ScanStared;
@@ -283,7 +282,19 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.selectedPreset = value;
-                this.NotifyOfPropertyChange("SelectedPreset");
+
+                if (this.SelectedPreset != null)
+                {
+                    this.PictureSettingsViewModel.SetPreset(this.SelectedPreset);
+                    this.VideoViewModel.SetPreset(this.SelectedPreset);
+                    this.FiltersViewModel.SetPreset(this.SelectedPreset);
+                    this.AudioViewModel.SetPreset(this.SelectedPreset);
+                    this.SubtitleViewModel.SetPreset(this.SelectedPreset);
+                    this.ChaptersViewModel.SetPreset(this.SelectedPreset);
+                    this.AdvancedViewModel.SetPreset(this.SelectedPreset);
+                }
+
+                this.NotifyOfPropertyChange(() => this.SelectedPreset);
             }
         }
 
@@ -523,6 +534,8 @@ namespace HandBrakeWPF.ViewModels
                     this.CurrentTask.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
                     this.NotifyOfPropertyChange("CurrentTask");
 
+                    this.Duration = selectedTitle.Duration.ToString();
+
                     // Setup the tab controls
                     this.SetupTabs();
                 }
@@ -557,7 +570,8 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.CurrentTask.StartPoint = value;
-                this.NotifyOfPropertyChange("SelectedStartPoint");
+                this.NotifyOfPropertyChange(() => this.SelectedStartPoint);
+                this.Duration = this.DurationCalculation();
             }
         }
 
@@ -573,7 +587,8 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.CurrentTask.EndPoint = value;
-                this.NotifyOfPropertyChange("SelectedEndPoint");
+                this.NotifyOfPropertyChange(() => this.SelectedEndPoint);
+                this.Duration = this.DurationCalculation();
             }
         }
 
@@ -611,7 +626,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-
         #endregion
 
         #region Load and Shutdown Handling
@@ -620,7 +634,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public override void OnLoad()
         {
-            // TODO
+            this.SelectedPreset = this.presetService.DefaultPreset;
         }
 
         /// <summary>
@@ -1086,6 +1100,30 @@ namespace HandBrakeWPF.ViewModels
                 this.ChaptersViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
                 this.AdvancedViewModel.SetSource(this.SelectedTitle, this.SelectedPreset, this.CurrentTask);
             }
+        }
+
+        /// <summary>
+        /// Calculate the duration between the end and start point
+        /// </summary>
+        /// <returns>
+        /// The duration calculation.
+        /// </returns>
+        private string DurationCalculation()
+        {
+            double startEndDuration = this.SelectedEndPoint - this.SelectedStartPoint;
+            switch (this.SelectedPointToPoint)
+            {
+                case PointToPointMode.Chapters:
+                    return this.SelectedTitle.CalculateDuration(this.SelectedStartPoint, this.SelectedEndPoint).ToString();
+                    break;
+                case PointToPointMode.Seconds:
+                    return TimeSpan.FromSeconds(startEndDuration).ToString();
+                case PointToPointMode.Frames:
+                    startEndDuration = startEndDuration / selectedTitle.Fps;
+                    return TimeSpan.FromSeconds(startEndDuration).ToString();
+            }
+
+            return "--:--:--";
         }
 
         #endregion

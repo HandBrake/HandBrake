@@ -48,29 +48,24 @@
     <Reference Include="Castle.Windsor">
       <HintPath>..\libraries\caliburn\Castle.Windsor.dll</HintPath>
     </Reference>
-    <Reference Include="Common.Logging">
-      <HintPath>..\libraries\caliburn\Common.Logging.dll</HintPath>
-    </Reference>
     <Reference Include="EagleBoost.Wpf.Presentation">
       <HintPath>..\libraries\EagleBoost.Wpf.Presentation.dll</HintPath>
+    </Reference>
+    <Reference Include="GongSolutions.Wpf.DragDrop">
+      <HintPath>..\libraries\WPFDragDrop\GongSolutions.Wpf.DragDrop.dll</HintPath>
     </Reference>
     <Reference Include="Ookii.Dialogs.Wpf">
       <HintPath>..\libraries\OokiiDialogs\Ookii.Dialogs.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework" />
-    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\libraries\caliburn\System.Windows.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -84,7 +79,7 @@
     </ApplicationDefinition>
     <Compile Include="Converters\BooleanConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Converters\AudioEnumConverter.cs" />
+    <Compile Include="Converters\EnumComboConverter.cs" />
     <Compile Include="Converters\FullPathToFileNameConverter.cs" />
     <Compile Include="Helpers\AutoNameHelper.cs" />
     <Compile Include="Helpers\ListBoxHelper.cs" />
@@ -103,6 +98,7 @@
     <Compile Include="ViewModels\AddPresetViewModel.cs" />
     <Compile Include="ViewModels\AudioViewModel.cs" />
     <Compile Include="ViewModels\AdvancedViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ITabInterface.cs" />
     <Compile Include="ViewModels\VideoViewModel.cs" />
     <Compile Include="ViewModels\FiltersViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IFiltersViewModel.cs" />

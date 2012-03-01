@@ -83,6 +83,25 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             this.ScannedTrack = new Audio();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AudioTrack"/> class.
+        /// Copy Constructor
+        /// </summary>
+        /// <param name="track">
+        /// The track.
+        /// </param>
+        public AudioTrack(AudioTrack track)
+        {
+            this.bitrate = track.Bitrate;
+            this.drc = track.DRC;
+            this.encoder = track.Encoder;
+            this.gain = track.Gain;
+            this.mixDown = track.MixDown;
+            this.sampleRate = track.SampleRate;
+            this.scannedTrack = new Audio();
+            this.trackName = track.TrackName;
+        }
+
         #endregion
 
         #region Public Properties

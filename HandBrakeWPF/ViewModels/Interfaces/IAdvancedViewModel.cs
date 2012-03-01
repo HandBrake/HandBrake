@@ -9,26 +9,19 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.Interop.Model.Encoding;
 
     /// <summary>
     /// The Advanced View Model Interface
     /// </summary>
-    public interface IAdvancedViewModel
+    public interface IAdvancedViewModel : ITabInterface
     {
         /// <summary>
-        /// Set the selected preset
+        /// Set the currently selected encoder.
         /// </summary>
-        /// <param name="title">
-        /// The title.
+        /// <param name="encoder">
+        /// The Video Encoder.
         /// </param>
-        /// <param name="preset">
-        /// The preset.
-        /// </param>
-        /// <param name="task">
-        /// The task.
-        /// </param>
-        void SetSource(Title title, Preset preset, EncodeTask task);
+        void SetEncoder(VideoEncoder encoder);
     }
 }

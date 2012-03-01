@@ -217,6 +217,16 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Setup this tab for the specified preset.
+        /// </summary>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        public void SetPreset(Preset preset)
+        {
+        }
+
+        /// <summary>
         /// Set the Source Chapters List
         /// </summary>
         /// <param name="sourceChapters">
@@ -229,10 +239,15 @@ namespace HandBrakeWPF.ViewModels
             this.Chapters.Clear();
 
             // Then Add new Chapter Markers.
+            int counter = 1;
+
             foreach (Chapter chapter in this.SourceChapterList)
             {
-                var marker = new ChapterMarker(chapter.ChapterNumber, chapter.ChapterName);
+                string chapterName = string.IsNullOrEmpty(chapter.ChapterName) ? string.Format("Chapter {0}", counter) : chapter.ChapterName;
+                var marker = new ChapterMarker(chapter.ChapterNumber, chapterName);
                 this.Chapters.Add(marker);
+
+                counter += 1;
             }
         }
 

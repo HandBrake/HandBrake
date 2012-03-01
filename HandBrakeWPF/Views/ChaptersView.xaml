@@ -27,7 +27,8 @@
 
         <DataGrid Grid.Row="2" Margin="10" ItemsSource="{Binding Chapters}" 
                   VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AutoGenerateColumns="False"
-                  CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False">
+                  CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False"
+                  CanUserAddRows="False" CanUserDeleteRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Chapter Number" Width="150" Binding="{Binding ChapterNumber}" IsReadOnly="True" />
                 <DataGridTextColumn Header="Chapter Name"  Width="*" Binding="{Binding ChapterName}" IsReadOnly="False" />

@@ -33,6 +33,96 @@ namespace HandBrake.ApplicationServices.Model
         }
 
         #region Source
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EncodeTask"/> class. 
+        /// Copy Constructor
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        public EncodeTask(EncodeTask task)
+        {
+            this.AdvancedEncoderOptions = task.AdvancedEncoderOptions;
+            this.AllowedPassthruOptions = new AllowedPassthru(task.AllowedPassthruOptions);
+            this.Anamorphic = task.Anamorphic;
+            this.Angle = task.Angle;
+
+            this.AudioTracks = new ObservableCollection<AudioTrack>();
+            foreach (AudioTrack track in task.AudioTracks)
+            {
+                this.AudioTracks.Add(new AudioTrack(track));
+            }
+
+
+            this.ChapterNames = new ObservableCollection<ChapterMarker>();
+            foreach (ChapterMarker track in task.ChapterNames)
+            {
+                this.ChapterNames.Add(new ChapterMarker(track));
+            }
+
+            this.ChapterMarkersFilePath = task.ChapterMarkersFilePath;
+            this.Cropping = new Cropping(task.Cropping);
+            this.CustomDecomb = task.CustomDecomb;
+            this.CustomDeinterlace = task.CustomDeinterlace;
+            this.CustomDenoise = task.CustomDenoise;
+            this.CustomDetelecine = task.CustomDetelecine;
+            this.Deblock = task.Deblock;
+            this.Decomb = task.Decomb;
+            this.Deinterlace = task.Deinterlace;
+            this.Denoise = task.Denoise;
+            this.Destination = task.Destination;
+            this.Detelecine = task.Detelecine;
+            this.DisableLibDvdNav = task.DisableLibDvdNav;
+            this.DisplayWidth = task.DisplayWidth;
+            this.EndPoint = task.EndPoint;
+            this.Framerate = task.Framerate;
+            this.FramerateMode = task.FramerateMode;
+            this.Grayscale = task.Grayscale;
+            this.HasCropping = task.HasCropping;
+            this.Height = task.Height;
+            this.IncludeChapterMarkers = task.IncludeChapterMarkers;
+            this.IPod5GSupport = task.IPod5GSupport;
+            this.KeepDisplayAspect = task.KeepDisplayAspect;
+            this.LargeFile = task.LargeFile;
+            this.MaxHeight = task.MaxHeight;
+            this.MaxWidth = task.MaxWidth;
+            this.Modulus = task.Modulus;
+            this.OptimizeMP4 = task.OptimizeMP4;
+            this.OutputFormat = task.OutputFormat;
+            this.PixelAspectX = task.PixelAspectX;
+            this.PixelAspectY = task.PixelAspectY;
+            this.PointToPointMode = task.PointToPointMode;
+            this.PresetBuildNumber = task.PresetBuildNumber;
+            this.PresetDescription = task.PresetDescription;
+            this.PresetName = task.PresetName;
+            this.Quality = task.Quality;
+            this.Source = task.Source;
+            this.StartPoint = task.StartPoint;
+
+            this.SubtitleTracks = new ObservableCollection<SubtitleTrack>();
+            foreach (SubtitleTrack subtitleTrack in task.SubtitleTracks)
+            {
+                this.SubtitleTracks.Add(new SubtitleTrack(subtitleTrack));
+            }
+
+            this.Title = task.Title;
+            this.TurboFirstPass = task.TurboFirstPass;
+            this.TwoPass = task.TwoPass;
+            this.Type = task.Type;
+            this.UsesMaxPictureSettings = task.UsesMaxPictureSettings;
+            this.UsesPictureFilters = task.UsesPictureFilters;
+            this.UsesPictureSettings = task.UsesPictureSettings;
+            this.Verbosity = task.Verbosity;
+            this.VideoBitrate = task.VideoBitrate;
+            this.VideoEncoder = task.VideoEncoder;
+            this.VideoEncodeRateType = task.VideoEncodeRateType;
+            this.Width = task.Width;
+            this.x264Preset = task.x264Preset;
+            this.x264Profile = task.x264Profile;
+            this.X264Tune = task.X264Tune;
+        }
+
         /// <summary>
         /// Gets or sets Source.
         /// </summary>

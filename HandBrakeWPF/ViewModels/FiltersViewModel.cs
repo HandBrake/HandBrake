@@ -372,6 +372,16 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void SetSource(Title title, Preset preset, EncodeTask task)
         {
+        }
+
+        /// <summary>
+        /// Setup this tab for the specified preset.
+        /// </summary>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        public void SetPreset(Preset preset)
+        {
             if (preset != null)
             {
                 // Properties
