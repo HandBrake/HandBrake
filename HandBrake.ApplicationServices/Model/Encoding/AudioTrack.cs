@@ -11,6 +11,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
 {
     using System;
     using System.ComponentModel;
+    using System.Globalization;
 
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Parsing;
@@ -260,7 +261,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         {
             get
             {
-                return this.SampleRate == 0 ? "Auto" : this.SampleRate.ToString();
+                return this.SampleRate == 0 ? "Auto" : this.SampleRate.ToString(CultureInfo.InvariantCulture);
             }
         }
 
