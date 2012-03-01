@@ -9,26 +9,10 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Parsing;
-
     /// <summary>
     /// The Video View Model Interface
     /// </summary>
-    public interface IVideoViewModel
+    public interface IVideoViewModel : ITabInterface
     {
-        /// <summary>
-        /// Set the selected preset
-        /// </summary>
-        /// <param name="title">
-        /// The title.
-        /// </param>
-        /// <param name="preset">
-        /// The preset.
-        /// </param>
-        /// <param name="task">
-        /// The task.
-        /// </param>
-        void SetSource(Title title, Preset preset, EncodeTask task);
     }
 }

@@ -123,6 +123,46 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Setup this tab for the specified preset.
+        /// </summary>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        public void SetPreset(Preset preset)
+        {
+            if (preset != null && preset.Task != null)
+            {   
+                // Store the previously selected tracks
+                List<Audio> selectedTracks = this.AudioTracks.Select(track => track.ScannedTrack).ToList();
+                this.AudioTracks.Clear();
+                
+                // Add the tracks from the preset
+                foreach (AudioTrack track in preset.Task.AudioTracks)
+                {
+                    this.AudioTracks.Add(new AudioTrack(track));
+                }
+
+                // Attempt to restore the previously selected tracks.
+                // or fallback to the first source track.
+                foreach (AudioTrack track in this.AudioTracks)
+                {
+                    if (selectedTracks.Count != 0)
+                    {
+                        track.ScannedTrack = selectedTracks[0];
+                        selectedTracks.RemoveAt(0);
+                    } 
+                    else
+                    {
+                        if (this.SourceTracks != null)
+                        {
+                            track.ScannedTrack = this.SourceTracks.FirstOrDefault();
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Get Appropiate Bitrates for the selected encoder and mixdown.
         /// </summary>
         /// <param name="encoder">

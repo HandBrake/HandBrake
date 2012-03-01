@@ -9,13 +9,16 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
 
     using Caliburn.Micro;
 
+    using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model.Encoding;
@@ -29,41 +32,10 @@ namespace HandBrakeWPF.ViewModels
     public class VideoViewModel : ViewModelBase, IVideoViewModel
     {
         #region Constants and Fields
-
         /// <summary>
-        /// The average bitrate.
+        /// Backing field for the user setting service.
         /// </summary>
-        private int averageBitrate;
-
-        /// <summary>
-        /// The is constant framerate.
-        /// </summary>
-        private bool isConstantFramerate;
-
-        /// <summary>
-        /// The is constant quantity.
-        /// </summary>
-        private bool isConstantQuantity;
-
-        /// <summary>
-        /// The is peak framerate.
-        /// </summary>
-        private bool isPeakFramerate;
-
-        /// <summary>
-        /// The is turbo first pass.
-        /// </summary>
-        private bool isTurboFirstPass;
-
-        /// <summary>
-        /// The is two pass.
-        /// </summary>
-        private bool isTwoPass;
-
-        /// <summary>
-        /// The is variable framerate.
-        /// </summary>
-        private bool isVariableFramerate;
+        private IUserSettingService userSettingService;
 
         /// <summary>
         /// The quality max.
@@ -76,24 +48,14 @@ namespace HandBrakeWPF.ViewModels
         private int qualityMin;
 
         /// <summary>
-        /// The rf.
+        /// The show peak framerate.
         /// </summary>
-        private int rf;
-
-        /// <summary>
-        /// The selected framerate.
-        /// </summary>
-        private double? selectedFramerate;
-
-        /// <summary>
-        /// The selected video encoder.
-        /// </summary>
-        private VideoEncoder selectedVideoEncoder;
+        private bool showPeakFramerate;
 
         /// <summary>
         /// The show peak framerate.
         /// </summary>
-        private bool showPeakFramerate;
+        private int rf;
 
         #endregion
 
@@ -110,9 +72,12 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public VideoViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
         {
+            this.Task = new EncodeTask { VideoEncoder = VideoEncoder.X264 };
+            this.userSettingService = userSettingService;
             this.QualityMin = 0;
             this.QualityMax = 51;
             this.IsConstantQuantity = true;
+            this.VideoEncoders = EnumHelper<VideoEncoder>.GetEnumList();
         }
 
         #endregion
@@ -120,23 +85,9 @@ namespace HandBrakeWPF.ViewModels
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets AverageBitrate.
+        /// Gets or sets the current Encode Task.
         /// </summary>
-        public string AverageBitrate
-        {
-            get
-            {
-                return this.averageBitrate.ToString();
-            }
-            set
-            {
-                if (value != null)
-                {
-                    this.averageBitrate = int.Parse(value);
-                }
-                this.NotifyOfPropertyChange(() => this.AverageBitrate);
-            }
-        }
+        public EncodeTask Task { get; set; }
 
         /// <summary>
         /// Gets Framerates.
@@ -156,13 +107,13 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.isConstantFramerate;
+                return this.Task.FramerateMode == FramerateMode.CFR;
             }
             set
             {
-                this.isConstantFramerate = value;
                 if (value)
                 {
+                    this.Task.FramerateMode = FramerateMode.CFR;
                     this.IsVariableFramerate = false;
                     this.IsPeakFramerate = false;
                 }
@@ -178,11 +129,23 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.isConstantQuantity;
+                return this.Task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality;
             }
             set
             {
-                this.isConstantQuantity = value;
+                if (value)
+                {
+                    this.Task.VideoEncodeRateType = VideoEncodeRateType.ConstantQuality;
+                    this.Task.TwoPass = false;
+                    this.Task.TurboFirstPass = false;
+                    this.Task.VideoBitrate = null;
+                    this.NotifyOfPropertyChange(() => this.Task);
+                }
+                else
+                {
+                    this.Task.VideoEncodeRateType = VideoEncodeRateType.AverageBitrate;
+                }
+
                 this.NotifyOfPropertyChange(() => this.IsConstantQuantity);
             }
         }
@@ -194,50 +157,18 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.isPeakFramerate;
+                return this.Task.FramerateMode == FramerateMode.PFR;
             }
             set
             {
-                this.isPeakFramerate = value;
                 if (value)
                 {
+                    this.Task.FramerateMode = FramerateMode.PFR;
                     this.IsVariableFramerate = false;
                     this.IsConstantFramerate = false;
                 }
 
                 this.NotifyOfPropertyChange(() => this.IsPeakFramerate);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether IsTurboFirstPass.
-        /// </summary>
-        public bool IsTurboFirstPass
-        {
-            get
-            {
-                return this.isTurboFirstPass;
-            }
-            set
-            {
-                this.isTurboFirstPass = value;
-                this.NotifyOfPropertyChange(() => this.IsTurboFirstPass);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether IsTwoPass.
-        /// </summary>
-        public bool IsTwoPass
-        {
-            get
-            {
-                return this.isTwoPass;
-            }
-            set
-            {
-                this.isTwoPass = value;
-                this.NotifyOfPropertyChange(() => this.IsTwoPass);
             }
         }
 
@@ -248,15 +179,15 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.isVariableFramerate;
+                return this.Task.FramerateMode == FramerateMode.VFR;
             }
             set
             {
-                this.isVariableFramerate = value;
                 if (value)
                 {
                     this.IsPeakFramerate = false;
                     this.IsConstantFramerate = false;
+                    this.Task.FramerateMode = FramerateMode.VFR;
                 }
 
                 this.NotifyOfPropertyChange(() => this.IsVariableFramerate);
@@ -302,12 +233,44 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.rf;
+                return rf;
             }
             set
             {
                 this.rf = value;
+
+                double cqStep = userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step);
+                switch (this.SelectedVideoEncoder)
+                {
+                    case VideoEncoder.FFMpeg:
+                    case VideoEncoder.FFMpeg2:
+                        this.Task.Quality = (32 - value);
+                        break;
+                    case VideoEncoder.X264:
+                        double rfValue = 51.0 - value * cqStep;
+                        rfValue = Math.Round(rfValue, 2);
+                        this.Task.Quality = rfValue;
+
+                        // TODO: Lossless warning.
+                        break;
+                    case VideoEncoder.Theora:
+                        Task.Quality = value;
+                        break;
+                }
+
                 this.NotifyOfPropertyChange(() => this.RF);
+                this.NotifyOfPropertyChange(() => this.DisplayRF);
+            }
+        }
+
+        /// <summary>
+        /// Gets DisplayRF.
+        /// </summary>
+        public double DisplayRF
+        {
+            get
+            {
+                return Task.Quality.HasValue ? this.Task.Quality.Value : 0;
             }
         }
 
@@ -318,43 +281,70 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                if (this.selectedFramerate == null)
+                if (this.Task.Framerate == null)
                 {
                     return "Same as source";
                 }
 
-                return this.selectedFramerate.ToString();
+                return this.Task.Framerate.ToString();
             }
             set
             {
                 if (value == "Same as source")
                 {
-                    this.selectedFramerate = null;
+                    this.Task.Framerate = null;
                     this.ShowPeakFramerate = false;
                 }
-                else
+                else if (!string.IsNullOrEmpty(value))
                 {
                     this.ShowPeakFramerate = true;
-                    this.selectedFramerate = double.Parse(value);
+                    if (this.Task.FramerateMode == FramerateMode.VFR)
+                    {
+                        this.Task.FramerateMode = FramerateMode.PFR; 
+                    } 
+                    this.Task.Framerate = double.Parse(value);
                 }
 
                 this.NotifyOfPropertyChange(() => this.SelectedFramerate);
+                this.NotifyOfPropertyChange(() => this.Task);
             }
         }
 
         /// <summary>
         /// Gets or sets SelectedVideoEncoder.
         /// </summary>
-        public string SelectedVideoEncoder
+        public VideoEncoder SelectedVideoEncoder
         {
             get
             {
-                return EnumHelper<VideoEncoder>.GetDisplay(this.selectedVideoEncoder);
+                return this.Task.VideoEncoder;
             }
             set
             {
-                this.selectedVideoEncoder = EnumHelper<VideoEncoder>.GetValue(value);
+                this.Task.VideoEncoder = value;
                 this.NotifyOfPropertyChange(() => this.SelectedVideoEncoder);
+
+                // Tell the Advanced Panel off the change
+                IAdvancedViewModel advancedViewModel = IoC.Get<IAdvancedViewModel>();
+                advancedViewModel.SetEncoder(this.Task.VideoEncoder);
+
+                // Update the Quality Slider
+                switch (this.SelectedVideoEncoder)
+                {
+                    case VideoEncoder.FFMpeg:
+                    case VideoEncoder.FFMpeg2:
+                        this.QualityMin = 1;
+                        this.QualityMax = 31;
+                        break;
+                    case VideoEncoder.X264:
+                        this.QualityMin = 0;
+                        this.QualityMax = (int)(51 / userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step));
+                        break;
+                    case VideoEncoder.Theora:
+                        this.QualityMin = 0;
+                        this.QualityMax = 63;
+                        break;
+                }
             }
         }
 
@@ -375,15 +365,9 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets VideoEncoders.
+        /// Gets or sets VideoEncoders.
         /// </summary>
-        public IEnumerable<string> VideoEncoders
-        {
-            get
-            {
-                return EnumHelper<VideoEncoder>.GetEnumDisplayValues(typeof(VideoEncoder));
-            }
-        }
+        public IEnumerable<VideoEncoder> VideoEncoders { get; set; }
 
         #endregion
 
@@ -403,6 +387,47 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void SetSource(Title title, Preset preset, EncodeTask task)
         {
+            this.Task = task;
+        }
+
+        /// <summary>
+        /// Setup this tab for the specified preset.
+        /// </summary>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        public void SetPreset(Preset preset)
+        {
+            if (preset == null || preset.Task == null)
+            {
+                return;
+            }
+            
+            this.SelectedVideoEncoder = preset.Task.VideoEncoder;
+            this.SelectedFramerate = preset.Task.Framerate.ToString();
+            switch (preset.Task.FramerateMode)
+            {
+                case FramerateMode.CFR:
+                    this.IsConstantFramerate = true;
+                    break;
+                case FramerateMode.VFR:
+                    this.IsVariableFramerate = true;
+                    this.ShowPeakFramerate = false;
+                    break;
+                case FramerateMode.PFR:
+                    this.IsPeakFramerate = true;
+                    this.ShowPeakFramerate = true;
+                    break;
+            }
+             
+            // TODO Compute RF
+            this.RF = 20;
+
+            this.Task.TwoPass = preset.Task.TwoPass;
+            this.Task.TurboFirstPass = preset.Task.TurboFirstPass;
+            this.Task.VideoBitrate = preset.Task.VideoBitrate;
+
+            this.NotifyOfPropertyChange(() => this.Task);
         }
 
         #endregion

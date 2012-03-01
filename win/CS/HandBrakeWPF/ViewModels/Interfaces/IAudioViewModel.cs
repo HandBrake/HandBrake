@@ -9,26 +9,10 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Parsing;
-
     /// <summary>
     /// The Audio View Model Interface
     /// </summary>
-    public interface IAudioViewModel
+    public interface IAudioViewModel : ITabInterface
     {
-        /// <summary>
-        /// Set the Source Title
-        /// </summary>
-        /// <param name="title">
-        /// The title.
-        /// </param>
-        /// <param name="preset">
-        /// The preset.
-        /// </param>
-        /// <param name="task">
-        /// The task.
-        /// </param>
-        void SetSource(Title title, Preset preset, EncodeTask task);
     }
 }

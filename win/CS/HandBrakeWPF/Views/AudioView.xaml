@@ -6,7 +6,12 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:NumericUpDown="clr-namespace:EagleBoost.Wpf.Presentation.Controls.NumericUpDown;assembly=EagleBoost.Wpf.Presentation"
-             mc:Ignorable="d">
+             xmlns:Conveters="clr-namespace:HandBrakeWPF.Converters"
+             xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop" mc:Ignorable="d">
+    
+    <UserControl.Resources>
+        <Conveters:EnumComboConverter x:Key="enumComboConverter" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -25,7 +30,9 @@
         </Grid>
 
         <ListBox Grid.Row="2" ItemsSource="{Binding AudioTracks}" 
-                 SelectionMode="Extended" Background="LightGray" Margin="10,10,10,10">
+                 SelectionMode="Extended" Background="LightGray" Margin="10,10,10,10"
+                 dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
+                 dd:DragDrop.DropHandler="{Binding}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
@@ -76,8 +83,8 @@
                                       SelectedItem="{Binding ScannedTrack}"/>
                             <TextBlock Text="Codec" FontWeight="Bold" Grid.Column="2" VerticalAlignment="Center" />
                             <ComboBox Width="100" Grid.Column="3" Margin="5,0,5,0" Height="22"
-                                      ItemsSource="{Binding DataContext.AudioEncoders, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
-                                      SelectedItem="{Binding Encoder}"/>
+                                      ItemsSource="{Binding DataContext.AudioEncoders, Converter={StaticResource enumComboConverter},  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                                      SelectedItem="{Binding Encoder, Converter={StaticResource enumComboConverter}}"/>
                             <TextBlock Text="Bitrate" FontWeight="Bold" Grid.Column="4" VerticalAlignment="Center" />
                             <ComboBox Width="70" Grid.Column="5" Margin="5,0,5,0" Height="22" 
                                       ItemsSource="{Binding DataContext.AudioBitrates, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
@@ -90,8 +97,8 @@
                             <!-- Row 2-->
                             <TextBlock Text="Mixdown" FontWeight="Bold" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center"/>
                             <ComboBox Width="100" Grid.Column="1" Margin="5,0,5,0" Grid.Row="1" Height="22"
-                                      ItemsSource="{Binding DataContext.AudioMixdowns, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                      SelectedItem="{Binding MixDown}"/>
+                                      ItemsSource="{Binding DataContext.AudioMixdowns, Converter={StaticResource enumComboConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                      SelectedItem="{Binding MixDown, Converter={StaticResource enumComboConverter}}"/>
                             <TextBlock Text="DRC" FontWeight="Bold" Grid.Column="2" Grid.Row="1" VerticalAlignment="Center"/>
                             <NumericUpDown:NumericUpDown Width="45" Value="{Binding DRC}" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Left"  Margin="5,0,5,0" />
                             <TextBlock Text="Gain" FontWeight="Bold" Grid.Column="4" Grid.Row="1" VerticalAlignment="Center"/>

@@ -39,9 +39,10 @@ namespace HandBrakeWPF.Converters
         /// </returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!string.IsNullOrEmpty(value.ToString()))
+            string path = value as string;
+            if (!string.IsNullOrEmpty(path) && ! path.EndsWith("\\"))
             {
-                return Path.GetFileName(value.ToString()); 
+                return Path.GetFileName(path);
             }
 
             return "Unknown";

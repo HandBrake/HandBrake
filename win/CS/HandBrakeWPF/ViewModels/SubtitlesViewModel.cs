@@ -189,6 +189,17 @@ namespace HandBrakeWPF.ViewModels
             this.SubtitleTracks = task.SubtitleTracks;
         }
 
+        /// <summary>
+        /// Setup this tab for the specified preset.
+        /// </summary>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        public void SetPreset(Preset preset)
+        {
+            // We don't currently support subtitles within presets.
+        }
+
         #endregion
     }
 }

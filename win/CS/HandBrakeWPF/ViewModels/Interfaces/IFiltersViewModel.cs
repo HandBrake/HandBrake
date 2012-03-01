@@ -9,26 +9,10 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Parsing;
-
     /// <summary>
     /// The Filters View Model Interface
     /// </summary>
-    public interface IFiltersViewModel
+    public interface IFiltersViewModel : ITabInterface
     {
-        /// <summary>
-        /// Setup a selected preset.
-        /// </summary>
-        /// <param name="title">
-        /// The title.
-        /// </param>
-        /// <param name="preset">
-        /// The Current Preset.
-        /// </param>
-        /// <param name="task">
-        /// The task.
-        /// </param>
-        void SetSource(Title title, Preset preset, EncodeTask task);
     }
 }

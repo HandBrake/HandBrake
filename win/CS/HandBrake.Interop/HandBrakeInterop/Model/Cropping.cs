@@ -9,13 +9,31 @@
 
 namespace HandBrake.Interop.Model
 {
-	public class Cropping
+    /// <summary>
+    /// The Cropping Model
+    /// </summary>
+    public class Cropping
 	{
         /// <summary>
         /// Initializes a new instance of the <see cref="Cropping"/> class. 
         /// </summary>
         public Cropping()
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Cropping"/> class.
+        /// Copy Constructor
+        /// </summary>
+        /// <param name="croping">
+        /// The croping.
+        /// </param>
+        public Cropping(Cropping croping)
+        {
+            this.Top = croping.Top;
+            this.Bottom = croping.Bottom;
+            this.Left = croping.Left;
+            this.Right = croping.Right;
         }
 
         /// <summary>
@@ -41,12 +59,33 @@ namespace HandBrake.Interop.Model
             this.Right = right;
         }
 
-		public int Top { get; set; }
-		public int Bottom { get; set; }
-		public int Left { get; set; }
-		public int Right { get; set; }
+        /// <summary>
+        /// Gets or sets Top.
+        /// </summary>
+        public int Top { get; set; }
 
-		public Cropping Clone()
+        /// <summary>
+        /// Gets or sets Bottom.
+        /// </summary>
+        public int Bottom { get; set; }
+
+        /// <summary>
+        /// Gets or sets Left.
+        /// </summary>
+        public int Left { get; set; }
+
+        /// <summary>
+        /// Gets or sets Right.
+        /// </summary>
+        public int Right { get; set; }
+
+        /// <summary>
+        /// Clone this model
+        /// </summary>
+        /// <returns>
+        /// A Cloned copy
+        /// </returns>
+        public Cropping Clone()
 		{
 			return new Cropping
 			{

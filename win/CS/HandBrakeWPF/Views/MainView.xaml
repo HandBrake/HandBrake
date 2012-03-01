@@ -4,6 +4,7 @@
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" Title="{Data:Binding Path=WindowTitle}" Height="655" Width="1015" FontSize="11" Background="#FFF0F0F0"
+        Micro:Message.Attach="[Event Loaded] = [Action Load]"
         AllowDrop="True">
 
     <i:Interaction.Triggers>
