@@ -12,6 +12,7 @@ namespace Handbrake.Controls
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Drawing;
+    using System.Globalization;
     using System.Linq;
     using System.Windows.Forms;
 
@@ -366,7 +367,7 @@ namespace Handbrake.Controls
                 case "drp_audioSample":
 
                     double samplerate;
-                    double.TryParse(drp_audioSample.Text, out samplerate);
+                    double.TryParse(drp_audioSample.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out samplerate);
                     track.SampleRate = samplerate;
                     break;
                 case "drp_audioBitrate":
@@ -443,7 +444,7 @@ namespace Handbrake.Controls
             double samplerate;
 
             int.TryParse(drp_audioBitrate.Text, out bitrate);
-            double.TryParse(drp_audioSample.Text, out samplerate);
+            double.TryParse(drp_audioSample.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out samplerate);
 
             // Create the Model
             AudioTrack track = new AudioTrack
