@@ -28,7 +28,37 @@ namespace HandBrake.ApplicationServices.Model.Encoding
 
         #endregion
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubtitleTrack"/> class.
+        /// </summary>
+        public SubtitleTrack()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubtitleTrack"/> class.
+        /// Copy Constructor
+        /// </summary>
+        /// <param name="subtitle">
+        /// The subtitle.
+        /// </param>
+        public SubtitleTrack(SubtitleTrack subtitle)
+        {
+            this.Burned = subtitle.Burned;
+            this.Default = subtitle.Default;
+            this.Forced = subtitle.Forced;
+            this.sourceTrack = subtitle.SourceTrack;
+            this.SrtCharCode = subtitle.SrtCharCode;
+            this.SrtFileName = subtitle.SrtFileName;
+            this.SrtLang = subtitle.SrtLang;
+            this.SrtOffset = subtitle.SrtOffset;
+            this.SrtPath = subtitle.SrtPath;
+            this.SubtitleType = subtitle.SubtitleType;
+            this.SourceTrack = subtitle.SourceTrack;
+        }
+
         #region Public Properties
+
 
         /// <summary>
         ///   Gets or sets a value indicating whether Burned.

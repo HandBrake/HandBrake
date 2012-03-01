@@ -9,13 +9,16 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using System.Collections.Generic;
     using System.ComponentModel.Composition;
 
     using Caliburn.Micro;
 
+    using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
 
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -48,6 +51,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private x264Tune x264Tune;
 
+        /// <summary>
+        /// Backing field used to display / hide the x264 options
+        /// </summary>
+        private bool displayX264Options;
+
         #endregion
 
         #region Constructors and Destructors
@@ -63,6 +71,13 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public AdvancedViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
         {
+            X264Presets = EnumHelper<x264Preset>.GetEnumList();
+            X264Profiles = EnumHelper<x264Profile>.GetEnumList();
+            X264Tunes = EnumHelper<x264Tune>.GetEnumList();
+
+            this.x264Preset = x264Preset.None;
+            this.x264Profile = x264Profile.None;
+            this.x264Tune = x264Tune.None;
         }
 
         #endregion
@@ -133,6 +148,37 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets X264Presets.
+        /// </summary>
+        public IEnumerable<x264Preset> X264Presets { get; set; }
+
+        /// <summary>
+        /// Gets or sets X264Profiles.
+        /// </summary>
+        public IEnumerable<x264Profile> X264Profiles { get; set; }
+
+        /// <summary>
+        /// Gets or sets X264Tunes.
+        /// </summary>
+        public IEnumerable<x264Tune> X264Tunes { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether DisplayX264Options.
+        /// </summary>
+        public bool DisplayX264Options
+        {
+            get
+            {
+                return this.displayX264Options;
+            }
+            set
+            {
+                this.displayX264Options = value;
+                this.NotifyOfPropertyChange(() => this.DisplayX264Options);
+            }
+        }
+
         #endregion
 
         #region Public Methods
@@ -155,6 +201,46 @@ namespace HandBrakeWPF.ViewModels
             this.X264Preset = preset.Task.x264Preset;
             this.X264Profile = preset.Task.x264Profile;
             this.X264Tune = preset.Task.X264Tune;
+        }
+
+        /// <summary>
+        /// Setup this tab for the specified preset.
+        /// </summary>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        public void SetPreset(Preset preset)
+        {
+            if (preset != null && preset.Task != null)
+            {
+                this.Query = preset.Task.AdvancedEncoderOptions;
+                this.SetEncoder(preset.Task.VideoEncoder);
+
+                this.X264Preset = preset.Task.x264Preset;
+                this.X264Profile = preset.Task.x264Profile;
+                this.X264Tune = preset.Task.X264Tune;
+            }
+        }
+
+        /// <summary>
+        /// Set the currently selected encoder.
+        /// </summary>
+        /// <param name="encoder">
+        /// The Video Encoder.
+        /// </param>
+        public void SetEncoder(VideoEncoder encoder)
+        {
+            if (encoder == VideoEncoder.X264)
+            {
+                this.DisplayX264Options = true;
+            }
+            else
+            {
+                this.x264Preset = x264Preset.None;
+                this.x264Profile = x264Profile.None;
+                this.x264Tune = x264Tune.None;
+                this.DisplayX264Options = false;
+            }
         }
 
         #endregion

@@ -43,6 +43,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AllowedPassthru"/> class.
+        /// Copy Constructor
         /// </summary>
         /// <param name="initialValue">
         /// The initial value.

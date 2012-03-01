@@ -33,6 +33,19 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ChapterMarker"/> class.
+        /// Copy Constructor
+        /// </summary>
+        /// <param name="chapter">
+        /// The chapter.
+        /// </param>
+        public ChapterMarker(ChapterMarker chapter)
+        {
+            this.ChapterName = chapter.ChapterName;
+            this.ChapterNumber = chapter.ChapterNumber;
+        }
+
+        /// <summary>
         /// Gets or sets The number of this Chapter, in regards to it's parent Title
         /// </summary>
         public int ChapterNumber { get; set; }

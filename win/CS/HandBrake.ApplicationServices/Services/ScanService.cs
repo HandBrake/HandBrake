@@ -259,7 +259,7 @@ namespace HandBrake.ApplicationServices.Services
                 this.readData = new Parser(this.hbProc.StandardError.BaseStream);
                 this.readData.OnScanProgress += this.OnScanProgress;
                 this.SouceData = Source.Parse(this.readData);
-                this.SouceData.ScanPath = source;
+                this.SouceData.ScanPath = (string)sourcePath;
 
                 // Write the Buffer out to file.
                 using (StreamWriter scanLog = new StreamWriter(dvdInfoPath))

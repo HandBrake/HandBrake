@@ -11,6 +11,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
 {
     using System;
     using System.ComponentModel;
+    using System.Globalization;
 
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Parsing;
@@ -81,6 +82,25 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             this.Bitrate = 160;
             this.DRC = 0;
             this.ScannedTrack = new Audio();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AudioTrack"/> class.
+        /// Copy Constructor
+        /// </summary>
+        /// <param name="track">
+        /// The track.
+        /// </param>
+        public AudioTrack(AudioTrack track)
+        {
+            this.bitrate = track.Bitrate;
+            this.drc = track.DRC;
+            this.encoder = track.Encoder;
+            this.gain = track.Gain;
+            this.mixDown = track.MixDown;
+            this.sampleRate = track.SampleRate;
+            this.scannedTrack = new Audio();
+            this.trackName = track.TrackName;
         }
 
         #endregion
@@ -241,7 +261,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         {
             get
             {
-                return this.SampleRate == 0 ? "Auto" : this.SampleRate.ToString();
+                return this.SampleRate == 0 ? "Auto" : this.SampleRate.ToString(CultureInfo.InvariantCulture);
             }
         }
 

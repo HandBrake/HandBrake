@@ -9,14 +9,17 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using System.Windows;
-    using HandBrake.ApplicationServices.Model;
-    using Services.Interfaces;
     using System.Collections.ObjectModel;
-    using HandBrake.ApplicationServices.Services.Interfaces;
     using System.ComponentModel.Composition;
-    using Interfaces;
+    using System.Windows;
+
     using Caliburn.Micro;
+
+    using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Services.Interfaces;
+
+    using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
     /// The Preview View Model

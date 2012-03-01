@@ -8,6 +8,7 @@
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="boolConverter" />
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+        <Converters:EnumComboConverter x:Key="enumComboConverter" />
     </UserControl.Resources>
    
     <Grid Margin="10,5,0,0">
@@ -29,7 +30,8 @@
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
                     <TextBlock Text="Video Codec:" Width="100" />
-                    <ComboBox Width="120" ItemsSource="{Binding VideoEncoders}" SelectedItem="{Binding SelectedVideoEncoder}" />
+                    <ComboBox Width="120" ItemsSource="{Binding VideoEncoders, Converter={StaticResource enumComboConverter}, Mode=TwoWay}" 
+                              SelectedItem="{Binding SelectedVideoEncoder, Converter={StaticResource enumComboConverter}, Mode=TwoWay}" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
@@ -49,7 +51,7 @@
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
                     <RadioButton Content="Constant Quality:" IsChecked="{Binding IsConstantQuantity}"  Margin="0,0,10,0"/>
-                    <TextBlock Text="{Binding RF}" Width="25" />
+                    <TextBlock Text="{Binding DisplayRF}" Width="25" />
                     <TextBlock Text="RF" FontWeight="Bold" />
                 </StackPanel>
 
@@ -58,14 +60,14 @@
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                     <RadioButton Content="Avg Bitrate (kbps):" IsChecked="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,10,0"/>
-                    <TextBox Width="75" Text="{Binding AverageBitrate}" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}" />
+                    <TextBox Width="75" Text="{Binding Task.VideoBitrate}" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="30,0,0,0">
                     <CheckBox Content="2-Pass Encoding" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}"
-                              IsChecked="{Binding IsTwoPass}" Margin="0,0,10,0" />
+                              IsChecked="{Binding Task.TwoPass}" Margin="0,0,10,0" />
                     <CheckBox Content="Turbo first pass" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}"
-                              IsChecked="{Binding IsTurboFirstPass}" />
+                              IsChecked="{Binding Task.TurboFirstPass}" />
                 </StackPanel>
 
             </StackPanel>
