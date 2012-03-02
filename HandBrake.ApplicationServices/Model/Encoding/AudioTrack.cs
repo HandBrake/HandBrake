@@ -255,13 +255,26 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         }
 
         /// <summary>
-        ///   Gets the The UI display value for sample rate
+        ///  Gets the The UI display value for sample rate
         /// </summary>
         public string SampleRateDisplayValue
         {
             get
             {
                 return this.SampleRate == 0 ? "Auto" : this.SampleRate.ToString(CultureInfo.InvariantCulture);
+            }
+            set
+            {
+                // TODO change this to be a converted field
+                if (string.IsNullOrEmpty(value))
+                {
+                    return;
+                }
+
+                double samplerate;
+                double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out samplerate);
+
+                this.SampleRate = samplerate;
             }
         }
 
