@@ -92,7 +92,7 @@
                             <TextBlock Text="Samplerate" FontWeight="Bold" Grid.Column="6" VerticalAlignment="Center" />
                             <ComboBox Width="70" Grid.Column="7" Margin="5,0,5,0" Height="22" 
                                       ItemsSource="{Binding DataContext.SampleRates, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                      SelectedItem="{Binding SampleRate}"/>
+                                      SelectedItem="{Binding SampleRateDisplayValue}"/>
 
                             <!-- Row 2-->
                             <TextBlock Text="Mixdown" FontWeight="Bold" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center"/>

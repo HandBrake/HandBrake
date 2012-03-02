@@ -9,8 +9,11 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
     using System.ComponentModel.Composition;
     using System.Linq;
 
@@ -47,6 +50,7 @@ namespace HandBrakeWPF.ViewModels
             this.AudioBitrates = this.GetAppropiateBitrates(AudioEncoder.ffaac, Mixdown.DolbyProLogicII);
             this.AudioEncoders = EnumHelper<AudioEncoder>.GetEnumList();
             this.AudioMixdowns = EnumHelper<Mixdown>.GetEnumList();
+            this.SourceTracks = new List<Audio>();
         }
 
         /// <summary>
@@ -84,14 +88,8 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Add()
         {
-            if (SourceTracks != null)
-            {
-                Audio track = this.SourceTracks.FirstOrDefault();
-                if (track != null)
-                {
-                    this.AudioTracks.Add(new AudioTrack { ScannedTrack = track });
-                }
-            }
+            // Add the first track if available.
+            this.Add(null);
         }
 
         /// <summary>
@@ -120,6 +118,9 @@ namespace HandBrakeWPF.ViewModels
         public void SetSource(Title title, Preset preset, EncodeTask task)
         {
             this.SourceTracks = title.AudioTracks;
+
+            this.SetPreset(preset);
+            this.AutomaticTrackSelection();
         }
 
         /// <summary>
@@ -131,34 +132,8 @@ namespace HandBrakeWPF.ViewModels
         public void SetPreset(Preset preset)
         {
             if (preset != null && preset.Task != null)
-            {   
-                // Store the previously selected tracks
-                List<Audio> selectedTracks = this.AudioTracks.Select(track => track.ScannedTrack).ToList();
-                this.AudioTracks.Clear();
-                
-                // Add the tracks from the preset
-                foreach (AudioTrack track in preset.Task.AudioTracks)
-                {
-                    this.AudioTracks.Add(new AudioTrack(track));
-                }
-
-                // Attempt to restore the previously selected tracks.
-                // or fallback to the first source track.
-                foreach (AudioTrack track in this.AudioTracks)
-                {
-                    if (selectedTracks.Count != 0)
-                    {
-                        track.ScannedTrack = selectedTracks[0];
-                        selectedTracks.RemoveAt(0);
-                    } 
-                    else
-                    {
-                        if (this.SourceTracks != null)
-                        {
-                            track.ScannedTrack = this.SourceTracks.FirstOrDefault();
-                        }
-                    }
-                }
+            {
+                AddTracksFromPreset(preset);
             }
         }
 
@@ -176,7 +151,145 @@ namespace HandBrakeWPF.ViewModels
         /// </returns>
         private IEnumerable<int> GetAppropiateBitrates(AudioEncoder encoder, Mixdown mixdown)
         {
-            return new ObservableCollection<int> { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160 };
+            return new ObservableCollection<int> { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 640, 768 };
+        }
+
+        /// <summary>
+        /// Add the specified source track, or the first track in the SourceTracks collection if available.
+        /// </summary>
+        /// <param name="sourceTrack">
+        /// The source track.
+        /// </param>
+        private void Add(Audio sourceTrack)
+        {
+            if (SourceTracks != null)
+            {
+                Audio track = sourceTrack ?? this.SourceTracks.FirstOrDefault();
+                if (track != null)
+                {
+                    this.AudioTracks.Add(new AudioTrack { ScannedTrack = track });
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add all source tracks that don't currently exist on the list.
+        /// </summary>
+        private void AddAllRemaining()
+        {
+            foreach (Audio sourceTrack in this.SourceTracks)
+            {
+                bool found = this.AudioTracks.Any(audioTrack => audioTrack.ScannedTrack == sourceTrack);
+                if (!found)
+                {
+                    this.Add(sourceTrack);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add the required tracks for the current preset
+        /// </summary>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        private void AddTracksFromPreset(Preset preset)
+        {
+            // Clear out the old tracks
+            this.AudioTracks.Clear();
+
+            // Get the preferred Language
+            IEnumerable<Audio> languages = this.SourceTracks.Where(item => item.Language.Contains(this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage)));
+            Audio preferred = languages.FirstOrDefault() ?? this.SourceTracks.FirstOrDefault();
+
+            // Get the currently selected langauges
+            List<Audio> selectedTracks = this.AudioTracks.Select(track => track.ScannedTrack).ToList();
+
+            // Add the preset audio tracks with the preferred language
+            foreach (AudioTrack track in preset.Task.AudioTracks)
+            {
+                this.AudioTracks.Add(new AudioTrack(track) { ScannedTrack = preferred });
+            }
+
+            // Attempt to restore the previously selected tracks.
+            // or fallback to the first source track.
+            foreach (AudioTrack track in this.AudioTracks)
+            {
+                if (selectedTracks.Count != 0)
+                {
+                    track.ScannedTrack = selectedTracks[0];
+                    selectedTracks.RemoveAt(0);
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Attempt to automatically select the correct audio tracks based on the users settings.
+        /// </summary>
+        private void AutomaticTrackSelection()
+        {
+            List<Audio> trackList = new List<Audio>();
+            if (!this.SourceTracks.Any())
+            {
+                return;
+            }
+
+            // Step 1: Preferred Language
+            if (this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage) == "Any")
+            {
+                // If we have Any as the preferred Language, just set the first track to all audio tracks.
+                trackList.Add(this.SourceTracks.FirstOrDefault());
+            }
+            else
+            {
+                // Otherwise, fetch the preferred language.
+                foreach (Audio item in this.SourceTracks.Where(item => item.Language.Contains(this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage))))
+                {
+                    trackList.Add(item);
+                    break;
+                }
+
+                foreach (AudioTrack track in this.AudioTracks)
+                {
+                    track.ScannedTrack = trackList.FirstOrDefault() ?? this.SourceTracks.FirstOrDefault();
+                }
+            }
+
+            // Step 2: Handle "All Remaining Tracks" and "All for Selected Languages"
+            int mode = this.UserSettingService.GetUserSetting<int>(UserSettingConstants.DubModeAudio);
+
+            switch (mode)
+            {
+                case 1: // Adding all remaining audio tracks
+                    this.AddAllRemaining();
+                    break;
+                case 2: // Add Langauges tracks for the additional languages selected, in-order.
+
+                    // Figure out the source tracks we want to add
+                    trackList.Clear();
+                    foreach (string language in this.UserSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages))
+                    {
+                        // TODO add support for "Add only 1 per language"
+                        trackList.AddRange(this.SourceTracks.Where(source => source.Language.Trim() == language));
+                    }
+
+                    // Add them if they are not already added.
+                    foreach (Audio sourceTrack in trackList)
+                    {
+                        bool found = this.AudioTracks.Any(audioTrack => audioTrack.ScannedTrack == sourceTrack);
+
+                        if (!found)
+                        {
+                            this.Add(sourceTrack);
+                        }
+                    }
+
+                    break;
+            }
         }
     }
 }
