@@ -32,8 +32,6 @@ namespace HandBrake.ApplicationServices.Model
             this.AllowedPassthruOptions = new AllowedPassthru();
         }
 
-        #region Source
-
         /// <summary>
         /// Initializes a new instance of the <see cref="EncodeTask"/> class. 
         /// Copy Constructor
@@ -121,7 +119,12 @@ namespace HandBrake.ApplicationServices.Model
             this.x264Preset = task.x264Preset;
             this.x264Profile = task.x264Profile;
             this.X264Tune = task.X264Tune;
+
+            this.PreviewStartAt = task.PreviewStartAt;
+            this.PreviewDuration = task.PreviewDuration;
         }
+
+        #region Source
 
         /// <summary>
         /// Gets or sets Source.
@@ -419,6 +422,19 @@ namespace HandBrake.ApplicationServices.Model
         /// </summary>
         public bool DisableLibDvdNav { get; set; }
 
+        #endregion
+
+        #region Preview
+
+        /// <summary>
+        /// Gets or sets StartAt.
+        /// </summary>
+        public int? PreviewStartAt { get; set; }
+
+        /// <summary>
+        /// Gets or sets Duration.
+        /// </summary>
+        public int? PreviewDuration { get; set; }
         #endregion
 
         #region Preset Information (TODO This should probably be dropped)
