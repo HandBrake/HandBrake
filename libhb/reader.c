@@ -404,8 +404,6 @@ void ReadLoop( void * _w )
             if ( buf->start > 0 )
             {
                 pts_to_start += buf->start;
-                r->pts_to_start += buf->start;
-                r->job->pts_to_start += buf->start;
             }
         }
         
