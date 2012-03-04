@@ -23,7 +23,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
-    using HandBrake.ApplicationServices.Model.General;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -231,7 +230,7 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
-                if (!object.Equals(this.windowName, value))
+                if (!Equals(this.windowName, value))
                 {
                     this.windowName = value;
                 }
@@ -251,7 +250,7 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
-                if (!object.Equals(this.programStatusLabel, value))
+                if (!Equals(this.programStatusLabel, value))
                 {
                     this.programStatusLabel = value;
                     this.NotifyOfPropertyChange("ProgramStatusLabel");
@@ -334,7 +333,7 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
-                if (!object.Equals(this.sourceLabel, value))
+                if (!Equals(this.sourceLabel, value))
                 {
                     this.sourceLabel = value;
                     this.NotifyOfPropertyChange("SourceLabel");
@@ -395,6 +394,17 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Gets a value indicating whether ShowTextEntryForPointToPointMode.
+        /// </summary>
+        public bool ShowTextEntryForPointToPointMode
+        {
+            get
+            {
+                return this.SelectedPointToPoint != PointToPointMode.Chapters;
+            }
+        }
+
+        /// <summary>
         /// Gets StartEndRangeItems.
         /// </summary>
         public IEnumerable<int> StartEndRangeItems
@@ -406,7 +416,7 @@ namespace HandBrakeWPF.ViewModels
                     return null;
                 }
 
-                return this.SelectedTitle.Chapters.Select(item => item.ChapterNumber).Select(dummy => (int)dummy).ToList();
+                return this.SelectedTitle.Chapters.Select(item => item.ChapterNumber).Select(dummy => dummy).ToList();
             }
         }
 
@@ -509,7 +519,7 @@ namespace HandBrakeWPF.ViewModels
             }
             set
             {
-                if (!object.Equals(this.selectedTitle, value))
+                if (!Equals(this.selectedTitle, value))
                 {
                     this.selectedTitle = value;
 
@@ -604,7 +614,8 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.CurrentTask.PointToPointMode = value;
-                this.NotifyOfPropertyChange("SelectedPointToPoint");
+                this.NotifyOfPropertyChange(() => SelectedPointToPoint);
+                this.NotifyOfPropertyChange(() => ShowTextEntryForPointToPointMode);
             }
         }
 
@@ -620,8 +631,8 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.selectedOutputFormat = value;
-                this.NotifyOfPropertyChange("SelectedOutputFormat");
-                this.NotifyOfPropertyChange("IsMkv");
+                this.NotifyOfPropertyChange(() => SelectedOutputFormat);
+                this.NotifyOfPropertyChange(() => IsMkv);
                 this.SetExtension(string.Format(".{0}", this.selectedOutputFormat.ToString().ToLower())); // TODO, tidy up
             }
         }
@@ -1110,12 +1121,16 @@ namespace HandBrakeWPF.ViewModels
         /// </returns>
         private string DurationCalculation()
         {
+            if (this.selectedTitle == null)
+            {
+                return "--:--:--";
+            }
+
             double startEndDuration = this.SelectedEndPoint - this.SelectedStartPoint;
             switch (this.SelectedPointToPoint)
             {
                 case PointToPointMode.Chapters:
                     return this.SelectedTitle.CalculateDuration(this.SelectedStartPoint, this.SelectedEndPoint).ToString();
-                    break;
                 case PointToPointMode.Seconds:
                     return TimeSpan.FromSeconds(startEndDuration).ToString();
                 case PointToPointMode.Frames:

@@ -11,6 +11,7 @@ namespace HandBrakeWPF.ViewModels
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
     using System.ComponentModel.Composition;
     using System.Linq;
 
@@ -96,7 +97,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public IEnumerable<string> CharacterCodes { get; set; }
 
-
         /// <summary>
         /// Gets or sets SourceTracks.
         /// </summary>
@@ -122,19 +122,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Add()
         {
-            if (this.SourceTracks != null)
-            {
-                Subtitle source = this.SourceTracks.FirstOrDefault();
-                if (source != null)
-                {
-                    SubtitleTrack track = new SubtitleTrack
-                    {
-                        SubtitleType = SubtitleType.VobSub
-                    };
-
-                    this.SubtitleTracks.Add(track);
-                }
-            }
+            this.Add(null);
         }
 
         /// <summary>
@@ -187,6 +175,8 @@ namespace HandBrakeWPF.ViewModels
         {
             this.SourceTracks = title.Subtitles;
             this.SubtitleTracks = task.SubtitleTracks;
+
+            this.AutomaticSubtitleSelection();
         }
 
         /// <summary>
@@ -198,6 +188,155 @@ namespace HandBrakeWPF.ViewModels
         public void SetPreset(Preset preset)
         {
             // We don't currently support subtitles within presets.
+        }
+        
+        /// <summary>
+        /// Automatic Subtitle Selection based on user preferences.
+        /// </summary>
+        public void AutomaticSubtitleSelection()
+        {
+            this.SubtitleTracks.Clear();
+
+            // New DUB Settings
+            int mode = UserSettingService.GetUserSetting<int>(UserSettingConstants.DubModeSubtitle);
+            switch (mode)
+            {
+                case 1: // Adding all remaining subtitle tracks
+                    this.AddAllRemaining();
+                    break;
+                case 2: // Adding only the first or preferred first subtitle track.
+                    this.Add();
+                    break;
+                case 3: // Selected Languages Only
+                    this.AddAllRemainingForSelectedLanguages();
+                    break;
+                case 4: // Prefered Only
+                    this.AddForPreferredLanaguages(true);
+                    break;
+                case 5: // Prefered Only All
+                    this.AddForPreferredLanaguages(false);
+                    break;
+            }
+
+            // Add all closed captions if enabled.
+            this.AddAllClosedCaptions();
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Add a subtitle track.
+        /// The Source track is set based on the following order. If null, it will skip to the next option.
+        ///   1. Passed in Subitle param
+        ///   2. First preferred Subtitle from source
+        ///   3. First subtitle from source.
+        /// Will not add a subtitle if the source has none.
+        /// </summary>
+        /// <param name="subtitle">
+        /// The subtitle. Use null to add preferred, or first from source (based on user preference)
+        /// </param>
+        private void Add(Subtitle subtitle)
+        {
+            if (this.SourceTracks != null)
+            {
+                string preferred = UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles);
+
+                Subtitle source = subtitle ?? (this.SourceTracks.FirstOrDefault(l => l.Language == preferred) ??
+                                               this.SourceTracks.FirstOrDefault());
+
+                if (source != null)
+                {
+                    SubtitleTrack track = new SubtitleTrack
+                    {
+                        SubtitleType = SubtitleType.VobSub,
+                        SourceTrack = source,
+                    };
+
+                    this.SubtitleTracks.Add(track);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add all the remaining subtitle tracks.
+        /// </summary>
+        private void AddAllRemaining()
+        {
+            foreach (Subtitle subtitle in this.SourceTitlesSubset(null))
+            {
+                this.Add(subtitle);
+            }
+        }
+
+        /// <summary>
+        /// Add all remaining tracks for the users preferred and selected languages
+        /// </summary>
+        private void AddAllRemainingForSelectedLanguages()
+        {
+            // Get a list of subtitle tracks that match the users lanaguages
+            StringCollection userSelectedLanguages = UserSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages);
+            userSelectedLanguages.Add(UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles));
+            List<Subtitle> availableTracks  = this.SourceTracks.Where(subtitle => userSelectedLanguages.Contains(subtitle.Language)).ToList();
+
+            foreach (Subtitle subtitle in this.SourceTitlesSubset(availableTracks))
+            {
+                this.Add(subtitle);
+            }
+        }
+
+        /// <summary>
+        /// Add all tracks for the preferred languages settings.
+        /// </summary>
+        /// <param name="firstOnly">
+        /// The first only.
+        /// </param>
+        private void AddForPreferredLanaguages(bool firstOnly)
+        {
+            string preferred = UserSettingService.GetUserSetting<string>(
+                UserSettingConstants.NativeLanguageForSubtitles);
+
+            foreach (Subtitle subtitle in this.SourceTitlesSubset(null))
+            {
+                if (subtitle.Language == preferred)
+                {
+                    this.Add(subtitle);
+                    if (firstOnly)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add all closed captions not already on the list.
+        /// </summary>
+        private void AddAllClosedCaptions()
+        {
+            if (UserSettingService.GetUserSetting<bool>(UserSettingConstants.UseClosedCaption))
+            {
+                foreach (Subtitle subtitle in this.SourceTitlesSubset(null).Where(s => s.SubtitleType == SubtitleType.CC))
+                {
+                    this.Add(subtitle);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of Source subtitle tracks that are not currently used.
+        /// </summary>
+        /// <param name="subtitles">
+        /// The subtitles. (Optional).  If null, works on the full source subtitle collection
+        /// </param>
+        /// <returns>
+        /// An IEnumerable collection of subtitles
+        /// </returns>
+        private IEnumerable<Subtitle> SourceTitlesSubset(IEnumerable<Subtitle> subtitles)
+        {
+            return subtitles != null ? subtitles.Where(subtitle => !this.SubtitleTracks.Any(track => track.SourceTrack == subtitle)).ToList() 
+                                     : this.SourceTracks.Where(subtitle => !this.SubtitleTracks.Any(track => track.SourceTrack == subtitle)).ToList();
         }
 
         #endregion

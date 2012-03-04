@@ -24,13 +24,11 @@ namespace HandBrakeWPF
         public const string AutoNameFormat = "autoNameFormat";
         public const string VLC_Path = "VLC_Path";
         public const string MainWindowMinimize = "MainWindowMinimize";
-        public const string QueryEditorTab = "QueryEditorTab";
         public const string PresetNotification = "presetNotification";
         public const string TrayIconAlerts = "trayIconAlerts";
         public const string LastUpdateCheckDate = "lastUpdateCheckDate";
         public const string DaysBetweenUpdateCheck = "daysBetweenUpdateCheck";
         public const string UseM4v = "useM4v";
-        public const string PromptOnUnmatchingQueries = "PromptOnUnmatchingQueries";
         public const string NativeLanguage = "NativeLanguage";
         public const string NativeLanguageForSubtitles = "NativeLanguageSubtitles";
         public const string DubMode = "DubMode";

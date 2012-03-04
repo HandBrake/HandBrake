@@ -160,9 +160,18 @@
                             <ComboBox Name="Angles" Margin="8,0,0,0" MinWidth="60" ItemsSource="{Binding Angles}"  SelectedItem="{Binding SelectedAngle}"/>
 
                             <ComboBox Name="PointToPointMode" Margin="8,0,0,0" MinWidth="80" ItemsSource="{Binding RangeMode}" SelectedItem="{Binding SelectedPointToPoint}" />
-                            <ComboBox Name="StartPoint" Margin="8,0,0,0" MinWidth="60" ItemsSource="{Binding StartEndRangeItems}" SelectedItem="{Binding SelectedStartPoint}" />
+                            
+                            <ComboBox Name="StartPoint" Margin="8,0,0,0" MinWidth="60" ItemsSource="{Binding StartEndRangeItems}" SelectedItem="{Binding SelectedStartPoint}"
+                                      Visibility="{Binding ShowTextEntryForPointToPointMode,Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"/>
+                            <TextBox Name="StartPointText" Margin="8,0,0,0" MinWidth="60" Text="{Binding SelectedStartPoint}"
+                                     Visibility="{Binding ShowTextEntryForPointToPointMode, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"/>
+                            
                             <Label Content="through" Margin="8,0,0,0" />
-                            <ComboBox Name="EndPoint" Margin="8,0,0,0" MinWidth="60" ItemsSource="{Binding StartEndRangeItems}" SelectedItem="{Binding SelectedEndPoint}" />
+                            <ComboBox Name="EndPoint" Margin="8,0,0,0" MinWidth="60" ItemsSource="{Binding StartEndRangeItems}" SelectedItem="{Binding SelectedEndPoint}"
+                                      Visibility="{Binding ShowTextEntryForPointToPointMode, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"/>
+                            <TextBox Name="EndPointText" Margin="8,0,0,0" MinWidth="60" Text="{Binding SelectedEndPoint}" 
+                                     Visibility="{Binding ShowTextEntryForPointToPointMode, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+                            
                             <Label Content="Duration" Margin="8,0,0,0" />
                             <Label Content="{Binding Duration}" Margin="8,0,0,0" />
                         </StackPanel>
@@ -174,7 +183,7 @@
                         <StackPanel Orientation="Horizontal">
                             <Label Content="File" Margin="8,0,0,0" />
                             <TextBox Name="Destination" Margin="8,0,0,0" Width="600" Text="{Binding CurrentTask.Destination}" />
-                            <Button Name="DestinationBrowser" Margin="8,0,0,0" Padding="8,0,8,0" Content="Browse" Micro:Message.Attach="[Event Click] = [Action BrowseDestination]" />
+                            <Button Name="DestinationBrowser" Margin="8,0,0,0" Content="Browse" Micro:Message.Attach="[Event Click] = [Action BrowseDestination]" />
                         </StackPanel>
                     </StackPanel>
 

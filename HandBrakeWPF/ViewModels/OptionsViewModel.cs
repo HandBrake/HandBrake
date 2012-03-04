@@ -149,11 +149,6 @@ namespace HandBrakeWPF.ViewModels
         private bool enableGuiTooltips;
 
         /// <summary>
-        /// The enable query editor.
-        /// </summary>
-        private bool enableQueryEditor;
-
-        /// <summary>
         /// The growl after encode.
         /// </summary>
         private bool growlAfterEncode;
@@ -202,11 +197,6 @@ namespace HandBrakeWPF.ViewModels
         /// The priority level options.
         /// </summary>
         private BindingList<string> priorityLevelOptions = new BindingList<string>();
-
-        /// <summary>
-        /// The prompt on different query.
-        /// </summary>
-        private bool promptOnDifferentQuery;
 
         /// <summary>
         /// The remove underscores.
@@ -1040,40 +1030,6 @@ namespace HandBrakeWPF.ViewModels
         #region Advanced
 
         /// <summary>
-        /// Gets or sets a value indicating whether EnableQueryEditor.
-        /// </summary>
-        public bool EnableQueryEditor
-        {
-            get
-            {
-                return this.enableQueryEditor;
-            }
-
-            set
-            {
-                this.enableQueryEditor = value;
-                this.NotifyOfPropertyChange("EnableQueryEditor");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether PromptOnDifferentQuery.
-        /// </summary>
-        public bool PromptOnDifferentQuery
-        {
-            get
-            {
-                return this.promptOnDifferentQuery;
-            }
-
-            set
-            {
-                this.promptOnDifferentQuery = value;
-                this.NotifyOfPropertyChange("PromptOnDifferentQuery");
-            }
-        }
-
-        /// <summary>
         /// Gets or sets ConstantQualityGranularity.
         /// </summary>
         public BindingList<string> ConstantQualityGranularity
@@ -1435,8 +1391,6 @@ namespace HandBrakeWPF.ViewModels
             // Minimise to Tray
             this.displayStatusMessagesTrayIcon = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.TrayIconAlerts);
             this.minimiseToTray = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.MainWindowMinimize);
-            this.enableQueryEditor = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.QueryEditorTab);
-            this.promptOnDifferentQuery = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PromptOnUnmatchingQueries);
             this.disablePresetUpdateCheckNotification = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification);
             this.showCliWindow = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.ShowCLI);
 
@@ -1676,8 +1630,6 @@ namespace HandBrakeWPF.ViewModels
             /* Advanced */
             userSettingService.SetUserSetting(UserSettingConstants.MainWindowMinimize, this.MinimiseToTray);
             userSettingService.SetUserSetting(UserSettingConstants.TrayIconAlerts, this.DisplayStatusMessagesTrayIcon);
-            userSettingService.SetUserSetting(UserSettingConstants.QueryEditorTab, this.EnableQueryEditor);
-            userSettingService.SetUserSetting(UserSettingConstants.PromptOnUnmatchingQueries, this.PromptOnDifferentQuery);
             userSettingService.SetUserSetting(UserSettingConstants.PresetNotification, this.DisablePresetUpdateCheckNotification);
             userSettingService.SetUserSetting(ASUserSettingConstants.ShowCLI, this.ShowCliWindow);
             userSettingService.SetUserSetting(ASUserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
