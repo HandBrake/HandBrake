@@ -9,10 +9,16 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
+    using HandBrake.ApplicationServices.Model;
+
     /// <summary>
     /// The Preview View Model Interface
     /// </summary>
     public interface IPreviewViewModel
     {
+        /// <summary>
+        /// Sets Task.
+        /// </summary>
+        EncodeTask Task { set; }
     }
 }

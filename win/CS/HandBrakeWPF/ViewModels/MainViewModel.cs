@@ -704,7 +704,9 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenPreviewWindow()
         {
-            this.WindowManager.ShowWindow(IoC.Get<IPreviewViewModel>());
+            IPreviewViewModel viewModel = IoC.Get<IPreviewViewModel>();
+            this.WindowManager.ShowWindow(viewModel);
+            viewModel.Task = this.CurrentTask;
         }
 
         /// <summary>
