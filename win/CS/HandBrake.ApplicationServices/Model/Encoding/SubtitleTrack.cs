@@ -82,7 +82,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         {
             get
             {
-                return this.SrtFileName != "-";
+                return this.SrtFileName != "-" && this.SrtFileName != null;
             }
         }
 

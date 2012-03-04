@@ -322,8 +322,6 @@
                         <StackPanel Orientation="Vertical" Grid.Column="1">
                             <CheckBox Content="Minimize to system tray (Requires Restart)" IsChecked="{Binding MinimiseToTray}" />
                             <CheckBox Content="Display status messages from tray icon (balloon popups)" IsChecked="{Binding DisplayStatusMessagesTrayIcon}" />
-                            <CheckBox Content="Enable 'Query Editor' tab (Requires Restart)" IsChecked="{Binding EnableQueryEditor}" />
-                            <CheckBox Content="Prompt when a manual query does not match GUI settings" Margin="10,0,0,5" IsChecked="{Binding PromptOnDifferentQuery}" />
                             <CheckBox Content="Disable built-in preset update notification" IsChecked="{Binding DisablePresetUpdateCheckNotification}" />
                             <CheckBox Content="Show CLI window (Allows you to cleanly exit encode with ctrl-c)" IsChecked="{Binding ShowCliWindow}" />
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">

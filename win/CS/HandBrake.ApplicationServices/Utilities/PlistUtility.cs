@@ -416,6 +416,11 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </param>
         public static void Export(string path, Preset preset)
         {
+            if (string.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
             EncodeTask parsed = QueryParserUtility.Parse(preset.Query);
             XmlTextWriter xmlWriter = new XmlTextWriter(path, Encoding.UTF8) { Formatting = Formatting.Indented };
 
