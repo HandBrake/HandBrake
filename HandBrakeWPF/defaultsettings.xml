@@ -170,18 +170,18 @@
   </item>
   <item>
     <key>
-      <string>appcast</string>
+      <string>appcast_i686</string>
     </key>
     <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">http://handbrake.fr/appcast.xml</anyType>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">http://handbrake.fr/appcast.i386.xml</anyType>
     </value>
   </item>
   <item>
     <key>
-      <string>appcast_unstable</string>
+      <string>appcast_x64</string>
     </key>
     <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">http://handbrake.fr/appcast_unstable.xml</anyType>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">http://handbrake.fr/appcast_unstable.x86_64.xml</anyType>
     </value>
   </item>
   <item>
@@ -422,6 +422,14 @@
     </key>
     <value>
       <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>HandBrakePlatform</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">MinGW i686</anyType>
     </value>
   </item>
 </dictionary>
