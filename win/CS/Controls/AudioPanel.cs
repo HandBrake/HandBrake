@@ -1006,6 +1006,7 @@ namespace Handbrake.Controls
                 case "DTS-HD Passthru":
                 case "AAC Passthru":
                 case "MP3 Passthru":
+                case "Auto Passthru":
                     drp_audioMix.SelectedItem = None;
                     break;
             }
