@@ -98,7 +98,7 @@ namespace Handbrake
 
                 if (selectedTitle != null && !string.IsNullOrEmpty(selectedTitle.SourceName))
                 {
-                    return Path.GetFileName(selectedTitle.SourceName);
+                    return Path.GetFileNameWithoutExtension(selectedTitle.SourceName);
                 }
 
                 // We have a drive, selected as a folder.
