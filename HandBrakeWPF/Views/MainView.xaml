@@ -30,6 +30,34 @@
             <Setter Property="Padding" Value="5,5" />
         </Style>
 
+
+        <CollectionViewSource x:Key="presetsCvs" Source="{Binding Presets}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Category"/>
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+
+        <DataTemplate x:Key="presetsTemplate">
+            <StackPanel>
+                <TextBlock Text="{Binding Path=Name}"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <HierarchicalDataTemplate x:Key="presetsCategoryTemplate" ItemsSource="{Binding Path=Items}" 
+                                  ItemTemplate="{StaticResource presetsTemplate}">
+            <TextBlock Text="{Binding Path=Name}" FontWeight="Bold"/>
+        </HierarchicalDataTemplate>
+
+        <Style TargetType="TreeViewItem">
+            <Setter Property="IsExpanded" Value="True" />
+            <Setter Property="Padding" Value="0,2,0,2" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsBuildIn}" Value="True">
+                    <Setter Property="Foreground" Value="DarkBlue" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
     </Window.Resources>
 
@@ -160,18 +188,18 @@
                             <ComboBox Name="Angles" Margin="8,0,0,0" MinWidth="60" ItemsSource="{Binding Angles}"  SelectedItem="{Binding SelectedAngle}"/>
 
                             <ComboBox Name="PointToPointMode" Margin="8,0,0,0" MinWidth="80" ItemsSource="{Binding RangeMode}" SelectedItem="{Binding SelectedPointToPoint}" />
-                            
+
                             <ComboBox Name="StartPoint" Margin="8,0,0,0" MinWidth="60" ItemsSource="{Binding StartEndRangeItems}" SelectedItem="{Binding SelectedStartPoint}"
                                       Visibility="{Binding ShowTextEntryForPointToPointMode,Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"/>
                             <TextBox Name="StartPointText" Margin="8,0,0,0" MinWidth="60" Text="{Binding SelectedStartPoint}"
                                      Visibility="{Binding ShowTextEntryForPointToPointMode, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"/>
-                            
+
                             <Label Content="through" Margin="8,0,0,0" />
                             <ComboBox Name="EndPoint" Margin="8,0,0,0" MinWidth="60" ItemsSource="{Binding StartEndRangeItems}" SelectedItem="{Binding SelectedEndPoint}"
                                       Visibility="{Binding ShowTextEntryForPointToPointMode, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"/>
                             <TextBox Name="EndPointText" Margin="8,0,0,0" MinWidth="60" Text="{Binding SelectedEndPoint}" 
                                      Visibility="{Binding ShowTextEntryForPointToPointMode, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
-                            
+
                             <Label Content="Duration" Margin="8,0,0,0" />
                             <Label Content="{Binding Duration}" Margin="8,0,0,0" />
                         </StackPanel>
@@ -234,8 +262,10 @@
                 <StackPanel Margin="5,5,5,5" Orientation="Vertical">
                     <GroupBox Header="Presets" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                         <StackPanel Orientation="Vertical">
-                            <TreeView ItemsSource="{Binding Presets}" Width="240" Height="460">
 
+                            <TreeView ItemsSource="{Binding Source={StaticResource presetsCvs}, Path=Groups}" 
+                                      ItemTemplate="{StaticResource presetsCategoryTemplate}" Width="240" Height="460"
+                                      >
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="SelectedItemChanged">
                                         <Micro:ActionMessage MethodName="SetSelectedPreset">

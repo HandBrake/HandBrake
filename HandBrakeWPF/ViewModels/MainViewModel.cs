@@ -12,11 +12,13 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using System.ComponentModel.Composition;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Windows;
+    using System.Windows.Data;
 
     using Caliburn.Micro;
 
@@ -92,11 +94,6 @@ namespace HandBrakeWPF.ViewModels
         /// Is a MKV file backing field
         /// </summary>
         private bool isMkv;
-
-        public string sourcePath;
-        private string dvdDrivePath;
-        private string dvdDriveLabel;
-        private List<DriveInformation> drives;
 
         /// <summary>
         /// The Toolbar Status Label
@@ -177,6 +174,9 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueuePaused += this.QueuePaused;
             this.queueProcessor.EncodeService.EncodeStarted += this.EncodeStarted;
             this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeStatusChanged;
+          
+            this.Presets = this.presetService.Presets;
+      
         }
 
         #region View Model Properties
@@ -259,15 +259,9 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets a list of presets
+        /// Gets or sets Presets.
         /// </summary>
-        public ObservableCollection<Preset> Presets
-        {
-            get
-            {
-                return this.presetService.Presets;
-            }
-        }
+        public IEnumerable<Preset> Presets { get; set; }
 
         /// <summary>
         /// Gets or sets SelectedPreset.
@@ -348,34 +342,28 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                // TODO Disc Label
-                //if (this.selectedSourceType == SourceType.DvdDrive)
-                //{
-                //    return this.dvdDriveLabel;
-                //}
-
+                // The title that is selected has a source name. This means it's part of a batch scan.
                 if (selectedTitle != null && !string.IsNullOrEmpty(selectedTitle.SourceName))
                 {
                     return Path.GetFileName(selectedTitle.SourceName);
                 }
 
-                // We have a drive, selected as a folder.
-                if (this.sourcePath.EndsWith("\\"))
+                // Check if we have a Folder, if so, check if it's a DVD / Bluray drive and get the label.
+                if (ScannedSource.ScanPath.EndsWith("\\"))
                 {
-                    drives = GeneralUtilities.GetDrives();
-                    foreach (DriveInformation item in drives)
+                    foreach (DriveInformation item in GeneralUtilities.GetDrives())
                     {
-                        if (item.RootDirectory.Contains(this.sourcePath))
+                        if (item.RootDirectory.Contains(this.ScannedSource.ScanPath))
                         {
                             return item.VolumeLabel;
                         }
                     }
                 }
 
-                if (Path.GetFileNameWithoutExtension(this.sourcePath) != "VIDEO_TS")
-                    return Path.GetFileNameWithoutExtension(this.sourcePath);
+                if (Path.GetFileNameWithoutExtension(this.ScannedSource.ScanPath) != "VIDEO_TS")
+                    return Path.GetFileNameWithoutExtension(this.ScannedSource.ScanPath);
 
-                return Path.GetFileNameWithoutExtension(Path.GetDirectoryName(this.sourcePath));
+                return Path.GetFileNameWithoutExtension(Path.GetDirectoryName(this.ScannedSource.ScanPath));
             }
         }
 
@@ -869,7 +857,7 @@ namespace HandBrakeWPF.ViewModels
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] fileNames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
-                if (fileNames != null && fileNames.Count() >= 1 && File.Exists(fileNames[0]))
+                if (fileNames != null && fileNames.Any() && File.Exists(fileNames[0]))
                 {
                     this.StartScan(fileNames[0], 0);
                 }
@@ -1045,7 +1033,6 @@ namespace HandBrakeWPF.ViewModels
         {
             // TODO 
             // 1. Disable GUI.
-            this.sourcePath = filename;
             this.scanService.Scan(filename, title, this.UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount));
         }
 
@@ -1171,14 +1158,14 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void ScanCompleted(object sender, HandBrake.ApplicationServices.EventArgs.ScanCompletedEventArgs e)
         {
-            Caliburn.Micro.Execute.OnUIThread(() =>
+            Execute.OnUIThread(() =>
                 {
                     if (e.Successful)
                     {
                         this.scanService.SouceData.CopyTo(this.ScannedSource);
                         this.NotifyOfPropertyChange("ScannedSource");
                         this.NotifyOfPropertyChange("ScannedSource.Titles");
-                        this.SelectedTitle = this.ScannedSource.Titles.Where(t => t.MainTitle).FirstOrDefault()
+                        this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault(t => t.MainTitle)
                                              ?? this.ScannedSource.Titles.FirstOrDefault();
                         this.JobContextService.CurrentSource = this.ScannedSource;
                         this.JobContextService.CurrentTask = this.CurrentTask;

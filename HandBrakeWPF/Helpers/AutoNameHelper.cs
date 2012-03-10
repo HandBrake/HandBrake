@@ -52,8 +52,7 @@ namespace HandBrakeWPF.Helpers
             {
                 // Get the Source Name and remove any invalid characters
                 string sourceName = Path.GetInvalidFileNameChars().Aggregate(sourceOrLabelName, (current, character) => current.Replace(character.ToString(), string.Empty));
-                sourceName = Path.GetFileNameWithoutExtension(sourceName);
-
+   
                 // Remove Underscores
                 if (userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameRemoveUnderscore))
                     sourceName = sourceName.Replace("_", " ");
