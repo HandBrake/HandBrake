@@ -179,7 +179,6 @@ namespace Handbrake.Functions
             {
                 // Get the Source Name and remove any invalid characters
                 string sourceName = Path.GetInvalidFileNameChars().Aggregate(mainWindow.SourceName, (current, character) => current.Replace(character.ToString(), string.Empty));
-                sourceName = Path.GetFileNameWithoutExtension(sourceName);
 
                 // Remove Underscores
                 if (UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameRemoveUnderscore))
