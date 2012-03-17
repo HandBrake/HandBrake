@@ -476,7 +476,7 @@ namespace HandBrakeWPF.ViewModels
         {
             // TODO: These all need to be handled correctly.
 
-            if (Task.UsesMaxPictureSettings)
+            if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
             {
                 this.Task.MaxWidth = preset.Task.MaxWidth;
                 this.Task.MaxHeight = preset.Task.MaxHeight;

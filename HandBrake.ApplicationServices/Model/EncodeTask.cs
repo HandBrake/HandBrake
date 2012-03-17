@@ -91,9 +91,6 @@ namespace HandBrake.ApplicationServices.Model
             this.PixelAspectX = task.PixelAspectX;
             this.PixelAspectY = task.PixelAspectY;
             this.PointToPointMode = task.PointToPointMode;
-            this.PresetBuildNumber = task.PresetBuildNumber;
-            this.PresetDescription = task.PresetDescription;
-            this.PresetName = task.PresetName;
             this.Quality = task.Quality;
             this.Source = task.Source;
             this.StartPoint = task.StartPoint;
@@ -107,10 +104,6 @@ namespace HandBrake.ApplicationServices.Model
             this.Title = task.Title;
             this.TurboFirstPass = task.TurboFirstPass;
             this.TwoPass = task.TwoPass;
-            this.Type = task.Type;
-            this.UsesMaxPictureSettings = task.UsesMaxPictureSettings;
-            this.UsesPictureFilters = task.UsesPictureFilters;
-            this.UsesPictureSettings = task.UsesPictureSettings;
             this.Verbosity = task.Verbosity;
             this.VideoBitrate = task.VideoBitrate;
             this.VideoEncoder = task.VideoEncoder;
@@ -435,44 +428,6 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets Duration.
         /// </summary>
         public int? PreviewDuration { get; set; }
-        #endregion
-
-        #region Preset Information (TODO This should probably be dropped)
-
-        /// <summary>
-        /// Gets or sets PresetBuildNumber.
-        /// </summary>
-        public int PresetBuildNumber { get; set; }
-
-        /// <summary>
-        /// Gets or sets PresetDescription.
-        /// </summary>
-        public string PresetDescription { get; set; }
-
-        /// <summary>
-        /// Gets or sets PresetName.
-        /// </summary>
-        public string PresetName { get; set; }
-
-        /// <summary>
-        /// Gets or sets Type.
-        /// </summary>
-        public string Type { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether UsesMaxPictureSettings.
-        /// </summary>
-        public bool UsesMaxPictureSettings { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether UsesPictureFilters.
-        /// </summary>
-        public bool UsesPictureFilters { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether UsesPictureSettings.
-        /// </summary>
-        public bool UsesPictureSettings { get; set; }
         #endregion
 
         #region Helpers

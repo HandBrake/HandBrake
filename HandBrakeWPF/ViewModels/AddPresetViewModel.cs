@@ -9,12 +9,15 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using System.Collections.Generic;
     using System.ComponentModel.Composition;
     using System.Windows;
 
     using Caliburn.Micro;
 
+    using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
@@ -38,6 +41,16 @@ namespace HandBrakeWPF.ViewModels
         private readonly IErrorService errorService;
 
         /// <summary>
+        /// Backing fields for Selected Picture settings mode.
+        /// </summary>
+        private PresetPictureSettingsMode selectedPictureSettingMode;
+
+        /// <summary>
+        /// Backging field for show custom inputs
+        /// </summary>
+        private bool showCustomInputs;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="AddPresetViewModel"/> class.
         /// </summary>
         /// <param name="windowManager">
@@ -54,13 +67,81 @@ namespace HandBrakeWPF.ViewModels
             this.presetService = presetService;
             this.errorService = errorService;
             this.Title = "Add Preset";
-            this.Preset = new Preset {IsBuildIn = false, IsDefault = false, Category = "User Presets"};
+            this.Preset = new Preset { IsBuildIn = false, IsDefault = false, Category = PresetService.UserPresetCatgoryName };
+            this.PictureSettingsModes = EnumHelper<PresetPictureSettingsMode>.GetEnumList();
         }
 
         /// <summary>
-        /// Gets or sets the Preset
+        /// Gets the Preset
         /// </summary>
         public Preset Preset { get; private set; }
+
+        /// <summary>
+        /// Gets or sets PictureSettingsModes.
+        /// </summary>
+        public IEnumerable<PresetPictureSettingsMode> PictureSettingsModes { get; set; }
+
+        /// <summary>
+        /// Gets or sets CustomWidth.
+        /// </summary>
+        public int CustomWidth { get; set; }
+
+        /// <summary>
+        /// Gets or sets CustomHeight.
+        /// </summary>
+        public int CustomHeight { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether ShowCustomInputs.
+        /// </summary>
+        public bool ShowCustomInputs
+        {
+            get
+            {
+                return this.showCustomInputs;
+            }
+            set
+            {
+                this.showCustomInputs = value;
+                this.NotifyOfPropertyChange(() => this.ShowCustomInputs);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets SelectedPictureSettingMode.
+        /// </summary>
+        public PresetPictureSettingsMode SelectedPictureSettingMode
+        {
+            get
+            {
+                return this.selectedPictureSettingMode;
+            }
+            set
+            {
+                this.selectedPictureSettingMode = value;
+                this.ShowCustomInputs = value == PresetPictureSettingsMode.Custom;
+
+                if (SelectedPictureSettingMode == PresetPictureSettingsMode.Custom)
+                {
+                    this.Preset.Task.MaxHeight = null;
+                    this.Preset.Task.MaxWidth = null;
+                }
+
+                if (SelectedPictureSettingMode == PresetPictureSettingsMode.Custom)
+                {
+                    this.Preset.Task.Width = this.CustomWidth;
+                    this.Preset.Task.Height = this.CustomHeight;
+                    this.Preset.Task.MaxHeight = null;
+                    this.Preset.Task.MaxWidth = null;
+                }
+
+                if (SelectedPictureSettingMode == PresetPictureSettingsMode.SourceMaximum)
+                {
+                    this.Preset.Task.MaxWidth = this.Preset.Task.Width;
+                    this.Preset.Task.MaxHeight = this.Preset.Task.Height;
+                }
+            }
+        }
 
         /// <summary>
         /// Prepare the Preset window to create a Preset Object later.
@@ -70,11 +151,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void Setup(EncodeTask task)
         {
-            task.UsesPictureFilters = this.Preset.UsePictureFilters;
-            task.UsesMaxPictureSettings = false; // TODO
-            task.UsesPictureSettings = false; // TODO
-            this.Preset.Task = task;
-            this.Preset.Query = QueryGeneratorUtility.GenerateQuery(task);
+            this.Preset.Task = new EncodeTask(task);
         }
 
         /// <summary>
@@ -94,6 +171,9 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
+            this.Preset.UsePictureFilters = this.Preset.UsePictureFilters;
+            this.Preset.PictureSettingsMode = this.SelectedPictureSettingMode;
+
             bool added = this.presetService.Add(this.Preset);
             if (!added)
             {
@@ -106,6 +186,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Cancel adding a preset
+        /// </summary>
         public void Cancel()
         {
             this.Close();

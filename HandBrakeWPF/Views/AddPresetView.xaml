@@ -3,9 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:cal="http://www.caliburnproject.org"
-        mc:Ignorable="d" 
+        xmlns:Converters="clr-namespace:HandBrakeWPF.Converters" mc:Ignorable="d" 
              Title="{Binding Title}" 
              Width="350" Height="310">
+
+    <Window.Resources>
+        <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+        <Converters:EnumComboConverter x:Key="enumComboConverter" />
+    </Window.Resources>
 
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FFF1F0EF">
         <Grid.RowDefinitions>
@@ -48,9 +53,11 @@
             <TextBlock Text="Picture Settings:" FontWeight="Bold"  Grid.Row="1" Grid.Column="0" Margin="0,20,0,0" />
 
             <TextBlock Text="Use Picture Size:"  Grid.Row="2" Grid.Column="0" />
-            <ComboBox Width="100" ItemsSource="{Binding PictureSettingModes}" SelectedItem="{Binding SelectedPictureMode}"  Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" />
-
-            <StackPanel Orientation="Horizontal" Margin="0,10,0,0"  Grid.Row="3" Grid.Column="1">
+            <ComboBox Width="125" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" 
+                          ItemsSource="{Binding PictureSettingsModes, Converter={StaticResource enumComboConverter}}" 
+                          SelectedItem="{Binding SelectedPictureSettingMode, Converter={StaticResource enumComboConverter}}"/>
+            
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Visibility="{Binding ShowCustomInputs, Converter={StaticResource boolToVisConverter}}"  Grid.Row="3" Grid.Column="1">
                 <TextBox Width="50" Text="{Binding CustomWidth}" />
                 <TextBlock Text="X" FontWeight="Bold" Margin="10,0,10,0" />
                 <TextBox Width="50" Text="{Binding CustomHeight}" />

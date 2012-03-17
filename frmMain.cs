@@ -841,11 +841,11 @@ namespace Handbrake
         {
             if (openPreset.ShowDialog() == DialogResult.OK)
             {
-                EncodeTask parsed = PlistPresetHandler.Import(openPreset.FileName);
+                Preset parsed = PlistPresetHandler.Import(openPreset.FileName);
 
-                if (presetHandler.CheckIfPresetExists(parsed.PresetName))
+                if (presetHandler.CheckIfPresetExists(parsed.Name))
                 {
-                    if (!presetHandler.CanUpdatePreset(parsed.PresetName))
+                    if (!presetHandler.CanUpdatePreset(parsed.Name))
                     {
                         MessageBox.Show(
                             "You can not import a preset with the same name as a built-in preset.",
@@ -861,35 +861,25 @@ namespace Handbrake
                                         MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
                     {
-                        Preset preset = new Preset
-                        {
-                            Name = parsed.PresetName,
-                            Query = QueryGeneratorUtility.GenerateQuery(parsed),
-                            CropSettings = parsed.UsesPictureSettings,
-                            Description = string.Empty,
-                            AudioPassthruSettings = parsed.AllowedPassthruOptions
-                        };
+                        parsed.Query = QueryGeneratorUtility.GenerateQuery(parsed.Task);
+                        parsed.AudioPassthruSettings = parsed.Task.AllowedPassthruOptions;
+                        parsed.CropSettings = false;
 
-                        presetHandler.Update(preset);
+                        presetHandler.Update(parsed);
                     }
                 }
                 else
                 {
-                    Preset preset = new Preset
+                    parsed.Query = QueryGeneratorUtility.GenerateQuery(parsed.Task);
+                    parsed.AudioPassthruSettings = parsed.Task.AllowedPassthruOptions;
+                    parsed.CropSettings = false;
+        
+                    if (presetHandler.Add(parsed))
                     {
-                        Name = parsed.PresetName,
-                        Query = QueryGeneratorUtility.GenerateQuery(parsed),
-                        CropSettings = parsed.UsesPictureSettings,
-                        Description = string.Empty,
-                        AudioPassthruSettings = parsed.AllowedPassthruOptions
-                    };
-
-                    if (presetHandler.Add(preset))
-                    {
-                        TreeNode preset_treeview = new TreeNode(parsed.PresetName)
+                        TreeNode preset_treeview = new TreeNode(parsed.Name)
                                                        {
                                                            ForeColor = Color.Black,
-                                                           Tag = preset,
+                                                           Tag = parsed,
                                                        };
                         treeView_presets.Nodes.Add(preset_treeview);
                     }
