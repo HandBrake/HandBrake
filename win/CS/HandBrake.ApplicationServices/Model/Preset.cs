@@ -5,6 +5,8 @@
 
 namespace HandBrake.ApplicationServices.Model
 {
+    using System;
+
     using Encoding;
 
     /// <summary>
@@ -30,6 +32,7 @@ namespace HandBrake.ApplicationServices.Model
         /// <summary>
         /// Gets or sets a value indicating whether to use picture Settings in presets.
         /// </summary>
+        [Obsolete("Don't use this!")]
         public bool CropSettings { get; set; }
 
         /// <summary>
@@ -46,6 +49,12 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets a value indicating whether Picture Filters are used with this preset.
         /// </summary>
         public bool UsePictureFilters { get; set; }
+
+        /// <summary>
+        /// Gets or sets PictureSettingsMode.
+        /// Source Maximum, Custom or None
+        /// </summary>
+        public PresetPictureSettingsMode PictureSettingsMode { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this is a built in preset

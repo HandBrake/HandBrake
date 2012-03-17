@@ -937,10 +937,10 @@ namespace HandBrakeWPF.ViewModels
 
             if (!string.IsNullOrEmpty(filename))
             {
-                EncodeTask parsed = PlistPresetHandler.Import(filename);
-                if (this.presetService.CheckIfPresetExists(parsed.PresetName))
+                Preset preset = PlistPresetHandler.Import(filename);
+                if (this.presetService.CheckIfPresetExists(preset.Name))
                 {
-                    if (!presetService.CanUpdatePreset(parsed.PresetName))
+                    if (!presetService.CanUpdatePreset(preset.Name))
                     {
                         MessageBox.Show(
                             "You can not import a preset with the same name as a built-in preset.",
@@ -958,18 +958,15 @@ namespace HandBrakeWPF.ViewModels
                             MessageBoxImage.Warning);
                     if (result == MessageBoxResult.Yes)
                     {
-                        Preset preset = new Preset { Name = parsed.PresetName, CropSettings = parsed.UsesPictureSettings, Task = parsed };
-
                         presetService.Update(preset);
                     }
                 }
                 else
                 {
-                    Preset preset = new Preset { Name = parsed.PresetName, Task = parsed, CropSettings = parsed.UsesPictureSettings, };
                     presetService.Add(preset);
                 }
 
-                this.NotifyOfPropertyChange("Presets");
+                this.NotifyOfPropertyChange(() => this.Presets);
             }
         }
 

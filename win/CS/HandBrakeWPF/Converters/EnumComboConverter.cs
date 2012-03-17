@@ -15,6 +15,7 @@ namespace HandBrakeWPF.Converters
     using System;
 
     using HandBrake.ApplicationServices.Functions;
+    using HandBrake.ApplicationServices.Model;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
 
@@ -70,7 +71,10 @@ namespace HandBrakeWPF.Converters
                 return EnumHelper<AudioEncoder>.GetEnumDisplayValues(typeof(AudioEncoder));
             }
 
-
+            if (value is IEnumerable<PresetPictureSettingsMode>)
+            {
+                return EnumHelper<PresetPictureSettingsMode>.GetEnumDisplayValues(typeof(PresetPictureSettingsMode));
+            }
 
             // Single Items
             if (targetType == typeof(x264Preset) || value.GetType() == typeof(x264Preset))
@@ -96,6 +100,10 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(AudioEncoder) || value.GetType() == typeof(AudioEncoder))
             {
                 return EnumHelper<AudioEncoder>.GetDisplay((AudioEncoder)value);
+            }
+            if (targetType == typeof(PresetPictureSettingsMode) || value.GetType() == typeof(PresetPictureSettingsMode))
+            {
+                return EnumHelper<PresetPictureSettingsMode>.GetDisplay((PresetPictureSettingsMode)value);
             }
 
             return null;
@@ -147,6 +155,10 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(AudioEncoder) || value.GetType() == typeof(AudioEncoder))
             {
                 return EnumHelper<AudioEncoder>.GetValue(value.ToString());
+            }
+            if (targetType == typeof(PresetPictureSettingsMode) || value.GetType() == typeof(PresetPictureSettingsMode))
+            {
+                return EnumHelper<PresetPictureSettingsMode>.GetValue(value.ToString());
             }
 
             return null;

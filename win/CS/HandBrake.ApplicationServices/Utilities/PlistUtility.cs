@@ -16,6 +16,7 @@ namespace HandBrake.ApplicationServices.Utilities
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model.Encoding;
 
@@ -31,19 +32,42 @@ namespace HandBrake.ApplicationServices.Utilities
 
         #region Import
 
-        public static EncodeTask Import(string filename)
+        public static Preset Import(string filename)
         {
+            Preset preset = new Preset();
+
             XmlNode root = loadFile(filename);
             if (root == null) return null;
 
             // We'll query a query parser object and use it's public var structures to store all the data.
             // This will allow the preset loader logic to be used instead of writing custom logic just for this file.
             EncodeTask parsed = new EncodeTask();
+            bool useFilters = false;
+            PresetPictureSettingsMode pictureSettingsMode = PresetPictureSettingsMode.None;
             string qualityMode = string.Empty;
 
             #region Get a List of Audio Track Objects
-            XmlNode audioListDict = root.ChildNodes[2].ChildNodes[0].FirstChild.ChildNodes[13];
+
+            // This is the main <dict> with all the values
+            XmlNode mainDict = root.ChildNodes[2].ChildNodes[0].FirstChild;
+            XmlNode audioListDict = null;
             ObservableCollection<AudioTrack> audioTracks = new ObservableCollection<AudioTrack>();
+
+            // Look for the AudioList key
+            bool found = false;
+            foreach (XmlNode node in mainDict.ChildNodes)
+            {
+                if (found)
+                {
+                    audioListDict = node;
+                    break;
+                }
+
+                if (node.InnerText == "AudioList")
+                {
+                    found = true; // We want the next node, as it is the value object.
+                }
+            }
 
             for (int i = 0; i < audioListDict.ChildNodes.Count; i++)
             {
@@ -304,25 +328,25 @@ namespace HandBrake.ApplicationServices.Utilities
 
                         // Preset Information
                     case "PresetBuildNumber":
-                        parsed.PresetBuildNumber = int.Parse(value);
+                        preset.Version = value;
                         break;
                     case "PresetDescription":
-                        parsed.PresetDescription = value;
+                        preset.Description = value;
                         break;
                     case "PresetName":
-                        parsed.PresetName = value;
+                        preset.Name = value;
                         break;
                     case "Type":
-                        parsed.Type = value;
+                        //parsed.Type = value; // TODO find out what this is
                         break;
                     case "UsesMaxPictureSettings":
-                        parsed.UsesMaxPictureSettings = value == "1";
+                        pictureSettingsMode = PresetPictureSettingsMode.SourceMaximum;
                         break;
                     case "UsesPictureFilters":
-                        parsed.UsesPictureFilters = value == "1";
+                        useFilters = value == "1";
                         break;
                     case "UsesPictureSettings":
-                        parsed.UsesPictureSettings = value == "1";
+                        pictureSettingsMode = PresetPictureSettingsMode.Custom;
                         break;
 
                     // Allowed Passthru
@@ -357,9 +381,32 @@ namespace HandBrake.ApplicationServices.Utilities
                     parsed.VideoEncodeRateType = VideoEncodeRateType.ConstantQuality;
                     break;
             }
+
+            // Default filters if we have to
+            if (!useFilters)
+            {
+                parsed.Detelecine = Detelecine.Off;
+                parsed.Denoise = Denoise.Off;
+                parsed.Deinterlace = Deinterlace.Off;
+                parsed.Decomb = Decomb.Off;
+                parsed.Deblock = 0;
+                parsed.Grayscale = false;
+            }
+
+            if (pictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
+            {
+                parsed.MaxWidth = parsed.Height;
+                parsed.MaxHeight = parsed.Width;
+            }
             #endregion
 
-            return parsed;
+
+            preset.Task = parsed;
+            preset.PictureSettingsMode = pictureSettingsMode;
+            preset.UsePictureFilters = useFilters;
+            preset.Category = PresetService.UserPresetCatgoryName;
+
+            return preset;
         }
 
         private static XmlNode loadFile(string filename)
