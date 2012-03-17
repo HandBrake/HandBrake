@@ -827,6 +827,11 @@ namespace HandBrake.ApplicationServices.Utilities
                     query += string.Format("--x264-tune={0} ", task.X264Tune.ToString().ToLower().Replace(" ", string.Empty));
                 }
 
+                if (!string.IsNullOrEmpty(task.AdvancedEncoderOptions))
+                {
+                    query += string.Format(" -x {0}", task.AdvancedEncoderOptions);
+                }
+
                 return query;
             }
 
