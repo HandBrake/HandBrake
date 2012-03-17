@@ -11,14 +11,11 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
     using System.ComponentModel.Composition;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Windows;
-    using System.Windows.Data;
 
     using Caliburn.Micro;
 
@@ -176,7 +173,6 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeStatusChanged;
           
             this.Presets = this.presetService.Presets;
-      
         }
 
         #region View Model Properties
@@ -278,13 +274,13 @@ namespace HandBrakeWPF.ViewModels
 
                 if (this.SelectedPreset != null)
                 {
-                    this.PictureSettingsViewModel.SetPreset(this.SelectedPreset);
-                    this.VideoViewModel.SetPreset(this.SelectedPreset);
-                    this.FiltersViewModel.SetPreset(this.SelectedPreset);
-                    this.AudioViewModel.SetPreset(this.SelectedPreset);
-                    this.SubtitleViewModel.SetPreset(this.SelectedPreset);
-                    this.ChaptersViewModel.SetPreset(this.SelectedPreset);
-                    this.AdvancedViewModel.SetPreset(this.SelectedPreset);
+                    this.PictureSettingsViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
+                    this.VideoViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
+                    this.FiltersViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
+                    this.AudioViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
+                    this.SubtitleViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
+                    this.ChaptersViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
+                    this.AdvancedViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
                 }
 
                 this.NotifyOfPropertyChange(() => this.SelectedPreset);
@@ -840,6 +836,18 @@ namespace HandBrakeWPF.ViewModels
         public void ExitApplication()
         {
             Application.Current.Shutdown();
+        }
+
+        /// <summary>
+        /// DEBUG: Show CLI Query for settings+6
+        /// </summary>
+        public void ShowCliQuery()
+        {
+            this.errorService.ShowMessageBox(
+                QueryGeneratorUtility.GenerateQuery(this.CurrentTask),
+                "CLI Query",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
 
         #endregion

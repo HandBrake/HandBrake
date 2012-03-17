@@ -25,7 +25,7 @@
             <Button Content="Import SRT" Grid.Column="2" Width="75" cal:Message.Attach="[Event Click] = [Action Import]" />
         </Grid>
 
-        <ListBox Grid.Row="2" ItemsSource="{Binding SubtitleTracks}" 
+        <ListBox Grid.Row="2" ItemsSource="{Binding Task.SubtitleTracks}" 
                  SelectionMode="Extended" Background="LightGray" Margin="10,10,10,10"
                  dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
                  dd:DragDrop.DropHandler="{Binding}">

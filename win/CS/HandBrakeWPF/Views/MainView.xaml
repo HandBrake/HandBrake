@@ -87,6 +87,10 @@
                         <Separator />
                         <MenuItem Header="About..." Micro:Message.Attach="[Event Click] = [Action OpenAboutApplication]" />
                     </MenuItem>
+
+                    <MenuItem Header="Debug">
+                        <MenuItem Header="Show CLI Equiv" Micro:Message.Attach="[Event Click] = [Action ShowCliQuery]" />
+                    </MenuItem>
                 </Menu>
 
                 <!-- ToolBar -->

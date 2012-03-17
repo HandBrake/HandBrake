@@ -396,8 +396,12 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="preset">
         /// The preset.
         /// </param>
-        public void SetPreset(Preset preset)
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        public void SetPreset(Preset preset, EncodeTask task)
         {
+            this.Task = task;
             if (preset == null || preset.Task == null)
             {
                 return;

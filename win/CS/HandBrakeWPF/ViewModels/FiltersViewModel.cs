@@ -28,55 +28,6 @@ namespace HandBrakeWPF.ViewModels
     [Export(typeof(IFiltersViewModel))]
     public class FiltersViewModel : ViewModelBase, IFiltersViewModel
     {
-        #region Constants and Fields
-
-        /// <summary>
-        /// Backing field for the deblock value
-        /// </summary>
-        private int deblockValue;
-
-        /// <summary>
-        /// Backing field for the selected deinterlace value
-        /// </summary>
-        private Deinterlace selectedDeInterlace;
-
-        /// <summary>
-        /// Backing field for the selected decomb value
-        /// </summary>
-        private Decomb selectedDecomb;
-
-        /// <summary>
-        /// Backing field for the selected denoise value
-        /// </summary>
-        private Denoise selectedDenoise;
-
-        /// <summary>
-        /// Backing field for the selected detelecine value
-        /// </summary>
-        private Detelecine selectedDetelecine;
-
-        /// <summary>
-        /// Backing field for the custom decomb value
-        /// </summary>
-        private string customDeinterlace;
-
-        /// <summary>
-        /// Backing field for the custom debcomb value
-        /// </summary>
-        private string customDecomb;
-
-        /// <summary>
-        /// Backing field for the custom detelecine value
-        /// </summary>
-        private string customDetelecine;
-
-        /// <summary>
-        /// Backing field for the custom denoise value
-        /// </summary>
-        private string customDenoise;
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>
@@ -103,13 +54,81 @@ namespace HandBrakeWPF.ViewModels
         public EncodeTask CurrentTask { get; private set; }
 
         /// <summary>
-        /// Gets DeInterlaceOptions.
+        /// Gets or sets CustomDecomb.
         /// </summary>
-        public IEnumerable<string> DeInterlaceOptions
+        public string CustomDecomb
         {
             get
             {
-                return EnumHelper<Deinterlace>.GetEnumDisplayValues(typeof(Deinterlace));
+                return this.CurrentTask.CustomDecomb;
+            }
+
+            set
+            {
+                this.CurrentTask.CustomDecomb = value;
+                this.NotifyOfPropertyChange(() => this.CustomDecomb);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets CustomDeinterlace.
+        /// </summary>
+        public string CustomDeinterlace
+        {
+            get
+            {
+                return this.CurrentTask.CustomDeinterlace;
+            }
+
+            set
+            {
+                this.CurrentTask.CustomDeinterlace = value;
+                this.NotifyOfPropertyChange(() => this.CustomDeinterlace);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets CustomDenoise.
+        /// </summary>
+        public string CustomDenoise
+        {
+            get
+            {
+                return this.CurrentTask.CustomDenoise;
+            }
+
+            set
+            {
+                this.CurrentTask.CustomDenoise = value;
+                this.NotifyOfPropertyChange(() => this.CustomDenoise);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets CustomDetelecine.
+        /// </summary>
+        public string CustomDetelecine
+        {
+            get
+            {
+                return this.CurrentTask.CustomDetelecine;
+            }
+
+            set
+            {
+                this.CurrentTask.CustomDetelecine = value;
+                this.NotifyOfPropertyChange(() => this.CustomDetelecine);
+            }
+        }
+
+        /// <summary>
+        /// Gets DeInterlaceOptions.
+        /// </summary>
+        public IEnumerable<Deinterlace> DeInterlaceOptions
+        {
+            get
+            {
+                return EnumHelper<Deinterlace>.GetEnumList();
             }
         }
 
@@ -131,144 +150,158 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.deblockValue;
+                return this.CurrentTask.Deblock;
             }
+
             set
             {
-                this.deblockValue = value;
-                this.NotifyOfPropertyChange("DeblockValue");
-                this.NotifyOfPropertyChange("DeblockText");
+                this.CurrentTask.Deblock = value;
+                this.NotifyOfPropertyChange(() => this.DeblockValue);
+                this.NotifyOfPropertyChange(() => this.DeblockText);
             }
         }
 
         /// <summary>
         /// Gets DecombOptions.
         /// </summary>
-        public IEnumerable<string> DecombOptions
+        public IEnumerable<Decomb> DecombOptions
         {
             get
             {
-                return EnumHelper<Decomb>.GetEnumDisplayValues(typeof(Decomb));
+                return EnumHelper<Decomb>.GetEnumList();
             }
         }
 
         /// <summary>
         /// Gets DenoiseOptions.
         /// </summary>
-        public IEnumerable<string> DenoiseOptions
+        public IEnumerable<Denoise> DenoiseOptions
         {
             get
             {
-                return EnumHelper<Denoise>.GetEnumDisplayValues(typeof(Denoise));
+                return EnumHelper<Denoise>.GetEnumList();
             }
         }
 
         /// <summary>
         /// Gets DetelecineOptions.
         /// </summary>
-        public IEnumerable<string> DetelecineOptions
+        public IEnumerable<Detelecine> DetelecineOptions
         {
             get
             {
-                return EnumHelper<Detelecine>.GetEnumDisplayValues(typeof(Detelecine));
+                return EnumHelper<Detelecine>.GetEnumList();
             }
         }
 
         /// <summary>
         /// Gets or sets a value indicating whether Grayscale.
         /// </summary>
-        public bool Grayscale { get; set; }
-
-        /// <summary>
-        /// Gets or sets SelectedDeInterlace.
-        /// </summary>
-        public string SelectedDeInterlace
+        public bool Grayscale
         {
             get
             {
-                return EnumHelper<Deinterlace>.GetDisplay(this.selectedDeInterlace);
+                return this.CurrentTask.Grayscale;
             }
 
             set
             {
-                this.selectedDeInterlace = EnumHelper<Deinterlace>.GetValue(value);
-                if (this.selectedDeInterlace != Deinterlace.Off)
+                this.CurrentTask.Grayscale = value;
+                this.NotifyOfPropertyChange(() => this.Grayscale);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets SelectedDeInterlace.
+        /// </summary>
+        public Deinterlace SelectedDeInterlace
+        {
+            get
+            {
+                return this.CurrentTask.Deinterlace;
+            }
+
+            set
+            {
+                this.CurrentTask.Deinterlace = value;
+                if (this.CurrentTask.Deinterlace != Deinterlace.Off)
                 {
-                    this.SelectedDecomb = EnumHelper<Decomb>.GetDisplay(Decomb.Off);
+                    this.SelectedDecomb = Decomb.Off;
                 }
-                this.NotifyOfPropertyChange("SelectedDeInterlace");
+
+                this.NotifyOfPropertyChange(() => this.SelectedDeInterlace);
 
                 // Show / Hide the Custom Control
-                this.ShowDeinterlaceCustom = this.selectedDeInterlace == Deinterlace.Custom;
-                this.NotifyOfPropertyChange("ShowDeinterlaceCustom");
+                this.ShowDeinterlaceCustom = this.CurrentTask.Deinterlace == Deinterlace.Custom;
+                this.NotifyOfPropertyChange(() => this.ShowDeinterlaceCustom);
             }
         }
 
         /// <summary>
         /// Gets or sets SelectedDecomb.
         /// </summary>
-        public string SelectedDecomb
+        public Decomb SelectedDecomb
         {
             get
             {
-                return EnumHelper<Decomb>.GetDisplay(this.selectedDecomb);
+                return this.CurrentTask.Decomb;
             }
 
             set
             {
-                this.selectedDecomb = EnumHelper<Decomb>.GetValue(value);
-                if (this.selectedDecomb != Decomb.Off)
+                this.CurrentTask.Decomb = value;
+                if (this.CurrentTask.Decomb != Decomb.Off)
                 {
-                    this.SelectedDeInterlace = EnumHelper<Deinterlace>.GetDisplay(Deinterlace.Off);
+                    this.SelectedDeInterlace = Deinterlace.Off;
                 }
 
-                this.NotifyOfPropertyChange("SelectedDecomb");
+                this.NotifyOfPropertyChange(() => this.SelectedDecomb);
 
                 // Show / Hide the Custom Control
-                this.ShowDecombCustom = this.selectedDecomb == Decomb.Custom;
-                this.NotifyOfPropertyChange("ShowDecombCustom");
+                this.ShowDecombCustom = this.CurrentTask.Decomb == Decomb.Custom;
+                this.NotifyOfPropertyChange(() => this.ShowDecombCustom);
             }
         }
 
         /// <summary>
         /// Gets or sets SelectedDenoise.
         /// </summary>
-        public string SelectedDenoise
+        public Denoise SelectedDenoise
         {
             get
             {
-                return EnumHelper<Denoise>.GetDisplay(this.selectedDenoise);
+                return this.CurrentTask.Denoise;
             }
 
             set
             {
-                this.selectedDenoise = EnumHelper<Denoise>.GetValue(value);
-                this.NotifyOfPropertyChange("SelectedDenoise");
+                this.CurrentTask.Denoise = value;
+                this.NotifyOfPropertyChange(() => this.SelectedDenoise);
 
                 // Show / Hide the Custom Control
-                this.ShowDenoiseCustom = this.selectedDenoise == Denoise.Custom;
-                this.NotifyOfPropertyChange("ShowDenoiseCustom");
+                this.ShowDenoiseCustom = this.CurrentTask.Denoise == Denoise.Custom;
+                this.NotifyOfPropertyChange(() => this.ShowDenoiseCustom);
             }
         }
 
         /// <summary>
         /// Gets or sets SelectedDetelecine.
         /// </summary>
-        public string SelectedDetelecine
+        public Detelecine SelectedDetelecine
         {
             get
             {
-                return EnumHelper<Detelecine>.GetDisplay(this.selectedDetelecine);
+                return this.CurrentTask.Detelecine;
             }
 
             set
             {
-                this.selectedDetelecine = EnumHelper<Detelecine>.GetValue(value);
-                this.NotifyOfPropertyChange("SelectedDetelecine");
+                this.CurrentTask.Detelecine = value;
+                this.NotifyOfPropertyChange(() => this.SelectedDetelecine);
 
                 // Show / Hide the Custom Control
-                this.ShowDetelecineCustom = this.selectedDetelecine == Detelecine.Custom;
-                this.NotifyOfPropertyChange("ShowDetelecineCustom");
+                this.ShowDetelecineCustom = this.CurrentTask.Detelecine == Detelecine.Custom;
+                this.NotifyOfPropertyChange(() => this.ShowDetelecineCustom);
             }
         }
 
@@ -292,71 +325,52 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public bool ShowDetelecineCustom { get; set; }
 
-        /// <summary>
-        /// Gets or sets CustomDeinterlace.
-        /// </summary>
-        public string CustomDeinterlace
-        {
-            get
-            {
-                return this.customDeinterlace;
-            }
-            set
-            {
-                this.customDeinterlace = value;
-                this.NotifyOfPropertyChange(() => this.CustomDeinterlace);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets CustomDecomb.
-        /// </summary>
-        public string CustomDecomb
-        {
-            get
-            {
-                return this.customDecomb;
-            }
-            set
-            {
-                this.customDecomb = value;
-                this.NotifyOfPropertyChange(() => this.CustomDecomb);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets CustomDetelecine.
-        /// </summary>
-        public string CustomDetelecine
-        {
-            get
-            {
-                return this.customDetelecine;
-            }
-            set
-            {
-                this.customDetelecine = value;
-                this.NotifyOfPropertyChange(() => this.CustomDetelecine);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets CustomDenoise.
-        /// </summary>
-        public string CustomDenoise
-        {
-            get
-            {
-                return this.customDenoise;
-            }
-            set
-            {
-                this.customDenoise = value;
-                this.NotifyOfPropertyChange(() => this.CustomDenoise);
-            }
-        }
-
         #endregion
+
+        #region Implemented Interfaces
+
+        #region ITabInterface
+
+        /// <summary>
+        /// Setup this tab for the specified preset.
+        /// </summary>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        public void SetPreset(Preset preset, EncodeTask task)
+        {
+            this.CurrentTask = task;
+
+            if (preset != null && preset.UsePictureFilters)
+            {
+                // Properties
+                this.SelectedDenoise = preset.Task.Denoise;
+                this.SelectedDecomb = preset.Task.Decomb;
+                this.SelectedDeInterlace = preset.Task.Deinterlace;
+                this.SelectedDetelecine = preset.Task.Detelecine;
+                this.Grayscale = preset.Task.Grayscale;
+                this.DeblockValue = preset.Task.Deblock;
+
+                // Custom Values
+                this.CustomDecomb = preset.Task.CustomDecomb;
+                this.CustomDeinterlace = preset.Task.CustomDeinterlace;
+                this.CustomDetelecine = preset.Task.CustomDetelecine;
+                this.CustomDenoise = preset.Task.CustomDenoise;
+            }
+            else
+            {
+                // Default everything to off
+                this.SelectedDenoise = Denoise.Off;
+                this.SelectedDecomb = Decomb.Off;
+                this.SelectedDeInterlace = Deinterlace.Off;
+                this.SelectedDetelecine = Detelecine.Off;
+                this.Grayscale = false;
+                this.DeblockValue = 0;
+            }
+        }
 
         /// <summary>
         /// Setup this window for a new source
@@ -372,32 +386,11 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void SetSource(Title title, Preset preset, EncodeTask task)
         {
+            this.CurrentTask = task;
         }
 
-        /// <summary>
-        /// Setup this tab for the specified preset.
-        /// </summary>
-        /// <param name="preset">
-        /// The preset.
-        /// </param>
-        public void SetPreset(Preset preset)
-        {
-            if (preset != null)
-            {
-                // Properties
-                this.SelectedDenoise = EnumHelper<Denoise>.GetDisplay(preset.Task.Denoise);
-                this.SelectedDecomb = EnumHelper<Decomb>.GetDisplay(preset.Task.Decomb);
-                this.SelectedDeInterlace = EnumHelper<Deinterlace>.GetDisplay(preset.Task.Deinterlace);
-                this.SelectedDetelecine = EnumHelper<Detelecine>.GetDisplay(preset.Task.Detelecine);
-                this.Grayscale = preset.Task.Grayscale;
-                this.DeblockValue = preset.Task.Deblock;
+        #endregion
 
-                // Custom Values
-                this.CustomDecomb = preset.Task.CustomDecomb;
-                this.CustomDeinterlace = preset.Task.CustomDeinterlace;
-                this.CustomDetelecine = preset.Task.CustomDetelecine;
-                this.CustomDenoise = preset.Task.CustomDenoise;
-            }
-        }
+        #endregion
     }
 }
