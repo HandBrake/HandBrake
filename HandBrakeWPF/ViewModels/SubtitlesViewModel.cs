@@ -10,7 +10,6 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel.Composition;
     using System.Linq;
@@ -36,11 +35,6 @@ namespace HandBrakeWPF.ViewModels
         #region Constants and Fields
 
         /// <summary>
-        /// The subtitle tracks.
-        /// </summary>
-        private ObservableCollection<SubtitleTrack> subtitleTracks;
-
-        /// <summary>
         /// Backing field for the source subtitle tracks.
         /// </summary>
         private IEnumerable<Subtitle> sourceTracks;
@@ -60,42 +54,25 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public SubtitlesViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
         {
-            this.SubtitleTracks = new ObservableCollection<SubtitleTrack>();
+            this.Task = new EncodeTask();
 
-            Langauges = LanguageUtilities.MapLanguages().Keys;
-            CharacterCodes = CharCodesUtilities.GetCharacterCodes();
+            this.Langauges = LanguageUtilities.MapLanguages().Keys;
+            this.CharacterCodes = CharCodesUtilities.GetCharacterCodes();
         }
 
         #endregion
 
-        #region Public Properties
-
-        /// <summary>
-        ///   Gets or sets State.
-        /// </summary>
-        public ObservableCollection<SubtitleTrack> SubtitleTracks
-        {
-            get
-            {
-                return this.subtitleTracks;
-            }
-
-            set
-            {
-                this.subtitleTracks = value;
-                this.NotifyOfPropertyChange(() => this.SubtitleTracks);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets Langauges.
-        /// </summary>
-        public IEnumerable<string> Langauges { get; set; }
+        #region Properties
 
         /// <summary>
         /// Gets or sets CharacterCodes.
         /// </summary>
         public IEnumerable<string> CharacterCodes { get; set; }
+
+        /// <summary>
+        /// Gets or sets Langauges.
+        /// </summary>
+        public IEnumerable<string> Langauges { get; set; }
 
         /// <summary>
         /// Gets or sets SourceTracks.
@@ -106,12 +83,18 @@ namespace HandBrakeWPF.ViewModels
             {
                 return this.sourceTracks;
             }
+
             set
             {
                 this.sourceTracks = value;
-                this.NotifyOfPropertyChange(() => SourceTracks);
+                this.NotifyOfPropertyChange(() => this.SourceTracks);
             }
         }
+
+        /// <summary>
+        /// Gets or sets Task.
+        /// </summary>
+        public EncodeTask Task { get; set; }
 
         #endregion
 
@@ -126,79 +109,14 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Import an SRT File.
-        /// </summary>
-        public void Import()
-        {
-            VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "SRT files (*.srt)|*.srt", CheckFileExists = true, Multiselect = true };
-
-            dialog.ShowDialog();
-
-            foreach (var srtFile in dialog.FileNames)
-            {
-                SubtitleTrack track = new SubtitleTrack
-                    {
-                        SrtFileName = srtFile,
-                        SrtOffset = 0,
-                        SrtCharCode = "UTF-8",
-                        SrtLang = "English",
-                        SubtitleType = SubtitleType.SRT
-                    };
-                this.SubtitleTracks.Add(track);
-            }
-        }
-
-        /// <summary>
-        /// Remove a Track
-        /// </summary>
-        /// <param name="track">
-        /// The track.
-        /// </param>
-        public void Remove(SubtitleTrack track)
-        {
-            this.SubtitleTracks.Remove(track);
-        }
-
-        /// <summary>
-        /// Setup this window for a new source
-        /// </summary>
-        /// <param name="title">
-        /// The title.
-        /// </param>
-        /// <param name="preset">
-        /// The preset.
-        /// </param>
-        /// <param name="task">
-        /// The task.
-        /// </param>
-        public void SetSource(Title title, Preset preset, EncodeTask task)
-        {
-            this.SourceTracks = title.Subtitles;
-            this.SubtitleTracks = task.SubtitleTracks;
-
-            this.AutomaticSubtitleSelection();
-        }
-
-        /// <summary>
-        /// Setup this tab for the specified preset.
-        /// </summary>
-        /// <param name="preset">
-        /// The preset.
-        /// </param>
-        public void SetPreset(Preset preset)
-        {
-            // We don't currently support subtitles within presets.
-        }
-        
-        /// <summary>
         /// Automatic Subtitle Selection based on user preferences.
         /// </summary>
         public void AutomaticSubtitleSelection()
         {
-            this.SubtitleTracks.Clear();
+            this.Task.SubtitleTracks.Clear();
 
             // New DUB Settings
-            int mode = UserSettingService.GetUserSetting<int>(UserSettingConstants.DubModeSubtitle);
+            int mode = this.UserSettingService.GetUserSetting<int>(UserSettingConstants.DubModeSubtitle);
             switch (mode)
             {
                 case 1: // Adding all remaining subtitle tracks
@@ -222,9 +140,90 @@ namespace HandBrakeWPF.ViewModels
             this.AddAllClosedCaptions();
         }
 
+        /// <summary>
+        /// Import an SRT File.
+        /// </summary>
+        public void Import()
+        {
+            VistaOpenFileDialog dialog = new VistaOpenFileDialog
+                {
+                   Filter = "SRT files (*.srt)|*.srt", CheckFileExists = true, Multiselect = true 
+                };
+
+            dialog.ShowDialog();
+
+            foreach (var srtFile in dialog.FileNames)
+            {
+                SubtitleTrack track = new SubtitleTrack
+                    {
+                        SrtFileName = srtFile, 
+                        SrtOffset = 0, 
+                        SrtCharCode = "UTF-8", 
+                        SrtLang = "English", 
+                        SubtitleType = SubtitleType.SRT
+                    };
+                this.Task.SubtitleTracks.Add(track);
+            }
+        }
+
+        /// <summary>
+        /// Remove a Track
+        /// </summary>
+        /// <param name="track">
+        /// The track.
+        /// </param>
+        public void Remove(SubtitleTrack track)
+        {
+            this.Task.SubtitleTracks.Remove(track);
+        }
+
         #endregion
 
-        #region Private Methods
+        #region Implemented Interfaces
+
+        #region ITabInterface
+
+        /// <summary>
+        /// Setup this tab for the specified preset.
+        /// </summary>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        public void SetPreset(Preset preset, EncodeTask task)
+        {
+            this.Task = task;
+            this.NotifyOfPropertyChange(() => this.Task);
+        }
+
+        /// <summary>
+        /// Setup this window for a new source
+        /// </summary>
+        /// <param name="title">
+        /// The title.
+        /// </param>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        public void SetSource(Title title, Preset preset, EncodeTask task)
+        {
+            this.SourceTracks = title.Subtitles;
+            this.Task = task;
+            this.NotifyOfPropertyChange(() => this.Task);
+
+            this.AutomaticSubtitleSelection();
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Add a subtitle track.
@@ -241,20 +240,36 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.SourceTracks != null)
             {
-                string preferred = UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles);
+                string preferred =
+                    this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles);
 
-                Subtitle source = subtitle ?? (this.SourceTracks.FirstOrDefault(l => l.Language == preferred) ??
-                                               this.SourceTracks.FirstOrDefault());
+                Subtitle source = subtitle ??
+                                  (this.SourceTracks.FirstOrDefault(l => l.Language == preferred) ??
+                                   this.SourceTracks.FirstOrDefault());
 
                 if (source != null)
                 {
                     SubtitleTrack track = new SubtitleTrack
-                    {
-                        SubtitleType = SubtitleType.VobSub,
-                        SourceTrack = source,
-                    };
+                        {
+                           SubtitleType = SubtitleType.VobSub, SourceTrack = source, 
+                        };
 
-                    this.SubtitleTracks.Add(track);
+                    this.Task.SubtitleTracks.Add(track);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add all closed captions not already on the list.
+        /// </summary>
+        private void AddAllClosedCaptions()
+        {
+            if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.UseClosedCaption))
+            {
+                foreach (
+                    Subtitle subtitle in this.SourceTitlesSubset(null).Where(s => s.SubtitleType == SubtitleType.CC))
+                {
+                    this.Add(subtitle);
                 }
             }
         }
@@ -276,9 +291,12 @@ namespace HandBrakeWPF.ViewModels
         private void AddAllRemainingForSelectedLanguages()
         {
             // Get a list of subtitle tracks that match the users lanaguages
-            StringCollection userSelectedLanguages = UserSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages);
-            userSelectedLanguages.Add(UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles));
-            List<Subtitle> availableTracks  = this.SourceTracks.Where(subtitle => userSelectedLanguages.Contains(subtitle.Language)).ToList();
+            StringCollection userSelectedLanguages =
+                this.UserSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages);
+            userSelectedLanguages.Add(
+                this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles));
+            List<Subtitle> availableTracks =
+                this.SourceTracks.Where(subtitle => userSelectedLanguages.Contains(subtitle.Language)).ToList();
 
             foreach (Subtitle subtitle in this.SourceTitlesSubset(availableTracks))
             {
@@ -294,8 +312,8 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void AddForPreferredLanaguages(bool firstOnly)
         {
-            string preferred = UserSettingService.GetUserSetting<string>(
-                UserSettingConstants.NativeLanguageForSubtitles);
+            string preferred =
+                this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles);
 
             foreach (Subtitle subtitle in this.SourceTitlesSubset(null))
             {
@@ -311,20 +329,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Add all closed captions not already on the list.
-        /// </summary>
-        private void AddAllClosedCaptions()
-        {
-            if (UserSettingService.GetUserSetting<bool>(UserSettingConstants.UseClosedCaption))
-            {
-                foreach (Subtitle subtitle in this.SourceTitlesSubset(null).Where(s => s.SubtitleType == SubtitleType.CC))
-                {
-                    this.Add(subtitle);
-                }
-            }
-        }
-
-        /// <summary>
         /// Gets a list of Source subtitle tracks that are not currently used.
         /// </summary>
         /// <param name="subtitles">
@@ -335,8 +339,11 @@ namespace HandBrakeWPF.ViewModels
         /// </returns>
         private IEnumerable<Subtitle> SourceTitlesSubset(IEnumerable<Subtitle> subtitles)
         {
-            return subtitles != null ? subtitles.Where(subtitle => !this.SubtitleTracks.Any(track => track.SourceTrack == subtitle)).ToList() 
-                                     : this.SourceTracks.Where(subtitle => !this.SubtitleTracks.Any(track => track.SourceTrack == subtitle)).ToList();
+            return subtitles != null
+                       ? subtitles.Where(
+                           subtitle => !this.Task.SubtitleTracks.Any(track => track.SourceTrack == subtitle)).ToList()
+                       : this.SourceTracks.Where(
+                           subtitle => !this.Task.SubtitleTracks.Any(track => track.SourceTrack == subtitle)).ToList();
         }
 
         #endregion

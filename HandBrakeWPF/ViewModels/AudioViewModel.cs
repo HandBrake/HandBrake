@@ -9,8 +9,6 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
@@ -34,6 +32,8 @@ namespace HandBrakeWPF.ViewModels
     [Export(typeof(IAudioViewModel))]
     public class AudioViewModel : ViewModelBase, IAudioViewModel
     {
+        #region Constructors and Destructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioViewModel"/> class.
         /// </summary>
@@ -45,7 +45,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public AudioViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
         {
-            this.AudioTracks = new ObservableCollection<AudioTrack>();
+            this.Task = new EncodeTask();
             this.SampleRates = new ObservableCollection<string> { "Auto", "48", "44.1", "32", "24", "22.05" };
             this.AudioBitrates = this.GetAppropiateBitrates(AudioEncoder.ffaac, Mixdown.DolbyProLogicII);
             this.AudioEncoders = EnumHelper<AudioEncoder>.GetEnumList();
@@ -53,15 +53,14 @@ namespace HandBrakeWPF.ViewModels
             this.SourceTracks = new List<Audio>();
         }
 
-        /// <summary>
-        /// Gets or sets AudioTracks.
-        /// </summary>
-        public ObservableCollection<AudioTrack> AudioTracks { get; set; }
+        #endregion
+
+        #region Properties
 
         /// <summary>
-        /// Gets or sets SourceTracks.
+        /// Gets or sets AudioBitrates.
         /// </summary>
-        public IEnumerable<Audio> SourceTracks { get; set; }
+        public IEnumerable<int> AudioBitrates { get; set; }
 
         /// <summary>
         /// Gets or sets AudioEncoders.
@@ -79,9 +78,18 @@ namespace HandBrakeWPF.ViewModels
         public IEnumerable<string> SampleRates { get; set; }
 
         /// <summary>
-        /// Gets or sets AudioBitrates.
+        /// Gets or sets SourceTracks.
         /// </summary>
-        public IEnumerable<int> AudioBitrates { get; set; }
+        public IEnumerable<Audio> SourceTracks { get; set; }
+
+        /// <summary>
+        /// Gets or sets the EncodeTask.
+        /// </summary>
+        public EncodeTask Task { get; set; }
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>
         /// Add an Audio Track
@@ -100,7 +108,32 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void Remove(AudioTrack track)
         {
-            this.AudioTracks.Remove(track);
+            this.Task.AudioTracks.Remove(track);
+        }
+
+        #endregion
+
+        #region Implemented Interfaces
+
+        #region ITabInterface
+
+        /// <summary>
+        /// Setup this tab for the specified preset.
+        /// </summary>
+        /// <param name="preset">
+        /// The preset.
+        /// </param>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        public void SetPreset(Preset preset, EncodeTask task)
+        {
+            this.Task = task;
+            this.NotifyOfPropertyChange(() => this.Task);
+            if (preset != null && preset.Task != null)
+            {
+                this.AddTracksFromPreset(preset);
+            }
         }
 
         /// <summary>
@@ -119,40 +152,15 @@ namespace HandBrakeWPF.ViewModels
         {
             this.SourceTracks = title.AudioTracks;
 
-            this.SetPreset(preset);
+            this.SetPreset(preset, task);
             this.AutomaticTrackSelection();
         }
 
-        /// <summary>
-        /// Setup this tab for the specified preset.
-        /// </summary>
-        /// <param name="preset">
-        /// The preset.
-        /// </param>
-        public void SetPreset(Preset preset)
-        {
-            if (preset != null && preset.Task != null)
-            {
-                AddTracksFromPreset(preset);
-            }
-        }
+        #endregion
 
-        /// <summary>
-        /// Get Appropiate Bitrates for the selected encoder and mixdown.
-        /// </summary>
-        /// <param name="encoder">
-        /// The encoder.
-        /// </param>
-        /// <param name="mixdown">
-        /// The mixdown.
-        /// </param>
-        /// <returns>
-        /// A List of valid audio bitrates
-        /// </returns>
-        private IEnumerable<int> GetAppropiateBitrates(AudioEncoder encoder, Mixdown mixdown)
-        {
-            return new ObservableCollection<int> { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 640, 768 };
-        }
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Add the specified source track, or the first track in the SourceTracks collection if available.
@@ -162,12 +170,12 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void Add(Audio sourceTrack)
         {
-            if (SourceTracks != null)
+            if (this.SourceTracks != null)
             {
                 Audio track = sourceTrack ?? this.SourceTracks.FirstOrDefault();
                 if (track != null)
                 {
-                    this.AudioTracks.Add(new AudioTrack { ScannedTrack = track });
+                    this.Task.AudioTracks.Add(new AudioTrack { ScannedTrack = track });
                 }
             }
         }
@@ -179,7 +187,7 @@ namespace HandBrakeWPF.ViewModels
         {
             foreach (Audio sourceTrack in this.SourceTracks)
             {
-                bool found = this.AudioTracks.Any(audioTrack => audioTrack.ScannedTrack == sourceTrack);
+                bool found = this.Task.AudioTracks.Any(audioTrack => audioTrack.ScannedTrack == sourceTrack);
                 if (!found)
                 {
                     this.Add(sourceTrack);
@@ -196,24 +204,28 @@ namespace HandBrakeWPF.ViewModels
         private void AddTracksFromPreset(Preset preset)
         {
             // Clear out the old tracks
-            this.AudioTracks.Clear();
+            this.Task.AudioTracks.Clear();
 
             // Get the preferred Language
-            IEnumerable<Audio> languages = this.SourceTracks.Where(item => item.Language.Contains(this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage)));
+            IEnumerable<Audio> languages =
+                this.SourceTracks.Where(
+                    item =>
+                    item.Language.Contains(
+                        this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage)));
             Audio preferred = languages.FirstOrDefault() ?? this.SourceTracks.FirstOrDefault();
 
             // Get the currently selected langauges
-            List<Audio> selectedTracks = this.AudioTracks.Select(track => track.ScannedTrack).ToList();
+            List<Audio> selectedTracks = this.Task.AudioTracks.Select(track => track.ScannedTrack).ToList();
 
             // Add the preset audio tracks with the preferred language
             foreach (AudioTrack track in preset.Task.AudioTracks)
             {
-                this.AudioTracks.Add(new AudioTrack(track) { ScannedTrack = preferred });
+                this.Task.AudioTracks.Add(new AudioTrack(track) { ScannedTrack = preferred });
             }
 
             // Attempt to restore the previously selected tracks.
             // or fallback to the first source track.
-            foreach (AudioTrack track in this.AudioTracks)
+            foreach (AudioTrack track in this.Task.AudioTracks)
             {
                 if (selectedTracks.Count != 0)
                 {
@@ -247,13 +259,18 @@ namespace HandBrakeWPF.ViewModels
             else
             {
                 // Otherwise, fetch the preferred language.
-                foreach (Audio item in this.SourceTracks.Where(item => item.Language.Contains(this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage))))
+                foreach (
+                    Audio item in
+                        this.SourceTracks.Where(
+                            item =>
+                            item.Language.Contains(
+                                this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage))))
                 {
                     trackList.Add(item);
                     break;
                 }
 
-                foreach (AudioTrack track in this.AudioTracks)
+                foreach (AudioTrack track in this.Task.AudioTracks)
                 {
                     track.ScannedTrack = trackList.FirstOrDefault() ?? this.SourceTracks.FirstOrDefault();
                 }
@@ -271,7 +288,10 @@ namespace HandBrakeWPF.ViewModels
 
                     // Figure out the source tracks we want to add
                     trackList.Clear();
-                    foreach (string language in this.UserSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages))
+                    foreach (
+                        string language in
+                            this.UserSettingService.GetUserSetting<StringCollection>(
+                                UserSettingConstants.SelectedLanguages))
                     {
                         // TODO add support for "Add only 1 per language"
                         trackList.AddRange(this.SourceTracks.Where(source => source.Language.Trim() == language));
@@ -280,7 +300,7 @@ namespace HandBrakeWPF.ViewModels
                     // Add them if they are not already added.
                     foreach (Audio sourceTrack in trackList)
                     {
-                        bool found = this.AudioTracks.Any(audioTrack => audioTrack.ScannedTrack == sourceTrack);
+                        bool found = this.Task.AudioTracks.Any(audioTrack => audioTrack.ScannedTrack == sourceTrack);
 
                         if (!found)
                         {
@@ -291,5 +311,24 @@ namespace HandBrakeWPF.ViewModels
                     break;
             }
         }
+
+        /// <summary>
+        /// Get Appropiate Bitrates for the selected encoder and mixdown.
+        /// </summary>
+        /// <param name="encoder">
+        /// The encoder.
+        /// </param>
+        /// <param name="mixdown">
+        /// The mixdown.
+        /// </param>
+        /// <returns>
+        /// A List of valid audio bitrates
+        /// </returns>
+        private IEnumerable<int> GetAppropiateBitrates(AudioEncoder encoder, Mixdown mixdown)
+        {
+            return new ObservableCollection<int> { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 640, 768 };
+        }
+
+        #endregion
     }
 }

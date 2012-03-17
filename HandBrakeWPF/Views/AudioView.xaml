@@ -29,7 +29,7 @@
             <Button Content="Add Track" cal:Message.Attach="[Event Click] = [Action Add]" Grid.Column="0" Width="75" Margin="0,0,10,0" />
         </Grid>
 
-        <ListBox Grid.Row="2" ItemsSource="{Binding AudioTracks}" 
+        <ListBox Grid.Row="2" ItemsSource="{Binding Task.AudioTracks}" 
                  SelectionMode="Extended" Background="LightGray" Margin="10,10,10,10"
                  dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
                  dd:DragDrop.DropHandler="{Binding}">

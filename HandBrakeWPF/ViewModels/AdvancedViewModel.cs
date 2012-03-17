@@ -32,26 +32,6 @@ namespace HandBrakeWPF.ViewModels
         #region Constants and Fields
 
         /// <summary>
-        /// The query.
-        /// </summary>
-        private string query;
-
-        /// <summary>
-        /// The x264 preset.
-        /// </summary>
-        private x264Preset x264Preset;
-
-        /// <summary>
-        /// The x264 profile.
-        /// </summary>
-        private x264Profile x264Profile;
-
-        /// <summary>
-        /// The x264 tune.
-        /// </summary>
-        private x264Tune x264Tune;
-
-        /// <summary>
         /// Backing field used to display / hide the x264 options
         /// </summary>
         private bool displayX264Options;
@@ -71,18 +51,20 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public AdvancedViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
         {
+            this.Task = new EncodeTask();
             X264Presets = EnumHelper<x264Preset>.GetEnumList();
             X264Profiles = EnumHelper<x264Profile>.GetEnumList();
             X264Tunes = EnumHelper<x264Tune>.GetEnumList();
-
-            this.x264Preset = x264Preset.None;
-            this.x264Profile = x264Profile.None;
-            this.x264Tune = x264Tune.None;
         }
 
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets Task.
+        /// </summary>
+        public EncodeTask Task { get; set; }
 
         /// <summary>
         /// Gets or sets State.
@@ -91,11 +73,11 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.query;
+                return this.Task.AdvancedEncoderOptions;
             }
             set
             {
-                this.query = value;
+                this.Task.AdvancedEncoderOptions = value;
                 this.NotifyOfPropertyChange(() => this.Query);
             }
         }
@@ -107,11 +89,11 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.x264Preset;
+                return this.Task.x264Preset;
             }
             set
             {
-                this.x264Preset = value;
+                this.Task.x264Preset = value;
                 this.NotifyOfPropertyChange(() => this.X264Preset);
             }
         }
@@ -123,11 +105,11 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.x264Profile;
+                return this.Task.x264Profile;
             }
             set
             {
-                this.x264Profile = value;
+                this.Task.x264Profile = value;
                 this.NotifyOfPropertyChange(() => this.X264Profile);
             }
         }
@@ -139,11 +121,11 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.x264Tune;
+                return this.Task.X264Tune;
             }
             set
             {
-                this.x264Tune = value;
+                this.Task.X264Tune = value;
                 this.NotifyOfPropertyChange(() => this.X264Tune);
             }
         }
@@ -197,10 +179,8 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void SetSource(Title title, Preset preset, EncodeTask task)
         {
-            this.Query = preset.Task.AdvancedEncoderOptions;
-            this.X264Preset = preset.Task.x264Preset;
-            this.X264Profile = preset.Task.x264Profile;
-            this.X264Tune = preset.Task.X264Tune;
+            this.Task = task;
+            this.NotifyOfPropertyChange(() => this.Task);
         }
 
         /// <summary>
@@ -209,8 +189,13 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="preset">
         /// The preset.
         /// </param>
-        public void SetPreset(Preset preset)
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        public void SetPreset(Preset preset, EncodeTask task)
         {
+            this.Task = task;
+            this.NotifyOfPropertyChange(() => this.Task);
             if (preset != null && preset.Task != null)
             {
                 this.Query = preset.Task.AdvancedEncoderOptions;
@@ -230,17 +215,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void SetEncoder(VideoEncoder encoder)
         {
-            if (encoder == VideoEncoder.X264)
-            {
-                this.DisplayX264Options = true;
-            }
-            else
-            {
-                this.x264Preset = x264Preset.None;
-                this.x264Profile = x264Profile.None;
-                this.x264Tune = x264Tune.None;
-                this.DisplayX264Options = false;
-            }
+            this.DisplayX264Options = encoder == VideoEncoder.X264;
         }
 
         #endregion

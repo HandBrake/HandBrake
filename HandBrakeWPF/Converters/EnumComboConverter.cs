@@ -65,16 +65,32 @@ namespace HandBrakeWPF.Converters
             {
                 return EnumHelper<Mixdown>.GetEnumDisplayValues(typeof(Mixdown));
             }
-
             if (value is IEnumerable<AudioEncoder>)
             {
                 return EnumHelper<AudioEncoder>.GetEnumDisplayValues(typeof(AudioEncoder));
             }
-
             if (value is IEnumerable<PresetPictureSettingsMode>)
             {
                 return EnumHelper<PresetPictureSettingsMode>.GetEnumDisplayValues(typeof(PresetPictureSettingsMode));
             }
+            if (value is IEnumerable<Decomb>)
+            {
+                return EnumHelper<Decomb>.GetEnumDisplayValues(typeof(Decomb));
+            }
+            if (value is IEnumerable<Deinterlace>)
+            {
+                return EnumHelper<Deinterlace>.GetEnumDisplayValues(typeof(Deinterlace));
+            }
+            if (value is IEnumerable<Detelecine>)
+            {
+                return EnumHelper<Detelecine>.GetEnumDisplayValues(typeof(Detelecine));
+            }
+            if (value is IEnumerable<Denoise>)
+            {
+                return EnumHelper<Denoise>.GetEnumDisplayValues(typeof(Denoise));
+            }
+
+
 
             // Single Items
             if (targetType == typeof(x264Preset) || value.GetType() == typeof(x264Preset))
@@ -104,6 +120,22 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(PresetPictureSettingsMode) || value.GetType() == typeof(PresetPictureSettingsMode))
             {
                 return EnumHelper<PresetPictureSettingsMode>.GetDisplay((PresetPictureSettingsMode)value);
+            }
+            if (targetType == typeof(Deinterlace) || value.GetType() == typeof(Deinterlace))
+            {
+                return EnumHelper<Deinterlace>.GetDisplay((Deinterlace)value);
+            }
+            if (targetType == typeof(Detelecine) || value.GetType() == typeof(Detelecine))
+            {
+                return EnumHelper<Detelecine>.GetDisplay((Detelecine)value);
+            }
+            if (targetType == typeof(Decomb) || value.GetType() == typeof(Decomb))
+            {
+                return EnumHelper<Decomb>.GetDisplay((Decomb)value);
+            }
+            if (targetType == typeof(Denoise) || value.GetType() == typeof(Denoise))
+            {
+                return EnumHelper<Denoise>.GetDisplay((Denoise)value);
             }
 
             return null;
@@ -159,6 +191,22 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(PresetPictureSettingsMode) || value.GetType() == typeof(PresetPictureSettingsMode))
             {
                 return EnumHelper<PresetPictureSettingsMode>.GetValue(value.ToString());
+            }
+            if (targetType == typeof(Denoise) || value.GetType() == typeof(Denoise))
+            {
+                return EnumHelper<Denoise>.GetValue(value.ToString());
+            }
+            if (targetType == typeof(Decomb) || value.GetType() == typeof(Decomb))
+            {
+                return EnumHelper<Decomb>.GetValue(value.ToString());
+            }
+            if (targetType == typeof(Deinterlace) || value.GetType() == typeof(Deinterlace))
+            {
+                return EnumHelper<Deinterlace>.GetValue(value.ToString());
+            }
+            if (targetType == typeof(Detelecine) || value.GetType() == typeof(Detelecine))
+            {
+                return EnumHelper<Detelecine>.GetValue(value.ToString());
             }
 
             return null;

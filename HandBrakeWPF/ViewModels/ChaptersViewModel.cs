@@ -33,15 +33,6 @@ namespace HandBrakeWPF.ViewModels
     [Export(typeof(IChaptersViewModel))]
     public class ChaptersViewModel : ViewModelBase, IChaptersViewModel
     {
-        #region Constants and Fields
-
-        /// <summary>
-        /// The include chapter markers.
-        /// </summary>
-        private bool includeChapterMarkers;
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>
@@ -55,17 +46,16 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public ChaptersViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
         {
-            this.Chapters = new ObservableCollection<ChapterMarker>();
+            this.Task = new EncodeTask();
         }
 
         #endregion
 
         #region Public Properties
-
         /// <summary>
-        /// Gets or sets State.
+        /// Gets or sets Task.
         /// </summary>
-        public ObservableCollection<ChapterMarker> Chapters { get; set; }
+        public EncodeTask Task { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether chapter markers are enabled.
@@ -74,11 +64,11 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.includeChapterMarkers;
+                return this.Task.IncludeChapterMarkers;
             }
             set
             {
-                this.includeChapterMarkers = value;
+                this.Task.IncludeChapterMarkers = value;
                 this.NotifyOfPropertyChange(() => this.IncludeChapterMarkers);
             }
         }
@@ -129,7 +119,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 string csv = string.Empty;
 
-                foreach (ChapterMarker row in this.Chapters)
+                foreach (ChapterMarker row in this.Task.ChapterNames)
                 {
                     csv += row.ChapterNumber.ToString();
                     csv += ",";
@@ -188,7 +178,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Now iterate over each chatper we have, and set it's name
-            foreach (ChapterMarker item in this.Chapters)
+            foreach (ChapterMarker item in this.Task.ChapterNames)
             {
                 string chapterName;
                 chapterMap.TryGetValue(item.ChapterNumber, out chapterName);
@@ -212,6 +202,8 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void SetSource(Title title, Preset preset, EncodeTask task)
         {
+            this.Task = task;
+            this.NotifyOfPropertyChange(() => this.Task);
             this.IncludeChapterMarkers = preset.Task.IncludeChapterMarkers;
             this.SetSourceChapters(title.Chapters);
         }
@@ -222,8 +214,13 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="preset">
         /// The preset.
         /// </param>
-        public void SetPreset(Preset preset)
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        public void SetPreset(Preset preset, EncodeTask task)
         {
+            this.Task = task;
+            this.NotifyOfPropertyChange(() => this.Task);
         }
 
         /// <summary>
@@ -236,7 +233,7 @@ namespace HandBrakeWPF.ViewModels
         {
             // Cache the chapters in this screen
             this.SourceChapterList = new ObservableCollection<Chapter>(sourceChapters);
-            this.Chapters.Clear();
+            this.Task.ChapterNames.Clear();
 
             // Then Add new Chapter Markers.
             int counter = 1;
@@ -245,7 +242,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 string chapterName = string.IsNullOrEmpty(chapter.ChapterName) ? string.Format("Chapter {0}", counter) : chapter.ChapterName;
                 var marker = new ChapterMarker(chapter.ChapterNumber, chapterName);
-                this.Chapters.Add(marker);
+                this.Task.ChapterNames.Add(marker);
 
                 counter += 1;
             }
