@@ -371,7 +371,7 @@ namespace Handbrake.Functions
             }
             catch (Exception e)
             {
-                UserSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeBuild, string.Empty);
+                UserSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeBuild, 0);
                 UserSettingService.SetUserSetting(ASUserSettingConstants.HandBrakePlatform, string.Empty);
                 UserSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeVersion, string.Empty);
                 UserSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeExeHash, string.Empty);

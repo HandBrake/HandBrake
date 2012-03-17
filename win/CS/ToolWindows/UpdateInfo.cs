@@ -28,7 +28,7 @@ namespace Handbrake.ToolWindows
         /// <summary>
         /// The Current Build
         /// </summary>
-        private readonly string currentBuild;
+        private readonly int currentBuild;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateInfo"/> class.
@@ -42,7 +42,7 @@ namespace Handbrake.ToolWindows
         /// <param name="currentBuild">
         /// The current Build.
         /// </param>
-        public UpdateInfo(UpdateCheckInformation reader, string currentVersion, string currentBuild)
+        public UpdateInfo(UpdateCheckInformation reader, string currentVersion, int currentBuild)
         {
             InitializeComponent();
 

@@ -223,7 +223,7 @@ namespace Handbrake
                 if (info.NewVersionAvailable)
                 {
                     UpdateInfo updateWindow = new UpdateInfo(info, userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion),
-                        userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeBuild));
+                        userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild));
                     updateWindow.ShowDialog();
                 }
             }
@@ -2584,7 +2584,7 @@ namespace Handbrake
 
                 if (info.NewVersionAvailable)
                 {
-                    UpdateInfo updateWindow = new UpdateInfo(info, userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion), userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeBuild));
+                    UpdateInfo updateWindow = new UpdateInfo(info, userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion), userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild));
                     updateWindow.ShowDialog();
                 }
                 else
