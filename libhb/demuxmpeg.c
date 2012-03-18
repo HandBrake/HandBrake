@@ -290,6 +290,15 @@ void hb_demux_mpeg( hb_buffer_t *buf, hb_list_t *list_es, hb_psdemux_t *state )
                     buf = tmp;
                     continue;
                 }
+                else
+                {
+                    // Some streams have no PCRs.  In these cases, we
+                    // will only get an "PCR" update if a large change
+                    // in DTS or PTS is detected.  So we need to update
+                    // our scr_delta with each valid timestamp so that
+                    // fdelta does not continually grow.
+                    state->scr_delta = buf->start - state->last_scr;
+                }
                 if ( state->last_pts >= 0 )
                 {
                     fdelta = buf->start - state->last_pts;
