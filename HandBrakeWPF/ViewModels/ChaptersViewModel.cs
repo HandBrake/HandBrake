@@ -204,7 +204,11 @@ namespace HandBrakeWPF.ViewModels
         {
             this.Task = task;
             this.NotifyOfPropertyChange(() => this.Task);
-            this.IncludeChapterMarkers = preset.Task.IncludeChapterMarkers;
+
+            if (preset != null)
+            {
+                this.IncludeChapterMarkers = preset.Task.IncludeChapterMarkers;
+            }
             this.SetSourceChapters(title.Chapters);
         }
 

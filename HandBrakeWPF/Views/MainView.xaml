@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Data="clr-namespace:System.Windows.Data;assembly=PresentationFramework" 
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" Title="{Data:Binding Path=WindowTitle}" Height="655" Width="1015" FontSize="11" Background="#FFF0F0F0"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" Title="{Data:Binding Path=WindowTitle}" Height="625" Width="1015" FontSize="11" Background="#FFF0F0F0"
         Micro:Message.Attach="[Event Loaded] = [Action Load]"
+        UseLayoutRounding="True"
         AllowDrop="True">
 
     <i:Interaction.Triggers>
@@ -74,14 +75,30 @@
                     </MenuItem>
 
                     <MenuItem Header="Tools">
-                        <MenuItem Header="Show Queue" Micro:Message.Attach="[Event Click] = [Action OpenQueueWindow]" />
-                        <MenuItem Header="Activity Window" Micro:Message.Attach="[Event Click] = [Action OpenLogWindow]" />
+                        <MenuItem Header="Show Queue" Micro:Message.Attach="[Event Click] = [Action OpenQueueWindow]" >
+                            <MenuItem.Icon>
+                                <Image Source="Images/Queue_Small.png" Width="16" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Activity Window" Micro:Message.Attach="[Event Click] = [Action OpenLogWindow]" >
+                            <MenuItem.Icon>
+                                <Image Source="Images/Output_Small.png" Width="16" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                         <Separator />
-                        <MenuItem Header="Options" Micro:Message.Attach="[Event Click] = [Action OpenOptionsWindow]" />
+                        <MenuItem Header="Options" Micro:Message.Attach="[Event Click] = [Action OpenOptionsWindow]" >
+                            <MenuItem.Icon>
+                                <Image Source="Images/Pref_Small.png" Width="16" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
 
                     <MenuItem Header="Help">
-                        <MenuItem Header="HandBrake User Guide" Micro:Message.Attach="[Event Click] = [Action LaunchHelp]" />
+                        <MenuItem Header="HandBrake User Guide" Micro:Message.Attach="[Event Click] = [Action LaunchHelp]" >
+                            <MenuItem.Icon>
+                                <Image Source="Images/Help16.png" Width="16" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                         <Separator />
                         <MenuItem Header="Check for Updates" Micro:Message.Attach="[Event Click] = [Action CheckForUpdates]" />
                         <Separator />
@@ -135,21 +152,21 @@
 
                     <Button Name="Stop" Micro:Message.Attach="[Event Click] = [Action StopEncode]" Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="Images/stop.png" Height="32" Width="32" />
+                            <Image Source="Images/stop.png" Height="32" Width="32" SnapsToDevicePixels="True" />
                             <Label Content="Stop"  Margin="8,0,0,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
                     <Button Name="AddToQueue"  Micro:Message.Attach="[Event Click] = [Action AddToQueue]">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="Images/AddToQueue.png" Height="32" Width="32" />
+                            <Image Source="Images/AddToQueue.png" Height="32" Width="32" SnapsToDevicePixels="True" />
                             <Label Content="Add To Queue"  Margin="8,0,0,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
 
                     <Button Name="ShowQueue"  Micro:Message.Attach="[Event Click] = [Action OpenQueueWindow]">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="Images/Queue.png" Height="32" Width="32" />
+                            <Image Source="Images/Queue.png" Height="32" Width="32" SnapsToDevicePixels="True" />
                             <Label Content="Show Queue"  Margin="8,0,0,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
@@ -158,7 +175,7 @@
 
                     <Button Name="Preview" Micro:Message.Attach="[Event Click] = [Action OpenPreviewWindow]">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="Images/window.png" Height="32" Width="32" />
+                            <Image Source="Images/window.png" Height="32" Width="32" SnapsToDevicePixels="True" />
                             <Label Content="Preview"  Margin="8,0,0,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
@@ -236,7 +253,7 @@
                     </StackPanel>
 
                     <!-- Tab Control -->
-                    <TabControl HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="725" Height="330" Margin="10,10,10,10" Name="tabControl" >
+                    <TabControl HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="725" Height="300" Margin="10,10,10,10" Name="tabControl" >
                         <TabItem Header="Picture" Name="pictureTab">
                             <ContentControl x:Name="PictureSettingsViewModel" ></ContentControl>
                         </TabItem>
@@ -268,7 +285,7 @@
                         <StackPanel Orientation="Vertical">
 
                             <TreeView ItemsSource="{Binding Source={StaticResource presetsCvs}, Path=Groups}" 
-                                      ItemTemplate="{StaticResource presetsCategoryTemplate}" Width="240" Height="460"
+                                      ItemTemplate="{StaticResource presetsCategoryTemplate}" Width="240" Height="430"
                                       >
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="SelectedItemChanged">

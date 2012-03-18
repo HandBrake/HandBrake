@@ -237,10 +237,10 @@ namespace HandBrake.ApplicationServices.Utilities
             if (task.Anamorphic != Anamorphic.Strict)
             {
                 if (task.MaxWidth.HasValue) query += string.Format(" -X {0}", task.MaxWidth);
-                else if (task.Width.HasValue) query += string.Format(" -w {0}", task.Width);
+                else if (task.Width.HasValue && task.Width != 0) query += string.Format(" -w {0}", task.Width);
 
                 if (task.MaxWidth.HasValue) query += string.Format(" -Y {0}", task.MaxHeight);
-                else if (task.Height.HasValue) query += string.Format(" -h {0}", task.Height);
+                else if (task.Height.HasValue && task.Height != 0) query += string.Format(" -h {0}", task.Height);
             }
 
             if (task.HasCropping)
@@ -536,7 +536,7 @@ namespace HandBrake.ApplicationServices.Utilities
                     firstLoop = false;
                 }
                 else
-                    audioItems += "," + item;
+                    audioItems += "," +  Converters.GetCliAudioEncoder(item);
             }
             if (audioItems.Trim() != String.Empty)
                 query += " -E " + audioItems;
@@ -552,7 +552,7 @@ namespace HandBrake.ApplicationServices.Utilities
                     firstLoop = false;
                 }
                 else
-                    audioItems += "," + item;
+                    audioItems += "," + Converters.GetCliMixDown(item);
             }
             if (audioItems.Trim() != String.Empty)
                 query += " -6 " + audioItems;

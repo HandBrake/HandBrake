@@ -13,6 +13,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
     using System.Drawing;
+    using System.Globalization;
 
     using Caliburn.Micro;
 
@@ -477,38 +478,46 @@ namespace HandBrakeWPF.ViewModels
         {
             this.Task = task;
 
+
             // TODO: These all need to be handled correctly.
+            this.SelectedAnamorphicMode = preset.Task.Anamorphic;
+
             if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
             {
                 this.Task.MaxWidth = preset.Task.MaxWidth;
                 this.Task.MaxHeight = preset.Task.MaxHeight;
-                this.Task.Width = preset.Task.MaxWidth ?? 0;
-                this.Task.Height = preset.Task.MaxHeight ?? 0;
+                this.Width = preset.Task.Width ?? (sourceResolution.Width - this.CropLeft - this.CropRight);
+                this.Height = preset.Task.Height ?? (sourceResolution.Height - this.CropTop - this.CropBottom);
             }
             else
             {
-                this.Task.Width = preset.Task.Width ?? 0;
-                this.Task.Height = preset.Task.Height ?? 0;
+                this.Width = preset.Task.Width ?? (sourceResolution.Width - this.CropLeft - this.CropRight);
+                this.Height = preset.Task.Height ?? (sourceResolution.Height - this.CropTop - this.CropBottom);
             }
 
             if (this.Task.Anamorphic == Anamorphic.Custom)
             {
-                this.Task.DisplayWidth = preset.Task.DisplayWidth ?? 0;
-                this.Task.PixelAspectX = preset.Task.PixelAspectX;
-                this.Task.PixelAspectY = preset.Task.PixelAspectY;
+                this.DisplayWidth = preset.Task.DisplayWidth != null ? int.Parse(preset.Task.DisplayWidth.ToString()) : 0;
+                this.ParWidth = preset.Task.PixelAspectX;
+                this.ParHeight = preset.Task.PixelAspectY;
             }
 
-            this.Task.KeepDisplayAspect = preset.Task.KeepDisplayAspect;
+            this.MaintainAspectRatio = preset.Task.KeepDisplayAspect;
 
             if (this.Task.Modulus.HasValue)
             {
-                this.Task.Modulus = preset.Task.Modulus;
+                this.SelectedModulus = preset.Task.Modulus;
             }
 
             if (preset.Task.HasCropping)
             {
-                this.Task.Cropping = preset.Task.Cropping;
+                this.CropLeft = preset.Task.Cropping.Left;
+                this.CropRight = preset.Task.Cropping.Right;
+                this.CropTop = preset.Task.Cropping.Top;
+                this.CropBottom = preset.Task.Cropping.Bottom;
             }
+
+            this.NotifyOfPropertyChange(() => this.Task);
         }
 
         /// <summary>
@@ -526,6 +535,7 @@ namespace HandBrakeWPF.ViewModels
         public void SetSource(Title title, Preset preset, EncodeTask task)
         {
             this.Task = task;
+
             if (title != null)
             {
                 // Set cached info
@@ -549,6 +559,8 @@ namespace HandBrakeWPF.ViewModels
                 this.Height = title.Resolution.Height;
                 this.MaintainAspectRatio = true;
             }
+
+            this.NotifyOfPropertyChange(() => this.Task);
         }
 
         #endregion
@@ -848,7 +860,7 @@ namespace HandBrakeWPF.ViewModels
                                            (this.sourceResolution.Height * this.SourceAspect.Width * crop_width);
 
                         this.Task.Height = (int)Math.Round(this.GetModulusValue(newHeight), 0);
-                        this.NotifyOfPropertyChange("Height");
+                        this.NotifyOfPropertyChange(() => this.Height);
                     }
 
                     break;
@@ -856,14 +868,14 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.Width = 0;
                     this.Task.Height = 0;
 
-                    this.NotifyOfPropertyChange(() => this.Task.Width);
-                    this.NotifyOfPropertyChange(() => this.Task.Height);
+                    this.NotifyOfPropertyChange(() => this.Width);
+                    this.NotifyOfPropertyChange(() => this.Height);
                     this.SetDisplaySize();
                     break;
                 case Anamorphic.Loose:
                     this.Task.Height = 0;
-                    this.NotifyOfPropertyChange(() => this.Task.Width);
-                    this.NotifyOfPropertyChange(() => this.Task.Height);
+                    this.NotifyOfPropertyChange(() => this.Width);
+                    this.NotifyOfPropertyChange(() => this.Height);
                     this.SetDisplaySize();
                     break;
                 case Anamorphic.Custom:
