@@ -3694,7 +3694,10 @@ static void hb_ps_stream_find_streams(hb_stream_t *stream)
                 if ( decode_ps_map( stream, buf->data, buf->size ) )
                 {
                     hb_log("Found program stream map");
-                    goto done;
+                    // Normally, we could quit here since the program
+                    // stream map *should* map all streams. But once
+                    // again Tivo breaks things by not always creating
+                    // complete maps.  So continue processing...
                 }
                 else
                 {
