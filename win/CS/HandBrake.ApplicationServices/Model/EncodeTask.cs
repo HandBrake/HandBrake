@@ -29,7 +29,6 @@ namespace HandBrake.ApplicationServices.Model
             this.AudioTracks = new ObservableCollection<AudioTrack>();
             this.SubtitleTracks = new ObservableCollection<SubtitleTrack>();
             this.ChapterNames = new ObservableCollection<ChapterMarker>();
-            this.AllowedPassthruOptions = new AllowedPassthru();
             this.x264Preset = x264Preset.None;
             this.x264Profile = x264Profile.None;
             this.X264Tune = x264Tune.None;
@@ -142,15 +141,39 @@ namespace HandBrake.ApplicationServices.Model
         /// </summary>
         public PointToPointMode PointToPointMode { get; set; }
 
+        private int startPoint;
+
         /// <summary>
         /// Gets or sets StartPoint.
         /// </summary>
-        public int StartPoint { get; set; }
+        public int StartPoint
+        {
+            get
+            {
+                return this.startPoint;
+            }
+            set
+            {
+                this.startPoint = value;
+            }
+        }
+
+        private int endPoint;
 
         /// <summary>
         /// Gets or sets EndPoint.
         /// </summary>
-        public int EndPoint { get; set; }
+        public int EndPoint
+        {
+            get
+            {
+                return this.endPoint;
+            }
+            set
+            {
+                this.endPoint = value;
+            }
+        }
 
         #endregion
 

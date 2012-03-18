@@ -515,9 +515,9 @@ namespace HandBrakeWPF.ViewModels
                     // Use the Path on the Title, or the Source Scan path if one doesn't exist.
                     this.CurrentTask.Source = !string.IsNullOrEmpty(this.selectedTitle.SourceName) ? this.selectedTitle.SourceName : this.ScannedSource.ScanPath;
                     this.CurrentTask.Title = value.TitleNumber;
-                    this.NotifyOfPropertyChange("StartEndRangeItems");
-                    this.NotifyOfPropertyChange("SelectedTitle");
-                    this.NotifyOfPropertyChange("Angles");
+                    this.NotifyOfPropertyChange(() => this.StartEndRangeItems);
+                    this.NotifyOfPropertyChange(() => this.SelectedTitle);
+                    this.NotifyOfPropertyChange(() => this.Angles);
 
                     // Default the Start and End Point dropdowns
                     this.SelectedStartPoint = 1;
@@ -526,7 +526,7 @@ namespace HandBrakeWPF.ViewModels
                     this.SelectedAngle = 1;
 
                     this.CurrentTask.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
-                    this.NotifyOfPropertyChange("CurrentTask");
+                    this.NotifyOfPropertyChange(() => this.CurrentTask);
 
                     this.Duration = selectedTitle.Duration.ToString();
 
@@ -547,8 +547,8 @@ namespace HandBrakeWPF.ViewModels
             }
             set
             {
-                this.CurrentTask.EndPoint = value;
-                this.NotifyOfPropertyChange("SelectedAngle");
+                this.CurrentTask.Angle = value;
+                this.NotifyOfPropertyChange(() => this.SelectedAngle);
             }
         }
 
