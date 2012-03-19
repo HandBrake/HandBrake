@@ -629,6 +629,18 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public override void OnLoad()
         {
+            // Check the CLI Executable.
+            CliCheckHelper.CheckCLIVersion();
+
+            // Perform an update check if required
+            UpdateCheckHelper.PerformStartupUpdateCheck();
+
+            // Setup the presets.
+            if (this.presetService.CheckIfPresetsAreOutOfDate())
+                if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification))
+                    this.errorService.ShowMessageBox("HandBrake has determined your built-in presets are out of date... These presets will now be updated.",
+                                    "Preset Update", MessageBoxButton.OK, MessageBoxImage.Information);
+
             this.SelectedPreset = this.presetService.DefaultPreset;
         }
 
@@ -706,14 +718,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void CheckForUpdates()
         {
-            // TODO The update service needs refactoring.
-            this.userSettingService.SetUserSetting(UserSettingConstants.LastUpdateCheckDate, DateTime.Now);
-            string url = userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakePlatform).Contains("x86_64")
-                                                  ? userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast_x64)
-                                                  : userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast_i686);
-            UpdateService.BeginCheckForUpdates(UpdateCheckHelper.UpdateCheckDoneMenu, false,
-                url, userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild),
-                userSettingService.GetUserSetting<int>(UserSettingConstants.Skipversion));
+            UpdateCheckHelper.CheckForUpdates();
         }
 
         /// <summary>
