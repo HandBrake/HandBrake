@@ -30,10 +30,6 @@ namespace HandBrakeWPF.Helpers
         /// <summary>
         /// The check cli version.
         /// </summary>
-        /// <returns>
-        /// Returns True when CLI is unchanged,
-        /// False when there is a change
-        /// </returns>
         public static void CheckCLIVersion()
         {
             IErrorService errorService = IoC.Get<IErrorService>();
