@@ -29,6 +29,7 @@ namespace HandBrake.ApplicationServices.Model
             this.AudioTracks = new ObservableCollection<AudioTrack>();
             this.SubtitleTracks = new ObservableCollection<SubtitleTrack>();
             this.ChapterNames = new ObservableCollection<ChapterMarker>();
+            this.AllowedPassthruOptions = new AllowedPassthru();
             this.x264Preset = x264Preset.None;
             this.x264Profile = x264Profile.None;
             this.X264Tune = x264Tune.None;
