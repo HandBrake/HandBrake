@@ -245,10 +245,10 @@ namespace HandBrake.ApplicationServices.Parsing
         public TimeSpan CalculateDuration(int startPoint, int endPoint)
         {
             TimeSpan duration = TimeSpan.FromSeconds(0.0);
-            if (startPoint != 0 && endPoint != 0 && endPoint <= this.Chapters.Count)
+            if (endPoint <= this.Chapters.Count)
             {
                 for (int i = startPoint; i <= endPoint; i++)
-                    duration += this.Chapters[i - 1].Duration;
+                    duration += this.Chapters[i].Duration;
             }
 
             return duration;
