@@ -1129,7 +1129,7 @@ namespace HandBrakeWPF.ViewModels
             switch (this.SelectedPointToPoint)
             {
                 case PointToPointMode.Chapters:
-                    return this.SelectedTitle.CalculateDuration(this.SelectedStartPoint, this.SelectedEndPoint).ToString();
+                    return this.SelectedTitle.CalculateDuration(this.SelectedStartPoint -1, this.SelectedEndPoint -1).ToString();
                 case PointToPointMode.Seconds:
                     return TimeSpan.FromSeconds(startEndDuration).ToString();
                 case PointToPointMode.Frames:
