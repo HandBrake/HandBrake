@@ -477,7 +477,7 @@ static void adjust_frame_rate( hb_work_private_t *pv, hb_buffer_t **buf_out )
             // each of which is a frame time long.
             double excess_dur = (double)out->stop - cfr_stop;
             out->stop = cfr_stop;
-            for ( ; excess_dur >= pv->frame_rate; excess_dur -= cfr_stop )
+            for ( ; excess_dur >= pv->frame_rate; excess_dur -= pv->frame_rate )
             {
                 /* next frame too far ahead - dup current frame */
                 hb_buffer_t *dup = hb_buffer_init( out->size );
