@@ -56,9 +56,6 @@ namespace Handbrake
                 return;
             }
 
-            // Make sure the GUI knows what CLI version it's attached to.
-            Functions.Main.SetCliVersionData();
-
             // Check were not running on a screen that's going to cause some funnies to happen.
             Screen scr = Screen.PrimaryScreen;
             if ((scr.Bounds.Width < 1024) || (scr.Bounds.Height < 620))
