@@ -312,7 +312,11 @@ namespace Handbrake
             "23.976",
             "24",
             "25",
-            "29.97"});
+            "29.97",
+            "30",
+            "50",
+            "59.94",
+            "60"});
             this.drp_videoFramerate.Location = new System.Drawing.Point(125, 62);
             this.drp_videoFramerate.Name = "drp_videoFramerate";
             this.drp_videoFramerate.Size = new System.Drawing.Size(125, 21);

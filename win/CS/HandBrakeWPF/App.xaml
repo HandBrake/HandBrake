@@ -4,6 +4,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Views/Styles/Styles.xaml"/>
                 <ResourceDictionary>
                     <local:CastleBootstrapper x:Key="bootstrapper" />
                 </ResourceDictionary>

@@ -65,6 +65,9 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Caliburn.Micro">
+      <HintPath>libraries\caliburn\Caliburn.Micro.dll</HintPath>
+    </Reference>
     <Reference Include="Growl.Connector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=980c2339411be384, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>libraries\Growl.Connector.dll</HintPath>

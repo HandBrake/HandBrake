@@ -5,16 +5,29 @@
 
 namespace HandBrake.ApplicationServices.Model
 {
+    using Caliburn.Micro;
+
     /// <summary>
     /// The QueueTask.
     /// </summary>
-    public class QueueTask
+    public class QueueTask : PropertyChangedBase
     {
+        #region Constants and Fields
+
+        /// <summary>
+        /// The status.
+        /// </summary>
+        private QueueItemStatus status;
+
+        #endregion
+
+        #region Constructors and Destructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="QueueTask"/> class.
         /// </summary>
         public QueueTask()
-        {         
+        {
         }
 
         /// <summary>
@@ -28,30 +41,9 @@ namespace HandBrake.ApplicationServices.Model
             this.Query = query;
         }
 
-        /// <summary>
-        /// Gets or sets the job ID.
-        /// </summary>
-        public int Id { get; set; }
+        #endregion
 
-        /// <summary>
-        /// Gets or sets Title.
-        /// </summary>
-        public int Title { get; set; }
-
-        /// <summary>
-        /// Gets or sets Source.
-        /// </summary>
-        public string Source { get; set; }
-
-        /// <summary>
-        /// Gets or sets Destination.
-        /// </summary>
-        public string Destination { get; set; }
-
-        /// <summary>
-        /// Gets or sets the query string.
-        /// </summary>
-        public string Query { get; set; }
+        #region Properties
 
         /// <summary>
         /// Gets or sets a value indicating whether if this is a user or GUI generated query
@@ -59,14 +51,14 @@ namespace HandBrake.ApplicationServices.Model
         public bool CustomQuery { get; set; }
 
         /// <summary>
-        /// Gets or sets Status.
+        /// Gets or sets Destination.
         /// </summary>
-        public QueueItemStatus Status { get; set; }
+        public string Destination { get; set; }
 
         /// <summary>
-        /// Gets or sets the Encode Task.
+        /// Gets or sets the job ID.
         /// </summary>
-        public EncodeTask Task { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether or not this instance is empty.
@@ -79,5 +71,44 @@ namespace HandBrake.ApplicationServices.Model
                        string.IsNullOrEmpty(this.Task.Destination);
             }
         }
+
+        /// <summary>
+        /// Gets or sets the query string.
+        /// </summary>
+        public string Query { get; set; }
+
+        /// <summary>
+        /// Gets or sets Source.
+        /// </summary>
+        public string Source { get; set; }
+
+        /// <summary>
+        /// Gets or sets Status.
+        /// </summary>
+        public QueueItemStatus Status
+        {
+            get
+            {
+                return this.status;
+            }
+
+            set
+            {
+                this.status = value;
+                this.NotifyOfPropertyChange(() => this.Status);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the Encode Task.
+        /// </summary>
+        public EncodeTask Task { get; set; }
+
+        /// <summary>
+        /// Gets or sets Title.
+        /// </summary>
+        public int Title { get; set; }
+
+        #endregion
     }
 }

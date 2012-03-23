@@ -41,6 +41,9 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Caliburn.Micro">
+      <HintPath>..\libraries\caliburn\Caliburn.Micro.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core">
       <HintPath>..\libraries\caliburn\Castle.Core.dll</HintPath>
     </Reference>

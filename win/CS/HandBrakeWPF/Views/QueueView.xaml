@@ -5,13 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:cal="http://www.caliburnproject.org"
              xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop" mc:Ignorable="d" Title="{Binding Title}" 
+        xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+        xmlns:Model="clr-namespace:HandBrake.ApplicationServices.Model;assembly=HandBrake.ApplicationServices"
+        mc:Ignorable="d" Title="{Binding Title}" 
              Width="600" Height="400"
              Background="#FFF0F0F0">
 
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <Converters:FullPathToFileNameConverter x:Key="filePathToFilenameConverter" />
+        <Converters:EnumComboConverter x:Key="enumComboConverter" />
+        <Converters:QueueStatusToVisibilityConverter x:Key="queueStatusVisConverter" />
     </Window.Resources>
 
     <Grid >
@@ -46,6 +50,17 @@
         <ListBox Grid.Row="2" ItemsSource="{Binding QueueJobs}" SelectionMode="Extended" Background="LightGray" Margin="10,0,10,10"
                  dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
                  dd:DragDrop.DropHandler="{Binding}">
+            
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Import Queue" cal:Message.Attach="[Event Click] = [Action Import]" />
+                    <MenuItem Header="Export Queue" cal:Message.Attach="[Event Click] = [Action Export]" />
+                    <Separator />
+                    <MenuItem Header="Clear" cal:Message.Attach="[Event Click] = [Action Clear]" />
+                    <MenuItem Header="Clear Completed" cal:Message.Attach="[Event Click] = [Action ClearCompleted]" />
+                </ContextMenu>
+            </ListBox.ContextMenu>
+            
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -65,43 +80,85 @@
                         </Grid.ColumnDefinitions>
 
                         <!-- Marker -->
-                        <Image Source="Images/Movies.png" Width="16" Height="16" Grid.Column="0" Margin="10,0,10,0" />
+                        <Image Width="16" Height="16" Grid.Column="0" Margin="10,0,10,0" >
+                            <Image.Style>
+                                <Style TargetType="{x:Type Image}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Waiting">
+                                            <Setter Property="Source" Value="Images\Movies.png"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="In Progress">
+                                            <Setter Property="Source" Value="Images\Working0.png"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Completed" >
+                                            <Setter Property="Source" Value="Images\Complete.png"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Error" >
+                                            <Setter Property="Source" Value="Images\WarningSmall.png"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>    
+                        </Image>
 
                         <!-- Settings -->
-                            <StackPanel Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,5,0,5">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Title: " FontWeight="Bold" />
-                                    <TextBlock Text="{Binding Task.Title}"/>
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,5,0,5">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Title: " FontWeight="Bold" />
+                                <TextBlock Text="{Binding Task.Title}"/>
 
-                                    <TextBlock Text="{Binding Task.PointToPointMode}" FontWeight="Bold" Margin="10,0,0,0" />
-                                    <TextBlock Text=": "  />
-                                    <TextBlock Text="{Binding Task.StartPoint}"/>
-                                    <TextBlock Text="to" Margin="5,0,5,0" />
-                                    <TextBlock Text="{Binding Task.EndPoint}"/>
-                                </StackPanel>
-
-                                <!-- TODO Support Drive Label Name-->
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Source: " FontWeight="Bold" />
-                                    <TextBlock Text="{Binding Task.Source, Converter={StaticResource filePathToFilenameConverter}}"/>
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Destination: " FontWeight="Bold" />
-                                    <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}"/>
-                                </StackPanel>
+                                <TextBlock Text="{Binding Task.PointToPointMode}" FontWeight="Bold" Margin="10,0,0,0" />
+                                <TextBlock Text=": "  />
+                                <TextBlock Text="{Binding Task.StartPoint}"/>
+                                <TextBlock Text="to" Margin="5,0,5,0" />
+                                <TextBlock Text="{Binding Task.EndPoint}"/>
                             </StackPanel>
-         
+
+                            <!-- TODO Support Drive Label Name-->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Source: " FontWeight="Bold" />
+                                <TextBlock Text="{Binding Task.Source, Converter={StaticResource filePathToFilenameConverter}}"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Destination: " FontWeight="Bold" />
+                                <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Status: " FontWeight="Bold" />
+                                <TextBlock Text="{Binding Status, Converter={StaticResource enumComboConverter}}"/>
+                            </StackPanel>
+                        </StackPanel>
+
                         <!-- Delete -->
-                        <Image Source="Images/delete.png" Width="16" Height="16" Grid.Column="2" Margin="10,0,10,0">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="MouseDown">
-                                    <cal:ActionMessage MethodName="RemoveJob">
-                                        <cal:Parameter Value="{Binding}" />
-                                    </cal:ActionMessage>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Image>
+                        <Grid VerticalAlignment="Center" Grid.Column="2" Margin="10,0,10,0">
+                            <StackPanel Orientation="Vertical">
+                                <Image Source="Images/Refresh.ico" Width="20" Height="20" ToolTip="Reset job status to Waiting."
+                                       Visibility="{Binding Status, Converter={StaticResource queueStatusVisConverter}}" >
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseDown">
+                                            <cal:ActionMessage MethodName="RetryJob">
+                                                <cal:Parameter Value="{Binding}" />
+                                            </cal:ActionMessage>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </Image>
+
+                                <Image Source="Images/delete.png" Width="20" Height="20" Margin="0,5,0,0" ToolTip="Remove this Job">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseDown">
+                                            <cal:ActionMessage MethodName="RemoveJob">
+                                                <cal:Parameter Value="{Binding}" />
+                                            </cal:ActionMessage>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </Image>
+                            </StackPanel>
+                        </Grid>
+                            
+                        
+                  
                     </Grid>
 
 
