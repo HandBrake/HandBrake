@@ -841,7 +841,7 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
-    [preset setObject:[NSNumber numberWithInt:2] forKey:@"PictureDetelecine"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
     [preset setObject:[NSNumber numberWithInt:2] forKey:@"PictureDecomb"];
 
     /* Set crop settings here */
