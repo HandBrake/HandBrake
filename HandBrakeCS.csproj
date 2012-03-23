@@ -48,10 +48,11 @@
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Release\</OutputPath>
     <UseVSHostingProcess>false</UseVSHostingProcess>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <Optimize>true</Optimize>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <PlatformTarget>x64</PlatformTarget>
