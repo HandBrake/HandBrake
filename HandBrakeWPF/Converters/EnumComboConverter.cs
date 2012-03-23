@@ -137,6 +137,10 @@ namespace HandBrakeWPF.Converters
             {
                 return EnumHelper<Denoise>.GetDisplay((Denoise)value);
             }
+            if (targetType == typeof(QueueItemStatus) || value.GetType() == typeof(QueueItemStatus))
+            {
+                return EnumHelper<QueueItemStatus>.GetDisplay((QueueItemStatus)value);
+            }
 
             return null;
         }

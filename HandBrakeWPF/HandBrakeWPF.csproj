@@ -97,6 +97,7 @@
     </ApplicationDefinition>
     <Compile Include="Converters\BooleanConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\QueueStatusToVisibilityConverter.cs" />
     <Compile Include="Converters\EnumComboConverter.cs" />
     <Compile Include="Converters\FullPathToFileNameConverter.cs" />
     <Compile Include="Helpers\AutoNameHelper.cs" />
@@ -232,6 +233,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Resource Include="Views\Styles\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Resource>
     <Page Include="Views\AudioView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -289,6 +294,10 @@
     <Content Include="defaultsettings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Views\Images\Refresh.ico" />
+    <Resource Include="Views\Images\WarningSmall.png" />
+    <Resource Include="Views\Images\Complete.png" />
+    <Resource Include="Views\Images\Working0.png" />
     <Resource Include="handbrakepineapple.ico" />
     <Resource Include="Views\Images\delete.png" />
     <Resource Include="Views\Images\Close.png" />

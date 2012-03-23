@@ -6,6 +6,7 @@
 namespace HandBrake.ApplicationServices.Model
 {
     using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
 
     using HandBrake.ApplicationServices.Converters;
 
@@ -16,15 +17,19 @@ namespace HandBrake.ApplicationServices.Model
     public enum QueueItemStatus
     {
         [Description("Waiting")]
+        [Display(Name = "Waiting")]
         Waiting = 0,
 
         [Description("In Progress")]
+        [Display(Name = "In Progress")]
         InProgress,
 
         [Description("Completed")]
+        [Display(Name = "Completed")]
         Completed,
 
         [Description("Error")]
+        [Display(Name = "Error")]
         Error,
     }
 }
