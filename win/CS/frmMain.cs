@@ -622,7 +622,7 @@ namespace Handbrake
             Form preset = new frmAddPreset(this, presetHandler);
             if (preset.ShowDialog() == DialogResult.OK)
             {
-                TreeNode presetTreeview = new TreeNode(presetHandler.LastPresetAdded.Name) { ForeColor = Color.Black };
+                TreeNode presetTreeview = new TreeNode(presetHandler.LastPresetAdded.Name) { ForeColor = Color.Black, Tag = presetHandler.LastPresetAdded };
                 treeView_presets.Nodes.Add(presetTreeview);
                 presetHandler.LastPresetAdded = null;
             }
@@ -826,10 +826,19 @@ namespace Handbrake
         {
             foreach (TreeNode treenode in treeView_presets.Nodes)
             {
+                if (treenode.Tag != null && ((Preset)treenode.Tag).Name == presetName)
+                {
+                    treeView_presets.SelectedNode = treenode;
+                    return;
+                }
+
                 foreach (TreeNode node in treenode.Nodes)
                 {
                     if (node.Text.Equals(presetName))
+                    {
                         treeView_presets.SelectedNode = node;
+                        return;
+                    }
                 }
             }
         }
