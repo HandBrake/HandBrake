@@ -114,13 +114,14 @@ static int    chapter_start = 0;
 static int    chapter_end   = 0;
 static int    chapter_markers = 0;
 static char * marker_file   = NULL;
-static char	  *advanced_opts = NULL;
-static char	  *advanced_opts2 = NULL;
-static char       *x264_profile = NULL;
-static char       *x264_preset = NULL;
-static char       *x264_tune = NULL;
-static int	  maxHeight		= 0;
-static int	  maxWidth		= 0;
+static char * advanced_opts = NULL;
+static char * advanced_opts2 = NULL;
+static char * x264_profile  = NULL;
+static char * x264_preset   = NULL;
+static char * x264_tune     = NULL;
+static char * h264_level    = NULL;
+static int    maxHeight     = 0;
+static int    maxWidth      = 0;
 static int    turbo_opts_enabled = 0;
 static char * turbo_opts = "ref=1:subme=2:me=dia:analyse=none:trellis=0:no-fast-pskip=0:8x8dct=0:weightb=0";
 static int    largeFileSize = 0;
@@ -373,6 +374,7 @@ int main( int argc, char ** argv )
     free( x264_profile );
     free( x264_preset );
     free( x264_tune );
+    free( h264_level );
 
     // write a carriage return to stdout - avoids overlap / line wrapping when stderr is redirected
     fprintf( stdout, "\n" );
@@ -2378,6 +2380,7 @@ static int HandleEvents( hb_handle_t * h )
             job->x264_profile = x264_profile;
             job->x264_preset = x264_preset;
             job->x264_tune = x264_tune;
+            job->h264_level = h264_level;
             if (maxWidth)
                 job->maxWidth = maxWidth;
             if (maxHeight)
@@ -2724,6 +2727,28 @@ static void ShowHelp()
     "          <string>          specified h.264 profile:\n"
     "                            ");
     x264_opts = hb_x264_profiles();
+    tmp[0] = 0;
+    len = 0;
+    while( x264_opts && *x264_opts )
+    {
+        strncat( tmp, *x264_opts++, 79 - len );
+        if( *x264_opts )
+            strcat( tmp, "/" );
+        len = strlen( tmp );
+        if( len > 40 && *x264_opts )
+        {
+            fprintf( out, "%s\n                            ", tmp );
+            len = 0;
+            tmp[0] = 0;
+        }
+    }
+    if( len )
+        fprintf( out, "%s\n", tmp );
+    fprintf( out,
+    "        --h264-level        When using x264, ensures compliance with the\n"
+    "          <string>          specified h.264 level:\n"
+    "                            ");
+    x264_opts = hb_h264_levels();
     tmp[0] = 0;
     len = 0;
     while( x264_opts && *x264_opts )
@@ -3108,6 +3133,7 @@ static int ParseOptions( int argc, char ** argv )
     #define X264_PROFILE        283
     #define X264_PRESET         284
     #define X264_TUNE           285
+    #define H264_LEVEL          286
     
     for( ;; )
     {
@@ -3181,6 +3207,7 @@ static int ParseOptions( int argc, char ** argv )
             { "x264-profile", required_argument, NULL,   X264_PROFILE },
             { "x264-preset", required_argument, NULL,    X264_PRESET },
             { "x264-tune",   required_argument, NULL,    X264_TUNE },
+            { "h264-level",  required_argument, NULL,    H264_LEVEL },
             { "turbo",       no_argument,       NULL,    'T' },
             { "maxHeight",   required_argument, NULL,    'Y' },
             { "maxWidth",    required_argument, NULL,    'X' },
@@ -3601,6 +3628,9 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case X264_TUNE:
                 x264_tune = strdup( optarg );
+                break;
+            case H264_LEVEL:
+                h264_level = strdup( optarg );
                 break;
             case 'T':
                 turbo_opts_enabled = 1;

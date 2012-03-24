@@ -327,23 +327,28 @@ void hb_display_job_info( hb_job_t * job )
         if( job->x264_preset && *job->x264_preset &&
             job->vcodec == HB_VCODEC_X264 )
         {
-            hb_log( "     + x264 preset: %s", job->x264_preset);
+            hb_log( "     + x264 preset: %s", job->x264_preset );
         }
         if( job->x264_tune && *job->x264_tune &&
             job->vcodec == HB_VCODEC_X264 )
         {
-            hb_log( "     + x264 tune: %s", job->x264_tune);
+            hb_log( "     + x264 tune: %s", job->x264_tune );
         }
         if( job->advanced_opts && *job->advanced_opts &&
             ( ( job->vcodec & HB_VCODEC_FFMPEG_MASK ) ||
               ( job->vcodec == HB_VCODEC_X264 ) ) )
         {
-            hb_log( "     + options: %s", job->advanced_opts);
+            hb_log( "     + options: %s", job->advanced_opts );
         }
         if( job->x264_profile && *job->x264_profile &&
             job->vcodec == HB_VCODEC_X264 )
         {
-            hb_log( "     + x264 profile: %s", job->x264_profile);
+            hb_log( "     + x264 profile: %s", job->x264_profile );
+        }
+        if( job->h264_level && *job->h264_level &&
+            job->vcodec == HB_VCODEC_X264 )
+        {
+            hb_log( "     + h264 level: %s", job->h264_level );
         }
 
         if( job->vquality >= 0 )

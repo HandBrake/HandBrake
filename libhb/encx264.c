@@ -7,8 +7,7 @@
 #include <stdarg.h>
 
 #include "hb.h"
-
-#include "x264.h"
+#include "encx264.h"
 
 int  encx264Init( hb_work_object_t *, hb_job_t * );
 int  encx264Work( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
@@ -280,7 +279,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
-    /* Apply profile settings after explicit settings, if present. */
+    /* Apply profile and level settings last, if present. */
     if( job->x264_profile )
     {
         if( x264_param_apply_profile( &param, job->x264_profile ) < 0 )
@@ -289,6 +288,10 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
             pv = NULL;
             return 1;
         }
+    }
+    if( job->h264_level )
+    {
+        hb_apply_h264_level( &param, job->h264_level );
     }
 
     /* B-frames are on by default.*/
@@ -627,6 +630,148 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     return HB_WORK_OK;
 }
 
+/* Applies the restrictions of the requested H.264 level to the passed x264_param_t.
+ * Does not modify resolution/framerate but warns when they exceed level limits.
+ * No return value: an error or warning does not cause libhb to exit.
+ * Based on x264_param_apply_level and other x264 code. */
+void hb_apply_h264_level( x264_param_t * param, const char * level )
+{
+    int i, h264_profile, i_mb_width, i_mb_height, mbs, max_frame_side;
+    x264_level_t * h264_level = NULL;
+
+    /* find the x264_level_t corresponding to the requested level */
+    for( i = 0; h264_level_names[i]; i++ )
+    {
+        if( !strcmp( h264_level_names[i], level ) )
+        {
+            int val = h264_level_values[i];
+            for( i = 0; x264_levels[i].level_idc; i++ )
+            {
+                if( x264_levels[i].level_idc == val )
+                {
+                    h264_level = (x264_level_t *)(x264_levels + i);
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    if( !h264_level )
+    {
+        // error (invalid or unsupported level), abort
+        // this is not a failure (encoding continues)
+        hb_log( "hb_apply_h264_level [ERROR]: invalid level %s, ignoring", level );
+        return;
+    }
+
+    /* some levels do not support interlaced encoding */
+    if( h264_level->frame_only && ( param->b_interlaced || param->b_fake_interlaced ) )
+    {
+        hb_log( "hb_apply_h264_level [warning]: interlaced flag not supported for level %s, disabling",
+                level );
+        param->b_interlaced = 0;
+        param->b_fake_interlaced = 0;
+    }
+
+    /* frame dimensions & rate (in macroblocks) */
+    i_mb_width  = ( param->i_width  + 15 ) / 16;
+    i_mb_height = ( param->i_height + 15 ) / 16;
+    // interlaced: i_mb_height*16 must be mod 32
+    if( param->b_interlaced || param->b_fake_interlaced )
+        i_mb_height = ( i_mb_height + 1 ) & ~1;
+    mbs = i_mb_width * i_mb_height;
+
+    /* sanitize ref/frameref */
+    if( param->i_keyint_max != 1 )
+    {
+        int i_max_dec_frame_buffering = MAX( MIN( h264_level->dpb / (384 * mbs), 16 ), 1 );
+        param->i_frame_reference = MIN( i_max_dec_frame_buffering, param->i_frame_reference );
+        // some level/resolution combinations may require as little as 1 reference
+        // B-frames & B-pyramid are not compatible with this scenario
+        if( i_max_dec_frame_buffering < 2 )
+            param->i_bframe = 0;
+        else if( i_max_dec_frame_buffering < 4 )
+            param->i_bframe_pyramid = X264_B_PYRAMID_NONE;
+    }
+
+    /* H.264 profile */
+    if( param->rc.i_rc_method == X264_RC_CRF && param->rc.f_rf_constant < 1 )
+    {
+        h264_profile = 2; // High 4:4:4 Predictive
+    }
+    else if( param->analyse.b_transform_8x8 || param->i_cqm_preset != X264_CQM_FLAT )
+    {
+        h264_profile = 1; // High
+    }
+    else
+    {
+        h264_profile = 0; // less than High
+    }
+
+    /* set and/or sanitize the VBV (if not lossless) */
+    if( h264_profile < 2 )
+    {
+        // High profile allows for higher VBV bufsize/maxrate
+        int cbp_factor = h264_profile == 1 ? 5 : 4;
+        if( !param->rc.i_vbv_max_bitrate)
+        {
+            param->rc.i_vbv_max_bitrate = (h264_level->bitrate * cbp_factor) / 4;
+        }
+        else
+        {
+            param->rc.i_vbv_max_bitrate =
+                MIN( param->rc.i_vbv_max_bitrate, (h264_level->bitrate * cbp_factor) / 4 );
+        }
+        if( !param->rc.i_vbv_buffer_size )
+        {
+            param->rc.i_vbv_buffer_size = (h264_level->cpb * cbp_factor) / 4;
+        }
+        else
+        {
+            param->rc.i_vbv_buffer_size =
+                MIN( param->rc.i_vbv_buffer_size, (h264_level->cpb * cbp_factor) / 4 );
+        }
+    }
+
+    /* sanitize mvrange/mv-range */
+    param->analyse.i_mv_range =
+        MIN( param->analyse.i_mv_range, h264_level->mv_range >> !!param->b_interlaced );
+
+    /* TODO: check the rest of the limits */
+
+    /* level successfully applied, yay! */
+    param->i_level_idc = h264_level->level_idc;
+
+    /* things we can do nothing about (too late to change resolution or fps), print warnings */
+    if( h264_level->frame_size < mbs  )
+    {
+        hb_log( "hb_apply_h264_level [warning]: frame size (%dx%d, %d macroblocks)",
+                i_mb_width*16, i_mb_height*16, mbs );
+        hb_log( "                               too high for level %s (max. %d macroblocks)",
+                level, h264_level->frame_size );
+    }
+    else if( h264_level->mbps < (int64_t)mbs * param->i_fps_num / param->i_fps_den )
+    {
+        hb_log( "hb_apply_h264_level [warning]: framerate (%.3f) too high for level %s",
+                (float)param->i_fps_num/param->i_fps_den, level );
+        hb_log( "                               at %dx%d (max. %.3f)",
+                 param->i_width, param->i_height, (float)h264_level->mbps/mbs );
+    }
+    // width^2 or height^2 may not exceed 8 * frame_size (in macroblocks)
+    // thus neither dimension may exceed sqrt(8 * frame_size)
+    max_frame_side = (int)sqrt( (double)h264_level->frame_size*8 );
+    if( h264_level->frame_size*8 < i_mb_width * i_mb_width )
+    {
+        hb_log( "hb_apply_h264_level [warning]: frame too wide (%d) for level %s (max. %d)",
+                param->i_width, level, max_frame_side*16 );
+    }
+    if( h264_level->frame_size*8 < i_mb_height * i_mb_height )
+    {
+        hb_log( "hb_apply_h264_level [warning]: frame too wide (%d) for level %s (max. %d)",
+                param->i_height, level, max_frame_side*16 );
+    }
+}
+
 const char * const * hb_x264_presets()
 {
     return x264_preset_names;
@@ -642,3 +787,7 @@ const char * const * hb_x264_profiles()
     return x264_profile_names;
 }
 
+const char * const * hb_h264_levels()
+{
+    return h264_level_names;
+}
