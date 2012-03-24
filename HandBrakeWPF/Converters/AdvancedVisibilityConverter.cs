@@ -1,69 +1,31 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BooleanToVisibilityConverter.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="AdvancedVisibilityConverter.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Defines the BooleanToVisibilityConverter type.
+//   Defines the AdvancedVisibilityConverter type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrakeWPF.Converters
 {
+    using System;
     using System.Globalization;
     using System.Windows;
     using System.Windows.Data;
-    using System;
 
     /// <summary>
-    /// Boolean to Visibility Converter
+    /// The advanced visibility converter.
     /// </summary>
-    public sealed class BooleanToVisibilityConverter : IValueConverter
+    [Obsolete("This will be refactored out soon! Don't use.")]
+    public class AdvancedVisibilityConverter : IValueConverter
     {
-        /// <summary>
-        /// Convert a boolean to visibility property.
-        /// </summary>
-        /// <param name="value">
-        /// The value.
-        /// </param>
-        /// <param name="targetType">
-        /// The target type.
-        /// </param>
-        /// <param name="parameter">
-        /// The parameter. (A boolean which inverts the output)
-        /// </param>
-        /// <param name="culture">
-        /// The culture.
-        /// </param>
-        /// <returns>
-        /// Visibility property
-        /// </returns>
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            // Paramater is a boolean which inverts the output.
-            var param = System.Convert.ToBoolean(parameter, CultureInfo.InvariantCulture);
+        #region Implemented Interfaces
 
-            if (value == null)
-            {
-                return Visibility.Collapsed;
-            }
-
-            if (value is Boolean)
-            {
-                if (param)
-                {
-                    return (bool)value ? Visibility.Collapsed : Visibility.Visible;
-                }
-                else
-                {
-                    return (bool)value ? Visibility.Visible : Visibility.Collapsed;
-                }
-            }
-
-            return value;
-        }
+        #region IValueConverter
 
         /// <summary>
-        /// Convert Back for the IValueConverter Interface. Not used!
+        /// The convert.
         /// </summary>
         /// <param name="value">
         /// The value.
@@ -78,14 +40,55 @@ namespace HandBrakeWPF.Converters
         /// The culture.
         /// </param>
         /// <returns>
-        /// Nothing
+        /// The convert.
         /// </returns>
-        /// <exception cref="NotImplementedException">
-        /// This method is not used!
-        /// </exception>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            bool visibility = (bool)value;
+
+            // If we are given a parameter, reverse it
+            if (parameter != null)
+            {
+                visibility = !visibility;
+            }
+
+            return visibility ? Visibility.Visible : Visibility.Collapsed;
         }
+
+        /// <summary>
+        /// The convert back.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <param name="targetType">
+        /// The target type.
+        /// </param>
+        /// <param name="parameter">
+        /// The parameter.
+        /// </param>
+        /// <param name="culture">
+        /// The culture.
+        /// </param>
+        /// <returns>
+        /// The convert back.
+        /// </returns>
+        public object ConvertBack(
+            object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            Visibility visibility = (Visibility)value;
+            bool result = visibility == Visibility.Visible;
+
+            if (parameter != null)
+            {
+                result = !result;
+            }
+
+            return result;
+        }
+
+        #endregion
+
+        #endregion
     }
 }

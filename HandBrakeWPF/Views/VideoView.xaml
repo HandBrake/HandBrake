@@ -73,6 +73,45 @@
             </StackPanel>
 
 
+            <!--<Grid Grid.Row="1" Margin="10,10,0,0" Visibility="{Binding DisplayX264Options, Converter={StaticResource boolToVisConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Vertical" Margin="0,0,0,10">
+
+                    <TextBlock Text="X264 Advanced Options:" Margin="0,0,0,5" FontWeight="Bold" VerticalAlignment="Center" />
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                        <TextBlock Text="Preset:" VerticalAlignment="Center" />
+                        <ComboBox Width="100" Grid.Column="3" Margin="5,0,5,0" Height="22"
+                          ItemsSource="{Binding X264Presets, Converter={StaticResource x264DisplayConverter}}" 
+                          SelectedItem="{Binding X264Preset, Converter={StaticResource x264DisplayConverter}}"/>
+
+                        <TextBlock Text="Profile:" VerticalAlignment="Center" />
+                        <ComboBox Width="100" Grid.Column="3" Margin="5,0,5,0" Height="22"
+                          ItemsSource="{Binding X264Profiles, Converter={StaticResource x264DisplayConverter}}" 
+                          SelectedItem="{Binding X264Profile, Converter={StaticResource x264DisplayConverter}}"/>
+
+
+                        <TextBlock Text="Tune:" VerticalAlignment="Center" />
+                        <ComboBox Width="100" Grid.Column="3" Margin="5,0,5,0" Height="22"
+                          ItemsSource="{Binding X264Tunes, Converter={StaticResource x264DisplayConverter}}" 
+                          SelectedItem="{Binding X264Tune, Converter={StaticResource x264DisplayConverter}}"/>
+                    </StackPanel>
+                </StackPanel>
+
+            </Grid>
+
+            <StackPanel Grid.Row="2" Margin="10" Height="100" VerticalAlignment="Top" >
+                <TextBlock Text="Advanced Query" Margin="0,0,0,5" FontWeight="Bold" VerticalAlignment="Center" />
+                <TextBox Text="{Binding Query}" 
+                 VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Height="150" TextWrapping="Wrap" />
+            </StackPanel>-->
+
+
+
         </Grid>
 
     </Grid>
