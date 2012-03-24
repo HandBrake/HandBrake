@@ -1230,6 +1230,7 @@ namespace Handbrake.Controls
         /// </param>
         private void autoPassthru_CheckedChanged(object sender, EventArgs e)
         {
+            this.PassthruSettings.IsEnabled = true;
             if (sender == this.check_mp3)
             {
                 this.PassthruSettings.AudioAllowMP3Pass = this.check_mp3.Checked;
@@ -1267,6 +1268,7 @@ namespace Handbrake.Controls
         /// </param>
         private void drp_passthruFallback_SelectedIndexChanged(object sender, EventArgs e)
         {
+            this.PassthruSettings.IsEnabled = true;
             this.PassthruSettings.AudioEncoderFallback =
                 EnumHelper<AudioEncoder>.GetValue(drp_passthruFallback.SelectedItem.ToString());
         }

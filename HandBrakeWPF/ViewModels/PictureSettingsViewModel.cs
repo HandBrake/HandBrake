@@ -477,8 +477,7 @@ namespace HandBrakeWPF.ViewModels
         public void SetPreset(Preset preset, EncodeTask task)
         {
             this.Task = task;
-
-
+ 
             // TODO: These all need to be handled correctly.
             this.SelectedAnamorphicMode = preset.Task.Anamorphic;
 

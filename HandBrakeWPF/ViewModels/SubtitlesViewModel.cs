@@ -177,6 +177,39 @@ namespace HandBrakeWPF.ViewModels
             this.Task.SubtitleTracks.Remove(track);
         }
 
+        /// <summary>
+        /// Select the default subtitle track.
+        /// </summary>
+        /// <param name="subtitle">
+        /// The subtitle.
+        /// </param>
+        public void SelectDefaultTrack(SubtitleTrack subtitle)
+        {
+            foreach (SubtitleTrack track in this.Task.SubtitleTracks)
+            {
+                track.Default = false;
+            }
+            subtitle.Default = true;
+
+            this.NotifyOfPropertyChange(() => this.Task);
+        }
+
+        /// <summary>
+        /// Select the burned in track.
+        /// </summary>
+        /// <param name="subtitle">
+        /// The subtitle.
+        /// </param>
+        public void SelectBurnedInTrack(SubtitleTrack subtitle)
+        {
+            foreach (SubtitleTrack track in this.Task.SubtitleTracks)
+            {
+                track.Burned = false;
+            }
+            subtitle.Burned = true;
+            this.NotifyOfPropertyChange(() => this.Task);
+        }
+
         #endregion
 
         #region Implemented Interfaces
