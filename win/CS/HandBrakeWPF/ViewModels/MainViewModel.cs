@@ -158,7 +158,7 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor = IoC.Get<IQueueProcessor>(); // TODO Instance ID!
 
             // Setup Properties
-            this.WindowTitle = "HandBrake WPF Test Application";
+            this.WindowTitle = "HandBrake";
             this.CurrentTask = new EncodeTask();
             this.ScannedSource = new Source();
 

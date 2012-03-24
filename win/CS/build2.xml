@@ -1,0 +1,76 @@
+﻿<!--
+  build.xml
+  This file is part of the HandBrake source code.
+  Homepage: <http://handbrake.fr>.
+  It may be used under the terms of the GNU General Public License
+  
+  HandBrake Build Scipt for usage with Jenkins.
+  Usage: 
+    msbuild build2.xml /p:Platform=x86 /t:Nightly
+    msbuild build2.xml /p:Platform=x86 /t:Release
+  Reuqires: HandBrakeCli.exe to be in the release folder.
+  
+-->
+<Project DefaultTargets="NightlyBuild" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  
+  <!-- Setup -->
+  <PropertyGroup>
+    <Configuration>Release</Configuration>
+  </PropertyGroup>
+  
+  <!-- Build all the main cproj files.-->
+  <ItemGroup>
+    <ProjectsToBuild Include="HandBrake.Interop\HandBrakeInterop\*proj" Exclude="$(MSBuildProjectFile)"/>
+    <ProjectsToBuild Include="HandBrake.ApplicationServices\*proj" Exclude="$(MSBuildProjectFile)"/>
+    <ProjectsToBuild Include="HandBrakeWPF\HandBrakeWPF.*proj" Exclude="$(MSBuildProjectFile)"/>
+  </ItemGroup>
+
+  <!-- Dependencies -->
+  <PropertyGroup>
+    <NightlyDependsOn>PreBuild;BuildRelease;NightlyPostBuild</NightlyDependsOn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <InstallDependsOn>PreBuild;BuildRelease;ReleasePostBuild</InstallDependsOn>
+  </PropertyGroup>
+  
+  <!-- Builds /t: -->
+  <Target Name="Nightly" DependsOnTargets="$(NightlyDependsOn)"/>
+  <Target Name="Release" DependsOnTargets="$(InstallDependsOn)"/>
+  
+  <!-- Build All Components (Forms, WPF, ApplicationServices, Interop -->
+  <Target Name="BuildRelease">
+    <MSBuild Projects ="@(ProjectsToBuild)"
+             ContinueOnError ="false"
+             Properties="Configuration=$(Configuration)" >
+      <Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
+    </MSBuild>
+  </Target>
+  
+  <!-- Pre Build Events -->
+  <Target Name="PreBuild">
+    <Exec Command="subwcrev.exe $(ProjectDir). $(ProjectDir)HandBrakeWPF\Properties\AssemblyInfo.cs.tmpl $(ProjectDir)HandBrakeWPF\Properties\AssemblyInfo.cs" />
+    <Exec Command="subwcrev.exe $(ProjectDir). $(ProjectDir)HandBrakeWPF\Installer\MakeNightly.nsi.tmpl $(ProjectDir)HandBrakeWPF\Installer\MakeNightly.nsi" />
+    <Exec Command="subwcrev.exe $(ProjectDir). $(ProjectDir)HandBrakeWPF\Installer\MakeNightly64.nsi.tmpl $(ProjectDir)HandBrakeWPF\Installer\MakeNightly64.nsi" />
+  </Target>
+
+  <!-- Post Build Events -->
+  <Target Name="NightlyPostBuild">
+    <Exec Command="copy $(ProjectDir)HandBrakeWPF\Installer\MakeNightly.nsi $(ProjectDir)HandBrakeWPF\bin\Release /Y" Condition="$(Platform) == 'x86'" />
+    <Exec Command="copy $(ProjectDir)HandBrakeWPF\Installer\MakeNightly64.nsi $(ProjectDir)HandBrakeWPF\bin\Release /Y" Condition="$(Platform) == 'x64'" />
+    <Exec Command="copy $(ProjectDir)handbrakepineapple.ico $(ProjectDir)HandBrakeWPF\bin\Release /Y" />
+    <Exec Command="xcopy $(ProjectDir)doc $(ProjectDir)HandBrakeWPF\bin\Release\doc /I /Y" />
+    <Exec Command="makensis $(ProjectDir)HandBrakeWPF\bin\Release\MakeNightly.nsi" Condition="$(Platform) == 'x86'" />
+    <Exec Command="makensis $(ProjectDir)HandBrakeWPF\bin\Release\MakeNightly64.nsi" Condition="$(Platform) == 'x64'" />
+  </Target>
+
+  <Target Name="ReleasePostBuild">
+    <Exec Command="copy $(ProjectDir)HandBrakeWPF\Installer\Installer.nsi $(ProjectDir)HandBrakeWPF\bin\Release /Y" Condition="$(Platform) == 'x86'" />
+    <Exec Command="copy $(ProjectDir)HandBrakeWPF\Installer\Installer64.nsi $(ProjectDir)HandBrakeWPF\bin\Release /Y" Condition="$(Platform) == 'x64'" />
+    <Exec Command="copy $(ProjectDir)handbrakepineapple.ico $(ProjectDir)HandBrakeWPF\bin\Release /Y" />
+    <Exec Command="xcopy $(ProjectDir)doc $(ProjectDir)HandBrakeWPF\bin\Release\doc /I /Y" />
+    <Exec Command="makensis $(ProjectDir)HandBrakeWPF\bin\Release\Installer.nsi" Condition="$(Platform) == 'x86'" />
+    <Exec Command="makensis $(ProjectDir)HandBrakeWPF\bin\Release\Installer64.nsi" Condition="$(Platform) == 'x64'" />
+  </Target>
+  
+</Project>

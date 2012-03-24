@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5CB7BC74-449C-4E95-98AB-E1E4387E514B}"
 	ProjectSection(SolutionItems) = preProject
 		build.xml = build.xml
+		build2.xml = build2.xml
 	EndProjectSection
 EndProject
 Global
