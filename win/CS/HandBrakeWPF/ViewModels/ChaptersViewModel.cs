@@ -224,6 +224,7 @@ namespace HandBrakeWPF.ViewModels
         public void SetPreset(Preset preset, EncodeTask task)
         {
             this.Task = task;
+            this.Task.IncludeChapterMarkers = preset.Task.IncludeChapterMarkers;
             this.NotifyOfPropertyChange(() => this.Task);
         }
 

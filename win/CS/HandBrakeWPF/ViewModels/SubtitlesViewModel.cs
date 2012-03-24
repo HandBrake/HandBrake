@@ -227,6 +227,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void SetPreset(Preset preset, EncodeTask task)
         {
+            // Note, We don't support Subtitles in presets yet.
             this.Task = task;
             this.NotifyOfPropertyChange(() => this.Task);
         }

@@ -22,6 +22,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model.Encoding;
+    using HandBrake.Interop.Model.Encoding.x264;
 
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -36,6 +37,11 @@ namespace HandBrakeWPF.ViewModels
         /// Backing field for the user setting service.
         /// </summary>
         private IUserSettingService userSettingService;
+
+        /// <summary>
+        /// Backing field used to display / hide the x264 options
+        /// </summary>
+        private bool displayX264Options;
 
         /// <summary>
         /// The quality max.
@@ -78,6 +84,10 @@ namespace HandBrakeWPF.ViewModels
             this.QualityMax = 51;
             this.IsConstantQuantity = true;
             this.VideoEncoders = EnumHelper<VideoEncoder>.GetEnumList();
+
+            //X264Presets = EnumHelper<x264Preset>.GetEnumList();
+            //X264Profiles = EnumHelper<x264Profile>.GetEnumList();
+            //X264Tunes = EnumHelper<x264Tune>.GetEnumList();
         }
 
         #endregion
@@ -432,8 +442,127 @@ namespace HandBrakeWPF.ViewModels
             this.Task.VideoBitrate = preset.Task.VideoBitrate;
 
             this.NotifyOfPropertyChange(() => this.Task);
+
+            //if (preset != null && preset.Task != null)
+            //{
+            //    this.Query = preset.Task.AdvancedEncoderOptions;
+            //    this.SetEncoder(preset.Task.VideoEncoder);
+
+            //    this.X264Preset = preset.Task.x264Preset;
+            //    this.X264Profile = preset.Task.x264Profile;
+            //    this.X264Tune = preset.Task.X264Tune;
+            //}
+
         }
 
+        /// <summary>
+        /// Set the currently selected encoder.
+        /// </summary>
+        /// <param name="encoder">
+        /// The Video Encoder.
+        /// </param>
+        public void SetEncoder(VideoEncoder encoder)
+        {
+            //this.DisplayX264Options = encoder == VideoEncoder.X264;
+        }
+
+        #endregion
+
+        #region Advanced
+        ///// <summary>
+        ///// Gets or sets State.
+        ///// </summary>
+        //public string Query
+        //{
+        //    get
+        //    {
+        //        return this.Task.AdvancedEncoderOptions;
+        //    }
+        //    set
+        //    {
+        //        this.Task.AdvancedEncoderOptions = value;
+        //        this.NotifyOfPropertyChange(() => this.Query);
+        //    }
+        //}
+
+        ///// <summary>
+        ///// Gets or sets X264Preset.
+        ///// </summary>
+        //public x264Preset X264Preset
+        //{
+        //    get
+        //    {
+        //        return this.Task.x264Preset;
+        //    }
+        //    set
+        //    {
+        //        this.Task.x264Preset = value;
+        //        this.NotifyOfPropertyChange(() => this.X264Preset);
+        //    }
+        //}
+
+        ///// <summary>
+        ///// Gets or sets X264Profile.
+        ///// </summary>
+        //public x264Profile X264Profile
+        //{
+        //    get
+        //    {
+        //        return this.Task.x264Profile;
+        //    }
+        //    set
+        //    {
+        //        this.Task.x264Profile = value;
+        //        this.NotifyOfPropertyChange(() => this.X264Profile);
+        //    }
+        //}
+
+        ///// <summary>
+        ///// Gets or sets X264Tune.
+        ///// </summary>
+        //public x264Tune X264Tune
+        //{
+        //    get
+        //    {
+        //        return this.Task.X264Tune;
+        //    }
+        //    set
+        //    {
+        //        this.Task.X264Tune = value;
+        //        this.NotifyOfPropertyChange(() => this.X264Tune);
+        //    }
+        //}
+
+        ///// <summary>
+        ///// Gets or sets X264Presets.
+        ///// </summary>
+        //public IEnumerable<x264Preset> X264Presets { get; set; }
+
+        ///// <summary>
+        ///// Gets or sets X264Profiles.
+        ///// </summary>
+        //public IEnumerable<x264Profile> X264Profiles { get; set; }
+
+        ///// <summary>
+        ///// Gets or sets X264Tunes.
+        ///// </summary>
+        //public IEnumerable<x264Tune> X264Tunes { get; set; }
+
+        ///// <summary>
+        ///// Gets or sets a value indicating whether DisplayX264Options.
+        ///// </summary>
+        //public bool DisplayX264Options
+        //{
+        //    get
+        //    {
+        //        return this.displayX264Options;
+        //    }
+        //    set
+        //    {
+        //        this.displayX264Options = value;
+        //        this.NotifyOfPropertyChange(() => this.DisplayX264Options);
+        //    }
+        //}
         #endregion
     }
 }
