@@ -198,8 +198,6 @@
   -->
   <PropertyGroup>
     <PreBuildEvent>
-      subwcrev.exe "$(ProjectDir)." "$(ProjectDir)Properties\AssemblyInfo.cs.tmpl" "$(ProjectDir)Properties\AssemblyInfo.cs"
-      subwcrev.exe "$(ProjectDir)." "$(ProjectDir)Properties\AssemblyInfo.cs.tmpl" "$(ProjectDir)Properties\AssemblyInfo.cs"
     </PreBuildEvent>
   </PropertyGroup>
 </Project>

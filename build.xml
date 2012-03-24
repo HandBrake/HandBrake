@@ -20,7 +20,6 @@
     <ProjectsToBuild Include="HandBrake.Interop\HandBrakeInterop\*proj" Exclude="$(MSBuildProjectFile)"/>
     <ProjectsToBuild Include="HandBrake.ApplicationServices\*proj" Exclude="$(MSBuildProjectFile)"/>
     <ProjectsToBuild Include="HandBrakeCS.*proj" Exclude="$(MSBuildProjectFile)"/>
-    <ProjectsToBuild Include="HandBrakeWPF\HandBrakeWPF.*proj" Exclude="$(MSBuildProjectFile)"/>
   </ItemGroup>
 
   <!-- Dependencies -->
@@ -32,9 +31,6 @@
     <InstallDependsOn>BuildRelease;CreateReleasePostBuildEvent</InstallDependsOn>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <AlphaDependsOn>AlphaPreBuild;BuildRelease;CreateAlphaPostBuildEvent</AlphaDependsOn>
-  </PropertyGroup>
   
   <!-- Builds /t: -->
   <Target Name="NightlyBuild" DependsOnTargets="$(NightlyDependsOn)"/>
@@ -51,11 +47,6 @@
   </Target>
   
   <!-- Pre Build Events -->
-  <Target Name="AlphaPreBuild">
-    <Exec Command="subwcrev.exe $(ProjectDir). $(ProjectDir)HandBrakeWPF\Properties\AssemblyInfo.cs.tmpl $(ProjectDir)HandBrakeWPF\Properties\AssemblyInfo.cs" />
-    <Exec Command="subwcrev.exe $(ProjectDir). $(ProjectDir)HandBrakeWPF\Installer\MakeAlpha.nsi.tmpl $(ProjectDir)HandBrakeWPF\Installer\MakeAlpha.nsi" />
-  </Target>
-
   <!-- Post Build Events -->
   <Target Name="NightlyPostBuildEvent">
     <Exec Command="copy $(ProjectDir)Installer\MakeNightly.nsi $(ProjectDir)bin\$(Platform)\Release /Y" Condition="$(Platform) == 'x86'" />
@@ -77,13 +68,6 @@
 
     <Exec Command="makensis $(ProjectDir)bin\$(Platform)\Release\Installer.nsi" Condition="$(Platform) == 'x86'" />
     <Exec Command="makensis $(ProjectDir)bin\$(Platform)\Release\Installer64.nsi" Condition="$(Platform) == 'x64'" />
-  </Target>
-
-  <Target Name="CreateAlphaPostBuildEvent">
-    <Exec Command="copy $(ProjectDir)HandBrakeWPF\Installer\MakeAlpha.nsi $(ProjectDir)HandBrakeWPF\bin\Release /Y" />
-    <Exec Command="copy $(ProjectDir)handbrakepineapple.ico $(ProjectDir)HandBrakeWPF\bin\Release /Y" />
-    <Exec Command="xcopy $(ProjectDir)doc $(ProjectDir)HandBrakeWPF\bin\Release\doc /I /Y" />
-    <Exec Command="makensis $(ProjectDir)HandBrakeWPF\bin\Release\MakeAlpha.nsi"/>
   </Target>
 
 </Project>

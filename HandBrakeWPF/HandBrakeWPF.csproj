@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>HandBrakeWPF</RootNamespace>
-    <AssemblyName>HandBrakeWPF</AssemblyName>
+    <AssemblyName>HandBrake</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -216,7 +216,10 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="Installer\MakeAlpha.nsi.tmpl" />
+    <None Include="Installer\Installer.nsi" />
+    <None Include="Installer\Installer64.nsi" />
+    <None Include="Installer\MakeNightly.nsi.tmpl" />
+    <None Include="Installer\MakeNightly64.nsi.tmpl" />
     <None Include="Properties\AssemblyInfo.cs.tmpl" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
