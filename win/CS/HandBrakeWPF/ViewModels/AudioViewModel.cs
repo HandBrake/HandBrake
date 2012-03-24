@@ -134,6 +134,9 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.AddTracksFromPreset(preset);
             }
+
+            this.Task.AllowedPassthruOptions.IsEnabled =
+                 this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedAudioPassthruOpts);
         }
 
         /// <summary>

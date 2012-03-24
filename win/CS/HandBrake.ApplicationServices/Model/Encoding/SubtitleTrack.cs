@@ -12,14 +12,26 @@ namespace HandBrake.ApplicationServices.Model.Encoding
     using System;
     using System.Windows.Forms;
 
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.Parsing;
 
     /// <summary>
     /// Subtitle Information
     /// </summary>
-    public class SubtitleTrack : ModelBase
+    public class SubtitleTrack : PropertyChangedBase
     {
         #region Constants and Fields
+
+        /// <summary>
+        /// The burned in backing field.
+        /// </summary>
+        private bool burned;
+
+        /// <summary>
+        /// The is default backing field.
+        /// </summary>
+        private bool isDefault;
 
         /// <summary>
         /// The source track.
@@ -27,6 +39,8 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         private Subtitle sourceTrack;
 
         #endregion
+
+        #region Constructors and Destructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubtitleTrack"/> class.
@@ -57,18 +71,43 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             this.SourceTrack = subtitle.SourceTrack;
         }
 
-        #region Public Properties
+        #endregion
 
+        #region Properties
 
         /// <summary>
         ///   Gets or sets a value indicating whether Burned.
         /// </summary>
-        public bool Burned { get; set; }
+        public bool Burned
+        {
+            get
+            {
+                return this.burned;
+            }
+
+            set
+            {
+                this.burned = value;
+                this.NotifyOfPropertyChange(() => this.Burned);
+            }
+        }
 
         /// <summary>
         ///   Gets or sets a value indicating whether Default.
         /// </summary>
-        public bool Default { get; set; }
+        public bool Default
+        {
+            get
+            {
+                return this.isDefault;
+            }
+
+            set
+            {
+                this.isDefault = value;
+                this.NotifyOfPropertyChange(() => this.Default);
+            }
+        }
 
         /// <summary>
         ///   Gets or sets a value indicating whether Forced.
@@ -87,11 +126,23 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         }
 
         /// <summary>
-        ///   Gets or sets Track.
+        ///   Gets A ListViewItem Containing information about this subitlte
         /// </summary>
-        [Obsolete("Use SourceTrack Instead")]
-        public string Track { get; set; }
-
+        [Obsolete("Used only for the old forms gui. Will be removed.")]
+        public ListViewItem ListView
+        {
+            get
+            {
+                var listTrack = new ListViewItem(this.Track);
+                listTrack.SubItems.Add(this.Forced ? "Yes" : "No");
+                listTrack.SubItems.Add(this.Burned ? "Yes" : "No");
+                listTrack.SubItems.Add(this.Default ? "Yes" : "No");
+                listTrack.SubItems.Add(this.SrtLang);
+                listTrack.SubItems.Add(this.SrtCharCode);
+                listTrack.SubItems.Add(this.SrtOffset.ToString());
+                return listTrack;
+            }
+        }
 
         /// <summary>
         ///   Gets or sets SourceTrack.
@@ -106,7 +157,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             set
             {
                 this.sourceTrack = value;
-                this.OnPropertyChanged("SourceTrack");
+                this.NotifyOfPropertyChange(() => this.SourceTrack);
                 if (this.sourceTrack != null)
                 {
                     this.Track = this.sourceTrack.ToString();
@@ -145,23 +196,10 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         public SubtitleType SubtitleType { get; set; }
 
         /// <summary>
-        ///   Gets A ListViewItem Containing information about this subitlte
+        ///   Gets or sets Track.
         /// </summary>
-        [Obsolete("Used only for the old forms gui. Will be removed.")]
-        public ListViewItem ListView
-        {
-            get
-            {
-                var listTrack = new ListViewItem(this.Track);
-                listTrack.SubItems.Add(this.Forced ? "Yes" : "No");
-                listTrack.SubItems.Add(this.Burned ? "Yes" : "No");
-                listTrack.SubItems.Add(this.Default ? "Yes" : "No");
-                listTrack.SubItems.Add(this.SrtLang);
-                listTrack.SubItems.Add(this.SrtCharCode);
-                listTrack.SubItems.Add(this.SrtOffset.ToString());
-                return listTrack;
-            }
-        }
+        [Obsolete("Use SourceTrack Instead")]
+        public string Track { get; set; }
 
         #endregion
     }

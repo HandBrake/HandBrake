@@ -79,9 +79,25 @@
                             <TextBlock Text="Forced Only" FontWeight="Bold" Grid.Column="2" VerticalAlignment="Center" />
                             <CheckBox Grid.Column="3" IsChecked="{Binding Forced}" VerticalAlignment="Center" Margin="5,0,5,0"/>
                             <TextBlock Text="Burn In" FontWeight="Bold" Grid.Column="4" VerticalAlignment="Center" />
-                            <CheckBox Grid.Column="5" IsChecked="{Binding Burned}" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                            <CheckBox Grid.Column="5" IsChecked="{Binding Burned}" VerticalAlignment="Center" Margin="5,0,5,0">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <cal:ActionMessage MethodName="SelectBurnedInTrack">
+                                            <cal:Parameter Value="{Binding}" />
+                                        </cal:ActionMessage>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </CheckBox>
                             <TextBlock Text="Default" FontWeight="Bold" Grid.Column="6" VerticalAlignment="Center" />
-                            <CheckBox Grid.Column="7" IsChecked="{Binding Default}" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                            <CheckBox Grid.Column="7" IsChecked="{Binding Default}" VerticalAlignment="Center" Margin="5,0,5,0">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <cal:ActionMessage MethodName="SelectDefaultTrack">
+                                            <cal:Parameter Value="{Binding}" />
+                                        </cal:ActionMessage>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </CheckBox>
 
                             <!-- Row 2-->
                             <TextBlock Text="Language" FontWeight="Bold" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center"/>

@@ -59,6 +59,12 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether IsEnabled.
+        /// Temp Measure until forms gui is retired.
+        /// </summary>
+        public bool IsEnabled { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether AudioAllowAACPass.
         /// </summary>
         public bool AudioAllowAACPass { get; set; }

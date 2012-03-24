@@ -485,6 +485,12 @@ namespace HandBrake.ApplicationServices.Services
         {
             try
             {
+                string directory = Path.GetDirectoryName(this.userPresetFile);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
                 using (FileStream strm = new FileStream(this.builtInPresetFile, FileMode.Create, FileAccess.Write))
                 {
                     Ser.Serialize(strm, this.presets.Where(p => p.IsBuildIn).ToList());

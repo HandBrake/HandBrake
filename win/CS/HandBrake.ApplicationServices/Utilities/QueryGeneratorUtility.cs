@@ -477,6 +477,7 @@ namespace HandBrake.ApplicationServices.Utilities
             List<double> samplerates = new List<double>();
             List<int> bitrates = new List<int>();
             List<double> drcs = new List<double>();
+            List<double> gains = new List<double>();
 
             // No Audio
             if (audioTracks.Count == 0)
@@ -506,6 +507,9 @@ namespace HandBrake.ApplicationServices.Utilities
 
                 // DRC (-D)
                 drcs.Add(track.DRC);
+
+                // Gain (--gain)
+                gains.Add(track.Gain);
             }
 
             // Audio Track (-a)
@@ -606,8 +610,26 @@ namespace HandBrake.ApplicationServices.Utilities
             if (audioItems.Trim() != String.Empty)
                 query += " -D " + audioItems;
 
+            audioItems = string.Empty; // Reset for another pass.
+            firstLoop = true;
+
+            // Gain (--gain)
+            foreach (var itm in gains)
+            {
+                string item = itm.ToString(new CultureInfo("en-US"));
+                if (firstLoop)
+                {
+                    audioItems = item;
+                    firstLoop = false;
+                }
+                else
+                    audioItems += "," + item;
+            }
+            if (audioItems.Trim() != String.Empty)
+                query += " --gain " + audioItems;
+
             // Passthru Settings
-            if (task.AllowedPassthruOptions != null)
+            if (task.AllowedPassthruOptions != null && task.AllowedPassthruOptions.IsEnabled)
             {
                 string fallbackEncoders = string.Empty;
 
