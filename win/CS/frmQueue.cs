@@ -353,8 +353,8 @@ namespace Handbrake
                     { Tag = queueItem, Text = EnumHelper<QueueItemStatus>.GetDescription(queueItem.Status) };
                 item.SubItems.Add(title);
                 item.SubItems.Add(chapters); // Chapters
-                item.SubItems.Add(queueItem.Source); // Source
-                item.SubItems.Add(queueItem.Destination); // Destination
+                item.SubItems.Add(queueItem.Task.Source); // Source
+                item.SubItems.Add(queueItem.Task.Destination); // Destination
                 item.SubItems.Add(EnumHelper<VideoEncoder>.GetDisplay(parsed.VideoEncoder));
 
                 // Display The Audio Track Information
@@ -440,8 +440,8 @@ namespace Handbrake
 
                 // found query is a global varible        
                 lbl_encodeStatus.Text = "Encoding ...";
-                lbl_source.Text = queue.QueueManager.LastProcessedJob.Source + "(Title: " + title + " Chapters: " + chapterlbl + ")";
-                lbl_dest.Text = queue.QueueManager.LastProcessedJob.Destination;
+                lbl_source.Text = queue.QueueManager.LastProcessedJob.Task.Source + "(Title: " + title + " Chapters: " + chapterlbl + ")";
+                lbl_dest.Text = queue.QueueManager.LastProcessedJob.Task.Destination;
                 lbl_encodeOptions.Text = string.Format("Video: {0},  Audio: {1}\nx264 Options: {2}",
                     EnumHelper<VideoEncoder>.GetDisplay(parsed.VideoEncoder),
                     audio, 

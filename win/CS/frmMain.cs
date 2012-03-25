@@ -2236,7 +2236,7 @@ namespace Handbrake
                         this.AudioSettings.LoadTracks(preset);
 
                         // Set the destination path);
-                        this.text_destination.Text = queueEdit.Destination;
+                        this.text_destination.Text = queueEdit.Task.Destination;
 
                         // The x264 widgets will need updated, so do this now:
                         x264Panel.StandardizeOptString();
@@ -2355,7 +2355,7 @@ namespace Handbrake
 
             // Scan
             queueEdit = job; // Nasty but will do for now. TODO
-            StartScan(job.Source, job.Title);
+            StartScan(job.Task.Source, job.Task.Title);
         }
 
         #endregion

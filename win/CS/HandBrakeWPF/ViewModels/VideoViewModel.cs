@@ -12,6 +12,7 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
+    using System.Globalization;
 
     using Caliburn.Micro;
 
@@ -310,8 +311,8 @@ namespace HandBrakeWPF.ViewModels
                     this.ShowPeakFramerate = true;
                     if (this.Task.FramerateMode == FramerateMode.VFR)
                     {
-                        this.Task.FramerateMode = FramerateMode.PFR; 
-                    } 
+                        this.Task.FramerateMode = FramerateMode.PFR;
+                    }
                     this.Task.Framerate = double.Parse(value);
                 }
 
@@ -416,9 +417,15 @@ namespace HandBrakeWPF.ViewModels
             {
                 return;
             }
-            
+
             this.SelectedVideoEncoder = preset.Task.VideoEncoder;
-            this.SelectedFramerate = preset.Task.Framerate.ToString();
+            if (preset.Task.Framerate.HasValue)
+            {
+                this.SelectedFramerate = preset.Task.Framerate.Value.ToString(CultureInfo.InvariantCulture);
+            }
+
+            this.IsConstantQuantity = preset.Task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality;
+
             switch (preset.Task.FramerateMode)
             {
                 case FramerateMode.CFR:
@@ -433,9 +440,39 @@ namespace HandBrakeWPF.ViewModels
                     this.ShowPeakFramerate = true;
                     break;
             }
-             
-            // TODO Compute RF
-            this.RF = 20;
+
+            double cqStep = userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step);
+            double rfValue = 0;
+            switch (this.SelectedVideoEncoder)
+            {
+                case VideoEncoder.FFMpeg:
+                case VideoEncoder.FFMpeg2:
+                    int cq;
+                    if (preset.Task.Quality.HasValue)
+                    {
+                        int.TryParse(preset.Task.Quality.Value.ToString(CultureInfo.InvariantCulture), out cq);
+                        this.RF = 32 - cq;
+                    }
+                    break;
+                case VideoEncoder.X264:
+ 
+                    double multiplier = 1.0 / cqStep;
+                    if (preset.Task.Quality.HasValue)
+                    {
+                        rfValue = preset.Task.Quality.Value * multiplier;
+                    }
+
+                    this.RF = this.QualityMax - (int)Math.Round(rfValue, 0);
+
+                    break;
+
+                case VideoEncoder.Theora:
+                    if (preset.Task.Quality.HasValue)
+                    {
+                        this.RF = (int)preset.Task.Quality.Value;
+                    }
+                    break;
+            }
 
             this.Task.TwoPass = preset.Task.TwoPass;
             this.Task.TurboFirstPass = preset.Task.TurboFirstPass;

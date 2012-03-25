@@ -366,7 +366,7 @@ namespace HandBrake.ApplicationServices.Services.Base
             // Make sure the path exists, attempt to create it if it doesn't
             try
             {
-                string path = Directory.GetParent(task.Destination ?? task.Task.Destination).ToString();
+                string path = Directory.GetParent(task.Task.Destination).ToString();
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);

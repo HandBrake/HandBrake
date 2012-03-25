@@ -816,7 +816,6 @@ namespace HandBrakeWPF.ViewModels
             // Create the Queue Task and Start Processing
             QueueTask task = new QueueTask(null)
                 {
-                    Destination = this.CurrentTask.Destination,
                     Task = this.CurrentTask,
                     Query = QueryGeneratorUtility.GenerateQuery(this.CurrentTask),
                     CustomQuery = false
