@@ -24,11 +24,11 @@
 
   <!-- Dependencies -->
   <PropertyGroup>
-    <NightlyDependsOn>BuildRelease;NightlyPostBuildEvent</NightlyDependsOn>
+    <NightlyDependsOn>PreBuild;BuildRelease;NightlyPostBuildEvent</NightlyDependsOn>
   </PropertyGroup>
 
   <PropertyGroup>
-    <InstallDependsOn>BuildRelease;CreateReleasePostBuildEvent</InstallDependsOn>
+    <InstallDependsOn>PreBuild;BuildRelease;CreateReleasePostBuildEvent</InstallDependsOn>
   </PropertyGroup>
 
   
@@ -47,6 +47,10 @@
   </Target>
   
   <!-- Pre Build Events -->
+  <Target Name="PreBuild">
+    <Exec Command="subwcrev.exe $(ProjectDir). $(ProjectDir)HandBrake.ApplicationServices\Properties\AssemblyInfo.cs.tmpl $(ProjectDir)HandBrake.ApplicationServices\Properties\AssemblyInfo.cs" />
+  </Target>
+  
   <!-- Post Build Events -->
   <Target Name="NightlyPostBuildEvent">
     <Exec Command="copy $(ProjectDir)Installer\MakeNightly.nsi $(ProjectDir)bin\$(Platform)\Release /Y" Condition="$(Platform) == 'x86'" />
