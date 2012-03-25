@@ -154,8 +154,6 @@ namespace HandBrake.ApplicationServices.Services
         {
             lock (QueueLock)
             {
-                // Tag the job with an ID
-                job.Id = lastJobId++;
                 queue.Add(job);
                 InvokeQueueChanged(EventArgs.Empty);
             }
@@ -366,7 +364,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <returns>Whether or not the supplied destination is already in the queue.</returns>
         public bool CheckForDestinationPathDuplicates(string destination)
         {
-            return this.queue.Any(checkItem => checkItem.Destination.Contains(destination.Replace("\\\\", "\\")));
+            return this.queue.Any(checkItem => checkItem.Task.Destination.Contains(destination.Replace("\\\\", "\\")));
         }
 
         /// <summary>

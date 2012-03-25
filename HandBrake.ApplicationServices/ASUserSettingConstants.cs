@@ -119,5 +119,10 @@ namespace HandBrake.ApplicationServices
         /// Preview Scan Count
         /// </summary>
         public const string PreviewScanCount = "previewScanCount";
+
+        /// <summary>
+        /// Clear completed items from the queue automatically.
+        /// </summary>
+        public const string ClearCompletedFromQueue = "ClearCompletedFromQueue";
     }
 }

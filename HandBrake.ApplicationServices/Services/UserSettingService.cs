@@ -6,9 +6,9 @@
 namespace HandBrake.ApplicationServices.Services
 {
     using System;
-    using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.IO;
+    using System.Linq;
     using System.Windows.Forms;
     using System.Xml.Serialization;
 
@@ -44,7 +44,7 @@ namespace HandBrake.ApplicationServices.Services
             this.Load();
             if (userSettings == null || userSettings.Count == 0)
             {
-                this.LoadDefaults();
+                this.userSettings = this.GetDefaults();
             }
         }
 
@@ -104,15 +104,25 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private void Save()
         {
-            string directory = Path.GetDirectoryName(this.settingsFile);
-            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+            try
             {
-                Directory.CreateDirectory(directory);
-            }
+                string directory = Path.GetDirectoryName(this.settingsFile);
+                if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
 
-            using (FileStream strm = new FileStream(this.settingsFile, FileMode.Create, FileAccess.Write))
+                using (FileStream strm = new FileStream(this.settingsFile, FileMode.Create, FileAccess.Write))
+                {
+                    serializer.Serialize(strm, this.userSettings);
+                }
+            }
+            catch (Exception exc)
             {
-                serializer.Serialize(strm, this.userSettings);
+                throw new GeneralApplicationException(
+                    "A problem occured when trying to save your preferences.",
+                    "Any settings you changed may need to be reset the next time HandBrake launches.",
+                    exc);
             }
         }
 
@@ -129,7 +139,16 @@ namespace HandBrake.ApplicationServices.Services
                     {
                         SerializableDictionary<string, object> data = (SerializableDictionary<string, object>)serializer.Deserialize(reader);
                         this.userSettings = data;
+
+                        // Add any new settings
+                        SerializableDictionary<string, object> defaults = this.GetDefaults();
+                        foreach (var item in defaults.Where(item => !this.userSettings.Keys.Contains(item.Key)))
+                        {
+                            this.userSettings.Add(item.Key, item.Value);
+                        }
                     }
+
+                    this.Save();
                 }
             }
             catch (Exception exc)
@@ -144,76 +163,34 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Load Default Settings
         /// </summary>
-        private void LoadDefaults()
+        /// <returns>
+        /// The get defaults.
+        /// </returns>
+        private SerializableDictionary<string, object> GetDefaults()
         {
-            string defaults = Path.Combine(Application.StartupPath, "defaultsettings.xml");
-            if (File.Exists(defaults))
+            try
             {
-                using (StreamReader reader = new StreamReader(defaults))
+                string defaults = Path.Combine(Application.StartupPath, "defaultsettings.xml");
+                if (File.Exists(defaults))
                 {
-                    SerializableDictionary<string, object> data = (SerializableDictionary<string, object>)serializer.Deserialize(reader);
-                    this.userSettings = data;
+                    using (StreamReader reader = new StreamReader(defaults))
+                    {
+                        return (SerializableDictionary<string, object>)serializer.Deserialize(reader);
+                    }
                 }
-            }
-        }
 
-        /// <summary>
-        /// This is just a utility method for creating a defaults xml file. Don't use this!!!
-        /// </summary>
-        private void SetAllDefaults()
-        {
-            userSettings = new SerializableDictionary<string, object>();
-            userSettings[ASUserSettingConstants.X264Step] = 0.25;
-            userSettings[ASUserSettingConstants.Verbosity] = 1;
-            userSettings[ASUserSettingConstants.WhenCompleteAction] = "Do Nothing";
-            userSettings[ASUserSettingConstants.GrowlEncode] = false;
-            userSettings[ASUserSettingConstants.GrowlQueue] = false;
-            userSettings[ASUserSettingConstants.ProcessPriority] = "Below Normal";
-            userSettings[ASUserSettingConstants.PreventSleep] = true;
-            userSettings[ASUserSettingConstants.ShowCLI] = false;
-            userSettings[ASUserSettingConstants.SaveLogToCopyDirectory] = false;
-            userSettings[ASUserSettingConstants.SaveLogWithVideo] = false;
-            userSettings[ASUserSettingConstants.DisableLibDvdNav] = false;
-            userSettings[ASUserSettingConstants.SendFile] = false;
-            userSettings[ASUserSettingConstants.MinScanDuration] = 10;
-            userSettings[ASUserSettingConstants.HandBrakeBuild] = 0;
-            userSettings[ASUserSettingConstants.HandBrakeVersion] = string.Empty;
-            userSettings["updateStatus"] = true;
-            userSettings["tooltipEnable"] = true;
-            userSettings["defaultPreset"] = string.Empty;
-            userSettings["skipversion"] = 0;
-            userSettings["autoNaming"] = true;
-            userSettings["autoNamePath"] = string.Empty;
-            userSettings["appcast_i686"] = "http://handbrake.fr/appcast.i386.xml";
-            userSettings["appcast_x64"] = "http://handbrake.fr/appcast_unstable.x86_64.xml";
-            userSettings["autoNameFormat"] = "{source}-{title}";
-            userSettings["VLC_Path"] = "C:\\Program Files\\VideoLAN\\vlc\\vlc.exe";
-            userSettings["MainWindowMinimize"] = true;
-            userSettings["QueryEditorTab"] = false;
-            userSettings["presetNotification"] = false;
-            userSettings["trayIconAlerts"] = true;
-            userSettings["lastUpdateCheckDate"] = DateTime.Today;
-            userSettings["daysBetweenUpdateCheck"] = 7;
-            userSettings["useM4v"] = 0;
-            userSettings["PromptOnUnmatchingQueries"] = true;
-            userSettings["NativeLanguage"] = "Any";
-            userSettings["DubMode"] = 255;
-            userSettings["HandBrakeExeHash"] = string.Empty;
-            userSettings["previewScanCount"] = 10;
-            userSettings["clearOldLogs"] = true;
-            userSettings["AutoNameTitleCase"] = true;
-            userSettings["AutoNameRemoveUnderscore"] = true;
-            userSettings["ActivityWindowLastMode"] = 0;
-            userSettings["useClosedCaption"] = false;
-            userSettings["batchMinDuration"] = "00:18:00";
-            userSettings["batchMaxDuration"] = "02:30:00";
-            userSettings["defaultPlayer"] = false;
-            userSettings["SelectedLanguages"] = new StringCollection();
-            userSettings["DubModeAudio"] = 0;
-            userSettings["DubModeSubtitle"] = 0;
-            userSettings["addOnlyOneAudioPerLanguage"] = true;
-            userSettings["MinTitleLength"] = 10;
-            userSettings["ShowAdvancedAudioPassthruOpts"] = false;
+                throw new GeneralApplicationException(
+                "User default settings file is missing. This install of HandBrake may be corrupted.",
+                "Try re-installing HandBrake.",
+                null);
+            }
+            catch (Exception exc)
+            {
+                throw new GeneralApplicationException(
+                   "User default settings file is missing or inaccessible. This install of HandBrake may be corrupted.",
+                   "Try re-installing HandBrake.",
+                   exc);
+            }
         }
     }
 }

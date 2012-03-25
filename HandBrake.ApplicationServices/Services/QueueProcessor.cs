@@ -201,6 +201,12 @@ namespace HandBrake.ApplicationServices.Services
         {
             this.QueueManager.LastProcessedJob.Status = QueueItemStatus.Completed;
 
+            // Clear the completed item of the queue if the setting is set.
+            if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.ClearCompletedFromQueue))
+            {
+                this.QueueManager.ClearCompleted();
+            }
+
             // Growl
             if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.GrowlEncode))
                 GrowlCommunicator.Notify("Encode Completed",
@@ -218,12 +224,12 @@ namespace HandBrake.ApplicationServices.Services
             }
 
             // Handling Log Data 
-            this.EncodeService.ProcessLogs(this.QueueManager.LastProcessedJob.Destination);
+            this.EncodeService.ProcessLogs(this.QueueManager.LastProcessedJob.Task.Destination);
 
             // Post-Processing
             if (e.Successful)
             {
-                SendToApplication(this.QueueManager.LastProcessedJob.Destination);
+                SendToApplication(this.QueueManager.LastProcessedJob.Task.Destination);
             }
 
             // Move onto the next job.

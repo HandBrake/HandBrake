@@ -132,9 +132,6 @@ namespace Handbrake.Functions
             EncodeTask task = CreateEncodeTaskObject(mainWindow);
             QueueTask queueTask = new QueueTask(query)
             {
-                Source = task.Source,
-                Destination = task.Destination,
-                Title = mainWindow.GetTitle(),
                 CustomQuery = (mainWindow.rtf_query.Text != string.Empty) || isCustom,
                 Task = task,
                 Query = query,

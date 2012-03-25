@@ -219,7 +219,7 @@ namespace Handbrake
             int duration;
             int.TryParse(endPoint.Text, out duration);
             string query = QueryGenerator.GeneratePreviewQuery(this.mainWindow, duration, startPoint.Text);
-            QueueTask task = new QueueTask(query) { Destination = this.mainWindow.text_destination.Text };
+            QueueTask task = new QueueTask(query) { Task = { Destination = this.mainWindow.text_destination.Text } };
             ThreadPool.QueueUserWorkItem(this.CreatePreview, task);
         }
 
