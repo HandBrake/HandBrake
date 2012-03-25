@@ -66,7 +66,7 @@ static int    vcodec      = HB_VCODEC_FFMPEG_MPEG4;
 static hb_list_t * audios = NULL;
 static hb_audio_config_t * audio = NULL;
 static int    num_audio_tracks = 0;
-static int    allowed_audio_copy = HB_ACODEC_PASS_MASK;
+static int    allowed_audio_copy = -1;
 static char * mixdowns    = NULL;
 static char * dynamic_range_compression = NULL;
 static char * audio_gain  = NULL;
@@ -2082,7 +2082,7 @@ static int HandleEvents( hb_handle_t * h )
                 if( audio->out.codec == HB_ACODEC_AUTO_PASS )
                 {
                     // Auto Passthru
-                    job->acodec_copy_mask = allowed_audio_copy;
+                    job->acodec_copy_mask = allowed_audio_copy == -1 ? HB_ACODEC_PASS_MASK : allowed_audio_copy;
                     job->acodec_fallback = acodec_fallback ? get_acodec_for_string( acodec_fallback ) : 0;
                     // sanitize the fallback; -1 isn't a valid HB_ACODEC_* value
                     if( job->acodec_fallback == -1 )
