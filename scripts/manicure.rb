@@ -361,22 +361,24 @@ class Display
           audioEncoders << "lame"
         when /FLAC/
           audioEncoders << "ffflac"
+        when /Auto Pass/
+          audioEncoders << "copy"
       end
       
       #Mixdowns
       case audioTrack["AudioMixdown"]
-      when /Mono/
-        audioMixdowns << "mono"
-      when /Stereo/
-        audioMixdowns << "stereo"
-      when /Dolby Surround/
-        audioMixdowns << "dpl1"
-      when /Dolby Pro Logic II/
-        audioMixdowns << "dpl2"
-      when /discrete/
-        audioMixdowns << "6ch"
-      when /None/
-        audioMixdowns << "auto"
+        when /Mono/
+          audioMixdowns << "mono"
+        when /Stereo/
+          audioMixdowns << "stereo"
+        when /Dolby Surround/
+          audioMixdowns << "dpl1"
+        when /Dolby Pro Logic II/
+          audioMixdowns << "dpl2"
+        when /discrete/
+          audioMixdowns << "6ch"
+        when /None/
+          audioMixdowns << "auto"
       end
       
       #Samplerates
@@ -404,6 +406,63 @@ class Display
     commandString << " -6 " << audioMixdowns
     commandString << " -R " << audioSamplerates
     commandString << " -D " << audioTrackDRCs
+    
+    #Auto Passthru Mask
+    audioCopyMask = ""
+    
+    if hash["AudioAllowAACPass"].to_i == 1
+      audioCopyMask << "aac"
+    end
+    if hash["AudioAllowAC3Pass"].to_i == 1
+      if audioCopyMask.size > 0
+        audioCopyMask << ","
+      end
+      audioCopyMask << "ac3"
+    end
+    if hash["AudioAllowDTSHDPass"].to_i == 1
+      if audioCopyMask.size > 0
+        audioCopyMask << ","
+      end
+      audioCopyMask << "dtshd"
+    end
+    if hash["AudioAllowDTSPass"].to_i == 1
+      if audioCopyMask.size > 0
+        audioCopyMask << ","
+      end
+      audioCopyMask << "dts"
+    end
+    if hash["AudioAllowMP3Pass"].to_i == 1
+      if audioCopyMask.size > 0
+        audioCopyMask << ","
+      end
+      audioCopyMask << "mp3"
+    end
+    
+    if audioCopyMask.size > 0
+      commandString << " --audio-copy-mask " << audioCopyMask
+    end
+    
+    #Auto Passthru Fallback
+    audioEncoderFallback = ""
+    
+    case hash["AudioEncoderFallback"]
+      when /AC3/
+        audioEncoderFallback << "ffac3"
+      when "AAC (ffmpeg)"
+        audioEncoderFallback << "ffaac"
+      when /AAC/
+        audioEncoderFallback << "faac"
+      when /Vorbis/
+        audioEncoderFallback << "vorbis"
+      when /MP3/
+        audioEncoderFallback << "lame"
+      when /FLAC/
+        audioEncoderFallback << "ffflac"
+    end
+    
+    if audioEncoderFallback.size > 0
+      commandString << " --audio-fallback " << audioEncoderFallback
+    end
         
     #Container
     commandString << " -f "
@@ -632,22 +691,24 @@ class Display
           audioEncoders << "lame"
         when /FLAC/
           audioEncoders << "ffflac"
+        when /Auto Pass/
+          audioEncoders << "copy"
       end
       
       #Mixdowns
       case audioTrack["AudioMixdown"]
-      when /Mono/
-        audioMixdowns << "mono"
-      when /Stereo/
-        audioMixdowns << "stereo"
-      when /Dolby Surround/
-        audioMixdowns << "dpl1"
-      when /Dolby Pro Logic II/
-        audioMixdowns << "dpl2"
-      when /discrete/
-        audioMixdowns << "6ch"
-      when /None/
-        audioMixdowns << "auto"
+        when /Mono/
+          audioMixdowns << "mono"
+        when /Stereo/
+          audioMixdowns << "stereo"
+        when /Dolby Surround/
+          audioMixdowns << "dpl1"
+        when /Dolby Pro Logic II/
+          audioMixdowns << "dpl2"
+        when /discrete/
+          audioMixdowns << "6ch"
+        when /None/
+          audioMixdowns << "auto"
       end
       
       #Samplerates
@@ -675,6 +736,63 @@ class Display
     commandString << " -6 " << audioMixdowns
     commandString << " -R " << audioSamplerates
     commandString << " -D " << audioTrackDRCs
+    
+    #Auto Passthru Mask
+    audioCopyMask = ""
+    
+    if hash["AudioAllowAACPass"].to_i == 1
+      audioCopyMask << "aac"
+    end
+    if hash["AudioAllowAC3Pass"].to_i == 1
+      if audioCopyMask.size > 0
+        audioCopyMask << ","
+      end
+      audioCopyMask << "ac3"
+    end
+    if hash["AudioAllowDTSHDPass"].to_i == 1
+      if audioCopyMask.size > 0
+        audioCopyMask << ","
+      end
+      audioCopyMask << "dtshd"
+    end
+    if hash["AudioAllowDTSPass"].to_i == 1
+      if audioCopyMask.size > 0
+        audioCopyMask << ","
+      end
+      audioCopyMask << "dts"
+    end
+    if hash["AudioAllowMP3Pass"].to_i == 1
+      if audioCopyMask.size > 0
+        audioCopyMask << ","
+      end
+      audioCopyMask << "mp3"
+    end
+    
+    if audioCopyMask.size > 0
+      commandString << " --audio-copy-mask " << audioCopyMask
+    end
+    
+    #Auto Passthru Fallback
+    audioEncoderFallback = ""
+    
+    case hash["AudioEncoderFallback"]
+      when /AC3/
+        audioEncoderFallback << "ffac3"
+      when "AAC (ffmpeg)"
+        audioEncoderFallback << "ffaac"
+      when /AAC/
+        audioEncoderFallback << "faac"
+      when /Vorbis/
+        audioEncoderFallback << "vorbis"
+      when /MP3/
+        audioEncoderFallback << "lame"
+      when /FLAC/
+        audioEncoderFallback << "ffflac"
+    end
+    
+    if audioEncoderFallback.size > 0
+      commandString << " --audio-fallback " << audioEncoderFallback
+    end
     
     #Container
     commandString << " -f "
@@ -903,22 +1021,24 @@ class Display
           audioEncoders << "lame"
         when /FLAC/
           audioEncoders << "ffflac"
+        when /Auto Pass/
+          audioEncoders << "copy"
       end
 
       #Mixdowns
       case audioTrack["AudioMixdown"]
-      when /Mono/
-        audioMixdowns << "mono"
-      when /Stereo/
-        audioMixdowns << "stereo"
-      when /Dolby Surround/
-        audioMixdowns << "dpl1"
-      when /Dolby Pro Logic II/
-        audioMixdowns << "dpl2"
-      when /discrete/
-        audioMixdowns << "6ch"
-      when /None/
-        audioMixdowns << "auto"
+        when /Mono/
+          audioMixdowns << "mono"
+        when /Stereo/
+          audioMixdowns << "stereo"
+        when /Dolby Surround/
+          audioMixdowns << "dpl1"
+        when /Dolby Pro Logic II/
+          audioMixdowns << "dpl2"
+        when /discrete/
+          audioMixdowns << "6ch"
+        when /None/
+          audioMixdowns << "auto"
       end
 
       #Samplerates
@@ -975,6 +1095,56 @@ class Display
     commandString << "    dynamic_range_compression = strdup(\"" << audioTrackDRCs
     commandString << "\");\n    "
     commandString << "}\n    "
+    
+    #Auto Passthru Mask
+    if hash["AudioAllowAACPass"]
+      commandString << "if( allowed_audio_copy == -1 )\n    "
+      commandString << "{\n    "
+      commandString << "    allowed_audio_copy = 0;\n    "
+      if hash["AudioAllowAACPass"].to_i == 1
+        commandString << "    allowed_audio_copy |= HB_ACODEC_AAC_PASS;\n    "
+      end
+      if hash["AudioAllowAC3Pass"].to_i == 1
+        commandString << "    allowed_audio_copy |= HB_ACODEC_AC3_PASS;\n    "
+      end
+      if hash["AudioAllowDTSHDPass"].to_i == 1
+        commandString << "    allowed_audio_copy |= HB_ACODEC_DCA_HD_PASS;\n    "
+      end
+      if hash["AudioAllowDTSPass"].to_i == 1
+        commandString << "    allowed_audio_copy |= HB_ACODEC_DCA_PASS;\n    "
+      end
+      if hash["AudioAllowMP3Pass"].to_i == 1
+        commandString << "    allowed_audio_copy |= HB_ACODEC_MP3_PASS;\n    "
+      end
+      commandString << "    allowed_audio_copy &= HB_ACODEC_PASS_MASK;\n    "
+      commandString << "}\n    "
+    end
+    
+    #Auto Passthru Fallback
+    audioEncoderFallback = ""
+    
+    case hash["AudioEncoderFallback"]
+      when /AC3/
+        audioEncoderFallback << "HB_ACODEC_AC3"
+      when "AAC (ffmpeg)"
+        audioEncoderFallback << "HB_ACODEC_FFAAC"
+      when /AAC/
+        audioEncoderFallback << "HB_ACODEC_FAAC"
+      when /Vorbis/
+        audioEncoderFallback << "HB_ACODEC_VORBIS"
+      when /MP3/
+        audioEncoderFallback << "HB_ACODEC_LAME"
+      when /FLAC/
+        audioEncoderFallback << "HB_ACODEC_FFFLAC"
+    end
+    
+    if audioEncoderFallback.size > 0
+      commandString << "if( !acodec_fallback )\n    "
+      commandString << "{\n    "
+      commandString << "    acodec_fallback = " << audioEncoderFallback
+      commandString << ";\n    "
+      commandString << "}\n    "
+    end
     
     #Cropping
     if hash["PictureAutoCrop"] == 0
@@ -1201,22 +1371,24 @@ class Display
           audioEncoders << "lame"
         when /FLAC/
           audioEncoders << "ffflac"
+        when /Auto Pass/
+          audioEncoders << "copy"
       end
       
       #Mixdowns
       case audioTrack["AudioMixdown"]
-      when /Mono/
-        audioMixdowns << "mono"
-      when /Stereo/
-        audioMixdowns << "stereo"
-      when /Dolby Surround/
-        audioMixdowns << "dpl1"
-      when /Dolby Pro Logic II/
-        audioMixdowns << "dpl2"
-      when /discrete/
-        audioMixdowns << "6ch"
-      when /None/
-        audioMixdowns << "auto"
+        when /Mono/
+          audioMixdowns << "mono"
+        when /Stereo/
+          audioMixdowns << "stereo"
+        when /Dolby Surround/
+          audioMixdowns << "dpl1"
+        when /Dolby Pro Logic II/
+          audioMixdowns << "dpl2"
+        when /discrete/
+          audioMixdowns << "6ch"
+        when /None/
+          audioMixdowns << "auto"
       end
       
       #Samplerates
@@ -1244,6 +1416,63 @@ class Display
     commandString << " -6 " << audioMixdowns
     commandString << " -R " << audioSamplerates
     commandString << " -D " << audioTrackDRCs
+    
+    #Auto Passthru Mask
+    audioCopyMask = ""
+    
+    if hash["AudioAllowAACPass"].to_i == 1
+      audioCopyMask << "aac"
+    end
+    if hash["AudioAllowAC3Pass"].to_i == 1
+      if audioCopyMask.size > 0
+        audioCopyMask << ","
+      end
+      audioCopyMask << "ac3"
+    end
+    if hash["AudioAllowDTSHDPass"].to_i == 1
+      if audioCopyMask.size > 0
+        audioCopyMask << ","
+      end
+      audioCopyMask << "dtshd"
+    end
+    if hash["AudioAllowDTSPass"].to_i == 1
+      if audioCopyMask.size > 0
+        audioCopyMask << ","
+      end
+      audioCopyMask << "dts"
+    end
+    if hash["AudioAllowMP3Pass"].to_i == 1
+      if audioCopyMask.size > 0
+        audioCopyMask << ","
+      end
+      audioCopyMask << "mp3"
+    end
+    
+    if audioCopyMask.size > 0
+      commandString << " --audio-copy-mask " << audioCopyMask
+    end
+    
+    #Auto Passthru Fallback
+    audioEncoderFallback = ""
+    
+    case hash["AudioEncoderFallback"]
+      when /AC3/
+        audioEncoderFallback << "ffac3"
+      when "AAC (ffmpeg)"
+        audioEncoderFallback << "ffaac"
+      when /AAC/
+        audioEncoderFallback << "faac"
+      when /Vorbis/
+        audioEncoderFallback << "vorbis"
+      when /MP3/
+        audioEncoderFallback << "lame"
+      when /FLAC/
+        audioEncoderFallback << "ffflac"
+    end
+    
+    if audioEncoderFallback.size > 0
+      commandString << " --audio-fallback " << audioEncoderFallback
+    end
     
     #Container
     commandString << " -f "
