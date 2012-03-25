@@ -641,16 +641,17 @@ void hb_apply_h264_level( x264_param_t * param, const char * level, const char *
 
     /* H.264 profile */
     h264_profile = -1; // Auto
+    /* TODO: FIXME
+     * we need to guess the profile like x264_sps_init does, otherwise we'll get
+     * an error when setting a Main-incompatible VBV and x264_sps_init guesses
+     * Main profile. x264_sps_init may eventually take VBV into account when
+     * guessing profile, at which point this code can be re-enabled.
     if( x264_profile && *x264_profile )
     {
         // if the user explicitly specified a profile, don't guess it
         if( !strcasecmp( x264_profile, "high444" ) )
         {
             h264_profile = 2; // High 4:4:4 Predictive
-        }
-        else if( !strcasecmp( x264_profile, "high" ) )
-        {
-            h264_profile = 1; // High
         }
         else if( !strcasecmp( x264_profile, "main" ) ||
                  !strcasecmp( x264_profile, "baseline" ) )
@@ -659,9 +660,21 @@ void hb_apply_h264_level( x264_param_t * param, const char * level, const char *
         }
         else
         {
-            hb_log( "hb_apply_h264_level [warning]: unsupported x264 profile %s, ignoring", x264_profile );
+            for( i = 0; x264_profile_names[i]; i++ )
+            {
+                if( !strcasecmp( x264_profile, x264_profile_names[i] ) )
+                {
+                    h264_profile = 1; // High or equivalent
+                    break;
+                }
+            }
+            if( h264_profile == -1 )
+            {
+                hb_log( "hb_apply_h264_level [warning]: unsupported x264 profile %s, ignoring", x264_profile );
+            }
         }
     }
+     */
 
     /* find the x264_level_t corresponding to the requested level */
     if( level && *level )
