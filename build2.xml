@@ -52,6 +52,7 @@
     <Exec Command="subwcrev.exe $(ProjectDir). $(ProjectDir)HandBrakeWPF\Properties\AssemblyInfo.cs.tmpl $(ProjectDir)HandBrakeWPF\Properties\AssemblyInfo.cs" />
     <Exec Command="subwcrev.exe $(ProjectDir). $(ProjectDir)HandBrakeWPF\Installer\MakeNightly.nsi.tmpl $(ProjectDir)HandBrakeWPF\Installer\MakeNightly.nsi" />
     <Exec Command="subwcrev.exe $(ProjectDir). $(ProjectDir)HandBrakeWPF\Installer\MakeNightly64.nsi.tmpl $(ProjectDir)HandBrakeWPF\Installer\MakeNightly64.nsi" />
+    <Exec Command="subwcrev.exe $(ProjectDir). $(ProjectDir)HandBrake.ApplicationServices\Properties\AssemblyInfo.cs.tmpl $(ProjectDir)HandBrake.ApplicationServices\Properties\AssemblyInfo.cs" />
   </Target>
 
   <!-- Post Build Events -->
