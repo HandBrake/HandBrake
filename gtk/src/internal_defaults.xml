@@ -310,7 +310,7 @@
 		<key>AudioAllowDTSHDPass</key>
 		<true />
 		<key>AudioEncoderFallback</key>
-		<string>ac3</string>
+		<string>ffac3</string>
 		<key>AudioList</key>
 		<array>
 			<dict>
