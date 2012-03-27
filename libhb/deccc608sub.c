@@ -1497,10 +1497,10 @@ void write_cc_line_as_transcript (struct eia608_screen *data, struct s_write *wb
          * Put this subtitle in a hb_buffer_t and shove it into the subtitle fifo
          */
         buffer = hb_buffer_init( length + 1 );
-        buffer->start = wb->data608->current_visible_start_ms;
-        buffer->stop = get_fts(wb);
+        buffer->s.start = wb->data608->current_visible_start_ms;
+        buffer->s.stop = get_fts(wb);
         memcpy( buffer->data, wb->subline, length + 1 );
-        //hb_log("CC %"PRId64": %s", buffer->stop, wb->subline);
+        //hb_log("CC %"PRId64": %s", buffer->s.stop, wb->subline);
 
         if (wb->hb_last_buffer) {
             wb->hb_last_buffer->next = buffer;
@@ -1650,8 +1650,8 @@ int write_cc_buffer_as_srt (struct eia608_screen *data, struct s_write *wb)
     if (wb->enc_buffer_used)
     {
         hb_buffer_t *buffer = hb_buffer_init( wb->enc_buffer_used + 1 );
-        buffer->start = ms_start;
-        buffer->stop = ms_end;
+        buffer->s.start = ms_start;
+        buffer->s.stop = ms_end;
         memcpy( buffer->data, wb->enc_buffer, wb->enc_buffer_used + 1 );
         if (wb->hb_last_buffer) {
             wb->hb_last_buffer->next = buffer;
@@ -2504,7 +2504,7 @@ int decccWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_DONE;
     }
 
-    pv->cc608->last_pts = in->start;
+    pv->cc608->last_pts = in->s.start;
 
     process608(in->data, in->size, pv->cc608);
 

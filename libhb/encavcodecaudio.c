@@ -260,10 +260,11 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     buf->size = avcodec_encode_audio( pv->context, buf->data, buf->alloc,
                                       (short*)pv->buf );
 
-    buf->start = pts + 90000 * pos / pv->out_discrete_channels / sizeof( float ) / audio->config.out.samplerate;
-    buf->stop  = buf->start + 90000 * pv->samples_per_frame / audio->config.out.samplerate;
+    buf->s.start = pts + 90000 * pos / pv->out_discrete_channels / sizeof( float ) / audio->config.out.samplerate;
+    buf->s.stop  = buf->s.start + 90000 * pv->samples_per_frame / audio->config.out.samplerate;
 
-    buf->frametype = HB_FRAME_AUDIO;
+    buf->s.type = AUDIO_BUF;
+    buf->s.frametype = HB_FRAME_AUDIO;
 
     if ( !buf->size )
     {

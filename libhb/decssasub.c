@@ -28,9 +28,6 @@
 struct hb_work_private_s
 {
     // If decoding to PICTURESUB format:
-    ASS_Library *ssa;
-    ASS_Renderer *renderer;
-    ASS_Track *ssaTrack;
     int readOrder;
 
     hb_job_t *job;
@@ -113,7 +110,7 @@ static void ssa_append_html_tags_for_style_change(
 }
 
 static hb_buffer_t *ssa_decode_line_to_utf8( uint8_t *in_data, int in_size, int in_sequence );
-static hb_buffer_t *ssa_decode_line_to_picture( hb_work_object_t * w, uint8_t *in_data, int in_size, int in_sequence );
+static hb_buffer_t *ssa_decode_line_to_mkv_ssa( hb_work_object_t * w, uint8_t *in_data, int in_size, int in_sequence );
 
 /*
  * Decodes a single SSA packet to one or more TEXTSUB or PICTURESUB subtitle packets.
@@ -164,7 +161,7 @@ static hb_buffer_t *ssa_decode_packet( hb_work_object_t * w, hb_buffer_t *in )
                 continue;
             }
         } else if ( w->subtitle->config.dest == RENDERSUB ) {
-            out = ssa_decode_line_to_picture( w, (uint8_t *) curLine, strlen( curLine ), in->sequence );
+            out = ssa_decode_line_to_mkv_ssa( w, (uint8_t *) curLine, strlen( curLine ), in->sequence );
             if ( out == NULL )
                 continue;
         }
@@ -188,16 +185,16 @@ static hb_buffer_t *ssa_decode_packet( hb_work_object_t * w, hb_buffer_t *in )
     //       such that first output packet's display time aligns with the 
     //       input packet's display time. This should give the correct time 
     //       when point-to-point encoding is in effect.
-    if (out_list && out_list->start > in->start)
+    if (out_list && out_list->s.start > in->s.start)
     {
-        int64_t slip = out_list->start - in->start;
+        int64_t slip = out_list->s.start - in->s.start;
         hb_buffer_t *out;
 
         out = out_list;
         while (out)
         {
-            out->start -= slip;
-            out->stop -= slip;
+            out->s.start -= slip;
+            out->s.stop -= slip;
             out = out->next;
         }
     }
@@ -262,7 +259,7 @@ static hb_buffer_t *ssa_decode_line_to_utf8( uint8_t *in_data, int in_size, int 
     uint8_t *pos = in_data;
     uint8_t *end = in_data + in_size;
     
-    // Parse values for in->start and in->stop
+    // Parse values for in->s.start and in->s.stop
     int64_t in_start, in_stop;
     if ( parse_timing_from_ssa_packet( (char *) in_data, &in_start, &in_stop ) )
         goto fail;
@@ -335,8 +332,8 @@ static hb_buffer_t *ssa_decode_line_to_utf8( uint8_t *in_data, int in_size, int 
     out->size = dst - out->data;
     
     // Copy metadata from the input packet to the output packet
-    out->start = in_start;
-    out->stop = in_stop;
+    out->s.start = in_start;
+    out->s.stop = in_stop;
     out->sequence = in_sequence;
     
     return out;
@@ -348,7 +345,6 @@ fail:
 
 static hb_buffer_t * ssa_to_mkv_ssa( hb_work_object_t * w,  hb_buffer_t * in )
 {
-    hb_work_private_t * pv = w->private_data;
     hb_buffer_t * out_last = NULL;
     hb_buffer_t * out_first = NULL;
 
@@ -361,62 +357,11 @@ static hb_buffer_t * ssa_to_mkv_ssa( hb_work_object_t * w,  hb_buffer_t * in )
           curLine;
           curLine = strtok_r( NULL, EOL, &curLine_parserData ) )
     {
-        // Skip empty lines and spaces between adjacent CR and LF
-        if (curLine[0] == '\0')
-            continue;
-        
-        int64_t in_start, in_stop;
-        if ( parse_timing_from_ssa_packet( curLine, &in_start, &in_stop ) )
-            continue;
+        hb_buffer_t * out;
 
-        int len = strlen(curLine);
-
-        // Convert the SSA line to MKV-SSA format
-        char *layerField = malloc( len );
-        // SSA subtitles have an empty layer field (bare ',').  The scanf
-        // format specifier "%*128[^,]" will not match on a bare ','.  There
-        // must be at least one non ',' character in the match.  So the format
-        // specifier is placed directly next to the ':' so that the next
-        // expected ' ' after the ':' will be the character it matches on 
-        // when there is no layer field.
-        int numPartsRead = sscanf( curLine, "Dialogue:%128[^,],", layerField );
-        if ( numPartsRead != 1 )
+        out = ssa_decode_line_to_mkv_ssa( w, (uint8_t *) curLine, strlen( curLine ), in->sequence );
+        if( out )
         {
-            free( layerField );
-            continue;
-        }
-        
-        char *styleToTextFields = (char *)find_field( (uint8_t*)curLine, (uint8_t*)curLine + len, 4 );
-        if ( styleToTextFields == NULL ) 
-        {
-            free( layerField );
-            continue;
-        }
-        
-        // The output should always be shorter than the input
-        hb_buffer_t * out = hb_buffer_init( len );
-        char *mkvOut = (char*)out->data;
-        out->start = in_start;
-        out->stop = in_stop;
-
-        // The sscanf conversion above will result in an extra space
-        // before the layerField.  Strip the space.
-        char *stripLayerField = layerField;
-        for(; *stripLayerField == ' '; stripLayerField++);
-
-        sprintf( mkvOut, "%d,%s,%s", 
-                 pv->readOrder++, stripLayerField, styleToTextFields );
-        
-        free( layerField );
-
-        len = strlen(mkvOut);
-        if ( len == 0 )
-        {
-            hb_buffer_close(&out);
-        }
-        else
-        {
-            out->size = len;
             if ( out_last == NULL )
             {
                 out_last = out_first = out;
@@ -441,168 +386,70 @@ static hb_buffer_t * ssa_to_mkv_ssa( hb_work_object_t * w,  hb_buffer_t * in )
  *   ReadOrder,Marked,          Style,Name,MarginL,MarginR,MarginV,Effect,Text '\0'
  *   1         2                3     4    5       6       7       8      9
  */
-static hb_buffer_t *ssa_decode_line_to_picture( hb_work_object_t * w, uint8_t *in_data, int in_size, int in_sequence )
+static hb_buffer_t *ssa_decode_line_to_mkv_ssa( hb_work_object_t * w, uint8_t *in_data, int in_size, int in_sequence )
 {
     hb_work_private_t * pv = w->private_data;
+    hb_buffer_t * out;
     
-    // Parse values for in->start and in->stop
+    // Parse values for in->s.start and in->s.stop
     int64_t in_start, in_stop;
     if ( parse_timing_from_ssa_packet( (char *) in_data, &in_start, &in_stop ) )
         goto fail;
     
     // Convert the SSA packet to MKV-SSA format, which is what libass expects
     char *mkvIn;
-    int mkvInSize;
-    {
-        char *layerField = malloc( in_size );
-        // SSA subtitles have an empty layer field (bare ',').  The scanf
-        // format specifier "%*128[^,]" will not match on a bare ','.  There
-        // must be at least one non ',' character in the match.  So the format
-        // specifier is placed directly next to the ':' so that the next
-        // expected ' ' after the ':' will be the character it matches on 
-        // when there is no layer field.
-        int numPartsRead = sscanf( (char *) in_data, "Dialogue:%128[^,],", layerField );
-        if ( numPartsRead != 1 )
-            goto fail;
-        
-        char *styleToTextFields = (char *) find_field( in_data, in_data + in_size, 4 );
-        if ( styleToTextFields == NULL ) {
-            free( layerField );
-            goto fail;
-        }
-        
-        // The sscanf conversion above will result in an extra space
-        // before the layerField.  Strip the space.
-        char *stripLayerField = layerField;
-        for(; *stripLayerField == ' '; stripLayerField++);
+    int numPartsRead;
+    char *styleToTextFields;
+    char *layerField = malloc( in_size );
 
-        mkvIn = malloc( in_size + 1 );
-        mkvIn[0] = '\0';
-        sprintf(mkvIn, "%d", pv->readOrder++);    // ReadOrder: make this up
-        strcat( mkvIn, "," );
-        strcat( mkvIn, stripLayerField );
-        strcat( mkvIn, "," );
-        strcat( mkvIn, (char *) styleToTextFields );
-        
-        mkvInSize = strlen(mkvIn);
-        
+    // SSA subtitles have an empty layer field (bare ',').  The scanf
+    // format specifier "%*128[^,]" will not match on a bare ','.  There
+    // must be at least one non ',' character in the match.  So the format
+    // specifier is placed directly next to the ':' so that the next
+    // expected ' ' after the ':' will be the character it matches on 
+    // when there is no layer field.
+    numPartsRead = sscanf( (char *)in_data, "Dialogue:%128[^,],", layerField );
+    if ( numPartsRead != 1 )
+        goto fail;
+    
+    styleToTextFields = (char *)find_field( in_data, in_data + in_size, 4 );
+    if ( styleToTextFields == NULL ) {
         free( layerField );
+        goto fail;
     }
     
-    // Parse MKV-SSA packet
-    ass_process_chunk( pv->ssaTrack, mkvIn, mkvInSize, in_start / 90, (in_stop - in_start) / 90 );
+    // The sscanf conversion above will result in an extra space
+    // before the layerField.  Strip the space.
+    char *stripLayerField = layerField;
+    for(; *stripLayerField == ' '; stripLayerField++);
+
+    out = hb_buffer_init( in_size + 1 );
+    mkvIn = (char*)out->data;
+
+    mkvIn[0] = '\0';
+    sprintf(mkvIn, "%d", pv->readOrder++);    // ReadOrder: make this up
+    strcat( mkvIn, "," );
+    strcat( mkvIn, stripLayerField );
+    strcat( mkvIn, "," );
+    strcat( mkvIn, (char *) styleToTextFields );
     
-    free( mkvIn );
-    
-    // TODO: To support things like karaoke, it won't be sufficient to only generate
-    //       new subtitle pictures when there are subtitle packets. Rather, pictures will
-    //       need to be generated potentially continuously. 
-    //       
-    //       Until "karaoke support" is implemented, make an educated guess about the
-    //       timepoint within the subtitle that should be rendered. I guess the midpoint.
-    int64_t renderTime = ( in_start + in_stop ) / 2; 
-    
-    int changed;
-    ASS_Image *frameList = ass_render_frame( pv->renderer, pv->ssaTrack, renderTime / 90, &changed );
-    if ( !changed || !frameList )
-        return NULL;
-    
-    int numFrames = 0;
-    ASS_Image *curFrame;
-    for (curFrame = frameList; curFrame; curFrame = curFrame->next)
-        numFrames++;
-    
-    hb_buffer_t *outSubpictureList = NULL;
-    hb_buffer_t **outSubpictureListTailPtr = &outSubpictureList;
-    
-    // Generate a PICTURESUB packet from the frames
-    ASS_Image *frame;
-    for (frame = frameList; frame; frame = frame->next) {
-        // Allocate pixmap where drawing will be done
-        uint8_t *rgba = calloc(frame->w * frame->h * 4, 1);
-        
-        unsigned r = (frame->color >> 24) & 0xff;
-        unsigned g = (frame->color >> 16) & 0xff;
-        unsigned b = (frame->color >>  8) & 0xff;
-        unsigned a = (frame->color      ) & 0xff;
-        
-        int x, y;
-        for (y = 0; y < frame->h; y++) {
-            for (x = 0; x < frame->w; x++) {
-                unsigned srcAlphaPrenormalized = frame->bitmap[y*frame->stride + x];
-                unsigned srcAlpha = (255 - a) * srcAlphaPrenormalized / 255;
-                
-                uint8_t *dst = &rgba[(y*frame->w + x) * 4];
-                unsigned oldDstAlpha = dst[3];
-                
-                if (oldDstAlpha == 0) {
-                    // Optimized version
-                    dst[0] = r;
-                    dst[1] = g;
-                    dst[2] = b;
-                    dst[3] = srcAlpha;
-                } else {
-                    dst[3] = 255 - ( 255 - dst[3] ) * ( 255 - srcAlpha ) / 255;
-                    if (dst[3] != 0) {
-                        dst[0] = ( dst[0] * oldDstAlpha * (255-srcAlpha) / 255 + r * srcAlpha ) / dst[3];
-                        dst[1] = ( dst[1] * oldDstAlpha * (255-srcAlpha) / 255 + g * srcAlpha ) / dst[3];
-                        dst[2] = ( dst[2] * oldDstAlpha * (255-srcAlpha) / 255 + b * srcAlpha ) / dst[3];
-                    }
-                }
-            }
-        }
-        
-        // Generate output subpicture (in PICTURESUB format)
-        hb_buffer_t *out = hb_buffer_init(frame->w * frame->h * 4);
-        out->x = frame->dst_x;
-        out->y = frame->dst_y;
-        out->width = frame->w;
-        out->height = frame->h;
-        out->start = in_start;
-        out->stop = in_stop;
-        out->sequence = in_sequence;
-        
-        int i;
-        int numPixels = frame->w * frame->h;
-        for (i = 0; i < numPixels; i++) {
-            uint8_t *srcRgba = &rgba[i * 4];
-            
-            uint8_t *dstY = &out->data[(numPixels * 0) + i];
-            uint8_t *dstA = &out->data[(numPixels * 1) + i];
-            uint8_t *dstU = &out->data[(numPixels * 2) + i];
-            uint8_t *dstV = &out->data[(numPixels * 3) + i];
-            
-            int srcYuv = hb_rgb2yuv((srcRgba[0] << 16) | (srcRgba[1] << 8) | (srcRgba[2] << 0));
-            int srcA = srcRgba[3];
-            
-            *dstY = (srcYuv >> 16) & 0xff;
-            *dstV = (srcYuv >> 8 ) & 0xff;
-            *dstU = (srcYuv >> 0 ) & 0xff;
-            *dstA = srcA / 16;  // HB's max alpha value is 16
-        }
-        
-        free(rgba);
-        
-        *outSubpictureListTailPtr = out;
-        outSubpictureListTailPtr = &out->next;
+    out->size = strlen(mkvIn);
+    out->s.start = in_start;
+    out->s.stop = in_stop;
+    out->sequence = in_sequence;
+
+    if( out->size == 0 )
+    {
+        hb_buffer_close(&out);
     }
     
-    // NOTE: The subpicture list is actually considered a single packet by most other code
-    hb_buffer_t *out = outSubpictureList;
+    free( layerField );
     
     return out;
     
 fail:
     hb_log( "decssasub: malformed SSA subtitle packet: %.*s\n", in_size, in_data );
     return NULL;
-}
-
-static void ssa_log(int level, const char *fmt, va_list args, void *data)
-{
-    if ( level < 5 )      // same as default verbosity when no callback is set
-    {
-        hb_valog( 1, "[ass]", fmt, args );
-    }
 }
 
 static int decssaInit( hb_work_object_t * w, hb_job_t * job )
@@ -612,73 +459,6 @@ static int decssaInit( hb_work_object_t * w, hb_job_t * job )
     pv              = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
     pv->job = job;
-    
-    if ( w->subtitle->config.dest == RENDERSUB ) {
-        pv->ssa = ass_library_init();
-        if ( !pv->ssa ) {
-            hb_log( "decssasub: libass initialization failed\n" );
-            return 1;
-        }
-        
-        // Redirect libass output to hb_log
-        ass_set_message_cb( pv->ssa, ssa_log, NULL );
-        
-        // Load embedded fonts
-        hb_list_t * list_attachment = job->title->list_attachment;
-        int i;
-        for ( i = 0; i < hb_list_count(list_attachment); i++ )
-        {
-            hb_attachment_t * attachment = hb_list_item( list_attachment, i );
-            
-            if ( attachment->type == FONT_TTF_ATTACH )
-            {
-                ass_add_font(
-                    pv->ssa,
-                    attachment->name,
-                    attachment->data,
-                    attachment->size );
-            }
-        }
-        
-        ass_set_extract_fonts( pv->ssa, 1 );
-        ass_set_style_overrides( pv->ssa, NULL );
-        
-        pv->renderer = ass_renderer_init( pv->ssa );
-        if ( !pv->renderer ) {
-            hb_log( "decssasub: renderer initialization failed\n" );
-            return 1;
-        }
-        
-        ass_set_use_margins( pv->renderer, 0 );
-        ass_set_hinting( pv->renderer, ASS_HINTING_LIGHT );     // VLC 1.0.4 uses this
-        ass_set_font_scale( pv->renderer, 1.0 );
-        ass_set_line_spacing( pv->renderer, 1.0 );
-        
-        // Setup default font family
-        // 
-        // SSA v4.00 requires that "Arial" be the default font
-        const char *font = NULL;
-        const char *family = "Arial";
-        // NOTE: This can sometimes block for several *seconds*.
-        //       It seems that process_fontdata() for some embedded fonts is slow.
-        ass_set_fonts( pv->renderer, font, family, /*haveFontConfig=*/1, NULL, 1 );
-        
-        // Setup track state
-        pv->ssaTrack = ass_new_track( pv->ssa );
-        if ( !pv->ssaTrack ) {
-            hb_log( "decssasub: ssa track initialization failed\n" );
-            return 1;
-        }
-        
-        // NOTE: The codec extradata is expected to be in MKV format
-        ass_process_codec_private( pv->ssaTrack,
-            (char *) w->subtitle->extradata, w->subtitle->extradata_size );
-        
-        int originalWidth = job->title->width;
-        int originalHeight = job->title->height;
-        ass_set_frame_size( pv->renderer, originalWidth, originalHeight);
-        ass_set_aspect_ratio( pv->renderer, /*dar=*/1.0, /*sar=*/1.0 );
-    }
     
     return 0;
 }
@@ -690,7 +470,7 @@ static int decssaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_buffer_t * in = *buf_in;
     
 #if SSA_VERBOSE_PACKETS
-    printf("\nPACKET(%"PRId64",%"PRId64"): %.*s\n", in->start/90, in->stop/90, in->size, in->data);
+    printf("\nPACKET(%"PRId64",%"PRId64"): %.*s\n", in->s.start/90, in->s.stop/90, in->size, in->data);
 #endif
     
     if ( in->size <= 0 )
@@ -714,15 +494,6 @@ static int decssaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
 static void decssaClose( hb_work_object_t * w )
 {
-    hb_work_private_t * pv = w->private_data;
-
-    if ( pv->ssaTrack )
-        ass_free_track( pv->ssaTrack );
-    if ( pv->renderer )
-        ass_renderer_done( pv->renderer );
-    if ( pv->ssa )
-        ass_library_done( pv->ssa );
-    
     free( w->private_data );
 }
 

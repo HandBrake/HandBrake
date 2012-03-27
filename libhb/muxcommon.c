@@ -188,7 +188,7 @@ static void MoveToInternalFifos( int tk, hb_mux_t *mux, hb_buffer_t * buf )
     // (b) we can control how data from multiple tracks is
     // interleaved in the output file.
     mf_push( mux, tk, buf );
-    if ( buf->stop >= mux->pts )
+    if ( buf->s.stop >= mux->pts )
     {
         // buffer is past our next interleave point so
         // note that this track is ready to be output.
@@ -201,7 +201,7 @@ static void OutputTrackChunk( hb_mux_t *mux, int tk, hb_mux_object_t *m )
     hb_track_t *track = mux->track[tk];
     hb_buffer_t *buf;
 
-    while ( ( buf = mf_peek( track ) ) != NULL && buf->start < mux->pts )
+    while ( ( buf = mf_peek( track ) ) != NULL && buf->s.start < mux->pts )
     {
         buf = mf_pull( mux, tk );
         track->frames += 1;
@@ -276,7 +276,7 @@ static int muxWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             // Otherwise clear rdy.
             if ( ( mux->eof & (1 << i) ) == 0 &&
                  ( track->mf.out == track->mf.in ||
-                   track->mf.fifo[(track->mf.in-1) & (track->mf.flen-1)]->stop
+                   track->mf.fifo[(track->mf.in-1) & (track->mf.flen-1)]->s.stop
                      < mux->pts + mux->interleave ) )
             {
                 mux->rdy &=~ ( 1 << i );

@@ -405,7 +405,7 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
 
         audio->config.lang.type = lang_extension;
 
-        lang = lang_for_code( vts->vtsi_mat->vts_audio_attr[i].lang_code );
+        lang = lang_for_code( lang_code );
 
         snprintf( audio->config.lang.description, sizeof( audio->config.lang.description ), "%s (%s)",
             strlen(lang->native_name) ? lang->native_name : lang->eng_name,
@@ -832,7 +832,6 @@ int is_nav_pack( unsigned char *buf )
     }
 }
 
-
 /***********************************************************************
  * hb_dvdread_read
  ***********************************************************************
@@ -1065,7 +1064,7 @@ static hb_buffer_t * hb_dvdread_read( hb_dvd_t * e )
 
                 if( d->cell_overlap )
                 {
-                    b->new_chap = hb_dvdread_is_break( d );
+                    b->s.new_chap = hb_dvdread_is_break( d );
                     d->cell_overlap = 0;
                 }
             }

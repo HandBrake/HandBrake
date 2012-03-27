@@ -906,6 +906,8 @@
     job->pass = 0;
     hb_add( fPreviewLibhb, job );
     
+    hb_free_filters( job );
+
     [fEncodingControlBox setHidden: NO];
     [fPictureControlBox setHidden: YES];
     

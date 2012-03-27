@@ -28,41 +28,29 @@
 
 struct hb_filter_private_s
 {
-    int              pix_fmt;
-    int              width[3];
-    int              height[3];
-
     int              hqdn3d_coef[4][512*16];
     unsigned int   * hqdn3d_line;
-	unsigned short * hqdn3d_frame[3];
-
-    AVPicture        pic_in;
-    AVPicture        pic_out;
-    hb_buffer_t    * buf_out;
+    unsigned short * hqdn3d_frame[3];
 };
 
-hb_filter_private_t * hb_denoise_init( int pix_fmt,
-                                       int width,
-                                       int height,
-                                       char * settings );
+static int hb_denoise_init( hb_filter_object_t * filter,
+                            hb_filter_init_t * init );
 
-int hb_denoise_work( const hb_buffer_t * buf_in,
-                     hb_buffer_t ** buf_out,
-                     int pix_fmt,
-                     int width,
-                     int height,
-                     hb_filter_private_t * pv );
+static int hb_denoise_work( hb_filter_object_t * filter,
+                            hb_buffer_t ** buf_in,
+                            hb_buffer_t ** buf_out );
 
-void hb_denoise_close( hb_filter_private_t * pv );
+static void hb_denoise_close( hb_filter_object_t * filter );
 
 hb_filter_object_t hb_filter_denoise =
 {
-    FILTER_DENOISE,
-    "Denoise (hqdn3d)",
-    NULL,
-    hb_denoise_init,
-    hb_denoise_work,
-    hb_denoise_close,
+    .id            = HB_FILTER_DENOISE,
+    .enforce_order = 1,
+    .name          = "Denoise (hqdn3d)",
+    .settings      = NULL,
+    .init          = hb_denoise_init,
+    .work          = hb_denoise_work,
+    .close         = hb_denoise_close,
 };
 
 static void hqdn3d_precalc_coef( int * ct,
@@ -293,34 +281,17 @@ static void hqdn3d_denoise( unsigned char * frame_src,
     }
 }
 
-hb_filter_private_t * hb_denoise_init( int pix_fmt,
-                                       int width,
-                                       int height,
-                                       char * settings )
+static int hb_denoise_init( hb_filter_object_t * filter,
+                            hb_filter_init_t * init )
 {
-    if( pix_fmt != PIX_FMT_YUV420P )
-    {
-        return 0;
-    }
-
-    hb_filter_private_t * pv = malloc( sizeof(struct hb_filter_private_s) );
-
-    /*
-     * Clear the memory to avoid freeing uninitialised memory later.
-     */
-    memset( pv, 0, sizeof( struct hb_filter_private_s ) );
-
-    pv->pix_fmt  = pix_fmt;
-    pv->width[0]  = width;
-    pv->height[0] = height;
-    pv->width[1]  = pv->width[2] = width >> 1;
-    pv->height[1] = pv->height[2] = height >> 1;
+    filter->private_data = calloc( sizeof(struct hb_filter_private_s), 1 );
+    hb_filter_private_t * pv = filter->private_data;
 
     double spatial_luma, temporal_luma, spatial_chroma, temporal_chroma;
 
-    if( settings )
+    if( filter->settings )
     {
-        switch( sscanf( settings, "%lf:%lf:%lf:%lf",
+        switch( sscanf( filter->settings, "%lf:%lf:%lf:%lf",
                         &spatial_luma, &spatial_chroma,
                         &temporal_luma, &temporal_chroma ) )
         {
@@ -361,20 +332,18 @@ hb_filter_private_t * hb_denoise_init( int pix_fmt,
         }
     }
 
-    pv->hqdn3d_line = malloc( width * sizeof(int) );
-
     hqdn3d_precalc_coef( pv->hqdn3d_coef[0], spatial_luma );
     hqdn3d_precalc_coef( pv->hqdn3d_coef[1], temporal_luma );
     hqdn3d_precalc_coef( pv->hqdn3d_coef[2], spatial_chroma );
     hqdn3d_precalc_coef( pv->hqdn3d_coef[3], temporal_chroma );
 
-    pv->buf_out = hb_video_buffer_init( width, height );
-
-    return pv;
+    return 0;
 }
 
-void hb_denoise_close( hb_filter_private_t * pv )
+static void hb_denoise_close( hb_filter_object_t * filter )
 {
+    hb_filter_private_t * pv = filter->private_data;
+
     if( !pv )
     {
         return;
@@ -400,68 +369,66 @@ void hb_denoise_close( hb_filter_private_t * pv )
         free( pv->hqdn3d_frame[2] );
         pv->hqdn3d_frame[2] = NULL;
     }
-    if( pv->buf_out )
-    {
-        hb_buffer_close( &pv->buf_out );
-    }
 
     free( pv );
+    filter->private_data = NULL;
 }
 
-int hb_denoise_work( const hb_buffer_t * buf_in,
-                     hb_buffer_t ** buf_out,
-                     int pix_fmt,
-                     int width,
-                     int height,
-                     hb_filter_private_t * pv )
+static int hb_denoise_work( hb_filter_object_t * filter,
+                            hb_buffer_t ** buf_in,
+                            hb_buffer_t ** buf_out )
 {
-    if( !pv ||
-        pix_fmt != pv->pix_fmt ||
-        width != pv->width[0] ||
-        height != pv->height[0] )
+    hb_filter_private_t * pv = filter->private_data;
+    hb_buffer_t * in = *buf_in, * out;
+
+    if ( in->size <= 0 )
     {
-        return FILTER_FAILED;
+        *buf_out = in;
+        *buf_in = NULL;
+        return HB_FILTER_DONE;
     }
 
-    avpicture_fill( &pv->pic_in, buf_in->data,
-                    pix_fmt, width, height );
+    out = hb_video_buffer_init( in->f.width, in->f.height );
 
-    avpicture_fill( &pv->pic_out, pv->buf_out->data,
-                    pix_fmt, width, height );
+    if( !pv->hqdn3d_line )
+    {
+        pv->hqdn3d_line = malloc( in->f.width * sizeof(int) );
+    }
 
-    hqdn3d_denoise( pv->pic_in.data[0],
-                    pv->pic_out.data[0],
+    hqdn3d_denoise( in->plane[0].data,
+                    out->plane[0].data,
                     pv->hqdn3d_line,
                     &pv->hqdn3d_frame[0],
-                    pv->width[0],
-                    pv->height[0],
+                    in->plane[0].stride,
+                    in->plane[0].height,
                     pv->hqdn3d_coef[0],
                     pv->hqdn3d_coef[0],
                     pv->hqdn3d_coef[1] );
 
-    hqdn3d_denoise( pv->pic_in.data[1],
-                    pv->pic_out.data[1],
+    hqdn3d_denoise( in->plane[1].data,
+                    out->plane[1].data,
                     pv->hqdn3d_line,
                     &pv->hqdn3d_frame[1],
-                    pv->width[1],
-                    pv->height[1],
+                    in->plane[1].stride,
+                    in->plane[1].height,
                     pv->hqdn3d_coef[2],
                     pv->hqdn3d_coef[2],
                     pv->hqdn3d_coef[3] );
 
-    hqdn3d_denoise( pv->pic_in.data[2],
-                    pv->pic_out.data[2],
+    hqdn3d_denoise( in->plane[2].data,
+                    out->plane[2].data,
                     pv->hqdn3d_line,
                     &pv->hqdn3d_frame[2],
-                    pv->width[2],
-                    pv->height[2],
+                    in->plane[2].stride,
+                    in->plane[2].height,
                     pv->hqdn3d_coef[2],
                     pv->hqdn3d_coef[2],
                     pv->hqdn3d_coef[3] );
 
-    hb_buffer_copy_settings( pv->buf_out, buf_in );
+    out->s = in->s;
+    hb_buffer_move_subs( out, in );
 
-    *buf_out = pv->buf_out;
+    *buf_out = out;
 
-    return FILTER_OK;
+    return HB_FILTER_OK;
 }

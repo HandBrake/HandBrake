@@ -419,16 +419,16 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     if (mux_data == job->mux_data)
     {
         /* Video */
-        timecode = buf->start * TIMECODE_SCALE;
+        timecode = buf->s.start * TIMECODE_SCALE;
 
-        if (job->chapter_markers && (buf->new_chap || timecode == 0))
+        if (job->chapter_markers && (buf->s.new_chap || timecode == 0))
         {
             /* Make sure we're not writing a chapter that has 0 length */
             if (mux_data->prev_chapter_tc != timecode)
             {
-                if ( buf->new_chap )
+                if ( buf->s.new_chap )
                 {
-                    mux_data->current_chapter = buf->new_chap - 2;
+                    mux_data->current_chapter = buf->s.new_chap - 2;
                 }
                 chapter_data = hb_list_item( title->list_chapter,
                                              mux_data->current_chapter++ );
@@ -468,14 +468,14 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     else if ( mux_data->subtitle )
     {
         uint64_t   duration;
-        timecode = buf->start * TIMECODE_SCALE;
+        timecode = buf->s.start * TIMECODE_SCALE;
         if( mk_startFrame(m->file, mux_data->track) < 0)
         {
             hb_error( "Failed to write frame to output file, Disk Full?" );
             *job->die = 1;
         }
 
-        duration = buf->stop * TIMECODE_SCALE - timecode;
+        duration = buf->s.stop * TIMECODE_SCALE - timecode;
         mk_addFrameData(m->file, mux_data->track, buf->data, buf->size);
         mk_setFrameFlags(m->file, mux_data->track, timecode, 1, duration);
         mk_flushFrame(m->file, mux_data->track);
@@ -485,7 +485,7 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     else
     {
         /* Audio */
-        timecode = buf->start * TIMECODE_SCALE;
+        timecode = buf->s.start * TIMECODE_SCALE;
         if (mux_data->codec == HB_ACODEC_VORBIS)
         {
             /* ughhh, vorbis is a pain :( */
@@ -513,8 +513,8 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                      (((job->vcodec == HB_VCODEC_X264 || 
                         (job->vcodec & HB_VCODEC_FFMPEG_MASK)) && 
                        mux_data == job->mux_data) ? 
-                            (buf->frametype == HB_FRAME_IDR) : 
-                            ((buf->frametype & HB_FRAME_KEY) != 0)), 0 );
+                            (buf->s.frametype == HB_FRAME_IDR) : 
+                            ((buf->s.frametype & HB_FRAME_KEY) != 0)), 0 );
     hb_buffer_close( &buf );
     return 0;
 }

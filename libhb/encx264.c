@@ -338,12 +338,11 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     pv->pic_in.img.i_csp = X264_CSP_I420;
     pv->pic_in.img.i_plane = 3;
-    pv->pic_in.img.i_stride[0] = job->width;
-    pv->pic_in.img.i_stride[2] = pv->pic_in.img.i_stride[1] = ( ( job->width + 1 ) >> 1 );
 
     if( job->grayscale )
     {
-        int uvsize = ( (job->width + 1) >> 1 ) * ( (job->height + 1) >> 1 );
+        int uvsize = hb_image_stride( PIX_FMT_YUV420P, job->width, 1 ) *
+                     hb_image_height( PIX_FMT_YUV420P, job->height, 1 );
         pv->grey_data = malloc( uvsize );
         memset( pv->grey_data, 0x80, uvsize );
         pv->pic_in.img.plane[1] = pv->pic_in.img.plane[2] = pv->grey_data;
@@ -375,8 +374,8 @@ void encx264Close( hb_work_object_t * w )
  */
 static void save_frame_info( hb_work_private_t * pv, hb_buffer_t * in )
 {
-    int i = (in->start >> FRAME_INFO_MAX2) & FRAME_INFO_MASK;
-    pv->frame_info[i].duration = in->stop - in->start;
+    int i = (in->s.start >> FRAME_INFO_MAX2) & FRAME_INFO_MASK;
+    pv->frame_info[i].duration = in->s.stop - in->s.start;
 }
 
 static int64_t get_frame_duration( hb_work_private_t * pv, int64_t pts )
@@ -395,13 +394,13 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
     /* Should be way too large */
     buf = hb_video_buffer_init( job->width, job->height );
     buf->size = 0;
-    buf->frametype = 0;
+    buf->s.frametype = 0;
 
     // use the pts to get the original frame's duration.
     int64_t duration  = get_frame_duration( pv, pic_out->i_pts );
-    buf->start = pic_out->i_pts;
-    buf->stop  = pic_out->i_pts + duration;
-    buf->renderOffset = pic_out->i_dts;
+    buf->s.start = pic_out->i_pts;
+    buf->s.stop  = pic_out->i_pts + duration;
+    buf->s.renderOffset = pic_out->i_dts;
     if ( !w->config->h264.init_delay && pic_out->i_dts < 0 )
     {
         w->config->h264.init_delay = -pic_out->i_dts;
@@ -447,47 +446,47 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
                 break;
 
             case X264_TYPE_I:
-                buf->frametype = HB_FRAME_I;
+                buf->s.frametype = HB_FRAME_I;
                 break;
 
             case X264_TYPE_P:
-                buf->frametype = HB_FRAME_P;
+                buf->s.frametype = HB_FRAME_P;
                 break;
 
             case X264_TYPE_B:
-                buf->frametype = HB_FRAME_B;
+                buf->s.frametype = HB_FRAME_B;
                 break;
 
         /*  This is for b-pyramid, which has reference b-frames
             However, it doesn't seem to ever be used... */
             case X264_TYPE_BREF:
-                buf->frametype = HB_FRAME_BREF;
+                buf->s.frametype = HB_FRAME_BREF;
                 break;
 
             // If it isn't the above, what type of frame is it??
             default:
-                buf->frametype = 0;
+                buf->s.frametype = 0;
                 break;
         }
 
         /* Since libx264 doesn't tell us when b-frames are
            themselves reference frames, figure it out on our own. */
-        if( (buf->frametype == HB_FRAME_B) &&
+        if( (buf->s.frametype == HB_FRAME_B) &&
             (nal[i].i_ref_idc != NAL_PRIORITY_DISPOSABLE) )
-            buf->frametype = HB_FRAME_BREF;
+            buf->s.frametype = HB_FRAME_BREF;
 
         /* Expose disposable bit to muxer. */
         if( nal[i].i_ref_idc == NAL_PRIORITY_DISPOSABLE )
-            buf->flags &= ~HB_FRAME_REF;
+            buf->s.flags &= ~HB_FRAME_REF;
         else
-            buf->flags |= HB_FRAME_REF;
+            buf->s.flags |= HB_FRAME_REF;
 
         // PIR has no IDR frames, but x264 marks recovery points
         // as keyframes.  So fake an IDR at these points. This flag
         // is also set for real IDR frames.
         if( pic_out->b_keyframe )
         {
-            buf->frametype = HB_FRAME_IDR;
+            buf->s.frametype = HB_FRAME_IDR;
             /* if we have a chapter marker pending and this
                frame's presentation time stamp is at or after
                the marker's time stamp, use this as the
@@ -495,7 +494,7 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
             if( pv->next_chap != 0 && pv->next_chap <= pic_out->i_pts )
             {
                 pv->next_chap = 0;
-                buf->new_chap = pv->chap_mark;
+                buf->s.new_chap = pv->chap_mark;
             }
         }
 
@@ -516,16 +515,17 @@ static hb_buffer_t *x264_encode( hb_work_object_t *w, hb_buffer_t *in )
     hb_job_t *job = pv->job;
 
     /* Point x264 at our current buffers Y(UV) data.  */
-    pv->pic_in.img.plane[0] = in->data;
-
-    int uvsize = ( (job->width + 1) >> 1 ) * ( (job->height + 1) >> 1 );
+    pv->pic_in.img.i_stride[0] = in->plane[0].stride;
+    pv->pic_in.img.i_stride[1] = in->plane[1].stride;
+    pv->pic_in.img.i_stride[2] = in->plane[2].stride;
+    pv->pic_in.img.plane[0] = in->plane[0].data;
     if( !job->grayscale )
     {
-        /* Point x264 at our buffers (Y)UV data */
-        pv->pic_in.img.plane[1] = in->data + job->width * job->height;
-        pv->pic_in.img.plane[2] = pv->pic_in.img.plane[1] + uvsize;
+        pv->pic_in.img.plane[1] = in->plane[1].data;
+        pv->pic_in.img.plane[2] = in->plane[2].data;
     }
-    if( in->new_chap && job->chapter_markers )
+
+    if( in->s.new_chap && job->chapter_markers )
     {
         /* chapters have to start with an IDR frame so request that this
            frame be coded as IDR. Since there may be up to 16 frames
@@ -535,11 +535,11 @@ static hb_buffer_t *x264_encode( hb_work_object_t *w, hb_buffer_t *in )
         pv->pic_in.i_type = X264_TYPE_IDR;
         if( pv->next_chap == 0 )
         {
-            pv->next_chap = in->start;
-            pv->chap_mark = in->new_chap;
+            pv->next_chap = in->s.start;
+            pv->chap_mark = in->s.new_chap;
         }
         /* don't let 'work_loop' put a chapter mark on the wrong buffer */
-        in->new_chap = 0;
+        in->s.new_chap = 0;
     }
     else
     {
@@ -551,19 +551,19 @@ static hb_buffer_t *x264_encode( hb_work_object_t *w, hb_buffer_t *in )
      * frame stream with the current frame's start time equal to the
      * previous frame's stop time.
      */
-    if( pv->last_stop != in->start )
+    if( pv->last_stop != in->s.start )
     {
         hb_log("encx264 input continuity err: last stop %"PRId64"  start %"PRId64,
-                pv->last_stop, in->start);
+                pv->last_stop, in->s.start);
     }
-    pv->last_stop = in->stop;
+    pv->last_stop = in->s.stop;
 
     // Remember info about this frame that we need to pass across
     // the x264_encoder_encode call (since it reorders frames).
     save_frame_info( pv, in );
 
     /* Feed the input PTS to x264 so it can figure out proper output PTS */
-    pv->pic_in.i_pts = in->start;
+    pv->pic_in.i_pts = in->s.start;
 
     x264_picture_t pic_out;
     int i_nal;

@@ -43,43 +43,31 @@ static const uint8_t  __attribute__((aligned(8))) pp7_dither[8][8] =
 
 struct hb_filter_private_s
 {
-    int           pix_fmt;
-    int           width[3];
-    int           height[3];
-
     int           pp7_qp;
     int           pp7_mode;
     int           pp7_mpeg2;
     int           pp7_temp_stride;
     uint8_t     * pp7_src;
-
-    AVPicture     pic_in;
-    AVPicture     pic_out;
-    hb_buffer_t * buf_out;
 };
 
-hb_filter_private_t * hb_deblock_init( int pix_fmt,
-                                       int width,
-                                       int height,
-                                       char * settings );
+static int hb_deblock_init( hb_filter_object_t * filter,
+                            hb_filter_init_t * init );
 
-int hb_deblock_work( const hb_buffer_t * buf_in,
-                     hb_buffer_t ** buf_out,
-                     int pix_fmt,
-                     int width,
-                     int height,
-                     hb_filter_private_t * pv );
+static int hb_deblock_work( hb_filter_object_t * filter,
+                            hb_buffer_t ** buf_in,
+                            hb_buffer_t ** buf_out );
 
-void hb_deblock_close( hb_filter_private_t * pv );
+static void hb_deblock_close( hb_filter_object_t * filter );
 
 hb_filter_object_t hb_filter_deblock =
 {
-    FILTER_DEBLOCK,
-    "Deblock (pp7)",
-    NULL,
-    hb_deblock_init,
-    hb_deblock_work,
-    hb_deblock_close,
+    .id            = HB_FILTER_DEBLOCK,
+    .enforce_order = 1,
+    .name          = "Deblock (pp7)",
+    .settings      = NULL,
+    .init          = hb_deblock_init,
+    .work          = hb_deblock_work,
+    .close         = hb_deblock_close,
 };
 
 static inline void pp7_dct_a( DCTELEM * dst, uint8_t * src, int stride )
@@ -349,34 +337,19 @@ static void pp7_filter( hb_filter_private_t * pv,
     }
 }
 
-hb_filter_private_t * hb_deblock_init( int pix_fmt,
-                                       int width,
-                                       int height,
-                                       char * settings )
+static int hb_deblock_init( hb_filter_object_t * filter, 
+                            hb_filter_init_t * init )
 {
-    if( pix_fmt != PIX_FMT_YUV420P )
-    {
-        return 0;
-    }
-
-    hb_filter_private_t * pv = malloc( sizeof(struct hb_filter_private_s) );
-
-    pv->pix_fmt = pix_fmt;
-
-    pv->width[0] = width;
-    pv->height[0] = height;
-
-    pv->width[1] = pv->width[2] = width >> 1;
-    pv->height[1] = pv->height[2] = height >> 1;
-
+    filter->private_data = calloc( sizeof(struct hb_filter_private_s), 1 );
+    hb_filter_private_t * pv = filter->private_data;
 
     pv->pp7_qp    = PP7_QP_DEFAULT;
     pv->pp7_mode  = PP7_MODE_DEFAULT;
     pv->pp7_mpeg2 = 1; /*mpi->qscale_type;*/
 
-    if( settings )
+    if( filter->settings )
     {
-        sscanf( settings, "%d:%d", &pv->pp7_qp, &pv->pp7_mode );
+        sscanf( filter->settings, "%d:%d", &pv->pp7_qp, &pv->pp7_mode );
     }
 
     if( pv->pp7_qp < 0 )
@@ -399,92 +372,83 @@ hb_filter_private_t * hb_deblock_init( int pix_fmt,
             break;
     }
 
-    int h = (height+16+15)&(~15);
+    int h = (init->height+16+15)&(~15);
 
-    pv->pp7_temp_stride = (width+16+15)&(~15);
+    pv->pp7_temp_stride = (init->width+16+15)&(~15);
 
     pv->pp7_src = (uint8_t*)malloc( pv->pp7_temp_stride*(h+8)*sizeof(uint8_t) );
 
-    pv->buf_out = hb_video_buffer_init( width, height );
-
-    return pv;
+    return 0;
 }
 
-void hb_deblock_close( hb_filter_private_t * pv )
+static void hb_deblock_close( hb_filter_object_t * filter )
 {
+    hb_filter_private_t * pv = filter->private_data;
+
     if( !pv )
     {
         return;
     }
 
-    if( pv->buf_out )
-    {
-        hb_buffer_close( &pv->buf_out );
-    }
-
     free( pv );
+    filter->private_data = NULL;
 }
 
-int hb_deblock_work( const hb_buffer_t * buf_in,
-                     hb_buffer_t ** buf_out,
-                     int pix_fmt,
-                     int width,
-                     int height,
-                     hb_filter_private_t * pv )
+static int hb_deblock_work( hb_filter_object_t * filter,
+                            hb_buffer_t ** buf_in,
+                            hb_buffer_t ** buf_out )
 {
-    if( !pv ||
-        pix_fmt != pv->pix_fmt ||
-        width != pv->width[0] ||
-        height != pv->height[0] )
+    hb_filter_private_t * pv = filter->private_data;
+    hb_buffer_t * in = *buf_in, * out;
+
+    if ( in->size <= 0 )
     {
-        return FILTER_FAILED;
+        *buf_out = in;
+        *buf_in = NULL;
+        return HB_FILTER_DONE;
     }
-
-    avpicture_fill( &pv->pic_in, buf_in->data,
-                    pix_fmt, width, height );
-
-    avpicture_fill( &pv->pic_out, pv->buf_out->data,
-                    pix_fmt, width, height );
 
     if( /*TODO: mpi->qscale ||*/ pv->pp7_qp )
     {
+        out = hb_video_buffer_init( in->f.width, in->f.height );
+
         pp7_filter( pv,
-                pv->pic_out.data[0],
-                pv->pic_in.data[0],
-                pv->width[0],
-                pv->height[0],
+                out->plane[0].data,
+                in->plane[0].data,
+                in->plane[0].stride,
+                in->plane[0].height,
                 NULL, /* TODO: mpi->qscale*/
                 0,    /* TODO: mpi->qstride*/
                 1 );
 
         pp7_filter( pv,
-                pv->pic_out.data[1],
-                pv->pic_in.data[1],
-                pv->width[1],
-                pv->height[1],
+                out->plane[1].data,
+                in->plane[1].data,
+                in->plane[1].stride,
+                in->plane[1].height,
                 NULL, /* TODO: mpi->qscale*/
                 0,    /* TODO: mpi->qstride*/
                 0 );
 
         pp7_filter( pv,
-                pv->pic_out.data[2],
-                pv->pic_in.data[2],
-                pv->width[2],
-                pv->height[2],
+                out->plane[2].data,
+                in->plane[2].data,
+                in->plane[2].stride,
+                in->plane[2].height,
                 NULL, /* TODO: mpi->qscale*/
                 0,    /* TODO: mpi->qstride*/
                 0 );
+
+        out->s = in->s;
+        hb_buffer_move_subs( out, in );
+
+        *buf_out = out;
     }
     else
     {
-        memcpy( pv->buf_out->data, buf_in->data, buf_in->size );
+        *buf_in = NULL;
+        *buf_out = in;
     }
 
-    hb_buffer_copy_settings( pv->buf_out, buf_in );
-
-    *buf_out = pv->buf_out;
-
-    return FILTER_OK;
+    return HB_FILTER_OK;
 }
-
-

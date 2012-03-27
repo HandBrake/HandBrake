@@ -231,10 +231,10 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
 
     if ( w->audio != NULL )
     {
-        if ( hb_need_downmix( w->audio->config.in.channel_layout, 
+        if ( hb_need_downmix( w->audio->config.in.channel_layout,
                               w->audio->config.out.mixdown) )
         {
-            pv->downmix = hb_downmix_init(w->audio->config.in.channel_layout, 
+            pv->downmix = hb_downmix_init(w->audio->config.in.channel_layout,
                                           w->audio->config.out.mixdown);
             hb_downmix_set_chan_map( pv->downmix, &hb_smpte_chan_map, &hb_smpte_chan_map );
         }
@@ -328,7 +328,7 @@ static int decavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     *buf_out = NULL;
 
-    if ( in->start < -1 && pv->pts_next <= 0 )
+    if ( in->s.start < -1 && pv->pts_next <= 0 )
     {
         // discard buffers that start before video time 0
         return HB_WORK_OK;
@@ -341,7 +341,7 @@ static int decavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         int pout_len;
         int64_t cur;
 
-        cur = in->start;
+        cur = in->s.start;
 
         if ( pv->parser != NULL )
         {
@@ -443,10 +443,10 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
 
             if ( parser != NULL )
             {
-                len = av_parser_parse2( parser, context, &pbuffer, 
-                                        &pbuffer_size, buf->data + pos, 
-                                        buf->size - pos, buf->start, 
-                                        buf->start, 0 );
+                len = av_parser_parse2( parser, context, &pbuffer,
+                                        &pbuffer_size, buf->data + pos,
+                                        buf->size - pos, buf->s.start,
+                                        buf->s.start, 0 );
             }
             else
             {
@@ -461,7 +461,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                 avp.data = pbuffer;
                 avp.size = pbuffer_size;
 
-                len = avcodec_decode_audio3( context, (int16_t*)buffer, 
+                len = avcodec_decode_audio3( context, (int16_t*)buffer,
                                              &out_size, &avp );
                 if ( len > 0 && context->sample_rate > 0 )
                 {
@@ -474,13 +474,13 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                     info->bitrate = context->bit_rate;
                     info->rate = context->sample_rate;
                     info->rate_base = 1;
-                    info->channel_layout = 
-                        hb_ff_layout_xlat(context->channel_layout, 
+                    info->channel_layout =
+                        hb_ff_layout_xlat(context->channel_layout,
                                           context->channels);
                     ret = 1;
                     if ( context->channels && isamp )
                     {
-                        info->samples_per_frame = out_size / 
+                        info->samples_per_frame = out_size /
                                                   (isamp * context->channels);
                     }
                     break;
@@ -552,7 +552,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
     {
         // have to convert to our internal color space and/or rescale
         AVPicture dstpic;
-        avpicture_fill( &dstpic, dst, PIX_FMT_YUV420P, w, h );
+        hb_avpicture_fill( &dstpic, buf );
 
         if ( ! pv->sws_context || 
              pv->sws_width != context->width ||
@@ -575,9 +575,14 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
     }
     else
     {
+        w = buf->plane[0].stride;
+        h = buf->plane[0].height;
         dst = copy_plane( dst, frame->data[0], w, frame->linesize[0], h );
-        w = (w + 1) >> 1; h = (h + 1) >> 1;
+        w = buf->plane[1].stride;
+        h = buf->plane[1].height;
         dst = copy_plane( dst, frame->data[1], w, frame->linesize[1], h );
+        w = buf->plane[2].stride;
+        h = buf->plane[2].height;
         dst = copy_plane( dst, frame->data[2], w, frame->linesize[2], h );
     }
     return buf;
@@ -621,7 +626,7 @@ static void flushDelayQueue( hb_work_private_t *pv )
     // flush all the video packets left on our timestamp-reordering delay q
     while ( ( buf = pv->delayq[slot] ) != NULL )
     {
-        buf->start = heap_pop( &pv->pts_heap );
+        buf->s.start = heap_pop( &pv->pts_heap );
         hb_list_add( pv->list, buf );
         pv->delayq[slot] = NULL;
         slot = ( slot + 1 ) & (HEAP_SIZE-1);
@@ -708,15 +713,15 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
 }
 
 /*
- * Decodes a video frame from the specified raw packet data 
+ * Decodes a video frame from the specified raw packet data
  *      ('data', 'size', 'sequence').
  * The output of this function is stored in 'pv->list', which contains a list
  * of zero or more decoded packets.
- * 
- * The returned packets are guaranteed to have their timestamps in the correct 
- * order, even if the original packets decoded by libavcodec have misordered 
+ *
+ * The returned packets are guaranteed to have their timestamps in the correct
+ * order, even if the original packets decoded by libavcodec have misordered
  * timestamps, due to the use of 'packed B-frames'.
- * 
+ *
  * Internally the set of decoded packets may be buffered in 'pv->delayq'
  * until enough packets have been decoded so that the timestamps can be
  * correctly rewritten, if this is necessary.
@@ -741,7 +746,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
     avp.dts = dts;
     if ( avcodec_decode_video2( pv->context, &frame, &got_picture, &avp ) < 0 )
     {
-        ++pv->decode_errors;     
+        ++pv->decode_errors;
     }
     if ( global_verbosity_level <= 1 )
     {
@@ -770,15 +775,15 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
 
         // ffmpeg makes it hard to attach a pts to a frame. if the MPEG ES
         // packet had a pts we handed it to av_parser_parse (if the packet had
-        // no pts we set it to AV_NOPTS_VALUE, but before the parse we can't 
-        // distinguish between the start of a video frame with no pts & an 
-        // intermediate packet of some frame which never has a pts). we hope 
-        // that when parse returns the frame to us the pts we originally 
-        // handed it will be in parser->pts. we put this pts into avp.pts so 
-        // that when avcodec_decode_video finally gets around to allocating an 
-        // AVFrame to hold the decoded frame, avcodec_default_get_buffer can 
-        // stuff that pts into the it. if all of these relays worked at this 
-        // point frame.pts should hold the frame's pts from the original data 
+        // no pts we set it to AV_NOPTS_VALUE, but before the parse we can't
+        // distinguish between the start of a video frame with no pts & an
+        // intermediate packet of some frame which never has a pts). we hope
+        // that when parse returns the frame to us the pts we originally
+        // handed it will be in parser->pts. we put this pts into avp.pts so
+        // that when avcodec_decode_video finally gets around to allocating an
+        // AVFrame to hold the decoded frame, avcodec_default_get_buffer can
+        // stuff that pts into the it. if all of these relays worked at this
+        // point frame.pts should hold the frame's pts from the original data
         // stream or AV_NOPTS_VALUE if it didn't have one. in the latter case
         // we generate the next pts in sequence for it.
         if ( !pv->frame_duration_set )
@@ -827,21 +832,23 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         if ( ! pv->job || ! pv->brokenByMicrosoft )
         {
             buf = copy_frame( pv, &frame );
-            buf->start = pts;
+            buf->s.start = pts;
             buf->sequence = sequence;
-            buf->flags = flags;
-            if ( pv->new_chap && buf->start >= pv->chap_time )
+
+            buf->s.flags = flags;
+
+            if ( pv->new_chap && buf->s.start >= pv->chap_time )
             {
-                buf->new_chap = pv->new_chap;
+                buf->s.new_chap = pv->new_chap;
+                log_chapter( pv, pv->new_chap, buf->s.start );
                 pv->new_chap = 0;
                 pv->chap_time = 0;
-                log_chapter( pv, buf->new_chap, buf->start );
             }
             else if ( pv->nframes == 0 && pv->job )
             {
-                log_chapter( pv, pv->job->chapter_start, buf->start );
+                log_chapter( pv, pv->job->chapter_start, buf->s.start );
             }
-            checkCadence( pv->cadence, buf->flags, buf->start );
+            checkCadence( pv->cadence, flags, buf->s.start );
             hb_list_add( pv->list, buf );
             ++pv->nframes;
             return got_picture;
@@ -873,27 +880,28 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         if ( ( buf = pv->delayq[slot] ) != NULL )
         {
             pv->queue_primed = 1;
-            buf->start = heap_pop( &pv->pts_heap );
+            buf->s.start = heap_pop( &pv->pts_heap );
 
-            if ( pv->new_chap && buf->start >= pv->chap_time )
+            if ( pv->new_chap && buf->s.start >= pv->chap_time )
             {
-                buf->new_chap = pv->new_chap;
+                buf->s.new_chap = pv->new_chap;
+                log_chapter( pv, pv->new_chap, buf->s.start );
                 pv->new_chap = 0;
                 pv->chap_time = 0;
-                log_chapter( pv, buf->new_chap, buf->start );
             }
             else if ( pv->nframes == 0 && pv->job )
             {
-                log_chapter( pv, pv->job->chapter_start, buf->start );
+                log_chapter( pv, pv->job->chapter_start, buf->s.start );
             }
-            checkCadence( pv->cadence, buf->flags, buf->start );
+            checkCadence( pv->cadence, buf->s.flags, buf->s.start );
             hb_list_add( pv->list, buf );
         }
 
         // add the new frame to the delayq & push its timestamp on the heap
         buf = copy_frame( pv, &frame );
         buf->sequence = sequence;
-        buf->flags = flags;
+        /* Store picture flags for later use by filters */
+        buf->s.flags = flags;
         pv->delayq[slot] = buf;
         heap_push( &pv->pts_heap, pts );
 
@@ -1085,7 +1093,7 @@ static int setup_extradata( hb_work_object_t *w, hb_buffer_t *in )
     hb_work_private_t *pv = w->private_data;
 
     // we can't call the avstream funcs but the read_header func in the
-    // AVInputFormat may set up some state in the AVContext. In particular 
+    // AVInputFormat may set up some state in the AVContext. In particular
     // vc1t_read_header allocates 'extradata' to deal with header issues
     // related to Microsoft's bizarre engineering notions. We alloc a chunk
     // of space to make vc1 work then associate the codec with the context.
@@ -1096,7 +1104,7 @@ static int setup_extradata( hb_work_object_t *w, hb_buffer_t *in )
         pv->context->extradata_size = 0;
         // av_malloc uses posix_memalign which is allowed to
         // return NULL when allocating 0 bytes.  We use extradata == NULL
-        // to trigger initialization of extradata and the decoder, so 
+        // to trigger initialization of extradata and the decoder, so
         // we can not set it to NULL here. So allocate a small
         // buffer instead.
         pv->context->extradata = av_malloc(1);
@@ -1193,14 +1201,14 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pv->video_codec_opened = 1;
     }
 
-    if( in->start >= 0 )
+    if( in->s.start >= 0 )
     {
-        pts = in->start;
-        dts = in->renderOffset;
+        pts = in->s.start;
+        dts = in->s.renderOffset;
     }
-    if ( in->new_chap )
+    if ( in->s.new_chap )
     {
-        pv->new_chap = in->new_chap;
+        pv->new_chap = in->s.new_chap;
         pv->chap_time = pts >= 0? pts : pv->pts_next;
     }
     decodeVideo( w, in->data, in->size, in->sequence, pts, dts );
@@ -1262,7 +1270,7 @@ static void compute_frame_duration( hb_work_private_t *pv )
              pv->context->time_base.num * max_fps > pv->context->time_base.den &&
              pv->context->time_base.den > pv->context->time_base.num * 8L )
         {
-            duration =  (double)pv->context->time_base.num / 
+            duration =  (double)pv->context->time_base.num /
                         (double)pv->context->time_base.den;
             if ( pv->context->ticks_per_frame > 1 )
             {
@@ -1277,7 +1285,7 @@ static void compute_frame_duration( hb_work_private_t *pv )
         if ( pv->context->time_base.num * max_fps > pv->context->time_base.den &&
              pv->context->time_base.den > pv->context->time_base.num * 8L )
         {
-            duration =  (double)pv->context->time_base.num / 
+            duration =  (double)pv->context->time_base.num /
                             (double)pv->context->time_base.den;
             if ( pv->context->ticks_per_frame > 1 )
             {
@@ -1376,10 +1384,10 @@ hb_work_object_t hb_decavcodecv =
     .bsinfo = decavcodecvBSInfo
 };
 
-static hb_buffer_t * downmixAudio( 
-    hb_audio_t *audio, 
-    hb_work_private_t *pv, 
-    hb_sample_t *buffer, 
+static hb_buffer_t * downmixAudio(
+    hb_audio_t *audio,
+    hb_work_private_t *pv,
+    hb_sample_t *buffer,
     int channels,
     int nsamples )
 {
@@ -1459,8 +1467,8 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
 
                 buf = hb_buffer_init( avp.size );
                 memcpy( buf->data, avp.data, avp.size );
-                buf->start = pv->pts_next;
-                buf->stop  = pts_next;
+                buf->s.start = pv->pts_next;
+                buf->s.stop  = pts_next;
                 hb_list_add( pv->list, buf );
                 pv->pts_next = pts_next;
                 continue;
@@ -1486,7 +1494,7 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
                 // get output buffer size then malloc a buffer
                 buffer = av_malloc( nsamples * sizeof(hb_sample_t) );
 
-                // we're doing straight sample format conversion which 
+                // we're doing straight sample format conversion which
                 // behaves as if there were only one channel.
                 const void * const ibuf[6] = { pv->buffer };
                 void * const obuf[6] = { buffer };
@@ -1499,8 +1507,8 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
 
             hb_buffer_t * buf;
             buf = downmixAudio( audio, pv, buffer, context->channels, nsamples );
-            buf->start = pv->pts_next;
-            buf->stop = pts_next;
+            buf->s.start = pv->pts_next;
+            buf->s.stop = pts_next;
             hb_list_add( pv->list, buf );
 
             pv->pts_next = pts_next;

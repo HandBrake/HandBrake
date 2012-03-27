@@ -125,7 +125,7 @@ static int decdcaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_DONE;
     }
 
-    if ( (*buf_in)->start < -1 && pv->next_pts == 0 )
+    if ( (*buf_in)->s.start < -1 && pv->next_pts == 0 )
     {
         // discard buffers that start before video time 0
         *buf_out = NULL;
@@ -235,9 +235,9 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     {
         buf = hb_buffer_init( pv->size );
         memcpy( buf->data, pv->frame, pv->size );
-        buf->start = pts;
+        buf->s.start = pts;
         pv->next_pts = pts + frame_dur;
-        buf->stop  = pv->next_pts;
+        buf->s.stop  = pv->next_pts;
         pv->sync = 0;
         return buf;
     }
@@ -252,9 +252,9 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     int nsamp = num_blocks * 256;
     buf = hb_buffer_init( nsamp * pv->out_discrete_channels * sizeof( float ) );
 
-    buf->start = pts;
+    buf->s.start = pts;
     pv->next_pts = pts + (double)nsamp / (double)pv->rate * 90000.;
-    buf->stop  = pv->next_pts;
+    buf->s.stop  = pv->next_pts;
 
     for( i = 0; i < num_blocks; i++ )
     {

@@ -47,7 +47,6 @@ void          hb_scan( hb_handle_t *, const char * path,
                        int title_index, int preview_count,
                        int store_previews, uint64_t min_duration );
 void          hb_scan_stop( hb_handle_t * );
-hb_filter_object_t * hb_get_filter_object(int filter_id, const char * settings);
 uint64_t      hb_first_duration( hb_handle_t * );
 
 /* hb_get_titles()
@@ -59,6 +58,8 @@ hb_list_t   * hb_get_titles( hb_handle_t * );
    Taken from Thomas Oestreich's 32detect filter in the Transcode project.  */
 int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, int color_diff, int threshold, int prog_equal, int prog_diff, int prog_threshold );
 
+int           hb_save_preview( hb_handle_t * h, int title, int preview, 
+                               hb_buffer_t *buf );
 void          hb_get_preview_by_index( hb_handle_t *, int, int, uint8_t * );
 void          hb_get_preview( hb_handle_t *, hb_title_t *, int,
                               uint8_t * );
@@ -69,6 +70,9 @@ void          hb_set_anamorphic_size_by_index( hb_handle_t *, int,
 void          hb_set_anamorphic_size( hb_job_t *,
                 int *output_width, int *output_height,
                 int *output_par_width, int *output_par_height );
+void          hb_validate_size( hb_job_t * job );
+void          hb_add_filter( hb_job_t * job, hb_filter_object_t * filter, 
+                const char * settings );
 
 /* Handling jobs */
 int           hb_count( hb_handle_t * );
@@ -77,6 +81,7 @@ void          hb_set_chapter_name( hb_handle_t *, int, int, const char * );
 void          hb_set_job( hb_handle_t *, int, hb_job_t * );
 void          hb_add( hb_handle_t *, hb_job_t * );
 void          hb_rem( hb_handle_t *, hb_job_t * );
+void          hb_reset_job( hb_job_t * job );
 
 void          hb_start( hb_handle_t * );
 void          hb_pause( hb_handle_t * );

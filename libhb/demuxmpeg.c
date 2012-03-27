@@ -46,10 +46,10 @@ static inline void check_mpeg_scr( hb_psdemux_t *state, int64_t scr, int tol )
 
 static inline void save_chap( hb_psdemux_t *state, hb_buffer_t *buf )
 {
-    if ( state && buf->new_chap )
+    if ( state && buf->s.new_chap )
     {
-        state->new_chap = buf->new_chap;
-        buf->new_chap = 0;
+        state->new_chap = buf->s.new_chap;
+        buf->s.new_chap = 0;
     }
 }
 
@@ -57,7 +57,7 @@ static inline void restore_chap( hb_psdemux_t *state, hb_buffer_t *buf )
 {
     if ( state )
     {
-        buf->new_chap = state->new_chap;
+        buf->s.new_chap = state->new_chap;
         state->new_chap = 0;
     }
 }
@@ -214,10 +214,10 @@ void hb_demux_dvd_ps( hb_buffer_t * buf, hb_list_t * list_es, hb_psdemux_t* stat
             /* Here we hit we ES payload */
             buf_es = hb_buffer_init( pes_packet_end - pos );
 
-            buf_es->id       = id;
-            buf_es->start    = pts;
-            buf_es->renderOffset = dts;
-            buf_es->stop     = -1;
+            buf_es->s.id       = id;
+            buf_es->s.start    = pts;
+            buf_es->s.renderOffset = dts;
+            buf_es->s.stop     = -1;
             if ( state && id == 0xE0)
             {
                 // Consume a chapter break, and apply it to the ES.
@@ -248,27 +248,27 @@ void hb_demux_mpeg( hb_buffer_t *buf, hb_list_t *list_es, hb_psdemux_t *state )
         save_chap( state, buf );
         if ( state )
         {
-            if ( buf->discontinuity )
+            if ( buf->s.discontinuity )
             {
                 // Buffer has been flagged as a discontinuity.  This happens
                 // when a blueray changes clips.
                 ++state->scr_changes;
-                state->last_scr = buf->start;
+                state->last_scr = buf->s.start;
             }
 
             // we're keeping track of timing (i.e., not in scan)
             // check if there's a new pcr in this packet
-            if ( buf->pcr >= 0 )
+            if ( buf->s.pcr >= 0 )
             {
                 // we have a new pcr
-                check_mpeg_scr( state, buf->pcr, 300 );
-                buf->pcr = -1;
+                check_mpeg_scr( state, buf->s.pcr, 300 );
+                buf->s.pcr = -1;
                 // Some streams have consistantly bad PCRs or SCRs
                 // So filter out the offset
-                if ( buf->start >= 0 )
-                    state->scr_delta = buf->start - state->last_scr;
+                if ( buf->s.start >= 0 )
+                    state->scr_delta = buf->s.start - state->last_scr;
             }
-            if ( buf->start >= 0 )
+            if ( buf->s.start >= 0 )
             {
                 // Program streams have an SCR in every PACK header so they
                 // can't lose their clock reference. But the PCR in Transport
@@ -279,7 +279,7 @@ void hb_demux_mpeg( hb_buffer_t *buf, hb_list_t *list_es, hb_psdemux_t *state )
                 // We try to protect against that here by sanity checking
                 // timestamps against the current reference clock and discarding
                 // packets where the DTS is "too far" from its clock.
-                int64_t fdelta = buf->start - state->last_scr - state->scr_delta;
+                int64_t fdelta = buf->s.start - state->last_scr - state->scr_delta;
                 if ( fdelta < -300 * 90000LL || fdelta > 300 * 90000LL )
                 {
                     // packet too far behind or ahead of its clock reference
@@ -297,11 +297,11 @@ void hb_demux_mpeg( hb_buffer_t *buf, hb_list_t *list_es, hb_psdemux_t *state )
                     // in DTS or PTS is detected.  So we need to update
                     // our scr_delta with each valid timestamp so that
                     // fdelta does not continually grow.
-                    state->scr_delta = buf->start - state->last_scr;
+                    state->scr_delta = buf->s.start - state->last_scr;
                 }
                 if ( state->last_pts >= 0 )
                 {
-                    fdelta = buf->start - state->last_pts;
+                    fdelta = buf->s.start - state->last_pts;
                     if ( fdelta < -5 * 90000LL || fdelta > 5 * 90000LL )
                     {
                         // Packet too far from last. This may be a NZ TV broadcast
@@ -309,13 +309,13 @@ void hb_demux_mpeg( hb_buffer_t *buf, hb_list_t *list_es, hb_psdemux_t *state )
                         // update. Since it may be a while until they actually tell
                         // us the new PCR use the PTS as the PCR.
                         ++state->scr_changes;
-                        state->last_scr = buf->start;
+                        state->last_scr = buf->s.start;
                     }
                 }
-                state->last_pts = buf->start;
+                state->last_pts = buf->s.start;
             }
 
-            if ( buf->type == VIDEO_BUF )
+            if ( buf->s.type == VIDEO_BUF )
             {
                 restore_chap( state, buf );
             }
@@ -341,13 +341,13 @@ void hb_demux_null( hb_buffer_t * buf, hb_list_t * list_es, hb_psdemux_t* state 
             // if we don't have a time offset yet, 
             // use this timestamp as the offset.
             if ( state->scr_changes == 0 &&
-                 ( buf->start != -1 || buf->renderOffset != -1 ) )
+                 ( buf->s.start != -1 || buf->s.renderOffset != -1 ) )
             {
                 ++state->scr_changes;
-                state->last_scr = buf->start >= 0 ? buf->start : buf->renderOffset;
+                state->last_scr = buf->s.start >= 0 ? buf->s.start : buf->s.renderOffset;
             }
 
-            if ( buf->type == VIDEO_BUF )
+            if ( buf->s.type == VIDEO_BUF )
             {
                 restore_chap( state, buf );
             }

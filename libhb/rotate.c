@@ -9,19 +9,18 @@
 // Mode 3: Flip both horizontally and vertically (modes 1 and 2 combined)
 
 typedef struct rotate_arguments_s {
-    uint8_t **dst;
+    hb_buffer_t *dst;
+    hb_buffer_t *src;
     int stop;
 } rotate_arguments_t;
 
 struct hb_filter_private_s
 {
-    int              pix_fmt;
-    int              width[3];
-    int              height[3];
-
     int              mode;
-
-    int              ref_stride[3];
+    int              width;
+    int              height;
+    int              par_width;
+    int              par_height;
 
     int              cpu_count;
 
@@ -29,59 +28,32 @@ struct hb_filter_private_s
     hb_lock_t      ** rotate_begin_lock;     // Thread has work
     hb_lock_t      ** rotate_complete_lock;  // Thread has completed work
     rotate_arguments_t *rotate_arguments;     // Arguments to thread for work
-
-    AVPicture        pic_in;
-    AVPicture        pic_out;
-    hb_buffer_t *    buf_out;
-    hb_buffer_t *    buf_settings;
 };
 
-hb_filter_private_t * hb_rotate_init( int pix_fmt,
-                                           int width,
-                                           int height,
-                                           char * settings );
+static int hb_rotate_init( hb_filter_object_t * filter,
+                           hb_filter_init_t * init );
 
-int hb_rotate_work( hb_buffer_t * buf_in,
-                         hb_buffer_t ** buf_out,
-                         int pix_fmt,
-                         int width,
-                         int height,
-                         hb_filter_private_t * pv );
+static int hb_rotate_work( hb_filter_object_t * filter,
+                           hb_buffer_t ** buf_in,
+                           hb_buffer_t ** buf_out );
 
-void hb_rotate_close( hb_filter_private_t * pv );
+static void hb_rotate_close( hb_filter_object_t * filter );
+
+static int hb_rotate_info( hb_filter_object_t * filter,
+                           hb_filter_info_t * info );
 
 hb_filter_object_t hb_filter_rotate =
 {
-    FILTER_ROTATE,
-    "Rotate (flips image axes)",
-    NULL,
-    hb_rotate_init,
-    hb_rotate_work,
-    hb_rotate_close,
+    .id            = HB_FILTER_ROTATE,
+    .enforce_order = 0,
+    .name          = "Rotate (rotate & flip image axes)",
+    .settings      = NULL,
+    .init          = hb_rotate_init,
+    .work          = hb_rotate_work,
+    .close         = hb_rotate_close,
+    .info          = hb_rotate_info
 };
 
-
-static void rotate_filter_line( uint8_t *dst,
-                               uint8_t *cur,
-                               int plane,
-                               hb_filter_private_t * pv )
-{
-
-    int w = pv->width[plane];
-
-    int x;
-    for( x = 0; x < w; x++)
-    {
-        if( pv->mode & 2 )
-        {
-            dst[x] = cur[w-x-1];
-        }
-        else
-        {
-            dst[x] = cur[x];
-        }
-    }
-}
 
 typedef struct rotate_thread_arg_s {
     hb_filter_private_t *pv;
@@ -99,8 +71,10 @@ void rotate_filter_thread( void *thread_args_v )
     int plane;
     int segment, segment_start, segment_stop;
     rotate_thread_arg_t *thread_args = thread_args_v;
-    uint8_t **dst;
-    int y, w, h, ref_stride;
+    uint8_t *dst;
+    hb_buffer_t *dst_buf;
+    hb_buffer_t *src_buf;
+    int y;
 
 
     pv = thread_args->pv;
@@ -137,13 +111,18 @@ void rotate_filter_thread( void *thread_args_v )
         /*
          * Process all three planes, but only this segment of it.
          */
+        dst_buf = rotate_work->dst;
+        src_buf = rotate_work->src;
         for( plane = 0; plane < 3; plane++)
         {
+            int dst_stride, src_stride;
 
-            dst = rotate_work->dst;
-            w = pv->width[plane];
-            h = pv->height[plane];
-            ref_stride = pv->ref_stride[plane];
+            dst = dst_buf->plane[plane].data;
+            dst_stride = dst_buf->plane[plane].stride;
+            src_stride = src_buf->plane[plane].stride;
+
+            int h = src_buf->plane[plane].height;
+            int w = src_buf->plane[plane].width;
             segment_start = ( h / pv->cpu_count ) * segment;
             if( segment == pv->cpu_count - 1 )
             {
@@ -158,21 +137,35 @@ void rotate_filter_thread( void *thread_args_v )
             for( y = segment_start; y < segment_stop; y++ )
             {
                 uint8_t * cur;
-                
-                if( pv->mode & 1 )
-                {
-                    cur  = &pv->pic_in.data[plane][(h-y-1)*pv->pic_in.linesize[plane]];
-                }
-                else
-                {
-                    cur  = &pv->pic_in.data[plane][(y)*pv->pic_in.linesize[plane]];
-                }
-                uint8_t *dst2 = &dst[plane][y*w];
+                int x, xo, yo;
 
-                rotate_filter_line( dst2, 
-                                   cur, 
-                                   plane, 
-                                   pv );
+                cur = &src_buf->plane[plane].data[y * src_stride];
+                for( x = 0; x < w; x++)
+                {
+                    if( pv->mode & 1 )
+                    {
+                        yo = h - y - 1;
+                    }
+                    else
+                    {
+                        yo = y;
+                    }
+                    if( pv->mode & 2 )
+                    {
+                        xo = w - x - 1;
+                    }
+                    else
+                    {
+                        xo = x;
+                    }
+                    if( pv->mode & 4 ) // Rotate 90 clockwise
+                    {
+                        int tmp = xo;
+                        xo = h - yo - 1;
+                        yo = tmp;
+                    }
+                    dst[yo*dst_stride + xo] = cur[x];
+                }
             }
         }
         /*
@@ -185,14 +178,16 @@ void rotate_filter_thread( void *thread_args_v )
 
 
 /*
- * threaded rotate - each thread rptates a single segment of all
+ * threaded rotate - each thread rotates a single segment of all
  * three planes. Where a segment is defined as the frame divided by
  * the number of CPUs.
  *
  * This function blocks until the frame is rotated.
  */
-static void rotate_filter( uint8_t ** dst,
-                          hb_filter_private_t * pv )
+static void rotate_filter( 
+    hb_filter_private_t * pv, 
+    hb_buffer_t *out, 
+    hb_buffer_t *in )
 {
 
     int segment;
@@ -202,7 +197,8 @@ static void rotate_filter( uint8_t ** dst,
         /*
          * Setup the work for this plane.
          */
-        pv->rotate_arguments[segment].dst = dst;
+        pv->rotate_arguments[segment].dst = out;
+        pv->rotate_arguments[segment].src = in;
 
         /*
          * Let the thread for this plane know that we've setup work 
@@ -232,37 +228,17 @@ static void rotate_filter( uint8_t ** dst,
 }
 
 
-hb_filter_private_t * hb_rotate_init( int pix_fmt,
-                                           int width,
-                                           int height,
-                                           char * settings )
+static int hb_rotate_init( hb_filter_object_t * filter,
+                           hb_filter_init_t * init )
 {
-    if( pix_fmt != PIX_FMT_YUV420P )
-    {
-        return 0;
-    }
-
-    hb_filter_private_t * pv = calloc( 1, sizeof(struct hb_filter_private_s) );
-
-    pv->pix_fmt = pix_fmt;
-
-    pv->width[0]  = width;
-    pv->height[0] = height;
-    pv->width[1]  = pv->width[2]  = width >> 1;
-    pv->height[1] = pv->height[2] = height >> 1;
-
-    pv->buf_out = hb_video_buffer_init( width, height );
-    pv->buf_settings = hb_buffer_init( 0 );
+    filter->private_data = calloc( 1, sizeof(struct hb_filter_private_s) );
+    hb_filter_private_t * pv = filter->private_data;
 
     pv->mode     = MODE_DEFAULT;
 
-    pv->ref_stride[0] = pv->width[0];
-    pv->ref_stride[1] = pv->width[1];
-    pv->ref_stride[2] = pv->width[2];
-    
-    if( settings )
+    if( filter->settings )
     {
-        sscanf( settings, "%d",
+        sscanf( filter->settings, "%d",
                 &pv->mode );
     }
 
@@ -308,25 +284,64 @@ hb_filter_private_t * hb_rotate_init( int pix_fmt,
             hb_error( "rotate could not create threads" );
         }
     }
+    // Set init width/height so the next stage in the pipline
+    // knows what it will be getting
+    if( pv->mode & 4 )
+    {
+        // 90 degree rotation, exchange width and height
+        int tmp = init->width;
+        init->width = init->height;
+        init->height = tmp;
 
-    return pv;
+        tmp = init->par_width;
+        init->par_width = init->par_height;
+        init->par_height = tmp;
+    }
+    pv->width = init->width;
+    pv->height = init->height;
+    pv->par_width = init->par_width;
+    pv->par_height = init->par_height;
+
+    return 0;
 }
 
-void hb_rotate_close( hb_filter_private_t * pv )
+static int hb_rotate_info( hb_filter_object_t * filter,
+                           hb_filter_info_t * info )
 {
+    hb_filter_private_t * pv = filter->private_data;
+    if( !pv )
+        return 1;
+
+    memset( info, 0, sizeof( hb_filter_info_t ) );
+    info->out.width = pv->width;
+    info->out.height = pv->height;
+    info->out.par_width = pv->par_width;
+    info->out.par_height = pv->par_height;
+    int pos = 0;
+    if( pv->mode & 1 )
+        pos += sprintf( &info->human_readable_desc[pos], "flip vertical" );
+    if( pv->mode & 2 )
+    {
+        if( pos )
+            pos += sprintf( &info->human_readable_desc[pos], "/" );
+        pos += sprintf( &info->human_readable_desc[pos], "flip horizontal" );
+    }
+    if( pv->mode & 4 )
+    {
+        if( pos )
+            pos += sprintf( &info->human_readable_desc[pos], "/" );
+        pos += sprintf( &info->human_readable_desc[pos], "rotate 90" );
+    }
+    return 0;
+}
+
+static void hb_rotate_close( hb_filter_object_t * filter )
+{
+    hb_filter_private_t * pv = filter->private_data;
+
     if( !pv )
     {
         return;
-    }
-
-    /* Cleanup frame buffers */
-    if( pv->buf_out )
-    {
-        hb_buffer_close( &pv->buf_out );
-    }
-    if (pv->buf_settings )
-    {
-        hb_buffer_close( &pv->buf_settings );
     }
 
     int i;
@@ -352,36 +367,43 @@ void hb_rotate_close( hb_filter_private_t * pv )
     free( pv->rotate_arguments );
 
     free( pv );
+    filter->private_data = NULL;
 }
 
-int hb_rotate_work( hb_buffer_t * buf_in,
-                         hb_buffer_t ** buf_out,
-                         int pix_fmt,
-                         int width,
-                         int height,
-                         hb_filter_private_t * pv )
+static int hb_rotate_work( hb_filter_object_t * filter,
+                           hb_buffer_t ** buf_in,
+                           hb_buffer_t ** buf_out )
 {
-    if( !pv ||
-        pix_fmt != pv->pix_fmt ||
-        width   != pv->width[0] ||
-        height  != pv->height[0] )
+    hb_filter_private_t * pv = filter->private_data;
+    hb_buffer_t * in = *buf_in, * out;
+
+    if ( in->size <= 0 )
     {
-        return FILTER_FAILED;
+        *buf_out = in;
+        *buf_in = NULL;
+        return HB_FILTER_DONE;
     }
 
-    avpicture_fill( &pv->pic_in, buf_in->data,
-                    pix_fmt, width, height );
+    int width_out, height_out;
+    if ( pv->mode & 4 )
+    {
+        width_out = in->f.height;
+        height_out = in->f.width;
+    }
+    else
+    {
+        width_out = in->f.width;
+        height_out = in->f.height;
+    }
 
-    avpicture_fill( &pv->pic_out, pv->buf_out->data,
-                        pix_fmt, width, height );
+    out = hb_video_buffer_init( width_out, height_out );
 
-    //do stuff here
-    rotate_filter( pv->pic_out.data, pv );
-    hb_buffer_copy_settings( pv->buf_out, buf_in );
+    // Rotate!
+    rotate_filter( pv, out, in );
+    out->s = in->s;
+    hb_buffer_move_subs( out, in );
     
-    *buf_out = pv->buf_out;
+    *buf_out = out;
     
-    return FILTER_OK;
+    return HB_FILTER_OK;
 }
-
-

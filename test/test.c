@@ -61,6 +61,7 @@ static int    decomb                = 0;
 static char * decomb_opt            = 0;
 static int    rotate                = 0;
 static char * rotate_opt            = 0;
+static int    rotate_val            = 0;
 static int    grayscale   = 0;
 static int    vcodec      = HB_VCODEC_FFMPEG_MPEG4;
 static hb_list_t * audios = NULL;
@@ -1343,44 +1344,50 @@ static int HandleEvents( hb_handle_t * h )
             job->deinterlace = deinterlace;
             job->grayscale   = grayscale;
             
+            hb_filter_object_t * filter;
+
             /* Add selected filters */
-            job->filters = hb_list_init();
-            
-            if( rotate )
-            {
-                hb_filter_rotate.settings = rotate_opt;
-                hb_list_add( job->filters, &hb_filter_rotate);
-            }
             if( detelecine )
             {
-                hb_filter_detelecine.settings = detelecine_opt;
-                hb_list_add( job->filters, &hb_filter_detelecine );
+                filter = hb_filter_init( HB_FILTER_DETELECINE );
+                hb_add_filter( job, filter, detelecine_opt );
             }
             if( decomb )
             {
-                hb_filter_decomb.settings = decomb_opt;
-                hb_list_add( job->filters, &hb_filter_decomb );
+                filter = hb_filter_init( HB_FILTER_DECOMB );
+                hb_add_filter( job, filter, decomb_opt );
             }
             if( deinterlace )
             {
-                hb_filter_deinterlace.settings = deinterlace_opt;
-                hb_list_add( job->filters, &hb_filter_deinterlace );
+                filter = hb_filter_init( HB_FILTER_DEINTERLACE );
+                hb_add_filter( job, filter, deinterlace_opt );
             }
             if( deblock )
             {
-                hb_filter_deblock.settings = deblock_opt;
-                hb_list_add( job->filters, &hb_filter_deblock );
+                filter = hb_filter_init( HB_FILTER_DEBLOCK );
+                hb_add_filter( job, filter, deblock_opt );
             }
             if( denoise )
             {
-                hb_filter_denoise.settings = denoise_opt;
-                hb_list_add( job->filters, &hb_filter_denoise );
+                filter = hb_filter_init( HB_FILTER_DENOISE );
+                hb_add_filter( job, filter, denoise_opt );
             }
+            if( rotate )
+            {
+                filter = hb_filter_init( HB_FILTER_ROTATE );
+                hb_add_filter( job, filter, rotate_opt);
+            }
+
+
+            if (maxWidth)
+                job->maxWidth = maxWidth;
+            if (maxHeight)
+                job->maxHeight = maxHeight;
 
             switch( anamorphic_mode )
             {
                 case 0: // Non-anamorphic
-                    
+
                     if (modulus)
                     {
                         job->modulus = modulus;
@@ -1540,6 +1547,38 @@ static int HandleEvents( hb_handle_t * h )
                     
                 break;
             }
+            // Validate and adjust job picture dimensions
+            hb_validate_size( job );
+
+            // Add filter that does cropping and scaling
+            char * filter_str;
+            filter_str = hb_strdup_printf("%d:%d:%d:%d:%d:%d",
+                job->width, job->height, 
+                job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
+            filter = hb_filter_init( HB_FILTER_CROP_SCALE );
+            hb_add_filter( job, filter, filter_str );
+            free( filter_str );
+
+            // Add framerate shaping filter
+            if( vrate )
+            {
+                job->cfr = cfr;
+                job->vrate = 27000000;
+                job->vrate_base = vrate;
+            }
+            else if ( cfr )
+            {
+                // cfr or pfr flag with no rate specified implies
+                // use the title rate.
+                job->cfr = cfr;
+                job->vrate = title->rate;
+                job->vrate_base = title->rate_base;
+            }
+            filter_str = hb_strdup_printf("%d:%d:%d",
+                job->cfr, job->vrate, job->vrate_base );
+            filter = hb_filter_init( HB_FILTER_VFR );
+            hb_add_filter( job, filter, filter_str );
+            free( filter_str );
 
             if( vquality >= 0.0 )
             {
@@ -1554,20 +1593,6 @@ static int HandleEvents( hb_handle_t * h )
             if( vcodec )
             {
                 job->vcodec = vcodec;
-            }
-            if( vrate )
-            {
-                job->cfr = cfr;
-                job->vrate = 27000000;
-                job->vrate_base = vrate;
-            }
-            else if ( cfr )
-            {
-                // cfr or pfr flag with no rate specified implies
-                // use the title rate.
-                job->cfr = cfr;
-                job->vrate = title->rate;
-                job->vrate_base = title->rate_base;
             }
 
             /* Grab audio tracks */
@@ -2235,6 +2260,12 @@ static int HandleEvents( hb_handle_t * h )
                 }
             }
 
+            if ( sub_burned )
+            {
+                filter = hb_filter_init( HB_FILTER_RENDER_SUB );
+                hb_add_filter( job, filter, NULL);
+            }
+
             if( srtfile )
             {
                 char * token;
@@ -2377,6 +2408,7 @@ static int HandleEvents( hb_handle_t * h )
             {
                 job->advanced_opts =  NULL;
             }
+
             job->x264_profile = x264_profile;
             job->x264_preset = x264_preset;
             job->x264_tune = x264_tune;
@@ -2514,6 +2546,7 @@ static int HandleEvents( hb_handle_t * h )
                 job->pass = 0;
                 hb_add( h, job );
             }
+            hb_reset_job( job );
             hb_start( h );
             break;
         }
@@ -3507,6 +3540,7 @@ static int ParseOptions( int argc, char ** argv )
                 if( optarg != NULL )
                 {
                     rotate_opt = strdup( optarg );
+                    rotate_val = atoi( optarg );
                 }
                 rotate = 1;
                 break;

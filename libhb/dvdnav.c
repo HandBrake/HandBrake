@@ -553,17 +553,19 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
 
         audio->config.lang.type = lang_extension;
 
-        lang = lang_for_code( ifo->vtsi_mat->vts_audio_attr[i].lang_code );
+        lang = lang_for_code( lang_code );
 
-        snprintf( audio->config.lang.description, sizeof( audio->config.lang.description ), "%s (%s)",
+        snprintf( audio->config.lang.description,
+            sizeof( audio->config.lang.description ), "%s (%s)",
             strlen(lang->native_name) ? lang->native_name : lang->eng_name,
-            audio->config.in.codec == HB_ACODEC_AC3 ? "AC3" : ( audio->config.in.codec ==
-                HB_ACODEC_DCA ? "DTS" : ( audio->config.in.codec ==
-                HB_ACODEC_FFMPEG ? "MPEG" : "LPCM" ) ) );
-        snprintf( audio->config.lang.simple, sizeof( audio->config.lang.simple ), "%s",
+            audio->config.in.codec == HB_ACODEC_AC3 ? "AC3" :
+            ( audio->config.in.codec == HB_ACODEC_DCA ? "DTS" :
+            ( audio->config.in.codec == HB_ACODEC_FFMPEG ? "MPEG" : "LPCM" ) ) );
+        snprintf( audio->config.lang.simple,
+                  sizeof( audio->config.lang.simple ), "%s",
                   strlen(lang->native_name) ? lang->native_name : lang->eng_name );
-        snprintf( audio->config.lang.iso639_2, sizeof( audio->config.lang.iso639_2 ), "%s",
-                  lang->iso639_2);
+        snprintf( audio->config.lang.iso639_2,
+                  sizeof( audio->config.lang.iso639_2 ), "%s", lang->iso639_2);
 
         switch( lang_extension )
         {
@@ -1621,7 +1623,7 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
             // The muxers expect to only get chapter 2 and above
             // They write chapter 1 when chapter 2 is detected.
             if (chapter > 1)
-                b->new_chap = chapter;
+                b->s.new_chap = chapter;
             chapter = 0;
             error_count = 0;
             return b;
@@ -1762,7 +1764,7 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
             // The muxers expect to only get chapter 2 and above
             // They write chapter 1 when chapter 2 is detected.
             if (chapter > 1)
-                b->new_chap = chapter;
+                b->s.new_chap = chapter;
             chapter = 0;
             return b;
 

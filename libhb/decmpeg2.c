@@ -57,6 +57,11 @@ typedef struct hb_libmpeg2_s
         int64_t          start;             // start time of this frame
         hb_buffer_t    * cc_buf;            // captions for this frame
     } tags[NTAGS];
+
+    struct SwsContext *sws_context; // if we have to rescale or convert color space
+    int             sws_width;
+    int             sws_height;
+    int             sws_pix_fmt;
 } hb_libmpeg2_t;
 
 /**********************************************************************
@@ -95,7 +100,7 @@ static void cc_send_to_decoder( hb_libmpeg2_t *m, hb_buffer_t *cc_buf )
     {
         // make a copy of the buf then forward it to the decoder
         hb_buffer_t *cpy = hb_buffer_init( cc_buf->size );
-        hb_buffer_copy_settings( cpy, cc_buf );
+        cpy->s = cc_buf->s;
         memcpy( cpy->data, cc_buf->data, cc_buf->size );
 
         subtitle = hb_list_item( m->list_subtitle, i++ );
@@ -251,20 +256,36 @@ static void next_tag( hb_libmpeg2_t *m, hb_buffer_t *buf_es )
         if ( m->tags[m->cur_tag].start < 0 ||
              ( m->got_iframe && m->tags[m->cur_tag].start >= m->first_pts ) )
             hb_log("mpeg2 tag botch: pts %"PRId64", tag pts %"PRId64" buf 0x%p",
-                   buf_es->start, m->tags[m->cur_tag].start, m->tags[m->cur_tag].cc_buf);
+                   buf_es->s.start, m->tags[m->cur_tag].start, m->tags[m->cur_tag].cc_buf);
         if ( m->tags[m->cur_tag].cc_buf )
             hb_buffer_close( &m->tags[m->cur_tag].cc_buf );
     }
-    m->tags[m->cur_tag].start = buf_es->start;
+    m->tags[m->cur_tag].start = buf_es->s.start;
     mpeg2_tag_picture( m->libmpeg2, m->cur_tag, 0 );
 }
 
-static hb_buffer_t *hb_copy_frame( hb_job_t *job, int width, int height,
-                                   int *crop, enum PixelFormat pixfmt,
-                                   uint8_t* y, uint8_t *u, uint8_t *v )
+static hb_buffer_t *hb_copy_frame( hb_libmpeg2_t *m )
 {
+    hb_job_t * job = m->job;
+    int width = m->info->sequence->width;
+    int height = m->info->sequence->height;
+    enum PixelFormat pixfmt = m->pixfmt;
+    uint8_t *y = m->info->display_fbuf->buf[0];
+    uint8_t *u = m->info->display_fbuf->buf[1];
+    uint8_t *v = m->info->display_fbuf->buf[2];
+    int crop[4] = {0};
+
     int dst_w, dst_h;
     int src_w, src_h;
+
+    if ( m->info->sequence->picture_width < m->info->sequence->width )
+    {
+        crop[3] = m->info->sequence->width - m->info->sequence->picture_width;
+    }
+    if ( m->info->sequence->picture_height < m->info->sequence->height )
+    {
+        crop[1] = m->info->sequence->height - m->info->sequence->picture_height;
+    }
 
     src_w = width - (crop[2] + crop[3]);
     src_h = height - (crop[0] + crop[1]);
@@ -280,7 +301,7 @@ static hb_buffer_t *hb_copy_frame( hb_job_t *job, int width, int height,
     }
 
     hb_buffer_t *buf  = hb_video_buffer_init( dst_w, dst_h );
-    buf->start = -1;
+    buf->s.start = -1;
 
     AVPicture in, out, pic_crop;
 
@@ -290,23 +311,34 @@ static hb_buffer_t *hb_copy_frame( hb_job_t *job, int width, int height,
     in.linesize[0] = width;
     in.linesize[1] = width>>1;
     in.linesize[2] = width>>1;
-    avpicture_fill( &out, buf->data, PIX_FMT_YUV420P, dst_w, dst_h );
+    hb_avpicture_fill( &out, buf );
 
     av_picture_crop( &pic_crop, &in, pixfmt, crop[0], crop[2] );
 
-    // Source and Dest dimensions may be the same.  There is no speed
-    // cost to using sws_scale to simply copy the data.
-    struct SwsContext *context = hb_sws_get_context( src_w, src_h, pixfmt,
-                                                 dst_w, dst_h, PIX_FMT_YUV420P,
-                                                 SWS_LANCZOS|SWS_ACCURATE_RND);
-    if ( context == NULL )
+    if ( !m->sws_context ||
+         m->sws_width != src_w ||
+         m->sws_height != src_h ||
+         m->sws_pix_fmt != pixfmt )
     {
-        hb_buffer_close( &buf );
-        return NULL;
+        // Source and Dest dimensions may be the same.  There is no speed
+        // cost to using sws_scale to simply copy the data.
+        m->sws_context = hb_sws_get_context( src_w, src_h, pixfmt,
+                                             dst_w, dst_h, buf->f.fmt,
+                                             SWS_LANCZOS|SWS_ACCURATE_RND);
+        m->sws_width = src_w;
+        m->sws_height = src_h;
+        m->sws_pix_fmt = pixfmt;
+
+        if ( m->sws_context == NULL )
+        {
+            hb_buffer_close( &buf );
+            return NULL;
+        }
+
     }
 
-    sws_scale( context, (const uint8_t* const *)pic_crop.data, pic_crop.linesize, 0, src_h, out.data, out.linesize );
-    sws_freeContext( context );
+    sws_scale( m->sws_context, (const uint8_t* const *)pic_crop.data, 
+               pic_crop.linesize, 0, src_h, out.data, out.linesize );
 
     return buf;
 }
@@ -325,7 +357,7 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
     if ( buf_es->size )
     {
         /* Feed libmpeg2 */
-        if( buf_es->start >= 0 )
+        if( buf_es->s.start >= 0 )
         {
             next_tag( m, buf_es );
         }
@@ -353,7 +385,7 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 if (m->tags[m->cur_tag].cc_buf)
                 {
                     hb_log("mpeg2 tag botch2: pts %"PRId64", tag pts %"PRId64" buf 0x%p",
-                           buf_es->start, m->tags[m->cur_tag].start, m->tags[m->cur_tag].cc_buf);
+                           buf_es->s.start, m->tags[m->cur_tag].start, m->tags[m->cur_tag].cc_buf);
                     hb_buffer_close( &m->tags[m->cur_tag].cc_buf );
                 }
                 // see if we already made a tag for the timestamp. If so we
@@ -416,23 +448,7 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
 
             if( m->got_iframe )
             {
-                int crop[4] = {0};
-                if ( m->info->sequence->picture_width < m->info->sequence->width )
-                {
-                    crop[3] = m->info->sequence->width - m->info->sequence->picture_width;
-                }
-                if ( m->info->sequence->picture_height < m->info->sequence->height )
-                {
-                    crop[1] = m->info->sequence->height - m->info->sequence->picture_height;
-                }
-                buf  = hb_copy_frame( m->job, 
-                                      m->info->sequence->width,
-                                      m->info->sequence->height,
-                                      crop,
-                                      m->pixfmt,
-                                      m->info->display_fbuf->buf[0],
-                                      m->info->display_fbuf->buf[1],
-                                      m->info->display_fbuf->buf[2] );
+                buf  = hb_copy_frame( m );
                 if ( buf == NULL )
                     continue;
 
@@ -442,29 +458,29 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 if( m->info->display_picture->flags & PIC_FLAG_TAGS )
                 {
                     int t = m->info->display_picture->tag;
-                    buf->start = m->tags[t].start;
+                    buf->s.start = m->tags[t].start;
                     cc_buf = m->tags[t].cc_buf;
                     m->tags[t].start = -1;
                     m->tags[t].cc_buf = NULL;
                 }
-                if( buf->start < 0 && m->last_pts >= 0 )
+                if( buf->s.start < 0 && m->last_pts >= 0 )
                 {
                     /* For some reason nb_fields is sometimes 1 while it
                        should be 2 */
-                    buf->start = m->last_pts +
+                    buf->s.start = m->last_pts +
                         MAX( 2, m->info->display_picture->nb_fields ) *
                         m->info->sequence->frame_period / 600;
                 }
-                if ( buf->start >= 0 )
+                if ( buf->s.start >= 0 )
                 {
-                    m->last_pts = buf->start;
+                    m->last_pts = buf->s.start;
                 }
 
                 // if we were accumulating captions we now know the timestamp
                 // so ship them to the decoder.
                 if ( cc_buf )
                 {
-                    cc_buf->start = m->last_pts;
+                    cc_buf->s.start = m->last_pts;
                     cc_send_to_decoder( m, cc_buf );
                 }
 
@@ -473,31 +489,35 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 {
                     // we were waiting for an iframe to insert a chapter mark
                     // and we have one.
-                    buf->new_chap = m->look_for_iframe;
+                    int new_chap = m->look_for_iframe;
+                    buf->s.new_chap = new_chap;
+
                     m->look_for_iframe = 0;
                     const char *chap_name = "";
-                    if ( m->job && buf->new_chap > 0 &&
+                    if ( m->job && new_chap > 0 &&
                          hb_list_item( m->job->title->list_chapter,
-                                       buf->new_chap - 1 ) )
+                                       new_chap - 1 ) )
                     {
-                        hb_chapter_t * c = hb_list_item( m->job->title->list_chapter,
-                                                         buf->new_chap - 1 );
+                        hb_chapter_t * c = hb_list_item( 
+                                                 m->job->title->list_chapter,
+                                                 new_chap - 1 );
                         chap_name = c->title;
                     }
                     hb_log( "mpeg2: \"%s\" (%d) at frame %u time %"PRId64,
-                            chap_name, buf->new_chap, m->nframes, buf->start );
+                            chap_name, new_chap, 
+                            m->nframes, buf->s.start );
                 }
                 else if ( m->nframes == 0 )
                 {
                     // this is the first frame returned by the decoder
-                    m->first_pts = buf->start;
+                    m->first_pts = buf->s.start;
                     if ( m->job && hb_list_item( m->job->title->list_chapter,
                                                  m->job->chapter_start - 1 ) )
                     {
                         hb_chapter_t * c = hb_list_item( m->job->title->list_chapter,
                                                          m->job->chapter_start - 1 );
                         hb_log( "mpeg2: \"%s\" (%d) at frame %u time %"PRId64,
-                                c->title, m->job->chapter_start, m->nframes, buf->start );
+                                c->title, m->job->chapter_start, m->nframes, buf->s.start );
                     }
                 }
                 ++m->nframes;
@@ -505,7 +525,7 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 m->flag = m->info->display_picture->flags;
 
 /*  Uncomment this block to see frame-by-frame picture flags, as the video encodes.
-               hb_log("***** MPEG 2 Picture Info for PTS %"PRId64" *****", buf->start);
+               hb_log("***** MPEG 2 Picture Info for PTS %"PRId64" *****", buf->s.start);
                 if( m->flag & TOP_FIRST )
                     hb_log("MPEG2 Flag: Top field first");
                 if( m->flag & PROGRESSIVE )
@@ -584,12 +604,11 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 }
 
                 if ( (m->cadence[2] <= TB) && (m->cadence[1] <= TB) && (m->cadence[0] > TB) && (m->cadence[11]) )
-                    hb_log("%fs: Video -> Film", (float)buf->start / 90000);
+                    hb_log("%fs: Video -> Film", (float)buf->s.start / 90000);
                 if ( (m->cadence[2] > TB) && (m->cadence[1] <= TB) && (m->cadence[0] <= TB) && (m->cadence[11]) )
-                    hb_log("%fs: Film -> Video", (float)buf->start / 90000);
+                    hb_log("%fs: Film -> Video", (float)buf->s.start / 90000);
 
-                /* Store picture flags for later use by filters */
-                buf->flags = m->info->display_picture->flags;
+                buf->s.flags = m->info->display_picture->flags;
 
                 hb_list_add( list_raw, buf );
             }
@@ -666,6 +685,11 @@ static void hb_libmpeg2_close( hb_libmpeg2_t ** _m )
     hb_libmpeg2_t * m = *_m;
 
     mpeg2_close( m->libmpeg2 );
+
+    if ( m->sws_context )
+    {
+        sws_freeContext( m->sws_context );
+    }
 
     int i;
     for ( i = 0; i < NTAGS; ++i )
@@ -754,6 +778,7 @@ static int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
 {
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf, * last = NULL;
+    hb_buffer_t * in = *buf_in;
     int status = HB_WORK_OK;
 
     if( w->title && pv && pv->libmpeg2 && !pv->libmpeg2->title ) {
@@ -763,21 +788,21 @@ static int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     // The reader found a chapter break. Remove it from the input 
     // stream. If we're reading (as opposed to scanning) start looking
     // for the next GOP start since that's where the chapter begins.
-    if( (*buf_in)->new_chap )
+    if( in->s.new_chap )
     {
         if ( pv->libmpeg2->job )
         {
-            pv->libmpeg2->look_for_break = (*buf_in)->new_chap;
+            pv->libmpeg2->look_for_break = in->s.new_chap;
         }
-        (*buf_in)->new_chap = 0;
+        in->s.new_chap = 0;
     }
 
-    hb_libmpeg2_decode( pv->libmpeg2, *buf_in, pv->list );
+    hb_libmpeg2_decode( pv->libmpeg2, in, pv->list );
 
     /* if we got an empty buffer signaling end-of-stream send it downstream */
-    if ( (*buf_in)->size == 0 )
+    if ( in->size == 0 )
     {
-        hb_list_add( pv->list, *buf_in );
+        hb_list_add( pv->list, in );
         *buf_in = NULL;
         status = HB_WORK_DONE;
 

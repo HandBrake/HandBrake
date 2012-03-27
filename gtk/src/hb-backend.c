@@ -4666,11 +4666,8 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	static gchar *advanced_opts;
 	gint sub_id = 0;
 	gboolean tweaks = FALSE;
-	gchar *detel_str = NULL;
-	gchar *decomb_str = NULL;
-	gchar *deint_str = NULL;
-	gchar *deblock_str = NULL;
-	gchar *denoise_str = NULL;
+	hb_filter_object_t * filter;
+	gchar *filter_str;
 	gchar *dest_str = NULL;
 
 	g_debug("add_job()\n");
@@ -4778,11 +4775,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 			}
 		}
 	}
-	job->crop[0] = ghb_settings_get_int(js, "PictureTopCrop");
-	job->crop[1] = ghb_settings_get_int(js, "PictureBottomCrop");
-	job->crop[2] = ghb_settings_get_int(js, "PictureLeftCrop");
-	job->crop[3] = ghb_settings_get_int(js, "PictureRightCrop");
-
 	
 	gboolean decomb_deint = ghb_settings_get_boolean(js, "PictureDecombDeinterlace");
 	gint decomb = ghb_settings_combo_int(js, "PictureDecomb");
@@ -4818,67 +4810,89 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		}
 	}
 
+	int width, height, crop[4];
+	width = ghb_settings_get_int(js, "scale_width");
+	height = ghb_settings_get_int(js, "scale_height");
+
+	crop[0] = ghb_settings_get_int(js, "PictureTopCrop");
+	crop[1] = ghb_settings_get_int(js, "PictureBottomCrop");
+	crop[2] = ghb_settings_get_int(js, "PictureLeftCrop");
+	crop[3] = ghb_settings_get_int(js, "PictureRightCrop");
+
+	filter_str = g_strdup_printf("%d:%d:%d:%d:%d:%d", 
+							width, height, crop[0], crop[1], crop[2], crop[3]);
+	filter = hb_filter_init(HB_FILTER_CROP_SCALE);
+	hb_add_filter( job, filter, filter_str );
+	g_free(filter_str);
+
 	/* Add selected filters */
-	job->filters = hb_list_init();
 	gint detel = ghb_settings_combo_int(js, "PictureDetelecine");
 	if ( detel )
 	{
+		filter_str = NULL;
 		if (detel != 1)
 		{
 			if (detel_opts.map[detel].svalue != NULL)
-				detel_str = g_strdup(detel_opts.map[detel].svalue);
+				filter_str = g_strdup(detel_opts.map[detel].svalue);
 		}
 		else
-			detel_str = ghb_settings_get_string(js, "PictureDetelecineCustom");
-		hb_filter_detelecine.settings = detel_str;
-		hb_list_add( job->filters, &hb_filter_detelecine );
+			filter_str = ghb_settings_get_string(js, "PictureDetelecineCustom");
+		filter = hb_filter_init(HB_FILTER_DETELECINE);
+		hb_add_filter( job, filter, filter_str );
+		g_free(filter_str);
 	}
 	if ( decomb_deint && decomb )
 	{
+		filter_str = NULL;
 		if (decomb != 1)
 		{
 			if (decomb_opts.map[decomb].svalue != NULL)
-				decomb_str = g_strdup(decomb_opts.map[decomb].svalue);
+				filter_str = g_strdup(decomb_opts.map[decomb].svalue);
 		}
 		else
-			decomb_str = ghb_settings_get_string(js, "PictureDecombCustom");
-		hb_filter_decomb.settings = decomb_str;
-		hb_list_add( job->filters, &hb_filter_decomb );
+			filter_str = ghb_settings_get_string(js, "PictureDecombCustom");
+		filter = hb_filter_init(HB_FILTER_DECOMB);
+		hb_add_filter( job, filter, filter_str );
+		g_free(filter_str);
 	}
 	if( job->deinterlace )
 	{
+		filter_str = NULL;
 		if (deint != 1)
 		{
 			if (deint_opts.map[deint].svalue != NULL)
-				deint_str = g_strdup(deint_opts.map[deint].svalue);
+				filter_str = g_strdup(deint_opts.map[deint].svalue);
 		}
 		else
-			deint_str = ghb_settings_get_string(js, "PictureDeinterlaceCustom");
-		hb_filter_deinterlace.settings = deint_str;
-		hb_list_add( job->filters, &hb_filter_deinterlace );
-	}
-	gint deblock = ghb_settings_get_int(js, "PictureDeblock");
-	if( deblock >= 5 )
-	{
-		deblock_str = g_strdup_printf("%d", deblock);
-		hb_filter_deblock.settings = deblock_str;
-		hb_list_add( job->filters, &hb_filter_deblock );
+			filter_str = ghb_settings_get_string(js, "PictureDeinterlaceCustom");
+		filter = hb_filter_init(HB_FILTER_DEINTERLACE);
+		hb_add_filter( job, filter, filter_str );
+		g_free(filter_str);
 	}
 	gint denoise = ghb_settings_combo_int(js, "PictureDenoise");
 	if( denoise )
 	{
+		filter_str = NULL;
 		if (denoise != 1)
 		{
 			if (denoise_opts.map[denoise].svalue != NULL)
-				denoise_str = g_strdup(denoise_opts.map[denoise].svalue);
+				filter_str = g_strdup(denoise_opts.map[denoise].svalue);
 		}
 		else
-			denoise_str = ghb_settings_get_string(js, "PictureDenoiseCustom");
-		hb_filter_denoise.settings = denoise_str;
-		hb_list_add( job->filters, &hb_filter_denoise );
+			filter_str = ghb_settings_get_string(js, "PictureDenoiseCustom");
+		filter = hb_filter_init(HB_FILTER_DENOISE);
+		hb_add_filter( job, filter, filter_str );
+		g_free(filter_str);
 	}
-	job->width = ghb_settings_get_int(js, "scale_width");
-	job->height = ghb_settings_get_int(js, "scale_height");
+	gint deblock = ghb_settings_get_int(js, "PictureDeblock");
+	if( deblock >= 5 )
+	{
+		filter_str = NULL;
+		filter_str = g_strdup_printf("%d", deblock);
+		filter = hb_filter_init(HB_FILTER_DEBLOCK);
+		hb_add_filter( job, filter, filter_str );
+		g_free(filter_str);
+	}
 
 	job->vcodec = ghb_settings_combo_int(js, "VideoEncoder");
 	if ((job->mux == HB_MUX_MP4 ) && (job->vcodec == HB_VCODEC_THEORA))
@@ -4903,23 +4917,29 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		job->vbitrate = ghb_settings_get_int(js, "VideoAvgBitrate");
 	}
 
-	gint vrate = ghb_settings_combo_int(js, "VideoFramerate");
-	if( vrate == 0 )
-	{
-		job->vrate = title->rate;
-		job->vrate_base = title->rate_base;
-	}
-	else
-	{
-		job->vrate = 27000000;
-		job->vrate_base = vrate;
-	}
+	gint vrate;
+	gint vrate_base = ghb_settings_combo_int(js, "VideoFramerate");
+	gint cfr;
 	if (ghb_settings_get_boolean(js, "VideoFrameratePFR"))
-		job->cfr = 2;
+		cfr = 2;
 	else if (ghb_settings_get_boolean(js, "VideoFramerateCFR"))
-		job->cfr = 1;
+		cfr = 1;
 	else
-		job->cfr = 0;
+		cfr = 0;
+
+	if( vrate_base == 0 )
+	{
+		vrate = title->rate;
+		vrate_base = title->rate_base;
+	}
+	else
+	{
+		vrate = 27000000;
+	}
+	filter_str = g_strdup_printf("%d:%d:%d", cfr, vrate, vrate_base);
+	filter = hb_filter_init(HB_FILTER_VFR);
+	hb_add_filter( job, filter, filter_str );
+	g_free(filter_str);
 
 	const GValue *audio_list;
 	gint count, ii;
@@ -5106,6 +5126,13 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 			}
 		}
 	}
+	if (one_burned)
+	{
+		// Add filter that renders vobsubs
+		filter = hb_filter_init(HB_FILTER_RENDER_SUB);
+		hb_add_filter( job, filter, NULL );
+	}
+
 
 	// TODO: libhb holds onto a reference to the advanced_opts and is not
 	// finished with it until encoding the job is done.  But I can't
@@ -5232,29 +5259,10 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		//	g_free(job->advanced_opts);
 	}
 
-	// clean up audio list
-	gint num_audio_tracks = hb_list_count(job->list_audio);
-	for(ii = 0; ii < num_audio_tracks; ii++)
-	{
-		hb_audio_t *audio = (hb_audio_t*)hb_list_item(job->list_audio, 0);
-		hb_list_rem(job->list_audio, audio);
-		free(audio);
-	}
+	// Reset the job so it can be use again to add other jobs
+	// for the same title.
+	hb_reset_job(job);
 
-	// clean up subtitle list
-	gint num_subtitle_tracks = hb_list_count(job->list_subtitle);
-	for(ii = 0; ii < num_subtitle_tracks; ii++)
-	{
-		hb_subtitle_t *subtitle = hb_list_item(job->list_subtitle, 0);
-		hb_list_rem(job->list_subtitle, subtitle);
-		free(subtitle);
-	}
-
-	if (detel_str) g_free(detel_str);
-	if (decomb_str) g_free(decomb_str);
-	if (deint_str) g_free(deint_str);
-	if (deblock_str) g_free(deblock_str);
-	if (denoise_str) g_free(denoise_str);
 	if (dest_str) g_free(dest_str);
 }
 
@@ -5269,8 +5277,6 @@ ghb_add_job(GValue *js, gint unique_id)
 void
 ghb_add_live_job(GValue *js, gint unique_id)
 {
-	// Since I'm doing a scan of the single title I want just prior 
-	// to adding the job, there is only the one title to choose from.
 	gint titleindex = ghb_settings_combo_int(js, "title");
 	add_job(h_scan, js, unique_id, titleindex);
 }

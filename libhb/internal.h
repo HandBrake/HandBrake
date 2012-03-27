@@ -4,6 +4,8 @@
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
+#include "hbffmpeg.h"
+
 /***********************************************************************
  * common.c
  **********************************************************************/
@@ -29,8 +31,6 @@ void hb_list_empty( hb_list_t ** );
 hb_title_t * hb_title_init( char * dvd, int index );
 void         hb_title_close( hb_title_t ** );
 
-void         hb_filter_close( hb_filter_object_t ** );
-
 /***********************************************************************
  * hb.c
  **********************************************************************/
@@ -40,6 +40,7 @@ void hb_set_state( hb_handle_t *, hb_state_t * );
 /***********************************************************************
  * fifo.c
  **********************************************************************/
+
 /*
  * Holds a packet of data that is moving through the transcoding process.
  * 
@@ -51,7 +52,7 @@ struct hb_buffer_s
     int           size;     // size of this packet
     int           alloc;    // used internally by the packet allocator (hb_buffer_init)
     uint8_t *     data;     // packet data
-    int           cur;      // used internally by packet lists (hb_list_t)
+    int           offset;   // used internally by packet lists (hb_list_t)
 
     /*
      * Corresponds to the order that this packet was read from the demuxer.
@@ -66,39 +67,56 @@ struct hb_buffer_s
      */
     int64_t       sequence;
 
-    enum { AUDIO_BUF, VIDEO_BUF, SUBTITLE_BUF, OTHER_BUF } type;
+    struct settings
+    {
+        enum { AUDIO_BUF, VIDEO_BUF, SUBTITLE_BUF, OTHER_BUF } type;
 
-    int           id;           // ID of the track that the packet comes from
-    int64_t       start;        // Video and subtitle packets: start time of frame/subtitle
-    int64_t       stop;         // Video and subtitle packets: stop time of frame/subtitle
-    int64_t       pcr;
-    uint8_t       discontinuity;
-    int           new_chap;     // Video packets: if non-zero, is the index of the chapter whose boundary was crossed
+        int           id;           // ID of the track that the packet comes from
+        int64_t       start;        // start time of frame
+        int64_t       stop;         // stop time of frame
+        int64_t       renderOffset; // DTS used by b-frame offsets in muxmp4
+        int64_t       pcr;
+        uint8_t       discontinuity;
+        int           new_chap;     // Video packets: if non-zero, is the index of the chapter whose boundary was crossed
 
-#define HB_FRAME_IDR    0x01
-#define HB_FRAME_I      0x02
-#define HB_FRAME_AUDIO  0x04
-#define HB_FRAME_P      0x10
-#define HB_FRAME_B      0x20
-#define HB_FRAME_BREF   0x40
-#define HB_FRAME_KEY    0x0F
-#define HB_FRAME_REF    0xF0
-    uint8_t       frametype;
-    uint16_t       flags;
+    #define HB_FRAME_IDR    0x01
+    #define HB_FRAME_I      0x02
+    #define HB_FRAME_AUDIO  0x04
+    #define HB_FRAME_P      0x10
+    #define HB_FRAME_B      0x20
+    #define HB_FRAME_BREF   0x40
+    #define HB_FRAME_KEY    0x0F
+    #define HB_FRAME_REF    0xF0
+        uint8_t       frametype;
+        uint16_t      flags;
+    } s;
 
-    /* Holds the output PTS from x264, for use by b-frame offsets in muxmp4.c */
-    int64_t     renderOffset;
+    struct format
+    {
+        int           x;
+        int           y;
+        int           width;
+        int           height;
+        int           fmt;
+    } f;
+
+    struct plane
+    {
+        uint8_t     * data;
+        int           stride;
+        int           width;
+        int           height;
+        int           size;
+    } plane[4]; // 3 Color components + alpha
 
     // PICTURESUB subtitle packets:
-    //   Location and size of the subpicture.
-    int           x;
-    int           y;
-    int           width;
-    int           height;
 
     // Video packets (after processing by the hb_sync_video work-object):
-    //   A (copy of a) PICTURESUB subtitle packet that needs to be burned into this video packet by the hb_render work-object.
-    //   Subtitles that are simply passed thru are NOT attached to the associated video packets.
+    //   A (copy of a) PICTURESUB subtitle packet that needs to be burned into 
+    //   this video packet by the vobsub renderer filter
+    //
+    //   Subtitles that are simply passed thru are NOT attached to the 
+    //   associated video packets.
     hb_buffer_t * sub;
 
     // Packets in a list:
@@ -115,6 +133,7 @@ void          hb_buffer_reduce( hb_buffer_t * b, int size );
 void          hb_buffer_close( hb_buffer_t ** );
 void          hb_buffer_copy_settings( hb_buffer_t * dst,
                                        const hb_buffer_t * src );
+void          hb_buffer_move_subs( hb_buffer_t * dst, hb_buffer_t * src );
 
 hb_fifo_t   * hb_fifo_init( int capacity, int thresh );
 int           hb_fifo_size( hb_fifo_t * );
@@ -135,19 +154,142 @@ hb_buffer_t * hb_fifo_get_list_element( hb_fifo_t *fifo );
 void          hb_fifo_close( hb_fifo_t ** );
 void          hb_fifo_flush( hb_fifo_t * f );
 
+static inline int hb_image_stride( int pix_fmt, int width, int plane )
+{
+    int linesize = av_image_get_linesize( pix_fmt, width, plane );
+
+    // Make buffer SIMD friendly.
+    linesize = MULTIPLE_MOD_UP( linesize, 16 );
+    return linesize;
+}
+
+static inline int hb_image_width( int pix_fmt, int width, int plane )
+{
+    const AVPixFmtDescriptor *desc = &av_pix_fmt_descriptors[pix_fmt];
+
+    if ( plane == 1 || plane == 2 )
+    {
+        // The wacky arithmatic assures rounding up.
+        width = -((-width)>>desc->log2_chroma_w);
+    }
+
+    return width;
+}
+
+static inline int hb_image_height( int pix_fmt, int height, int plane )
+{
+    const AVPixFmtDescriptor *desc = &av_pix_fmt_descriptors[pix_fmt];
+
+    if ( plane == 1 || plane == 2 )
+    {
+        // The wacky arithmatic assures rounding up.
+        height = -((-height)>>desc->log2_chroma_h);
+    }
+
+    return height;
+}
+
+// this routine gets a buffer for an uncompressed picture
+// with pixel format pix_fmt and dimensions width x height.
+static inline hb_buffer_t * hb_pic_buffer_init( int pix_fmt, int width, int height )
+{
+    const AVPixFmtDescriptor *desc = &av_pix_fmt_descriptors[pix_fmt];
+
+    hb_buffer_t * buf;
+    int p;
+    uint8_t has_plane[4] = {0,};
+
+    for( p = 0; p < 4; p++ )
+    {
+        has_plane[desc->comp[p].plane] = 1;
+    }
+
+    int size = 0;
+    for( p = 0; p < 4; p++ )
+    {
+        if( has_plane[p] )
+        {
+            size += hb_image_stride( pix_fmt, width, p ) * 
+                    hb_image_height( pix_fmt, height, p );
+        }
+    }
+
+    buf = hb_buffer_init( size );
+    if( buf == NULL )
+        return NULL;
+
+    buf->s.type = VIDEO_BUF;
+    buf->f.width = width;
+    buf->f.height = height;
+    buf->f.fmt = pix_fmt;
+
+    uint8_t * plane = buf->data;
+    for( p = 0; p < 4; p++ )
+    {
+        if ( has_plane[p] )
+        {
+            buf->plane[p].data = plane;
+            buf->plane[p].stride = hb_image_stride( pix_fmt, width, p );
+            buf->plane[p].height = hb_image_height( pix_fmt, height, p );
+            buf->plane[p].width  = hb_image_width( pix_fmt, width, p );
+            buf->plane[p].size   = hb_image_stride( pix_fmt, width, p ) *
+                                   hb_image_height( pix_fmt, height, p );
+            plane += buf->plane[p].size;
+        }
+    }
+    return buf;
+}
+
 // this routine gets a buffer for an uncompressed YUV420 video frame
 // with dimensions width x height.
 static inline hb_buffer_t * hb_video_buffer_init( int width, int height )
 {
-    // Y requires w x h bytes. U & V each require (w+1)/2 x
-    // (h+1)/2 bytes (the "+1" is to round up). We shift rather
-    // than divide by 2 since the compiler can't know these ints
-    // are positive so it generates very expensive integer divides
-    // if we do "/2". The code here matches the calculation for
-    // PIX_FMT_YUV420P in ffmpeg's avpicture_fill() which is required
-    // for most of HB's filters to work right.
-    return hb_buffer_init( width * height + ( ( width+1 ) >> 1 ) *
-                           ( ( height+1 ) >> 1 ) * 2 );
+    return hb_pic_buffer_init( PIX_FMT_YUV420P, width, height );
+}
+
+// this routine reallocs a buffer for an uncompressed YUV420 video frame
+// with dimensions width x height.
+static inline void hb_video_buffer_realloc( hb_buffer_t * buf, int width, int height )
+{
+    const AVPixFmtDescriptor *desc = &av_pix_fmt_descriptors[buf->f.fmt];
+    int p;
+
+    uint8_t has_plane[4] = {0,};
+
+    for( p = 0; p < 4; p++ )
+    {
+        has_plane[desc->comp[p].plane] = 1;
+    }
+
+    int size = 0;
+    for( p = 0; p < 4; p++ )
+    {
+        if( has_plane[p] )
+        {
+            size += hb_image_stride( buf->f.fmt, width, p ) * 
+                    hb_image_height( buf->f.fmt, height, p );
+        }
+    }
+
+    hb_buffer_realloc(buf, size );
+
+    buf->f.width = width;
+    buf->f.height = height;
+
+    uint8_t * plane = buf->data;
+    for( p = 0; p < 4; p++ )
+    {
+        if( has_plane[p] )
+        {
+            buf->plane[p].data = plane;
+            buf->plane[p].stride = hb_image_stride( buf->f.fmt, width, p );
+            buf->plane[p].height = hb_image_height( buf->f.fmt, height, p );
+            buf->plane[p].width  = hb_image_width( buf->f.fmt, width, p );
+            buf->plane[p].size   = hb_image_stride( buf->f.fmt, width, p ) *
+                                   hb_image_height( buf->f.fmt, height, p );
+            plane += buf->plane[p].size;
+        }
+    }
 }
 
 // this routine 'moves' data from src to dst by interchanging 'data',
@@ -365,15 +507,15 @@ enum
     WORK_READER
 };
 
-enum
-{
-    FILTER_DEINTERLACE = 1,
-    FILTER_DEBLOCK,
-    FILTER_DENOISE,
-    FILTER_DETELECINE,
-    FILTER_DECOMB,
-    FILTER_ROTATE
-};
+extern hb_filter_object_t hb_filter_detelecine;
+extern hb_filter_object_t hb_filter_deinterlace;
+extern hb_filter_object_t hb_filter_deblock;
+extern hb_filter_object_t hb_filter_denoise;
+extern hb_filter_object_t hb_filter_decomb;
+extern hb_filter_object_t hb_filter_rotate;
+extern hb_filter_object_t hb_filter_crop_scale;
+extern hb_filter_object_t hb_filter_render_sub;
+extern hb_filter_object_t hb_filter_vfr;
 
 // Picture flags used by filters
 #ifndef PIC_FLAG_REPEAT_FIRST_FIELD

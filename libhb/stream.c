@@ -1184,14 +1184,13 @@ static int isRecoveryPoint( const uint8_t *buf, int len )
 {
     uint8_t *nal;
     int nal_len;
-    int ii, type, size, start;
+    int ii, type, size;
     int recovery_frames = 0;
 
     CreateDecodedNAL( &nal, &nal_len, buf, len );
 
     for ( ii = 0; ii+1 < nal_len; )
     {
-        start = ii;
         type = 0;
         while ( ii+1 < nal_len )
         {
@@ -3348,15 +3347,15 @@ static hb_buffer_t * hb_ps_stream_decode( hb_stream_t *stream )
         switch (stream->pes.list[idx].stream_kind)
         {
             case A:
-                buf->type = AUDIO_BUF;
+                buf->s.type = AUDIO_BUF;
                 break;
 
             case V:
-                buf->type = VIDEO_BUF;
+                buf->s.type = VIDEO_BUF;
                 break;
 
             default:
-                buf->type = OTHER_BUF;
+                buf->s.type = OTHER_BUF;
                 break;
         }
 
@@ -3364,25 +3363,25 @@ static hb_buffer_t * hb_ps_stream_decode( hb_stream_t *stream )
         {
             // we're looking for the first video frame because we're
             // doing random access during 'scan'
-            if ( buf->type != VIDEO_BUF ||
+            if ( buf->s.type != VIDEO_BUF ||
                  !isIframe( stream, buf->data, buf->size ) )
             {
                 // not the video stream or didn't find an I frame
                 // but we'll only wait 255 video frames for an I frame.
-                if ( buf->type != VIDEO_BUF || ++stream->need_keyframe < 512 )
+                if ( buf->s.type != VIDEO_BUF || ++stream->need_keyframe < 512 )
                 {
                     continue;
                 }
             }
             stream->need_keyframe = 0;
         }
-        if ( buf->type == VIDEO_BUF )
+        if ( buf->s.type == VIDEO_BUF )
             ++stream->frames;
 
-        buf->id = get_id( &stream->pes.list[idx] );
-        buf->pcr = stream->pes.scr;
-        buf->start = pes_info.pts;
-        buf->renderOffset = pes_info.dts;
+        buf->s.id = get_id( &stream->pes.list[idx] );
+        buf->s.pcr = stream->pes.scr;
+        buf->s.start = pes_info.pts;
+        buf->s.renderOffset = pes_info.dts;
         memmove( buf->data, buf->data + pes_info.header_len,
                  buf->size - pes_info.header_len );
         buf->size -= pes_info.header_len;
@@ -4150,7 +4149,7 @@ static void hb_ts_resolve_pid_types(hb_stream_t *stream)
             break;
 
         int idx;
-        idx = index_of_id( stream, buf->id );
+        idx = index_of_id( stream, buf->s.id );
 
         if (idx < 0 || stream->pes.list[idx].stream_kind != U )
             continue;
@@ -4226,7 +4225,7 @@ static void hb_ps_resolve_stream_types(hb_stream_t *stream)
             break;
 
         int idx;
-        idx = index_of_id( stream, buf->id );
+        idx = index_of_id( stream, buf->s.id );
 
         if (idx < 0 || stream->pes.list[idx].stream_kind != U )
             continue;
@@ -4404,53 +4403,53 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
             buf = tmp;
         }
 
-        buf->id = get_id( &stream->pes.list[pes_idx] );
+        buf->s.id = get_id( &stream->pes.list[pes_idx] );
         switch (stream->pes.list[pes_idx].stream_kind)
         {
             case A:
-                buf->type = AUDIO_BUF;
+                buf->s.type = AUDIO_BUF;
                 break;
 
             case V:
-                buf->type = VIDEO_BUF;
+                buf->s.type = VIDEO_BUF;
                 break;
 
             default:
-                buf->type = OTHER_BUF;
+                buf->s.type = OTHER_BUF;
                 break;
         }
 
-        if( b->cur > stream->ts.pcr_out )
+        if( b->sequence > stream->ts.pcr_out )
         {
             // we have a new pcr
-            stream->ts.pcr_out = b->cur;
-            buf->pcr = b->pcr;
-            if( b->cur >= stream->ts.pcr_discontinuity )
+            stream->ts.pcr_out = b->sequence;
+            buf->s.pcr = b->s.pcr;
+            if( b->sequence >= stream->ts.pcr_discontinuity )
                 stream->ts.pcr_current = stream->ts.pcr_discontinuity;
         }
         else
         {
-            buf->pcr = -1;
+            buf->s.pcr = -1;
         }
 
         // check if this packet was referenced to an older pcr and if that
         // pcr was prior to a discontinuity.
-        if( b->cur < stream->ts.pcr_current )
+        if( b->sequence < stream->ts.pcr_current )
         {
             // we've sent up a new pcr but have a packet referenced to an
             // old pcr and the difference was enough to trigger a discontinuity
             // correction. smash the timestamps or we'll mess up the correction.
-            buf->start = -1;
-            buf->renderOffset = -1;
-            buf->stop = -1;
-            buf->pcr = -1;
+            buf->s.start = -1;
+            buf->s.renderOffset = -1;
+            buf->s.stop = -1;
+            buf->s.pcr = -1;
         }
         else
         {
             // put the PTS & possible DTS into 'start' & 'renderOffset'
             // then strip off the PES header.
-            buf->start = pes_info.pts;
-            buf->renderOffset = pes_info.dts;
+            buf->s.start = pes_info.pts;
+            buf->s.renderOffset = pes_info.dts;
         }
         memcpy( buf->data, tdat, size );
     }
@@ -4704,16 +4703,16 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt )
                 // Output data is ready.
                 // remember the pcr that was in effect when we started
                 // this packet.
-                stream->ts.list[curstream].buf->cur = stream->ts.pcr_in;
-                stream->ts.list[curstream].buf->pcr = stream->ts.pcr;
+                stream->ts.list[curstream].buf->sequence = stream->ts.pcr_in;
+                stream->ts.list[curstream].buf->s.pcr = stream->ts.pcr;
                 hb_ts_stream_append_pkt(stream, curstream, pkt + 4 + adapt_len,
                                         184 - adapt_len);
                 return buf;
             }
         }
         // remember the pcr that was in effect when we started this packet.
-        stream->ts.list[curstream].buf->cur = stream->ts.pcr_in;
-        stream->ts.list[curstream].buf->pcr = stream->ts.pcr;
+        stream->ts.list[curstream].buf->sequence = stream->ts.pcr_in;
+        stream->ts.list[curstream].buf->s.pcr = stream->ts.pcr;
     }
 
     // Add the payload for this packet to the current buffer
@@ -5436,26 +5435,26 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
         buf = hb_buffer_init( stream->ffmpeg_pkt->size );
         memcpy( buf->data, stream->ffmpeg_pkt->data, stream->ffmpeg_pkt->size );
     }
-    buf->id = stream->ffmpeg_pkt->stream_index;
+    buf->s.id = stream->ffmpeg_pkt->stream_index;
 
     // compute a conversion factor to go from the ffmpeg
     // timebase for the stream to HB's 90kHz timebase.
     AVStream *s = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt->stream_index];
     double tsconv = 90000. * (double)s->time_base.num / (double)s->time_base.den;
 
-    buf->start = av_to_hb_pts( stream->ffmpeg_pkt->pts, tsconv );
-    buf->renderOffset = av_to_hb_pts( stream->ffmpeg_pkt->dts, tsconv );
-    if ( buf->renderOffset >= 0 && buf->start == -1 )
+    buf->s.start = av_to_hb_pts( stream->ffmpeg_pkt->pts, tsconv );
+    buf->s.renderOffset = av_to_hb_pts( stream->ffmpeg_pkt->dts, tsconv );
+    if ( buf->s.renderOffset >= 0 && buf->s.start == -1 )
     {
-        buf->start = buf->renderOffset;
+        buf->s.start = buf->s.renderOffset;
     }
-    else if ( buf->renderOffset == -1 && buf->start >= 0 )
+    else if ( buf->s.renderOffset == -1 && buf->s.start >= 0 )
     {
-        buf->renderOffset = buf->start;
+        buf->s.renderOffset = buf->s.start;
     }
 
     /*
-     * Fill out buf->stop for subtitle packets
+     * Fill out buf->s.stop for subtitle packets
      *
      * libavcodec's MKV demuxer stores the duration of UTF-8 subtitles (CODEC_ID_TEXT)
      * in the 'convergence_duration' field for some reason.
@@ -5477,30 +5476,30 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
     switch ( codec_type )
     {
         case AVMEDIA_TYPE_VIDEO:
-            buf->type = VIDEO_BUF;
+            buf->s.type = VIDEO_BUF;
             break;
 
         case AVMEDIA_TYPE_AUDIO:
-            buf->type = AUDIO_BUF;
+            buf->s.type = AUDIO_BUF;
             break;
 
         case AVMEDIA_TYPE_SUBTITLE:
-            buf->type = SUBTITLE_BUF;
+            buf->s.type = SUBTITLE_BUF;
             break;
 
         default:
-            buf->type = OTHER_BUF;
+            buf->s.type = OTHER_BUF;
             break;
     }
     if ( ffmpeg_pkt_codec == CODEC_ID_TEXT ) {
         int64_t ffmpeg_pkt_duration = stream->ffmpeg_pkt->convergence_duration;
         int64_t buf_duration = av_to_hb_pts( ffmpeg_pkt_duration, tsconv );
-        buf->stop = buf->start + buf_duration;
+        buf->s.stop = buf->s.start + buf_duration;
     }
     if ( ffmpeg_pkt_codec == CODEC_ID_MOV_TEXT ) {
         int64_t ffmpeg_pkt_duration = stream->ffmpeg_pkt->duration;
         int64_t buf_duration = av_to_hb_pts( ffmpeg_pkt_duration, tsconv );
-        buf->stop = buf->start + buf_duration;
+        buf->s.stop = buf->s.start + buf_duration;
     }
 
     /*
@@ -5512,7 +5511,7 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
      * below handles both the chapters & no chapters case.
      */
     if ( stream->ffmpeg_pkt->stream_index == stream->ffmpeg_video_id &&
-         buf->start >= stream->chapter_end )
+         buf->s.start >= stream->chapter_end )
     {
         hb_chapter_t *chapter = hb_list_item( stream->title->list_chapter,
                                               stream->chapter+1 );
@@ -5520,15 +5519,16 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
         {
             stream->chapter++;
             stream->chapter_end += chapter->duration;
-            buf->new_chap = stream->chapter + 1;
+            buf->s.new_chap = stream->chapter + 1;
             hb_deep_log( 2, "ffmpeg_read starting chapter %i at %"PRId64,
-                         buf->new_chap, buf->start);
+                         stream->chapter + 1, buf->s.start);
         } else {
             // Must have run out of chapters, stop looking.
             stream->chapter_end = INT64_MAX;
+            buf->s.new_chap = 0;
         }
     } else {
-        buf->new_chap = 0;
+        buf->s.new_chap = 0;
     }
     av_free_packet( stream->ffmpeg_pkt );
     return buf;

@@ -334,8 +334,8 @@ void encavcodecClose( hb_work_object_t * w )
 static void save_frame_info( hb_work_private_t * pv, hb_buffer_t * in )
 {
     int i = pv->frameno_in & FRAME_INFO_MASK;
-    pv->frame_info[i].start = in->start;
-    pv->frame_info[i].stop = in->stop;
+    pv->frame_info[i].start = in->s.start;
+    pv->frame_info[i].stop = in->s.stop;
 }
 
 static int64_t get_frame_start( hb_work_private_t * pv, int64_t frameno )
@@ -356,7 +356,7 @@ static void compute_dts_offset( hb_work_private_t * pv, hb_buffer_t * buf )
     {
         if ( ( pv->frameno_in - 1 ) == pv->job->areBframes )
         {
-            pv->dts_delay = buf->start;
+            pv->dts_delay = buf->s.start;
             pv->job->config.h264.init_delay = pv->dts_delay;
         }
     }
@@ -401,7 +401,7 @@ static hb_buffer_t * process_delay_list( hb_work_private_t * pv, hb_buffer_t * b
             // Note that start Nth frame != start time this buffer since the
             // output buffers have rearranged start times.
             int64_t start = get_frame_start( pv, pv->frameno_out );
-            buf->renderOffset = start - pv->dts_delay;
+            buf->s.renderOffset = start - pv->dts_delay;
             return buf;
         }
         else
@@ -415,7 +415,7 @@ static hb_buffer_t * process_delay_list( hb_work_private_t * pv, hb_buffer_t * b
                 // Note that start Nth frame != start time this buffer since the
                 // output buffers have rearranged start times.
                 int64_t start = get_frame_start( pv, pv->frameno_out );
-                buf->renderOffset = start - pv->dts_delay;
+                buf->s.renderOffset = start - pv->dts_delay;
                 buf = buf->next;
             }
             buf = pv->delay_head;
@@ -425,7 +425,7 @@ static hb_buffer_t * process_delay_list( hb_work_private_t * pv, hb_buffer_t * b
     }
     else if ( buf )
     {
-        buf->renderOffset = buf->start - pv->dts_delay;
+        buf->s.renderOffset = buf->s.start - pv->dts_delay;
         return buf;
     }
     return NULL;
@@ -453,12 +453,13 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
 
     frame              = avcodec_alloc_frame();
-    frame->data[0]     = in->data;
-    frame->data[1]     = frame->data[0] + job->width * job->height;
-    frame->data[2]     = frame->data[1] + job->width * job->height / 4;
-    frame->linesize[0] = job->width;
-    frame->linesize[1] = job->width / 2;
-    frame->linesize[2] = job->width / 2;
+    frame->data[0]     = in->plane[0].data;
+    frame->data[1]     = in->plane[1].data;
+    frame->data[2]     = in->plane[2].data;
+    frame->linesize[0] = in->plane[0].stride;
+    frame->linesize[1] = in->plane[1].stride;
+    frame->linesize[2] = in->plane[2].stride;
+
     // For constant quality, setting the quality in AVCodecContext 
     // doesn't do the trick.  It must be set in the AVFrame.
     frame->quality = pv->context->global_quality;
@@ -466,7 +467,7 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     // Bizarro ffmpeg appears to require the input AVFrame.pts to be
     // set to a frame number.  Setting it to an actual pts causes
     // jerky video.
-    // frame->pts = in->start;
+    // frame->pts = in->s.start;
     frame->pts = ++pv->frameno_in;
 
     // Remember info about this frame that we need to pass across
@@ -487,43 +488,43 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         else
         {
             int64_t frameno = pv->context->coded_frame->pts;
-            buf->start  = get_frame_start( pv, frameno );
-            buf->stop  = get_frame_stop( pv, frameno );
-            buf->flags &= ~HB_FRAME_REF;
+            buf->s.start  = get_frame_start( pv, frameno );
+            buf->s.stop  = get_frame_stop( pv, frameno );
+            buf->s.flags &= ~HB_FRAME_REF;
             switch ( pv->context->coded_frame->pict_type )
             {
                 case AV_PICTURE_TYPE_P:
                 {
-                    buf->frametype = HB_FRAME_P;
+                    buf->s.frametype = HB_FRAME_P;
                 } break;
 
                 case AV_PICTURE_TYPE_B:
                 {
-                    buf->frametype = HB_FRAME_B;
+                    buf->s.frametype = HB_FRAME_B;
                 } break;
 
                 case AV_PICTURE_TYPE_S:
                 {
-                    buf->frametype = HB_FRAME_P;
+                    buf->s.frametype = HB_FRAME_P;
                 } break;
 
                 case AV_PICTURE_TYPE_SP:
                 {
-                    buf->frametype = HB_FRAME_P;
+                    buf->s.frametype = HB_FRAME_P;
                 } break;
 
                 case AV_PICTURE_TYPE_BI:
                 case AV_PICTURE_TYPE_SI:
                 case AV_PICTURE_TYPE_I:
                 {
-                    buf->flags |= HB_FRAME_REF;
+                    buf->s.flags |= HB_FRAME_REF;
                     if ( pv->context->coded_frame->key_frame )
                     {
-                        buf->frametype = HB_FRAME_IDR;
+                        buf->s.frametype = HB_FRAME_IDR;
                     }
                     else
                     {
-                        buf->frametype = HB_FRAME_I;
+                        buf->s.frametype = HB_FRAME_I;
                     }
                 } break;
 
@@ -531,12 +532,12 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 {
                     if ( pv->context->coded_frame->key_frame )
                     {
-                        buf->flags |= HB_FRAME_REF;
-                        buf->frametype = HB_FRAME_KEY;
+                        buf->s.flags |= HB_FRAME_REF;
+                        buf->s.frametype = HB_FRAME_KEY;
                     }
                     else
                     {
-                        buf->frametype = HB_FRAME_REF;
+                        buf->s.frametype = HB_FRAME_REF;
                     }
                 } break;
             }

@@ -32,7 +32,7 @@ static int decutf8Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     // Warn if the subtitle's duration has not been passed through by the demuxer,
     // which will prevent the subtitle from displaying at all
-    if ( out->stop == 0 ) {
+    if ( out->s.stop == 0 ) {
         hb_log( "decutf8sub: subtitle packet lacks duration" );
     }
     

@@ -124,6 +124,19 @@ int hb_avcodec_close(AVCodecContext *avctx)
     return ret;
 }
 
+
+int hb_avpicture_fill( AVPicture *pic, hb_buffer_t *buf )
+{
+    int ret, ii;
+
+    for( ii = 0; ii < 4; ii++ )
+        pic->linesize[ii] = buf->plane[ii].stride;
+
+    ret = av_image_fill_pointers( pic->data, buf->f.fmt, buf->f.height,
+                                  buf->data, pic->linesize );
+    return ret;
+}
+
 static int handle_jpeg(enum PixelFormat *format)
 {
     switch (*format) {
@@ -446,7 +459,6 @@ hb_handle_t * hb_init( int verbose, int update_check )
     hb_register( &hb_decutf8sub );
     hb_register( &hb_dectx3gsub );
     hb_register( &hb_decssasub );
-	hb_register( &hb_render );
 	hb_register( &hb_encavcodec );
 	hb_register( &hb_encx264 );
     hb_register( &hb_enctheora );
@@ -546,7 +558,6 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
     hb_register( &hb_decutf8sub );
     hb_register( &hb_dectx3gsub );
     hb_register( &hb_decssasub );
-	hb_register( &hb_render );
 	hb_register( &hb_encavcodec );
 	hb_register( &hb_encx264 );
     hb_register( &hb_enctheora );
@@ -699,6 +710,39 @@ void hb_get_preview_by_index( hb_handle_t * h, int title_index, int picture, uin
     } 
 }
 
+int hb_save_preview( hb_handle_t * h, int title, int preview, hb_buffer_t *buf )
+{
+    FILE * file;
+    char   filename[1024];
+
+    hb_get_tempory_filename( h, filename, "%d_%d_%d",
+                             hb_get_instance_id(h), title, preview );
+
+    file = fopen( filename, "wb" );
+    if( !file )
+    {
+        hb_error( "hb_save_preview: fopen failed (%s)", filename );
+        return -1;
+    }
+
+    int pp, hh;
+    for( pp = 0; pp < 3; pp++ )
+    {
+        uint8_t *data = buf->plane[pp].data;
+        int stride = buf->plane[pp].stride;
+        int w = buf->plane[pp].width;
+        int h = buf->plane[pp].height;
+
+        for( hh = 0; hh < h; hh++ )
+        {
+            fwrite( data, w, 1, file );
+            data += stride;
+        }
+    }
+    fclose( file );
+    return 0;
+}
+
 /**
  * Create preview image of desired title a index of picture.
  * @param h Handle to hb_handle_t.
@@ -835,8 +879,8 @@ int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, i
     cc_1 = 0; cc_2 = 0;
 
     int offset = 0;
-    
-    if ( buf->flags & 16 )
+
+    if ( buf->s.flags & 16 )
     {
         /* Frame is progressive, be more discerning. */
         color_diff = prog_diff;
@@ -1171,6 +1215,77 @@ void hb_set_anamorphic_size( hb_job_t * job,
 }
 
 /**
+ * Add a filter to a jobs filter list
+ *
+ * @param job Handle to hb_job_t
+ * @param settings to give the filter
+ */
+void hb_add_filter( hb_job_t * job, hb_filter_object_t * filter, const char * settings_in )
+{
+    char * settings = NULL;
+
+    if ( settings_in != NULL )
+    {
+        settings = strdup( settings_in );
+    }
+    filter->settings = settings;
+    if( filter->enforce_order )
+    {
+        // Find the position in the filter chain this filter belongs in
+        int i;
+        for( i = 0; i < hb_list_count( job->list_filter ); i++ )
+        {
+            hb_filter_object_t * f = hb_list_item( job->list_filter, i );
+            if( f->id > filter->id )
+            {
+                hb_list_insert( job->list_filter, i, filter );
+                return;
+            }
+            else if( f->id == filter->id )
+            {
+                // Don't allow the same filter to be added twice
+                return;
+            }
+        }
+    }
+    // No position found or order not enforced for this filter
+    hb_list_add( job->list_filter, filter );
+}
+
+/**
+ * Validate and adjust dimensions if necessary
+ *
+ * @param job Handle to hb_job_t
+ */
+void hb_validate_size( hb_job_t * job )
+{
+    if ( job->anamorphic.mode )
+    {
+        hb_set_anamorphic_size( job, &job->width, &job->height,
+            &job->anamorphic.par_width, &job->anamorphic.par_height );
+    }
+    else
+    {
+        if ( job->maxHeight && ( job->height > job->maxHeight )  )
+        {
+            job->height = job->maxHeight;
+            hb_fix_aspect( job, HB_KEEP_HEIGHT );
+            hb_log( "Height out of bounds, scaling down to %i",
+                    job->maxHeight );
+            hb_log( "New dimensions %i * %i", job->width, job->height );
+        }
+        if ( job->maxWidth && ( job->width > job->maxWidth )  )
+        {
+            job->width = job->maxWidth;
+            hb_fix_aspect( job, HB_KEEP_WIDTH );
+            hb_log( "Width out of bounds, scaling down to %i",
+                    job->maxWidth );
+            hb_log( "New dimensions %i * %i", job->width, job->height );
+        }
+    }
+}
+
+/**
  * Calculates job width, height, and cropping parameters.
  * @param job Handle to hb_job_t.
  * @param aspect Desired aspect ratio. Value of -1 uses title aspect.
@@ -1501,11 +1616,11 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     job_copy->pause = h->pause_lock;
 
     /* Copy the job filter list */
-    if( job->filters )
+    if( job->list_filter )
     {
         int i;
-        int filter_count = hb_list_count( job->filters );
-        job_copy->filters = hb_list_init();
+        int filter_count = hb_list_count( job->list_filter );
+        job_copy->list_filter = hb_list_init();
         for( i = 0; i < filter_count; i++ )
         {
             /*
@@ -1516,14 +1631,9 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
              * as well for completeness. Not copying private_data since it gets
              * created for each job in renderInit.
              */
-            hb_filter_object_t * filter = hb_list_item( job->filters, i );
-            hb_filter_object_t * filter_copy = malloc( sizeof( hb_filter_object_t ) );
-            memcpy( filter_copy, filter, sizeof( hb_filter_object_t ) );
-            if( filter->name )
-                filter_copy->name = strdup( filter->name );
-            if( filter->settings )
-                filter_copy->settings = strdup( filter->settings );
-            hb_list_add( job_copy->filters, filter_copy );
+            hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
+            hb_filter_object_t * filter_copy = hb_filter_copy( filter );
+            hb_list_add( job_copy->list_filter, filter_copy );
         }
     }
 
@@ -1531,6 +1641,37 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     hb_list_add( h->jobs, job_copy );
     h->job_count = hb_count(h);
     h->job_count_permanent++;
+}
+
+/**
+ * Clean up the job structure so that is is ready for setting up a new job.
+ * Should be called by front-ends after hb_add().
+ */
+void hb_reset_job( hb_job_t * job )
+{
+    hb_audio_t *audio;
+    hb_subtitle_t *subtitle;
+    hb_filter_object_t *filter;
+
+    // clean up audio list
+    while( ( audio = hb_list_item( job->list_audio, 0 ) ) )
+    {
+        hb_list_rem( job->list_audio, audio );
+        free( audio );
+    }
+    // clean up subtitle list
+    while( ( subtitle = hb_list_item( job->list_subtitle, 0 ) ) )
+    {
+        hb_list_rem( job->list_subtitle, subtitle );
+        free( subtitle );
+    }
+    // clean up filter list
+    while( ( filter = hb_list_item( job->list_filter, 0 ) ) )
+    {
+        hb_list_rem( job->list_filter, filter );
+        free( filter->settings );
+        free( filter );
+    }
 }
 
 /**
@@ -1650,52 +1791,6 @@ void hb_scan_stop( hb_handle_t * h )
 }
 
 /**
- * Gets a filter object with the given type and settings.
- * @param filter_id The type of filter to get.
- * @param settings The filter settings to use.
- * @returns The requested filter object.
- */
-hb_filter_object_t * hb_get_filter_object(int filter_id, const char * settings)
-{
-    if (filter_id == HB_FILTER_ROTATE)
-    {
-        hb_filter_rotate.settings = (char*)settings;
-        return &hb_filter_rotate;
-    }
-
-    if (filter_id == HB_FILTER_DETELECINE)
-    {
-        hb_filter_detelecine.settings = (char*)settings;
-        return &hb_filter_detelecine;
-    }
-
-    if (filter_id == HB_FILTER_DECOMB)
-    {
-        hb_filter_decomb.settings = (char*)settings;
-        return &hb_filter_decomb;
-    }
-
-    if (filter_id == HB_FILTER_DEINTERLACE)
-    {
-        hb_filter_deinterlace.settings = (char*)settings;
-        return &hb_filter_deinterlace;
-    }
-
-    if (filter_id == HB_FILTER_DEBLOCK)
-    {
-        hb_filter_deblock.settings = (char*)settings;
-        return &hb_filter_deblock;
-    }
-
-    if (filter_id == HB_FILTER_DENOISE)
-    {
-        hb_filter_denoise.settings = (char*)settings;
-        return &hb_filter_denoise;
-    }
-    return NULL;
-}
-
-/**
  * Returns the state of the conversion process.
  * @param h Handle to hb_handle_t.
  * @param s Handle to hb_state_t which to copy the state data.
@@ -1745,9 +1840,9 @@ void hb_close( hb_handle_t ** _h )
     while( ( title = hb_list_item( h->list_title, 0 ) ) )
     {
         hb_list_rem( h->list_title, title );
-        if( title->job && title->job->filters )
+        if( title->job )
         {
-            hb_list_close( &title->job->filters );
+            hb_reset_job( title->job );
         }
         free( title->job );
         hb_title_close( &title );

@@ -153,7 +153,7 @@ static int deca52Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_DONE;
     }
 
-    if ( (*buf_in)->start < -1 && pv->next_expected_pts == 0 )
+    if ( (*buf_in)->s.start < -1 && pv->next_expected_pts == 0 )
     {
         // discard buffers that start before video time 0
         *buf_out = NULL;
@@ -264,9 +264,9 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     {
         buf = hb_buffer_init( size );
         memcpy( buf->data, pv->frame, size );
-        buf->start = pts;
+        buf->s.start = pts;
         pts += frame_dur;
-        buf->stop  = pts;
+        buf->s.stop  = pts;
         pv->next_expected_pts = pts;
         return buf;
     }
@@ -288,9 +288,9 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
 
     /* 6 blocks per frame, 256 samples per block, channelsused channels */
     buf        = hb_buffer_init( 6 * 256 * pv->out_discrete_channels * sizeof( float ) );
-    buf->start = pts;
+    buf->s.start = pts;
     pts += frame_dur;
-    buf->stop  = pts;
+    buf->s.stop  = pts;
     pv->next_expected_pts = pts;
 
     for( i = 0; i < 6; i++ )
@@ -374,7 +374,7 @@ static int deca52BSInfo( hb_work_object_t *w, const hb_buffer_t *b,
             // discard enough bytes from the front of the buffer to make
             // room for the new stuff
             int newlen = sizeof(w->audio->priv.config.a52.buf) - blen;
-            memcpy( buf, buf + len - newlen, newlen );
+            memmove( buf, buf + len - newlen, newlen );
             len = newlen;
         }
     }

@@ -535,9 +535,8 @@ int hb_bd_seek_pts( hb_bd_t * d, uint64_t pts )
 
 int hb_bd_seek_chapter( hb_bd_t * d, int c )
 {
-    int64_t pos;
     d->next_chap = c;
-    pos = bd_seek_chapter( d->bd, c - 1 );
+    bd_seek_chapter( d->bd, c - 1 );
     hb_ts_stream_reset(d->stream);
     return 1;
 }
@@ -612,8 +611,8 @@ hb_buffer_t * hb_bd_read( hb_bd_t * d )
         b = hb_ts_decode_pkt( d->stream, buf+4 );
         if ( b )
         {
-            b->discontinuity = discontinuity;
-            b->new_chap = new_chap;
+            b->s.discontinuity = discontinuity;
+            b->s.new_chap = new_chap;
             return b;
         }
     }

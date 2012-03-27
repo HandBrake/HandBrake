@@ -1059,15 +1059,14 @@ void hb_list_rem( hb_list_t * l, void * p )
     {
         if( l->items[i] == p )
         {
+            /* Shift all items after it sizeof( void * ) bytes earlier */
+            memmove( &l->items[i], &l->items[i+1],
+                     ( l->items_count - i - 1 ) * sizeof( void * ) );
+
+            (l->items_count)--;
             break;
         }
     }
-
-    /* Shift all items after it sizeof( void * ) bytes earlier */
-    memmove( &l->items[i], &l->items[i+1],
-             ( l->items_count - i - 1 ) * sizeof( void * ) );
-
-    (l->items_count)--;
 }
 
 /**********************************************************************
@@ -1102,7 +1101,7 @@ int hb_list_bytes( hb_list_t * l )
     for( i = 0; i < hb_list_count( l ); i++ )
     {
         buf  = hb_list_item( l, i );
-        ret += buf->size - buf->cur;
+        ret += buf->size - buf->offset;
     }
 
     return ret;
@@ -1124,8 +1123,8 @@ void hb_list_seebytes( hb_list_t * l, uint8_t * dst, int size )
     for( i = 0, copied = 0; copied < size; i++ )
     {
         buf     = hb_list_item( l, i );
-        copying = MIN( buf->size - buf->cur, size - copied );
-        memcpy( &dst[copied], &buf->data[buf->cur], copying );
+        copying = MIN( buf->size - buf->offset, size - copied );
+        memcpy( &dst[copied], &buf->data[buf->offset], copying );
         copied += copying;
     }
 }
@@ -1157,18 +1156,18 @@ void hb_list_getbytes( hb_list_t * l, uint8_t * dst, int size,
     for( copied = 0, has_pts = 0; copied < size;  )
     {
         buf     = hb_list_item( l, 0 );
-        copying = MIN( buf->size - buf->cur, size - copied );
-        memcpy( &dst[copied], &buf->data[buf->cur], copying );
+        copying = MIN( buf->size - buf->offset, size - copied );
+        memcpy( &dst[copied], &buf->data[buf->offset], copying );
 
         if( !has_pts )
         {
-            *pts    = buf->start;
-            *pos    = buf->cur;
+            *pts    = buf->s.start;
+            *pos    = buf->offset;
             has_pts = 1;
         }
 
-        buf->cur += copying;
-        if( buf->cur >= buf->size )
+        buf->offset += copying;
+        if( buf->offset >= buf->size )
         {
             hb_list_rem( l, buf );
             hb_buffer_close( &buf );
@@ -1501,6 +1500,71 @@ void hb_title_close( hb_title_t ** _t )
     *_t = NULL;
 }
 
+hb_filter_object_t * hb_filter_copy( hb_filter_object_t * filter )
+{
+    if( filter == NULL )
+        return NULL;
+
+    hb_filter_object_t * filter_copy = malloc( sizeof( hb_filter_object_t ) );
+    memcpy( filter_copy, filter, sizeof( hb_filter_object_t ) );
+    if( filter->settings )
+        filter_copy->settings = strdup( filter->settings );
+    return filter_copy;
+}
+
+/**
+ * Gets a filter object with the given type
+ * @param filter_id The type of filter to get.
+ * @returns The requested filter object.
+ */
+hb_filter_object_t * hb_filter_init( int filter_id )
+{
+    hb_filter_object_t * filter;
+    switch( filter_id )
+    {
+        case HB_FILTER_DETELECINE:
+            filter = &hb_filter_detelecine;
+            break;
+
+        case HB_FILTER_DECOMB:
+            filter = &hb_filter_decomb;
+            break;
+
+        case HB_FILTER_DEINTERLACE:
+            filter = &hb_filter_deinterlace;
+            break;
+
+        case HB_FILTER_VFR:
+            filter = &hb_filter_vfr;
+            break;
+
+        case HB_FILTER_DEBLOCK:
+            filter = &hb_filter_deblock;
+            break;
+
+        case HB_FILTER_DENOISE:
+            filter = &hb_filter_denoise;
+            break;
+
+        case HB_FILTER_RENDER_SUB:
+            filter = &hb_filter_render_sub;
+            break;
+
+        case HB_FILTER_CROP_SCALE:
+            filter = &hb_filter_crop_scale;
+            break;
+
+        case HB_FILTER_ROTATE:
+            filter = &hb_filter_rotate;
+            break;
+
+        default:
+            filter = NULL;
+            break;
+    }
+    return hb_filter_copy( filter );
+}
+
 /**********************************************************************
  * hb_filter_close
  **********************************************************************
@@ -1510,10 +1574,6 @@ void hb_filter_close( hb_filter_object_t ** _f )
 {
     hb_filter_object_t * f = *_f;
 
-    f->close( f->private_data );
-
-    if( f->name )
-        free( f->name );
     if( f->settings )
         free( f->settings );
 

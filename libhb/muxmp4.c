@@ -893,15 +893,14 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     if( mux_data == job->mux_data )
     {
         /* Video */
-
         if( job->vcodec == HB_VCODEC_X264 ||
             ( job->vcodec & HB_VCODEC_FFMPEG_MASK ) )
         {
-            if ( buf && buf->start < buf->renderOffset )
+            if ( buf && buf->s.start < buf->s.renderOffset )
             {
                 hb_log("MP4Mux: PTS %"PRId64" < DTS %"PRId64,
-                       buf->start, buf->renderOffset );
-                buf->renderOffset = buf->start;
+                       buf->s.start, buf->s.renderOffset );
+                buf->s.renderOffset = buf->s.start;
             }
         }
 
@@ -918,14 +917,14 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             ( job->vcodec & HB_VCODEC_FFMPEG_MASK ) )
         {
             // x264 supplies us with DTS, so offset is PTS - DTS
-            offset = buf->start - buf->renderOffset;
+            offset = buf->s.start - buf->s.renderOffset;
         }
 
         /* Add the sample before the new frame.
            It is important that this be calculated prior to the duration
            of the new video sample, as we want to sync to right after it.
            (This is because of how durations for text tracks work in QT) */
-        if( job->chapter_markers && buf->new_chap )
+        if( job->chapter_markers && buf->s.new_chap )
         {    
             hb_chapter_t *chapter = NULL;
 
@@ -940,14 +939,14 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             if ( duration >= (90000*3)/2 )
             {
                 chapter = hb_list_item( m->job->title->list_chapter,
-                                        buf->new_chap - 2 );
+                                        buf->s.new_chap - 2 );
 
                 MP4AddChapter( m->file,
                                m->chapter_track,
                                duration,
                                (chapter != NULL) ? chapter->title : NULL);
 
-                m->current_chapter = buf->new_chap;
+                m->current_chapter = buf->s.new_chap;
                 m->chapter_duration += duration;
             }
         }
@@ -958,11 +957,11 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             // x264 supplies us with DTS
             if ( m->delay_buf )
             {
-                duration = m->delay_buf->renderOffset - buf->renderOffset;
+                duration = m->delay_buf->s.renderOffset - buf->s.renderOffset;
             }
             else
             {
-                duration = buf->stop - m->sum_dur;
+                duration = buf->s.stop - m->sum_dur;
                 // Due to how libx264 generates DTS, it's possible for the
                 // above calculation to be negative. 
                 //
@@ -998,7 +997,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             // We're getting the frames in decode order but the timestamps are
             // for presentation so we have to use durations and effectively
             // compute a DTS.
-            duration = buf->stop - buf->start;
+            duration = buf->s.stop - buf->s.start;
         }
 
         if ( duration <= 0 )
@@ -1009,7 +1008,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                try to fix the error so that the file will still be playable. */
             hb_log("MP4Mux: illegal duration %"PRId64", start %"PRId64","
                    "stop %"PRId64", sum_dur %"PRId64,
-                   duration, buf->start, buf->stop, m->sum_dur );
+                   duration, buf->s.start, buf->s.stop, m->sum_dur );
             /* we don't know when the next frame starts so we can't pick a
                valid duration for this one. we pick something "short"
                (roughly 1/3 of an NTSC frame time) to take time from
@@ -1045,12 +1044,12 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         uint32_t dflags = 0;
 
         /* encoding layer signals if frame is referenced by other frames */
-        if( buf->flags & HB_FRAME_REF )
+        if( buf->s.flags & HB_FRAME_REF )
             dflags |= MP4_SDT_HAS_DEPENDENTS;
         else
             dflags |= MP4_SDT_HAS_NO_DEPENDENTS; /* disposable */
 
-        switch( buf->frametype )
+        switch( buf->s.frametype )
         {
             case HB_FRAME_IDR:
                 sync = 1;
@@ -1086,50 +1085,50 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         {
             /* MPEG4 timed text does not allow overlapping samples; upstream
                code should coalesce overlapping subtitle lines. */
-            if( buf->start < mux_data->sum_dur )
+            if( buf->s.start < mux_data->sum_dur )
             {
-                if ( buf->stop - mux_data->sum_dur > 90*500 )
+                if ( buf->s.stop - mux_data->sum_dur > 90*500 )
                 {
                     hb_log("MP4Mux: shortening overlapping subtitle, "
                            "start %"PRId64", stop %"PRId64", sum_dur %"PRId64,
-                           buf->start, buf->stop, m->sum_dur);
-                    buf->start = mux_data->sum_dur;
+                           buf->s.start, buf->s.stop, m->sum_dur);
+                    buf->s.start = mux_data->sum_dur;
                 }
             }
-            if( buf->start < mux_data->sum_dur )
+            if( buf->s.start < mux_data->sum_dur )
             {
                 hb_log("MP4Mux: skipping overlapping subtitle, "
                        "start %"PRId64", stop %"PRId64", sum_dur %"PRId64,
-                       buf->start, buf->stop, m->sum_dur);
+                       buf->s.start, buf->s.stop, m->sum_dur);
             }
             else
             {
                 int64_t duration;
 
-                if( buf->start < 0 )
-                    buf->start = mux_data->sum_dur;
+                if( buf->s.start < 0 )
+                    buf->s.start = mux_data->sum_dur;
 
-                if( buf->stop < 0 )
+                if( buf->s.stop < 0 )
                     duration = 90000L * 10;
                 else
-                    duration = buf->stop - buf->start;
+                    duration = buf->s.stop - buf->s.start;
 
                 /* Write an empty sample */
-                if ( mux_data->sum_dur < buf->start )
+                if ( mux_data->sum_dur < buf->s.start )
                 {
                     uint8_t empty[2] = {0,0};
                     if( !MP4WriteSample( m->file,
                                         mux_data->track,
                                         empty,
                                         2,
-                                        buf->start - mux_data->sum_dur,
+                                        buf->s.start - mux_data->sum_dur,
                                         0,
                                         1 ))
                     {
                         hb_error("Failed to write to output file, disk full?");
                         *job->die = 1;
                     }
-                    mux_data->sum_dur += buf->start - mux_data->sum_dur;
+                    mux_data->sum_dur += buf->s.start - mux_data->sum_dur;
                 }
                 uint8_t styleatom[2048];;
                 uint16_t stylesize = 0;
@@ -1150,7 +1149,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                 buffersize = strlen((char*)buffer);
 
                 hb_deep_log(3, "MuxMP4:Sub:%fs:%"PRId64":%"PRId64":%"PRId64": %s",
-                            (float)buf->start / 90000, buf->start, buf->stop,
+                            (float)buf->s.start / 90000, buf->s.start, buf->s.stop,
                             duration, buffer);
 
                 /* Write the subtitle sample */
@@ -1178,30 +1177,30 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         {
             int64_t duration;
 
-            if( buf->start < 0 )
-                buf->start = mux_data->sum_dur;
+            if( buf->s.start < 0 )
+                buf->s.start = mux_data->sum_dur;
 
-            if( buf->stop < 0 )
+            if( buf->s.stop < 0 )
                 duration = 90000L * 10;
             else
-                duration = buf->stop - buf->start;
+                duration = buf->s.stop - buf->s.start;
 
             /* Write an empty sample */
-            if ( mux_data->sum_dur < buf->start )
+            if ( mux_data->sum_dur < buf->s.start )
             {
                 uint8_t empty[2] = {0,0};
                 if( !MP4WriteSample( m->file,
                                     mux_data->track,
                                     empty,
                                     2,
-                                    buf->start - mux_data->sum_dur,
+                                    buf->s.start - mux_data->sum_dur,
                                     0,
                                     1 ))
                 {
                     hb_error("Failed to write to output file, disk full?");
                     *job->die = 1;
                 } 
-                mux_data->sum_dur += buf->start - mux_data->sum_dur;
+                mux_data->sum_dur += buf->s.start - mux_data->sum_dur;
             }
             if( !MP4WriteSample( m->file,
                                  mux_data->track,
@@ -1229,7 +1228,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                              buf->size,
                              duration,
                              offset,
-                             ( buf->frametype & HB_FRAME_KEY ) != 0 ))
+                             ( buf->s.frametype & HB_FRAME_KEY ) != 0 ))
         {
             hb_error("Failed to write to output file, disk full?");
             *job->die = 1;

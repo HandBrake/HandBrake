@@ -143,7 +143,7 @@ static void lpcmInfo( hb_work_object_t *w, hb_buffer_t *in )
     pv->samples = ( pv->duration * pv->nchannels * pv->samplerate ) / 90000;
     pv->size = pv->chunks * chunk_size;
 
-    pv->next_pts = in->start;
+    pv->next_pts = in->s.start;
 }
 
 static int declpcmInit( hb_work_object_t * w, hb_job_t * job )
@@ -218,9 +218,9 @@ static hb_buffer_t *Decode( hb_work_object_t *w )
 
     out = hb_buffer_init( pv->samples * sizeof( float ) );
 
-    out->start  = pv->next_pts;
+    out->s.start  = pv->next_pts;
     pv->next_pts += pv->duration;
-    out->stop = pv->next_pts;
+    out->s.stop = pv->next_pts;
 
     float *odat = (float *)out->data;
     int count = pv->chunks / pv->nchannels;

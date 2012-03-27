@@ -15,6 +15,7 @@ typedef struct mcdeint_private_s mcdeint_private_t;
 void mcdeint_init( mcdeint_private_t * pv,
                    int mode,
                    int qp,
+                   int pix_fmt,
                    int width,
                    int height );
 

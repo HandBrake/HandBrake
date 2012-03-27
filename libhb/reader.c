@@ -210,7 +210,7 @@ static int is_audio( hb_work_private_t *r, int id )
 static stream_timing_t *id_to_st( hb_work_private_t *r, const hb_buffer_t *buf, int valid )
 {
     stream_timing_t *st = r->stream_timing;
-    while ( st->id != buf->id && st->id != -1)
+    while ( st->id != buf->s.id && st->id != -1)
     {
         ++st;
     }
@@ -228,11 +228,11 @@ static stream_timing_t *id_to_st( hb_work_private_t *r, const hb_buffer_t *buf, 
                                         sizeof(*r->stream_timing) );
             st = r->stream_timing + slot;
         }
-        st->id = buf->id;
+        st->id = buf->s.id;
         st->average = 30.*90.;
         st->startup = 10;
         st->last = -st->average;
-        if ( ( st->is_audio = is_audio( r, buf->id ) ) != 0 )
+        if ( ( st->is_audio = is_audio( r, buf->s.id ) ) != 0 )
         {
             r->saw_audio = 1;
         }
@@ -249,13 +249,13 @@ static void update_ipt( hb_work_private_t *r, const hb_buffer_t *buf )
 {
     stream_timing_t *st = id_to_st( r, buf, 1 );
 
-    if( buf->renderOffset < 0 )
+    if( buf->s.renderOffset < 0 )
     {
         st->last += st->average;
         return;
     }
 
-    double dt = buf->renderOffset - st->last;
+    double dt = buf->s.renderOffset - st->last;
     // Protect against spurious bad timestamps
     if ( dt > -5 * 90000LL && dt < 5 * 90000LL )
     {
@@ -268,7 +268,7 @@ static void update_ipt( hb_work_private_t *r, const hb_buffer_t *buf )
         {
             st->average += ( dt - st->average ) * (1./32.);
         }
-        st->last = buf->renderOffset;
+        st->last = buf->s.renderOffset;
     }
     st->valid = 1;
 }
@@ -294,10 +294,10 @@ static void new_scr_offset( hb_work_private_t *r, hb_buffer_t *buf )
         last = st->last;
     }
     int64_t nxt = last + st->average;
-    r->scr_offset = buf->renderOffset - nxt;
+    r->scr_offset = buf->s.renderOffset - nxt;
     // This log is handy when you need to debug timing problems...
     //hb_log("id %x last %ld avg %g nxt %ld renderOffset %ld scr_offset %ld",
-    //    buf->id, last, st->average, nxt, buf->renderOffset, r->scr_offset);
+    //    buf->s.id, last, st->average, nxt, buf->s.renderOffset, r->scr_offset);
     r->scr_changes = r->demux.scr_changes;
 }
 
@@ -401,9 +401,9 @@ void ReadLoop( void * _w )
         // and then seek to the appropriate offset from it
         if ( ( buf = hb_stream_read( r->stream ) ) )
         {
-            if ( buf->start > 0 )
+            if ( buf->s.start > 0 )
             {
-                pts_to_start += buf->start;
+                pts_to_start += buf->s.start;
             }
         }
         
@@ -487,11 +487,11 @@ void ReadLoop( void * _w )
             // We will inspect the timestamps of each frame in sync
             // to skip from this seek point to the timestamp we
             // want to start at.
-            if ( buf->start > 0 && buf->start < r->job->pts_to_start )
+            if ( buf->s.start > 0 && buf->s.start < r->job->pts_to_start )
             {
-                r->job->pts_to_start -= buf->start;
+                r->job->pts_to_start -= buf->s.start;
             }
-            else if ( buf->start >= r->job->pts_to_start )
+            else if ( buf->s.start >= r->job->pts_to_start )
             {
                 r->job->pts_to_start = 0;
                 r->start_found = 1;
@@ -526,15 +526,15 @@ void ReadLoop( void * _w )
         while( ( buf = hb_list_item( list, 0 ) ) )
         {
             hb_list_rem( list, buf );
-            fifos = GetFifoForId( r->job, buf->id );
+            fifos = GetFifoForId( r->job, buf->s.id );
 
             if ( fifos && ! r->saw_video && !r->job->indepth_scan )
             {
                 // The first data packet with a PTS from an audio or video stream
                 // that we're decoding defines 'time zero'. Discard packets until
                 // we get one.
-                if ( buf->start != -1 && buf->renderOffset != -1 &&
-                     ( buf->id == r->title->video_id || is_audio( r, buf->id ) ) )
+                if ( buf->s.start != -1 && buf->s.renderOffset != -1 &&
+                     ( buf->s.id == r->title->video_id || is_audio( r, buf->s.id ) ) )
                 {
                     // force a new scr offset computation
                     r->scr_changes = r->demux.scr_changes - 1;
@@ -543,7 +543,7 @@ void ReadLoop( void * _w )
                     id_to_st( r, buf, 1 );
                     r->saw_video = 1;
                     hb_log( "reader: first SCR %"PRId64" id 0x%x DTS %"PRId64,
-                            r->demux.last_scr, buf->id, buf->renderOffset );
+                            r->demux.last_scr, buf->s.id, buf->s.renderOffset );
                 }
                 else
                 {
@@ -552,7 +552,7 @@ void ReadLoop( void * _w )
             }
             if( fifos )
             {
-                if ( buf->renderOffset != -1 )
+                if ( buf->s.renderOffset != -1 )
                 {
                     if ( r->scr_changes != r->demux.scr_changes )
                     {
@@ -577,14 +577,14 @@ void ReadLoop( void * _w )
                             // frame but video & subtitles don't. Clear
                             // the timestamps so the decoder will generate
                             // them from the frame durations.
-                            buf->start = -1;
-                            buf->renderOffset = -1;
+                            buf->s.start = -1;
+                            buf->s.renderOffset = -1;
                         }
                     }
                 }
-                if ( buf->start != -1 )
+                if ( buf->s.start != -1 )
                 {
-                    int64_t start = buf->start - r->scr_offset;
+                    int64_t start = buf->s.start - r->scr_offset;
                     if ( !r->start_found )
                         UpdateState( r, start );
 
@@ -596,17 +596,17 @@ void ReadLoop( void * _w )
                     }
                     // This log is handy when you need to debug timing problems
                     //hb_log("id %x scr_offset %ld start %ld --> %ld", 
-                    //        buf->id, r->scr_offset, buf->start, 
-                    //        buf->start - r->scr_offset);
-                    buf->start -= r->scr_offset;
+                    //        buf->s.id, r->scr_offset, buf->s.start, 
+                    //        buf->s.start - r->scr_offset);
+                    buf->s.start -= r->scr_offset;
                 }
-                if ( buf->renderOffset != -1 )
+                if ( buf->s.renderOffset != -1 )
                 {
                     // This packet is referenced to the same SCR as the last.
                     // Adjust timestamp to remove the System Clock Reference
                     // offset then update the average inter-packet time
                     // for this stream.
-                    buf->renderOffset -= r->scr_offset;
+                    buf->s.renderOffset -= r->scr_offset;
                     update_ipt( r, buf );
                 }
                 else
@@ -627,7 +627,7 @@ void ReadLoop( void * _w )
                 for( n = 1; fifos[n] != NULL; n++)
                 {
                     hb_buffer_t *buf_copy = hb_buffer_init( buf->size );
-                    hb_buffer_copy_settings( buf_copy, buf );
+                    buf_copy->s = buf->s;
                     memcpy( buf_copy->data, buf->data, buf->size );
                     push_buf( r, fifos[n], buf_copy );
                 }

@@ -369,8 +369,8 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
 
                 if( buffer )
                 {
-                    buffer->start = start_time - pv->start_time;
-                    buffer->stop = stop_time - pv->start_time;
+                    buffer->s.start = start_time - pv->start_time;
+                    buffer->s.stop = stop_time - pv->start_time;
 
                     memcpy( buffer->data, pv->current_entry.text, length + 1 );
                 }
@@ -438,8 +438,8 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
 
         if( buffer )
         {
-            buffer->start = start_time - pv->start_time;
-            buffer->stop = stop_time - pv->start_time;
+            buffer->s.start = start_time - pv->start_time;
+            buffer->s.stop = stop_time - pv->start_time;
 
             memcpy( buffer->data, pv->current_entry.text, length + 1 );
         }

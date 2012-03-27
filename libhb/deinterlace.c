@@ -40,7 +40,6 @@ typedef struct yadif_arguments_s {
 
 struct hb_filter_private_s
 {
-    int              pix_fmt;
     int              width[3];
     int              height[3];
 
@@ -61,34 +60,28 @@ struct hb_filter_private_s
     int              mcdeint_mode;
     mcdeint_private_t mcdeint;
 
-    AVPicture        pic_in;
-    AVPicture        pic_out;
     hb_buffer_t *    buf_out[2];
     hb_buffer_t *    buf_settings;
 };
 
-hb_filter_private_t * hb_deinterlace_init( int pix_fmt,
-                                           int width,
-                                           int height,
-                                           char * settings );
+static int hb_deinterlace_init( hb_filter_object_t * filter,
+                                hb_filter_init_t * init );
 
-int hb_deinterlace_work( hb_buffer_t * buf_in,
-                         hb_buffer_t ** buf_out,
-                         int pix_fmt,
-                         int width,
-                         int height,
-                         hb_filter_private_t * pv );
+static int hb_deinterlace_work( hb_filter_object_t * filter,
+                                hb_buffer_t ** buf_in,
+                                hb_buffer_t ** buf_out );
 
-void hb_deinterlace_close( hb_filter_private_t * pv );
+static void hb_deinterlace_close( hb_filter_object_t * filter );
 
 hb_filter_object_t hb_filter_deinterlace =
 {
-    FILTER_DEINTERLACE,
-    "Deinterlace (ffmpeg or yadif/mcdeint)",
-    NULL,
-    hb_deinterlace_init,
-    hb_deinterlace_work,
-    hb_deinterlace_close,
+    .id            = HB_FILTER_DEINTERLACE,
+    .enforce_order = 1,
+    .name          = "Deinterlace (ffmpeg or yadif/mcdeint)",
+    .settings      = NULL,
+    .init          = hb_deinterlace_init,
+    .work          = hb_deinterlace_work,
+    .close         = hb_deinterlace_close,
 };
 
 
@@ -392,27 +385,19 @@ static void yadif_filter( uint8_t ** dst,
      */
 }
 
-hb_filter_private_t * hb_deinterlace_init( int pix_fmt,
-                                           int width,
-                                           int height,
-                                           char * settings )
+static int hb_deinterlace_init( hb_filter_object_t * filter,
+                                hb_filter_init_t * init )
 {
-    if( pix_fmt != PIX_FMT_YUV420P )
-    {
-        return 0;
-    }
+    filter->private_data = calloc( 1, sizeof(struct hb_filter_private_s) );
+    hb_filter_private_t * pv = filter->private_data;
 
-    hb_filter_private_t * pv = calloc( 1, sizeof(struct hb_filter_private_s) );
+    pv->width[0]  = hb_image_stride( init->pix_fmt, init->width, 0 );
+    pv->height[0] = hb_image_height( init->pix_fmt, init->height, 0 );
+    pv->width[1]  = pv->width[2]  = hb_image_stride( init->pix_fmt, init->width, 1 );
+    pv->height[1] = pv->height[2] = hb_image_height( init->pix_fmt, init->height, 1 );
 
-    pv->pix_fmt = pix_fmt;
-
-    pv->width[0]  = width;
-    pv->height[0] = height;
-    pv->width[1]  = pv->width[2]  = width >> 1;
-    pv->height[1] = pv->height[2] = height >> 1;
-
-    pv->buf_out[0] = hb_video_buffer_init( width, height );
-    pv->buf_out[1] = hb_video_buffer_init( width, height );
+    pv->buf_out[0] = hb_video_buffer_init( init->width, init->height );
+    pv->buf_out[1] = hb_video_buffer_init( init->width, init->height );
     pv->buf_settings = hb_buffer_init( 0 );
 
     pv->yadif_ready    = 0;
@@ -422,9 +407,9 @@ hb_filter_private_t * hb_deinterlace_init( int pix_fmt,
     pv->mcdeint_mode   = MCDEINT_MODE_DEFAULT;
     int mcdeint_qp     = MCDEINT_QP_DEFAULT;
 
-    if( settings )
+    if( filter->settings )
     {
-        sscanf( settings, "%d:%d:%d:%d",
+        sscanf( filter->settings, "%d:%d:%d:%d",
                 &pv->yadif_mode,
                 &pv->yadif_parity,
                 &pv->mcdeint_mode,
@@ -440,8 +425,8 @@ hb_filter_private_t * hb_deinterlace_init( int pix_fmt,
         for( i = 0; i < 3; i++ )
         {
             int is_chroma = !!i;
-            int w = ((width   + 31) & (~31))>>is_chroma;
-            int h = ((height+6+ 31) & (~31))>>is_chroma;
+            int w = ((init->width   + 31) & (~31))>>is_chroma;
+            int h = ((init->height+6+ 31) & (~31))>>is_chroma;
 
             pv->yadif_ref_stride[i] = w;
 
@@ -491,13 +476,16 @@ hb_filter_private_t * hb_deinterlace_init( int pix_fmt,
         }
     }
 
-    mcdeint_init( &pv->mcdeint, pv->mcdeint_mode, mcdeint_qp, width, height );
+    mcdeint_init( &pv->mcdeint, pv->mcdeint_mode, mcdeint_qp, 
+                  init->pix_fmt, init->width, init->height );
     
-    return pv;
+    return 0;
 }
 
-void hb_deinterlace_close( hb_filter_private_t * pv )
+static void hb_deinterlace_close( hb_filter_object_t * filter )
 {
+    hb_filter_private_t * pv = filter->private_data;
+
     if( !pv )
     {
         return;
@@ -556,47 +544,52 @@ void hb_deinterlace_close( hb_filter_private_t * pv )
     mcdeint_close( &pv->mcdeint );
     
     free( pv );
+    filter->private_data = NULL;
 }
 
-int hb_deinterlace_work( hb_buffer_t * buf_in,
-                         hb_buffer_t ** buf_out,
-                         int pix_fmt,
-                         int width,
-                         int height,
-                         hb_filter_private_t * pv )
+static int hb_deinterlace_work( hb_filter_object_t * filter,
+                                hb_buffer_t ** buf_in,
+                                hb_buffer_t ** buf_out )
 {
-    if( !pv ||
-        pix_fmt != pv->pix_fmt ||
-        width   != pv->width[0] ||
-        height  != pv->height[0] )
+    AVPicture pic_in;
+    AVPicture pic_out;
+    hb_filter_private_t * pv = filter->private_data;
+    hb_buffer_t * in = *buf_in;
+
+    if ( in->size <= 0 )
     {
-        return FILTER_FAILED;
+        *buf_out = in;
+        *buf_in = NULL;
+        return HB_FILTER_DONE;
     }
 
-    avpicture_fill( &pv->pic_in, buf_in->data,
-                    pix_fmt, width, height );
+    hb_avpicture_fill( &pic_in, in );
 
     /* Use libavcodec deinterlace if yadif_mode < 0 */
     if( pv->yadif_mode < 0 )
     {
-        avpicture_fill( &pv->pic_out, pv->buf_out[0]->data,
-                        pix_fmt, width, height );
+        hb_avpicture_fill( &pic_out, pv->buf_out[0] );
 
-        avpicture_deinterlace( &pv->pic_out, &pv->pic_in,
-                               pix_fmt, width, height );
+        avpicture_deinterlace( &pic_out, &pic_in, pv->buf_out[0]->f.fmt, 
+                               pv->buf_out[0]->f.width, pv->buf_out[0]->f.height );
 
-        hb_buffer_copy_settings( pv->buf_out[0], buf_in );
+        pv->buf_out[0]->s = in->s;
+        hb_buffer_move_subs( pv->buf_out[0], in );
 
         *buf_out = pv->buf_out[0];
 
-        return FILTER_OK;
+        // Allocate a replacement for the buffer we just consumed
+        hb_buffer_t * b = pv->buf_out[0];
+        pv->buf_out[0] = hb_video_buffer_init( b->f.width, b->f.height );
+
+        return HB_FILTER_OK;
     }
 
     /* Determine if top-field first layout */
     int tff;
     if( pv->yadif_parity < 0 )
     {
-        tff = !!(buf_in->flags & PIC_FLAG_TOP_FIELD_FIRST);
+        tff = !!(in->s.flags & PIC_FLAG_TOP_FIELD_FIRST);
     }
     else
     {
@@ -604,59 +597,65 @@ int hb_deinterlace_work( hb_buffer_t * buf_in,
     }
 
     /* Store current frame in yadif cache */
-    yadif_store_ref( (const uint8_t**)pv->pic_in.data, pv );
+    yadif_store_ref( (const uint8_t**)pic_in.data, pv );
 
-    /* If yadif is not ready, store another ref and return FILTER_DELAY */
+    /* If yadif is not ready, store another ref and return HB_FILTER_DELAY */
     if( pv->yadif_ready == 0 )
     {
-        yadif_store_ref( (const uint8_t**)pv->pic_in.data, pv );
+        yadif_store_ref( (const uint8_t**)pic_in.data, pv );
 
-        hb_buffer_copy_settings( pv->buf_settings, buf_in );
-
-        /* don't let 'work_loop' send a chapter mark upstream */
-        buf_in->new_chap  = 0;
+        pv->buf_settings->s = in->s;
+        hb_buffer_move_subs( pv->buf_settings, in );
 
         pv->yadif_ready = 1;
 
-        return FILTER_DELAY;
+        return HB_FILTER_DELAY;
     }
 
     /* Perform yadif and mcdeint filtering */
     int frame;
+    int out_frame;
+    hb_buffer_t * b;
     for( frame = 0; frame <= (pv->yadif_mode & 1); frame++ )
     {
+        AVPicture pic_yadif_out;
         int parity = frame ^ tff ^ 1;
 
-        avpicture_fill( &pv->pic_out, pv->buf_out[!(frame^1)]->data,
-                        pix_fmt, width, height );
+        b = pv->buf_out[!(frame^1)];
+        hb_avpicture_fill( &pic_yadif_out, b );
 
-        yadif_filter( pv->pic_out.data, parity, tff, pv );
+        yadif_filter( pic_yadif_out.data, parity, tff, pv );
 
         if( pv->mcdeint_mode >= 0 )
         {
-            avpicture_fill( &pv->pic_in,  pv->buf_out[(frame^1)]->data,
-                            pix_fmt, width, height );
+            b = pv->buf_out[(frame^1)];
+            hb_avpicture_fill( &pic_out, b );
 
-            mcdeint_filter( pv->pic_in.data, pv->pic_out.data, parity, pv->width, pv->height, &pv->mcdeint );
+            mcdeint_filter( pic_out.data, pic_yadif_out.data, parity, 
+                            pv->width, pv->height, &pv->mcdeint );
 
-            *buf_out = pv->buf_out[ (frame^1)];
+            out_frame = (frame^1);
         }
         else
         {
-            *buf_out = pv->buf_out[!(frame^1)];
+            out_frame = !(frame^1);
         }
     }
+    *buf_out = pv->buf_out[out_frame];
+
+    // Allocate a replacement for the buffer we just consumed
+    b = pv->buf_out[out_frame];
+    pv->buf_out[out_frame] = hb_video_buffer_init( b->f.width, b->f.height );
 
     /* Copy buffered settings to output buffer settings */
-    hb_buffer_copy_settings( *buf_out, pv->buf_settings );
+    (*buf_out)->s = pv->buf_settings->s;
+    hb_buffer_move_subs( *buf_out, pv->buf_settings );
 
     /* Replace buffered settings with input buffer settings */
-    hb_buffer_copy_settings( pv->buf_settings, buf_in );
+    pv->buf_settings->s = in->s;
+    hb_buffer_move_subs( pv->buf_settings, in );
 
-    /* don't let 'work_loop' send a chapter mark upstream */
-    buf_in->new_chap  = 0;
-
-    return FILTER_OK;
+    return HB_FILTER_OK;
 }
 
 

@@ -1191,15 +1191,15 @@ void eedi2_interpolate_lattice( const int plane, uint8_t * dmskp, int dmsk_pitch
                 }
             }
             if( x > 1 && x < width - 2 && 
-                (     dstp[x] < MAX(   dstp[x-2],   dstp[x-1] ) - 3 &&
+                ( (   dstp[x] < MAX(   dstp[x-2],   dstp[x-1] ) - 3 &&
                       dstp[x] < MAX(   dstp[x+2],   dstp[x+1] ) - 3 &&
                     dstpnn[x] < MAX( dstpnn[x-2], dstpnn[x-1] ) - 3 &&
                     dstpnn[x] < MAX( dstpnn[x+2], dstpnn[x+1] ) - 3 )
                 ||
-                (     dstp[x] > MIN(   dstp[x-2],   dstp[x-1] ) + 3 &&
+                  (   dstp[x] > MIN(   dstp[x-2],   dstp[x-1] ) + 3 &&
                       dstp[x] > MIN(   dstp[x+2],   dstp[x+1] ) + 3 &&
                     dstpnn[x] > MIN( dstpnn[x-2], dstpnn[x-1] ) + 3 &&
-                    dstpnn[x] > MIN( dstpnn[x+2], dstpnn[x+1] ) + 3 ) )
+                    dstpnn[x] > MIN( dstpnn[x+2], dstpnn[x+1] ) + 3 ) ) )
             {
                 dstpn[x] = ( dstp[x] + dstpnn[x] + 1 ) >> 1;
                 dmskp[x] = 128;

@@ -375,6 +375,9 @@ void hb_buffer_close( hb_buffer_t ** _b )
 
         b->next = NULL;
 
+        // Close any attached subtitle buffers
+        hb_buffer_close( &b->sub );
+
         if( buffer_pool && b->data && !hb_fifo_is_full( buffer_pool ) )
         {
             hb_fifo_push_head( buffer_pool, b );
@@ -393,16 +396,15 @@ void hb_buffer_close( hb_buffer_t ** _b )
         free( b );
         b = next;
     }
+
     *_b = NULL;
 }
 
-void hb_buffer_copy_settings( hb_buffer_t * dst, const hb_buffer_t * src )
+void hb_buffer_move_subs( hb_buffer_t * dst, hb_buffer_t * src )
 {
-    dst->start     = src->start;
-    dst->stop      = src->stop;
-    dst->new_chap  = src->new_chap;
-    dst->frametype = src->frametype;
-    dst->flags     = src->flags;
+    // Note that dst takes ownership of the subtitles
+    dst->sub       = src->sub;
+    src->sub       = NULL;
 }
 
 hb_fifo_t * hb_fifo_init( int capacity, int thresh )
@@ -736,6 +738,9 @@ void hb_fifo_close( hb_fifo_t ** _f )
 {
     hb_fifo_t   * f = *_f;
     hb_buffer_t * b;
+
+    if ( f == NULL )
+        return;
 
     hb_deep_log( 2, "fifo_close: trashing %d buffer(s)", hb_fifo_size( f ) );
     while( ( b = hb_fifo_get( f ) ) )

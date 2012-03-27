@@ -224,9 +224,12 @@ static hb_buffer_t * Flush( hb_work_object_t * w )
             memcpy( buf->data + sizeof( ogg_packet ), op.packet,
                     op.bytes );
             blocksize = vorbis_packet_blocksize(&pv->vi, &op);
-            buf->frametype   = HB_FRAME_AUDIO;
-            buf->start = (int64_t)(vorbis_granule_time(&pv->vd, op.granulepos) * 90000);
-            buf->stop  = (int64_t)(vorbis_granule_time(&pv->vd, (pv->prev_blocksize + blocksize)/4 + op.granulepos) * 90000);
+
+            buf->s.type = AUDIO_BUF;
+            buf->s.frametype = HB_FRAME_AUDIO;
+
+            buf->s.start = (int64_t)(vorbis_granule_time(&pv->vd, op.granulepos) * 90000);
+            buf->s.stop  = (int64_t)(vorbis_granule_time(&pv->vd, (pv->prev_blocksize + blocksize)/4 + op.granulepos) * 90000);
             /* The stop time isn't accurate for the first ~3 packets, as the actual blocksize depends on the previous _and_ current packets. */
             pv->prev_blocksize = blocksize;
             return buf;

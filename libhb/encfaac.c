@@ -231,10 +231,11 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
         hb_buffer_t * buf = hb_buffer_init( size );
         memcpy( buf->data, pv->obuf, size );
         buf->size = size;
-        buf->start = pv->pts;
+        buf->s.start = pv->pts;
         pv->pts += pv->framedur;
-        buf->stop = pv->pts;
-        buf->frametype   = HB_FRAME_AUDIO;
+        buf->s.stop = pv->pts;
+        buf->s.type = AUDIO_BUF;
+        buf->s.frametype = HB_FRAME_AUDIO;
         return buf;
     }
     return NULL;

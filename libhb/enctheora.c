@@ -319,16 +319,18 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     // Y
     ycbcr[0].width = frame_width;
     ycbcr[0].height = frame_height;
-    ycbcr[0].stride = job->width;
 
     // CbCr decimated by factor of 2 in both width and height
     ycbcr[1].width  = ycbcr[2].width  = (frame_width + 1) / 2;
     ycbcr[1].height = ycbcr[2].height = (frame_height + 1) / 2;
-    ycbcr[1].stride = ycbcr[2].stride = (job->width + 1) / 2;
 
-    ycbcr[0].data = in->data;
-    ycbcr[1].data = ycbcr[0].data + (ycbcr[0].stride * job->height);
-    ycbcr[2].data = ycbcr[1].data + (ycbcr[1].stride * ((job->height+1)/2));
+    ycbcr[0].stride = in->plane[0].stride;
+    ycbcr[1].stride = in->plane[1].stride;
+    ycbcr[2].stride = in->plane[2].stride;
+
+    ycbcr[0].data = in->plane[0].data;
+    ycbcr[1].data = in->plane[1].data;
+    ycbcr[2].data = in->plane[2].data;
 
     th_encode_ycbcr_in( pv->ctx, ycbcr );
 
@@ -358,9 +360,12 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     buf = hb_buffer_init( op.bytes + sizeof(op) );
     memcpy(buf->data, &op, sizeof(op));
     memcpy(buf->data + sizeof(op), op.packet, op.bytes);
-    buf->frametype = ( th_packet_iskeyframe(&op) ) ? HB_FRAME_KEY : HB_FRAME_REF;
-    buf->start = in->start;
-    buf->stop  = in->stop;
+    buf->f.fmt = PIX_FMT_YUV420P;
+    buf->f.width = frame_width;
+    buf->f.height = frame_height;
+    buf->s.frametype = ( th_packet_iskeyframe(&op) ) ? HB_FRAME_KEY : HB_FRAME_REF;
+    buf->s.start = in->s.start;
+    buf->s.stop  = in->s.stop;
 
     *buf_out = buf;
 

@@ -59,6 +59,7 @@
 #define EVEN( a )        ( (a) + ( (a) & 1 ) )
 #define MULTIPLE_16( a ) ( 16 * ( ( (a) + 8 ) / 16 ) )
 #define MULTIPLE_MOD( a, b ) ((b==1)?a:( b * ( ( (a) + (b / 2) - 1) / b ) ))
+#define MULTIPLE_MOD_UP( a, b ) ((b==1)?a:( b * ( ( (a) + (b) - 1) / b ) ))
 #define MULTIPLE_MOD_DOWN( a, b ) ((b==1)?a:( b * ( (a) / b ) ))
 
 #define HB_DVD_READ_BUFFER_SIZE 2048
@@ -241,7 +242,7 @@ struct hb_job_s
          maxHeight:           keep height below this */
     int             crop[4];
     int             deinterlace;
-    hb_list_t     * filters;
+    hb_list_t     * list_filter;
     int             width;
     int             height;
     int             keep_ratio;
@@ -849,7 +850,6 @@ extern hb_work_object_t hb_decsrtsub;
 extern hb_work_object_t hb_decutf8sub;
 extern hb_work_object_t hb_dectx3gsub;
 extern hb_work_object_t hb_decssasub;
-extern hb_work_object_t hb_render;
 extern hb_work_object_t hb_encavcodec;
 extern hb_work_object_t hb_encx264;
 extern hb_work_object_t hb_enctheora;
@@ -867,43 +867,86 @@ extern hb_work_object_t hb_encca_haac;
 extern hb_work_object_t hb_encavcodeca;
 extern hb_work_object_t hb_reader;
 
-#define FILTER_OK      0
-#define FILTER_DELAY   1
-#define FILTER_FAILED  2
-#define FILTER_DROP    3
+#define HB_FILTER_OK      0
+#define HB_FILTER_DELAY   1
+#define HB_FILTER_FAILED  2
+#define HB_FILTER_DROP    3
+#define HB_FILTER_DONE    4
+
+typedef struct hb_filter_init_s
+{
+    hb_job_t    * job;
+    int           pix_fmt;
+    int           width;
+    int           height;
+    int           par_width;
+    int           par_height;
+    int           crop[4];
+    int           vrate_base;
+    int           vrate;
+    int           cfr;
+} hb_filter_init_t;
+
+typedef struct hb_filter_info_s
+{
+    char               human_readable_desc[128];
+    hb_filter_init_t   out;
+} hb_filter_info_t;
 
 struct hb_filter_object_s
 {
     int                     id;
+    int                     enforce_order;
     char                  * name;
     char                  * settings;
 
 #ifdef __LIBHB__
-    hb_filter_private_t* (* init)  ( int, int, int, char * );
+    int         (* init)  ( hb_filter_object_t *, hb_filter_init_t * );
 
-    int                  (* work)  ( const hb_buffer_t *, hb_buffer_t **,
-                                     int, int, int, hb_filter_private_t * );
+    int         (* work)  ( hb_filter_object_t *,
+                            hb_buffer_t **, hb_buffer_t ** );
 
-    void                 (* close) ( hb_filter_private_t * );
+    void        (* close) ( hb_filter_object_t * );
+    int         (* info)  ( hb_filter_object_t *, hb_filter_info_t * );
 
-    hb_filter_private_t   * private_data;
-    //hb_buffer_t           * buffer;
+    hb_fifo_t   * fifo_in;
+    hb_fifo_t   * fifo_out;
+
+    hb_subtitle_t     * subtitle;
+
+    hb_filter_private_t * private_data;
+
+    hb_thread_t       * thread;
+    volatile int      * done;
+    int                 status;
+
+    // Filters can drop frames and thus chapter marks
+    // These are used to bridge the chapter to the next buffer
+    int                 chapter_val;
+    int64_t             chapter_time;
 #endif
 };
 
-#define HB_FILTER_DETELECINE    1
-#define HB_FILTER_DEINTERLACE   2
-#define HB_FILTER_DEBLOCK       3
-#define HB_FILTER_DENOISE       4
-#define HB_FILTER_DECOMB        5
-#define HB_FILTER_ROTATE        6
+enum
+{
+    // First, filters that may change the framerate (drop or dup frames)
+    HB_FILTER_DETELECINE = 1,
+    HB_FILTER_DECOMB,
+    HB_FILTER_DEINTERLACE,
+    HB_FILTER_VFR,
+    // Filters that must operate on the original source image are next
+    HB_FILTER_DEBLOCK,
+    HB_FILTER_DENOISE,
+    HB_FILTER_RENDER_SUB,
+    HB_FILTER_CROP_SCALE,
+    // Finally filters that don't care what order they are in,
+    // except that they must be after the above filters
+    HB_FILTER_ROTATE,
+};
 
-extern hb_filter_object_t hb_filter_detelecine;
-extern hb_filter_object_t hb_filter_deinterlace;
-extern hb_filter_object_t hb_filter_deblock;
-extern hb_filter_object_t hb_filter_denoise;
-extern hb_filter_object_t hb_filter_decomb;
-extern hb_filter_object_t hb_filter_rotate;
+hb_filter_object_t * hb_filter_init( int filter_id );
+hb_filter_object_t * hb_filter_copy( hb_filter_object_t * filter );
+void                 hb_filter_close( hb_filter_object_t ** );
 
 typedef void hb_error_handler_t( const char *errmsg );
 

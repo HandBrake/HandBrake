@@ -419,7 +419,11 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     pv->pts += 90000LL * pv->isamples / pv->osamplerate;
     obuf->stop  = pv->pts;
     obuf->size  = odesc.mDataByteSize;
-    obuf->frametype = HB_FRAME_AUDIO;
+
+    hb_buffer_tag_t tag;
+    tag.id = HB_TAG_AUDIO;
+    tag.u.audio.frametype = HB_FRAME_AUDIO;
+    hb_buffer_add_tag( obuf, &tag );
 
     return obuf;
 }

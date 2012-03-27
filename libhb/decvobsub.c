@@ -96,7 +96,7 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_DONE;
     }
 
-    pv->stream_id = in->id;
+    pv->stream_id = in->s.id;
 
     size_sub = ( in->data[0] << 8 ) | in->data[1];
     size_rle = ( in->data[2] << 8 ) | in->data[3];
@@ -113,12 +113,12 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
             pv->buf      = hb_buffer_init( 0xFFFF );
             memcpy( pv->buf->data, in->data, in->size );
-            pv->buf->id = in->id;
+            pv->buf->s.id = in->s.id;
             pv->buf->sequence = in->sequence;
             pv->size_got = in->size;
-            if( in->start >= 0 )
+            if( in->s.start >= 0 )
             {
-                pv->pts      = in->start;
+                pv->pts      = in->s.start;
             }
         }
     }
@@ -128,12 +128,12 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         if( in->size <= pv->size_sub - pv->size_got )
         {
             memcpy( pv->buf->data + pv->size_got, in->data, in->size );
-            pv->buf->id = in->id;
+            pv->buf->s.id = in->s.id;
             pv->buf->sequence = in->sequence;
             pv->size_got += in->size;
-            if( in->start >= 0 )
+            if( in->s.start >= 0 )
             {
-                pv->pts = in->start;
+                pv->pts = in->s.start;
             }
         }
         else
@@ -158,7 +158,7 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
         if( buf_out && *buf_out )
         {
-            (*buf_out)->id = in->id;
+            (*buf_out)->s.id = in->s.id;
             (*buf_out)->sequence = in->sequence;
         }
 
@@ -335,10 +335,10 @@ static void ParseControls( hb_work_object_t * w )
                      */
                     uint8_t    alpha[4];
 
-                    alpha[3] = (buf[i+0]>>4)&0x0f;
-                    alpha[2] = (buf[i+0])&0x0f;
-                    alpha[1] = (buf[i+1]>>4)&0x0f;
-                    alpha[0] = (buf[i+1])&0x0f;
+                    alpha[3] = ((buf[i+0] >> 4) & 0x0f) << 4;
+                    alpha[2] = ((buf[i+0]     ) & 0x0f) << 4;
+                    alpha[1] = ((buf[i+1] >> 4) & 0x0f) << 4;
+                    alpha[0] = ((buf[i+1]     ) & 0x0f) << 4;
 
 
                     int lastAlpha = pv->alpha[3] + pv->alpha[2] + pv->alpha[1] + pv->alpha[0];
@@ -416,6 +416,7 @@ static int LineIsTransparent( hb_work_object_t * w, uint8_t * p )
     }
     return 1;
 }
+
 static int ColumnIsTransparent( hb_work_object_t * w, uint8_t * p )
 {
     hb_work_private_t * pv = w->private_data;
@@ -429,6 +430,58 @@ static int ColumnIsTransparent( hb_work_object_t * w, uint8_t * p )
     }
     return 1;
 }
+
+// Brain dead resampler.  This should really use swscale...
+// Uses Bresenham algo to pick source samples for averaging
+static void resample( uint8_t * dst, uint8_t * src, int dst_w, int src_w )
+{
+    int dst_x, src_x, err, cnt, sum, val;
+
+    if( dst_w < src_w )
+    {
+        // sample down
+        err = 0;
+        val = 0;
+        cnt = 0;
+        err = src_w / 2;
+        dst_x = 0;
+        for( src_x = 0; src_x < src_w; src_x++ )
+        {
+            sum += src[src_x];
+            cnt++;
+            err -= dst_w;
+            if( err < 0 )
+            {
+                val = sum / cnt;
+                dst[dst_x++] = val;
+                sum = cnt = 0;
+                err += src_w;
+            }
+        }
+        for( ; dst_x < dst_w; dst_x++ )
+        {
+            dst[dst_x] = val;
+        }
+    }
+    else
+    {
+        // sample up
+        err = 0;
+        err = dst_w / 2;
+        src_x = 0;
+        for( dst_x = 0; dst_x < dst_w; dst_x++ )
+        {
+            dst[dst_x] = src[src_x];
+            err -= src_w;
+            if( err < 0 )
+            {
+                src_x++;
+                err += dst_w;
+            }
+        }
+    }
+}
+
 static hb_buffer_t * CropSubtitle( hb_work_object_t * w, uint8_t * raw )
 {
     hb_work_private_t * pv = w->private_data;
@@ -437,8 +490,7 @@ static hb_buffer_t * CropSubtitle( hb_work_object_t * w, uint8_t * raw )
     uint8_t * alpha;
     int realwidth, realheight;
     hb_buffer_t * buf;
-    uint8_t * lum_in, * lum_out, * alpha_in, * alpha_out;
-    uint8_t * u_in, * u_out, * v_in, * v_out;
+    uint8_t * lum_in, * alpha_in, * u_in, * v_in;
 
     alpha = raw + pv->width * pv->height;
 
@@ -491,40 +543,44 @@ static hb_buffer_t * CropSubtitle( hb_work_object_t * w, uint8_t * raw )
     realwidth  = crop[3] - crop[2] + 1;
     realheight = crop[1] - crop[0] + 1;
 
-    buf         = hb_buffer_init( realwidth * realheight * 4 );
-    buf->start  = pv->pts_start;
-    buf->stop   = pv->pts_stop;
-    buf->x      = pv->x + crop[2];
-    buf->y      = pv->y + crop[0];
-    buf->width  = realwidth;
-    buf->height = realheight;
+    buf = hb_pic_buffer_init( PIX_FMT_YUVA420P, realwidth, realheight );
+    buf->s.start  = pv->pts_start;
+    buf->s.stop   = pv->pts_stop;
+    buf->s.type   = SUBTITLE_BUF;
+
+    buf->f.x = pv->x + crop[2];
+    buf->f.y = pv->y + crop[0];
 
     lum_in    = raw + crop[0] * pv->width + crop[2];
     alpha_in  = lum_in + pv->width * pv->height;
     u_in      = alpha_in + pv->width * pv->height;
     v_in      = u_in + pv->width * pv->height;
 
-    lum_out   = buf->data;
-    alpha_out = lum_out + realwidth * realheight;
-    u_out     = alpha_out + realwidth * realheight;
-    v_out     = u_out + realwidth * realheight;
-
+    uint8_t *dst;
     for( i = 0; i < realheight; i++ )
     {
-        memcpy( lum_out, lum_in, realwidth );
-        memcpy( alpha_out, alpha_in, realwidth );
-        memcpy( u_out, u_in, realwidth );
-        memcpy( v_out, v_in, realwidth );
+        // Luma
+        dst = buf->plane[0].data + buf->plane[0].stride * i;
+        memcpy( dst, lum_in, realwidth );
+
+        if( ( i & 1 ) == 0 )
+        {
+            // chroma U (resample to YUV420)
+            dst = buf->plane[1].data + buf->plane[1].stride * ( i >> 1 );
+            resample( dst, u_in, buf->plane[1].width, realwidth );
+
+            // chroma V (resample to YUV420)
+            dst = buf->plane[2].data + buf->plane[2].stride * ( i >> 1 );
+            resample( dst, v_in, buf->plane[2].width, realwidth );
+        }
+        // Alpha
+        dst = buf->plane[3].data + buf->plane[3].stride * i;
+        memcpy( dst, alpha_in, realwidth );
 
         lum_in    += pv->width;
         alpha_in  += pv->width;
         u_in      += pv->width;
         v_in      += pv->width;
-
-        lum_out   += realwidth;
-        alpha_out += realwidth;
-        u_out     += realwidth;
-        v_out     += realwidth;
     }
 
     return buf;
@@ -557,8 +613,8 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
 
     if (w->subtitle->config.dest == PASSTHRUSUB)
     {
-        pv->buf->start  = pv->pts_start;
-        pv->buf->stop   = pv->pts_stop;
+        pv->buf->s.start  = pv->pts_start;
+        pv->buf->s.stop   = pv->pts_stop;
         buf = pv->buf;
         pv->buf = NULL;
         return buf;

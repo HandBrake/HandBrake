@@ -21,6 +21,7 @@ typedef struct
 static void work_func();
 static void do_job( hb_job_t *);
 static void work_loop( void * );
+static void filter_loop( void * );
 
 #define FIFO_UNBOUNDED 65536
 #define FIFO_UNBOUNDED_WAKE 65535
@@ -28,6 +29,8 @@ static void work_loop( void * );
 #define FIFO_LARGE_WAKE 16
 #define FIFO_SMALL 16
 #define FIFO_SMALL_WAKE 15
+#define FIFO_MINI 4
+#define FIFO_MINI_WAKE 3
 
 /**
  * Allocates work object and launches work thread with work_func.
@@ -271,6 +274,29 @@ void hb_display_job_info( hb_job_t * job )
             (float) job->pfr_vrate / (float) job->pfr_vrate_base );
     }
 
+    // Filters can modify dimensions.  So show them first.
+    if( hb_list_count( job->list_filter ) )
+    {
+        hb_log("   + %s", hb_list_count( job->list_filter) > 1 ? "filters" : "filter" );
+        for( i = 0; i < hb_list_count( job->list_filter ); i++ )
+        {
+            hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
+            if( filter->settings )
+                hb_log("     + %s (%s)", filter->name, filter->settings);
+            else
+                hb_log("     + %s (default settings)", filter->name);
+            if( filter->info )
+            {
+                hb_filter_info_t info;
+                filter->info( filter, &info );
+                if( info.human_readable_desc[0] )
+                {
+                    hb_log("       %s", info.human_readable_desc);
+                }
+            }
+        }
+    }
+    
     if( job->anamorphic.mode )
     {
         hb_log( "   + %s anamorphic", job->anamorphic.mode == 1 ? "strict" : job->anamorphic.mode == 2? "loose" : "custom" );
@@ -278,9 +304,8 @@ void hb_display_job_info( hb_job_t * job )
         {
             hb_log( "     + keeping source display aspect ratio"); 
         }
-        hb_log( "     + storage dimensions: %d * %d -> %d * %d, crop %d/%d/%d/%d, mod %i",
-                    title->width, title->height, job->width, job->height,
-                    job->crop[0], job->crop[1], job->crop[2], job->crop[3], job->modulus );
+        hb_log( "     + storage dimensions: %d * %d, mod %i",
+                    job->width, job->height, job->modulus );
         if( job->anamorphic.itu_par )
         {
             hb_log( "     + using ITU pixel aspect ratio values"); 
@@ -291,27 +316,13 @@ void hb_display_job_info( hb_job_t * job )
     }
     else
     {
-        hb_log( "   + dimensions: %d * %d -> %d * %d, crop %d/%d/%d/%d, mod %i",
-                title->width, title->height, job->width, job->height,
-                job->crop[0], job->crop[1], job->crop[2], job->crop[3], job->modulus );
+        hb_log( "   + dimensions: %d * %d, mod %i",
+                job->width, job->height, job->modulus );
     }
 
     if ( job->grayscale )
         hb_log( "   + grayscale mode" );
 
-    if( hb_list_count( job->filters ) )
-    {
-        hb_log("   + %s", hb_list_count( job->filters) > 1 ? "filters" : "filter" );
-        for( i = 0; i < hb_list_count( job->filters ); i++ )
-        {
-            hb_filter_object_t * filter = hb_list_item( job->filters, i );
-            if (filter->settings)
-                hb_log("     + %s (%s)", filter->name, filter->settings);
-            else
-                hb_log("     + %s (default settings)", filter->name);
-        }
-    }
-    
     if( !job->indepth_scan )
     {
         /* Video encoder */
@@ -510,10 +521,44 @@ static void do_job( hb_job_t * job )
 
     hb_log( "starting job" );
 
+    // Filters have an effect on settings.
+    // So initialize the filters and update the job.
+    if( job->list_filter && hb_list_count( job->list_filter ) )
+    {
+        hb_filter_init_t init;
+
+        init.job = job;
+        init.pix_fmt = PIX_FMT_YUV420P;
+        init.width = title->width;
+        init.height = title->height;
+        init.par_width = job->anamorphic.par_width;
+        init.par_height = job->anamorphic.par_height;
+        memcpy(init.crop, title->crop, sizeof(int[4]));
+        init.vrate_base = title->rate_base;
+        init.vrate = title->rate;
+        init.cfr = 0;
+        for( i = 0; i < hb_list_count( job->list_filter ); i++ )
+        {
+            hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
+            if( filter->init( filter, &init ) )
+            {
+                hb_error( "Failure to initialise filter '%s'", filter->name );
+                *job->die = 1;
+                goto cleanup;
+            }
+        }
+        job->width = init.width;
+        job->height = init.height;
+        job->anamorphic.par_width = init.par_width;
+        job->anamorphic.par_height = init.par_height;
+        memcpy(title->crop, init.crop, sizeof(int[4]));
+        job->vrate_base = init.vrate_base;
+        job->vrate = init.vrate;
+        job->cfr = init.cfr;
+    }
+
     if( job->anamorphic.mode )
     {
-        hb_set_anamorphic_size(job, &job->width, &job->height, &job->anamorphic.par_width, &job->anamorphic.par_height);
-
         if( job->vcodec & HB_VCODEC_FFMPEG_MASK )
         {
             /* Just to make working with ffmpeg even more fun,
@@ -530,47 +575,6 @@ static void do_job( hb_job_t * job )
         }
     }
     
-    /* Keep width and height within these boundaries,
-       but ignore for anamorphic. For "loose" anamorphic encodes,
-       this stuff is covered in the pixel_ratio section above.    */
-    if ( job->maxHeight && ( job->height > job->maxHeight ) && ( !job->anamorphic.mode ) )
-    {
-        job->height = job->maxHeight;
-        hb_fix_aspect( job, HB_KEEP_HEIGHT );
-        hb_log( "Height out of bounds, scaling down to %i", job->maxHeight );
-        hb_log( "New dimensions %i * %i", job->width, job->height );
-    }
-    if ( job->maxWidth && ( job->width > job->maxWidth ) && ( !job->anamorphic.mode ) )
-    {
-        job->width = job->maxWidth;
-        hb_fix_aspect( job, HB_KEEP_WIDTH );
-        hb_log( "Width out of bounds, scaling down to %i", job->maxWidth );
-        hb_log( "New dimensions %i * %i", job->width, job->height );
-    }
-
-    if ( job->cfr == 0 )
-    {
-        /* Ensure we're using "Same as source" FPS */
-        job->vrate = title->rate;
-        job->vrate_base = title->rate_base;
-    }
-    else if ( job->cfr == 2 )
-    {
-        job->pfr_vrate = job->vrate;
-        job->pfr_vrate_base = job->vrate_base;
-
-        // Ensure we're using "Same as source" FPS, with peak set by pfr_vrate_* 
-        // For PFR, we want the framerate based on the source's actual 
-        // framerate, unless it's higher than the specified peak framerate. 
-        double source_fps = (double)job->title->rate / job->title->rate_base;
-        double peak_l_fps = (double)job->vrate / job->vrate_base;
-        if ( source_fps < peak_l_fps )
-        {
-            job->vrate_base = title->rate_base;
-            job->vrate = title->rate;
-        }
-    }
-
     job->fifo_mpeg2  = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
     job->fifo_raw    = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
     job->fifo_sync   = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
@@ -829,42 +833,6 @@ static void do_job( hb_job_t * job )
     w->fifo_in  = job->fifo_mpeg2;
     w->fifo_out = job->fifo_raw;
 
-    /* Video renderer */
-    hb_list_add( job->list_work, ( w = hb_get_work( WORK_RENDER ) ) );
-    w->fifo_in  = job->fifo_sync;
-    if( !job->indepth_scan )
-        w->fifo_out = job->fifo_render;
-    else
-        w->fifo_out = NULL;
-
-    if( !job->indepth_scan )
-    {
-
-        /* Video encoder */
-        switch( job->vcodec )
-        {
-        case HB_VCODEC_FFMPEG_MPEG4:
-            w = hb_get_work( WORK_ENCAVCODEC );
-            w->codec_param = CODEC_ID_MPEG4;
-            break;
-        case HB_VCODEC_FFMPEG_MPEG2:
-            w = hb_get_work( WORK_ENCAVCODEC );
-            w->codec_param = CODEC_ID_MPEG2VIDEO;
-            break;
-        case HB_VCODEC_X264:
-            w = hb_get_work( WORK_ENCX264 );
-            break;
-        case HB_VCODEC_THEORA:
-            w = hb_get_work( WORK_ENCTHEORA );
-            break;
-        }
-        w->fifo_in  = job->fifo_render;
-        w->fifo_out = job->fifo_mpeg4;
-        w->config   = &job->config;
-
-        hb_list_add( job->list_work, w );
-    }
-
     /*
      * Look for the scanned subtitle in the existing subtitle list
      * select_subtitle implies that we did a scan.
@@ -918,7 +886,6 @@ static void do_job( hb_job_t * job )
             interjob->select_subtitle = NULL;
         }
     }
-
 
     for( i=0; i < hb_list_count(title->list_subtitle); i++ )
     {
@@ -996,8 +963,61 @@ static void do_job( hb_job_t * job )
         }
     }
 
+    /* Set up the video filter fifo pipeline */
     if( !job->indepth_scan )
     {
+        if( job->list_filter )
+        {
+            int filter_count = hb_list_count( job->list_filter );
+            int i;
+            hb_fifo_t * fifo_in = job->fifo_sync;
+
+            for( i = 0; i < filter_count; i++ )
+            {
+                hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
+
+                filter->fifo_in = fifo_in;
+                filter->fifo_out = hb_fifo_init( FIFO_MINI, FIFO_MINI_WAKE );
+                fifo_in = filter->fifo_out;
+            }
+            job->fifo_render = fifo_in;
+        }
+        else if ( !job->list_filter )
+        {
+            hb_log("work: Internal Error: no filters");
+            job->fifo_render = NULL;
+        }
+
+        /* Video encoder */
+        switch( job->vcodec )
+        {
+        case HB_VCODEC_FFMPEG_MPEG4:
+            w = hb_get_work( WORK_ENCAVCODEC );
+            w->codec_param = CODEC_ID_MPEG4;
+            break;
+        case HB_VCODEC_FFMPEG_MPEG2:
+            w = hb_get_work( WORK_ENCAVCODEC );
+            w->codec_param = CODEC_ID_MPEG2VIDEO;
+            break;
+        case HB_VCODEC_X264:
+            w = hb_get_work( WORK_ENCX264 );
+            break;
+        case HB_VCODEC_THEORA:
+            w = hb_get_work( WORK_ENCTHEORA );
+            break;
+        }
+        // Handle case where there are no filters.  
+        // This really should never happen.
+        if ( job->fifo_render )
+            w->fifo_in  = job->fifo_render;
+        else
+            w->fifo_in  = job->fifo_sync;
+
+        w->fifo_out = job->fifo_mpeg4;
+        w->config   = &job->config;
+
+        hb_list_add( job->list_work, w );
+
         for( i = 0; i < hb_list_count( title->list_audio ); i++ )
         {
             audio = hb_list_item( title->list_audio, i );
@@ -1068,6 +1088,25 @@ static void do_job( hb_job_t * job )
     reader->thread = hb_thread_init( reader->name, ReadLoop, reader, HB_NORMAL_PRIORITY );
 
     job->done = 0;
+
+    if( job->list_filter && !job->indepth_scan )
+    {
+        int filter_count = hb_list_count( job->list_filter );
+        int i;
+
+        for( i = 0; i < filter_count; i++ )
+        {
+            hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
+
+            if( !filter ) continue;
+
+            // Filters were initialized earlier, so we just need
+            // to start the filter's thread
+            filter->done = &job->done;
+            filter->thread = hb_thread_init( filter->name, filter_loop, filter,
+                                             HB_LOW_PRIORITY );
+        }
+    }
 
     /* Launch processing threads */
     for( i = 0; i < hb_list_count( job->list_work ); i++ )
@@ -1179,6 +1218,26 @@ static void do_job( hb_job_t * job )
 cleanup:
     /* Stop the write thread (thread_close will block until the muxer finishes) */
     job->done = 1;
+
+    // Close render filter pipeline
+    if( job->list_filter )
+    {
+        int filter_count = hb_list_count( job->list_filter );
+        int i;
+
+        for( i = 0; i < filter_count; i++ )
+        {
+            hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
+
+            if( !filter ) continue;
+
+            if( filter->thread != NULL )
+            {
+                hb_thread_close( &filter->thread );
+            }
+            filter->close( filter );
+        }
+    }
 
     /* Close work objects */
     while( ( w = hb_list_item( job->list_work, 0 ) ) )
@@ -1315,20 +1374,35 @@ cleanup:
         }
     }
 
-    if( job->filters )
+    if( job->list_filter )
     {
-        for( i = 0; i < hb_list_count( job->filters ); i++ )
+        for( i = 0; i < hb_list_count( job->list_filter ); i++ )
         {
-            hb_filter_object_t * filter = hb_list_item( job->filters, i );
+            hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
             hb_filter_close( &filter );
         }
-        hb_list_close( &job->filters );
+        hb_list_close( &job->list_filter );
     }
 
     hb_buffer_pool_free();
 
     hb_title_close( &job->title );
     free( job );
+}
+
+static inline void copy_chapter( hb_buffer_t * dst, hb_buffer_t * src )
+{
+    // Propagate any chapter breaks for the worker if and only if the
+    // output frame has the same time stamp as the input frame (any
+    // worker that delays frames has to propagate the chapter marks itself
+    // and workers that move chapter marks to a different time should set
+    // 'src' to NULL so that this code won't generate spurious duplicates.)
+    if( src && dst && src->s.start == dst->s.start)
+    {
+        // restore log below to debug chapter mark propagation problems
+        //hb_log("work %s: Copying Chapter Break @ %"PRId64, w->name, src->s.start);
+        dst->s.new_chap = src->s.new_chap;
+    }
 }
 
 /**
@@ -1361,17 +1435,7 @@ static void work_loop( void * _w )
         buf_out = NULL;
         w->status = w->work( w, &buf_in, &buf_out );
 
-        // Propagate any chapter breaks for the worker if and only if the
-        // output frame has the same time stamp as the input frame (any
-        // worker that delays frames has to propagate the chapter marks itself
-        // and workers that move chapter marks to a different time should set
-        // 'buf_in' to NULL so that this code won't generate spurious duplicates.)
-        if( buf_in && buf_out && buf_in->new_chap && buf_in->start == buf_out->start)
-        {
-            // restore log below to debug chapter mark propagation problems
-            //hb_log("work %s: Copying Chapter Break @ %"PRId64, w->name, buf_in->start);
-            buf_out->new_chap = buf_in->new_chap;
-        }
+        copy_chapter( buf_out, buf_in );
 
         if( buf_in )
         {
@@ -1408,3 +1472,78 @@ static void work_loop( void * _w )
             hb_buffer_close( &buf_in );
     }
 }
+
+/**
+ * Performs the filter object's specific work function.
+ * Loops calling work function for associated filter object. 
+ * Sleeps when fifo is full.
+ * Monitors work done indicator.
+ * Exits loop when work indiactor is set.
+ * @param _w Handle to work object.
+ */
+static void filter_loop( void * _f )
+{
+    hb_filter_object_t * f = _f;
+    hb_buffer_t      * buf_in, * buf_out;
+
+    while( !*f->done && f->status != HB_FILTER_DONE )
+    {
+        buf_in = hb_fifo_get_wait( f->fifo_in );
+        if ( buf_in == NULL )
+            continue;
+
+        // Filters can drop buffers.  Remember chapter information
+        // so that it can be propagated to the next buffer
+        if ( buf_in->s.new_chap )
+        {
+            f->chapter_time = buf_in->s.start;
+            f->chapter_val = buf_in->s.new_chap;
+        }
+        if ( *f->done )
+        {
+            if( buf_in )
+            {
+                hb_buffer_close( &buf_in );
+            }
+            break;
+        }
+
+        buf_out = NULL;
+        f->status = f->work( f, &buf_in, &buf_out );
+
+        if ( buf_out && f->chapter_val && f->chapter_time <= buf_out->s.start )
+        {
+            buf_out->s.new_chap = f->chapter_val;
+            f->chapter_val = 0;
+        }
+
+        if( buf_in )
+        {
+            hb_buffer_close( &buf_in );
+        }
+        if ( buf_out && f->fifo_out == NULL )
+        {
+            hb_buffer_close( &buf_out );
+        }
+        if( buf_out )
+        {
+            while ( !*f->done )
+            {
+                if ( hb_fifo_full_wait( f->fifo_out ) )
+                {
+                    hb_fifo_push( f->fifo_out, buf_out );
+                    break;
+                }
+            }
+        }
+    }
+    // Consume data in incoming fifo till job complete so that
+    // residual data does not stall the pipeline
+    while( !*f->done )
+    {
+        buf_in = hb_fifo_get_wait( f->fifo_in );
+        if ( buf_in != NULL )
+            hb_buffer_close( &buf_in );
+    }
+}
+

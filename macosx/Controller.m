@@ -2747,6 +2747,8 @@ fWorkingCount = 0;
         hb_add( fQueueEncodeLibhb, job );
     }
 	
+	hb_free_filters( job );
+
     NSString *destinationDirectory = [[queueToApply objectForKey:@"DestinationPath"] stringByDeletingLastPathComponent];
 	[[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
 	/* Lets mark our new encode as 1 or "Encoding" */
@@ -3278,6 +3280,11 @@ bool one_burned = FALSE;
         }
         i++;
     }
+    if( one_burned )
+    {
+        filter = hb_filter_init( HB_FILTER_RENDER_SUB );
+        hb_add_filter( job, filter, NULL );
+    }
    
     
     
@@ -3337,25 +3344,23 @@ bool one_burned = FALSE;
         job->grayscale = 0;
     }
     
-    /* Initialize the filters list */
-    job->filters = hb_list_init();
-    
     /* Now lets call the filters if applicable.
     * The order of the filters is critical
     */
     
+    hb_filter_object_t * filter;
 	/* Detelecine */
     hb_filter_detelecine.settings = NULL;
+    filter = hb_filter_init( HB_FILTER_DETELECINE );
     if ([fPictureController detelecine] == 1)
     {
         /* use a custom detelecine string */
-        hb_filter_detelecine.settings = (char *) [[fPictureController detelecineCustomString] UTF8String];
-        hb_list_add( job->filters, &hb_filter_detelecine );
+        hb_add_filter( job, filter, [[fPictureController detelecineCustomString] UTF8String] );
     }
     if ([fPictureController detelecine] == 2)
     {
         /* Default */
-        hb_list_add( job->filters, &hb_filter_detelecine );
+        hb_add_filter( job, filter, NULL );
     }
     
     
@@ -3363,77 +3368,69 @@ bool one_burned = FALSE;
     if ([fPictureController useDecomb] == 1)
     {
         /* Decomb */
+        filter = hb_filter_init( HB_FILTER_DECOMB );
         if ([fPictureController decomb] == 1)
         {
             /* use a custom decomb string */
-            hb_filter_decomb.settings = (char *) [[fPictureController decombCustomString] UTF8String];
-            hb_list_add( job->filters, &hb_filter_decomb );
+            hb_add_filter( job, filter, [[fPictureController decombCustomString] UTF8String] );
         }
         if ([fPictureController decomb] == 2)
         {
             /* use libhb defaults */
-            hb_filter_decomb.settings = NULL;
-            hb_list_add( job->filters, &hb_filter_decomb );
+            hb_add_filter( job, filter, NULL );
         }
         if ([fPictureController decomb] == 3)
         {
             /* use old defaults (decomb fast) */
-            hb_filter_decomb.settings = "7:2:6:9:1:80";
-            hb_list_add( job->filters, &hb_filter_decomb );
+            hb_add_filter( job, filter, "7:2:6:9:1:80" );
         }
     }
     else
     {
         
         /* Deinterlace */
+        filter = hb_filter_init( HB_FILTER_DEINTERLACE );
         if ([fPictureController deinterlace] == 1)
         {
             /* we add the custom string if present */
-            hb_filter_deinterlace.settings = (char *) [[fPictureController deinterlaceCustomString] UTF8String];
-            hb_list_add( job->filters, &hb_filter_deinterlace );            
+            hb_add_filter( job, filter, [[fPictureController deinterlaceCustomString] UTF8String] );            
         }
         else if ([fPictureController deinterlace] == 2)
         {
             /* Run old deinterlacer fd by default */
-            hb_filter_deinterlace.settings = "-1"; 
-            hb_list_add( job->filters, &hb_filter_deinterlace );
+            hb_add_filter( job, filter, "-1" );
         }
         else if ([fPictureController deinterlace] == 3)
         {
             /* Yadif mode 0 (without spatial deinterlacing.) */
-            hb_filter_deinterlace.settings = "2"; 
-            hb_list_add( job->filters, &hb_filter_deinterlace );            
+            hb_add_filter( job, filter, "2" );            
         }
         else if ([fPictureController deinterlace] == 4)
         {
             /* Yadif (with spatial deinterlacing) */
-            hb_filter_deinterlace.settings = "0"; 
-            hb_list_add( job->filters, &hb_filter_deinterlace );            
+            hb_add_filter( job, filter, "0" );
         }
         
 	}
     
     /* Denoise */
+    filter = hb_filter_init( HB_FILTER_DENOISE );
 	if ([fPictureController denoise] == 1) // custom in popup
 	{
 		/* we add the custom string if present */
-        hb_filter_denoise.settings = (char *) [[fPictureController denoiseCustomString] UTF8String]; 
-        hb_list_add( job->filters, &hb_filter_denoise );	
+        hb_add_filter( job, filter, [[fPictureController denoiseCustomString] UTF8String] );
 	}
     else if ([fPictureController denoise] == 2) // Weak in popup
 	{
-		hb_filter_denoise.settings = "2:1:2:3"; 
-        hb_list_add( job->filters, &hb_filter_denoise );	
+        hb_add_filter( job, filter, "2:1:2:3" );
 	}
 	else if ([fPictureController denoise] == 3) // Medium in popup
 	{
-		hb_filter_denoise.settings = "3:2:2:3"; 
-        hb_list_add( job->filters, &hb_filter_denoise );	
+        hb_add_filter( job, filter, "3:2:2:3" );
 	}
 	else if ([fPictureController denoise] == 4) // Strong in popup
 	{
-		hb_filter_denoise.settings = "7:7:5:5"; 
-        hb_list_add( job->filters, &hb_filter_denoise );	
+        hb_add_filter( job, filter, "7:7:5:5" );
 	}
     
     
@@ -3442,13 +3439,28 @@ bool one_burned = FALSE;
      * the macgui's purposes a value of 0 actually means to not even use the filter
      * current hb_filter_deblock.settings valid ranges are from 5 - 15 
      */
+    filter = hb_filter_init( HB_FILTER_DEBLOCK );
     if ([fPictureController deblock] != 0)
     {
         NSString *deblockStringValue = [NSString stringWithFormat: @"%d",[fPictureController deblock]];
-        hb_filter_deblock.settings = (char *) [deblockStringValue UTF8String];
-        hb_list_add( job->filters, &hb_filter_deblock );
+        hb_add_filter( job, filter, [deblockStringValue UTF8String] );
     }
 
+    /* Add Crop/Scale filter */
+    char * filter_str;
+    filter_str = hb_strdup_printf("%d:%d:%d:%d:%d:%d",
+        job->width, job->height,
+        job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
+    filter = hb_filter_init( HB_FILTER_CROP_SCALE );
+    hb_add_filter( job, filter, filter_str );
+    free( filter_str );
+
+    // Add framerate shaping filter
+    filter_str = hb_strdup_printf("%d:%d:%d",
+        job->cfr, job->vrate, job->vrate_base );
+    filter = hb_filter_init( HB_FILTER_VFR );
+    hb_add_filter( job, filter, filter_str );
+    free( filter_str );
 }
 
 
@@ -3817,6 +3829,11 @@ bool one_burned = FALSE;
         }
         i++;
     }
+    if( one_burned )
+    {
+        filter = hb_filter_init( HB_FILTER_RENDER_SUB );
+        hb_add_filter( job, filter, NULL );
+    }
 
 #pragma mark -
 
@@ -3875,46 +3892,41 @@ bool one_burned = FALSE;
 		}
 	}
     
-    /* Filters */ 
-    job->filters = hb_list_init();
-    
+    hb_filter_object_t * filter;
     /* Now lets call the filters if applicable.
      * The order of the filters is critical
      */
     /* Detelecine */
-    hb_filter_detelecine.settings = NULL;
+    filter = hb_filter_init( HB_FILTER_DETELECINE );
     if ([[queueToApply objectForKey:@"PictureDetelecine"] intValue] == 1)
     {
         /* use a custom detelecine string */
-        hb_filter_detelecine.settings = (char *) [[queueToApply objectForKey:@"PictureDetelecineCustom"] UTF8String];
-        hb_list_add( job->filters, &hb_filter_detelecine );
+        hb_add_filter( job, filter, [[queueToApply objectForKey:@"PictureDetelecineCustom"] UTF8String] );
     }
     if ([[queueToApply objectForKey:@"PictureDetelecine"] intValue] == 2)
     {
         /* Use libhb's default values */
-        hb_list_add( job->filters, &hb_filter_detelecine );
+        hb_add_filter( job, filter, NULL );
     }
     
     if ([[queueToApply objectForKey:@"PictureDecombDeinterlace"] intValue] == 1)
     {
         /* Decomb */
+        filter = hb_filter_init( HB_FILTER_DECOMB );
         if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 1)
         {
             /* use a custom decomb string */
-            hb_filter_decomb.settings = (char *) [[queueToApply objectForKey:@"PictureDecombCustom"] UTF8String];
-            hb_list_add( job->filters, &hb_filter_decomb );
+            hb_add_filter( job, filter, [[queueToApply objectForKey:@"PictureDecombCustom"] UTF8String] );
         }
         if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 2)
         {
             /* use libhb defaults */
-            hb_filter_decomb.settings = NULL;
-            hb_list_add( job->filters, &hb_filter_decomb );
+            hb_add_filter( job, filter, NULL );
         }
         if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 3)
         {
             /* use old defaults (decomb fast) */
-            hb_filter_decomb.settings = "7:2:6:9:1:80";
-            hb_list_add( job->filters, &hb_filter_decomb );
+            hb_add_filter( job, filter, "7:2:6:9:1:80" );
         }
         
     }
@@ -3922,54 +3934,48 @@ bool one_burned = FALSE;
     {
         
         /* Deinterlace */
+        filter = hb_filter_init( HB_FILTER_DEINTERLACE );
         if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 1)
         {
             /* we add the custom string if present */
-            hb_filter_deinterlace.settings = (char *) [[queueToApply objectForKey:@"PictureDeinterlaceCustom"] UTF8String];
-            hb_list_add( job->filters, &hb_filter_deinterlace );            
+            hb_add_filter( job, filter, [[queueToApply objectForKey:@"PictureDeinterlaceCustom"] UTF8String] );            
         }
         else if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 2)
         {
             /* Run old deinterlacer fd by default */
-            hb_filter_deinterlace.settings = "-1"; 
-            hb_list_add( job->filters, &hb_filter_deinterlace );
+            hb_add_filter( job, filter, "-1" );
         }
         else if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 3)
         {
             /* Yadif mode 0 (without spatial deinterlacing.) */
-            hb_filter_deinterlace.settings = "2"; 
-            hb_list_add( job->filters, &hb_filter_deinterlace );            
+            hb_add_filter( job, filter, "2" );            
         }
         else if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 4)
         {
             /* Yadif (with spatial deinterlacing) */
-            hb_filter_deinterlace.settings = "0"; 
-            hb_list_add( job->filters, &hb_filter_deinterlace );            
+            hb_add_filter( job, filter, "0" );            
         }
         
         
     }
     /* Denoise */
+    filter = hb_filter_init( HB_FILTER_DENOISE );
 	if ([[queueToApply objectForKey:@"PictureDenoise"] intValue] == 1) // Custom in popup
 	{
 		/* we add the custom string if present */
-        hb_filter_denoise.settings = (char *) [[queueToApply objectForKey:@"PictureDenoiseCustom"] UTF8String];
-        hb_list_add( job->filters, &hb_filter_denoise );	
+        hb_add_filter( job, filter, [[queueToApply objectForKey:@"PictureDenoiseCustom"] UTF8String] );	
 	}
     else if ([[queueToApply objectForKey:@"PictureDenoise"] intValue] == 2) // Weak in popup
 	{
-		hb_filter_denoise.settings = "2:1:2:3"; 
-        hb_list_add( job->filters, &hb_filter_denoise );	
+        hb_add_filter( job, filter, "2:1:2:3" );	
 	}
 	else if ([[queueToApply objectForKey:@"PictureDenoise"] intValue] == 3) // Medium in popup
 	{
-		hb_filter_denoise.settings = "3:2:2:3"; 
-        hb_list_add( job->filters, &hb_filter_denoise );	
+        hb_add_filter( job, filter, "3:2:2:3" );	
 	}
 	else if ([[queueToApply objectForKey:@"PictureDenoise"] intValue] == 4) // Strong in popup
 	{
-		hb_filter_denoise.settings = "7:7:5:5"; 
-        hb_list_add( job->filters, &hb_filter_denoise );	
+        hb_add_filter( job, filter, "7:7:5:5" );	
 	}
     
     
@@ -3978,11 +3984,28 @@ bool one_burned = FALSE;
      * the macgui's purposes a value of 0 actually means to not even use the filter
      * current hb_filter_deblock.settings valid ranges are from 5 - 15 
      */
+    filter = hb_filter_init( HB_FILTER_DEBLOCK );
     if ([[queueToApply objectForKey:@"PictureDeblock"] intValue] != 0)
     {
-        hb_filter_deblock.settings = (char *) [[queueToApply objectForKey:@"PictureDeblock"] UTF8String];
-        hb_list_add( job->filters, &hb_filter_deblock );
+        hb_add_filter( job, filter, [[queueToApply objectForKey:@"PictureDeblock"] UTF8String] );
     }
+
+    /* Add Crop/Scale filter */
+    char * filter_str;
+    filter_str = hb_strdup_printf("%d:%d:%d:%d:%d:%d",
+        job->width, job->height,
+        job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
+    filter = hb_filter_init( HB_FILTER_CROP_SCALE );
+    hb_add_filter( job, filter, filter_str );
+    free( filter_str );
+
+    // Add framerate shaping filter
+    filter_str = hb_strdup_printf("%d:%d:%d",
+        job->cfr, job->vrate, job->vrate_base );
+    filter = hb_filter_init( HB_FILTER_VFR );
+    hb_add_filter( job, filter, filter_str );
+    free( filter_str );
+
 [self writeToActivityLog: "prepareJob exiting"];    
 }
 

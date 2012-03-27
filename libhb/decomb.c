@@ -139,7 +139,6 @@ typedef struct yadif_thread_arg_s {
 
 struct hb_filter_private_s
 {
-    int              pix_fmt;
     int              width[3];
     int              height[3];
 
@@ -221,28 +220,24 @@ struct hb_filter_private_s
 //    int              alternator;           // for bobbing parity when framedoubling
 };
 
-hb_filter_private_t * hb_decomb_init( int pix_fmt,
-                                           int width,
-                                           int height,
-                                           char * settings );
+static int hb_decomb_init( hb_filter_object_t * filter,
+                           hb_filter_init_t * init );
 
-int hb_decomb_work(      const hb_buffer_t * buf_in,
-                         hb_buffer_t ** buf_out,
-                         int pix_fmt,
-                         int width,
-                         int height,
-                         hb_filter_private_t * pv );
+static int hb_decomb_work( hb_filter_object_t * filter,
+                           hb_buffer_t ** buf_in,
+                           hb_buffer_t ** buf_out );
 
-void hb_decomb_close( hb_filter_private_t * pv );
+static void hb_decomb_close( hb_filter_object_t * filter );
 
 hb_filter_object_t hb_filter_decomb =
 {
-    FILTER_DECOMB,
-    "Decomb",
-    NULL,
-    hb_decomb_init,
-    hb_decomb_work,
-    hb_decomb_close,
+    .id            = HB_FILTER_DECOMB,
+    .enforce_order = 1,
+    .name          = "Decomb",
+    .settings      = NULL,
+    .init          = hb_decomb_init,
+    .work          = hb_decomb_work,
+    .close         = hb_decomb_close,
 };
 
 int cubic_interpolate_pixel( int y0, int y1, int y2, int y3 )
@@ -790,7 +785,7 @@ int check_filtered_combing_mask( hb_filter_private_t * pv )
                     pv->mask_box_x = x;
                     pv->mask_box_y = y;
 
-                   if ( block_score <= threshold && !( pv->buf_settings->flags & 16) )
+                   if ( block_score <= threshold && !( pv->buf_settings->s.flags & 16) )
                     {
                         /* Blend video content that scores between
                            ( threshold / 2 ) and threshold.        */
@@ -799,7 +794,7 @@ int check_filtered_combing_mask( hb_filter_private_t * pv )
                     }
                     else if( block_score > threshold )
                     {
-                        if( pv->buf_settings->flags & 16 )
+                        if( pv->buf_settings->s.flags & 16 )
                         {
                             /* Blend progressive content above the threshold.*/
                             pv->mask_box_color = 2;
@@ -919,7 +914,7 @@ int check_combing_mask( hb_filter_private_t * pv )
                     pv->mask_box_x = x;
                     pv->mask_box_y = y;
 
-                    if ( block_score <= threshold && !( pv->buf_settings->flags & 16) )
+                    if ( block_score <= threshold && !( pv->buf_settings->s.flags & 16) )
                     {
                         /* Blend video content that scores between
                            ( threshold / 2 ) and threshold.        */
@@ -928,7 +923,7 @@ int check_combing_mask( hb_filter_private_t * pv )
                     }
                     else if( block_score > threshold )
                     {
-                        if( pv->buf_settings->flags & 16 )
+                        if( pv->buf_settings->s.flags & 16 )
                         {
                             /* Blend progressive content above the threshold.*/
                             pv->mask_box_color = 2;
@@ -1994,29 +1989,22 @@ static void yadif_filter( uint8_t ** dst,
     }
 }
 
-hb_filter_private_t * hb_decomb_init( int pix_fmt,
-                                           int width,
-                                           int height,
-                                           char * settings )
+static int hb_decomb_init( hb_filter_object_t * filter,
+                           hb_filter_init_t * init )
 {
-    if( pix_fmt != PIX_FMT_YUV420P )
-    {
-        return 0;
-    }
+    filter->private_data = calloc( 1, sizeof(struct hb_filter_private_s) );
+    hb_filter_private_t * pv = filter->private_data;
 
-    hb_filter_private_t * pv = calloc( 1, sizeof(struct hb_filter_private_s) );
-
-    pv->pix_fmt = pix_fmt;
-
-    pv->width[0]  = width;
-    pv->height[0] = height;
-    pv->width[1]  = pv->width[2]  = width >> 1;
-    pv->height[1] = pv->height[2] = height >> 1;
+    pv->width[0]  = hb_image_stride( init->pix_fmt, init->width, 0 );
+    pv->height[0] = hb_image_height( init->pix_fmt, init->height, 0 );
+    pv->width[1]  = pv->width[2]  = hb_image_stride( init->pix_fmt, init->width, 1 );
+    pv->height[1] = pv->height[2] = hb_image_height( init->pix_fmt, init->height, 1 );
 
     build_gamma_lut( pv );
 
-    pv->buf_out[0] = hb_video_buffer_init( width, height );
-    pv->buf_out[1] = hb_video_buffer_init( width, height );
+    pv->buf_out[0] = hb_video_buffer_init( init->width, init->height );
+    pv->buf_out[1] = hb_video_buffer_init( init->width, init->height );
+
     pv->buf_settings = hb_buffer_init( 0 );
 
     pv->deinterlaced_frames = 0;
@@ -2049,9 +2037,9 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
     pv->mcdeint_mode   = MCDEINT_MODE_DEFAULT;
     int mcdeint_qp     = MCDEINT_QP_DEFAULT;
 
-    if( settings )
+    if( filter->settings )
     {
-        sscanf( settings, "%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d",
+        sscanf( filter->settings, "%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d",
                 &pv->mode,
                 &pv->spatial_metric,
                 &pv->motion_threshold,
@@ -2084,8 +2072,8 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
     for( i = 0; i < 3; i++ )
     {
         int is_chroma = !!i;
-        int w = ((width   + 31) & (~31))>>is_chroma;
-        int h = ((height+6+ 31) & (~31))>>is_chroma;
+        int w = ((init->width   + 31) & (~31))>>is_chroma;
+        int h = ((init->height+6+ 31) & (~31))>>is_chroma;
 
         pv->ref_stride[i] = w;
 
@@ -2110,11 +2098,11 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
     if( pv->mode & MODE_EEDI2 )
     {
         /* Allocate half-height eedi2 buffers */
-        height = pv->height[0] / 2;
+        int height = pv->height[0] / 2;
         for( i = 0; i < 3; i++ )
         {
             int is_chroma = !!i;
-            int w = ((width   + 31) & (~31))>>is_chroma;
+            int w = ((init->width   + 31) & (~31))>>is_chroma;
             int h = ((height+6+ 31) & (~31))>>is_chroma;
 
             for( j = 0; j < 4; j++ )
@@ -2128,7 +2116,7 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
         for( i = 0; i < 3; i++ )
         {
             int is_chroma = !!i;
-            int w = ((width   + 31) & (~31))>>is_chroma;
+            int w = ((init->width   + 31) & (~31))>>is_chroma;
             int h = ((height+6+ 31) & (~31))>>is_chroma;
 
             for( j = 0; j < 5; j++ )
@@ -2276,14 +2264,17 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
             }
         }
     }
+    
+    mcdeint_init( &pv->mcdeint, pv->mcdeint_mode, mcdeint_qp, 
+                  init->pix_fmt, init->width, init->height );
 
-    mcdeint_init( &pv->mcdeint, pv->mcdeint_mode, mcdeint_qp, width, height );
-
-    return pv;
+    return 0;
 }
 
-void hb_decomb_close( hb_filter_private_t * pv )
+static void hb_decomb_close( hb_filter_object_t * filter )
 {
+    hb_filter_private_t * pv = filter->private_data;
+
     if( !pv )
     {
         return;
@@ -2451,33 +2442,30 @@ void hb_decomb_close( hb_filter_private_t * pv )
     mcdeint_close( &pv->mcdeint );
 
     free( pv );
+    filter->private_data = NULL;
 }
 
-int hb_decomb_work( const hb_buffer_t * cbuf_in,
-                    hb_buffer_t ** buf_out,
-                    int pix_fmt,
-                    int width,
-                    int height,
-                    hb_filter_private_t * pv )
+static int hb_decomb_work( hb_filter_object_t * filter,
+                           hb_buffer_t ** buf_in,
+                           hb_buffer_t ** buf_out )
 {
-    hb_buffer_t * buf_in = (hb_buffer_t *)cbuf_in;
+    hb_filter_private_t * pv = filter->private_data;
+    hb_buffer_t * in = *buf_in;
 
-    if( !pv ||
-        pix_fmt != pv->pix_fmt ||
-        width   != pv->width[0] ||
-        height  != pv->height[0] )
+    if ( in->size <= 0 )
     {
-        return FILTER_FAILED;
+        *buf_out = in;
+        *buf_in = NULL;
+        return HB_FILTER_DONE;
     }
 
-    avpicture_fill( &pv->pic_in, buf_in->data,
-                    pix_fmt, width, height );
+    hb_avpicture_fill( &pv->pic_in, in );
 
     /* Determine if top-field first layout */
     int tff;
     if( pv->parity < 0 )
     {
-        tff = !!(buf_in->flags & PIC_FLAG_TOP_FIELD_FIRST);
+        tff = !!(in->s.flags & PIC_FLAG_TOP_FIELD_FIRST);
     }
     else
     {
@@ -2492,18 +2480,16 @@ int hb_decomb_work( const hb_buffer_t * cbuf_in,
     {
         store_ref( (const uint8_t**)pv->pic_in.data, pv );
 
-        hb_buffer_copy_settings( pv->buf_settings, buf_in );
-
-        /* don't let 'work_loop' send a chapter mark upstream */
-        buf_in->new_chap  = 0;
+        pv->buf_settings->s = in->s;
+        hb_buffer_move_subs( pv->buf_settings, in );
 
         pv->yadif_ready = 1;
 
-        return FILTER_DELAY;
+        return HB_FILTER_DELAY;
     }
 
-    /* Perform yadif filtering */
-    int frame;
+    /* Perform yadif filtering */        
+    int frame, out_frame;
     for( frame = 0; frame <= ( ( pv->mode & MODE_MCDEINT ) ? 1 : 0 ) ; frame++ )
 // This would be what to use for bobbing: for( frame = 0; frame <= 0 ; frame++ )
     {
@@ -2531,8 +2517,8 @@ int hb_decomb_work( const hb_buffer_t * cbuf_in,
 #endif
         pv->tff = !parity;
 
-        avpicture_fill( &pv->pic_out, pv->buf_out[!(frame^1)]->data,
-                        pix_fmt, width, height );
+        hb_buffer_t *b = pv->buf_out[!(frame^1)];
+        hb_avpicture_fill( &pv->pic_out, b );
 
         /* XXX
             Should check here and only bother filtering field 2 when
@@ -2548,27 +2534,29 @@ int hb_decomb_work( const hb_buffer_t * cbuf_in,
         if( pv->mcdeint_mode >= 0 /* && pv->yadif_arguments[0].is_combed */)
         {
             /* Perform mcdeint filtering */
-            avpicture_fill( &pv->pic_in,  pv->buf_out[(frame^1)]->data,
-                            pix_fmt, width, height );
+            b = pv->buf_out[(frame^1)];
+            hb_avpicture_fill( &pv->pic_in, b );
 
             mcdeint_filter( pv->pic_in.data, pv->pic_out.data, parity, pv->width, pv->height, &pv->mcdeint );
 
-            *buf_out = pv->buf_out[(frame^1)];
+            out_frame = frame ^ 1;
         }
         else
         {
-            *buf_out = pv->buf_out[!(frame^1)];
+            out_frame = !(frame ^ 1);
         }
     }
+    *buf_out = pv->buf_out[out_frame];
+    // Allocate a replacement for the buffer we just consumed
+    pv->buf_out[out_frame] = hb_video_buffer_init( pv->width[0], pv->height[0] );
 
     /* Copy buffered settings to output buffer settings */
-    hb_buffer_copy_settings( *buf_out, pv->buf_settings );
+    (*buf_out)->s = pv->buf_settings->s;
+    hb_buffer_move_subs( *buf_out, pv->buf_settings );
 
     /* Replace buffered settings with input buffer settings */
-    hb_buffer_copy_settings( pv->buf_settings, buf_in );
+    pv->buf_settings->s = in->s;
+    hb_buffer_move_subs( pv->buf_settings, in );
 
-    /* don't let 'work_loop' send a chapter mark upstream */
-    buf_in->new_chap  = 0;
-
-    return FILTER_OK;
+    return HB_FILTER_OK;
 }

@@ -28,6 +28,7 @@
 void mcdeint_init( mcdeint_private_t * pv,
                    int mode,
                    int qp,
+                   int pix_fmt,
                    int width,
                    int height )
 {
@@ -53,7 +54,7 @@ void mcdeint_init( mcdeint_private_t * pv,
             avctx_enc->time_base                = (AVRational){1,25};  // meaningless
             avctx_enc->gop_size                 = 300;
             avctx_enc->max_b_frames             = 0;
-            avctx_enc->pix_fmt                  = PIX_FMT_YUV420P;
+            avctx_enc->pix_fmt                  = pix_fmt;
             avctx_enc->flags                    = CODEC_FLAG_QSCALE | CODEC_FLAG_LOW_DELAY;
             avctx_enc->strict_std_compliance    = FF_COMPLIANCE_EXPERIMENTAL;
             avctx_enc->global_quality           = 1;
@@ -110,7 +111,6 @@ void mcdeint_filter( uint8_t ** dst,
                      mcdeint_private_t * pv )
 {
     int x, y, i;
-    int out_size;
 
 #ifdef SUPPRESS_AV_LOG
     /* TODO: temporarily change log level to suppress obnoxious debug output */
@@ -127,10 +127,10 @@ void mcdeint_filter( uint8_t ** dst,
     pv->mcdeint_avctx_enc->me_sub_cmp = FF_CMP_SAD;
     pv->mcdeint_frame->quality        = pv->mcdeint_qp * FF_QP2LAMBDA;
 
-    out_size = avcodec_encode_video( pv->mcdeint_avctx_enc,
-                                     pv->mcdeint_outbuf,
-                                     pv->mcdeint_outbuf_size,
-                                     pv->mcdeint_frame );
+    avcodec_encode_video( pv->mcdeint_avctx_enc,
+                          pv->mcdeint_outbuf,
+                          pv->mcdeint_outbuf_size,
+                          pv->mcdeint_frame );
 
     pv->mcdeint_frame_dec = pv->mcdeint_avctx_enc->coded_frame;
 

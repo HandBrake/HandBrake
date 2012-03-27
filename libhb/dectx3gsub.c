@@ -164,8 +164,8 @@ static hb_buffer_t *tx3g_decode_to_utf8( hb_buffer_t *in )
     out->size = dst - out->data;
     
     // Copy metadata from the input packet to the output packet
-    out->start = in->start;
-    out->stop = in->stop;
+    out->s.start = in->s.start;
+    out->s.stop = in->s.stop;
     
 fail:
     free( startStyle );
@@ -197,7 +197,7 @@ static int dectx3gWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     
     // Warn if the subtitle's duration has not been passed through by the demuxer,
     // which will prevent the subtitle from displaying at all
-    if ( in->stop == 0 ) {
+    if ( in->s.stop == 0 ) {
         hb_log( "dectx3gsub: subtitle packet lacks duration" );
     }
     

@@ -302,6 +302,7 @@ static void ScanFunc( void * _data )
 
         job->list_audio = hb_list_init();
         job->list_subtitle = hb_list_init();
+        job->list_filter = hb_list_init();
 
         job->mux = HB_MUX_MP4;
     }
@@ -553,8 +554,6 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
     for( i = 0; i < data->preview_count; i++ )
     {
         int j;
-        FILE * file_preview;
-        char   filename[1024];
 
         if ( *data->die )
         {
@@ -645,7 +644,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             while( ( buf_es = hb_list_item( list_es, 0 ) ) )
             {
                 hb_list_rem( list_es, buf_es );
-                if( buf_es->id == title->video_id && vid_buf == NULL )
+                if( buf_es->s.id == title->video_id && vid_buf == NULL )
                 {
                     vid_decoder->work( vid_decoder, &buf_es, &vid_buf );
                 }
@@ -688,13 +687,13 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         remember_info( info_list, &vid_info );
 
         if( is_close_to( vid_info.rate_base, 900900, 100 ) &&
-            ( vid_buf->flags & PIC_FLAG_REPEAT_FIRST_FIELD ) )
+            ( vid_buf->s.flags & PIC_FLAG_REPEAT_FIRST_FIELD ) )
         {
             /* Potentially soft telecine material */
             pulldown_count++;
         }
 
-        if( vid_buf->flags & PIC_FLAG_REPEAT_FRAME )
+        if( vid_buf->s.flags & PIC_FLAG_REPEAT_FRAME )
         {
             // AVCHD-Lite specifies that all streams are
             // 50 or 60 fps.  To produce 25 or 30 fps, camera
@@ -725,20 +724,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         
         if( data->store_previews )
         {
-            hb_get_tempory_filename( data->h, filename, "%d_%d_%d",
-                                     hb_get_instance_id(data->h), title->index, i );
-
-            file_preview = fopen( filename, "wb" );
-            if( file_preview )
-            {
-                fwrite( vid_buf->data, vid_info.width * vid_info.height * 3 / 2,
-                        1, file_preview );
-                fclose( file_preview );
-            }
-            else
-            {
-                hb_log( "scan: fopen failed (%s)", filename );
-            }
+            hb_save_preview( data->h, title->index, i, vid_buf );
         }
 
         /* Detect black borders */
@@ -983,7 +969,7 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
     {
         audio = hb_list_item( title->list_audio, i );
         /* check if this elementary stream is one we want */
-        if ( audio->id == b->id )
+        if ( audio->id == b->s.id )
         {
             break;
         }
