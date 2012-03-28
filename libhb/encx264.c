@@ -7,6 +7,7 @@
 #include <stdarg.h>
 
 #include "hb.h"
+#include "hb_dict.h"
 #include "encx264.h"
 
 int  encx264Init( hb_work_object_t *, hb_job_t * );
@@ -161,58 +162,26 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         param.vui.i_colmatrix = 6;
     }
 
-    /*
-        This section passes the string advanced_opts to libx264 for parsing into
-        parameter names and values.
-
-        The string is set up like this:
-        option1=value1:option2=value 2
-
-        So, you have to iterate through based on the colons, and then put
-        the left side of the equals sign in "name" and the right side into
-        "value." Then you hand those strings off to x264 for interpretation.
-
-        This is all based on the universal x264 option handling Loren
-        Merritt implemented in the Mplayer/Mencoder project.
-     */
-
+    /* place job->advanced_opts in an hb_dict_t for convenience */
+    hb_dict_t * x264_opts = NULL;
     if( job->advanced_opts != NULL && *job->advanced_opts != '\0' )
     {
-        char *x264opts, *x264opts_start;
-
-        x264opts = x264opts_start = strdup(job->advanced_opts);
-
-        while( x264opts_start && *x264opts )
-        {
-            char *name = x264opts;
-            char *value;
-            int ret;
-
-            x264opts += strcspn( x264opts, ":" );
-            if( *x264opts )
-            {
-                *x264opts = 0;
-                x264opts++;
-            }
-
-            value = strchr( name, '=' );
-            if( value )
-            {
-                *value = 0;
-                value++;
-            }
-
-            /* Here's where the strings are passed to libx264 for parsing. */
-            ret = x264_param_parse( &param, name, value );
-
-            /* Let x264 sanity check the options for us*/
-            if( ret == X264_PARAM_BAD_NAME )
-                hb_log( "x264 options: Unknown suboption %s", name );
-            if( ret == X264_PARAM_BAD_VALUE )
-                hb_log( "x264 options: Bad argument %s=%s", name, value ? value : "(null)" );
-        }
-        free(x264opts_start);
+        x264_opts = hb_encopts_to_dict( job->advanced_opts );
     }
+    /* iterate through x264_opts and have libx264 parse the options for us */
+    int ret;
+    hb_dict_entry_t * entry = NULL;
+    while( ( entry = hb_dict_next( x264_opts, entry ) ) )
+    {
+        /* Here's where the strings are passed to libx264 for parsing. */
+        ret = x264_param_parse( &param, entry->key, entry->value );
+        /* Let x264 sanity check the options for us */
+        if( ret == X264_PARAM_BAD_NAME )
+            hb_log( "x264 options: Unknown suboption %s", entry->key );
+        if( ret == X264_PARAM_BAD_VALUE )
+            hb_log( "x264 options: Bad argument %s=%s", entry->key, entry->value ? entry->value : "(null)" );
+    }
+    hb_dict_free( &x264_opts );
 
     /* Reload colorimetry settings in case custom values were set
      * in the advanced_opts string */

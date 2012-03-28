@@ -5,6 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
 
 #include "hb.h"
+#include "hb_dict.h"
 #include "hbffmpeg.h"
 
 /*
@@ -156,51 +157,22 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     context->time_base.num = fps.den;
     context->gop_size  = 10 * (int)( (double)job->vrate / (double)job->vrate_base + 0.5 );
 
-    /*
-        This section passes the string advanced_opts to avutil for parsing 
-        into an AVCodecContext.
-
-        The string is set up like this:
-        option1=value1:option2=value2
-
-        So, you have to iterate through based on the colons, and then put
-        the left side of the equals sign in "name" and the right side into
-        "value." Then you hand those strings off to avutil for interpretation.
-     */
-    AVDictionary *av_opts = NULL;
+    /* place job->advanced_opts in an hb_dict_t for convenience */
+    hb_dict_t * lavc_opts = NULL;
     if( job->advanced_opts != NULL && *job->advanced_opts != '\0' )
     {
-        char *opts, *opts_start;
-
-        opts = opts_start = strdup(job->advanced_opts);
-
-        if( opts_start )
-        {
-            while( *opts )
-            {
-                char *name = opts;
-                char *value;
-
-                opts += strcspn( opts, ":" );
-                if( *opts )
-                {
-                    *opts = 0;
-                    opts++;
-                }
-
-                value = strchr( name, '=' );
-                if( value )
-                {
-                    *value = 0;
-                    value++;
-                }
-
-                /* Here's where the strings are passed to avutil for parsing. */
-                av_dict_set( &av_opts, name, value, 0 );
-            }
-        }
-        free(opts_start);
+        lavc_opts = hb_encopts_to_dict( job->advanced_opts );
     }
+    /* iterate through lavc_opts and have avutil parse the options for us */
+    int ret;
+    AVDictionary * av_opts = NULL;
+    hb_dict_entry_t * entry = NULL;
+    while( ( entry = hb_dict_next( lavc_opts, entry ) ) )
+    {
+        /* Here's where the strings are passed to avutil for parsing. */
+        av_dict_set( &av_opts, entry->key, entry->value, 0 );
+    }
+    hb_dict_free( &lavc_opts );
 
     // Now set the things in context that we don't want to allow
     // the user to override.
