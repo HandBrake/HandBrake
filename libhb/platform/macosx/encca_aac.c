@@ -415,15 +415,12 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
         return NULL;
     }
 
-    obuf->start = pv->pts;
-    pv->pts += 90000LL * pv->isamples / pv->osamplerate;
-    obuf->stop  = pv->pts;
     obuf->size  = odesc.mDataByteSize;
-
-    hb_buffer_tag_t tag;
-    tag.id = HB_TAG_AUDIO;
-    tag.u.audio.frametype = HB_FRAME_AUDIO;
-    hb_buffer_add_tag( obuf, &tag );
+    obuf->s.start = pv->pts;
+    pv->pts += 90000LL * pv->isamples / pv->osamplerate;
+    obuf->s.stop  = pv->pts;
+    obuf->s.type = AUDIO_BUF;
+    obuf->s.frametype = HB_FRAME_AUDIO;
 
     return obuf;
 }

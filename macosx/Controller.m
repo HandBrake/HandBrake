@@ -2746,8 +2746,6 @@ fWorkingCount = 0;
         
         hb_add( fQueueEncodeLibhb, job );
     }
-	
-	hb_free_filters( job );
 
     NSString *destinationDirectory = [[queueToApply objectForKey:@"DestinationPath"] stringByDeletingLastPathComponent];
 	[[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
@@ -3076,6 +3074,7 @@ fWorkingCount = 0;
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
             [fSrcTitlePopUp indexOfSelectedItem] );
     hb_job_t * job = title->job;
+    hb_filter_object_t * filter;
     /* set job->angle for libdvdnav */
     job->angle = [fSrcAnglePopUp indexOfSelectedItem] + 1;
     /* Chapter selection */
@@ -3348,9 +3347,9 @@ bool one_burned = FALSE;
     * The order of the filters is critical
     */
     
-    hb_filter_object_t * filter;
+
 	/* Detelecine */
-    hb_filter_detelecine.settings = NULL;
+    //hb_filter_detelecine.settings = NULL;
     filter = hb_filter_init( HB_FILTER_DETELECINE );
     if ([fPictureController detelecine] == 1)
     {
@@ -3476,6 +3475,7 @@ bool one_burned = FALSE;
     hb_title_t * title = (hb_title_t *) hb_list_item( list,0 ); // is always zero since now its a single title scan
     hb_job_t * job = title->job;
     hb_audio_config_t * audio;
+    hb_filter_object_t * filter;
     /* Title Angle for dvdnav */
     job->angle = [[queueToApply objectForKey:@"TitleAngle"] intValue];
     
@@ -3892,7 +3892,6 @@ bool one_burned = FALSE;
 		}
 	}
     
-    hb_filter_object_t * filter;
     /* Now lets call the filters if applicable.
      * The order of the filters is critical
      */
