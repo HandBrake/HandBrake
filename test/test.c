@@ -2898,9 +2898,9 @@ static void ShowHelp()
     "    --modulus               Set the number you want the scaled pixel dimensions\n"
     "      <number>              to divide cleanly by. Does not affect strict\n"
     "                            anamorphic mode, which is always mod 2 (default: 16)\n"
-    "    -M  --color-matrix      Set the color space signaled by the output\n"
-    "          <601 or 709>      (Bt.601 is mostly for SD content, Bt.709 for HD,\n"
-    "                             default: set by resolution)\n"
+    "    -M, --color-matrix      Set the color space signaled by the output\n"
+    "                            Values: 709, pal, ntsc, 601 (same as ntsc)\n"
+    "                            (default: detected from source)\n"
     "\n"
 
     "### Filters---------------------------------------------------------\n\n"
@@ -3725,11 +3725,16 @@ static int ParseOptions( int argc, char ** argv )
                 acodec_fallback = strdup( optarg );
                 break;
             case 'M':
-                if( atoi( optarg ) == 601 )
-                    color_matrix_code = 1;
-                else if( atoi( optarg ) == 709 )
-                    color_matrix_code = 2;
-                break;
+                if( optarg != NULL )
+                {
+                    if( !strcmp( optarg, "601" ) ||
+                        !strcmp( optarg, "ntsc" ) )
+                        color_matrix_code = 1;
+                    else if( !strcmp( optarg, "pal" ) )
+                        color_matrix_code = 2;
+                    else if( !strcmp( optarg, "709" ) )
+                        color_matrix_code = 3;
+                } break;
             case MIN_DURATION:
                 min_title_duration = strtol( optarg, NULL, 0 );
                 break;

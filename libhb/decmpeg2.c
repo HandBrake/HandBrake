@@ -894,6 +894,82 @@ static int decmpeg2Info( hb_work_object_t *w, hb_work_info_t *info )
         info->profile = m->info->sequence->profile_level_id >> 4;
         info->level = m->info->sequence->profile_level_id & 0xf;
         info->name = "mpeg2";
+
+        if( pv->libmpeg2->info->sequence->flags & SEQ_FLAG_COLOUR_DESCRIPTION )
+        {
+            switch( pv->libmpeg2->info->sequence->colour_primaries )
+            {
+                case 1: // ITU-R Recommendation 709
+                    info->color_prim = HB_COLR_PRI_BT709;
+                    break;
+                case 5: // ITU-R Recommendation 624-4 System B, G
+                    info->color_prim = HB_COLR_PRI_EBUTECH;
+                    break;
+                case 4: // ITU-R Recommendation 624-4 System M
+                case 6: // SMPTE 170M
+                case 7: // SMPTE 240M
+                    info->color_prim = HB_COLR_PRI_SMPTEC;
+                    break;
+                default:
+                    info->color_prim = HB_COLR_PRI_UNDEF;
+                    break;
+            }
+            switch( pv->libmpeg2->info->sequence->transfer_characteristics )
+            {
+                case 1: // ITU-R Recommendation 709
+                case 4: // ITU-R Recommendation 624-4 System M
+                case 5: // ITU-R Recommendation 624-4 System B, G
+                case 6: // SMPTE 170M
+                    info->color_transfer = HB_COLR_TRA_BT709;
+                    break;
+                case 7: // SMPTE 240M
+                    info->color_transfer = HB_COLR_TRA_SMPTE240M;
+                    break;
+                default:
+                    info->color_transfer = HB_COLR_TRA_UNDEF;
+                    break;
+            }
+            switch( pv->libmpeg2->info->sequence->matrix_coefficients )
+            {
+                case 1: // ITU-R Recommendation 709
+                    info->color_matrix = HB_COLR_MAT_BT709;
+                    break;
+                case 4: // FCC
+                case 5: // ITU-R Recommendation 624-4 System B, G
+                case 6: // SMPTE 170M
+                    info->color_matrix = HB_COLR_MAT_SMPTE170M;
+                    break;
+                case 7: // SMPTE 240M
+                    info->color_matrix = HB_COLR_MAT_SMPTE240M;
+                    break;
+                default:
+                    info->color_matrix = HB_COLR_MAT_UNDEF;
+                    break;
+            }
+        }
+        else if( ( info->width >= 1280 || info->height >= 720 ) ||
+                 ( info->width >   720 && info->height >  576 ) )
+        {
+            // ITU BT.709 HD content
+            info->color_prim     = HB_COLR_PRI_BT709;
+            info->color_transfer = HB_COLR_TRA_BT709;
+            info->color_matrix   = HB_COLR_MAT_BT709;
+        }
+        else if( info->rate_base == 1080000 )
+        {
+            // ITU BT.601 DVD or SD TV content (PAL)
+            info->color_prim     = HB_COLR_PRI_EBUTECH;
+            info->color_transfer = HB_COLR_TRA_BT709;
+            info->color_matrix   = HB_COLR_MAT_SMPTE170M;
+        }
+        else
+        {
+            // ITU BT.601 DVD or SD TV content (NTSC)
+            info->color_prim     = HB_COLR_PRI_SMPTEC;
+            info->color_transfer = HB_COLR_TRA_BT709;
+            info->color_matrix   = HB_COLR_MAT_SMPTE170M;
+        }
+
         return 1;
     }
     return 0;

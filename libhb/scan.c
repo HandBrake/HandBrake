@@ -869,6 +869,9 @@ skip_preview:
             title->pixel_aspect_width = vid_info.pixel_aspect_width;
             title->pixel_aspect_height = vid_info.pixel_aspect_height;
         }
+        title->color_prim = vid_info.color_prim;
+        title->color_transfer = vid_info.color_transfer;
+        title->color_matrix = vid_info.color_matrix;
 
         // compute the aspect ratio based on the storage dimensions and the
         // pixel aspect ratio (if supplied) or just storage dimensions if no PAR.

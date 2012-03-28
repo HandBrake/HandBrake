@@ -139,27 +139,40 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     
     /* set up the VUI color model & gamma to match what the COLR atom
      * set in muxmp4.c says. See libhb/muxmp4.c for notes. */
-    if( job->color_matrix_code == 3 )
+    if( job->color_matrix_code == 4 )
     {
         // Custom
         param.vui.i_colorprim = job->color_prim;
         param.vui.i_transfer  = job->color_transfer;
         param.vui.i_colmatrix = job->color_matrix;
     }
-    else if( ( job->color_matrix_code == 2 ) || 
-             ( job->color_matrix_code == 0 && ( job->title->width >= 1280 || job->title->height >= 720 ) ) )
+    else if( job->color_matrix_code == 3 )
     {
         // ITU BT.709 HD content
-        param.vui.i_colorprim = 1;
-        param.vui.i_transfer  = 1;
-        param.vui.i_colmatrix = 1;
+        param.vui.i_colorprim = HB_COLR_PRI_BT709;
+        param.vui.i_transfer  = HB_COLR_TRA_BT709;
+        param.vui.i_colmatrix = HB_COLR_MAT_BT709;
+    }
+    else if( job->color_matrix_code == 2 )
+    {
+        // ITU BT.601 DVD or SD TV content (PAL)
+        param.vui.i_colorprim = HB_COLR_PRI_EBUTECH;
+        param.vui.i_transfer  = HB_COLR_TRA_BT709;
+        param.vui.i_colmatrix = HB_COLR_MAT_SMPTE170M;
+    }
+    else if( job->color_matrix_code == 1 )
+    {
+        // ITU BT.601 DVD or SD TV content (NTSC)
+        param.vui.i_colorprim = HB_COLR_PRI_SMPTEC;
+        param.vui.i_transfer  = HB_COLR_TRA_BT709;
+        param.vui.i_colmatrix = HB_COLR_MAT_SMPTE170M;
     }
     else
     {
-        // ITU BT.601 DVD or SD TV content
-        param.vui.i_colorprim = 6;
-        param.vui.i_transfer  = 1;
-        param.vui.i_colmatrix = 6;
+        // detected during scan
+        param.vui.i_colorprim = job->title->color_prim;
+        param.vui.i_transfer  = job->title->color_transfer;
+        param.vui.i_colmatrix = job->title->color_matrix;
     }
 
     /* place job->advanced_opts in an hb_dict_t for convenience */
@@ -185,7 +198,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     /* Reload colorimetry settings in case custom values were set
      * in the advanced_opts string */
-    job->color_matrix_code = 3;
+    job->color_matrix_code = 4;
     job->color_prim = param.vui.i_colorprim;
     job->color_transfer = param.vui.i_transfer;
     job->color_matrix = param.vui.i_colmatrix;

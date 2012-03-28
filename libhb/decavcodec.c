@@ -1336,11 +1336,77 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     info->level = pv->context->level;
     info->name = pv->context->codec->name;
 
+    switch( pv->context->color_primaries )
+    {
+        case AVCOL_PRI_BT709:
+            info->color_prim = HB_COLR_PRI_BT709;
+            break;
+        case AVCOL_PRI_BT470BG:
+            info->color_prim = HB_COLR_PRI_EBUTECH;
+            break;
+        case AVCOL_PRI_BT470M:
+        case AVCOL_PRI_SMPTE170M:
+        case AVCOL_PRI_SMPTE240M:
+            info->color_prim = HB_COLR_PRI_SMPTEC;
+            break;
+        default:
+        {
+            if( ( info->width >= 1280 || info->height >= 720 ) ||
+                ( info->width >   720 && info->height >  576 ) )
+                // ITU BT.709 HD content
+                info->color_prim = HB_COLR_PRI_BT709;
+            else if( info->rate_base == 1080000 )
+                // ITU BT.601 DVD or SD TV content (PAL)
+                info->color_prim = HB_COLR_PRI_EBUTECH;
+            else
+                // ITU BT.601 DVD or SD TV content (NTSC)
+                info->color_prim = HB_COLR_PRI_SMPTEC;
+            break;
+        }
+    }
+
+    /* AVCOL_TRC_BT709 -> HB_COLR_TRA_BT709
+     * AVCOL_TRC_GAMMA22 (bt470m) -> HB_COLR_TRA_BT709
+     * AVCOL_TRC_GAMMA28 (bt470bg) -> HB_COLR_TRA_BT709
+     * AVCOL_TRC_UNSPECIFIED, AVCOL_TRC_NB:
+     * -> ITU BT.709 -> HB_COLR_TRA_BT709
+     * -> ITU BT.601 -> HB_COLR_TRA_BT709
+     * TODO: AVCOL_TRC_SMPTE240M -> HB_COLR_TRA_SMPTE240M but it's not yet in Libav */
+    info->color_transfer = HB_COLR_TRA_BT709;
+
+    switch( pv->context->colorspace )
+    {
+        case AVCOL_SPC_BT709:
+            info->color_matrix = HB_COLR_MAT_BT709;
+            break;
+        case AVCOL_SPC_FCC:
+        case AVCOL_SPC_BT470BG:
+        case AVCOL_SPC_SMPTE170M:
+        case AVCOL_SPC_RGB: // libswscale rgb2yuv
+            info->color_matrix = HB_COLR_MAT_SMPTE170M;
+            break;
+        case AVCOL_SPC_SMPTE240M:
+            info->color_matrix = HB_COLR_MAT_SMPTE240M;
+            break;
+        default:
+        {
+            if( ( info->width >= 1280 || info->height >= 720 ) ||
+                ( info->width >   720 && info->height >  576 ) )
+                // ITU BT.709 HD content
+                info->color_matrix = HB_COLR_MAT_BT709;
+            else
+                // ITU BT.601 DVD or SD TV content (PAL)
+                // ITU BT.601 DVD or SD TV content (NTSC)
+                info->color_matrix = HB_COLR_MAT_SMPTE170M;
+            break;
+        }
+    }
+
     return 1;
 }
 
 static int decavcodecvBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
-                             hb_work_info_t *info )
+                              hb_work_info_t *info )
 {
     return 0;
 }

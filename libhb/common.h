@@ -298,10 +298,26 @@ struct hb_job_s
     char            *x264_tune;
     char            *h264_level;
     int             areBframes;
+
     int             color_matrix_code;
     int             color_prim;
     int             color_transfer;
     int             color_matrix;
+// see https://developer.apple.com/quicktime/icefloe/dispatch019.html#colr
+#define HB_COLR_PRI_BT709     1
+#define HB_COLR_PRI_UNDEF     2
+#define HB_COLR_PRI_EBUTECH   5 // use for bt470bg
+#define HB_COLR_PRI_SMPTEC    6 // smpte170m; also use for bt470m and smpte240m
+// 0, 3-4, 7-65535: reserved
+#define HB_COLR_TRA_BT709     1 // also use for bt470m, bt470bg and smpte170m
+#define HB_COLR_TRA_UNDEF     2
+#define HB_COLR_TRA_SMPTE240M 7
+// 0, 3-6, 8-65535: reserved
+#define HB_COLR_MAT_BT709     1
+#define HB_COLR_MAT_UNDEF     2
+#define HB_COLR_MAT_SMPTE170M 6 // also use for fcc and bt470bg
+#define HB_COLR_MAT_SMPTE240M 7
+// 0, 3-5, 8-65535: reserved
 
     /* List of audio settings. */
     hb_list_t     * list_audio;
@@ -685,6 +701,9 @@ struct hb_title_s
     int         height;
     int         pixel_aspect_width;
     int         pixel_aspect_height;
+    int         color_prim;
+    int         color_transfer;
+    int         color_matrix;
     int         rate;
     int         rate_base;
     int         crop[4];
@@ -785,6 +804,9 @@ typedef struct hb_work_info_s
             int     height;
             int     pixel_aspect_width;
             int     pixel_aspect_height;
+            int     color_prim;
+            int     color_transfer;
+            int     color_matrix;
         };
         struct {    // info only valid for audio decoders
             int     channel_layout;
