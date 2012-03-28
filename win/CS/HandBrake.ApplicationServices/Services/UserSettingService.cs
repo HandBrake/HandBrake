@@ -153,6 +153,15 @@ namespace HandBrake.ApplicationServices.Services
             }
             catch (Exception exc)
             {
+                this.userSettings = this.GetDefaults();
+                try
+                {
+                    this.Save();
+                }
+                catch (Exception)
+                {        
+                }
+                
                 throw new GeneralApplicationException(
                     "HandBrake has detected corruption in the settings file. User settings will now be reset to defaults.",
                     "Please restart HandBrake before continuing.",
