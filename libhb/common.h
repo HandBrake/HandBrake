@@ -291,6 +291,7 @@ struct hb_job_s
     int             vrate_base;
     int             cfr;
     int             pass;
+    int             fastfirstpass;
     char            *advanced_opts;
     char            *x264_profile;
     char            *x264_preset;

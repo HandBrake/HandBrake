@@ -2718,23 +2718,11 @@ fWorkingCount = 0;
     if( [[queueToApply objectForKey:@"VideoTwoPass"] intValue] == 1 )
     {
         job->indepth_scan = 0;
-        
-
-        
         job->pass = 1;
         
         hb_add( fQueueEncodeLibhb, job );
         
         job->pass = 2;
-        
-        if( job->vcodec == HB_VCODEC_X264 )
-        {
-            job->advanced_opts = strdup( [[queueToApply objectForKey:@"x264Option"] UTF8String] );
-        }
-        else if( job->vcodec & HB_VCODEC_FFMPEG_MASK )
-        {
-            job->advanced_opts = strdup( [[queueToApply objectForKey:@"lavcOption"] UTF8String] );
-        }
         
         hb_add( fQueueEncodeLibhb, job );
         
@@ -3093,6 +3081,7 @@ fWorkingCount = 0;
 		/* Below Sends x264 options to the core library if x264 is selected*/
 		/* Lets use this as per Nyx, Thanks Nyx! */
 		/* For previews we ignore the turbo option for the first pass of two since we only use 1 pass */
+		job->fastfirstpass = 0;
 		job->advanced_opts = strdup( [[fAdvancedOptions optionsString] UTF8String] );
 
         
@@ -3589,18 +3578,13 @@ bool one_burned = FALSE;
 		/* Turbo first pass if two pass and Turbo First pass is selected */
 		if( [[queueToApply objectForKey:@"VideoTwoPass"] intValue] == 1 && [[queueToApply objectForKey:@"VideoTurboTwoPass"] intValue] == 1 )
 		{
-			/* pass the "Turbo" string to be appended to the existing x264 opts string into a variable for the first pass */
-			NSString *firstPassOptStringTurbo = @":ref=1:subme=2:me=dia:analyse=none:trellis=0:no-fast-pskip=0:8x8dct=0:weightb=0";
-			/* append the "Turbo" string variable to the existing opts string.
-             * Note: the "Turbo" string must be appended, not prepended to work properly */
-			NSString *firstPassOptStringCombined = [[queueToApply objectForKey:@"x264Option"] stringByAppendingString:firstPassOptStringTurbo];
-			job->advanced_opts = strdup( [firstPassOptStringCombined UTF8String] );
+			job->fastfirstpass = 1;
 		}
 		else
 		{
-			job->advanced_opts = strdup( [[queueToApply objectForKey:@"x264Option"] UTF8String] );
+			job->fastfirstpass = 0;
 		}
-        
+		job->advanced_opts = strdup( [[queueToApply objectForKey:@"x264Option"] UTF8String] );
     }
     else if( job->vcodec & HB_VCODEC_FFMPEG_MASK )
     {

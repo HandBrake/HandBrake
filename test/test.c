@@ -116,7 +116,6 @@ static int    chapter_end   = 0;
 static int    chapter_markers = 0;
 static char * marker_file   = NULL;
 static char * advanced_opts = NULL;
-static char * advanced_opts2 = NULL;
 static char * x264_profile  = NULL;
 static char * x264_preset   = NULL;
 static char * x264_tune     = NULL;
@@ -124,7 +123,6 @@ static char * h264_level    = NULL;
 static int    maxHeight     = 0;
 static int    maxWidth      = 0;
 static int    turbo_opts_enabled = 0;
-static char * turbo_opts = "ref=1:subme=2:me=dia:analyse=none:trellis=0:no-fast-pskip=0:8x8dct=0:weightb=0";
 static int    largeFileSize = 0;
 static int    preset        = 0;
 static char * preset_name   = 0;
@@ -367,8 +365,7 @@ int main( int argc, char ** argv )
     str_vfree( acompressions );
     if( acodecs ) free( acodecs );
     if (native_language ) free (native_language );
-	if( advanced_opts ) free (advanced_opts );
-	if( advanced_opts2 ) free (advanced_opts2 );
+    if( advanced_opts ) free (advanced_opts );
     if (preset_name) free (preset_name);
     if( stop_at_string ) free( stop_at_string );
     if( start_at_string ) free( start_at_string );
@@ -2485,41 +2482,16 @@ static int HandleEvents( hb_handle_t * h )
 
                 job->indepth_scan = 0;
 
-                if (advanced_opts)
-                {
-                    advanced_opts2 = strdup(advanced_opts);
-                }
-
-                /*
-                 * If turbo options have been selected then append them
-                 * to the advanced_opts now (size includes one ':' and the '\0')
-                 */
+                /* Turbo first pass */
                 if( turbo_opts_enabled )
                 {
-                    int size = (advanced_opts ? strlen(advanced_opts) : 0) + strlen(turbo_opts) + 2;
-                    char *tmp_advanced_opts;
-
-                    tmp_advanced_opts = malloc(size * sizeof(char));
-                    if( advanced_opts )
-                    {
-                        snprintf( tmp_advanced_opts, size, "%s:%s",
-                                  advanced_opts, turbo_opts );
-                        free( advanced_opts );
-                    } else {
-                        /*
-                         * No advanced_opts to modify, but apply the turbo options
-                         * anyway as they may be modifying defaults
-                         */
-                        snprintf( tmp_advanced_opts, size, "%s",
-                                  turbo_opts );
-                    }
-                    advanced_opts = tmp_advanced_opts;
-
-                    fprintf( stderr, "Modified x264 options for pass 1 to append turbo options: %s\n",
-                             advanced_opts );
-
-                    job->advanced_opts = advanced_opts;
+                    job->fastfirstpass = 1;
                 }
+                else
+                {
+                    job->fastfirstpass = 0;
+                }
+
                 hb_add( h, job );
 
                 job->pass = 2;
@@ -2530,8 +2502,6 @@ static int HandleEvents( hb_handle_t * h )
                  * attribute of the job).
                  */
                 job->indepth_scan = 0;
-
-                job->advanced_opts = advanced_opts2;
 
                 hb_add( h, job );
             }

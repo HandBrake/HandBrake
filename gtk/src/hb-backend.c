@@ -3083,12 +3083,6 @@ init_ui_combo_boxes(GtkBuilder *builder)
 		init_combo_box(builder, combo_name_map[ii].name);
 	}
 }
-	
-static const char * turbo_lavc_opts = "";
-
-static const char * turbo_x264_opts = 
-	"ref=1:subme=2:me=dia:analyse=none:trellis=0:"
-	"no-fast-pskip=0:8x8dct=0";
 
 // Construct the advanced options string
 // The result is allocated, so someone must free it at some point.
@@ -5176,58 +5170,19 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		 */
 		job->pass = 1;
 		job->indepth_scan = 0;
+		job->advanced_opts = advanced_opts;
 
 		/*
-		 * If turbo options have been selected then append them
-		 * to the advanced_opts now (size includes one ':' and the '\0')
+		 * If turbo options have been selected then set job->fastfirstpass
 		 */
-		if( ghb_settings_get_boolean(js, "VideoTurboTwoPass") )
+		if( ghb_settings_get_boolean(js, "VideoTurboTwoPass") &&
+			job->vcodec == HB_VCODEC_X264 )
 		{
-			gchar *tmp_advanced_opts;
-			gchar *extra_opts;
-
-			if (job->vcodec == HB_VCODEC_X264)
-			{
-				gint badapt;
-
-				badapt = ghb_lookup_badapt(advanced_opts);
-				if (badapt == 2)
-				{
-					extra_opts = g_strdup_printf("%s", turbo_x264_opts);
-				}
-				else
-				{
-					extra_opts = g_strdup_printf("%s:weightb=0", turbo_x264_opts);
-				}
-			}
-			else if (job->vcodec == HB_VCODEC_FFMPEG_MPEG4)
-			{
-				extra_opts = g_strdup_printf("%s", turbo_lavc_opts);
-			}
-			else
-			{
-				extra_opts = g_strdup("");
-			}
-
-			if ( advanced_opts )
-			{
-				tmp_advanced_opts = g_strdup_printf("%s:%s", advanced_opts, extra_opts);
-			} 
-			else 
-			{
-				/*
-				 * No advanced_opts to modify, but apply the turbo options
-				 * anyway as they may be modifying defaults
-				 */
-				tmp_advanced_opts = g_strdup_printf("%s", extra_opts);
-			}
-			g_free(extra_opts);
-
-			job->advanced_opts = tmp_advanced_opts;
+			job->fastfirstpass = 1;
 		}
 		else
 		{
-			job->advanced_opts = advanced_opts;
+			job->fastfirstpass = 0;
 		}
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
 		hb_add( h, job );
@@ -5242,7 +5197,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		 * attribute of the job).
 		 */
 		job->indepth_scan = 0;
-		job->advanced_opts = advanced_opts;
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
 		hb_add( h, job );
 		//if (job->advanced_opts != NULL)

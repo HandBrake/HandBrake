@@ -263,6 +263,12 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         hb_apply_h264_level( &param, job->h264_level, job->x264_profile );
     }
 
+    /* Turbo first pass */
+    if( job->pass == 1 && job->fastfirstpass == 1 )
+    {
+        x264_param_apply_fastfirstpass( &param );
+    }
+
     /* B-frames are on by default.*/
     job->areBframes = 1;
     
