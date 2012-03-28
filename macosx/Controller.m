@@ -3349,14 +3349,13 @@ bool one_burned = FALSE;
     
 
 	/* Detelecine */
-    //hb_filter_detelecine.settings = NULL;
     filter = hb_filter_init( HB_FILTER_DETELECINE );
     if ([fPictureController detelecine] == 1)
     {
         /* use a custom detelecine string */
         hb_add_filter( job, filter, [[fPictureController detelecineCustomString] UTF8String] );
     }
-    if ([fPictureController detelecine] == 2)
+    else if ([fPictureController detelecine] == 2)
     {
         /* Default */
         hb_add_filter( job, filter, NULL );
@@ -3446,20 +3445,16 @@ bool one_burned = FALSE;
     }
 
     /* Add Crop/Scale filter */
-    char * filter_str;
-    filter_str = hb_strdup_printf("%d:%d:%d:%d:%d:%d",
-        job->width, job->height,
-        job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
     filter = hb_filter_init( HB_FILTER_CROP_SCALE );
-    hb_add_filter( job, filter, filter_str );
-    free( filter_str );
+    hb_add_filter( job, filter, [[NSString stringWithFormat:@"%d:%d:%d:%d:%d:%d",
+                                  job->width,job->height,
+                                  job->crop[0], job->crop[1],
+                                  job->crop[2], job->crop[3]] UTF8String] );
 
-    // Add framerate shaping filter
-    filter_str = hb_strdup_printf("%d:%d:%d",
-        job->cfr, job->vrate, job->vrate_base );
+    /* Add framerate shaping filter */
     filter = hb_filter_init( HB_FILTER_VFR );
-    hb_add_filter( job, filter, filter_str );
-    free( filter_str );
+    hb_add_filter( job, filter, [[NSString stringWithFormat:@"%d:%d:%d",
+                                  job->cfr, job->vrate, job->vrate_base] UTF8String] );
 }
 
 
@@ -3902,7 +3897,7 @@ bool one_burned = FALSE;
         /* use a custom detelecine string */
         hb_add_filter( job, filter, [[queueToApply objectForKey:@"PictureDetelecineCustom"] UTF8String] );
     }
-    if ([[queueToApply objectForKey:@"PictureDetelecine"] intValue] == 2)
+    else if ([[queueToApply objectForKey:@"PictureDetelecine"] intValue] == 2)
     {
         /* Use libhb's default values */
         hb_add_filter( job, filter, NULL );
@@ -3990,20 +3985,16 @@ bool one_burned = FALSE;
     }
 
     /* Add Crop/Scale filter */
-    char * filter_str;
-    filter_str = hb_strdup_printf("%d:%d:%d:%d:%d:%d",
-        job->width, job->height,
-        job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
     filter = hb_filter_init( HB_FILTER_CROP_SCALE );
-    hb_add_filter( job, filter, filter_str );
-    free( filter_str );
+    hb_add_filter( job, filter, [[NSString stringWithFormat:@"%d:%d:%d:%d:%d:%d",
+                                  job->width,job->height,
+                                  job->crop[0], job->crop[1],
+                                  job->crop[2], job->crop[3]] UTF8String] );
 
-    // Add framerate shaping filter
-    filter_str = hb_strdup_printf("%d:%d:%d",
-        job->cfr, job->vrate, job->vrate_base );
+    /* Add framerate shaping filter */
     filter = hb_filter_init( HB_FILTER_VFR );
-    hb_add_filter( job, filter, filter_str );
-    free( filter_str );
+    hb_add_filter( job, filter, [[NSString stringWithFormat:@"%d:%d:%d",
+                                  job->cfr, job->vrate, job->vrate_base] UTF8String] );
 
 [self writeToActivityLog: "prepareJob exiting"];    
 }
