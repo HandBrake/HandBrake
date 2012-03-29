@@ -989,4 +989,7 @@ const char * const * hb_x264_tunes();
 const char * const * hb_x264_profiles();
 const char * const * hb_h264_levels();
 
+// x264 option name/synonym helper
+const char * hb_x264_encopt_name( const char * name );
+
 #endif

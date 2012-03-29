@@ -132,7 +132,7 @@ hb_dict_entry_t * hb_dict_next( hb_dict_t * dict, hb_dict_entry_t * previous )
     return NULL;
 }
 
-hb_dict_t * hb_encopts_to_dict( const char * encopts )
+hb_dict_t * hb_encopts_to_dict( const char * encopts, int encoder )
 {
     hb_dict_t * dict = NULL;
     if( encopts && *encopts )
@@ -159,6 +159,9 @@ hb_dict_t * hb_encopts_to_dict( const char * encopts )
                     *value = 0;
                     value++;
                 }
+                // x264 has multiple names for some options
+                if( encoder == HB_VCODEC_X264 )
+                    name = hb_x264_encopt_name( name );
                 hb_dict_set( &dict, name, value );
             }
         }

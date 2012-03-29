@@ -161,7 +161,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     hb_dict_t * lavc_opts = NULL;
     if( job->advanced_opts != NULL && *job->advanced_opts != '\0' )
     {
-        lavc_opts = hb_encopts_to_dict( job->advanced_opts );
+        lavc_opts = hb_encopts_to_dict( job->advanced_opts, job->vcodec );
     }
     /* iterate through lavc_opts and have avutil parse the options for us */
     int ret;

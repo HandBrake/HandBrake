@@ -179,7 +179,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     hb_dict_t * x264_opts = NULL;
     if( job->advanced_opts != NULL && *job->advanced_opts != '\0' )
     {
-        x264_opts = hb_encopts_to_dict( job->advanced_opts );
+        x264_opts = hb_encopts_to_dict( job->advanced_opts, job->vcodec );
     }
     /* iterate through x264_opts and have libx264 parse the options for us */
     int ret;
@@ -834,4 +834,13 @@ const char * const * hb_x264_profiles()
 const char * const * hb_h264_levels()
 {
     return h264_level_names;
+}
+
+const char * hb_x264_encopt_name( const char * name )
+{
+    int i;
+    for( i = 0; x264_encopt_synonyms[i] && x264_encopt_synonyms[i+1]; i += 2 )
+        if( !strcmp( name, x264_encopt_synonyms[i+1] ) )
+            return x264_encopt_synonyms[i];
+    return name;
 }

@@ -27,7 +27,7 @@ void hb_dict_set(  hb_dict_t ** dict_ptr, const char * key, const char * value )
 hb_dict_entry_t * hb_dict_get(  hb_dict_t  * dict, const char * key );
 hb_dict_entry_t * hb_dict_next( hb_dict_t  * dict, hb_dict_entry_t * previous );
 
-hb_dict_t * hb_encopts_to_dict( const char * encopts );
+hb_dict_t * hb_encopts_to_dict( const char * encopts, int encoder );
 
 struct hb_dict_entry_s
 {
