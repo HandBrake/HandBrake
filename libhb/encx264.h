@@ -31,6 +31,7 @@ static const char * const x264_encopt_synonyms[] =
     "ipratio",        "ip-factor",
     "pbratio",        "pb-factor",
     "cplxblur",       "cplx-blur",
+    "cqm",            "cqmfile",
     0
 };
 
