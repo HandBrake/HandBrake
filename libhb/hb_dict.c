@@ -41,16 +41,13 @@ void hb_dict_free( hb_dict_t ** dict_ptr )
                 if( dict->objects[i].key )
                 {
                     free( dict->objects[i].key );
-                    dict->objects[i].key = NULL;
                 }
                 if( dict->objects[i].value )
                 {
                     free( dict->objects[i].value );
-                    dict->objects[i].value = NULL;
                 }
             }
             free( dict->objects );
-            dict->objects = NULL;
         }
         free( *dict_ptr );
         *dict_ptr = NULL;
@@ -129,10 +126,9 @@ hb_dict_entry_t * hb_dict_next( hb_dict_t * dict, hb_dict_entry_t * previous )
         return NULL;
     if( !previous )
         return &dict->objects[0];
-    int i;
-    for( i = 0; i+1 < dict->count; i++ )
-        if( &dict->objects[i] == previous )
-            return &dict->objects[i+1];
+    unsigned int prev_index = previous - dict->objects;
+    if( prev_index + 1 < dict->count )
+            return &dict->objects[prev_index+1];
     return NULL;
 }
 
