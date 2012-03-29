@@ -2008,4 +2008,3 @@ void hb_hexdump( hb_debug_level_t level, const char * label, const uint8_t * dat
         hb_deep_log( level, "    %-50s%20s", line, ascii );
     }
 }
-
