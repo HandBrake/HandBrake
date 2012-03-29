@@ -9,7 +9,6 @@ namespace HandBrake.ApplicationServices.Services
     using System.Collections.Specialized;
     using System.IO;
     using System.Linq;
-    using System.Windows.Forms;
     using System.Xml.Serialization;
 
     using HandBrake.ApplicationServices.Collections;
@@ -42,10 +41,6 @@ namespace HandBrake.ApplicationServices.Services
         public UserSettingService()
         {
             this.Load();
-            if (userSettings == null || userSettings.Count == 0)
-            {
-                this.userSettings = this.GetDefaults();
-            }
         }
 
         /// <summary>
@@ -133,39 +128,36 @@ namespace HandBrake.ApplicationServices.Services
         {
             try
             {
+                // Load up the users current settings file.
                 if (File.Exists(this.settingsFile))
                 {
                     using (StreamReader reader = new StreamReader(this.settingsFile))
                     {
                         SerializableDictionary<string, object> data = (SerializableDictionary<string, object>)serializer.Deserialize(reader);
                         this.userSettings = data;
-
-                        // Add any new settings
-                        SerializableDictionary<string, object> defaults = this.GetDefaults();
-                        foreach (var item in defaults.Where(item => !this.userSettings.Keys.Contains(item.Key)))
-                        {
-                            this.userSettings.Add(item.Key, item.Value);
-                        }
                     }
+                }
 
+                // Add any missing / new settings
+                SerializableDictionary<string, object> defaults = this.GetDefaults();
+                foreach (var item in defaults.Where(item => !this.userSettings.Keys.Contains(item.Key)))
+                {
+                    this.userSettings.Add(item.Key, item.Value);
                     this.Save();
                 }
             }
-            catch (Exception exc)
+            catch (Exception)
             {
-                this.userSettings = this.GetDefaults();
                 try
                 {
+                    this.userSettings = this.GetDefaults();
                     this.Save();
                 }
                 catch (Exception)
-                {        
+                {
                 }
-                
-                throw new GeneralApplicationException(
-                    "HandBrake has detected corruption in the settings file. User settings will now be reset to defaults.",
-                    "Please restart HandBrake before continuing.",
-                    exc);
+
+                throw;
             }
         }
 
@@ -177,29 +169,14 @@ namespace HandBrake.ApplicationServices.Services
         /// </returns>
         private SerializableDictionary<string, object> GetDefaults()
         {
-            try
+            if (File.Exists("defaultsettings.xml"))
             {
-                string defaults = Path.Combine(Application.StartupPath, "defaultsettings.xml");
-                if (File.Exists(defaults))
+                using (StreamReader reader = new StreamReader("defaultsettings.xml"))
                 {
-                    using (StreamReader reader = new StreamReader(defaults))
-                    {
-                        return (SerializableDictionary<string, object>)serializer.Deserialize(reader);
-                    }
+                    return (SerializableDictionary<string, object>)serializer.Deserialize(reader);
                 }
-
-                throw new GeneralApplicationException(
-                "User default settings file is missing. This install of HandBrake may be corrupted.",
-                "Try re-installing HandBrake.",
-                null);
             }
-            catch (Exception exc)
-            {
-                throw new GeneralApplicationException(
-                   "User default settings file is missing or inaccessible. This install of HandBrake may be corrupted.",
-                   "Try re-installing HandBrake.",
-                   exc);
-            }
+            return new SerializableDictionary<string, object>();
         }
     }
 }

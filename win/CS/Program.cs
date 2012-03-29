@@ -98,7 +98,9 @@ namespace Handbrake
                     {
                         window.Setup(
                             applicationException.Error + Environment.NewLine + applicationException.Solution,
-                            e.ExceptionObject + "\n\n ---- \n\n" + applicationException.ActualException);
+                            e.ExceptionObject + "\n\n ---- \n\n" + applicationException.ActualException +
+                            Environment.NewLine + "-----" + Environment.NewLine +
+                            applicationException.ActualException.InnerException);
                     }
                 }
                 else

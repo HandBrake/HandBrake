@@ -45,6 +45,11 @@ namespace Handbrake
         private readonly IUserSettingService userSettingService = ServiceManager.UserSettingService;
 
         /// <summary>
+        /// Set to true when the window is ready.
+        /// </summary>
+        private bool isInitialised = false;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="frmQueue"/> class.
         /// </summary>
         /// <param name="q">
@@ -69,6 +74,7 @@ namespace Handbrake
             queue.EncodeService.EncodeCompleted += this.queue_EncodeEnded;
 
             drp_completeOption.Text = userSettingService.GetUserSetting<string>(ASUserSettingConstants.WhenCompleteAction);
+            this.isInitialised = true;
         }
 
         /// <summary>
@@ -720,7 +726,10 @@ namespace Handbrake
         /// </param>
         private void CompleteOptionChanged(object sender, EventArgs e)
         {
-            userSettingService.SetUserSetting(ASUserSettingConstants.WhenCompleteAction, drp_completeOption.Text);
+            if (this.isInitialised)
+            {
+                userSettingService.SetUserSetting(ASUserSettingConstants.WhenCompleteAction, drp_completeOption.Text);
+            }
         }
 
         /// <summary>
