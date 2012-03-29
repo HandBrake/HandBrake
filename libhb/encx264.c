@@ -658,7 +658,8 @@ void hb_apply_h264_level( x264_param_t * param, const char * level, const char *
             }
             if( h264_profile == -1 )
             {
-                hb_log( "hb_apply_h264_level [warning]: unsupported x264 profile %s, ignoring", x264_profile );
+                hb_log( "hb_apply_h264_level [warning]: unsupported x264 profile %s, ignoring",
+                        x264_profile );
             }
         }
     }
@@ -687,7 +688,8 @@ void hb_apply_h264_level( x264_param_t * param, const char * level, const char *
         {
             // error (invalid or unsupported level), abort
             // this is not a failure (encoding continues)
-            hb_log( "hb_apply_h264_level [ERROR]: invalid level %s, ignoring", level );
+            hb_log( "hb_apply_h264_level [ERROR]: invalid level %s, nothing applied",
+                    level );
             return;
         }
     }
@@ -695,7 +697,17 @@ void hb_apply_h264_level( x264_param_t * param, const char * level, const char *
     {
         // error (level not a string), abort
         // this is not a failure (encoding continues)
-        hb_log( "hb_apply_h264_level [ERROR]: no level specified, ignoring" );
+        hb_log( "hb_apply_h264_level [ERROR]: no level specified, nothing applied" );
+        return;
+    }
+
+    /* we need at least width and height in order to apply a level correctly */
+    if( param->i_width <= 0 || param->i_height <= 0 )
+    {
+        // error (invalid width or height), abort
+        // this is not a failure (encoding continues)
+        hb_log( "hb_apply_h264_level [ERROR]: invalid resolution (width: %d height: %d), nothing applied",
+                param->i_width, param->i_height );
         return;
     }
 
@@ -794,7 +806,7 @@ void hb_apply_h264_level( x264_param_t * param, const char * level, const char *
         hb_log( "                               too high for level %s (max. %d macroblocks)",
                 level, h264_level->frame_size );
     }
-    else if( h264_level->mbps < (int64_t)mbs * param->i_fps_num / param->i_fps_den )
+    else if( param->i_fps_den && ( h264_level->mbps < (int64_t)mbs * param->i_fps_num / param->i_fps_den ) )
     {
         hb_log( "hb_apply_h264_level [warning]: framerate (%.3f) too high for level %s",
                 (float)param->i_fps_num/param->i_fps_den, level );
