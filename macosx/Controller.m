@@ -2741,18 +2741,8 @@ fWorkingCount = 0;
     [queueToApply setObject:[NSNumber numberWithInt:1] forKey:@"Status"];
     [self saveQueueFileItem];
     
-    /* we need to clean up the subtitle tracks after the job(s) have been set  */
-    int num_subtitle_tracks = hb_list_count(job->list_subtitle);
-    int ii;
-    for(ii = 0; ii < num_subtitle_tracks; ii++)
-    {
-        hb_subtitle_t * subtitle;
-        subtitle = (hb_subtitle_t *)hb_list_item(job->list_subtitle, 0);
-        
-
-        hb_list_rem(job->list_subtitle, subtitle);
-        free(subtitle);
-    }
+    /* we need to clean up the various lists after the job(s) have been set  */
+    hb_reset_job( job );
     
     /* We should be all setup so let 'er rip */   
     [self doRip];
@@ -3841,13 +3831,6 @@ bool one_burned = FALSE;
     job->acodec_fallback = [[queueToApply objectForKey: @"JobAudioEncoderFallback"] intValue];
     
     /* Audio tracks and mixdowns */
-    /* Lets make sure there arent any erroneous audio tracks in the job list, so lets make sure it's empty */
-    int audiotrack_count = hb_list_count(job->list_audio);
-    for( int i = 0; i < audiotrack_count; i++ )
-    {
-        hb_audio_t * temp_audio = (hb_audio_t*) hb_list_item( job->list_audio, 0 );
-        hb_list_rem(job->list_audio, temp_audio);
-    }
     /* Now lets add our new tracks to the audio list here */
 	for (unsigned int counter = 0; counter < maximumNumberOfAllowedAudioTracks; counter++) {
 		NSString *prefix = [NSString stringWithFormat: @"Audio%d", counter + 1];
@@ -4481,14 +4464,6 @@ bool one_burned = FALSE;
 								 userInfo: [NSDictionary dictionaryWithObjectsAndKeys:
 											[NSData dataWithBytesNoCopy: &fTitle length: sizeof(fTitle) freeWhenDone: NO], keyTitleTag,
 											nil]]];
-	
-	/* Lets make sure there arent any erroneous audio tracks in the job list, so lets make sure its empty*/
-    int audiotrack_count = hb_list_count(job->list_audio);
-    for( int i = 0; i < audiotrack_count;i++)
-    {
-        hb_audio_t * temp_audio = (hb_audio_t*) hb_list_item( job->list_audio, 0 );
-        hb_list_rem(job->list_audio, temp_audio);
-    }
 
 	
     [fVidRatePopUp selectItemAtIndex: 0];

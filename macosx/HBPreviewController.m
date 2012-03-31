@@ -906,6 +906,9 @@
     job->pass = 0;
     hb_add( fPreviewLibhb, job );
 
+    /* we need to clean up the various lists after the job(s) have been set  */
+    hb_reset_job( job );
+
     [fEncodingControlBox setHidden: NO];
     [fPictureControlBox setHidden: YES];
     
