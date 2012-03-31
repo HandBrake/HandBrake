@@ -80,15 +80,15 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     pv->job = job;
 
-    memset( pv->filename, 0, 1024 );
-    hb_get_tempory_filename( job->h, pv->filename, "x264.log" );
-
     if( x264_param_default_preset( &param, job->x264_preset, job->x264_tune ) < 0 )
     {
         free( pv );
         pv = NULL;
         return 1;
     }
+
+    /* Some HandBrake-specific defaults; users can override them
+     * using the advanced_opts string. */
     
     /* Enable metrics */
     param.analyse.b_psnr = 1;
@@ -96,13 +96,9 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     /* QuickTime has trouble with very low QPs (resulting in visual artifacts).
      * Known to affect QuickTime 7, QuickTime X and iTunes.
-     * Testing shows that a qpmin of 3 works.
-     */
+     * Testing shows that a qpmin of 3 works. */
     param.rc.i_qp_min = 3;
     
-    param.i_threads    = ( hb_get_cpu_count() * 3 / 2 );
-    param.i_width      = job->width;
-    param.i_height     = job->height;
     if( job->pass == 2 && job->cfr != 1 )
     {
         hb_interjob_t * interjob = hb_interjob_get( job->h );
@@ -126,17 +122,14 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         param.i_timebase_den   = 90000;
     }
 
-    /* Disable annexb. Inserts size into nal header instead of start code */
-    param.b_annexb     = 0;
-
-    /* Set min:max keyframe intervals to 1:10 of fps.
-       adjust +0.5 for when fps has remainder to bump
-       { 23.976, 29.976, 59.94 } to { 24, 30, 60 } */
+    /* Set min:max keyframe intervals to 1:10 of fps;
+     * adjust +0.5 for when fps has remainder to bump
+     * { 23.976, 29.976, 59.94 } to { 24, 30, 60 }. */
     param.i_keyint_min = (int)( (double)job->vrate / (double)job->vrate_base + 0.5 );
     param.i_keyint_max = 10 * param.i_keyint_min;
 
     param.i_log_level  = X264_LOG_INFO;
-    
+
     /* set up the VUI color model & gamma to match what the COLR atom
      * set in muxmp4.c says. See libhb/muxmp4.c for notes. */
     if( job->color_matrix_code == 4 )
@@ -204,7 +197,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     job->color_matrix = param.vui.i_colmatrix;
 
     /* For 25 fps sources, HandBrake's explicit keyints will match the x264 defaults:
-       min-keyint 25 (same as auto), keyint 250 */
+     * min-keyint 25 (same as auto), keyint 250. */
     if( param.i_keyint_min != 25 || param.i_keyint_max != 250 )
     {
         int min_auto;
@@ -226,6 +219,15 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         hb_log( "encx264: min-keyint: %s, keyint: %s", min, max );
     }
 
+    /* Settings which can't be overriden in the advanced_opts string
+     * (muxer-specific settings, resolution, ratecontrol, etc.). */
+
+    /* Disable annexb. Inserts size into nal header instead of start code. */
+    param.b_annexb = 0;
+
+    param.i_width  = job->width;
+    param.i_height = job->height;
+
     if( job->anamorphic.mode )
     {
         param.vui.i_sar_width  = job->anamorphic.par_width;
@@ -234,7 +236,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         hb_log( "encx264: encoding with stored aspect %d/%d",
                 param.vui.i_sar_width, param.vui.i_sar_height );
     }
-
 
     if( job->vquality >= 0 )
     {
@@ -248,14 +249,21 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         /* Average bitrate */
         param.rc.i_rc_method = X264_RC_ABR;
         param.rc.i_bitrate = job->vbitrate;
+        if( job->pass > 0 && job->pass < 3 )
+        {
+            memset( pv->filename, 0, 1024 );
+            hb_get_tempory_filename( job->h, pv->filename, "x264.log" );
+        }
         switch( job->pass )
         {
             case 1:
-                param.rc.b_stat_write  = 1;
+                param.rc.b_stat_read  = 0;
+                param.rc.b_stat_write = 1;
                 param.rc.psz_stat_out = pv->filename;
                 break;
             case 2:
-                param.rc.b_stat_read = 1;
+                param.rc.b_stat_read  = 1;
+                param.rc.b_stat_write = 0;
                 param.rc.psz_stat_in = pv->filename;
                 break;
         }
@@ -282,24 +290,16 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         x264_param_apply_fastfirstpass( &param );
     }
 
-    /* B-frames are on by default.*/
-    job->areBframes = 1;
+    /* B-pyramid is enabled by default. */
+    job->areBframes = 2;
     
-    if( param.i_bframe && param.i_bframe_pyramid )
+    if( !param.i_bframe )
     {
-        /* Note b-pyramid here, so the initial delay can be doubled */
-        job->areBframes = 2;
-    }
-    else if( !param.i_bframe )
-    {
-        /*
-         When B-frames are enabled, the max frame count increments
-         by 1 (regardless of the number of B-frames). If you don't
-         change the duration of the video track when you mux, libmp4
-         barfs.  So, check if the x264opts aren't using B-frames, and
-         when they aren't, set the boolean job->areBframes as false.
-         */
         job->areBframes = 0;
+    }
+    else if( !param.i_bframe_pyramid )
+    {
+        job->areBframes = 1;
     }
     
     hb_deep_log( 2, "encx264: opening libx264 (pass %d)", job->pass );
