@@ -109,11 +109,20 @@ namespace HandBrake.Interop.HbLib
 
 		public const int HB_CONFIG_MAX_SIZE = 8192;
 
-		public const int HB_FILTER_DETELECINE = 1;
-		public const int HB_FILTER_DEINTERLACE = 2;
-		public const int HB_FILTER_DEBLOCK = 3;
-		public const int HB_FILTER_DENOISE = 4;
-		public const int HB_FILTER_DECOMB = 5;
-		public const int HB_FILTER_ROTATE = 6;
+        // First, filters that may change the framerate (drop or dup frames) 
+        public const int HB_FILTER_DETELECINE = 1;
+        public const int HB_FILTER_DECOMB = 2;
+        public const int HB_FILTER_DEINTERLACE = 3;
+        public const int HB_FILTER_VFR = 4;
+
+        // Filters that must operate on the original source image are next 
+        public const int HB_FILTER_DEBLOCK = 5;
+        public const int HB_FILTER_DENOISE = 6;
+        public const int HB_FILTER_RENDER_SUB = 7;
+        public const int HB_FILTER_CROP_SCALE = 8;
+
+        // Finally filters that don't care what order they are in, 
+        // except that they must be after the above filters 
+        public const int HB_FILTER_ROTATE = 9;
 	}
 }
