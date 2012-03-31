@@ -69,7 +69,7 @@ struct hb_buffer_s
 
     struct settings
     {
-        enum { AUDIO_BUF, VIDEO_BUF, SUBTITLE_BUF, OTHER_BUF } type;
+        enum { AUDIO_BUF, VIDEO_BUF, SUBTITLE_BUF, FRAME_BUF, OTHER_BUF } type;
 
         int           id;           // ID of the track that the packet comes from
         int64_t       start;        // start time of frame
@@ -128,11 +128,14 @@ void hb_buffer_pool_init( void );
 void hb_buffer_pool_free( void );
 
 hb_buffer_t * hb_buffer_init( int size );
+hb_buffer_t * hb_frame_buffer_init( int pix_fmt, int w, int h);
+void          hb_buffer_init_planes( hb_buffer_t * b );
 void          hb_buffer_realloc( hb_buffer_t *, int size );
+void          hb_video_buffer_realloc( hb_buffer_t * b, int w, int h );
 void          hb_buffer_reduce( hb_buffer_t * b, int size );
 void          hb_buffer_close( hb_buffer_t ** );
-void          hb_buffer_copy_settings( hb_buffer_t * dst,
-                                       const hb_buffer_t * src );
+hb_buffer_t * hb_buffer_copy( const hb_buffer_t * src );
+void          hb_buffer_swap_copy( hb_buffer_t *src, hb_buffer_t *dst );
 void          hb_buffer_move_subs( hb_buffer_t * dst, hb_buffer_t * src );
 
 hb_fifo_t   * hb_fifo_init( int capacity, int thresh );
@@ -189,123 +192,11 @@ static inline int hb_image_height( int pix_fmt, int height, int plane )
     return height;
 }
 
-// this routine gets a buffer for an uncompressed picture
-// with pixel format pix_fmt and dimensions width x height.
-static inline hb_buffer_t * hb_pic_buffer_init( int pix_fmt, int width, int height )
-{
-    const AVPixFmtDescriptor *desc = &av_pix_fmt_descriptors[pix_fmt];
-
-    hb_buffer_t * buf;
-    int p;
-    uint8_t has_plane[4] = {0,};
-
-    for( p = 0; p < 4; p++ )
-    {
-        has_plane[desc->comp[p].plane] = 1;
-    }
-
-    int size = 0;
-    for( p = 0; p < 4; p++ )
-    {
-        if( has_plane[p] )
-        {
-            size += hb_image_stride( pix_fmt, width, p ) * 
-                    hb_image_height( pix_fmt, height, p );
-        }
-    }
-
-    buf = hb_buffer_init( size );
-    if( buf == NULL )
-        return NULL;
-
-    buf->s.type = VIDEO_BUF;
-    buf->f.width = width;
-    buf->f.height = height;
-    buf->f.fmt = pix_fmt;
-
-    uint8_t * plane = buf->data;
-    for( p = 0; p < 4; p++ )
-    {
-        if ( has_plane[p] )
-        {
-            buf->plane[p].data = plane;
-            buf->plane[p].stride = hb_image_stride( pix_fmt, width, p );
-            buf->plane[p].height = hb_image_height( pix_fmt, height, p );
-            buf->plane[p].width  = hb_image_width( pix_fmt, width, p );
-            buf->plane[p].size   = hb_image_stride( pix_fmt, width, p ) *
-                                   hb_image_height( pix_fmt, height, p );
-            plane += buf->plane[p].size;
-        }
-    }
-    return buf;
-}
-
 // this routine gets a buffer for an uncompressed YUV420 video frame
 // with dimensions width x height.
 static inline hb_buffer_t * hb_video_buffer_init( int width, int height )
 {
-    return hb_pic_buffer_init( PIX_FMT_YUV420P, width, height );
-}
-
-// this routine reallocs a buffer for an uncompressed YUV420 video frame
-// with dimensions width x height.
-static inline void hb_video_buffer_realloc( hb_buffer_t * buf, int width, int height )
-{
-    const AVPixFmtDescriptor *desc = &av_pix_fmt_descriptors[buf->f.fmt];
-    int p;
-
-    uint8_t has_plane[4] = {0,};
-
-    for( p = 0; p < 4; p++ )
-    {
-        has_plane[desc->comp[p].plane] = 1;
-    }
-
-    int size = 0;
-    for( p = 0; p < 4; p++ )
-    {
-        if( has_plane[p] )
-        {
-            size += hb_image_stride( buf->f.fmt, width, p ) * 
-                    hb_image_height( buf->f.fmt, height, p );
-        }
-    }
-
-    hb_buffer_realloc(buf, size );
-
-    buf->f.width = width;
-    buf->f.height = height;
-
-    uint8_t * plane = buf->data;
-    for( p = 0; p < 4; p++ )
-    {
-        if( has_plane[p] )
-        {
-            buf->plane[p].data = plane;
-            buf->plane[p].stride = hb_image_stride( buf->f.fmt, width, p );
-            buf->plane[p].height = hb_image_height( buf->f.fmt, height, p );
-            buf->plane[p].width  = hb_image_width( buf->f.fmt, width, p );
-            buf->plane[p].size   = hb_image_stride( buf->f.fmt, width, p ) *
-                                   hb_image_height( buf->f.fmt, height, p );
-            plane += buf->plane[p].size;
-        }
-    }
-}
-
-// this routine 'moves' data from src to dst by interchanging 'data',
-// 'size' & 'alloc' between them and copying the rest of the fields
-// from src to dst.
-static inline void hb_buffer_swap_copy( hb_buffer_t *src, hb_buffer_t *dst )
-{
-    uint8_t *data  = dst->data;
-    int      size  = dst->size;
-    int      alloc = dst->alloc;
-
-    *dst = *src;
-
-    src->data  = data;
-    src->size  = size;
-    src->alloc = alloc;
+    return hb_frame_buffer_init( PIX_FMT_YUV420P, width, height );
 }
 
 /***********************************************************************
