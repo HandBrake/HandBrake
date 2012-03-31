@@ -109,6 +109,24 @@ void hb_dict_set( hb_dict_t ** dict_ptr, const char * key, const char * value )
     }
 }
 
+void hb_dict_unset( hb_dict_t ** dict_ptr, const char * key )
+{
+    hb_dict_t * dict = *dict_ptr;
+    if( !dict || !dict->objects || !key || !strlen( key ) )
+        return;
+    int i;
+    for( i = 0; i < dict->count; i++ )
+        if( !strcmp( key, dict->objects[i].key ) )
+        {
+            free( dict->objects[i].key );
+            if( dict->objects[i].value )
+                free( dict->objects[i].value );
+            if( i != --dict->count )
+                memmove( &dict->objects[i], &dict->objects[i+1],
+                         sizeof( hb_dict_entry_t ) * ( dict->count - i ) );
+        }
+}
+
 hb_dict_entry_t * hb_dict_get( hb_dict_t * dict, const char * key )
 {
     if( !dict || !dict->objects || !key || !strlen( key ) )
@@ -168,4 +186,32 @@ hb_dict_t * hb_encopts_to_dict( const char * encopts, int encoder )
         free( opts_start );
     }
     return dict;
+}
+
+char * hb_dict_to_encopts( hb_dict_t * dict )
+{
+    int first_opt = 1;
+    char *tmp, *encopts_tmp, *encopts = NULL;
+    hb_dict_entry_t * entry = NULL;
+    while( ( entry = hb_dict_next( dict, entry ) ) )
+    {
+        tmp = hb_strdup_printf( "%s%s%s%s",
+                                first_opt    ? "" : ":",
+                                entry->key,
+                                entry->value ? "=" : "",
+                                entry->value ? entry->value : "" );
+        if( tmp )
+        {
+            encopts_tmp = hb_strncat_dup( encopts, tmp, strlen( tmp ) );
+            if( encopts_tmp )
+            {
+                if( encopts )
+                    free( encopts );
+                encopts = encopts_tmp;
+            }
+            first_opt = 0;
+            free( tmp );
+        }
+    }
+    return encopts;
 }
