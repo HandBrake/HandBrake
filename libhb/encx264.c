@@ -264,7 +264,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
             case 2:
                 param.rc.b_stat_read  = 1;
                 param.rc.b_stat_write = 0;
-                param.rc.psz_stat_in = pv->filename;
+                param.rc.psz_stat_in  = pv->filename;
                 break;
         }
     }
