@@ -249,7 +249,7 @@ namespace HandBrake.Interop
 			IntPtr nativeBuffer = Marshal.AllocHGlobal(imageBufferSize);
 			allocatedMemory.Add(nativeBuffer);
 			HBFunctions.hb_set_job(this.hbHandle, job.Title, ref nativeJob);
-			HBFunctions.hb_get_preview_by_index(this.hbHandle, job.Title, previewNumber, nativeBuffer);
+            HBFunctions.hb_get_preview(this.hbHandle, ref title, previewNumber, nativeBuffer);
 
 			// Copy the filled image buffer to a managed array.
 			byte[] managedBuffer = new byte[imageBufferSize];
@@ -590,7 +590,8 @@ namespace HandBrake.Interop
 			int refParWidth = 0;
 			int refParHeight = 0;
 			HBFunctions.hb_set_job(this.hbHandle, job.Title, ref nativeJob);
-			HBFunctions.hb_set_anamorphic_size_by_index(this.hbHandle, job.Title, ref refWidth, ref refHeight, ref refParWidth, ref refParHeight);
+			//HBFunctions.hb_set_anamorphic_size_by_index(this.hbHandle, job.Title, ref refWidth, ref refHeight, ref refParWidth, ref refParHeight);
+            HBFunctions.hb_set_anamorphic_size(ref nativeJob, ref refWidth, ref refHeight, ref refParWidth, ref refParHeight);
 			InteropUtilities.FreeMemory(allocatedMemory);
 
 			width = refWidth;
@@ -963,7 +964,6 @@ namespace HandBrake.Interop
 			nativeJob.crop[2] = crop.Left;
 			nativeJob.crop[3] = crop.Right;
 
-			var filterList = new List<IntPtr>();
 			if (profile.Deinterlace != Deinterlace.Off)
 			{
 				nativeJob.deinterlace = 1;
@@ -987,7 +987,7 @@ namespace HandBrake.Interop
 						break;
 				}
 
-				this.AddFilter(filterList, NativeConstants.HB_FILTER_DEINTERLACE, settings, allocatedMemory);
+                this.AddFilter(nativeJob, NativeConstants.HB_FILTER_DEINTERLACE, settings, allocatedMemory);
 			}
 			else
 			{
@@ -1002,7 +1002,7 @@ namespace HandBrake.Interop
 					settings = profile.CustomDetelecine;
 				}
 
-				this.AddFilter(filterList, NativeConstants.HB_FILTER_DETELECINE, settings, allocatedMemory);
+				this.AddFilter(nativeJob, NativeConstants.HB_FILTER_DETELECINE, settings, allocatedMemory);
 			}
 
 			if (profile.Decomb != Decomb.Off)
@@ -1013,12 +1013,12 @@ namespace HandBrake.Interop
 					settings = profile.CustomDecomb;
 				}
 
-				this.AddFilter(filterList, NativeConstants.HB_FILTER_DECOMB, settings, allocatedMemory);
+                this.AddFilter(nativeJob, NativeConstants.HB_FILTER_DECOMB, settings, allocatedMemory);
 			}
 
 			if (profile.Deblock > 0)
 			{
-				this.AddFilter(filterList, NativeConstants.HB_FILTER_DEBLOCK, profile.Deblock.ToString(), allocatedMemory);
+                this.AddFilter(nativeJob, NativeConstants.HB_FILTER_DEBLOCK, profile.Deblock.ToString(), allocatedMemory);
 			}
 
 			if (profile.Denoise != Denoise.Off)
@@ -1042,12 +1042,8 @@ namespace HandBrake.Interop
 						break;
 				}
 
-				this.AddFilter(filterList, NativeConstants.HB_FILTER_DENOISE, settings, allocatedMemory);
+                this.AddFilter(nativeJob, NativeConstants.HB_FILTER_DENOISE, settings, allocatedMemory);
 			}
-
-			NativeList filterListNative = InteropUtilities.CreateIntPtrList(filterList);
-			nativeJob.filters = filterListNative.ListPtr;
-			allocatedMemory.AddRange(filterListNative.AllocatedMemory);
 
 			int width = profile.Width;
 			int height = profile.Height;
@@ -1378,15 +1374,23 @@ namespace HandBrake.Interop
 		/// <summary>
 		/// Adds a filter to the given filter list.
 		/// </summary>
-		/// <param name="filterList">The filter list to add to.</param>
-		/// <param name="filterType">The type of filter.</param>
-		/// <param name="settings">Settings for the filter.</param>
-		/// <param name="allocatedMemory">The list of allocated memory.</param>
-		private void AddFilter(List<IntPtr> filterList, int filterType, string settings, List<IntPtr> allocatedMemory)
+		/// <param name="job">
+		/// The job.
+		/// </param>
+		/// <param name="filterType">
+		/// The type of filter.
+		/// </param>
+		/// <param name="settings">
+		/// Settings for the filter.
+		/// </param>
+		/// <param name="allocatedMemory">
+		/// The list of allocated memory.
+		/// </param>
+		private void AddFilter(hb_job_s job, int filterType, string settings, List<IntPtr> allocatedMemory)
 		{
 			IntPtr settingsNativeString = Marshal.StringToHGlobalAnsi(settings);
-			filterList.Add(HBFunctions.hb_get_filter_object(filterType, settingsNativeString));
-
+            hb_filter_object_s filter = HBFunctions.hb_filter_init(filterType);
+            HBFunctions.hb_add_filter(ref job, filter, settingsNativeString);
 			allocatedMemory.Add(settingsNativeString);
 		}
 

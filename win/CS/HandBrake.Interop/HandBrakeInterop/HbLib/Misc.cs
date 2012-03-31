@@ -410,6 +410,25 @@ namespace HandBrake.Interop.HbLib
 		public uint x;
 	}
 
+    [StructLayout(LayoutKind.Sequential)]
+    public struct hb_title_set_s
+    {
+        ///hb_list_t   *
+        public hb_list_s list_title;
+
+        // int
+        public int feature;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct hb_filter_object_s
+    {
+        public int id;
+        public int enforce_order;
+        public IntPtr name;
+        public IntPtr settings;
+    }
+
 	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 	public delegate void LoggingCallback(string message);
 }
