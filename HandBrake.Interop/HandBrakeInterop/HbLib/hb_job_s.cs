@@ -90,6 +90,8 @@ namespace HandBrake.Interop.HbLib
 		/// int
 		public int pass;
 
+        public int fastfirstpass;
+
 		public IntPtr advanced_opts;
 
 		public IntPtr x264_profile;
@@ -97,6 +99,8 @@ namespace HandBrake.Interop.HbLib
 		public IntPtr x264_preset;
 
 		public IntPtr x264_tune;
+
+        public IntPtr h264_level;
 
 		/// int
 		public int areBframes;
