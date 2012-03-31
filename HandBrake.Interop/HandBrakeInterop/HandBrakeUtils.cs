@@ -7,8 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Runtime.InteropServices;
-
 namespace HandBrake.Interop
 {
 	using System;
@@ -48,6 +46,15 @@ namespace HandBrake.Interop
 		/// Fires when HandBrake has logged an error.
 		/// </summary>
 		public static event EventHandler<MessageLoggedEventArgs> ErrorLogged;
+
+		/// <summary>
+		/// Enables or disables LibDVDNav. If disabled libdvdread will be used instead.
+		/// </summary>
+		/// <param name="enableDvdNav">True to enable LibDVDNav.</param>
+		public static void SetDvdNav(bool enableDvdNav)
+		{
+			HBFunctions.hb_dvd_set_dvdnav(enableDvdNav ? 1 : 0);
+		}
 
 		/// <summary>
 		/// Register the logger.
