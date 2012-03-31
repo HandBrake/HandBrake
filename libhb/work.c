@@ -291,7 +291,7 @@ void hb_display_job_info( hb_job_t * job )
                 filter->info( filter, &info );
                 if( info.human_readable_desc[0] )
                 {
-                    hb_log("       %s", info.human_readable_desc);
+                    hb_log("       + %s", info.human_readable_desc);
                 }
             }
         }

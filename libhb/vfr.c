@@ -384,7 +384,7 @@ static int hb_vfr_info( hb_filter_object_t * filter,
         double source_fps = (double)pv->input_vrate / pv->input_vrate_base;
         double peak_fps = (double)pv->vrate / pv->vrate_base;
         sprintf( info->human_readable_desc, 
-                "frame rate: %.3f fps -> peak rate limited to %.3f fps)",
+                "frame rate: %.3f fps -> peak rate limited to %.3f fps",
                 source_fps , peak_fps );
     }
     else
@@ -393,7 +393,7 @@ static int hb_vfr_info( hb_filter_object_t * filter,
         double source_fps = (double)pv->input_vrate / pv->input_vrate_base;
         double constant_fps = (double)pv->vrate / pv->vrate_base;
         sprintf( info->human_readable_desc, 
-                "frame rate: %.3f fps -> constant rate limited to %.3f fps)",
+                "frame rate: %.3f fps -> constant %.3f fps",
                 source_fps , constant_fps );
     }
 
