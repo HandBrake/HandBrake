@@ -272,17 +272,27 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	if (strcmp("source", fps) == 0)
 	{
 		g_free(fps);
-		if (ghb_settings_combo_int(settings, "PictureDetelecine"))
-			fps = g_strdup("Same As Source (vfr detelecine)");
+		if (ghb_settings_get_boolean(settings, "VideoFramerateCFR"))
+			fps = g_strdup("Same As Source (constant)");
 		else
 			fps = g_strdup("Same As Source (variable)");
 	}
 	else
 	{
-		gchar *tmp;
-		tmp = g_strdup_printf("%s (constant frame rate)", fps);
-		g_free(fps);
-		fps = tmp;
+		if (ghb_settings_get_boolean(settings, "VideoFrameratePFR"))
+		{
+			gchar *tmp;
+			tmp = g_strdup_printf("Peak %s (may be lower)", fps);
+			g_free(fps);
+			fps = tmp;
+		}
+		else
+		{
+			gchar *tmp;
+			tmp = g_strdup_printf("%s (constant frame rate)", fps);
+			g_free(fps);
+			fps = tmp;
+		}
 	}
 	source_width = ghb_settings_get_int(settings, "source_width");
 	source_height = ghb_settings_get_int(settings, "source_height");
