@@ -50,7 +50,7 @@
                             <CheckBox Content="Check for Updates" IsChecked="{Binding CheckForUpdates}" />
                             <ComboBox Name="checkForUpdateFrequency" ItemsSource="{Binding CheckForUpdatesFrequencies}" SelectedIndex="{Binding CheckForUpdatesFrequency}" Margin="25,0,0,5" HorizontalAlignment="Left" Width="120"></ComboBox>
 
-                            <CheckBox Content="Enable Tooltips" IsChecked="{Binding EnableGuiTooltips}" />
+                            <CheckBox Content="Enable Tooltips"  Visibility="Collapsed"  IsChecked="{Binding EnableGuiTooltips}" />
                         </StackPanel>
                     </Grid>
 
@@ -320,10 +320,11 @@
 
                         <TextBlock Text="GUI:" Grid.Column="0" FontWeight="Bold"/>
                         <StackPanel Orientation="Vertical" Grid.Column="1">
-                            <CheckBox Content="Minimize to system tray (Requires Restart)" IsChecked="{Binding MinimiseToTray}" />
-                            <CheckBox Content="Display status messages from tray icon (balloon popups)" IsChecked="{Binding DisplayStatusMessagesTrayIcon}" />
+                            <CheckBox Content="Minimize to system tray (Requires Restart)" Visibility="Collapsed" IsChecked="{Binding MinimiseToTray}" />
+                            <CheckBox Content="Display status messages from tray icon (balloon popups)"  Visibility="Collapsed"  IsChecked="{Binding DisplayStatusMessagesTrayIcon}" />
                             <CheckBox Content="Disable built-in preset update notification" IsChecked="{Binding DisablePresetUpdateCheckNotification}" />
                             <CheckBox Content="Show CLI window (Allows you to cleanly exit encode with ctrl-c)" IsChecked="{Binding ShowCliWindow}" />
+                            <CheckBox Content="Always clear completed queue items after an encode completes" IsChecked="{Binding ClearQueueOnEncodeCompleted}" />
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <TextBlock Text="Number of picture previews to scan:" VerticalAlignment="Center" Width="250" />
                                 <ComboBox Name="numberOfPreviews" ItemsSource="{Binding PreviewPicturesToScan}" SelectedItem="{Binding SelectedPreviewCount}" Width="120" />
