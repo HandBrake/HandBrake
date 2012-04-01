@@ -3,8 +3,6 @@
     Homepage: <http://handbrake.fr/>.
     It may be used under the terms of the GNU General Public License. */
 
-using HandBrake.ApplicationServices.Model.Encoding;
-
 namespace Handbrake
 {
     using System;

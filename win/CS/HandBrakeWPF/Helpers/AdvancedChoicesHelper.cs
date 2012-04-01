@@ -145,8 +145,9 @@ namespace HandBrakeWPF.Helpers
 
             analysis = new List<AdvancedChoice>
                 {
+                    new AdvancedChoice { Label = "Most (Default)", IsDefault = true },
                     new AdvancedChoice { Label = "None", Value = "none" },
-                    new AdvancedChoice { Label = "Some (Default)", IsDefault = true },
+                    new AdvancedChoice { Label = "Some", Value = "i4x4,i8x8", },
                     new AdvancedChoice { Label = "All", Value = "all" }
                 };
 
@@ -351,6 +352,7 @@ namespace HandBrakeWPF.Helpers
         /// The default number.
         /// </param>
         /// <returns>
+        /// List of Advanced Choices Options.
         /// </returns>
         private static List<AdvancedChoice> CreateNumberList(int lower, int upper, int defaultNumber)
         {
