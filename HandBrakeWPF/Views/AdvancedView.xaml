@@ -231,10 +231,12 @@
                         </Slider.ToolTip>
                     </Slider>
 
-                    <Label Content="Psychovisual Rate Distortion:" Grid.Row="1" Grid.Column="0" Style="{StaticResource AdvancedLabel}" />
+                    <Label Content="Psychovisual Rate Distortion:" Grid.Row="1" Grid.Column="0" Style="{StaticResource AdvancedLabel}"
+                           Visibility="{Binding PsychovisualRateDistortionVisible, Converter={StaticResource VisibilityConverter}}" />
                     <Slider Grid.Row="1" Grid.Column="1" Minimum="0.0" Maximum="2.0" TickPlacement="BottomRight"
-                        TickFrequency="0.1" SmallChange="0.1" LargeChange="0.2" IsSnapToTickEnabled="True"
-                        Value="{Binding PsychovisualRateDistortion}" Style="{StaticResource LongToolTipHolder}">
+                            TickFrequency="0.1" SmallChange="0.1" LargeChange="0.2" IsSnapToTickEnabled="True"
+                            Visibility="{Binding PsychovisualRateDistortionVisible, Converter={StaticResource VisibilityConverter}}"
+                            Value="{Binding PsychovisualRateDistortion}" Style="{StaticResource LongToolTipHolder}">
                         <Slider.ToolTip>
                             <TextBlock Text="{x:Static Properties:Resources.Advanced_PsychovisualRateDistortionToolTip}" Style="{StaticResource LongToolTip}" />
                         </Slider.ToolTip>

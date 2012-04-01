@@ -524,6 +524,19 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Gets a value indicating whether PsychovisualRateDistortionVisible.
+        /// </summary>
+        public bool PsychovisualRateDistortionVisible
+        {
+            get
+            {
+                int value;
+                int.TryParse(this.SubpixelMotionEstimation.Value.Trim(), out value);
+                return value >= 6;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets PyramidalBFrames.
         /// </summary>
         public AdvancedChoice PyramidalBFrames
@@ -584,6 +597,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.subpixelMotionEstimation = value;
                 this.NotifyOfPropertyChange(() => this.SubpixelMotionEstimation);
+                this.NotifyOfPropertyChange(() => this.PsychovisualRateDistortionVisible);
                 this.UpdateOptionsString();
             }
         }
