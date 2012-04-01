@@ -9,6 +9,7 @@
 
 namespace HandBrakeWPF.Views
 {
+    using System;
     using System.Windows;
 
     /// <summary>

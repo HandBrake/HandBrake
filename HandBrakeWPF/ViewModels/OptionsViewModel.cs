@@ -299,6 +299,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool showAdvancedPassthruOpts;
 
+        /// <summary>
+        /// Backing field for clear queue on encode completed.
+        /// </summary>
+        private bool clearQueueOnEncodeCompleted;
+
         #endregion
 
         #region Constructors and Destructors
@@ -1215,6 +1220,23 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange("ShowCliWindow");
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether ClearQueueOnEncodeCompleted.
+        /// </summary>
+        public bool ClearQueueOnEncodeCompleted
+        {
+            get
+            {
+                return this.clearQueueOnEncodeCompleted;
+            }
+            set
+            {
+                this.clearQueueOnEncodeCompleted = value;
+                this.NotifyOfPropertyChange(() => this.ClearQueueOnEncodeCompleted);
+            }
+        }
+
         #endregion
 
         #endregion
@@ -1393,6 +1415,7 @@ namespace HandBrakeWPF.ViewModels
             this.minimiseToTray = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.MainWindowMinimize);
             this.disablePresetUpdateCheckNotification = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification);
             this.showCliWindow = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.ShowCLI);
+            this.clearQueueOnEncodeCompleted = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.ClearCompletedFromQueue);
 
             // Set the preview count
             this.PreviewPicturesToScan.Add(10);
@@ -1632,6 +1655,7 @@ namespace HandBrakeWPF.ViewModels
             userSettingService.SetUserSetting(UserSettingConstants.TrayIconAlerts, this.DisplayStatusMessagesTrayIcon);
             userSettingService.SetUserSetting(UserSettingConstants.PresetNotification, this.DisablePresetUpdateCheckNotification);
             userSettingService.SetUserSetting(ASUserSettingConstants.ShowCLI, this.ShowCliWindow);
+            userSettingService.SetUserSetting(ASUserSettingConstants.ClearCompletedFromQueue, this.ClearQueueOnEncodeCompleted);
             userSettingService.SetUserSetting(ASUserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
             userSettingService.SetUserSetting(ASUserSettingConstants.X264Step, double.Parse(this.SelectedGranulairty));
 

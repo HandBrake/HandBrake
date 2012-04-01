@@ -113,32 +113,14 @@
 
                 <!-- ToolBar -->
                 <ToolBar Name="mainToolBar" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  SnapsToDevicePixels="False">
-
                     <Menu Background="Transparent" >
-                        <MenuItem>
+                        <MenuItem ItemsSource="{Binding SourceToolbarMenu}">
                             <MenuItem.Header>
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Images/Movies.png" Height="32" Width="32" />
                                     <Label Content="Source"  Margin="8,0,0,0" VerticalAlignment="Center" />
                                 </StackPanel>
                             </MenuItem.Header>
-
-                            <MenuItem Micro:Message.Attach="[Event Click] = [Action FolderScan]">
-                                <MenuItem.Header>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Image Source="Images/folder.png" Height="20" Width="20" />
-                                        <Label Content="Open Folder"  Margin="8,0,0,0" VerticalAlignment="Center" />
-                                    </StackPanel>
-                                </MenuItem.Header>
-                            </MenuItem>
-                            <MenuItem Micro:Message.Attach="[Event Click] = [Action FileScan]">
-                                <MenuItem.Header>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Image Source="Images/Movies.png" Height="20" Width="20" />
-                                        <Label Content="Open File"  Margin="8,0,0,0" VerticalAlignment="Center" />
-                                    </StackPanel>
-                                </MenuItem.Header>
-                            </MenuItem>
                         </MenuItem>
                     </Menu>
 
@@ -239,7 +221,7 @@
 
                     <!-- Output Options -->
                     <StackPanel Margin="10,5,10,5" MaxWidth="725" Width="725" HorizontalAlignment="Left">
-                        <Label Content="Output Settings (Preset: None)" FontWeight="Bold" />
+                        <Label Content="Output Settings" FontWeight="Bold" />
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Container" Margin="8,0,0,0" />
                             <ComboBox Name="Container" Margin="8,0,0,0" MinWidth="100" ItemsSource="{Binding OutputFormats}" SelectedItem="{Binding SelectedOutputFormat}" />

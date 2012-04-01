@@ -11,11 +11,15 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.ComponentModel.Composition;
     using System.Diagnostics;
+    using System.Drawing;
     using System.IO;
     using System.Linq;
     using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media.Imaging;
 
     using Caliburn.Micro;
 
@@ -23,7 +27,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
-    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
@@ -33,6 +36,8 @@ namespace HandBrakeWPF.ViewModels
     using Ookii.Dialogs.Wpf;
 
     using HandBrakeWPF.Services.Interfaces;
+
+    using Image = System.Windows.Controls.Image;
 
     /// <summary>
     /// HandBrakes Main Window
@@ -251,6 +256,52 @@ namespace HandBrakeWPF.ViewModels
                     this.statusLabel = value;
                     this.NotifyOfPropertyChange(() => this.StatusLabel);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets SourceToolbarMenu.
+        /// </summary>
+        public IEnumerable<MenuItem> SourceToolbarMenu
+        {
+            get
+            {
+                BindingList<MenuItem> menuItems = new BindingList<MenuItem>();
+
+                // Folder Menu Item
+                MenuItem folderMenuItem = new MenuItem
+                    {
+                        Icon = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrakeWPF;component/Views/Images/folder.png")), Width = 16, Height = 16 },
+                        Header = new TextBlock { Text = "Open Folder", Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center }
+                    };
+                folderMenuItem.Click += this.folderMenuItem_Click;
+                menuItems.Add(folderMenuItem);
+
+                // File Menu Item
+                MenuItem fileMenuItem = new MenuItem
+                    {
+                        Icon = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrakeWPF;component/Views/Images/Movies.png")), Width = 16, Height = 16 },
+                        Header = new TextBlock { Text = "Open File", Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center }
+                    };
+                fileMenuItem.Click += this.fileMenuItem_Click;
+                menuItems.Add(fileMenuItem);
+
+
+                // Drives
+                foreach (DriveInformation item in GeneralUtilities.GetDrives())
+                {
+                    MenuItem driveMenuItem = new MenuItem
+                        {
+                            Icon = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrakeWPF;component/Views/Images/disc_small.png")), Width = 16, Height = 16 },
+                            Header = new TextBlock { Text = string.Format("{0} ({1})", item.RootDirectory, item.VolumeLabel), Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center },
+                            Tag = item
+                        };
+                    driveMenuItem.Click += this.driveMenuItem_Click;
+                    menuItems.Add(driveMenuItem);
+                }
+
+
+                return menuItems;
             }
         }
 
@@ -861,6 +912,11 @@ namespace HandBrakeWPF.ViewModels
                 MessageBoxImage.Information);
         }
 
+        public void SourceContextMenuOpening(MenuItem item)
+        {
+            Console.WriteLine(item);
+        }
+
         #endregion
 
         #region Main Window Public Methods
@@ -1297,6 +1353,52 @@ namespace HandBrakeWPF.ViewModels
                 });
 
             // TODO Handle Updating the UI
+        }
+
+        /// <summary>
+        /// Drive Scan
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The RoutedEventArgs.
+        /// </param>
+        private void driveMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem item = e.OriginalSource as MenuItem;
+            if (item != null)
+            {
+                this.StartScan(((DriveInformation)item.Tag).RootDirectory, 0);
+            }
+        }
+
+        /// <summary>
+        /// File Scan
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The RoutedEventArgs.
+        /// </param>
+        private void fileMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            this.FileScan();
+        }
+
+        /// <summary>
+        /// Folder Scan
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The RoutedEventArgs.
+        /// </param>
+        private void folderMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            this.FolderScan();
         }
         #endregion
     }
