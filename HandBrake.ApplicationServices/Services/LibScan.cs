@@ -195,9 +195,9 @@ namespace HandBrake.ApplicationServices.Services
                     this.ScanStared(this, new EventArgs());
 
                 if (title != 0)
-                    instance.StartScan(source, previewCount, title);
+                    instance.StartScan(sourcePath.ToString(), previewCount, title);
                 else
-                    instance.StartScan(source, previewCount);
+                    instance.StartScan(sourcePath.ToString(), previewCount);
             }
             catch (Exception exc)
             {
