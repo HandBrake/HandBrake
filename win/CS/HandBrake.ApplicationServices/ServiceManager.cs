@@ -1,5 +1,9 @@
 ﻿namespace HandBrake.ApplicationServices
 {
+    using System;
+
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop;
@@ -26,6 +30,15 @@
         {
             get
             {
+                try
+                {
+                    return IoC.Get<IUserSettingService>();
+                }
+                catch (NullReferenceException)
+                {
+                    // Hack until this legacy code for the forms gui is removed!
+                }
+
                 return userSettingService ?? (userSettingService = new UserSettingService());
             }
         }

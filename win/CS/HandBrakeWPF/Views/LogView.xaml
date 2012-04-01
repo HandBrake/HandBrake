@@ -28,7 +28,7 @@
                 </ComboBox>
             </ToolBar>
 
-            <TextBox AcceptsReturn="True" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Visible" IsReadOnly="True" Grid.Row="1" Text="{Binding Log}"  />
+            <TextBox AcceptsReturn="True" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Visible" IsReadOnly="True" Grid.Row="1" Text="{Binding Log, Mode=OneWay}"  />
         </Grid>
 
     </Grid>

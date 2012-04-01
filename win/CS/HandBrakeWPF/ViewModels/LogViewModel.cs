@@ -76,19 +76,11 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedMode = 0;
         }
 
-        /// <summary>
-        /// Gets or sets Log.
-        /// </summary>
         public string Log
         {
             get
             {
-                return log;
-            }
-            set
-            {
-                log = value;
-                this.NotifyOfPropertyChange("Log");
+                return this.SelectedMode == 0 ? this.encodeService.ActivityLog : this.scanService.ActivityLog;
             }
         }
 
@@ -115,7 +107,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 selectedMode = value;
-                this.NotifyOfPropertyChange("SelectedMode");
+                this.NotifyOfPropertyChange(() => this.SelectedMode);
                 this.ChangeLogDisplay();
             }
         }
@@ -148,7 +140,19 @@ namespace HandBrakeWPF.ViewModels
             this.scanService.ScanCompleted += scanService_ScanCompleted;
             this.encodeService.EncodeStarted += encodeService_EncodeStarted;
             this.encodeService.EncodeCompleted += encodeService_EncodeCompleted;
+            this.encodeService.EncodeStatusChanged += this.encodeService_EncodeStatusChanged;
+            this.scanService.ScanStatusChanged += this.scanService_ScanStatusChanged;
             base.OnActivate();
+        }
+
+        private void scanService_ScanStatusChanged(object sender, ScanProgressEventArgs e)
+        {
+            this.NotifyOfPropertyChange(() => this.Log);
+        }
+
+        private void encodeService_EncodeStatusChanged(object sender, EncodeProgressEventArgs e)
+        {
+            this.NotifyOfPropertyChange(() => this.Log);
         }
 
         /// <summary>
@@ -170,7 +174,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private void ChangeLogDisplay()
         {
-            this.Log = this.SelectedMode == 0 ? this.encodeService.ActivityLog : this.scanService.ActivityLog;
+            this.NotifyOfPropertyChange(() => this.Log);
         }
 
         /// <summary>
@@ -185,7 +189,7 @@ namespace HandBrakeWPF.ViewModels
         private void encodeService_EncodeStarted(object sender, EventArgs e)
         {
             this.SelectedMode = 0;
-            this.Log = this.encodeService.ActivityLog;
+            this.NotifyOfPropertyChange(() => this.Log);
         }
 
         /// <summary>
@@ -200,7 +204,7 @@ namespace HandBrakeWPF.ViewModels
         private void scanService_ScanStared(object sender, EventArgs e)
         {
             this.SelectedMode = 1;
-            this.Log = this.scanService.ActivityLog;
+            this.NotifyOfPropertyChange(() => this.Log);
         }
 
         /// <summary>
@@ -214,10 +218,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void scanService_ScanCompleted(object sender, ScanCompletedEventArgs e)
         {
-            if (this.SelectedMode == 1)
-            {
-                this.Log = this.scanService.ActivityLog;
-            }
+            this.NotifyOfPropertyChange(() => this.Log);
         }
 
         /// <summary>
@@ -231,10 +232,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void encodeService_EncodeCompleted(object sender, EncodeCompletedEventArgs e)
         {
-            if (this.SelectedMode == 0)
-            {
-                this.Log = this.encodeService.ActivityLog;
-            }
+            this.NotifyOfPropertyChange(() => this.Log);
         }
     }
 }

@@ -3,9 +3,6 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-using HandBrake.ApplicationServices.Model.Encoding;
-using HandBrake.ApplicationServices.Utilities;
-
 namespace HandBrake.ApplicationServices.Services
 {
     using System;
@@ -21,6 +18,8 @@ namespace HandBrake.ApplicationServices.Services
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>
     /// The preset service manages HandBrake's presets
