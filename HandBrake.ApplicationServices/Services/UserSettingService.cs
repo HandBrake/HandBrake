@@ -151,6 +151,10 @@ namespace HandBrake.ApplicationServices.Services
                 try
                 {
                     this.userSettings = this.GetDefaults();
+                    if (File.Exists(this.settingsFile))
+                    {
+                        File.Delete(this.settingsFile);
+                    }
                     this.Save();
                 }
                 catch (Exception)
