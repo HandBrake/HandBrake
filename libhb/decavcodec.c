@@ -1409,7 +1409,9 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
     int pos = 0;
     int loop_limit = 256;
 
-    if ( pts != -1 )
+    // If we are givn a pts, use it.
+    // But don't loose partial ticks.
+    if ( pts != -1 && (int64_t)pv->pts_next != pts )
         pv->pts_next = pts;
     while ( pos < size )
     {
