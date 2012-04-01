@@ -872,7 +872,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
             // Verbosity Level
             int verbosity = UserSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity);
-            query += string.Format(" --verbose= {0}", verbosity);
+            query += string.Format(" --verbose={0}", verbosity);
 
             // LibDVDNav
             if (UserSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav))
