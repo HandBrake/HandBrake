@@ -266,12 +266,14 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
+                // TODO - Find a cleaner way of implementing this
+
                 BindingList<MenuItem> menuItems = new BindingList<MenuItem>();
 
                 // Folder Menu Item
                 MenuItem folderMenuItem = new MenuItem
                     {
-                        Icon = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrakeWPF;component/Views/Images/folder.png")), Width = 16, Height = 16 },
+                        Icon = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/folder.png")), Width = 16, Height = 16 },
                         Header = new TextBlock { Text = "Open Folder", Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center }
                     };
                 folderMenuItem.Click += this.folderMenuItem_Click;
@@ -280,19 +282,40 @@ namespace HandBrakeWPF.ViewModels
                 // File Menu Item
                 MenuItem fileMenuItem = new MenuItem
                     {
-                        Icon = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrakeWPF;component/Views/Images/Movies.png")), Width = 16, Height = 16 },
+                        Icon = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/Movies.png")), Width = 16, Height = 16 },
                         Header = new TextBlock { Text = "Open File", Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center }
                     };
                 fileMenuItem.Click += this.fileMenuItem_Click;
                 menuItems.Add(fileMenuItem);
 
 
+                // File Menu Item
+                MenuItem titleSpecific = new MenuItem {Header = new TextBlock { Text = "Title Specific Scan", Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center }};
+
+                MenuItem titleSpecificFolder = new MenuItem
+                  {
+                      Icon = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/folder.png")), Width = 16, Height = 16 },
+                      Header = new TextBlock { Text = "Open Folder", Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center }
+                  };
+                MenuItem titleSpecificFile = new MenuItem
+                  {
+                      Icon = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/Movies.png")), Width = 16, Height = 16 },
+                      Header = new TextBlock { Text = "Open File", Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center }
+                  };
+                titleSpecificFolder.Click += this.titleSpecificFolder_Click;
+                titleSpecificFile.Click += this.titleSpecificFile_Click;
+
+                titleSpecific.Items.Add(titleSpecificFolder);
+                titleSpecific.Items.Add(titleSpecificFile);
+
+                menuItems.Add(titleSpecific);
+
                 // Drives
                 foreach (DriveInformation item in GeneralUtilities.GetDrives())
                 {
                     MenuItem driveMenuItem = new MenuItem
                         {
-                            Icon = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrakeWPF;component/Views/Images/disc_small.png")), Width = 16, Height = 16 },
+                            Icon = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/disc_small.png")), Width = 16, Height = 16 },
                             Header = new TextBlock { Text = string.Format("{0} ({1})", item.RootDirectory, item.VolumeLabel), Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center },
                             Tag = item
                         };
@@ -817,6 +840,51 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Folder Scan
+        /// </summary>
+        public void FolderScanTitleSpecific()
+        {
+            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog { Description = "Please select a folder.", UseDescriptionForTitle = true };
+            dialog.ShowDialog();
+
+            if (string.IsNullOrEmpty(dialog.SelectedPath))
+            {
+                return;
+            }
+
+            ITitleSpecificViewModel titleSpecificView = IoC.Get<ITitleSpecificViewModel>();
+            this.WindowManager.ShowDialog(titleSpecificView);
+
+            if (titleSpecificView.SelectedTitle.HasValue)
+            {
+                this.StartScan(dialog.SelectedPath, titleSpecificView.SelectedTitle.Value);
+            }
+        }
+
+        /// <summary>
+        /// File Scan
+        /// </summary>
+        public void FileScanTitleSpecific()
+        {
+            VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "All files (*.*)|*.*" };
+            dialog.ShowDialog();
+
+            if (string.IsNullOrEmpty(dialog.FileName))
+            {
+                return;
+            }
+
+            ITitleSpecificViewModel titleSpecificView = IoC.Get<ITitleSpecificViewModel>();
+            this.WindowManager.ShowDialog(titleSpecificView);
+
+            if (titleSpecificView.SelectedTitle.HasValue)
+            {
+                this.StartScan(dialog.FileName, titleSpecificView.SelectedTitle.Value);
+            }
+        }
+
+
+        /// <summary>
         /// Cancel a Scan
         /// </summary>
         public void CancelScan()
@@ -910,11 +978,6 @@ namespace HandBrakeWPF.ViewModels
                 "CLI Query",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
-        }
-
-        public void SourceContextMenuOpening(MenuItem item)
-        {
-            Console.WriteLine(item);
         }
 
         #endregion
@@ -1400,6 +1463,35 @@ namespace HandBrakeWPF.ViewModels
         {
             this.FolderScan();
         }
+
+        /// <summary>
+        /// Title Specific Scan for File
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void titleSpecificFile_Click(object sender, RoutedEventArgs e)
+        {
+            this.FileScanTitleSpecific();
+        }
+
+        /// <summary>
+        /// Title Specific Scan for folder
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void titleSpecificFolder_Click(object sender, RoutedEventArgs e)
+        {
+            this.FolderScanTitleSpecific();
+        }
+
         #endregion
     }
 }
