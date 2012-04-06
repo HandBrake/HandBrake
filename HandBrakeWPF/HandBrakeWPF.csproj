@@ -110,6 +110,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\Interfaces\ITitleSpecificViewModel.cs" />
+    <Compile Include="ViewModels\TitleSpecificViewModel.cs" />
+    <Compile Include="Views\TitleSpecificView.xaml.cs">
+      <DependentUpon>TitleSpecificView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\AdvancedVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
@@ -246,6 +251,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\TitleSpecificView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AboutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

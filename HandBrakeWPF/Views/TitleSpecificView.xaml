@@ -1,0 +1,27 @@
+﻿<Window x:Class="HandBrakeWPF.Views.TitleSpecificView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:NumericUpDown="clr-namespace:EagleBoost.Wpf.Presentation.Controls.NumericUpDown;assembly=EagleBoost.Wpf.Presentation"
+             xmlns:cal="http://www.caliburnproject.org" mc:Ignorable="d" Title="Scan Title"
+             Width="210" Height="130"
+            >
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,10,0,10">
+            <TextBlock Text="Scan title number:" />
+            <NumericUpDown:NumericUpDown Value="{Binding SelectedTitle, Mode=TwoWay}" Minimum="0" Maximum="1000" Width="60" Margin="10,0,0,0" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
+            <Button Name="Cancel"  Content="Cancel" cal:Message.Attach="[Event Click] = [Action Cancel]" Margin="0,0,10,0" />
+            <Button Name="OpenTitle" Content="Open Title" cal:Message.Attach="[Event Click] = [Action Open]" />
+        </StackPanel>
+
+    </Grid>
+</Window>
