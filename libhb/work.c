@@ -567,19 +567,24 @@ static void do_job( hb_job_t * job )
 
     if( job->anamorphic.mode )
     {
+        /* While x264 is smart enough to reduce fractions on its own, libavcodec and
+         * the MacGUI need some help with the math, so lose superfluous factors. */
+        hb_reduce( &job->anamorphic.par_width, &job->anamorphic.par_height,
+                    job->anamorphic.par_width,  job->anamorphic.par_height );
         if( job->vcodec & HB_VCODEC_FFMPEG_MASK )
         {
             /* Just to make working with ffmpeg even more fun,
-               lavc's MPEG-4 encoder can't handle PAR values >= 255,
-               even though AVRational does. Adjusting downwards
-               distorts the display aspect slightly, but such is life. */
-            while ((job->anamorphic.par_width & ~0xFF) ||
-                   (job->anamorphic.par_height & ~0xFF))
+             * lavc's MPEG-4 encoder can't handle PAR values >= 255,
+             * even though AVRational does. Adjusting downwards
+             * distorts the display aspect slightly, but such is life. */
+            while( ( job->anamorphic.par_width  & ~0xFF ) ||
+                   ( job->anamorphic.par_height & ~0xFF ) )
             {
-                job->anamorphic.par_width >>= 1;
+                job->anamorphic.par_width  >>= 1;
                 job->anamorphic.par_height >>= 1;
+                hb_reduce( &job->anamorphic.par_width, &job->anamorphic.par_height,
+                            job->anamorphic.par_width,  job->anamorphic.par_height );
             }
-            hb_reduce( &job->anamorphic.par_width, &job->anamorphic.par_height, job->anamorphic.par_width, job->anamorphic.par_height );
         }
     }
     

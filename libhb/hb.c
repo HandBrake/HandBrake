@@ -1209,7 +1209,7 @@ void hb_set_anamorphic_size( hb_job_t * job,
     }
     
     /* While x264 is smart enough to reduce fractions on its own, libavcodec
-       needs some help with the math, so lose superfluous factors.            */
+     * needs some help with the math, so lose superfluous factors. */
     hb_reduce( output_par_width, output_par_height,
                pixel_aspect_width, pixel_aspect_height );
 }
