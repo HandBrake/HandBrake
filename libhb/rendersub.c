@@ -95,22 +95,10 @@ static void blend( hb_buffer_t *dst, hb_buffer_t *src, int left, int top )
     {
         y_in   = src->plane[0].data + yy * src->plane[0].stride;
         y_out   = dst->plane[0].data + ( yy + top ) * dst->plane[0].stride;
-        if( a_in )
-        {
-            a_in = src->plane[3].data + yy * src->plane[3].stride;
-        }
+        a_in = src->plane[3].data + yy * src->plane[3].stride;
         for( xx = x0; xx < ww; xx++ )
         {
-            if( a_in )
-            {
-                alpha = a_in[xx];
-            }
-            else
-            {
-                // If source has no alpha channel, use 50%
-                alpha = 128;
-            }
-
+            alpha = a_in[xx];
             /*
              * Merge the luminance and alpha with the picture
              */
@@ -134,22 +122,11 @@ static void blend( hb_buffer_t *dst, hb_buffer_t *src, int left, int top )
         u_out = dst->plane[1].data + ( yy + ( top >> hshift ) ) * dst->plane[1].stride;
         v_in = src->plane[2].data + yy * src->plane[2].stride;
         v_out = dst->plane[2].data + ( yy + ( top >> hshift ) ) * dst->plane[2].stride;
-        if( a_in )
-        {
-            a_in = src->plane[3].data + ( yy << hshift ) * src->plane[3].stride;
-        }
+        a_in = src->plane[3].data + ( yy << hshift ) * src->plane[3].stride;
 
         for( xx = x0 >> wshift; xx < ww >> wshift; xx++ )
         {
-            if( a_in )
-            {
-                alpha = a_in[xx << wshift];
-            }
-            else
-            {
-                // If source has no alpha channel, use 50%
-                alpha = 128;
-            }
+            alpha = a_in[xx << wshift];
 
             // Blend averge U and alpha
             u_out[(left >> wshift) + xx] =
@@ -404,7 +381,7 @@ static void ApplySSASubs( hb_filter_private_t * pv, hb_buffer_t * buf )
                                   buf->s.start / 90, NULL );
     if ( !frameList )
         return;
-    
+
     ASS_Image *frame;
     for (frame = frameList; frame; frame = frame->next) {
         sub = RenderSSAFrame( frame );
