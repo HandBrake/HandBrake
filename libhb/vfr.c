@@ -265,6 +265,7 @@ static void adjust_frame_rate( hb_filter_private_t *pv, hb_buffer_t **buf_out )
             {
                 out->s.stop = cfr_stop;
             }
+            pv->out_last_stop = out->s.stop;
         }
         else
         {
@@ -274,6 +275,7 @@ static void adjust_frame_rate( hb_filter_private_t *pv, hb_buffer_t **buf_out )
             // each of which is a frame time long.
             double excess_dur = (double)out->s.stop - cfr_stop;
             out->s.stop = cfr_stop;
+            pv->out_last_stop = out->s.stop;
             for ( ; excess_dur >= pv->frame_rate; excess_dur -= pv->frame_rate )
             {
                 /* next frame too far ahead - dup current frame */
@@ -282,12 +284,12 @@ static void adjust_frame_rate( hb_filter_private_t *pv, hb_buffer_t **buf_out )
                 dup->s.start = cfr_stop;
                 cfr_stop += pv->frame_rate;
                 dup->s.stop = cfr_stop;
+                pv->out_last_stop = dup->s.stop;
                 out = insert_buffer_in_chain( out, dup );
                 ++pv->dups;
                 ++pv->count_frames;
             }
         }
-        pv->out_last_stop = out->s.stop;
     }
 }
 
@@ -486,10 +488,16 @@ static int hb_vfr_work( hb_filter_object_t * filter,
             {
                 if( !head && !tail )
                 {
-                    head = tail = next;
+                    head = next;
                 } else {
                     tail->next = next;
+                }
+                // Move tail to the end of the list that 
+                // adjust_frame_rate could return
+                while (next)
+                {
                     tail = next;
+                    next = next->next;
                 }
             }
         }
