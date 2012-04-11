@@ -2923,6 +2923,13 @@ static int parse_pes_header(
                 pes_info->dts = pes_info->pts;
             }
         }
+        // A user encountered a stream that has garbage DTS timestamps. 
+        // DTS should never be > PTS.  Such broken timestamps leads to 
+        // HandBrake computing negative buffer start times. 
+        if (pes_info->dts > pes_info->pts) 
+        { 
+            pes_info->dts = pes_info->pts; 
+        } 
 
         if ( has_escr )
             bits_skip(&bb_hdr, 8 * 6);
