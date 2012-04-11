@@ -166,8 +166,6 @@ hb_work_object_t * hb_sync_init( hb_job_t * job )
                 chapter   = hb_list_item( title->list_chapter, i - 1 );
                 duration += chapter->duration;
             }
-            duration += 90000;
-            /* 1 second safety so we're sure we won't miss anything */
         }
         sync->count_frames_max = duration * title->rate / title->rate_base / 90000;
     }
