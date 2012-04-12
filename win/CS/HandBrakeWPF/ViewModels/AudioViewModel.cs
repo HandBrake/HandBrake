@@ -87,6 +87,17 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public EncodeTask Task { get; set; }
 
+        /// <summary>
+        /// Gets a value indicating whether ShowPassthruOptions.
+        /// </summary>
+        public bool ShowPassthruOptions
+        {
+            get
+            {
+                return this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedAudioPassthruOpts);
+            }
+        }
+
         #endregion
 
         #region Public Methods
@@ -129,11 +140,13 @@ namespace HandBrakeWPF.ViewModels
         public void SetPreset(Preset preset, EncodeTask task)
         {
             this.Task = task;
-            this.NotifyOfPropertyChange(() => this.Task);
+ 
             if (preset != null && preset.Task != null)
             {
                 this.AddTracksFromPreset(preset);
+                this.Task.AllowedPassthruOptions = new AllowedPassthru(preset.Task.AllowedPassthruOptions);
             }
+            this.NotifyOfPropertyChange(() => this.Task);
 
             this.Task.AllowedPassthruOptions.IsEnabled =
                  this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedAudioPassthruOpts);

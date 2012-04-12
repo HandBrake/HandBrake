@@ -1151,6 +1151,14 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedPreset = e.NewValue as Preset;
         }
 
+        /// <summary>
+        /// Show Release Notes
+        /// </summary>
+        public void ReleaseNotes()
+        {
+            Process.Start("https://forum.handbrake.fr/viewtopic.php?f=11&t=23843");
+        }
+
         #endregion
 
         #region Private Methods
