@@ -9,6 +9,7 @@
 
 namespace HandBrakeWPF.Views
 {
+    using System.Diagnostics;
     using System.Windows;
 
     /// <summary>
@@ -22,6 +23,11 @@ namespace HandBrakeWPF.Views
         public MainView()
         {
             InitializeComponent();
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
         }
     }
 }

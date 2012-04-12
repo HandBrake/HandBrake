@@ -11,6 +11,7 @@
     
     <UserControl.Resources>
         <Conveters:EnumComboConverter x:Key="enumComboConverter" />
+        <Conveters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -24,9 +25,24 @@
         <Grid Grid.Row="1" Margin="10,5,10,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Button Content="Add Track" cal:Message.Attach="[Event Click] = [Action Add]" Grid.Column="0" Width="75" Margin="0,0,10,0" />
+
+            <StackPanel Orientation="Horizontal" Grid.Column="2" Visibility="{Binding ShowPassthruOptions, Converter={StaticResource boolToVisConverter}}" >
+                <TextBlock Text="Auto Passthru:" Margin="5,0,5,0" />
+                <CheckBox Content="MP3" Margin="0,0,5,0" IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowMP3Pass}" />
+                <CheckBox Content="AAC" Margin="0,0,5,0" IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowAACPass}" />
+                <CheckBox Content="AC3" Margin="0,0,5,0" IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowAC3Pass}" />
+                <CheckBox Content="DTS" Margin="0,0,5,0" IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowDTSPass}" />
+                <CheckBox Content="DTSHD" Margin="0,0,5,0" IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowDTSHDPass}" />
+                <TextBlock Text="Fallback:" Margin="5,0,5,0" />
+                <ComboBox Width="100" Grid.Column="3" Margin="10,0,5,0" Height="22"
+                                      ItemsSource="{Binding DataContext.AudioEncoders, Converter={StaticResource enumComboConverter},  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                                      SelectedItem="{Binding Task.AllowedPassthruOptions.AudioEncoderFallback, Converter={StaticResource enumComboConverter}}"/>
+            </StackPanel>
+
         </Grid>
 
         <ListBox Grid.Row="2" ItemsSource="{Binding Task.AudioTracks}" 

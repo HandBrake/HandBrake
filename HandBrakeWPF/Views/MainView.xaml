@@ -16,8 +16,8 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <Window.Resources>       
-        
+    <Window.Resources>
+
         <Style TargetType="Button">
             <Setter Property="Foreground" Value="DarkOrange" />
             <Setter Property="FontWeight" Value="Bold" />
@@ -121,7 +121,7 @@
                                     <Label Content="Source"  Margin="8,0,0,0" VerticalAlignment="Center" />
                                 </StackPanel>
                             </MenuItem.Header>
-                           
+
                         </MenuItem>
                     </Menu>
 
@@ -331,6 +331,13 @@
             <!-- Status Bar -->
             <StatusBar Padding="0" Margin="0" Grid.Row="6" Height="32" Grid.ColumnSpan="2" VerticalAlignment="Bottom" >
                 <Label Content="{Binding Path=StatusLabel}" FontSize="11" Padding="0,0,0,5" VerticalAlignment="Center" />
+
+                <TextBlock VerticalAlignment="Top" HorizontalAlignment="Right" Padding="0,0,0,5" FontSize="11" FontWeight="Bold">
+                    <Hyperlink NavigateUri="http://forum.handbrake.fr/viewtopic.php?f=11&amp;t=23843" RequestNavigate="Hyperlink_RequestNavigate">
+                                BETA WPF UI Release Notes
+                    </Hyperlink>
+                </TextBlock>
+
             </StatusBar>
 
         </StackPanel>
