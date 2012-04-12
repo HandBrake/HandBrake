@@ -467,6 +467,7 @@ static void adjust_frame_rate( hb_work_private_t *pv, hb_buffer_t **buf_out )
             if ( out->stop <= cfr_stop )
             {
                 out->stop = cfr_stop;
+                pv->out_last_stop = out->stop;
             }
         }
         else
@@ -477,6 +478,7 @@ static void adjust_frame_rate( hb_work_private_t *pv, hb_buffer_t **buf_out )
             // each of which is a frame time long.
             double excess_dur = (double)out->stop - cfr_stop;
             out->stop = cfr_stop;
+            pv->out_last_stop = out->stop;
             for ( ; excess_dur >= pv->frame_rate; excess_dur -= pv->frame_rate )
             {
                 /* next frame too far ahead - dup current frame */
@@ -487,12 +489,12 @@ static void adjust_frame_rate( hb_work_private_t *pv, hb_buffer_t **buf_out )
                 dup->start = cfr_stop;
                 cfr_stop += pv->frame_rate;
                 dup->stop = cfr_stop;
+                pv->out_last_stop = dup->stop;
                 out = insert_buffer_in_chain( out, dup );
                 ++pv->dups;
                 ++pv->count_frames;
             }
         }
-        pv->out_last_stop = out->stop;
         out = out->next;
     }
 }
