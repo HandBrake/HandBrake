@@ -10,6 +10,7 @@ namespace Handbrake
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services;
+    using HandBrake.ApplicationServices.Utilities;
 
     using Handbrake.Functions;
     using Handbrake.Model;
@@ -88,7 +89,7 @@ namespace Handbrake
                     Query = query,
                     CropSettings = pictureSettingsMode != QueryPictureSettingsMode.None,
                     Description = string.Empty,
-                    AudioPassthruSettings = mainWindow.AudioSettings.PassthruSettings          
+                    Task = QueryParserUtility.Parse(query),    
                 };
 
             if (presetCode.Add(preset))

@@ -140,7 +140,7 @@ namespace HandBrakeWPF.ViewModels
         public void SetPreset(Preset preset, EncodeTask task)
         {
             this.Task = task;
- 
+
             if (preset != null && preset.Task != null)
             {
                 this.AddTracksFromPreset(preset);

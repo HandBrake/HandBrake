@@ -151,7 +151,6 @@ namespace HandBrake.ApplicationServices.Services
                 {
                     preset.Query = update.Query;
                     preset.Task = update.Task;
-                    preset.AudioPassthruSettings = update.AudioPassthruSettings;
                     preset.CropSettings = update.CropSettings;
                     preset.UsePictureFilters = update.UsePictureFilters;
 
@@ -316,7 +315,7 @@ namespace HandBrake.ApplicationServices.Services
                                     Task = QueryParserUtility.Parse(presetName[2])
                                 };
 
-                            newPreset.AudioPassthruSettings = new AllowedPassthru(false); // We don't want to override the built-in preset
+                            newPreset.Task.AllowedPassthruOptions = new AllowedPassthru(false); // We don't want to override the built-in preset
                             
                             if (newPreset.Name == "Normal")
                             {
