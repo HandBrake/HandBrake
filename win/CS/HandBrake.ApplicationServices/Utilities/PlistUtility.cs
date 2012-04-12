@@ -386,11 +386,12 @@ namespace HandBrake.ApplicationServices.Utilities
                 if (!File.Exists(filename))
                     return null;
 
-                StreamReader sr = File.OpenText(filename);
                 string fromfile = string.Empty;
-                int fileChar;
-                while ((fileChar = sr.Read()) != -1)
-                    fromfile += Convert.ToChar(fileChar);
+                using (StreamReader sr = File.OpenText(filename))
+                {
+                    int fileChar;
+                    while ((fileChar = sr.Read()) != -1) fromfile += Convert.ToChar(fileChar);
+                }
 
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml(fromfile);
@@ -432,27 +433,28 @@ namespace HandBrake.ApplicationServices.Utilities
         public static void Export(string path, Preset preset)
         {
             EncodeTask parsed = QueryParserUtility.Parse(preset.Query);
-            XmlTextWriter xmlWriter = new XmlTextWriter(path, Encoding.UTF8) { Formatting = Formatting.Indented };
+            using (XmlTextWriter xmlWriter = new XmlTextWriter(path, Encoding.UTF8) { Formatting = Formatting.Indented })
+            {
+                // Header
+                xmlWriter.WriteStartDocument();
+                xmlWriter.WriteDocType(
+                    "plist", "-//Apple//DTD PLIST 1.0//EN", @"http://www.apple.com/DTDs/PropertyList-1.0.dtd", null);
 
-            // Header
-            xmlWriter.WriteStartDocument();
-            xmlWriter.WriteDocType("plist", "-//Apple//DTD PLIST 1.0//EN",
-                                @"http://www.apple.com/DTDs/PropertyList-1.0.dtd", null);
+                xmlWriter.WriteStartElement("plist");
+                xmlWriter.WriteStartElement("array");
 
-            xmlWriter.WriteStartElement("plist");
-            xmlWriter.WriteStartElement("array");
+                // Add New Preset Here. Can write multiple presets here if required in future.
+                WritePreset(xmlWriter, parsed, preset);
 
-            // Add New Preset Here. Can write multiple presets here if required in future.
-            WritePreset(xmlWriter, parsed, preset);
+                // Footer
+                xmlWriter.WriteEndElement();
+                xmlWriter.WriteEndElement();
 
-            // Footer
-            xmlWriter.WriteEndElement();
-            xmlWriter.WriteEndElement();
+                xmlWriter.WriteEndDocument();
 
-            xmlWriter.WriteEndDocument();
-
-            // Closeout
-            xmlWriter.Close();
+                // Closeout
+                xmlWriter.Close();
+            }
         }
 
         /// <summary>
