@@ -6,7 +6,6 @@
 namespace HandBrake.ApplicationServices.Utilities
 {
     using System;
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Text;
@@ -32,6 +31,14 @@ namespace HandBrake.ApplicationServices.Utilities
 
         #region Import
 
+        /// <summary>
+        /// Import a Plist Preset
+        /// </summary>
+        /// <param name="filename">
+        /// The filename.
+        /// </param>
+        /// <returns>
+        /// </returns>
         public static Preset Import(string filename)
         {
             Preset preset = new Preset();
@@ -94,7 +101,7 @@ namespace HandBrake.ApplicationServices.Utilities
                             track.SampleRate = value == "Auto" ? 0 : double.Parse(value);
                             break;
                         case "AudioTrack":
-                           //track.SourceTrack = value;
+                            //track.SourceTrack = value;
                             break;
                         case "AudioTrackDRCSlider":
                             track.DRC = double.Parse(value);
@@ -121,7 +128,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
                 switch (key)
                 {
-                        // Output Settings
+                    // Output Settings
                     case "FileFormat":
                         parsed.OutputFormat = Converters.GetFileFormat(value.Replace("file", string.Empty).Trim());
                         break;
@@ -129,13 +136,13 @@ namespace HandBrake.ApplicationServices.Utilities
                         parsed.OptimizeMP4 = value == "1";
                         break;
                     case "Mp4LargeFile":
-                        parsed.IPod5GSupport = value == "1";
+                        parsed.LargeFile = value == "1";
                         break;
                     case "Mp4iPodCompatible":
                         parsed.IPod5GSupport = value == "1";
                         break;
 
-                        // Picture Settings
+                    // Picture Settings
                     case "PictureAutoCrop":
                         parsed.HasCropping = value != "1";
                         break;
@@ -178,16 +185,23 @@ namespace HandBrake.ApplicationServices.Utilities
                         }
                         break;
 
-                        // Filters
+                    // Filters
                     case "PictureDeblock":
                         parsed.Deblock = int.Parse(value);
                         break;
                     case "PictureDecomb":
                         parsed.Decomb = Decomb.Off;
-                        // Don't place custom here as it's handled in the filter panel
-                        if (value == "2")
+                        switch (value)
                         {
-                            parsed.Decomb = Decomb.Default;
+                            case "1":
+                                parsed.Decomb = Decomb.Custom;
+                                break;
+                            case "2":
+                                parsed.Decomb = Decomb.Default;
+                                break;
+                            case "3":
+                                parsed.Decomb = Decomb.Fast;
+                                break;
                         }
                         break;
                     case "PictureDecombCustom":
@@ -205,7 +219,9 @@ namespace HandBrake.ApplicationServices.Utilities
                             case "0":
                                 parsed.Deinterlace = Deinterlace.Off;
                                 break;
-                                // Don't place custom here as it's handled in the filter panel
+                            case "1":
+                                parsed.Deinterlace = Deinterlace.Custom;
+                                break;
                             case "2":
                                 parsed.Deinterlace = Deinterlace.Fast;
                                 break;
@@ -229,7 +245,9 @@ namespace HandBrake.ApplicationServices.Utilities
                             case "0":
                                 parsed.Denoise = Denoise.Off;
                                 break;
-                                // Don't place custom here as it's handled in the filter panel
+                            case "1":
+                                parsed.Denoise = Denoise.Custom;
+                                break;
                             case "2":
                                 parsed.Denoise = Denoise.Weak;
                                 break;
@@ -252,6 +270,10 @@ namespace HandBrake.ApplicationServices.Utilities
                         parsed.Detelecine = Detelecine.Off;
                         if (value == "1")
                         {
+                            parsed.Detelecine = Detelecine.Custom;
+                        }
+                        if (value == "2")
+                        {
                             parsed.Detelecine = Detelecine.Default;
                         }
                         break;
@@ -262,7 +284,7 @@ namespace HandBrake.ApplicationServices.Utilities
                         }
                         break;
 
-                        // Video Tab
+                    // Video Tab
                     case "VideoAvgBitrate":
                         if (!string.IsNullOrEmpty(value))
                         {
@@ -316,17 +338,17 @@ namespace HandBrake.ApplicationServices.Utilities
                         parsed.TwoPass = value == "1";
                         break;
 
-                        // Chapter Markers Tab
+                    // Chapter Markers Tab
                     case "ChapterMarkers":
                         parsed.IncludeChapterMarkers = value == "1";
                         break;
 
-                        // Advanced x264 tab
+                    // Advanced x264 tab
                     case "x264Option":
                         parsed.AdvancedEncoderOptions = value;
                         break;
 
-                        // Preset Information
+                    // Preset Information
                     case "PresetBuildNumber":
                         preset.Version = value;
                         break;
@@ -554,11 +576,15 @@ namespace HandBrake.ApplicationServices.Utilities
                     AddEncodeElement(xmlWriter, "PictureDecombCustom", "string", string.Empty);
                     break;
                 case Decomb.Default:
-                    AddEncodeElement(xmlWriter, "PictureDecomb", "integer", "1");
+                    AddEncodeElement(xmlWriter, "PictureDecomb", "integer", "2");
                     AddEncodeElement(xmlWriter, "PictureDecombCustom", "string", string.Empty);
                     break;
-                default:
-                    AddEncodeElement(xmlWriter, "PictureDecomb", "integer", "2");
+                case Decomb.Fast:
+                    AddEncodeElement(xmlWriter, "PictureDecomb", "integer", "3");
+                    AddEncodeElement(xmlWriter, "PictureDecombCustom", "string", string.Empty);
+                    break;
+                case Decomb.Custom:
+                    AddEncodeElement(xmlWriter, "PictureDecomb", "integer", "1");
                     AddEncodeElement(xmlWriter, "PictureDecombCustom", "string", parsed.CustomDecomb);
                     break;
             }
@@ -571,19 +597,19 @@ namespace HandBrake.ApplicationServices.Utilities
                     AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", string.Empty);
                     break;
                 case Deinterlace.Fast:
-                    AddEncodeElement(xmlWriter, "PictureDeinterlace", "integer", "1");
-                    AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", string.Empty);
-                    break;
-                case Deinterlace.Slow:
                     AddEncodeElement(xmlWriter, "PictureDeinterlace", "integer", "2");
                     AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", string.Empty);
                     break;
-                case Deinterlace.Slower:
+                case Deinterlace.Slow:
                     AddEncodeElement(xmlWriter, "PictureDeinterlace", "integer", "3");
                     AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", string.Empty);
                     break;
-                default:
+                case Deinterlace.Slower:
                     AddEncodeElement(xmlWriter, "PictureDeinterlace", "integer", "4");
+                    AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", string.Empty);
+                    break;
+                case Deinterlace.Custom:
+                    AddEncodeElement(xmlWriter, "PictureDeinterlace", "integer", "1");
                     AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", parsed.CustomDeinterlace);
                     break;
             }
@@ -595,24 +621,24 @@ namespace HandBrake.ApplicationServices.Utilities
                     AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", string.Empty);
                     break;
                 case Denoise.Weak:
-                    AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "1");
-                    AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", string.Empty);
-                    break;
-                case Denoise.Medium:
                     AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "2");
                     AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", string.Empty);
                     break;
-                case Denoise.Strong:
+                case Denoise.Medium:
                     AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "3");
                     AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", string.Empty);
                     break;
-                default:
+                case Denoise.Strong:
                     AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "4");
+                    AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", string.Empty);
+                    break;
+                case Denoise.Custom:
+                    AddEncodeElement(xmlWriter, "PictureDenoise", "integer", "1");
                     AddEncodeElement(xmlWriter, "PictureDenoiseCustom", "string", parsed.CustomDenoise);
                     break;
             }
 
-            int detelecine;
+            int detelecine = 0;
             switch (parsed.Detelecine)
             {
                 case Detelecine.Off:
@@ -621,7 +647,7 @@ namespace HandBrake.ApplicationServices.Utilities
                 case Detelecine.Default:
                     detelecine = 2;
                     break;
-                default:
+                case Detelecine.Custom:
                     detelecine = 1;
                     break;
             }
@@ -779,7 +805,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
             xmlWriter.WriteElementString("key", "AudioTrackGainSlider");
             xmlWriter.WriteElementString("real", audioTrack.Gain.ToString());
-            
+
             xmlWriter.WriteEndElement();
         }
         #endregion
