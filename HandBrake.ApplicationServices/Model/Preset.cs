@@ -72,11 +72,6 @@ namespace HandBrake.ApplicationServices.Model
         public EncodeTask Task { get; set; }
 
         /// <summary>
-        /// Gets or sets AudioPassthruSettings.
-        /// </summary>
-        public AllowedPassthru AudioPassthruSettings { get; set; }
-
-        /// <summary>
         ///  Override the ToString Method
         /// </summary>
         /// <returns>

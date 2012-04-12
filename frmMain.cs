@@ -561,7 +561,6 @@ namespace Handbrake
                     Name = this.treeView_presets.SelectedNode.Text,
                     Query = query,
                     CropSettings = (result == DialogResult.Yes),
-                    AudioPassthruSettings = this.AudioSettings.PassthruSettings,
                     Task = QueryParserUtility.Parse(query),
                 };
 
@@ -869,7 +868,7 @@ namespace Handbrake
                     if (result == DialogResult.Yes)
                     {
                         parsed.Query = QueryGeneratorUtility.GenerateQuery(parsed.Task);
-                        parsed.AudioPassthruSettings = parsed.Task.AllowedPassthruOptions;
+                        parsed.Task.AllowedPassthruOptions = parsed.Task.AllowedPassthruOptions;
                         parsed.CropSettings = false;
 
                         presetHandler.Update(parsed);
@@ -878,7 +877,7 @@ namespace Handbrake
                 else
                 {
                     parsed.Query = QueryGeneratorUtility.GenerateQuery(parsed.Task);
-                    parsed.AudioPassthruSettings = parsed.Task.AllowedPassthruOptions;
+                    parsed.Task.AllowedPassthruOptions = parsed.Task.AllowedPassthruOptions;
                     parsed.CropSettings = false;
         
                     if (presetHandler.Add(parsed))

@@ -190,7 +190,7 @@ namespace Handbrake.Controls
             ClearAudioList();
 
             ObservableCollection<AudioTrack> tracks = new ObservableCollection<AudioTrack>(preset.Task.AudioTracks);
-            this.PassthruSettings = preset.AudioPassthruSettings != null ? new AllowedPassthru(preset.AudioPassthruSettings) : new AllowedPassthru(false);
+            this.PassthruSettings = preset.Task.AllowedPassthruOptions != null ? new AllowedPassthru(preset.Task.AllowedPassthruOptions) : new AllowedPassthru(false);
             this.SetPassthruSettings(this.PassthruSettings);
 
             if (this.drp_audioTrack.SelectedItem != null && this.drp_audioTrack.SelectedItem.ToString() == AudioHelper.NoneFound.Description)
