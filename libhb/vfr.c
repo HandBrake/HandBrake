@@ -309,7 +309,7 @@ static int hb_vfr_init( hb_filter_object_t * filter,
                 &pv->cfr, &pv->vrate, &pv->vrate_base );
     }
 
-    //pv->job = init->job;
+    pv->job = init->job;
 
     /* Setup FIFO queue for subtitle cache */
     pv->delay_queue = hb_fifo_init( 8, 1 );
