@@ -550,9 +550,10 @@ static void do_job( hb_job_t * job )
             hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
             if( filter->init( filter, &init ) )
             {
-                hb_error( "Failure to initialise filter '%s'", filter->name );
-                *job->die = 1;
-                goto cleanup;
+                hb_log( "Failure to initialise filter '%s', disabling",
+                        filter->name );
+                hb_list_rem( job->list_filter, filter );
+                hb_filter_close( &filter );
             }
         }
         job->width = init.width;

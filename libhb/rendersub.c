@@ -552,7 +552,7 @@ static int hb_rendersub_init( hb_filter_object_t * filter,
     }
     if( filter->subtitle == NULL )
     {
-        hb_error("rendersub: no subtitle marked for burn");
+        hb_log("rendersub: no subtitle marked for burn");
         return 1;
     }
 
@@ -570,7 +570,7 @@ static int hb_rendersub_init( hb_filter_object_t * filter,
 
         default:
         {
-            hb_error("rendersub: unsupported subtitle format %d", pv->type );
+            hb_log("rendersub: unsupported subtitle format %d", pv->type );
             return 1;
         } break;
     }
