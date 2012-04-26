@@ -35,5 +35,9 @@ gint ghb_selected_subtitle_row(signal_user_data_t *ud);
 void ghb_reset_subtitles(signal_user_data_t *ud, GValue *settings);
 void ghb_subtitle_prune(signal_user_data_t *ud);
 gboolean ghb_soft_in_subtitle_list(GValue *subtitle_list);
+gboolean ghb_canBurnSub(int source);
+gboolean ghb_canForceSub(int source);
+gboolean ghb_canPassSub(int source, int mux);
+void ghb_subtitle_list_refresh_selected(signal_user_data_t *ud);
 
 #endif // _SUBTITLEHANDLER_H_

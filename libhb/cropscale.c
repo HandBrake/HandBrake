@@ -30,6 +30,7 @@ hb_filter_object_t hb_filter_crop_scale =
 {
     .id            = HB_FILTER_CROP_SCALE,
     .enforce_order = 1,
+    .init_index    = 0,
     .name          = "Crop and Scale",
     .settings      = NULL,
     .init          = hb_crop_scale_init,

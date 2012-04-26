@@ -237,7 +237,7 @@ static void ScanFunc( void * _data )
             for( j = 0; j < hb_list_count( title->list_subtitle ); j++ )
             {
                 hb_subtitle_t *subtitle = hb_list_item( title->list_subtitle, j );
-                if ( subtitle->source == VOBSUB )
+                if ( subtitle->source == VOBSUB || subtitle->source == PGSSUB )
                 {
                     subtitle->width = title->width;
                     subtitle->height = title->height;

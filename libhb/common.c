@@ -1751,6 +1751,7 @@ int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlec
         return 0;
     }
     subtitle->config = *subtitlecfg;
+    subtitle->out_track = hb_list_count(job->list_subtitle) + 1;
     hb_list_add(job->list_subtitle, subtitle);
     return 1;
 }
@@ -1768,6 +1769,7 @@ int hb_srt_add( const hb_job_t * job,
     subtitle->id = (hb_list_count(job->list_subtitle) << 8) | 0xFF;
     subtitle->format = TEXTSUB;
     subtitle->source = SRTSUB;
+    subtitle->codec = WORK_DECSRTSUB;
 
     language = lang_for_code2( lang );
 
@@ -1784,6 +1786,61 @@ int hb_srt_add( const hb_job_t * job,
         retval = 1;
     }
     return retval;
+}
+
+int hb_subtitle_can_force( int source )
+{
+    return source == VOBSUB || source == PGSSUB;
+}
+
+int hb_subtitle_can_burn( int source )
+{
+    return source == VOBSUB || source == PGSSUB || source == SSASUB;
+}
+
+int hb_subtitle_can_pass( int source, int mux )
+{
+    if ( mux == HB_MUX_MKV )
+    {
+        switch( source )
+        {
+            case PGSSUB:
+            case VOBSUB:
+            case SSASUB:
+            case SRTSUB:
+            case UTF8SUB:
+            case TX3GSUB:
+            case CC608SUB:
+            case CC708SUB:
+                return 1;
+
+            default:
+                return 0;
+        }
+    }
+    else if ( mux == HB_MUX_MP4 )
+    {
+        switch( source )
+        {
+            case VOBSUB:
+            case SSASUB:
+            case SRTSUB:
+            case UTF8SUB:
+            case TX3GSUB:
+            case CC608SUB:
+            case CC708SUB:
+                return 1;
+
+            default:
+                return 0;
+        }
+    }
+    else
+    {
+        // Internal error. Should never get here.
+        hb_error("internel error.  Bad mux %d\n", mux);
+        return 0;
+    }
 }
 
 char * hb_strdup_printf( const char * fmt, ... )
@@ -1964,6 +2021,8 @@ const char * hb_subsource_name( int source )
             return "TX3G";
         case SSASUB:
             return "SSA";
+        case PGSSUB:
+            return "PGS";
         default:
             return "Unknown";
     }

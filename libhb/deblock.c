@@ -63,6 +63,7 @@ hb_filter_object_t hb_filter_deblock =
 {
     .id            = HB_FILTER_DEBLOCK,
     .enforce_order = 1,
+    .init_index    = 0,
     .name          = "Deblock (pp7)",
     .settings      = NULL,
     .init          = hb_deblock_init,

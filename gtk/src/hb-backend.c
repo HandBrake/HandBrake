@@ -1423,37 +1423,6 @@ ghb_subtitle_track_source(GValue *settings, gint track)
 }
 
 const char*
-ghb_subtitle_source_name(gint source)
-{
-	const gchar * name = "Unknown";
-	switch (source)
-	{
-		case VOBSUB:
-			name = "VOBSUB";
-			break;
-		case TX3GSUB:
-			name = "TX3G";
-			break;
-		case UTF8SUB:
-			name = "UTF8";
-			break;
-		case CC708SUB:
-		case CC608SUB:
-			name = "CC";
-			break;
-		case SRTSUB:
-			name = "SRT";
-			break;
-		case SSASUB:
-			name = "SSA";
-			break;
-		default:
-			break;
-	}
-	return name;
-}
-
-const char*
 ghb_subtitle_track_source_name(GValue *settings, gint track)
 {
 	gint titleindex;
@@ -1491,7 +1460,7 @@ ghb_subtitle_track_source_name(GValue *settings, gint track)
 	sub = hb_list_item( title->list_subtitle, track);
 	if (sub != NULL)
 	{
-		name = ghb_subtitle_source_name(sub->source);
+		name = hb_subsource_name(sub->source);
 	}
 
 done:
@@ -2304,7 +2273,7 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
        		subtitle = (hb_subtitle_t *)hb_list_item(title->list_subtitle, ii);
 			options[ii] = g_strdup_printf("%d - %s (%s)", ii+1, 
 				subtitle->lang, 
-				ghb_subtitle_source_name(subtitle->source));
+				hb_subsource_name(subtitle->source));
 			subtitle_opts.map[ii+1].option = options[ii];
 			subtitle_opts.map[ii+1].shortOpt = index_str[ii];
 			subtitle_opts.map[ii+1].ivalue = ii;
@@ -2681,18 +2650,6 @@ ghb_find_cc_track(gint titleindex)
 	return -2;
 }
 
-static gboolean
-canForce(int source)
-{
-	return (source == VOBSUB);
-}
-
-static gboolean
-canBurn(int source)
-{
-	return (source == VOBSUB || source == SSASUB);
-}
-
 gint
 ghb_find_subtitle_track(
 	gint          titleindex, 
@@ -2745,8 +2702,8 @@ ghb_find_subtitle_track(
 				continue;
 
        		subtitle = (hb_subtitle_t*)hb_list_item( title->list_subtitle, ii );
-			if (((!force || (force && canForce(subtitle->source))) &&
-				 (!burn  || (burn  &&  canBurn(subtitle->source)))) &&
+			if (((!force || (force && ghb_canForceSub(subtitle->source))) &&
+				 (!burn  || (burn  &&  ghb_canBurnSub(subtitle->source)))) &&
 				((strcmp(lang, subtitle->iso639_2) == 0) ||
 				 (strcmp(lang, "und") == 0)))
 			{
@@ -5106,7 +5063,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 				{
 					sub_config.dest = PASSTHRUSUB;
 				}
-				else if ( burned && canBurn(subt->source) )
+				else if ( burned && ghb_canBurnSub(subt->source) )
 				{
 					// Only allow one subtitle to be burned into the video
 					if (one_burned)

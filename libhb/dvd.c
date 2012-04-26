@@ -496,12 +496,16 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
         subtitle->format = PICTURESUB;
         subtitle->source = VOBSUB;
         subtitle->config.dest   = RENDERSUB;  // By default render (burn-in) the VOBSUB.
+        subtitle->stream_type = 0xbd;
+        subtitle->substream_type = 0x20 + position;
+        subtitle->codec = WORK_DECVOBSUB;
 
         subtitle->type = lang_extension;
         
         memcpy( subtitle->palette,
             vts->vts_pgcit->pgci_srp[pgc_id-1].pgc->palette,
             16 * sizeof( uint32_t ) );
+        subtitle->palette_set = 1;
 
         switch( lang_extension )
         {  

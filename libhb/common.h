@@ -122,6 +122,9 @@ hb_subtitle_t *hb_subtitle_copy(const hb_subtitle_t *src);
 int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlecfg, int track);
 int hb_srt_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlecfg, 
                const char *lang);
+int hb_subtitle_can_force( int source );
+int hb_subtitle_can_burn( int source );
+int hb_subtitle_can_pass( int source, int mux );
 
 hb_attachment_t *hb_attachment_copy(const hb_attachment_t *src);
 
@@ -610,11 +613,12 @@ struct hb_subtitle_s
 {
     int  id;
     int  track;
+    int  out_track;
 
     hb_subtitle_config_t config;
 
     enum subtype { PICTURESUB, TEXTSUB } format;
-    enum subsource { VOBSUB, SRTSUB, CC608SUB, /*unused*/CC708SUB, UTF8SUB, TX3GSUB, SSASUB } source;
+    enum subsource { VOBSUB, SRTSUB, CC608SUB, /*unused*/CC708SUB, UTF8SUB, TX3GSUB, SSASUB, PGSSUB } source;
     char lang[1024];
     char iso639_2[4];
     uint8_t type; /* Closed Caption, Childrens, Directors etc */
@@ -622,6 +626,7 @@ struct hb_subtitle_s
     // Color lookup table for VOB subtitle tracks. Each entry is in YCbCr format.
     // Must be filled out by the demuxer for VOB subtitle tracks.
     uint32_t    palette[16];
+    uint8_t     palette_set;
     int         width;
     int         height;
     
@@ -634,6 +639,11 @@ struct hb_subtitle_s
 
 #ifdef __LIBHB__
     /* Internal data */
+    PRIVATE uint32_t codec;         /* Input "codec" */
+    PRIVATE uint32_t reg_desc;      /* registration descriptor of source */
+    PRIVATE uint32_t stream_type;   /* stream type from source stream */
+    PRIVATE uint32_t substream_type;/* substream for multiplexed streams */
+
     hb_fifo_t * fifo_in;  /* SPU ES */
     hb_fifo_t * fifo_raw; /* Decoded SPU */
     hb_fifo_t * fifo_sync;/* Synced */
@@ -873,6 +883,7 @@ extern hb_work_object_t hb_decsrtsub;
 extern hb_work_object_t hb_decutf8sub;
 extern hb_work_object_t hb_dectx3gsub;
 extern hb_work_object_t hb_decssasub;
+extern hb_work_object_t hb_decpgssub;
 extern hb_work_object_t hb_encavcodec;
 extern hb_work_object_t hb_encx264;
 extern hb_work_object_t hb_enctheora;
@@ -920,6 +931,7 @@ struct hb_filter_object_s
 {
     int                     id;
     int                     enforce_order;
+    int                     init_index;
     char                  * name;
     char                  * settings;
 

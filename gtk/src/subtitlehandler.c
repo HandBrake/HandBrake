@@ -42,16 +42,22 @@ free_subtitle_key(gpointer data)
 		g_free(data);
 }
 
-static gboolean
-canBurn(int source)
+gboolean
+ghb_canPassSub(int source, int mux)
 {
-	return (source == VOBSUB || source == SSASUB);
+	return hb_subtitle_can_pass(source, mux);
 }
 
-static gboolean
-canForce(int source)
+gboolean
+ghb_canBurnSub(int source)
 {
-	return (source == VOBSUB);
+	return hb_subtitle_can_burn(source);
+}
+
+gboolean
+ghb_canForceSub(int source)
+{
+    return hb_subtitle_can_force(source);
 }
 
 gboolean
@@ -86,7 +92,6 @@ ghb_subtitle_exclusive_burn_settings(GValue *settings, gint index)
 	{
 		if (ii != index)
 		{
-printf("settings burn %d also %d\n", index, ii);
 			subsettings = ghb_array_get_nth(subtitle_list, ii);
 			ghb_settings_set_boolean(subsettings, "SubtitleBurned", FALSE);
 		}
@@ -114,7 +119,6 @@ ghb_subtitle_exclusive_burn(signal_user_data_t *ud, gint index)
 		gtk_tree_model_iter_nth_child(tm, &ti, NULL, ii);
 		if (ii != index)
 		{
-printf("ui burn %d also %d\n", index, ii);
 			subsettings = ghb_array_get_nth(subtitle_list, ii);
 			ghb_settings_set_boolean(subsettings, "SubtitleBurned", FALSE);
 			gtk_list_store_set(GTK_LIST_STORE(tm), &ti, 2, FALSE, -1);
@@ -226,7 +230,8 @@ ghb_add_subtitle_to_settings(GValue *settings, GValue *subsettings)
 	// Add the current subtitle settings to the list.
 	GValue *subtitle_list;
 	gint count;
-	gboolean burned;
+	gboolean burned, forced;
+	gint source, mux;
 	const gchar *track;
 	const gchar *lang;
 	
@@ -256,9 +261,29 @@ ghb_add_subtitle_to_settings(GValue *settings, GValue *subsettings)
 	lang = ghb_settings_combo_string(subsettings, "SubtitleTrack");
 	ghb_settings_set_string(subsettings, "SubtitleLanguage", lang);
 
+	mux = ghb_settings_combo_int(settings, "FileFormat");
+	source = ghb_settings_get_int(subsettings, "SubtitleSource");
+	burned = ghb_settings_get_boolean(subsettings, "SubtitleBurned");
+	if (burned && !ghb_canBurnSub(source))
+	{
+		burned = FALSE;
+		ghb_settings_set_boolean(subsettings, "SubtitleBurned", burned);
+	}
+	if (!burned && !ghb_canPassSub(source, mux))
+	{
+		burned = TRUE;
+		ghb_settings_set_boolean(subsettings, "SubtitleBurned", burned);
+		ghb_settings_set_boolean(subsettings, "SubtitleDefaultTrack", FALSE);
+	}
+	forced = ghb_settings_get_boolean(subsettings, "SubtitleForced");
+	if (forced && !ghb_canForceSub(source))
+	{
+		forced = FALSE;
+		ghb_settings_set_boolean(subsettings, "SubtitleForced", forced);
+	}
+
 	ghb_array_append(subtitle_list, subsettings);
 
-	burned = ghb_settings_get_boolean(subsettings, "SubtitleBurned");
 	if (burned)
 		ghb_subtitle_exclusive_burn_settings(settings, count);
 	return TRUE;
@@ -300,6 +325,7 @@ add_all_pref_subtitles(signal_user_data_t *ud)
 	for (ii = 0; ii < count; ii++)
 	{
 		subtitle = ghb_value_dup(ghb_array_get_nth(pref_subtitle, ii));
+		gboolean force = ghb_settings_get_boolean(subtitle, "SubtitleForced");
 		lang = ghb_settings_get_string(subtitle, "SubtitleLanguage");
 		// If there are multiple subtitles using the same language, then
 		// select sequential tracks for each.  The hash keeps track 
@@ -417,7 +443,7 @@ ghb_set_pref_subtitle_settings(gint titleindex, GValue *settings)
 		GValue *subsettings;
 		gboolean burn;
 
-		track = ghb_find_subtitle_track(titleindex, pref_lang, FALSE, FALSE, VOBSUB, track_indices);
+		track = ghb_find_subtitle_track(titleindex, pref_lang, FALSE, FALSE, PGSSUB, track_indices);
 		if (track >= -1)
 		{
 			int source;
@@ -463,7 +489,6 @@ ghb_set_pref_subtitle_settings(gint titleindex, GValue *settings)
 		if (track >= 0)
 		{
 			int source;
-
 			subsettings = ghb_dict_value_new();
 			ghb_settings_set_int(subsettings, "SubtitleTrack", track);
 			source = ghb_subtitle_track_source(settings, track);
@@ -606,8 +631,10 @@ subtitle_forced_toggled_cb(
 	settings = ghb_array_get_nth(subtitle_list, row);
 
 	source = ghb_settings_get_int(settings, "SubtitleSource");
-	if (!canForce(source))
+	if (!ghb_canForceSub(source))
+    {
 		return;
+    }
 
 	ghb_settings_set_boolean(settings, "SubtitleForced", active);
 	gtk_list_store_set(GTK_LIST_STORE(tm), &ti, 1, active, -1);
@@ -630,7 +657,7 @@ subtitle_burned_toggled_cb(
 	GValue *subtitle_list;
 	gint count;
 	GValue *settings;
-	gint source;
+	gint source, mux;
 
 	g_debug("burned toggled");
 	tp = gtk_tree_path_new_from_string (path);
@@ -654,7 +681,10 @@ subtitle_burned_toggled_cb(
 
 	settings = ghb_array_get_nth(subtitle_list, row);
 	source = ghb_settings_get_int(settings, "SubtitleSource");
-	if (!canBurn(source))
+	if (!ghb_canBurnSub(source))
+		return;
+	mux = ghb_settings_combo_int(ud->settings, "FileFormat");
+	if (!active && !hb_subtitle_can_pass(source, mux))
 		return;
 
 	ghb_settings_set_boolean(settings, "SubtitleBurned", active);
@@ -711,6 +741,12 @@ subtitle_default_toggled_cb(
 
 	settings = ghb_array_get_nth(subtitle_list, row);
 
+	int source, mux;
+	source = ghb_settings_get_int(settings, "SubtitleSource");
+	mux = ghb_settings_combo_int(ud->settings, "FileFormat");
+	if (active && !hb_subtitle_can_pass(source, mux))
+		return;
+
 	ghb_settings_set_boolean(settings, "SubtitleDefaultTrack", active);
 	gtk_list_store_set(GTK_LIST_STORE(tm), &ti, 3, active, -1);
 
@@ -724,8 +760,8 @@ subtitle_default_toggled_cb(
 	ghb_live_reset(ud);
 }
 
-static void
-subtitle_list_refresh_selected(signal_user_data_t *ud)
+void
+ghb_subtitle_list_refresh_selected(signal_user_data_t *ud)
 {
 	GtkTreeView *treeview;
 	GtkTreePath *treepath;
@@ -760,21 +796,33 @@ subtitle_list_refresh_selected(signal_user_data_t *ud)
 			return;
 		settings = ghb_array_get_nth(subtitle_list, row);
 
-		def = ghb_settings_get_boolean(settings, "SubtitleDefaultTrack");
+		burned = ghb_settings_get_boolean(settings, "SubtitleBurned");
 
 		gint i_source;
 		i_source = ghb_settings_get_int(settings, "SubtitleSource");
-		if (!canBurn(i_source))
+		if (!ghb_canBurnSub(i_source))
 		{
 			burned = FALSE;
 			ghb_settings_set_boolean(settings, "SubtitleBurned", burned);
 		}
-		if (!canForce(i_source))
+
+		gint i_mux;
+		i_mux = ghb_settings_combo_int(ud->settings, "FileFormat");
+		if (!burned && !ghb_canPassSub(i_source, i_mux))
 		{
-			// Force only apply to VOBSUBS
+			burned = TRUE;
+			ghb_settings_set_boolean(settings, "SubtitleBurned", burned);
+			ghb_settings_set_boolean(settings, "SubtitleDefaultTrack", FALSE);
+		}
+
+		forced = ghb_settings_get_boolean(settings, "SubtitleForced");
+		if (!ghb_canForceSub(i_source))
+		{
 			forced = FALSE;
 			ghb_settings_set_boolean(settings, "SubtitleForced", forced);
 		}
+
+		def = ghb_settings_get_boolean(settings, "SubtitleDefaultTrack");
 
 		if (i_source == SRTSUB)
 		{
@@ -801,24 +849,18 @@ subtitle_list_refresh_selected(signal_user_data_t *ud)
 			}
 			g_free(code);
 			offset = ghb_settings_get_int(settings, "SrtOffset");
-
-			forced = FALSE;
-			burned = FALSE;
 		}
 		else
 		{
 			track = g_strdup(
 				ghb_settings_combo_option(settings, "SubtitleTrack"));
-			source = g_strdup(ghb_subtitle_source_name(i_source));
+			source = g_strdup(hb_subsource_name(i_source));
 			s_track = ghb_settings_get_string(settings, "SubtitleTrack");
-
-			forced = ghb_settings_get_boolean(settings, "SubtitleForced");
-			burned = ghb_settings_get_boolean(settings, "SubtitleBurned");
 		}
 
-		if (canBurn(i_source))
+		if (ghb_canBurnSub(i_source))
 			allow_burn = TRUE;
-		if (canForce(i_source))
+		if (ghb_canForceSub(i_source))
 			allow_force = TRUE;
 
 		gtk_list_store_set(GTK_LIST_STORE(store), &iter, 
@@ -864,7 +906,7 @@ subtitle_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		ghb_settings_set_int(settings, "SubtitleSource", source);
 		lang = ghb_settings_combo_string(settings, "SubtitleTrack");
 		ghb_settings_set_string(settings, "SubtitleLanguage", lang);
-		subtitle_list_refresh_selected(ud);
+		ghb_subtitle_list_refresh_selected(ud);
 		ghb_live_reset(ud);
 	}
 	ghb_live_reset(ud);
@@ -882,7 +924,7 @@ srt_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	if (settings != NULL)
 	{
 		ghb_widget_to_setting(settings, widget);
-		subtitle_list_refresh_selected(ud);
+		ghb_subtitle_list_refresh_selected(ud);
 
 		ghb_live_reset(ud);
 	}
@@ -902,7 +944,7 @@ srt_file_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		gchar *filename, *dirname;
 
 		ghb_widget_to_setting(settings, widget);
-		subtitle_list_refresh_selected(ud);
+		ghb_subtitle_list_refresh_selected(ud);
 
 		ghb_live_reset(ud);
 
@@ -936,7 +978,7 @@ srt_lang_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		const gchar *lang;
 
 		ghb_widget_to_setting(settings, widget);
-		subtitle_list_refresh_selected(ud);
+		ghb_subtitle_list_refresh_selected(ud);
 
 		ghb_live_reset(ud);
 
@@ -982,7 +1024,7 @@ add_to_subtitle_list(
 	GtkTreeIter iter;
 	GtkListStore *store;
 	GtkTreeSelection *selection;
-	const gchar *track, *source;
+	const gchar *track;
 	gboolean forced, burned, def;
 	gchar *s_track;
 	gint i_source;
@@ -1001,11 +1043,10 @@ add_to_subtitle_list(
 
 	s_track = ghb_settings_get_string(settings, "SubtitleTrack");
 	i_source = ghb_settings_get_int(settings, "SubtitleSource");
-	source = ghb_subtitle_source_name(i_source);
 
-	if (canBurn(i_source))
+	if (ghb_canBurnSub(i_source))
 		allow_burn = TRUE;
-	if (canForce(i_source))
+	if (ghb_canForceSub(i_source))
 		allow_force = TRUE;
 
 	gtk_list_store_append(store, &iter);
@@ -1251,7 +1292,7 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	// Add the current subtitle settings to the list.
 	GValue *settings;
 	gboolean burned = FALSE;
-	gint track, source;
+	gint track, source, mux;
 	
 	g_debug("subtitle_add_clicked_cb ()");
 
@@ -1260,6 +1301,11 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	settings = ghb_dict_value_new();
 	ghb_settings_set_int(settings, "SubtitleTrack", track);
 	source = ghb_subtitle_track_source(ud->settings, track);
+
+	// Initialize to passthru if possible, else burn
+	mux = ghb_settings_combo_int(ud->settings, "FileFormat");
+	burned = !hb_subtitle_can_pass(source, mux);
+
 	ghb_settings_set_int(settings, "SubtitleSource", source);
 	ghb_settings_take_value(settings, "SubtitleForced", 
 							ghb_boolean_value_new(FALSE));
@@ -1331,7 +1377,6 @@ void
 ghb_subtitle_prune(signal_user_data_t *ud)
 {
 	GtkTreeView  *tv;
-	GtkTreeModel *tm;
 	GValue *subtitle_list;
 	gint count, ii;
 	gint first_track = 0, one_burned = 0;
@@ -1343,7 +1388,6 @@ ghb_subtitle_prune(signal_user_data_t *ud)
 
 	tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list"));
 	g_return_if_fail(tv != NULL);
-	tm = gtk_tree_view_get_model(tv);
 	for (ii = count-1; ii >= 0; ii--)
 	{
 		gboolean burned;

@@ -38,6 +38,16 @@ static int ssa_work( hb_filter_object_t * filter,
 static void ssa_close( hb_filter_object_t * filter );
 
 
+// PGS
+static int pgssub_init ( hb_filter_object_t * filter, hb_filter_init_t * init );
+
+static int pgssub_work ( hb_filter_object_t * filter,
+                      hb_buffer_t ** buf_in,
+                      hb_buffer_t ** buf_out );
+
+static void pgssub_close( hb_filter_object_t * filter );
+
+
 // Entry points
 static int hb_rendersub_init( hb_filter_object_t * filter,
                                  hb_filter_init_t * init );
@@ -52,6 +62,7 @@ hb_filter_object_t hb_filter_render_sub =
 {
     .id            = HB_FILTER_RENDER_SUB,
     .enforce_order = 1,
+    .init_index    = 1,
     .name          = "Subtitle renderer",
     .settings      = NULL,
     .init          = hb_rendersub_init,
@@ -80,16 +91,15 @@ static void blend( hb_buffer_t *dst, hb_buffer_t *src, int left, int top )
     }
 
     ww = src->f.width;
-    if( left + src->f.width > dst->f.width )
+    if( src->f.width - x0 > dst->f.width - left )
     {
-        ww = dst->f.width - ( left + src->f.width );
+        ww = dst->f.width - left + x0;
     }
     hh = src->f.height;
-    if( top + src->f.height > dst->f.height )
+    if( src->f.height - y0 > dst->f.height - top )
     {
-        hh = dst->f.height - ( top + src->f.height );
+        hh = dst->f.height - top + y0;
     }
-
     // Blend luma
     for( yy = y0; yy < hh; yy++ )
     {
@@ -116,6 +126,7 @@ static void blend( hb_buffer_t *dst, hb_buffer_t *src, int left, int top )
         hshift = 1;
     if( dst->plane[1].width < dst->plane[0].width )
         wshift = 1;
+
     for( yy = y0 >> hshift; yy < hh >> hshift; yy++ )
     {
         u_in = src->plane[1].data + yy * src->plane[1].stride;
@@ -224,13 +235,14 @@ static void ApplyVOBSubs( hb_filter_private_t * pv, hb_buffer_t * buf )
     int ii;
     hb_buffer_t * sub;
 
-    for( ii = 0; ii < hb_list_count( pv->sub_list ); ii++ )
+    for( ii = 0; ii < hb_list_count( pv->sub_list ); )
     {
         sub = hb_list_item( pv->sub_list, ii );
         if( sub->s.stop <= buf->s.start )
         {
             // Subtitle stop is in the past, delete it
             hb_list_rem( pv->sub_list, sub );
+            hb_buffer_close( &sub );
         }
         else if( sub->s.start <= buf->s.start )
         {
@@ -241,6 +253,7 @@ static void ApplyVOBSubs( hb_filter_private_t * pv, hb_buffer_t * buf )
                 ApplySub( pv, buf, sub );
                 sub = sub->next;
             }
+            ii++;
         }
         else
         {
@@ -530,6 +543,116 @@ static int ssa_work( hb_filter_object_t * filter,
     return HB_FILTER_OK;
 }
 
+static void ApplyPGSSubs( hb_filter_private_t * pv, hb_buffer_t * buf )
+{
+    int index;
+    hb_buffer_t * old_sub;
+    hb_buffer_t * sub;
+
+    // Each PGS subtitle supersedes anything that preceded it.
+    // Find the active subtitle (if there is one), and delete
+    // everything before it.
+    for( index = hb_list_count( pv->sub_list ) - 1; index > 0; index-- )
+    {
+        sub = hb_list_item( pv->sub_list, index);
+        if ( sub->s.start <= buf->s.start )
+        {
+            while ( index > 0 )
+            {
+                old_sub = hb_list_item( pv->sub_list, index - 1);
+                hb_list_rem( pv->sub_list, old_sub );
+                hb_buffer_close( &old_sub );
+                index--;
+            }
+        }
+    }
+
+    // Some PGS subtitles have no content and only serve to clear
+    // the screen. If any of these are at the front of our list,
+    // we can now get rid of them.
+    while ( hb_list_count( pv->sub_list ) > 0 )
+    {
+        sub = hb_list_item( pv->sub_list, 0 );
+        if (sub->f.width != 0 && sub->f.height != 0)
+            break;
+
+        hb_list_rem( pv->sub_list, sub );
+        hb_buffer_close( &sub );
+    }
+
+    // Check to see if there's an active subtitle, and apply it.
+    if ( hb_list_count( pv->sub_list ) > 0)
+    {
+        sub = hb_list_item( pv->sub_list, 0 );
+        if ( sub->s.start <= buf->s.start )
+        {
+            while ( sub )
+            {
+                ApplySub( pv, buf, sub );
+                sub = sub->sub;
+            }
+        }
+    }
+}
+
+static int pgssub_init( hb_filter_object_t * filter,
+                        hb_filter_init_t * init )
+{
+    hb_filter_private_t * pv = filter->private_data;
+
+    // PGS render filter has no settings
+    memcpy( pv->crop, init->crop, sizeof( int[4] ) );
+
+    pv->sub_list = hb_list_init();
+
+    return 0;
+}
+
+static void pgssub_close( hb_filter_object_t * filter )
+{
+    hb_filter_private_t * pv = filter->private_data;
+
+    if ( !pv )
+    {
+        return;
+    }
+
+    if ( pv->sub_list )
+        hb_list_empty( &pv->sub_list );
+
+    free( pv );
+    filter->private_data = NULL;
+}
+
+static int pgssub_work( hb_filter_object_t * filter,
+                        hb_buffer_t ** buf_in,
+                        hb_buffer_t ** buf_out)
+{
+    hb_filter_private_t * pv = filter->private_data;
+    hb_buffer_t * in = *buf_in;
+    hb_buffer_t * sub;
+
+    if ( in->size <= 0 )
+    {
+        *buf_in = NULL;
+        *buf_out = in;
+        return HB_FILTER_DONE;
+    }
+
+    // Get any pending subtitles and add them to the active
+    // subtitle list
+    while ( ( sub = hb_fifo_get( filter->subtitle->fifo_out ) ) )
+    {
+        hb_list_add( pv->sub_list, sub );
+    }
+
+    ApplyPGSSubs( pv, in );
+    *buf_in = NULL;
+    *buf_out = in;
+
+    return HB_FILTER_OK;
+}
+
 static int hb_rendersub_init( hb_filter_object_t * filter,
                                  hb_filter_init_t * init )
 {
@@ -568,6 +691,11 @@ static int hb_rendersub_init( hb_filter_object_t * filter,
             return ssa_init( filter, init );
         } break;
 
+        case PGSSUB:
+        {
+            return pgssub_init( filter, init );
+        } break;
+
         default:
         {
             hb_log("rendersub: unsupported subtitle format %d", pv->type );
@@ -593,6 +721,11 @@ static int hb_rendersub_work( hb_filter_object_t * filter,
             return ssa_work( filter, buf_in, buf_out );
         } break;
 
+        case PGSSUB:
+        {
+            return pgssub_work( filter, buf_in, buf_out );
+        } break;
+
         default:
         {
             hb_error("rendersub: unsupported subtitle format %d", pv->type );
@@ -614,6 +747,11 @@ static void hb_rendersub_close( hb_filter_object_t * filter )
         case SSASUB:
         {
             ssa_close( filter );
+        } break;
+
+        case PGSSUB:
+        {
+            pgssub_close( filter );
         } break;
 
         default:

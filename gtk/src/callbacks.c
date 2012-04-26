@@ -1268,6 +1268,7 @@ container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
 	ghb_subtitle_prune(ud);
+	ghb_subtitle_list_refresh_selected(ud);
 	ghb_audio_list_refresh_selected(ud);
 }
 

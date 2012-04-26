@@ -81,6 +81,44 @@ int hb_bd_title_count( hb_bd_t * d )
     return d->title_count;
 }
 
+static void add_subtitle(int track, hb_list_t *list_subtitle, BLURAY_STREAM_INFO *bdsub, uint32_t codec)
+{
+    hb_subtitle_t * subtitle;
+    iso639_lang_t * lang;
+
+    subtitle = calloc( sizeof( hb_subtitle_t ), 1 );
+
+    subtitle->track = track;
+    subtitle->id = bdsub->pid;
+    lang = lang_for_code2( (char*)bdsub->lang );
+    snprintf( subtitle->lang, sizeof( subtitle->lang ), "%s",
+              strlen(lang->native_name) ? lang->native_name : lang->eng_name);
+    snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "%s",
+              lang->iso639_2);
+
+    switch ( bdsub->coding_type )
+    {
+        case BLURAY_STREAM_TYPE_SUB_PG:
+            subtitle->source = PGSSUB;
+            subtitle->format = PICTURESUB;
+            subtitle->config.dest = RENDERSUB;
+            break;
+        default:
+            // Unrecognized, don't add to list
+            free( subtitle );
+            return;
+    }
+    subtitle->reg_desc = STR4_TO_UINT32("HDMV");
+    subtitle->stream_type = bdsub->coding_type;
+    subtitle->codec = codec;
+
+    hb_log( "bd: subtitle id=0x%x, lang=%s, 3cc=%s", subtitle->id,
+            subtitle->lang, subtitle->iso639_2 );
+
+    hb_list_add( list_subtitle, subtitle );
+    return;
+}
+
 static void add_audio(int track, hb_list_t *list_audio, BLURAY_STREAM_INFO *bdaudio, int substream_type, uint32_t codec, uint32_t codec_param)
 {
     hb_audio_t * audio;
@@ -89,6 +127,7 @@ static void add_audio(int track, hb_list_t *list_audio, BLURAY_STREAM_INFO *bdau
     audio = calloc( sizeof( hb_audio_t ), 1 );
 
     audio->id = (substream_type << 16) | bdaudio->pid;
+    audio->config.in.reg_desc = STR4_TO_UINT32("HDMV");
     audio->config.in.stream_type = bdaudio->coding_type;
     audio->config.in.substream_type = substream_type;
     audio->config.in.codec = codec;
@@ -389,6 +428,25 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
             default:
                 hb_log( "scan: unknown audio pid 0x%x codec 0x%x",
                         bdaudio->pid, bdaudio->coding_type );
+                break;
+        }
+    }
+
+    // Add all the subtitles found in the above clip.
+    for ( ii = 0; ii < ti->clips[audio_clip_index].pg_stream_count; ii++ )
+    {
+        BLURAY_STREAM_INFO * bdpgs;
+
+        bdpgs = &ti->clips[audio_clip_index].pg_streams[ii];
+
+        switch( bdpgs->coding_type )
+        {
+            case BLURAY_STREAM_TYPE_SUB_PG:
+                add_subtitle(ii, title->list_subtitle, bdpgs, WORK_DECPGSSUB);
+                break;
+            default:
+                hb_log( "scan: unknown subtitle pid 0x%x codec 0x%x",
+                        bdpgs->pid, bdpgs->coding_type );
                 break;
         }
     }

@@ -155,7 +155,8 @@ hb_dict_t * hb_encopts_to_dict( const char * encopts, int encoder )
     hb_dict_t * dict = NULL;
     if( encopts && *encopts )
     {
-        char *cur_opt, *opts_start, *name, *value;
+        char *cur_opt, *opts_start, *value;
+        const char *name;
         dict = hb_dict_init( 10 );
         if( !dict )
             return NULL;

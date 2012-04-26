@@ -3,17 +3,9 @@
    This file is part of the HandBrake source code.
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
-//
 
 #import "HBSubtitles.h"
 #include "hb.h"
-
-
-
-
-
-
-
 
 @implementation HBSubtitles
 - (id)init 
@@ -285,8 +277,8 @@
                 subtitle = (hb_subtitle_t *) hb_list_item( fTitle->list_subtitle, i );
                 sub_config = subtitle->config;
                 
-                int canBeBurnedIn = subtitle->source == VOBSUB || subtitle->source == SSASUB;
-                int supportsForcedFlags = subtitle->source == VOBSUB;
+                int canBeBurnedIn = hb_subtitle_can_burn( subtitle->source );
+                int supportsForcedFlags = hb_subtitle_can_force( subtitle->source );
                 
                 /* create a dictionary of source subtitle information to store in our array */
                 NSMutableDictionary *newSubtitleSourceTrack = [[NSMutableDictionary alloc] init];
@@ -294,7 +286,7 @@
                 [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:i] forKey:@"sourceTrackNum"];
                 /* Human-readable representation of subtitle->source */
                 NSString *subSourceName = [NSString stringWithUTF8String:hb_subsource_name( subtitle->source )];
-                NSString *bitmapOrText = subtitle->source == PICTURESUB ? @"Bitmap" : @"Text";
+                NSString *bitmapOrText = subtitle->format == PICTURESUB ? @"Bitmap" : @"Text";
                 /* Subtitle Source track name */
                 NSString *popupName = [NSString stringWithFormat:@"%d - %@ - (%@) (%@)",i,[NSString stringWithUTF8String:subtitle->lang],bitmapOrText,subSourceName];
                 [newSubtitleSourceTrack setObject:popupName forKey:@"sourceTrackName"];
@@ -769,7 +761,9 @@
          */
         if (container == HB_MUX_MP4 && [anObject intValue] != 0)
         {
-            if ([[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackType"] isEqualToString:[NSString stringWithUTF8String:hb_subsource_name( VOBSUB )]])
+            NSString *subtitleSourceTrackType = [[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackType"];
+            if ([subtitleSourceTrackType isEqualToString:[NSString stringWithUTF8String:hb_subsource_name( VOBSUB )]] ||
+                [subtitleSourceTrackType isEqualToString:[NSString stringWithUTF8String:hb_subsource_name( PGSSUB )]])
             {
                 /* lets see if there are currently any burned in subs specified */
                 NSEnumerator *enumerator = [subtitleArray objectEnumerator];
@@ -783,7 +777,7 @@
                     }
                 }
                 /* if we have no current vobsub set to burn it in ... burn it in by default */
-                if(!subtrackBurnedInFound)
+                if (!subtrackBurnedInFound)
                 {
                     [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:1] forKey:@"subtitleTrackBurned"];
                     /* Burned In and Default are mutually exclusive */

@@ -49,6 +49,7 @@ struct hb_work_private_s
     uint8_t       chromaU[4];
     uint8_t       chromaV[4];
     uint8_t       alpha[4];
+    uint8_t       palette_set;
 };
 
 static hb_buffer_t * Decode( hb_work_object_t * );
@@ -64,18 +65,23 @@ int decsubInit( hb_work_object_t * w, hb_job_t * job )
     pv->pts = 0;
     
     // Warn if the input color palette is empty
-    int paletteEmpty = 1;
-    int i;
-    for (i=0; i<16; i++)
+    pv->palette_set = w->subtitle->palette_set;
+    if ( pv->palette_set )
     {
-        if (w->subtitle->palette[i])
+        // Make sure the entries in the palette are not all 0
+        pv->palette_set = 0;
+        int i;
+        for (i=0; i<16; i++)
         {
-            paletteEmpty = 0;
-            break;
+            if (w->subtitle->palette[i])
+            {
+                pv->palette_set = 1;
+                break;
+            }
         }
     }
-    if (paletteEmpty) {
-        hb_log( "decvobsub: input color palette is empty; not demuxed properly?" );
+    if (!pv->palette_set) {
+        hb_log( "decvobsub: input color palette is empty!" );
     }
 
     return 0;

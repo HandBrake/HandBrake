@@ -30,9 +30,10 @@
  * U - Unknown (to be determined by further processing)
  * A - Audio
  * V - Video
+ * S - Subtitle
  * P - PCR
  */
-typedef enum { N, U, A, V, P } kind_t;
+typedef enum { N, U, A, V, P, S } kind_t;
 typedef struct {
     kind_t kind; /* not handled / unknown / audio / video */
     int codec;          /* HB worker object id of codec */
@@ -82,7 +83,7 @@ static const stream2codec_t st2codec[256] = {
 
     st(0x8a, A, HB_ACODEC_DCA,     0,              "DTS"),
 
-    st(0x90, N, 0,                 0,              "PGS Subtitle"),
+    st(0x90, S, WORK_DECPGSSUB,    0,              "PGS Subtitle"),
     // 0x91 can be AC3 or BD Interactive Graphics Stream.
     st(0x91, U, 0,                 0,              "AC3/IGS"),
     st(0x92, N, 0,                 0,              "Subtitle"),
@@ -253,6 +254,7 @@ static int64_t pes_timestamp( const uint8_t *pes );
 static int hb_ts_stream_init(hb_stream_t *stream);
 static hb_buffer_t * hb_ts_stream_decode(hb_stream_t *stream);
 static void hb_init_audio_list(hb_stream_t *stream, hb_title_t *title);
+static void hb_init_subtitle_list(hb_stream_t *stream, hb_title_t *title);
 static int hb_ts_stream_find_pids(hb_stream_t *stream);
 
 static void hb_ps_stream_init(hb_stream_t *stream);
@@ -947,6 +949,15 @@ hb_stream_t * hb_bd_stream_open( hb_title_t *title )
         update_ts_streams( d, pid, stream_id_ext, stream_type, A, NULL );
     }
 
+    hb_subtitle_t * subtitle;
+    for ( ii = 0; ( subtitle = hb_list_item( title->list_subtitle, ii ) ); ++ii )
+    {
+        pid = subtitle->id & 0xFFFF;
+        stream_type = subtitle->stream_type;
+
+        update_ts_streams( d, pid, 0, stream_type, S, NULL );
+    }
+
     // When scanning, title->job == NULL.  We don't need to wait for
     // a PCR when scanning. In fact, it trips us up on the first
     // preview of every title since we would have to read quite a
@@ -1035,6 +1046,7 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream, hb_title_t * title)
     // - For program streams read the first 4MB and take every unique
     //   audio stream we find.
     hb_init_audio_list(stream, title);
+    hb_init_subtitle_list(stream, title);
 
     // set the video id, codec & muxer
     int idx = pes_index_of_video( stream );
@@ -2024,6 +2036,119 @@ static void set_audio_description(
 
 // Sort specifies the index in the audio list where you would
 // like sorted items to begin.
+static void pes_add_subtitle_to_title(
+    hb_stream_t *stream,
+    int         idx,
+    hb_title_t  *title,
+    int         sort)
+{
+    hb_pes_stream_t *pes = &stream->pes.list[idx];
+
+    // Sort by id when adding to the list
+    // This assures that they are always displayed in the same order
+    int id = get_id( pes );
+    int i;
+    hb_subtitle_t *tmp = NULL;
+
+    int count = hb_list_count( title->list_subtitle );
+
+    // Don't add the same audio twice.  Search for audio.
+    for ( i = 0; i < count; i++ )
+    {
+        tmp = hb_list_item( title->list_subtitle, i );
+        if ( id == tmp->id )
+            return;
+    }
+
+    hb_subtitle_t *subtitle = calloc( sizeof( hb_subtitle_t ), 1 );
+    iso639_lang_t * lang;
+
+    subtitle->track = idx;
+    subtitle->id = id;
+    lang = lang_for_code( pes->lang_code );
+    snprintf( subtitle->lang, sizeof( subtitle->lang ), "%s",
+              strlen(lang->native_name) ? lang->native_name : lang->eng_name);
+    snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "%s",
+              lang->iso639_2);
+
+    switch ( pes->codec )
+    {
+        case WORK_DECPGSSUB:
+            subtitle->source = PGSSUB;
+            subtitle->format = PICTURESUB;
+            subtitle->config.dest = RENDERSUB;
+            break;
+        case WORK_DECVOBSUB:
+            subtitle->source = VOBSUB;
+            subtitle->format = PICTURESUB;
+            subtitle->config.dest = RENDERSUB;
+            break;
+        default:
+            // Unrecognized, don't add to list
+            hb_log("unregonized subtitle!");
+            free( subtitle );
+            return;
+    }
+    subtitle->reg_desc = stream->reg_desc;
+    subtitle->stream_type = pes->stream_type;
+    subtitle->substream_type = pes->stream_id_ext;
+    subtitle->codec = pes->codec;
+
+    // Create a default palette since vob files do not include the
+    // vobsub palette.
+    if ( subtitle->source == VOBSUB )
+    {
+        subtitle->palette[0] = 0x108080;
+        subtitle->palette[1] = 0x108080;
+        subtitle->palette[2] = 0x108080;
+        subtitle->palette[3] = 0xbff000;
+
+        subtitle->palette[4] = 0xbff000;
+        subtitle->palette[5] = 0x108080;
+        subtitle->palette[6] = 0x108080;
+        subtitle->palette[7] = 0x108080;
+
+        subtitle->palette[8] = 0xbff000;
+        subtitle->palette[9] = 0x108080;
+        subtitle->palette[10] = 0x108080;
+        subtitle->palette[11] = 0x108080;
+
+        subtitle->palette[12] = 0x108080;
+        subtitle->palette[13] = 0xbff000;
+        subtitle->palette[14] = 0x108080;
+        subtitle->palette[15] = 0x108080;
+    }
+
+    hb_log("stream id 0x%x (type 0x%x substream 0x%x) subtitle 0x%x",
+           pes->stream_id, pes->stream_type, pes->stream_id_ext, subtitle->id);
+
+    // Search for the sort position
+    if ( sort >= 0 )
+    {
+        sort = sort < count ? sort : count;
+        for ( i = sort; i < count; i++ )
+        {
+            tmp = hb_list_item( title->list_subtitle, i );
+            int sid = tmp->id & 0xffff;
+            int ssid = tmp->id >> 16;
+            if ( pes->stream_id < sid )
+                break;
+            else if ( pes->stream_id <= sid &&
+                      pes->stream_id_ext <= ssid )
+            {
+                break;
+            }
+        }
+        hb_list_insert( title->list_subtitle, i, subtitle );
+    }
+    else
+    {
+        hb_list_add( title->list_subtitle, subtitle );
+    }
+}
+
+// Sort specifies the index in the audio list where you would
+// like sorted items to begin.
 static void pes_add_audio_to_title(
     hb_stream_t *stream,
     int         idx,
@@ -2087,6 +2212,42 @@ static void pes_add_audio_to_title(
     else
     {
         hb_list_add( title->list_audio, audio );
+    }
+}
+
+static void hb_init_subtitle_list(hb_stream_t *stream, hb_title_t *title)
+{
+    int ii;
+    int map_idx;
+    int largest = -1;
+
+    // First add all that were found in a map.
+    for ( map_idx = 0; 1; map_idx++ )
+    {
+        for ( ii = 0; ii < stream->pes.count; ii++ )
+        {
+            if ( stream->pes.list[ii].stream_kind == S )
+            {
+                if ( stream->pes.list[ii].map_idx == map_idx )
+                {
+                    pes_add_subtitle_to_title( stream, ii, title, -1 );
+                }
+                if ( stream->pes.list[ii].map_idx > largest )
+                    largest = stream->pes.list[ii].map_idx;
+            }
+        }
+        if ( map_idx > largest )
+            break;
+    }
+
+    int count = hb_list_count( title->list_audio );
+    // Now add the reset.  Sort them by stream id.
+    for ( ii = 0; ii < stream->pes.count; ii++ )
+    {
+        if ( stream->pes.list[ii].stream_kind == S )
+        {
+            pes_add_subtitle_to_title( stream, ii, title, count );
+        }
     }
 }
 
@@ -2206,6 +2367,19 @@ static int hb_ts_stream_init(hb_stream_t *stream)
                         stream->ts.list[i].is_pcr ? " (PCR)" : "");
             }
         }
+        hb_log("    Subtitle PIDS : ");
+        for (i = 0; i < stream->ts.count; i++)
+        {
+            if ( ts_stream_kind( stream, i ) == S )
+            {
+                hb_log( "      0x%x type %s (0x%x)%s",
+                        stream->ts.list[i].pid,
+                        stream_type_name2(stream,
+                                &stream->pes.list[stream->ts.list[i].pes_list]),
+                        ts_stream_type( stream, i ),
+                        stream->ts.list[i].is_pcr ? " (PCR)" : "");
+            }
+        }
         hb_log("    Other PIDS : ");
         for (i = 0; i < stream->ts.count; i++)
         {
@@ -2272,6 +2446,19 @@ static void hb_ps_stream_init(hb_stream_t *stream)
         for (i = 0; i < stream->pes.count; i++)
         {
             if ( stream->pes.list[i].stream_kind == A )
+            {
+                hb_log( "      0x%x-0x%x type %s (0x%x)",
+                        stream->pes.list[i].stream_id,
+                        stream->pes.list[i].stream_id_ext,
+                        stream_type_name2(stream,
+                                         &stream->pes.list[i]),
+                        stream->pes.list[i].stream_type );
+            }
+        }
+        hb_log("    Subtitle Streams : ");
+        for (i = 0; i < stream->pes.count; i++)
+        {
+            if ( stream->pes.list[i].stream_kind == S )
             {
                 hb_log( "      0x%x-0x%x type %s (0x%x)",
                         stream->pes.list[i].stream_id,
@@ -3728,10 +3915,10 @@ static void hb_ps_stream_find_streams(hb_stream_t *stream)
                 // Check dvd substream id
                 if ( ssid >= 0x20 && ssid <= 0x37 )
                 {
-                    // Skip dvd subtitles
                     int idx = update_ps_streams( stream, pes_info.stream_id,
                                             pes_info.bd_substream_id, 0, -1 );
-                    stream->pes.list[idx].stream_kind = N;
+                    stream->pes.list[idx].stream_kind = S;
+                    stream->pes.list[idx].codec = WORK_DECVOBSUB;
                     strncpy(stream->pes.list[idx].codec_name, 
                             "DVD Subtitle", 80);
                     continue;
@@ -4122,6 +4309,7 @@ static void hb_ts_resolve_pid_types(hb_stream_t *stream)
         // stype == 0 indicates a type not in st2codec table
         if ( stype != 0 &&
              ( ts_stream_kind( stream, ii ) == A ||
+               ts_stream_kind( stream, ii ) == S ||
                ts_stream_kind( stream, ii ) == V ) )
         {
             // Assuming there are no substreams.
@@ -4203,6 +4391,7 @@ static void hb_ps_resolve_stream_types(hb_stream_t *stream)
         // stype == 0 indicates a type not in st2codec table
         if ( stype != 0 &&
              ( stream->pes.list[ii].stream_kind == A ||
+               stream->pes.list[ii].stream_kind == S ||
                stream->pes.list[ii].stream_kind == V ) )
         {
             stream->pes.list[ii].codec = st2codec[stype].codec;
@@ -5049,6 +5238,7 @@ static int ffmpeg_parse_vobsub_extradata_mkv( AVCodecContext *codec, hb_subtitle
         int i;
         for (i=0; i<16; i++)
             subtitle->palette[i] = hb_rgb2yuv(rgb[i]);
+        subtitle->palette_set = 1;
         return 0;
     }
     else
@@ -5072,6 +5262,7 @@ static int ffmpeg_parse_vobsub_extradata_mp4( AVCodecContext *codec, hb_subtitle
             codec->extradata[j+1] << 16 |   // Y
             codec->extradata[j+2] << 8  |   // Cb
             codec->extradata[j+3] << 0;     // Cr
+        subtitle->palette_set = 1;
     }
     if (codec->width <= 0 || codec->height <= 0)
     {
@@ -5113,6 +5304,7 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
             subtitle->format = PICTURESUB;
             subtitle->source = VOBSUB;
             subtitle->config.dest = RENDERSUB;  // By default render (burn-in) the VOBSUB.
+            subtitle->codec = WORK_DECVOBSUB;
             if ( ffmpeg_parse_vobsub_extradata( codec, subtitle ) )
                 hb_log( "add_ffmpeg_subtitle: malformed extradata for VOB subtitle track; "
                         "subtitle colors likely to be wrong" );
@@ -5121,16 +5313,25 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
             subtitle->format = TEXTSUB;
             subtitle->source = UTF8SUB;
             subtitle->config.dest = PASSTHRUSUB;
+            subtitle->codec = WORK_DECUTF8SUB;
             break;
         case CODEC_ID_MOV_TEXT: // TX3G
             subtitle->format = TEXTSUB;
             subtitle->source = TX3GSUB;
             subtitle->config.dest = PASSTHRUSUB;
+            subtitle->codec = WORK_DECTX3GSUB;
             break;
         case CODEC_ID_SSA:
             subtitle->format = TEXTSUB;
             subtitle->source = SSASUB;
             subtitle->config.dest = PASSTHRUSUB;
+            subtitle->codec = WORK_DECSSASUB;
+            break;
+        case CODEC_ID_HDMV_PGS_SUBTITLE:
+            subtitle->format = PICTURESUB;
+            subtitle->source = PGSSUB;
+            subtitle->config.dest = RENDERSUB;
+            subtitle->codec = WORK_DECPGSSUB;
             break;
         default:
             hb_log( "add_ffmpeg_subtitle: unknown subtitle stream type: 0x%x", (int) codec->codec_id );

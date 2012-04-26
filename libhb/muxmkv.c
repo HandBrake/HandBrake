@@ -322,9 +322,9 @@ static int MKVInit( hb_mux_object_t * m )
             continue;
 
         memset(track, 0, sizeof(mk_TrackConfig));
-        switch (subtitle->format)
+        switch (subtitle->source)
         {
-            case PICTURESUB:
+            case VOBSUB:
                 track->codecID = MK_SUBTITLE_VOBSUB;
                 for (j = 0; j < 16; j++)
                     rgb[j] = hb_yuv2rgb(subtitle->palette[j]);
@@ -338,16 +338,20 @@ static int MKVInit( hb_mux_object_t * m )
                 track->codecPrivate = subidx;
                 track->codecPrivateSize = len + 1;
                 break;
-            case TEXTSUB:
-                if (subtitle->source == SSASUB)
-                {
-                    track->codecID = MK_SUBTITLE_SSA;
-                    need_fonts = 1;
-                    track->codecPrivate = subtitle->extradata;
-                    track->codecPrivateSize = subtitle->extradata_size;
-                }
-                else
-                    track->codecID = MK_SUBTITLE_UTF8;
+            case PGSSUB:
+                track->codecID = "S_HDMV/PGS";
+                break;
+            case SSASUB:
+                track->codecID = MK_SUBTITLE_SSA;
+                need_fonts = 1;
+                track->codecPrivate = subtitle->extradata;
+                track->codecPrivateSize = subtitle->extradata_size;
+                break;
+            case CC608SUB:
+            case CC708SUB:
+            case UTF8SUB:
+            case TX3GSUB:
+                track->codecID = MK_SUBTITLE_UTF8;
                 break;
             default:
                 continue;

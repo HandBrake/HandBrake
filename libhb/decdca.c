@@ -157,7 +157,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     hb_buffer_t * buf;
     hb_audio_t  * audio = w->audio;
     int           i, j, k;
-    int64_t       pts, pos;
+    int64_t       pts;
     uint64_t      upts, upos;
     int           num_blocks;
 
@@ -203,7 +203,6 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     /* Get the whole frame */
     hb_list_getbytes( pv->list, pv->frame, pv->size, &upts, &upos );
     pts = (int64_t)upts;
-    pos = (int64_t)upos;
 
     if ( pts != pv->last_buf_pts )
     {

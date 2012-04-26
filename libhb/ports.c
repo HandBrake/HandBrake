@@ -611,9 +611,7 @@ void hb_cond_wait( hb_cond_t * c, hb_lock_t * lock )
 void hb_clock_gettime( struct timespec *tp )
 {
     struct timeval tv;
-    time_t sec;
 
-    sec = time( NULL );
     gettimeofday( &tv, NULL );
     tp->tv_sec = tv.tv_sec;
     tp->tv_nsec = tv.tv_usec * 1000;

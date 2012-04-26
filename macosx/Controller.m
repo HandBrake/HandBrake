@@ -3185,28 +3185,6 @@ bool one_burned = FALSE;
             }
             else
             {
-                
-                /* for the actual source tracks, we must subtract the non source entries so 
-                 * that the menu index matches the source subtitle_list index for convenience */
-                if (i == 0)
-                {
-                    /* for the first track, the source tracks start at menu index 2 ( None is 0,
-                     * Foreign Language Search is 1) so subtract 2 */
-                    subtitle = subtitle - 2;
-                }
-                else
-                {
-                    /* for all other tracks, the source tracks start at menu index 1 (None is 0)
-                     * so subtract 1. */
-                    
-                    subtitle = subtitle - 1;
-                }
-                
-                /* We are setting a source subtitle so access the source subtitle info */  
-                hb_subtitle_t * subt;
-                
-                subt = (hb_subtitle_t *)hb_list_item(title->list_subtitle, subtitle);
-                
                 /* if we are getting the subtitles from an external srt file */
                 if ([[tempObject objectForKey:@"subtitleSourceTrackType"] isEqualToString:@"SRT"])
                 {
@@ -3225,35 +3203,48 @@ bool one_burned = FALSE;
                     sub_config.default_track = def;
                     
                     hb_srt_add( job, &sub_config, [[tempObject objectForKey:@"subtitleTrackSrtLanguageIso3"] UTF8String]);
+                    continue;
                 }
                 
-                if (subt != NULL)
+                /* for the actual source tracks, we must subtract the non source entries so 
+                 * that the menu index matches the source subtitle_list index for convenience */
+                if( i == 0 )
+                {
+                    /* for the first track, the source tracks start at menu index 2 ( None is 0,
+                     * Foreign Language Search is 1) so subtract 2 */
+                    subtitle = subtitle - 2;
+                }
+                else
+                {
+                    /* for all other tracks, the source tracks start at menu index 1 (None is 0)
+                     * so subtract 1. */
+                    subtitle = subtitle - 1;
+                }
+                
+                /* We are setting a source subtitle so access the source subtitle info */  
+                hb_subtitle_t * subt = (hb_subtitle_t *) hb_list_item( title->list_subtitle, subtitle );
+                
+                if( subt != NULL )
                 {
                     hb_subtitle_config_t sub_config = subt->config;
                     
-                    if ( !burned && subt->format == PICTURESUB )
+                    if( !burned && hb_subtitle_can_pass( subt->source, job->mux ) )
                     {
                         sub_config.dest = PASSTHRUSUB;
                     }
-                    else if ( burned && subt->format == PICTURESUB )
+                    else if( hb_subtitle_can_burn( subt->source ) )
                     {
                         // Only allow one subtitle to be burned into the video
-                        if (one_burned)
+                        if( one_burned )
                             continue;
                         one_burned = TRUE;
-                    }
-                    
-                    /* Besides VOBSUBS we can also burn in SSA text subs */
-                    if (subt->source == SSASUB && burned)
-                    {
                         sub_config.dest = RENDERSUB;
                     }
                     
                     sub_config.force = force;
                     sub_config.default_track = def;
                     hb_subtitle_add( job, &sub_config, subtitle );
-                }   
-                
+                }
             }
         }
         i++;
@@ -3724,28 +3715,6 @@ bool one_burned = FALSE;
             }
             else
             {
-                
-                /* for the actual source tracks, we must subtract the non source entries so 
-                 * that the menu index matches the source subtitle_list index for convenience */
-                if (i == 0)
-                {
-                    /* for the first track, the source tracks start at menu index 2 ( None is 0,
-                     * Foreign Language Search is 1) so subtract 2 */
-                    subtitle = subtitle - 2;
-                }
-                else
-                {
-                    /* for all other tracks, the source tracks start at menu index 1 (None is 0)
-                     * so subtract 1. */
-                    
-                    subtitle = subtitle - 1;
-                }
-                
-                /* We are setting a source subtitle so access the source subtitle info */  
-                hb_subtitle_t * subt;
-                
-                subt = (hb_subtitle_t *)hb_list_item(title->list_subtitle, subtitle);
-                
                 /* if we are getting the subtitles from an external srt file */
                 if ([[tempObject objectForKey:@"subtitleSourceTrackType"] isEqualToString:@"SRT"])
                 {
@@ -3764,36 +3733,48 @@ bool one_burned = FALSE;
                     sub_config.default_track = def;
                     
                     hb_srt_add( job, &sub_config, [[tempObject objectForKey:@"subtitleTrackSrtLanguageIso3"] UTF8String]);
+                    continue;
                 }
                 
+                /* for the actual source tracks, we must subtract the non source entries so 
+                 * that the menu index matches the source subtitle_list index for convenience */
+                if( i == 0 )
+                {
+                    /* for the first track, the source tracks start at menu index 2 ( None is 0,
+                     * Foreign Language Search is 1) so subtract 2 */
+                    subtitle = subtitle - 2;
+                }
+                else
+                {
+                    /* for all other tracks, the source tracks start at menu index 1 (None is 0)
+                     * so subtract 1. */
+                    subtitle = subtitle - 1;
+                }
                 
-                if (subt != NULL)
+                /* We are setting a source subtitle so access the source subtitle info */  
+                hb_subtitle_t * subt = (hb_subtitle_t *) hb_list_item( title->list_subtitle, subtitle );
+                
+                if( subt != NULL )
                 {
                     hb_subtitle_config_t sub_config = subt->config;
                     
-                    if ( !burned && subt->format == PICTURESUB )
+                    if( !burned && hb_subtitle_can_pass( subt->source, job->mux ) )
                     {
                         sub_config.dest = PASSTHRUSUB;
                     }
-                    else if ( burned  )
+                    else if( hb_subtitle_can_burn( subt->source ) )
                     {
                         // Only allow one subtitle to be burned into the video
-                        if (one_burned)
+                        if( one_burned )
                             continue;
                         one_burned = TRUE;
-                    }
-                    
-                    /* Besides VOBSUBS we can also burn in SSA text subs */
-                    if (subt->source == SSASUB && burned)
-                    {
                         sub_config.dest = RENDERSUB;
                     }
-
+                    
                     sub_config.force = force;
                     sub_config.default_track = def;
                     hb_subtitle_add( job, &sub_config, subtitle );
-                }   
-                
+                }
             }
         }
         i++;

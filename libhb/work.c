@@ -390,17 +390,20 @@ void hb_display_job_info( hb_job_t * job )
             {
                 /* For SRT, print offset and charset too */
                 hb_log( " * subtitle track %i, %s (id 0x%x) %s [%s] -> %s%s, offset: %"PRId64", charset: %s",
-                        subtitle->track, subtitle->lang, subtitle->id, "Text", "SRT", "Pass-Through",
+                        subtitle->out_track, subtitle->lang, subtitle->id,
+                        "Text", "SRT", "Pass-Through",
                         subtitle->config.default_track ? ", Default" : "",
                         subtitle->config.offset, subtitle->config.src_codeset );
             }
             else
             {
-                hb_log( " * subtitle track %i, %s (id 0x%x) %s [%s] -> %s%s%s", subtitle->track, subtitle->lang, subtitle->id,
+                hb_log( " * subtitle track %i, %s (id 0x%x) %s [%s] -> %s%s%s",
+                        subtitle->out_track, subtitle->lang, subtitle->id,
                         subtitle->format == PICTURESUB ? "Picture" : "Text",
                         hb_subsource_name( subtitle->source ),
                         job->indepth_scan ? "Foreign Audio Search" :
-                        subtitle->config.dest == RENDERSUB ? "Render/Burn in" : "Pass-Through",
+                            subtitle->config.dest == RENDERSUB ?
+                                "Render/Burn in" : "Pass-Through",
                         subtitle->config.force ? ", Forced Only" : "",
                         subtitle->config.default_track ? ", Default" : "" );
             }
@@ -489,6 +492,46 @@ void correct_framerate( hb_job_t * job )
     interjob->vrate_base = job->vrate_base;
 }
 
+void hb_filter_init_next( hb_list_t * list, int *score, int *ret_pos )
+{
+    int count = hb_list_count( list );
+    int pos = *ret_pos + 1;
+    int ii = 0;
+    if ( pos == 0 )
+    {
+        hb_filter_object_t * filter = hb_list_item( list, pos );
+        if ( filter->init_index == *score )
+        {
+            *ret_pos = pos;
+            return;
+        }
+        pos++;
+    }
+    while (1)
+    {
+        if ( pos == count )
+        {
+            pos = 0;
+            (*score)++;
+        }
+        hb_filter_object_t * filter = hb_list_item( list, pos );
+        if ( filter->init_index == *score )
+        {
+            *ret_pos = pos;
+            return;
+        }
+        pos++;
+        ii++;
+        if (ii > count)
+        {
+            // This is an error that should never happen
+            hb_error("internal error during filter initialization");
+            *ret_pos = -1;
+            return;
+        }
+    }
+}
+
 /**
  * Job initialization rountine.
  * Initializes fifos.
@@ -529,11 +572,139 @@ static void do_job( hb_job_t * job )
 
     hb_log( "starting job" );
 
+    /*
+     * Look for the scanned subtitle in the existing subtitle list
+     * select_subtitle implies that we did a scan.
+     */
+    if ( !job->indepth_scan && interjob->select_subtitle &&
+         ( job->pass == 0 || job->pass == 2 ) )
+    {
+        /*
+         * Disable forced subtitles if we didn't find any in the scan
+         * so that we display normal subtitles instead.
+         */
+        if( interjob->select_subtitle->config.force && 
+            interjob->select_subtitle->forced_hits == 0 )
+        {
+            interjob->select_subtitle->config.force = 0;
+        }
+        for( i=0; i < hb_list_count(title->list_subtitle); i++ )
+        {
+            subtitle =  hb_list_item( title->list_subtitle, i );
+
+            if( subtitle )
+            {
+                /*
+                * Remove the scanned subtitle from the subtitle list if
+                * it would result in an identical duplicate subtitle track
+                * or an emty track (forced and no forced hits).
+                */
+                if( ( interjob->select_subtitle->id == subtitle->id ) &&
+                    ( ( interjob->select_subtitle->forced_hits == 0 &&
+                        subtitle->config.force ) ||
+                    ( subtitle->config.force == interjob->select_subtitle->config.force ) ) )
+                {
+                    *subtitle = *(interjob->select_subtitle);
+                    free( interjob->select_subtitle );
+                    interjob->select_subtitle = NULL;
+                    break;
+                }
+            }
+        }
+
+        if( interjob->select_subtitle )
+        {
+            /*
+             * Its not in the existing list
+             *
+             * Must be second pass of a two pass with subtitle scan enabled, so
+             * add the subtitle that we found on the first pass for use in this
+             * pass.
+             */
+            hb_list_add( title->list_subtitle, interjob->select_subtitle );
+            interjob->select_subtitle = NULL;
+        }
+    }
+
+    if ( !job->indepth_scan )
+    {
+        // Sanitize subtitles
+        uint8_t one_burned = 0;
+        for( i=0; i < hb_list_count(title->list_subtitle); )
+        {
+            subtitle =  hb_list_item( title->list_subtitle, i );
+
+            if ( subtitle->config.dest == RENDERSUB )
+            {
+                if ( one_burned )
+                {
+                    if ( !hb_subtitle_can_pass(subtitle->source, job->mux) )
+                    {
+                        hb_log( "More than one subtitle burn-in requested, dropping track %d.", i );
+                        hb_list_rem( title->list_subtitle, subtitle );
+                        free( subtitle );
+                        continue;
+                    }
+                    else
+                    {
+                        hb_log( "More than one subtitle burn-in requested.  Changing track %d to soft subtitle.", i );
+                        subtitle->config.dest = PASSTHRUSUB;
+                    }
+                }
+                else if ( !hb_subtitle_can_burn(subtitle->source) )
+                {
+                    hb_log( "Subtitle burn-in requested and input track can not be rendered.  Changing track %d to soft subtitle.", i );
+                    subtitle->config.dest = PASSTHRUSUB;
+                }
+                else
+                {
+                    one_burned = 1;
+                }
+            }
+
+            if ( subtitle->config.dest == PASSTHRUSUB &&
+                 !hb_subtitle_can_pass(subtitle->source, job->mux) )
+            {
+                if ( !one_burned )
+                {
+                    hb_log( "Subtitle pass-thru requested and input track is not compatible with container.  Changing track %d to burned-in subtitle.", i );
+                    subtitle->config.dest = RENDERSUB;
+                    subtitle->config.default_track = 0;
+                    one_burned = 1;
+                }
+                else
+                {
+                    hb_log( "Subtitle pass-thru requested and input track is not compatible with container.  One track already burned, dropping track %d.", i );
+                    hb_list_rem( title->list_subtitle, subtitle );
+                    free( subtitle );
+                    continue;
+                }
+            }
+            /* Adjust output track number, in case we removed one.
+             * Output tracks sadly still need to be in sequential order.
+             * Note: out.track starts at 1, i starts at 0 */
+            subtitle->out_track = ++i;
+        }
+        if ( one_burned )
+        {
+            hb_filter_object_t * filter;
+
+            // Add subtitle rendering filter
+            // Note that if the filter is already in the filter chain, this
+            // has no effect. Note also that this means the front-end is
+            // not required to add the subtitle rendering filter since
+            // we will always try to do it here.
+            filter = hb_filter_init(HB_FILTER_RENDER_SUB);
+            hb_add_filter( job, filter, NULL );
+        }
+    }
+
     // Filters have an effect on settings.
     // So initialize the filters and update the job.
     if( job->list_filter && hb_list_count( job->list_filter ) )
     {
         hb_filter_init_t init;
+        int pos = -1, score = 0;
 
         init.job = job;
         init.pix_fmt = PIX_FMT_YUV420P;
@@ -547,7 +718,19 @@ static void do_job( hb_job_t * job )
         init.cfr = 0;
         for( i = 0; i < hb_list_count( job->list_filter ); i++ )
         {
-            hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
+            // Some filters need to be initialized in a different order
+            // than they are executed in the pipeline.  e.g. rendersub
+            // needs to be initialized after cropscale so that it knows
+            // the crop settings, but it needs to be executed before
+            // cropscale. so hb_filter_init_next() finds returns the
+            // position of filters in initialization order.
+            hb_filter_init_next( job->list_filter, &score, &pos );
+            if( pos == -1)
+            {
+                // This is an error that should never happen!
+                break;
+            }
+            hb_filter_object_t * filter = hb_list_item( job->list_filter, pos );
             if( filter->init( filter, &init ) )
             {
                 hb_log( "Failure to initialise filter '%s', disabling",
@@ -847,60 +1030,6 @@ static void do_job( hb_job_t * job )
     w->fifo_in  = job->fifo_mpeg2;
     w->fifo_out = job->fifo_raw;
 
-    /*
-     * Look for the scanned subtitle in the existing subtitle list
-     * select_subtitle implies that we did a scan.
-     */
-    if ( !job->indepth_scan && interjob->select_subtitle &&
-         ( job->pass == 0 || job->pass == 2 ) )
-    {
-        /*
-         * Disable forced subtitles if we didn't find any in the scan
-         * so that we display normal subtitles instead.
-         */
-        if( interjob->select_subtitle->config.force && 
-            interjob->select_subtitle->forced_hits == 0 )
-        {
-            interjob->select_subtitle->config.force = 0;
-        }
-        for( i=0; i < hb_list_count(title->list_subtitle); i++ )
-        {
-            subtitle =  hb_list_item( title->list_subtitle, i );
-
-            if( subtitle )
-            {
-                /*
-                * Remove the scanned subtitle from the subtitle list if
-                * it would result in an identical duplicate subtitle track
-                * or an emty track (forced and no forced hits).
-                */
-                if( ( interjob->select_subtitle->id == subtitle->id ) &&
-                    ( ( interjob->select_subtitle->forced_hits == 0 &&
-                        subtitle->config.force ) ||
-                    ( subtitle->config.force == interjob->select_subtitle->config.force ) ) )
-                {
-                    *subtitle = *(interjob->select_subtitle);
-                    free( interjob->select_subtitle );
-                    interjob->select_subtitle = NULL;
-                    break;
-                }
-            }
-        }
-
-        if( interjob->select_subtitle )
-        {
-            /*
-             * Its not in the existing list
-             *
-             * Must be second pass of a two pass with subtitle scan enabled, so
-             * add the subtitle that we found on the first pass for use in this
-             * pass.
-             */
-            hb_list_add( title->list_subtitle, interjob->select_subtitle );
-            interjob->select_subtitle = NULL;
-        }
-    }
-
     for( i=0; i < hb_list_count(title->list_subtitle); i++ )
     {
         subtitle =  hb_list_item( title->list_subtitle, i );
@@ -920,60 +1049,17 @@ static void do_job( hb_job_t * job )
             subtitle->fifo_sync = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
             subtitle->fifo_out  = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
 
-            if( (!job->indepth_scan || job->select_subtitle_config.force) && 
-                subtitle->source == VOBSUB ) {
-                /*
-                 * Don't add threads for subtitles when we are scanning, unless
-                 * looking for forced subtitles.
-                 */
-                w = hb_get_work( WORK_DECVOBSUB );
-                w->fifo_in  = subtitle->fifo_in;
-                w->fifo_out = subtitle->fifo_raw;
-                w->subtitle = subtitle;
-                hb_list_add( job->list_work, w );
-            }
-
-            if( !job->indepth_scan && subtitle->source == CC608SUB )
+            if( job->indepth_scan && 
+                !( job->select_subtitle_config.force &&
+                   hb_subtitle_can_force( subtitle->source ) ) )
             {
-                w = hb_get_work( WORK_DECCC608 );
-                w->fifo_in  = subtitle->fifo_in;
-                w->fifo_out = subtitle->fifo_raw;
-                hb_list_add( job->list_work, w );
+                continue;
             }
-
-            if( !job->indepth_scan && subtitle->source == SRTSUB )
-            {
-                w = hb_get_work( WORK_DECSRTSUB );
-                w->fifo_in  = subtitle->fifo_in;
-                w->fifo_out = subtitle->fifo_raw;
-                w->subtitle = subtitle;
-                hb_list_add( job->list_work, w );
-            }
-            
-            if( !job->indepth_scan && subtitle->source == UTF8SUB )
-            {
-                w = hb_get_work( WORK_DECUTF8SUB );
-                w->fifo_in  = subtitle->fifo_in;
-                w->fifo_out = subtitle->fifo_raw;
-                hb_list_add( job->list_work, w );
-            }
-            
-            if( !job->indepth_scan && subtitle->source == TX3GSUB )
-            {
-                w = hb_get_work( WORK_DECTX3GSUB );
-                w->fifo_in  = subtitle->fifo_in;
-                w->fifo_out = subtitle->fifo_raw;
-                hb_list_add( job->list_work, w );
-            }
-            
-            if( !job->indepth_scan && subtitle->source == SSASUB )
-            {
-                w = hb_get_work( WORK_DECSSASUB );
-                w->fifo_in  = subtitle->fifo_in;
-                w->fifo_out = subtitle->fifo_raw;
-                w->subtitle = subtitle;
-                hb_list_add( job->list_work, w );
-            }
+            w = hb_get_work( subtitle->codec );
+            w->fifo_in = subtitle->fifo_in;
+            w->fifo_out = subtitle->fifo_raw;
+            w->subtitle = subtitle;
+            hb_list_add( job->list_work, w );
         }
     }
 

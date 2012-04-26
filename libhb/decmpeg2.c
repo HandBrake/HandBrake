@@ -654,6 +654,7 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 subtitle->format = TEXTSUB;
                 subtitle->source = CC608SUB;
                 subtitle->config.dest = PASSTHRUSUB;
+                subtitle->codec = WORK_DECCC608;
                 subtitle->type = 5; 
                 snprintf( subtitle->lang, sizeof( subtitle->lang ), "Closed Captions");
                 /*
@@ -664,7 +665,7 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 if( audio )
                 {
                     snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), 
-                              audio->config.lang.iso639_2);
+                              "%s", audio->config.lang.iso639_2);
                 } else {
                     snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "und");
                 }

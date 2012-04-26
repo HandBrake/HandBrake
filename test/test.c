@@ -2229,11 +2229,10 @@ static int HandleEvents( hb_handle_t * h )
 
                         force = test_sub_list(subforce, i+1);
                         
-                        int supports_burn =
-                            ( subtitle->source == VOBSUB ) ||
-                            ( subtitle->source == SSASUB );
+                        int supports_burn = hb_subtitle_can_burn( subtitle->source );
                         
-                        if ( burn && supports_burn )
+                        if ( ( burn && supports_burn ) ||
+                             !hb_subtitle_can_pass( subtitle->source, mux ) )
                         {
                             // Only allow one subtitle to be burned into video
                             if ( sub_burned )

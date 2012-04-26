@@ -1607,7 +1607,7 @@ int write_cc_buffer_as_srt (struct eia608_screen *data, struct s_write *wb)
     if (debug_608)
     {
         hb_log ("\n- - - SRT caption - - -\n");
-        hb_log (timeline);
+        hb_log ("%s", timeline);
     }
     //fwrite (enc_buffer,enc_buffer_used,1,wb->fh);		
     XMLRPC_APPEND(wb->enc_buffer,wb->enc_buffer_used);

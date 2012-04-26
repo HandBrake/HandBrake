@@ -69,10 +69,6 @@ typedef struct
     uint64_t   st_counts[4];
     uint64_t   st_dates[4];
     uint64_t   st_first;
-    
-    /* Subtitles */
-    hb_buffer_t * sub_list;   /* list of subtitles to be passed thru or rendered */
-    hb_buffer_t * sub_tail;   /* list of subtitles to be passed thru or rendered */
 } hb_sync_video_t;
 
 struct hb_work_private_s

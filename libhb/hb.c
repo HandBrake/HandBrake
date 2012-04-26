@@ -459,6 +459,7 @@ hb_handle_t * hb_init( int verbose, int update_check )
     hb_register( &hb_decutf8sub );
     hb_register( &hb_dectx3gsub );
     hb_register( &hb_decssasub );
+    hb_register( &hb_decpgssub );
 	hb_register( &hb_encavcodec );
 	hb_register( &hb_encx264 );
     hb_register( &hb_enctheora );
@@ -1244,6 +1245,7 @@ void hb_add_filter( hb_job_t * job, hb_filter_object_t * filter, const char * se
             else if( f->id == filter->id )
             {
                 // Don't allow the same filter to be added twice
+                hb_filter_close( &filter );
                 return;
             }
         }
@@ -1569,7 +1571,7 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
         {
             subtitle = hb_list_item( title->list_subtitle, i );
             if( strcmp( subtitle->iso639_2, audio_lang ) == 0 &&
-                subtitle->source == VOBSUB )
+                hb_subtitle_can_force( subtitle->source ) )
             {
                 /*
                  * Matched subtitle language with audio language, so

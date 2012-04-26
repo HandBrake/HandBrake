@@ -164,7 +164,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         lavc_opts = hb_encopts_to_dict( job->advanced_opts, job->vcodec );
     }
     /* iterate through lavc_opts and have avutil parse the options for us */
-    int ret;
     AVDictionary * av_opts = NULL;
     hb_dict_entry_t * entry = NULL;
     while( ( entry = hb_dict_next( lavc_opts, entry ) ) )
