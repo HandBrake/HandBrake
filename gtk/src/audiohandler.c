@@ -56,7 +56,7 @@ check_list_full(signal_user_data_t *ud)
 gint
 ghb_select_audio_codec(gint mux, hb_audio_config_t *aconfig, gint acodec, gint fallback, gint copy_mask)
 {
-	guint32 in_codec = aconfig ? aconfig->in.codec : HB_ACODEC_MASK;
+	guint32 in_codec = aconfig ? aconfig->in.codec : 0;
 	if (acodec == HB_ACODEC_AUTO_PASS)
 	{
 		return hb_autopassthru_get_encoder(in_codec, copy_mask, fallback, mux);
@@ -437,17 +437,6 @@ ghb_set_pref_audio_settings(gint titleindex, GValue *settings)
 				{
 					// Skip this audio
 					acodec = 0;
-				}
-				else
-				{
-					int channels;
-					select_acodec = fallback;
-					mix = ghb_get_best_mix(aconfig, select_acodec, mix);
-					channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(mix);
-					bitrate = aconfig->in.bitrate / 1000;
-					bitrate = hb_get_best_audio_bitrate(select_acodec, bitrate,
-							aconfig->in.samplerate, mix);
-					rate = 0;
 				}
 			}
 			else

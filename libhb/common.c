@@ -334,7 +334,10 @@ void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, in
     if( codec & HB_ACODEC_PASS_FLAG )
     {
         // Bitrates don't apply to "lossless" audio (Passthru, FLAC)
-        *low = *high = -1;
+        // ... but may be applied if we fallback to an encoder
+        // when the source can not be passed.
+        *high = 768;
+        *low = 32;
         return;
     }
     switch( codec )
