@@ -160,11 +160,13 @@ static int ghb_select_fallback( GValue *settings, int mux, int acodec )
 	}
 	if ( mux == HB_MUX_MKV )
 	{
-		mask = 	HB_ACODEC_LAME |
-				HB_ACODEC_FFAAC |
+		mask =	
+				HB_ACODEC_FAAC |
+				HB_ACODEC_LAME |
+				HB_ACODEC_VORBIS |
 				HB_ACODEC_AC3 |
-				HB_ACODEC_DCA |
-				HB_ACODEC_DCA_HD;
+				HB_ACODEC_FFAAC |
+				HB_ACODEC_FFFLAC;
 	}
 	if (!(fallback & mask ))
 	{
