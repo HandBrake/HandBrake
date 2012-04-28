@@ -39,6 +39,10 @@ namespace HandBrake.ApplicationServices.Model
         public QueueTask(string query)
         {
             this.Query = query;
+            if (this.Task == null)
+            {
+                this.Task = new EncodeTask();
+            }
         }
 
         #endregion
