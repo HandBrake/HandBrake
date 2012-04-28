@@ -267,7 +267,7 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
 
     hb_log("pgc_id: %d, pgn: %d: pgc: %p", pgc_id, pgn, d->pgc);
 
-    if( !d->pgc )
+    if( !d->pgc || !d->pgc->program_map )
     {
         hb_error( "scan: pgc not valid, skipping" );
         goto fail;
