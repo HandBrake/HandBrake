@@ -24,6 +24,8 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         UTF8Sub,
         [Description("TX3G")]
         TX3G,
+        [Description("PGS")]
+        PGS,
         [Description("Unknown")]
         Unknown
     }

@@ -247,8 +247,8 @@ namespace Handbrake
             // 
             // text_destination
             // 
-            this.text_destination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.text_destination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.text_destination.Location = new System.Drawing.Point(36, 3);
             this.text_destination.Name = "text_destination";
             this.text_destination.Size = new System.Drawing.Size(603, 21);
@@ -283,7 +283,7 @@ namespace Handbrake
             this.check_largeFile.TabIndex = 2;
             this.check_largeFile.Text = "Large file size";
             this.ToolTip.SetToolTip(this.check_largeFile, "Caution: This option will likely break device compatibility with all but the Appl" +
-        "eTV Take 2.\r\nChecking this box enables a 64bit mp4 file which can be over 4GB.");
+                    "eTV Take 2.\r\nChecking this box enables a 64bit mp4 file which can be over 4GB.");
             this.check_largeFile.UseVisualStyleBackColor = false;
             // 
             // check_turbo
@@ -293,7 +293,7 @@ namespace Handbrake
             this.check_turbo.Enabled = false;
             this.check_turbo.Location = new System.Drawing.Point(495, 134);
             this.check_turbo.Name = "check_turbo";
-            this.check_turbo.Size = new System.Drawing.Size(101, 17);
+            this.check_turbo.Size = new System.Drawing.Size(99, 17);
             this.check_turbo.TabIndex = 9;
             this.check_turbo.Text = "Turbo first Pass";
             this.ToolTip.SetToolTip(this.check_turbo, "Makes the first pass of a 2 pass encode faster.");
@@ -357,8 +357,8 @@ namespace Handbrake
             this.check_optimiseMP4.TabIndex = 3;
             this.check_optimiseMP4.Text = "Web optimized";
             this.ToolTip.SetToolTip(this.check_optimiseMP4, "MP4 files can be optimized for progressive downloads over the Web,\r\nbut note that" +
-        " QuickTime can only read the files as long as the file extension is .mp4\r\nCan on" +
-        "ly be used with H.264 ");
+                    " QuickTime can only read the files as long as the file extension is .mp4\r\nCan on" +
+                    "ly be used with H.264 ");
             this.check_optimiseMP4.UseVisualStyleBackColor = false;
             // 
             // check_iPodAtom
@@ -372,7 +372,7 @@ namespace Handbrake
             this.check_iPodAtom.TabIndex = 4;
             this.check_iPodAtom.Text = "iPod 5G support";
             this.ToolTip.SetToolTip(this.check_iPodAtom, "Support for legacy 5th Generation iPods.\r\nEncodes will not sync if this option is" +
-        " not enabled for H.264 encodes.");
+                    " not enabled for H.264 encodes.");
             this.check_iPodAtom.UseVisualStyleBackColor = false;
             // 
             // data_chpt
@@ -489,8 +489,8 @@ namespace Handbrake
             this.drp_dvdtitle.Size = new System.Drawing.Size(119, 21);
             this.drp_dvdtitle.TabIndex = 1;
             this.ToolTip.SetToolTip(this.drp_dvdtitle, "Select the title you wish to encode.\r\n\r\nWhen a DVD is in use, HandBrake will try " +
-        "to determine the \"Main Feature\" title automatically.\r\nPlease note, this is not a" +
-        "lways accurate and should be checked.");
+                    "to determine the \"Main Feature\" title automatically.\r\nPlease note, this is not a" +
+                    "lways accurate and should be checked.");
             this.drp_dvdtitle.SelectedIndexChanged += new System.EventHandler(this.drp_dvdtitle_SelectedIndexChanged);
             this.drp_dvdtitle.Click += new System.EventHandler(this.drp_dvdtitle_Click);
             // 
@@ -548,8 +548,8 @@ namespace Handbrake
             this.btn_generate_Query.TabIndex = 2;
             this.btn_generate_Query.Text = "Generate Query";
             this.ToolTip.SetToolTip(this.btn_generate_Query, "This will allow you to override the generated query.\r\nNote, The query in the box " +
-        "below will always override any automatically generated query, even if you change" +
-        " title or source.");
+                    "below will always override any automatically generated query, even if you change" +
+                    " title or source.");
             this.btn_generate_Query.UseVisualStyleBackColor = true;
             this.btn_generate_Query.Click += new System.EventHandler(this.btn_generate_Query_Click);
             // 
@@ -559,7 +559,7 @@ namespace Handbrake
             this.radio_cq.BackColor = System.Drawing.Color.Transparent;
             this.radio_cq.Location = new System.Drawing.Point(366, 37);
             this.radio_cq.Name = "radio_cq";
-            this.radio_cq.Size = new System.Drawing.Size(110, 17);
+            this.radio_cq.Size = new System.Drawing.Size(105, 17);
             this.radio_cq.TabIndex = 3;
             this.radio_cq.Text = "Constant Quality:";
             this.ToolTip.SetToolTip(this.radio_cq, resources.GetString("radio_cq.ToolTip"));
@@ -573,7 +573,7 @@ namespace Handbrake
             this.radio_avgBitrate.Checked = true;
             this.radio_avgBitrate.Location = new System.Drawing.Point(367, 108);
             this.radio_avgBitrate.Name = "radio_avgBitrate";
-            this.radio_avgBitrate.Size = new System.Drawing.Size(116, 17);
+            this.radio_avgBitrate.Size = new System.Drawing.Size(112, 17);
             this.radio_avgBitrate.TabIndex = 4;
             this.radio_avgBitrate.TabStop = true;
             this.radio_avgBitrate.Text = "Avg Bitrate (kbps):";
@@ -587,7 +587,7 @@ namespace Handbrake
             this.check_2PassEncode.BackColor = System.Drawing.Color.Transparent;
             this.check_2PassEncode.Location = new System.Drawing.Point(385, 134);
             this.check_2PassEncode.Name = "check_2PassEncode";
-            this.check_2PassEncode.Size = new System.Drawing.Size(104, 17);
+            this.check_2PassEncode.Size = new System.Drawing.Size(106, 17);
             this.check_2PassEncode.TabIndex = 10;
             this.check_2PassEncode.Text = "2-Pass Encoding";
             this.ToolTip.SetToolTip(this.check_2PassEncode, resources.GetString("check_2PassEncode.ToolTip"));
@@ -840,6 +840,7 @@ namespace Handbrake
             allowedPassthru1.AudioAllowDTSPass = true;
             allowedPassthru1.AudioAllowMP3Pass = true;
             allowedPassthru1.AudioEncoderFallback = HandBrake.Interop.Model.Encoding.AudioEncoder.Ac3;
+            allowedPassthru1.IsEnabled = false;
             this.AudioSettings.PassthruSettings = allowedPassthru1;
             this.AudioSettings.Size = new System.Drawing.Size(720, 310);
             this.AudioSettings.TabIndex = 0;
@@ -891,7 +892,7 @@ namespace Handbrake
             this.radio_constantFramerate.Checked = true;
             this.radio_constantFramerate.Location = new System.Drawing.Point(0, 0);
             this.radio_constantFramerate.Name = "radio_constantFramerate";
-            this.radio_constantFramerate.Size = new System.Drawing.Size(122, 17);
+            this.radio_constantFramerate.Size = new System.Drawing.Size(117, 17);
             this.radio_constantFramerate.TabIndex = 17;
             this.radio_constantFramerate.TabStop = true;
             this.radio_constantFramerate.Text = "Constant Framerate";
@@ -903,7 +904,7 @@ namespace Handbrake
             this.radio_peakAndVariable.BackColor = System.Drawing.Color.Transparent;
             this.radio_peakAndVariable.Location = new System.Drawing.Point(0, 23);
             this.radio_peakAndVariable.Name = "radio_peakAndVariable";
-            this.radio_peakAndVariable.Size = new System.Drawing.Size(116, 17);
+            this.radio_peakAndVariable.Size = new System.Drawing.Size(113, 17);
             this.radio_peakAndVariable.TabIndex = 19;
             this.radio_peakAndVariable.Text = "Variable Framerate";
             this.radio_peakAndVariable.UseVisualStyleBackColor = false;
@@ -982,7 +983,7 @@ namespace Handbrake
             this.Check_ChapterMarkers.BackColor = System.Drawing.Color.Transparent;
             this.Check_ChapterMarkers.Location = new System.Drawing.Point(16, 32);
             this.Check_ChapterMarkers.Name = "Check_ChapterMarkers";
-            this.Check_ChapterMarkers.Size = new System.Drawing.Size(140, 17);
+            this.Check_ChapterMarkers.Size = new System.Drawing.Size(136, 17);
             this.Check_ChapterMarkers.TabIndex = 4;
             this.Check_ChapterMarkers.Text = "Create chapter markers";
             this.Check_ChapterMarkers.UseVisualStyleBackColor = false;
@@ -1333,8 +1334,8 @@ namespace Handbrake
             this.btn_dvd_source.Image = global::Handbrake.Properties.Resources.folder;
             this.btn_dvd_source.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_dvd_source.Name = "btn_dvd_source";
-            this.btn_dvd_source.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.O)));
+            this.btn_dvd_source.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+                        | System.Windows.Forms.Keys.O)));
             this.btn_dvd_source.Size = new System.Drawing.Size(182, 22);
             this.btn_dvd_source.Text = "Folder";
             this.btn_dvd_source.Click += new System.EventHandler(this.BtnFolderScanClicked);
@@ -1406,7 +1407,7 @@ namespace Handbrake
             this.mnu_AddAllTitles.Size = new System.Drawing.Size(192, 22);
             this.mnu_AddAllTitles.Text = "Add All (Experimental)";
             this.mnu_AddAllTitles.ToolTipText = "Add all titles to the queue.\r\nUse caution with this feature as incorrect usage ma" +
-    "y result in a queue of failed encodes.";
+                "y result in a queue of failed encodes.";
             this.mnu_AddAllTitles.Click += new System.EventHandler(this.mnu_AddAllTitles_Click);
             // 
             // mnu_AddTittleRange
@@ -1452,7 +1453,7 @@ namespace Handbrake
             this.btn_ActivityWindow.Size = new System.Drawing.Size(130, 36);
             this.btn_ActivityWindow.Text = "Activity Window";
             this.btn_ActivityWindow.ToolTipText = "Displays the activity window which displays the log of the last completed or curr" +
-    "ently running encode.";
+                "ently running encode.";
             this.btn_ActivityWindow.Click += new System.EventHandler(this.btn_ActivityWindow_Click);
             // 
             // toolStripSeparator8

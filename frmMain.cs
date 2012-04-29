@@ -1829,6 +1829,8 @@ namespace Handbrake
 
             if (Path.HasExtension(newExtension))
                 text_destination.Text = Path.ChangeExtension(text_destination.Text, newExtension);
+
+            this.Subtitles.SetExtension(newExtension);
         }
 
         // Video Tab

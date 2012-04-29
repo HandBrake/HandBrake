@@ -16,6 +16,7 @@ namespace Handbrake.Controls
 
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
@@ -46,6 +47,10 @@ namespace Handbrake.Controls
         /// </summary>
         private static readonly IUserSettingService UserSettingService = ServiceManager.UserSettingService;
 
+        /// <summary>
+        /// The current output extension
+        /// </summary>
+        private string currentOutputExtension;
         #endregion
 
         /// <summary>
@@ -188,6 +193,17 @@ namespace Handbrake.Controls
         public bool RequiresM4V()
         {
             return this.subList.Any(track => track.SubtitleType != SubtitleType.VobSub);
+        }
+
+        /// <summary>
+        /// Set the current extension to allow this window to behave correctly based on extension.
+        /// </summary>
+        /// <param name="extension">
+        /// The extension.
+        /// </param>
+        public void SetExtension(string extension)
+        {
+            currentOutputExtension = extension.Replace(".", string.Empty);
         }
 
         /// <summary>
@@ -401,6 +417,24 @@ namespace Handbrake.Controls
                 SrtFileName = srtFile
             };
 
+            track.SubtitleType = ((Subtitle)drp_subtitleTracks.SelectedItem).SubtitleType;
+
+            if (currentOutputExtension.Equals("mp4", StringComparison.InvariantCultureIgnoreCase) ||
+                currentOutputExtension.Equals("m4v", StringComparison.CurrentCultureIgnoreCase))
+            {
+                // Default it to burned as mp4 doesn't allow PGS
+                track.Burned = true;
+
+                // Check to make sure we don't have more than one PGS. Fail if we do.
+                if (this.subList.Any(item => item.SubtitleType == SubtitleType.PGS))
+                {
+                    MessageBox.Show(
+                        "You can only burn-in one PGS subtitle track into an MP4 file. You must first remove the current track to add a new one.",
+                        "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+            }
+
             lv_subList.Items.Add(track.ListView);
             subList.Add(track);
         }
@@ -417,14 +451,35 @@ namespace Handbrake.Controls
         private void mnu_AddAll_Click(object sender, EventArgs e)
         {
             // TODO - Might need to be a bit more clever with this. Will wait and see if this causes any problems.
+            bool addedPGS = false;
             foreach (object item in drp_subtitleTracks.Items)
             {
+                Subtitle sub = item as Subtitle;
+
+                // PGS Handling.
+                if (addedPGS)
+                {
+                    // Skip over any pgs tracks after we've added the first.
+                    continue;
+                }
+
+                if (currentOutputExtension.Equals("mp4", StringComparison.InvariantCultureIgnoreCase) ||
+                    currentOutputExtension.Equals("m4v", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    if (sub != null && sub.SubtitleType == SubtitleType.PGS)
+                    {
+                        addedPGS = true;
+                    }
+                }
+
                 if (!item.ToString().Contains("Foreign Audio Search"))
                 {
                     drp_subtitleTracks.SelectedItem = item;
                     btn_addSubtitleTrack_Click(this, EventArgs.Empty);
                 }
             }
+
+
         }
 
         /// <summary>
