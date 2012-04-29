@@ -126,6 +126,9 @@ namespace HandBrake.ApplicationServices.Parsing
                     case "SSA":
                         thisSubtitle.SubtitleType = SubtitleType.SSA;
                         break;
+                    case "PGS":
+                        thisSubtitle.SubtitleType = SubtitleType.PGS;
+                        break;
                     default:
                         thisSubtitle.SubtitleType = SubtitleType.Unknown;
                         break;
