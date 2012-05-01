@@ -1050,7 +1050,15 @@ static hb_buffer_t * OutputAudioFrame( hb_audio_t *audio, hb_buffer_t *buf,
                                        hb_sync_audio_t *sync )
 {
     int64_t start = (int64_t)sync->next_start;
-    double duration = buf->s.stop - buf->s.start;
+
+    // Can't count of buf->s.stop - buf->s.start for accurate duration
+    // due to integer rounding, so use buf->s.duration when it is set
+    // (which should be always if I didn't miss anything)
+    double duration;
+    if ( buf->s.duration > 0 )
+        duration = buf->s.duration;
+    else
+        duration = buf->s.stop - buf->s.start;
 
     if ( !( audio->config.out.codec & HB_ACODEC_PASS_FLAG ) )
     {

@@ -73,6 +73,7 @@ struct hb_buffer_s
 
         int           id;           // ID of the track that the packet comes from
         int64_t       start;        // start time of frame
+        double        duration;     // Actual duration, may be fractional ticks
         int64_t       stop;         // stop time of frame
         int64_t       renderOffset; // DTS used by b-frame offsets in muxmp4
         int64_t       pcr;

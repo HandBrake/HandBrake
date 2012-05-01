@@ -235,6 +235,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
         buf = hb_buffer_init( pv->size );
         memcpy( buf->data, pv->frame, pv->size );
         buf->s.start = pts;
+        buf->s.duration = frame_dur;
         pv->next_pts = pts + frame_dur;
         buf->s.stop  = pv->next_pts;
         pv->sync = 0;
@@ -249,10 +250,12 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
 
     /* num_blocks blocks per frame, 256 samples per block, channelsused channels */
     int nsamp = num_blocks * 256;
+    frame_dur = (double)nsamp / (double)pv->rate * 90000.;
     buf = hb_buffer_init( nsamp * pv->out_discrete_channels * sizeof( float ) );
 
     buf->s.start = pts;
-    pv->next_pts = pts + (double)nsamp / (double)pv->rate * 90000.;
+    buf->s.duration = frame_dur;
+    pv->next_pts = pts + frame_dur;
     buf->s.stop  = pv->next_pts;
 
     for( i = 0; i < num_blocks; i++ )
