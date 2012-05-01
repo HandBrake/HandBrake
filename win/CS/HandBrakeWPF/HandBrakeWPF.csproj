@@ -110,6 +110,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\BooleanToHiddenVisibilityConverter.cs" />
     <Compile Include="ViewModels\Interfaces\ITitleSpecificViewModel.cs" />
     <Compile Include="ViewModels\TitleSpecificViewModel.cs" />
     <Compile Include="Views\TitleSpecificView.xaml.cs">
