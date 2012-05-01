@@ -135,12 +135,8 @@ static int    store_previews = 0;
 static int    start_at_preview = 0;
 static int64_t start_at_pts    = 0;
 static int    start_at_frame = 0;
-static char * start_at_string = NULL;
-static char * start_at_token = NULL;
 static int64_t stop_at_pts    = 0;
 static int    stop_at_frame = 0;
-static char * stop_at_string = NULL;
-static char * stop_at_token = NULL;
 static uint64_t min_title_duration = 10;
 
 /* Exit cleanly on Ctrl-C */
@@ -367,8 +363,6 @@ int main( int argc, char ** argv )
     if (native_language ) free (native_language );
     if( advanced_opts ) free (advanced_opts );
     if (preset_name) free (preset_name);
-    if( stop_at_string ) free( stop_at_string );
-    if( start_at_string ) free( start_at_string );
     free( x264_profile );
     free( x264_preset );
     free( x264_tune );
@@ -3100,6 +3094,21 @@ static void str_vfree( char **strv )
     free( strv );
 }
 
+static double parse_hhmmss_strtok()
+{
+    /* Assumes strtok has already been called on a string.  Intends to parse
+     * hh:mm:ss.ss or mm:ss.ss or ss.ss or ss into double seconds.  Actually
+     * parses a list of doubles separated by colons, multiplying the current
+     * result by 60 then adding in the next value.  Malformed input does not
+     * result in a explicit error condition but instead returns an
+     * intermediate result. */
+    double duration = 0;
+    char* str;
+    while ((str = strtok(NULL, ":")) != NULL)
+        duration = 60*duration + strtod(str, NULL);
+    return duration;
+}
+
 /****************************************************************************
  * ParseOptions:
  ****************************************************************************/
@@ -3657,6 +3666,9 @@ static int ParseOptions( int argc, char ** argv )
                 start_at_preview = atoi( optarg );
                 break;
             case START_AT:
+            {
+                char * start_at_string = NULL;
+                char * start_at_token = NULL;
                 start_at_string = strdup( optarg );
                 start_at_token = strtok( start_at_string, ":");
                 if( !strcmp( start_at_token, "frame" ) )
@@ -3671,12 +3683,16 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else if( !strcmp( start_at_token, "duration" ) )
                 {
-                    start_at_token = strtok( NULL, ":");
-                    sscanf( start_at_token, "%"SCNd64, &start_at_pts );
-                    start_at_pts *= 90000LL;
+                    double duration_seconds = parse_hhmmss_strtok();
+                    start_at_pts = (int64_t)(duration_seconds * 90e3);
                 }
+                free( start_at_string );
                 break;
+            }
             case STOP_AT:
+            {
+                char * stop_at_string = NULL;
+                char * stop_at_token = NULL;
                 stop_at_string = strdup( optarg );
                 stop_at_token = strtok( stop_at_string, ":");
                 if( !strcmp( stop_at_token, "frame" ) )
@@ -3691,11 +3707,12 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 else if( !strcmp( stop_at_token, "duration" ) )
                 {
-                    stop_at_token = strtok( NULL, ":");
-                    sscanf( stop_at_token, "%"SCNd64, &stop_at_pts );
-                    stop_at_pts *= 90000LL;
+                    double duration_seconds = parse_hhmmss_strtok();
+                    stop_at_pts = (int64_t)(duration_seconds * 90e3);
                 }
+                free( stop_at_string );
                 break;
+            }
             case ALLOWED_AUDIO_COPY:
             {
                 int i, j;
