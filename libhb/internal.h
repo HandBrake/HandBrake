@@ -70,6 +70,7 @@ struct hb_buffer_s
 
     int           id;           // ID of the track that the packet comes from
     int64_t       start;        // Video and subtitle packets: start time of frame/subtitle
+    double        duration;     // Actual duration, may be fractional ticks
     int64_t       stop;         // Video and subtitle packets: stop time of frame/subtitle
     int64_t       pcr;
     uint8_t       discontinuity;

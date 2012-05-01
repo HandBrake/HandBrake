@@ -265,6 +265,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
         buf = hb_buffer_init( size );
         memcpy( buf->data, pv->frame, size );
         buf->start = pts;
+        buf->duration = frame_dur;
         pts += frame_dur;
         buf->stop  = pts;
         pv->next_expected_pts = pts;
@@ -289,6 +290,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     /* 6 blocks per frame, 256 samples per block, channelsused channels */
     buf        = hb_buffer_init( 6 * 256 * pv->out_discrete_channels * sizeof( float ) );
     buf->start = pts;
+    buf->duration = frame_dur;
     pts += frame_dur;
     buf->stop  = pts;
     pv->next_expected_pts = pts;

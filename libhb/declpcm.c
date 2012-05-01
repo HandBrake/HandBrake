@@ -219,6 +219,7 @@ static hb_buffer_t *Decode( hb_work_object_t *w )
     out = hb_buffer_init( pv->samples * sizeof( float ) );
 
     out->start  = pv->next_pts;
+    out->duration = pv->duration;
     pv->next_pts += pv->duration;
     out->stop = pv->next_pts;
 
