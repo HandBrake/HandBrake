@@ -9,8 +9,6 @@
 #include "a52dec/a52.h"
 #include "dca.h"
 
-#define HB_MAX_PREVIEWS 30 // 30 previews = every 5 minutes of a 2.5 hour video
-
 typedef struct
 {
     hb_handle_t  * h;
@@ -402,11 +400,32 @@ static int column_all_dark( hb_work_info_t *info, uint8_t* luma, int top, int bo
 
 typedef struct {
     int n;
-    int t[HB_MAX_PREVIEWS];
-    int b[HB_MAX_PREVIEWS];
-    int l[HB_MAX_PREVIEWS];
-    int r[HB_MAX_PREVIEWS];
+    int *t;
+    int *b;
+    int *l;
+    int *r;
 } crop_record_t;
+
+static crop_record_t * crop_record_init( int max_previews )
+{
+    crop_record_t *crops = calloc( 1, sizeof(*crops) );
+
+    crops->t = calloc( max_previews, sizeof(int) );
+    crops->b = calloc( max_previews, sizeof(int) );
+    crops->l = calloc( max_previews, sizeof(int) );
+    crops->r = calloc( max_previews, sizeof(int) );
+
+    return crops;
+}
+
+static void crop_record_free( crop_record_t *crops )
+{
+    free( crops->t );
+    free( crops->b );
+    free( crops->l );
+    free( crops->r );
+    free( crops );
+}
 
 static void record_crop( crop_record_t *crops, int t, int b, int l, int r )
 {
@@ -508,7 +527,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
     int doubled_frame_count = 0;
     int interlaced_preview_count = 0;
     info_list_t * info_list = calloc( data->preview_count+1, sizeof(*info_list) );
-    crop_record_t *crops = calloc( 1, sizeof(*crops) );
+    crop_record_t *crops = crop_record_init( data->preview_count );
 
     list_es  = hb_list_init();
 
@@ -559,7 +578,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         if ( *data->die )
         {
             free( info_list );
-            free( crops );
+            crop_record_free( crops );
             return 0;
         }
         if (data->bd)
@@ -943,7 +962,7 @@ skip_preview:
             title->detected_interlacing = 0;
         }
     }
-    free( crops );
+    crop_record_free( crops );
     free( info_list );
 
     while( ( buf_es = hb_list_item( list_es, 0 ) ) )
