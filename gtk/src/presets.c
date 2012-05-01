@@ -431,7 +431,10 @@ presets_find_pos(const GValue *path, gint type, gint *len)
 		val = ghb_array_get_nth(path, ii);
 		name = g_value_get_string(val);
 		indices[ii] = presets_find_element(nested, name);
-		if (indices[ii] == -1) return NULL;
+		if (indices[ii] == -1) {
+			g_free(indices);
+			return NULL;
+		}
 		dict = ghb_array_get_nth(nested, indices[ii]);
 		folder = ghb_value_boolean(preset_dict_get_value(dict, "Folder"));
 		nested = NULL;
@@ -1683,6 +1686,7 @@ ghb_presets_list_init(
 	if (presets == NULL)
 	{
 		g_warning("Failed to find parent folder when adding child.");
+		g_free(more_indices);
 		return;
 	}
 	count = ghb_array_len(presets);

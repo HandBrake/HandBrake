@@ -77,6 +77,7 @@ static int MKVInit( hb_mux_object_t * m )
         hb_error( "Could not create output file, Disk Full?" );
         job->mux_data = NULL;
         *job->die = 1;
+        free(track);
         return 0;
     }
 
@@ -94,8 +95,10 @@ static int MKVInit( hb_mux_object_t * m )
             /* Taken from x264 muxers.c */
             avcC_len = 5 + 1 + 2 + job->config.h264.sps_length + 1 + 2 + job->config.h264.pps_length;
             avcC = malloc(avcC_len);
-            if (avcC == NULL)
+            if (avcC == NULL) {
+                free(track);
                 return -1;
+            }
 
             avcC[0] = 1;
             avcC[1] = job->config.h264.sps[1];      /* AVCProfileIndication */
@@ -158,6 +161,7 @@ static int MKVInit( hb_mux_object_t * m )
         default:
             *job->die = 1;
             hb_error("muxmkv: Unknown video codec: %x", job->vcodec);
+            free(track);
             return 0;
     }
 
