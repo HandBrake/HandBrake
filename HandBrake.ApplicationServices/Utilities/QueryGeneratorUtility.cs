@@ -497,19 +497,19 @@ namespace HandBrake.ApplicationServices.Utilities
                 codecs.Add(track.Encoder);
 
                 // Audio Mixdown (-6)
-                mixdowns.Add(track.MixDown);
+                mixdowns.Add(track.IsPassthru ? Mixdown.None : track.MixDown);
 
                 // Sample Rate (-R)
-                samplerates.Add(track.SampleRate);
+                samplerates.Add(track.IsPassthru ? 0 : track.SampleRate);
 
                 // Audio Bitrate (-B)
-                bitrates.Add(track.Bitrate);
+                bitrates.Add(track.IsPassthru ? 0 : track.Bitrate);
 
                 // DRC (-D)
-                drcs.Add(track.DRC);
+                drcs.Add(track.IsPassthru ? 0 : track.DRC);
 
                 // Gain (--gain)
-                gains.Add(track.Gain);
+                gains.Add(track.IsPassthru ? 0 : track.Gain);
             }
 
             // Audio Track (-a)
@@ -566,13 +566,14 @@ namespace HandBrake.ApplicationServices.Utilities
             // Sample Rate (-R)
             foreach (double item in samplerates)
             {
+                string add = (item == 0.0) ? "Auto" : item.ToString();
                 if (firstLoop)
                 {
-                    audioItems = item.ToString();
+                    audioItems = add;
                     firstLoop = false;
                 }
                 else
-                    audioItems += "," + item;
+                    audioItems += "," + add;
             }
             if (audioItems.Trim() != String.Empty)
                 query += " -R " + audioItems;
