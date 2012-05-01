@@ -2519,7 +2519,19 @@ static int hb_decomb_work( hb_filter_object_t * filter,
                And when it's not, it's a progressive frame,
                so mcdeint should be skipped...
             */
-            yadif_filter( pv->pic_out.data, parity, tff, pv );
+            if ( duplicate )
+            {
+                // Don't perform comb detection again
+                // during bob duplicate processing
+                int spatial_metric_sav = pv->spatial_metric;
+                pv->spatial_metric = -1;
+                yadif_filter( pv->pic_out.data, parity, tff, pv );
+                pv->spatial_metric = spatial_metric_sav;
+            }
+            else
+            {
+                yadif_filter( pv->pic_out.data, parity, tff, pv );
+            }
 
             /* Commented out code in the line below would skip mcdeint
                on uncombed frames. Possibly a bad idea, since mcdeint

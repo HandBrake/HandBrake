@@ -2084,6 +2084,7 @@ value_map_t deint_xlat[] =
 	{"2", "fast"},
 	{"3", "slow"},
 	{"4", "slower"},
+	{"5", "bob"},
 	{NULL, NULL}
 };
 
@@ -2111,6 +2112,7 @@ value_map_t decomb_xlat[] =
 	{"1", "custom"},
 	{"2", "default"},
 	{"3", "fast"},
+	{"4", "bob"},
 	{NULL, NULL}
 };
 
