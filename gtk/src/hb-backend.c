@@ -202,6 +202,7 @@ static options_map_t d_decomb_opts[] =
 	{"Custom", "custom", 1, ""},
 	{"Default","default",2, NULL},
 	{"Fast",   "fast",   3, "7:2:6:9:1:80"},
+	{"Bob",    "bob",    4, "455"},
 };
 combo_opts_t decomb_opts =
 {
@@ -211,11 +212,12 @@ combo_opts_t decomb_opts =
 
 static options_map_t d_deint_opts[] =
 {
-	{"Off",    "off",   0, ""},
-	{"Custom", "custom", 1, ""},
-	{"Fast",   "fast",   2, "-1:-1:-1:0:1"},
-	{"Slow",   "slow",   3, "2:-1:-1:0:1"},
-	{"Slower", "slower", 4, "0:-1:-1:0:1"},
+	{"Off",    "off",    0,  ""},
+	{"Custom", "custom", 1,  ""},
+	{"Fast",   "fast",   2,  "0:-1:-1:0:1"},
+	{"Slow",   "slow",   3,  "1:-1:-1:0:1"},
+	{"Slower", "slower", 4,  "3:-1:-1:0:1"},
+	{"Bob",    "bob",    5, "15:-1:-1:0:1"},
 };
 combo_opts_t deint_opts =
 {

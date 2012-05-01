@@ -3451,15 +3451,19 @@ static int ParseOptions( int argc, char ** argv )
                 {
                     if (!( strcmp( optarg, "fast" ) ))
                     {
-                        deinterlace_opt = "-1";
+                        deinterlace_opt = "0";
                     }
                     else if (!( strcmp( optarg, "slow" ) ))
                     {
-                        deinterlace_opt = "2";
+                        deinterlace_opt = "1";
                     }
                     else if (!( strcmp( optarg, "slower" ) ))
                     {
-                        deinterlace_opt = "0";
+                        deinterlace_opt = "3";
+                    }
+                    else if (!( strcmp( optarg, "bob" ) ))
+                    {
+                        deinterlace_opt = "15";
                     }
                     else
                     {
@@ -3507,7 +3511,18 @@ static int ParseOptions( int argc, char ** argv )
             case '5':
                 if( optarg != NULL )
                 {
-                    decomb_opt = strdup( optarg );
+                    if (!( strcmp( optarg, "fast" ) ))
+                    {
+                        decomb_opt = "7:2:6:9:1:80";
+                    }
+                    else if (!( strcmp( optarg, "bob" ) ))
+                    {
+                        decomb_opt = "455";
+                    }
+                    else
+                    {
+                        decomb_opt = strdup( optarg );
+                    }
                 }
                 decomb = 1;
                 break;

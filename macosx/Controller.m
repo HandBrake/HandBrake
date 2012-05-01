@@ -3366,17 +3366,17 @@ bool one_burned = FALSE;
         else if ([fPictureController deinterlace] == 2)
         {
             /* Run old deinterlacer fd by default */
-            hb_add_filter( job, filter, "-1" );
+            hb_add_filter( job, filter, "0" );
         }
         else if ([fPictureController deinterlace] == 3)
         {
             /* Yadif mode 0 (without spatial deinterlacing.) */
-            hb_add_filter( job, filter, "2" );            
+            hb_add_filter( job, filter, "1" );            
         }
         else if ([fPictureController deinterlace] == 4)
         {
             /* Yadif (with spatial deinterlacing) */
-            hb_add_filter( job, filter, "0" );
+            hb_add_filter( job, filter, "3" );
         }
         
 	}
@@ -3885,17 +3885,17 @@ bool one_burned = FALSE;
         else if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 2)
         {
             /* Run old deinterlacer fd by default */
-            hb_add_filter( job, filter, "-1" );
+            hb_add_filter( job, filter, "0" );
         }
         else if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 3)
         {
             /* Yadif mode 0 (without spatial deinterlacing.) */
-            hb_add_filter( job, filter, "2" );            
+            hb_add_filter( job, filter, "1" );            
         }
         else if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 4)
         {
             /* Yadif (with spatial deinterlacing) */
-            hb_add_filter( job, filter, "0" );            
+            hb_add_filter( job, filter, "3" );            
         }
         
         

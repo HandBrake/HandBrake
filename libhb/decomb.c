@@ -27,13 +27,14 @@ Defaults:
 Original "Faster" settings:
     7:2:6:9:1:80:16:16:10:20:20:4:2:50:24:1:-1
 *****/
-
 #define MODE_YADIF       1 // Use yadif
 #define MODE_BLEND       2 // Use blending interpolation
 #define MODE_CUBIC       4 // Use cubic interpolation
 #define MODE_EEDI2       8 // Use EEDI2 interpolation
 #define MODE_MCDEINT    16 // Post-process with mcdeint
 #define MODE_MASK       32 // Output combing masks instead of pictures
+#define MODE_BOB        64 // Deinterlace each field to a separate frame
+
 #define MODE_GAMMA      128 // Scale gamma when decombing
 #define MODE_FILTER     256 // Filter combing mask
 #define MODE_COMPOSITE  512 // Overlay combing mask onto picture
@@ -216,8 +217,6 @@ struct hb_filter_private_s
     hb_lock_t      ** eedi2_begin_lock;     // Thread has work
     hb_lock_t      ** eedi2_complete_lock;  // Thread has completed work
     eedi2_arguments_t *eedi2_arguments;    // Arguments to thread for work
-
-//    int              alternator;           // for bobbing parity when framedoubling
 };
 
 static int hb_decomb_init( hb_filter_object_t * filter,
@@ -328,7 +327,6 @@ void draw_mask_box( hb_filter_private_t * pv )
     int stride = pv->ref_stride[0];
     uint8_t * mskp = ( pv->mode & MODE_FILTER ) ? pv->mask_filtered[0] : pv->mask[0];
 
-
     int block_x, block_y;
     for( block_x = 0; block_x < box_width; block_x++)
     {
@@ -364,7 +362,6 @@ void apply_mask_line( uint8_t * srcp,
 
 void apply_mask( hb_filter_private_t * pv )
 {
-
     /* draw_boxes */
     draw_mask_box( pv );
 
@@ -681,7 +678,6 @@ void filter_combing_mask( hb_filter_private_t * pv )
 
             for( x = 0; x < pv->width[k]-1; x++ )
             {
-
                 h_count = v_count = 0;
                 if( x == 0 )
                 {
@@ -973,7 +969,6 @@ void detect_gamma_combed_segment( hb_filter_private_t * pv, int segment_start, i
        picked up from neuron2's Decomb plugin for
        AviSynth and tritical's IsCombedT and
        IsCombedTIVTC plugins.                       */
-
     int x, y, k, width, height;
 
     /* Comb scoring algorithm */
@@ -2452,6 +2447,8 @@ static int hb_decomb_work( hb_filter_object_t * filter,
 {
     hb_filter_private_t * pv = filter->private_data;
     hb_buffer_t * in = *buf_in;
+    hb_buffer_t * last = NULL, * out = NULL;
+    uint8_t duplicate = 0;
 
     if ( in->size <= 0 )
     {
@@ -2460,104 +2457,134 @@ static int hb_decomb_work( hb_filter_object_t * filter,
         return HB_FILTER_DONE;
     }
 
-    hb_avpicture_fill( &pv->pic_in, in );
-
-    /* Determine if top-field first layout */
-    int tff;
-    if( pv->parity < 0 )
+    do
     {
-        tff = !!(in->s.flags & PIC_FLAG_TOP_FIELD_FIRST);
-    }
-    else
-    {
-        tff = (pv->parity & 1) ^ 1;
-    }
+        hb_avpicture_fill( &pv->pic_in, in );
 
-    /* Store current frame in yadif cache */
-    store_ref( (const uint8_t**)pv->pic_in.data, pv );
-
-    /* If yadif is not ready, store another ref and return FILTER_DELAY */
-    if( pv->yadif_ready == 0 )
-    {
-        store_ref( (const uint8_t**)pv->pic_in.data, pv );
-
-        pv->buf_settings->s = in->s;
-        hb_buffer_move_subs( pv->buf_settings, in );
-
-        pv->yadif_ready = 1;
-
-        return HB_FILTER_DELAY;
-    }
-
-    /* Perform yadif filtering */        
-    int frame, out_frame;
-    for( frame = 0; frame <= ( ( pv->mode & MODE_MCDEINT ) ? 1 : 0 ) ; frame++ )
-// This would be what to use for bobbing: for( frame = 0; frame <= 0 ; frame++ )
-    {
-
-#if 0
-        /* Perhaps skip the second run if the frame is uncombed? */
-        if( frame && !pv->yadif_arguments[0].is_combed )
+        /* Determine if top-field first layout */
+        int tff;
+        if( pv->parity < 0 )
         {
-            break;
-        }
-#endif
-        int parity = frame ^ tff ^ 1;
-
-// This will be for bobbing
-#if 0
-        if( pv->alternator )
-        {
-            parity = !parity;
-            pv->alternator = 0;
+            tff = !!(in->s.flags & PIC_FLAG_TOP_FIELD_FIRST);
         }
         else
         {
-            pv->alternator = 1;
+            tff = (pv->parity & 1) ^ 1;
         }
-#endif
-        pv->tff = !parity;
 
-        hb_buffer_t *b = pv->buf_out[!(frame^1)];
-        hb_avpicture_fill( &pv->pic_out, b );
-
-        /* XXX
-            Should check here and only bother filtering field 2 when
-           field 1 was detected as combed.
-           And when it's not, it's a progressive frame,
-           so mcdeint should be skipped...
-        */
-        yadif_filter( pv->pic_out.data, parity, tff, pv );
-
-        /* Commented out code in the line below would skip mcdeint
-           on uncombed frames. Possibly a bad idea, since mcdeint
-           maintains the same snow context for the entire video... */
-        if( pv->mcdeint_mode >= 0 /* && pv->yadif_arguments[0].is_combed */)
+        /* Store current frame in yadif cache */
+        if( !duplicate )
         {
-            /* Perform mcdeint filtering */
-            b = pv->buf_out[(frame^1)];
-            hb_avpicture_fill( &pv->pic_in, b );
+            store_ref( (const uint8_t**)pv->pic_in.data, pv );
+        }
 
-            mcdeint_filter( pv->pic_in.data, pv->pic_out.data, parity, pv->width, pv->height, &pv->mcdeint );
+        /* If yadif is not ready, store another ref and return FILTER_DELAY */
+        if( pv->yadif_ready == 0 )
+        {
+            store_ref( (const uint8_t**)pv->pic_in.data, pv );
 
-            out_frame = frame ^ 1;
+            pv->buf_settings->s = in->s;
+            hb_buffer_move_subs( pv->buf_settings, in );
+
+            pv->yadif_ready = 1;
+
+            return HB_FILTER_DELAY;
+        }
+
+        /* deinterlace both fields if mcdeint is enabled without bob */
+        int frame, out_frame, num_frames = 1;
+        if( ( pv->mode & (MODE_MCDEINT | MODE_BOB) ) == MODE_MCDEINT )
+            num_frames = 2;
+        
+        /* Perform yadif filtering */        
+        for( frame = 0; frame < num_frames; frame++ )
+        {
+
+#if 0
+            /* Perhaps skip the second run if the frame is uncombed? */
+            if( frame && !pv->yadif_arguments[0].is_combed )
+            {
+                break;
+            }
+#endif        
+            int parity = frame ^ tff ^ 1 ^ duplicate;
+            pv->tff = !parity;
+
+            hb_buffer_t *b = pv->buf_out[!(frame^1)];
+            hb_avpicture_fill( &pv->pic_out, b );
+
+            /* XXX
+                Should check here and only bother filtering field 2 when
+               field 1 was detected as combed.
+               And when it's not, it's a progressive frame,
+               so mcdeint should be skipped...
+            */
+            yadif_filter( pv->pic_out.data, parity, tff, pv );
+
+            /* Commented out code in the line below would skip mcdeint
+               on uncombed frames. Possibly a bad idea, since mcdeint
+               maintains the same snow context for the entire video... */
+            if( pv->mcdeint_mode >= 0 /* && pv->yadif_arguments[0].is_combed */)
+            {
+                /* Perform mcdeint filtering */
+                b = pv->buf_out[(frame^1)];
+                hb_avpicture_fill( &pv->pic_in, b );
+
+                mcdeint_filter( pv->pic_in.data, pv->pic_out.data, parity, pv->width, pv->height, &pv->mcdeint );
+
+                out_frame = frame ^ 1;
+            }
+            else
+            {
+                out_frame = !(frame ^ 1);
+            }
+        }
+
+        // Add to list of output buffers (should be at most 2)
+        if ( out == NULL )
+        {
+            last = out = pv->buf_out[out_frame];
         }
         else
         {
-            out_frame = !(frame ^ 1);
+            last->next = pv->buf_out[out_frame];
+            last = last->next;
         }
-    }
-    *buf_out = pv->buf_out[out_frame];
-    // Allocate a replacement for the buffer we just consumed
-    pv->buf_out[out_frame] = hb_video_buffer_init( pv->width[0], pv->height[0] );
 
-    /* Copy buffered settings to output buffer settings */
-    (*buf_out)->s = pv->buf_settings->s;
-    hb_buffer_move_subs( *buf_out, pv->buf_settings );
+        // Allocate a replacement for the buffer we just consumed
+        pv->buf_out[out_frame] = hb_video_buffer_init( pv->width[0], pv->height[0] );
+
+        /* Copy buffered settings to output buffer settings */
+        last->s = pv->buf_settings->s;
+
+        if ( !duplicate )
+        {
+            hb_buffer_move_subs( last, pv->buf_settings );
+        }
+
+        /* if this frame was deinterlaced and bob mode is engaged, halve
+           the duration of the saved timestamp, and request a duplicate. */
+        if( pv->mode & MODE_BOB && pv->yadif_arguments[0].is_combed == 1 )
+        {
+            if ( !duplicate )
+            {
+                last->s.stop -= (last->s.stop - last->s.start) / 2LL;
+                duplicate = 1;
+            }
+            else
+            {
+                last->s.start = out->s.stop;
+                last->s.new_chap = 0;
+                duplicate = 0;
+            }
+        }
+    } while ( duplicate );
 
     /* Replace buffered settings with input buffer settings */
     pv->buf_settings->s = in->s;
     hb_buffer_move_subs( pv->buf_settings, in );
+
+    *buf_out = out;
 
     return HB_FILTER_OK;
 }

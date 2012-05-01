@@ -21,7 +21,14 @@
 #include "mpeg2dec/mpeg2.h"
 #include "mcdeint.h"
 
-#define YADIF_MODE_DEFAULT     -1
+// yadif_mode is a bit vector with the following flags
+// Note that 2PASS should be enabled when using MCDEINT
+#define MODE_YADIF_ENABLE       1
+#define MODE_YADIF_SPATIAL      2
+#define MODE_YADIF_2PASS        4
+#define MODE_YADIF_BOB          8
+
+#define YADIF_MODE_DEFAULT      0
 #define YADIF_PARITY_DEFAULT   -1
 
 #define MCDEINT_MODE_DEFAULT   -1
@@ -155,7 +162,7 @@ static void yadif_filter_line( uint8_t *dst,
         YADIF_CHECK(-1) YADIF_CHECK(-2) }} }}
         YADIF_CHECK( 1) YADIF_CHECK( 2) }} }}
 
-        if( pv->yadif_mode < 2 )
+        if( pv->yadif_mode & MODE_YADIF_SPATIAL )
         {
             int b = (prev2[-2*refs] + next2[-2*refs])>>1;
             int f = (prev2[+2*refs] + next2[+2*refs])>>1;
@@ -420,7 +427,7 @@ static int hb_deinterlace_init( hb_filter_object_t * filter,
     pv->cpu_count = hb_get_cpu_count();
 
     /* Allocate yadif specific buffers */
-    if( pv->yadif_mode >= 0 )
+    if( pv->yadif_mode & MODE_YADIF_ENABLE )
     {
         int i, j;
         for( i = 0; i < 3; i++ )
@@ -507,7 +514,7 @@ static void hb_deinterlace_close( hb_filter_object_t * filter )
     }
 
     /* Cleanup yadif specific buffers */
-    if( pv->yadif_mode >= 0 )
+    if( pv->yadif_mode & MODE_YADIF_ENABLE )
     {
         int i;
         for( i = 0; i<3*3; i++ )
@@ -556,6 +563,8 @@ static int hb_deinterlace_work( hb_filter_object_t * filter,
     AVPicture pic_out;
     hb_filter_private_t * pv = filter->private_data;
     hb_buffer_t * in = *buf_in;
+    hb_buffer_t * last = NULL, * out = NULL;
+    uint8_t duplicate = 0;
 
     if ( in->size <= 0 )
     {
@@ -564,99 +573,144 @@ static int hb_deinterlace_work( hb_filter_object_t * filter,
         return HB_FILTER_DONE;
     }
 
-    hb_avpicture_fill( &pic_in, in );
-
-    /* Use libavcodec deinterlace if yadif_mode < 0 */
-    if( pv->yadif_mode < 0 )
+    do
     {
-        hb_avpicture_fill( &pic_out, pv->buf_out[0] );
+        hb_avpicture_fill( &pic_in, in );
 
-        avpicture_deinterlace( &pic_out, &pic_in, pv->buf_out[0]->f.fmt, 
-                               pv->buf_out[0]->f.width, pv->buf_out[0]->f.height );
-
-        pv->buf_out[0]->s = in->s;
-        hb_buffer_move_subs( pv->buf_out[0], in );
-
-        *buf_out = pv->buf_out[0];
-
-        // Allocate a replacement for the buffer we just consumed
-        hb_buffer_t * b = pv->buf_out[0];
-        pv->buf_out[0] = hb_video_buffer_init( b->f.width, b->f.height );
-
-        return HB_FILTER_OK;
-    }
-
-    /* Determine if top-field first layout */
-    int tff;
-    if( pv->yadif_parity < 0 )
-    {
-        tff = !!(in->s.flags & PIC_FLAG_TOP_FIELD_FIRST);
-    }
-    else
-    {
-        tff = (pv->yadif_parity & 1) ^ 1;
-    }
-
-    /* Store current frame in yadif cache */
-    yadif_store_ref( (const uint8_t**)pic_in.data, pv );
-
-    /* If yadif is not ready, store another ref and return HB_FILTER_DELAY */
-    if( pv->yadif_ready == 0 )
-    {
-        yadif_store_ref( (const uint8_t**)pic_in.data, pv );
-
-        pv->buf_settings->s = in->s;
-        hb_buffer_move_subs( pv->buf_settings, in );
-
-        pv->yadif_ready = 1;
-
-        return HB_FILTER_DELAY;
-    }
-
-    /* Perform yadif and mcdeint filtering */
-    int frame;
-    int out_frame;
-    hb_buffer_t * b;
-    for( frame = 0; frame <= (pv->yadif_mode & 1); frame++ )
-    {
-        AVPicture pic_yadif_out;
-        int parity = frame ^ tff ^ 1;
-
-        b = pv->buf_out[!(frame^1)];
-        hb_avpicture_fill( &pic_yadif_out, b );
-
-        yadif_filter( pic_yadif_out.data, parity, tff, pv );
-
-        if( pv->mcdeint_mode >= 0 )
+        /* Use libavcodec deinterlace if yadif_mode < 0 */
+        if( !( pv->yadif_mode & MODE_YADIF_ENABLE ) )
         {
-            b = pv->buf_out[(frame^1)];
-            hb_avpicture_fill( &pic_out, b );
+            hb_avpicture_fill( &pic_out, pv->buf_out[0] );
 
-            mcdeint_filter( pic_out.data, pic_yadif_out.data, parity, 
-                            pv->width, pv->height, &pv->mcdeint );
+            avpicture_deinterlace( &pic_out, &pic_in, pv->buf_out[0]->f.fmt, 
+                                   pv->buf_out[0]->f.width, pv->buf_out[0]->f.height );
 
-            out_frame = (frame^1);
+            pv->buf_out[0]->s = in->s;
+            hb_buffer_move_subs( pv->buf_out[0], in );
+
+            *buf_out = pv->buf_out[0];
+
+            // Allocate a replacement for the buffer we just consumed
+            hb_buffer_t * b = pv->buf_out[0];
+            pv->buf_out[0] = hb_video_buffer_init( b->f.width, b->f.height );
+
+            return HB_FILTER_OK;
+        }
+
+        /* Determine if top-field first layout */
+        int tff;
+        if( pv->yadif_parity < 0 )
+        {
+            tff = !!(in->s.flags & PIC_FLAG_TOP_FIELD_FIRST);
         }
         else
         {
-            out_frame = !(frame^1);
+            tff = (pv->yadif_parity & 1) ^ 1;
         }
-    }
-    *buf_out = pv->buf_out[out_frame];
 
-    // Allocate a replacement for the buffer we just consumed
-    b = pv->buf_out[out_frame];
-    pv->buf_out[out_frame] = hb_video_buffer_init( b->f.width, b->f.height );
+        /* Store current frame in yadif cache */
+        if (!duplicate)
+        {
+            yadif_store_ref( (const uint8_t**)pic_in.data, pv );
+        }
 
-    /* Copy buffered settings to output buffer settings */
-    (*buf_out)->s = pv->buf_settings->s;
-    hb_buffer_move_subs( *buf_out, pv->buf_settings );
+        /* If yadif is not ready, store another ref and return HB_FILTER_DELAY */
+        if( pv->yadif_ready == 0 )
+        {
+            yadif_store_ref( (const uint8_t**)pic_in.data, pv );
+
+            pv->buf_settings->s = in->s;
+            hb_buffer_move_subs( pv->buf_settings, in );
+
+            pv->yadif_ready = 1;
+
+            return HB_FILTER_DELAY;
+        }
+
+        /* deinterlace both fields if mcdeint is enabled without bob */
+        int frame, num_frames = 1;
+        if( ( pv->yadif_mode & MODE_YADIF_2PASS ) &&
+           !( pv->yadif_mode & MODE_YADIF_BOB ) )
+        {
+            num_frames = 2;
+        }
+
+        /* Perform yadif and mcdeint filtering */
+        int out_frame;
+        hb_buffer_t * b;
+        for( frame = 0; frame < num_frames; frame++ )
+        {
+            AVPicture pic_yadif_out;
+            int parity = frame ^ tff ^ 1 ^ duplicate;
+
+            b = pv->buf_out[!(frame^1)];
+            hb_avpicture_fill( &pic_yadif_out, b );
+
+            yadif_filter( pic_yadif_out.data, parity, tff, pv );
+
+            if( pv->mcdeint_mode >= 0 )
+            {
+                b = pv->buf_out[(frame^1)];
+                hb_avpicture_fill( &pic_out, b );
+
+                mcdeint_filter( pic_out.data, pic_yadif_out.data, parity, 
+                                pv->width, pv->height, &pv->mcdeint );
+
+                out_frame = (frame^1);
+            }
+            else
+            {
+                out_frame = !(frame^1);
+            }
+        }
+
+        // Add to list of output buffers (should be at most 2)
+        if ( out == NULL )
+        {
+            last = out = pv->buf_out[out_frame];
+        }
+        else
+        {
+            last->next = pv->buf_out[out_frame];
+            last = last->next;
+        }
+
+        // Allocate a replacement for the buffer we just consumed
+        b = pv->buf_out[out_frame];
+        pv->buf_out[out_frame] = hb_video_buffer_init( b->f.width, b->f.height );
+
+        /* Copy buffered settings to output buffer settings */
+        last->s = pv->buf_settings->s;
+
+        if ( !duplicate )
+        {
+            hb_buffer_move_subs( last, pv->buf_settings );
+        }
+
+        /* if bob mode is engaged, halve the duration of the
+         * timestamp, and request a duplicate. */
+        if( pv->yadif_mode & MODE_YADIF_BOB )
+        {
+            if ( !duplicate )
+            {
+                last->s.stop -= (last->s.stop - last->s.start) / 2LL;
+                duplicate = 1;
+            }
+            else
+            {
+                last->s.start = out->s.stop;
+                last->s.new_chap = 0;
+                duplicate = 0;
+            }
+        }
+    } while ( duplicate );
 
     /* Replace buffered settings with input buffer settings */
     pv->buf_settings->s = in->s;
     hb_buffer_move_subs( pv->buf_settings, in );
 
+    *buf_out = out;
+
     return HB_FILTER_OK;
 }
-
 
