@@ -695,6 +695,7 @@ hb_net_t * hb_net_open( char * address, int port )
         if (iResult != 0)
         {
             hb_log("WSAStartup failed: %d", iResult);
+            free(n);
             return NULL;
         }
         winsock_init = 1;

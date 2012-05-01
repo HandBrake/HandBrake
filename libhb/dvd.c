@@ -146,7 +146,7 @@ hb_dvd_t * hb_dvdread_init( char * path )
 fail:
     if( d->vmg )    ifoClose( d->vmg );
     if( d->reader ) DVDClose( d->reader );
-    free( d );
+    free( e );
     return NULL;
 }
 

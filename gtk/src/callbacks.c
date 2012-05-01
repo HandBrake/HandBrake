@@ -4965,15 +4965,17 @@ ghb_check_update(signal_user_data_t *ud)
 	if (host == NULL || appcast == NULL)
 		return NULL;
 
-	query = g_strdup_printf( "GET /%s HTTP/1.0\r\nHost: %s\r\n\r\n",
+	query = g_strdup_printf("GET /%s HTTP/1.0\r\nHost: %s\r\n\r\n",
 							appcast, host);
 
 	ioc = ghb_net_open(ud, host, 80);
 	if (ioc == NULL)
-		return NULL;
+		goto free_resources;
 
 	g_io_channel_write_chars(ioc, query, strlen(query), &len, &gerror);
 	g_io_channel_flush(ioc, &gerror);
+
+free_resources:
 	g_free(query);
 	g_free(host);
 	g_free(appcast);

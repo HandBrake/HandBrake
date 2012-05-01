@@ -531,6 +531,7 @@ main(gint argc, gchar *argv[])
 
 	gval = ghb_resource_parse_file(file);
 	ghb_plist_write_file(dst, gval);
+	fclose(file);
 	return 0;
 }
 
