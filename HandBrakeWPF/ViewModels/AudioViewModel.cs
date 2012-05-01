@@ -32,6 +32,11 @@ namespace HandBrakeWPF.ViewModels
     [Export(typeof(IAudioViewModel))]
     public class AudioViewModel : ViewModelBase, IAudioViewModel
     {
+        /// <summary>
+        /// Backing field for the source tracks list.
+        /// </summary>
+        private IEnumerable<Audio> sourceTracks;
+
         #region Constructors and Destructors
 
         /// <summary>
@@ -80,7 +85,18 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets SourceTracks.
         /// </summary>
-        public IEnumerable<Audio> SourceTracks { get; set; }
+        public IEnumerable<Audio> SourceTracks
+        {
+            get
+            {
+                return this.sourceTracks;
+            }
+            set
+            {
+                this.sourceTracks = value;
+                this.NotifyOfPropertyChange(() => this.SourceTracks);
+            }
+        }
 
         /// <summary>
         /// Gets or sets the EncodeTask.
@@ -168,8 +184,24 @@ namespace HandBrakeWPF.ViewModels
         {
             this.SourceTracks = title.AudioTracks;
 
-            this.SetPreset(preset, task);
-            this.AutomaticTrackSelection();
+            // Only reset the audio tracks if we have none, or if the task is null.
+            if (this.Task == null || this.Task.AudioTracks.Count == 0)
+            {
+                this.SetPreset(preset, task);
+            }
+
+            // If there are no source tracks, clear the list, otherwise try to Auto-Select the correct tracks
+            if (this.SourceTracks == null || !this.SourceTracks.Any())
+            {
+                this.Task.AudioTracks.Clear();
+            }
+            else
+            {
+                this.AutomaticTrackSelection();
+            }
+
+            // Force UI Updates
+            this.NotifyOfPropertyChange(() => this.Task);
         }
 
         #endregion
@@ -223,35 +255,17 @@ namespace HandBrakeWPF.ViewModels
             this.Task.AudioTracks.Clear();
 
             // Get the preferred Language
-            IEnumerable<Audio> languages =
+            IEnumerable<Audio> preferredAudioTracks =
                 this.SourceTracks.Where(
                     item =>
                     item.Language.Contains(
                         this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage)));
-            Audio preferred = languages.FirstOrDefault() ?? this.SourceTracks.FirstOrDefault();
-
-            // Get the currently selected langauges
-            List<Audio> selectedTracks = this.Task.AudioTracks.Select(track => track.ScannedTrack).ToList();
+            Audio preferred = preferredAudioTracks.FirstOrDefault() ?? this.SourceTracks.FirstOrDefault();
 
             // Add the preset audio tracks with the preferred language
             foreach (AudioTrack track in preset.Task.AudioTracks)
             {
                 this.Task.AudioTracks.Add(new AudioTrack(track) { ScannedTrack = preferred });
-            }
-
-            // Attempt to restore the previously selected tracks.
-            // or fallback to the first source track.
-            foreach (AudioTrack track in this.Task.AudioTracks)
-            {
-                if (selectedTracks.Count != 0)
-                {
-                    track.ScannedTrack = selectedTracks[0];
-                    selectedTracks.RemoveAt(0);
-                }
-                else
-                {
-                    break;
-                }
             }
         }
 
@@ -266,7 +280,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            // Step 1: Preferred Language
+            // Step 1: Fetch all the Preferred Language settings
             if (this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage) == "Any")
             {
                 // If we have Any as the preferred Language, just set the first track to all audio tracks.
@@ -285,18 +299,19 @@ namespace HandBrakeWPF.ViewModels
                     trackList.Add(item);
                     break;
                 }
-
-                foreach (AudioTrack track in this.Task.AudioTracks)
-                {
-                    track.ScannedTrack = trackList.FirstOrDefault() ?? this.SourceTracks.FirstOrDefault();
-                }
             }
 
-            // Step 2: Handle "All Remaining Tracks" and "All for Selected Languages"
+            // Step 2: Handle "All Remaining Tracks" and "All for Selected Languages" or use the default behaviour
             int mode = this.UserSettingService.GetUserSetting<int>(UserSettingConstants.DubModeAudio);
 
             switch (mode)
             {
+                default: // Default by setting all existing tracks to a preferred or first source track.
+                    foreach (AudioTrack track in this.Task.AudioTracks)
+                    {
+                        track.ScannedTrack = trackList.FirstOrDefault() ?? this.SourceTracks.FirstOrDefault();
+                    }
+                    break;
                 case 1: // Adding all remaining audio tracks
                     this.AddAllRemaining();
                     break;

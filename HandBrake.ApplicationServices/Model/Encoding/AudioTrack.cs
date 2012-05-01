@@ -197,6 +197,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             {
                 this.encoder = value;
                 this.OnPropertyChanged("Encoder");
+                this.OnPropertyChanged("IsPassthru");
             }
         }
 
@@ -341,6 +342,22 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether IsPassthru.
+        /// </summary>
+        public bool IsPassthru
+        {
+            get
+            {
+                if (this.Encoder == AudioEncoder.Ac3Passthrough || this.Encoder == AudioEncoder.DtsPassthrough
+                    || this.Encoder == AudioEncoder.DtsHDPassthrough || this.Encoder == AudioEncoder.AacPassthru
+                    || this.Encoder == AudioEncoder.Mp3Passthru || this.Encoder == AudioEncoder.Passthrough)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
         #endregion
     }
 }
