@@ -380,30 +380,42 @@ void hb_display_job_info( hb_job_t * job )
         }
     }
 
+    if( job->indepth_scan )
+    {
+        hb_log( " * Foreign Audio Search: %s%s%s",
+                job->select_subtitle_config.dest == RENDERSUB ? "Render/Burn-in" : "Passthrough",
+                job->select_subtitle_config.force ? ", Forced Only" : "",
+                job->select_subtitle_config.default_track ? ", Default" : "" );
+    }
+
     for( i=0; i < hb_list_count( title->list_subtitle ); i++ )
     {
         subtitle =  hb_list_item( title->list_subtitle, i );
 
         if( subtitle )
         {
-            if( subtitle->source == SRTSUB )
+            if( job->indepth_scan )
+            {
+                hb_log( "   + subtitle, %s (track %d, id 0x%x) %s [%s]",
+                        subtitle->lang, subtitle->track, subtitle->id,
+                        subtitle->format == PICTURESUB ? "Picture" : "Text",
+                        hb_subsource_name( subtitle->source ) );
+            }
+            else if( subtitle->source == SRTSUB )
             {
                 /* For SRT, print offset and charset too */
-                hb_log( " * subtitle track %i, %s (id 0x%x) %s [%s] -> %s%s, offset: %"PRId64", charset: %s",
-                        subtitle->out_track, subtitle->lang, subtitle->id,
-                        "Text", "SRT", "Pass-Through",
+                hb_log( " * subtitle track %i, %s (track %d, id 0x%x) Text [SRT] -> %s%s, offset: %"PRId64", charset: %s",
+                        subtitle->out_track, subtitle->lang, subtitle->track, subtitle->id, "Passthrough",
                         subtitle->config.default_track ? ", Default" : "",
                         subtitle->config.offset, subtitle->config.src_codeset );
             }
             else
             {
-                hb_log( " * subtitle track %i, %s (id 0x%x) %s [%s] -> %s%s%s",
-                        subtitle->out_track, subtitle->lang, subtitle->id,
+                hb_log( " * subtitle track %i, %s (track %d, id 0x%x) %s [%s] -> %s%s%s",
+                        subtitle->out_track, subtitle->lang, subtitle->track, subtitle->id,
                         subtitle->format == PICTURESUB ? "Picture" : "Text",
                         hb_subsource_name( subtitle->source ),
-                        job->indepth_scan ? "Foreign Audio Search" :
-                            subtitle->config.dest == RENDERSUB ?
-                                "Render/Burn in" : "Pass-Through",
+                        subtitle->config.dest == RENDERSUB ? "Render/Burn-in" : "Passthrough",
                         subtitle->config.force ? ", Forced Only" : "",
                         subtitle->config.default_track ? ", Default" : "" );
             }
@@ -555,9 +567,10 @@ static void do_job( hb_job_t * job )
     hb_subtitle_t * subtitle;
     unsigned int subtitle_highest = 0;
     unsigned int subtitle_highest_id = 0;
-    unsigned int subtitle_lowest = -1;
+    unsigned int subtitle_lowest = 0;
     unsigned int subtitle_lowest_id = 0;
     unsigned int subtitle_forced_id = 0;
+    unsigned int subtitle_forced_hits = 0;
     unsigned int subtitle_hit = 0;
 
     title = job->title;
@@ -583,16 +596,14 @@ static void do_job( hb_job_t * job )
          * Disable forced subtitles if we didn't find any in the scan
          * so that we display normal subtitles instead.
          */
-        if( interjob->select_subtitle->config.force && 
+        if( interjob->select_subtitle->config.force &&
             interjob->select_subtitle->forced_hits == 0 )
         {
             interjob->select_subtitle->config.force = 0;
         }
-        for( i=0; i < hb_list_count(title->list_subtitle); i++ )
+        for( i = 0; i < hb_list_count(title->list_subtitle); )
         {
-            subtitle =  hb_list_item( title->list_subtitle, i );
-
-            if( subtitle )
+            if( ( subtitle = hb_list_item( title->list_subtitle, i ) ) )
             {
                 /*
                 * Remove the scanned subtitle from the subtitle list if
@@ -600,30 +611,37 @@ static void do_job( hb_job_t * job )
                 * or an emty track (forced and no forced hits).
                 */
                 if( ( interjob->select_subtitle->id == subtitle->id ) &&
-                    ( ( interjob->select_subtitle->forced_hits == 0 &&
-                        subtitle->config.force ) ||
-                    ( subtitle->config.force == interjob->select_subtitle->config.force ) ) )
+                    ( ( subtitle->config.force && interjob->select_subtitle->forced_hits == 0 ) ||
+                      ( subtitle->config.force == interjob->select_subtitle->config.force ) ) )
                 {
-                    *subtitle = *(interjob->select_subtitle);
-                    free( interjob->select_subtitle );
-                    interjob->select_subtitle = NULL;
-                    break;
+                    hb_list_rem( title->list_subtitle, subtitle );
+                    free( subtitle );
+                    continue;
                 }
+                /* Adjust output track number, in case we removed one.
+                 * Output tracks sadly still need to be in sequential order.
+                 * Note: out.track starts at 1, i starts at 0, and track 1 is
+                 *       interjob->select_subtitle */
+                subtitle->out_track = ++i + 1;
+            }
+            else
+            {
+                // avoid infinite loop is subtitle == NULL
+                i++;
             }
         }
 
-        if( interjob->select_subtitle )
-        {
-            /*
-             * Its not in the existing list
-             *
-             * Must be second pass of a two pass with subtitle scan enabled, so
-             * add the subtitle that we found on the first pass for use in this
-             * pass.
-             */
-            hb_list_add( title->list_subtitle, interjob->select_subtitle );
-            interjob->select_subtitle = NULL;
-        }
+        /*
+         * Add the subtitle that we found on the first pass for use in this
+         * pass.
+         *
+         * Make sure it's the first subtitle in the list so that is is the
+         * first burned subtitle (explicitly or after sanitizing) - which
+         * should ensures that it doesn't get dropped.
+         */
+        interjob->select_subtitle->out_track = 1;
+        hb_list_insert( title->list_subtitle, 0, interjob->select_subtitle );
+        interjob->select_subtitle = NULL;
     }
 
     if ( !job->indepth_scan )
@@ -1401,31 +1419,33 @@ cleanup:
         {
             subtitle =  hb_list_item( title->list_subtitle, i );
 
-            hb_log( "Subtitle stream 0x%x '%s': %d hits (%d forced)",
-                    subtitle->id, subtitle->lang, subtitle->hits,
-                    subtitle->forced_hits );
+            hb_log( "Subtitle track %d (id 0x%x) '%s': %d hits (%d forced)",
+                    subtitle->track, subtitle->id, subtitle->lang,
+                    subtitle->hits, subtitle->forced_hits );
 
             if( subtitle->hits == 0 )
                 continue;
 
-            if( subtitle->hits > subtitle_highest )
+            if( subtitle_highest < subtitle->hits )
             {
                 subtitle_highest = subtitle->hits;
                 subtitle_highest_id = subtitle->id;
             }
 
-            if( subtitle->hits < subtitle_lowest )
+            if( subtitle_lowest == 0 ||
+                subtitle_lowest > subtitle->hits )
             {
                 subtitle_lowest = subtitle->hits;
                 subtitle_lowest_id = subtitle->id;
             }
 
-            if( subtitle->forced_hits > 0 )
+            // pick the track with fewest forced hits
+            if( subtitle->forced_hits > 0 &&
+                ( subtitle_forced_hits == 0 ||
+                  subtitle_forced_hits > subtitle->forced_hits ) )
             {
-                if( subtitle_forced_id == 0 )
-                {
-                    subtitle_forced_id = subtitle->id;
-                }
+                subtitle_forced_id = subtitle->id;
+                subtitle_forced_hits = subtitle->forced_hits;
             }
         }
 
@@ -1437,9 +1457,11 @@ cleanup:
              * then select it in preference to the lowest.
              */
             subtitle_hit = subtitle_forced_id;
-            hb_log("Found a subtitle candidate id 0x%x (contains forced subs)",
-                   subtitle_hit);
-        } else if( subtitle_lowest < subtitle_highest )
+            hb_log( "Found a subtitle candidate with id 0x%x (contains forced subs)",
+                    subtitle_hit );
+        }
+        else if( subtitle_lowest > 0 &&
+                 subtitle_lowest < ( subtitle_highest * 0.1 ) )
         {
             /*
              * OK we have more than one, and the lowest is lower,
@@ -1448,14 +1470,12 @@ cleanup:
              *
              * Let's say 10% as a default.
              */
-            if( subtitle_lowest < ( subtitle_highest * 0.1 ) )
-            {
-                subtitle_hit = subtitle_lowest_id;
-                hb_log( "Found a subtitle candidate id 0x%x",
-                        subtitle_hit );
-            } else {
-                hb_log( "No candidate subtitle detected during subtitle-scan");
-            }
+            subtitle_hit = subtitle_lowest_id;
+            hb_log( "Found a subtitle candidate with id 0x%x", subtitle_hit );
+        }
+        else
+        {
+            hb_log( "No candidate detected during subtitle scan" );
         }
     }
 

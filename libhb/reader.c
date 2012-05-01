@@ -741,22 +741,15 @@ static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id )
         }
     }
 
-    n = 0;
     count = hb_list_count( title->list_subtitle );
     count = count > 99 ? 99 : count;
-    for( i=0; i < count; i++ ) {
+    for( i = n = 0; i < count; i++ )
+    {
         subtitle =  hb_list_item( title->list_subtitle, i );
-        if (id == subtitle->id) {
-            subtitle->hits++;
-            if( !job->indepth_scan || job->select_subtitle_config.force )
-            {
-                /*
-                 * Pass the subtitles to be processed if we are not scanning, or if
-                 * we are scanning and looking for forced subs, then pass them up
-                 * to decode whether the sub is a forced one.
-                 */
-                fifos[n++] = subtitle->fifo_in;
-            }
+        if (id == subtitle->id)
+        {
+            /* pass the subtitles to be processed */
+            fifos[n++] = subtitle->fifo_in;
         }
     }
     if ( n != 0 )
@@ -766,8 +759,7 @@ static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id )
     
     if( !job->indepth_scan )
     {
-        n = 0;
-        for( i = 0; i < hb_list_count( title->list_audio ); i++ )
+        for( i = n = 0; i < hb_list_count( title->list_audio ); i++ )
         {
             audio = hb_list_item( title->list_audio, i );
             if( id == audio->id )

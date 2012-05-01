@@ -259,28 +259,14 @@ static void ParseControls( hb_work_object_t * w )
                 case 0x00: // 0x00 - FSTA_DSP - Forced Start Display, no arguments
                     pv->pts_start = pv->pts + date * 1024;
                     pv->pts_forced = 1;
-
-                    /*
-                     * If we are doing a subtitle scan then note down
-                     */
-                    if( job->indepth_scan )
-                    {
-                        for( n=0; n < hb_list_count(title->list_subtitle); n++ )
-                        {
-                            subtitle = hb_list_item( title->list_subtitle, n);
-                            if( pv->stream_id == subtitle->id ) {
-                                /*
-                                 * A hit, count it.
-                                 */
-                                subtitle->forced_hits++;
-                            }
-                        }
-                    }
+                    w->subtitle->hits++;
+                    w->subtitle->forced_hits++;
                     break;
 
                 case 0x01: // 0x01 - STA_DSP - Start Display, no arguments
                     pv->pts_start = pv->pts + date * 1024;
                     pv->pts_forced  = 0;
+                    w->subtitle->hits++;
                     break;
 
                 case 0x02: // 0x02 - STP_DSP - Stop Display, no arguments

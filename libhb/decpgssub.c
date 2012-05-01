@@ -111,32 +111,30 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             avp.size = 0;
         }
 
+        if (has_subtitle && subtitle.num_rects > 0)
+        {
+            w->subtitle->hits++;
+            if (subtitle.forced)
+                w->subtitle->forced_hits++;
+        }
+
         // The sub is "usable" if:
         // 1. libav returned a sub AND
-        // 2. we are scanning for foreign audio subs OR
+        // 2. we are not scanning for foreign audio subs AND
         // 3. we want all subs (e.g. not forced) OR
         // 4. the sub is forced and we only want forced OR
         // 5. subtitle clears the previous sub (these are never forced)
         //    subtitle.num_rects == 0
-        uint8_t useable_sub =
-                    pv->job->indepth_scan ||
-                    subtitle.num_rects == 0 ||
-                    !w->subtitle->config.force ||
-                    ( w->subtitle->config.force && subtitle.forced );
+        uint8_t useable_sub = has_subtitle && !pv->job->indepth_scan &&
+                              ( !subtitle.num_rects || !w->subtitle->config.force ||
+                                ( w->subtitle->config.force && subtitle.forced ) );
 
-        if (has_subtitle && useable_sub)
+        if (useable_sub)
         {
             int64_t pts = av_rescale(subtitle.pts, 90000, AV_TIME_BASE);
             hb_buffer_t * out = NULL;
 
-            if( pv->job->indepth_scan )
-            {
-                if (subtitle.forced)
-                {
-                    w->subtitle->forced_hits++;
-                }
-            }
-            else if ( w->subtitle->config.dest == PASSTHRUSUB &&
+            if ( w->subtitle->config.dest == PASSTHRUSUB &&
                  hb_subtitle_can_pass( PGSSUB, pv->job->mux ) )
             {
                 out = pv->list_pass_buffer;
