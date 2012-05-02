@@ -4744,18 +4744,16 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	job->modulus = ghb_settings_combo_int(js, "PictureModulus");
 	if (job->anamorphic.mode)
 	{
-		job->anamorphic.par_width = title->pixel_aspect_width;
-		job->anamorphic.par_height = title->pixel_aspect_height;
+		job->anamorphic.par_width = 
+			ghb_settings_get_int(js, "PicturePARWidth");
+		job->anamorphic.par_height = 
+			ghb_settings_get_int(js, "PicturePARHeight");
 		job->anamorphic.dar_width = 0;
 		job->anamorphic.dar_height = 0;
 
 		if (job->anamorphic.mode == 3 && !keep_aspect)
 		{
 			job->anamorphic.keep_display_aspect = 0;
-			job->anamorphic.par_width = 
-				ghb_settings_get_int(js, "PicturePARWidth");
-			job->anamorphic.par_height = 
-				ghb_settings_get_int(js, "PicturePARHeight");
 		}
 		else
 		{
