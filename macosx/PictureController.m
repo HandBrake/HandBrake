@@ -1137,6 +1137,7 @@ are maintained across different sources */
     [fDecombPopUp addItemWithTitle: @"Custom"];
     [fDecombPopUp addItemWithTitle: @"Default"];
     [fDecombPopUp addItemWithTitle: @"Fast"];
+    [fDecombPopUp addItemWithTitle: @"Bob"];
     
     [fDecombPopUp selectItemAtIndex: fPictureFilterSettings.decomb];
     
@@ -1146,7 +1147,8 @@ are maintained across different sources */
     [fDeinterlacePopUp addItemWithTitle: @"Custom"];
     [fDeinterlacePopUp addItemWithTitle: @"Fast"];
     [fDeinterlacePopUp addItemWithTitle: @"Slow"];
-	[fDeinterlacePopUp addItemWithTitle: @"Slower"];
+    [fDeinterlacePopUp addItemWithTitle: @"Slower"];
+    [fDeinterlacePopUp addItemWithTitle: @"Bob"];
     
 	/* Set deinterlaces level according to the integer in the main window */
 	[fDeinterlacePopUp selectItemAtIndex: fPictureFilterSettings.deinterlace];

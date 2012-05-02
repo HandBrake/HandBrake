@@ -3342,20 +3342,24 @@ bool one_burned = FALSE;
             /* use a custom decomb string */
             hb_add_filter( job, filter, [[fPictureController decombCustomString] UTF8String] );
         }
-        if ([fPictureController decomb] == 2)
+        else if ([fPictureController decomb] == 2)
         {
             /* use libhb defaults */
             hb_add_filter( job, filter, NULL );
         }
-        if ([fPictureController decomb] == 3)
+        else if ([fPictureController decomb] == 3)
         {
             /* use old defaults (decomb fast) */
             hb_add_filter( job, filter, "7:2:6:9:1:80" );
         }
+        else if ([fPictureController decomb] == 4)
+        {
+            /* decomb 3 with bobbing enabled */
+            hb_add_filter( job, filter, "455" );
+        }
     }
     else
     {
-        
         /* Deinterlace */
         filter = hb_filter_init( HB_FILTER_DEINTERLACE );
         if ([fPictureController deinterlace] == 1)
@@ -3370,7 +3374,7 @@ bool one_burned = FALSE;
         }
         else if ([fPictureController deinterlace] == 3)
         {
-            /* Yadif mode 0 (without spatial deinterlacing.) */
+            /* Yadif mode 0 (without spatial deinterlacing) */
             hb_add_filter( job, filter, "1" );            
         }
         else if ([fPictureController deinterlace] == 4)
@@ -3378,7 +3382,11 @@ bool one_burned = FALSE;
             /* Yadif (with spatial deinterlacing) */
             hb_add_filter( job, filter, "3" );
         }
-        
+        else if ([fPictureController deinterlace] == 5)
+        {
+            /* Yadif (with spatial deinterlacing and bobbing) */
+            hb_add_filter( job, filter, "15" );
+        }
 	}
     
     /* Denoise */
@@ -3860,21 +3868,24 @@ bool one_burned = FALSE;
             /* use a custom decomb string */
             hb_add_filter( job, filter, [[queueToApply objectForKey:@"PictureDecombCustom"] UTF8String] );
         }
-        if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 2)
+        else if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 2)
         {
             /* use libhb defaults */
             hb_add_filter( job, filter, NULL );
         }
-        if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 3)
+        else if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 3)
         {
             /* use old defaults (decomb fast) */
             hb_add_filter( job, filter, "7:2:6:9:1:80" );
         }
-        
+        else if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 4)
+        {
+            /* decomb 3 with bobbing enabled */
+            hb_add_filter( job, filter, "455" );
+        }
     }
     else
     {
-        
         /* Deinterlace */
         filter = hb_filter_init( HB_FILTER_DEINTERLACE );
         if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 1)
@@ -3889,7 +3900,7 @@ bool one_burned = FALSE;
         }
         else if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 3)
         {
-            /* Yadif mode 0 (without spatial deinterlacing.) */
+            /* Yadif mode 0 (without spatial deinterlacing) */
             hb_add_filter( job, filter, "1" );            
         }
         else if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 4)
@@ -3897,8 +3908,11 @@ bool one_burned = FALSE;
             /* Yadif (with spatial deinterlacing) */
             hb_add_filter( job, filter, "3" );            
         }
-        
-        
+        else if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 5)
+        {
+            /* Yadif (with spatial deinterlacing and bobbing) */
+            hb_add_filter( job, filter, "15" );            
+        }
     }
     /* Denoise */
     filter = hb_filter_init( HB_FILTER_DENOISE );
