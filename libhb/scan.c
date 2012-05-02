@@ -870,9 +870,20 @@ skip_preview:
         title->height = vid_info.height;
         if ( vid_info.rate && vid_info.rate_base )
         {
+            // if the frame rate is very close to one of our "common" framerates,
+            // assume it actually is said frame rate; e.g. some 24000/1001 sources
+            // may have a rate_base of 1126124 (instead of 1126125)
+            for( i = 0; i < hb_video_rates_count; i++ )
+            {
+                if( is_close_to( vid_info.rate_base, hb_video_rates[i].rate, 100 ) )
+                {
+                    vid_info.rate_base = hb_video_rates[i].rate;
+                    break;
+                }
+            }
             title->rate = vid_info.rate;
             title->rate_base = vid_info.rate_base;
-            if( is_close_to( vid_info.rate_base, 900900, 100 ) )
+            if( vid_info.rate_base == 900900 )
             {
                 if( pulldown_count >= npreviews / 4 )
                 {
