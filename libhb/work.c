@@ -525,6 +525,7 @@ void hb_filter_init_next( hb_list_t * list, int *score, int *ret_pos )
         {
             pos = 0;
             (*score)++;
+            ii = 0;
         }
         hb_filter_object_t * filter = hb_list_item( list, pos );
         if ( filter->init_index == *score )
