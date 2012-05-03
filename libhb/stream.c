@@ -2004,18 +2004,40 @@ static void set_audio_description(
     }
     else
     {
-        codec_name = audio->config.in.codec == HB_ACODEC_AC3 ? "AC3" :
-                 audio->config.in.codec == HB_ACODEC_DCA ? "DTS" :
-                 audio->config.in.codec == HB_ACODEC_DCA_HD ? "DTS-HD" :
-                 audio->config.in.codec == HB_ACODEC_LPCM ? "LPCM" :
-                 (audio->config.in.codec & HB_ACODEC_FF_MASK) ? "FFmpeg" :
-                 "Unknown";
+        switch( audio->config.in.codec )
+        {
+            case HB_ACODEC_AC3:
+                codec_name = "AC3";
+                break;
+            case HB_ACODEC_DCA:
+                codec_name = "DTS";
+                break;
+            case HB_ACODEC_LPCM:
+                codec_name = "LPCM";
+                break;
+            case HB_ACODEC_MP3:
+                codec_name = "MP3";
+                break;
+            case HB_ACODEC_FFAAC:
+                codec_name = "AAC";
+                break;
+            case HB_ACODEC_DCA_HD:
+                codec_name = "DTS-HD";
+                break;
+            default:
+                codec_name = ( audio->config.in.codec & HB_ACODEC_FF_MASK ) ? "Unknown FFmpeg" : "Unknown";
+                break;
+        }
     }
 
+    snprintf( audio->config.lang.simple,
+              sizeof( audio->config.lang.simple ), "%s",
+              strlen( lang->native_name ) ? lang->native_name : lang->eng_name );
+    snprintf( audio->config.lang.iso639_2,
+              sizeof( audio->config.lang.iso639_2 ), "%s", lang->iso639_2 );
     snprintf( audio->config.lang.description,
               sizeof( audio->config.lang.description ), "%s (%s)",
-              strlen(lang->native_name) ? lang->native_name : lang->eng_name,
-              codec_name );
+              audio->config.lang.simple, codec_name );
 
     if ( audio->config.in.channel_layout )
     {
@@ -2027,11 +2049,6 @@ static void set_audio_description(
                      HB_INPUT_CH_LAYOUT_GET_DISCRETE_REAR_COUNT(layout),
                  HB_INPUT_CH_LAYOUT_GET_DISCRETE_LFE_COUNT(layout) );
     }
-
-    snprintf( audio->config.lang.simple, sizeof( audio->config.lang.simple ), "%s",
-              strlen(lang->native_name) ? lang->native_name : lang->eng_name );
-    snprintf( audio->config.lang.iso639_2, sizeof( audio->config.lang.iso639_2 ),
-              "%s", lang->iso639_2);
 }
 
 // Sort specifies the index in the audio list where you would
@@ -5157,8 +5174,7 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
         }
 
         tag = av_dict_get( st->metadata, "language", NULL, 0 );
-        set_audio_description( stream, audio,
-            lang_for_code2( tag ? tag->value : "und" ) );
+        set_audio_description( stream, audio, lang_for_code2( tag ? tag->value : "und" ) );
 
         audio->config.in.track = id;
         hb_list_add( title->list_audio, audio );

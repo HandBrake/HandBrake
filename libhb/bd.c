@@ -121,6 +121,7 @@ static void add_subtitle(int track, hb_list_t *list_subtitle, BLURAY_STREAM_INFO
 
 static void add_audio(int track, hb_list_t *list_audio, BLURAY_STREAM_INFO *bdaudio, int substream_type, uint32_t codec, uint32_t codec_param)
 {
+    const char * codec_name;
     hb_audio_t * audio;
     iso639_lang_t * lang;
 
@@ -132,35 +133,67 @@ static void add_audio(int track, hb_list_t *list_audio, BLURAY_STREAM_INFO *bdau
     audio->config.in.substream_type = substream_type;
     audio->config.in.codec = codec;
     audio->config.in.codec_param = codec_param;
-    audio->config.lang.type = 0;
+
+    switch( audio->config.in.codec )
+    {
+        case HB_ACODEC_AC3:
+            codec_name = "AC3";
+            break;
+        case HB_ACODEC_DCA:
+            codec_name = "DTS";
+            break;
+        default:
+        {
+            if( audio->config.in.codec & HB_ACODEC_FF_MASK )
+            {
+                switch( bdaudio->coding_type )
+                {
+                    case BLURAY_STREAM_TYPE_AUDIO_AC3PLUS:
+                        codec_name = "E-AC3";
+                        break;
+                    case BLURAY_STREAM_TYPE_AUDIO_DTSHD:
+                        codec_name = "DTS-HD HRA";
+                        break;
+                    case BLURAY_STREAM_TYPE_AUDIO_DTSHD_MASTER:
+                        codec_name = "DTS-HD MA";
+                        break;
+                    case BLURAY_STREAM_TYPE_AUDIO_LPCM:
+                        codec_name = "BD LPCM";
+                        break;
+                    case BLURAY_STREAM_TYPE_AUDIO_MPEG1:
+                        codec_name = "MPEG1";
+                        break;
+                    case BLURAY_STREAM_TYPE_AUDIO_MPEG2:
+                        codec_name = "MPEG2";
+                        break;
+                    case BLURAY_STREAM_TYPE_AUDIO_TRUHD:
+                        codec_name = "TrueHD";
+                        break;
+                    default:
+                        codec_name = "Unknown FFmpeg";
+                        break;
+                }
+            }
+            else
+            {
+                codec_name = "Unknown";
+            }
+        }
+        break;
+    }
 
     lang = lang_for_code2( (char*)bdaudio->lang );
 
-    int stream_type = bdaudio->coding_type;
-    snprintf( audio->config.lang.description, 
-        sizeof( audio->config.lang.description ), "%s (%s)",
-        strlen(lang->native_name) ? lang->native_name : lang->eng_name,
-        audio->config.in.codec == HB_ACODEC_AC3 ? "AC3" : 
-        ( audio->config.in.codec == HB_ACODEC_DCA ? "DTS" : 
-        ( ( audio->config.in.codec & HB_ACODEC_FF_MASK ) ? 
-            ( stream_type == BLURAY_STREAM_TYPE_AUDIO_LPCM ? "BD LPCM" : 
-            ( stream_type == BLURAY_STREAM_TYPE_AUDIO_AC3PLUS ? "E-AC3" : 
-            ( stream_type == BLURAY_STREAM_TYPE_AUDIO_TRUHD ? "TrueHD" : 
-            ( stream_type == BLURAY_STREAM_TYPE_AUDIO_DTSHD ? "DTS-HD HRA" : 
-            ( stream_type == BLURAY_STREAM_TYPE_AUDIO_DTSHD_MASTER ? "DTS-HD MA" : 
-            ( stream_type == BLURAY_STREAM_TYPE_AUDIO_MPEG1 ? "MPEG1" : 
-            ( stream_type == BLURAY_STREAM_TYPE_AUDIO_MPEG2 ? "MPEG2" : 
-                                                           "Unknown FFmpeg" 
-            ) ) ) ) ) ) ) : "Unknown" 
-        ) ) );
+    audio->config.lang.type = 0;
 
     snprintf( audio->config.lang.simple, 
               sizeof( audio->config.lang.simple ), "%s",
-              strlen(lang->native_name) ? lang->native_name : 
-                                          lang->eng_name );
-
+              strlen( lang->native_name ) ? lang->native_name : lang->eng_name );
     snprintf( audio->config.lang.iso639_2, 
-              sizeof( audio->config.lang.iso639_2 ), "%s", lang->iso639_2);
+              sizeof( audio->config.lang.iso639_2 ), "%s", lang->iso639_2 );
+    snprintf( audio->config.lang.description,
+              sizeof( audio->config.lang.description ), "%s (%s)",
+              audio->config.lang.simple, codec_name );
 
     hb_log( "bd: audio id=0x%x, lang=%s, 3cc=%s", audio->id,
             audio->config.lang.description, audio->config.lang.iso639_2 );

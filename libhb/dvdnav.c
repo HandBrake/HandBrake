@@ -305,6 +305,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
     int            longest_pgcn, longest_pgn, longest_pgcn_end;
     float          duration_correction;
     const char   * name;
+    const char   * codec_name;
 
     hb_log( "scan: scanning title %d", t );
 
@@ -473,11 +474,9 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
     /* Detect languages */
     for( i = 0; i < ifo->vtsi_mat->nr_of_vts_audio_streams; i++ )
     {
+        int audio_format, lang_code, lang_extension, audio_control, position, j;
         hb_audio_t * audio, * audio_tmp;
-        int          audio_format, lang_code, audio_control,
-                     position, j;
         iso639_lang_t * lang;
-        int lang_extension = 0;
 
         hb_log( "scan: checking audio %d", i + 1 );
 
@@ -503,27 +502,32 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
             case 0x00:
                 audio->id    = ( ( 0x80 + position ) << 8 ) | 0xbd;
                 audio->config.in.codec = HB_ACODEC_AC3;
+                codec_name = "AC3";
                 break;
 
             case 0x02:
             case 0x03:
                 audio->id    = 0xc0 + position;
                 audio->config.in.codec = HB_ACODEC_FFMPEG;
+                codec_name = "MPEG";
                 break;
 
             case 0x04:
                 audio->id    = ( ( 0xa0 + position ) << 8 ) | 0xbd;
                 audio->config.in.codec = HB_ACODEC_LPCM;
+                codec_name = "LPCM";
                 break;
 
             case 0x06:
                 audio->id    = ( ( 0x88 + position ) << 8 ) | 0xbd;
                 audio->config.in.codec = HB_ACODEC_DCA;
+                codec_name = "DTS";
                 break;
 
             default:
                 audio->id    = 0;
                 audio->config.in.codec = 0;
+                codec_name = "Unknown";
                 hb_log( "scan: unknown audio codec (%x)",
                         audio_format );
                 break;
@@ -551,38 +555,32 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
             continue;
         }
 
-        audio->config.lang.type = lang_extension;
-
         lang = lang_for_code( lang_code );
 
-        snprintf( audio->config.lang.description,
-            sizeof( audio->config.lang.description ), "%s (%s)",
-            strlen(lang->native_name) ? lang->native_name : lang->eng_name,
-            audio->config.in.codec == HB_ACODEC_AC3 ? "AC3" :
-            ( audio->config.in.codec == HB_ACODEC_DCA ? "DTS" :
-            ( audio->config.in.codec == HB_ACODEC_FFMPEG ? "MPEG" : "LPCM" ) ) );
+        audio->config.lang.type = lang_extension;
+
         snprintf( audio->config.lang.simple,
                   sizeof( audio->config.lang.simple ), "%s",
-                  strlen(lang->native_name) ? lang->native_name : lang->eng_name );
+                  strlen( lang->native_name ) ? lang->native_name : lang->eng_name );
         snprintf( audio->config.lang.iso639_2,
-                  sizeof( audio->config.lang.iso639_2 ), "%s", lang->iso639_2);
+                  sizeof( audio->config.lang.iso639_2 ), "%s", lang->iso639_2 );
+        snprintf( audio->config.lang.description,
+                  sizeof( audio->config.lang.description ), "%s (%s)",
+                  audio->config.lang.simple, codec_name );
 
         switch( lang_extension )
         {
-        case 0:
-        case 1:
-            break;
-        case 2:
-            strcat( audio->config.lang.description, " (Visually Impaired)" );
-            break;
-        case 3:
-            strcat( audio->config.lang.description, " (Director's Commentary 1)" );
-            break;
-        case 4:
-            strcat( audio->config.lang.description, " (Director's Commentary 2)" );
-            break;
-        default:
-            break;
+            case 2:
+                strcat( audio->config.lang.description, " (Visually Impaired)" );
+                break;
+            case 3:
+                strcat( audio->config.lang.description, " (Director's Commentary 1)" );
+                break;
+            case 4:
+                strcat( audio->config.lang.description, " (Director's Commentary 2)" );
+                break;
+            default:
+                break;
         }
 
         hb_log( "scan: id=0x%x, lang=%s, 3cc=%s ext=%i", audio->id,
@@ -659,52 +657,38 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
 
         switch( lang_extension )
         {  
-        case 0:
-            break;
-        case 1:
-            break;
-        case 2:
-            strcat( subtitle->lang, " (Caption with bigger size character)");
-            break;
-        case 3: 
-            strcat( subtitle->lang, " (Caption for Children)");
-            break;
-        case 4:
-            break;
-        case 5:
-            strcat( subtitle->lang, " (Closed Caption)");
-            break;
-        case 6:
-            strcat( subtitle->lang, " (Closed Caption with bigger size character)");
-            break;
-        case 7:
-            strcat( subtitle->lang, " (Closed Caption for Children)");
-            break;
-        case 8:
-            break;
-        case 9:
-            strcat( subtitle->lang, " (Forced Caption)");
-            break;
-        case 10:
-            break;
-        case 11:
-            break;
-        case 12:
-            break;
-        case 13:
-            strcat( subtitle->lang, " (Director's Commentary)");
-            break;
-        case 14:
-            strcat( subtitle->lang, " (Director's Commentary with bigger size character)");
-            break;
-        case 15:
-            strcat( subtitle->lang, " (Director's Commentary for Children)");
-        default:
-            break;
+            case 2:
+                strcat( subtitle->lang, " (Caption with bigger size character)" );
+                break;
+            case 3: 
+                strcat( subtitle->lang, " (Caption for Children)" );
+                break;
+            case 5:
+                strcat( subtitle->lang, " (Closed Caption)" );
+                break;
+            case 6:
+                strcat( subtitle->lang, " (Closed Caption with bigger size character)" );
+                break;
+            case 7:
+                strcat( subtitle->lang, " (Closed Caption for Children)" );
+                break;
+            case 9:
+                strcat( subtitle->lang, " (Forced Caption)" );
+                break;
+            case 13:
+                strcat( subtitle->lang, " (Director's Commentary)" );
+                break;
+            case 14:
+                strcat( subtitle->lang, " (Director's Commentary with bigger size character)" );
+                break;
+            case 15:
+                strcat( subtitle->lang, " (Director's Commentary for Children)" );
+            default:
+                break;
         }
 
-        hb_log( "scan: id=0x%x, lang=%s, 3cc=%s", subtitle->id,
-                subtitle->lang, subtitle->iso639_2 );
+        hb_log( "scan: id=0x%x, lang=%s, 3cc=%s ext=%i", subtitle->id,
+                subtitle->lang, subtitle->iso639_2, lang_extension );
 
         hb_list_add( title->list_subtitle, subtitle );
     }
