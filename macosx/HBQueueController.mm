@@ -1219,6 +1219,11 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
                 pictureFiltersPresent = YES;
                 pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace (Slow)"];           
             }
+            else if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 4)
+            {
+                pictureFiltersPresent = YES;
+                pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace (Slower)"];           
+            }
             else if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 5)
             {
                 pictureFiltersPresent = YES;
