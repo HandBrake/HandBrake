@@ -5074,11 +5074,14 @@ the user is using "Custom" settings by determining the sender*/
         videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Detelecine (%@)",[fPictureController detelecineCustomString]]];
     }
     
-    
     if ([fPictureController useDecomb] == 1)
     {
         /* Decomb */
-        if ([fPictureController decomb] == 3)
+        if ([fPictureController decomb] == 4)
+        {
+            videoFilters = [videoFilters stringByAppendingString:@" - Decomb (Bob)"];
+        }
+        else if ([fPictureController decomb] == 3)
         {
             videoFilters = [videoFilters stringByAppendingString:@" - Decomb (Fast)"];
         }
@@ -5094,33 +5097,36 @@ the user is using "Custom" settings by determining the sender*/
     else
     {
         /* Deinterlace */
-        if ([fPictureController deinterlace] > 0)
+        if ([fPictureController deinterlace] == 5)
         {
             fTitle->job->deinterlace  = 1;
+            videoFilters = [videoFilters stringByAppendingString:@" - Deinterlace (Bob)"];
+        }
+        else if ([fPictureController deinterlace] == 4)
+        {
+            fTitle->job->deinterlace  = 1;
+            videoFilters = [videoFilters stringByAppendingString:@" - Deinterlace (Slower)"];
+        }
+        else if ([fPictureController deinterlace] == 3)
+        {
+            fTitle->job->deinterlace  = 1;
+            videoFilters = [videoFilters stringByAppendingString:@" - Deinterlace (Slow)"];
+        }
+        else if ([fPictureController deinterlace] == 2)
+        {
+            fTitle->job->deinterlace  = 1;
+            videoFilters = [videoFilters stringByAppendingString:@" - Deinterlace (Fast)"];
+        }
+        else if ([fPictureController deinterlace] == 1)
+        {
+            fTitle->job->deinterlace  = 1;
+            videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Deinterlace (%@)",[fPictureController deinterlaceCustomString]]];
         }
         else
         {
             fTitle->job->deinterlace  = 0;
         }
-        
-        if ([fPictureController deinterlace] == 2)
-        {
-            videoFilters = [videoFilters stringByAppendingString:@" - Deinterlace (Fast)"];
-        }
-        else if ([fPictureController deinterlace] == 3)
-        {
-            videoFilters = [videoFilters stringByAppendingString:@" - Deinterlace (Slow)"];
-        }
-        else if ([fPictureController deinterlace] == 4)
-        {
-            videoFilters = [videoFilters stringByAppendingString:@" - Deinterlace (Slower)"];
-        }
-        else if ([fPictureController deinterlace] == 1)
-        {
-            videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Deinterlace (%@)",[fPictureController deinterlaceCustomString]]];
-        }
 	}
-    
     
     /* Denoise */
 	if ([fPictureController denoise] == 2)
