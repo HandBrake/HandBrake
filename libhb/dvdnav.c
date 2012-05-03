@@ -721,9 +721,11 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
         {
             chapter = calloc( sizeof( hb_chapter_t ), 1 );
 
-            chapter->index = c + 1;
             chapter->pgcn = pgcn;
             chapter->pgn = i;
+            chapter->index = c + 1;
+            sprintf( chapter->title, "Chapter %d", chapter->index );
+
             hb_list_add( title->list_chapter, chapter );
             c++;
         }
@@ -780,13 +782,13 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
     duration_correction = (float) title->duration / (float) duration;
     for( i = 0; i < hb_list_count( title->list_chapter ); i++ )
     {
-        int seconds;
-        chapter            = hb_list_item( title->list_chapter, i );
-        chapter->duration  = duration_correction * chapter->duration;
-        seconds            = ( chapter->duration + 45000 ) / 90000;
-        chapter->hours     = seconds / 3600;
-        chapter->minutes   = ( seconds % 3600 ) / 60;
-        chapter->seconds   = seconds % 60;
+        chapter           = hb_list_item( title->list_chapter, i );
+        chapter->duration = duration_correction * chapter->duration;
+
+        int seconds       = ( chapter->duration + 45000 ) / 90000;
+        chapter->hours    = ( seconds / 3600 );
+        chapter->minutes  = ( seconds % 3600 ) / 60;
+        chapter->seconds  = ( seconds % 60 );
 
         hb_log( "scan: chap %d c=%d->%d, b=%"PRIu64"->%"PRIu64" (%"PRIu64"), %"PRId64" ms",
                 chapter->index, chapter->cell_start, chapter->cell_end,

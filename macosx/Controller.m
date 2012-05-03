@@ -2331,7 +2331,7 @@ fWorkingCount = 0;
         hb_chapter_t *chapter = (hb_chapter_t *) hb_list_item( fTitle->list_chapter, i );
         if( chapter != NULL )
         {
-          [ChapterNamesArray addObject:[NSString stringWithCString:chapter->title encoding:NSUTF8StringEncoding]];
+          [ChapterNamesArray addObject:[NSString stringWithUTF8String:chapter->title]];
         }
     }
     [queueFileJob setObject:[NSMutableArray arrayWithArray: ChapterNamesArray] forKey:@"ChapterNames"];

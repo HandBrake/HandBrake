@@ -80,13 +80,25 @@ static void decmp4metadata( hb_title_t *title )
                 chapter = calloc( sizeof( hb_chapter_t ), 1 );
                 chapter->index = i;
                 chapter->duration = chapter_list[i-1].duration * 90;
-                chapter->hours    = chapter->duration / 90000 / 3600;
-                chapter->minutes  = ( ( chapter->duration / 90000 ) % 3600 ) / 60;
-                chapter->seconds  = ( chapter->duration / 90000 ) % 60;
-                strcpy( chapter->title, chapter_list[i-1].title );
-                hb_deep_log( 2, "Added chapter %i, name='%s', dur=%"PRId64", (%02i:%02i:%02i)", chapter->index, chapter->title, 
-                       chapter->duration, chapter->hours, 
-                       chapter->minutes, chapter->seconds);
+
+                int seconds      = ( chapter->duration + 45000 ) / 90000;
+                chapter->hours   = ( seconds / 3600 );
+                chapter->minutes = ( seconds % 3600 ) / 60;
+                chapter->seconds = ( seconds % 60 );
+
+                if( chapter_list[i-1].title )
+                {
+                    strcpy( chapter->title, chapter_list[i-1].title );
+                }
+                else
+                {
+                    sprintf( chapter->title, "Chapter %d", chapter->index );
+                }
+
+                hb_deep_log( 2, "Added chapter %i, name='%s', dur=%"PRId64", (%02i:%02i:%02i)",
+                             chapter->index, chapter->title, chapter->duration,
+                             chapter->hours, chapter->minutes, chapter->seconds);
+
                 hb_list_add( title->list_chapter, chapter );
                 i++;
             }

@@ -5501,15 +5501,29 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                 chapter->index    = i+1;
                 chapter->duration = ( m->end / ( (double) m->time_base.num * m->time_base.den ) ) * 90000  - duration_sum;
                 duration_sum     += chapter->duration;
-                chapter->hours    = chapter->duration / 90000 / 3600;
-                chapter->minutes  = ( ( chapter->duration / 90000 ) % 3600 ) / 60;
-                chapter->seconds  = ( chapter->duration / 90000 ) % 60;
+
+                int seconds      = ( chapter->duration + 45000 ) / 90000;
+                chapter->hours   = ( seconds / 3600 );
+                chapter->minutes = ( seconds % 3600 ) / 60;
+                chapter->seconds = ( seconds % 60 );
+
                 tag = av_dict_get( m->metadata, "title", NULL, 0 );
-                strcpy( chapter->title, tag ? tag->value : "" );
+                /* Ignore generic chapter names set by MakeMKV ("Chapter 00" etc.).
+                 * Our default chapter names are better. */
+                if( tag && tag->value &&
+                    ( strncmp( "Chapter ", tag->value, 8 ) || strlen( tag->value ) > 11 ) )
+                {
+                    strcpy( chapter->title, tag->value );
+                }
+                else
+                {
+                    sprintf( chapter->title, "Chapter %d", chapter->index );
+                }
+
                 hb_deep_log( 2, "Added chapter %i, name='%s', dur=%"PRIu64", (%02i:%02i:%02i)",
-                            chapter->index, chapter->title,
-                            chapter->duration, chapter->hours,
-                            chapter->minutes, chapter->seconds );
+                             chapter->index, chapter->title, chapter->duration,
+                             chapter->hours, chapter->minutes, chapter->seconds );
+
                 hb_list_add( title->list_chapter, chapter );
             }
     }

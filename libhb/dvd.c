@@ -170,7 +170,6 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
     ifo_handle_t * vts = NULL;
     int            pgc_id, pgn, i;
     hb_chapter_t * chapter;
-    int            c;
     uint64_t       duration;
     float          duration_correction;
     unsigned char  unused[1024];
@@ -562,12 +561,14 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
     /* Chapters */
     hb_log( "scan: title %d has %d chapters", t,
             vts->vts_ptt_srpt->title[title->ttn-1].nr_of_ptts );
-    for( i = 0, c = 1;
+    for( i = 0;
          i < vts->vts_ptt_srpt->title[title->ttn-1].nr_of_ptts; i++ )
     {
         chapter = calloc( sizeof( hb_chapter_t ), 1 );
+
         /* remember the on-disc chapter number */
         chapter->index = i + 1;
+        sprintf( chapter->title, "Chapter %d", chapter->index );
 
         pgc_id = vts->vts_ptt_srpt->title[title->ttn-1].ptt[i].pgcn;
         pgn    = vts->vts_ptt_srpt->title[title->ttn-1].ptt[i].pgn;
@@ -605,8 +606,8 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
             FindNextCell( d );
             d->cell_cur = d->cell_next;
         }
+
         hb_list_add( title->list_chapter, chapter );
-        c++;
     }
 
     /* The durations we get for chapters aren't precise. Scale them so
@@ -620,13 +621,13 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
     duration_correction = (float) title->duration / (float) duration;
     for( i = 0; i < hb_list_count( title->list_chapter ); i++ )
     {
-        int seconds;
-        chapter            = hb_list_item( title->list_chapter, i );
-        chapter->duration  = duration_correction * chapter->duration;
-        seconds            = ( chapter->duration + 45000 ) / 90000;
-        chapter->hours     = seconds / 3600;
-        chapter->minutes   = ( seconds % 3600 ) / 60;
-        chapter->seconds   = seconds % 60;
+        chapter           = hb_list_item( title->list_chapter, i );
+        chapter->duration = duration_correction * chapter->duration;
+
+        int seconds       = ( chapter->duration + 45000 ) / 90000;
+        chapter->hours    = ( seconds / 3600 );
+        chapter->minutes  = ( seconds % 3600 ) / 60;
+        chapter->seconds  = ( seconds % 60 );
 
         hb_log( "scan: chap %d c=%d->%d, b=%"PRIu64"->%"PRIu64" (%"PRIu64"), %"PRId64" ms",
                 chapter->index, chapter->cell_start, chapter->cell_end,

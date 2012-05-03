@@ -457,14 +457,15 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
         chapter = calloc( sizeof( hb_chapter_t ), 1 );
 
         chapter->index = ii + 1;
+        sprintf( chapter->title, "Chapter %d", chapter->index );
+
         chapter->duration = ti->chapters[ii].duration;
         chapter->block_start = ti->chapters[ii].offset;
 
-        int seconds;
-        seconds            = ( chapter->duration + 45000 ) / 90000;
-        chapter->hours     = seconds / 3600;
-        chapter->minutes   = ( seconds % 3600 ) / 60;
-        chapter->seconds   = seconds % 60;
+        int seconds      = ( chapter->duration + 45000 ) / 90000;
+        chapter->hours   = ( seconds / 3600 );
+        chapter->minutes = ( seconds % 3600 ) / 60;
+        chapter->seconds = ( seconds % 60 );
 
         hb_log( "bd: chap %d packet=%"PRIu64", %"PRId64" ms",
                 chapter->index,
