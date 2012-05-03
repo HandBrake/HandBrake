@@ -1589,52 +1589,60 @@ static int HandleEvents( hb_handle_t * h )
             /* Grab audio tracks */
             if( atracks )
             {
-                char * token = strtok(atracks, ",");
-                if (token == NULL)
+                char * token = strtok( atracks, "," );
+                if( token == NULL )
                     token = optarg;
                 int track_start, track_end;
-                while( token != NULL )
+                for( ; token != NULL; token = strtok( NULL, "," ) )
                 {
-                    audio = calloc(1, sizeof(*audio));
-                    hb_audio_config_init(audio);
-                    if (strlen(token) >= 3)
+                    if( strlen( token ) >= 3 )
                     {
-                        if (sscanf(token, "%d-%d", &track_start, &track_end) == 2)
+                        if( sscanf( token, "%d-%d", &track_start, &track_end ) == 2 )
                         {
                             int i;
-                            for (i = track_start - 1; i < track_end; i++)
+                            for( i = track_start - 1; i < track_end; i++ )
                             {
-                                if (i != track_start - 1)
+                                if( hb_list_item( title->list_audio, i ) == NULL ) 
                                 {
-                                    audio = calloc(1, sizeof(*audio));
-                                    hb_audio_config_init(audio);
+                                    fprintf( stderr, "Warning: Could not find audio track %d, skipped\n", i + 1 );
+                                    continue;
                                 }
+                                audio = calloc( 1, sizeof( *audio ) );
+                                hb_audio_config_init( audio );
                                 audio->in.track = i;
                                 audio->out.track = num_audio_tracks++;
-                                hb_list_add(audios, audio);
+                                hb_list_add( audios, audio );
                             }
                         }
                         else if( !strcasecmp(token, "none" ) )
                         {
+                            audio = calloc( 1, sizeof( *audio ) );
+                            hb_audio_config_init( audio );
                             audio->in.track = audio->out.track = -1;
                             audio->out.codec = 0;
-                            hb_list_add(audios, audio);
+                            hb_list_add( audios, audio );
                             break;
                         }
                         else
                         {
-                            fprintf(stderr, "ERROR: Unable to parse audio input \"%s\", skipping.\n",
-                                    token);
-                            free(audio);
+                            fprintf( stderr, "ERROR: unable to parse audio input \"%s\", skipping\n",
+                                     token);
                         }
                     }
                     else
                     {
-                        audio->in.track = atoi(token) - 1;
+                        int i = atoi( token ) - 1;
+                        if( hb_list_item( title->list_audio, i ) == NULL ) 
+                        {
+                            fprintf( stderr, "Warning: could not find audio track %d, skipped\n", i + 1 );
+                            continue;
+                        }
+                        audio = calloc( 1, sizeof( *audio ) );
+                        hb_audio_config_init( audio );
+                        audio->in.track = i;
                         audio->out.track = num_audio_tracks++;
-                        hb_list_add(audios, audio);
+                        hb_list_add( audios, audio );
                     }
-                    token = strtok(NULL, ",");
                 }
             }
 
@@ -1658,69 +1666,67 @@ static int HandleEvents( hb_handle_t * h )
                              * Replace any existing audio tracks that a preset may
                              * have put here.
                              */
-                            if( hb_list_count(audios) == 0) {
-                                audio = calloc(1, sizeof(*audio));
-                                hb_audio_config_init(audio);
+                            if( hb_list_count( audios ) == 0 )
+                            {
+                                audio = calloc( 1, sizeof( *audio ) );
+                                hb_audio_config_init( audio );
                                 audio->in.track = track;
                                 audio->out.track = num_audio_tracks++;
                                 /* Add it to our audios */
-                                hb_list_add(audios, audio);
-                            } else {
+                                hb_list_add( audios, audio );
+                            }
+                            else
+                            {
                                 /*
                                  * Update the track numbers on what is already in
                                  * there.
                                  */
-                                for( i=0; i < hb_list_count( audios ); i++ )
+                                for( i = 0; i < hb_list_count( audios ); i++ )
                                 {
                                     audio = hb_list_item( audios, i );
-
                                     audio->in.track = track;
                                 }
                             }
                             break;
                         }
                     }
-                } else {
-                    fprintf( stderr, "Warning: Native language (dubbing) selection ignored since an audio track has already been selected\n");
-                }
-            }
-
-            if( hb_list_count(audios) == 0 &&
-                hb_list_count(job->title->list_audio) > 0 )
-            {        
-                /* Create a new audio track with default settings */
-                audio = calloc(1, sizeof(*audio));
-                hb_audio_config_init(audio);
-                /* Add it to our audios */
-                hb_list_add(audios, audio);
-            }
-
-            tmp_num_audio_tracks = num_audio_tracks = hb_list_count(audios);
-            for (i = 0; i < tmp_num_audio_tracks; i++)
-            {
-                audio = hb_list_item(audios, 0);
-                if( (audio == NULL) || (audio->in.track == -1) ||
-                    (audio->out.track == -1) || (audio->out.codec == 0) )
-                {
-                    num_audio_tracks--;
                 }
                 else
                 {
-                    if( hb_audio_add( job, audio ) == 0 )
-                    {
-                        fprintf(stderr, "ERROR: Invalid audio input track '%u', exiting.\n", 
-                                audio->in.track + 1 );
-                        num_audio_tracks--;
-                        exit(3);
-                    }
+                    fprintf( stderr, "Warning: Native language (dubbing) selection ignored since an audio track has already been selected\n" );
                 }
-                hb_list_rem(audios, audio);
-                if( audio != NULL)
+            }
+
+            if( hb_list_count( audios ) == 0 &&
+                hb_list_count( job->title->list_audio ) > 0 )
+            {        
+                /* Create a new audio track with default settings */
+                audio = calloc( 1, sizeof( *audio ) );
+                hb_audio_config_init( audio );
+                /* Add it to our audios */
+                hb_list_add( audios, audio );
+            }
+            tmp_num_audio_tracks = num_audio_tracks = hb_list_count( audios );
+            for( i = 0; i < tmp_num_audio_tracks; i++ )
+            {
+                audio = hb_list_item( audios, 0 );
+                if( audio == NULL || 
+                    audio->in.track  == -1 ||
+                    audio->out.track == -1 ||
+                    audio->out.codec ==  0 ||
+                    hb_audio_add( job, audio ) == 0 )
+                {
+                    num_audio_tracks--;
+                }
+                if( audio != NULL )
+                {
+                    hb_list_rem( audios, audio );
                     if( audio->out.name )
                     {
-                        free( audio->out.name);
+                        free( audio->out.name );
                     }
                     free( audio );
+                }
             }
 
             /* Audio Codecs */
