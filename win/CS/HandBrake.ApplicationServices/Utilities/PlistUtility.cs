@@ -585,6 +585,10 @@ namespace HandBrake.ApplicationServices.Utilities
                     AddEncodeElement(xmlWriter, "PictureDecomb", "integer", "3");
                     AddEncodeElement(xmlWriter, "PictureDecombCustom", "string", string.Empty);
                     break;
+                case Decomb.Bob:
+                    AddEncodeElement(xmlWriter, "PictureDecomb", "integer", "4");
+                    AddEncodeElement(xmlWriter, "PictureDecombCustom", "string", string.Empty);
+                    break;
                 case Decomb.Custom:
                     AddEncodeElement(xmlWriter, "PictureDecomb", "integer", "1");
                     AddEncodeElement(xmlWriter, "PictureDecombCustom", "string", parsed.CustomDecomb);
@@ -608,6 +612,10 @@ namespace HandBrake.ApplicationServices.Utilities
                     break;
                 case Deinterlace.Slower:
                     AddEncodeElement(xmlWriter, "PictureDeinterlace", "integer", "4");
+                    AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", string.Empty);
+                    break;
+                case Deinterlace.Bob:
+                    AddEncodeElement(xmlWriter, "PictureDeinterlace", "integer", "5");
                     AddEncodeElement(xmlWriter, "PictureDeinterlaceCustom", "string", string.Empty);
                     break;
                 case Deinterlace.Custom:
