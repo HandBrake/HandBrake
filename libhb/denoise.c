@@ -46,7 +46,6 @@ hb_filter_object_t hb_filter_denoise =
 {
     .id            = HB_FILTER_DENOISE,
     .enforce_order = 1,
-    .init_index    = 0,
     .name          = "Denoise (hqdn3d)",
     .settings      = NULL,
     .init          = hb_denoise_init,

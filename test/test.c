@@ -2243,8 +2243,12 @@ static int HandleEvents( hb_handle_t * h )
 
             if ( sub_burned )
             {
+                char * filter_str;
+                filter_str = hb_strdup_printf("%d:%d:%d:%d",
+                    job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
                 filter = hb_filter_init( HB_FILTER_RENDER_SUB );
-                hb_add_filter( job, filter, NULL);
+                hb_add_filter( job, filter, filter_str);
+                free( filter_str );
             }
 
             if( srtfile )

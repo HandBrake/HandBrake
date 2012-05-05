@@ -46,7 +46,6 @@ hb_filter_object_t hb_filter_vfr =
 {
     .id            = HB_FILTER_VFR,
     .enforce_order = 1,
-    .init_index    = 0,
     .name          = "Framerate Shaper",
     .settings      = NULL,
     .init          = hb_vfr_init,

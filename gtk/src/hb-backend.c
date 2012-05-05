@@ -5081,7 +5081,10 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	{
 		// Add filter that renders vobsubs
 		filter = hb_filter_init(HB_FILTER_RENDER_SUB);
-		hb_add_filter( job, filter, NULL );
+		filter_str = g_strdup_printf("%d:%d:%d:%d", 
+								crop[0], crop[1], crop[2], crop[3]);
+		hb_add_filter( job, filter, filter_str );
+		g_free(filter_str);
 	}
 
 

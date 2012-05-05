@@ -3252,7 +3252,9 @@ bool one_burned = FALSE;
     if( one_burned )
     {
         filter = hb_filter_init( HB_FILTER_RENDER_SUB );
-        hb_add_filter( job, filter, NULL );
+        hb_add_filter( job, filter, [[NSString stringWithFormat:@"%d:%d:%d:%d",
+                                  job->crop[0], job->crop[1],
+                                  job->crop[2], job->crop[3]] UTF8String] );
     }
    
     
@@ -3790,7 +3792,9 @@ bool one_burned = FALSE;
     if( one_burned )
     {
         filter = hb_filter_init( HB_FILTER_RENDER_SUB );
-        hb_add_filter( job, filter, NULL );
+        hb_add_filter( job, filter, [[NSString stringWithFormat:@"%d:%d:%d:%d",
+                                  job->crop[0], job->crop[1],
+                                  job->crop[2], job->crop[3]] UTF8String] );
     }
 
 #pragma mark -

@@ -232,7 +232,6 @@ hb_filter_object_t hb_filter_decomb =
 {
     .id            = HB_FILTER_DECOMB,
     .enforce_order = 1,
-    .init_index    = 0,
     .name          = "Decomb",
     .settings      = NULL,
     .init          = hb_decomb_init,

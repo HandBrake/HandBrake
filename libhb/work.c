@@ -504,47 +504,6 @@ void correct_framerate( hb_job_t * job )
     interjob->vrate_base = job->vrate_base;
 }
 
-void hb_filter_init_next( hb_list_t * list, int *score, int *ret_pos )
-{
-    int count = hb_list_count( list );
-    int pos = *ret_pos + 1;
-    int ii = 0;
-    if ( pos == 0 )
-    {
-        hb_filter_object_t * filter = hb_list_item( list, pos );
-        if ( filter->init_index == *score )
-        {
-            *ret_pos = pos;
-            return;
-        }
-        pos++;
-    }
-    while (1)
-    {
-        if ( pos == count )
-        {
-            pos = 0;
-            (*score)++;
-            ii = 0;
-        }
-        hb_filter_object_t * filter = hb_list_item( list, pos );
-        if ( filter->init_index == *score )
-        {
-            *ret_pos = pos;
-            return;
-        }
-        pos++;
-        ii++;
-        if (ii > count)
-        {
-            // This is an error that should never happen
-            hb_error("internal error during filter initialization");
-            *ret_pos = -1;
-            return;
-        }
-    }
-}
-
 /**
  * Job initialization rountine.
  * Initializes fifos.
@@ -723,7 +682,6 @@ static void do_job( hb_job_t * job )
     if( job->list_filter && hb_list_count( job->list_filter ) )
     {
         hb_filter_init_t init;
-        int pos = -1, score = 0;
 
         init.job = job;
         init.pix_fmt = PIX_FMT_YUV420P;
@@ -737,19 +695,7 @@ static void do_job( hb_job_t * job )
         init.cfr = 0;
         for( i = 0; i < hb_list_count( job->list_filter ); i++ )
         {
-            // Some filters need to be initialized in a different order
-            // than they are executed in the pipeline.  e.g. rendersub
-            // needs to be initialized after cropscale so that it knows
-            // the crop settings, but it needs to be executed before
-            // cropscale. so hb_filter_init_next() finds returns the
-            // position of filters in initialization order.
-            hb_filter_init_next( job->list_filter, &score, &pos );
-            if( pos == -1)
-            {
-                // This is an error that should never happen!
-                break;
-            }
-            hb_filter_object_t * filter = hb_list_item( job->list_filter, pos );
+            hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
             if( filter->init( filter, &init ) )
             {
                 hb_log( "Failure to initialise filter '%s', disabling",

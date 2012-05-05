@@ -931,7 +931,6 @@ struct hb_filter_object_s
 {
     int                     id;
     int                     enforce_order;
-    int                     init_index;
     char                  * name;
     char                  * settings;
 

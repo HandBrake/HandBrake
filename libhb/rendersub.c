@@ -62,7 +62,6 @@ hb_filter_object_t hb_filter_render_sub =
 {
     .id            = HB_FILTER_RENDER_SUB,
     .enforce_order = 1,
-    .init_index    = 1,
     .name          = "Subtitle renderer",
     .settings      = NULL,
     .init          = hb_rendersub_init,
@@ -268,9 +267,6 @@ static int vobsub_init( hb_filter_object_t * filter,
 {
     hb_filter_private_t * pv = filter->private_data;
 
-    // VOBSUB render filter has no settings
-    memcpy( pv->crop, init->crop, sizeof( int[4] ) );
-    
     pv->sub_list = hb_list_init();
 
     return 0;
@@ -419,8 +415,6 @@ static int ssa_init( hb_filter_object_t * filter,
 {
     hb_filter_private_t * pv = filter->private_data;
 
-    memcpy( pv->crop, init->crop, sizeof( int[4] ) );
-    
     pv->ssa = ass_library_init();
     if ( !pv->ssa ) {
         hb_error( "decssasub: libass initialization failed\n" );
@@ -481,12 +475,16 @@ static int ssa_init( hb_filter_object_t * filter,
     ass_process_codec_private( pv->ssaTrack,
         (char *)filter->subtitle->extradata, filter->subtitle->extradata_size );
     
-    int width = init->width - ( init->crop[2] + init->crop[3] );
-    int height = init->height - ( init->crop[0] + init->crop[1] );
+    int width = init->width - ( pv->crop[2] + pv->crop[3] );
+    int height = init->height - ( pv->crop[0] + pv->crop[1] );
     ass_set_frame_size( pv->renderer, width, height);
 
     double par = (double)init->par_width / init->par_height;
     ass_set_aspect_ratio( pv->renderer, 1, par );
+
+    // libass will take care of positioning for us, so we don't need to
+    // compensate for crop.
+    pv->crop[0] = pv->crop[1] = pv->crop[2] = pv->crop[3] = 0;
 
     return 0;
 }
@@ -600,9 +598,6 @@ static int pgssub_init( hb_filter_object_t * filter,
 {
     hb_filter_private_t * pv = filter->private_data;
 
-    // PGS render filter has no settings
-    memcpy( pv->crop, init->crop, sizeof( int[4] ) );
-
     pv->sub_list = hb_list_init();
 
     return 0;
@@ -660,6 +655,15 @@ static int hb_rendersub_init( hb_filter_object_t * filter,
     hb_filter_private_t * pv = filter->private_data;
     hb_subtitle_t *subtitle;
     int ii;
+
+    if( filter->settings )
+    {
+        sscanf( filter->settings, "%d:%d:%d:%d",
+                &pv->crop[0],
+                &pv->crop[1],
+                &pv->crop[2],
+                &pv->crop[3]);
+    }
 
     // Find the subtitle we need
     for( ii = 0; ii < hb_list_count(init->job->title->list_subtitle); ii++ )

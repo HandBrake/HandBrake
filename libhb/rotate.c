@@ -46,7 +46,6 @@ hb_filter_object_t hb_filter_rotate =
 {
     .id            = HB_FILTER_ROTATE,
     .enforce_order = 0,
-    .init_index    = 2,
     .name          = "Rotate (rotate & flip image axes)",
     .settings      = NULL,
     .init          = hb_rotate_init,

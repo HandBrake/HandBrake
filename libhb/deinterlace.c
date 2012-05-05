@@ -84,7 +84,6 @@ hb_filter_object_t hb_filter_deinterlace =
 {
     .id            = HB_FILTER_DEINTERLACE,
     .enforce_order = 1,
-    .init_index    = 0,
     .name          = "Deinterlace (ffmpeg or yadif/mcdeint)",
     .settings      = NULL,
     .init          = hb_deinterlace_init,
