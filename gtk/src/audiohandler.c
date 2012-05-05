@@ -96,15 +96,6 @@ int ghb_get_copy_mask(GValue *settings)
 {
 	gint mask = 0;
 
-	if (!ghb_settings_get_boolean(settings, "AdvancedAutoPassthru"))
-	{
-		mask = 	HB_ACODEC_MP3 |
-				HB_ACODEC_FFAAC |
-				HB_ACODEC_AC3 |
-				HB_ACODEC_DCA |
-				HB_ACODEC_DCA_HD;
-		return mask;
-	}
 	if (ghb_settings_get_boolean(settings, "AudioAllowMP3Pass"))
 	{
 		mask |= HB_ACODEC_MP3;
@@ -146,9 +137,7 @@ static int ghb_select_fallback( GValue *settings, int mux, int acodec )
 
 		default:
 		{
-			if (ghb_settings_get_boolean(settings, "AdvancedAutoPassthru"))
-				fallback = ghb_settings_combo_int(settings, 
-												"AudioEncoderFallback");
+			fallback = ghb_settings_combo_int(settings, "AudioEncoderFallback");
 		}
 	}
 	if ( mux == HB_MUX_MP4 )
