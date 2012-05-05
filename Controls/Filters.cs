@@ -188,6 +188,9 @@ namespace Handbrake.Controls
                     case "Fast":
                         query += " --decomb=\"7:2:6:9:1:80\"";
                         break;
+                    case "Bob":
+                        query += " --decomb=\"bob\"";
+                        break;
                     default:
                         query += string.Empty;
                         break;
@@ -209,6 +212,9 @@ namespace Handbrake.Controls
                         break;
                     case "Custom":
                         query += " --deinterlace=\"" + text_customDI.Text + "\"";
+                        break;
+                    case "Bob":
+                        query += " --deinterlace=\"bob\"";
                         break;
                     default:
                         query += string.Empty;
@@ -337,7 +343,9 @@ namespace Handbrake.Controls
                     break;
                 case Deinterlace.Slower:
                     drop_deinterlace.SelectedIndex = 4;
-
+                    break;
+                case Deinterlace.Bob:
+                    drop_deinterlace.SelectedIndex = 5;
                     break;
                 default:
                     drop_deinterlace.SelectedIndex = 1;
@@ -370,6 +378,9 @@ namespace Handbrake.Controls
                     break;
                 case Decomb.Fast:
                     drop_decomb.SelectedIndex = 3;
+                    break;
+                case Decomb.Bob:
+                    drop_decomb.SelectedIndex = 4;
                     break;
                 default:
                     drop_decomb.SelectedIndex = 1;
