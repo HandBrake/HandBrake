@@ -318,6 +318,12 @@ namespace HandBrake.ApplicationServices.Utilities
                 case Decomb.Custom:
                     query += string.Format(" --decomb=\"{0}\"", task.CustomDecomb);
                     break;
+                case Decomb.Fast:
+                    query += " --decomb=\"fast\"";
+                    break;
+                case Decomb.Bob:
+                    query += " --decomb=\"bob\"";
+                    break;
                 default:
                     query += string.Empty;
                     break;
@@ -336,6 +342,10 @@ namespace HandBrake.ApplicationServices.Utilities
                     break;
                 case Deinterlace.Custom:
                     query += string.Format(" --deinterlace=\"{0}\"", task.CustomDeinterlace);
+                    break;
+
+                case Deinterlace.Bob:
+                    query += " --deinterlace=\"bob\"";
                     break;
                 default:
                     query += string.Empty;

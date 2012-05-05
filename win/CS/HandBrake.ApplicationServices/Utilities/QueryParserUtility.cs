@@ -226,8 +226,22 @@ namespace HandBrake.ApplicationServices.Utilities
                     parsed.Decomb = Decomb.Default;
                     if (decombValue.Success)
                     {
-                        parsed.CustomDecomb = decombValue.ToString().Replace("--decomb=", string.Empty).Replace("\"", string.Empty).Trim();
-                        parsed.Decomb = parsed.CustomDecomb == "7:2:6:9:1:80" ? Decomb.Fast : Decomb.Custom;
+                        string value = decombValue.ToString().Replace("--decomb=", string.Empty).Replace("\"", string.Empty).Trim();
+
+                        if (value == "bob")
+                        {
+                            parsed.Decomb = Decomb.Bob;
+                        }
+                        else if (value == "fast")
+                        {
+                            parsed.Decomb = Decomb.Fast;
+                        }
+                        else
+                        {
+                            parsed.CustomDecomb = value;
+                            parsed.Decomb = parsed.CustomDecomb == "7:2:6:9:1:80" ? Decomb.Fast : Decomb.Custom;
+                        }
+
                     }
                 }
 
@@ -244,6 +258,9 @@ namespace HandBrake.ApplicationServices.Utilities
                             break;
                         case "slower":
                             parsed.Deinterlace = Deinterlace.Slower;
+                            break;
+                        case "bob":
+                            parsed.Deinterlace = Deinterlace.Bob;
                             break;
                         default:
                             parsed.Deinterlace = Deinterlace.Custom;
