@@ -417,7 +417,15 @@ namespace Handbrake.Controls
                 SrtFileName = srtFile
             };
 
-            track.SubtitleType = ((Subtitle)drp_subtitleTracks.SelectedItem).SubtitleType;
+            Subtitle subtitle = drp_subtitleTracks.SelectedItem as Subtitle;
+            if (subtitle != null)
+            {
+                track.SubtitleType = ((Subtitle)drp_subtitleTracks.SelectedItem).SubtitleType;
+            }
+            else if (drp_subtitleTracks.SelectedItem != null && drp_subtitleTracks.SelectedItem.ToString().Contains(".srt"))
+            {
+                track.SubtitleType = SubtitleType.SRT;
+            }
 
             if (currentOutputExtension.Equals("mp4", StringComparison.InvariantCultureIgnoreCase) ||
                 currentOutputExtension.Equals("m4v", StringComparison.CurrentCultureIgnoreCase))
