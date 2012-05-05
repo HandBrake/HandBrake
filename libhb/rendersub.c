@@ -329,7 +329,7 @@ static uint8_t ssaAlpha( ASS_Image *frame, int x, int y )
     return (uint8_t)alpha;
 }
 
-static hb_buffer_t * RenderSSAFrame( ASS_Image * frame )
+static hb_buffer_t * RenderSSAFrame( hb_filter_private_t * pv, ASS_Image * frame )
 {
     hb_buffer_t *sub;
     int xx, yy;
@@ -376,8 +376,8 @@ static hb_buffer_t * RenderSSAFrame( ASS_Image * frame )
     }
     sub->f.width = frame->w;
     sub->f.height = frame->h;
-    sub->f.x = frame->dst_x;
-    sub->f.y = frame->dst_y;
+    sub->f.x = frame->dst_x + pv->crop[2];
+    sub->f.y = frame->dst_y + pv->crop[0];
 
     return sub;
 }
@@ -393,7 +393,7 @@ static void ApplySSASubs( hb_filter_private_t * pv, hb_buffer_t * buf )
 
     ASS_Image *frame;
     for (frame = frameList; frame; frame = frame->next) {
-        sub = RenderSSAFrame( frame );
+        sub = RenderSSAFrame( pv, frame );
         if( sub )
         {
             ApplySub( pv, buf, sub );
@@ -481,10 +481,6 @@ static int ssa_init( hb_filter_object_t * filter,
 
     double par = (double)init->par_width / init->par_height;
     ass_set_aspect_ratio( pv->renderer, 1, par );
-
-    // libass will take care of positioning for us, so we don't need to
-    // compensate for crop.
-    pv->crop[0] = pv->crop[1] = pv->crop[2] = pv->crop[3] = 0;
 
     return 0;
 }
