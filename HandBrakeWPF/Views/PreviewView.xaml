@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:cal="http://www.caliburnproject.org"
         mc:Ignorable="d" 
              Title="{Binding Title}" 
-             Width="380" Height="140">
+             Width="380" SizeToContent="Height" Background="#FFF1F0EF">
 
     <Window.Resources>
         <Style TargetType="Button">
@@ -17,8 +17,16 @@
         </Style>
     </Window.Resources>
     
-    <StackPanel Orientation="Vertical" Margin="10,10,0,0">
-        <StackPanel Orientation="Horizontal">
+    <StackPanel Orientation="Vertical" >
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0"  Background="White" Height="30" Margin="0,0,0,10" >
+            <Image Source="Images/window.png" Margin="10,0,5,0"  Width="24" Height="24" VerticalAlignment="Center" />
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                <TextBlock Text="Create a video preview" FontWeight="Bold" />
+            </StackPanel>
+        </StackPanel>
+        
+        <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
             <TextBlock Text="Start at Preview:" Margin="0,0,5,0" VerticalAlignment="Center" />
             <ComboBox ItemsSource="{Binding StartPoints}" Width="60" SelectedItem="{Binding StartAt}" />
 
@@ -26,14 +34,14 @@
             <ComboBox ItemsSource="{Binding AvailableDurations}" Width="60" SelectedItem="{Binding Duration}" />
         </StackPanel>
         
-        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+        <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
             <ProgressBar Minimum="0" Maximum="100" Width="310" Height="22" Value="{Binding PercentageValue}" />
             <TextBlock Text="{Binding Percentage}" Margin="5,0,0,0" />
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Width="360">
-            <CheckBox Content="Use system default player" IsChecked="{Binding UseSystemDefaultPlayer}" />
-            <Button Content="Play" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0,0,0"
+        <StackPanel Orientation="Horizontal" Margin="10,10,0,10" Width="360">
+            <CheckBox Content="Use system default player" VerticalAlignment="Center" IsChecked="{Binding UseSystemDefaultPlayer}" />
+            <Button Content="Play" HorizontalAlignment="Right" IsDefault="True" VerticalAlignment="Center" Padding="8,2" Margin="10,0,0,0"
                     cal:Message.Attach="[Event Click] = [Action Play]" />
         </StackPanel>
     </StackPanel>

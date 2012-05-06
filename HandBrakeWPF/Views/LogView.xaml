@@ -12,7 +12,7 @@
                 <Button cal:Message.Attach="[Event Click] = [Action CopyLog]">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="Images/copy.png" Width="16"/>
-                        <TextBlock Text="Copy" Margin="2,0,0,0" />
+                        <TextBlock Text="Copy to clipboard" Margin="2,0,0,0" />
                     </StackPanel>
                 </Button>
                 <Button Margin="5,0,0,0" cal:Message.Attach="[Event Click] = [Action OpenLogDirectory]">
@@ -24,6 +24,7 @@
                 
                 <Separator />
 
+                <TextBlock Text="Choose Log:" FontWeight="Bold" VerticalAlignment="Center" Margin="10,0,10,0" />
                 <ComboBox Width="100" HorizontalAlignment="Right" ItemsSource="{Binding LogModes}" SelectedIndex="{Binding SelectedMode}">
                 </ComboBox>
             </ToolBar>

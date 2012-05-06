@@ -19,8 +19,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
-    using HandBrake.ApplicationServices.Utilities;
-
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -67,7 +65,7 @@ namespace HandBrakeWPF.ViewModels
             this.presetService = presetService;
             this.errorService = errorService;
             this.Title = "Add Preset";
-            this.Preset = new Preset { IsBuildIn = false, IsDefault = false, Category = PresetService.UserPresetCatgoryName };
+            this.Preset = new Preset { IsBuildIn = false, IsDefault = false, Category = PresetService.UserPresetCatgoryName, UsePictureFilters = true};
             this.PictureSettingsModes = EnumHelper<PresetPictureSettingsMode>.GetEnumList();
         }
 

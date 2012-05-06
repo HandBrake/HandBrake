@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Data="clr-namespace:System.Windows.Data;assembly=PresentationFramework" 
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" Title="{Data:Binding Path=WindowTitle}" Height="625" Width="1015" FontSize="11" Background="#FFF0F0F0"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" Title="{Data:Binding Path=WindowTitle}" Width="1015" FontSize="11" Background="#FFF0F0F0"
         Micro:Message.Attach="[Event Loaded] = [Action Load]"
-        UseLayoutRounding="True"
+        UseLayoutRounding="True" SizeToContent="Height"
         AllowDrop="True">
 
     <i:Interaction.Triggers>
@@ -237,7 +237,7 @@
                     </StackPanel>
 
                     <!-- Tab Control -->
-                    <TabControl HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="725" Height="300" Margin="10,10,10,10" Name="tabControl" >
+                    <TabControl HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="725" Height="310" Margin="10,10,10,10" Name="tabControl" >
                         <TabItem Header="Picture" Name="pictureTab">
                             <ContentControl x:Name="PictureSettingsViewModel" ></ContentControl>
                         </TabItem>
