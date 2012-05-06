@@ -15,9 +15,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Windows;
 
     using HandBrake.ApplicationServices.Services.Interfaces;
-
-    using Caliburn.Micro;
-
     using Interfaces;
 
     using HandBrake.ApplicationServices.EventArgs;
@@ -27,11 +24,6 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class LogViewModel : ViewModelBase, ILogViewModel
     {
-        /**
-         * TODO
-         * - Live update the log file.
-         */
-
         #region Private Fields
 
         /// <summary>
@@ -59,16 +51,13 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="LogViewModel"/> class.
         /// </summary>
-        /// <param name="windowManager">
-        /// The window manager.
-        /// </param>
         /// <param name="encodeService">
         /// The encode service.
         /// </param>
         /// <param name="scanService">
         /// The scan service.
         /// </param>
-        public LogViewModel(IWindowManager windowManager, IEncode encodeService, IScan scanService)
+        public LogViewModel(IEncode encodeService, IScan scanService)
         {
             this.encodeService = encodeService;
             this.scanService = scanService;
@@ -76,6 +65,9 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedMode = 0;
         }
 
+        /// <summary>
+        /// Gets Log.
+        /// </summary>
         public string Log
         {
             get
@@ -136,21 +128,39 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         protected override void OnActivate()
         {
-            this.scanService.ScanStared += scanService_ScanStared;
-            this.scanService.ScanCompleted += scanService_ScanCompleted;
-            this.encodeService.EncodeStarted += encodeService_EncodeStarted;
-            this.encodeService.EncodeCompleted += encodeService_EncodeCompleted;
-            this.encodeService.EncodeStatusChanged += this.encodeService_EncodeStatusChanged;
-            this.scanService.ScanStatusChanged += this.scanService_ScanStatusChanged;
+            this.scanService.ScanStared += ScanServiceScanStared;
+            this.scanService.ScanCompleted += ScanServiceScanCompleted;
+            this.encodeService.EncodeStarted += EncodeServiceEncodeStarted;
+            this.encodeService.EncodeCompleted += EncodeServiceEncodeCompleted;
+            this.encodeService.EncodeStatusChanged += this.EncodeServiceEncodeStatusChanged;
+            this.scanService.ScanStatusChanged += this.ScanServiceScanStatusChanged;
             base.OnActivate();
         }
 
-        private void scanService_ScanStatusChanged(object sender, ScanProgressEventArgs e)
+        /// <summary>
+        /// Scan Status has changed, update log window.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void ScanServiceScanStatusChanged(object sender, ScanProgressEventArgs e)
         {
             this.NotifyOfPropertyChange(() => this.Log);
         }
 
-        private void encodeService_EncodeStatusChanged(object sender, EncodeProgressEventArgs e)
+        /// <summary>
+        /// Encode Status has changed, update log window
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void EncodeServiceEncodeStatusChanged(object sender, EncodeProgressEventArgs e)
         {
             this.NotifyOfPropertyChange(() => this.Log);
         }
@@ -163,8 +173,8 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         protected override void OnDeactivate(bool close)
         {
-            this.scanService.ScanStared -= scanService_ScanStared;
-            this.encodeService.EncodeStarted -= encodeService_EncodeStarted;
+            this.scanService.ScanStared -= ScanServiceScanStared;
+            this.encodeService.EncodeStarted -= EncodeServiceEncodeStarted;
             this.Load();
             base.OnDeactivate(close);
         }
@@ -186,10 +196,9 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="e">
         /// The e.
         /// </param>
-        private void encodeService_EncodeStarted(object sender, EventArgs e)
+        private void EncodeServiceEncodeStarted(object sender, EventArgs e)
         {
             this.SelectedMode = 0;
-            this.NotifyOfPropertyChange(() => this.Log);
         }
 
         /// <summary>
@@ -201,10 +210,9 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="e">
         /// The e.
         /// </param>
-        private void scanService_ScanStared(object sender, EventArgs e)
+        private void ScanServiceScanStared(object sender, EventArgs e)
         {
             this.SelectedMode = 1;
-            this.NotifyOfPropertyChange(() => this.Log);
         }
 
         /// <summary>
@@ -216,7 +224,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="e">
         /// The e.
         /// </param>
-        private void scanService_ScanCompleted(object sender, ScanCompletedEventArgs e)
+        private void ScanServiceScanCompleted(object sender, ScanCompletedEventArgs e)
         {
             this.NotifyOfPropertyChange(() => this.Log);
         }
@@ -230,7 +238,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="e">
         /// The e.
         /// </param>
-        private void encodeService_EncodeCompleted(object sender, EncodeCompletedEventArgs e)
+        private void EncodeServiceEncodeCompleted(object sender, EncodeCompletedEventArgs e)
         {
             this.NotifyOfPropertyChange(() => this.Log);
         }

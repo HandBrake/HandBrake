@@ -30,7 +30,7 @@
                     <TextBlock Text="{Binding Version}" Margin="0,0,0,1" VerticalAlignment="Bottom" />
                 </StackPanel>
                 
-                <TextBlock Text="Copyright 2003-2011 HandBrake Team" Margin="5,0,0,0 " Grid.Row="1" />
+                <TextBlock Text="Copyright 2003-2012 HandBrake Team" Margin="5,0,0,0 " Grid.Row="1" />
 
                 <TextBlock Text="License:" Margin="5,10,0,5" Grid.Row="2" />
                 <TextBox VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsReadOnly="True" TextWrapping="Wrap" 
@@ -46,7 +46,7 @@ You should have received a copy of the GNU General Public License along with thi
         </Grid>
 
         <StackPanel HorizontalAlignment="Stretch" Background="LightGray" Grid.Row="1">
-            <Button Content="Close" Micro:Message.Attach="[Event Click] = [Action Close]"
+            <Button Content="Close" IsDefault="True" Micro:Message.Attach="[Event Click] = [Action Close]"
                     HorizontalAlignment="Right" Padding="12,2" Margin="0,5,10,5" VerticalAlignment="Center" />
         </StackPanel>
     </Grid>

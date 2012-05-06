@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:cal="http://www.caliburnproject.org"
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters" mc:Ignorable="d" 
              Title="{Binding Title}" 
-             Width="350" Height="310">
+             Width="350" SizeToContent="Height">
 
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
@@ -22,7 +22,7 @@
         
         <!-- Header -->
         <StackPanel Orientation="Horizontal" Grid.Row="0"  Background="White" Height="30" Margin="0,0,0,10" >
-            <Image Source="Images/Add16.png" Margin="10,0,5,0" Width="16" Height="16" VerticalAlignment="Center" />
+            <Image Source="Images/Add16.png" Margin="10,0,5,0" Width="24" Height="24" VerticalAlignment="Center" />
             <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                 <TextBlock Text="Add a Preset" FontWeight="Bold" />
             </StackPanel>
@@ -78,8 +78,10 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <Button Content="Cancel" Padding="8,2" Margin="0,5,10,5" Grid.Column="1" cal:Message.Attach="[Event Click] = [Action Cancel]" />
-            <Button Content="Add" Padding="8,2" Margin="0,5,10,5" Grid.Column="2" cal:Message.Attach="[Event Click] = [Action Add]" />
+            <Button Content="Cancel" Padding="8,2" Margin="0,5,10,5" Grid.Column="1" 
+                    IsCancel="True" cal:Message.Attach="[Event Click] = [Action Cancel]" />
+            <Button Content="Add" Padding="8,2" Margin="0,5,10,5" Grid.Column="2" 
+                    IsDefault="True" cal:Message.Attach="[Event Click] = [Action Add]" />
         </Grid>
 
     </Grid>
