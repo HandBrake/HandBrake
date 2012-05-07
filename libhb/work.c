@@ -693,7 +693,7 @@ static void do_job( hb_job_t * job )
         init.vrate_base = title->rate_base;
         init.vrate = title->rate;
         init.cfr = 0;
-        for( i = 0; i < hb_list_count( job->list_filter ); i++ )
+        for( i = 0; i < hb_list_count( job->list_filter ); )
         {
             hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
             if( filter->init( filter, &init ) )
@@ -702,7 +702,9 @@ static void do_job( hb_job_t * job )
                         filter->name );
                 hb_list_rem( job->list_filter, filter );
                 hb_filter_close( &filter );
+                continue;
             }
+            i++;
         }
         job->width = init.width;
         job->height = init.height;
