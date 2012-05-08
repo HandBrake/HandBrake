@@ -1984,7 +1984,6 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
 	{
 		list = hb_get_titles( h_scan );
 		count = hb_list_count( list );
-		if (count > 100) count = 100;
 	}
 	if (titles) g_strfreev(titles);
 	if (title_opts.map) g_free(title_opts.map);
@@ -2335,7 +2334,6 @@ ghb_longest_title()
 	if (h_scan == NULL) return 0;
 	list = hb_get_titles( h_scan );
 	count = hb_list_count( list );
-	if (count > 100) count = 100;
 	if (count < 1) return 0;
 	title = (hb_title_t*)hb_list_item(list, 0);
 	feature = title->job->feature;
