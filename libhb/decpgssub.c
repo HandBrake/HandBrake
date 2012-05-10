@@ -18,6 +18,10 @@ struct hb_work_private_s
     // while parsing an input packet.
     hb_buffer_t * list_buffer;
     hb_buffer_t * last_buffer;
+    // for PGS subs, we need to pass 'empty' subtitles through (they clear the
+    // display) - when doing forced-only extraction, only pass empty subtitles
+    // through if we've seen a forced sub and haven't seen any empty sub since
+    uint8_t seen_forced_sub;
 };
 
 static int decsubInit( hb_work_object_t * w, hb_job_t * job )
@@ -30,6 +34,7 @@ static int decsubInit( hb_work_object_t * w, hb_job_t * job )
     pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
 
+    pv->seen_forced_sub = 0;
     pv->context = context;
     pv->job = job;
 
@@ -111,23 +116,52 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             avp.size = 0;
         }
 
-        if (has_subtitle && subtitle.num_rects > 0)
-        {
-            w->subtitle->hits++;
-            if (subtitle.forced)
-                w->subtitle->forced_hits++;
-        }
+        /* Subtitles are "usable" if:
+         *   1. Libav returned a subtitle (has_subtitle) AND
+         *   2. we are not doing Foreign Audio Search (!pv->job->indepth_scan)
+         * For forced-only extraction, usable subtitles also need to:
+         *   a. be forced (subtitle.forced) OR
+         *   b. clear a forced sub (pv->seen_forced_sub && !subtitle.num_rects) */
+        uint8_t useable_sub;
 
-        // The sub is "usable" if:
-        // 1. libav returned a sub AND
-        // 2. we are not scanning for foreign audio subs AND
-        // 3. we want all subs (e.g. not forced) OR
-        // 4. the sub is forced and we only want forced OR
-        // 5. subtitle clears the previous sub (these are never forced)
-        //    subtitle.num_rects == 0
-        uint8_t useable_sub = has_subtitle && !pv->job->indepth_scan &&
-                              ( !subtitle.num_rects || !w->subtitle->config.force ||
-                                ( w->subtitle->config.force && subtitle.forced ) );
+        if (has_subtitle)
+        {
+            // subtitle statistics
+            if (subtitle.num_rects != 0)
+            {
+                w->subtitle->hits++;
+                if (subtitle.forced)
+                {
+                    w->subtitle->forced_hits++;
+                }
+            }
+            // is it usable?
+            if (pv->job->indepth_scan)
+            {
+                useable_sub = 0;
+            }
+            else if (w->subtitle->config.force)
+            {
+                useable_sub = subtitle.forced || (pv->seen_forced_sub && !subtitle.num_rects);
+                // note if we find forced or empty subtitles
+                if (subtitle.forced)
+                {
+                    pv->seen_forced_sub = 1;
+                }
+                else if (!subtitle.num_rects)
+                {
+                    pv->seen_forced_sub = 0;
+                }
+            }
+            else
+            {
+                useable_sub = 1;
+            }
+        }
+        else
+        {
+            useable_sub = 0;
+        }
 
         if (useable_sub)
         {
@@ -137,8 +171,49 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             if ( w->subtitle->config.dest == PASSTHRUSUB &&
                  hb_subtitle_can_pass( PGSSUB, pv->job->mux ) )
             {
-                out = pv->list_pass_buffer;
-                pv->list_pass_buffer = NULL;
+                /* PGS subtitles are spread across multiple packets (1 per segment).
+                 * In the MKV container, all segments are found in the same packet
+                 * (this is expected by some devices, such as the WD TV Live).
+                 * So if there are multiple packets, merge them. */
+                if (pv->list_pass_buffer->next == NULL)
+                {
+                    // packets already merged (e.g. MKV sources)
+                    out = pv->list_pass_buffer;
+                    pv->list_pass_buffer = NULL;
+                }
+                else
+                {
+                    int size = 0;
+                    uint8_t * data;
+                    hb_buffer_t * b;
+
+                    b = pv->list_pass_buffer;
+                    while (b != NULL)
+                    {
+                        size += b->size;
+                        b = b->next;
+                    }
+
+                    out = hb_buffer_init( size );
+                    data = out->data;
+                    b = pv->list_pass_buffer;
+                    while (b != NULL)
+                    {
+                        memcpy( data, b->data, b->size );
+                        data += b->size;
+                        b = b->next;
+                    }
+                    hb_buffer_close( &pv->list_pass_buffer );
+
+                    out->s        = in->s;
+                    out->sequence = in->sequence;
+                }
+                if (pts >= 0)
+                {
+                    // this should (eventually) always be the case
+                    out->s.start = pts;
+                }
+                out->s.stop = 0;
             }
             else
             {
