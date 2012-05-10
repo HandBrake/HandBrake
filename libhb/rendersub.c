@@ -157,72 +157,80 @@ static void ApplySub( hb_filter_private_t * pv, hb_buffer_t * buf, hb_buffer_t *
 {
     int top, left, margin_top, margin_percent;
 
-    /*
-     * Percent of height of picture that form a margin that subtitles
-     * should not be displayed within.
-     */
-    margin_percent = 2;
+    if ( !pv->ssa )
+    {
+        /*
+         * Percent of height of picture that form a margin that subtitles
+         * should not be displayed within.
+         */
+        margin_percent = 2;
 
-    /*
-     * If necessary, move the subtitle so it is not in a cropped zone.
-     * When it won't fit, we center it so we lose as much on both ends.
-     * Otherwise we try to leave a 20px or 2% margin around it.
-     */
-    margin_top = ( ( buf->f.height - pv->crop[0] - pv->crop[1] ) *
-                   margin_percent ) / 100;
+        /*
+         * If necessary, move the subtitle so it is not in a cropped zone.
+         * When it won't fit, we center it so we lose as much on both ends.
+         * Otherwise we try to leave a 20px or 2% margin around it.
+         */
+        margin_top = ( ( buf->f.height - pv->crop[0] - pv->crop[1] ) *
+                       margin_percent ) / 100;
 
-    if( margin_top > 20 )
-    {
-        /*
-         * A maximum margin of 20px regardless of height of the picture.
-         */
-        margin_top = 20;
-    }
+        if( margin_top > 20 )
+        {
+            /*
+             * A maximum margin of 20px regardless of height of the picture.
+             */
+            margin_top = 20;
+        }
 
-    if( sub->f.height > buf->f.height - pv->crop[0] - pv->crop[1] -
-        ( margin_top * 2 ) )
-    {
-        /*
-         * The subtitle won't fit in the cropped zone, so center
-         * it vertically so we fit in as much as we can.
-         */
-        top = pv->crop[0] + ( buf->f.height - pv->crop[0] -
-                                      pv->crop[1] - sub->f.height ) / 2;
-    }
-    else if( sub->f.y < pv->crop[0] + margin_top )
-    {
-        /*
-         * The subtitle fits in the cropped zone, but is currently positioned
-         * within our top margin, so move it outside of our margin.
-         */
-        top = pv->crop[0] + margin_top;
-    }
-    else if( sub->f.y > buf->f.height - pv->crop[1] - margin_top - sub->f.height )
-    {
-        /*
-         * The subtitle fits in the cropped zone, and is not within the top
-         * margin but is within the bottom margin, so move it to be above
-         * the margin.
-         */
-        top = buf->f.height - pv->crop[1] - margin_top - sub->f.height;
+        if( sub->f.height > buf->f.height - pv->crop[0] - pv->crop[1] -
+            ( margin_top * 2 ) )
+        {
+            /*
+             * The subtitle won't fit in the cropped zone, so center
+             * it vertically so we fit in as much as we can.
+             */
+            top = pv->crop[0] + ( buf->f.height - pv->crop[0] -
+                                          pv->crop[1] - sub->f.height ) / 2;
+        }
+        else if( sub->f.y < pv->crop[0] + margin_top )
+        {
+            /*
+             * The subtitle fits in the cropped zone, but is currently positioned
+             * within our top margin, so move it outside of our margin.
+             */
+            top = pv->crop[0] + margin_top;
+        }
+        else if( sub->f.y > buf->f.height - pv->crop[1] - margin_top - sub->f.height )
+        {
+            /*
+             * The subtitle fits in the cropped zone, and is not within the top
+             * margin but is within the bottom margin, so move it to be above
+             * the margin.
+             */
+            top = buf->f.height - pv->crop[1] - margin_top - sub->f.height;
+        }
+        else
+        {
+            /*
+             * The subtitle is fine where it is.
+             */
+            top = sub->f.y;
+        }
+
+        if( sub->f.width > buf->f.width - pv->crop[2] - pv->crop[3] - 40 )
+            left = pv->crop[2] + ( buf->f.width - pv->crop[2] -
+                    pv->crop[3] - sub->f.width ) / 2;
+        else if( sub->f.x < pv->crop[2] + 20 )
+            left = pv->crop[2] + 20;
+        else if( sub->f.x > buf->f.width - pv->crop[3] - 20 - sub->f.width )
+            left = buf->f.width - pv->crop[3] - 20 - sub->f.width;
+        else
+            left = sub->f.x;
     }
     else
     {
-        /*
-         * The subtitle is fine where it is.
-         */
         top = sub->f.y;
-    }
-
-    if( sub->f.width > buf->f.width - pv->crop[2] - pv->crop[3] - 40 )
-        left = pv->crop[2] + ( buf->f.width - pv->crop[2] -
-                pv->crop[3] - sub->f.width ) / 2;
-    else if( sub->f.x < pv->crop[2] + 20 )
-        left = pv->crop[2] + 20;
-    else if( sub->f.x > buf->f.width - pv->crop[3] - 20 - sub->f.width )
-        left = buf->f.width - pv->crop[3] - 20 - sub->f.width;
-    else
         left = sub->f.x;
+    }
 
     blend( buf, sub, left, top );
 }
