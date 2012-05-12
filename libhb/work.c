@@ -1335,8 +1335,9 @@ cleanup:
     hb_fifo_close( &job->fifo_render );
     hb_fifo_close( &job->fifo_mpeg4 );
 
-    for (i = 0; i < hb_list_count( title->list_subtitle ); i++) {
-        subtitle = hb_list_item( title->list_subtitle, i);
+    for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
+    {
+        subtitle = hb_list_item( title->list_subtitle, i );
         if( subtitle )
         {
             hb_fifo_close( &subtitle->fifo_in );
