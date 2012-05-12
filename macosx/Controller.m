@@ -583,17 +583,19 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (void) enableUI: (bool) b
 {
     NSControl * controls[] =
-    { fSrcTitleField, fSrcTitlePopUp,
+    {
+        fSrcTitleField, fSrcTitlePopUp,
         fSrcChapterField, fSrcChapterStartPopUp, fSrcChapterToField,
         fSrcChapterEndPopUp, fSrcDuration1Field, fSrcDuration2Field,
         fDstFormatField, fDstFormatPopUp, fDstFile1Field, fDstFile2Field,
         fDstBrowseButton, fVidRateField, fVidRatePopUp,fVidEncoderField, fVidEncoderPopUp, fVidQualityField,
         fPictureSizeField,fPictureCroppingField, fVideoFiltersField,fVidQualityMatrix, fSubField, fSubPopUp,
-        fQueueStatus,fPresetsAdd,fPresetsDelete,fSrcAngleLabel,fSrcAnglePopUp,
+        fPresetsAdd,fPresetsDelete,fSrcAngleLabel,fSrcAnglePopUp,
 		fCreateChapterMarkers,fVidTurboPassCheck,fDstMp4LargeFileCheck,fSubForcedCheck,fPresetsOutlineView,
         fDstMp4HttpOptFileCheck,fDstMp4iPodFileCheck,fVidQualityRFField,fVidQualityRFLabel,
         fEncodeStartStopPopUp,fSrcTimeStartEncodingField,fSrcTimeEndEncodingField,fSrcFrameStartEncodingField,
-        fSrcFrameEndEncodingField, fLoadChaptersButton, fSaveChaptersButton, fFramerateMatrix};
+        fSrcFrameEndEncodingField, fLoadChaptersButton, fSaveChaptersButton, fFramerateMatrix
+    };
     
     for( unsigned i = 0;
         i < sizeof( controls ) / sizeof( NSControl * ); i++ )
