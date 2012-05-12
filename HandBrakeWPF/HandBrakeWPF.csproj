@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>HandBrakeWPF</RootNamespace>
-    <AssemblyName>HandBrake</AssemblyName>
+    <AssemblyName>Handbrake</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -110,6 +110,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\Audio\AudioBitrateConverter.cs" />
     <Compile Include="Converters\BooleanToHiddenVisibilityConverter.cs" />
     <Compile Include="ViewModels\Interfaces\ITitleSpecificViewModel.cs" />
     <Compile Include="ViewModels\TitleSpecificViewModel.cs" />
@@ -323,6 +324,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="defaultsettings.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="releasenotes.html">
+      <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Resource Include="Views\Images\Refresh.ico" />

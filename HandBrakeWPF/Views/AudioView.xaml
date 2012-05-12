@@ -7,12 +7,14 @@
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:NumericUpDown="clr-namespace:EagleBoost.Wpf.Presentation.Controls.NumericUpDown;assembly=EagleBoost.Wpf.Presentation"
              xmlns:Conveters="clr-namespace:HandBrakeWPF.Converters"
-             xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop" mc:Ignorable="d">
-    
+             xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+             xmlns:Audio="clr-namespace:HandBrakeWPF.Converters.Audio" mc:Ignorable="d">
+
     <UserControl.Resources>
         <Conveters:EnumComboConverter x:Key="enumComboConverter" />
         <Conveters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <Conveters:BooleanToHiddenVisibilityConverter x:Key="boolToHiddenVisConverter" />
+        <Audio:AudioBitrateConverter x:Key="audioBitrateConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -86,31 +88,31 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            
+
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="28" />
                                 <RowDefinition Height="28" />
                             </Grid.RowDefinitions>
-                            
+
                             <!-- Row 1-->
 
                             <TextBlock Text="Source" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Center" />
                             <ComboBox Width="100" Grid.Column="1" Margin="5,0,5,0" Height="22"
                                       ItemsSource="{Binding DataContext.SourceTracks, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
                                       SelectedItem="{Binding ScannedTrack}"/>
-                            
+
                             <TextBlock Text="Codec" FontWeight="Bold" Grid.Column="2" VerticalAlignment="Center" />
                             <ComboBox Width="100" Grid.Column="3" Margin="5,0,5,0" Height="22"
                                       ItemsSource="{Binding DataContext.AudioEncoders, Converter={StaticResource enumComboConverter},  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
                                       SelectedItem="{Binding Encoder, Converter={StaticResource enumComboConverter}}"/>
-                            
+
                             <TextBlock Text="Bitrate" FontWeight="Bold" Grid.Column="4" VerticalAlignment="Center"
                                        Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
                             <ComboBox Width="70" Grid.Column="5" Margin="5,0,5,0" Height="22" 
-                                      ItemsSource="{Binding DataContext.AudioBitrates, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                      SelectedItem="{Binding Bitrate}" IsEnabled="{Binding}"
+                                      SelectedItem="{Binding Bitrate}"
+                                      ItemsSource="{Binding TrackReference, Converter={StaticResource audioBitrateConverter}}"
                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-                            
+
                             <TextBlock Text="Samplerate" FontWeight="Bold" Grid.Column="6" VerticalAlignment="Center"
                                        Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
                             <ComboBox Width="70" Grid.Column="7" Margin="5,0,5,0" Height="22" 
@@ -125,19 +127,19 @@
                                       ItemsSource="{Binding DataContext.AudioMixdowns, Converter={StaticResource enumComboConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                       SelectedItem="{Binding MixDown, Converter={StaticResource enumComboConverter}}"
                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-                            
+
                             <TextBlock Text="DRC" FontWeight="Bold" Grid.Column="2" Grid.Row="1" VerticalAlignment="Center"
                                        Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
                             <NumericUpDown:NumericUpDown Name="drcNumericCtl"  Width="45" Value="{Binding DRC, Mode=TwoWay}" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Left" Margin="5,0,5,0"
                                                          Minimum="0" Maximum="4" DecimalPlace="1" LargeChange="0.1" SmallChange="0.1"
                                                          Visibility="{Binding IsPassthru, Converter={StaticResource boolToHiddenVisConverter}, ConverterParameter=true}" />
-                            
+
                             <TextBlock Text="Gain" FontWeight="Bold" Grid.Column="4" Grid.Row="1" VerticalAlignment="Center"
                                        Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
                             <NumericUpDown:NumericUpDown Name="gainNumericCtl" Width="45" Value="{Binding Gain, Mode=TwoWay}" Grid.Row="1" Grid.Column="5" HorizontalAlignment="Left" Margin="5,0,5,0"
                                                          Minimum="-20" Maximum="20" DecimalPlace="0" SmallChange="1" LargeChange="1"
                                                          Visibility="{Binding IsPassthru, Converter={StaticResource boolToHiddenVisConverter}, ConverterParameter=true}"/>
-                            
+
                         </Grid>
 
                         <!-- Delete -->

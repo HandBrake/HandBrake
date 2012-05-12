@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+
 namespace HandBrake.ApplicationServices.Model.Encoding
 {
     using System;
@@ -198,6 +200,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
                 this.encoder = value;
                 this.OnPropertyChanged("Encoder");
                 this.OnPropertyChanged("IsPassthru");
+                this.OnPropertyChanged("TrackReference");
             }
         }
 
@@ -235,6 +238,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             {
                 this.mixDown = value;
                 this.OnPropertyChanged("MixDown");
+                this.OnPropertyChanged("TrackReference");
             }
         }
 
@@ -357,6 +361,19 @@ namespace HandBrake.ApplicationServices.Model.Encoding
                 }
                 return false;
             }
+        }
+
+        public bool IsLossless
+        {
+            get
+            {
+                return this.IsPassthru || this.Encoder == AudioEncoder.ffflac;
+            }
+        }
+
+        public AudioTrack TrackReference
+        {
+            get { return this; }
         }
         #endregion
     }

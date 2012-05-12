@@ -1154,9 +1154,11 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Show Release Notes
         /// </summary>
-        public void ReleaseNotes()
+        public void ShowReleaseNotes()
         {
-            Process.Start("https://forum.handbrake.fr/viewtopic.php?f=11&t=23843");
+            string path =
+                Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+            Process.Start(path + "\\releasenotes.html");
         }
 
         #endregion
