@@ -591,7 +591,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         fDstBrowseButton, fVidRateField, fVidRatePopUp,fVidEncoderField, fVidEncoderPopUp, fVidQualityField,
         fPictureSizeField,fPictureCroppingField, fVideoFiltersField,fVidQualityMatrix, fSubField, fSubPopUp,
         fPresetsAdd,fPresetsDelete,fSrcAngleLabel,fSrcAnglePopUp,
-		fCreateChapterMarkers,fVidTurboPassCheck,fDstMp4LargeFileCheck,fSubForcedCheck,fPresetsOutlineView,
+        fCreateChapterMarkers,fVidTurboPassCheck,fDstMp4LargeFileCheck,fSubForcedCheck,fPresetsOutlineView,
         fDstMp4HttpOptFileCheck,fDstMp4iPodFileCheck,fVidQualityRFField,fVidQualityRFLabel,
         fEncodeStartStopPopUp,fSrcTimeStartEncodingField,fSrcTimeEndEncodingField,fSrcFrameStartEncodingField,
         fSrcFrameEndEncodingField, fLoadChaptersButton, fSaveChaptersButton, fFramerateMatrix
