@@ -2920,7 +2920,7 @@ static void ShowHelp()
     "                            Separated by commas for more than one subtitle track.\n"
     "                            Example: \"1,2,3\" for multiple tracks.\n"
     "                            If \"string\" is omitted, the first track is forced.\n"
-    "        --subtitle-burn     \"Burn\" the selected subtitle into the video track\n"
+    "        --subtitle-burned   \"Burn\" the selected subtitle into the video track\n"
     "          <number>          If \"number\" is omitted, the first track is burned.\n"
     "                            \"number\" is an index into the subtitle list\n"
     "                            specified with '--subtitle'.\n"
