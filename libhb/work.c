@@ -1360,11 +1360,9 @@ cleanup:
 
     if( job->indepth_scan )
     {
-        /*
-         * Before closing the title print out our subtitle stats if we need to
-         * Find the highest and lowest.
-         */
-        for( i=0; i < hb_list_count( title->list_subtitle ); i++ )
+        /* Before closing the title print out our subtitle stats if we need to
+         * find the highest and lowest. */
+        for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
         {
             subtitle =  hb_list_item( title->list_subtitle, i );
 
@@ -1398,13 +1396,10 @@ cleanup:
             }
         }
 
-        
         if( subtitle_forced_id )
         {
-            /*
-             * If there are any subtitle streams with forced subtitles
-             * then select it in preference to the lowest.
-             */
+            /* If there is a subtitle stream with forced subtitles
+             * then select it in preference to the lowest. */
             subtitle_hit = subtitle_forced_id;
             hb_log( "Found a subtitle candidate with id 0x%x (contains forced subs)",
                     subtitle_hit );
@@ -1412,13 +1407,11 @@ cleanup:
         else if( subtitle_lowest > 0 &&
                  subtitle_lowest < ( subtitle_highest * 0.1 ) )
         {
-            /*
-             * OK we have more than one, and the lowest is lower,
+            /* OK we have more than one, and the lowest is lower,
              * but how much lower to qualify for turning it on by
              * default?
              *
-             * Let's say 10% as a default.
-             */
+             * Let's say 10% as a default. */
             subtitle_hit = subtitle_lowest_id;
             hb_log( "Found a subtitle candidate with id 0x%x", subtitle_hit );
         }
@@ -1426,11 +1419,8 @@ cleanup:
         {
             hb_log( "No candidate detected during subtitle scan" );
         }
-    }
 
-    if( job->indepth_scan )
-    {
-        for( i=0; i < hb_list_count( title->list_subtitle ); i++ )
+        for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
         {
             subtitle =  hb_list_item( title->list_subtitle, i );
             if( subtitle->id == subtitle_hit )
