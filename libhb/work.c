@@ -388,9 +388,9 @@ void hb_display_job_info( hb_job_t * job )
                 job->select_subtitle_config.default_track ? ", Default" : "" );
     }
 
-    for( i=0; i < hb_list_count( title->list_subtitle ); i++ )
+    for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
     {
-        subtitle =  hb_list_item( title->list_subtitle, i );
+        subtitle = hb_list_item( title->list_subtitle, i );
 
         if( subtitle )
         {
@@ -608,9 +608,9 @@ static void do_job( hb_job_t * job )
     {
         // Sanitize subtitles
         uint8_t one_burned = 0;
-        for( i=0; i < hb_list_count(title->list_subtitle); )
+        for( i = 0; i < hb_list_count( title->list_subtitle ); )
         {
-            subtitle =  hb_list_item( title->list_subtitle, i );
+            subtitle = hb_list_item( title->list_subtitle, i );
 
             if ( subtitle->config.dest == RENDERSUB )
             {
@@ -997,9 +997,9 @@ static void do_job( hb_job_t * job )
     w->fifo_in  = job->fifo_mpeg2;
     w->fifo_out = job->fifo_raw;
 
-    for( i=0; i < hb_list_count(title->list_subtitle); i++ )
+    for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
     {
-        subtitle =  hb_list_item( title->list_subtitle, i );
+        subtitle = hb_list_item( title->list_subtitle, i );
 
         if( subtitle )
         {
@@ -1335,8 +1335,8 @@ cleanup:
     hb_fifo_close( &job->fifo_render );
     hb_fifo_close( &job->fifo_mpeg4 );
 
-    for (i=0; i < hb_list_count(title->list_subtitle); i++) {
-        subtitle =  hb_list_item( title->list_subtitle, i);
+    for (i = 0; i < hb_list_count( title->list_subtitle ); i++) {
+        subtitle = hb_list_item( title->list_subtitle, i);
         if( subtitle )
         {
             hb_fifo_close( &subtitle->fifo_in );
@@ -1364,7 +1364,7 @@ cleanup:
          * find the highest and lowest. */
         for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
         {
-            subtitle =  hb_list_item( title->list_subtitle, i );
+            subtitle = hb_list_item( title->list_subtitle, i );
 
             hb_log( "Subtitle track %d (id 0x%x) '%s': %d hits (%d forced)",
                     subtitle->track, subtitle->id, subtitle->lang,
@@ -1422,7 +1422,7 @@ cleanup:
 
         for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
         {
-            subtitle =  hb_list_item( title->list_subtitle, i );
+            subtitle = hb_list_item( title->list_subtitle, i );
             if( subtitle->id == subtitle_hit )
             {
                 subtitle->config = job->select_subtitle_config;
