@@ -11,7 +11,7 @@
   Reuqires: HandBrakeCli.exe to be in the release folder.
   
 -->
-<Project DefaultTargets="NightlyBuild" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Nightly" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <!-- Setup -->
   <PropertyGroup>
@@ -50,18 +50,18 @@
 
   <!-- Pre Build Events -->
   <Target Name="PreBuild">
+    <Exec Command="copy $(ProjectDir)HandBrakeWPF\Installer\MakeNightly.nsi.tmpl $(ProjectDir)HandBrakeWPF\bin\Release /Y" Condition="$(Platform) == 'x86'" />
+    <Exec Command="copy $(ProjectDir)HandBrakeWPF\Installer\MakeNightly64.nsi.tmpl $(ProjectDir)HandBrakeWPF\bin\Release /Y" Condition="$(Platform) == 'x64'" />
+    <Exec Command="copy $(ProjectDir)HandBrakeWPF\Installer\Installer.nsi $(ProjectDir)HandBrakeWPF\bin\Release /Y" Condition="$(Platform) == 'x86'" />
+    <Exec Command="copy $(ProjectDir)HandBrakeWPF\Installer\Installer64.nsi $(ProjectDir)HandBrakeWPF\bin\Release /Y" Condition="$(Platform) == 'x64'" />
     <Exec Command="subwcrev.exe $(ProjectDir). $(ProjectDir)HandBrakeWPF\Properties\AssemblyInfo.cs.tmpl $(ProjectDir)HandBrakeWPF\Properties\AssemblyInfo.cs" />
-    <Exec Command="subwcrev.exe $(ProjectDir). $(ProjectDir)HandBrakeWPF\Installer\MakeNightly.nsi.tmpl $(ProjectDir)HandBrakeWPF\Installer\MakeNightly.nsi" />
-    <Exec Command="subwcrev.exe $(ProjectDir). $(ProjectDir)HandBrakeWPF\Installer\MakeNightly64.nsi.tmpl $(ProjectDir)HandBrakeWPF\Installer\MakeNightly64.nsi" />
-    <Exec Command="subwcrev.exe $(ProjectDir). $(ProjectDir)HandBrakeWPF\Installer\Installer.nsi.tmpl $(ProjectDir)HandBrakeWPF\Installer\Installer.nsi" />
-    <Exec Command="subwcrev.exe $(ProjectDir). $(ProjectDir)HandBrakeWPF\Installer\Installer64.nsi.tmpl $(ProjectDir)HandBrakeWPF\Installer\Installer64.nsi" />
+    <Exec Command="subwcrev.exe $(ProjectDir). $(ProjectDir)HandBrakeWPF\Installer\MakeNightly.nsi.tmpl $(ProjectDir)HandBrakeWPF\Installer\MakeNightly.nsi" Condition="$(Platform) == 'x86'" />
+    <Exec Command="subwcrev.exe $(ProjectDir). $(ProjectDir)HandBrakeWPF\Installer\MakeNightly64.nsi.tmpl $(ProjectDir)HandBrakeWPF\Installer\MakeNightly64.nsi" Condition="$(Platform) == 'x64'" />
     <Exec Command="subwcrev.exe $(ProjectDir). $(ProjectDir)HandBrake.ApplicationServices\Properties\AssemblyInfo.cs.tmpl $(ProjectDir)HandBrake.ApplicationServices\Properties\AssemblyInfo.cs" />
   </Target>
 
   <!-- Post Build Events -->
   <Target Name="NightlyPostBuild">
-    <Exec Command="copy $(ProjectDir)HandBrakeWPF\Installer\MakeNightly.nsi $(ProjectDir)HandBrakeWPF\bin\Release /Y" Condition="$(Platform) == 'x86'" />
-    <Exec Command="copy $(ProjectDir)HandBrakeWPF\Installer\MakeNightly64.nsi $(ProjectDir)HandBrakeWPF\bin\Release /Y" Condition="$(Platform) == 'x64'" />
     <Exec Command="copy $(ProjectDir)handbrakepineapple.ico $(ProjectDir)HandBrakeWPF\bin\Release /Y" />
     <Exec Command="xcopy $(ProjectDir)doc $(ProjectDir)HandBrakeWPF\bin\Release\doc /I /Y" />
     <Exec Command="makensis $(ProjectDir)HandBrakeWPF\bin\Release\MakeNightly.nsi" Condition="$(Platform) == 'x86'" />
@@ -69,8 +69,6 @@
   </Target>
 
   <Target Name="ReleasePostBuild">
-    <Exec Command="copy $(ProjectDir)HandBrakeWPF\Installer\Installer.nsi $(ProjectDir)HandBrakeWPF\bin\Release /Y" Condition="$(Platform) == 'x86'" />
-    <Exec Command="copy $(ProjectDir)HandBrakeWPF\Installer\Installer64.nsi $(ProjectDir)HandBrakeWPF\bin\Release /Y" Condition="$(Platform) == 'x64'" />
     <Exec Command="copy $(ProjectDir)handbrakepineapple.ico $(ProjectDir)HandBrakeWPF\bin\Release /Y" />
     <Exec Command="xcopy $(ProjectDir)doc $(ProjectDir)HandBrakeWPF\bin\Release\doc /I /Y" />
     <Exec Command="makensis $(ProjectDir)HandBrakeWPF\bin\Release\Installer.nsi" Condition="$(Platform) == 'x86'" />
