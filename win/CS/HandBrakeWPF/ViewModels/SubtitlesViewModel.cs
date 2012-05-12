@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.IO;
+
 namespace HandBrakeWPF.ViewModels
 {
     using System.Collections.Generic;
@@ -156,11 +158,12 @@ namespace HandBrakeWPF.ViewModels
             {
                 SubtitleTrack track = new SubtitleTrack
                     {
-                        SrtFileName = srtFile, 
+                        SrtFileName = Path.GetFileNameWithoutExtension(srtFile), 
                         SrtOffset = 0, 
                         SrtCharCode = "UTF-8", 
                         SrtLang = "English", 
-                        SubtitleType = SubtitleType.SRT
+                        SubtitleType = SubtitleType.SRT,
+                        SrtPath = srtFile
                     };
                 this.Task.SubtitleTracks.Add(track);
             }

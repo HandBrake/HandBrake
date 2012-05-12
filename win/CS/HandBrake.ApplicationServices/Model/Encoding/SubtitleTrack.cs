@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.IO;
+
 namespace HandBrake.ApplicationServices.Model.Encoding
 {
     using System;
@@ -37,6 +39,11 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         /// The source track.
         /// </summary>
         private Subtitle sourceTrack;
+
+        /// <summary>
+        /// Backing field for the srt file name.
+        /// </summary>
+        private string srtFileName;
 
         #endregion
 
@@ -170,10 +177,23 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         /// </summary>
         public string SrtCharCode { get; set; }
 
+
         /// <summary>
         ///   Gets or sets the SRT Filename
         /// </summary>
-        public string SrtFileName { get; set; }
+        public string SrtFileName
+        {
+            get
+            {
+                return srtFileName;
+            }
+
+            set
+            {
+                srtFileName = value;
+                this.NotifyOfPropertyChange(() => this.IsSrtSubtitle);
+            }
+        }
 
         /// <summary>
         ///   Gets or sets the SRT Language

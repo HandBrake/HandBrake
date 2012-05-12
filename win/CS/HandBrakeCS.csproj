@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Handbrake</RootNamespace>
-    <AssemblyName>Handbrake</AssemblyName>
+    <AssemblyName>Handbrake_old</AssemblyName>
     <ApplicationIcon>handbrakepineapple.ico</ApplicationIcon>
     <StartupObject>Handbrake.Program</StartupObject>
     <TargetZone>LocalIntranet</TargetZone>
@@ -43,6 +43,7 @@
     <OutputPath>bin\x86\Debug\</OutputPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <WarningLevel>1</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>

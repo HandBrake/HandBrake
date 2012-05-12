@@ -5,7 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:cal="http://www.caliburnproject.org"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:NumericUpDown="clr-namespace:EagleBoost.Wpf.Presentation.Controls.NumericUpDown;assembly=EagleBoost.Wpf.Presentation"
-             xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop" mc:Ignorable="d">
+             xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+             xmlns:Converters="clr-namespace:HandBrakeWPF.Converters" mc:Ignorable="d">
+    <UserControl.Resources>
+        <Converters:BooleanToVisibilityConverter x:Key="booleanToVisConverter" />
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -75,7 +80,11 @@
 
                             <TextBlock Text="Source" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Center" />
                             <ComboBox Width="120" ItemsSource="{Binding DataContext.SourceTracks, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
-                                      SelectedItem="{Binding SourceTrack}" Grid.Column="1" Margin="5,0,5,0" Height="22" />
+                                      SelectedItem="{Binding SourceTrack}" Grid.Column="1" Margin="5,0,5,0" Height="22"
+                                      Visibility="{Binding IsSrtSubtitle, Converter={StaticResource booleanToVisConverter}, ConverterParameter=true}"/>
+                            <TextBlock Text="{Binding SrtFileName}" Grid.Column="1" VerticalAlignment="Center"
+                                       Visibility="{Binding IsSrtSubtitle, Converter={StaticResource booleanToVisConverter}, ConverterParameter=false}" />
+                            
                             <TextBlock Text="Forced Only" FontWeight="Bold" Grid.Column="2" VerticalAlignment="Center" />
                             <CheckBox Grid.Column="3" IsChecked="{Binding Forced}" VerticalAlignment="Center" Margin="5,0,5,0"/>
                             <TextBlock Text="Burn In" FontWeight="Bold" Grid.Column="4" VerticalAlignment="Center" />
