@@ -159,7 +159,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 [ [NSFileManager defaultManager] removeItemAtPath: [ PreviewDirectory stringByAppendingPathComponent: file ] error: &error ];
                 if( error ) 
                 { 
-                    //an error occurred...
+                    //an error occurred
                     [self writeToActivityLog: "Could not remove existing preview at : %s",[file UTF8String] ];
                 }
             }    
@@ -745,7 +745,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         case HB_STATE_SCANNING:
 		{
             [fSrcDVD2Field setStringValue: [NSString stringWithFormat:
-                                            NSLocalizedString( @"Scanning title %d of %d...", @"" ),
+                                            NSLocalizedString( @"Scanning title %d of %d…", @"" ),
                                             p.title_cur, p.title_count]];
             [fScanIndicator setHidden: NO];
             [fScanIndicator setDoubleValue: 100.0 * ((double)( p.title_cur - 1 ) / p.title_count)];
@@ -817,12 +817,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         case HB_STATE_SCANNING:
 		{
             [fStatusField setStringValue: [NSString stringWithFormat:
-                                           NSLocalizedString( @"Queue Scanning title %d of %d...", @"" ),
+                                           NSLocalizedString( @"Queue Scanning title %d of %d…", @"" ),
                                            p.title_cur, p.title_count]];
             
             /* Set the status string in fQueueController as well */                               
             [fQueueController setQueueStatusString: [NSString stringWithFormat:
-                                                     NSLocalizedString( @"Queue Scanning title %d of %d...", @"" ),
+                                                     NSLocalizedString( @"Queue Scanning title %d of %d…", @"" ),
                                                      p.title_cur, p.title_count]];
             break;
 		}
@@ -850,8 +850,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* Update text field */
             pass_desc = @"";
             //string = [NSMutableString stringWithFormat: NSLocalizedString( @"Searching for start point: pass %d %@ of %d, %.2f %%", @"" ), p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
-            /* For now, do not announce "pass x of x for the search phase ... */
-            string = [NSMutableString stringWithFormat: NSLocalizedString( @"Searching for start point ... :  %.2f %%", @"" ), 100.0 * p.progress];
+            /* For now, do not announce "pass x of x for the search phase */
+            string = [NSMutableString stringWithFormat: NSLocalizedString( @"Searching for start point… :  %.2f %%", @"" ), 100.0 * p.progress];
             
 			if( p.seconds > -1 )
             {
@@ -957,9 +957,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         case HB_STATE_MUXING:
         {
             /* Update text field */
-            [fStatusField setStringValue: NSLocalizedString( @"Muxing...", @"" )];
+            [fStatusField setStringValue: NSLocalizedString( @"Muxing…", @"" )];
             /* Set the status string in fQueueController as well */
-            [fQueueController setQueueStatusString: NSLocalizedString( @"Muxing...", @"" )];
+            [fQueueController setQueueStatusString: NSLocalizedString( @"Muxing…", @"" )];
             /* Update slider */
             [fRipIndicator setIndeterminate: YES];
             [fRipIndicator startAnimation: nil];
@@ -1417,13 +1417,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 -(void)showGrowlDoneNotification:(NSString *) filePath
 {
     /* This end of encode action is called as each encode rolls off of the queue */
-    /* Setup the Growl stuff ... */
+    /* Setup the Growl stuff */
     NSString * finishedEncode = filePath;
     /* strip off the path to just show the file name */
     finishedEncode = [finishedEncode lastPathComponent];
     NSString * growlMssg = [NSString stringWithFormat: @"your HandBrake encode %@ is done!",finishedEncode];
     [GrowlApplicationBridge 
-     notifyWithTitle:@"Put down that cocktail..." 
+     notifyWithTitle:@"Put down that cocktail…" 
      description:growlMssg 
      notificationName:SERVICE_NAME
      iconData:nil 
@@ -1462,7 +1462,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     {
         /*On Screen Notification*/
         int status;
-        status = NSRunAlertPanel(@"Put down that cocktail...",@"Your HandBrake queue is done!", @"OK", nil, nil);
+        status = NSRunAlertPanel(@"Put down that cocktail…",@"Your HandBrake queue is done!", @"OK", nil, nil);
         [NSApp requestUserAttention:NSCriticalRequest];
     }
     
@@ -1686,8 +1686,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     if(sender == fScanSrcTitleOpenButton)
     {
         /* We setup the scan status in the main window to indicate a source title scan */
-        [fSrcDVD2Field setStringValue: @"Opening a new source title ..."];
-		[fScanIndicator setHidden: NO];
+        [fSrcDVD2Field setStringValue: @"Opening a new source title…"];
+        [fScanIndicator setHidden: NO];
         [fScanIndicator setIndeterminate: YES];
         [fScanIndicator startAnimation: nil];
 		
@@ -1775,11 +1775,17 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
     if (cancelScanDecrypt == 0)
     {
-        /* we actually pass the scan off to libhb here */
-        /* If there is no title number passed to scan, we use "0"
-         * which causes the default behavior of a full source scan
-         */
-        if (!scanTitleNum)
+        /* We use our advanced pref to determine how many previews to scan */
+        int hb_num_previews = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
+        /* We use our advanced pref to determine the minimum title length to use in seconds*/
+        int min_title_duration_seconds = [[[NSUserDefaults standardUserDefaults] objectForKey:@"MinTitleScanSeconds"] intValue];
+        uint64_t min_title_duration_ticks = 90000LL * min_title_duration_seconds;
+        /* set title to NULL */
+        fTitle = NULL;
+        /* We actually pass the scan off to libhb here.
+         * If there is no title number passed to scan, we use 0
+         * which causes the default behavior of a full source scan */
+        if (scanTitleNum < 0)
         {
             scanTitleNum = 0;
         }
@@ -1787,15 +1793,14 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         {
             [self writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
         }
-        /* We use our advanced pref to determine how many previews to scan */
-        int hb_num_previews = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
-        /* We use our advanced pref to determine the minimum title length to use in seconds*/
-        uint64_t min_title_duration_seconds = 90000L * [[[NSUserDefaults standardUserDefaults] objectForKey:@"MinTitleScanSeconds"] intValue];
-        /* set title to NULL */
-        fTitle = NULL;
-        [self writeToActivityLog: "Minimum length of title for scan: %d", min_title_duration_seconds];
-        hb_scan( fHandle, [path UTF8String], scanTitleNum, hb_num_previews, 1 , min_title_duration_seconds );
-        [fSrcDVD2Field setStringValue:@"Scanning new source ..."];
+        else
+        {
+            // minimum title duration doesn't apply to title-specific scan
+            // it doesn't apply to batch scan either, but we can't tell it apart from DVD & BD folders here
+            [self writeToActivityLog: "scanning titles with a duration of %d seconds or more", min_title_duration_seconds];
+        }
+        hb_scan( fHandle, [path UTF8String], scanTitleNum, hb_num_previews, 1 , min_title_duration_ticks );
+        [fSrcDVD2Field setStringValue:@"Scanning new source…"];
     }
 }
 
@@ -2273,7 +2278,7 @@ fWorkingCount = 0;
     [queueFileJob setObject:[NSNumber numberWithInt:title->index] forKey:@"TitleNumber"];
     [queueFileJob setObject:[NSNumber numberWithInt:[fSrcAnglePopUp indexOfSelectedItem] + 1] forKey:@"TitleAngle"];
     
-    /* Determine and set a variable to tell hb what start and stop times to use ... chapters vs seconds */
+    /* Determine and set a variable to tell hb what start and stop times to use (chapters, seconds or frames) */
     if( [fEncodeStartStopPopUp indexOfSelectedItem] == 0 )
     {
         [queueFileJob setObject:[NSNumber numberWithInt:0] forKey:@"fEncodeStartStop"];    
@@ -2446,7 +2451,7 @@ fWorkingCount = 0;
     [queueFileJob setObject:[NSNumber numberWithInt:[[fAudioFallbackPopUp selectedItem] tag]] forKey: @"JobAudioEncoderFallback"];
     
     /* Audio */
-    [self writeToActivityLog: "createQueueFileItem: Getting Audio from prepareAudioForQueueFileJob ..."];
+    [self writeToActivityLog: "createQueueFileItem: Getting Audio from prepareAudioForQueueFileJob…"];
     [fAudioDelegate prepareAudioForQueueFileJob: queueFileJob];
     [self writeToActivityLog: "createQueueFileItem: Returned getting audio from prepareAudioForQueueFileJob"];
     
@@ -2636,11 +2641,10 @@ fWorkingCount = 0;
 
     if (cancelScanDecrypt == 0)
     {
-        /* we actually pass the scan off to libhb here */
-        /* If there is no title number passed to scan, we use "0"
-         * which causes the default behavior of a full source scan
-         */
-        if (!scanTitleNum)
+        /* We actually pass the scan off to libhb here.
+         * If there is no title number passed to scan, we use "0"
+         * which causes the default behavior of a full source scan */
+        if (scanTitleNum < 0)
         {
             scanTitleNum = 0;
         }
@@ -2648,7 +2652,6 @@ fWorkingCount = 0;
         {
             [self writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
         }
-        
         /* Only scan 10 previews before an encode - additional previews are only useful for autocrop and static previews,
          * which are already taken care of at this point */
         hb_scan( fQueueEncodeLibhb, [path UTF8String], scanTitleNum, 10, 0, 0 );
@@ -3073,30 +3076,31 @@ fWorkingCount = 0;
         /* a specific framerate has been chosen */
         job->vrate      = 27000000;
         job->vrate_base = hb_video_rates[[fVidRatePopUp indexOfSelectedItem]-1].rate;
-        /* We are not same as source so we set job->cfr to 1 
-         * to enable constant frame rate since user has specified
-         * a specific framerate */
-        if ([fFramerateMatrix selectedRow] == 0) // we are pfr if a specific framerate is set
+        if ([fFramerateMatrix selectedRow] == 1)
         {
-            job->cfr = 2;
+            // CFR
+            job->cfr = 1;
         }
         else
         {
-            job->cfr = 1;
+            // PFR
+            job->cfr = 2;
         }
     }
     else
     {
-        /* We are same as source (variable) */
+        /* same as source */
         job->vrate      = title->rate;
         job->vrate_base = title->rate_base;
-        /* We are same as source so we set job->cfr to 0 
-         * to enable true same as source framerate */
-        job->cfr = 0;
-        /* If the user specifies cfr then ... */
-        if ([fFramerateMatrix selectedRow] == 1) // we are cfr
+        if ([fFramerateMatrix selectedRow] == 1)
         {
+            // CFR
             job->cfr = 1;
+        }
+        else
+        {
+            // VFR
+            job->cfr = 0;
         }
     }
 
@@ -3440,7 +3444,7 @@ bool one_burned = FALSE;
     else if ([[queueToApply objectForKey:@"fEncodeStartStop"] intValue] == 1)
     {
         /* we are pts based start / stop */
-        [self writeToActivityLog: "Start / Stop set to seconds ..."];
+        [self writeToActivityLog: "Start / Stop set to seconds…"];
         
         /* Point A to Point B. Time to time in seconds.*/
         /* get the start seconds from the start seconds field */
@@ -3454,7 +3458,7 @@ bool one_burned = FALSE;
     else if ([[queueToApply objectForKey:@"fEncodeStartStop"] intValue] == 2)
     {
         /* we are frame based start / stop */
-        [self writeToActivityLog: "Start / Stop set to frames ..."];
+        [self writeToActivityLog: "Start / Stop set to frames…"];
         
         /* Point A to Point B. Frame to frame */
         /* get the start frame from the start frame field */
@@ -3598,31 +3602,31 @@ bool one_burned = FALSE;
         /* a specific framerate has been chosen */
         job->vrate      = 27000000;
         job->vrate_base = hb_video_rates[[[queueToApply objectForKey:@"JobIndexVideoFramerate"] intValue]-1].rate;
-        /* We are not same as source so we set job->cfr to 1 
-         * to enable constant frame rate since user has specified
-         * a specific framerate*/
-        
-        if ([[queueToApply objectForKey:@"VideoFramerateMode"] isEqualToString:@"pfr"])
+        if ([[queueToApply objectForKey:@"VideoFramerateMode"] isEqualToString:@"cfr"])
         {
-            job->cfr = 2;
+            // CFR
+            job->cfr = 1;
         }
         else
         {
-            job->cfr = 1;
+            // PFR
+            job->cfr = 2;
         }
     }
     else
     {
-        /* We are same as source (variable) */
+        /* same as source */
         job->vrate      = [[queueToApply objectForKey:@"JobVrate"] intValue];
         job->vrate_base = [[queueToApply objectForKey:@"JobVrateBase"] intValue];
-        /* We are same as source so we set job->cfr to 0 
-         * to enable true same as source framerate */
-        job->cfr = 0;
-        /* If the user specifies cfr then ... */
-        if ([[queueToApply objectForKey:@"VideoFramerateMode"] isEqualToString:@"cfr"]) // we are cfr
+        if ([[queueToApply objectForKey:@"VideoFramerateMode"] isEqualToString:@"cfr"])
         {
+            // CFR
             job->cfr = 1;
+        }
+        else
+        {
+            // VFR
+            job->cfr = 0;
         }
     }
     
@@ -4120,7 +4124,7 @@ bool one_burned = FALSE;
                /*Warn that computer will sleep after encoding*/
                int reminduser;
                NSBeep();
-               reminduser = NSRunAlertPanel(@"The computer will sleep after encoding is done.",@"You have selected to sleep the computer after encoding. To turn off sleeping, go to the HandBrake preferences.", @"OK", @"Preferences...", nil);
+               reminduser = NSRunAlertPanel(@"The computer will sleep after encoding is done.",@"You have selected to sleep the computer after encoding. To turn off sleeping, go to the HandBrake preferences.", @"OK", @"Preferences…", nil);
                [NSApp requestUserAttention:NSCriticalRequest];
                if ( reminduser == NSAlertAlternateReturn )
                {
@@ -4132,7 +4136,7 @@ bool one_burned = FALSE;
                /*Warn that computer will shut down after encoding*/
                int reminduser;
                NSBeep();
-               reminduser = NSRunAlertPanel(@"The computer will shut down after encoding is done.",@"You have selected to shut down the computer after encoding. To turn off shut down, go to the HandBrake preferences.", @"OK", @"Preferences...", nil);
+               reminduser = NSRunAlertPanel(@"The computer will shut down after encoding is done.",@"You have selected to shut down the computer after encoding. To turn off shut down, go to the HandBrake preferences.", @"OK", @"Preferences…", nil);
                [NSApp requestUserAttention:NSCriticalRequest];
                if ( reminduser == NSAlertAlternateReturn )
                {
@@ -4220,11 +4224,11 @@ bool one_burned = FALSE;
     
     // now that we've stopped the currently encoding job, lets mark it as cancelled
     [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] setObject:[NSNumber numberWithInt:3] forKey:@"Status"];
-    // and as always, save it in the queue .plist...
+    // and as always, save it in Queue.plist
     /* We save all of the Queue data here */
     [self saveQueueFileItem];
     
-    // ... and see if there are more items left in our queue
+    // and see if there are more items left in our queue
     int queueItems = [QueueFileArray count];
     /* If we still have more items in our queue, lets go to the next one */
     /* Check to see if there are any more pending items in the queue */
@@ -4262,7 +4266,7 @@ bool one_burned = FALSE;
     
     // now that we've stopped the currently encoding job, lets mark it as cancelled
     [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] setObject:[NSNumber numberWithInt:3] forKey:@"Status"];
-    // and as always, save it in the queue .plist...
+    // and as always, save it in Queue.plist
     /* We save all of the Queue data here */
     [self saveQueueFileItem];
     // so now lets move to 
@@ -4308,18 +4312,18 @@ bool one_burned = FALSE;
     /* first get the currently selected index so we can choose it again after cycling through the available titles. */
     int currentlySelectedTitle = [fSrcTitlePopUp indexOfSelectedItem];
     
-    /* For each title in the fSrcTitlePopUp select it ... */
+    /* For each title in the fSrcTitlePopUp, select it */
     for( int i = 0; i < [fSrcTitlePopUp numberOfItems]; i++ )
     {
         [fSrcTitlePopUp selectItemAtIndex:i];
-        /* Now call titlePopUpChanged to load it up ... */
+        /* Now call titlePopUpChanged to load it up */
         [self titlePopUpChanged:nil];
         /* now add the title to the queue */
         [self addToQueue:nil];   
     }
     /* Now that we are done, reselect the previously selected title.*/
     [fSrcTitlePopUp selectItemAtIndex: currentlySelectedTitle];
-    /* Now call titlePopUpChanged to load it up ... */
+    /* Now call titlePopUpChanged to load it up */
     [self titlePopUpChanged:nil]; 
 }
 
@@ -6087,7 +6091,7 @@ return YES;
             /*On Screen Notification*/
             int status;
             NSBeep();
-            status = NSRunAlertPanel(@"HandBrake has determined your built in presets are out of date...",@"HandBrake will now update your built-in presets.", @"OK", nil, nil);
+            status = NSRunAlertPanel(@"HandBrake has determined your built in presets are out of date…",@"HandBrake will now update your built-in presets.", @"OK", nil, nil);
             [NSApp requestUserAttention:NSCriticalRequest];
         }
         /* when alert is dismissed, go ahead and update the built in presets */
