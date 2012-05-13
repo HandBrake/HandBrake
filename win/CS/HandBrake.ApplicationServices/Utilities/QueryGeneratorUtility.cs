@@ -409,8 +409,6 @@ namespace HandBrake.ApplicationServices.Utilities
                     break;
             }
 
-            double x264CqStep = UserSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step);
-
             switch (task.VideoEncodeRateType)
             {
                 case VideoEncodeRateType.AverageBitrate:
@@ -422,17 +420,14 @@ namespace HandBrake.ApplicationServices.Utilities
                     switch (task.VideoEncoder)
                     {
                         case VideoEncoder.FFMpeg:
-                            value = 31 - (task.Quality.Value - 1);
-                            query += string.Format(" -q {0}", value.ToString(CultureInfo.InvariantCulture));
+                        case VideoEncoder.FFMpeg2:
+                            query += string.Format(" -q {0}", task.Quality.Value.ToString(CultureInfo.InvariantCulture));
                             break;
                         case VideoEncoder.X264:
-                            value = 51 - (task.Quality.Value * x264CqStep);
-                            value = Math.Round(value, 2);
-                            query += string.Format(" -q {0}", value.ToString(CultureInfo.InvariantCulture));
+                            query += string.Format(" -q {0}", task.Quality.Value.ToString(CultureInfo.InvariantCulture));
                             break;
                         case VideoEncoder.Theora:
-                            value = task.Quality.Value;
-                            query += string.Format(" -q {0}", value.ToString(CultureInfo.InvariantCulture));
+                            query += string.Format(" -q {0}", task.Quality.Value.ToString(CultureInfo.InvariantCulture));
                             break;
                     }
                     break;
