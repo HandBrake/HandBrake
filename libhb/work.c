@@ -1005,12 +1005,6 @@ static void do_job( hb_job_t * job )
             subtitle->fifo_sync = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
             subtitle->fifo_out  = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
 
-            if( job->indepth_scan && 
-                !( job->select_subtitle_config.force &&
-                   hb_subtitle_can_force( subtitle->source ) ) )
-            {
-                continue;
-            }
             w = hb_get_work( subtitle->codec );
             w->fifo_in = subtitle->fifo_in;
             w->fifo_out = subtitle->fifo_raw;
@@ -1386,10 +1380,10 @@ cleanup:
             }
         }
 
-        if( subtitle_forced_id )
+        if( subtitle_forced_id && job->select_subtitle_config.force )
         {
-            /* If there is a subtitle stream with forced subtitles
-             * then select it in preference to the lowest. */
+            /* If there is a subtitle stream with forced subtitles and forced-only
+             * is set, then select it in preference to the lowest. */
             subtitle_hit = subtitle_forced_id;
             hb_log( "Found a subtitle candidate with id 0x%x (contains forced subs)",
                     subtitle_hit );
