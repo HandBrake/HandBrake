@@ -21,7 +21,7 @@ namespace HandBrake.ApplicationServices.Services
     /// <summary>
     /// Scan a Source
     /// </summary>
-    public class ScanService : IScan
+    public class  ScanService : IScan
     {
         #region Private Variables
 
@@ -209,6 +209,11 @@ namespace HandBrake.ApplicationServices.Services
                 string dvdInfoPath = Path.Combine(
                     logDir,
                     string.Format("last_scan_log{0}.txt", GeneralUtilities.GetInstanceCount));
+
+                if (!Directory.Exists(logDir))
+                {
+                    Directory.CreateDirectory(logDir);
+                }
 
                 // Make we don't pick up a stale last_encode_log.txt (and that we have rights to the file)
                 if (File.Exists(dvdInfoPath))

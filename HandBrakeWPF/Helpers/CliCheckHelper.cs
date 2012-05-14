@@ -72,14 +72,12 @@ namespace HandBrakeWPF.Helpers
                 cliProcess.Start();
 
                 // Retrieve standard output and report back to parent thread until the process is complete
+                bool success = false;
                 TextReader stdOutput = cliProcess.StandardError;
-
-                while (!cliProcess.HasExited)
+                while ((line = stdOutput.ReadLine()) != null)
                 {
-                    line = stdOutput.ReadLine() ?? string.Empty;
                     Match m = Regex.Match(line, @"HandBrake ([svnM0-9.]*) \(([0-9]*)\)");
                     Match platform = Regex.Match(line, @"- ([A-Za-z0-9\s ]*) -");
-
                     if (m.Success)
                     {
                         string version = m.Groups[1].Success ? m.Groups[1].Value : string.Empty;
@@ -90,6 +88,7 @@ namespace HandBrakeWPF.Helpers
 
                         userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeBuild, buildValue);
                         userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeVersion, version);
+                        success = true;
                     }
 
                     if (platform.Success)
@@ -97,7 +96,10 @@ namespace HandBrakeWPF.Helpers
                         userSettingService.SetUserSetting(
                             ASUserSettingConstants.HandBrakePlatform, platform.Value.Replace("-", string.Empty).Trim());
                     }
+                }
 
+                while (!cliProcess.HasExited)
+                {
                     if (cliProcess.TotalProcessorTime.Seconds > 10) // Don't wait longer than 10 seconds.
                     {
                         Process cli = Process.GetProcessById(cliProcess.Id);
@@ -108,7 +110,10 @@ namespace HandBrakeWPF.Helpers
                     }
                 }
 
-                userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeExeHash, base64Hash);
+                if (success)
+                {
+                    userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeExeHash, base64Hash);
+                }
             }
             catch (Exception e)
             {
