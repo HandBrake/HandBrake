@@ -174,9 +174,11 @@ namespace HandBrake.ApplicationServices.Services
             }
             catch (Exception exc)
             {
+                encodeQueueTask.Status = QueueItemStatus.Error;
                 this.Invoke_encodeCompleted(
                     new EncodeCompletedEventArgs(
-                        false, exc, "An Error occured when trying to encode this source. "));
+                        false, null, "An Error occured when trying to encode this source. "));
+                throw;
             }
         }
 
