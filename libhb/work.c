@@ -560,12 +560,15 @@ static void do_job( hb_job_t * job )
         {
             if( ( subtitle = hb_list_item( title->list_subtitle, i ) ) )
             {
-                /* Remove the scanned subtitle from the subtitle list if
-                 * it would result in an identical duplicate subtitle track
-                 * or an emty track (forced and no forced hits). */
+                /* Remove the scanned subtitle from the list if it would result in:
+                 * - an emty track (forced and no forced hits)
+                 * - an identical, duplicate subtitle track:
+                 *   -> both (or neither) are forced 
+                 *   -> subtitle is not forced but all its hits are forced */
                 if( ( interjob->select_subtitle->id == subtitle->id ) &&
                     ( ( subtitle->config.force && interjob->select_subtitle->forced_hits == 0 ) ||
-                      ( subtitle->config.force == interjob->select_subtitle->config.force ) ) )
+                      ( subtitle->config.force == interjob->select_subtitle->config.force ) ||
+                      ( subtitle->config.force == 0 && interjob->select_subtitle->hits == interjob->select_subtitle->forced_hits ) ) )
                 {
                     hb_list_rem( title->list_subtitle, subtitle );
                     free( subtitle );
@@ -573,8 +576,7 @@ static void do_job( hb_job_t * job )
                 }
                 /* Adjust output track number, in case we removed one.
                  * Output tracks sadly still need to be in sequential order.
-                 * Note: out.track starts at 1, i starts at 0, and track 1 is
-                 *       interjob->select_subtitle */
+                 * Note: out.track starts at 1, i starts at 0, and track 1 is interjob->select_subtitle */
                 subtitle->out_track = ++i + 1;
             }
             else
