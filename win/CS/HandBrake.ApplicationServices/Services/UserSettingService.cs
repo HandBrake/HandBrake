@@ -136,6 +136,10 @@ namespace HandBrake.ApplicationServices.Services
                         SerializableDictionary<string, object> data = (SerializableDictionary<string, object>)serializer.Deserialize(reader);
                         this.userSettings = data;
                     }
+                } 
+                else
+                {
+                    this.userSettings = new SerializableDictionary<string, object>();
                 }
 
                 // Add any missing / new settings
@@ -146,7 +150,7 @@ namespace HandBrake.ApplicationServices.Services
                     this.Save();
                 }
             }
-            catch (Exception)
+            catch (Exception exc)
             {
                 try
                 {
