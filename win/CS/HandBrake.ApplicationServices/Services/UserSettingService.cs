@@ -3,6 +3,8 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
+using System.Linq;
+
 namespace HandBrake.ApplicationServices.Services
 {
     using System;
@@ -123,6 +125,7 @@ namespace HandBrake.ApplicationServices.Services
         {
             try
             {
+                // Load up the users current settings file.
                 if (File.Exists(this.settingsFile))
                 {
                     using (StreamReader reader = new StreamReader(this.settingsFile))
@@ -131,13 +134,35 @@ namespace HandBrake.ApplicationServices.Services
                         this.userSettings = data;
                     }
                 }
+                else
+                {
+                    this.userSettings = new SerializableDictionary<string, object>();
+                }
+
+                // Add any missing / new settings
+                SerializableDictionary<string, object> defaults = this.GetDefaults();
+                foreach (var item in defaults.Where(item => !this.userSettings.Keys.Contains(item.Key)))
+                {
+                    this.userSettings.Add(item.Key, item.Value);
+                    this.Save();
+                }
             }
             catch (Exception exc)
             {
-                throw new GeneralApplicationException(
-                    "HandBrake has detected corruption in the settings file. User settings will now be reset to defaults.",
-                    "Please restart HandBrake before continuing.",
-                    exc);
+                try
+                {
+                    this.userSettings = this.GetDefaults();
+                    if (File.Exists(this.settingsFile))
+                    {
+                        File.Delete(this.settingsFile);
+                    }
+                    this.Save();
+                }
+                catch (Exception)
+                {
+                }
+
+                throw;
             }
         }
 
@@ -158,62 +183,21 @@ namespace HandBrake.ApplicationServices.Services
         }
 
         /// <summary>
-        /// This is just a utility method for creating a defaults xml file. Don't use this!!!
+        /// Load Default Settings
         /// </summary>
-        private void SetAllDefaults()
+        /// <returns>
+        /// The get defaults.
+        /// </returns>
+        private SerializableDictionary<string, object> GetDefaults()
         {
-            userSettings = new SerializableDictionary<string, object>();
-            userSettings[ASUserSettingConstants.X264Step] = 0.25;
-            userSettings[ASUserSettingConstants.Verbosity] = 1;
-            userSettings[ASUserSettingConstants.WhenCompleteAction] = "Do Nothing";
-            userSettings[ASUserSettingConstants.GrowlEncode] = false;
-            userSettings[ASUserSettingConstants.GrowlQueue] = false;
-            userSettings[ASUserSettingConstants.ProcessPriority] = "Below Normal";
-            userSettings[ASUserSettingConstants.PreventSleep] = true;
-            userSettings[ASUserSettingConstants.ShowCLI] = false;
-            userSettings[ASUserSettingConstants.SaveLogToCopyDirectory] = false;
-            userSettings[ASUserSettingConstants.SaveLogWithVideo] = false;
-            userSettings[ASUserSettingConstants.DisableLibDvdNav] = false;
-            userSettings[ASUserSettingConstants.SendFile] = false;
-            userSettings[ASUserSettingConstants.MinScanDuration] = 10;
-            userSettings[ASUserSettingConstants.HandBrakeBuild] = 0;
-            userSettings[ASUserSettingConstants.HandBrakeVersion] = string.Empty;
-            userSettings["updateStatus"] = true;
-            userSettings["tooltipEnable"] = true;
-            userSettings["defaultPreset"] = string.Empty;
-            userSettings["skipversion"] = 0;
-            userSettings["autoNaming"] = true;
-            userSettings["autoNamePath"] = string.Empty;
-            userSettings["appcast_i686"] = "http://handbrake.fr/appcast.i386.xml";
-            userSettings["appcast_x64"] = "http://handbrake.fr/appcast_unstable.x86_64.xml";
-            userSettings["autoNameFormat"] = "{source}-{title}";
-            userSettings["VLC_Path"] = "C:\\Program Files\\VideoLAN\\vlc\\vlc.exe";
-            userSettings["MainWindowMinimize"] = true;
-            userSettings["QueryEditorTab"] = false;
-            userSettings["presetNotification"] = false;
-            userSettings["trayIconAlerts"] = true;
-            userSettings["lastUpdateCheckDate"] = DateTime.Today;
-            userSettings["daysBetweenUpdateCheck"] = 7;
-            userSettings["useM4v"] = 0;
-            userSettings["PromptOnUnmatchingQueries"] = true;
-            userSettings["NativeLanguage"] = "Any";
-            userSettings["DubMode"] = 255;
-            userSettings["HandBrakeExeHash"] = string.Empty;
-            userSettings["previewScanCount"] = 10;
-            userSettings["clearOldLogs"] = true;
-            userSettings["AutoNameTitleCase"] = true;
-            userSettings["AutoNameRemoveUnderscore"] = true;
-            userSettings["ActivityWindowLastMode"] = 0;
-            userSettings["useClosedCaption"] = false;
-            userSettings["batchMinDuration"] = "00:18:00";
-            userSettings["batchMaxDuration"] = "02:30:00";
-            userSettings["defaultPlayer"] = false;
-            userSettings["SelectedLanguages"] = new StringCollection();
-            userSettings["DubModeAudio"] = 0;
-            userSettings["DubModeSubtitle"] = 0;
-            userSettings["addOnlyOneAudioPerLanguage"] = true;
-            userSettings["MinTitleLength"] = 10;
-            userSettings["ShowAdvancedAudioPassthruOpts"] = false;
+            if (File.Exists("defaultsettings.xml"))
+            {
+                using (StreamReader reader = new StreamReader("defaultsettings.xml"))
+                {
+                    return (SerializableDictionary<string, object>)serializer.Deserialize(reader);
+                }
+            }
+            return new SerializableDictionary<string, object>();
         }
     }
 }
