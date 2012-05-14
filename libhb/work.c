@@ -545,17 +545,12 @@ static void do_job( hb_job_t * job )
 
     hb_log( "starting job" );
 
-    /*
-     * Look for the scanned subtitle in the existing subtitle list
-     * select_subtitle implies that we did a scan.
-     */
-    if ( !job->indepth_scan && interjob->select_subtitle &&
-         ( job->pass == 0 || job->pass == 2 ) )
+    /* Look for the scanned subtitle in the existing subtitle list
+     * select_subtitle implies that we did a scan. */
+    if( !job->indepth_scan && interjob->select_subtitle )
     {
-        /*
-         * Disable forced subtitles if we didn't find any in the scan
-         * so that we display normal subtitles instead.
-         */
+        /* Disable forced subtitles if we didn't find any in the scan, so that
+         * we display normal subtitles instead. */
         if( interjob->select_subtitle->config.force &&
             interjob->select_subtitle->forced_hits == 0 )
         {
@@ -565,11 +560,9 @@ static void do_job( hb_job_t * job )
         {
             if( ( subtitle = hb_list_item( title->list_subtitle, i ) ) )
             {
-                /*
-                * Remove the scanned subtitle from the subtitle list if
-                * it would result in an identical duplicate subtitle track
-                * or an emty track (forced and no forced hits).
-                */
+                /* Remove the scanned subtitle from the subtitle list if
+                 * it would result in an identical duplicate subtitle track
+                 * or an emty track (forced and no forced hits). */
                 if( ( interjob->select_subtitle->id == subtitle->id ) &&
                     ( ( subtitle->config.force && interjob->select_subtitle->forced_hits == 0 ) ||
                       ( subtitle->config.force == interjob->select_subtitle->config.force ) ) )
@@ -591,17 +584,13 @@ static void do_job( hb_job_t * job )
             }
         }
 
-        /*
-         * Add the subtitle that we found on the first pass for use in this
-         * pass.
+        /* Add the subtitle that we found on the subtitle scan pass.
          *
-         * Make sure it's the first subtitle in the list so that is is the
-         * first burned subtitle (explicitly or after sanitizing) - which
-         * should ensures that it doesn't get dropped.
-         */
+         * Make sure it's the first subtitle in the list so that it becomes the
+         * first burned subtitle (explicitly or after sanitizing) - which should
+         * ensure that it doesn't get dropped. */
         interjob->select_subtitle->out_track = 1;
-        hb_list_insert( title->list_subtitle, 0, interjob->select_subtitle );
-        interjob->select_subtitle = NULL;
+        hb_list_insert( title->list_subtitle, 0, hb_subtitle_copy( interjob->select_subtitle ) );
     }
 
     if ( !job->indepth_scan )

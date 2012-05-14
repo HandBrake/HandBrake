@@ -1531,19 +1531,11 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     }
     title_copy->video_codec_name = strdup( title->video_codec_name );
 
-    /*
-     * The following code is confusing, there are two ways in which
-     * we select subtitles and it depends on whether this is single or
-     * two pass mode.
+    /* If we're doing Foreign Audio Search, copy all subtitles matching the first
+     * audio track language we find in the audio list.
      *
-     * subtitle_scan may be enabled, in which case the first pass
-     * scans all subtitles of that language. The second pass does not
-     * select any because they are set at the end of the first pass.
-     *
-     * We may have manually selected a subtitle, in which case that is
-     * selected in the first pass of a single pass, or the second of a
-     * two pass.
-     */
+     * Otherwise, copy all subtitles found in the input job (which can be manually
+     * selected by the user, or added after the Foreign Audio Search pass). */
     memset( audio_lang, 0, sizeof( audio_lang ) );
 
     if( job->indepth_scan )
@@ -1565,30 +1557,23 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
             if( strcmp( subtitle->iso639_2, audio_lang ) == 0 &&
                 hb_subtitle_can_force( subtitle->source ) )
             {
-                /* Matched subtitle language with audio language, so
-                 * add this to our list to scan.
+                /* Matched subtitle language with audio language, so add this to
+                 * our list to scan.
                  *
-                 * We will update the subtitle list on the second pass
-                 * later after the first pass has completed. */
+                 * We will update the subtitle list on the next pass later, after
+                 * the subtitle scan pass has completed. */
                 hb_list_add( title_copy->list_subtitle, hb_subtitle_copy( subtitle ) );
             }
         }
     }
     else
     {
-        /*
-         * Not doing a subtitle scan in this pass, but maybe we are in the
-         * first pass?
-         */
-        if( job->pass != 1 )
+        /* Copy all subtitles from the input job to title_copy/job_copy. */
+        for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
         {
-            /* Copy all subtitles from the input job to title_copy/job_copy. */
-            for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
+            if( ( subtitle = hb_list_item( job->list_subtitle, i ) ) )
             {
-                if( ( subtitle = hb_list_item( job->list_subtitle, i ) ) )
-                {
-                    hb_list_add( title_copy->list_subtitle, hb_subtitle_copy( subtitle ) );
-                }
+                hb_list_add( title_copy->list_subtitle, hb_subtitle_copy( subtitle ) );
             }
         }
     }
