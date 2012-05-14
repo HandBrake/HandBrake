@@ -1343,7 +1343,7 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     hb_title_t    * title,    * title_copy;
     hb_chapter_t  * chapter,  * chapter_copy;
     hb_audio_t    * audio;
-    hb_subtitle_t * subtitle, * subtitle_copy;
+    hb_subtitle_t * subtitle;
     hb_attachment_t * attachment;
     int             i;
     char            audio_lang[4];
@@ -1429,61 +1429,48 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
      */
     memset( audio_lang, 0, sizeof( audio_lang ) );
 
-    if ( job->indepth_scan ) {
+    if( job->indepth_scan )
+    {
 
-        /*
-         * Find the first audio language that is being encoded
-         */
-        for( i = 0; i < hb_list_count(job->list_audio); i++ )
+        /* Find the first audio language that is being encoded, then add all the
+         * matching subtitles for that language. */
+        for( i = 0; i < hb_list_count( job->list_audio ); i++ )
         {
             if( ( audio = hb_list_item( job->list_audio, i ) ) )
             {
-                strncpy(audio_lang, audio->config.lang.iso639_2, sizeof(audio_lang));
+                strncpy( audio_lang, audio->config.lang.iso639_2, sizeof( audio_lang ) );
                 break;
             }
         }
-    }
-
-    /*
-     * If doing a subtitle scan then add all the matching subtitles for this
-     * language.
-     */
-    if ( job->indepth_scan )
-    {
-        for( i=0; i < hb_list_count( title->list_subtitle ); i++ )
+        for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
         {
             subtitle = hb_list_item( title->list_subtitle, i );
             if( strcmp( subtitle->iso639_2, audio_lang ) == 0 &&
                 subtitle->source == VOBSUB )
             {
-                /*
-                 * Matched subtitle language with audio language, so
+                /* Matched subtitle language with audio language, so
                  * add this to our list to scan.
                  *
                  * We will update the subtitle list on the second pass
-                 * later after the first pass has completed.
-                 */
-                subtitle_copy = malloc( sizeof( hb_subtitle_t ) );
-                memcpy( subtitle_copy, subtitle, sizeof( hb_subtitle_t ) );
-                hb_list_add( title_copy->list_subtitle, subtitle_copy );
+                 * later after the first pass has completed. */
+                hb_list_add( title_copy->list_subtitle, hb_subtitle_copy( subtitle ) );
             }
         }
-    } else {
+    }
+    else
+    {
         /*
          * Not doing a subtitle scan in this pass, but maybe we are in the
          * first pass?
          */
         if( job->pass != 1 )
         {
-            /*
-             * Copy all of them from the input job, to the title_copy/job_copy.
-             */
-            for(  i = 0; i < hb_list_count(job->list_subtitle); i++ ) {
+            /* Copy all subtitles from the input job to title_copy/job_copy. */
+            for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
+            {
                 if( ( subtitle = hb_list_item( job->list_subtitle, i ) ) )
                 {
-                    subtitle_copy = malloc( sizeof( hb_subtitle_t ) );
-                    memcpy( subtitle_copy, subtitle, sizeof( hb_subtitle_t ) );
-                    hb_list_add( title_copy->list_subtitle, subtitle_copy );
+                    hb_list_add( title_copy->list_subtitle, hb_subtitle_copy( subtitle ) );
                 }
             }
         }
