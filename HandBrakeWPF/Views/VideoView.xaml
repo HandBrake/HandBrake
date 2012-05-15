@@ -39,8 +39,8 @@
                     <StackPanel Orientation="Vertical">
                         <ComboBox Width="120" ItemsSource="{Binding Framerates}" SelectedItem="{Binding SelectedFramerate}" />
                         <RadioButton Content="Constant Framerate" IsChecked="{Binding IsConstantFramerate}" />
-                        <RadioButton Content="Variable Framerate" IsChecked="{Binding IsVariableFramerate}" Visibility="{Binding ShowPeakFramerate, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
-                        <RadioButton Content="Peak Framerate" IsChecked="{Binding IsPeakFramerate}" Visibility="{Binding ShowPeakFramerate, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                        <RadioButton Content="Variable Framerate" IsChecked="{Binding IsVariableFramerate}" Visibility="{Binding ShowPeakFramerate, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                        <RadioButton Content="Peak Framerate" IsChecked="{Binding IsPeakFramerate}" Visibility="{Binding ShowPeakFramerate, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
