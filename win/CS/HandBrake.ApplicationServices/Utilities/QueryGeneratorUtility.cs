@@ -240,7 +240,7 @@ namespace HandBrake.ApplicationServices.Utilities
                 else if (task.Width.HasValue && task.Width != 0) query += string.Format(" -w {0}", task.Width);
 
                 if (task.MaxWidth.HasValue) query += string.Format(" -Y {0}", task.MaxHeight);
-                else if (task.Height.HasValue && task.Height != 0) query += string.Format(" -h {0}", task.Height);
+                else if (task.Height.HasValue && task.Height != 0) query += string.Format(" -l {0}", task.Height);
             }
 
             if (task.HasCropping)

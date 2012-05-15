@@ -305,13 +305,18 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.Task.Framerate = null;
                     this.ShowPeakFramerate = false;
+
+                    if (this.Task.FramerateMode == FramerateMode.PFR)
+                    {
+                        this.IsVariableFramerate = true;
+                    }
                 }
                 else if (!string.IsNullOrEmpty(value))
                 {
                     this.ShowPeakFramerate = true;
                     if (this.Task.FramerateMode == FramerateMode.VFR)
                     {
-                        this.Task.FramerateMode = FramerateMode.PFR;
+                        this.IsPeakFramerate = true;
                     }
                     this.Task.Framerate = double.Parse(value);
                 }
