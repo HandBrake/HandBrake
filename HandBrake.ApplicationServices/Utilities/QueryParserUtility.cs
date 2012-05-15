@@ -46,20 +46,20 @@ namespace HandBrake.ApplicationServices.Utilities
             #region Regular Expressions
 
             // Source
-            Match title = Regex.Match(input, @"-t ([0-9]*)");
-            Match chapters = Regex.Match(input, @"-c ([0-9-]*)");
+            Match title = Regex.Match(input, @"-t ([0-9]+)");
+            Match chapters = Regex.Match(input, @"-c ([0-9-]+)");
 
             // Output Settings
-            Match format = Regex.Match(input, @"-f ([a-zA-Z0-9]*)");
+            Match format = Regex.Match(input, @"-f ([a-zA-Z0-9]+)");
             Match grayscale = Regex.Match(input, @" -g");
             Match largerMp4 = Regex.Match(input, @" -4");
             Match ipodAtom = Regex.Match(input, @" -I");
 
             // Picture Settings Tab
-            Match width = Regex.Match(input, @"-w ([0-9]*)");
-            Match height = Regex.Match(input, @"-l ([0-9]*)");
-            Match maxWidth = Regex.Match(input, @"-X ([0-9]*)");
-            Match maxHeight = Regex.Match(input, @"-Y ([0-9]*)");
+            Match width = Regex.Match(input, @"-w ([0-9]+)");
+            Match height = Regex.Match(input, @"-l ([0-9]+)");
+            Match maxWidth = Regex.Match(input, @"-X ([0-9]+)");
+            Match maxHeight = Regex.Match(input, @"-Y ([0-9]+)");
             Match crop = Regex.Match(input, @"--crop ([0-9]*):([0-9]*):([0-9]*):([0-9]*)");
 
             Match looseAnamorphic = Regex.Match(input, @"--loose-anamorphic");
@@ -81,10 +81,10 @@ namespace HandBrake.ApplicationServices.Utilities
             Match detelecineValue = Regex.Match(input, @" --detelecine=\""([a-zA-Z0-9.:]*)\""");
 
             // Video Settings Tab
-            Match videoEncoder = Regex.Match(input, @"-e ([a-zA-Z0-9]*)");
-            Match videoFramerate = Regex.Match(input, @"-r ([0-9.]*)");
-            Match videoBitrate = Regex.Match(input, @"-b ([0-9]*)");
-            Match videoQuality = Regex.Match(input, @"-q ([0-9.]*)");
+            Match videoEncoder = Regex.Match(input, @"-e ([a-zA-Z0-9]+)");
+            Match videoFramerate = Regex.Match(input, @"-r ([0-9.]+)");
+            Match videoBitrate = Regex.Match(input, @"-b ([0-9]+)");
+            Match videoQuality = Regex.Match(input, @"-q ([0-9.]+)");
             Match twoPass = Regex.Match(input, @" -2");
             Match turboFirstPass = Regex.Match(input, @" -T");
             Match optimizeMP4 = Regex.Match(input, @" -O");
@@ -94,13 +94,13 @@ namespace HandBrake.ApplicationServices.Utilities
 
             // Audio Settings Tab
             Match noAudio = Regex.Match(input, @"-a none");
-            Match audioTracks = Regex.Match(input, @"-a ([0-9,]*)");
-            Match audioTrackMixes = Regex.Match(input, @"-6 ([0-9a-zA-Z,]*)");
-            Match audioEncoders = Regex.Match(input, @"-E ([a-zA-Z0-9+,:\*]*)");
-            Match audioBitrates = Regex.Match(input, @"-B ([0-9a-zA-Z,]*)"); // Auto = a-z
-            Match audioSampleRates = Regex.Match(input, @"-R ([0-9a-zA-Z.,]*)"); // Auto = a-z
-            Match drcValues = Regex.Match(input, @"-D ([0-9.,]*)");
-            Match gainValues = Regex.Match(input, @"--gain=([0-9.,-]*)");
+            Match audioTracks = Regex.Match(input, @"-a ([0-9,]+)");
+            Match audioTrackMixes = Regex.Match(input, @"-6 ([0-9a-zA-Z,]+)");
+            Match audioEncoders = Regex.Match(input, @"-E ([a-zA-Z0-9+,:\*]+)");
+            Match audioBitrates = Regex.Match(input, @"-B ([0-9a-zA-Z,]+)"); // Auto = a-z
+            Match audioSampleRates = Regex.Match(input, @"-R ([0-9a-zA-Z.,]+)"); // Auto = a-z
+            Match drcValues = Regex.Match(input, @"-D ([0-9.,]+)");
+            Match gainValues = Regex.Match(input, @"--gain=([0-9.,-]+)");
             Match fallbackEncoder = Regex.Match(input, @"--audio-fallback([a-zA-Z0-9:=\s ]*)");
             Match allowedPassthru = Regex.Match(input, @"--audio-copy-mask([a-zA-Z0-9:,=\s ]*)");
 
