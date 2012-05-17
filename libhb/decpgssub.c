@@ -41,6 +41,93 @@ static int decsubInit( hb_work_object_t * w, hb_job_t * job )
     return 0;
 }
 
+static void make_empty_pgs( hb_buffer_t * buf )
+{
+    hb_buffer_t * b = buf;
+    uint8_t done = 0;
+
+    // Each buffer is composed of 1 or more segments.
+    // Segment header is:
+    //      type   - 1 byte
+    //      length - 2 bytes
+    // We want to modify the presentation segment which is type 0x16
+    //
+    // Note that every pgs display set is required to have a presentation
+    // segment, so we will only have to look at one display set.
+    while ( b && !done )
+    {
+        int ii = 0;
+
+        while (ii + 3 <= b->size)
+        {
+            uint8_t type;
+            int len;
+            int segment_len_pos;
+
+            type = b->data[ii++];
+            segment_len_pos = ii;
+            len = ((int)b->data[ii] << 8) + b->data[ii+1];
+            ii += 2;
+
+            if (type == 0x16 && ii + len <= b->size)
+            {
+                int obj_count;
+                int kk, jj = ii;
+                int obj_start;
+
+                // Skip
+                // video descriptor 5 bytes
+                // composition descriptor 3 bytes
+                // palette update flg 1 byte
+                // palette id ref 1 byte
+                jj += 10;
+
+                // Set number of composition objects to 0
+                obj_count = b->data[jj];
+                b->data[jj] = 0;
+                jj++;
+                obj_start = jj;
+
+                // And remove all the composition objects
+                for (kk = 0; kk < obj_count; kk++)
+                {
+                    uint8_t crop;
+
+                    crop = b->data[jj + 3];
+                    // skip
+                    // object id - 2 bytes
+                    // window id - 1 byte
+                    // object/forced flag - 1 byte
+                    // x pos - 2 bytes
+                    // y pos - 2 bytes
+                    jj += 8;
+                    if (crop & 0x80)
+                    {
+                        // skip
+                        // crop x - 2 bytes
+                        // crop y - 2 bytes
+                        // crop w - 2 bytes
+                        // crop h - 2 bytes
+                        jj += 8;
+                    }
+                }
+                if (jj < b->size)
+                {
+                    memmove(b->data + obj_start, b->data + jj, b->size - jj);
+                }
+                b->size = obj_start + ( b->size - jj );
+                done = 1;
+                len = obj_start - (segment_len_pos + 2);
+                b->data[segment_len_pos] = len >> 8;
+                b->data[segment_len_pos+1] = len & 0xff;
+                break;
+            }
+            ii += len;
+        }
+        b = b->next;
+    }
+}
+
 static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 hb_buffer_t ** buf_out )
 {
@@ -96,6 +183,7 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     avp.pts = av_rescale(in->s.start, AV_TIME_BASE, 90000);
 
     int has_subtitle = 0;
+    int clear_subtitle = 0;
 
     do
     {
@@ -135,6 +223,10 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     w->subtitle->forced_hits++;
                 }
             }
+            else
+            {
+                clear_subtitle = 1;
+            }
             // is it usable?
             if (pv->job->indepth_scan)
             {
@@ -142,7 +234,7 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             }
             else if (w->subtitle->config.force)
             {
-                useable_sub = subtitle.forced || (pv->seen_forced_sub && !subtitle.num_rects);
+                useable_sub = subtitle.forced || pv->seen_forced_sub;
                 // note if we find forced or empty subtitles
                 if (subtitle.forced)
                 {
@@ -151,6 +243,16 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 else if (!subtitle.num_rects)
                 {
                     pv->seen_forced_sub = 0;
+                }
+                else if (pv->seen_forced_sub)
+                {
+                    // We have output a forced subtitle, but not cleared
+                    // it yet, and the next subtitle is not empty.
+                    //
+                    // If passthru, create an empty subtitle.
+                    // Flag an empty subtitle for subtitle RENDER
+                    make_empty_pgs( pv->list_pass_buffer );
+                    clear_subtitle = 1;
                 }
             }
             else
@@ -213,11 +315,11 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     // this should (eventually) always be the case
                     out->s.start = pts;
                 }
-                out->s.stop = 0;
+                out->s.stop = out->s.start;
             }
             else
             {
-                if (subtitle.num_rects != 0)
+                if (!clear_subtitle)
                 {
                     unsigned ii;
                     for (ii = 0; ii < subtitle.num_rects; ii++)
@@ -230,7 +332,7 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                         out->s.id     = in->s.id;
                         out->sequence = in->sequence;
                         out->s.start  = pts;
-                        out->s.stop   = 0;
+                        out->s.stop   = pts;
                         out->f.x      = rect->x;
                         out->f.y      = rect->y;
 
@@ -288,7 +390,7 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
                     out->s.id     = in->s.id;
                     out->s.start  = pts;
-                    out->s.stop   = 0;
+                    out->s.stop   = pts;
                     out->f.x      = 0;
                     out->f.y      = 0;
                     out->f.width  = 0;
