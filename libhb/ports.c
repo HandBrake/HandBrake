@@ -294,20 +294,20 @@ void hb_mkdir( char * name )
  ***********************************************************************/
 struct hb_thread_s
 {
-    char       * name;
-    int          priority;
-    void      (* function) ( void * );
-    void       * arg;
+    char          * name;
+    int             priority;
+    thread_func_t * function;
+    void          * arg;
 
-    hb_lock_t  * lock;
-    int          exited;
+    hb_lock_t     * lock;
+    int             exited;
 
 #if defined( SYS_BEOS )
-    thread_id    thread;
+    thread_id       thread;
 #elif USE_PTHREAD
-    pthread_t    thread;
+    pthread_t       thread;
 //#elif defined( SYS_CYGWIN )
-//    HANDLE       thread;
+//    HANDLE          thread;
 #endif
 };
 
@@ -346,7 +346,7 @@ static void attribute_align_thread hb_thread_func( void * _t )
 {
     hb_thread_t * t = (hb_thread_t *) _t;
 
-#if defined( SYS_DARWIN )
+#if defined( SYS_DARWIN ) || defined( SYS_FREEBSD )
     /* Set the thread priority */
     struct sched_param param;
     memset( &param, 0, sizeof( struct sched_param ) );
@@ -376,7 +376,7 @@ static void attribute_align_thread hb_thread_func( void * _t )
  * arg:      argument of the routine
  * priority: HB_LOW_PRIORITY or HB_NORMAL_PRIORITY
  ***********************************************************************/
-hb_thread_t * hb_thread_init( char * name, void (* function)(void *),
+hb_thread_t * hb_thread_init( const char * name, void (* function)(void *),
                               void * arg, int priority )
 {
     hb_thread_t * t = calloc( sizeof( hb_thread_t ), 1 );
@@ -489,7 +489,7 @@ hb_lock_t * hb_lock_init()
 
     pthread_mutexattr_init(&mta);
 
-#if defined( SYS_CYGWIN )
+#if defined( SYS_CYGWIN ) || defined( SYS_FREEBSD )
     pthread_mutexattr_settype(&mta, PTHREAD_MUTEX_NORMAL);
 #endif
 
@@ -565,6 +565,9 @@ struct hb_cond_s
 hb_cond_t * hb_cond_init()
 {
     hb_cond_t * c = calloc( sizeof( hb_cond_t ), 1 );
+
+    if( c == NULL )
+        return NULL;
 
 #if defined( SYS_BEOS )
     c->thread = -1;

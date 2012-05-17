@@ -2,6 +2,7 @@
 #include "hb.h"
 #include "hbffmpeg.h"
 //#include "mpeg2dec/mpeg2.h"
+#include "taskset.h"
 
 #define MODE_DEFAULT     3
 // Mode 1: Flip vertically (y0 becomes yN and yN becomes y0)
@@ -11,7 +12,6 @@
 typedef struct rotate_arguments_s {
     hb_buffer_t *dst;
     hb_buffer_t *src;
-    int stop;
 } rotate_arguments_t;
 
 struct hb_filter_private_s
@@ -24,9 +24,7 @@ struct hb_filter_private_s
 
     int              cpu_count;
 
-    hb_thread_t    ** rotate_threads;        // Threads for Rotate - one per CPU
-    hb_lock_t      ** rotate_begin_lock;     // Thread has work
-    hb_lock_t      ** rotate_complete_lock;  // Thread has completed work
+    taskset_t         rotate_taskset;        // Threads for Rotate - one per CPU
     rotate_arguments_t *rotate_arguments;     // Arguments to thread for work
 };
 
@@ -85,27 +83,25 @@ void rotate_filter_thread( void *thread_args_v )
     while( run )
     {
         /*
-         * Wait here until there is work to do. hb_lock() blocks until
-         * render releases it to say that there is more work to do.
+         * Wait here until there is work to do.
          */
-        hb_lock( pv->rotate_begin_lock[segment] );
+        taskset_thread_wait4start( &pv->rotate_taskset, segment );
 
-        rotate_work = &pv->rotate_arguments[segment];
-
-        if( rotate_work->stop )
+        if( taskset_thread_stop( &pv->rotate_taskset, segment ) )
         {
             /*
              * No more work to do, exit this thread.
              */
             run = 0;
-            continue;
+            goto report_completion;
         } 
 
+        rotate_work = &pv->rotate_arguments[segment];
         if( rotate_work->dst == NULL )
         {
             hb_error( "Thread started when no work available" );
             hb_snooze(500);
-            continue;
+            goto report_completion;
         }
         
         /*
@@ -168,12 +164,13 @@ void rotate_filter_thread( void *thread_args_v )
                 }
             }
         }
+
+report_completion:
         /*
          * Finished this segment, let everyone know.
          */
-        hb_unlock( pv->rotate_complete_lock[segment] );
+        taskset_thread_complete( &pv->rotate_taskset, segment );
     }
-    free( thread_args_v );
 }
 
 
@@ -199,28 +196,12 @@ static void rotate_filter(
          */
         pv->rotate_arguments[segment].dst = out;
         pv->rotate_arguments[segment].src = in;
-
-        /*
-         * Let the thread for this plane know that we've setup work 
-         * for it by releasing the begin lock (ensuring that the
-         * complete lock is already locked so that we block when
-         * we try to lock it again below).
-         */
-        hb_lock( pv->rotate_complete_lock[segment] );
-        hb_unlock( pv->rotate_begin_lock[segment] );
     }
 
     /*
-     * Wait until all three threads have completed by trying to get
-     * the complete lock that we locked earlier for each thread, which
-     * will block until that thread has completed the work on that
-     * plane.
+     * Allow the taskset threads to make one pass over the data.
      */
-    for( segment = 0; segment < pv->cpu_count; segment++ )
-    {
-        hb_lock( pv->rotate_complete_lock[segment] );
-        hb_unlock( pv->rotate_complete_lock[segment] );
-    }
+    taskset_cycle( &pv->rotate_taskset );
 
     /*
      * Entire frame is now rotated.
@@ -244,44 +225,34 @@ static int hb_rotate_init( hb_filter_object_t * filter,
 
     pv->cpu_count = hb_get_cpu_count();
 
-
     /*
-     * Create threads and locks.
+     * Create rotate taskset.
      */
-    pv->rotate_threads = malloc( sizeof( hb_thread_t* ) * pv->cpu_count );
-    pv->rotate_begin_lock = malloc( sizeof( hb_lock_t * ) * pv->cpu_count );
-    pv->rotate_complete_lock = malloc( sizeof( hb_lock_t * ) * pv->cpu_count );
     pv->rotate_arguments = malloc( sizeof( rotate_arguments_t ) * pv->cpu_count );
+    if( pv->rotate_arguments == NULL ||
+        taskset_init( &pv->rotate_taskset, /*thread_count*/pv->cpu_count,
+                      sizeof( rotate_thread_arg_t ) ) == 0 )
+    {
+            hb_error( "rotate could not initialize taskset" );
+    }
 
     int i;
     for( i = 0; i < pv->cpu_count; i++ )
     {
         rotate_thread_arg_t *thread_args;
     
-        thread_args = malloc( sizeof( rotate_thread_arg_t ) );
+        thread_args = taskset_thread_args( &pv->rotate_taskset, i );
     
-        if( thread_args ) {
-            thread_args->pv = pv;
-            thread_args->segment = i;
+        thread_args->pv = pv;
+        thread_args->segment = i;
+        pv->rotate_arguments[i].dst = NULL;
     
-            pv->rotate_begin_lock[i] = hb_lock_init();
-            pv->rotate_complete_lock[i] = hb_lock_init();
-    
-            /*
-             * Important to start off with the threads locked waiting
-             * on input.
-             */
-            hb_lock( pv->rotate_begin_lock[i] );
-    
-            pv->rotate_arguments[i].stop = 0;
-            pv->rotate_arguments[i].dst = NULL;
-            
-            pv->rotate_threads[i] = hb_thread_init( "rotate_filter_segment",
-                                                   rotate_filter_thread,
-                                                   thread_args,
-                                                   HB_NORMAL_PRIORITY );
-        } else {
-            hb_error( "rotate could not create threads" );
+        if( taskset_thread_spawn( &pv->rotate_taskset, i,
+                                  "rotate_filter_segment",
+                                  rotate_filter_thread,
+                                  HB_NORMAL_PRIORITY ) == 0 )
+        {
+            hb_error( "rotate could not spawn thread" );
         }
     }
     // Set init width/height so the next stage in the pipline
@@ -344,26 +315,11 @@ static void hb_rotate_close( hb_filter_object_t * filter )
         return;
     }
 
-    int i;
-    for( i = 0; i < pv->cpu_count; i++)
-    {
-        /*
-         * Tell each rotate thread to stop, and then cleanup.
-         */
-        pv->rotate_arguments[i].stop = 1;
-        hb_unlock(  pv->rotate_begin_lock[i] );
-    
-        hb_thread_close( &pv->rotate_threads[i] );
-        hb_lock_close( &pv->rotate_begin_lock[i] );
-        hb_lock_close( &pv->rotate_complete_lock[i] );
-    }
+    taskset_fini( &pv->rotate_taskset );
     
     /*
      * free memory for rotate structs
      */
-    free( pv->rotate_threads );
-    free( pv->rotate_begin_lock );
-    free( pv->rotate_complete_lock );
     free( pv->rotate_arguments );
 
     free( pv );

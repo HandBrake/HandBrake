@@ -80,6 +80,7 @@ which will feed EEDI2 interpolations to yadif.
 #include "mpeg2dec/mpeg2.h"
 #include "eedi2.h"
 #include "mcdeint.h"
+#include "taskset.h"
 
 #define PARITY_DEFAULT   -1
 
@@ -107,21 +108,10 @@ struct yadif_arguments_s {
     uint8_t **dst;
     int parity;
     int tff;
-    int stop;
     int is_combed;
 };
 
-struct decomb_arguments_s {
-    int stop;
-};
-
-struct eedi2_arguments_s {
-    int stop;
-};
-
 typedef struct yadif_arguments_s yadif_arguments_t;
-typedef struct decomb_arguments_s decomb_arguments_t;
-typedef struct eedi2_arguments_s eedi2_arguments_t;
 
 typedef struct eedi2_thread_arg_s {
     hb_filter_private_t *pv;
@@ -203,20 +193,12 @@ struct hb_filter_private_s
 
     int              cpu_count;
 
-    hb_thread_t    ** yadif_threads;         // Threads for Yadif - one per CPU
-    hb_lock_t      ** yadif_begin_lock;      // Thread has work
-    hb_lock_t      ** yadif_complete_lock;   // Thread has completed work
-    yadif_arguments_t *yadif_arguments;      // Arguments to thread for work
+    taskset_t        yadif_taskset;       // Threads for Yadif - one per CPU
+    yadif_arguments_t *yadif_arguments;   // Arguments to thread for work
 
-    hb_thread_t    ** decomb_threads;        // Threads for comb detection - one per CPU
-    hb_lock_t      ** decomb_begin_lock;     // Thread has work
-    hb_lock_t      ** decomb_complete_lock;  // Thread has completed work
-    decomb_arguments_t *decomb_arguments;    // Arguments to thread for work
+    taskset_t        decomb_taskset;      // Threads for comb detection - one per CPU
 
-    hb_thread_t    ** eedi2_threads;        // Threads for eedi2 - one per plane
-    hb_lock_t      ** eedi2_begin_lock;     // Thread has work
-    hb_lock_t      ** eedi2_complete_lock;  // Thread has completed work
-    eedi2_arguments_t *eedi2_arguments;    // Arguments to thread for work
+    taskset_t        eedi2_taskset;       // Threads for eedi2 - one per plane
 };
 
 static int hb_decomb_init( hb_filter_object_t * filter,
@@ -1314,7 +1296,6 @@ void eedi2_interpolate_plane( hb_filter_private_t * pv, int k )
  */
 void eedi2_filter_thread( void *thread_args_v )
 {
-    eedi2_arguments_t *eedi2_work = NULL;
     hb_filter_private_t * pv;
     int run = 1;
     int plane;
@@ -1328,31 +1309,29 @@ void eedi2_filter_thread( void *thread_args_v )
     while( run )
     {
         /*
-         * Wait here until there is work to do. hb_lock() blocks until
-         * render releases it to say that there is more work to do.
+         * Wait here until there is work to do.
          */
-        hb_lock( pv->eedi2_begin_lock[plane] );
+        taskset_thread_wait4start( &pv->eedi2_taskset, plane );
 
-        eedi2_work = &pv->eedi2_arguments[plane];
-
-        if( eedi2_work->stop )
+        if( taskset_thread_stop( &pv->eedi2_taskset, plane ) )
         {
             /*
              * No more work to do, exit this thread.
              */
             run = 0;
-            continue;
         }
-
-        /*
-         * Process plane
-         */
+        else
+        { 
+            /*
+             * Process plane
+             */
             eedi2_interpolate_plane( pv, plane );
-
+        }
+        
         /*
          * Finished this segment, let everyone know.
          */
-        hb_unlock( pv->eedi2_complete_lock[plane] );
+        taskset_thread_complete( &pv->eedi2_taskset, plane );
     }
     free( thread_args_v );
 }
@@ -1370,30 +1349,11 @@ void eedi2_planer( hb_filter_private_t * pv )
         eedi2_fill_half_height_buffer_plane( &pv->ref[1][i][pitch*start_line], pv->eedi_half[SRCPF][i], pitch, pv->height[i] );
     }
 
-    int plane;
-    for( plane = 0; plane < 3; plane++ )
-    {
-        /*
-         * Let the thread for this plane know that we've setup work
-         * for it by releasing the begin lock (ensuring that the
-         * complete lock is already locked so that we block when
-         * we try to lock it again below).
-         */
-        hb_lock( pv->eedi2_complete_lock[plane] );
-        hb_unlock( pv->eedi2_begin_lock[plane] );
-    }
-
     /*
-     * Wait until all three threads have completed by trying to get
-     * the complete lock that we locked earlier for each thread, which
-     * will block until that thread has completed the work on that
-     * plane.
+     * Now that all data is ready for our threads, fire them off
+     * and wait for their completion.
      */
-    for( plane = 0; plane < 3; plane++ )
-    {
-        hb_lock( pv->eedi2_complete_lock[plane] );
-        hb_unlock( pv->eedi2_complete_lock[plane] );
-    }
+    taskset_cycle( &pv->eedi2_taskset );
 }
 
 
@@ -1402,7 +1362,6 @@ void eedi2_planer( hb_filter_private_t * pv )
  */
 void decomb_filter_thread( void *thread_args_v )
 {
-    decomb_arguments_t *decomb_work = NULL;
     hb_filter_private_t * pv;
     int run = 1;
     int segment, segment_start, segment_stop, plane;
@@ -1416,21 +1375,18 @@ void decomb_filter_thread( void *thread_args_v )
     while( run )
     {
         /*
-         * Wait here until there is work to do. hb_lock() blocks until
-         * render releases it to say that there is more work to do.
+         * Wait here until there is work to do.
          */
-        hb_lock( pv->decomb_begin_lock[segment] );
+        taskset_thread_wait4start( &pv->decomb_taskset, segment );
 
-        decomb_work = &pv->decomb_arguments[segment];
-
-        if( decomb_work->stop )
+        if( taskset_thread_stop( &pv->decomb_taskset, segment ) )
         {
             /*
              * No more work to do, exit this thread.
              */
             run = 0;
-            continue;
-        }
+            goto report_completion;
+        } 
 
         /*
          * Process segment (for now just from luma)
@@ -1459,42 +1415,23 @@ void decomb_filter_thread( void *thread_args_v )
                 detect_combed_segment( pv, segment_start, segment_stop );
             }
         }
+
+report_completion:
         /*
          * Finished this segment, let everyone know.
          */
-        hb_unlock( pv->decomb_complete_lock[segment] );
+        taskset_thread_complete( &pv->decomb_taskset, segment );
     }
-    free( thread_args_v );
 }
 
 int comb_segmenter( hb_filter_private_t * pv )
 {
-    int segment;
-
-    for( segment = 0; segment < pv->cpu_count; segment++ )
-    {
-        /*
-         * Let the thread for this plane know that we've setup work
-         * for it by releasing the begin lock (ensuring that the
-         * complete lock is already locked so that we block when
-         * we try to lock it again below).
-         */
-        hb_lock( pv->decomb_complete_lock[segment] );
-        hb_unlock( pv->decomb_begin_lock[segment] );
-    }
-
     /*
-     * Wait until all three threads have completed by trying to get
-     * the complete lock that we locked earlier for each thread, which
-     * will block until that thread has completed the work on that
-     * plane.
+     * Now that all data for decomb detection is ready for
+     * our threads, fire them off and wait for their completion.
      */
-    for( segment = 0; segment < pv->cpu_count; segment++ )
-    {
-        hb_lock( pv->decomb_complete_lock[segment] );
-        hb_unlock( pv->decomb_complete_lock[segment] );
-    }
-
+    taskset_cycle( &pv->decomb_taskset );
+    
     if( pv->mode & MODE_FILTER )
     {
         filter_combing_mask( pv );
@@ -1689,27 +1626,26 @@ void yadif_decomb_filter_thread( void *thread_args_v )
     while( run )
     {
         /*
-         * Wait here until there is work to do. hb_lock() blocks until
-         * render releases it to say that there is more work to do.
+         * Wait here until there is work to do.
          */
-        hb_lock( pv->yadif_begin_lock[segment] );
-
-        yadif_work = &pv->yadif_arguments[segment];
-
-        if( yadif_work->stop )
+        taskset_thread_wait4start( &pv->yadif_taskset, segment );
+        
+        if( taskset_thread_stop( &pv->yadif_taskset, segment ) )
         {
             /*
              * No more work to do, exit this thread.
              */
             run = 0;
-            continue;
-        }
+            goto report_completion;
+        } 
+
+        yadif_work = &pv->yadif_arguments[segment];
 
         if( yadif_work->dst == NULL )
         {
             hb_error( "thread started when no work available" );
             hb_snooze(500);
-            continue;
+            goto report_completion;
         }
 
         is_combed = pv->yadif_arguments[segment].is_combed;
@@ -1822,12 +1758,13 @@ void yadif_decomb_filter_thread( void *thread_args_v )
                 }
             }
         }
+
+report_completion:
         /*
          * Finished this segment, let everyone know.
          */
-        hb_unlock( pv->yadif_complete_lock[segment] );
+        taskset_thread_complete( &pv->yadif_taskset, segment );
     }
-    free( thread_args_v );
 }
 
 static void yadif_filter( uint8_t ** dst,
@@ -1923,28 +1860,12 @@ static void yadif_filter( uint8_t ** dst,
                 pv->yadif_arguments[segment].tff = tff;
                 pv->yadif_arguments[segment].dst = dst;
                 pv->yadif_arguments[segment].is_combed = is_combed;
-
-                /*
-                 * Let the thread for this plane know that we've setup work
-                 * for it by releasing the begin lock (ensuring that the
-                 * complete lock is already locked so that we block when
-                 * we try to lock it again below).
-                 */
-                hb_lock( pv->yadif_complete_lock[segment] );
-                hb_unlock( pv->yadif_begin_lock[segment] );
             }
 
             /*
-             * Wait until all three threads have completed by trying to get
-             * the complete lock that we locked earlier for each thread, which
-             * will block until that thread has completed the work on that
-             * plane.
+             * Allow the taskset threads to make one pass over the data.
              */
-            for( segment = 0; segment < pv->cpu_count; segment++ )
-            {
-                hb_lock( pv->yadif_complete_lock[segment] );
-                hb_unlock( pv->yadif_complete_lock[segment] );
-            }
+            taskset_cycle( &pv->yadif_taskset );
 
             /*
              * Entire frame is now deinterlaced.
@@ -2120,99 +2041,71 @@ static int hb_decomb_init( hb_filter_object_t * filter,
             }
         }
     }
-
-     /*
-      * Create yadif threads and locks.
-      */
-     pv->yadif_threads = malloc( sizeof( hb_thread_t* ) * pv->cpu_count );
-     pv->yadif_begin_lock = malloc( sizeof( hb_lock_t * ) * pv->cpu_count );
-     pv->yadif_complete_lock = malloc( sizeof( hb_lock_t * ) * pv->cpu_count );
-     pv->yadif_arguments = malloc( sizeof( yadif_arguments_t ) * pv->cpu_count );
-
-     for( i = 0; i < pv->cpu_count; i++ )
-     {
-         yadif_thread_arg_t *thread_args;
-
-         thread_args = malloc( sizeof( yadif_thread_arg_t ) );
-
-         if( thread_args )
-         {
-             thread_args->pv = pv;
-             thread_args->segment = i;
-
-             pv->yadif_begin_lock[i] = hb_lock_init();
-             pv->yadif_complete_lock[i] = hb_lock_init();
-
-             /*
-              * Important to start off with the threads locked waiting
-              * on input.
-              */
-             hb_lock( pv->yadif_begin_lock[i] );
-
-             pv->yadif_arguments[i].stop = 0;
-             pv->yadif_arguments[i].dst = NULL;
-
-             pv->yadif_threads[i] = hb_thread_init( "yadif_filter_segment",
-                                                    yadif_decomb_filter_thread,
-                                                    thread_args,
-                                                    HB_NORMAL_PRIORITY );
-         }
-         else
-         {
-             hb_error( "yadif could not create threads" );
-         }
-    }
-
+    
     /*
-     * Create decomb threads and locks.
+     * Setup yadif taskset.
      */
-    pv->decomb_threads = malloc( sizeof( hb_thread_t* ) * pv->cpu_count );
-    pv->decomb_begin_lock = malloc( sizeof( hb_lock_t * ) * pv->cpu_count );
-    pv->decomb_complete_lock = malloc( sizeof( hb_lock_t * ) * pv->cpu_count );
-    pv->decomb_arguments = malloc( sizeof( decomb_arguments_t ) * pv->cpu_count );
+    pv->yadif_arguments = malloc( sizeof( yadif_arguments_t ) * pv->cpu_count );
+    if( pv->yadif_arguments == NULL ||
+        taskset_init( &pv->yadif_taskset, /*thread_count*/pv->cpu_count,
+                      sizeof( yadif_thread_arg_t ) ) == 0 )
+    {
+        hb_error( "yadif could not initialize taskset" );
+    }
 
     for( i = 0; i < pv->cpu_count; i++ )
     {
-        decomb_thread_arg_t *decomb_thread_args;
+        yadif_thread_arg_t *thread_args;
 
-        decomb_thread_args = malloc( sizeof( decomb_thread_arg_t ) );
-
-        if( decomb_thread_args )
+        thread_args = taskset_thread_args( &pv->yadif_taskset, i );
+        thread_args->pv = pv;
+        thread_args->segment = i;
+        pv->yadif_arguments[i].dst = NULL;
+        if( taskset_thread_spawn( &pv->yadif_taskset, i,
+                                 "yadif_filter_segment",
+                                 yadif_decomb_filter_thread,
+                                 HB_NORMAL_PRIORITY ) == 0 )
         {
-            decomb_thread_args->pv = pv;
-            decomb_thread_args->segment = i;
-
-            pv->decomb_begin_lock[i] = hb_lock_init();
-            pv->decomb_complete_lock[i] = hb_lock_init();
-
-            /*
-             * Important to start off with the threads locked waiting
-             * on input.
-             */
-            hb_lock( pv->decomb_begin_lock[i] );
-
-            pv->decomb_arguments[i].stop = 0;
-
-            pv->decomb_threads[i] = hb_thread_init( "decomb_filter_segment",
-                                                   decomb_filter_thread,
-                                                   decomb_thread_args,
-                                                   HB_NORMAL_PRIORITY );
+            hb_error( "yadif could not spawn thread" );
         }
-        else
+    }
+
+    /*
+     * Create decomb taskset.
+     */
+    if( taskset_init( &pv->decomb_taskset, /*thread_count*/pv->cpu_count,
+                      sizeof( decomb_thread_arg_t ) ) == 0 )
+    {
+        hb_error( "decomb could not initialize taskset" );
+    }
+    for( i = 0; i < pv->cpu_count; i++ )
+    {
+        decomb_thread_arg_t *decomb_thread_args;
+    
+        decomb_thread_args = taskset_thread_args( &pv->decomb_taskset, i );
+        decomb_thread_args->pv = pv;
+        decomb_thread_args->segment = i;
+
+        if( taskset_thread_spawn( &pv->decomb_taskset, i,
+                                 "decomb_filter_segment",
+                                 decomb_filter_thread,
+                                 HB_NORMAL_PRIORITY ) == 0 )
         {
-            hb_error( "decomb could not create threads" );
+            hb_error( "decomb could not spawn thread" );
         }
     }
 
     if( pv->mode & MODE_EEDI2 )
     {
+
         /*
-         * Create eedi2 threads and locks.
+         * Create eedi2 taskset.
          */
-        pv->eedi2_threads = malloc( sizeof( hb_thread_t* ) * 3 );
-        pv->eedi2_begin_lock = malloc( sizeof( hb_lock_t * ) * 3 );
-        pv->eedi2_complete_lock = malloc( sizeof( hb_lock_t * ) * 3 );
-        pv->eedi2_arguments = malloc( sizeof( eedi2_arguments_t ) * 3 );
+        if( taskset_init( &pv->eedi2_taskset, /*thread_count*/3,
+                          sizeof( eedi2_thread_arg_t ) ) == 0 )
+        {
+            hb_error( "eedi2 could not initialize taskset" );
+        }
 
         if( pv->post_processing > 1 )
         {
@@ -2230,32 +2123,17 @@ static int hb_decomb_init( hb_filter_object_t * filter,
         {
             eedi2_thread_arg_t *eedi2_thread_args;
 
-            eedi2_thread_args = malloc( sizeof( eedi2_thread_arg_t ) );
+            eedi2_thread_args = taskset_thread_args( &pv->eedi2_taskset, i );
 
-            if( eedi2_thread_args )
+            eedi2_thread_args->pv = pv;
+            eedi2_thread_args->plane = i;
+
+            if( taskset_thread_spawn( &pv->eedi2_taskset, i,
+                                      "eedi2_filter_segment",
+                                      eedi2_filter_thread,
+                                      HB_NORMAL_PRIORITY ) == 0 )
             {
-                eedi2_thread_args->pv = pv;
-                eedi2_thread_args->plane = i;
-
-                pv->eedi2_begin_lock[i] = hb_lock_init();
-                pv->eedi2_complete_lock[i] = hb_lock_init();
-
-                /*
-                 * Important to start off with the threads locked waiting
-                 * on input.
-                 */
-                hb_lock( pv->eedi2_begin_lock[i] );
-
-                pv->eedi2_arguments[i].stop = 0;
-
-                pv->eedi2_threads[i] = hb_thread_init( "eedi2_filter_segment",
-                                                       eedi2_filter_thread,
-                                                       eedi2_thread_args,
-                                                       HB_NORMAL_PRIORITY );
-            }
-            else
-            {
-                hb_error( "eedi2 could not create threads" );
+                hb_error( "eedi2 could not spawn thread" );
             }
         }
     }
@@ -2366,71 +2244,18 @@ static void hb_decomb_close( hb_filter_object_t * filter )
         if (pv->cxy) eedi2_aligned_free(pv->cxy);
         if (pv->tmpc) eedi2_aligned_free(pv->tmpc);
     }
-
-    for( i = 0; i < pv->cpu_count; i++)
-    {
-        /*
-         * Tell each yadif thread to stop, and then cleanup.
-         */
-        pv->yadif_arguments[i].stop = 1;
-        hb_unlock(  pv->yadif_begin_lock[i] );
-
-        hb_thread_close( &pv->yadif_threads[i] );
-        hb_lock_close( &pv->yadif_begin_lock[i] );
-        hb_lock_close( &pv->yadif_complete_lock[i] );
-    }
-
+    
+    taskset_fini( &pv->yadif_taskset );
+    taskset_fini( &pv->decomb_taskset );
+    
     /*
      * free memory for yadif structs
      */
-    free( pv->yadif_threads );
-    free( pv->yadif_begin_lock );
-    free( pv->yadif_complete_lock );
     free( pv->yadif_arguments );
-
-    for( i = 0; i < pv->cpu_count; i++)
-    {
-        /*
-         * Tell each decomb thread to stop, and then cleanup.
-         */
-        pv->decomb_arguments[i].stop = 1;
-        hb_unlock(  pv->decomb_begin_lock[i] );
-
-        hb_thread_close( &pv->decomb_threads[i] );
-        hb_lock_close( &pv->decomb_begin_lock[i] );
-        hb_lock_close( &pv->decomb_complete_lock[i] );
-    }
-
-    /*
-     * free memory for decomb structs
-     */
-    free( pv->decomb_threads );
-    free( pv->decomb_begin_lock );
-    free( pv->decomb_complete_lock );
-    free( pv->decomb_arguments );
-
+    
     if( pv->mode & MODE_EEDI2 )
     {
-        for( i = 0; i < 3; i++)
-        {
-            /*
-             * Tell each eedi2 thread to stop, and then cleanup.
-             */
-            pv->eedi2_arguments[i].stop = 1;
-            hb_unlock(  pv->eedi2_begin_lock[i] );
-
-            hb_thread_close( &pv->eedi2_threads[i] );
-            hb_lock_close( &pv->eedi2_begin_lock[i] );
-            hb_lock_close( &pv->eedi2_complete_lock[i] );
-        }
-
-        /*
-         * free memory for eedi2 structs
-         */
-        free( pv->eedi2_threads );
-        free( pv->eedi2_begin_lock );
-        free( pv->eedi2_complete_lock );
-        free( pv->eedi2_arguments );
+        taskset_fini( &pv->eedi2_taskset );
     }
 
     /* Cleanup mcdeint specific buffers */

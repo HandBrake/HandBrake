@@ -62,7 +62,8 @@ typedef struct hb_thread_s hb_thread_t;
 #  define HB_NORMAL_PRIORITY 0
 #endif
 
-hb_thread_t * hb_thread_init( char * name, void (* function)(void *),
+typedef void (thread_func_t)(void *);
+hb_thread_t * hb_thread_init( const char * name, thread_func_t *function,
                               void * arg, int priority );
 void          hb_thread_close( hb_thread_t ** );
 int           hb_thread_has_exited( hb_thread_t * );
