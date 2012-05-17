@@ -253,6 +253,7 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     // Flag an empty subtitle for subtitle RENDER
                     make_empty_pgs( pv->list_pass_buffer );
                     clear_subtitle = 1;
+                    pv->seen_forced_sub = 0;
                 }
             }
             else
