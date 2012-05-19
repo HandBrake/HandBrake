@@ -15,6 +15,7 @@
         <Conveters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <Conveters:BooleanToHiddenVisibilityConverter x:Key="boolToHiddenVisConverter" />
         <Audio:AudioBitrateConverter x:Key="audioBitrateConverter" />
+        <Audio:AudioEncoderConverter x:Key="audioEncoderConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -102,9 +103,21 @@
                                       SelectedItem="{Binding ScannedTrack}"/>
 
                             <TextBlock Text="Codec" FontWeight="Bold" Grid.Column="2" VerticalAlignment="Center" />
-                            <ComboBox Width="100" Grid.Column="3" Margin="5,0,5,0" Height="22"
-                                      ItemsSource="{Binding DataContext.AudioEncoders, Converter={StaticResource enumComboConverter},  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
-                                      SelectedItem="{Binding Encoder, Converter={StaticResource enumComboConverter}}"/>
+                            <ComboBox Width="100" Grid.Column="3" Margin="5,0,5,0" Height="22">
+                                <ComboBox.SelectedItem>
+                                    <MultiBinding Converter="{StaticResource audioEncoderConverter}">
+                                        <Binding Path="Encoder" />
+                                    </MultiBinding>
+                                </ComboBox.SelectedItem>
+                                <ComboBox.ItemsSource>
+                                    <MultiBinding Converter="{StaticResource audioEncoderConverter}">
+                                        <Binding Path="DataContext.AudioEncoders"
+                                                 RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
+                                        <Binding Path="DataContext.Task"
+                                                 RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
+                                    </MultiBinding>
+                                </ComboBox.ItemsSource>
+                            </ComboBox>
 
                             <TextBlock Text="Bitrate" FontWeight="Bold" Grid.Column="4" VerticalAlignment="Center"
                                        Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />

@@ -7,8 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-
 namespace HandBrake.ApplicationServices.Model.Encoding
 {
     using System;

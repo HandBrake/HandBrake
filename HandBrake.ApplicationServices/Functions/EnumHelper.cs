@@ -102,5 +102,22 @@ namespace HandBrake.ApplicationServices.Functions
                 strings.Add(GetDisplay(e));
             return strings;
         }
+
+        /// <summary>
+        /// Get a list of string names for each enum value passed in.
+        /// </summary>
+        /// <param name="items">
+        /// The items.
+        /// </param>
+        /// <typeparam name="T">
+        /// The type of the enum
+        /// </typeparam>
+        /// <returns>
+        /// A collection of strings that represent all the enum values
+        /// </returns>
+        public static IEnumerable<string> GetEnumDisplayValuesSubset(IEnumerable<T> items)
+        {
+            return items.Select(GetDisplay).ToList();
+        }
     }
 }
