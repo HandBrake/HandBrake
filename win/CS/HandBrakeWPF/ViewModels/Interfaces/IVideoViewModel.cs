@@ -14,5 +14,9 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     /// </summary>
     public interface IVideoViewModel : ITabInterface
     {
+        /// <summary>
+        /// Trigger a Notify Property Changed on the Task to force various UI elements to update.
+        /// </summary>
+        void RefreshTask();
     }
 }

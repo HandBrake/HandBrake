@@ -65,10 +65,7 @@ namespace HandBrakeWPF.Converters
             {
                 return EnumHelper<Mixdown>.GetEnumDisplayValues(typeof(Mixdown));
             }
-            if (value is IEnumerable<AudioEncoder>)
-            {
-                return EnumHelper<AudioEncoder>.GetEnumDisplayValues(typeof(AudioEncoder));
-            }
+ 
             if (value is IEnumerable<PresetPictureSettingsMode>)
             {
                 return EnumHelper<PresetPictureSettingsMode>.GetEnumDisplayValues(typeof(PresetPictureSettingsMode));
@@ -113,10 +110,7 @@ namespace HandBrakeWPF.Converters
             {
                 return EnumHelper<Mixdown>.GetDisplay((Mixdown)value);
             }
-            if (targetType == typeof(AudioEncoder) || value.GetType() == typeof(AudioEncoder))
-            {
-                return EnumHelper<AudioEncoder>.GetDisplay((AudioEncoder)value);
-            }
+  
             if (targetType == typeof(PresetPictureSettingsMode) || value.GetType() == typeof(PresetPictureSettingsMode))
             {
                 return EnumHelper<PresetPictureSettingsMode>.GetDisplay((PresetPictureSettingsMode)value);
@@ -188,10 +182,7 @@ namespace HandBrakeWPF.Converters
             {
                 return EnumHelper<Mixdown>.GetValue(value.ToString());
             }
-            if (targetType == typeof(AudioEncoder) || value.GetType() == typeof(AudioEncoder))
-            {
-                return EnumHelper<AudioEncoder>.GetValue(value.ToString());
-            }
+
             if (targetType == typeof(PresetPictureSettingsMode) || value.GetType() == typeof(PresetPictureSettingsMode))
             {
                 return EnumHelper<PresetPictureSettingsMode>.GetValue(value.ToString());

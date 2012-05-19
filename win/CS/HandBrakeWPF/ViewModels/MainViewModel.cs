@@ -689,9 +689,14 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.selectedOutputFormat = value;
+                this.CurrentTask.OutputFormat = value;
                 this.NotifyOfPropertyChange(() => SelectedOutputFormat);
+                this.NotifyOfPropertyChange(() => this.CurrentTask.OutputFormat);
                 this.NotifyOfPropertyChange(() => IsMkv);
                 this.SetExtension(string.Format(".{0}", this.selectedOutputFormat.ToString().ToLower())); // TODO, tidy up
+
+                this.VideoViewModel.RefreshTask();
+                this.AudioViewModel.RefreshTask();
             }
         }
 
@@ -1196,19 +1201,15 @@ namespace HandBrakeWPF.ViewModels
                 {
                     case 0: // Auto
                         newExtension = this.CurrentTask.RequiresM4v ? ".m4v" : ".mp4";
-                        this.CurrentTask.OutputFormat = newExtension == ".m4v" ? OutputFormat.M4V : OutputFormat.Mp4;
                         break;
                     case 1: // MP4
                         newExtension = ".mp4";
-                        this.CurrentTask.OutputFormat = OutputFormat.Mp4;
                         break;
                     case 2: // M4v
                         newExtension = ".m4v";
-                        this.CurrentTask.OutputFormat = OutputFormat.M4V;
                         break;
                 }
 
-                this.selectedOutputFormat = OutputFormat.Mp4;
                 this.IsMkv = false;
             }
 
@@ -1220,7 +1221,6 @@ namespace HandBrakeWPF.ViewModels
                 this.CurrentTask.OptimizeMP4 = false;
                 this.CurrentTask.IPod5GSupport = false;
                 this.selectedOutputFormat = OutputFormat.Mkv;
-                this.CurrentTask.OutputFormat = OutputFormat.Mkv;
             }
 
             // Update The browse file extension display

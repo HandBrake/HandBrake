@@ -508,6 +508,19 @@ namespace HandBrakeWPF.ViewModels
             //this.DisplayX264Options = encoder == VideoEncoder.X264;
         }
 
+        /// <summary>
+        /// Trigger a Notify Property Changed on the Task to force various UI elements to update.
+        /// </summary>
+        public void RefreshTask()
+        {
+            this.NotifyOfPropertyChange(() => this.Task);
+
+            if (Task.OutputFormat == OutputFormat.Mp4 && this.SelectedVideoEncoder == VideoEncoder.Theora)
+            {
+                this.SelectedVideoEncoder = VideoEncoder.X264;
+            }
+        }
+
         #endregion
 
         #region Advanced

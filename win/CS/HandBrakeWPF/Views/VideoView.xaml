@@ -3,12 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:Converters="clr-namespace:HandBrakeWPF.Converters" mc:Ignorable="d" >
+             xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
+             xmlns:Video="clr-namespace:HandBrakeWPF.Converters.Video" mc:Ignorable="d" >
 
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="boolConverter" />
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <Converters:EnumComboConverter x:Key="enumComboConverter" />
+        <Video:VideoEncoderConverter x:Key="videoEncoderConverter" />
     </UserControl.Resources>
    
     <Grid Margin="10,5,0,0">
@@ -30,8 +32,21 @@
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
                     <TextBlock Text="Video Codec:" Width="100" />
-                    <ComboBox Width="120" ItemsSource="{Binding VideoEncoders, Converter={StaticResource enumComboConverter}, Mode=TwoWay}" 
-                              SelectedItem="{Binding SelectedVideoEncoder, Converter={StaticResource enumComboConverter}, Mode=TwoWay}" />
+
+                    <ComboBox Width="120">
+                        <ComboBox.SelectedItem>
+                            <MultiBinding Converter="{StaticResource videoEncoderConverter}">
+                                <Binding Path="SelectedVideoEncoder" />
+                            </MultiBinding>
+                        </ComboBox.SelectedItem>
+                        <ComboBox.ItemsSource>
+                            <MultiBinding Converter="{StaticResource videoEncoderConverter}">
+                                <Binding Path="VideoEncoders"/>
+                                <Binding Path="Task" />
+                            </MultiBinding>
+                        </ComboBox.ItemsSource>
+                    </ComboBox>
+                    
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">

@@ -138,6 +138,22 @@ namespace HandBrakeWPF.ViewModels
             this.Task.AudioTracks.Remove(track);
         }
 
+        /// <summary>
+        /// Trigger a Notify Property Changed on the Task to force various UI elements to update.
+        /// </summary>
+        public void RefreshTask()
+        {
+            this.NotifyOfPropertyChange(() => this.Task);
+
+            if (Task.OutputFormat == OutputFormat.Mp4)
+            {
+                foreach (AudioTrack track in this.Task.AudioTracks.Where(track => track.Encoder == AudioEncoder.ffflac || track.Encoder == AudioEncoder.Vorbis))
+                {
+                    track.Encoder = AudioEncoder.ffaac;
+                }
+            }
+        }
+
         #endregion
 
         #region Implemented Interfaces
