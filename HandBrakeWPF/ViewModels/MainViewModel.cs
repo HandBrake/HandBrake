@@ -1049,7 +1049,7 @@ namespace HandBrakeWPF.ViewModels
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] fileNames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
-                if (fileNames != null && fileNames.Any() && File.Exists(fileNames[0]))
+                if (fileNames != null && fileNames.Any() && (File.Exists(fileNames[0]) || Directory.Exists(fileNames[0])) )
                 {
                     this.StartScan(fileNames[0], 0);
                 }
