@@ -58,7 +58,12 @@ namespace HandBrakeWPF.Converters.Video
                 return EnumHelper<VideoEncoder>.GetEnumDisplayValuesSubset(encoders);
             }
 
-            return EnumHelper<VideoEncoder>.GetDisplay((VideoEncoder)values[0]);
+            if (values[0].GetType() == typeof(VideoEncoder))
+            {
+                return EnumHelper<VideoEncoder>.GetDisplay((VideoEncoder)values[0]);
+            }
+
+            return null;
         }
 
         /// <summary>

@@ -218,7 +218,6 @@ namespace HandBrake.ApplicationServices.Services
             this.UpdatePresetFiles();
         }
 
-
         /// <summary>
         /// Get a Preset
         /// </summary>
@@ -256,9 +255,6 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Reads the CLI's CLI output format and load's them into the preset List Preset
         /// </summary>
-        /// <param name="cliPath">
-        /// The Path to the CLI, leave blank for current folder.
-        /// </param>
         public void UpdateBuiltInPresets()
         {
             // Create a new tempory file and execute the CLI to get the built in Presets.
@@ -312,6 +308,7 @@ namespace HandBrake.ApplicationServices.Services
                                     CropSettings = pic,
                                     Description = string.Empty, // Maybe one day we will populate this.
                                     IsBuildIn = true,
+                                    UsePictureFilters = true,
                                     Task = QueryParserUtility.Parse(presetName[2])
                                 };
 
