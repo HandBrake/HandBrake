@@ -59,7 +59,19 @@ namespace HandBrakeWPF
         private void Dispatcher_UnhandledException(
             object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            this.ShowError(e.Exception);
+            if (e.Exception.GetType() == typeof(GeneralApplicationException))
+            {
+                this.ShowError(e.Exception);
+            }
+            else if (e.Exception.InnerException.GetType() == typeof(GeneralApplicationException))
+            {
+                this.ShowError(e.Exception.InnerException);
+            }
+            else
+            {
+                this.ShowError(e.Exception);
+            }
+
             e.Handled = true;
         }
 
@@ -83,9 +95,19 @@ namespace HandBrakeWPF
                         GeneralApplicationException applicationException = exception as GeneralApplicationException;
                         if (applicationException != null)
                         {
+                            string details = string.Format(
+                                "{0}{1}{2}{3}{4}",
+                                applicationException.Error,
+                                Environment.NewLine,
+                                applicationException.Solution,
+                                Environment.NewLine,
+                                applicationException.ActualException != null
+                                    ? applicationException.ActualException.ToString()
+                                    : "No additional exception information available.");
+
                             errorView.ErrorMessage = applicationException.Error;
                             errorView.Solution = applicationException.Solution;
-                            errorView.Details = applicationException.ActualException.ToString();
+                            errorView.Details = details;
                         }
                     }
                     else

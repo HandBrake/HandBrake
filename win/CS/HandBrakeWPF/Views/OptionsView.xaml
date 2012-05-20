@@ -100,7 +100,7 @@
                             <CheckBox Content="Automatically name output files" IsChecked="{Binding AutomaticallyNameFiles}" />
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <TextBlock VerticalAlignment="Center" Text="Arguments: " />
+                                <TextBlock VerticalAlignment="Center" Text="Default Path: " />
                                 <TextBox Name="autoNameOutputPath" Text="{Binding AutoNameDefaultPath}" Width="180" />
                                 <Button Content="Browse" Margin="5,0,0,0" cal:Message.Attach="[Event Click] = [Action BrowseAutoNamePath]" Width="55"/>
                             </StackPanel>

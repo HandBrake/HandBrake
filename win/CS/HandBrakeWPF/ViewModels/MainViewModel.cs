@@ -24,6 +24,7 @@ namespace HandBrakeWPF.ViewModels
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices;
+    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
@@ -290,7 +291,7 @@ namespace HandBrakeWPF.ViewModels
 
 
                 // File Menu Item
-                MenuItem titleSpecific = new MenuItem {Header = new TextBlock { Text = "Title Specific Scan", Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center }};
+                MenuItem titleSpecific = new MenuItem { Header = new TextBlock { Text = "Title Specific Scan", Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center } };
 
                 MenuItem titleSpecificFolder = new MenuItem
                   {
@@ -599,7 +600,10 @@ namespace HandBrakeWPF.ViewModels
                     this.SelectedPointToPoint = PointToPointMode.Chapters;
                     this.SelectedAngle = 1;
 
-                    this.CurrentTask.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
+                    if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
+                    {
+                        this.CurrentTask.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
+                    }
                     this.NotifyOfPropertyChange(() => this.CurrentTask);
 
                     this.Duration = selectedTitle.Duration.ToString();
@@ -813,7 +817,7 @@ namespace HandBrakeWPF.ViewModels
 
             QueueTask task = new QueueTask
                                  {
-                                     Task = this.CurrentTask,
+                                     Task = new EncodeTask(this.CurrentTask),
                                      Query = QueryGeneratorUtility.GenerateQuery(this.CurrentTask)
                                  };
             this.queueProcessor.QueueManager.Add(task);
@@ -821,6 +825,30 @@ namespace HandBrakeWPF.ViewModels
             if (!this.IsEncoding)
             {
                 this.StatusLabel = string.Format("{0} Encodes Pending", this.queueProcessor.QueueManager.Count);
+            }
+        }
+
+        /// <summary>
+        /// Add all Items to the queue
+        /// </summary>
+        public void AddAllToQueue()
+        {
+            if (this.ScannedSource == null || this.ScannedSource.Titles == null || this.ScannedSource.Titles.Count == 0)
+            {
+                this.errorService.ShowMessageBox("You must first scan a source and setup your job before adding to the queue.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (!AutoNameHelper.IsAutonamingEnabled())
+            {
+                this.errorService.ShowMessageBox("You must turn on automatic file naming in preferences before you can add to the queue.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            foreach (Title title in this.ScannedSource.Titles)
+            {
+                this.SelectedTitle = title;
+                this.AddToQueue();
             }
         }
 
@@ -887,7 +915,6 @@ namespace HandBrakeWPF.ViewModels
                 this.StartScan(dialog.FileName, titleSpecificView.SelectedTitle.Value);
             }
         }
-
 
         /// <summary>
         /// Cancel a Scan

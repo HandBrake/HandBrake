@@ -52,7 +52,7 @@ namespace HandBrakeWPF.Helpers
             {
                 // Get the Source Name and remove any invalid characters
                 string sourceName = Path.GetInvalidFileNameChars().Aggregate(sourceOrLabelName, (current, character) => current.Replace(character.ToString(), string.Empty));
-   
+
                 // Remove Underscores
                 if (userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameRemoveUnderscore))
                     sourceName = sourceName.Replace("_", " ");
@@ -160,6 +160,32 @@ namespace HandBrakeWPF.Helpers
             }
 
             return autoNamePath;
+        }
+
+        /// <summary>
+        /// Check if there is a valid autoname path.
+        /// </summary>
+        /// <returns>
+        /// True if there is a valid path
+        /// </returns>
+        public static bool IsAutonamingEnabled()
+        {
+            IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
+            // If there is an auto name path, use it...
+            if (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim().StartsWith("{source_path}"))
+            {
+                return true;
+            }
+            else if (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Contains("{source_folder_name}"))
+            {
+                return true;
+            }
+            else
+            {
+                return
+                    Directory.Exists(
+                        userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim());
+            }
         }
     }
 }
