@@ -3,9 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Data="clr-namespace:System.Windows.Data;assembly=PresentationFramework" 
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" Title="{Data:Binding Path=WindowTitle}" Width="1015" FontSize="11" Background="#FFF0F0F0"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" Title="{Data:Binding Path=WindowTitle}" Width="1015" 
+        FontSize="11" Background="#FFF0F0F0"
         Micro:Message.Attach="[Event Loaded] = [Action Load]"
         UseLayoutRounding="True" SizeToContent="Height"
+        SnapsToDevicePixels="True"
         AllowDrop="True">
 
     <i:Interaction.Triggers>
@@ -140,13 +142,49 @@
                             <Label Content="Stop"  Margin="8,0,0,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
+                    
+                    <Menu Background="Transparent">
+                        <MenuItem >
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Name="QueueDrop"  Micro:Message.Attach="[Event Click] = [Action AddToQueue]"
+                                            VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                                            Background="Transparent">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="Images/AddToQueue.png" Height="32" Width="32" SnapsToDevicePixels="True" />
+                                            <Label Content="Add To Queue"  Margin="8,0,0,0" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type Button}">
+                                                            <Border x:Name="border" SnapsToDevicePixels="True" Background="{TemplateBinding Background}">
+                                                                <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                                  Content="{TemplateBinding Content}" 
+                                                                                  ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsPressed" Value="True">
+                                                                    <Setter Property="Background" TargetName="border" Value="#FF98B5E2"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
 
-                    <Button Name="AddToQueue"  Micro:Message.Attach="[Event Click] = [Action AddToQueue]">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="Images/AddToQueue.png" Height="32" Width="32" SnapsToDevicePixels="True" />
-                            <Label Content="Add To Queue"  Margin="8,0,0,0" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
+                                    <Path Fill="{DynamicResource GlyphBrush}" Data="M 0 0 L 4 4 L 8 0 Z"  Height="5" Margin="2,2,2,0"/>
+                                </StackPanel>
+                            </MenuItem.Header>
+                            <MenuItem Header="Add All" Micro:Message.Attach="[Event Click] = [Action AddAllToQueue]"/>
+                        </MenuItem>
+                    </Menu>
 
                     <Button Name="ShowQueue"  Micro:Message.Attach="[Event Click] = [Action OpenQueueWindow]">
                         <StackPanel Orientation="Horizontal">
@@ -335,7 +373,7 @@
                 <Button Content="BETA WPF UI RELEASE NOTES"  Micro:Message.Attach="[Event Click] = [Action ShowReleaseNotes]" 
                          FontWeight="Bold" Foreground="Blue" Padding="0,0,0,5" FontSize="11"
                         />
- 
+
 
             </StatusBar>
 
