@@ -124,6 +124,11 @@ namespace HandBrakeWPF.ViewModels
         private bool isEncoding;
 
         /// <summary>
+        /// An Indicated to show the status window
+        /// </summary>
+        private bool showStatusWindow;
+
+        /// <summary>
         /// Backing field for the selected preset.
         /// </summary>
         private Preset selectedPreset;
@@ -529,7 +534,24 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.isEncoding = value;
-                this.NotifyOfPropertyChange("IsEncoding");
+                this.NotifyOfPropertyChange(() => this.IsEncoding);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether ShowStatusWindow.
+        /// </summary>
+        public bool ShowStatusWindow
+        {
+            get
+            {
+                return this.showStatusWindow;
+            }
+
+            set
+            {
+                this.showStatusWindow = value;
+                this.NotifyOfPropertyChange(() => this.ShowStatusWindow);
             }
         }
 
@@ -1321,6 +1343,7 @@ namespace HandBrakeWPF.ViewModels
         private void ScanStatusChanged(object sender, HandBrake.ApplicationServices.EventArgs.ScanProgressEventArgs e)
         {
             this.SourceLabel = "Scanning Title " + e.CurrentTitle + " of " + e.Titles;
+            this.StatusLabel = "Scanning Title " + e.CurrentTitle + " of " + e.Titles;
         }
 
         /// <summary>
@@ -1346,13 +1369,12 @@ namespace HandBrakeWPF.ViewModels
                         this.JobContextService.CurrentSource = this.ScannedSource;
                         this.JobContextService.CurrentTask = this.CurrentTask;
                         this.SetupTabs();
+                        this.ShowStatusWindow = false;
                     }
 
                     this.SourceLabel = "Scan Completed";
                     this.StatusLabel = "Scan Completed";
                 });
-
-            // TODO Re-enable GUI.
         }
 
         /// <summary>
@@ -1370,6 +1392,7 @@ namespace HandBrakeWPF.ViewModels
                 () =>
                 {
                     this.StatusLabel = "Scanning source, please wait...";
+                    this.ShowStatusWindow = true;
                 });
             // TODO - Disable relevant parts of the UI.
         }

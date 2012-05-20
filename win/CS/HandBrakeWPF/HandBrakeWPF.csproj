@@ -110,6 +110,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\Loading.xaml.cs">
+      <DependentUpon>Loading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\StatusPanel.xaml.cs">
+      <DependentUpon>StatusPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\Audio\AudioBitrateConverter.cs" />
     <Compile Include="Converters\Audio\AudioEncoderConverter.cs" />
     <Compile Include="Converters\BooleanToHiddenVisibilityConverter.cs" />
@@ -255,6 +261,14 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\Loading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StatusPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\TitleSpecificView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

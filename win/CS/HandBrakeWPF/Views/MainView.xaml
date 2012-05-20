@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Data="clr-namespace:System.Windows.Data;assembly=PresentationFramework" 
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" Title="{Data:Binding Path=WindowTitle}" Width="1015" 
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:Controls="clr-namespace:HandBrakeWPF.Controls" Title="{Data:Binding Path=WindowTitle}" Width="1015" 
         FontSize="11" Background="#FFF0F0F0"
         Micro:Message.Attach="[Event Loaded] = [Action Load]"
         UseLayoutRounding="True" SizeToContent="Height"
@@ -65,318 +66,332 @@
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
     </Window.Resources>
 
-    <Grid>
-        <StackPanel Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <!-- Menu and Taskbar-->
-            <StackPanel Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                <!-- Main Menu -->
-                <Menu Height="23" VerticalAlignment="Top" HorizontalAlignment="Stretch">
-                    <MenuItem Header="File">
-                        <MenuItem Header="Cancel Scan" Micro:Message.Attach="[Event Click] = [Action CancelScan]" />
-                        <Separator />
-                        <MenuItem Header="Exit" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
-                    </MenuItem>
+    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-                    <MenuItem Header="Tools">
-                        <MenuItem Header="Show Queue" Micro:Message.Attach="[Event Click] = [Action OpenQueueWindow]" >
-                            <MenuItem.Icon>
-                                <Image Source="Images/Queue_Small.png" Width="16" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Header="Activity Window" Micro:Message.Attach="[Event Click] = [Action OpenLogWindow]" >
-                            <MenuItem.Icon>
-                                <Image Source="Images/Output_Small.png" Width="16" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <Separator />
-                        <MenuItem Header="Options" Micro:Message.Attach="[Event Click] = [Action OpenOptionsWindow]" >
-                            <MenuItem.Icon>
-                                <Image Source="Images/Pref_Small.png" Width="16" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </MenuItem>
+        <!-- Menu and Taskbar-->
+        <StackPanel Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                        Grid.Row="0">
+            <!-- Main Menu -->
+            <Menu Height="23" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                <MenuItem Header="File">
+                    <MenuItem Header="Cancel Scan" Micro:Message.Attach="[Event Click] = [Action CancelScan]" />
+                    <Separator />
+                    <MenuItem Header="Exit" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
+                </MenuItem>
 
-                    <MenuItem Header="Help">
-                        <MenuItem Header="HandBrake User Guide (HTTP)" Micro:Message.Attach="[Event Click] = [Action LaunchHelp]" >
-                            <MenuItem.Icon>
-                                <Image Source="Images/Help16.png" Width="16" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <Separator />
-                        <MenuItem Header="Check for Updates" Micro:Message.Attach="[Event Click] = [Action CheckForUpdates]" />
-                        <Separator />
-                        <MenuItem Header="About..." Micro:Message.Attach="[Event Click] = [Action OpenAboutApplication]" />
+                <MenuItem Header="Tools">
+                    <MenuItem Header="Show Queue" Micro:Message.Attach="[Event Click] = [Action OpenQueueWindow]" >
+                        <MenuItem.Icon>
+                            <Image Source="Images/Queue_Small.png" Width="16" />
+                        </MenuItem.Icon>
                     </MenuItem>
+                    <MenuItem Header="Activity Window" Micro:Message.Attach="[Event Click] = [Action OpenLogWindow]" >
+                        <MenuItem.Icon>
+                            <Image Source="Images/Output_Small.png" Width="16" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Header="Options" Micro:Message.Attach="[Event Click] = [Action OpenOptionsWindow]" >
+                        <MenuItem.Icon>
+                            <Image Source="Images/Pref_Small.png" Width="16" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
 
-                    <MenuItem Header="Debug">
-                        <MenuItem Header="Show CLI Equiv" Micro:Message.Attach="[Event Click] = [Action ShowCliQuery]" />
+                <MenuItem Header="Help">
+                    <MenuItem Header="HandBrake User Guide (HTTP)" Micro:Message.Attach="[Event Click] = [Action LaunchHelp]" >
+                        <MenuItem.Icon>
+                            <Image Source="Images/Help16.png" Width="16" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Header="Check for Updates" Micro:Message.Attach="[Event Click] = [Action CheckForUpdates]" />
+                    <Separator />
+                    <MenuItem Header="About..." Micro:Message.Attach="[Event Click] = [Action OpenAboutApplication]" />
+                </MenuItem>
+
+                <MenuItem Header="Debug">
+                    <MenuItem Header="Show CLI Equiv" Micro:Message.Attach="[Event Click] = [Action ShowCliQuery]" />
+                </MenuItem>
+            </Menu>
+
+            <!-- ToolBar -->
+            <ToolBar Name="mainToolBar" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  SnapsToDevicePixels="False">
+                <Menu Background="Transparent" >
+                    <MenuItem ItemsSource="{Binding SourceToolbarMenu}">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="Images/Movies.png" Height="32" Width="32" />
+                                <Label Content="Source"  Margin="8,0,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </MenuItem.Header>
+
                     </MenuItem>
                 </Menu>
 
-                <!-- ToolBar -->
-                <ToolBar Name="mainToolBar" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  SnapsToDevicePixels="False">
-                    <Menu Background="Transparent" >
-                        <MenuItem ItemsSource="{Binding SourceToolbarMenu}">
-                            <MenuItem.Header>
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Source="Images/Movies.png" Height="32" Width="32" />
-                                    <Label Content="Source"  Margin="8,0,0,0" VerticalAlignment="Center" />
-                                </StackPanel>
-                            </MenuItem.Header>
+                <Separator />
 
-                        </MenuItem>
-                    </Menu>
+                <Button Name="Start" Micro:Message.Attach="[Event Click] = [Action StartEncode]" Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Images/Play.png" Height="32" Width="32" />
+                        <Label Content="Start"  Margin="8,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
 
-                    <Separator />
+                <Button Name="Stop" Micro:Message.Attach="[Event Click] = [Action StopEncode]" Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Images/stop.png" Height="32" Width="32" SnapsToDevicePixels="True" />
+                        <Label Content="Stop"  Margin="8,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
 
-                    <Button Name="Start" Micro:Message.Attach="[Event Click] = [Action StartEncode]" Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="Images/Play.png" Height="32" Width="32" />
-                            <Label Content="Start"  Margin="8,0,0,0" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
-
-                    <Button Name="Stop" Micro:Message.Attach="[Event Click] = [Action StopEncode]" Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="Images/stop.png" Height="32" Width="32" SnapsToDevicePixels="True" />
-                            <Label Content="Stop"  Margin="8,0,0,0" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
-                    
-                    <Menu Background="Transparent">
-                        <MenuItem >
-                            <MenuItem.Header>
-                                <StackPanel Orientation="Horizontal">
-                                    <Button Name="QueueDrop"  Micro:Message.Attach="[Event Click] = [Action AddToQueue]"
+                <Menu Background="Transparent">
+                    <MenuItem >
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Name="QueueDrop"  Micro:Message.Attach="[Event Click] = [Action AddToQueue]"
                                             VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                                             HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
                                             Background="Transparent">
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Source="Images/AddToQueue.png" Height="32" Width="32" SnapsToDevicePixels="True" />
-                                            <Label Content="Add To Queue"  Margin="8,0,0,0" VerticalAlignment="Center" />
-                                        </StackPanel>
-                                        <Button.Style>
-                                            <Style TargetType="{x:Type Button}">
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate TargetType="{x:Type Button}">
-                                                            <Border x:Name="border" SnapsToDevicePixels="True" Background="{TemplateBinding Background}">
-                                                                <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="Images/AddToQueue.png" Height="32" Width="32" SnapsToDevicePixels="True" />
+                                        <Label Content="Add To Queue"  Margin="8,0,0,0" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type Button}">
+                                                        <Border x:Name="border" SnapsToDevicePixels="True" Background="{TemplateBinding Background}">
+                                                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
                                                                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
                                                                                   VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                                                                   Content="{TemplateBinding Content}" 
                                                                                   ContentTemplate="{TemplateBinding ContentTemplate}"/>
-                                                            </Border>
-                                                            <ControlTemplate.Triggers>
-                                                                <Trigger Property="IsPressed" Value="True">
-                                                                    <Setter Property="Background" TargetName="border" Value="#FF98B5E2"/>
-                                                                </Trigger>
-                                                            </ControlTemplate.Triggers>
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Style>
-                                        </Button.Style>
-                                    </Button>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsPressed" Value="True">
+                                                                <Setter Property="Background" TargetName="border" Value="#FF98B5E2"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
 
-                                    <Path Fill="{DynamicResource GlyphBrush}" Data="M 0 0 L 4 4 L 8 0 Z"  Height="5" Margin="2,2,2,0"/>
-                                </StackPanel>
-                            </MenuItem.Header>
-                            <MenuItem Header="Add All" Micro:Message.Attach="[Event Click] = [Action AddAllToQueue]"/>
-                        </MenuItem>
-                    </Menu>
+                                <Path Fill="{DynamicResource GlyphBrush}" Data="M 0 0 L 4 4 L 8 0 Z"  Height="5" Margin="2,2,2,0"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+                        <MenuItem Header="Add All" Micro:Message.Attach="[Event Click] = [Action AddAllToQueue]"/>
+                    </MenuItem>
+                </Menu>
 
-                    <Button Name="ShowQueue"  Micro:Message.Attach="[Event Click] = [Action OpenQueueWindow]">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="Images/Queue.png" Height="32" Width="32" SnapsToDevicePixels="True" />
-                            <Label Content="Show Queue"  Margin="8,0,0,0" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
+                <Button Name="ShowQueue"  Micro:Message.Attach="[Event Click] = [Action OpenQueueWindow]">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Images/Queue.png" Height="32" Width="32" SnapsToDevicePixels="True" />
+                        <Label Content="Show Queue"  Margin="8,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
 
-                    <Separator />
+                <Separator />
 
-                    <Button Name="Preview" Micro:Message.Attach="[Event Click] = [Action OpenPreviewWindow]">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="Images/window.png" Height="32" Width="32" SnapsToDevicePixels="True" />
-                            <Label Content="Preview"  Margin="8,0,0,0" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
+                <Button Name="Preview" Micro:Message.Attach="[Event Click] = [Action OpenPreviewWindow]">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Images/window.png" Height="32" Width="32" SnapsToDevicePixels="True" />
+                        <Label Content="Preview"  Margin="8,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
 
-                    <Button Name="ActivityWindow" Micro:Message.Attach="[Event Click] = [Action OpenLogWindow]">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="Images/ActivityWindow.png" Height="32" Width="32" />
-                            <Label Content="Activity Window"  Margin="8,0,0,0" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
-                </ToolBar>
-            </StackPanel>
+                <Button Name="ActivityWindow" Micro:Message.Attach="[Event Click] = [Action OpenLogWindow]">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Images/ActivityWindow.png" Height="32" Width="32" />
+                        <Label Content="Activity Window"  Margin="8,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+        </StackPanel>
 
-            <!-- Main Body-->
-            <StackPanel Orientation="Horizontal">
+        <!-- Main Body-->
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
 
-                <!-- Main Controls-->
-                <StackPanel Orientation="Vertical">
-                    <!-- Source -->
-                    <StackPanel Margin="10,5,10,5" MaxWidth="725" Width="725" HorizontalAlignment="Left">
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="Source" FontWeight="Bold" />
-                            <Label Content="{Binding Path=SourceLabel}" />
-                        </StackPanel>
+            <!-- Main Controls-->
+            <StackPanel Orientation="Vertical">
+                <!-- Source -->
+                <StackPanel Margin="10,5,10,5" MaxWidth="725" Width="725" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Source" FontWeight="Bold" />
+                        <Label Content="{Binding Path=SourceLabel}" />
+                    </StackPanel>
 
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="Title" Margin="8,0,0,0" />
-                            <ComboBox Name="Titles" Margin="8,0,0,0" MinWidth="100" ItemsSource="{Binding ScannedSource.Titles}" SelectedItem="{Binding Path=SelectedTitle}" />
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Title" Margin="8,0,0,0" />
+                        <ComboBox Name="Titles" Margin="8,0,0,0" MinWidth="100" ItemsSource="{Binding ScannedSource.Titles}" SelectedItem="{Binding Path=SelectedTitle}" />
 
-                            <Label Content="Angle" Margin="8,0,0,0" />
-                            <ComboBox Name="Angles" Margin="8,0,0,0" MinWidth="60" ItemsSource="{Binding Angles}"  SelectedItem="{Binding SelectedAngle}"/>
+                        <Label Content="Angle" Margin="8,0,0,0" />
+                        <ComboBox Name="Angles" Margin="8,0,0,0" MinWidth="60" ItemsSource="{Binding Angles}"  SelectedItem="{Binding SelectedAngle}"/>
 
-                            <ComboBox Name="PointToPointMode" Margin="8,0,0,0" MinWidth="80" ItemsSource="{Binding RangeMode}" SelectedItem="{Binding SelectedPointToPoint}" />
+                        <ComboBox Name="PointToPointMode" Margin="8,0,0,0" MinWidth="80" ItemsSource="{Binding RangeMode}" SelectedItem="{Binding SelectedPointToPoint}" />
 
-                            <ComboBox Name="StartPoint" Margin="8,0,0,0" MinWidth="60" ItemsSource="{Binding StartEndRangeItems}" SelectedItem="{Binding SelectedStartPoint}"
+                        <ComboBox Name="StartPoint" Margin="8,0,0,0" MinWidth="60" ItemsSource="{Binding StartEndRangeItems}" SelectedItem="{Binding SelectedStartPoint}"
                                       Visibility="{Binding ShowTextEntryForPointToPointMode,Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"/>
-                            <TextBox Name="StartPointText" Margin="8,0,0,0" MinWidth="60" Text="{Binding SelectedStartPoint}"
+                        <TextBox Name="StartPointText" Margin="8,0,0,0" MinWidth="60" Text="{Binding SelectedStartPoint}"
                                      Visibility="{Binding ShowTextEntryForPointToPointMode, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"/>
 
-                            <Label Content="through" Margin="8,0,0,0" />
-                            <ComboBox Name="EndPoint" Margin="8,0,0,0" MinWidth="60" ItemsSource="{Binding StartEndRangeItems}" SelectedItem="{Binding SelectedEndPoint}"
+                        <Label Content="through" Margin="8,0,0,0" />
+                        <ComboBox Name="EndPoint" Margin="8,0,0,0" MinWidth="60" ItemsSource="{Binding StartEndRangeItems}" SelectedItem="{Binding SelectedEndPoint}"
                                       Visibility="{Binding ShowTextEntryForPointToPointMode, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"/>
-                            <TextBox Name="EndPointText" Margin="8,0,0,0" MinWidth="60" Text="{Binding SelectedEndPoint}" 
+                        <TextBox Name="EndPointText" Margin="8,0,0,0" MinWidth="60" Text="{Binding SelectedEndPoint}" 
                                      Visibility="{Binding ShowTextEntryForPointToPointMode, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
 
-                            <Label Content="Duration" Margin="8,0,0,0" />
-                            <Label Content="{Binding Duration}" Margin="8,0,0,0" />
-                        </StackPanel>
+                        <Label Content="Duration" Margin="8,0,0,0" />
+                        <Label Content="{Binding Duration}" Margin="8,0,0,0" />
                     </StackPanel>
-
-                    <!-- Destination -->
-                    <StackPanel Margin="10,5,10,5" MaxWidth="725" Width="725" HorizontalAlignment="Left">
-                        <Label Content="Destination" FontWeight="Bold" />
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="File" Margin="8,0,0,0" />
-                            <TextBox Name="Destination" Margin="8,0,0,0" Width="600" Text="{Binding CurrentTask.Destination}" />
-                            <Button Name="DestinationBrowser" Margin="8,0,0,0" Content="Browse" Micro:Message.Attach="[Event Click] = [Action BrowseDestination]" />
-                        </StackPanel>
-                    </StackPanel>
-
-                    <!-- Output Options -->
-                    <StackPanel Margin="10,5,10,5" MaxWidth="725" Width="725" HorizontalAlignment="Left">
-                        <Label Content="Output Settings" FontWeight="Bold" />
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="Container" Margin="8,0,0,0" />
-                            <ComboBox Name="Container" Margin="8,0,0,0" MinWidth="100" ItemsSource="{Binding OutputFormats}" SelectedItem="{Binding SelectedOutputFormat}" />
-
-                            <CheckBox Name="LargeFileMp4" Content="Large File Size" IsChecked="{Binding Path=CurrentTask.LargeFile}"
-                                      Visibility="{Binding IsMkv, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" VerticalAlignment="Center" Margin="8,0,0,0" />
-                            <CheckBox Name="WebOptimized" Content="Web Optimized" IsChecked="{Binding Path=CurrentTask.OptimizeMP4}"
-                                      Visibility="{Binding IsMkv, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" VerticalAlignment="Center" Margin="8,0,0,0" />
-                            <CheckBox Name="iPod5G" Content="iPod 5G Support" IsChecked="{Binding Path=CurrentTask.IPod5GSupport}"
-                                      Visibility="{Binding IsMkv, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" VerticalAlignment="Center" Margin="8,0,0,0" />
-                        </StackPanel>
-                    </StackPanel>
-
-                    <!-- Tab Control -->
-                    <TabControl HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="725" Height="310" Margin="10,10,10,10" Name="tabControl" >
-                        <TabItem Header="Picture" Name="pictureTab">
-                            <ContentControl x:Name="PictureSettingsViewModel" ></ContentControl>
-                        </TabItem>
-                        <TabItem Header="Video Filters" Name="filtersTab">
-                            <ContentControl x:Name="FiltersViewModel" ></ContentControl>
-                        </TabItem>
-                        <TabItem Header="Video" Name="videoTab">
-                            <ContentControl x:Name="VideoViewModel" ></ContentControl>
-                        </TabItem>
-                        <TabItem Header="Audio" Name="audioTab">
-                            <ContentControl x:Name="AudioViewModel" ></ContentControl>
-                        </TabItem>
-                        <TabItem Header="Subtitles" Name="subtitlesTab">
-                            <ContentControl x:Name="SubtitleViewModel"></ContentControl>
-                        </TabItem>
-                        <TabItem Header="Chapters" Name="chaptersTab">
-                            <ContentControl x:Name="ChaptersViewModel"></ContentControl>
-                        </TabItem>
-                        <TabItem Header="Advanced" Name="advancedTab">
-                            <ContentControl x:Name="AdvancedViewModel"></ContentControl>
-                        </TabItem>
-                    </TabControl>
-
                 </StackPanel>
 
-                <!-- Presets -->
-                <StackPanel Margin="5,5,5,5" Orientation="Vertical">
-                    <GroupBox Header="Presets" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                        <StackPanel Orientation="Vertical">
-
-                            <TreeView ItemsSource="{Binding Source={StaticResource presetsCvs}, Path=Groups}" 
-                                      ItemTemplate="{StaticResource presetsCategoryTemplate}" Width="240" Height="430"
-                                      >
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="SelectedItemChanged">
-                                        <Micro:ActionMessage MethodName="SetSelectedPreset">
-                                            <Micro:Parameter Value="$eventArgs"></Micro:Parameter>
-                                        </Micro:ActionMessage>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-
-                            </TreeView>
-
-
-                            <ToolBar Name="presetsToolBar" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" UseLayoutRounding="False" Background="Transparent" 
-                                     SnapsToDevicePixels="False">
-                                <Button Micro:Message.Attach="[Event Click] = [Action PresetAdd]">
-                                    <Button.Content>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Source="Images/Add16.png" Height="16" Width="16" />
-                                            <TextBlock Text="Add" Style="{StaticResource textBlockOrangeStyle}"  Margin="2,0,0,0" VerticalAlignment="Center" />
-                                        </StackPanel>
-                                    </Button.Content>
-                                </Button>
-
-                                <Button Micro:Message.Attach="[Event Click] = [Action PresetRemove]">
-                                    <Button.Content>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Source="Images/Close.png" Height="16" Width="16" />
-                                            <TextBlock Text="Remove" Style="{StaticResource textBlockOrangeStyle}"  Margin="2,0,0,0" VerticalAlignment="Center" />
-                                        </StackPanel>
-                                    </Button.Content>
-                                </Button>
-
-                                <Menu Background="Transparent" >
-                                    <MenuItem ToolBar.OverflowMode="Never">
-                                        <MenuItem.Header>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Image Source="Images/Options24.png" Height="16" Width="16" />
-                                                <TextBlock Text="Options" Style="{StaticResource textBlockOrangeStyle}" Margin="2,0,0,0" VerticalAlignment="Center" />
-                                            </StackPanel>
-                                        </MenuItem.Header>
-
-                                        <MenuItem Header="Set Default" Micro:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
-                                        <Separator />
-                                        <MenuItem Header="Import" Micro:Message.Attach="[Event Click] = [Action PresetImport]" />
-                                        <MenuItem Header="Export" Micro:Message.Attach="[Event Click] = [Action PresetExport]" />
-                                        <Separator />
-                                        <MenuItem Header="Reset Built-in Presets" Micro:Message.Attach="[Event Click] = [Action PresetReset]" />
-                                    </MenuItem>
-                                </Menu>
-
-
-                            </ToolBar>
-                        </StackPanel>
-                    </GroupBox>
+                <!-- Destination -->
+                <StackPanel Margin="10,5,10,5" MaxWidth="725" Width="725" HorizontalAlignment="Left">
+                    <Label Content="Destination" FontWeight="Bold" />
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="File" Margin="8,0,0,0" />
+                        <TextBox Name="Destination" Margin="8,0,0,0" Width="600" Text="{Binding CurrentTask.Destination}" />
+                        <Button Name="DestinationBrowser" Margin="8,0,0,0" Content="Browse" Micro:Message.Attach="[Event Click] = [Action BrowseDestination]" />
+                    </StackPanel>
                 </StackPanel>
+
+                <!-- Output Options -->
+                <StackPanel Margin="10,5,10,5" MaxWidth="725" Width="725" HorizontalAlignment="Left">
+                    <Label Content="Output Settings" FontWeight="Bold" />
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Container" Margin="8,0,0,0" />
+                        <ComboBox Name="Container" Margin="8,0,0,0" MinWidth="100" ItemsSource="{Binding OutputFormats}" SelectedItem="{Binding SelectedOutputFormat}" />
+
+                        <CheckBox Name="LargeFileMp4" Content="Large File Size" IsChecked="{Binding Path=CurrentTask.LargeFile}"
+                                      Visibility="{Binding IsMkv, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" VerticalAlignment="Center" Margin="8,0,0,0" />
+                        <CheckBox Name="WebOptimized" Content="Web Optimized" IsChecked="{Binding Path=CurrentTask.OptimizeMP4}"
+                                      Visibility="{Binding IsMkv, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" VerticalAlignment="Center" Margin="8,0,0,0" />
+                        <CheckBox Name="iPod5G" Content="iPod 5G Support" IsChecked="{Binding Path=CurrentTask.IPod5GSupport}"
+                                      Visibility="{Binding IsMkv, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" VerticalAlignment="Center" Margin="8,0,0,0" />
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Tab Control -->
+                <TabControl HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="725" Height="310" Margin="10,10,10,10" Name="tabControl" >
+                    <TabItem Header="Picture" Name="pictureTab">
+                        <ContentControl x:Name="PictureSettingsViewModel" ></ContentControl>
+                    </TabItem>
+                    <TabItem Header="Video Filters" Name="filtersTab">
+                        <ContentControl x:Name="FiltersViewModel" ></ContentControl>
+                    </TabItem>
+                    <TabItem Header="Video" Name="videoTab">
+                        <ContentControl x:Name="VideoViewModel" ></ContentControl>
+                    </TabItem>
+                    <TabItem Header="Audio" Name="audioTab">
+                        <ContentControl x:Name="AudioViewModel" ></ContentControl>
+                    </TabItem>
+                    <TabItem Header="Subtitles" Name="subtitlesTab">
+                        <ContentControl x:Name="SubtitleViewModel"></ContentControl>
+                    </TabItem>
+                    <TabItem Header="Chapters" Name="chaptersTab">
+                        <ContentControl x:Name="ChaptersViewModel"></ContentControl>
+                    </TabItem>
+                    <TabItem Header="Advanced" Name="advancedTab">
+                        <ContentControl x:Name="AdvancedViewModel"></ContentControl>
+                    </TabItem>
+                </TabControl>
 
             </StackPanel>
 
-            <!-- Status Bar -->
-            <StatusBar Padding="0" Margin="0" Grid.Row="6" Height="32" Grid.ColumnSpan="2" VerticalAlignment="Bottom" >
-                <Label Content="{Binding Path=StatusLabel}" FontSize="11" Padding="0,0,0,5" VerticalAlignment="Center" />
+            <!-- Presets -->
+            <StackPanel Margin="5,5,5,5" Orientation="Vertical">
+                <GroupBox Header="Presets" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <StackPanel Orientation="Vertical">
 
-                <Button Content="BETA WPF UI RELEASE NOTES"  Micro:Message.Attach="[Event Click] = [Action ShowReleaseNotes]" 
+                        <TreeView ItemsSource="{Binding Source={StaticResource presetsCvs}, Path=Groups}" 
+                                      ItemTemplate="{StaticResource presetsCategoryTemplate}" Width="240" Height="430"
+                                      >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectedItemChanged">
+                                    <Micro:ActionMessage MethodName="SetSelectedPreset">
+                                        <Micro:Parameter Value="$eventArgs"></Micro:Parameter>
+                                    </Micro:ActionMessage>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+
+                        </TreeView>
+
+
+                        <ToolBar Name="presetsToolBar" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" UseLayoutRounding="False" Background="Transparent" 
+                                     SnapsToDevicePixels="False">
+                            <Button Micro:Message.Attach="[Event Click] = [Action PresetAdd]">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="Images/Add16.png" Height="16" Width="16" />
+                                        <TextBlock Text="Add" Style="{StaticResource textBlockOrangeStyle}"  Margin="2,0,0,0" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+
+                            <Button Micro:Message.Attach="[Event Click] = [Action PresetRemove]">
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="Images/Close.png" Height="16" Width="16" />
+                                        <TextBlock Text="Remove" Style="{StaticResource textBlockOrangeStyle}"  Margin="2,0,0,0" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+
+                            <Menu Background="Transparent" >
+                                <MenuItem ToolBar.OverflowMode="Never">
+                                    <MenuItem.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="Images/Options24.png" Height="16" Width="16" />
+                                            <TextBlock Text="Options" Style="{StaticResource textBlockOrangeStyle}" Margin="2,0,0,0" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </MenuItem.Header>
+
+                                    <MenuItem Header="Set Default" Micro:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
+                                    <Separator />
+                                    <MenuItem Header="Import" Micro:Message.Attach="[Event Click] = [Action PresetImport]" />
+                                    <MenuItem Header="Export" Micro:Message.Attach="[Event Click] = [Action PresetExport]" />
+                                    <Separator />
+                                    <MenuItem Header="Reset Built-in Presets" Micro:Message.Attach="[Event Click] = [Action PresetReset]" />
+                                </MenuItem>
+                            </Menu>
+
+
+                        </ToolBar>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+
+        </StackPanel>
+
+        <Controls:StatusPanel x:Name="loadingPanel"
+                              Panel.ZIndex="10"
+                              Grid.Row="1"
+                              Grid.RowSpan="2"
+                              Height="70"
+                              VerticalAlignment="Bottom"
+                              IsLoading="{Binding ShowStatusWindow}"
+                              Message="{Binding StatusLabel}"
+                              SubMessage="Please Wait ..."  />
+
+        <!-- Status Bar -->
+        <StatusBar Padding="0" Margin="0" Grid.Row="2" Height="32" Grid.ColumnSpan="2" VerticalAlignment="Bottom" >
+            <Label Content="{Binding Path=StatusLabel}" FontSize="11" Padding="0,0,0,5" VerticalAlignment="Center" />
+
+            <Button Content="BETA WPF UI RELEASE NOTES"  Micro:Message.Attach="[Event Click] = [Action ShowReleaseNotes]" 
                          FontWeight="Bold" Foreground="Blue" Padding="0,0,0,5" FontSize="11"
                         />
 
 
-            </StatusBar>
-
-        </StackPanel>
+        </StatusBar>
     </Grid>
 </Window>
