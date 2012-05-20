@@ -27,7 +27,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Button Content="Add" Name="AddTrack" Grid.Column="0" Width="75" Margin="0,0,10,0" cal:Message.Attach="[Event Click] = [Action Add]" />
-            <Button Content="Import SRT" Grid.Column="2" Width="75" cal:Message.Attach="[Event Click] = [Action Import]" />
+            <Button Content="Import SRT" Grid.Column="2" Width="85" cal:Message.Attach="[Event Click] = [Action Import]" />
         </Grid>
 
         <ListBox Grid.Row="2" ItemsSource="{Binding Task.SubtitleTracks}" 

@@ -33,6 +33,7 @@ namespace HandBrake.ApplicationServices.Model
             this.x264Preset = x264Preset.None;
             this.x264Profile = x264Profile.None;
             this.X264Tune = x264Tune.None;
+            this.Modulus = 16;
         }
 
         /// <summary>

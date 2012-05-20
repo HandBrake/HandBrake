@@ -69,11 +69,9 @@ namespace HandBrakeWPF.ViewModels
         /// The window manager.
         /// </param>
         /// <param name="queueProcessor">
-        /// 
         /// The Queue Processor Service 
         /// </param>
         /// <param name="errorService">
-        /// 
         /// The Error Service 
         /// </param>
         public QueueViewModel(IWindowManager windowManager, IQueueProcessor queueProcessor, IErrorService errorService)
@@ -331,7 +329,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void QueueManager_QueueChanged(object sender, EventArgs e)
         {
-            // TODO
+            this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.QueueManager.Count);
         }
 
         /// <summary>

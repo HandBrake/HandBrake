@@ -494,7 +494,7 @@ namespace HandBrakeWPF.ViewModels
                 this.Height = preset.Task.Height ?? (sourceResolution.Height - this.CropTop - this.CropBottom);
             }
 
-            if (this.Task.Anamorphic == Anamorphic.Custom)
+            if (preset.Task.Anamorphic == Anamorphic.Custom)
             {
                 this.DisplayWidth = preset.Task.DisplayWidth != null ? int.Parse(preset.Task.DisplayWidth.ToString()) : 0;
                 this.ParWidth = preset.Task.PixelAspectX;
@@ -503,7 +503,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.MaintainAspectRatio = preset.Task.KeepDisplayAspect;
 
-            if (this.Task.Modulus.HasValue)
+            if (preset.Task.Modulus.HasValue)
             {
                 this.SelectedModulus = preset.Task.Modulus;
             }
