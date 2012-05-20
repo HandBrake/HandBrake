@@ -343,6 +343,8 @@ static int MKVInit( hb_mux_object_t * m )
                 track->codecPrivateSize = len + 1;
                 break;
             case PGSSUB:
+                track->codecPrivate = NULL;
+                track->codecPrivateSize = 0;
                 track->codecID = "S_HDMV/PGS";
                 break;
             case SSASUB:
@@ -355,6 +357,9 @@ static int MKVInit( hb_mux_object_t * m )
             case CC708SUB:
             case UTF8SUB:
             case TX3GSUB:
+            case SRTSUB:
+                track->codecPrivate = NULL;
+                track->codecPrivateSize = 0;
                 track->codecID = MK_SUBTITLE_UTF8;
                 break;
             default:
