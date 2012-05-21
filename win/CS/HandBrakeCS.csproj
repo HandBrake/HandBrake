@@ -320,6 +320,7 @@
     <None Include="Installer\Installer.nsi" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DEPRECATED WARNING.txt" />
     <Content Include="handbrakepineapple.ico" />
     <Content Include="defaultsettings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
