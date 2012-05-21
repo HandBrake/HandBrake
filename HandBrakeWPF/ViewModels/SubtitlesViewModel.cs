@@ -190,9 +190,12 @@ namespace HandBrakeWPF.ViewModels
         {
             foreach (SubtitleTrack track in this.Task.SubtitleTracks)
             {
+                if (track == subtitle)
+                {
+                    continue; // Skip the track the user selected.
+                }
                 track.Default = false;
             }
-            subtitle.Default = true;
 
             this.NotifyOfPropertyChange(() => this.Task);
         }
@@ -207,9 +210,12 @@ namespace HandBrakeWPF.ViewModels
         {
             foreach (SubtitleTrack track in this.Task.SubtitleTracks)
             {
+                if (track == subtitle)
+                {
+                    continue; // Skip the track the user selected.
+                }
                 track.Burned = false;
             }
-            subtitle.Burned = true;
             this.NotifyOfPropertyChange(() => this.Task);
         }
 

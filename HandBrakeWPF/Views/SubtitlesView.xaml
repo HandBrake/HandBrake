@@ -85,10 +85,14 @@
                             <TextBlock Text="{Binding SrtFileName}" Grid.Column="1" VerticalAlignment="Center"
                                        Visibility="{Binding IsSrtSubtitle, Converter={StaticResource booleanToVisConverter}, ConverterParameter=false}" />
                             
-                            <TextBlock Text="Forced Only" FontWeight="Bold" Grid.Column="2" VerticalAlignment="Center" />
-                            <CheckBox Grid.Column="3" IsChecked="{Binding Forced}" VerticalAlignment="Center" Margin="5,0,5,0"/>
-                            <TextBlock Text="Burn In" FontWeight="Bold" Grid.Column="4" VerticalAlignment="Center" />
-                            <CheckBox Grid.Column="5" IsChecked="{Binding Burned}" VerticalAlignment="Center" Margin="5,0,5,0">
+                            <TextBlock Text="Forced Only" FontWeight="Bold" Grid.Column="2" VerticalAlignment="Center"
+                                       Visibility="{Binding IsSrtSubtitle, Converter={StaticResource booleanToVisConverter}, ConverterParameter=true}" />
+                            <CheckBox Grid.Column="3" IsChecked="{Binding Forced}" VerticalAlignment="Center" Margin="5,0,5,0"
+                                      Visibility="{Binding IsSrtSubtitle, Converter={StaticResource booleanToVisConverter}, ConverterParameter=true}" />
+                            <TextBlock Text="Burn In" FontWeight="Bold" Grid.Column="4" VerticalAlignment="Center"
+                                       Visibility="{Binding IsSrtSubtitle, Converter={StaticResource booleanToVisConverter}, ConverterParameter=true}"/>
+                            <CheckBox Grid.Column="5" IsChecked="{Binding Burned}" VerticalAlignment="Center" Margin="5,0,5,0"
+                                      Visibility="{Binding IsSrtSubtitle, Converter={StaticResource booleanToVisConverter}, ConverterParameter=true}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Click">
                                         <cal:ActionMessage MethodName="SelectBurnedInTrack">
