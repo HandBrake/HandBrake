@@ -8,12 +8,19 @@
         FontSize="11" Background="#FFF0F0F0"
         Micro:Message.Attach="[Event Loaded] = [Action Load]"
         UseLayoutRounding="True" SizeToContent="Height"
+        WindowStartupLocation="CenterScreen"
         SnapsToDevicePixels="True"
         AllowDrop="True">
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Drop">
             <Micro:ActionMessage MethodName="FilesDroppedOnWindow">
+                <Micro:Parameter Value="$eventArgs"></Micro:Parameter>
+            </Micro:ActionMessage>
+        </i:EventTrigger>
+
+        <i:EventTrigger EventName="Closing">
+            <Micro:ActionMessage MethodName="HandleWindowClosing">
                 <Micro:Parameter Value="$eventArgs"></Micro:Parameter>
             </Micro:ActionMessage>
         </i:EventTrigger>
