@@ -215,12 +215,9 @@ hb_work_object_t hb_decvobsub =
 static void ParseControls( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
-    hb_job_t * job = pv->job;
-    hb_title_t * title = job->title;
-    hb_subtitle_t * subtitle;
     uint8_t * buf = pv->buf->data;
 
-    int i, n;
+    int i;
     int command;
     int date, next;
 

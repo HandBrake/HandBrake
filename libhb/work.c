@@ -526,7 +526,6 @@ static void do_job( hb_job_t * job )
     hb_audio_t   * audio;
     hb_subtitle_t * subtitle;
     unsigned int subtitle_highest = 0;
-    unsigned int subtitle_highest_id = 0;
     unsigned int subtitle_lowest = 0;
     unsigned int subtitle_lowest_id = 0;
     unsigned int subtitle_forced_id = 0;
@@ -1362,7 +1361,6 @@ cleanup:
             if( subtitle_highest < subtitle->hits )
             {
                 subtitle_highest = subtitle->hits;
-                subtitle_highest_id = subtitle->id;
             }
 
             if( subtitle_lowest == 0 ||

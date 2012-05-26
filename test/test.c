@@ -2253,7 +2253,6 @@ static int HandleEvents( hb_handle_t * h )
 
             if( srtfile )
             {
-                char * token;
                 int i;
                 hb_subtitle_config_t sub_config;
 
@@ -2263,7 +2262,6 @@ static int HandleEvents( hb_handle_t * h )
                     int64_t offset = 0;
                     char *lang = "und";
 
-                    token = srtfile[i];
                     if( srtcodeset && srtcodeset[i] )
                     {
                         codeset = srtcodeset[i];

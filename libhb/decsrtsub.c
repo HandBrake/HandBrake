@@ -233,11 +233,11 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
         case k_state_inEntry_or_new:
         {
             char *endpoint;
-            long entry_number;
             /*
              * Is this really new next entry begin?
+             * Look for entry number.
              */
-            entry_number = strtol(line_buffer, &endpoint, 10);
+            strtol(line_buffer, &endpoint, 10);
             if (endpoint == line_buffer ||
                 (endpoint && *endpoint != '\n' && *endpoint != '\r'))
             {
