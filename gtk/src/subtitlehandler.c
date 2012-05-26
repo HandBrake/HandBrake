@@ -434,7 +434,6 @@ ghb_set_pref_subtitle_settings(gint titleindex, GValue *settings)
 				found_cc = TRUE;
 			ghb_add_subtitle_to_settings(settings, dup);
 			jj++;
-			g_free(lang);
 		}
 	}
 	if (foreign_lang_index < 0 && pref_lang != NULL)
@@ -506,8 +505,6 @@ ghb_set_pref_subtitle_settings(gint titleindex, GValue *settings)
 	}
 	if (pref_lang != NULL)
 		g_free(pref_lang);
-	if (audio_lang != NULL)
-		g_free(audio_lang);
 	g_hash_table_destroy(track_indices);
 }
 

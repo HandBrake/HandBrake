@@ -1500,10 +1500,10 @@ ghb_subtitle_track_lang(GValue *settings, gint track)
 		goto fail;
 	sub = hb_list_item( title->list_subtitle, track);
 	if (sub != NULL)
-	   	return g_strdup(sub->iso639_2);
+	   	return sub->iso639_2;
 
 fail:
-	return g_strdup("und");
+	return "und";
 }
 
 gint
@@ -2370,7 +2370,7 @@ ghb_get_source_audio_lang(gint titleindex, gint track)
 	if (audio == NULL)
 		return lang;
 
-	lang = g_strdup(audio->lang.iso639_2);
+	lang = audio->lang.iso639_2;
 	return lang;
 }
 

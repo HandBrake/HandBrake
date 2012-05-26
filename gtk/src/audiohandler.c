@@ -376,7 +376,7 @@ ghb_set_pref_audio_settings(gint titleindex, GValue *settings)
 	// Find "best" audio based on audio preferences
 	if (!ghb_settings_get_boolean(settings, "AudioDUB"))
 	{
-		source_lang = ghb_get_source_audio_lang(titleindex, 0);
+		source_lang = g_strdup(ghb_get_source_audio_lang(titleindex, 0));
 	}
 	else
 	{
