@@ -204,10 +204,7 @@ custom_cell_renderer_button_activate (GtkCellRenderer      *cell,
 				   GdkRectangle   *cell_area,
 				   GtkCellRendererState  flags)
 {
-	CustomCellRendererButton *cellbutton;
-  
 	g_debug("custom_cell_renderer_button_activate ()\n");
-	cellbutton = CUSTOM_CELL_RENDERER_BUTTON (cell);
 	g_signal_emit (cell, button_cell_signals[CLICKED], 0, path);
 	return TRUE;
 }

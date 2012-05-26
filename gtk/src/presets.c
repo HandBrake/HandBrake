@@ -1171,7 +1171,7 @@ ghb_write_pid_file()
 	gchar *config, *path;
 	pid_t pid;
 	FILE *fp;
-	int fd, lock;
+	int fd;
 
 	pid = getpid();
 
@@ -1183,7 +1183,7 @@ ghb_write_pid_file()
 	fclose(fp);
 
 	fd = open(path, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR);
-	lock = lockf(fd, F_TLOCK, 0);
+	lockf(fd, F_TLOCK, 0);
 
 	g_free(config);
 	g_free(path);
@@ -2512,7 +2512,6 @@ import_value_xlat(GValue *dict)
 
 
 	GValue *sdeflist;
-	GValue *sdefaults;
 	GValue *slist;
 	GValue *sdict;
 	gint count, ii;
@@ -2523,7 +2522,6 @@ import_value_xlat(GValue *dict)
 		slist = ghb_dict_lookup(dict, "SubtitleList");
 		if (slist)
 		{
-			sdefaults = ghb_array_get_nth(sdeflist, 0);
 			count = ghb_array_len(slist);
 			for (ii = 0; ii < count; ii++)
 			{

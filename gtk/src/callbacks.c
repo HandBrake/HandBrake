@@ -2081,11 +2081,10 @@ G_MODULE_EXPORT void
 prefs_dialog_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GtkWidget *dialog;
-	GtkResponseType response;
 
 	g_debug("prefs_dialog_cb ()");
 	dialog = GHB_WIDGET(ud->builder, "prefs_dialog");
-	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_hide(dialog);
 }
 
@@ -2232,15 +2231,14 @@ void
 ghb_error_dialog(GtkMessageType type, const gchar *message, const gchar *cancel)
 {
 	GtkWidget *dialog;
-	GtkResponseType response;
-			
+
 	// Toss up a warning dialog
 	dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
 							type, GTK_BUTTONS_NONE,
 							"%s", message);
 	gtk_dialog_add_buttons( GTK_DIALOG(dialog), 
 						   cancel, GTK_RESPONSE_CANCEL, NULL);
-	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy (dialog);
 }
 
@@ -5048,12 +5046,9 @@ notify_closed_cb(NotifyNotification *notification, signal_user_data_t *ud)
 void
 ghb_notify_done(signal_user_data_t *ud)
 {
-	GtkStatusIcon *si;
 
 	if (ghb_settings_combo_int(ud->settings, "WhenComplete") == 0)
 		return;
-
-	si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
 
 #if !defined(_WIN32)
 	NotifyNotification *notification;
@@ -5065,6 +5060,8 @@ ghb_notify_done(signal_user_data_t *ud)
                 );
 #else
 		,NULL);
+
+	GtkStatusIcon *si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
 	notify_notification_attach_to_status_icon(notification, si);
 #endif
 	g_signal_connect(notification, "closed", (GCallback)notify_closed_cb, ud);

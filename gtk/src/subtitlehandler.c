@@ -325,7 +325,6 @@ add_all_pref_subtitles(signal_user_data_t *ud)
 	for (ii = 0; ii < count; ii++)
 	{
 		subtitle = ghb_value_dup(ghb_array_get_nth(pref_subtitle, ii));
-		gboolean force = ghb_settings_get_boolean(subtitle, "SubtitleForced");
 		lang = ghb_settings_get_string(subtitle, "SubtitleLanguage");
 		// If there are multiple subtitles using the same language, then
 		// select sequential tracks for each.  The hash keeps track 
@@ -355,7 +354,7 @@ ghb_set_pref_subtitle_settings(gint titleindex, GValue *settings)
 	gint track;
 	GHashTable *track_indices;
 	gchar *lang, *pref_lang = NULL;
-	gchar *audio_lang;
+	const gchar *audio_lang;
 	gint foreign_lang_index = -1;
 	gboolean found_cc = FALSE;
 
@@ -416,11 +415,12 @@ ghb_set_pref_subtitle_settings(gint titleindex, GValue *settings)
 		g_free(lang);
 		if (track >= -1)
 		{
+			const gchar *track_lang;
 			GValue *dup = ghb_value_dup(subtitle);
-			lang = ghb_subtitle_track_lang(settings, track);
+			track_lang = ghb_subtitle_track_lang(settings, track);
 			ghb_settings_set_int(dup, "SubtitleTrack", track);
 			if (foreign_lang_index < 0 && pref_lang != NULL &&
-				strcmp(lang, pref_lang) == 0)
+				strcmp(track_lang, pref_lang) == 0)
 			{
 				foreign_lang_index = jj;
 				ghb_settings_take_value(dup, "SubtitleForced", 

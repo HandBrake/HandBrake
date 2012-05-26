@@ -221,11 +221,9 @@ bind_chapter_tree_model (signal_user_data_t *ud)
 	GtkTreeViewColumn *column;
 	GtkListStore *treestore;
 	GtkTreeView  *treeview;
-	GtkTreeSelection *selection;
 
 	g_debug("bind_chapter_tree_model ()\n");
 	treeview = GTK_TREE_VIEW(GHB_WIDGET (ud->builder, "chapters_list"));
-	selection = gtk_tree_view_get_selection (treeview);
 	treestore = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
 	gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
 

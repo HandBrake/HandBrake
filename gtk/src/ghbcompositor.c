@@ -139,10 +139,6 @@ ghb_compositor_get_property (
     GValue     *value,
     GParamSpec *pspec)
 {
-    GhbCompositor *compositor;
-
-    compositor = GHB_COMPOSITOR (object);
-
     switch (prop_id)
     {
     default:
@@ -158,10 +154,6 @@ ghb_compositor_set_property (
     const GValue *value,
     GParamSpec   *pspec)
 {
-    GhbCompositor *compositor;
-
-    compositor = GHB_COMPOSITOR (object);
-
     switch (prop_id)
     {
     default:

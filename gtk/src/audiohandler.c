@@ -190,7 +190,6 @@ ghb_sanitize_audio(GValue *settings, GValue *asettings)
 	gint fallback = ghb_select_fallback(settings, mux, acodec);
 	gint copy_mask = ghb_get_copy_mask(settings);
 	select_acodec = ghb_select_audio_codec(mux, aconfig, acodec, fallback, copy_mask);
-	gboolean codec_defined_bitrate = FALSE;
 	if (ghb_audio_is_passthru (select_acodec))
 	{
 		if (aconfig)
@@ -202,7 +201,6 @@ ghb_sanitize_audio(GValue *settings, GValue *asettings)
 			ghb_settings_set_string(asettings, "AudioMixdown",
 				ghb_lookup_combo_string("AudioMixdown", ghb_int_value(mix)));
 			select_acodec &= aconfig->in.codec | HB_ACODEC_PASS_FLAG;
-			codec_defined_bitrate = TRUE;
 			ghb_settings_set_string(asettings, "AudioSamplerate",
 				ghb_lookup_combo_string("AudioSamplerate", ghb_int_value(0)));
 		}
@@ -336,11 +334,11 @@ free_audio_hash_key_value(gpointer data)
 	g_free(data);
 }
 
-gchar*
+const gchar*
 ghb_get_user_audio_lang(GValue *settings, gint titleindex, gint track)
 {
 	GValue *audio_list, *asettings;
-	gchar *lang;
+	const gchar *lang;
 
 	audio_list = ghb_settings_get_value(settings, "audio_list");
 	if (ghb_array_len(audio_list) <= track)
@@ -541,7 +539,6 @@ ghb_audio_list_refresh_selected(signal_user_data_t *ud)
 	{
 		const gchar *track, *codec, *br, *sr, *mix;
 		gchar *s_drc, *s_gain, *s_quality = NULL;
-		gint itrack;
 		gdouble drc, gain;
 		// Get the row number
 		treepath = gtk_tree_model_get_path (store, &iter);
@@ -556,7 +553,6 @@ ghb_audio_list_refresh_selected(signal_user_data_t *ud)
 		asettings = ghb_array_get_nth(audio_list, row);
 
 		track = ghb_settings_combo_option(asettings, "AudioTrack");
-		itrack = ghb_settings_combo_int(asettings, "AudioTrack");
 		codec = ghb_settings_combo_option(asettings, "AudioEncoderActual");
 		double quality = ghb_settings_get_double(asettings, "AudioTrackQuality");
 		if (ghb_settings_get_boolean(asettings, "AudioTrackQualityEnable") &&
@@ -615,7 +611,6 @@ ghb_audio_list_refresh(signal_user_data_t *ud)
 		{
 			const gchar *track, *codec, *br, *sr, *mix;
 			gchar *s_drc, *s_gain, *s_quality = NULL;
-			gint itrack;
 			gdouble drc, gain;
 			GValue *asettings;
 
@@ -625,7 +620,6 @@ ghb_audio_list_refresh(signal_user_data_t *ud)
 			asettings = ghb_array_get_nth(audio_list, row);
 
 			track = ghb_settings_combo_option(asettings, "AudioTrack");
-			itrack = ghb_settings_combo_int(asettings, "AudioTrack");
 			codec = ghb_settings_combo_option(asettings, "AudioEncoderActual");
 			double quality = ghb_settings_get_double(asettings, "AudioTrackQuality");
 			if (ghb_settings_get_boolean(asettings, "AudioTrackQualityEnable") &&
@@ -1014,7 +1008,6 @@ ghb_add_audio_to_ui(GtkBuilder *builder, const GValue *settings)
 	GtkTreeSelection *selection;
 	const gchar *track, *codec, *br, *sr, *mix;
 	gchar *s_drc, *s_gain, *s_quality = NULL;
-	gint itrack;
 	gdouble drc;
 	gdouble gain;
 	
@@ -1024,7 +1017,6 @@ ghb_add_audio_to_ui(GtkBuilder *builder, const GValue *settings)
 	store = GTK_LIST_STORE(gtk_tree_view_get_model(treeview));
 
 	track = ghb_settings_combo_option(settings, "AudioTrack");
-	itrack = ghb_settings_combo_int(settings, "AudioTrack");
 	codec = ghb_settings_combo_option(settings, "AudioEncoderActual");
 	double quality = ghb_settings_get_double(settings, "AudioTrackQuality");
 	if (ghb_settings_get_boolean(settings, "AudioTrackQualityEnable") &&

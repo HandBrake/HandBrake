@@ -1469,7 +1469,7 @@ done:
 	return name;
 }
 
-gchar*
+const gchar*
 ghb_subtitle_track_lang(GValue *settings, gint track)
 {
 	gint titleindex;
@@ -1929,10 +1929,6 @@ srt_codeset_opts_set(GtkBuilder *builder, const gchar *name)
 						   4, srt_codeset_table[ii],
 						   -1);
 	}
-	GtkComboBoxEntry *cbe;
-
-	cbe = GTK_COMBO_BOX_ENTRY(GHB_WIDGET(builder, name));
-	//gtk_combo_box_entry_set_text_column(cbe, 0);
 }
 
 static void
@@ -2348,13 +2344,13 @@ ghb_longest_title()
 	return titleindex;
 }
 
-gchar*
+const gchar*
 ghb_get_source_audio_lang(gint titleindex, gint track)
 {
 	hb_list_t  * list;
 	hb_title_t * title;
     hb_audio_config_t * audio;
-	gchar *lang = "und";
+	const gchar *lang = "und";
 	
 	g_debug("ghb_lookup_1st_audio_lang ()\n");
 	if (h_scan == NULL) 
@@ -4170,12 +4166,11 @@ ghb_validate_filter_string(const gchar *str, gint max_fields)
 {
 	gint fields = 0;
 	gchar *end;
-	gdouble val;
 
 	if (str == NULL || *str == 0) return TRUE;
 	while (*str)
 	{
-		val = g_strtod(str, &end);
+		g_strtod(str, &end);
 		if (str != end)
 		{ // Found a numeric value
 			fields++;
@@ -4616,7 +4611,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	hb_job_t   * job;
 	static gchar *advanced_opts;
 	gint sub_id = 0;
-	gboolean tweaks = FALSE;
 	hb_filter_object_t * filter;
 	gchar *filter_str;
 	gchar *dest_str = NULL;
@@ -4645,7 +4639,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		job->pts_to_stop = ghb_settings_get_int(js, "live_duration") * 90000LL;
 	}
 
-	tweaks = ghb_settings_get_boolean(js, "allow_tweaks");
 	job->mux = ghb_settings_combo_int(js, "FileFormat");
 	if (job->mux == HB_MUX_MP4)
 	{

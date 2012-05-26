@@ -74,7 +74,6 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	gint source_width, source_height;
 	gboolean pass2 = FALSE, keep_aspect, vqtype, turbo;
 	gint pic_par;
-	gboolean tweaks;
 	gchar *escape, *escape2;
 	
 	g_debug("update_queue_list ()");
@@ -82,7 +81,6 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
 	store = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
 		
-	tweaks = ghb_settings_get_boolean(settings, "allow_tweaks");
 	title = ghb_settings_get_int(settings, "titlenum");
 	start_point = ghb_settings_get_int(settings, "start_point");
 	end_point = ghb_settings_get_int(settings, "end_point");

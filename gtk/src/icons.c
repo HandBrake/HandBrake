@@ -36,6 +36,6 @@ ghb_load_icons()
 				NULL, NULL);
 		size = gdk_pixbuf_get_height(pb);
 		gtk_icon_theme_add_builtin_icon(name, size, pb);
-		gdk_pixbuf_unref(pb);
+		g_object_unref(pb);
 	}
 }

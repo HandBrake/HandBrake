@@ -141,7 +141,7 @@ void ghb_set_bitrate_opts(
 void ghb_grey_combo_options(signal_user_data_t *ud);
 void ghb_update_ui_combo_box(
 	signal_user_data_t *ud, const gchar *name, gint user_data, gboolean all);
-gchar* ghb_get_source_audio_lang(gint titleindex, gint track);
+const gchar* ghb_get_source_audio_lang(gint titleindex, gint track);
 gint ghb_find_audio_track(
 	gint titleindex, const gchar *lang, gint acodec, 
 	gint fallback_acodec, GHashTable *track_indices);
@@ -163,7 +163,7 @@ gint ghb_get_title_number(gint titleindex);
 int ghb_get_title_count();
 gint ghb_subtitle_track_source(GValue *settings, gint track);
 const char* ghb_subtitle_track_source_name(GValue *settings, gint track);
-gchar* ghb_subtitle_track_lang(GValue *settings, gint track);
+const gchar* ghb_subtitle_track_lang(GValue *settings, gint track);
 
 gboolean ghb_validate_vquality(GValue *settings);
 gboolean ghb_validate_audio(GValue *settings);
