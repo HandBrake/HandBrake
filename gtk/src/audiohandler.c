@@ -340,11 +340,11 @@ gchar*
 ghb_get_user_audio_lang(GValue *settings, gint titleindex, gint track)
 {
 	GValue *audio_list, *asettings;
-	gchar *lang = NULL;
+	gchar *lang;
 
 	audio_list = ghb_settings_get_value(settings, "audio_list");
 	if (ghb_array_len(audio_list) <= track)
-		return NULL;
+		return "und";
 	asettings = ghb_array_get_nth(audio_list, track);
 	track = ghb_settings_get_int(asettings, "AudioTrack");
 	lang = ghb_get_source_audio_lang(titleindex, track);
@@ -355,7 +355,7 @@ void
 ghb_set_pref_audio_settings(gint titleindex, GValue *settings)
 {
 	gint track;
-	gchar *source_lang = NULL;
+	gchar *source_lang;
 	hb_audio_config_t *aconfig;
 	GHashTable *track_indices;
 	gint mux;
@@ -378,8 +378,10 @@ ghb_set_pref_audio_settings(gint titleindex, GValue *settings)
 	{
 		source_lang = ghb_get_source_audio_lang(titleindex, 0);
 	}
-	if (source_lang == NULL)
+	else
+	{
 		source_lang = ghb_settings_get_string(settings, "PreferredLanguage");
+	}
 
 	pref_audio = ghb_settings_get_value(settings, "AudioList");
 
