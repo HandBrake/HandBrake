@@ -764,6 +764,29 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.EncodeService.EncodeStarted -= this.EncodeStarted;
             this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
         }
+
+        /// <summary>
+        /// Handle the Window Closing Event and warn the user if an encode is in-progress
+        /// </summary>
+        /// <param name="e">
+        /// The CancelEventArgs.
+        /// </param>
+        public void HandleWindowClosing(CancelEventArgs e)
+        {
+            if (this.encodeService.IsEncoding)
+            {
+                MessageBoxResult result = this.errorService.ShowMessageBox("HandBrake is currently encoding. Closing now will abort your encode.\nAre you sure you wish to exit?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.No)
+                {
+                    e.Cancel = true;
+                } 
+                else
+                {
+                    this.encodeService.Stop();
+                }
+            }
+        }
+
         #endregion
 
         #region Menu and Taskbar
@@ -1072,9 +1095,24 @@ namespace HandBrakeWPF.ViewModels
                 };
             dialog.ShowDialog();
 
-            this.CurrentTask.Destination = dialog.FileName;
-            this.NotifyOfPropertyChange("CurrentTask");
-            this.SetExtension(Path.GetExtension(dialog.FileName));
+            if (!string.IsNullOrEmpty(dialog.FileName))
+            {
+                switch (Path.GetExtension(dialog.FileName))
+                {
+                    case ".mkv":
+                        this.SelectedOutputFormat = OutputFormat.Mkv;
+                        break;
+                    case ".mp4":
+                        this.SelectedOutputFormat = OutputFormat.Mp4;
+                        break;
+                    case ".m4v":
+                        this.SelectedOutputFormat = OutputFormat.M4V;
+                        break;
+                }
+
+                this.CurrentTask.Destination = dialog.FileName;
+                this.NotifyOfPropertyChange(() => this.CurrentTask);
+            } 
         }
 
         /// <summary>
@@ -1269,7 +1307,6 @@ namespace HandBrakeWPF.ViewModels
                 this.CurrentTask.LargeFile = false;
                 this.CurrentTask.OptimizeMP4 = false;
                 this.CurrentTask.IPod5GSupport = false;
-                this.selectedOutputFormat = OutputFormat.Mkv;
             }
 
             // Update The browse file extension display
