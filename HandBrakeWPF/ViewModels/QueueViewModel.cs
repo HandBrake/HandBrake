@@ -16,6 +16,7 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
+    using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -39,6 +40,11 @@ namespace HandBrakeWPF.ViewModels
         private readonly IErrorService errorService;
 
         /// <summary>
+        /// The User Setting Service Backing Field.
+        /// </summary>
+        private readonly IUserSettingService userSettingService;
+
+        /// <summary>
         /// Queue Processor Backing field
         /// </summary>
         private readonly IQueueProcessor queueProcessor;
@@ -58,6 +64,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private string jobsPending;
 
+        /// <summary>
+        /// Backing field for the when done action description
+        /// </summary>
+        private string whenDoneAction;
+
         #endregion
 
         #region Constructors and Destructors
@@ -68,19 +79,23 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="windowManager">
         /// The window manager.
         /// </param>
+        /// <param name="userSettingService">
+        /// The user Setting Service.
+        /// </param>
         /// <param name="queueProcessor">
         /// The Queue Processor Service 
         /// </param>
         /// <param name="errorService">
         /// The Error Service 
         /// </param>
-        public QueueViewModel(IWindowManager windowManager, IQueueProcessor queueProcessor, IErrorService errorService)
+        public QueueViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IQueueProcessor queueProcessor, IErrorService errorService)
         {
+            this.userSettingService = userSettingService;
             this.queueProcessor = queueProcessor;
             this.errorService = errorService;
             this.Title = "Queue";
             this.JobsPending = "No encodes pending";
-            this.JobStatus = "There are no jobs currently encoding";
+            this.JobStatus = "There are no jobs currently encoding";  
         }
 
         #endregion
@@ -149,9 +164,37 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets WhenDoneAction.
+        /// </summary>
+        public string WhenDoneAction
+        {
+            get
+            {
+                return this.whenDoneAction;
+            }
+            set
+            {
+                this.whenDoneAction = value;
+                this.NotifyOfPropertyChange(() => this.WhenDoneAction);
+            }
+        }
+
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Update the When Done Setting
+        /// </summary>
+        /// <param name="action">
+        /// The action.
+        /// </param>
+        public void WhenDone(string action)
+        {
+            this.WhenDoneAction = action;
+            this.userSettingService.SetUserSetting(ASUserSettingConstants.WhenCompleteAction, action);
+        }
 
         /// <summary>
         /// Clear the Queue
@@ -182,11 +225,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public override void OnLoad()
         {
-            this.queueProcessor.JobProcessingStarted += this.queueProcessor_JobProcessingStarted;
-            this.queueProcessor.QueueCompleted += this.queueProcessor_QueueCompleted;
-            this.queueProcessor.QueuePaused += this.queueProcessor_QueuePaused;
-            this.queueProcessor.QueueManager.QueueChanged += this.QueueManager_QueueChanged;
-
             // Setup the window to the correct state.
             this.IsEncoding = this.queueProcessor.EncodeService.IsEncoding;
             this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.QueueManager.Count);
@@ -291,7 +329,33 @@ namespace HandBrakeWPF.ViewModels
         protected override void OnActivate()
         {
             this.Load();
+
+            this.WhenDoneAction = this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.WhenCompleteAction);    
+
+            this.queueProcessor.JobProcessingStarted += this.queueProcessor_JobProcessingStarted;
+            this.queueProcessor.QueueCompleted += this.queueProcessor_QueueCompleted;
+            this.queueProcessor.QueuePaused += this.queueProcessor_QueuePaused;
+            this.queueProcessor.QueueManager.QueueChanged += this.QueueManager_QueueChanged;
+            this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeService_EncodeStatusChanged;
+
             base.OnActivate();
+        }
+
+        /// <summary>
+        /// Override the Deactivate
+        /// </summary>
+        /// <param name="close">
+        /// The close.
+        /// </param>
+        protected override void OnDeactivate(bool close)
+        {
+            this.queueProcessor.JobProcessingStarted -= this.queueProcessor_JobProcessingStarted;
+            this.queueProcessor.QueueCompleted -= this.queueProcessor_QueueCompleted;
+            this.queueProcessor.QueuePaused -= this.queueProcessor_QueuePaused;
+            this.queueProcessor.QueueManager.QueueChanged -= this.QueueManager_QueueChanged;
+            this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeService_EncodeStatusChanged;
+
+            base.OnDeactivate(close);
         }
 
         /// <summary>
@@ -346,7 +410,6 @@ namespace HandBrakeWPF.ViewModels
         {
             this.JobStatus = "Queue Started";
             this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.QueueManager.Count);
-            this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeService_EncodeStatusChanged;
             this.IsEncoding = true;
         }
 

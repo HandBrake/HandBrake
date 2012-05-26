@@ -6,8 +6,7 @@
              xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
-        xmlns:Model="clr-namespace:HandBrake.ApplicationServices.Model;assembly=HandBrake.ApplicationServices"
-        mc:Ignorable="d" Title="{Binding Title}" 
+        xmlns:YourNamespace="clr-namespace:HandBrakeWPF.AttachedProperties" mc:Ignorable="d" Title="{Binding Title}" 
              Width="600" Height="400"
              Background="#FFF0F0F0">
 
@@ -25,21 +24,56 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <ToolBar Name="mainToolBar" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  SnapsToDevicePixels="False">
+        <ToolBar Name="mainToolBar" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  SnapsToDevicePixels="True">
 
-            <Button Name="Start" cal:Message.Attach="[Event Click] = [Action StartEncode]" Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="Images/Play.png" Height="32" Width="32" />
-                    <Label Content="Start"  Margin="8,0,0,0" VerticalAlignment="Center" />
-                </StackPanel>
-            </Button>
+            <DockPanel Background="Transparent" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ToolBarPanel}}}">
+                <DockPanel.Resources>
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" />
+                    <Style TargetType="{x:Type Menu}" BasedOn="{StaticResource {x:Static ToolBar.MenuStyleKey}}" />
+                </DockPanel.Resources>
 
-            <Button Name="Pause" cal:Message.Attach="[Event Click] = [Action PauseEncode]" Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="Images/Pause.png" Height="32" Width="32" />
-                    <Label Content="Pause"  Margin="8,0,0,0" VerticalAlignment="Center" />
-                </StackPanel>
-            </Button>
+                <Button Name="Start" cal:Message.Attach="[Event Click] = [Action StartEncode]" 
+                    Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Images/Play.png" Height="32" Width="32" />
+                        <Label Content="Start"  Margin="8,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+
+                <Button Name="Pause" cal:Message.Attach="[Event Click] = [Action PauseEncode]" 
+                    Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Images/Pause.png" Height="32" Width="32" />
+                        <Label Content="Pause"  Margin="8,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+
+                <Menu Background="Transparent" HorizontalAlignment="Right">
+                    <MenuItem>
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal" Height="32">
+                                <TextBlock FontWeight="Bold" Text="When Done: " VerticalAlignment="Center" />
+                                <Label Content="{Binding WhenDoneAction}" Margin="8,0,0,0" VerticalAlignment="Center" />
+                                <Path Fill="{DynamicResource GlyphBrush}" Data="M 0 0 L 4 4 L 8 0 Z"  Height="5" Margin="2,2,2,0"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+                        <MenuItem Header="Do nothing" IsCheckable="True" YourNamespace:MenuItemExtensions.GroupName="whenDone"  
+                              cal:Message.Attach="[Event Click] = [Action WhenDone(doNothing.Header)]" x:Name="doNothing" />
+                        <MenuItem Header="Shutdown" IsCheckable="True" YourNamespace:MenuItemExtensions.GroupName="whenDone" 
+                              cal:Message.Attach="[Event Click] = [Action WhenDone(shutdown.Header)]" x:Name="shutdown" />
+                        <MenuItem Header="Suspend" IsCheckable="True" YourNamespace:MenuItemExtensions.GroupName="whenDone"
+                              cal:Message.Attach="[Event Click] = [Action WhenDone(suspend.Header)]" x:Name="suspend" />
+                        <MenuItem Header="Hibernate" IsCheckable="True" YourNamespace:MenuItemExtensions.GroupName="whenDone"
+                              cal:Message.Attach="[Event Click] = [Action WhenDone(hibernate.Header)]" x:Name="hibernate" />
+                        <MenuItem Header="Lock system" IsCheckable="True" YourNamespace:MenuItemExtensions.GroupName="whenDone" 
+                              cal:Message.Attach="[Event Click] = [Action WhenDone(lock.Header)]" x:Name="lock" />            
+                        <MenuItem Header="Log off" IsCheckable="True" YourNamespace:MenuItemExtensions.GroupName="whenDone"
+                              cal:Message.Attach="[Event Click] = [Action WhenDone(logoff.Header)]" x:Name="logoff" />
+                        <MenuItem Header="Quit HandBrake" IsCheckable="True" YourNamespace:MenuItemExtensions.GroupName="whenDone"
+                              cal:Message.Attach="[Event Click] = [Action WhenDone(quit.Header)]" x:Name="quit" />
+                    </MenuItem>
+                </Menu>
+            </DockPanel>
         </ToolBar>
 
         <StackPanel Grid.Row="1" Margin="10,20,10,20">
@@ -50,7 +84,7 @@
         <ListBox Grid.Row="2" ItemsSource="{Binding QueueJobs}" SelectionMode="Extended" Background="LightGray" Margin="10,0,10,10"
                  dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
                  dd:DragDrop.DropHandler="{Binding}">
-            
+
             <ListBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Import Queue" cal:Message.Attach="[Event Click] = [Action Import]" />
@@ -60,7 +94,7 @@
                     <MenuItem Header="Clear Completed" cal:Message.Attach="[Event Click] = [Action ClearCompleted]" />
                 </ContextMenu>
             </ListBox.ContextMenu>
-            
+
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -98,7 +132,7 @@
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
-                            </Image.Style>    
+                            </Image.Style>
                         </Image>
 
                         <!-- Settings -->
@@ -156,9 +190,9 @@
                                 </Image>
                             </StackPanel>
                         </Grid>
-                            
-                        
-                  
+
+
+
                     </Grid>
 
 

@@ -63,7 +63,7 @@ namespace HandBrakeWPF
             {
                 this.ShowError(e.Exception);
             }
-            else if (e.Exception.InnerException.GetType() == typeof(GeneralApplicationException))
+            else if (e.Exception.InnerException != null && e.Exception.InnerException.GetType() == typeof(GeneralApplicationException))
             {
                 this.ShowError(e.Exception.InnerException);
             }
