@@ -282,8 +282,8 @@ static int MP4Init( hb_mux_object_t * m )
                 if ( audio->config.out.codec & HB_ACODEC_PASS_FLAG )
                 {
                     bsmod = audio->config.in.mode;
-                    acmod = audio->config.flags.ac3 & 0x7;
-                    lfeon = (audio->config.flags.ac3 & A52_LFE) ? 1 : 0;
+                    acmod = audio->config.in.flags & 0x7;
+                    lfeon = ( audio->config.in.flags & A52_LFE ) ? 1 : 0;
                     freq = audio->config.in.samplerate;
                     bitrate = audio->config.in.bitrate;
                 }

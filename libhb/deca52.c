@@ -418,11 +418,6 @@ static int deca52BSInfo( hb_work_object_t *w, const hb_buffer_t *b,
     info->mode = raw & 0x7;      /* bsmod is the following 3 bits */
     info->samples_per_frame = 1536;
 
-    if ( (flags & A52_CHANNEL_MASK) == A52_DOLBY )
-    {
-        info->flags |= AUDIO_F_DOLBY;
-    }
-
     switch( flags & A52_CHANNEL_MASK )
     {
         /* mono sources */
@@ -436,7 +431,7 @@ static int deca52BSInfo( hb_work_object_t *w, const hb_buffer_t *b,
         case A52_STEREO:
             info->channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
             break;
-        /* dolby (DPL1 aka Dolby Surround = 4.0 matrix-encoded) input */
+        /* Dolby Pro Logic (a.k.a. Dolby Surround), 4.0 channels (matrix-encoded) */
         case A52_DOLBY:
             info->channel_layout = HB_INPUT_CH_LAYOUT_DOLBY;
             break;

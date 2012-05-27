@@ -2039,7 +2039,11 @@ static void set_audio_description(
               sizeof( audio->config.lang.description ), "%s (%s)",
               audio->config.lang.simple, codec_name );
 
-    if ( audio->config.in.channel_layout )
+    if( audio->config.in.channel_layout == HB_INPUT_CH_LAYOUT_DOLBY )
+    {
+        strcat( audio->config.lang.description, " (Dolby Surround)" );
+    }
+    else if( audio->config.in.channel_layout )
     {
         int layout = audio->config.in.channel_layout;
         char *desc = audio->config.lang.description +

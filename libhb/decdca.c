@@ -76,17 +76,66 @@ static int decdcaInit( hb_work_object_t * w, hb_job_t * job )
 
     pv->list      = hb_list_init();
     pv->state     = dca_init( 0 );
+    pv->level     = 1.0;
 
-    /* Decide what format we want out of libdca
-    work.c has already done some of this deduction for us in do_job() */
+    /* Decide what format we want out of libdca;
+     * work.c has already done some of this deduction for us in do_job().
+     * Dolby Surround and Pro Logic II are a bit tricky. */
+    int layout = ( audio->config.in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK );
+    switch( audio->config.out.mixdown )
+    {
+        case HB_AMIXDOWN_DOLBYPLII:
+        {
+            if( layout == HB_INPUT_CH_LAYOUT_3F2R )
+            {
+                // Dolby Pro Logic II output is supported
+                pv->flags_out = ( DCA_3F2R | DCA_OUT_DPLII );
+            }
+            else if( layout == HB_INPUT_CH_LAYOUT_3F1R )
+            {
+                // Dolby Surround output and DCA_3F1R downmix are supported
+                pv->flags_out = ( DCA_3F1R | DCA_OUT_DPLI );
+            }
+            else if( layout > HB_INPUT_CH_LAYOUT_DOLBY )
+            {
+                // Dolby Surround output is supported, but DCA_3F1R downmix isn't
+                pv->flags_out = DCA_DOLBY;
+            }
+            else
+            {
+                // Dolby Surround output not supported OR
+                // Dolby Surround input just gets passed through as is
+                pv->flags_out = DCA_STEREO;
+            }
+        } break;
 
-    pv->flags_out = HB_AMIXDOWN_GET_DCA_FORMAT(audio->config.out.mixdown);
+        case HB_AMIXDOWN_DOLBY:
+        {
+            if( layout == HB_INPUT_CH_LAYOUT_3F2R || layout == HB_INPUT_CH_LAYOUT_3F1R )
+            {
+                // Dolby Surround output and DCA_3F1R downmix are supported
+                pv->flags_out = ( DCA_3F1R | DCA_OUT_DPLI );
+            }
+            else if( layout > HB_INPUT_CH_LAYOUT_DOLBY )
+            {
+                // Dolby Surround output is supported, but DCA_3F1R downmix isn't
+                pv->flags_out = DCA_DOLBY;
+            }
+            else
+            {
+                // Dolby Surround output not supported OR
+                // Dolby Surround input just gets passed through as is
+                pv->flags_out = DCA_STEREO;
+            }
+        } break;
+
+        default:
+            pv->flags_out = HB_AMIXDOWN_GET_DCA_FORMAT( audio->config.out.mixdown );
+            break;
+    }
 
     /* pass the number of channels used into the private work data */
-    /* will only be actually used if we're not doing AC3 passthru */
-    pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
-
-    pv->level     = 1.0;
+    pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT( audio->config.out.mixdown );
 
     return 0;
 }
@@ -315,11 +364,6 @@ static int decdcaBSInfo( hb_work_object_t *w, const hb_buffer_t *b,
     info->flags = flags;
     info->samples_per_frame = frame_length;
 
-    if ( ( flags & DCA_CHANNEL_MASK) == DCA_DOLBY )
-    {
-        info->flags |= AUDIO_F_DOLBY;
-    }
-
     switch( flags & DCA_CHANNEL_MASK )
     {
         /* mono sources */
@@ -332,6 +376,10 @@ static int decdcaBSInfo( hb_work_object_t *w, const hb_buffer_t *b,
         case DCA_STEREO_SUMDIFF:
         case DCA_STEREO_TOTAL:
             info->channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
+            break;
+        /* Dolby Pro Logic (a.k.a. Dolby Surround), 4.0 channels (matrix-encoded) */
+        case DCA_DOLBY:
+            info->channel_layout = HB_INPUT_CH_LAYOUT_DOLBY;
             break;
         /* 3F/2R input */
         case DCA_3F2R:

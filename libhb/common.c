@@ -705,41 +705,33 @@ int hb_get_best_mixdown( uint32_t codec, int layout, int mixdown )
     }
     switch (layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK)
     {
-        // stereo input or something not handled below
-        default:
-        case HB_INPUT_CH_LAYOUT_STEREO:
-            // mono gets mixed up to stereo & more than stereo gets mixed down
-            best_mixdown = HB_AMIXDOWN_STEREO;
-            break;
-
         // mono input
         case HB_INPUT_CH_LAYOUT_MONO:
-            // everything else passes through
             best_mixdown = HB_AMIXDOWN_MONO;
             break;
 
-        // dolby (DPL1 aka Dolby Surround = 4.0 matrix-encoded) input
-        // the A52 flags don't allow for a way to distinguish between DPL1 and
+        // Dolby Pro Logic (a.k.a. Dolby Surround), 4.0 channels (matrix-encoded)
+        // The A52 flags don't allow for a way to distinguish between DPL1 and
         // DPL2 on a DVD so we always assume a DPL1 source for A52_DOLBY.
         case HB_INPUT_CH_LAYOUT_DOLBY:
-            best_mixdown = HB_AMIXDOWN_DOLBY;
-            break;
-
-        // 4 channel discrete
+        // 3 or 4 discrete channels
+        // case HB_INPUT_CH_LAYOUT_3F:   // FIXME: can it be downmixed to Dolby?
+        // case HB_INPUT_CH_LAYOUT_2F1R: // FIXME: can it be downmixed to Dolby?
         case HB_INPUT_CH_LAYOUT_2F2R:
         case HB_INPUT_CH_LAYOUT_3F1R:
             // a52dec and libdca can't upmix to 6ch, 
             // so we must downmix these.
-            best_mixdown = HB_AMIXDOWN_DOLBYPLII;
+            // libdca only supports DPLII if the source is 3F2R to begin with
+            best_mixdown = HB_AMIXDOWN_DOLBY;
             break;
 
-        // 5, 6, 7, or 8 channel discrete
+        // 5 to 8 discrete channels
         case HB_INPUT_CH_LAYOUT_4F2R:
         case HB_INPUT_CH_LAYOUT_3F4R:
         case HB_INPUT_CH_LAYOUT_3F2R:
-            if ( ! ( layout & HB_INPUT_CH_LAYOUT_HAS_LFE ) )
+            if (!(layout & HB_INPUT_CH_LAYOUT_HAS_LFE))
             {
-                // we don't do 5 channel discrete so mixdown to DPLII
+                // we don't do 5-channel discrete
                 // a52dec and libdca can't upmix to 6ch, 
                 // so we must downmix this.
                 best_mixdown = HB_AMIXDOWN_DOLBYPLII;
@@ -758,6 +750,12 @@ int hb_get_best_mixdown( uint32_t codec, int layout, int mixdown )
                         break;
                 }
             }
+            break;
+
+        // stereo input or something not handled above
+        default:
+            // mono gets mixed up to stereo & more than stereo gets mixed down
+            best_mixdown = HB_AMIXDOWN_STEREO;
             break;
     }
     // return the best that is not greater than the requested mixdown
@@ -1608,30 +1606,36 @@ hb_audio_t *hb_audio_copy(const hb_audio_t *src)
  *********************************************************************/
 void hb_audio_config_init(hb_audio_config_t * audiocfg)
 {
-    /* Set read only paramaters to invalid values */
-    audiocfg->in.codec = 0xDEADBEEF;
-    audiocfg->in.bitrate = -1;
-    audiocfg->in.samplerate = -1;
-    audiocfg->in.channel_layout = 0;
-    audiocfg->in.channel_map = NULL;
+    /* Set read-only paramaters to invalid values */
+    audiocfg->in.codec = 0;
+    audiocfg->in.codec_param = 0;
+    audiocfg->in.reg_desc = 0;
+    audiocfg->in.stream_type = 0;
+    audiocfg->in.substream_type = 0;
     audiocfg->in.version = 0;
+    audiocfg->in.flags = 0;
     audiocfg->in.mode = 0;
-    audiocfg->flags.ac3 = 0;
+    audiocfg->in.samplerate = -1;
+    audiocfg->in.samples_per_frame = -1;
+    audiocfg->in.bitrate = -1;
+    audiocfg->in.channel_layout = -1;
+    audiocfg->in.channel_map = NULL;
     audiocfg->lang.description[0] = 0;
     audiocfg->lang.simple[0] = 0;
     audiocfg->lang.iso639_2[0] = 0;
 
-    /* Initalize some sensable defaults */
+    /* Initalize some sensible defaults */
     audiocfg->in.track = audiocfg->out.track = 0;
-    audiocfg->out.codec = HB_ACODEC_FAAC;
+    audiocfg->out.codec = hb_audio_encoders[0].encoder;
+    audiocfg->out.samplerate = -1;
+    audiocfg->out.samples_per_frame = -1;
     audiocfg->out.bitrate = -1;
     audiocfg->out.quality = HB_INVALID_AUDIO_QUALITY;
     audiocfg->out.compression_level = -1;
-    audiocfg->out.samplerate = -1;
     audiocfg->out.mixdown = -1;
     audiocfg->out.dynamic_range_compression = 0;
+    audiocfg->out.gain = 0;
     audiocfg->out.name = NULL;
-
 }
 
 /**********************************************************************

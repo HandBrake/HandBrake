@@ -433,12 +433,12 @@ struct hb_job_s
 // DCA_FORMAT of DCA_STEREO                = 2    = 0x002
 // A52_FORMAT of A52_STEREO                = 2    = 0x02
 // discrete channel count of 2
-#define HB_AMIXDOWN_DOLBY                       0x042070A2
-// DCA_FORMAT of DCA_3F1R | DCA_OUT_DPLI   = 519  = 0x207
+#define HB_AMIXDOWN_DOLBY                       0x040000A2
+// DCA_FORMAT handled directly in decdca.c
 // A52_FORMAT of A52_DOLBY                 = 10   = 0x0A
 // discrete channel count of 2
-#define HB_AMIXDOWN_DOLBYPLII                   0x084094A2
-// DCA_FORMAT of DCA_3F2R | DCA_OUT_DPLII  = 1033 = 0x409
+#define HB_AMIXDOWN_DOLBYPLII                   0x080004A2
+// DCA_FORMAT handled directly in decdca.c
 // A52_FORMAT of A52_DOLBY | A52_USE_DPLII = 74   = 0x4A
 // discrete channel count of 2
 #define HB_AMIXDOWN_6CH                         0x10089176
@@ -486,55 +486,44 @@ struct hb_audio_config_s
     /* Output */
     struct
     {
-            int track;      /* Output track number */
-            uint32_t codec;  /* Output audio codec.
-                                 * HB_ACODEC_AC3 means pass-through, then bitrate and samplerate
-                                 * are ignored.
-                                 */
-            int samplerate;         /* Output sample rate (Hz) */
-            int samples_per_frame;  /* Number of samples per frame */
-            int bitrate;            /* Output bitrate (kbps) */
-            float quality;          /* Output quality */
-            float compression_level;  /* Output compression level */
-            int mixdown;            /* The mixdown format to be used for this audio track (see HB_AMIXDOWN_*) */
-            double dynamic_range_compression; /* Amount of DRC that gets applied to this track */
-            double gain;    /* Gain in dB. negative is quieter */
-            char * name;    /* Output track name */
+            int track; /* Output track number */
+            uint32_t codec; /* Output audio codec */
+            int samplerate; /* Output sample rate (Hz) */
+            int samples_per_frame; /* Number of samples per frame */
+            int bitrate; /* Output bitrate (Kbps) */
+            float quality; /* Output quality (encoder-specific) */
+            float compression_level;  /* Output compression level (encoder-specific) */
+            int mixdown; /* The mixdown used for this audio track (see HB_AMIXDOWN_*) */
+            double dynamic_range_compression; /* Amount of DRC applied to this track */
+            double gain; /* Gain (in dB), negative is quieter */
+            char * name; /* Output track name */
     } out;
 
     /* Input */
     struct
     {
-        int track;                /* Input track number */
-        PRIVATE uint32_t codec;   /* Input audio codec */
-        PRIVATE uint32_t reg_desc; /* registration descriptor of source */
-        PRIVATE uint32_t stream_type; /* stream type from source stream */
-        PRIVATE uint32_t substream_type; /* substream for multiplexed streams */
-        PRIVATE uint32_t codec_param; /* per-codec config info */
+        int track; /* Input track number */
+        PRIVATE uint32_t codec; /* Input audio codec */
+        PRIVATE uint32_t codec_param; /* Per-codec config info */
+        PRIVATE uint32_t reg_desc; /* Registration descriptor of source */
+        PRIVATE uint32_t stream_type; /* Stream type from source stream */
+        PRIVATE uint32_t substream_type; /* Substream type for multiplexed streams */
         PRIVATE uint32_t version; /* Bitsream version */
-        PRIVATE uint32_t mode;    /* Bitstream mode, codec dependent encoding */
+        PRIVATE uint32_t flags; /* Bitstream flags, codec-specific */
+        PRIVATE uint32_t mode; /* Bitstream mode, codec-specific */
         PRIVATE int samplerate; /* Input sample rate (Hz) */
         PRIVATE int samples_per_frame; /* Number of samples per frame */
-        PRIVATE int bitrate;    /* Input bitrate (kbps) */
-        PRIVATE int channel_layout; /* channel_layout is the channel layout of this audio this is used to
-                                     * provide a common way of describing the source audio */
-        PRIVATE hb_chan_map_t * channel_map; /* source channel map, set by the audio decoder */
+        PRIVATE int bitrate; /* Input bitrate (bps) */
+        PRIVATE int channel_layout; /* Source channel layout, set by the audio decoder */
+        PRIVATE hb_chan_map_t * channel_map; /* Source channel map, set by the audio decoder */
     } in;
-
-    /* Misc. */
-    union
-    {
-        PRIVATE int ac3;    /* flags.ac3 is only set when the source audio format is HB_ACODEC_AC3 */
-        PRIVATE int dca;    /* flags.dca is only set when the source audio format is HB_ACODEC_DCA */
-    } flags;
-#define AUDIO_F_DOLBY (1 << 31)  /* set if source uses Dolby Surround */
 
     struct
     {
         PRIVATE char description[1024];
         PRIVATE char simple[1024];
         PRIVATE char iso639_2[4];
-        PRIVATE uint8_t type; /* normal, visually impared, directors */
+        PRIVATE uint8_t type; /* normal, visually impaired, director's commentary */
     } lang;
 };
 
@@ -799,15 +788,15 @@ struct hb_state_s
 
 typedef struct hb_work_info_s
 {
-    const char *name;
-    int     profile;
-    int     level;
-    int     bitrate;
-    int     rate;
-    int     rate_base;
-    int     flags;
-    int     version;
-    int     mode;
+    const char * name;
+    int          profile;
+    int          level;
+    int          bitrate;
+    int          rate;
+    int          rate_base;
+    uint32_t     version;
+    uint32_t     flags;
+    uint32_t     mode;
     union {
         struct {    // info only valid for video decoders
             int     width;

@@ -1065,11 +1065,11 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
     audio->config.in.channel_layout = info.channel_layout;
     audio->config.in.channel_map = info.channel_map;
     audio->config.in.version = info.version;
+    audio->config.in.flags = info.flags;
     audio->config.in.mode = info.mode;
-    audio->config.flags.ac3 = info.flags;
 
     // update the audio description string based on the info we found
-    if ( audio->config.flags.ac3 & AUDIO_F_DOLBY )
+    if( audio->config.in.channel_layout == HB_INPUT_CH_LAYOUT_DOLBY )
     {
         strcat( audio->config.lang.description, " (Dolby Surround)" );
     }
