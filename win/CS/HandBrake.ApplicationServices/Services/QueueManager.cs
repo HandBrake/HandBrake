@@ -13,6 +13,8 @@ namespace HandBrake.ApplicationServices.Services
     using System.Windows.Forms;
     using System.Xml.Serialization;
 
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -74,7 +76,7 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         public QueueManager()
         {
-            this.queueFile =  "hb_queue_recovery.xml"; // TODO need to support multi-instance here.
+            this.queueFile = "hb_queue_recovery.xml"; // TODO need to support multi-instance here.
         }
 
         /// <summary>
@@ -196,12 +198,16 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         public void ClearCompleted()
         {
-            List<QueueTask> deleteList = this.queue.Where(task => task.Status == QueueItemStatus.Completed).ToList();
-            foreach (QueueTask item in deleteList)
-            {
-                this.queue.Remove(item);
-            }
-            this.InvokeQueueChanged(EventArgs.Empty);
+            Execute.OnUIThread(
+                () =>
+                {
+                    List<QueueTask> deleteList = this.queue.Where(task => task.Status == QueueItemStatus.Completed).ToList();
+                    foreach (QueueTask item in deleteList)
+                    {
+                        this.queue.Remove(item);
+                    }
+                    this.InvokeQueueChanged(EventArgs.Empty);
+                });
         }
 
         /// <summary>
@@ -324,7 +330,7 @@ namespace HandBrake.ApplicationServices.Services
 
                         try
                         {
-                            list = serializer.Deserialize(strm) as List<QueueTask>; 
+                            list = serializer.Deserialize(strm) as List<QueueTask>;
                         }
                         catch (Exception exc)
                         {
