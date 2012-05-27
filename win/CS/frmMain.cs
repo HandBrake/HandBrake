@@ -1640,7 +1640,9 @@ namespace Handbrake
             }
 
             // Update the Duration
-            lbl_duration.Text = this.selectedTitle.CalculateDuration(drop_chapterStart.SelectedIndex, drop_chapterFinish.SelectedIndex).ToString();
+            lbl_duration.Text =
+                this.selectedTitle.CalculateDuration(
+                    drop_chapterStart.SelectedIndex + 1, drop_chapterFinish.SelectedIndex + 1).ToString();
 
             // Run the Autonaming function
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))

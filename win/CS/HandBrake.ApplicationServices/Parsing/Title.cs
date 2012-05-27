@@ -9,6 +9,7 @@ namespace HandBrake.ApplicationServices.Parsing
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Text.RegularExpressions;
 
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -244,12 +245,11 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <returns>A Timespan</returns>
         public TimeSpan CalculateDuration(int startPoint, int endPoint)
         {
+            IEnumerable<Chapter> chapers =
+                this.Chapters.Where(c => c.ChapterNumber >= startPoint && c.ChapterNumber <= endPoint);
+
             TimeSpan duration = TimeSpan.FromSeconds(0.0);
-            if (endPoint <= this.Chapters.Count)
-            {
-                for (int i = startPoint; i <= endPoint; i++)
-                    duration += this.Chapters[i].Duration;
-            }
+            duration = chapers.Aggregate(duration, (current, chapter) => current + chapter.Duration);
 
             return duration;
         }
