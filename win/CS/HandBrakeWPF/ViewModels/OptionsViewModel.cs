@@ -1447,7 +1447,7 @@ namespace HandBrakeWPF.ViewModels
 
             // x264 step
             this.ConstantQualityGranularity.Clear();
-            this.ConstantQualityGranularity.Add("1.0");
+            this.ConstantQualityGranularity.Add("1.00");
             this.ConstantQualityGranularity.Add("0.50");
             this.ConstantQualityGranularity.Add("0.25");
             this.ConstantQualityGranularity.Add("0.20");

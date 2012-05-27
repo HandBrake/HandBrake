@@ -216,8 +216,11 @@ namespace HandBrakeWPF.ViewModels
             }
             set
             {
-                this.qualityMax = value;
-                this.NotifyOfPropertyChange(() => this.QualityMax);
+                if (!qualityMax.Equals(value))
+                {
+                    this.qualityMax = value;
+                    this.NotifyOfPropertyChange(() => this.QualityMax);
+                }
             }
         }
 
@@ -232,8 +235,11 @@ namespace HandBrakeWPF.ViewModels
             }
             set
             {
-                this.qualityMin = value;
-                this.NotifyOfPropertyChange(() => this.QualityMin);
+                if (!qualityMin.Equals(value))
+                {
+                    this.qualityMin = value;
+                    this.NotifyOfPropertyChange(() => this.QualityMin);
+                }
             }
         }
 
@@ -251,6 +257,7 @@ namespace HandBrakeWPF.ViewModels
                 this.rf = value;
 
                 double cqStep = userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step);
+                this.SetQualitySliderBounds(); 
                 switch (this.SelectedVideoEncoder)
                 {
                     case VideoEncoder.FFMpeg:
@@ -344,23 +351,8 @@ namespace HandBrakeWPF.ViewModels
                 IAdvancedViewModel advancedViewModel = IoC.Get<IAdvancedViewModel>();
                 advancedViewModel.SetEncoder(this.Task.VideoEncoder);
 
-                // Update the Quality Slider
-                switch (this.SelectedVideoEncoder)
-                {
-                    case VideoEncoder.FFMpeg:
-                    case VideoEncoder.FFMpeg2:
-                        this.QualityMin = 1;
-                        this.QualityMax = 31;
-                        break;
-                    case VideoEncoder.X264:
-                        this.QualityMin = 0;
-                        this.QualityMax = (int)(51 / userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step));
-                        break;
-                    case VideoEncoder.Theora:
-                        this.QualityMin = 0;
-                        this.QualityMax = 63;
-                        break;
-                }
+                // Update the Quality Slider. Make sure the bounds are up to date with the users settings.
+                this.SetQualitySliderBounds();
             }
         }
 
@@ -448,6 +440,7 @@ namespace HandBrakeWPF.ViewModels
 
             double cqStep = userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step);
             double rfValue = 0;
+            this.SetQualitySliderBounds();
             switch (this.SelectedVideoEncoder)
             {
                 case VideoEncoder.FFMpeg:
@@ -522,6 +515,31 @@ namespace HandBrakeWPF.ViewModels
         }
 
         #endregion
+
+        /// <summary>
+        /// Set the bounds of the Constant Quality Slider
+        /// </summary>
+        private void SetQualitySliderBounds()
+        {
+            // Note Updating bounds to the same values won't trigger an update.
+            // The properties are smart enough to not take in equal values.
+            switch (this.SelectedVideoEncoder)
+            {
+                case VideoEncoder.FFMpeg:
+                case VideoEncoder.FFMpeg2:
+                    this.QualityMin = 1;
+                    this.QualityMax = 31;
+                    break;
+                case VideoEncoder.X264:
+                    this.QualityMin = 0;
+                    this.QualityMax = (int)(51 / userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step));
+                    break;
+                case VideoEncoder.Theora:
+                    this.QualityMin = 0;
+                    this.QualityMax = 63;
+                    break;
+            }
+        }
 
         #region Advanced
         ///// <summary>
