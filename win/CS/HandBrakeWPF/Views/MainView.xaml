@@ -267,7 +267,7 @@
                     <Label Content="Destination" FontWeight="Bold" />
                     <StackPanel Orientation="Horizontal">
                         <Label Content="File" Margin="8,0,0,0" />
-                        <TextBox Name="Destination" Margin="8,0,0,0" Width="600" Text="{Binding CurrentTask.Destination, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Name="Destination" Margin="8,0,0,0" Width="600" Text="{Binding Destination, UpdateSourceTrigger=PropertyChanged}" />
                         <Button Name="DestinationBrowser" Margin="8,0,0,0" Content="Browse" Micro:Message.Attach="[Event Click] = [Action BrowseDestination]" />
                     </StackPanel>
                 </StackPanel>

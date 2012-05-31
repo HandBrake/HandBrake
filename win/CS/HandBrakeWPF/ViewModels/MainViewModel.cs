@@ -590,6 +590,22 @@ namespace HandBrakeWPF.ViewModels
         #region Properties for Settings
 
         /// <summary>
+        /// Gets or sets Destination.
+        /// </summary>
+        public string Destination
+        {
+            get
+            {
+                return this.CurrentTask.Destination;
+            }
+            set
+            {
+                this.CurrentTask.Destination = value;
+                this.NotifyOfPropertyChange(() => this.Destination);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets SelectedTitle.
         /// </summary>
         public Title SelectedTitle
@@ -624,7 +640,7 @@ namespace HandBrakeWPF.ViewModels
 
                     if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
                     {
-                        this.CurrentTask.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
+                        this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
                     }
                     this.NotifyOfPropertyChange(() => this.CurrentTask);
 
@@ -666,6 +682,11 @@ namespace HandBrakeWPF.ViewModels
                 this.CurrentTask.StartPoint = value;
                 this.NotifyOfPropertyChange(() => this.SelectedStartPoint);
                 this.Duration = this.DurationCalculation();
+
+                if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
+                {
+                    this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
+                }
             }
         }
 
@@ -683,6 +704,11 @@ namespace HandBrakeWPF.ViewModels
                 this.CurrentTask.EndPoint = value;
                 this.NotifyOfPropertyChange(() => this.SelectedEndPoint);
                 this.Duration = this.DurationCalculation();
+
+                if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
+                {
+                    this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
+                }
             }
         }
 
@@ -988,7 +1014,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            if (string.IsNullOrEmpty(this.CurrentTask.Destination))
+            if (string.IsNullOrEmpty(this.Destination))
             {
                 this.errorService.ShowMessageBox("The Destination field was empty.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -1000,7 +1026,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            if (File.Exists(this.CurrentTask.Destination))
+            if (File.Exists(this.Destination))
             {
                 MessageBoxResult result = this.errorService.ShowMessageBox("The current file already exists, do you wish to overwrite it?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.No)
@@ -1110,7 +1136,7 @@ namespace HandBrakeWPF.ViewModels
                         break;
                 }
 
-                this.CurrentTask.Destination = dialog.FileName;
+                this.Destination = dialog.FileName;
                 this.NotifyOfPropertyChange(() => this.CurrentTask);
             } 
         }
@@ -1312,7 +1338,7 @@ namespace HandBrakeWPF.ViewModels
             // Update The browse file extension display
             if (Path.HasExtension(newExtension))
             {
-                this.CurrentTask.Destination = Path.ChangeExtension(this.CurrentTask.Destination, newExtension);
+                this.Destination = Path.ChangeExtension(this.Destination, newExtension);
             }
 
             // Update the UI Display
