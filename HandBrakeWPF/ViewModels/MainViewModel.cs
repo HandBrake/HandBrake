@@ -726,6 +726,12 @@ namespace HandBrakeWPF.ViewModels
                 this.CurrentTask.PointToPointMode = value;
                 this.NotifyOfPropertyChange(() => SelectedPointToPoint);
                 this.NotifyOfPropertyChange(() => ShowTextEntryForPointToPointMode);
+
+                if (value == PointToPointMode.Chapters && this.SelectedTitle != null)
+                {
+                    this.SelectedStartPoint = 1;
+                    this.SelectedEndPoint = selectedTitle.Chapters.Last().ChapterNumber;
+                }
             }
         }
 
