@@ -45,10 +45,13 @@
                 </Grid.ColumnDefinitions>
 
                 <Label Content="Anamorphic:" Grid.Row="0" Grid.Column="0" />
-                <Label Content="Modulus:" Grid.Row="1" Grid.Column="0" />
+                <Label Content="Modulus:" Grid.Row="1" Grid.Column="0" 
+                       Visibility="{Binding ShowModulus, Converter={StaticResource boolToVisConverter}}" />
 
                 <ComboBox Width="110" Grid.Row="0" ItemsSource="{Binding AnamorphicModes}" SelectedItem="{Binding SelectedAnamorphicMode}" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <ComboBox Width="110" Grid.Row="1" ItemsSource="{Binding ModulusValues}" SelectedItem="{Binding SelectedModulus}" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <ComboBox Width="110" Grid.Row="1" ItemsSource="{Binding ModulusValues}" SelectedItem="{Binding SelectedModulus}" 
+                          Visibility="{Binding ShowModulus, Converter={StaticResource boolToVisConverter}}"
+                          Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
             </Grid>
             
             <!-- Row 4-->
@@ -84,9 +87,11 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Label Content="Display Size:" Grid.Row="0" Grid.Column="0" />
+                <Label Content="Display Size:" Grid.Row="0" Grid.Column="0"
+                       Visibility="{Binding ShowDisplaySize, Converter={StaticResource boolToVisConverter}}" />
 
-                <Label Content="{Binding DisplaySize}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <Label Content="{Binding DisplaySize}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5"
+                       Visibility="{Binding ShowDisplaySize, Converter={StaticResource boolToVisConverter}}" />
             </Grid>
         </StackPanel>
 

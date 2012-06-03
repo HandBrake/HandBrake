@@ -78,6 +78,16 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool widthControlEnabled = true;
 
+        /// <summary>
+        /// Backing field for the show modulus field
+        /// </summary>
+        private bool showModulus;
+
+        /// <summary>
+        /// Backing field for showing display size.
+        /// </summary>
+        private bool showDisplaySize;
+
         #endregion
 
         #region Constructors and Destructors
@@ -127,6 +137,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.Task.Cropping.Bottom = this.CorrectForModulus(this.Task.Cropping.Bottom, value);
                 this.NotifyOfPropertyChange(() => this.CropBottom);
+                this.SetDisplaySize();
             }
         }
 
@@ -144,6 +155,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.Task.Cropping.Left = this.CorrectForModulus(this.Task.Cropping.Left, value);
                 this.NotifyOfPropertyChange(() => this.CropLeft);
+                this.SetDisplaySize();
             }
         }
 
@@ -161,6 +173,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.Task.Cropping.Right = this.CorrectForModulus(this.Task.Cropping.Right, value);
                 this.NotifyOfPropertyChange(() => this.CropRight);
+                this.SetDisplaySize();
             }
         }
 
@@ -178,6 +191,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.Task.Cropping.Top = this.CorrectForModulus(this.Task.Cropping.Top, value);
                 this.NotifyOfPropertyChange(() => this.CropTop);
+                this.SetDisplaySize();
             }
         }
 
@@ -389,6 +403,38 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether ShowModulus.
+        /// </summary>
+        public bool ShowModulus
+        {
+            get
+            {
+                return this.showModulus;
+            }
+            set
+            {
+                this.showModulus = value;
+                this.NotifyOfPropertyChange(() => this.ShowModulus);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether ShowDisplaySize.
+        /// </summary>
+        public bool ShowDisplaySize
+        {
+            get
+            {
+                return this.showDisplaySize;
+            }
+            set
+            {
+                this.showDisplaySize = value;
+                this.NotifyOfPropertyChange(() => this.ShowDisplaySize);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets SourceInfo.
         /// </summary>
         public string SourceInfo
@@ -580,12 +626,16 @@ namespace HandBrakeWPF.ViewModels
                                        this.CalculateAnamorphicSizes().Width, 
                                        this.CalculateAnamorphicSizes().Height);
 
+            this.ShowDisplaySize = true;
             switch (this.SelectedAnamorphicMode)
             {
                 case Anamorphic.None:
                     this.WidthControlEnabled = true;
                     this.HeightControlEnabled = true;
                     this.ShowCustomAnamorphicControls = false;
+                    this.ShowModulus = false;
+                    this.ShowDisplaySize = false;
+                    this.SelectedModulus = 16; // Reset
                     this.Width = this.sourceResolution.Width;
                     this.SetDisplaySize();
                     break;
@@ -593,6 +643,8 @@ namespace HandBrakeWPF.ViewModels
                     this.WidthControlEnabled = false;
                     this.HeightControlEnabled = false;
                     this.ShowCustomAnamorphicControls = false;
+                    this.ShowModulus = false;
+                    this.SelectedModulus = 16; // Reset
 
                     this.Width = 0;
                     this.Height = 0;
@@ -605,6 +657,7 @@ namespace HandBrakeWPF.ViewModels
                     this.WidthControlEnabled = true;
                     this.HeightControlEnabled = false;
                     this.ShowCustomAnamorphicControls = false;
+                    this.ShowModulus = true;
 
                     this.Width = this.sourceResolution.Width;
                     this.Height = 0;
@@ -617,6 +670,7 @@ namespace HandBrakeWPF.ViewModels
                     this.WidthControlEnabled = true;
                     this.HeightControlEnabled = true;
                     this.ShowCustomAnamorphicControls = true;
+                    this.ShowModulus = true;
 
                     this.Width = this.sourceResolution.Width;
                     this.Height = 0;
@@ -861,7 +915,7 @@ namespace HandBrakeWPF.ViewModels
                         this.Task.Height = (int)Math.Round(this.GetModulusValue(newHeight), 0);
                         this.NotifyOfPropertyChange(() => this.Height);
                     }
-
+                    this.SetDisplaySize();
                     break;
                 case Anamorphic.Strict:
                     this.Task.Width = 0;
