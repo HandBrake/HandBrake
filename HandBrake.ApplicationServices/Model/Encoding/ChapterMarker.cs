@@ -5,11 +5,18 @@
 
 namespace HandBrake.ApplicationServices.Model.Encoding
 {
+    using Caliburn.Micro;
+
     /// <summary>
     /// A Movie Chapter
     /// </summary>
-    public class ChapterMarker
+    public class ChapterMarker : PropertyChangedBase
     {
+        /// <summary>
+        /// Backing field for chapter name
+        /// </summary>
+        private string chapterName;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ChapterMarker"/> class.
         /// </summary>
@@ -53,6 +60,17 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         /// <summary>
         /// Gets or sets ChapterName.
         /// </summary>
-        public string ChapterName { get; set; }
+        public string ChapterName
+        {
+            get
+            {
+                return this.chapterName;
+            }
+            set
+            {
+                this.chapterName = value;
+                this.NotifyOfPropertyChange(() => this.ChapterName);
+            }
+        }
     }
 }
