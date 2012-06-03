@@ -183,8 +183,6 @@ namespace HandBrakeWPF.ViewModels
                 string chapterName;
                 chapterMap.TryGetValue(item.ChapterNumber, out chapterName);
                 item.ChapterName = chapterName;
-
-                // TODO force a fresh of this property
             }
         }
 
