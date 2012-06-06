@@ -204,7 +204,7 @@ static int MKVInit( hb_mux_object_t * m )
 
         mux_data->codec = audio->config.out.codec;
 
-        switch (audio->config.out.codec & HB_ACODEC_MASK)
+        switch( audio->config.out.codec & HB_ACODEC_MASK )
         {
             case HB_ACODEC_DCA:
             case HB_ACODEC_DCA_HD:
@@ -269,7 +269,7 @@ static int MKVInit( hb_mux_object_t * m )
                 return 0;
         }
 
-        if (default_track_flag)
+        if( default_track_flag )
         {
             track->flagDefault = 1;
             default_track_flag = 0;
@@ -284,19 +284,18 @@ static int MKVInit( hb_mux_object_t * m )
         lang =  lang_for_code2( audio->config.lang.iso639_2 );
         track->language = lang->iso639_2b ? lang->iso639_2b : lang->iso639_2;
         track->extra.audio.samplingFreq = (float)audio->config.out.samplerate;
-        if (audio->config.out.codec & HB_ACODEC_PASS_FLAG)
+        if( audio->config.out.codec & HB_ACODEC_PASS_FLAG )
         {
-            track->extra.audio.channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(audio->config.in.channel_layout);
+            track->extra.audio.channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT( audio->config.in.channel_layout );
         }
         else
         {
-            track->extra.audio.channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
+            track->extra.audio.channels = hb_mixdown_get_discrete_channel_count( audio->config.out.mixdown );
         }
-//        track->defaultDuration = job->arate * 1000;
         mux_data->track = mk_createTrack(m->file, track);
-        if ( audio->config.out.codec == HB_ACODEC_VORBIS ||
-             audio->config.out.codec == HB_ACODEC_FFFLAC )
-          free(track->codecPrivate);
+        if( audio->config.out.codec == HB_ACODEC_VORBIS ||
+            audio->config.out.codec == HB_ACODEC_FFFLAC )
+            free( track->codecPrivate );
     }
 
     char * subidx_fmt =

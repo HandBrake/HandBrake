@@ -1459,7 +1459,7 @@ static hb_buffer_t * downmixAudio(
     if ( pv->downmix )
     {
         int n_ch_samples = nsamples / channels;
-        int out_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
+        int out_channels = hb_mixdown_get_discrete_channel_count( audio->config.out.mixdown );
 
         buf = hb_buffer_init( n_ch_samples * out_channels * sizeof(float) );
         hb_sample_t *samples = (hb_sample_t *)buf->data;

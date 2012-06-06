@@ -97,18 +97,36 @@ static int deca52Init( hb_work_object_t * w, hb_job_t * job )
     pv->crc_table = av_crc_get_table( AV_CRC_16_ANSI );
     pv->list      = hb_list_init();
     pv->state     = a52_init( 0 );
-
-    /* Decide what format we want out of a52dec
-    work.c has already done some of this deduction for us in do_job() */
-
-    pv->flags_out = HB_AMIXDOWN_GET_A52_FORMAT(audio->config.out.mixdown);
-
-    /* pass the number of channels used into the private work data */
-    /* will only be actually used if we're not doing AC3 passthru */
-    pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
-
     pv->level     = 1.0;
     pv->dynamic_range_compression = audio->config.out.dynamic_range_compression;
+
+    /* Decide what format we want out of a52dec;
+     * work.c has already done some of this deduction for us in do_job(). */
+    switch( audio->config.out.mixdown )
+    {
+        case HB_AMIXDOWN_6CH:
+            pv->flags_out = ( A52_3F2R | A52_LFE );
+            break;
+
+        case HB_AMIXDOWN_DOLBYPLII:
+            pv->flags_out = ( A52_DOLBY | A52_USE_DPLII );
+            break;
+
+        case HB_AMIXDOWN_DOLBY:
+            pv->flags_out = A52_DOLBY;
+            break;
+
+        case HB_AMIXDOWN_MONO:
+            pv->flags_out = A52_MONO;
+            break;
+
+        default:
+            pv->flags_out = A52_STEREO;
+            break;
+    }
+
+    /* pass the number of channels used into the private work data */
+    pv->out_discrete_channels = hb_mixdown_get_discrete_channel_count( audio->config.out.mixdown );
 
     return 0;
 }

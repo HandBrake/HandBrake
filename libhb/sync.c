@@ -1032,11 +1032,11 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
         }
         else
         {
-            /* Not passthru, Initialize libsamplerate */
+            /* Not passthru, initialize libsamplerate */
             int error;
-            sync->state = src_new( SRC_SINC_MEDIUM_QUALITY, 
-                HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(
-                    w->audio->config.out.mixdown), &error );
+            sync->state = src_new( SRC_SINC_MEDIUM_QUALITY,
+                                   hb_mixdown_get_discrete_channel_count( w->audio->config.out.mixdown ),
+                                   &error );
             sync->data.end_of_input = 0;
         }
     }
@@ -1069,10 +1069,10 @@ static hb_buffer_t * OutputAudioFrame( hb_audio_t *audio, hb_buffer_t *buf,
             /* do sample rate conversion */
             int count_in, count_out;
             hb_buffer_t * buf_raw = buf;
-            int channel_count = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown) *
-                                sizeof( float );
+            int sample_size = hb_mixdown_get_discrete_channel_count( audio->config.out.mixdown ) *
+                              sizeof( float );
 
-            count_in  = buf_raw->size / channel_count;
+            count_in  = buf_raw->size / sample_size;
             /*
              * When using stupid rates like 44.1 there will always be some
              * truncation error. E.g., a 1536 sample AC3 frame will turn into a
@@ -1089,7 +1089,7 @@ static hb_buffer_t * OutputAudioFrame( hb_audio_t *audio, hb_buffer_t *buf,
             sync->data.src_ratio = (double)audio->config.out.samplerate /
                                    (double)audio->config.in.samplerate;
 
-            buf = hb_buffer_init( count_out * channel_count );
+            buf = hb_buffer_init( count_out * sample_size );
             sync->data.data_in  = (float *) buf_raw->data;
             sync->data.data_out = (float *) buf->data;
             if( src_process( sync->state, &sync->data ) )
@@ -1099,7 +1099,7 @@ static hb_buffer_t * OutputAudioFrame( hb_audio_t *audio, hb_buffer_t *buf,
             }
             hb_buffer_close( &buf_raw );
 
-            buf->size = sync->data.output_frames_gen * channel_count;
+            buf->size = sync->data.output_frames_gen * sample_size;
             duration = (double)( sync->data.output_frames_gen * 90000 ) /
                        audio->config.out.samplerate;
         }
@@ -1182,10 +1182,8 @@ static void InsertSilence( hb_work_object_t * w, int64_t duration )
         }
         else
         {
-            buf = hb_buffer_init( w->audio->config.out.samples_per_frame * 
-                                   sizeof( float ) *
-                                   HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(
-                                         w->audio->config.out.mixdown) );
+            buf = hb_buffer_init( sizeof( float ) * w->audio->config.out.samples_per_frame *
+                                  hb_mixdown_get_discrete_channel_count( w->audio->config.out.mixdown ) );
             buf->s.start = sync->next_start;
             buf->s.stop  = buf->s.start + frame_dur;
             memset( buf->data, 0, buf->size );

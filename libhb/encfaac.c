@@ -69,7 +69,7 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
     pv->job   = job;
 
 	/* pass the number of channels used into the private work data */
-    pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
+    pv->out_discrete_channels = hb_mixdown_get_discrete_channel_count( audio->config.out.mixdown );
 
     /* if the sample rate is 'auto' and that has given us an invalid output */
     /* rate, map it to the next highest output rate or 48K if above the highest. */

@@ -140,7 +140,7 @@ int encCoreAudioInit( hb_work_object_t * w, hb_job_t * job, enum AAC_MODE mode )
     pv->job = job;
 
     // pass the number of channels used into the private work data
-    pv->nchannels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT( audio->config.out.mixdown );
+    pv->nchannels = hb_mixdown_get_discrete_channel_count( audio->config.out.mixdown );
 
     bzero( &input, sizeof( AudioStreamBasicDescription ) );
     input.mSampleRate = ( Float64 ) audio->config.out.samplerate;

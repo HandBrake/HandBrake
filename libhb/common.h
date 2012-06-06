@@ -193,8 +193,10 @@ int           hb_get_video_encoders_count();
 hb_encoder_t* hb_get_audio_encoders();
 int           hb_get_audio_encoders_count();
 
+int hb_mixdown_get_discrete_channel_count( int amixdown );
 int hb_mixdown_get_mixdown_from_short_name( const char * short_name );
 const char * hb_mixdown_get_short_name_from_mixdown( int amixdown );
+
 void hb_autopassthru_apply_settings( hb_job_t * job, hb_title_t * title );
 void hb_autopassthru_print_settings( hb_job_t * job );
 int hb_autopassthru_get_encoder( int in_codec, int copy_mask, int fallback, int muxer );
@@ -418,40 +420,8 @@ struct hb_job_s
 #define HB_SUBSTREAM_BD_DTSHD   0x72
 #define HB_SUBSTREAM_BD_DTS     0x71
 
-/* Audio Mixdown */
-/* define some masks, used to extract the various information from the HB_AMIXDOWN_XXXX values */
-#define HB_AMIXDOWN_DCA_FORMAT_MASK             0x00FFF000
-#define HB_AMIXDOWN_A52_FORMAT_MASK             0x00000FF0
-#define HB_AMIXDOWN_DISCRETE_CHANNEL_COUNT_MASK 0x0000000F
-/* define the HB_AMIXDOWN_XXXX values */
-#define HB_AMIXDOWN_NONE                        0x00000000
-#define HB_AMIXDOWN_MONO                        0x01000011
-// DCA_FORMAT of DCA_MONO                  = 0    = 0x000
-// A52_FORMAT of A52_MONO                  = 1    = 0x01
-// discrete channel count of 1
-#define HB_AMIXDOWN_STEREO                      0x02002022
-// DCA_FORMAT of DCA_STEREO                = 2    = 0x002
-// A52_FORMAT of A52_STEREO                = 2    = 0x02
-// discrete channel count of 2
-#define HB_AMIXDOWN_DOLBY                       0x040000A2
-// DCA_FORMAT handled directly in decdca.c
-// A52_FORMAT of A52_DOLBY                 = 10   = 0x0A
-// discrete channel count of 2
-#define HB_AMIXDOWN_DOLBYPLII                   0x080004A2
-// DCA_FORMAT handled directly in decdca.c
-// A52_FORMAT of A52_DOLBY | A52_USE_DPLII = 74   = 0x4A
-// discrete channel count of 2
-#define HB_AMIXDOWN_6CH                         0x10089176
-// DCA_FORMAT of DCA_3F2R | DCA_LFE        = 137  = 0x089
-// A52_FORMAT of A52_3F2R | A52_LFE        = 23   = 0x17
-// discrete channel count of 6
-/* define some macros to extract the various information from the HB_AMIXDOWN_XXXX values */
-#define HB_AMIXDOWN_GET_DCA_FORMAT( a ) ( ( a & HB_AMIXDOWN_DCA_FORMAT_MASK ) >> 12 )
-#define HB_AMIXDOWN_GET_A52_FORMAT( a ) ( ( a & HB_AMIXDOWN_A52_FORMAT_MASK ) >> 4 )
-#define HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT( a ) ( ( a & HB_AMIXDOWN_DISCRETE_CHANNEL_COUNT_MASK ) )
-
 /* Input Channel Layout */
-/* define some masks, used to extract the various information from the HB_AMIXDOWN_XXXX values */
+/* define some masks, used to extract the various information from the HB_INPUT_CH_LAYOUT_* values */
 #define HB_INPUT_CH_LAYOUT_DISCRETE_FRONT_MASK  0x00F0000
 #define HB_INPUT_CH_LAYOUT_DISCRETE_REAR_MASK   0x000F000
 #define HB_INPUT_CH_LAYOUT_DISCRETE_LFE_MASK    0x0000F00
@@ -470,7 +440,7 @@ struct hb_job_s
 #define HB_INPUT_CH_LAYOUT_4F2R    0x0942042
 #define HB_INPUT_CH_LAYOUT_3F4R    0x0a34034
 #define HB_INPUT_CH_LAYOUT_HAS_LFE 0x0000100
-/* define some macros to extract the various information from the HB_AMIXDOWN_XXXX values */
+/* define some macros to extract the various information from the HB_INPUT_CH_LAYOUT_* values */
 #define HB_INPUT_CH_LAYOUT_GET_DISCRETE_FRONT_COUNT( a ) ( ( a & HB_INPUT_CH_LAYOUT_DISCRETE_FRONT_MASK ) >> 16 )
 #define HB_INPUT_CH_LAYOUT_GET_DISCRETE_REAR_COUNT( a )  ( ( a & HB_INPUT_CH_LAYOUT_DISCRETE_REAR_MASK ) >> 12 )
 #define HB_INPUT_CH_LAYOUT_GET_DISCRETE_LFE_COUNT( a )   ( ( a & HB_INPUT_CH_LAYOUT_DISCRETE_LFE_MASK ) >> 8 )
@@ -486,17 +456,25 @@ struct hb_audio_config_s
     /* Output */
     struct
     {
-            int track; /* Output track number */
-            uint32_t codec; /* Output audio codec */
-            int samplerate; /* Output sample rate (Hz) */
-            int samples_per_frame; /* Number of samples per frame */
-            int bitrate; /* Output bitrate (Kbps) */
-            float quality; /* Output quality (encoder-specific) */
-            float compression_level;  /* Output compression level (encoder-specific) */
-            int mixdown; /* The mixdown used for this audio track (see HB_AMIXDOWN_*) */
-            double dynamic_range_compression; /* Amount of DRC applied to this track */
-            double gain; /* Gain (in dB), negative is quieter */
-            char * name; /* Output track name */
+        enum
+        {
+            HB_AMIXDOWN_NONE = 0,
+            HB_AMIXDOWN_MONO,
+            HB_AMIXDOWN_STEREO,
+            HB_AMIXDOWN_DOLBY,
+            HB_AMIXDOWN_DOLBYPLII,
+            HB_AMIXDOWN_6CH,
+        } mixdown; /* Audio mixdown */
+        int      track; /* Output track number */
+        uint32_t codec; /* Output audio codec */
+        int      samplerate; /* Output sample rate (Hz) */
+        int      samples_per_frame; /* Number of samples per frame */
+        int      bitrate; /* Output bitrate (Kbps) */
+        float    quality; /* Output quality (encoder-specific) */
+        float    compression_level;  /* Output compression level (encoder-specific) */
+        double   dynamic_range_compression; /* Amount of DRC applied to this track */
+        double   gain; /* Gain (in dB), negative is quieter */
+        char *   name; /* Output track name */
     } out;
 
     /* Input */

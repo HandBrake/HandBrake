@@ -96,6 +96,21 @@ int hb_get_video_encoders_count() { return hb_video_encoders_count; }
 hb_encoder_t* hb_get_audio_encoders() { return hb_audio_encoders; }
 int hb_get_audio_encoders_count() { return hb_audio_encoders_count; }
 
+int hb_mixdown_get_discrete_channel_count( int amixdown )
+{
+    switch( amixdown )
+    {
+        case HB_AMIXDOWN_6CH:
+            return 6;
+
+        case HB_AMIXDOWN_MONO:
+            return 1;
+
+        default:
+            return 2;
+    }
+}
+
 int hb_mixdown_get_mixdown_from_short_name( const char * short_name )
 {
     int i;
@@ -330,14 +345,13 @@ void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, in
 {
     int channels;
 
-    channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(mixdown);
+    channels = hb_mixdown_get_discrete_channel_count( mixdown );
     if( codec & HB_ACODEC_PASS_FLAG )
     {
-        // Bitrates don't apply to "lossless" audio (Passthru, FLAC)
-        // ... but may be applied if we fallback to an encoder
-        // when the source can not be passed.
-        *high = 768;
-        *low = 32;
+        // Bitrates don't apply to "lossless" audio (Passthru, FLAC), but may apply
+        // if we fallback to an encoder when the source can't be passed through.
+        *low = hb_audio_bitrates[0].rate;
+        *high = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
         return;
     }
     switch( codec )
@@ -518,7 +532,7 @@ int hb_get_default_audio_bitrate( uint32_t codec, int samplerate, int mixdown )
     if( codec & HB_ACODEC_PASS_FLAG )
         return -1;
 
-    channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(mixdown);
+    channels = hb_mixdown_get_discrete_channel_count( mixdown );
 
     // Min bitrate is established such that we get good quality
     // audio as a minimum.

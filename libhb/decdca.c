@@ -84,6 +84,10 @@ static int decdcaInit( hb_work_object_t * w, hb_job_t * job )
     int layout = ( audio->config.in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK );
     switch( audio->config.out.mixdown )
     {
+        case HB_AMIXDOWN_6CH:
+            pv->flags_out = ( DCA_3F2R | DCA_LFE );
+            break;
+
         case HB_AMIXDOWN_DOLBYPLII:
         {
             if( layout == HB_INPUT_CH_LAYOUT_3F2R )
@@ -129,13 +133,17 @@ static int decdcaInit( hb_work_object_t * w, hb_job_t * job )
             }
         } break;
 
+        case HB_AMIXDOWN_MONO:
+            pv->flags_out = DCA_MONO;
+            break;
+
         default:
-            pv->flags_out = HB_AMIXDOWN_GET_DCA_FORMAT( audio->config.out.mixdown );
+            pv->flags_out = DCA_STEREO;
             break;
     }
 
     /* pass the number of channels used into the private work data */
-    pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT( audio->config.out.mixdown );
+    pv->out_discrete_channels = hb_mixdown_get_discrete_channel_count( audio->config.out.mixdown );
 
     return 0;
 }

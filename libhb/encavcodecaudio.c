@@ -47,7 +47,7 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
 
     pv->job = job;
 
-    pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
+    pv->out_discrete_channels = hb_mixdown_get_discrete_channel_count( audio->config.out.mixdown );
 
     codec = avcodec_find_encoder( w->codec_param );
     if( !codec )

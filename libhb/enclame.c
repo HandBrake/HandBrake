@@ -69,7 +69,7 @@ int enclameInit( hb_work_object_t * w, hb_job_t * job )
     lame_set_in_samplerate( pv->lame, audio->config.out.samplerate );
     lame_set_out_samplerate( pv->lame, audio->config.out.samplerate );
 
-    pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
+    pv->out_discrete_channels = hb_mixdown_get_discrete_channel_count( audio->config.out.mixdown );
     // Lame's default encoding mode is JOINT_STEREO.  This subtracts signal
     // that is "common" to left and right (within some threshold) and encodes
     // it separately.  This improves quality at low bitrates, but hurts 
