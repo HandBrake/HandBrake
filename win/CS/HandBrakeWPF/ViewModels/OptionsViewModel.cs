@@ -1505,7 +1505,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void LanguageMoveLeft()
         {
-            if (this.AvailableLanguages.Count > 0)
+            if (this.SelectedLangauges.Count > 0)
             {
                 List<string> copiedList = SelectedAvailableToMove.ToList();
                 foreach (string item in copiedList)
@@ -1513,6 +1513,8 @@ namespace HandBrakeWPF.ViewModels
                     this.AvailableLanguages.Remove(item);
                     this.SelectedLangauges.Add(item);
                 }
+
+                this.AvailableLanguages = new BindingList<string>(this.AvailableLanguages.OrderBy(o => o).ToList());
             }
         }
 
@@ -1521,7 +1523,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void LanguageMoveRight()
         {
-            if (this.SelectedLangauges.Count > 0)
+            if (this.SelectedLangaugesToMove.Count > 0)
             {
                 List<string> copiedList = SelectedLangaugesToMove.ToList();
                 foreach (string item in copiedList)
@@ -1541,6 +1543,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.AvailableLanguages.Add(item);
             }
+            this.AvailableLanguages = new BindingList<string>(this.AvailableLanguages.OrderBy(o => o).ToList());
 
             this.SelectedLangauges.Clear();
         }
