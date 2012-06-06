@@ -895,7 +895,7 @@ namespace HandBrakeWPF.ViewModels
             QueueTask task = new QueueTask
                                  {
                                      Task = new EncodeTask(this.CurrentTask),
-                                     Query = QueryGeneratorUtility.GenerateQuery(this.CurrentTask)
+                                     Query = QueryGeneratorUtility.GenerateQuery(new EncodeTask(this.CurrentTask))
                                  };
             this.queueProcessor.QueueManager.Add(task);
 
@@ -1044,8 +1044,8 @@ namespace HandBrakeWPF.ViewModels
             // Create the Queue Task and Start Processing
             QueueTask task = new QueueTask(null)
                 {
-                    Task = this.CurrentTask,
-                    Query = QueryGeneratorUtility.GenerateQuery(this.CurrentTask),
+                    Task = new EncodeTask(this.CurrentTask),
+                    Query = QueryGeneratorUtility.GenerateQuery(new EncodeTask(this.CurrentTask)),
                     CustomQuery = false
                 };
             this.queueProcessor.QueueManager.Add(task);

@@ -633,7 +633,7 @@ namespace HandBrakeWPF.ViewModels
                     this.WidthControlEnabled = true;
                     this.HeightControlEnabled = true;
                     this.ShowCustomAnamorphicControls = false;
-                    this.ShowModulus = false;
+                    this.ShowModulus = true;
                     this.ShowDisplaySize = false;
                     this.SelectedModulus = 16; // Reset
                     this.Width = this.sourceResolution.Width;
