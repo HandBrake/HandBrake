@@ -10,6 +10,7 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Collections.ObjectModel;
     using System.Globalization;
     using System.IO;
+    using System.Text.RegularExpressions;
 
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
@@ -139,6 +140,13 @@ namespace HandBrake.ApplicationServices.Utilities
         private static string SourceQuery(EncodeTask task, int? duration, string preview)
         {
             string query = string.Empty;
+
+            // If we have a folder, strip it's trailing slash for the CLI.
+            // It behaves a bit funny with trailing \ in some cases.
+            if (task.Source.EndsWith("\\"))
+            {
+                task.Source = task.Source.TrimEnd('\\');
+            }
 
             query += string.Format(" -i \"{0}\"", task.Source);
             query += string.Format(" -t {0}", task.Title);
