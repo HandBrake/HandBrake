@@ -242,7 +242,9 @@ namespace HandBrake.ApplicationServices.Services
 
                 // Quick fix for "F:\\" style paths. Just get rid of the \\ so the CLI doesn't fall over.
                 // Sould probably clean up the escaping of the strings later.
-                string source = sourcePath.ToString().EndsWith("\\") ? sourcePath.ToString() : "\"" + sourcePath + "\"";
+                string source = sourcePath.ToString().EndsWith("\\")
+                                    ? "\"" + sourcePath.ToString().TrimEnd('\\') + "\""
+                                    : "\"" + sourcePath + "\"";
                 string query = string.Format(@" -i {0} -t{1} {2} -v ", source, title, extraArguments);
 
                 this.hbProc = new Process
