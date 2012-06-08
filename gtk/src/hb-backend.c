@@ -5509,7 +5509,7 @@ sanitize_volname(gchar *name)
 			b++;
 			break;
 		default:
-			*a = *b;
+			*a = *b & 0x7f;
 			a++; b++;
 			break;
 		}
