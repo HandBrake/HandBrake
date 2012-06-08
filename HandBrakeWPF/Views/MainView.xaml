@@ -1,23 +1,16 @@
-﻿<Window x:Class="HandBrakeWPF.Views.MainView"
+﻿<UserControl x:Class="HandBrakeWPF.Views.MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Controls="clr-namespace:HandBrakeWPF.Controls"
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
-        xmlns:Data="clr-namespace:System.Windows.Data;assembly=PresentationFramework"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
-        Title="{Data:Binding Path=WindowTitle}"
-        Width="1015"
-        Height="652"
-        MinWidth="1015"
-        MinHeight="652"
         AllowDrop="True"
         Background="#FFF0F0F0"
         FontSize="11"
         Micro:Message.Attach="[Event Loaded] = [Action Load]"
         SnapsToDevicePixels="True"
         UseLayoutRounding="True"
-        WindowStartupLocation="CenterScreen"
         >
 
     <i:Interaction.Triggers>
@@ -34,7 +27,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <Window.Resources>
+    <UserControl.Resources>
 
         <Style TargetType="Button">
             <Setter Property="Foreground" Value="DarkOrange" />
@@ -81,7 +74,7 @@
         </Style>
 
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
-    </Window.Resources>
+    </UserControl.Resources>
 
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
@@ -628,4 +621,4 @@
 
         </StatusBar>
     </Grid>
-</Window>
+</UserControl>
