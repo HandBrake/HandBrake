@@ -28,7 +28,9 @@
 #if !defined(_WIN32)
 #include <poll.h>
 #define G_UDEV_API_IS_SUBJECT_TO_CHANGE 1
+#if defined(__linux__)
 #include <gudev/gudev.h>
+#endif
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
 
@@ -49,6 +51,9 @@
 #endif
 
 #include <gdk/gdkx.h>
+#ifndef NOTIFY_CHECK_VERSION
+#define NOTIFY_CHECK_VERSION(x,y,z) 0
+#endif
 #else
 #define WINVER 0x0500
 #include <winsock2.h>
@@ -3937,14 +3942,14 @@ dvd_device_list()
 	return dvd_devices;
 }
 
-#if !defined(_WIN32)
+#if defined(__linux__)
 static GUdevClient *udev_ctx = NULL;
 #endif
 
 gboolean
 ghb_is_cd(GDrive *gd)
 {
-#if !defined(_WIN32)
+#if defined(__linux__)
 	gchar *device;
 	GUdevDevice *udd;
 
@@ -3978,7 +3983,7 @@ ghb_is_cd(GDrive *gd)
 void
 ghb_udev_init()
 {
-#if !defined(_WIN32)
+#if defined(__linux__)
 	udev_ctx = g_udev_client_new(NULL);
 #endif
 }

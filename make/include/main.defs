@@ -83,6 +83,11 @@ ifeq (1-linux,$(FEATURE.gtk)-$(BUILD.system))
     MODULES += gtk
 endif
 
+ifeq (1-gnu,$(FEATURE.gtk)-$(BUILD.system))
+    ## build gtk when gtk+gnu
+    MODULES += gtk
+endif
+
 ifeq (1,$(FEATURE.local_yasm))
     MODULES += contrib/yasm
 endif
