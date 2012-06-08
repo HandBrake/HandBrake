@@ -31,7 +31,7 @@ namespace HandBrakeWPF.Startup
     /// <summary>
     /// The Castle Bootstrapper
     /// </summary>
-    public class CastleBootstrapper : Bootstrapper<IMainViewModel>
+    public class CastleBootstrapper : Bootstrapper<IShellViewModel>
     {
         /// <summary>
         /// The Windsor Container
@@ -55,6 +55,7 @@ namespace HandBrakeWPF.Startup
             this.windsorContainer.Register(Component.For<IErrorService>().ImplementedBy<ErrorService>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IErrorViewModel>().ImplementedBy<ErrorViewModel>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IMainViewModel>().ImplementedBy<MainViewModel>().LifeStyle.Is(LifestyleType.Singleton));
+            this.windsorContainer.Register(Component.For<IShellViewModel>().ImplementedBy<ShellViewModel>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IQueueViewModel>().ImplementedBy<QueueViewModel>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IAddPresetViewModel>().ImplementedBy<AddPresetViewModel>().LifeStyle.Is(LifestyleType.Transient));
             this.windsorContainer.Register(Component.For<IPreviewViewModel>().ImplementedBy<PreviewViewModel>().LifeStyle.Is(LifestyleType.Singleton));

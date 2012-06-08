@@ -26,6 +26,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
+    using HandBrakeWPF.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Ookii.Dialogs.Wpf;
@@ -42,6 +43,11 @@ namespace HandBrakeWPF.ViewModels
         /// Backing field for the user setting service.
         /// </summary>
         private readonly IUserSettingService userSettingService;
+
+        /// <summary>
+        /// The Shell View Model
+        /// </summary>
+        private readonly IShellViewModel shellViewModel;
 
         /// <summary>
         /// The add audio mode options.
@@ -317,10 +323,14 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        public OptionsViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
+        /// <param name="shellViewModel">
+        /// The shell View Model.
+        /// </param>
+        public OptionsViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IShellViewModel shellViewModel)
         {
             this.Title = "Options";
             this.userSettingService = userSettingService;
+            this.shellViewModel = shellViewModel;
             this.OnLoad();
         }
 
@@ -1466,7 +1476,7 @@ namespace HandBrakeWPF.ViewModels
         public void Close()
         {
             this.Save();
-            this.TryClose(); 
+            this.shellViewModel.DisplayWindow(ShellWindow.MainWindow);
         }
 
         /// <summary>

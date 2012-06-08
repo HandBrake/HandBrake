@@ -10,11 +10,12 @@
 namespace HandBrakeWPF.Views
 {
     using System.Windows;
+    using System.Windows.Controls;
 
     /// <summary>
     /// Interaction logic for OptionsView.xaml
     /// </summary>
-    public partial class OptionsView : Window
+    public partial class OptionsView : UserControl
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionsView"/> class.

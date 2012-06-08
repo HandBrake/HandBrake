@@ -32,7 +32,9 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Helpers;
+    using HandBrakeWPF.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrakeWPF.Views;
 
     using Ookii.Dialogs.Wpf;
 
@@ -72,6 +74,11 @@ namespace HandBrakeWPF.ViewModels
         /// The Error Service Backing field.
         /// </summary>
         private readonly IErrorService errorService;
+
+        /// <summary>
+        /// The Shell View Model
+        /// </summary>
+        private readonly IShellViewModel shellViewModel;
 
         /// <summary>
         /// Backing field for the user setting service.
@@ -157,14 +164,18 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="errorService">
         /// The Error Service
         /// </param>
+        /// <param name="shellViewModel">
+        /// The shell View Model.
+        /// </param>
         [ImportingConstructor]
         public MainViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService,
-            IErrorService errorService)
+            IErrorService errorService, IShellViewModel shellViewModel)
         {
             this.scanService = scanService;
             this.encodeService = encodeService;
             this.presetService = presetService;
             this.errorService = errorService;
+            this.shellViewModel = shellViewModel;
             this.userSettingService = userSettingService;
             this.queueProcessor = IoC.Get<IQueueProcessor>(); // TODO Instance ID!
 
@@ -836,7 +847,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenOptionsWindow()
         {
-            this.WindowManager.ShowWindow(IoC.Get<IOptionsViewModel>());
+            this.shellViewModel.DisplayWindow(ShellWindow.OptionsWindow);
         }
 
         /// <summary>

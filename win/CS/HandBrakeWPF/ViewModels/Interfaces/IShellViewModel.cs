@@ -1,27 +1,27 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MainView.xaml.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="IShellViewModel.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Interaction logic for MainView.xaml
+//   The Interface for the Shell View Model
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Views
+namespace HandBrakeWPF.ViewModels.Interfaces
 {
-    using System.Windows.Controls;
+    using HandBrakeWPF.Model;
 
     /// <summary>
-    /// Interaction logic for MainView.xaml
+    /// The Interface for the Shell View Model
     /// </summary>
-    public partial class MainView : UserControl
+    public interface IShellViewModel
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MainView"/> class.
+        /// Change the page displayed on this window.
         /// </summary>
-        public MainView()
-        {
-            InitializeComponent();
-        }
+        /// <param name="window">
+        /// The window.
+        /// </param>
+        void DisplayWindow(ShellWindow window);
     }
 }
