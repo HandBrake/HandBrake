@@ -22,6 +22,8 @@ namespace HandBrake.Interop.SourceData
 
 		Aac,
 
-		Other
+		Other,
+
+        Flac
 	}
 }

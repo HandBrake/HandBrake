@@ -1,7 +1,11 @@
-﻿/*  QueryGeneratorUtility.cs $
-    This file is part of the HandBrake source code.
-    Homepage: <http://handbrake.fr/>.
-    It may be used under the terms of the GNU General Public License. */
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="QueryGeneratorUtility.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Generate a CLI Query for HandBrakeCLI
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.ApplicationServices.Utilities
 {
@@ -10,7 +14,6 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Collections.ObjectModel;
     using System.Globalization;
     using System.IO;
-    using System.Text.RegularExpressions;
 
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;

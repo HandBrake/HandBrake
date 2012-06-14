@@ -1,7 +1,11 @@
-/*  Chapter.cs $
-    This file is part of the HandBrake source code.
-    Homepage: <http://handbrake.fr>.
-    It may be used under the terms of the GNU General Public License. */
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Chapter.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   An object representing a Chapter aosciated with a Title, in a DVD
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.ApplicationServices.Parsing
 {
@@ -28,15 +32,15 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <param name="number">
         /// The number.
         /// </param>
-        /// <param name="Name">
+        /// <param name="name">
         /// The name.
         /// </param>
         /// <param name="duration">
         /// The duration.
         /// </param>
-        public Chapter(int number, string Name, TimeSpan duration)
+        public Chapter(int number, string name, TimeSpan duration)
         {
-            this.ChapterName = Name;
+            this.ChapterName = name;
             this.ChapterNumber = number;
             this.Duration = duration;
         }

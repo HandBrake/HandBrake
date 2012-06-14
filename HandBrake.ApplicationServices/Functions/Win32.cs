@@ -1,15 +1,16 @@
-﻿/*  win32.cs $
-    This file is part of the HandBrake source code.
-    Homepage: <http://handbrake.fr>.
-    It may be used under the terms of the GNU General Public License. */
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Win32.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Win32 API calls
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.ApplicationServices.Functions
 {
     using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
     using System.Runtime.InteropServices;
-    using System.Windows;
     using System.Windows.Threading;
 
     /// <summary>

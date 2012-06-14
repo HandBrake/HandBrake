@@ -1,7 +1,11 @@
-/*  GrowlCommunicator.cs $
-    This file is part of the HandBrake source code.
-    Homepage: <http://handbrake.fr>.
-    It may be used under the terms of the GNU General Public License. */
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="GrowlCommunicator.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Provides all functionality for communicating with Growl for Windows.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.ApplicationServices.Functions
 {

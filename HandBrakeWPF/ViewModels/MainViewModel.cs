@@ -1206,7 +1206,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (!string.IsNullOrEmpty(filename))
             {
-                Preset preset = PlistPresetHandler.Import(filename);
+                Preset preset = PlistUtility.Import(filename);
                 if (this.presetService.CheckIfPresetExists(preset.Name))
                 {
                     if (!presetService.CanUpdatePreset(preset.Name))
@@ -1252,7 +1252,7 @@ namespace HandBrakeWPF.ViewModels
 
                 if (filename != null)
                 {
-                    PlistPresetHandler.Export(savefiledialog.FileName, this.selectedPreset);
+                    PlistUtility.Export(savefiledialog.FileName, this.selectedPreset);
                 }
             }
             else

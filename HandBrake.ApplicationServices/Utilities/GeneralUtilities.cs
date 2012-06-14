@@ -1,7 +1,11 @@
-﻿/*  UtilityService.cs $
-    This file is part of the HandBrake source code.
-    Homepage: <http://handbrake.fr>.
-    It may be used under the terms of the GNU General Public License. */
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="GeneralUtilities.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   A Set of Static Utilites
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.ApplicationServices.Utilities
 {
@@ -12,9 +16,10 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Text;
     using System.Windows.Forms;
 
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     /// <summary>
@@ -25,7 +30,7 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <summary>
         /// The User Setting Service
         /// </summary>
-        private static IUserSettingService userSettingService = ServiceManager.UserSettingService;
+        private static readonly IUserSettingService UserSettingService = IoC.Get<IUserSettingService>();
 
         /// <summary>
         /// The Default Log Directory
@@ -113,7 +118,7 @@ namespace HandBrake.ApplicationServices.Utilities
         {
             StringBuilder logHeader = new StringBuilder();
 
-            logHeader.AppendLine(String.Format("HandBrake {0} {1}", userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion), userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild)));
+            logHeader.AppendLine(String.Format("HandBrake {0} {1}", UserSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion), UserSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild)));
             logHeader.AppendLine(String.Format("OS: {0}", Environment.OSVersion));
             logHeader.AppendLine(String.Format("CPU: {0}", SystemInfo.GetCpuCount));
             logHeader.Append(String.Format("Ram: {0} MB, ", SystemInfo.TotalPhysicalMemory));

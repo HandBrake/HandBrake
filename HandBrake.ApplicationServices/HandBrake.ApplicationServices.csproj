@@ -105,7 +105,7 @@
     <Compile Include="Functions\GrowlCommunicator.cs" />
     <Compile Include="Functions\InteropModelCreator.cs" />
     <Compile Include="Functions\PlistHelper.cs" />
-    <Compile Include="Functions\System.cs" />
+    <Compile Include="Functions\SystemInfo.cs" />
     <Compile Include="Functions\Win32.cs" />
     <Compile Include="Functions\Win7.cs" />
     <Compile Include="Model\DriveInformation.cs" />
@@ -119,7 +119,6 @@
     <Compile Include="Model\Encoding\SubtitleTrack.cs" />
     <Compile Include="Model\General\UpdateCheckInformation.cs" />
     <Compile Include="Model\General\UpdateCheckResult.cs" />
-    <Compile Include="Model\ModelBase.cs" />
     <Compile Include="Model\Preset.cs" />
     <Compile Include="Model\PresetPictureSettingsMode.cs" />
     <Compile Include="Model\QueueItemStatus.cs" />

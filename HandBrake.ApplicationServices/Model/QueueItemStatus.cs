@@ -1,7 +1,11 @@
-﻿/*  QueueItemStatus.cs $
-    This file is part of the HandBrake source code.
-    Homepage: <http://handbrake.fr>.
-    It may be used under the terms of the GNU General Public License. */
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="QueueItemStatus.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Queue Item Status
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.ApplicationServices.Model
 {
@@ -13,7 +17,7 @@ namespace HandBrake.ApplicationServices.Model
     /// <summary>
     /// Queue Item Status
     /// </summary>
-    [TypeConverter(typeof(EnumToDescConveter))]
+    [TypeConverter(typeof(EnumToDescConverter))]
     public enum QueueItemStatus
     {
         [Description("Waiting")]

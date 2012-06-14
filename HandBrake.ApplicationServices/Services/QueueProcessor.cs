@@ -1,7 +1,11 @@
-﻿/*  Queue.cs $
-    This file is part of the HandBrake source code.
-    Homepage: <http://handbrake.fr/>.
-    It may be used under the terms of the GNU General Public License. */
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="QueueProcessor.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   The HandBrake Queue
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.ApplicationServices.Services
 {
@@ -10,8 +14,9 @@ namespace HandBrake.ApplicationServices.Services
     using System.IO;
     using System.Windows.Forms;
 
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.EventArgs;
-    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -24,7 +29,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// The User Setting Service
         /// </summary>
-        private static IUserSettingService userSettingService = ServiceManager.UserSettingService;
+        private static IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QueueProcessor"/> class.
