@@ -1,14 +1,14 @@
-﻿/*  Preset.cs $
-    This file is part of the HandBrake source code.
-    Homepage: <http://handbrake.fr>.
-    It may be used under the terms of the GNU General Public License. */
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Preset.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   A Preset for encoding with.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.ApplicationServices.Model
 {
-    using System;
-
-    using Encoding;
-
     /// <summary>
     /// A Preset for encoding with.
     /// </summary>
@@ -28,7 +28,6 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets the preset query
         /// </summary>
         public string Query { get; set; }
-
 
         /// <summary>
         /// Gets or sets The version number which associates this preset with a HB build

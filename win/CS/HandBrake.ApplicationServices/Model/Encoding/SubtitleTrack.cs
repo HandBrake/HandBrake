@@ -155,7 +155,6 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         /// </summary>
         public string SrtCharCode { get; set; }
 
-
         /// <summary>
         ///   Gets or sets the SRT Filename
         /// </summary>

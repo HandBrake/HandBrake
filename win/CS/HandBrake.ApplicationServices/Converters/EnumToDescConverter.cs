@@ -1,8 +1,11 @@
-﻿/*  EnumToDescConveter.cs $
-    This file is part of the HandBrake source code.
-    Homepage: <http://handbrake.fr>.
-    It may be used under the terms of the GNU General Public License. */
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="EnumToDescConverter.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Enum to Description Converter
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.ApplicationServices.Converters
 {
@@ -14,15 +17,15 @@ namespace HandBrake.ApplicationServices.Converters
     /// <summary>
     /// Enum to Description Converter
     /// </summary>
-    public class EnumToDescConveter : EnumConverter
+    public class EnumToDescConverter : EnumConverter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="EnumToDescConveter"/> class.
+        /// Initializes a new instance of the <see cref="EnumToDescConverter"/> class.
         /// </summary>
         /// <param name="type">
         /// The type.
         /// </param>
-        public EnumToDescConveter(Type type)
+        public EnumToDescConverter(Type type)
             : base(type)
         {
         }

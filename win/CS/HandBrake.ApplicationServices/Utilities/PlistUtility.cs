@@ -1,7 +1,11 @@
-﻿/*  PlistUtility.cs $
-    This file is part of the HandBrake source code.
-    Homepage: <http://handbrake.fr/>.
-    It may be used under the terms of the GNU General Public License. */
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="PlistUtility.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Plist Preset Converter
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.ApplicationServices.Utilities
 {
@@ -22,7 +26,7 @@ namespace HandBrake.ApplicationServices.Utilities
     /// <summary>
     /// Plist Preset Converter
     /// </summary>
-    public class PlistPresetHandler
+    public class PlistUtility
     {
         /// <summary>
         /// The User Setting Service
@@ -38,6 +42,7 @@ namespace HandBrake.ApplicationServices.Utilities
         /// The filename.
         /// </param>
         /// <returns>
+        /// A Preset Object
         /// </returns>
         public static Preset Import(string filename)
         {

@@ -7,8 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using HandBrake.Interop.Model;
-
 namespace HandBrake.Interop
 {
 	using System;
@@ -17,8 +15,9 @@ namespace HandBrake.Interop
 	using HandBrake.Interop.HbLib;
 	using HandBrake.Interop.Model.Encoding;
 	using HandBrake.Interop.SourceData;
+	using HandBrake.Interop.Model;
 
-	public static class Converters
+    public static class Converters
 	{
 		/// <summary>
 		/// Video Frame Rates
@@ -32,7 +31,11 @@ namespace HandBrake.Interop
 			{23.976, 1126125},
 			{24, 1125000},
 			{25, 1080000},
-			{29.97, 900900}
+			{29.97, 900900},
+            {30, 900000},
+			{50, 540000},
+			{59.94, 450450},
+			{60, 450000}
 		};
 
 		/// <summary>
@@ -159,6 +162,8 @@ namespace HandBrake.Interop
 					return NativeConstants.HB_ACODEC_DCA_HD_PASS;
 				case AudioEncoder.Vorbis:
 					return NativeConstants.HB_ACODEC_VORBIS;
+                case AudioEncoder.ffflac:
+			        return NativeConstants.HB_ACODEC_FFFLAC;
 			}
 
 			return 0;
@@ -191,6 +196,8 @@ namespace HandBrake.Interop
 				case NativeConstants.HB_ACODEC_CA_AAC:
 				case NativeConstants.HB_ACODEC_CA_HAAC:
 					return AudioCodec.Aac;
+                case NativeConstants.HB_ACODEC_FFFLAC:
+			        return AudioCodec.Flac;
 				default:
 					return AudioCodec.Other;
 			}

@@ -1,7 +1,11 @@
-/*  UpdateCheckResult.cs $
-    This file is part of the HandBrake source code.
-    Homepage: <http://handbrake.fr>.
-    It may be used under the terms of the GNU General Public License. */
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="UpdateCheckResult.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Used in EndUpdateCheck() for update checking and the IAsyncResult design pattern.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.ApplicationServices.Model.General
 {
@@ -22,7 +26,7 @@ namespace HandBrake.ApplicationServices.Model.General
         /// <param name="info">
         /// The info.
         /// </param>
-        public UpdateCheckResult(object asyncState, ApplicationServices.Model.General.UpdateCheckInformation info)
+        public UpdateCheckResult(object asyncState, UpdateCheckInformation info)
         {
             this.AsyncState = asyncState;
             this.Result = info;
@@ -36,12 +40,13 @@ namespace HandBrake.ApplicationServices.Model.General
         /// <summary>
         /// Gets the result of the update check.
         /// </summary>
-        public ApplicationServices.Model.General.UpdateCheckInformation Result { get; private set; }
+        public UpdateCheckInformation Result { get; private set; }
 
         /// <summary>
         /// Gets AsyncWaitHandle.
         /// </summary>
         /// <exception cref="NotImplementedException">
+        /// This is not implemented as it is not used.
         /// </exception>
         public WaitHandle AsyncWaitHandle
         {
@@ -52,6 +57,7 @@ namespace HandBrake.ApplicationServices.Model.General
         /// Gets a value indicating whether CompletedSynchronously.
         /// </summary>
         /// <exception cref="NotImplementedException">
+        /// This is not implemented as it is not used.
         /// </exception>
         public bool CompletedSynchronously
         {
@@ -62,6 +68,7 @@ namespace HandBrake.ApplicationServices.Model.General
         /// Gets a value indicating whether IsCompleted.
         /// </summary>
         /// <exception cref="NotImplementedException">
+        /// This is not implemented as it is not used.
         /// </exception>
         public bool IsCompleted
         {

@@ -1,7 +1,11 @@
-/*  Title.cs $
-    This file is part of the HandBrake source code.
-    Homepage: <http://handbrake.fr>.
-    It may be used under the terms of the GNU General Public License. */
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Title.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   An object that represents a single Title of a DVD
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.ApplicationServices.Parsing
 {

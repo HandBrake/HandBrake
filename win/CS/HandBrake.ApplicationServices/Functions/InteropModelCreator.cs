@@ -1,7 +1,11 @@
-﻿/*  InteropModelCreator.cs $
-    This file is part of the HandBrake source code.
-    Homepage: <http://handbrake.fr>.
-    It may be used under the terms of the GNU General Public License. */
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="InteropModelCreator.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   A Utility Class to Convert a
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.ApplicationServices.Functions
 {
@@ -47,10 +51,6 @@ namespace HandBrake.ApplicationServices.Functions
 
             // Which will be converted to this EncodeJob Model.
             EncodeJob job = new EncodeJob();
-
-
-
-
 
             EncodingProfile profile = new EncodingProfile();
             job.EncodingProfile = profile;
@@ -172,7 +172,6 @@ namespace HandBrake.ApplicationServices.Functions
                     break;
             }
 
-
             if (work.PointToPointMode == PointToPointMode.Seconds)
             {
                 job.SecondsEnd = work.EndPoint;
@@ -189,7 +188,6 @@ namespace HandBrake.ApplicationServices.Functions
             //{
             //    // TODO
             //}
-
 
             return job;
         }

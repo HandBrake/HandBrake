@@ -14,37 +14,153 @@ namespace HandBrakeWPF
     /// </summary>
     public class UserSettingConstants
     {
-        public const string UpdateStatus = "updateStatus";
-        public const string TooltipEnable = "tooltipEnable";
-        public const string Skipversion = "skipversion";
-        public const string AutoNaming = "autoNaming";
-        public const string AutoNamePath = "autoNamePath";
-        public const string Appcast_i686 = "appcast_i686";
-        public const string Appcast_x64 = "appcast_x64";
-        public const string AutoNameFormat = "autoNameFormat";
-        public const string VLC_Path = "VLC_Path";
-        public const string MainWindowMinimize = "MainWindowMinimize";
-        public const string PresetNotification = "presetNotification";
-        public const string TrayIconAlerts = "trayIconAlerts";
-        public const string LastUpdateCheckDate = "lastUpdateCheckDate";
-        public const string DaysBetweenUpdateCheck = "daysBetweenUpdateCheck";
-        public const string UseM4v = "useM4v";
-        public const string NativeLanguage = "NativeLanguage";
-        public const string NativeLanguageForSubtitles = "NativeLanguageSubtitles";
-        public const string DubMode = "DubMode";
-        public const string ClearOldLogs = "clearOldLogs";
-        public const string AutoNameTitleCase = "AutoNameTitleCase";
-        public const string AutoNameRemoveUnderscore = "AutoNameRemoveUnderscore";
-        public const string ActivityWindowLastMode = "ActivityWindowLastMode";
-        public const string UseClosedCaption = "useClosedCaption";
-        public const string BatchMinDuration = "batchMinDuration";
-        public const string BatchMaxDuration = "batchMaxDuration";
-        public const string DefaultPlayer = "defaultPlayer";
-        public const string SelectedLanguages = "SelectedLanguages";
-        public const string DubModeAudio = "DubModeAudio";
-        public const string DubModeSubtitle = "DubModeSubtitle";
+        #region Constants and Fields
+
+        /// <summary>
+        /// Add Only One Per Langage
+        /// </summary>
         public const string AddOnlyOneAudioPerLanguage = "addOnlyOneAudioPerLanguage";
+
+        /// <summary>
+        /// Appcast i686
+        /// </summary>
+        public const string Appcast_i686 = "appcast_i686";
+
+        /// <summary>
+        /// Appcast 64
+        /// </summary>
+        public const string Appcast_x64 = "appcast_x64";
+
+        /// <summary>
+        /// Auto name format
+        /// </summary>
+        public const string AutoNameFormat = "autoNameFormat";
+
+        /// <summary>
+        /// Autoname path
+        /// </summary>
+        public const string AutoNamePath = "autoNamePath";
+
+        /// <summary>
+        /// Auto Name Remove underscore
+        /// </summary>
+        public const string AutoNameRemoveUnderscore = "AutoNameRemoveUnderscore";
+
+        /// <summary>
+        /// Auto Name Title Case
+        /// </summary>
+        public const string AutoNameTitleCase = "AutoNameTitleCase";
+
+        /// <summary>
+        /// Auto Naming
+        /// </summary>
+        public const string AutoNaming = "autoNaming";
+
+        /// <summary>
+        /// Clear old logs
+        /// </summary>
+        public const string ClearOldLogs = "clearOldLogs";
+
+        /// <summary>
+        /// Update check interval
+        /// </summary>
+        public const string DaysBetweenUpdateCheck = "daysBetweenUpdateCheck";
+
+        /// <summary>
+        /// Use Default Player
+        /// </summary>
+        public const string DefaultPlayer = "defaultPlayer";
+
+        /// <summary>
+        /// Dub mode
+        /// </summary>
+        public const string DubMode = "DubMode";
+
+        /// <summary>
+        /// Dub Mode Audio
+        /// </summary>
+        public const string DubModeAudio = "DubModeAudio";
+
+        /// <summary>
+        /// Dub Mode Subs
+        /// </summary>
+        public const string DubModeSubtitle = "DubModeSubtitle";
+
+        /// <summary>
+        /// Last Update Check
+        /// </summary>
+        public const string LastUpdateCheckDate = "lastUpdateCheckDate";
+
+        /// <summary>
+        /// Main Window Minimise
+        /// </summary>
+        public const string MainWindowMinimize = "MainWindowMinimize";
+
+        /// <summary>
+        /// Min Title Length
+        /// </summary>
         public const string MinTitleLength = "MinTitleLength";
+
+        /// <summary>
+        /// Native Language Audio
+        /// </summary>
+        public const string NativeLanguage = "NativeLanguage";
+
+        /// <summary>
+        /// Native Language Subs
+        /// </summary>
+        public const string NativeLanguageForSubtitles = "NativeLanguageSubtitles";
+
+        /// <summary>
+        /// Preset Notification
+        /// </summary>
+        public const string PresetNotification = "presetNotification";
+
+        /// <summary>
+        /// Selected Languages
+        /// </summary>
+        public const string SelectedLanguages = "SelectedLanguages";
+
+        /// <summary>
+        /// AUudio Passthru
+        /// </summary>
         public const string ShowAdvancedAudioPassthruOpts = "ShowAdvancedAudioPassthruOpts";
+
+        /// <summary>
+        /// Skip Version
+        /// </summary>
+        public const string Skipversion = "skipversion";
+
+        /// <summary>
+        /// Tooltip
+        /// </summary>
+        public const string TooltipEnable = "tooltipEnable";
+
+        /// <summary>
+        /// Tray Icon
+        /// </summary>
+        public const string TrayIconAlerts = "trayIconAlerts";
+
+        /// <summary>
+        /// Update Status
+        /// </summary>
+        public const string UpdateStatus = "updateStatus";
+
+        /// <summary>
+        /// Closed Captions
+        /// </summary>
+        public const string UseClosedCaption = "useClosedCaption";
+
+        /// <summary>
+        /// Use m4v
+        /// </summary>
+        public const string UseM4v = "useM4v";
+
+        /// <summary>
+        /// Vlc Path
+        /// </summary>
+        public const string VLC_Path = "VLC_Path";
+
+        #endregion
     }
 }

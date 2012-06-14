@@ -1,7 +1,11 @@
-﻿/*  EncodeBase.cs $
-    This file is part of the HandBrake source code.
-    Homepage: <http://handbrake.fr>.
-    It may be used under the terms of the GNU General Public License. */
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="EncodeBase.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   A Base Class for the Encode Services.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.ApplicationServices.Services.Base
 {

@@ -13,6 +13,8 @@ namespace HandBrake.ApplicationServices.Model.Encoding
     using System.ComponentModel;
     using System.Globalization;
 
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.Interop.Model.Encoding;
@@ -20,7 +22,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
     /// <summary>
     /// An Audio Track for the Audio Panel
     /// </summary>
-    public class AudioTrack : ModelBase
+    public class AudioTrack : PropertyChangedBase
     {
         #region Constants and Fields
 
@@ -100,7 +102,6 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             this.mixDown = track.MixDown;
             this.sampleRate = track.SampleRate;
             this.scannedTrack = new Audio();
-            this.trackName = track.TrackName;
         }
 
         #endregion
@@ -159,7 +160,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             set
             {
                 this.bitrate = value;
-                this.OnPropertyChanged("Bitrate");
+                this.NotifyOfPropertyChange("Bitrate");
             }
         }
 
@@ -178,7 +179,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
                 if (!object.Equals(value, this.drc))
                 {
                     this.drc = value;
-                    this.OnPropertyChanged("DRC");
+                    this.NotifyOfPropertyChange("DRC");
                 }
             }
         }
@@ -196,9 +197,9 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             set
             {
                 this.encoder = value;
-                this.OnPropertyChanged("Encoder");
-                this.OnPropertyChanged("IsPassthru");
-                this.OnPropertyChanged("TrackReference");
+                this.NotifyOfPropertyChange(() => this.Encoder);
+                this.NotifyOfPropertyChange("IsPassthru");
+                this.NotifyOfPropertyChange("TrackReference");
             }
         }
 
@@ -217,7 +218,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
                 if (!object.Equals(value, this.gain))
                 {
                     this.gain = value;
-                    this.OnPropertyChanged("Gain");
+                    this.NotifyOfPropertyChange("Gain");
                 }
             }
         }
@@ -235,8 +236,8 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             set
             {
                 this.mixDown = value;
-                this.OnPropertyChanged("MixDown");
-                this.OnPropertyChanged("TrackReference");
+                this.NotifyOfPropertyChange("MixDown");
+                this.NotifyOfPropertyChange("TrackReference");
             }
         }
 
@@ -253,7 +254,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             set
             {
                 this.sampleRate = value;
-                this.OnPropertyChanged("SampleRate");
+                this.NotifyOfPropertyChange("SampleRate");
             }
         }
 
@@ -295,8 +296,8 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             set
             {
                 this.scannedTrack = value;
-                this.OnPropertyChanged("ScannedTrack");
-                this.OnPropertyChanged("TrackDisplay");
+                this.NotifyOfPropertyChange("ScannedTrack");
+                this.NotifyOfPropertyChange("TrackDisplay");
             }
         }
 
@@ -317,34 +318,6 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         }
 
         /// <summary>
-        ///   Gets the Display Value for this model.
-        /// </summary>
-        public string TrackDisplay
-        {
-            get
-            {
-                return this.ScannedTrack == null ? string.Empty : this.ScannedTrack.ToString();
-            }
-        }
-
-        /// <summary>
-        ///   Gets or sets TrackName.
-        /// </summary>
-        public string TrackName
-        {
-            get
-            {
-                return this.trackName;
-            }
-
-            set
-            {
-                this.trackName = value;
-                this.OnPropertyChanged("TrackName");
-            }
-        }
-
-        /// <summary>
         /// Gets a value indicating whether IsPassthru.
         /// </summary>
         public bool IsPassthru
@@ -361,6 +334,9 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether IsLossless.
+        /// </summary>
         public bool IsLossless
         {
             get
@@ -369,6 +345,9 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             }
         }
 
+        /// <summary>
+        /// Gets TrackReference.
+        /// </summary>
         public AudioTrack TrackReference
         {
             get { return this; }

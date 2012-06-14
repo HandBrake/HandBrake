@@ -17,6 +17,7 @@ namespace HandBrake.Interop
 	using System.Windows.Media.Imaging;
 
 	using HandBrake.Interop.HbLib;
+	using HandBrake.Interop.Interfaces;
 	using HandBrake.Interop.Model;
 	using HandBrake.Interop.Model.Encoding;
 	using HandBrake.Interop.SourceData;
@@ -24,7 +25,7 @@ namespace HandBrake.Interop
 	/// <summary>
 	/// A wrapper for a HandBrake instance.
 	/// </summary>
-	public class HandBrakeInstance : IDisposable
+	public class HandBrakeInstance : IHandBrakeInstance, IDisposable
 	{
 		/// <summary>
 		/// The modulus for picture size when auto-sizing dimensions.
