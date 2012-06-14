@@ -1,7 +1,13 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.LogView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:cal="http://www.caliburnproject.org"
-        Title="{Binding Title}" Height="600" Width="500">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:cal="http://www.caliburnproject.org"
+        Title="{Binding Title}"
+        Width="500"
+        Height="600"
+        MinWidth="500"
+        MinHeight="600"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
@@ -11,25 +17,36 @@
             <ToolBar Grid.Row="0">
                 <Button cal:Message.Attach="[Event Click] = [Action CopyLog]">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="Images/copy.png" Width="16"/>
-                        <TextBlock Text="Copy to clipboard" Margin="2,0,0,0" />
+                        <Image Width="16" Source="Images/copy.png" />
+                        <TextBlock Margin="2,0,0,0" Text="Copy to clipboard" />
                     </StackPanel>
                 </Button>
                 <Button Margin="5,0,0,0" cal:Message.Attach="[Event Click] = [Action OpenLogDirectory]">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="Images/folder.png" Width="16"/>
-                        <TextBlock Text="Open Log Directory" Margin="2,0,0,0" />
+                        <Image Width="16" Source="Images/folder.png" />
+                        <TextBlock Margin="2,0,0,0" Text="Open Log Directory" />
                     </StackPanel>
                 </Button>
-                
+
                 <Separator />
 
-                <TextBlock Text="Choose Log:" FontWeight="Bold" VerticalAlignment="Center" Margin="10,0,10,0" />
-                <ComboBox Width="100" HorizontalAlignment="Right" ItemsSource="{Binding LogModes}" SelectedIndex="{Binding SelectedMode}">
-                </ComboBox>
+                <TextBlock Margin="10,0,10,0"
+                           VerticalAlignment="Center"
+                           FontWeight="Bold"
+                           Text="Choose Log:" />
+                <ComboBox Width="100"
+                          HorizontalAlignment="Right"
+                          ItemsSource="{Binding LogModes}"
+                          SelectedIndex="{Binding SelectedMode}" />
             </ToolBar>
 
-            <TextBox AcceptsReturn="True" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Visible" IsReadOnly="True" Grid.Row="1" Text="{Binding Log, Mode=OneWay}"  />
+            <TextBox Grid.Row="1"
+                     AcceptsReturn="True"
+                     IsReadOnly="True"
+                     ScrollViewer.VerticalScrollBarVisibility="Visible"
+                     Text="{Binding Log,
+                                    Mode=OneWay}"
+                     TextWrapping="Wrap" />
         </Grid>
 
     </Grid>
