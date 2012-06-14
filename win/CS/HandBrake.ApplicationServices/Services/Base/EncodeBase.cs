@@ -257,8 +257,9 @@ namespace HandBrake.ApplicationServices.Services.Base
 
             try
             {
+                string query = QueryGeneratorUtility.GenerateQuery(new EncodeTask(encodeQueueTask.Task));
                 this.logBuffer = new StringBuilder();
-                this.logBuffer.AppendLine(String.Format("CLI Query: {0}", encodeQueueTask.Query));
+                this.logBuffer.AppendLine(String.Format("CLI Query: {0}", query));
                 this.logBuffer.AppendLine(String.Format("User Query: {0}", encodeQueueTask.CustomQuery));
                 this.logBuffer.AppendLine();
 
@@ -275,7 +276,7 @@ namespace HandBrake.ApplicationServices.Services.Base
 
                 this.fileWriter = new StreamWriter(logFile) { AutoFlush = true };
                 this.fileWriter.WriteLine(GeneralUtilities.CreateCliLogHeader());
-                this.fileWriter.WriteLine(String.Format("CLI Query: {0}", encodeQueueTask.Query));
+                this.fileWriter.WriteLine(String.Format("CLI Query: {0}", query));
                 this.fileWriter.WriteLine(String.Format("User Query: {0}", encodeQueueTask.CustomQuery));
                 this.fileWriter.WriteLine();
             }

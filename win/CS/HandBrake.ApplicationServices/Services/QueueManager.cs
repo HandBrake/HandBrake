@@ -23,6 +23,7 @@ namespace HandBrake.ApplicationServices.Services
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Utilities;
 
     using EventArgs = System.EventArgs;
 
@@ -392,7 +393,7 @@ namespace HandBrake.ApplicationServices.Services
             string queries = string.Empty;
             foreach (QueueTask queueItem in this.queue)
             {
-                string qItem = queueItem.Query;
+                string qItem = QueryGeneratorUtility.GenerateQuery(new EncodeTask(queueItem.Task));
                 string fullQuery = '"' + Application.StartupPath + "\\HandBrakeCLI.exe" + '"' + qItem;
 
                 if (queries == string.Empty)

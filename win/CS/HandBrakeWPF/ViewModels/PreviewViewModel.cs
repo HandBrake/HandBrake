@@ -23,7 +23,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services.Interfaces;
-    using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -277,10 +276,13 @@ namespace HandBrakeWPF.ViewModels
 
             this.CurrentlyPlaying = encodeTask.Destination.Replace(".m", "_sample.m");
 
+            // Setup the encode task as a preview encode
+            encodeTask.IsPreviewEncode = true;
+            encodeTask.PreviewEncodeStartAt = this.StartAt.ToString(CultureInfo.InvariantCulture);
+            encodeTask.PreviewEncodeDuration = this.Duration;
             QueueTask task = new QueueTask
                 {
                     Task = encodeTask,
-                    Query = QueryGeneratorUtility.GeneratePreviewQuery(encodeTask, this.Duration, this.StartAt.ToString(CultureInfo.InvariantCulture)),
                 };
 
             ThreadPool.QueueUserWorkItem(this.CreatePreview, task);

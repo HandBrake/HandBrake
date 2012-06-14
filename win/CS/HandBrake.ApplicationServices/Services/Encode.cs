@@ -21,6 +21,7 @@ namespace HandBrake.ApplicationServices.Services
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Base;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>
     /// Class which handles the CLI
@@ -120,7 +121,16 @@ namespace HandBrake.ApplicationServices.Services
                 this.VerifyEncodeDestinationPath(currentTask);
 
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
-                ProcessStartInfo cliStart = new ProcessStartInfo(handbrakeCLIPath, currentTask.Query)
+
+                // TODO tidy this code up, it's kinda messy.
+                string query = this.currentTask.Task.IsPreviewEncode
+                                   ? QueryGeneratorUtility.GeneratePreviewQuery(
+                                       new EncodeTask(this.currentTask.Task),
+                                       this.currentTask.Task.PreviewEncodeDuration,
+                                       this.currentTask.Task.PreviewEncodeStartAt)
+                                   : QueryGeneratorUtility.GenerateQuery(new EncodeTask(this.currentTask.Task));
+
+                ProcessStartInfo cliStart = new ProcessStartInfo(handbrakeCLIPath, query)
                 {
                     RedirectStandardOutput = true,
                     RedirectStandardError = enableLogging ? true : false,
