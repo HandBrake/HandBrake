@@ -1,7 +1,8 @@
 ﻿<UserControl  x:Class="HandBrakeWPF.Views.OptionsView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:cal="http://www.caliburnproject.org"
-        xmlns:Helpers="clr-namespace:HandBrakeWPF.Helpers" >
+        xmlns:Helpers="clr-namespace:HandBrakeWPF.Helpers"
+              xmlns:Options="clr-namespace:HandBrakeWPF.Converters.Options" Background="White">
 
     <UserControl.Resources>
         <Style TargetType="Button">
@@ -21,28 +22,54 @@
         <Style TargetType="CheckBox">
             <Setter Property="Margin" Value="0,0,0,5" />
         </Style>
-        </UserControl.Resources>
 
-    <Grid Background="#FFF1F0EF">
+        <Style TargetType="ListBoxItem">
+            <Setter Property="Padding" Value="8,4" />
+            <!--<Style.Triggers>
+                <DataTrigger Binding="{Binding IsBuildIn}" Value="True">
+                    <Setter Property="Foreground" Value="DarkBlue" />
+                </DataTrigger>
+            </Style.Triggers>-->
+        </Style>
+
+        <Options:OptionsTabConverter x:Key="tabConverter" />
+    </UserControl.Resources>
+
+
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        
-        <!-- Header -->
-        <StackPanel Orientation="Horizontal"  Background="White" Height="50" Grid.Row="0" >
-            <Image Source="Images/Preferences.png" Margin="10,0,5,0" Width="32" Height="32" VerticalAlignment="Center" />
-            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                <TextBlock Text="Options" FontWeight="Bold" />
-                <TextBlock Text="Preferences to control various features in HandBrake" />
-            </StackPanel>
+
+
+        <StackPanel Orientation="Vertical" Grid.Column="0" Margin="10,10,0,0">
+            <Border BorderThickness="0 0 0 1" BorderBrush="LightGray" Margin="0,0,0,10">
+                <TextBlock Text="Preferences" FontSize="16" />
+            </Border>
+            
+            <ListBox ItemsSource="{Binding OptionTabs}" SelectedItem="{Binding SelectedTab}"
+                     BorderThickness="0" Background="Transparent">
+            </ListBox>
+            
         </StackPanel>
 
-        <!-- Options Panel-->
-        <TabControl Margin="10,10,10,10" MinHeight="410" Grid.Row="1">
-            <TabItem Header="General">
-                <StackPanel Orientation="Vertical">
+        <ScrollViewer Grid.Column="1">
+            <StackPanel Orientation="Vertical">
+
+                <StackPanel Name="General" Orientation="Vertical" Margin="10,10,0,0"
+                            Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter='General'}">
+
+                    <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
+                        <TextBlock Text="General" FontSize="16" />
+                    </Border>
+
                     <Grid Margin="10,10,0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100" />
@@ -88,11 +115,35 @@
 
                         </StackPanel>
                     </Grid>
-                </StackPanel>
-            </TabItem>
 
-            <TabItem Header="Output Files">
-                <StackPanel Orientation="Vertical">
+                    <Grid Margin="10,10,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="VLC Path:" Grid.Column="0" FontWeight="Bold"/>
+
+                        <StackPanel Orientation="Vertical" Grid.Column="1">
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" Text="Path:" />
+                                <TextBox Name="vlcPath" Text="{Binding VLCPath}"  Width="180" />
+                                <Button Content="Browse" cal:Message.Attach="[Event Click] = [Action BrowseVlcPath]" Margin="5,0,0,0" Width="55"/>
+                            </StackPanel>
+                            <TextBlock Text="This path is used for the video preview feature only." />
+
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Name="Output" Orientation="Vertical" Margin="10,10,0,0"
+                            Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter='Output Files'}">
+
+                    <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
+                        <TextBlock Text="Output Files" FontSize="16" />
+                    </Border>
+                    
                     <Grid Margin="10,10,0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100" />
@@ -129,35 +180,14 @@
                         </StackPanel>
                     </Grid>
                 </StackPanel>
-            </TabItem>
 
-            <TabItem Header="Preview">
-                <StackPanel Orientation="Vertical">
-                    <Grid Margin="10,10,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                <StackPanel Name="Audio" Orientation="Vertical" Margin="10,10,0,0"
+                            Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter='Language'}">
 
-                        <TextBlock Text="VLC Path:" Grid.Column="0" FontWeight="Bold"/>
-
-                        <StackPanel Orientation="Vertical" Grid.Column="1">
-
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock VerticalAlignment="Center" Text="Path:" />
-                                <TextBox Name="vlcPath" Text="{Binding VLCPath}"  Width="180" />
-                                <Button Content="Browse" cal:Message.Attach="[Event Click] = [Action BrowseVlcPath]" Margin="5,0,0,0" Width="55"/>
-                            </StackPanel>
-                            <TextBlock Text="This path is used for the video preview feature only." />
-
-                        </StackPanel>
-                    </Grid>
-                </StackPanel>
-            </TabItem>
-
-            <TabItem Header="Audio and Subtitles">
-                <StackPanel Orientation="Vertical">
-
+                    <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
+                        <TextBlock Text="Automatic Language Selection" FontSize="16" />
+                    </Border>
+                    
                     <TextBlock Text="Automatic Selection" Grid.Column="0" Margin="10,10,0,0" FontWeight="Bold"/>
 
                     <Grid Margin="10,10,0,0">
@@ -254,10 +284,66 @@
                     </StackPanel>
 
                 </StackPanel>
-            </TabItem>
 
-            <TabItem Header="System and Logging">
-                <StackPanel Orientation="Vertical">
+                <StackPanel Name="Advanced" Orientation="Vertical" Margin="10,10,0,0"
+                            Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter='Advanced'}">
+                    
+                    <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
+                        <TextBlock Text="Advanced" FontSize="16" />
+                    </Border>
+                    
+                    <Grid Margin="10,10,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="GUI:" Grid.Column="0" FontWeight="Bold"/>
+                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                            <CheckBox Content="Minimize to system tray (Requires Restart)" Visibility="Collapsed" IsChecked="{Binding MinimiseToTray}" />
+                            <CheckBox Content="Display status messages from tray icon (balloon popups)"  Visibility="Collapsed"  IsChecked="{Binding DisplayStatusMessagesTrayIcon}" />
+                            <CheckBox Content="Disable built-in preset update notification" IsChecked="{Binding DisablePresetUpdateCheckNotification}" />
+                            <CheckBox Content="Show CLI window (Allows you to cleanly exit encode with ctrl-c)" IsChecked="{Binding ShowCliWindow}" />
+                            <CheckBox Content="Always clear completed queue items after an encode completes" IsChecked="{Binding ClearQueueOnEncodeCompleted}" />
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <TextBlock Text="Number of picture previews to scan:" VerticalAlignment="Center" Width="250" />
+                                <ComboBox Name="numberOfPreviews" ItemsSource="{Binding PreviewPicturesToScan}" SelectedItem="{Binding SelectedPreviewCount}" Width="120" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock Text="Minimum length of title to scan (seconds):" VerticalAlignment="Center" Width="250" />
+                                <TextBox Name="MinTitleLength" Text="{Binding MinLength}"  Width="120"/>
+                                <!-- Find a control for this-->
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="10,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="x264:" Grid.Column="0" FontWeight="Bold"/>
+                        <StackPanel Orientation="Horizontal" Grid.Column="1">
+                            <TextBlock Text="Constant quality fractional granularity:" VerticalAlignment="Center" Width="250" />
+                            <ComboBox Name="x264Granularity" ItemsSource="{Binding ConstantQualityGranularity}" SelectedItem="{Binding SelectedGranulairty}" Width="120"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="10,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="DVD:" Grid.Column="0" FontWeight="Bold"/>
+
+                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                            <CheckBox Content="Disable LibDVDNav. (libdvdread will be used instead)" IsChecked="{Binding DisableLibdvdNav}" />
+                        </StackPanel>
+
+                    </Grid>
+
                     <Grid Margin="10,10,0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100" />
@@ -313,66 +399,10 @@
 
                     </Grid>
                 </StackPanel>
-            </TabItem>
+            </StackPanel>
+        </ScrollViewer>
 
-            <TabItem Header="Advanced">
-                <StackPanel Orientation="Vertical">
-                    <Grid Margin="10,10,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="GUI:" Grid.Column="0" FontWeight="Bold"/>
-                        <StackPanel Orientation="Vertical" Grid.Column="1">
-                            <CheckBox Content="Minimize to system tray (Requires Restart)" Visibility="Collapsed" IsChecked="{Binding MinimiseToTray}" />
-                            <CheckBox Content="Display status messages from tray icon (balloon popups)"  Visibility="Collapsed"  IsChecked="{Binding DisplayStatusMessagesTrayIcon}" />
-                            <CheckBox Content="Disable built-in preset update notification" IsChecked="{Binding DisablePresetUpdateCheckNotification}" />
-                            <CheckBox Content="Show CLI window (Allows you to cleanly exit encode with ctrl-c)" IsChecked="{Binding ShowCliWindow}" />
-                            <CheckBox Content="Always clear completed queue items after an encode completes" IsChecked="{Binding ClearQueueOnEncodeCompleted}" />
-                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                                <TextBlock Text="Number of picture previews to scan:" VerticalAlignment="Center" Width="250" />
-                                <ComboBox Name="numberOfPreviews" ItemsSource="{Binding PreviewPicturesToScan}" SelectedItem="{Binding SelectedPreviewCount}" Width="120" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <TextBlock Text="Minimum length of title to scan (seconds):" VerticalAlignment="Center" Width="250" />
-                                <TextBox Name="MinTitleLength" Text="{Binding MinLength}"  Width="120"/>
-                                <!-- Find a control for this-->
-                            </StackPanel>
-
-                        </StackPanel>
-                    </Grid>
-
-                    <Grid Margin="10,0,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="x264:" Grid.Column="0" FontWeight="Bold"/>
-                        <StackPanel Orientation="Horizontal" Grid.Column="1">
-                            <TextBlock Text="Constant quality fractional granularity:" VerticalAlignment="Center" Width="250" />
-                            <ComboBox Name="x264Granularity" ItemsSource="{Binding ConstantQualityGranularity}" SelectedItem="{Binding SelectedGranulairty}" Width="120"/>
-                        </StackPanel>
-                    </Grid>
-
-                    <Grid Margin="10,0,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="DVD:" Grid.Column="0" FontWeight="Bold"/>
-
-                        <StackPanel Orientation="Vertical" Grid.Column="1">
-                            <CheckBox Content="Disable LibDVDNav. (libdvdread will be used instead)" IsChecked="{Binding DisableLibdvdNav}" />
-                        </StackPanel>
-
-                    </Grid>
-                </StackPanel>
-            </TabItem>
-        </TabControl>
-
-        <StackPanel HorizontalAlignment="Stretch" Background="LightGray" Grid.Row="2" >
+        <StackPanel HorizontalAlignment="Stretch" Background="LightGray" Grid.Row="1" Grid.ColumnSpan="2" >
             <Button Content="Save Changes" IsDefault="True" cal:Message.Attach="[Event Click] = [Action Close]"
                     HorizontalAlignment="Center" Padding="12,2" Margin="0,5,10,5" />
         </StackPanel>
