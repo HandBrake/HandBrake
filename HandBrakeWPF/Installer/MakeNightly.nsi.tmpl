@@ -132,7 +132,6 @@ Section "Handbrake" SEC01
   File "*.config"
   File "*.xml"
   File "*.pdb"
-  File "*.html"
 
   ; Copy the standard doc set into the doc folder
   SetOutPath "$INSTDIR\doc"

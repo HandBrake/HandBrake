@@ -460,6 +460,7 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets Duration.
         /// </summary>
         public int? PreviewDuration { get; set; }
+
         #endregion
 
         #region Helpers
@@ -484,6 +485,21 @@ namespace HandBrake.ApplicationServices.Model
                 return false;
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether IsPreviewEncode.
+        /// </summary>
+        public bool IsPreviewEncode { get; set; }
+
+        /// <summary>
+        /// Gets or sets PreviewEncodeDuration.
+        /// </summary>
+        public int PreviewEncodeDuration { get; set; }
+
+        /// <summary>
+        /// Gets or sets PreviewEncodeStartAt.
+        /// </summary>
+        public string PreviewEncodeStartAt { get; set; }
         #endregion
     }
 }

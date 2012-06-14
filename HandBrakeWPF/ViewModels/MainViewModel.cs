@@ -899,11 +899,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            QueueTask task = new QueueTask
-                                 {
-                                     Task = new EncodeTask(this.CurrentTask),
-                                     Query = QueryGeneratorUtility.GenerateQuery(new EncodeTask(this.CurrentTask))
-                                 };
+            QueueTask task = new QueueTask { Task = new EncodeTask(this.CurrentTask) };
             this.queueProcessor.QueueManager.Add(task);
 
             if (!this.IsEncoding)
@@ -1049,10 +1045,9 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Create the Queue Task and Start Processing
-            QueueTask task = new QueueTask(null)
+            QueueTask task = new QueueTask
                 {
                     Task = new EncodeTask(this.CurrentTask),
-                    Query = QueryGeneratorUtility.GenerateQuery(new EncodeTask(this.CurrentTask)),
                     CustomQuery = false
                 };
             this.queueProcessor.QueueManager.Add(task);
