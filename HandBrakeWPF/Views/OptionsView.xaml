@@ -70,31 +70,22 @@
                         <TextBlock Text="General" FontSize="16" />
                     </Border>
 
-                    <Grid Margin="10,10,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Vertical" Margin="0,10,0,20">
 
-                        <TextBlock Text="At Launch:" Grid.Column="0" FontWeight="Bold"/>
+                        <TextBlock Text="On Startup" Grid.Column="0" FontSize="14" Margin="0,0,0,10"/>
 
-                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                        <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
                             <CheckBox Content="Check for Updates" IsChecked="{Binding CheckForUpdates}" />
                             <ComboBox Name="checkForUpdateFrequency" ItemsSource="{Binding CheckForUpdatesFrequencies}" SelectedIndex="{Binding CheckForUpdatesFrequency}" Margin="25,0,0,5" HorizontalAlignment="Left" Width="120"></ComboBox>
 
                             <CheckBox Content="Enable Tooltips"  Visibility="Collapsed"  IsChecked="{Binding EnableGuiTooltips}" />
                         </StackPanel>
-                    </Grid>
+                    </StackPanel>
 
-                    <Grid Margin="10,10,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Vertical" Margin="0,0,0,20">
+                        <TextBlock Text="When Done" Grid.Column="0" FontSize="14" Margin="0,0,0,10" />
 
-                        <TextBlock Text="When Done:" Grid.Column="0" FontWeight="Bold"/>
-
-                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                        <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
                             <ComboBox Name="whenDone" ItemsSource="{Binding WhenDoneOptions}" SelectedItem="{Binding WhenDone}" Width="120"  HorizontalAlignment="Left"></ComboBox>
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
@@ -110,31 +101,27 @@
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                 <TextBlock VerticalAlignment="Center"  Margin="25,0,5,0" Text="Arguments:" />
-                                <TextBox Name="SendToArguments" Text="{Binding Arguments}" Width="180" />
+                                <TextBox Name="SendToArguments" Text="{Binding Arguments}" Width="250" />
                             </StackPanel>
 
                         </StackPanel>
-                    </Grid>
+                    </StackPanel>
 
-                    <Grid Margin="10,10,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Vertical" Margin="0,0,0,20">
 
-                        <TextBlock Text="VLC Path:" Grid.Column="0" FontWeight="Bold"/>
+                        <TextBlock Text="Path to VLC Player" Grid.Column="0" FontSize="14" Margin="0,0,0,10"/>
 
-                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                        <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
 
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" Text="Path:" />
-                                <TextBox Name="vlcPath" Text="{Binding VLCPath}"  Width="180" />
+                                <TextBox Name="vlcPath" Text="{Binding VLCPath}"  Width="250" />
                                 <Button Content="Browse" cal:Message.Attach="[Event Click] = [Action BrowseVlcPath]" Margin="5,0,0,0" Width="55"/>
                             </StackPanel>
                             <TextBlock Text="This path is used for the video preview feature only." />
 
                         </StackPanel>
-                    </Grid>
+                    </StackPanel>
                 </StackPanel>
 
                 <StackPanel Name="Output" Orientation="Vertical" Margin="10,10,0,0"
@@ -143,16 +130,12 @@
                     <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
                         <TextBlock Text="Output Files" FontSize="16" />
                     </Border>
-                    
-                    <Grid Margin="10,10,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="Output Files:" Grid.Column="0" FontWeight="Bold"/>
+                    <StackPanel Orientation="Vertical" Margin="0,10,0,20">
 
-                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                        <TextBlock Text="Automatic File Naming" Grid.Column="0" FontSize="14" Margin="0,0,0,10"/>
+
+                        <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
                             <CheckBox Content="Automatically name output files" IsChecked="{Binding AutomaticallyNameFiles}" />
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
@@ -178,7 +161,7 @@
                                 <ComboBox Name="mp4FileExtension" Width="120" ItemsSource="{Binding Mp4ExtensionOptions}" SelectedIndex="{Binding SelectedMp4Extension}" HorizontalAlignment="Left"></ComboBox>
                             </StackPanel>
                         </StackPanel>
-                    </Grid>
+                    </StackPanel>
                 </StackPanel>
 
                 <StackPanel Name="Audio" Orientation="Vertical" Margin="10,10,0,0"
@@ -188,9 +171,9 @@
                         <TextBlock Text="Automatic Language Selection" FontSize="16" />
                     </Border>
                     
-                    <TextBlock Text="Automatic Selection" Grid.Column="0" Margin="10,10,0,0" FontWeight="Bold"/>
+                    <TextBlock Text="Audio and Subtitle Language Selection" Grid.Column="0" Margin="10,10,0,0" FontSize="14"/>
 
-                    <Grid Margin="10,10,0,0">
+                    <Grid Margin="20,10,0,0" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="140" />
                             <ColumnDefinition Width="*" />
@@ -205,7 +188,7 @@
                         </StackPanel>
                     </Grid>
 
-                    <Grid Margin="10,10,0,0">
+                    <Grid Margin="20,10,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100" />
                             <ColumnDefinition Width="*" />
@@ -260,7 +243,7 @@
                         </StackPanel>
                     </Grid>
 
-                    <GroupBox Header="Add Additional Tracks" >
+                    <GroupBox Header="Add Additional Tracks" Margin="20,0,10,0" >
                         <StackPanel Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Audio:" VerticalAlignment="Center" Margin="15,0,5,0" Width="100" />
@@ -278,9 +261,9 @@
                     </GroupBox>
 
                     <StackPanel Orientation="Vertical">
-                        <Label Content="Audio Tab Options" FontWeight="Bold" />
+                        <Label Content="Audio Tab Options" FontSize="14"/>
                         <CheckBox IsChecked="{Binding ShowAdvancedPassthruOpts}" Content="Show advanced audio passthru options. (Requires Restart)"
-                                  Margin="5,0,0,0" />
+                                  Margin="20,0,0,0" />
                     </StackPanel>
 
                 </StackPanel>
@@ -291,15 +274,13 @@
                     <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
                         <TextBlock Text="Advanced" FontSize="16" />
                     </Border>
-                    
-                    <Grid Margin="10,10,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="GUI:" Grid.Column="0" FontWeight="Bold"/>
-                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                    <StackPanel Orientation="Vertical" Margin="0,10,0,20">
+
+                        <TextBlock Text="Advanced Options" Grid.Column="0" FontSize="14" Margin="0,0,0,10"/>
+                        
+                        <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
+                            <CheckBox Content="Prevent the system from sleeping while encoding" IsChecked="{Binding PreventSleep}" />
                             <CheckBox Content="Minimize to system tray (Requires Restart)" Visibility="Collapsed" IsChecked="{Binding MinimiseToTray}" />
                             <CheckBox Content="Display status messages from tray icon (balloon popups)"  Visibility="Collapsed"  IsChecked="{Binding DisplayStatusMessagesTrayIcon}" />
                             <CheckBox Content="Disable built-in preset update notification" IsChecked="{Binding DisablePresetUpdateCheckNotification}" />
@@ -314,69 +295,37 @@
                                 <TextBox Name="MinTitleLength" Text="{Binding MinLength}"  Width="120"/>
                                 <!-- Find a control for this-->
                             </StackPanel>
+                            <StackPanel Orientation="Horizontal" Grid.Column="1">
+                                <TextBlock Text="Priority Level:" VerticalAlignment="Center" />
+                                <ComboBox Name="processPriorityLevel" ItemsSource="{Binding PriorityLevelOptions}" SelectedItem="{Binding SelectedPriority}" Width="120" />
+                            </StackPanel>
 
                         </StackPanel>
-                    </Grid>
+                    </StackPanel>
 
-                    <Grid Margin="10,0,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="x264:" Grid.Column="0" FontWeight="Bold"/>
-                        <StackPanel Orientation="Horizontal" Grid.Column="1">
+                    <StackPanel Orientation="Vertical" Margin="0,10,0,20">
+                        <TextBlock Text="x264 Settings" Grid.Column="0" FontSize="14" Margin="0,0,0,10"/>
+                        <StackPanel Orientation="Horizontal" Grid.Column="1"  Margin="20,0,0,0">
                             <TextBlock Text="Constant quality fractional granularity:" VerticalAlignment="Center" Width="250" />
                             <ComboBox Name="x264Granularity" ItemsSource="{Binding ConstantQualityGranularity}" SelectedItem="{Binding SelectedGranulairty}" Width="120"/>
                         </StackPanel>
-                    </Grid>
+                    </StackPanel>
 
-                    <Grid Margin="10,0,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Vertical" Margin="0,10,0,20">
 
-                        <TextBlock Text="DVD:" Grid.Column="0" FontWeight="Bold"/>
+                        <TextBlock Text="DVD Reading" Grid.Column="0" FontSize="14" Margin="0,0,0,10"/>
 
-                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                        <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
                             <CheckBox Content="Disable LibDVDNav. (libdvdread will be used instead)" IsChecked="{Binding DisableLibdvdNav}" />
                         </StackPanel>
 
-                    </Grid>
+                    </StackPanel>
 
-                    <Grid Margin="10,10,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Vertical" Margin="0,10,0,20">
 
-                        <TextBlock Text="CLI:" Grid.Column="0" FontWeight="Bold"/>
-                        <StackPanel Orientation="Horizontal" Grid.Column="1">
-                            <TextBlock Text="Priority Level:" VerticalAlignment="Center" />
-                            <ComboBox Name="processPriorityLevel" ItemsSource="{Binding PriorityLevelOptions}" SelectedItem="{Binding SelectedPriority}" Width="120" />
-                        </StackPanel>
-                    </Grid>
+                        <TextBlock Text="Logging" Grid.Column="0" FontSize="14" Margin="0,0,0,10"/>
 
-                    <Grid Margin="10,10,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="System:" Grid.Column="0" FontWeight="Bold"/>
-                        <StackPanel Orientation="Horizontal" Grid.Column="1">
-                            <CheckBox Content="Prevent the system from sleeping while encoding" IsChecked="{Binding PreventSleep}" />
-                        </StackPanel>
-                    </Grid>
-
-                    <Grid Margin="10,10,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="Logs:" Grid.Column="0" FontWeight="Bold"/>
-
-                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                        <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
                             <StackPanel Orientation="Horizontal" Grid.Column="1">
                                 <TextBlock Text="Log Verbosity Level:" VerticalAlignment="Center" />
                                 <ComboBox Name="logVerbosityLevel" ItemsSource="{Binding LogVerbosityOptions}" SelectedItem="{Binding SelectedVerbosity}" Width="120" />
@@ -397,7 +346,7 @@
                             <CheckBox Content="Clear Log files older than 30 days " Margin="0,5,0,0" IsChecked="{Binding ClearOldOlgs}" />
                         </StackPanel>
 
-                    </Grid>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
