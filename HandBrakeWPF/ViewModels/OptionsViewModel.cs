@@ -310,6 +310,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool clearQueueOnEncodeCompleted;
 
+        /// <summary>
+        /// The options tab that is selected.
+        /// </summary>
+        private string selectedTab;
+
         #endregion
 
         #region Constructors and Destructors
@@ -332,8 +337,41 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService = userSettingService;
             this.shellViewModel = shellViewModel;
             this.OnLoad();
+
+            this.SelectedTab = "General";
         }
 
+        #endregion
+
+        #region Window Properties
+
+        /// <summary>
+        /// Gets OptionTabs.
+        /// </summary>
+        public IEnumerable<string> OptionTabs
+        {
+            get
+            {
+                return new List<string> { "General", "Output Files", "Language", "Advanced" };
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets SelectedTab.
+        /// </summary>
+        public string SelectedTab
+        {
+            get
+            {
+                return this.selectedTab;
+            }
+
+            set
+            {
+                this.selectedTab = value;
+                this.NotifyOfPropertyChange(() => this.SelectedTab);
+            }
+        }
         #endregion
 
         #region Properties
