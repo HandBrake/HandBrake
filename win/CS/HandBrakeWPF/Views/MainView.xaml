@@ -610,15 +610,6 @@
                    Padding="0,0,0,5"
                    />
 
-            <Button Content="BETA WPF UI RELEASE NOTES"
-                    FontSize="11"
-                    FontWeight="Bold"
-                    Foreground="Blue"
-                    Micro:Message.Attach="[Event Click] = [Action ShowReleaseNotes]"
-                    Padding="0,0,0,5"
-                    />
-
-
         </StatusBar>
     </Grid>
 </UserControl>

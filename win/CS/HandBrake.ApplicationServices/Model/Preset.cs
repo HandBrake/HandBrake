@@ -29,11 +29,6 @@ namespace HandBrake.ApplicationServices.Model
         /// </summary>
         public string Query { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether to use picture Settings in presets.
-        /// </summary>
-        [Obsolete("Don't use this!")]
-        public bool CropSettings { get; set; }
 
         /// <summary>
         /// Gets or sets The version number which associates this preset with a HB build

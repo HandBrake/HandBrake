@@ -14,7 +14,6 @@ namespace HandBrakeWPF.ViewModels
     using System.ComponentModel;
     using System.ComponentModel.Composition;
     using System.Diagnostics;
-    using System.Drawing;
     using System.IO;
     using System.Linq;
     using System.Windows;
@@ -24,7 +23,6 @@ namespace HandBrakeWPF.ViewModels
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices;
-    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
@@ -34,7 +32,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
-    using HandBrakeWPF.Views;
 
     using Ookii.Dialogs.Wpf;
 
@@ -304,7 +301,6 @@ namespace HandBrakeWPF.ViewModels
                     };
                 fileMenuItem.Click += this.fileMenuItem_Click;
                 menuItems.Add(fileMenuItem);
-
 
                 // File Menu Item
                 MenuItem titleSpecific = new MenuItem { Header = new TextBlock { Text = "Title Specific Scan", Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center } };
@@ -1284,16 +1280,6 @@ namespace HandBrakeWPF.ViewModels
         public void SetSelectedPreset(RoutedPropertyChangedEventArgs<object> e)
         {
             this.SelectedPreset = e.NewValue as Preset;
-        }
-
-        /// <summary>
-        /// Show Release Notes
-        /// </summary>
-        public void ShowReleaseNotes()
-        {
-            string path =
-                Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-            Process.Start(path + "\\releasenotes.html");
         }
 
         #endregion
