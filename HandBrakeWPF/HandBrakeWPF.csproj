@@ -354,10 +354,6 @@
     <Content Include="defaultsettings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="releasenotes.html">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Resource Include="Views\Images\Refresh.ico" />
     <Resource Include="Views\Images\WarningSmall.png" />
     <Resource Include="Views\Images\Complete.png" />
@@ -414,10 +410,6 @@
     <ProjectReference Include="..\HandBrake.Interop\HandBrakeInterop\HandBrakeInterop.csproj">
       <Project>{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}</Project>
       <Name>HandBrakeInterop</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HandBrakeCS.csproj">
-      <Project>{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}</Project>
-      <Name>HandBrakeCS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

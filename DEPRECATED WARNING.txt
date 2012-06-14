@@ -1,3 +1,0 @@
-﻿!!!!  WARNING  !!!!
-The Winforms GUI is being retired. It is currently being shipped as a fallback option only until the WPF UI becomes stable.
-All development should be done on the WPF UI!

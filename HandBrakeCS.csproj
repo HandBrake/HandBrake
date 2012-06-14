@@ -10,7 +10,8 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Handbrake</RootNamespace>
     <AssemblyName>Handbrake_old</AssemblyName>
-    <ApplicationIcon>handbrakepineapple.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
     <StartupObject>Handbrake.Program</StartupObject>
     <TargetZone>LocalIntranet</TargetZone>
     <GenerateManifests>false</GenerateManifests>
@@ -106,183 +107,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\AudioPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\AudioPanel.Designer.cs">
-      <DependentUpon>AudioPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\AdvancedEncoderOpts.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\AdvancedEncoderOpts.Designer.cs">
-      <DependentUpon>AdvancedEncoderOpts.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Filters.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\Filters.Designer.cs">
-      <DependentUpon>Filters.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\PictureSettings.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\PictureSettings.designer.cs">
-      <DependentUpon>PictureSettings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Subtitles.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\Subtitles.Designer.cs">
-      <DependentUpon>Subtitles.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\x264Panel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\x264Panel.Designer.cs">
-      <DependentUpon>x264Panel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmPreview.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmPreview.Designer.cs">
-      <DependentUpon>frmPreview.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Functions\ToolStripRenderOverride.cs" />
-    <Compile Include="Model\ActivityLogMode.cs" />
-    <Compile Include="Model\QueryPictureSettingsMode.cs" />
-    <Compile Include="Model\QueryEncodeMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="frmAbout.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmAbout.Designer.cs">
-      <DependentUpon>frmAbout.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmAddPreset.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmAddPreset.Designer.cs">
-      <DependentUpon>frmAddPreset.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmMain.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmMain.Designer.cs">
-      <DependentUpon>frmMain.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmOptions.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmOptions.Designer.cs">
-      <DependentUpon>frmOptions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmQueue.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmQueue.Designer.cs">
-      <DependentUpon>frmQueue.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Functions\PresetLoader.cs" />
-    <Compile Include="Functions\QueryGenerator.cs" />
-    <Compile Include="Functions\Main.cs" />
-    <Compile Include="frmActivityWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmActivityWindow.Designer.cs">
-      <DependentUpon>frmActivityWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Model\SourceType.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="ToolWindows\AdvancedAudio.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ToolWindows\AdvancedAudio.Designer.cs">
-      <DependentUpon>AdvancedAudio.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ToolWindows\BatchAdd.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ToolWindows\BatchAdd.Designer.cs">
-      <DependentUpon>BatchAdd.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ToolWindows\DownloadUpdate.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ToolWindows\DownloadUpdate.Designer.cs">
-      <DependentUpon>DownloadUpdate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ToolWindows\ExceptionWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ToolWindows\ExceptionWindow.designer.cs">
-      <DependentUpon>ExceptionWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ToolWindows\TitleSpecificScan.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ToolWindows\TitleSpecificScan.Designer.cs">
-      <DependentUpon>TitleSpecificScan.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ToolWindows\UpdateInfo.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ToolWindows\UpdateInfo.Designer.cs">
-      <DependentUpon>UpdateInfo.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserSettingConstants.cs" />
-    <EmbeddedResource Include="Controls\AudioPanel.resx">
-      <DependentUpon>AudioPanel.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\AdvancedEncoderOpts.resx">
-      <DependentUpon>AdvancedEncoderOpts.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Filters.resx">
-      <DependentUpon>Filters.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\PictureSettings.resx">
-      <DependentUpon>PictureSettings.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Subtitles.resx">
-      <DependentUpon>Subtitles.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\x264Panel.resx">
-      <DependentUpon>x264Panel.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmPreview.resx">
-      <DependentUpon>frmPreview.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmAbout.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>frmAbout.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmAddPreset.resx">
-      <DependentUpon>frmAddPreset.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmMain.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>frmMain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmOptions.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>frmOptions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmQueue.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>frmQueue.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmActivityWindow.resx">
-      <DependentUpon>frmActivityWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -293,71 +118,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="ToolWindows\AdvancedAudio.resx">
-      <DependentUpon>AdvancedAudio.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ToolWindows\BatchAdd.resx">
-      <DependentUpon>BatchAdd.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ToolWindows\DownloadUpdate.resx">
-      <DependentUpon>DownloadUpdate.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ToolWindows\ExceptionWindow.resx">
-      <DependentUpon>ExceptionWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ToolWindows\TitleSpecificScan.resx">
-      <DependentUpon>TitleSpecificScan.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ToolWindows\UpdateInfo.resx">
-      <DependentUpon>UpdateInfo.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <None Include="app.config" />
-    <None Include="Installer\Installer64.nsi" />
-    <None Include="Installer\MakeNightly64.nsi.tmpl" />
-    <None Include="Installer\MakeNightly.nsi.tmpl" />
-    <None Include="Installer\Installer.nsi" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DEPRECATED WARNING.txt" />
-    <Content Include="handbrakepineapple.ico" />
-    <Content Include="defaultsettings.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Properties\AssemblyInfo.cs.tmpl" />
-    <None Include="Resources\logo64.png" />
-    <None Include="Resources\logo128.png" />
-    <None Include="Resources\ActivityWindow.png" />
-    <None Include="Resources\AddToQueue.png" />
-    <Content Include="Resources\ActivityWindow_small.png" />
-    <None Include="Resources\AddToQueue_small.png" />
-    <None Include="Resources\Add16.png" />
-    <Content Include="Resources\copy.png" />
-    <Content Include="Resources\disc_small.png" />
-    <None Include="Resources\hb32.png" />
-    <None Include="Resources\hb16.png" />
-    <None Include="Resources\Help16.png" />
-    <None Include="Resources\info16.png" />
-    <None Include="Resources\folder.png" />
-    <None Include="Resources\download.png" />
-    <None Include="Resources\ErrorX.png" />
-    <None Include="Resources\Help32.png" />
-    <None Include="Resources\Help24.png" />
-    <None Include="Resources\Options24.png" />
-    <Content Include="Resources\Output_Small.png" />
-    <None Include="Resources\Pause.png" />
-    <None Include="Resources\Play.png" />
-    <None Include="Resources\picture.png" />
-    <None Include="Resources\Play_small.png" />
-    <Content Include="Resources\Pref_Small.png" />
-    <Content Include="Resources\Queue.png" />
-    <Content Include="Resources\Queue_Small.png" />
-    <Content Include="Resources\window.png" />
-    <None Include="Resources\save.png" />
-    <None Include="Resources\stop.png" />
-    <None Include="Resources\Movies.png" />
-    <None Include="Resources\General Preferences.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
