@@ -23,7 +23,6 @@
     <ProjectsToBuild Include="HandBrake.Interop\HandBrakeInterop\*proj" Exclude="$(MSBuildProjectFile)"/>
     <ProjectsToBuild Include="HandBrake.ApplicationServices\*proj" Exclude="$(MSBuildProjectFile)"/>
     <ProjectsToBuild Include="HandBrakeWPF\HandBrakeWPF.*proj" Exclude="$(MSBuildProjectFile)"/>
-    <ProjectsToBuild Include="HandBrakeWPF\HandBrakeCS.*proj" Exclude="$(MSBuildProjectFile)"/>
   </ItemGroup>
 
   <!-- Dependencies -->
@@ -39,7 +38,7 @@
   <Target Name="Nightly" DependsOnTargets="$(NightlyDependsOn)"/>
   <Target Name="Release" DependsOnTargets="$(InstallDependsOn)"/>
 
-  <!-- Build All Components (Forms, WPF, ApplicationServices, Interop -->
+  <!-- Build All Components (WPF, ApplicationServices, Interop -->
   <Target Name="BuildRelease">
     <MSBuild Projects ="@(ProjectsToBuild)"
              ContinueOnError ="false"
