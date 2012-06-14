@@ -7,12 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.IO;
-
 namespace HandBrake.ApplicationServices.Model.Encoding
 {
     using System;
-    using System.Windows.Forms;
 
     using Caliburn.Micro;
 
@@ -129,25 +126,6 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             get
             {
                 return this.SrtFileName != "-" && this.SrtFileName != null;
-            }
-        }
-
-        /// <summary>
-        ///   Gets A ListViewItem Containing information about this subitlte
-        /// </summary>
-        [Obsolete("Used only for the old forms gui. Will be removed.")]
-        public ListViewItem ListView
-        {
-            get
-            {
-                var listTrack = new ListViewItem(this.Track);
-                listTrack.SubItems.Add(this.Forced ? "Yes" : "No");
-                listTrack.SubItems.Add(this.Burned ? "Yes" : "No");
-                listTrack.SubItems.Add(this.Default ? "Yes" : "No");
-                listTrack.SubItems.Add(this.SrtLang);
-                listTrack.SubItems.Add(this.SrtCharCode);
-                listTrack.SubItems.Add(this.SrtOffset.ToString());
-                return listTrack;
             }
         }
 

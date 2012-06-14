@@ -151,7 +151,6 @@ namespace HandBrake.ApplicationServices.Services
                 {
                     preset.Query = update.Query;
                     preset.Task = update.Task;
-                    preset.CropSettings = update.CropSettings;
                     preset.UsePictureFilters = update.UsePictureFilters;
 
                     // Update the presets file
@@ -297,15 +296,12 @@ namespace HandBrake.ApplicationServices.Services
                             Regex r = new Regex("(:  )"); // Split on hyphens. 
                             string[] presetName = r.Split(line);
 
-                            bool pic = presetName[2].Contains("crop");
-
                             Preset newPreset = new Preset
                                 {
                                     Category = category,
                                     Name = presetName[0].Replace("+", string.Empty).Trim(),
                                     Query = presetName[2],
                                     Version = this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion),
-                                    CropSettings = pic,
                                     Description = string.Empty, // Maybe one day we will populate this.
                                     IsBuildIn = true,
                                     UsePictureFilters = true,

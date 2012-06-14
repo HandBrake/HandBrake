@@ -1,10 +1,16 @@
-﻿namespace HandBrake.ApplicationServices
-{
-    using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ServiceManager.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Tempory Class which manages services until Windosor is added back into the project to handle it for us.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
+namespace HandBrake.ApplicationServices
+{
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop;
 
@@ -13,11 +19,6 @@
     /// </summary>
     public class ServiceManager
     {
-        /// <summary>
-        /// Backing Field for the User Setting Service.
-        /// </summary>
-        private static IUserSettingService userSettingService;
-
         /// <summary>
         /// The Backing field for HandBrake Instance.
         /// </summary>
@@ -30,16 +31,7 @@
         {
             get
             {
-                try
-                {
-                    return IoC.Get<IUserSettingService>();
-                }
-                catch (NullReferenceException)
-                {
-                    // Hack until this legacy code for the forms gui is removed!
-                }
-
-                return userSettingService ?? (userSettingService = new UserSettingService());
+                return IoC.Get<IUserSettingService>();
             }
         }
 
