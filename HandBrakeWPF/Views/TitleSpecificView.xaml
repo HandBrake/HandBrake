@@ -1,13 +1,17 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.TitleSpecificView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:NumericUpDown="clr-namespace:EagleBoost.Wpf.Presentation.Controls.NumericUpDown;assembly=EagleBoost.Wpf.Presentation"
-             xmlns:cal="http://www.caliburnproject.org" mc:Ignorable="d" Title="Scan Title"
-             Width="250"  SizeToContent="Height"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:cal="http://www.caliburnproject.org"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:NumericUpDown="clr-namespace:EagleBoost.Wpf.Presentation.Controls.NumericUpDown;assembly=EagleBoost.Wpf.Presentation"
+        Title="Scan Title"
+        Width="250"
         Background="#FFF1F0EF"
-            >
+        ResizeMode="NoResize"
+        SizeToContent="Height"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -15,22 +19,50 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <StackPanel Orientation="Horizontal" Grid.Row="0"  Background="White" Height="30" Margin="0,0,0,10" >
-            <Image Source="Images/Movies.png" Margin="10,0,5,0" Width="24" Height="24" VerticalAlignment="Center" />
-            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                <TextBlock Text="Title Specific Scan" FontWeight="Bold" />
+        <!--  Header  -->
+        <StackPanel Grid.Row="0"
+                    Height="30"
+                    Margin="0,0,0,10"
+                    Background="White"
+                    Orientation="Horizontal">
+            <Image Width="24"
+                   Height="24"
+                   Margin="10,0,5,0"
+                   VerticalAlignment="Center"
+                   Source="Images/Movies.png" />
+            <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+                <TextBlock FontWeight="Bold" Text="Title Specific Scan" />
             </StackPanel>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,10,0,10">
+        <StackPanel Grid.Row="1"
+                    Margin="10,10,0,10"
+                    Orientation="Horizontal">
             <TextBlock Text="Choose a title to scan:" />
-            <NumericUpDown:NumericUpDown Value="{Binding SelectedTitle, Mode=TwoWay}" Minimum="0" Maximum="1000" Width="60" Margin="10,0,0,0" />
+            <NumericUpDown:NumericUpDown Width="60"
+                                         Margin="10,0,0,0"
+                                         Maximum="1000"
+                                         Minimum="0"
+                                         Value="{Binding SelectedTitle,
+                                                         Mode=TwoWay}" />
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" Margin="0,0,0,10">
-            <Button Name="Cancel" IsCancel="True" Content="Cancel" cal:Message.Attach="[Event Click] = [Action Cancel]" Padding="8,1" Margin="0,0,10,0" />
-            <Button Name="OpenTitle" IsDefault="True" Content="Open Title" cal:Message.Attach="[Event Click] = [Action Open]" Padding="8,1" Margin="0,0,10,0" />
+        <StackPanel Grid.Row="2"
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+            <Button Name="Cancel"
+                    Margin="0,0,10,0"
+                    cal:Message.Attach="[Event Click] = [Action Cancel]"
+                    Content="Cancel"
+                    IsCancel="True"
+                    Padding="8,1" />
+            <Button Name="OpenTitle"
+                    Margin="0,0,10,0"
+                    cal:Message.Attach="[Event Click] = [Action Open]"
+                    Content="Open Title"
+                    IsDefault="True"
+                    Padding="8,1" />
         </StackPanel>
 
     </Grid>

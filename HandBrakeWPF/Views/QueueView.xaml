@@ -1,14 +1,22 @@
 ﻿<Window x:Class="HandBrakeWPF.Views.QueueView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:cal="http://www.caliburnproject.org"
-             xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:cal="http://www.caliburnproject.org"
+        xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
-        xmlns:YourNamespace="clr-namespace:HandBrakeWPF.AttachedProperties" mc:Ignorable="d" Title="{Binding Title}" 
-             Width="600" Height="400"
-             Background="#FFF0F0F0">
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:YourNamespace="clr-namespace:HandBrakeWPF.AttachedProperties"
+        Title="{Binding Title}"
+        Width="600"
+        Height="400"
+        MinWidth="600"
+        MinHeight="400"
+        MaxWidth="600"
+        Background="#FFF0F0F0"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d">
 
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
@@ -17,60 +25,105 @@
         <Converters:QueueStatusToVisibilityConverter x:Key="queueStatusVisConverter" />
     </Window.Resources>
 
-    <Grid >
+    <Grid>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <ToolBar Name="mainToolBar" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  SnapsToDevicePixels="True">
+        <ToolBar Name="mainToolBar"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Stretch"
+                 SnapsToDevicePixels="True">
 
-            <DockPanel Background="Transparent" Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ToolBarPanel}}}">
+            <DockPanel Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ToolBarPanel}}}" Background="Transparent">
                 <DockPanel.Resources>
-                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" />
-                    <Style TargetType="{x:Type Menu}" BasedOn="{StaticResource {x:Static ToolBar.MenuStyleKey}}" />
+                    <Style BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" TargetType="{x:Type Button}" />
+                    <Style BasedOn="{StaticResource {x:Static ToolBar.MenuStyleKey}}" TargetType="{x:Type Menu}" />
                 </DockPanel.Resources>
 
-                <Button Name="Start" cal:Message.Attach="[Event Click] = [Action StartEncode]" 
-                    Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
+                <Button Name="Start"
+                        cal:Message.Attach="[Event Click] = [Action StartEncode]"
+                        Visibility="{Binding IsEncoding,
+                                             Converter={StaticResource boolToVisConverter},
+                                             ConverterParameter=true}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="Images/Play.png" Height="32" Width="32" />
-                        <Label Content="Start"  Margin="8,0,0,0" VerticalAlignment="Center" />
+                        <Image Width="32"
+                               Height="32"
+                               Source="Images/Play.png" />
+                        <Label Margin="8,0,0,0"
+                               VerticalAlignment="Center"
+                               Content="Start" />
                     </StackPanel>
                 </Button>
 
-                <Button Name="Pause" cal:Message.Attach="[Event Click] = [Action PauseEncode]" 
-                    Visibility="{Binding IsEncoding, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
+                <Button Name="Pause"
+                        cal:Message.Attach="[Event Click] = [Action PauseEncode]"
+                        Visibility="{Binding IsEncoding,
+                                             Converter={StaticResource boolToVisConverter},
+                                             ConverterParameter=false}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="Images/Pause.png" Height="32" Width="32" />
-                        <Label Content="Pause"  Margin="8,0,0,0" VerticalAlignment="Center" />
+                        <Image Width="32"
+                               Height="32"
+                               Source="Images/Pause.png" />
+                        <Label Margin="8,0,0,0"
+                               VerticalAlignment="Center"
+                               Content="Pause" />
                     </StackPanel>
                 </Button>
 
-                <Menu Background="Transparent" HorizontalAlignment="Right">
+                <Menu HorizontalAlignment="Right" Background="Transparent">
                     <MenuItem>
                         <MenuItem.Header>
-                            <StackPanel Orientation="Horizontal" Height="32">
-                                <TextBlock FontWeight="Bold" Text="When Done: " VerticalAlignment="Center" />
-                                <Label Content="{Binding WhenDoneAction}" Margin="8,0,0,0" VerticalAlignment="Center" />
-                                <Path Fill="{DynamicResource GlyphBrush}" Data="M 0 0 L 4 4 L 8 0 Z"  Height="5" Margin="2,2,2,0"/>
+                            <StackPanel Height="32" Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center"
+                                           FontWeight="Bold"
+                                           Text="When Done: " />
+                                <Label Margin="8,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Content="{Binding WhenDoneAction}" />
+                                <Path Height="5"
+                                      Margin="2,2,2,0"
+                                      Data="M 0 0 L 4 4 L 8 0 Z"
+                                      Fill="{DynamicResource GlyphBrush}" />
                             </StackPanel>
                         </MenuItem.Header>
-                        <MenuItem Header="Do nothing" IsCheckable="True" YourNamespace:MenuItemExtensions.GroupName="whenDone"  
-                              cal:Message.Attach="[Event Click] = [Action WhenDone(doNothing.Header)]" x:Name="doNothing" />
-                        <MenuItem Header="Shutdown" IsCheckable="True" YourNamespace:MenuItemExtensions.GroupName="whenDone" 
-                              cal:Message.Attach="[Event Click] = [Action WhenDone(shutdown.Header)]" x:Name="shutdown" />
-                        <MenuItem Header="Suspend" IsCheckable="True" YourNamespace:MenuItemExtensions.GroupName="whenDone"
-                              cal:Message.Attach="[Event Click] = [Action WhenDone(suspend.Header)]" x:Name="suspend" />
-                        <MenuItem Header="Hibernate" IsCheckable="True" YourNamespace:MenuItemExtensions.GroupName="whenDone"
-                              cal:Message.Attach="[Event Click] = [Action WhenDone(hibernate.Header)]" x:Name="hibernate" />
-                        <MenuItem Header="Lock system" IsCheckable="True" YourNamespace:MenuItemExtensions.GroupName="whenDone" 
-                              cal:Message.Attach="[Event Click] = [Action WhenDone(lock.Header)]" x:Name="lock" />            
-                        <MenuItem Header="Log off" IsCheckable="True" YourNamespace:MenuItemExtensions.GroupName="whenDone"
-                              cal:Message.Attach="[Event Click] = [Action WhenDone(logoff.Header)]" x:Name="logoff" />
-                        <MenuItem Header="Quit HandBrake" IsCheckable="True" YourNamespace:MenuItemExtensions.GroupName="whenDone"
-                              cal:Message.Attach="[Event Click] = [Action WhenDone(quit.Header)]" x:Name="quit" />
+                        <MenuItem x:Name="doNothing"
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(doNothing.Header)]"
+                                  Header="Do nothing"
+                                  IsCheckable="True"
+                                  YourNamespace:MenuItemExtensions.GroupName="whenDone" />
+                        <MenuItem x:Name="shutdown"
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(shutdown.Header)]"
+                                  Header="Shutdown"
+                                  IsCheckable="True"
+                                  YourNamespace:MenuItemExtensions.GroupName="whenDone" />
+                        <MenuItem x:Name="suspend"
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(suspend.Header)]"
+                                  Header="Suspend"
+                                  IsCheckable="True"
+                                  YourNamespace:MenuItemExtensions.GroupName="whenDone" />
+                        <MenuItem x:Name="hibernate"
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(hibernate.Header)]"
+                                  Header="Hibernate"
+                                  IsCheckable="True"
+                                  YourNamespace:MenuItemExtensions.GroupName="whenDone" />
+                        <MenuItem x:Name="lock"
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(lock.Header)]"
+                                  Header="Lock system"
+                                  IsCheckable="True"
+                                  YourNamespace:MenuItemExtensions.GroupName="whenDone" />
+                        <MenuItem x:Name="logoff"
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(logoff.Header)]"
+                                  Header="Log off"
+                                  IsCheckable="True"
+                                  YourNamespace:MenuItemExtensions.GroupName="whenDone" />
+                        <MenuItem x:Name="quit"
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(quit.Header)]"
+                                  Header="Quit HandBrake"
+                                  IsCheckable="True"
+                                  YourNamespace:MenuItemExtensions.GroupName="whenDone" />
                     </MenuItem>
                 </Menu>
             </DockPanel>
@@ -81,17 +134,22 @@
             <TextBlock Text="{Binding JobStatus}" />
         </StackPanel>
 
-        <ListBox Grid.Row="2" ItemsSource="{Binding QueueJobs}" SelectionMode="Extended" Background="LightGray" Margin="10,0,10,10"
-                 dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"
-                 dd:DragDrop.DropHandler="{Binding}">
+        <ListBox Grid.Row="2"
+                 Margin="10,0,10,10"
+                 Background="LightGray"
+                 dd:DragDrop.DropHandler="{Binding}"
+                 dd:DragDrop.IsDragSource="True"
+                 dd:DragDrop.IsDropTarget="True"
+                 ItemsSource="{Binding QueueJobs}"
+                 SelectionMode="Extended">
 
             <ListBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Import Queue" cal:Message.Attach="[Event Click] = [Action Import]" />
-                    <MenuItem Header="Export Queue" cal:Message.Attach="[Event Click] = [Action Export]" />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action Import]" Header="Import Queue" />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="Export Queue" />
                     <Separator />
-                    <MenuItem Header="Clear" cal:Message.Attach="[Event Click] = [Action Clear]" />
-                    <MenuItem Header="Clear Completed" cal:Message.Attach="[Event Click] = [Action ClearCompleted]" />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="Clear" />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="Clear Completed" />
                 </ContextMenu>
             </ListBox.ContextMenu>
 
@@ -106,70 +164,83 @@
             <ListBox.ItemTemplate>
                 <DataTemplate x:Name="QueueItemTemplate">
 
-                    <Grid HorizontalAlignment="Stretch" >
+                    <Grid HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <!-- Marker -->
-                        <Image Width="16" Height="16" Grid.Column="0" Margin="10,0,10,0" >
+                        <!--  Marker  -->
+                        <Image Grid.Column="0"
+                               Width="16"
+                               Height="16"
+                               Margin="10,0,10,0">
                             <Image.Style>
                                 <Style TargetType="{x:Type Image}">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Waiting">
-                                            <Setter Property="Source" Value="Images\Movies.png"/>
+                                            <Setter Property="Source" Value="Images\Movies.png" />
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="In Progress">
-                                            <Setter Property="Source" Value="Images\Working0.png"/>
+                                            <Setter Property="Source" Value="Images\Working0.png" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Completed" >
-                                            <Setter Property="Source" Value="Images\Complete.png"/>
+                                        <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Completed">
+                                            <Setter Property="Source" Value="Images\Complete.png" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Error" >
-                                            <Setter Property="Source" Value="Images\WarningSmall.png"/>
+                                        <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Error">
+                                            <Setter Property="Source" Value="Images\WarningSmall.png" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </Image.Style>
                         </Image>
 
-                        <!-- Settings -->
-                        <StackPanel Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,5,0,5">
+                        <!--  Settings  -->
+                        <StackPanel Grid.Column="1"
+                                    Margin="0,5,0,5"
+                                    HorizontalAlignment="Stretch">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Title: " FontWeight="Bold" />
-                                <TextBlock Text="{Binding Task.Title}"/>
+                                <TextBlock FontWeight="Bold" Text="Title: " />
+                                <TextBlock Text="{Binding Task.Title}" />
 
-                                <TextBlock Text="{Binding Task.PointToPointMode}" FontWeight="Bold" Margin="10,0,0,0" />
-                                <TextBlock Text=": "  />
-                                <TextBlock Text="{Binding Task.StartPoint}"/>
-                                <TextBlock Text="to" Margin="5,0,5,0" />
-                                <TextBlock Text="{Binding Task.EndPoint}"/>
+                                <TextBlock Margin="10,0,0,0"
+                                           FontWeight="Bold"
+                                           Text="{Binding Task.PointToPointMode}" />
+                                <TextBlock Text=": " />
+                                <TextBlock Text="{Binding Task.StartPoint}" />
+                                <TextBlock Margin="5,0,5,0" Text="to" />
+                                <TextBlock Text="{Binding Task.EndPoint}" />
                             </StackPanel>
 
-                            <!-- TODO Support Drive Label Name-->
+                            <!--  TODO Support Drive Label Name  -->
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Source: " FontWeight="Bold" />
-                                <TextBlock Text="{Binding Task.Source, Converter={StaticResource filePathToFilenameConverter}}"/>
+                                <TextBlock FontWeight="Bold" Text="Source: " />
+                                <TextBlock Text="{Binding Task.Source, Converter={StaticResource filePathToFilenameConverter}}" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Destination: " FontWeight="Bold" />
-                                <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}"/>
+                                <TextBlock FontWeight="Bold" Text="Destination: " />
+                                <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Status: " FontWeight="Bold" />
-                                <TextBlock Text="{Binding Status, Converter={StaticResource enumComboConverter}}"/>
+                                <TextBlock FontWeight="Bold" Text="Status: " />
+                                <TextBlock Text="{Binding Status, Converter={StaticResource enumComboConverter}}" />
                             </StackPanel>
                         </StackPanel>
 
-                        <!-- Delete -->
-                        <Grid VerticalAlignment="Center" Grid.Column="2" Margin="10,0,10,0">
+                        <!--  Delete  -->
+                        <Grid Grid.Column="2"
+                              Margin="10,0,10,0"
+                              VerticalAlignment="Center">
                             <StackPanel Orientation="Vertical">
-                                <Image Source="Images/Refresh.ico" Width="20" Height="20" ToolTip="Reset job status to Waiting."
-                                       Visibility="{Binding Status, Converter={StaticResource queueStatusVisConverter}}" >
+                                <Image Width="20"
+                                       Height="20"
+                                       Source="Images/Refresh.ico"
+                                       ToolTip="Reset job status to Waiting."
+                                       Visibility="{Binding Status,
+                                                            Converter={StaticResource queueStatusVisConverter}}">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDown">
                                             <cal:ActionMessage MethodName="RetryJob">
@@ -179,7 +250,11 @@
                                     </i:Interaction.Triggers>
                                 </Image>
 
-                                <Image Source="Images/delete.png" Width="20" Height="20" Margin="0,5,0,0" ToolTip="Remove this Job">
+                                <Image Width="20"
+                                       Height="20"
+                                       Margin="0,5,0,0"
+                                       Source="Images/delete.png"
+                                       ToolTip="Remove this Job">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDown">
                                             <cal:ActionMessage MethodName="RemoveJob">

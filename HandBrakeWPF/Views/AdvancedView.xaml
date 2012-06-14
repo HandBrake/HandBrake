@@ -43,7 +43,7 @@
                  />
 
         <StackPanel Orientation="Vertical">
-            
+
             <!--  Other Encoders  -->
             <Grid Visibility="{Binding DisplayX264Options, Converter={StaticResource BooleanVisibilityConverter}, ConverterParameter=true}">
                 <Grid.RowDefinitions>
@@ -63,7 +63,7 @@
                          TextWrapping="Wrap"
                          />
             </Grid>
-            
+
             <!--  X264  -->
             <Grid Visibility="{Binding DisplayX264Options, Converter={StaticResource BooleanVisibilityConverter}, ConverterParameter=false}">
                 <Grid.RowDefinitions>
