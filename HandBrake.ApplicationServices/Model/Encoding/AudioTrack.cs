@@ -101,7 +101,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             this.gain = track.Gain;
             this.mixDown = track.MixDown;
             this.sampleRate = track.SampleRate;
-            this.scannedTrack = new Audio();
+            this.scannedTrack = track.ScannedTrack ?? new Audio();
         }
 
         #endregion
