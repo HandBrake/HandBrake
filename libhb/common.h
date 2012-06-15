@@ -1,9 +1,12 @@
-/* $Id: common.h,v 1.51 2005/11/04 13:09:40 titer Exp $
+/* common.h
 
-   This file is part of the HandBrake source code.
+   Copyright (c) 2003-2012 HandBrake Team
+   This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
-   It may be used under the terms of the GNU General Public License. */
-
+   It may be used under the terms of the GNU General Public License v2.
+   For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
+ */
+ 
 #ifndef HB_COMMON_H
 #define HB_COMMON_H
 

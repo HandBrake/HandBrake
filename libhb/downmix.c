@@ -1,8 +1,11 @@
-/* $Id: downmix.c,v 1.15 2005/03/17 19:22:47 stebbins Exp $
+/* downmix.c
 
-   This file is part of the HandBrake source code.
+   Copyright (c) 2003-2012 HandBrake Team
+   This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
-   It may be used under the terms of the GNU General Public License. */
+   It may be used under the terms of the GNU General Public License v2.
+   For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
+ */
 
 #include <string.h>
 #include <stdlib.h>

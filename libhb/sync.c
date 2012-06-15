@@ -1,8 +1,11 @@
-/* $Id: sync.c,v 1.38 2005/04/14 21:57:58 titer Exp $
+/* sync.c
 
-   This file is part of the HandBrake source code.
+   Copyright (c) 2003-2012 HandBrake Team
+   This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
-   It may be used under the terms of the GNU General Public License. */
+   It may be used under the terms of the GNU General Public License v2.
+   For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
+ */
 
 #include "hb.h"
 #include "hbffmpeg.h"

@@ -1,8 +1,10 @@
-/* $Id: decomb.c,v 1.14 2008/04/25 5:00:00 jbrjake Exp $
+/* decomb.c
 
-   This file is part of the HandBrake source code.
+   Copyright (c) 2003-2012 HandBrake Team
+   This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
-   It may be used under the terms of the GNU General Public License.
+   It may be used under the terms of the GNU General Public License v2.
+   For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
 
    The yadif algorithm was created by Michael Niedermayer.
    Tritical's work inspired much of the comb detection code:

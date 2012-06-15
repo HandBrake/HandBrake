@@ -1,8 +1,11 @@
-/* $Id: declpcm.c,v 1.8 2005/11/04 14:44:01 titer Exp $
+/* declpcm.c
 
-   This file is part of the HandBrake source code.
+   Copyright (c) 2003-2012 HandBrake Team
+   This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
-   It may be used under the terms of the GNU General Public License. */
+   It may be used under the terms of the GNU General Public License v2.
+   For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
+ */
 
 #include "hb.h"
 #include "downmix.h"
