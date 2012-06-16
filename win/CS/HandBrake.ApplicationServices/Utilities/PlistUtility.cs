@@ -496,7 +496,7 @@ namespace HandBrake.ApplicationServices.Utilities
                 return;
             }
 
-            EncodeTask parsed = QueryParserUtility.Parse(preset.Query);
+            EncodeTask parsed = new EncodeTask(preset.Task);
             using (XmlTextWriter xmlWriter = new XmlTextWriter(path, Encoding.UTF8) { Formatting = Formatting.Indented })
             {
                 // Header
