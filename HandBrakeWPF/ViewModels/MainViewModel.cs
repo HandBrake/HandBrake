@@ -785,6 +785,9 @@ namespace HandBrakeWPF.ViewModels
                     this.errorService.ShowMessageBox("HandBrake has determined your built-in presets are out of date... These presets will now be updated.",
                                     "Preset Update", MessageBoxButton.OK, MessageBoxImage.Information);
 
+            // Queue Recovery
+            QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService);
+
             this.SelectedPreset = this.presetService.DefaultPreset;
         }
 

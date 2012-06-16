@@ -280,6 +280,7 @@ namespace HandBrakeWPF.ViewModels
         public void RetryJob(QueueTask task)
         {
             task.Status = QueueItemStatus.Waiting;
+            this.queueProcessor.QueueManager.BackupQueue(null);
         }
 
         /// <summary>

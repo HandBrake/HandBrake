@@ -153,7 +153,6 @@ namespace HandBrake.ApplicationServices.Services
             {
                 if (preset.Name == update.Name)
                 {
-                    preset.Query = update.Query;
                     preset.Task = update.Task;
                     preset.UsePictureFilters = update.UsePictureFilters;
 
@@ -304,7 +303,6 @@ namespace HandBrake.ApplicationServices.Services
                                 {
                                     Category = category,
                                     Name = presetName[0].Replace("+", string.Empty).Trim(),
-                                    Query = presetName[2],
                                     Version = this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion),
                                     Description = string.Empty, // Maybe one day we will populate this.
                                     IsBuildIn = true,

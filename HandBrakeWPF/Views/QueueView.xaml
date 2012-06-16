@@ -8,7 +8,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:YourNamespace="clr-namespace:HandBrakeWPF.AttachedProperties"
-        Title="{Binding Title}"
+        xmlns:Audio="clr-namespace:HandBrakeWPF.Converters.Audio" Title="{Binding Title}"
         Width="600"
         Height="400"
         MinWidth="600"
@@ -23,6 +23,7 @@
         <Converters:FullPathToFileNameConverter x:Key="filePathToFilenameConverter" />
         <Converters:EnumComboConverter x:Key="enumComboConverter" />
         <Converters:QueueStatusToVisibilityConverter x:Key="queueStatusVisConverter" />
+        <Audio:AudioQueueDisplayConverter x:Key="audioTrackDisplayConverter" />
     </Window.Resources>
 
     <Grid>
@@ -154,10 +155,31 @@
             </ListBox.ContextMenu>
 
             <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
+                <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="Background" Value="WhiteSmoke" />
                     <Setter Property="Margin" Value="0,0,0,1" />
+                    <Setter Property="ToolTip">
+                        <Setter.Value>
+                            <StackPanel Grid.Column="1"
+                                    Margin="0,5,0,5"
+                                    HorizontalAlignment="Stretch">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="Bold" Text="Video" />
+                                    <TextBlock Text=": " />
+                                    <TextBlock Text="{Binding Task.VideoEncoder, Converter={StaticResource enumComboConverter}}" />
+                                    <TextBlock Margin="10,0,0,0" FontWeight="Bold" Text="Audio: " />
+                                    <TextBlock Text="{Binding Task.AudioTracks, Converter={StaticResource audioTrackDisplayConverter}}" />
+                                </StackPanel>
+                                
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontWeight="Bold" Text="Advanced: " />
+                                    <TextBlock Text="{Binding Task.AdvancedEncoderOptions}" />
+                                </StackPanel>
+
+                            </StackPanel>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </ListBox.ItemContainerStyle>
 

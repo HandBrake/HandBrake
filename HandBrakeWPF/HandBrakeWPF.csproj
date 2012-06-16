@@ -119,6 +119,7 @@
     </Compile>
     <Compile Include="Converters\Audio\AudioBitrateConverter.cs" />
     <Compile Include="Converters\Audio\AudioEncoderConverter.cs" />
+    <Compile Include="Converters\Audio\AudioQueueDisplayConverter.cs" />
     <Compile Include="Converters\BooleanToHiddenVisibilityConverter.cs" />
     <Compile Include="Converters\Options\OptionsTabConverter.cs" />
     <Compile Include="Converters\Video\VideoEncoderConverter.cs" />
