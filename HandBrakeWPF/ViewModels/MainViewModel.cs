@@ -1269,17 +1269,6 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedPreset = this.presetService.DefaultPreset;
         }
 
-        /// <summary>
-        /// Set the selected preset.
-        /// </summary>
-        /// <param name="e">
-        /// The RoutedPropertyChangedEventArgs.
-        /// </param>
-        public void SetSelectedPreset(RoutedPropertyChangedEventArgs<object> e)
-        {
-            this.SelectedPreset = e.NewValue as Preset;
-        }
-
         #endregion
 
         #region Private Methods

@@ -5,7 +5,7 @@
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
-        AllowDrop="True"
+             xmlns:behaviours="clr-namespace:HandBrakeWPF.Helpers" AllowDrop="True"
         Background="#FFF0F0F0"
         FontSize="11"
         Micro:Message.Attach="[Event Loaded] = [Action Load]"
@@ -63,14 +63,29 @@
             <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" />
         </HierarchicalDataTemplate>
 
-        <Style TargetType="TreeViewItem">
-            <Setter Property="IsExpanded" Value="True" />
+        <Style TargetType="ListBoxItem">
             <Setter Property="Padding" Value="0,2,0,2" />
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsBuildIn}" Value="True">
                     <Setter Property="Foreground" Value="DarkBlue" />
                 </DataTrigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                </Trigger>
             </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ContainerStyle" TargetType="{x:Type GroupItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Expander Header="{Binding Name}" IsExpanded="True">
+                            <ItemsPresenter />
+                        </Expander>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
@@ -131,7 +146,7 @@
                     <MenuItem Header="About..." Micro:Message.Attach="[Event Click] = [Action OpenAboutApplication]" />
                 </MenuItem>
 
-                <MenuItem Header="Debug">
+                <MenuItem Header="Debug" Foreground="Transparent" >
                     <MenuItem Header="Show CLI Equiv" Micro:Message.Attach="[Event Click] = [Action ShowCliQuery]" />
                 </MenuItem>
             </Menu>
@@ -390,6 +405,7 @@
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
+
             <!--  Destination  -->
             <StackPanel Grid.Row="1"
                         Margin="10,5,5,5"
@@ -418,6 +434,7 @@
                             />
                 </Grid>
             </StackPanel>
+
             <!--  Output Options  -->
             <StackPanel Grid.Row="2"
                         Margin="10,5,5,5"
@@ -462,6 +479,7 @@
                               />
                 </StackPanel>
             </StackPanel>
+
             <!--  Tab Control  -->
             <TabControl Name="tabControl"
                         Grid.Row="3"
@@ -491,6 +509,7 @@
                     <ContentControl x:Name="AdvancedViewModel" />
                 </TabItem>
             </TabControl>
+
             <!--  Presets  -->
             <GroupBox Grid.RowSpan="4"
                       Grid.Column="1"
@@ -498,35 +517,43 @@
                       VerticalAlignment="Stretch"
                       Header="Presets"
                       Margin="0,0,0,5"
+                      Background="White"
                       >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <TreeView HorizontalAlignment="Stretch"
-                              VerticalAlignment="Stretch"
-                              ItemsSource="{Binding Source={StaticResource presetsCvs},
-                                                    Path=Groups}"
-                              ItemTemplate="{StaticResource presetsCategoryTemplate}"
-                              >
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="SelectedItemChanged">
-                                <Micro:ActionMessage MethodName="SetSelectedPreset">
-                                    <Micro:Parameter Value="$eventArgs" />
-                                </Micro:ActionMessage>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </TreeView>
+
+                    <ListBox HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource presetsCvs}}"
+                             SelectedItem="{Binding SelectedPreset, Mode=TwoWay}" BorderThickness="0,0,0,1"
+                                                           BorderBrush="LightGray"
+                            >
+                        <ListBox.GroupStyle>
+                            <GroupStyle ContainerStyle="{StaticResource ContainerStyle}"/>
+                        </ListBox.GroupStyle>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" Margin="24,0,0,0" Padding="8,1" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+
+                    </ListBox>
+
                     <ToolBar Name="presetsToolBar"
                              Grid.Row="1"
-                             HorizontalAlignment="Stretch"
+                             HorizontalAlignment="Center"
                              VerticalAlignment="Stretch"
                              Background="Transparent"
                              SnapsToDevicePixels="False"
                              UseLayoutRounding="False"
+                             ToolBar.OverflowMode="Never" 
+                             ToolBarTray.IsLocked="True"
+                             Loaded="PresetsToolBarLoaded"
                              >
-                        <Button Micro:Message.Attach="[Event Click] = [Action PresetAdd]">
+                        <Button Micro:Message.Attach="[Event Click] = [Action PresetAdd]" >
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
                                     <Image Width="16"
