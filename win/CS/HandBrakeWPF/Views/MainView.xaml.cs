@@ -9,6 +9,7 @@
 
 namespace HandBrakeWPF.Views
 {
+    using System.Windows;
     using System.Windows.Controls;
 
     /// <summary>
@@ -22,6 +23,29 @@ namespace HandBrakeWPF.Views
         public MainView()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// Hide the overflow control on the Preset panel.
+        /// TODO find a better way of doing this. This seems to be the common solution. 
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void PresetsToolBarLoaded(object sender, RoutedEventArgs e)
+        {
+            ToolBar toolBar = sender as ToolBar;
+            if (toolBar != null)
+            {
+                var overflowGrid = toolBar.Template.FindName("OverflowGrid", toolBar) as FrameworkElement;
+                if (overflowGrid != null)
+                {
+                    overflowGrid.Visibility = Visibility.Collapsed;
+                }
+            }
         }
     }
 }
