@@ -12,7 +12,6 @@
 #include "hbffmpeg.h"
 #include "lang.h"
 #include "a52dec/a52.h"
-#include "mp4v2/mp4v2.h"
 #include "libbluray/bluray.h"
 
 #define min(a, b) a < b ? a : b
