@@ -361,6 +361,13 @@ namespace HandBrakeWPF.ViewModels
 
                 if (this.SelectedPreset != null)
                 {
+                    // Main Window Settings
+                    this.CurrentTask.LargeFile = selectedPreset.Task.LargeFile;
+                    this.CurrentTask.OptimizeMP4 = selectedPreset.Task.OptimizeMP4;
+                    this.CurrentTask.IPod5GSupport = selectedPreset.Task.IPod5GSupport;
+                    this.SelectedOutputFormat = selectedPreset.Task.OutputFormat;
+
+                    // Tab Settings
                     this.PictureSettingsViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
                     this.VideoViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
                     this.FiltersViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);

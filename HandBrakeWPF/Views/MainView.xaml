@@ -156,6 +156,8 @@
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
                      SnapsToDevicePixels="False"
+                     ToolBar.OverflowMode="Never"
+                     ToolBarTray.IsLocked="True"
                      >
                 <Menu Background="Transparent">
                     <MenuItem ItemsSource="{Binding SourceToolbarMenu}">
