@@ -594,7 +594,17 @@ static void do_job( hb_job_t * job )
          * first burned subtitle (explicitly or after sanitizing) - which should
          * ensure that it doesn't get dropped. */
         interjob->select_subtitle->out_track = 1;
-        hb_list_insert( title->list_subtitle, 0, hb_subtitle_copy( interjob->select_subtitle ) );
+        if (job->pass == 0 || job->pass == 2)
+        {
+            // final pass, interjob->select_subtitle is no longer needed
+            hb_list_insert(title->list_subtitle, 0, interjob->select_subtitle);
+            interjob->select_subtitle = NULL;
+        }
+        else
+        {
+            // this is not the final pass, so we need to copy it instead
+            hb_list_insert(title->list_subtitle, 0, hb_subtitle_copy(interjob->select_subtitle));
+        }
     }
 
     if ( !job->indepth_scan )
