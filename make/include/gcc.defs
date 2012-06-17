@@ -67,15 +67,15 @@ GCC.args.L         = -L$(1)
 GCC.args.l         = -l$(1)
 GCC.args.end       = -Wl,--end-group
 
-GCC.args.extra         =
+GCC.args.extra         = $(CFLAGS) $(CPPFLAGS)
 GCC.args.extra.h_o     =
 GCC.args.extra.c_o     =
-GCC.args.extra.dylib   =
-GCC.args.extra.exe     =
+GCC.args.extra.dylib   = $(LDFLAGS)
+GCC.args.extra.exe     = $(LDFLAGS)
 GCC.args.extra.hpp_o   =
 GCC.args.extra.cpp_o   =
-GCC.args.extra.dylib++ =
-GCC.args.extra.exe++   =
+GCC.args.extra.dylib++ = $(LDFLAGS)
+GCC.args.extra.exe++   = $(LDFLAGS)
 
 ###############################################################################
 
