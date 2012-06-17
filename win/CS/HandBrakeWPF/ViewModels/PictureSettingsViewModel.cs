@@ -32,8 +32,9 @@ namespace HandBrakeWPF.ViewModels
     {
         /*
          * TODO:
-         * Handle Presets when a new title is set
-         * Handle changes in cropping affecting the resolution calcuation.
+         * - We are not handling cropping correctly within the UI.
+         * - The Height is not correctly set when using no Anamorphic
+         * - Maintain Aspect ratio needs corrected.
          * 
          */
         #region Constants and Fields
@@ -88,6 +89,16 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool showDisplaySize;
 
+        /// <summary>
+        /// Backing field for max height
+        /// </summary>
+        private int maxHeight;
+
+        /// <summary>
+        /// Backing field for max width
+        /// </summary>
+        private int maxWidth;
+
         #endregion
 
         #region Constructors and Destructors
@@ -106,6 +117,10 @@ namespace HandBrakeWPF.ViewModels
             this.Task = new EncodeTask();
             this.SelectedModulus = 16;
             this.MaintainAspectRatio = true;
+
+            // Default the Max Width / Height to 1080p format
+            this.MaxHeight = 1080;
+            this.MaxWidth = 1920;
         }
 
         #endregion
@@ -492,6 +507,38 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets MaxHeight.
+        /// </summary>
+        public int MaxHeight
+        {
+            get
+            {
+                return this.maxHeight;
+            }
+            set
+            {
+                this.maxHeight = value;
+                this.NotifyOfPropertyChange(() => this.MaxHeight);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets MinHeight.
+        /// </summary>
+        public int MaxWidth
+        {
+            get
+            {
+                return this.maxWidth;
+            }
+            set
+            {
+                this.maxWidth = value;
+                this.NotifyOfPropertyChange(() => this.MaxWidth);
+            }
+        }
+
+        /// <summary>
         /// Gets SourceAspect.
         /// </summary>
         private Size SourceAspect
@@ -527,19 +574,45 @@ namespace HandBrakeWPF.ViewModels
             // TODO: These all need to be handled correctly.
             this.SelectedAnamorphicMode = preset.Task.Anamorphic;
 
-            if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
+            // Set the limits on the UI Controls.
+            this.MaxWidth = preset.Task.MaxWidth ?? sourceResolution.Width;
+            this.MaxHeight = preset.Task.MaxHeight ?? sourceResolution.Height;
+            this.Task.MaxWidth = preset.Task.MaxWidth;
+            this.Task.MaxHeight = preset.Task.MaxHeight;
+
+            if (preset.Task.MaxWidth.HasValue)
             {
-                this.Task.MaxWidth = preset.Task.MaxWidth;
-                this.Task.MaxHeight = preset.Task.MaxHeight;
-                this.Width = preset.Task.Width ?? (sourceResolution.Width - this.CropLeft - this.CropRight);
-                this.Height = preset.Task.Height ?? (sourceResolution.Height - this.CropTop - this.CropBottom);
-            }
+                if (this.Width > this.MaxWidth)
+                {
+                    this.Width = this.MaxWidth;
+                } 
+                else
+                {
+                    this.Width = preset.Task.Width ?? this.getRes((sourceResolution.Width - this.CropLeft - this.CropRight), this.MaxWidth);
+                }
+            } 
             else
             {
                 this.Width = preset.Task.Width ?? (sourceResolution.Width - this.CropLeft - this.CropRight);
+            }
+
+            if (preset.Task.MaxHeight.HasValue)
+            {
+                if (this.Height > this.MaxHeight)
+                {
+                    this.Height = this.MaxHeight;
+                }
+                else
+                {
+                    this.Height = preset.Task.Height ?? this.getRes((sourceResolution.Height - this.CropTop - this.CropBottom), this.MaxHeight);
+                }
+            } 
+            else
+            {
                 this.Height = preset.Task.Height ?? (sourceResolution.Height - this.CropTop - this.CropBottom);
             }
 
+            // Anamorphic
             if (preset.Task.Anamorphic == Anamorphic.Custom)
             {
                 this.DisplayWidth = preset.Task.DisplayWidth != null ? int.Parse(preset.Task.DisplayWidth.ToString()) : 0;
@@ -587,6 +660,25 @@ namespace HandBrakeWPF.ViewModels
                 this.sourceAspectRatio = title.AspectRatio;
                 this.sourceParValues = title.ParVal;
                 this.sourceResolution = title.Resolution;
+
+                // Set the Max Width / Height available to the user controls
+                if (sourceResolution.Width < this.MaxWidth)
+                {
+                    this.MaxWidth = sourceResolution.Width;
+                } 
+                else if (sourceResolution.Width > this.MaxWidth)
+                {
+                    this.MaxWidth = preset.Task.MaxWidth ?? sourceResolution.Width;
+                }
+
+                if (sourceResolution.Height < this.MaxHeight)
+                {
+                    this.MaxHeight = sourceResolution.Height;
+                }
+                else if (sourceResolution.Height > this.MaxHeight)
+                {
+                    this.MaxHeight = preset.Task.MaxHeight ?? sourceResolution.Height;
+                }
 
                 // Set Screen Controls
                 this.SourceInfo = string.Format(
@@ -935,6 +1027,32 @@ namespace HandBrakeWPF.ViewModels
                     this.SetDisplaySize();
                     break;
             }
+        }
+
+        /// <summary>
+        /// Quick function to get the max resolution value
+        ///  </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <param name="max">
+        /// The max.
+        /// </param>
+        /// <returns>
+        /// An Int
+        /// </returns>
+        private int getRes(int value, int max)
+        {
+            if (value > max)
+            {
+                return max;
+            }
+            else
+            {
+                return value;
+            }
+
+            return 0;
         }
 
         #endregion
