@@ -347,7 +347,7 @@ static int MKVInit( hb_mux_object_t * m )
             case PGSSUB:
                 track->codecPrivate = NULL;
                 track->codecPrivateSize = 0;
-                track->codecID = "S_HDMV/PGS";
+                track->codecID = MK_SUBTITLE_PGS;
                 break;
             case SSASUB:
                 track->codecID = MK_SUBTITLE_SSA;
