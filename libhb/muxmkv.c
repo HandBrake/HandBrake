@@ -295,12 +295,10 @@ static int MKVInit( hb_mux_object_t * m )
             // samplingFreq is half of outputSamplingFreq
             track->extra.audio.outputSamplingFreq = (float)audio->config.out.samplerate;
             track->extra.audio.samplingFreq = track->extra.audio.outputSamplingFreq / 2.;
-            hb_log("HE-AAC Passthru!!! !!! !!!");
         }
         else
         {
             track->extra.audio.samplingFreq = (float)audio->config.out.samplerate;
-            hb_log("AAC Passthru :(");
         }
         if( audio->config.out.codec & HB_ACODEC_PASS_FLAG )
         {
