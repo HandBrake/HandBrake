@@ -598,7 +598,7 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
                                        [NSNumber numberWithInt: audio->in.bitrate / 1000], keyAudioInputBitrate,
                                        [NSNumber numberWithInt: audio->in.samplerate], keyAudioInputSampleRate,
                                        [NSNumber numberWithInt: audio->in.codec], keyAudioInputCodec,
-                                       [NSNumber numberWithInt: audio->in.channel_layout], keyAudioInputChannelLayout,
+                                       [NSNumber numberWithUnsignedLongLong: audio->in.channel_layout], keyAudioInputChannelLayout,
                                        nil]];
         }
         self.masterTrackArray = newTrackArray;

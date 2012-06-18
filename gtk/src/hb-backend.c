@@ -1702,8 +1702,7 @@ gint
 ghb_get_best_mix(hb_audio_config_t *aconfig, gint acodec, gint mix)
 {
 	gint layout;
-	layout = aconfig ? aconfig->in.channel_layout : 
-						HB_INPUT_CH_LAYOUT_3F2R | HB_INPUT_CH_LAYOUT_HAS_LFE;
+	layout = aconfig ? aconfig->in.channel_layout : AV_CH_LAYOUT_5POINT1;
 	return hb_get_best_mixdown( acodec, layout, mix );
 }
 
@@ -2438,7 +2437,7 @@ ghb_find_audio_track(
 			if (used[ii])
 				continue;
 
-			channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(
+			channels = av_get_channel_layout_nb_channels(
 													audio->in.channel_layout);
 			// Find a track that is not visually impaired or dirctor's
 			// commentary, and has the highest channel count.
@@ -2482,7 +2481,7 @@ ghb_find_audio_track(
 			if (passthru_used[ii])
 				continue;
 		}
-		channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(
+		channels = av_get_channel_layout_nb_channels(
 												audio->in.channel_layout);
 		// Find a track that is not visually impaired or dirctor's commentary
 		if ((audio->lang.type < 2) &&
@@ -2519,7 +2518,7 @@ ghb_find_audio_track(
 			if (used[ii])
 				continue;
 
-			channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(
+			channels = av_get_channel_layout_nb_channels(
 													audio->in.channel_layout);
 			// Find a track that is not visually impaired or dirctor's
 			// commentary, and has the highest channel count.
@@ -2554,7 +2553,7 @@ ghb_find_audio_track(
 		audio = (hb_audio_config_t*)hb_list_audio_config_item( 
 													title->list_audio, ii );
 		passthru_acodec = HB_ACODEC_PASS_MASK & audio->in.codec;
-		channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(
+		channels = av_get_channel_layout_nb_channels(
 												audio->in.channel_layout);
 		if (passthru_acodec && passthru)
 		{

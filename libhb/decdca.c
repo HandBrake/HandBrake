@@ -84,55 +84,57 @@ static int decdcaInit( hb_work_object_t * w, hb_job_t * job )
     /* Decide what format we want out of libdca;
      * work.c has already done some of this deduction for us in do_job().
      * Dolby Surround and Pro Logic II are a bit tricky. */
-    int layout = ( audio->config.in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK );
-    switch( audio->config.out.mixdown )
+    int layout = (audio->config.in.channel_layout & ~AV_CH_LOW_FREQUENCY);
+    switch (audio->config.out.mixdown)
     {
         case HB_AMIXDOWN_6CH:
-            pv->flags_out = ( DCA_3F2R | DCA_LFE );
+            pv->flags_out = (DCA_3F2R|DCA_LFE);
             break;
 
         case HB_AMIXDOWN_DOLBYPLII:
         {
-            if( layout == HB_INPUT_CH_LAYOUT_3F2R )
+            if (layout == AV_CH_LAYOUT_5POINT0)
             {
                 // Dolby Pro Logic II output is supported
-                pv->flags_out = ( DCA_3F2R | DCA_OUT_DPLII );
+                pv->flags_out = (DCA_3F2R|DCA_OUT_DPLII);
             }
-            else if( layout == HB_INPUT_CH_LAYOUT_3F1R )
+            else if (layout == AV_CH_LAYOUT_4POINT0)
             {
                 // Dolby Surround output and DCA_3F1R downmix are supported
-                pv->flags_out = ( DCA_3F1R | DCA_OUT_DPLI );
+                pv->flags_out = (DCA_3F1R|DCA_OUT_DPLI);
             }
-            else if( layout > HB_INPUT_CH_LAYOUT_DOLBY )
-            {
-                // Dolby Surround output is supported, but DCA_3F1R downmix isn't
-                pv->flags_out = DCA_DOLBY;
-            }
-            else
+            else if (layout == AV_CH_LAYOUT_STEREO ||
+                     layout == AV_CH_LAYOUT_STEREO_DOWNMIX)
             {
                 // Dolby Surround output not supported OR
                 // Dolby Surround input just gets passed through as is
                 pv->flags_out = DCA_STEREO;
+            }
+            else
+            {
+                // Dolby Surround output is supported, but DCA_3F1R downmix isn't
+                pv->flags_out = DCA_DOLBY;
             }
         } break;
 
         case HB_AMIXDOWN_DOLBY:
         {
-            if( layout == HB_INPUT_CH_LAYOUT_3F2R || layout == HB_INPUT_CH_LAYOUT_3F1R )
+            if (layout == AV_CH_LAYOUT_5POINT0 || layout == AV_CH_LAYOUT_4POINT0)
             {
                 // Dolby Surround output and DCA_3F1R downmix are supported
-                pv->flags_out = ( DCA_3F1R | DCA_OUT_DPLI );
+                pv->flags_out = (DCA_3F1R|DCA_OUT_DPLI);
             }
-            else if( layout > HB_INPUT_CH_LAYOUT_DOLBY )
-            {
-                // Dolby Surround output is supported, but DCA_3F1R downmix isn't
-                pv->flags_out = DCA_DOLBY;
-            }
-            else
+            else if (layout == AV_CH_LAYOUT_STEREO ||
+                     layout == AV_CH_LAYOUT_STEREO_DOWNMIX)
             {
                 // Dolby Surround output not supported OR
                 // Dolby Surround input just gets passed through as is
                 pv->flags_out = DCA_STEREO;
+            }
+            else
+            {
+                // Dolby Surround output is supported, but DCA_3F1R downmix isn't
+                pv->flags_out = DCA_DOLBY;
             }
         } break;
 
@@ -379,48 +381,48 @@ static int decdcaBSInfo( hb_work_object_t *w, const hb_buffer_t *b,
     {
         /* mono sources */
         case DCA_MONO:
-            info->channel_layout = HB_INPUT_CH_LAYOUT_MONO;
+            info->channel_layout = AV_CH_LAYOUT_MONO;
             break;
         /* stereo input */
         case DCA_CHANNEL:
         case DCA_STEREO:
         case DCA_STEREO_SUMDIFF:
         case DCA_STEREO_TOTAL:
-            info->channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
+            info->channel_layout = AV_CH_LAYOUT_STEREO;
             break;
         /* Dolby Pro Logic (a.k.a. Dolby Surround), 4.0 channels (matrix-encoded) */
         case DCA_DOLBY:
-            info->channel_layout = HB_INPUT_CH_LAYOUT_DOLBY;
+            info->channel_layout = AV_CH_LAYOUT_STEREO_DOWNMIX;
             break;
         /* 3F/2R input */
         case DCA_3F2R:
-            info->channel_layout = HB_INPUT_CH_LAYOUT_3F2R;
+            info->channel_layout = AV_CH_LAYOUT_5POINT0;
             break;
         /* 3F/1R input */
         case DCA_3F1R:
-            info->channel_layout = HB_INPUT_CH_LAYOUT_3F1R;
+            info->channel_layout = AV_CH_LAYOUT_4POINT0;
             break;
         /* other inputs */
         case DCA_3F:
-            info->channel_layout = HB_INPUT_CH_LAYOUT_3F;
+            info->channel_layout = AV_CH_LAYOUT_SURROUND;
             break;
         case DCA_2F1R:
-            info->channel_layout = HB_INPUT_CH_LAYOUT_2F1R;
+            info->channel_layout = AV_CH_LAYOUT_2_1;
             break;
         case DCA_2F2R:
-            info->channel_layout = HB_INPUT_CH_LAYOUT_2F2R;
+            info->channel_layout = AV_CH_LAYOUT_2_2;
             break;
         case DCA_4F2R:
-            info->channel_layout = HB_INPUT_CH_LAYOUT_4F2R;
+            info->channel_layout = AV_CH_LAYOUT_2_2|AV_CH_FRONT_LEFT_OF_CENTER|AV_CH_FRONT_RIGHT_OF_CENTER;
             break;
         /* unknown */
         default:
-            info->channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
+            info->channel_layout = AV_CH_LAYOUT_STEREO;
     }
 
     if (flags & DCA_LFE)
     {
-        info->channel_layout |= HB_INPUT_CH_LAYOUT_HAS_LFE;
+        info->channel_layout |= AV_CH_LOW_FREQUENCY;
     }
 
     info->channel_map = &hb_qt_chan_map;

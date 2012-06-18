@@ -9,9 +9,10 @@
 
 #include "libavcodec/avcodec.h"
 #include "libavformat/avformat.h"
-#include "libavutil/opt.h"
-#include "libavutil/mathematics.h"
+#include "libavutil/audioconvert.h"
 #include "libavutil/imgutils.h"
+#include "libavutil/mathematics.h"
+#include "libavutil/opt.h"
 #include "libswscale/swscale.h"
 
 #define HB_FFMPEG_THREADS_AUTO (-1) // let hb_avcodec_open decide thread_count
@@ -19,7 +20,7 @@
 void hb_avcodec_init(void);
 int hb_avcodec_open( AVCodecContext *, struct AVCodec *, AVDictionary **av_opts, int thread_count );
 int hb_avcodec_close( AVCodecContext * );
-int hb_ff_layout_xlat(int64_t ff_layout, int channels);
+uint64_t hb_ff_layout_xlat(uint64_t ff_channel_layout, int nchannels);
 struct SwsContext* hb_sws_get_context( int srcW, int srcH, 
     enum PixelFormat srcFormat, int dstW, int dstH, 
     enum PixelFormat dstFormat, int flags);

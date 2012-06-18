@@ -828,47 +828,77 @@ static int channel_layout_map[DOWNMIX_NUM_MODES] =
     (HB_CH_FRONT_LEFT|HB_CH_FRONT_RIGHT)
 };
 
-int hb_layout_to_mode(int layout)
+int hb_layout_to_mode(uint64_t layout)
 {
-    int mode;
-    switch (layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK)
+    int mode = 0;
+    if (layout & AV_CH_LOW_FREQUENCY)
+        mode |= DOWNMIX_LFE_FLAG;
+    switch (layout & ~AV_CH_LOW_FREQUENCY)
     {
-        case HB_INPUT_CH_LAYOUT_MONO:
-            mode = DOWNMIX_MONO;
+        case AV_CH_LAYOUT_MONO:
+            mode |= DOWNMIX_MONO;
             break;
-        case HB_INPUT_CH_LAYOUT_STEREO:
-            mode = DOWNMIX_STEREO;
+        case AV_CH_LAYOUT_STEREO:
+        case AV_CH_LAYOUT_STEREO_DOWNMIX:
+            mode |= DOWNMIX_STEREO;
             break;
-        case HB_INPUT_CH_LAYOUT_3F:
-            mode = DOWNMIX_3F;
+        case AV_CH_LAYOUT_SURROUND:
+            mode |= DOWNMIX_3F;
             break;
-        case HB_INPUT_CH_LAYOUT_2F1R:
-            mode = DOWNMIX_2F1R;
+        case AV_CH_LAYOUT_2_1:
+            mode |= DOWNMIX_2F1R;
             break;
-        case HB_INPUT_CH_LAYOUT_3F1R:
-            mode = DOWNMIX_3F1R;
+        case AV_CH_LAYOUT_4POINT0:
+            mode |= DOWNMIX_3F1R;
             break;
-        case HB_INPUT_CH_LAYOUT_2F2R:
-            mode = DOWNMIX_2F2R;
+        case AV_CH_LAYOUT_2_2:
+        case AV_CH_LAYOUT_QUAD:
+            mode |= DOWNMIX_2F2R;
             break;
-        case HB_INPUT_CH_LAYOUT_3F2R:
-            mode = DOWNMIX_3F2R;
+        case AV_CH_LAYOUT_5POINT0:
+        case AV_CH_LAYOUT_5POINT0_BACK:
+            mode |= DOWNMIX_3F2R;
             break;
-        case HB_INPUT_CH_LAYOUT_4F2R:
-            mode = DOWNMIX_3F2R|DOWNMIX_LFE_FLAG;
-            break;
-        case HB_INPUT_CH_LAYOUT_3F4R:
-            mode = DOWNMIX_3F4R;
-            break;
-        case HB_INPUT_CH_LAYOUT_DOLBY:
-            mode = DOWNMIX_STEREO;
+        case AV_CH_LAYOUT_7POINT0:
+            mode |= DOWNMIX_3F4R;
             break;
         default:
-            mode = DOWNMIX_STEREO;
-            break;
+        {
+            switch (av_get_channel_layout_nb_channels(layout))
+            {
+                case 1:
+                    mode = DOWNMIX_MONO;
+                    break;
+                case 2:
+                    mode = DOWNMIX_STEREO;
+                    break;
+                case 3:
+                    mode = DOWNMIX_3F;
+                    break;
+                case 4:
+                    mode = DOWNMIX_2F2R;
+                    break;
+                case 5:
+                    mode = DOWNMIX_3F2R;
+                    break;
+                case 6:
+                    mode = DOWNMIX_3F2R|DOWNMIX_LFE_FLAG;
+                    break;
+                case 7:
+                    mode = DOWNMIX_3F4R;
+                    break;
+                case 8:
+                    mode = DOWNMIX_3F4R|DOWNMIX_LFE_FLAG;
+                    break;
+                default:
+                    // This will likely not sound very good ;)
+                    mode = DOWNMIX_STEREO;
+                    hb_error("hb_layout_to_mode: unsupported layout 0x%"PRIx64" with %d channels",
+                             layout, av_get_channel_layout_nb_channels(layout));
+                    break;
+            }
+        } break;
     }
-    if (layout & HB_INPUT_CH_LAYOUT_DISCRETE_LFE_MASK)
-        mode |= DOWNMIX_LFE_FLAG;
     return mode;
 }
 
@@ -1142,12 +1172,11 @@ hb_chan_map_t hb_ac3_chan_map =
 static const uint8_t nchans_tbl[] = {1, 2, 3, 3, 4, 4, 5, 7, 2, 2};
 
 // Takes a set of samples and remaps the channel layout
-void hb_layout_remap( 
-    hb_chan_map_t * map_in, 
-    hb_chan_map_t * map_out, 
-    int layout, 
-    hb_sample_t * samples, 
-    int nsamples )
+void hb_layout_remap(hb_chan_map_t *map_in,
+                     hb_chan_map_t *map_out,
+                     uint64_t layout,
+                     hb_sample_t *samples,
+                     int nsamples)
 {
     int nchans;
     int ii, jj;

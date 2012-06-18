@@ -961,7 +961,10 @@
 		273F200814ADAE950021BE6D /* debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
+				HEADER_SEARCH_PATHS = (
+					"\"$(EXTERNAL_BUILD)/libhb\"",
+					"\"$(EXTERNAL_BUILD)/contrib/include\"",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(EXTERNAL_BUILD)/libhb\"",
@@ -974,7 +977,10 @@
 		273F200914ADAE950021BE6D /* release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
+				HEADER_SEARCH_PATHS = (
+					"\"$(EXTERNAL_BUILD)/libhb\"",
+					"\"$(EXTERNAL_BUILD)/contrib/include\"",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(EXTERNAL_BUILD)/libhb\"",
@@ -991,7 +997,10 @@
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
-				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
+				HEADER_SEARCH_PATHS = (
+					"\"$(EXTERNAL_BUILD)/libhb\"",
+					"\"$(EXTERNAL_BUILD)/contrib/include\"",
+				);
 				INFOPLIST_FILE = "$(EXTERNAL_BUILD)/macosx/Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1010,7 +1019,10 @@
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
-				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
+				HEADER_SEARCH_PATHS = (
+					"\"$(EXTERNAL_BUILD)/libhb\"",
+					"\"$(EXTERNAL_BUILD)/contrib/include\"",
+				);
 				INFOPLIST_FILE = "$(EXTERNAL_BUILD)/macosx/Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

@@ -57,12 +57,11 @@ void hb_downmix_set_chan_map(
     hb_chan_map_t * map_in, 
     hb_chan_map_t * map_out );
 void hb_downmix( hb_downmix_t * downmix, hb_sample_t * dst, hb_sample_t * src, int nsamples);
-void hb_layout_remap( 
-    hb_chan_map_t * map_in, 
-    hb_chan_map_t * map_out, 
-    int layout, 
-    hb_sample_t * samples, 
-    int nsamples );
+void hb_layout_remap(hb_chan_map_t *map_in,
+                     hb_chan_map_t *map_out,
+                     uint64_t layout,
+                     hb_sample_t *samples,
+                     int nsamples);
 int hb_need_downmix( int layout, int mixdown );
 
 #endif /* DOWNMIX_H */

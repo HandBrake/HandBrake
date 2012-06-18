@@ -36,21 +36,21 @@ AC_ARG_WITH(hb,
 if test  $hb_PATHSET = 1 ; then
     case ${with_hb} in
     /*)
-		CXXFLAGS="$CXXFLAGS -I$with_hb/libhb"
-		CFLAGS="$CFLAGS -I$with_hb/libhb"
+		CXXFLAGS="$CXXFLAGS -I$with_hb/libhb -I$with_hb/contrib/include"
+		CFLAGS="$CFLAGS -I$with_hb/libhb -I$with_hb/contrib/include"
 		LDFLAGS="$LDFLAGS -L$with_hb/libhb -L$with_hb/contrib/lib"
 		AC_SUBST(HB_DIR, "$with_hb")
         ;;
     *)
-		CXXFLAGS="$CXXFLAGS "'-I$(top_srcdir)/'"$with_hb/libhb"
-		CFLAGS="$CFLAGS "'-I$(top_srcdir)/'"$with_hb/libhb"
+		CXXFLAGS="$CXXFLAGS "'-I$(top_srcdir)/'"$with_hb/libhb "'-I$(top_srcdir)/'"$with_hb/contrib/include"
+		CFLAGS="$CXXFLAGS "'-I$(top_srcdir)/'"$with_hb/libhb "'-I$(top_srcdir)/'"$with_hb/contrib/include"
 		LDFLAGS="$LDFLAGS "'-L$(top_srcdir)/'"$with_hb/libhb "'-L$(top_srcdir)/'"$with_hb/contrib/lib"
 		AC_SUBST(HB_DIR, '$(top_srcdir)/'"$with_hb")
         ;;
     esac
 else
-	CXXFLAGS="$CXXFLAGS "'-I$(top_srcdir)/'"../libhb"
-	CFLAGS="$CFLAGS "'-I$(top_srcdir)/'"../libhb"
+	CXXFLAGS="$CXXFLAGS "'-I$(top_srcdir)/'"../libhb "'-I$(top_srcdir)/'"../contrib/include"
+	CFLAGS="$CXXFLAGS "'-I$(top_srcdir)/'"../libhb "'-I$(top_srcdir)/'"../contrib/include"
 	LDFLAGS="$LDFLAGS "'-L$(top_srcdir)/'"../libhb "'-L$(top_srcdir)/'"../contrib/lib"
 	AC_SUBST(HB_DIR, '$(top_srcdir)/'"..")
 fi

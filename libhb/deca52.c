@@ -108,11 +108,11 @@ static int deca52Init( hb_work_object_t * w, hb_job_t * job )
     switch( audio->config.out.mixdown )
     {
         case HB_AMIXDOWN_6CH:
-            pv->flags_out = ( A52_3F2R | A52_LFE );
+            pv->flags_out = (A52_3F2R|A52_LFE);
             break;
 
         case HB_AMIXDOWN_DOLBYPLII:
-            pv->flags_out = ( A52_DOLBY | A52_USE_DPLII );
+            pv->flags_out = (A52_DOLBY|A52_USE_DPLII);
             break;
 
         case HB_AMIXDOWN_DOLBY:
@@ -445,43 +445,43 @@ static int deca52BSInfo( hb_work_object_t *w, const hb_buffer_t *b,
         case A52_MONO:
         case A52_CHANNEL1:
         case A52_CHANNEL2:
-            info->channel_layout = HB_INPUT_CH_LAYOUT_MONO;
+            info->channel_layout = AV_CH_LAYOUT_MONO;
             break;
         /* stereo input */
         case A52_CHANNEL:
         case A52_STEREO:
-            info->channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
+            info->channel_layout = AV_CH_LAYOUT_STEREO;
             break;
         /* Dolby Pro Logic (a.k.a. Dolby Surround), 4.0 channels (matrix-encoded) */
         case A52_DOLBY:
-            info->channel_layout = HB_INPUT_CH_LAYOUT_DOLBY;
+            info->channel_layout = AV_CH_LAYOUT_STEREO_DOWNMIX;
             break;
         /* 3F/2R input */
         case A52_3F2R:
-            info->channel_layout = HB_INPUT_CH_LAYOUT_3F2R;
+            info->channel_layout = AV_CH_LAYOUT_5POINT0;
             break;
         /* 3F/1R input */
         case A52_3F1R:
-            info->channel_layout = HB_INPUT_CH_LAYOUT_3F1R;
+            info->channel_layout = AV_CH_LAYOUT_4POINT0;
             break;
         /* other inputs */
         case A52_3F:
-            info->channel_layout = HB_INPUT_CH_LAYOUT_3F;
+            info->channel_layout = AV_CH_LAYOUT_SURROUND;
             break;
         case A52_2F1R:
-            info->channel_layout = HB_INPUT_CH_LAYOUT_2F1R;
+            info->channel_layout = AV_CH_LAYOUT_2_1;
             break;
         case A52_2F2R:
-            info->channel_layout = HB_INPUT_CH_LAYOUT_2F2R;
+            info->channel_layout = AV_CH_LAYOUT_2_2;
             break;
         /* unknown */
         default:
-            info->channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
+            info->channel_layout = AV_CH_LAYOUT_STEREO;
     }
 
     if (flags & A52_LFE)
     {
-        info->channel_layout |= HB_INPUT_CH_LAYOUT_HAS_LFE;
+        info->channel_layout |= AV_CH_LOW_FREQUENCY;
     }
 
     info->channel_map = &hb_ac3_chan_map;

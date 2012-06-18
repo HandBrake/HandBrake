@@ -948,49 +948,16 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
 
         c->bit_rate    = w->audio->config.in.bitrate;
         c->sample_rate = w->audio->config.in.samplerate;
-        c->channels    = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT( w->audio->config.in.channel_layout );
+        c->channels    = av_get_channel_layout_nb_channels(w->audio->config.in.channel_layout);
         hb_ff_set_sample_fmt( c, codec );
 
-        switch( w->audio->config.in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK )
+        if (w->audio->config.in.channel_layout == AV_CH_LAYOUT_STEREO_DOWNMIX)
         {
-            case HB_INPUT_CH_LAYOUT_MONO:
-                c->channel_layout = AV_CH_LAYOUT_MONO;
-                break;
-
-            case HB_INPUT_CH_LAYOUT_STEREO:
-            case HB_INPUT_CH_LAYOUT_DOLBY:
-                c->channel_layout = AV_CH_LAYOUT_STEREO;
-                break;
-
-            case HB_INPUT_CH_LAYOUT_3F2R:
-                c->channel_layout = AV_CH_LAYOUT_5POINT0;
-                break;
-
-            case HB_INPUT_CH_LAYOUT_3F1R:
-                c->channel_layout = AV_CH_LAYOUT_4POINT0;
-                break;
-
-            case HB_INPUT_CH_LAYOUT_3F:
-                c->channel_layout = AV_CH_LAYOUT_SURROUND;
-                break;
-
-            case HB_INPUT_CH_LAYOUT_2F1R:
-                c->channel_layout = AV_CH_LAYOUT_2_1;
-                break;
-
-            case HB_INPUT_CH_LAYOUT_2F2R:
-                c->channel_layout = AV_CH_LAYOUT_QUAD;
-                break;
-
-            default:
-                c->channel_layout = AV_CH_LAYOUT_STEREO;
-                hb_log("sync: unrecognized channel layout" );
-                break;
+            c->channel_layout = AV_CH_LAYOUT_STEREO;
         }
-
-        if ( w->audio->config.in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE )
+        else
         {
-            c->channel_layout |= AV_CH_LOW_FREQUENCY;
+            c->channel_layout = w->audio->config.in.channel_layout;
         }
 
         if( hb_avcodec_open( c, codec, NULL, 0 ) < 0 )

@@ -720,37 +720,35 @@ int hb_get_best_mixdown( uint32_t codec, int layout, int mixdown )
         // Audio pass-thru.  No mixdown.
         return HB_AMIXDOWN_NONE;
     }
-    switch (layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK)
+    switch (layout & ~AV_CH_LOW_FREQUENCY)
     {
         // mono input
-        case HB_INPUT_CH_LAYOUT_MONO:
+        case AV_CH_LAYOUT_MONO:
             best_mixdown = HB_AMIXDOWN_MONO;
             break;
 
         // Dolby Pro Logic (a.k.a. Dolby Surround), 4.0 channels (matrix-encoded)
         // The A52 flags don't allow for a way to distinguish between DPL1 and
         // DPL2 on a DVD so we always assume a DPL1 source for A52_DOLBY.
-        case HB_INPUT_CH_LAYOUT_DOLBY:
+        case AV_CH_LAYOUT_STEREO_DOWNMIX:
         // 3 or 4 discrete channels
-        // case HB_INPUT_CH_LAYOUT_3F:   // FIXME: can it be downmixed to Dolby?
-        // case HB_INPUT_CH_LAYOUT_2F1R: // FIXME: can it be downmixed to Dolby?
-        case HB_INPUT_CH_LAYOUT_2F2R:
-        case HB_INPUT_CH_LAYOUT_3F1R:
-            // a52dec and libdca can't upmix to 6ch, 
-            // so we must downmix these.
-            // libdca only supports DPLII if the source is 3F2R to begin with
+        case AV_CH_LAYOUT_2_1:
+        case AV_CH_LAYOUT_2_2:
+        case AV_CH_LAYOUT_QUAD:
+        case AV_CH_LAYOUT_4POINT0:
+        case AV_CH_LAYOUT_SURROUND:
+            // a52dec and libdca can't upmix to 6ch, so we must downmix these.
+            // libdca only supports DPLII if the source is 3F2R to begin with.
             best_mixdown = HB_AMIXDOWN_DOLBY;
             break;
 
         // 5 to 8 discrete channels
-        case HB_INPUT_CH_LAYOUT_4F2R:
-        case HB_INPUT_CH_LAYOUT_3F4R:
-        case HB_INPUT_CH_LAYOUT_3F2R:
-            if (!(layout & HB_INPUT_CH_LAYOUT_HAS_LFE))
+        case AV_CH_LAYOUT_5POINT0:
+        case AV_CH_LAYOUT_7POINT0:
+            if (!(layout & AV_CH_LOW_FREQUENCY))
             {
                 // we don't do 5-channel discrete
-                // a52dec and libdca can't upmix to 6ch, 
-                // so we must downmix this.
+                // a52dec and libdca can't upmix to 6ch, so we must downmix this.
                 best_mixdown = HB_AMIXDOWN_DOLBYPLII;
             }
             else

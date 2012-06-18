@@ -20,6 +20,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
+#include "libavutil/audioconvert.h"
 
 /*
  * It seems WinXP doesn't align the stack of new threads to 16 bytes.
@@ -423,34 +424,6 @@ struct hb_job_s
 #define HB_SUBSTREAM_BD_DTSHD   0x72
 #define HB_SUBSTREAM_BD_DTS     0x71
 
-/* Input Channel Layout */
-/* define some masks, used to extract the various information from the HB_INPUT_CH_LAYOUT_* values */
-#define HB_INPUT_CH_LAYOUT_DISCRETE_FRONT_MASK  0x00F0000
-#define HB_INPUT_CH_LAYOUT_DISCRETE_REAR_MASK   0x000F000
-#define HB_INPUT_CH_LAYOUT_DISCRETE_LFE_MASK    0x0000F00
-#define HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK 0xFFFF0FF
-#define HB_INPUT_CH_LAYOUT_ENCODED_FRONT_MASK   0x00000F0
-#define HB_INPUT_CH_LAYOUT_ENCODED_REAR_MASK    0x000000F
-/* define the input channel layouts used to describe the channel layout of this audio */
-#define HB_INPUT_CH_LAYOUT_MONO    0x0110010
-#define HB_INPUT_CH_LAYOUT_STEREO  0x0220020
-#define HB_INPUT_CH_LAYOUT_DOLBY   0x0320031
-#define HB_INPUT_CH_LAYOUT_3F      0x0430030
-#define HB_INPUT_CH_LAYOUT_2F1R    0x0521021
-#define HB_INPUT_CH_LAYOUT_3F1R    0x0631031
-#define HB_INPUT_CH_LAYOUT_2F2R    0x0722022
-#define HB_INPUT_CH_LAYOUT_3F2R    0x0832032
-#define HB_INPUT_CH_LAYOUT_4F2R    0x0942042
-#define HB_INPUT_CH_LAYOUT_3F4R    0x0a34034
-#define HB_INPUT_CH_LAYOUT_HAS_LFE 0x0000100
-/* define some macros to extract the various information from the HB_INPUT_CH_LAYOUT_* values */
-#define HB_INPUT_CH_LAYOUT_GET_DISCRETE_FRONT_COUNT( a ) ( ( a & HB_INPUT_CH_LAYOUT_DISCRETE_FRONT_MASK ) >> 16 )
-#define HB_INPUT_CH_LAYOUT_GET_DISCRETE_REAR_COUNT( a )  ( ( a & HB_INPUT_CH_LAYOUT_DISCRETE_REAR_MASK ) >> 12 )
-#define HB_INPUT_CH_LAYOUT_GET_DISCRETE_LFE_COUNT( a )   ( ( a & HB_INPUT_CH_LAYOUT_DISCRETE_LFE_MASK ) >> 8 )
-#define HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT( a ) ( ( ( a & HB_INPUT_CH_LAYOUT_DISCRETE_FRONT_MASK ) >> 16 ) + ( ( a & HB_INPUT_CH_LAYOUT_DISCRETE_REAR_MASK ) >> 12 ) + ( ( a & HB_INPUT_CH_LAYOUT_DISCRETE_LFE_MASK ) >> 8 ) )
-#define HB_INPUT_CH_LAYOUT_GET_ENCODED_FRONT_COUNT( a )   ( ( a & HB_INPUT_CH_LAYOUT_ENCODED_FRONT_MASK ) >> 4 )
-#define HB_INPUT_CH_LAYOUT_GET_ENCODED_REAR_COUNT( a )   ( ( a & HB_INPUT_CH_LAYOUT_ENCODED_REAR_MASK ) )
-
 /* define an invalid VBR quality compatible with all VBR-capable codecs */
 #define HB_INVALID_AUDIO_QUALITY (-3.)
 
@@ -495,7 +468,7 @@ struct hb_audio_config_s
         PRIVATE int samplerate; /* Input sample rate (Hz) */
         PRIVATE int samples_per_frame; /* Number of samples per frame */
         PRIVATE int bitrate; /* Input bitrate (bps) */
-        PRIVATE int channel_layout; /* Source channel layout, set by the audio decoder */
+        PRIVATE uint64_t channel_layout; /* Source channel layout, set by the audio decoder */
         PRIVATE hb_chan_map_t * channel_map; /* Source channel map, set by the audio decoder */
     } in;
 
@@ -778,18 +751,21 @@ typedef struct hb_work_info_s
     uint32_t     version;
     uint32_t     flags;
     uint32_t     mode;
-    union {
-        struct {    // info only valid for video decoders
-            int     width;
-            int     height;
-            int     pixel_aspect_width;
-            int     pixel_aspect_height;
-            int     color_prim;
-            int     color_transfer;
-            int     color_matrix;
+    union
+    {
+        struct
+        {    // info only valid for video decoders
+            int width;
+            int height;
+            int pixel_aspect_width;
+            int pixel_aspect_height;
+            int color_prim;
+            int color_transfer;
+            int color_matrix;
         };
-        struct {    // info only valid for audio decoders
-            int     channel_layout;
+        struct
+        {    // info only valid for audio decoders
+            uint64_t channel_layout;
             hb_chan_map_t * channel_map;
             int samples_per_frame;
         };

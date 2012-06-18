@@ -279,16 +279,16 @@ int encCoreAudioInit( hb_work_object_t * w, hb_job_t * job, enum AAC_MODE mode )
     switch( audio->config.out.mixdown )
     {
         case HB_AMIXDOWN_MONO:
-            pv->layout = HB_INPUT_CH_LAYOUT_MONO;
+            pv->layout = AV_CH_LAYOUT_MONO;
             break;
         case HB_AMIXDOWN_STEREO:
         case HB_AMIXDOWN_DOLBY:
         case HB_AMIXDOWN_DOLBYPLII:
-            pv->layout = HB_INPUT_CH_LAYOUT_STEREO;
+            pv->layout = AV_CH_LAYOUT_STEREO;
             break;
         case HB_AMIXDOWN_6CH:
         default:
-            pv->layout = HB_INPUT_CH_LAYOUT_3F2R | HB_INPUT_CH_LAYOUT_HAS_LFE;
+            pv->layout = AV_CH_LAYOUT_5POINT1;
             break;
     }
 

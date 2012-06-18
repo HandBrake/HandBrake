@@ -413,17 +413,17 @@ static int MP4Init( hb_mux_object_t * m )
                         audio_type = 0xA9;
                     } break;
                 }
-                if( audio->config.out.codec & HB_ACODEC_PASS_FLAG )
+                if (audio->config.out.codec & HB_ACODEC_PASS_FLAG)
                 {
                     samplerate = audio->config.in.samplerate;
                     samples_per_frame = audio->config.in.samples_per_frame;
-                    channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT( audio->config.in.channel_layout );
+                    channels = av_get_channel_layout_nb_channels(audio->config.in.channel_layout);
                 }
                 else
                 {
                     samplerate = audio->config.out.samplerate;
                     samples_per_frame = audio->config.out.samples_per_frame;
-                    channels = hb_mixdown_get_discrete_channel_count( audio->config.out.mixdown );
+                    channels = hb_mixdown_get_discrete_channel_count(audio->config.out.mixdown);
                 }
                 mux_data->track = MP4AddAudioTrack( m->file, samplerate, 
                                                 samples_per_frame, audio_type );

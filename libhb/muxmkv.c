@@ -300,13 +300,13 @@ static int MKVInit( hb_mux_object_t * m )
         {
             track->extra.audio.samplingFreq = (float)audio->config.out.samplerate;
         }
-        if( audio->config.out.codec & HB_ACODEC_PASS_FLAG )
+        if (audio->config.out.codec & HB_ACODEC_PASS_FLAG)
         {
-            track->extra.audio.channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT( audio->config.in.channel_layout );
+            track->extra.audio.channels = av_get_channel_layout_nb_channels(audio->config.in.channel_layout);
         }
         else
         {
-            track->extra.audio.channels = hb_mixdown_get_discrete_channel_count( audio->config.out.mixdown );
+            track->extra.audio.channels = hb_mixdown_get_discrete_channel_count(audio->config.out.mixdown);
         }
         mux_data->track = mk_createTrack(m->file, track);
         if( audio->config.out.codec == HB_ACODEC_VORBIS ||

@@ -19,7 +19,6 @@ struct hb_work_private_s
 
     int              out_discrete_channels;
     int              samples_per_frame;
-    int              layout;
     unsigned long    input_samples;
     unsigned long    output_bytes;
     hb_list_t      * list;
@@ -75,28 +74,25 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
-    context->channel_layout = AV_CH_LAYOUT_STEREO;
-    switch( audio->config.out.mixdown )
+    switch (audio->config.out.mixdown)
     {
         case HB_AMIXDOWN_MONO:
             context->channel_layout = AV_CH_LAYOUT_MONO;
-            pv->layout = HB_INPUT_CH_LAYOUT_MONO;
             break;
 
         case HB_AMIXDOWN_STEREO:
         case HB_AMIXDOWN_DOLBY:
         case HB_AMIXDOWN_DOLBYPLII:
             context->channel_layout = AV_CH_LAYOUT_STEREO;
-            pv->layout = HB_INPUT_CH_LAYOUT_STEREO;
             break;
 
         case HB_AMIXDOWN_6CH:
             context->channel_layout = AV_CH_LAYOUT_5POINT1;
-            pv->layout = HB_INPUT_CH_LAYOUT_3F2R | HB_INPUT_CH_LAYOUT_HAS_LFE;
             break;
 
         default:
-            hb_log("encavcodecaInit: bad mixdown" );
+            context->channel_layout = AV_CH_LAYOUT_STEREO;
+            hb_log("encavcodecaInit: bad mixdown");
             break;
     }
 
@@ -226,10 +222,11 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     //      do it here - this hack should be removed if Libav fixes the bug
     hb_chan_map_t * out_map = ( w->codec_param == CODEC_ID_AAC ) ? &hb_qt_chan_map : &hb_smpte_chan_map;
 
-    if ( audio->config.in.channel_map != out_map )
+    if (audio->config.in.channel_map != out_map)
     {
-        hb_layout_remap( audio->config.in.channel_map, out_map, pv->layout,
-                         (float*)pv->buf, pv->samples_per_frame );
+        hb_layout_remap(audio->config.in.channel_map, out_map,
+                        pv->context->channel_layout, (float*)pv->buf,
+                        pv->samples_per_frame);
     }
 
     // Do we need to convert our internal float format?
