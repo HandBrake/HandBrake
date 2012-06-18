@@ -283,7 +283,20 @@ static int MKVInit( hb_mux_object_t * m )
         // MKV lang codes should be ISO-639-2/B
         lang =  lang_for_code2( audio->config.lang.iso639_2 );
         track->language = lang->iso639_2b ? lang->iso639_2b : lang->iso639_2;
-        track->extra.audio.samplingFreq = (float)audio->config.out.samplerate;
+        // sample rate
+        if ((audio->config.out.codec == HB_ACODEC_CA_HAAC) ||
+            (audio->config.out.codec == HB_ACODEC_AAC_PASS &&
+             audio->priv.config.extradata.length == 5))
+        {
+            // For HE-AAC, write outputSamplingFreq too
+            // samplingFreq is half of outputSamplingFreq
+            track->extra.audio.outputSamplingFreq = (float)audio->config.out.samplerate;
+            track->extra.audio.samplingFreq = track->extra.audio.outputSamplingFreq / 2.;
+        }
+        else
+        {
+            track->extra.audio.samplingFreq = (float)audio->config.out.samplerate;
+        }
         if (audio->config.out.codec & HB_ACODEC_PASS_FLAG)
         {
             track->extra.audio.channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(audio->config.in.channel_layout);
