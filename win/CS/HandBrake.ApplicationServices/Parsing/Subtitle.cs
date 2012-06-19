@@ -173,7 +173,7 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <returns>A string formatted as: {track #} {language}</returns>
         public override string ToString()
         {
-            return string.Format("{0} {1} ({2})", TrackNumber, Language, TypeString);
+            return this.SubtitleType == SubtitleType.ForeignAudioSearch ? "Foreign Audio Scan" : string.Format("{0} {1} ({2})", this.TrackNumber, this.Language, this.TypeString);
         }
     }
 }
