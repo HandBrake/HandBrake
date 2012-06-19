@@ -165,8 +165,11 @@ namespace HandBrakeWPF.ViewModels
 
             if (this.presetService.CheckIfPresetExists(this.Preset.Name))
             {
-                this.errorService.ShowMessageBox("A Preset with this name already exists. Please choose a new name", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+               MessageBoxResult result = this.errorService.ShowMessageBox("A Preset with this name already exists. Would you like to overwrite it?", "Error", MessageBoxButton.YesNo, MessageBoxImage.Error);
+               if (result == MessageBoxResult.No)
+               {
+                   return;
+               }
             }
 
             this.Preset.UsePictureFilters = this.Preset.UsePictureFilters;

@@ -13,6 +13,7 @@ namespace HandBrakeWPF.ViewModels
 {
     using System.Collections.Generic;
     using System.Collections.Specialized;
+    using System.ComponentModel;
     using System.ComponentModel.Composition;
     using System.Linq;
 
@@ -39,7 +40,12 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Backing field for the source subtitle tracks.
         /// </summary>
-        private IEnumerable<Subtitle> sourceTracks;
+        private IList<Subtitle> sourceTracks;
+
+        /// <summary>
+        /// The Foreign Audio Search Track
+        /// </summary>
+        private readonly Subtitle ForeignAudioSearchTrack;
 
         #endregion
 
@@ -60,6 +66,9 @@ namespace HandBrakeWPF.ViewModels
 
             this.Langauges = LanguageUtilities.MapLanguages().Keys;
             this.CharacterCodes = CharCodesUtilities.GetCharacterCodes();
+
+            this.ForeignAudioSearchTrack = new Subtitle { SubtitleType = SubtitleType.ForeignAudioSearch, Language = "Foreign Audio Search (Bitmap)" };
+            this.SourceTracks = new List<Subtitle> { this.ForeignAudioSearchTrack };
         }
 
         #endregion
@@ -79,7 +88,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets SourceTracks.
         /// </summary>
-        public IEnumerable<Subtitle> SourceTracks
+        public IList<Subtitle> SourceTracks
         {
             get
             {
@@ -149,7 +158,9 @@ namespace HandBrakeWPF.ViewModels
         {
             VistaOpenFileDialog dialog = new VistaOpenFileDialog
                 {
-                   Filter = "SRT files (*.srt)|*.srt", CheckFileExists = true, Multiselect = true 
+                    Filter = "SRT files (*.srt)|*.srt",
+                    CheckFileExists = true,
+                    Multiselect = true
                 };
 
             dialog.ShowDialog();
@@ -158,10 +169,10 @@ namespace HandBrakeWPF.ViewModels
             {
                 SubtitleTrack track = new SubtitleTrack
                     {
-                        SrtFileName = Path.GetFileNameWithoutExtension(srtFile), 
-                        SrtOffset = 0, 
-                        SrtCharCode = "UTF-8", 
-                        SrtLang = "English", 
+                        SrtFileName = Path.GetFileNameWithoutExtension(srtFile),
+                        SrtOffset = 0,
+                        SrtCharCode = "UTF-8",
+                        SrtLang = "English",
                         SubtitleType = SubtitleType.SRT,
                         SrtPath = srtFile
                     };
@@ -255,7 +266,13 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void SetSource(Title title, Preset preset, EncodeTask task)
         {
-            this.SourceTracks = title.Subtitles;
+            this.SourceTracks.Clear();
+            this.SourceTracks.Add(ForeignAudioSearchTrack);
+            foreach (Subtitle subtitle in title.Subtitles)
+            {
+                this.SourceTracks.Add(subtitle);
+            }
+
             this.Task = task;
             this.NotifyOfPropertyChange(() => this.Task);
 
@@ -281,24 +298,24 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void Add(Subtitle subtitle)
         {
-            if (this.SourceTracks != null)
+            string preferred =
+                this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles);
+
+            Subtitle source = subtitle ??
+                              ((this.SourceTracks != null)
+                                   ? (this.SourceTracks.FirstOrDefault(l => l.Language == preferred) ??
+                                      this.SourceTracks.FirstOrDefault(s => s.SubtitleType != SubtitleType.ForeignAudioSearch))
+                                   : null);
+
+            if (source != null)
             {
-                string preferred =
-                    this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles);
+                SubtitleTrack track = new SubtitleTrack
+                    {
+                        SubtitleType = SubtitleType.VobSub,
+                        SourceTrack = source,
+                    };
 
-                Subtitle source = subtitle ??
-                                  (this.SourceTracks.FirstOrDefault(l => l.Language == preferred) ??
-                                   this.SourceTracks.FirstOrDefault());
-
-                if (source != null)
-                {
-                    SubtitleTrack track = new SubtitleTrack
-                        {
-                           SubtitleType = SubtitleType.VobSub, SourceTrack = source, 
-                        };
-
-                    this.Task.SubtitleTracks.Add(track);
-                }
+                this.Task.SubtitleTracks.Add(track);
             }
         }
 

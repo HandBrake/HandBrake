@@ -31,6 +31,8 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         [Description("PGS")]
         PGS,
         [Description("Unknown")]
-        Unknown
+        Unknown,
+        [Description("Foreign Audio Search")]
+        ForeignAudioSearch, // Special Type for Foreign Audio Search
     }
 }

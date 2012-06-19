@@ -116,7 +116,8 @@ namespace HandBrake.ApplicationServices.Services
         #region Public Methods
 
         /// <summary>
-        /// Add a new preset to the system
+        /// Add a new preset to the system.
+        /// Performs an Update if it already exists
         /// </summary>
         /// <param name="preset">
         /// A Preset to add
@@ -134,6 +135,11 @@ namespace HandBrake.ApplicationServices.Services
 
                 // Update the presets file
                 this.UpdatePresetFiles();
+                return true;
+            } 
+            else
+            {
+                this.Update(preset);
                 return true;
             }
 

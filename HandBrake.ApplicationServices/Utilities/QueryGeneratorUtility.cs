@@ -407,7 +407,10 @@ namespace HandBrake.ApplicationServices.Utilities
             switch (task.VideoEncoder)
             {
                 case VideoEncoder.FFMpeg:
-                    query += " -e ffmpeg";
+                    query += " -e ffmpeg4";
+                    break;
+                case VideoEncoder.FFMpeg2:
+                    query += " -e ffmpeg2";
                     break;
                 case VideoEncoder.X264:
                     query += " -e x264";
@@ -743,7 +746,7 @@ namespace HandBrake.ApplicationServices.Utilities
                         subCount++;
 
                         // Find --subtitle <string>
-                        if (item.Track.Contains("Foreign Audio Search"))
+                        if (item.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch)
                             itemToAdd = "scan";
                         else
                         {
