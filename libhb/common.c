@@ -710,74 +710,51 @@ float hb_get_default_audio_compression( uint32_t codec )
     return compression;
 }
 
-int hb_get_best_mixdown( uint32_t codec, int layout, int mixdown )
+int hb_get_best_mixdown(uint32_t codec, int layout, int mixdown)
 {
-
     int best_mixdown;
-    
+
     if (codec & HB_ACODEC_PASS_FLAG)
     {
-        // Audio pass-thru.  No mixdown.
+        // Audio passthrough, no mixdown
         return HB_AMIXDOWN_NONE;
     }
-    switch (layout & ~AV_CH_LOW_FREQUENCY)
+    else if ((layout & AV_CH_LAYOUT_5POINT1) == AV_CH_LAYOUT_5POINT1 ||
+             (layout & AV_CH_LAYOUT_5POINT1_BACK) == AV_CH_LAYOUT_5POINT1_BACK)
     {
-        // mono input
-        case AV_CH_LAYOUT_MONO:
-            best_mixdown = HB_AMIXDOWN_MONO;
-            break;
-
-        // Dolby Pro Logic (a.k.a. Dolby Surround), 4.0 channels (matrix-encoded)
-        // The A52 flags don't allow for a way to distinguish between DPL1 and
-        // DPL2 on a DVD so we always assume a DPL1 source for A52_DOLBY.
-        case AV_CH_LAYOUT_STEREO_DOWNMIX:
-        // 3 or 4 discrete channels
-        case AV_CH_LAYOUT_2_1:
-        case AV_CH_LAYOUT_2_2:
-        case AV_CH_LAYOUT_QUAD:
-        case AV_CH_LAYOUT_4POINT0:
-        case AV_CH_LAYOUT_SURROUND:
-            // a52dec and libdca can't upmix to 6ch, so we must downmix these.
-            // libdca only supports DPLII if the source is 3F2R to begin with.
-            best_mixdown = HB_AMIXDOWN_DOLBY;
-            break;
-
-        // 5 to 8 discrete channels
-        case AV_CH_LAYOUT_5POINT0:
-        case AV_CH_LAYOUT_7POINT0:
-            if (!(layout & AV_CH_LOW_FREQUENCY))
-            {
-                // we don't do 5-channel discrete
-                // a52dec and libdca can't upmix to 6ch, so we must downmix this.
-                best_mixdown = HB_AMIXDOWN_DOLBYPLII;
-            }
-            else
-            {
-                switch (codec)
-                {
-                    case HB_ACODEC_LAME:
-                    case HB_ACODEC_FFAAC:
-                        best_mixdown = HB_AMIXDOWN_DOLBYPLII;
-                        break;
-
-                    default:
-                        best_mixdown = HB_AMIXDOWN_6CH;
-                        break;
-                }
-            }
-            break;
-
-        // stereo input or something not handled above
-        default:
-            // mono gets mixed up to stereo & more than stereo gets mixed down
-            best_mixdown = HB_AMIXDOWN_STEREO;
-            break;
+        // full 3F2R, possibly with additional channels, and an LFE
+        // limiting factor: liba52, libdca (can't upmix)
+        best_mixdown = HB_AMIXDOWN_6CH;
     }
+    else if ((layout & AV_CH_LAYOUT_5POINT0) == AV_CH_LAYOUT_5POINT0 ||
+             (layout & AV_CH_LAYOUT_5POINT0_BACK) == AV_CH_LAYOUT_5POINT0_BACK)
+    {
+        // full 3F2R, possibly with additional channels, but no LFE
+        // limiting factor: liba52, libdca (can't upmix)
+        // limiting factor: libdca (can only do DPL2 with 3F2R sources)
+        best_mixdown = HB_AMIXDOWN_DOLBYPLII;
+    }
+    else if(layout == AV_CH_LAYOUT_STEREO)
+    {
+        // limiting factor: no Dolby Surround for Stereo sources
+        best_mixdown = HB_AMIXDOWN_STEREO;
+    }
+    else if(av_get_channel_layout_nb_channels(layout) == 1)
+    {
+        // only one channel, not much point in upmixing
+        best_mixdown = HB_AMIXDOWN_MONO;
+    }
+    else
+    {
+        // everything else, including Dolby (AV_CH_LAYOUT_STEREO_DOWNMIX)
+        best_mixdown = HB_AMIXDOWN_DOLBY;
+    }
+
     // return the best that is not greater than the requested mixdown
     // 0 means the caller requested the best available mixdown
-    if( best_mixdown > mixdown && mixdown > 0 )
+    if (best_mixdown > mixdown && mixdown > 0)
         best_mixdown = mixdown;
-    
+
     return best_mixdown;
 }
 
