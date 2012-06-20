@@ -710,7 +710,7 @@ float hb_get_default_audio_compression( uint32_t codec )
     return compression;
 }
 
-int hb_get_best_mixdown(uint32_t codec, int layout, int mixdown)
+int hb_get_best_mixdown(uint32_t codec, uint64_t layout, int mixdown)
 {
     int best_mixdown;
 
@@ -765,7 +765,7 @@ int hb_get_best_mixdown(uint32_t codec, int layout, int mixdown)
     return best_mixdown;
 }
 
-int hb_get_default_mixdown( uint32_t codec, int layout )
+int hb_get_default_mixdown(uint32_t codec, uint64_t layout)
 {
     int mixdown;
     switch (codec)
@@ -781,7 +781,7 @@ int hb_get_default_mixdown( uint32_t codec, int layout )
             break;
     }
     // return the best available mixdown up to the selected default
-    return hb_get_best_mixdown( codec, layout, mixdown );
+    return hb_get_best_mixdown(codec, layout, mixdown);
 }
 
 /**********************************************************************
