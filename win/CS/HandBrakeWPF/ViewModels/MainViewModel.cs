@@ -1135,8 +1135,16 @@ namespace HandBrakeWPF.ViewModels
                     Filter = "mp4|*.mp4;*.m4v|mkv|*.mkv",
                     AddExtension = true,
                     OverwritePrompt = true,
-                    DefaultExt = ".mp4"
+                    DefaultExt = ".mp4",
                 };
+            if (this.CurrentTask != null && !string.IsNullOrEmpty(this.CurrentTask.Destination))
+            {
+                if (Directory.Exists(Path.GetFullPath(this.CurrentTask.Destination)))
+                {
+                    dialog.InitialDirectory = Path.GetFullPath(this.CurrentTask.Destination);
+                }
+            }
+
             dialog.ShowDialog();
 
             if (!string.IsNullOrEmpty(dialog.FileName))
