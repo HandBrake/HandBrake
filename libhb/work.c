@@ -751,61 +751,52 @@ static void do_job( hb_job_t * job )
     /*
      * Audio fifos must be initialized before sync
      */
-    if( !job->indepth_scan )
+    if (!job->indepth_scan)
     {
     // apply Auto Passthru settings
-    hb_autopassthru_apply_settings( job, title );
+    hb_autopassthru_apply_settings(job, title);
     // sanitize audio settings
-    for( i = 0; i < hb_list_count( title->list_audio ); )
+    for (i = 0; i < hb_list_count(title->list_audio);)
     {
-        audio = hb_list_item( title->list_audio, i );
-        if( audio->config.out.codec == HB_ACODEC_AUTO_PASS )
+        audio = hb_list_item(title->list_audio, i);
+        if (audio->config.out.codec == HB_ACODEC_AUTO_PASS)
         {
             // Auto Passthru should have been handled above
             // remove track to avoid a crash
-            hb_log( "Auto Passthru error, dropping track %d",
-                    audio->config.out.track  );
-            hb_list_rem( title->list_audio, audio );
-            free( audio );
+            hb_log("Auto Passthru error, dropping track %d",
+                   audio->config.out.track);
+            hb_list_rem(title->list_audio, audio);
+            free(audio);
             continue;
         }
-        if( ( audio->config.out.codec & HB_ACODEC_PASS_FLAG ) &&
-           !( audio->config.in.codec & audio->config.out.codec & HB_ACODEC_PASS_MASK ) )
+        if ((audio->config.out.codec & HB_ACODEC_PASS_FLAG) &&
+            !(audio->config.in.codec & audio->config.out.codec & HB_ACODEC_PASS_MASK))
         {
-            hb_log( "Passthru requested and input codec is not the same as output codec for track %d, dropping track",
-                    audio->config.out.track );
-            hb_list_rem( title->list_audio, audio );
-            free( audio );
+            hb_log("Passthru requested and input codec is not the same as output codec for track %d, dropping track",
+                   audio->config.out.track);
+            hb_list_rem(title->list_audio, audio);
+            free(audio);
             continue;
         }
-        if( !(audio->config.out.codec & HB_ACODEC_PASS_FLAG) )
+        if (!(audio->config.out.codec & HB_ACODEC_PASS_FLAG))
         {
-            if( audio->config.out.samplerate > 48000 )
+            if (audio->config.out.samplerate < 0)
             {
-                hb_log( "Sample rate %d not supported. Down-sampling to 48kHz.",
-                        audio->config.out.samplerate );
-                audio->config.out.samplerate = 48000;
-            }
-            // if not specified, set to same as input
-            if( audio->config.out.samplerate < 0 )
-            {
+                // if not specified, set to same as input
                 audio->config.out.samplerate = audio->config.in.samplerate;
             }
-        }
-        if( audio->config.out.codec == HB_ACODEC_CA_HAAC )
-        {
-            if( !encca_haac_available() )
+            if (audio->config.out.samplerate > 48000)
             {
-                // user chose Core Audio HE-AAC but the encoder is unavailable
-                hb_log( "Core Audio HE-AAC unavailable. Using Core Audio AAC for track %d",
-                        audio->config.out.track );
-                audio->config.out.codec = HB_ACODEC_CA_AAC;
+                hb_log("Sample rate %d not supported. Downsampling to 48kHz for track %d",
+                       audio->config.out.samplerate, audio->config.out.track);
+                audio->config.out.samplerate = 48000;
             }
-            else if( audio->config.out.samplerate < 32000 )
+            else if (audio->config.out.samplerate < 32000 &&
+                     audio->config.out.codec == HB_ACODEC_CA_HAAC)
             {
                 // Core Audio HE-AAC doesn't support samplerates < 32 kHz
-                hb_log( "Sample rate %d not supported (ca_haac). Using 32kHz for track %d",
-                        audio->config.out.samplerate, audio->config.out.track );
+                hb_log("Sample rate %d not supported (ca_haac). Using 32kHz for track %d",
+                       audio->config.out.samplerate, audio->config.out.track);
                 audio->config.out.samplerate = 32000;
             }
         }
