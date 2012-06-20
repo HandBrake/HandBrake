@@ -724,7 +724,14 @@ int hb_get_best_mixdown(uint32_t codec, int layout, int mixdown)
     {
         // full 3F2R, possibly with additional channels, and an LFE
         // limiting factor: liba52, libdca (can't upmix)
-        best_mixdown = HB_AMIXDOWN_6CH;
+        if (codec == HB_ACODEC_LAME || codec == HB_ACODEC_FFAAC)
+        {
+            best_mixdown = HB_AMIXDOWN_DOLBYPLII;
+        }
+        else
+        {
+            best_mixdown = HB_AMIXDOWN_6CH;
+        }
     }
     else if ((layout & AV_CH_LAYOUT_5POINT0) == AV_CH_LAYOUT_5POINT0 ||
              (layout & AV_CH_LAYOUT_5POINT0_BACK) == AV_CH_LAYOUT_5POINT0_BACK)
