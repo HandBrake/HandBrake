@@ -307,16 +307,18 @@ namespace HandBrakeWPF.ViewModels
                                       this.SourceTracks.FirstOrDefault(s => s.SubtitleType != SubtitleType.ForeignAudioSearch))
                                    : null);
 
-            if (source != null)
+            if (source == null)
             {
-                SubtitleTrack track = new SubtitleTrack
+                source = ForeignAudioSearchTrack;
+            }
+
+            SubtitleTrack track = new SubtitleTrack
                     {
                         SubtitleType = SubtitleType.VobSub,
                         SourceTrack = source,
                     };
 
-                this.Task.SubtitleTracks.Add(track);
-            }
+            this.Task.SubtitleTracks.Add(track);
         }
 
         /// <summary>
