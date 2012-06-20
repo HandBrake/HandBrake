@@ -185,10 +185,9 @@ namespace HandBrakeWPF.ViewModels
             this.scanService.ScanStared += this.ScanStared;
             this.scanService.ScanCompleted += this.ScanCompleted;
             this.scanService.ScanStatusChanged += this.ScanStatusChanged;
-
+            this.queueProcessor.JobProcessingStarted += this.QueueProcessorJobProcessingStarted;
             this.queueProcessor.QueueCompleted += this.QueueCompleted;
             this.queueProcessor.QueuePaused += this.QueuePaused;
-            this.queueProcessor.EncodeService.EncodeStarted += this.EncodeStarted;
             this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeStatusChanged;
 
             this.Presets = this.presetService.Presets;
@@ -810,7 +809,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.queueProcessor.QueueCompleted -= this.QueueCompleted;
             this.queueProcessor.QueuePaused -= this.QueuePaused;
-            this.queueProcessor.EncodeService.EncodeStarted -= this.EncodeStarted;
+            this.queueProcessor.JobProcessingStarted -= this.QueueProcessorJobProcessingStarted;
             this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
         }
 
@@ -1494,22 +1493,22 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Encode Started Handler
+        /// Handle the Queue Starting Event
         /// </summary>
         /// <param name="sender">
-        /// The Sender
+        /// The sender.
         /// </param>
         /// <param name="e">
-        /// The EventArgs
+        /// The e.
         /// </param>
-        private void EncodeStarted(object sender, EventArgs e)
+        void QueueProcessorJobProcessingStarted(object sender, HandBrake.ApplicationServices.EventArgs.QueueProgressEventArgs e)
         {
             Execute.OnUIThread(
-                () =>
-                {
-                    this.StatusLabel = "Preparing to encode ...";
-                    this.IsEncoding = true;
-                });
+               () =>
+               {
+                   this.StatusLabel = "Preparing to encode ...";
+                   this.IsEncoding = true;
+               });
 
             // TODO Handle Updating the UI
         }
