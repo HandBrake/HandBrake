@@ -1137,11 +1137,13 @@ namespace HandBrakeWPF.ViewModels
                     OverwritePrompt = true,
                     DefaultExt = ".mp4",
                 };
+
             if (this.CurrentTask != null && !string.IsNullOrEmpty(this.CurrentTask.Destination))
             {
-                if (Directory.Exists(Path.GetFullPath(this.CurrentTask.Destination)))
+                if (Directory.Exists(Path.GetDirectoryName(this.CurrentTask.Destination)))
                 {
-                    dialog.InitialDirectory = Path.GetFullPath(this.CurrentTask.Destination);
+                    dialog.InitialDirectory = Path.GetDirectoryName(this.CurrentTask.Destination) + "\\";
+                    dialog.FileName = Path.GetFileName(this.CurrentTask.Destination);
                 }
             }
 
