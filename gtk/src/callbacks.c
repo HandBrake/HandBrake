@@ -2846,19 +2846,22 @@ ghb_backend_events(signal_user_data_t *ud)
 		status_str = searching_status_string(ud, &status.queue);
 		label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_status"));
 		gtk_label_set_text (label, status_str);
+		if (ghb_settings_get_boolean(ud->settings, "show_status"))
+		{
 #if !GTK_CHECK_VERSION(2, 16, 0)
-		GtkStatusIcon *si;
+			GtkStatusIcon *si;
 
-		si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
-		gtk_status_icon_set_tooltip(si, status_str);
+			si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
+			gtk_status_icon_set_tooltip(si, status_str);
 #endif
 #if defined(_USE_APP_IND)
-		char * ai_status_str= g_strdup_printf(
-			"%.2f%%",
-			100.0 * status.queue.progress);
-		app_indicator_set_label( ud->ai, ai_status_str, "99.99%");
-		g_free(ai_status_str);
+			char * ai_status_str= g_strdup_printf(
+				"%.2f%%",
+				100.0 * status.queue.progress);
+			app_indicator_set_label( ud->ai, ai_status_str, "99.99%");
+			g_free(ai_status_str);
 #endif
+		}
 		gtk_label_set_text (work_status, status_str);
 		gtk_progress_bar_set_fraction (progress, status.queue.progress);
 		g_free(status_str);
@@ -2891,20 +2894,23 @@ ghb_backend_events(signal_user_data_t *ud)
 		status_str = working_status_string(ud, &status.queue);
 		label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_status"));
 		gtk_label_set_text (label, status_str);
+		if (ghb_settings_get_boolean(ud->settings, "show_status"))
+		{
 #if defined(_USE_APP_IND)
-		char * ai_status_str= g_strdup_printf(
-			"%.2f%%",
-			100.0 * status.queue.progress);
-		app_indicator_set_label( ud->ai, ai_status_str, "99.99%");
-		g_free(ai_status_str);
+			char * ai_status_str= g_strdup_printf(
+				"%.2f%%",
+				100.0 * status.queue.progress);
+			app_indicator_set_label( ud->ai, ai_status_str, "99.99%");
+			g_free(ai_status_str);
 #else
 #if !GTK_CHECK_VERSION(2, 16, 0)
-		GtkStatusIcon *si;
+			GtkStatusIcon *si;
 
-		si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
-		gtk_status_icon_set_tooltip(si, status_str);
+			si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
+			gtk_status_icon_set_tooltip(si, status_str);
 #endif
 #endif
+		}
 		gtk_label_set_text (work_status, status_str);
 		gtk_progress_bar_set_fraction (progress, status.queue.progress);
 		g_free(status_str);
