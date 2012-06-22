@@ -1913,9 +1913,9 @@ static int hb_decomb_init( hb_filter_object_t * filter,
     filter->private_data = calloc( 1, sizeof(struct hb_filter_private_s) );
     hb_filter_private_t * pv = filter->private_data;
 
-    pv->width[0]  = hb_image_width( init->pix_fmt, init->width, 0 );
+    pv->width[0]  = hb_image_stride( init->pix_fmt, init->width, 0 );
     pv->height[0] = hb_image_height( init->pix_fmt, init->height, 0 );
-    pv->width[1]  = pv->width[2]  = hb_image_width( init->pix_fmt, init->width, 1 );
+    pv->width[1]  = pv->width[2]  = hb_image_stride( init->pix_fmt, init->width, 1 );
     pv->height[1] = pv->height[2] = hb_image_height( init->pix_fmt, init->height, 1 );
 
     build_gamma_lut( pv );
@@ -2390,7 +2390,7 @@ static int hb_decomb_work( hb_filter_object_t * filter,
         }
 
         // Allocate a replacement for the buffer we just consumed
-        pv->buf_out[out_frame] = hb_video_buffer_init( pv->width[0], pv->height[0] );
+        pv->buf_out[out_frame] = hb_video_buffer_init( last->f.width, last->f.height );
 
         /* Copy buffered settings to output buffer settings */
         last->s = pv->buf_settings->s;
