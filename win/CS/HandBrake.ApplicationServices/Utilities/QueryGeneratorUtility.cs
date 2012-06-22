@@ -248,10 +248,10 @@ namespace HandBrake.ApplicationServices.Utilities
             if (task.Anamorphic != Anamorphic.Strict)
             {
                 if (task.MaxWidth.HasValue) query += string.Format(" -X {0}", task.MaxWidth);
-                else if (task.Width.HasValue && task.Width != 0) query += string.Format(" -w {0}", task.Width);
+                if (task.Width.HasValue && task.Width != 0) query += string.Format(" -w {0}", task.Width);
 
-                if (task.MaxWidth.HasValue) query += string.Format(" -Y {0}", task.MaxHeight);
-                else if (task.Height.HasValue && task.Height != 0) query += string.Format(" -l {0}", task.Height);
+                if (task.MaxHeight.HasValue) query += string.Format(" -Y {0}", task.MaxHeight);
+                if (task.Height.HasValue && task.Height != 0) query += string.Format(" -l {0}", task.Height);
             }
 
             if (task.HasCropping)
