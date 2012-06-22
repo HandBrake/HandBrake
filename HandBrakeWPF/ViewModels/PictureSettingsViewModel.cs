@@ -13,7 +13,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
     using System.Drawing;
-    using System.Globalization;
 
     using Caliburn.Micro;
 
