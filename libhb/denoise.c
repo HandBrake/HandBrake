@@ -392,14 +392,14 @@ static int hb_denoise_work( hb_filter_object_t * filter,
 
     if( !pv->hqdn3d_line )
     {
-        pv->hqdn3d_line = malloc( in->f.width * sizeof(int) );
+        pv->hqdn3d_line = malloc( in->plane[0].stride * sizeof(int) );
     }
 
     hqdn3d_denoise( in->plane[0].data,
                     out->plane[0].data,
                     pv->hqdn3d_line,
                     &pv->hqdn3d_frame[0],
-                    in->plane[0].width,
+                    in->plane[0].stride,
                     in->plane[0].height,
                     pv->hqdn3d_coef[0],
                     pv->hqdn3d_coef[0],
@@ -409,7 +409,7 @@ static int hb_denoise_work( hb_filter_object_t * filter,
                     out->plane[1].data,
                     pv->hqdn3d_line,
                     &pv->hqdn3d_frame[1],
-                    in->plane[1].width,
+                    in->plane[1].stride,
                     in->plane[1].height,
                     pv->hqdn3d_coef[2],
                     pv->hqdn3d_coef[2],
@@ -419,7 +419,7 @@ static int hb_denoise_work( hb_filter_object_t * filter,
                     out->plane[2].data,
                     pv->hqdn3d_line,
                     &pv->hqdn3d_frame[2],
-                    in->plane[2].width,
+                    in->plane[2].stride,
                     in->plane[2].height,
                     pv->hqdn3d_coef[2],
                     pv->hqdn3d_coef[2],
