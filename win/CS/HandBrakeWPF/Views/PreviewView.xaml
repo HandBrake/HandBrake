@@ -14,7 +14,6 @@
 
     <Window.Resources>
         <Style TargetType="Button">
-            <Setter Property="Foreground" Value="DarkOrange" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Padding" Value="5,1" />
             <Setter Property="FontSize" Value="11.5" />

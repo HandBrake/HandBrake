@@ -2,11 +2,12 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:cal="http://www.caliburnproject.org"
         xmlns:Helpers="clr-namespace:HandBrakeWPF.Helpers"
-              xmlns:Options="clr-namespace:HandBrakeWPF.Converters.Options" Background="White">
+              xmlns:Options="clr-namespace:HandBrakeWPF.Converters.Options"
+              xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+              Background="White">
 
     <UserControl.Resources>
         <Style TargetType="Button">
-            <Setter Property="Foreground" Value="DarkOrange" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Padding" Value="5,0.5" />
             <Setter Property="FontSize" Value="11.5" />
@@ -53,11 +54,11 @@
             <Border BorderThickness="0 0 0 1" BorderBrush="LightGray" Margin="0,0,0,10">
                 <TextBlock Text="Preferences" FontSize="16" />
             </Border>
-            
+
             <ListBox ItemsSource="{Binding OptionTabs}" SelectedItem="{Binding SelectedTab}"
                      BorderThickness="0" Background="Transparent">
             </ListBox>
-            
+
         </StackPanel>
 
         <ScrollViewer Grid.Column="1">
@@ -118,7 +119,7 @@
                                 <TextBox Name="vlcPath" Text="{Binding VLCPath}"  Width="250" />
                                 <Button Content="Browse" cal:Message.Attach="[Event Click] = [Action BrowseVlcPath]" Margin="5,0,0,0" Width="55"/>
                             </StackPanel>
-                            <TextBlock Text="This path is used for the video preview feature only." />
+                            <TextBlock Margin="30,0,0,0" Text="This path is used for the video preview feature only." />
 
                         </StackPanel>
                     </StackPanel>
@@ -170,7 +171,7 @@
                     <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
                         <TextBlock Text="Automatic Language Selection" FontSize="16" />
                     </Border>
-                    
+
                     <TextBlock Text="Audio and Subtitle Language Selection" Grid.Column="0" Margin="10,10,0,0" FontSize="14"/>
 
                     <Grid Margin="20,10,0,0" >
@@ -201,7 +202,6 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Orientation="Vertical" Grid.Column="0">
@@ -225,20 +225,11 @@
                                 <StackPanel Orientation="Vertical" Grid.Column="2">
                                     <TextBlock Text="Selected Langauges"  Margin="0,0,0,5"/>
                                     <ListBox Name="selectedLangauges" ItemsSource="{Binding SelectedLangauges}" Helpers:ListBoxHelper.SelectedItems="{Binding SelectedLangaugesToMove}" 
-                                             SelectionMode="Extended" Width="140" Height="140" />
+                                             SelectionMode="Extended" Width="140" Height="140"
+                                             dd:DragDrop.DropHandler="{Binding}"
+                                             dd:DragDrop.IsDragSource="True"
+                                             dd:DragDrop.IsDropTarget="True"/>
                                 </StackPanel>
-
-                                <DockPanel Grid.Column="3" Margin="10,0,10,0">
-                                    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                        <Button VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveUp]"  >
-                                            <Image Source="Images/arrow_up.png" Width="16" Height="16" />
-                                        </Button>
-                                        <Button VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveDown]"  >
-                                            <Image Source="Images/arrow_down.png" Width="16" Height="16" />
-                                        </Button>
-                                    </StackPanel>
-                                </DockPanel>
-
                             </Grid>
                         </StackPanel>
                     </Grid>
@@ -270,7 +261,7 @@
 
                 <StackPanel Name="Advanced" Orientation="Vertical" Margin="10,10,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter='Advanced'}">
-                    
+
                     <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
                         <TextBlock Text="Advanced" FontSize="16" />
                     </Border>
@@ -278,7 +269,7 @@
                     <StackPanel Orientation="Vertical" Margin="0,10,0,20">
 
                         <TextBlock Text="Advanced Options" Grid.Column="0" FontSize="14" Margin="0,0,0,10"/>
-                        
+
                         <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
                             <CheckBox Content="Prevent the system from sleeping while encoding" IsChecked="{Binding PreventSleep}" />
                             <CheckBox Content="Minimize to system tray (Requires Restart)" Visibility="Collapsed" IsChecked="{Binding MinimiseToTray}" />
@@ -295,8 +286,8 @@
                                 <TextBox Name="MinTitleLength" Text="{Binding MinLength}"  Width="120"/>
                                 <!-- Find a control for this-->
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" Grid.Column="1">
-                                <TextBlock Text="Priority Level:" VerticalAlignment="Center" />
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock Text="Priority Level:" Width="250" VerticalAlignment="Center" />
                                 <ComboBox Name="processPriorityLevel" ItemsSource="{Binding PriorityLevelOptions}" SelectedItem="{Binding SelectedPriority}" Width="120" />
                             </StackPanel>
 
@@ -327,12 +318,12 @@
 
                         <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
                             <StackPanel Orientation="Horizontal" Grid.Column="1">
-                                <TextBlock Text="Log Verbosity Level:" VerticalAlignment="Center" />
+                                <TextBlock Text="Log Verbosity Level:" Width="250" VerticalAlignment="Center" />
                                 <ComboBox Name="logVerbosityLevel" ItemsSource="{Binding LogVerbosityOptions}" SelectedItem="{Binding SelectedVerbosity}" Width="120" />
                             </StackPanel>
 
-                            <CheckBox Content="Put a copy of individual encode logs in the same location as the encoded video" IsChecked="{Binding CopyLogToEncodeDirectory}" />
-                            <CheckBox Content="Put a copy of individual encode logs in a specified location: " IsChecked="{Binding CopyLogToSepcficedLocation}" />
+                            <CheckBox Content="Put a copy of individual encode logs in the same location as the encoded video" Margin="0,5,0,0" IsChecked="{Binding CopyLogToEncodeDirectory}" />
+                            <CheckBox Content="Put a copy of individual encode logs in a specified location: " Margin="0,5,0,0" IsChecked="{Binding CopyLogToSepcficedLocation}" />
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Grid.Column="1">
                                 <TextBlock Text="Log Path:" VerticalAlignment="Center" />
                                 <TextBox Width="120" Text="{Binding LogDirectory}" />
