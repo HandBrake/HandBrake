@@ -108,6 +108,11 @@ namespace HandBrakeWPF.ViewModels
         private string statusLabel;
 
         /// <summary>
+        /// Program Status Label
+        /// </summary>
+        private string programStatusLabel;
+
+        /// <summary>
         /// Backing field for the scanned source.
         /// </summary>
         private Source scannedSource;
@@ -247,6 +252,27 @@ namespace HandBrakeWPF.ViewModels
                 if (!Equals(this.windowName, value))
                 {
                     this.windowName = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the Program Status Toolbar Label
+        /// This indicates the status of HandBrake
+        /// </summary>
+        public string ProgramStatusLabel
+        {
+            get
+            {
+                return string.IsNullOrEmpty(this.programStatusLabel) ? "Ready" : this.programStatusLabel;
+            }
+
+            set
+            {
+                if (!Equals(this.statusLabel, value))
+                {
+                    this.programStatusLabel = value;
+                    this.NotifyOfPropertyChange(() => this.ProgramStatusLabel);
                 }
             }
         }
@@ -913,7 +939,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (!this.IsEncoding)
             {
-                this.StatusLabel = string.Format("{0} Encodes Pending", this.queueProcessor.QueueManager.Count);
+                this.ProgramStatusLabel = string.Format("{0} Encodes Pending", this.queueProcessor.QueueManager.Count);
             }
         }
 
@@ -1463,7 +1489,6 @@ namespace HandBrakeWPF.ViewModels
                     this.StatusLabel = "Scanning source, please wait...";
                     this.ShowStatusWindow = true;
                 });
-            // TODO - Disable relevant parts of the UI.
         }
 
         /// <summary>
@@ -1480,7 +1505,7 @@ namespace HandBrakeWPF.ViewModels
             Execute.OnUIThread(
                 () =>
                 {
-                    this.StatusLabel =
+                    this.ProgramStatusLabel =
                         string.Format(
                             "{0:00.00}%,  FPS: {1:000.0},  Avg FPS: {2:000.0},  Time Remaining: {3},  Elapsed: {4:hh\\:mm\\:ss},  Pending Jobs {5}",
                             e.PercentComplete,
@@ -1506,7 +1531,7 @@ namespace HandBrakeWPF.ViewModels
             Execute.OnUIThread(
                () =>
                {
-                   this.StatusLabel = "Preparing to encode ...";
+                   this.ProgramStatusLabel = "Preparing to encode ...";
                    this.IsEncoding = true;
                });
 
@@ -1544,7 +1569,7 @@ namespace HandBrakeWPF.ViewModels
             Execute.OnUIThread(
                 () =>
                 {
-                    this.StatusLabel = "Queue Finished";
+                    this.ProgramStatusLabel = "Queue Finished";
                     this.IsEncoding = false;
                 });
 

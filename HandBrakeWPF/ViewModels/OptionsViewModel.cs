@@ -1393,6 +1393,7 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedLangaugesToMove = new BindingList<string>();
 
             IDictionary<string, string> langList = LanguageUtilities.MapLanguages();
+            langList = (from entry in langList orderby entry.Key ascending select entry).ToDictionary(pair => pair.Key, pair => pair.Value);
 
             this.selectedLangauges.Clear();
             foreach (string selectedItem in this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages))
@@ -1553,7 +1554,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void LanguageMoveLeft()
         {
-            if (this.SelectedLangauges.Count > 0)
+            if (this.SelectedAvailableToMove.Count > 0)
             {
                 List<string> copiedList = SelectedAvailableToMove.ToList();
                 foreach (string item in copiedList)
@@ -1580,6 +1581,8 @@ namespace HandBrakeWPF.ViewModels
                     this.AvailableLanguages.Add(item);
                 }
             }
+
+            this.AvailableLanguages = new BindingList<string>(this.AvailableLanguages.OrderBy(o => o).ToList());
         }
 
         /// <summary>
@@ -1594,47 +1597,6 @@ namespace HandBrakeWPF.ViewModels
             this.AvailableLanguages = new BindingList<string>(this.AvailableLanguages.OrderBy(o => o).ToList());
 
             this.SelectedLangauges.Clear();
-        }
-
-        /// <summary>
-        ///  Audio List Language Move UP
-        /// </summary>
-        public void LanguageMoveUp()
-        {
-            List<string> langauges = this.SelectedLangauges.ToList();
-            foreach (string item in langauges)
-            {
-                if (this.SelectedLangaugesToMove.Contains(item))
-                {
-                    int index = this.SelectedLangauges.IndexOf(item);
-                    if (index != 0)
-                    {
-                        this.SelectedLangauges.Remove(item);
-                        this.SelectedLangauges.Insert(index - 1, item);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Audio List Language Move Down
-        /// </summary>
-        public void LanguageMoveDown()
-        {
-            List<string> langauges = this.SelectedLangauges.ToList();
-            int count = this.SelectedLangauges.Count;
-            foreach (string item in langauges)
-            {
-                if (this.SelectedLangaugesToMove.Contains(item))
-                {
-                    int index = this.SelectedLangauges.IndexOf(item);
-                    if ((index + 1) != count)
-                    {
-                        this.SelectedLangauges.Remove(item);
-                        this.SelectedLangauges.Insert(index + 1, item);
-                    }
-                }
-            }
         }
 
         /// <summary>
