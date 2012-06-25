@@ -536,8 +536,12 @@ static int hb_deinterlace_work( hb_filter_object_t * filter,
         {
             hb_avpicture_fill( &pic_out, pv->buf_out[0] );
 
+            // avpicture_deinterlace requires 8 byte aligned width and height
+            // we have aligned all buffers to 16 byte width and height strides
+            // so use the image stride when deinterlacing
             avpicture_deinterlace( &pic_out, &pic_in, pv->buf_out[0]->f.fmt, 
-                                   pv->buf_out[0]->f.width, pv->buf_out[0]->f.height );
+                                   pv->buf_out[0]->plane[0].stride,
+                                   pv->buf_out[0]->plane[0].height_stride );
 
             pv->buf_out[0]->s = in->s;
             hb_buffer_move_subs( pv->buf_out[0], in );

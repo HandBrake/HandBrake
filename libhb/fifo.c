@@ -389,7 +389,7 @@ hb_buffer_t * hb_buffer_copy( const hb_buffer_t * src )
 static void hb_buffer_init_planes_internal( hb_buffer_t * b, uint8_t * has_plane )
 {
     uint8_t * plane = b->data;
-    int p;
+    int p, tot = 0;
 
     for( p = 0; p < 4; p++ )
     {
@@ -397,11 +397,12 @@ static void hb_buffer_init_planes_internal( hb_buffer_t * b, uint8_t * has_plane
         {
             b->plane[p].data = plane;
             b->plane[p].stride = hb_image_stride( b->f.fmt, b->f.width, p );
-            b->plane[p].height = hb_image_height( b->f.fmt, b->f.height, p );
+            b->plane[p].height_stride = hb_image_height_stride( b->f.fmt, b->f.height, p );
             b->plane[p].width  = hb_image_width( b->f.fmt, b->f.width, p );
-            b->plane[p].size   = hb_image_stride( b->f.fmt, b->f.width, p ) *
-                                 hb_image_height( b->f.fmt, b->f.height, p );
+            b->plane[p].height = hb_image_height( b->f.fmt, b->f.height, p );
+            b->plane[p].size   = b->plane[p].stride * b->plane[p].height_stride;
             plane += b->plane[p].size;
+            tot += b->plane[p].size;
         }
     }
 }
@@ -440,7 +441,7 @@ hb_buffer_t * hb_frame_buffer_init( int pix_fmt, int width, int height )
         if ( has_plane[p] )
         {
             size += hb_image_stride( pix_fmt, width, p ) * 
-                    hb_image_height( pix_fmt, height, p );
+                    hb_image_height_stride( pix_fmt, height, p );
         }
     }
 
@@ -476,7 +477,7 @@ void hb_video_buffer_realloc( hb_buffer_t * buf, int width, int height )
         if ( has_plane[p] )
         {
             size += hb_image_stride( buf->f.fmt, width, p ) * 
-                    hb_image_height( buf->f.fmt, height, p );
+                    hb_image_height_stride( buf->f.fmt, height, p );
         }
     }
 

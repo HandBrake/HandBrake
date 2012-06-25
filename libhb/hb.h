@@ -61,6 +61,7 @@ int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, i
 
 int           hb_save_preview( hb_handle_t * h, int title, int preview, 
                                hb_buffer_t *buf );
+hb_buffer_t * hb_read_preview( hb_handle_t * h, int title_idx, int preview );
 void          hb_get_preview_by_index( hb_handle_t *, int, int, uint8_t * );
 void          hb_get_preview( hb_handle_t *, hb_title_t *, int,
                               uint8_t * );

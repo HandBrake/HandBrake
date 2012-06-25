@@ -133,6 +133,7 @@ typedef struct yadif_thread_arg_s {
 struct hb_filter_private_s
 {
     int              width[3];
+    int              stride[3];
     int              height[3];
 
     // Decomb parameters
@@ -370,7 +371,7 @@ void apply_mask( hb_filter_private_t * pv )
                 apply_mask_line( srcp, mskp, pv->width[plane] );
             }
 
-            srcp += pv->pic_out.linesize[plane];
+            srcp += pv->stride[plane];
             mskp += pv->ref_stride[plane];
         }
     }
@@ -394,6 +395,7 @@ static void store_ref( const uint8_t ** pic,
         uint8_t * ref = pv->ref[2][i];
 
         int w = pv->width[i];
+        int s = pv->stride[i];
         int h = pv->height[i];
         int ref_stride = pv->ref_stride[i];
 
@@ -401,7 +403,7 @@ static void store_ref( const uint8_t ** pic,
         for( y = 0; y < h; y++ )
         {
             memcpy(ref, src, w);
-            src = (uint8_t*)src + w;
+            src = (uint8_t*)src + s;
             ref = (uint8_t*)ref + ref_stride;
         }
     }
@@ -1618,7 +1620,7 @@ void yadif_decomb_filter_thread( void *thread_args_v )
     int segment, segment_start, segment_stop;
     yadif_thread_arg_t *thread_args = thread_args_v;
     uint8_t **dst;
-    int parity, tff, y, w, h, penultimate, ultimate, ref_stride, is_combed;
+    int parity, tff, y, w, s, h, penultimate, ultimate, ref_stride, is_combed;
 
     pv = thread_args->pv;
     segment = thread_args->segment;
@@ -1662,6 +1664,7 @@ void yadif_decomb_filter_thread( void *thread_args_v )
             parity = yadif_work->parity;
             tff = yadif_work->tff;
             w = pv->width[plane];
+            s = pv->stride[plane];
             h = pv->height[plane];
             penultimate = h - 2;
             ultimate = h - 1;
@@ -1683,7 +1686,7 @@ void yadif_decomb_filter_thread( void *thread_args_v )
                 {
                     /* This line gets blend filtered, not yadif filtered. */
                     uint8_t *cur  = &pv->ref[1][plane][y*ref_stride];
-                    uint8_t *dst2 = &dst[plane][y*w];
+                    uint8_t *dst2 = &dst[plane][y*s];
                     /* These will be useful if we ever do temporal blending. */
                     // uint8_t *prev = &pv->ref[0][plane][y*ref_stride];
                     // uint8_t *next = &pv->ref[2][plane][y*ref_stride];
@@ -1694,7 +1697,7 @@ void yadif_decomb_filter_thread( void *thread_args_v )
                 {
                     /* Just apply vertical cubic interpolation */
                     uint8_t *cur  = &pv->ref[1][plane][y*ref_stride];
-                    uint8_t *dst2 = &dst[plane][y*w];
+                    uint8_t *dst2 = &dst[plane][y*s];
 
                     cubic_interpolate_line( dst2, cur, plane, y, pv );
                 }
@@ -1712,7 +1715,7 @@ void yadif_decomb_filter_thread( void *thread_args_v )
                         uint8_t *prev = &pv->ref[0][plane][y*ref_stride];
                         uint8_t *cur  = &pv->ref[1][plane][y*ref_stride];
                         uint8_t *next = &pv->ref[2][plane][y*ref_stride];
-                        uint8_t *dst2 = &dst[plane][y*w];
+                        uint8_t *dst2 = &dst[plane][y*s];
 
                         yadif_filter_line( dst2,
                                            prev,
@@ -1726,35 +1729,35 @@ void yadif_decomb_filter_thread( void *thread_args_v )
                     else if( y == 0 )
                     {
                         /* BFF, so y0 = y1 */
-                        memcpy( &dst[plane][y*w],
+                        memcpy( &dst[plane][y*s],
                                 &pv->ref[1][plane][1*ref_stride],
                                 w * sizeof(uint8_t) );
                     }
                     else if( y == 1 )
                     {
                         /* TFF, so y1 = y0 */
-                        memcpy( &dst[plane][y*w],
+                        memcpy( &dst[plane][y*s],
                                 &pv->ref[1][plane][0],
                                 w * sizeof(uint8_t) );
                     }
                     else if( y == penultimate )
                     {
                         /* BFF, so penultimate y = ultimate y */
-                        memcpy( &dst[plane][y*w],
+                        memcpy( &dst[plane][y*s],
                                 &pv->ref[1][plane][ultimate*ref_stride],
                                 w * sizeof(uint8_t) );
                     }
                     else if( y == ultimate )
                     {
                         /* TFF, so ultimate y = penultimate y */
-                        memcpy( &dst[plane][y*w],
+                        memcpy( &dst[plane][y*s],
                                 &pv->ref[1][plane][penultimate*ref_stride],
                                 w * sizeof(uint8_t) );
                     }
                 }
                 else
                 {
-                    memcpy( &dst[plane][y*w],
+                    memcpy( &dst[plane][y*s],
                             &pv->ref[1][plane][y*ref_stride],
                             w * sizeof(uint8_t) );
                 }
@@ -1838,13 +1841,14 @@ static void yadif_filter( uint8_t ** dst,
                 uint8_t * dest = dst[i];
 
                 int w = pv->width[i];
+                int s = pv->stride[i];
                 int ref_stride = pv->ref_stride[i];
 
                 int y;
                 for( y = 0; y < pv->height[i]; y++ )
                 {
                     memcpy(dest, ref, w);
-                    dest += w;
+                    dest += s;
                     ref += ref_stride;
                 }
             }
@@ -1888,13 +1892,14 @@ static void yadif_filter( uint8_t ** dst,
             uint8_t * dest = dst[i];
 
             int w = pv->width[i];
+            int s = pv->stride[i];
             int ref_stride = pv->ref_stride[i];
 
             int y;
             for( y = 0; y < pv->height[i]; y++ )
             {
                 memcpy(dest, ref, w);
-                dest += w;
+                dest += s;
                 ref += ref_stride;
             }
         }
@@ -1913,9 +1918,11 @@ static int hb_decomb_init( hb_filter_object_t * filter,
     filter->private_data = calloc( 1, sizeof(struct hb_filter_private_s) );
     hb_filter_private_t * pv = filter->private_data;
 
-    pv->width[0]  = hb_image_stride( init->pix_fmt, init->width, 0 );
+    pv->width[0]  = hb_image_width( init->pix_fmt, init->width, 0 );
+    pv->stride[0]  = hb_image_stride( init->pix_fmt, init->width, 0 );
     pv->height[0] = hb_image_height( init->pix_fmt, init->height, 0 );
-    pv->width[1]  = pv->width[2]  = hb_image_stride( init->pix_fmt, init->width, 1 );
+    pv->width[1]  = pv->width[2]  = hb_image_width( init->pix_fmt, init->width, 1 );
+    pv->stride[1]  = pv->stride[2]  = hb_image_stride( init->pix_fmt, init->width, 1 );
     pv->height[1] = pv->height[2] = hb_image_height( init->pix_fmt, init->height, 1 );
 
     build_gamma_lut( pv );
@@ -2005,8 +2012,8 @@ static int hb_decomb_init( hb_filter_object_t * filter,
     for( i = 0; i < 3; i++ )
     {
         int is_chroma = !!i;
-        int w = ((pv->width[0]   + 31) & (~31))>>is_chroma;
-        int h = ((pv->height[0]+6+ 31) & (~31))>>is_chroma;
+        int w = ((init->width   + 31) & (~31))>>is_chroma;
+        int h = ((init->height+6+ 31) & (~31))>>is_chroma;
 
         pv->mask[i] = calloc( 1, w*h*sizeof(uint8_t) ) + 3*w;
         pv->mask_filtered[i] = calloc( 1, w*h*sizeof(uint8_t) ) + 3*w;
@@ -2016,7 +2023,7 @@ static int hb_decomb_init( hb_filter_object_t * filter,
     if( pv->mode & MODE_EEDI2 )
     {
         /* Allocate half-height eedi2 buffers */
-        int height = pv->height[0] / 2;
+        int height = init->height / 2;
         for( i = 0; i < 3; i++ )
         {
             int is_chroma = !!i;
@@ -2030,7 +2037,7 @@ static int hb_decomb_init( hb_filter_object_t * filter,
         }
 
         /* Allocate full-height eedi2 buffers */
-        height = pv->height[0];
+        height = init->height;
         for( i = 0; i < 3; i++ )
         {
             int is_chroma = !!i;

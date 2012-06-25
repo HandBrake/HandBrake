@@ -141,8 +141,14 @@ int hb_avpicture_fill( AVPicture *pic, hb_buffer_t *buf )
     for( ii = 0; ii < 4; ii++ )
         pic->linesize[ii] = buf->plane[ii].stride;
 
-    ret = av_image_fill_pointers( pic->data, buf->f.fmt, buf->f.height,
+    ret = av_image_fill_pointers( pic->data, buf->f.fmt,
+                                  buf->plane[0].height_stride,
                                   buf->data, pic->linesize );
+    if (ret != buf->size)
+    {
+        hb_error("Internal error hb_avpicture_fill expected %d, got %d",
+                 buf->size, ret);
+    }
     return ret;
 }
 
@@ -705,6 +711,50 @@ int hb_save_preview( hb_handle_t * h, int title, int preview, hb_buffer_t *buf )
     return 0;
 }
 
+hb_buffer_t * hb_read_preview( hb_handle_t * h, int title_idx, int preview )
+{
+    FILE * file;
+    char   filename[1024];
+
+    hb_title_t * title = hb_list_item( h->list_title, title_idx - 1);
+    if ( title == NULL )
+    {
+        hb_error( "hb_read_preview: invalid title (%d)", title_idx );
+        return NULL;
+    }
+
+    hb_get_tempory_filename( h, filename, "%d_%d_%d",
+                             hb_get_instance_id(h), title_idx, preview );
+
+    file = fopen( filename, "rb" );
+    if( !file )
+    {
+        hb_error( "hb_read_preview: fopen failed (%s)", filename );
+        return NULL;
+    }
+
+    hb_buffer_t * buf;
+    buf = hb_frame_buffer_init( PIX_FMT_YUV420P, title->width, title->height );
+
+    int pp, hh;
+    for( pp = 0; pp < 3; pp++ )
+    {
+        uint8_t *data = buf->plane[pp].data;
+        int stride = buf->plane[pp].stride;
+        int w = buf->plane[pp].width;
+        int h = buf->plane[pp].height;
+
+        for( hh = 0; hh < h; hh++ )
+        {
+            fread( data, w, 1, file );
+            data += stride;
+        }
+    }
+    fclose( file );
+
+    return buf;
+}
+
 /**
  * Create preview image of desired title a index of picture.
  * @param h Handle to hb_handle_t.
@@ -717,53 +767,50 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
 {
     hb_job_t           * job = title->job;
     char                 filename[1024];
-    FILE               * file;
-    uint8_t            * buf1, * buf2, * buf3, * buf4, * pen;
+    hb_buffer_t        * in_buf, * deint_buf = NULL, * preview_buf;
+    uint8_t            * pen;
     uint32_t             swsflags;
-    AVPicture            pic_in, pic_preview, pic_deint, pic_crop, pic_scale;
+    AVPicture            pic_in, pic_preview, pic_deint, pic_crop;
     struct SwsContext  * context;
     int                  i;
-    int                  deint_width = ((title->width + 7) >> 3) << 3;
-    int                  rgb_width = ((job->width + 7) >> 3) << 3;
     int                  preview_size;
 
     swsflags = SWS_LANCZOS | SWS_ACCURATE_RND;
 
-    buf1 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P, title->width, title->height ) );
-    buf2 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P, deint_width, title->height ) );
-    buf3 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P, rgb_width, job->height ) );
-    buf4 = av_malloc( avpicture_get_size( PIX_FMT_RGB32, rgb_width, job->height ) );
-    avpicture_fill( &pic_in, buf1, PIX_FMT_YUV420P,
-                    title->width, title->height );
-    avpicture_fill( &pic_deint, buf2, PIX_FMT_YUV420P,
-                    deint_width, title->height );
-    avpicture_fill( &pic_scale, buf3, PIX_FMT_YUV420P,
-                    rgb_width, job->height );
-    avpicture_fill( &pic_preview, buf4, PIX_FMT_RGB32,
-                    rgb_width, job->height );
+    preview_buf = hb_frame_buffer_init( PIX_FMT_RGB32,
+                                        job->width, job->height );
+    hb_avpicture_fill( &pic_preview, preview_buf );
 
     // Allocate the AVPicture frames and fill in
 
     memset( filename, 0, 1024 );
 
-    hb_get_tempory_filename( h, filename, "%d_%d_%d",
-                             h->id, title->index, picture );
-
-    file = fopen( filename, "rb" );
-    if( !file )
+    in_buf = hb_read_preview( h, title->index, picture );
+    if ( in_buf == NULL )
     {
-        hb_log( "hb_get_preview: fopen failed" );
         return;
     }
 
-    fread( buf1, avpicture_get_size( PIX_FMT_YUV420P, title->width, title->height), 1, file );
-    fclose( file );
+    hb_avpicture_fill( &pic_in, in_buf );
 
     if( job->deinterlace )
     {
         // Deinterlace and crop
-        avpicture_deinterlace( &pic_deint, &pic_in, PIX_FMT_YUV420P, title->width, title->height );
-        av_picture_crop( &pic_crop, &pic_deint, PIX_FMT_YUV420P, job->crop[0], job->crop[2] );
+        // avpicture_deinterlace requires width & height that are 8 byte 
+        // alligned.  This means the left and bottom edges of the preview
+        // will not get deinterlaced or transfered into the output buffer
+        // by avpicture_deinterlace.  So copy the original frame into
+        // the deinterlace buffer so we don't see uninitialized data in
+        // the resulting image.
+        deint_buf = hb_frame_buffer_init( PIX_FMT_YUV420P,
+                                          title->width, title->height );
+        hb_avpicture_fill( &pic_deint, deint_buf );
+
+        avpicture_deinterlace( &pic_deint, &pic_in, PIX_FMT_YUV420P,
+            in_buf->plane[0].stride, in_buf->plane[0].height_stride );
+
+        av_picture_crop( &pic_crop, &pic_deint, PIX_FMT_YUV420P,
+                job->crop[0], job->crop[2] );
     }
     else
     {
@@ -775,27 +822,13 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     context = hb_sws_get_context(title->width  - (job->crop[2] + job->crop[3]),
                              title->height - (job->crop[0] + job->crop[1]),
                              PIX_FMT_YUV420P,
-                             job->width, job->height, PIX_FMT_YUV420P,
+                             job->width, job->height, PIX_FMT_RGB32,
                              swsflags);
 
     // Scale
     sws_scale(context,
               (const uint8_t* const *)pic_crop.data, pic_crop.linesize,
               0, title->height - (job->crop[0] + job->crop[1]),
-              pic_scale.data, pic_scale.linesize);
-
-    // Free context
-    sws_freeContext( context );
-
-    // Get preview context
-    context = hb_sws_get_context(rgb_width, job->height, PIX_FMT_YUV420P,
-                              rgb_width, job->height, PIX_FMT_RGB32,
-                              swsflags);
-
-    // Create preview
-    sws_scale(context,
-              (const uint8_t* const *)pic_scale.data, pic_scale.linesize,
-              0, job->height,
               pic_preview.data, pic_preview.linesize);
 
     // Free context
@@ -805,15 +838,14 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     pen = buffer;
     for( i = 0; i < job->height; i++ )
     {
-        memcpy( pen, buf4 + preview_size * i, 4 * job->width );
+        memcpy( pen, pic_preview.data[0] + preview_size * i, 4 * job->width );
         pen += 4 * job->width;
     }
 
     // Clean up
-    avpicture_free( &pic_preview );
-    avpicture_free( &pic_scale );
-    avpicture_free( &pic_deint );
-    avpicture_free( &pic_in );
+    hb_buffer_close( &in_buf );
+    hb_buffer_close( &deint_buf );
+    hb_buffer_close( &preview_buf );
 }
 
  /**

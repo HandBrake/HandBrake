@@ -578,13 +578,16 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
     {
         w = buf->plane[0].stride;
         h = buf->plane[0].height;
-        dst = copy_plane( dst, frame->data[0], w, frame->linesize[0], h );
+        dst = buf->plane[0].data;
+        copy_plane( dst, frame->data[0], w, frame->linesize[0], h );
         w = buf->plane[1].stride;
         h = buf->plane[1].height;
-        dst = copy_plane( dst, frame->data[1], w, frame->linesize[1], h );
+        dst = buf->plane[1].data;
+        copy_plane( dst, frame->data[1], w, frame->linesize[1], h );
         w = buf->plane[2].stride;
         h = buf->plane[2].height;
-        dst = copy_plane( dst, frame->data[2], w, frame->linesize[2], h );
+        dst = buf->plane[2].data;
+        copy_plane( dst, frame->data[2], w, frame->linesize[2], h );
     }
     return buf;
 }

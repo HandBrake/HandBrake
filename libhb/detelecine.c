@@ -33,6 +33,7 @@ struct pullup_buffer
 {
     int lock[2];
     unsigned char **planes;
+    int *size;
 };
 
 struct pullup_field
@@ -593,11 +594,13 @@ static void pullup_alloc_buffer( struct pullup_context * c,
     int i;
     if( b->planes ) return;
     b->planes = calloc( c->nplanes, sizeof(unsigned char *) );
+    b->size = calloc( c->nplanes, sizeof(int) );
     for ( i = 0; i < c->nplanes; i++ )
     {
-        b->planes[i] = malloc(c->h[i]*c->stride[i]);
+        b->size[i] = c->h[i] * c->stride[i];
+        b->planes[i] = malloc(b->size[i]);
         /* Deal with idiotic 128=0 for chroma: */
-        memset( b->planes[i], c->background[i], c->h[i]*c->stride[i] );
+        memset( b->planes[i], c->background[i], b->size[i] );
     }
 }
 
@@ -919,9 +922,9 @@ static int hb_detelecine_work( hb_filter_object_t * filter,
     }
 
     /* Copy input buffer into pullup buffer */
-    memcpy( buf->planes[0], in->plane[0].data, in->plane[0].size );
-    memcpy( buf->planes[1], in->plane[1].data, in->plane[1].size );
-    memcpy( buf->planes[2], in->plane[2].data, in->plane[2].size );
+    memcpy( buf->planes[0], in->plane[0].data, buf->size[0] );
+    memcpy( buf->planes[1], in->plane[1].data, buf->size[1] );
+    memcpy( buf->planes[2], in->plane[2].data, buf->size[2] );
 
     /* Submit buffer fields based on buffer flags.
        Detelecine assumes BFF when the TFF flag isn't present. */
@@ -1011,9 +1014,9 @@ static int hb_detelecine_work( hb_filter_object_t * filter,
     out = hb_video_buffer_init( in->f.width, in->f.height );
 
     /* Copy pullup frame buffer into output buffer */
-    memcpy( out->plane[0].data, frame->buffer->planes[0], in->plane[0].size );
-    memcpy( out->plane[1].data, frame->buffer->planes[1], in->plane[1].size );
-    memcpy( out->plane[2].data, frame->buffer->planes[2], in->plane[2].size );
+    memcpy( out->plane[0].data, frame->buffer->planes[0], frame->buffer->size[0] );
+    memcpy( out->plane[1].data, frame->buffer->planes[1], frame->buffer->size[1] );
+    memcpy( out->plane[2].data, frame->buffer->planes[2], frame->buffer->size[2] );
 
     pullup_release_frame( frame );
 
