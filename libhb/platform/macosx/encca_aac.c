@@ -49,7 +49,7 @@ struct hb_work_private_s
     uint64_t pts, ibytes;
     Float64 osamplerate;
 
-    int layout;
+    uint64_t layout;
     hb_chan_map_t *ichanmap;
 };
 
@@ -199,7 +199,7 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
 
         if (err != noErr)
         {
-            hb_log("Error creating an AudioConverter err=%"PRId64" output.mBytesPerFrame=%"PRIu64,
+            hb_log("Error creating an AudioConverter err=%"PRId64" output.mBytesPerFrame=%"PRIu64"",
                    (int64_t)err, (uint64_t)output.mBytesPerFrame);
             *job->die = 1;
             return -1;
