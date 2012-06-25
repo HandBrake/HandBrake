@@ -582,8 +582,54 @@ int hb_deinterlace_work( hb_buffer_t * buf_in,
         avpicture_fill( &pv->pic_out, pv->buf_out[0]->data,
                         pix_fmt, width, height );
 
-        avpicture_deinterlace( &pv->pic_out, &pv->pic_in,
-                               pix_fmt, width, height );
+        if ( ( width & 7 ) || ( height & 7 ) )
+        {
+            // avpicture_deinterlace requires 8 pixel aligned dimensions
+            // so we are going to have to do some buffer copying
+            int aligned_width = ((width + 7) & ~7);
+            int aligned_height = ((height + 7) & ~7);
+            uint8_t * buf1, * buf2;
+            AVPicture pic_in, pic_out;
+            int i, p;
+
+            buf1 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P,
+                              aligned_width, aligned_height ) );
+            buf2 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P,
+                              aligned_width, aligned_height ) );
+            avpicture_fill( &pic_in, buf1, PIX_FMT_YUV420P,
+                            aligned_width, aligned_height );
+            avpicture_fill( &pic_out, buf2, PIX_FMT_YUV420P,
+                            aligned_width, aligned_height );
+            for (p = 0; p < 3; p++)
+            {
+                int h = !p ? height : height >> 1;
+                for (i = 0; i < h; i++)
+                {
+                    memcpy(pic_in.data[p] + pic_in.linesize[p] * i,
+                           pv->pic_in.data[p] + pv->pic_in.linesize[p] * i,
+                           pv->pic_in.linesize[p]);
+                }
+            }
+            avpicture_deinterlace( &pic_out, &pic_in,
+                                   pix_fmt, aligned_width, aligned_height );
+            for (p = 0; p < 3; p++)
+            {
+                int h = !p ? height : height >> 1;
+                for (i = 0; i < h; i++)
+                {
+                    memcpy(pv->pic_out.data[p] + pv->pic_out.linesize[p] * i,
+                           pic_out.data[p] + pic_out.linesize[p] * i,
+                           pv->pic_out.linesize[p]);
+                }
+            }
+            avpicture_free( &pic_in );
+            avpicture_free( &pic_out );
+        }
+        else
+        {
+            avpicture_deinterlace( &pv->pic_out, &pv->pic_in,
+                                   pix_fmt, width, height );
+        }
 
         hb_buffer_copy_settings( pv->buf_out[0], buf_in );
 
