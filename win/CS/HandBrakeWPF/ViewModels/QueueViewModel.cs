@@ -201,7 +201,12 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Clear()
         {
-            this.queueProcessor.QueueManager.Clear();
+            MessageBoxResult result = this.errorService.ShowMessageBox(
+                "Are you sure you wish to clear the queue?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes)
+            {
+                this.queueProcessor.QueueManager.Clear();
+            }
         }
 
         /// <summary>
