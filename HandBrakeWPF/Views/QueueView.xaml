@@ -146,8 +146,8 @@
 
             <ListBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="Clear" />
                     <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="Clear Completed" />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="Clear" />
                     <Separator />
                     <MenuItem cal:Message.Attach="[Event Click] = [Action Import]" Header="Import Queue" />
                     <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="Export Queue" />

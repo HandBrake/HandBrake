@@ -399,6 +399,9 @@ namespace HandBrakeWPF.ViewModels
                     this.SubtitleViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
                     this.ChaptersViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
                     this.AdvancedViewModel.SetPreset(this.SelectedPreset, this.CurrentTask);
+
+                    // Do this again to force an update for m4v/mp4 selection
+                    this.SelectedOutputFormat = selectedPreset.Task.OutputFormat;
                 }
 
                 this.NotifyOfPropertyChange(() => this.SelectedPreset);
@@ -1181,7 +1184,9 @@ namespace HandBrakeWPF.ViewModels
             }
 
             dialog.ShowDialog();
+            this.Destination = dialog.FileName;
 
+            // Set the Extension Dropdown. This will also set Mp4/m4v correctly.
             if (!string.IsNullOrEmpty(dialog.FileName))
             {
                 switch (Path.GetExtension(dialog.FileName))
@@ -1197,7 +1202,6 @@ namespace HandBrakeWPF.ViewModels
                         break;
                 }
 
-                this.Destination = dialog.FileName;
                 this.NotifyOfPropertyChange(() => this.CurrentTask);
             } 
         }
