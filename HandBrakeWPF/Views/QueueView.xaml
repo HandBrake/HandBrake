@@ -146,11 +146,11 @@
 
             <ListBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action Import]" Header="Import Queue" />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="Export Queue" />
-                    <Separator />
                     <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="Clear" />
                     <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="Clear Completed" />
+                    <Separator />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action Import]" Header="Import Queue" />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="Export Queue" />
                 </ContextMenu>
             </ListBox.ContextMenu>
 
@@ -244,11 +244,6 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock FontWeight="Bold" Text="Destination: " />
                                 <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}" />
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock FontWeight="Bold" Text="Status: " />
-                                <TextBlock Text="{Binding Status, Converter={StaticResource enumComboConverter}}" />
                             </StackPanel>
                         </StackPanel>
 
