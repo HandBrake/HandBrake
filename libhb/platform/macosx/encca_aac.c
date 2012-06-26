@@ -60,61 +60,61 @@ struct hb_work_private_s
 // based off of mov_mp4_read_descr_len from mov.c in ffmpeg's libavformat
 static int readDescrLen(UInt8 **buffer)
 {
-	int len = 0;
-	int count = 4;
-	while (count--)
+    int len = 0;
+    int count = 4;
+    while (count--)
     {
-		int c = *(*buffer)++;
-		len = (len << 7) | (c & 0x7f);
-		if (!(c & 0x80))
-			break;
-	}
-	return len;
+        int c = *(*buffer)++;
+        len = (len << 7) | (c & 0x7f);
+        if (!(c & 0x80))
+            break;
+    }
+    return len;
 }
 
 // based off of mov_mp4_read_descr from mov.c in ffmpeg's libavformat
 static int readDescr(UInt8 **buffer, int *tag)
 {
-	*tag = *(*buffer)++;
-	return readDescrLen(buffer);
+    *tag = *(*buffer)++;
+    return readDescrLen(buffer);
 }
 
 // based off of mov_read_esds from mov.c in ffmpeg's libavformat
 static long ReadESDSDescExt(void* descExt, UInt8 **buffer, UInt32 *size, int versionFlags)
 {
-	UInt8 *esds = (UInt8*)descExt;
-	int tag, len;
-	*size = 0;
+    UInt8 *esds = (UInt8*)descExt;
+    int tag, len;
+    *size = 0;
 
     if (versionFlags)
-        esds += 4;		// version + flags
-	readDescr(&esds, &tag);
-	esds += 2;		// ID
-	if (tag == MP4ESDescrTag)
-		esds++;		// priority
+        esds += 4;        // version + flags
+    readDescr(&esds, &tag);
+    esds += 2;        // ID
+    if (tag == MP4ESDescrTag)
+        esds++;        // priority
 
-	readDescr(&esds, &tag);
-	if (tag == MP4DecConfigDescrTag)
+    readDescr(&esds, &tag);
+    if (tag == MP4DecConfigDescrTag)
     {
-		esds++;		// object type id
-		esds++;		// stream type
-		esds += 3;	// buffer size db
-		esds += 4;	// max bitrate
-		esds += 4;	// average bitrate
+        esds++;        // object type id
+        esds++;        // stream type
+        esds += 3;    // buffer size db
+        esds += 4;    // max bitrate
+        esds += 4;    // average bitrate
 
-		len = readDescr(&esds, &tag);
-		if (tag == MP4DecSpecificDescrTag)
+        len = readDescr(&esds, &tag);
+        if (tag == MP4DecSpecificDescrTag)
         {
-			*buffer = calloc(1, len + 8);
-			if (*buffer)
+            *buffer = calloc(1, len + 8);
+            if (*buffer)
             {
-				memcpy(*buffer, esds, len);
-				*size = len;
-			}
-		}
-	}
+                memcpy(*buffer, esds, len);
+                *size = len;
+            }
+        }
+    }
 
-	return noErr;
+    return noErr;
 }
 
 /***********************************************************************
@@ -215,16 +215,19 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
     {
         // set encoder bitrate control mode to constrained variable
         tmp = kAudioCodecBitRateControlMode_VariableConstrained;
-        AudioConverterSetProperty(pv->converter, kAudioCodecPropertyBitRateControlMode,
+        AudioConverterSetProperty(pv->converter,
+                                  kAudioCodecPropertyBitRateControlMode,
                                   sizeof(tmp), &tmp);
 
         // get available bitrates
         AudioValueRange *bitrates;
         ssize_t bitrateCounts;
-        err = AudioConverterGetPropertyInfo(pv->converter, kAudioConverterApplicableEncodeBitRates,
+        err = AudioConverterGetPropertyInfo(pv->converter,
+                                            kAudioConverterApplicableEncodeBitRates,
                                             &tmpsiz, NULL);
         bitrates = malloc(tmpsiz);
-        err = AudioConverterGetProperty(pv->converter, kAudioConverterApplicableEncodeBitRates,
+        err = AudioConverterGetProperty(pv->converter,
+                                        kAudioConverterApplicableEncodeBitRates,
                                         &tmpsiz, bitrates);
         bitrateCounts = tmpsiz / sizeof(AudioValueRange);
 
@@ -236,9 +239,12 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
             tmp = bitrates[bitrateCounts-1].mMinimum;
         free(bitrates);
         if (tmp != audio->config.out.bitrate * 1000)
+        {
             hb_log("encca_aac: sanitizing track %d audio bitrate %d to %"PRIu32"",
                    audio->config.out.track, audio->config.out.bitrate, tmp / 1000);
-        AudioConverterSetProperty(pv->converter, kAudioConverterEncodeBitRate,
+        }
+        AudioConverterSetProperty(pv->converter,
+                                  kAudioConverterEncodeBitRate,
                                   sizeof(tmp), &tmp);
     }
     else if (audio->config.out.quality >= 0)
@@ -250,12 +256,14 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
         }
         // set encoder bitrate control mode to variable
         tmp = kAudioCodecBitRateControlMode_Variable;
-        AudioConverterSetProperty(pv->converter, kAudioCodecPropertyBitRateControlMode,
+        AudioConverterSetProperty(pv->converter,
+                                  kAudioCodecPropertyBitRateControlMode,
                                   sizeof(tmp), &tmp);
 
         // set quality
         tmp = audio->config.out.quality;
-        AudioConverterSetProperty(pv->converter, kAudioCodecPropertySoundQualityForVBR,
+        AudioConverterSetProperty(pv->converter,
+                                  kAudioCodecPropertySoundQualityForVBR,
                                   sizeof(tmp), &tmp);
     }
     else
