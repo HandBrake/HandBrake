@@ -192,7 +192,6 @@ namespace HandBrakeWPF.ViewModels
             this.scanService.ScanStatusChanged += this.ScanStatusChanged;
             this.queueProcessor.JobProcessingStarted += this.QueueProcessorJobProcessingStarted;
             this.queueProcessor.QueueCompleted += this.QueueCompleted;
-            this.queueProcessor.QueuePaused += this.QueuePaused;
             this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeStatusChanged;
 
             this.Presets = this.presetService.Presets;
@@ -834,7 +833,6 @@ namespace HandBrakeWPF.ViewModels
             this.scanService.ScanStatusChanged -= this.ScanStatusChanged;
 
             this.queueProcessor.QueueCompleted -= this.QueueCompleted;
-            this.queueProcessor.QueuePaused -= this.QueuePaused;
             this.queueProcessor.JobProcessingStarted -= this.QueueProcessorJobProcessingStarted;
             this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
         }
@@ -935,7 +933,15 @@ namespace HandBrakeWPF.ViewModels
             }
 
             QueueTask task = new QueueTask { Task = new EncodeTask(this.CurrentTask) };
-            this.queueProcessor.QueueManager.Add(task);
+            if (!this.queueProcessor.QueueManager.CheckForDestinationPathDuplicates(task.Task.Destination))
+            {
+                this.queueProcessor.QueueManager.Add(task);
+            } 
+            else
+            {
+                this.errorService.ShowMessageBox("There are jobs on the queue with the same destination path. Please choose a different path for this job.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            
 
             if (!this.IsEncoding)
             {
@@ -1044,6 +1050,12 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void StartEncode()
         {
+            if (this.queueProcessor.IsProcessing)
+            {
+                this.errorService.ShowMessageBox("HandBrake is already encoding.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             // Check if we already have jobs, and if we do, just start the queue.
             if (this.queueProcessor.QueueManager.Count != 0)
             {
@@ -1064,11 +1076,6 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            if (this.queueProcessor.IsProcessing)
-            {
-                this.errorService.ShowMessageBox("HandBrake is already encoding.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
 
             if (File.Exists(this.Destination))
             {
@@ -1103,6 +1110,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void StopEncode()
         {
+            this.queueProcessor.Pause();
             this.encodeService.Stop();
         }
 
@@ -1534,23 +1542,6 @@ namespace HandBrakeWPF.ViewModels
                    this.ProgramStatusLabel = "Preparing to encode ...";
                    this.IsEncoding = true;
                });
-
-            // TODO Handle Updating the UI
-        }
-
-        /// <summary>
-        /// The Queue has been paused handler
-        /// </summary>
-        /// <param name="sender">
-        /// The Sender
-        /// </param>
-        /// <param name="e">
-        /// The EventArgs
-        /// </param>
-        private void QueuePaused(object sender, EventArgs e)
-        {
-            this.IsEncoding = false;
-            // TODO Handle Updating the UI
         }
 
         /// <summary>
@@ -1572,8 +1563,6 @@ namespace HandBrakeWPF.ViewModels
                     this.ProgramStatusLabel = "Queue Finished";
                     this.IsEncoding = false;
                 });
-
-            // TODO Handle Updating the UI
         }
 
         /// <summary>

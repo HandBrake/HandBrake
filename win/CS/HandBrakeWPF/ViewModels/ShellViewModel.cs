@@ -10,8 +10,14 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System.ComponentModel.Composition;
+    using System.Windows;
+
+    using Caliburn.Micro;
+
+    using HandBrake.ApplicationServices.Services.Interfaces;
 
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -20,6 +26,11 @@ namespace HandBrakeWPF.ViewModels
     [Export(typeof(IShellViewModel))]
     public class ShellViewModel : ViewModelBase, IShellViewModel
     {
+        /// <summary>
+        /// Backing field for the error service.
+        /// </summary>
+        private readonly IErrorService errorService;
+
         #region Constants and Fields
 
         /// <summary>
@@ -37,8 +48,12 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="ShellViewModel"/> class.
         /// </summary>
-        public ShellViewModel()
+        /// <param name="errorService">
+        /// The error Service.
+        /// </param>
+        public ShellViewModel(IErrorService errorService)
         {
+            this.errorService = errorService;
             this.showMainWindow = true;
             this.showOptions = false;
         }
@@ -60,7 +75,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.ShowOptions = true;
                 this.ShowMainWindow = false;
-            } 
+            }
             else
             {
                 this.ShowMainWindow = true;
@@ -124,5 +139,35 @@ namespace HandBrakeWPF.ViewModels
         }
 
         #endregion
+
+        /// <summary>
+        /// Checks with the use if this window can be closed.
+        /// </summary>
+        /// <returns>
+        /// Returns true if the window can be closed.
+        /// </returns>
+        public bool CanClose()
+        {
+            IQueueProcessor processor = IoC.Get<IQueueProcessor>();
+            if (processor.EncodeService.IsEncoding)
+            {
+                MessageBoxResult result =
+                    errorService.ShowMessageBox(
+                        "An Encode is currently running. Exiting HandBrake will stop this encode.\nAre you sure you wish to continue?",
+                        "Warning",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    processor.Pause();
+                    processor.EncodeService.Stop();
+                    return true;
+                }
+                return false;
+            }
+
+            return true;
+        }
     }
 }

@@ -23,5 +23,13 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// The window.
         /// </param>
         void DisplayWindow(ShellWindow window);
+
+        /// <summary>
+        /// Checks with the use if this window can be closed.
+        /// </summary>
+        /// <returns>
+        /// Returns true if the window can be closed.
+        /// </returns>
+        bool CanClose();
     }
 }

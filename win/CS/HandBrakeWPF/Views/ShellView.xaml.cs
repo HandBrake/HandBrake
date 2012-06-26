@@ -11,6 +11,8 @@ namespace HandBrakeWPF.Views
 {
     using System.Windows;
 
+    using HandBrakeWPF.ViewModels.Interfaces;
+
     /// <summary>
     /// Interaction logic for ShellView.xaml
     /// </summary>
@@ -22,6 +24,23 @@ namespace HandBrakeWPF.Views
         public ShellView()
         {
             this.InitializeComponent();
+        }
+
+        /// <summary>
+        /// Check with the user before closing.
+        /// </summary>
+        /// <param name="e">
+        /// The CancelEventArgs.
+        /// </param>
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            bool canClose = ((IShellViewModel)this.DataContext).CanClose();
+            if (!canClose)
+            {
+                e.Cancel = true;
+            }
+
+            base.OnClosing(e);
         }
     }
 }
