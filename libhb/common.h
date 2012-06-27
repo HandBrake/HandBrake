@@ -197,9 +197,9 @@ int           hb_get_video_encoders_count();
 hb_encoder_t* hb_get_audio_encoders();
 int           hb_get_audio_encoders_count();
 
-int hb_mixdown_get_discrete_channel_count( int amixdown );
-int hb_mixdown_get_mixdown_from_short_name( const char * short_name );
-const char * hb_mixdown_get_short_name_from_mixdown( int amixdown );
+int hb_mixdown_get_discrete_channel_count(int amixdown);
+int hb_mixdown_get_mixdown_from_short_name(const char *short_name);
+const char* hb_mixdown_get_short_name_from_mixdown(int amixdown);
 
 void hb_autopassthru_apply_settings( hb_job_t * job, hb_title_t * title );
 void hb_autopassthru_print_settings( hb_job_t * job );

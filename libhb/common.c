@@ -99,9 +99,9 @@ int hb_get_video_encoders_count() { return hb_video_encoders_count; }
 hb_encoder_t* hb_get_audio_encoders() { return hb_audio_encoders; }
 int hb_get_audio_encoders_count() { return hb_audio_encoders_count; }
 
-int hb_mixdown_get_discrete_channel_count( int amixdown )
+int hb_mixdown_get_discrete_channel_count(int amixdown)
 {
-    switch( amixdown )
+    switch (amixdown)
     {
         case HB_AMIXDOWN_6CH:
             return 6;
@@ -109,17 +109,20 @@ int hb_mixdown_get_discrete_channel_count( int amixdown )
         case HB_AMIXDOWN_MONO:
             return 1;
 
+        case HB_AMIXDOWN_NONE:
+            return 0;
+
         default:
             return 2;
     }
 }
 
-int hb_mixdown_get_mixdown_from_short_name( const char * short_name )
+int hb_mixdown_get_mixdown_from_short_name(const char *short_name)
 {
     int i;
     for (i = 0; i < hb_audio_mixdowns_count; i++)
     {
-        if (strcmp(hb_audio_mixdowns[i].short_name, short_name) == 0)
+        if (!strcmp(hb_audio_mixdowns[i].short_name, short_name))
         {
             return hb_audio_mixdowns[i].amixdown;
         }
@@ -127,7 +130,7 @@ int hb_mixdown_get_mixdown_from_short_name( const char * short_name )
     return 0;
 }
 
-const char * hb_mixdown_get_short_name_from_mixdown( int amixdown )
+const char* hb_mixdown_get_short_name_from_mixdown(int amixdown)
 {
     int i;
     for (i = 0; i < hb_audio_mixdowns_count; i++)
