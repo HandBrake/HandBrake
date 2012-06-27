@@ -65,6 +65,7 @@
     [childrenArray addObject:[self createiPadPreset]];
     [childrenArray addObject:[self createAppleTVPreset]];
 	[childrenArray addObject:[self createAppleTv2Preset]];
+    [childrenArray addObject:[self createAppleTv3Preset]];
     [childrenArray addObject:[self createAndroidMidPreset]];
     [childrenArray addObject:[self createAndroidHighPreset]];
 
@@ -684,6 +685,127 @@
     [preset autorelease];
     return preset;
 }
+
+- (NSDictionary *)createAppleTv3Preset
+{
+    NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
+	
+    /* Get the New Preset Name from the field in the AddPresetPanel */
+    [preset setObject:@"AppleTV 3" forKey:@"PresetName"];
+	
+    /*Set whether or not this is a user preset where 0 is factory, 1 is user*/
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"Type"];
+    /*Set whether or not this is a folder, 1 is bool for folder*/
+    [preset setObject:[NSNumber numberWithBool: NO] forKey:@"Folder"];
+    /*Set whether or not this is default, at creation set to 0*/
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
+	
+    /*Get the whether or not to apply pic settings in the AddPresetPanel*/
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
+	
+    /* Get the New Preset Description from the field in the AddPresetPanel */
+    [preset setObject:@"HandBrake's preset for the Apple TV (3rd gen) is optimized for up to 1080p playback." forKey:@"PresetDescription"];
+	
+    /* File Format */
+    [preset setObject:@"MP4 file" forKey:@"FileFormat"];
+	
+    /* 64-bit MP4 file */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Mp4LargeFile"];
+	
+    /* Chapter Markers*/
+	[preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
+	
+    /* Video encoder */
+    [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
+	
+    /* x264 Option String (We can use this to tweak the output)*/
+    [preset setObject:@"b-adapt=2" forKey:@"x264Option"];
+	
+    /* Video quality */
+    [preset setObject:[NSNumber numberWithInt:2] forKey:@"VideoQualityType"];
+    [preset setObject:@"2500" forKey:@"VideoAvgBitrate"];
+    [preset setObject:[NSNumber numberWithFloat:20.0] forKey:@"VideoQualitySlider"];
+	
+    /* Video framerate */
+    [preset setObject:@"30" forKey:@"VideoFramerate"];
+    [preset setObject:@"pfr" forKey:@"VideoFramerateMode"];
+    
+    /* GrayScale */
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoGrayScale"];
+	
+    /* 2 Pass Encoding */
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"VideoTwoPass"];
+	
+    /* Basic Picture Settings */
+    /* Use Max Picture settings for whatever the dvd is.*/
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
+    [preset setObject:[NSNumber numberWithInt:1920] forKey:@"PictureWidth"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
+    
+    /* We use Loose Anamorphic with a Modulus of 2 */
+    [preset setObject:[NSNumber numberWithInt:2] forKey:@"PicturePAR"];
+    [preset setObject:[NSNumber numberWithInt:2] forKey:@"PictureModulus"];
+	
+    /* Explicitly set the filters for built-in presets */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureDecombDeinterlace"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDetelecine"];
+    /* Note: decided to use Fast Decomb. This makes this the only device preset using
+     * decomb that we have. Fast Decomb is better than no decomb imo and has basically no
+     * speed hit on progressive sources. Once Default decomb is sped up, we can switch */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureDecomb"];
+	
+    /* Set crop settings here */
+    /* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureAutoCrop"];    
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureTopCrop"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureBottomCrop"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
+	
+    /* Audio - Is done on a track by track basis, ONLY specifiy the tracks we want set as any track
+     * not listed will be set to "None" and not encoded */
+    NSMutableArray *audioListArray = [[NSMutableArray alloc] init];
+    
+    /* Track 1 */        
+    NSMutableDictionary *audioTrack1Array = [[NSMutableDictionary alloc] init];
+    [audioTrack1Array setObject:[NSNumber numberWithInt:1] forKey:@"AudioTrack"];
+    [audioTrack1Array setObject:@"AAC (faac)" forKey:@"AudioEncoder"];
+    [audioTrack1Array setObject:@"Dolby Pro Logic II"  forKey:@"AudioMixdown"];
+    [audioTrack1Array setObject:@"Auto" forKey:@"AudioSamplerate"];
+    [audioTrack1Array setObject:@"160" forKey:@"AudioBitrate"];
+    [audioTrack1Array setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackDRCSlider"];
+    [audioTrack1Array autorelease];
+    [audioListArray addObject:audioTrack1Array];
+	
+    /* Track 2 */
+    NSMutableDictionary *audioTrack2Array = [[NSMutableDictionary alloc] init];
+    [audioTrack2Array setObject:[NSNumber numberWithInt:1] forKey:@"AudioTrack"];
+    [audioTrack2Array setObject:@"AC3 Passthru" forKey:@"AudioEncoder"];
+    [audioTrack2Array setObject:@"None" forKey:@"AudioMixdown"];
+    [audioTrack2Array setObject:@"Auto" forKey:@"AudioSamplerate"];
+    [audioTrack2Array setObject:@"160" forKey:@"AudioBitrate"];
+    /* Note: we ignore specified bitrate for AC3 Passthru in libhb and use
+     * the sources bitrate, however we need to initially set the value to something so
+     * the macgui doesnt barf, so 160 seems as good as anything */
+    [audioTrack2Array setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackDRCSlider"];
+    [audioTrack2Array autorelease];
+    [audioListArray addObject:audioTrack2Array];
+	
+	
+    [preset setObject:[NSMutableArray arrayWithArray: audioListArray] forKey:@"AudioList"];
+	
+    /* Subtitles*/
+    [preset setObject:@"None" forKey:@"Subtitles"];
+	
+    [preset autorelease];
+    return preset;
+}
+
 
 - (NSDictionary *)createClassicPreset
 {

@@ -21,6 +21,7 @@
 - (NSDictionary *)createiPhone4Preset;
 - (NSDictionary *)createAppleTv2Preset;
 - (NSDictionary *)createAppleTVPreset;
+- (NSDictionary *)createAppleTv3Preset;
 - (NSDictionary *)createAppleUniversalPreset;
 - (NSDictionary *)createClassicPreset;
 - (NSDictionary *)createiPhonePreset;
