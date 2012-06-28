@@ -757,7 +757,7 @@
     /* Note: decided to use Fast Decomb. This makes this the only device preset using
      * decomb that we have. Fast Decomb is better than no decomb imo and has basically no
      * speed hit on progressive sources. Once Default decomb is sped up, we can switch */
-    [preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureDecomb"];
+    [preset setObject:[NSNumber numberWithInt:3] forKey:@"PictureDecomb"];
 	
     /* Set crop settings here */
     /* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */
