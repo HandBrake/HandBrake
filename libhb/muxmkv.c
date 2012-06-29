@@ -286,7 +286,7 @@ static int MKVInit( hb_mux_object_t * m )
         // sample rate
         if ((audio->config.out.codec == HB_ACODEC_CA_HAAC) ||
             (audio->config.out.codec == HB_ACODEC_AAC_PASS &&
-             audio->priv.config.extradata.length == 5))
+             audio->config.in.samples_per_frame > 1024))
         {
             // For HE-AAC, write outputSamplingFreq too
             // samplingFreq is half of outputSamplingFreq
