@@ -430,7 +430,7 @@
     /* Basic Picture Settings */
     /* Use Max Picture settings for whatever the dvd is.*/
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
-    [preset setObject:[NSNumber numberWithInt:1024] forKey:@"PictureWidth"];
+    [preset setObject:[NSNumber numberWithInt:1280] forKey:@"PictureWidth"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureHeight"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureKeepRatio"];
     [preset setObject:[NSNumber numberWithInt:2] forKey:@"PicturePAR"];
