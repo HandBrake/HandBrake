@@ -902,7 +902,7 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         dynamic_range_compression = strdup("0.0");
                     }
-                    maxWidth = 1024;
+                    maxWidth = 1280;
                     if( !anamorphic_mode )
                     {
                         anamorphic_mode = 2;
@@ -993,6 +993,53 @@ static int HandleEvents( hb_handle_t * h )
                         dynamic_range_compression = strdup("0.0,0.0");
                     }
                     maxWidth = 1280;
+                    if( !anamorphic_mode )
+                    {
+                        anamorphic_mode = 2;
+                    }
+                    job->chapter_markers = 1;
+                    
+                }
+                
+                if (!strcmp(preset_name, "AppleTV 3"))
+                {
+                    if( !mux )
+                    {
+                        mux = HB_MUX_MP4;
+                    }
+                    job->largeFileSize = 1;
+                    vcodec = HB_VCODEC_X264;
+                    job->vquality = 20.0;
+                    job->cfr = 2;
+                    if( !atracks )
+                    {
+                        atracks = strdup("1,1");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("faac,copy:ac3");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = str_split("160,160", ',');
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("dpl2,auto");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("Auto,Auto");
+                    }
+                    if( !dynamic_range_compression )
+                    {
+                        dynamic_range_compression = strdup("0.0,0.0");
+                    }
+                    maxWidth = 1920;
+                    if( !advanced_opts )
+                    {
+                        advanced_opts = strdup("b-adapt=2");
+                    }
                     if( !anamorphic_mode )
                     {
                         anamorphic_mode = 2;
@@ -1170,7 +1217,6 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         advanced_opts = strdup("b-adapt=2:rc-lookahead=50");
                     }
-                    detelecine = 1;
                     decomb = 1;
                     if( !anamorphic_mode )
                     {
@@ -2972,41 +3018,43 @@ static void ShowPresets()
     fprintf( stderr, "%s - %s - %s\n", HB_PROJECT_TITLE, HB_PROJECT_BUILD_TITLE, HB_PROJECT_URL_WEBSITE );
 
     printf("\n< Devices\n");
-
+    
     printf("\n   + Universal:  -e x264  -q 20.0 -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -X 720 --loose-anamorphic -m -x cabac=0:ref=2:me=umh:bframes=0:weightp=0:8x8dct=0:trellis=0:subme=6\n");
-
+    
     printf("\n   + iPod:  -e x264  -b 700 -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 -f mp4 -I -X 320 -m -x level=30:bframes=0:weightp=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:subme=6:8x8dct=0:trellis=0\n");
-
+    
     printf("\n   + iPhone & iPod Touch:  -e x264  -q 20.0 -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0.0 -f mp4 -X 480 -m -x cabac=0:ref=2:me=umh:bframes=0:weightp=0:subme=6:8x8dct=0:trellis=0\n");
-
+    
     printf("\n   + iPhone 4:  -e x264  -q 20.0 -r 29.97 --pfr  -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 -f mp4 -4 -X 960 --loose-anamorphic -m\n");
-
-    printf("\n   + iPad:  -e x264  -q 20.0 -r 29.97 --pfr  -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 -f mp4 -4 -X 1024 --loose-anamorphic -m\n");
-
+    
+    printf("\n   + iPad:  -e x264  -q 20.0 -r 29.97 --pfr  -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 -f mp4 -4 -X 1280 --loose-anamorphic -m\n");
+    
     printf("\n   + AppleTV:  -e x264  -q 20.0 -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 -X 960 --loose-anamorphic -m -x cabac=0:ref=2:me=umh:b-pyramid=none:b-adapt=2:weightb=0:trellis=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500\n");
-
+    
     printf("\n   + AppleTV 2:  -e x264  -q 20.0 -r 29.97 --pfr  -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 -X 1280 --loose-anamorphic -m\n");
-
+    
+    printf("\n   + AppleTV 3:  -e x264  -q 20.0 -r 30 --pfr  -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 -X 1920 --loose-anamorphic -m -x b-adapt=2\n");
+    
     printf("\n   + Android Mid:  -e x264  -q 22.0 -r 29.97 --pfr  -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0.0 -f mp4 -X 480 -x cabac=0:ref=2:me=umh:bframes=0:weightp=0:subme=6:8x8dct=0:trellis=0\n");
-
+    
     printf("\n   + Android High:  -e x264  -q 22.0 -r 29.97 --pfr  -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0.0 -f mp4 -X 720 --loose-anamorphic -x weightp=0:cabac=0\n");
-
+    
     printf("\n>\n");
-
+    
     printf("\n< Regular\n");
-
+    
     printf("\n   + Normal:  -e x264  -q 20.0 -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 -f mp4 --strict-anamorphic -m -x ref=1:weightp=1:subq=2:rc-lookahead=10:trellis=0:8x8dct=0\n");
-
-    printf("\n   + High Profile:  -e x264  -q 20.0 -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 --detelecine --decomb --loose-anamorphic -m -x b-adapt=2:rc-lookahead=50\n");
-
+    
+    printf("\n   + High Profile:  -e x264  -q 20.0 -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 --decomb --loose-anamorphic -m -x b-adapt=2:rc-lookahead=50\n");
+    
     printf("\n>\n");
-
+    
     printf("\n< Legacy\n");
-
+    
     printf("\n   + Classic:  -b 1000 -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 -f mp4\n");
-
+    
     printf("\n   + iPod Legacy:  -e x264  -b 1500 -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 -f mp4 -I -X 640 -m -x level=30:bframes=0:weightp=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:subme=6:8x8dct=0:trellis=0\n");
-
+    
     printf("\n>\n");
 
 }
