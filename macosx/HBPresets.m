@@ -395,7 +395,7 @@
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
     
     /* Get the New Preset Description from the field in the AddPresetPanel */
-    [preset setObject:@"HandBrake's preset for the iPad (1st gen) is optimized for viewing on its 1024x768 display." forKey:@"PresetDescription"];
+    [preset setObject:@"HandBrake's preset for the iPad (all generations) is optimized for a good balance between quality and filesize." forKey:@"PresetDescription"];
     
     /* File Format */
     [preset setObject:@"MP4 file" forKey:@"FileFormat"];
