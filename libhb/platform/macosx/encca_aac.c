@@ -82,20 +82,20 @@ static long ReadESDSDescExt(void* descExt, UInt8 **buffer, UInt32 *size, int ver
 	*size = 0;
 
     if (versionFlags)
-        esds += 4;		// version + flags
+        esds += 4; // version + flags
 	readDescr(&esds, &tag);
-	esds += 2;		// ID
+	esds += 2;     // ID
 	if (tag == MP4ESDescrTag)
-		esds++;		// priority
+		esds++;    // priority
 
 	readDescr(&esds, &tag);
 	if (tag == MP4DecConfigDescrTag)
     {
-		esds++;		// object type id
-		esds++;		// stream type
-		esds += 3;	// buffer size db
-		esds += 4;	// max bitrate
-		esds += 4;	// average bitrate
+		esds++;    // object type id
+		esds++;    // stream type
+		esds += 3; // buffer size db
+		esds += 4; // max bitrate
+		esds += 4; // average bitrate
 
 		len = readDescr(&esds, &tag);
 		if (tag == MP4DecSpecificDescrTag)
@@ -427,7 +427,7 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
         hb_log("encCoreAudio: unexpected error in AudioConverterFillComplexBuffer()");
     }
     // only drop the output buffer if it's actually empty
-    if (!odesc.mDataByteSize || !npackets)
+    if (!npackets || odesc.mDataByteSize <= 0)
     {
         hb_log("encCoreAudio: 0 packets returned");
         return NULL;
