@@ -14,7 +14,25 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <ToolBar Grid.Row="0">
+            <ToolBar Grid.Row="0"
+                     ToolBar.OverflowMode="Never" 
+                     ToolBarTray.IsLocked="True"
+                     Loaded="ToolBarLoaded"
+                     >
+           
+
+                <TextBlock Margin="10,0,10,0"
+                           VerticalAlignment="Center"
+                           FontWeight="Bold"
+                           Text="Choose Log:" />
+                <ComboBox Width="100"
+                          HorizontalAlignment="Right"
+                          ItemsSource="{Binding LogModes}"
+                          SelectedIndex="{Binding SelectedMode}"
+                          />
+                
+                <Separator />
+                
                 <Button cal:Message.Attach="[Event Click] = [Action CopyLog]">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Source="Images/copy.png" />
@@ -28,16 +46,6 @@
                     </StackPanel>
                 </Button>
 
-                <Separator />
-
-                <TextBlock Margin="10,0,10,0"
-                           VerticalAlignment="Center"
-                           FontWeight="Bold"
-                           Text="Choose Log:" />
-                <ComboBox Width="100"
-                          HorizontalAlignment="Right"
-                          ItemsSource="{Binding LogModes}"
-                          SelectedIndex="{Binding SelectedMode}" />
             </ToolBar>
 
             <TextBox Grid.Row="1"

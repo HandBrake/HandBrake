@@ -116,7 +116,7 @@
                         <Grid Grid.Column="1" HorizontalAlignment="Stretch">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" MaxWidth="300" />
+                                <ColumnDefinition Width="*" MaxWidth="160" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
@@ -141,7 +141,7 @@
                                        Text="Source" />
                             <ComboBox Grid.Column="1"
                                       Height="22"
-                                      MaxWidth="300"
+                                      MaxWidth="150"
                                       Margin="5,0,5,0"
                                       HorizontalAlignment="Stretch"
                                       ItemsSource="{Binding DataContext.SourceTracks,
