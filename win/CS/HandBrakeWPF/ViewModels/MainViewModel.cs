@@ -471,7 +471,7 @@ namespace HandBrakeWPF.ViewModels
                 // The title that is selected has a source name. This means it's part of a batch scan.
                 if (selectedTitle != null && !string.IsNullOrEmpty(selectedTitle.SourceName))
                 {
-                    return Path.GetFileName(selectedTitle.SourceName);
+                    return Path.GetFileNameWithoutExtension(selectedTitle.SourceName);
                 }
 
                 // Check if we have a Folder, if so, check if it's a DVD / Bluray drive and get the label.
