@@ -45,6 +45,9 @@ namespace HandBrakeWPF.Converters.Options
                     case "Advanced":
                         if (parameter.ToString() == "Advanced") return Visibility.Visible;
                         break;
+                    case "Updates":
+                        if (parameter.ToString() == "Updates") return Visibility.Visible;
+                        break;
                 }
             }
 

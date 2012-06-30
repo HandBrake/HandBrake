@@ -27,6 +27,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Ookii.Dialogs.Wpf;
@@ -48,6 +49,11 @@ namespace HandBrakeWPF.ViewModels
         /// The Shell View Model
         /// </summary>
         private readonly IShellViewModel shellViewModel;
+
+        /// <summary>
+        /// Backing field for the update service.
+        /// </summary>
+        private readonly IUpdateService updateService;
 
         /// <summary>
         /// The add audio mode options.
@@ -274,7 +280,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private string sendFileToPath;
 
-
         /// <summary>
         /// The show cli window.
         /// </summary>
@@ -315,6 +320,26 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private string selectedTab;
 
+        /// <summary>
+        /// Update Message
+        /// </summary>
+        private string updateMessage;
+
+        /// <summary>
+        /// Update Available
+        /// </summary>
+        private bool updateAvailable;
+
+        /// <summary>
+        /// Download progress backing field.
+        /// </summary>
+        private int downloadProgressPercentage;
+
+        /// <summary>
+        /// Backing field for update info.
+        /// </summary>
+        private UpdateCheckInformation updateInfo;
+
         #endregion
 
         #region Constructors and Destructors
@@ -331,14 +356,19 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="shellViewModel">
         /// The shell View Model.
         /// </param>
-        public OptionsViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IShellViewModel shellViewModel)
+        /// <param name="updateService">
+        /// The update Service.
+        /// </param>
+        public OptionsViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IShellViewModel shellViewModel, IUpdateService updateService )
         {
             this.Title = "Options";
             this.userSettingService = userSettingService;
             this.shellViewModel = shellViewModel;
+            this.updateService = updateService;
             this.OnLoad();
 
             this.SelectedTab = "General";
+            this.UpdateMessage = "Click 'Check for Updates' to check for new versions";
         }
 
         #endregion
@@ -352,7 +382,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return new List<string> { "General", "Output Files", "Language", "Advanced" };
+                return new List<string> { "General", "Output Files", "Language", "Advanced", "Updates" };
             }
         }
 
@@ -1289,6 +1319,74 @@ namespace HandBrakeWPF.ViewModels
 
         #endregion
 
+        #region About HandBrake
+
+        /// <summary>
+        /// Gets Version.
+        /// </summary>
+        public string Version
+        {
+            get
+            {
+                string nightly = UserSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion).Contains("svn") ? " (SVN / Nightly Build)" : string.Empty;
+                return string.Format(
+                    "{0} ({1}) {2}",
+                    UserSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion),
+                    UserSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild),
+                    nightly);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets UpdateMessage.
+        /// </summary>
+        public string UpdateMessage
+        {
+            get
+            {
+                return this.updateMessage;
+            }
+            set
+            {
+                this.updateMessage = value;
+                this.NotifyOfPropertyChange(() => this.UpdateMessage);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether UpdateAvailable.
+        /// </summary>
+        public bool UpdateAvailable
+        {
+            get
+            {
+                return this.updateAvailable;
+            }
+            set
+            {
+                this.updateAvailable = value;
+                this.NotifyOfPropertyChange(() => this.UpdateAvailable);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets DownloadProgressPercentage.
+        /// </summary>
+        public int DownloadProgressPercentage
+        {
+            get
+            {
+                return this.downloadProgressPercentage;
+            }
+            set
+            {
+                this.downloadProgressPercentage = value;
+                this.NotifyOfPropertyChange(() => this.DownloadProgressPercentage);
+            }
+        }
+
+        #endregion
+
         #region Public Methods
 
         /// <summary>
@@ -1633,6 +1731,27 @@ namespace HandBrakeWPF.ViewModels
                 MessageBox.Show("HandBrake's Log file directory has been cleared!", "Notice", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
+        #endregion
+
+        #region Updates
+
+        /// <summary>
+        /// Download an Update
+        /// </summary>
+        public void DownloadUpdate()
+        {
+            this.UpdateMessage = "Preparing for Update ...";
+            this.updateService.DownloadFile(this.updateInfo.DownloadFile, this.DownloadComplete, this.DownloadProgress);
+        }
+
+        /// <summary>
+        /// Check for updates
+        /// </summary>
+        public void PerformUpdateCheck()
+        {
+            this.UpdateMessage = "Checking for Updates ...";
+            this.updateService.CheckForUpdates(this.UpdateCheckComplete);
+        }
 
         #endregion
 
@@ -1700,6 +1819,63 @@ namespace HandBrakeWPF.ViewModels
             }
 
             userSettingService.SetUserSetting(ASUserSettingConstants.DisableLibDvdNav, this.DisableLibdvdNav);
+        }
+
+        /// <summary>
+        /// Update Check Complete
+        /// </summary>
+        /// <param name="info">
+        /// The info.
+        /// </param>
+        private void UpdateCheckComplete(UpdateCheckInformation info)
+        {
+            this.updateInfo = info;
+            if (info.NewVersionAvailable)
+            {
+                this.UpdateMessage = "A New Update is Available!";
+                this.UpdateAvailable = true;
+            } 
+            else
+            {
+                this.UpdateMessage = "There are no new updates at this time.";
+                this.UpdateAvailable = false;
+            }
+        }
+
+        /// <summary>
+        /// Download Progress Action
+        /// </summary>
+        /// <param name="info">
+        /// The info.
+        /// </param>
+        private void DownloadProgress(DownloadStatus info)
+        {
+            if (info.TotalBytes == 0 || info.BytesRead == 0)
+            {
+                return;
+            }
+
+            long p = (info.BytesRead * 100) / info.TotalBytes;
+            int progress;
+            int.TryParse(p.ToString(CultureInfo.InvariantCulture), out progress);
+            this.DownloadProgressPercentage = progress;
+            this.UpdateMessage = string.Format(
+                "Downloading... {0}% - {1}k of {2}k", this.DownloadProgressPercentage, (info.BytesRead / 1024), (info.TotalBytes / 1024));
+        }
+
+        /// <summary>
+        /// Download Complete Action
+        /// </summary>
+        /// <param name="info">
+        /// The info.
+        /// </param>
+        private void DownloadComplete(DownloadStatus info)
+        {
+            this.UpdateAvailable = false;
+            this.UpdateMessage = info.WasSuccessful ? "Update Downloaded" : "Update Failed. You can try downloading the update from http://handbrake.fr";
+
+            Process.Start(Path.Combine(Path.GetTempPath(), "handbrake-setup.exe"));
+            Application.Current.Shutdown();
         }
     }
 }

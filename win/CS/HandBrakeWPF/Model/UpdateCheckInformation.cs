@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Model.General
+namespace HandBrakeWPF.Model
 {
     using System;
 
