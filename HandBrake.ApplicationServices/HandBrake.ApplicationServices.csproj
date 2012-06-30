@@ -117,8 +117,6 @@
     <Compile Include="Model\EncodeTask.cs" />
     <Compile Include="Model\Encoding\OutputFormat.cs" />
     <Compile Include="Model\Encoding\SubtitleTrack.cs" />
-    <Compile Include="Model\General\UpdateCheckInformation.cs" />
-    <Compile Include="Model\General\UpdateCheckResult.cs" />
     <Compile Include="Model\Preset.cs" />
     <Compile Include="Model\PresetPictureSettingsMode.cs" />
     <Compile Include="Model\QueueItemStatus.cs" />
@@ -152,7 +150,6 @@
     <Compile Include="Services\QueueManager.cs" />
     <Compile Include="Services\QueueProcessor.cs" />
     <Compile Include="Services\ScanService.cs" />
-    <Compile Include="Services\UpdateService.cs" />
     <Compile Include="Services\UserSettingService.cs" />
     <Compile Include="ASUserSettingConstants.cs" />
     <Compile Include="Utilities\AppcastReader.cs" />

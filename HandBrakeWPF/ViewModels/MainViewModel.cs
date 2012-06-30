@@ -78,6 +78,11 @@ namespace HandBrakeWPF.ViewModels
         private readonly IShellViewModel shellViewModel;
 
         /// <summary>
+        /// Backing field for the update serivce.
+        /// </summary>
+        private readonly IUpdateService updateService;
+
+        /// <summary>
         /// Backing field for the user setting service.
         /// </summary>
         private readonly IUserSettingService userSettingService;
@@ -169,15 +174,19 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="shellViewModel">
         /// The shell View Model.
         /// </param>
+        /// <param name="updateService">
+        /// The update Service.
+        /// </param>
         [ImportingConstructor]
         public MainViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService,
-            IErrorService errorService, IShellViewModel shellViewModel)
+            IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService)
         {
             this.scanService = scanService;
             this.encodeService = encodeService;
             this.presetService = presetService;
             this.errorService = errorService;
             this.shellViewModel = shellViewModel;
+            this.updateService = updateService;
             this.userSettingService = userSettingService;
             this.queueProcessor = IoC.Get<IQueueProcessor>(); // TODO Instance ID!
 
@@ -811,7 +820,7 @@ namespace HandBrakeWPF.ViewModels
             CliCheckHelper.CheckCLIVersion();
 
             // Perform an update check if required
-            UpdateCheckHelper.PerformStartupUpdateCheck();
+            this.updateService.PerformStartupUpdateCheck(this.HandleUpdateCheckResults);
 
             // Setup the presets.
             if (this.presetService.CheckIfPresetsAreOutOfDate())
@@ -854,7 +863,7 @@ namespace HandBrakeWPF.ViewModels
                 if (result == MessageBoxResult.No)
                 {
                     e.Cancel = true;
-                } 
+                }
                 else
                 {
                     this.encodeService.Stop();
@@ -921,7 +930,8 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void CheckForUpdates()
         {
-            UpdateCheckHelper.CheckForUpdates();
+            this.ProgramStatusLabel = "Checking for Updates ...";
+            this.updateService.CheckForUpdates(this.HandleManualUpdateCheckResults);
         }
 
         /// <summary>
@@ -939,12 +949,12 @@ namespace HandBrakeWPF.ViewModels
             if (!this.queueProcessor.QueueManager.CheckForDestinationPathDuplicates(task.Task.Destination))
             {
                 this.queueProcessor.QueueManager.Add(task);
-            } 
+            }
             else
             {
                 this.errorService.ShowMessageBox("There are jobs on the queue with the same destination path. Please choose a different path for this job.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            
+
 
             if (!this.IsEncoding)
             {
@@ -1152,7 +1162,7 @@ namespace HandBrakeWPF.ViewModels
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] fileNames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
-                if (fileNames != null && fileNames.Any() && (File.Exists(fileNames[0]) || Directory.Exists(fileNames[0])) )
+                if (fileNames != null && fileNames.Any() && (File.Exists(fileNames[0]) || Directory.Exists(fileNames[0])))
                 {
                     this.StartScan(fileNames[0], 0);
                 }
@@ -1203,7 +1213,7 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 this.NotifyOfPropertyChange(() => this.CurrentTask);
-            } 
+            }
         }
 
         /// <summary>
@@ -1433,6 +1443,38 @@ namespace HandBrakeWPF.ViewModels
             }
 
             return "--:--:--";
+        }
+
+        /// <summary>
+        /// Handle Update Check Results
+        /// </summary>
+        /// <param name="information">
+        /// The information.
+        /// </param>
+        private void HandleUpdateCheckResults(UpdateCheckInformation information)
+        {
+            if (information.NewVersionAvailable)
+            {
+                this.ProgramStatusLabel = "A New Update is Available. Goto Tools Menu > Options to Install";
+            }
+        }
+
+        /// <summary>
+        /// Handle Update Check Results
+        /// </summary>
+        /// <param name="information">
+        /// The information.
+        /// </param>
+        private void HandleManualUpdateCheckResults(UpdateCheckInformation information)
+        {
+            if (information.NewVersionAvailable)
+            {
+                MessageBox.Show("A New Version is available. Goto Tools Menu > Options to Install or visit http://handbrake.fr for details.", "Update Available", MessageBoxButton.OK, MessageBoxImage.Information);
+            } 
+            else
+            {
+                MessageBox.Show("There is no new updates at this time.", "No Update Available", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         #endregion

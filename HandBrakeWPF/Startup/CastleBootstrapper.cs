@@ -51,6 +51,9 @@ namespace HandBrakeWPF.Startup
             this.windsorContainer.Register(Component.For<IWindsorInstaller>().ImplementedBy<ServicesWindsorInstaller>());
             this.windsorContainer.Install(windsorContainer.ResolveAll<IWindsorInstaller>());
 
+            // Services
+            this.windsorContainer.Register(Component.For<IUpdateService>().ImplementedBy<UpdateService>().LifeStyle.Is(LifestyleType.Singleton));
+
             // Shell
             this.windsorContainer.Register(Component.For<IErrorService>().ImplementedBy<ErrorService>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IErrorViewModel>().ImplementedBy<ErrorViewModel>().LifeStyle.Is(LifestyleType.Singleton));
