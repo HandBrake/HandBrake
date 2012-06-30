@@ -151,17 +151,6 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         }
 
         /// <summary>
-        ///   Gets a value indicating whether this is an SRT subtitle.
-        /// </summary>
-        public bool IsSrtSubtitle
-        {
-            get
-            {
-                return this.SrtFileName != "-" && this.SrtFileName != null;
-            }
-        }
-
-        /// <summary>
         ///   Gets or sets SourceTrack.
         /// </summary>
         public Subtitle SourceTrack
@@ -179,6 +168,9 @@ namespace HandBrake.ApplicationServices.Model.Encoding
                 {
                     this.Track = this.sourceTrack.ToString();
                 }
+
+                this.NotifyOfPropertyChange(() => this.CanBeBurned);
+                this.NotifyOfPropertyChange(() => this.CanBeForced);
             }
         }
 
@@ -231,5 +223,51 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         public string Track { get; set; }
 
         #endregion
+
+        /// <summary>
+        /// Gets a value indicating whether CanForced.
+        /// </summary>
+        public bool CanBeForced
+        {
+            get
+            {
+                if (this.SourceTrack != null)
+                {
+                    return this.SourceTrack.SubtitleType == SubtitleType.VobSub || this.SourceTrack.SubtitleType == SubtitleType.PGS
+                        || this.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch;
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether CanBeBurned.
+        /// </summary>
+        public bool CanBeBurned
+        {
+            get
+            {
+                if (this.SourceTrack != null)
+                {
+                    return this.SourceTrack.SubtitleType == SubtitleType.VobSub || this.SourceTrack.SubtitleType == SubtitleType.PGS
+                        || this.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch || this.SourceTrack.SubtitleType == SubtitleType.SSA;
+                }
+
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        ///   Gets a value indicating whether this is an SRT subtitle.
+        /// </summary>
+        public bool IsSrtSubtitle
+        {
+            get
+            {
+                return this.SrtFileName != "-" && this.SrtFileName != null;
+            }
+        }
     }
 }

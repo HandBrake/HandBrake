@@ -1227,6 +1227,33 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Update a selected preset.
+        /// </summary>
+        public void PresetUpdate()
+        {
+            if (this.SelectedPreset == null)
+            {
+                this.errorService.ShowMessageBox(
+                    "Please select a preset to update.", "No Preset selected", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                return;
+            }
+
+            if (this.SelectedPreset.IsBuildIn)
+            {
+                this.errorService.ShowMessageBox(
+                    "You can not modify built in presets. Please select one of your own presets.", "No Preset selected", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            this.SelectedPreset.Task = new EncodeTask(this.CurrentTask);
+            this.presetService.Update(this.SelectedPreset);
+
+            this.errorService.ShowMessageBox(
+                    "The Preset has now been updated with your current settings.", "Preset Updated", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        /// <summary>
         /// Remove a Preset
         /// </summary>
         public void PresetRemove()
@@ -1475,6 +1502,8 @@ namespace HandBrakeWPF.ViewModels
             {
                 MessageBox.Show("There is no new updates at this time.", "No Update Available", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+
+            this.ProgramStatusLabel = "Ready";
         }
 
         #endregion

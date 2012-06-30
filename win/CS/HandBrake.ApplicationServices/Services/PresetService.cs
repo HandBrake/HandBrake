@@ -161,6 +161,9 @@ namespace HandBrake.ApplicationServices.Services
                 {
                     preset.Task = update.Task;
                     preset.UsePictureFilters = update.UsePictureFilters;
+                    preset.PictureSettingsMode = update.PictureSettingsMode;
+                    preset.Category = update.Category;
+                    preset.Description = update.Description;
 
                     // Update the presets file
                     this.UpdatePresetFiles();

@@ -134,6 +134,7 @@
                             <CheckBox Grid.Column="3"
                                       Margin="5,0,5,0"
                                       VerticalAlignment="Center"
+                                      IsEnabled="{Binding CanBeForced}"
                                       IsChecked="{Binding Forced}"
                                       Visibility="{Binding IsSrtSubtitle,
                                                            Converter={StaticResource booleanToVisConverter},
@@ -149,6 +150,7 @@
                                       Margin="5,0,5,0"
                                       VerticalAlignment="Center"
                                       IsChecked="{Binding Burned}"
+                                      IsEnabled="{Binding CanBeBurned}"
                                       Visibility="{Binding IsSrtSubtitle,
                                                            Converter={StaticResource booleanToVisConverter},
                                                            ConverterParameter=true}">
