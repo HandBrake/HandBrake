@@ -118,26 +118,6 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.selectedPictureSettingMode = value;
                 this.ShowCustomInputs = value == PresetPictureSettingsMode.Custom;
-
-                if (SelectedPictureSettingMode == PresetPictureSettingsMode.Custom)
-                {
-                    this.Preset.Task.MaxHeight = null;
-                    this.Preset.Task.MaxWidth = null;
-                }
-
-                if (SelectedPictureSettingMode == PresetPictureSettingsMode.Custom)
-                {
-                    this.Preset.Task.Width = this.CustomWidth;
-                    this.Preset.Task.Height = this.CustomHeight;
-                    this.Preset.Task.MaxHeight = null;
-                    this.Preset.Task.MaxWidth = null;
-                }
-
-                if (SelectedPictureSettingMode == PresetPictureSettingsMode.SourceMaximum)
-                {
-                    this.Preset.Task.MaxWidth = this.Preset.Task.Width;
-                    this.Preset.Task.MaxHeight = this.Preset.Task.Height;
-                }
             }
         }
 
@@ -175,6 +155,28 @@ namespace HandBrakeWPF.ViewModels
             this.Preset.UsePictureFilters = this.Preset.UsePictureFilters;
             this.Preset.PictureSettingsMode = this.SelectedPictureSettingMode;
 
+            // Setting W, H, MW and MH
+            if (SelectedPictureSettingMode == PresetPictureSettingsMode.None)
+            {
+                this.Preset.Task.MaxHeight = null;
+                this.Preset.Task.MaxWidth = null;
+            }
+
+            if (SelectedPictureSettingMode == PresetPictureSettingsMode.Custom)
+            {
+                this.Preset.Task.MaxWidth = this.CustomWidth;
+                this.Preset.Task.MaxHeight = this.CustomHeight;
+                this.Preset.Task.Width = null;
+                this.Preset.Task.Height = null;
+            }
+
+            if (SelectedPictureSettingMode == PresetPictureSettingsMode.SourceMaximum)
+            {
+                this.Preset.Task.MaxWidth = this.Preset.Task.Width;
+                this.Preset.Task.MaxHeight = this.Preset.Task.Height;
+            }
+
+            // Add the Preset
             bool added = this.presetService.Add(this.Preset);
             if (!added)
             {
