@@ -347,17 +347,19 @@ static inline int clampBlack( int x )
     return x < 16 ? 16 : x;
 }
 
-static int row_all_dark( hb_work_info_t *info, uint8_t* luma, int row )
+static int row_all_dark( hb_buffer_t* buf, int row )
 {
-    luma += info->width * row;
+    int width = buf->plane[0].width;
+    int stride = buf->plane[0].stride;
+    uint8_t *luma = buf->plane[0].data + stride * row;
 
     // compute the average luma value of the row
     int i, avg = 0;
-    for ( i = 0; i < info->width; ++i )
+    for ( i = 0; i < width; ++i )
     {
         avg += clampBlack( luma[i] );
     }
-    avg /= info->width;
+    avg /= width;
     if ( avg >= DARK )
         return 0;
 
@@ -365,7 +367,7 @@ static int row_all_dark( hb_work_info_t *info, uint8_t* luma, int row )
     // all pixels are within +-16 of the average (this range is fairly coarse
     // but there's a lot of quantization noise for luma values near black
     // so anything less will fail to crop because of the noise).
-    for ( i = 0; i < info->width; ++i )
+    for ( i = 0; i < width; ++i )
     {
         if ( absdiff( avg, clampBlack( luma[i] ) ) > 16 )
             return 0;
@@ -373,12 +375,12 @@ static int row_all_dark( hb_work_info_t *info, uint8_t* luma, int row )
     return 1;
 }
 
-static int column_all_dark( hb_work_info_t *info, uint8_t* luma, int top, int bottom,
-                            int col )
+static int column_all_dark( hb_buffer_t* buf, int top, int bottom, int col )
 {
-    int stride = info->width;
-    int height = info->height - top - bottom;
-    luma += stride * top + col;
+    int width = buf->plane[0].width;
+    int stride = buf->plane[0].stride;
+    int height = buf->plane[0].height - top - bottom;
+    uint8_t *luma = buf->plane[0].data + stride * top + col;
 
     // compute the average value of the column
     int i = height, avg = 0, row = 0;
@@ -751,7 +753,6 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 
         /* Detect black borders */
 
-#define Y    vid_buf->data
         int top, bottom, left, right;
         int h4 = vid_info.height / 4, w4 = vid_info.width / 4;
 
@@ -767,7 +768,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 
         for ( top = border; top < h4; ++top )
         {
-            if ( ! row_all_dark( &vid_info, Y, top ) )
+            if ( ! row_all_dark( vid_buf, top ) )
                 break;
         }
         if ( top <= border )
@@ -776,7 +777,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             // didn't check are dark or if we shouldn't crop at all.
             for ( top = 0; top < border; ++top )
             {
-                if ( ! row_all_dark( &vid_info, Y, top ) )
+                if ( ! row_all_dark( vid_buf, top ) )
                     break;
             }
             if ( top >= border )
@@ -786,14 +787,14 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         }
         for ( bottom = border; bottom < h4; ++bottom )
         {
-            if ( ! row_all_dark( &vid_info, Y, vid_info.height - 1 - bottom ) )
+            if ( ! row_all_dark( vid_buf, vid_info.height - 1 - bottom ) )
                 break;
         }
         if ( bottom <= border )
         {
             for ( bottom = 0; bottom < border; ++bottom )
             {
-                if ( ! row_all_dark( &vid_info, Y, vid_info.height - 1 - bottom ) )
+                if ( ! row_all_dark( vid_buf, vid_info.height - 1 - bottom ) )
                     break;
             }
             if ( bottom >= border )
@@ -803,12 +804,12 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         }
         for ( left = 0; left < w4; ++left )
         {
-            if ( ! column_all_dark( &vid_info, Y, top, bottom, left ) )
+            if ( ! column_all_dark( vid_buf, top, bottom, left ) )
                 break;
         }
         for ( right = 0; right < w4; ++right )
         {
-            if ( ! column_all_dark( &vid_info, Y, top, bottom, vid_info.width - 1 - right ) )
+            if ( ! column_all_dark( vid_buf, top, bottom, vid_info.width - 1 - right ) )
                 break;
         }
 
