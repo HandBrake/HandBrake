@@ -40,7 +40,6 @@ namespace HandBrakeWPF.Helpers
         /// </returns>
         public static string AutoName(EncodeTask task, string sourceOrLabelName)
         {
-
             IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
             if (task.Destination == null)
             {

@@ -546,7 +546,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 // display aspect = (width * par_width) / (height * par_height)
                 return new Size(
-                    (this.sourceParValues.Width * this.sourceResolution.Width), 
+                    (this.sourceParValues.Width * this.sourceResolution.Width),
                     (this.sourceParValues.Height * this.sourceResolution.Height));
             }
         }
@@ -569,7 +569,7 @@ namespace HandBrakeWPF.ViewModels
         public void SetPreset(Preset preset, EncodeTask task)
         {
             this.Task = task;
- 
+
             // TODO: These all need to be handled correctly.
             this.SelectedAnamorphicMode = preset.Task.Anamorphic;
 
@@ -584,12 +584,12 @@ namespace HandBrakeWPF.ViewModels
                 if (this.Width > preset.Task.MaxWidth)
                 {
                     this.Width = preset.Task.MaxWidth.Value;
-                } 
+                }
                 else
                 {
                     this.Width = preset.Task.Width ?? this.getRes((sourceResolution.Width - this.CropLeft - this.CropRight), preset.Task.MaxWidth.Value);
                 }
-            } 
+            }
             else
             {
                 this.Width = preset.Task.Width ?? (sourceResolution.Width - this.CropLeft - this.CropRight);
@@ -605,7 +605,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.Height = preset.Task.Height ?? this.getRes((sourceResolution.Height - this.CropTop - this.CropBottom), preset.Task.MaxHeight.Value);
                 }
-            } 
+            }
 
             // Anamorphic
             if (preset.Task.Anamorphic == Anamorphic.Custom)
@@ -616,14 +616,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Default this to On.
-            if (preset.Task.Anamorphic == Anamorphic.None)
-            {
-                this.MaintainAspectRatio = true;
-            }
-            else
-            {
-                this.MaintainAspectRatio = preset.Task.KeepDisplayAspect;
-            }
+            this.MaintainAspectRatio = preset.Task.Anamorphic == Anamorphic.None || preset.Task.KeepDisplayAspect;
 
             if (preset.Task.Modulus.HasValue)
             {
@@ -632,10 +625,15 @@ namespace HandBrakeWPF.ViewModels
 
             if (preset.Task.HasCropping)
             {
+                this.IsCustomCrop = true;
                 this.CropLeft = preset.Task.Cropping.Left;
                 this.CropRight = preset.Task.Cropping.Right;
                 this.CropTop = preset.Task.Cropping.Top;
                 this.CropBottom = preset.Task.Cropping.Bottom;
+            }
+            else
+            {
+                this.IsCustomCrop = false;
             }
 
             this.NotifyOfPropertyChange(() => this.Task);
@@ -668,7 +666,7 @@ namespace HandBrakeWPF.ViewModels
                 if (sourceResolution.Width < this.MaxWidth)
                 {
                     this.MaxWidth = sourceResolution.Width;
-                } 
+                }
                 else if (sourceResolution.Width > this.MaxWidth)
                 {
                     this.MaxWidth = preset.Task.MaxWidth ?? sourceResolution.Width;
@@ -685,14 +683,27 @@ namespace HandBrakeWPF.ViewModels
 
                 // Set Screen Controls
                 this.SourceInfo = string.Format(
-                    "{0}x{1}, Aspect Ratio: {2:0.00}", 
-                    title.Resolution.Width, 
-                    title.Resolution.Height, 
+                    "{0}x{1}, Aspect Ratio: {2:0.00}",
+                    title.Resolution.Width,
+                    title.Resolution.Height,
                     title.AspectRatio);
-                this.CropTop = title.AutoCropDimensions.Top;
-                this.CropBottom = title.AutoCropDimensions.Bottom;
-                this.CropLeft = title.AutoCropDimensions.Left;
-                this.CropRight = title.AutoCropDimensions.Right;
+
+                if (!preset.Task.HasCropping)
+                {
+                    this.CropTop = title.AutoCropDimensions.Top;
+                    this.CropBottom = title.AutoCropDimensions.Bottom;
+                    this.CropLeft = title.AutoCropDimensions.Left;
+                    this.CropRight = title.AutoCropDimensions.Right;
+                    this.IsCustomCrop = false;
+                }
+                else
+                {
+                    this.CropLeft = preset.Task.Cropping.Left;
+                    this.CropRight = preset.Task.Cropping.Right;
+                    this.CropTop = preset.Task.Cropping.Top;
+                    this.CropBottom = preset.Task.Cropping.Bottom;
+                    this.IsCustomCrop = true;
+                }
 
                 // TODO handle preset max width / height
                 this.Width = title.Resolution.Width;
@@ -717,8 +728,8 @@ namespace HandBrakeWPF.ViewModels
             this.DisplaySize = this.sourceResolution.IsEmpty
                                    ? "No Title Selected"
                                    : string.Format(
-                                       "{0}x{1}", 
-                                       this.CalculateAnamorphicSizes().Width, 
+                                       "{0}x{1}",
+                                       this.CalculateAnamorphicSizes().Width,
                                        this.CalculateAnamorphicSizes().Height);
 
             this.ShowDisplaySize = true;
@@ -974,8 +985,8 @@ namespace HandBrakeWPF.ViewModels
             this.DisplaySize = this.sourceResolution.IsEmpty
                                    ? "No Title Selected"
                                    : string.Format(
-                                       "{0}x{1}", 
-                                       this.CalculateAnamorphicSizes().Width, 
+                                       "{0}x{1}",
+                                       this.CalculateAnamorphicSizes().Width,
                                        this.CalculateAnamorphicSizes().Height);
         }
 
