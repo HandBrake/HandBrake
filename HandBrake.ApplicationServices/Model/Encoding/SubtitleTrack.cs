@@ -42,6 +42,11 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         /// </summary>
         private string srtFileName;
 
+        /// <summary>
+        /// Backing field for Forced Subs
+        /// </summary>
+        private bool forced;
+
         #endregion
 
         #region Constructors and Destructors
@@ -91,8 +96,16 @@ namespace HandBrake.ApplicationServices.Model.Encoding
 
             set
             {
-                this.burned = value;
-                this.NotifyOfPropertyChange(() => this.Burned);
+                if (!object.Equals(this.burned, value))
+                {
+                    this.burned = value;
+                    this.NotifyOfPropertyChange(() => this.Burned);
+
+                    if (value)
+                    {
+                        this.Default = false;
+                    }
+                }
             }
         }
 
@@ -108,15 +121,34 @@ namespace HandBrake.ApplicationServices.Model.Encoding
 
             set
             {
-                this.isDefault = value;
-                this.NotifyOfPropertyChange(() => this.Default);
+                if (!object.Equals(this.isDefault, value))
+                {
+                    this.isDefault = value;
+                    this.NotifyOfPropertyChange(() => this.Default);
+
+                    if (value)
+                    {
+                        this.Burned = false;
+                    }
+                }
             }
         }
 
         /// <summary>
         ///   Gets or sets a value indicating whether Forced.
         /// </summary>
-        public bool Forced { get; set; }
+        public bool Forced
+        {
+            get
+            {
+                return this.forced;
+            }
+            set
+            {
+                this.forced = value;
+                this.NotifyOfPropertyChange(() => this.Forced);
+            }
+        }
 
         /// <summary>
         ///   Gets a value indicating whether this is an SRT subtitle.
