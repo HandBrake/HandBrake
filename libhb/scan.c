@@ -377,7 +377,6 @@ static int row_all_dark( hb_buffer_t* buf, int row )
 
 static int column_all_dark( hb_buffer_t* buf, int top, int bottom, int col )
 {
-    int width = buf->plane[0].width;
     int stride = buf->plane[0].stride;
     int height = buf->plane[0].height - top - bottom;
     uint8_t *luma = buf->plane[0].data + stride * top + col;
