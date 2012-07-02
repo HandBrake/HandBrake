@@ -497,19 +497,23 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     {
         if( mk_startFrame(m->file, mux_data->track) < 0)
         {
-            hb_error( "Failed to write frame to output file, Disk Full?" );
+            hb_error("Failed to write frame to output file, Disk Full?");
             *job->die = 1;
         }
         uint64_t duration;
         timecode = buf->s.start * TIMECODE_SCALE;
-        duration = buf->s.stop * TIMECODE_SCALE - timecode;
-        // PGS subtitles have negative durations (buf->s.start - 0)
-        if (duration < 0)
+        if (buf->s.stop <= buf->s.start)
+        {
             duration = 0;
+        }
+        else
+        {
+            duration = buf->s.stop * TIMECODE_SCALE - timecode;
+        }
         mk_addFrameData(m->file, mux_data->track, buf->data, buf->size);
         mk_setFrameFlags(m->file, mux_data->track, timecode, 1, duration);
         mk_flushFrame(m->file, mux_data->track);
-        hb_buffer_close( &buf );
+        hb_buffer_close(&buf);
         return 0;
     }
     else
