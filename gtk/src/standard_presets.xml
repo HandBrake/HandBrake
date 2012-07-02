@@ -414,9 +414,9 @@
 				<key>PictureTopCrop</key>
 				<integer>0</integer>
 				<key>PictureWidth</key>
-				<integer>1024</integer>
+				<integer>1280</integer>
 				<key>PresetDescription</key>
-				<string>HandBrake's preset for the iPad (1st gen) is optimized for viewing on its 1024x768 display.</string>
+				<string>HandBrake's preset for the iPad (all generations) is optimized for a good balance between quality and filesize.</string>
 				<key>PresetName</key>
 				<string>iPad</string>
 				<key>Subtitles</key>
