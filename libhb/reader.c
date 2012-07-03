@@ -52,12 +52,13 @@ struct hb_work_private_s
     int            start_found;     // found pts_to_start point
     int64_t        pts_to_start;
     uint64_t       st_first;
+    hb_fifo_t    * fifos[100];
 };
 
 /***********************************************************************
  * Local prototypes
  **********************************************************************/
-static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id );
+static hb_fifo_t ** GetFifoForId( hb_work_private_t * r, int id );
 static void UpdateState( hb_work_private_t  * r, int64_t start);
 
 /***********************************************************************
@@ -526,7 +527,7 @@ void ReadLoop( void * _w )
         while( ( buf = hb_list_item( list, 0 ) ) )
         {
             hb_list_rem( list, buf );
-            fifos = GetFifoForId( r->job, buf->id );
+            fifos = GetFifoForId( r, buf->id );
 
             if ( fifos && ! r->saw_video && !r->job->indepth_scan )
             {
@@ -714,15 +715,15 @@ static void UpdateState( hb_work_private_t  * r, int64_t start)
  ***********************************************************************
  *
  **********************************************************************/
-static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id )
+static hb_fifo_t ** GetFifoForId( hb_work_private_t * r, int id )
 {
+    hb_job_t      * job = r->job;
     hb_title_t    * title = job->title;
     hb_audio_t    * audio;
     hb_subtitle_t * subtitle;
     int             i, n, count;
-    static hb_fifo_t * fifos[100];
 
-    memset(fifos, 0, sizeof(fifos));
+    memset(r->fifos, 0, sizeof(r->fifos));
 
     if( id == title->video_id )
     {
@@ -736,8 +737,8 @@ static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id )
         }
         else
         {
-            fifos[0] = job->fifo_mpeg2;
-            return fifos;
+            r->fifos[0] = job->fifo_mpeg2;
+            return r->fifos;
         }
     }
 
@@ -755,13 +756,13 @@ static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id )
                  * we are scanning and looking for forced subs, then pass them up
                  * to decode whether the sub is a forced one.
                  */
-                fifos[n++] = subtitle->fifo_in;
+                r->fifos[n++] = subtitle->fifo_in;
             }
         }
     }
     if ( n != 0 )
     {
-        return fifos;
+        return r->fifos;
     }
     
     if( !job->indepth_scan )
@@ -772,13 +773,13 @@ static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id )
             audio = hb_list_item( title->list_audio, i );
             if( id == audio->id )
             {
-                fifos[n++] = audio->priv.fifo_in;
+                r->fifos[n++] = audio->priv.fifo_in;
             }
         }
 
         if( n != 0 )
         {
-            return fifos;
+            return r->fifos;
         }
     }
 
