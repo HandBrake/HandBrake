@@ -147,8 +147,12 @@ static inline hb_buffer_t * hb_video_buffer_init( int width, int height )
     // if we do "/2". The code here matches the calculation for
     // PIX_FMT_YUV420P in ffmpeg's avpicture_fill() which is required
     // for most of HB's filters to work right.
-    return hb_buffer_init( width * height + ( ( width+1 ) >> 1 ) *
-                           ( ( height+1 ) >> 1 ) * 2 );
+    hb_buffer_t * b = hb_buffer_init( width * height + ( ( width+1 ) >> 1 ) *
+                                      ( ( height+1 ) >> 1 ) * 2 );
+    b->width = width;
+    b->height = height;
+
+    return b;
 }
 
 // this routine 'moves' data from src to dst by interchanging 'data',

@@ -819,8 +819,10 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
  * @param prog_diff   Sensitivity for detecting different colors on progressive frames
  * @param prog_threshold Sensitivity for flagging progressive frames as combed
  */
-int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, int color_diff, int threshold, int prog_equal, int prog_diff, int prog_threshold )
+int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int threshold, int prog_equal, int prog_diff, int prog_threshold )
 {
+    int width = buf->width;
+    int height = buf->height;
     int j, k, n, off, cc_1, cc_2, cc[3];
 	// int flag[3] ; // debugging flag
     uint16_t s1, s2, s3, s4;

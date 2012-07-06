@@ -736,7 +736,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         }
 
         /* Check preview for interlacing artifacts */
-        if( hb_detect_comb( vid_buf, vid_info.width, vid_info.height, 10, 30, 9, 10, 30, 9 ) )
+        if( hb_detect_comb( vid_buf, 10, 30, 9, 10, 30, 9 ) )
         {
             hb_deep_log( 2, "Interlacing detected in preview frame %i", i+1);
             interlaced_preview_count++;
