@@ -914,7 +914,7 @@ namespace HandBrake.ApplicationServices.Utilities
         private static bool ChapterCsvSave(IEnumerable<ChapterMarker> chapters, string filePathName)
         {
             string csv = string.Empty;
-            int counter = 0;
+            int counter = 1;
 
             foreach (ChapterMarker name in chapters)
             {
