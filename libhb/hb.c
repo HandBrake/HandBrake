@@ -865,14 +865,12 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
  * @param prog_diff   Sensitivity for detecting different colors on progressive frames
  * @param prog_threshold Sensitivity for flagging progressive frames as combed
  */
-int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, int color_diff, int threshold, int prog_equal, int prog_diff, int prog_threshold )
+int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int threshold, int prog_equal, int prog_diff, int prog_threshold )
 {
     int j, k, n, off, cc_1, cc_2, cc[3];
 	// int flag[3] ; // debugging flag
     uint16_t s1, s2, s3, s4;
     cc_1 = 0; cc_2 = 0;
-
-    int offset = 0;
 
     if ( buf->s.flags & 16 )
     {
@@ -885,21 +883,10 @@ int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, i
     /* One pas for Y, one pass for Cb, one pass for Cr */    
     for( k = 0; k < 3; k++ )
     {
-        if( k == 1 )
-        {
-            /* Y has already been checked, now offset by Y's dimensions
-               and divide all the other values by 2, since Cr and Cb
-               are half-size compared to Y.                               */
-            offset = width * height;
-            width >>= 1;
-            height >>= 1;
-        }
-        else if ( k == 2 )
-        {
-            /* Y and Cb are done, so the offset needs to be bumped
-               so it's width*height + (width / 2) * (height / 2)  */
-            offset *= 5/4;
-        }
+        uint8_t * data = buf->plane[k].data;
+        int width = buf->plane[k].width;
+        int stride = buf->plane[k].stride;
+        int height = buf->plane[k].height;
 
         for( j = 0; j < width; ++j )
         {
@@ -908,10 +895,10 @@ int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, i
             for( n = 0; n < ( height - 4 ); n = n + 2 )
             {
                 /* Look at groups of 4 sequential horizontal lines */
-                s1 = ( ( buf->data + offset )[ off + j             ] & 0xff );
-                s2 = ( ( buf->data + offset )[ off + j + width     ] & 0xff );
-                s3 = ( ( buf->data + offset )[ off + j + 2 * width ] & 0xff );
-                s4 = ( ( buf->data + offset )[ off + j + 3 * width ] & 0xff );
+                s1 = ( ( data )[ off + j              ] & 0xff );
+                s2 = ( ( data )[ off + j +     stride ] & 0xff );
+                s3 = ( ( data )[ off + j + 2 * stride ] & 0xff );
+                s4 = ( ( data )[ off + j + 3 * stride ] & 0xff );
 
                 /* Note if the 1st and 2nd lines are more different in
                    color than the 1st and 3rd lines are similar in color.*/
@@ -926,7 +913,7 @@ int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, i
                         ++cc_2;
 
                 /* Now move down 2 horizontal lines before starting over.*/
-                off += 2 * width;
+                off += 2 * stride;
             }
         }
 

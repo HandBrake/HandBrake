@@ -1997,8 +1997,8 @@ static int hb_decomb_init( hb_filter_object_t * filter,
     for( i = 0; i < 3; i++ )
     {
         int is_chroma = !!i;
-        int w = ((init->width   + 31) & (~31))>>is_chroma;
-        int h = ((init->height+6+ 31) & (~31))>>is_chroma;
+        int w = ((init->width >>is_chroma)  + 31) & (~31);
+        int h = ((init->height>>is_chroma)+6+ 31) & (~31);
 
         pv->ref_stride[i] = w;
 
@@ -2012,8 +2012,8 @@ static int hb_decomb_init( hb_filter_object_t * filter,
     for( i = 0; i < 3; i++ )
     {
         int is_chroma = !!i;
-        int w = ((init->width   + 31) & (~31))>>is_chroma;
-        int h = ((init->height+6+ 31) & (~31))>>is_chroma;
+        int w = ((init->width >>is_chroma)  + 31) & (~31);
+        int h = ((init->height>>is_chroma)+6+ 31) & (~31);
 
         pv->mask[i] = calloc( 1, w*h*sizeof(uint8_t) ) + 3*w;
         pv->mask_filtered[i] = calloc( 1, w*h*sizeof(uint8_t) ) + 3*w;
@@ -2027,8 +2027,8 @@ static int hb_decomb_init( hb_filter_object_t * filter,
         for( i = 0; i < 3; i++ )
         {
             int is_chroma = !!i;
-            int w = ((init->width   + 31) & (~31))>>is_chroma;
-            int h = ((height+6+ 31) & (~31))>>is_chroma;
+            int w = ((init->width>>is_chroma)   + 31) & (~31);
+            int h = ((height>>is_chroma)    + 6 + 31) & (~31);
 
             for( j = 0; j < 4; j++ )
             {
@@ -2037,12 +2037,11 @@ static int hb_decomb_init( hb_filter_object_t * filter,
         }
 
         /* Allocate full-height eedi2 buffers */
-        height = init->height;
         for( i = 0; i < 3; i++ )
         {
             int is_chroma = !!i;
-            int w = ((init->width   + 31) & (~31))>>is_chroma;
-            int h = ((height+6+ 31) & (~31))>>is_chroma;
+            int w = ((init->width >>is_chroma)  + 31) & (~31);
+            int h = ((init->height>>is_chroma)+6+ 31) & (~31);
 
             for( j = 0; j < 5; j++ )
             {

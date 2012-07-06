@@ -57,7 +57,7 @@ hb_list_t   * hb_get_titles( hb_handle_t * );
 /* hb_detect_comb()
    Analyze a frame for interlacing artifacts, returns true if they're found.
    Taken from Thomas Oestreich's 32detect filter in the Transcode project.  */
-int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, int color_diff, int threshold, int prog_equal, int prog_diff, int prog_threshold );
+int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int threshold, int prog_equal, int prog_diff, int prog_threshold );
 
 int           hb_save_preview( hb_handle_t * h, int title, int preview, 
                                hb_buffer_t *buf );
