@@ -54,7 +54,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// HandBrakes Queue file with a place holder for an extra string.
         /// </summary>
-        private readonly string queueFile;
+        private string queueFile;
 
         #endregion
 
@@ -406,6 +406,14 @@ namespace HandBrake.ApplicationServices.Services
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Temp workaround until this can be fixed properly.
+        /// </summary>
+        public void ResetInstanceId()
+        {
+            this.queueFile = string.Format("hb_queue_recovery{0}.xml", GeneralUtilities.GetInstanceCount);
         }
 
         #endregion

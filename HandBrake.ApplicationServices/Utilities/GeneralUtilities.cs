@@ -12,6 +12,7 @@ namespace HandBrake.ApplicationServices.Utilities
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Globalization;
     using System.IO;
     using System.Text;
     using System.Windows.Forms;
@@ -27,15 +28,54 @@ namespace HandBrake.ApplicationServices.Utilities
     /// </summary>
     public class GeneralUtilities
     {
+        #region Constants and Fields
+
+        /// <summary>
+        /// The Default Log Directory
+        /// </summary>
+        private static readonly string LogDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
+                                                "\\HandBrake\\logs";
+
         /// <summary>
         /// The User Setting Service
         /// </summary>
         private static readonly IUserSettingService UserSettingService = IoC.Get<IUserSettingService>();
 
         /// <summary>
-        /// The Default Log Directory
+        /// The Instance ID
         /// </summary>
-        private static readonly string LogDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+        private static int instanceId = 0;
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the number of HandBrake instances running.
+        /// </summary>
+        public static string GetInstanceCount
+        {
+            get
+            {
+                return instanceId == 0 ? string.Empty : instanceId.ToString(CultureInfo.InvariantCulture);
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether HandBrake is running in multi instance mode
+        /// </summary>
+        /// <returns>True if the UI has another instance running</returns>
+        public static bool IsMultiInstance
+        {
+            get
+            {
+                return Process.GetProcessesByName("HandBrake").Length > 1 ? true : false;
+            }
+        }
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>
         /// Clear all the log files older than 30 Days
@@ -48,7 +88,7 @@ namespace HandBrake.ApplicationServices.Utilities
             if (Directory.Exists(LogDir))
             {
                 // Get all the log files
-                DirectoryInfo info = new DirectoryInfo(LogDir);
+                var info = new DirectoryInfo(LogDir);
                 FileInfo[] logFiles = info.GetFiles("*.txt");
 
                 // Delete Them
@@ -70,33 +110,33 @@ namespace HandBrake.ApplicationServices.Utilities
         }
 
         /// <summary>
-        /// Get a list of available DVD drives which are ready and contain DVD content.
+        /// Add the CLI Query to the Log File.
         /// </summary>
-        /// <returns>A List of Drives with their details</returns>
-        public static List<DriveInformation> GetDrives()
+        /// <returns>
+        /// The create cli log header.
+        /// </returns>
+        public static StringBuilder CreateCliLogHeader()
         {
-            List<DriveInformation> drives = new List<DriveInformation>();
-            DriveInfo[] theCollectionOfDrives = DriveInfo.GetDrives();
-            int id = 0;
-            foreach (DriveInfo curDrive in theCollectionOfDrives)
-            {
-                if (curDrive.DriveType == DriveType.CDRom && curDrive.IsReady)
-                {
-                    if (Directory.Exists(curDrive.RootDirectory + "VIDEO_TS") || Directory.Exists(curDrive.RootDirectory + "BDMV"))
-                    {
-                        drives.Add(
-                            new DriveInformation
-                                {
-                                    Id = id,
-                                    VolumeLabel = curDrive.VolumeLabel,
-                                    RootDirectory = curDrive.RootDirectory.ToString()
-                                });
-                        id++;
-                    }
-                }
-            }
+            var logHeader = new StringBuilder();
 
-            return drives;
+            logHeader.AppendLine(
+                String.Format(
+                    "HandBrake {0} {1}", 
+                    UserSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion), 
+                    UserSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild)));
+            logHeader.AppendLine(String.Format("OS: {0}", Environment.OSVersion));
+            logHeader.AppendLine(String.Format("CPU: {0}", SystemInfo.GetCpuCount));
+            logHeader.Append(String.Format("Ram: {0} MB, ", SystemInfo.TotalPhysicalMemory));
+            logHeader.AppendLine(
+                String.Format(
+                    "Screen: {0}x{1}", SystemInfo.ScreenBounds.Bounds.Width, SystemInfo.ScreenBounds.Bounds.Height));
+            logHeader.AppendLine(String.Format("Temp Dir: {0}", Path.GetTempPath()));
+            logHeader.AppendLine(String.Format("Install Dir: {0}", Application.StartupPath));
+            logHeader.AppendLine(String.Format("Data Dir: {0}\n", Application.UserAppDataPath));
+
+            logHeader.AppendLine("-------------------------------------------");
+
+            return logHeader;
         }
 
         /// <summary>
@@ -109,33 +149,42 @@ namespace HandBrake.ApplicationServices.Utilities
         }
 
         /// <summary>
-        /// Add the CLI Query to the Log File.
+        /// Get a list of available DVD drives which are ready and contain DVD content.
         /// </summary>
-        /// <returns>
-        /// The create cli log header.
-        /// </returns>
-        public static StringBuilder CreateCliLogHeader()
+        /// <returns>A List of Drives with their details</returns>
+        public static List<DriveInformation> GetDrives()
         {
-            StringBuilder logHeader = new StringBuilder();
+            var drives = new List<DriveInformation>();
+            DriveInfo[] theCollectionOfDrives = DriveInfo.GetDrives();
+            int id = 0;
+            foreach (DriveInfo curDrive in theCollectionOfDrives)
+            {
+                if (curDrive.DriveType == DriveType.CDRom && curDrive.IsReady)
+                {
+                    if (Directory.Exists(curDrive.RootDirectory + "VIDEO_TS") ||
+                        Directory.Exists(curDrive.RootDirectory + "BDMV"))
+                    {
+                        drives.Add(
+                            new DriveInformation
+                                {
+                                    Id = id, 
+                                    VolumeLabel = curDrive.VolumeLabel, 
+                                    RootDirectory = curDrive.RootDirectory.ToString()
+                                });
+                        id++;
+                    }
+                }
+            }
 
-            logHeader.AppendLine(String.Format("HandBrake {0} {1}", UserSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion), UserSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild)));
-            logHeader.AppendLine(String.Format("OS: {0}", Environment.OSVersion));
-            logHeader.AppendLine(String.Format("CPU: {0}", SystemInfo.GetCpuCount));
-            logHeader.Append(String.Format("Ram: {0} MB, ", SystemInfo.TotalPhysicalMemory));
-            logHeader.AppendLine(String.Format("Screen: {0}x{1}", SystemInfo.ScreenBounds.Bounds.Width, SystemInfo.ScreenBounds.Bounds.Height));
-            logHeader.AppendLine(String.Format("Temp Dir: {0}", Path.GetTempPath()));
-            logHeader.AppendLine(String.Format("Install Dir: {0}", Application.StartupPath));
-            logHeader.AppendLine(String.Format("Data Dir: {0}\n", Application.UserAppDataPath));
-
-            logHeader.AppendLine("-------------------------------------------");
-
-            return logHeader;
+            return drives;
         }
 
         /// <summary>
         /// Return the standard log format line of text for a given log message
         /// </summary>
-        /// <param name="message">The Log Message</param>
+        /// <param name="message">
+        /// The Log Message
+        /// </param>
         /// <returns>
         /// A Log Message in the format: "[hh:mm:ss] message"
         /// </returns>
@@ -145,26 +194,12 @@ namespace HandBrake.ApplicationServices.Utilities
         }
 
         /// <summary>
-        /// Gets a value indicating whether HandBrake is running in multi instance mode
+        /// Set the Instance ID
         /// </summary>
-        /// <returns>True if the UI has another instance running</returns>
-        public static bool IsMultiInstance
+        public static void SetInstanceId()
         {
-            get
-            {
-                return Process.GetProcessesByName("HandBrake").Length > 1 ? true : false;
-            }
+            instanceId = Process.GetProcessesByName("HandBrake").Length;
         }
-
-        /// <summary>
-        /// Gets the number of HandBrake instances running.
-        /// </summary>
-        public static string GetInstanceCount
-        {
-            get
-            {
-                return Process.GetProcessesByName("HandBrake").Length == 0 ? string.Empty : Process.GetProcessesByName("HandBrake").Length.ToString();
-            }
-        }
+        #endregion
     }
 }

@@ -131,5 +131,10 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// True if sucessful
         /// </returns>
         bool WriteBatchScriptToFile(string path);
+
+        /// <summary>
+        /// Temp workaround until this can be fixed properly.
+        /// </summary>
+        void ResetInstanceId();
     }
 }
