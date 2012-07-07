@@ -188,7 +188,7 @@ namespace HandBrakeWPF.ViewModels
             this.shellViewModel = shellViewModel;
             this.updateService = updateService;
             this.userSettingService = userSettingService;
-            this.queueProcessor = IoC.Get<IQueueProcessor>(); // TODO Instance ID!
+            this.queueProcessor = IoC.Get<IQueueProcessor>();
 
             // Setup Properties
             this.WindowTitle = "HandBrake";
