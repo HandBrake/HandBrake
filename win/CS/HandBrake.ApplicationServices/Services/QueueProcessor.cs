@@ -59,19 +59,6 @@ namespace HandBrake.ApplicationServices.Services
             }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QueueProcessor"/> class.
-        /// This call also initializes the Encode and QueueManager services
-        /// </summary>
-        /// <param name="instanceId">
-        /// The instance id.
-        /// </param>
-        public QueueProcessor(int instanceId)
-        {
-            this.EncodeService = File.Exists("hb.dll") ? (IEncode)new LibEncode() : new Encode();
-            this.QueueManager = new QueueManager(instanceId);
-        }
-
         #region Events
 
         /// <summary>

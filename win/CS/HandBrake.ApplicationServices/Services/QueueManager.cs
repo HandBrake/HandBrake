@@ -56,34 +56,18 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private readonly string queueFile;
 
-        /// <summary>
-        /// The ID of the job last added
-        /// </summary>
-        private int lastJobId;
-
         #endregion
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QueueManager"/> class.
-        /// </summary>
-        /// <param name="instanceId">
-        /// The instance Id.
-        /// </param>
-        public QueueManager(int instanceId)
-        {
-            // If this is the first instance, just use the main queue file, otherwise add the instance id to the filename.
-            this.queueFile = instanceId == 0 ? "hb_queue_recovery.xml" : string.Format("hb_queue_recovery{0}.xml", instanceId);
-        }
-
-        #region Events
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QueueManager"/> class.
         /// </summary>
         public QueueManager()
         {
-            this.queueFile = "hb_queue_recovery.xml"; // TODO need to support multi-instance here.
+            // If this is the first instance, just use the main queue file, otherwise add the instance id to the filename.
+            this.queueFile = string.Format("hb_queue_recovery{0}.xml", GeneralUtilities.GetInstanceCount);
         }
+
+        #region Events
 
         /// <summary>
         /// Fires when a job is Added, Removed or Re-Ordered.
