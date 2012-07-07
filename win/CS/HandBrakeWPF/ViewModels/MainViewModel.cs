@@ -181,6 +181,9 @@ namespace HandBrakeWPF.ViewModels
         public MainViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService,
             IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService)
         {
+            GeneralUtilities.SetInstanceId();
+            
+
             this.scanService = scanService;
             this.encodeService = encodeService;
             this.presetService = presetService;
@@ -189,6 +192,7 @@ namespace HandBrakeWPF.ViewModels
             this.updateService = updateService;
             this.userSettingService = userSettingService;
             this.queueProcessor = IoC.Get<IQueueProcessor>();
+            queueProcessor.QueueManager.ResetInstanceId();
 
             // Setup Properties
             this.WindowTitle = "HandBrake";

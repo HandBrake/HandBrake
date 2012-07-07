@@ -25,7 +25,7 @@ namespace HandBrake.ApplicationServices.Services
     /// <summary>
     /// Scan a Source
     /// </summary>
-    public class  ScanService : IScan
+    public class ScanService : IScan
     {
         #region Private Variables
 
