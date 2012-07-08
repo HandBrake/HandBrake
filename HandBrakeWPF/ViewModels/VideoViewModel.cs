@@ -487,7 +487,28 @@ namespace HandBrakeWPF.ViewModels
             //    this.X264Profile = preset.Task.x264Profile;
             //    this.X264Tune = preset.Task.X264Tune;
             //}
+        }
 
+        /// <summary>
+        /// Update all the UI controls based on the encode task passed in.
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        public void UpdateTask(EncodeTask task)
+        {
+            this.Task = task;
+            this.NotifyOfPropertyChange(() => this.IsConstantFramerate);
+            this.NotifyOfPropertyChange(() => this.IsConstantQuantity);
+            this.NotifyOfPropertyChange(() => this.IsPeakFramerate);
+            this.NotifyOfPropertyChange(() => this.IsVariableFramerate);
+            this.NotifyOfPropertyChange(() => this.SelectedVideoEncoder);
+            this.NotifyOfPropertyChange(() => this.SelectedFramerate);
+            this.NotifyOfPropertyChange(() => this.RF);
+            this.NotifyOfPropertyChange(() => this.DisplayRF);
+            this.NotifyOfPropertyChange(() => this.Task.VideoBitrate);
+            this.NotifyOfPropertyChange(() => this.Task.TwoPass);
+            this.NotifyOfPropertyChange(() => this.Task.TurboFirstPass);
         }
 
         /// <summary>

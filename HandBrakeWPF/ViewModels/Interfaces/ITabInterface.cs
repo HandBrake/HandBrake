@@ -41,5 +41,13 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// The task.
         /// </param>
         void SetPreset(Preset preset, EncodeTask task);
+
+        /// <summary>
+        /// Update all the UI controls based on the encode task passed in.
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        void UpdateTask(EncodeTask task);
     }
 }

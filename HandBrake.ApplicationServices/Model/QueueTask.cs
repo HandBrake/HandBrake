@@ -11,6 +11,8 @@ namespace HandBrake.ApplicationServices.Model
 {
     using Caliburn.Micro;
 
+    using HandBrake.ApplicationServices.Parsing;
+
     /// <summary>
     /// The QueueTask.
     /// </summary>
@@ -26,6 +28,11 @@ namespace HandBrake.ApplicationServices.Model
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets ScannedSource.
+        /// </summary>
+        public Source ScannedSource { get; set; } 
 
         /// <summary>
         /// Gets or sets a value indicating whether if this is a user or GUI generated query

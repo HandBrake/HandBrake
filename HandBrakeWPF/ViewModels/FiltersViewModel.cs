@@ -373,6 +373,29 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Update all the UI controls based on the encode task passed in.
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        public void UpdateTask(EncodeTask task)
+        {
+            this.CurrentTask = task;
+
+            this.NotifyOfPropertyChange(() => this.SelectedDenoise);
+            this.NotifyOfPropertyChange(() => this.SelectedDecomb);
+            this.NotifyOfPropertyChange(() => this.SelectedDeInterlace);
+            this.NotifyOfPropertyChange(() => this.SelectedDetelecine);
+            this.NotifyOfPropertyChange(() => this.Grayscale);
+            this.NotifyOfPropertyChange(() => this.DeblockValue);
+
+            this.NotifyOfPropertyChange(() => this.CustomDecomb);
+            this.NotifyOfPropertyChange(() => this.CustomDeinterlace);
+            this.NotifyOfPropertyChange(() => this.CustomDetelecine);
+            this.NotifyOfPropertyChange(() => this.CustomDenoise);
+        }
+
+        /// <summary>
         /// Setup this window for a new source
         /// </summary>
         /// <param name="title">

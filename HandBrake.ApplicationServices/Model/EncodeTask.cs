@@ -147,39 +147,15 @@ namespace HandBrake.ApplicationServices.Model
         /// </summary>
         public PointToPointMode PointToPointMode { get; set; }
 
-        private int startPoint;
-
         /// <summary>
         /// Gets or sets StartPoint.
         /// </summary>
-        public int StartPoint
-        {
-            get
-            {
-                return this.startPoint;
-            }
-            set
-            {
-                this.startPoint = value;
-            }
-        }
-
-        private int endPoint;
+        public int StartPoint { get; set; }
 
         /// <summary>
         /// Gets or sets EndPoint.
         /// </summary>
-        public int EndPoint
-        {
-            get
-            {
-                return this.endPoint;
-            }
-            set
-            {
-                this.endPoint = value;
-            }
-        }
+        public int EndPoint { get; set; }
 
         #endregion
 

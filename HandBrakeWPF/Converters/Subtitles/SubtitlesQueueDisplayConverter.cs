@@ -1,13 +1,13 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AudioQueueDisplayConverter.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="SubtitlesQueueDisplayConverter.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Audio Queue Display Converter
+//   Subtitle Queue Display Converter
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters.Audio
+namespace HandBrakeWPF.Converters.Subtitles
 {
     using System;
     using System.Collections.ObjectModel;
@@ -15,14 +15,12 @@ namespace HandBrakeWPF.Converters.Audio
     using System.Text;
     using System.Windows.Data;
 
-    using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model.Encoding;
-    using HandBrake.Interop.Model.Encoding;
 
     /// <summary>
-    /// Audio Queue Display Converter
+    /// Subtitle Queue Display Converter
     /// </summary>
-    public class AudioQueueDisplayConverter : IValueConverter
+    public class SubtitlesQueueDisplayConverter : IValueConverter
     {
         /// <summary>
         /// Converts a value. 
@@ -33,24 +31,25 @@ namespace HandBrakeWPF.Converters.Audio
         /// <param name="value">The value produced by the binding source.</param><param name="targetType">The type of the binding target property.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            ObservableCollection<AudioTrack> tracks = value as ObservableCollection<AudioTrack>;
+            ObservableCollection<SubtitleTrack> tracks = value as ObservableCollection<SubtitleTrack>;
             StringBuilder audioTracks = new StringBuilder();
             if (tracks != null)
             {
-                foreach (AudioTrack track in tracks)
+                foreach (SubtitleTrack track in tracks)
                 {
+                    string text = track.SourceTrack != null ? track.SourceTrack.ToString() : (track.SrtFileName + ".srt");
                     if (string.IsNullOrEmpty(audioTracks.ToString()))
                     {
-                        audioTracks.Append(EnumHelper<AudioEncoder>.GetDisplay(track.Encoder));
+                        audioTracks.Append(text);
                     }
                     else
                     {
-                        audioTracks.Append(", " + EnumHelper<AudioEncoder>.GetDisplay(track.Encoder));
+                        audioTracks.Append(", " + text);
                     }
                 }
             }
 
-            return audioTracks.ToString();
+            return string.IsNullOrEmpty(audioTracks.ToString()) ? "None" : audioTracks.ToString();
         }
 
         /// <summary>

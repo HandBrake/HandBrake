@@ -123,6 +123,7 @@
     <Compile Include="Converters\Audio\AudioQueueDisplayConverter.cs" />
     <Compile Include="Converters\BooleanToHiddenVisibilityConverter.cs" />
     <Compile Include="Converters\Options\OptionsTabConverter.cs" />
+    <Compile Include="Converters\Subtitles\SubtitlesQueueDisplayConverter.cs" />
     <Compile Include="Converters\Video\VideoEncoderConverter.cs" />
     <Compile Include="Model\ShellWindow.cs" />
     <Compile Include="Model\UpdateCheckInformation.cs" />
@@ -152,10 +153,8 @@
     <Compile Include="Helpers\QueueRecoveryHelper.cs" />
     <Compile Include="Model\AdvancedChoice.cs" />
     <Compile Include="Services\ErrorService.cs" />
-    <Compile Include="Services\Interfaces\IJobContextService.cs" />
     <Compile Include="Services\Interfaces\IErrorService.cs" />
     <Compile Include="Services\Interfaces\IUpdateVersionService.cs" />
-    <Compile Include="Services\JobContextService.cs" />
     <Compile Include="Services\UpdateVersionService.cs" />
     <Compile Include="Startup\CastleBootstrapper.cs" />
     <Compile Include="Startup\MefBootstrapper.cs" />

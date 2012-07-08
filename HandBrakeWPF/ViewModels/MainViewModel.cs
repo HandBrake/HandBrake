@@ -147,6 +147,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private Preset selectedPreset;
 
+        /// <summary>
+        /// Queue Edit Task
+        /// </summary>
+        private EncodeTask queueEditTask;
+
         #endregion
 
         /// <summary>
@@ -1115,6 +1120,19 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Edit a Queue Task
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        public void EditQueueJob(EncodeTask task)
+        {
+            // Rescan the source to make sure it's still valid
+            this.queueEditTask = task;
+            this.scanService.Scan(task.Source, task.Title, this.UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount), QueueEditAction);
+        }
+
+        /// <summary>
         /// Pause an Encode
         /// </summary>
         public void PauseEncode()
@@ -1369,6 +1387,44 @@ namespace HandBrakeWPF.ViewModels
         #region Private Methods
 
         /// <summary>
+        /// Update all the UI Components to allow the user to edit their previous settings.
+        /// </summary>
+        /// <param name="successful">
+        /// The successful.
+        /// </param>
+        private void QueueEditAction(bool successful)
+        {
+            Execute.OnUIThread(() =>
+                {
+                    // Copy all the Scan data into the UI
+                    this.scanService.SouceData.CopyTo(this.ScannedSource);
+                    this.NotifyOfPropertyChange(() => this.ScannedSource);
+                    this.NotifyOfPropertyChange(() => this.ScannedSource.Titles);
+
+                    // Select the Users Title
+                    this.CurrentTask = new EncodeTask(queueEditTask);
+                    this.NotifyOfPropertyChange(() => this.CurrentTask);
+                    this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault(t => t.TitleNumber == this.CurrentTask.Title);
+
+                    // Update the Main UI control Area (TODO)
+                    this.CurrentTask = new EncodeTask(queueEditTask);
+                    this.NotifyOfPropertyChange(() => this.CurrentTask);
+
+                    // Update the Tab Controls (TODO)
+                    this.PictureSettingsViewModel.UpdateTask(this.CurrentTask);
+                    this.VideoViewModel.UpdateTask(this.CurrentTask);
+                    this.FiltersViewModel.UpdateTask(this.CurrentTask);
+                    this.AudioViewModel.UpdateTask(this.CurrentTask);
+                    this.SubtitleViewModel.UpdateTask(this.CurrentTask);
+                    this.ChaptersViewModel.UpdateTask(this.CurrentTask);
+                    this.AdvancedViewModel.UpdateTask(this.CurrentTask);
+                   
+                    // Cleanup
+                    this.ShowStatusWindow = false;
+                });
+        }
+
+        /// <summary>
         /// Start a Scan
         /// </summary>
         /// <param name="filename">
@@ -1381,7 +1437,7 @@ namespace HandBrakeWPF.ViewModels
         {
             // TODO 
             // 1. Disable GUI.
-            this.scanService.Scan(filename, title, this.UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount));
+            this.scanService.Scan(filename, title, this.UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount), null);
         }
 
         /// <summary>
@@ -1548,8 +1604,6 @@ namespace HandBrakeWPF.ViewModels
                         this.NotifyOfPropertyChange("ScannedSource.Titles");
                         this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault(t => t.MainTitle)
                                              ?? this.ScannedSource.Titles.FirstOrDefault();
-                        this.JobContextService.CurrentSource = this.ScannedSource;
-                        this.JobContextService.CurrentTask = this.CurrentTask;
                         this.SetupTabs();
                         this.ShowStatusWindow = false;
                     }

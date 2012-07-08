@@ -141,7 +141,10 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="previewCount">
         /// The preview Count.
         /// </param>
-        public void Scan(string sourcePath, int title, int previewCount)
+        /// <param name="postAction">
+        /// The post Action.
+        /// </param>
+        public void Scan(string sourcePath, int title, int previewCount, Action<bool> postAction)
         {
             Thread t = new Thread(unused => this.ScanSource(sourcePath, title, previewCount));
             t.Start();

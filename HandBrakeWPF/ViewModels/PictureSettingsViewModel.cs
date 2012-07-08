@@ -640,6 +640,24 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Update all the UI controls based on the encode task passed in.
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        public void UpdateTask(EncodeTask task)
+        {
+            this.Task = task;
+            this.NotifyOfPropertyChange(() => this.Width);
+            this.NotifyOfPropertyChange(() => this.Height);
+            this.NotifyOfPropertyChange(() => this.SelectedAnamorphicMode);
+            this.NotifyOfPropertyChange(() => this.SelectedModulus);
+            this.NotifyOfPropertyChange(() => this.DisplayWidth);
+            this.NotifyOfPropertyChange(() => this.ParHeight);
+            this.NotifyOfPropertyChange(() => this.ParWidth);
+        }
+
+        /// <summary>
         /// Setup this window for a new source
         /// </summary>
         /// <param name="title">
