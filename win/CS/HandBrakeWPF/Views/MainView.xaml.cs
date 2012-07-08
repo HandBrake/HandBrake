@@ -9,8 +9,10 @@
 
 namespace HandBrakeWPF.Views
 {
+    using System;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Input;
 
     /// <summary>
     /// Interaction logic for MainView.xaml

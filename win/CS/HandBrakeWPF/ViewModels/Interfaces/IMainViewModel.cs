@@ -25,5 +25,40 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// Shutdown the Application
         /// </summary>
         void ExitApplication();
+
+        /// <summary>
+        /// Open the Log Window
+        /// </summary>
+        void OpenLogWindow();
+
+        /// <summary>
+        /// Open the Queue Window.
+        /// </summary>
+        void OpenQueueWindow();
+
+        /// <summary>
+        /// Add the current task to the queue.
+        /// </summary>
+        void AddToQueue();
+
+        /// <summary>
+        /// File Scan
+        /// </summary>
+        void FileScan();
+
+        /// <summary>
+        /// Folder Scan
+        /// </summary>
+        void FolderScan();
+
+        /// <summary>
+        /// Stop an Encode.
+        /// </summary>
+        void StopEncode();
+
+        /// <summary>
+        /// Start an Encode
+        /// </summary>
+        void StartEncode();
     }
 }
