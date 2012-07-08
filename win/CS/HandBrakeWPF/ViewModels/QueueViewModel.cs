@@ -331,6 +331,33 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueueManager.RestoreQueue(dialog.FileName);
         }
 
+        /// <summary>
+        /// Edit this Job
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        public void EditJob(QueueTask task)
+        {
+            MessageBoxResult result = this.errorService.ShowMessageBox(
+                "Are you sure you wish to edit this job?\nWARNING!!! This feature is not finished YET! Only part of the job will be copied back!!!",
+                "Modify Job?",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result != MessageBoxResult.Yes)
+            {
+                return;
+            }
+
+            // Remove the job if it is not already encoding. Let the user decide if they want to cancel or not.
+            this.RemoveJob(task);
+
+            // Pass a copy of the job back to the Main Screen
+            IMainViewModel mvm = IoC.Get<IMainViewModel>();
+            mvm.EditQueueJob(new EncodeTask(task.Task));
+        }
+
         #endregion
 
         #region Methods

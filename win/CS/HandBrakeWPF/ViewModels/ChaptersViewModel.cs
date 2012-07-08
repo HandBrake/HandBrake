@@ -227,6 +227,20 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Update all the UI controls based on the encode task passed in.
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        public void UpdateTask(EncodeTask task)
+        {
+            this.Task = task;
+
+            this.NotifyOfPropertyChange(() => this.Task.IncludeChapterMarkers);
+            this.NotifyOfPropertyChange(() => this.Task.ChapterNames);
+        }
+
+        /// <summary>
         /// Set the Source Chapters List
         /// </summary>
         /// <param name="sourceChapters">

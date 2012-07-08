@@ -253,6 +253,18 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Update all the UI controls based on the encode task passed in.
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        public void UpdateTask(EncodeTask task)
+        {
+            this.Task = task;
+            this.NotifyOfPropertyChange(() => this.Task.SubtitleTracks);
+        }
+
+        /// <summary>
         /// Setup this window for a new source
         /// </summary>
         /// <param name="title">

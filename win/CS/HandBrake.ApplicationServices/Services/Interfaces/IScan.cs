@@ -84,7 +84,10 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <param name="previewCount">
         /// The preview Count.
         /// </param>
-        void Scan(string sourcePath, int title, int previewCount);
+        /// <param name="postAction">
+        /// The post Action.
+        /// </param>
+        void Scan(string sourcePath, int title, int previewCount, Action<bool> postAction);
 
         /// <summary>
         /// Kill the scan

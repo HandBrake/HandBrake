@@ -60,5 +60,13 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// Start an Encode
         /// </summary>
         void StartEncode();
+
+        /// <summary>
+        /// Edit a Queue Task
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        void EditQueueJob(EncodeTask task);
     }
 }

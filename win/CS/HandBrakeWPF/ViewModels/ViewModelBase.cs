@@ -75,10 +75,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public IUserSettingService UserSettingService { get; set; }
 
-        /// <summary>
-        /// Gets or sets JobContextService.
-        /// </summary>
-        public IJobContextService JobContextService { get; set; }
         #endregion
 
         #region Public Methods

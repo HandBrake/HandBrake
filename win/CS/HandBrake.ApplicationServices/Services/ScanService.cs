@@ -124,9 +124,12 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="previewCount">
         /// The preview Count.
         /// </param>
-        public void Scan(string sourcePath, int title, int previewCount)
+        /// <param name="postScanAction">
+        /// The post Scan Action.
+        /// </param>
+        public void Scan(string sourcePath, int title, int previewCount, Action<bool> postScanAction)
         {
-            Thread t = new Thread(unused => this.ScanSource(sourcePath, title, previewCount));
+            Thread t = new Thread(unused => this.ScanSource(sourcePath, title, previewCount, postScanAction));
             t.Start();
         }
 
@@ -195,7 +198,10 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="previewCount">
         /// The preview Count.
         /// </param>
-        private void ScanSource(object sourcePath, int title, int previewCount)
+        /// <param name="postScanAction">
+        /// The post Scan Action. Disables the Scan Completed Event
+        /// </param>
+        private void ScanSource(object sourcePath, int title, int previewCount, Action<bool> postScanAction)
         {
             try
             {
@@ -292,17 +298,34 @@ namespace HandBrake.ApplicationServices.Services
 
                 this.IsScanning = false;
 
-                if (this.ScanCompleted != null)
+
+                if (postScanAction != null)
                 {
-                    this.ScanCompleted(this, new ScanCompletedEventArgs(true, null, string.Empty));
+                    postScanAction(true);
+                } 
+                else
+                {
+                    if (this.ScanCompleted != null)
+                    {
+                        this.ScanCompleted(this, new ScanCompletedEventArgs(true, null, string.Empty));
+                    }
                 }
             }
             catch (Exception exc)
             {
                 this.Stop();
 
-                if (this.ScanCompleted != null)
-                    this.ScanCompleted(this, new ScanCompletedEventArgs(false, exc, "An Error has occured in ScanService.ScanSource()"));
+                if (postScanAction != null)
+                {
+                    postScanAction(false);
+                }
+                else
+                {
+                    if (this.ScanCompleted != null)
+                    {
+                        this.ScanCompleted(this, new ScanCompletedEventArgs(false, exc, "An Error has occured in ScanService.ScanSource()"));
+                    }
+                }
             }
         }
         
