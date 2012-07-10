@@ -715,9 +715,18 @@ hb_buffer_t * hb_read_preview( hb_handle_t * h, int title_idx, int preview )
 {
     FILE * file;
     char   filename[1024];
+    hb_title_t * title = NULL;
 
-    hb_title_t * title = hb_list_item( h->list_title, title_idx - 1);
-    if ( title == NULL )
+    int ii;
+    for (ii = 0; ii < hb_list_count(h->list_title); ii++)
+    {
+        title = hb_list_item( h->list_title, ii);
+        if (title != NULL && title->index == title_idx)
+        {
+            break;
+        }
+    }
+    if (title == NULL)
     {
         hb_error( "hb_read_preview: invalid title (%d)", title_idx );
         return NULL;
