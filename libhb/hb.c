@@ -725,6 +725,7 @@ hb_buffer_t * hb_read_preview( hb_handle_t * h, int title_idx, int preview )
         {
             break;
         }
+        title = NULL;
     }
     if (title == NULL)
     {
