@@ -144,14 +144,10 @@ namespace HandBrake.ApplicationServices.Utilities
         {
             string query = string.Empty;
 
-            // If we have a folder, strip it's trailing slash for the CLI.
-            // It behaves a bit funny with trailing \ in some cases.
-            if (task.Source.EndsWith("\\"))
-            {
-                task.Source = task.Source.TrimEnd('\\');
-            }
+            query += task.Source.EndsWith("\\")
+                         ? string.Format(" -i \"{0}\\\\\"", task.Source.TrimEnd('\\'))
+                         : string.Format(" -i \"{0}\"", task.Source);
 
-            query += string.Format(" -i \"{0}\"", task.Source);
             query += string.Format(" -t {0}", task.Title);
             query += string.Format(" --angle {0}", task.Angle);
 
