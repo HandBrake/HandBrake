@@ -8,6 +8,7 @@
  */
 
 #include "hb.h"
+#include "audio_remap.h"
 
 #include "faac.h"
 
@@ -72,7 +73,7 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
     pv->job   = job;
 
 	/* pass the number of channels used into the private work data */
-    pv->out_discrete_channels = hb_mixdown_get_discrete_channel_count( audio->config.out.mixdown );
+    pv->out_discrete_channels = hb_mixdown_get_discrete_channel_count(audio->config.out.mixdown);
 
     /* if the sample rate is 'auto' and that has given us an invalid output */
     /* rate, map it to the next highest output rate or 48K if above the highest. */
@@ -109,41 +110,26 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
     cfg->aacObjectType = LOW;
     cfg->allowMidside  = 1;
 
-	if (pv->out_discrete_channels == 6) {
-		/* we are preserving 5.1 audio into 6-channel AAC,
-		so indicate that we have an lfe channel */
-		cfg->useLfe    = 1;
-	} else {
-		cfg->useLfe    = 0;
-	}
+    // LFE, remapping
+    uint64_t layout;
+    layout = hb_ff_mixdown_xlat(audio->config.out.mixdown, NULL);
+    cfg->useLfe = !!(layout & AV_CH_LOW_FREQUENCY);
+    if (pv->out_discrete_channels > 2 &&
+        audio->config.in.channel_map != &hb_aac_chan_map)
+    {
+        int *remap_table;
+        remap_table = hb_audio_remap_build_table(layout,
+                                                 audio->config.in.channel_map,
+                                                 &hb_aac_chan_map);
+        // faac does its own remapping
+        memcpy(cfg->channel_map, remap_table, pv->out_discrete_channels * sizeof(int));
+    }
 
     cfg->useTns        = 0;
     cfg->bitRate       = audio->config.out.bitrate * 1000 / pv->out_discrete_channels; /* Per channel */
     cfg->bandWidth     = 0;
     cfg->outputFormat  = 0;
     cfg->inputFormat   =  FAAC_INPUT_FLOAT;
-
-    if( ( audio->config.out.mixdown == HB_AMIXDOWN_6CH ) && ( audio->config.in.channel_map != &hb_qt_chan_map ) )
-    {
-        if( audio->config.in.channel_map == &hb_ac3_chan_map )
-        {
-            cfg->channel_map[0] = 2;
-            cfg->channel_map[1] = 1;
-            cfg->channel_map[2] = 3;
-            cfg->channel_map[3] = 4;
-            cfg->channel_map[4] = 5;
-            cfg->channel_map[5] = 0;
-        }
-        else if( audio->config.in.channel_map == &hb_smpte_chan_map )
-        {
-            cfg->channel_map[0] = 2;
-            cfg->channel_map[1] = 0;
-            cfg->channel_map[2] = 1;
-            cfg->channel_map[3] = 4;
-            cfg->channel_map[4] = 5;
-            cfg->channel_map[5] = 3;
-        }
-    }
 
     if( !faacEncSetConfiguration( pv->faac, cfg ) )
     {

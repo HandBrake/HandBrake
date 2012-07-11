@@ -105,15 +105,16 @@ void hb_avcodec_init()
     av_register_all();
 }
 
-int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec, AVDictionary **av_opts, int thread_count)
+int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec,
+                    AVDictionary **av_opts, int thread_count)
 {
     int ret;
 
-    if ( ( thread_count == HB_FFMPEG_THREADS_AUTO || thread_count > 0 ) && 
-         ( codec->type == AVMEDIA_TYPE_VIDEO ) )
+    if ((thread_count == HB_FFMPEG_THREADS_AUTO || thread_count > 0) && 
+        (codec->type == AVMEDIA_TYPE_VIDEO))
     {
-        avctx->thread_count = ( thread_count == HB_FFMPEG_THREADS_AUTO ) ? 
-                                hb_get_cpu_count() / 2 + 1 : thread_count;
+        avctx->thread_count = (thread_count == HB_FFMPEG_THREADS_AUTO) ?
+                               hb_get_cpu_count() / 2 + 1 : thread_count;
         avctx->thread_type = FF_THREAD_FRAME|FF_THREAD_SLICE;
         avctx->thread_safe_callbacks = 1;
     }
@@ -134,16 +135,16 @@ int hb_avcodec_close(AVCodecContext *avctx)
 }
 
 
-int hb_avpicture_fill( AVPicture *pic, hb_buffer_t *buf )
+int hb_avpicture_fill(AVPicture *pic, hb_buffer_t *buf)
 {
     int ret, ii;
 
-    for( ii = 0; ii < 4; ii++ )
+    for (ii = 0; ii < 4; ii++)
         pic->linesize[ii] = buf->plane[ii].stride;
 
-    ret = av_image_fill_pointers( pic->data, buf->f.fmt,
-                                  buf->plane[0].height_stride,
-                                  buf->data, pic->linesize );
+    ret = av_image_fill_pointers(pic->data, buf->f.fmt,
+                                 buf->plane[0].height_stride,
+                                 buf->data, pic->linesize);
     if (ret != buf->size)
     {
         hb_error("Internal error hb_avpicture_fill expected %d, got %d",
@@ -209,45 +210,61 @@ hb_sws_get_context(int srcW, int srcH, enum PixelFormat srcFormat,
     return ctx;
 }
 
+uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode)
+{
+    uint64_t ff_layout = 0;
+    int mode = AV_MATRIX_ENCODING_NONE;
+    switch (hb_mixdown)
+    {
+        // Passthru
+        case HB_AMIXDOWN_NONE:
+            break;
+
+        case HB_AMIXDOWN_MONO:
+            ff_layout = AV_CH_LAYOUT_MONO;
+            break;
+
+        case HB_AMIXDOWN_DOLBY:
+            ff_layout = AV_CH_LAYOUT_STEREO;
+            mode = AV_MATRIX_ENCODING_DOLBY;
+            break;
+
+        case HB_AMIXDOWN_DOLBYPLII:
+            ff_layout = AV_CH_LAYOUT_STEREO;
+            mode = AV_MATRIX_ENCODING_DPLII;
+            break;
+
+        case HB_AMIXDOWN_STEREO:
+            ff_layout = AV_CH_LAYOUT_STEREO;
+            break;
+
+        case HB_AMIXDOWN_6CH:
+            ff_layout = AV_CH_LAYOUT_5POINT1;
+            break;
+
+        default:
+            ff_layout = AV_CH_LAYOUT_STEREO;
+            hb_log("unrecognized channel layout");
+            break;
+    }
+    if (downmix_mode != NULL)
+        *downmix_mode = mode;
+    return ff_layout;
+}
+
 uint64_t hb_ff_layout_xlat(uint64_t ff_channel_layout, int nchannels)
 {
     uint64_t hb_layout = ff_channel_layout;
     if (!hb_layout ||
         av_get_channel_layout_nb_channels(hb_layout) != nchannels)
     {
-        switch (nchannels)
+        hb_layout = av_get_default_channel_layout(nchannels);
+        if (!hb_layout)
         {
-            // TODO: use av_get_default_channel_layout when available
-            case 1:
-                hb_layout = AV_CH_LAYOUT_MONO;
-                break;
-            case 2:
-                hb_layout = AV_CH_LAYOUT_STEREO;
-                break;
-            case 3:
-                hb_layout = AV_CH_LAYOUT_SURROUND;
-                break;
-            case 4:
-                hb_layout = AV_CH_LAYOUT_QUAD;
-                break;
-            case 5:
-                hb_layout = AV_CH_LAYOUT_5POINT0;
-                break;
-            case 6:
-                hb_layout = AV_CH_LAYOUT_5POINT1;
-                break;
-            case 7:
-                hb_layout = AV_CH_LAYOUT_5POINT1|AV_CH_BACK_CENTER;
-                break;
-            case 8:
-                hb_layout = AV_CH_LAYOUT_7POINT1;
-                break;
-            default:
-                // This will likely not sound very good ;)
-                hb_layout = AV_CH_LAYOUT_STEREO;
-                hb_error("hb_ff_layout_xlat: unsupported layout 0x%"PRIx64" with %d channels",
-                         ff_channel_layout, nchannels);
-                break;
+            // This will likely not sound very good ;)
+            hb_layout = AV_CH_LAYOUT_STEREO;
+            hb_error("hb_ff_layout_xlat: unsupported layout 0x%"PRIx64" with %d channels",
+                     ff_channel_layout, nchannels);
         }
     }
     return hb_layout;

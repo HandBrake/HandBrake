@@ -1,41 +1,41 @@
 diff --git a/libavcodec/h264.c b/libavcodec/h264.c
-index 9889224..ae77285 100644
+index 6ed251e..a3242ce 100644
 --- a/libavcodec/h264.c
 +++ b/libavcodec/h264.c
-@@ -2229,6 +2229,7 @@ static void flush_dpb(AVCodecContext *avctx){
-     h->s.first_field= 0;
+@@ -2627,6 +2627,7 @@ static void flush_dpb(AVCodecContext *avctx)
+     h->s.first_field = 0;
      ff_h264_reset_sei(h);
      ff_mpeg_flush(avctx);
 +    h->recovery_frame= -1;
  }
  
- static int init_poc(H264Context *h){
-@@ -3654,9 +3655,18 @@ static int decode_nal_units(H264Context *h, const uint8_t *buf, int buf_size){
-             if((err = decode_slice_header(hx, h)))
-                break;
+ static int init_poc(H264Context *h)
+@@ -4289,9 +4290,18 @@ again:
+                 if ((err = decode_slice_header(hx, h)))
+                     break;
  
-+            if (h->sei_recovery_frame_cnt >= 0 && h->recovery_frame < 0) {
-+                h->recovery_frame = (h->frame_num + h->sei_recovery_frame_cnt) %
-+                                    (1 << h->sps.log2_max_frame_num);
-+            }
++                if (h->sei_recovery_frame_cnt >= 0 && h->recovery_frame < 0) {
++                    h->recovery_frame = (h->frame_num + h->sei_recovery_frame_cnt) %
++                                        (1 << h->sps.log2_max_frame_num);
++                }
 +
-             s->current_picture_ptr->f.key_frame |=
+                 s->current_picture_ptr->f.key_frame |=
 -                    (hx->nal_unit_type == NAL_IDR_SLICE) ||
 -                    (h->sei_recovery_frame_cnt >= 0);
-+                    (hx->nal_unit_type == NAL_IDR_SLICE);
++                        (hx->nal_unit_type == NAL_IDR_SLICE);
 +
-+            if (h->recovery_frame == h->frame_num) {
-+                s->current_picture_ptr->f.key_frame |= 1;
-+                h->recovery_frame = -1;
-+            }
++                if (h->recovery_frame == h->frame_num) {
++                    s->current_picture_ptr->f.key_frame |= 1;
++                    h->recovery_frame = -1;
++                }
  
-             if (h->current_slice == 1) {
-                 if(!(s->flags2 & CODEC_FLAG2_CHUNKS)) {
+                 if (h->current_slice == 1) {
+                     if (!(s->flags2 & CODEC_FLAG2_CHUNKS))
 diff --git a/libavcodec/h264.h b/libavcodec/h264.h
-index 122a54a..cd044b0 100644
+index 570ce2f..454b755 100644
 --- a/libavcodec/h264.h
 +++ b/libavcodec/h264.h
-@@ -575,6 +575,13 @@ typedef struct H264Context{
+@@ -569,6 +569,13 @@ typedef struct H264Context {
       * frames.
       */
      int sei_recovery_frame_cnt;
@@ -47,10 +47,10 @@ index 122a54a..cd044b0 100644
 +     */
 +    int recovery_frame;
  
-     int luma_weight_flag[2];   ///< 7.4.3.2 luma_weight_lX_flag
-     int chroma_weight_flag[2]; ///< 7.4.3.2 chroma_weight_lX_flag
+     int luma_weight_flag[2];    ///< 7.4.3.2 luma_weight_lX_flag
+     int chroma_weight_flag[2];  ///< 7.4.3.2 chroma_weight_lX_flag
 diff --git a/libavcodec/h264_sei.c b/libavcodec/h264_sei.c
-index 4f52bbe..8d3c40b 100644
+index 2e5fb65..ea33a18 100644
 --- a/libavcodec/h264_sei.c
 +++ b/libavcodec/h264_sei.c
 @@ -38,6 +38,7 @@ static const uint8_t sei_num_clock_ts_table[9]={

@@ -451,17 +451,25 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if ( pv->context->codec )
     {
+        int ret;
+        AVPacket pkt;
+        int got_packet;
+
+        av_init_packet(&pkt);
         /* Should be way too large */
         buf = hb_video_buffer_init( job->width, job->height );
-        buf->size = avcodec_encode_video( pv->context, buf->data, buf->alloc,
-                                          frame );
-        if ( buf->size <= 0 )
+        pkt.data = buf->data;
+        pkt.size = buf->alloc;
+
+        ret = avcodec_encode_video2( pv->context, &pkt, frame, &got_packet );
+        if ( ret < 0 || pkt.size <= 0 || !got_packet )
         {
             hb_buffer_close( &buf );
         }
         else
         {
-            int64_t frameno = pv->context->coded_frame->pts;
+            int64_t frameno = pkt.pts;
+            buf->size = pkt.size;
             buf->s.start  = get_frame_start( pv, frameno );
             buf->s.stop  = get_frame_stop( pv, frameno );
             buf->s.flags &= ~HB_FRAME_REF;
@@ -492,7 +500,7 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 case AV_PICTURE_TYPE_I:
                 {
                     buf->s.flags |= HB_FRAME_REF;
-                    if ( pv->context->coded_frame->key_frame )
+                    if ( pkt.flags & AV_PKT_FLAG_KEY )
                     {
                         buf->s.frametype = HB_FRAME_IDR;
                     }
@@ -504,7 +512,7 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
                 default:
                 {
-                    if ( pv->context->coded_frame->key_frame )
+                    if ( pkt.flags & AV_PKT_FLAG_KEY )
                     {
                         buf->s.flags |= HB_FRAME_REF;
                         buf->s.frametype = HB_FRAME_KEY;

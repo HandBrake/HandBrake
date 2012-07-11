@@ -922,7 +922,6 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
            gap */
         AVCodec        * codec;
         AVCodecContext * c;
-        short          * zeros;
 
         switch ( w->audio->config.out.codec )
         {
@@ -966,8 +965,18 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
             return;
         }
 
-        int input_size = c->frame_size * av_get_bytes_per_sample( c->sample_fmt ) * c->channels;
+        // Prepare input frame
+        AVFrame frame;
+        uint8_t * zeros;
+
+        frame.nb_samples= c->frame_size;
+        int input_size = av_samples_get_buffer_size(NULL, c->channels,
+                                frame.nb_samples, c->sample_fmt, 1);
         zeros = calloc( 1, input_size );
+        avcodec_fill_audio_frame(&frame, c->channels, 
+                                 c->sample_fmt, zeros, input_size, 1);
+        frame.pts = 0;
+
         // Allocate enough space for the encoded silence
         // The output should be < the input
         sync->silence_buf  = malloc( input_size );
@@ -977,19 +986,26 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
         int ii;
         for ( ii = 0; ii < 10; ii++ )
         {
-            sync->silence_size = avcodec_encode_audio( c, sync->silence_buf, 
-                                    input_size, zeros );
+            // Prepare output packet
+            AVPacket pkt;
+            int got_packet;
+            av_init_packet(&pkt);
+            pkt.data = zeros;
+            pkt.size = input_size;
 
-            if (sync->silence_size)
+            int ret = avcodec_encode_audio2( c, &pkt, &frame, &got_packet);
+            if ( ret < 0 )
             {
+                hb_log( "sync: avcodec_encode_audio failed" );
+                break;
+            }
+
+            if ( got_packet )
+            {
+                sync->silence_size = pkt.size;
                 break;
             }
         }
-        if (!sync->silence_size)
-        {
-            hb_log( "sync: avcodec_encode_audio failed" );
-        }
-
         free( zeros );
         hb_avcodec_close( c );
         av_free( c );

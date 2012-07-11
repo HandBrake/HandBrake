@@ -5085,13 +5085,13 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title, int scan )
     return 1;
 
   fail:
-    if ( info_ic ) av_close_input_file( info_ic );
+    if ( info_ic ) avformat_close_input( &info_ic );
     return 0;
 }
 
 static void ffmpeg_close( hb_stream_t *d )
 {
-    av_close_input_file( d->ffmpeg_ic );
+    avformat_close_input( &d->ffmpeg_ic );
     if ( d->ffmpeg_pkt != NULL )
     {
         free( d->ffmpeg_pkt );
@@ -5104,23 +5104,9 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
     AVStream *st = stream->ffmpeg_ic->streams[id];
     AVCodecContext *codec = st->codec;
     AVDictionaryEntry *tag;
-    int layout;
 
-    // DTS: work around lack of 6.0/6.1 support in libhb
-    if( hb_ff_dts_disable_xch( codec ) )
-    {
-        hb_deep_log( 2, "add_ffmpeg_audio: found DTS-ES, requesting DTS core" );
-    }
-
-    // scan will ignore any audio without a bitrate. Since we've already
-    // typed the audio in order to determine its codec we set up the audio
-    // paramters here.
-    layout = hb_ff_layout_xlat( codec->channel_layout, codec->channels );
-    if ( !layout )
-    {
-        // Unsupported layout
-        return;
-    }
+    // scan will ignore any audio without a bitrate. Since we've already typed the
+    // audio in order to determine its codec we set up the audio parameters here.
     if ( codec->bit_rate || codec->sample_rate )
     {
         hb_audio_t *audio = calloc( 1, sizeof(*audio) );;
@@ -5173,8 +5159,9 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
                 audio->config.in.bitrate = 1;
             audio->config.in.samplerate = codec->sample_rate;
             audio->config.in.samples_per_frame = codec->frame_size;
-            audio->config.in.channel_layout = layout;
-            audio->config.in.channel_map = &hb_smpte_chan_map;
+            audio->config.in.channel_map = &hb_libav_chan_map;
+            audio->config.in.channel_layout = hb_ff_layout_xlat(codec->channel_layout,
+                                                                codec->channels);
         }
 
         tag = av_dict_get( st->metadata, "language", NULL, 0 );

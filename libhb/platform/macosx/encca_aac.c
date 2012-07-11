@@ -8,7 +8,7 @@
  */
 
 #include "hb.h"
-#include "downmix.h"
+#include "audio_remap.h"
 #include <AudioToolbox/AudioToolbox.h>
 #include <CoreAudio/CoreAudio.h>
 
@@ -49,8 +49,7 @@ struct hb_work_private_s
     uint64_t pts, ibytes;
     Float64 osamplerate;
 
-    uint64_t layout;
-    hb_chan_map_t *ichanmap;
+    int *remap_table;
 };
 
 #define MP4ESDescrTag                   0x03
@@ -289,22 +288,17 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
     pv->osamplerate = output.mSampleRate;
     audio->config.out.samples_per_frame = pv->isamples;
 
-    // set channel map and layout (for remapping)
-    pv->ichanmap = audio->config.in.channel_map;
-    switch (audio->config.out.mixdown)
+    // channel remapping
+    if (pv->nchannels > 2 && audio->config.in.channel_map != &hb_aac_chan_map)
     {
-        case HB_AMIXDOWN_MONO:
-            pv->layout = AV_CH_LAYOUT_MONO;
-            break;
-        case HB_AMIXDOWN_STEREO:
-        case HB_AMIXDOWN_DOLBY:
-        case HB_AMIXDOWN_DOLBYPLII:
-            pv->layout = AV_CH_LAYOUT_STEREO;
-            break;
-        case HB_AMIXDOWN_6CH:
-        default:
-            pv->layout = AV_CH_LAYOUT_5POINT1;
-            break;
+        uint64_t layout = hb_ff_mixdown_xlat(audio->config.out.mixdown, NULL);
+        pv->remap_table = hb_audio_remap_build_table(layout,
+                                                     audio->config.in.channel_map,
+                                                     &hb_aac_chan_map);
+    }
+    else
+    {
+        pv->remap_table = NULL;
     }
 
     // get maximum output size
@@ -350,6 +344,10 @@ void encCoreAudioClose(hb_work_object_t *w)
         {
             free(pv->buf);
         }
+        if (pv->remap_table != NULL)
+        {
+            free(pv->remap_table);
+        }
         hb_list_empty(&pv->list);
         free(pv);
         w->private_data = NULL;
@@ -394,10 +392,11 @@ static OSStatus inInputDataProc(AudioConverterRef converter, UInt32 *npackets,
     *npackets = buffers->mBuffers[0].mDataByteSize / pv->isamplesiz;
     pv->ibytes -= buffers->mBuffers[0].mDataByteSize;
 
-    if (pv->ichanmap != &hb_qt_chan_map)
+    if (pv->remap_table != NULL)
     {
-        hb_layout_remap(pv->ichanmap, &hb_qt_chan_map, pv->layout,
-                        (float*)buffers->mBuffers[0].mData, *npackets);
+        hb_audio_remap(pv->nchannels, *npackets,
+                       (hb_sample_t*)buffers->mBuffers[0].mData,
+                       pv->remap_table);
     }
 
     return noErr;

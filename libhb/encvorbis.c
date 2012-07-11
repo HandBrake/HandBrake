@@ -8,6 +8,7 @@
  */
 
 #include "hb.h"
+#include "audio_remap.h"
 
 #include "vorbis/vorbisenc.h"
 
@@ -40,9 +41,9 @@ struct hb_work_private_s
     uint64_t        pts;
 
     hb_list_t     * list;
-    int           out_discrete_channels;
-    int           channel_map[6];
-    int64_t       prev_blocksize;
+    int             out_discrete_channels;
+    int           * remap_table;
+    int64_t         prev_blocksize;
 };
 
 int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
@@ -53,7 +54,7 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
 
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
-    pv->out_discrete_channels = hb_mixdown_get_discrete_channel_count( audio->config.out.mixdown );
+    pv->out_discrete_channels = hb_mixdown_get_discrete_channel_count(audio->config.out.mixdown);
 
     pv->job   = job;
 
@@ -134,48 +135,13 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
 
     pv->list = hb_list_init();
 
-    switch (pv->out_discrete_channels) {
-        case 1:
-            pv->channel_map[0] = 0;
-            break;
-        case 6:
-            // Vorbis uses the following channel map = L C R Ls Rs Lfe
-            if( audio->config.in.channel_map == &hb_ac3_chan_map )
-            {
-                pv->channel_map[0] = 1;
-                pv->channel_map[1] = 2;
-                pv->channel_map[2] = 3;
-                pv->channel_map[3] = 4;
-                pv->channel_map[4] = 5;
-                pv->channel_map[5] = 0;
-            }
-            else if( audio->config.in.channel_map == &hb_smpte_chan_map )
-            {
-                pv->channel_map[0] = 0;
-                pv->channel_map[1] = 2;
-                pv->channel_map[2] = 1;
-                pv->channel_map[3] = 4;
-                pv->channel_map[4] = 5;
-                pv->channel_map[5] = 3;
-            }
-            else // &hb_qt_chan_map
-            {
-                pv->channel_map[0] = 1;
-                pv->channel_map[1] = 0;
-                pv->channel_map[2] = 2;
-                pv->channel_map[3] = 3;
-                pv->channel_map[4] = 4;
-                pv->channel_map[5] = 5;
-            }
-            break;
-        default:
-            hb_log("encvorbis.c: Unable to correctly proccess %d channels, assuming stereo.", pv->out_discrete_channels);
-        case 2:
-            // Assume stereo
-            pv->channel_map[0] = 0;
-            pv->channel_map[1] = 1;
-            break;
-    }
+    // remapping
+    uint64_t layout;
+    layout = hb_ff_mixdown_xlat(audio->config.out.mixdown, NULL);
+    pv->remap_table = hb_audio_remap_build_table(layout,
+                                                 audio->config.in.channel_map,
+                                                 &hb_vorbis_chan_map);
+    
 
     return 0;
 }
@@ -273,7 +239,7 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     {
         for( j = 0; j < pv->out_discrete_channels; j++)
         {
-            buffer[j][i] = ((float *) pv->buf)[(pv->out_discrete_channels * i + pv->channel_map[j])];
+            buffer[j][i] = ((float *) pv->buf)[(pv->out_discrete_channels * i + pv->remap_table[j])];
         }
     }
 

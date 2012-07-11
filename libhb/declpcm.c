@@ -8,14 +8,14 @@
  */
 
 #include "hb.h"
-#include "downmix.h"
+#include "audio_remap.h"
 
 struct hb_work_private_s
 {
     hb_job_t    *job;
     uint32_t    size;       /* frame size in bytes */
-    uint32_t    chunks;     /* number of samples pairs if paired */
-    uint32_t    samples;    /* frame size in samples */
+    uint32_t    nchunks;     /* number of samples pairs if paired */
+    uint32_t    nsamples;   /* frame size in samples */
     uint32_t    pos;        /* buffer offset for next input data */
 
     int64_t     next_pts;   /* pts for next output frame */
@@ -29,6 +29,15 @@ struct hb_work_private_s
     uint8_t     sample_size; /* bits per sample */
 
     uint8_t     frame[HB_DVD_READ_BUFFER_SIZE*2];
+    uint8_t   * data;
+    uint32_t    alloc_size;
+
+    AVAudioResampleContext *avresample;
+    int                    resample;
+    int                    out_channels;
+    int                    stereo_downmix_mode;
+    uint64_t               out_channel_layout;
+    uint64_t               resample_channel_layout;
 };
 
 static hb_buffer_t * Decode( hb_work_object_t * w );
@@ -53,11 +62,84 @@ static const int hdr2samplerate[] = { 48000, 96000, 44100, 32000 };
 static const int hdr2samplesize[] = { 16, 20, 24, 16 };
 static const uint64_t hdr2layout[] =
 {
-    AV_CH_LAYOUT_MONO,    AV_CH_LAYOUT_STEREO,
-    AV_CH_LAYOUT_2_1,     AV_CH_LAYOUT_2_2,
-    AV_CH_LAYOUT_5POINT0, AV_CH_LAYOUT_2_2|AV_CH_FRONT_LEFT_OF_CENTER|AV_CH_FRONT_RIGHT_OF_CENTER,
-    AV_CH_LAYOUT_STEREO,  AV_CH_LAYOUT_STEREO,
+    AV_CH_LAYOUT_MONO,         AV_CH_LAYOUT_STEREO,
+    AV_CH_LAYOUT_2_1,          AV_CH_LAYOUT_QUAD,
+    AV_CH_LAYOUT_5POINT0_BACK, AV_CH_LAYOUT_6POINT0_FRONT,
+    AV_CH_LAYOUT_STEREO,       AV_CH_LAYOUT_STEREO,
 };
+
+static hb_buffer_t * downmixAudio(hb_work_private_t *pv,
+                                  hb_audio_t *audio)
+{
+    int64_t in_layout;
+    int resample_changed;
+
+    in_layout = hdr2layout[pv->nchannels - 1];
+    pv->resample = pv->resample || (pv->out_channel_layout != in_layout);
+    resample_changed = pv->resample && (pv->resample_channel_layout != in_layout);
+
+    if (resample_changed || (pv->resample && pv->avresample == NULL))
+    {
+        if (pv->avresample == NULL)
+        {
+            pv->avresample = avresample_alloc_context();
+            if (pv->avresample == NULL)
+            {
+                hb_error("Failed to initialize avresample");
+                return NULL;
+            }
+            // some settings only need to be set once
+            av_opt_set_int(pv->avresample, "in_sample_fmt", AV_SAMPLE_FMT_FLT, 0);
+            av_opt_set_int(pv->avresample, "out_sample_fmt", AV_SAMPLE_FMT_FLT, 0);
+            av_opt_set_int(pv->avresample, "out_channel_layout", pv->out_channel_layout, 0);
+            av_opt_set_int(pv->avresample, "matrix_encoding", pv->stereo_downmix_mode, 0);
+        }
+        else if (resample_changed)
+        {
+            avresample_close(pv->avresample);
+        }
+
+        av_opt_set_int(pv->avresample, "in_channel_layout", in_layout, 0);
+
+        if (avresample_open(pv->avresample) < 0)
+        {
+            hb_error("Failed to open libavresample");
+            return NULL;
+        }
+
+        pv->resample_channel_layout = in_layout;
+    }
+
+    hb_buffer_t *buf;
+    int out_size, out_linesize, sample_size;
+    sample_size = av_get_bytes_per_sample(AV_SAMPLE_FMT_FLT);
+    out_size = av_samples_get_buffer_size(&out_linesize, pv->out_channels,
+                                          pv->nsamples, AV_SAMPLE_FMT_FLT, !pv->resample);
+    buf = hb_buffer_init(out_size);
+
+    if (pv->resample)
+    {
+        int in_linesize, out_samples;
+        in_linesize = pv->nsamples * pv->nchannels * sample_size;
+        out_samples = avresample_convert(pv->avresample,
+                                         (void**)&buf->data, out_linesize, pv->nsamples,
+                                         (void**)&pv->data, in_linesize, pv->nsamples);
+        
+        if (out_samples < 0)
+        {
+            hb_error("avresample_convert() failed");
+            return NULL;
+        }
+        buf->size = out_samples * sample_size * pv->out_channels;
+    }
+    else
+    {
+        memcpy(buf->data, pv->data, out_size);
+        buf->size = pv->nsamples * sample_size * pv->out_channels;
+    }
+
+    return buf;
+}
 
 static void lpcmInfo( hb_work_object_t *w, hb_buffer_t *in )
 {
@@ -99,8 +181,8 @@ static void lpcmInfo( hb_work_object_t *w, hb_buffer_t *in )
         hb_log( "declpcm: illegal frame offset %d", pv->offset );
         pv->offset = 2; /*XXX*/
     }
-    pv->samplerate = hdr2samplerate[ ( in->data[4] >> 4 ) & 0x3 ];
-    pv->nchannels  = ( in->data[4] & 7 ) + 1;
+    pv->nchannels   = ( in->data[4] & 7 ) + 1;
+    pv->samplerate  = hdr2samplerate[ ( in->data[4] >> 4 ) & 0x3 ];
     pv->sample_size = hdr2samplesize[in->data[4] >> 6];
 
     // 20 and 24 bit lpcm is always encoded in sample pairs.  So take this
@@ -142,10 +224,10 @@ static void lpcmInfo( hb_work_object_t *w, hb_buffer_t *in )
                    149 ) / 150;
 
     pv->duration = frames * 150;
-    pv->chunks =  ( pv->duration * pv->nchannels * pv->samplerate + 
+    pv->nchunks =  ( pv->duration * pv->nchannels * pv->samplerate + 
                     samples_per_chunk - 1 ) / ( 90000 * samples_per_chunk );
-    pv->samples = ( pv->duration * pv->nchannels * pv->samplerate ) / 90000;
-    pv->size = pv->chunks * chunk_size;
+    pv->nsamples = ( pv->duration * pv->samplerate ) / 90000;
+    pv->size = pv->nchunks * chunk_size;
 
     pv->next_pts = in->s.start;
 }
@@ -154,7 +236,13 @@ static int declpcmInit( hb_work_object_t * w, hb_job_t * job )
 {
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
-    pv->job   = job;
+    pv->job = job;
+
+    // initialize output settings for avresample
+    pv->out_channels = hb_mixdown_get_discrete_channel_count(w->audio->config.out.mixdown);
+    pv->out_channel_layout = hb_ff_mixdown_xlat(w->audio->config.out.mixdown,
+                                                &pv->stereo_downmix_mode);
+
     return 0;
 }
 
@@ -215,20 +303,19 @@ static int declpcmWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 static hb_buffer_t *Decode( hb_work_object_t *w )
 {
     hb_work_private_t *pv = w->private_data;
-    hb_buffer_t *out;
  
-    if (pv->samples == 0)
+    if (pv->nsamples == 0)
         return NULL;
 
-    out = hb_buffer_init( pv->samples * sizeof( float ) );
+    int size = pv->nsamples * pv->nchannels * sizeof( float );
+    if (pv->alloc_size != size)
+    {
+        pv->data = realloc( pv->data, size );
+        pv->alloc_size = size;
+    }
 
-    out->s.start  = pv->next_pts;
-    out->s.duration = pv->duration;
-    pv->next_pts += pv->duration;
-    out->s.stop = pv->next_pts;
-
-    float *odat = (float *)out->data;
-    int count = pv->chunks / pv->nchannels;
+    float *odat = (float *)pv->data;
+    int count = pv->nchunks / pv->nchannels;
 
     switch( pv->sample_size )
     {
@@ -312,14 +399,30 @@ static hb_buffer_t *Decode( hb_work_object_t *w )
             }
         } break;
     }
+
+    hb_buffer_t *out;
+    out = downmixAudio( pv, w->audio );
+
+    out->s.start  = pv->next_pts;
+    out->s.duration = pv->duration;
+    pv->next_pts += pv->duration;
+    out->s.stop = pv->next_pts;
+
     return out;
 }
 
 static void declpcmClose( hb_work_object_t * w )
 {
-    if ( w->private_data )
+    hb_work_private_t * pv = w->private_data;
+
+    if ( pv )
     {
-        free( w->private_data );
+        if ( pv->avresample )
+        {
+            avresample_free( &pv->avresample );
+        }
+        free( pv->data );
+        free( pv );
         w->private_data = 0;
     }
 }
@@ -342,7 +445,7 @@ static int declpcmBSInfo( hb_work_object_t *w, const hb_buffer_t *b,
     info->bitrate = bitrate;
     info->flags = ( b->data[3] << 16 ) | ( b->data[4] << 8 ) | b->data[5];
     info->channel_layout = hdr2layout[nchannels - 1];
-    info->channel_map = &hb_qt_chan_map;
+    info->channel_map = &hb_libav_chan_map;
     info->samples_per_frame = ( duration * rate ) / 90000;
 
     return 1;

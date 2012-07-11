@@ -1,5 +1,5 @@
 diff --git a/configure b/configure
-index e01d9fd..69ba7ea 100755
+index 07baa2f..4597a0d 100755
 --- a/configure
 +++ b/configure
 @@ -54,6 +54,9 @@ if test "$E1" != 0 || test "$E2" = 0; then
@@ -12,7 +12,7 @@ index e01d9fd..69ba7ea 100755
  show_help(){
  cat <<EOF
  Usage: configure [options]
-@@ -2603,7 +2606,7 @@ EOF
+@@ -2688,7 +2691,7 @@ EOF
  check_cc <<EOF || die "endian test failed"
  unsigned int endian = 'B' << 24 | 'I' << 16 | 'G' << 8 | 'E';
  EOF

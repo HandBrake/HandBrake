@@ -20,7 +20,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
-#include "libavutil/audioconvert.h"
 
 /*
  * It seems WinXP doesn't align the stack of new threads to 16 bytes.
@@ -99,7 +98,8 @@ typedef struct hb_lock_s hb_lock_t;
 #else
 #define PRIVATE const
 #endif
-#include "downmix.h"
+#include "audio_remap.h"
+#include "libavutil/audioconvert.h"
 
 hb_list_t * hb_list_init();
 int         hb_list_count( hb_list_t * );

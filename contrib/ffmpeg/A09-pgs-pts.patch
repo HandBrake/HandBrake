@@ -1,18 +1,20 @@
-diff -Naur ffmpeg-v0.7-1696-gcae4f4b.orig/libavcodec/avcodec.h ffmpeg-v0.7-1696-gcae4f4b/libavcodec/avcodec.h
---- ffmpeg-v0.7-1696-gcae4f4b.orig/libavcodec/avcodec.h	2011-11-03 12:29:48.000000000 +0100
-+++ ffmpeg-v0.7-1696-gcae4f4b/libavcodec/avcodec.h	2012-04-22 10:59:41.122351884 +0200
-@@ -3193,6 +3193,7 @@
+diff --git a/libavcodec/avcodec.h b/libavcodec/avcodec.h
+index 102df3a..aa40c78 100644
+--- a/libavcodec/avcodec.h
++++ b/libavcodec/avcodec.h
+@@ -3093,6 +3093,7 @@ typedef struct AVSubtitle {
      unsigned num_rects;
      AVSubtitleRect **rects;
      int64_t pts;    ///< Same as packet pts, in AV_TIME_BASE
 +    uint8_t forced;
  } AVSubtitle;
  
- /* packet functions */
-diff -Naur ffmpeg-v0.7-1696-gcae4f4b.orig/libavcodec/pgssubdec.c ffmpeg-v0.7-1696-gcae4f4b/libavcodec/pgssubdec.c
---- ffmpeg-v0.7-1696-gcae4f4b.orig/libavcodec/pgssubdec.c	2011-11-03 12:29:48.000000000 +0100
-+++ ffmpeg-v0.7-1696-gcae4f4b/libavcodec/pgssubdec.c	2012-04-22 13:09:29.499671541 +0200
-@@ -45,6 +45,8 @@
+ /**
+diff --git a/libavcodec/pgssubdec.c b/libavcodec/pgssubdec.c
+index 3335412..3f14a2d 100644
+--- a/libavcodec/pgssubdec.c
++++ b/libavcodec/pgssubdec.c
+@@ -45,6 +45,8 @@ typedef struct PGSSubPresentation {
      int y;
      int id_number;
      int object_number;
@@ -21,7 +23,7 @@ diff -Naur ffmpeg-v0.7-1696-gcae4f4b.orig/libavcodec/pgssubdec.c ffmpeg-v0.7-169
  } PGSSubPresentation;
  
  typedef struct PGSSubPicture {
-@@ -271,7 +273,8 @@
+@@ -271,7 +273,8 @@ static void parse_palette_segment(AVCodecContext *avctx,
   * @todo TODO: Implement forcing of subtitles
   */
  static void parse_presentation_segment(AVCodecContext *avctx,
@@ -31,7 +33,7 @@ diff -Naur ffmpeg-v0.7-1696-gcae4f4b.orig/libavcodec/pgssubdec.c ffmpeg-v0.7-169
  {
      PGSSubContext *ctx = avctx->priv_data;
  
-@@ -280,6 +283,8 @@
+@@ -280,6 +283,8 @@ static void parse_presentation_segment(AVCodecContext *avctx,
      int w = bytestream_get_be16(&buf);
      int h = bytestream_get_be16(&buf);
  
@@ -40,7 +42,7 @@ diff -Naur ffmpeg-v0.7-1696-gcae4f4b.orig/libavcodec/pgssubdec.c ffmpeg-v0.7-169
      av_dlog(avctx, "Video Dimensions %dx%d\n",
              w, h);
      if (av_image_check_size(w, h, 0, avctx) >= 0)
-@@ -299,16 +304,17 @@
+@@ -299,16 +304,17 @@ static void parse_presentation_segment(AVCodecContext *avctx,
      buf += 3;
  
      ctx->presentation.object_number = bytestream_get_byte(&buf);
@@ -61,7 +63,7 @@ diff -Naur ffmpeg-v0.7-1696-gcae4f4b.orig/libavcodec/pgssubdec.c ffmpeg-v0.7-169
  
      x = bytestream_get_be16(&buf);
      y = bytestream_get_be16(&buf);
-@@ -356,6 +362,9 @@
+@@ -356,6 +362,9 @@ static int display_end_segment(AVCodecContext *avctx, void *data,
       */
  
      memset(sub, 0, sizeof(*sub));
@@ -71,7 +73,7 @@ diff -Naur ffmpeg-v0.7-1696-gcae4f4b.orig/libavcodec/pgssubdec.c ffmpeg-v0.7-169
      // Blank if last object_number was 0.
      // Note that this may be wrong for more complex subtitles.
      if (!ctx->presentation.object_number)
-@@ -441,7 +450,7 @@
+@@ -441,7 +450,7 @@ static int decode(AVCodecContext *avctx, void *data, int *data_size,
              parse_picture_segment(avctx, buf, segment_length);
              break;
          case PRESENTATION_SEGMENT:

@@ -8,7 +8,7 @@
  */
 
 #include "hb.h"
-#include "downmix.h"
+#include "audio_remap.h"
 
 #include "dca.h"
 
@@ -425,7 +425,7 @@ static int decdcaBSInfo( hb_work_object_t *w, const hb_buffer_t *b,
         info->channel_layout |= AV_CH_LOW_FREQUENCY;
     }
 
-    info->channel_map = &hb_qt_chan_map;
+    info->channel_map = &hb_libdca_chan_map;
 
     dca_free( state );
     return 1;

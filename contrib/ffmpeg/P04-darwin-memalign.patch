@@ -1,8 +1,8 @@
 diff --git a/libavutil/mem.c b/libavutil/mem.c
-index 27bb30b..6f29363 100644
+index bf1a542..a32d400 100644
 --- a/libavutil/mem.c
 +++ b/libavutil/mem.c
-@@ -80,6 +80,11 @@ void *av_malloc(size_t size)
+@@ -82,6 +82,11 @@ void *av_malloc(size_t size)
      ptr = (char*)ptr + diff;
      ((char*)ptr)[-1]= diff;
  #elif HAVE_POSIX_MEMALIGN

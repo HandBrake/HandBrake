@@ -58,7 +58,6 @@ void mcdeint_init( mcdeint_private_t * pv,
             avctx_enc->flags                    = CODEC_FLAG_QSCALE | CODEC_FLAG_LOW_DELAY;
             avctx_enc->strict_std_compliance    = FF_COMPLIANCE_EXPERIMENTAL;
             avctx_enc->global_quality           = 1;
-            avctx_enc->flags2                   = CODEC_FLAG2_MEMC_ONLY;
             avctx_enc->me_cmp                   = FF_CMP_SAD; //SSE;
             avctx_enc->me_sub_cmp               = FF_CMP_SAD; //SSE;
             avctx_enc->mb_cmp                   = FF_CMP_SSE;
@@ -80,8 +79,7 @@ void mcdeint_init( mcdeint_private_t * pv,
         }
 
         pv->mcdeint_frame       = avcodec_alloc_frame();
-        pv->mcdeint_outbuf_size = width * height * 10;
-        pv->mcdeint_outbuf      = malloc( pv->mcdeint_outbuf_size );
+        av_new_packet( &pv->mcdeint_pkt, width * height * 10 );
     }
 
 }
@@ -96,10 +94,7 @@ void mcdeint_close( mcdeint_private_t * pv )
             hb_avcodec_close( pv->mcdeint_avctx_enc );
             av_freep( &pv->mcdeint_avctx_enc );
         }
-        if( pv->mcdeint_outbuf )
-        {
-            free( pv->mcdeint_outbuf );
-        }
+        av_free_packet( &pv->mcdeint_pkt );
     }
 }
 
@@ -127,10 +122,10 @@ void mcdeint_filter( uint8_t ** dst,
     pv->mcdeint_avctx_enc->me_sub_cmp = FF_CMP_SAD;
     pv->mcdeint_frame->quality        = pv->mcdeint_qp * FF_QP2LAMBDA;
 
-    avcodec_encode_video( pv->mcdeint_avctx_enc,
-                          pv->mcdeint_outbuf,
-                          pv->mcdeint_outbuf_size,
-                          pv->mcdeint_frame );
+    int got_packet;
+
+    avcodec_encode_video2( pv->mcdeint_avctx_enc,
+            &pv->mcdeint_pkt, pv->mcdeint_frame, &got_packet );
 
     pv->mcdeint_frame_dec = pv->mcdeint_avctx_enc->coded_frame;
 

@@ -9,8 +9,7 @@
 
 #include "hb.h"
 #include "hbffmpeg.h"
-#include "downmix.h"
-#include "libavcodec/audioconvert.h"
+#include "audio_remap.h"
 
 struct hb_work_private_s
 {
@@ -23,6 +22,9 @@ struct hb_work_private_s
     unsigned long    output_bytes;
     hb_list_t      * list;
     uint8_t        * buf;
+
+    AVAudioResampleContext *avresample;
+    int                    *remap_table;
 };
 
 static int  encavcodecaInit( hb_work_object_t *, hb_job_t * );
@@ -49,8 +51,6 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
 
     pv->job = job;
 
-    pv->out_discrete_channels = hb_mixdown_get_discrete_channel_count( audio->config.out.mixdown );
-
     codec = avcodec_find_encoder( w->codec_param );
     if( !codec )
     {
@@ -60,40 +60,30 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     }
     context = avcodec_alloc_context3(codec);
 
+    int mode;
+    context->channel_layout = hb_ff_mixdown_xlat(audio->config.out.mixdown, &mode);
+    pv->out_discrete_channels = hb_mixdown_get_discrete_channel_count(audio->config.out.mixdown);
+
+    if (pv->out_discrete_channels > 2 &&
+        audio->config.in.channel_map != &hb_libav_chan_map)
+    {
+        pv->remap_table = hb_audio_remap_build_table(context->channel_layout,
+                                                     audio->config.in.channel_map,
+                                                     &hb_libav_chan_map);
+    }
+    else
+    {
+        pv->remap_table = NULL;
+    }
+
     AVDictionary *av_opts = NULL;
-    if ( w->codec_param == CODEC_ID_AAC )
+    if (w->codec_param == CODEC_ID_AAC)
     {
-        av_dict_set( &av_opts, "stereo_mode", "ms_off", 0 );
+        av_dict_set(&av_opts, "stereo_mode", "ms_off", 0);
     }
-    if ( w->codec_param == CODEC_ID_AC3 )
+    else if (w->codec_param == CODEC_ID_AC3 && mode != AV_MATRIX_ENCODING_NONE)
     {
-        if( audio->config.out.mixdown == HB_AMIXDOWN_DOLBY ||
-            audio->config.out.mixdown == HB_AMIXDOWN_DOLBYPLII )
-        {
-            av_dict_set( &av_opts, "dsur_mode", "on", 0 );
-        }
-    }
-
-    switch (audio->config.out.mixdown)
-    {
-        case HB_AMIXDOWN_MONO:
-            context->channel_layout = AV_CH_LAYOUT_MONO;
-            break;
-
-        case HB_AMIXDOWN_STEREO:
-        case HB_AMIXDOWN_DOLBY:
-        case HB_AMIXDOWN_DOLBYPLII:
-            context->channel_layout = AV_CH_LAYOUT_STEREO;
-            break;
-
-        case HB_AMIXDOWN_6CH:
-            context->channel_layout = AV_CH_LAYOUT_5POINT1;
-            break;
-
-        default:
-            context->channel_layout = AV_CH_LAYOUT_STEREO;
-            hb_log("encavcodecaInit: bad mixdown");
-            break;
+        av_dict_set(&av_opts, "dsur_mode", "on", 0);
     }
 
     if( audio->config.out.bitrate > 0 )
@@ -146,6 +136,31 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         w->config->extradata.length = context->extradata_size;
     }
 
+    // Check if sample format conversion is necessary
+    if (AV_SAMPLE_FMT_FLT != pv->context->sample_fmt)
+    {
+        // Set up avresample to do conversion
+        pv->avresample = avresample_alloc_context();
+        if (pv->avresample == NULL)
+        {
+            hb_error("Failed to initialize avresample");
+            return 1;
+        }
+
+        uint64_t layout;
+        layout = hb_ff_layout_xlat(context->channel_layout, context->channels);
+        av_opt_set_int(pv->avresample, "in_channel_layout", layout, 0);
+        av_opt_set_int(pv->avresample, "out_channel_layout", layout, 0);
+        av_opt_set_int(pv->avresample, "in_sample_fmt", AV_SAMPLE_FMT_FLT, 0);
+        av_opt_set_int(pv->avresample, "out_sample_fmt", context->sample_fmt, 0);
+
+        if (avresample_open(pv->avresample) < 0)
+        {
+            hb_error("Failed to open avresample");
+            avresample_free(&pv->avresample);
+            return 1;
+        }
+    }
     return 0;
 }
 
@@ -159,11 +174,20 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
 static void Finalize( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
-    hb_buffer_t * buf = hb_buffer_init( pv->output_bytes );
+    hb_buffer_t * buf;
 
     // Finalize with NULL input needed by FLAC to generate md5sum
     // in context extradata
-    avcodec_encode_audio( pv->context, buf->data, buf->alloc, NULL );
+
+    // Prepare output packet
+    AVPacket pkt;
+    int got_packet;
+    buf = hb_buffer_init( pv->output_bytes );
+    av_init_packet(&pkt);
+    pkt.data = buf->data;
+    pkt.size = buf->alloc;
+
+    avcodec_encode_audio2( pv->context, &pkt, NULL, &got_packet);
     hb_buffer_close( &buf );
 
     // Then we need to recopy the header since it was modified
@@ -198,8 +222,33 @@ static void encavcodecaClose( hb_work_object_t * w )
         if ( pv->list )
             hb_list_empty( &pv->list );
 
+        if (pv->avresample != NULL)
+        {
+            avresample_free(&pv->avresample);
+        }
+
         free( pv );
         w->private_data = NULL;
+    }
+}
+
+static void convertAudioFormat( hb_work_private_t *pv, AVFrame *frame )
+{
+    if (pv->avresample != NULL)
+    {
+        int out_samples, out_linesize;
+
+        av_samples_get_buffer_size(&out_linesize, pv->context->channels,
+                                   frame->nb_samples, pv->context->sample_fmt, 0);
+
+        out_samples = avresample_convert(pv->avresample,
+                                         (void **)frame->data, out_linesize, frame->nb_samples,
+                                         (void **)frame->data, frame->linesize[0], frame->nb_samples);
+
+        if (out_samples < 0)
+        {
+            hb_error("avresample_convert() failed");
+        }
     }
 }
 
@@ -217,65 +266,67 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
 
     hb_list_getbytes( pv->list, pv->buf, pv->input_samples * sizeof( float ),
                       &pts, &pos);
-
-    // XXX: ffaac fails to remap from the internal libav* channel map (SMPTE) to the native AAC channel map
-    //      do it here - this hack should be removed if Libav fixes the bug
-    hb_chan_map_t * out_map = ( w->codec_param == CODEC_ID_AAC ) ? &hb_qt_chan_map : &hb_smpte_chan_map;
-
-    if (audio->config.in.channel_map != out_map)
+    if (pv->remap_table != NULL)
     {
-        hb_layout_remap(audio->config.in.channel_map, out_map,
-                        pv->context->channel_layout, (float*)pv->buf,
-                        pv->samples_per_frame);
+        hb_audio_remap(pv->out_discrete_channels, pv->samples_per_frame,
+                       (hb_sample_t*)pv->buf, pv->remap_table);
     }
+
+    // Prepare input frame
+    AVFrame frame;
+    frame.nb_samples= pv->samples_per_frame;
+    int size = av_samples_get_buffer_size(NULL, pv->context->channels,
+                            frame.nb_samples, pv->context->sample_fmt, 1);
+    avcodec_fill_audio_frame(&frame, pv->context->channels, 
+                             pv->context->sample_fmt, pv->buf, size, 1);
+    frame.pts = pts + 90000 * pos / pv->out_discrete_channels / sizeof( float ) / audio->config.out.samplerate;
+
+    // libav requires that timebase of audio input frames to be
+    // in sample_rate units.
+    frame.pts = av_rescale( frame.pts, pv->context->sample_rate, 90000);
 
     // Do we need to convert our internal float format?
-    if ( pv->context->sample_fmt != AV_SAMPLE_FMT_FLT )
-    {
-        int isamp, osamp;
-        AVAudioConvert *ctx;
+    convertAudioFormat(pv, &frame);
 
-        isamp = av_get_bytes_per_sample( AV_SAMPLE_FMT_FLT );
-        osamp = av_get_bytes_per_sample( pv->context->sample_fmt );
-        ctx = av_audio_convert_alloc( pv->context->sample_fmt, 1,
-                                      AV_SAMPLE_FMT_FLT, 1,
-                                      NULL, 0 );
-
-        // get output buffer size then malloc a buffer
-        //nsamples = out_size / isamp;
-        //buffer = av_malloc( nsamples * sizeof(hb_sample_t) );
-
-        // we're doing straight sample format conversion which 
-        // behaves as if there were only one channel.
-        const void * const ibuf[6] = { pv->buf };
-        void * const obuf[6] = { pv->buf };
-        const int istride[6] = { isamp };
-        const int ostride[6] = { osamp };
-
-        av_audio_convert( ctx, obuf, ostride, ibuf, istride, pv->input_samples );
-        av_audio_convert_free( ctx );
-    }
-    
+    // Prepare output packet
+    AVPacket pkt;
+    int got_packet;
     buf = hb_buffer_init( pv->output_bytes );
-    buf->size = avcodec_encode_audio( pv->context, buf->data, buf->alloc,
-                                      (short*)pv->buf );
+    av_init_packet(&pkt);
+    pkt.data = buf->data;
+    pkt.size = buf->alloc;
 
-    buf->s.start = pts + 90000 * pos / pv->out_discrete_channels / sizeof( float ) / audio->config.out.samplerate;
-    buf->s.stop  = buf->s.start + 90000 * pv->samples_per_frame / audio->config.out.samplerate;
-
-    buf->s.type = AUDIO_BUF;
-    buf->s.frametype = HB_FRAME_AUDIO;
-
-    if ( !buf->size )
-    {
-        hb_buffer_close( &buf );
-        return Encode( w );
-    }
-    else if (buf->size < 0)
+    // Encode
+    int ret = avcodec_encode_audio2( pv->context, &pkt, &frame, &got_packet);
+    if ( ret < 0 )
     {
         hb_log( "encavcodeca: avcodec_encode_audio failed" );
         hb_buffer_close( &buf );
         return NULL;
+    }
+
+    if ( got_packet && pkt.size )
+    {
+        buf->size = pkt.size;
+
+        // The output pts from libav is in context->time_base.  Convert
+        // it back to our timebase.
+        //
+        // Also account for the "delay" factor that libav seems to arbitrarily
+        // subtract from the packet.  Not sure WTH they think they are doing
+        // by offseting the value in a negative direction.
+        buf->s.start = av_rescale_q( pkt.pts + pv->context->delay,
+                pv->context->time_base, (AVRational){ 1, 90000 });
+
+        buf->s.stop  = buf->s.start + 90000 * pv->samples_per_frame / audio->config.out.samplerate;
+
+        buf->s.type = AUDIO_BUF;
+        buf->s.frametype = HB_FRAME_AUDIO;
+    }
+    else
+    {
+        hb_buffer_close( &buf );
+        return Encode( w );
     }
 
     return buf;

@@ -1,8 +1,8 @@
 diff --git a/libavcodec/pngdec.c b/libavcodec/pngdec.c
-index a40cebb..26239e2 100644
+index 871f2b2..cba2e90 100644
 --- a/libavcodec/pngdec.c
 +++ b/libavcodec/pngdec.c
-@@ -599,6 +599,18 @@ static int decode_frame(AVCodecContext *avctx,
+@@ -592,6 +592,24 @@ static int decode_frame(AVCodecContext *avctx,
          }
      }
   exit_loop:
@@ -16,12 +16,18 @@ index a40cebb..26239e2 100644
 + * It offers a similar solution; forces code block to be skipped.
 + *
 + * --kb
++ *
++ * The "fix" in r19079 was a hack placed in avcodec_decode_video.
++ * avcodec_decode_video was obsoleted and no longer exists.  The
++ * "fix" disappeared with it.
++ *
++ * --jas
 + */
 +#if 0
       /* handle p-frames only if a predecessor frame is available */
       if(s->last_picture->data[0] != NULL) {
           if(!(avpkt->flags & AV_PKT_FLAG_KEY)) {
-@@ -615,6 +627,7 @@ static int decode_frame(AVCodecContext *avctx,
+@@ -608,6 +626,7 @@ static int decode_frame(AVCodecContext *avctx,
              }
          }
      }

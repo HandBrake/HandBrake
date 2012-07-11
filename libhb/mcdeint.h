@@ -12,8 +12,7 @@ struct mcdeint_private_s
     int              mcdeint_mode;
     int              mcdeint_qp;
 
-    int              mcdeint_outbuf_size;
-    uint8_t        * mcdeint_outbuf;
+    AVPacket         mcdeint_pkt;
     AVCodecContext * mcdeint_avctx_enc;
     AVFrame        * mcdeint_frame;
     AVFrame        * mcdeint_frame_dec;

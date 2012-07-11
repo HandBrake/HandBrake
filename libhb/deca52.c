@@ -8,7 +8,7 @@
  */
 
 #include "hb.h"
-#include "downmix.h"
+#include "audio_remap.h"
 
 #include "a52dec/a52.h"
 #include "libavutil/crc.h"
@@ -484,7 +484,7 @@ static int deca52BSInfo( hb_work_object_t *w, const hb_buffer_t *b,
         info->channel_layout |= AV_CH_LOW_FREQUENCY;
     }
 
-    info->channel_map = &hb_ac3_chan_map;
+    info->channel_map = &hb_liba52_chan_map;
 
     return 1;
 }

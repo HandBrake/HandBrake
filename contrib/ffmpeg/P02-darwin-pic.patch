@@ -1,8 +1,8 @@
 diff --git a/configure b/configure
-index e01d9fd..d5d6aec 100755
+index 07baa2f..8a2a581 100755
 --- a/configure
 +++ b/configure
-@@ -2413,6 +2413,7 @@ case $target_os in
+@@ -2494,6 +2494,7 @@ case $target_os in
          AVSERVERLDFLAGS=-Wl,-bind_at_load
          objformat="macho"
          enabled x86_64 && objformat="macho64"
@@ -10,9 +10,9 @@ index e01d9fd..d5d6aec 100755
          enabled_any pic shared ||
              { check_cflags -mdynamic-no-pic && add_asflags -mdynamic-no-pic; }
          ;;
-@@ -2530,7 +2531,7 @@ esac
+@@ -2614,7 +2615,7 @@ esc(){
  
- echo "config:$arch:$subarch:$cpu:$target_os:$cc_ident:$LIBAV_CONFIGURATION" >config.fate
+ echo "config:$arch:$subarch:$cpu:$target_os:$(esc $cc_ident):$(esc $LIBAV_CONFIGURATION)" >config.fate
  
 -check_cpp_condition stdlib.h "defined(__PIC__) || defined(__pic__) || defined(PIC)" && enable pic
 +#check_cpp_condition stdlib.h "defined(__PIC__) || defined(__pic__) || defined(PIC)" && enable pic

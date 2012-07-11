@@ -40,8 +40,7 @@
 
 #include "hb.h"
 #include "hbffmpeg.h"
-#include "downmix.h"
-#include "libavcodec/audioconvert.h"
+#include "audio_remap.h"
 
 static void compute_frame_duration( hb_work_private_t *pv );
 static void flushDelayQueue( hb_work_private_t *pv );
@@ -98,9 +97,16 @@ struct hb_work_private_s
     int             sws_width;
     int             sws_height;
     int             sws_pix_fmt;
-    hb_downmix_t    *downmix;
     int cadence[12];
     int wait_for_keyframe;
+
+    AVAudioResampleContext *avresample;
+    int                    resample;
+    int                    out_channels;
+    int                    stereo_downmix_mode;
+    uint64_t               out_channel_layout;
+    uint64_t               resample_channel_layout;
+    enum AVSampleFormat    resample_sample_fmt;
 };
 
 static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *data, int size, int64_t pts );
@@ -178,19 +184,19 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
 
-    pv->job   = job;
-    if ( job )
+    pv->job = job;
+    if (job)
         pv->title = job->title;
     else
         pv->title = w->title;
-    pv->list  = hb_list_init();
+    pv->list = hb_list_init();
 
-    int codec_id = w->codec_param;
-    /*XXX*/
-    if ( codec_id == 0 )
-        codec_id = CODEC_ID_MP2;
+    // initialize output settings for avresample
+    pv->out_channels = hb_mixdown_get_discrete_channel_count(w->audio->config.out.mixdown);
+    pv->out_channel_layout = hb_ff_mixdown_xlat(w->audio->config.out.mixdown,
+                                                &pv->stereo_downmix_mode);
 
-    codec = avcodec_find_decoder( codec_id );
+    codec = avcodec_find_decoder( w->codec_param );
     if ( pv->title->opaque_priv )
     {
         AVFormatContext *ic = (AVFormatContext*)pv->title->opaque_priv;
@@ -200,7 +206,7 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     }
     else
     {
-        pv->parser = av_parser_init( codec_id );
+        pv->parser = av_parser_init( w->codec_param );
 
         pv->context = avcodec_alloc_context3(codec);
         hb_ff_set_sample_fmt( pv->context, codec );
@@ -209,36 +215,6 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     {
         hb_log( "decavcodecaInit: avcodec_open failed" );
         return 1;
-    }
-
-    // DTS: work around lack of 6.0/6.1 support in libhb
-    if (hb_ff_dts_disable_xch(pv->context))
-    {
-        hb_deep_log(2, "decavcodecaInit: found DTS-ES, requesting DTS core");
-    }
-    else if ((!pv->context->channels || !pv->context->channel_layout) &&
-             (w->audio->config.in.codec == HB_ACODEC_DCA_HD) &&
-             ((w->audio->config.in.channel_layout & ~AV_CH_LOW_FREQUENCY) == AV_CH_LAYOUT_5POINT0))
-    {
-        /* XXX: when we are demuxing the stream ourselves, it seems we have no
-         * channel count/layout info in the context until we decode audio for
-         * the first time. If the scan info says the source is 5.0 or 5.1,
-         * make sure XCh processing is disabled in Libav before decoding. */
-        pv->context->request_channels = pv->context->channels =
-            av_get_channel_layout_nb_channels(w->audio->config.in.channel_layout);
-        pv->context->channel_layout = w->audio->config.in.channel_layout;
-        hb_deep_log(2, "decavcodecaInit: scan detected DTS 5.0/5.1, disabling XCh processing");
-    }
-
-    if ( w->audio != NULL )
-    {
-        if ( hb_need_downmix( w->audio->config.in.channel_layout,
-                              w->audio->config.out.mixdown) )
-        {
-            pv->downmix = hb_downmix_init(w->audio->config.in.channel_layout,
-                                          w->audio->config.out.mixdown);
-            hb_downmix_set_chan_map( pv->downmix, &hb_smpte_chan_map, &hb_smpte_chan_map );
-        }
     }
 
     return 0;
@@ -283,14 +259,9 @@ static void closePrivData( hb_work_private_t ** ppv )
         {
             hb_list_empty( &pv->list );
         }
-        if ( pv->buffer )
+        if ( pv->avresample )
         {
-            av_free( pv->buffer );
-            pv->buffer = NULL;
-        }
-        if ( pv->downmix )
-        {
-            hb_downmix_close( &(pv->downmix) );
+            avresample_free( &pv->avresample );
         }
         free( pv );
     }
@@ -366,10 +337,9 @@ static int decavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             // total samples to per-channel samples. 'sample_rate' converts
             // per-channel samples to seconds per sample and the 90000
             // is mpeg ticks per second.
-            if ( pv->context->sample_rate && pv->context->channels )
+            if ( pv->context->sample_rate )
             {
-                pv->duration = 90000. /
-                    (double)( pv->context->sample_rate * pv->context->channels );
+                pv->duration = 90000. / (double)( pv->context->sample_rate );
             }
             decodeAudio( w->audio, pv, pout, pout_len, cur );
         }
@@ -409,11 +379,8 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     {
         return decavcodecaInfo( w, info );
     }
-    // XXX
-    // We should parse the bitstream to find its parameters but for right
-    // now we just return dummy values if there's a codec that will handle it.
-    AVCodec *codec = avcodec_find_decoder( w->codec_param? w->codec_param :
-                                                           CODEC_ID_MP2 );
+
+    AVCodec *codec = avcodec_find_decoder( w->codec_param );
     if ( ! codec )
     {
         // there's no ffmpeg codec for this audio type - give up
@@ -430,8 +397,6 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     {
         return -1;
     }
-    uint8_t *buffer = av_malloc( AVCODEC_MAX_AUDIO_FRAME_SIZE );
-    int out_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
     unsigned char *pbuffer;
     int pos, pbuffer_size;
 
@@ -457,21 +422,16 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
             pos += len;
             if ( pbuffer_size > 0 )
             {
+                AVFrame frame;
+                int got_frame;
                 AVPacket avp;
                 av_init_packet( &avp );
                 avp.data = pbuffer;
                 avp.size = pbuffer_size;
 
-                len = avcodec_decode_audio3( context, (int16_t*)buffer,
-                                             &out_size, &avp );
+                len = avcodec_decode_audio4( context, &frame, &got_frame, &avp );
                 if ( len > 0 && context->sample_rate > 0 )
                 {
-                    // DTS: work around lack of 6.0/6.1 support in libhb
-                    if( hb_ff_dts_disable_xch( context ) )
-                    {
-                        hb_deep_log( 2, "decavcodecaBSInfo: found DTS-ES, requesting DTS core" );
-                    }
-                    int isamp = av_get_bytes_per_sample( context->sample_fmt );
                     info->bitrate = context->bit_rate;
                     info->rate = context->sample_rate;
                     info->rate_base = 1;
@@ -479,11 +439,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                         hb_ff_layout_xlat(context->channel_layout,
                                           context->channels);
                     ret = 1;
-                    if ( context->channels && isamp )
-                    {
-                        info->samples_per_frame = out_size /
-                                                  (isamp * context->channels);
-                    }
+                    info->samples_per_frame = frame.nb_samples;
                     break;
                 }
             }
@@ -493,9 +449,8 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
 
     info->profile = context->profile;
     info->level = context->level;
-    info->channel_map = &hb_smpte_chan_map;
+    info->channel_map = &hb_libav_chan_map;
 
-    av_free( buffer );
     if ( parser != NULL )
         av_parser_close( parser );
     hb_avcodec_close( context );
@@ -1007,6 +962,8 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->title = w->title;
     pv->list = hb_list_init();
 
+    // XXX: A bug in libav prores decoder causes incorrect decoding when
+    // threaded decode is enabled.  So disable it till this bug is fixed.
     if( pv->job && pv->job->title && !pv->job->title->has_resolution_change &&
         w->codec_param != CODEC_ID_PRORES )
     {
@@ -1024,8 +981,6 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->context = avcodec_alloc_context3(codec);
         avcodec_copy_context( pv->context, ic->streams[pv->title->video_id]->codec);
         pv->context->workaround_bugs = FF_BUG_AUTODETECT;
-        // Depricated but still used by Libav (twits!)
-        pv->context->error_recognition = FF_ER_CAREFUL;
         pv->context->err_recognition = AV_EF_CRCCHECK;
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
 
@@ -1049,8 +1004,6 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->parser = av_parser_init( w->codec_param );
         pv->context = avcodec_alloc_context3( codec );
         pv->context->workaround_bugs = FF_BUG_AUTODETECT;
-        // Depricated but still used by Libav (twits!)
-        pv->context->error_recognition = FF_ER_CAREFUL;
         pv->context->err_recognition = AV_EF_CRCCHECK;
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
         init_video_avcodec_context( pv );
@@ -1451,28 +1404,81 @@ hb_work_object_t hb_decavcodecv =
     .bsinfo = decavcodecvBSInfo
 };
 
-static hb_buffer_t * downmixAudio(
-    hb_audio_t *audio,
-    hb_work_private_t *pv,
-    hb_sample_t *buffer,
-    int channels,
-    int nsamples )
+static hb_buffer_t * downmixAudio(hb_work_private_t *pv,
+                                  hb_audio_t *audio,
+                                  AVFrame *frame)
 {
-    hb_buffer_t * buf = NULL;
+    uint64_t in_layout;
+    int resample_changed;
 
-    if ( pv->downmix )
+    in_layout = hb_ff_layout_xlat(pv->context->channel_layout, pv->context->channels);
+    pv->resample = (pv->resample ||
+                    pv->out_channel_layout != in_layout ||
+                    pv->context->sample_fmt != AV_SAMPLE_FMT_FLT);
+    resample_changed = (pv->resample &&
+                        (pv->resample_channel_layout != in_layout ||
+                         pv->resample_sample_fmt != pv->context->sample_fmt));
+
+    if (resample_changed || (pv->resample && pv->avresample == NULL))
     {
-        int n_ch_samples = nsamples / channels;
-        int out_channels = hb_mixdown_get_discrete_channel_count( audio->config.out.mixdown );
+        if (pv->avresample == NULL)
+        {
+            pv->avresample = avresample_alloc_context();
+            if (pv->avresample == NULL)
+            {
+                hb_error("Failed to initialize avresample");
+                return NULL;
+            }
+            // output settings only need to be set once
+            av_opt_set_int(pv->avresample, "out_sample_fmt", AV_SAMPLE_FMT_FLT, 0);
+            av_opt_set_int(pv->avresample, "out_channel_layout", pv->out_channel_layout, 0);
+            av_opt_set_int(pv->avresample, "matrix_encoding", pv->stereo_downmix_mode, 0);
+        }
+        else if (resample_changed)
+        {
+            avresample_close(pv->avresample);
+        }
 
-        buf = hb_buffer_init( n_ch_samples * out_channels * sizeof(float) );
-        hb_sample_t *samples = (hb_sample_t *)buf->data;
-        hb_downmix(pv->downmix, samples, buffer, n_ch_samples);
+        av_opt_set_int(pv->avresample, "in_channel_layout", in_layout, 0);
+        av_opt_set_int(pv->avresample, "in_sample_fmt", pv->context->sample_fmt, 0);
+        if (av_get_bytes_per_sample(pv->context->sample_fmt) <= 2)
+            av_opt_set_int(pv->avresample, "internal_sample_fmt", AV_SAMPLE_FMT_S16P, 0);
+
+        if (avresample_open(pv->avresample) < 0)
+        {
+            hb_error("Failed to open libavresample");
+            return NULL;
+        }
+
+        pv->resample_channel_layout = in_layout;
+        pv->resample_sample_fmt = pv->context->sample_fmt;
+    }
+
+    hb_buffer_t *buf;
+    int out_size, out_linesize, sample_size;
+    sample_size = av_get_bytes_per_sample(AV_SAMPLE_FMT_FLT);
+    out_size = av_samples_get_buffer_size(&out_linesize, pv->out_channels,
+                                          frame->nb_samples, AV_SAMPLE_FMT_FLT, !pv->resample);
+    buf = hb_buffer_init(out_size);
+
+    if (pv->resample)
+    {
+        int out_samples;
+        out_samples = avresample_convert(pv->avresample,
+                                         (void**)&buf->data, out_linesize, frame->nb_samples,
+                                         (void**)frame->data, frame->linesize[0], frame->nb_samples);
+
+        if (out_samples < 0)
+        {
+            hb_error("avresample_convert() failed");
+            return NULL;
+        }
+        buf->size = out_samples * sample_size * pv->out_channels;
     }
     else
     {
-        buf = hb_buffer_init( nsamples * sizeof(float) );
-        memcpy( buf->data, buffer, nsamples * sizeof(float) );
+        memcpy(buf->data, frame->data[0], out_size);
+        buf->size = frame->nb_samples * sample_size * pv->out_channels;
     }
 
     return buf;
@@ -1490,13 +1496,8 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
         pv->pts_next = pts;
     while ( pos < size )
     {
-        float *buffer = pv->buffer;
-        if ( buffer == NULL )
-        {
-            pv->buffer = av_malloc( AVCODEC_MAX_AUDIO_FRAME_SIZE );
-            buffer = pv->buffer;
-        }
-
+        AVFrame frame;
+        int got_frame;
         AVPacket avp;
         av_init_packet( &avp );
         avp.data = data + pos;
@@ -1504,14 +1505,12 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
         avp.pts = pv->pts_next;
         avp.dts = AV_NOPTS_VALUE;
 
-        int out_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
-        int nsamples;
-        int len = avcodec_decode_audio3( context, (int16_t*)buffer, &out_size, &avp );
+        int len = avcodec_decode_audio4( context, &frame, &got_frame, &avp );
         if ( len < 0 )
         {
             return;
         }
-        if ( len == 0 )
+        if ( !got_frame )
         {
             if ( !(loop_limit--) )
                 return;
@@ -1520,11 +1519,9 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
             loop_limit = 256;
 
         pos += len;
-        if( out_size > 0 )
+        if( got_frame )
         {
-            int isamp = av_get_bytes_per_sample( context->sample_fmt );
-            nsamples = out_size / isamp;
-            double duration = nsamples * pv->duration;
+            double duration = frame.nb_samples * pv->duration;
             double pts_next = pv->pts_next + duration;
 
             // DTS-HD can be passed through to mkv
@@ -1545,50 +1542,15 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
                 continue;
             }
 
-            // We require floats for the output format. If
-            // we got something different convert it.
-            if ( context->sample_fmt != AV_SAMPLE_FMT_FLT )
+            hb_buffer_t * buf = downmixAudio( pv, audio, &frame );
+            if ( buf != NULL )
             {
-                // Note: av_audio_convert seems to be a work-in-progress but
-                //       looks like it will eventually handle general audio
-                //       mixdowns which would allow us much more flexibility
-                //       in handling multichannel audio in HB. If we were doing
-                //       anything more complicated than a one-for-one format
-                //       conversion we'd probably want to cache the converter
-                //       context in the pv.
-                AVAudioConvert *ctx;
+                buf->s.start = pv->pts_next;
+                buf->s.duration = duration;
+                buf->s.stop = pts_next;
+                hb_list_add( pv->list, buf );
 
-                ctx = av_audio_convert_alloc( AV_SAMPLE_FMT_FLT, 1,
-                                              context->sample_fmt, 1,
-                                              NULL, 0 );
-
-                // get output buffer size then malloc a buffer
-                buffer = av_malloc( nsamples * sizeof(hb_sample_t) );
-
-                // we're doing straight sample format conversion which
-                // behaves as if there were only one channel.
-                const void * const ibuf[6] = { pv->buffer };
-                void * const obuf[6] = { buffer };
-                const int istride[6] = { isamp };
-                const int ostride[6] = { sizeof(hb_sample_t) };
-
-                av_audio_convert( ctx, obuf, ostride, ibuf, istride, nsamples );
-                av_audio_convert_free( ctx );
-            }
-
-            hb_buffer_t * buf;
-            buf = downmixAudio( audio, pv, buffer, context->channels, nsamples );
-            buf->s.start = pv->pts_next;
-            buf->s.duration = duration;
-            buf->s.stop = pts_next;
-            hb_list_add( pv->list, buf );
-
-            pv->pts_next = pts_next;
-
-            // if we allocated a buffer for sample format conversion, free it
-            if ( buffer != pv->buffer )
-            {
-                av_free( buffer );
+                pv->pts_next = pts_next;
             }
         }
     }
