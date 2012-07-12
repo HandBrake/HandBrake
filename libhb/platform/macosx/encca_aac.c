@@ -49,7 +49,7 @@ struct hb_work_private_s
     uint64_t pts, ibytes;
     Float64 osamplerate;
 
-    int *remap_table;
+    hb_audio_remap_t *remap;
 };
 
 #define MP4ESDescrTag                   0x03
@@ -289,16 +289,12 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
     audio->config.out.samples_per_frame = pv->isamples;
 
     // channel remapping
-    if (pv->nchannels > 2 && audio->config.in.channel_map != &hb_aac_chan_map)
+    uint64_t layout = hb_ff_mixdown_xlat(audio->config.out.mixdown, NULL);
+    pv->remap = hb_audio_remap_init(layout, &hb_aac_chan_map,
+                                    audio->config.in.channel_map);
+    if (pv->remap == NULL)
     {
-        uint64_t layout = hb_ff_mixdown_xlat(audio->config.out.mixdown, NULL);
-        pv->remap_table = hb_audio_remap_build_table(layout,
-                                                     audio->config.in.channel_map,
-                                                     &hb_aac_chan_map);
-    }
-    else
-    {
-        pv->remap_table = NULL;
+        hb_log("encCoreAudioInit: hb_audio_remap_init() failed");
     }
 
     // get maximum output size
@@ -344,9 +340,9 @@ void encCoreAudioClose(hb_work_object_t *w)
         {
             free(pv->buf);
         }
-        if (pv->remap_table != NULL)
+        if (pv->remap != NULL)
         {
-            free(pv->remap_table);
+            hb_audio_remap_free(pv->remap);
         }
         hb_list_empty(&pv->list);
         free(pv);
@@ -392,12 +388,8 @@ static OSStatus inInputDataProc(AudioConverterRef converter, UInt32 *npackets,
     *npackets = buffers->mBuffers[0].mDataByteSize / pv->isamplesiz;
     pv->ibytes -= buffers->mBuffers[0].mDataByteSize;
 
-    if (pv->remap_table != NULL)
-    {
-        hb_audio_remap(pv->nchannels, *npackets,
-                       (hb_sample_t*)buffers->mBuffers[0].mData,
-                       pv->remap_table);
-    }
+    hb_audio_remap(pv->remap,
+                   (hb_sample_t*)buffers->mBuffers[0].mData, *npackets);
 
     return noErr;
 }

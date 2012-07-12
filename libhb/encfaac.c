@@ -110,20 +110,20 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
     cfg->aacObjectType = LOW;
     cfg->allowMidside  = 1;
 
-    // LFE, remapping
+    // channel remapping, LFE
     uint64_t layout;
+    int *remap_table;
     layout = hb_ff_mixdown_xlat(audio->config.out.mixdown, NULL);
-    cfg->useLfe = !!(layout & AV_CH_LOW_FREQUENCY);
-    if (pv->out_discrete_channels > 2 &&
-        audio->config.in.channel_map != &hb_aac_chan_map)
+    remap_table = hb_audio_remap_build_table(layout, &hb_aac_chan_map,
+                                             audio->config.in.channel_map);
+    if (remap_table != NULL)
     {
-        int *remap_table;
-        remap_table = hb_audio_remap_build_table(layout,
-                                                 audio->config.in.channel_map,
-                                                 &hb_aac_chan_map);
         // faac does its own remapping
-        memcpy(cfg->channel_map, remap_table, pv->out_discrete_channels * sizeof(int));
+        memcpy(cfg->channel_map, remap_table,
+               pv->out_discrete_channels * sizeof(int));
+        free(remap_table);
     }
+    cfg->useLfe = !!(layout & AV_CH_LOW_FREQUENCY);
 
     cfg->useTns        = 0;
     cfg->bitRate       = audio->config.out.bitrate * 1000 / pv->out_discrete_channels; /* Per channel */

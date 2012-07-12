@@ -97,30 +97,96 @@ hb_chan_map_t hb_aac_chan_map =
     }
 };
 
-int* hb_audio_remap_build_table(uint64_t layout, hb_chan_map_t *map_in, hb_chan_map_t *map_out)
+hb_audio_remap_t* hb_audio_remap_init(uint64_t channel_layout,
+                                      hb_chan_map_t *map_out,
+                                      hb_chan_map_t *map_in)
 {
-    int ii, jj, idx, remap_idx, *remap_table;
-    uint64_t *input_order, *output_order;
-
-    remap_table = calloc(HB_AUDIO_REMAP_MAX_CHANNELS, sizeof(int));
-    if (!remap_table)
+    hb_audio_remap_t *remap = malloc(sizeof(hb_audio_remap_t));
+    if (remap == NULL)
         return NULL;
 
-    idx          = 0;
-    input_order  = map_in->channel_order;
-    output_order = map_out->channel_order;
-    for (ii = 0; output_order[ii]; ii++)
+    remap->remap_table = hb_audio_remap_build_table(channel_layout,
+                                                    map_out, map_in);
+    if (remap->remap_table == NULL)
     {
-        if (layout & output_order[ii])
+        hb_audio_remap_free(remap);
+        return NULL;
+    }
+
+    int ii;
+    remap->nchannels    = av_get_channel_layout_nb_channels(channel_layout);
+    remap->sample_size  = remap->nchannels * sizeof(hb_sample_t);
+    remap->remap_needed = 0;
+    for (ii = 0; ii < remap->nchannels; ii++)
+    {
+        if (remap->remap_table[ii] != ii)
+        {
+            remap->remap_needed = 1;
+            break;
+        }
+    }
+
+    return remap;
+}
+
+void hb_audio_remap_free(hb_audio_remap_t *remap)
+{
+    if (remap != NULL)
+    {
+        if (remap->remap_table != NULL)
+        {
+            free(remap->remap_table);
+        }
+        free(remap);
+    }
+}
+
+void hb_audio_remap(hb_audio_remap_t *remap, hb_sample_t *samples, int nsamples)
+{
+    if (remap != NULL && remap->remap_needed)
+    {
+        int ii, jj;
+
+        for (ii = 0; ii < nsamples; ii++)
+        {
+            memcpy(remap->tmp, samples, remap->sample_size);
+            for (jj = 0; jj < remap->nchannels; jj++)
+            {
+                samples[jj] = remap->tmp[remap->remap_table[jj]];
+            }
+            samples += remap->nchannels;
+        }
+    }
+}
+
+int* hb_audio_remap_build_table(uint64_t channel_layout,
+                                hb_chan_map_t *map_out,
+                                hb_chan_map_t *map_in)
+{
+    int ii, jj, nchannels, out_chan_idx, remap_idx, *remap_table;
+    uint64_t *channels_in, *channels_out;
+
+    nchannels = av_get_channel_layout_nb_channels(channel_layout);
+    remap_table = malloc(nchannels * sizeof(int));
+    if (remap_table == NULL)
+        return NULL;
+
+    out_chan_idx = 0;
+    channels_in  = map_in->channel_order_map;
+    channels_out = map_out->channel_order_map;
+    for (ii = 0; channels_out[ii] && out_chan_idx < nchannels; ii++)
+    {
+        if (channel_layout & channels_out[ii])
         {
             remap_idx = 0;
-            for (jj = 0; input_order[jj]; jj++)
+            for (jj = 0; channels_in[jj]; jj++)
             {
-                if (output_order[ii] == input_order[jj])
+                if (channels_out[ii] == channels_in[jj])
                 {
-                    remap_table[idx++] = remap_idx++;
+                    remap_table[out_chan_idx++] = remap_idx++;
+                    break;
                 }
-                else if (layout & input_order[jj])
+                else if (channel_layout & channels_in[jj])
                 {
                     remap_idx++;
                 }
@@ -129,20 +195,4 @@ int* hb_audio_remap_build_table(uint64_t layout, hb_chan_map_t *map_in, hb_chan_
     }
 
     return remap_table;
-}
-
-void hb_audio_remap(int nchannels, int nsamples, hb_sample_t *samples, int *remap_table)
-{
-    int ii, jj;
-    hb_sample_t tmp[HB_AUDIO_REMAP_MAX_CHANNELS];
-
-    for (ii = 0; ii < nsamples; ii++)
-    {
-        memcpy(tmp, samples, nchannels * sizeof(hb_sample_t));
-        for (jj = 0; jj < nchannels; jj++)
-        {
-            samples[jj] = tmp[remap_table[jj]];
-        }
-        samples += nchannels;
-    }
 }

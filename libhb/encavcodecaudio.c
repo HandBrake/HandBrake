@@ -24,7 +24,7 @@ struct hb_work_private_s
     uint8_t        * buf;
 
     AVAudioResampleContext *avresample;
-    int                    *remap_table;
+    hb_audio_remap_t       *remap;
 };
 
 static int  encavcodecaInit( hb_work_object_t *, hb_job_t * );
@@ -64,16 +64,13 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     context->channel_layout = hb_ff_mixdown_xlat(audio->config.out.mixdown, &mode);
     pv->out_discrete_channels = hb_mixdown_get_discrete_channel_count(audio->config.out.mixdown);
 
-    if (pv->out_discrete_channels > 2 &&
-        audio->config.in.channel_map != &hb_libav_chan_map)
+    // channel remapping
+    // note: unnecessary once everything is downmixed using libavresample
+    pv->remap = hb_audio_remap_init(context->channel_layout, &hb_libav_chan_map,
+                                    audio->config.in.channel_map);
+    if (pv->remap == NULL)
     {
-        pv->remap_table = hb_audio_remap_build_table(context->channel_layout,
-                                                     audio->config.in.channel_map,
-                                                     &hb_libav_chan_map);
-    }
-    else
-    {
-        pv->remap_table = NULL;
+        hb_log("encavcodecaInit: hb_audio_remap_init() failed");
     }
 
     AVDictionary *av_opts = NULL;
@@ -198,36 +195,43 @@ static void Finalize( hb_work_object_t * w )
     }
 }
 
-static void encavcodecaClose( hb_work_object_t * w )
+static void encavcodecaClose(hb_work_object_t * w)
 {
     hb_work_private_t * pv = w->private_data;
 
-    if ( pv )
+    if (pv != NULL)
     {
-        if( pv->context )
+        if (pv->context != NULL)
         {
-            Finalize( w );
-            hb_deep_log( 2, "encavcodeca: closing libavcodec" );
-            if ( pv->context->codec )
-                avcodec_flush_buffers( pv->context );
-            hb_avcodec_close( pv->context );
+            Finalize(w);
+            hb_deep_log(2, "encavcodeca: closing libavcodec");
+            if (pv->context->codec != NULL)
+                avcodec_flush_buffers(pv->context);
+            hb_avcodec_close(pv->context);
         }
 
-        if ( pv->buf )
+        if (pv->buf != NULL)
         {
-            free( pv->buf );
+            free(pv->buf);
             pv->buf = NULL;
         }
 
-        if ( pv->list )
-            hb_list_empty( &pv->list );
+        if (pv->list != NULL)
+        {
+            hb_list_empty(&pv->list);
+        }
 
         if (pv->avresample != NULL)
         {
             avresample_free(&pv->avresample);
         }
 
-        free( pv );
+        if (pv->remap != NULL)
+        {
+            hb_audio_remap_free(pv->remap);
+        }
+
+        free(pv);
         w->private_data = NULL;
     }
 }
@@ -265,12 +269,9 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     }
 
     hb_list_getbytes( pv->list, pv->buf, pv->input_samples * sizeof( float ),
-                      &pts, &pos);
-    if (pv->remap_table != NULL)
-    {
-        hb_audio_remap(pv->out_discrete_channels, pv->samples_per_frame,
-                       (hb_sample_t*)pv->buf, pv->remap_table);
-    }
+                     &pts, &pos);
+
+    hb_audio_remap(pv->remap, (hb_sample_t*)pv->buf, pv->samples_per_frame);
 
     // Prepare input frame
     AVFrame frame;
