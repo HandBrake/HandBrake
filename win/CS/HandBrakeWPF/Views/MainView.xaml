@@ -5,7 +5,8 @@
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
-             xmlns:behaviours="clr-namespace:HandBrakeWPF.Helpers" AllowDrop="True"
+             xmlns:behaviours="clr-namespace:HandBrakeWPF.Helpers" xmlns:Model="clr-namespace:HandBrakeWPF.Model"
+             AllowDrop="True"
         Background="#FFF0F0F0"
         FontSize="11"
         Micro:Message.Attach="[Event Loaded] = [Action Load]"
@@ -40,7 +41,6 @@
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Padding" Value="5,5" />
         </Style>
-
 
         <CollectionViewSource x:Key="presetsCvs" Source="{Binding Presets}">
             <CollectionViewSource.GroupDescriptions>
@@ -87,6 +87,7 @@
         </Style>
 
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+
     </UserControl.Resources>
 
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -158,7 +159,7 @@
                      ToolBarTray.IsLocked="True"
                      >
                 <Menu Background="Transparent">
-                    <MenuItem ItemsSource="{Binding SourceToolbarMenu}">
+                    <MenuItem ItemsSource="{Binding SourceMenu}">
                         <MenuItem.Header>
                             <StackPanel Orientation="Horizontal">
                                 <Image Width="32"
@@ -171,6 +172,25 @@
                                        />
                             </StackPanel>
                         </MenuItem.Header>
+                        <MenuItem.ItemContainerStyle>
+                            <Style TargetType="{x:Type MenuItem}">
+                                <Setter Property="Header" Value="{Binding Text}" />
+                                <Setter Property="MenuItem.Command" Value="{Binding Command}"/>
+                                <Setter Property="MenuItem.CommandParameter" Value="123"/>
+                                <Setter Property="ItemsSource" Value="{Binding Children}" />
+                                <Setter Property="Icon" Value="{Binding Image}" />
+                            </Style>
+                        </MenuItem.ItemContainerStyle>
+                            <!--<HierarchicalDataTemplate DataType="{x:Type Model:SourceMenuItem}"
+                                  ItemsSource="{Binding Path=Children}">
+                                <HierarchicalDataTemplate.ItemContainerStyle>
+                                    <Style TargetType="MenuItem">
+                                        <Setter Property="Command" Value="{Binding Command}" />
+                                        <Setter Property="Icon" Value="{Binding Image}" />
+                                    </Style>
+                                </HierarchicalDataTemplate.ItemContainerStyle>
+                                <TextBlock Text="{Binding Text}" />
+                            </HierarchicalDataTemplate>-->
 
                     </MenuItem>
                 </Menu>
@@ -530,7 +550,7 @@
                              SelectedItem="{Binding SelectedPreset, Mode=TwoWay}" BorderThickness="0,0,0,1"
                                                            BorderBrush="LightGray"
                             >
-                                               
+
                         <ListBox.GroupStyle>
                             <GroupStyle ContainerStyle="{StaticResource ContainerStyle}"/>
                         </ListBox.GroupStyle>

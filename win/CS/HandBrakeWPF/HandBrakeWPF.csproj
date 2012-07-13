@@ -94,6 +94,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\libraries\caliburn\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -112,6 +113,7 @@
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MenuItemExtensions.cs" />
     <Compile Include="Commands\ProcessShortcutCommand.cs" />
+    <Compile Include="Commands\SourceMenuCommand.cs" />
     <Compile Include="Controls\Loading.xaml.cs">
       <DependentUpon>Loading.xaml</DependentUpon>
     </Compile>
@@ -126,6 +128,7 @@
     <Compile Include="Converters\Subtitles\SubtitlesQueueDisplayConverter.cs" />
     <Compile Include="Converters\Video\VideoEncoderConverter.cs" />
     <Compile Include="Model\ShellWindow.cs" />
+    <Compile Include="Model\SourceMenuItem.cs" />
     <Compile Include="Model\UpdateCheckInformation.cs" />
     <Compile Include="Model\DownloadStatus.cs" />
     <Compile Include="Services\Interfaces\IUpdateService.cs" />

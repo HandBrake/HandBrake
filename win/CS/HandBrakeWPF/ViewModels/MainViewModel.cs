@@ -16,8 +16,8 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Threading;
     using System.Windows;
-    using System.Windows.Controls;
     using System.Windows.Media.Imaging;
 
     using Caliburn.Micro;
@@ -29,13 +29,13 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
+    using HandBrakeWPF.Commands;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Ookii.Dialogs.Wpf;
-
-    using HandBrakeWPF.Services.Interfaces;
 
     using Image = System.Windows.Controls.Image;
 
@@ -152,6 +152,10 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private EncodeTask queueEditTask;
 
+        /// <summary>
+        /// The Source Menu Backing Field
+        /// </summary>
+        private IEnumerable<SourceMenuItem> sourceMenu;
         #endregion
 
         /// <summary>
@@ -187,7 +191,7 @@ namespace HandBrakeWPF.ViewModels
             IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService)
         {
             GeneralUtilities.SetInstanceId();
-            
+
 
             this.scanService = scanService;
             this.encodeService = encodeService;
@@ -316,70 +320,18 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets SourceToolbarMenu.
+        /// Gets or sets the source menu.
         /// </summary>
-        public IEnumerable<MenuItem> SourceToolbarMenu
+        public IEnumerable<SourceMenuItem> SourceMenu
         {
             get
             {
-                // TODO - Find a cleaner way of implementing this
-
-                BindingList<MenuItem> menuItems = new BindingList<MenuItem>();
-
-                // Folder Menu Item
-                MenuItem folderMenuItem = new MenuItem
-                    {
-                        Icon = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/folder.png")), Width = 16, Height = 16 },
-                        Header = new TextBlock { Text = "Open Folder", Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center }
-                    };
-                folderMenuItem.Click += this.folderMenuItem_Click;
-                menuItems.Add(folderMenuItem);
-
-                // File Menu Item
-                MenuItem fileMenuItem = new MenuItem
-                    {
-                        Icon = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/Movies.png")), Width = 16, Height = 16 },
-                        Header = new TextBlock { Text = "Open File", Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center }
-                    };
-                fileMenuItem.Click += this.fileMenuItem_Click;
-                menuItems.Add(fileMenuItem);
-
-                // File Menu Item
-                MenuItem titleSpecific = new MenuItem { Header = new TextBlock { Text = "Title Specific Scan", Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center } };
-
-                MenuItem titleSpecificFolder = new MenuItem
-                  {
-                      Icon = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/folder.png")), Width = 16, Height = 16 },
-                      Header = new TextBlock { Text = "Open Folder", Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center }
-                  };
-                MenuItem titleSpecificFile = new MenuItem
-                  {
-                      Icon = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/Movies.png")), Width = 16, Height = 16 },
-                      Header = new TextBlock { Text = "Open File", Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center }
-                  };
-                titleSpecificFolder.Click += this.titleSpecificFolder_Click;
-                titleSpecificFile.Click += this.titleSpecificFile_Click;
-
-                titleSpecific.Items.Add(titleSpecificFolder);
-                titleSpecific.Items.Add(titleSpecificFile);
-
-                menuItems.Add(titleSpecific);
-
-                // Drives
-                foreach (DriveInformation item in GeneralUtilities.GetDrives())
-                {
-                    MenuItem driveMenuItem = new MenuItem
-                        {
-                            Icon = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/disc_small.png")), Width = 16, Height = 16 },
-                            Header = new TextBlock { Text = string.Format("{0} ({1})", item.RootDirectory, item.VolumeLabel), Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center },
-                            Tag = item
-                        };
-                    driveMenuItem.Click += this.driveMenuItem_Click;
-                    menuItems.Add(driveMenuItem);
-                }
-
-
-                return menuItems;
+                return this.sourceMenu;
+            }
+            set
+            {
+                this.sourceMenu = value;
+                this.NotifyOfPropertyChange(() => SourceMenu);
             }
         }
 
@@ -841,6 +793,9 @@ namespace HandBrakeWPF.ViewModels
             QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService);
 
             this.SelectedPreset = this.presetService.DefaultPreset;
+
+            // Populate the Source menu with drives.
+            this.SourceMenu = this.GenerateSourceMenu();
         }
 
         /// <summary>
@@ -1418,7 +1373,7 @@ namespace HandBrakeWPF.ViewModels
                     this.SubtitleViewModel.UpdateTask(this.CurrentTask);
                     this.ChaptersViewModel.UpdateTask(this.CurrentTask);
                     this.AdvancedViewModel.UpdateTask(this.CurrentTask);
-                   
+
                     // Cleanup
                     this.ShowStatusWindow = false;
                 });
@@ -1557,7 +1512,7 @@ namespace HandBrakeWPF.ViewModels
             if (information.NewVersionAvailable)
             {
                 MessageBox.Show("A New Version is available. Goto Tools Menu > Options to Install or visit http://handbrake.fr for details.", "Update Available", MessageBoxButton.OK, MessageBoxImage.Information);
-            } 
+            }
             else
             {
                 MessageBox.Show("There is no new updates at this time.", "No Update Available", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -1699,77 +1654,84 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Drive Scan
+        /// The process drive.
         /// </summary>
-        /// <param name="sender">
-        /// The sender.
+        /// <param name="item">
+        /// The item.
         /// </param>
-        /// <param name="e">
-        /// The RoutedEventArgs.
-        /// </param>
-        private void driveMenuItem_Click(object sender, RoutedEventArgs e)
+        private void ProcessDrive(object item)
         {
-            MenuItem item = e.OriginalSource as MenuItem;
             if (item != null)
             {
-                this.StartScan(((DriveInformation)item.Tag).RootDirectory, 0);
+                this.StartScan(((DriveInformation)item).RootDirectory, 0);
             }
         }
 
         /// <summary>
-        /// File Scan
+        /// The generate source menu.
         /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The RoutedEventArgs.
-        /// </param>
-        private void fileMenuItem_Click(object sender, RoutedEventArgs e)
+        /// <returns>
+        /// The System.Collections.Generic.IEnumerable`1[T -&gt; HandBrakeWPF.Model.SourceMenuItem].
+        /// </returns>
+        private IEnumerable<SourceMenuItem> GenerateSourceMenu()
         {
-            this.FileScan();
+            List<SourceMenuItem> menuItems = new List<SourceMenuItem>();
+
+            SourceMenuItem folderScan = new SourceMenuItem
+            {
+                Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/folder.png")), Width = 16, Height = 16 },
+                Text = "Open Folder",
+                Command = new SourceMenuCommand(this.FolderScan)
+            };
+            SourceMenuItem fileScan = new SourceMenuItem
+            {
+                Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/Movies.png")), Width = 16, Height = 16 },
+                Text = "Open File",
+                Command = new SourceMenuCommand(this.FileScan)
+            };
+
+            SourceMenuItem titleSpecific = new SourceMenuItem { Text = "Title Specific Scan" };
+            SourceMenuItem folderScanTitle = new SourceMenuItem
+            {
+                Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/folder.png")), Width = 16, Height = 16 },
+                Text = "Open Folder",
+                Command = new SourceMenuCommand(this.FolderScanTitleSpecific)
+            };
+            SourceMenuItem fileScanTitle = new SourceMenuItem
+            {
+                Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/Movies.png")), Width = 16, Height = 16 },
+                Text = "Open File",
+                Command = new SourceMenuCommand(this.FileScanTitleSpecific)
+            };
+            titleSpecific.Children.Add(folderScanTitle);
+            titleSpecific.Children.Add(fileScanTitle);
+
+            menuItems.Add(folderScan);
+            menuItems.Add(fileScan);
+            menuItems.Add(titleSpecific);
+
+            // Drives
+            menuItems.AddRange(
+                from item in GeneralUtilities.GetDrives()
+                let driveInformation = item
+                select
+                    new SourceMenuItem
+                        {
+                            Image = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/HandBrake;component/Views/Images/disc_small.png")), Width = 16, Height = 16 },
+                            Text = string.Format("{0} ({1})", item.RootDirectory, item.VolumeLabel),
+                            Command = new SourceMenuCommand(() => this.ProcessDrive(driveInformation)),
+                            Tag = item
+                        });
+
+            return menuItems;
         }
 
         /// <summary>
-        /// Folder Scan
+        /// The drive tray changed.
         /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The RoutedEventArgs.
-        /// </param>
-        private void folderMenuItem_Click(object sender, RoutedEventArgs e)
+        private void DriveTrayChanged()
         {
-            this.FolderScan();
-        }
-
-        /// <summary>
-        /// Title Specific Scan for File
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void titleSpecificFile_Click(object sender, RoutedEventArgs e)
-        {
-            this.FileScanTitleSpecific();
-        }
-
-        /// <summary>
-        /// Title Specific Scan for folder
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void titleSpecificFolder_Click(object sender, RoutedEventArgs e)
-        {
-            this.FolderScanTitleSpecific();
+            Caliburn.Micro.Execute.OnUIThread(() => this.SourceMenu = this.GenerateSourceMenu());       
         }
 
         #endregion
