@@ -162,11 +162,13 @@ namespace HandBrakeWPF.ViewModels
                 {
                     processor.Pause();
                     processor.EncodeService.Stop();
+                    this.MainViewModel.Shutdown();
                     return true;
                 }
                 return false;
             }
 
+            this.MainViewModel.Shutdown();
             return true;
         }
     }

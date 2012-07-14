@@ -11,12 +11,10 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.ComponentModel.Composition;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using System.Threading;
     using System.Windows;
     using System.Windows.Media.Imaging;
 
@@ -81,6 +79,11 @@ namespace HandBrakeWPF.ViewModels
         /// Backing field for the update serivce.
         /// </summary>
         private readonly IUpdateService updateService;
+
+        /// <summary>
+        /// The drive detect service.
+        /// </summary>
+        private readonly IDriveDetectService driveDetectService;
 
         /// <summary>
         /// Backing field for the user setting service.
@@ -186,9 +189,12 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="updateService">
         /// The update Service.
         /// </param>
+        /// <param name="driveDetectService">
+        /// The drive Detect Service.
+        /// </param>
         [ImportingConstructor]
         public MainViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService,
-            IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService)
+            IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService, IDriveDetectService driveDetectService)
         {
             GeneralUtilities.SetInstanceId();
 
@@ -199,9 +205,10 @@ namespace HandBrakeWPF.ViewModels
             this.errorService = errorService;
             this.shellViewModel = shellViewModel;
             this.updateService = updateService;
+            this.driveDetectService = driveDetectService;
             this.userSettingService = userSettingService;
             this.queueProcessor = IoC.Get<IQueueProcessor>();
-            queueProcessor.QueueManager.ResetInstanceId();
+            this.queueProcessor.QueueManager.ResetInstanceId();
 
             // Setup Properties
             this.WindowTitle = "HandBrake";
@@ -796,6 +803,8 @@ namespace HandBrakeWPF.ViewModels
 
             // Populate the Source menu with drives.
             this.SourceMenu = this.GenerateSourceMenu();
+
+            this.driveDetectService.StartDetection(this.DriveTrayChanged);
         }
 
         /// <summary>
@@ -803,6 +812,9 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Shutdown()
         {
+            // Shutdown Service
+            this.driveDetectService.Close();
+
             // Unsubscribe from Events.
             this.scanService.ScanStared -= this.ScanStared;
             this.scanService.ScanCompleted -= this.ScanCompleted;
@@ -811,28 +823,6 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueueCompleted -= this.QueueCompleted;
             this.queueProcessor.JobProcessingStarted -= this.QueueProcessorJobProcessingStarted;
             this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
-        }
-
-        /// <summary>
-        /// Handle the Window Closing Event and warn the user if an encode is in-progress
-        /// </summary>
-        /// <param name="e">
-        /// The CancelEventArgs.
-        /// </param>
-        public void HandleWindowClosing(CancelEventArgs e)
-        {
-            if (this.encodeService.IsEncoding)
-            {
-                MessageBoxResult result = this.errorService.ShowMessageBox("HandBrake is currently encoding. Closing now will abort your encode.\nAre you sure you wish to exit?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if (result == MessageBoxResult.No)
-                {
-                    e.Cancel = true;
-                }
-                else
-                {
-                    this.encodeService.Stop();
-                }
-            }
         }
 
         #endregion
