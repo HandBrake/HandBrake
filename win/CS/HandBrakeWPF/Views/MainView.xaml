@@ -20,12 +20,6 @@
                 <Micro:Parameter Value="$eventArgs" />
             </Micro:ActionMessage>
         </i:EventTrigger>
-
-        <i:EventTrigger EventName="Closing">
-            <Micro:ActionMessage MethodName="HandleWindowClosing">
-                <Micro:Parameter Value="$eventArgs" />
-            </Micro:ActionMessage>
-        </i:EventTrigger>
     </i:Interaction.Triggers>
 
     <UserControl.Resources>
@@ -47,19 +41,6 @@
                 <PropertyGroupDescription PropertyName="Category" />
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
-
-        <DataTemplate x:Key="presetsTemplate">
-            <StackPanel>
-                <TextBlock Text="{Binding Path=Name}" />
-            </StackPanel>
-        </DataTemplate>
-
-        <HierarchicalDataTemplate x:Key="presetsCategoryTemplate"
-                                  ItemsSource="{Binding Path=Items}"
-                                  ItemTemplate="{StaticResource presetsTemplate}"
-                                  >
-            <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" />
-        </HierarchicalDataTemplate>
 
         <Style TargetType="ListBoxItem">
             <Setter Property="Padding" Value="0,2,0,2" />
@@ -181,17 +162,6 @@
                                 <Setter Property="Icon" Value="{Binding Image}" />
                             </Style>
                         </MenuItem.ItemContainerStyle>
-                            <!--<HierarchicalDataTemplate DataType="{x:Type Model:SourceMenuItem}"
-                                  ItemsSource="{Binding Path=Children}">
-                                <HierarchicalDataTemplate.ItemContainerStyle>
-                                    <Style TargetType="MenuItem">
-                                        <Setter Property="Command" Value="{Binding Command}" />
-                                        <Setter Property="Icon" Value="{Binding Image}" />
-                                    </Style>
-                                </HierarchicalDataTemplate.ItemContainerStyle>
-                                <TextBlock Text="{Binding Text}" />
-                            </HierarchicalDataTemplate>-->
-
                     </MenuItem>
                 </Menu>
 

@@ -127,6 +127,8 @@
     <Compile Include="Converters\Options\OptionsTabConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitlesQueueDisplayConverter.cs" />
     <Compile Include="Converters\Video\VideoEncoderConverter.cs" />
+    <Compile Include="Services\DriveDetectService.cs" />
+    <Compile Include="Services\Interfaces\IDriveDetectService.cs" />
     <Compile Include="Model\ShellWindow.cs" />
     <Compile Include="Model\SourceMenuItem.cs" />
     <Compile Include="Model\UpdateCheckInformation.cs" />

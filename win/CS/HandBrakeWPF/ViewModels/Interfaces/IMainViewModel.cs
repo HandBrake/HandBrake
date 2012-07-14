@@ -68,5 +68,10 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// The task.
         /// </param>
         void EditQueueJob(EncodeTask task);
+
+        /// <summary>
+        /// Shutdown this View
+        /// </summary>
+        void Shutdown();
     }
 }

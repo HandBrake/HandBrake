@@ -53,6 +53,7 @@ namespace HandBrakeWPF.Startup
 
             // Services
             this.windsorContainer.Register(Component.For<IUpdateService>().ImplementedBy<UpdateService>().LifeStyle.Is(LifestyleType.Singleton));
+            this.windsorContainer.Register(Component.For<IDriveDetectService>().ImplementedBy<DriveDetectService>().LifeStyle.Is(LifestyleType.Singleton));
 
             // Shell
             this.windsorContainer.Register(Component.For<IErrorService>().ImplementedBy<ErrorService>().LifeStyle.Is(LifestyleType.Singleton));
