@@ -50,7 +50,6 @@ typedef struct
 /* Predefined channel maps for common channel orders. */
 extern hb_chan_map_t hb_libav_chan_map;
 extern hb_chan_map_t hb_liba52_chan_map;
-extern hb_chan_map_t hb_libdca_chan_map;
 extern hb_chan_map_t hb_vorbis_chan_map;
 extern hb_chan_map_t hb_aac_chan_map;
 
