@@ -8,7 +8,9 @@
  */
 
 #include "hb.h"
+#include "hbffmpeg.h"
 #include "audio_remap.h"
+#include "audio_resample.h"
 
 struct hb_work_private_s
 {
@@ -32,12 +34,7 @@ struct hb_work_private_s
     uint8_t   * data;
     uint32_t    alloc_size;
 
-    AVAudioResampleContext *avresample;
-    int                    resample;
-    int                    out_channels;
-    int                    stereo_downmix_mode;
-    uint64_t               out_channel_layout;
-    uint64_t               resample_channel_layout;
+    hb_audio_resample_t *resample;
 };
 
 static hb_buffer_t * Decode( hb_work_object_t * w );
@@ -67,79 +64,6 @@ static const uint64_t hdr2layout[] =
     AV_CH_LAYOUT_5POINT0_BACK, AV_CH_LAYOUT_6POINT0_FRONT,
     AV_CH_LAYOUT_STEREO,       AV_CH_LAYOUT_STEREO,
 };
-
-static hb_buffer_t * downmixAudio(hb_work_private_t *pv,
-                                  hb_audio_t *audio)
-{
-    int64_t in_layout;
-    int resample_changed;
-
-    in_layout = hdr2layout[pv->nchannels - 1];
-    pv->resample = pv->resample || (pv->out_channel_layout != in_layout);
-    resample_changed = pv->resample && (pv->resample_channel_layout != in_layout);
-
-    if (resample_changed || (pv->resample && pv->avresample == NULL))
-    {
-        if (pv->avresample == NULL)
-        {
-            pv->avresample = avresample_alloc_context();
-            if (pv->avresample == NULL)
-            {
-                hb_error("Failed to initialize avresample");
-                return NULL;
-            }
-            // some settings only need to be set once
-            av_opt_set_int(pv->avresample, "in_sample_fmt", AV_SAMPLE_FMT_FLT, 0);
-            av_opt_set_int(pv->avresample, "out_sample_fmt", AV_SAMPLE_FMT_FLT, 0);
-            av_opt_set_int(pv->avresample, "out_channel_layout", pv->out_channel_layout, 0);
-            av_opt_set_int(pv->avresample, "matrix_encoding", pv->stereo_downmix_mode, 0);
-        }
-        else if (resample_changed)
-        {
-            avresample_close(pv->avresample);
-        }
-
-        av_opt_set_int(pv->avresample, "in_channel_layout", in_layout, 0);
-
-        if (avresample_open(pv->avresample) < 0)
-        {
-            hb_error("Failed to open libavresample");
-            return NULL;
-        }
-
-        pv->resample_channel_layout = in_layout;
-    }
-
-    hb_buffer_t *buf;
-    int out_size, out_linesize, sample_size;
-    sample_size = av_get_bytes_per_sample(AV_SAMPLE_FMT_FLT);
-    out_size = av_samples_get_buffer_size(&out_linesize, pv->out_channels,
-                                          pv->nsamples, AV_SAMPLE_FMT_FLT, !pv->resample);
-    buf = hb_buffer_init(out_size);
-
-    if (pv->resample)
-    {
-        int in_linesize, out_samples;
-        in_linesize = pv->nsamples * pv->nchannels * sample_size;
-        out_samples = avresample_convert(pv->avresample,
-                                         (void**)&buf->data, out_linesize, pv->nsamples,
-                                         (void**)&pv->data, in_linesize, pv->nsamples);
-        
-        if (out_samples < 0)
-        {
-            hb_error("avresample_convert() failed");
-            return NULL;
-        }
-        buf->size = out_samples * sample_size * pv->out_channels;
-    }
-    else
-    {
-        memcpy(buf->data, pv->data, out_size);
-        buf->size = pv->nsamples * sample_size * pv->out_channels;
-    }
-
-    return buf;
-}
 
 static void lpcmInfo( hb_work_object_t *w, hb_buffer_t *in )
 {
@@ -238,10 +162,14 @@ static int declpcmInit( hb_work_object_t * w, hb_job_t * job )
     w->private_data = pv;
     pv->job = job;
 
-    // initialize output settings for avresample
-    pv->out_channels = hb_mixdown_get_discrete_channel_count(w->audio->config.out.mixdown);
-    pv->out_channel_layout = hb_ff_mixdown_xlat(w->audio->config.out.mixdown,
-                                                &pv->stereo_downmix_mode);
+    int mode;
+    uint64_t layout = hb_ff_mixdown_xlat(w->audio->config.out.mixdown, &mode);
+    pv->resample = hb_audio_resample_init(AV_SAMPLE_FMT_FLT, layout, mode);
+    if (pv->resample == NULL)
+    {
+        hb_error("declpcmInit: hb_audio_resample_init() failed");
+        return 1;
+    }
 
     return 0;
 }
@@ -401,7 +329,13 @@ static hb_buffer_t *Decode( hb_work_object_t *w )
     }
 
     hb_buffer_t *out;
-    out = downmixAudio( pv, w->audio );
+    hb_audio_resample_update(pv->resample, AV_SAMPLE_FMT_FLT,
+                             hdr2layout[pv->nchannels - 1], pv->nchannels);
+    out = hb_audio_resample(pv->resample, (void*)pv->data, pv->nsamples);
+    if (out == NULL)
+    {
+        return NULL;
+    }
 
     out->s.start  = pv->next_pts;
     out->s.duration = pv->duration;
@@ -417,10 +351,7 @@ static void declpcmClose( hb_work_object_t * w )
 
     if ( pv )
     {
-        if ( pv->avresample )
-        {
-            avresample_free( &pv->avresample );
-        }
+        hb_audio_resample_free(pv->resample);
         free( pv->data );
         free( pv );
         w->private_data = 0;
@@ -444,7 +375,8 @@ static int declpcmBSInfo( hb_work_object_t *w, const hb_buffer_t *b,
     info->rate_base = 1;
     info->bitrate = bitrate;
     info->flags = ( b->data[3] << 16 ) | ( b->data[4] << 8 ) | b->data[5];
-    info->channel_layout = hdr2layout[nchannels - 1];
+    info->channel_layout = hb_ff_layout_xlat(hdr2layout[nchannels - 1],
+                                             nchannels);
     info->channel_map = &hb_libav_chan_map;
     info->samples_per_frame = ( duration * rate ) / 90000;
 

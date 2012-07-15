@@ -41,6 +41,7 @@
 #include "hb.h"
 #include "hbffmpeg.h"
 #include "audio_remap.h"
+#include "audio_resample.h"
 
 static void compute_frame_duration( hb_work_private_t *pv );
 static void flushDelayQueue( hb_work_private_t *pv );
@@ -100,13 +101,7 @@ struct hb_work_private_s
     int cadence[12];
     int wait_for_keyframe;
 
-    AVAudioResampleContext *avresample;
-    int                    resample;
-    int                    out_channels;
-    int                    stereo_downmix_mode;
-    uint64_t               out_channel_layout;
-    uint64_t               resample_channel_layout;
-    enum AVSampleFormat    resample_sample_fmt;
+    hb_audio_resample_t *resample;
 };
 
 static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *data, int size, int64_t pts );
@@ -191,10 +186,19 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         pv->title = w->title;
     pv->list = hb_list_init();
 
-    // initialize output settings for avresample
-    pv->out_channels = hb_mixdown_get_discrete_channel_count(w->audio->config.out.mixdown);
-    pv->out_channel_layout = hb_ff_mixdown_xlat(w->audio->config.out.mixdown,
-                                                &pv->stereo_downmix_mode);
+    /* Downmixing & sample_fmt conversion */
+    if (!(w->audio->config.out.codec & HB_ACODEC_PASS_FLAG))
+    {
+        int mode;
+        uint64_t layout = hb_ff_mixdown_xlat(w->audio->config.out.mixdown,
+                                             &mode);
+        pv->resample = hb_audio_resample_init(AV_SAMPLE_FMT_FLT, layout, mode);
+        if (pv->resample == NULL)
+        {
+            hb_log("decavcodecaInit: hb_audio_resample_init() failed");
+            return 1;
+        }
+    }
 
     codec = avcodec_find_decoder( w->codec_param );
     if ( pv->title->opaque_priv )
@@ -259,10 +263,7 @@ static void closePrivData( hb_work_private_t ** ppv )
         {
             hb_list_empty( &pv->list );
         }
-        if ( pv->avresample )
-        {
-            avresample_free( &pv->avresample );
-        }
+        hb_audio_resample_free(pv->resample);
         free( pv );
     }
     *ppv = NULL;
@@ -1404,153 +1405,69 @@ hb_work_object_t hb_decavcodecv =
     .bsinfo = decavcodecvBSInfo
 };
 
-static hb_buffer_t * downmixAudio(hb_work_private_t *pv,
-                                  hb_audio_t *audio,
-                                  AVFrame *frame)
-{
-    uint64_t in_layout;
-    int resample_changed;
-
-    in_layout = hb_ff_layout_xlat(pv->context->channel_layout, pv->context->channels);
-    pv->resample = (pv->resample ||
-                    pv->out_channel_layout != in_layout ||
-                    pv->context->sample_fmt != AV_SAMPLE_FMT_FLT);
-    resample_changed = (pv->resample &&
-                        (pv->resample_channel_layout != in_layout ||
-                         pv->resample_sample_fmt != pv->context->sample_fmt));
-
-    if (resample_changed || (pv->resample && pv->avresample == NULL))
-    {
-        if (pv->avresample == NULL)
-        {
-            pv->avresample = avresample_alloc_context();
-            if (pv->avresample == NULL)
-            {
-                hb_error("Failed to initialize avresample");
-                return NULL;
-            }
-            // output settings only need to be set once
-            av_opt_set_int(pv->avresample, "out_sample_fmt", AV_SAMPLE_FMT_FLT, 0);
-            av_opt_set_int(pv->avresample, "out_channel_layout", pv->out_channel_layout, 0);
-            av_opt_set_int(pv->avresample, "matrix_encoding", pv->stereo_downmix_mode, 0);
-        }
-        else if (resample_changed)
-        {
-            avresample_close(pv->avresample);
-        }
-
-        av_opt_set_int(pv->avresample, "in_channel_layout", in_layout, 0);
-        av_opt_set_int(pv->avresample, "in_sample_fmt", pv->context->sample_fmt, 0);
-        if (av_get_bytes_per_sample(pv->context->sample_fmt) <= 2)
-            av_opt_set_int(pv->avresample, "internal_sample_fmt", AV_SAMPLE_FMT_S16P, 0);
-
-        if (avresample_open(pv->avresample) < 0)
-        {
-            hb_error("Failed to open libavresample");
-            return NULL;
-        }
-
-        pv->resample_channel_layout = in_layout;
-        pv->resample_sample_fmt = pv->context->sample_fmt;
-    }
-
-    hb_buffer_t *buf;
-    int out_size, out_linesize, sample_size;
-    sample_size = av_get_bytes_per_sample(AV_SAMPLE_FMT_FLT);
-    out_size = av_samples_get_buffer_size(&out_linesize, pv->out_channels,
-                                          frame->nb_samples, AV_SAMPLE_FMT_FLT, !pv->resample);
-    buf = hb_buffer_init(out_size);
-
-    if (pv->resample)
-    {
-        int out_samples;
-        out_samples = avresample_convert(pv->avresample,
-                                         (void**)&buf->data, out_linesize, frame->nb_samples,
-                                         (void**)frame->data, frame->linesize[0], frame->nb_samples);
-
-        if (out_samples < 0)
-        {
-            hb_error("avresample_convert() failed");
-            return NULL;
-        }
-        buf->size = out_samples * sample_size * pv->out_channels;
-    }
-    else
-    {
-        memcpy(buf->data, frame->data[0], out_size);
-        buf->size = frame->nb_samples * sample_size * pv->out_channels;
-    }
-
-    return buf;
-}
-
-static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *data, int size, int64_t pts )
+static void decodeAudio(hb_audio_t *audio, hb_work_private_t *pv, uint8_t *data,
+                        int size, int64_t pts)
 {
     AVCodecContext *context = pv->context;
-    int pos = 0;
     int loop_limit = 256;
+    int pos = 0;
 
-    // If we are givn a pts, use it.
-    // But don't loose partial ticks.
-    if ( pts != -1 && (int64_t)pv->pts_next != pts )
+    // If we are given a pts, use it; but don't lose partial ticks.
+    if (pts != -1 && (int64_t)pv->pts_next != pts)
         pv->pts_next = pts;
-    while ( pos < size )
+    while (pos < size)
     {
         AVFrame frame;
         int got_frame;
         AVPacket avp;
-        av_init_packet( &avp );
+        av_init_packet(&avp);
         avp.data = data + pos;
         avp.size = size - pos;
-        avp.pts = pv->pts_next;
-        avp.dts = AV_NOPTS_VALUE;
+        avp.pts  = pv->pts_next;
+        avp.dts  = AV_NOPTS_VALUE;
 
-        int len = avcodec_decode_audio4( context, &frame, &got_frame, &avp );
-        if ( len < 0 )
+        int len = avcodec_decode_audio4(context, &frame, &got_frame, &avp);
+        if ((len < 0) || (!got_frame && !(loop_limit--)))
         {
             return;
         }
-        if ( !got_frame )
-        {
-            if ( !(loop_limit--) )
-                return;
-        }
         else
+        {
             loop_limit = 256;
+        }
 
         pos += len;
-        if( got_frame )
+
+        if (got_frame)
         {
+            hb_buffer_t *out;
             double duration = frame.nb_samples * pv->duration;
             double pts_next = pv->pts_next + duration;
 
-            // DTS-HD can be passed through to mkv
-            if( audio->config.out.codec & HB_ACODEC_PASS_FLAG )
+            if (audio->config.out.codec & HB_ACODEC_PASS_FLAG)
             {
-                // Note that even though we are doing passthru, we had
-                // to decode so that we know the stop time and the
-                // pts of the next audio packet.
-                hb_buffer_t * buf;
-
-                buf = hb_buffer_init( avp.size );
-                memcpy( buf->data, avp.data, avp.size );
-                buf->s.start = pv->pts_next;
-                buf->s.duration = duration;
-                buf->s.stop  = pts_next;
-                hb_list_add( pv->list, buf );
-                pv->pts_next = pts_next;
-                continue;
+                // Note that even though we are doing passthru, we had to decode
+                // so that we know the stop time and the pts of the next audio
+                // packet.
+                out = hb_buffer_init(avp.size);
+                memcpy(out->data, avp.data, avp.size);
+            }
+            else
+            {
+                hb_audio_resample_update(pv->resample, pv->context->sample_fmt,
+                                         pv->context->channel_layout,
+                                         pv->context->channels);
+                out = hb_audio_resample(pv->resample, (void*)frame.data[0],
+                                        frame.nb_samples);
             }
 
-            hb_buffer_t * buf = downmixAudio( pv, audio, &frame );
-            if ( buf != NULL )
+            if (out != NULL)
             {
-                buf->s.start = pv->pts_next;
-                buf->s.duration = duration;
-                buf->s.stop = pts_next;
-                hb_list_add( pv->list, buf );
-
-                pv->pts_next = pts_next;
+                out->s.start    = pv->pts_next;
+                out->s.duration = duration;
+                out->s.stop     = pts_next;
+                pv->pts_next    = pts_next;
+                hb_list_add(pv->list, out);
             }
         }
     }

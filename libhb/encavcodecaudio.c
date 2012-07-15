@@ -10,6 +10,7 @@
 #include "hb.h"
 #include "hbffmpeg.h"
 #include "audio_remap.h"
+#include "audio_resample.h"
 
 struct hb_work_private_s
 {
@@ -23,8 +24,8 @@ struct hb_work_private_s
     hb_list_t      * list;
     uint8_t        * buf;
 
-    AVAudioResampleContext *avresample;
-    hb_audio_remap_t       *remap;
+    hb_audio_remap_t    *remap;
+    hb_audio_resample_t *resample;
 };
 
 static int  encavcodecaInit( hb_work_object_t *, hb_job_t * );
@@ -61,17 +62,11 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     context = avcodec_alloc_context3(codec);
 
     int mode;
-    context->channel_layout = hb_ff_mixdown_xlat(audio->config.out.mixdown, &mode);
-    pv->out_discrete_channels = hb_mixdown_get_discrete_channel_count(audio->config.out.mixdown);
-
-    // channel remapping
-    // note: unnecessary once everything is downmixed using libavresample
-    pv->remap = hb_audio_remap_init(context->channel_layout, &hb_libav_chan_map,
-                                    audio->config.in.channel_map);
-    if (pv->remap == NULL)
-    {
-        hb_log("encavcodecaInit: hb_audio_remap_init() failed");
-    }
+    context->channel_layout = hb_ff_mixdown_xlat(audio->config.out.mixdown,
+                                                 &mode);
+    context->channels = pv->out_discrete_channels =
+        hb_mixdown_get_discrete_channel_count(audio->config.out.mixdown);
+    context->sample_rate = audio->config.out.samplerate;
 
     AVDictionary *av_opts = NULL;
     if (w->codec_param == CODEC_ID_AAC)
@@ -94,8 +89,6 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     if( audio->config.out.compression_level >= 0 )
         context->compression_level = audio->config.out.compression_level;
 
-    context->sample_rate = audio->config.out.samplerate;
-    context->channels = pv->out_discrete_channels;
     // Try to set format to float.  Fallback to whatever is supported.
     hb_ff_set_sample_fmt( context, codec );
 
@@ -112,6 +105,26 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         hb_log( "encavcodecaInit: Unknown avcodec option %s", t->key );
     }
     av_dict_free( &av_opts );
+
+    // channel remapping
+    pv->remap = hb_audio_remap_init(context->channel_layout, &hb_libav_chan_map,
+                                    audio->config.in.channel_map);
+    if (pv->remap == NULL)
+    {
+        hb_log("encavcodecaInit: hb_audio_remap_init() failed");
+    }
+
+    // sample_fmt conversion
+    pv->resample = hb_audio_resample_init(context->sample_fmt,
+                                          context->channel_layout,
+                                          AV_MATRIX_ENCODING_NONE);
+    if (hb_audio_resample_update(pv->resample, AV_SAMPLE_FMT_FLT,
+                                 context->channel_layout, context->channels))
+    {
+        hb_error("encavcodecaInit: hb_audio_resample_update() failed");
+        hb_audio_resample_free(pv->resample);
+        return 1;
+    }
 
     pv->context = context;
 
@@ -133,31 +146,6 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         w->config->extradata.length = context->extradata_size;
     }
 
-    // Check if sample format conversion is necessary
-    if (AV_SAMPLE_FMT_FLT != pv->context->sample_fmt)
-    {
-        // Set up avresample to do conversion
-        pv->avresample = avresample_alloc_context();
-        if (pv->avresample == NULL)
-        {
-            hb_error("Failed to initialize avresample");
-            return 1;
-        }
-
-        uint64_t layout;
-        layout = hb_ff_layout_xlat(context->channel_layout, context->channels);
-        av_opt_set_int(pv->avresample, "in_channel_layout", layout, 0);
-        av_opt_set_int(pv->avresample, "out_channel_layout", layout, 0);
-        av_opt_set_int(pv->avresample, "in_sample_fmt", AV_SAMPLE_FMT_FLT, 0);
-        av_opt_set_int(pv->avresample, "out_sample_fmt", context->sample_fmt, 0);
-
-        if (avresample_open(pv->avresample) < 0)
-        {
-            hb_error("Failed to open avresample");
-            avresample_free(&pv->avresample);
-            return 1;
-        }
-    }
     return 0;
 }
 
@@ -221,116 +209,97 @@ static void encavcodecaClose(hb_work_object_t * w)
             hb_list_empty(&pv->list);
         }
 
-        if (pv->avresample != NULL)
-        {
-            avresample_free(&pv->avresample);
-        }
+        hb_audio_remap_free(pv->remap);
+        pv->remap = NULL;
 
-        if (pv->remap != NULL)
-        {
-            hb_audio_remap_free(pv->remap);
-        }
+        hb_audio_resample_free(pv->resample);
+        pv->resample = NULL;
 
         free(pv);
         w->private_data = NULL;
     }
 }
 
-static void convertAudioFormat( hb_work_private_t *pv, AVFrame *frame )
+static hb_buffer_t* Encode(hb_work_object_t *w)
 {
-    if (pv->avresample != NULL)
-    {
-        int out_samples, out_linesize;
-
-        av_samples_get_buffer_size(&out_linesize, pv->context->channels,
-                                   frame->nb_samples, pv->context->sample_fmt, 0);
-
-        out_samples = avresample_convert(pv->avresample,
-                                         (void **)frame->data, out_linesize, frame->nb_samples,
-                                         (void **)frame->data, frame->linesize[0], frame->nb_samples);
-
-        if (out_samples < 0)
-        {
-            hb_error("avresample_convert() failed");
-        }
-    }
-}
-
-static hb_buffer_t * Encode( hb_work_object_t * w )
-{
-    hb_work_private_t * pv = w->private_data;
+    hb_work_private_t *pv = w->private_data;
+    hb_audio_t *audio = w->audio;
+    hb_buffer_t *resampled, *out;
     uint64_t pts, pos;
-    hb_audio_t * audio = w->audio;
-    hb_buffer_t * buf;
 
-    if( hb_list_bytes( pv->list ) < pv->input_samples * sizeof( float ) )
+    if (hb_list_bytes(pv->list) < pv->input_samples * sizeof(float))
     {
         return NULL;
     }
 
-    hb_list_getbytes( pv->list, pv->buf, pv->input_samples * sizeof( float ),
-                     &pts, &pos);
+    hb_list_getbytes(pv->list, pv->buf, pv->input_samples * sizeof(float), &pts,
+                     &pos);
 
+    // channel remapping and sample_fmt conversion
     hb_audio_remap(pv->remap, (hb_sample_t*)pv->buf, pv->samples_per_frame);
+    resampled = hb_audio_resample(pv->resample, (void*)pv->buf,
+                                  pv->samples_per_frame);
 
     // Prepare input frame
     AVFrame frame;
     frame.nb_samples= pv->samples_per_frame;
     int size = av_samples_get_buffer_size(NULL, pv->context->channels,
-                            frame.nb_samples, pv->context->sample_fmt, 1);
-    avcodec_fill_audio_frame(&frame, pv->context->channels, 
-                             pv->context->sample_fmt, pv->buf, size, 1);
-    frame.pts = pts + 90000 * pos / pv->out_discrete_channels / sizeof( float ) / audio->config.out.samplerate;
-
-    // libav requires that timebase of audio input frames to be
-    // in sample_rate units.
-    frame.pts = av_rescale( frame.pts, pv->context->sample_rate, 90000);
-
-    // Do we need to convert our internal float format?
-    convertAudioFormat(pv, &frame);
+                                          frame.nb_samples,
+                                          pv->context->sample_fmt, 1);
+    avcodec_fill_audio_frame(&frame, pv->context->channels,
+                             pv->context->sample_fmt, resampled->data, size, 1);
+    // Libav requires timebase of audio input frames to be in sample_rate units
+    frame.pts = pts + (90000 * pos / pv->out_discrete_channels /
+                       sizeof(float) / audio->config.out.samplerate);
+    frame.pts = av_rescale(frame.pts, pv->context->sample_rate, 90000);
 
     // Prepare output packet
     AVPacket pkt;
     int got_packet;
-    buf = hb_buffer_init( pv->output_bytes );
+    out = hb_buffer_init(pv->output_bytes);
     av_init_packet(&pkt);
-    pkt.data = buf->data;
-    pkt.size = buf->alloc;
+    pkt.data = out->data;
+    pkt.size = out->alloc;
 
     // Encode
-    int ret = avcodec_encode_audio2( pv->context, &pkt, &frame, &got_packet);
-    if ( ret < 0 )
+    int ret = avcodec_encode_audio2(pv->context, &pkt, &frame, &got_packet);
+    if (ret < 0)
     {
-        hb_log( "encavcodeca: avcodec_encode_audio failed" );
-        hb_buffer_close( &buf );
+        hb_log("encavcodeca: avcodec_encode_audio failed");
+        hb_buffer_close(&resampled);
+        hb_buffer_close(&out);
         return NULL;
     }
 
-    if ( got_packet && pkt.size )
+    if (got_packet && pkt.size)
     {
-        buf->size = pkt.size;
+        out->size = pkt.size;
 
-        // The output pts from libav is in context->time_base.  Convert
-        // it back to our timebase.
+        // The output pts from libav is in context->time_base. Convert it back
+        // to our timebase.
         //
         // Also account for the "delay" factor that libav seems to arbitrarily
-        // subtract from the packet.  Not sure WTH they think they are doing
-        // by offseting the value in a negative direction.
-        buf->s.start = av_rescale_q( pkt.pts + pv->context->delay,
-                pv->context->time_base, (AVRational){ 1, 90000 });
+        // subtract from the packet.  Not sure WTH they think they are doing by
+        // offsetting the value in a negative direction.
+        out->s.start = av_rescale_q(pv->context->delay + pkt.pts,
+                                    pv->context->time_base,
+                                    (AVRational){1, 90000});
 
-        buf->s.stop  = buf->s.start + 90000 * pv->samples_per_frame / audio->config.out.samplerate;
+        out->s.stop  = out->s.start + (90000 * pv->samples_per_frame /
+                                       audio->config.out.samplerate);
 
-        buf->s.type = AUDIO_BUF;
-        buf->s.frametype = HB_FRAME_AUDIO;
+        out->s.type = AUDIO_BUF;
+        out->s.frametype = HB_FRAME_AUDIO;
     }
     else
     {
-        hb_buffer_close( &buf );
-        return Encode( w );
+        hb_buffer_close(&resampled);
+        hb_buffer_close(&out);
+        return Encode(w);
     }
 
-    return buf;
+    hb_buffer_close(&resampled);
+    return out;
 }
 
 static hb_buffer_t * Flush( hb_work_object_t * w )
