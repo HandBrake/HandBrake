@@ -765,6 +765,7 @@ class Project( Action ):
         self.vmajor = 0
         self.vminor = 9
         self.vpoint = 6
+		self.vpatch = 1
 
     def _action( self ):
         ## add architecture to URL only for Mac
@@ -774,7 +775,7 @@ class Project( Action ):
             url_arch = ''
 
         if repo.type == 'release':
-            self.version = '%d.%d.%d' % (self.vmajor,self.vminor,self.vpoint)
+            self.version = '%d.%d.%d.%d' % (self.vmajor,self.vminor,self.vpoint, self.vpatch)
             url_ctype = ''
             url_ntype = 'stable'
             self.build = time.strftime('%Y%m%d') + '00'
@@ -1444,8 +1445,9 @@ int main ()
     doc.add( 'HB.version.major',  project.vmajor )
     doc.add( 'HB.version.minor',  project.vminor )
     doc.add( 'HB.version.point',  project.vpoint )
+	doc.add( 'HB.version.patch',  project.vpatch )
     doc.add( 'HB.version',        project.version )
-    doc.add( 'HB.version.hex',    '%04x%02x%02x%08x' % (project.vmajor,project.vminor,project.vpoint,repo.rev) )
+    doc.add( 'HB.version.hex',    '%04x%02x%02x%02x%08x' % (project.vmajor,project.vminor,project.vpoint,project.vpatch,repo.rev) )
 
     doc.add( 'HB.build', project.build )
 
