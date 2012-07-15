@@ -73,7 +73,7 @@ static const stream2codec_t st2codec[256] = {
 
     st(0x80, U, HB_ACODEC_FFMPEG,  CODEC_ID_PCM_BLURAY, "Digicipher II Video"),
     st(0x81, A, HB_ACODEC_AC3,     0,              "AC3"),
-    st(0x82, A, HB_ACODEC_DCA,     0,              "DTS"),
+    st(0x82, A, HB_ACODEC_DCA,     CODEC_ID_DTS,   "DTS"),
     // 0x83 can be LPCM or BD TrueHD.  Set to 'unknown' till we know more.
     st(0x83, U, HB_ACODEC_LPCM,    0,              "LPCM"),
     // BD E-AC3 Primary audio
@@ -83,7 +83,7 @@ static const stream2codec_t st2codec[256] = {
     st(0x86, U, HB_ACODEC_DCA_HD,  CODEC_ID_DTS,   "DTS-HD MA"),
     st(0x87, A, HB_ACODEC_FFMPEG,  CODEC_ID_EAC3,  "E-AC3"),
 
-    st(0x8a, A, HB_ACODEC_DCA,     0,              "DTS"),
+    st(0x8a, A, HB_ACODEC_DCA,     CODEC_ID_DTS,   "DTS"),
 
     st(0x90, S, WORK_DECPGSSUB,    0,              "PGS Subtitle"),
     // 0x91 can be AC3 or BD Interactive Graphics Stream.
@@ -4067,8 +4067,6 @@ static int probe_dts_profile( hb_pes_stream_t *pes )
     }
     switch (info.profile)
     {
-        /* When we improve handling of channels > 5.1, we should move
-         * DTS_ES down to use libav for decode */
         case FF_PROFILE_DTS:
         case FF_PROFILE_DTS_ES:
         case FF_PROFILE_DTS_96_24:
@@ -4306,6 +4304,7 @@ static void hb_ts_resolve_pid_types(hb_stream_t *stream)
             update_ts_streams( stream, pid, HB_SUBSTREAM_BD_DTS,
                                stype, A, &pes_idx );
             stream->pes.list[pes_idx].codec = HB_ACODEC_DCA;
+            stream->pes.list[pes_idx].codec_param = CODEC_ID_DTS;
 
             update_ts_streams( stream, pid, 0, stype, A, &pes_idx );
             stream->pes.list[pes_idx].codec = HB_ACODEC_DCA_HD;
@@ -4320,6 +4319,7 @@ static void hb_ts_resolve_pid_types(hb_stream_t *stream)
             update_ts_streams( stream, pid, HB_SUBSTREAM_BD_DTS,
                                stype, A, &pes_idx );
             stream->pes.list[pes_idx].codec = HB_ACODEC_DCA;
+            stream->pes.list[pes_idx].codec_param = CODEC_ID_DTS;
 
             update_ts_streams( stream, pid, 0, stype, A, &pes_idx );
             stream->pes.list[pes_idx].codec = HB_ACODEC_DCA_HD;
@@ -5116,18 +5116,16 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
         {
             audio->config.in.codec = HB_ACODEC_AC3;
         }
-        /* When we improve handling of channels > 5.1, we should move
-         * DTS_ES down to use libav for decode */
-        else if ( codec->codec_id == CODEC_ID_DTS &&
-                ( codec->profile == FF_PROFILE_DTS ||
-                  codec->profile == FF_PROFILE_DTS_ES ||
-                  codec->profile == FF_PROFILE_DTS_96_24 ) )
-        {
-            audio->config.in.codec = HB_ACODEC_DCA;
-        }
         else
         {
             if ( codec->codec_id == CODEC_ID_DTS &&
+                    ( codec->profile == FF_PROFILE_DTS ||
+                      codec->profile == FF_PROFILE_DTS_ES ||
+                      codec->profile == FF_PROFILE_DTS_96_24 ) )
+            {
+                audio->config.in.codec = HB_ACODEC_DCA;
+            }
+            else if ( codec->codec_id == CODEC_ID_DTS &&
                ( codec->profile == FF_PROFILE_DTS_HD_MA ||
                  codec->profile == FF_PROFILE_DTS_HD_HRA ) )
             {

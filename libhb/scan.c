@@ -10,7 +10,6 @@
 #include "hb.h"
 #include "hbffmpeg.h"
 #include "a52dec/a52.h"
-#include "dca.h"
 
 typedef struct
 {

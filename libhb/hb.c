@@ -448,7 +448,6 @@ hb_handle_t * hb_init( int verbose, int update_check )
 	hb_register( &hb_encx264 );
     hb_register( &hb_enctheora );
 	hb_register( &hb_deca52 );
-	hb_register( &hb_decdca );
 	hb_register( &hb_decavcodeca );
 	hb_register( &hb_decavcodecv );
 	hb_register( &hb_declpcm );
@@ -547,7 +546,6 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
 	hb_register( &hb_encx264 );
     hb_register( &hb_enctheora );
 	hb_register( &hb_deca52 );
-	hb_register( &hb_decdca );
 	hb_register( &hb_decavcodeca );
 	hb_register( &hb_decavcodecv );
 	hb_register( &hb_declpcm );

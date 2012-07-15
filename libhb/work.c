@@ -9,7 +9,6 @@
 
 #include "hb.h"
 #include "a52dec/a52.h"
-#include "dca.h"
 #include "libavformat/avformat.h"
 
 typedef struct
@@ -117,7 +116,6 @@ hb_work_object_t * hb_codec_decoder( int codec )
     switch( codec )
     {
         case HB_ACODEC_AC3:  return hb_get_work( WORK_DECA52 );
-        case HB_ACODEC_DCA:  return hb_get_work( WORK_DECDCA );
         case HB_ACODEC_LPCM: return hb_get_work( WORK_DECLPCM );
         default:
             if ( codec & HB_ACODEC_FF_MASK )
@@ -438,10 +436,7 @@ void hb_display_job_info( hb_job_t * job )
 
             hb_log( "   + decoder: %s (track %d, id 0x%x)", audio->config.lang.description, audio->config.in.track + 1, audio->id );
 
-            if( ( audio->config.in.codec == HB_ACODEC_AC3 ) || ( audio->config.in.codec == HB_ACODEC_DCA) )
-            {
-                hb_log( "     + bitrate: %d kbps, samplerate: %d Hz", audio->config.in.bitrate / 1000, audio->config.in.samplerate );
-            }
+            hb_log( "     + bitrate: %d kbps, samplerate: %d Hz", audio->config.in.bitrate / 1000, audio->config.in.samplerate );
 
             if( audio->config.out.codec & HB_ACODEC_PASS_FLAG )
             {

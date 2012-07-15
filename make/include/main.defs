@@ -27,7 +27,6 @@ MODULES += contrib/fontconfig
 MODULES += contrib/freetype
 MODULES += contrib/lame
 MODULES += contrib/libass
-MODULES += contrib/libdca
 MODULES += contrib/libdvdread
 MODULES += contrib/libdvdnav
 MODULES += contrib/libbluray

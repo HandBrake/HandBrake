@@ -426,7 +426,8 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_DTS:
-                add_audio(ii, title->list_audio, bdaudio, 0, HB_ACODEC_DCA, 0);
+                add_audio(ii, title->list_audio, bdaudio, 0, HB_ACODEC_DCA,
+                          CODEC_ID_DTS);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_MPEG2:
@@ -453,7 +454,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
             case BLURAY_STREAM_TYPE_AUDIO_DTSHD:
                 // Add 2 audio tracks.  One for DTS-HD and one for DTS
                 add_audio(ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_DTS, 
-                          HB_ACODEC_DCA, 0);
+                          HB_ACODEC_DCA, CODEC_ID_DTS);
                 // DTS-HD is special.  The substreams must be concatinated
                 // DTS-core followed by DTS-hd-extensions.  Setting
                 // a substream id of 0 says use all substreams.

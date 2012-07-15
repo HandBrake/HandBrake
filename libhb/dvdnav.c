@@ -525,6 +525,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
             case 0x06:
                 audio->id    = ( ( 0x88 + position ) << 8 ) | 0xbd;
                 audio->config.in.codec = HB_ACODEC_DCA;
+                audio->config.in.codec_param = CODEC_ID_DTS;
                 codec_name = "DTS";
                 break;
 
