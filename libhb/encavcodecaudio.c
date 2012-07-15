@@ -41,22 +41,20 @@ hb_work_object_t hb_encavcodeca =
     encavcodecaClose
 };
 
-static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
+static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
 {
-    AVCodec * codec;
-    AVCodecContext * context;
-    hb_audio_t * audio = w->audio;
+    AVCodec *codec;
+    AVCodecContext *context;
+    hb_audio_t *audio = w->audio;
 
-    hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
+    hb_work_private_t *pv = calloc(1, sizeof(hb_work_private_t));
     w->private_data = pv;
-
     pv->job = job;
 
-    codec = avcodec_find_encoder( w->codec_param );
-    if( !codec )
+    codec = avcodec_find_encoder(w->codec_param);
+    if (codec == NULL)
     {
-        hb_log( "encavcodecaInit: avcodec_find_encoder "
-                "failed" );
+        hb_error("encavcodecaInit: avcodec_find_encoder() failed");
         return 1;
     }
     context = avcodec_alloc_context3(codec);
@@ -78,40 +76,44 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         av_dict_set(&av_opts, "dsur_mode", "on", 0);
     }
 
-    if( audio->config.out.bitrate > 0 )
+    if (audio->config.out.bitrate > 0)
+    {
         context->bit_rate = audio->config.out.bitrate * 1000;
-    else if( audio->config.out.quality >= 0 )
+    }
+    else if (audio->config.out.quality >= 0)
     {
         context->global_quality = audio->config.out.quality * FF_QP2LAMBDA;
         context->flags |= CODEC_FLAG_QSCALE;
     }
 
-    if( audio->config.out.compression_level >= 0 )
-        context->compression_level = audio->config.out.compression_level;
-
-    // Try to set format to float.  Fallback to whatever is supported.
-    hb_ff_set_sample_fmt( context, codec );
-
-    if( hb_avcodec_open( context, codec, &av_opts, 0 ) )
+    if (audio->config.out.compression_level >= 0)
     {
-        hb_log( "encavcodecaInit: avcodec_open failed" );
+        context->compression_level = audio->config.out.compression_level;
+    }
+
+    // Try to set format to float; fall back to whatever is supported.
+    hb_ff_set_sample_fmt(context, codec);
+
+    if (hb_avcodec_open(context, codec, &av_opts, 0))
+    {
+        hb_error("encavcodecaInit: hb_avcodec_open() failed");
         return 1;
     }
     // avcodec_open populates the opts dictionary with the
     // things it didn't recognize.
     AVDictionaryEntry *t = NULL;
-    while( ( t = av_dict_get( av_opts, "", t, AV_DICT_IGNORE_SUFFIX ) ) )
+    while ((t = av_dict_get(av_opts, "", t, AV_DICT_IGNORE_SUFFIX)))
     {
-        hb_log( "encavcodecaInit: Unknown avcodec option %s", t->key );
+        hb_log("encavcodecaInit: Unknown avcodec option %s", t->key);
     }
-    av_dict_free( &av_opts );
+    av_dict_free(&av_opts);
 
     // channel remapping
     pv->remap = hb_audio_remap_init(context->channel_layout, &hb_libav_chan_map,
                                     audio->config.in.channel_map);
     if (pv->remap == NULL)
     {
-        hb_log("encavcodecaInit: hb_audio_remap_init() failed");
+        hb_error("encavcodecaInit: hb_audio_remap_init() failed");
     }
 
     // sample_fmt conversion
@@ -127,22 +129,22 @@ static int encavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     }
 
     pv->context = context;
-
-    audio->config.out.samples_per_frame = pv->samples_per_frame = context->frame_size;
+    pv->samples_per_frame = context->frame_size;
+    audio->config.out.samples_per_frame = pv->samples_per_frame;
     pv->input_samples = pv->samples_per_frame * pv->out_discrete_channels;
 
     // Set a reasonable maximum output size
-    pv->output_bytes = context->frame_size * 
-        av_get_bytes_per_sample(context->sample_fmt) * 
-        context->channels;
+    pv->output_bytes = (context->channels * context->frame_size *
+                        av_get_bytes_per_sample(context->sample_fmt));
 
-    pv->buf = malloc( pv->input_samples * sizeof( float ) );
+    pv->buf = malloc(pv->input_samples * sizeof(float));
 
     pv->list = hb_list_init();
 
-    if ( context->extradata )
+    if (context->extradata)
     {
-        memcpy( w->config->extradata.bytes, context->extradata, context->extradata_size );
+        memcpy(w->config->extradata.bytes,
+               context->extradata, context->extradata_size);
         w->config->extradata.length = context->extradata_size;
     }
 

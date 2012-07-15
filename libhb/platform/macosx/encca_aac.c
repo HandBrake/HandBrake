@@ -239,7 +239,7 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
         free(bitrates);
         if (tmp != audio->config.out.bitrate * 1000)
         {
-            hb_log("encca_aac: sanitizing track %d audio bitrate %d to %"PRIu32"",
+            hb_log("encCoreAudioInit: sanitizing track %d audio bitrate %d to %"PRIu32"",
                    audio->config.out.track, audio->config.out.bitrate, tmp / 1000);
         }
         AudioConverterSetProperty(pv->converter,
@@ -250,7 +250,7 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
     {
         if (mode != AAC_MODE_LC)
         {
-            hb_log("encCoreAudioInit: internal error, VBR set but not applicable");
+            hb_error("encCoreAudioInit: internal error, VBR set but not applicable");
             return 1;
         }
         // set encoder bitrate control mode to variable
@@ -267,7 +267,7 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
     }
     else
     {
-        hb_log("encCoreAudioInit: internal error, bitrate/quality not set");
+        hb_error("encCoreAudioInit: internal error, bitrate/quality not set");
         return 1;
     }
 
@@ -294,7 +294,7 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
                                     audio->config.in.channel_map);
     if (pv->remap == NULL)
     {
-        hb_log("encCoreAudioInit: hb_audio_remap_init() failed");
+        hb_error("encCoreAudioInit: hb_audio_remap_init() failed");
     }
 
     // get maximum output size
