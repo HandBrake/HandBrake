@@ -31,6 +31,9 @@ struct hb_work_private_s
     // display) - when doing forced-only extraction, only pass empty subtitles
     // through if we've seen a forced sub and haven't seen any empty sub since
     uint8_t seen_forced_sub;
+    // if we start encoding partway through the source, we may encounter empty
+    // subtitles before we see any actual subtitle content - discard them
+    uint8_t discard_subtitle;
 };
 
 static int decsubInit( hb_work_object_t * w, hb_job_t * job )
@@ -43,6 +46,7 @@ static int decsubInit( hb_work_object_t * w, hb_job_t * job )
     pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
 
+    pv->discard_subtitle = 1;
     pv->seen_forced_sub = 0;
     pv->context = context;
     pv->job = job;
@@ -192,7 +196,6 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     avp.pts = av_rescale(in->s.start, AV_TIME_BASE, 90000);
 
     int has_subtitle = 0;
-    int clear_subtitle = 0;
 
     do
     {
@@ -215,16 +218,18 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
         /* Subtitles are "usable" if:
          *   1. Libav returned a subtitle (has_subtitle) AND
-         *   2. we are not doing Foreign Audio Search (!pv->job->indepth_scan)
+         *   2. we're not doing Foreign Audio Search (!pv->job->indepth_scan) AND
+         *   3. the sub is non-empty or we've seen one such sub before (!pv->discard_subtitle)
          * For forced-only extraction, usable subtitles also need to:
          *   a. be forced (subtitle.forced) OR
-         *   b. clear a forced sub (pv->seen_forced_sub && !subtitle.num_rects) */
-        uint8_t useable_sub;
+         *   b. follow a forced sub (pv->seen_forced_sub) */
+        uint8_t useable_sub = 0;
+        uint8_t clear_subtitle = 0;
 
         if (has_subtitle)
         {
             // subtitle statistics
-            if (subtitle.num_rects != 0)
+            if (subtitle.num_rects)
             {
                 w->subtitle->hits++;
                 if (subtitle.forced)
@@ -236,43 +241,30 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             {
                 clear_subtitle = 1;
             }
-            // is it usable?
-            if (pv->job->indepth_scan)
+            // are we doing Foreign Audio Search?
+            if (!pv->job->indepth_scan)
             {
-                useable_sub = 0;
-            }
-            else if (w->subtitle->config.force)
-            {
-                useable_sub = subtitle.forced || pv->seen_forced_sub;
-                // note if we find forced or empty subtitles
-                if (subtitle.forced)
+                // do we want to discard this subtitle?
+                pv->discard_subtitle = pv->discard_subtitle && clear_subtitle;
+                // do we need this subtitle?
+                useable_sub = (!pv->discard_subtitle &&
+                               (!w->subtitle->config.force ||
+                                subtitle.forced || pv->seen_forced_sub));
+                // do we need to create an empty subtitle?
+                if (w->subtitle->config.force && useable_sub &&
+                    !subtitle.forced && !clear_subtitle)
                 {
-                    pv->seen_forced_sub = 1;
-                }
-                else if (!subtitle.num_rects)
-                {
-                    pv->seen_forced_sub = 0;
-                }
-                else if (pv->seen_forced_sub)
-                {
-                    // We have output a forced subtitle, but not cleared
-                    // it yet, and the next subtitle is not empty.
+                    // We are forced-only and need to output this subtitle, but
+                    // it's neither forced nor empty.
                     //
                     // If passthru, create an empty subtitle.
-                    // Flag an empty subtitle for subtitle RENDER
-                    make_empty_pgs( pv->list_pass_buffer );
+                    // Also, flag an empty subtitle for subtitle RENDER.
+                    make_empty_pgs(pv->list_pass_buffer);
                     clear_subtitle = 1;
-                    pv->seen_forced_sub = 0;
                 }
+                // is the subtitle forced?
+                pv->seen_forced_sub = subtitle.forced;
             }
-            else
-            {
-                useable_sub = 1;
-            }
-        }
-        else
-        {
-            useable_sub = 0;
         }
 
         if (useable_sub)
