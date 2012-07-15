@@ -195,7 +195,7 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         pv->resample = hb_audio_resample_init(AV_SAMPLE_FMT_FLT, layout, mode);
         if (pv->resample == NULL)
         {
-            hb_log("decavcodecaInit: hb_audio_resample_init() failed");
+            hb_error("decavcodecaInit: hb_audio_resample_init() failed");
             return 1;
         }
     }
