@@ -45,22 +45,6 @@ hb_chan_map_t hb_liba52_chan_map =
     }
 };
 
-// source: libdca documentation and libavcodec/dca.c
-hb_chan_map_t hb_libdca_chan_map =
-{
-    {
-        AV_CH_FRONT_LEFT_OF_CENTER,
-        AV_CH_FRONT_CENTER,
-        AV_CH_FRONT_RIGHT_OF_CENTER,
-        AV_CH_FRONT_LEFT,
-        AV_CH_FRONT_RIGHT,
-        AV_CH_SIDE_LEFT,
-        AV_CH_SIDE_RIGHT,
-        AV_CH_LOW_FREQUENCY,
-        0
-    }
-};
-
 // source: http://xiph.org/vorbis/doc/Vorbis_I_spec.html#x1-800004.3.9
 hb_chan_map_t hb_vorbis_chan_map =
 {
