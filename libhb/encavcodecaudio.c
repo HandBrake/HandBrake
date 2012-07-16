@@ -9,9 +9,6 @@
 #include "downmix.h"
 #include "libavcodec/audioconvert.h"
 
-struct AVAudioConvert;
-typedef struct AVAudioConvert AVAudioConvert;
-
 struct hb_work_private_s
 {
     hb_job_t       * job;
