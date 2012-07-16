@@ -65,7 +65,6 @@ pkg.push.src.deb:: $(PKG.src.deb.stamp)
 	(cd $(STAGE.out.src/)oneiric && dput handbrake-snapshots handbrake_$(HB.version)ppa1~oneiric1_source.changes )
 	(cd $(STAGE.out.src/)natty && dput handbrake-snapshots handbrake_$(HB.version)ppa1~natty1_source.changes )
 	(cd $(STAGE.out.src/)maverick && dput handbrake-snapshots handbrake_$(HB.version)ppa1~maverick1_source.changes )
-	(cd $(STAGE.out.src/)lucid && dput handbrake-snapshots handbrake_$(HB.version)ppa1~lucid1_source.changes )
 
 $(PKG.src.deb.stamp): GNUmakefile
 	-$(RM.exe) -rf $(STAGE.out.src/)
