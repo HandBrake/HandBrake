@@ -2619,13 +2619,25 @@ working_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
 	}
 	if(status->seconds > -1)
 	{
-		status_str= g_strdup_printf(
-			"Encoding: %s%s%.2f %%"
-			" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)",
-			job_str, task_str,
-			100.0 * status->progress,
-			status->rate_cur, status->rate_avg, status->hours, 
-			status->minutes, status->seconds );
+		if (status->rate_cur > 0.0)
+		{
+			status_str= g_strdup_printf(
+				"Encoding: %s%s%.2f %%"
+				" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)",
+				job_str, task_str,
+				100.0 * status->progress,
+				status->rate_cur, status->rate_avg, status->hours, 
+				status->minutes, status->seconds );
+		}
+		else
+		{
+			status_str= g_strdup_printf(
+				"Encoding: %s%s%.2f %%"
+				" (ETA %02dh%02dm%02ds)",
+				job_str, task_str,
+				100.0 * status->progress,
+				status->hours, status->minutes, status->seconds );
+		}
 	}
 	else
 	{
