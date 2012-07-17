@@ -1046,6 +1046,7 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         anamorphic_mode = 2;
                     }
+                    modulus = 2;
                     job->chapter_markers = 1;
                     
                 }
@@ -3035,7 +3036,7 @@ static void ShowPresets()
     
     printf("\n   + AppleTV 2:  -e x264  -q 20.0 -r 29.97 --pfr  -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 -X 1280 --loose-anamorphic -m\n");
     
-    printf("\n   + AppleTV 3:  -e x264  -q 20.0 -r 30 --pfr  -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 -X 1920 --decomb=\"7:2:6:9:1:80\" --loose-anamorphic -m -x b-adapt=2\n");
+    printf("\n   + AppleTV 3:  -e x264  -q 20.0 -r 30 --pfr  -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 -X 1920 --decomb=\"7:2:6:9:1:80\" --loose-anamorphic --modulus 2 -m -x b-adapt=2\n");
     
     printf("\n   + Android Mid:  -e x264  -q 22.0 -r 29.97 --pfr  -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0.0 -f mp4 -X 480 -x cabac=0:ref=2:me=umh:bframes=0:weightp=0:subme=6:8x8dct=0:trellis=0\n");
     

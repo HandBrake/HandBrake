@@ -566,6 +566,11 @@ class Display
       commandString << " --custom-anamorphic"
     end
 
+    #Modulus
+    if hash["PictureModulus"]
+      commandString << " --modulus " << hash["PictureModulus"].to_s
+    end
+
     #Booleans
     if hash["ChapterMarkers"] == 1 then commandString << " -m" end
     if hash["VideoGrayScale"] == 1 then commandString << " -g" end
@@ -902,6 +907,11 @@ class Display
       commandString << " --loose-anamorphic"
     elsif hash["PicturePAR"] == 3
       commandString << " --custom-anamorphic"
+    end
+    
+    #Modulus
+    if hash["PictureModulus"]
+      commandString << " --modulus " << hash["PictureModulus"].to_s
     end
     
     #Booleans
@@ -1264,6 +1274,11 @@ class Display
       commandString << "}\n    "
     end
     
+    #Modulus
+    if hash["PictureModulus"]
+      commandString << "modulus = " << hash["PictureModulus"].to_s << ";\n    "
+    end
+    
     #Booleans
     if hash["ChapterMarkers"] == 1 then commandString << "job->chapter_markers = 1;\n    " end
     if hash["VideoGrayScale"] == 1 then commandString << "job->grayscale = 1;\n    " end
@@ -1601,6 +1616,11 @@ class Display
       commandString << " --loose-anamorphic"
     elsif hash["PicturePAR"] == 3
       commandString << " --custom-anamorphic"
+    end
+    
+    #Modulus
+    if hash["PictureModulus"]
+      commandString << " --modulus " << hash["PictureModulus"].to_s
     end
     
     #Booleans
