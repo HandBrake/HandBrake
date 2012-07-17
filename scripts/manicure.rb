@@ -543,9 +543,17 @@ class Display
         commandString << " --denoise=\"strong\""
       end
       
+      case hash["PictureDecomb"]
+      when 1
+        commandString << " --decomb=\\\"" << hash["PictureDecombCustom"].to_s << "\\\""
+      when 2
+        commandString << " --decomb"
+      when 3
+        commandString << " --decomb=\\\"7:2:6:9:1:80\\\""
+      end
+      
       if hash["PictureDetelecine"] == 2 then commandString << " --detelecine" end
       if hash["PictureDeblock"] != 0 then commandString << " --deblock=" << hash["PictureDeblock"].to_s end
-      if hash["PictureDecomb"] == 2 then commandString << " --decomb" end
       
     end
     
@@ -873,9 +881,18 @@ class Display
         commandString << " --denoise=\"strong\""
       end
       
+      case hash["PictureDecomb"]
+      when 1
+        commandString << " --decomb=\\\"" << hash["PictureDecombCustom"].to_s << "\\\""
+      when 2
+        commandString << " --decomb"
+      when 3
+        commandString << " --decomb=\\\"7:2:6:9:1:80\\\""
+      end
+      
       if hash["PictureDetelecine"] == 2 then commandString << " --detelecine" end
       if hash["PictureDeblock"] != 0 then commandString << " --deblock=" << hash["PictureDeblock"].to_s end
-      if hash["PictureDecomb"] == 2 then commandString << " --decomb" end
+      
     end
 
     #Anamorphic
@@ -1213,13 +1230,23 @@ class Display
         commandString << "denoise_opt = \"7:7:5:5\";\n    "
       end
       
+      case hash["PictureDecomb"]
+      when 1
+        commandString << "decomb = 1;\n    "
+        commandString << "decomb_opt = strdup(\"" << hash["PictureDecombCustom"].to_s << "\");\n    "
+      when 2
+        commandString << "decomb = 1;\n    "
+      when 3
+        commandString << "decomb = 1;\n    "
+        commandString << "decomb_opt = strdup(\"7:2:6:9:1:80\");\n    "
+      end
+      
       if hash["PictureDetelecine"] == 2 then commandString << "detelecine = 1;\n    " end
       if hash["PictureDeblock"] != 0
         then
           commandString << "deblock = 1;\n    "
           commandString << "deblock_opt = \"" << hash["PictureDeblock"].to_s << "\";\n    "
         end
-      if hash["PictureDecomb"] == 2 then commandString << "decomb = 1;\n    " end
       
     end
     
@@ -1553,9 +1580,18 @@ class Display
         commandString << " --denoise=\\\"strong\\\""
       end
       
+      case hash["PictureDecomb"]
+      when 1
+        commandString << " --decomb=\\\"" << hash["PictureDecombCustom"].to_s << "\\\""
+      when 2
+        commandString << " --decomb"
+      when 3
+        commandString << " --decomb=\\\"7:2:6:9:1:80\\\""
+      end
+      
       if hash["PictureDetelecine"] == 2 then commandString << " --detelecine" end
       if hash["PictureDeblock"] != 0 then commandString << " --deblock=" << hash["PictureDeblock"].to_s end
-      if hash["PictureDecomb"] == 2 then commandString << " --decomb" end
+      
     end
     
     #Anamorphic
