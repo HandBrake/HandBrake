@@ -467,8 +467,8 @@ static void adjust_frame_rate( hb_work_private_t *pv, hb_buffer_t **buf_out )
             if ( out->stop <= cfr_stop )
             {
                 out->stop = cfr_stop;
-                pv->out_last_stop = out->stop;
             }
+            pv->out_last_stop = out->stop;
         }
         else
         {
