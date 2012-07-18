@@ -963,10 +963,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->title = w->title;
     pv->list = hb_list_init();
 
-    // XXX: A bug in libav prores decoder causes incorrect decoding when
-    // threaded decode is enabled.  So disable it till this bug is fixed.
-    if( pv->job && pv->job->title && !pv->job->title->has_resolution_change &&
-        w->codec_param != CODEC_ID_PRORES )
+    if( pv->job && pv->job->title && !pv->job->title->has_resolution_change )
     {
         pv->threads = HB_FFMPEG_THREADS_AUTO;
     }
