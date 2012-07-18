@@ -1194,6 +1194,14 @@ static void UpdateState( hb_work_object_t * w )
     }
     pv->common->count_frames++;
 
+    if (pv->job->indepth_scan)
+    {
+        // Progress for indept scan is handled by reader
+        // pv->common->count_frames is used during indepth_scan
+        // to find start & end points.
+        return;
+    }
+
     if( hb_get_date() > sync->st_dates[3] + 1000 )
     {
         memmove( &sync->st_dates[0], &sync->st_dates[1],
@@ -1253,6 +1261,14 @@ static void UpdateSearchState( hb_work_object_t * w, int64_t start )
         pv->job->st_paused = 0;
     }
     pv->common->count_frames++;
+
+    if (pv->job->indepth_scan)
+    {
+        // Progress for indept scan is handled by reader
+        // pv->common->count_frames is used during indepth_scan
+        // to find start & end points.
+        return;
+    }
 
 #define p state.param.working
     state.state = HB_STATE_SEARCHING;

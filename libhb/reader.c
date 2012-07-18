@@ -54,6 +54,7 @@ struct hb_work_private_s
     int            start_found;     // found pts_to_start point
     int64_t        pts_to_start;
     uint64_t       st_first;
+    uint64_t       duration;
     hb_fifo_t    * fifos[100];
 };
 
@@ -126,6 +127,28 @@ static int hb_reader_init( hb_work_object_t * w, hb_job_t * job )
         // so can't be decoded without starting a little early.
         // sync.c will drop early frames.
         r->pts_to_start = MAX(0, job->pts_to_start - 180000);
+    }
+
+    if (job->pts_to_stop)
+    {
+        r->duration = job->pts_to_start + job->pts_to_stop;
+    }
+    else if (job->frame_to_stop)
+    {
+        int frames = job->frame_to_start + job->frame_to_stop;
+        r->duration = (int64_t)frames * job->title->rate_base * 90000 / job->title->rate;
+    }
+    else
+    {
+        hb_chapter_t *chapter;
+        int ii;
+
+        r->duration = 0;
+        for (ii = job->chapter_start; ii < job->chapter_end; ii++)
+        {
+            chapter = hb_list_item( job->title->list_chapter, ii - 1);
+            r->duration += chapter->duration;
+        }
     }
 
     // The stream needs to be open before starting the reader thead
@@ -319,6 +342,7 @@ void ReadLoop( void * _w )
     int            n;
     int            chapter = -1;
     int            chapter_end = r->job->chapter_end;
+    uint8_t        done = 0;
 
     if (r->bd)
     {
@@ -338,6 +362,7 @@ void ReadLoop( void * _w )
             // Note, bd seeks always put us to an i-frame.  no need
             // to start decoding early using r->pts_to_start
             hb_bd_seek_pts( r->bd, r->job->pts_to_start );
+            r->duration -= r->job->pts_to_start;
             r->job->pts_to_start = 0;
             r->start_found = 1;
         }
@@ -417,6 +442,7 @@ void ReadLoop( void * _w )
             // first packet we get, subtract that from pts_to_start, and
             // inspect the reset of the frames in sync.
             r->start_found = 2;
+            r->duration -= r->job->pts_to_start;
             r->job->pts_to_start = pts_to_start;
         }
     } 
@@ -444,7 +470,7 @@ void ReadLoop( void * _w )
 
     list  = hb_list_init();
 
-    while( !*r->die && !r->job->done )
+    while(!*r->die && !r->job->done && !done)
     {
         if (r->bd)
             chapter = hb_bd_chapter( r->bd );
@@ -502,28 +528,6 @@ void ReadLoop( void * _w )
           }
         }
 
-        if( r->job->indepth_scan )
-        {
-            /*
-             * Need to update the progress during a subtitle scan
-             */
-            hb_state_t state;
-
-#define p state.param.working
-
-            state.state = HB_STATE_WORKING;
-            p.progress = (double)chapter / (double)r->job->chapter_end;
-            if( p.progress > 1.0 )
-            {
-                p.progress = 1.0;
-            }
-            p.rate_avg = 0.0;
-            p.hours    = -1;
-            p.minutes  = -1;
-            p.seconds  = -1;
-            hb_set_state( r->job->h, &state );
-        }
-
         (hb_demux[r->title->demuxer])( buf, list, &r->demux );
 
         while( ( buf = hb_list_item( list, 0 ) ) )
@@ -553,7 +557,8 @@ void ReadLoop( void * _w )
                     fifos = NULL;
                 }
             }
-            if( fifos )
+
+            if ( r->job->indepth_scan || fifos )
             {
                 if ( buf->s.renderOffset != -1 )
                 {
@@ -588,8 +593,21 @@ void ReadLoop( void * _w )
                 if ( buf->s.start != -1 )
                 {
                     int64_t start = buf->s.start - r->scr_offset;
-                    if ( !r->start_found )
+
+                    if (!r->start_found || r->job->indepth_scan)
+                    {
                         UpdateState( r, start );
+                    }
+
+                    if (r->job->indepth_scan && r->job->pts_to_stop &&
+                        start >= r->pts_to_start + r->job->pts_to_stop)
+                    {
+                        // sync normally would terminate p-to-p
+                        // but sync doesn't run during indepth scan
+                        hb_log( "reader: reached pts %"PRId64", exiting early", start );
+                        done = 1;
+                        break;
+                    }
 
                     if ( !r->start_found &&
                         start >= r->pts_to_start )
@@ -616,6 +634,9 @@ void ReadLoop( void * _w )
                 {
                     update_ipt( r, buf );
                 }
+            }
+            if( fifos )
+            {
                 if ( !r->start_found )
                 {
                     hb_buffer_close( &buf );
@@ -685,25 +706,37 @@ static void UpdateState( hb_work_private_t  * r, int64_t start)
     }
 
 #define p state.param.working
-    state.state = HB_STATE_SEARCHING;
-    p.progress  = (float) start / (float) r->job->pts_to_start;
+    if ( !r->job->indepth_scan )
+    {
+        state.state = HB_STATE_SEARCHING;
+        p.progress  = (float) start / (float) r->job->pts_to_start;
+    }
+    else
+    {
+        state.state = HB_STATE_WORKING;
+        p.progress  = (float) start / (float) r->duration;
+    }
     if( p.progress > 1.0 )
     {
         p.progress = 1.0;
     }
+    p.rate_cur = 0.0;
+    p.rate_avg = 0.0;
     if (now > r->st_first)
     {
         int eta;
 
         avg = 1000.0 * (double)start / (now - r->st_first);
-        eta = ( r->job->pts_to_start - start ) / avg;
+        if ( !r->job->indepth_scan )
+            eta = ( r->job->pts_to_start - start ) / avg;
+        else
+            eta = ( r->duration - start ) / avg;
         p.hours   = eta / 3600;
         p.minutes = ( eta % 3600 ) / 60;
         p.seconds = eta % 60;
     }
     else
     {
-        p.rate_avg = 0.0;
         p.hours    = -1;
         p.minutes  = -1;
         p.seconds  = -1;
@@ -729,11 +762,14 @@ static hb_fifo_t ** GetFifoForId( hb_work_private_t * r, int id )
 
     if( id == title->video_id )
     {
-        if( job->indepth_scan )
+        if (job->indepth_scan && !job->frame_to_stop)
         {
             /*
              * Ditch the video here during the indepth scan until
              * we can improve the MPEG2 decode performance.
+             *
+             * But if we specify a stop frame, we must decode the
+             * frames in order to count them.
              */
             return NULL;
         }

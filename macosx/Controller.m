@@ -914,9 +914,18 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             
 			if( p.seconds > -1 )
             {
-                [string appendFormat:
-                 NSLocalizedString( @" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)", @"" ),
-                 p.rate_cur, p.rate_avg, p.hours, p.minutes, p.seconds];
+                if ( p.rate_cur > 0.0 )
+                {
+                    [string appendFormat:
+                     NSLocalizedString( @" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)", @"" ),
+                     p.rate_cur, p.rate_avg, p.hours, p.minutes, p.seconds];
+                }
+                else
+                {
+                    [string appendFormat:
+                     NSLocalizedString( @" (ETA %02dh%02dm%02ds)", @"" ),
+                     p.hours, p.minutes, p.seconds];
+                }
             }
             [fStatusField setStringValue: string];
             [fQueueController setQueueStatusString:string];
