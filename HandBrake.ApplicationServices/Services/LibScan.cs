@@ -14,12 +14,15 @@ namespace HandBrake.ApplicationServices.Services
     using System.Text;
     using System.Threading;
 
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop;
+    using HandBrake.Interop.Interfaces;
 
     using AudioTrack = HandBrake.ApplicationServices.Parsing.Audio;
     using ScanProgressEventArgs = HandBrake.Interop.ScanProgressEventArgs;
@@ -47,7 +50,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// LibHB Instance
         /// </summary>
-        private readonly HandBrakeInstance instance;
+        private readonly IHandBrakeInstance instance;
 
         /// <summary>
         /// Log data from HandBrakeInstance
@@ -68,7 +71,7 @@ namespace HandBrake.ApplicationServices.Services
         {
             logging = new StringBuilder();
 
-            instance = ServiceManager.HandBrakeInstance;
+            instance = IoC.Get<IHandBrakeInstance>();
             instance.Initialize(1);
             instance.ScanProgress += this.InstanceScanProgress;
             instance.ScanCompleted += this.InstanceScanCompleted;

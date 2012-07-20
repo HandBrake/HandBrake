@@ -15,8 +15,8 @@ namespace HandBrake.ApplicationServices.Model.Encoding
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
 
     /// <summary>

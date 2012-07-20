@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Functions
+namespace HandBrake.ApplicationServices.Utilities
 {
     using Microsoft.WindowsAPICodePack.Taskbar;
 

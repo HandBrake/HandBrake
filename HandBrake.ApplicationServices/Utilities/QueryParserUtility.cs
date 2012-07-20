@@ -16,7 +16,6 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Linq;
     using System.Text.RegularExpressions;
 
-    using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.Interop.Model;

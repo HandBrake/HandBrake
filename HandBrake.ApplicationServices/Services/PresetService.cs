@@ -19,6 +19,8 @@ namespace HandBrake.ApplicationServices.Services
     using System.Text.RegularExpressions;
     using System.Xml.Serialization;
 
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -67,7 +69,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// The User Setting Service
         /// </summary>
-        private IUserSettingService userSettingService = ServiceManager.UserSettingService;
+        private IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
 
         #endregion
 

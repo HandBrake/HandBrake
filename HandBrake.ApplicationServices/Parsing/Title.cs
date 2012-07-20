@@ -16,6 +16,8 @@ namespace HandBrake.ApplicationServices.Parsing
     using System.Linq;
     using System.Text.RegularExpressions;
 
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model;
 
@@ -29,7 +31,7 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <summary>
         /// The User Setting Service
         /// </summary>
-        private static IUserSettingService userSettingService = ServiceManager.UserSettingService;
+        private static IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Title"/> class. 

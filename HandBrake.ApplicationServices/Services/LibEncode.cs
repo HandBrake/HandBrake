@@ -12,11 +12,14 @@ namespace HandBrake.ApplicationServices.Services
     using System;
     using System.Diagnostics;
 
-    using HandBrake.ApplicationServices.Functions;
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Base;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop;
+    using HandBrake.Interop.Interfaces;
     using HandBrake.Interop.Model;
 
     using EncodeCompletedEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeCompletedEventArgs;
@@ -37,7 +40,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// The User Setting Service
         /// </summary>
-        private IUserSettingService userSettingService = ServiceManager.UserSettingService;
+        private IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
 
         /// <summary>
         /// The Start time of the current Encode;
@@ -47,7 +50,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// An Instance of the HandBrake Interop Library
         /// </summary>
-        private HandBrakeInstance instance;
+        private IHandBrakeInstance instance;
 
         /// <summary>
         /// A flag to indicate if logging is enabled or not.
@@ -62,7 +65,7 @@ namespace HandBrake.ApplicationServices.Services
         public LibEncode()
         {
             // Setup the HandBrake Instance
-            this.instance = ServiceManager.HandBrakeInstance;
+            this.instance = IoC.Get<IHandBrakeInstance>();
             this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
             this.instance.EncodeProgress += this.InstanceEncodeProgress;
 

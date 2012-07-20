@@ -16,11 +16,15 @@ namespace HandBrake.ApplicationServices.Services
     using System.Threading;
     using System.Windows.Forms;
 
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
+
+    using Parser = HandBrake.ApplicationServices.Parsing.Parser;
 
     /// <summary>
     /// Scan a Source
@@ -52,7 +56,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// The User Setting Service
         /// </summary>
-        private IUserSettingService userSettingService = ServiceManager.UserSettingService;
+        private IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
 
         #endregion
 

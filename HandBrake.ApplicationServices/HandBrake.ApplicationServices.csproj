@@ -100,14 +100,14 @@
     <Compile Include="EventArgs\ScanCompletedEventArgs.cs" />
     <Compile Include="EventArgs\ScanProgressEventArgs.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Functions\Converters.cs" />
-    <Compile Include="Functions\EnumHelper.cs" />
-    <Compile Include="Functions\GrowlCommunicator.cs" />
-    <Compile Include="Functions\InteropModelCreator.cs" />
-    <Compile Include="Functions\PlistHelper.cs" />
-    <Compile Include="Functions\SystemInfo.cs" />
-    <Compile Include="Functions\Win32.cs" />
-    <Compile Include="Functions\Win7.cs" />
+    <Compile Include="Utilities\Converters.cs" />
+    <Compile Include="Utilities\EnumHelper.cs" />
+    <Compile Include="Utilities\GrowlCommunicator.cs" />
+    <Compile Include="Utilities\InteropModelCreator.cs" />
+    <Compile Include="Utilities\PlistHelper.cs" />
+    <Compile Include="Utilities\SystemInfo.cs" />
+    <Compile Include="Utilities\Win32.cs" />
+    <Compile Include="Utilities\Win7.cs" />
     <Compile Include="Model\DriveInformation.cs" />
     <Compile Include="Model\Encoding\AllowedPassthru.cs" />
     <Compile Include="Model\Encoding\AudioTrack.cs" />
@@ -134,7 +134,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ServiceManager.cs" />
     <Compile Include="ServicesWindsorInstaller.cs" />
     <Compile Include="Services\Base\EncodeBase.cs" />
     <Compile Include="Services\Encode.cs" />
