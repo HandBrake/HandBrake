@@ -262,6 +262,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.Task = task;
             this.NotifyOfPropertyChange(() => this.Task.SubtitleTracks);
+            this.NotifyOfPropertyChange(() => this.Task);
         }
 
         /// <summary>

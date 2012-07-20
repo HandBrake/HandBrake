@@ -15,6 +15,23 @@
         </Setter>
     </Style>
 
+    <Style TargetType="{x:Type ComboBox}">
+        <Setter Property="Height" Value="22"/>
+        <Setter Property="Margin" Value="0,2,0,2" />
+    </Style>
+
+    <Style TargetType="{x:Type TextBlock}">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <Style TargetType="{x:Type Button}">
+        <Setter Property="Height" Value="22"/>
+    </Style>
+
+    <Style TargetType="{x:Type RadioButton}">
+        <Setter Property="Margin" Value="0,0,0,8" />
+    </Style>
+
     <SolidColorBrush x:Key="GlyphBrush" Color="#444"/>
 
 </ResourceDictionary>

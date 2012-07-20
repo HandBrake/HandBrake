@@ -175,5 +175,70 @@ namespace HandBrake.ApplicationServices.Parsing
         {
             return this.SubtitleType == SubtitleType.ForeignAudioSearch ? "Foreign Audio Scan" : string.Format("{0} {1} ({2})", this.TrackNumber, this.Language, this.TypeString);
         }
+
+        /// <summary>
+        /// The equals.
+        /// </summary>
+        /// <param name="other">
+        /// The other.
+        /// </param>
+        /// <returns>
+        /// The System.Boolean.
+        /// </returns>
+        public bool Equals(Subtitle other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+            return other.TrackNumber == this.TrackNumber && object.Equals(other.Language, this.Language) && object.Equals(other.LanguageCode, this.LanguageCode) && object.Equals(other.SubtitleType, this.SubtitleType);
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <returns>
+        /// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
+        /// </returns>
+        /// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>. </param><filterpriority>2</filterpriority>
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+            if (obj.GetType() != typeof(Subtitle))
+            {
+                return false;
+            }
+            return Equals((Subtitle)obj);
+        }
+
+        /// <summary>
+        /// Serves as a hash function for a particular type. 
+        /// </summary>
+        /// <returns>
+        /// A hash code for the current <see cref="T:System.Object"/>.
+        /// </returns>
+        /// <filterpriority>2</filterpriority>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int result = this.TrackNumber;
+                result = (result * 397) ^ (this.Language != null ? this.Language.GetHashCode() : 0);
+                result = (result * 397) ^ (this.LanguageCode != null ? this.LanguageCode.GetHashCode() : 0);
+                result = (result * 397) ^ this.SubtitleType.GetHashCode();
+                return result;
+            }
+        }
     }
 }

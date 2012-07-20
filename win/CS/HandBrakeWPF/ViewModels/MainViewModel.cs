@@ -1114,6 +1114,21 @@ namespace HandBrakeWPF.ViewModels
                 MessageBoxImage.Information);
         }
 
+        /// <summary>
+        /// The debug scan log.
+        /// </summary>
+        public void DebugScanLog()
+        {
+            VistaOpenFileDialog dialog = new VistaOpenFileDialog();
+             
+            dialog.ShowDialog();
+
+            if (File.Exists(dialog.FileName))
+            {
+                this.scanService.DebugScanLog(dialog.FileName);
+            }    
+        }
+
         #endregion
 
         #region Main Window Public Methods
