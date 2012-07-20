@@ -14,10 +14,10 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
 
     using HandBrakeWPF.ViewModels.Interfaces;

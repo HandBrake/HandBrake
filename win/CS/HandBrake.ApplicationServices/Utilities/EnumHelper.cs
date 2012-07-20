@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Functions
+namespace HandBrake.ApplicationServices.Utilities
 {
     using System;
     using System.Collections.Generic;

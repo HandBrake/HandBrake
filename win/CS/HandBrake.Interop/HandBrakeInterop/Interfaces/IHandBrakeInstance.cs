@@ -67,6 +67,12 @@ namespace HandBrake.Interop.Interfaces
         #region Public Methods
 
         /// <summary>
+        /// Initializes this instance.
+        /// </summary>
+        /// <param name="verbosity">The code for the logging verbosity to use.</param>
+        void Initialize(int verbosity);
+
+        /// <summary>
         /// Calculates the video bitrate for the given job and target size.
         /// </summary>
         /// <param name="job">

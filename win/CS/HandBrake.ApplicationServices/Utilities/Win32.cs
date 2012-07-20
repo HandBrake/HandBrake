@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Functions
+namespace HandBrake.ApplicationServices.Utilities
 {
     using System;
     using System.Runtime.InteropServices;
@@ -134,7 +134,7 @@ namespace HandBrake.ApplicationServices.Functions
         /// <summary>
         /// Execution State
         /// </summary>
-        [FlagsAttribute]
+        [Flags]
         public enum EXECUTION_STATE : uint
         {
             ES_SYSTEM_REQUIRED = 0x00000001,

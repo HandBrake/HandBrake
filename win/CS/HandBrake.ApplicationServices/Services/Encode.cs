@@ -15,13 +15,15 @@ namespace HandBrake.ApplicationServices.Services
     using System.Threading;
     using System.Windows.Forms;
 
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.EventArgs;
-    using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Base;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
+
+    using Parser = HandBrake.ApplicationServices.Parsing.Parser;
 
     /// <summary>
     /// Class which handles the CLI
@@ -33,7 +35,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// The User Setting Service
         /// </summary>
-        private IUserSettingService userSettingService = ServiceManager.UserSettingService;
+        private IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
 
         /// <summary>
         /// Gets The Process Handle

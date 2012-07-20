@@ -7,15 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Functions
+namespace HandBrake.ApplicationServices.Utilities
 {
     using System;
     using System.Text.RegularExpressions;
 
+    using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
-
-    using OutputFormat = HandBrake.ApplicationServices.Model.Encoding.OutputFormat;
 
     /// <summary>
     /// A class to convert various things to native C# objects

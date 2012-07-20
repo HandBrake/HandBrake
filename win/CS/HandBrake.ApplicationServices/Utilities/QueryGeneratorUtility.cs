@@ -15,7 +15,8 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Globalization;
     using System.IO;
 
-    using HandBrake.ApplicationServices.Functions;
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -30,7 +31,7 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <summary>
         /// Backing field for the user settings service.
         /// </summary>
-        private static readonly IUserSettingService UserSettingService = ServiceManager.UserSettingService;
+        private static readonly IUserSettingService UserSettingService = IoC.Get<IUserSettingService>();
 
         /// <summary>
         /// Generate a CLI Query for an EncodeTask Model object

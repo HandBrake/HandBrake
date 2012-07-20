@@ -19,7 +19,6 @@ namespace HandBrake.ApplicationServices.Utilities
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
 

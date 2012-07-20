@@ -14,8 +14,8 @@ namespace HandBrakeWPF.Converters
     using System.Windows.Data;
     using System;
 
-    using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
 

@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Functions
+namespace HandBrake.ApplicationServices.Utilities
 {
     using System;
     using System.Collections.Generic;
@@ -17,8 +17,6 @@ namespace HandBrake.ApplicationServices.Functions
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
-
-    using OutputFormat = HandBrake.ApplicationServices.Model.Encoding.OutputFormat;
 
     /// <summary>
     /// A Utility Class to Convert a 

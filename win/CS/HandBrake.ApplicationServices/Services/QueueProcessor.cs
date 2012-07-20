@@ -17,9 +17,9 @@ namespace HandBrake.ApplicationServices.Services
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.EventArgs;
-    using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>
     /// The HandBrake Queue

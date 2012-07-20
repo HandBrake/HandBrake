@@ -13,9 +13,10 @@ namespace HandBrake.ApplicationServices.Services.Base
     using System.IO;
     using System.Text;
 
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Exceptions;
-    using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
@@ -35,7 +36,7 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// <summary>
         /// The User Setting Service
         /// </summary>
-        private IUserSettingService userSettingService = ServiceManager.UserSettingService;
+        private IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
 
         /// <summary>
         /// Windows 7 API Pack wrapper

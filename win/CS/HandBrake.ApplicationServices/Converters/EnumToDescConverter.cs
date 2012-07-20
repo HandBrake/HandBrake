@@ -12,7 +12,7 @@ namespace HandBrake.ApplicationServices.Converters
     using System;
     using System.ComponentModel;
 
-    using HandBrake.ApplicationServices.Functions;
+    using HandBrake.ApplicationServices.Utilities;
 
     /// <summary>
     /// Enum to Description Converter

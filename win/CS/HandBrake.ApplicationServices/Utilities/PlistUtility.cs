@@ -16,7 +16,8 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Windows.Forms;
     using System.Xml;
 
-    using HandBrake.ApplicationServices.Functions;
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services;
@@ -31,7 +32,7 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <summary>
         /// The User Setting Service
         /// </summary>
-        private static IUserSettingService userSettingService = ServiceManager.UserSettingService;
+        private static IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
 
         #region Import
 
