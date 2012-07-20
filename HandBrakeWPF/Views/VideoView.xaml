@@ -50,7 +50,7 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Framerate (FPS):" Width="100"/>
+                    <TextBlock Text="Framerate (FPS):" VerticalAlignment="Top" Margin="0,5,0,0" Width="100"/>
                     <StackPanel Orientation="Vertical">
                         <ComboBox Width="120" ItemsSource="{Binding Framerates}" SelectedItem="{Binding SelectedFramerate}" />
                         <RadioButton Content="Constant Framerate" IsChecked="{Binding IsConstantFramerate}" Margin="0,10,0,0" />

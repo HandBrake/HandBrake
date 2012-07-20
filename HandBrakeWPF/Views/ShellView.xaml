@@ -13,6 +13,7 @@
         SnapsToDevicePixels="True"
         UseLayoutRounding="True"
         WindowStartupLocation="CenterScreen"
+        TextOptions.TextFormattingMode="Display"
         >
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />

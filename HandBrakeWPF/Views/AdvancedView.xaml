@@ -18,13 +18,15 @@
 
         <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement">
             <Setter Property="ToolTipService.ShowDuration" Value="20000" />
+            <Setter Property="Margin" Value="0,2,0,2" />
         </Style>
 
         <Style x:Key="LongToolTip" TargetType="TextBlock">
             <Setter Property="Width" Value="400" />
             <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
-    </UserControl.Resources>
+
+      </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -274,13 +276,10 @@
                             <ColumnDefinition Width="*" MinWidth="100" />
                         </Grid.ColumnDefinitions>
 
-                        <Label Grid.Row="0"
-                               Grid.Column="0"
-                               Content="Adaptive B-Frames:"
+                        <Label Content="Adaptive B-Frames:"
                                Style="{StaticResource AdvancedLabel}"
                                Visibility="{Binding BFramesOptionsVisible,
-                                                    Converter={StaticResource VisibilityConverter}}"
-                               />
+                                                    Converter={StaticResource VisibilityConverter}}" Height="26" VerticalAlignment="Top" />
                         <ComboBox Grid.Row="0"
                                   Grid.Column="1"
                                   Width="120"

@@ -11,6 +11,7 @@ namespace HandBrakeWPF.Services
 {
     using System;
     using System.Management;
+    using System.Threading;
 
     using HandBrakeWPF.Services.Interfaces;
 
@@ -37,28 +38,32 @@ namespace HandBrakeWPF.Services
         /// </param>
         public void StartDetection(Action action)
         {
-            this.detectionAction = action;
-
-            var options = new ConnectionOptions { EnablePrivileges = true };
-            var scope = new ManagementScope(@"root\CIMV2", options);
-
-            try
-            {
-                var query = new WqlEventQuery
+            ThreadPool.QueueUserWorkItem(
+                delegate
                 {
-                    EventClassName = "__InstanceModificationEvent",
-                    WithinInterval = TimeSpan.FromSeconds(1),
-                    Condition = @"TargetInstance ISA 'Win32_LogicalDisk' and TargetInstance.DriveType = 5" // DriveType - 5: CDROM
-                };
+                    this.detectionAction = action;
 
-                this.watcher = new ManagementEventWatcher(scope, query);
-                this.watcher.EventArrived += this.WatcherEventArrived;
-                this.watcher.Start();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+                    var options = new ConnectionOptions { EnablePrivileges = true };
+                    var scope = new ManagementScope(@"root\CIMV2", options);
+
+                    try
+                    {
+                        var query = new WqlEventQuery
+                        {
+                            EventClassName = "__InstanceModificationEvent",
+                            WithinInterval = TimeSpan.FromSeconds(1),
+                            Condition = @"TargetInstance ISA 'Win32_LogicalDisk' and TargetInstance.DriveType = 5" // DriveType - 5: CDROM
+                        };
+
+                        this.watcher = new ManagementEventWatcher(scope, query);
+                        this.watcher.EventArrived += this.WatcherEventArrived;
+                        this.watcher.Start();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                });
         }
 
         /// <summary>
@@ -66,7 +71,10 @@ namespace HandBrakeWPF.Services
         /// </summary>
         public void Close()
         {
-            this.watcher.Stop();
+            if (watcher != null)
+            {
+                this.watcher.Stop();
+            }
         }
 
         /// <summary>
