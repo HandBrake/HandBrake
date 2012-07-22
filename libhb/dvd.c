@@ -641,7 +641,7 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
             goto fail;
     }
 
-    hb_log( "scan: aspect = %g", title->aspect );
+    hb_log( "scan: aspect = %g", title->container_aspect );
 
     /* This title is ok so far */
     goto cleanup;
