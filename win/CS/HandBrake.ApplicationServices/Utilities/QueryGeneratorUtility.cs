@@ -646,38 +646,50 @@ namespace HandBrake.ApplicationServices.Utilities
                 query += " --gain " + audioItems;
 
             // Passthru Settings
-            if (task.AllowedPassthruOptions != null && task.AllowedPassthruOptions.IsEnabled)
+            if (task.AllowedPassthruOptions != null)
             {
                 string fallbackEncoders = string.Empty;
 
-                if (task.AllowedPassthruOptions.AudioAllowAACPass)
+                if (task.AllowedPassthruOptions.AudioAllowAACPass != null && task.AllowedPassthruOptions.AudioAllowAACPass.Value)
                 {
                     fallbackEncoders += "aac";
                 }
 
-                if (task.AllowedPassthruOptions.AudioAllowAC3Pass)
+                if (task.AllowedPassthruOptions.AudioAllowAC3Pass != null && task.AllowedPassthruOptions.AudioAllowAC3Pass.Value)
                 {
                     fallbackEncoders += string.IsNullOrEmpty(fallbackEncoders) ? "ac3" : ",ac3";
                 }
 
-                if (task.AllowedPassthruOptions.AudioAllowDTSHDPass)
+                if (task.AllowedPassthruOptions.AudioAllowDTSHDPass != null && task.AllowedPassthruOptions.AudioAllowDTSHDPass.Value)
                 {
                     fallbackEncoders += string.IsNullOrEmpty(fallbackEncoders) ? "dtshd" : ",dtshd";
                 }
 
-                if (task.AllowedPassthruOptions.AudioAllowDTSPass)
+                if (task.AllowedPassthruOptions.AudioAllowDTSPass != null && task.AllowedPassthruOptions.AudioAllowDTSPass.Value)
                 {
                     fallbackEncoders += string.IsNullOrEmpty(fallbackEncoders) ? "dts" : ",dts";
                 }
 
-                if (task.AllowedPassthruOptions.AudioAllowMP3Pass)
+                if (task.AllowedPassthruOptions.AudioAllowMP3Pass != null && task.AllowedPassthruOptions.AudioAllowMP3Pass.Value)
                 {
                     fallbackEncoders += string.IsNullOrEmpty(fallbackEncoders) ? "mp3" : ",mp3";
                 }
 
                 if (!string.IsNullOrEmpty(fallbackEncoders))
                 {
-                    query += string.Format(" --audio-copy-mask {0}", fallbackEncoders);
+                    // Special Case, The CLI alredy defaults to ALL, so if all area selected, then just set copy-mask to none
+                    if (fallbackEncoders == "aac,ac3,dtshd,dts,mp3")
+                    {
+                        query += string.Format(" --audio-copy-mask none");
+                    }
+                    else
+                    {
+                        query += string.Format(" --audio-copy-mask {0}", fallbackEncoders);
+                    }
+                } 
+                else
+                {
+                    query += string.Format(" --audio-copy-mask none");  
                 }
 
                 query += string.Format(" --audio-fallback {0}", Converters.GetCliAudioEncoder(task.AllowedPassthruOptions.AudioEncoderFallback));
