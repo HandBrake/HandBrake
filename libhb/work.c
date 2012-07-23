@@ -436,7 +436,13 @@ void hb_display_job_info( hb_job_t * job )
 
             hb_log( "   + decoder: %s (track %d, id 0x%x)", audio->config.lang.description, audio->config.in.track + 1, audio->id );
 
-            hb_log( "     + bitrate: %d kbps, samplerate: %d Hz", audio->config.in.bitrate / 1000, audio->config.in.samplerate );
+            if (audio->config.in.bitrate >= 1000)
+                hb_log("     + bitrate: %d kbps, samplerate: %d Hz",
+                       audio->config.in.bitrate / 1000,
+                       audio->config.in.samplerate);
+            else
+                hb_log("     + samplerate: %d Hz",
+                       audio->config.in.samplerate);
 
             if( audio->config.out.codec & HB_ACODEC_PASS_FLAG )
             {
