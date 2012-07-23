@@ -634,11 +634,11 @@ namespace HandBrakeWPF.ViewModels
             }
             set
             {
-                if (!Equals(this.selectedTitle, value))
+                if (!object.Equals(this.selectedTitle, value))
                 {
                     this.selectedTitle = value;
 
-                    if (selectedTitle == null)
+                    if (this.selectedTitle == null)
                     {
                         return;
                     }
@@ -652,7 +652,11 @@ namespace HandBrakeWPF.ViewModels
 
                     // Default the Start and End Point dropdowns
                     this.SelectedStartPoint = 1;
-                    this.SelectedEndPoint = selectedTitle.Chapters.Last().ChapterNumber;
+                    this.SelectedEndPoint = this.selectedTitle.Chapters != null &&
+                                            this.selectedTitle.Chapters.Count != 0
+                                                ? this.selectedTitle.Chapters.Last().ChapterNumber
+                                                : 1;
+
                     this.SelectedPointToPoint = PointToPointMode.Chapters;
                     this.SelectedAngle = 1;
 
@@ -662,7 +666,7 @@ namespace HandBrakeWPF.ViewModels
                     }
                     this.NotifyOfPropertyChange(() => this.CurrentTask);
 
-                    this.Duration = selectedTitle.Duration.ToString();
+                    this.Duration = this.selectedTitle.Duration.ToString();
 
                     // Setup the tab controls
                     this.SetupTabs();

@@ -266,7 +266,7 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <returns>A string representing this track in the format: {title #} (00:00:00)</returns>
         public override string ToString()
         {
-            if (!string.IsNullOrEmpty(this.Playlist))
+            if (!string.IsNullOrEmpty(this.Playlist) && !this.Playlist.StartsWith(" "))
             {
                 this.Playlist = string.Format(" {0}", this.Playlist);
             }
