@@ -104,7 +104,6 @@
     <Compile Include="Utilities\EnumHelper.cs" />
     <Compile Include="Utilities\GrowlCommunicator.cs" />
     <Compile Include="Utilities\InteropModelCreator.cs" />
-    <Compile Include="Utilities\PlistHelper.cs" />
     <Compile Include="Utilities\SystemInfo.cs" />
     <Compile Include="Utilities\Win32.cs" />
     <Compile Include="Utilities\Win7.cs" />
