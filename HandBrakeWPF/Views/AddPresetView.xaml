@@ -10,6 +10,7 @@
         ResizeMode="NoResize"
         SizeToContent="Height"
         WindowStartupLocation="CenterScreen"
+        TextOptions.TextFormattingMode="Display"
         mc:Ignorable="d">
 
     <Window.Resources>

@@ -9,6 +9,7 @@
         MinHeight="380"
         Background="#FFF0F0F0"
         FontSize="11"
+        TextOptions.TextFormattingMode="Display"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>

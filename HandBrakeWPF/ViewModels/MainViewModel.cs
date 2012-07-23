@@ -1232,11 +1232,14 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            this.SelectedPreset.Task = new EncodeTask(this.CurrentTask);
-            this.presetService.Update(this.SelectedPreset);
+            if (this.errorService.ShowMessageBox("Are you sure you wish to update the selected preset?", "Are you sure?", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                this.SelectedPreset.Task = new EncodeTask(this.CurrentTask);
+                this.presetService.Update(this.SelectedPreset);
 
-            this.errorService.ShowMessageBox(
-                    "The Preset has now been updated with your current settings.", "Preset Updated", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.errorService.ShowMessageBox(
+                        "The Preset has now been updated with your current settings.", "Preset Updated", MessageBoxButton.OK, MessageBoxImage.Information);
+            } 
         }
 
         /// <summary>

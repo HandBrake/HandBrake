@@ -6,6 +6,7 @@
         Width="600"
         Height="320"
         ResizeMode="NoResize"
+        TextOptions.TextFormattingMode="Display"
         WindowStartupLocation="CenterScreen">
 
     <Grid>
