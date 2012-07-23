@@ -179,9 +179,6 @@ namespace HandBrakeWPF.ViewModels
                 this.Task.AllowedPassthruOptions = new AllowedPassthru(preset.Task.AllowedPassthruOptions);
             }
             this.NotifyOfPropertyChange(() => this.Task);
-
-            this.Task.AllowedPassthruOptions.IsEnabled =
-                 this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedAudioPassthruOpts);
         }
 
         /// <summary>

@@ -544,6 +544,25 @@ namespace HandBrake.ApplicationServices.Utilities
         }
 
         /// <summary>
+        /// The get null bool value.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <returns>
+        /// The System.String.
+        /// </returns>
+        private static string getNullBoolValue(bool? value)
+        {
+            if (!value.HasValue)
+            {
+                return "1";
+            }
+
+            return value.Value ? "1" : "0";
+        }
+
+        /// <summary>
         /// Add the encode settings to the preset
         /// </summary>
         /// <param name="xmlWriter">
@@ -557,11 +576,11 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </param>
         private static void AddEncodeSettings(XmlTextWriter xmlWriter, EncodeTask parsed, Preset preset)
         {
-            AddEncodeElement(xmlWriter, "AudioAllowAACPass", "integer", parsed.AllowedPassthruOptions.AudioAllowAACPass ? "1" : "0");
-            AddEncodeElement(xmlWriter, "AudioAllowAC3Pass", "integer", parsed.AllowedPassthruOptions.AudioAllowAC3Pass ? "1" : "0");
-            AddEncodeElement(xmlWriter, "AudioAllowDTSHDPass", "integer", parsed.AllowedPassthruOptions.AudioAllowDTSHDPass ? "1" : "0");
-            AddEncodeElement(xmlWriter, "AudioAllowDTSPass", "integer", parsed.AllowedPassthruOptions.AudioAllowDTSPass ? "1" : "0");
-            AddEncodeElement(xmlWriter, "AudioAllowMP3Pass", "integer", parsed.AllowedPassthruOptions.AudioAllowMP3Pass ? "1" : "0");
+            AddEncodeElement(xmlWriter, "AudioAllowAACPass", "integer", getNullBoolValue(parsed.AllowedPassthruOptions.AudioAllowAACPass));
+            AddEncodeElement(xmlWriter, "AudioAllowAC3Pass", "integer", getNullBoolValue(parsed.AllowedPassthruOptions.AudioAllowAC3Pass));
+            AddEncodeElement(xmlWriter, "AudioAllowDTSHDPass", "integer", getNullBoolValue(parsed.AllowedPassthruOptions.AudioAllowDTSHDPass));
+            AddEncodeElement(xmlWriter, "AudioAllowDTSPass", "integer", getNullBoolValue(parsed.AllowedPassthruOptions.AudioAllowDTSPass));
+            AddEncodeElement(xmlWriter, "AudioAllowMP3Pass", "integer", getNullBoolValue(parsed.AllowedPassthruOptions.AudioAllowMP3Pass));
             AddEncodeElement(xmlWriter, "AudioEncoderFallback", "string", EnumHelper<AudioEncoder>.GetDisplay(parsed.AllowedPassthruOptions.AudioEncoderFallback));
 
             AddEncodeElement(xmlWriter, "ChapterMarkers", "integer", parsed.IncludeChapterMarkers ? "1" : "0");

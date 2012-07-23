@@ -57,6 +57,16 @@ namespace HandBrakeWPF.Converters.Audio
                     encoders.Remove(AudioEncoder.ffflac);
                 }
 
+                if (parameter != null && parameter.ToString() == "True")
+                {
+                    encoders.Remove(AudioEncoder.DtsHDPassthrough);
+                    encoders.Remove(AudioEncoder.DtsPassthrough);
+                    encoders.Remove(AudioEncoder.AacPassthru);
+                    encoders.Remove(AudioEncoder.Ac3Passthrough);
+                    encoders.Remove(AudioEncoder.Mp3Passthru);
+                    encoders.Remove(AudioEncoder.Passthrough);
+                }
+
                 return EnumHelper<AudioEncoder>.GetEnumDisplayValuesSubset(encoders);
             }
 

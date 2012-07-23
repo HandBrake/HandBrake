@@ -48,33 +48,41 @@
                         Orientation="Horizontal"
                         Visibility="{Binding ShowPassthruOptions,
                                              Converter={StaticResource boolToVisConverter}}">
-                <TextBlock Margin="5,0,5,0" Text="Auto Passthru:" />
+                <TextBlock Margin="5,0,5,0" Text="Auto Passthru:" VerticalAlignment="Center" />
                 <CheckBox Margin="0,0,5,0"
-                          Content="MP3"
+                          Content="MP3" VerticalAlignment="Center"    
                           IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowMP3Pass}" />
                 <CheckBox Margin="0,0,5,0"
-                          Content="AAC"
+                          Content="AAC" VerticalAlignment="Center"
                           IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowAACPass}" />
                 <CheckBox Margin="0,0,5,0"
-                          Content="AC3"
+                          Content="AC3" VerticalAlignment="Center"
                           IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowAC3Pass}" />
                 <CheckBox Margin="0,0,5,0"
-                          Content="DTS"
+                          Content="DTS" VerticalAlignment="Center"
                           IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowDTSPass}" />
                 <CheckBox Margin="0,0,5,0"
-                          Content="DTSHD"
+                          Content="DTSHD" VerticalAlignment="Center"
                           IsChecked="{Binding Task.AllowedPassthruOptions.AudioAllowDTSHDPass}" />
                 <TextBlock Margin="5,0,5,0" Text="Fallback:" />
-                <ComboBox Grid.Column="3"
-                          Width="100"
-                          Height="22"
-                          Margin="10,0,5,0"
-                          ItemsSource="{Binding DataContext.AudioEncoders,
-                                                Converter={StaticResource enumComboConverter},
-                                                RelativeSource={RelativeSource FindAncestor,
-                                                                               AncestorType={x:Type UserControl}}}"
-                          SelectedItem="{Binding Task.AllowedPassthruOptions.AudioEncoderFallback,
-                                                 Converter={StaticResource enumComboConverter}}" />
+
+                <ComboBox Grid.Column="3" VerticalAlignment="Center"
+                                      Width="100"
+                                      Height="22"
+                                      Margin="10,0,5,0">
+                    <ComboBox.SelectedItem>
+                        <MultiBinding Converter="{StaticResource audioEncoderConverter}">
+                            <Binding Path="Task.AllowedPassthruOptions.AudioEncoderFallback" />
+                        </MultiBinding>
+                    </ComboBox.SelectedItem>
+                    <ComboBox.ItemsSource>
+                        <MultiBinding Converter="{StaticResource audioEncoderConverter}" ConverterParameter="True">
+                            <Binding Path="DataContext.AudioEncoders" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
+                            <Binding Path="DataContext.Task" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type UserControl}}" />
+                        </MultiBinding>
+                    </ComboBox.ItemsSource>
+                </ComboBox>
+
             </StackPanel>
 
         </Grid>

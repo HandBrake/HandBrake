@@ -321,7 +321,7 @@ namespace HandBrake.ApplicationServices.Services
                                     Task = QueryParserUtility.Parse(presetName[2])
                                 };
 
-                            newPreset.Task.AllowedPassthruOptions = new AllowedPassthru(false); // We don't want to override the built-in preset
+                            newPreset.Task.AllowedPassthruOptions = new AllowedPassthru(true); // We don't want to override the built-in preset
                             
                             if (newPreset.Name == "Normal")
                             {
