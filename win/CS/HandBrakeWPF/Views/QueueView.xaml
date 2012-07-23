@@ -17,6 +17,7 @@
         MaxWidth="600"
         Background="#FFF0F0F0"
         WindowStartupLocation="CenterScreen"
+        TextOptions.TextFormattingMode="Display"
         mc:Ignorable="d">
 
     <Window.Resources>

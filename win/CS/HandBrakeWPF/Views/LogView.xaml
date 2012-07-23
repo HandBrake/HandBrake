@@ -3,11 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:cal="http://www.caliburnproject.org"
         Title="{Binding Title}"
-        Width="500"
+        Width="525"
         Height="600"
-        MinWidth="500"
+        MinWidth="525"
         MinHeight="600"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        TextOptions.TextFormattingMode="Display">
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
@@ -25,15 +26,16 @@
                            VerticalAlignment="Center"
                            FontWeight="Bold"
                            Text="Choose Log:" />
-                <ComboBox Width="100"
-                          HorizontalAlignment="Right"
+                <ComboBox Width="120
+                          " Margin="0,0,10,0" Background="LightSteelBlue" Height="22" FontWeight="Black"
+                          HorizontalAlignment="Right" VerticalAlignment="Center"
                           ItemsSource="{Binding LogModes}"
                           SelectedIndex="{Binding SelectedMode}"
                           />
                 
                 <Separator />
                 
-                <Button cal:Message.Attach="[Event Click] = [Action CopyLog]">
+                <Button cal:Message.Attach="[Event Click] = [Action CopyLog]" Margin="10,0,0,0">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Source="Images/copy.png" />
                         <TextBlock Margin="2,0,0,0" Text="Copy to clipboard" />
