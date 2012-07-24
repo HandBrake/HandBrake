@@ -193,8 +193,6 @@ static int MKVInit( hb_mux_object_t * m )
 
     mux_data->track = mk_createTrack(m->file, track);
 
-    memset(track, 0, sizeof(mk_TrackConfig));
-
     /* add the audio tracks */
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
@@ -204,6 +202,7 @@ static int MKVInit( hb_mux_object_t * m )
 
         mux_data->codec = audio->config.out.codec;
 
+        memset(track, 0, sizeof(mk_TrackConfig));
         switch (audio->config.out.codec & HB_ACODEC_MASK)
         {
             case HB_ACODEC_DCA:
