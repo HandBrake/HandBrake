@@ -727,6 +727,11 @@ namespace HandBrakeWPF.ViewModels
                 this.Width = title.Resolution.Width;
                 this.Height = title.Resolution.Height;
                 this.MaintainAspectRatio = true;
+
+                if (this.SelectedAnamorphicMode == Anamorphic.Custom)
+                {
+                    AnamorphicAdjust(); // Refresh the values
+                }
             }
 
             this.NotifyOfPropertyChange(() => this.Task);
@@ -794,10 +799,10 @@ namespace HandBrakeWPF.ViewModels
                     this.WidthControlEnabled = true;
                     this.HeightControlEnabled = true;
                     this.ShowCustomAnamorphicControls = true;
+                    this.MaintainAspectRatio = true;
                     this.ShowModulus = true;
 
                     this.Width = this.sourceResolution.Width;
-                    this.Height = 0;
                     this.NotifyOfPropertyChange(() => this.Width);
                     this.NotifyOfPropertyChange(() => this.Height);
 
