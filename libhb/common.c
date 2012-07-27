@@ -1634,7 +1634,7 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg)
     audiocfg->out.bitrate = -1;
     audiocfg->out.quality = HB_INVALID_AUDIO_QUALITY;
     audiocfg->out.compression_level = -1;
-    audiocfg->out.mixdown = -1;
+    audiocfg->out.mixdown = HB_INVALID_AMIXDOWN;
     audiocfg->out.dynamic_range_compression = 0;
     audiocfg->out.gain = 0;
     audiocfg->out.name = NULL;

@@ -434,6 +434,8 @@ struct hb_audio_config_s
     {
         enum
         {
+            // make sure audio->config.out.mixdown isn't treated as unsigned
+            HB_INVALID_AMIXDOWN = -1,
             HB_AMIXDOWN_NONE = 0,
             HB_AMIXDOWN_MONO,
             HB_AMIXDOWN_STEREO,
