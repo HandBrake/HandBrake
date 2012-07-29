@@ -1683,7 +1683,7 @@ ghb_grey_combo_options(signal_user_data_t *ud)
 		fallback = ghb_settings_combo_int(ud->settings, "AudioEncoderFallback");
 		gint copy_mask = ghb_get_copy_mask(ud->settings);
 		acodec = ghb_select_audio_codec(mux, aconfig, acodec, fallback, copy_mask);
-		gint best = hb_get_best_mixdown(acodec, aconfig->in.channel_layout, 0);
+		gint best = hb_get_best_mixdown(acodec, aconfig->in.channel_layout, HB_INVALID_AMIXDOWN);
 
 		allow_stereo = best >= HB_AMIXDOWN_STEREO;
 		allow_dolby = best >= HB_AMIXDOWN_DOLBY;
@@ -4479,7 +4479,7 @@ ghb_validate_audio(GValue *settings)
 		gboolean allow_6ch = TRUE;
 		allow_mono = TRUE;
 
-		gint best = hb_get_best_mixdown(codec, aconfig->in.channel_layout, 0);
+		gint best = hb_get_best_mixdown(codec, aconfig->in.channel_layout, HB_INVALID_AMIXDOWN);
 
 		allow_stereo = best >= HB_AMIXDOWN_STEREO;
 		allow_dolby = best >= HB_AMIXDOWN_DOLBY;

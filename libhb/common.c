@@ -761,8 +761,8 @@ int hb_get_best_mixdown(uint32_t codec, uint64_t layout, int mixdown)
     }
 
     // return the best that is not greater than the requested mixdown
-    // 0 means the caller requested the best available mixdown
-    if (best_mixdown > mixdown && mixdown > 0)
+    // HB_INVALID_AMIXDOWN means the caller requested the best available mixdown
+    if (best_mixdown > mixdown && mixdown != HB_INVALID_AMIXDOWN)
         best_mixdown = mixdown;
 
     return best_mixdown;
@@ -1681,7 +1681,7 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
         /* Pass-through, copy from input. */
         audio->config.out.samplerate = audio->config.in.samplerate;
         audio->config.out.bitrate = audio->config.in.bitrate;
-        audio->config.out.mixdown = 0;
+        audio->config.out.mixdown = HB_AMIXDOWN_NONE;
         audio->config.out.dynamic_range_compression = 0;
         audio->config.out.gain = 0;
         audio->config.out.compression_level = -1;

@@ -817,7 +817,7 @@ static void do_job( hb_job_t * job )
         audio = hb_list_item( title->list_audio, i );
 
         /* sense-check the requested mixdown */
-        if( audio->config.out.mixdown <= 0 &&
+        if( audio->config.out.mixdown <= HB_AMIXDOWN_NONE &&
             !( audio->config.out.codec & HB_ACODEC_PASS_FLAG ) )
         {
             /*
@@ -845,10 +845,11 @@ static void do_job( hb_job_t * job )
             }
         }
 
-        best_mixdown = hb_get_best_mixdown( audio->config.out.codec,
-                                            audio->config.in.channel_layout, 0 );
+        best_mixdown = hb_get_best_mixdown(audio->config.out.codec,
+                                           audio->config.in.channel_layout,
+                                           audio->config.out.mixdown);
 
-        if ( audio->config.out.mixdown > best_mixdown )
+        if (audio->config.out.mixdown != best_mixdown)
         {
             audio->config.out.mixdown = best_mixdown;
         }

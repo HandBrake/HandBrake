@@ -231,7 +231,7 @@ static NSMutableArray *masterBitRateArray = nil;
     unsigned int count = [masterMixdownArray count];
     int codecCodec = [[codec objectForKey: keyAudioCodec] intValue];
     int theDefaultMixdown = hb_get_default_mixdown(codecCodec, channelLayout);
-    int theBestMixdown = hb_get_best_mixdown(codecCodec, channelLayout, 0);
+    int theBestMixdown = hb_get_best_mixdown(codecCodec, channelLayout, HB_INVALID_AMIXDOWN);
 
     for (unsigned int i = 0; i < count; i++)
     {
