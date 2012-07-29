@@ -806,8 +806,6 @@ static void do_job( hb_job_t * job )
             audio->config.out.track = ++i;
         }
 
-        int requested_mixdown = 0;
-        int requested_mixdown_index = 0;
         int best_mixdown = 0;
         int best_bitrate = 0;
 
@@ -847,40 +845,32 @@ static void do_job( hb_job_t * job )
                     }
                 }
             }
-
-            /* log the requested mixdown */
-            for (j = 0; j < hb_audio_mixdowns_count; j++)
+            else
             {
-                if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown)
+                best_mixdown = hb_get_best_mixdown(audio->config.out.codec,
+                                                   audio->config.in.channel_layout,
+                                                   audio->config.out.mixdown);
+
+                if (audio->config.out.mixdown != best_mixdown)
                 {
-                    requested_mixdown = audio->config.out.mixdown;
-                    requested_mixdown_index = j;
-                    break;
-                }
-            }
-
-            best_mixdown = hb_get_best_mixdown(audio->config.out.codec,
-                                               audio->config.in.channel_layout,
-                                               audio->config.out.mixdown);
-
-            if (audio->config.out.mixdown != best_mixdown)
-            {
-                audio->config.out.mixdown = best_mixdown;
-            }
-
-            if (audio->config.out.mixdown != requested_mixdown)
-            {
-                /* log the output mixdown */
-                for (j = 0; j < hb_audio_mixdowns_count; j++)
-                {
-                    if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown)
+                    int prev_mix_idx = 0, best_mix_idx = 0;
+                    for (j = 0; j < hb_audio_mixdowns_count; j++)
                     {
-                        hb_log("work: sanitizing track %i mixdown %s to %s",
-                               audio->config.out.track,
-                               hb_audio_mixdowns[requested_mixdown_index].human_readable_name,
-                               hb_audio_mixdowns[j].human_readable_name);
-                        break;
+                        if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown)
+                        {
+                            prev_mix_idx = j;
+                        }
+                        else if (hb_audio_mixdowns[j].amixdown == best_mixdown)
+                        {
+                            best_mix_idx = j;
+                        }
                     }
+                    /* log the output mixdown */
+                    hb_log("work: sanitizing track %i mixdown %s to %s",
+                           audio->config.out.track,
+                           hb_audio_mixdowns[prev_mix_idx].human_readable_name,
+                           hb_audio_mixdowns[best_mix_idx].human_readable_name);
+                    audio->config.out.mixdown = best_mixdown;
                 }
             }
 
@@ -896,8 +886,7 @@ static void do_job( hb_job_t * job )
                            audio->config.out.compression_level);
                 }
             }
-
-            if (audio->config.out.compression_level >= 0)
+            else
             {
                 float best_compression =
                     hb_get_best_audio_compression(audio->config.out.codec,
@@ -961,22 +950,24 @@ static void do_job( hb_job_t * job )
                                audio->config.out.bitrate);
                     }
                 }
-
-                best_bitrate =
-                    hb_get_best_audio_bitrate(audio->config.out.codec,
-                                              audio->config.out.bitrate,
-                                              audio->config.out.samplerate,
-                                              audio->config.out.mixdown);
-
-                if (best_bitrate > 0 &&
-                    best_bitrate != audio->config.out.bitrate)
+                else
                 {
-                    /* log the output bitrate */
-                    hb_log("work: sanitizing track %d bitrate %d to %d",
-                           audio->config.out.track, audio->config.out.bitrate,
-                           best_bitrate);
+                    best_bitrate =
+                        hb_get_best_audio_bitrate(audio->config.out.codec,
+                                                  audio->config.out.bitrate,
+                                                  audio->config.out.samplerate,
+                                                  audio->config.out.mixdown);
+
+                    if (best_bitrate > 0 &&
+                        best_bitrate != audio->config.out.bitrate)
+                    {
+                        /* log the output bitrate */
+                        hb_log("work: sanitizing track %d bitrate %d to %d",
+                               audio->config.out.track,
+                               audio->config.out.bitrate, best_bitrate);
+                    }
+                    audio->config.out.bitrate = best_bitrate;
                 }
-                audio->config.out.bitrate = best_bitrate;
             }
         }
     }
