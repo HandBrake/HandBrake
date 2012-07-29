@@ -749,237 +749,238 @@ static void do_job( hb_job_t * job )
     job->fifo_render = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
     job->fifo_mpeg4  = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
 
-    /*
-     * Audio fifos must be initialized before sync
-     */
+    /* Audio fifos must be initialized before sync */
     if (!job->indepth_scan)
     {
-    // apply Auto Passthru settings
-    hb_autopassthru_apply_settings(job, title);
-    // sanitize audio settings
-    for (i = 0; i < hb_list_count(title->list_audio);)
-    {
-        audio = hb_list_item(title->list_audio, i);
-        if (audio->config.out.codec == HB_ACODEC_AUTO_PASS)
+        // apply Auto Passthru settings
+        hb_autopassthru_apply_settings(job, title);
+        // sanitize audio settings
+        for (i = 0; i < hb_list_count(title->list_audio);)
         {
-            // Auto Passthru should have been handled above
-            // remove track to avoid a crash
-            hb_log("Auto Passthru error, dropping track %d",
-                   audio->config.out.track);
-            hb_list_rem(title->list_audio, audio);
-            free(audio);
-            continue;
-        }
-        if ((audio->config.out.codec & HB_ACODEC_PASS_FLAG) &&
-            !(audio->config.in.codec & audio->config.out.codec & HB_ACODEC_PASS_MASK))
-        {
-            hb_log("Passthru requested and input codec is not the same as output codec for track %d, dropping track",
-                   audio->config.out.track);
-            hb_list_rem(title->list_audio, audio);
-            free(audio);
-            continue;
-        }
-        if (!(audio->config.out.codec & HB_ACODEC_PASS_FLAG))
-        {
-            if (audio->config.out.samplerate < 0)
+            audio = hb_list_item(title->list_audio, i);
+            if (audio->config.out.codec == HB_ACODEC_AUTO_PASS)
             {
-                // if not specified, set to same as input
-                audio->config.out.samplerate = audio->config.in.samplerate;
+                // Auto Passthru should have been handled above
+                // remove track to avoid a crash
+                hb_log("Auto Passthru error, dropping track %d",
+                       audio->config.out.track);
+                hb_list_rem(title->list_audio, audio);
+                free(audio);
+                continue;
             }
-            if (audio->config.out.samplerate > 48000)
+            if ((audio->config.out.codec & HB_ACODEC_PASS_FLAG) &&
+                !(audio->config.in.codec &
+                  audio->config.out.codec & HB_ACODEC_PASS_MASK))
             {
-                hb_log("Sample rate %d not supported. Downsampling to 48kHz for track %d",
-                       audio->config.out.samplerate, audio->config.out.track);
-                audio->config.out.samplerate = 48000;
+                hb_log("Passthru requested and input codec is not the same as output codec for track %d, dropping track",
+                       audio->config.out.track);
+                hb_list_rem(title->list_audio, audio);
+                free(audio);
+                continue;
             }
-            else if (audio->config.out.samplerate < 32000 &&
-                     audio->config.out.codec == HB_ACODEC_CA_HAAC)
+            if (!(audio->config.out.codec & HB_ACODEC_PASS_FLAG))
             {
-                // Core Audio HE-AAC doesn't support samplerates < 32 kHz
-                hb_log("Sample rate %d not supported (ca_haac). Using 32kHz for track %d",
-                       audio->config.out.samplerate, audio->config.out.track);
-                audio->config.out.samplerate = 32000;
+                if (audio->config.out.samplerate < 0)
+                {
+                    // if not specified, set to same as input
+                    audio->config.out.samplerate = audio->config.in.samplerate;
+                }
+                if (audio->config.out.samplerate > 48000)
+                {
+                    hb_log("Sample rate %d not supported. Downsampling to 48kHz for track %d",
+                           audio->config.out.samplerate, audio->config.out.track);
+                    audio->config.out.samplerate = 48000;
+                }
+                else if (audio->config.out.samplerate < 32000 &&
+                         audio->config.out.codec == HB_ACODEC_CA_HAAC)
+                {
+                    // Core Audio HE-AAC doesn't support samplerates < 32 kHz
+                    hb_log("Sample rate %d not supported (ca_haac). Using 32kHz for track %d",
+                           audio->config.out.samplerate, audio->config.out.track);
+                    audio->config.out.samplerate = 32000;
+                }
             }
+            /* Adjust output track number, in case we removed one.
+             * Output tracks sadly still need to be in sequential order.
+             * Note: out.track starts at 1, i starts at 0 */
+            audio->config.out.track = ++i;
         }
-        /* Adjust output track number, in case we removed one.
-         * Output tracks sadly still need to be in sequential order.
-         * Note: out.track starts at 1, i starts at 0 */
-        audio->config.out.track = ++i;
-    }
 
-    int requested_mixdown = 0;
-    int requested_mixdown_index = 0;
-    int best_mixdown = 0;
-    int best_bitrate = 0;
+        int requested_mixdown = 0;
+        int requested_mixdown_index = 0;
+        int best_mixdown = 0;
+        int best_bitrate = 0;
 
-    for( i = 0; i < hb_list_count( title->list_audio ); i++ )
-    {
-        audio = hb_list_item( title->list_audio, i );
-
-        /* set up the audio work structures */
-        audio->priv.fifo_raw  = hb_fifo_init(FIFO_SMALL, FIFO_SMALL_WAKE);
-        audio->priv.fifo_sync = hb_fifo_init(FIFO_SMALL, FIFO_SMALL_WAKE);
-        audio->priv.fifo_out  = hb_fifo_init(FIFO_LARGE, FIFO_LARGE_WAKE);
-        audio->priv.fifo_in   = hb_fifo_init(FIFO_LARGE, FIFO_LARGE_WAKE);
-
-        /* Passthru audio, nothing to sanitize here */
-        if (audio->config.out.codec & HB_ACODEC_PASS_FLAG)
-            continue;
-
-        /* Vorbis language information */
-        if (audio->config.out.codec == HB_ACODEC_VORBIS)
-            audio->priv.config.vorbis.language = audio->config.lang.simple;
-
-        /* sense-check the requested mixdown */
-        if (audio->config.out.mixdown <= HB_AMIXDOWN_NONE)
+        for (i = 0; i < hb_list_count(title->list_audio); i++)
         {
-            /*
-             * Mixdown wasn't specified and this is not pass-through,
-             * set a default mixdown
-             */
-            audio->config.out.mixdown = hb_get_default_mixdown( audio->config.out.codec,
-                                                                audio->config.in.channel_layout );
+            audio = hb_list_item(title->list_audio, i);
+
+            /* set up the audio work structures */
+            audio->priv.fifo_raw  = hb_fifo_init(FIFO_SMALL, FIFO_SMALL_WAKE);
+            audio->priv.fifo_sync = hb_fifo_init(FIFO_SMALL, FIFO_SMALL_WAKE);
+            audio->priv.fifo_out  = hb_fifo_init(FIFO_LARGE, FIFO_LARGE_WAKE);
+            audio->priv.fifo_in   = hb_fifo_init(FIFO_LARGE, FIFO_LARGE_WAKE);
+
+            /* Passthru audio, nothing to sanitize here */
+            if (audio->config.out.codec & HB_ACODEC_PASS_FLAG)
+                continue;
+
+            /* Vorbis language information */
+            if (audio->config.out.codec == HB_ACODEC_VORBIS)
+                audio->priv.config.vorbis.language = audio->config.lang.simple;
+
+            /* sense-check the requested mixdown */
+            if (audio->config.out.mixdown <= HB_AMIXDOWN_NONE)
+            {
+                /* Mixdown not specified, set the default mixdown */
+                audio->config.out.mixdown =
+                    hb_get_default_mixdown(audio->config.out.codec,
+                                           audio->config.in.channel_layout);
+                for (j = 0; j < hb_audio_mixdowns_count; j++)
+                {
+                    if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown)
+                    {
+                        hb_log("work: mixdown not specified, track %i setting mixdown %s",
+                               audio->config.out.track,
+                               hb_audio_mixdowns[j].human_readable_name);
+                        break;
+                    }
+                }
+            }
+
+            /* log the requested mixdown */
             for (j = 0; j < hb_audio_mixdowns_count; j++)
             {
                 if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown)
                 {
-                    hb_log("work: mixdown not specified, track %i setting mixdown %s", audio->config.out.track, hb_audio_mixdowns[j].human_readable_name);
+                    requested_mixdown = audio->config.out.mixdown;
+                    requested_mixdown_index = j;
                     break;
                 }
             }
-        }
 
-        /* log the requested mixdown */
-        for (j = 0; j < hb_audio_mixdowns_count; j++) {
-            if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown) {
-                requested_mixdown = audio->config.out.mixdown;
-                requested_mixdown_index = j;
-                break;
-            }
-        }
+            best_mixdown = hb_get_best_mixdown(audio->config.out.codec,
+                                               audio->config.in.channel_layout,
+                                               audio->config.out.mixdown);
 
-        best_mixdown = hb_get_best_mixdown(audio->config.out.codec,
-                                           audio->config.in.channel_layout,
-                                           audio->config.out.mixdown);
+            if (audio->config.out.mixdown != best_mixdown)
+            {
+                audio->config.out.mixdown = best_mixdown;
+            }
 
-        if (audio->config.out.mixdown != best_mixdown)
-        {
-            audio->config.out.mixdown = best_mixdown;
-        }
+            if (audio->config.out.mixdown != requested_mixdown)
+            {
+                /* log the output mixdown */
+                for (j = 0; j < hb_audio_mixdowns_count; j++)
+                {
+                    if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown)
+                    {
+                        hb_log("work: sanitizing track %i mixdown %s to %s",
+                               audio->config.out.track,
+                               hb_audio_mixdowns[requested_mixdown_index].human_readable_name,
+                               hb_audio_mixdowns[j].human_readable_name);
+                        break;
+                    }
+                }
+            }
 
-        if ( audio->config.out.mixdown != requested_mixdown )
-        {
-            /* log the output mixdown */
-            for (j = 0; j < hb_audio_mixdowns_count; j++)
+            /* sense-check the requested compression level */
+            if (audio->config.out.compression_level < 0)
             {
-                if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown)
+                audio->config.out.compression_level =
+                    hb_get_default_audio_compression(audio->config.out.codec);
+                if (audio->config.out.compression_level >= 0)
                 {
-                    hb_log("work: sanitizing track %i mixdown %s to %s", 
-                        audio->config.out.track, 
-                        hb_audio_mixdowns[requested_mixdown_index].human_readable_name, 
-                        hb_audio_mixdowns[j].human_readable_name);
-                    break;
+                    hb_log("work: compression level not specified, track %d setting compression level %.2f",
+                           audio->config.out.track,
+                           audio->config.out.compression_level);
                 }
             }
-        }
-        
-        /* sense-check the requested compression level */
-        if( audio->config.out.compression_level < 0 )
-        {
-            audio->config.out.compression_level =
-                hb_get_default_audio_compression( audio->config.out.codec );
-            if( audio->config.out.compression_level >= 0 )
-            {
-                hb_log( "work: compression level not specified, track %d setting compression level %.2f",
-                    audio->config.out.track, audio->config.out.compression_level );
-            }
-        }
 
-        if( audio->config.out.compression_level >= 0 )
-        {
-            float best_compression = hb_get_best_audio_compression( 
-                                        audio->config.out.codec, 
-                                        audio->config.out.compression_level );
-            if( best_compression != audio->config.out.compression_level )
+            if (audio->config.out.compression_level >= 0)
             {
-                if( best_compression == -1 )
+                float best_compression =
+                    hb_get_best_audio_compression(audio->config.out.codec,
+                                                  audio->config.out.compression_level);
+                if (best_compression != audio->config.out.compression_level)
                 {
-                    hb_log( "work: compression levels not supported by codec" );
-                }
-                else
-                {
-                    hb_log( "work: sanitizing track %d audio compression level %.2f to %.2f", 
-                            audio->config.out.track,
-                            audio->config.out.compression_level,
-                            best_compression );
-                }
-                audio->config.out.compression_level = best_compression;
-            }
-        }
-        
-        /* sense-check the requested quality */
-        if( audio->config.out.quality != HB_INVALID_AUDIO_QUALITY )
-        {
-            float best_quality = hb_get_best_audio_quality( 
-                    audio->config.out.codec, audio->config.out.quality );
-            if( best_quality != audio->config.out.quality )
-            {
-                if( best_quality == HB_INVALID_AUDIO_QUALITY )
-                {
-                    hb_log( "work: quality mode not supported by codec" );
-                }
-                else
-                {
-                    hb_log( "work: sanitizing track %d audio quality %.2f to %.2f", 
-                            audio->config.out.track,
-                            audio->config.out.quality,
-                            best_quality );
-                }
-                audio->config.out.quality = best_quality;
-            }
-        }
-        
-        /* sense-check the requested bitrate */
-        if( audio->config.out.quality == HB_INVALID_AUDIO_QUALITY )
-        {
-            if( audio->config.out.bitrate <= 0 )
-            {
-                /*
-                 * Bitrate wasn't specified and this is not pass-through,
-                 * set a default bitrate
-                 */
-                audio->config.out.bitrate = 
-                    hb_get_default_audio_bitrate( audio->config.out.codec,
-                                                  audio->config.out.samplerate,
-                                                  audio->config.out.mixdown );
-                
-                if( audio->config.out.bitrate > 0 )
-                {
-                    hb_log( "work: bitrate not specified, track %d setting bitrate %d",
-                        audio->config.out.track, audio->config.out.bitrate );
+                    if (best_compression == -1)
+                    {
+                        hb_log("work: track %d, compression level not supported by codec",
+                               audio->config.out.track);
+                    }
+                    else
+                    {
+                        hb_log("work: sanitizing track %d compression level %.2f to %.2f",
+                               audio->config.out.track,
+                               audio->config.out.compression_level,
+                               best_compression);
+                    }
+                    audio->config.out.compression_level = best_compression;
                 }
             }
-            
-            /* log the requested bitrate */
-            best_bitrate = hb_get_best_audio_bitrate( audio->config.out.codec, 
-                                                      audio->config.out.bitrate,
-                                                      audio->config.out.samplerate,
-                                                      audio->config.out.mixdown );
-            
-            if ( audio->config.out.bitrate != best_bitrate && 
-                 best_bitrate > 0 )
+
+            /* sense-check the requested quality */
+            if (audio->config.out.quality != HB_INVALID_AUDIO_QUALITY)
             {
-                /* log the output bitrate */
-                hb_log( "work: sanitizing track %d audio bitrate %d to %d", 
-                        audio->config.out.track,
-                        audio->config.out.bitrate,
-                        best_bitrate );
+                float best_quality =
+                    hb_get_best_audio_quality(audio->config.out.codec,
+                                              audio->config.out.quality);
+                if (best_quality != audio->config.out.quality)
+                {
+                    if (best_quality == HB_INVALID_AUDIO_QUALITY)
+                    {
+                        hb_log("work: track %d, quality mode not supported by codec",
+                               audio->config.out.track);
+                    }
+                    else
+                    {
+                        hb_log("work: sanitizing track %d quality %.2f to %.2f",
+                               audio->config.out.track,
+                               audio->config.out.quality, best_quality);
+                    }
+                    audio->config.out.quality = best_quality;
+                }
             }
-            audio->config.out.bitrate = best_bitrate;
+
+            /* sense-check the requested bitrate */
+            if (audio->config.out.quality == HB_INVALID_AUDIO_QUALITY)
+            {
+                if (audio->config.out.bitrate <= 0)
+                {
+                    /* Bitrate not specified, set the default bitrate */
+                    audio->config.out.bitrate = 
+                        hb_get_default_audio_bitrate(audio->config.out.codec,
+                                                     audio->config.out.samplerate,
+                                                     audio->config.out.mixdown);
+
+                    if (audio->config.out.bitrate > 0)
+                    {
+                        hb_log("work: bitrate not specified, track %d setting bitrate %d",
+                               audio->config.out.track,
+                               audio->config.out.bitrate);
+                    }
+                }
+
+                best_bitrate =
+                    hb_get_best_audio_bitrate(audio->config.out.codec,
+                                              audio->config.out.bitrate,
+                                              audio->config.out.samplerate,
+                                              audio->config.out.mixdown);
+
+                if (best_bitrate > 0 &&
+                    best_bitrate != audio->config.out.bitrate)
+                {
+                    /* log the output bitrate */
+                    hb_log("work: sanitizing track %d bitrate %d to %d",
+                           audio->config.out.track, audio->config.out.bitrate,
+                           best_bitrate);
+                }
+                audio->config.out.bitrate = best_bitrate;
+            }
         }
     }
 
-    }
     /* Synchronization */
     sync = hb_sync_init( job );
 
