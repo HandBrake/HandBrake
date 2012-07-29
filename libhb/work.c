@@ -816,9 +816,22 @@ static void do_job( hb_job_t * job )
     {
         audio = hb_list_item( title->list_audio, i );
 
+        /* set up the audio work structures */
+        audio->priv.fifo_raw  = hb_fifo_init(FIFO_SMALL, FIFO_SMALL_WAKE);
+        audio->priv.fifo_sync = hb_fifo_init(FIFO_SMALL, FIFO_SMALL_WAKE);
+        audio->priv.fifo_out  = hb_fifo_init(FIFO_LARGE, FIFO_LARGE_WAKE);
+        audio->priv.fifo_in   = hb_fifo_init(FIFO_LARGE, FIFO_LARGE_WAKE);
+
+        /* Passthru audio, nothing to sanitize here */
+        if (audio->config.out.codec & HB_ACODEC_PASS_FLAG)
+            continue;
+
+        /* Vorbis language information */
+        if (audio->config.out.codec == HB_ACODEC_VORBIS)
+            audio->priv.config.vorbis.language = audio->config.lang.simple;
+
         /* sense-check the requested mixdown */
-        if( audio->config.out.mixdown <= HB_AMIXDOWN_NONE &&
-            !( audio->config.out.codec & HB_ACODEC_PASS_FLAG ) )
+        if (audio->config.out.mixdown <= HB_AMIXDOWN_NONE)
         {
             /*
              * Mixdown wasn't specified and this is not pass-through,
@@ -964,15 +977,6 @@ static void do_job( hb_job_t * job )
             }
             audio->config.out.bitrate = best_bitrate;
         }
-
-        if (audio->config.out.codec == HB_ACODEC_VORBIS)
-            audio->priv.config.vorbis.language = audio->config.lang.simple;
-
-        /* set up the audio work structures */
-        audio->priv.fifo_raw  = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
-        audio->priv.fifo_sync = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
-        audio->priv.fifo_out  = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
-        audio->priv.fifo_in   = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
     }
 
     }
