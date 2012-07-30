@@ -78,9 +78,6 @@ int hb_audio_resample_update(hb_audio_resample_t *resample,
             avresample_close(resample->avresample);
         }
 
-        if (av_get_bytes_per_sample(new_sample_fmt) <= 2)
-            av_opt_set_int(resample->avresample, "internal_sample_fmt",
-                           AV_SAMPLE_FMT_S16P, 0);
         av_opt_set_int(resample->avresample, "in_sample_fmt",
                        new_sample_fmt, 0);
         av_opt_set_int(resample->avresample, "in_channel_layout",
