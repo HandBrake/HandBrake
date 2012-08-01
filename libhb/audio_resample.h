@@ -39,6 +39,7 @@ typedef struct
         int channels;
         int linesize;
         int sample_size;
+        int normalize_mix_level;
         uint64_t channel_layout;
         enum AVSampleFormat sample_fmt;
         enum AVMatrixEncoding matrix_encoding;
@@ -52,7 +53,8 @@ typedef struct
  */
 hb_audio_resample_t* hb_audio_resample_init(enum AVSampleFormat output_sample_fmt,
                                             uint64_t output_channel_layout,
-                                            enum AVMatrixEncoding matrix_encoding);
+                                            enum AVMatrixEncoding matrix_encoding,
+                                            int normalize_mix_level);
 
 /* Update an hb_audio_resample_t, setting the input sample characteristics.
  *

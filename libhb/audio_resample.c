@@ -13,20 +13,23 @@
 
 hb_audio_resample_t* hb_audio_resample_init(enum AVSampleFormat output_sample_fmt,
                                             uint64_t output_channel_layout,
-                                            enum AVMatrixEncoding matrix_encoding)
+                                            enum AVMatrixEncoding matrix_encoding,
+                                            int normalize_mix_level)
 {
     hb_audio_resample_t *resample = malloc(sizeof(hb_audio_resample_t));
     if (resample == NULL)
         return NULL;
 
-    resample->out.sample_fmt      = output_sample_fmt;
-    resample->out.sample_size     = av_get_bytes_per_sample(output_sample_fmt);
-    resample->out.channel_layout  = output_channel_layout;
-    resample->out.channels        =
+    resample->out.sample_fmt          = output_sample_fmt;
+    resample->out.sample_size         =
+        av_get_bytes_per_sample(output_sample_fmt);
+    resample->out.channel_layout      = output_channel_layout;
+    resample->out.channels            =
         av_get_channel_layout_nb_channels(output_channel_layout);
-    resample->out.matrix_encoding = matrix_encoding;
-    resample->resample_needed     = 0;
-    resample->avresample          = NULL;
+    resample->out.matrix_encoding     = matrix_encoding;
+    resample->out.normalize_mix_level = normalize_mix_level;
+    resample->resample_needed         = 0;
+    resample->avresample              = NULL;
 
     return resample;
 }
@@ -72,6 +75,8 @@ int hb_audio_resample_update(hb_audio_resample_t *resample,
                            resample->out.channel_layout, 0);
             av_opt_set_int(resample->avresample, "matrix_encoding",
                            resample->out.matrix_encoding, 0);
+            av_opt_set_int(resample->avresample, "normalize_mix_level",
+                           resample->out.normalize_mix_level, 0);
         }
         else if (resample_changed)
         {

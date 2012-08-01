@@ -164,7 +164,8 @@ static int declpcmInit( hb_work_object_t * w, hb_job_t * job )
 
     int mode;
     uint64_t layout = hb_ff_mixdown_xlat(w->audio->config.out.mixdown, &mode);
-    pv->resample = hb_audio_resample_init(AV_SAMPLE_FMT_FLT, layout, mode);
+    pv->resample = hb_audio_resample_init(AV_SAMPLE_FMT_FLT, layout, mode,
+                                          w->audio->config.out.normalize_mix_level);
     if (pv->resample == NULL)
     {
         hb_error("declpcmInit: hb_audio_resample_init() failed");

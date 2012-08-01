@@ -1637,6 +1637,7 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg)
     audiocfg->out.mixdown = HB_INVALID_AMIXDOWN;
     audiocfg->out.dynamic_range_compression = 0;
     audiocfg->out.gain = 0;
+    audiocfg->out.normalize_mix_level = 0;
     audiocfg->out.name = NULL;
 }
 
@@ -1684,6 +1685,7 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
         audio->config.out.mixdown = HB_AMIXDOWN_NONE;
         audio->config.out.dynamic_range_compression = 0;
         audio->config.out.gain = 0;
+        audio->config.out.normalize_mix_level = 0;
         audio->config.out.compression_level = -1;
         audio->config.out.quality = HB_INVALID_AUDIO_QUALITY;
     }
@@ -1698,6 +1700,7 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
         audio->config.out.dynamic_range_compression = audiocfg->out.dynamic_range_compression;
         audio->config.out.mixdown = audiocfg->out.mixdown;
         audio->config.out.gain = audiocfg->out.gain;
+        audio->config.out.normalize_mix_level = audiocfg->out.normalize_mix_level;
     }
     if (audiocfg->out.name && *audiocfg->out.name)
     {

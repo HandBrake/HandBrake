@@ -71,6 +71,7 @@ static int    allowed_audio_copy = -1;
 static char * mixdowns    = NULL;
 static char * dynamic_range_compression = NULL;
 static char * audio_gain  = NULL;
+static char ** normalize_mix_level  = NULL;
 static char * atracks     = NULL;
 static char * arates      = NULL;
 static char ** abitrates  = NULL;
@@ -2096,6 +2097,41 @@ static int HandleEvents( hb_handle_t * h )
             }
             /* Audio Gain */
 
+            /* Audio Mix Normalization */
+            i = 0;
+            int norm = 0;
+            if( normalize_mix_level )
+            {
+                for ( i = 0; normalize_mix_level[i] != NULL && i < num_audio_tracks; i++ )
+                {
+                    char * token = normalize_mix_level[i];
+                    norm = atoi(token);
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+
+                    if( audio != NULL )
+                    {
+                        audio->out.normalize_mix_level = norm;
+                    }
+                    else
+                    {
+                        fprintf(stderr, "Ignoring normalization %d, no audio tracks\n", norm);
+                    }
+                }
+            }
+            if (i < num_audio_tracks && i == 1)
+            {
+                /* We have fewer inputs than audio tracks,
+                 * and we only have one input, use
+                 * that for all tracks.
+                 */
+                for (; i < num_audio_tracks; i++)
+                {
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    audio->out.normalize_mix_level = norm;
+                }
+            }
+            /* Audio Mix Normalization */
+
             /* Audio Track Names */
             if ( anames )
             {
@@ -2883,6 +2919,10 @@ static void ShowHelp()
     "                            Separated by commas for more than one audio track.\n"
     "                            (mono/stereo/dpl1/dpl2/6ch, default: up to 6ch for ac3,\n"
     "                            up to dpl2 for other encoders)\n"
+    "        --normalize-mix     Normalize audio mix levels to prevent clipping.\n"
+    "               <string>     Separated by commas for more than one audio track.\n"
+    "                            0 = Disable Normalization (default)\n"
+    "                            1 = Enable Normalization\n"
     "    -R, --arate             Set audio samplerate(s) (" );
     for( i = 0; i < hb_audio_rates_count; i++ )
     {
@@ -3186,6 +3226,7 @@ static int ParseOptions( int argc, char ** argv )
     #define X264_PRESET         284
     #define X264_TUNE           285
     #define H264_LEVEL          286
+    #define NORMALIZE_MIX       287
     
     for( ;; )
     {
@@ -3212,6 +3253,7 @@ static int ParseOptions( int argc, char ** argv )
             { "markers",     optional_argument, NULL,    'm' },
             { "audio",       required_argument, NULL,    'a' },
             { "mixdown",     required_argument, NULL,    '6' },
+            { "normalize-mix", required_argument, NULL,  NORMALIZE_MIX },
             { "drc",         required_argument, NULL,    'D' },
             { "gain",        required_argument, NULL,    AUDIO_GAIN },
             { "subtitle",    required_argument, NULL,    's' },
@@ -3428,6 +3470,12 @@ static int ParseOptions( int argc, char ** argv )
                 if( optarg != NULL )
                 {
                     audio_gain = strdup( optarg );
+                }
+                break;
+            case NORMALIZE_MIX:
+                if( optarg != NULL )
+                {
+                    normalize_mix_level = str_split( optarg, ',' );
                 }
                 break;
             case 's':

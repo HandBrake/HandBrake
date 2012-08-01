@@ -452,6 +452,7 @@ struct hb_audio_config_s
         float    compression_level;  /* Output compression level (encoder-specific) */
         double   dynamic_range_compression; /* Amount of DRC applied to this track */
         double   gain; /* Gain (in dB), negative is quieter */
+        int      normalize_mix_level; /* mix level normalization (boolean) */
         char *   name; /* Output track name */
     } out;
 
