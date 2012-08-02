@@ -121,7 +121,8 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
                                           context->channel_layout,
                                           AV_MATRIX_ENCODING_NONE, 0);
     if (hb_audio_resample_update(pv->resample, AV_SAMPLE_FMT_FLT,
-                                 context->channel_layout, context->channels))
+                                 context->channel_layout, HB_MIXLEV_DEFAULT,
+                                 HB_MIXLEV_DEFAULT, context->channels))
     {
         hb_error("encavcodecaInit: hb_audio_resample_update() failed");
         hb_audio_resample_free(pv->resample);

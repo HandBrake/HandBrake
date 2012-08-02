@@ -1,19 +1,19 @@
-diff -Naur -x '*.o' -x '*.lo' -x '*.a' -x '*.la' a52dec/liba52/a52_internal.h ../a52dec.new/liba52/a52_internal.h
---- a52dec/liba52/a52_internal.h	2011-04-28 07:54:05.499052327 -0700
-+++ ../a52dec.new/liba52/a52_internal.h	2011-04-28 07:50:30.998845068 -0700
-@@ -32,6 +32,11 @@
-     int8_t bap[256];		/* derived channel bit allocation */
+diff -Naur a52dec.old/include/a52.h a52dec.new/include/a52.h
+--- a52dec.old/include/a52.h	2012-07-16 14:24:14.000000000 +0200
++++ a52dec.new/include/a52.h	2012-07-16 14:31:37.000000000 +0200
+@@ -42,6 +42,11 @@
  } expbap_t;
  
-+typedef struct complex_s {
+ typedef struct {
 +    sample_t real;
 +    sample_t imag;
 +} complex_t;
 +
- struct a52_state_s {
-     uint8_t fscod;		/* sample rate */
-     uint8_t halfrate;		/* halfrate factor */
-@@ -85,6 +90,20 @@
++typedef struct {
+     uint8_t fscod;            /* sample rate */
+     uint8_t halfrate;         /* halfrate factor */
+     uint8_t acmod;            /* coded channels */
+@@ -94,6 +99,20 @@
  
      sample_t * samples;
      int downmixed;
@@ -31,10 +31,13 @@ diff -Naur -x '*.o' -x '*.lo' -x '*.a' -x '*.la' a52dec/liba52/a52_internal.h ..
 +    complex_t * post2;            // size 32
 +
 +    sample_t * a52_imdct_window;  // size 256
- };
+ } a52_state_t;
  
- #define LEVEL_PLUS6DB 2.0
-@@ -119,6 +138,6 @@
+ #define A52_CHANNEL 0
+diff -Naur a52dec.old/liba52/a52_internal.h a52dec.new/liba52/a52_internal.h
+--- a52dec.old/liba52/a52_internal.h	2012-07-16 14:24:14.000000000 +0200
++++ a52dec.new/liba52/a52_internal.h	2012-07-16 14:28:33.000000000 +0200
+@@ -49,6 +49,6 @@
  		  sample_t clev, sample_t slev);
  void a52_upmix (sample_t * samples, int acmod, int output);
  
@@ -44,9 +47,9 @@ diff -Naur -x '*.o' -x '*.lo' -x '*.a' -x '*.la' a52dec/liba52/a52_internal.h ..
 +void a52_imdct_init (a52_state_t * state, uint32_t mm_accel);
 +void a52_imdct_256 (a52_state_t * state, sample_t * data, sample_t * delay, sample_t bias);
 +void a52_imdct_512 (a52_state_t * state, sample_t * data, sample_t * delay, sample_t bias);
-diff -Naur -x '*.o' -x '*.lo' -x '*.a' -x '*.la' a52dec/liba52/imdct.c ../a52dec.new/liba52/imdct.c
---- a52dec/liba52/imdct.c	2002-07-27 18:52:07.000000000 -0700
-+++ ../a52dec.new/liba52/imdct.c	2011-04-28 07:51:00.398624376 -0700
+diff -Naur a52dec.old/liba52/imdct.c a52dec.new/liba52/imdct.c
+--- a52dec.old/liba52/imdct.c	2012-07-16 14:24:14.000000000 +0200
++++ a52dec.new/liba52/imdct.c	2012-07-16 14:33:00.000000000 +0200
 @@ -40,11 +40,6 @@
  #include "a52_internal.h"
  #include "mm_accel.h"
@@ -316,9 +319,9 @@ diff -Naur -x '*.o' -x '*.lo' -x '*.a' -x '*.la' a52dec/liba52/imdct.c ../a52dec
      }
  
  #ifdef LIBA52_DJBFFT
-diff -Naur -x '*.o' -x '*.lo' -x '*.a' -x '*.la' a52dec/liba52/parse.c ../a52dec.new/liba52/parse.c
---- a52dec/liba52/parse.c	2002-07-27 18:52:07.000000000 -0700
-+++ ../a52dec.new/liba52/parse.c	2011-04-28 07:40:48.030435061 -0700
+diff -Naur a52dec.old/liba52/parse.c a52dec.new/liba52/parse.c
+--- a52dec.old/liba52/parse.c	2012-07-16 14:24:14.000000000 +0200
++++ a52dec.new/liba52/parse.c	2012-07-16 14:33:00.000000000 +0200
 @@ -56,16 +56,53 @@
      a52_state_t * state;
      int i;

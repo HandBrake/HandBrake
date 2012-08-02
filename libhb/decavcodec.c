@@ -1454,6 +1454,7 @@ static void decodeAudio(hb_audio_t *audio, hb_work_private_t *pv, uint8_t *data,
             {
                 hb_audio_resample_update(pv->resample, pv->context->sample_fmt,
                                          pv->context->channel_layout,
+                                         HB_MIXLEV_DEFAULT, HB_MIXLEV_DEFAULT,
                                          pv->context->channels);
                 out = hb_audio_resample(pv->resample, (void*)frame.data[0],
                                         frame.nb_samples);

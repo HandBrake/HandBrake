@@ -17,9 +17,13 @@
 #ifndef AUDIO_RESAMPLE_H
 #define AUDIO_RESAMPLE_H
 
+#include <math.h>
 #include <stdint.h>
 #include "libavutil/audioconvert.h"
 #include "libavresample/avresample.h"
+
+/* Default mix level for center and surround channels */
+#define HB_MIXLEV_DEFAULT ((double)M_SQRT1_2)
 
 typedef struct
 {
@@ -31,6 +35,8 @@ typedef struct
         int channels;
         int linesize;
         uint64_t channel_layout;
+        double center_mix_level;
+        double surround_mix_level;
         enum AVSampleFormat sample_fmt;
     } in;
 
@@ -46,7 +52,7 @@ typedef struct
     } out;
 } hb_audio_resample_t;
 
-/* Initialize an hb_audio_resample_t to convert audio to the requested
+/* Initialize an hb_audio_resample_t for converting audio to the requested
  * sample_fmt and channel_layout, using the specified matrix_encoding.
  *
  * Input characteristics are set via hb_audio_resample_update().
@@ -65,6 +71,8 @@ hb_audio_resample_t* hb_audio_resample_init(enum AVSampleFormat output_sample_fm
 int                  hb_audio_resample_update(hb_audio_resample_t *resample,
                                               enum AVSampleFormat new_sample_fmt,
                                               uint64_t new_channel_layout,
+                                              double new_surroundmixlev,
+                                              double new_centermixlev,
                                               int new_channels);
 
 /* Free an hb_audio_remsample_t. */

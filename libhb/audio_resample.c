@@ -18,7 +18,10 @@ hb_audio_resample_t* hb_audio_resample_init(enum AVSampleFormat output_sample_fm
 {
     hb_audio_resample_t *resample = malloc(sizeof(hb_audio_resample_t));
     if (resample == NULL)
+    {
+        hb_error("hb_audio_resample_init: failed to allocate resample");
         return NULL;
+    }
 
     resample->out.sample_fmt          = output_sample_fmt;
     resample->out.sample_size         =
@@ -37,6 +40,8 @@ hb_audio_resample_t* hb_audio_resample_init(enum AVSampleFormat output_sample_fm
 int hb_audio_resample_update(hb_audio_resample_t *resample,
                              enum AVSampleFormat new_sample_fmt,
                              uint64_t new_channel_layout,
+                             double new_surroundmixlev,
+                             double new_centermixlev,
                              int new_channels)
 {
     if (resample == NULL)
@@ -55,7 +60,9 @@ int hb_audio_resample_update(hb_audio_resample_t *resample,
     int resample_changed =
         (resample->resample_needed &&
          (resample->in.sample_fmt != new_sample_fmt ||
-          resample->in.channel_layout != new_channel_layout));
+          resample->in.channel_layout != new_channel_layout ||
+          resample->in.center_mix_level != new_centermixlev ||
+          resample->in.surround_mix_level != new_surroundmixlev));
 
     if (resample_changed || (resample->resample_needed &&
                              resample->avresample == NULL))
@@ -87,6 +94,10 @@ int hb_audio_resample_update(hb_audio_resample_t *resample,
                        new_sample_fmt, 0);
         av_opt_set_int(resample->avresample, "in_channel_layout",
                        new_channel_layout, 0);
+        av_opt_set_double(resample->avresample, "center_mix_level",
+                          new_centermixlev, 0);
+        av_opt_set_double(resample->avresample, "surround_mix_level",
+                          new_surroundmixlev, 0);
 
         if (avresample_open(resample->avresample) < 0)
         {
@@ -96,8 +107,10 @@ int hb_audio_resample_update(hb_audio_resample_t *resample,
             return 1;
         }
 
-        resample->in.sample_fmt     = new_sample_fmt;
-        resample->in.channel_layout = new_channel_layout;
+        resample->in.sample_fmt         = new_sample_fmt;
+        resample->in.channel_layout     = new_channel_layout;
+        resample->in.center_mix_level   = new_centermixlev;
+        resample->in.surround_mix_level = new_surroundmixlev;
     }
 
     return 0;

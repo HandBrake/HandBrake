@@ -722,42 +722,35 @@ int hb_get_best_mixdown(uint32_t codec, uint64_t layout, int mixdown)
         // Audio passthrough, no mixdown
         return HB_AMIXDOWN_NONE;
     }
-    else if ((layout & AV_CH_LAYOUT_5POINT1) == AV_CH_LAYOUT_5POINT1 ||
-             (layout & AV_CH_LAYOUT_5POINT1_BACK) == AV_CH_LAYOUT_5POINT1_BACK)
+    else if ((layout & AV_CH_LAYOUT_2_1) == AV_CH_LAYOUT_2_1 ||
+             (layout & AV_CH_LAYOUT_2_2) == AV_CH_LAYOUT_2_2 ||
+             (layout & AV_CH_LAYOUT_QUAD) == AV_CH_LAYOUT_QUAD)
     {
-        // full 3F2R, possibly with additional channels, and an LFE
-        // limiting factor: liba52, libdca (can't upmix)
-        if (codec == HB_ACODEC_LAME || codec == HB_ACODEC_FFAAC)
-        {
-            best_mixdown = HB_AMIXDOWN_DOLBYPLII;
-        }
-        else
+        // at least 2 front channels and one back or side channel
+        // allow downmixing or upmixing to 5.1 (yes, we can)
+        if (codec != HB_ACODEC_LAME && codec != HB_ACODEC_FFAAC)
         {
             best_mixdown = HB_AMIXDOWN_6CH;
         }
+        else
+        {
+            best_mixdown = HB_AMIXDOWN_DOLBYPLII;
+        }
     }
-    else if ((layout & AV_CH_LAYOUT_5POINT0) == AV_CH_LAYOUT_5POINT0 ||
-             (layout & AV_CH_LAYOUT_5POINT0_BACK) == AV_CH_LAYOUT_5POINT0_BACK)
+    else if (layout == AV_CH_LAYOUT_STEREO_DOWNMIX)
     {
-        // full 3F2R, possibly with additional channels, but no LFE
-        // limiting factor: liba52, libdca (can't upmix)
-        // limiting factor: libdca (can only do DPL2 with 3F2R sources)
-        best_mixdown = HB_AMIXDOWN_DOLBYPLII;
+        // Dolby in, allow Dolby out
+        best_mixdown = HB_AMIXDOWN_DOLBY;
     }
-    else if(layout == AV_CH_LAYOUT_STEREO)
+    else if (av_get_channel_layout_nb_channels(layout) > 1)
     {
-        // limiting factor: no Dolby Surround for Stereo sources
+        // more than one channel, allow Stereo downmix
         best_mixdown = HB_AMIXDOWN_STEREO;
-    }
-    else if(av_get_channel_layout_nb_channels(layout) == 1)
-    {
-        // only one channel, not much point in upmixing
-        best_mixdown = HB_AMIXDOWN_MONO;
     }
     else
     {
-        // everything else, including Dolby (AV_CH_LAYOUT_STEREO_DOWNMIX)
-        best_mixdown = HB_AMIXDOWN_DOLBY;
+        // only one channel, not much point in upmixing
+        best_mixdown = HB_AMIXDOWN_MONO;
     }
 
     // return the best that is not greater than the requested mixdown
@@ -773,7 +766,7 @@ int hb_get_default_mixdown(uint32_t codec, uint64_t layout)
     int mixdown;
     switch (codec)
     {
-        // the AC3 encoder defaults to the best mixdown up to 6-channel
+        // the FLAC and AC3 encoders default to the best mixdown up to 6-channel
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_AC3:
             mixdown = HB_AMIXDOWN_6CH;

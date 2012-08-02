@@ -1,6 +1,6 @@
 diff -Naur a52dec_original/liba52/imdct.c a52dec_patched/liba52/imdct.c
---- a52dec_original/liba52/imdct.c	2002-07-28 03:52:07.000000000 +0200
-+++ a52dec_patched/liba52/imdct.c	2011-07-15 20:29:09.000000000 +0200
+--- a52dec.old/liba52/imdct.c	2002-07-28 03:52:07.000000000 +0200
++++ a52dec.new/liba52/imdct.c	2011-07-15 20:29:09.000000000 +0200
 @@ -425,7 +425,6 @@
      } else
  #endif

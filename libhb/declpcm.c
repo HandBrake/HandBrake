@@ -331,7 +331,8 @@ static hb_buffer_t *Decode( hb_work_object_t *w )
 
     hb_buffer_t *out;
     hb_audio_resample_update(pv->resample, AV_SAMPLE_FMT_FLT,
-                             hdr2layout[pv->nchannels - 1], pv->nchannels);
+                             hdr2layout[pv->nchannels - 1], HB_MIXLEV_DEFAULT,
+                             HB_MIXLEV_DEFAULT, pv->nchannels);
     out = hb_audio_resample(pv->resample, (void*)pv->data, pv->nsamples);
     if (out == NULL)
     {
