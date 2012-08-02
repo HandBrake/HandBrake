@@ -465,6 +465,10 @@ void hb_display_job_info( hb_job_t * job )
                         break;
                     }
                 }
+                if( audio->config.out.normalize_mix_level != 0 )
+                {
+                    hb_log( "   + normalized mixing levels" );
+                }
                 if( audio->config.out.gain != 0.0 )
                 {
                     hb_log( "   + gain: %.fdB", audio->config.out.gain );
