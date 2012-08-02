@@ -46,9 +46,9 @@ define import.CONTRIB.defs
     ##
     ## target: patch
     ##
-    $(1).PATCH.srcs = $$(wildcard \
+    $(1).PATCH.srcs = $$(sort $$(wildcard \
         $$($(1).src/)A??-*.patch \
-        $$($(1).src/)P??-$$(BUILD.system)*.patch )
+        $$($(1).src/)P??-$$(BUILD.system)*.patch ))
 
     # extra line feed is required
     define $(1).PATCH.item
