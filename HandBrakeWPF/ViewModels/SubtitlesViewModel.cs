@@ -7,14 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.IO;
-
 namespace HandBrakeWPF.ViewModels
 {
     using System.Collections.Generic;
     using System.Collections.Specialized;
-    using System.ComponentModel;
     using System.ComponentModel.Composition;
+    using System.IO;
     using System.Linq;
 
     using Caliburn.Micro;
@@ -120,6 +118,51 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Add all closed captions not already on the list.
+        /// </summary>
+        public void AddAllClosedCaptions()
+        {
+            if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.UseClosedCaption))
+            {
+                foreach (
+                    Subtitle subtitle in this.SourceTitlesSubset(null).Where(s => s.SubtitleType == SubtitleType.CC))
+                {
+                    this.Add(subtitle);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add all the remaining subtitle tracks.
+        /// </summary>
+        public void AddAllRemaining()
+        {
+            foreach (Subtitle subtitle in this.SourceTitlesSubset(null))
+            {
+                this.Add(subtitle);
+            }
+        }
+
+        /// <summary>
+        /// Add all remaining tracks for the users preferred and selected languages
+        /// </summary>
+        public void AddAllRemainingForSelectedLanguages()
+        {
+            // Get a list of subtitle tracks that match the users lanaguages
+            StringCollection userSelectedLanguages =
+                this.UserSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages);
+            userSelectedLanguages.Add(
+                this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles));
+            List<Subtitle> availableTracks =
+                this.SourceTracks.Where(subtitle => userSelectedLanguages.Contains(subtitle.Language)).ToList();
+
+            foreach (Subtitle subtitle in this.SourceTitlesSubset(availableTracks))
+            {
+                this.Add(subtitle);
+            }
+        }
+
+        /// <summary>
         /// Automatic Subtitle Selection based on user preferences.
         /// </summary>
         public void AutomaticSubtitleSelection()
@@ -189,6 +232,14 @@ namespace HandBrakeWPF.ViewModels
         public void Remove(SubtitleTrack track)
         {
             this.Task.SubtitleTracks.Remove(track);
+        }
+
+        /// <summary>
+        /// Clear all Tracks
+        /// </summary>
+        public void Clear()
+        {
+            this.Task.SubtitleTracks.Clear();
         }
 
         /// <summary>
@@ -332,51 +383,6 @@ namespace HandBrakeWPF.ViewModels
                     };
 
             this.Task.SubtitleTracks.Add(track);
-        }
-
-        /// <summary>
-        /// Add all closed captions not already on the list.
-        /// </summary>
-        private void AddAllClosedCaptions()
-        {
-            if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.UseClosedCaption))
-            {
-                foreach (
-                    Subtitle subtitle in this.SourceTitlesSubset(null).Where(s => s.SubtitleType == SubtitleType.CC))
-                {
-                    this.Add(subtitle);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Add all the remaining subtitle tracks.
-        /// </summary>
-        private void AddAllRemaining()
-        {
-            foreach (Subtitle subtitle in this.SourceTitlesSubset(null))
-            {
-                this.Add(subtitle);
-            }
-        }
-
-        /// <summary>
-        /// Add all remaining tracks for the users preferred and selected languages
-        /// </summary>
-        private void AddAllRemainingForSelectedLanguages()
-        {
-            // Get a list of subtitle tracks that match the users lanaguages
-            StringCollection userSelectedLanguages =
-                this.UserSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages);
-            userSelectedLanguages.Add(
-                this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguageForSubtitles));
-            List<Subtitle> availableTracks =
-                this.SourceTracks.Where(subtitle => userSelectedLanguages.Contains(subtitle.Language)).ToList();
-
-            foreach (Subtitle subtitle in this.SourceTitlesSubset(availableTracks))
-            {
-                this.Add(subtitle);
-            }
         }
 
         /// <summary>

@@ -10,9 +10,9 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+
         <TextBlock Text="Chapter Markers" FontWeight="Bold" Margin="10,5,0,0" Grid.Row="0" ></TextBlock>
-        
+
         <Grid Grid.Row="1" Margin="10,5,10,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -29,6 +29,14 @@
                   VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AutoGenerateColumns="False"
                   CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False"
                   CanUserAddRows="False" CanUserDeleteRows="False">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Import Names" cal:Message.Attach="[Event Click] = [Action Import]" />
+                    <MenuItem Header="Export Names" cal:Message.Attach="[Event Click] = [Action Export]" />
+                    <Separator />
+                    <MenuItem Header="Reset Chapter Names" cal:Message.Attach="[Event Click] = [Action Reset]" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Chapter Number" Width="150" Binding="{Binding ChapterNumber}" IsReadOnly="True" />
                 <DataGridTextColumn Header="Chapter Name"  Width="*" Binding="{Binding ChapterName}" IsReadOnly="False" />
