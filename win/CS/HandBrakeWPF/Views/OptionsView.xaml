@@ -168,19 +168,13 @@
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter='Language'}">
 
                     <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
-                        <TextBlock Text="Automatic Language Selection" FontSize="16" />
+                        <TextBlock Text="Audio and Subtitle Language Handling" FontSize="16" />
                     </Border>
 
-                    <TextBlock Text="Audio and Subtitle Language Selection" Grid.Column="0" Margin="10,10,0,0" FontSize="14"/>
+                    <TextBlock Text="Select your preferred language" Grid.Column="0" Margin="10,10,0,0" FontSize="14"/>
 
                     <Grid Margin="20,10,0,0" >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="140" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="Preferred Language:" Grid.Column="0"/>
-                        <StackPanel Orientation="Horizontal" Grid.Column="1">
+                        <StackPanel Orientation="Horizontal">
                             <TextBlock VerticalAlignment="Center"  Text="Audio: " FontSize="10" />
                             <ComboBox Name="primaryAudioLanguage" VerticalAlignment="Center"  ItemsSource="{Binding PreferredLanguages}" SelectedItem="{Binding SelectedPreferredLangauge}" Width="120" />
                             <TextBlock VerticalAlignment="Center"  Text="Subtitles: " FontSize="10" Margin="10,0,0,0" />
@@ -188,14 +182,14 @@
                         </StackPanel>
                     </Grid>
 
+                    <TextBlock Text="Select languages for automatic inclusion" Grid.Column="0" Margin="10,20,0,0" FontSize="14"/>
+
                     <Grid Margin="20,10,0,0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="Additional Tracks:" Grid.Column="0"/>
-                        <StackPanel Orientation="Horizontal" Grid.Column="1">
+                        <StackPanel Orientation="Horizontal">
                             <Grid Margin="10,0,0,0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -233,8 +227,8 @@
                         </StackPanel>
                     </Grid>
 
-                    <GroupBox Header="Add Additional Tracks" Margin="20,0,10,0" >
-                        <StackPanel Orientation="Vertical">
+                    <GroupBox Header="What to do (Automatically Add Tracks)" Margin="20,5,10,0" >
+                        <StackPanel Orientation="Vertical" Margin="0,5,0,5">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Audio:" VerticalAlignment="Center" Margin="15,0,5,0" Width="100" />
                                 <ComboBox Name="autoAudioMode" ItemsSource="{Binding AddAudioModeOptions}" SelectedIndex="{Binding SelectedAddAudioMode}" Width="120" Margin="0,0,5,0" />
@@ -250,7 +244,7 @@
                         </StackPanel>
                     </GroupBox>
 
-                    <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Vertical" Margin="0,10,0,0">
                         <Label Content="Audio Tab Options" FontSize="14"/>
                         <CheckBox IsChecked="{Binding ShowAdvancedPassthruOpts}" Content="Show advanced audio passthru options. (Requires Restart)"
                                   Margin="20,0,0,0" />
