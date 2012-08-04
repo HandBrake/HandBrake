@@ -33,6 +33,11 @@ namespace HandBrakeWPF.ViewModels
     [Export(typeof(IChaptersViewModel))]
     public class ChaptersViewModel : ViewModelBase, IChaptersViewModel
     {
+        /// <summary>
+        /// The source chapters backing field
+        /// </summary>
+        private List<Chapter> sourceChaptersList; 
+
         #region Constructors and Destructors
 
         /// <summary>
@@ -207,6 +212,8 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.IncludeChapterMarkers = preset.Task.IncludeChapterMarkers;
             }
+
+            this.sourceChaptersList = title.Chapters;
             this.SetSourceChapters(title.Chapters);
         }
 
@@ -238,6 +245,17 @@ namespace HandBrakeWPF.ViewModels
 
             this.NotifyOfPropertyChange(() => this.Task.IncludeChapterMarkers);
             this.NotifyOfPropertyChange(() => this.Task.ChapterNames);
+        }
+
+        /// <summary>
+        /// Reset Chapter Names
+        /// </summary>
+        public void Reset()
+        {
+            if (this.sourceChaptersList != null)
+            {
+                this.SetSourceChapters(this.sourceChaptersList);
+            }
         }
 
         /// <summary>

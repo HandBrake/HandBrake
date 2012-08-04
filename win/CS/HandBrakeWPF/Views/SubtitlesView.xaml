@@ -61,6 +61,17 @@
                 </Style>
             </ListBox.ItemContainerStyle>
 
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Add New Track" cal:Message.Attach="[Event Click] = [Action Add]" />
+                    <MenuItem Header="Add All Remaining Tracks" cal:Message.Attach="[Event Click] = [Action AddAllRemaining]" />
+                    <MenuItem Header="Add All Remaining Closed Captions" cal:Message.Attach="[Event Click] = [Action AddAllClosedCaptions]" />
+                    <MenuItem Header="Add All Remaining Selected Languages" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguages]" />    
+                    <Separator />
+                    <MenuItem Header="Clear All" cal:Message.Attach="[Event Click] = [Action Clear]" />
+                </ContextMenu>
+            </ListBox.ContextMenu>
+
             <ListBox.ItemTemplate>
                 <DataTemplate>
 
