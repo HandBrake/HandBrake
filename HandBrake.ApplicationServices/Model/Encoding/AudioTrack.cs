@@ -63,9 +63,6 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         private Audio scannedTrack;
 
-        /// <summary>
-        /// The track name.
-        /// </summary>
         private string trackName;
 
         #endregion
@@ -84,6 +81,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             this.Bitrate = 160;
             this.DRC = 0;
             this.ScannedTrack = new Audio();
+            this.TrackName = string.Empty;
         }
 
         /// <summary>
@@ -102,6 +100,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             this.mixDown = track.MixDown;
             this.sampleRate = track.SampleRate;
             this.scannedTrack = track.ScannedTrack ?? new Audio();
+            this.TrackName = track.TrackName;
         }
 
         #endregion
@@ -352,6 +351,22 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         {
             get { return this; }
         }
+
+        /// <summary>
+        /// Gets or sets the track name.
+        /// </summary>
+        public string TrackName
+        {
+            get
+            {
+                return this.trackName;
+            }
+            set
+            {
+                this.trackName = value;
+            }
+        }
+
         #endregion
     }
 }

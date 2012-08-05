@@ -20,6 +20,7 @@
         <Audio:AudioBitrateConverter x:Key="audioBitrateConverter" />
         <Audio:AudioEncoderConverter x:Key="audioEncoderConverter" />
     </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -116,7 +117,14 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
 
+                    
+                  
+                    
                     <Grid HorizontalAlignment="Stretch">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
@@ -124,14 +132,14 @@
                         </Grid.ColumnDefinitions>
 
                         <!--  Marker  -->
-                        <Image Grid.Column="0"
+                        <Image Grid.Column="0" Grid.Row="0"
                                Width="16"
                                Height="16"
                                Margin="10,0,10,0"
                                Source="Images/Movies.png" />
 
                         <!--  Settings  -->
-                        <Grid Grid.Column="1" HorizontalAlignment="Stretch">
+                        <Grid Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" MaxWidth="160" />
@@ -300,25 +308,47 @@
                                                          Value="{Binding Gain,
                                                                          Mode=TwoWay}" />
 
+                            <ToggleButton Name="advancedOptionsToggle" VerticalAlignment="Center" Grid.Column="6" Grid.Row="1" Grid.ColumnSpan="2"
+                                          FontWeight="Bold" Height="22" Padding="4,0" HorizontalAlignment="Left" >
+                                <ToggleButton.Style>
+                                    <Style TargetType="{x:Type ToggleButton}">
+                                        <Setter Property="Content" Value="Show Advanced"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter Property="Content" Value="Hide Advanced"/>
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="False">
+                                                <Setter Property="Content" Value="Show Advanced"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ToggleButton.Style>
+                            </ToggleButton>
+ 
                         </Grid>
 
                         <!--  Delete  -->
-                        <Image Grid.Column="2"
-                               Width="16"
-                               Height="16"
-                               Margin="10,0,10,0"
-                               Source="Images/delete.png">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="MouseDown">
-                                    <cal:ActionMessage MethodName="Remove">
-                                        <cal:Parameter Value="{Binding}" />
-                                    </cal:ActionMessage>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </Image>
+                        <StackPanel Grid.Column="2" Grid.Row="0" VerticalAlignment="Center">
+                            <Image Width="16" Height="16" Margin="10,0,10,0" Source="Images/delete.png">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDown">
+                                        <cal:ActionMessage MethodName="Remove">
+                                            <cal:Parameter Value="{Binding}" />
+                                        </cal:ActionMessage>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Image>
+                        </StackPanel>
 
+                        <!-- Hidden Row -->
+                        <Grid Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Visibility="{Binding IsChecked, ElementName=advancedOptionsToggle, Converter={StaticResource boolToVisConverter}}">
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,5" >
+                                <TextBlock Text="Track Name:" VerticalAlignment="Center" FontWeight="Bold" Margin="0,0,5,0" />
+                                <TextBox Text="{Binding TrackName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="138" Height="22" />
+                            </StackPanel>
+                                
+                        </Grid>
                     </Grid>
-
 
                 </DataTemplate>
             </ListBox.ItemTemplate>
