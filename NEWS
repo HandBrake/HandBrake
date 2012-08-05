@@ -1,5 +1,15 @@
 NEWS file for HandBrake <http://handbrake.fr/>
 
+Changes betwen 0.9.7 and 0.9.8:
+
+-> Corrects a few crash bugs that showed up in 0.9.7
+
+Changes betwen 0.9.6 and 0.9.7:
+
+-> This is a bug fix release for 0.9.6.
+-> Includes an AppleTV3 Preset and updated iPad Preset
+
+
 Changes betwen 0.9.5 and 0.9.6:
 
 Encoders:
