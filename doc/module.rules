@@ -5,7 +5,7 @@ doc: doc.txt
 doc.post: doc.txt
 	$(CP.exe) $(DOC.out.articles/)txt/Building.osx.txt $(DOC.in/)BUILD-Mac
 	$(CP.exe) $(DOC.out.articles/)txt/Building.linux.txt $(DOC.in/)BUILD-Linux
-	$(CP.exe) $(DOC.out.articles/)txt/Building.cygwin.txt $(DOC.in/)BUILD-Cygwin
+	$(CP.exe) $(DOC.out.articles/)txt/Building.mingw.txt $(DOC.in/)BUILD-MinGW
 
 doc.txt: $(DOC.texi2txt.out)
 doc.xml: $(DOC.texi2xml.out)
