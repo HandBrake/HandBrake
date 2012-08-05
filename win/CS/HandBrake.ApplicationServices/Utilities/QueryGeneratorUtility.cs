@@ -494,6 +494,7 @@ namespace HandBrake.ApplicationServices.Utilities
             List<int> bitrates = new List<int>();
             List<double> drcs = new List<double>();
             List<double> gains = new List<double>();
+            List<string> trackNames = new List<string>();
 
             // No Audio
             if (audioTracks.Count == 0)
@@ -526,6 +527,9 @@ namespace HandBrake.ApplicationServices.Utilities
 
                 // Gain (--gain)
                 gains.Add(track.IsPassthru ? 0 : track.Gain);
+
+                // Audio Track Name (--aname)
+                trackNames.Add(track.TrackName);
             }
 
             // Audio Track (-a)
@@ -644,6 +648,29 @@ namespace HandBrake.ApplicationServices.Utilities
             }
             if (audioItems.Trim() != String.Empty)
                 query += " --gain " + audioItems;
+
+            audioItems = string.Empty; // Reset for another pass.
+            firstLoop = true;
+
+            // Audio Track Names (--aname)
+            bool foundTrackName = false;
+            foreach (string trackName in trackNames)
+            {
+                if (!string.IsNullOrEmpty(trackName))
+                {
+                    foundTrackName = true;
+                }
+
+                if (firstLoop)
+                {
+                    audioItems = string.IsNullOrEmpty(trackName) ? "\"\"" : string.Format("\"{0}\"", trackName.Trim());
+                    firstLoop = false;
+                }
+                else
+                    audioItems += "," + (string.IsNullOrEmpty(trackName) ? "\"\"" : string.Format("\"{0}\"", trackName.Trim()));
+            }
+            if (foundTrackName)
+                query += string.Format(" --aname={0}", audioItems);
 
             // Passthru Settings
             if (task.AllowedPassthruOptions != null)
