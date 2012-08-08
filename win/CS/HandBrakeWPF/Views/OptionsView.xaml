@@ -147,7 +147,7 @@
 
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <TextBlock VerticalAlignment="Center" Text="Format:" />
-                                <TextBox Name="autoNameFormat" Text="{Binding AutonameFormat}" Width="180" />
+                                <TextBox Name="autoNameFormat" Text="{Binding AutonameFormat}" Width="180" ToolTip=" {Source} = Source Name,  {Title} = Title Number,  {Chapters} = Selected Chapters, {Date} = Todays Date,"  />
                             </StackPanel>
                             <TextBlock Text="Available Options: {source} {title} {chapters} {date}" />
 
