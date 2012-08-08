@@ -814,7 +814,7 @@ namespace HandBrake.ApplicationServices.Utilities
                     if (subtitleForced != string.Empty)
                         query += " --subtitle-forced=" + subtitleForced;
                     if (subtitleBurn != string.Empty)
-                        query += " --subtitle-burn=" + subtitleBurn;
+                        query += " --subtitle-burned=" + subtitleBurn;
                     if (subtitleDefault != string.Empty)
                         query += " --subtitle-default=" + subtitleDefault;
                 }
