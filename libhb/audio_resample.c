@@ -50,6 +50,8 @@ int hb_audio_resample_update(hb_audio_resample_t *resample,
         return 1;
     }
 
+    int ret, resample_changed;
+
     new_channel_layout = hb_ff_layout_xlat(new_channel_layout, new_channels);
 
     resample->resample_needed =
@@ -57,7 +59,7 @@ int hb_audio_resample_update(hb_audio_resample_t *resample,
          resample->out.sample_fmt != new_sample_fmt ||
          resample->out.channel_layout != new_channel_layout);
 
-    int resample_changed =
+    resample_changed =
         (resample->resample_needed &&
          (resample->in.sample_fmt != new_sample_fmt ||
           resample->in.channel_layout != new_channel_layout ||
@@ -99,12 +101,15 @@ int hb_audio_resample_update(hb_audio_resample_t *resample,
         av_opt_set_double(resample->avresample, "surround_mix_level",
                           new_surroundmixlev, 0);
 
-        if (avresample_open(resample->avresample) < 0)
+        if ((ret = avresample_open(resample->avresample)))
         {
-            hb_error("hb_audio_resample_update: avresample_open() failed");
+            char err_desc[64];
+            av_strerror(ret, err_desc, 63);
+            hb_error("hb_audio_resample_update: avresample_open() failed (%s)",
+                     err_desc);
             // avresample won't open, start over
             avresample_free(&resample->avresample);
-            return 1;
+            return ret;
         }
 
         resample->in.sample_fmt         = new_sample_fmt;
