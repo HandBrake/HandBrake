@@ -255,8 +255,7 @@ uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode)
 uint64_t hb_ff_layout_xlat(uint64_t ff_channel_layout, int nchannels)
 {
     uint64_t hb_layout = ff_channel_layout;
-    if (!hb_layout ||
-        av_get_channel_layout_nb_channels(hb_layout) != nchannels)
+    if (!hb_layout || av_get_channel_layout_nb_channels(hb_layout) != nchannels)
     {
         hb_layout = av_get_default_channel_layout(nchannels);
         if (!hb_layout)
@@ -266,6 +265,11 @@ uint64_t hb_ff_layout_xlat(uint64_t ff_channel_layout, int nchannels)
             hb_error("hb_ff_layout_xlat: unsupported layout 0x%"PRIx64" with %d channels",
                      ff_channel_layout, nchannels);
         }
+    }
+    else if (hb_layout == AV_CH_LAYOUT_STEREO_DOWNMIX)
+    {
+        // Dolby is really only Stereo as far as downmixing is concerned
+        hb_layout = AV_CH_LAYOUT_STEREO;
     }
     return hb_layout;
 }
