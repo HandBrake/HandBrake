@@ -266,11 +266,6 @@ uint64_t hb_ff_layout_xlat(uint64_t ff_channel_layout, int nchannels)
                      ff_channel_layout, nchannels);
         }
     }
-    else if (hb_layout == AV_CH_LAYOUT_STEREO_DOWNMIX)
-    {
-        // Dolby is really only Stereo as far as downmixing is concerned
-        hb_layout = AV_CH_LAYOUT_STEREO;
-    }
     return hb_layout;
 }
 

@@ -53,6 +53,11 @@ int hb_audio_resample_update(hb_audio_resample_t *resample,
     int ret, resample_changed;
 
     new_channel_layout = hb_ff_layout_xlat(new_channel_layout, new_channels);
+    if (new_channel_layout == AV_CH_LAYOUT_STEREO_DOWNMIX)
+    {
+        // Dolby Surround is Stereo when it comes to remixing
+        new_channel_layout = AV_CH_LAYOUT_STEREO;
+    }
 
     resample->resample_needed =
         (resample->resample_needed ||
