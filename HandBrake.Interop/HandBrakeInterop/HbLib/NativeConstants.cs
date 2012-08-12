@@ -46,7 +46,7 @@ namespace HandBrake.Interop.HbLib
 		public const int HB_AMIXDOWN_A52_FORMAT_MASK = 0x00000FF0;
 		public const int HB_AMIXDOWN_DISCRETE_CHANNEL_COUNT_MASK = 0x0000000F;
 		public const int HB_AMIXDOWN_NONE = 0x00000000;
-		public const int HB_AMIXDOWN_MONO = 0x01000001;
+		public const int HB_AMIXDOWN_MONO = 0x01000011;
 		public const int HB_AMIXDOWN_STEREO = 0x02002022;
 		public const int HB_AMIXDOWN_DOLBY = 0x042070A2;
 		public const int HB_AMIXDOWN_DOLBYPLII = 0x084094A2;

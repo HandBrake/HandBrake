@@ -57,6 +57,14 @@ namespace HandBrake.Interop
 		}
 
 		/// <summary>
+		/// Call before app shutdown. Performs global cleanup.
+		/// </summary>
+		public static void DisposeGlobal()
+		{
+			HBFunctions.hb_global_close();
+		}
+
+		/// <summary>
 		/// Register the logger.
 		/// </summary>
 		public static void RegisterLogger()

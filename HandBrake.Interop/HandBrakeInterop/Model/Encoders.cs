@@ -116,6 +116,16 @@ namespace HandBrake.Interop.Model
 		}
 
 		/// <summary>
+		/// Gets the video encoder with the specified short name.
+		/// </summary>
+		/// <param name="shortName">The name of the video encoder.</param>
+		/// <returns>The requested video encoder.</returns>
+		public static HBVideoEncoder GetVideoEncoder(string shortName)
+		{
+			return VideoEncoders.SingleOrDefault(e => e.ShortName == shortName);
+		}
+
+		/// <summary>
 		/// Gets the mixdown with the specified short name.
 		/// </summary>
 		/// <param name="shortName">The name of the mixdown.</param>
@@ -145,7 +155,7 @@ namespace HandBrake.Interop.Model
 		public static int GetMaxMixdownIndex(HBAudioEncoder audioEncoder)
 		{
 			// To find best case scenario, pass in highest number of channels and 6-channel discrete mixdown.
-			int maxMixdownId = HBFunctions.hb_get_best_mixdown((uint)audioEncoder.Id, NativeConstants.HB_INPUT_CH_LAYOUT_3F4R, NativeConstants.HB_AMIXDOWN_6CH);
+			int maxMixdownId = HBFunctions.hb_get_best_mixdown((uint)audioEncoder.Id, NativeConstants.HB_INPUT_CH_LAYOUT_3F4R | NativeConstants.HB_INPUT_CH_LAYOUT_HAS_LFE, NativeConstants.HB_AMIXDOWN_6CH);
 
 			for (int i = 0; i < Mixdowns.Count; i++)
 			{

@@ -48,9 +48,14 @@ namespace HandBrake.Interop
 		private const string TurboX264Opts = "ref=1:subme=2:me=dia:analyse=none:trellis=0:no-fast-pskip=0:8x8dct=0:weightb=0";
 
 		/// <summary>
-		/// Default value to give as a minimum duration when scanning.
+		/// Lock for creation of handbrake instances;
 		/// </summary>
-		private const ulong DefaultMinDuration = 900000;
+		private static object instanceCreationLock = new object();
+
+		/// <summary>
+		/// True if a handbrake instance has been created.
+		/// </summary>
+		private static bool globalInitialized;
 
 		/// <summary>
 		/// The native handle to the HandBrake instance.
@@ -164,19 +169,19 @@ namespace HandBrake.Interop
 		}
 
 		/// <summary>
-		/// Call before app shutdown. Performs global cleanup.
-		/// </summary>
-		public static void DisposeGlobal()
-		{
-			HBFunctions.hb_global_close();
-		}
-
-		/// <summary>
 		/// Initializes this instance.
 		/// </summary>
 		/// <param name="verbosity">The code for the logging verbosity to use.</param>
 		public void Initialize(int verbosity)
 		{
+			lock (instanceCreationLock)
+			{
+				if (!globalInitialized)
+				{
+					globalInitialized = true;
+				}
+			}
+
 			HandBrakeUtils.RegisterLogger();
 			this.hbHandle = HBFunctions.hb_init(verbosity, update_check: 0);
 		}
@@ -186,9 +191,15 @@ namespace HandBrake.Interop
 		/// </summary>
 		/// <param name="path">The path to the video to scan.</param>
 		/// <param name="previewCount">The number of preview images to make.</param>
+		/// <param name="minDuration">The minimum duration of a title to show up on the scan.</param>
+		public void StartScan(string path, int previewCount, TimeSpan minDuration)
+		{
+			this.StartScan(path, previewCount, minDuration, 0);
+		}
+
 		public void StartScan(string path, int previewCount)
 		{
-			this.StartScan(path, previewCount, 0);
+			this.StartScan(path, previewCount, TimeSpan.FromSeconds(10), 0);
 		}
 
 		/// <summary>
@@ -199,17 +210,7 @@ namespace HandBrake.Interop
 		/// <param name="titleIndex">The title index to scan (1-based, 0 for all titles).</param>
 		public void StartScan(string path, int previewCount, int titleIndex)
 		{
-			this.previewCount = previewCount;
-			HBFunctions.hb_scan(this.hbHandle, path, titleIndex, previewCount, 1, DefaultMinDuration);
-			this.scanPollTimer = new System.Timers.Timer();
-			this.scanPollTimer.Interval = ScanPollIntervalMs;
-
-			// Lambda notation used to make sure we can view any JIT exceptions the method throws
-			this.scanPollTimer.Elapsed += (o, e) =>
-			{
-				this.PollScanProgress();
-			};
-			this.scanPollTimer.Start();
+			this.StartScan(path, previewCount, TimeSpan.Zero, titleIndex);
 		}
 
 		/// <summary>
@@ -723,6 +724,28 @@ namespace HandBrake.Interop
 		}
 
 		/// <summary>
+		/// Starts a scan of the given path.
+		/// </summary>
+		/// <param name="path">The path of the video to scan.</param>
+		/// <param name="previewCount">The number of previews to make on each title.</param>
+		/// <param name="minDuration">The minimum duration of a title to show up on the scan.</param>
+		/// <param name="titleIndex">The title index to scan (1-based, 0 for all titles).</param>
+		private void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex)
+		{
+			this.previewCount = previewCount;
+			HBFunctions.hb_scan(this.hbHandle, path, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000));
+			this.scanPollTimer = new System.Timers.Timer();
+			this.scanPollTimer.Interval = ScanPollIntervalMs;
+
+			// Lambda notation used to make sure we can view any JIT exceptions the method throws
+			this.scanPollTimer.Elapsed += (o, e) =>
+			{
+				this.PollScanProgress();
+			};
+			this.scanPollTimer.Start();
+		}
+
+		/// <summary>
 		/// Checks the status of the ongoing scan.
 		/// </summary>
 		private void PollScanProgress()
@@ -1183,8 +1206,14 @@ namespace HandBrake.Interop
 
 			List<Tuple<AudioEncoding, int>> outputTrackList = this.GetOutputTracks(job, title);
 
-			if (profile.AudioEncoderFallback != null)
+			if (!string.IsNullOrEmpty(profile.AudioEncoderFallback))
 			{
+				HBAudioEncoder audioEncoder = Encoders.GetAudioEncoder(profile.AudioEncoderFallback);
+				if (audioEncoder == null)
+				{
+					throw new ArgumentException("Unrecognized fallback audio encoder: " + profile.AudioEncoderFallback);
+				}
+
 				nativeJob.acodec_fallback = Encoders.GetAudioEncoder(profile.AudioEncoderFallback).Id;
 			}
 
