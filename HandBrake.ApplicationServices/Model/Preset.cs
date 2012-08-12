@@ -9,41 +9,33 @@
 
 namespace HandBrake.ApplicationServices.Model
 {
+    using Caliburn.Micro;
+
     /// <summary>
     /// A Preset for encoding with.
     /// </summary>
-    public class Preset
+    public class Preset : PropertyChangedBase
     {
+        #region Constants and Fields
+
+        /// <summary>
+        /// The is default.
+        /// </summary>
+        private bool isDefault;
+
+        #endregion
+
+        #region Properties
+
         /// <summary>
         /// Gets or sets the category which the preset resides under
         /// </summary>
         public string Category { get; set; }
 
         /// <summary>
-        /// Gets or sets the preset name
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets The version number which associates this preset with a HB build
-        /// </summary>
-        public string Version { get; set; }
-
-        /// <summary>
         /// Gets or sets the Description for the preset
         /// </summary>
         public string Description { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether Picture Filters are used with this preset.
-        /// </summary>
-        public bool UsePictureFilters { get; set; }
-
-        /// <summary>
-        /// Gets or sets PictureSettingsMode.
-        /// Source Maximum, Custom or None
-        /// </summary>
-        public PresetPictureSettingsMode PictureSettingsMode { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this is a built in preset
@@ -53,12 +45,48 @@ namespace HandBrake.ApplicationServices.Model
         /// <summary>
         /// Gets or sets a value indicating whether IsDefault.
         /// </summary>
-        public bool IsDefault { get; set; }
+        public bool IsDefault
+        {
+            get
+            {
+                return this.isDefault;
+            }
+            set
+            {
+                this.isDefault = value;
+                this.NotifyOfPropertyChange(() => this.IsDefault);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the preset name
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets PictureSettingsMode.
+        /// Source Maximum, Custom or None
+        /// </summary>
+        public PresetPictureSettingsMode PictureSettingsMode { get; set; }
 
         /// <summary>
         /// Gets or sets task.
         /// </summary>
         public EncodeTask Task { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether Picture Filters are used with this preset.
+        /// </summary>
+        public bool UsePictureFilters { get; set; }
+
+        /// <summary>
+        /// Gets or sets The version number which associates this preset with a HB build
+        /// </summary>
+        public string Version { get; set; }
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>
         ///  Override the ToString Method
@@ -70,5 +98,7 @@ namespace HandBrake.ApplicationServices.Model
         {
             return this.Name;
         }
+
+        #endregion
     }
 }

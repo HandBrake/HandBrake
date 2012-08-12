@@ -5,8 +5,7 @@
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:Micro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
-             xmlns:behaviours="clr-namespace:HandBrakeWPF.Helpers" xmlns:Model="clr-namespace:HandBrakeWPF.Model"
-             AllowDrop="True"
+        AllowDrop="True"
         Background="#FFF0F0F0"
         FontSize="11"
         Micro:Message.Attach="[Event Loaded] = [Action Load]"
@@ -52,6 +51,12 @@
                     <Setter Property="FontWeight" Value="Bold"/>
                     <Setter Property="Background" Value="Transparent"/>
                 </Trigger>
+                <DataTrigger Binding="{Binding IsDefault}" Value="True" >
+                    <Setter Property="FontStyle" Value="Italic" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsDefault}" Value="False" >
+                    <Setter Property="FontStyle" Value="Normal" />
+                </DataTrigger>
             </Style.Triggers>
         </Style>
 
@@ -517,9 +522,9 @@
                     </Grid.RowDefinitions>
 
                     <ListBox HorizontalAlignment="Stretch"
-                              VerticalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource presetsCvs}}"
+                             VerticalAlignment="Stretch" ItemsSource="{Binding Source={StaticResource presetsCvs}}"
                              SelectedItem="{Binding SelectedPreset, Mode=TwoWay}" BorderThickness="0,0,0,1"
-                                                           BorderBrush="LightGray"
+                             BorderBrush="LightGray"
                             >
 
                         <ListBox.GroupStyle>
@@ -543,7 +548,7 @@
                              UseLayoutRounding="False"
                              ToolBar.OverflowMode="Never" 
                              ToolBarTray.IsLocked="True"
-                             Loaded="PresetsToolBarLoaded"
+                             Loaded="ToolBarLoaded"
                              >
                         <Button Micro:Message.Attach="[Event Click] = [Action PresetAdd]" >
                             <Button.Content>
