@@ -35,7 +35,7 @@ namespace HandBrakeWPF.Views
         /// <param name="e">
         /// The e.
         /// </param>
-        private void PresetsToolBarLoaded(object sender, RoutedEventArgs e)
+        private void ToolBarLoaded(object sender, RoutedEventArgs e)
         {
             ToolBar toolBar = sender as ToolBar;
             if (toolBar != null)
