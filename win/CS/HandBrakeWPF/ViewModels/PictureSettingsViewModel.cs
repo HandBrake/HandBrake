@@ -574,8 +574,8 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedAnamorphicMode = preset.Task.Anamorphic;
 
             // Set the limits on the UI Controls.
-            this.MaxWidth = sourceResolution.Width;
-            this.MaxHeight = sourceResolution.Height;
+            this.MaxWidth = preset.Task.MaxWidth ?? sourceResolution.Width;
+            this.MaxHeight = preset.Task.MaxHeight ?? sourceResolution.Height;
             this.Task.MaxWidth = preset.Task.MaxWidth;
             this.Task.MaxHeight = preset.Task.MaxHeight;
 
@@ -724,8 +724,8 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 // TODO handle preset max width / height
-                this.Width = title.Resolution.Width;
-                this.Height = title.Resolution.Height;
+                this.Width = this.MaxWidth;
+                this.Height = this.MaxHeight;
                 this.MaintainAspectRatio = true;
 
                 if (this.SelectedAnamorphicMode == Anamorphic.Custom)
