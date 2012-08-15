@@ -150,6 +150,11 @@ int* hb_audio_remap_build_table(uint64_t channel_layout,
     int ii, jj, nchannels, out_chan_idx, remap_idx, *remap_table;
     uint64_t *channels_in, *channels_out;
 
+    if (channel_layout == AV_CH_LAYOUT_STEREO_DOWNMIX)
+    {
+        // Dolby Surround is Stereo when it comes to remapping
+        channel_layout = AV_CH_LAYOUT_STEREO;
+    }
     nchannels = av_get_channel_layout_nb_channels(channel_layout);
     remap_table = malloc(nchannels * sizeof(int));
     if (remap_table == NULL)
