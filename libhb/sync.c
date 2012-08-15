@@ -1085,6 +1085,13 @@ static hb_buffer_t * OutputAudioFrame( hb_audio_t *audio, hb_buffer_t *buf,
             }
             hb_buffer_close( &buf_raw );
 
+            if (sync->data.output_frames_gen <= 0)
+            {
+                // XXX: don't send empty buffers downstream (EOF)
+                // possibly out-of-sync audio is better than no audio at all
+                hb_buffer_close(&buf);
+                return NULL;
+            }
             buf->size = sync->data.output_frames_gen * sample_size;
             duration = (double)( sync->data.output_frames_gen * 90000 ) /
                        audio->config.out.samplerate;

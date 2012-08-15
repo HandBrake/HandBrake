@@ -174,9 +174,11 @@ hb_buffer_t* hb_audio_resample(hb_audio_resample_t *resample,
                                          (void**)&samples,
                                          resample->in.linesize, nsamples);
 
-        if (out_samples < 0)
+        if (out_samples <= 0)
         {
-            hb_log("hb_audio_resample: avresample_convert() failed");
+            if (out_samples < 0)
+                hb_log("hb_audio_resample: avresample_convert() failed");
+            // don't send empty buffers downstream (EOF)
             hb_buffer_close(&out);
             return NULL;
         }
