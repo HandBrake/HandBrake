@@ -373,9 +373,15 @@ static hb_buffer_t* Decode(hb_work_object_t *w)
                 }
             }
         }
-        hb_audio_resample_update(pv->resample, AV_SAMPLE_FMT_FLT,
-                                 pv->channel_layout, (double)pv->state->slev,
-                                 (double)pv->state->clev, pv->nchannels);
+        if (hb_audio_resample_update(pv->resample, AV_SAMPLE_FMT_FLT,
+                                     pv->channel_layout,
+                                     (double)pv->state->slev,
+                                     (double)pv->state->clev, pv->nchannels))
+        {
+            hb_log("deca52: hb_audio_resample_update() failed");
+            hb_buffer_close(&flt);
+            return NULL;
+        }
         out = hb_audio_resample(pv->resample, (void*)flt->data, 1536);
         hb_buffer_close(&flt);
     }

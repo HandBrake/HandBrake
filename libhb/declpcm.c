@@ -232,6 +232,7 @@ static int declpcmWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 static hb_buffer_t *Decode( hb_work_object_t *w )
 {
     hb_work_private_t *pv = w->private_data;
+    hb_buffer_t *out;
  
     if (pv->nsamples == 0)
         return NULL;
@@ -329,10 +330,14 @@ static hb_buffer_t *Decode( hb_work_object_t *w )
         } break;
     }
 
-    hb_buffer_t *out;
-    hb_audio_resample_update(pv->resample, AV_SAMPLE_FMT_FLT,
-                             hdr2layout[pv->nchannels - 1], HB_MIXLEV_DEFAULT,
-                             HB_MIXLEV_DEFAULT, pv->nchannels);
+    if (hb_audio_resample_update(pv->resample, AV_SAMPLE_FMT_FLT,
+                                 hdr2layout[pv->nchannels - 1],
+                                 HB_MIXLEV_DEFAULT, HB_MIXLEV_DEFAULT,
+                                 pv->nchannels))
+    {
+        hb_log("declpcm: hb_audio_resample_update() failed");
+        return NULL;
+    }
     out = hb_audio_resample(pv->resample, (void*)pv->data, pv->nsamples);
     if (out == NULL)
     {
