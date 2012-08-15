@@ -168,17 +168,12 @@
                                    Height="28"
                                    Content="8x8 Transform:"
                                    Style="{StaticResource AdvancedLabel}"
-                                   Visibility="{Binding EightByEightDctVisible,
-                                                        Converter={StaticResource VisibilityConverter}}"
                                    />
                             <CheckBox Grid.Row="5"
                                       Grid.Column="1"
                                       Height="16"
                                       IsChecked="{Binding EightByEightDct}"
-                                      Style="{StaticResource LongToolTipHolder}"
-                                      Visibility="{Binding EightByEightDctVisible,
-                                                           Converter={StaticResource VisibilityConverter}}"
-                                      >
+                                      Style="{StaticResource LongToolTipHolder}">
                                 <CheckBox.ToolTip>
                                     <TextBlock Style="{StaticResource LongToolTip}" Text="{x:Static Properties:Resources.Advanced_EightByEightDctToolTip}" />
                                 </CheckBox.ToolTip>
@@ -378,8 +373,7 @@
                                   SelectedItem="{Binding MotionEstimationRange}"
                                   Style="{StaticResource LongToolTipHolder}"
                                   Visibility="{Binding MotionEstimationRangeVisible,
-                                                       Converter={StaticResource VisibilityConverter}}"
-                                  >
+                                                       Converter={StaticResource VisibilityConverter}}" Margin="0,0,0,2" VerticalAlignment="Bottom">
                             <ComboBox.ToolTip>
                                 <TextBlock Style="{StaticResource LongToolTip}" Text="{x:Static Properties:Resources.Advanced_MotionEstimationRangeToolTip}" />
                             </ComboBox.ToolTip>

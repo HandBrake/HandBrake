@@ -579,14 +579,17 @@ namespace HandBrakeWPF.ViewModels
             this.Task.MaxWidth = preset.Task.MaxWidth;
             this.Task.MaxHeight = preset.Task.MaxHeight;
 
+            // Setup the Width
             if (preset.Task.MaxWidth.HasValue)
             {
                 if (this.Width > preset.Task.MaxWidth)
                 {
-                    this.Width = preset.Task.MaxWidth.Value;
+                    // Limit the Width to the Max Width
+                    this.Width = preset.Task.MaxWidth.Value; 
                 }
                 else
                 {
+                    // Figure out the best width based on the preset and source
                     this.Width = preset.Task.Width ?? this.getRes((sourceResolution.Width - this.CropLeft - this.CropRight), preset.Task.MaxWidth.Value);
                 }
             }
@@ -595,15 +598,28 @@ namespace HandBrakeWPF.ViewModels
                 this.Width = preset.Task.Width ?? (sourceResolution.Width - this.CropLeft - this.CropRight);
             }
 
+
+            // Set the Maintain Aspect ratio. This will calculate Height for us now.
+            this.MaintainAspectRatio = preset.Task.Anamorphic == Anamorphic.None || preset.Task.KeepDisplayAspect;
+
+            // Set Height, but only if necessary.
             if (preset.Task.MaxHeight.HasValue)
             {
                 if (this.Height > preset.Task.MaxHeight)
                 {
+                    // Limit the Height to the Max Height of the preset. Setting this will recalculate the width.
                     this.Height = preset.Task.MaxHeight.Value;
                 }
                 else
                 {
-                    this.Height = preset.Task.Height ?? this.getRes((sourceResolution.Height - this.CropTop - this.CropBottom), preset.Task.MaxHeight.Value);
+                    // Only calculate height if Maintain Aspect ratio is off.
+                    if (!this.MaintainAspectRatio)
+                    {
+                        this.Height = preset.Task.Height ??
+                                      this.getRes(
+                                          (sourceResolution.Height - this.CropTop - this.CropBottom),
+                                          preset.Task.MaxHeight.Value);
+                    }
                 }
             }
 
@@ -615,14 +631,13 @@ namespace HandBrakeWPF.ViewModels
                 this.ParHeight = preset.Task.PixelAspectY;
             }
 
-            // Default this to On.
-            this.MaintainAspectRatio = preset.Task.Anamorphic == Anamorphic.None || preset.Task.KeepDisplayAspect;
-
+            // Modulus
             if (preset.Task.Modulus.HasValue)
             {
                 this.SelectedModulus = preset.Task.Modulus;
             }
 
+            // Cropping
             if (preset.Task.HasCropping)
             {
                 this.IsCustomCrop = true;
@@ -723,11 +738,16 @@ namespace HandBrakeWPF.ViewModels
                     this.IsCustomCrop = true;
                 }
 
-                // TODO handle preset max width / height
+                // Set the Width, and Maintain Aspect ratio. That should calc the Height for us.
                 this.Width = this.MaxWidth;
-                this.Height = this.MaxHeight;
                 this.MaintainAspectRatio = true;
 
+                // If our height is too large, let it downscale the width for us by setting the height to the lower value.
+                if (this.Height > this.MaxHeight)
+                {
+                    this.Height = this.MaxHeight;
+                }
+       
                 if (this.SelectedAnamorphicMode == Anamorphic.Custom)
                 {
                     AnamorphicAdjust(); // Refresh the values
@@ -963,6 +983,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private void HeightAdjust()
         {
+            if (this.sourceResolution == new Size(0,0))
+            {
+                return;
+            }
+
             if (this.Height > this.sourceResolution.Height)
             {
                 this.Task.Height = this.sourceResolution.Height;

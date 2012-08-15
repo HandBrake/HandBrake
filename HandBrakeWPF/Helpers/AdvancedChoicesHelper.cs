@@ -90,7 +90,7 @@ namespace HandBrakeWPF.Helpers
         /// </summary>
         static AdvancedChoicesHelper()
         {
-            referenceFrames = CreateNumberList(0, 16, defaultNumber: 3);
+            referenceFrames = CreateNumberList(1, 16, defaultNumber: 3);
             bFrames = CreateNumberList(0, 16, defaultNumber: 3);
 
             pyramidalBFrames = new List<AdvancedChoice>

@@ -266,7 +266,6 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.analysis = value;
                 this.NotifyOfPropertyChange(() => this.Analysis);
-                this.NotifyOfPropertyChange(() => this.EightByEightDctVisible);
                 this.UpdateOptionsString();
             }
         }
@@ -395,17 +394,6 @@ namespace HandBrakeWPF.ViewModels
                 this.eightByEightDct = value;
                 this.NotifyOfPropertyChange(() => this.EightByEightDct);
                 this.UpdateOptionsString();
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether EightByEightDctVisible.
-        /// </summary>
-        public bool EightByEightDctVisible
-        {
-            get
-            {
-                return this.Analysis.Value != "none";
             }
         }
 
