@@ -62,7 +62,7 @@ static const uint64_t hdr2layout[] =
     AV_CH_LAYOUT_MONO,         AV_CH_LAYOUT_STEREO,
     AV_CH_LAYOUT_2_1,          AV_CH_LAYOUT_QUAD,
     AV_CH_LAYOUT_5POINT0_BACK, AV_CH_LAYOUT_6POINT0_FRONT,
-    AV_CH_LAYOUT_STEREO,       AV_CH_LAYOUT_STEREO,
+    AV_CH_LAYOUT_6POINT1,      AV_CH_LAYOUT_7POINT1,
 };
 
 static void lpcmInfo( hb_work_object_t *w, hb_buffer_t *in )
@@ -382,8 +382,7 @@ static int declpcmBSInfo( hb_work_object_t *w, const hb_buffer_t *b,
     info->rate_base = 1;
     info->bitrate = bitrate;
     info->flags = ( b->data[3] << 16 ) | ( b->data[4] << 8 ) | b->data[5];
-    info->channel_layout = hb_ff_layout_xlat(hdr2layout[nchannels - 1],
-                                             nchannels);
+    info->channel_layout = hdr2layout[nchannels - 1];
     info->channel_map = &hb_libav_chan_map;
     info->samples_per_frame = ( duration * rate ) / 90000;
 
