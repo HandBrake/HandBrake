@@ -296,21 +296,6 @@ void hb_ff_set_sample_fmt(AVCodecContext *context, AVCodec *codec)
     }
 }
 
-// Libav can decode DTS-ES 6.0/6.1 (5.0/5.1 core + XCh extension)
-// but we don't support 6.0/6.1 (and incorrectly assume 5.1/7.0)
-// request channels-1 to disable XCh processing in Libav
-int hb_ff_dts_disable_xch( AVCodecContext *c )
-{
-    if( ( c->codec_id == CODEC_ID_DTS ) &&
-        ( ( c->channel_layout & ~AV_CH_LOW_FREQUENCY ) == ( AV_CH_LAYOUT_5POINT0|AV_CH_BACK_CENTER ) ) )
-    {
-        c->request_channels = --c->channels;
-        c->channel_layout &= ~AV_CH_BACK_CENTER;
-        return 1;
-    }
-    return 0;
-}
-
 /**
  * Registers work objects, by adding the work object to a liked list.
  * @param w Handle to hb_work_object_t to register.
