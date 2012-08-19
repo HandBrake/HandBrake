@@ -34,6 +34,11 @@ namespace HandBrake.ApplicationServices.Services
         #region Private Variables
 
         /// <summary>
+        /// The User Setting Service
+        /// </summary>
+        private readonly IUserSettingService userSettingService;
+
+        /// <summary>
         /// The CLI data parser
         /// </summary>
         private Parser readData;
@@ -53,18 +58,17 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         StringBuilder header = GeneralUtilities.CreateCliLogHeader();
 
-        /// <summary>
-        /// The User Setting Service
-        /// </summary>
-        private IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
-
         #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScanService"/> class.
         /// </summary>
-        public ScanService()
+        /// <param name="userSettingService">
+        /// The user Setting Service.
+        /// </param>
+        public ScanService(IUserSettingService userSettingService)
         {
+            this.userSettingService = userSettingService;
             this.logBuffer = new StringBuilder();
         }
 
@@ -173,7 +177,7 @@ namespace HandBrake.ApplicationServices.Services
             {
                 StreamReader parseLog = new StreamReader(path);
                 this.readData = new Parser(parseLog.BaseStream);
-                this.SouceData = Source.Parse(this.readData);
+                this.SouceData = Source.Parse(this.readData, this.userSettingService);
                 this.SouceData.ScanPath = path;
 
                 if (this.ScanCompleted != null)
@@ -277,7 +281,7 @@ namespace HandBrake.ApplicationServices.Services
 
                 this.readData = new Parser(this.hbProc.StandardError.BaseStream);
                 this.readData.OnScanProgress += this.OnScanProgress;
-                this.SouceData = Source.Parse(this.readData);
+                this.SouceData = Source.Parse(this.readData, this.userSettingService);
                 this.SouceData.ScanPath = (string)sourcePath;
 
                 // Write the Buffer out to file.

@@ -20,6 +20,7 @@ namespace HandBrake.ApplicationServices.Utilities
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     /// <summary>
@@ -34,12 +35,6 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </summary>
         private static readonly string LogDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
                                                 "\\HandBrake\\logs";
-
-        /// <summary>
-        /// The User Setting Service
-        /// </summary>
-        private static readonly IUserSettingService UserSettingService = IoC.Get<IUserSettingService>();
-
         /// <summary>
         /// The Instance ID
         /// </summary>
@@ -117,12 +112,23 @@ namespace HandBrake.ApplicationServices.Utilities
         public static StringBuilder CreateCliLogHeader()
         {
             var logHeader = new StringBuilder();
+            
+            IUserSettingService userSettingService;
+            try
+            {
+                userSettingService = IoC.Get<IUserSettingService>();
+            } 
+            catch (Exception)
+            {
+                // TODO Sort this out. Should not be calling IoC.Get or creating a new instance here.
+                userSettingService = new UserSettingService();
+            }
 
             logHeader.AppendLine(
                 String.Format(
-                    "HandBrake {0} {1}", 
-                    UserSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion), 
-                    UserSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild)));
+                    "HandBrake {0} {1}",
+                    userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion),
+                    userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild)));
             logHeader.AppendLine(String.Format("OS: {0}", Environment.OSVersion));
             logHeader.AppendLine(String.Format("CPU: {0}", SystemInfo.GetCpuCount));
             logHeader.Append(String.Format("Ram: {0} MB, ", SystemInfo.TotalPhysicalMemory));

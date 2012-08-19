@@ -29,6 +29,8 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Helpers;
+    using HandBrakeWPF.Isolation;
+    using HandBrakeWPF.Isolation.Interfaces;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -48,7 +50,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The Source Scan Service.
         /// </summary>
-        private readonly IScan scanService;
+        private IScan scanService;
 
         /// <summary>
         /// The Encode Service
@@ -197,7 +199,6 @@ namespace HandBrakeWPF.ViewModels
             IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService, IDriveDetectService driveDetectService)
         {
             GeneralUtilities.SetInstanceId();
-
 
             this.scanService = scanService;
             this.encodeService = encodeService;
@@ -819,6 +820,13 @@ namespace HandBrakeWPF.ViewModels
             // Shutdown Service
             this.driveDetectService.Close();
 
+            IIsolatedScanService isolatedScanService = this.scanService as IsolatedScanService;
+            if (isolatedScanService != null)
+            {
+                // Kill any background services for this instance of HandBrake.
+                isolatedScanService.Disconnect();
+            }
+
             // Unsubscribe from Events.
             this.scanService.ScanStared -= this.ScanStared;
             this.scanService.ScanCompleted -= this.ScanCompleted;
@@ -1131,6 +1139,26 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.scanService.DebugScanLog(dialog.FileName);
             }    
+        }
+
+        /// <summary>
+        /// The test isolation services.
+        /// Swaps out the implementation of IScan to the IsolatedScanService version.
+        /// </summary>
+        public void TestIsolationServices()
+        {
+            // Unhook the old service
+            this.scanService.ScanStared -= this.ScanStared;
+            this.scanService.ScanCompleted -= this.ScanCompleted;
+            this.scanService.ScanStatusChanged -= this.ScanStatusChanged;
+
+            // Replace the Service
+            this.scanService = new IsolatedScanService(this.errorService);
+
+            // Add Event Hooks
+            this.scanService.ScanStared += this.ScanStared;
+            this.scanService.ScanCompleted += this.ScanCompleted;
+            this.scanService.ScanStatusChanged += this.ScanStatusChanged;
         }
 
         #endregion
@@ -1562,19 +1590,19 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void ScanCompleted(object sender, HandBrake.ApplicationServices.EventArgs.ScanCompletedEventArgs e)
         {
+            this.scanService.SouceData.CopyTo(this.ScannedSource);
             Execute.OnUIThread(() =>
                 {
                     if (e.Successful)
                     {
-                        this.scanService.SouceData.CopyTo(this.ScannedSource);
                         this.NotifyOfPropertyChange("ScannedSource");
                         this.NotifyOfPropertyChange("ScannedSource.Titles");
                         this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault(t => t.MainTitle)
                                              ?? this.ScannedSource.Titles.FirstOrDefault();
-                        this.SetupTabs();
-                        this.ShowStatusWindow = false;
+                        this.SetupTabs();      
                     }
 
+                    this.ShowStatusWindow = false;
                     this.SourceLabel = "Scan Completed";
                     this.StatusLabel = "Scan Completed";
                 });
