@@ -79,7 +79,10 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -100,6 +103,9 @@
     <Compile Include="EventArgs\ScanCompletedEventArgs.cs" />
     <Compile Include="EventArgs\ScanProgressEventArgs.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Services\Interfaces\IHbServiceCallback.cs" />
+    <Compile Include="Services\Interfaces\IServerService.cs" />
+    <Compile Include="Services\ServerService.cs" />
     <Compile Include="Utilities\Converters.cs" />
     <Compile Include="Utilities\EnumHelper.cs" />
     <Compile Include="Utilities\GrowlCommunicator.cs" />

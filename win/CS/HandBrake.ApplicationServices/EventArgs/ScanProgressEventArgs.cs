@@ -10,20 +10,24 @@
 namespace HandBrake.ApplicationServices.EventArgs
 {
     using System;
+    using System.Runtime.Serialization;
 
     /// <summary>
     /// Scan Progress Event Args
     /// </summary>
+    [DataContractAttribute]
     public class ScanProgressEventArgs : EventArgs
     {
         /// <summary>
         /// Gets or sets the title currently being scanned.
         /// </summary>
+        [DataMember]
         public int CurrentTitle { get; set; }
 
         /// <summary>
         /// Gets or sets the total number of Titles.
         /// </summary>
+        [DataMember]
         public int Titles { get; set; }
     }
 }

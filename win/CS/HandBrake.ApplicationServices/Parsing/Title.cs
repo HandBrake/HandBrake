@@ -29,11 +29,6 @@ namespace HandBrake.ApplicationServices.Parsing
     public class Title
     {
         /// <summary>
-        /// The User Setting Service
-        /// </summary>
-        private static IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Title"/> class. 
         /// </summary>
         public Title()
@@ -125,9 +120,16 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <summary>
         /// Parse the Title Information
         /// </summary>
-        /// <param name="output">A StringReader of output data</param>
-        /// <returns>A Title Object</returns>
-        public static Title Parse(StringReader output)
+        /// <param name="output">
+        /// A StringReader of output data
+        /// </param>
+        /// <param name="userSettingService">
+        /// The user Setting Service.
+        /// </param>
+        /// <returns>
+        /// A Title Object
+        /// </returns>
+        public static Title Parse(StringReader output, IUserSettingService userSettingService)
         {
             var thisTitle = new Title();
             string nextLine = output.ReadLine();
@@ -224,9 +226,16 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <summary>
         /// Return a list of parsed titles
         /// </summary>
-        /// <param name="output">The Output</param>
-        /// <returns>A List of titles</returns>
-        public static Title[] ParseList(string output)
+        /// <param name="output">
+        /// The Output
+        /// </param>
+        /// <param name="userSettingService">
+        /// The user Setting Service.
+        /// </param>
+        /// <returns>
+        /// A List of titles
+        /// </returns>
+        public static Title[] ParseList(string output, IUserSettingService userSettingService)
         {
             var titles = new List<Title>();
             var sr = new StringReader(output);
@@ -237,7 +246,7 @@ namespace HandBrake.ApplicationServices.Parsing
                 if (sr.Peek() == ' ') // If the character is a space, then chances are it's the combing detected line.
                     sr.ReadLine(); // Skip over it
                 else
-                    titles.Add(Parse(sr));
+                    titles.Add(Parse(sr, userSettingService));
             }
 
             return titles.ToArray();

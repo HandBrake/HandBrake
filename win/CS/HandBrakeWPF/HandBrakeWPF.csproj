@@ -95,6 +95,8 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\libraries\caliburn\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -127,6 +129,9 @@
     <Compile Include="Converters\Options\OptionsTabConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitlesQueueDisplayConverter.cs" />
     <Compile Include="Converters\Video\VideoEncoderConverter.cs" />
+    <Compile Include="Isolation\BackgroundServiceConnector.cs" />
+    <Compile Include="Isolation\Interfaces\IIsolatedScanService.cs" />
+    <Compile Include="Isolation\IsolatedScanService.cs" />
     <Compile Include="Services\DriveDetectService.cs" />
     <Compile Include="Services\Interfaces\IDriveDetectService.cs" />
     <Compile Include="Model\ShellWindow.cs" />
@@ -419,6 +424,10 @@
     <ProjectReference Include="..\HandBrake.Interop\HandBrakeInterop\HandBrakeInterop.csproj">
       <Project>{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}</Project>
       <Name>HandBrakeInterop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HandBrake.Server\HandBrake.Server.csproj">
+      <Project>{36847BA0-6814-41E1-B1C3-1D9D874418E9}</Project>
+      <Name>HandBrake.Server</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

@@ -11,10 +11,14 @@ namespace HandBrake.ApplicationServices.Parsing
 {
     using System.Collections.Generic;
     using System.IO;
+    using System.Runtime.Serialization;
+
+    using HandBrake.ApplicationServices.Services.Interfaces;
 
     /// <summary>
     /// An object representing a scanned DVD
     /// </summary>
+    [DataContract]
     public class Source
     {
         /// <summary>
@@ -30,11 +34,13 @@ namespace HandBrake.ApplicationServices.Parsing
         /// Gets or sets ScanPath.
         /// The Path used by the Scan Service.
         /// </summary>
+        [DataMember]
         public string ScanPath { get; set; }
 
         /// <summary>
         /// Gets or sets Titles. A list of titles from the source
         /// </summary>
+        [DataMember]
         public List<Title> Titles { get; set; }
 
         /// <summary>
@@ -43,17 +49,18 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <param name="output">
         /// The output.
         /// </param>
+        /// <param name="userSettingService"> </param>
         /// <returns>
         /// A DVD object which contains a list of title inforamtion
         /// </returns>
-        public static Source Parse(StreamReader output)
+        public static Source Parse(StreamReader output, IUserSettingService userSettingService)
         {
             var thisDVD = new Source();
 
             while (!output.EndOfStream)
             {
                 if ((char) output.Peek() == '+')
-                    thisDVD.Titles.AddRange(Title.ParseList(output.ReadToEnd()));
+                    thisDVD.Titles.AddRange(Title.ParseList(output.ReadToEnd(), userSettingService));
                 else
                     output.ReadLine();
             }
