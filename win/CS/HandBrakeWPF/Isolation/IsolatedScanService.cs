@@ -66,7 +66,6 @@ namespace HandBrakeWPF.Isolation
             {
                 if (this.CanConnect())
                 {
-                    this.StartServer();
                     this.Connect();
                 }
             }
@@ -86,7 +85,7 @@ namespace HandBrakeWPF.Isolation
         {
             get
             {
-                return this.Service.ActivityLog;
+                return Service.ScanActivityLog;
             }
         }
 
@@ -97,7 +96,7 @@ namespace HandBrakeWPF.Isolation
         {
             get
             {
-                return this.Service.IsScanning;
+                return Service.IsScanning;
             }
         }
 
@@ -108,7 +107,7 @@ namespace HandBrakeWPF.Isolation
         {
             get
             {
-                return this.Service.SouceData;
+                return Service.SouceData;
             }
         }
 
@@ -180,7 +179,7 @@ namespace HandBrakeWPF.Isolation
         /// </param>
         public void DebugScanLog(string path)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("Not available in process isolation mode!");
         }
 
         /// <summary>
@@ -202,7 +201,7 @@ namespace HandBrakeWPF.Isolation
         public void Scan(string sourcePath, int title, int previewCount, Action<bool> postAction)
         {
             this.postScanAction = postAction;
-            this.Service.ScanSource(sourcePath, title, previewCount);
+            Service.ScanSource(sourcePath, title, previewCount);
         }
 
         /// <summary>
@@ -210,7 +209,7 @@ namespace HandBrakeWPF.Isolation
         /// </summary>
         public void Stop()
         {
-            throw new NotImplementedException();
+            Service.StopScan();
         }
 
         #endregion

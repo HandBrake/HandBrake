@@ -13,8 +13,6 @@ namespace HandBrake.ApplicationServices.Services.Base
     using System.IO;
     using System.Text;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
@@ -31,17 +29,22 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// <summary>
         /// A Lock for the filewriter
         /// </summary>
-        private static readonly object fileWriterLock = new object();
+        private static readonly object FileWriterLock = new object();
 
         /// <summary>
         /// The User Setting Service
         /// </summary>
-        private IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
+        private readonly IUserSettingService userSettingService;
 
         /// <summary>
         /// Windows 7 API Pack wrapper
         /// </summary>
-        private Win7 windowsSeven = new Win7();
+        private readonly Win7 windowsSeven = new Win7();
+
+        /// <summary>
+        /// The Log File Header
+        /// </summary>
+        private readonly StringBuilder header = GeneralUtilities.CreateCliLogHeader();
 
         /// <summary>
         /// The Log Buffer
@@ -53,18 +56,17 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// </summary>
         private StreamWriter fileWriter;
 
-        /// <summary>
-        /// The Log File Header
-        /// </summary>
-        private StringBuilder header = GeneralUtilities.CreateCliLogHeader();
-
         #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EncodeBase"/> class.
         /// </summary>
-        public EncodeBase()
+        /// <param name="userSettingService">
+        /// The user Setting Service.
+        /// </param>
+        public EncodeBase(IUserSettingService userSettingService)
         {
+            this.userSettingService = userSettingService;
             this.logBuffer = new StringBuilder();
         }
 
@@ -310,7 +312,7 @@ namespace HandBrake.ApplicationServices.Services.Base
                         this.LogBuffer.AppendLine(message);
                     }
 
-                    lock (fileWriterLock)
+                    lock (FileWriterLock)
                     {
                         if (this.fileWriter != null && this.fileWriter.BaseStream.CanWrite)
                         {
@@ -341,7 +343,7 @@ namespace HandBrake.ApplicationServices.Services.Base
         {
             try
             {
-                lock (fileWriterLock)
+                lock (FileWriterLock)
                 {
                     if (this.fileWriter != null)
                     {

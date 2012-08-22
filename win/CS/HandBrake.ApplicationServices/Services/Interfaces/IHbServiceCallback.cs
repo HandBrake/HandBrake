@@ -42,5 +42,29 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// </summary>
         [OperationContract(IsOneWay = true)]
         void ScanStartedCallback();
+
+        /// <summary>
+        /// The encode progress callback.
+        /// </summary>
+        /// <param name="eventArgs">
+        /// The event Args.
+        /// </param>
+        [OperationContract(IsOneWay = true)]
+        void EncodeProgressCallback(EncodeProgressEventArgs eventArgs);
+
+        /// <summary>
+        /// The encode completed callback.
+        /// </summary>
+        /// <param name="eventArgs">
+        /// The event Args.
+        /// </param>
+        [OperationContract(IsOneWay = true)]
+        void EncodeCompletedCallback(EncodeCompletedEventArgs eventArgs);
+
+        /// <summary>
+        /// The encode started callback.
+        /// </summary>
+        [OperationContract(IsOneWay = true)]
+        void EncodeStartedCallback();
     }
 }

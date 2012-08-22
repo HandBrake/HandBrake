@@ -130,6 +130,8 @@
     <Compile Include="Converters\Subtitles\SubtitlesQueueDisplayConverter.cs" />
     <Compile Include="Converters\Video\VideoEncoderConverter.cs" />
     <Compile Include="Isolation\BackgroundServiceConnector.cs" />
+    <Compile Include="Isolation\IsolatedEncodeService.cs" />
+    <Compile Include="Isolation\Interfaces\IIsolatedEncodeService.cs" />
     <Compile Include="Isolation\Interfaces\IIsolatedScanService.cs" />
     <Compile Include="Isolation\IsolatedScanService.cs" />
     <Compile Include="Services\DriveDetectService.cs" />

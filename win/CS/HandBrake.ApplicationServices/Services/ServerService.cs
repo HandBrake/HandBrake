@@ -16,13 +16,15 @@ namespace HandBrake.ApplicationServices.Services
     using System.Windows;
 
     using HandBrake.ApplicationServices.EventArgs;
+    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     /// <summary>
     /// HandBrake WCF Service
     /// </summary>
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, IncludeExceptionDetailInFaults = true, ConcurrencyMode = ConcurrencyMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, IncludeExceptionDetailInFaults = true, 
+        ConcurrencyMode = ConcurrencyMode.Single)]
     public class ServerService : IServerService
     {
         #region Constants and Fields
@@ -31,6 +33,11 @@ namespace HandBrake.ApplicationServices.Services
         /// List of connected Clients. For now, this should only be one.
         /// </summary>
         private static readonly List<IHbServiceCallback> Subscribers = new List<IHbServiceCallback>();
+
+        /// <summary>
+        /// The encode service.
+        /// </summary>
+        private static IEncode encodeService;
 
         /// <summary>
         /// The scan service.
@@ -44,9 +51,75 @@ namespace HandBrake.ApplicationServices.Services
 
         #endregion
 
+        #region Properties
+
+        /// <summary>
+        /// Gets the activity log.
+        /// </summary>
+        [DataMember]
+        public string ActivityLog
+        {
+            get
+            {
+                return scanService.ActivityLog;
+            }
+        }
+
+        /// <summary>
+        /// Gets the activity log.
+        /// </summary>
+        public string EncodeActivityLog { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether is encoding.
+        /// </summary>
+        public bool IsEncoding { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether is scanning.
+        /// </summary>
+        [DataMember]
+        public bool IsScanning
+        {
+            get
+            {
+                return scanService.IsScanning;
+            }
+        }
+
+        /// <summary>
+        /// Gets the activity log.
+        /// </summary>
+        public string ScanActivityLog { get; private set; }
+
+        /// <summary>
+        /// Gets the souce data.
+        /// </summary>
+        [DataMember]
+        public Source SouceData
+        {
+            get
+            {
+                return scanService.SouceData;
+            }
+        }
+
+        #endregion
+
         #region Implemented Interfaces
 
         #region IServerService
+
+        /// <summary>
+        /// The process encode logs.
+        /// </summary>
+        /// <param name="destination">
+        /// The destination.
+        /// </param>
+        public void ProcessEncodeLogs(string destination)
+        {
+            encodeService.ProcessLogs(destination);
+        }
 
         /// <summary>
         /// The scan source.
@@ -71,43 +144,6 @@ namespace HandBrake.ApplicationServices.Services
         }
 
         /// <summary>
-        /// Gets the activity log.
-        /// </summary>
-        [DataMember]
-        public string ActivityLog
-        {
-            get
-            {
-                return scanService.ActivityLog;
-
-            }
-        }
-
-        /// <summary>
-        /// Gets the souce data.
-        /// </summary>
-        [DataMember]
-        public Source SouceData
-        {
-            get
-            {
-                return scanService.SouceData;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether is scanning.
-        /// </summary>
-        [DataMember]
-        public bool IsScanning
-        {
-            get
-            {
-                return scanService.IsScanning;
-            }
-        }
-
-        /// <summary>
         /// Start the service
         /// </summary>
         public void Start()
@@ -121,9 +157,28 @@ namespace HandBrake.ApplicationServices.Services
                 Console.WriteLine("Service Started");
 
                 // Setup the services we are going to use.
-                scanService = new ScanService(new UserSettingService());
+                scanService = new ScanService(new UserSettingService()); // TODO this needs wired up with castle
+                encodeService = new Encode(new UserSettingService());
                 Console.ReadLine();
             }
+        }
+
+        /// <summary>
+        /// Start and Encode
+        /// </summary>
+        /// <param name="job">
+        /// The job.
+        /// </param>
+        /// <param name="enableLogging">
+        /// The enable logging.
+        /// </param>
+        public void StartEncode(QueueTask job, bool enableLogging)
+        {
+            Console.WriteLine("Starting Source Encode for: " + job.Task.Source);
+            encodeService.EncodeCompleted += this.EncodeServiceEncodeCompleted;
+            encodeService.EncodeStarted += this.encodeService_EncodeStarted;
+            encodeService.EncodeStatusChanged += this.encodeService_EncodeStatusChanged;
+            encodeService.Start(job, enableLogging);
         }
 
         /// <summary>
@@ -136,6 +191,14 @@ namespace HandBrake.ApplicationServices.Services
                 this.host.Close();
                 Application.Current.Shutdown();
             }
+        }
+
+        /// <summary>
+        /// Stop and Encode
+        /// </summary>
+        public void StopEncode()
+        {
+            encodeService.Stop();
         }
 
         /// <summary>
@@ -222,17 +285,17 @@ namespace HandBrake.ApplicationServices.Services
         {
             Subscribers.ForEach(
                 delegate(IHbServiceCallback callback)
-                {
-                    if (((ICommunicationObject)callback).State == CommunicationState.Opened)
                     {
-                        Console.WriteLine("Scan Completed Callback");
-                        callback.ScanCompletedCallback(e);
-                    }
-                    else
-                    {
-                        Subscribers.Remove(callback);
-                    }
-                });
+                        if (((ICommunicationObject)callback).State == CommunicationState.Opened)
+                        {
+                            Console.WriteLine("Scan Completed Callback");
+                            callback.ScanCompletedCallback(e);
+                        }
+                        else
+                        {
+                            Subscribers.Remove(callback);
+                        }
+                    });
 
             scanService.ScanStared -= this.ScanStaredHandler;
             scanService.ScanStatusChanged -= this.ScanStatusChangedHandler;
@@ -252,17 +315,17 @@ namespace HandBrake.ApplicationServices.Services
         {
             Subscribers.ForEach(
                 delegate(IHbServiceCallback callback)
-                {
-                    if (((ICommunicationObject)callback).State == CommunicationState.Opened)
                     {
-                        Console.WriteLine("Scan Started Callback");
-                        callback.ScanStartedCallback();
-                    }
-                    else
-                    {
-                        Subscribers.Remove(callback);
-                    }
-                });
+                        if (((ICommunicationObject)callback).State == CommunicationState.Opened)
+                        {
+                            Console.WriteLine("Scan Started Callback");
+                            callback.ScanStartedCallback();
+                        }
+                        else
+                        {
+                            Subscribers.Remove(callback);
+                        }
+                    });
         }
 
         /// <summary>
@@ -278,17 +341,99 @@ namespace HandBrake.ApplicationServices.Services
         {
             Subscribers.ForEach(
                 delegate(IHbServiceCallback callback)
-                {
-                    if (((ICommunicationObject)callback).State == CommunicationState.Opened)
                     {
-                        Console.WriteLine("Scan Changed Callback");
-                        callback.ScanProgressCallback(e);
-                    }
-                    else
+                        if (((ICommunicationObject)callback).State == CommunicationState.Opened)
+                        {
+                            Console.WriteLine("Scan Changed Callback");
+                            callback.ScanProgressCallback(e);
+                        }
+                        else
+                        {
+                            Subscribers.Remove(callback);
+                        }
+                    });
+        }
+
+        /// <summary>
+        /// The encode service_ encode completed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void EncodeServiceEncodeCompleted(object sender, EncodeCompletedEventArgs e)
+        {
+            encodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
+            encodeService.EncodeStarted -= this.encodeService_EncodeStarted;
+            encodeService.EncodeStatusChanged -= this.encodeService_EncodeStatusChanged;
+
+            Subscribers.ForEach(
+                delegate(IHbServiceCallback callback)
                     {
-                        Subscribers.Remove(callback);
-                    }
-                });
+                        if (((ICommunicationObject)callback).State == CommunicationState.Opened)
+                        {
+                            Console.WriteLine("Encode Completed Callback");
+                            callback.EncodeCompletedCallback(e);
+                        }
+                        else
+                        {
+                            Subscribers.Remove(callback);
+                        }
+                    });
+        }
+
+        /// <summary>
+        /// The encode service_ encode started.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void encodeService_EncodeStarted(object sender, EventArgs e)
+        {
+            Subscribers.ForEach(
+                delegate(IHbServiceCallback callback)
+                    {
+                        if (((ICommunicationObject)callback).State == CommunicationState.Opened)
+                        {
+                            Console.WriteLine("Encode Started Callback");
+                            callback.EncodeStartedCallback();
+                        }
+                        else
+                        {
+                            Subscribers.Remove(callback);
+                        }
+                    });
+        }
+
+        /// <summary>
+        /// The encode service_ encode status changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void encodeService_EncodeStatusChanged(object sender, EncodeProgressEventArgs e)
+        {
+            Subscribers.ForEach(
+                delegate(IHbServiceCallback callback)
+                    {
+                        if (((ICommunicationObject)callback).State == CommunicationState.Opened)
+                        {
+                            Console.WriteLine("Encode Status Callback");
+                            callback.EncodeProgressCallback(e);
+                        }
+                        else
+                        {
+                            Subscribers.Remove(callback);
+                        }
+                    });
         }
 
         #endregion
