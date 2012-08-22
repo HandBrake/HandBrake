@@ -56,5 +56,14 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// Requests a pause of the encode queue.
         /// </summary>
         void Pause();
+
+        /// <summary>
+        /// Swap encode service.
+        /// Temp method until Castle is hooked up.
+        /// </summary>
+        /// <param name="service">
+        /// The service.
+        /// </param>
+        void SwapEncodeService(IEncode service);
     }
 }

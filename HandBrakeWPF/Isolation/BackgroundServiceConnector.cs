@@ -28,23 +28,23 @@ namespace HandBrakeWPF.Isolation
     /// </summary>
     public class BackgroundServiceConnector : IHbServiceCallback, IDisposable
     {
+        #region Constants and Fields
+
         /// <summary>
         /// The error service.
         /// </summary>
         private readonly IErrorService errorService;
 
-        #region Constants and Fields
-
         /// <summary>
         /// Gets or sets the pipe factory.
         /// DuplexChannelFactory is necessary for Callbacks.
         /// </summary>
-        private DuplexChannelFactory<IServerService> pipeFactory;
+        private static DuplexChannelFactory<IServerService> pipeFactory;
 
         /// <summary>
         /// The background process.
         /// </summary>
-        private Process backgroundProcess;
+        private static Process backgroundProcess;
 
         #endregion
 
@@ -73,7 +73,7 @@ namespace HandBrakeWPF.Isolation
 
         #endregion
 
-        #region Public Methods
+        #region Public Server Management Methods
 
         /// <summary>
         /// The can connect.
@@ -91,19 +91,24 @@ namespace HandBrakeWPF.Isolation
         /// </summary>
         public void Connect()
         {
+            if (backgroundProcess == null)
+            {
+               // backgroundProcess = Process.Start("HandBrake.Server.exe");
+            }
+
             ThreadPool.QueueUserWorkItem(delegate
                 {
                     try
                     {
-                        this.pipeFactory = new DuplexChannelFactory<IServerService>(
+                        pipeFactory = new DuplexChannelFactory<IServerService>(
                             new InstanceContext(this),
                             new NetTcpBinding(),
                             new EndpointAddress("net.tcp://127.0.0.1:8000/IHbService"));
 
                         // Connect and Subscribe to the Server
-                        this.Service = this.pipeFactory.CreateChannel();
-                        this.Service.Subscribe();
-                        this.IsConnected = true;
+                        Service = pipeFactory.CreateChannel();
+                        Service.Subscribe();
+                        IsConnected = true;
                     }
                     catch (Exception exc)
                     {
@@ -121,7 +126,7 @@ namespace HandBrakeWPF.Isolation
             {
                 try
                 {
-                    this.Service.Unsubscribe();
+                    Service.Unsubscribe();
                 }
                 catch (Exception exc)
                 {
@@ -130,33 +135,56 @@ namespace HandBrakeWPF.Isolation
             }
         }
 
-        /// <summary>
-        /// The scan source.
-        /// </summary>
-        /// <param name="path">
-        /// The path.
-        /// </param>
-        /// <param name="title">
-        /// The title.
-        /// </param>
-        /// <param name="previewCount">
-        /// The preview count.
-        /// </param>
-        public void ScanSource(string path, int title, int previewCount)
-        {
-            ThreadPool.QueueUserWorkItem(delegate { this.Service.ScanSource(path, title, previewCount); });
-        }
+        #endregion
 
-        /// <summary>
-        /// The start server.
-        /// </summary>
-        public void StartServer()
-        {
-            if (this.backgroundProcess == null)
-            {
-                this.backgroundProcess = Process.Start("HandBrake.Server.exe");
-            }
-        }
+        #region Public Service Methods
+
+        ///// <summary>
+        ///// The scan source.
+        ///// </summary>
+        ///// <param name="path">
+        ///// The path.
+        ///// </param>
+        ///// <param name="title">
+        ///// The title.
+        ///// </param>
+        ///// <param name="previewCount">
+        ///// The preview count.
+        ///// </param>
+        //public void ScanSource(string path, int title, int previewCount)
+        //{
+        //    ThreadPool.QueueUserWorkItem(delegate { this.Service.ScanSource(path, title, previewCount); });
+        //}
+
+        ///// <summary>
+        ///// The stop scan.
+        ///// </summary>
+        //public void StopScan()
+        //{
+        //    ThreadPool.QueueUserWorkItem(delegate { this.Service.StopScan(); });
+        //}
+
+        ///// <summary>
+        ///// Start an Encode
+        ///// </summary>
+        ///// <param name="job">
+        ///// The job.
+        ///// </param>
+        ///// <param name="enableLogging">
+        ///// The enable logging.
+        ///// </param>
+        //public void StartEncode(QueueTask job, bool enableLogging)
+        //{
+        //    ThreadPool.QueueUserWorkItem(delegate { this.Service.StartEncode(job, enableLogging); });
+        //}
+
+        ///// <summary>
+        ///// Stop an Encode
+        ///// </summary>
+        //public void StopEncode()
+        //{
+        //    ThreadPool.QueueUserWorkItem(delegate { this.Service.StopEncode(); });
+        //}
 
         #endregion
 
@@ -169,7 +197,7 @@ namespace HandBrakeWPF.Isolation
         /// </summary>
         public void Dispose()
         {
-            this.Service.Unsubscribe();
+            Service.Unsubscribe();
         }
 
         #endregion
@@ -203,22 +231,34 @@ namespace HandBrakeWPF.Isolation
         {
         }
 
-        #endregion
-
-        #endregion
-
-        #region Implementation of IHbServiceCallback
+        /// <summary>
+        /// The encode progress callback.
+        /// </summary>
+        /// <param name="eventArgs">
+        /// The event Args.
+        /// </param>
+        public virtual void EncodeProgressCallback(EncodeProgressEventArgs eventArgs)
+        {
+        }
 
         /// <summary>
-        /// The test.
+        /// The encode completed callback.
         /// </summary>
-        /// <param name="message">
-        /// The message.
+        /// <param name="eventArgs">
+        /// The event Args.
         /// </param>
-        public void Test(string message)
+        public virtual void EncodeCompletedCallback(EncodeCompletedEventArgs eventArgs)
         {
-            Console.WriteLine(message);
         }
+
+        /// <summary>
+        /// The encode started callback.
+        /// </summary>
+        public virtual void EncodeStartedCallback()
+        {
+        }
+
+        #endregion
 
         #endregion
     }

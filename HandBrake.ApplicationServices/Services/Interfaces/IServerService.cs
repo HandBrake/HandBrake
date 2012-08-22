@@ -12,6 +12,7 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
     using System.Runtime.Serialization;
     using System.ServiceModel;
 
+    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
 
     /// <summary>
@@ -24,7 +25,13 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// Gets the activity log.
         /// </summary>
         [DataMember]
-        string ActivityLog { get; }
+        string ScanActivityLog { get; }
+
+        /// <summary>
+        /// Gets the activity log.
+        /// </summary>
+        [DataMember]
+        string EncodeActivityLog { get; }
 
         /// <summary>
         /// Gets the souce data.
@@ -38,8 +45,20 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <summary>
         /// Gets a value indicating whether is scanning.
         /// </summary>
-        [DataMember]
-        bool IsScanning { get; }
+        bool IsScanning
+        {
+            [OperationContract]
+            get;
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether is encoding.
+        /// </summary>
+        bool IsEncoding
+        {
+            [OperationContract]
+            get;
+        }
 
         /// <summary>
         /// Start the WCF Service
@@ -65,6 +84,33 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// </param>
         [OperationContract]
         void ScanSource(string path, int title, int previewCount);
+
+        /// <summary>
+        /// Start and Encode
+        /// </summary>
+        /// <param name="job">
+        /// The job.
+        /// </param>
+        /// <param name="enableLogging">
+        /// The enable logging.
+        /// </param>
+        [OperationContract]
+        void StartEncode(QueueTask job, bool enableLogging);
+
+        /// <summary>
+        /// The process encode logs.
+        /// </summary>
+        /// <param name="destination">
+        /// The destination.
+        /// </param>
+        [OperationContract]
+        void ProcessEncodeLogs(string destination);
+
+        /// <summary>
+        /// Stop and Encode
+        /// </summary>
+        [OperationContract]
+        void StopEncode();
 
         /// <summary>
         /// Stop the scan.

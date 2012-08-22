@@ -40,7 +40,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// The User Setting Service
         /// </summary>
-        private IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
+        private readonly IUserSettingService userSettingService;
 
         /// <summary>
         /// The Start time of the current Encode;
@@ -62,8 +62,14 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="LibEncode"/> class.
         /// </summary>
-        public LibEncode()
+        /// <param name="userSettingService">
+        /// The user Setting Service.
+        /// </param>
+        public LibEncode(IUserSettingService userSettingService)
+            : base(userSettingService)
         {
+            this.userSettingService = userSettingService;
+
             // Setup the HandBrake Instance
             this.instance = IoC.Get<IHandBrakeInstance>();
             this.instance.EncodeCompleted += this.InstanceEncodeCompleted;

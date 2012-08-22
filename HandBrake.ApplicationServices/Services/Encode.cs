@@ -15,8 +15,6 @@ namespace HandBrake.ApplicationServices.Services
     using System.Threading;
     using System.Windows.Forms;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Base;
@@ -35,7 +33,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// The User Setting Service
         /// </summary>
-        private IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
+        private readonly IUserSettingService userSettingService;
 
         /// <summary>
         /// Gets The Process Handle
@@ -62,8 +60,13 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="Encode"/> class.
         /// </summary>
-        public Encode()
+        /// <param name="userSettingService">
+        /// The user Setting Service.
+        /// </param>
+        public Encode(IUserSettingService userSettingService)
+            : base(userSettingService)
         {
+            this.userSettingService = userSettingService;
             this.EncodeStarted += this.EncodeEncodeStarted;
             GrowlCommunicator.Register();
         }
@@ -116,7 +119,7 @@ namespace HandBrake.ApplicationServices.Services
 
                 if (this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.PreventSleep))
                 {
-                    Win32.PreventSleep();
+                   // Win32.PreventSleep();
                 }
 
                 // Make sure the path exists, attempt to create it if it doesn't

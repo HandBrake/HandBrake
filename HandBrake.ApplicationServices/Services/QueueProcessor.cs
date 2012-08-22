@@ -11,7 +11,6 @@ namespace HandBrake.ApplicationServices.Services
 {
     using System;
     using System.Diagnostics;
-    using System.IO;
     using System.Windows.Forms;
 
     using Caliburn.Micro;
@@ -178,6 +177,18 @@ namespace HandBrake.ApplicationServices.Services
         {
             this.InvokeQueuePaused(EventArgs.Empty);
             this.IsProcessing = false;
+        }
+
+        /// <summary>
+        /// Swap encode service.
+        /// Temp method until Castle is hooked up.
+        /// </summary>
+        /// <param name="service">
+        /// The service.
+        /// </param>
+        public void SwapEncodeService(IEncode service)
+        {
+            this.EncodeService = service;
         }
 
         /// <summary>

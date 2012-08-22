@@ -19,6 +19,7 @@ namespace HandBrake.ApplicationServices.Utilities
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
+    using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
@@ -31,7 +32,7 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <summary>
         /// Backing field for the user settings service.
         /// </summary>
-        private static readonly IUserSettingService UserSettingService = IoC.Get<IUserSettingService>();
+        private static IUserSettingService UserSettingService;
 
         /// <summary>
         /// Generate a CLI Query for an EncodeTask Model object
@@ -44,6 +45,19 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </returns>
         public static string GenerateQuery(EncodeTask task)
         {
+            // TODO Remove this quick hack
+            if (UserSettingService == null)
+            {
+                try
+                {
+                    UserSettingService = IoC.Get<IUserSettingService>();
+                }
+                catch (Exception exc)
+                {
+                    UserSettingService = new UserSettingService();
+                }
+            }
+
             string query = string.Empty;
             query += SourceQuery(task, null, null);
             query += DestinationQuery(task);
@@ -69,6 +83,19 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </returns>
         public static string GeneratePreviewQuery(EncodeTask task, int duration, string startAtPreview)
         {
+            // TODO Remove this quick hack
+            if (UserSettingService == null)
+            {
+                try
+                {
+                    UserSettingService = IoC.Get<IUserSettingService>();
+                }
+                catch (Exception exc)
+                {
+                    UserSettingService = new UserSettingService();
+                }
+            }
+
             string query = string.Empty;
             query += SourceQuery(task, duration, startAtPreview);
             query += DestinationQuery(task);

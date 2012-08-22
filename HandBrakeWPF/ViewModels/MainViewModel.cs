@@ -48,16 +48,6 @@ namespace HandBrakeWPF.ViewModels
         #region Private Variables and Services
 
         /// <summary>
-        /// The Source Scan Service.
-        /// </summary>
-        private IScan scanService;
-
-        /// <summary>
-        /// The Encode Service
-        /// </summary>
-        private readonly IEncode encodeService;
-
-        /// <summary>
         /// The Encode Service
         /// </summary>
         private readonly IQueueProcessor queueProcessor;
@@ -91,6 +81,16 @@ namespace HandBrakeWPF.ViewModels
         /// Backing field for the user setting service.
         /// </summary>
         private readonly IUserSettingService userSettingService;
+
+        /// <summary>
+        /// The Source Scan Service.
+        /// </summary>
+        private IScan scanService;
+
+        /// <summary>
+        /// The Encode Service
+        /// </summary>
+        private IEncode encodeService;
 
         /// <summary>
         /// HandBrakes Main Window Title
@@ -1147,18 +1147,22 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void TestIsolationServices()
         {
-            // Unhook the old service
+            // Unhook the old services
             this.scanService.ScanStared -= this.ScanStared;
             this.scanService.ScanCompleted -= this.ScanCompleted;
             this.scanService.ScanStatusChanged -= this.ScanStatusChanged;
+            this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
 
-            // Replace the Service
+            // Replace the Services
             this.scanService = new IsolatedScanService(this.errorService);
+            this.encodeService = new IsolatedEncodeService(this.errorService);
+            this.queueProcessor.SwapEncodeService(this.encodeService);
 
-            // Add Event Hooks
+            // Add the new Event Hooks
             this.scanService.ScanStared += this.ScanStared;
             this.scanService.ScanCompleted += this.ScanCompleted;
             this.scanService.ScanStatusChanged += this.ScanStatusChanged;
+            this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeStatusChanged;
         }
 
         #endregion

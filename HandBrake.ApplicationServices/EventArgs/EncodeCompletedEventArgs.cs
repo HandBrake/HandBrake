@@ -10,10 +10,12 @@
 namespace HandBrake.ApplicationServices.EventArgs
 {
     using System;
+    using System.Runtime.Serialization;
 
     /// <summary>
     /// Encode Progress Event Args
     /// </summary>
+    [DataContractAttribute]
     public class EncodeCompletedEventArgs : EventArgs
     {
         /// <summary>
@@ -38,16 +40,19 @@ namespace HandBrake.ApplicationServices.EventArgs
         /// <summary>
         /// Gets or sets a value indicating whether Successful.
         /// </summary>
+        [DataMember]
         public bool Successful { get; set; }
 
         /// <summary>
         /// Gets or sets Exception.
         /// </summary>
+        [DataMember]
         public Exception Exception { get; set; }
 
         /// <summary>
         /// Gets or sets ErrorInformation.
         /// </summary>
+        [DataMember]
         public string ErrorInformation { get; set; }
     }
 }
