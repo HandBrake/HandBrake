@@ -369,15 +369,24 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="file">
         /// The location of the file to write the batch file to.
         /// </param>
+        /// <param name="previewScanCount">
+        /// The preview Scan Count.
+        /// </param>
+        /// <param name="verbosity">
+        /// The verbosity.
+        /// </param>
+        /// <param name="disableLibdvdnav">
+        /// The disable Libdvdnav.
+        /// </param>
         /// <returns>
         /// The write batch script to file.
         /// </returns>
-        public bool WriteBatchScriptToFile(string file)
+        public bool WriteBatchScriptToFile(string file, int previewScanCount, int verbosity, bool disableLibdvdnav)
         {
             string queries = string.Empty;
             foreach (QueueTask queueItem in this.queue)
             {
-                string qItem = QueryGeneratorUtility.GenerateQuery(new EncodeTask(queueItem.Task));
+                string qItem = QueryGeneratorUtility.GenerateQuery(new EncodeTask(queueItem.Task), previewScanCount, verbosity, disableLibdvdnav);
                 string fullQuery = '"' + Application.StartupPath + "\\HandBrakeCLI.exe" + '"' + qItem;
 
                 if (queries == string.Empty)

@@ -298,7 +298,7 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
-                if (!Equals(this.statusLabel, value))
+                if (!Equals(this.programStatusLabel, value))
                 {
                     this.programStatusLabel = value;
                     this.NotifyOfPropertyChange(() => this.ProgramStatusLabel);
@@ -1120,7 +1120,10 @@ namespace HandBrakeWPF.ViewModels
         public void ShowCliQuery()
         {
             this.errorService.ShowMessageBox(
-                QueryGeneratorUtility.GenerateQuery(this.CurrentTask),
+                QueryGeneratorUtility.GenerateQuery(this.CurrentTask, 
+                userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount),
+                userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity),
+                userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav)),
                 "CLI Query",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
@@ -1362,7 +1365,7 @@ namespace HandBrakeWPF.ViewModels
 
                 if (filename != null)
                 {
-                    PlistUtility.Export(savefiledialog.FileName, this.selectedPreset);
+                    PlistUtility.Export(savefiledialog.FileName, this.selectedPreset, userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild).ToString());
                 }
             }
             else
@@ -1645,15 +1648,18 @@ namespace HandBrakeWPF.ViewModels
             Execute.OnUIThread(
                 () =>
                 {
-                    this.ProgramStatusLabel =
-                        string.Format(
-                            "{0:00.00}%,  FPS: {1:000.0},  Avg FPS: {2:000.0},  Time Remaining: {3},  Elapsed: {4:hh\\:mm\\:ss},  Pending Jobs {5}",
-                            e.PercentComplete,
-                            e.CurrentFrameRate,
-                            e.AverageFrameRate,
-                            e.EstimatedTimeLeft,
-                            e.ElapsedTime,
-                            this.queueProcessor.QueueManager.Count);
+                    if (this.IsEncoding)
+                    {
+                        this.ProgramStatusLabel =
+                            string.Format(
+                                "{0:00.00}%,  FPS: {1:000.0},  Avg FPS: {2:000.0},  Time Remaining: {3},  Elapsed: {4:hh\\:mm\\:ss},  Pending Jobs {5}",
+                                e.PercentComplete,
+                                e.CurrentFrameRate,
+                                e.AverageFrameRate,
+                                e.EstimatedTimeLeft,
+                                e.ElapsedTime,
+                                this.queueProcessor.QueueManager.Count);
+                    }
                 });
         }
 

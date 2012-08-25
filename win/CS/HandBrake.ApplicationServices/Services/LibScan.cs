@@ -14,8 +14,6 @@ namespace HandBrake.ApplicationServices.Services
     using System.Text;
     using System.Threading;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
@@ -58,6 +56,11 @@ namespace HandBrake.ApplicationServices.Services
         private readonly StringBuilder logging;
 
         /// <summary>
+        /// The Log File Header
+        /// </summary>
+        private readonly StringBuilder header;
+
+        /// <summary>
         /// The Current source scan path.
         /// </summary>
         private string currentSourceScanPath;
@@ -67,11 +70,21 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="LibScan"/> class. 
         /// </summary>
-        public LibScan()
+        /// <param name="userSettingService">
+        /// The user Setting Service.
+        /// </param>
+        /// <param name="handBrakeInstance">
+        /// The hand Brake Instance.
+        /// </param>
+        public LibScan(IUserSettingService userSettingService, IHandBrakeInstance handBrakeInstance)
         {
             logging = new StringBuilder();
 
-            instance = IoC.Get<IHandBrakeInstance>();
+            header = GeneralUtilities.CreateCliLogHeader(
+                userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion),
+                userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild));
+
+            instance = handBrakeInstance;
             instance.Initialize(1);
             instance.ScanProgress += this.InstanceScanProgress;
             instance.ScanCompleted += this.InstanceScanCompleted;
@@ -96,11 +109,6 @@ namespace HandBrake.ApplicationServices.Services
         /// Encode process has progressed
         /// </summary>
         public event ScanProgessStatus ScanStatusChanged;
-
-        /// <summary>
-        /// The Log File Header
-        /// </summary>
-        StringBuilder header = GeneralUtilities.CreateCliLogHeader();
 
         #endregion
 

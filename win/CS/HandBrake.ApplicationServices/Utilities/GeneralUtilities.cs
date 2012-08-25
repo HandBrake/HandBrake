@@ -106,35 +106,24 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <summary>
         /// Add the CLI Query to the Log File.
         /// </summary>
+        /// <param name="version">
+        /// The version.
+        /// </param>
+        /// <param name="build">
+        /// The build.
+        /// </param>
         /// <returns>
         /// The create cli log header.
         /// </returns>
-        public static StringBuilder CreateCliLogHeader()
+        public static StringBuilder CreateCliLogHeader(string version, int build)
         {
             var logHeader = new StringBuilder();
             
-            IUserSettingService userSettingService;
-            try
-            {
-                userSettingService = IoC.Get<IUserSettingService>();
-            } 
-            catch (Exception)
-            {
-                // TODO Sort this out. Should not be calling IoC.Get or creating a new instance here.
-                userSettingService = new UserSettingService();
-            }
-
-            logHeader.AppendLine(
-                String.Format(
-                    "HandBrake {0} {1}",
-                    userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion),
-                    userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild)));
+            logHeader.AppendLine(String.Format("HandBrake {0} {1}", version, build));
             logHeader.AppendLine(String.Format("OS: {0}", Environment.OSVersion));
             logHeader.AppendLine(String.Format("CPU: {0}", SystemInfo.GetCpuCount));
             logHeader.Append(String.Format("Ram: {0} MB, ", SystemInfo.TotalPhysicalMemory));
-            logHeader.AppendLine(
-                String.Format(
-                    "Screen: {0}x{1}", SystemInfo.ScreenBounds.Bounds.Width, SystemInfo.ScreenBounds.Bounds.Height));
+            logHeader.AppendLine(String.Format("Screen: {0}x{1}", SystemInfo.ScreenBounds.Bounds.Width, SystemInfo.ScreenBounds.Bounds.Height));
             logHeader.AppendLine(String.Format("Temp Dir: {0}", Path.GetTempPath()));
             logHeader.AppendLine(String.Format("Install Dir: {0}", Application.StartupPath));
             logHeader.AppendLine(String.Format("Data Dir: {0}\n", Application.UserAppDataPath));

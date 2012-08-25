@@ -44,7 +44,7 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// <summary>
         /// The Log File Header
         /// </summary>
-        private readonly StringBuilder header = GeneralUtilities.CreateCliLogHeader();
+        private readonly StringBuilder header;
 
         /// <summary>
         /// The Log Buffer
@@ -68,6 +68,11 @@ namespace HandBrake.ApplicationServices.Services.Base
         {
             this.userSettingService = userSettingService;
             this.logBuffer = new StringBuilder();
+            header =
+                GeneralUtilities.CreateCliLogHeader(
+                    userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion),
+                    userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild));
+
         }
 
         #region Events
@@ -260,7 +265,10 @@ namespace HandBrake.ApplicationServices.Services.Base
 
             try
             {
-                string query = QueryGeneratorUtility.GenerateQuery(new EncodeTask(encodeQueueTask.Task));
+                string query = QueryGeneratorUtility.GenerateQuery(new EncodeTask(encodeQueueTask.Task), 
+                    userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount),
+                    userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity),
+                    userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav));
                 this.logBuffer = new StringBuilder();
                 this.logBuffer.AppendLine(String.Format("CLI Query: {0}", query));
                 this.logBuffer.AppendLine(String.Format("User Query: {0}", encodeQueueTask.CustomQuery));
@@ -278,7 +286,7 @@ namespace HandBrake.ApplicationServices.Services.Base
                 }
 
                 this.fileWriter = new StreamWriter(logFile) { AutoFlush = true };
-                this.fileWriter.WriteLine(GeneralUtilities.CreateCliLogHeader());
+                this.fileWriter.WriteLine(header);
                 this.fileWriter.WriteLine(String.Format("CLI Query: {0}", query));
                 this.fileWriter.WriteLine(String.Format("User Query: {0}", encodeQueueTask.CustomQuery));
                 this.fileWriter.WriteLine();

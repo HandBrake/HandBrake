@@ -47,6 +47,11 @@ namespace HandBrake.ApplicationServices.Services
         private static readonly XmlSerializer Ser = new XmlSerializer(typeof(List<Preset>));
 
         /// <summary>
+        /// The User Setting Service
+        /// </summary>
+        private readonly IUserSettingService userSettingService;
+
+        /// <summary>
         /// User Preset Default Catgory Name
         /// </summary>
         public static string UserPresetCatgoryName = "User Presets";
@@ -66,19 +71,19 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private ObservableCollection<Preset> presets = new ObservableCollection<Preset>();
 
-        /// <summary>
-        /// The User Setting Service
-        /// </summary>
-        private IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
-
         #endregion
 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PresetService"/> class.
         /// </summary>
-        public PresetService()
+        /// <param name="userSettingService">
+        /// The user Setting Service.
+        /// </param>
+        public PresetService(IUserSettingService userSettingService)
         {
+            this.userSettingService = userSettingService;
+
             // If the preset file doesn't exist. Create it.
             if (!File.Exists(this.builtInPresetFile))
             {

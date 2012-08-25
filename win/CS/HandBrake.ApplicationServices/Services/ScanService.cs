@@ -39,6 +39,11 @@ namespace HandBrake.ApplicationServices.Services
         private readonly IUserSettingService userSettingService;
 
         /// <summary>
+        /// The Log File Header
+        /// </summary>
+        private readonly StringBuilder header;
+
+        /// <summary>
         /// The CLI data parser
         /// </summary>
         private Parser readData;
@@ -53,11 +58,6 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private Process hbProc;
 
-        /// <summary>
-        /// The Log File Header
-        /// </summary>
-        StringBuilder header = GeneralUtilities.CreateCliLogHeader();
-
         #endregion
 
         /// <summary>
@@ -70,6 +70,10 @@ namespace HandBrake.ApplicationServices.Services
         {
             this.userSettingService = userSettingService;
             this.logBuffer = new StringBuilder();
+
+            header = GeneralUtilities.CreateCliLogHeader(
+                userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion),
+                userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild));
         }
 
         #region Events
@@ -290,7 +294,7 @@ namespace HandBrake.ApplicationServices.Services
                     // Only write the log file to disk if it's less than 50MB.
                     if (this.readData.Buffer.Length < 50000000)
                     {
-                        scanLog.WriteLine(GeneralUtilities.CreateCliLogHeader());
+                        scanLog.WriteLine(header);
                         scanLog.WriteLine(query);
                         scanLog.Write(this.readData.Buffer);
 

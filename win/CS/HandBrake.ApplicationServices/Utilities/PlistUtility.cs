@@ -16,12 +16,9 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Windows.Forms;
     using System.Xml;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services;
-    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model.Encoding;
 
     /// <summary>
@@ -29,11 +26,6 @@ namespace HandBrake.ApplicationServices.Utilities
     /// </summary>
     public class PlistUtility
     {
-        /// <summary>
-        /// The User Setting Service
-        /// </summary>
-        private static IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
-
         #region Import
 
         /// <summary>
@@ -490,7 +482,10 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="preset">
         /// The preset.
         /// </param>
-        public static void Export(string path, Preset preset)
+        /// <param name="build">
+        /// The build.
+        /// </param>
+        public static void Export(string path, Preset preset, string build)
         {
             if (string.IsNullOrEmpty(path))
             {
@@ -509,7 +504,7 @@ namespace HandBrake.ApplicationServices.Utilities
                 xmlWriter.WriteStartElement("array");
 
                 // Add New Preset Here. Can write multiple presets here if required in future.
-                WritePreset(xmlWriter, parsed, preset);
+                WritePreset(xmlWriter, parsed, preset, build);
 
                 // Footer
                 xmlWriter.WriteEndElement();
@@ -534,11 +529,14 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="preset">
         /// The preset.
         /// </param>
-        private static void WritePreset(XmlTextWriter xmlWriter, EncodeTask parsed, Preset preset)
+        /// <param name="build">
+        /// The build.
+        /// </param>
+        private static void WritePreset(XmlTextWriter xmlWriter, EncodeTask parsed, Preset preset, string build)
         {
             xmlWriter.WriteStartElement("dict");
             AudioListArrayDict(xmlWriter, parsed);
-            AddEncodeSettings(xmlWriter, parsed, preset);
+            AddEncodeSettings(xmlWriter, parsed, preset, build);
 
             xmlWriter.WriteEndElement();
         }
@@ -574,7 +572,10 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="preset">
         /// The preset.
         /// </param>
-        private static void AddEncodeSettings(XmlTextWriter xmlWriter, EncodeTask parsed, Preset preset)
+        /// <param name="build">
+        /// The build.
+        /// </param>
+        private static void AddEncodeSettings(XmlTextWriter xmlWriter, EncodeTask parsed, Preset preset, string build)
         {
             AddEncodeElement(xmlWriter, "AudioAllowAACPass", "integer", getNullBoolValue(parsed.AllowedPassthruOptions.AudioAllowAACPass));
             AddEncodeElement(xmlWriter, "AudioAllowAC3Pass", "integer", getNullBoolValue(parsed.AllowedPassthruOptions.AudioAllowAC3Pass));
@@ -701,7 +702,7 @@ namespace HandBrake.ApplicationServices.Utilities
             AddEncodeElement(xmlWriter, "PictureWidth", "integer", parsed.Width.ToString());
 
             // Preset Information
-            AddEncodeElement(xmlWriter, "PresetBuildNumber", "string", userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild).ToString());
+            AddEncodeElement(xmlWriter, "PresetBuildNumber", "string", build);
             AddEncodeElement(xmlWriter, "PresetDescription", "string", "No Description");
             AddEncodeElement(xmlWriter, "PresetName", "string", preset.Name);
             AddEncodeElement(xmlWriter, "Type", "integer", "1"); // 1 is user preset, 0 is built in
