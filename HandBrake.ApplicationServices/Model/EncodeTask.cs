@@ -79,7 +79,6 @@ namespace HandBrake.ApplicationServices.Model
             this.Denoise = task.Denoise;
             this.Destination = task.Destination;
             this.Detelecine = task.Detelecine;
-            this.DisableLibDvdNav = task.DisableLibDvdNav;
             this.DisplayWidth = task.DisplayWidth;
             this.EndPoint = task.EndPoint;
             this.Framerate = task.Framerate;
@@ -112,7 +111,6 @@ namespace HandBrake.ApplicationServices.Model
             this.Title = task.Title;
             this.TurboFirstPass = task.TurboFirstPass;
             this.TwoPass = task.TwoPass;
-            this.Verbosity = task.Verbosity;
             this.VideoBitrate = task.VideoBitrate;
             this.VideoEncoder = task.VideoEncoder;
             this.VideoEncodeRateType = task.VideoEncodeRateType;
@@ -412,16 +410,6 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets X264Tune.
         /// </summary>
         public x264Tune X264Tune { get; set; }
-
-        /// <summary>
-        /// Gets or sets Verbosity.
-        /// </summary>
-        public int Verbosity { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether disableLibDvdNav.
-        /// </summary>
-        public bool DisableLibDvdNav { get; set; }
 
         #endregion
 

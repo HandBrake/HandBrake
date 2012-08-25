@@ -15,12 +15,8 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Globalization;
     using System.IO;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
-    using HandBrake.ApplicationServices.Services;
-    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
 
@@ -30,38 +26,29 @@ namespace HandBrake.ApplicationServices.Utilities
     public class QueryGeneratorUtility
     {
         /// <summary>
-        /// Backing field for the user settings service.
-        /// </summary>
-        private static IUserSettingService UserSettingService;
-
-        /// <summary>
         /// Generate a CLI Query for an EncodeTask Model object
         /// </summary>
         /// <param name="task">
         /// The task.
         /// </param>
+        /// <param name="previewScanCount">
+        /// The preview Scan Count.
+        /// </param>
+        /// <param name="verbosity">
+        /// The verbosity.
+        /// </param>
+        /// <param name="disableLibDvdNav">
+        /// The disable Lib Dvd Nav.
+        /// </param>
         /// <returns>
         /// A Cli Query
         /// </returns>
-        public static string GenerateQuery(EncodeTask task)
+        public static string GenerateQuery(EncodeTask task, int previewScanCount, int verbosity, bool disableLibDvdNav)
         {
-            // TODO Remove this quick hack
-            if (UserSettingService == null)
-            {
-                try
-                {
-                    UserSettingService = IoC.Get<IUserSettingService>();
-                }
-                catch (Exception exc)
-                {
-                    UserSettingService = new UserSettingService();
-                }
-            }
-
             string query = string.Empty;
-            query += SourceQuery(task, null, null);
+            query += SourceQuery(task, null, null, previewScanCount);
             query += DestinationQuery(task);
-            query += GenerateTabbedComponentsQuery(task, true);
+            query += GenerateTabbedComponentsQuery(task, true, verbosity, disableLibDvdNav);
 
             return query;
         }
@@ -78,28 +65,24 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="startAtPreview">
         /// The start At Preview.
         /// </param>
+        /// <param name="previewScanCount">
+        /// The preview Scan Count.
+        /// </param>
+        /// <param name="verbosity">
+        /// The verbosity.
+        /// </param>
+        /// <param name="disableLibDvdNav">
+        /// The disable Lib Dvd Nav.
+        /// </param>
         /// <returns>
         /// A Cli query suitable for generating a preview video.
         /// </returns>
-        public static string GeneratePreviewQuery(EncodeTask task, int duration, string startAtPreview)
+        public static string GeneratePreviewQuery(EncodeTask task, int duration, string startAtPreview, int previewScanCount, int verbosity, bool disableLibDvdNav)
         {
-            // TODO Remove this quick hack
-            if (UserSettingService == null)
-            {
-                try
-                {
-                    UserSettingService = IoC.Get<IUserSettingService>();
-                }
-                catch (Exception exc)
-                {
-                    UserSettingService = new UserSettingService();
-                }
-            }
-
             string query = string.Empty;
-            query += SourceQuery(task, duration, startAtPreview);
+            query += SourceQuery(task, duration, startAtPreview, previewScanCount);
             query += DestinationQuery(task);
-            query += GenerateTabbedComponentsQuery(task, true);
+            query += GenerateTabbedComponentsQuery(task, true, verbosity, disableLibDvdNav);
 
             return query;
         }
@@ -115,10 +98,16 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="enableFilters">
         /// The enableFilters.
         /// </param>
+        /// <param name="verbosity">
+        /// The verbosity.
+        /// </param>
+        /// <param name="disableLibDvdNav">
+        /// The disable Lib Dvd Nav.
+        /// </param>
         /// <returns>
         /// The CLI query for the Tabbed section of the main window UI
         /// </returns>
-        private static string GenerateTabbedComponentsQuery(EncodeTask task, bool enableFilters)
+        private static string GenerateTabbedComponentsQuery(EncodeTask task, bool enableFilters, int verbosity, bool disableLibDvdNav)
         {
             string query = string.Empty;
 
@@ -148,7 +137,7 @@ namespace HandBrake.ApplicationServices.Utilities
             query += AdvancedQuery(task);
 
             // Extra Settings
-            query += ExtraSettings();
+            query += ExtraSettings(verbosity, disableLibDvdNav);
 
             return query;
         }
@@ -165,10 +154,13 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <param name="preview">
         /// The preview.
         /// </param>
+        /// <param name="previewScanCount">
+        /// The preview Scan Count.
+        /// </param>
         /// <returns>
         /// A Cli Query as a string
         /// </returns>
-        private static string SourceQuery(EncodeTask task, int? duration, string preview)
+        private static string SourceQuery(EncodeTask task, int? duration, string preview, int previewScanCount)
         {
             string query = string.Empty;
 
@@ -198,7 +190,7 @@ namespace HandBrake.ApplicationServices.Utilities
                     query += string.Format(" --start-at frame:{0} --stop-at frame:{1}", task.StartPoint, calculatedDuration);
                     break;
                 case PointToPointMode.Preview: // Preview
-                    query += " --previews " + UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount) + " ";
+                    query += " --previews " + previewScanCount + " ";
                     query += " --start-at-preview " + preview;
                     query += " --stop-at duration:" + duration + " ";
                     break;
@@ -946,19 +938,24 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <summary>
         /// Generate the Command Line Arguments for any additional advanced options.
         /// </summary>
+        /// <param name="verbosity">
+        /// The verbosity.
+        /// </param>
+        /// <param name="disableLibdvdNav">
+        /// The disable Libdvd Nav.
+        /// </param>
         /// <returns>
         /// A Cli Query as a string
         /// </returns>
-        private static string ExtraSettings()
+        private static string ExtraSettings(int verbosity, bool disableLibdvdNav)
         {
             string query = string.Empty;
 
             // Verbosity Level
-            int verbosity = UserSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity);
             query += string.Format(" --verbose={0}", verbosity);
 
             // LibDVDNav
-            if (UserSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav))
+            if (disableLibdvdNav)
                 query += " --no-dvdnav";
 
             return query;

@@ -258,7 +258,6 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             }
         }
 
-
         /// <summary>
         ///   Gets a value indicating whether this is an SRT subtitle.
         /// </summary>

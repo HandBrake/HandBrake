@@ -13,8 +13,6 @@ namespace HandBrake.ApplicationServices.Services
     using System.Diagnostics;
     using System.Windows.Forms;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -28,7 +26,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// The User Setting Service
         /// </summary>
-        private static IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
+        private readonly IUserSettingService userSettingService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QueueProcessor"/> class.
@@ -39,11 +37,15 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="encodeService">
         /// The encode Service.
         /// </param>
+        /// <param name="userSettingService">
+        /// The user Setting Service.
+        /// </param>
         /// <exception cref="ArgumentNullException">
         /// Services are not setup
         /// </exception>
-        public QueueProcessor(IQueueManager queueManager, IEncode encodeService)
+        public QueueProcessor(IQueueManager queueManager, IEncode encodeService, IUserSettingService userSettingService)
         {
+            this.userSettingService = userSettingService;
             this.QueueManager = queueManager;
             this.EncodeService = encodeService;
 
@@ -278,7 +280,7 @@ namespace HandBrake.ApplicationServices.Services
         /// Send a file to a 3rd party application after encoding has completed.
         /// </summary>
         /// <param name="file"> The file path</param>
-        private static void SendToApplication(string file)
+        private void SendToApplication(string file)
         {
             if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SendFile) && !string.IsNullOrEmpty(userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileTo)))
             {
@@ -291,7 +293,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Perform an action after an encode. e.g a shutdown, standby, restart etc.
         /// </summary>
-        private static void Finish()
+        private void Finish()
         {
             // Growl
             if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.GrowlQueue))

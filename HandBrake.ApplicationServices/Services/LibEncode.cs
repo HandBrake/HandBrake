@@ -12,8 +12,6 @@ namespace HandBrake.ApplicationServices.Services
     using System;
     using System.Diagnostics;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Base;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -65,13 +63,16 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        public LibEncode(IUserSettingService userSettingService)
+        /// <param name="handBrakeInstance">
+        /// The hand Brake Instance.
+        /// </param>
+        public LibEncode(IUserSettingService userSettingService, IHandBrakeInstance handBrakeInstance)
             : base(userSettingService)
         {
             this.userSettingService = userSettingService;
 
             // Setup the HandBrake Instance
-            this.instance = IoC.Get<IHandBrakeInstance>();
+            this.instance = handBrakeInstance;
             this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
             this.instance.EncodeProgress += this.InstanceEncodeProgress;
 

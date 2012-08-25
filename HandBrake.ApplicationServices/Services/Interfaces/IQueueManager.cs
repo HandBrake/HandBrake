@@ -127,10 +127,19 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <param name="path">
         /// The path to the location for the script to be saved.
         /// </param>
+        /// <param name="previewScanCount">
+        /// The preview Scan Count.
+        /// </param>
+        /// <param name="verbosity">
+        /// The verbosity.
+        /// </param>
+        /// <param name="disableLibdvdnav">
+        /// The disable Libdvdnav.
+        /// </param>
         /// <returns>
         /// True if sucessful
         /// </returns>
-        bool WriteBatchScriptToFile(string path);
+        bool WriteBatchScriptToFile(string path, int previewScanCount, int verbosity, bool disableLibdvdnav);
 
         /// <summary>
         /// Temp workaround until this can be fixed properly.
