@@ -1064,7 +1064,7 @@ namespace HandBrakeWPF.ViewModels
 
                         double newHeight = ((double)this.Width * this.sourceResolution.Width * this.SourceAspect.Height *
                                             crop_height) /
-                                           (this.sourceResolution.Height * this.SourceAspect.Width * crop_width);
+                                           ((double)this.sourceResolution.Height * this.SourceAspect.Width * crop_width);
 
                         this.Task.Height = (int)Math.Round(this.GetModulusValue(newHeight), 0);
                         this.NotifyOfPropertyChange(() => this.Height);
