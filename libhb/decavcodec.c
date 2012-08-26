@@ -221,18 +221,6 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         hb_log( "decavcodecaInit: avcodec_open failed" );
         return 1;
     }
-    /* Libav's ff_vector_fmac_scalar_*() asm functions are buggy under Win64
-     * we can't let it decode the DTS-ES XCh extension until this is fixed
-     *
-     * Note: the DTS decoder doesn't support request_channels changing
-     * mid-stream, so we must do this here */
-    if ((w->codec_param == CODEC_ID_DTS) &&
-        (w->audio->config.in.channel_layout & ~AV_CH_LOW_FREQUENCY) == AV_CH_LAYOUT_6POINT0)
-    {
-        hb_deep_log(2, "decavcodecaInit: disabling DTS-ES XCh extension processing");
-        pv->context->request_channels =
-            5 + !!(w->audio->config.in.channel_layout & AV_CH_LOW_FREQUENCY);
-    }
 
     return 0;
 }
