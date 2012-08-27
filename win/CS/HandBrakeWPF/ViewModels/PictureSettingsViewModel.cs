@@ -11,7 +11,6 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.Composition;
     using System.Drawing;
 
     using Caliburn.Micro;
@@ -26,7 +25,6 @@ namespace HandBrakeWPF.ViewModels
     /// <summary>
     /// The Picture Settings View Model
     /// </summary>
-    [Export(typeof(IPictureSettingsViewModel))]
     public class PictureSettingsViewModel : ViewModelBase, IPictureSettingsViewModel
     {
         /*

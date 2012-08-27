@@ -11,7 +11,6 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.Composition;
     using System.Globalization;
 
     using Caliburn.Micro;
@@ -23,14 +22,12 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
-    using HandBrake.Interop.Model.Encoding.x264;
 
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
     /// The Video View Model
     /// </summary>
-    [Export(typeof(IVideoViewModel))]
     public class VideoViewModel : ViewModelBase, IVideoViewModel
     {
         #region Constants and Fields

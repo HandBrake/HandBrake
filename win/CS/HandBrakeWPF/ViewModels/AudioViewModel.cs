@@ -12,7 +12,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
-    using System.ComponentModel.Composition;
     using System.Linq;
 
     using Caliburn.Micro;
@@ -29,7 +28,6 @@ namespace HandBrakeWPF.ViewModels
     /// <summary>
     /// The Audio View Model
     /// </summary>
-    [Export(typeof(IAudioViewModel))]
     public class AudioViewModel : ViewModelBase, IAudioViewModel
     {
         /// <summary>

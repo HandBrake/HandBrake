@@ -13,7 +13,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.ComponentModel;
-    using System.ComponentModel.Composition;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
@@ -35,7 +34,6 @@ namespace HandBrakeWPF.ViewModels
     /// <summary>
     /// The Options View Model
     /// </summary>
-    [Export(typeof(IOptionsViewModel))]
     public class OptionsViewModel : ViewModelBase, IOptionsViewModel
     {
         #region Constants and Fields

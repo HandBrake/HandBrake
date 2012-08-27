@@ -10,7 +10,6 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
-    using System.ComponentModel.Composition;
     using System.Windows;
 
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -18,7 +17,6 @@ namespace HandBrakeWPF.ViewModels
     /// <summary>
     /// The Error View Model
     /// </summary>
-    [Export(typeof(IErrorViewModel))]
     public class ErrorViewModel : ViewModelBase, IErrorViewModel
     {
         #region Constants and Fields

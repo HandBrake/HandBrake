@@ -92,7 +92,6 @@
     </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
@@ -169,7 +168,6 @@
     <Compile Include="Services\Interfaces\IUpdateVersionService.cs" />
     <Compile Include="Services\UpdateVersionService.cs" />
     <Compile Include="Startup\CastleBootstrapper.cs" />
-    <Compile Include="Startup\MefBootstrapper.cs" />
     <Compile Include="UserSettingConstants.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AddPresetViewModel.cs" />

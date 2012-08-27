@@ -9,14 +9,11 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using System.ComponentModel.Composition;
-
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
     /// The Title Specific View Model
     /// </summary>
-    [Export(typeof(ITitleSpecificViewModel))]
     public class TitleSpecificViewModel : ViewModelBase, ITitleSpecificViewModel
     {
         #region Constants and Fields

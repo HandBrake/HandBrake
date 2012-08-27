@@ -12,7 +12,6 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.ComponentModel.Composition;
     using System.IO;
 
     using Caliburn.Micro;
@@ -30,7 +29,6 @@ namespace HandBrakeWPF.ViewModels
     /// <summary>
     /// The Chapters View Model
     /// </summary>
-    [Export(typeof(IChaptersViewModel))]
     public class ChaptersViewModel : ViewModelBase, IChaptersViewModel
     {
         /// <summary>
