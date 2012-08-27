@@ -118,8 +118,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
 
     // sample_fmt conversion
     pv->resample = hb_audio_resample_init(context->sample_fmt,
-                                          context->channel_layout,
-                                          AV_MATRIX_ENCODING_NONE, 0);
+                                          audio->config.out.mixdown, 0, 0);
     hb_audio_resample_set_sample_fmt(pv->resample, AV_SAMPLE_FMT_FLT);
     if (hb_audio_resample_update(pv->resample))
     {

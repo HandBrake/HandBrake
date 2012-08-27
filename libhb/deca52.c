@@ -139,10 +139,10 @@ static int deca52Init(hb_work_object_t *w, hb_job_t *job)
         pv->dynamic_range_compression =
             audio->config.out.dynamic_range_compression;
 
-        int mode;
-        uint64_t layout = hb_ff_mixdown_xlat(audio->config.out.mixdown, &mode);
-        pv->resample = hb_audio_resample_init(AV_SAMPLE_FMT_FLT, layout, mode,
-                                              audio->config.out.normalize_mix_level);
+        pv->resample =
+            hb_audio_resample_init(AV_SAMPLE_FMT_FLT,
+                                   audio->config.out.mixdown, 1,
+                                   audio->config.out.normalize_mix_level);
         if (pv->resample == NULL)
         {
             hb_error("deca52Init: hb_audio_resample_init() failed");

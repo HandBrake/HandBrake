@@ -27,6 +27,7 @@
 
 typedef struct
 {
+    int do_remix;
     int resample_needed;
     AVAudioResampleContext *avresample;
 
@@ -59,14 +60,15 @@ typedef struct
 } hb_audio_resample_t;
 
 /* Initialize an hb_audio_resample_t for converting audio to the requested
- * sample_fmt and channel_layout, using the specified matrix_encoding.
+ * sample_fmt and mixdown.
  *
  * Also sets the default audio input characteristics, so that they are the same
  * as the output characteristics (no conversion needed).
+ *
+ * If do_remix is 0, it will be assumed that any remixing was *already* done.
  */
-hb_audio_resample_t* hb_audio_resample_init(enum AVSampleFormat output_sample_fmt,
-                                            uint64_t output_channel_layout,
-                                            enum AVMatrixEncoding matrix_encoding,
+hb_audio_resample_t* hb_audio_resample_init(enum AVSampleFormat sample_fmt,
+                                            int hb_amixdown, int do_remix,
                                             int normalize_mix_level);
 
 /* The following functions set the audio input characteristics.

@@ -189,11 +189,10 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     /* Downmixing & sample_fmt conversion */
     if (!(w->audio->config.out.codec & HB_ACODEC_PASS_FLAG))
     {
-        int mode;
-        uint64_t layout = hb_ff_mixdown_xlat(w->audio->config.out.mixdown,
-                                             &mode);
-        pv->resample = hb_audio_resample_init(AV_SAMPLE_FMT_FLT, layout, mode,
-                                              w->audio->config.out.normalize_mix_level);
+        pv->resample =
+            hb_audio_resample_init(AV_SAMPLE_FMT_FLT,
+                                   w->audio->config.out.mixdown, 1,
+                                   w->audio->config.out.normalize_mix_level);
         if (pv->resample == NULL)
         {
             hb_error("decavcodecaInit: hb_audio_resample_init() failed");
