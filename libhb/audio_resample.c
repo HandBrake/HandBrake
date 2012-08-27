@@ -34,15 +34,52 @@ hb_audio_resample_t* hb_audio_resample_init(enum AVSampleFormat output_sample_fm
     resample->resample_needed         = 0;
     resample->avresample              = NULL;
 
+    // set default input characteristics
+    resample->in.sample_fmt         = resample->out.sample_fmt;
+    resample->in.channel_layout     = resample->out.channel_layout;
+    resample->in.center_mix_level   = HB_MIXLEV_DEFAULT;
+    resample->in.surround_mix_level = HB_MIXLEV_DEFAULT;
+
     return resample;
 }
 
-int hb_audio_resample_update(hb_audio_resample_t *resample,
-                             enum AVSampleFormat new_sample_fmt,
-                             uint64_t new_channel_layout,
-                             double new_surroundmixlev,
-                             double new_centermixlev,
-                             int new_channels)
+void hb_audio_resample_set_channel_layout(hb_audio_resample_t *resample,
+                                          uint64_t channel_layout,
+                                          int channels)
+{
+    if (resample != NULL)
+    {
+        channel_layout = hb_ff_layout_xlat(channel_layout, channels);
+        if (channel_layout == AV_CH_LAYOUT_STEREO_DOWNMIX)
+        {
+            // Dolby Surround is Stereo when it comes to remixing
+            channel_layout = AV_CH_LAYOUT_STEREO;
+        }
+        resample->in.channel_layout = channel_layout;
+    }
+}
+
+void hb_audio_resample_set_mix_levels(hb_audio_resample_t *resample,
+                                      double surround_mix_level,
+                                      double center_mix_level)
+{
+    if (resample != NULL)
+    {
+        resample->in.center_mix_level   = center_mix_level;
+        resample->in.surround_mix_level = surround_mix_level;
+    }
+}
+
+void hb_audio_resample_set_sample_fmt(hb_audio_resample_t *resample,
+                                      enum AVSampleFormat sample_fmt)
+{
+    if (resample != NULL)
+    {
+        resample->in.sample_fmt = sample_fmt;
+    }
+}
+
+int hb_audio_resample_update(hb_audio_resample_t *resample)
 {
     if (resample == NULL)
     {
@@ -52,24 +89,17 @@ int hb_audio_resample_update(hb_audio_resample_t *resample,
 
     int ret, resample_changed;
 
-    new_channel_layout = hb_ff_layout_xlat(new_channel_layout, new_channels);
-    if (new_channel_layout == AV_CH_LAYOUT_STEREO_DOWNMIX)
-    {
-        // Dolby Surround is Stereo when it comes to remixing
-        new_channel_layout = AV_CH_LAYOUT_STEREO;
-    }
-
     resample->resample_needed =
         (resample->resample_needed ||
-         resample->out.sample_fmt != new_sample_fmt ||
-         resample->out.channel_layout != new_channel_layout);
+         resample->out.sample_fmt != resample->in.sample_fmt ||
+         resample->out.channel_layout != resample->in.channel_layout);
 
     resample_changed =
         (resample->resample_needed &&
-         (resample->in.sample_fmt != new_sample_fmt ||
-          resample->in.channel_layout != new_channel_layout ||
-          resample->in.center_mix_level != new_centermixlev ||
-          resample->in.surround_mix_level != new_surroundmixlev));
+         (resample->resample.sample_fmt != resample->in.sample_fmt ||
+          resample->resample.channel_layout != resample->in.channel_layout ||
+          resample->resample.center_mix_level != resample->in.center_mix_level ||
+          resample->resample.surround_mix_level != resample->in.surround_mix_level));
 
     if (resample_changed || (resample->resample_needed &&
                              resample->avresample == NULL))
@@ -98,13 +128,13 @@ int hb_audio_resample_update(hb_audio_resample_t *resample,
         }
 
         av_opt_set_int(resample->avresample, "in_sample_fmt",
-                       new_sample_fmt, 0);
+                       resample->in.sample_fmt, 0);
         av_opt_set_int(resample->avresample, "in_channel_layout",
-                       new_channel_layout, 0);
+                       resample->in.channel_layout, 0);
         av_opt_set_double(resample->avresample, "center_mix_level",
-                          new_centermixlev, 0);
+                          resample->in.center_mix_level, 0);
         av_opt_set_double(resample->avresample, "surround_mix_level",
-                          new_surroundmixlev, 0);
+                          resample->in.surround_mix_level, 0);
 
         if ((ret = avresample_open(resample->avresample)))
         {
@@ -117,10 +147,12 @@ int hb_audio_resample_update(hb_audio_resample_t *resample,
             return ret;
         }
 
-        resample->in.sample_fmt         = new_sample_fmt;
-        resample->in.channel_layout     = new_channel_layout;
-        resample->in.center_mix_level   = new_centermixlev;
-        resample->in.surround_mix_level = new_surroundmixlev;
+        resample->resample.sample_fmt         = resample->in.sample_fmt;
+        resample->resample.channel_layout     = resample->in.channel_layout;
+        resample->resample.channels           =
+            av_get_channel_layout_nb_channels(resample->in.channel_layout);
+        resample->resample.center_mix_level   = resample->in.center_mix_level;
+        resample->resample.surround_mix_level = resample->in.surround_mix_level;
     }
 
     return 0;
@@ -158,21 +190,19 @@ hb_buffer_t* hb_audio_resample(hb_audio_resample_t *resample,
 
     if (resample->resample_needed)
     {
-        int out_samples;
+        int in_linesize, out_linesize, out_samples;
         // set in/out linesize and out_size
-        av_samples_get_buffer_size(&resample->in.linesize,
-                                   resample->in.channels, nsamples,
-                                   resample->in.sample_fmt, 0);
-        out_size = av_samples_get_buffer_size(&resample->out.linesize,
+        av_samples_get_buffer_size(&in_linesize,
+                                   resample->resample.channels, nsamples,
+                                   resample->resample.sample_fmt, 0);
+        out_size = av_samples_get_buffer_size(&out_linesize,
                                               resample->out.channels, nsamples,
                                               resample->out.sample_fmt, 0);
         out = hb_buffer_init(out_size);
 
         out_samples = avresample_convert(resample->avresample,
-                                         (void**)&out->data,
-                                         resample->out.linesize, nsamples,
-                                         (void**)&samples,
-                                         resample->in.linesize, nsamples);
+                                         (void**)&out->data, out_linesize, nsamples,
+                                         (void**)&samples,    in_linesize, nsamples);
 
         if (out_samples <= 0)
         {

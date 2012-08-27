@@ -330,10 +330,10 @@ static hb_buffer_t *Decode( hb_work_object_t *w )
         } break;
     }
 
-    if (hb_audio_resample_update(pv->resample, AV_SAMPLE_FMT_FLT,
-                                 hdr2layout[pv->nchannels - 1],
-                                 HB_MIXLEV_DEFAULT, HB_MIXLEV_DEFAULT,
-                                 pv->nchannels))
+    hb_audio_resample_set_channel_layout(pv->resample,
+                                         hdr2layout[pv->nchannels - 1],
+                                         pv->nchannels);
+    if (hb_audio_resample_update(pv->resample))
     {
         hb_log("declpcm: hb_audio_resample_update() failed");
         return NULL;

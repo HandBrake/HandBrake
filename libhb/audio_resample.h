@@ -32,8 +32,6 @@ typedef struct
 
     struct
     {
-        int channels;
-        int linesize;
         uint64_t channel_layout;
         double center_mix_level;
         double surround_mix_level;
@@ -43,7 +41,15 @@ typedef struct
     struct
     {
         int channels;
-        int linesize;
+        uint64_t channel_layout;
+        double center_mix_level;
+        double surround_mix_level;
+        enum AVSampleFormat sample_fmt;
+    } resample;
+
+    struct
+    {
+        int channels;
         int sample_size;
         int normalize_mix_level;
         uint64_t channel_layout;
@@ -55,25 +61,38 @@ typedef struct
 /* Initialize an hb_audio_resample_t for converting audio to the requested
  * sample_fmt and channel_layout, using the specified matrix_encoding.
  *
- * Input characteristics are set via hb_audio_resample_update().
+ * Also sets the default audio input characteristics, so that they are the same
+ * as the output characteristics (no conversion needed).
  */
 hb_audio_resample_t* hb_audio_resample_init(enum AVSampleFormat output_sample_fmt,
                                             uint64_t output_channel_layout,
                                             enum AVMatrixEncoding matrix_encoding,
                                             int normalize_mix_level);
 
-/* Update an hb_audio_resample_t, setting the input sample characteristics.
+/* The following functions set the audio input characteristics.
  *
- * Can be called whenever the input type may change.
+ * They should be called whenever the relevant characteristic(s) differ from the
+ * requested output characteristics, or if they may have changed in the source.
  *
- * new_channel_layout is sanitized automatically.
+ * Note: channel_layout is automatically sanitized.
  */
-int                  hb_audio_resample_update(hb_audio_resample_t *resample,
-                                              enum AVSampleFormat new_sample_fmt,
-                                              uint64_t new_channel_layout,
-                                              double new_surroundmixlev,
-                                              double new_centermixlev,
-                                              int new_channels);
+
+void                 hb_audio_resample_set_channel_layout(hb_audio_resample_t *resample,
+                                                          uint64_t channel_layout,
+                                                          int channels);
+
+void                 hb_audio_resample_set_mix_levels(hb_audio_resample_t *resample,
+                                                      double surround_mix_level,
+                                                      double center_mix_level);
+
+void                 hb_audio_resample_set_sample_fmt(hb_audio_resample_t *resample,
+                                                      enum AVSampleFormat sample_fmt);
+
+/* Update an hb_audio_resample_t.
+ *
+ * Must be called after using any of the above functions.
+ */
+int                  hb_audio_resample_update(hb_audio_resample_t *resample);
 
 /* Free an hb_audio_remsample_t. */
 void                 hb_audio_resample_free(hb_audio_resample_t *resample);

@@ -1452,12 +1452,12 @@ static void decodeAudio(hb_audio_t *audio, hb_work_private_t *pv, uint8_t *data,
             }
             else
             {
-                if (hb_audio_resample_update(pv->resample,
-                                             pv->context->sample_fmt,
-                                             pv->context->channel_layout,
-                                             HB_MIXLEV_DEFAULT,
-                                             HB_MIXLEV_DEFAULT,
-                                             pv->context->channels))
+                hb_audio_resample_set_channel_layout(pv->resample,
+                                                     context->channel_layout,
+                                                     context->channels);
+                hb_audio_resample_set_sample_fmt(pv->resample,
+                                                 context->sample_fmt);
+                if (hb_audio_resample_update(pv->resample))
                 {
                     hb_log("decavcodec: hb_audio_resample_update() failed");
                     return;

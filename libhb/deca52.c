@@ -373,10 +373,13 @@ static hb_buffer_t* Decode(hb_work_object_t *w)
                 }
             }
         }
-        if (hb_audio_resample_update(pv->resample, AV_SAMPLE_FMT_FLT,
-                                     pv->channel_layout,
-                                     (double)pv->state->slev,
-                                     (double)pv->state->clev, pv->nchannels))
+        hb_audio_resample_set_channel_layout(pv->resample,
+                                             pv->channel_layout,
+                                             pv->nchannels);
+        hb_audio_resample_set_mix_levels(pv->resample,
+                                         (double)pv->state->slev,
+                                         (double)pv->state->clev);
+        if (hb_audio_resample_update(pv->resample))
         {
             hb_log("deca52: hb_audio_resample_update() failed");
             hb_buffer_close(&flt);
