@@ -67,7 +67,7 @@
 					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView"/>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
+				<string key="NSScreenRect">{{0, 0}, {1920, 1178}}</string>
 				<string key="NSMinSize">{213, 129}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
@@ -717,10 +717,300 @@
 				<int key="NSvFlags">256</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
+					<object class="NSTextField" id="725503362">
+						<reference key="NSNextResponder" ref="332598366"/>
+						<int key="NSvFlags">256</int>
+						<string key="NSFrame">{{30, 77}, {134, 28}}</string>
+						<reference key="NSSuperview" ref="332598366"/>
+						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="113289239"/>
+						<bool key="NSEnabled">YES</bool>
+						<object class="NSTextFieldCell" key="NSCell" id="603140150">
+							<int key="NSCellFlags">67239424</int>
+							<int key="NSCellFlags2">272760832</int>
+							<string key="NSContents">Alternate Language:</string>
+							<reference key="NSSupport" ref="26"/>
+							<reference key="NSControlView" ref="725503362"/>
+							<reference key="NSBackgroundColor" ref="525377782"/>
+							<reference key="NSTextColor" ref="887152126"/>
+						</object>
+					</object>
+					<object class="NSComboBox" id="113289239">
+						<reference key="NSNextResponder" ref="332598366"/>
+						<int key="NSvFlags">256</int>
+						<string key="NSFrame">{{169, 87}, {247, 22}}</string>
+						<reference key="NSSuperview" ref="332598366"/>
+						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="247298122"/>
+						<bool key="NSEnabled">YES</bool>
+						<object class="NSComboBoxCell" key="NSCell" id="37767182">
+							<int key="NSCellFlags">343014976</int>
+							<int key="NSCellFlags2">272761856</int>
+							<string key="NSContents"/>
+							<reference key="NSSupport" ref="26"/>
+							<reference key="NSControlView" ref="113289239"/>
+							<bool key="NSDrawsBackground">YES</bool>
+							<object class="NSColor" key="NSBackgroundColor" id="84276979">
+								<int key="NSColorSpace">6</int>
+								<string key="NSCatalogName">System</string>
+								<string key="NSColorName">textBackgroundColor</string>
+								<object class="NSColor" key="NSColor" id="993015046">
+									<int key="NSColorSpace">3</int>
+									<bytes key="NSWhite">MQA</bytes>
+								</object>
+							</object>
+							<reference key="NSTextColor" ref="887152126"/>
+							<int key="NSVisibleItemCount">10</int>
+							<bool key="NSHasVerticalScroller">YES</bool>
+							<bool key="NSCompletes">YES</bool>
+							<object class="NSMutableArray" key="NSPopUpListData">
+								<bool key="EncodedWithXMLCoder">YES</bool>
+								<string>Afar</string>
+								<string>Abkhazian</string>
+								<string>Afrikaans</string>
+								<string>Albanian</string>
+								<string>Amharic</string>
+								<string>Arabic</string>
+								<string>Armenian</string>
+								<string>Assamese</string>
+								<string>Avestan</string>
+								<string>Aymara</string>
+								<string>Azerbaijani</string>
+								<string>Bashkir</string>
+								<string>Basque</string>
+								<string>Belarusian</string>
+								<string>Bengali</string>
+								<string>Bihari</string>
+								<string>Bislama</string>
+								<string>Bosnian</string>
+								<string>Breton</string>
+								<string>Bulgarian</string>
+								<string>Burmese</string>
+								<string>Catalan</string>
+								<string>Chamorro</string>
+								<string>Chechen</string>
+								<string>Chichewa; Nyanja</string>
+								<string>Chinese</string>
+								<string>Church Slavic</string>
+								<string>Chuvash</string>
+								<string>Cornish</string>
+								<string>Corsican</string>
+								<string>Croatian</string>
+								<string>Czech</string>
+								<string>Dansk</string>
+								<string>Deutsch</string>
+								<string>Dzongkha</string>
+								<string>English</string>
+								<string>Espanol</string>
+								<string>Esperanto</string>
+								<string>Estonian</string>
+								<string>Faroese</string>
+								<string>Fijian</string>
+								<string>Francais</string>
+								<string>Frisian</string>
+								<string>Georgian</string>
+								<string>Gaelic (Scots)</string>
+								<string>Gallegan</string>
+								<string>Greek, Modern ()</string>
+								<string>Guarani</string>
+								<string>Gujarati</string>
+								<string>Hebrew</string>
+								<string>Herero</string>
+								<string>Hindi</string>
+								<string>Hiri Motu</string>
+								<string>Inuktitut</string>
+								<string>Interlingue</string>
+								<string>Interlingua</string>
+								<string>Indonesian</string>
+								<string>Inupiaq</string>
+								<string>Irish</string>
+								<string>Islenska</string>
+								<string>Italian</string>
+								<string>Javanese</string>
+								<string>Japanese</string>
+								<string>Kalaallisut (Greenlandic)</string>
+								<string>Kannada</string>
+								<string>Kashmiri</string>
+								<string>Kazakh</string>
+								<string>Khmer</string>
+								<string>Kikuyu</string>
+								<string>Kinyarwanda</string>
+								<string>Kirghiz</string>
+								<string>Komi</string>
+								<string>Korean</string>
+								<string>Kuanyama</string>
+								<string>Kurdish</string>
+								<string>Lao</string>
+								<string>Latin</string>
+								<string>Latvian</string>
+								<string>Lingala</string>
+								<string>Lithuanian</string>
+								<string>Letzeburgesch</string>
+								<string>Macedonian</string>
+								<string>Magyar</string>
+								<string>Malay</string>
+								<string>Malayalam</string>
+								<string>Malagasy</string>
+								<string>Maltese</string>
+								<string>Manx</string>
+								<string>Maori</string>
+								<string>Marathi</string>
+								<string>Marshall</string>
+								<string>Moldavian</string>
+								<string>Mongolian</string>
+								<string>Nauru</string>
+								<string>Navajo</string>
+								<string>Ndebele, South</string>
+								<string>Ndebele, North</string>
+								<string>Ndonga</string>
+								<string>Nederlands</string>
+								<string>Nepali</string>
+								<string>Northern Sami</string>
+								<string>Norwegian</string>
+								<string>Norwegian Bokmal</string>
+								<string>Norwegian Nynorsk</string>
+								<string>Occitan (post 1500); Provencal</string>
+								<string>Oriya</string>
+								<string>Oromo</string>
+								<string>Ossetian; Ossetic</string>
+								<string>Panjabi</string>
+								<string>Persian</string>
+								<string>Pali</string>
+								<string>Polish</string>
+								<string>Portuges</string>
+								<string>Pushto</string>
+								<string>Quechua</string>
+								<string>Raeto-Romance</string>
+								<string>Romanian</string>
+								<string>Rundi</string>
+								<string>Russian</string>
+								<string>Sango</string>
+								<string>Sanskrit</string>
+								<string>Sardinian</string>
+								<string>Serbian</string>
+								<string>Sinhalese</string>
+								<string>Slovak</string>
+								<string>Slovenian</string>
+								<string>Samoan</string>
+								<string>Shona</string>
+								<string>Sindhi</string>
+								<string>Somali</string>
+								<string>Sotho, Southern</string>
+								<string>Sundanese</string>
+								<string>Suomi</string>
+								<string>Svenska</string>
+								<string>Swahili</string>
+								<string>Swati</string>
+								<string>Tahitian</string>
+								<string>Tamil</string>
+								<string>Tatar</string>
+								<string>Telugu</string>
+								<string>Tajik</string>
+								<string>Tagalog</string>
+								<string>Thai</string>
+								<string>Tibetian</string>
+								<string>Tigrinya</string>
+								<string>Tonga (Tonga Islands)</string>
+								<string>Tswana</string>
+								<string>Tsonga</string>
+								<string>Turkish</string>
+								<string>Turkmen</string>
+								<string>Twi</string>
+								<string>Uighur</string>
+								<string>Ukrainian</string>
+								<string>Urdu</string>
+								<string>Uzbek</string>
+								<string>Vietnamese</string>
+								<string>Volapk</string>
+								<string>Welsh</string>
+								<string>Wolof</string>
+								<string>Xhosa</string>
+								<string>Yiddish</string>
+								<string>Yoruba</string>
+								<string>Zhuang</string>
+								<string>Zulu</string>
+							</object>
+							<reference key="NSDelegate" ref="113289239"/>
+							<object class="NSComboTableView" key="NSTableView" id="734498420">
+								<reference key="NSNextResponder"/>
+								<int key="NSvFlags">274</int>
+								<string key="NSFrameSize">{13, 2952}</string>
+								<reference key="NSSuperview"/>
+								<reference key="NSWindow"/>
+								<bool key="NSEnabled">YES</bool>
+								<object class="NSMutableArray" key="NSTableColumns">
+									<bool key="EncodedWithXMLCoder">YES</bool>
+									<object class="NSTableColumn">
+										<double key="NSWidth">10</double>
+										<double key="NSMinWidth">10</double>
+										<double key="NSMaxWidth">1000</double>
+										<object class="NSTableHeaderCell" key="NSHeaderCell">
+											<int key="NSCellFlags">75628032</int>
+											<int key="NSCellFlags2">0</int>
+											<object class="NSMutableString" key="NSContents">
+												<characters key="NS.bytes"/>
+											</object>
+											<object class="NSFont" key="NSSupport" id="464053631">
+												<string key="NSName">LucidaGrande</string>
+												<double key="NSSize">12</double>
+												<int key="NSfFlags">16</int>
+											</object>
+											<object class="NSColor" key="NSBackgroundColor">
+												<int key="NSColorSpace">3</int>
+												<bytes key="NSWhite">MC4zMzMzMzI5OQA</bytes>
+											</object>
+											<reference key="NSTextColor" ref="993015046"/>
+										</object>
+										<object class="NSTextFieldCell" key="NSDataCell">
+											<int key="NSCellFlags">338820672</int>
+											<int key="NSCellFlags2">1024</int>
+											<reference key="NSSupport" ref="26"/>
+											<reference key="NSControlView" ref="734498420"/>
+											<bool key="NSDrawsBackground">YES</bool>
+											<object class="NSColor" key="NSBackgroundColor" id="501011794">
+												<int key="NSColorSpace">6</int>
+												<string key="NSCatalogName">System</string>
+												<string key="NSColorName">controlBackgroundColor</string>
+												<reference key="NSColor" ref="666005350"/>
+											</object>
+											<reference key="NSTextColor" ref="887152126"/>
+										</object>
+										<int key="NSResizingMask">3</int>
+										<bool key="NSIsResizeable">YES</bool>
+										<reference key="NSTableView" ref="734498420"/>
+									</object>
+								</object>
+								<double key="NSIntercellSpacingWidth">3</double>
+								<double key="NSIntercellSpacingHeight">2</double>
+								<reference key="NSBackgroundColor" ref="501011794"/>
+								<object class="NSColor" key="NSGridColor" id="855204397">
+									<int key="NSColorSpace">6</int>
+									<string key="NSCatalogName">System</string>
+									<string key="NSColorName">gridColor</string>
+									<object class="NSColor" key="NSColor">
+										<int key="NSColorSpace">3</int>
+										<bytes key="NSWhite">MC41AA</bytes>
+									</object>
+								</object>
+								<double key="NSRowHeight">16</double>
+								<string key="NSAction">tableViewAction:</string>
+								<int key="NSTvFlags">-765427712</int>
+								<reference key="NSDelegate" ref="37767182"/>
+								<reference key="NSDataSource" ref="37767182"/>
+								<reference key="NSTarget" ref="37767182"/>
+								<int key="NSColumnAutoresizingStyle">1</int>
+								<int key="NSDraggingSourceMaskForLocal">15</int>
+								<int key="NSDraggingSourceMaskForNonLocal">0</int>
+								<bool key="NSAllowsTypeSelect">YES</bool>
+								<int key="NSTableViewDraggingDestinationStyle">0</int>
+								<int key="NSTableViewGroupRowStyle">1</int>
+							</object>
+						</object>
+					</object>
 					<object class="NSTextField" id="389101877">
 						<reference key="NSNextResponder" ref="332598366"/>
 						<int key="NSvFlags">256</int>
-						<string key="NSFrame">{{30, 78}, {96, 14}}</string>
+						<string key="NSFrame">{{30, 122}, {134, 14}}</string>
 						<reference key="NSSuperview" ref="332598366"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="172081130"/>
@@ -738,7 +1028,7 @@
 					<object class="NSTextField" id="247298122">
 						<reference key="NSNextResponder" ref="332598366"/>
 						<int key="NSvFlags">256</int>
-						<string key="NSFrame">{{95, 44}, {31, 14}}</string>
+						<string key="NSFrame">{{90, 55}, {31, 14}}</string>
 						<reference key="NSSuperview" ref="332598366"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="1054432492"/>
@@ -756,10 +1046,10 @@
 					<object class="NSComboBox" id="172081130">
 						<reference key="NSNextResponder" ref="332598366"/>
 						<int key="NSvFlags">256</int>
-						<string key="NSFrame">{{131, 72}, {247, 22}}</string>
+						<string key="NSFrame">{{169, 118}, {247, 22}}</string>
 						<reference key="NSSuperview" ref="332598366"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="247298122"/>
+						<reference key="NSNextKeyView" ref="725503362"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSComboBoxCell" key="NSCell" id="210320026">
 							<int key="NSCellFlags">343014976</int>
@@ -768,15 +1058,7 @@
 							<reference key="NSSupport" ref="26"/>
 							<reference key="NSControlView" ref="172081130"/>
 							<bool key="NSDrawsBackground">YES</bool>
-							<object class="NSColor" key="NSBackgroundColor" id="84276979">
-								<int key="NSColorSpace">6</int>
-								<string key="NSCatalogName">System</string>
-								<string key="NSColorName">textBackgroundColor</string>
-								<object class="NSColor" key="NSColor" id="993015046">
-									<int key="NSColorSpace">3</int>
-									<bytes key="NSWhite">MQA</bytes>
-								</object>
-							</object>
+							<reference key="NSBackgroundColor" ref="84276979"/>
 							<reference key="NSTextColor" ref="887152126"/>
 							<int key="NSVisibleItemCount">10</int>
 							<bool key="NSHasVerticalScroller">YES</bool>
@@ -968,11 +1250,7 @@
 											<object class="NSMutableString" key="NSContents">
 												<characters key="NS.bytes"/>
 											</object>
-											<object class="NSFont" key="NSSupport">
-												<string key="NSName">LucidaGrande</string>
-												<double key="NSSize">12</double>
-												<int key="NSfFlags">16</int>
-											</object>
+											<reference key="NSSupport" ref="464053631"/>
 											<object class="NSColor" key="NSBackgroundColor">
 												<int key="NSColorSpace">3</int>
 												<bytes key="NSWhite">MC4zMzMzMzI5OQA</bytes>
@@ -985,12 +1263,7 @@
 											<reference key="NSSupport" ref="26"/>
 											<reference key="NSControlView" ref="686758712"/>
 											<bool key="NSDrawsBackground">YES</bool>
-											<object class="NSColor" key="NSBackgroundColor" id="501011794">
-												<int key="NSColorSpace">6</int>
-												<string key="NSCatalogName">System</string>
-												<string key="NSColorName">controlBackgroundColor</string>
-												<reference key="NSColor" ref="666005350"/>
-											</object>
+											<reference key="NSBackgroundColor" ref="501011794"/>
 											<reference key="NSTextColor" ref="887152126"/>
 										</object>
 										<int key="NSResizingMask">3</int>
@@ -1001,15 +1274,7 @@
 								<double key="NSIntercellSpacingWidth">3</double>
 								<double key="NSIntercellSpacingHeight">2</double>
 								<reference key="NSBackgroundColor" ref="501011794"/>
-								<object class="NSColor" key="NSGridColor">
-									<int key="NSColorSpace">6</int>
-									<string key="NSCatalogName">System</string>
-									<string key="NSColorName">gridColor</string>
-									<object class="NSColor" key="NSColor">
-										<int key="NSColorSpace">3</int>
-										<bytes key="NSWhite">MC41AA</bytes>
-									</object>
-								</object>
+								<reference key="NSGridColor" ref="855204397"/>
 								<double key="NSRowHeight">16</double>
 								<string key="NSAction">tableViewAction:</string>
 								<int key="NSTvFlags">-765427712</int>
@@ -1028,7 +1293,7 @@
 					<object class="NSButton" id="168948265">
 						<reference key="NSNextResponder" ref="332598366"/>
 						<int key="NSvFlags">256</int>
-						<string key="NSFrame">{{96, 7}, {292, 26}}</string>
+						<string key="NSFrame">{{91, 18}, {292, 26}}</string>
 						<reference key="NSSuperview" ref="332598366"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView"/>
@@ -1051,7 +1316,7 @@
 					<object class="NSButton" id="1054432492">
 						<reference key="NSNextResponder" ref="332598366"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{128, 42}, {333, 18}}</string>
+						<string key="NSFrame">{{123, 53}, {333, 18}}</string>
 						<reference key="NSSuperview" ref="332598366"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="168948265"/>
@@ -1073,7 +1338,7 @@
 						</object>
 					</object>
 				</object>
-				<string key="NSFrameSize">{492, 113}</string>
+				<string key="NSFrameSize">{492, 157}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="389101877"/>
@@ -1940,6 +2205,22 @@
 					</object>
 					<int key="connectionID">501</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: values.AlternateLanguage</string>
+						<reference key="source" ref="113289239"/>
+						<reference key="destination" ref="580534391"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="113289239"/>
+							<reference key="NSDestination" ref="580534391"/>
+							<string key="NSLabel">value: values.AlternateLanguage</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">values.AlternateLanguage</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">513</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -2098,10 +2379,12 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="389101877"/>
+							<reference ref="725503362"/>
+							<reference ref="113289239"/>
 							<reference ref="172081130"/>
-							<reference ref="247298122"/>
 							<reference ref="1054432492"/>
 							<reference ref="168948265"/>
+							<reference ref="247298122"/>
 						</object>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Audio</string>
@@ -2819,6 +3102,34 @@
 						<reference key="object" ref="583376135"/>
 						<reference key="parent" ref="479459549"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">508</int>
+						<reference key="object" ref="113289239"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="37767182"/>
+						</object>
+						<reference key="parent" ref="332598366"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">509</int>
+						<reference key="object" ref="725503362"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="603140150"/>
+						</object>
+						<reference key="parent" ref="332598366"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">510</int>
+						<reference key="object" ref="603140150"/>
+						<reference key="parent" ref="725503362"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">511</int>
+						<reference key="object" ref="37767182"/>
+						<reference key="parent" ref="113289239"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -2941,6 +3252,10 @@
 					<string>499.IBPluginDependency</string>
 					<string>5.IBPluginDependency</string>
 					<string>5.IBWindowTemplateEditedContentRect</string>
+					<string>508.IBPluginDependency</string>
+					<string>509.IBPluginDependency</string>
+					<string>510.IBPluginDependency</string>
+					<string>511.IBPluginDependency</string>
 					<string>6.IBPluginDependency</string>
 					<string>61.IBPluginDependency</string>
 				</object>
@@ -3064,6 +3379,10 @@
 					<string>{{69, 656}, {500, 200}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="unlocalizedProperties">
@@ -3078,7 +3397,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">502</int>
+			<int key="maxID">513</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

@@ -426,23 +426,50 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
 
 {
     id whatToUse = [self _presetAudioArrayFromPreset: aPreset];
-    NSString *preferredLanguageName = [[NSUserDefaults standardUserDefaults] stringForKey: @"DefaultLanguage"];
-    int preferredLanguage = [self _trackWithTitlePrefix: preferredLanguageName defaultIfNotFound: 1];
+    NSMutableArray *tracksToAdd = [[NSMutableArray alloc] init];
 
-    // Reinitialize the configured list of audio tracks
-    [self _clearAudioArray];
+    NSArray* preferredLanguages = [NSArray arrayWithObjects: 
+                          [[NSUserDefaults standardUserDefaults] stringForKey: @"DefaultLanguage"],
+                          [[NSUserDefaults standardUserDefaults] stringForKey: @"AlternateLanguage"],
+                          nil];
 
-    [self _processPresetAudioArray: whatToUse forTrack: preferredLanguage andType: [[aPreset objectForKey: @"Type"] intValue]];
+    // Add tracks of Default and Alternate Language by name
+    for(id languageName in preferredLanguages)
+    {
+        int trackNumber = [self _trackWithTitlePrefix: languageName defaultIfNotFound: 0];
+        
+        if(trackNumber > 0 && [tracksToAdd indexOfObject:[NSNumber numberWithInt:trackNumber]] == NSNotFound)
+        {
+            [tracksToAdd addObject:[NSNumber numberWithInt:trackNumber]];
+        }
+    }
+
+    // If no preferred Language was found, add standard track 1
+    if([tracksToAdd count] == 0)
+    {
+        [tracksToAdd addObject:[NSNumber numberWithInt:1]];
+    }
+
+    // If all tracks should be added, add all track numbers that are not yet processed
     if (allTracks)
     {
         unsigned int count = [masterTrackArray count];
         for (unsigned int i = 1; i < count; i++)
         {
-            if (i != preferredLanguage)
+            NSNumber *trackNumber = [NSNumber numberWithInt:i];
+            if([tracksToAdd indexOfObject:trackNumber] == NSNotFound)
             {
-                [self _processPresetAudioArray: whatToUse forTrack: i andType: [[aPreset objectForKey: @"Type"] intValue]];
+               [tracksToAdd addObject:trackNumber];
             }
         }
+    }
+         
+    // Reinitialize the configured list of audio tracks
+    [self _clearAudioArray];
+
+    for(id trackNumber in tracksToAdd)
+    {
+        [self _processPresetAudioArray: whatToUse forTrack:[trackNumber intValue] andType: [[aPreset objectForKey: @"Type"] intValue]];
     }
 }
 
