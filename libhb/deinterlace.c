@@ -40,22 +40,21 @@
 #define MAX3(a,b,c) MAX(MAX(a,b),c)
 
 typedef struct yadif_arguments_s {
-    uint8_t **dst;
+    hb_buffer_t * dst;
     int parity;
     int tff;
 } yadif_arguments_t;
 
 struct hb_filter_private_s
 {
-    int              width[3];
-    int              height[3];
+    int              width;
+    int              height;
 
     int              yadif_mode;
     int              yadif_parity;
     int              yadif_ready;
 
-    uint8_t        * yadif_ref[4][3];
-    int              yadif_ref_stride[3];
+    hb_buffer_t      * yadif_ref[3];
 
     int              cpu_count;
 
@@ -66,8 +65,7 @@ struct hb_filter_private_s
     int              mcdeint_mode;
     mcdeint_private_t mcdeint;
 
-    hb_buffer_t *    buf_out[2];
-    hb_buffer_t *    buf_settings;
+    //hb_buffer_t *    buf_out[2];
 };
 
 static int hb_deinterlace_init( hb_filter_object_t * filter,
@@ -91,79 +89,56 @@ hb_filter_object_t hb_filter_deinterlace =
 };
 
 
-static void yadif_store_ref( const uint8_t ** pic,
-                             hb_filter_private_t * pv )
+static void yadif_store_ref(hb_filter_private_t *pv, hb_buffer_t *b)
 {
-    memcpy( pv->yadif_ref[3],
-            pv->yadif_ref[0],
-            sizeof(uint8_t *)*3 );
 
-    memmove( pv->yadif_ref[0],
-             pv->yadif_ref[1],
-             sizeof(uint8_t *)*3*3 );
-
-    int i;
-    for( i = 0; i < 3; i++ )
-    {
-        const uint8_t * src = pic[i];
-        uint8_t * ref = pv->yadif_ref[2][i];
-
-        int w = pv->width[i];
-        int ref_stride = pv->yadif_ref_stride[i];
-
-        int y;
-        for( y = 0; y < pv->height[i]; y++ )
-        {
-            memcpy(ref, src, w);
-            src = (uint8_t*)src + w;
-            ref = (uint8_t*)ref + ref_stride;
-        }
-    }
+    hb_buffer_close(&pv->yadif_ref[0]);
+    memmove(&pv->yadif_ref[0], &pv->yadif_ref[1], sizeof(hb_buffer_t *) * 2 );
+    pv->yadif_ref[2] = b;
 }
 
-static void yadif_filter_line( uint8_t *dst,
-                               uint8_t *prev,
-                               uint8_t *cur,
-                               uint8_t *next,
-                               int plane,
-                               int parity,
-                               hb_filter_private_t * pv )
+static void yadif_filter_line(
+    hb_filter_private_t * pv,
+    uint8_t             * dst,
+    uint8_t             * prev,
+    uint8_t             * cur,
+    uint8_t             * next,
+    int                   width,
+    int                   stride,
+    int                   parity)
 {
     uint8_t *prev2 = parity ? prev : cur ;
     uint8_t *next2 = parity ? cur  : next;
 
-    int w = pv->width[plane];
-    int refs = pv->yadif_ref_stride[plane];
-
     int x;
-    for( x = 0; x < w; x++)
+    for( x = 0; x < width; x++)
     {
-        int c              = cur[-refs];
+        int c              = cur[-stride];
         int d              = (prev2[0] + next2[0])>>1;
-        int e              = cur[+refs];
+        int e              = cur[+stride];
         int temporal_diff0 = ABS(prev2[0] - next2[0]);
-        int temporal_diff1 = ( ABS(prev[-refs] - c) + ABS(prev[+refs] - e) ) >> 1;
-        int temporal_diff2 = ( ABS(next[-refs] - c) + ABS(next[+refs] - e) ) >> 1;
+        int temporal_diff1 = ( ABS(prev[-stride] - c) + ABS(prev[+stride] - e) ) >> 1;
+        int temporal_diff2 = ( ABS(next[-stride] - c) + ABS(next[+stride] - e) ) >> 1;
         int diff           = MAX3(temporal_diff0>>1, temporal_diff1, temporal_diff2);
         int spatial_pred   = (c+e)>>1;
-        int spatial_score  = ABS(cur[-refs-1] - cur[+refs-1]) + ABS(c-e) +
-                             ABS(cur[-refs+1] - cur[+refs+1]) - 1;
+        int spatial_score  = ABS(cur[-stride-1] - cur[+stride-1]) + ABS(c-e) +
+                             ABS(cur[-stride+1] - cur[+stride+1]) - 1;
 
 #define YADIF_CHECK(j)\
-        {   int score = ABS(cur[-refs-1+j] - cur[+refs-1-j])\
-                      + ABS(cur[-refs  +j] - cur[+refs  -j])\
-                      + ABS(cur[-refs+1+j] - cur[+refs+1-j]);\
+        {   int score = ABS(cur[-stride-1+j] - cur[+stride-1-j])\
+                      + ABS(cur[-stride  +j] - cur[+stride  -j])\
+                      + ABS(cur[-stride+1+j] - cur[+stride+1-j]);\
             if( score < spatial_score ){\
                 spatial_score = score;\
-                spatial_pred  = (cur[-refs  +j] + cur[+refs  -j])>>1;\
+                spatial_pred  = (cur[-stride  +j] + cur[+stride  -j])>>1;\
 
         YADIF_CHECK(-1) YADIF_CHECK(-2) }} }}
         YADIF_CHECK( 1) YADIF_CHECK( 2) }} }}
 
         if( pv->yadif_mode & MODE_YADIF_SPATIAL )
         {
-            int b = (prev2[-2*refs] + next2[-2*refs])>>1;
-            int f = (prev2[+2*refs] + next2[+2*refs])>>1;
+            int b = (prev2[-2*stride] + next2[-2*stride])>>1;
+            int f = (prev2[+2*stride] + next2[+2*stride])>>1;
 
             int max = MAX3(d-e, d-c, MIN(b-c, f-e));
             int min = MIN3(d-e, d-c, MAX(b-c, f-e));
@@ -204,12 +179,8 @@ void yadif_filter_thread( void *thread_args_v )
     yadif_arguments_t *yadif_work = NULL;
     hb_filter_private_t * pv;
     int run = 1;
-    int plane;
     int segment, segment_start, segment_stop;
     yadif_thread_arg_t *thread_args = thread_args_v;
-    uint8_t **dst;
-    int parity, tff, y, w, h, ref_stride, penultimate, ultimate;
-
 
     pv = thread_args->pv;
     segment = thread_args->segment;
@@ -245,18 +216,20 @@ void yadif_filter_thread( void *thread_args_v )
         /*
          * Process all three planes, but only this segment of it.
          */
-        for( plane = 0; plane < 3; plane++)
+        int pp;
+        for(pp = 0; pp < 3; pp++)
         {
+            hb_buffer_t *dst = yadif_work->dst;
+            int w = dst->plane[pp].width;
+            int s = dst->plane[pp].stride;
+            int h = dst->plane[pp].height;
+            int yy;
+            int parity = yadif_work->parity;
+            int tff = yadif_work->tff;
+            int penultimate = h - 2;
 
-            dst = yadif_work->dst;
-            parity = yadif_work->parity;
-            tff = yadif_work->tff;
-            w = pv->width[plane];
-            h = pv->height[plane];
-            penultimate = h -2;
-            ultimate = h - 1;
-            ref_stride = pv->yadif_ref_stride[plane];
-            segment_start = ( h / pv->cpu_count ) * segment;
+            int segment_height = (h / pv->cpu_count) & ~1;
+            segment_start = segment_height * segment;
             if( segment == pv->cpu_count - 1 )
             {
                 /*
@@ -264,12 +237,16 @@ void yadif_filter_thread( void *thread_args_v )
                  */
                 segment_stop = h;
             } else {
-                segment_stop = ( h / pv->cpu_count ) * ( segment + 1 );
+                segment_stop = segment_height * ( segment + 1 );
             }
 
-            for( y = segment_start; y < segment_stop; y++ )
+            uint8_t *dst2 = &dst->plane[pp].data[segment_start * s];
+            uint8_t *prev = &pv->yadif_ref[0]->plane[pp].data[segment_start * s];
+            uint8_t *cur  = &pv->yadif_ref[1]->plane[pp].data[segment_start * s];
+            uint8_t *next = &pv->yadif_ref[2]->plane[pp].data[segment_start * s];
+            for( yy = segment_start; yy < segment_stop; yy++ )
             {
-                if( ( ( y ^ parity ) &  1 ) )
+                if(((yy ^ parity) &  1))
                 {
                     /* This is the bottom field when TFF and vice-versa.
                        It's the field that gets filtered. Because yadif
@@ -277,58 +254,32 @@ void yadif_filter_thread( void *thread_args_v )
                        we need to mirror the edges. When TFF, this means
                        replacing the 2nd line with a copy of the 1st,
                        and the last with the second-to-last.                  */
-                    if( y > 1 && y < ( h -2 ) )
+                    if( yy > 1 && yy < penultimate )
                     {
-                        /* This isn't the top or bottom, proceed as normal to yadif. */
-                        uint8_t *prev = &pv->yadif_ref[0][plane][y*ref_stride];
-                        uint8_t *cur  = &pv->yadif_ref[1][plane][y*ref_stride];
-                        uint8_t *next = &pv->yadif_ref[2][plane][y*ref_stride];
-                        uint8_t *dst2 = &dst[plane][y*w];
-
-                        yadif_filter_line( dst2, 
-                                           prev, 
-                                           cur, 
-                                           next, 
-                                           plane, 
-                                           parity ^ tff, 
-                                           pv );
+                        /* This isn't the top or bottom,
+                         * proceed as normal to yadif. */
+                        yadif_filter_line(pv, dst2, prev, cur, next, w, s, 
+                                          parity ^ tff);
                     }
-                    else if( y == 0 )
+                    else
                     {
-                        /* BFF, so y0 = y1 */
-                        memcpy( &dst[plane][y*w],
-                                &pv->yadif_ref[1][plane][1*ref_stride],
-                                w * sizeof(uint8_t) );
-                    }
-                    else if( y == 1 )
-                    {
-                        /* TFF, so y1 = y0 */
-                        memcpy( &dst[plane][y*w],
-                                &pv->yadif_ref[1][plane][0],
-                                w * sizeof(uint8_t) );
-                    }
-                    else if( y == penultimate )
-                    {
-                        /* BFF, so penultimate y = ultimate y */
-                        memcpy( &dst[plane][y*w],
-                                &pv->yadif_ref[1][plane][ultimate*ref_stride],
-                                w * sizeof(uint8_t) );
-                    }
-                    else if( y == ultimate )
-                    {
-                        /* TFF, so ultimate y = penultimate y */
-                        memcpy( &dst[plane][y*w],
-                                &pv->yadif_ref[1][plane][penultimate*ref_stride],
-                                w * sizeof(uint8_t) );
+                        // parity == 0 (TFF), y1 = y0
+                        // parity == 1 (BFF), y0 = y1
+                        // parity == 0 (TFF), yu = yp
+                        // parity == 1 (BFF), yp = yu
+                        uint8_t *src  = &pv->yadif_ref[1]->plane[pp].data[(yy^parity)*s];
+                        memcpy(dst2, src, w);
                     }
                 }
                 else
                 {
                     /* Preserve this field unfiltered */
-                    memcpy( &dst[plane][y*w],
-                            &pv->yadif_ref[1][plane][y*ref_stride],
-                            w * sizeof(uint8_t) );
+                    memcpy(dst2, cur, w);
                 }
+                dst2 += s;
+                prev += s;
+                cur += s;
+                next += s;
             }
         }
 
@@ -348,10 +299,8 @@ report_completion:
  *
  * This function blocks until the frame is deinterlaced.
  */
-static void yadif_filter( uint8_t ** dst,
-                          int parity,
-                          int tff,
-                          hb_filter_private_t * pv )
+static void yadif_filter( hb_filter_private_t * pv,
+                          hb_buffer_t * dst, int parity, int tff)
 {
 
     int segment;
@@ -380,14 +329,8 @@ static int hb_deinterlace_init( hb_filter_object_t * filter,
     filter->private_data = calloc( 1, sizeof(struct hb_filter_private_s) );
     hb_filter_private_t * pv = filter->private_data;
 
-    pv->width[0]  = hb_image_stride( init->pix_fmt, init->width, 0 );
-    pv->height[0] = hb_image_height( init->pix_fmt, init->height, 0 );
-    pv->width[1]  = pv->width[2]  = hb_image_stride( init->pix_fmt, init->width, 1 );
-    pv->height[1] = pv->height[2] = hb_image_height( init->pix_fmt, init->height, 1 );
-
-    pv->buf_out[0] = hb_video_buffer_init( init->width, init->height );
-    pv->buf_out[1] = hb_video_buffer_init( init->width, init->height );
-    pv->buf_settings = hb_buffer_init( 0 );
+    pv->width = init->width;
+    pv->height = init->height;
 
     pv->yadif_ready    = 0;
     pv->yadif_mode     = YADIF_MODE_DEFAULT;
@@ -410,21 +353,6 @@ static int hb_deinterlace_init( hb_filter_object_t * filter,
     /* Allocate yadif specific buffers */
     if( pv->yadif_mode & MODE_YADIF_ENABLE )
     {
-        int i, j;
-        for( i = 0; i < 3; i++ )
-        {
-            int is_chroma = !!i;
-            int w = ((init->width   + 31) & (~31))>>is_chroma;
-            int h = ((init->height+6+ 31) & (~31))>>is_chroma;
-
-            pv->yadif_ref_stride[i] = w;
-
-            for( j = 0; j < 3; j++ )
-            {
-                pv->yadif_ref[j][i] = malloc( w*h*sizeof(uint8_t) ) + 3*w;
-            }
-        }
-
         /*
          * Setup yadif taskset.
          */
@@ -436,17 +364,18 @@ static int hb_deinterlace_init( hb_filter_object_t * filter,
             hb_error( "yadif could not initialize taskset" );
         }
 
-        for( i = 0; i < pv->cpu_count; i++ )
+        int ii;
+        for( ii = 0; ii < pv->cpu_count; ii++ )
         {
             yadif_thread_arg_t *thread_args;
 
-            thread_args = taskset_thread_args( &pv->yadif_taskset, i );
+            thread_args = taskset_thread_args( &pv->yadif_taskset, ii );
 
             thread_args->pv = pv;
-            thread_args->segment = i;
-            pv->yadif_arguments[i].dst = NULL;
+            thread_args->segment = ii;
+            pv->yadif_arguments[ii].dst = NULL;
 
-            if( taskset_thread_spawn( &pv->yadif_taskset, i,
+            if( taskset_thread_spawn( &pv->yadif_taskset, ii,
                                       "yadif_filter_segment",
                                       yadif_filter_thread,
                                       HB_NORMAL_PRIORITY ) == 0 )
@@ -471,35 +400,17 @@ static void hb_deinterlace_close( hb_filter_object_t * filter )
         return;
     }
 
-    /* Cleanup frame buffers */
-    if( pv->buf_out[0] )
-    {
-        hb_buffer_close( &pv->buf_out[0] );
-    }
-    if( pv->buf_out[1] )
-    {
-        hb_buffer_close( &pv->buf_out[1] );
-    }
-    if (pv->buf_settings )
-    {
-        hb_buffer_close( &pv->buf_settings );
-    }
-
     /* Cleanup yadif specific buffers */
     if( pv->yadif_mode & MODE_YADIF_ENABLE )
     {
-        int i;
-        for( i = 0; i<3*3; i++ )
+        taskset_fini( &pv->yadif_taskset );
+
+        int ii;
+        for(ii = 0; ii < 3; ii++)
         {
-            uint8_t **p = &pv->yadif_ref[i%3][i/3];
-            if (*p)
-            {
-                free( *p - 3*pv->yadif_ref_stride[i/3] );
-                *p = NULL;
-            }
+            hb_buffer_close(&pv->yadif_ref[ii]);
         }
 
-        taskset_fini( &pv->yadif_taskset );
         free( pv->yadif_arguments );
     }
 
@@ -509,16 +420,39 @@ static void hb_deinterlace_close( hb_filter_object_t * filter )
     filter->private_data = NULL;
 }
 
+static hb_buffer_t * deint_fast(hb_buffer_t * in)
+{
+    AVPicture pic_in;
+    AVPicture pic_out;
+    hb_buffer_t * out;
+
+    int w = (in->plane[0].width + 3) & ~0x3;
+    int h = (in->plane[0].height + 3) & ~0x3;
+
+    out = hb_frame_buffer_init(in->f.fmt, in->f.width, in->f.height);
+
+    hb_avpicture_fill( &pic_in, in );
+    hb_avpicture_fill( &pic_out, out );
+
+    // avpicture_deinterlace requires 4 pixel aligned width and height
+    // we have aligned all buffers to 16 byte width and height strides
+    // so there is room in the buffers to accomodate a litte
+    // overscan.
+    avpicture_deinterlace(&pic_out, &pic_in, out->f.fmt, w, h);
+
+    out->s = in->s;
+    hb_buffer_move_subs(out, in);
+
+    return out;
+}
+
 static int hb_deinterlace_work( hb_filter_object_t * filter,
                                 hb_buffer_t ** buf_in,
                                 hb_buffer_t ** buf_out )
 {
-    AVPicture pic_in;
-    AVPicture pic_out;
     hb_filter_private_t * pv = filter->private_data;
     hb_buffer_t * in = *buf_in;
     hb_buffer_t * last = NULL, * out = NULL;
-    uint8_t duplicate = 0;
 
     if ( in->size <= 0 )
     {
@@ -527,148 +461,109 @@ static int hb_deinterlace_work( hb_filter_object_t * filter,
         return HB_FILTER_DONE;
     }
 
-    do
+    /* Use libavcodec deinterlace if yadif_mode < 0 */
+    if( !( pv->yadif_mode & MODE_YADIF_ENABLE ) )
     {
-        hb_avpicture_fill( &pic_in, in );
+        *buf_out = deint_fast(in);
+        return HB_FILTER_OK;
+    }
 
-        /* Use libavcodec deinterlace if yadif_mode < 0 */
-        if( !( pv->yadif_mode & MODE_YADIF_ENABLE ) )
+    /* Store current frame in yadif cache */
+    *buf_in = NULL;
+    yadif_store_ref(pv, in);
+
+    // yadif requires 3 buffers, prev, cur, and next.  For the first
+    // frame, there can be no prev, so we duplicate the first frame.
+    if (!pv->yadif_ready)
+    {
+        // If yadif is not ready, store another ref and return HB_FILTER_DELAY
+        yadif_store_ref(pv, hb_buffer_dup(in));
+        pv->yadif_ready = 1;
+        // Wait for next
+        return HB_FILTER_DELAY;
+    }
+
+    /* Determine if top-field first layout */
+    int tff;
+    if( pv->yadif_parity < 0 )
+    {
+        tff = !!(in->s.flags & PIC_FLAG_TOP_FIELD_FIRST);
+    }
+    else
+    {
+        tff = (pv->yadif_parity & 1) ^ 1;
+    }
+
+    /* deinterlace both fields if mcdeint is enabled without bob */
+    int frame, num_frames = 1;
+    if ((pv->yadif_mode & MODE_YADIF_2PASS) ||
+        (pv->yadif_mode & MODE_YADIF_BOB))
+    {
+        num_frames = 2;
+    }
+
+    // Will need up to 2 buffers simultaneously
+    int idx = 0;
+    hb_buffer_t * o_buf[2] = {NULL,};
+
+    /* Perform yadif and mcdeint filtering */
+    for( frame = 0; frame < num_frames; frame++ )
+    {
+        int parity = frame ^ tff ^ 1;
+
+        if (o_buf[idx] == NULL)
         {
-            int width = (pv->buf_out[0]->plane[0].width + 3) & ~0x3;
-            int height = (pv->buf_out[0]->plane[0].height + 3) & ~0x3;
-
-            hb_avpicture_fill( &pic_out, pv->buf_out[0] );
-
-            // avpicture_deinterlace requires 4 pixel aligned width and height
-            // we have aligned all buffers to 16 byte width and height strides
-            // so there is room in the buffers to accomodate a litte
-            // overscan.
-            avpicture_deinterlace( &pic_out, &pic_in, pv->buf_out[0]->f.fmt, 
-                                   width, height );
-
-            pv->buf_out[0]->s = in->s;
-            hb_buffer_move_subs( pv->buf_out[0], in );
-
-            *buf_out = pv->buf_out[0];
-
-            // Allocate a replacement for the buffer we just consumed
-            hb_buffer_t * b = pv->buf_out[0];
-            pv->buf_out[0] = hb_video_buffer_init( b->f.width, b->f.height );
-
-            return HB_FILTER_OK;
+            o_buf[idx] = hb_frame_buffer_init(in->f.fmt, in->f.width, in->f.height);
         }
+        yadif_filter(pv, o_buf[idx], parity, tff);
 
-        /* Determine if top-field first layout */
-        int tff;
-        if( pv->yadif_parity < 0 )
+        if (pv->mcdeint_mode >= 0)
         {
-            tff = !!(in->s.flags & PIC_FLAG_TOP_FIELD_FIRST);
-        }
-        else
-        {
-            tff = (pv->yadif_parity & 1) ^ 1;
-        }
-
-        /* Store current frame in yadif cache */
-        if (!duplicate)
-        {
-            yadif_store_ref( (const uint8_t**)pic_in.data, pv );
-        }
-
-        /* If yadif is not ready, store another ref and return HB_FILTER_DELAY */
-        if( pv->yadif_ready == 0 )
-        {
-            yadif_store_ref( (const uint8_t**)pic_in.data, pv );
-
-            pv->buf_settings->s = in->s;
-            hb_buffer_move_subs( pv->buf_settings, in );
-
-            pv->yadif_ready = 1;
-
-            return HB_FILTER_DELAY;
-        }
-
-        /* deinterlace both fields if mcdeint is enabled without bob */
-        int frame, num_frames = 1;
-        if( ( pv->yadif_mode & MODE_YADIF_2PASS ) &&
-           !( pv->yadif_mode & MODE_YADIF_BOB ) )
-        {
-            num_frames = 2;
-        }
-
-        /* Perform yadif and mcdeint filtering */
-        int out_frame;
-        hb_buffer_t * b;
-        for( frame = 0; frame < num_frames; frame++ )
-        {
-            AVPicture pic_yadif_out;
-            int parity = frame ^ tff ^ 1 ^ duplicate;
-
-            b = pv->buf_out[!(frame^1)];
-            hb_avpicture_fill( &pic_yadif_out, b );
-
-            yadif_filter( pic_yadif_out.data, parity, tff, pv );
-
-            if( pv->mcdeint_mode >= 0 )
+            if (o_buf[idx^1] == NULL)
             {
-                b = pv->buf_out[(frame^1)];
-                hb_avpicture_fill( &pic_out, b );
+                o_buf[idx^1] = hb_frame_buffer_init(in->f.fmt, in->f.width, in->f.height);
+            }
+            mcdeint_filter( o_buf[idx^1], o_buf[idx], parity, &pv->mcdeint );
+            idx ^= 1;
+        }
 
-                mcdeint_filter( pic_out.data, pic_yadif_out.data, parity, 
-                                pv->width, pv->height, &pv->mcdeint );
-
-                out_frame = (frame^1);
+        // If bob, add both frames
+        // else, add only second frame
+        if (( pv->yadif_mode & MODE_YADIF_BOB ) || frame == num_frames - 1)
+        {
+            if ( out == NULL )
+            {
+                last = out = o_buf[idx];
             }
             else
             {
-                out_frame = !(frame^1);
+                last->next = o_buf[idx];
+                last = last->next;
             }
+            last->next = NULL;
+
+            // Indicate that buffer was consumed
+            o_buf[idx] = NULL;
+
+            /* Copy buffered settings to output buffer settings */
+            last->s = pv->yadif_ref[1]->s;
+            idx ^= 1;
         }
+    }
+    // Copy subs only to first output buffer
+    hb_buffer_move_subs( out, pv->yadif_ref[1] );
 
-        // Add to list of output buffers (should be at most 2)
-        if ( out == NULL )
-        {
-            last = out = pv->buf_out[out_frame];
-        }
-        else
-        {
-            last->next = pv->buf_out[out_frame];
-            last = last->next;
-        }
+    hb_buffer_close(&o_buf[0]);
+    hb_buffer_close(&o_buf[1]);
 
-        // Allocate a replacement for the buffer we just consumed
-        b = pv->buf_out[out_frame];
-        pv->buf_out[out_frame] = hb_video_buffer_init( b->f.width, b->f.height );
-
-        /* Copy buffered settings to output buffer settings */
-        last->s = pv->buf_settings->s;
-
-        if ( !duplicate )
-        {
-            hb_buffer_move_subs( last, pv->buf_settings );
-        }
-
-        /* if bob mode is engaged, halve the duration of the
-         * timestamp, and request a duplicate. */
-        if( pv->yadif_mode & MODE_YADIF_BOB )
-        {
-            if ( !duplicate )
-            {
-                last->s.stop -= (last->s.stop - last->s.start) / 2LL;
-                duplicate = 1;
-            }
-            else
-            {
-                last->s.start = out->s.stop;
-                last->s.new_chap = 0;
-                duplicate = 0;
-            }
-        }
-    } while ( duplicate );
-
-    /* Replace buffered settings with input buffer settings */
-    pv->buf_settings->s = in->s;
-    hb_buffer_move_subs( pv->buf_settings, in );
+    /* if bob mode is engaged, halve the duration of the
+     * timestamps. */
+    if (pv->yadif_mode & MODE_YADIF_BOB)
+    {
+        out->s.stop -= (out->s.stop - out->s.start) / 2LL;
+        last->s.start = out->s.stop;
+        last->s.new_chap = 0;
+    }
 
     *buf_out = out;
 

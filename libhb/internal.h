@@ -139,7 +139,8 @@ void          hb_buffer_realloc( hb_buffer_t *, int size );
 void          hb_video_buffer_realloc( hb_buffer_t * b, int w, int h );
 void          hb_buffer_reduce( hb_buffer_t * b, int size );
 void          hb_buffer_close( hb_buffer_t ** );
-hb_buffer_t * hb_buffer_copy( const hb_buffer_t * src );
+hb_buffer_t * hb_buffer_dup( const hb_buffer_t * src );
+int           hb_buffer_copy( hb_buffer_t * dst, const hb_buffer_t * src );
 void          hb_buffer_swap_copy( hb_buffer_t *src, hb_buffer_t *dst );
 void          hb_buffer_move_subs( hb_buffer_t * dst, hb_buffer_t * src );
 

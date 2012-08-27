@@ -366,7 +366,7 @@ void hb_buffer_reduce( hb_buffer_t * b, int size )
     }
 }
 
-hb_buffer_t * hb_buffer_copy( const hb_buffer_t * src )
+hb_buffer_t * hb_buffer_dup( const hb_buffer_t * src )
 {
     hb_buffer_t * buf;
 
@@ -384,6 +384,23 @@ hb_buffer_t * hb_buffer_copy( const hb_buffer_t * src )
     }
 
     return buf;
+}
+
+int hb_buffer_copy(hb_buffer_t * dst, const hb_buffer_t * src)
+{
+    if (src == NULL || dst == NULL)
+        return -1;
+
+    if ( dst->size < src->size )
+        return -1;
+
+    memcpy( dst->data, src->data, src->size );
+    dst->s = src->s;
+    dst->f = src->f;
+    if (dst->s.type == FRAME_BUF)
+        hb_buffer_init_planes(dst);
+
+    return 0;
 }
 
 static void hb_buffer_init_planes_internal( hb_buffer_t * b, uint8_t * has_plane )

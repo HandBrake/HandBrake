@@ -287,7 +287,7 @@ static void adjust_frame_rate( hb_filter_private_t *pv, hb_buffer_t **buf_out )
             for ( ; excess_dur >= pv->frame_rate; excess_dur -= pv->frame_rate )
             {
                 /* next frame too far ahead - dup current frame */
-                hb_buffer_t *dup = hb_buffer_copy( out );
+                hb_buffer_t *dup = hb_buffer_dup( out );
                 dup->s.new_chap = 0;
                 dup->s.start = cfr_stop;
                 cfr_stop += pv->frame_rate;

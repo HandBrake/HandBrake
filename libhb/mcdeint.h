@@ -29,9 +29,7 @@ void mcdeint_init( mcdeint_private_t * pv,
 
 void mcdeint_close( mcdeint_private_t * pv );
 
-void mcdeint_filter( uint8_t ** dst,
-                     uint8_t ** src,
+void mcdeint_filter( hb_buffer_t * dst,
+                     hb_buffer_t * src,
                      int parity,
-                     int * width,
-                     int * height,
                      mcdeint_private_t * pv );
