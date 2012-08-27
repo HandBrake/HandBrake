@@ -11,7 +11,6 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
     using System.Collections.ObjectModel;
-    using System.ComponentModel.Composition;
     using System.Windows;
 
     using Caliburn.Micro;
@@ -29,7 +28,6 @@ namespace HandBrakeWPF.ViewModels
     /// <summary>
     /// The Preview View Model
     /// </summary>
-    [Export(typeof(IQueueViewModel))]
     public class QueueViewModel : ViewModelBase, IQueueViewModel
     {
         #region Constants and Fields

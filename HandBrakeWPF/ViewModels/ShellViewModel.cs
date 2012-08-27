@@ -9,7 +9,6 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using System.ComponentModel.Composition;
     using System.Windows;
 
     using Caliburn.Micro;
@@ -23,7 +22,6 @@ namespace HandBrakeWPF.ViewModels
     /// <summary>
     /// The Shell View Model
     /// </summary>
-    [Export(typeof(IShellViewModel))]
     public class ShellViewModel : ViewModelBase, IShellViewModel
     {
         /// <summary>

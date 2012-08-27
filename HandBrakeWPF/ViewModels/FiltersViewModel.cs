@@ -10,7 +10,6 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System.Collections.Generic;
-    using System.ComponentModel.Composition;
 
     using Caliburn.Micro;
 
@@ -25,7 +24,6 @@ namespace HandBrakeWPF.ViewModels
     /// <summary>
     /// The Filters View Model
     /// </summary>
-    [Export(typeof(IFiltersViewModel))]
     public class FiltersViewModel : ViewModelBase, IFiltersViewModel
     {
         #region Constructors and Destructors

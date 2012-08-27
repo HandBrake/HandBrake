@@ -10,7 +10,6 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System.Collections.Generic;
-    using System.ComponentModel.Composition;
     using System.Windows;
 
     using Caliburn.Micro;
@@ -26,7 +25,6 @@ namespace HandBrakeWPF.ViewModels
     /// <summary>
     /// The Add Preset View Model
     /// </summary>
-    [Export(typeof(IAddPresetViewModel))]
     public class AddPresetViewModel : ViewModelBase, IAddPresetViewModel
     {
         /// <summary>

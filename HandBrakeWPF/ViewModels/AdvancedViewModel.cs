@@ -11,7 +11,6 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.Composition;
     using System.Globalization;
     using System.Linq;
 
@@ -29,7 +28,6 @@ namespace HandBrakeWPF.ViewModels
     /// <summary>
     /// The Advanced View Model
     /// </summary>
-    [Export(typeof(IAdvancedViewModel))]
     public class AdvancedViewModel : ViewModelBase, IAdvancedViewModel
     {
         #region Constants and Fields

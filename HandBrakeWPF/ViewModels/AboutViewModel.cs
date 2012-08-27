@@ -9,8 +9,6 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using System.ComponentModel.Composition;
-
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices;
@@ -21,7 +19,6 @@ namespace HandBrakeWPF.ViewModels
     /// <summary>
     /// The About View Model
     /// </summary>
-    [Export(typeof(IAboutViewModel))]
     public class AboutViewModel : ViewModelBase, IAboutViewModel
     {
         /// <summary>

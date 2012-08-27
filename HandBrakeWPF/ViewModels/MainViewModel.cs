@@ -11,7 +11,6 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.Composition;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
@@ -42,7 +41,6 @@ namespace HandBrakeWPF.ViewModels
     /// <summary>
     /// HandBrakes Main Window
     /// </summary>
-    [Export(typeof(IMainViewModel))]
     public class MainViewModel : ViewModelBase, IMainViewModel
     {
         #region Private Variables and Services
@@ -194,7 +192,6 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="driveDetectService">
         /// The drive Detect Service.
         /// </param>
-        [ImportingConstructor]
         public MainViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService,
             IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService, IDriveDetectService driveDetectService)
         {

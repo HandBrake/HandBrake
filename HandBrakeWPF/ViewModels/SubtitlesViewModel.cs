@@ -11,7 +11,6 @@ namespace HandBrakeWPF.ViewModels
 {
     using System.Collections.Generic;
     using System.Collections.Specialized;
-    using System.ComponentModel.Composition;
     using System.IO;
     using System.Linq;
 
@@ -30,7 +29,6 @@ namespace HandBrakeWPF.ViewModels
     /// <summary>
     /// The Subtitles View Model
     /// </summary>
-    [Export(typeof(ISubtitlesViewModel))]
     public class SubtitlesViewModel : ViewModelBase, ISubtitlesViewModel
     {
         #region Constants and Fields
