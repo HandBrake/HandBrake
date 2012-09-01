@@ -2915,10 +2915,21 @@ static void ShowHelp()
     "    -C, --ac <compression>  Set audio compression metric (default: depends on the\n"
     "                            selected codec)\n"
     "                            Separated by commas for more than one audio track.\n"
-    "    -6, --mixdown <string>  Format(s) for surround sound downmixing\n"
+    "    -6, --mixdown <string>  Format(s) for audio downmixing/upmixing:\n");
+    // skip HB_AMIXDOWN_NONE
+    for (i = 1; i < hb_audio_mixdowns_count; i++)
+    {
+        fprintf(out, "                               %s\n",
+                hb_audio_mixdowns[i].short_name);
+    }
+    fprintf(out,
     "                            Separated by commas for more than one audio track.\n"
-    "                            (mono/stereo/dpl1/dpl2/6ch, default: up to 6ch for ac3,\n"
-    "                            up to dpl2 for other encoders)\n"
+    "                            Default: up to %s for ffac3 and ffflac,\n",
+            hb_mixdown_get_short_name_from_mixdown(HB_AMIXDOWN_6CH));
+    fprintf(out,
+    "                                     up to %s for other encoders).\n",
+            hb_mixdown_get_short_name_from_mixdown(HB_AMIXDOWN_DOLBYPLII));
+    fprintf(out,
     "        --normalize-mix     Normalize audio mix levels to prevent clipping.\n"
     "               <string>     Separated by commas for more than one audio track.\n"
     "                            0 = Disable Normalization (default)\n"
