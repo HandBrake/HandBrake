@@ -33,6 +33,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrakeWPF.Views;
 
     using Ookii.Dialogs.Wpf;
 
@@ -843,7 +844,16 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenAboutApplication()
         {
-            this.WindowManager.ShowWindow(IoC.Get<IAboutViewModel>());
+            Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(AboutView));
+
+            if (window != null)
+            {
+                window.Activate();
+            }
+            else
+            {
+                this.WindowManager.ShowWindow(IoC.Get<IAboutViewModel>());
+            }
         }
 
         /// <summary>
@@ -859,7 +869,16 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenLogWindow()
         {
-            this.WindowManager.ShowWindow(IoC.Get<ILogViewModel>());
+            Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(LogView));
+
+            if (window != null)
+            {
+                window.Activate();
+            }
+            else
+            {
+                this.WindowManager.ShowWindow(IoC.Get<ILogViewModel>());
+            }
         }
 
         /// <summary>
@@ -867,7 +886,16 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenQueueWindow()
         {
-            this.WindowManager.ShowWindow(IoC.Get<IQueueViewModel>());
+            Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueView));
+
+            if (window != null)
+            {
+                window.Activate();
+            }
+            else
+            {
+                this.WindowManager.ShowWindow(IoC.Get<IQueueViewModel>());
+            }
         }
 
         /// <summary>
@@ -875,9 +903,17 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenPreviewWindow()
         {
-            IPreviewViewModel viewModel = IoC.Get<IPreviewViewModel>();
-            this.WindowManager.ShowWindow(viewModel);
-            viewModel.Task = this.CurrentTask;
+            Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(PreviewView));
+
+            if (window != null)
+            {
+                window.Activate();
+            }
+            else
+            {
+                IPreviewViewModel viewModel = IoC.Get<IPreviewViewModel>();
+                this.WindowManager.ShowWindow(viewModel);
+            }
         }
 
         /// <summary>
