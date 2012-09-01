@@ -36,6 +36,11 @@ namespace HandBrakeWPF.Isolation
         private readonly IErrorService errorService;
 
         /// <summary>
+        /// The user setting service.
+        /// </summary>
+        private readonly IUserSettingService userSettingService;
+
+        /// <summary>
         /// Gets or sets the pipe factory.
         /// DuplexChannelFactory is necessary for Callbacks.
         /// </summary>
@@ -56,9 +61,13 @@ namespace HandBrakeWPF.Isolation
         /// <param name="errorService">
         /// The error service.
         /// </param>
-        public BackgroundServiceConnector(IErrorService errorService)
+        /// <param name="userSettingService">
+        /// The user Setting Service.
+        /// </param>
+        public BackgroundServiceConnector(IErrorService errorService, IUserSettingService userSettingService)
         {
             this.errorService = errorService;
+            this.userSettingService = userSettingService;
         }
 
         /// <summary>
@@ -91,9 +100,19 @@ namespace HandBrakeWPF.Isolation
         /// </summary>
         public void Connect()
         {
+            string port = this.userSettingService.GetUserSetting<string>(UserSettingConstants.ServerPort);
+
             if (backgroundProcess == null)
             {
-               // backgroundProcess = Process.Start("HandBrake.Server.exe");
+                ProcessStartInfo processStartInfo = new ProcessStartInfo(
+                    "HandBrake.Server.exe", port)
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = false,
+                };
+
+                backgroundProcess = new Process { StartInfo = processStartInfo };
+                backgroundProcess.Start();
             }
 
             ThreadPool.QueueUserWorkItem(delegate
@@ -103,7 +122,7 @@ namespace HandBrakeWPF.Isolation
                         pipeFactory = new DuplexChannelFactory<IServerService>(
                             new InstanceContext(this),
                             new NetTcpBinding(),
-                            new EndpointAddress("net.tcp://127.0.0.1:8000/IHbService"));
+                            new EndpointAddress(string.Format("net.tcp://127.0.0.1:{0}/IHbService", port)));
 
                         // Connect and Subscribe to the Server
                         Service = pipeFactory.CreateChannel();

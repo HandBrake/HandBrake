@@ -60,7 +60,11 @@ namespace HandBrakeWPF.Isolation
         /// <param name="errorService">
         /// The error Service.
         /// </param>
-        public IsolatedScanService(IErrorService errorService) : base(errorService)
+        /// <param name="userSettingService">
+        /// The user Setting Service.
+        /// </param>
+        public IsolatedScanService(IErrorService errorService, IUserSettingService userSettingService)
+            : base(errorService, userSettingService)
         {
             try
             {

@@ -161,6 +161,16 @@ namespace HandBrakeWPF
         /// </summary>
         public const string VLC_Path = "VLC_Path";
 
+        /// <summary>
+        /// The enable process isolation.
+        /// </summary>
+        public const string EnableProcessIsolation = "EnableProcessIsolation";
+
+        /// <summary>
+        /// The server port.
+        /// </summary>
+        public const string ServerPort = "ServerPort";
+
         #endregion
     }
 }

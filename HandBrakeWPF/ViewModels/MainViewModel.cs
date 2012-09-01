@@ -166,9 +166,6 @@ namespace HandBrakeWPF.ViewModels
         /// Initializes a new instance of the <see cref="MainViewModel"/> class.
         /// The viewmodel for HandBrakes main window.
         /// </summary>
-        /// <param name="windowManager">
-        /// The window manager.
-        /// </param>
         /// <param name="userSettingService">
         /// The User Setting Service
         /// </param>
@@ -193,7 +190,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="driveDetectService">
         /// The drive Detect Service.
         /// </param>
-        public MainViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService,
+        public MainViewModel(IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService,
             IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService, IDriveDetectService driveDetectService)
         {
             GeneralUtilities.SetInstanceId();
@@ -808,6 +805,11 @@ namespace HandBrakeWPF.ViewModels
             this.SourceMenu = this.GenerateSourceMenu();
 
             this.driveDetectService.StartDetection(this.DriveTrayChanged);
+
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableProcessIsolation))
+            {
+                this.EnableIsolationServices();
+            }
         }
 
         /// <summary>
@@ -1181,7 +1183,7 @@ namespace HandBrakeWPF.ViewModels
         /// The test isolation services.
         /// Swaps out the implementation of IScan to the IsolatedScanService version.
         /// </summary>
-        public void TestIsolationServices()
+        public void EnableIsolationServices()
         {
             // Unhook the old services
             this.scanService.ScanStared -= this.ScanStared;
@@ -1190,8 +1192,8 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
 
             // Replace the Services
-            this.scanService = new IsolatedScanService(this.errorService);
-            this.encodeService = new IsolatedEncodeService(this.errorService);
+            this.scanService = new IsolatedScanService(this.errorService, this.userSettingService);
+            this.encodeService = new IsolatedEncodeService(this.errorService, this.userSettingService);
             this.queueProcessor.SwapEncodeService(this.encodeService);
 
             // Add the new Event Hooks

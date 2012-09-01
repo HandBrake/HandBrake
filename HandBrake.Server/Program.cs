@@ -1,6 +1,7 @@
 ﻿namespace HandBrake.Server
 {
     using System;
+    using System.Linq;
 
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -18,8 +19,16 @@
         /// </param>
         static void Main(string[] args)
         {
-            IServerService server = new ServerService();
-            server.Start();
+            if (args.Count() != 1)
+            {
+                Console.WriteLine("Invalid Arguments");
+                Console.ReadLine();
+            }
+            else
+            {
+                IServerService server = new ServerService();
+                server.Start(args[0]);
+            }
         }
     }
 }

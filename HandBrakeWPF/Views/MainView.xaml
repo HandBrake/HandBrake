@@ -134,7 +134,7 @@
                 <MenuItem Header="Debug" Foreground="Transparent" >
                     <MenuItem Header="Show CLI Equiv" Micro:Message.Attach="[Event Click] = [Action ShowCliQuery]" />
                     <MenuItem Header="Debug Scan Log" Micro:Message.Attach="[Event Click] = [Action DebugScanLog]" />
-                    <MenuItem Header="Test Isolation Service" Micro:Message.Attach="[Event Click] = [Action TestIsolationServices]" />
+                    <MenuItem Header="Test Isolation Service" Micro:Message.Attach="[Event Click] = [Action EnableIsolationServices]" />
                 </MenuItem>
             </Menu>
 
