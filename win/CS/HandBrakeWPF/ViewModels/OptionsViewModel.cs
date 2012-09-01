@@ -22,6 +22,7 @@ namespace HandBrakeWPF.ViewModels
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices;
+    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
@@ -338,6 +339,16 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private UpdateCheckInformation updateInfo;
 
+        /// <summary>
+        /// The enable process isolation.
+        /// </summary>
+        private bool enableProcessIsolation;
+
+        /// <summary>
+        /// The server port.
+        /// </summary>
+        private int serverPort;
+
         #endregion
 
         #region Constructors and Destructors
@@ -345,9 +356,6 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionsViewModel"/> class.
         /// </summary>
-        /// <param name="windowManager">
-        /// The window manager.
-        /// </param>
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
@@ -357,7 +365,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="updateService">
         /// The update Service.
         /// </param>
-        public OptionsViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IShellViewModel shellViewModel, IUpdateService updateService )
+        public OptionsViewModel(IUserSettingService userSettingService, IShellViewModel shellViewModel, IUpdateService updateService )
         {
             this.Title = "Options";
             this.userSettingService = userSettingService;
@@ -1313,6 +1321,38 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether ClearQueueOnEncodeCompleted.
+        /// </summary>
+        public bool EnableProcessIsolation
+        {
+            get
+            {
+                return this.enableProcessIsolation;
+            }
+            set
+            {
+                this.enableProcessIsolation = value;
+                this.NotifyOfPropertyChange(() => this.EnableProcessIsolation);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the server port.
+        /// </summary>
+        public int ServerPort
+        {
+            get
+            {
+                return this.serverPort;
+            }
+            set
+            {
+                this.serverPort = value;
+                this.NotifyOfPropertyChange(() => this.ServerPort);
+            }
+        }
+
         #endregion
 
         #endregion
@@ -1601,8 +1641,13 @@ namespace HandBrakeWPF.ViewModels
             // Min Title Length
             this.MinLength = this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.MinScanDuration);
 
-            // Use Experimental dvdnav
+            // Use dvdnav
             this.DisableLibdvdNav = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav);
+
+            int port;
+            int.TryParse(userSettingService.GetUserSetting<string>(UserSettingConstants.ServerPort), out port);
+            this.ServerPort = port;
+            this.EnableProcessIsolation = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableProcessIsolation);
         }
 
         /// <summary>
@@ -1817,6 +1862,8 @@ namespace HandBrakeWPF.ViewModels
             }
 
             userSettingService.SetUserSetting(ASUserSettingConstants.DisableLibDvdNav, this.DisableLibdvdNav);
+            userSettingService.SetUserSetting(UserSettingConstants.EnableProcessIsolation, this.EnableProcessIsolation);
+            userSettingService.SetUserSetting(UserSettingConstants.ServerPort, this.ServerPort.ToString());
         }
 
         /// <summary>

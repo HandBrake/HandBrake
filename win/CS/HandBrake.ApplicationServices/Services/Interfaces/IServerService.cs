@@ -63,7 +63,10 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <summary>
         /// Start the WCF Service
         /// </summary>
-        void Start();
+        /// <param name="port">
+        /// The port.
+        /// </param>
+        void Start(string port);
 
         /// <summary>
         /// Stop the WCF Service

@@ -34,8 +34,11 @@ namespace HandBrakeWPF.Isolation
         /// <param name="errorService">
         /// The error Service.
         /// </param>
-        public IsolatedEncodeService(IErrorService errorService)
-            : base(errorService)
+        /// <param name="userSettingService">
+        /// The user Setting Service.
+        /// </param>
+        public IsolatedEncodeService(IErrorService errorService, IUserSettingService userSettingService)
+            : base(errorService, userSettingService)
         {
             try
             {

@@ -146,15 +146,15 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Start the service
         /// </summary>
-        public void Start()
+        public void Start(string port)
         {
-            using (this.host = new ServiceHost(typeof(ServerService), new Uri("net.tcp://localhost:8000")))
+            using (this.host = new ServiceHost(typeof(ServerService), new Uri(string.Format("net.tcp://127.0.0.1:{0}", port))))
             {
                 // Setup a listener
                 this.host.AddServiceEndpoint(typeof(IServerService), new NetTcpBinding(), "IHbService");
                 this.host.Open();
-                Console.WriteLine("::: HandBrake Server :::");
-                Console.WriteLine("Service Started");
+                Console.WriteLine("::: HandBrake Isolation Server:::");
+                Console.WriteLine("Service Started. Waiting for Clients...");
 
                 // Setup the services we are going to use.
                 scanService = new ScanService(new UserSettingService()); // TODO this needs wired up with castle
