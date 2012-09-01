@@ -322,7 +322,7 @@ namespace HandBrakeWPF.ViewModels
                     {
                         this.IsPeakFramerate = true;
                     }
-                    this.Task.Framerate = double.Parse(value);
+                    this.Task.Framerate = double.Parse(value, CultureInfo.InvariantCulture);
                 }
 
                 this.NotifyOfPropertyChange(() => this.SelectedFramerate);

@@ -470,7 +470,7 @@ namespace HandBrake.ApplicationServices.Utilities
                 query += " -T ";
 
             if (task.Framerate.HasValue)
-                query += string.Format(" -r {0}", task.Framerate);
+                query += string.Format(" -r {0}", task.Framerate.Value.ToString(CultureInfo.InvariantCulture));
 
             switch (task.FramerateMode)
             {
