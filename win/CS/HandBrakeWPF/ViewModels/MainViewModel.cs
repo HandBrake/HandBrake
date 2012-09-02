@@ -906,14 +906,16 @@ namespace HandBrakeWPF.ViewModels
         public void OpenPreviewWindow()
         {
             Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(PreviewView));
+            IPreviewViewModel viewModel = IoC.Get<IPreviewViewModel>();
 
             if (window != null)
             {
+                viewModel.Task = this.CurrentTask;
                 window.Activate();
             }
             else
             {
-                IPreviewViewModel viewModel = IoC.Get<IPreviewViewModel>();
+                viewModel.Task = this.CurrentTask;
                 this.WindowManager.ShowWindow(viewModel);
             }
         }
