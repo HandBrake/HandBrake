@@ -108,12 +108,17 @@ namespace HandBrakeWPF.Isolation
                     "HandBrake.Server.exe", port)
                 {
                     UseShellExecute = false,
-                    CreateNoWindow = false,
+                    CreateNoWindow = true,
+                    RedirectStandardOutput = true,
                 };
 
                 backgroundProcess = new Process { StartInfo = processStartInfo };
                 backgroundProcess.Start();
             }
+
+            // When the process writes out a line, it's pipe server is ready and can be contacted for
+            // work. Reading line blocks until this happens.
+            backgroundProcess.StandardOutput.ReadLine();
 
             ThreadPool.QueueUserWorkItem(delegate
                 {
@@ -141,16 +146,16 @@ namespace HandBrakeWPF.Isolation
         /// </summary>
         public void Disconnect()
         {
-            if (backgroundProcess != null && !backgroundProcess.HasExited)
+            try
             {
-                try
+                if (backgroundProcess != null && !backgroundProcess.HasExited)
                 {
                     Service.Unsubscribe();
                 }
-                catch (Exception exc)
-                {
-                    this.errorService.ShowError("Unable to disconnect from service", "It may have already close. Check for any left over HandBrake.Server.exe processes", exc);
-                }
+            }
+            catch (Exception exc)
+            {
+                this.errorService.ShowError("Unable to disconnect from service", "It may have already close. Check for any left over HandBrake.Server.exe processes", exc);
             }
         }
 

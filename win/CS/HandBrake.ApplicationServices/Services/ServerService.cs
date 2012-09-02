@@ -13,6 +13,7 @@ namespace HandBrake.ApplicationServices.Services
     using System.Collections.Generic;
     using System.Runtime.Serialization;
     using System.ServiceModel;
+    using System.Threading;
     using System.Windows;
 
     using HandBrake.ApplicationServices.EventArgs;
@@ -47,7 +48,12 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// The host.
         /// </summary>
-        private ServiceHost host;
+        private static ServiceHost host;
+
+        /// <summary>
+        /// The shutdown flag.
+        /// </summary>
+        private static ManualResetEvent shutdownFlag;
 
         #endregion
 
@@ -148,18 +154,20 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         public void Start(string port)
         {
-            using (this.host = new ServiceHost(typeof(ServerService), new Uri(string.Format("net.tcp://127.0.0.1:{0}", port))))
+            using (host = new ServiceHost(typeof(ServerService), new Uri(string.Format("net.tcp://127.0.0.1:{0}", port))))
             {
                 // Setup a listener
-                this.host.AddServiceEndpoint(typeof(IServerService), new NetTcpBinding(), "IHbService");
-                this.host.Open();
-                Console.WriteLine("::: HandBrake Isolation Server:::");
+                host.AddServiceEndpoint(typeof(IServerService), new NetTcpBinding(), "IHbService");
+                host.Open();
+                Console.WriteLine("::: HandBrake Isolation Server - Debug Console:::");
                 Console.WriteLine("Service Started. Waiting for Clients...");
 
                 // Setup the services we are going to use.
                 scanService = new ScanService(new UserSettingService()); // TODO this needs wired up with castle
                 encodeService = new Encode(new UserSettingService());
-                Console.ReadLine();
+
+                shutdownFlag = new ManualResetEvent(false);
+                shutdownFlag.WaitOne();
             }
         }
 
@@ -186,10 +194,11 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         public void Stop()
         {
-            if (this.host != null)
+            if (host != null)
             {
-                this.host.Close();
-                Application.Current.Shutdown();
+                host.BeginClose(null, null);
+                //host.Abort();            
+                shutdownFlag.Set();
             }
         }
 

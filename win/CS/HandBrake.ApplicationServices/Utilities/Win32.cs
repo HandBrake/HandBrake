@@ -168,8 +168,7 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </summary>
         public static void AllowSleep()
         {
-            executor(
-                () => SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS));
+            SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS);
         }
 
         /// <summary>

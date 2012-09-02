@@ -84,7 +84,7 @@ namespace HandBrakeWPF.Isolation
         {
             get
             {
-                return Service.EncodeActivityLog;
+                return this.IsConnected ? this.Service.EncodeActivityLog : "Unable to connect to background worker service ...";
             }
         }
 
@@ -95,7 +95,7 @@ namespace HandBrakeWPF.Isolation
         {
             get
             {
-                return Service.IsEncoding;
+                return this.IsConnected && this.Service.IsEncoding;
             }
         }
 
