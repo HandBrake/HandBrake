@@ -373,6 +373,13 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="timeRemaining">Time Left</param>
         private void EncodeOnEncodeProgress(object sender, int currentTask, int taskCount, float percentComplete, float currentFps, float avg, string timeRemaining)
         {
+            if (!this.IsEncoding)
+            {
+                // We can get events out of order since the CLI progress is monitored on a background thread.
+                // So make sure we don't send a status update after an encode complete event.
+                return;
+            }
+
             EncodeProgressEventArgs eventArgs = new EncodeProgressEventArgs
             {
                 AverageFrameRate = avg,

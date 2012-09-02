@@ -827,6 +827,13 @@ namespace HandBrakeWPF.ViewModels
                 isolatedScanService.Disconnect();
             }
 
+            IIsolatedEncodeService isolatedEncodeService = this.encodeService as IIsolatedEncodeService;
+            if (isolatedEncodeService != null)
+            {
+                // Kill any background services for this instance of HandBrake.
+                isolatedEncodeService.Disconnect();
+            }
+
             // Unsubscribe from Events.
             this.scanService.ScanStared -= this.ScanStared;
             this.scanService.ScanCompleted -= this.ScanCompleted;

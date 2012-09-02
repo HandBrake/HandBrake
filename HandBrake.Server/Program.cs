@@ -21,8 +21,11 @@
         {
             if (args.Count() != 1)
             {
-                Console.WriteLine("Invalid Arguments");
-                Console.ReadLine();
+                //Console.WriteLine("Invalid Arguments");
+                //Console.ReadLine();
+
+                IServerService server = new ServerService();
+                server.Start("8001");
             }
             else
             {
