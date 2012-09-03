@@ -72,18 +72,6 @@ int encvorbisInit(hb_work_object_t *w, hb_job_t *job)
 
     if (audio->config.out.bitrate > 0)
     {
-        /* 28kbps/channel seems to be the minimum for 6ch vorbis. */
-        int min_bitrate = 28 * pv->out_discrete_channels;
-        if (pv->out_discrete_channels > 2 &&
-            audio->config.out.bitrate < min_bitrate)
-        {
-            hb_log("encvorbis: Selected bitrate (%d kbps) too low for %d channel audio",
-                   audio->config.out.bitrate, pv->out_discrete_channels);
-            hb_log("encvorbis: Resetting bitrate to %d kbps", min_bitrate);
-            /* Naughty! We shouldn't modify the audio from here. */
-            audio->config.out.bitrate = min_bitrate;
-        }
-
         if (vorbis_encode_setup_managed(&pv->vi, pv->out_discrete_channels,
                                         audio->config.out.samplerate, -1,
                                         audio->config.out.bitrate * 1000, -1))

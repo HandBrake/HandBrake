@@ -405,14 +405,14 @@ void hb_display_job_info( hb_job_t * job )
             else if( subtitle->source == SRTSUB )
             {
                 /* For SRT, print offset and charset too */
-                hb_log( " * subtitle track %i, %s (track %d, id 0x%x) Text [SRT] -> Passthrough%s, offset: %"PRId64", charset: %s",
+                hb_log( " * subtitle track %d, %s (track %d, id 0x%x) Text [SRT] -> Passthrough%s, offset: %"PRId64", charset: %s",
                         subtitle->out_track, subtitle->lang, subtitle->track, subtitle->id,
                         subtitle->config.default_track ? ", Default" : "",
                         subtitle->config.offset, subtitle->config.src_codeset );
             }
             else
             {
-                hb_log( " * subtitle track %i, %s (track %d, id 0x%x) %s [%s] -> %s%s%s",
+                hb_log( " * subtitle track %d, %s (track %d, id 0x%x) %s [%s] -> %s%s%s",
                         subtitle->out_track, subtitle->lang, subtitle->track, subtitle->id,
                         subtitle->format == PICTURESUB ? "Picture" : "Text",
                         hb_subsource_name( subtitle->source ),
@@ -782,36 +782,15 @@ static void do_job( hb_job_t * job )
                 free(audio);
                 continue;
             }
-            if (!(audio->config.out.codec & HB_ACODEC_PASS_FLAG))
-            {
-                if (audio->config.out.samplerate < 0)
-                {
-                    // if not specified, set to same as input
-                    audio->config.out.samplerate = audio->config.in.samplerate;
-                }
-                if (audio->config.out.samplerate > 48000)
-                {
-                    hb_log("Sample rate %d not supported. Downsampling to 48kHz for track %d",
-                           audio->config.out.samplerate, audio->config.out.track);
-                    audio->config.out.samplerate = 48000;
-                }
-                else if (audio->config.out.samplerate < 32000 &&
-                         audio->config.out.codec == HB_ACODEC_CA_HAAC)
-                {
-                    // Core Audio HE-AAC doesn't support samplerates < 32 kHz
-                    hb_log("Sample rate %d not supported (ca_haac). Using 32kHz for track %d",
-                           audio->config.out.samplerate, audio->config.out.track);
-                    audio->config.out.samplerate = 32000;
-                }
-            }
             /* Adjust output track number, in case we removed one.
              * Output tracks sadly still need to be in sequential order.
              * Note: out.track starts at 1, i starts at 0 */
             audio->config.out.track = ++i;
         }
 
-        int best_mixdown = 0;
-        int best_bitrate = 0;
+        int best_mixdown    = 0;
+        int best_bitrate    = 0;
+        int best_samplerate = 0;
 
         for (i = 0; i < hb_list_count(title->list_audio); i++)
         {
@@ -831,6 +810,31 @@ static void do_job( hb_job_t * job )
             if (audio->config.out.codec == HB_ACODEC_VORBIS)
                 audio->priv.config.vorbis.language = audio->config.lang.simple;
 
+            /* sense-check the requested samplerate */
+            if (audio->config.out.samplerate < 0)
+            {
+                // if not specified, set to same as input
+                audio->config.out.samplerate = audio->config.in.samplerate;
+            }
+            best_samplerate =
+                hb_get_best_samplerate(audio->config.out.codec,
+                                       audio->config.out.samplerate, NULL);
+            if (best_samplerate != audio->config.out.samplerate)
+            {
+                int ii;
+                for (ii = 0; ii < hb_audio_rates_count; ii++)
+                {
+                    if (best_samplerate == hb_audio_rates[ii].rate)
+                    {
+                        hb_log("work: sanitizing track %d unsupported samplerate %d Hz to %s kHz",
+                               audio->config.out.track, audio->config.out.samplerate,
+                               hb_audio_rates[ii].string);
+                        break;
+                    }
+                }
+                audio->config.out.samplerate = best_samplerate;
+            }
+
             /* sense-check the requested mixdown */
             if (audio->config.out.mixdown <= HB_AMIXDOWN_NONE)
             {
@@ -842,7 +846,7 @@ static void do_job( hb_job_t * job )
                 {
                     if (hb_audio_mixdowns[j].amixdown == audio->config.out.mixdown)
                     {
-                        hb_log("work: mixdown not specified, track %i setting mixdown %s",
+                        hb_log("work: mixdown not specified, track %d setting mixdown %s",
                                audio->config.out.track,
                                hb_audio_mixdowns[j].human_readable_name);
                         break;
@@ -851,10 +855,10 @@ static void do_job( hb_job_t * job )
             }
             else
             {
-                best_mixdown = hb_get_best_mixdown(audio->config.out.codec,
-                                                   audio->config.in.channel_layout,
-                                                   audio->config.out.mixdown);
-
+                best_mixdown =
+                    hb_get_best_mixdown(audio->config.out.codec,
+                                        audio->config.in.channel_layout,
+                                        audio->config.out.mixdown);
                 if (audio->config.out.mixdown != best_mixdown)
                 {
                     int prev_mix_idx = 0, best_mix_idx = 0;
@@ -870,7 +874,7 @@ static void do_job( hb_job_t * job )
                         }
                     }
                     /* log the output mixdown */
-                    hb_log("work: sanitizing track %i mixdown %s to %s",
+                    hb_log("work: sanitizing track %d mixdown %s to %s",
                            audio->config.out.track,
                            hb_audio_mixdowns[prev_mix_idx].human_readable_name,
                            hb_audio_mixdowns[best_mix_idx].human_readable_name);
@@ -942,14 +946,13 @@ static void do_job( hb_job_t * job )
                 if (audio->config.out.bitrate <= 0)
                 {
                     /* Bitrate not specified, set the default bitrate */
-                    audio->config.out.bitrate = 
+                    audio->config.out.bitrate =
                         hb_get_default_audio_bitrate(audio->config.out.codec,
                                                      audio->config.out.samplerate,
                                                      audio->config.out.mixdown);
-
                     if (audio->config.out.bitrate > 0)
                     {
-                        hb_log("work: bitrate not specified, track %d setting bitrate %d",
+                        hb_log("work: bitrate not specified, track %d setting bitrate %d Kbps",
                                audio->config.out.track,
                                audio->config.out.bitrate);
                     }
@@ -961,12 +964,11 @@ static void do_job( hb_job_t * job )
                                                   audio->config.out.bitrate,
                                                   audio->config.out.samplerate,
                                                   audio->config.out.mixdown);
-
                     if (best_bitrate > 0 &&
                         best_bitrate != audio->config.out.bitrate)
                     {
                         /* log the output bitrate */
-                        hb_log("work: sanitizing track %d bitrate %d to %d",
+                        hb_log("work: sanitizing track %d bitrate %d to %d Kbps",
                                audio->config.out.track,
                                audio->config.out.bitrate, best_bitrate);
                     }

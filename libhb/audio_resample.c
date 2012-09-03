@@ -27,6 +27,21 @@ hb_audio_resample_t* hb_audio_resample_init(enum AVSampleFormat sample_fmt,
     uint64_t channel_layout = hb_ff_mixdown_xlat(hb_amixdown, &matrix_encoding);
     channels = av_get_channel_layout_nb_channels(channel_layout);
 
+    if (do_remix && (hb_amixdown == HB_AMIXDOWN_LEFT ||
+                     hb_amixdown == HB_AMIXDOWN_RIGHT))
+    {
+        /* When downmixing, Dual Mono to Mono is a special case:
+         * the audio must remain 2-channel until all conversions are done. */
+        channels                       = 2;
+        channel_layout                 = AV_CH_LAYOUT_STEREO;
+        resample->dual_mono_downmix    = 1;
+        resample->dual_mono_right_only = (hb_amixdown == HB_AMIXDOWN_RIGHT);
+    }
+    else
+    {
+        resample->dual_mono_downmix = 0;
+    }
+
     // requested channel_layout
     resample->out.channels            = channels;
     resample->out.channel_layout      = channel_layout;
@@ -193,12 +208,12 @@ hb_buffer_t* hb_audio_resample(hb_audio_resample_t *resample,
         return NULL;
     }
 
-    int out_size;
     hb_buffer_t *out;
+    int out_size, out_samples;
 
     if (resample->resample_needed)
     {
-        int in_linesize, out_linesize, out_samples;
+        int in_linesize, out_linesize;
         // set in/out linesize and out_size
         av_samples_get_buffer_size(&in_linesize,
                                    resample->resample.channels, nsamples,
@@ -225,10 +240,28 @@ hb_buffer_t* hb_audio_resample(hb_audio_resample_t *resample,
     }
     else
     {
-        out_size = (nsamples *
+        out_samples = nsamples;
+        out_size = (out_samples *
                     resample->out.sample_size * resample->out.channels);
         out = hb_buffer_init(out_size);
         memcpy(out->data, samples, out_size);
+    }
+
+    /* Dual Mono to Mono.
+     *
+     * Copy all left or right samples to the first half of the buffer
+     * and halve the size */
+    if (resample->dual_mono_downmix)
+    {
+        int ii;
+        int jj = !!resample->dual_mono_right_only;
+        float *audio_samples = (float*)out->data;
+        for (ii = 0; ii < out_samples; ii++)
+        {
+            audio_samples[ii] = audio_samples[jj];
+            jj += 2;
+        }
+        out->size = out_samples * resample->out.sample_size;
     }
 
     return out;

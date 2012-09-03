@@ -2067,17 +2067,16 @@ value_map_t samplerate_xlat[] =
 	{NULL, NULL}
 };
 
-value_map_t mix_xlat[] =
+// mix translation table filed in with hb_audio_mixdowns table contents
+value_map_t *mix_xlat;
+
+// Backwards compatibility mappings for audio mix
+value_map_t mix_xlat_compat[] =
 {
-	{"Mono", "mono"},
-	{"Stereo", "stereo"},
-	{"Dolby Surround", "dpl1"},
-	{"Dolby Pro Logic II", "dpl2"},
-	{"6-channel discrete", "6ch"},
-	{"None", "none"},
-	{"AC3 Passthru", "none"},    // Backwards compatibility with mac ui
-	{"DTS Passthru", "none"},    // Backwards compatibility with mac ui
-	{"DTS-HD Passthru", "none"}, // Backwards compatibility with mac ui
+	{"6-channel discrete", "5point1"},
+	{"AC3 Passthru", "none"},
+	{"DTS Passthru", "none"},
+	{"DTS-HD Passthru", "none"},
 	{NULL, NULL}
 };
 
@@ -3130,6 +3129,24 @@ update_standard_presets(signal_user_data_t *ud)
 void
 ghb_presets_load(signal_user_data_t *ud)
 {
+	int ii, jj;
+
+	// Create audio mixdown translation table
+	mix_xlat = malloc(sizeof(value_map_t) *
+			(hb_audio_mixdowns_count +
+			 sizeof(mix_xlat_compat) / sizeof(value_map_t)));
+	for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
+	{
+		mix_xlat[ii].mac_val = hb_audio_mixdowns[ii].human_readable_name;
+		mix_xlat[ii].lin_val = hb_audio_mixdowns[ii].short_name;
+	}
+	for (jj = 0; mix_xlat_compat[jj].mac_val != NULL; jj++, ii++)
+	{
+		mix_xlat[ii] = mix_xlat_compat[jj];
+	}
+	mix_xlat[ii].mac_val = NULL;
+	mix_xlat[ii].lin_val = NULL;
+
 	presetsPlist = load_plist("presets");
 	if (presetsPlist == NULL)
 	{

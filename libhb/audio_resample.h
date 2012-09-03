@@ -28,6 +28,9 @@
 typedef struct
 {
     int do_remix;
+    int dual_mono_downmix;
+    int dual_mono_right_only;
+
     int resample_needed;
     AVAudioResampleContext *avresample;
 

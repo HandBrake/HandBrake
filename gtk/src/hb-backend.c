@@ -1590,6 +1590,21 @@ grey_combo_box_item(GtkBuilder *builder, const gchar *name, gint value, gboolean
 	}
 }
 
+static void
+grey_mix_opts(signal_user_data_t *ud, gint acodec, gint64 layout)
+{
+	gint ii;
+	
+	g_debug("grey_mix_opts()\n");
+	for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
+	{
+		grey_combo_box_item(ud->builder, "AudioMixdown",
+				hb_audio_mixdowns[ii].amixdown,
+				!hb_mixdown_is_supported(hb_audio_mixdowns[ii].amixdown,
+										acodec, layout));
+	}
+}
+
 void
 ghb_grey_combo_options(signal_user_data_t *ud)
 {
@@ -1670,32 +1685,12 @@ ghb_grey_combo_options(signal_user_data_t *ud)
 	gval = ghb_widget_value(widget);
 	acodec = ghb_lookup_combo_int("AudioEncoder", gval);
 	ghb_value_free(gval);
-	grey_combo_box_item(ud->builder, "AudioMixdown", 0, TRUE);
 
-	gboolean allow_mono = TRUE;
-	gboolean allow_stereo = TRUE;
-	gboolean allow_dolby = TRUE;
-	gboolean allow_dpl2 = TRUE;
-	gboolean allow_6ch = TRUE;
-	allow_6ch = acodec & ~HB_ACODEC_LAME;
-	if (aconfig)
-	{
-		fallback = ghb_settings_combo_int(ud->settings, "AudioEncoderFallback");
-		gint copy_mask = ghb_get_copy_mask(ud->settings);
-		acodec = ghb_select_audio_codec(mux, aconfig, acodec, fallback, copy_mask);
-		gint best = hb_get_best_mixdown(acodec, aconfig->in.channel_layout, HB_INVALID_AMIXDOWN);
-
-		allow_stereo = best >= HB_AMIXDOWN_STEREO;
-		allow_dolby = best >= HB_AMIXDOWN_DOLBY;
-		allow_dpl2 = best >= HB_AMIXDOWN_DOLBYPLII;
-		allow_6ch = best >= HB_AMIXDOWN_6CH;
-		allow_mono = best >= HB_AMIXDOWN_MONO;
-	}
-	grey_combo_box_item(ud->builder, "AudioMixdown", HB_AMIXDOWN_MONO, !allow_mono);
-	grey_combo_box_item(ud->builder, "AudioMixdown", HB_AMIXDOWN_STEREO, !allow_stereo);
-	grey_combo_box_item(ud->builder, "AudioMixdown", HB_AMIXDOWN_DOLBY, !allow_dolby);
-	grey_combo_box_item(ud->builder, "AudioMixdown", HB_AMIXDOWN_DOLBYPLII, !allow_dpl2);
-	grey_combo_box_item(ud->builder, "AudioMixdown", HB_AMIXDOWN_6CH, !allow_6ch);
+	gint64 layout = aconfig != NULL ? aconfig->in.channel_layout : ~0;
+	fallback = ghb_select_fallback(ud->settings, mux, acodec);
+	gint copy_mask = ghb_get_copy_mask(ud->settings);
+	acodec = ghb_select_audio_codec(mux, aconfig, acodec, fallback, copy_mask);
+	grey_mix_opts(ud, acodec, layout);
 }
 
 gint
@@ -4472,40 +4467,20 @@ ghb_validate_audio(GValue *settings)
 		}
 
 		gint mix = ghb_settings_combo_int (asettings, "AudioMixdown");
-		gboolean allow_mono = TRUE;
-		gboolean allow_stereo = TRUE;
-		gboolean allow_dolby = TRUE;
-		gboolean allow_dpl2 = TRUE;
-		gboolean allow_6ch = TRUE;
-		allow_mono = TRUE;
 
-		gint best = hb_get_best_mixdown(codec, aconfig->in.channel_layout, HB_INVALID_AMIXDOWN);
-
-		allow_stereo = best >= HB_AMIXDOWN_STEREO;
-		allow_dolby = best >= HB_AMIXDOWN_DOLBY;
-		allow_dpl2 = best >= HB_AMIXDOWN_DOLBYPLII;
-		allow_6ch = best >= HB_AMIXDOWN_6CH;
-
+		gint jj;
 		gchar *mix_unsup = NULL;
-		if (mix == HB_AMIXDOWN_MONO && !allow_mono)
+		if (!hb_mixdown_is_supported(mix, codec, aconfig->in.channel_layout))
 		{
-			mix_unsup = "mono";
-		}
-		if (mix == HB_AMIXDOWN_STEREO && !allow_stereo)
-		{
-			mix_unsup = "stereo";
-		}
-		if (mix == HB_AMIXDOWN_DOLBY && !allow_dolby)
-		{
-			mix_unsup = "Dolby";
-		}
-		if (mix == HB_AMIXDOWN_DOLBYPLII && !allow_dpl2)
-		{
-			mix_unsup = "Dolby Pro Logic II";
-		}
-		if (mix == HB_AMIXDOWN_6CH && !allow_6ch)
-		{
-			mix_unsup = "6 Channel";
+			for (jj = 0; jj < hb_audio_mixdowns_count; jj++)
+			{
+				if (mix == hb_audio_mixdowns[jj].amixdown)
+				{
+					{
+						mix_unsup = hb_audio_mixdowns[jj].human_readable_name;
+					}
+				}
+			}
 		}
 		if (mix_unsup)
 		{

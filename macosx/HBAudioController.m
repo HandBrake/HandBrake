@@ -90,9 +90,9 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
         if ([anAudio enabled])
         {
             NSString *prefix = [NSString stringWithFormat: @"Audio%d", counter + 1];
-            NSNumber *sampleRateToUse = (0 == [[[anAudio sampleRate] objectForKey: keyAudioSamplerate] intValue]) ?
-            [[anAudio track] objectForKey: keyAudioInputSampleRate] :
-            [[anAudio sampleRate] objectForKey: keyAudioSamplerate];
+            NSNumber *sampleRateToUse = ([[[anAudio sampleRate] objectForKey: keyAudioSamplerate] intValue] == 0 ?
+                                         [[anAudio track] objectForKey: keyAudioInputSampleRate] :
+                                         [[anAudio sampleRate] objectForKey: keyAudioSamplerate]);
 
             [aDict setObject: [[anAudio track] objectForKey: keyAudioTrackIndex] forKey: [prefix stringByAppendingString: @"Track"]];
             [aDict setObject: [[anAudio track] objectForKey: keyAudioTrackName] forKey: [prefix stringByAppendingString: @"TrackDescription"]];
@@ -345,13 +345,17 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
                 [dict setObject:[NSNumber numberWithFloat:0.0] forKey:@"AudioTrackGainSlider"];
             }
 
-            // map legacy passthru mixdowns
+            // map legacy mixdowns
             key = [dict objectForKey: @"AudioMixdown"];
             if ([key isEqualToString: @"AC3 Passthru"] ||
                 [key isEqualToString: @"DTS Passthru"] ||
                 [key isEqualToString: @"DTS-HD Passthru"])
             {
                 [dict setObject: @"None" forKey: @"AudioMixdown"];
+            }
+            else if ([key isEqualToString: @"6-channel discrete"])
+            {
+                [dict setObject: @"5.1 Channels" forKey: @"AudioMixdown"];
             }
 
             // If our preset wants us to support a codec that the track does not support, instead

@@ -295,7 +295,7 @@ static int MP4Init( hb_mux_object_t * m )
                     bsmod = 0;
                     freq = audio->config.out.samplerate;
                     bitrate = audio->config.out.bitrate * 1000;
-                    switch( audio->config.out.mixdown )
+                    switch (audio->config.out.mixdown)
                     {
                         case HB_AMIXDOWN_MONO:
                             acmod = 1;
@@ -309,13 +309,13 @@ static int MP4Init( hb_mux_object_t * m )
                             lfeon = 0;
                             break;
 
-                        case HB_AMIXDOWN_6CH:
+                        case HB_AMIXDOWN_5POINT1:
                             acmod = 7;
                             lfeon = 1;
                             break;
 
                         default:
-                            hb_log(" MP4Init: bad mixdown" );
+                            hb_log("MP4Init: bad mixdown");
                             acmod = 2;
                             lfeon = 0;
                             break;

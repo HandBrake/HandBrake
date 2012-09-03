@@ -56,7 +56,8 @@ check_list_full(signal_user_data_t *ud)
 gint
 ghb_select_audio_codec(gint mux, hb_audio_config_t *aconfig, gint acodec, gint fallback, gint copy_mask)
 {
-	guint32 in_codec = aconfig ? aconfig->in.codec : 0;
+	guint32 in_codec = aconfig != NULL ? aconfig->in.codec : 0;
+
 	if (acodec == HB_ACODEC_AUTO_PASS)
 	{
 		return hb_autopassthru_get_encoder(in_codec, copy_mask, fallback, mux);
@@ -119,7 +120,7 @@ int ghb_get_copy_mask(GValue *settings)
 	return mask;
 }
 
-static int ghb_select_fallback( GValue *settings, int mux, int acodec )
+int ghb_select_fallback( GValue *settings, int mux, int acodec )
 {
 	gint mask;
 	gint fallback = 0;
@@ -839,6 +840,7 @@ global_audio_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_check_dependency(ud, widget, NULL);
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_adjust_audio_rate_combos(ud);
+	ghb_grey_combo_options (ud);
 	ghb_audio_list_refresh_selected(ud);
 	ghb_live_reset(ud);
 }

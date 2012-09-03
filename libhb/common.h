@@ -197,7 +197,11 @@ int           hb_get_video_encoders_count();
 hb_encoder_t* hb_get_audio_encoders();
 int           hb_get_audio_encoders_count();
 
+int hb_mixdown_is_supported(int mixdown, uint32_t codec, uint64_t layout);
+int hb_mixdown_has_codec_support(int mixdown, uint32_t codec);
+int hb_mixdown_has_remix_support(int mixdown, uint64_t layout);
 int hb_mixdown_get_discrete_channel_count(int amixdown);
+int hb_mixdown_get_low_freq_channel_count(int amixdown);
 int hb_mixdown_get_mixdown_from_short_name(const char *short_name);
 const char* hb_mixdown_get_short_name_from_mixdown(int amixdown);
 
@@ -206,6 +210,7 @@ void hb_autopassthru_print_settings( hb_job_t * job );
 int hb_autopassthru_get_encoder( int in_codec, int copy_mask, int fallback, int muxer );
 int hb_get_best_mixdown(uint32_t codec, uint64_t layout, int mixdown);
 int hb_get_default_mixdown(uint32_t codec, uint64_t layout);
+int hb_get_best_samplerate(uint32_t codec, int samplerate, int *sr_shift);
 int hb_find_closest_audio_bitrate(int bitrate);
 void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, int *low, int *high);
 int hb_get_best_audio_bitrate( uint32_t codec, int bitrate, int samplerate, int mixdown);
@@ -438,10 +443,15 @@ struct hb_audio_config_s
             HB_INVALID_AMIXDOWN = -1,
             HB_AMIXDOWN_NONE = 0,
             HB_AMIXDOWN_MONO,
+            HB_AMIXDOWN_LEFT,
+            HB_AMIXDOWN_RIGHT,
             HB_AMIXDOWN_STEREO,
             HB_AMIXDOWN_DOLBY,
             HB_AMIXDOWN_DOLBYPLII,
-            HB_AMIXDOWN_6CH,
+            HB_AMIXDOWN_5POINT1,
+            HB_AMIXDOWN_6POINT1,
+            HB_AMIXDOWN_7POINT1,
+            HB_AMIXDOWN_5_2_LFE,
         } mixdown; /* Audio mixdown */
         int      track; /* Output track number */
         uint32_t codec; /* Output audio codec */

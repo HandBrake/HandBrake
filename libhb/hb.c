@@ -221,6 +221,8 @@ uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode)
             break;
 
         case HB_AMIXDOWN_MONO:
+        case HB_AMIXDOWN_LEFT:
+        case HB_AMIXDOWN_RIGHT:
             ff_layout = AV_CH_LAYOUT_MONO;
             break;
 
@@ -238,13 +240,27 @@ uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode)
             ff_layout = AV_CH_LAYOUT_STEREO;
             break;
 
-        case HB_AMIXDOWN_6CH:
+        case HB_AMIXDOWN_5POINT1:
             ff_layout = AV_CH_LAYOUT_5POINT1;
+            break;
+
+        case HB_AMIXDOWN_6POINT1:
+            ff_layout = AV_CH_LAYOUT_6POINT1;
+            break;
+
+        case HB_AMIXDOWN_7POINT1:
+            ff_layout = AV_CH_LAYOUT_7POINT1;
+            break;
+
+        case HB_AMIXDOWN_5_2_LFE:
+            ff_layout = (AV_CH_LAYOUT_5POINT1_BACK|
+                         AV_CH_FRONT_LEFT_OF_CENTER|
+                         AV_CH_FRONT_RIGHT_OF_CENTER);
             break;
 
         default:
             ff_layout = AV_CH_LAYOUT_STEREO;
-            hb_log("unrecognized channel layout");
+            hb_log("hb_ff_mixdown_xlat: unsupported mixdown %d", hb_mixdown);
             break;
     }
     if (downmix_mode != NULL)

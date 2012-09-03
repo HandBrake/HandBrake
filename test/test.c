@@ -2925,7 +2925,7 @@ static void ShowHelp()
     fprintf(out,
     "                            Separated by commas for more than one audio track.\n"
     "                            Default: up to %s for ffac3 and ffflac,\n",
-            hb_mixdown_get_short_name_from_mixdown(HB_AMIXDOWN_6CH));
+            hb_mixdown_get_short_name_from_mixdown(HB_AMIXDOWN_5POINT1));
     fprintf(out,
     "                                     up to %s for other encoders).\n",
             hb_mixdown_get_short_name_from_mixdown(HB_AMIXDOWN_DOLBYPLII));

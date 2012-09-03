@@ -1,6 +1,6 @@
-diff -Naur faac-1.28/libfaac/frame.c ../build.debug/contrib/faac/faac-1.28/libfaac/frame.c
---- faac-1.28.orig/libfaac/frame.c	2004-11-17 06:26:06.000000000 -0800
-+++ faac-1.28/libfaac/frame.c	2010-04-10 12:26:28.200614437 -0700
+diff -Naur faac-1.28.old/libfaac/frame.c faac-1.28.new/libfaac/frame.c
+--- faac-1.28.old/libfaac/frame.c	2004-11-17 06:26:06.000000000 -0800
++++ faac-1.28.new/libfaac/frame.c	2010-04-10 12:26:28.200614437 -0700
 @@ -196,6 +196,8 @@
  			{47000, 10000},
  			{64000, 16000},

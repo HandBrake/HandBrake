@@ -20,93 +20,241 @@
  * Global variables
  *********************************************************************/
 hb_rate_t hb_video_rates[] =
-{ { "5",  5400000 }, { "10",     2700000 }, { "12", 2250000 },
-  { "15", 1800000 }, { "23.976", 1126125 }, { "24", 1125000 },
-  { "25", 1080000 }, { "29.97",  900900  }, { "30", 900000  },
-  { "50", 540000  }, { "59.94",  450450  }, { "60", 450000  } };
-int hb_video_rates_count = sizeof( hb_video_rates ) /
-                           sizeof( hb_rate_t );
+{
+    {  "5",     5400000 },
+    { "10",     2700000 },
+    { "12",     2250000 },
+    { "15",     1800000 },
+    { "23.976", 1126125 },
+    { "24",     1125000 },
+    { "25",     1080000 },
+    { "29.97",   900900 },
+    { "30",      900000 },
+    { "50",      540000 },
+    { "59.94",   450450 },
+    { "60",      450000 },
+};
+int hb_video_rates_count = sizeof(hb_video_rates) / sizeof(hb_rate_t);
 
 hb_rate_t hb_audio_rates[] =
-{ { "22.05", 22050 }, { "24", 24000 }, { "32", 32000 },
-  { "44.1",  44100 }, { "48", 48000 } };
-int hb_audio_rates_count   = sizeof( hb_audio_rates ) /
-                             sizeof( hb_rate_t );
-int hb_audio_rates_default = 3; /* 44100 Hz */
+{
+    {  "8",      8000 },
+    { "11.025", 11025 },
+    { "12",     12000 },
+    { "16",     16000 },
+    { "22.05",  22050 },
+    { "24",     24000 },
+    { "32",     32000 },
+    { "44.1",   44100 },
+    { "48",     48000 },
+};
+int hb_audio_rates_count = sizeof(hb_audio_rates) / sizeof(hb_rate_t);
 
 hb_rate_t hb_audio_bitrates[] =
-{ {  "32",  32 }, {  "40",  40 }, {  "48",  48 }, {  "56",  56 },
-  {  "64",  64 }, {  "80",  80 }, {  "96",  96 }, { "112", 112 },
-  { "128", 128 }, { "160", 160 }, { "192", 192 }, { "224", 224 },
-  { "256", 256 }, { "320", 320 }, { "384", 384 }, { "448", 448 },
-  { "512", 512 }, { "576", 576 }, { "640", 640 }, { "768", 768 } };
-int hb_audio_bitrates_count = sizeof( hb_audio_bitrates ) /
-                              sizeof( hb_rate_t );
+{
+    // AC3-compatible bitrates
+    {   "32",   32 },
+    {   "40",   40 },
+    {   "48",   48 },
+    {   "56",   56 },
+    {   "64",   64 },
+    {   "80",   80 },
+    {   "96",   96 },
+    {  "112",  112 },
+    {  "128",  128 },
+    {  "160",  160 },
+    {  "192",  192 },
+    {  "224",  224 },
+    {  "256",  256 },
+    {  "320",  320 },
+    {  "384",  384 },
+    {  "448",  448 },
+    {  "512",  512 },
+    {  "576",  576 },
+    {  "640",  640 },
+    // additional bitrates
+    {  "768",  768 },
+    {  "960",  960 },
+    { "1152", 1152 },
+    { "1344", 1344 },
+    { "1536", 1536 },
+};
+int hb_audio_bitrates_count = sizeof(hb_audio_bitrates) / sizeof(hb_rate_t);
 
 static hb_error_handler_t *error_handler = NULL;
 
 hb_mixdown_t hb_audio_mixdowns[] =
-{ { "None",               "HB_AMIXDOWN_NONE",      "none",   HB_AMIXDOWN_NONE      },
-  { "Mono",               "HB_AMIXDOWN_MONO",      "mono",   HB_AMIXDOWN_MONO      },
-  { "Stereo",             "HB_AMIXDOWN_STEREO",    "stereo", HB_AMIXDOWN_STEREO    },
-  { "Dolby Surround",     "HB_AMIXDOWN_DOLBY",     "dpl1",   HB_AMIXDOWN_DOLBY     },
-  { "Dolby Pro Logic II", "HB_AMIXDOWN_DOLBYPLII", "dpl2",   HB_AMIXDOWN_DOLBYPLII },
-  { "6-channel discrete", "HB_AMIXDOWN_6CH",       "6ch",    HB_AMIXDOWN_6CH       } };
-int hb_audio_mixdowns_count = sizeof( hb_audio_mixdowns ) /
-                              sizeof( hb_mixdown_t );
+{
+    { "None",               "HB_AMIXDOWN_NONE",      "none",       HB_AMIXDOWN_NONE      },
+    { "Mono",               "HB_AMIXDOWN_MONO",      "mono",       HB_AMIXDOWN_MONO      },
+    { "Mono (Left Only)",   "HB_AMIXDOWN_LEFT",      "left_only",  HB_AMIXDOWN_LEFT      },
+    { "Mono (Right Only)",  "HB_AMIXDOWN_RIGHT",     "right_only", HB_AMIXDOWN_RIGHT     },
+    { "Stereo",             "HB_AMIXDOWN_STEREO",    "stereo",     HB_AMIXDOWN_STEREO    },
+    { "Dolby Surround",     "HB_AMIXDOWN_DOLBY",     "dpl1",       HB_AMIXDOWN_DOLBY     },
+    { "Dolby Pro Logic II", "HB_AMIXDOWN_DOLBYPLII", "dpl2",       HB_AMIXDOWN_DOLBYPLII },
+    { "5.1 Channels",       "HB_AMIXDOWN_5POINT1",   "5point1",    HB_AMIXDOWN_5POINT1   },
+    { "6.1 Channels",       "HB_AMIXDOWN_6POINT1",   "6point1",    HB_AMIXDOWN_6POINT1   },
+    { "7.1 Channels",       "HB_AMIXDOWN_7POINT1",   "7point1",    HB_AMIXDOWN_7POINT1   },
+    { "7.1 (5F/2R/LFE)",    "HB_AMIXDOWN_5_2_LFE",   "5_2_lfe",    HB_AMIXDOWN_5_2_LFE   },
+};
+int hb_audio_mixdowns_count = sizeof(hb_audio_mixdowns) / sizeof(hb_mixdown_t);
 
 hb_encoder_t hb_video_encoders[] =
-{ { "H.264 (x264)",       "x264",       HB_VCODEC_X264,         HB_MUX_MP4|HB_MUX_MKV },
-  { "MPEG-4 (FFmpeg)",    "ffmpeg4",    HB_VCODEC_FFMPEG_MPEG4, HB_MUX_MP4|HB_MUX_MKV },
-  { "MPEG-2 (FFmpeg)",    "ffmpeg2",    HB_VCODEC_FFMPEG_MPEG2, HB_MUX_MP4|HB_MUX_MKV },
-  { "VP3 (Theora)",       "theora",     HB_VCODEC_THEORA,                  HB_MUX_MKV } };
-int hb_video_encoders_count = sizeof( hb_video_encoders ) /
-                              sizeof( hb_encoder_t );
+{
+    { "H.264 (x264)",    "x264",    HB_VCODEC_X264,         HB_MUX_MP4|HB_MUX_MKV },
+    { "MPEG-4 (FFmpeg)", "ffmpeg4", HB_VCODEC_FFMPEG_MPEG4, HB_MUX_MP4|HB_MUX_MKV },
+    { "MPEG-2 (FFmpeg)", "ffmpeg2", HB_VCODEC_FFMPEG_MPEG2, HB_MUX_MP4|HB_MUX_MKV },
+    { "VP3 (Theora)",    "theora",  HB_VCODEC_THEORA,                  HB_MUX_MKV },
+};
+int hb_video_encoders_count = sizeof(hb_video_encoders) / sizeof(hb_encoder_t);
 
 hb_encoder_t hb_audio_encoders[] =
 {
 #ifdef __APPLE__
-  { "AAC (CoreAudio)",    "ca_aac",     HB_ACODEC_CA_AAC,       HB_MUX_MP4|HB_MUX_MKV },
-  { "HE-AAC (CoreAudio)", "ca_haac",    HB_ACODEC_CA_HAAC,      HB_MUX_MP4|HB_MUX_MKV },
+    { "AAC (CoreAudio)",    "ca_aac",     HB_ACODEC_CA_AAC,       HB_MUX_MP4|HB_MUX_MKV },
+    { "HE-AAC (CoreAudio)", "ca_haac",    HB_ACODEC_CA_HAAC,      HB_MUX_MP4|HB_MUX_MKV },
 #endif
-  { "AAC (faac)",         "faac",       HB_ACODEC_FAAC,         HB_MUX_MP4|HB_MUX_MKV },
-  { "AAC (ffmpeg)",       "ffaac",      HB_ACODEC_FFAAC,        HB_MUX_MP4|HB_MUX_MKV },
-  { "AAC Passthru",       "copy:aac",   HB_ACODEC_AAC_PASS,     HB_MUX_MP4|HB_MUX_MKV },
-  { "AC3 (ffmpeg)",       "ffac3",      HB_ACODEC_AC3,          HB_MUX_MP4|HB_MUX_MKV },
-  { "AC3 Passthru",       "copy:ac3",   HB_ACODEC_AC3_PASS,     HB_MUX_MP4|HB_MUX_MKV },
-  { "DTS Passthru",       "copy:dts",   HB_ACODEC_DCA_PASS,     HB_MUX_MP4|HB_MUX_MKV },
-  { "DTS-HD Passthru",    "copy:dtshd", HB_ACODEC_DCA_HD_PASS,  HB_MUX_MP4|HB_MUX_MKV },
-  { "MP3 (lame)",         "lame",       HB_ACODEC_LAME,         HB_MUX_MP4|HB_MUX_MKV },
-  { "MP3 Passthru",       "copy:mp3",   HB_ACODEC_MP3_PASS,     HB_MUX_MP4|HB_MUX_MKV },
-  { "Vorbis (vorbis)",    "vorbis",     HB_ACODEC_VORBIS,                  HB_MUX_MKV },
-  { "FLAC (ffmpeg)",      "ffflac",     HB_ACODEC_FFFLAC,                  HB_MUX_MKV },
-  { "Auto Passthru",      "copy",       HB_ACODEC_AUTO_PASS,    HB_MUX_MP4|HB_MUX_MKV } };
-int hb_audio_encoders_count = sizeof( hb_audio_encoders ) /
-                              sizeof( hb_encoder_t );
+    { "AAC (faac)",         "faac",       HB_ACODEC_FAAC,         HB_MUX_MP4|HB_MUX_MKV },
+    { "AAC (ffmpeg)",       "ffaac",      HB_ACODEC_FFAAC,        HB_MUX_MP4|HB_MUX_MKV },
+    { "AAC Passthru",       "copy:aac",   HB_ACODEC_AAC_PASS,     HB_MUX_MP4|HB_MUX_MKV },
+    { "AC3 (ffmpeg)",       "ffac3",      HB_ACODEC_AC3,          HB_MUX_MP4|HB_MUX_MKV },
+    { "AC3 Passthru",       "copy:ac3",   HB_ACODEC_AC3_PASS,     HB_MUX_MP4|HB_MUX_MKV },
+    { "DTS Passthru",       "copy:dts",   HB_ACODEC_DCA_PASS,     HB_MUX_MP4|HB_MUX_MKV },
+    { "DTS-HD Passthru",    "copy:dtshd", HB_ACODEC_DCA_HD_PASS,  HB_MUX_MP4|HB_MUX_MKV },
+    { "MP3 (lame)",         "lame",       HB_ACODEC_LAME,         HB_MUX_MP4|HB_MUX_MKV },
+    { "MP3 Passthru",       "copy:mp3",   HB_ACODEC_MP3_PASS,     HB_MUX_MP4|HB_MUX_MKV },
+    { "Vorbis (vorbis)",    "vorbis",     HB_ACODEC_VORBIS,                  HB_MUX_MKV },
+    { "FLAC (ffmpeg)",      "ffflac",     HB_ACODEC_FFFLAC,                  HB_MUX_MKV },
+    { "Auto Passthru",      "copy",       HB_ACODEC_AUTO_PASS,    HB_MUX_MP4|HB_MUX_MKV },
+};
+int hb_audio_encoders_count = sizeof(hb_audio_encoders) / sizeof(hb_encoder_t);
 
 /* Expose values for PInvoke */
-hb_rate_t* hb_get_video_rates() { return hb_video_rates; }
-int hb_get_video_rates_count() { return hb_video_rates_count; }
-hb_rate_t* hb_get_audio_rates() { return hb_audio_rates; }
-int hb_get_audio_rates_count() { return hb_audio_rates_count; }
-int hb_get_audio_rates_default() { return hb_audio_rates_default; }
-hb_rate_t* hb_get_audio_bitrates() { return hb_audio_bitrates; }
-int hb_get_audio_bitrates_count() { return hb_audio_bitrates_count; }
-hb_mixdown_t* hb_get_audio_mixdowns() { return hb_audio_mixdowns; }
-int hb_get_audio_mixdowns_count() { return hb_audio_mixdowns_count; }
-hb_encoder_t* hb_get_video_encoders() { return hb_video_encoders; }
-int hb_get_video_encoders_count() { return hb_video_encoders_count; }
-hb_encoder_t* hb_get_audio_encoders() { return hb_audio_encoders; }
-int hb_get_audio_encoders_count() { return hb_audio_encoders_count; }
+hb_rate_t*    hb_get_video_rates()          { return hb_video_rates;          }
+int           hb_get_video_rates_count()    { return hb_video_rates_count;    }
+hb_rate_t*    hb_get_audio_rates()          { return hb_audio_rates;          }
+int           hb_get_audio_rates_count()    { return hb_audio_rates_count;    }
+hb_rate_t*    hb_get_audio_bitrates()       { return hb_audio_bitrates;       }
+int           hb_get_audio_bitrates_count() { return hb_audio_bitrates_count; }
+hb_mixdown_t* hb_get_audio_mixdowns()       { return hb_audio_mixdowns;       }
+int           hb_get_audio_mixdowns_count() { return hb_audio_mixdowns_count; }
+hb_encoder_t* hb_get_video_encoders()       { return hb_video_encoders;       }
+int           hb_get_video_encoders_count() { return hb_video_encoders_count; }
+hb_encoder_t* hb_get_audio_encoders()       { return hb_audio_encoders;       }
+int           hb_get_audio_encoders_count() { return hb_audio_encoders_count; }
+
+int hb_mixdown_is_supported(int mixdown, uint32_t codec, uint64_t layout)
+{
+    return (hb_mixdown_has_codec_support(mixdown, codec) &&
+            hb_mixdown_has_remix_support(mixdown, layout));
+}
+
+int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
+{
+    // Passthru, only "None" mixdown is supported
+    if (codec & HB_ACODEC_PASS_FLAG)
+        return (mixdown == HB_AMIXDOWN_NONE);
+
+    // Not passthru, "None" mixdown never supported
+    if (mixdown == HB_AMIXDOWN_NONE)
+        return 0;
+
+    switch (codec)
+    {
+        case HB_ACODEC_FFFLAC:
+        case HB_ACODEC_VORBIS:
+            return (mixdown <= HB_AMIXDOWN_7POINT1);
+
+        case HB_ACODEC_LAME:
+        case HB_ACODEC_FFAAC:
+            return (mixdown <= HB_AMIXDOWN_DOLBYPLII);
+
+        case HB_ACODEC_FAAC:
+        case HB_ACODEC_CA_AAC:
+        case HB_ACODEC_CA_HAAC:
+            return ((mixdown <= HB_AMIXDOWN_5POINT1) ||
+                    (mixdown == HB_AMIXDOWN_5_2_LFE));
+
+        default:
+            return (mixdown <= HB_AMIXDOWN_5POINT1);
+    }
+}
+
+int hb_mixdown_has_remix_support(int mixdown, uint64_t layout)
+{
+    switch (mixdown)
+    {
+        // stereo + front left/right of center
+        case HB_AMIXDOWN_5_2_LFE:
+            return ((layout & AV_CH_FRONT_LEFT_OF_CENTER) &&
+                    (layout & AV_CH_FRONT_RIGHT_OF_CENTER) &&
+                    (layout & AV_CH_LAYOUT_STEREO) == AV_CH_LAYOUT_STEREO);
+
+        // 7.0 or better
+        case HB_AMIXDOWN_7POINT1:
+            return ((layout & AV_CH_LAYOUT_7POINT0) == AV_CH_LAYOUT_7POINT0);
+
+        // 6.0 or better
+        case HB_AMIXDOWN_6POINT1:
+            return ((layout & AV_CH_LAYOUT_7POINT0) == AV_CH_LAYOUT_7POINT0 ||
+                    (layout & AV_CH_LAYOUT_6POINT0) == AV_CH_LAYOUT_6POINT0 ||
+                    (layout & AV_CH_LAYOUT_HEXAGONAL) == AV_CH_LAYOUT_HEXAGONAL);
+
+        // stereo + either of front center, side or back left/right, back center
+        case HB_AMIXDOWN_5POINT1:
+            return ((layout & AV_CH_LAYOUT_2_1) == AV_CH_LAYOUT_2_1 ||
+                    (layout & AV_CH_LAYOUT_2_2) == AV_CH_LAYOUT_2_2 ||
+                    (layout & AV_CH_LAYOUT_QUAD) == AV_CH_LAYOUT_QUAD ||
+                    (layout & AV_CH_LAYOUT_SURROUND) == AV_CH_LAYOUT_SURROUND);
+
+        // stereo + either of side or back left/right, back center
+        // also, allow Dolby Surrounbd output if the input is already Dolby
+        case HB_AMIXDOWN_DOLBY:
+        case HB_AMIXDOWN_DOLBYPLII:
+            return ((layout & AV_CH_LAYOUT_2_1) == AV_CH_LAYOUT_2_1 ||
+                    (layout & AV_CH_LAYOUT_2_2) == AV_CH_LAYOUT_2_2 ||
+                    (layout & AV_CH_LAYOUT_QUAD) == AV_CH_LAYOUT_QUAD ||
+                    (layout == AV_CH_LAYOUT_STEREO_DOWNMIX &&
+                     mixdown == HB_AMIXDOWN_DOLBY));
+
+        // more than 1 channel
+        case HB_AMIXDOWN_STEREO:
+            return (av_get_channel_layout_nb_channels(layout) > 1);
+
+        // regular stereo (not Dolby)
+        case HB_AMIXDOWN_LEFT:
+        case HB_AMIXDOWN_RIGHT:
+            return (layout == AV_CH_LAYOUT_STEREO);
+
+        // mono remix always supported
+        // HB_AMIXDOWN_NONE always supported (for Passthru)
+        case HB_AMIXDOWN_MONO:
+        case HB_AMIXDOWN_NONE:
+            return 1;
+
+        // unknown mixdown, should never happen
+        default:
+            return 0;
+    }
+}
 
 int hb_mixdown_get_discrete_channel_count(int amixdown)
 {
     switch (amixdown)
     {
-        case HB_AMIXDOWN_6CH:
+        case HB_AMIXDOWN_5_2_LFE:
+        case HB_AMIXDOWN_7POINT1:
+            return 8;
+
+        case HB_AMIXDOWN_6POINT1:
+            return 7;
+
+        case HB_AMIXDOWN_5POINT1:
             return 6;
 
         case HB_AMIXDOWN_MONO:
+        case HB_AMIXDOWN_LEFT:
+        case HB_AMIXDOWN_RIGHT:
             return 1;
 
         case HB_AMIXDOWN_NONE:
@@ -114,6 +262,21 @@ int hb_mixdown_get_discrete_channel_count(int amixdown)
 
         default:
             return 2;
+    }
+}
+
+int hb_mixdown_get_low_freq_channel_count(int amixdown)
+{
+    switch (amixdown)
+    {
+        case HB_AMIXDOWN_5POINT1:
+        case HB_AMIXDOWN_6POINT1:
+        case HB_AMIXDOWN_7POINT1:
+        case HB_AMIXDOWN_5_2_LFE:
+            return 1;
+
+        default:
+            return 0;
     }
 }
 
@@ -294,17 +457,15 @@ int hb_autopassthru_get_encoder( int in_codec, int copy_mask, int fallback, int 
 // Given an input bitrate, find closest match in the set of allowed bitrates
 int hb_find_closest_audio_bitrate(int bitrate)
 {
-    int ii;
-    int result;
-
     // Check if bitrate mode was disabled
-    if( bitrate <= 0 )
+    if (bitrate <= 0)
         return bitrate;
 
+    int ii, result;
     // result is highest rate if none found during search.
     // rate returned will always be <= rate asked for.
     result = hb_audio_bitrates[0].rate;
-    for (ii = hb_audio_bitrates_count-1; ii >= 0; ii--)
+    for (ii = hb_audio_bitrates_count - 1; ii > 0; ii--)
     {
         if (bitrate >= hb_audio_bitrates[ii].rate)
         {
@@ -315,259 +476,263 @@ int hb_find_closest_audio_bitrate(int bitrate)
     return result;
 }
 
-// Get the bitrate low and high limits for a codec/samplerate/mixdown triplet
-// The limits have been empirically determined through testing.  Max bitrates
-// in table below. Numbers in parenthesis are the target bitrate chosen.
-/*
-Encoder     1 channel           2 channels          6 channels
+/* Get the bitrate low and high limits for a codec/samplerate/mixdown triplet.
+
+Encoder    1.0 channel    2.0 channels    5.1 channels    6.1 channels    7.1 channels
+--------------------------------------------------------------------------------------
 
 faac
-24kHz       86 (128)            173 (256)           460 (768)
-48kHz       152 (160)           304 (320)           759 (768)
+----
+supported samplerates: 8 - 48 kHz
+libfaac/util.c defines the bitrate limits:
+MinBitrate() -> 8000 bps (per channel, incl. LFE).
+MaxBitrate() -> (6144 * samplerate / 1024) bps (per channel, incl. LFE).
+But output bitrates don't go as high as the theoretical maximums:
+12 kHz        43  (72)        87 (144)      260  (432)      303  (504)      342  (576)
+24 kHz        87 (144)       174 (288)      514  (864)      595 (1008)      669 (1152)
+48 kHz       174 (288)       347 (576)      970 (1728)     1138 (2016)     1287 (2304)
+Also, faac isn't a great encoder, so you don't want to allow too low a bitrate.
+Limits: minimum of  32 Kbps per channel
+        maximum of 192 Kbps per channel at 32-48 kHz, adjusted for sr_shift
 
-Vorbis
-24kHz       97 (80)             177 (160)           527 (512)
-48kHz       241 (224)           465 (448)           783 (768)
 
-Lame
-24kHz       146 (768)           138 (768)
-48kHz       318 (768)           318 (768)
+ffaac
+-----
+supported samplerates: 8 - 48 kHz
+libavcodec/aacenc.c defines a maximum bitrate:
+-> 6144 * samplerate / 1024 bps (per channel, incl. LFE).
+But output bitrates don't go as high as the theoretical maximums:
+12 kHz        61  (72)       123 (144)
+24 kHz       121 (144)       242 (288)
+48 kHz       236 (288)       472 (576)
+Also, ffaac isn't a great encoder, so you don't want to allow too low a bitrate.
+Limits: minimum of  32 Kbps per channel
+        maximum of 192 Kbps per channel at 32 kHz, adjusted for sr_shift
+        maximum of 256 Kbps per channel at 44.1-48 kHz, adjusted for sr_shift
+
+vorbis
+------
+supported samplerates: 8 - 48 kHz
+lib/modes/setup_*.h provides a range of allowed bitrates for various configurations.
+for each samplerate, the highest minimums and lowest maximums are:
+ 8 kHz        Minimum  8 Kbps, maximum  32 Kbps (per channel, incl. LFE).
+12 kHz        Minimum 14 Kbps, maximum  44 Kbps (per channel, incl. LFE).
+16 kHz        Minimum 16 Kbps, maximum  86 Kbps (per channel, incl. LFE).
+24 kHz        Minimum 22 Kbps, maximum  86 Kbps (per channel, incl. LFE).
+32 kHz        Minimum 26 Kbps, maximum 190 Kbps (per channel, incl. LFE).
+48 kHz        Minimum 28 Kbps, maximum 240 Kbps (per channel, incl. LFE).
+Limits: minimum of 14/22/28 Kbps per channel (8-12, 16-24, 32-48 kHz)
+        maximum of 32/86/190/240 Kbps per channel (8-12, 16-24, 32, 44.1-48 kHz)
+
+lame
+----
+supported samplerates: 8 - 48 kHz
+lame_init_params() allows the following bitrates:
+12 kHz        Minimum  8 Kbps, maximum  64 Kbps
+24 kHz        Minimum  8 Kbps, maximum 160 Kbps
+48 kHz        Minimum 32 Kbps, maximum 320 Kbps
+Limits: minimum of 8/8/32 Kbps (8-12, 16-24, 32-48 kHz)
+        maximum of 64/160/320 Kbps (8-12, 16-24, 32-48 kHz)
 
 ffac3
-24kHz       318 (320)           318 (320)           318 (320)
-48kHz       636 (640)           636 (640)           636 (640)
+-----
+supported samplerates: 32 - 48 kHz (< 32 kHz disabled for compatibility reasons)
+Dolby's encoder has a min. of 224 Kbps for 5 full-bandwidth channels (5.0, 5.1)
+The maximum AC3 bitrate is 640 Kbps
+Limits: minimum of 224/5 Kbps per full-bandwidth channel, maximum of 640 Kbps
 
-Core Audio AAC (core audio api provides range of allowed bitrates)
-24kHz       16-64               32-128              80-320
-32kHz       24-96               48-192              128-448
-48kHz       32-256              64-320              160-768
+ca_aac
+------
+supported samplerates: 8 - 48 kHz
+Core Audio API provides a range of allowed bitrates:
+ 8 kHz         8 -  24        16 -  48        40 - 112        48 - 144        56 - 160
+12 kHz        12 -  32        24 -  64        64 - 160        72 - 192        96 - 224
+16 kHz        12 -  48        24 -  96        64 - 224        72 - 288        96 - 320
+24 kHz        16 -  64        32 - 128        80 - 320        96 - 384       112 - 448
+32 kHz        24 -  96        48 - 192       128 - 448       144 - 576       192 - 640
+48 kHz        32 - 256        64 - 320       160 - 768       192 - 960       224 - 960
+Limits:
+ 8 kHz -> minimum of  8 Kbps and maximum of  24 Kbps per full-bandwidth channel
+12 kHz -> minimum of 12 Kbps and maximum of  32 Kbps per full-bandwidth channel
+16 kHz -> minimum of 12 Kbps and maximum of  48 Kbps per full-bandwidth channel
+24 kHz -> minimum of 16 Kbps and maximum of  64 Kbps per full-bandwidth channel
+32 kHz -> minimum of 24 Kbps and maximum of  96 Kbps per full-bandwidth channel
+48 kHz -> minimum of 32 Kbps and maximum of 160 Kbps per full-bandwidth channel
+48 kHz ->                        maximum of +96 Kbps for Mono
+Note: encCoreAudioInit() will sanitize any mistake made here.
 
-Core Audio HE-AAC (core audio api provides range of allowed bitrates)
-32kHz       12-40               24-80               64-192
-48kHz       16-40               32-80               80-192
+ca_haac
+-------
+supported samplerates: 32 - 48 kHz
+Core Audio API provides a range of allowed bitrates:
+32 kHz         12 - 40         24 - 80        64 - 192          N/A           96 - 256
+48 kHz         16 - 40         32 - 80        80 - 192          N/A          112 - 256
+Limits: minimum of 12 (+ 4 if rate >= 44100) Kbps per full-bandwidth channel
+        maximum of 40 Kbps per full-bandwidth channel
+Note: encCoreAudioInit() will sanitize any mistake made here.
 */
 
-void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, int *low, int *high)
+void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown,
+                                 int *low, int *high)
 {
-    int channels;
-
-    channels = hb_mixdown_get_discrete_channel_count( mixdown );
-    if( codec & HB_ACODEC_PASS_FLAG )
+    if (codec & HB_ACODEC_PASS_FLAG)
     {
-        // Bitrates don't apply to "lossless" audio (Passthru, FLAC), but may apply
-        // if we fallback to an encoder when the source can't be passed through.
+        // Bitrates don't apply to passthrough audio, but may apply if we
+        // fallback to an encoder when the source can't be passed through.
         *low = hb_audio_bitrates[0].rate;
         *high = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
         return;
     }
-    switch( codec )
+
+    /* samplerate, sr_shift */
+    int sr_shift;
+    samplerate = hb_get_best_samplerate(codec, samplerate, &sr_shift);
+
+    /* LFE, full-bandwidth channels */
+    int lfe_count, nchannels;
+    lfe_count = hb_mixdown_get_low_freq_channel_count(mixdown);
+    nchannels = hb_mixdown_get_discrete_channel_count(mixdown) - lfe_count;
+
+    switch (codec)
     {
+        // Bitrates don't apply to "lossless" audio
         case HB_ACODEC_FFFLAC:
-            // Bitrates don't apply to "lossless" audio (Passthru, FLAC)
-            *high = *low = -1;
-            break;
+            *low = *high = -1;
+            return;
 
         case HB_ACODEC_AC3:
-            *low = 32 * channels;
-            if (samplerate > 24000)
-            {
-                *high = 640;
-            }
-            else
-            {
-                *high = 320;
-            }
+            *low  = 224 * nchannels / 5;
+            *high = 640;
             break;
 
         case HB_ACODEC_CA_AAC:
-            if (samplerate > 32000)
+        {
+            switch (samplerate)
             {
-                *low = channels * 32;
-                if (channels == 1)
-                    *high = 256;
-                if (channels == 2)
-                    *high = 320;
-                if (channels == 6)
-                {
-                    *low = 160;
-                    *high = 768;
-                }
+                case 8000:
+                    *low  = nchannels *  8;
+                    *high = nchannels * 24;
+                    break;
+                case 11025:
+                case 12000:
+                    *low  = nchannels * 12;
+                    *high = nchannels * 32;
+                    break;
+                case 16000:
+                    *low  = nchannels * 12;
+                    *high = nchannels * 48;
+                    break;
+                case 22050:
+                case 24000:
+                    *low  = nchannels * 16;
+                    *high = nchannels * 64;
+                    break;
+                case 32000:
+                    *low  = nchannels * 24;
+                    *high = nchannels * 96;
+                    break;
+                case 44100:
+                case 48000:
+                default:
+                    *low  = nchannels * 32;
+                    *high = nchannels * (160 + (96 * (nchannels == 1)));
+                    break;
             }
-            else if (samplerate > 24000)
-            {
-                *low = channels * 24;
-                *high = channels * 96;
-                if (channels == 6)
-                {
-                    *low = 128;
-                    *high = 448;
-                }
-            }
-            else
-            {
-                *low = channels * 16;
-                *high = channels * 64;
-                if (channels == 6)
-                {
-                    *low = 80;
-                    *high = 320;
-                }
-            }
-            break;
+        } break;
 
         case HB_ACODEC_CA_HAAC:
-            if (samplerate > 32000)
-            {
-                *low = channels * 16;
-                *high = channels * 40;
-                if (channels == 6)
-                {
-                    *low = 80;
-                    *high = 192;
-                }
-            }
-            else
-            {
-                *low = channels * 12;
-                *high = channels * 40;
-                if (channels == 6)
-                {
-                    *low = 64;
-                    *high = 192;
-                }
-            }
+            *low  = nchannels * (12 + (4 * (samplerate >= 44100)));
+            *high = nchannels * 40;
             break;
 
         case HB_ACODEC_FAAC:
-            *low = 32 * channels;
-            if (samplerate > 24000)
-            {
-                *high = 160 * channels;
-                if (*high > 768)
-                    *high = 768;
-            }
-            else
-            {
-                *high = 96 * channels;
-                if (*high > 480)
-                    *high = 480;
-            }
+            *low  = (nchannels + lfe_count) * 32;
+            *high = (nchannels + lfe_count) * (192 >> sr_shift);
             break;
 
         case HB_ACODEC_FFAAC:
-            *low = 32 * channels;
-            if (samplerate > 24000)
-            {
-                *high = 160 * channels;
-                if (*high > 768)
-                    *high = 768;
-            }
-            else
-            {
-                *high = 96 * channels;
-                if (*high > 480)
-                    *high = 480;
-            }
-            break;
-
-        case HB_ACODEC_VORBIS:
-            *high = channels * 80;
-            if (samplerate > 24000)
-            {
-                if (channels > 2)
-                {
-                    // Vorbis minimum is around 30kbps/ch for 6ch 
-                    // at rates > 24k (32k/44.1k/48k) 
-                    *low = 32 * channels;
-                    *high = 128 * channels;
-                }
-                else
-                {
-                    // Allow 24kbps mono and 48kbps stereo at rates > 24k 
-                    // (32k/44.1k/48k)
-                    *low = 24 * channels;
-                    if (samplerate > 32000)
-                        *high = channels * 224;
-                    else
-                        *high = channels * 160;
-                }
-            }
-            else
-            {
-                *low = channels * 16;
-                *high = 80 * channels;
-            }
+            *low  = ((nchannels + lfe_count) * 32);
+            *high = ((nchannels + lfe_count) *
+                     ((192 + (64 * ((samplerate << sr_shift) >= 44100)))
+                      >> sr_shift));
             break;
 
         case HB_ACODEC_LAME:
-            *low = hb_audio_bitrates[0].rate;
-            if (samplerate > 24000)
-                *high = 320;
-            else
-                *high = 160;
+            *low  =  8 + (24 * (sr_shift < 1));
+            *high = 64 + (96 * (sr_shift < 2)) + (160 * (sr_shift < 1));
             break;
-        
+
+        case HB_ACODEC_VORBIS:
+            *low  = (nchannels + lfe_count) * (14 +
+                                               (8 * (sr_shift < 2)) +
+                                               (6 * (sr_shift < 1)));
+            *high = (nchannels + lfe_count) * (32 +
+                                               ( 54 * (sr_shift < 2)) +
+                                               (104 * (sr_shift < 1)) +
+                                               ( 50 * (samplerate >= 44100)));
+            break;
+
         default:
-            *low = hb_audio_bitrates[0].rate;
+            *low  = hb_audio_bitrates[0].rate;
             *high = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
             break;
     }
+    // sanitize max. bitrate
+    if (*high < hb_audio_bitrates[0].rate)
+        *high = hb_audio_bitrates[0].rate;
+    if (*high > hb_audio_bitrates[hb_audio_bitrates_count-1].rate)
+        *high = hb_audio_bitrates[hb_audio_bitrates_count-1].rate;
 }
 
-// Given an input bitrate, sanitize it.  Check low and high limits and
-// make sure it is in the set of allowed bitrates.
-int hb_get_best_audio_bitrate( uint32_t codec, int bitrate, int samplerate, int mixdown)
+// Given an input bitrate, sanitize it.
+// Check low and high limits and make sure it is in the set of allowed bitrates.
+int hb_get_best_audio_bitrate(uint32_t codec, int bitrate, int samplerate,
+                              int mixdown)
 {
     int low, high;
-
     hb_get_audio_bitrate_limits(codec, samplerate, mixdown, &low, &high);
     if (bitrate > high)
         bitrate = high;
     if (bitrate < low)
         bitrate = low;
-    bitrate = hb_find_closest_audio_bitrate(bitrate);
-    return bitrate;
+    return hb_find_closest_audio_bitrate(bitrate);
 }
 
 // Get the default bitrate for a given codec/samplerate/mixdown triplet.
-int hb_get_default_audio_bitrate( uint32_t codec, int samplerate, int mixdown )
+int hb_get_default_audio_bitrate(uint32_t codec, int samplerate, int mixdown)
 {
-    int bitrate, channels;
-    int sr_shift;
-
-    if( codec & HB_ACODEC_PASS_FLAG )
+    if (codec & HB_ACODEC_PASS_FLAG)
+    {
         return -1;
+    }
 
-    channels = hb_mixdown_get_discrete_channel_count( mixdown );
+    int bitrate, nchannels, sr_shift;
+    /* full-bandwidth channels, sr_shift */
+    nchannels = (hb_mixdown_get_discrete_channel_count(mixdown) -
+                 hb_mixdown_get_low_freq_channel_count(mixdown));
+    hb_get_best_samplerate(codec, samplerate, &sr_shift);
 
-    // Min bitrate is established such that we get good quality
-    // audio as a minimum.
-    sr_shift = (samplerate <= 24000) ? 1 : 0;
-
-    switch ( codec )
+    switch (codec)
     {
         case HB_ACODEC_FFFLAC:
-            bitrate = -1;
-            sr_shift = 0;
-            break;
+            return -1;
+
+        // 96, 224, 640 Kbps
         case HB_ACODEC_AC3:
-            if (channels == 1)
-                bitrate = 96;
-            else if (channels <= 2)
-                bitrate = 224;
-            else
-                bitrate = 640;
+            bitrate = (nchannels * 128) - (32 * (nchannels < 5));
             break;
+
         case HB_ACODEC_CA_HAAC:
-            bitrate = channels * 32;
+            bitrate = nchannels * 32;
             break;
+
         default:
-            bitrate = channels * 80;
+            bitrate = nchannels * 80;
             break;
     }
+    // sample_rate adjustment
     bitrate >>= sr_shift;
-    bitrate = hb_get_best_audio_bitrate( codec, bitrate, samplerate, mixdown );
-    return bitrate;
+    return hb_get_best_audio_bitrate(codec, bitrate, samplerate, mixdown);
 }
 
 // Get limits and hints for the UIs.
@@ -577,9 +742,10 @@ int hb_get_default_audio_bitrate( uint32_t codec, int samplerate, int mixdown )
 //
 // direction says whether 'low' limit is highest or lowest 
 // quality (direction 0 == lowest value is worst quality)
-void hb_get_audio_quality_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction)
+void hb_get_audio_quality_limits(uint32_t codec, float *low, float *high,
+                                 float *granularity, int *direction)
 {
-    switch( codec )
+    switch (codec)
     {
         case HB_ACODEC_LAME:
             *direction = 1;
@@ -610,11 +776,10 @@ void hb_get_audio_quality_limits(uint32_t codec, float *low, float *high, float 
     }
 }
 
-float hb_get_best_audio_quality( uint32_t codec, float quality)
+float hb_get_best_audio_quality(uint32_t codec, float quality)
 {
     float low, high, granularity;
     int direction;
-
     hb_get_audio_quality_limits(codec, &low, &high, &granularity, &direction);
     if (quality > high)
         quality = high;
@@ -654,9 +819,10 @@ float hb_get_default_audio_quality( uint32_t codec )
 //
 // direction says whether 'low' limit is highest or lowest 
 // compression level (direction 0 == lowest value is worst compression level)
-void hb_get_audio_compression_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction)
+void hb_get_audio_compression_limits(uint32_t codec, float *low, float *high,
+                                     float *granularity, int *direction)
 {
-    switch( codec )
+    switch (codec)
     {
         case HB_ACODEC_FFFLAC:
             *direction = 0;
@@ -680,12 +846,11 @@ void hb_get_audio_compression_limits(uint32_t codec, float *low, float *high, fl
     }
 }
 
-float hb_get_best_audio_compression( uint32_t codec, float compression)
+float hb_get_best_audio_compression(uint32_t codec, float compression)
 {
     float low, high, granularity;
     int direction;
-
-    hb_get_audio_compression_limits( codec, &low, &high, &granularity, &direction );
+    hb_get_audio_compression_limits(codec, &low, &high, &granularity, &direction);
     if( compression > high )
         compression = high;
     if( compression < low )
@@ -693,72 +858,39 @@ float hb_get_best_audio_compression( uint32_t codec, float compression)
     return compression;
 }
 
-float hb_get_default_audio_compression( uint32_t codec )
+float hb_get_default_audio_compression(uint32_t codec)
 {
-    float compression;
-    switch( codec )
+    switch (codec)
     {
         case HB_ACODEC_FFFLAC:
-            compression = 5;
-            break;
+            return 5.;
 
         case HB_ACODEC_LAME:
-            compression = 2;
-            break;
+            return 2.;
 
         default:
-            compression = -1;
-            break;
+            return -1.;
     }
-    return compression;
 }
 
 int hb_get_best_mixdown(uint32_t codec, uint64_t layout, int mixdown)
 {
-    int best_mixdown;
-
+    // Passthru, only "None" mixdown is supported
     if (codec & HB_ACODEC_PASS_FLAG)
-    {
-        // Audio passthrough, no mixdown
         return HB_AMIXDOWN_NONE;
-    }
-    else if ((layout & AV_CH_LAYOUT_2_1) == AV_CH_LAYOUT_2_1 ||
-             (layout & AV_CH_LAYOUT_2_2) == AV_CH_LAYOUT_2_2 ||
-             (layout & AV_CH_LAYOUT_QUAD) == AV_CH_LAYOUT_QUAD)
-    {
-        // at least 2 front channels and one back or side channel
-        // allow downmixing or upmixing to 5.1 (yes, we can)
-        if (codec != HB_ACODEC_LAME && codec != HB_ACODEC_FFAAC)
-        {
-            best_mixdown = HB_AMIXDOWN_6CH;
-        }
-        else
-        {
-            best_mixdown = HB_AMIXDOWN_DOLBYPLII;
-        }
-    }
-    else if (layout == AV_CH_LAYOUT_STEREO_DOWNMIX)
-    {
-        // Dolby in, allow Dolby out
-        best_mixdown = HB_AMIXDOWN_DOLBY;
-    }
-    else if (av_get_channel_layout_nb_channels(layout) > 1)
-    {
-        // more than one channel, allow Stereo downmix
-        best_mixdown = HB_AMIXDOWN_STEREO;
-    }
-    else
-    {
-        // only one channel, not much point in upmixing
-        best_mixdown = HB_AMIXDOWN_MONO;
-    }
 
-    // return the best that is not greater than the requested mixdown
-    // HB_INVALID_AMIXDOWN means the caller requested the best available mixdown
-    if (best_mixdown > mixdown && mixdown != HB_INVALID_AMIXDOWN)
-        best_mixdown = mixdown;
+    // caller requested the best available mixdown
+    if (mixdown == HB_INVALID_AMIXDOWN)
+        mixdown = hb_audio_mixdowns[hb_audio_mixdowns_count].amixdown;
 
-    return best_mixdown;
+    int ii;
+    // test all mixdowns until an authorized, supported mixdown is found
+    // stop before we reach the "worst" non-None mixdown (index == 1)
+    for (ii = hb_audio_mixdowns_count; ii > 1; ii--)
+        if (hb_audio_mixdowns[ii].amixdown <= mixdown &&
+            hb_mixdown_is_supported(hb_audio_mixdowns[ii].amixdown, codec, layout))
+            break;
+    return hb_audio_mixdowns[ii].amixdown;
 }
 
 int hb_get_default_mixdown(uint32_t codec, uint64_t layout)
@@ -766,10 +898,13 @@ int hb_get_default_mixdown(uint32_t codec, uint64_t layout)
     int mixdown;
     switch (codec)
     {
-        // the FLAC and AC3 encoders default to the best mixdown up to 6-channel
+        // the FLAC encoder defaults to the best mixdown up to 7.1
         case HB_ACODEC_FFFLAC:
+            mixdown = HB_AMIXDOWN_7POINT1;
+            break;
+        // the AC3 encoder defaults to the best mixdown up to 5.1
         case HB_ACODEC_AC3:
-            mixdown = HB_AMIXDOWN_6CH;
+            mixdown = HB_AMIXDOWN_5POINT1;
             break;
         // other encoders default to the best mixdown up to DPLII
         default:
@@ -778,6 +913,52 @@ int hb_get_default_mixdown(uint32_t codec, uint64_t layout)
     }
     // return the best available mixdown up to the selected default
     return hb_get_best_mixdown(codec, layout, mixdown);
+}
+
+int hb_get_best_samplerate(uint32_t codec, int samplerate, int *sr_shift)
+{
+    int ii, best_samplerate, samplerate_shift;
+    if ((samplerate < 32000) &&
+        (codec == HB_ACODEC_CA_HAAC || codec == HB_ACODEC_AC3))
+    {
+        // ca_haac can't do samplerates < 32 kHz
+        // AC-3 < 32 kHz suffers from poor hardware compatibility
+        best_samplerate  = 32000;
+        samplerate_shift = 0;
+    }
+    else
+    {
+        best_samplerate = samplerate;
+        for (ii = hb_audio_rates_count - 1; ii >= 0; ii--)
+        {
+            // valid samplerate
+            if (best_samplerate == hb_audio_rates[ii].rate)
+                break;
+
+            // samplerate is higher than the next valid samplerate,
+            // or lower than the lowest valid samplerate
+            if (best_samplerate > hb_audio_rates[ii].rate || ii == 0)
+            {
+                best_samplerate = hb_audio_rates[ii].rate;
+                break;
+            }
+        }
+        /* sr_shift: 0 -> 48000, 44100, 32000 Hz
+         *           1 -> 24000, 22050, 16000 Hz
+         *           2 -> 12000, 11025,  8000 Hz
+         *
+         * also, since samplerates are sanitized downwards:
+         *
+         * (samplerate < 32000) implies (samplerate <= 24000)
+         */
+        samplerate_shift = ((best_samplerate < 16000) ? 2 :
+                            (best_samplerate < 32000) ? 1 : 0);
+    }
+    if (sr_shift != NULL)
+    {
+        *sr_shift = samplerate_shift;
+    }
+    return best_samplerate;
 }
 
 /**********************************************************************

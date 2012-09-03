@@ -224,37 +224,19 @@ static NSMutableArray *masterBitRateArray = nil;
 {
     NSMutableArray *permittedMixdowns = [NSMutableArray array];
     NSDictionary *dict;
-    BOOL shouldAdd;
     int currentMixdown;
 
     unsigned long long channelLayout = [[track objectForKey: keyAudioInputChannelLayout] unsignedLongLongValue];
     unsigned int count = [masterMixdownArray count];
     int codecCodec = [[codec objectForKey: keyAudioCodec] intValue];
     int theDefaultMixdown = hb_get_default_mixdown(codecCodec, channelLayout);
-    int theBestMixdown = hb_get_best_mixdown(codecCodec, channelLayout, HB_INVALID_AMIXDOWN);
 
     for (unsigned int i = 0; i < count; i++)
     {
         dict = [masterMixdownArray objectAtIndex: i];
         currentMixdown = [[dict objectForKey: keyAudioMixdown] intValue];
 
-        // Basically with the way the mixdowns are stored, the assumption from the libhb point of view
-        // currently is that all mixdowns from the best down to mono are supported.
-        if ((currentMixdown != HB_AMIXDOWN_NONE) && (currentMixdown <= theBestMixdown))
-        {
-            shouldAdd = YES;
-        }
-        else if ((currentMixdown == HB_AMIXDOWN_NONE) && (codecCodec & HB_ACODEC_PASS_FLAG))
-        {
-            // "None" mixdown (passthru)
-            shouldAdd = YES;
-        }
-        else
-        {
-            shouldAdd = NO;
-        }
-
-        if (shouldAdd)
+        if (hb_mixdown_is_supported(currentMixdown, codecCodec, channelLayout))
         {
             [permittedMixdowns addObject: dict];
         }
