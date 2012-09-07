@@ -19,6 +19,9 @@ namespace HandBrake.Interop.Model.Encoding
 		[Display(Name = "Dolby Pro Logic II")]
 		DolbyProLogicII = 0,
 
+        [Display(Name = "None")]
+        None,
+
 		[Display(Name = "Automatic")]
 		Auto,
 
@@ -48,8 +51,5 @@ namespace HandBrake.Interop.Model.Encoding
 
         [Display(Name = "7.1 (5F/2R/LFE)")]
         Five_2_LFE,
-
-        [Display(Name = "None")]
-        None,
 	}
 }

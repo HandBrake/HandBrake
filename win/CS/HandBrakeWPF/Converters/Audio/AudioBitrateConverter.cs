@@ -53,7 +53,7 @@ namespace HandBrakeWPF.Converters.Audio
                 {
                     case AudioEncoder.Faac:
                     case AudioEncoder.ffaac:
-                        max = track.MixDown == Mixdown.FivePoint1Channels ? 768 : 320;
+                        max = track.MixDown >= Mixdown.FivePoint1Channels ? 768 : 320;
                         break;
                     case AudioEncoder.Lame:
                         max = 320;
