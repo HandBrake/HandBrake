@@ -25,14 +25,29 @@ namespace HandBrake.Interop.Model.Encoding
 		[Display(Name = "Mono")]
 		Mono,
 
+        [Display(Name = "Mono (Left Only)")]
+        LeftOnly,
+
+        [Display(Name = "Mono (Right Only)")]
+        RightOnly,
+
 		[Display(Name = "Stereo")]
 		Stereo,
 
 		[Display(Name = "Dolby Surround")]
 		DolbySurround,
 
-		[Display(Name = "6-channel discrete")]
-		SixChannelDiscrete,
+		[Display(Name = "5.1 Channels")]
+		FivePoint1Channels,
+
+        [Display(Name = "6.1 Channels")]
+        SixPoint1Channels,
+
+        [Display(Name = "7.1 Channels")]
+        SevenPoint1Channels,
+
+        [Display(Name = "7.1 (5F/2R/LFE)")]
+        Five_2_LFE,
 
         [Display(Name = "None")]
         None,

@@ -62,14 +62,24 @@ namespace HandBrake.ApplicationServices.Utilities
             {
                 case "mono":
                     return "Mono";
+                case "left_only":
+                    return "Mono (Left Only)";
+                case "right_only":
+                    return "Mono (Right Only)";
                 case "stereo":
                     return "Stereo";
                 case "dpl1":
                     return "Dolby Surround";
                 case "dpl2":
                     return "Dolby Pro Logic II";
-                case "6ch":
-                    return "6-channel discrete";
+                case "5point1":
+                    return "5.1 Channels";
+                case "6point1":
+                    return "6.1 Channels";
+                case "7point1":
+                    return "7.1 Channels";
+                case "5_2_lfe":
+                    return "7.1 (5F/2R/LFE)";
                 default:
                     return "Automatic";
             }
@@ -92,8 +102,14 @@ namespace HandBrake.ApplicationServices.Utilities
                     return Mixdown.DolbySurround;
                 case "Dolby Pro Logic II":
                     return Mixdown.DolbyProLogicII;
-                case "6-channel discrete":
-                    return Mixdown.SixChannelDiscrete;
+                case "5.1 Channels":
+                    return Mixdown.FivePoint1Channels;
+                case "6.1 Channels":
+                    return Mixdown.SixPoint1Channels;
+                case "7.1 Channels":
+                    return Mixdown.SevenPoint1Channels;
+                case "7.1 (5F/2R/LFE)":
+                    return Mixdown.Five_2_LFE;
                 case "None":
                 case "Passthru":
                     return Mixdown.None;
@@ -116,14 +132,24 @@ namespace HandBrake.ApplicationServices.Utilities
                     return "auto";
                 case Mixdown.Mono:
                     return "mono";
+                case Mixdown.LeftOnly:
+                    return "left_only";
+                case Mixdown.RightOnly:
+                    return "right_only";
                 case Mixdown.Stereo:
                     return "stereo";
                 case Mixdown.DolbySurround:
                     return "dpl1";
                 case Mixdown.DolbyProLogicII:
                     return "dpl2";
-                case Mixdown.SixChannelDiscrete:
-                    return "6ch";
+                case Mixdown.FivePoint1Channels:
+                    return "5point1";
+                case Mixdown.SixPoint1Channels:
+                    return "6point1";
+                case Mixdown.SevenPoint1Channels:
+                    return "7point1";
+                case Mixdown.Five_2_LFE:
+                    return "5_2_lfe";
                 default:
                     return "auto";
             }
