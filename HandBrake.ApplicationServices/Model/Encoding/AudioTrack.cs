@@ -254,6 +254,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             {
                 this.sampleRate = value;
                 this.NotifyOfPropertyChange("SampleRate");
+                this.NotifyOfPropertyChange("TrackReference");
             }
         }
 

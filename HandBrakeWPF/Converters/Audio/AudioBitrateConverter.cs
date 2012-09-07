@@ -46,23 +46,56 @@ namespace HandBrakeWPF.Converters.Audio
             List<int> bitrates = new List<int> { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 640, 768 };
 
             int max = 160;
+
             AudioTrack track = value as AudioTrack;
             if (track != null)
             {
+                int channels = this.GetChannelCount(track.MixDown);
+
+                double samplerate = 48; // Default
+
+                if (!track.SampleRate.Equals(0.0d))
+                {
+                    samplerate = track.SampleRate;
+                }
+                else if (track.ScannedTrack != null && track.ScannedTrack.SampleRate != 0)
+                {
+                    samplerate = track.ScannedTrack.SampleRate / 1000d;
+                }
+             
                 switch (track.Encoder)
                 {
                     case AudioEncoder.Faac:
                     case AudioEncoder.ffaac:
-                        max = track.MixDown >= Mixdown.FivePoint1Channels ? 768 : 320;
+                        if (samplerate > 24)
+                        {
+                            max = 160 * channels;
+                            if (max > 768)
+                            {
+                                max = 768;
+                            }
+                        }
+                        else
+                        {
+                            max = 96 * channels;
+                            if (max > 480)
+                            {
+                                max = 480;
+                            }
+                        }
                         break;
                     case AudioEncoder.Lame:
-                        max = 320;
+                        max = samplerate > 24 ? 320 : 160;
                         break;
                     case AudioEncoder.Vorbis:
-                        max = 384;
+                        max = samplerate > 24
+                                  ? (channels > 2
+                                         ? 128 * channels
+                                         : (track.SampleRate > 32 ? 224 * channels : 160 * channels))
+                                  : 80 * this.GetChannelCount(track.MixDown);
                         break;
                     case AudioEncoder.Ac3:
-                        max = 640;
+                        max = samplerate > 24 ? 640 : 320;
                         break;
                     case AudioEncoder.Ac3Passthrough:
                     case AudioEncoder.DtsPassthrough:
@@ -87,6 +120,38 @@ namespace HandBrakeWPF.Converters.Audio
 
             return bitrates.Where(bitrate => bitrate <= max);
         }
+
+        /// <summary>
+        /// The get channel count.
+        /// </summary>
+        /// <param name="mixdown">
+        /// The mixdown.
+        /// </param>
+        /// <returns>
+        /// The System.Int32.
+        /// </returns>
+        private int GetChannelCount(Mixdown mixdown)
+        {
+            switch (mixdown)
+            {
+                case Mixdown.Five_2_LFE:
+                case Mixdown.SevenPoint1Channels:
+                    return 8;
+                case Mixdown.SixPoint1Channels:
+                    return 7;
+                case Mixdown.FivePoint1Channels:
+                    return 6;
+                case Mixdown.Mono:
+                case Mixdown.LeftOnly:
+                case Mixdown.RightOnly:
+                    return 1;
+                case Mixdown.None:
+                    return 0;
+                default:
+                    return 2;
+            }
+        }
+
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
