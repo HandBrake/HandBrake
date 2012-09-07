@@ -8,6 +8,17 @@ include $(SRC/)make/include/tool.defs
 
 ###############################################################################
 
+ifeq (1,$(FEATURE.local_autotools))
+    MODULES += contrib/autoconf
+    MODULES += contrib/automake
+    MODULES += contrib/libtool
+    MODULES += contrib/m4
+    AUTOTOOL_MODULES = AUTOCONF AUTOMAKE LIBTOOL M4
+    PATH := $(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)
+else
+    AUTOTOOL_MODULES =
+endif
+
 MODULES += contrib/a52dec
 
 ifneq (,$(filter $(BUILD.system),cygwin mingw))
@@ -19,7 +30,6 @@ endif
 ifneq (,$(filter $(BUILD.system),darwin cygwin mingw))
     MODULES += contrib/fribidi
 endif
-
 
 MODULES += contrib/faac
 MODULES += contrib/ffmpeg

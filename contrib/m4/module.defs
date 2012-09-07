@@ -1,0 +1,4 @@
+$(eval $(call import.MODULE.defs,M4,m4))
+$(eval $(call import.CONTRIB.defs,M4))
+
+M4.FETCH.url = http://download.handbrake.fr/handbrake/contrib/m4-1.4.16.tar.bz2

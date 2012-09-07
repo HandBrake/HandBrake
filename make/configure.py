@@ -1111,6 +1111,8 @@ def createCLI():
 
     h = IfHost( 'Build and use local yasm', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-local-yasm', default=False, action='store_true', help=h )
+    h = IfHost( 'Build and use local autotools', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-local-autotools', default=False, action='store_true', help=h )
 
     cli.add_option_group( grp )
 
@@ -1269,15 +1271,18 @@ try:
         else:
             gmake = ToolProbe( 'GMAKE.exe', 'gmake', 'make' )
 
-        m4     = ToolProbe( 'M4.exe',     'm4' )
-        mkdir  = ToolProbe( 'MKDIR.exe',  'mkdir' )
-        patch  = ToolProbe( 'PATCH.exe',  'gpatch', 'patch' )
-        rm     = ToolProbe( 'RM.exe',     'rm' )
-        ranlib = ToolProbe( 'RANLIB.exe', 'ranlib' )
-        strip  = ToolProbe( 'STRIP.exe',  'strip' )
-        tar    = ToolProbe( 'TAR.exe',    'gtar', 'tar' )
-        wget   = ToolProbe( 'WGET.exe',   'wget', abort=False )
-        yasm   = ToolProbe( 'YASM.exe',   'yasm', abort=False )
+        m4       = ToolProbe( 'M4.exe',       'm4' )
+        mkdir    = ToolProbe( 'MKDIR.exe',    'mkdir' )
+        patch    = ToolProbe( 'PATCH.exe',    'gpatch', 'patch' )
+        rm       = ToolProbe( 'RM.exe',       'rm' )
+        ranlib   = ToolProbe( 'RANLIB.exe',   'ranlib' )
+        strip    = ToolProbe( 'STRIP.exe',    'strip' )
+        tar      = ToolProbe( 'TAR.exe',      'gtar', 'tar' )
+        wget     = ToolProbe( 'WGET.exe',     'wget', abort=False )
+        yasm     = ToolProbe( 'YASM.exe',     'yasm', abort=False )
+        autoconf = ToolProbe( 'AUTOCONF.exe', 'autoconf', abort=False )
+        automake = ToolProbe( 'AUTOMAKE.exe', 'automake', abort=False )
+        libtool  = ToolProbe( 'LIBTOOL.exe',  'libtool', abort=False )
 
         xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', abort=False )
         lipo       = ToolProbe( 'LIPO.exe',       'lipo', abort=False )
@@ -1335,8 +1340,12 @@ try:
         action.run()
 
     ## enable local yasm when yasm probe fails
-    if Tools.yasm.fail and not options.enable_local_yasm:
+    if not options.enable_local_yasm and Tools.yasm.fail:
         options.enable_local_yasm = True
+
+    ## enable local autotools when any of { autoconf, automake, libtool } probe fails
+    if not options.enable_local_autotools and (Tools.autoconf.fail or Tools.automake.fail or Tools.libtool.fail):
+        options.enable_local_autotools = True
 
     if build.system == 'mingw':
         dlfcn_test = """
@@ -1499,7 +1508,8 @@ int main ()
     doc.add( 'PREFIX/', cfg.prefix_final + os.sep )
     
     doc.addBlank()
-    doc.add( 'FEATURE.local_yasm', int( options.enable_local_yasm ) )
+    doc.add( 'FEATURE.local_yasm', int( options.enable_local_yasm ))
+    doc.add( 'FEATURE.local_autotools', int( options.enable_local_autotools ))
     doc.add( 'FEATURE.asm',        'disabled' )
     doc.add( 'FEATURE.gtk',        int( not options.disable_gtk ))
     doc.add( 'FEATURE.gtk.update.checks', int( not options.disable_gtk_update_checks ))
