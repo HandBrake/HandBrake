@@ -89,7 +89,7 @@ namespace HandBrake.Interop
 					return NativeConstants.HB_AMIXDOWN_DOLBY;
 				case Mixdown.Mono:
 					return NativeConstants.HB_AMIXDOWN_MONO;
-				case Mixdown.SixChannelDiscrete:
+				case Mixdown.FivePoint1Channels:
 					return NativeConstants.HB_AMIXDOWN_6CH;
 				case Mixdown.Stereo:
 					return NativeConstants.HB_AMIXDOWN_STEREO;
@@ -125,7 +125,7 @@ namespace HandBrake.Interop
 				case NativeConstants.HB_AMIXDOWN_DOLBYPLII:
 					return Mixdown.DolbyProLogicII;
 				case NativeConstants.HB_AMIXDOWN_6CH:
-					return Mixdown.SixChannelDiscrete;
+					return Mixdown.FivePoint1Channels;
 			}
 
 			throw new ArgumentException("Unrecognized mixdown: " + mixdown, "mixdown");
