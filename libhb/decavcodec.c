@@ -1317,14 +1317,16 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
         }
     }
 
-    /* AVCOL_TRC_BT709 -> HB_COLR_TRA_BT709
-     * AVCOL_TRC_GAMMA22 (bt470m) -> HB_COLR_TRA_BT709
-     * AVCOL_TRC_GAMMA28 (bt470bg) -> HB_COLR_TRA_BT709
-     * AVCOL_TRC_UNSPECIFIED, AVCOL_TRC_NB:
-     * -> ITU BT.709 -> HB_COLR_TRA_BT709
-     * -> ITU BT.601 -> HB_COLR_TRA_BT709
-     * TODO: AVCOL_TRC_SMPTE240M -> HB_COLR_TRA_SMPTE240M but it's not yet in Libav */
-    info->color_transfer = HB_COLR_TRA_BT709;
+    switch( pv->context->color_trc )
+    {
+        case AVCOL_TRC_SMPTE240M:
+            info->color_transfer = HB_COLR_TRA_SMPTE240M;
+            break;
+        default:
+            // ITU BT.601, BT.709, anything else
+            info->color_transfer = HB_COLR_TRA_BT709;
+            break;
+    }
 
     switch( pv->context->colorspace )
     {
