@@ -200,7 +200,7 @@
                                        VerticalAlignment="Center"
                                        FontWeight="Bold"
                                        Text="Bitrate"
-                                       Visibility="{Binding IsPassthru,
+                                       Visibility="{Binding CanSetBitrate,
                                                             Converter={StaticResource boolToVisConverter},
                                                             ConverterParameter=true}" />
                             <ComboBox Grid.Column="5"
@@ -210,7 +210,7 @@
                                       ItemsSource="{Binding TrackReference,
                                                             Converter={StaticResource audioBitrateConverter}}"
                                       SelectedItem="{Binding Bitrate}"
-                                      Visibility="{Binding IsPassthru,
+                                      Visibility="{Binding CanSetBitrate,
                                                            Converter={StaticResource boolToVisConverter},
                                                            ConverterParameter=true}" />
 
