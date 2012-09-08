@@ -80,26 +80,19 @@ namespace HandBrakeWPF.Converters.Audio
                         break;
                     case AudioEncoder.ffaac:
                         low = ((channels + lfeCount) * 32);
-                        max = ((channels + lfeCount) *
-                                 ((192 + (64 * ((samplerate << srShift) >= 44100 ? 1 : 0)))
-                                  >> srShift));
+                        max = ((channels + lfeCount) * ((192 + (64 * ((samplerate << srShift) >= 44100 ? 1 : 0))) >> srShift));
                         break;
                     case AudioEncoder.Lame:
                         low = 8 + (24 * (srShift < 1 ? 1 : 0) );
                         max = 64 + (96 * (srShift < 2 ? 1 : 0)) + (160 * (srShift < 1 ? 1 : 0));
                         break;
                     case AudioEncoder.Vorbis:
-                        low = (channels + lfeCount) * (14 +
-                            (8 * (srShift < 2 ? 1 : 0)) +
-                                              (6 * (srShift < 1 ? 1 : 0)));
-                        max = (channels + lfeCount) * (32 +
-                                                           (54 * (srShift < 2 ? 1 : 0)) +
-                                                           (104 * (srShift < 1 ? 1 : 0)) +
-                                                           (50 * (samplerate >= 44100 ? 1 : 0)));
+                        low = (channels + lfeCount) * (14 + (8 * (srShift < 2 ? 1 : 0)) + (6 * (srShift < 1 ? 1 : 0)));
+                        max = (channels + lfeCount) * (32 + (54 * (srShift < 2 ? 1 : 0)) + (104 * (srShift < 1 ? 1 : 0)) + (50 * (samplerate >= 44100 ? 1 : 0)));
                         break;
                     case AudioEncoder.Ac3:
                         low = 224 * channels / 5;
-                        max = samplerate > 24 ? 640 : 320;
+                        max = 640;
                         break;
                     case AudioEncoder.Ac3Passthrough:
                     case AudioEncoder.DtsPassthrough:
