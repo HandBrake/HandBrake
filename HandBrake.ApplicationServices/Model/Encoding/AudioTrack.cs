@@ -198,6 +198,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
                 this.encoder = value;
                 this.NotifyOfPropertyChange(() => this.Encoder);
                 this.NotifyOfPropertyChange("IsPassthru");
+                this.NotifyOfPropertyChange("CanSetBitrate");
                 this.NotifyOfPropertyChange("TrackReference");
             }
         }
@@ -331,6 +332,17 @@ namespace HandBrake.ApplicationServices.Model.Encoding
                     return true;
                 }
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether can set bitrate.
+        /// </summary>
+        public bool CanSetBitrate
+        {
+            get
+            {
+                return this.IsPassthru || this.Encoder == AudioEncoder.ffflac;
             }
         }
 
