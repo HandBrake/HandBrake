@@ -349,6 +349,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private int serverPort;
 
+        /// <summary>
+        /// The server port.
+        /// </summary>
+        private bool enableDebugFeatures;
+
         #endregion
 
         #region Constructors and Destructors
@@ -1353,6 +1358,22 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Enable Debugging features in the UI.
+        /// </summary>
+        public bool EnableDebugFeatures
+        {
+            get
+            {
+                return this.enableDebugFeatures;
+            }
+            set
+            {
+                this.enableDebugFeatures = value;
+                this.NotifyOfPropertyChange(() => this.EnableDebugFeatures);
+            }
+        }
+
         #endregion
 
         #endregion
@@ -1648,6 +1669,7 @@ namespace HandBrakeWPF.ViewModels
             int.TryParse(userSettingService.GetUserSetting<string>(UserSettingConstants.ServerPort), out port);
             this.ServerPort = port;
             this.EnableProcessIsolation = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableProcessIsolation);
+            this.EnableDebugFeatures = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDebugFeatures);
         }
 
         /// <summary>
@@ -1864,6 +1886,7 @@ namespace HandBrakeWPF.ViewModels
             userSettingService.SetUserSetting(ASUserSettingConstants.DisableLibDvdNav, this.DisableLibdvdNav);
             userSettingService.SetUserSetting(UserSettingConstants.EnableProcessIsolation, this.EnableProcessIsolation);
             userSettingService.SetUserSetting(UserSettingConstants.ServerPort, this.ServerPort.ToString());
+            userSettingService.SetUserSetting(UserSettingConstants.EnableDebugFeatures, this.EnableDebugFeatures);
         }
 
         /// <summary>
