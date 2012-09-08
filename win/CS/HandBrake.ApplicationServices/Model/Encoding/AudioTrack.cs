@@ -338,7 +338,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         /// <summary>
         /// Gets a value indicating whether can set bitrate.
         /// </summary>
-        public bool CanSetBitrate
+        public bool CannotSetBitrate
         {
             get
             {
