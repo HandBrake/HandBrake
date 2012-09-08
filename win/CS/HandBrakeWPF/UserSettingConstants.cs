@@ -171,6 +171,11 @@ namespace HandBrakeWPF
         /// </summary>
         public const string ServerPort = "ServerPort";
 
+        /// <summary>
+        /// Enable Debugging features within the GUI.
+        /// </summary>
+        public const string EnableDebugFeatures = "EnableDebugFeatures";
+
         #endregion
     }
 }

@@ -599,6 +599,17 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether show debug menu.
+        /// </summary>
+        public bool ShowDebugMenu
+        {
+           get
+           {
+               return this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDebugFeatures);
+           }
+        }
+
         #endregion
 
         #region Properties for Settings
