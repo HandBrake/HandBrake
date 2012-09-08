@@ -1,20 +1,20 @@
-diff --git a/libavutil/x86/float_dsp_init.c b/libavutil/x86/float_dsp_init.c
-index d259a36..3729d91 100644
---- a/libavutil/x86/float_dsp_init.c
-+++ b/libavutil/x86/float_dsp_init.c
-@@ -38,11 +38,13 @@ void ff_float_dsp_init_x86(AVFloatDSPContext *fdsp)
- 
-     if (mm_flags & AV_CPU_FLAG_SSE && HAVE_SSE) {
-         fdsp->vector_fmul = ff_vector_fmul_sse;
--        fdsp->vector_fmac_scalar = ff_vector_fmac_scalar_sse;
-+        // buggy under 64-bit Windows: http://bugzilla.libav.org/show_bug.cgi?id=336
-+        // fdsp->vector_fmac_scalar = ff_vector_fmac_scalar_sse;
-     }
-     if (mm_flags & AV_CPU_FLAG_AVX && HAVE_AVX) {
-         fdsp->vector_fmul = ff_vector_fmul_avx;
--        fdsp->vector_fmac_scalar = ff_vector_fmac_scalar_avx;
-+        // buggy under 64-bit Windows: http://bugzilla.libav.org/show_bug.cgi?id=336
-+        // fdsp->vector_fmac_scalar = ff_vector_fmac_scalar_avx;
-     }
- #endif
- }
+diff --git a/libavutil/x86/float_dsp.asm b/libavutil/x86/float_dsp.asm
+index c4e0c66..d379d8f 100644
+--- a/libavutil/x86/float_dsp.asm
++++ b/libavutil/x86/float_dsp.asm
+@@ -60,12 +60,12 @@ cglobal vector_fmac_scalar, 3,3,3, dst, src, len
+ %else
+ cglobal vector_fmac_scalar, 4,4,3, dst, src, mul, len
+ %endif
+-%if WIN64
+-    SWAP 0, 2
+-%endif
+ %if ARCH_X86_32
+     VBROADCASTSS m0, mulm
+ %else
++%if WIN64
++    mova       xmm0, xmm2
++%endif
+     shufps     xmm0, xmm0, 0
+ %if cpuflag(avx)
+     vinsertf128  m0, m0, xmm0, 1
