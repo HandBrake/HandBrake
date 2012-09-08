@@ -68,6 +68,6 @@ ifeq ($(HAS.dlfcn),1)
     TEST.GCC.l += dl
 endif
     TEST.GCC.D += PTW32_STATIC_LIB
-    TEST.GCC.l += iberty ws2_32
+    TEST.GCC.l += ws2_32
 	TEST.GCC.args.extra.exe++ += -static
 endif

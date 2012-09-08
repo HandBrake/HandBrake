@@ -91,18 +91,18 @@ define import.CONTRIB.defs
     ## debug=max or optimizations=none.  Otherwise, use the contribs defaults
     ifeq (max,$$($(1).GCC.g))
         ifeq (none,$$($(1).GCC.O))
-            $(1).CONFIGURE.env.CFLAGS   = CFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra .g .O)"
-            $(1).CONFIGURE.env.CXXFLAGS = CXXFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra .g .O)"
+            $(1).CONFIGURE.env.CFLAGS   = CFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra .g .O *D)"
+            $(1).CONFIGURE.env.CXXFLAGS = CXXFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra .g .O *D)"
         else
-            $(1).CONFIGURE.env.CFLAGS   = CFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra .g)"
-            $(1).CONFIGURE.env.CXXFLAGS = CXXFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra .g)"
+            $(1).CONFIGURE.env.CFLAGS   = CFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra .g *D)"
+            $(1).CONFIGURE.env.CXXFLAGS = CXXFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra .g *D)"
         endif
     else
-        $(1).CONFIGURE.env.CFLAGS   = CFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra)"
-        $(1).CONFIGURE.env.CXXFLAGS = CXXFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra)"
+        $(1).CONFIGURE.env.CFLAGS   = CFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra *D)"
+        $(1).CONFIGURE.env.CXXFLAGS = CXXFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra *D)"
     endif
-    $(1).CONFIGURE.env.CPPFLAGS = CPPFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra)"
-    $(1).CONFIGURE.env.LDFLAGS  = LDFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra.exe)"
+    $(1).CONFIGURE.env.CPPFLAGS = CPPFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra *D)"
+    $(1).CONFIGURE.env.LDFLAGS  = LDFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra.exe *D)"
     $(1).CONFIGURE.env.PKG_CONFIG_PATH  = PKG_CONFIG_PATH="$$(call fn.ABSOLUTE,$$(CONTRIB.build/))lib/pkgconfig"
 
     $(1).CONFIGURE.env.args = !CC !CFLAGS !CXX !CXXFLAGS !CPPFLAGS !LDFLAGS !PKG_CONFIG_PATH !LOCAL_PATH
