@@ -877,8 +877,8 @@ const char * const * hb_h264_levels()
 const char * hb_x264_encopt_name(const char *name)
 {
     int i;
-    for (i = 0; hb_x264_encopt_synonyms[i] && hb_x264_encopt_synonyms[i+1]; i += 2)
-        if (!strcmp(name, hb_x264_encopt_synonyms[i+1]))
-            return hb_x264_encopt_synonyms[i];
+    for (i = 0; hb_x264_encopt_synonyms[i][0] != NULL; i++)
+        if (!strcmp(name, hb_x264_encopt_synonyms[i][1]))
+            return hb_x264_encopt_synonyms[i][0];
     return name;
 }
