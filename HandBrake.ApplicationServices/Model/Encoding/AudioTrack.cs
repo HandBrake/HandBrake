@@ -159,7 +159,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             set
             {
                 this.bitrate = value;
-                this.NotifyOfPropertyChange("Bitrate");
+                this.NotifyOfPropertyChange(() => this.Bitrate);
             }
         }
 
@@ -178,7 +178,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
                 if (!object.Equals(value, this.drc))
                 {
                     this.drc = value;
-                    this.NotifyOfPropertyChange("DRC");
+                    this.NotifyOfPropertyChange(() => this.DRC);
                 }
             }
         }
@@ -197,9 +197,9 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             {
                 this.encoder = value;
                 this.NotifyOfPropertyChange(() => this.Encoder);
-                this.NotifyOfPropertyChange("IsPassthru");
-                this.NotifyOfPropertyChange("CanSetBitrate");
-                this.NotifyOfPropertyChange("TrackReference");
+                this.NotifyOfPropertyChange(() => this.IsPassthru);
+                this.NotifyOfPropertyChange(() => this.CannotSetBitrate);
+                this.NotifyOfPropertyChange(() => this.TrackReference);
             }
         }
 
@@ -218,7 +218,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
                 if (!object.Equals(value, this.gain))
                 {
                     this.gain = value;
-                    this.NotifyOfPropertyChange("Gain");
+                    this.NotifyOfPropertyChange(() => this.Gain);
                 }
             }
         }
@@ -236,8 +236,8 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             set
             {
                 this.mixDown = value;
-                this.NotifyOfPropertyChange("MixDown");
-                this.NotifyOfPropertyChange("TrackReference");
+                this.NotifyOfPropertyChange(() => this.MixDown);
+                this.NotifyOfPropertyChange(() => this.TrackReference);
             }
         }
 
@@ -254,8 +254,8 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             set
             {
                 this.sampleRate = value;
-                this.NotifyOfPropertyChange("SampleRate");
-                this.NotifyOfPropertyChange("TrackReference");
+                this.NotifyOfPropertyChange(() => this.SampleRate);
+                this.NotifyOfPropertyChange(() => this.TrackReference);
             }
         }
 
@@ -297,8 +297,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
             set
             {
                 this.scannedTrack = value;
-                this.NotifyOfPropertyChange("ScannedTrack");
-                this.NotifyOfPropertyChange("TrackDisplay");
+                this.NotifyOfPropertyChange(() => this.ScannedTrack);
             }
         }
 
