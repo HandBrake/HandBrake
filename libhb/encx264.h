@@ -40,4 +40,7 @@ static const char * const x264_encopt_synonyms[] =
     0
 };
 
-void hb_apply_h264_level( x264_param_t * param, const char * level, const char * x264_profile );
+int hb_apply_h264_level(x264_param_t *param,
+                        int width, int height,
+                        const char *h264_level,
+                        const char *x264_profile);
