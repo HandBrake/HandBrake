@@ -701,11 +701,11 @@ int hb_apply_h264_level(x264_param_t *param,
     /* find the x264_level_t corresponding to the requested level */
     if (h264_level != NULL && *h264_level)
     {
-        for (i = 0; h264_level_names[i]; i++)
+        for (i = 0; hb_h264_level_names[i]; i++)
         {
-            if (!strcmp(h264_level_names[i], h264_level))
+            if (!strcmp(hb_h264_level_names[i], h264_level))
             {
-                int val = h264_level_values[i];
+                int val = hb_h264_level_values[i];
                 for (i = 0; x264_levels[i].level_idc; i++)
                 {
                     if (x264_levels[i].level_idc == val)
@@ -871,14 +871,14 @@ const char * const * hb_x264_profiles()
 
 const char * const * hb_h264_levels()
 {
-    return h264_level_names;
+    return hb_h264_level_names;
 }
 
-const char * hb_x264_encopt_name( const char * name )
+const char * hb_x264_encopt_name(const char *name)
 {
     int i;
-    for( i = 0; x264_encopt_synonyms[i] && x264_encopt_synonyms[i+1]; i += 2 )
-        if( !strcmp( name, x264_encopt_synonyms[i+1] ) )
-            return x264_encopt_synonyms[i];
+    for (i = 0; hb_x264_encopt_synonyms[i] && hb_x264_encopt_synonyms[i+1]; i += 2)
+        if (!strcmp(name, hb_x264_encopt_synonyms[i+1]))
+            return hb_x264_encopt_synonyms[i];
     return name;
 }
