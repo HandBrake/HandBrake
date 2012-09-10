@@ -5712,6 +5712,14 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
     {
         case AVMEDIA_TYPE_VIDEO:
             buf->s.type = VIDEO_BUF;
+            /*
+             * libav avcodec_decode_video2() needs AVPacket flagged with AV_PKT_FLAG_KEY
+             * for some codecs. For example, sequence of PNG in a mov container.
+             */
+            if ( stream->ffmpeg_pkt->flags & AV_PKT_FLAG_KEY )
+            {
+                buf->s.frametype |= HB_FRAME_KEY;
+            }
             break;
 
         case AVMEDIA_TYPE_AUDIO:

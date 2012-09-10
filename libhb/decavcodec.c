@@ -686,7 +686,7 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
  * until enough packets have been decoded so that the timestamps can be
  * correctly rewritten, if this is necessary.
  */
-static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequence, int64_t pts, int64_t dts )
+static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequence, int64_t pts, int64_t dts, uint8_t frametype )
 {
     hb_work_private_t *pv = w->private_data;
     int got_picture, oldlevel = 0;
@@ -696,7 +696,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
     if ( global_verbosity_level <= 1 )
     {
         oldlevel = av_log_get_level();
-        av_log_set_level( AV_LOG_QUIET );
+        av_log_set_level( AV_LOG_VERBOSE );
     }
 
     av_init_packet( &avp );
@@ -704,6 +704,15 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
     avp.size = size;
     avp.pts = pts;
     avp.dts = dts;
+    /*
+     * libav avcodec_decode_video2() needs AVPacket flagged with AV_PKT_FLAG_KEY
+     * for some codecs. For example, sequence of PNG in a mov container.
+     */ 
+    if ( frametype & HB_FRAME_KEY )
+    {
+        avp.flags |= AV_PKT_FLAG_KEY;
+    }
+
     if ( avcodec_decode_video2( pv->context, &frame, &got_picture, &avp ) < 0 )
     {
         ++pv->decode_errors;
@@ -870,7 +879,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
 
     return got_picture;
 }
-static void decodeVideo( hb_work_object_t *w, uint8_t *data, int size, int sequence, int64_t pts, int64_t dts )
+static void decodeVideo( hb_work_object_t *w, uint8_t *data, int size, int sequence, int64_t pts, int64_t dts, uint8_t frametype )
 {
     hb_work_private_t *pv = w->private_data;
 
@@ -903,14 +912,14 @@ static void decodeVideo( hb_work_object_t *w, uint8_t *data, int size, int seque
 
         if ( pout_len > 0 )
         {
-            decodeFrame( w, pout, pout_len, sequence, parser_pts, parser_dts );
+            decodeFrame( w, pout, pout_len, sequence, parser_pts, parser_dts, frametype );
         }
     } while ( pos < size );
 
     /* the stuff above flushed the parser, now flush the decoder */
     if ( size <= 0 )
     {
-        while ( decodeFrame( w, NULL, 0, sequence, AV_NOPTS_VALUE, AV_NOPTS_VALUE ) )
+        while ( decodeFrame( w, NULL, 0, sequence, AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0 ) )
         {
         }
         flushDelayQueue( pv );
@@ -1115,7 +1124,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     {
         if ( pv->context->codec != NULL )
         {
-            decodeVideo( w, in->data, in->size, in->sequence, pts, dts );
+            decodeVideo( w, in->data, in->size, in->sequence, pts, dts, in->s.frametype );
         }
         hb_list_add( pv->list, in );
         *buf_out = link_buf_list( pv );
@@ -1163,7 +1172,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pv->new_chap = in->s.new_chap;
         pv->chap_time = pts >= 0? pts : pv->pts_next;
     }
-    decodeVideo( w, in->data, in->size, in->sequence, pts, dts );
+    decodeVideo( w, in->data, in->size, in->sequence, pts, dts, in->s.frametype );
     hb_buffer_close( &in );
     *buf_out = link_buf_list( pv );
     return HB_WORK_OK;
