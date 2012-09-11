@@ -12,6 +12,7 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Collections.Generic;
     using System.Drawing;
+    using System.Globalization;
 
     using Caliburn.Micro;
 
@@ -232,7 +233,7 @@ namespace HandBrakeWPF.ViewModels
             get
             {
                 return this.Task.DisplayWidth.HasValue
-                           ? int.Parse(Math.Round(this.Task.DisplayWidth.Value, 0).ToString())
+                           ? int.Parse(Math.Round(this.Task.DisplayWidth.Value, 0).ToString(CultureInfo.InvariantCulture))
                            : 0;
             }
 
@@ -572,8 +573,8 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedAnamorphicMode = preset.Task.Anamorphic;
 
             // Set the limits on the UI Controls.
-            this.MaxWidth = preset.Task.MaxWidth ?? sourceResolution.Width;
-            this.MaxHeight = preset.Task.MaxHeight ?? sourceResolution.Height;
+            this.MaxWidth = preset.Task.MaxWidth ?? this.sourceResolution.Width;
+            this.MaxHeight = preset.Task.MaxHeight ?? this.sourceResolution.Height;
             this.Task.MaxWidth = preset.Task.MaxWidth;
             this.Task.MaxHeight = preset.Task.MaxHeight;
 
@@ -588,14 +589,13 @@ namespace HandBrakeWPF.ViewModels
                 else
                 {
                     // Figure out the best width based on the preset and source
-                    this.Width = preset.Task.Width ?? this.getRes((sourceResolution.Width - this.CropLeft - this.CropRight), preset.Task.MaxWidth.Value);
+                    this.Width = preset.Task.Width ?? this.GetModulusValue(this.getRes((this.sourceResolution.Width - this.CropLeft - this.CropRight), preset.Task.MaxWidth.Value));
                 }
             }
             else
             {
-                this.Width = preset.Task.Width ?? (sourceResolution.Width - this.CropLeft - this.CropRight);
+                this.Width = preset.Task.Width ?? this.GetModulusValue((this.sourceResolution.Width - this.CropLeft - this.CropRight));
             }
-
 
             // Set the Maintain Aspect ratio. This will calculate Height for us now.
             this.MaintainAspectRatio = preset.Task.Anamorphic == Anamorphic.None || preset.Task.KeepDisplayAspect;
@@ -615,7 +615,7 @@ namespace HandBrakeWPF.ViewModels
                     {
                         this.Height = preset.Task.Height ??
                                       this.getRes(
-                                          (sourceResolution.Height - this.CropTop - this.CropBottom),
+                                          (this.sourceResolution.Height - this.CropTop - this.CropBottom),
                                           preset.Task.MaxHeight.Value);
                     }
                 }
@@ -694,22 +694,22 @@ namespace HandBrakeWPF.ViewModels
                 this.sourceResolution = title.Resolution;
 
                 // Set the Max Width / Height available to the user controls
-                if (sourceResolution.Width < this.MaxWidth)
+                if (this.sourceResolution.Width < this.MaxWidth)
                 {
-                    this.MaxWidth = sourceResolution.Width;
+                    this.MaxWidth = this.sourceResolution.Width;
                 }
-                else if (sourceResolution.Width > this.MaxWidth)
+                else if (this.sourceResolution.Width > this.MaxWidth)
                 {
-                    this.MaxWidth = preset.Task.MaxWidth ?? sourceResolution.Width;
+                    this.MaxWidth = preset.Task.MaxWidth ?? this.sourceResolution.Width;
                 }
 
-                if (sourceResolution.Height < this.MaxHeight)
+                if (this.sourceResolution.Height < this.MaxHeight)
                 {
-                    this.MaxHeight = sourceResolution.Height;
+                    this.MaxHeight = this.sourceResolution.Height;
                 }
-                else if (sourceResolution.Height > this.MaxHeight)
+                else if (this.sourceResolution.Height > this.MaxHeight)
                 {
-                    this.MaxHeight = preset.Task.MaxHeight ?? sourceResolution.Height;
+                    this.MaxHeight = preset.Task.MaxHeight ?? this.sourceResolution.Height;
                 }
 
                 // Set Screen Controls
@@ -748,7 +748,7 @@ namespace HandBrakeWPF.ViewModels
        
                 if (this.SelectedAnamorphicMode == Anamorphic.Custom)
                 {
-                    AnamorphicAdjust(); // Refresh the values
+                    this.AnamorphicAdjust(); // Refresh the values
                 }
             }
 
@@ -863,7 +863,7 @@ namespace HandBrakeWPF.ViewModels
                   - 2: Loose anamorphic, round to mod16 and preserve storage aspect ratio
                   - 3: Power user anamorphic, specify everything
               */
-            double calcWidth, calcHeight;
+            double calcHeight;
             switch (this.SelectedAnamorphicMode)
             {
                 default:
@@ -881,7 +881,7 @@ namespace HandBrakeWPF.ViewModels
                         - Uses mod16-compliant dimensions,
                         - Allows users to set the width
                     */
-                    calcWidth = this.GetModulusValue(this.Width); /* Time to get picture width that divide cleanly.*/
+                    double calcWidth = this.GetModulusValue(this.Width);
                     calcHeight = (calcWidth / storageAspect) + 0.5;
                     calcHeight = this.GetModulusValue(calcHeight); /* Time to get picture height that divide cleanly.*/
 
@@ -902,18 +902,18 @@ namespace HandBrakeWPF.ViewModels
                 case Anamorphic.Custom:
 
                     // Get the User Interface Values
-                    double UIdisplayWidth;
-                    double.TryParse(this.DisplayWidth.ToString(), out UIdisplayWidth);
+                    double uIdisplayWidth;
+                    double.TryParse(this.DisplayWidth.ToString(CultureInfo.InvariantCulture), out uIdisplayWidth);
 
                     /* Anamorphic 3: Power User Jamboree - Set everything based on specified values */
                     calcHeight = this.GetModulusValue(this.Height);
 
                     if (this.MaintainAspectRatio)
                     {
-                        return new Size((int)Math.Truncate(UIdisplayWidth), (int)calcHeight);
+                        return new Size((int)Math.Truncate(uIdisplayWidth), (int)calcHeight);
                     }
 
-                    return new Size((int)Math.Truncate(UIdisplayWidth), (int)calcHeight);
+                    return new Size((int)Math.Truncate(uIdisplayWidth), (int)calcHeight);
             }
         }
 
@@ -957,7 +957,7 @@ namespace HandBrakeWPF.ViewModels
         /// <returns>
         /// Value corrected so that value % selected modulus == 0
         /// </returns>
-        private double GetModulusValue(double value)
+        private int GetModulusValue(double value)
         {
             if (this.SelectedModulus == null)
             {
@@ -966,14 +966,16 @@ namespace HandBrakeWPF.ViewModels
 
             double remainder = value % this.SelectedModulus.Value;
 
-            if (remainder == 0)
+            if (remainder.Equals(0.0d))
             {
-                return value;
+                return (int)Math.Abs(value);
             }
 
-            return remainder >= ((double)this.SelectedModulus.Value / 2)
+            double result = remainder >= ((double)this.SelectedModulus.Value / 2)
                        ? value + (this.SelectedModulus.Value - remainder)
                        : value - remainder;
+
+            return (int)Math.Abs(result);
         }
 
         /// <summary>
@@ -981,7 +983,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private void HeightAdjust()
         {
-            if (this.sourceResolution == new Size(0,0))
+            if (this.sourceResolution == new Size(0, 0))
             {
                 return;
             }
@@ -997,14 +999,14 @@ namespace HandBrakeWPF.ViewModels
                 case Anamorphic.None:
                     if (this.MaintainAspectRatio)
                     {
-                        double crop_width = this.sourceResolution.Width - this.CropLeft - this.CropRight;
-                        double crop_height = this.sourceResolution.Height - this.CropTop - this.CropBottom;
+                        double cropWidth = this.sourceResolution.Width - this.CropLeft - this.CropRight;
+                        double cropHeight = this.sourceResolution.Height - this.CropTop - this.CropBottom;
 
-                        double new_width = ((double)this.Height * this.sourceResolution.Height * this.SourceAspect.Width *
-                                            crop_width) /
-                                           ((double)this.sourceResolution.Width * this.SourceAspect.Height * crop_height);
+                        double newWidth = ((double)this.Height * this.sourceResolution.Height * this.SourceAspect.Width *
+                                            cropWidth) /
+                                           ((double)this.sourceResolution.Width * this.SourceAspect.Height * cropHeight);
 
-                        this.Task.Width = (int)Math.Round(this.GetModulusValue(new_width), 0);
+                        this.Task.Width = this.GetModulusValue(newWidth);
                         this.NotifyOfPropertyChange(() => this.Task.Width);
                     }
 
@@ -1052,8 +1054,8 @@ namespace HandBrakeWPF.ViewModels
                 case Anamorphic.None:
                     if (this.MaintainAspectRatio)
                     {
-                        double crop_width = this.sourceResolution.Width - this.CropLeft - this.CropRight;
-                        double crop_height = this.sourceResolution.Height - this.CropTop - this.CropBottom;
+                        double cropWidth = this.sourceResolution.Width - this.CropLeft - this.CropRight;
+                        double cropHeight = this.sourceResolution.Height - this.CropTop - this.CropBottom;
 
                         if (this.SourceAspect.Width == 0 && this.SourceAspect.Height == 0)
                         {
@@ -1061,10 +1063,10 @@ namespace HandBrakeWPF.ViewModels
                         }
 
                         double newHeight = ((double)this.Width * this.sourceResolution.Width * this.SourceAspect.Height *
-                                            crop_height) /
-                                           ((double)this.sourceResolution.Height * this.SourceAspect.Width * crop_width);
+                                            cropHeight) /
+                                           ((double)this.sourceResolution.Height * this.SourceAspect.Width * cropWidth);
 
-                        this.Task.Height = (int)Math.Round(this.GetModulusValue(newHeight), 0);
+                        this.Task.Height = this.GetModulusValue(newHeight);
                         this.NotifyOfPropertyChange(() => this.Height);
                     }
                     this.SetDisplaySize();
@@ -1103,16 +1105,7 @@ namespace HandBrakeWPF.ViewModels
         /// </returns>
         private int getRes(int value, int max)
         {
-            if (value > max)
-            {
-                return max;
-            }
-            else
-            {
-                return value;
-            }
-
-            return 0;
+            return value > max ? max : value;
         }
 
         #endregion
