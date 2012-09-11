@@ -155,13 +155,13 @@ namespace HandBrakeWPF.ViewModels
             this.Preset.PictureSettingsMode = this.SelectedPictureSettingMode;
 
             // Setting W, H, MW and MH
-            if (SelectedPictureSettingMode == PresetPictureSettingsMode.None)
+            if (this.SelectedPictureSettingMode == PresetPictureSettingsMode.None)
             {
                 this.Preset.Task.MaxHeight = null;
                 this.Preset.Task.MaxWidth = null;
             }
 
-            if (SelectedPictureSettingMode == PresetPictureSettingsMode.Custom)
+            if (this.SelectedPictureSettingMode == PresetPictureSettingsMode.Custom)
             {
                 this.Preset.Task.MaxWidth = this.CustomWidth;
                 this.Preset.Task.MaxHeight = this.CustomHeight;
@@ -169,7 +169,7 @@ namespace HandBrakeWPF.ViewModels
                 this.Preset.Task.Height = null;
             }
 
-            if (SelectedPictureSettingMode == PresetPictureSettingsMode.SourceMaximum)
+            if (this.SelectedPictureSettingMode == PresetPictureSettingsMode.SourceMaximum)
             {
                 this.Preset.Task.MaxWidth = this.Preset.Task.Width;
                 this.Preset.Task.MaxHeight = this.Preset.Task.Height;

@@ -12,6 +12,7 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Windows;
@@ -1412,7 +1413,8 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void PresetExport()
         {
-            VistaSaveFileDialog savefiledialog = new VistaSaveFileDialog { Filter = "plist|*.plist", CheckPathExists = true };
+            VistaSaveFileDialog savefiledialog = new VistaSaveFileDialog
+                { Filter = "plist|*.plist", CheckPathExists = true, AddExtension = true };
             if (this.selectedPreset != null)
             {
                 savefiledialog.ShowDialog();
@@ -1420,7 +1422,7 @@ namespace HandBrakeWPF.ViewModels
 
                 if (filename != null)
                 {
-                    PlistUtility.Export(savefiledialog.FileName, this.selectedPreset, userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild).ToString());
+                    PlistUtility.Export(savefiledialog.FileName, this.selectedPreset, userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild).ToString(CultureInfo.InvariantCulture));
                 }
             }
             else
