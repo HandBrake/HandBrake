@@ -1738,15 +1738,6 @@ void yadif_decomb_filter_thread( void *thread_args_v )
 
         yadif_work = &pv->yadif_arguments[segment];
 
-#if 0
-        if( yadif_work->dst == NULL )
-        {
-            hb_error( "thread started when no work available" );
-            hb_snooze(500);
-            goto report_completion;
-        }
-#endif
-
         /*
          * Process all three planes, but only this segment of it.
          */
@@ -1924,6 +1915,7 @@ static void yadif_filter( hb_filter_private_t * pv,
         eedi2_planer( pv );
     }
 
+    pv->is_combed = is_combed;
     if( is_combed )
     {
         if( ( pv->mode & MODE_EEDI2 ) && !( pv->mode & MODE_YADIF ) && is_combed == 1 )
@@ -2598,7 +2590,7 @@ static int hb_decomb_work( hb_filter_object_t * filter,
         int parity = frame ^ tff ^ 1;
 
         /* Skip the second run if the frame is uncombed */
-        if (frame && pv->yadif_arguments[0].is_combed == 0)
+        if (frame && pv->is_combed == 0)
         {
             break;
         }
@@ -2631,13 +2623,13 @@ static int hb_decomb_work( hb_filter_object_t * filter,
 
             // If frame was combed, we will use results from mcdeint
             // else we will use yadif result
-            if (pv->yadif_arguments[0].is_combed)
+            if (pv->is_combed)
                 idx ^= 1;
         }
 
         // Add to list of output buffers (should be at most 2)
         if ((pv->mode & MODE_BOB) ||
-            pv->yadif_arguments[0].is_combed == 0 ||
+            pv->is_combed == 0 ||
             frame == num_frames - 1)
         {
             if ( out == NULL )
@@ -2663,7 +2655,7 @@ static int hb_decomb_work( hb_filter_object_t * filter,
                 if (pv->mode == MODE_MASK ||
                     ((pv->mode & MODE_MASK) && (pv->mode & MODE_FILTER)) ||
                     ((pv->mode & MODE_MASK) && (pv->mode & MODE_GAMMA)) ||
-                    pv->yadif_arguments[0].is_combed)
+                    pv->is_combed)
                 {
                     apply_mask(pv, last);
                 }
@@ -2678,7 +2670,7 @@ static int hb_decomb_work( hb_filter_object_t * filter,
 
     /* if this frame was deinterlaced and bob mode is engaged, halve
        the duration of the saved timestamps. */
-    if ((pv->mode & MODE_BOB) && pv->yadif_arguments[0].is_combed)
+    if ((pv->mode & MODE_BOB) && pv->is_combed)
     {
         out->s.stop -= (out->s.stop - out->s.start) / 2LL;
         last->s.start = out->s.stop;
