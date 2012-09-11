@@ -285,7 +285,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     if (job->h264_level != NULL)
     {
         if (hb_apply_h264_level(&param, job->width, job->height,
-                                job->h264_level, job->x264_profile))
+                                job->h264_level, job->x264_profile, 0))
         {
             free(pv);
             pv = NULL;
@@ -638,7 +638,8 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
 int hb_apply_h264_level(x264_param_t *param,
                         int width, int height,
                         const char *h264_level,
-                        const char *x264_profile)
+                        const char *x264_profile,
+                        int be_quiet)
 {
     float f_framerate;
     const x264_level_t *x264_level = NULL;
@@ -744,8 +745,11 @@ int hb_apply_h264_level(x264_param_t *param,
     if (x264_level->frame_only && (param->b_interlaced ||
                                    param->b_fake_interlaced))
     {
-        hb_log("hb_apply_h264_level [warning]: interlaced flag not supported for level %s, disabling",
-                h264_level);
+        if (!be_quiet)
+        {
+            hb_log("hb_apply_h264_level [warning]: interlaced flag not supported for level %s, disabling",
+                   h264_level);
+        }
         param->b_interlaced = param->b_fake_interlaced = 0;
     }
 
@@ -823,30 +827,33 @@ int hb_apply_h264_level(x264_param_t *param,
     /* TODO: check the rest of the limits */
 
     /* things we can do nothing about (too late to change resolution or fps), print warnings */
-    if (x264_level->frame_size < i_mb_size)
+    if (!be_quiet)
     {
-        hb_log("hb_apply_h264_level [warning]: frame size (%dx%d, %d macroblocks) too high for level %s (max. %d macroblocks)",
-               i_mb_width * 16, i_mb_height * 16, i_mb_size, h264_level,
-               x264_level->frame_size);
-    }
-    else if (x264_level->mbps < i_mb_rate)
-    {
-        hb_log("hb_apply_h264_level [warning]: framerate (%.3f) too high for level %s at %dx%d (max. %.3f)",
-               f_framerate, h264_level, width, height,
-               (float)x264_level->mbps / i_mb_size);
-    }
-    // width or height squared may not exceed 8 * frame_size (in macroblocks)
-    // thus neither dimension may exceed sqrt(8 * frame_size)
-    max_mb_side = sqrt(x264_level->frame_size * 8);
-    if (i_mb_width > max_mb_side)
-    {
-        hb_log("hb_apply_h264_level [warning]: frame too wide (%d) for level %s (max. %d)",
-               width, h264_level, max_mb_side * 16);
-    }
-    if (i_mb_height > max_mb_side)
-    {
-        hb_log("hb_apply_h264_level [warning]: frame too tall (%d) for level %s (max. %d)",
-               height, h264_level, max_mb_side * 16);
+        if (x264_level->frame_size < i_mb_size)
+        {
+            hb_log("hb_apply_h264_level [warning]: frame size (%dx%d, %d macroblocks) too high for level %s (max. %d macroblocks)",
+                   i_mb_width * 16, i_mb_height * 16, i_mb_size, h264_level,
+                   x264_level->frame_size);
+        }
+        else if (x264_level->mbps < i_mb_rate)
+        {
+            hb_log("hb_apply_h264_level [warning]: framerate (%.3f) too high for level %s at %dx%d (max. %.3f)",
+                   f_framerate, h264_level, width, height,
+                   (float)x264_level->mbps / i_mb_size);
+        }
+        // width or height squared may not exceed 8 * frame_size (in macroblocks)
+        // thus neither dimension may exceed sqrt(8 * frame_size)
+        max_mb_side = sqrt(x264_level->frame_size * 8);
+        if (i_mb_width > max_mb_side)
+        {
+            hb_log("hb_apply_h264_level [warning]: frame too wide (%d) for level %s (max. %d)",
+                   width, h264_level, max_mb_side * 16);
+        }
+        if (i_mb_height > max_mb_side)
+        {
+            hb_log("hb_apply_h264_level [warning]: frame too tall (%d) for level %s (max. %d)",
+                   height, h264_level, max_mb_side * 16);
+        }
     }
 
     /* level successfully applied, yay! */

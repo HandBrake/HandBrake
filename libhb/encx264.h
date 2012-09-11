@@ -43,4 +43,5 @@ static const char * const hb_x264_encopt_synonyms[][2] =
 int hb_apply_h264_level(x264_param_t *param,
                         int width, int height,
                         const char *h264_level,
-                        const char *x264_profile);
+                        const char *x264_profile,
+                        int be_quiet);
