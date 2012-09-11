@@ -696,7 +696,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
     if ( global_verbosity_level <= 1 )
     {
         oldlevel = av_log_get_level();
-        av_log_set_level( AV_LOG_VERBOSE );
+        av_log_set_level( AV_LOG_QUIET );
     }
 
     av_init_packet( &avp );
