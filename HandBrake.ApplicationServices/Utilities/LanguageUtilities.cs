@@ -80,7 +80,7 @@ namespace HandBrake.ApplicationServices.Utilities
                                                               {"Irish", "gle"}, 
                                                               {"Galician", "glg"}, 
                                                               {"Manx", "glv"}, 
-                                                              {"Greek Modern", "ell"}, 
+                                                              {"Greek, Modern", "ell"}, 
                                                               {"Guarani", "grn"}, 
                                                               {"Gujarati", "guj"}, 
                                                               {"Haitian", "hat"}, 
