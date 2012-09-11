@@ -1115,7 +1115,7 @@ void mask_dilate_thread( void *thread_args_v )
     pv = thread_args->pv;
     segment = thread_args->segment;
 
-    hb_log("mask dialate thread started for segment %d", segment);
+    hb_log("mask dilate thread started for segment %d", segment);
 
     while (1)
     {
