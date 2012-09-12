@@ -1545,6 +1545,40 @@ int comb_segmenter( hb_filter_private_t * pv )
     return check_combing_results(pv);
 }
 
+/* EDDI: Edge Directed Deinterlacing Interpolation
+   Checks 4 different slopes to see if there is more similarity along a diagonal
+   than there was vertically. If a diagonal is more similar, then it indicates
+   an edge, so interpolate along that instead of a vertical line, using either
+   linear or cubic interpolation depending on mode. */
+#define YADIF_CHECK(j) {\
+        int score = ABS(cur[-stride-1+j] - cur[+stride-1-j])\
+                      + ABS(cur[-stride  +j] - cur[+stride  -j])\
+                      + ABS(cur[-stride+1+j] - cur[+stride+1-j]);\
+        if( score < spatial_score ){\
+            spatial_score = score;\
+            if( ( pv->mode & MODE_CUBIC ) && !vertical_edge )\
+            {\
+                switch(j)\
+                {\
+                    case -1:\
+                        spatial_pred = cubic_interpolate_pixel(cur[-3 * stride - 3], cur[-stride -1], cur[+stride + 1], cur[3* stride + 3] );\
+                    break;\
+                    case -2:\
+                        spatial_pred = cubic_interpolate_pixel( ( ( cur[-3*stride - 4] + cur[-stride - 4] ) / 2 ) , cur[-stride -2], cur[+stride + 2], ( ( cur[3*stride + 4] + cur[stride + 4] ) / 2 ) );\
+                    break;\
+                    case 1:\
+                        spatial_pred = cubic_interpolate_pixel(cur[-3 * stride +3], cur[-stride +1], cur[+stride - 1], cur[3* stride -3] );\
+                    break;\
+                    case 2:\
+                        spatial_pred = cubic_interpolate_pixel(( ( cur[-3*stride + 4] + cur[-stride + 4] ) / 2 ), cur[-stride +2], cur[+stride - 2], ( ( cur[3*stride - 4] + cur[stride - 4] ) / 2 ) );\
+                    break;\
+                }\
+            }\
+            else\
+            {\
+                spatial_pred = ( cur[-stride +j] + cur[+stride -j] ) >>1;\
+            }\
+
 static void yadif_filter_line(
        hb_filter_private_t * pv,
        uint8_t             * dst,
@@ -1624,56 +1658,16 @@ static void yadif_filter_line(
                 spatial_pred = (c+e)>>1;
             }
 
-        /* EDDI: Edge Directed Deinterlacing Interpolation
-           Checks 4 different slopes to see if there is more similarity along a diagonal
-           than there was vertically. If a diagonal is more similar, then it indicates
-           an edge, so interpolate along that instead of a vertical line, using either
-           linear or cubic interpolation depending on mode. */
-        #define YADIF_CHECK(j)\
-                {   int score = ABS(cur[-stride-1+j] - cur[+stride-1-j])\
-                              + ABS(cur[-stride  +j] - cur[+stride  -j])\
-                              + ABS(cur[-stride+1+j] - cur[+stride+1-j]);\
-                    if( score < spatial_score ){\
-                        spatial_score = score;\
-                        if( ( pv->mode & MODE_CUBIC ) && !vertical_edge )\
-                        {\
-                            switch(j)\
-                            {\
-                                case -1:\
-                                    spatial_pred = cubic_interpolate_pixel(cur[-3 * stride - 3], cur[-stride -1], cur[+stride + 1], cur[3* stride + 3] );\
-                                break;\
-                                case -2:\
-                                    spatial_pred = cubic_interpolate_pixel( ( ( cur[-3*stride - 4] + cur[-stride - 4] ) / 2 ) , cur[-stride -2], cur[+stride + 2], ( ( cur[3*stride + 4] + cur[stride + 4] ) / 2 ) );\
-                                break;\
-                                case 1:\
-                                    spatial_pred = cubic_interpolate_pixel(cur[-3 * stride +3], cur[-stride +1], cur[+stride - 1], cur[3* stride -3] );\
-                                break;\
-                                case 2:\
-                                    spatial_pred = cubic_interpolate_pixel(( ( cur[-3*stride + 4] + cur[-stride + 4] ) / 2 ), cur[-stride +2], cur[+stride - 2], ( ( cur[3*stride - 4] + cur[stride - 4] ) / 2 ) );\
-                                break;\
-                            }\
-                        }\
-                        else\
-                        {\
-                            spatial_pred = ( cur[-stride +j] + cur[+stride -j] ) >>1;\
-                        }\
-
-                        if( x >= 2 && x <= width - 3 )
-                        {
-                            YADIF_CHECK(-1)
-                            if( x >= 3 && x <= width - 4 )
-                            {
-                                YADIF_CHECK(-2) }} }}
-                            }
-                        }
-                        if( x >= 2 && x <= width - 3 )
-                        {
-                            YADIF_CHECK(1)
-                            if( x >= 3 && x <= width - 4 )
-                            {
-                                YADIF_CHECK(2) }} }}
-                            }
-                        }
+            // YADIF_CHECK touches pixels -3 and +3 around the current x pos
+            // when MODE_CUBIC is enabled
+            if( x >= 3 && x <= width - 4 )
+            {
+                YADIF_CHECK(-1) YADIF_CHECK(-2) }} }}
+            }
+            if( x >= 3 && x <= width - 4 )
+            {
+                YADIF_CHECK(1) YADIF_CHECK(2) }} }}
+            }
         }
 
         /* Temporally adjust the spatial prediction by
