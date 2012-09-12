@@ -1658,15 +1658,24 @@ static void yadif_filter_line(
                 spatial_pred = (c+e)>>1;
             }
 
-            // YADIF_CHECK touches pixels -3 and +3 around the current x pos
-            // when MODE_CUBIC is enabled
-            if( x >= 3 && x <= width - 4 )
+            // YADIF_CHECK requires a margin to avoid invalid memory access.
+            // In MODE_CUBIC, margin needed is 2 + ABS(param).
+            // Else, the margin needed is 1 + ABS(param).
+            int margin = 2;
+            if (pv->mode & MODE_CUBIC)
+                margin = 3;
+
+            if (x >= margin && x <= width - (margin + 1))
             {
-                YADIF_CHECK(-1) YADIF_CHECK(-2) }} }}
+                YADIF_CHECK(-1)
+                if (x >= margin + 1 && x <= width - (margin + 2))
+                    YADIF_CHECK(-2) }} }}
             }
-            if( x >= 3 && x <= width - 4 )
+            if (x >= margin && x <= width - (margin + 1))
             {
-                YADIF_CHECK(1) YADIF_CHECK(2) }} }}
+                YADIF_CHECK(1)
+                if (x >= margin + 1 && x <= width - (margin + 2))
+                    YADIF_CHECK(2) }} }}
             }
         }
 

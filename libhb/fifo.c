@@ -334,6 +334,7 @@ hb_buffer_t * hb_buffer_init( int size )
         hb_lock(buffers.lock);
         buffers.allocated += b->alloc;
         hb_unlock(buffers.lock);
+        memset(b->data, 0, b->alloc);
     }
     return b;
 }
@@ -346,6 +347,7 @@ void hb_buffer_realloc( hb_buffer_t * b, int size )
         size = size_to_pool( size )->buffer_size;
         b->data  = realloc( b->data, size );
         b->alloc = size;
+        memset(b->data, 0, b->alloc);
 
         hb_lock(buffers.lock);
         buffers.allocated += size - orig;
