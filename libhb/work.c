@@ -750,8 +750,8 @@ static void do_job( hb_job_t * job )
     job->fifo_mpeg2  = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
     job->fifo_raw    = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
     job->fifo_sync   = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
-    job->fifo_render = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
     job->fifo_mpeg4  = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
+    job->fifo_render = NULL; // Attached to filter chain
 
     /* Audio fifos must be initialized before sync */
     if (!job->indepth_scan)
@@ -1324,7 +1324,6 @@ cleanup:
     hb_fifo_close( &job->fifo_mpeg2 );
     hb_fifo_close( &job->fifo_raw );
     hb_fifo_close( &job->fifo_sync );
-    hb_fifo_close( &job->fifo_render );
     hb_fifo_close( &job->fifo_mpeg4 );
 
     for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
@@ -1430,6 +1429,7 @@ cleanup:
         for( i = 0; i < hb_list_count( job->list_filter ); i++ )
         {
             hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
+            hb_fifo_close( &filter->fifo_out );
             hb_filter_close( &filter );
         }
         hb_list_close( &job->list_filter );

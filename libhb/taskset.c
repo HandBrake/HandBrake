@@ -107,14 +107,14 @@ fail:
             free( ts->task_complete_bitmap );
             /* FALL THROUGH */
         case 3:
-	    free( ts->task_begin_bitmap );
+            free( ts->task_begin_bitmap );
             /* FALL THROUGH */
         case 2:
-	    if( ts->task_threads_args == NULL )
+            if( ts->task_threads_args == NULL )
                 free( ts->task_threads_args );
             /* FALL THROUGH */
         case 1:
-	    free( ts->task_threads );
+            free( ts->task_threads );
             /* FALL THROUGH */
         case 0:
             break;
@@ -124,7 +124,7 @@ fail:
 
 int
 taskset_thread_spawn( taskset_t *ts, int thr_idx, const char *descr,
-		      thread_func_t *func, int priority )
+                      thread_func_t *func, int priority )
 {
     ts->task_threads[thr_idx] = hb_thread_init( descr, func,
                                                 taskset_thread_args( ts, thr_idx ),

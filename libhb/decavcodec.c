@@ -257,6 +257,7 @@ static void closePrivData( hb_work_private_t ** ppv )
         }
         if ( pv->context )
         {
+            av_freep( &pv->context->extradata );
             av_free( pv->context );
         }
         if ( pv->list )
@@ -1142,6 +1143,14 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             *buf_out = hb_buffer_init( 0 );;
             return HB_WORK_DONE;
         }
+        // Note that there is currently a small memory leak in libav at this
+        // point.  pv->context->priv_data gets allocated by
+        // avcodec_alloc_context3(), then avcodec_get_context_defaults3()
+        // memsets the context and looses the pointer.
+        //
+        // avcodec_get_context_defaults3() looks as if they intended for
+        // it to preserve any existing priv_data because they test the pointer
+        // before allocating new memory, but the memset has already cleared it.
         avcodec_get_context_defaults3( pv->context, codec );
         init_video_avcodec_context( pv );
         if ( setup_extradata( w, in ) )
@@ -1387,6 +1396,7 @@ static void decavcodecvFlush( hb_work_object_t *w )
         {
             pv->video_codec_opened = 0;
             hb_avcodec_close( pv->context );
+            av_freep( &pv->context->extradata );
             if ( pv->parser )
             {
                 av_parser_close(pv->parser);

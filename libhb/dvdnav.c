@@ -1822,6 +1822,8 @@ static void hb_dvdnav_close( hb_dvd_t ** _d )
     if( d->vmg ) ifoClose( d->vmg );
     if( d->reader ) DVDClose( d->reader );
 
+    free(d->path);
+
     free( d );
     *_d = NULL;
 }

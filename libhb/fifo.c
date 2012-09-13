@@ -239,9 +239,9 @@ void hb_buffer_pool_free( void )
         count = 0;
         while( ( b = hb_fifo_get(buffers.pool[i]) ) )
         {
-            freed += b->alloc;
             if( b->data )
             {
+                freed += b->alloc;
                 free( b->data );
             }
             free( b );
@@ -342,7 +342,7 @@ void hb_buffer_realloc( hb_buffer_t * b, int size )
 {
     if ( size > b->alloc || b->data == NULL )
     {
-        uint32_t orig = b->alloc;
+        uint32_t orig = b->data != NULL ? b->alloc : 0;
         size = size_to_pool( size )->buffer_size;
         b->data  = realloc( b->data, size );
         b->alloc = size;

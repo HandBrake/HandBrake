@@ -2470,6 +2470,7 @@ static void hb_decomb_close( hb_filter_object_t * filter )
 
     taskset_fini( &pv->yadif_taskset );
     taskset_fini( &pv->decomb_filter_taskset );
+    taskset_fini( &pv->decomb_check_taskset );
 
     if( pv->mode & MODE_FILTER )
     {
@@ -2523,6 +2524,8 @@ static void hb_decomb_close( hb_filter_object_t * filter )
         if (pv->tmpc) eedi2_aligned_free(pv->tmpc);
     }
     
+    free(pv->block_score);
+
     /*
      * free memory for yadif structs
      */
