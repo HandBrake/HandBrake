@@ -11,6 +11,7 @@
 #import "HBDVDDetector.h"
 #import "HBPresets.h"
 #import "HBPreviewController.h"
+#import "DockTextField.h"
 
 unsigned int maximumNumberOfAllowedAudioTracks = 24;
 NSString *HBContainerChangedNotification = @"HBContainerChangedNotification";
@@ -19,6 +20,10 @@ NSString *HBTitleChangedNotification = @"HBTitleChangedNotification";
 NSString *keyTitleTag = @"keyTitleTag";
 
 #define DragDropSimplePboardType 	@"MyCustomOutlineViewPboardType"
+
+NSString *dockTilePercentFormat   = @"%2.1f%%";
+// DockTile update freqency in total percent increment
+#define dockTileUpdateFrequency     0.5f
 
 /* We setup the toolbar values here ShowPreviewIdentifier */
 static NSString *        ToggleDrawerIdentifier             = @"Toggle Drawer Item Identifier";
@@ -92,6 +97,24 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* Lets report the HandBrake version number here to the activity log and text log file */
     NSString *versionStringFull = [[NSString stringWithFormat: @"Handbrake Version: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]] stringByAppendingString: [NSString stringWithFormat: @" (%@)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
     [self writeToActivityLog: "%s", [versionStringFull UTF8String]];
+    
+    /* Load the dockTile and instiante initial text fields */
+    self->dockTile = [[NSApplication sharedApplication] dockTile];
+    NSImageView *iv = [[NSImageView alloc] init];
+    [iv setImage:[[NSApplication sharedApplication] applicationIconImage]];
+    [self->dockTile setContentView:iv];
+    
+    /* We can move the specific values out from here by subclassing NSDockTile and package everything in here */
+    /* If colors are to be chosen once and for all, we can also remove the instantiation with numerical values */
+    percentField = [[DockTextField alloc] initWithFrame:NSMakeRect(0.0f, 32.0f, self->dockTile.size.width, 30.0f)];
+    [percentField changeGradientColors:[NSColor colorWithSRGBRed:0.4f green:0.6f blue:0.4f alpha:1.0f] withEndColor:[NSColor colorWithSRGBRed:0.2f green:0.4f blue:0.2f alpha:1.0f]];
+    [iv addSubview:percentField];
+    
+    timeField = [[DockTextField alloc] initWithFrame:NSMakeRect(0.0f, 0.0f, self->dockTile.size.width, 30.0f)];
+    [timeField changeGradientColors:[NSColor colorWithSRGBRed:0.6f green:0.4f blue:0.4f alpha:1.0f] withEndColor:[NSColor colorWithSRGBRed:0.4f green:0.2f blue:0.2f alpha:1.0f]];
+    [iv addSubview:timeField];
+    
+    [self updateDockIcon:-1.0 withETA:@""];
     
     return self;
 }
@@ -635,83 +658,26 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 
 /***********************************************************************
- * UpdateDockIcon
+ * updateDockIcon
  ***********************************************************************
- * Shows a progression bar on the dock icon, filled according to
- * 'progress' (0.0 <= progress <= 1.0).
- * Called with progress < 0.0 or progress > 1.0, restores the original
- * icon.
+ * Updates two DockTextFields on the dockTile,
+ * one with total percentage, the other one with the ETA.
+ * The ETA string is formated by the callers
  **********************************************************************/
-- (void) UpdateDockIcon: (float) progress
+- (void) updateDockIcon: (double) progress withETA:(NSString*)etaStr
 {
-    NSData * tiff;
-    NSBitmapImageRep * bmp;
-    uint32_t * pen;
-    uint32_t black = htonl( 0x000000FF );
-    uint32_t red   = htonl( 0xFF0000FF );
-    uint32_t white = htonl( 0xFFFFFFFF );
-    int row_start, row_end;
-    int i, j;
-
-    if( progress < 0.0 || progress > 1.0 )
+    if (progress < 0.0 || progress > 1.0)
     {
-        [NSApp setApplicationIconImage: fApplicationIcon];
-        return;
+        [percentField setHidden:YES];
+        [timeField setHidden:YES];
+    } else {
+        [percentField setTextToDisplay:[NSString stringWithFormat:dockTilePercentFormat,progress * 100]];
+        [percentField setHidden:NO];
+        [timeField setTextToDisplay:etaStr];
+        [timeField setHidden:NO];
     }
-
-    /* Get it in a raw bitmap form */
-    tiff = [fApplicationIcon TIFFRepresentationUsingCompression:
-            NSTIFFCompressionNone factor: 1.0];
-    bmp = [NSBitmapImageRep imageRepWithData: tiff];
     
-    /* Draw the progression bar */
-    /* It's pretty simple (ugly?) now, but I'm no designer */
-
-    row_start = 3 * (int) [bmp size].height / 4;
-    row_end   = 7 * (int) [bmp size].height / 8;
-
-    for( i = row_start; i < row_start + 2; i++ )
-    {
-        pen = (uint32_t *) ( [bmp bitmapData] + i * [bmp bytesPerRow] );
-        for( j = 0; j < (int) [bmp size].width; j++ )
-        {
-            pen[j] = black;
-        }
-    }
-    for( i = row_start + 2; i < row_end - 2; i++ )
-    {
-        pen = (uint32_t *) ( [bmp bitmapData] + i * [bmp bytesPerRow] );
-        pen[0] = black;
-        pen[1] = black;
-        for( j = 2; j < (int) [bmp size].width - 2; j++ )
-        {
-            if( j < 2 + (int) ( ( [bmp size].width - 4.0 ) * progress ) )
-            {
-                pen[j] = red;
-            }
-            else
-            {
-                pen[j] = white;
-            }
-        }
-        pen[j]   = black;
-        pen[j+1] = black;
-    }
-    for( i = row_end - 2; i < row_end; i++ )
-    {
-        pen = (uint32_t *) ( [bmp bitmapData] + i * [bmp bytesPerRow] );
-        for( j = 0; j < (int) [bmp size].width; j++ )
-        {
-            pen[j] = black;
-        }
-    }
-
-    /* Now update the dock icon */
-    tiff = [bmp TIFFRepresentationUsingCompression:
-            NSTIFFCompressionNone factor: 1.0];
-    NSImage* icon = [[NSImage alloc] initWithData: tiff];
-    [NSApp setApplicationIconImage: icon];
-    [icon release];
+    [self->dockTile display];
 }
 
 - (void) updateUI: (NSTimer *) timer
@@ -954,8 +920,22 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* Update dock icon */
             if( dockIconProgress < 100.0 * progress_total )
             {
-                [self UpdateDockIcon: progress_total];
-                dockIconProgress += 5;
+                // ETA format is [XX]X:XX:XX when ETA is greater than one hour
+                // [X]X:XX when ETA is greater than 0 (minutes or seconds)
+                // When these conditions doesn't applied (eg. when ETA is undefined)
+                // we show just a tilde (~)
+                
+                NSString *etaStr = @"";
+                if (p.hours > 0)
+                    etaStr = [NSString stringWithFormat:@"%d:%02d:%02d", p.hours, p.minutes, p.seconds];
+                else if (p.minutes > 0 || p.seconds > 0)
+                    etaStr = [NSString stringWithFormat:@"%d:%02d", p.minutes, p.seconds];
+                else
+                    etaStr = @"~";
+                
+                [self updateDockIcon:progress_total withETA:etaStr];
+
+                dockIconProgress += dockTileUpdateFrequency;
             }
             
             break;
@@ -974,7 +954,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [fRipIndicator startAnimation: nil];
             
             /* Update dock icon */
-            [self UpdateDockIcon: 1.0];
+            [self updateDockIcon:1.0 withETA:@""];
             
 			break;
         }
@@ -1002,7 +982,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [[fWindow toolbar] validateVisibleItems];
             
             /* Restore dock icon */
-            [self UpdateDockIcon: -1.0];
+            [self updateDockIcon:-1.0 withETA:@""];
             dockIconProgress = 0;
             
             if( fRipIndicatorShown )
