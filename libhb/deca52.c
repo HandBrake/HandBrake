@@ -37,6 +37,7 @@ struct hb_work_private_s
     uint8_t       frame[3840];
 
     int                 nchannels;
+    int                 use_mix_levels;
     uint64_t            channel_layout;
     hb_audio_resample_t *resample;
     int                 *remap_table;
@@ -148,6 +149,13 @@ static int deca52Init(hb_work_object_t *w, hb_job_t *job)
             hb_error("deca52Init: hb_audio_resample_init() failed");
             return 1;
         }
+
+        /* liba52 doesn't provide us with Lt/Rt mix levels.
+         * When doing an Lt/Rt downmix, ignore mix levels
+         * (this matches what liba52's own downmix code does). */
+        pv->use_mix_levels =
+            !(audio->config.out.mixdown == HB_AMIXDOWN_DOLBY ||
+              audio->config.out.mixdown == HB_AMIXDOWN_DOLBYPLII);
     }
 
     return 0;
@@ -376,9 +384,12 @@ static hb_buffer_t* Decode(hb_work_object_t *w)
         hb_audio_resample_set_channel_layout(pv->resample,
                                              pv->channel_layout,
                                              pv->nchannels);
-        hb_audio_resample_set_mix_levels(pv->resample,
-                                         (double)pv->state->slev,
-                                         (double)pv->state->clev);
+        if (pv->use_mix_levels)
+        {
+            hb_audio_resample_set_mix_levels(pv->resample,
+                                             (double)pv->state->slev,
+                                             (double)pv->state->clev);
+        }
         if (hb_audio_resample_update(pv->resample))
         {
             hb_log("deca52: hb_audio_resample_update() failed");
