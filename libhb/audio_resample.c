@@ -113,8 +113,7 @@ int hb_audio_resample_update(hb_audio_resample_t *resample)
     int ret, resample_changed;
 
     resample->resample_needed =
-        (resample->resample_needed ||
-         resample->out.sample_fmt != resample->in.sample_fmt ||
+        (resample->out.sample_fmt != resample->in.sample_fmt ||
          resample->out.channel_layout != resample->in.channel_layout);
 
     resample_changed =
