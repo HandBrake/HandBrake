@@ -23,7 +23,7 @@ NSString *keyTitleTag = @"keyTitleTag";
 
 NSString *dockTilePercentFormat   = @"%2.1f%%";
 // DockTile update freqency in total percent increment
-#define dockTileUpdateFrequency     0.5f
+#define dockTileUpdateFrequency     0.1f
 
 /* We setup the toolbar values here ShowPreviewIdentifier */
 static NSString *        ToggleDrawerIdentifier             = @"Toggle Drawer Item Identifier";
