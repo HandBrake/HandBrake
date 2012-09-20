@@ -41,7 +41,7 @@ namespace HandBrake.Interop.HbLib
 		public int deinterlace;
 
 		/// hb_list_t*
-		public IntPtr filters;
+		public IntPtr list_filter;
 
 		/// int
 		public int width;
@@ -90,7 +90,7 @@ namespace HandBrake.Interop.HbLib
 		/// int
 		public int pass;
 
-        public int fastfirstpass;
+		public int fastfirstpass;
 
 		public IntPtr advanced_opts;
 
@@ -100,7 +100,7 @@ namespace HandBrake.Interop.HbLib
 
 		public IntPtr x264_tune;
 
-        public IntPtr h264_level;
+		public IntPtr h264_level;
 
 		/// int
 		public int areBframes;

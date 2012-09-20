@@ -11,7 +11,7 @@ namespace HandBrake.Interop
 {
 	using System;
 	using System.Collections.Generic;
-
+	using System.Runtime.InteropServices;
 	using HandBrake.Interop.HbLib;
 	using HandBrake.Interop.Model;
 	using HandBrake.Interop.Model.Encoding;
@@ -128,6 +128,18 @@ namespace HandBrake.Interop
 
 				System.Diagnostics.Debug.WriteLine("ERROR: " + message);
 			}
+		}
+
+		/// <summary>
+		/// Gets the standard x264 option name given the starting point.
+		/// </summary>
+		/// <returns>The standard x264 option name.</returns>
+		public static string SanitizeX264OptName(string name)
+		{
+			IntPtr namePtr = Marshal.StringToHGlobalAnsi(name);
+			string sanitizedName = Marshal.PtrToStringAnsi(HBFunctions.hb_x264_encopt_name(namePtr));
+			Marshal.FreeHGlobal(namePtr);
+			return sanitizedName;
 		}
 
 		/// <summary>

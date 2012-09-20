@@ -13,8 +13,8 @@ namespace HandBrake.Interop.Model.Encoding
 	{
 		Off = 0,
 		Default,
-		Custom,
-        Bob,
-        Fast
+		Fast,
+		Bob,
+		Custom
 	}
 }

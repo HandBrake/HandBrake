@@ -212,18 +212,6 @@ namespace HandBrake.Interop.HbLib
 		public hb_state_param_u param;
 	}
 
-	[StructLayout(LayoutKind.Explicit)]
-	public struct Anonymous_a0a59d69_d9a4_4003_a198_f7c51511e31d
-	{
-		/// int
-		[FieldOffset(0)]
-		public int ac3;
-
-		/// int
-		[FieldOffset(0)]
-		public int dca;
-	}
-
 	[StructLayout(LayoutKind.Sequential)]
 	public struct hb_fifo_s
 	{
@@ -418,15 +406,6 @@ namespace HandBrake.Interop.HbLib
 
         // int
         public int feature;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct hb_filter_object_s
-    {
-        public int id;
-        public int enforce_order;
-        public IntPtr name;
-        public IntPtr settings;
     }
 
 	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]

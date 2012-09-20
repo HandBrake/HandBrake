@@ -138,6 +138,7 @@
     <Compile Include="HbLib\HBFunctions.cs" />
     <Compile Include="HbLib\hb_audio.cs" />
     <Compile Include="HbLib\hb_chapter_s.cs" />
+    <Compile Include="HbLib\hb_filter.cs" />
     <Compile Include="HbLib\hb_handle_s.cs" />
     <Compile Include="HbLib\hb_subtitle.cs" />
     <Compile Include="HbLib\Misc.cs" />

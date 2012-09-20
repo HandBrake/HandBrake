@@ -148,25 +148,26 @@ namespace HandBrake.Interop.Model
 		}
 
 		/// <summary>
-		/// Finds the highest possible mixdown for a given audio encoder.
+		/// Determines if the given mixdown supports the given channel layout.
 		/// </summary>
-		/// <param name="audioEncoder">The audio encoder in question.</param>
-		/// <returns>The highest possible mixdown for that audio encoder.</returns>
-		public static int GetMaxMixdownIndex(HBAudioEncoder audioEncoder)
+		/// <param name="mixdown">The mixdown to evaluate.</param>
+		/// <param name="layout">The channel layout to evaluate.</param>
+		/// <returns>True if the mixdown supports the given channel layout.</returns>
+		public static bool MixdownHasRemixSupport(HBMixdown mixdown, ulong layout)
 		{
-			// To find best case scenario, pass in highest number of channels and 6-channel discrete mixdown.
-			int maxMixdownId = HBFunctions.hb_get_best_mixdown((uint)audioEncoder.Id, NativeConstants.HB_INPUT_CH_LAYOUT_3F4R | NativeConstants.HB_INPUT_CH_LAYOUT_HAS_LFE, NativeConstants.HB_AMIXDOWN_6CH);
+			return HBFunctions.hb_mixdown_has_remix_support(mixdown.Id, layout) > 0;
+		}
 
-			for (int i = 0; i < Mixdowns.Count; i++)
-			{
-				if (Mixdowns[i].Id == maxMixdownId)
-				{
-					return i;
-				}
-			}
-
-			return -1;
-		} 
+		/// <summary>
+		/// Determines if the given encoder supports the given mixdown.
+		/// </summary>
+		/// <param name="mixdown">The mixdown to evaluate.</param>
+		/// <param name="encoder">The encoder to evaluate.</param>
+		/// <returns>True if the encoder supports the mixdown.</returns>
+		public static bool MixdownHasCodecSupport(HBMixdown mixdown, HBAudioEncoder encoder)
+		{
+			return HBFunctions.hb_mixdown_has_codec_support(mixdown.Id, (uint) encoder.Id) > 0;
+		}
 
 		/// <summary>
 		/// Sanitizes a mixdown given the output codec and input channel layout.
@@ -175,7 +176,7 @@ namespace HandBrake.Interop.Model
 		/// <param name="encoder">The output encoder to be used.</param>
 		/// <param name="layout">The input channel layout.</param>
 		/// <returns>A sanitized mixdown value.</returns>
-		public static HBMixdown SanitizeMixdown(HBMixdown mixdown, HBAudioEncoder encoder, int layout)
+		public static HBMixdown SanitizeMixdown(HBMixdown mixdown, HBAudioEncoder encoder, ulong layout)
 		{
 			int sanitizedMixdown = HBFunctions.hb_get_best_mixdown((uint)encoder.Id, layout, mixdown.Id);
 			return Mixdowns.Single(m => m.Id == sanitizedMixdown);
@@ -187,7 +188,7 @@ namespace HandBrake.Interop.Model
 		/// <param name="encoder">The output codec to be used.</param>
 		/// <param name="layout">The input channel layout.</param>
 		/// <returns>The default mixdown for the given codec and channel layout.</returns>
-		public static HBMixdown GetDefaultMixdown(HBAudioEncoder encoder, int layout)
+		public static HBMixdown GetDefaultMixdown(HBAudioEncoder encoder, ulong layout)
 		{
 			int defaultMixdown = HBFunctions.hb_get_default_mixdown((uint)encoder.Id, layout);
 			return Mixdowns.Single(m => m.Id == defaultMixdown);

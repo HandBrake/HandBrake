@@ -47,7 +47,7 @@ namespace HandBrake.Interop.SourceData
 		/// <summary>
 		/// Gets or sets the channel layout of this Audio Track.
 		/// </summary>
-		public int ChannelLayout { get; set; }
+		public ulong ChannelLayout { get; set; }
 
 		/// <summary>
 		/// Gets or sets the frequency (in Hz) of this Audio Track
