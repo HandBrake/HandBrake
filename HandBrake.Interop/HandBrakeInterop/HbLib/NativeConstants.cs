@@ -26,7 +26,7 @@ namespace HandBrake.Interop.HbLib
 		public const uint HB_ACODEC_DCA_HD = 0x00040000;
 		public const uint HB_ACODEC_MP3 = 0x00080000;
 		public const uint HB_ACODEC_FFFLAC = 0x00100000;
-		public const uint HB_ACODEC_FF_MASK = 0x001f0000;
+		public const uint HB_ACODEC_FF_MASK = 0x001f2000;
 		public const uint HB_ACODEC_PASS_FLAG = 0x40000000;
 		public const uint HB_ACODEC_PASS_MASK = (HB_ACODEC_MP3 | HB_ACODEC_FFAAC | HB_ACODEC_DCA_HD | HB_ACODEC_AC3 | HB_ACODEC_DCA);
 		public const uint HB_ACODEC_AUTO_PASS = (HB_ACODEC_PASS_MASK | HB_ACODEC_PASS_FLAG);
@@ -41,34 +41,6 @@ namespace HandBrake.Interop.HbLib
 		public const int HB_SUBSTREAM_BD_AC3 = 0x76;
 		public const int HB_SUBSTREAM_BD_DTSHD = 0x72;
 		public const int HB_SUBSTREAM_BD_DTS = 0x71;
-
-		public const int HB_AMIXDOWN_DCA_FORMAT_MASK = 0x00FFF000;
-		public const int HB_AMIXDOWN_A52_FORMAT_MASK = 0x00000FF0;
-		public const int HB_AMIXDOWN_DISCRETE_CHANNEL_COUNT_MASK = 0x0000000F;
-		public const int HB_AMIXDOWN_NONE = 0x00000000;
-		public const int HB_AMIXDOWN_MONO = 0x01000011;
-		public const int HB_AMIXDOWN_STEREO = 0x02002022;
-		public const int HB_AMIXDOWN_DOLBY = 0x042070A2;
-		public const int HB_AMIXDOWN_DOLBYPLII = 0x084094A2;
-		public const int HB_AMIXDOWN_6CH = 0x10089176;
-
-		public const int HB_INPUT_CH_LAYOUT_MONO = 0x0110010;
-		public const int HB_INPUT_CH_LAYOUT_STEREO = 0x0220020;
-		public const int HB_INPUT_CH_LAYOUT_DOLBY = 0x0320031;
-		public const int HB_INPUT_CH_LAYOUT_3F = 0x0430030;
-		public const int HB_INPUT_CH_LAYOUT_2F1R = 0x0521021;
-		public const int HB_INPUT_CH_LAYOUT_3F1R = 0x0631031;
-		public const int HB_INPUT_CH_LAYOUT_2F2R = 0x0722022;
-		public const int HB_INPUT_CH_LAYOUT_3F2R = 0x0832032;
-		public const int HB_INPUT_CH_LAYOUT_4F2R = 0x0942042;
-		public const int HB_INPUT_CH_LAYOUT_3F4R = 0x0a34034;
-		public const int HB_INPUT_CH_LAYOUT_HAS_LFE = 0x0000100;
-		public const int HB_INPUT_CH_LAYOUT_DISCRETE_FRONT_MASK = 0x00F0000;
-		public const int HB_INPUT_CH_LAYOUT_DISCRETE_REAR_MASK = 0x000F000;
-		public const int HB_INPUT_CH_LAYOUT_DISCRETE_LFE_MASK = 0x0000F00;
-		public const int HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK = 0xFFFF0FF;
-		public const int HB_INPUT_CH_LAYOUT_ENCODED_FRONT_MASK = 0x00000F0;
-		public const int HB_INPUT_CH_LAYOUT_ENCODED_REAR_MASK = 0x000000F;
 
 		public const int HB_VCODEC_MASK = 0x0000FF;
 		public const int HB_VCODEC_X264 = 0x000001;
@@ -109,20 +81,20 @@ namespace HandBrake.Interop.HbLib
 
 		public const int HB_CONFIG_MAX_SIZE = 8192;
 
-        // First, filters that may change the framerate (drop or dup frames) 
-        public const int HB_FILTER_DETELECINE = 1;
-        public const int HB_FILTER_DECOMB = 2;
-        public const int HB_FILTER_DEINTERLACE = 3;
-        public const int HB_FILTER_VFR = 4;
-
-        // Filters that must operate on the original source image are next 
-        public const int HB_FILTER_DEBLOCK = 5;
-        public const int HB_FILTER_DENOISE = 6;
-        public const int HB_FILTER_RENDER_SUB = 7;
-        public const int HB_FILTER_CROP_SCALE = 8;
-
-        // Finally filters that don't care what order they are in, 
-        // except that they must be after the above filters 
-        public const int HB_FILTER_ROTATE = 9;
+		// see https://developer.apple.com/quicktime/icefloe/dispatch019.html#colr
+		public const int HB_COLR_PRI_BT709 = 1;
+		public const int HB_COLR_PRI_UNDEF = 2;
+		public const int HB_COLR_PRI_EBUTECH = 5; // use for bt470bg
+		public const int HB_COLR_PRI_SMPTEC = 6; // smpte170m; also use for bt470m and smpte240m
+		// 0, 3-4, 7-65535: reserved
+		public const int HB_COLR_TRA_BT709 = 1; // also use for bt470m, bt470bg and smpte170m
+		public const int HB_COLR_TRA_UNDEF = 2;
+		public const int HB_COLR_TRA_SMPTE240M = 7;
+		// 0, 3-6, 8-65535: reserved
+		public const int HB_COLR_MAT_BT709 = 1;
+		public const int HB_COLR_MAT_UNDEF = 2;
+		public const int HB_COLR_MAT_SMPTE170M = 6; // also use for fcc and bt470bg
+		public const int HB_COLR_MAT_SMPTE240M = 7;
+		// 0, 3-5, 8-65535: reserved
 	}
 }

@@ -9,6 +9,7 @@
 
 namespace HandBrake.Interop.Model.Encoding
 {
+	using System;
 	using System.Collections.Generic;
 
 	using HandBrake.Interop.Model;
@@ -64,6 +65,9 @@ namespace HandBrake.Interop.Model.Encoding
 		public bool TwoPass { get; set; }
 		public bool TurboFirstPass { get; set; }
 		public double Framerate { get; set; }
+		public bool ConstantFramerate { get; set; }
+
+		[Obsolete("This setting is obsolete. Use Framerate and ConstantFramerate instead.")]
 		public bool PeakFramerate { get; set; }
 
 		public List<AudioEncoding> AudioEncodings { get; set; }
@@ -117,6 +121,7 @@ namespace HandBrake.Interop.Model.Encoding
 				TwoPass = this.TwoPass,
 				TurboFirstPass = this.TurboFirstPass,
 				Framerate = this.Framerate,
+				ConstantFramerate = this.ConstantFramerate,
 				PeakFramerate = this.PeakFramerate,
 
 				AudioEncodings = new List<AudioEncoding>(this.AudioEncodings)

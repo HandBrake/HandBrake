@@ -92,9 +92,9 @@ namespace HandBrake.Interop.HbLib
 		/// int
 		public int pixel_aspect_height;
 
-        public int color_prim;
-        public int color_transfer; 
- 	    public int color_matrix; 
+		public int color_prim;
+		public int color_transfer; 
+		public int color_matrix; 
 
 		/// int
 		public int rate;

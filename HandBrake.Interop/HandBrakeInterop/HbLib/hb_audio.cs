@@ -36,15 +36,14 @@ namespace HandBrake.Interop.HbLib
 		public hb_audio_config_output_s output;
 		public hb_audio_config_input_s input;
 
-		/// Anonymous_a0a59d69_d9a4_4003_a198_f7c51511e31d
-		public Anonymous_a0a59d69_d9a4_4003_a198_f7c51511e31d flags;
-
 		public hb_audio_config_lang_s lang;
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
 	public struct hb_audio_config_output_s
 	{
+		public int mixdown;
+
 		/// int
 		public int track;
 
@@ -63,19 +62,30 @@ namespace HandBrake.Interop.HbLib
 
 		public float compression_level;
 
-		/// int
-		public int mixdown;
-
 		/// double
 		public double dynamic_range_compression;
 
 		public double gain;
 
-		/// char*
-		//[MarshalAs(UnmanagedType.LPStr)]
-		//public string name;
+		public int normalize_mix_level;
 
 		public IntPtr name;
+	}
+
+	public enum hb_mixdown
+	{
+		HB_INVALID_AMIXDOWN = -1,
+		HB_AMIXDOWN_NONE = 0,
+		HB_AMIXDOWN_MONO,
+		HB_AMIXDOWN_LEFT,
+		HB_AMIXDOWN_RIGHT,
+		HB_AMIXDOWN_STEREO,
+		HB_AMIXDOWN_DOLBY,
+		HB_AMIXDOWN_DOLBYPLII,
+		HB_AMIXDOWN_5POINT1,
+		HB_AMIXDOWN_6POINT1,
+		HB_AMIXDOWN_7POINT1,
+		HB_AMIXDOWN_5_2_LFE,
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
@@ -84,36 +94,44 @@ namespace HandBrake.Interop.HbLib
 		/// int
 		public int track;
 
-		/// uint32_t->unsigned int
+		/* Input audio codec */
 		public uint codec;
 
-		public uint reg_desc;
-
-		public uint stream_type;
-
-		public uint substream_type;
-
-		/// uint32_t->unsigned int
+		/* Per-codec config info */
 		public uint codec_param;
 
-		/// uint32_t->unsigned int
+		/* Registration descriptor of source */
+		public uint reg_desc;
+
+		/* Stream type from source stream */
+		public uint stream_type;
+
+		/* Substream type for multiplexed streams */
+		public uint substream_type;
+
+		/* Bitsream version */
 		public uint version;
 
-		/// uint32_t->unsigned int
+		/* Bitstream flags, codec-specific */
+		public uint flags;
+
+		/* Bitstream mode, codec-specific */
 		public uint mode;
 
-		/// int
+		/* Input sample rate (Hz) */
 		public int samplerate;
 
+		/* Number of samples per frame */
 		public int samples_per_frame;
 
-		/// int
+		/* Input bitrate (bps) */
 		public int bitrate;
 
-		/// int
-		public int channel_layout;
+		/* Source channel layout, set by the audio decoder */
+		public ulong channel_layout;
 
-		// hb_chan_map_t *
+		/* Source channel map, set by the audio decoder */
+		// hb_chan_map_t
 		public IntPtr channel_map;
 	}
 

@@ -15,7 +15,7 @@ namespace HandBrake.Interop.Model.Encoding
 		Fast,
 		Slow,
 		Slower,
-        Bob,
+		Bob,
 		Custom
 	}
 }

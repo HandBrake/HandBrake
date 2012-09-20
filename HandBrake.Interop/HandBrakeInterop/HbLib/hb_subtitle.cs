@@ -10,10 +10,10 @@
 
 namespace HandBrake.Interop.HbLib
 {
-    using System;
-    using System.Runtime.InteropServices;
+	using System;
+	using System.Runtime.InteropServices;
 
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 	public struct hb_subtitle_s
 	{
 		/// int
@@ -21,6 +21,8 @@ namespace HandBrake.Interop.HbLib
 
 		/// int
 		public int track;
+
+		public int out_track;
 
 		/// hb_subtitle_config_t->hb_subtitle_config_s
 		public hb_subtitle_config_s config;
@@ -45,6 +47,8 @@ namespace HandBrake.Interop.HbLib
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 16, ArraySubType = UnmanagedType.U4)]
 		public uint[] palette;
 
+		public byte palette_set;
+
 		public int width;
 
 		public int height;
@@ -58,6 +62,14 @@ namespace HandBrake.Interop.HbLib
 
 		/// int
 		public int forced_hits;
+
+		public uint codec;
+
+		public uint reg_desc;
+
+		public uint stream_type;
+
+		public uint substream_type;
 
 		/// hb_fifo_t*
 		public IntPtr fifo_in;
@@ -127,6 +139,8 @@ namespace HandBrake.Interop.HbLib
 
 		TX3GSUB,
 
-		SSASUB
+		SSASUB,
+
+		PGSSUB
 	}
 }
