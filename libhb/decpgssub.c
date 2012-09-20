@@ -27,6 +27,10 @@ struct hb_work_private_s
     // while parsing an input packet.
     hb_buffer_t * list_buffer;
     hb_buffer_t * last_buffer;
+    // XXX: we may occasionally see subtitles with broken timestamps
+    //      while this should really get fixed elsewhere,
+    //      dropping subtitles should be avoided as much as possible
+    int64_t last_pts;
     // for PGS subs, we need to pass 'empty' subtitles through (they clear the
     // display) - when doing forced-only extraction, only pass empty subtitles
     // through if we've seen a forced sub and haven't seen any empty sub since
@@ -47,9 +51,10 @@ static int decsubInit( hb_work_object_t * w, hb_job_t * job )
     w->private_data = pv;
 
     pv->discard_subtitle = 1;
-    pv->seen_forced_sub = 0;
-    pv->context = context;
-    pv->job = job;
+    pv->seen_forced_sub  = 0;
+    pv->last_pts         = 0;
+    pv->context          = context;
+    pv->job              = job;
 
     return 0;
 }
@@ -272,6 +277,21 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             int64_t pts = av_rescale(subtitle.pts, 90000, AV_TIME_BASE);
             hb_buffer_t * out = NULL;
 
+            // work around broken timestamps
+            if (pts < 0 && in->s.start >= 0)
+            {
+                pts = in->s.start;
+            }
+            else if (pts < 0)
+            {
+                // XXX: a broken pts will cause us to drop this subtitle,
+                //      which is bad; use a default duration of 3 seconds
+                pts = pv->last_pts + 3 * 90000LL;
+                hb_log("[warning] decpgssub: track %d, invalid PTS",
+                       w->subtitle->out_track);
+            }
+            pv->last_pts = pts;
+
             if ( w->subtitle->config.dest == PASSTHRUSUB &&
                  hb_subtitle_can_pass( PGSSUB, pv->job->mux ) )
             {
@@ -312,12 +332,7 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     out->s        = in->s;
                     out->sequence = in->sequence;
                 }
-                if (pts >= 0)
-                {
-                    // this should (eventually) always be the case
-                    out->s.start = pts;
-                }
-                out->s.stop = out->s.start;
+                out->s.start = out->s.stop = pts;
             }
             else
             {
