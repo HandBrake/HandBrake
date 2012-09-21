@@ -259,6 +259,8 @@ BOOL                        fIsDragging;
     
     /* Dock progress variables */
     double                         dockIconProgress;
+    
+    BOOL                         fWillScan;
     NSDockTile                    *dockTile;
     DockTextField                 *percentField;
     DockTextField                 *timeField;
@@ -446,7 +448,12 @@ BOOL                        fIsDragging;
 + (unsigned int) maximumNumberOfAllowedAudioTracks;
 - (IBAction) addAllAudioTracks: (id) sender;
 
-- (void) updateDockIcon:(double)progress withETA:(NSString*)etaStr;
+// Drag & Drop methods
+- (void)openFiles:(NSArray*)filenames;
+- (void)application:(NSApplication *)sender openFiles:(NSArray *)filenames;
+- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender;
+- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender;
 
+- (void) updateDockIcon:(double)progress withETA:(NSString*)etaStr;
 @end
 

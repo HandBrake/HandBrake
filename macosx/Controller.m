@@ -19,6 +19,8 @@ NSString *keyContainerTag = @"keyContainerTag";
 NSString *HBTitleChangedNotification = @"HBTitleChangedNotification";
 NSString *keyTitleTag = @"keyTitleTag";
 
+NSString *dragDropFiles= @"dragDropFiles";
+
 #define DragDropSimplePboardType 	@"MyCustomOutlineViewPboardType"
 
 NSString *dockTilePercentFormat   = @"%2.1f%%";
@@ -119,6 +121,63 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     return self;
 }
 
+// This method is triggered at launch (and every launch) whether or not
+// files have been dragged on to the dockTile. As a consequence, [self openFiles]
+// contains the logic to detect the case when no files has been drop on the dock
+- (void)application:(NSApplication *)sender openFiles:(NSArray *)filenames
+{
+    [self openFiles:filenames];
+    
+    [NSApp replyToOpenOrPrint:NSApplicationDelegateReplySuccess];
+}
+
+- (void)openFiles:(NSArray*)filenames
+{
+    if (filenames.count == 1 && [[filenames objectAtIndex:0] isEqual:@"YES"])
+        return;
+    
+    NSMutableArray* filesList = [[NSMutableArray alloc] initWithArray:filenames];
+    [filesList removeObject:@"YES"];
+    
+    // For now, we just want to accept one file at a time
+    // If for any reason, more than one file is submitted, we will take the first one
+    if (filesList.count > 1) {
+        filesList = [NSMutableArray arrayWithObject:[filesList objectAtIndex:0]];
+    }
+    
+    // The goal of this check is to know if the application was running before the drag & drop
+    // if fSubtitlesDelegate is set, then applicationDidFinishLaunching was called
+    if (fSubtitlesDelegate)
+    {
+        // Handbrake was already running when the user dropped the file(s)
+        // So we get unstack the first one and launch the scan
+        // The other ones remain in the UserDefaults, and will be handled in the updateUI method
+        // when Handbrake is idle
+        id firstItem = [filesList objectAtIndex:0];
+        [filesList removeObjectAtIndex:0];
+        
+        // This variable has only one goal, let the updateUI knows that even if idling
+        // maybe a scan is in preparation
+        fWillScan = YES;
+        
+        if (filesList.count > 0)
+        {
+            [[NSUserDefaults standardUserDefaults] setObject:filesList forKey:dragDropFiles];
+        } else {
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:dragDropFiles];
+        }
+        
+        [browsedSourceDisplayName release];
+        browsedSourceDisplayName = [[firstItem lastPathComponent] retain];
+        [self performScan:firstItem scanTitleNum:0];
+    } else {
+        // Handbrake was not running before the user dropped the file(s)
+        // So we save the file(s) list in the UserDefaults and we will read them
+        // in the applicationDidFinishLaunching method
+        [[NSUserDefaults standardUserDefaults] setObject:filesList forKey:dragDropFiles];
+    }
+}
+
 - (void) applicationDidFinishLaunching: (NSNotification *) notification
 {
     /* Init libhb with check for updates libhb style set to "0" so its ignored and lets sparkle take care of it */
@@ -216,6 +275,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
      */
      applyQueueToScan = NO;
     
+    // We try to get the list of filenames that may have been drag & drop before the application was running
+    id dragDropFilesId = [[NSUserDefaults standardUserDefaults] objectForKey:dragDropFiles];
+    
     /* Now we re-check the queue array to see if there are
      * any remaining encodes to be done in it and ask the
      * user if they want to reload the queue */
@@ -275,25 +337,46 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                                           fWindow, self,
                                           nil, @selector(didDimissReloadQueue:returnCode:contextInfo:), nil,
                                           NSLocalizedString(@" Do you want to reload them ?", nil));
+                
+                // After handling the previous queue (reload or empty), if there is files waiting for scanning
+                // we will process them
+                if (dragDropFilesId)
+                {
+                    NSArray *dragDropFiles = (NSArray *)dragDropFilesId;
+                    [self openFiles:dragDropFiles];
+                }
             }
             else
             {
-                /* Since we addressed any pending or previously encoding items above, we go ahead and make sure the queue
-                 * is empty of any finished items or cancelled items */
-                [self clearQueueAllItems];
-                /* We show whichever open source window specified in LaunchSourceBehavior preference key */
-                if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source"])
+                // We will open the source window only if there is no dropped files waiting to be scanned
+                if (dragDropFilesId)
                 {
-                    [self browseSources:nil];
-                }
+                    NSArray *dragDropFiles = (NSArray *)dragDropFilesId;
+                    [self openFiles:dragDropFiles];
+                } else {
+                    /* Since we addressed any pending or previously encoding items above, we go ahead and make sure
+                     * the queue is empty of any finished items or cancelled items */
+                    [self clearQueueAllItems];
+                    /* We show whichever open source window specified in LaunchSourceBehavior preference key */
+                    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source"])
+                    {
+                        [self browseSources:nil];
+                    }
                 
-                if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source (Title Specific)"])
-                {
-                    [self browseSources:(id)fOpenSourceTitleMMenu];
+                    if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source (Title Specific)"])
+                    {
+                        [self browseSources:(id)fOpenSourceTitleMMenu];
+                    }
                 }
             }
             
         }
+    }
+    // We will open the source window only if there is no dropped files waiting to be scanned
+    else if (dragDropFilesId)
+    {
+        NSArray *dragDropFiles = (NSArray *)dragDropFilesId;
+        [self openFiles:dragDropFiles];
     }
     else
     {
@@ -356,6 +439,45 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (int) getPidnum
 {
     return pidNum;
+}
+
+#pragma mark -
+#pragma mark Drag & drop handling
+
+// This method is used by OSX to know what kind of files can be drag & drop on the NSWindow
+// We only want filenames (and so folders too)
+- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender {
+    NSPasteboard *pboard = [sender draggingPasteboard];
+    
+    if ([[pboard types] containsObject:NSFilenamesPboardType]) {
+        NSArray *paths = [pboard propertyListForType:NSFilenamesPboardType];
+        
+        return paths.count == 1 ? NSDragOperationGeneric : NSDragOperationNone;
+    }
+    
+    return NSDragOperationNone;
+}
+
+// This method is doing the job after the drag & drop operation has been validated by [self draggingEntered] and OSX
+- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender {
+    NSPasteboard *pboard;
+    
+    pboard = [sender draggingPasteboard];
+    
+    if ( [[pboard types] containsObject:NSFilenamesPboardType] ) {
+        NSArray *paths = [pboard propertyListForType:NSFilenamesPboardType];
+        
+        if (paths.count > 0) {
+            // For now, we just want to accept one file at a time
+            // If for any reason, more than one file is submitted, we will take the first one
+            NSArray *reducedPaths = [NSArray arrayWithObject:[paths objectAtIndex:0]];
+            paths = reducedPaths;
+        }
+        
+        [self openFiles:paths];
+    }
+    
+    return YES;
 }
 
 #pragma mark -
@@ -433,6 +555,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification
 {
+    // When the application is closed and we still have some files in the dragDropFiles array
+    // it's highly probable that the user throw a lot of files and just want to reset this
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:dragDropFiles];
+    
     [currentQueueEncodeNameString release];
     [browsedSourceDisplayName release];
     [outputPanel release];
@@ -600,6 +726,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	[self getDefaultPresets:nil];
 	/* lets initialize the current successful scancount here to 0 */
 	currentSuccessfulScanCount = 0;
+    
+    /* Register HBController's Window as a receiver for files/folders drag & drop operations */
+    [fWindow registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
 }
 
 - (void) enableUI: (bool) b
@@ -1049,7 +1178,45 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     {
         [fAudioAutoPassthruBox setHidden:YES];
     }
+ 
     
+    // Finally after all UI updates, we look for a next dragDropItem to scan
+    // fWillScan will signal that a scan will be launched, so we need to wait
+    // the next idle cycle after the scan
+    hb_get_state( fHandle, &s );
+    if (s.state == HB_STATE_IDLE && !fWillScan)
+    {
+        // Continue to loop on the other drag & drop files if any
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:dragDropFiles])
+        {
+            NSMutableArray *filesList = [[NSMutableArray alloc] initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:dragDropFiles]];
+        
+            if (filesList.count > 0)
+            {
+                // We need to add the previous scan file into the queue (without doing the usual checks)
+                // Before scanning the new one
+                [self doAddToQueue];
+                
+                id nextItem = [filesList objectAtIndex:0];
+                [filesList removeObjectAtIndex:0];
+            
+                [browsedSourceDisplayName release];
+                browsedSourceDisplayName = [[((NSString*)nextItem) lastPathComponent] retain];
+                [self performScan:nextItem scanTitleNum:0];
+            
+                if (filesList.count > 0)
+                {
+                    // Updating the list in the user defaults
+                    [[NSUserDefaults standardUserDefaults] setObject:filesList forKey:dragDropFiles];
+                } else {
+                    // Cleaning if last one was treated
+                    [[NSUserDefaults standardUserDefaults] removeObjectForKey:dragDropFiles];
+                }
+            } else {
+                [[NSUserDefaults standardUserDefaults] removeObjectForKey:dragDropFiles];
+            }
+        }
+    }
 }
 
 /* We use this to write messages to stderr from the macgui which show up in the activity window and log*/
@@ -1690,7 +1857,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 /* Here we actually tell hb_scan to perform the source scan, using the path to source and title number*/
 - (void) performScan:(NSString *) scanPath scanTitleNum: (int) scanTitleNum
 {
-    
     /* use a bool to determine whether or not we can decrypt using vlc */
     BOOL cancelScanDecrypt = 0;
     BOOL vlcFound = 0;
@@ -1789,6 +1955,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         }
         hb_scan( fHandle, [path UTF8String], scanTitleNum, hb_num_previews, 1 , min_title_duration_ticks );
         [fSrcDVD2Field setStringValue:@"Scanning new source…"];
+
+        // After the scan process, we signal to enableUI loop that this scan process is now finished
+        // If remaining drag & drop files are in the UserDefaults array, they will then be processed
+        fWillScan = NO;
     }
 }
 

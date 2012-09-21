@@ -14,6 +14,19 @@ dnl
 	<string>en</string>
     <key>CFBundleDisplayName</key>
     <string>__HB_name</string>
+ 	<key>CFBundleDocumentTypes</key>
+ 	<array>
+ 		<dict>
+ 			<key>CFBundleTypeExtensions</key>
+ 			<array>
+ 				<string>*</string>
+ 			</array>
+ 			<key>CFBundleTypeName</key>
+ 			<string>All files</string>
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 		</dict>
+ 	</array>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
     <key>CFBundleGetInfoString</key>
