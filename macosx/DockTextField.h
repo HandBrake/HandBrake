@@ -12,6 +12,6 @@
 @property (nonatomic,retain) NSColor *startColor;
 @property (nonatomic,retain) NSColor *endColor;
 
-- (void)changeGradientColors:(NSColor*)startColor withEndColor:(NSColor*)endColor;
+- (void)changeGradientColors:(NSColor*)startColor endColor:(NSColor*)endColor;
 
 @end

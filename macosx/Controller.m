@@ -107,18 +107,17 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* We can move the specific values out from here by subclassing NSDockTile and package everything in here */
     /* If colors are to be chosen once and for all, we can also remove the instantiation with numerical values */
     percentField = [[DockTextField alloc] initWithFrame:NSMakeRect(0.0f, 32.0f, [dockTile size].width, 30.0f)];
-    [percentField changeGradientColors:[NSColor colorWithSRGBRed:0.4f green:0.6f blue:0.4f alpha:1.0f] withEndColor:[NSColor colorWithSRGBRed:0.2f green:0.4f blue:0.2f alpha:1.0f]];
+    [percentField changeGradientColors:[NSColor colorWithDeviceRed:0.4f green:0.6f blue:0.4f alpha:1.0f] endColor:[NSColor colorWithDeviceRed:0.2f green:0.4f blue:0.2f alpha:1.0f]];
     [iv addSubview:percentField];
     
     timeField = [[DockTextField alloc] initWithFrame:NSMakeRect(0.0f, 0.0f, [dockTile size].width, 30.0f)];
-    [timeField changeGradientColors:[NSColor colorWithSRGBRed:0.6f green:0.4f blue:0.4f alpha:1.0f] withEndColor:[NSColor colorWithSRGBRed:0.4f green:0.2f blue:0.2f alpha:1.0f]];
+    [timeField changeGradientColors:[NSColor colorWithDeviceRed:0.6f green:0.4f blue:0.4f alpha:1.0f] endColor:[NSColor colorWithDeviceRed:0.4f green:0.2f blue:0.2f alpha:1.0f]];
     [iv addSubview:timeField];
     
     [self updateDockIcon:-1.0 withETA:@""];
     
     return self;
 }
-
 
 - (void) applicationDidFinishLaunching: (NSNotification *) notification
 {

@@ -21,20 +21,16 @@
     if (self) {
         [[self cell] setBezelStyle: NSTextFieldRoundedBezel];
         _textToDisplay = @"";
-        
-        [self changeGradientColors:[NSColor grayColor] withEndColor:[NSColor blackColor]];
+        [self changeGradientColors:[NSColor grayColor] endColor:[NSColor blackColor]];
     }
     
     return self;
 }
 
-- (void)changeGradientColors:(NSColor*)startColor withEndColor:(NSColor*)endColor
+- (void)changeGradientColors:(NSColor*)startColor endColor:(NSColor*)endColor
 {
-    NSColor *startRGBColor = [startColor colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
-    NSColor *endRGBColor = [endColor colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
-    
-    self.startColor = [NSColor colorWithSRGBRed:startRGBColor.redComponent green:startRGBColor.greenComponent blue:startRGBColor.blueComponent alpha:DOCK_TEXTFIELD_ALPHA];
-    self.endColor = [NSColor colorWithSRGBRed:endRGBColor.redComponent green:endRGBColor.greenComponent blue:endRGBColor.blueComponent alpha:DOCK_TEXTFIELD_ALPHA];
+    self.startColor = [startColor colorWithAlphaComponent:DOCK_TEXTFIELD_ALPHA];
+    self.endColor = [endColor colorWithAlphaComponent:DOCK_TEXTFIELD_ALPHA];
 }
 
 - (void)drawRect:(NSRect)dirtyRect
@@ -44,9 +40,10 @@
     
     NSRect blackOutlineFrame = NSMakeRect(0.0, 0.0, [self bounds].size.width, [self bounds].size.height-1.0);
     double radius = self.bounds.size.height / 2;
-    
+
     NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:self.startColor endingColor:self.endColor];
     [gradient drawInBezierPath:[NSBezierPath bezierPathWithRoundedRect:blackOutlineFrame xRadius:radius yRadius:radius] angle:90];
+    [gradient release];
     
     NSMutableDictionary *drawStringAttributes = [[NSMutableDictionary alloc] init];
 	[drawStringAttributes setValue:[NSColor whiteColor] forKey:NSForegroundColorAttributeName];
