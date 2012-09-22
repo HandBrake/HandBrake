@@ -14,18 +14,18 @@
 #import "DockTextField.h"
 
 unsigned int maximumNumberOfAllowedAudioTracks = 24;
-NSString *HBContainerChangedNotification = @"HBContainerChangedNotification";
-NSString *keyContainerTag = @"keyContainerTag";
-NSString *HBTitleChangedNotification = @"HBTitleChangedNotification";
-NSString *keyTitleTag = @"keyTitleTag";
+NSString *HBContainerChangedNotification       = @"HBContainerChangedNotification";
+NSString *keyContainerTag                      = @"keyContainerTag";
+NSString *HBTitleChangedNotification           = @"HBTitleChangedNotification";
+NSString *keyTitleTag                          = @"keyTitleTag";
 
-NSString *dragDropFiles= @"dragDropFiles";
+NSString *dragDropFiles                        = @"dragDropFiles";
 
-#define DragDropSimplePboardType 	@"MyCustomOutlineViewPboardType"
+#define DragDropSimplePboardType                 @"MyCustomOutlineViewPboardType"
 
-NSString *dockTilePercentFormat   = @"%2.1f%%";
+NSString *dockTilePercentFormat                = @"%2.1f%%";
 // DockTile update freqency in total percent increment
-#define dockTileUpdateFrequency     0.1f
+#define dockTileUpdateFrequency                  0.1f
 
 /* We setup the toolbar values here ShowPreviewIdentifier */
 static NSString *        ToggleDrawerIdentifier             = @"Toggle Drawer Item Identifier";
@@ -33,8 +33,8 @@ static NSString *        StartEncodingIdentifier            = @"Start Encoding I
 static NSString *        PauseEncodingIdentifier            = @"Pause Encoding Item Identifier";
 static NSString *        ShowQueueIdentifier                = @"Show Queue Item Identifier";
 static NSString *        AddToQueueIdentifier               = @"Add to Queue Item Identifier";
-static NSString *        ShowPictureIdentifier             = @"Show Picture Window Item Identifier";
-static NSString *        ShowPreviewIdentifier             = @"Show Preview Window Item Identifier";
+static NSString *        ShowPictureIdentifier              = @"Show Picture Window Item Identifier";
+static NSString *        ShowPreviewIdentifier              = @"Show Preview Window Item Identifier";
 static NSString *        ShowActivityIdentifier             = @"Debug Output Item Identifier";
 static NSString *        ChooseSourceIdentifier             = @"Choose Source Item Identifier";
 
@@ -141,7 +141,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
     // For now, we just want to accept one file at a time
     // If for any reason, more than one file is submitted, we will take the first one
-    if (filesList.count > 1) {
+    if (filesList.count > 1)
+    {
         filesList = [NSMutableArray arrayWithObject:[filesList objectAtIndex:0]];
     }
     
@@ -163,14 +164,18 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         if (filesList.count > 0)
         {
             [[NSUserDefaults standardUserDefaults] setObject:filesList forKey:dragDropFiles];
-        } else {
+        }
+        else
+        {
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:dragDropFiles];
         }
         
         [browsedSourceDisplayName release];
         browsedSourceDisplayName = [[firstItem lastPathComponent] retain];
         [self performScan:firstItem scanTitleNum:0];
-    } else {
+    }
+    else
+    {
         // Handbrake was not running before the user dropped the file(s)
         // So we save the file(s) list in the UserDefaults and we will read them
         // in the applicationDidFinishLaunching method
@@ -353,7 +358,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 {
                     NSArray *dragDropFiles = (NSArray *)dragDropFilesId;
                     [self openFiles:dragDropFiles];
-                } else {
+                }
+                else
+                {
                     /* Since we addressed any pending or previously encoding items above, we go ahead and make sure
                      * the queue is empty of any finished items or cancelled items */
                     [self clearQueueAllItems];
@@ -446,12 +453,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 // This method is used by OSX to know what kind of files can be drag & drop on the NSWindow
 // We only want filenames (and so folders too)
-- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender {
+- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
+{
     NSPasteboard *pboard = [sender draggingPasteboard];
     
-    if ([[pboard types] containsObject:NSFilenamesPboardType]) {
+    if ([[pboard types] containsObject:NSFilenamesPboardType])
+    {
         NSArray *paths = [pboard propertyListForType:NSFilenamesPboardType];
-        
         return paths.count == 1 ? NSDragOperationGeneric : NSDragOperationNone;
     }
     
@@ -459,15 +467,18 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 }
 
 // This method is doing the job after the drag & drop operation has been validated by [self draggingEntered] and OSX
-- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender {
+- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
+{
     NSPasteboard *pboard;
     
     pboard = [sender draggingPasteboard];
     
-    if ( [[pboard types] containsObject:NSFilenamesPboardType] ) {
+    if ([[pboard types] containsObject:NSFilenamesPboardType])
+    {
         NSArray *paths = [pboard propertyListForType:NSFilenamesPboardType];
         
-        if (paths.count > 0) {
+        if (paths.count > 0)
+        {
             // For now, we just want to accept one file at a time
             // If for any reason, more than one file is submitted, we will take the first one
             NSArray *reducedPaths = [NSArray arrayWithObject:[paths objectAtIndex:0]];
@@ -798,7 +809,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     {
         [percentField setHidden:YES];
         [timeField setHidden:YES];
-    } else {
+    }
+    else
+    {
         [percentField setTextToDisplay:[NSString stringWithFormat:dockTilePercentFormat,progress * 100]];
         [percentField setHidden:NO];
         [timeField setTextToDisplay:etaStr];
@@ -1208,11 +1221,15 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 {
                     // Updating the list in the user defaults
                     [[NSUserDefaults standardUserDefaults] setObject:filesList forKey:dragDropFiles];
-                } else {
+                }
+                else
+                {
                     // Cleaning if last one was treated
                     [[NSUserDefaults standardUserDefaults] removeObjectForKey:dragDropFiles];
                 }
-            } else {
+            }
+            else
+            {
                 [[NSUserDefaults standardUserDefaults] removeObjectForKey:dragDropFiles];
             }
         }
@@ -5410,7 +5427,8 @@ the user is using "Custom" settings by determining the sender*/
 }
 
 
-- (IBAction) toggleDrawer:(id)sender {
+- (IBAction) toggleDrawer:(id)sender
+{
     [fPresetDrawer toggle:self];
 }
 

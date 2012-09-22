@@ -258,12 +258,12 @@ BOOL                        fIsDragging;
     NSString                      * browsedSourceDisplayName;
     
     /* Dock progress variables */
-    double                         dockIconProgress;
+    double                          dockIconProgress;
     
-    BOOL                         fWillScan;
-    NSDockTile                    *dockTile;
-    DockTextField                 *percentField;
-    DockTextField                 *timeField;
+    BOOL                            fWillScan;
+    NSDockTile                    * dockTile;
+    DockTextField                 * percentField;
+    DockTextField                 * timeField;
 }
 - (int) getPidnum;
 - (IBAction) showAboutPanel:(id)sender;
