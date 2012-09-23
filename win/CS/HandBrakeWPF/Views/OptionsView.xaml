@@ -198,25 +198,21 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Orientation="Vertical" Grid.Column="0">
-                                    <TextBlock Text="Available Langauges" Margin="0,0,0,5"/>
+                                    <TextBlock Text="Available Languages" Margin="0,0,0,5"/>
                                     <ListBox Name="availableLanguages" ItemsSource="{Binding AvailableLanguages}" Helpers:ListBoxHelper.SelectedItems="{Binding SelectedAvailableToMove}" 
                                              SelectionMode="Extended" Width="140" Height="140"></ListBox>
                                 </StackPanel>
 
                                 <DockPanel Grid.Column="1" Margin="10,0,10,0">
                                     <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                        <Button VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveLeft]" Width="60" >
-                                            <Image Source="Images/arrow_right.png" Width="24" Height="24" />
-                                        </Button>
-                                        <Button VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveRight]" Width="60" >
-                                            <Image Source="Images/arrow_left.png" Width="24" Height="24" />
-                                        </Button>
-                                        <Button Content="Clear" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageClearAll]" Width="60" />
+                                        <Button Content="Move Left"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveLeft]" Width="80" />
+                                        <Button Content="Move Right"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveRight]" Width="80" />
+                                        <Button Content="Clear" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageClearAll]" Width="80"/>
                                     </StackPanel>
                                 </DockPanel>
 
                                 <StackPanel Orientation="Vertical" Grid.Column="2">
-                                    <TextBlock Text="Selected Langauges"  Margin="0,0,0,5"/>
+                                    <TextBlock Text="Selected Languages"  Margin="0,0,0,5"/>
                                     <ListBox Name="selectedLangauges" ItemsSource="{Binding SelectedLangauges}" Helpers:ListBoxHelper.SelectedItems="{Binding SelectedLangaugesToMove}" 
                                              SelectionMode="Extended" Width="140" Height="140"
                                              dd:DragDrop.DropHandler="{Binding}"
@@ -232,7 +228,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Audio:" VerticalAlignment="Center" Margin="15,0,5,0" Width="100" />
                                 <ComboBox Name="autoAudioMode" ItemsSource="{Binding AddAudioModeOptions}" SelectedIndex="{Binding SelectedAddAudioMode}" Width="120" Margin="0,0,5,0" />
-                                <CheckBox Content="Add only one audio track per langauge" VerticalAlignment="Center" IsChecked="{Binding AddOnlyOneAudioTrackPerLanguage}" />
+                                <CheckBox Content="Add only one audio track per language" VerticalAlignment="Center" IsChecked="{Binding AddOnlyOneAudioTrackPerLanguage}" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
@@ -391,7 +387,7 @@
         </ScrollViewer>
 
         <StackPanel HorizontalAlignment="Stretch" Background="LightGray" Grid.Row="1" Grid.ColumnSpan="2" >
-            <Button Content="Save Changes" IsDefault="True" cal:Message.Attach="[Event Click] = [Action Close]"
+            <Button Content="Close" IsDefault="True" cal:Message.Attach="[Event Click] = [Action Close]"
                     HorizontalAlignment="Center" Padding="12,2" Margin="0,5,10,5" />
         </StackPanel>
 
