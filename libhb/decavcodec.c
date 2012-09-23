@@ -40,7 +40,6 @@
 
 #include "hb.h"
 #include "hbffmpeg.h"
-#include "audio_remap.h"
 #include "audio_resample.h"
 
 static void compute_frame_duration( hb_work_private_t *pv );

@@ -9,7 +9,6 @@
 
 #include "hb.h"
 #include "hbffmpeg.h"
-#include "audio_remap.h"
 #include "audio_resample.h"
 
 struct hb_work_private_s
@@ -24,7 +23,6 @@ struct hb_work_private_s
     hb_list_t      * list;
     uint8_t        * buf;
 
-    hb_audio_remap_t    *remap;
     hb_audio_resample_t *resample;
 };
 
@@ -107,14 +105,6 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         hb_log("encavcodecaInit: Unknown avcodec option %s", t->key);
     }
     av_dict_free(&av_opts);
-
-    // channel remapping
-    pv->remap = hb_audio_remap_init(context->channel_layout, &hb_libav_chan_map,
-                                    audio->config.in.channel_map);
-    if (pv->remap == NULL)
-    {
-        hb_error("encavcodecaInit: hb_audio_remap_init() failed");
-    }
 
     // sample_fmt conversion
     pv->resample = hb_audio_resample_init(context->sample_fmt,
@@ -210,9 +200,6 @@ static void encavcodecaClose(hb_work_object_t * w)
             hb_list_empty(&pv->list);
         }
 
-        hb_audio_remap_free(pv->remap);
-        pv->remap = NULL;
-
         hb_audio_resample_free(pv->resample);
         pv->resample = NULL;
 
@@ -236,8 +223,7 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
     hb_list_getbytes(pv->list, pv->buf, pv->input_samples * sizeof(float), &pts,
                      &pos);
 
-    // channel remapping and sample_fmt conversion
-    hb_audio_remap(pv->remap, (hb_sample_t*)pv->buf, pv->samples_per_frame);
+    // sample_fmt conversion
     resampled = hb_audio_resample(pv->resample, (void*)pv->buf,
                                   pv->samples_per_frame);
 

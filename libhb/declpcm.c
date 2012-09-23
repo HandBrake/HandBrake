@@ -9,7 +9,6 @@
 
 #include "hb.h"
 #include "hbffmpeg.h"
-#include "audio_remap.h"
 #include "audio_resample.h"
 
 struct hb_work_private_s
