@@ -154,7 +154,7 @@ namespace HandBrake.ApplicationServices.Utilities
                                                               {"Persian", "fas"}, 
                                                               {"Pali", "pli"}, 
                                                               {"Polish", "pol"}, 
-                                                              {"Portugues", "por"}, 
+                                                              {"Portuguese", "por"}, 
                                                               {"Pushto", "pus"}, 
                                                               {"Quechua", "que"}, 
                                                               {"Romansh", "roh"}, 

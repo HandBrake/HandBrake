@@ -369,20 +369,13 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Resource Include="Views\Images\Refresh.ico" />
-    <Resource Include="Views\Images\WarningSmall.png" />
     <Resource Include="Views\Images\Complete.png" />
     <Resource Include="Views\Images\Working0.png" />
     <Resource Include="handbrakepineapple.ico" />
     <Resource Include="Views\Images\delete.png" />
     <Resource Include="Views\Images\Close.png" />
-    <Resource Include="Views\Images\Help24.png" />
-    <Resource Include="Views\Images\Help32.png" />
     <Resource Include="Views\Images\Add16.png" />
     <Resource Include="Views\Images\Options24.png" />
-    <Resource Include="Views\Images\arrow_down.png" />
-    <Resource Include="Views\Images\arrow_left.png" />
-    <Resource Include="Views\Images\arrow_right.png" />
-    <Resource Include="Views\Images\arrow_up.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Views\Images\ActivityWindow.png" />
@@ -404,14 +397,12 @@
     <Resource Include="Views\Images\Movies.png" />
     <Resource Include="Views\Images\logo64.png" />
     <Resource Include="Views\Images\logo128.png" />
-    <Resource Include="Views\Images\info16.png" />
     <Resource Include="Views\Images\Help16.png" />
     <Resource Include="Views\Images\hb32.png" />
     <Resource Include="Views\Images\hb16.png" />
     <Resource Include="Views\Images\Preferences.png" />
     <Resource Include="Views\Images\folder.png" />
     <Resource Include="Views\Images\ErrorX.png" />
-    <Resource Include="Views\Images\download.png" />
     <Resource Include="Views\Images\AddToQueue_small.png" />
     <Resource Include="Views\Images\AddToQueue.png" />
     <Resource Include="Views\Images\window.png" />

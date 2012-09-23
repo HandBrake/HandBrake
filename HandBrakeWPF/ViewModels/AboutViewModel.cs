@@ -9,10 +9,7 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices;
-    using HandBrake.ApplicationServices.Services.Interfaces;
 
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -24,13 +21,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="AboutViewModel"/> class.
         /// </summary>
-        /// <param name="windowManager">
-        /// The window manager.
-        /// </param>
-        /// <param name="userSettingService">
-        /// The user Setting Service.
-        /// </param>
-        public AboutViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
+        public AboutViewModel()
         {
             this.Title = "About HandBrake";
         }
