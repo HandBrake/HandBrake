@@ -888,8 +888,6 @@ hb_work_object_t hb_sync_audio =
     syncAudioClose
 };
 
-#define LVL_PLUS1DB 1.122462048
-
 static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
 {
     hb_work_object_t  * w;
@@ -1032,7 +1030,7 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
         }
     }
 
-    sync->gain_factor = pow(LVL_PLUS1DB, w->audio->config.out.gain);
+    sync->gain_factor = exp2(w->audio->config.out.gain / 6.);
 
     hb_list_add( job->list_work, w );
 }
