@@ -264,6 +264,14 @@ namespace HandBrake.ApplicationServices.Services
             //}*/
         }
 
+        /// <summary>
+        /// Shutdown the service.
+        /// </summary>
+        public void Shutdown()
+        {
+            // Nothing to do.
+        }
+
         #endregion
 
         #region Private Helper Methods

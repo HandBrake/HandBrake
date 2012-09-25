@@ -16,8 +16,6 @@ namespace HandBrake.ApplicationServices.Services
     using System.Threading;
     using System.Windows.Forms;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Parsing;
@@ -194,6 +192,15 @@ namespace HandBrake.ApplicationServices.Services
                 throw new GeneralApplicationException("Debug Run Failed", string.Empty, e);
             }
         }
+
+        /// <summary>
+        /// Shutdown the service.
+        /// </summary>
+        public void Shutdown()
+        {
+            // Nothing to do for this implementation.
+        }
+
         #endregion
 
         #region Private Methods

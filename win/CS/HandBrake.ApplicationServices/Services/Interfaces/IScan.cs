@@ -101,5 +101,10 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// The path to the log file.
         /// </param>
         void DebugScanLog(string path);
+
+        /// <summary>
+        /// Shutdown the service.
+        /// </summary>
+        void Shutdown();
     }
 }

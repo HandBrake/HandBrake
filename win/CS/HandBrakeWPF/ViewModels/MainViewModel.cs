@@ -29,8 +29,6 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Helpers;
-    using HandBrakeWPF.Isolation;
-    using HandBrakeWPF.Isolation.Interfaces;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -85,12 +83,12 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The Source Scan Service.
         /// </summary>
-        private IScan scanService;
+        private readonly IScanServiceWrapper scanService;
 
         /// <summary>
         /// The Encode Service
         /// </summary>
-        private IEncode encodeService;
+        private readonly IEncodeServiceWrapper encodeService;
 
         /// <summary>
         /// HandBrakes Main Window Title
@@ -191,7 +189,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="driveDetectService">
         /// The drive Detect Service.
         /// </param>
-        public MainViewModel(IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService,
+        public MainViewModel(IUserSettingService userSettingService, IScanServiceWrapper scanService, IEncodeServiceWrapper encodeService, IPresetService presetService,
             IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService, IDriveDetectService driveDetectService)
         {
             GeneralUtilities.SetInstanceId();
@@ -817,11 +815,6 @@ namespace HandBrakeWPF.ViewModels
             this.SourceMenu = this.GenerateSourceMenu();
 
             this.driveDetectService.StartDetection(this.DriveTrayChanged);
-
-            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableProcessIsolation))
-            {
-                this.EnableIsolationServices();
-            }
         }
 
         /// <summary>
@@ -832,19 +825,8 @@ namespace HandBrakeWPF.ViewModels
             // Shutdown Service
             this.driveDetectService.Close();
 
-            IIsolatedScanService isolatedScanService = this.scanService as IsolatedScanService;
-            if (isolatedScanService != null)
-            {
-                // Kill any background services for this instance of HandBrake.
-                isolatedScanService.Disconnect();
-            }
-
-            IIsolatedEncodeService isolatedEncodeService = this.encodeService as IIsolatedEncodeService;
-            if (isolatedEncodeService != null)
-            {
-                // Kill any background services for this instance of HandBrake.
-                isolatedEncodeService.Disconnect();
-            }
+            this.scanService.Shutdown();
+            this.encodeService.Shutdown();
 
             // Unsubscribe from Events.
             this.scanService.ScanStared -= this.ScanStared;
@@ -976,7 +958,6 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.errorService.ShowMessageBox("There are jobs on the queue with the same destination path. Please choose a different path for this job.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-
 
             if (!this.IsEncoding)
             {
@@ -1111,7 +1092,6 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-
             if (File.Exists(this.Destination))
             {
                 MessageBoxResult result = this.errorService.ShowMessageBox("The current file already exists, do you wish to overwrite it?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -1198,30 +1178,6 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.scanService.DebugScanLog(dialog.FileName);
             }    
-        }
-
-        /// <summary>
-        /// The test isolation services.
-        /// Swaps out the implementation of IScan to the IsolatedScanService version.
-        /// </summary>
-        public void EnableIsolationServices()
-        {
-            // Unhook the old services
-            this.scanService.ScanStared -= this.ScanStared;
-            this.scanService.ScanCompleted -= this.ScanCompleted;
-            this.scanService.ScanStatusChanged -= this.ScanStatusChanged;
-            this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
-
-            // Replace the Services
-            this.scanService = new IsolatedScanService(this.errorService, this.userSettingService);
-            this.encodeService = new IsolatedEncodeService(this.errorService, this.userSettingService);
-            this.queueProcessor.SwapEncodeService(this.encodeService);
-
-            // Add the new Event Hooks
-            this.scanService.ScanStared += this.ScanStared;
-            this.scanService.ScanCompleted += this.ScanCompleted;
-            this.scanService.ScanStatusChanged += this.ScanStatusChanged;
-            this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeStatusChanged;
         }
 
         #endregion

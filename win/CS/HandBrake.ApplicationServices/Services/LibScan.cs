@@ -183,6 +183,14 @@ namespace HandBrake.ApplicationServices.Services
             throw new NotImplementedException("Only Available when using the CLI mode. Not LibHB");
         }
 
+        /// <summary>
+        /// Shutdown the service.
+        /// </summary>
+        public void Shutdown()
+        {
+            // Nothing to do for this implementation.
+        }
+
         #endregion
 
         #region Private Methods
@@ -205,7 +213,8 @@ namespace HandBrake.ApplicationServices.Services
             {
                 this.logging.Clear();
 
-                string source = sourcePath.ToString().EndsWith("\\") ? sourcePath.ToString() : "\"" + sourcePath + "\"";
+                string source = sourcePath.ToString().EndsWith("\\") ? string.Format("\"{0}\\\\\"", sourcePath.ToString().TrimEnd('\\'))
+                              : "\"" + sourcePath + "\"";
                 currentSourceScanPath = source;
 
                 IsScanning = true;
@@ -240,7 +249,14 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         private void InstanceScanCompleted(object sender, EventArgs e)
         {
-            this.SouceData = new Source { Titles = ConvertTitles(this.instance.Titles), ScanPath = currentSourceScanPath};
+            // TODO -> Might be a better place to fix this.
+            string path = currentSourceScanPath;
+            if (currentSourceScanPath.Contains("\""))
+            {
+                path = currentSourceScanPath.Trim('\"');
+            }
+
+            this.SouceData = new Source { Titles = ConvertTitles(this.instance.Titles), ScanPath = path };
 
             IsScanning = false;
 

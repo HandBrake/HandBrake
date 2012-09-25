@@ -21,6 +21,8 @@ namespace HandBrakeWPF.Startup
     using Castle.Windsor;
 
     using HandBrake.ApplicationServices;
+    using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.Interop;
 
     using ViewModels;
     using ViewModels.Interfaces;
@@ -49,11 +51,14 @@ namespace HandBrakeWPF.Startup
 
             // Initialise the ApplicationServices IWindsorInstaller
             this.windsorContainer.Register(Component.For<IWindsorInstaller>().ImplementedBy<ServicesWindsorInstaller>());
+            this.windsorContainer.Register(Component.For<IWindsorInstaller>().ImplementedBy<InteropWindsorInstaller>());
             this.windsorContainer.Install(windsorContainer.ResolveAll<IWindsorInstaller>());
 
             // Services
             this.windsorContainer.Register(Component.For<IUpdateService>().ImplementedBy<UpdateService>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IDriveDetectService>().ImplementedBy<DriveDetectService>().LifeStyle.Is(LifestyleType.Singleton));
+            this.windsorContainer.Register(Component.For<IScanServiceWrapper>().ImplementedBy<ScanServiceWrapper>().LifeStyle.Is(LifestyleType.Singleton));
+            this.windsorContainer.Register(Component.For<IEncodeServiceWrapper>().ImplementedBy<EncodeServiceWrapper>().LifeStyle.Is(LifestyleType.Singleton));
 
             // Shell
             this.windsorContainer.Register(Component.For<IErrorService>().ImplementedBy<ErrorService>().LifeStyle.Is(LifestyleType.Singleton));

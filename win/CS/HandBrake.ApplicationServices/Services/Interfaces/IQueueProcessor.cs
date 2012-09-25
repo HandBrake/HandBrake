@@ -34,7 +34,7 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <summary>
         /// Gets the IEncodeService instance.
         /// </summary>
-        IEncode EncodeService { get; }
+        IEncodeServiceWrapper EncodeService { get; }
 
         /// <summary>
         /// Gets the IQueueManager instance.
@@ -64,6 +64,6 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <param name="service">
         /// The service.
         /// </param>
-        void SwapEncodeService(IEncode service);
+        void SwapEncodeService(IEncodeServiceWrapper service);
     }
 }

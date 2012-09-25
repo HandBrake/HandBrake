@@ -55,7 +55,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -128,18 +128,15 @@
     <Compile Include="Converters\Options\OptionsTabConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitlesQueueDisplayConverter.cs" />
     <Compile Include="Converters\Video\VideoEncoderConverter.cs" />
-    <Compile Include="Isolation\BackgroundServiceConnector.cs" />
-    <Compile Include="Isolation\IsolatedEncodeService.cs" />
-    <Compile Include="Isolation\Interfaces\IIsolatedEncodeService.cs" />
-    <Compile Include="Isolation\Interfaces\IIsolatedScanService.cs" />
-    <Compile Include="Isolation\IsolatedScanService.cs" />
     <Compile Include="Services\DriveDetectService.cs" />
+    <Compile Include="Services\EncodeServiceWrapper.cs" />
     <Compile Include="Services\Interfaces\IDriveDetectService.cs" />
     <Compile Include="Model\ShellWindow.cs" />
     <Compile Include="Model\SourceMenuItem.cs" />
     <Compile Include="Model\UpdateCheckInformation.cs" />
     <Compile Include="Model\DownloadStatus.cs" />
     <Compile Include="Services\Interfaces\IUpdateService.cs" />
+    <Compile Include="Services\ScanServiceWrapper.cs" />
     <Compile Include="Services\UpdateService.cs" />
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
@@ -368,6 +365,7 @@
     <Content Include="defaultsettings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Views\Images\warningsmall.png" />
     <Resource Include="Views\Images\Refresh.ico" />
     <Resource Include="Views\Images\Complete.png" />
     <Resource Include="Views\Images\Working0.png" />

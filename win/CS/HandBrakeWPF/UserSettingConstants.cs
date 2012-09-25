@@ -176,6 +176,11 @@ namespace HandBrakeWPF
         /// </summary>
         public const string EnableDebugFeatures = "EnableDebugFeatures";
 
+        /// <summary>
+        /// Enable the use of LibHb instead of HandBrakeCLI
+        /// </summary>
+        public const string EnableLibHb = "EnableLibHb";
+
         #endregion
     }
 }
