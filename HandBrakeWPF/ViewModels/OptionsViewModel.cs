@@ -354,6 +354,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool enableDebugFeatures;
 
+        /// <summary>
+        /// Backing field for EnableLibHb
+        /// </summary>
+        private bool enableLibHb;
+
         #endregion
 
         #region Constructors and Destructors
@@ -1374,6 +1379,22 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether enable lib hb.
+        /// </summary>
+        public bool EnableLibHb
+        {
+            get
+            {
+                return this.enableLibHb;
+            }
+            set
+            {
+                this.enableLibHb = value;
+                this.NotifyOfPropertyChange(() => this.EnableLibHb);
+            }
+        }
+
         #endregion
 
         #endregion
@@ -1670,6 +1691,7 @@ namespace HandBrakeWPF.ViewModels
             this.ServerPort = port;
             this.EnableProcessIsolation = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableProcessIsolation);
             this.EnableDebugFeatures = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDebugFeatures);
+            this.EnableLibHb = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableLibHb);
         }
 
         /// <summary>
@@ -1887,6 +1909,7 @@ namespace HandBrakeWPF.ViewModels
             userSettingService.SetUserSetting(UserSettingConstants.EnableProcessIsolation, this.EnableProcessIsolation);
             userSettingService.SetUserSetting(UserSettingConstants.ServerPort, this.ServerPort.ToString());
             userSettingService.SetUserSetting(UserSettingConstants.EnableDebugFeatures, this.EnableDebugFeatures);
+            userSettingService.SetUserSetting(UserSettingConstants.EnableLibHb, this.EnableLibHb);
         }
 
         /// <summary>

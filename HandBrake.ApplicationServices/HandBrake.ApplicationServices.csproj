@@ -20,12 +20,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
-    <OutputPath>bin\x86\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <PlatformTarget>x86</PlatformTarget>
-    <OutputPath>bin\x86\Release\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <Optimize>true</Optimize>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>pdbonly</DebugType>
@@ -33,12 +33,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <PlatformTarget>x64</PlatformTarget>
-    <OutputPath>bin\x64\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <PlatformTarget>x64</PlatformTarget>
-    <OutputPath>bin\x64\Release\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -105,7 +105,12 @@
     <Compile Include="EventArgs\ScanCompletedEventArgs.cs" />
     <Compile Include="EventArgs\ScanProgressEventArgs.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Isolation\BackgroundServiceConnector.cs" />
+    <Compile Include="Isolation\IsolatedEncodeService.cs" />
+    <Compile Include="Isolation\IsolatedScanService.cs" />
+    <Compile Include="Services\Interfaces\IEncodeServiceWrapper.cs" />
     <Compile Include="Services\Interfaces\IHbServiceCallback.cs" />
+    <Compile Include="Services\Interfaces\IScanServiceWrapper.cs" />
     <Compile Include="Services\Interfaces\IServerService.cs" />
     <Compile Include="Services\ServerService.cs" />
     <Compile Include="Utilities\Converters.cs" />
@@ -185,7 +190,6 @@
     <ProjectReference Include="..\HandBrake.Interop\HandBrakeInterop\HandBrakeInterop.csproj">
       <Project>{F0A61F62-2C3B-4A87-AFF4-0C4256253DA1}</Project>
       <Name>HandBrakeInterop</Name>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

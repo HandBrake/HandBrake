@@ -43,7 +43,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <exception cref="ArgumentNullException">
         /// Services are not setup
         /// </exception>
-        public QueueProcessor(IQueueManager queueManager, IEncode encodeService, IUserSettingService userSettingService)
+        public QueueProcessor(IQueueManager queueManager, IEncodeServiceWrapper encodeService, IUserSettingService userSettingService)
         {
             this.userSettingService = userSettingService;
             this.QueueManager = queueManager;
@@ -147,7 +147,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Gets the IEncodeService instance.
         /// </summary>
-        public IEncode EncodeService { get; private set; }
+        public IEncodeServiceWrapper EncodeService { get; private set; }
 
         /// <summary>
         /// Gets the IQueueManager instance.
@@ -188,7 +188,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="service">
         /// The service.
         /// </param>
-        public void SwapEncodeService(IEncode service)
+        public void SwapEncodeService(IEncodeServiceWrapper service)
         {
             this.EncodeService = service;
         }
@@ -260,8 +260,8 @@ namespace HandBrake.ApplicationServices.Services
             QueueTask job = this.QueueManager.GetNextJobForProcessing();
             if (job != null)
             {
-                this.EncodeService.Start(job, true);
                 this.InvokeJobProcessingStarted(new QueueProgressEventArgs(job));
+                this.EncodeService.Start(job, true);        
             }
             else
             {

@@ -9,7 +9,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Isolation
+namespace HandBrake.ApplicationServices.Isolation
 {
     using System;
     using System.Diagnostics;
@@ -17,9 +17,8 @@ namespace HandBrakeWPF.Isolation
     using System.Threading;
 
     using HandBrake.ApplicationServices.EventArgs;
+    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Services.Interfaces;
-
-    using HandBrakeWPF.Services.Interfaces;
 
     /// <summary>
     /// Background Service Connector.
@@ -29,16 +28,6 @@ namespace HandBrakeWPF.Isolation
     public class BackgroundServiceConnector : IHbServiceCallback, IDisposable
     {
         #region Constants and Fields
-
-        /// <summary>
-        /// The error service.
-        /// </summary>
-        private readonly IErrorService errorService;
-
-        /// <summary>
-        /// The user setting service.
-        /// </summary>
-        private readonly IUserSettingService userSettingService;
 
         /// <summary>
         /// Gets or sets the pipe factory.
@@ -54,21 +43,6 @@ namespace HandBrakeWPF.Isolation
         #endregion
 
         #region Properties
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BackgroundServiceConnector"/> class.
-        /// </summary>
-        /// <param name="errorService">
-        /// The error service.
-        /// </param>
-        /// <param name="userSettingService">
-        /// The user Setting Service.
-        /// </param>
-        public BackgroundServiceConnector(IErrorService errorService, IUserSettingService userSettingService)
-        {
-            this.errorService = errorService;
-            this.userSettingService = userSettingService;
-        }
 
         /// <summary>
         /// Gets or sets a value indicating whether is connected.
@@ -98,10 +72,11 @@ namespace HandBrakeWPF.Isolation
         /// <summary>
         /// The connect.
         /// </summary>
-        public void Connect()
+        /// <param name="port">
+        /// The port.
+        /// </param>
+        public void Connect(string port)
         {
-            string port = this.userSettingService.GetUserSetting<string>(UserSettingConstants.ServerPort);
-
             if (backgroundProcess == null)
             {
                 ProcessStartInfo processStartInfo = new ProcessStartInfo(
@@ -130,13 +105,13 @@ namespace HandBrakeWPF.Isolation
                             new EndpointAddress(string.Format("net.tcp://127.0.0.1:{0}/IHbService", port)));
 
                         // Connect and Subscribe to the Server
-                        Service = pipeFactory.CreateChannel();
-                        Service.Subscribe();
-                        IsConnected = true;
+                        this.Service = pipeFactory.CreateChannel();
+                        this.Service.Subscribe();
+                        this.IsConnected = true;
                     }
                     catch (Exception exc)
                     {
-                        Caliburn.Micro.Execute.OnUIThread(() => this.errorService.ShowError("Unable to connect to background worker service", "Please restart HandBrake", exc));
+                        throw new GeneralApplicationException("Unable to connect to background worker process", "Please restart HandBrake", exc);
                     }
                 });
         }
@@ -144,71 +119,21 @@ namespace HandBrakeWPF.Isolation
         /// <summary>
         /// The disconnect.
         /// </summary>
-        public void Disconnect()
+        public void Shutdown()
         {
             try
             {
                 if (backgroundProcess != null && !backgroundProcess.HasExited)
                 {
-                    Service.Unsubscribe();
+                    this.Service.Unsubscribe();
                 }
             }
             catch (Exception exc)
             {
-                this.errorService.ShowError("Unable to disconnect from service", "It may have already close. Check for any left over HandBrake.Server.exe processes", exc);
+                throw new GeneralApplicationException("Unable to disconnect to background worker process", 
+                    "It may have already close. Check for any left over HandBrake.Server.exe processes", exc);
             }
         }
-
-        #endregion
-
-        #region Public Service Methods
-
-        ///// <summary>
-        ///// The scan source.
-        ///// </summary>
-        ///// <param name="path">
-        ///// The path.
-        ///// </param>
-        ///// <param name="title">
-        ///// The title.
-        ///// </param>
-        ///// <param name="previewCount">
-        ///// The preview count.
-        ///// </param>
-        //public void ScanSource(string path, int title, int previewCount)
-        //{
-        //    ThreadPool.QueueUserWorkItem(delegate { this.Service.ScanSource(path, title, previewCount); });
-        //}
-
-        ///// <summary>
-        ///// The stop scan.
-        ///// </summary>
-        //public void StopScan()
-        //{
-        //    ThreadPool.QueueUserWorkItem(delegate { this.Service.StopScan(); });
-        //}
-
-        ///// <summary>
-        ///// Start an Encode
-        ///// </summary>
-        ///// <param name="job">
-        ///// The job.
-        ///// </param>
-        ///// <param name="enableLogging">
-        ///// The enable logging.
-        ///// </param>
-        //public void StartEncode(QueueTask job, bool enableLogging)
-        //{
-        //    ThreadPool.QueueUserWorkItem(delegate { this.Service.StartEncode(job, enableLogging); });
-        //}
-
-        ///// <summary>
-        ///// Stop an Encode
-        ///// </summary>
-        //public void StopEncode()
-        //{
-        //    ThreadPool.QueueUserWorkItem(delegate { this.Service.StopEncode(); });
-        //}
 
         #endregion
 
@@ -221,7 +146,7 @@ namespace HandBrakeWPF.Isolation
         /// </summary>
         public void Dispose()
         {
-            Service.Unsubscribe();
+            this.Service.Unsubscribe();
         }
 
         #endregion

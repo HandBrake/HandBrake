@@ -8,23 +8,21 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Isolation
+namespace HandBrake.ApplicationServices.Isolation
 {
     using System;
     using System.Threading;
 
     using HandBrake.ApplicationServices.EventArgs;
+    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
-
-    using HandBrakeWPF.Isolation.Interfaces;
-    using HandBrakeWPF.Services.Interfaces;
 
     /// <summary>
     /// Isolated Scan Service. 
     /// This is an implementation of the IScan implementation that runs scans on a seperate process
     /// </summary>
-    public class IsolatedScanService : BackgroundServiceConnector, IIsolatedScanService
+    public class IsolatedScanService : BackgroundServiceConnector, IScan
     {
         #region Constants and Fields
 
@@ -57,26 +55,21 @@ namespace HandBrakeWPF.Isolation
         /// <summary>
         /// Initializes a new instance of the <see cref="IsolatedScanService"/> class.
         /// </summary>
-        /// <param name="errorService">
-        /// The error Service.
+        /// <param name="port">
+        /// The port.
         /// </param>
-        /// <param name="userSettingService">
-        /// The user Setting Service.
-        /// </param>
-        public IsolatedScanService(IErrorService errorService, IUserSettingService userSettingService)
-            : base(errorService, userSettingService)
+        public IsolatedScanService(string port)
         {
             try
             {
                 if (this.CanConnect())
                 {
-                    this.Connect();
+                    this.Connect(port);
                 }
             }
             catch (Exception exception)
             {
-                errorService.ShowError(
-                    "Unable to connect to scan worker process.", "Try restarting HandBrake", exception);
+                throw new GeneralApplicationException("Unable to connect to scan worker process.", "Try restarting HandBrake", exception);
             }
         }
 
@@ -89,7 +82,7 @@ namespace HandBrakeWPF.Isolation
         {
             get
             {
-                return Service.ScanActivityLog;
+                return this.Service.ScanActivityLog;
             }
         }
 
@@ -100,7 +93,7 @@ namespace HandBrakeWPF.Isolation
         {
             get
             {
-                return Service.IsScanning;
+                return this.Service.IsScanning;
             }
         }
 
@@ -111,7 +104,7 @@ namespace HandBrakeWPF.Isolation
         {
             get
             {
-                return Service.SouceData;
+                return this.Service.SouceData;
             }
         }
 
@@ -205,7 +198,7 @@ namespace HandBrakeWPF.Isolation
         public void Scan(string sourcePath, int title, int previewCount, Action<bool> postAction)
         {
             this.postScanAction = postAction;
-            Service.ScanSource(sourcePath, title, previewCount);
+            this.Service.ScanSource(sourcePath, title, previewCount);
         }
 
         /// <summary>
@@ -213,7 +206,7 @@ namespace HandBrakeWPF.Isolation
         /// </summary>
         public void Stop()
         {
-            Service.StopScan();
+            this.Service.StopScan();
         }
 
         #endregion

@@ -33,8 +33,8 @@ namespace HandBrake.ApplicationServices
             container.Register(Component.For<IQueueManager>().ImplementedBy<QueueManager>());
             container.Register(Component.For<IQueueProcessor>().ImplementedBy<QueueProcessor>());
             container.Register(Component.For<IUserSettingService>().ImplementedBy<UserSettingService>());
-            container.Register(Component.For<IScan>().ImplementedBy<ScanService>());
-            container.Register(Component.For<IEncode>().ImplementedBy<Encode>());
+           // container.Register(Component.For<IScan>().ImplementedBy<ScanService>());
+           // container.Register(Component.For<IEncode>().ImplementedBy<Encode>());
         }
 
         #endregion

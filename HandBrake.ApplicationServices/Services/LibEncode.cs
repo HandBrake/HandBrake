@@ -12,6 +12,7 @@ namespace HandBrake.ApplicationServices.Services
     using System;
     using System.Diagnostics;
 
+    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Base;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -163,7 +164,7 @@ namespace HandBrake.ApplicationServices.Services
             }
             catch (Exception exc)
             {
-                this.Invoke_encodeCompleted(new EncodeCompletedEventArgs(false, exc, "An Error has occured in EncodeService.Run()"));
+                this.Invoke_encodeCompleted(new EncodeCompletedEventArgs(false, exc, "An Error has occured."));
             }
         }
 
@@ -184,7 +185,15 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         public override void Stop(Exception exc)
         {
-            this.instance.StopEncode();
+            try
+            {
+                this.IsEncoding = false;
+                this.instance.StopEncode();
+            } 
+            catch(Exception)
+            {
+                // Do Nothing.
+            }
 
             this.Invoke_encodeCompleted(
                 exc == null
@@ -200,6 +209,14 @@ namespace HandBrake.ApplicationServices.Services
         public void SafelyStop()
         {
             throw new NotImplementedException("This Method is not used in the LibEncode service. You should use the Stop() method instead! ");
+        }
+
+        /// <summary>
+        /// Shutdown the service.
+        /// </summary>
+        public void Shutdown()
+        {
+            // Nothing to do for this implementation.
         }
 
         #region HandBrakeInstance Event Handlers.

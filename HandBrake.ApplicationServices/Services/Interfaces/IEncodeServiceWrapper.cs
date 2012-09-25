@@ -1,24 +1,18 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IIsolatedScanService.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="IEncodeServiceWrapper.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   The Isolated Scan Service interface.
+//   IEncodeServiceWrapper Interface
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Isolation.Interfaces
+namespace HandBrake.ApplicationServices.Services.Interfaces
 {
-    using HandBrake.ApplicationServices.Services.Interfaces;
-
     /// <summary>
-    /// The Isolated Scan Service interface.
+    /// EncodeServiceWrapper Interface
     /// </summary>
-    public interface IIsolatedScanService : IScan
+    public interface IEncodeServiceWrapper : IEncode
     {
-        /// <summary>
-        /// The disconnect.
-        /// </summary>
-        void Disconnect();
     }
 }

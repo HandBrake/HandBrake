@@ -96,5 +96,10 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// The destination.
         /// </param>
         void ProcessLogs(string destination);
+
+        /// <summary>
+        /// Shutdown the service.
+        /// </summary>
+        void Shutdown();
     }
 }

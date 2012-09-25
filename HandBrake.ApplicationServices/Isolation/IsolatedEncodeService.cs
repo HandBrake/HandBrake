@@ -8,49 +8,42 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Isolation
+namespace HandBrake.ApplicationServices.Isolation
 {
     using System;
     using System.Threading;
 
     using HandBrake.ApplicationServices.EventArgs;
+    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
-
-    using HandBrakeWPF.Isolation.Interfaces;
-    using HandBrakeWPF.Services.Interfaces;
 
     /// <summary>
     /// Isolated Scan Service. 
     /// This is an implementation of the IEncode implementation that runs scans on a seperate process
     /// </summary>
-    public class IsolatedEncodeService : BackgroundServiceConnector, IIsolatedEncodeService
+    public class IsolatedEncodeService : BackgroundServiceConnector, IEncode
     {
         #region Constructors and Destructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IsolatedEncodeService"/> class. 
         /// </summary>
-        /// <param name="errorService">
-        /// The error Service.
+        /// <param name="port">
+        /// The port.
         /// </param>
-        /// <param name="userSettingService">
-        /// The user Setting Service.
-        /// </param>
-        public IsolatedEncodeService(IErrorService errorService, IUserSettingService userSettingService)
-            : base(errorService, userSettingService)
+        public IsolatedEncodeService(string port)
         {
             try
             {
                 if (this.CanConnect())
                 {
-                    this.Connect();
+                    this.Connect(port);
                 }
             }
             catch (Exception exception)
             {
-                errorService.ShowError(
-                    "Unable to connect to scan worker process.", "Try restarting HandBrake", exception);
+                throw new GeneralApplicationException("Unable to connect to scan worker process.", "Try restarting HandBrake", exception);
             }
         }
 
@@ -149,7 +142,7 @@ namespace HandBrakeWPF.Isolation
         /// </param>
         public void ProcessLogs(string destination)
         {
-            ThreadPool.QueueUserWorkItem(delegate { Service.ProcessEncodeLogs(destination); });
+            ThreadPool.QueueUserWorkItem(delegate { this.Service.ProcessEncodeLogs(destination); });
         }
 
         /// <summary>
@@ -159,7 +152,7 @@ namespace HandBrakeWPF.Isolation
         /// </summary>
         public void SafelyStop()
         {
-            ThreadPool.QueueUserWorkItem(delegate { Service.StopEncode(); });
+            ThreadPool.QueueUserWorkItem(delegate { this.Service.StopEncode(); });
         }
 
         /// <summary>
@@ -174,7 +167,7 @@ namespace HandBrakeWPF.Isolation
         public void Start(QueueTask job, bool enableLogging)
         {
             ThreadPool.QueueUserWorkItem(
-                delegate { Service.StartEncode(job, enableLogging); });
+                delegate { this.Service.StartEncode(job, enableLogging); });
         }
 
         /// <summary>
@@ -182,7 +175,7 @@ namespace HandBrakeWPF.Isolation
         /// </summary>
         public void Stop()
         {
-            ThreadPool.QueueUserWorkItem(delegate { Service.StopEncode(); });
+            ThreadPool.QueueUserWorkItem(delegate { this.Service.StopEncode(); });
         }
 
         #endregion
