@@ -88,7 +88,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        public PreviewViewModel(IWindowManager windowManager, IEncode encodeService, IErrorService errorService, IUserSettingService userSettingService) 
+        public PreviewViewModel(IWindowManager windowManager, IEncodeServiceWrapper encodeService, IErrorService errorService, IUserSettingService userSettingService) 
         {
             this.encodeService = encodeService;
             this.errorService = errorService;
