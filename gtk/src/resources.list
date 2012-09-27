@@ -5,7 +5,11 @@
 		<icon name="hb-canceled" file="hb-canceled.16.png" />
 		<icon name="hb-complete" file="hb-complete.16.png" />
 		<icon name="hb-drawer" file="hb-drawer.32.png" />
-		<icon name="hb-icon" file="hb-icon.128.png" />
+		<icon name="hb-icon.256" file="hb-icon.256.png" />
+		<icon name="hb-icon.128" file="hb-icon.128.png" />
+		<icon name="hb-icon.64" file="hb-icon.64.png" />
+		<icon name="hb-icon.32" file="hb-icon.32.png" />
+		<icon name="hb-icon.16" file="hb-icon.16.png" />
 		<icon name="hb-status" file="hb-status.32.png" />
 		<icon name="hb-status-empty" file="hb-status-empty.32.png" />
 		<icon name="hb-pause" file="hb-pause.32.png" />

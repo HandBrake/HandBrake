@@ -1687,7 +1687,7 @@
 										<property name="height_request">200</property>
 										<property name="visible">True</property>
 										<property name="icon_name">hb-icon</property>
-										<property name="icon-size">6</property>
+										<property name="pixel-size">128</property>
 										<signal name="size_allocate" handler="preview_button_size_allocate_cb"/>
 									  </object>
 									</child>
@@ -4486,7 +4486,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="icon_name">hb-icon</property>
-                        <property name="icon-size">6</property>
+                        <property name="pixel-size">64</property>
                       </object>
                     </child>
                   </object>
@@ -7544,7 +7544,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="icon_name">hb-icon</property>
-                        <property name="icon-size">6</property>
+                        <property name="pixel-size">64</property>
                       </object>
                     </child>
                   </object>

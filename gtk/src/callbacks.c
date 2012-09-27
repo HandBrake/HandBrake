@@ -5072,7 +5072,7 @@ ghb_notify_done(signal_user_data_t *ud)
 	notification = notify_notification_new(
 		"Encode Complete",
 		"Put down that cocktail, Your HandBrake queue is done!",
-		"hb-icon"
+		NULL
 #if NOTIFY_CHECK_VERSION (0, 7, 0)
                 );
 #else
@@ -5081,8 +5081,13 @@ ghb_notify_done(signal_user_data_t *ud)
 	GtkStatusIcon *si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
 	notify_notification_attach_to_status_icon(notification, si);
 #endif
+	GtkIconTheme *theme = gtk_icon_theme_get_default();
+	GdkPixbuf *pb = gtk_icon_theme_load_icon(theme, "hb-icon", 64,
+											GTK_ICON_LOOKUP_USE_BUILTIN, NULL);
+	notify_notification_set_icon_from_pixbuf(notification, pb);
 	g_signal_connect(notification, "closed", (GCallback)notify_closed_cb, ud);
 	notify_notification_show(notification, NULL);
+	g_object_unref(G_OBJECT(pb));
 #endif
 
 	if (ghb_settings_combo_int(ud->settings, "WhenComplete") == 3)
