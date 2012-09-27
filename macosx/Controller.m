@@ -54,12 +54,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         return nil;
     }
 
-    /* replace bundled app icon with one which is 32/64-bit savvy */
-#if defined( __LP64__ )
-    fApplicationIcon = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForImageResource:@"HandBrake-64.icns"]];
-#else
     fApplicationIcon = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForImageResource:@"HandBrake.icns"]];
-#endif
+
     if( fApplicationIcon != nil )
         [NSApp setApplicationIconImage:fApplicationIcon];
     

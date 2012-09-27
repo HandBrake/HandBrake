@@ -43,8 +43,6 @@
 		273F20C914ADC5150021BE6D /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202F14ADB9790021BE6D /* AudioToolbox.framework */; };
 		273F20CB14ADC89A0021BE6D /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 273F20BF14ADC1250021BE6D /* Growl.framework */; };
 		273F20CC14ADC8A10021BE6D /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 273F20C014ADC1250021BE6D /* Sparkle.framework */; };
-		273F214614ADCBF80021BE6D /* HandBrake-64.icns in Resources */ = {isa = PBXBuildFile; fileRef = 273F211E14ADCBF70021BE6D /* HandBrake-64.icns */; };
-		273F214714ADCBF80021BE6D /* HandBrake.icns in Resources */ = {isa = PBXBuildFile; fileRef = 273F211F14ADCBF70021BE6D /* HandBrake.icns */; };
 		273F214814ADCBF80021BE6D /* ActivityWindow.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 273F212114ADCBF70021BE6D /* ActivityWindow.tiff */; };
 		273F214914ADCBF80021BE6D /* AddToQueue.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 273F212214ADCBF70021BE6D /* AddToQueue.tiff */; };
 		273F214B14ADCBF80021BE6D /* Brushed_Window.png in Resources */ = {isa = PBXBuildFile; fileRef = 273F212414ADCBF70021BE6D /* Brushed_Window.png */; };
@@ -138,6 +136,7 @@
 		27D6C77114B102DA00B785E4 /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73F14B102DA00B785E4 /* libx264.a */; };
 		27D6C77214B102DA00B785E4 /* libxml2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C74014B102DA00B785E4 /* libxml2.a */; };
 		27D6C77314B102DA00B785E4 /* libxml2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C74014B102DA00B785E4 /* libxml2.a */; };
+		3490BCB41614CF8D002A5AD7 /* HandBrake.icns in Resources */ = {isa = PBXBuildFile; fileRef = 3490BCB31614CF8D002A5AD7 /* HandBrake.icns */; };
 		46AB433515F98A2B009C0961 /* DockTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 46AB433415F98A2B009C0961 /* DockTextField.m */; };
 /* End PBXBuildFile section */
 
@@ -233,8 +232,6 @@
 		273F20BF14ADC1250021BE6D /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Growl.framework; sourceTree = "<group>"; };
 		273F20C014ADC1250021BE6D /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		273F20C714ADC4FF0021BE6D /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
-		273F211E14ADCBF70021BE6D /* HandBrake-64.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "HandBrake-64.icns"; sourceTree = "<group>"; };
-		273F211F14ADCBF70021BE6D /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = HandBrake.icns; sourceTree = "<group>"; };
 		273F212114ADCBF70021BE6D /* ActivityWindow.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = ActivityWindow.tiff; sourceTree = "<group>"; };
 		273F212214ADCBF70021BE6D /* AddToQueue.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = AddToQueue.tiff; sourceTree = "<group>"; };
 		273F212414ADCBF70021BE6D /* Brushed_Window.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Brushed_Window.png; sourceTree = "<group>"; };
@@ -310,6 +307,7 @@
 		27D6C73E14B102DA00B785E4 /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = external/contrib/lib/libvorbisenc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73F14B102DA00B785E4 /* libx264.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx264.a; path = external/contrib/lib/libx264.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C74014B102DA00B785E4 /* libxml2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxml2.a; path = external/contrib/lib/libxml2.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3490BCB31614CF8D002A5AD7 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = HandBrake.icns; path = icons/HandBrake.icns; sourceTree = "<group>"; };
 		34FF2FC014EEC363004C2400 /* HBAdvancedController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAdvancedController.h; sourceTree = "<group>"; };
 		46AB433315F98A2B009C0961 /* DockTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockTextField.h; sourceTree = "<group>"; };
 		46AB433415F98A2B009C0961 /* DockTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockTextField.m; sourceTree = "<group>"; };
@@ -546,10 +544,9 @@
 		273F20CD14ADC8E60021BE6D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3490BCB31614CF8D002A5AD7 /* HandBrake.icns */,
 				273F217914ADDDA10021BE6D /* English.lproj */,
 				273F212014ADCBF70021BE6D /* icons */,
-				273F211E14ADCBF70021BE6D /* HandBrake-64.icns */,
-				273F211F14ADCBF70021BE6D /* HandBrake.icns */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -748,8 +745,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				273F214614ADCBF80021BE6D /* HandBrake-64.icns in Resources */,
-				273F214714ADCBF80021BE6D /* HandBrake.icns in Resources */,
 				273F214814ADCBF80021BE6D /* ActivityWindow.tiff in Resources */,
 				273F214914ADCBF80021BE6D /* AddToQueue.tiff in Resources */,
 				273F214B14ADCBF80021BE6D /* Brushed_Window.png in Resources */,
@@ -791,6 +786,7 @@
 				273F218F14ADDDA10021BE6D /* PictureSettings.xib in Resources */,
 				273F219014ADDDA10021BE6D /* Preferences.xib in Resources */,
 				273F219114ADDDA10021BE6D /* Queue.xib in Resources */,
+				3490BCB41614CF8D002A5AD7 /* HandBrake.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
