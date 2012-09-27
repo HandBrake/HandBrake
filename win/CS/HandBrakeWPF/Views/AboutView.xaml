@@ -22,13 +22,13 @@
             </Grid.ColumnDefinitions>
 
             <Image Grid.Column="0"
-                   Width="64"
-                   Height="64"
+                   Width="96"
+                   Height="96"
                    Margin="10,10,10,10"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Top"
                    SnapsToDevicePixels="True"
-                   Source="Images/logo64.png" />
+                   Source="Images/logo128.png" />
 
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
