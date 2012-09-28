@@ -1241,7 +1241,7 @@
                     <property name="spacing">3</property>
 
                     <child>
-                      <object class="GtkAlignment" id="alignment55">
+                      <object class="GtkAlignment" id="picture_summary">
                         <property name="visible">True</property>
                         <property name="top_padding">10</property>
                         <property name="left_padding">10</property>
@@ -1701,7 +1701,7 @@
 							  </packing>
 							</child>
 							<child>
-							  <object class="GtkAlignment" id="alignment57">
+							  <object class="GtkAlignment" id="picture_summary2">
 								<property name="visible">True</property>
 								<property name="xscale">0</property>
 								<property name="yscale">0</property>
