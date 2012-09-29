@@ -6275,9 +6275,9 @@ return YES;
 
 - (IBAction) addPresetPicDropdownChanged: (id) sender
 {
-    if ([fPresetNewPicSettingsPopUp indexOfSelectedItem] == 1)
+    if ([[fPresetNewPicSettingsPopUp selectedItem] tag] == 1)
     {
-        [fPresetNewPicWidthHeightBox setHidden:NO];  
+        [fPresetNewPicWidthHeightBox setHidden:NO];
     }
     else
     {
@@ -6290,13 +6290,29 @@ return YES;
     /* Deselect the currently selected Preset if there is one*/
     [fPresetsOutlineView deselectRow:[fPresetsOutlineView selectedRow]];
 
-    /* Populate the preset picture settings popup here */
+    /*
+     * Populate the preset picture settings popup.
+     *
+     * Custom is not applicable when the anamorphic mode is Strict.
+     *
+     * Use [NSMenuItem tag] to store preset values for each option.
+     */
     [fPresetNewPicSettingsPopUp removeAllItems];
     [fPresetNewPicSettingsPopUp addItemWithTitle:@"None"];
-    [fPresetNewPicSettingsPopUp addItemWithTitle:@"Custom"];
+    [[fPresetNewPicSettingsPopUp lastItem] setTag: 0];
+    if (fTitle->job->anamorphic.mode != 1)
+    {
+        // not Strict, Custom is applicable
+        [fPresetNewPicSettingsPopUp addItemWithTitle:@"Custom"];
+        [[fPresetNewPicSettingsPopUp lastItem] setTag: 1];
+    }
     [fPresetNewPicSettingsPopUp addItemWithTitle:@"Source Maximum (post source scan)"];
-    /* Use current width and height by default (Custom) */
-    [fPresetNewPicSettingsPopUp selectItemAtIndex: 1];
+    [[fPresetNewPicSettingsPopUp lastItem] setTag: 2];
+    /*
+     * Default to Source Maximum for anamorphic Strict
+     * Default to Custom for all other anamorphic modes
+     */
+    [fPresetNewPicSettingsPopUp selectItemWithTag: (1 + (fTitle->job->anamorphic.mode == 1))];
     /* Save the current filters in the preset by default */
     [fPresetNewPicFiltersCheck setState:NSOnState];
     // fPresetNewFolderCheck
@@ -6397,10 +6413,10 @@ return YES;
     else // we are not creating a preset folder, so we go ahead with the rest of the preset info
     {
         /*Get the whether or not to apply pic Size and Cropping (includes Anamorphic)*/
-        [preset setObject:[NSNumber numberWithInt:[fPresetNewPicSettingsPopUp indexOfSelectedItem]] forKey:@"UsesPictureSettings"];
+        [preset setObject:[NSNumber numberWithInteger:[[fPresetNewPicSettingsPopUp selectedItem] tag]] forKey:@"UsesPictureSettings"];
         /* Get whether or not to use the current Picture Filter settings for the preset */
         [preset setObject:[NSNumber numberWithInt:[fPresetNewPicFiltersCheck state]] forKey:@"UsesPictureFilters"];
-        
+
         /* Get New Preset Description from the field in the AddPresetPanel*/
         [preset setObject:[fPresetNewDesc stringValue] forKey:@"PresetDescription"];
         /* File Format */
