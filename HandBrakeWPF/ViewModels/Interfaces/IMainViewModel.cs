@@ -62,6 +62,17 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         void StartEncode();
 
         /// <summary>
+        /// The start scan.
+        /// </summary>
+        /// <param name="filename">
+        /// The filename.
+        /// </param>
+        /// <param name="title">
+        /// The title.
+        /// </param>
+        void StartScan(string filename, int title);
+
+        /// <summary>
         /// Edit a Queue Task
         /// </summary>
         /// <param name="task">
