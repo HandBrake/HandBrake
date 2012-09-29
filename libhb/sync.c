@@ -1030,7 +1030,7 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
         }
     }
 
-    sync->gain_factor = exp2(w->audio->config.out.gain / 6.);
+    sync->gain_factor = pow(10, w->audio->config.out.gain / 20);
 
     hb_list_add( job->list_work, w );
 }
