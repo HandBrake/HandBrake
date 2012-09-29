@@ -10,6 +10,8 @@
 namespace HandBrakeWPF
 {
     using System;
+    using System.IO;
+    using System.Linq;
     using System.Windows;
 
     using Caliburn.Micro;
@@ -17,6 +19,7 @@ namespace HandBrakeWPF
     using HandBrake.ApplicationServices.Exceptions;
 
     using HandBrakeWPF.ViewModels;
+    using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -31,6 +34,25 @@ namespace HandBrakeWPF
             Application.Current.Dispatcher.UnhandledException += this.Dispatcher_UnhandledException;
             AppDomain.CurrentDomain.UnhandledException +=
                 new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+        }
+
+        /// <summary>
+        /// Override the startup behavior to handle files dropped on the app icon.
+        /// </summary>
+        /// <param name="e">
+        /// The StartupEventArgs.
+        /// </param>
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            // If we have a file dropped on the icon, try scanning it.
+            string[] fileNames = e.Args;
+            if (fileNames.Any() && (File.Exists(fileNames[0]) || Directory.Exists(fileNames[0])))
+            {
+                IMainViewModel mvm = IoC.Get<IMainViewModel>();
+                mvm.StartScan(fileNames[0], 0);
+            }
         }
 
         /// <summary>

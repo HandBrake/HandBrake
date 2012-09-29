@@ -1397,6 +1397,20 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedPreset = this.presetService.DefaultPreset;
         }
 
+        /// <summary>
+        /// Start a Scan
+        /// </summary>
+        /// <param name="filename">
+        /// The filename.
+        /// </param>
+        /// <param name="title">
+        /// The title.
+        /// </param>
+        public void StartScan(string filename, int title)
+        {
+            this.scanService.Scan(filename, title, this.UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount), null);
+        }
+
         #endregion
 
         #region Private Methods
@@ -1437,22 +1451,6 @@ namespace HandBrakeWPF.ViewModels
                     // Cleanup
                     this.ShowStatusWindow = false;
                 });
-        }
-
-        /// <summary>
-        /// Start a Scan
-        /// </summary>
-        /// <param name="filename">
-        /// The filename.
-        /// </param>
-        /// <param name="title">
-        /// The title.
-        /// </param>
-        private void StartScan(string filename, int title)
-        {
-            // TODO 
-            // 1. Disable GUI.
-            this.scanService.Scan(filename, title, this.UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount), null);
         }
 
         /// <summary>
