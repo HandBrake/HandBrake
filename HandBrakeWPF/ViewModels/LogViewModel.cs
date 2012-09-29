@@ -29,12 +29,12 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Backing field for the encodeService service
         /// </summary>
-        private readonly IEncode encodeService;
+        private readonly IEncodeServiceWrapper encodeService;
 
         /// <summary>
         /// Backing field for the Scan Service
         /// </summary>
-        private readonly IScan scanService;
+        private readonly IScanServiceWrapper scanService;
 
         /// <summary>
         /// Backing field for the selected mode
@@ -57,7 +57,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="scanService">
         /// The scan service.
         /// </param>
-        public LogViewModel(IEncode encodeService, IScan scanService)
+        public LogViewModel(IEncodeServiceWrapper encodeService, IScanServiceWrapper scanService)
         {
             this.encodeService = encodeService;
             this.scanService = scanService;
