@@ -1627,8 +1627,29 @@ namespace HandBrakeWPF.ViewModels
                     }
 
                     this.ShowStatusWindow = false;
-                    this.SourceLabel = "Scan Completed";
-                    this.StatusLabel = "Scan Completed";
+                    if (e.Successful)
+                    {
+                        if (this.SelectedTitle != null && !string.IsNullOrEmpty(this.SelectedTitle.SourceName))
+                        {
+                            this.SourceLabel = this.SelectedTitle.SourceName;
+                        } 
+                        else
+                        {
+                            this.SourceLabel = this.SourceName;
+                        }
+
+                        this.StatusLabel = "Scan Completed";
+                    } 
+                    else if (!e.Successful && e.Exception == null)
+                    {
+                        this.SourceLabel = "Scan Cancelled.";
+                        this.StatusLabel = "Scan Cancelled.";
+                    } 
+                    else
+                    {
+                        this.SourceLabel = "Scan Failed... See Activity Log for details.";
+                        this.StatusLabel = "Scan Failed... See Activity Log for details."; 
+                    }
                 });
         }
 
