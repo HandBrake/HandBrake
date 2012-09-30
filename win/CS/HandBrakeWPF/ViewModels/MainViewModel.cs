@@ -1080,7 +1080,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Otherwise, perform Santiy Checking then add to the queue and start if everything is ok.
-            if (this.ScannedSource == null || this.CurrentTask == null)
+            if (this.SelectedTitle == null)
             {
                 this.errorService.ShowMessageBox("You must first scan a source.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;

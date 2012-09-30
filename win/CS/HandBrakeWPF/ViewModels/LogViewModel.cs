@@ -40,12 +40,6 @@ namespace HandBrakeWPF.ViewModels
         /// Backing field for the selected mode
         /// </summary>
         private int selectedMode;
-
-        /// <summary>
-        /// Backing field for the log info.
-        /// </summary>
-        private string log;
-
         #endregion
 
         /// <summary>
@@ -62,7 +56,8 @@ namespace HandBrakeWPF.ViewModels
             this.encodeService = encodeService;
             this.scanService = scanService;
             this.Title = "Log Viewer";
-            this.SelectedMode = 0;
+
+            this.SelectedMode = this.encodeService.IsEncoding ? 0 : 1;
         }
 
         /// <summary>
@@ -174,8 +169,12 @@ namespace HandBrakeWPF.ViewModels
         protected override void OnDeactivate(bool close)
         {
             this.scanService.ScanStared -= ScanServiceScanStared;
+            this.scanService.ScanCompleted -= ScanServiceScanCompleted;
             this.encodeService.EncodeStarted -= EncodeServiceEncodeStarted;
-            this.Load();
+            this.encodeService.EncodeCompleted -= EncodeServiceEncodeCompleted;
+            this.encodeService.EncodeStatusChanged -= this.EncodeServiceEncodeStatusChanged;
+            this.scanService.ScanStatusChanged -= this.ScanServiceScanStatusChanged;
+
             base.OnDeactivate(close);
         }
 
