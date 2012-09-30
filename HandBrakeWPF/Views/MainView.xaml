@@ -95,7 +95,7 @@
                   VerticalAlignment="Top"
                   >
                 <MenuItem Header="File">
-                    <MenuItem Header="Cancel Scan" Micro:Message.Attach="[Event Click] = [Action CancelScan]" />
+                    <MenuItem Header="Cancel Scan" Command="{Binding CancelScanCommand}" />
                     <Separator />
                     <MenuItem Header="Exit" Micro:Message.Attach="[Event Click] = [Action ExitApplication]" />
                 </MenuItem>

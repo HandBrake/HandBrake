@@ -219,6 +219,7 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeStatusChanged;
 
             this.Presets = this.presetService.Presets;
+            this.CancelScanCommand = new CancelScanCommand(this.scanService);
         }
 
         #region View Model Properties
@@ -608,6 +609,11 @@ namespace HandBrakeWPF.ViewModels
                return this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDebugFeatures);
            }
         }
+
+        /// <summary>
+        /// Gets or sets the cancel scan command.
+        /// </summary>
+        public CancelScanCommand CancelScanCommand { get; set; }
 
         #endregion
 
