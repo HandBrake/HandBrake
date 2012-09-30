@@ -20,6 +20,12 @@ namespace HandBrake.ApplicationServices.Services
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.Interop;
+    using HandBrake.Interop.Interfaces;
+
+    using EncodeCompletedEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeCompletedEventArgs;
+    using EncodeProgressEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeProgressEventArgs;
+    using ScanProgressEventArgs = HandBrake.ApplicationServices.EventArgs.ScanProgressEventArgs;
 
     /// <summary>
     /// HandBrake WCF Service
@@ -152,6 +158,9 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Start the service
         /// </summary>
+        /// <param name="port">
+        /// The port.
+        /// </param>
         public void Start(string port)
         {
             using (host = new ServiceHost(typeof(ServerService), new Uri(string.Format("net.tcp://127.0.0.1:{0}", port))))
@@ -163,8 +172,9 @@ namespace HandBrake.ApplicationServices.Services
                 Console.WriteLine("Service Started. Waiting for Clients...");
 
                 // Setup the services we are going to use.
-                scanService = new ScanService(new UserSettingService()); // TODO this needs wired up with castle
-                encodeService = new Encode(new UserSettingService());
+                IHandBrakeInstance instance = new HandBrakeInstance();
+                scanService = new LibScan(new UserSettingService(), instance); // TODO this needs wired up with castle
+                encodeService = new LibEncode(new UserSettingService(), instance);
 
                 shutdownFlag = new ManualResetEvent(false);
                 shutdownFlag.WaitOne();

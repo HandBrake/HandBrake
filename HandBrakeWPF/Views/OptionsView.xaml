@@ -14,8 +14,6 @@
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
-
-
         <Style TargetType="TextBlock">
             <Setter Property="Margin" Value="0,0,5,0" />
         </Style>
@@ -336,9 +334,9 @@
                         <TextBlock Text="These options are for developer testing of features that are currently in progress!!!!" FontWeight="Bold" Margin="0,0,0,10" />
 
                         <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
-                            <CheckBox Content="Enable Process Isolation (Run Scans and Encodes via an intermediate service)" IsChecked="{Binding EnableProcessIsolation}" />
-                            <CheckBox Content="Enable LibHB (uses hb.dll instead of HandBrakeCLI.exe)" Margin="0,5,0,0" IsChecked="{Binding EnableLibHb}" />
                             
+                            <CheckBox Content="Enable LibHB (uses hb.dll instead of HandBrakeCLI.exe)" Margin="0,5,0,0" IsChecked="{Binding EnableLibHb}" />
+                            <CheckBox Content="Enable Process Isolation (Run Scans and Encodes via an intermediate service)" Margin="20,10,0,0" IsChecked="{Binding EnableProcessIsolation}" />
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Grid.Column="1">
                                 <TextBlock Text="Server Port:" VerticalAlignment="Center" />
                                 <TextBox Width="50" MaxLength="5" Text="{Binding ServerPort}" />

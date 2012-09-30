@@ -106,7 +106,7 @@
                             <Image Width="16" Source="Images/Queue_Small.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Activity Window" Micro:Message.Attach="[Event Click] = [Action OpenLogWindow]">
+                    <MenuItem Header="Activity Log" Micro:Message.Attach="[Event Click] = [Action OpenLogWindow]">
                         <MenuItem.Icon>
                             <Image Width="16" Source="Images/Output_Small.png" />
                         </MenuItem.Icon>
@@ -311,7 +311,7 @@
                                />
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="Activity Window"
+                               Content="Activity Log"
                                />
                     </StackPanel>
                 </Button>
