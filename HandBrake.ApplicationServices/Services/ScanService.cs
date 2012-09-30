@@ -56,6 +56,11 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private Process hbProc;
 
+        /// <summary>
+        /// The stop scan.
+        /// </summary>
+        private bool cancelScan;
+
         #endregion
 
         /// <summary>
@@ -156,6 +161,8 @@ namespace HandBrake.ApplicationServices.Services
                     this.readData.OnScanProgress -= this.OnScanProgress;
                 }
 
+                cancelScan = true;
+
                 if (this.hbProc != null && !this.hbProc.HasExited)
                 {
                     this.hbProc.Kill();
@@ -225,6 +232,8 @@ namespace HandBrake.ApplicationServices.Services
             try
             {
                 this.IsScanning = true;
+                this.cancelScan = false;
+
                 if (this.ScanStared != null)
                 {
                     this.ScanStared(this, new EventArgs());
@@ -311,7 +320,7 @@ namespace HandBrake.ApplicationServices.Services
                     else
                     {
                         throw new Exception(
-                            "The Log file has not been written to disk as it has grown above the 100MB limit. This indicates there was a problem during the scan process.");
+                            "The Log file has not been written to disk as it has grown above the 50MB limit. This indicates there was a problem during the scan process.");
                     }
                 }
 
@@ -326,7 +335,7 @@ namespace HandBrake.ApplicationServices.Services
                 {
                     if (this.ScanCompleted != null)
                     {
-                        this.ScanCompleted(this, new ScanCompletedEventArgs(true, null, string.Empty));
+                        this.ScanCompleted(this, new ScanCompletedEventArgs(!this.cancelScan, null, string.Empty));
                     }
                 }
             }
