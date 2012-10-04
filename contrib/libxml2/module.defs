@@ -1,4 +1,5 @@
-$(eval $(call import.MODULE.defs,LIBXML2,libxml2))
+__deps__ := LIBICONV
+$(eval $(call import.MODULE.defs,LIBXML2,libxml2,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,LIBXML2))
 
 LIBXML2.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libxml2-2.7.7.tar.gz

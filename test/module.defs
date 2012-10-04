@@ -9,34 +9,17 @@ TEST.c.o = $(patsubst $(SRC/)%.c,$(BUILD/)%.o,$(TEST.c))
 
 TEST.exe = $(BUILD/)$(call TARGET.exe,$(HB.name)CLI)
 
-TEST.libs = $(LIBHB.a) $(foreach n, \
-        a52 ass avcodec avformat avutil avresample dvdnav dvdread faac fontconfig freetype mkv mpeg2 mp3lame mp4v2 \
-        ogg samplerate swscale theora vorbis vorbisenc x264 xml2 bluray, \
-        $(CONTRIB.build/)lib/lib$(n).a )
+TEST.GCC.L = $(CONTRIB.build/)lib
+
+TEST.libs = $(LIBHB.a)
+
+TEST.GCC.l = \
+        a52 ass avcodec avformat avutil avresample dvdnav dvdread faac \
+        fontconfig freetype fribidi mkv mpeg2 mp3lame mp4v2 ogg \
+        samplerate swscale theoraenc theoradec vorbis vorbisenc x264 \
+        xml2 bluray bz2 z
 
 TEST.install.exe = $(DESTDIR)$(PREFIX/)bin/$(notdir $(TEST.exe))
-
-ifeq (1,$(PTHREADW32.enabled))
-    TEST.libs += $(CONTRIB.build/)lib/libpthreadGC2.a
-endif
-ifeq (1,$(LIBICONV.enabled))
-    TEST.libs += $(CONTRIB.build/)lib/libiconv.a
-endif
-ifeq (1,$(BZIP2.enabled))
-    TEST.libs += $(CONTRIB.build/)lib/libbz2.a
-else
-	TEST.GCC.l += bz2
-endif
-ifeq (1,$(ZLIB.enabled))
-    TEST.libs += $(CONTRIB.build/)lib/libz.a
-else
-	TEST.GCC.l += z
-endif
-ifeq (1,$(FRIBIDI.enabled))
-    TEST.libs += $(CONTRIB.build/)lib/libfribidi.a
-else
-	TEST.GCC.l += fribidi
-endif
 
 ###############################################################################
 
@@ -56,18 +39,12 @@ ifeq ($(BUILD.system),darwin)
 else ifeq ($(BUILD.system),linux)
     TEST.GCC.l += pthread dl m
 else ifeq ($(BUILD.system),solaris)
-    TEST.GCC.l += pthread nsl socket
+    TEST.GCC.l += pthread nsl socket iconv
 else ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
-ifeq ($(HAS.iconv),1)
-    TEST.GCC.l += iconv
-endif
-ifeq ($(HAS.pthread),1)
-    TEST.GCC.l += pthreadGC2
-endif
 ifeq ($(HAS.dlfcn),1)
     TEST.GCC.l += dl
 endif
+    TEST.GCC.l += pthreadGC2 iconv ws2_32
     TEST.GCC.D += PTW32_STATIC_LIB
-    TEST.GCC.l += ws2_32
 	TEST.GCC.args.extra.exe++ += -static
 endif
