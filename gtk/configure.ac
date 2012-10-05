@@ -36,21 +36,18 @@ AC_ARG_WITH(hb,
 if test  $hb_PATHSET = 1 ; then
     case ${with_hb} in
     /*)
-		CXXFLAGS="$CXXFLAGS -I$with_hb/libhb -I$with_hb/contrib/include"
-		CFLAGS="$CFLAGS -I$with_hb/libhb -I$with_hb/contrib/include"
+		HBINC="-I$with_hb/libhb -I$with_hb/contrib/include"
 		LDFLAGS="$LDFLAGS -L$with_hb/libhb -L$with_hb/contrib/lib"
 		AC_SUBST(HB_DIR, "$with_hb")
         ;;
     *)
-		CXXFLAGS="$CXXFLAGS "'-I$(top_srcdir)/'"$with_hb/libhb "'-I$(top_srcdir)/'"$with_hb/contrib/include"
-		CFLAGS="$CXXFLAGS "'-I$(top_srcdir)/'"$with_hb/libhb "'-I$(top_srcdir)/'"$with_hb/contrib/include"
+		HBINC='-I$(top_srcdir)/'"$with_hb/libhb "'-I$(top_srcdir)/'"$with_hb/contrib/include"
 		LDFLAGS="$LDFLAGS "'-L$(top_srcdir)/'"$with_hb/libhb "'-L$(top_srcdir)/'"$with_hb/contrib/lib"
 		AC_SUBST(HB_DIR, '$(top_srcdir)/'"$with_hb")
         ;;
     esac
 else
-	CXXFLAGS="$CXXFLAGS "'-I$(top_srcdir)/'"../libhb "'-I$(top_srcdir)/'"../contrib/include"
-	CFLAGS="$CXXFLAGS "'-I$(top_srcdir)/'"../libhb "'-I$(top_srcdir)/'"../contrib/include"
+	HBINC='-I$(top_srcdir)/'"../libhb "'-I$(top_srcdir)/'"../contrib/include"
 	LDFLAGS="$LDFLAGS "'-L$(top_srcdir)/'"../libhb "'-L$(top_srcdir)/'"../contrib/lib"
 	AC_SUBST(HB_DIR, '$(top_srcdir)/'"..")
 fi
@@ -140,6 +137,8 @@ if test "x$have_appind" = "xyes" ; then
     CFLAGS="$CFLAGS -D_USE_APP_IND"
 fi
 PKG_CHECK_MODULES(GHB, [$GHB_PACKAGES])
+
+GHB_CFLAGS="$HBINC $GHB_CFLAGS"
 
 AC_PATH_PROG(BUILD_PKG_CONFIG, pkg-config, no)
 if test x"$BUILD_PKG_CONFIG" = x"no"; then

@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn4394 (2012010401) on Linux
+Guide to Building HandBrake svn4981 (2012092601) on Linux
 *********************************************************
 
 Table of Contents
@@ -90,7 +90,23 @@ Ubuntu 10.04 - 10.10 packages:
 
    * libbz2-dev (cli/gui)
 
+   * libxml2-dev (cli/gui)
+
+   * libogg-dev (cli/gui)
+
+   * libtheora-dev (cli/gui)
+
+   * libvorbis-dev (cli/gui)
+
+   * libsamplerate-dev (cli/gui)
+
    * libfribidi-dev (cli/gui)
+
+   * libfreetype6-dev (cli/gui)
+
+   * libfontconfig1-dev (cli/gui)
+
+   * libass-dev (cli/gui)
 
    * intltool (gui)
 
@@ -114,11 +130,12 @@ Ubuntu 11.04 - 11.10 packages:
    * libappindicator-dev (gui)
 
 To install these packages:
-     sudo apt-get install subversion yasm build-essential \
-     autoconf libtool zlib1g-dev libbz2-dev libfribidi-dev \
-     intltool libglib2.0-dev libdbus-glib-1-dev libgtk2.0-dev \
-     libgudev-1.0-dev libwebkit-dev libnotify-dev libgstreamer0.10-dev \
-     libgstreamer-plugins-base0.10-dev libappindicator-dev
+     sudo apt-get install subversion yasm build-essential autoconf libtool \
+     zlib1g-dev libbz2-dev libogg-dev libtheora-dev libvorbis-dev \
+     libsamplerate-dev libxml2-dev libfribidi-dev libfreetype6-dev \
+     libfontconfig1-dev libass-dev intltool libglib2.0-dev libdbus-glib-1-dev \
+     libgtk2.0-dev libgudev-1.0-dev libwebkit-dev libnotify-dev \
+     libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev libappindicator-dev
 
 Fedora 12 - 13 package groups:
    * Development Tools
@@ -140,7 +157,23 @@ Additional Fedora packages:
 
    * bzip2-devel (cli/gui)
 
+   * libogg-devel (cli/gui)
+
+   * libtheora-devel (cli/gui)
+
+   * libvorbis-devel (cli/gui)
+
+   * libsamplerate-devel (cli/gui)
+
+   * libxml2-devel (cli/gui)
+
    * fribidi-devel (cli/gui)
+
+   * freetype-devel (cli/gui)
+
+   * fontconfig-devel (cli/gui)
+
+   * libass-devel (cli/gui)
 
    * dbus-glib-devel (gui)
 
@@ -155,8 +188,10 @@ Additional Fedora packages:
    * gstreamer-plugins-base-devel (gui)
 
 To install these packages:
-     sudo yum install yasm zlib-devel bzip2-devel fribidi-devel \
-     dbus-glib-devel libgudev1-devel webkitgtk-devel libnotify-devel \
+     sudo yum install yasm zlib-devel bzip2-devel libogg-devel libtheora-devel \
+     libvorbis-devel libsamplerate-devel libxml2-devel fribidi-devel \
+     freetype-devel fontconfig-devel libass-devel dbus-glib-devel \
+     libgudev1-devel webkitgtk-devel libnotify-devel \
      gstreamer-devel gstreamer-plugins-base-devel
 
 3 QuickStart
@@ -555,7 +590,7 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    4394
-     date:   2011-12-30 17:21:44 -0500
+     rev:    4981
+     date:   2012-09-25 09:52:53 -0700
      type:   developer
 

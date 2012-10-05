@@ -105,7 +105,7 @@ $(PKG.src.deb.stamp): GNUmakefile
 	svn co -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)maverick/$(PKG.deb.basename)
 	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)maverick/$(PKG.deb.basename)
 	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)maverick/$(PKG.deb.basename)
-	$(CP.exe) $(STAGE.out.src/)maverick/$(PKG.deb.basename)/debian/control.karmic $(STAGE.out.src/)maverick/$(PKG.deb.basename)/debian/control
+	$(CP.exe) $(STAGE.out.src/)maverick/$(PKG.deb.basename)/debian/control.maverick $(STAGE.out.src/)maverick/$(PKG.deb.basename)/debian/control
 	echo "handbrake ($(HB.version)ppa1~maverick1) maverick; urgency=low" > $(STAGE.out.src/)maverick/$(PKG.deb.basename)/debian/changelog
 	echo "  * Snapshot" >> $(STAGE.out.src/)maverick/$(PKG.deb.basename)/debian/changelog
 	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)maverick/$(PKG.deb.basename)/debian/changelog

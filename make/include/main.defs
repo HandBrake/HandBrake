@@ -28,24 +28,24 @@ endif
 endif
 
 ifneq (,$(filter $(BUILD.system),darwin cygwin mingw))
+    MODULES += contrib/fontconfig
+    MODULES += contrib/freetype
     MODULES += contrib/fribidi
+    MODULES += contrib/libxml2
+    MODULES += contrib/libass
+    MODULES += contrib/libogg
+    MODULES += contrib/libvorbis
+    MODULES += contrib/libtheora
+    MODULES += contrib/libsamplerate
 endif
 
+MODULES += contrib/lame
 MODULES += contrib/faac
 MODULES += contrib/ffmpeg
-MODULES += contrib/fontconfig
-MODULES += contrib/freetype
-MODULES += contrib/lame
-MODULES += contrib/libass
 MODULES += contrib/libdvdread
 MODULES += contrib/libdvdnav
 MODULES += contrib/libbluray
 MODULES += contrib/libmkv
-MODULES += contrib/libogg
-MODULES += contrib/libsamplerate
-MODULES += contrib/libtheora
-MODULES += contrib/libvorbis
-MODULES += contrib/libxml2
 MODULES += contrib/mp4v2
 MODULES += contrib/mpeg2dec
 
