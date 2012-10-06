@@ -17,7 +17,7 @@ TEST.GCC.l = \
         a52 ass avcodec avformat avutil avresample dvdnav dvdread faac \
         fontconfig freetype fribidi mkv mpeg2 mp3lame mp4v2 ogg \
         samplerate swscale theoraenc theoradec vorbis vorbisenc x264 \
-        xml2 bluray bz2 z
+        bluray xml2 bz2 z
 
 TEST.install.exe = $(DESTDIR)$(PREFIX/)bin/$(notdir $(TEST.exe))
 

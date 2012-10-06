@@ -5,13 +5,14 @@ HB_LIBS= \
 	-lhb -la52 -lmkv -lavresample -lavformat -lavcodec -lavutil \
 	-ldvdnav -ldvdread -lfaac -lmp3lame -lmpeg2 -lvorbis -lvorbisenc \
 	-logg -lsamplerate -lx264 -lmp4v2 -lswscale -ltheoraenc -ltheoradec -lz \
-	-lbz2 -lpthreadGC2 -lbluray -lass -lfontconfig -lfreetype -lgmodule-2.0
+	-lbz2 -lpthreadGC2 -lbluray -lass -lfontconfig -lfreetype -lxml2 \
+	-lgmodule-2.0
 else
 HB_LIBS= \
 	-lhb -la52 -lmkv -lavresample -lavformat -lavcodec -lavutil \
 	-ldvdnav -ldvdread -lfaac -lmp3lame -lmpeg2 -lvorbis -lvorbisenc \
 	-logg -lsamplerate -lx264 -lmp4v2 -lswscale -ltheoraenc -ltheoradec -lz \
-	-lbz2 -lpthread -lbluray -lass -lfontconfig -lfreetype
+	-lbz2 -lpthread -lbluray -lass -lfontconfig -lfreetype -lxml2
 endif
 
 icons =	\
