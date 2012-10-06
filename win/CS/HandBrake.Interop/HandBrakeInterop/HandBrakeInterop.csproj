@@ -101,12 +101,6 @@
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core">
-      <HintPath>..\..\libraries\caliburn\Castle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Windsor">
-      <HintPath>..\..\libraries\caliburn\Castle.Windsor.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -147,7 +141,6 @@
     <Compile Include="HbLib\NativeConstants.cs" />
     <Compile Include="Interfaces\IHandBrakeInstance.cs" />
     <Compile Include="InteropUtilities.cs" />
-    <Compile Include="InteropWindsorInstaller.cs" />
     <Compile Include="Language.cs" />
     <Compile Include="LanguageCodes.cs" />
     <Compile Include="MarshalingConstants.cs" />

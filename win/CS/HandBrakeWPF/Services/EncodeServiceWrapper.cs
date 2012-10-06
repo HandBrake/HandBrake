@@ -13,14 +13,11 @@ namespace HandBrakeWPF.Services
 {
     using System;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Isolation;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
-    using HandBrake.Interop.Interfaces;
 
     using EncodeCompletedEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeCompletedEventArgs;
     using EncodeProgressEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeProgressEventArgs;
@@ -66,8 +63,7 @@ namespace HandBrakeWPF.Services
                     }
                     else
                     {
-                        IHandBrakeInstance handBrakeInstance = IoC.Get<IHandBrakeInstance>();
-                        this.encodeService = new LibEncode(userSettingService, handBrakeInstance);
+                        this.encodeService = new LibEncode(userSettingService, ScanServiceWrapper.HandbrakeInstance);
                     }
                 }
                 catch (Exception exc)
