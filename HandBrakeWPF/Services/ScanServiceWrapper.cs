@@ -13,13 +13,12 @@ namespace HandBrakeWPF.Services
 {
     using System;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Isolation;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.Interop;
     using HandBrake.Interop.Interfaces;
 
     /// <summary>
@@ -30,6 +29,11 @@ namespace HandBrakeWPF.Services
     public class ScanServiceWrapper : IScanServiceWrapper
     {
         #region Constants and Fields
+
+        /// <summary>
+        /// The handbrake instance.
+        /// </summary>
+        public static readonly IHandBrakeInstance HandbrakeInstance = new HandBrakeInstance();
 
         /// <summary>
         /// The scan service.
@@ -63,8 +67,7 @@ namespace HandBrakeWPF.Services
                     }
                     else
                     {
-                        IHandBrakeInstance handBrakeInstance = IoC.Get<IHandBrakeInstance>();
-                        this.scanService = new LibScan(userSettingService, handBrakeInstance);
+                        this.scanService = new LibScan(userSettingService, HandbrakeInstance);
                     }
                 } 
                 catch(Exception exc)

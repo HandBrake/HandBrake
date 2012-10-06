@@ -22,7 +22,6 @@ namespace HandBrakeWPF.Startup
 
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Services.Interfaces;
-    using HandBrake.Interop;
 
     using ViewModels;
     using ViewModels.Interfaces;
@@ -51,7 +50,6 @@ namespace HandBrakeWPF.Startup
 
             // Initialise the ApplicationServices IWindsorInstaller
             this.windsorContainer.Register(Component.For<IWindsorInstaller>().ImplementedBy<ServicesWindsorInstaller>());
-            this.windsorContainer.Register(Component.For<IWindsorInstaller>().ImplementedBy<InteropWindsorInstaller>());
             this.windsorContainer.Install(windsorContainer.ResolveAll<IWindsorInstaller>());
 
             // Services
