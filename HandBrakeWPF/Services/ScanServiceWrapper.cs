@@ -33,7 +33,7 @@ namespace HandBrakeWPF.Services
         /// <summary>
         /// The handbrake instance.
         /// </summary>
-        public static readonly IHandBrakeInstance HandbrakeInstance = new HandBrakeInstance();
+        public static IHandBrakeInstance HandbrakeInstance;
 
         /// <summary>
         /// The scan service.
@@ -67,6 +67,7 @@ namespace HandBrakeWPF.Services
                     }
                     else
                     {
+                        HandbrakeInstance = new HandBrakeInstance();
                         this.scanService = new LibScan(userSettingService, HandbrakeInstance);
                     }
                 } 
