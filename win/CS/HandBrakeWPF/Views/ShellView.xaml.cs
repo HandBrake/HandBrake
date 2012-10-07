@@ -12,6 +12,8 @@ namespace HandBrakeWPF.Views
     using System.Windows;
     using System.Windows.Input;
 
+    using HandBrake.ApplicationServices.Utilities;
+
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -42,6 +44,12 @@ namespace HandBrakeWPF.Views
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.A, ModifierKeys.Control)), new KeyGesture(Key.A, ModifierKeys.Control)));
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.F, ModifierKeys.Control)), new KeyGesture(Key.F, ModifierKeys.Control)));
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.R, ModifierKeys.Control)), new KeyGesture(Key.R, ModifierKeys.Control)));
+
+            // Enable Windows 7 Taskbar progress indication.
+            if (this.TaskbarItemInfo == null)
+            {
+                this.TaskbarItemInfo = Win7.WindowsTaskbar;
+            }
         }
 
         /// <summary>
