@@ -319,8 +319,8 @@ namespace HandBrake.ApplicationServices.Services
                     }
                     else
                     {
-                        throw new Exception(
-                            "The Log file has not been written to disk as it has grown above the 50MB limit. This indicates there was a problem during the scan process.");
+                        throw new GeneralApplicationException(
+                            "The Log file has not been written to disk as it has grown above the 50MB limit", " This indicates there was a problem during the scan process.", null);
                     }
                 }
 
@@ -330,7 +330,7 @@ namespace HandBrake.ApplicationServices.Services
                 if (postScanAction != null)
                 {
                     postScanAction(true);
-                } 
+                }
                 else
                 {
                     if (this.ScanCompleted != null)
@@ -338,6 +338,10 @@ namespace HandBrake.ApplicationServices.Services
                         this.ScanCompleted(this, new ScanCompletedEventArgs(!this.cancelScan, null, string.Empty));
                     }
                 }
+            }
+            catch (GeneralApplicationException)
+            {
+                throw;
             }
             catch (Exception exc)
             {
@@ -356,7 +360,7 @@ namespace HandBrake.ApplicationServices.Services
                 }
             }
         }
-        
+
         /// <summary>
         /// Fire an event when the scan process progresses
         /// </summary>

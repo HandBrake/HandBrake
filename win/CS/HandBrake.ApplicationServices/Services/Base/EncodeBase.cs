@@ -72,7 +72,6 @@ namespace HandBrake.ApplicationServices.Services.Base
                 GeneralUtilities.CreateCliLogHeader(
                     userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeVersion),
                     userSettingService.GetUserSetting<int>(ASUserSettingConstants.HandBrakeBuild));
-
         }
 
         #region Events
@@ -265,7 +264,7 @@ namespace HandBrake.ApplicationServices.Services.Base
 
             try
             {
-                string query = QueryGeneratorUtility.GenerateQuery(new EncodeTask(encodeQueueTask.Task), 
+                string query = QueryGeneratorUtility.GenerateQuery(new EncodeTask(encodeQueueTask.Task),
                     userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount),
                     userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity),
                     userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav));
@@ -330,12 +329,16 @@ namespace HandBrake.ApplicationServices.Services.Base
                             if (this.fileWriter.BaseStream.Length > 100000000)
                             {
                                 this.Stop(
-                                    new Exception(
-                                        "The encode has been stopped. The log file has grown to over 100MB which indicates a serious problem has occured with the encode." +
-                                        "Please check the encode log for an indication of what the problem is."));
+                                    new GeneralApplicationException(
+                                        "The encode has been stopped. The log file has grown to over 100MB which indicates a serious problem has occured with the encode.", 
+                                        "Please check the encode log for an indication of what the problem is.", null));
                             }
                         }
                     }
+                }
+                catch (GeneralApplicationException)
+                {
+                    throw;
                 }
                 catch (Exception exc)
                 {
