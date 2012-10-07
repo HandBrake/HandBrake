@@ -18,6 +18,7 @@ namespace HandBrakeWPF.Services
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Services.Interfaces;
+    using HandBrake.Interop;
 
     using EncodeCompletedEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeCompletedEventArgs;
     using EncodeProgressEventArgs = HandBrake.ApplicationServices.EventArgs.EncodeProgressEventArgs;
@@ -63,6 +64,11 @@ namespace HandBrakeWPF.Services
                     }
                     else
                     {
+                        if (ScanServiceWrapper.HandbrakeInstance == null)
+                        {
+                            ScanServiceWrapper.HandbrakeInstance = new HandBrakeInstance();
+                        }
+
                         this.encodeService = new LibEncode(userSettingService, ScanServiceWrapper.HandbrakeInstance);
                     }
                 }
