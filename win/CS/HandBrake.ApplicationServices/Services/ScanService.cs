@@ -186,7 +186,7 @@ namespace HandBrake.ApplicationServices.Services
             {
                 StreamReader parseLog = new StreamReader(path);
                 this.readData = new Parser(parseLog.BaseStream);
-                this.SouceData = Source.Parse(this.readData, this.userSettingService);
+                this.SouceData = Source.Parse(this.readData, this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav));
                 this.SouceData.ScanPath = path;
 
                 if (this.ScanCompleted != null)
@@ -301,7 +301,7 @@ namespace HandBrake.ApplicationServices.Services
 
                 this.readData = new Parser(this.hbProc.StandardError.BaseStream);
                 this.readData.OnScanProgress += this.OnScanProgress;
-                this.SouceData = Source.Parse(this.readData, this.userSettingService);
+                this.SouceData = Source.Parse(this.readData, this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav));
                 this.SouceData.ScanPath = (string)sourcePath;
 
                 // Write the Buffer out to file.

@@ -195,12 +195,12 @@ namespace HandBrake.ApplicationServices.Services
                 }
 
                 // Fire the Encode Started Event
-                this.Invoke_encodeStarted(EventArgs.Empty);
+                this.InvokeEncodeStarted(EventArgs.Empty);
             }
             catch (Exception exc)
             {
                 encodeQueueTask.Status = QueueItemStatus.Error;
-                this.Invoke_encodeCompleted(
+                this.InvokeEncodeCompleted(
                     new EncodeCompletedEventArgs(
                         false, null, "An Error occured when trying to encode this source. "));
                 throw;
@@ -236,32 +236,10 @@ namespace HandBrake.ApplicationServices.Services
                 // No need to report anything to the user. If it fails, it's probably already stopped.
             }
 
-            this.Invoke_encodeCompleted(
+            this.InvokeEncodeCompleted(
                 exc == null
                     ? new EncodeCompletedEventArgs(true, null, string.Empty)
                     : new EncodeCompletedEventArgs(false, exc, "An Unknown Error has occured when trying to Stop this encode."));
-        }
-
-        /// <summary>
-        /// Attempt to Safely kill a DirectRun() CLI
-        /// NOTE: This will not work with a MinGW CLI
-        /// Note: http://www.cygwin.com/ml/cygwin/2006-03/msg00330.html
-        /// </summary>
-        public void SafelyStop()
-        {
-            if ((int)this.processHandle == 0)
-                return;
-
-            // Allow the CLI to exit cleanly
-            Win32.SetForegroundWindow((int)this.processHandle);
-            SendKeys.Send("^C");
-            SendKeys.Flush();
-
-            /*/if (HbProcess != null)
-            //{
-            //    HbProcess.StandardInput.AutoFlush = true;
-            //    HbProcess.StandardInput.WriteLine("^c^z");
-            //}*/
         }
 
         /// <summary>
@@ -314,7 +292,7 @@ namespace HandBrake.ApplicationServices.Services
             }
 
             this.currentTask.Status = QueueItemStatus.Completed;
-            this.Invoke_encodeCompleted(new EncodeCompletedEventArgs(true, null, string.Empty));
+            this.InvokeEncodeCompleted(new EncodeCompletedEventArgs(true, null, string.Empty));
         }
 
         /// <summary>
@@ -399,7 +377,7 @@ namespace HandBrake.ApplicationServices.Services
                 ElapsedTime = DateTime.Now - this.startTime,
             };
 
-            this.Invoke_encodeStatusChanged(eventArgs);
+            this.InvokeEncodeStatusChanged(eventArgs);
 
             if (this.WindowsSeven.IsWindowsSeven)
             {

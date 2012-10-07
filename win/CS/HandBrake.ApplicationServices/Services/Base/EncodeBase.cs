@@ -147,7 +147,7 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// <param name="e">
         /// The EncodeProgressEventArgs.
         /// </param>
-        public void Invoke_encodeStatusChanged(EncodeProgressEventArgs e)
+        public void InvokeEncodeStatusChanged(EncodeProgressEventArgs e)
         {
             EncodeProgessStatus handler = this.EncodeStatusChanged;
             if (handler != null)
@@ -162,7 +162,7 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// <param name="e">
         /// The EncodeCompletedEventArgs.
         /// </param>
-        public void Invoke_encodeCompleted(EncodeCompletedEventArgs e)
+        public void InvokeEncodeCompleted(EncodeCompletedEventArgs e)
         {
             EncodeCompletedStatus handler = this.EncodeCompleted;
             if (handler != null)
@@ -177,7 +177,7 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// <param name="e">
         /// The EventArgs.
         /// </param>
-        public void Invoke_encodeStarted(EventArgs e)
+        public void InvokeEncodeStarted(EventArgs e)
         {
             EventHandler handler = this.EncodeStarted;
             if (handler != null)
