@@ -9,39 +9,48 @@
 
 namespace HandBrake.ApplicationServices.Utilities
 {
-    using Microsoft.WindowsAPICodePack.Taskbar;
+    using System.Windows.Shell;
+
 
     /// <summary>
-    /// A class implimenting Windows 7 Specific features
+    /// A class implementing Windows 7 Specific features
     /// </summary>
     public class Win7
     {
         /// <summary>
         /// The Windows Taskbar
         /// </summary>
-        private TaskbarManager windowsTaskbar;
+        public static TaskbarItemInfo WindowsTaskbar;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Win7"/> class.
         /// </summary>
         public Win7()
         {
-            if (this.IsWindowsSeven)
-            {
-                this.windowsTaskbar = TaskbarManager.Instance;
-                this.windowsTaskbar.ApplicationId = "HandBrake";
-            }
+            if (WindowsTaskbar == null)
+                WindowsTaskbar = new TaskbarItemInfo();
         }
 
         /// <summary>
-        /// Gets a value indicating whether this is Windows Seven.
+        /// Gets a value indicating whether is windows seven.
         /// </summary>
         public bool IsWindowsSeven
         {
             get
             {
-                return TaskbarManager.IsPlatformSupported;
+                return true;
             }
+        }
+
+        /// <summary>
+        /// The get task bar.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="TaskbarItemInfo"/>.
+        /// </returns>
+        public TaskbarItemInfo GetTaskBar()
+        {
+            return WindowsTaskbar;
         }
 
         /// <summary>
@@ -52,13 +61,13 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </param>
         public void SetTaskBarProgress(int percentage)
         {
-            if (!this.IsWindowsSeven)
-            {
-                return;
-            }
-
-            this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.Normal);
-            this.windowsTaskbar.SetProgressValue(percentage, 100);
+            // Update the taskbar progress indicator.  The normal state shows a green progress bar.
+            Caliburn.Micro.Execute.OnUIThread(
+                () =>
+                {
+                    WindowsTaskbar.ProgressState = TaskbarItemProgressState.Normal;
+                    WindowsTaskbar.ProgressValue = (double)percentage / 100;
+                });
         }
 
         /// <summary>
@@ -66,12 +75,7 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </summary>
         public void SetTaskBarProgressToNoProgress()
         {
-            if (!this.IsWindowsSeven)
-            {
-                return;
-            }
-
-            this.windowsTaskbar.SetProgressState(TaskbarProgressBarState.NoProgress);
+            Caliburn.Micro.Execute.OnUIThread(() => WindowsTaskbar.ProgressState = TaskbarItemProgressState.None);
         }
     }
 }
