@@ -123,13 +123,13 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <param name="output">
         /// A StringReader of output data
         /// </param>
-        /// <param name="userSettingService">
-        /// The user Setting Service.
+        /// <param name="isDvdNavDisabled">
+        /// The is Dvd Nav Disabled.
         /// </param>
         /// <returns>
         /// A Title Object
         /// </returns>
-        public static Title Parse(StringReader output, IUserSettingService userSettingService)
+        public static Title Parse(StringReader output, bool isDvdNavDisabled)
         {
             var thisTitle = new Title();
             string nextLine = output.ReadLine();
@@ -172,7 +172,7 @@ namespace HandBrake.ApplicationServices.Parsing
             }
        
             // Multi-Angle Support if LibDvdNav is enabled
-            if (!userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav))
+            if (!isDvdNavDisabled)
             {
                 m = Regex.Match(nextLine, @"  \+ angle\(s\) ([0-9])");
                 if (m.Success)
@@ -229,13 +229,13 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <param name="output">
         /// The Output
         /// </param>
-        /// <param name="userSettingService">
-        /// The user Setting Service.
+        /// <param name="isDvdNavDisabled">
+        /// The is Dvd Nav Disabled.
         /// </param>
         /// <returns>
         /// A List of titles
         /// </returns>
-        public static Title[] ParseList(string output, IUserSettingService userSettingService)
+        public static Title[] ParseList(string output, bool isDvdNavDisabled)
         {
             var titles = new List<Title>();
             var sr = new StringReader(output);
@@ -246,7 +246,7 @@ namespace HandBrake.ApplicationServices.Parsing
                 if (sr.Peek() == ' ') // If the character is a space, then chances are it's the combing detected line.
                     sr.ReadLine(); // Skip over it
                 else
-                    titles.Add(Parse(sr, userSettingService));
+                    titles.Add(Parse(sr, isDvdNavDisabled));
             }
 
             return titles.ToArray();

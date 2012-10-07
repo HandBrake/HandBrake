@@ -83,13 +83,6 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         void Stop();
 
         /// <summary>
-        /// Attempt to Safely kill a DirectRun() CLI
-        /// NOTE: This will not work with a MinGW CLI
-        /// Note: http://www.cygwin.com/ml/cygwin/2006-03/msg00330.html
-        /// </summary>
-        void SafelyStop();
-
-        /// <summary>
         /// Copy the log file to the desired destinations
         /// </summary>
         /// <param name="destination">

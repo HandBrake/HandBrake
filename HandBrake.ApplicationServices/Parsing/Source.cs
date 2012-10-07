@@ -49,18 +49,20 @@ namespace HandBrake.ApplicationServices.Parsing
         /// <param name="output">
         /// The output.
         /// </param>
-        /// <param name="userSettingService"> </param>
+        /// <param name="isDvdNavDisabled">
+        /// The is Dvd Nav Disabled.
+        /// </param>
         /// <returns>
         /// A DVD object which contains a list of title inforamtion
         /// </returns>
-        public static Source Parse(StreamReader output, IUserSettingService userSettingService)
+        public static Source Parse(StreamReader output, bool isDvdNavDisabled)
         {
             var thisDVD = new Source();
 
             while (!output.EndOfStream)
             {
                 if ((char) output.Peek() == '+')
-                    thisDVD.Titles.AddRange(Title.ParseList(output.ReadToEnd(), userSettingService));
+                    thisDVD.Titles.AddRange(Title.ParseList(output.ReadToEnd(), isDvdNavDisabled));
                 else
                     output.ReadLine();
             }

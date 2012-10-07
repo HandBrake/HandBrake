@@ -146,16 +146,6 @@ namespace HandBrake.ApplicationServices.Isolation
         }
 
         /// <summary>
-        /// Attempt to Safely kill a DirectRun() CLI
-        /// NOTE: This will not work with a MinGW CLI
-        /// Note: http://www.cygwin.com/ml/cygwin/2006-03/msg00330.html
-        /// </summary>
-        public void SafelyStop()
-        {
-            ThreadPool.QueueUserWorkItem(delegate { this.Service.StopEncode(); });
-        }
-
-        /// <summary>
         /// Start with a LibHb EncodeJob Object
         /// </summary>
         /// <param name="job">
