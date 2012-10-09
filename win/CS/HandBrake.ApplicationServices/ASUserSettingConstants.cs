@@ -50,11 +50,6 @@ namespace HandBrake.ApplicationServices
         public const string PreventSleep = "PreventSleep";
 
         /// <summary>
-        /// Show the CLI window
-        /// </summary>
-        public const string ShowCLI = "ShowCLI";
-
-        /// <summary>
         /// Save Log Directory
         /// </summary>
         public const string SaveLogToCopyDirectory = "SaveLogToCopyDirectory";
