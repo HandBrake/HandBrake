@@ -280,11 +280,6 @@ namespace HandBrakeWPF.ViewModels
         private string sendFileToPath;
 
         /// <summary>
-        /// The show cli window.
-        /// </summary>
-        private bool showCliWindow;
-
-        /// <summary>
         /// The vlc path.
         /// </summary>
         private string vlcPath;
@@ -1299,23 +1294,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether ShowCliWindow.
-        /// </summary>
-        public bool ShowCliWindow
-        {
-            get
-            {
-                return this.showCliWindow;
-            }
-
-            set
-            {
-                this.showCliWindow = value;
-                this.NotifyOfPropertyChange("ShowCliWindow");
-            }
-        }
-
-        /// <summary>
         /// Gets or sets a value indicating whether ClearQueueOnEncodeCompleted.
         /// </summary>
         public bool ClearQueueOnEncodeCompleted
@@ -1626,7 +1604,6 @@ namespace HandBrakeWPF.ViewModels
 
             // Priority level for encodes
             this.priorityLevelOptions.Clear();
-            this.priorityLevelOptions.Add("Realtime");
             this.priorityLevelOptions.Add("High");
             this.priorityLevelOptions.Add("Above Normal");
             this.priorityLevelOptions.Add("Normal");
@@ -1660,7 +1637,6 @@ namespace HandBrakeWPF.ViewModels
             this.DisplayStatusMessagesTrayIcon = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.TrayIconAlerts);
             this.MinimiseToTray = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.MainWindowMinimize);
             this.DisablePresetUpdateCheckNotification = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification);
-            this.ShowCliWindow = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.ShowCLI);
             this.ClearQueueOnEncodeCompleted = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.ClearCompletedFromQueue);
 
             // Set the preview count
@@ -1894,7 +1870,6 @@ namespace HandBrakeWPF.ViewModels
             userSettingService.SetUserSetting(UserSettingConstants.MainWindowMinimize, this.MinimiseToTray);
             userSettingService.SetUserSetting(UserSettingConstants.TrayIconAlerts, this.DisplayStatusMessagesTrayIcon);
             userSettingService.SetUserSetting(UserSettingConstants.PresetNotification, this.DisablePresetUpdateCheckNotification);
-            userSettingService.SetUserSetting(ASUserSettingConstants.ShowCLI, this.ShowCliWindow);
             userSettingService.SetUserSetting(ASUserSettingConstants.ClearCompletedFromQueue, this.ClearQueueOnEncodeCompleted);
             userSettingService.SetUserSetting(ASUserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
             userSettingService.SetUserSetting(ASUserSettingConstants.X264Step, double.Parse(this.SelectedGranulairty, CultureInfo.InvariantCulture));

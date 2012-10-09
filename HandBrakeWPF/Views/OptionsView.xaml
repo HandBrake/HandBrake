@@ -262,7 +262,6 @@
                             <CheckBox Content="Minimize to system tray (Requires Restart)" Visibility="Collapsed" IsChecked="{Binding MinimiseToTray}" />
                             <CheckBox Content="Display status messages from tray icon (balloon popups)"  Visibility="Collapsed"  IsChecked="{Binding DisplayStatusMessagesTrayIcon}" />
                             <CheckBox Content="Disable built-in preset update notification" IsChecked="{Binding DisablePresetUpdateCheckNotification}" />
-                            <CheckBox Content="Show CLI window (Allows you to cleanly exit encode with ctrl-c)" IsChecked="{Binding ShowCliWindow}" />
                             <CheckBox Content="Always clear completed queue items after an encode completes" IsChecked="{Binding ClearQueueOnEncodeCompleted}" />
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <TextBlock Text="Number of picture previews to scan:" VerticalAlignment="Center" Width="250" />

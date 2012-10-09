@@ -146,7 +146,7 @@ namespace HandBrake.ApplicationServices.Services
                     RedirectStandardOutput = true,
                     RedirectStandardError = enableLogging ? true : false,
                     UseShellExecute = false,
-                    CreateNoWindow = !this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.ShowCLI) ? true : false
+                    CreateNoWindow = true
                 };
 
                 this.HbProcess = new Process { StartInfo = cliStart };
