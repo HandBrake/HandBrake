@@ -30,16 +30,6 @@ namespace HandBrake.ApplicationServices
         public const string WhenCompleteAction = "WhenCompleteAction";
 
         /// <summary>
-        /// Growl Encodes
-        /// </summary>
-        public const string GrowlEncode = "GrowlEncode";
-
-        /// <summary>
-        /// Growl Queues
-        /// </summary>
-        public const string GrowlQueue = "GrowlQueue";
-
-        /// <summary>
         /// Process Priority
         /// </summary>
         public const string ProcessPriority = "ProcessPriority";

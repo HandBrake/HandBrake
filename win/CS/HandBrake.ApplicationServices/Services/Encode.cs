@@ -68,7 +68,7 @@ namespace HandBrake.ApplicationServices.Services
         {
             this.userSettingService = userSettingService;
             this.EncodeStarted += this.EncodeEncodeStarted;
-            GrowlCommunicator.Register();
+            
         }
 
         #region Properties
