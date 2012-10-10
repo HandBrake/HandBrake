@@ -20,11 +20,6 @@ namespace HandBrake.ApplicationServices
         public const string Verbosity = "Verbosity";
 
         /// <summary>
-        /// The X264 Stepper 
-        /// </summary>
-        public const string X264Step = "X264Step";
-
-        /// <summary>
         /// When Complete Action
         /// </summary>
         public const string WhenCompleteAction = "WhenCompleteAction";
@@ -63,21 +58,6 @@ namespace HandBrake.ApplicationServices
         /// HandBrakes build
         /// </summary>
         public const string HandBrakeBuild = "HandBrakeBuild";
-
-        /// <summary>
-        /// HandBrakes build
-        /// </summary>
-        public const string HandBrakePlatform = "HandBrakePlatform";
-
-        /// <summary>
-        /// HandBrakes CLI Exe SHA1 Hash
-        /// </summary>
-        public const string HandBrakeExeHash = "HandBrakeExeHash";
-
-        /// <summary>
-        /// The Instance Id
-        /// </summary>
-        public const string InstanceId = "InstanceId";
 
         /// <summary>
         /// Disable Libdvdnav

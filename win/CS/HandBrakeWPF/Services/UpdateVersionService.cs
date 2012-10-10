@@ -72,7 +72,7 @@ namespace HandBrakeWPF.Services
             string base64Hash = Convert.ToBase64String(hash);
 
             // Compare the hash with the last known hash. If it's the same, return.
-            if (userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeExeHash) == base64Hash)
+            if (userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeExeHash) == base64Hash)
             {
                 return;
             }
@@ -115,7 +115,7 @@ namespace HandBrakeWPF.Services
 
                     if (platform.Success)
                     {
-                        userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakePlatform, platform.Value.Replace("-", string.Empty).Trim());
+                        userSettingService.SetUserSetting(UserSettingConstants.HandBrakePlatform, platform.Value.Replace("-", string.Empty).Trim());
                     }
 
                     if (cliProcess.TotalProcessorTime.Seconds > 10) // Don't wait longer than 10 seconds.
@@ -128,14 +128,14 @@ namespace HandBrakeWPF.Services
                     }
                 }
 
-                userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeExeHash, base64Hash);
+                userSettingService.SetUserSetting(UserSettingConstants.HandBrakeExeHash, base64Hash);
             }
             catch (Exception e)
             {
                 userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeBuild, string.Empty);
-                userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakePlatform, string.Empty);
+                userSettingService.SetUserSetting(UserSettingConstants.HandBrakePlatform, string.Empty);
                 userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeVersion, string.Empty);
-                userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeExeHash, string.Empty);
+                userSettingService.SetUserSetting(UserSettingConstants.HandBrakeExeHash, string.Empty);
 
                 this.errorService.ShowError("Unable to Initialise HandBrake", "This error is unrecoverable. Maybe try restarting.", e);
 
