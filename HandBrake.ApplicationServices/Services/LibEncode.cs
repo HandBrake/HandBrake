@@ -79,8 +79,6 @@ namespace HandBrake.ApplicationServices.Services
 
             HandBrakeUtils.MessageLogged += this.HandBrakeInstanceMessageLogged;
             HandBrakeUtils.ErrorLogged += this.HandBrakeInstanceErrorLogged;
-
-            GrowlCommunicator.Register();
         }
 
         /// <summary>

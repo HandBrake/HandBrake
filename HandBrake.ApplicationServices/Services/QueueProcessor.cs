@@ -212,11 +212,6 @@ namespace HandBrake.ApplicationServices.Services
                 this.QueueManager.ClearCompleted();
             }
 
-            // Growl
-            if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.GrowlEncode))
-                GrowlCommunicator.Notify("Encode Completed",
-                                         "Put down that cocktail...\nyour Handbrake encode is done.");
-
             if (!e.Successful)
             {
                 this.QueueManager.LastProcessedJob.Status = QueueItemStatus.Error;
@@ -295,12 +290,6 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private void Finish()
         {
-            // Growl
-            if (userSettingService.GetUserSetting<bool>(ASUserSettingConstants.GrowlQueue))
-            {
-                GrowlCommunicator.Notify("Queue Completed", "Put down that cocktail...\nyour Handbrake queue is done.");
-            }
-
             // Do something whent he encode ends.
             switch (userSettingService.GetUserSetting<string>(ASUserSettingConstants.WhenCompleteAction))
             {
