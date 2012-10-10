@@ -189,8 +189,12 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="driveDetectService">
         /// The drive Detect Service.
         /// </param>
+        /// <param name="notificationService">
+        /// The notification Service.
+        /// Leave in Constructor.
+        /// </param>
         public MainViewModel(IUserSettingService userSettingService, IScanServiceWrapper scanService, IEncodeServiceWrapper encodeService, IPresetService presetService,
-            IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService, IDriveDetectService driveDetectService)
+            IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService, IDriveDetectService driveDetectService, INotificationService notificationService)
         {
             GeneralUtilities.SetInstanceId();
 

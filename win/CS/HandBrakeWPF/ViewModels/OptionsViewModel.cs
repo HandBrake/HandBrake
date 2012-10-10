@@ -781,7 +781,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.preferredLanguages = value;
-                this.NotifyOfPropertyChange("preferredLanguages");
+                this.NotifyOfPropertyChange("PreferredLanguages");
             }
         }
 
@@ -1499,8 +1499,8 @@ namespace HandBrakeWPF.ViewModels
             this.whenDoneOptions.Add("Quit HandBrake");
             this.WhenDone = userSettingService.GetUserSetting<string>("WhenCompleteAction");
 
-            this.GrowlAfterEncode = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.GrowlEncode);
-            this.GrowlAfterQueue = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.GrowlQueue);
+            this.GrowlAfterEncode = userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlEncode);
+            this.GrowlAfterQueue = userSettingService.GetUserSetting<bool>(UserSettingConstants.GrowlQueue);
             this.SendFileAfterEncode = this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.SendFile);
             this.SendFileTo = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileTo)) ?? string.Empty;
             this.SendFileToPath = this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.SendFileTo) ?? string.Empty;
@@ -1828,8 +1828,8 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.DaysBetweenUpdateCheck, this.CheckForUpdatesFrequency);
             this.userSettingService.SetUserSetting(UserSettingConstants.TooltipEnable, this.EnableGuiTooltips);
             this.userSettingService.SetUserSetting(ASUserSettingConstants.WhenCompleteAction, this.WhenDone);
-            this.userSettingService.SetUserSetting(ASUserSettingConstants.GrowlQueue, this.GrowlAfterQueue);
-            this.userSettingService.SetUserSetting(ASUserSettingConstants.GrowlEncode, this.GrowlAfterEncode);
+            this.userSettingService.SetUserSetting(UserSettingConstants.GrowlQueue, this.GrowlAfterQueue);
+            this.userSettingService.SetUserSetting(UserSettingConstants.GrowlEncode, this.GrowlAfterEncode);
             this.userSettingService.SetUserSetting(ASUserSettingConstants.SendFileTo, this.SendFileToPath);
             this.userSettingService.SetUserSetting(ASUserSettingConstants.SendFile, this.SendFileAfterEncode);
             this.userSettingService.SetUserSetting(ASUserSettingConstants.SendFileToArgs, this.Arguments);

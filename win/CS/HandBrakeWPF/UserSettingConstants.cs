@@ -181,6 +181,16 @@ namespace HandBrakeWPF
         /// </summary>
         public const string EnableLibHb = "EnableLibHb";
 
+        /// <summary>
+        /// Growl Encodes
+        /// </summary>
+        public const string GrowlEncode = "GrowlEncode";
+
+        /// <summary>
+        /// Growl Queues
+        /// </summary>
+        public const string GrowlQueue = "GrowlQueue";
+
         #endregion
     }
 }
