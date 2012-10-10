@@ -51,7 +51,7 @@ namespace HandBrakeWPF.Helpers
             string base64Hash = Convert.ToBase64String(hash);
 
             // Compare the hash with the last known hash. If it's the same, return.
-            if (userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakeExeHash) == base64Hash)
+            if (userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakeExeHash) == base64Hash)
             {
                 return;
             }
@@ -94,7 +94,7 @@ namespace HandBrakeWPF.Helpers
                     if (platform.Success)
                     {
                         userSettingService.SetUserSetting(
-                            ASUserSettingConstants.HandBrakePlatform, platform.Value.Replace("-", string.Empty).Trim());
+                            UserSettingConstants.HandBrakePlatform, platform.Value.Replace("-", string.Empty).Trim());
                     }
                 }
 
@@ -112,15 +112,15 @@ namespace HandBrakeWPF.Helpers
 
                 if (success)
                 {
-                    userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeExeHash, base64Hash);
+                    userSettingService.SetUserSetting(UserSettingConstants.HandBrakeExeHash, base64Hash);
                 }
             }
             catch (Exception e)
             {
                 userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeBuild, 0);
-                userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakePlatform, string.Empty);
+                userSettingService.SetUserSetting(UserSettingConstants.HandBrakePlatform, string.Empty);
                 userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeVersion, string.Empty);
-                userSettingService.SetUserSetting(ASUserSettingConstants.HandBrakeExeHash, string.Empty);
+                userSettingService.SetUserSetting(UserSettingConstants.HandBrakeExeHash, string.Empty);
 
                 errorService.ShowError(
                     "Unable to Initialise HandBrake. This error is unrecoverable.", " Try restarting.", e);

@@ -253,7 +253,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.rf = value;
 
-                double cqStep = userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step);
+                double cqStep = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
                 this.SetQualitySliderBounds(); 
                 switch (this.SelectedVideoEncoder)
                 {
@@ -435,7 +435,7 @@ namespace HandBrakeWPF.ViewModels
                     break;
             }
 
-            double cqStep = userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step);
+            double cqStep = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
             double rfValue = 0;
             this.SetQualitySliderBounds();
             switch (this.SelectedVideoEncoder)
@@ -550,7 +550,7 @@ namespace HandBrakeWPF.ViewModels
                     break;
                 case VideoEncoder.X264:
                     this.QualityMin = 0;
-                    this.QualityMax = (int)(51 / userSettingService.GetUserSetting<double>(ASUserSettingConstants.X264Step));
+                    this.QualityMax = (int)(51 / userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step));
                     break;
                 case VideoEncoder.Theora:
                     this.QualityMin = 0;

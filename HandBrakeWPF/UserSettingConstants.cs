@@ -191,6 +191,26 @@ namespace HandBrakeWPF
         /// </summary>
         public const string GrowlQueue = "GrowlQueue";
 
+        /// <summary>
+        /// HandBrakes CLI Exe SHA1 Hash
+        /// </summary>
+        public const string HandBrakeExeHash = "HandBrakeExeHash";
+
+        /// <summary>
+        /// The Instance Id
+        /// </summary>
+        public const string InstanceId = "InstanceId";
+
+        /// <summary>
+        /// The X264 Stepper 
+        /// </summary>
+        public const string X264Step = "X264Step";
+
+        /// <summary>
+        /// HandBrakes build
+        /// </summary>
+        public const string HandBrakePlatform = "HandBrakePlatform";
+
         #endregion
     }
 }

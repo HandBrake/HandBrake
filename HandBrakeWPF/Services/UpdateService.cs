@@ -87,7 +87,7 @@ namespace HandBrakeWPF.Services
                     try
                     {
                         string url =
-                            this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.HandBrakePlatform)
+                            this.userSettingService.GetUserSetting<string>(UserSettingConstants.HandBrakePlatform)
                                 .Contains("x86_64")
                                 ? this.userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast_x64)
                                 : this.userSettingService.GetUserSetting<string>(UserSettingConstants.Appcast_i686);
