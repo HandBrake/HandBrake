@@ -207,7 +207,7 @@ namespace HandBrakeWPF.ViewModels
             this.driveDetectService = driveDetectService;
             this.userSettingService = userSettingService;
             this.queueProcessor = IoC.Get<IQueueProcessor>();
-            this.queueProcessor.QueueManager.ResetInstanceId();
+            this.queueProcessor.ResetInstanceId();
 
             // Setup Properties
             this.WindowTitle = "HandBrake";
@@ -960,9 +960,9 @@ namespace HandBrakeWPF.ViewModels
             }
 
             QueueTask task = new QueueTask { Task = new EncodeTask(this.CurrentTask) };
-            if (!this.queueProcessor.QueueManager.CheckForDestinationPathDuplicates(task.Task.Destination))
+            if (!this.queueProcessor.CheckForDestinationPathDuplicates(task.Task.Destination))
             {
-                this.queueProcessor.QueueManager.Add(task);
+                this.queueProcessor.Add(task);
             }
             else
             {
@@ -971,7 +971,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (!this.IsEncoding)
             {
-                this.ProgramStatusLabel = string.Format("{0} Encodes Pending", this.queueProcessor.QueueManager.Count);
+                this.ProgramStatusLabel = string.Format("{0} Encodes Pending", this.queueProcessor.Count);
             }
         }
 
@@ -1083,7 +1083,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Check if we already have jobs, and if we do, just start the queue.
-            if (this.queueProcessor.QueueManager.Count != 0)
+            if (this.queueProcessor.Count != 0)
             {
                 this.queueProcessor.Start();
                 return;
@@ -1117,7 +1117,7 @@ namespace HandBrakeWPF.ViewModels
                     Task = new EncodeTask(this.CurrentTask),
                     CustomQuery = false
                 };
-            this.queueProcessor.QueueManager.Add(task);
+            this.queueProcessor.Add(task);
             this.queueProcessor.Start();
             this.IsEncoding = true;
         }
@@ -1700,7 +1700,7 @@ namespace HandBrakeWPF.ViewModels
                                 e.AverageFrameRate,
                                 e.EstimatedTimeLeft,
                                 e.ElapsedTime,
-                                this.queueProcessor.QueueManager.Count);
+                                this.queueProcessor.Count);
                     }
                 });
         }

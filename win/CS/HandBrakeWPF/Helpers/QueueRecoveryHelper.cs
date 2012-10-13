@@ -115,7 +115,7 @@ namespace HandBrakeWPF.Helpers
             {
                 foreach (string file in queueFiles)
                 {
-                    encodeQueue.QueueManager.RestoreQueue(appDataPath + file); // Start Recovery
+                    encodeQueue.RestoreQueue(appDataPath + file); // Start Recovery
                 }
             }
             else

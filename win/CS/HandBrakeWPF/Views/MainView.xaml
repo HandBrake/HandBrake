@@ -134,7 +134,6 @@
                 <MenuItem Header="Debug" Visibility="{Binding ShowDebugMenu, Converter={StaticResource boolToVisConverter}}" >
                     <MenuItem Header="Show CLI Equiv" Micro:Message.Attach="[Event Click] = [Action ShowCliQuery]" />
                     <MenuItem Header="Debug Scan Log" Micro:Message.Attach="[Event Click] = [Action DebugScanLog]" />
-                    <MenuItem Header="Test Isolation Service" Micro:Message.Attach="[Event Click] = [Action EnableIsolationServices]" />
                 </MenuItem>
             </Menu>
 
