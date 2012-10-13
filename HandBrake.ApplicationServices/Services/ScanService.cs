@@ -246,7 +246,7 @@ namespace HandBrake.ApplicationServices.Services
                                 "\\HandBrake\\logs";
                 string dvdInfoPath = Path.Combine(
                     logDir,
-                    string.Format("last_scan_log{0}.txt", GeneralUtilities.GetInstanceCount));
+                    string.Format("last_scan_log{0}.txt", GeneralUtilities.ProcessId));
 
                 if (!Directory.Exists(logDir))
                 {
