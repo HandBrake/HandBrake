@@ -14,14 +14,12 @@ namespace HandBrake.ApplicationServices.Utilities
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Text;
+    using System.Text.RegularExpressions;
     using System.Windows.Forms;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services;
-    using HandBrake.ApplicationServices.Services.Interfaces;
 
     /// <summary>
     /// A Set of Static Utilites
@@ -33,12 +31,7 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <summary>
         /// The Default Log Directory
         /// </summary>
-        private static readonly string LogDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
-                                                "\\HandBrake\\logs";
-        /// <summary>
-        /// The Instance ID
-        /// </summary>
-        private static int instanceId = 0;
+        private static readonly string LogDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
 
         #endregion
 
@@ -47,23 +40,11 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <summary>
         /// Gets the number of HandBrake instances running.
         /// </summary>
-        public static string GetInstanceCount
+        public static int ProcessId
         {
             get
             {
-                return instanceId == 0 ? string.Empty : instanceId.ToString(CultureInfo.InvariantCulture);
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether HandBrake is running in multi instance mode
-        /// </summary>
-        /// <returns>True if the UI has another instance running</returns>
-        public static bool IsMultiInstance
-        {
-            get
-            {
-                return Process.GetProcessesByName("HandBrake").Length > 1 ? true : false;
+                return Process.GetCurrentProcess().Id;
             }
         }
 
@@ -85,19 +66,16 @@ namespace HandBrake.ApplicationServices.Utilities
                 var info = new DirectoryInfo(LogDir);
                 FileInfo[] logFiles = info.GetFiles("*.txt");
 
-                // Delete Them
+                // Delete old and excessivly large files (> ~50MB).
                 foreach (FileInfo file in logFiles)
                 {
                     if (file.LastWriteTime < DateTime.Now.AddDays(-daysToKeep))
                     {
-                        if (!file.Name.Contains("last_scan_log.txt") && !file.Name.Contains("last_encode_log.txt"))
-                        {
-                            File.Delete(file.FullName);
-                        }
-                        else if (file.Length > 104857600)
-                        {
-                            File.Delete(file.FullName);
-                        }
+                        File.Delete(file.FullName);
+                    }
+                    else if (file.Length > 50000000)
+                    {
+                        File.Delete(file.FullName);
                     }
                 }
             }
@@ -118,7 +96,7 @@ namespace HandBrake.ApplicationServices.Utilities
         public static StringBuilder CreateCliLogHeader(string version, int build)
         {
             var logHeader = new StringBuilder();
-            
+
             logHeader.AppendLine(String.Format("HandBrake {0} {1}", version, build));
             logHeader.AppendLine(String.Format("OS: {0}", Environment.OSVersion));
             logHeader.AppendLine(String.Format("CPU: {0}", SystemInfo.GetCpuCount));
@@ -161,8 +139,8 @@ namespace HandBrake.ApplicationServices.Utilities
                         drives.Add(
                             new DriveInformation
                                 {
-                                    Id = id, 
-                                    VolumeLabel = curDrive.VolumeLabel, 
+                                    Id = id,
+                                    VolumeLabel = curDrive.VolumeLabel,
                                     RootDirectory = curDrive.RootDirectory.ToString()
                                 });
                         id++;
@@ -188,12 +166,20 @@ namespace HandBrake.ApplicationServices.Utilities
         }
 
         /// <summary>
-        /// Set the Instance ID
+        /// The find hand brake instance ids.
         /// </summary>
-        public static void SetInstanceId()
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>. True if it's a running HandBrake instance.
+        /// </returns>
+        public static bool IsPidACurrentHandBrakeInstance(int id)
         {
-            instanceId = Process.GetProcessesByName("HandBrake").Length;
+            List<int> ids = Process.GetProcessesByName("HandBrake").Select(process => process.Id).ToList();
+            return ids.Contains(id);
         }
+
         #endregion
     }
 }

@@ -154,11 +154,6 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         void Remove(QueueTask job);
 
         /// <summary>
-        /// Temp workaround until this can be fixed properly.
-        /// </summary>
-        void ResetInstanceId();
-
-        /// <summary>
         /// Reset a Queued Item from Error or Completed to Waiting
         /// </summary>
         /// <param name="job">

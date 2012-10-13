@@ -15,6 +15,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Threading;
     using System.Windows;
     using System.Windows.Media.Imaging;
 
@@ -196,8 +197,6 @@ namespace HandBrakeWPF.ViewModels
         public MainViewModel(IUserSettingService userSettingService, IScanServiceWrapper scanService, IEncodeServiceWrapper encodeService, IPresetService presetService,
             IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService, IDriveDetectService driveDetectService, INotificationService notificationService)
         {
-            GeneralUtilities.SetInstanceId();
-
             this.scanService = scanService;
             this.encodeService = encodeService;
             this.presetService = presetService;
@@ -207,7 +206,6 @@ namespace HandBrakeWPF.ViewModels
             this.driveDetectService = driveDetectService;
             this.userSettingService = userSettingService;
             this.queueProcessor = IoC.Get<IQueueProcessor>();
-            this.queueProcessor.ResetInstanceId();
 
             // Setup Properties
             this.WindowTitle = "HandBrake";
@@ -825,6 +823,13 @@ namespace HandBrakeWPF.ViewModels
             this.SourceMenu = this.GenerateSourceMenu();
 
             this.driveDetectService.StartDetection(this.DriveTrayChanged);
+
+            // Log Cleaning
+            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs))
+            {
+                Thread clearLog = new Thread(() => GeneralUtilities.ClearLogFiles(30));
+                clearLog.Start();
+            }
         }
 
         /// <summary>

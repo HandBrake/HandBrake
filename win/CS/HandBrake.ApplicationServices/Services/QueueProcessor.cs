@@ -75,7 +75,7 @@ namespace HandBrake.ApplicationServices.Services
             this.EncodeService = encodeService;
 
             // If this is the first instance, just use the main queue file, otherwise add the instance id to the filename.
-            this.queueFile = string.Format("hb_queue_recovery{0}.xml", GeneralUtilities.GetInstanceCount);
+            this.queueFile = string.Format("hb_queue_recovery{0}.xml", GeneralUtilities.ProcessId);
         }
 
         #endregion
@@ -328,14 +328,6 @@ namespace HandBrake.ApplicationServices.Services
                 this.queue.Remove(job);
                 this.InvokeQueueChanged(EventArgs.Empty);
             }
-        }
-
-        /// <summary>
-        /// Temp workaround until this can be fixed properly.
-        /// </summary>
-        public void ResetInstanceId()
-        {
-            this.queueFile = string.Format("hb_queue_recovery{0}.xml", GeneralUtilities.GetInstanceCount);
         }
 
         /// <summary>

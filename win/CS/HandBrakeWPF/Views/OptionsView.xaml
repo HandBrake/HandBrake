@@ -24,11 +24,6 @@
 
         <Style TargetType="ListBoxItem">
             <Setter Property="Padding" Value="8,4" />
-            <!--<Style.Triggers>
-                <DataTrigger Binding="{Binding IsBuildIn}" Value="True">
-                    <Setter Property="Foreground" Value="DarkBlue" />
-                </DataTrigger>
-            </Style.Triggers>-->
         </Style>
 
         <Options:OptionsTabConverter x:Key="tabConverter" />
