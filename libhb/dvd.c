@@ -203,14 +203,14 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
     if ( !title->vts )
     {
         /* A VTS of 0 means the title wasn't found in the title set */
-        hb_error("Invalid VTS (title set) number: %i", title->vts);
+        hb_log("Invalid VTS (title set) number: %i", title->vts);
         goto fail;
     }
 
     hb_log( "scan: opening IFO for VTS %d", title->vts );
     if( !( vts = ifoOpen( d->reader, title->vts ) ) )
     {
-        hb_error( "scan: ifoOpen failed" );
+        hb_log( "scan: ifoOpen failed" );
         goto fail;
     }
 
@@ -221,26 +221,26 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
         if( (vts->vts_c_adt->cell_adr_table[i].start_sector & 0xffffff ) ==
             0xffffff )
         {
-            hb_error( "scan: cell_adr_table[%d].start_sector invalid (0x%x) "
-                      "- skipping title", i,
-                      vts->vts_c_adt->cell_adr_table[i].start_sector );
+            hb_log( "scan: cell_adr_table[%d].start_sector invalid (0x%x) "
+                    "- skipping title", i,
+                    vts->vts_c_adt->cell_adr_table[i].start_sector );
             goto fail;
         }
         if( (vts->vts_c_adt->cell_adr_table[i].last_sector & 0xffffff ) ==
             0xffffff )
         {
-            hb_error( "scan: cell_adr_table[%d].last_sector invalid (0x%x) "
-                      "- skipping title", i,
-                      vts->vts_c_adt->cell_adr_table[i].last_sector );
+            hb_log( "scan: cell_adr_table[%d].last_sector invalid (0x%x) "
+                    "- skipping title", i,
+                    vts->vts_c_adt->cell_adr_table[i].last_sector );
             goto fail;
         }
         if( vts->vts_c_adt->cell_adr_table[i].start_sector >=
             vts->vts_c_adt->cell_adr_table[i].last_sector )
         {
-            hb_error( "scan: cell_adr_table[%d].start_sector (0x%x) "
-                      "is not before last_sector (0x%x) - skipping title", i,
-                      vts->vts_c_adt->cell_adr_table[i].start_sector,
-                      vts->vts_c_adt->cell_adr_table[i].last_sector );
+            hb_log( "scan: cell_adr_table[%d].start_sector (0x%x) "
+                    "is not before last_sector (0x%x) - skipping title", i,
+                    vts->vts_c_adt->cell_adr_table[i].start_sector,
+                    vts->vts_c_adt->cell_adr_table[i].last_sector );
             goto fail;
         }
     }
@@ -254,7 +254,7 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
     title->ttn = d->vmg->tt_srpt->title[t-1].vts_ttn;
     if ( title->ttn < 1 || title->ttn > vts->vts_ptt_srpt->nr_of_srpts )
     {
-        hb_error( "invalid VTS PTT offset %d for title %d, skipping", title->ttn, t );
+        hb_log( "invalid VTS PTT offset %d for title %d, skipping", title->ttn, t );
         goto fail;
     }
 
@@ -262,7 +262,7 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
     pgc_id = vts->vts_ptt_srpt->title[title->ttn-1].ptt[0].pgcn;
     if ( pgc_id < 1 || pgc_id > vts->vts_pgcit->nr_of_pgci_srp )
     {
-        hb_error( "invalid PGC ID %d for title %d, skipping", pgc_id, t );
+        hb_log( "invalid PGC ID %d for title %d, skipping", pgc_id, t );
         goto fail;
     }
     pgn    = vts->vts_ptt_srpt->title[title->ttn-1].ptt[0].pgn;
@@ -272,13 +272,19 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
 
     if( !d->pgc || !d->pgc->program_map )
     {
-        hb_error( "scan: pgc not valid, skipping" );
+        hb_log( "scan: pgc not valid, skipping" );
+        goto fail;
+    }
+
+    if (d->pgc->cell_playback == NULL)
+    {
+        hb_log( "invalid PGC cell_playback table for title %d, skipping", t );
         goto fail;
     }
 
     if( pgn <= 0 || pgn > 99 )
     {
-        hb_error( "scan: pgn %d not valid, skipping", pgn );
+        hb_log( "scan: pgn %d not valid, skipping", pgn );
         goto fail;
     }
 

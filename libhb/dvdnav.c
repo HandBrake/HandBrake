@@ -242,6 +242,8 @@ PttDuration(ifo_handle_t *ifo, int ttn, int pttn, int *blocks, int *last_pgcn)
     int            cell_start, cell_end;
     int            i;
 
+    *blocks = 0;
+
     // Initialize map of visited pgc's to prevent loops
     uint32_t pgcn_map[MAX_PGCN/32];
     PgcWalkInit( pgcn_map );
@@ -249,25 +251,35 @@ PttDuration(ifo_handle_t *ifo, int ttn, int pttn, int *blocks, int *last_pgcn)
     pgn   = ifo->vts_ptt_srpt->title[ttn-1].ptt[pttn-1].pgn;
     if ( pgcn < 1 || pgcn > ifo->vts_pgcit->nr_of_pgci_srp || pgcn >= MAX_PGCN)
     {
-        hb_error( "invalid PGC ID %d, skipping", pgcn );
+        hb_log( "invalid PGC ID %d, skipping", pgcn );
         return 0;
     }
 
     if( pgn <= 0 || pgn > 99 )
     {
-        hb_error( "scan: pgn %d not valid, skipping", pgn );
+        hb_log( "scan: pgn %d not valid, skipping", pgn );
         return 0;
     }
 
-    *blocks = 0;
     do
     {
         pgc = ifo->vts_pgcit->pgci_srp[pgcn-1].pgc;
         if (!pgc)
         {
-            hb_error( "scan: pgc not valid, skipping" );
+            *blocks = 0;
+            duration = 0;
+            hb_log( "scan: pgc not valid, skipping" );
             break;
         }
+
+        if (pgc->cell_playback == NULL)
+        {
+            *blocks = 0;
+            duration = 0;
+            hb_log("invalid PGC cell_playback table, skipping");
+            break;
+        }
+
         if (pgn > pgc->nr_of_programs)
         {
             pgn = 1;
@@ -337,14 +349,14 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
     if ( !title->vts )
     {
         /* A VTS of 0 means the title wasn't found in the title set */
-        hb_error("Invalid VTS (title set) number: %i", title->vts);
+        hb_log("Invalid VTS (title set) number: %i", title->vts);
         goto fail;
     }
 
     hb_log( "scan: opening IFO for VTS %d", title->vts );
     if( !( ifo = ifoOpen( d->reader, title->vts ) ) )
     {
-        hb_error( "scan: ifoOpen failed" );
+        hb_log( "scan: ifoOpen failed" );
         goto fail;
     }
 
@@ -355,26 +367,26 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
         if( (ifo->vts_c_adt->cell_adr_table[i].start_sector & 0xffffff ) ==
             0xffffff )
         {
-            hb_error( "scan: cell_adr_table[%d].start_sector invalid (0x%x) "
-                      "- skipping title", i,
-                      ifo->vts_c_adt->cell_adr_table[i].start_sector );
+            hb_log( "scan: cell_adr_table[%d].start_sector invalid (0x%x) "
+                    "- skipping title", i,
+                    ifo->vts_c_adt->cell_adr_table[i].start_sector );
             goto fail;
         }
         if( (ifo->vts_c_adt->cell_adr_table[i].last_sector & 0xffffff ) ==
             0xffffff )
         {
-            hb_error( "scan: cell_adr_table[%d].last_sector invalid (0x%x) "
-                      "- skipping title", i,
-                      ifo->vts_c_adt->cell_adr_table[i].last_sector );
+            hb_log( "scan: cell_adr_table[%d].last_sector invalid (0x%x) "
+                    "- skipping title", i,
+                    ifo->vts_c_adt->cell_adr_table[i].last_sector );
             goto fail;
         }
         if( ifo->vts_c_adt->cell_adr_table[i].start_sector >=
             ifo->vts_c_adt->cell_adr_table[i].last_sector )
         {
-            hb_error( "scan: cell_adr_table[%d].start_sector (0x%x) "
-                      "is not before last_sector (0x%x) - skipping title", i,
-                      ifo->vts_c_adt->cell_adr_table[i].start_sector,
-                      ifo->vts_c_adt->cell_adr_table[i].last_sector );
+            hb_log( "scan: cell_adr_table[%d].start_sector (0x%x) "
+                    "is not before last_sector (0x%x) - skipping title", i,
+                    ifo->vts_c_adt->cell_adr_table[i].start_sector,
+                    ifo->vts_c_adt->cell_adr_table[i].last_sector );
             goto fail;
         }
     }
@@ -388,7 +400,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
     title->ttn = d->vmg->tt_srpt->title[t-1].vts_ttn;
     if ( title->ttn < 1 || title->ttn > ifo->vts_ptt_srpt->nr_of_srpts )
     {
-        hb_error( "invalid VTS PTT offset %d for title %d, skipping", title->ttn, t );
+        hb_log( "invalid VTS PTT offset %d for title %d, skipping", title->ttn, t );
         goto fail;
     }
 
@@ -446,16 +458,37 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
     /* Get pgc */
     if ( pgcn < 1 || pgcn > ifo->vts_pgcit->nr_of_pgci_srp || pgcn >= MAX_PGCN)
     {
-        hb_error( "invalid PGC ID %d for title %d, skipping", pgcn, t );
+        hb_log( "invalid PGC ID %d for title %d, skipping", pgcn, t );
         goto fail;
     }
 
+    // Check all pgc's for validity
+    uint32_t pgcn_map[MAX_PGCN/32];
+    PgcWalkInit( pgcn_map );
+    do
+    {
+        pgc = ifo->vts_pgcit->pgci_srp[pgcn-1].pgc;
+
+        if( !pgc || !pgc->program_map )
+        {
+            hb_log( "scan: pgc not valid, skipping" );
+            goto fail;
+        }
+
+        if (pgc->cell_playback == NULL)
+        {
+            hb_log( "invalid PGC cell_playback table for title %d, skipping", t );
+            goto fail;
+        }
+    } while ((pgcn = NextPgcn(ifo, pgcn, pgcn_map)) != 0);
+
+    pgcn       = longest_pgcn;
     pgc = ifo->vts_pgcit->pgci_srp[pgcn-1].pgc;
 
     hb_log("pgc_id: %d, pgn: %d: pgc: %p", pgcn, pgn, pgc);
     if (pgn > pgc->nr_of_programs)
     {
-        hb_error( "invalid PGN %d for title %d, skipping", pgn, t );
+        hb_log( "invalid PGN %d for title %d, skipping", pgn, t );
         goto fail;
     }
 
@@ -699,7 +732,6 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
     }
 
     /* Chapters */
-    uint32_t pgcn_map[MAX_PGCN/32];
     PgcWalkInit( pgcn_map );
     c = 0;
     do
