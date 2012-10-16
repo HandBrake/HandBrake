@@ -11,7 +11,6 @@ namespace HandBrakeWPF.Helpers
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -131,9 +130,9 @@ namespace HandBrakeWPF.Helpers
                         try
                         {
                             // Once we load it in, remove it as we no longer need it.
-                            File.Delete(file);
+                            File.Delete(Path.Combine(appDataPath, file));
                         }
-                        catch (Exception)
+                        catch (Exception exc)
                         {
                             // Keep quite, nothing much we can do if there are problems.
                             // We will continue processing files.
@@ -148,7 +147,7 @@ namespace HandBrakeWPF.Helpers
                     if (File.Exists(Path.Combine(appDataPath, file)))
                     {
                         // Check that the file doesn't belong to another running instance.
-                        Match m = Regex.Match(file, @"[([0-9]+)].xml");
+                        Match m = Regex.Match(file, @"([0-9]+).xml");
                         if (m.Success)
                         {
                             int processId = int.Parse(m.Groups[1].ToString());
