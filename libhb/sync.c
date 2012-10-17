@@ -946,12 +946,12 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
             } break;
         }
 
-        c     = avcodec_alloc_context3( codec );
-
+        c              = avcodec_alloc_context3(codec);
         c->bit_rate    = w->audio->config.in.bitrate;
         c->sample_rate = w->audio->config.in.samplerate;
-        c->channels    = av_get_channel_layout_nb_channels(w->audio->config.in.channel_layout);
-        hb_ff_set_sample_fmt( c, codec );
+        c->channels    =
+            av_get_channel_layout_nb_channels(w->audio->config.in.channel_layout);
+        hb_ff_set_sample_fmt(c, codec, AV_SAMPLE_FMT_FLT);
 
         if (w->audio->config.in.channel_layout == AV_CH_LAYOUT_STEREO_DOWNMIX)
         {

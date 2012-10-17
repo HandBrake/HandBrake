@@ -205,14 +205,14 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         AVFormatContext *ic = (AVFormatContext*)pv->title->opaque_priv;
         pv->context = avcodec_alloc_context3(codec);
         avcodec_copy_context( pv->context, ic->streams[w->audio->id]->codec);
-        hb_ff_set_sample_fmt( pv->context, codec );
+        hb_ff_set_sample_fmt( pv->context, codec, AV_SAMPLE_FMT_FLT );
     }
     else
     {
         pv->parser = av_parser_init( w->codec_param );
 
         pv->context = avcodec_alloc_context3(codec);
-        hb_ff_set_sample_fmt( pv->context, codec );
+        hb_ff_set_sample_fmt( pv->context, codec, AV_SAMPLE_FMT_FLT );
     }
     if ( hb_avcodec_open( pv->context, codec, NULL, 0 ) )
     {
@@ -393,7 +393,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
 
     AVCodecParserContext *parser = av_parser_init( codec->id );
     AVCodecContext *context = avcodec_alloc_context3(codec);
-    hb_ff_set_sample_fmt( context, codec );
+    hb_ff_set_sample_fmt( context, codec, AV_SAMPLE_FMT_FLT );
     if ( hb_avcodec_open( context, codec, NULL, 0 ) )
     {
         return -1;

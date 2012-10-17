@@ -285,30 +285,47 @@ uint64_t hb_ff_layout_xlat(uint64_t ff_channel_layout, int nchannels)
     return hb_layout;
 }
 
-// Set sample format to AV_SAMPLE_FMT_FLT if supported.
-// If it is not supported, we will have to translate using
-// av_audio_convert.
-void hb_ff_set_sample_fmt(AVCodecContext *context, AVCodec *codec)
+/*
+ * Set sample format to the request format if supported by the codec.
+ * The planar/packed variant of the requested format is the next best thing.
+ */
+void hb_ff_set_sample_fmt(AVCodecContext *context, AVCodec *codec,
+                          enum AVSampleFormat request_sample_fmt)
 {
-    if ( codec && codec->sample_fmts )
+    if (context != NULL && codec != NULL &&
+        codec->type == AVMEDIA_TYPE_AUDIO && codec->sample_fmts != NULL)
     {
-        if ( codec->type != AVMEDIA_TYPE_AUDIO )
-            return; // Not audio
-
         const enum AVSampleFormat *fmt;
+        enum AVSampleFormat next_best_fmt;
 
-        for ( fmt = codec->sample_fmts; *fmt != -1; fmt++ )
+        next_best_fmt = (av_sample_fmt_is_planar(request_sample_fmt)  ?
+                         av_get_packed_sample_fmt(request_sample_fmt) :
+                         av_get_planar_sample_fmt(request_sample_fmt));
+
+        context->request_sample_fmt = AV_SAMPLE_FMT_NONE;
+
+        for (fmt = codec->sample_fmts; *fmt != AV_SAMPLE_FMT_NONE; fmt++)
         {
-            if ( *fmt == AV_SAMPLE_FMT_FLT )
+            if (*fmt == request_sample_fmt)
             {
-                context->request_sample_fmt = AV_SAMPLE_FMT_FLT;
-                context->sample_fmt = AV_SAMPLE_FMT_FLT;
+                context->request_sample_fmt = request_sample_fmt;
                 break;
             }
+            else if (*fmt == next_best_fmt)
+            {
+                context->request_sample_fmt = next_best_fmt;
+            }
         }
-        if ( *fmt == -1 )
-            context->sample_fmt = codec->sample_fmts[0];
 
+        /*
+         * When encoding and AVCodec.sample_fmts exists, avcodec_open2()
+         * will error out if AVCodecContext.sample_fmt isn't set.
+         */
+        if (context->request_sample_fmt == AV_SAMPLE_FMT_NONE)
+        {
+            context->request_sample_fmt = codec->sample_fmts[0];
+        }
+        context->sample_fmt = context->request_sample_fmt;
     }
 }
 

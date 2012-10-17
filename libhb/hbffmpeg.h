@@ -24,7 +24,7 @@ int  hb_avcodec_close(AVCodecContext *);
 
 uint64_t hb_ff_layout_xlat(uint64_t ff_channel_layout, int nchannels);
 uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode);
-void     hb_ff_set_sample_fmt(AVCodecContext *context, AVCodec *codec);
+void     hb_ff_set_sample_fmt(AVCodecContext *, AVCodec *, enum AVSampleFormat);
 
 struct SwsContext*
 hb_sws_get_context(int srcW, int srcH, enum PixelFormat srcFormat,

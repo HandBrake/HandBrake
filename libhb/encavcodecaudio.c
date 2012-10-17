@@ -89,8 +89,15 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         context->compression_level = audio->config.out.compression_level;
     }
 
-    // Try to set format to float; fall back to whatever is supported.
-    hb_ff_set_sample_fmt(context, codec);
+    // set the sample_fmt to something practical
+    if (audio->config.out.codec == HB_ACODEC_FFFLAC)
+    {
+        hb_ff_set_sample_fmt(context, codec, AV_SAMPLE_FMT_S16);
+    }
+    else
+    {
+        hb_ff_set_sample_fmt(context, codec, AV_SAMPLE_FMT_FLT);
+    }
 
     if (hb_avcodec_open(context, codec, &av_opts, 0))
     {
