@@ -284,6 +284,7 @@ namespace HandBrakeWPF.ViewModels
         {
             task.Status = QueueItemStatus.Waiting;
             this.queueProcessor.BackupQueue(null);
+            this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.Count);
         }
 
         /// <summary>

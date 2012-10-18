@@ -1423,7 +1423,10 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void StartScan(string filename, int title)
         {
-            this.scanService.Scan(filename, title, this.UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount), null);
+            if (!string.IsNullOrEmpty(filename))
+            {
+                this.scanService.Scan(filename, title, this.UserSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount), null);
+            }
         }
 
         #endregion
