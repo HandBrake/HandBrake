@@ -54,7 +54,7 @@ hb_bd_t * hb_bd_init( char * path )
         goto fail;
     }
 
-    d->title_count = bd_get_titles( d->bd, TITLES_RELEVANT );
+    d->title_count = bd_get_titles( d->bd, TITLES_RELEVANT, 0 );
     if ( d->title_count == 0 )
     {
         hb_log( "bd: not a bd - trying as a stream/file instead" );
@@ -63,7 +63,7 @@ hb_bd_t * hb_bd_init( char * path )
     d->title_info = calloc( sizeof( BLURAY_TITLE_INFO* ) , d->title_count );
     for ( ii = 0; ii < d->title_count; ii++ )
     {
-        d->title_info[ii] = bd_get_title_info( d->bd, ii );
+        d->title_info[ii] = bd_get_title_info( d->bd, ii, 0 );
     }
     qsort(d->title_info, d->title_count, sizeof( BLURAY_TITLE_INFO* ), title_info_compare_mpls );
     d->path = strdup( path );
