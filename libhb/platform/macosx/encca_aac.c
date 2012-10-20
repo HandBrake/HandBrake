@@ -289,13 +289,14 @@ int encCoreAudioInit(hb_work_object_t *w, hb_job_t *job, enum AAC_MODE mode)
     audio->config.out.samples_per_frame = pv->isamples;
 
     // channel remapping
-    uint64_t layout = hb_ff_mixdown_xlat(audio->config.out.mixdown, NULL);
-    pv->remap = hb_audio_remap_init(layout, &hb_aac_chan_map,
+    pv->remap = hb_audio_remap_init(AV_SAMPLE_FMT_FLT, &hb_aac_chan_map,
                                     audio->config.in.channel_map);
     if (pv->remap == NULL)
     {
         hb_error("encCoreAudioInit: hb_audio_remap_init() failed");
     }
+    uint64_t layout = hb_ff_mixdown_xlat(audio->config.out.mixdown, NULL);
+    hb_audio_remap_set_channel_layout(pv->remap, layout);
 
     // get maximum output size
     AudioConverterGetProperty(pv->converter,
@@ -388,8 +389,7 @@ static OSStatus inInputDataProc(AudioConverterRef converter, UInt32 *npackets,
     *npackets = buffers->mBuffers[0].mDataByteSize / pv->isamplesiz;
     pv->ibytes -= buffers->mBuffers[0].mDataByteSize;
 
-    hb_audio_remap(pv->remap,
-                   (hb_sample_t*)buffers->mBuffers[0].mData, *npackets);
+    hb_audio_remap(pv->remap, (uint8_t*)buffers->mBuffers[0].mData, *npackets);
 
     return noErr;
 }

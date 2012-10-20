@@ -74,18 +74,10 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
     cfg->allowMidside  = 1;
 
     /* channel configuration & remapping */
-    uint64_t layout;
-    int *remap_table;
-    layout = hb_ff_mixdown_xlat(audio->config.out.mixdown, NULL);
-    remap_table = hb_audio_remap_build_table(layout, &hb_aac_chan_map,
-                                             audio->config.in.channel_map);
-    if (remap_table != NULL)
-    {
-        // faac does its own remapping
-        memcpy(cfg->channel_map, remap_table,
-               pv->out_discrete_channels * sizeof(int));
-        free(remap_table);
-    }
+    uint64_t layout = hb_ff_mixdown_xlat(audio->config.out.mixdown, NULL);
+    hb_audio_remap_build_table(&hb_aac_chan_map, audio->config.in.channel_map,
+                               layout, cfg->channel_map);
+
     switch (audio->config.out.mixdown)
     {
         case HB_AMIXDOWN_7POINT1:

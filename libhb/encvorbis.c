@@ -43,7 +43,7 @@ struct hb_work_private_s
     int64_t   prev_blocksize;
     int       out_discrete_channels;
 
-    int       *remap_table;
+    int       remap_table[8];
 };
 
 int encvorbisInit(hb_work_object_t *w, hb_job_t *job)
@@ -129,14 +129,9 @@ int encvorbisInit(hb_work_object_t *w, hb_job_t *job)
 
     // channel remapping
     uint64_t layout = hb_ff_mixdown_xlat(audio->config.out.mixdown, NULL);
-    pv->remap_table = hb_audio_remap_build_table(layout, &hb_vorbis_chan_map,
-                                                 audio->config.in.channel_map);
-    if (pv->remap_table == NULL)
-    {
-        hb_error("encvorbisInit: hb_audio_remap_build_table() failed");
-        *job->die = 1;
-        return -1;
-    }
+    hb_audio_remap_build_table(&hb_vorbis_chan_map,
+                               audio->config.in.channel_map, layout,
+                               pv->remap_table);
 
     return 0;
 }
@@ -160,7 +155,6 @@ void encvorbisClose(hb_work_object_t * w)
         hb_list_empty(&pv->list);
     }
 
-    free(pv->remap_table);
     free(pv->buf);
     free(pv);
     w->private_data = NULL;

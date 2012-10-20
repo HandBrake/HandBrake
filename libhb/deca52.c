@@ -37,10 +37,10 @@ struct hb_work_private_s
     uint8_t       frame[3840];
 
     int                 nchannels;
+    int                 remap_table[6];
     int                 use_mix_levels;
     uint64_t            channel_layout;
     hb_audio_resample_t *resample;
-    int                 *remap_table;
 };
 
 static int  deca52Init( hb_work_object_t *, hb_job_t * );
@@ -177,10 +177,6 @@ static void deca52Close(hb_work_object_t *w)
                pv->frames, pv->crc_errors, pv->bytes_dropped);
     }
 
-    if (pv->remap_table != NULL)
-    {
-        free(pv->remap_table);
-    }
     hb_audio_resample_free(pv->resample);
     hb_list_empty(&pv->list);
     a52_free(pv->state);
@@ -343,20 +339,10 @@ static hb_buffer_t* Decode(hb_work_object_t *w)
                                lfeon2layout[(pv->flags & A52_LFE) != 0]);
         if (new_layout != pv->channel_layout)
         {
-            if (pv->remap_table != NULL)
-            {
-                free(pv->remap_table);
-            }
-            pv->remap_table = hb_audio_remap_build_table(new_layout,
-                                                         &hb_libav_chan_map,
-                                                         &hb_liba52_chan_map);
-            if (pv->remap_table == NULL)
-            {
-                hb_error("deca52: hb_audio_remap_build_table() failed");
-                return NULL;
-            }
             pv->channel_layout = new_layout;
-            pv->nchannels = av_get_channel_layout_nb_channels(new_layout);
+            pv->nchannels      = av_get_channel_layout_nb_channels(new_layout);
+            hb_audio_remap_build_table(&hb_libav_chan_map, &hb_liba52_chan_map,
+                                       pv->channel_layout, pv->remap_table);
         }
 
         /* 6 blocks per frame, 256 samples per block, pv->nchannels channels */
