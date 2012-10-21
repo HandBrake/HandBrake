@@ -35,6 +35,8 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.ViewModels.Interfaces;
     using HandBrakeWPF.Views;
 
+    using Microsoft.Win32;
+
     using Ookii.Dialogs.Wpf;
 
     using Image = System.Windows.Controls.Image;
@@ -218,6 +220,7 @@ namespace HandBrakeWPF.ViewModels
             this.scanService.ScanStatusChanged += this.ScanStatusChanged;
             this.queueProcessor.JobProcessingStarted += this.QueueProcessorJobProcessingStarted;
             this.queueProcessor.QueueCompleted += this.QueueCompleted;
+            this.queueProcessor.QueueChanged += this.QueueChanged;
             this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeStatusChanged;
 
             this.Presets = this.presetService.Presets;
@@ -606,10 +609,10 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public bool ShowDebugMenu
         {
-           get
-           {
-               return this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDebugFeatures);
-           }
+            get
+            {
+                return this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableDebugFeatures);
+            }
         }
 
         /// <summary>
@@ -849,6 +852,7 @@ namespace HandBrakeWPF.ViewModels
             this.scanService.ScanStatusChanged -= this.ScanStatusChanged;
 
             this.queueProcessor.QueueCompleted -= this.QueueCompleted;
+            this.queueProcessor.QueueChanged -= this.QueueChanged;
             this.queueProcessor.JobProcessingStarted -= this.QueueProcessorJobProcessingStarted;
             this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
         }
@@ -1171,7 +1175,7 @@ namespace HandBrakeWPF.ViewModels
         public void ShowCliQuery()
         {
             this.errorService.ShowMessageBox(
-                QueryGeneratorUtility.GenerateQuery(this.CurrentTask, 
+                QueryGeneratorUtility.GenerateQuery(this.CurrentTask,
                 userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount),
                 userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity),
                 userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav)),
@@ -1186,13 +1190,13 @@ namespace HandBrakeWPF.ViewModels
         public void DebugScanLog()
         {
             VistaOpenFileDialog dialog = new VistaOpenFileDialog();
-             
+
             dialog.ShowDialog();
 
             if (File.Exists(dialog.FileName))
             {
                 this.scanService.DebugScanLog(dialog.FileName);
-            }    
+            }
         }
 
         #endregion
@@ -1224,30 +1228,33 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void BrowseDestination()
         {
-            VistaSaveFileDialog dialog = new VistaSaveFileDialog
+            SaveFileDialog saveFileDialog = new SaveFileDialog
                 {
                     Filter = "mp4|*.mp4;*.m4v|mkv|*.mkv",
+                    CheckPathExists = true,
                     AddExtension = true,
-                    OverwritePrompt = true,
                     DefaultExt = ".mp4",
+                    OverwritePrompt = true,
+                    FilterIndex = this.CurrentTask.OutputFormat == OutputFormat.Mkv ? 1 : 0,
                 };
 
             if (this.CurrentTask != null && !string.IsNullOrEmpty(this.CurrentTask.Destination))
             {
                 if (Directory.Exists(Path.GetDirectoryName(this.CurrentTask.Destination)))
                 {
-                    dialog.InitialDirectory = Path.GetDirectoryName(this.CurrentTask.Destination) + "\\";
-                    dialog.FileName = Path.GetFileName(this.CurrentTask.Destination);
+                    saveFileDialog.InitialDirectory = Path.GetDirectoryName(this.CurrentTask.Destination) + "\\";
                 }
+
+                saveFileDialog.FileName = Path.GetFileName(this.CurrentTask.Destination);
             }
 
-            dialog.ShowDialog();
-            this.Destination = dialog.FileName;
+            saveFileDialog.ShowDialog();
+            this.Destination = saveFileDialog.FileName;
 
             // Set the Extension Dropdown. This will also set Mp4/m4v correctly.
-            if (!string.IsNullOrEmpty(dialog.FileName))
+            if (!string.IsNullOrEmpty(saveFileDialog.FileName))
             {
-                switch (Path.GetExtension(dialog.FileName))
+                switch (Path.GetExtension(saveFileDialog.FileName))
                 {
                     case ".mkv":
                         this.SelectedOutputFormat = OutputFormat.Mkv;
@@ -1301,7 +1308,7 @@ namespace HandBrakeWPF.ViewModels
 
                 this.errorService.ShowMessageBox(
                         "The Preset has now been updated with your current settings.", "Preset Updated", MessageBoxButton.OK, MessageBoxImage.Information);
-            } 
+            }
         }
 
         /// <summary>
@@ -1384,8 +1391,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void PresetExport()
         {
-            VistaSaveFileDialog savefiledialog = new VistaSaveFileDialog
-                { Filter = "plist|*.plist", CheckPathExists = true, AddExtension = true };
+            VistaSaveFileDialog savefiledialog = new VistaSaveFileDialog { Filter = "plist|*.plist", CheckPathExists = true, AddExtension = true };
             if (this.selectedPreset != null)
             {
                 savefiledialog.ShowDialog();
@@ -1631,11 +1637,11 @@ namespace HandBrakeWPF.ViewModels
                 {
                     if (e.Successful)
                     {
-                        this.NotifyOfPropertyChange("ScannedSource");
-                        this.NotifyOfPropertyChange("ScannedSource.Titles");
+                        this.NotifyOfPropertyChange(() => this.ScannedSource);
+                        this.NotifyOfPropertyChange(() => this.ScannedSource.Titles);
                         this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault(t => t.MainTitle)
                                              ?? this.ScannedSource.Titles.FirstOrDefault();
-                        this.SetupTabs();      
+                        this.SetupTabs();
                     }
 
                     this.ShowStatusWindow = false;
@@ -1644,23 +1650,23 @@ namespace HandBrakeWPF.ViewModels
                         if (this.SelectedTitle != null && !string.IsNullOrEmpty(this.SelectedTitle.SourceName))
                         {
                             this.SourceLabel = this.SelectedTitle.SourceName;
-                        } 
+                        }
                         else
                         {
                             this.SourceLabel = this.SourceName;
                         }
 
                         this.StatusLabel = "Scan Completed";
-                    } 
+                    }
                     else if (!e.Successful && e.Exception == null)
                     {
                         this.SourceLabel = "Scan Cancelled.";
                         this.StatusLabel = "Scan Cancelled.";
-                    } 
+                    }
                     else
                     {
                         this.SourceLabel = "Scan Failed... See Activity Log for details.";
-                        this.StatusLabel = "Scan Failed... See Activity Log for details."; 
+                        this.StatusLabel = "Scan Failed... See Activity Log for details.";
                     }
                 });
         }
@@ -1754,6 +1760,24 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// The queue changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The EventArgs.
+        /// </param>
+        private void QueueChanged(object sender, EventArgs e)
+        {
+            Execute.OnUIThread(
+              () =>
+              {
+                  this.ProgramStatusLabel = string.Format("{0} Encodes Pending", this.queueProcessor.Count);
+              });
+        }
+
+        /// <summary>
         /// The process drive.
         /// </summary>
         /// <param name="item">
@@ -1831,7 +1855,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private void DriveTrayChanged()
         {
-            Caliburn.Micro.Execute.OnUIThread(() => this.SourceMenu = this.GenerateSourceMenu());       
+            Caliburn.Micro.Execute.OnUIThread(() => this.SourceMenu = this.GenerateSourceMenu());
         }
 
         #endregion
