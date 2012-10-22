@@ -61,18 +61,29 @@ $(PKG.cli.deb): $(PKG.gui.tmp.deb)
 # Debian source package rules
 #
 pkg.push.src.deb:: $(PKG.src.deb.stamp)
+	(cd $(STAGE.out.src/)quantal && dput handbrake-snapshots handbrake_$(HB.version)ppa1~quantal1_source.changes )
 	(cd $(STAGE.out.src/)precise && dput handbrake-snapshots handbrake_$(HB.version)ppa1~precise1_source.changes )
 	(cd $(STAGE.out.src/)oneiric && dput handbrake-snapshots handbrake_$(HB.version)ppa1~oneiric1_source.changes )
 	(cd $(STAGE.out.src/)natty && dput handbrake-snapshots handbrake_$(HB.version)ppa1~natty1_source.changes )
-	(cd $(STAGE.out.src/)maverick && dput handbrake-snapshots handbrake_$(HB.version)ppa1~maverick1_source.changes )
 
 $(PKG.src.deb.stamp): GNUmakefile
 	-$(RM.exe) -rf $(STAGE.out.src/)
 	make contrib.fetch
+	svn co -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)quantal/$(PKG.deb.basename)
+	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)quantal/$(PKG.deb.basename)
+	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)quantal/$(PKG.deb.basename)
+	$(CP.exe) $(STAGE.out.src/)quantal/$(PKG.deb.basename)/debian/control.quantal $(STAGE.out.src/)quantal/$(PKG.deb.basename)/debian/control
+	echo "handbrake ($(HB.version)ppa1~quantal1) quantal; urgency=low" > $(STAGE.out.src/)quantal/$(PKG.deb.basename)/debian/changelog
+	echo "  * Snapshot" >> $(STAGE.out.src/)quantal/$(PKG.deb.basename)/debian/changelog
+	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)quantal/$(PKG.deb.basename)/debian/changelog
+	echo "" >> $(STAGE.out.src/)quantal/$(PKG.deb.basename)/debian/changelog
+	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)quantal/$(PKG.deb.basename)/debian/changelog
+	$(TAR.exe) czf $(STAGE.out.src/)quantal/$(PKG.src.deb.tar) -C $(STAGE.out.src/)quantal $(PKG.deb.basename)
+	(cd $(STAGE.out.src/)quantal/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
 	svn co -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)precise/$(PKG.deb.basename)
 	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)precise/$(PKG.deb.basename)
 	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)precise/$(PKG.deb.basename)
-	$(CP.exe) $(STAGE.out.src/)precise/$(PKG.deb.basename)/debian/control.pangolin $(STAGE.out.src/)precise/$(PKG.deb.basename)/debian/control
+	$(CP.exe) $(STAGE.out.src/)precise/$(PKG.deb.basename)/debian/control.precise $(STAGE.out.src/)precise/$(PKG.deb.basename)/debian/control
 	echo "handbrake ($(HB.version)ppa1~precise1) precise; urgency=low" > $(STAGE.out.src/)precise/$(PKG.deb.basename)/debian/changelog
 	echo "  * Snapshot" >> $(STAGE.out.src/)precise/$(PKG.deb.basename)/debian/changelog
 	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)precise/$(PKG.deb.basename)/debian/changelog
@@ -102,15 +113,3 @@ $(PKG.src.deb.stamp): GNUmakefile
 	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)natty/$(PKG.deb.basename)/debian/changelog
 	$(TAR.exe) czf $(STAGE.out.src/)natty/$(PKG.src.deb.tar) -C $(STAGE.out.src/)natty $(PKG.deb.basename)
 	(cd $(STAGE.out.src/)natty/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
-	svn co -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)maverick/$(PKG.deb.basename)
-	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)maverick/$(PKG.deb.basename)
-	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)maverick/$(PKG.deb.basename)
-	$(CP.exe) $(STAGE.out.src/)maverick/$(PKG.deb.basename)/debian/control.maverick $(STAGE.out.src/)maverick/$(PKG.deb.basename)/debian/control
-	echo "handbrake ($(HB.version)ppa1~maverick1) maverick; urgency=low" > $(STAGE.out.src/)maverick/$(PKG.deb.basename)/debian/changelog
-	echo "  * Snapshot" >> $(STAGE.out.src/)maverick/$(PKG.deb.basename)/debian/changelog
-	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)maverick/$(PKG.deb.basename)/debian/changelog
-	echo "" >> $(STAGE.out.src/)maverick/$(PKG.deb.basename)/debian/changelog
-	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)maverick/$(PKG.deb.basename)/debian/changelog
-	$(TAR.exe) czf $(STAGE.out.src/)maverick/$(PKG.src.deb.tar) -C $(STAGE.out.src/)maverick $(PKG.deb.basename)
-	(cd $(STAGE.out.src/)maverick/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
-
