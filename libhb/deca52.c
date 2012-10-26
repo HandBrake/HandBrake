@@ -394,16 +394,14 @@ static hb_buffer_t* Decode(hb_work_object_t *w)
         hb_buffer_close(&flt);
     }
 
-    if (out == NULL)
+    if (out != NULL)
     {
-        return NULL;
+        out->s.start          = pts;
+        out->s.duration       = frame_dur;
+        pts                  += frame_dur;
+        out->s.stop           = pts;
+        pv->next_expected_pts = pts;
     }
-
-    out->s.start          = pts;
-    out->s.duration       = frame_dur;
-    pts                  += frame_dur;
-    out->s.stop           = pts;
-    pv->next_expected_pts = pts;
     return out;
 }
 
