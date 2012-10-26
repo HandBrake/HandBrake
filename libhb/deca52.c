@@ -35,6 +35,7 @@ struct hb_work_private_s
     hb_list_t    *list;
     const AVCRC  *crc_table;
     uint8_t       frame[3840];
+    uint8_t       buf[1536 * 6 * sizeof(float)]; // decoded samples (1 frame, 6 channels)
 
     int                 nchannels;
     int                 remap_table[6];
@@ -317,7 +318,6 @@ static hb_buffer_t* Decode(hb_work_object_t *w)
     else
     {
         int i, j, k;
-        hb_buffer_t *flt;
 
         /* Feed liba52 */
         a52_frame(pv->state, pv->frame, &pv->flags, &pv->level, 0);
@@ -366,9 +366,6 @@ static hb_buffer_t* Decode(hb_work_object_t *w)
             return NULL;
         }
 
-        // 6 blocks per frame, 256 samples per block, pv->nchannels channels
-        flt = hb_buffer_init(1536 * pv->nchannels * sizeof(float));
-
         // decode all blocks before downmixing
         for (i = 0; i < 6; i++)
         {
@@ -376,7 +373,7 @@ static hb_buffer_t* Decode(hb_work_object_t *w)
 
             a52_block(pv->state);
             samples_in  = (float*)a52_samples(pv->state);
-            samples_out = (float*)(flt->data +
+            samples_out = (float*)(pv->buf +
                                    (i * pv->nchannels * 256 * sizeof(float)));
 
             // Planar -> interleaved, remap to Libav channel order
@@ -390,8 +387,7 @@ static hb_buffer_t* Decode(hb_work_object_t *w)
             }
         }
 
-        out = hb_audio_resample(pv->resample, (void*)flt->data, 1536);
-        hb_buffer_close(&flt);
+        out = hb_audio_resample(pv->resample, (void*)pv->buf, 1536);
     }
 
     if (out != NULL)
