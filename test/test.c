@@ -1005,6 +1005,7 @@ static int HandleEvents( hb_handle_t * h )
                     job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
+                    job->vrate_base = 900000;
                     job->cfr = 2;
                     if( !atracks )
                     {
