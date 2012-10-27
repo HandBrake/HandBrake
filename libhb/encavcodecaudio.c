@@ -137,10 +137,10 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
 
     pv->list = hb_list_init();
 
-    if (context->extradata)
+    if (context->extradata != NULL)
     {
-        memcpy(w->config->extradata.bytes,
-               context->extradata, context->extradata_size);
+        memcpy(w->config->extradata.bytes, context->extradata,
+               context->extradata_size);
         w->config->extradata.length = context->extradata_size;
     }
 
