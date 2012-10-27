@@ -57,6 +57,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libraries\caliburn\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -89,6 +90,7 @@
     <Compile Include="EventArgs\ScanCompletedEventArgs.cs" />
     <Compile Include="EventArgs\ScanProgressEventArgs.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Factories\PlistPresetFactory.cs" />
     <Compile Include="Isolation\BackgroundServiceConnector.cs" />
     <Compile Include="Isolation\IsolatedEncodeService.cs" />
     <Compile Include="Isolation\IsolatedScanService.cs" />
@@ -100,6 +102,8 @@
     <Compile Include="Utilities\Converters.cs" />
     <Compile Include="Utilities\EnumHelper.cs" />
     <Compile Include="Utilities\InteropModelCreator.cs" />
+    <Compile Include="Utilities\PList.cs" />
+    <Compile Include="Utilities\PlistUtility.cs" />
     <Compile Include="Utilities\SystemInfo.cs" />
     <Compile Include="Utilities\Win32.cs" />
     <Compile Include="Utilities\Win7.cs" />
@@ -148,7 +152,6 @@
     <Compile Include="Utilities\CharCodesUtilities.cs" />
     <Compile Include="Utilities\GeneralUtilities.cs" />
     <Compile Include="Utilities\LanguageUtilities.cs" />
-    <Compile Include="Utilities\PlistUtility.cs" />
     <Compile Include="Utilities\QueryGeneratorUtility.cs" />
     <Compile Include="Utilities\QueryParserUtility.cs" />
   </ItemGroup>

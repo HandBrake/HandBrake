@@ -17,10 +17,10 @@ namespace HandBrake.ApplicationServices.Model
     public enum PresetPictureSettingsMode
     {
         [Display(Name = "None")]
-        None,
+        None = 0,
         [Display(Name = "Custom")]
-        Custom,
+        Custom = 1,
         [Display(Name = "Source Maximum")]
-        SourceMaximum,
+        SourceMaximum = 2,
     }
 }
