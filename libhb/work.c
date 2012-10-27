@@ -700,6 +700,8 @@ static void do_job( hb_job_t * job )
         memcpy(init.crop, title->crop, sizeof(int[4]));
         init.vrate_base = title->rate_base;
         init.vrate = title->rate;
+        init.pfr_vrate_base = job->pfr_vrate_base;
+        init.pfr_vrate = job->pfr_vrate;
         init.cfr = 0;
         for( i = 0; i < hb_list_count( job->list_filter ); )
         {
@@ -721,6 +723,8 @@ static void do_job( hb_job_t * job )
         memcpy(title->crop, init.crop, sizeof(int[4]));
         job->vrate_base = init.vrate_base;
         job->vrate = init.vrate;
+        job->pfr_vrate_base = init.pfr_vrate_base;
+        job->pfr_vrate = init.pfr_vrate;
         job->cfr = init.cfr;
     }
 

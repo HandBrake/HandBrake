@@ -355,6 +355,8 @@ static int hb_vfr_init( hb_filter_object_t * filter,
             init->vrate = pv->vrate;
             init->vrate_base = pv->vrate_base;
         }
+        init->pfr_vrate = pv->vrate;
+        init->pfr_vrate_base = pv->vrate_base;
     }
     else
     {

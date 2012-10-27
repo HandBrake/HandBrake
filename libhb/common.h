@@ -877,6 +877,8 @@ typedef struct hb_filter_init_s
     int           crop[4];
     int           vrate_base;
     int           vrate;
+    int           pfr_vrate_base;
+    int           pfr_vrate;
     int           cfr;
 } hb_filter_init_t;
 
