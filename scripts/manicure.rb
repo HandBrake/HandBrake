@@ -248,7 +248,7 @@ class Display
     (depth+1).times do
       commandString << "<"
     end
-    commandString << " " << hash["PresetName"] << "\n\n"
+    commandString << " " << hash["PresetName"] << "\n"
     puts commandString
   end
   
@@ -260,7 +260,7 @@ class Display
     (depth+1).times do
       commandString << ">"
     end
-    commandString << "\n\n"
+    commandString << "\n"
     puts commandString
   end
   
@@ -599,10 +599,6 @@ class Display
     
     # That's it, print to screen now
     puts commandString
-    
-    #puts "*" * @columnWidth
-
-    puts  "\n"
   end
   
   def generateCLIFolderParse( hash, depth ) # Shows the folder for wrappers to parse
@@ -613,7 +609,7 @@ class Display
     (depth+1).times do
       commandString << "<"
     end
-    commandString << " " << hash["PresetName"] << "\n\n"
+    commandString << " " << hash["PresetName"] << "\n"
     puts commandString
   end
   
@@ -625,7 +621,7 @@ class Display
     (depth+1).times do
       commandString << ">"
     end
-    commandString << "\n\n"
+    commandString << "\n"
     puts commandString
   end
   
@@ -956,10 +952,6 @@ class Display
     
     # That's it, print to screen now
     puts commandString
-    
-    #puts "*" * @columnWidth
-
-    puts  "\n"
   end
 
   def generateAPIcalls(hash) # Makes a C version of the preset ready for coding into the CLI
@@ -1323,17 +1315,28 @@ class Display
     end
 
     #Booleans
-    if hash["ChapterMarkers"] == 1 then commandString << "job->chapter_markers = 1;\n    " end
-    if hash["VideoGrayScale"] == 1 then commandString << "job->grayscale = 1;\n    " end
-    if hash["VideoTwoPass"] == 1 then commandString << "twoPass = 1;\n    " end
-    if hash["VideoTurboTwoPass"] == 1 then commandString << "turbo_opts_enabled = 1;\n" end
-    commandString << "\n"
-    commandString << "}"
-    
+    if hash["ChapterMarkers"] == 1
+      commandString << "job->chapter_markers = 1;\n    "
+    end
+
+    if hash["VideoGrayScale"] == 1
+      commandString << "job->grayscale = 1;\n    "
+    end
+
+    if hash["VideoTwoPass"] == 1
+      commandString << "twoPass = 1;\n    "
+    end
+
+    if hash["VideoTurboTwoPass"] == 1
+      commandString << "turbo_opts_enabled = 1;\n    "
+    end
+
+    #Finish
+    commandString = commandString.rstrip
+    commandString << "\n}"
+
     # That's it, print to screen now
     puts commandString
-    #puts "*" * @columnWidth
-    puts  "\n"
   end
   
   def generateAPIFolderList( hash, depth )
@@ -1347,7 +1350,7 @@ class Display
       commandString << "<"
     end
     commandString << " " << hash["PresetName"]
-    commandString << "\\n\");\n\n"    
+    commandString << "\\n\");\n"    
     puts commandString
   end
   
@@ -1361,7 +1364,7 @@ class Display
     (depth+1).times do
       commandString << ">"
     end
-    commandString << "\\n\");\n\n"    
+    commandString << "\\n\");\n"
     puts commandString
   end
   
@@ -1696,7 +1699,6 @@ class Display
     
     # That's it, print to screen now
     puts commandString
-    puts  "\n"
   end
   
 end
