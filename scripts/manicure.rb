@@ -1023,8 +1023,9 @@ class Display
       elsif hash["VideoFramerate"] == "29.97 (NTSC Video)"
         commandString << "job->vrate_base = " << "900900;\n    "
       elsif hash["VideoFramerate"] == "25 (PAL Film/Video)"
-        commandString << "job->vrate_base = " << "1080000\n    "
-      # Gotta add the rest of the framerates for completion's sake.
+        commandString << "job->vrate_base = " << "1080000;\n    "
+      else
+        commandString << "job->vrate_base = " << (27000000 / hash["VideoFramerate"].to_i).to_s << ";\n    "
       end
       # not same as source: pfr, else default (cfr)
       if hash["VideoFramerateMode"] == "pfr"
