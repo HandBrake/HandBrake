@@ -16,10 +16,10 @@ namespace HandBrake.Interop.Model.Encoding
 		[Display(Name = "None")]
 		None = 0,
 		[Display(Name = "Strict")]
-		Strict,
+		Strict = 1,
 		[Display(Name = "Loose")]
-		Loose,
+		Loose = 2,
 		[Display(Name = "Custom")]
-		Custom
+		Custom = 3
 	}
 }

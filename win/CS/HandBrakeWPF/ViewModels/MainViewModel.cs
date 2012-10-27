@@ -22,6 +22,7 @@ namespace HandBrakeWPF.ViewModels
     using Caliburn.Micro;
 
     using HandBrake.ApplicationServices;
+    using HandBrake.ApplicationServices.Factories;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
@@ -1353,7 +1354,9 @@ namespace HandBrakeWPF.ViewModels
 
             if (!string.IsNullOrEmpty(filename))
             {
-                Preset preset = PlistUtility.Import(filename);
+                PList plist = new PList(filename);
+                Preset preset = PlistPresetFactory.CreatePreset(plist);
+
                 if (this.presetService.CheckIfPresetExists(preset.Name))
                 {
                     if (!presetService.CanUpdatePreset(preset.Name))
