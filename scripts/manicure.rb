@@ -524,28 +524,50 @@ class Display
     if hash["UsesPictureFilters"] == 1
       
       case hash["PictureDeinterlace"]
+      when 1
+        commandString << " --deinterlace=" << hash["PictureDeinterlaceCustom"].to_s
       when 2
-        commandString << " --deinterlace=\"fast\""
+        commandString << " --deinterlace=fast"
       when 3
-        commandString << " --deinterlace=\slow\""
+        commandString << " --deinterlace=slow"
       when 4
-        commandString << " --deinterlace=\"slower\""
+        commandString << " --deinterlace=slower"
       when 5
-        commandString << " --deinterlace=\"slowest\""
+        commandString << " --deinterlace=bob"
       end
       
       case hash["PictureDenoise"]
+      when 1
+        commandString << " --denoise=" << hash["PictureDenoiseCustom"].to_s
       when 2
-        commandString << " --denoise=\"weak\""
+        commandString << " --denoise=weak"
       when 3
-        commandString << " --denoise=\"medium\""
+        commandString << " --denoise=medium"
       when 4
-        commandString << " --denoise=\"strong\""
+        commandString << " --denoise=strong"
       end
       
-      if hash["PictureDetelecine"] == 2 then commandString << " --detelecine" end
-      if hash["PictureDeblock"] != 0 then commandString << " --deblock=" << hash["PictureDeblock"].to_s end
-      if hash["PictureDecomb"] == 2 then commandString << " --decomb" end
+      case hash["PictureDecomb"]
+      when 1
+        commandString << " --decomb=" << hash["PictureDecombCustom"].to_s
+      when 2
+        commandString << " --decomb"
+      when 3
+        commandString << " --decomb=fast"
+      when 4
+        commandString << " --decomb=bob"
+      end
+
+      case hash["PictureDetelecine"]
+        when 1
+          commandString << " --detelecine=" << hash["PictureDetelecineCustom"].to_s
+        when 2
+          commandString << " --detelecine"
+      end
+
+      if hash["PictureDeblock"] != 0
+        commandString << " --deblock=" << hash["PictureDeblock"].to_s
+      end
       
     end
     
@@ -854,28 +876,51 @@ class Display
     if hash["UsesPictureFilters"] == 1
       
       case hash["PictureDeinterlace"]
+      when 1
+        commandString << " --deinterlace=" << hash["PictureDeinterlaceCustom"].to_s
       when 2
-        commandString << " --deinterlace=\"fast\""
+        commandString << " --deinterlace=fast"
       when 3
-        commandString << " --deinterlace=\slow\""
+        commandString << " --deinterlace=slow"
       when 4
-        commandString << " --deinterlace=\"slower\""
+        commandString << " --deinterlace=slower"
       when 5
-        commandString << " --deinterlace=\"slowest\""
+        commandString << " --deinterlace=bob"
       end
       
       case hash["PictureDenoise"]
+      when 1
+        commandString << " --denoise=" << hash["PictureDenoiseCustom"].to_s
       when 2
-        commandString << " --denoise=\"weak\""
+        commandString << " --denoise=weak"
       when 3
-        commandString << " --denoise=\"medium\""
+        commandString << " --denoise=medium"
       when 4
-        commandString << " --denoise=\"strong\""
+        commandString << " --denoise=strong"
       end
       
-      if hash["PictureDetelecine"] == 2 then commandString << " --detelecine" end
-      if hash["PictureDeblock"] != 0 then commandString << " --deblock=" << hash["PictureDeblock"].to_s end
-      if hash["PictureDecomb"] == 2 then commandString << " --decomb" end
+      case hash["PictureDecomb"]
+      when 1
+        commandString << " --decomb=" << hash["PictureDecombCustom"].to_s
+      when 2
+        commandString << " --decomb"
+      when 3
+        commandString << " --decomb=fast"
+      when 4
+        commandString << " --decomb=bob"
+      end
+
+      case hash["PictureDetelecine"]
+        when 1
+          commandString << " --detelecine=" << hash["PictureDetelecineCustom"].to_s
+        when 2
+          commandString << " --detelecine"
+      end
+
+      if hash["PictureDeblock"] != 0
+        commandString << " --deblock=" << hash["PictureDeblock"].to_s
+      end
+
     end
 
     #Anamorphic
@@ -1186,40 +1231,64 @@ class Display
     #Video Filters
     if hash["UsesPictureFilters"] == 1
       
+      if hash["PictureDeinterlace"].to_i != 0
+        commandString << "deinterlace = 1;\n    "
+      end
+
       case hash["PictureDeinterlace"]
+      when 1
+        commandString << "deinterlace_opt = \"" << hash["PictureDeinterlaceCustom"].to_s << "\";\n    "
       when 2
-        commandString << "deinterlace = 1;\n    "
-        commandString << "deinterlace_opt = \"-1\";\n    "
-      when 3
-        commandString << "deinterlace = 1;\n    "
-        commandString << "deinterlace_opt = \"2\";\n    "
-      when 4
-        commandString << "deinterlace = 1;\n    "
         commandString << "deinterlace_opt = \"0\";\n    "
+      when 3
+        commandString << "deinterlace_opt = \"1\";\n    "
+      when 4
+        commandString << "deinterlace_opt = \"3\";\n    "
       when 5
-        commandString << "deinterlace = 1;\n    "
-        commandString << "deinterlace_opt = \"1:-1:1\";\n    "
+        commandString << "deinterlace_opt = \"15\";\n    "
       end
       
-      case hash["PictureDenoise"]
-      when 2
+      if hash["PictureDenoise"].to_i != 0
         commandString << "denoise = 1;\n    "
+      end
+
+      case hash["PictureDenoise"]
+      when 1
+        commandString << "denoise_opt = \"" << hash["PictureDenoiseCustom"].to_s << "\";\n    "
+      when 2
         commandString << "denoise_opt = \"2:1:2:3\";\n    "
       when 3
-        commandString << "denoise = 1;\n    "
         commandString << "denoise_opt = \"3:2:2:3\";\n    "
       when 4
-        commandString << "denoise = 1;\n    "
         commandString << "denoise_opt = \"7:7:5:5\";\n    "
       end
       
-      if hash["PictureDetelecine"] == 2 then commandString << "detelecine = 1;\n    " end
+      if hash["PictureDecomb"].to_i != 0
+        commandString << "decomb = 1;\n    "
+      end
+
+      case hash["PictureDecomb"]
+      when 1
+        commandString << "decomb_opt = \"" << hash["PictureDecombCustom"].to_s << "\";\n    "
+      when 3
+        commandString << "decomb_opt = \"7:2:6:9:1:80\";\n    "
+      when 4
+        commandString << "decomb_opt = \"455\";\n    "
+      end
+
+      if hash["PictureDetelecine"].to_i != 0
+        commandString << "detelecine = 1;\n    "
+      end
+
+      case hash["PictureDetelecine"]
+        when 1
+          commandString << "detelecine_opt = \"" << hash["PictureDetelecineCustom"].to_s << "\";\n    "
+      end
+
       if hash["PictureDeblock"] != 0
-        then
-          commandString << "deblock = 1;\n    "
-          commandString << "deblock_opt = \"" << hash["PictureDeblock"].to_s << "\";\n    "
-        end
-      if hash["PictureDecomb"] == 2 then commandString << "decomb = 1;\n    " end
+        commandString << "deblock = 1;\n    "
+        commandString << "deblock_opt = \"" << hash["PictureDeblock"].to_s << "\";\n    "
+      end
       
     end
     
@@ -1534,28 +1603,51 @@ class Display
     if hash["UsesPictureFilters"] == 1
       
       case hash["PictureDeinterlace"]
+      when 1
+        commandString << " --deinterlace=" << hash["PictureDeinterlaceCustom"].to_s
       when 2
-        commandString << " --deinterlace=\\\"fast\\\""
+        commandString << " --deinterlace=fast"
       when 3
-        commandString << " --deinterlace=\\\slow\\\""
+        commandString << " --deinterlace=slow"
       when 4
-        commandString << " --deinterlace=\\\"slower\\\""
+        commandString << " --deinterlace=slower"
       when 5
-        commandString << " --deinterlace=\\\"slowest\\\""
+        commandString << " --deinterlace=bob"
       end
       
       case hash["PictureDenoise"]
+      when 1
+        commandString << " --denoise=" << hash["PictureDenoiseCustom"].to_s
       when 2
-        commandString << " --denoise=\\\"weak\\\""
+        commandString << " --denoise=weak"
       when 3
-        commandString << " --denoise=\\\"medium\\\""
+        commandString << " --denoise=medium"
       when 4
-        commandString << " --denoise=\\\"strong\\\""
+        commandString << " --denoise=strong"
       end
       
-      if hash["PictureDetelecine"] == 2 then commandString << " --detelecine" end
-      if hash["PictureDeblock"] != 0 then commandString << " --deblock=" << hash["PictureDeblock"].to_s end
-      if hash["PictureDecomb"] == 2 then commandString << " --decomb" end
+      case hash["PictureDecomb"]
+      when 1
+        commandString << " --decomb=" << hash["PictureDecombCustom"].to_s
+      when 2
+        commandString << " --decomb"
+      when 3
+        commandString << " --decomb=fast"
+      when 4
+        commandString << " --decomb=bob"
+      end
+
+      case hash["PictureDetelecine"]
+        when 1
+          commandString << " --detelecine=" << hash["PictureDetelecineCustom"].to_s
+        when 2
+          commandString << " --detelecine"
+      end
+
+      if hash["PictureDeblock"] != 0
+        commandString << " --deblock=" << hash["PictureDeblock"].to_s
+      end
+
     end
     
     #Anamorphic
