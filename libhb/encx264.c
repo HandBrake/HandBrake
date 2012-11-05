@@ -627,6 +627,21 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     return HB_WORK_OK;
 }
 
+int hb_check_h264_level(const char *h264_level, int width, int height,
+                        int fps_num, int fps_den, int interlaced,
+                        int fake_interlaced)
+{
+    x264_param_t param;
+    x264_param_default(&param);
+    param.i_width           = width;
+    param.i_height          = height;
+    param.i_fps_num         = fps_num;
+    param.i_fps_den         = fps_den;
+    param.b_interlaced      = !!interlaced;
+    param.b_fake_interlaced = !!fake_interlaced;
+    return (hb_apply_h264_level(&param, h264_level, NULL, 1) != 0);
+}
+
 int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
                         const char *x264_profile, int be_quiet)
 {

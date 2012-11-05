@@ -41,6 +41,21 @@ static const char * const hb_x264_encopt_synonyms[][2] =
 };
 
 /*
+ * Check whether a valid h264_level is compatible with the given framerate,
+ * resolution and interlaced compression/flags combination.
+ *
+ * width, height, fps_num and fps_den should be greater than zero.
+ *
+ * interlacing parameters can be set to zero when the information is
+ * unavailable, as hb_apply_h264_level() will disable interlacing if necessary.
+ *
+ * Returns 0 if the level is valid and compatible, 1 otherwise.
+ */
+int hb_check_h264_level(const char *h264_level, int width, int height,
+                        int fps_num, int fps_den, int interlaced,
+                        int fake_interlaced);
+
+/*
  * Applies the restrictions of the requested H.264 level to an x264_param_t.
  *
  * Returns -1 if an invalid level (or no level) is specified. GUIs should be
