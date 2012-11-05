@@ -284,8 +284,8 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     }
     if (job->h264_level != NULL)
     {
-        if (hb_apply_h264_level(&param, job->width, job->height,
-                                job->h264_level, job->x264_profile, 0) < 0)
+        if (hb_apply_h264_level(&param, job->h264_level,
+                                job->x264_profile, 0) < 0)
         {
             free(pv);
             pv = NULL;
@@ -627,19 +627,8 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     return HB_WORK_OK;
 }
 
-/* Applies the restrictions of the requested H.264 level to an x264_param_t.
- *
- * Returns -1 if an invalid level (or no level) is specified. GUIs should be
- * capable of always providing a valid level.
- *
- * Does not modify resolution/framerate but warns when they exceed level limits.
- *
- * Based on a x264_param_apply_level() draft and other x264 code. */
-int hb_apply_h264_level(x264_param_t *param,
-                        int width, int height,
-                        const char *h264_level,
-                        const char *x264_profile,
-                        int be_quiet)
+int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
+                        const char *x264_profile, int be_quiet)
 {
     float f_framerate;
     const x264_level_t *x264_level = NULL;
@@ -733,11 +722,11 @@ int hb_apply_h264_level(x264_param_t *param,
     }
 
     /* we need at least width and height in order to apply a level correctly */
-    if (width <= 0 || height <= 0)
+    if (param->i_width <= 0 || param->i_height <= 0)
     {
         // error (invalid width or height), abort
         hb_error("hb_apply_h264_level: invalid resolution (width: %d, height: %d)",
-                 width, height);
+                 param->i_width, param->i_height);
         return -1;
     }
 
@@ -846,7 +835,7 @@ int hb_apply_h264_level(x264_param_t *param,
         if (!be_quiet)
         {
             hb_log("hb_apply_h264_level [warning]: framerate (%.3f) too high for level %s at %dx%d (max. %.3f)",
-                   f_framerate, h264_level, width, height,
+                   f_framerate, h264_level, param->i_width, param->i_height,
                    (float)x264_level->mbps / i_mb_size);
         }
         ret = 1;
@@ -859,7 +848,7 @@ int hb_apply_h264_level(x264_param_t *param,
         if (!be_quiet)
         {
             hb_log("hb_apply_h264_level [warning]: frame too wide (%d) for level %s (max. %d)",
-                   width, h264_level, max_mb_side * 16);
+                   param->i_width, h264_level, max_mb_side * 16);
         }
         ret = 1;
     }
@@ -868,7 +857,7 @@ int hb_apply_h264_level(x264_param_t *param,
         if (!be_quiet)
         {
             hb_log("hb_apply_h264_level [warning]: frame too tall (%d) for level %s (max. %d)",
-                   height, h264_level, max_mb_side * 16);
+                   param->i_height, h264_level, max_mb_side * 16);
         }
         ret = 1;
     }

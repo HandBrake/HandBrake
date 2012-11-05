@@ -40,8 +40,15 @@ static const char * const hb_x264_encopt_synonyms[][2] =
     { NULL,             NULL,              },
 };
 
-int hb_apply_h264_level(x264_param_t *param,
-                        int width, int height,
-                        const char *h264_level,
-                        const char *x264_profile,
-                        int be_quiet);
+/*
+ * Applies the restrictions of the requested H.264 level to an x264_param_t.
+ *
+ * Returns -1 if an invalid level (or no level) is specified. GUIs should be
+ * capable of always providing a valid level.
+ *
+ * Does not modify resolution/framerate but warns when they exceed level limits.
+ *
+ * Based on a x264_param_apply_level() draft and other x264 code.
+ */
+int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
+                        const char *x264_profile, int be_quiet);
