@@ -398,7 +398,7 @@ namespace HandBrake.ApplicationServices.Utilities
                     break;
             }
 
-            if (task.Deblock != 0)
+            if (task.Deblock > 4)
                 query += string.Format(" --deblock={0}", task.Deblock);
 
             if (task.Grayscale)
