@@ -40,6 +40,7 @@ namespace HandBrakeWPF.ViewModels
         public FiltersViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
         {
             this.CurrentTask = new EncodeTask();
+            this.DeblockValue = 4; // OFF
         }
 
         #endregion
@@ -350,7 +351,7 @@ namespace HandBrakeWPF.ViewModels
                 this.SelectedDeInterlace = preset.Task.Deinterlace;
                 this.SelectedDetelecine = preset.Task.Detelecine;
                 this.Grayscale = preset.Task.Grayscale;
-                this.DeblockValue = preset.Task.Deblock;
+                this.DeblockValue = preset.Task.Deblock == 0 ? 4 : preset.Task.Deblock;
 
                 // Custom Values
                 this.CustomDecomb = preset.Task.CustomDecomb;
