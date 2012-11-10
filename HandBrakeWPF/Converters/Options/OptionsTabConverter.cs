@@ -39,8 +39,8 @@ namespace HandBrakeWPF.Converters.Options
                     case "Output Files":
                         if (parameter.ToString() == "Output Files") return Visibility.Visible;
                         break;
-                    case "Language":
-                        if (parameter.ToString() == "Language") return Visibility.Visible;
+                    case "Audio and Subtitles":
+                        if (parameter.ToString() == "Audio and Subtitles") return Visibility.Visible;
                         break;
                     case "Advanced":
                         if (parameter.ToString() == "Advanced") return Visibility.Visible;

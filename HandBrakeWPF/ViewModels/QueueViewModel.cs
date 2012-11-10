@@ -339,7 +339,7 @@ namespace HandBrakeWPF.ViewModels
         public void EditJob(QueueTask task)
         {
             MessageBoxResult result = this.errorService.ShowMessageBox(
-                "Are you sure you wish to edit this job?\nWARNING!!! This feature is not finished YET! Only part of the job will be copied back!!!",
+                "Are you sure you wish to edit this job? It will be removed from the queue and sent to the main window.",
                 "Modify Job?",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
