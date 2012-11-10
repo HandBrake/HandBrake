@@ -164,12 +164,13 @@ namespace HandBrake.ApplicationServices.Services
                         File.Delete(this.settingsFile);
                     }
                     this.Save();
+
+                    throw new GeneralApplicationException("Warning, your settings have been reset!", "Your user settings file was corrupted or inaccessible. Settings have been reset to defaults.", exc);
                 }
                 catch (Exception)
                 {
+                    throw new GeneralApplicationException("Unable to load user settings.", "Your user settings file appears to be inaccessible or corrupted. You may have to delete the file and let HandBrake generate a new one.", exc);
                 }
-
-                throw;
             }
         }
 
