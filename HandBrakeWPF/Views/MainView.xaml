@@ -122,7 +122,7 @@
                 <MenuItem Header="Help">
                     <MenuItem Header="HandBrake User Guide (HTTP)" Micro:Message.Attach="[Event Click] = [Action LaunchHelp]">
                         <MenuItem.Icon>
-                            <Image Width="16" Source="Images/Help16.png" />
+                            <Image Width="16" Height="16"  Source="Images/information.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator />
@@ -226,7 +226,7 @@
                                         <Image Width="32"
                                                Height="32"
                                                SnapsToDevicePixels="True"
-                                               Source="Images/AddToQueue.png"
+                                               Source="Images/AddToQueue_small.png"
                                                />
                                         <Label Margin="8,0,0,0"
                                                VerticalAlignment="Center"
@@ -277,7 +277,7 @@
                         <Image Width="32"
                                Height="32"
                                SnapsToDevicePixels="True"
-                               Source="Images/Queue.png"
+                               Source="Images/Queue_small.png"
                                />
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
@@ -293,7 +293,7 @@
                         <Image Width="32"
                                Height="32"
                                SnapsToDevicePixels="True"
-                               Source="Images/window.png"
+                               Source="Images/picture_small.png"
                                />
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
@@ -321,7 +321,7 @@
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="260" />
+                <ColumnDefinition Width="270" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -584,8 +584,8 @@
                             <MenuItem ToolBar.OverflowMode="Never">
                                 <MenuItem.Header>
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Width="16"
-                                               Height="16"
+                                        <Image Width="20"
+                                               Height="20"
                                                Source="Images/Options24.png"
                                                />
                                         <TextBlock Margin="2,0,0,0"

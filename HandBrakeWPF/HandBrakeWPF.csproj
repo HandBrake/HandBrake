@@ -377,6 +377,8 @@
     <Content Include="defaultsettings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Views\Images\information.png" />
+    <Resource Include="Views\Images\picture_small.png" />
     <None Include="Resources\logo64.png" />
     <Resource Include="Views\Images\warningsmall.png" />
     <Resource Include="Views\Images\Refresh.ico" />
@@ -400,7 +402,6 @@
     <Resource Include="Views\Images\Queue.png" />
     <Resource Include="Views\Images\Queue_Small.png" />
     <Resource Include="Views\Images\stop.png" />
-    <Resource Include="Views\Images\save.png" />
     <Resource Include="Views\Images\Play_small.png" />
     <Resource Include="Views\Images\Play.png" />
     <Resource Include="Views\Images\picture.png" />
@@ -408,9 +409,6 @@
     <Resource Include="Views\Images\Movies.png" />
     <Resource Include="Views\Images\logo64.png" />
     <Resource Include="Views\Images\logo128.png" />
-    <Resource Include="Views\Images\Help16.png" />
-    <Resource Include="Views\Images\hb32.png" />
-    <Resource Include="Views\Images\hb16.png" />
     <Resource Include="Views\Images\Preferences.png" />
     <Resource Include="Views\Images\folder.png" />
     <Resource Include="Views\Images\ErrorX.png" />
