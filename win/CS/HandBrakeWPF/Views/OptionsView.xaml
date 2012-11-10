@@ -1,5 +1,4 @@
-﻿<UserControl  x:Class="HandBrakeWPF.Views.OptionsView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<UserControl  x:Class="HandBrakeWPF.Views.OptionsView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:cal="http://www.caliburnproject.org"
         xmlns:Helpers="clr-namespace:HandBrakeWPF.Helpers"
               xmlns:Options="clr-namespace:HandBrakeWPF.Converters.Options"
@@ -158,32 +157,67 @@
                 </StackPanel>
 
                 <StackPanel Name="Audio" Orientation="Vertical" Margin="10,10,0,0"
-                            Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter='Language'}">
-
+                            Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter='Audio and Subtitles'}">
+                   
+                    
                     <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
                         <TextBlock Text="Audio and Subtitle Language Handling" FontSize="16" />
                     </Border>
+                    <TextBlock Text="Control the default selection behaviour for audio and subtitle tracks" Margin="0,10,0,10" />
 
-                    <TextBlock Text="Select your preferred language" Grid.Column="0" Margin="10,10,0,0" FontSize="14"/>
+                    <TextBlock Text="Select your preferred languages" Grid.Column="0" Margin="10,10,0,0" FontSize="14"/>
 
                     <Grid Margin="20,10,0,0" >
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock VerticalAlignment="Center"  Text="Audio: " FontSize="10" />
-                            <ComboBox Name="primaryAudioLanguage" VerticalAlignment="Center"  ItemsSource="{Binding PreferredLanguages}" SelectedItem="{Binding SelectedPreferredLangauge}" Width="120" />
-                            <TextBlock VerticalAlignment="Center"  Text="Subtitles: " FontSize="10" Margin="10,0,0,0" />
-                            <ComboBox Name="primarySubtitleLanguage" VerticalAlignment="Center"  ItemsSource="{Binding PreferredLanguages}" SelectedItem="{Binding SelectedPreferredSubtitleLangauge}" Width="120" />
+                            <TextBlock VerticalAlignment="Center"  Text="Audio: " />
+                            <ComboBox Name="primaryAudioLanguage" VerticalAlignment="Center"  ItemsSource="{Binding PreferredLanguages}" 
+                                      SelectedItem="{Binding SelectedPreferredLangauge}" Width="120" />
+                            <TextBlock VerticalAlignment="Center"  Text="Subtitles: " Margin="10,0,0,0" />
+                            <ComboBox Name="primarySubtitleLanguage" VerticalAlignment="Center"  ItemsSource="{Binding PreferredLanguages}" 
+                                      SelectedItem="{Binding SelectedPreferredSubtitleLangauge}" Width="120" />
                         </StackPanel>
                     </Grid>
 
-                    <TextBlock Text="Select languages for automatic inclusion" Grid.Column="0" Margin="10,20,0,0" FontSize="14"/>
+                    <TextBlock Text="Automatic language selection behaviour" Grid.Column="0" Margin="10,20,0,0" FontSize="14"/>
 
-                    <Grid Margin="20,10,0,0">
+                    <Grid Margin="20,10,0,0" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Audio -->
+                        <TextBlock Text="Audio:" Grid.Column="0" Grid.Row="0" Margin="0,0,5,0" HorizontalAlignment="Left"  VerticalAlignment="Center" />
+                        <ComboBox Name="autoAudioMode" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left"
+                                  ItemsSource="{Binding AddAudioModeOptions}" SelectedIndex="{Binding SelectedAddAudioMode}" Width="120" Margin="0,0,5,0" />
+                        <CheckBox Content="Add only one audio track per language" Grid.Column="1" Grid.Row="1"  HorizontalAlignment="Left"
+                                  IsChecked="{Binding AddOnlyOneAudioTrackPerLanguage}" Margin="0,5,0,0" />
+                        
+                        <!-- Subtitles -->
+                        <TextBlock Text="Subtitle:"  Grid.Column="2" Grid.Row="0" Margin="0,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        <ComboBox Name="autoSubtitleMode"  Grid.Column="3" Grid.Row="0" HorizontalAlignment="Left"
+                                  ItemsSource="{Binding AddSubtitleModeOptions}" SelectedIndex="{Binding SelectedAddSubtitleMode}" Width="120" Margin="0,0,5,0" />
+                        <CheckBox Content="Add Closed Captions when available"  Grid.Column="3" Grid.Row="1" Margin="0,5,0,0" 
+                                  HorizontalAlignment="Left" IsChecked="{Binding AddClosedCaptions}"/>
+                    </Grid>
+
+                    <TextBlock Text="Additional languages for possible selection" Grid.Column="0" Margin="10,20,0,0" FontSize="14"/>
+
+                    <Grid Margin="20,20,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Orientation="Horizontal">
-                            <Grid Margin="10,0,0,0">
+                            <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
@@ -205,7 +239,7 @@
                                 </DockPanel>
 
                                 <StackPanel Orientation="Vertical" Grid.Column="2">
-                                    <TextBlock Text="Selected Languages"  Margin="0,0,0,5"/>
+                                    <TextBlock Text="Chosen Selected Languages"  Margin="0,0,0,5"/>
                                     <ListBox Name="selectedLangauges" ItemsSource="{Binding SelectedLangauges}" Helpers:ListBoxHelper.SelectedItems="{Binding SelectedLangaugesToMove}" 
                                              SelectionMode="Extended" Width="140" Height="140"
                                              dd:DragDrop.DropHandler="{Binding}"
@@ -215,23 +249,6 @@
                             </Grid>
                         </StackPanel>
                     </Grid>
-
-                    <GroupBox Header="What to do (Automatically Add Tracks)" Margin="20,5,10,0" >
-                        <StackPanel Orientation="Vertical" Margin="0,5,0,5">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Audio:" VerticalAlignment="Center" Margin="15,0,5,0" Width="100" />
-                                <ComboBox Name="autoAudioMode" ItemsSource="{Binding AddAudioModeOptions}" SelectedIndex="{Binding SelectedAddAudioMode}" Width="120" Margin="0,0,5,0" />
-                                <CheckBox Content="Add only one audio track per language" VerticalAlignment="Center" IsChecked="{Binding AddOnlyOneAudioTrackPerLanguage}" />
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <TextBlock Text="Subtitle:" VerticalAlignment="Center" Margin="15,0,5,0" Width="100" />
-                                <ComboBox Name="autoSubtitleMode" ItemsSource="{Binding AddSubtitleModeOptions}" SelectedIndex="{Binding SelectedAddSubtitleMode}" Width="120" Margin="0,0,5,0" />
-                            </StackPanel>
-
-                            <CheckBox Content="Add Closed Captions when available" Margin="120,5,0,0" IsChecked="{Binding AddClosedCaptions}"/>
-                        </StackPanel>
-                    </GroupBox>
 
                     <StackPanel Orientation="Vertical" Margin="0,10,0,0">
                         <Label Content="Audio Tab Options" FontSize="14"/>

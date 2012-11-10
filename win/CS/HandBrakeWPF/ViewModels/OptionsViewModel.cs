@@ -393,7 +393,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return new List<string> { "General", "Output Files", "Language", "Advanced", "Updates" };
+                return new List<string> { "General", "Output Files", "Audio and Subtitles", "Advanced", "Updates" };
             }
         }
 
@@ -1579,16 +1579,16 @@ namespace HandBrakeWPF.ViewModels
 
             this.AddAudioModeOptions.Clear();
             this.AddAudioModeOptions.Add("None");
-            this.AddAudioModeOptions.Add("All Remaining Tracks");
-            this.AddAudioModeOptions.Add("All for Selected Languages");
+            this.AddAudioModeOptions.Add("Add All Remaining Tracks");
+            this.AddAudioModeOptions.Add("Add All for Selected Languages");
 
             this.AddSubtitleModeOptions.Clear();
             this.AddSubtitleModeOptions.Add("None");
-            this.AddSubtitleModeOptions.Add("All");
-            this.AddSubtitleModeOptions.Add("First");
-            this.AddSubtitleModeOptions.Add("Selected");
-            this.AddSubtitleModeOptions.Add("Prefered Only (First)");
-            this.AddSubtitleModeOptions.Add("Prefered Only (All)");
+            this.AddSubtitleModeOptions.Add("Add All (Where possible)");
+            this.AddSubtitleModeOptions.Add("Add First");
+            this.AddSubtitleModeOptions.Add("Add all for Selected Languages");
+            this.AddSubtitleModeOptions.Add("Add only for Prefered Language (First)");
+            this.AddSubtitleModeOptions.Add("Add all for Prefered Language");
 
             this.SelectedAddAudioMode = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DubModeAudio);
             this.SelectedAddSubtitleMode = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DubModeSubtitle);
