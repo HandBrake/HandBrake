@@ -553,9 +553,9 @@
                         <Button Micro:Message.Attach="[Event Click] = [Action PresetAdd]" >
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Width="16"
-                                           Height="16"
-                                           Source="Images/Add16.png"
+                                    <Image Width="18"
+                                           Height="18"
+                                           Source="Images/add.png"
                                            />
                                     <TextBlock Margin="2,0,0,0"
                                                VerticalAlignment="Center"
@@ -568,9 +568,9 @@
                         <Button Micro:Message.Attach="[Event Click] = [Action PresetRemove]">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Width="16"
-                                           Height="16"
-                                           Source="Images/Close.png"
+                                    <Image Width="18"
+                                           Height="18"
+                                           Source="Images/remove.png"
                                            />
                                     <TextBlock Margin="2,0,0,0"
                                                VerticalAlignment="Center"
