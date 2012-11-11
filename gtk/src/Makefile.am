@@ -16,30 +16,43 @@ HB_LIBS= \
 endif
 
 icons =	\
-	hb-icon.128.png 
+	hb-icon.256.png \
+	hb-icon.128.png \
+	hb-icon.64.png \
+	hb-icon.48.png \
+	hb-icon.32.png \
+	hb-icon.24.png \
+	hb-icon.22.png \
+	hb-icon.16.png
 
 icons_dep =	\
 	hb-activity.32.png \
+	hb-activity.64.png \
 	hb-add-queue.32.png \
+	hb-add-queue.64.png \
 	hb-canceled.16.png \
 	hb-complete.16.png \
-	hb-drawer.32.png \
 	hb-status.32.png \
 	hb-status-empty.32.png \
 	hb-icon.128.png \
 	hb-icon.64.png \
 	hb-pause.32.png \
-	hb-play.32.png \
+	hb-pause.64.png \
+	hb-start.32.png \
+	hb-start.64.png \
 	hb-pref.32.png \
-	hb-queue.32.png \
-	hb-queue-delete.16.png \
+	hb-showqueue.32.png \
+	hb-showqueue.64.png \
+	hb-remove.24.png \
+	hb-remove.48.png \
 	hb-queue-job.16.png \
 	hb-queue-pass1.16.png \
 	hb-queue-pass2.16.png \
 	hb-queue-subtitle.16.png \
-	hb-remove.32.png \
 	hb-source.32.png \
+	hb-source.64.png \
 	hb-stop.32.png \
+	hb-stop.64.png \
 	hb-working0.16.png \
 	hb-working1.16.png \
 	hb-working2.16.png \

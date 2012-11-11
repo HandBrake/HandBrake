@@ -1034,7 +1034,7 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
 	else
 	{
 		gtk_widget_set_sensitive (widget, show_start);
-		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-play");
+		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-start");
 		gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Start");
 		gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), "Start Encoding");
 	}
@@ -1049,7 +1049,7 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
 	else
 	{
 		gtk_widget_set_sensitive (widget, show_start);
-		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-play");
+		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-start");
 		gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Start");
 		gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), "Start Encoding");
 	}
@@ -1057,7 +1057,7 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
 	if (paused)
 	{
 		gtk_widget_set_sensitive (widget, show_stop);
-		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-play");
+		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-start");
 		gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Resume");
 		gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), "Resume Encoding");
 	}
@@ -1072,7 +1072,7 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
 	if (paused)
 	{
 		gtk_widget_set_sensitive (widget, show_stop);
-		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-play");
+		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-start");
 		gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Resume");
 		gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), "Resume Encoding");
 	}
@@ -1105,12 +1105,12 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
 	{
 		gtk_action_set_sensitive (action, show_start);
 #if GTK_CHECK_VERSION(2, 16, 0)
-		gtk_action_set_icon_name(action, "hb-play");
+		gtk_action_set_icon_name(action, "hb-start");
 		gtk_action_set_label(action, "_Start Queue");
 		gtk_action_set_tooltip(action, "Start Encoding");
 #else
 		g_object_set_property(G_OBJECT(action), "icon-name", 
-											ghb_string_value("hb-play"));
+											ghb_string_value("hb-start"));
 		g_object_set_property(G_OBJECT(action), "label",
 											ghb_string_value("_Start Queue"));
 		g_object_set_property(G_OBJECT(action), "tooltip",
@@ -1122,12 +1122,12 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
 	{
 		gtk_action_set_sensitive (action, show_start);
 #if GTK_CHECK_VERSION(2, 16, 0)
-		gtk_action_set_icon_name(action, "hb-play");
+		gtk_action_set_icon_name(action, "hb-start");
 		gtk_action_set_label(action, "_Resume Queue");
 		gtk_action_set_tooltip(action, "Resume Encoding");
 #else
 		g_object_set_property(G_OBJECT(action), "icon-name", 
-										ghb_string_value("hb-play"));
+										ghb_string_value("hb-start"));
 		g_object_set_property(G_OBJECT(action), "label",
 										ghb_string_value("_Resume Queue"));
 		g_object_set_property(G_OBJECT(action), "tooltip",

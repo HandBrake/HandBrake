@@ -5082,7 +5082,7 @@ ghb_notify_done(signal_user_data_t *ud)
 	notify_notification_attach_to_status_icon(notification, si);
 #endif
 	GtkIconTheme *theme = gtk_icon_theme_get_default();
-	GdkPixbuf *pb = gtk_icon_theme_load_icon(theme, "hb-icon", 64,
+	GdkPixbuf *pb = gtk_icon_theme_load_icon(theme, "hb-icon", 32,
 											GTK_ICON_LOOKUP_USE_BUILTIN, NULL);
 	notify_notification_set_icon_from_pixbuf(notification, pb);
 	g_signal_connect(notification, "closed", (GCallback)notify_closed_cb, ud);
