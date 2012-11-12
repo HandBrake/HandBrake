@@ -17,6 +17,7 @@ namespace HandBrake.Interop.SourceData
 		CC708,
 		UTF8,
 		TX3G,
-		SSA
+		SSA,
+		PGS
 	}
 }

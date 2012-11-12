@@ -461,6 +461,12 @@ namespace HandBrake.Interop
 				this.encodeAllocatedMemory.Add(nativeJob.x264_tune);
 			}
 
+			if (!string.IsNullOrEmpty(job.EncodingProfile.H264Level))
+			{
+				nativeJob.h264_level = Marshal.StringToHGlobalAnsi(job.EncodingProfile.H264Level);
+				this.encodeAllocatedMemory.Add(nativeJob.h264_level);
+			}
+
 			if (this.subtitleScan)
 			{
 				// If we need to scan subtitles, enqueue a pre-processing job to do that.
@@ -592,8 +598,6 @@ namespace HandBrake.Interop
 			int refHeight = 0;
 			int refParWidth = 0;
 			int refParHeight = 0;
-			HBFunctions.hb_set_job(this.hbHandle, job.Title, ref nativeJob);
-			//HBFunctions.hb_set_anamorphic_size_by_index(this.hbHandle, job.Title, ref refWidth, ref refHeight, ref refParWidth, ref refParHeight);
 			HBFunctions.hb_set_anamorphic_size(ref nativeJob, ref refWidth, ref refHeight, ref refParWidth, ref refParHeight);
 			InteropUtilities.FreeMemory(allocatedMemory);
 
@@ -1159,6 +1163,11 @@ namespace HandBrake.Interop
 				height = profile.MaxHeight;
 			}
 
+			// The job width can sometimes start not clean, due to interference from
+			// preview generation. We reset it here to allow good calculations.
+			nativeJob.width = width;
+			nativeJob.height = height;
+
 			nativeJob.grayscale = profile.Grayscale ? 1 : 0;
 
 			switch (profile.Anamorphic)
@@ -1171,12 +1180,26 @@ namespace HandBrake.Interop
 					height = outputSize.Height;
 
 					nativeJob.anamorphic.keep_display_aspect = profile.KeepDisplayAspect ? 1 : 0;
+
+					nativeJob.width = width;
+					nativeJob.height = height;
+
+					nativeJob.maxWidth = profile.MaxWidth;
+					nativeJob.maxHeight = profile.MaxHeight;
+
 					break;
 				case Anamorphic.Strict:
 					nativeJob.anamorphic.mode = 1;
 					break;
 				case Anamorphic.Loose:
 					nativeJob.anamorphic.mode = 2;
+
+					nativeJob.modulus = profile.Modulus;
+
+					nativeJob.width = width;
+
+					nativeJob.maxWidth = profile.MaxWidth;
+
 					break;
 				case Anamorphic.Custom:
 					nativeJob.anamorphic.mode = 3;
@@ -1210,10 +1233,12 @@ namespace HandBrake.Interop
 							nativeJob.anamorphic.dar_height = height;
 							nativeJob.anamorphic.keep_display_aspect = 1;
 						}
-
-						nativeJob.anamorphic.dar_width = profile.DisplayWidth;
-						nativeJob.anamorphic.dar_height = height;
-						nativeJob.anamorphic.keep_display_aspect = profile.KeepDisplayAspect ? 1 : 0;
+						else
+						{
+							nativeJob.anamorphic.dar_width = profile.DisplayWidth;
+							nativeJob.anamorphic.dar_height = height;
+							nativeJob.anamorphic.keep_display_aspect = profile.KeepDisplayAspect ? 1 : 0;
+						}
 					}
 					else
 					{
@@ -1222,16 +1247,28 @@ namespace HandBrake.Interop
 						nativeJob.anamorphic.keep_display_aspect = 0;
 					}
 
+					nativeJob.width = width;
+					nativeJob.height = height;
+
+					nativeJob.maxWidth = profile.MaxWidth;
+					nativeJob.maxHeight = profile.MaxHeight;
+
 					break;
 				default:
 					break;
 			}
 
-			nativeJob.width = width;
-			nativeJob.height = height;
+			// Need to fix up values before adding crop/scale filter
+			if (profile.Anamorphic != Anamorphic.None)
+			{
+				int anamorphicWidth = 0, anamorphicHeight = 0, anamorphicParWidth = 0, anamorphicParHeight = 0;
 
-			nativeJob.maxWidth = profile.MaxWidth;
-			nativeJob.maxHeight = profile.MaxHeight;
+				HBFunctions.hb_set_anamorphic_size(ref nativeJob, ref anamorphicWidth, ref anamorphicHeight, ref anamorphicParWidth, ref anamorphicParHeight);
+				nativeJob.width = anamorphicWidth;
+				nativeJob.height = anamorphicHeight;
+				nativeJob.anamorphic.par_width = anamorphicParWidth;
+				nativeJob.anamorphic.par_height = anamorphicParHeight;
+			}
 
 			string cropScaleSettings = string.Format(
 				CultureInfo.InvariantCulture,
@@ -1617,7 +1654,9 @@ namespace HandBrake.Interop
 				AspectRatio = title.aspect,
 				AngleCount = title.angle_count,
 				VideoCodecName = title.video_codec_name,
-				Framerate = ((double)title.rate) / title.rate_base
+				Framerate = ((double)title.rate) / title.rate_base,
+				FramerateNumerator = title.rate,
+				FramerateDenominator = title.rate_base
 			};
 
 			switch (title.type)
@@ -1675,6 +1714,9 @@ namespace HandBrake.Interop
 						break;
 					case hb_subtitle_s_subsource.VOBSUB:
 						newSubtitle.SubtitleSource = SubtitleSource.VobSub;
+						break;
+					case hb_subtitle_s_subsource.PGSSUB:
+						newSubtitle.SubtitleSource = SubtitleSource.PGS;
 						break;
 					default:
 						break;
