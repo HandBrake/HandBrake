@@ -491,10 +491,12 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     /* Chapters */
     for ( ii = 0; ii < ti->chapter_count; ii++ )
     {
+        char chapter_title[80];
         chapter = calloc( sizeof( hb_chapter_t ), 1 );
 
         chapter->index = ii + 1;
-        sprintf( chapter->title, "Chapter %d", chapter->index );
+        sprintf( chapter_title, "Chapter %d", chapter->index );
+        hb_chapter_set_title( chapter, chapter_title );
 
         chapter->duration = ti->chapters[ii].duration;
         chapter->block_start = ti->chapters[ii].offset;

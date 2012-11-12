@@ -441,7 +441,7 @@ static int ssa_init( hb_filter_object_t * filter,
     ass_set_message_cb( pv->ssa, ssa_log, NULL );
     
     // Load embedded fonts
-    hb_list_t * list_attachment = init->job->title->list_attachment;
+    hb_list_t * list_attachment = init->job->list_attachment;
     int i;
     for ( i = 0; i < hb_list_count(list_attachment); i++ )
     {
@@ -678,9 +678,9 @@ static int hb_rendersub_init( hb_filter_object_t * filter,
     }
 
     // Find the subtitle we need
-    for( ii = 0; ii < hb_list_count(init->job->title->list_subtitle); ii++ )
+    for( ii = 0; ii < hb_list_count(init->job->list_subtitle); ii++ )
     {
-        subtitle = hb_list_item( init->job->title->list_subtitle, ii );
+        subtitle = hb_list_item( init->job->list_subtitle, ii );
         if( subtitle && subtitle->config.dest == RENDERSUB )
         {
             // Found it

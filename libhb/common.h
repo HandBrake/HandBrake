@@ -73,6 +73,7 @@ typedef struct hb_rate_s hb_rate_t;
 typedef struct hb_mixdown_s hb_mixdown_t;
 typedef struct hb_encoder_s hb_encoder_t;
 typedef struct hb_job_s  hb_job_t;
+typedef struct hb_title_set_s hb_title_set_t;
 typedef struct hb_title_s hb_title_t;
 typedef struct hb_chapter_s hb_chapter_t;
 typedef struct hb_audio_s hb_audio_t;
@@ -81,6 +82,7 @@ typedef struct hb_subtitle_s hb_subtitle_t;
 typedef struct hb_subtitle_config_s hb_subtitle_config_t;
 typedef struct hb_attachment_s hb_attachment_t;
 typedef struct hb_metadata_s hb_metadata_t;
+typedef struct hb_coverart_s hb_coverart_t;
 typedef struct hb_state_s hb_state_t;
 typedef union  hb_esconfig_u     hb_esconfig_t;
 typedef struct hb_work_private_s hb_work_private_t;
@@ -102,11 +104,11 @@ typedef struct hb_lock_s hb_lock_t;
 #include "libavutil/audioconvert.h"
 
 hb_list_t * hb_list_init();
-int         hb_list_count( hb_list_t * );
+int         hb_list_count( const hb_list_t * );
 void        hb_list_add( hb_list_t *, void * );
 void        hb_list_insert( hb_list_t * l, int pos, void * p );
 void        hb_list_rem( hb_list_t *, void * );
-void      * hb_list_item( hb_list_t *, int );
+void      * hb_list_item( const hb_list_t *, int );
 void        hb_list_close( hb_list_t ** );
 
 void hb_reduce( int *x, int *y, int num, int den );
@@ -117,12 +119,19 @@ void hb_limit_rational64( int64_t *x, int64_t *y, int64_t num, int64_t den, int6
 #define HB_KEEP_HEIGHT 1
 void hb_fix_aspect( hb_job_t * job, int keep );
 
+void hb_job_set_advanced_opts( hb_job_t *job, const char *advanced_opts );
+void hb_job_set_file( hb_job_t *job, const char *file );
+
 hb_audio_t *hb_audio_copy(const hb_audio_t *src);
+hb_list_t *hb_audio_list_copy(const hb_list_t *src);
+void hb_audio_close(hb_audio_t **audio);
 void hb_audio_config_init(hb_audio_config_t * audiocfg);
 int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg);
 hb_audio_config_t * hb_list_audio_config_item(hb_list_t * list, int i);
 
 hb_subtitle_t *hb_subtitle_copy(const hb_subtitle_t *src);
+hb_list_t *hb_subtitle_list_copy(const hb_list_t *src);
+void hb_subtitle_close( hb_subtitle_t **sub );
 int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlecfg, int track);
 int hb_srt_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlecfg, 
                const char *lang);
@@ -131,6 +140,29 @@ int hb_subtitle_can_burn( int source );
 int hb_subtitle_can_pass( int source, int mux );
 
 hb_attachment_t *hb_attachment_copy(const hb_attachment_t *src);
+hb_list_t *hb_attachment_list_copy(const hb_list_t *src);
+void hb_attachment_close(hb_attachment_t **attachment);
+
+hb_metadata_t * hb_metadata_init();
+hb_metadata_t * hb_metadata_copy(const hb_metadata_t *src);
+void hb_metadata_close(hb_metadata_t **metadata);
+void hb_metadata_set_name( hb_metadata_t *metadata, const char *name );
+void hb_metadata_set_artist( hb_metadata_t *metadata, const char *artist );
+void hb_metadata_set_composer( hb_metadata_t *metadata, const char *composer );
+void hb_metadata_set_release_date( hb_metadata_t *metadata, const char *release_date );
+void hb_metadata_set_comment( hb_metadata_t *metadata, const char *comment );
+void hb_metadata_set_genre( hb_metadata_t *metadata, const char *genre );
+void hb_metadata_set_album( hb_metadata_t *metadata, const char *album );
+void hb_metadata_set_album_artist( hb_metadata_t *metadata, const char *album_artist );
+void hb_metadata_set_description( hb_metadata_t *metadata, const char *description );
+void hb_metadata_set_long_description( hb_metadata_t *metadata, const char *long_description );
+void hb_metadata_add_coverart( hb_metadata_t *metadata, const uint8_t *data, int size, int type );
+void hb_metadata_rem_coverart( hb_metadata_t *metadata, int ii );
+
+hb_chapter_t *hb_chapter_copy(const hb_chapter_t *src);
+hb_list_t *hb_chapter_list_copy(const hb_list_t *src);
+void hb_chapter_close(hb_chapter_t **chapter);
+void hb_chapter_set_title(hb_chapter_t *chapter, const char *title);
 
 struct hb_rate_s
 {
@@ -205,7 +237,9 @@ int hb_mixdown_get_low_freq_channel_count(int amixdown);
 int hb_mixdown_get_mixdown_from_short_name(const char *short_name);
 const char* hb_mixdown_get_short_name_from_mixdown(int amixdown);
 
-void hb_autopassthru_apply_settings( hb_job_t * job, hb_title_t * title );
+int hb_mixdown_get_mixdown_from_short_name( const char * short_name );
+const char * hb_mixdown_get_short_name_from_mixdown( int amixdown );
+void hb_autopassthru_apply_settings( hb_job_t * job );
 void hb_autopassthru_print_settings( hb_job_t * job );
 int hb_autopassthru_get_encoder( int in_codec, int copy_mask, int fallback, int muxer );
 int hb_get_best_mixdown(uint32_t codec, uint64_t layout, int mixdown);
@@ -221,6 +255,12 @@ float hb_get_default_audio_quality( uint32_t codec );
 void hb_get_audio_compression_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
 float hb_get_best_audio_compression( uint32_t codec, float compression);
 float hb_get_default_audio_compression( uint32_t codec );
+
+struct hb_title_set_s
+{
+    hb_list_t   * list_title;
+    int           feature;    // Detected DVD feature title
+};
 
 /******************************************************************************
  * hb_job_t: settings to be filled by the UI
@@ -333,6 +373,8 @@ struct hb_job_s
 #define HB_COLR_MAT_SMPTE240M 7
 // 0, 3-5, 8-65535: reserved
 
+    hb_list_t     * list_chapter;
+
     /* List of audio settings. */
     hb_list_t     * list_audio;
     int             acodec_copy_mask; // Auto Passthru allowed codecs
@@ -340,6 +382,10 @@ struct hb_job_s
 
     /* Subtitles */
     hb_list_t     * list_subtitle;
+
+    hb_list_t     * list_attachment;
+
+    hb_metadata_t * metadata;
 
     /* Muxer settings
          mux:  output file format
@@ -349,7 +395,7 @@ struct hb_job_s
 #define HB_MUX_MKV  0x200000
 
     int             mux;
-    const char          * file;
+    char          * file;
 
     /* Allow MP4 files > 4 gigs */
     int             largeFileSize;
@@ -534,7 +580,7 @@ struct hb_chapter_s
     uint64_t duration;
 
     /* Optional chapter title */
-    char     title[1024];
+    char     *title;
 };
 
 /*
@@ -615,23 +661,38 @@ struct hb_subtitle_s
  */
 struct hb_attachment_s
 {
-    enum attachtype { FONT_TTF_ATTACH } type;
+    enum attachtype { FONT_TTF_ATTACH, HB_ART_ATTACH } type;
     char *  name;
     char *  data;
     int     size;
 };
 
+struct hb_coverart_s
+{
+    uint8_t *data;
+    uint32_t size;
+    enum arttype {
+        HB_ART_UNDEFINED,
+        HB_ART_BMP,
+        HB_ART_GIF,
+        HB_ART_PNG,
+        HB_ART_JPEG
+    } type;
+};
+
 struct hb_metadata_s 
 {
-    char  name[255];
-    char  artist[255];
-    char  composer[255];
-    char  release_date[255];
-    char  comment[1024];
-    char  album[255];
-    char  genre[255];
-    uint32_t coverart_size;
-    uint8_t *coverart;
+    char  *name;
+    char  *artist;          // Actors
+    char  *composer;
+    char  *release_date;
+    char  *comment;
+    char  *album;           // DVD
+    char  *album_artist;    // Director
+    char  *genre;
+    char  *description;
+    char  *long_description;
+    hb_list_t * list_coverart;
 };
 
 struct hb_title_s
@@ -682,7 +743,7 @@ struct hb_title_s
     int         video_codec_param;      /* codec specific config */
     char        *video_codec_name;
     int         video_bitrate;
-    const char  *container_name;
+    char        *container_name;
     int         data_rate;
 
     hb_metadata_t *metadata;
@@ -692,12 +753,15 @@ struct hb_title_s
     hb_list_t * list_subtitle;
     hb_list_t * list_attachment;
 
-    /* Job template for this title */
+#define HB_TITLE_JOBS
+#if defined(HB_TITLE_JOBS)
     hb_job_t  * job;
+#endif
 
     uint32_t    flags;
                 // set if video stream doesn't have IDR frames
 #define         HBTF_NO_IDR (1 << 0)
+#define         HBTF_SCAN_COMPLETE (1 << 0)
 };
 
 
@@ -941,7 +1005,8 @@ enum
 
 hb_filter_object_t * hb_filter_init( int filter_id );
 hb_filter_object_t * hb_filter_copy( hb_filter_object_t * filter );
-void                 hb_filter_close( hb_filter_object_t ** );
+hb_list_t *hb_filter_list_copy(const hb_list_t *src);
+void hb_filter_close( hb_filter_object_t ** );
 
 typedef void hb_error_handler_t( const char *errmsg );
 

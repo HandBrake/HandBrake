@@ -4195,12 +4195,12 @@ presets_row_expanded_cb(
 }
 
 static void
-preset_update_title_deps(signal_user_data_t *ud, ghb_title_info_t *tinfo)
+preset_update_title_deps(signal_user_data_t *ud, hb_title_t *title)
 {
 	GtkWidget *widget;
 
 	ghb_ui_update(ud, "scale_width", 
-			ghb_int64_value(tinfo->width - tinfo->crop[2] - tinfo->crop[3]));
+			ghb_int64_value(title->width - title->crop[2] - title->crop[3]));
 	// If anamorphic or keep_aspect, the hight will be automatically calculated
 	gboolean keep_aspect;
 	gint pic_par;
@@ -4209,35 +4209,34 @@ preset_update_title_deps(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	if (!(keep_aspect || pic_par) || pic_par == 3)
 	{
 		ghb_ui_update(ud, "scale_height", 
-			ghb_int64_value(tinfo->height - tinfo->crop[0] - tinfo->crop[1]));
+			ghb_int64_value(title->height - title->crop[0] - title->crop[1]));
 	}
 
 	// Set the limits of cropping.  hb_set_anamorphic_size crashes if
 	// you pass it a cropped width or height == 0.
 	gint bound;
-	bound = tinfo->height / 2 - 2;
+	bound = title->height / 2 - 2;
 	widget = GHB_WIDGET (ud->builder, "PictureTopCrop");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
 	widget = GHB_WIDGET (ud->builder, "PictureBottomCrop");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
-	bound = tinfo->width / 2 - 2;
+	bound = title->width / 2 - 2;
 	widget = GHB_WIDGET (ud->builder, "PictureLeftCrop");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
 	widget = GHB_WIDGET (ud->builder, "PictureRightCrop");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
 	if (ghb_settings_get_boolean(ud->settings, "PictureAutoCrop"))
 	{
-		ghb_ui_update(ud, "PictureTopCrop", ghb_int64_value(tinfo->crop[0]));
-		ghb_ui_update(ud, "PictureBottomCrop", ghb_int64_value(tinfo->crop[1]));
-		ghb_ui_update(ud, "PictureLeftCrop", ghb_int64_value(tinfo->crop[2]));
-		ghb_ui_update(ud, "PictureRightCrop", ghb_int64_value(tinfo->crop[3]));
+		ghb_ui_update(ud, "PictureTopCrop", ghb_int64_value(title->crop[0]));
+		ghb_ui_update(ud, "PictureBottomCrop", ghb_int64_value(title->crop[1]));
+		ghb_ui_update(ud, "PictureLeftCrop", ghb_int64_value(title->crop[2]));
+		ghb_ui_update(ud, "PictureRightCrop", ghb_int64_value(title->crop[3]));
 	}
 }
 
 void
 ghb_refresh_preset(signal_user_data_t *ud)
 {
-	ghb_title_info_t tinfo;
 	GValue *preset;
 	gint *indices, len;
 
@@ -4266,9 +4265,10 @@ ghb_refresh_preset(signal_user_data_t *ud)
 			ghb_set_pref_audio_from_settings(ud, ud->settings);
 			ghb_set_pref_subtitle(titleindex, ud);
 			ghb_settings_set_boolean(ud->settings, "preset_modified", FALSE);
-			if (ghb_get_title_info (&tinfo, titleindex))
+			hb_title_t * title = ghb_get_title_info(titleindex);
+			if (title != NULL)
 			{
-				preset_update_title_deps(ud, &tinfo);
+				preset_update_title_deps(ud, title);
 			}
 			ud->scale_busy = FALSE;
 			ghb_set_scale (ud, GHB_PIC_KEEP_PAR|GHB_PIC_USE_MAX);
@@ -4306,7 +4306,6 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 {
 	GtkTreeModel *store;
 	GtkTreeIter iter;
-	ghb_title_info_t tinfo;
 	GtkWidget *widget;
 	
 	g_debug("presets_list_selection_changed_cb ()");
@@ -4343,9 +4342,10 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 			ghb_set_pref_audio_from_settings(ud, ud->settings);
 			ghb_set_pref_subtitle(titleindex, ud);
 			ghb_settings_set_boolean(ud->settings, "preset_modified", FALSE);
-			if (ghb_get_title_info (&tinfo, titleindex))
+			hb_title_t * title = ghb_get_title_info(titleindex);
+			if (title != NULL)
 			{
-				preset_update_title_deps(ud, &tinfo);
+				preset_update_title_deps(ud, title);
 			}
 			ud->scale_busy = FALSE;
 			ghb_set_scale (ud, GHB_PIC_KEEP_PAR|GHB_PIC_USE_MAX);

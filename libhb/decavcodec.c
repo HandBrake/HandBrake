@@ -565,7 +565,7 @@ static void log_chapter( hb_work_private_t *pv, int chap_num, int64_t pts )
     if ( !pv->job )
         return;
 
-    c = hb_list_item( pv->job->title->list_chapter, chap_num - 1 );
+    c = hb_list_item( pv->job->list_chapter, chap_num - 1 );
     if ( c && c->title )
     {
         hb_log( "%s: \"%s\" (%d) at frame %u time %"PRId64,

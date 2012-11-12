@@ -167,7 +167,7 @@ hb_work_object_t * hb_sync_init( hb_job_t * job )
             duration = 0;
             for( i = job->chapter_start; i <= job->chapter_end; i++ )
             {
-                chapter   = hb_list_item( title->list_chapter, i - 1 );
+                chapter   = hb_list_item( job->list_chapter, i - 1 );
                 duration += chapter->duration;
             }
         }
@@ -179,7 +179,7 @@ hb_work_object_t * hb_sync_init( hb_job_t * job )
     /* Initialize libsamplerate for every audio track we have */
     if ( ! job->indepth_scan )
     {
-        for( i = 0; i < hb_list_count( title->list_audio ); i++ )
+        for( i = 0; i < hb_list_count( job->list_audio ); i++ )
         {
             InitAudio( job, pv->common, i );
         }
@@ -892,7 +892,6 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
 {
     hb_work_object_t  * w;
     hb_work_private_t * pv;
-    hb_title_t        * title = job->title;
     hb_sync_audio_t   * sync;
 
     pv = calloc( 1, sizeof( hb_work_private_t ) );
@@ -905,7 +904,7 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
 
     w = hb_get_work( WORK_SYNC_AUDIO );
     w->private_data = pv;
-    w->audio = hb_list_item( title->list_audio, i );
+    w->audio = hb_list_item( job->list_audio, i );
     w->fifo_in = w->audio->priv.fifo_raw;
 
     if ( w->audio->config.out.codec & HB_ACODEC_PASS_FLAG )

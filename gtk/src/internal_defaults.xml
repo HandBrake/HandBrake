@@ -24,6 +24,22 @@
 		<integer>100</integer>
 		<key>folder</key>
 		<string></string>
+		<key>MetaName</key>
+		<string></string>
+		<key>MetaArtist</key>
+		<string></string>
+		<key>MetaAlbumArtist</key>
+		<string></string>
+		<key>MetaReleaseDate</key>
+		<string></string>
+		<key>MetaComment</key>
+		<string></string>
+		<key>MetaGenre</key>
+		<string></string>
+		<key>MetaDescription</key>
+		<string></string>
+		<key>MetaLongDescription</key>
+		<string></string>
 		<key>preset</key>
 		<array>
 			<string>Normal</string>

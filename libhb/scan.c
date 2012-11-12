@@ -18,7 +18,7 @@ typedef struct
 
     char         * path;
     int            title_index;
-    hb_list_t    * list_title;
+    hb_title_set_t * title_set;
 
     hb_bd_t      * bd;
     hb_dvd_t     * dvd;
@@ -51,7 +51,7 @@ static const char *aspect_to_string( double aspect )
 
 hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
                             const char * path, int title_index, 
-                            hb_list_t * list_title, int preview_count, 
+                            hb_title_set_t * title_set, int preview_count, 
                             int store_previews, uint64_t min_duration )
 {
     hb_scan_t * data = calloc( sizeof( hb_scan_t ), 1 );
@@ -60,7 +60,7 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
     data->die          = die;
     data->path         = strdup( path );
     data->title_index  = title_index;
-    data->list_title   = list_title;
+    data->title_set    = title_set;
     
     data->preview_count  = preview_count;
     data->store_previews = store_previews;
@@ -88,7 +88,8 @@ static void ScanFunc( void * _data )
         if( data->title_index )
         {
             /* Scan this title only */
-            hb_list_add( data->list_title, hb_bd_title_scan( data->bd,
+            hb_list_add( data->title_set->list_title,
+                         hb_bd_title_scan( data->bd,
                          data->title_index, 0 ) );
         }
         else
@@ -96,10 +97,12 @@ static void ScanFunc( void * _data )
             /* Scan all titles */
             for( i = 0; i < hb_bd_title_count( data->bd ); i++ )
             {
-                hb_list_add( data->list_title, hb_bd_title_scan( data->bd, 
+                hb_list_add( data->title_set->list_title,
+                             hb_bd_title_scan( data->bd, 
                              i + 1, data->min_title_duration ) );
             }
-            feature = hb_bd_main_feature( data->bd, data->list_title );
+            feature = hb_bd_main_feature( data->bd,
+                                          data->title_set->list_title );
         }
     }
     else if( ( data->dvd = hb_dvd_init( data->path ) ) )
@@ -109,7 +112,8 @@ static void ScanFunc( void * _data )
         if( data->title_index )
         {
             /* Scan this title only */
-            hb_list_add( data->list_title, hb_dvd_title_scan( data->dvd,
+            hb_list_add( data->title_set->list_title,
+                         hb_dvd_title_scan( data->dvd,
                             data->title_index, 0 ) );
         }
         else
@@ -117,10 +121,12 @@ static void ScanFunc( void * _data )
             /* Scan all titles */
             for( i = 0; i < hb_dvd_title_count( data->dvd ); i++ )
             {
-                hb_list_add( data->list_title, hb_dvd_title_scan( data->dvd, 
+                hb_list_add( data->title_set->list_title,
+                             hb_dvd_title_scan( data->dvd, 
                             i + 1, data->min_title_duration ) );
             }
-            feature = hb_dvd_main_feature( data->dvd, data->list_title );
+            feature = hb_dvd_main_feature( data->dvd,
+                                           data->title_set->list_title );
         }
     }
     else if ( ( data->batch = hb_batch_init( data->path ) ) )
@@ -131,7 +137,7 @@ static void ScanFunc( void * _data )
             title = hb_batch_title_scan( data->batch, data->title_index );
             if ( title )
             {
-                hb_list_add( data->list_title, title );
+                hb_list_add( data->title_set->list_title, title );
             }
         }
         else
@@ -144,7 +150,7 @@ static void ScanFunc( void * _data )
                 title = hb_batch_title_scan( data->batch, i + 1 );
                 if ( title != NULL )
                 {
-                    hb_list_add( data->list_title, title );
+                    hb_list_add( data->title_set->list_title, title );
                 }
             }
         }
@@ -156,7 +162,7 @@ static void ScanFunc( void * _data )
         {
             title = hb_stream_title_scan( data->stream, title );
             if ( title )
-                hb_list_add( data->list_title, title );
+                hb_list_add( data->title_set->list_title, title );
         }
         else
         {
@@ -166,7 +172,7 @@ static void ScanFunc( void * _data )
         }
     }
 
-    for( i = 0; i < hb_list_count( data->list_title ); )
+    for( i = 0; i < hb_list_count( data->title_set->list_title ); )
     {
         int j;
         hb_state_t state;
@@ -176,7 +182,7 @@ static void ScanFunc( void * _data )
         {
             goto finish;
         }
-        title = hb_list_item( data->list_title, i );
+        title = hb_list_item( data->title_set->list_title, i );
 
 #define p state.param.scanning
         /* Update the UI */
@@ -185,7 +191,7 @@ static void ScanFunc( void * _data )
         p.title_count = data->dvd ? hb_dvd_title_count( data->dvd ) : 
                         data->bd ? hb_bd_title_count( data->bd ) :
                         data->batch ? hb_batch_title_count( data->batch ) :
-                                   hb_list_count(data->list_title);
+                                   hb_list_count(data->title_set->list_title);
         hb_set_state( data->h, &state );
 #undef p
 
@@ -194,7 +200,7 @@ static void ScanFunc( void * _data )
         if( !DecodePreviews( data, title ) )
         {
             /* TODO: free things */
-            hb_list_rem( data->list_title, title );
+            hb_list_rem( data->title_set->list_title, title );
             for( j = 0; j < hb_list_count( title->list_audio ); j++)
             {
                 audio = hb_list_item( title->list_audio, j );
@@ -247,64 +253,16 @@ static void ScanFunc( void * _data )
         i++;
     }
 
-    /* Init jobs templates */
-    for( i = 0; i < hb_list_count( data->list_title ); i++ )
+    data->title_set->feature = feature;
+
+    /* Mark title scan complete and init jobs */
+    for( i = 0; i < hb_list_count( data->title_set->list_title ); i++ )
     {
-        hb_job_t * job;
-
-        title      = hb_list_item( data->list_title, i );
-        job        = calloc( sizeof( hb_job_t ), 1 );
-        title->job = job;
-
-        job->title = title;
-        job->feature = feature;
-
-        /* Set defaults settings */
-        job->chapter_start = 1;
-        job->chapter_end   = hb_list_count( title->list_chapter );
-
-        /* Autocrop by default. Gnark gnark */
-        memcpy( job->crop, title->crop, 4 * sizeof( int ) );
-
-        /* Preserve a source's pixel aspect, if it's available. */
-        if( title->pixel_aspect_width && title->pixel_aspect_height )
-        {
-            job->anamorphic.par_width  = title->pixel_aspect_width;
-            job->anamorphic.par_height = title->pixel_aspect_height;
-        }
-
-        if( title->aspect != 0 && title->aspect != 1. &&
-            !job->anamorphic.par_width && !job->anamorphic.par_height)
-        {
-            hb_reduce( &job->anamorphic.par_width, &job->anamorphic.par_height,
-                       (int)(title->aspect * title->height + 0.5), title->width );
-        }
-
-        job->width = title->width - job->crop[2] - job->crop[3];
-        hb_fix_aspect( job, HB_KEEP_WIDTH );
-        if( job->height > title->height - job->crop[0] - job->crop[1] )
-        {
-            job->height = title->height - job->crop[0] - job->crop[1];
-            hb_fix_aspect( job, HB_KEEP_HEIGHT );
-        }
-
-        hb_log( "scan: title (%d) job->width:%d, job->height:%d",
-                i, job->width, job->height );
-
-        job->keep_ratio = 1;
-
-        job->vcodec     = HB_VCODEC_FFMPEG_MPEG4;
-        job->vquality   = -1.0;
-        job->vbitrate   = 1000;
-        job->pass       = 0;
-        job->vrate      = title->rate;
-        job->vrate_base = title->rate_base;
-
-        job->list_audio = hb_list_init();
-        job->list_subtitle = hb_list_init();
-        job->list_filter = hb_list_init();
-
-        job->mux = HB_MUX_MP4;
+        title      = hb_list_item( data->title_set->list_title, i );
+        title->flags |= HBTF_SCAN_COMPLETE;
+#if defined(HB_TITLE_JOBS)
+        title->job = hb_job_init( title );
+#endif
     }
 
 finish:

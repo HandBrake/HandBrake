@@ -1404,18 +1404,11 @@ ghb_subtitle_track_source(GValue *settings, gint track)
 	if (titleindex < 0)
 		return VOBSUB;
 
-	hb_list_t  * list;
 	hb_title_t * title;
 	hb_subtitle_t * sub;
 	
 	if (h_scan == NULL) return VOBSUB;
-	list = hb_get_titles( h_scan );
-	if( !hb_list_count( list ) )
-	{
-		/* No valid title, stop right there */
-		return VOBSUB;
-	}
-	title = hb_list_item( list, titleindex );
+	title = ghb_get_title_info( titleindex );
 	if (title == NULL) return VOBSUB;	// Bad titleindex
 	sub = hb_list_item( title->list_subtitle, track);
 	if (sub != NULL)
@@ -1445,17 +1438,10 @@ ghb_subtitle_track_source_name(GValue *settings, gint track)
 	if (titleindex < 0)
 		goto done;
 
-	hb_list_t  * list;
 	hb_title_t * title;
 	hb_subtitle_t * sub;
 	
-	if (h_scan == NULL) 
-		goto done;
-	list = hb_get_titles( h_scan );
-	if( !hb_list_count( list ) )
-		goto done;
-
-	title = hb_list_item( list, titleindex );
+	title = ghb_get_title_info( titleindex );
 	if (title == NULL)
 		goto done;
 
@@ -1482,20 +1468,10 @@ ghb_subtitle_track_lang(GValue *settings, gint track)
 	if (track < 0)
 		goto fail;
 
-	hb_list_t  * list;
 	hb_title_t * title;
 	hb_subtitle_t * sub;
 	
-	if (h_scan == NULL)
-		goto fail;
-
-	list = hb_get_titles( h_scan );
-	if( !hb_list_count( list ) )
-	{
-		/* No valid title, stop right there */
-		goto fail;
-	}
-	title = hb_list_item( list, titleindex );
+	title = ghb_get_title_info( titleindex );
 	if (title == NULL) 	// Bad titleindex
 		goto fail;
 	sub = hb_list_item( title->list_subtitle, track);
@@ -1509,17 +1485,9 @@ fail:
 gint
 ghb_get_title_number(gint titleindex)
 {
-	hb_list_t  * list;
 	hb_title_t * title;
 	
-	if (h_scan == NULL) return 1;
-	list = hb_get_titles( h_scan );
-	if( !hb_list_count( list ) )
-	{
-		/* No valid title, stop right there */
-		return 1;
-	}
-	title = hb_list_item( list, titleindex );
+	title = ghb_get_title_info( titleindex );
 	if (title == NULL) return 1;	// Bad titleindex
 	return title->index;
 }
@@ -2104,7 +2072,6 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 {
 	GtkTreeIter iter;
 	GtkListStore *store;
-	hb_list_t  * list = NULL;
 	hb_title_t * title = NULL;
     hb_audio_config_t * audio;
 	gint ii;
@@ -2114,14 +2081,10 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 	g_debug("audio_track_opts_set ()\n");
 	store = get_combo_box_store(builder, name);
 	gtk_list_store_clear(store);
-	if (h_scan != NULL)
+	title = ghb_get_title_info(titleindex);
+	if (title != NULL)
 	{
-		list = hb_get_titles( h_scan );
-	    title = (hb_title_t*)hb_list_item( list, titleindex );
-		if (title != NULL)
-		{
-			count = hb_list_count( title->list_audio );
-		}
+		count = hb_list_count( title->list_audio );
 	}
 	if (count > 100) count = 100;
 	if (audio_track_opts.map)
@@ -2188,16 +2151,13 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 const gchar*
 ghb_audio_track_description(gint track, int titleindex)
 {
-	hb_list_t  * list = NULL;
 	hb_title_t * title = NULL;
     hb_audio_config_t * audio;
 	gchar * desc = "Unknown";
 	
 	g_debug("ghb_audio_track_description ()\n");
 
-	if (h_scan == NULL) return desc;
-	list = hb_get_titles( h_scan );
-	title = (hb_title_t*)hb_list_item( list, titleindex );
+	title = ghb_get_title_info( titleindex );
 	if (title == NULL) return desc;
 	if (track >= hb_list_count( title->list_audio )) return desc;
 
@@ -2211,7 +2171,6 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 {
 	GtkTreeIter iter;
 	GtkListStore *store;
-	hb_list_t  * list = NULL;
 	hb_title_t * title = NULL;
 	hb_subtitle_t * subtitle;
 	gint ii, count = 0;
@@ -2220,14 +2179,10 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 	g_debug("subtitle_track_opts_set ()\n");
 	store = get_combo_box_store(builder, name);
 	gtk_list_store_clear(store);
-	if (h_scan != NULL)
+	title = ghb_get_title_info(titleindex);
+	if (title != NULL)
 	{
-		list = hb_get_titles( h_scan );
-	    title = (hb_title_t*)hb_list_item( list, titleindex );
-		if (title != NULL)
-		{
-			count = hb_list_count( title->list_subtitle );
-		}
+		count = hb_list_count( title->list_subtitle );
 	}
 	if (count > 100) count = 100;
 	if (subtitle_opts.map) g_free(subtitle_opts.map);
@@ -2313,44 +2268,39 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 gint
 ghb_longest_title()
 {
-	hb_list_t  * list;
+	hb_title_set_t * title_set;
 	hb_title_t * title;
 	gint ii;
 	gint count = 0;
-	gint titleindex = 0;
 	gint feature;
 	
 	g_debug("ghb_longest_title ()\n");
 	if (h_scan == NULL) return 0;
-	list = hb_get_titles( h_scan );
-	count = hb_list_count( list );
+	title_set = hb_get_title_set( h_scan );
+	count = hb_list_count( title_set->list_title );
 	if (count < 1) return 0;
-	title = (hb_title_t*)hb_list_item(list, 0);
-	feature = title->job->feature;
+	title = (hb_title_t*)hb_list_item(title_set->list_title, 0);
+	feature = title_set->feature;
 	for (ii = 0; ii < count; ii++)
 	{
-		title = (hb_title_t*)hb_list_item(list, ii);
+		title = (hb_title_t*)hb_list_item(title_set->list_title, ii);
 		if (title->index == feature)
 		{
 			return ii;
 		}
 	}
-	return titleindex;
+	return 0;
 }
 
 const gchar*
 ghb_get_source_audio_lang(gint titleindex, gint track)
 {
-	hb_list_t  * list;
 	hb_title_t * title;
     hb_audio_config_t * audio;
 	const gchar *lang = "und";
 	
 	g_debug("ghb_lookup_1st_audio_lang ()\n");
-	if (h_scan == NULL) 
-		return lang;
-	list = hb_get_titles( h_scan );
-    title = (hb_title_t*)hb_list_item( list, titleindex );
+    title = ghb_get_title_info( titleindex );
 	if (title == NULL)
 		return lang;
 	if (hb_list_count( title->list_audio ) <= track)
@@ -2390,7 +2340,6 @@ ghb_find_audio_track(
 	gint fallback_acodec,
 	GHashTable *track_indices)
 {
-	hb_list_t  * list;
 	hb_title_t * title;
 	hb_audio_config_t * audio;
 	gint ii;
@@ -2405,9 +2354,7 @@ ghb_find_audio_track(
 	gint channels;
 	
 	g_debug("find_audio_track ()\n");
-	if (h_scan == NULL) return -1;
-	list = hb_get_titles( h_scan );
-	title = (hb_title_t*)hb_list_item( list, titleindex );
+	title = ghb_get_title_info( titleindex );
 	if (title != NULL)
 	{
 		count = hb_list_count( title->list_audio );
@@ -2617,15 +2564,12 @@ ghb_find_pref_subtitle_track(const gchar *lang)
 gint
 ghb_find_cc_track(gint titleindex)
 {
-	hb_list_t  * list;
 	hb_title_t * title;
 	hb_subtitle_t * subtitle;
 	gint count, ii;
 	
 	g_debug("ghb_find_cc_track ()\n");
-	if (h_scan == NULL) return -2;
-	list = hb_get_titles( h_scan );
-	title = (hb_title_t*)hb_list_item( list, titleindex );
+	title = ghb_get_title_info( titleindex );
 	if (title != NULL)
 	{
 		count = hb_list_count( title->list_subtitle );
@@ -2649,57 +2593,55 @@ ghb_find_subtitle_track(
 	gint          source,
 	GHashTable  * track_indices)
 {
-	hb_list_t  * list;
 	hb_title_t * title;
 	hb_subtitle_t * subtitle;
 	gint count, ii;
 	gboolean *used;
-	
+
 	g_debug("find_subtitle_track ()\n");
 	if (strcmp(lang, "auto") == 0)
 		return -1;
-	if (h_scan == NULL) return -1;
-	list = hb_get_titles( h_scan );
-	title = (hb_title_t*)hb_list_item( list, titleindex );
-	if (title != NULL)
+
+	title = ghb_get_title_info( titleindex );
+	if (title == NULL)
+		return -2;
+
+	count = hb_list_count( title->list_subtitle );
+	used = g_hash_table_lookup(track_indices, lang);
+	if (used == NULL)
 	{
-		count = hb_list_count( title->list_subtitle );
-		used = g_hash_table_lookup(track_indices, lang);
-		if (used == NULL)
-		{
-			used = g_malloc0(count * sizeof(gboolean));
-			g_hash_table_insert(track_indices, g_strdup(lang), used);
-		}
-		// Try to find an item that matches the preferred language and source
-		for (ii = 0; ii < count; ii++)
-		{
-			if (used[ii])
-				continue;
+		used = g_malloc0(count * sizeof(gboolean));
+		g_hash_table_insert(track_indices, g_strdup(lang), used);
+	}
+	// Try to find an item that matches the preferred language and source
+	for (ii = 0; ii < count; ii++)
+	{
+		if (used[ii])
+			continue;
 
-       		subtitle = (hb_subtitle_t*)hb_list_item( title->list_subtitle, ii );
-			if (source == subtitle->source &&
-				((strcmp(lang, subtitle->iso639_2) == 0) ||
-				 (strcmp(lang, "und") == 0)))
-			{
-				used[ii] = TRUE;
-				return ii;
-			}
-		}
-		// Try to find an item that matches the preferred language
-		for (ii = 0; ii < count; ii++)
+		subtitle = (hb_subtitle_t*)hb_list_item( title->list_subtitle, ii );
+		if (source == subtitle->source &&
+			((strcmp(lang, subtitle->iso639_2) == 0) ||
+			 (strcmp(lang, "und") == 0)))
 		{
-			if (used[ii])
-				continue;
+			used[ii] = TRUE;
+			return ii;
+		}
+	}
+	// Try to find an item that matches the preferred language
+	for (ii = 0; ii < count; ii++)
+	{
+		if (used[ii])
+			continue;
 
-       		subtitle = (hb_subtitle_t*)hb_list_item( title->list_subtitle, ii );
-			if (((!force || (force && ghb_canForceSub(subtitle->source))) &&
-				 (!burn  || (burn  &&  ghb_canBurnSub(subtitle->source)))) &&
-				((strcmp(lang, subtitle->iso639_2) == 0) ||
-				 (strcmp(lang, "und") == 0)))
-			{
-				used[ii] = TRUE;
-				return ii;
-			}
+		subtitle = (hb_subtitle_t*)hb_list_item( title->list_subtitle, ii );
+		if (((!force || (force && ghb_canForceSub(subtitle->source))) &&
+			 (!burn  || (burn  &&  ghb_canBurnSub(subtitle->source)))) &&
+			((strcmp(lang, subtitle->iso639_2) == 0) ||
+			 (strcmp(lang, "und") == 0)))
+		{
+			used[ii] = TRUE;
+			return ii;
 		}
 	}
 	return -2;
@@ -3081,16 +3023,13 @@ ghb_build_advanced_opts_string(GValue *settings)
 void
 ghb_part_duration(gint tt, gint sc, gint ec, gint *hh, gint *mm, gint *ss)
 {
-	hb_list_t  * list;
 	hb_title_t * title;
-    hb_chapter_t * chapter;
+	hb_chapter_t * chapter;
 	gint count, c;
 	gint64 duration;
 	
 	*hh = *mm = *ss = 0;
-	if (h_scan == NULL) return;
-	list = hb_get_titles( h_scan );
-    title = (hb_title_t*)hb_list_item( list, tt );
+	title = ghb_get_title_info( tt );
 	if (title == NULL) return;
 
 	*hh = title->hours;
@@ -3119,16 +3058,13 @@ ghb_part_duration(gint tt, gint sc, gint ec, gint *hh, gint *mm, gint *ss)
 void
 ghb_get_chapter_duration(gint ti, gint ii, gint *hh, gint *mm, gint *ss)
 {
-	hb_list_t  * list;
 	hb_title_t * title;
-    hb_chapter_t * chapter;
+	hb_chapter_t * chapter;
 	gint count;
 	
 	g_debug("ghb_get_chapter_duration (title = %d)\n", ti);
 	*hh = *mm = *ss = 0;
-	if (h_scan == NULL) return;
-	list = hb_get_titles( h_scan );
-    title = (hb_title_t*)hb_list_item( list, ti );
+	title = ghb_get_title_info( ti );
 	if (title == NULL) return;
 	count = hb_list_count( title->list_chapter );
 	if (ii >= count) return;
@@ -3142,18 +3078,15 @@ ghb_get_chapter_duration(gint ti, gint ii, gint *hh, gint *mm, gint *ss)
 GValue*
 ghb_get_chapters(gint titleindex)
 {
-	hb_list_t  * list;
 	hb_title_t * title;
-    hb_chapter_t * chapter;
+	hb_chapter_t * chapter;
 	gint count, ii;
 	GValue *chapters = NULL;
 	
 	g_debug("ghb_get_chapters (title = %d)\n", titleindex);
 	chapters = ghb_array_value_new(0);
 
-	if (h_scan == NULL) return chapters;
-	list = hb_get_titles( h_scan );
-    title = (hb_title_t*)hb_list_item( list, titleindex );
+	title = ghb_get_title_info( titleindex );
 	if (title == NULL) return chapters;
 	count = hb_list_count( title->list_chapter );
 	for (ii = 0; ii < count; ii++)
@@ -3601,49 +3534,15 @@ ghb_track_status()
     }
 }
 
-gboolean
-ghb_get_title_info(ghb_title_info_t *tinfo, gint titleindex)
+hb_title_t *
+ghb_get_title_info(gint titleindex)
 {
 	hb_list_t  * list;
-	hb_title_t * title;
-	
-    if (h_scan == NULL) return FALSE;
+
+	if (h_scan == NULL) return NULL;
 	list = hb_get_titles( h_scan );
-	if( !hb_list_count( list ) )
-	{
-		/* No valid title, stop right there */
-		return FALSE;
-	}
-
-	title = hb_list_item( list, titleindex );
-	if (title == NULL) return FALSE;	// Bad titleindex
-	tinfo->index = titleindex;
-	tinfo->video_codec_name = title->video_codec_name;
-	tinfo->width = title->width;
-	tinfo->height = title->height;
-	memcpy(tinfo->crop, title->crop, 4 * sizeof(int));
-	// Don't allow crop to 0
-	if (title->crop[0] + title->crop[1] >= title->height)
-		title->crop[0] = title->crop[1] = 0;
-	if (title->crop[2] + title->crop[3] >= title->width)
-		title->crop[2] = title->crop[3] = 0;
-	tinfo->num_chapters = hb_list_count(title->list_chapter);
-	tinfo->rate_base = title->rate_base;
-	tinfo->rate = title->rate;
-	tinfo->interlaced = title->detected_interlacing;
-	hb_reduce(&(tinfo->aspect_n), &(tinfo->aspect_d), 
-				title->width * title->pixel_aspect_width, 
-				title->height * title->pixel_aspect_height);
-	tinfo->hours = title->hours;
-	tinfo->minutes = title->minutes;
-	tinfo->seconds = title->seconds;
-	tinfo->duration = title->duration;
-
-	tinfo->angle_count = title->angle_count;
-	tinfo->path = title->path;
-	tinfo->name = title->name;
-	tinfo->type = title->type;
-	return TRUE;
+	if (list == NULL) return NULL;
+	return hb_list_item( list, titleindex );
 }
 
 hb_audio_config_t*
@@ -3740,13 +3639,13 @@ ghb_limit_rational( gint *num, gint *den, gint limit )
 void
 ghb_set_scale_settings(GValue *settings, gint mode)
 {
-	hb_list_t  * list;
 	hb_title_t * title;
 	hb_job_t   * job;
 	gboolean keep_aspect;
 	gint pic_par;
 	gboolean autocrop, autoscale, noscale;
-	gint crop[4], width, height, par_width, par_height;
+	gint crop[4] = {0,};
+	gint width, height, par_width, par_height;
 	gint crop_width, crop_height;
 	gint aspect_n, aspect_d;
 	gboolean keep_width = (mode & GHB_PIC_KEEP_WIDTH);
@@ -3769,19 +3668,13 @@ ghb_set_scale_settings(GValue *settings, gint mode)
 		ghb_settings_set_boolean(settings, "PictureKeepRatio", TRUE);
 	}
 
-	if (h_scan == NULL) return;
-	list = hb_get_titles( h_scan );
-	if( !hb_list_count( list ) )
-	{
-		/* No valid title, stop right there */
-		return;
-	}
 	gint titleindex;
 
 	titleindex = ghb_settings_combo_int(settings, "title");
-	title = hb_list_item( list, titleindex );
+	title = ghb_get_title_info (titleindex);
 	if (title == NULL) return;
-	job   = title->job;
+
+	job = hb_job_init( title );
 	if (job == NULL) return;
 
 	// First configure widgets
@@ -3801,14 +3694,12 @@ ghb_set_scale_settings(GValue *settings, gint mode)
 		keep_height = FALSE;
 	}
 
-	ghb_title_info_t tinfo;
-	ghb_get_title_info (&tinfo, titleindex);
 	if (autocrop)
 	{
-		crop[0] = tinfo.crop[0];
-		crop[1] = tinfo.crop[1];
-		crop[2] = tinfo.crop[2];
-		crop[3] = tinfo.crop[3];
+		crop[0] = title->crop[0];
+		crop[1] = title->crop[1];
+		crop[2] = title->crop[2];
+		crop[3] = title->crop[3];
 		ghb_settings_set_int(settings, "PictureTopCrop", crop[0]);
 		ghb_settings_set_int(settings, "PictureBottomCrop", crop[1]);
 		ghb_settings_set_int(settings, "PictureLeftCrop", crop[2]);
@@ -3826,8 +3717,8 @@ ghb_set_scale_settings(GValue *settings, gint mode)
 		gint need1, need2;
 
 		// Adjust the cropping to accomplish the desired width and height
-		crop_width = tinfo.width - crop[2] - crop[3];
-		crop_height = tinfo.height - crop[0] - crop[1];
+		crop_width = width - crop[2] - crop[3];
+		crop_height = height - crop[0] - crop[1];
 		width = MOD_DOWN(crop_width, mod);
 		height = MOD_DOWN(crop_height, mod);
 
@@ -3999,6 +3890,7 @@ ghb_set_scale_settings(GValue *settings, gint mode)
 	ghb_settings_set_int(settings, "PicturePARHeight", par_height);
 	ghb_settings_set_int(settings, "PictureDisplayWidth", disp_width);
 	ghb_settings_set_int(settings, "PictureDisplayHeight", height);
+	hb_job_close( &job );
 }
 
 void
@@ -4290,24 +4182,19 @@ ghb_validate_video(GValue *settings)
 gboolean
 ghb_validate_subtitles(GValue *settings)
 {
-	hb_list_t  * list;
 	hb_title_t * title;
 	gchar *message;
 
-	if (h_scan == NULL) return FALSE;
-	list = hb_get_titles( h_scan );
-	if( !hb_list_count( list ) )
+	gint titleindex;
+
+	titleindex = ghb_settings_combo_int(settings, "title");
+	title = ghb_get_title_info(titleindex);
+	if (title == NULL)
 	{
 		/* No valid title, stop right there */
 		g_message("No title found.\n");
 		return FALSE;
 	}
-
-	gint titleindex;
-
-	titleindex = ghb_settings_combo_int(settings, "title");
-    title = hb_list_item( list, titleindex );
-	if (title == NULL) return FALSE;
 
 	const GValue *slist, *subtitle;
 	gint count, ii, source;
@@ -4368,25 +4255,20 @@ ghb_validate_subtitles(GValue *settings)
 gboolean
 ghb_validate_audio(GValue *settings)
 {
-	hb_list_t  * list;
 	hb_title_t * title;
 	gchar *message;
 	GValue *value;
 
-	if (h_scan == NULL) return FALSE;
-	list = hb_get_titles( h_scan );
-	if( !hb_list_count( list ) )
+	gint titleindex;
+
+	titleindex = ghb_settings_combo_int(settings, "title");
+	title = ghb_get_title_info( titleindex );
+	if (title == NULL)
 	{
 		/* No valid title, stop right there */
 		g_message("No title found.\n");
 		return FALSE;
 	}
-
-	gint titleindex;
-
-	titleindex = ghb_settings_combo_int(settings, "title");
-    title = hb_list_item( list, titleindex );
-	if (title == NULL) return FALSE;
 	gint mux = ghb_settings_combo_int(settings, "FileFormat");
 
 	const GValue *audio_list;
@@ -4602,7 +4484,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	if (title == NULL) return;
 
 	/* Set job settings */
-	job   = title->job;
+	job = hb_job_init( title );
 	if (job == NULL) return;
 
 	job->angle = ghb_settings_get_int(js, "angle");
@@ -4686,9 +4568,8 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 				{
 					name = g_strdup_printf ("Chapter %2d", chap+1);
 				}
-				chapter_s = hb_list_item( job->title->list_chapter, chap);
-				strncpy(chapter_s->title, name, 1023);
-				chapter_s->title[1023] = '\0';
+				chapter_s = hb_list_item( job->list_chapter, chap);
+				hb_chapter_set_title(chapter_s, name);
 				g_free(name);
 			}
 		}
@@ -4945,7 +4826,8 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	}
 
 	dest_str = ghb_settings_get_string(js, "destination");
-	job->file = dest_str;
+	hb_job_set_file( job, dest_str);
+	g_free(dest_str);
 
 	const GValue *subtitle_list;
 	gint subtitle;
@@ -5066,6 +4948,57 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		advanced_opts = NULL;
 	}
 
+	char * meta;
+
+	meta = ghb_settings_get_string(js, "MetaName");
+	if (meta && *meta)
+	{
+		hb_metadata_set_name(job->metadata, meta);
+	}
+	free(meta);
+	meta = ghb_settings_get_string(js, "MetaArtist");
+	if (meta && *meta)
+	{
+		hb_metadata_set_artist(job->metadata, meta);
+	}
+	free(meta);
+	meta = ghb_settings_get_string(js, "MetaAlbumArtist");
+	if (meta && *meta)
+	{
+		hb_metadata_set_album_artist(job->metadata, meta);
+	}
+	free(meta);
+	meta = ghb_settings_get_string(js, "MetaReleaseDate");
+	if (meta && *meta)
+	{
+		hb_metadata_set_release_date(job->metadata, meta);
+	}
+	free(meta);
+	meta = ghb_settings_get_string(js, "MetaComment");
+	if (meta && *meta)
+	{
+		hb_metadata_set_comment(job->metadata, meta);
+	}
+	free(meta);
+	meta = ghb_settings_get_string(js, "MetaGenre");
+	if (meta && *meta)
+	{
+		hb_metadata_set_genre(job->metadata, meta);
+	}
+	free(meta);
+	meta = ghb_settings_get_string(js, "MetaDescription");
+	if (meta && *meta)
+	{
+		hb_metadata_set_description(job->metadata, meta);
+	}
+	free(meta);
+	meta = ghb_settings_get_string(js, "MetaLongDescription");
+	if (meta && *meta)
+	{
+		hb_metadata_set_long_description(job->metadata, meta);
+	}
+	free(meta);
+
 	if (job->indepth_scan == 1)
 	{
 		// Subtitle scan. Look for subtitle matching audio language
@@ -5076,7 +5009,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		 */
 		job->pass = -1;
 		job->indepth_scan = 1;
-		job->advanced_opts = NULL;
+		hb_job_set_advanced_opts(job, NULL);
 
 		/*
 		 * Add the pre-scan job
@@ -5095,7 +5028,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		 */
 		job->pass = 1;
 		job->indepth_scan = 0;
-		job->advanced_opts = advanced_opts;
+		hb_job_set_advanced_opts(job, advanced_opts);
 
 		/*
 		 * If turbo options have been selected then set job->fastfirstpass
@@ -5109,10 +5042,9 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		{
 			job->fastfirstpass = 0;
 		}
+
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
 		hb_add( h, job );
-		//if (job->advanced_opts != NULL)
-		//	g_free(job->advanced_opts);
 
 		job->pass = 2;
 		/*
@@ -5124,25 +5056,18 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		job->indepth_scan = 0;
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
 		hb_add( h, job );
-		//if (job->advanced_opts != NULL)
-		//	g_free(job->advanced_opts);
 	}
 	else
 	{
-		job->advanced_opts = advanced_opts;
+		hb_job_set_advanced_opts(job, advanced_opts);
 		job->indepth_scan = 0;
 		job->pass = 0;
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
 		hb_add( h, job );
-		//if (job->advanced_opts != NULL)
-		//	g_free(job->advanced_opts);
 	}
+	g_free(advanced_opts);
 
-	// Reset the job so it can be use again to add other jobs
-	// for the same title.
-	hb_reset_job(job);
-
-	if (dest_str) g_free(dest_str);
+	hb_job_close(&job);
 }
 
 void
@@ -5327,19 +5252,16 @@ ghb_get_preview_image(
 {
 	GValue *settings;
 	hb_title_t *title;
-	hb_list_t  *list;
+	hb_job_t *job;
 	
 	settings = ud->settings;
-	list = hb_get_titles( h_scan );
-	if( !hb_list_count( list ) )
-	{
-		/* No valid title, stop right there */
-		return NULL;
-	}
-    title = hb_list_item( list, titleindex );
-	if (title == NULL) return NULL;
-	if (title->job == NULL) return NULL;
-	set_preview_job_settings(title->job, settings);
+	title = ghb_get_title_info( titleindex );
+	if( title == NULL ) return NULL;
+
+	job = hb_job_init( title );
+	if (job == NULL) return NULL;
+
+	set_preview_job_settings(job, settings);
 
 	// hb_get_preview doesn't compensate for anamorphic, so lets
 	// calculate scale factors
@@ -5347,13 +5269,13 @@ ghb_get_preview_image(
 	gint pic_par = ghb_settings_combo_int(settings, "PicturePAR");
 	if (pic_par)
 	{
-		hb_set_anamorphic_size( title->job, &width, &height, 
+		hb_set_anamorphic_size( job, &width, &height, 
 								&par_width, &par_height );
 	}
 
 	// Make sure we have a big enough buffer to receive the image from libhb
-	gint dstWidth = title->job->width;
-	gint dstHeight= title->job->height;
+	gint dstWidth = job->width;
+	gint dstHeight= job->height;
 
 	static guint8 *buffer = NULL;
 	static gint bufferSize = 0;
@@ -5365,7 +5287,8 @@ ghb_get_preview_image(
 		bufferSize = newSize;
 		buffer     = (guint8*) g_realloc( buffer, bufferSize );
 	}
-	hb_get_preview( h_scan, title, index, buffer );
+	hb_get_preview( h_scan, job, index, buffer );
+	hb_job_close( &job );
 
 	// Create an GdkPixbuf and copy the libhb image into it, converting it from
 	// libhb's format something suitable.

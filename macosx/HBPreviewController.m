@@ -698,7 +698,7 @@
         buffer     = (uint8_t *) realloc( buffer, bufferSize );
     }
 
-    hb_get_preview( handle, title, pictureIndex, buffer );
+    hb_get_preview( handle, title->job, pictureIndex, buffer );
 
     // Create an NSBitmapImageRep and copy the libhb image into it, converting it from
     // libhb's format to one suitable for NSImage. Along the way, we'll strip off the
@@ -907,7 +907,7 @@
     hb_add( fPreviewLibhb, job );
 
     /* we need to clean up the various lists after the job(s) have been set  */
-    hb_reset_job( job );
+    hb_job_reset( job );
 
     [fEncodingControlBox setHidden: NO];
     [fPictureControlBox setHidden: YES];

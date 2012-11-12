@@ -62,29 +62,6 @@ typedef struct
 #define GHB_PIC_KEEP_PAR            0x20
 #define GHB_PIC_USE_MAX             0x40
 
-typedef struct
-{
-	gchar *path;
-	gchar *name;
-	gint index;
-	gint type;
-	char *video_codec_name;
-	gint width;
-	gint height;
-	gint crop[4];
-	gint num_chapters;
-	gint rate;
-	gint rate_base;
-	gint interlaced;
-	gint aspect_n;
-	gint aspect_d;
-	gint hours;
-	gint minutes;
-	gint seconds;
-	gint64 duration;
-	gint angle_count;
-} ghb_title_info_t;
-
 #define GHB_AUDIO_SAMPLERATE 1
 #define GHB_AUDIO_BITRATE 2
 #define GHB_FRAMERATE 3
@@ -123,7 +100,7 @@ void ghb_track_status(void);
 void ghb_backend_scan(const gchar *path, gint titleindex, gint preview_count, guint64 min_duration);
 void ghb_backend_scan_stop();
 void ghb_backend_queue_scan(const gchar *path, gint titleindex);
-gboolean ghb_get_title_info(ghb_title_info_t *tinfo, gint titleindex);
+hb_title_t* ghb_get_title_info(gint titleindex);
 void ghb_par_init(signal_user_data_t *ud);
 void ghb_set_scale(signal_user_data_t *ud, gint mode);
 void ghb_set_scale_settings(GValue *settings, gint mode);

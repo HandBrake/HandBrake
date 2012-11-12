@@ -262,9 +262,9 @@ static int MP4Init( hb_mux_object_t * m )
     }
 
     /* add the audio tracks */
-    for( i = 0; i < hb_list_count( title->list_audio ); i++ )
+    for( i = 0; i < hb_list_count( job->list_audio ); i++ )
     {
-        audio = hb_list_item( title->list_audio, i );
+        audio = hb_list_item( job->list_audio, i );
         mux_data = calloc(1, sizeof( hb_mux_data_t ) );
         audio->priv.mux_data = mux_data;
 
@@ -464,7 +464,7 @@ static int MP4Init( hb_mux_object_t * m )
         /* Set the language for this track */
         MP4SetTrackLanguage(m->file, mux_data->track, audio->config.lang.iso639_2);
 
-        if( hb_list_count( title->list_audio ) > 1 )
+        if( hb_list_count( job->list_audio ) > 1 )
         {
             /* Set the audio track alternate group */
             MP4SetTrackIntegerProperty(m->file, mux_data->track, "tkhd.alternate_group", 1);
@@ -944,7 +944,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             duration = m->sum_dur - m->chapter_duration + offset;
             if ( duration >= (90000*3)/2 )
             {
-                chapter = hb_list_item( m->job->title->list_chapter,
+                chapter = hb_list_item( m->job->list_chapter,
                                         buf->s.new_chap - 2 );
 
                 MP4AddChapter( m->file,
@@ -1248,7 +1248,6 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
 static int MP4End( hb_mux_object_t * m )
 {
     hb_job_t   * job   = m->job;
-    hb_title_t * title = job->title;
 
     // Flush the delayed frame
     if ( m->delay_buf )
@@ -1264,7 +1263,7 @@ static int MP4End( hb_mux_object_t * m )
         if ( duration >= (90000*3)/2 )
         {
 
-            chapter = hb_list_item( m->job->title->list_chapter,
+            chapter = hb_list_item( m->job->list_chapter,
                                     m->current_chapter - 1 );
 
             MP4AddChapter( m->file,
@@ -1293,9 +1292,9 @@ static int MP4End( hb_mux_object_t * m )
     /*
      * Write the MP4 iTunes metadata if we have any metadata
      */
-    if( title->metadata )
+    if( job->metadata )
     {
-        hb_metadata_t *md = title->metadata;
+        hb_metadata_t *md = job->metadata;
         const MP4Tags* tags;
 
         hb_deep_log( 2, "Writing Metadata to output file...");
@@ -1306,28 +1305,60 @@ static int MP4End( hb_mux_object_t * m )
         MP4TagsFetch( tags, m->file );
 
         /* populate */
-        if( strlen( md->name ))
+        if( md->name )
             MP4TagsSetName( tags, md->name );
-        if( strlen( md->artist ))
+        if( md->artist )
             MP4TagsSetArtist( tags, md->artist );
-        if( strlen( md->composer ))
+        if( md->composer )
             MP4TagsSetComposer( tags, md->composer );
-        if( strlen( md->comment ))
+        if( md->comment )
             MP4TagsSetComments( tags, md->comment );
-        if( strlen( md->release_date ))
+        if( md->release_date )
             MP4TagsSetReleaseDate( tags, md->release_date );
-        if( strlen( md->album ))
+        if( md->album )
             MP4TagsSetAlbum( tags, md->album );
-        if( strlen( md->genre ))
+        if( md->album_artist )
+            MP4TagsSetAlbumArtist( tags, md->album_artist );
+        if( md->genre )
             MP4TagsSetGenre( tags, md->genre );
+        if( md->description )
+            MP4TagsSetDescription( tags, md->description );
+        if( md->long_description )
+            MP4TagsSetLongDescription( tags, md->long_description );
 
-        if( md->coverart )
+        if( md->list_coverart )
         {
-            MP4TagArtwork art;
-            art.data = md->coverart;
-            art.size = md->coverart_size;
-            art.type = MP4_ART_UNDEFINED; // delegate typing to libmp4v2
-            MP4TagsAddArtwork( tags, &art );
+            hb_coverart_t * coverart;
+            int ii;
+
+            for ( ii = 0; ii < hb_list_count( md->list_coverart ); ii++ )
+            {
+                coverart = hb_list_item( md->list_coverart, ii );
+                MP4TagArtwork art;
+                int type;
+                switch ( coverart->type )
+                {
+                    case HB_ART_BMP:
+                        type = MP4_ART_BMP;
+                        break;
+                    case HB_ART_GIF:
+                        type = MP4_ART_GIF;
+                        break;
+                    case HB_ART_JPEG:
+                        type = MP4_ART_JPEG;
+                        break;
+                    case HB_ART_PNG:
+                        type = MP4_ART_PNG;
+                        break;
+                    default:
+                        type = MP4_ART_UNDEFINED;
+                        break;
+                }
+                art.data = coverart->data;
+                art.size = coverart->size;
+                art.type = type;
+                MP4TagsAddArtwork( tags, &art );
+            }
         }
 
         /* push data to MP4 file */

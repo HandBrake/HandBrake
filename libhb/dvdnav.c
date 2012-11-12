@@ -740,12 +740,14 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
 
         for (i = pgn; i <= pgc->nr_of_programs; i++)
         {
+            char chapter_title[80];
             chapter = calloc( sizeof( hb_chapter_t ), 1 );
 
             chapter->pgcn = pgcn;
             chapter->pgn = i;
             chapter->index = c + 1;
-            sprintf( chapter->title, "Chapter %d", chapter->index );
+            sprintf( chapter_title, "Chapter %d", chapter->index );
+            hb_chapter_set_title( chapter, chapter_title );
 
             hb_list_add( title->list_chapter, chapter );
             c++;

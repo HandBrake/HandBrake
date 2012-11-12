@@ -29,18 +29,18 @@
     if (!title)
         return;
 
-    int count = hb_list_count( title->list_chapter );
+    hb_job_t * job = title->job;
+    int count = hb_list_count( job->list_chapter );
 
     for( i = 0; i < count; i++ )
     {
-        hb_chapter_t *chapter = hb_list_item( title->list_chapter, i );
+        hb_chapter_t *chapter = hb_list_item( job->list_chapter, i );
         
-        if( chapter != NULL && chapter->title[0] == '\0' )
+        if( chapter != NULL && chapter->title == NULL )
         {
             chapterString = [NSString stringWithFormat:@"Chapter %2d",(i+1)];
     
-            strncpy( chapter->title, [chapterString UTF8String], 1023);
-            chapter->title[1023] = '\0';
+            hb_chapter_set_title( chapter, [chapterString UTF8String]);
         }
     }
     
@@ -67,12 +67,11 @@
     {
         if( fTitle )
         {
-            hb_chapter_t *chapter = hb_list_item( fTitle->list_chapter, rowIndex );
+            hb_chapter_t *chapter = hb_list_item( fTitle->job->list_chapter, rowIndex );
 
             if( chapter != NULL )
             {
-                strncpy( chapter->title, [anObject UTF8String], 1023);
-                chapter->title[1023] = '\0';
+                hb_chapter_set_title( chapter, [anObject UTF8String]);
             }
         }
     }
@@ -92,7 +91,7 @@
     {
         if( fTitle )
         {
-            hb_chapter_t *chapter = hb_list_item( fTitle->list_chapter, rowIndex );
+            hb_chapter_t *chapter = hb_list_item( fTitle->job->list_chapter, rowIndex );
 
             if( chapter != NULL )
             {

@@ -59,7 +59,6 @@ static uint8_t * create_flac_header( uint8_t *data, int size )
 static int MKVInit( hb_mux_object_t * m )
 {
     hb_job_t   * job   = m->job;
-    hb_title_t * title = job->title;
     hb_audio_t    * audio;
     hb_mux_data_t * mux_data;
 
@@ -197,9 +196,9 @@ static int MKVInit( hb_mux_object_t * m )
     mux_data->track = mk_createTrack(m->file, track);
 
     /* add the audio tracks */
-    for( i = 0; i < hb_list_count( title->list_audio ); i++ )
+    for( i = 0; i < hb_list_count( job->list_audio ); i++ )
     {
-        audio = hb_list_item( title->list_audio, i );
+        audio = hb_list_item( job->list_audio, i );
         mux_data = calloc(1, sizeof( hb_mux_data_t ) );
         audio->priv.mux_data = mux_data;
 
@@ -328,14 +327,14 @@ static int MKVInit( hb_mux_object_t * m )
         "custom colors: OFF, tridx: 0000, "
         "colors: 000000, 000000, 000000, 000000\n";
 
-    for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
+    for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
     {
         hb_subtitle_t * subtitle;
         uint32_t        rgb[16];
         char            subidx[2048];
         int             len;
 
-        subtitle = hb_list_item( title->list_subtitle, i );
+        subtitle = hb_list_item( job->list_subtitle, i );
         if (subtitle->config.dest != PASSTHRUSUB)
             continue;
 
@@ -400,7 +399,7 @@ static int MKVInit( hb_mux_object_t * m )
 
     if (need_fonts)
     {
-        hb_list_t * list_attachment = job->title->list_attachment;
+        hb_list_t * list_attachment = job->list_attachment;
         int i;
         for ( i = 0; i < hb_list_count(list_attachment); i++ )
         {
@@ -437,7 +436,6 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
 {
     ogg_packet  *op = NULL;
     hb_job_t * job = m->job;
-    hb_title_t * title = job->title;
     uint64_t   timecode = 0;
     hb_chapter_t *chapter_data;
     char tmp_buffer[1024];
@@ -457,7 +455,7 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                 {
                     mux_data->current_chapter = buf->s.new_chap - 2;
                 }
-                chapter_data = hb_list_item( title->list_chapter,
+                chapter_data = hb_list_item( job->list_chapter,
                                              mux_data->current_chapter++ );
                 tmp_buffer[0] = '\0';
 
@@ -556,7 +554,6 @@ static int MKVEnd( hb_mux_object_t * m )
 {
     hb_job_t  *job = m->job;
     hb_mux_data_t *mux_data = job->mux_data;
-    hb_title_t  *title = job->title;
     hb_chapter_t *chapter_data;
     char tmp_buffer[1024];
     char *string = tmp_buffer;
@@ -569,7 +566,7 @@ static int MKVEnd( hb_mux_object_t * m )
         return 0;
     }
 
-    chapter_data = hb_list_item( title->list_chapter, mux_data->current_chapter++ );
+    chapter_data = hb_list_item( job->list_chapter, mux_data->current_chapter++ );
 
     if(job->chapter_markers)
     {
@@ -588,29 +585,62 @@ static int MKVEnd( hb_mux_object_t * m )
         mk_createChapterSimple(m->file, mux_data->prev_chapter_tc, mux_data->prev_chapter_tc, string);
     }
 
-    if( title->metadata )
+    if( job->metadata )
     {
-        hb_metadata_t *md = title->metadata;
+        hb_metadata_t *md = job->metadata;
 
         hb_deep_log( 2, "Writing Metadata to output file...");
-        mk_createTagSimple( m->file, MK_TAG_TITLE, md->name );
-        mk_createTagSimple( m->file, "ARTIST", md->artist );
-        mk_createTagSimple( m->file, "COMPOSER", md->composer );
-        mk_createTagSimple( m->file, MK_TAG_SYNOPSIS, md->comment );
-        mk_createTagSimple( m->file, "DATE_RELEASED", md->release_date );
-        // mk_createTagSimple( m->file, "", md->album );
-        mk_createTagSimple( m->file, MK_TAG_GENRE, md->genre );
+        if ( md->name )
+        {
+            mk_createTagSimple( m->file, MK_TAG_TITLE, md->name );
+        }
+        if ( md->artist )
+        {
+            mk_createTagSimple( m->file, "ARTIST", md->artist );
+        }
+        if ( md->album_artist )
+        {
+            mk_createTagSimple( m->file, "DIRECTOR", md->album_artist );
+        }
+        if ( md->composer )
+        {
+            mk_createTagSimple( m->file, "COMPOSER", md->composer );
+        }
+        if ( md->release_date )
+        {
+            mk_createTagSimple( m->file, "DATE_RELEASED", md->release_date );
+        }
+        if ( md->comment )
+        {
+            mk_createTagSimple( m->file, "SUMMARY", md->comment );
+        }
+        if ( !md->name && md->album )
+        {
+            mk_createTagSimple( m->file, MK_TAG_TITLE, md->album );
+        }
+        if ( md->genre )
+        {
+            mk_createTagSimple( m->file, MK_TAG_GENRE, md->genre );
+        }
+        if ( md->description )
+        {
+            mk_createTagSimple( m->file, "DESCRIPTION", md->description );
+        }
+        if ( md->long_description )
+        {
+            mk_createTagSimple( m->file, "SYNOPSIS", md->long_description );
+        }
     }
 
     // Update and track private data that can change during
     // encode.
     int i;
-    for( i = 0; i < hb_list_count( title->list_audio ); i++ )
+    for( i = 0; i < hb_list_count( job->list_audio ); i++ )
     {
         mk_Track  * track;
         hb_audio_t    * audio;
 
-        audio = hb_list_item( title->list_audio, i );
+        audio = hb_list_item( job->list_audio, i );
         track = audio->priv.mux_data->track;
 
         switch (audio->config.out.codec & HB_ACODEC_MASK)

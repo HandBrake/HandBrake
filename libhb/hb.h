@@ -54,21 +54,23 @@ uint64_t      hb_first_duration( hb_handle_t * );
    Returns the list of valid titles detected by the latest scan. */
 hb_list_t   * hb_get_titles( hb_handle_t * );
 
+/* hb_get_title_set()
+   Returns the title set which contains a list of valid titles detected
+   by the latest scan and title set data. */
+hb_title_set_t   * hb_get_title_set( hb_handle_t * );
+
 /* hb_detect_comb()
    Analyze a frame for interlacing artifacts, returns true if they're found.
    Taken from Thomas Oestreich's 32detect filter in the Transcode project.  */
 int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int threshold, int prog_equal, int prog_diff, int prog_threshold );
 
+// JJJ: title->job?
 int           hb_save_preview( hb_handle_t * h, int title, int preview, 
                                hb_buffer_t *buf );
 hb_buffer_t * hb_read_preview( hb_handle_t * h, int title_idx, int preview );
-void          hb_get_preview_by_index( hb_handle_t *, int, int, uint8_t * );
-void          hb_get_preview( hb_handle_t *, hb_title_t *, int,
+void          hb_get_preview( hb_handle_t *, hb_job_t *, int,
                               uint8_t * );
 void          hb_set_size( hb_job_t *, double ratio, int pixels );
-void          hb_set_anamorphic_size_by_index( hb_handle_t *, int,
-                int *output_width, int *output_height,
-                int *output_par_width, int *output_par_height );
 void          hb_set_anamorphic_size( hb_job_t *,
                 int *output_width, int *output_height,
                 int *output_par_width, int *output_par_height );
@@ -83,7 +85,11 @@ void          hb_set_chapter_name( hb_handle_t *, int, int, const char * );
 void          hb_set_job( hb_handle_t *, int, hb_job_t * );
 void          hb_add( hb_handle_t *, hb_job_t * );
 void          hb_rem( hb_handle_t *, hb_job_t * );
-void          hb_reset_job( hb_job_t * job );
+
+hb_job_t *    hb_job_init_by_index( hb_handle_t *h, int title_index );
+hb_job_t *    hb_job_init( hb_title_t * title );
+void          hb_job_reset( hb_job_t * job );
+void          hb_job_close( hb_job_t ** job );
 
 void          hb_start( hb_handle_t * );
 void          hb_pause( hb_handle_t * );

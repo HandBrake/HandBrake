@@ -498,11 +498,11 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                     m->look_for_iframe = 0;
                     const char *chap_name = "";
                     if ( m->job && new_chap > 0 &&
-                         hb_list_item( m->job->title->list_chapter,
+                         hb_list_item( m->job->list_chapter,
                                        new_chap - 1 ) )
                     {
                         hb_chapter_t * c = hb_list_item( 
-                                                 m->job->title->list_chapter,
+                                                 m->job->list_chapter,
                                                  new_chap - 1 );
                         chap_name = c->title;
                     }
@@ -514,10 +514,10 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 {
                     // this is the first frame returned by the decoder
                     m->first_pts = buf->s.start;
-                    if ( m->job && hb_list_item( m->job->title->list_chapter,
+                    if ( m->job && hb_list_item( m->job->list_chapter,
                                                  m->job->chapter_start - 1 ) )
                     {
-                        hb_chapter_t * c = hb_list_item( m->job->title->list_chapter,
+                        hb_chapter_t * c = hb_list_item( m->job->list_chapter,
                                                          m->job->chapter_start - 1 );
                         hb_log( "mpeg2: \"%s\" (%d) at frame %u time %"PRId64,
                                 c->title, m->job->chapter_start, m->nframes, buf->s.start );

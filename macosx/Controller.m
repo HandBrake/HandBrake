@@ -1982,13 +1982,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 - (IBAction) showNewScan:(id)sender
 {
-    hb_list_t  * list;
+    hb_title_set_t * title_set;
 	hb_title_t * title = NULL;
 	int feature_title=0; // Used to store the main feature title
 
-        list = hb_get_titles( fHandle );
+        title_set = hb_get_title_set( fHandle );
         
-        if( !hb_list_count( list ) )
+        if( !hb_list_count( title_set->list_title ) )
         {
             /* We display a message if a valid dvd source was not chosen */
             [fSrcDVD2Field setStringValue: @"No Valid Source Found"];
@@ -2036,9 +2036,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [[fWindow toolbar] validateVisibleItems];
             
             [fSrcTitlePopUp removeAllItems];
-            for( int i = 0; i < hb_list_count( list ); i++ )
+            for( int i = 0; i < hb_list_count( title_set->list_title ); i++ )
             {
-                title = (hb_title_t *) hb_list_item( list, i );
+                title = (hb_title_t *) hb_list_item( title_set->list_title, i );
                 
                 currentSource = [NSString stringWithUTF8String: title->name];
                 /*Set DVD Name at top of window with the browsedSourceDisplayName grokked right before -performScan */
@@ -2081,7 +2081,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 }
                 
                 /* See if this is the main feature according to libhb */
-                if (title->index == title->job->feature)
+                if (title->index == title_set->feature)
                 {
                     feature_title = i;
                 }
@@ -2503,10 +2503,10 @@ fWorkingCount = 0;
      */
      int i;
      NSMutableArray *ChapterNamesArray = [[NSMutableArray alloc] init];
-     int chaptercount = hb_list_count( fTitle->list_chapter );
+     int chaptercount = hb_list_count( fTitle->job->list_chapter );
      for( i = 0; i < chaptercount; i++ )
     {
-        hb_chapter_t *chapter = (hb_chapter_t *) hb_list_item( fTitle->list_chapter, i );
+        hb_chapter_t *chapter = (hb_chapter_t *) hb_list_item( fTitle->job->list_chapter, i );
         if( chapter != NULL )
         {
           [ChapterNamesArray addObject:[NSString stringWithUTF8String:chapter->title]];
@@ -2844,7 +2844,7 @@ fWorkingCount = 0;
     NSMutableDictionary * queueToApply = [QueueFileArray objectAtIndex:currentQueueEncodeIndex];
     [self writeToActivityLog: "Preset: %s", [[queueToApply objectForKey:@"PresetName"] UTF8String]];
     [self writeToActivityLog: "processNewQueueEncode number of passes expected is: %d", ([[queueToApply objectForKey:@"VideoTwoPass"] intValue] + 1)];
-    job->file = [[queueToApply objectForKey:@"DestinationPath"] UTF8String];
+    hb_job_set_file(job, [[queueToApply objectForKey:@"DestinationPath"] UTF8String]);
     [self prepareJob];
     
     /*
@@ -2852,16 +2852,14 @@ fWorkingCount = 0;
      */
     if( job->indepth_scan == 1 )
     {
-        char *x264opts_tmp;
+        NSString *advanced_opts_tmp = [NSString stringWithUTF8String: job->advanced_opts];
         
         /*
          * When subtitle scan is enabled do a fast pre-scan job
          * which will determine which subtitles to enable, if any.
          */
         job->pass = -1;
-        x264opts_tmp = job->advanced_opts;
-        
-        job->advanced_opts = NULL;
+        hb_job_set_advanced_opts(job, NULL);
         
         job->indepth_scan = 1;  
 
@@ -2870,7 +2868,7 @@ fWorkingCount = 0;
          * Add the pre-scan job
          */
         hb_add( fQueueEncodeLibhb, job );
-        job->advanced_opts = x264opts_tmp;
+        hb_job_set_advanced_opts(job, [advanced_opts_tmp UTF8String] );
     }
 
     
@@ -2900,8 +2898,10 @@ fWorkingCount = 0;
     [queueToApply setObject:[NSNumber numberWithInt:1] forKey:@"Status"];
     [self saveQueueFileItem];
     
-    /* we need to clean up the various lists after the job(s) have been set  */
-    hb_reset_job( job );
+    /* libhb makes a copy of the job.  So we need to free any resource
+     * that were allocated in construction of the job. This empties
+     * the audio, subtitle, and filter lists */
+    hb_job_reset(job);
     
     /* We should be all setup so let 'er rip */   
     [self doRip];
@@ -3231,13 +3231,11 @@ fWorkingCount = 0;
 		/* Lets use this as per Nyx, Thanks Nyx! */
 		/* For previews we ignore the turbo option for the first pass of two since we only use 1 pass */
 		job->fastfirstpass = 0;
-		job->advanced_opts = strdup( [[fAdvancedOptions optionsString] UTF8String] );
-
-        
+		hb_job_set_advanced_opts(job, [[fAdvancedOptions optionsString] UTF8String] );
     }
     else if( job->vcodec & HB_VCODEC_FFMPEG_MASK )
     {
-        job->advanced_opts = strdup( [[fAdvancedOptions optionsStringLavc] UTF8String] );
+        hb_job_set_advanced_opts(job, [[fAdvancedOptions optionsStringLavc] UTF8String] );
     }
 
     /* Video settings */
@@ -3689,11 +3687,10 @@ bool one_burned = FALSE;
         id tempObject;
         while (tempObject = [enumerator nextObject])
         {
-            hb_chapter_t *chapter = (hb_chapter_t *) hb_list_item( title->list_chapter, i );
+            hb_chapter_t *chapter = (hb_chapter_t *) hb_list_item( job->list_chapter, i );
             if( chapter != NULL )
             {
-                strncpy( chapter->title, [tempObject UTF8String], 1023);
-                chapter->title[1023] = '\0';
+                hb_chapter_set_title( chapter, [tempObject UTF8String] );
             }
             i++;
         }
@@ -3726,13 +3723,13 @@ bool one_burned = FALSE;
 		{
 			job->fastfirstpass = 0;
 		}
-		job->advanced_opts = strdup( [[queueToApply objectForKey:@"x264Option"] UTF8String] );
+        hb_job_set_advanced_opts( job, [[queueToApply objectForKey:@"x264Option"] UTF8String] );
     }
     else if( job->vcodec & HB_VCODEC_FFMPEG_MASK )
     {
         if ([queueToApply objectForKey:@"lavcOption"])
         {
-            job->advanced_opts = strdup( [[queueToApply objectForKey:@"lavcOption"] UTF8String] );
+            hb_job_set_advanced_opts( job, [[queueToApply objectForKey:@"lavcOption"] UTF8String] );
         }
     }
     
@@ -4579,7 +4576,6 @@ bool one_burned = FALSE;
     }
     
     /* Start Get and set the initial pic size for display */
-	hb_job_t * job = title->job;
 	fTitle = title;
     
     /* Set Auto Crop to on upon selecting a new title  */
@@ -4587,12 +4583,12 @@ bool one_burned = FALSE;
     
 	/* We get the originial output picture width and height and put them
 	in variables for use with some presets later on */
-	PicOrigOutputWidth = job->width;
-	PicOrigOutputHeight = job->height;
-	AutoCropTop = job->crop[0];
-	AutoCropBottom = job->crop[1];
-	AutoCropLeft = job->crop[2];
-	AutoCropRight = job->crop[3];
+	PicOrigOutputWidth = title->width;
+	PicOrigOutputHeight = title->height;
+	AutoCropTop = title->crop[0];
+	AutoCropBottom = title->crop[1];
+	AutoCropLeft = title->crop[2];
+	AutoCropRight = title->crop[3];
 
 	/* Reset the new title in fPictureController &&  fPreviewController*/
     [fPictureController SetTitle:title];
@@ -4614,8 +4610,6 @@ bool one_burned = FALSE;
 								 userInfo: [NSDictionary dictionaryWithObjectsAndKeys:
 											[NSData dataWithBytesNoCopy: &fTitle length: sizeof(fTitle) freeWhenDone: NO], keyTitleTag,
 											nil]]];
-
-	
     [fVidRatePopUp selectItemAtIndex: 0];
 
     /* we run the picture size values through calculatePictureSizing to get all picture setting	information*/

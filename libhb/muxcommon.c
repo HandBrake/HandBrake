@@ -441,7 +441,6 @@ static void mux_loop( void * _w )
 
 hb_work_object_t * hb_muxer_init( hb_job_t * job )
 {
-    hb_title_t  * title = job->title;
     int           i;
     hb_mux_t    * mux = calloc( sizeof( hb_mux_t ), 1 );
     hb_work_object_t  * w;
@@ -490,9 +489,9 @@ hb_work_object_t * hb_muxer_init( hb_job_t * job )
     add_mux_track( mux, job->mux_data, 1 );
     muxer->done = &muxer->private_data->mux->done;
 
-    for( i = 0; i < hb_list_count( title->list_audio ); i++ )
+    for( i = 0; i < hb_list_count( job->list_audio ); i++ )
     {
-        hb_audio_t  *audio = hb_list_item( title->list_audio, i );
+        hb_audio_t  *audio = hb_list_item( job->list_audio, i );
 
         w = hb_get_work( WORK_MUX );
         w->private_data = calloc( sizeof( hb_work_private_t ), 1 );
@@ -507,9 +506,9 @@ hb_work_object_t * hb_muxer_init( hb_job_t * job )
         w->thread = hb_thread_init( w->name, mux_loop, w, HB_NORMAL_PRIORITY );
     }
 
-    for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
+    for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
     {
-        hb_subtitle_t  *subtitle = hb_list_item( title->list_subtitle, i );
+        hb_subtitle_t  *subtitle = hb_list_item( job->list_subtitle, i );
 
         if (subtitle->config.dest != PASSTHRUSUB)
             continue;

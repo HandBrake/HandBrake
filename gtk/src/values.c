@@ -322,7 +322,14 @@ ghb_string_value(const gchar *str)
 	static GValue gval = {0,};
 	if (!G_IS_VALUE(&gval))
 		g_value_init(&gval, G_TYPE_STRING);
-	g_value_set_string(&gval, str);
+	if (str == NULL)
+	{
+		g_value_set_string(&gval, "");
+	}
+	else
+	{
+		g_value_set_string(&gval, str);
+	}
 	return &gval;
 }
 

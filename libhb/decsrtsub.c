@@ -464,7 +464,6 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
     hb_buffer_t *buffer;
     int i;
     hb_chapter_t * chapter;
-    hb_title_t *title = job->title;
 
     pv = calloc( 1, sizeof( hb_work_private_t ) );
     if( pv )
@@ -489,7 +488,7 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
         pv->start_time = 0;
         for( i = 1; i < job->chapter_start; ++i )
         {
-            chapter = hb_list_item( title->list_chapter, i - 1 );
+            chapter = hb_list_item( job->list_chapter, i - 1 );
             if( chapter )
             {
                 pv->start_time += chapter->duration;
@@ -501,7 +500,7 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
         pv->stop_time = pv->start_time;
         for( i = job->chapter_start; i <= job->chapter_end; ++i )
         {
-            chapter = hb_list_item( title->list_chapter, i - 1 );
+            chapter = hb_list_item( job->list_chapter, i - 1 );
             if( chapter )
             {
                 pv->stop_time += chapter->duration;

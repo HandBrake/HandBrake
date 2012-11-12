@@ -389,9 +389,9 @@ void hb_display_job_info( hb_job_t * job )
                 job->select_subtitle_config.default_track ? ", Default" : "" );
     }
 
-    for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
+    for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
     {
-        subtitle = hb_list_item( title->list_subtitle, i );
+        subtitle = hb_list_item( job->list_subtitle, i );
 
         if( subtitle )
         {
@@ -425,9 +425,9 @@ void hb_display_job_info( hb_job_t * job )
 
     if( !job->indepth_scan )
     {
-        for( i = 0; i < hb_list_count( title->list_audio ); i++ )
+        for( i = 0; i < hb_list_count( job->list_audio ); i++ )
         {
-            audio = hb_list_item( title->list_audio, i );
+            audio = hb_list_item( job->list_audio, i );
 
             hb_log( " * audio track %d", audio->config.out.track );
             
@@ -529,6 +529,7 @@ static void do_job( hb_job_t * job )
     hb_work_object_t * w;
     hb_work_object_t * sync;
     hb_work_object_t * muxer;
+    hb_work_object_t *reader = hb_get_work(WORK_READER);
     hb_interjob_t * interjob;
 
     hb_audio_t   * audio;
@@ -563,21 +564,25 @@ static void do_job( hb_job_t * job )
         {
             interjob->select_subtitle->config.force = 0;
         }
-        for( i = 0; i < hb_list_count(title->list_subtitle); )
+        for( i = 0; i < hb_list_count( job->list_subtitle ); )
         {
-            if( ( subtitle = hb_list_item( title->list_subtitle, i ) ) )
+            subtitle = hb_list_item( job->list_subtitle, i );
+            if( subtitle )
             {
-                /* Remove the scanned subtitle from the list if it would result in:
+                /* Remove the scanned subtitle from the list if
+                 * it would result in:
                  * - an emty track (forced and no forced hits)
                  * - an identical, duplicate subtitle track:
                  *   -> both (or neither) are forced 
                  *   -> subtitle is not forced but all its hits are forced */
                 if( ( interjob->select_subtitle->id == subtitle->id ) &&
-                    ( ( subtitle->config.force && interjob->select_subtitle->forced_hits == 0 ) ||
+                    ( ( subtitle->config.force &&
+                        interjob->select_subtitle->forced_hits == 0 ) ||
                       ( subtitle->config.force == interjob->select_subtitle->config.force ) ||
-                      ( subtitle->config.force == 0 && interjob->select_subtitle->hits == interjob->select_subtitle->forced_hits ) ) )
+                      ( !subtitle->config.force &&
+                        interjob->select_subtitle->hits == interjob->select_subtitle->forced_hits ) ) )
                 {
-                    hb_list_rem( title->list_subtitle, subtitle );
+                    hb_list_rem( job->list_subtitle, subtitle );
                     free( subtitle );
                     continue;
                 }
@@ -602,13 +607,13 @@ static void do_job( hb_job_t * job )
         if (job->pass == 0 || job->pass == 2)
         {
             // final pass, interjob->select_subtitle is no longer needed
-            hb_list_insert(title->list_subtitle, 0, interjob->select_subtitle);
+            hb_list_insert(job->list_subtitle, 0, interjob->select_subtitle);
             interjob->select_subtitle = NULL;
         }
         else
         {
             // this is not the final pass, so we need to copy it instead
-            hb_list_insert(title->list_subtitle, 0, hb_subtitle_copy(interjob->select_subtitle));
+            hb_list_insert(job->list_subtitle, 0, hb_subtitle_copy(interjob->select_subtitle));
         }
     }
 
@@ -616,10 +621,9 @@ static void do_job( hb_job_t * job )
     {
         // Sanitize subtitles
         uint8_t one_burned = 0;
-        for( i = 0; i < hb_list_count( title->list_subtitle ); )
+        for( i = 0; i < hb_list_count( job->list_subtitle ); )
         {
-            subtitle = hb_list_item( title->list_subtitle, i );
-
+            subtitle = hb_list_item( job->list_subtitle, i );
             if ( subtitle->config.dest == RENDERSUB )
             {
                 if ( one_burned )
@@ -627,7 +631,7 @@ static void do_job( hb_job_t * job )
                     if ( !hb_subtitle_can_pass(subtitle->source, job->mux) )
                     {
                         hb_log( "More than one subtitle burn-in requested, dropping track %d.", i );
-                        hb_list_rem( title->list_subtitle, subtitle );
+                        hb_list_rem( job->list_subtitle, subtitle );
                         free( subtitle );
                         continue;
                     }
@@ -661,7 +665,7 @@ static void do_job( hb_job_t * job )
                 else
                 {
                     hb_log( "Subtitle pass-thru requested and input track is not compatible with container.  One track already burned, dropping track %d.", i );
-                    hb_list_rem( title->list_subtitle, subtitle );
+                    hb_list_rem( job->list_subtitle, subtitle );
                     free( subtitle );
                     continue;
                 }
@@ -697,9 +701,9 @@ static void do_job( hb_job_t * job )
         init.height = title->height;
         init.par_width = job->anamorphic.par_width;
         init.par_height = job->anamorphic.par_height;
-        memcpy(init.crop, title->crop, sizeof(int[4]));
-        init.vrate_base = title->rate_base;
-        init.vrate = title->rate;
+        memcpy(init.crop, job->crop, sizeof(int[4]));
+        init.vrate_base = job->vrate_base;
+        init.vrate = job->vrate;
         init.pfr_vrate_base = job->pfr_vrate_base;
         init.pfr_vrate = job->pfr_vrate;
         init.cfr = 0;
@@ -720,7 +724,7 @@ static void do_job( hb_job_t * job )
         job->height = init.height;
         job->anamorphic.par_width = init.par_width;
         job->anamorphic.par_height = init.par_height;
-        memcpy(title->crop, init.crop, sizeof(int[4]));
+        memcpy(job->crop, init.crop, sizeof(int[4]));
         job->vrate_base = init.vrate_base;
         job->vrate = init.vrate;
         job->pfr_vrate_base = init.pfr_vrate_base;
@@ -761,18 +765,18 @@ static void do_job( hb_job_t * job )
     if (!job->indepth_scan)
     {
         // apply Auto Passthru settings
-        hb_autopassthru_apply_settings(job, title);
+        hb_autopassthru_apply_settings(job);
         // sanitize audio settings
-        for (i = 0; i < hb_list_count(title->list_audio);)
+        for (i = 0; i < hb_list_count(job->list_audio);)
         {
-            audio = hb_list_item(title->list_audio, i);
+            audio = hb_list_item(job->list_audio, i);
             if (audio->config.out.codec == HB_ACODEC_AUTO_PASS)
             {
                 // Auto Passthru should have been handled above
                 // remove track to avoid a crash
                 hb_log("Auto Passthru error, dropping track %d",
                        audio->config.out.track);
-                hb_list_rem(title->list_audio, audio);
+                hb_list_rem(job->list_audio, audio);
                 free(audio);
                 continue;
             }
@@ -782,7 +786,7 @@ static void do_job( hb_job_t * job )
             {
                 hb_log("Passthru requested and input codec is not the same as output codec for track %d, dropping track",
                        audio->config.out.track);
-                hb_list_rem(title->list_audio, audio);
+                hb_list_rem(job->list_audio, audio);
                 free(audio);
                 continue;
             }
@@ -796,9 +800,9 @@ static void do_job( hb_job_t * job )
         int best_bitrate    = 0;
         int best_samplerate = 0;
 
-        for (i = 0; i < hb_list_count(title->list_audio); i++)
+        for (i = 0; i < hb_list_count(job->list_audio); i++)
         {
-            audio = hb_list_item(title->list_audio, i);
+            audio = hb_list_item(job->list_audio, i);
 
             /* set up the audio work structures */
             audio->priv.fifo_raw  = hb_fifo_init(FIFO_SMALL, FIFO_SMALL_WAKE);
@@ -999,9 +1003,9 @@ static void do_job( hb_job_t * job )
     w->fifo_in  = job->fifo_mpeg2;
     w->fifo_out = job->fifo_raw;
 
-    for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
+    for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
     {
-        subtitle = hb_list_item( title->list_subtitle, i );
+        subtitle = hb_list_item( job->list_subtitle, i );
 
         if( subtitle )
         {
@@ -1081,9 +1085,9 @@ static void do_job( hb_job_t * job )
 
         hb_list_add( job->list_work, w );
 
-        for( i = 0; i < hb_list_count( title->list_audio ); i++ )
+        for( i = 0; i < hb_list_count( job->list_audio ); i++ )
         {
-            audio = hb_list_item( title->list_audio, i );
+            audio = hb_list_item( job->list_audio, i );
 
             /*
             * Audio Decoder Thread
@@ -1140,7 +1144,6 @@ static void do_job( hb_job_t * job )
     hb_display_job_info( job );
 
     /* Init read & write threads */
-    hb_work_object_t *reader = hb_get_work(WORK_READER);
     if ( reader->init( reader, job ) )
     {
         hb_error( "Failure to initialise thread '%s'", reader->name );
@@ -1330,9 +1333,9 @@ cleanup:
     hb_fifo_close( &job->fifo_sync );
     hb_fifo_close( &job->fifo_mpeg4 );
 
-    for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
+    for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
     {
-        subtitle = hb_list_item( title->list_subtitle, i );
+        subtitle = hb_list_item( job->list_subtitle, i );
         if( subtitle )
         {
             hb_fifo_close( &subtitle->fifo_in );
@@ -1341,9 +1344,9 @@ cleanup:
             hb_fifo_close( &subtitle->fifo_out );
         }
     }
-    for( i = 0; i < hb_list_count( title->list_audio ); i++ )
+    for( i = 0; i < hb_list_count( job->list_audio ); i++ )
     {
-        audio = hb_list_item( title->list_audio, i );
+        audio = hb_list_item( job->list_audio, i );
         if( audio->priv.fifo_in != NULL )
             hb_fifo_close( &audio->priv.fifo_in );
         if( audio->priv.fifo_raw != NULL )
@@ -1354,13 +1357,22 @@ cleanup:
             hb_fifo_close( &audio->priv.fifo_out );
     }
 
+    if( job->list_filter )
+    {
+        for( i = 0; i < hb_list_count( job->list_filter ); i++ )
+        {
+            hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
+            hb_fifo_close( &filter->fifo_out );
+        }
+    }
+
     if( job->indepth_scan )
     {
         /* Before closing the title print out our subtitle stats if we need to
          * find the highest and lowest. */
-        for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
+        for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
         {
-            subtitle = hb_list_item( title->list_subtitle, i );
+            subtitle = hb_list_item( job->list_subtitle, i );
 
             hb_log( "Subtitle track %d (id 0x%x) '%s': %d hits (%d forced)",
                     subtitle->track, subtitle->id, subtitle->lang,
@@ -1415,34 +1427,23 @@ cleanup:
             hb_log( "No candidate detected during subtitle scan" );
         }
 
-        for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
+        for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
         {
-            subtitle = hb_list_item( title->list_subtitle, i );
+            subtitle = hb_list_item( job->list_subtitle, i );
             if( subtitle->id == subtitle_hit )
             {
                 subtitle->config = job->select_subtitle_config;
-                hb_list_rem( title->list_subtitle, subtitle );
+                // Remove from list since we are taking ownership
+                // of the subtitle.
+                hb_list_rem( job->list_subtitle, subtitle );
                 interjob->select_subtitle = subtitle;
                 break;
             }
         }
     }
 
-    if( job->list_filter )
-    {
-        for( i = 0; i < hb_list_count( job->list_filter ); i++ )
-        {
-            hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
-            hb_fifo_close( &filter->fifo_out );
-            hb_filter_close( &filter );
-        }
-        hb_list_close( &job->list_filter );
-    }
-
     hb_buffer_pool_free();
-
-    hb_title_close( &job->title );
-    free( job );
+    hb_job_close( &job );
 }
 
 static inline void copy_chapter( hb_buffer_t * dst, hb_buffer_t * src )

@@ -1328,9 +1328,8 @@ update_title_duration(signal_user_data_t *ud)
 	}
 	else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
 	{
-		ghb_title_info_t tinfo;
-
-		if (ghb_get_title_info (&tinfo, ti))
+		hb_title_t * title = ghb_get_title_info (ti);
+		if (title != NULL)
 		{
 			gint64 frames;
 			gint duration;
@@ -1338,7 +1337,7 @@ update_title_duration(signal_user_data_t *ud)
 			start = ghb_settings_get_int(ud->settings, "start_point");
 			end = ghb_settings_get_int(ud->settings, "end_point");
 			frames = end - start + 1;
-			duration = frames * tinfo.rate_base / tinfo.rate;
+			duration = frames * title->rate_base / title->rate;
 			hh = duration / (60*60);
 			mm = (duration / 60) % 60;
 			ss = duration % 60;
@@ -1354,19 +1353,19 @@ update_title_duration(signal_user_data_t *ud)
 }
 
 static void
-show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
+show_title_info(signal_user_data_t *ud, hb_title_t *title)
 {
 	GtkWidget *widget;
 	gchar *text;
 
-	ghb_settings_set_string(ud->settings, "source", tinfo->path);
-	if (tinfo->type == HB_STREAM_TYPE || tinfo->type == HB_FF_STREAM_TYPE)
+	ghb_settings_set_string(ud->settings, "source", title->path);
+	if (title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE)
 	{
 		GtkWidget *widget = GHB_WIDGET (ud->builder, "source_title");
-		if (tinfo->name != NULL && tinfo->name[0] != 0)
+		if (title->name != NULL && title->name[0] != 0)
 		{
-			gtk_label_set_text (GTK_LABEL(widget), tinfo->name);
-			ghb_settings_set_string(ud->settings, "volume_label", tinfo->name);
+			gtk_label_set_text (GTK_LABEL(widget), title->name);
+			ghb_settings_set_string(ud->settings, "volume_label", title->name);
 			set_destination(ud);
 		}
 		else
@@ -1380,31 +1379,35 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	ud->scale_busy = TRUE;
 	update_title_duration(ud);
 	widget = GHB_WIDGET (ud->builder, "source_codec");
-	if ( tinfo->video_codec_name )
-		gtk_label_set_text (GTK_LABEL(widget), tinfo->video_codec_name);
+	if ( title->video_codec_name )
+		gtk_label_set_text (GTK_LABEL(widget), title->video_codec_name);
 	else
 		gtk_label_set_text (GTK_LABEL(widget), "Unknown");
 	widget = GHB_WIDGET (ud->builder, "source_dimensions");
-	text = g_strdup_printf ("%d x %d", tinfo->width, tinfo->height);
+	text = g_strdup_printf ("%d x %d", title->width, title->height);
 	gtk_label_set_text (GTK_LABEL(widget), text);
-	ghb_settings_set_int(ud->settings, "source_width", tinfo->width);
-	ghb_settings_set_int(ud->settings, "source_height", tinfo->height);
+	ghb_settings_set_int(ud->settings, "source_width", title->width);
+	ghb_settings_set_int(ud->settings, "source_height", title->height);
 	g_free(text);
 	widget = GHB_WIDGET (ud->builder, "source_aspect");
-	text = get_aspect_string(tinfo->aspect_n, tinfo->aspect_d);
+	gint aspect_n, aspect_d;
+	hb_reduce(&aspect_n, &aspect_d,
+				title->width * title->pixel_aspect_width,
+				title->height * title->pixel_aspect_height);
+	text = get_aspect_string(aspect_n, aspect_d);
 	gtk_label_set_text (GTK_LABEL(widget), text);
 	g_free(text);
 
 	widget = GHB_WIDGET (ud->builder, "source_frame_rate");
-	text = (gchar*)get_rate_string(tinfo->rate_base, tinfo->rate);
+	text = (gchar*)get_rate_string(title->rate_base, title->rate);
 	gtk_label_set_text (GTK_LABEL(widget), text);
 	g_free(text);
 
 	//widget = GHB_WIDGET (ud->builder, "source_interlaced");
-	//gtk_label_set_text (GTK_LABEL(widget), tinfo->interlaced ? "Yes" : "No");
+	//gtk_label_set_text (GTK_LABEL(widget), title->interlaced ? "Yes" : "No");
 
 	ghb_ui_update(ud, "scale_width", 
-		ghb_int64_value(tinfo->width - tinfo->crop[2] - tinfo->crop[3]));
+		ghb_int64_value(title->width - title->crop[2] - title->crop[3]));
 	// If anamorphic or keep_aspect, the hight will be automatically calculated
 	gboolean keep_aspect;
 	gint pic_par;
@@ -1413,28 +1416,28 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	if (!(keep_aspect || pic_par) || pic_par == 3)
 	{
 		ghb_ui_update(ud, "scale_height", 
-			ghb_int64_value(tinfo->height - tinfo->crop[0] - tinfo->crop[1]));
+			ghb_int64_value(title->height - title->crop[0] - title->crop[1]));
 	}
 
 	// Set the limits of cropping.  hb_set_anamorphic_size crashes if
 	// you pass it a cropped width or height == 0.
 	gint bound;
-	bound = tinfo->height / 2 - 8;
+	bound = title->height / 2 - 8;
 	widget = GHB_WIDGET (ud->builder, "PictureTopCrop");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
 	widget = GHB_WIDGET (ud->builder, "PictureBottomCrop");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
-	bound = tinfo->width / 2 - 8;
+	bound = title->width / 2 - 8;
 	widget = GHB_WIDGET (ud->builder, "PictureLeftCrop");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
 	widget = GHB_WIDGET (ud->builder, "PictureRightCrop");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
 	if (ghb_settings_get_boolean(ud->settings, "PictureAutoCrop"))
 	{
-		ghb_ui_update(ud, "PictureTopCrop", ghb_int64_value(tinfo->crop[0]));
-		ghb_ui_update(ud, "PictureBottomCrop", ghb_int64_value(tinfo->crop[1]));
-		ghb_ui_update(ud, "PictureLeftCrop", ghb_int64_value(tinfo->crop[2]));
-		ghb_ui_update(ud, "PictureRightCrop", ghb_int64_value(tinfo->crop[3]));
+		ghb_ui_update(ud, "PictureTopCrop", ghb_int64_value(title->crop[0]));
+		ghb_ui_update(ud, "PictureBottomCrop", ghb_int64_value(title->crop[1]));
+		ghb_ui_update(ud, "PictureLeftCrop", ghb_int64_value(title->crop[2]));
+		ghb_ui_update(ud, "PictureRightCrop", ghb_int64_value(title->crop[3]));
 	}
 	ud->scale_busy = FALSE;
 	ghb_set_scale (ud, GHB_PIC_KEEP_PAR|GHB_PIC_USE_MAX);
@@ -1443,25 +1446,26 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	crop[1] = ghb_settings_get_int(ud->settings, "PictureBottomCrop");
 	crop[2] = ghb_settings_get_int(ud->settings, "PictureLeftCrop");
 	crop[3] = ghb_settings_get_int(ud->settings, "PictureRightCrop");
-	width = tinfo->width - crop[2] - crop[3];
-	height = tinfo->height - crop[0] - crop[1];
+	width = title->width - crop[2] - crop[3];
+	height = title->height - crop[0] - crop[1];
 	widget = GHB_WIDGET (ud->builder, "crop_dimensions");
 	text = g_strdup_printf ("%d x %d", width, height);
 	gtk_label_set_text (GTK_LABEL(widget), text);
 	g_free(text);
 
 
-	gint duration = tinfo->duration / 90000;
+	gint duration = title->duration / 90000;
 
+	gint num_chapters = hb_list_count(title->list_chapter);
 	if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
 	{
 		widget = GHB_WIDGET (ud->builder, "start_point");
-		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, tinfo->num_chapters);
+		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, num_chapters);
 		gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 1);
 
 		widget = GHB_WIDGET (ud->builder, "end_point");
-		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, tinfo->num_chapters);
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), tinfo->num_chapters);
+		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, num_chapters);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), num_chapters);
 	}
 	else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
 	{
@@ -1476,7 +1480,7 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	}
 	else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
 	{
-		gdouble max_frames = (gdouble)duration * tinfo->rate / tinfo->rate_base;
+		gdouble max_frames = (gdouble)duration * title->rate / title->rate_base;
 		widget = GHB_WIDGET (ud->builder, "start_point");
 		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, max_frames);
 		gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 1);
@@ -1488,29 +1492,57 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 
 	widget = GHB_WIDGET (ud->builder, "angle");
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 1);
-	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, tinfo->angle_count);
-	ghb_settings_set_int(ud->settings, "angle_count", tinfo->angle_count);
+	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, title->angle_count);
+	ghb_settings_set_int(ud->settings, "angle_count", title->angle_count);
 	ud->dont_clear_presets = FALSE;
+	// Set default metadata name
+	ghb_ui_update(ud, "MetaName", ghb_string_value(title->name));
+	if (title->metadata)
+	{
+		if (title->metadata->name)
+		{
+			ghb_ui_update(ud, "MetaName",
+					ghb_string_value(title->metadata->name));
+		}
+		ghb_ui_update(ud, "MetaArtist",
+				ghb_string_value(title->metadata->artist));
+		ghb_ui_update(ud, "MetaReleaseDate",
+				ghb_string_value(title->metadata->release_date));
+		ghb_ui_update(ud, "MetaComment",
+				ghb_string_value(title->metadata->comment));
+		if (!title->metadata->name && title->metadata->album)
+		{
+			ghb_ui_update(ud, "MetaName",
+					ghb_string_value(title->metadata->album));
+		}
+		ghb_ui_update(ud, "MetaAlbumArtist",
+				ghb_string_value(title->metadata->album_artist));
+		ghb_ui_update(ud, "MetaGenre",
+				ghb_string_value(title->metadata->genre));
+		ghb_ui_update(ud, "MetaDescription",
+				ghb_string_value(title->metadata->description));
+		ghb_ui_update(ud, "MetaLongDescription",
+				ghb_string_value(title->metadata->long_description));
+	}
 }
 
 void
 set_title_settings(GValue *settings, gint titleindex)
 {
-	ghb_title_info_t tinfo;
-
 	ghb_settings_set_int(settings, "title", titleindex);
 	ghb_settings_set_int(settings, "title_no", titleindex);
 
-	if (ghb_get_title_info (&tinfo, titleindex))
+	hb_title_t * title = ghb_get_title_info(titleindex);
+	if (title != NULL)
 	{
-		ghb_settings_set_int(settings, "source_width", tinfo.width);
-		ghb_settings_set_int(settings, "source_height", tinfo.height);
-		ghb_settings_set_string(settings, "source", tinfo.path);
-		if (tinfo.type == HB_STREAM_TYPE || tinfo.type == HB_FF_STREAM_TYPE)
+		ghb_settings_set_int(settings, "source_width", title->width);
+		ghb_settings_set_int(settings, "source_height", title->height);
+		ghb_settings_set_string(settings, "source", title->path);
+		if (title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE)
 		{
-			if (tinfo.name != NULL && tinfo.name[0] != 0)
+			if (title->name != NULL && title->name[0] != 0)
 			{
-				ghb_settings_set_string(settings, "volume_label", tinfo.name);
+				ghb_settings_set_string(settings, "volume_label", title->name);
 			}
 			else
 			{
@@ -1519,7 +1551,7 @@ set_title_settings(GValue *settings, gint titleindex)
 			}
 		}
 		ghb_settings_set_int(settings, "scale_width",
-							 tinfo.width - tinfo.crop[2] - tinfo.crop[3]);
+							 title->width - title->crop[2] - title->crop[3]);
 
 		// If anamorphic or keep_aspect, the hight will 
 		// be automatically calculated
@@ -1530,11 +1562,11 @@ set_title_settings(GValue *settings, gint titleindex)
 		if (!(keep_aspect || pic_par) || pic_par == 3)
 		{
 			ghb_settings_set_int(settings, "scale_height",
-							 tinfo.width - tinfo.crop[0] - tinfo.crop[1]);
+							 title->width - title->crop[0] - title->crop[1]);
 		}
 
 		ghb_set_scale_settings(settings, GHB_PIC_KEEP_PAR|GHB_PIC_USE_MAX);
-		ghb_settings_set_int(settings, "angle_count", tinfo.angle_count);
+		ghb_settings_set_int(settings, "angle_count", title->angle_count);
 	}
 	update_chapter_list_settings(settings);
 	ghb_set_pref_audio_settings(titleindex, settings);
@@ -1559,14 +1591,13 @@ ghb_add_all_titles(signal_user_data_t *ud)
 
 	for (ii = 0; ii < count; ii++)
 	{
-		ghb_title_info_t tinfo;
-
 		GValue *settings = ghb_value_dup(ud->settings);
 		ghb_settings_set_boolean(settings, "use_source_name", TRUE);
-		if (ghb_get_title_info (&tinfo, ii))
+		hb_title_t * title = ghb_get_title_info(ii);
+		if (title != NULL)
 		{
-			if (tinfo.type == HB_DVD_TYPE ||
-				tinfo.type == HB_BD_TYPE)
+			if (title->type == HB_DVD_TYPE ||
+				title->type == HB_BD_TYPE)
 			{
 				ghb_settings_set_boolean(settings, 
 										"title_no_in_destination", TRUE);
@@ -1582,7 +1613,6 @@ static gboolean update_preview = FALSE;
 G_MODULE_EXPORT void
 title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-	ghb_title_info_t tinfo;
 	gint titleindex;
 
 	g_debug("title_changed_cb ()");
@@ -1593,9 +1623,10 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_update_ui_combo_box (ud, "AudioTrack", titleindex, FALSE);
 	ghb_update_ui_combo_box (ud, "SubtitleTrack", titleindex, FALSE);
 
-	if (ghb_get_title_info (&tinfo, titleindex))
+	hb_title_t * title = ghb_get_title_info(titleindex);
+	if (title != NULL)
 	{
-		show_title_info(ud, &tinfo);
+		show_title_info(ud, title);
 	}
 	ghb_check_dependency(ud, widget, NULL);
 	update_chapter_list_settings(ud->settings);
@@ -1640,26 +1671,28 @@ G_MODULE_EXPORT void
 ptop_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	gint ti;
-	ghb_title_info_t tinfo;
+	hb_title_t * title;
 
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget, NULL);
 	ghb_live_reset(ud);
 
 	ti = ghb_settings_combo_int(ud->settings, "title");
-	if (!ghb_get_title_info (&tinfo, ti))
+	title = ghb_get_title_info(ti);
+	if (title == NULL)
 		return;
 
-	gint duration = tinfo.duration / 90000;
+	gint num_chapters = hb_list_count(title->list_chapter);
+	gint duration = title->duration / 90000;
 	if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
 	{
 		widget = GHB_WIDGET (ud->builder, "start_point");
-		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, tinfo.num_chapters);
+		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, num_chapters);
 		gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 1);
 
 		widget = GHB_WIDGET (ud->builder, "end_point");
-		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, tinfo.num_chapters);
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), tinfo.num_chapters);
+		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, num_chapters);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), num_chapters);
 	}
 	else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
 	{
@@ -1673,7 +1706,7 @@ ptop_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	}
 	else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
 	{
-		gdouble max_frames = (gdouble)duration * tinfo.rate / tinfo.rate_base;
+		gdouble max_frames = (gdouble)duration * title->rate / title->rate_base;
 		widget = GHB_WIDGET (ud->builder, "start_point");
 		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, max_frames);
 		gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 1);
@@ -1713,6 +1746,20 @@ setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
+}
+
+G_MODULE_EXPORT gboolean
+meta_focus_out_cb(GtkWidget *widget, GdkEventFocus *event, 
+	signal_user_data_t *ud)
+{
+	ghb_widget_to_setting(ud->settings, widget);
+	return FALSE;
+}
+
+G_MODULE_EXPORT void
+meta_setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	ghb_widget_to_setting(ud->settings, widget);
 }
 
 G_MODULE_EXPORT void
@@ -1926,7 +1973,6 @@ G_MODULE_EXPORT void
 crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	gint titleindex, crop[4];
-	ghb_title_info_t tinfo;
 	
 	g_debug("crop_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
@@ -1940,13 +1986,14 @@ crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	crop[2] = ghb_settings_get_int(ud->settings, "PictureLeftCrop");
 	crop[3] = ghb_settings_get_int(ud->settings, "PictureRightCrop");
 	titleindex = ghb_settings_combo_int(ud->settings, "title");
-	if (ghb_get_title_info (&tinfo, titleindex))
+	hb_title_t * title = ghb_get_title_info(titleindex);
+	if (title != NULL)
 	{
 		gint width, height;
 		gchar *text;
 		
-		width = tinfo.width - crop[2] - crop[3];
-		height = tinfo.height - crop[0] - crop[1];
+		width = title->width - crop[2] - crop[3];
+		height = title->height - crop[0] - crop[1];
 		widget = GHB_WIDGET (ud->builder, "crop_dimensions");
 		text = g_strdup_printf ("%d x %d", width, height);
 		gtk_label_set_text (GTK_LABEL(widget), text);
@@ -2787,15 +2834,14 @@ ghb_backend_events(signal_user_data_t *ud)
 			ghb_refresh_preset(ud);
 		}
 
-		ghb_title_info_t tinfo;
-			
 		ghb_update_ui_combo_box(ud, "title", 0, FALSE);
 		titleindex = ghb_longest_title();
 		ghb_ui_update(ud, "title", ghb_int64_value(titleindex));
 
 		label = GTK_LABEL(GHB_WIDGET (ud->builder, "source_title"));
 		// Are there really any titles.
-		if (!ghb_get_title_info(&tinfo, titleindex))
+		hb_title_t * title = ghb_get_title_info(titleindex);
+		if (title == NULL)
 		{
 			gtk_label_set_text(label, "None");
 		}

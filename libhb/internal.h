@@ -228,7 +228,7 @@ static inline hb_buffer_t * hb_video_buffer_init( int width, int height )
 hb_thread_t * hb_update_init( int * build, char * version );
 hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die, 
                             const char * path, int title_index, 
-                            hb_list_t * list_title, int preview_count, 
+                            hb_title_set_t * title_set, int preview_count, 
                             int store_previews, uint64_t min_duration );
 hb_thread_t * hb_work_init( hb_list_t * jobs,
                             volatile int * die, int * error, hb_job_t ** job );
@@ -266,7 +266,7 @@ extern const hb_muxer_t hb_demux[];
 /***********************************************************************
  * decmetadata.c
  **********************************************************************/
-extern void decmetadata( hb_title_t *title );
+extern int decmetadata( hb_title_t *title );
 
 /***********************************************************************
  * batch.c

@@ -385,14 +385,14 @@ static void ShowCommands()
     fprintf( stdout, " [r]esume  Resume encoding\n" );
 }
 
-static void PrintTitleInfo( hb_title_t * title )
+static void PrintTitleInfo( hb_title_t * title, int feature )
 {
     hb_chapter_t  * chapter;
     hb_subtitle_t * subtitle;
     int i;
 
     fprintf( stderr, "+ title %d:\n", title->index );
-    if ( title->index == title->job->feature )
+    if ( title->index == feature )
     {
         fprintf( stderr, "  + Main Feature\n" );
     }
@@ -470,6 +470,18 @@ static void PrintTitleInfo( hb_title_t * title )
         fprintf( stderr, "  + combing detected, may be interlaced or telecined\n");
     }
 
+}
+
+static void PrintTitleSetInfo( hb_title_set_t * title_set )
+{
+    int i;
+    hb_title_t * title;
+
+    for( i = 0; i < hb_list_count( title_set->list_title ); i++ )
+    {
+        title = hb_list_item( title_set->list_title, i );
+        PrintTitleInfo( title, title_set->feature );
+    }
 }
 
 static int test_sub_list( char ** list, int pos )
@@ -582,7 +594,7 @@ static int HandleEvents( hb_handle_t * h )
 
         case HB_STATE_SCANDONE:
         {
-            hb_list_t  * list;
+            hb_title_set_t * title_set;
             hb_title_t * title;
             hb_job_t   * job;
             int i;
@@ -599,9 +611,9 @@ static int HandleEvents( hb_handle_t * h )
             double gain = 0;
             /* Audio argument string parsing variables */
 
-            list = hb_get_titles( h );
+            title_set = hb_get_title_set( h );
 
-            if( !hb_list_count( list ) )
+            if( !title_set || !hb_list_count( title_set->list_title ) )
             {
                 /* No valid title, stop right there */
                 fprintf( stderr, "No title found.\n" );
@@ -618,9 +630,9 @@ static int HandleEvents( hb_handle_t * h )
 
                 fprintf( stderr, "Searching for main feature title...\n" );
 
-                for( i = 0; i < hb_list_count( list ); i++ )
+                for( i = 0; i < hb_list_count( title_set->list_title ); i++ )
                 {
-                    title = hb_list_item( list, i );
+                    title = hb_list_item( title_set->list_title, i );
                     title_time = (title->hours*60*60 ) + (title->minutes *60) + (title->seconds);
                     fprintf( stderr, " + Title (%d) index %d has length %dsec\n",
                              i, title->index, title_time );
@@ -630,7 +642,7 @@ static int HandleEvents( hb_handle_t * h )
                         main_feature_pos = i;
                         main_feature_idx = title->index;
                     }
-                    if( title->job->feature == title->index )
+                    if( title_set->feature == title->index )
                     {
                         main_feature_time = title_time;
                         main_feature_pos = i;
@@ -648,28 +660,24 @@ static int HandleEvents( hb_handle_t * h )
                 fprintf( stderr, "Found main feature title, setting title to %d\n",
                          main_feature_idx);
 
-                title = hb_list_item( list, main_feature_pos);
+                title = hb_list_item( title_set->list_title, main_feature_pos);
             } else {
-                title = hb_list_item( list, 0 );
+                title = hb_list_item( title_set->list_title, 0 );
             }
 
             if( !titleindex || titlescan )
             {
                 /* Scan-only mode, print infos and exit */
-                int i;
-                for( i = 0; i < hb_list_count( list ); i++ )
-                {
-                    title = hb_list_item( list, i );
-                    PrintTitleInfo( title );
-                }
+                PrintTitleSetInfo( title_set );
                 die = 1;
                 break;
             }
 
-            /* Set job settings */
-            job   = title->job;
+            PrintTitleInfo( title, title_set->feature );
 
-            PrintTitleInfo( title );
+            /* Set job settings */
+            job = hb_job_init( title );
+
 
             if( chapter_start && chapter_end && !stop_at_pts && !start_at_preview && !stop_at_frame && !start_at_pts && !start_at_frame )
             {
@@ -1312,16 +1320,14 @@ static int HandleEvents( hb_handle_t * h )
                                 {
                                     hb_chapter_t * chapter_s;
 
-                                    chapter_s = hb_list_item( job->title->list_chapter, chapter - 1);
-                                    strncpy(chapter_s->title, cell->cell_text, 1023);
-                                    chapter_s->title[1023] = '\0';
+                                    chapter_s = hb_list_item( job->list_chapter, chapter - 1);
+                                    hb_chapter_set_title(chapter_s, cell->cell_text);
                                 }
                             }
 
 
                             hb_dispose_cell( cell );
                         }
-
                         hb_close_csv_file( file );
                     }
                 }
@@ -1705,8 +1711,8 @@ static int HandleEvents( hb_handle_t * h )
                 }
             }
 
-            if( hb_list_count( audios ) == 0 &&
-                hb_list_count( job->title->list_audio ) > 0 )
+            if( hb_list_count(audios) == 0 &&
+                hb_list_count(title->list_audio) > 0 )
             {        
                 /* Create a new audio track with default settings */
                 audio = calloc( 1, sizeof( *audio ) );
@@ -2434,20 +2440,11 @@ static int HandleEvents( hb_handle_t * h )
                 job->ipod_atom = 1;
             }
 
-            job->file = strdup( output );
+            hb_job_set_file( job, output );
 
             if( color_matrix_code )
             {
                 job->color_matrix_code = color_matrix_code;
-            }
-
-            if( advanced_opts != NULL && *advanced_opts != '\0' )
-            {
-                job->advanced_opts = advanced_opts;
-            }
-            else /*avoids a bus error crash when options aren't specified*/
-            {
-                job->advanced_opts =  NULL;
             }
 
             job->x264_profile = x264_profile;
@@ -2491,17 +2488,13 @@ static int HandleEvents( hb_handle_t * h )
             
             if( subtitle_scan )
             {
-                char *advanced_opts_tmp;
-
                 /*
                  * When subtitle scan is enabled do a fast pre-scan job
                  * which will determine which subtitles to enable, if any.
                  */
                 job->pass = -1;
 
-                advanced_opts_tmp = job->advanced_opts;
-
-                job->advanced_opts = NULL;
+                hb_job_set_advanced_opts(job, NULL);
 
                 job->indepth_scan = subtitle_scan;
                 fprintf( stderr, "Subtitle Scan Enabled - enabling "
@@ -2511,9 +2504,9 @@ static int HandleEvents( hb_handle_t * h )
                  * Add the pre-scan job
                  */
                 hb_add( h, job );
-
-                job->advanced_opts = advanced_opts_tmp;
             }
+
+            hb_job_set_advanced_opts(job, advanced_opts);
 
             if( twoPass )
             {
@@ -2558,9 +2551,10 @@ static int HandleEvents( hb_handle_t * h )
 
                 job->indepth_scan = 0;
                 job->pass = 0;
+
                 hb_add( h, job );
             }
-            hb_reset_job( job );
+            hb_job_close( &job );
             hb_start( h );
             break;
         }

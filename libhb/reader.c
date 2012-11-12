@@ -386,12 +386,12 @@ void ReadLoop( void * _w )
          * a media chapter that got merged, we'll stop ripping too early.
          */
         int start = r->job->chapter_start;
-        hb_chapter_t *chap = hb_list_item( r->title->list_chapter, chapter_end - 1 );
+        hb_chapter_t *chap = hb_list_item( r->job->list_chapter, chapter_end - 1 );
 
         chapter_end = chap->index;
         if (start > 1)
         {
-           chap = hb_list_item( r->title->list_chapter, start - 1 );
+           chap = hb_list_item( r->job->list_chapter, start - 1 );
            start = chap->index;
         }
         /* end chapter mapping XXX */
@@ -453,12 +453,12 @@ void ReadLoop( void * _w )
          * end chapter so that we end at the right time.
          */
         int start = r->job->chapter_start;
-        hb_chapter_t *chap = hb_list_item( r->title->list_chapter, chapter_end - 1 );
+        hb_chapter_t *chap = hb_list_item( r->job->list_chapter, chapter_end - 1 );
         
         chapter_end = chap->index;
         if (start > 1)
         {
-            chap = hb_list_item( r->title->list_chapter, start - 1 );
+            chap = hb_list_item( r->job->list_chapter, start - 1 );
             start = chap->index;
         }
         
@@ -670,14 +670,14 @@ void ReadLoop( void * _w )
         push_buf( r, r->job->fifo_mpeg2, hb_buffer_init(0) );
 
         hb_audio_t *audio;
-        for( n = 0; (audio = hb_list_item( r->job->title->list_audio, n)); ++n )
+        for( n = 0; (audio = hb_list_item( r->job->list_audio, n)); ++n )
         {
             if ( audio->priv.fifo_in )
                 push_buf( r, audio->priv.fifo_in, hb_buffer_init(0) );
         }
 
         hb_subtitle_t *subtitle;
-        for( n = 0; (subtitle = hb_list_item( r->job->title->list_subtitle, n)); ++n )
+        for( n = 0; (subtitle = hb_list_item( r->job->list_subtitle, n)); ++n )
         {
             if ( subtitle->fifo_in && subtitle->source == VOBSUB)
                 push_buf( r, subtitle->fifo_in, hb_buffer_init(0) );
@@ -780,11 +780,11 @@ static hb_fifo_t ** GetFifoForId( hb_work_private_t * r, int id )
         }
     }
 
-    count = hb_list_count( title->list_subtitle );
+    count = hb_list_count( job->list_subtitle );
     count = count > 99 ? 99 : count;
     for( i = n = 0; i < count; i++ )
     {
-        subtitle =  hb_list_item( title->list_subtitle, i );
+        subtitle =  hb_list_item( job->list_subtitle, i );
         if (id == subtitle->id)
         {
             /* pass the subtitles to be processed */
@@ -798,9 +798,9 @@ static hb_fifo_t ** GetFifoForId( hb_work_private_t * r, int id )
     
     if( !job->indepth_scan )
     {
-        for( i = n = 0; i < hb_list_count( title->list_audio ); i++ )
+        for( i = n = 0; i < hb_list_count( job->list_audio ); i++ )
         {
-            audio = hb_list_item( title->list_audio, i );
+            audio = hb_list_item( job->list_audio, i );
             if( id == audio->id )
             {
                 r->fifos[n++] = audio->priv.fifo_in;

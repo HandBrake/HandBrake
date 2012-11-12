@@ -36,7 +36,7 @@ struct hb_handle_s
     int            pid;
 
     /* DVD/file scan thread */
-    hb_list_t    * list_title;
+    hb_title_set_t title_set;
     hb_thread_t  * scan_thread;
 
     /* The thread which processes the jobs. Others threads are launched
@@ -71,7 +71,6 @@ int hb_instance_counter = 0;
 int hb_process_initialized = 0;
 
 static void thread_func( void * );
-hb_title_t * hb_get_title_by_index( hb_handle_t *, int );
 
 static int ff_lockmgr_cb(void **mutex, enum AVLockOp op)
 {
@@ -432,7 +431,7 @@ hb_handle_t * hb_init( int verbose, int update_check )
      */
     hb_buffer_pool_init();
 
-    h->list_title = hb_list_init();
+    h->title_set.list_title = hb_list_init();
     h->jobs       = hb_list_init();
 
     h->state_lock  = hb_lock_init();
@@ -531,7 +530,7 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
         }
     }
 
-    h->list_title = hb_list_init();
+    h->title_set.list_title = hb_list_init();
     h->jobs       = hb_list_init();
     h->current_job = NULL;
 
@@ -631,7 +630,7 @@ void hb_remove_previews( hb_handle_t * h )
     dir = opendir( dirname );
     if (dir == NULL) return;
 
-    count = hb_list_count( h->list_title );
+    count = hb_list_count( h->title_set.list_title );
     while( ( entry = readdir( dir ) ) )
     {
         if( entry->d_name[0] == '.' )
@@ -640,7 +639,7 @@ void hb_remove_previews( hb_handle_t * h )
         }
         for( i = 0; i < count; i++ )
         {
-            title = hb_list_item( h->list_title, i );
+            title = hb_list_item( h->title_set.list_title, i );
             len = snprintf( filename, 1024, "%d_%d", h->id, title->index );
             if (strncmp(entry->d_name, filename, len) == 0)
             {
@@ -670,15 +669,15 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
 
     /* Clean up from previous scan */
     hb_remove_previews( h );
-    while( ( title = hb_list_item( h->list_title, 0 ) ) )
+    while( ( title = hb_list_item( h->title_set.list_title, 0 ) ) )
     {
-        hb_list_rem( h->list_title, title );
+        hb_list_rem( h->title_set.list_title, title );
         hb_title_close( &title );
     }
 
     hb_log( "hb_scan: path=%s, title_index=%d", path, title_index );
     h->scan_thread = hb_scan_init( h, &h->scan_die, path, title_index, 
-                                   h->list_title, preview_count, 
+                                   &h->title_set, preview_count, 
                                    store_previews, min_duration );
 }
 
@@ -689,25 +688,12 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
  */
 hb_list_t * hb_get_titles( hb_handle_t * h )
 {
-    return h->list_title;
+    return h->title_set.list_title;
 }
 
-/**
- * Create preview image of desired title a index of picture.
- * @param h Handle to hb_handle_t.
- * @param title_index Index of the title to get the preview for (1-based).
- * @param picture Index in title.
- * @param buffer Handle to buffer were image will be drawn.
- */
-void hb_get_preview_by_index( hb_handle_t * h, int title_index, int picture, uint8_t * buffer )
+hb_title_set_t * hb_get_title_set( hb_handle_t * h )
 {
-    hb_title_t * title;
-
-    title = hb_get_title_by_index( h, title_index );
-    if ( title != NULL )
-    {
-        hb_get_preview( h, title, picture, buffer );
-    } 
+    return &h->title_set;
 }
 
 int hb_save_preview( hb_handle_t * h, int title, int preview, hb_buffer_t *buf )
@@ -747,12 +733,16 @@ hb_buffer_t * hb_read_preview( hb_handle_t * h, int title_idx, int preview )
 {
     FILE * file;
     char   filename[1024];
+    hb_title_set_t *title_set;
+
     hb_title_t * title = NULL;
 
+    title_set = hb_get_title_set(h);
+
     int ii;
-    for (ii = 0; ii < hb_list_count(h->list_title); ii++)
+    for (ii = 0; ii < hb_list_count(title_set->list_title); ii++)
     {
-        title = hb_list_item( h->list_title, ii);
+        title = hb_list_item( title_set->list_title, ii);
         if (title != NULL && title->index == title_idx)
         {
             break;
@@ -804,10 +794,10 @@ hb_buffer_t * hb_read_preview( hb_handle_t * h, int title_idx, int preview )
  * @param picture Index in title.
  * @param buffer Handle to buffer were image will be drawn.
  */
-void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
+void hb_get_preview( hb_handle_t * h, hb_job_t * job, int picture,
                      uint8_t * buffer )
 {
-    hb_job_t           * job = title->job;
+    hb_title_t         * title = job->title;
     char                 filename[1024];
     hb_buffer_t        * in_buf, * deint_buf = NULL, * preview_buf;
     uint8_t            * pen;
@@ -986,26 +976,6 @@ int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int thre
     /* Reaching this point means no combing detected. */
     return 0;
 
-}
-
-/**
- * Calculates job width and height for anamorphic content,
- *
- * @param h Instance handle
- * @param title_index Index of the title/job to inspect (1-based).
- * @param output_width Pointer to returned storage width
- * @param output_height Pointer to returned storage height
- * @param output_par_width Pointer to returned pixel width
- * @param output_par_height Pointer to returned pixel height
- */
-void hb_set_anamorphic_size_by_index( hb_handle_t * h, int title_index,
-        int *output_width, int *output_height,
-        int *output_par_width, int *output_par_height )
-{
-    hb_title_t * title;
-    title = hb_get_title_by_index( h, title_index );
-    
-    hb_set_anamorphic_size( title->job, output_width, output_height, output_par_width, output_par_height );
 }
 
 /**
@@ -1423,53 +1393,6 @@ hb_job_t * hb_current_job( hb_handle_t * h )
 }
 
 /**
- * Applies information from the given job to the official job instance.
- * @param h Handle to hb_handle_t.
- * @param title_index Index of the title to apply the chapter name to (1-based).
- * @param chapter The chapter to apply the name to (1-based).
- * @param job Job information to apply.
- */
-void hb_set_chapter_name( hb_handle_t * h, int title_index, int chapter_index, const char * chapter_name )
-{
-    hb_title_t * title;
-    title = hb_get_title_by_index( h, title_index );
-    
-    hb_chapter_t * chapter = hb_list_item( title->list_chapter, chapter_index - 1 );
-    
-    strncpy(chapter->title, chapter_name, 1023);
-    chapter->title[1023] = '\0';
-}
-
-/**
- * Applies information from the given job to the official job instance.
- * Currently only applies information needed for anamorphic size calculation and previews.
- * @param h Handle to hb_handle_t.
- * @param title_index Index of the title to apply the job information to (1-based).
- * @param job Job information to apply.
- */
-void hb_set_job( hb_handle_t * h, int title_index, hb_job_t * job )
-{
-	int i;
-
-    hb_title_t * title;
-    title = hb_get_title_by_index( h, title_index );
-    
-    hb_job_t * job_target = title->job;
-    
-    job_target->deinterlace = job->deinterlace;
-    job_target->width = job->width;
-    job_target->height = job->height;
-    job_target->maxWidth = job->maxWidth;
-    job_target->maxHeight = job->maxHeight;
-    for (i = 0; i < 4; i++)
-    {
-        job_target->crop[i] = job->crop[i];
-    }
-	
-    job_target->anamorphic = job->anamorphic;
-}
-
-/**
  * Adds a job to the job list.
  * @param h Handle to hb_handle_t.
  * @param job Handle to hb_job_t.
@@ -1477,85 +1400,21 @@ void hb_set_job( hb_handle_t * h, int title_index, hb_job_t * job )
 void hb_add( hb_handle_t * h, hb_job_t * job )
 {
     hb_job_t      * job_copy;
-    hb_title_t    * title,    * title_copy;
-    hb_chapter_t  * chapter,  * chapter_copy;
     hb_audio_t    * audio;
     hb_subtitle_t * subtitle;
-    hb_attachment_t * attachment;
     int             i;
     char            audio_lang[4];
 
-    /* Copy the title */
-    title      = job->title;
-    title_copy = malloc( sizeof( hb_title_t ) );
-    memcpy( title_copy, title, sizeof( hb_title_t ) );
+    /* Copy the job */
+    job_copy        = calloc( sizeof( hb_job_t ), 1 );
+    memcpy( job_copy, job, sizeof( hb_job_t ) );
 
-    title_copy->list_chapter = hb_list_init();
-    for( i = 0; i < hb_list_count( title->list_chapter ); i++ )
-    {
-        chapter      = hb_list_item( title->list_chapter, i );
-        chapter_copy = malloc( sizeof( hb_chapter_t ) );
-        memcpy( chapter_copy, chapter, sizeof( hb_chapter_t ) );
-        hb_list_add( title_copy->list_chapter, chapter_copy );
-    }
-
-    /*
-     * Copy the metadata
-     */
-    if( title->metadata )
-    {
-        title_copy->metadata = malloc( sizeof( hb_metadata_t ) );
-        
-        if( title_copy->metadata ) 
-        {
-            memcpy( title_copy->metadata, title->metadata, sizeof( hb_metadata_t ) );
-
-            /*
-             * Need to copy the artwork seperatly (TODO).
-             */
-            if( title->metadata->coverart )
-            {
-                title_copy->metadata->coverart = malloc( title->metadata->coverart_size );
-                if( title_copy->metadata->coverart )
-                {
-                    memcpy( title_copy->metadata->coverart, title->metadata->coverart,
-                            title->metadata->coverart_size );
-                } else {
-                    title_copy->metadata->coverart_size = 0; 
-                }
-            }
-        }
-    }
-
-    /* Copy the audio track(s) we want */
-    title_copy->list_audio = hb_list_init();
-    for( i = 0; i < hb_list_count(job->list_audio); i++ )
-    {
-        if( ( audio = hb_list_item( job->list_audio, i ) ) )
-        {
-            hb_list_add( title_copy->list_audio, hb_audio_copy(audio) );
-        }
-    }
-
-    /* Initialize subtitle list - filled out further below */
-    title_copy->list_subtitle = hb_list_init();
-    
-    /* Copy all the attachments */
-    title_copy->list_attachment = hb_list_init();
-    for( i = 0; i < hb_list_count(title->list_attachment); i++ )
-    {
-        if( ( attachment = hb_list_item( title->list_attachment, i ) ) )
-        {
-            hb_list_add( title_copy->list_attachment, hb_attachment_copy(attachment) );
-        }
-    }
-    title_copy->video_codec_name = strdup( title->video_codec_name );
-
-    /* If we're doing Foreign Audio Search, copy all subtitles matching the first
-     * audio track language we find in the audio list.
+    /* If we're doing Foreign Audio Search, copy all subtitles matching the
+     * first audio track language we find in the audio list.
      *
-     * Otherwise, copy all subtitles found in the input job (which can be manually
-     * selected by the user, or added after the Foreign Audio Search pass). */
+     * Otherwise, copy all subtitles found in the input job (which can be
+     * manually selected by the user, or added after the Foreign Audio
+     * Search pass). */
     memset( audio_lang, 0, sizeof( audio_lang ) );
 
     if( job->indepth_scan )
@@ -1571,9 +1430,16 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
                 break;
             }
         }
-        for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
+
+        /*
+         * If doing a subtitle scan then add all the matching subtitles for this
+         * language.
+         */
+        job_copy->list_subtitle = hb_list_init();
+    
+        for( i = 0; i < hb_list_count( job->title->list_subtitle ); i++ )
         {
-            subtitle = hb_list_item( title->list_subtitle, i );
+            subtitle = hb_list_item( job->title->list_subtitle, i );
             if( strcmp( subtitle->iso639_2, audio_lang ) == 0 &&
                 hb_subtitle_can_force( subtitle->source ) )
             {
@@ -1582,90 +1448,36 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
                  *
                  * We will update the subtitle list on the next pass later, after
                  * the subtitle scan pass has completed. */
-                hb_list_add( title_copy->list_subtitle, hb_subtitle_copy( subtitle ) );
+                hb_list_add( job_copy->list_subtitle,
+                             hb_subtitle_copy( subtitle ) );
             }
         }
     }
     else
     {
         /* Copy all subtitles from the input job to title_copy/job_copy. */
-        for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
-        {
-            if( ( subtitle = hb_list_item( job->list_subtitle, i ) ) )
-            {
-                hb_list_add( title_copy->list_subtitle, hb_subtitle_copy( subtitle ) );
-            }
-        }
+        job_copy->list_subtitle = hb_subtitle_list_copy( job->list_subtitle );
     }
 
-    /* Copy the job */
-    job_copy        = calloc( sizeof( hb_job_t ), 1 );
-    memcpy( job_copy, job, sizeof( hb_job_t ) );
-    title_copy->job = job_copy;
-    job_copy->title = title_copy;
-    job_copy->list_audio = title_copy->list_audio;
-    job_copy->list_subtitle = title_copy->list_subtitle;   // sharing list between title and job
-    job_copy->file  = strdup( job->file );
+    job_copy->list_chapter = hb_chapter_list_copy( job->list_chapter );
+    job_copy->list_audio = hb_audio_list_copy( job->list_audio );
+    job_copy->list_attachment = hb_attachment_list_copy( job->list_attachment );
+    job_copy->metadata = hb_metadata_copy( job->metadata );
+
+    if ( job->file )
+        job_copy->file  = strdup( job->file );
+    if ( job->advanced_opts )
+        job_copy->advanced_opts  = strdup( job->advanced_opts );
     job_copy->h     = h;
     job_copy->pause = h->pause_lock;
 
     /* Copy the job filter list */
-    if( job->list_filter )
-    {
-        int i;
-        int filter_count = hb_list_count( job->list_filter );
-        job_copy->list_filter = hb_list_init();
-        for( i = 0; i < filter_count; i++ )
-        {
-            /*
-             * Copy the filters, since the MacGui reuses the global filter objects
-             * meaning that queued up jobs overwrite the previous filter settings.
-             * In reality, settings is probably the only field that needs duplicating
-             * since it's the only value that is ever changed. But name is duplicated
-             * as well for completeness. Not copying private_data since it gets
-             * created for each job in renderInit.
-             */
-            hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
-            hb_filter_object_t * filter_copy = hb_filter_copy( filter );
-            hb_list_add( job_copy->list_filter, filter_copy );
-        }
-    }
+    job_copy->list_filter = hb_filter_list_copy( job->list_filter );
 
     /* Add the job to the list */
     hb_list_add( h->jobs, job_copy );
     h->job_count = hb_count(h);
     h->job_count_permanent++;
-}
-
-/**
- * Clean up the job structure so that is is ready for setting up a new job.
- * Should be called by front-ends after hb_add().
- */
-void hb_reset_job( hb_job_t * job )
-{
-    hb_audio_t *audio;
-    hb_subtitle_t *subtitle;
-    hb_filter_object_t *filter;
-
-    // clean up audio list
-    while( ( audio = hb_list_item( job->list_audio, 0 ) ) )
-    {
-        hb_list_rem( job->list_audio, audio );
-        free( audio );
-    }
-    // clean up subtitle list
-    while( ( subtitle = hb_list_item( job->list_subtitle, 0 ) ) )
-    {
-        hb_list_rem( job->list_subtitle, subtitle );
-        free( subtitle );
-    }
-    // clean up filter list
-    while( ( filter = hb_list_item( job->list_filter, 0 ) ) )
-    {
-        hb_list_rem( job->list_filter, filter );
-        free( filter->settings );
-        free( filter );
-    }
 }
 
 /**
@@ -1831,17 +1643,12 @@ void hb_close( hb_handle_t ** _h )
     
     hb_thread_close( &h->main_thread );
 
-    while( ( title = hb_list_item( h->list_title, 0 ) ) )
+    while( ( title = hb_list_item( h->title_set.list_title, 0 ) ) )
     {
-        hb_list_rem( h->list_title, title );
-        if( title->job )
-        {
-            hb_reset_job( title->job );
-        }
-        free( title->job );
+        hb_list_rem( h->title_set.list_title, title );
         hb_title_close( &title );
     }
-    hb_list_close( &h->list_title );
+    hb_list_close( &h->title_set.list_title );
 
     hb_list_close( &h->jobs );
     hb_lock_close( &h->state_lock );
@@ -1925,9 +1732,9 @@ static void thread_func( void * _h )
                 hb_title_t * title;
 
                 hb_remove_previews( h );
-                while( ( title = hb_list_item( h->list_title, 0 ) ) )
+                while( ( title = hb_list_item( h->title_set.list_title, 0 ) ) )
                 {
-                    hb_list_rem( h->list_title, title );
+                    hb_list_rem( h->title_set.list_title, title );
                     hb_title_close( &title );
                 }
 
@@ -1936,7 +1743,7 @@ static void thread_func( void * _h )
             else
             {
                 hb_log( "libhb: scan thread found %d valid title(s)",
-                        hb_list_count( h->list_title ) );
+                        hb_list_count( h->title_set.list_title ) );
             }
             hb_lock( h->state_lock );
             h->state.state = HB_STATE_SCANDONE; //originally state.state
@@ -2021,29 +1828,6 @@ int hb_get_pid( hb_handle_t * h )
 int hb_get_instance_id( hb_handle_t * h )
 {
     return h->id;
-}
-
-/**
- * Returns the title with the given title index.
- * @param h Handle to hb_handle_t
- * @param title_index the index of the title to get
- * @returns The requested title
- */
-hb_title_t * hb_get_title_by_index( hb_handle_t * h, int title_index )
-{
-    hb_title_t * title;
-    int i;
-	int count = hb_list_count( h->list_title );
-    for (i = 0; i < count; i++)
-    {
-        title = hb_list_item( h->list_title, i );
-        if (title->index == title_index)
-        {
-            return title;
-        }
-    }
-    
-    return NULL;
 }
 
 /**
