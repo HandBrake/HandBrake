@@ -21,7 +21,9 @@ static const char * const hb_x264_encopt_synonyms[][2] =
     { "level",          "level-idc",       },
     { "ref",            "frameref",        },
     { "keyint-min",     "min-keyint",      },
+    { "no-deblock",     "nf",              },
     { "deblock",        "filter",          },
+    { "cqm",            "cqmfile",         },
     { "analyse",        "partitions",      },
     { "weightb",        "weight-b",        },
     { "direct",         "direct-pred",     },
@@ -36,7 +38,6 @@ static const char * const hb_x264_encopt_synonyms[][2] =
     { "ipratio",        "ip-factor",       },
     { "pbratio",        "pb-factor",       },
     { "cplxblur",       "cplx-blur",       },
-    { "cqm",            "cqmfile",         },
     { NULL,             NULL,              },
 };
 
