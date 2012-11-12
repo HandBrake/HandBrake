@@ -143,6 +143,29 @@ namespace HandBrake.Interop
 		}
 
 		/// <summary>
+		/// Checks to see if the given H.264 level is valid given the inputs.
+		/// </summary>
+		/// <param name="level">The level to check.</param>
+		/// <param name="width">The output picture width.</param>
+		/// <param name="height">The output picture height.</param>
+		/// <param name="fpsNumerator">The rate numerator.</param>
+		/// <param name="fpsDenominator">The rate denominator.</param>
+		/// <param name="interlaced">True if x264 interlaced output is enabled.</param>
+		/// <param name="fakeInterlaced">True if x264 fake interlacing is enabled.</param>
+		/// <returns>True if the level is valid.</returns>
+		public static bool IsH264LevelValid(string level, int width, int height, int fpsNumerator, int fpsDenominator, bool interlaced, bool fakeInterlaced)
+		{
+			return HBFunctions.hb_check_h264_level(
+				level, 
+				width, 
+				height, 
+				fpsNumerator, 
+				fpsDenominator, 
+				interlaced ? 1 : 0,
+				fakeInterlaced ? 1 : 0) == 0;
+		}
+
+		/// <summary>
 		/// Gets the total number of seconds on the given encode job.
 		/// </summary>
 		/// <param name="job">The encode job to query.</param>

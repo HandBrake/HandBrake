@@ -58,6 +58,7 @@ namespace HandBrake.Interop.Model.Encoding
 		public string X264Profile { get; set; }
 		public string X264Preset { get; set; }
 		public string X264Tune { get; set; }
+		public string H264Level { get; set; }
 		public VideoEncodeRateType VideoEncodeRateType { get; set; }
 		public double Quality { get; set; }
 		public int TargetSize { get; set; }
@@ -114,6 +115,7 @@ namespace HandBrake.Interop.Model.Encoding
 				X264Profile = this.X264Profile,
 				X264Preset = this.X264Preset,
 				X264Tune = this.X264Tune,
+				H264Level = this.H264Level,
 				VideoEncodeRateType = this.VideoEncodeRateType,
 				Quality = this.Quality,
 				TargetSize = this.TargetSize,
@@ -122,7 +124,9 @@ namespace HandBrake.Interop.Model.Encoding
 				TurboFirstPass = this.TurboFirstPass,
 				Framerate = this.Framerate,
 				ConstantFramerate = this.ConstantFramerate,
+#pragma warning disable 612,618
 				PeakFramerate = this.PeakFramerate,
+#pragma warning restore 612,618
 
 				AudioEncodings = new List<AudioEncoding>(this.AudioEncodings)
 			};

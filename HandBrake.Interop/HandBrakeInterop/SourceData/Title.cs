@@ -9,12 +9,12 @@
 
 namespace HandBrake.Interop.SourceData
 {
-    using System;
-    using System.Collections.Generic;
+	using System;
+	using System.Collections.Generic;
 
-    using HandBrake.Interop.Model;
+	using HandBrake.Interop.Model;
 
-    /// <summary>
+	/// <summary>
 	/// An object that represents a single Title of a DVD
 	/// </summary>
 	public class Title
@@ -106,6 +106,16 @@ namespace HandBrake.Interop.SourceData
 		/// Gets or sets the video frame rate for this title.
 		/// </summary>
 		public double Framerate { get; set; }
+
+		/// <summary>
+		/// Gets or sets the video frame rate numerator.
+		/// </summary>
+		public int FramerateNumerator { get; set; }
+
+		/// <summary>
+		/// Gets or sets the video frame rate denominator.
+		/// </summary>
+		public int FramerateDenominator { get; set; }
 
 		/// <summary>
 		/// Gets the total number of frames in this title.
