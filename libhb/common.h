@@ -1021,12 +1021,9 @@ int hb_rgb2yuv(int rgb);
 const char * hb_subsource_name( int source );
 
 // unparse a set of x264 settings to an HB encopts string
-char * hb_x264_param_unparse( const char * x264_preset,
-                              const char * x264_tune,
-                              const char * x264_encopts,
-                              const char * x264_profile,
-                              const char * h264_level,
-                              int width, int height );
+char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
+                             const char *x264_encopts, const char *x264_profile,
+                             const char *h264_level, int width, int height);
 
 // x264 preset/tune/profile & h264 level helpers
 const char * const * hb_x264_presets();
