@@ -570,6 +570,8 @@ class ArchAction( Action ):
                 self.mode.mode = 'ppc64'
         elif host.match( '*-*-linux*' ):
             pass
+        elif host.match( '*-*-solaris*' ):
+            pass
         else:
             self.msg_pass = 'WARNING'
 
