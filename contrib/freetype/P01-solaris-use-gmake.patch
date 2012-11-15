@@ -1,0 +1,25 @@
+From 6017133ae056c3abcd70aac6873adf0709f5f486 Mon Sep 17 00:00:00 2001
+From: Sean McGovern <gseanmcg@gmail.com>
+Date: Sun, 28 Oct 2012 23:26:15 -0400
+Subject: [PATCH] build: use 'gmake' instead of 'make'
+
+---
+ configure | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure b/configure
+index b397556..cb125e1 100755
+--- a/configure
++++ b/configure
+@@ -16,7 +16,7 @@
+ rm -f config.mk builds/unix/unix-def.mk builds/unix/unix-cc.mk
+ 
+ if test "x$GNUMAKE" = x; then
+-  GNUMAKE=make
++  GNUMAKE=gmake
+ fi
+ 
+ if test -z "`$GNUMAKE -v 2>/dev/null | grep GNU`"; then
+-- 
+1.7.12
+
