@@ -19,6 +19,8 @@ ifeq ($(BUILD.system),mingw)
     FONTCONFIG.config_archoption  = --with-arch=i386
 else ifeq ($(BUILD.system),linux)
     FONTCONFIG.cc_archoption      = 
+else ifeq ($(BUILD.system),solaris)
+    FONTCONFIG.cc_archoption      =
 else
     FONTCONFIG.cc_archoption      = -arch $(FONTCONFIG.GCC.archs)
     FONTCONFIG.config_archoption  = --with-arch=$(FONTCONFIG.GCC.archs)
