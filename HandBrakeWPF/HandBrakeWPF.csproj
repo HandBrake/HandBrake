@@ -377,6 +377,7 @@
     <Content Include="defaultsettings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Views\Images\add40.png" />
     <Resource Include="Views\Images\add.png" />
     <Resource Include="Views\Images\remove.png" />
     <Resource Include="Views\Images\information.png" />
@@ -389,7 +390,6 @@
     <Resource Include="handbrakepineapple.ico" />
     <Resource Include="Views\Images\delete.png" />
     <Resource Include="Views\Images\Close.png" />
-    <Resource Include="Views\Images\Add16.png" />
     <Resource Include="Views\Images\Options24.png" />
   </ItemGroup>
   <ItemGroup>

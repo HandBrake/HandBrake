@@ -38,7 +38,7 @@
                    Height="24"
                    Margin="10,0,5,0"
                    VerticalAlignment="Center"
-                   Source="Images/Add16.png" />
+                   Source="Images/Add40.png" />
             <StackPanel VerticalAlignment="Center" Orientation="Vertical">
                 <TextBlock FontWeight="Bold" Text="Add a Preset" />
             </StackPanel>
