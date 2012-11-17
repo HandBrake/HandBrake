@@ -336,5 +336,8 @@ namespace HandBrake.Interop.HbLib
 
 		[DllImport("hb.dll", EntryPoint = "hb_x264_encopt_name", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr hb_x264_encopt_name(IntPtr name);
+
+		[DllImport("hb.dll", EntryPoint = "hb_check_h264_level", CallingConvention = CallingConvention.Cdecl)]
+		public static extern int hb_check_h264_level([In] [MarshalAs(UnmanagedType.LPStr)] string level, int width, int height, int fps_num, int fps_den, int interlaced, int fake_interlaced);
 	}
 }
