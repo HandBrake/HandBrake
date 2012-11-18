@@ -33,7 +33,7 @@ namespace HandBrakeWPF
         {
             Application.Current.Dispatcher.UnhandledException += this.Dispatcher_UnhandledException;
             AppDomain.CurrentDomain.UnhandledException +=
-                new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+                this.CurrentDomain_UnhandledException;
         }
 
         /// <summary>
@@ -66,7 +66,15 @@ namespace HandBrakeWPF
         /// </param>
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            this.ShowError(e.ExceptionObject);
+            if (e.ExceptionObject.GetType() == typeof(FileNotFoundException))
+            {
+                GeneralApplicationException exception = new GeneralApplicationException("A file appears to be missing.", "Try re-installing Microsoft .NET Framework 4.0", (Exception)e.ExceptionObject);
+                this.ShowError(exception);
+            }
+            else
+            {
+                this.ShowError(e.ExceptionObject);
+            }
         }
 
         /// <summary>
@@ -81,7 +89,12 @@ namespace HandBrakeWPF
         private void Dispatcher_UnhandledException(
             object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            if (e.Exception.GetType() == typeof(GeneralApplicationException))
+            if (e.Exception.GetType() == typeof(FileNotFoundException))
+            {
+                GeneralApplicationException exception = new GeneralApplicationException("A file appears to be missing.", "Try re-installing Microsoft .NET Framework 4.0", e.Exception);
+                this.ShowError(exception);
+            }
+            else if (e.Exception.GetType() == typeof(GeneralApplicationException))
             {
                 this.ShowError(e.Exception);
             }
