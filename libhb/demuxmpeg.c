@@ -257,6 +257,7 @@ void hb_demux_mpeg( hb_buffer_t *buf, hb_list_t *list_es, hb_psdemux_t *state )
                 // when a blueray changes clips.
                 ++state->scr_changes;
                 state->last_scr = buf->s.start;
+                state->scr_delta = 0;
             }
 
             // we're keeping track of timing (i.e., not in scan)
@@ -302,20 +303,24 @@ void hb_demux_mpeg( hb_buffer_t *buf, hb_list_t *list_es, hb_psdemux_t *state )
                     // fdelta does not continually grow.
                     state->scr_delta = buf->s.start - state->last_scr;
                 }
-                if ( state->last_pts >= 0 )
+                if (buf->s.type == AUDIO_BUF || buf->s.type == VIDEO_BUF)
                 {
-                    fdelta = buf->s.start - state->last_pts;
-                    if ( fdelta < -5 * 90000LL || fdelta > 5 * 90000LL )
+                    if ( state->last_pts >= 0 )
                     {
-                        // Packet too far from last. This may be a NZ TV broadcast
-                        // as they like to change the PCR without sending a PCR
-                        // update. Since it may be a while until they actually tell
-                        // us the new PCR use the PTS as the PCR.
-                        ++state->scr_changes;
-                        state->last_scr = buf->s.start;
+                        fdelta = buf->s.start - state->last_pts;
+                        if ( fdelta < -5 * 90000LL || fdelta > 5 * 90000LL )
+                        {
+                            // Packet too far from last. This may be a NZ TV broadcast
+                            // as they like to change the PCR without sending a PCR
+                            // update. Since it may be a while until they actually tell
+                            // us the new PCR use the PTS as the PCR.
+                            ++state->scr_changes;
+                            state->last_scr = buf->s.start;
+                            state->scr_delta = 0;
+                        }
                     }
+                    state->last_pts = buf->s.start;
                 }
-                state->last_pts = buf->s.start;
             }
 
             if ( buf->s.type == VIDEO_BUF )

@@ -963,7 +963,7 @@ hb_stream_t * hb_bd_stream_open( hb_title_t *title )
     // We don't need to wait for a PCR when scanning. In fact, it
     // trips us up on the first preview of every title since we would
     // have to read quite a lot of data before finding the PCR.
-    if ( !(title->flags & HBTF_SCAN_COMPLETE) )
+    if ( title->flags & HBTF_SCAN_COMPLETE )
     {
         /* BD has PCRs, but the BD index always points to a packet
          * after a PCR packet, so we will not see the initial PCR
