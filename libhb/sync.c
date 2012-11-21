@@ -992,7 +992,7 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
             AVPacket pkt;
             int got_packet;
             av_init_packet(&pkt);
-            pkt.data = zeros;
+            pkt.data = sync->silence_buf;
             pkt.size = input_size;
 
             int ret = avcodec_encode_audio2( c, &pkt, &frame, &got_packet);
