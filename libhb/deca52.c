@@ -380,7 +380,9 @@ static hb_buffer_t* Decode(hb_work_object_t *w)
         {
             pv->channel_layout = new_layout;
             pv->nchannels      = av_get_channel_layout_nb_channels(new_layout);
-            hb_audio_remap_set_channel_layout(pv->remap, pv->channel_layout);
+            hb_audio_remap_set_channel_layout(pv->remap,
+                                              pv->channel_layout,
+                                              pv->nchannels);
             hb_audio_resample_set_channel_layout(pv->resample,
                                                  pv->channel_layout,
                                                  pv->nchannels);
