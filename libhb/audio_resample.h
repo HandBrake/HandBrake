@@ -27,7 +27,6 @@
 
 typedef struct
 {
-    int do_remix;
     int dual_mono_downmix;
     int dual_mono_right_only;
 
@@ -67,12 +66,9 @@ typedef struct
  *
  * Also sets the default audio input characteristics, so that they are the same
  * as the output characteristics (no conversion needed).
- *
- * If do_remix is 0, it will be assumed that any remixing was *already* done.
  */
 hb_audio_resample_t* hb_audio_resample_init(enum AVSampleFormat sample_fmt,
-                                            int hb_amixdown, int do_remix,
-                                            int normalize_mix_level);
+                                            int hb_amixdown, int normalize_mix);
 
 /* The following functions set the audio input characteristics.
  *
@@ -110,6 +106,6 @@ void                 hb_audio_resample_free(hb_audio_resample_t *resample);
  * resampling is only done when necessary.
  */
 hb_buffer_t*         hb_audio_resample(hb_audio_resample_t *resample,
-                                       void *samples, int nsamples);
+                                       uint8_t **samples, int nsamples);
 
 #endif /* AUDIO_RESAMPLE_H */

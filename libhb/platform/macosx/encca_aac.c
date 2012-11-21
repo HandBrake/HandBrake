@@ -389,7 +389,8 @@ static OSStatus inInputDataProc(AudioConverterRef converter, UInt32 *npackets,
     *npackets = buffers->mBuffers[0].mDataByteSize / pv->isamplesiz;
     pv->ibytes -= buffers->mBuffers[0].mDataByteSize;
 
-    hb_audio_remap(pv->remap, (uint8_t*)buffers->mBuffers[0].mData, *npackets);
+    hb_audio_remap(pv->remap, (uint8_t**)(&buffers->mBuffers[0].mData),
+                   (int)(*npackets));
 
     return noErr;
 }

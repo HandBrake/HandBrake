@@ -35,12 +35,13 @@ struct hb_work_private_s
     hb_list_t    *list;
     const AVCRC  *crc_table;
     uint8_t       frame[3840];
-    uint8_t       buf[1536 * 6 * sizeof(float)]; // decoded samples (1 frame, 6 channels)
+    uint8_t       buf[6][6][256 * sizeof(float)]; // decoded frame (up to 6 channels, 6 blocks * 256 samples)
+    uint8_t      *samples[6];                     // pointers to the start of each plane (1 per channel)
 
     int                 nchannels;
-    int                 remap_table[6];
     int                 use_mix_levels;
     uint64_t            channel_layout;
+    hb_audio_remap_t    *remap;
     hb_audio_resample_t *resample;
 };
 
@@ -133,17 +134,17 @@ static int deca52Init(hb_work_object_t *w, hb_job_t *job)
     pv->list      = hb_list_init();
     pv->crc_table = av_crc_get_table(AV_CRC_16_ANSI);
 
-    /* Downmixing */
+    /*
+     * Decoding, remapping, downmixing
+     */
     if (audio->config.out.codec != HB_ACODEC_AC3_PASS)
     {
-        /* We want AV_SAMPLE_FMT_FLT samples */
-        pv->level = 1.0;
-        pv->dynamic_range_compression =
-            audio->config.out.dynamic_range_compression;
-
+        /*
+         * Output AV_SAMPLE_FMT_FLT samples
+         */
         pv->resample =
             hb_audio_resample_init(AV_SAMPLE_FMT_FLT,
-                                   audio->config.out.mixdown, 1,
+                                   audio->config.out.mixdown,
                                    audio->config.out.normalize_mix_level);
         if (pv->resample == NULL)
         {
@@ -151,12 +152,39 @@ static int deca52Init(hb_work_object_t *w, hb_job_t *job)
             return 1;
         }
 
-        /* liba52 doesn't provide us with Lt/Rt mix levels.
+        /*
+         * Decode to AV_SAMPLE_FMT_FLTP
+         */
+        pv->level = 1.0;
+        pv->dynamic_range_compression =
+            audio->config.out.dynamic_range_compression;
+        hb_audio_resample_set_sample_fmt(pv->resample, AV_SAMPLE_FMT_FLTP);
+
+        /*
+         * liba52 doesn't provide Lt/Rt mix levels, only Lo/Ro.
+         *
          * When doing an Lt/Rt downmix, ignore mix levels
-         * (this matches what liba52's own downmix code does). */
+         * (this matches what liba52's own downmix code does).
+         */
         pv->use_mix_levels =
             !(audio->config.out.mixdown == HB_AMIXDOWN_DOLBY ||
               audio->config.out.mixdown == HB_AMIXDOWN_DOLBYPLII);
+
+        /*
+         * Remap from liba52 to Libav channel order
+         */
+        pv->remap = hb_audio_remap_init(AV_SAMPLE_FMT_FLTP, &hb_libav_chan_map,
+                                        &hb_liba52_chan_map);
+        if (pv->remap == NULL)
+        {
+            hb_error("deca52Init: hb_audio_remap_init() failed");
+            return 1;
+        }
+    }
+    else
+    {
+        pv->remap    = NULL;
+        pv->resample = NULL;
     }
 
     return 0;
@@ -179,6 +207,7 @@ static void deca52Close(hb_work_object_t *w)
     }
 
     hb_audio_resample_free(pv->resample);
+    hb_audio_remap_free(pv->remap);
     hb_list_empty(&pv->list);
     a52_free(pv->state);
     free(pv);
@@ -317,9 +346,12 @@ static hb_buffer_t* Decode(hb_work_object_t *w)
     }
     else
     {
-        int i, j, k;
+        int i, j;
+        float *block_samples;
 
-        /* Feed liba52 */
+        /*
+         * Feed liba52
+         */
         a52_frame(pv->state, pv->frame, &pv->flags, &pv->level, 0);
 
         /*
@@ -348,11 +380,10 @@ static hb_buffer_t* Decode(hb_work_object_t *w)
         {
             pv->channel_layout = new_layout;
             pv->nchannels      = av_get_channel_layout_nb_channels(new_layout);
+            hb_audio_remap_set_channel_layout(pv->remap, pv->channel_layout);
             hb_audio_resample_set_channel_layout(pv->resample,
                                                  pv->channel_layout,
                                                  pv->nchannels);
-            hb_audio_remap_build_table(&hb_libav_chan_map, &hb_liba52_chan_map,
-                                       pv->channel_layout, pv->remap_table);
         }
         if (pv->use_mix_levels)
         {
@@ -366,28 +397,29 @@ static hb_buffer_t* Decode(hb_work_object_t *w)
             return NULL;
         }
 
-        // decode all blocks before downmixing
+        /*
+         * decode all blocks before downmixing
+         */
         for (i = 0; i < 6; i++)
         {
-            float *samples_in, *samples_out;
-
             a52_block(pv->state);
-            samples_in  = (float*)a52_samples(pv->state);
-            samples_out = (float*)(pv->buf +
-                                   (i * pv->nchannels * 256 * sizeof(float)));
+            block_samples = (float*)a52_samples(pv->state);
 
-            // Planar -> interleaved, remap to Libav channel order
-            for (j = 0; j < 256; j++)
+            /*
+             * reset pv->samples (may have been modified by hb_audio_remap)
+             *
+             * copy samples to our internal buffer
+             */
+            for (j = 0; j < pv->nchannels; j++)
             {
-                for (k = 0; k < pv->nchannels; k++)
-                {
-                    samples_out[(pv->nchannels*j)+k] =
-                     samples_in[(256*pv->remap_table[k])+j];
-                }
+                pv->samples[j] = (uint8_t*)pv->buf[j];
+                memcpy(pv->buf[j][i], block_samples, 256 * sizeof(float));
+                block_samples += 256;
             }
         }
 
-        out = hb_audio_resample(pv->resample, (void*)pv->buf, 1536);
+        hb_audio_remap(pv->remap, pv->samples, 1536);
+        out = hb_audio_resample(pv->resample, pv->samples, 1536);
     }
 
     if (out != NULL)

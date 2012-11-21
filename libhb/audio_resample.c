@@ -12,27 +12,36 @@
 #include "audio_resample.h"
 
 hb_audio_resample_t* hb_audio_resample_init(enum AVSampleFormat sample_fmt,
-                                            int hb_amixdown, int do_remix,
-                                            int normalize_mix_level)
+                                            int hb_amixdown, int normalize_mix)
 {
     hb_audio_resample_t *resample = calloc(1, sizeof(hb_audio_resample_t));
     if (resample == NULL)
     {
         hb_error("hb_audio_resample_init: failed to allocate resample");
-        return NULL;
+        goto fail;
+    }
+
+    // avresample context, initialized in hb_audio_resample_update()
+    resample->avresample = NULL;
+
+    // we don't support planar output yet
+    if (av_sample_fmt_is_planar(sample_fmt))
+    {
+        hb_error("hb_audio_resample_init: planar output not supported ('%s')",
+                 av_get_sample_fmt_name(sample_fmt));
+        goto fail;
     }
 
     // convert mixdown to channel_layout/matrix_encoding combo
-    int channels, matrix_encoding;
+    int matrix_encoding;
     uint64_t channel_layout = hb_ff_mixdown_xlat(hb_amixdown, &matrix_encoding);
-    channels = av_get_channel_layout_nb_channels(channel_layout);
 
-    if (do_remix && (hb_amixdown == HB_AMIXDOWN_LEFT ||
-                     hb_amixdown == HB_AMIXDOWN_RIGHT))
+    /*
+     * When downmixing, Dual Mono to Mono is a special case:
+     * the audio must remain 2-channel until all conversions are done.
+     */
+    if (hb_amixdown == HB_AMIXDOWN_LEFT || hb_amixdown == HB_AMIXDOWN_RIGHT)
     {
-        /* When downmixing, Dual Mono to Mono is a special case:
-         * the audio must remain 2-channel until all conversions are done. */
-        channels                       = 2;
         channel_layout                 = AV_CH_LAYOUT_STEREO;
         resample->dual_mono_downmix    = 1;
         resample->dual_mono_right_only = (hb_amixdown == HB_AMIXDOWN_RIGHT);
@@ -42,35 +51,34 @@ hb_audio_resample_t* hb_audio_resample_init(enum AVSampleFormat sample_fmt,
         resample->dual_mono_downmix = 0;
     }
 
-    // requested channel_layout
-    resample->out.channels            = channels;
+    // requested output channel_layout, sample_fmt
+    resample->out.channels = av_get_channel_layout_nb_channels(channel_layout);
     resample->out.channel_layout      = channel_layout;
     resample->out.matrix_encoding     = matrix_encoding;
-    resample->out.normalize_mix_level = normalize_mix_level;
-
-    // requested sample_fmt
+    resample->out.normalize_mix_level = normalize_mix;
     resample->out.sample_fmt          = sample_fmt;
     resample->out.sample_size         = av_get_bytes_per_sample(sample_fmt);
 
     // set default input characteristics
-    resample->in.sample_fmt           = resample->out.sample_fmt;
-    resample->in.channel_layout       = resample->out.channel_layout;
-    resample->in.center_mix_level     = HB_MIXLEV_DEFAULT;
-    resample->in.surround_mix_level   = HB_MIXLEV_DEFAULT;
+    resample->in.sample_fmt         = resample->out.sample_fmt;
+    resample->in.channel_layout     = resample->out.channel_layout;
+    resample->in.center_mix_level   = HB_MIXLEV_DEFAULT;
+    resample->in.surround_mix_level = HB_MIXLEV_DEFAULT;
 
     // by default, no conversion needed
-    resample->resample_needed         = 0;
-    resample->avresample              = NULL;
-    resample->do_remix                = !!do_remix;
-
+    resample->resample_needed = 0;
     return resample;
+
+fail:
+    hb_audio_resample_free(resample);
+    return NULL;
 }
 
 void hb_audio_resample_set_channel_layout(hb_audio_resample_t *resample,
                                           uint64_t channel_layout,
                                           int channels)
 {
-    if (resample != NULL && resample->do_remix)
+    if (resample != NULL)
     {
         channel_layout = hb_ff_layout_xlat(channel_layout, channels);
         if (channel_layout == AV_CH_LAYOUT_STEREO_DOWNMIX)
@@ -86,7 +94,7 @@ void hb_audio_resample_set_mix_levels(hb_audio_resample_t *resample,
                                       double surround_mix_level,
                                       double center_mix_level)
 {
-    if (resample != NULL && resample->do_remix)
+    if (resample != NULL)
     {
         resample->in.center_mix_level   = center_mix_level;
         resample->in.surround_mix_level = surround_mix_level;
@@ -193,7 +201,7 @@ void hb_audio_resample_free(hb_audio_resample_t *resample)
 }
 
 hb_buffer_t* hb_audio_resample(hb_audio_resample_t *resample,
-                               void *samples, int nsamples)
+                               uint8_t **samples, int nsamples)
 {
     if (resample == NULL)
     {
@@ -224,7 +232,7 @@ hb_buffer_t* hb_audio_resample(hb_audio_resample_t *resample,
 
         out_samples = avresample_convert(resample->avresample,
                                          (void**)&out->data, out_linesize, nsamples,
-                                         (void**)&samples,    in_linesize, nsamples);
+                                         (void**)samples,     in_linesize, nsamples);
 
         if (out_samples <= 0)
         {
@@ -243,24 +251,27 @@ hb_buffer_t* hb_audio_resample(hb_audio_resample_t *resample,
         out_size = (out_samples *
                     resample->out.sample_size * resample->out.channels);
         out = hb_buffer_init(out_size);
-        memcpy(out->data, samples, out_size);
+        memcpy(out->data, samples[0], out_size);
     }
 
-    /* Dual Mono to Mono.
+    /*
+     * Dual Mono to Mono.
      *
-     * Copy all left or right samples to the first half of the buffer
-     * and halve the size */
+     * Copy all left or right samples to the first half of the buffer and halve
+     * the buffer size.
+     */
     if (resample->dual_mono_downmix)
     {
-        int ii;
-        int jj = !!resample->dual_mono_right_only;
-        float *audio_samples = (float*)out->data;
+        int ii, jj = !!resample->dual_mono_right_only;
+        int sample_size = resample->out.sample_size;
+        uint8_t *audio_samples = out->data;
         for (ii = 0; ii < out_samples; ii++)
         {
-            audio_samples[ii] = audio_samples[jj];
+            memcpy(audio_samples + (ii * sample_size),
+                   audio_samples + (jj * sample_size), sample_size);
             jj += 2;
         }
-        out->size = out_samples * resample->out.sample_size;
+        out->size = out_samples * sample_size;
     }
 
     return out;

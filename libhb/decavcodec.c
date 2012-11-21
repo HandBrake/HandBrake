@@ -190,7 +190,7 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     {
         pv->resample =
             hb_audio_resample_init(AV_SAMPLE_FMT_FLT,
-                                   w->audio->config.out.mixdown, 1,
+                                   w->audio->config.out.mixdown,
                                    w->audio->config.out.normalize_mix_level);
         if (pv->resample == NULL)
         {
@@ -1481,7 +1481,7 @@ static void decodeAudio(hb_audio_t *audio, hb_work_private_t *pv, uint8_t *data,
                     hb_log("decavcodec: hb_audio_resample_update() failed");
                     return;
                 }
-                out = hb_audio_resample(pv->resample, (void*)frame.data[0],
+                out = hb_audio_resample(pv->resample, frame.extended_data,
                                         frame.nb_samples);
             }
 

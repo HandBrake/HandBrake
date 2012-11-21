@@ -81,32 +81,100 @@ hb_chan_map_t hb_aac_chan_map =
     }
 };
 
-static void remap_planar(uint8_t *tmp_buf, uint8_t *samples, int nsamples,
-                         int nchannels, int sample_size, int *remap_table)
+static void remap_planar(uint8_t **samples, int nsamples,
+                         int nchannels, int *remap_table)
 {
-    int ii, stride = nsamples * sample_size;
-    memcpy(tmp_buf, samples, nchannels * stride);
+    int ii;
+    uint8_t *tmp_buf[HB_AUDIO_REMAP_MAX_CHANNELS];
+    memcpy(tmp_buf, samples, nchannels * sizeof(uint8_t*));
     for (ii = 0; ii < nchannels; ii++)
     {
-        memcpy(samples + (ii              * stride),
-               tmp_buf + (remap_table[ii] * stride), stride);
+        samples[ii] = tmp_buf[remap_table[ii]];
     }
 }
 
-static void remap_interleaved(uint8_t *tmp_buf, uint8_t *samples, int nsamples,
-                              int nchannels, int sample_size, int *remap_table)
+static void remap_u8_interleaved(uint8_t **samples, int nsamples,
+                                 int nchannels, int *remap_table)
 {
-    int ii, jj, stride = nchannels * sample_size;
-    memcpy(tmp_buf, samples, nsamples * stride);
+    int ii, jj;
+    uint8_t *samples_u8 = (*samples);
+    uint8_t tmp_buf[HB_AUDIO_REMAP_MAX_CHANNELS];
     for (ii = 0; ii < nsamples; ii++)
     {
+        memcpy(tmp_buf, samples_u8, nchannels * sizeof(uint8_t));
         for (jj = 0; jj < nchannels; jj++)
         {
-            memcpy(samples + (jj              * sample_size),
-                   tmp_buf + (remap_table[jj] * sample_size), sample_size);
+            samples_u8[jj] = tmp_buf[remap_table[jj]];
         }
-        samples += stride;
-        tmp_buf += stride;
+        samples_u8 += nchannels;
+    }
+}
+
+static void remap_s16_interleaved(uint8_t **samples, int nsamples,
+                                  int nchannels, int *remap_table)
+{
+    int ii, jj;
+    int16_t *samples_s16 = (int16_t*)(*samples);
+    int16_t tmp_buf[HB_AUDIO_REMAP_MAX_CHANNELS];
+    for (ii = 0; ii < nsamples; ii++)
+    {
+        memcpy(tmp_buf, samples_s16, nchannels * sizeof(int16_t));
+        for (jj = 0; jj < nchannels; jj++)
+        {
+            samples_s16[jj] = tmp_buf[remap_table[jj]];
+        }
+        samples_s16 += nchannels;
+    }
+}
+
+static void remap_s32_interleaved(uint8_t **samples, int nsamples,
+                                  int nchannels, int *remap_table)
+{
+    int ii, jj;
+    int32_t *samples_s32 = (int32_t*)(*samples);
+    int32_t tmp_buf[HB_AUDIO_REMAP_MAX_CHANNELS];
+    for (ii = 0; ii < nsamples; ii++)
+    {
+        memcpy(tmp_buf, samples_s32, nchannels * sizeof(int32_t));
+        for (jj = 0; jj < nchannels; jj++)
+        {
+            samples_s32[jj] = tmp_buf[remap_table[jj]];
+        }
+        samples_s32 += nchannels;
+    }
+}
+
+static void remap_flt_interleaved(uint8_t **samples, int nsamples,
+                                  int nchannels, int *remap_table)
+{
+    int ii, jj;
+    float *samples_flt = (float*)(*samples);
+    float tmp_buf[HB_AUDIO_REMAP_MAX_CHANNELS];
+    for (ii = 0; ii < nsamples; ii++)
+    {
+        memcpy(tmp_buf, samples_flt, nchannels * sizeof(float));
+        for (jj = 0; jj < nchannels; jj++)
+        {
+            samples_flt[jj] = tmp_buf[remap_table[jj]];
+        }
+        samples_flt += nchannels;
+    }
+}
+
+static void remap_dbl_interleaved(uint8_t **samples, int nsamples,
+                                  int nchannels, int *remap_table)
+{
+    int ii, jj;
+    double *samples_dbl = (double*)(*samples);
+    double tmp_buf[HB_AUDIO_REMAP_MAX_CHANNELS];
+    for (ii = 0; ii < nsamples; ii++)
+    {
+        memcpy(tmp_buf, samples_dbl, nchannels * sizeof(double));
+        for (jj = 0; jj < nchannels; jj++)
+        {
+            samples_dbl[jj] = tmp_buf[remap_table[jj]];
+        }
+        samples_dbl += nchannels;
     }
 }
 
@@ -133,11 +201,23 @@ hb_audio_remap_t* hb_audio_remap_init(enum AVSampleFormat sample_fmt,
             break;
 
         case AV_SAMPLE_FMT_U8:
+            remap->remap = &remap_u8_interleaved;
+            break;
+
         case AV_SAMPLE_FMT_S16:
+            remap->remap = &remap_s16_interleaved;
+            break;
+
         case AV_SAMPLE_FMT_S32:
+            remap->remap = &remap_s32_interleaved;
+            break;
+
         case AV_SAMPLE_FMT_FLT:
+            remap->remap = &remap_flt_interleaved;
+            break;
+
         case AV_SAMPLE_FMT_DBL:
-            remap->remap = &remap_interleaved;
+            remap->remap = &remap_dbl_interleaved;
             break;
 
         default:
@@ -145,7 +225,6 @@ hb_audio_remap_t* hb_audio_remap_init(enum AVSampleFormat sample_fmt,
                      av_get_sample_fmt_name(sample_fmt));
             goto fail;
     }
-    remap->sample_size = av_get_bytes_per_sample(sample_fmt);
 
     // input/output channel order
     if (channel_map_in == NULL || channel_map_out == NULL)
@@ -155,14 +234,6 @@ hb_audio_remap_t* hb_audio_remap_init(enum AVSampleFormat sample_fmt,
     }
     remap->channel_map_in  = channel_map_in;
     remap->channel_map_out = channel_map_out;
-
-    // temp buffer - we don't know the required size yet
-    remap->buf = hb_buffer_init(0);
-    if (remap->buf == NULL)
-    {
-        hb_error("hb_audio_remap_init: failed to allocate remap->buf");
-        goto fail;
-    }
 
     // remap can't be done until the channel layout has been set
     remap->remap_needed = 0;
@@ -215,21 +286,15 @@ void hb_audio_remap_free(hb_audio_remap_t *remap)
 {
     if (remap != NULL)
     {
-        if (remap->buf != NULL)
-            hb_buffer_close(&remap->buf);
         free(remap);
     }
 }
 
-void hb_audio_remap(hb_audio_remap_t *remap, uint8_t *samples, int nsamples)
+void hb_audio_remap(hb_audio_remap_t *remap, uint8_t **samples, int nsamples)
 {
     if (remap != NULL && remap->remap_needed)
     {
-        // make sure our temp buffer can hold a copy of all samples
-        hb_buffer_realloc(remap->buf, nsamples * remap->sample_size *
-                          remap->nchannels);
-        remap->remap(remap->buf->data, samples, nsamples, remap->nchannels,
-                     remap->sample_size, remap->table);
+        remap->remap(samples, nsamples, remap->nchannels, remap->table);
     }
 }
 
