@@ -233,31 +233,29 @@ namespace HandBrake.Interop
 		/// <returns>An image with the requested preview.</returns>
 		public BitmapImage GetPreview(EncodeJob job, int previewNumber)
 		{
-			hb_title_s title = this.GetOriginalTitle(job.Title);
+			IntPtr nativeJobPtr = HBFunctions.hb_job_init_by_index(this.hbHandle, job.Title);
+			var nativeJob = InteropUtilities.ReadStructure<hb_job_s>(nativeJobPtr);
 
-			hb_job_s nativeJob = InteropUtilities.ReadStructure<hb_job_s>(title.job);
 			List<IntPtr> allocatedMemory = this.ApplyJob(ref nativeJob, job);
 			
 			// There are some problems with getting previews with deinterlacing. Disabling for now.
 			nativeJob.deinterlace = 0;
-
-			// Create a new job pointer from our modified job object
-			IntPtr newJob = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(hb_job_s)));
-			Marshal.StructureToPtr(nativeJob, newJob, false);
-			allocatedMemory.Add(newJob);
 
 			int outputWidth = nativeJob.width;
 			int outputHeight = nativeJob.height;
 			int imageBufferSize = outputWidth * outputHeight * 4;
 			IntPtr nativeBuffer = Marshal.AllocHGlobal(imageBufferSize);
 			allocatedMemory.Add(nativeBuffer);
-			HBFunctions.hb_set_job(this.hbHandle, job.Title, ref nativeJob);
-			HBFunctions.hb_get_preview(this.hbHandle, ref title, previewNumber, nativeBuffer);
+			HBFunctions.hb_get_preview(this.hbHandle, ref nativeJob, previewNumber, nativeBuffer);
+
+			// We've used the job to get the preview. Clean up the job.
+			InteropUtilities.CloseJob(nativeJobPtr);
 
 			// Copy the filled image buffer to a managed array.
 			byte[] managedBuffer = new byte[imageBufferSize];
 			Marshal.Copy(nativeBuffer, managedBuffer, 0, imageBufferSize);
 
+			// We've copied the data out of unmanaged memory. Clean up that memory now.
 			InteropUtilities.FreeMemory(allocatedMemory);
 
 			var bitmap = new System.Drawing.Bitmap(outputWidth, outputHeight);
@@ -401,11 +399,16 @@ namespace HandBrake.Interop
 		/// for calculating bitrate when the target size would be wrong.</param>
 		public void StartEncode(EncodeJob job, bool preview, int previewNumber, int previewSeconds, double overallSelectedLengthSeconds)
 		{
+			EncodingProfile profile = job.EncodingProfile;
 			this.currentJob = job;
-			hb_job_s nativeJob = InteropUtilities.ReadStructure<hb_job_s>(this.GetOriginalTitle(job.Title).job);
+
+			IntPtr nativeJobPtr = HBFunctions.hb_job_init_by_index(this.hbHandle, job.Title);
+			var nativeJob = InteropUtilities.ReadStructure<hb_job_s>(nativeJobPtr);
+
+			//hb_job_s nativeJob = InteropUtilities.ReadStructure<hb_job_s>(this.GetOriginalTitle(job.Title).job);
 			this.encodeAllocatedMemory = this.ApplyJob(ref nativeJob, job, preview, previewNumber, previewSeconds, overallSelectedLengthSeconds);
 
-			if (!preview && job.EncodingProfile.IncludeChapterMarkers)
+			if (!preview && profile.IncludeChapterMarkers)
 			{
 				Title title = this.GetTitle(job.Title);
 				int numChapters = title.Chapters.Count;
@@ -439,25 +442,25 @@ namespace HandBrake.Interop
 				}
 			}
 
-			string x264Options = job.EncodingProfile.X264Options ?? string.Empty;
+			string x264Options = profile.X264Options ?? string.Empty;
 			IntPtr originalX264Options = Marshal.StringToHGlobalAnsi(x264Options);
 			this.encodeAllocatedMemory.Add(originalX264Options);
 
-			if (!string.IsNullOrEmpty(job.EncodingProfile.X264Profile))
+			if (!string.IsNullOrEmpty(profile.X264Profile))
 			{
-				nativeJob.x264_profile = Marshal.StringToHGlobalAnsi(job.EncodingProfile.X264Profile);
+				nativeJob.x264_profile = Marshal.StringToHGlobalAnsi(profile.X264Profile);
 				this.encodeAllocatedMemory.Add(nativeJob.x264_profile);
 			}
 
-			if (!string.IsNullOrEmpty(job.EncodingProfile.X264Preset))
+			if (!string.IsNullOrEmpty(profile.X264Preset))
 			{
-				nativeJob.x264_preset = Marshal.StringToHGlobalAnsi(job.EncodingProfile.X264Preset);
+				nativeJob.x264_preset = Marshal.StringToHGlobalAnsi(profile.X264Preset);
 				this.encodeAllocatedMemory.Add(nativeJob.x264_preset);
 			}
 
-			if (!string.IsNullOrEmpty(job.EncodingProfile.X264Tune))
+			if (profile.X264Tunes != null && profile.X264Tunes.Count > 0)
 			{
-				nativeJob.x264_tune = Marshal.StringToHGlobalAnsi(job.EncodingProfile.X264Tune);
+				nativeJob.x264_tune = Marshal.StringToHGlobalAnsi(string.Join(",", profile.X264Tunes));
 				this.encodeAllocatedMemory.Add(nativeJob.x264_tune);
 			}
 
@@ -519,6 +522,9 @@ namespace HandBrake.Interop
 
 			HBFunctions.hb_start(this.hbHandle);
 
+			// Should be safe to clean up the job we started with; a copy is in the queue now.
+			InteropUtilities.CloseJob(nativeJobPtr);
+
 			this.encodePollTimer = new System.Timers.Timer();
 			this.encodePollTimer.Interval = EncodePollIntervalMs;
 
@@ -577,9 +583,10 @@ namespace HandBrake.Interop
 		/// <param name="parHeight">The pixel aspect Y number.</param>
 		public void GetSize(EncodeJob job, out int width, out int height, out int parWidth, out int parHeight)
 		{
+			Title title = this.GetTitle(job.Title);
+
 			if (job.EncodingProfile.Anamorphic == Anamorphic.None)
 			{
-				Title title = this.GetTitle(job.Title);
 				Size storageDimensions = CalculateNonAnamorphicOutput(job.EncodingProfile, title);
 
 				width = storageDimensions.Width;
@@ -591,21 +598,23 @@ namespace HandBrake.Interop
 				return;
 			}
 
-			var nativeJob = InteropUtilities.ReadStructure<hb_job_s>(this.GetOriginalTitle(job.Title).job);
-			List<IntPtr> allocatedMemory = this.ApplyJob(ref nativeJob, job);
+			IntPtr nativeJobPtr = HBFunctions.hb_job_init_by_index(this.hbHandle, job.Title);
+			var nativeJob = InteropUtilities.ReadStructure<hb_job_s>(nativeJobPtr);
 
-			int refWidth = 0;
-			int refHeight = 0;
-			int refParWidth = 0;
-			int refParHeight = 0;
-			HBFunctions.hb_set_anamorphic_size(ref nativeJob, ref refWidth, ref refHeight, ref refParWidth, ref refParHeight);
+			List<IntPtr> allocatedMemory = this.ApplyJob(ref nativeJob, job);
 			InteropUtilities.FreeMemory(allocatedMemory);
 
-			width = refWidth;
-			height = refHeight;
-			parWidth = refParWidth;
-			parHeight = refParHeight;
+			InteropUtilities.CloseJob(nativeJobPtr);
+
+			// During the ApplyJob call, it modified nativeJob to have the correct width, height and PAR.
+			// We use those for the size.
+			width = nativeJob.width;
+			height = nativeJob.height;
+			parWidth = nativeJob.anamorphic.par_width;
+			parHeight = nativeJob.anamorphic.par_height;
 		}
+
+
 
 		/// <summary>
 		/// Frees any resources associated with this object.
@@ -649,13 +658,17 @@ namespace HandBrake.Interop
 			int height = profile.Height;
 
 			Cropping crop;
-			if (profile.CustomCropping)
+			switch (profile.CroppingType)
 			{
-				crop = profile.Cropping;
-			}
-			else
-			{
-				crop = title.AutoCropDimensions;
+				case CroppingType.Automatic:
+					crop = title.AutoCropDimensions;
+					break;
+				case CroppingType.Custom:
+					crop = profile.Cropping;
+					break;
+				default:
+					crop = new Cropping();
+					break;
 			}
 
 			sourceWidth -= crop.Left;
@@ -771,8 +784,9 @@ namespace HandBrake.Interop
 			{
 				this.titles = new List<Title>();
 
-				IntPtr listPtr = HBFunctions.hb_get_titles(this.hbHandle);
-				this.originalTitles = InteropUtilities.ConvertList<hb_title_s>(listPtr);
+				IntPtr titleSetPtr = HBFunctions.hb_get_title_set(this.hbHandle);
+				hb_title_set_s titleSet = InteropUtilities.ReadStructure<hb_title_set_s>(titleSetPtr);
+				this.originalTitles = InteropUtilities.ConvertList<hb_title_s>(titleSet.list_title);
 
 				foreach (hb_title_s title in this.originalTitles)
 				{
@@ -782,8 +796,7 @@ namespace HandBrake.Interop
 
 				if (this.originalTitles.Count > 0)
 				{
-					var nativeJob = InteropUtilities.ReadStructure<hb_job_s>(this.originalTitles[0].job);
-					this.featureTitle = nativeJob.feature;
+					this.featureTitle = titleSet.feature;
 				}
 				else
 				{
@@ -977,16 +990,7 @@ namespace HandBrake.Interop
 
 			nativeJob.chapter_markers = profile.IncludeChapterMarkers ? 1 : 0;
 
-			Cropping crop;
-
-			if (profile.CustomCropping)
-			{
-				crop = profile.Cropping;
-			}
-			else
-			{
-				crop = title.AutoCropDimensions;
-			}
+			Cropping crop = GetCropping(profile, title);
 
 			nativeJob.crop[0] = crop.Top;
 			nativeJob.crop[1] = crop.Bottom;
@@ -1190,6 +1194,9 @@ namespace HandBrake.Interop
 					break;
 				case Anamorphic.Strict:
 					nativeJob.anamorphic.mode = 1;
+
+					nativeJob.anamorphic.par_width = title.ParVal.Width;
+					nativeJob.anamorphic.par_height = title.ParVal.Height;
 					break;
 				case Anamorphic.Loose:
 					nativeJob.anamorphic.mode = 2;
@@ -1200,6 +1207,8 @@ namespace HandBrake.Interop
 
 					nativeJob.maxWidth = profile.MaxWidth;
 
+					nativeJob.anamorphic.par_width = title.ParVal.Width;
+					nativeJob.anamorphic.par_height = title.ParVal.Height;
 					break;
 				case Anamorphic.Custom:
 					nativeJob.anamorphic.mode = 3;
@@ -1762,6 +1771,30 @@ namespace HandBrake.Interop
 			}
 
 			return newTitle;
+		}
+
+		/// <summary>
+		/// Gets the cropping to use for the given encoding profile and title.
+		/// </summary>
+		/// <param name="profile">The encoding profile to use.</param>
+		/// <param name="title">The title being encoded.</param>
+		/// <returns>The cropping to use for the encode.</returns>
+		private static Cropping GetCropping(EncodingProfile profile, Title title)
+		{
+			Cropping crop;
+			switch (profile.CroppingType)
+			{
+				case CroppingType.Automatic:
+					crop = title.AutoCropDimensions;
+					break;
+				case CroppingType.Custom:
+					crop = profile.Cropping;
+					break;
+				default:
+					crop = new Cropping();
+					break;
+			}
+			return crop;
 		}
 	}
 }

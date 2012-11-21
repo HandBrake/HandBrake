@@ -32,7 +32,7 @@ namespace HandBrake.Interop.Model.Encoding
 		public int Height { get; set; }
 		public int MaxWidth { get; set; }
 		public int MaxHeight { get; set; }
-		public bool CustomCropping { get; set; }
+		public CroppingType CroppingType { get; set; }
 		public Cropping Cropping { get; set; }
 		public Anamorphic Anamorphic { get; set; }
 		public bool UseDisplayWidth { get; set; }
@@ -57,7 +57,8 @@ namespace HandBrake.Interop.Model.Encoding
 		public string X264Options { get; set; }
 		public string X264Profile { get; set; }
 		public string X264Preset { get; set; }
-		public string X264Tune { get; set; }
+
+		public List<string> X264Tunes { get; set; }
 		public string H264Level { get; set; }
 		public VideoEncodeRateType VideoEncodeRateType { get; set; }
 		public double Quality { get; set; }
@@ -68,15 +69,12 @@ namespace HandBrake.Interop.Model.Encoding
 		public double Framerate { get; set; }
 		public bool ConstantFramerate { get; set; }
 
-		[Obsolete("This setting is obsolete. Use Framerate and ConstantFramerate instead.")]
-		public bool PeakFramerate { get; set; }
-
 		public List<AudioEncoding> AudioEncodings { get; set; }
 		public string AudioEncoderFallback { get; set; }
 
 		public EncodingProfile Clone()
 		{
-			EncodingProfile profile = new EncodingProfile
+			var profile = new EncodingProfile
 			{
 				OutputFormat = this.OutputFormat,
 				PreferredExtension = this.PreferredExtension,
@@ -89,7 +87,7 @@ namespace HandBrake.Interop.Model.Encoding
 				Height = this.Height,
 				MaxWidth = this.MaxWidth,
 				MaxHeight = this.MaxHeight,
-				CustomCropping = this.CustomCropping,
+				CroppingType = this.CroppingType,
 				Cropping = this.Cropping.Clone(),
 				Anamorphic = this.Anamorphic,
 				UseDisplayWidth = this.UseDisplayWidth,
@@ -114,7 +112,7 @@ namespace HandBrake.Interop.Model.Encoding
 				X264Options = this.X264Options,
 				X264Profile = this.X264Profile,
 				X264Preset = this.X264Preset,
-				X264Tune = this.X264Tune,
+				X264Tunes = this.X264Tunes,
 				H264Level = this.H264Level,
 				VideoEncodeRateType = this.VideoEncodeRateType,
 				Quality = this.Quality,
@@ -124,9 +122,6 @@ namespace HandBrake.Interop.Model.Encoding
 				TurboFirstPass = this.TurboFirstPass,
 				Framerate = this.Framerate,
 				ConstantFramerate = this.ConstantFramerate,
-#pragma warning disable 612,618
-				PeakFramerate = this.PeakFramerate,
-#pragma warning restore 612,618
 
 				AudioEncodings = new List<AudioEncoding>(this.AudioEncodings)
 			};

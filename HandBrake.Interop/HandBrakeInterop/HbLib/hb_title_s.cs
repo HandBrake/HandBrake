@@ -160,6 +160,16 @@ namespace HandBrake.Interop.HbLib
 		public uint flags;
 	}
 
+	[StructLayout(LayoutKind.Sequential)]
+	public struct hb_title_set_s
+	{
+		///hb_list_t   *
+		public IntPtr list_title;
+
+		// int
+		public int feature;
+	}
+
 	public enum hb_title_type_anon
 	{
 		HB_DVD_TYPE,

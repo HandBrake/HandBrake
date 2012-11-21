@@ -114,6 +114,8 @@ namespace HandBrake.Interop.HbLib
 		/// int
 		public int color_matrix;
 
+		public IntPtr list_chapter;
+
 		/// hb_list_t*
 		public IntPtr list_audio;
 
@@ -122,6 +124,10 @@ namespace HandBrake.Interop.HbLib
 
 		/// hb_list_t*
 		public IntPtr list_subtitle;
+
+		public IntPtr list_attachment;
+
+		public IntPtr metadata;
 
 		/// int
 		public int mux;
