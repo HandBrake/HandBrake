@@ -431,45 +431,43 @@ static int MKVInit( hb_mux_object_t * m )
     return 0;
 }
 
-static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
-                   hb_buffer_t * buf )
+static int MKVMux(hb_mux_object_t *m, hb_mux_data_t *mux_data, hb_buffer_t *buf)
 {
-    ogg_packet  *op = NULL;
-    hb_job_t * job = m->job;
-    uint64_t   timecode = 0;
+    char chapter_name[1024];
     hb_chapter_t *chapter_data;
-    char tmp_buffer[1024];
-    char *string = tmp_buffer;
+    uint64_t timecode = 0;
+    ogg_packet *op    = NULL;
+    hb_job_t *job     = m->job;
 
     if (mux_data == job->mux_data)
     {
         /* Video */
         timecode = buf->s.start * TIMECODE_SCALE;
 
-        if (job->chapter_markers && (buf->s.new_chap || timecode == 0))
+        if (job->chapter_markers && buf->s.new_chap)
         {
-            /* Make sure we're not writing a chapter that has 0 length */
-            if (mux_data->prev_chapter_tc != timecode)
+            // reached chapter N, write marker for chapter N-1
+            mux_data->current_chapter = buf->s.new_chap - 1;
+
+            // chapter numbers start at 1, but the list starts at 0
+            chapter_data = hb_list_item(job->list_chapter,
+                                        mux_data->current_chapter - 1);
+
+            // make sure we're not writing a chapter that has 0 length
+            if (chapter_data != NULL && mux_data->prev_chapter_tc < timecode)
             {
-                if ( buf->s.new_chap )
+                if (chapter_data->title != NULL)
                 {
-                    mux_data->current_chapter = buf->s.new_chap - 2;
+                    snprintf(chapter_name, 1023, "%s", chapter_data->title);
                 }
-                chapter_data = hb_list_item( job->list_chapter,
-                                             mux_data->current_chapter++ );
-                tmp_buffer[0] = '\0';
-
-                if( chapter_data != NULL )
+                else
                 {
-                    string = chapter_data->title;
+                    snprintf(chapter_name, 1023, "Chapter %d",
+                             mux_data->current_chapter);
                 }
-
-                if( strlen(string) == 0 || strlen(string) >= 1024 )
-                {
-                    snprintf( tmp_buffer, 1023, "Chapter %02i", mux_data->current_chapter );
-                    string = tmp_buffer;
-                }
-                mk_createChapterSimple(m->file, mux_data->prev_chapter_tc, mux_data->prev_chapter_tc, string);
+                mk_createChapterSimple(m->file,
+                                       mux_data->prev_chapter_tc,
+                                       mux_data->prev_chapter_tc, chapter_name);
             }
             mux_data->prev_chapter_tc = timecode;
         }
@@ -550,13 +548,12 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     return 0;
 }
 
-static int MKVEnd( hb_mux_object_t * m )
+static int MKVEnd(hb_mux_object_t *m)
 {
-    hb_job_t  *job = m->job;
-    hb_mux_data_t *mux_data = job->mux_data;
+    char chapter_name[1024];
     hb_chapter_t *chapter_data;
-    char tmp_buffer[1024];
-    char *string = tmp_buffer;
+    hb_job_t *job           = m->job;
+    hb_mux_data_t *mux_data = job->mux_data;
 
     if( !job->mux_data )
     {
@@ -566,23 +563,28 @@ static int MKVEnd( hb_mux_object_t * m )
         return 0;
     }
 
-    chapter_data = hb_list_item( job->list_chapter, mux_data->current_chapter++ );
-
-    if(job->chapter_markers)
+    if (job->chapter_markers)
     {
-        tmp_buffer[0] = '\0';
+        // get the last chapter
+        chapter_data = hb_list_item(job->list_chapter,
+                                    mux_data->current_chapter++);
 
-        if( chapter_data != NULL )
+        // only write the last chapter marker if it lasts at least 1.5 second
+        if (chapter_data != NULL && chapter_data->duration > 135000LL)
         {
-            string = chapter_data->title;
+            if (chapter_data->title != NULL)
+            {
+                snprintf(chapter_name, 1023, "%s", chapter_data->title);
+            }
+            else
+            {
+                snprintf(chapter_name, 1023, "Chapter %d",
+                         mux_data->current_chapter);
+            }
+            mk_createChapterSimple(m->file,
+                                   mux_data->prev_chapter_tc,
+                                   mux_data->prev_chapter_tc, chapter_name);
         }
-
-        if( strlen(string) == 0 || strlen(string) >= 1024 )
-        {
-            snprintf( tmp_buffer, 1023, "Chapter %02i", mux_data->current_chapter );
-            string = tmp_buffer;
-        }
-        mk_createChapterSimple(m->file, mux_data->prev_chapter_tc, mux_data->prev_chapter_tc, string);
     }
 
     if( job->metadata )
