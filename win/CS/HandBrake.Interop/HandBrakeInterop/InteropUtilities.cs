@@ -163,6 +163,23 @@ namespace HandBrake.Interop
 		}
 
 		/// <summary>
+		/// Closes the given job.
+		/// </summary>
+		/// <param name="nativeJobPtr">The pointer to the job.</param>
+		public static void CloseJob(IntPtr nativeJobPtr)
+		{
+			// Create a point to the job pointer first.
+			IntPtr nativeJobPtrPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(IntPtr)));
+
+			// Assign the new pointer to the job pointer and tell HB to clean the job up.
+			Marshal.WriteIntPtr(nativeJobPtrPtr, nativeJobPtr);
+			HBFunctions.hb_job_close(nativeJobPtrPtr);
+
+			// Free the pointer we used.
+			Marshal.FreeHGlobal(nativeJobPtrPtr);
+		}
+
+		/// <summary>
 		/// Frees all the memory locations in the given list.
 		/// </summary>
 		/// <param name="memoryList">The list of memory locations to free.</param>

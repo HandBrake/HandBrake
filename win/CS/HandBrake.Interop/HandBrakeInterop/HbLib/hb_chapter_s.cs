@@ -10,9 +10,9 @@
 
 namespace HandBrake.Interop.HbLib
 {
-    using System.Runtime.InteropServices;
+	using System.Runtime.InteropServices;
 
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 	public struct hb_chapter_s
 	{
 		/// int
@@ -51,8 +51,8 @@ namespace HandBrake.Interop.HbLib
 		/// uint64_t->unsigned int
 		public ulong duration;
 
-		/// char[1024]
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)]
+		/// char *
+		[MarshalAs(UnmanagedType.LPStr)]
 		public string title;
 	}
 }

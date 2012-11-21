@@ -98,39 +98,48 @@ namespace HandBrake.Interop.HbLib
 	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
 	public struct hb_metadata_s
 	{
-		/// char[255]
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)]
+		/// char *
+		[MarshalAs(UnmanagedType.LPStr)]
 		public string name;
 
-		/// char[255]
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)]
+		/// char *
+		[MarshalAs(UnmanagedType.LPStr)]
 		public string artist;
 
-		/// char[255]
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)]
+		/// char *
+		[MarshalAs(UnmanagedType.LPStr)]
 		public string composer;
 
-		/// char[255]
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)]
+		/// char *
+		[MarshalAs(UnmanagedType.LPStr)]
 		public string release_date;
 
-		/// char[1024]
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)]
+		/// char *
+		[MarshalAs(UnmanagedType.LPStr)]
 		public string comment;
 
-		/// char[255]
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)]
+		/// char *
+		[MarshalAs(UnmanagedType.LPStr)]
 		public string album;
 
-		/// char[255]
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 255)]
+		/// char *
+		[MarshalAs(UnmanagedType.LPStr)]
+		public string album_artist;
+
+		/// char *
+		[MarshalAs(UnmanagedType.LPStr)]
 		public string genre;
 
-		/// uint32_t->unsigned int
-		public uint coverart_size;
+		/// char *
+		[MarshalAs(UnmanagedType.LPStr)]
+		public string description;
+
+		/// char *
+		[MarshalAs(UnmanagedType.LPStr)]
+		public string long_description;
 
 		/// uint8_t*
-		public IntPtr coverart;
+		public IntPtr list_coverart;
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
@@ -397,16 +406,6 @@ namespace HandBrake.Interop.HbLib
 		/// unsigned int
 		public uint x;
 	}
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct hb_title_set_s
-    {
-        ///hb_list_t   *
-        public hb_list_s list_title;
-
-        // int
-        public int feature;
-    }
 
 	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 	public delegate void LoggingCallback(string message);

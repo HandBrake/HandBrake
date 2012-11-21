@@ -103,7 +103,7 @@ namespace HandBrake.Interop.HbLib
 		///param2: int
 		///param3: uint8_t*
 		[DllImport("hb.dll", EntryPoint = "hb_get_preview", CallingConvention = CallingConvention.Cdecl)]
-		public static extern void hb_get_preview(IntPtr hbHandle, ref hb_title_s title, int preview, IntPtr buffer);
+		public static extern void hb_get_preview(IntPtr hbHandle, ref hb_job_s title, int preview, IntPtr buffer);
 
 
 		/// Return Type: void
@@ -296,11 +296,11 @@ namespace HandBrake.Interop.HbLib
 
 		///hb_title_set_t  * hb_get_title_set( hb_handle_t * );
 		[DllImport("hb.dll", EntryPoint = "hb_get_title_set", CallingConvention = CallingConvention.Cdecl)]
-		public static extern hb_title_set_s hb_get_title_set(IntPtr hbHandle);
+		public static extern IntPtr hb_get_title_set(IntPtr hbHandle);
 
 		///hb_job_t * hb_job_init_by_index( hb_handle_t *h, int title_index );
 		[DllImport("hb.dll", EntryPoint = "hb_job_init_by_index", CallingConvention = CallingConvention.Cdecl)]
-		public static extern hb_job_s hb_job_init_by_index(IntPtr hbHandle, int title_index);
+		public static extern IntPtr hb_job_init_by_index(IntPtr hbHandle, int title_index);
 
 		///hb_job_t * hb_job_init( hb_title_t * title );
 		[DllImport("hb.dll", EntryPoint = "hb_job_init", CallingConvention = CallingConvention.Cdecl)]
@@ -312,7 +312,7 @@ namespace HandBrake.Interop.HbLib
 
 		///void hb_job_close( hb_job_t ** job );
 		[DllImport("hb.dll", EntryPoint = "hb_job_close", CallingConvention = CallingConvention.Cdecl)]
-		public static extern void hb_job_close(ref hb_job_s job);
+		public static extern void hb_job_close(IntPtr job);
 
 		///void hb_job_set_advanced_opts( hb_job_t *job, const char *advanced_opts );
 		[DllImport("hb.dll", EntryPoint = "hb_job_set_advanced_opts", CallingConvention = CallingConvention.Cdecl)]
