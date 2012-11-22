@@ -84,7 +84,7 @@ namespace HandBrake.ApplicationServices.Utilities
                     Right = work.Cropping.Right
                 };
 
-            profile.CustomCropping = true; // TODO deal with this better
+            profile.CroppingType = CroppingType.Custom; // TODO deal with this better
             profile.CustomDecomb = work.CustomDecomb;
             profile.CustomDeinterlace = work.CustomDeinterlace;
             profile.CustomDenoise = work.CustomDenoise;
@@ -118,7 +118,7 @@ namespace HandBrake.ApplicationServices.Utilities
                     profile.OutputFormat = Container.Mkv;
                     break;
             }
-            profile.PeakFramerate = work.FramerateMode == FramerateMode.PFR;
+            profile.ConstantFramerate = work.FramerateMode == FramerateMode.CFR;
             profile.PixelAspectX = work.PixelAspectX;
             profile.PixelAspectY = work.PixelAspectY;
 
