@@ -405,29 +405,7 @@ namespace HandBrake.Interop
 			IntPtr nativeJobPtr = HBFunctions.hb_job_init_by_index(this.hbHandle, job.Title);
 			var nativeJob = InteropUtilities.ReadStructure<hb_job_s>(nativeJobPtr);
 
-			//hb_job_s nativeJob = InteropUtilities.ReadStructure<hb_job_s>(this.GetOriginalTitle(job.Title).job);
 			this.encodeAllocatedMemory = this.ApplyJob(ref nativeJob, job, preview, previewNumber, previewSeconds, overallSelectedLengthSeconds);
-
-			if (!preview && profile.IncludeChapterMarkers)
-			{
-				Title title = this.GetTitle(job.Title);
-				int numChapters = title.Chapters.Count;
-
-				if (job.UseDefaultChapterNames)
-				{
-					for (int i = 0; i < numChapters; i++)
-					{
-						HBFunctions.hb_set_chapter_name(this.hbHandle, job.Title, i + 1, "Chapter " + (i + 1));
-					}
-				}
-				else
-				{
-					for (int i = 0; i < numChapters; i++)
-					{
-						HBFunctions.hb_set_chapter_name(this.hbHandle, job.Title, i + 1, job.CustomChapterNames[i]);
-					}
-				}
-			}
 
 			this.subtitleScan = false;
 			if (job.Subtitles.SourceSubtitles != null)
@@ -786,7 +764,7 @@ namespace HandBrake.Interop
 
 				IntPtr titleSetPtr = HBFunctions.hb_get_title_set(this.hbHandle);
 				hb_title_set_s titleSet = InteropUtilities.ReadStructure<hb_title_set_s>(titleSetPtr);
-				this.originalTitles = InteropUtilities.ConvertList<hb_title_s>(titleSet.list_title);
+				this.originalTitles = titleSet.list_title.ToList<hb_title_s>();
 
 				foreach (hb_title_s title in this.originalTitles)
 				{
@@ -988,7 +966,36 @@ namespace HandBrake.Interop
 				}
 			}
 
+			// Chapter markers
 			nativeJob.chapter_markers = profile.IncludeChapterMarkers ? 1 : 0;
+
+			List<IntPtr> nativeChapters = nativeJob.list_chapter.ToIntPtrList();
+
+			if (!preview && profile.IncludeChapterMarkers)
+			{
+				int numChapters = title.Chapters.Count;
+
+				if (job.UseDefaultChapterNames)
+				{
+					for (int i = 0; i < numChapters; i++)
+					{
+						if (i < nativeChapters.Count)
+						{
+							HBFunctions.hb_chapter_set_title(nativeChapters[i], "Chapter " + (i + 1));
+						}
+					}
+				}
+				else
+				{
+					for (int i = 0; i < numChapters; i++)
+					{
+						if (i < nativeChapters.Count && i < job.CustomChapterNames.Count)
+						{
+							HBFunctions.hb_chapter_set_title(nativeChapters[i], job.CustomChapterNames[i]);
+						}
+					}
+				}
+			}
 
 			Cropping crop = GetCropping(profile, title);
 
@@ -1309,7 +1316,7 @@ namespace HandBrake.Interop
 
 			// areBframes
 			// color_matrix
-			List<hb_audio_s> titleAudio = InteropUtilities.ConvertList<hb_audio_s>(originalTitle.list_audio);
+			List<hb_audio_s> titleAudio = originalTitle.list_audio.ToList<hb_audio_s>();
 			
 			var audioList = new List<hb_audio_s>();
 			int numTracks = 0;
@@ -1361,7 +1368,7 @@ namespace HandBrake.Interop
 			{
 				if (job.Subtitles.SourceSubtitles != null && job.Subtitles.SourceSubtitles.Count > 0)
 				{
-					List<hb_subtitle_s> titleSubtitles = InteropUtilities.ConvertList<hb_subtitle_s>(originalTitle.list_subtitle);
+					List<hb_subtitle_s> titleSubtitles = originalTitle.list_subtitle.ToList<hb_subtitle_s>();
 
 					foreach (SourceSubtitle sourceSubtitle in job.Subtitles.SourceSubtitles)
 					{
@@ -1682,7 +1689,7 @@ namespace HandBrake.Interop
 			}
 
 			int currentSubtitleTrack = 1;
-			List<hb_subtitle_s> subtitleList = InteropUtilities.ConvertList<hb_subtitle_s>(title.list_subtitle);
+			List<hb_subtitle_s> subtitleList = title.list_subtitle.ToList<hb_subtitle_s>();
 			foreach (hb_subtitle_s subtitle in subtitleList)
 			{
 				var newSubtitle = new Subtitle
@@ -1737,7 +1744,7 @@ namespace HandBrake.Interop
 			}
 
 			int currentAudioTrack = 1;
-			List<hb_audio_s> audioList = InteropUtilities.ConvertList<hb_audio_s>(title.list_audio);
+			List<hb_audio_s> audioList = title.list_audio.ToList<hb_audio_s>();
 			foreach (hb_audio_s audio in audioList)
 			{
 				var newAudio = new AudioTrack
@@ -1758,7 +1765,7 @@ namespace HandBrake.Interop
 				currentAudioTrack++;
 			}
 
-			List<hb_chapter_s> chapterList = InteropUtilities.ConvertList<hb_chapter_s>(title.list_chapter);
+			List<hb_chapter_s> chapterList = title.list_chapter.ToList<hb_chapter_s>();
 			foreach (hb_chapter_s chapter in chapterList)
 			{
 				var newChapter = new Chapter
