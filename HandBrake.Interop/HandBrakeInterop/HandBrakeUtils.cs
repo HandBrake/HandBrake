@@ -166,6 +166,46 @@ namespace HandBrake.Interop
 		}
 
 		/// <summary>
+		/// Creates an X264 options string from the given settings.
+		/// </summary>
+		/// <param name="preset">The x264 preset.</param>
+		/// <param name="tunes">The x264 tunes being used.</param>
+		/// <param name="extraOptions">The extra options string.</param>
+		/// <param name="profile">The H.264 profile.</param>
+		/// <param name="level">The H.264 level.</param>
+		/// <param name="width">The width of the final picture.</param>
+		/// <param name="height">The height of the final picture.</param>
+		/// <returns>The full x264 options string from the given inputs.</returns>
+		public static string CreateX264OptionsString(
+			string preset, 
+			IList<string> tunes, 
+			string extraOptions, 
+			string profile,
+			string level, 
+			int width, 
+			int height)
+		{
+			if (width <= 0)
+			{
+				throw new ArgumentException("width must be positive.");
+			}
+
+			if (height <= 0)
+			{
+				throw new ArgumentException("height must be positive.");
+			}
+
+			return HBFunctions.hb_x264_param_unparse(
+				preset,
+				string.Join(",", tunes),
+				extraOptions,
+				profile,
+				level,
+				width,
+				height);
+		}
+
+		/// <summary>
 		/// Gets the total number of seconds on the given encode job.
 		/// </summary>
 		/// <param name="job">The encode job to query.</param>

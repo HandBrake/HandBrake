@@ -135,9 +135,6 @@ namespace HandBrake.Interop.HbLib
 		[DllImport("hb.dll", EntryPoint = "hb_job", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr hb_job(IntPtr hbHandle, int jobIndex);
 
-		[DllImport("hb.dll", EntryPoint = "hb_set_chapter_name", CallingConvention = CallingConvention.Cdecl)]
-		public static extern void hb_set_chapter_name(IntPtr hbHandle, int title_index, int chapter_index, [In] [MarshalAs(UnmanagedType.LPStr)] string chapter_name);
-
 		[DllImport("hb.dll", EntryPoint = "hb_set_job", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void hb_set_job(IntPtr hbHandle, int title_index, ref hb_job_s job);
 
@@ -324,7 +321,7 @@ namespace HandBrake.Interop.HbLib
 
 		///void hb_chapter_set_title(hb_chapter_t *chapter, const char *title);
 		[DllImport("hb.dll", EntryPoint = "hb_chapter_set_title", CallingConvention = CallingConvention.Cdecl)]
-		public static extern void hb_chapter_set_title(ref hb_chapter_s chapter, IntPtr title);
+		public static extern void hb_chapter_set_title(IntPtr chapter, [In] [MarshalAs(UnmanagedType.LPStr)] string title);
 
 		/// void hb_add_filter( hb_job_t * job, hb_filter_object_t * filter, const char * settings ); 
 		[DllImport("hb.dll", EntryPoint = "hb_add_filter", CallingConvention = CallingConvention.Cdecl)]
@@ -339,5 +336,15 @@ namespace HandBrake.Interop.HbLib
 
 		[DllImport("hb.dll", EntryPoint = "hb_check_h264_level", CallingConvention = CallingConvention.Cdecl)]
 		public static extern int hb_check_h264_level([In] [MarshalAs(UnmanagedType.LPStr)] string level, int width, int height, int fps_num, int fps_den, int interlaced, int fake_interlaced);
+
+		[DllImport("hb.dll", EntryPoint = "hb_x264_param_unparse", CallingConvention = CallingConvention.Cdecl)]
+		public static extern string hb_x264_param_unparse(
+			[In] [MarshalAs(UnmanagedType.LPStr)] string x264_preset,
+			[In] [MarshalAs(UnmanagedType.LPStr)] string x264_tune,
+			[In] [MarshalAs(UnmanagedType.LPStr)] string x264_encopts,
+			[In] [MarshalAs(UnmanagedType.LPStr)] string x264_profile,
+			[In] [MarshalAs(UnmanagedType.LPStr)] string h264_level,
+			int width,
+			int height);
 	}
 }
