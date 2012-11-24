@@ -224,7 +224,7 @@
                         <TextBlock Grid.Row="0"
                                    Margin="10,5,0,0"
                                    FontWeight="Bold"
-                                   Text="Psychvisual: "
+                                   Text="Psychovisual: "
                                    />
                         <StackPanel Orientation="Horizontal">
                             <Label Width="110"

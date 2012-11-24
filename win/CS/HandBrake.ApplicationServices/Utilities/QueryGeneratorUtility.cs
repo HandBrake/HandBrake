@@ -723,12 +723,8 @@ namespace HandBrake.ApplicationServices.Utilities
 
                 if (!string.IsNullOrEmpty(fallbackEncoders))
                 {
-                    // Special Case, The CLI alredy defaults to ALL, so if all area selected, then just set copy-mask to none
-                    if (fallbackEncoders == "aac,ac3,dtshd,dts,mp3")
-                    {
-                        query += string.Format(" --audio-copy-mask none");
-                    }
-                    else
+                    // Special Case, The CLI alredy defaults to ALL, so if all area selected, then don't need to set copy mask
+                    if (fallbackEncoders != "aac,ac3,dtshd,dts,mp3")
                     {
                         query += string.Format(" --audio-copy-mask {0}", fallbackEncoders);
                     }
