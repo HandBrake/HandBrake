@@ -14,11 +14,8 @@ namespace HandBrakeWPF.ViewModels
     using System.Globalization;
     using System.Linq;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
-    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model.Encoding;
 
     using HandBrakeWPF.Helpers;
@@ -31,6 +28,11 @@ namespace HandBrakeWPF.ViewModels
     public class AdvancedViewModel : ViewModelBase, IAdvancedViewModel
     {
         #region Constants and Fields
+
+        /// <summary>
+        /// AdvancedOptionsCache;
+        /// </summary>
+        private string optionsCache = string.Empty;
 
         /// <summary>
         /// Backing field for displaying x264 options
@@ -164,13 +166,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="AdvancedViewModel"/> class.
         /// </summary>
-        /// <param name="windowManager">
-        /// The window manager.
-        /// </param>
-        /// <param name="userSettingService">
-        /// The user Setting Service.
-        /// </param>
-        public AdvancedViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
+        public AdvancedViewModel()
         {
             this.Task = new EncodeTask();
             this.UpdateUIFromAdvancedOptions();
@@ -913,11 +909,28 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void SetEncoder(VideoEncoder encoder)
         {
-            this.DisplayX264Options = encoder == VideoEncoder.X264;
-            if (encoder == VideoEncoder.Theora)
+            // If we are switching from x264, cache it's settings.
+            if (this.DisplayX264Options.HasValue && this.DisplayX264Options.Value )
             {
+                this.optionsCache = this.AdvancedOptionsString;
+            }
+
+            // UI Set for new encoder.
+            if (encoder == VideoEncoder.X264)
+            {
+                this.AdvancedOptionsString = optionsCache;
+                this.DisplayX264Options = true;
+            }
+            else if (encoder == VideoEncoder.Theora)
+            {
+                this.AdvancedOptionsString = string.Empty;
                 this.DisplayX264Options = null;
             }
+            else
+            {
+                this.AdvancedOptionsString = string.Empty;
+                this.DisplayX264Options = false;
+            }     
         }
 
         #endregion
