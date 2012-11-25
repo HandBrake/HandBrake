@@ -301,7 +301,7 @@ namespace HandBrakeWPF.ViewModels
                     return "Same as source";
                 }
 
-                return this.Task.Framerate.ToString();
+                return this.Task.Framerate.Value.ToString(CultureInfo.InvariantCulture);
             }
             set
             {
