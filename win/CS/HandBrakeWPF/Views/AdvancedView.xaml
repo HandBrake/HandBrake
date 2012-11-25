@@ -205,6 +205,7 @@
                             <ComboBox Grid.Row="7"
                                       Grid.Column="1"
                                       Height="22"
+                                      MaxWidth="100"
                                       DisplayMemberPath="Label"
                                       ItemsSource="{x:Static Helpers:AdvancedChoicesHelper.PyramidalBFrames}"
                                       SelectedItem="{Binding PyramidalBFrames}"
@@ -318,7 +319,7 @@
 
                         <Label Grid.Row="2"
                                Grid.Column="0"
-                               Content="Motion Estimation Method:"
+                               Content="Motion Est Method:"
                                Style="{StaticResource AdvancedLabel}"
                                />
                         <ComboBox Grid.Row="2"
@@ -338,7 +339,7 @@
 
                         <Label Grid.Row="3"
                                Grid.Column="0"
-                               Content="Subpixel Motion Estimation:"
+                               Content="Subpixel Motion Est:"
                                Style="{StaticResource AdvancedLabel}"
                                />
                         <ComboBox Grid.Row="3"
@@ -358,7 +359,7 @@
 
                         <Label Grid.Row="4"
                                Grid.Column="0"
-                               Content="Motion Estimation Range:"
+                               Content="Motion Est Range:"
                                Style="{StaticResource AdvancedLabel}"
                                Visibility="{Binding MotionEstimationRangeVisible,
                                                     Converter={StaticResource VisibilityConverter}}"
@@ -397,7 +398,7 @@
 
                         <Label Grid.Row="0"
                                Grid.Column="0"
-                               Content="Adaptive Quantization Strength:"
+                               Content="Adaptive Quant Strength:"
                                Style="{StaticResource AdvancedLabel}"
                                />
                         <Slider Grid.Row="0"
