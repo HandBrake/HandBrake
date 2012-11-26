@@ -287,15 +287,15 @@ static void update_ipt( hb_work_private_t *r, const hb_buffer_t *buf )
     {
         if( st->startup )
         {
-            st->average += ( dt - st->average ) * (1./2.);
+            st->average += ( dt - st->average ) * (1./4.);
             st->startup--;
         }
         else
         {
             st->average += ( dt - st->average ) * (1./32.);
         }
-        st->last = buf->s.renderOffset;
     }
+    st->last = buf->s.renderOffset;
     st->valid = 1;
 }
 
