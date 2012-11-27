@@ -495,7 +495,6 @@
     [fScaleToScreenToggleButton setEnabled:YES];
     [fCreatePreviewMovieButton setEnabled:YES];
     [fGoToStillPreviewButton setEnabled:YES];
-    [fHBController writeToActivityLog: "Preview: Enabling HUD Controls"];
 }
 
 - (void) disableHudControls
@@ -504,7 +503,6 @@
     [fScaleToScreenToggleButton setEnabled:NO];
     [fCreatePreviewMovieButton setEnabled:NO];
     [fGoToStillPreviewButton setEnabled:NO];
-    [fHBController writeToActivityLog: "Preview: Disabling HUD Controls"];
 }
 
 - (void) mouseMoved:(NSEvent *)theEvent

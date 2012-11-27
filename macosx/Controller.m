@@ -2622,9 +2622,7 @@ fWorkingCount = 0;
     [queueFileJob setObject:[NSNumber numberWithInt:[[fAudioFallbackPopUp selectedItem] tag]] forKey: @"JobAudioEncoderFallback"];
     
     /* Audio */
-    [self writeToActivityLog: "createQueueFileItem: Getting Audio from prepareAudioForQueueFileJob…"];
     [fAudioDelegate prepareAudioForQueueFileJob: queueFileJob];
-    [self writeToActivityLog: "createQueueFileItem: Returned getting audio from prepareAudioForQueueFileJob"];
     
 	/* Subtitles */
     NSMutableArray *subtitlesArray = [[NSMutableArray alloc] initWithArray:[fSubtitlesDelegate getSubtitleArray] copyItems:YES];
