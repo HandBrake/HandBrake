@@ -1454,7 +1454,7 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
         {
             // can be modified by: level
             sprintf(buf, "%d", param.rc.i_vbv_max_bitrate);
-            hb_dict_set(&x264_opts, "vbv-bitrate", buf);
+            hb_dict_set(&x264_opts, "vbv-maxrate", buf);
         }
         else
         {
