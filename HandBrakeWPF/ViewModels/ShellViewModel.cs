@@ -147,7 +147,7 @@ namespace HandBrakeWPF.ViewModels
         public bool CanClose()
         {
             IQueueProcessor processor = IoC.Get<IQueueProcessor>();
-            if (processor.EncodeService.IsEncoding)
+            if (processor != null && processor.EncodeService.IsEncoding)
             {
                 MessageBoxResult result =
                     errorService.ShowMessageBox(
@@ -160,13 +160,20 @@ namespace HandBrakeWPF.ViewModels
                 {
                     processor.Pause();
                     processor.EncodeService.Stop();
-                    this.MainViewModel.Shutdown();
+                    if (this.MainViewModel != null)
+                    {
+                        this.MainViewModel.Shutdown();
+                    }
+
                     return true;
                 }
                 return false;
             }
 
-            this.MainViewModel.Shutdown();
+            if (this.MainViewModel != null)
+            {
+                this.MainViewModel.Shutdown();
+            }
             return true;
         }
     }
