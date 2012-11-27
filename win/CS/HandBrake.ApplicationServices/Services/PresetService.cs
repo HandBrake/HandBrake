@@ -19,8 +19,6 @@ namespace HandBrake.ApplicationServices.Services
     using System.Text.RegularExpressions;
     using System.Xml.Serialization;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Interfaces;
@@ -32,13 +30,6 @@ namespace HandBrake.ApplicationServices.Services
     /// </summary>
     public class PresetService : IPresetService
     {
-        /**
-         * TODO:
-         * - Wire this into the Forms and WPF UI's
-         * - Note: This is untested so far. It'll likely need fixes before it can be used.
-         * - Maybe change the collection to a dictionary to allow easier lookups?
-         **/
-
         #region Private Variables
 
         /// <summary>
@@ -143,14 +134,10 @@ namespace HandBrake.ApplicationServices.Services
                 // Update the presets file
                 this.UpdatePresetFiles();
                 return true;
-            } 
-            else
-            {
-                this.Update(preset);
-                return true;
             }
-
-            return false;
+            
+            this.Update(preset);
+            return true;
         }
 
         /// <summary>
@@ -447,15 +434,16 @@ namespace HandBrake.ApplicationServices.Services
             {
                 if (File.Exists(this.builtInPresetFile))
                 {
-                    StreamReader reader = new StreamReader(this.builtInPresetFile);
-                    List<Preset> list = (List<Preset>)Ser.Deserialize(reader);
-                    foreach (Preset preset in list)
+                    using (StreamReader reader = new StreamReader(this.builtInPresetFile))
                     {
-                        preset.IsBuildIn = true; // Older versions did not have this flag so explicitly make sure it is set.
-                        this.presets.Add(preset);
+                        List<Preset> list = (List<Preset>)Ser.Deserialize(reader);
+                        foreach (Preset preset in list)
+                        {
+                            preset.IsBuildIn = true;
+                                // Older versions did not have this flag so explicitly make sure it is set.
+                            this.presets.Add(preset);
+                        }
                     }
-
-                    reader.Close();
                 } 
             }
             catch (Exception exc)
@@ -470,14 +458,14 @@ namespace HandBrake.ApplicationServices.Services
             {
                 if (File.Exists(this.userPresetFile))
                 {
-                    StreamReader reader = new StreamReader(this.userPresetFile);
-                    List<Preset> list = (List<Preset>)Ser.Deserialize(reader);
-                    foreach (Preset preset in list)
+                    using (StreamReader reader = new StreamReader(this.userPresetFile))
                     {
-                        this.presets.Add(preset);
+                        List<Preset> list = (List<Preset>)Ser.Deserialize(reader);
+                        foreach (Preset preset in list)
+                        {
+                            this.presets.Add(preset);
+                        }
                     }
-
-                    reader.Close();
                 }
             }
             catch (Exception exc)
@@ -503,15 +491,11 @@ namespace HandBrake.ApplicationServices.Services
                 using (FileStream strm = new FileStream(this.builtInPresetFile, FileMode.Create, FileAccess.Write))
                 {
                     Ser.Serialize(strm, this.presets.Where(p => p.IsBuildIn).ToList());
-                    strm.Close();
-                    strm.Dispose();
                 }
 
                 using (FileStream strm = new FileStream(this.userPresetFile, FileMode.Create, FileAccess.Write))
                 {
                     Ser.Serialize(strm, this.presets.Where(p => p.IsBuildIn == false).ToList());
-                    strm.Close();
-                    strm.Dispose();
                 }
             }
             catch (Exception exc)

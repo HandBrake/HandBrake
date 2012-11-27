@@ -60,10 +60,15 @@ namespace HandBrakeWPF.Views
         /// </param>
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
-            bool canClose = ((IShellViewModel)this.DataContext).CanClose();
-            if (!canClose)
+            IShellViewModel shellViewModel = this.DataContext as IShellViewModel;
+
+            if (shellViewModel != null)
             {
-                e.Cancel = true;
+                bool canClose = shellViewModel.CanClose();
+                if (!canClose)
+                {
+                    e.Cancel = true;
+                }
             }
 
             base.OnClosing(e);
