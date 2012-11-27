@@ -953,6 +953,12 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private void CustomAnamorphicAdjust()
         {
+            if (this.MaintainAspectRatio && this.DisplayWidth != 0)
+            {
+                this.ParWidth = this.DisplayWidth;
+                this.ParHeight = this.Width;
+            }
+
             this.SetDisplaySize();
         }
 
@@ -1094,6 +1100,12 @@ namespace HandBrakeWPF.ViewModels
                     this.SetDisplaySize();
                     break;
                 case Anamorphic.Custom:
+                    if (this.MaintainAspectRatio)
+                    {
+                        this.ParWidth = this.DisplayWidth;
+                        this.ParHeight = this.Width;
+                    }
+
                     this.SetDisplaySize();
                     break;
             }

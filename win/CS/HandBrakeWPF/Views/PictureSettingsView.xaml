@@ -54,7 +54,7 @@
                           Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
             </Grid>
             
-            <!-- Row 4-->
+            <!-- Custom Anamoprhic -->
             <Grid Margin="5,15,5,0" Visibility="{Binding ShowCustomAnamorphicControls, Converter={StaticResource boolToVisConverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -72,8 +72,10 @@
                 <Label Content="PAR Height:" Grid.Row="5" Grid.Column="0" />
 
                 <NumericUpDown:NumericUpDown Width="60" Value="{Binding DisplayWidth, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="60" Value="{Binding ParWidth, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="60" Value="{Binding ParHeight, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <NumericUpDown:NumericUpDown Width="60" Value="{Binding ParWidth, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"
+                                             IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,0,5" />
+                <NumericUpDown:NumericUpDown Width="60" Value="{Binding ParHeight, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" 
+                                             IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,0,5" />
             </Grid>
             
             <!-- Row 5-->
