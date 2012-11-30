@@ -1078,7 +1078,6 @@ void eedi2_filter_thread( void *thread_args_v )
     }
 
     taskset_thread_complete( &pv->eedi2_taskset, plane );
-    free( thread_args_v );
 }
 
 // Sets up the input field planes for EEDI2 in pv->eedi_half[SRCPF]
