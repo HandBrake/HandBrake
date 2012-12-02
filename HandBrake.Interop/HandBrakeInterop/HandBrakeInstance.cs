@@ -233,7 +233,7 @@ namespace HandBrake.Interop
 		/// <returns>An image with the requested preview.</returns>
 		public BitmapImage GetPreview(EncodeJob job, int previewNumber)
 		{
-			IntPtr nativeJobPtr = HBFunctions.hb_job_init_by_index(this.hbHandle, job.Title);
+			IntPtr nativeJobPtr = HBFunctions.hb_job_init_by_index(this.hbHandle, this.GetTitleIndex(job.Title));
 			var nativeJob = InteropUtilities.ReadStructure<hb_job_s>(nativeJobPtr);
 
 			List<IntPtr> allocatedMemory = this.ApplyJob(ref nativeJob, job);
@@ -402,7 +402,7 @@ namespace HandBrake.Interop
 			EncodingProfile profile = job.EncodingProfile;
 			this.currentJob = job;
 
-			IntPtr nativeJobPtr = HBFunctions.hb_job_init_by_index(this.hbHandle, job.Title);
+			IntPtr nativeJobPtr = HBFunctions.hb_job_init_by_index(this.hbHandle, this.GetTitleIndex(job.Title));
 			var nativeJob = InteropUtilities.ReadStructure<hb_job_s>(nativeJobPtr);
 
 			this.encodeAllocatedMemory = this.ApplyJob(ref nativeJob, job, preview, previewNumber, previewSeconds, overallSelectedLengthSeconds);
@@ -576,7 +576,7 @@ namespace HandBrake.Interop
 				return;
 			}
 
-			IntPtr nativeJobPtr = HBFunctions.hb_job_init_by_index(this.hbHandle, job.Title);
+			IntPtr nativeJobPtr = HBFunctions.hb_job_init_by_index(this.hbHandle, this.GetTitleIndex(title));
 			var nativeJob = InteropUtilities.ReadStructure<hb_job_s>(nativeJobPtr);
 
 			List<IntPtr> allocatedMemory = this.ApplyJob(ref nativeJob, job);
@@ -1540,13 +1540,34 @@ namespace HandBrake.Interop
 		}
 
 		/// <summary>
-		/// Gets the title, given the 1-based index.
+		/// Gets the title, given the 1-based title number.
 		/// </summary>
-		/// <param name="titleIndex">The index of the title (1-based).</param>
+		/// <param name="titleNumber">The number of the title (1-based).</param>
 		/// <returns>The requested Title.</returns>
-		private Title GetTitle(int titleIndex)
+		private Title GetTitle(int titleNumber)
 		{
-			return this.Titles.SingleOrDefault(title => title.TitleNumber == titleIndex);
+			return this.Titles.SingleOrDefault(title => title.TitleNumber == titleNumber);
+		}
+
+		/// <summary>
+		/// Gets the 1-based title index of the given title.
+		/// </summary>
+		/// <param name="titleNumber">The 1-based title title number.</param>
+		/// <returns>The 1-based title index.</returns>
+		private int GetTitleIndex(int titleNumber)
+		{
+			Title title = this.GetTitle(titleNumber);
+			return this.GetTitleIndex(title);
+		}
+
+		/// <summary>
+		/// Gets the 1-based title index of the given title.
+		/// </summary>
+		/// <param name="title">The title to look up</param>
+		/// <returns>The 1-based title index of the given title.</returns>
+		private int GetTitleIndex(Title title)
+		{
+			return this.Titles.IndexOf(title) + 1;
 		}
 
 		/// <summary>
@@ -1657,6 +1678,7 @@ namespace HandBrake.Interop
 			var newTitle = new Title
 			{
 				TitleNumber = title.index,
+				Playlist = title.playlist,
 				Resolution = new Size(title.width, title.height),
 				ParVal = new Size(title.pixel_aspect_width, title.pixel_aspect_height),
 				Duration = TimeSpan.FromSeconds(title.duration / 90000),
