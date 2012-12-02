@@ -68,6 +68,11 @@ namespace HandBrake.Interop.SourceData
 		public int TitleNumber { get; set; }
 
 		/// <summary>
+		/// Gets or sets the playlist number this title came from.
+		/// </summary>
+		public int Playlist { get; set; }
+
+		/// <summary>
 		/// Gets or sets the length in time of this Title
 		/// </summary>
 		public TimeSpan Duration { get; set; }
@@ -131,11 +136,22 @@ namespace HandBrake.Interop.SourceData
 		/// <summary>
 		/// Override of the ToString method to provide an easy way to use this object in the UI
 		/// </summary>
-		/// <returns>A string representing this track in the format: {title #} (00:00:00)</returns>
+		/// <returns>A string representing this track in the format: {title #}[ {playlist source}] (00:00:00)</returns>
 		public override string ToString()
 		{
-			return string.Format("{0} ({1:00}:{2:00}:{3:00})", this.TitleNumber, this.Duration.Hours,
-								 this.Duration.Minutes, this.Duration.Seconds);
+			string playlistPortion = string.Empty;
+			if (this.InputType == InputType.Bluray)
+			{
+				playlistPortion = string.Format(" {0:d5}.MPLS", this.Playlist);
+			}
+
+			return string.Format(
+				"{0}{1} ({2:00}:{3:00}:{4:00})", 
+				this.TitleNumber, 
+				playlistPortion,
+				this.Duration.Hours,
+				this.Duration.Minutes, 
+				this.Duration.Seconds);
 		}
 
 		/// <summary>

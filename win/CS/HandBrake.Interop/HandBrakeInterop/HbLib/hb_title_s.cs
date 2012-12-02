@@ -23,7 +23,7 @@ namespace HandBrake.Interop.HbLib
 
 		/// char[1024]
 		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)]
-		public string dvd;
+		public string path;
 
 		/// char[1024]
 		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)]
