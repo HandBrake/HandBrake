@@ -420,7 +420,8 @@ ghb_set_pref_subtitle_settings(gint titleindex, GValue *settings)
 			track_lang = ghb_subtitle_track_lang(settings, track);
 			ghb_settings_set_int(dup, "SubtitleTrack", track);
 			if (foreign_lang_index < 0 && pref_lang != NULL &&
-				strcmp(track_lang, pref_lang) == 0)
+				strcmp(track_lang, pref_lang) == 0 &&
+		        !ghb_settings_get_boolean(dup, "SubtitleBurned"))
 			{
 				foreign_lang_index = jj;
 				ghb_settings_take_value(dup, "SubtitleForced", 
