@@ -560,23 +560,45 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         // muxer or renderer filter.
         while ( ( sub = hb_fifo_see( subtitle->fifo_raw ) ) != NULL )
         {
-            if ( sub->s.stop == -1 && hb_fifo_size( subtitle->fifo_raw ) < 2 )
-                break;
+            hb_lock( pv->common->mutex );
+            sub_start = sub->s.start - pv->common->video_pts_slip;
+            hb_unlock( pv->common->mutex );
+
+            if (sub->s.stop == -1)
+            {
+                if (subtitle->config.dest != RENDERSUB &&
+                    hb_fifo_size( subtitle->fifo_raw ) < 2)
+                {
+                    // For passthru subs, we want to wait for the
+                    // next subtitle so that we can fill in the stop time.
+                    // This way the muxer can compute the duration of
+                    // the subtitle.
+                    //
+                    // For render subs, we need to ensure that they
+                    // get to the renderer before the associated video
+                    // that they are to be applied to.  It is the 
+                    // responsibility of the renderer to handle
+                    // stop == -1.
+                    break;
+                }
+            }
 
             sub = hb_fifo_get( subtitle->fifo_raw );
             if ( sub->s.stop == -1 )
             {
                 hb_buffer_t *next;
                 next = hb_fifo_see( subtitle->fifo_raw );
-                sub->s.stop = next->s.start;
+                if (next != NULL)
+                    sub->s.stop = next->s.start;
             }
             // Need to re-write subtitle timestamps to account
             // for any slippage.
-            hb_lock( pv->common->mutex );
-            sub_start = sub->s.start - pv->common->video_pts_slip;
-            hb_unlock( pv->common->mutex );
-            duration = sub->s.stop - sub->s.start;
-            sub_stop = sub_start + duration;
+            sub_stop = -1;
+            if ( sub->s.stop != -1 )
+            {
+                duration = sub->s.stop - sub->s.start;
+                sub_stop = sub_start + duration;
+            }
 
             sub->s.start = sub_start;
             sub->s.stop = sub_stop;

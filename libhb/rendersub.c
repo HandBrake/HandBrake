@@ -248,12 +248,18 @@ static void ApplySub( hb_filter_private_t * pv, hb_buffer_t * buf, hb_buffer_t *
 static void ApplyVOBSubs( hb_filter_private_t * pv, hb_buffer_t * buf )
 {
     int ii;
-    hb_buffer_t * sub;
+    hb_buffer_t *sub, *next;
 
-    for( ii = 0; ii < hb_list_count( pv->sub_list ); )
+    for( ii = 0; ii < hb_list_count(pv->sub_list); )
     {
         sub = hb_list_item( pv->sub_list, ii );
-        if( sub->s.stop <= buf->s.start )
+        if (ii + 1 < hb_list_count(pv->sub_list))
+            next = hb_list_item( pv->sub_list, ii + 1 );
+        else
+            next = NULL;
+
+        if ((sub->s.stop != -1 && sub->s.stop <= buf->s.start) ||
+            (next != NULL && sub->s.stop == -1 && next->s.start <= buf->s.start))
         {
             // Subtitle stop is in the past, delete it
             hb_list_rem( pv->sub_list, sub );
@@ -541,6 +547,8 @@ static int ssa_work( hb_filter_object_t * filter,
     while( ( sub = hb_fifo_get( filter->subtitle->fifo_out ) ) )
     {
         // Parse MKV-SSA packet
+        // SSA subtitles always have an explicit stop time, so we
+        // do not need to do special processing for stop == -1
         ass_process_chunk( pv->ssaTrack, (char*)sub->data, sub->size,
                            sub->s.start / 90,
                            (sub->s.stop - sub->s.start) / 90 );
