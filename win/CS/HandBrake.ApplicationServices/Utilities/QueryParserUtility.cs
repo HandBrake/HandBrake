@@ -322,7 +322,7 @@ namespace HandBrake.ApplicationServices.Utilities
                 if (videoFramerate.Success)
                 {
                     double fps;
-                    double.TryParse(videoFramerate.Groups[1].ToString(), out fps);
+                    double.TryParse(videoFramerate.Groups[1].ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out fps);
                     parsed.Framerate = fps;
                 }
 
