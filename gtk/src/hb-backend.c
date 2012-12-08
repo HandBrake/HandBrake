@@ -3717,8 +3717,8 @@ ghb_set_scale_settings(GValue *settings, gint mode)
 		gint need1, need2;
 
 		// Adjust the cropping to accomplish the desired width and height
-		crop_width = width - crop[2] - crop[3];
-		crop_height = height - crop[0] - crop[1];
+		crop_width = title->width - crop[2] - crop[3];
+		crop_height = title->height - crop[0] - crop[1];
 		width = MOD_DOWN(crop_width, mod);
 		height = MOD_DOWN(crop_height, mod);
 
