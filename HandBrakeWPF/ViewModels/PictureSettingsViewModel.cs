@@ -911,7 +911,7 @@ namespace HandBrakeWPF.ViewModels
                 case Anamorphic.Custom:
                     // Get the User Interface Values
                     double uIdisplayWidth;
-                    double.TryParse(this.DisplayWidth.ToString(CultureInfo.InvariantCulture), out uIdisplayWidth);
+                    double.TryParse(this.DisplayWidth.ToString(CultureInfo.InvariantCulture), NumberStyles.Any, CultureInfo.InvariantCulture, out uIdisplayWidth);
 
                     /* Anamorphic 3: Power User Jamboree - Set everything based on specified values */
                     calcHeight = this.GetModulusValue(this.Height);

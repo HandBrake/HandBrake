@@ -823,7 +823,7 @@ namespace HandBrakeWPF.ViewModels
 
                                 break;
                             case "aq-strength":
-                                if (double.TryParse(optionValue, out parseDouble) && parseDouble >= 0.0 &&
+                                if (double.TryParse(optionValue, NumberStyles.Any, CultureInfo.InvariantCulture, out parseDouble) && parseDouble >= 0.0 &&
                                     parseDouble <= 2.0)
                                 {
                                     this.AdaptiveQuantizationStrength = Math.Round(parseDouble, 1);
@@ -835,8 +835,8 @@ namespace HandBrakeWPF.ViewModels
                                 if (subParts.Length == 2)
                                 {
                                     double psyRD, psyTrellis;
-                                    if (double.TryParse(subParts[0], out psyRD) &&
-                                        double.TryParse(subParts[1], out psyTrellis))
+                                    if (double.TryParse(subParts[0], NumberStyles.Any, CultureInfo.InvariantCulture, out psyRD) &&
+                                        double.TryParse(subParts[1], NumberStyles.Any, CultureInfo.InvariantCulture, out psyTrellis))
                                     {
                                         if (psyRD >= 0.0 && psyRD <= 2.0 && psyTrellis >= 0.0 && psyTrellis <= 1.0)
                                         {
