@@ -15,7 +15,6 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Parsing;
@@ -31,6 +30,12 @@ namespace HandBrakeWPF.ViewModels
     public class VideoViewModel : ViewModelBase, IVideoViewModel
     {
         #region Constants and Fields
+
+        /// <summary>
+        /// Same as source constant.
+        /// </summary>
+        private const string SameAsSource = "Same as source";
+
         /// <summary>
         /// Backing field for the user setting service.
         /// </summary>
@@ -413,10 +418,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.SelectedVideoEncoder = preset.Task.VideoEncoder;
-            if (preset.Task.Framerate.HasValue)
-            {
-                this.SelectedFramerate = preset.Task.Framerate.Value.ToString(CultureInfo.InvariantCulture);
-            }
+            this.SelectedFramerate = preset.Task.Framerate.HasValue ? preset.Task.Framerate.Value.ToString(CultureInfo.InvariantCulture) : SameAsSource;
 
             this.IsConstantQuantity = preset.Task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality;
 

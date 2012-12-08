@@ -1875,7 +1875,7 @@ namespace HandBrakeWPF.ViewModels
             userSettingService.SetUserSetting(UserSettingConstants.X264Step, double.Parse(this.SelectedGranulairty, CultureInfo.InvariantCulture));
 
             int value;
-            if (int.TryParse(this.MinLength.ToString(), out value))
+            if (int.TryParse(this.MinLength.ToString(CultureInfo.InvariantCulture), out value))
             {
                 this.userSettingService.SetUserSetting(ASUserSettingConstants.MinScanDuration, value);
             }
