@@ -97,10 +97,12 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.analyse.b_psnr = 1;
     param.analyse.b_ssim = 1;
 
-    /* QuickTime has trouble with very low QPs (resulting in visual artifacts).
+    /*
+     * QuickTime has trouble with very low QPs (resulting in visual artifacts).
      * Known to affect QuickTime 7, QuickTime X and iTunes.
-     * Testing shows that a qpmin of 3 works. */
-    param.rc.i_qp_min = 3;
+     * Testing shows that a qpmin of 4 usually works.
+     */
+    param.rc.i_qp_min = 4;
     
     if( job->pass == 2 && job->cfr != 1 )
     {
