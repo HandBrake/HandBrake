@@ -1671,26 +1671,10 @@ void hb_title_close( hb_title_t ** _t )
     *_t = NULL;
 }
 
-/*
- * Create a pristine job structure from a title
- * title_index is 1 based
- */
-hb_job_t * hb_job_init_by_index( hb_handle_t * h, int title_index )
+static void job_setup( hb_job_t * job, hb_title_t * title )
 {
-    hb_title_set_t *title_set = hb_get_title_set( h );
-    hb_title_t * title = hb_list_item( title_set->list_title,
-                                       title_index - 1 );
-    return hb_job_init( title );
-}
-
-hb_job_t * hb_job_init( hb_title_t * title )
-{
-    hb_job_t * job;
-
-    if ( title == NULL )
-        return NULL;
-
-    job        = calloc( sizeof( hb_job_t ), 1 );
+    if ( job == NULL || title == NULL )
+        return;
 
     job->title = title;
 
@@ -1741,6 +1725,87 @@ hb_job_t * hb_job_init( hb_title_t * title )
 
     job->list_attachment = hb_attachment_list_copy( title->list_attachment );
     job->metadata = hb_metadata_copy( title->metadata );
+}
+
+static void job_clean( hb_job_t * job )
+{
+    if (job)
+    {
+        hb_chapter_t *chapter;
+        hb_audio_t *audio;
+        hb_subtitle_t *subtitle;
+        hb_filter_object_t *filter;
+        hb_attachment_t *attachment;
+
+        free(job->file);
+        free(job->advanced_opts);
+
+        // clean up chapter list
+        while( ( chapter = hb_list_item( job->list_chapter, 0 ) ) )
+        {
+            hb_list_rem( job->list_chapter, chapter );
+            hb_chapter_close( &chapter );
+        }
+        hb_list_close( &job->list_chapter );
+
+        // clean up audio list
+        while( ( audio = hb_list_item( job->list_audio, 0 ) ) )
+        {
+            hb_list_rem( job->list_audio, audio );
+            hb_audio_close( &audio );
+        }
+        hb_list_close( &job->list_audio );
+
+        // clean up subtitle list
+        while( ( subtitle = hb_list_item( job->list_subtitle, 0 ) ) )
+        {
+            hb_list_rem( job->list_subtitle, subtitle );
+            hb_subtitle_close( &subtitle );
+        }
+        hb_list_close( &job->list_subtitle );
+
+        // clean up filter list
+        while( ( filter = hb_list_item( job->list_filter, 0 ) ) )
+        {
+            hb_list_rem( job->list_filter, filter );
+            hb_filter_close( &filter );
+        }
+        hb_list_close( &job->list_filter );
+
+        // clean up attachment list
+        while( ( attachment = hb_list_item( job->list_attachment, 0 ) ) )
+        {
+            hb_list_rem( job->list_attachment, attachment );
+            hb_attachment_close( &attachment );
+        }
+        hb_list_close( &job->list_attachment );
+
+        // clean up metadata
+        hb_metadata_close( &job->metadata );
+    }
+}
+
+/*
+ * Create a pristine job structure from a title
+ * title_index is 1 based
+ */
+hb_job_t * hb_job_init_by_index( hb_handle_t * h, int title_index )
+{
+    hb_title_set_t *title_set = hb_get_title_set( h );
+    hb_title_t * title = hb_list_item( title_set->list_title,
+                                       title_index - 1 );
+    return hb_job_init( title );
+}
+
+hb_job_t * hb_job_init( hb_title_t * title )
+{
+    hb_job_t * job;
+
+    if ( title == NULL )
+        return NULL;
+
+    job = calloc( sizeof( hb_job_t ), 1 );
+    job_setup(job, title);
 
     return job;
 }
@@ -1758,34 +1823,9 @@ void hb_job_reset( hb_job_t * job )
 {
     if ( job )
     {
-        hb_audio_t *audio;
-        hb_subtitle_t *subtitle;
-        hb_filter_object_t *filter;
         hb_title_t * title = job->title;
-
-        // clean up audio list
-        while( ( audio = hb_list_item( job->list_audio, 0 ) ) )
-        {
-            hb_list_rem( job->list_audio, audio );
-            hb_audio_close( &audio );
-        }
-
-        // clean up subtitle list
-        while( ( subtitle = hb_list_item( job->list_subtitle, 0 ) ) )
-        {
-            hb_list_rem( job->list_subtitle, subtitle );
-            hb_subtitle_close( &subtitle );
-        }
-
-        // clean up filter list
-        while( ( filter = hb_list_item( job->list_filter, 0 ) ) )
-        {
-            hb_list_rem( job->list_filter, filter );
-            hb_filter_close( &filter );
-        }
-
-        hb_metadata_close( &job->metadata );
-        job->metadata = hb_metadata_copy( title->metadata );
+        job_clean(job);
+        job_setup(job, title);
     }
 }
 
@@ -1796,68 +1836,10 @@ void hb_job_reset( hb_job_t * job )
  *********************************************************************/
 void hb_job_close( hb_job_t ** _j )
 {
-    if (_j)
+    if (_j && *_j)
     {
-        hb_job_t * job = *_j;
-
-        if (job)
-        {
-            hb_chapter_t *chapter;
-            hb_audio_t *audio;
-            hb_subtitle_t *subtitle;
-            hb_filter_object_t *filter;
-            hb_attachment_t *attachment;
-
-            free(job->file);
-            free(job->advanced_opts);
-
-            // clean up chapter list
-            while( ( chapter = hb_list_item( job->list_chapter, 0 ) ) )
-            {
-                hb_list_rem( job->list_chapter, chapter );
-                hb_chapter_close( &chapter );
-            }
-            hb_list_close( &job->list_chapter );
-
-            // clean up audio list
-            while( ( audio = hb_list_item( job->list_audio, 0 ) ) )
-            {
-                hb_list_rem( job->list_audio, audio );
-                hb_audio_close( &audio );
-            }
-            hb_list_close( &job->list_audio );
-
-            // clean up subtitle list
-            while( ( subtitle = hb_list_item( job->list_subtitle, 0 ) ) )
-            {
-                hb_list_rem( job->list_subtitle, subtitle );
-                hb_subtitle_close( &subtitle );
-            }
-            hb_list_close( &job->list_subtitle );
-
-            // clean up filter list
-            while( ( filter = hb_list_item( job->list_filter, 0 ) ) )
-            {
-                hb_list_rem( job->list_filter, filter );
-                hb_filter_close( &filter );
-            }
-            hb_list_close( &job->list_filter );
-
-            // clean up attachment list
-            while( ( attachment = hb_list_item( job->list_attachment, 0 ) ) )
-            {
-                hb_list_rem( job->list_attachment, attachment );
-                hb_attachment_close( &attachment );
-            }
-            hb_list_close( &job->list_attachment );
-
-            // clean up metadata
-            if ( job->metadata )
-            {
-                hb_metadata_close( &job->metadata );
-            }
-            free( job );
-        }
+        job_clean(*_j);
+        free( *_j );
         _j = NULL;
     }
 }

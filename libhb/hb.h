@@ -81,8 +81,6 @@ void          hb_add_filter( hb_job_t * job, hb_filter_object_t * filter,
 /* Handling jobs */
 int           hb_count( hb_handle_t * );
 hb_job_t *    hb_job( hb_handle_t *, int );
-void          hb_set_chapter_name( hb_handle_t *, int, int, const char * );
-void          hb_set_job( hb_handle_t *, int, hb_job_t * );
 void          hb_add( hb_handle_t *, hb_job_t * );
 void          hb_rem( hb_handle_t *, hb_job_t * );
 
