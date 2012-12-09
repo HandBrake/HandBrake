@@ -145,9 +145,9 @@ hb_dict_entry_t * hb_dict_get( hb_dict_t * dict, const char * key )
 
 hb_dict_entry_t * hb_dict_next( hb_dict_t * dict, hb_dict_entry_t * previous )
 {
-    if( !dict || !dict->objects )
+    if( dict == NULL || dict->objects == NULL || !dict->count )
         return NULL;
-    if( !previous )
+    if( previous == NULL )
         return &dict->objects[0];
     unsigned int prev_index = previous - dict->objects;
     if( prev_index + 1 < dict->count )
