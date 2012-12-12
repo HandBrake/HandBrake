@@ -1076,6 +1076,7 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream, hb_title_t * title)
     // One Chapter
     hb_chapter_t * chapter;
     chapter = calloc( sizeof( hb_chapter_t ), 1 );
+    hb_chapter_set_title( chapter, "Chapter 1" );
     chapter->index = 1;
     chapter->duration = title->duration;
     chapter->hours = title->hours;

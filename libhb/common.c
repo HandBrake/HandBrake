@@ -1738,7 +1738,9 @@ static void job_clean( hb_job_t * job )
         hb_attachment_t *attachment;
 
         free(job->file);
+        job->file = NULL;
         free(job->advanced_opts);
+        job->advanced_opts = NULL;
 
         // clean up chapter list
         while( ( chapter = hb_list_item( job->list_chapter, 0 ) ) )

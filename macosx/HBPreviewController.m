@@ -859,7 +859,7 @@
     }
     
     /* We now direct our preview encode to fPreviewMoviePath */
-    fTitle->job->file = [fPreviewMoviePath UTF8String];
+    hb_job_set_file(fTitle->job, [fPreviewMoviePath UTF8String]);
     
     /* We use our advance pref to determine how many previews to scan */
     int hb_num_previews = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
