@@ -473,6 +473,24 @@
                                                    Converter={StaticResource boolToVisConverter},
                                                    ConverterParameter=true}"
                               />
+                    <CheckBox Name="OpenCL"
+                              Margin="8,0,0,0"
+                              VerticalAlignment="Center"
+                              Content="OpenCL Support"
+                              IsChecked="{Binding Path=CurrentTask.OpenCLSupport}" IsEnabled="True" 
+                              Visibility="{Binding SupportOpenCL,
+                                                   Converter={StaticResource boolToVisConverter},
+                                                   ConverterParameter=true}"
+                              />
+                    <CheckBox Name="UVD"
+                              Margin="8,0,0,0"
+                              VerticalAlignment="Center"
+                              Content="UVD Support"
+                              IsChecked="{Binding Path=CurrentTask.UVDSupport}" IsEnabled="True" 
+                              Visibility="{Binding SupportHardwareDecoding,
+                                                   Converter={StaticResource boolToVisConverter},
+                                                   ConverterParameter=true}"
+                              />
                 </StackPanel>
             </StackPanel>
 

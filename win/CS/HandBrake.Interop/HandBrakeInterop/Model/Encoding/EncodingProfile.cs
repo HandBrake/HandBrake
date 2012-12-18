@@ -27,6 +27,8 @@ namespace HandBrake.Interop.Model.Encoding
 		public bool LargeFile { get; set; }
 		public bool Optimize { get; set; }
 		public bool IPod5GSupport { get; set; }
+        public bool OpenCLGSupport { get; set; }
+        public bool UVDSupport { get; set; }
 
 		public int Width { get; set; }
 		public int Height { get; set; }
@@ -82,6 +84,8 @@ namespace HandBrake.Interop.Model.Encoding
 				LargeFile = this.LargeFile,
 				Optimize = this.Optimize,
 				IPod5GSupport = this.IPod5GSupport,
+                OpenCLGSupport = this.OpenCLGSupport,
+                UVDSupport = this.UVDSupport,
 
 				Width = this.Width,
 				Height = this.Height,

@@ -56,6 +56,8 @@ namespace HandBrake.ApplicationServices.Utilities
             Match grayscale = Regex.Match(input, @" -g");
             Match largerMp4 = Regex.Match(input, @" -4");
             Match ipodAtom = Regex.Match(input, @" -I");
+            Match openclSupport = Regex.Match(input, @" -P");
+            Match uvdSupport = Regex.Match(input, @" -U");
 
             // Picture Settings Tab
             Match width = Regex.Match(input, @"-w ([0-9]+)");
@@ -156,6 +158,8 @@ namespace HandBrake.ApplicationServices.Utilities
                 parsed.LargeFile = largerMp4.Success;
                 parsed.IPod5GSupport = ipodAtom.Success;
                 parsed.OptimizeMP4 = optimizeMP4.Success;
+                parsed.OpenCLSupport = openclSupport.Success;
+                parsed.UVDSupport = uvdSupport.Success;
 
                 #endregion
 

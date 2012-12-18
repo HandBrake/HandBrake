@@ -10,6 +10,7 @@
 #include "hb.h"
 #include "a52dec/a52.h"
 #include "libavformat/avformat.h"
+#include "openclwrapper.h"
 
 typedef struct
 {
@@ -552,7 +553,18 @@ static void do_job( hb_job_t * job )
     job->list_work = hb_list_init();
 
     hb_log( "starting job" );
-
+#ifdef USE_OPENCL
+    if ( job->use_opencl )
+    {
+	    /* init opencl environment */
+        hb_log( "Using GPU : Yes.\n" );
+        job->use_opencl =! hb_init_opencl_run_env(0, NULL, "-I.");
+    }
+    else
+        hb_log( "Using GPU : NO.\n" );
+#else
+    hb_log( "Using GPU : NO.\n" );
+#endif    
     /* Look for the scanned subtitle in the existing subtitle list
      * select_subtitle implies that we did a scan. */
     if( !job->indepth_scan && interjob->select_subtitle )
@@ -699,6 +711,16 @@ static void do_job( hb_job_t * job )
         init.pix_fmt = PIX_FMT_YUV420P;
         init.width = title->width;
         init.height = title->height;
+#ifdef USE_OPENCL
+        init.title_width = title->width;
+        init.title_height = title->height;
+        init.use_dxva = hb_use_dxva( title ); 
+        if ( init.use_dxva && ( title->width > job->width || title->height > job->height ) )
+        {
+            init.width = job->width;
+            init.height = job->height;
+        }
+#endif
         init.par_width = job->anamorphic.par_width;
         init.par_height = job->anamorphic.par_height;
         memcpy(init.crop, job->crop, sizeof(int[4]));
@@ -996,6 +1018,12 @@ static void do_job( hb_job_t * job )
     {
         vcodec = WORK_DECAVCODECV;
         title->video_codec_param = CODEC_ID_MPEG2VIDEO;
+    }
+#endif
+#ifdef USE_OPENCL  
+    if ( job->use_opencl && hb_use_dxva( title ) && (TestGPU() == 0) && job->use_uvd )
+    {        
+        vcodec = WORK_DECAVCODECVACCL;
     }
 #endif
     hb_list_add( job->list_work, ( w = hb_get_work( vcodec ) ) );

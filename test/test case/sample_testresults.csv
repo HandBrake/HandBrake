@@ -1,0 +1,52 @@
+input file, handbrake preset, fps, psnr
+blueangels_20m.m2ps, universal,51.249393,43.329
+blueangels_20m.m2ps, iPod,104.499466,43.39
+blueangels_20m.m2ps, iPhone_iPod_Touch,82.94838,42.932
+blueangels_20m.m2ps, iPhone_4,27.005239,43.781
+blueangels_20m.m2ps, iPad,24.081524,43.829
+blueangels_20m.m2ps, Apple_TV,26.035112,43.496
+blueangels_20m.m2ps, Apple_TV_2,15.095184,44.122
+blueangels_20m.m2ps, Android_Mid,85.799118,41.523
+blueangels_20m.m2ps, Android_High,51.151642,42.586
+blueangels_20m.m2ps, Normal_1080p_to_1080p_fixed_qp,24.162228,44.721
+blueangels_20m.m2ps, Normal_1080p_to_720p_fixed_qp,43.044079,43.631
+blueangels_20m.m2ps, Normal_1080p_to_1080p_13_mbps,23.51717,45.031
+blueangels_20m.m2ps, Normal_1080p_to_720p_6_mbps,39.531132,44.304
+blueangels_20m.m2ps, high_1080p_to_1080p_fixed_qp,5.44732,45.031
+blueangels_20m.m2ps, high_1080p_to_720p_fixed qp,11.749803,43.892
+blueangels_20m.m2ps, high_1080p_to_1080p_13_mbps,5.319024,45.168
+blueangels_20m.m2ps, high_1080p_to_720p_6mbps,11.092562,44.167
+blueangels_20m.m2ps, strange_resolution,35.530605,44.236
+blueangels.m2ts, universal,38.152428,43.238
+blueangels.m2ts, iPod,58.110367,43.381
+blueangels.m2ts, iPhone_iPod_Touch,51.766876,42.914
+blueangels.m2ts, iPhone_4,21.514906,43.562
+blueangels.m2ts, iPad,19.358091,43.586
+blueangels.m2ts, Apple_TV,21.262102,43.3
+blueangels.m2ts, Apple_TV_2,12.826241,43.734
+blueangels.m2ts, Android_Mid,51.420086,41.512
+blueangels.m2ts, Android_High,36.581734,42.514
+blueangels.m2ts, Normal_1080p_to_1080p_fixed_qp,19.23077,43.986
+blueangels.m2ts, Normal_1080p_to_720p_fixed_qp,31.648577,43.284
+blueangels.m2ts, Normal_1080p_to_1080p_13_mbps,18.489985,44.288
+blueangels.m2ts, Normal_1080p_to_720p_6_mbps,30.822269,43.864
+blueangels.m2ts, high_1080p_to_1080p_fixed_qp,5.114225,44.334
+blueangels.m2ts, high_1080p_to_720p_fixed qp,10.028431,43.695
+blueangels.m2ts, high_1080p_to_1080p_13_mbps,5.020767,44.382
+blueangels.m2ts, high_1080p_to_720p_6mbps,9.411227,44.107
+blueangels.m2ts, strange_resolution,27.356098,44.088
+BigBuckBunny.VOB, universal,74.327034,43.579
+BigBuckBunny.VOB, iPod,212.377899,43.668
+BigBuckBunny.VOB, iPhone_iPod_Touch,133.710114,43.028
+BigBuckBunny.VOB, iPhone_4,33.673248,44.976
+BigBuckBunny.VOB, iPad,29.014545,45.052
+BigBuckBunny.VOB, Apple_TV,35.109959,44.672
+BigBuckBunny.VOB, Apple_TV_2,18.789587,45.661
+BigBuckBunny.VOB, Android_Mid,167.233826,41.377
+BigBuckBunny.VOB, Android_High,71.774277,42.81
+BigBuckBunny.VOB, Normal_1080p_to_1080p_fixed_qp,173.294464,42.192
+BigBuckBunny.VOB, Normal_1080p_to_720p_fixed_qp,67.47831,43.995
+BigBuckBunny.VOB, Normal_1080p_to_1080p_13_mbps,91.628754,53.538
+BigBuckBunny.VOB, Normal_1080p_to_720p_6_mbps,50.870552,46.778
+BigBuckBunny.VOB, high_1080p_to_1080p_fixed_qp,7.289626,47.018
+BigBuckBunny.VOB, high_1080p_to_720p_fixed qp,18.983526,45.495

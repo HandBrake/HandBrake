@@ -1,14 +1,17 @@
-/* cropscale.c
+/* cropscaleaccl.c
 
    Copyright (c) 2003-2012 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
+
+   Authors: Peng Gao <peng@multicorewareinc.com> <http://www.multicorewareinc.com/>
+            Li   Cao <li@multicorewareinc.com> <http://www.multicorewareinc.com/>
  */
-   
+#ifdef USE_OPENCL
 #include "hb.h"
-#include "hbffmpeg.h"
+#include "common.h"
 
 struct hb_filter_private_s
 {
@@ -20,6 +23,10 @@ struct hb_filter_private_s
     int                 height_out;
     int                 crop[4];
     int                 use_dxva;
+
+    int                 title_width;
+    int                 title_height;
+    hb_oclscale_t       * os; //ocl scaler handler
     struct SwsContext * context;
 };
 
@@ -35,11 +42,11 @@ static int hb_crop_scale_info( hb_filter_object_t * filter,
 
 static void hb_crop_scale_close( hb_filter_object_t * filter );
 
-hb_filter_object_t hb_filter_crop_scale =
+hb_filter_object_t hb_filter_crop_scale_accl =
 {
-    .id            = HB_FILTER_CROP_SCALE,
+    .id            = HB_FILTER_CROP_SCALE_ACCL,
     .enforce_order = 1,
-    .name          = "Crop and Scale",
+    .name          = "Hardware Acceleration Crop and Scale",
     .settings      = NULL,
     .init          = hb_crop_scale_init,
     .work          = hb_crop_scale_work,
@@ -59,6 +66,9 @@ static int hb_crop_scale_init( hb_filter_object_t * filter,
     pv->height_in = init->height;
     pv->width_out = init->width;
     pv->height_out = init->height;
+    pv->use_dxva = init->use_dxva;
+    pv->title_width = init->title_width;
+    pv->title_height = init->title_height;
     memcpy( pv->crop, init->crop, sizeof( int[4] ) );
     if( filter->settings )
     {
@@ -72,10 +82,8 @@ static int hb_crop_scale_init( hb_filter_object_t * filter,
     init->width = pv->width_out;
     init->height = pv->height_out;
     memcpy( init->crop, pv->crop, sizeof( int[4] ) );
-#ifdef USE_OPENCL
-    pv->use_dxva = init->use_dxva;
-#endif
-
+    pv->os = ( hb_oclscale_t * )malloc( sizeof( hb_oclscale_t ) );
+    memset( pv->os, 0, sizeof( hb_oclscale_t ) );
     return 0;
 }
 
@@ -95,14 +103,14 @@ static int hb_crop_scale_info( hb_filter_object_t * filter,
     info->out.height = pv->height_out;
     memcpy( info->out.crop, pv->crop, sizeof( int[4] ) );
 
-    int cropped_width = pv->width_in - ( pv->crop[2] + pv->crop[3] );
-    int cropped_height = pv->height_in - ( pv->crop[0] + pv->crop[1] );
+    int cropped_width = pv->title_width - ( pv->crop[2] + pv->crop[3] );
+    int cropped_height = pv->title_height - ( pv->crop[0] + pv->crop[1] );
 
-    sprintf( info->human_readable_desc, 
-        "source: %d * %d, crop (%d/%d/%d/%d): %d * %d, scale: %d * %d",
-        pv->width_in, pv->height_in,
-        pv->crop[0], pv->crop[1], pv->crop[2], pv->crop[3],
-        cropped_width, cropped_height, pv->width_out, pv->height_out );
+    sprintf( info->human_readable_desc,
+             "source: %d * %d, crop (%d/%d/%d/%d): %d * %d, scale: %d * %d",
+             pv->title_width, pv->title_height,
+             pv->crop[0], pv->crop[1], pv->crop[2], pv->crop[3],
+             cropped_width, cropped_height, pv->width_out, pv->height_out );
 
     return 0;
 }
@@ -111,18 +119,44 @@ static void hb_crop_scale_close( hb_filter_object_t * filter )
 {
     hb_filter_private_t * pv = filter->private_data;
 
-    if ( !pv )
+    if( !pv )
     {
         return;
     }
-
-    if ( pv->context )
+    if ( pv->os )
     {
-        sws_freeContext( pv->context );
-    }
-
+        CL_FREE( pv->os->h_in_buf );
+        CL_FREE( pv->os->h_out_buf );
+        CL_FREE( pv->os->v_out_buf );
+        CL_FREE( pv->os->h_coeff_y );
+        CL_FREE( pv->os->h_coeff_uv );
+        CL_FREE( pv->os->h_index_y );
+        CL_FREE( pv->os->h_index_uv );
+        CL_FREE( pv->os->v_coeff_y );
+        CL_FREE( pv->os->v_coeff_uv );
+        CL_FREE( pv->os->v_index_y );
+        CL_FREE( pv->os->v_index_uv );
+        free( pv->os );
+    }        
     free( pv );
     filter->private_data = NULL;
+}
+
+static uint8_t *copy_plane( uint8_t *dst, uint8_t* src, int dstride, int sstride, int h )
+{
+    if( dstride == sstride )
+    {
+        memcpy( dst, src, dstride * h );
+        return dst + dstride * h;
+    }
+    int lbytes = dstride <= sstride ? dstride : sstride;
+    while( --h >= 0 )
+    {
+        memcpy( dst, src, lbytes );
+        src += sstride;
+        dst += dstride;
+    }
+    return dst;
 }
 
 static hb_buffer_t* crop_scale( hb_filter_private_t * pv, hb_buffer_t * in )
@@ -141,34 +175,43 @@ static hb_buffer_t* crop_scale( hb_filter_private_t * pv, hb_buffer_t * in )
     av_picture_crop( &pic_crop, &pic_in, in->f.fmt,
                      pv->crop[0], pv->crop[2] );
 
-    if ( !pv->context ||
-         pv->width_in   != in->f.width  ||
-         pv->height_in  != in->f.height ||
-         pv->pix_fmt != in->f.fmt )
+
+    int w = in->f.width - ( pv->crop[2] + pv->crop[3] );
+    int h = in->f.height - ( pv->crop[0] + pv->crop[1] );
+    uint8_t *tmp_in = malloc( w * h * 3 / 2 );
+    uint8_t *tmp_out = malloc( pv->width_out * pv->height_out * 3 / 2 );
+    if( pic_crop.data[0] || pic_crop.data[1] || pic_crop.data[2] || pic_crop.data[3] )
     {
-        // Something changed, need a new scaling context.
-        if( pv->context )
-            sws_freeContext( pv->context );
-
-        pv->context = hb_sws_get_context(
-                                in->f.width  - (pv->crop[2] + pv->crop[3]),
-                                in->f.height - (pv->crop[0] + pv->crop[1]),
-                                in->f.fmt,
-                                out->f.width, out->f.height, out->f.fmt,
-                                SWS_LANCZOS | SWS_ACCURATE_RND );
-        pv->width_in = in->f.width;
-        pv->height_in = in->f.height;
-        pv->pix_fmt = in->f.fmt;
+        int i;
+        for( i = 0; i< h>>1; i++ )
+        {
+            memcpy( tmp_in + ( ( i<<1 ) + 0 ) * w, pic_crop.data[0]+ ( ( i<<1 ) + 0 ) * pic_crop.linesize[0], w );
+            memcpy( tmp_in + ( ( i<<1 ) + 1 ) * w, pic_crop.data[0]+ ( ( i<<1 ) + 1 ) * pic_crop.linesize[0], w );
+            memcpy( tmp_in + ( w * h ) + i * ( w>>1 ), pic_crop.data[1] + i * pic_crop.linesize[1], w >> 1 );
+            memcpy( tmp_in + ( w * h ) + ( ( w * h )>>2 ) + i * ( w>>1 ), pic_crop.data[2] + i * pic_crop.linesize[2], w >> 1 );
+        }
     }
-
-    // Scale pic_crop into pic_render according to the
-    // context set up above
-    sws_scale(pv->context,
-              (const uint8_t* const*)pic_crop.data,
-              pic_crop.linesize,
-              0, in->f.height - (pv->crop[0] + pv->crop[1]),
-              pic_out.data,  pic_out.linesize);
-
+    else
+    {
+        memcpy( tmp_in, pic_crop.data[0], w * h );
+        memcpy( tmp_in + w * h, pic_crop.data[1], (w*h)>>2 );
+        memcpy( tmp_in + w * h + ((w*h)>>2), pic_crop.data[2], (w*h)>>2 );
+    }
+    hb_ocl_scale( NULL, tmp_in, tmp_out, w, h, out->f.width, out->f.height, pv->os );
+    w = out->plane[0].stride;
+    h = out->plane[0].height;
+    uint8_t *dst = out->plane[0].data;
+    copy_plane( dst, tmp_out, w, pv->width_out, h );
+    w = out->plane[1].stride;
+    h = out->plane[1].height;
+    dst = out->plane[1].data;
+    copy_plane( dst, tmp_out + pv->width_out * pv->height_out, w, pv->width_out>>1, h );
+    w = out->plane[2].stride;
+    h = out->plane[2].height;
+    dst = out->plane[2].data;
+    copy_plane( dst, tmp_out + pv->width_out * pv->height_out +( ( pv->width_out * pv->height_out )>>2 ), w, pv->width_out>>1, h );
+    free( tmp_out );
+    free( tmp_in );
     out->s = in->s;
     hb_buffer_move_subs( out, in );
     return out;
@@ -181,14 +224,14 @@ static int hb_crop_scale_work( hb_filter_object_t * filter,
     hb_filter_private_t * pv = filter->private_data;
     hb_buffer_t * in = *buf_in;
 
-    if ( in->size <= 0 )
+    if( in->size <= 0 )
     {
         *buf_out = in;
         *buf_in = NULL;
         return HB_FILTER_DONE;
     }
 
-    if ( !pv )
+    if( !pv )
     {
         *buf_out = in;
         *buf_in = NULL;
@@ -197,29 +240,23 @@ static int hb_crop_scale_work( hb_filter_object_t * filter,
 
     // If width or height were not set, set them now based on the
     // input width & height
-    if ( pv->width_out <= 0 || pv->height_out <= 0 )
+    if( pv->width_out <= 0 || pv->height_out <= 0 )
     {
         pv->width_out = in->f.width - (pv->crop[2] + pv->crop[3]);
         pv->height_out = in->f.height - (pv->crop[0] + pv->crop[1]);
     }
-    if ( in->f.fmt == pv->pix_fmt_out &&
-         !pv->crop[0] && !pv->crop[1] && !pv->crop[2] && !pv->crop[3] &&
-         in->f.width == pv->width_out && in->f.height == pv->height_out )
+    if( ( in->f.fmt == pv->pix_fmt_out &&
+          !pv->crop[0] && !pv->crop[1] && !pv->crop[2] && !pv->crop[3] &&
+          in->f.width == pv->width_out && in->f.height == pv->height_out ) ||
+        ( pv->use_dxva && in->f.width == pv->width_out && in->f.height == pv->height_out ) )
     {
         *buf_out = in;
         *buf_in = NULL;
         return HB_FILTER_OK;
     }
-#ifdef USE_OPENCL
-	if ( pv->use_dxva && in->f.width == pv->width_out && in->f.height == pv->height_out )
-	{
-		*buf_out = in;
-		*buf_in = NULL;
-		return HB_FILTER_OK;
-	}
-#endif
-
     *buf_out = crop_scale( pv, in );
+
 
     return HB_FILTER_OK;
 }
+#endif

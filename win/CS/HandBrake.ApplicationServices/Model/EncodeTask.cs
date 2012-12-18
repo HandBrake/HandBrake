@@ -88,6 +88,8 @@ namespace HandBrake.ApplicationServices.Model
             this.Height = task.Height;
             this.IncludeChapterMarkers = task.IncludeChapterMarkers;
             this.IPod5GSupport = task.IPod5GSupport;
+            this.OpenCLSupport = task.OpenCLSupport;
+            this.UVDSupport = task.UVDSupport;
             this.KeepDisplayAspect = task.KeepDisplayAspect;
             this.LargeFile = task.LargeFile;
             this.MaxHeight = task.MaxHeight;
@@ -186,6 +188,16 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets a value indicating whether IPod5GSupport.
         /// </summary>
         public bool IPod5GSupport { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether OpenCLSupport.
+        /// </summary>
+        public bool OpenCLSupport { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether UVDSupport.
+        /// </summary>
+        public bool UVDSupport { get; set; }
         #endregion
 
         #region Picture

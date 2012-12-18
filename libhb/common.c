@@ -1939,7 +1939,11 @@ hb_filter_object_t * hb_filter_init( int filter_id )
         case HB_FILTER_CROP_SCALE:
             filter = &hb_filter_crop_scale;
             break;
-
+#ifdef USE_OPENCL
+        case HB_FILTER_CROP_SCALE_ACCL:
+            filter = &hb_filter_crop_scale_accl;
+            break;
+#endif
         case HB_FILTER_ROTATE:
             filter = &hb_filter_rotate;
             break;
@@ -2902,4 +2906,29 @@ void hb_hexdump( hb_debug_level_t level, const char * label, const uint8_t * dat
     {
         hb_deep_log( level, "    %-50s%20s", line, ascii );
     }
+}
+
+int hb_use_dxva( hb_title_t * title )
+{                
+    return ( (title->video_codec_param == CODEC_ID_MPEG2VIDEO 
+              || title->video_codec_param == CODEC_ID_H264
+              || title->video_codec_param == CODEC_ID_VC1 
+              || title->video_codec_param == CODEC_ID_WMV3 
+              || title->video_codec_param == CODEC_ID_MPEG4 )
+             && title->opaque_priv );
+}
+int hb_get_gui_info(hb_gui_t * gui, int option)
+{
+    if ( option == 1 )
+        return gui->use_uvd;
+    else if ( option == 2 )
+        return gui->use_opencl;
+    else
+        return gui->title_scan;
+}
+void hb_set_gui_info(hb_gui_t *gui, int uvd, int opencl, int titlescan)
+{
+    gui->use_uvd = uvd;
+    gui->use_opencl = opencl;
+    gui->title_scan = titlescan;
 }

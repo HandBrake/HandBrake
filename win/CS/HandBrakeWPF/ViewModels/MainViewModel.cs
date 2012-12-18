@@ -115,6 +115,14 @@ namespace HandBrakeWPF.ViewModels
         private bool isMkv;
 
         /// <summary>
+        /// Support Hardware Decoding
+        /// </summary>
+        private bool supportHardwareDecoding;
+
+        /// <summary>
+        /// Support OpenCL
+        /// </summary>
+        private bool supportOpenCL;
         /// The Toolbar Status Label
         /// </summary>
         private string statusLabel;
@@ -368,6 +376,8 @@ namespace HandBrakeWPF.ViewModels
                     this.CurrentTask.LargeFile = selectedPreset.Task.LargeFile;
                     this.CurrentTask.OptimizeMP4 = selectedPreset.Task.OptimizeMP4;
                     this.CurrentTask.IPod5GSupport = selectedPreset.Task.IPod5GSupport;
+                    this.CurrentTask.OpenCLSupport = selectedPreset.Task.OpenCLSupport;
+                    this.CurrentTask.UVDSupport = selectedPreset.Task.UVDSupport;
                     this.SelectedOutputFormat = selectedPreset.Task.OutputFormat;
 
                     // Tab Settings
@@ -590,8 +600,38 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange("IsMkv");
             }
         }
+  
+        /// <summary>
+        /// Gets or sets a value indicating whether SupportHardwareDecoding.
+        /// </summary>
+        public bool SupportHardwareDecoding
+        {
+            get
+            {
+                return this.supportHardwareDecoding;
+            }
+            set
+            {
+                this.supportHardwareDecoding = value;
+                this.NotifyOfPropertyChange("SupportHardwareDecoding");
+            }
+        }
 
         /// <summary>
+        /// Gets or sets a value indicating whether SupportHardwareDecoding.
+        /// </summary>
+        public bool SupportOpenCL
+        {
+            get
+            {
+                return this.supportOpenCL;
+            }
+            set
+            {
+                this.supportOpenCL = value;
+                this.NotifyOfPropertyChange("SupportOpenCL");
+            }
+        }
         /// Gets RangeMode.
         /// </summary>
         public IEnumerable<OutputFormat> OutputFormats
@@ -791,6 +831,8 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => SelectedOutputFormat);
                 this.NotifyOfPropertyChange(() => this.CurrentTask.OutputFormat);
                 this.NotifyOfPropertyChange(() => IsMkv);
+                this.NotifyOfPropertyChange(() => SupportHardwareDecoding);
+                this.NotifyOfPropertyChange(() => SupportOpenCL);
                 this.SetExtension(string.Format(".{0}", this.selectedOutputFormat.ToString().ToLower())); // TODO, tidy up
 
                 this.VideoViewModel.RefreshTask();
@@ -1645,6 +1687,25 @@ namespace HandBrakeWPF.ViewModels
                         this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault(t => t.MainTitle)
                                              ?? this.ScannedSource.Titles.FirstOrDefault();
                         this.SetupTabs();
+                    }
+                    if (e.Successful && this.selectedTitle != null)
+                    {
+                        if (this.selectedTitle.OpenCLSupport == 0)
+                        {
+                            this.SupportOpenCL = false;
+                        }
+                        else
+                        {
+                            this.SupportOpenCL = true;
+                        }
+                        if (this.selectedTitle.UVDSupport == 0)
+                        {
+                            this.SupportHardwareDecoding = true;
+                        }
+                        else
+                        {
+                            this.SupportHardwareDecoding = false;
+                        }
                     }
 
                     this.ShowStatusWindow = false;

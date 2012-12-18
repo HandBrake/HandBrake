@@ -10,7 +10,7 @@
 namespace HandBrake.ApplicationServices.Utilities
 {
     using System.Windows.Forms;
-
+    using System.Management;
     using Microsoft.Win32;
 
     /// <summary>
@@ -55,6 +55,40 @@ namespace HandBrake.ApplicationServices.Utilities
         public static Screen ScreenBounds
         {
             get { return Screen.PrimaryScreen; }
+        }
+        public static object GetGPUDriverVersion
+        {
+            get
+            {
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher(
+                "select * from " + "Win32_VideoController");
+                foreach (ManagementObject share in searcher.Get())
+                {
+                    foreach (PropertyData PC in share.Properties)
+                    {
+                        if (PC.Name.Equals("DriverVersion"))
+                            return PC.Value;
+                    }
+                }
+                return null;
+            }
+        }
+        public static object GetGPUName
+        {
+            get
+            {
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher(
+                "select * from " + "Win32_VideoController");
+                foreach (ManagementObject share in searcher.Get())
+                {
+                    foreach (PropertyData PC in share.Properties)
+                    {
+                        if (PC.Name.Equals("Name"))
+                            return PC.Value;
+                    }
+                }
+                return null;
+            }
         }
     }
 }

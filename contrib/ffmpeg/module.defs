@@ -17,8 +17,8 @@ FFMPEG.CONFIGURE.extra = \
     --disable-avfilter \
     --disable-muxers \
     --disable-network \
-    --disable-hwaccels \
-    --disable-encoders \
+    --disable-vaapi \
+    --enable-dxva2 \
     --enable-encoder=flac \
     --enable-encoder=ac3 \
     --enable-encoder=aac \

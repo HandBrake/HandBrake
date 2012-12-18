@@ -115,6 +115,15 @@ namespace HandBrake.ApplicationServices.Parsing
         /// </summary>
         public string SourceName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the OpenCL
+        /// </summary>
+        public int OpenCLSupport { get; set; }
+
+        /// <summary>
+        /// Gets or sets the UVD
+        /// </summary>
+        public int UVDSupport { get; set; }
         #endregion
 
         /// <summary>
@@ -214,6 +223,12 @@ namespace HandBrake.ApplicationServices.Parsing
                     };
             }
 
+            m = Regex.Match(output.ReadLine(), @"^  \+ support opencl: ([0-9]*)");
+            if (m.Success)
+                thisTitle.OpenCLSupport = int.Parse(m.Groups[1].Value.Trim());
+            m = Regex.Match(output.ReadLine(), @"  \+ support uvd: ([0-9]*)");
+            if (m.Success)
+                thisTitle.UVDSupport = int.Parse(m.Groups[1].Value.Trim());
             thisTitle.Chapters.AddRange(Chapter.ParseList(output));
 
             thisTitle.AudioTracks.AddRange(AudioHelper.ParseList(output));

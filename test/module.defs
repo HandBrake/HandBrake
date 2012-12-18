@@ -44,6 +44,10 @@ else ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
 ifeq ($(HAS.dlfcn),1)
     TEST.GCC.l += dl
 endif
+ifeq (1,$(FEATURE.opencl))
+    TEST.GCC.l += OpenCL
+    TEST.GCC.D += USE_OPENCL
+endif
     TEST.GCC.l += pthreadGC2 iconv ws2_32
     TEST.GCC.D += PTW32_STATIC_LIB
 	TEST.GCC.args.extra.exe++ += -static

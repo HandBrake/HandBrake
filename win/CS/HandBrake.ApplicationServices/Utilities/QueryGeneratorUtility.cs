@@ -245,6 +245,12 @@ namespace HandBrake.ApplicationServices.Utilities
             if (task.OptimizeMP4)
                 query += " -O ";
 
+            if (task.OpenCLSupport)
+                query += " -P ";
+            if (task.UVDSupport && task.OpenCLSupport)
+                query += " -U ";
+            else if (task.UVDSupport && !task.OpenCLSupport)
+                query += " -P -U";
             return query;
         }
 

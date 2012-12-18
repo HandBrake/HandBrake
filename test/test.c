@@ -22,6 +22,7 @@
 #include "hb.h"
 #include "lang.h"
 #include "parsecsv.h"
+#include "openclwrapper.h"
 
 #if defined( __APPLE_CC__ )
 #import <CoreServices/CoreServices.h>
@@ -139,6 +140,8 @@ static int    start_at_frame = 0;
 static int64_t stop_at_pts    = 0;
 static int    stop_at_frame = 0;
 static uint64_t min_title_duration = 10;
+static int use_opencl = 0;
+static int use_uvd = 0;
 
 /* Exit cleanly on Ctrl-C */
 static volatile int die = 0;
@@ -209,7 +212,9 @@ int main( int argc, char ** argv )
     /* Init libhb */
     h = hb_init( debug, update );
     hb_dvd_set_dvdnav( dvdnav );
-
+#ifdef USE_OPENCL
+    hb_get_opencl_env();
+#endif
     /* Show version */
     fprintf( stderr, "%s - %s - %s\n",
              HB_PROJECT_TITLE, HB_PROJECT_BUILD_TITLE, HB_PROJECT_URL_WEBSITE );
@@ -250,6 +255,7 @@ int main( int argc, char ** argv )
         titleindex = 0;
     }
 
+    hb_set_gui_info(&hb_gui, use_uvd, use_opencl, titleindex);
     hb_scan( h, input, titleindex, preview_count, store_previews, min_title_duration * 90000LL );
 
     /* Wait... */
@@ -422,6 +428,10 @@ static void PrintTitleInfo( hb_title_t * title, int feature )
              (float) title->rate / title->rate_base );
     fprintf( stderr, "  + autocrop: %d/%d/%d/%d\n", title->crop[0],
              title->crop[1], title->crop[2], title->crop[3] );
+
+    fprintf( stderr, "  + support opencl: %d \n", title->opencl_support);
+    fprintf( stderr, "  + support uvd: %d\n", title->uvd_support);
+
     fprintf( stderr, "  + chapters:\n" );
     for( i = 0; i < hb_list_count( title->list_chapter ); i++ )
     {
@@ -1388,6 +1398,10 @@ static int HandleEvents( hb_handle_t * h )
                 job->maxWidth = maxWidth;
             if (maxHeight)
                 job->maxHeight = maxHeight;
+            if (use_uvd)
+            {
+                job->use_uvd = use_uvd;
+            }
 
             switch( anamorphic_mode )
             {
@@ -1560,7 +1574,13 @@ static int HandleEvents( hb_handle_t * h )
             filter_str = hb_strdup_printf("%d:%d:%d:%d:%d:%d",
                 job->width, job->height, 
                 job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
-            filter = hb_filter_init( HB_FILTER_CROP_SCALE );
+
+#ifdef USE_OPENCL
+            if ( use_opencl )
+                filter = hb_filter_init( HB_FILTER_CROP_SCALE_ACCL );
+            else
+#endif                    
+                filter = hb_filter_init( HB_FILTER_CROP_SCALE );
             hb_add_filter( job, filter, filter_str );
             free( filter_str );
 
@@ -2485,7 +2505,11 @@ static int HandleEvents( hb_handle_t * h )
                 job->frame_to_start = start_at_frame;
                 subtitle_scan = 0;
             }
-            
+#ifdef USE_OPENCL 
+            job->use_opencl = use_opencl;
+#else
+            job->use_opencl = 0;
+#endif            
             if( subtitle_scan )
             {
                 /*
@@ -2662,6 +2686,7 @@ static void ShowHelp()
     "    -z, --preset-list       See a list of available built-in presets\n"
     "        --no-dvdnav         Do not use dvdnav for reading DVDs\n"
     "                            (experimental, enabled by default for testing)\n"
+    "    --no-opencl             Disable use of OpenCL\n"
     "\n"
 
     "### Source Options-----------------------------------------------------------\n\n"
@@ -2695,6 +2720,8 @@ static void ShowHelp()
     "                            4 GB. Note: Breaks iPod, PS3 compatibility.\n"""
     "    -O, --optimize          Optimize mp4 files for HTTP streaming\n"
     "    -I, --ipod-atom         Mark mp4 files so 5.5G iPods will accept them\n"
+    "    -P, --opencl-support    Use OpenCL\n"
+    "    -U, --UVD-support       Use UVD hardware\n"
     "\n"
 
 
@@ -3188,7 +3215,8 @@ static int ParseOptions( int argc, char ** argv )
     #define X264_PRESET         284
     #define X264_TUNE           285
     #define H264_LEVEL          286
-    #define NORMALIZE_MIX       287
+	#define NO_OPENCL           287
+    #define NORMALIZE_MIX       288
     
     for( ;; )
     {
@@ -3197,14 +3225,17 @@ static int ParseOptions( int argc, char ** argv )
             { "help",        no_argument,       NULL,    'h' },
             { "update",      no_argument,       NULL,    'u' },
             { "verbose",     optional_argument, NULL,    'v' },
-            { "no-dvdnav",      no_argument,       NULL,    DVDNAV },
-
+            { "no-dvdnav",   no_argument,       NULL,    DVDNAV },
+            { "no-opencl",   no_argument,       NULL,    NO_OPENCL },
+            
             { "format",      required_argument, NULL,    'f' },
             { "input",       required_argument, NULL,    'i' },
             { "output",      required_argument, NULL,    'o' },
             { "large-file",  no_argument,       NULL,    '4' },
             { "optimize",    no_argument,       NULL,    'O' },
             { "ipod-atom",   no_argument,       NULL,    'I' },
+            { "use-opencl",  no_argument,       NULL,    'P' },
+            { "use-uvd",     no_argument,       NULL,    'U' },
 
             { "title",       required_argument, NULL,    't' },
             { "min-duration",required_argument, NULL,    MIN_DURATION },
@@ -3293,7 +3324,7 @@ static int ParseOptions( int argc, char ** argv )
 
         cur_optind = optind;
         c = getopt_long( argc, argv,
-                         "hv::uC:f:4i:Io:t:c:m::M:a:A:6:s:UF::N:e:E:Q:C:"
+                         "hv::uC:f:4i:Io:PUt:c:m::M:a:A:6:s:F::N:e:E:Q:C:"
                          "2dD:7895gOw:l:n:b:q:S:B:r:R:x:TY:X:Z:z",
                          long_options, &option_index );
         if( c < 0 )
@@ -3364,6 +3395,12 @@ static int ParseOptions( int argc, char ** argv )
             case 'I':
                 ipod_atom = 1;
                 break;
+            case 'P':
+                use_opencl = 1;
+                break;
+            case 'U':
+                use_uvd = 1;
+                break;
 
             case 't':
                 titleindex = atoi( optarg );
@@ -3395,6 +3432,9 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 break;
             }
+            case NO_OPENCL:
+                use_opencl = 0;
+                break;
             case ANGLE:
                 angle = atoi( optarg );
                 break;

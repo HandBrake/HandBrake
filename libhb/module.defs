@@ -37,8 +37,12 @@ LIBHB.out += $(LIBHB.a)
 ifeq (1,$(FEATURE.ff.mpeg2))
 LIBHB.GCC.D += USE_FF_MPEG2
 endif
+ifeq (1,$(FEATURE.opencl))
+LIBHB.GCC.D += USE_OPENCL
+endif
 LIBHB.GCC.D += __LIBHB__ USE_PTHREAD
 LIBHB.GCC.I += $(LIBHB.build/) $(CONTRIB.build/)include
+LIBHB.GCC.I += $(AMDAPPSDKROOT)/include
 
 ifeq ($(BUILD.system),cygwin)
     LIBHB.GCC.D += SYS_CYGWIN
@@ -130,6 +134,9 @@ LIBHB.GCC.args.extra.dylib++ += -Wl,--out-implib,$(LIBHB.lib)
 LIBHB.GCC.l += ws2_32
 ifeq ($(HAS.dlfcn),1)
     LIBHB.GCC.l += dl
+endif
+ifeq (1,$(FEATURE.opencl))
+    LIBHB.GCC.l += OpenCL
 endif
 LIBHB.out += $(LIBHB.dll) $(LIBHB.lib)
 

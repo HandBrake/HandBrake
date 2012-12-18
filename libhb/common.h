@@ -20,7 +20,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
-
+#ifdef USE_OPENCL
+#include <CL/cl.h>
+#endif
 /*
  * It seems WinXP doesn't align the stack of new threads to 16 bytes.
  * To prevent crashes in SSE functions, we need to force stack alignement
@@ -92,6 +94,7 @@ typedef struct hb_filter_object_s  hb_filter_object_t;
 typedef struct hb_buffer_s hb_buffer_t;
 typedef struct hb_fifo_s hb_fifo_t;
 typedef struct hb_lock_s hb_lock_t;
+typedef struct hb_gui_s hb_gui_t;
 
 #include "ports.h"
 #ifdef __LIBHB__
@@ -140,6 +143,16 @@ int hb_subtitle_can_burn( int source );
 int hb_subtitle_can_pass( int source, int mux );
 
 hb_attachment_t *hb_attachment_copy(const hb_attachment_t *src);
+int hb_get_gui_info(hb_gui_t *gui, int option);
+void hb_set_gui_info(hb_gui_t *gui, int uvd, int opencl, int titlescan);
+struct hb_gui_s
+{
+    int use_uvd;
+    int use_opencl;
+    int title_scan;
+};
+hb_gui_t hb_gui;
+
 hb_list_t *hb_attachment_list_copy(const hb_list_t *src);
 void hb_attachment_close(hb_attachment_t **attachment);
 
@@ -418,6 +431,8 @@ struct hb_job_s
     uint32_t        frames_to_skip;     // decode but discard this many frames
                                         //  initially (for frame accurate positioning
                                         //  to non-I frames).
+    int use_opencl;/* 0 is disable use of opencl. 1 is enable use of opencl */
+    int use_uvd;
 
 #ifdef __LIBHB__
     /* Internal data */
@@ -760,6 +775,8 @@ struct hb_title_s
 
     uint32_t    flags;
                 // set if video stream doesn't have IDR frames
+    int         opencl_support;
+    int         uvd_support;
 #define         HBTF_NO_IDR (1 << 0)
 #define         HBTF_SCAN_COMPLETE (1 << 0)
 };
@@ -923,12 +940,67 @@ extern hb_work_object_t hb_encca_aac;
 extern hb_work_object_t hb_encca_haac;
 extern hb_work_object_t hb_encavcodeca;
 extern hb_work_object_t hb_reader;
+extern hb_work_object_t hb_decavcodecv_accl;
 
 #define HB_FILTER_OK      0
 #define HB_FILTER_DELAY   1
 #define HB_FILTER_FAILED  2
 #define HB_FILTER_DROP    3
 #define HB_FILTER_DONE    4
+
+typedef struct hb_oclscale_s
+{
+#ifdef USE_OPENCL
+    // input buffer for running horizontal kernel. output buffer of running horizontal kernel. outpuf buffer of running vertiacla kernel
+    cl_mem h_in_buf;
+    cl_mem h_out_buf;
+    cl_mem v_out_buf;
+    // horizontal coefficent buffer for Y U and V plane, hroizontal source index for Y,U and V plane
+    cl_mem h_coeff_y;
+    cl_mem h_coeff_uv;
+    cl_mem h_index_y;
+    cl_mem h_index_uv;
+    // vertical coefficent buffer for Y U and V plane, vertical source index for Y,U and V plane
+    cl_mem v_coeff_y; 
+    cl_mem v_coeff_uv;
+    cl_mem v_index_y;
+    cl_mem v_index_uv;
+    // horizontal scaling and vertical scaling kernel handle
+    cl_kernel h_kernel;
+    cl_kernel v_kernel;
+    int use_ocl_mem; // 0 use host memory. 1 use gpu oclmem
+#endif        
+} hb_oclscale_t;
+
+#ifdef USE_OPENCL
+int hb_ocl_scale( cl_mem in_buf, uint8_t *in_data, uint8_t *out_data, int in_w, int in_h, int out_w, int out_h, hb_oclscale_t  *os );
+int TestGPU();
+#endif
+
+#ifdef USE_OPENCL
+int hb_use_dxva( hb_title_t * title );
+// create opencl buffer
+#define CREATEBUF( out, flags, size )\
+    {\
+        out = clCreateBuffer( kenv->context, (flags), (size), NULL, &status );\
+        if( CL_SUCCESS != status ) return -1;\
+    }
+
+#define OCLCHECK( method, ... )\
+    status = method( __VA_ARGS__ ); if( status != CL_SUCCESS ) {\
+        printf( # method " error '%d'\n", status ); return status; }
+
+#define CL_FREE( buf )\
+{\
+    if( buf )\
+    {\
+        { clReleaseMemObject( buf ); }\
+        buf = NULL;\
+    }\
+}
+
+
+#endif
 
 typedef struct hb_filter_init_s
 {
@@ -944,6 +1016,12 @@ typedef struct hb_filter_init_s
     int           pfr_vrate_base;
     int           pfr_vrate;
     int           cfr;
+#ifdef USE_OPENCL
+ 	int           use_dxva;
+	int           title_width;
+	int           title_height;
+#endif    
+
 } hb_filter_init_t;
 
 typedef struct hb_filter_info_s
@@ -998,6 +1076,9 @@ enum
     HB_FILTER_DENOISE,
     HB_FILTER_RENDER_SUB,
     HB_FILTER_CROP_SCALE,
+#ifdef USE_OPENCL    
+    HB_FILTER_CROP_SCALE_ACCL,
+#endif    
     // Finally filters that don't care what order they are in,
     // except that they must be after the above filters
     HB_FILTER_ROTATE,

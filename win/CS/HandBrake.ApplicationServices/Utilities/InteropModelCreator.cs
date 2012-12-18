@@ -101,6 +101,8 @@ namespace HandBrake.ApplicationServices.Utilities
             profile.Grayscale = work.Grayscale;
             profile.Height = work.Height.HasValue ? work.Height.Value : 0;
             profile.IPod5GSupport = work.IPod5GSupport;
+            profile.OpenCLGSupport = work.OpenCLSupport;
+            profile.UVDSupport = work.UVDSupport;
             profile.IncludeChapterMarkers = work.IncludeChapterMarkers;
             profile.KeepDisplayAspect = work.KeepDisplayAspect;
             profile.LargeFile = work.LargeFile;

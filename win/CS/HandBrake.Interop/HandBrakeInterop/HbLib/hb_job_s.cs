@@ -145,6 +145,12 @@ namespace HandBrake.Interop.HbLib
 		/// int
 		public int ipod_atom;
 
+        /// int
+        public int opencl_support;
+
+        /// int
+        public int uvd_support;
+
 		/// int
 		public int indepth_scan;
 
