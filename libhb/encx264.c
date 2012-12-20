@@ -970,7 +970,7 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
     /*
      * apply the additional x264 options
      */
-    while ((entry = hb_dict_next(x264_opts, entry)))
+    while ((entry = hb_dict_next(x264_opts, entry)) != NULL)
     {
         // let's not pollute GUI logs with x264_param_parse return codes
         x264_param_parse(&param, entry->key, entry->value);
