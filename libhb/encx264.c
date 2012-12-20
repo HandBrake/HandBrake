@@ -946,10 +946,30 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
     }
 
     /*
-     * apply the additional advanced x264 options
+     * place additional x264 options in a dictionary
      */
     entry     = NULL;
     x264_opts = hb_encopts_to_dict(x264_encopts, HB_VCODEC_X264);
+
+    /*
+     * some libx264 options are set via dedicated widgets in the video tab or
+     * hardcoded in libhb, and have no effect when present in the advanced x264
+     * options string.
+     *
+     * clear them from x264_opts so as to not apply then during unparse.
+     */
+    hb_dict_unset(&x264_opts, "qp");
+    hb_dict_unset(&x264_opts, "qp_constant");
+    hb_dict_unset(&x264_opts, "crf");
+    hb_dict_unset(&x264_opts, "bitrate");
+    hb_dict_unset(&x264_opts, "fps");
+    hb_dict_unset(&x264_opts, "force-cfr");
+    hb_dict_unset(&x264_opts, "sar");
+    hb_dict_unset(&x264_opts, "annexb");
+
+    /*
+     * apply the additional x264 options
+     */
     while ((entry = hb_dict_next(x264_opts, entry)))
     {
         // let's not pollute GUI logs with x264_param_parse return codes
