@@ -67,4 +67,4 @@ int hb_check_h264_level(const char *h264_level, int width, int height,
  * Based on a x264_param_apply_level() draft and other x264 code.
  */
 int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
-                        const char *x264_profile, int be_quiet);
+                        const char *x264_profile, int verbose);
