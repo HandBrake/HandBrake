@@ -1249,134 +1249,137 @@ static int MP4End( hb_mux_object_t * m )
 {
     hb_job_t   * job   = m->job;
 
-    // Flush the delayed frame
-    if ( m->delay_buf )
-        MP4Mux( m, job->mux_data, NULL );
-
-    /* Write our final chapter marker */
-    if( m->job->chapter_markers )
+    if (m->file != MP4_INVALID_FILE_HANDLE)
     {
-        hb_chapter_t *chapter = NULL;
-        int64_t duration = m->sum_dur - m->chapter_duration;
-        /* The final chapter can have a very short duration - if it's less
-         * than 1.5 seconds just skip it. */
-        if ( duration >= (90000*3)/2 )
+        // Flush the delayed frame
+        if ( m->delay_buf )
+            MP4Mux( m, job->mux_data, NULL );
+
+        /* Write our final chapter marker */
+        if( m->job->chapter_markers )
         {
-
-            chapter = hb_list_item( m->job->list_chapter,
-                                    m->current_chapter - 1 );
-
-            MP4AddChapter( m->file,
-                           m->chapter_track,
-                           duration,
-                           (chapter != NULL) ? chapter->title : NULL);
-        }
-    }
-
-    if ( job->config.h264.init_delay )
-    {
-           // Insert track edit to get A/V back in sync.  The edit amount is
-           // the init_delay.
-           int64_t edit_amt = job->config.h264.init_delay;
-           MP4AddTrackEdit(m->file, 1, MP4_INVALID_EDIT_ID, edit_amt,
-                           MP4GetTrackDuration(m->file, 1), 0);
-            if ( m->job->chapter_markers )
+            hb_chapter_t *chapter = NULL;
+            int64_t duration = m->sum_dur - m->chapter_duration;
+            /* The final chapter can have a very short duration - if it's less
+             * than 1.5 seconds just skip it. */
+            if ( duration >= (90000*3)/2 )
             {
-                // apply same edit to chapter track to keep it in sync with video
-                MP4AddTrackEdit(m->file, m->chapter_track, MP4_INVALID_EDIT_ID,
-                                edit_amt,
-                                MP4GetTrackDuration(m->file, m->chapter_track), 0);
+
+                chapter = hb_list_item( m->job->list_chapter,
+                                        m->current_chapter - 1 );
+
+                MP4AddChapter( m->file,
+                               m->chapter_track,
+                               duration,
+                               (chapter != NULL) ? chapter->title : NULL);
             }
-     }
+        }
 
-    /*
-     * Write the MP4 iTunes metadata if we have any metadata
-     */
-    if( job->metadata )
-    {
-        hb_metadata_t *md = job->metadata;
-        const MP4Tags* tags;
-
-        hb_deep_log( 2, "Writing Metadata to output file...");
-
-        /* allocate tags structure */
-        tags = MP4TagsAlloc();
-        /* fetch data from MP4 file (in case it already has some data) */
-        MP4TagsFetch( tags, m->file );
-
-        /* populate */
-        if( md->name )
-            MP4TagsSetName( tags, md->name );
-        if( md->artist )
-            MP4TagsSetArtist( tags, md->artist );
-        if( md->composer )
-            MP4TagsSetComposer( tags, md->composer );
-        if( md->comment )
-            MP4TagsSetComments( tags, md->comment );
-        if( md->release_date )
-            MP4TagsSetReleaseDate( tags, md->release_date );
-        if( md->album )
-            MP4TagsSetAlbum( tags, md->album );
-        if( md->album_artist )
-            MP4TagsSetAlbumArtist( tags, md->album_artist );
-        if( md->genre )
-            MP4TagsSetGenre( tags, md->genre );
-        if( md->description )
-            MP4TagsSetDescription( tags, md->description );
-        if( md->long_description )
-            MP4TagsSetLongDescription( tags, md->long_description );
-
-        if( md->list_coverart )
+        if ( job->config.h264.init_delay )
         {
-            hb_coverart_t * coverart;
-            int ii;
-
-            for ( ii = 0; ii < hb_list_count( md->list_coverart ); ii++ )
-            {
-                coverart = hb_list_item( md->list_coverart, ii );
-                MP4TagArtwork art;
-                int type;
-                switch ( coverart->type )
+               // Insert track edit to get A/V back in sync.  The edit amount is
+               // the init_delay.
+               int64_t edit_amt = job->config.h264.init_delay;
+               MP4AddTrackEdit(m->file, 1, MP4_INVALID_EDIT_ID, edit_amt,
+                               MP4GetTrackDuration(m->file, 1), 0);
+                if ( m->job->chapter_markers )
                 {
-                    case HB_ART_BMP:
-                        type = MP4_ART_BMP;
-                        break;
-                    case HB_ART_GIF:
-                        type = MP4_ART_GIF;
-                        break;
-                    case HB_ART_JPEG:
-                        type = MP4_ART_JPEG;
-                        break;
-                    case HB_ART_PNG:
-                        type = MP4_ART_PNG;
-                        break;
-                    default:
-                        type = MP4_ART_UNDEFINED;
-                        break;
+                    // apply same edit to chapter track to keep it in sync with video
+                    MP4AddTrackEdit(m->file, m->chapter_track, MP4_INVALID_EDIT_ID,
+                                    edit_amt,
+                                    MP4GetTrackDuration(m->file, m->chapter_track), 0);
                 }
-                art.data = coverart->data;
-                art.size = coverart->size;
-                art.type = type;
-                MP4TagsAddArtwork( tags, &art );
+         }
+
+        /*
+         * Write the MP4 iTunes metadata if we have any metadata
+         */
+        if( job->metadata )
+        {
+            hb_metadata_t *md = job->metadata;
+            const MP4Tags* tags;
+
+            hb_deep_log( 2, "Writing Metadata to output file...");
+
+            /* allocate tags structure */
+            tags = MP4TagsAlloc();
+            /* fetch data from MP4 file (in case it already has some data) */
+            MP4TagsFetch( tags, m->file );
+
+            /* populate */
+            if( md->name )
+                MP4TagsSetName( tags, md->name );
+            if( md->artist )
+                MP4TagsSetArtist( tags, md->artist );
+            if( md->composer )
+                MP4TagsSetComposer( tags, md->composer );
+            if( md->comment )
+                MP4TagsSetComments( tags, md->comment );
+            if( md->release_date )
+                MP4TagsSetReleaseDate( tags, md->release_date );
+            if( md->album )
+                MP4TagsSetAlbum( tags, md->album );
+            if( md->album_artist )
+                MP4TagsSetAlbumArtist( tags, md->album_artist );
+            if( md->genre )
+                MP4TagsSetGenre( tags, md->genre );
+            if( md->description )
+                MP4TagsSetDescription( tags, md->description );
+            if( md->long_description )
+                MP4TagsSetLongDescription( tags, md->long_description );
+
+            if( md->list_coverart )
+            {
+                hb_coverart_t * coverart;
+                int ii;
+
+                for ( ii = 0; ii < hb_list_count( md->list_coverart ); ii++ )
+                {
+                    coverart = hb_list_item( md->list_coverart, ii );
+                    MP4TagArtwork art;
+                    int type;
+                    switch ( coverart->type )
+                    {
+                        case HB_ART_BMP:
+                            type = MP4_ART_BMP;
+                            break;
+                        case HB_ART_GIF:
+                            type = MP4_ART_GIF;
+                            break;
+                        case HB_ART_JPEG:
+                            type = MP4_ART_JPEG;
+                            break;
+                        case HB_ART_PNG:
+                            type = MP4_ART_PNG;
+                            break;
+                        default:
+                            type = MP4_ART_UNDEFINED;
+                            break;
+                    }
+                    art.data = coverart->data;
+                    art.size = coverart->size;
+                    art.type = type;
+                    MP4TagsAddArtwork( tags, &art );
+                }
             }
+
+            /* push data to MP4 file */
+            MP4TagsStore( tags, m->file );
+            /* free memory associated with structure */
+            MP4TagsFree( tags );
         }
 
-        /* push data to MP4 file */
-        MP4TagsStore( tags, m->file );
-        /* free memory associated with structure */
-        MP4TagsFree( tags );
-    }
+        MP4Close( m->file );
 
-    MP4Close( m->file );
-
-    if ( job->mp4_optimize )
-    {
-        hb_log( "muxmp4: optimizing file" );
-        char filename[1024]; memset( filename, 0, 1024 );
-        snprintf( filename, 1024, "%s.tmp", job->file );
-        MP4Optimize( job->file, filename, MP4_DETAILS_ERROR );
-        remove( job->file );
-        rename( filename, job->file );
+        if ( job->mp4_optimize )
+        {
+            hb_log( "muxmp4: optimizing file" );
+            char filename[1024]; memset( filename, 0, 1024 );
+            snprintf( filename, 1024, "%s.tmp", job->file );
+            MP4Optimize( job->file, filename, MP4_DETAILS_ERROR );
+            remove( job->file );
+            rename( filename, job->file );
+        }
     }
 
     return 0;
