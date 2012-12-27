@@ -21,8 +21,8 @@
 
 typedef struct
 {
-	guchar *data;
-	gsize size;
+    guchar *data;
+    gsize size;
 } ghb_rawdata_t;
 
 GType ghb_rawdata_get_type(void);

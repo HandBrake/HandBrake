@@ -17,12 +17,12 @@ static void     custom_cell_renderer_button_finalize (GObject *gobject);
 // My customized part that adds "clicked" signal
 static gboolean
 custom_cell_renderer_button_activate (GtkCellRenderer      *cell,
-				   GdkEvent             *event,
-				   GtkWidget            *widget,
-				   const gchar          *path,
-				   GdkRectangle   *background_area,
-				   GdkRectangle   *cell_area,
-				   GtkCellRendererState  flags);
+                   GdkEvent             *event,
+                   GtkWidget            *widget,
+                   const gchar          *path,
+                   GdkRectangle   *background_area,
+                   GdkRectangle   *cell_area,
+                   GtkCellRendererState  flags);
 
 enum {
   CLICKED,
@@ -44,31 +44,31 @@ static   gpointer parent_class;
 GType
 custom_cell_renderer_button_get_type (void)
 {
-	static GType cell_button_type = 0;
+    static GType cell_button_type = 0;
 
-	if (cell_button_type == 0)
-	{
-		static const GTypeInfo cell_button_info =
-		{
-			sizeof (CustomCellRendererButtonClass),
-			NULL,                                                     /* base_init */
-			NULL,                                                     /* base_finalize */
-			(GClassInitFunc) custom_cell_renderer_button_class_init,
-			NULL,                                                     /* class_finalize */
-			NULL,                                                     /* class_data */
-			sizeof (CustomCellRendererButton),
-			0,                                                        /* n_preallocs */
-			(GInstanceInitFunc) custom_cell_renderer_button_init,
-		};
+    if (cell_button_type == 0)
+    {
+        static const GTypeInfo cell_button_info =
+        {
+            sizeof (CustomCellRendererButtonClass),
+            NULL,                                                     /* base_init */
+            NULL,                                                     /* base_finalize */
+            (GClassInitFunc) custom_cell_renderer_button_class_init,
+            NULL,                                                     /* class_finalize */
+            NULL,                                                     /* class_data */
+            sizeof (CustomCellRendererButton),
+            0,                                                        /* n_preallocs */
+            (GInstanceInitFunc) custom_cell_renderer_button_init,
+        };
 
-		/* Derive from GtkCellRendererPixbuf */
-		cell_button_type = g_type_register_static (GTK_TYPE_CELL_RENDERER_PIXBUF,
-													 "CustomCellRendererButton",
-													  &cell_button_info,
-													  0);
-	}
+        /* Derive from GtkCellRendererPixbuf */
+        cell_button_type = g_type_register_static (GTK_TYPE_CELL_RENDERER_PIXBUF,
+                                                     "CustomCellRendererButton",
+                                                      &cell_button_info,
+                                                      0);
+    }
 
-	return cell_button_type;
+    return cell_button_type;
 }
 
 /***************************************************************************
@@ -80,9 +80,9 @@ custom_cell_renderer_button_get_type (void)
 static void
 custom_cell_renderer_button_init (CustomCellRendererButton *cellbutton)
 {
-	g_object_set(cellbutton, "mode", GTK_CELL_RENDERER_MODE_ACTIVATABLE, NULL);
-	g_object_set(cellbutton, "xpad", 2, NULL);
-	g_object_set(cellbutton, "ypad", 2, NULL);
+    g_object_set(cellbutton, "mode", GTK_CELL_RENDERER_MODE_ACTIVATABLE, NULL);
+    g_object_set(cellbutton, "xpad", 2, NULL);
+    g_object_set(cellbutton, "ypad", 2, NULL);
 }
 
 /***************************************************************************
@@ -99,29 +99,29 @@ custom_cell_renderer_button_init (CustomCellRendererButton *cellbutton)
 static void
 custom_cell_renderer_button_class_init (CustomCellRendererButtonClass *klass)
 {
-	GtkCellRendererClass *cell_class   = GTK_CELL_RENDERER_CLASS(klass);
-	GObjectClass         *object_class = G_OBJECT_CLASS(klass);
+    GtkCellRendererClass *cell_class   = GTK_CELL_RENDERER_CLASS(klass);
+    GObjectClass         *object_class = G_OBJECT_CLASS(klass);
 
-	parent_class           = g_type_class_peek_parent (klass);
-	object_class->finalize = custom_cell_renderer_button_finalize;
+    parent_class           = g_type_class_peek_parent (klass);
+    object_class->finalize = custom_cell_renderer_button_finalize;
 
-	/* Hook up functions to set and get our
-	 *   custom cell renderer properties */
-	object_class->get_property = custom_cell_renderer_button_get_property;
-	object_class->set_property = custom_cell_renderer_button_set_property;
+    /* Hook up functions to set and get our
+     *   custom cell renderer properties */
+    object_class->get_property = custom_cell_renderer_button_get_property;
+    object_class->set_property = custom_cell_renderer_button_set_property;
 
-	// Override activate
-	cell_class->activate = custom_cell_renderer_button_activate;
+    // Override activate
+    cell_class->activate = custom_cell_renderer_button_activate;
 
-	button_cell_signals[CLICKED] =
-		g_signal_new (g_intern_static_string ("clicked"),
-			  G_OBJECT_CLASS_TYPE (object_class),
-			  G_SIGNAL_RUN_LAST,
-			  G_STRUCT_OFFSET (CustomCellRendererButtonClass, clicked),
-			  NULL, NULL,
-			  ghb_marshal_VOID__STRING,
-			  G_TYPE_NONE, 1,
-			  G_TYPE_STRING);
+    button_cell_signals[CLICKED] =
+        g_signal_new (g_intern_static_string ("clicked"),
+              G_OBJECT_CLASS_TYPE (object_class),
+              G_SIGNAL_RUN_LAST,
+              G_STRUCT_OFFSET (CustomCellRendererButtonClass, clicked),
+              NULL, NULL,
+              ghb_marshal_VOID__STRING,
+              G_TYPE_NONE, 1,
+              G_TYPE_STRING);
 }
 
 /***************************************************************************
@@ -132,14 +132,14 @@ custom_cell_renderer_button_class_init (CustomCellRendererButtonClass *klass)
 static void
 custom_cell_renderer_button_finalize (GObject *object)
 {
-	/*
-	If you need to do anyting with the renderer button ...
-	CustomCellRendererProgress *cellrendererbutton = CUSTOM_CELL_RENDERER_BUTTON(object);
-	*/
+    /*
+    If you need to do anyting with the renderer button ...
+    CustomCellRendererProgress *cellrendererbutton = CUSTOM_CELL_RENDERER_BUTTON(object);
+    */
 
-	/* Free any dynamically allocated resources here */
+    /* Free any dynamically allocated resources here */
 
-	(* G_OBJECT_CLASS (parent_class)->finalize) (object);
+    (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 /***************************************************************************
@@ -153,14 +153,14 @@ custom_cell_renderer_button_get_property (GObject    *object,
                                           GValue     *value,
                                           GParamSpec *psec)
 {
-	//CustomCellRendererButton  *cellbutton = CUSTOM_CELL_RENDERER_BUTTON(object);
+    //CustomCellRendererButton  *cellbutton = CUSTOM_CELL_RENDERER_BUTTON(object);
 
-	switch (param_id)
-	{
-		default:
-			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, psec);
-			break;
-	}
+    switch (param_id)
+    {
+        default:
+            G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, psec);
+            break;
+    }
 }
 
 /***************************************************************************
@@ -174,14 +174,14 @@ custom_cell_renderer_button_set_property (GObject      *object,
                                           const GValue *value,
                                           GParamSpec   *pspec)
 {
-	//CustomCellRendererButton *cellbutton = CUSTOM_CELL_RENDERER_BUTTON(object);
+    //CustomCellRendererButton *cellbutton = CUSTOM_CELL_RENDERER_BUTTON(object);
 
-	switch (param_id)
-	{
-		default:
-			G_OBJECT_WARN_INVALID_PROPERTY_ID(object, param_id, pspec);
-			break;
-	}
+    switch (param_id)
+    {
+        default:
+            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, param_id, pspec);
+            break;
+    }
 }
 
 /***************************************************************************
@@ -192,19 +192,19 @@ custom_cell_renderer_button_set_property (GObject      *object,
 GtkCellRenderer *
 custom_cell_renderer_button_new (void)
 {
-	return g_object_new(CUSTOM_TYPE_CELL_RENDERER_BUTTON, NULL);
+    return g_object_new(CUSTOM_TYPE_CELL_RENDERER_BUTTON, NULL);
 }
 
 static gboolean
 custom_cell_renderer_button_activate (GtkCellRenderer      *cell,
-				   GdkEvent             *event,
-				   GtkWidget            *widget,
-				   const gchar          *path,
-				   GdkRectangle   *background_area,
-				   GdkRectangle   *cell_area,
-				   GtkCellRendererState  flags)
+                   GdkEvent             *event,
+                   GtkWidget            *widget,
+                   const gchar          *path,
+                   GdkRectangle   *background_area,
+                   GdkRectangle   *cell_area,
+                   GtkCellRendererState  flags)
 {
-	g_debug("custom_cell_renderer_button_activate ()\n");
-	g_signal_emit (cell, button_cell_signals[CLICKED], 0, path);
-	return TRUE;
+    g_debug("custom_cell_renderer_button_activate ()\n");
+    g_signal_emit (cell, button_cell_signals[CLICKED], 0, path);
+    return TRUE;
 }

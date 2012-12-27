@@ -21,79 +21,79 @@
 #include <libappindicator/app-indicator.h>
 #endif
 
-#define GHB_WIDGET(b,n)	GTK_WIDGET(gtk_builder_get_object ((b), (n)))
-//#define GHB_WIDGET(b,n)	GTK_WIDGET(debug_get_object((b), (n)))
-#define GHB_ACTION(b,n)	GTK_ACTION(gtk_builder_get_object ((b), (n)))
-#define GHB_OBJECT(b,n)	gtk_builder_get_object ((b), (n))
+#define GHB_WIDGET(b,n) GTK_WIDGET(gtk_builder_get_object ((b), (n)))
+//#define GHB_WIDGET(b,n)   GTK_WIDGET(debug_get_object((b), (n)))
+#define GHB_ACTION(b,n) GTK_ACTION(gtk_builder_get_object ((b), (n)))
+#define GHB_OBJECT(b,n) gtk_builder_get_object ((b), (n))
 
 GObject* debug_get_object(GtkBuilder *b, const gchar *n);
 
 enum
 {
-	GHB_STATE_IDLE 		= 0x00,
-	GHB_STATE_SCANNING 	= 0x02,
-	GHB_STATE_SCANDONE 	= 0x04,
-	GHB_STATE_WORKING 	= 0x08,
-	GHB_STATE_WORKDONE 	= 0x10,
-	GHB_STATE_PAUSED 	= 0x20,
-	GHB_STATE_MUXING 	= 0x40,
-	GHB_STATE_SEARCHING	= 0x80,
+    GHB_STATE_IDLE      = 0x00,
+    GHB_STATE_SCANNING  = 0x02,
+    GHB_STATE_SCANDONE  = 0x04,
+    GHB_STATE_WORKING   = 0x08,
+    GHB_STATE_WORKDONE  = 0x10,
+    GHB_STATE_PAUSED    = 0x20,
+    GHB_STATE_MUXING    = 0x40,
+    GHB_STATE_SEARCHING = 0x80,
 };
 
 enum
 {
-	GHB_CANCEL_NONE,
-	GHB_CANCEL_ALL,
-	GHB_CANCEL_CURRENT,
-	GHB_CANCEL_FINISH
+    GHB_CANCEL_NONE,
+    GHB_CANCEL_ALL,
+    GHB_CANCEL_CURRENT,
+    GHB_CANCEL_FINISH
 };
 
 typedef struct preview_s preview_t;
 
 typedef struct
 {
-	gchar *current_dvd_device;
-	gboolean debug;
-	gboolean dont_clear_presets;
-	gboolean scale_busy;
-	gint cancel_encode;
-	GtkBuilder *builder;
-	GValue *settings;
-	GValue *queue;
-	GValue *current_job;
-	GIOChannel *activity_log;
-	GIOChannel *job_activity_log;
-	preview_t *preview;
-	gchar *appcast;
-	gint appcast_len;
-	GdkVisibilityState hb_visibility;
+    gchar *current_dvd_device;
+    gboolean debug;
+    gboolean dont_clear_presets;
+    gboolean scale_busy;
+    gint cancel_encode;
+    GtkBuilder *builder;
+    GValue *settings;
+    GValue *queue;
+    GValue *current_job;
+    GIOChannel *activity_log;
+    GIOChannel *job_activity_log;
+    preview_t *preview;
+    gchar *appcast;
+    gint appcast_len;
+    GdkVisibilityState hb_visibility;
 #if defined(_USE_APP_IND)
-	AppIndicator *ai;
+    AppIndicator *ai;
 #endif
 } signal_user_data_t;
 
 enum
 {
-	GHB_QUEUE_PENDING,
-	GHB_QUEUE_RUNNING,
-	GHB_QUEUE_CANCELED,
-	GHB_QUEUE_DONE,
+    GHB_QUEUE_PENDING,
+    GHB_QUEUE_RUNNING,
+    GHB_QUEUE_CANCELED,
+    GHB_QUEUE_DONE,
 };
 
 GValue* ghb_settings_new(void);
 void ghb_settings_take_value(
-	GValue *settings, const gchar *key, GValue *value);
+    GValue *settings, const gchar *key, GValue *value);
 void ghb_settings_set_value(
-	GValue *settings, const gchar *key, const GValue *value);
+    GValue *settings, const gchar *key, const GValue *value);
 void ghb_settings_set_string(
-	GValue *settings, const gchar *key, const gchar *sval);
+    GValue *settings, const gchar *key, const gchar *sval);
 void ghb_settings_set_double(GValue *settings, const gchar *key, gdouble dval);
 void ghb_settings_set_int64(GValue *settings, const gchar *key, gint64 ival);
 void ghb_settings_set_int(GValue *settings, const gchar *key, gint ival);
 void ghb_settings_set_boolean(
-	GValue *settings, const gchar *key, gboolean bval);
+    GValue *settings, const gchar *key, gboolean bval);
 void ghb_settings_copy(
-	GValue *settings, const gchar *key, const GValue *value);
+    GValue *settings, const gchar *key, const GValue *value);
 GValue* ghb_settings_get_value(const GValue *settings, const gchar *key);
 gboolean ghb_settings_get_boolean(const GValue *settings, const gchar *key);
 gint64 ghb_settings_get_int64(const GValue *settings, const gchar *key);
@@ -114,9 +114,9 @@ gint ghb_widget_boolean(GtkWidget *widget);
 
 void ghb_widget_to_setting(GValue *settings, GtkWidget *widget);
 int ghb_ui_update(
-	signal_user_data_t *ud, const gchar *name, const GValue *value);
+    signal_user_data_t *ud, const gchar *name, const GValue *value);
 int ghb_ui_update_from_settings(
-	GtkBuilder *builder, const gchar *name, const GValue *settings);
+    GtkBuilder *builder, const gchar *name, const GValue *settings);
 const gchar* ghb_get_setting_key(GtkWidget *widget);
 
 #endif // _SETTINGS_H_

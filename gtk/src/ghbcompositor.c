@@ -588,8 +588,8 @@ ghb_compositor_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
     for (link = compositor->children; link != NULL; link = link->next)
     {
         cc = (GhbCompositorChild*)link->data;
-    	if (gtk_widget_get_realized (cc->widget))
-        	gtk_widget_size_allocate (cc->widget, &child_allocation);
+        if (gtk_widget_get_realized (cc->widget))
+            gtk_widget_size_allocate (cc->widget, &child_allocation);
     }
 }
 
