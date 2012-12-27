@@ -29,5 +29,6 @@
 
 void ghb_x264_parse_options(signal_user_data_t *ud, const gchar *options);
 gint ghb_lookup_badapt(const gchar *options);
+void ghb_show_hide_advanced_video( signal_user_data_t *ud );
 
 #endif // _X264HANDLER_H_

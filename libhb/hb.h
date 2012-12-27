@@ -16,6 +16,7 @@ extern "C" {
 
 #include "project.h"
 #include "common.h"
+#include "hb_dict.h"
 
 /* hb_init()
    Initializes a libhb session (launches his own thread, detects CPUs,

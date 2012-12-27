@@ -863,6 +863,24 @@ init_settings_from_dict(
 	}
 }
 
+static const char * dict_get_string(GValue *dict, const char *key)
+{
+    GValue *gval = ghb_dict_lookup(dict, key);
+
+    if (gval == NULL)
+        return NULL;
+    return g_value_get_string(gval);
+}
+
+static gboolean dict_get_boolean(GValue *dict, const char *key)
+{
+    GValue *gval = ghb_dict_lookup(dict, key);
+
+    if (gval == NULL)
+        return FALSE;
+    return g_value_get_boolean(gval);
+}
+
 void
 init_ui_from_dict(
 	signal_user_data_t *ud, 
@@ -879,6 +897,8 @@ init_ui_from_dict(
 	while (g_hash_table_iter_next(
 			&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
 	{
+		if (!strcmp(key, "x264Option"))
+            continue;
 		val = NULL;
 		if (dict)
 			val = ghb_dict_lookup(dict, key);
@@ -886,6 +906,14 @@ init_ui_from_dict(
 			val = gval;
 		ghb_ui_update(ud, key, val);
 	}
+
+    if (ghb_value_boolean(preset_dict_get_value(dict, "x264UseAdvancedOptions")))
+
+    {
+        val = ghb_dict_lookup(dict, "x264Option");
+        if (val != NULL)
+            ghb_ui_update(ud, "x264Option", val);
+    }
 }
 
 static void
@@ -2513,7 +2541,6 @@ import_value_xlat(GValue *dict)
 	if (gval)
 		ghb_dict_insert(dict, g_strdup(key), gval);
 
-
 	GValue *sdeflist;
 	GValue *slist;
 	GValue *sdict;
@@ -2648,6 +2675,7 @@ import_xlat_preset(GValue *dict)
 	gint vqtype;
 
 	g_debug("import_xlat_preset ()");
+
 	uses_max = ghb_value_boolean(
 						preset_dict_get_value(dict, "UsesMaxPictureSettings"));
 	uses_pic = ghb_value_int(
@@ -2793,6 +2821,90 @@ import_xlat_preset(GValue *dict)
 		}
 		g_free(str);
 	}
+
+    const char * const *preset = hb_x264_presets();
+    if (ghb_value_boolean(preset_dict_get_value(dict, "x264UseAdvancedOptions")))
+    {
+        // Force preset/tune/profile/level/opts to conform to option string
+        ghb_dict_insert(dict, g_strdup("x264Preset"),
+                        ghb_string_value_new("medium"));
+        ghb_dict_insert(dict, g_strdup("x264Tune"),
+                        ghb_string_value_new("none"));
+        ghb_dict_insert(dict, g_strdup("h264Profile"),
+                        ghb_string_value_new("auto"));
+        ghb_dict_insert(dict, g_strdup("h264Level"),
+                        ghb_string_value_new("auto"));
+        GValue *opt = ghb_dict_lookup(dict, "x264Option");
+        ghb_dict_insert(dict, g_strdup("x264OptionExtra"),
+                        ghb_value_dup(opt));
+    }
+
+    GValue *x264Preset = ghb_dict_lookup(dict, "x264Preset");
+    if (x264Preset != NULL)
+    {
+        gchar *str;
+        str = ghb_value_string(x264Preset);
+        int ii;
+        for (ii = 0; preset[ii]; ii++)
+        {
+            if (!strcasecmp(str, preset[ii]))
+            {
+                ghb_dict_insert(dict, g_strdup("x264PresetSlider"),
+                                ghb_int_value_new(ii));
+            }
+        }
+        g_free(str);
+    }
+    else
+    {
+        int ii;
+        for (ii = 0; preset[ii]; ii++)
+        {
+            if (!strcasecmp("medium", preset[ii]))
+            {
+                ghb_dict_insert(dict, g_strdup("x264PresetSlider"),
+                                ghb_int_value_new(ii));
+            }
+        }
+    }
+
+    const char *x264Tune = dict_get_string(dict, "x264Tune");
+    if (x264Tune != NULL)
+    {
+        char *tune = NULL;
+        char *tmp = g_strdup(x264Tune);
+        char *saveptr;
+
+        char * tok = strtok_r(tmp, ",./-+", &saveptr);
+        while (tok != NULL)
+        {
+            if (!strcasecmp(tok, "fastdecode"))
+            {
+                ghb_dict_insert(dict, g_strdup("x264FastDecode"),
+                                ghb_boolean_value_new(TRUE));
+            }
+            else if (!strcasecmp(tok, "zerolatency"))
+            {
+                ghb_dict_insert(dict, g_strdup("x264ZeroLatency"),
+                                ghb_boolean_value_new(TRUE));
+            }
+            else if (tune == NULL)
+            {
+                tune = g_strdup(tok);
+            }
+            else
+            {
+                ghb_log("Superfluous tunes! %s", tok);
+            }
+            tok = strtok_r(NULL, ",./-+", &saveptr);
+        }
+        if (tune != NULL)
+        {
+            ghb_dict_insert(dict, g_strdup("x264Tune"),
+                            ghb_string_value_new(tune));
+            g_free(tune);
+        }
+    }
 }
 
 static void
@@ -2889,6 +3001,28 @@ export_xlat_preset(GValue *dict)
 							ghb_double_value_new(0.0));
 		}
 	}
+
+    const char *tune = dict_get_string(dict, "x264Tune");
+    if (tune != NULL)
+    {
+        GString *str = g_string_new("");
+        char *tunes;
+
+        g_string_append_printf(str, "%s", tune);
+        if (dict_get_boolean(dict, "x264FastDecode"))
+        {
+            g_string_append_printf(str, ",%s", "fastdecode");
+        }
+        if (dict_get_boolean(dict, "x264ZeroLatency"))
+        {
+            g_string_append_printf(str, ",%s", "zerolatency");
+        }
+        tunes = g_string_free(str, FALSE);
+        ghb_dict_insert(dict, g_strdup("x264Tune"), 
+                        ghb_string_value_new(tunes));
+
+        g_free(tunes);
+    }
 
 	GValue *internal;
 	GHashTableIter iter;
@@ -3292,6 +3426,7 @@ settings_save(signal_user_data_t *ud, const GValue *path)
 			!ghb_settings_get_boolean( ud->settings, "PictureHeightEnable")
 		)
 	);
+
 	store_presets();
 	ud->dont_clear_presets = TRUE;
 	// Make the new preset the selected item

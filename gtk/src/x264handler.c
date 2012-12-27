@@ -27,6 +27,192 @@ static gchar* sanitize_x264opts(signal_user_data_t *ud, const gchar *options);
 // Flag needed to prevent x264 options processing from chasing its tail
 static gboolean ignore_options_update = FALSE;
 
+void ghb_show_hide_advanced_video( signal_user_data_t *ud )
+{
+    GtkWidget *nb = GHB_WIDGET(ud->builder, "SettingsNotebook");
+    GtkWidget *at = GHB_WIDGET(ud->builder, "advanced_tab");
+
+    int pgn = gtk_notebook_page_num(GTK_NOTEBOOK(nb), at);
+
+    GtkWidget *pg;
+    pg = gtk_notebook_get_nth_page(GTK_NOTEBOOK(nb), pgn);
+    if (ghb_settings_get_boolean(ud->settings, "HideAdvancedVideoSettings"))
+    {
+        gtk_widget_hide(pg);
+        ghb_ui_update(ud, "x264UseAdvancedOptions", ghb_boolean_value(FALSE));
+    }
+    else
+    {
+        gtk_widget_show(pg);
+    }
+}
+
+G_MODULE_EXPORT void
+x264_use_advanced_options_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    ghb_widget_to_setting(ud->settings, widget);
+
+    if (ghb_settings_get_boolean(ud->settings, "HideAdvancedVideoSettings") &&
+        ghb_settings_get_boolean(ud->settings, "x264UseAdvancedOptions"))
+    {
+        ghb_ui_update(ud, "x264UseAdvancedOptions", ghb_boolean_value(FALSE));
+        return;
+    }
+
+    if (ghb_settings_get_boolean(ud->settings, "x264UseAdvancedOptions"))
+    {
+        ghb_ui_update(ud, "x264PresetSlider", ghb_int_value(5));
+        ghb_ui_update(ud, "x264Tune", ghb_string_value("none"));
+        ghb_ui_update(ud, "h264Profile", ghb_string_value("auto"));
+        ghb_ui_update(ud, "h264Level", ghb_string_value("auto"));
+
+        char *options = ghb_settings_get_string(ud->settings, "x264Option");
+        ghb_ui_update(ud, "x264OptionExtra", ghb_string_value(options));
+        g_free(options);
+    }
+
+    ghb_check_dependency(ud, widget, NULL);
+    ghb_clear_presets_selection(ud);
+}
+
+G_MODULE_EXPORT void
+x264_setting_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    static char *tt = NULL;
+
+
+    if (tt == NULL)
+    {
+        GtkWidget *eo = GTK_WIDGET(GHB_WIDGET(ud->builder, "x264OptionExtra"));
+        tt = gtk_widget_get_tooltip_text(eo);
+    }
+
+    ghb_widget_to_setting(ud->settings, widget);
+
+    int x264Preset = ghb_settings_get_int(ud->settings, "x264PresetSlider");
+    const char * preset = hb_x264_presets()[x264Preset];
+    ghb_settings_set_string(ud->settings, "x264Preset", preset);
+
+    if (!ghb_settings_get_boolean(ud->settings, "x264UseAdvancedOptions"))
+    {
+        GString *str = g_string_new("");
+        char *preset;
+        char *tune;
+        char *profile;
+        char *level;
+        char *opts;
+        char *tunes;
+
+        preset = ghb_settings_get_string(ud->settings, "x264Preset");
+        tune = ghb_settings_get_string(ud->settings, "x264Tune");
+        profile = ghb_settings_get_string(ud->settings, "h264Profile");
+        level = ghb_settings_get_string(ud->settings, "h264Level");
+        opts = ghb_settings_get_string(ud->settings, "x264OptionExtra");
+
+        if (tune[0] && strcmp(tune, "none"))
+        {
+            g_string_append_printf(str, "%s", tune);
+        }
+        if (ghb_settings_get_boolean(ud->settings, "x264FastDecode"))
+        {
+            g_string_append_printf(str, "%s%s", str->str[0] ? "," : "", "fastdecode");
+        }
+        if (ghb_settings_get_boolean(ud->settings, "x264ZeroLatency"))
+        {
+            g_string_append_printf(str, "%s%s", str->str[0] ? "," : "", "zerolatency");
+        }
+        tunes = g_string_free(str, FALSE);
+
+        char * new_opts;
+
+        int w = ghb_settings_get_int(ud->settings, "scale_width");
+        int h = ghb_settings_get_int(ud->settings, "scale_height");
+
+        if (w == 0 || h == 0)
+        {
+            if (!ghb_settings_get_boolean(ud->settings, "autoscale"))
+            {
+                w = ghb_settings_get_int(ud->settings, "PictureWidth");
+                h = ghb_settings_get_int(ud->settings, "PictureHeight");
+
+                if (h == 0 && w != 0)
+                {
+                    h = w * 9 / 16;
+                }
+                if (w == 0 && h != 0)
+                {
+                    w = h * 16 / 9;
+                }
+            }
+            if (w == 0 || h == 0)
+            {
+                w = 1280;
+                h = 720;
+            }
+        }
+
+        if (!strcasecmp(profile, "auto"))
+        {
+            profile[0] = 0;
+        }
+        if (!strcasecmp(level, "auto"))
+        {
+            level[0] = 0;
+        }
+        new_opts = hb_x264_param_unparse(
+                        preset, tunes, opts, profile, level, w, h);
+        if (new_opts)
+            ghb_ui_update(ud, "x264Option", ghb_string_value(new_opts));
+        else
+            ghb_ui_update(ud, "x264Option", ghb_string_value(""));
+
+        GtkWidget *eo = GTK_WIDGET(GHB_WIDGET(ud->builder, "x264OptionExtra"));
+
+        char * new_tt;
+        if (new_opts)
+            new_tt = g_strdup_printf("%s\n\nExpanded Options:\n\"%s\"", tt, new_opts);
+        else
+            new_tt = g_strdup_printf("%s\n\nExpanded Options:\n\"\"", tt);
+        gtk_widget_set_tooltip_text(eo, new_tt);
+
+        g_free(new_tt);
+        g_free(new_opts);
+
+        g_free(preset);
+        g_free(tune);
+        g_free(profile);
+        g_free(level);
+        g_free(opts);
+        g_free(tunes);
+    }
+    else
+    {
+        char *opts = ghb_settings_get_string(ud->settings, "x264Option");
+
+        GtkWidget *eo = GTK_WIDGET(GHB_WIDGET(ud->builder, "x264OptionExtra"));
+        char * new_tt;
+        if (opts)
+            new_tt = g_strdup_printf("%s\n\nExpanded Options:\n\"%s\"", tt, opts);
+        else
+            new_tt = g_strdup_printf("%s\n\nExpanded Options:\n\"\"", tt);
+        gtk_widget_set_tooltip_text(eo, new_tt);
+
+        g_free(opts);
+    }
+
+    ghb_check_dependency(ud, widget, NULL);
+    ghb_clear_presets_selection(ud);
+}
+
+G_MODULE_EXPORT void
+x264_option_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    GtkWidget *textview;
+
+    textview = GTK_WIDGET(GHB_WIDGET(ud->builder, "x264OptionExtra"));
+    x264_setting_changed_cb(textview, ud);
+}
+
 G_MODULE_EXPORT void
 x264_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
@@ -105,6 +291,15 @@ G_MODULE_EXPORT void
 x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("x264_entry_changed_cb ()");
+
+    static char *tt = NULL;
+
+    if (tt == NULL)
+    {
+        GtkWidget *eo = GTK_WIDGET(GHB_WIDGET(ud->builder, "x264OptionExtra"));
+        tt = gtk_widget_get_tooltip_text(eo);
+    }
+
 	if (!ignore_options_update)
 	{
 		GtkWidget *textview;
@@ -113,6 +308,7 @@ x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		textview = GTK_WIDGET(GHB_WIDGET(ud->builder, "x264Option"));
 		ghb_widget_to_setting(ud->settings, textview);
 		options = ghb_settings_get_string(ud->settings, "x264Option");
+
 		ignore_options_update = TRUE;
 		ghb_x264_parse_options(ud, options);
 		if (!gtk_widget_has_focus(textview))
@@ -122,8 +318,29 @@ x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 			sopts = sanitize_x264opts(ud, options);
 			ghb_ui_update(ud, "x264Option", ghb_string_value(sopts));
 			ghb_x264_parse_options(ud, sopts);
-			g_free(sopts);
+
+            GtkWidget *eo = GTK_WIDGET(GHB_WIDGET(ud->builder, "x264OptionExtra"));
+            char * new_tt;
+            if (sopts)
+                new_tt = g_strdup_printf("%s\n\nExpanded Options:\n\"%s\"", tt, sopts);
+            else
+                new_tt = g_strdup_printf("%s\n\nExpanded Options:\n\"\"", tt);
+            gtk_widget_set_tooltip_text(eo, new_tt);
+
+            g_free(options);
+            options = sopts;
 		}
+#if 0
+        if (ghb_settings_get_boolean(ud->settings, "x264UseAdvancedOptions"))
+        {
+            ghb_ui_update(ud, "x264PresetSlider", ghb_int_value(5));
+            ghb_ui_update(ud, "x264Tune", ghb_string_value("none"));
+            ghb_ui_update(ud, "h264Profile", ghb_string_value("auto"));
+            ghb_ui_update(ud, "h264Level", ghb_string_value("auto"));
+
+            ghb_ui_update(ud, "x264OptionExtra", ghb_string_value(options));
+        }
+#endif
 		g_free(options);
 		ignore_options_update = FALSE;
 	}
@@ -1088,5 +1305,18 @@ lavc_focus_out_cb(GtkWidget *widget, GdkEventFocus *event,
 	ignore_options_update = FALSE;
 #endif
 	return FALSE;
+}
+
+G_MODULE_EXPORT gchar*
+format_x264_preset_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
+{
+    const char * const *x264_presets;
+    const char *preset = "medium";
+
+    x264_presets = hb_x264_presets();
+
+    preset = x264_presets[(int)val];
+
+    return g_strdup_printf(" %-12s", preset);
 }
 

@@ -554,7 +554,7 @@ update_widget(GtkWidget *widget, const GValue *value)
 			do
 			{
 				gtk_tree_model_get(store, &iter, 2, &shortOpt, -1);
-				if (strcmp(shortOpt, str) == 0)
+				if (strcasecmp(shortOpt, str) == 0)
 				{
 					gtk_combo_box_set_active_iter (
 						GTK_COMBO_BOX(widget), &iter);

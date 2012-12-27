@@ -47,6 +47,7 @@ dep_map = (
 	DepEntry("PictureAutoCrop", "PictureLeftCrop", "FALSE", False, False),
 	DepEntry("PictureAutoCrop", "PictureRightCrop", "FALSE", False, False),
 	DepEntry("VideoEncoder", "x264_tab", "x264", False, True),
+	DepEntry("VideoEncoder", "x264VideoSettings", "x264", False, True),
 	DepEntry("VideoEncoder", "lavc_mpeg4_tab", "ffmpeg|ffmpeg4|ffmpeg2", False, True),
 	DepEntry("VideoEncoder", "Mp4iPodCompatible", "x264", False, False),
 	DepEntry("AudioTrackQualityEnable", "AudioTrackQuality", "FALSE", True, False),
@@ -79,6 +80,9 @@ dep_map = (
 	DepEntry("x264_subme", "x264_psy_rd", "<6", True, False),
 	DepEntry("x264_subme", "x264_psy_trell", "<6", True, False),
 	DepEntry("x264_trellis", "x264_psy_trell", "0", True, False),
+	DepEntry("x264UseAdvancedOptions", "x264VideoSettingsTable", "TRUE", True, False),
+	DepEntry("x264UseAdvancedOptions", "x264_tab", "FALSE", True, False),
+	DepEntry("HideAdvancedVideoSettings", "x264UseAdvancedOptions", "TRUE", True, True),
 	DepEntry("use_source_name", "chapters_in_destination", "TRUE", False, False),
 	DepEntry("use_source_name", "title_no_in_destination", "TRUE", False, False),
 	)

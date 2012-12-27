@@ -2040,6 +2040,120 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
 	titles[ii] = NULL;
 }
 
+static void
+x264_tune_opts_set(GtkBuilder *builder, const gchar *name)
+{
+    GtkTreeIter iter;
+    GtkListStore *store;
+    gint ii, count = 0;
+
+    const char * const *tunes;
+    tunes = hb_x264_tunes();
+    while (tunes && tunes[count]) count++;
+
+    g_debug("x264_tune_opts_set ()\n");
+    store = get_combo_box_store(builder, name);
+    gtk_list_store_clear(store);
+
+    gtk_list_store_append(store, &iter);
+    gtk_list_store_set(store, &iter, 
+                       0, "None",
+                       1, TRUE, 
+                       2, "none",
+                       3, (gdouble)0, 
+                       4, "none",
+                       -1);
+
+    for (ii = 0; ii < count; ii++)
+    {
+        if (strcmp(tunes[ii], "fastdecode") && strcmp(tunes[ii], "zerolatency"))
+        {
+            gtk_list_store_append(store, &iter);
+            gtk_list_store_set(store, &iter, 
+                               0, tunes[ii],
+                               1, TRUE, 
+                               2, tunes[ii],
+                               3, (gdouble)ii + 1,
+                               4, tunes[ii],
+                               -1);
+        }
+    }
+}
+
+static void
+x264_profile_opts_set(GtkBuilder *builder, const gchar *name)
+{
+    GtkTreeIter iter;
+    GtkListStore *store;
+    gint ii, count = 0;
+
+    const char * const *profiles;
+    profiles = hb_x264_profiles();
+    while (profiles && profiles[count]) count++;
+
+    g_debug("x264_profile_opts_set ()\n");
+    store = get_combo_box_store(builder, name);
+    gtk_list_store_clear(store);
+
+    gtk_list_store_append(store, &iter);
+    gtk_list_store_set(store, &iter, 
+                       0, "Auto",
+                       1, TRUE, 
+                       2, "auto",
+                       3, (gdouble)0, 
+                       4, "auto",
+                       -1);
+
+    for (ii = 0; ii < count; ii++)
+    {
+        gtk_list_store_append(store, &iter);
+        gtk_list_store_set(store, &iter, 
+                           0, profiles[ii],
+                           1, TRUE, 
+                           2, profiles[ii],
+                           3, (gdouble)ii + 1,
+                           4, profiles[ii],
+                           -1);
+    }
+}
+
+static void
+x264_level_opts_set(GtkBuilder *builder, const gchar *name)
+{
+    GtkTreeIter iter;
+    GtkListStore *store;
+    gint ii, count = 0;
+
+    const char * const *levels;
+    levels = hb_h264_levels();
+    while (levels && levels[count]) count++;
+
+    g_debug("x264_level_opts_set ()\n");
+    store = get_combo_box_store(builder, name);
+    gtk_list_store_clear(store);
+
+    gtk_list_store_append(store, &iter);
+    gtk_list_store_set(store, &iter, 
+                       0, "Auto",
+                       1, TRUE, 
+                       2, "auto",
+                       3, (gdouble)0, 
+                       4, "auto",
+                       -1);
+
+    for (ii = 0; ii < count; ii++)
+    {
+        gtk_list_store_append(store, &iter);
+        gtk_list_store_set(store, &iter, 
+                           0, levels[ii],
+                           1, TRUE, 
+                           2, levels[ii],
+                           3, (gdouble)ii + 1,
+                           4, levels[ii],
+                           -1);
+    }
+}
+
 int
 ghb_get_title_count()
 {
@@ -2912,6 +3026,9 @@ ghb_update_ui_combo_box(
 		small_opts_set(ud->builder, "x264_subme", &subme_opts);
 		small_opts_set(ud->builder, "x264_analyse", &analyse_opts);
 		small_opts_set(ud->builder, "x264_trellis", &trellis_opts);
+		x264_tune_opts_set(ud->builder, "x264Tune");
+		x264_profile_opts_set(ud->builder, "h264Profile");
+		x264_level_opts_set(ud->builder, "h264Level");
 	}
 	else
 	{
@@ -2941,6 +3058,12 @@ ghb_update_ui_combo_box(
 			subtitle_track_opts_set(ud->builder, "SubtitleTrack", user_data);
 		else if (strcmp(name, "AudioTrack") == 0)
 			audio_track_opts_set(ud->builder, "AudioTrack", user_data);
+		else if (strcmp(name, "x264Tune") == 0)
+		    x264_tune_opts_set(ud->builder, "x264Tune");
+		else if (strcmp(name, "h264Profile") == 0)
+		    x264_profile_opts_set(ud->builder, "h264Profile");
+		else if (strcmp(name, "h264Level") == 0)
+		    x264_level_opts_set(ud->builder, "h264Level");
 		else
 			generic_opts_set(ud->builder, name, find_combo_table(name));
 	}
@@ -2967,6 +3090,9 @@ init_ui_combo_boxes(GtkBuilder *builder)
 	init_combo_box(builder, "VideoEncoder");
 	init_combo_box(builder, "AudioEncoder");
 	init_combo_box(builder, "AudioEncoderFallback");
+	init_combo_box(builder, "x264Tune");
+	init_combo_box(builder, "h264Profile");
+	init_combo_box(builder, "h264Level");
 	for (ii = 0; combo_name_map[ii].name != NULL; ii++)
 	{
 		init_combo_box(builder, combo_name_map[ii].name);
@@ -3018,6 +3144,81 @@ ghb_build_advanced_opts_string(GValue *settings)
 		} break;
 	}
 	return result;
+}
+
+void ghb_set_video_encoder_opts(hb_job_t *job, GValue *js)
+{
+    gint vcodec = ghb_settings_combo_int(js, "VideoEncoder");
+
+    switch (vcodec)
+    {
+        case HB_VCODEC_X264:
+        {
+            if (ghb_settings_get_boolean(js, "x264UseAdvancedOptions"))
+            {
+                char *opts = ghb_settings_get_string(js, "x264Option");
+                hb_job_set_advanced_opts(job, opts);
+                g_free(opts);
+            }
+            else
+            {
+                GString *str = g_string_new("");
+                char *preset = ghb_settings_get_string(js, "x264Preset");
+                char *tune = ghb_settings_get_string(js, "x264Tune");
+                char *profile = ghb_settings_get_string(js, "h264Profile");
+                char *level = ghb_settings_get_string(js, "h264Level");
+                char *opts = ghb_settings_get_string(js, "x264OptionExtra");
+                char *tunes;
+
+                g_string_append_printf(str, "%s", tune);
+                if (ghb_settings_get_boolean(js, "x264FastDecode"))
+                {
+                    g_string_append_printf(str, "%s%s", str->str[0] ? "," : "", "fastdecode");
+                }
+                if (ghb_settings_get_boolean(js, "x264ZeroLatency"))
+                {
+                    g_string_append_printf(str, "%s%s", str->str[0] ? "," : "", "zerolatency");
+                }
+                tunes = g_string_free(str, FALSE);
+
+                hb_job_set_x264_preset(job, preset);
+
+                if (tunes != NULL && strcasecmp(tune, "none"))
+                    hb_job_set_x264_tune(job, tunes);
+
+                if (profile != NULL && strcasecmp(profile, "auto"))
+                    hb_job_set_x264_profile(job, profile);
+
+                if (level != NULL && strcasecmp(level, "auto"))
+                    hb_job_set_x264_level(job, level);
+
+                hb_job_set_advanced_opts(job, opts);
+
+                g_free(preset);
+                g_free(tune);
+                g_free(profile);
+                g_free(level);
+                g_free(opts);
+                g_free(tunes);
+            }
+        } break;
+
+        case HB_VCODEC_FFMPEG_MPEG2:
+        case HB_VCODEC_FFMPEG_MPEG4:
+        {
+            gchar *opts = ghb_settings_get_string(js, "lavcOption");
+            if (opts != NULL && opts[0])
+            {
+                hb_job_set_advanced_opts(job, opts);
+            }
+            g_free(opts);
+        } break;
+
+        case HB_VCODEC_THEORA:
+        default:
+        {
+        } break;
+    }
 }
 
 void
@@ -4465,7 +4666,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	hb_list_t  * list;
 	hb_title_t * title;
 	hb_job_t   * job;
-	static gchar *advanced_opts;
 	gint sub_id = 0;
 	hb_filter_object_t * filter;
 	gchar *filter_str;
@@ -4724,6 +4924,13 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	else
 		cfr = 0;
 
+    // x264 zero latency requires CFR encode
+    if (ghb_settings_get_boolean(js, "x264ZeroLatency"))
+    {
+        cfr = 1;
+        ghb_log("zerolatency x264 tune selected, forcing constant framerate");
+    }
+
 	if( vrate_base == 0 )
 	{
 		vrate = title->rate;
@@ -4935,19 +5142,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	}
 
 
-	// TODO: libhb holds onto a reference to the advanced_opts and is not
-	// finished with it until encoding the job is done.  But I can't
-	// find a way to get at the job before it is removed in order to
-	// free up the memory I am allocating here.
-	// The short story is THIS LEAKS.
-	advanced_opts = ghb_build_advanced_opts_string(js);
-	
-	if( advanced_opts && *advanced_opts == '\0' )
-	{
-		g_free(advanced_opts);
-		advanced_opts = NULL;
-	}
-
 	char * meta;
 
 	meta = ghb_settings_get_string(js, "MetaName");
@@ -5028,7 +5222,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		 */
 		job->pass = 1;
 		job->indepth_scan = 0;
-		hb_job_set_advanced_opts(job, advanced_opts);
+        ghb_set_video_encoder_opts(job, js);
 
 		/*
 		 * If turbo options have been selected then set job->fastfirstpass
@@ -5059,13 +5253,12 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	}
 	else
 	{
-		hb_job_set_advanced_opts(job, advanced_opts);
+        ghb_set_video_encoder_opts(job, js);
 		job->indepth_scan = 0;
 		job->pass = 0;
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
 		hb_add( h, job );
 	}
-	g_free(advanced_opts);
 
 	hb_job_close(&job);
 }

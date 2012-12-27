@@ -141,6 +141,8 @@
 	</dict>
 	<key>Preferences</key>
 	<dict>
+		<key>HideAdvancedVideoSettings</key>
+		<false />
 		<key>AdvancedAutoPassthru</key>
 		<false />
 		<key>AutoScan</key>
@@ -243,6 +245,12 @@
 		<key>VideoFramerateVFR</key>
 		<false />
 		<key>PictureDeinterlaceDecomb</key>
+		<false />
+		<key>x264PresetSlider</key>
+		<integer>0</integer>
+		<key>x264ZeroLatency</key>
+		<false />
+		<key>x264FastDecode</key>
 		<false />
 	</dict>
 	<key>Presets</key>
@@ -396,6 +404,18 @@
 		<key>lavcOption</key>
 		<string></string>
 		<key>x264Option</key>
+		<string></string>
+		<key>x264Preset</key>
+		<string>custom</string>
+		<key>x264Tune</key>
+		<string></string>
+		<key>h264Profile</key>
+		<string></string>
+		<key>h264Level</key>
+		<string></string>
+		<key>x264UseAdvancedOptions</key>
+		<true />
+		<key>x264OptionExtra</key>
 		<string></string>
 	</dict>
 </dict>
