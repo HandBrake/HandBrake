@@ -210,14 +210,7 @@ namespace HandBrake.ApplicationServices.Utilities
         /// </returns>
         private static string DestinationQuery(EncodeTask task)
         {
-            string query = string.Empty;
-
-            if (task.PointToPointMode == PointToPointMode.Preview)
-                query += string.Format(" -o \"{0}\" ", task.Destination.Replace(".m", "_sample.m"));
-            else
-                query += string.Format(" -o \"{0}\" ", task.Destination);
-
-            return query;
+            return string.Format(" -o \"{0}\" ", task.Destination);
         }
 
         /// <summary>

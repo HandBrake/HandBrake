@@ -373,7 +373,7 @@
                         <TextBox Name="StartPointText"
                                  MinWidth="60"
                                  Margin="8,0,0,0"
-                                 Text="{Binding SelectedStartPoint}"
+                                 Text="{Binding SelectedStartPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                  Visibility="{Binding ShowTextEntryForPointToPointMode,
                                                       Converter={StaticResource boolToVisConverter},
                                                       ConverterParameter=false}"
@@ -391,7 +391,7 @@
                         <TextBox Name="EndPointText"
                                  MinWidth="60"
                                  Margin="8,0,0,0"
-                                 Text="{Binding SelectedEndPoint}"
+                                 Text="{Binding SelectedEndPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                  Visibility="{Binding ShowTextEntryForPointToPointMode,
                                                       Converter={StaticResource boolToVisConverter},
                                                       ConverterParameter=false}"

@@ -17,8 +17,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Threading;
     using System.Windows;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Model.Encoding;
@@ -76,9 +74,6 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="PreviewViewModel"/> class.
         /// </summary>
-        /// <param name="windowManager">
-        /// The window manager.
-        /// </param>
         /// <param name="encodeService">
         /// The encode Service.
         /// </param>
@@ -88,7 +83,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        public PreviewViewModel(IWindowManager windowManager, IEncodeServiceWrapper encodeService, IErrorService errorService, IUserSettingService userSettingService) 
+        public PreviewViewModel(IEncodeServiceWrapper encodeService, IErrorService errorService, IUserSettingService userSettingService) 
         {
             this.encodeService = encodeService;
             this.errorService = errorService;
@@ -274,8 +269,24 @@ namespace HandBrakeWPF.ViewModels
                     PointToPointMode = PointToPointMode.Preview
                 };
 
-            this.CurrentlyPlaying = encodeTask.Destination.Replace(".m", "_sample.m");
-
+            // Filename handling.
+            if (string.IsNullOrEmpty(encodeTask.Destination))
+            {
+                string filename = Path.ChangeExtension(Path.GetTempFileName(), encodeTask.OutputFormat == OutputFormat.Mkv ? "m4v" : "mkv");
+                encodeTask.Destination = filename;
+                this.CurrentlyPlaying = filename;
+            }
+            else
+            {
+                string directory =  Path.GetDirectoryName(encodeTask.Destination) ?? string.Empty;
+                string filename = Path.GetFileNameWithoutExtension(encodeTask.Destination);
+                string extension = Path.GetExtension(encodeTask.Destination);
+                string previewFilename = string.Format("{0}_preview{1}", filename, extension);
+                string previewFullPath = Path.Combine(directory, previewFilename);
+                encodeTask.Destination = previewFullPath;
+                this.CurrentlyPlaying = previewFullPath;
+            }
+            
             // Setup the encode task as a preview encode
             encodeTask.IsPreviewEncode = true;
             encodeTask.PreviewEncodeStartAt = this.StartAt.ToString(CultureInfo.InvariantCulture);
