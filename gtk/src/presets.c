@@ -2866,6 +2866,8 @@ import_xlat_preset(GValue *dict)
                                 ghb_int_value_new(ii));
             }
         }
+        ghb_dict_insert(dict, g_strdup("x264UseAdvancedOptions"),
+                        ghb_boolean_value_new(TRUE));
     }
 
     const char *x264Tune = dict_get_string(dict, "x264Tune");
@@ -3002,6 +3004,14 @@ export_xlat_preset(GValue *dict)
         }
     }
 
+    if (ghb_value_boolean(preset_dict_get_value(dict, "x264UseAdvancedOptions")))
+    {
+        ghb_dict_remove(dict, "x264Preset");
+        ghb_dict_remove(dict, "x264Tune");
+        ghb_dict_remove(dict, "h264Profile");
+        ghb_dict_remove(dict, "h264Level");
+        ghb_dict_remove(dict, "x264OptionExtra");
+    }
     const char *tune = dict_get_string(dict, "x264Tune");
     if (tune != NULL)
     {
