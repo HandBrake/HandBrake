@@ -23,5 +23,10 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// The Video Encoder.
         /// </param>
         void SetEncoder(VideoEncoder encoder);
+
+        /// <summary>
+        /// Clear out the settings.
+        /// </summary>
+        void Clear();
     }
 }

@@ -237,4 +237,44 @@ may have problems with Weighted P-frame prediction: the Apple TV is completely i
   <data name="logo64" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\logo64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Video_x264ExtraArgs" xml:space="preserve">
+    <value>The full x264 list of parameters: {0}</value>
+  </data>
+  <data name="Video_x264FastDecode" xml:space="preserve">
+    <value>Reduce decoder CPU usage.
+
+Set this if your device is struggling to play the output. (i.e. dropped frames)</value>
+  </data>
+  <data name="Video_x264Level" xml:space="preserve">
+    <value>Sets and ensures compliance with the specified H.264 Levels. This will override all other settings.</value>
+  </data>
+  <data name="Video_x264Preset" xml:space="preserve">
+    <value>Adjusts x264 settings to trade off compression efficiency against encoding speed.
+
+This establishes your default x264 settings. Tunes, profiles, levels and advanced options string will be applied to this.
+
+You should generally set this option to the slowest you can bear since slower settings will result in better quality or smaller files.</value>
+  </data>
+  <data name="Video_x264Profile" xml:space="preserve">
+    <value>Limit the H.264 profile of the output stream. This will override all other settings.</value>
+  </data>
+  <data name="Video_x264Tune" xml:space="preserve">
+    <value>Tune settings to optimise for common scenarios
+
+This can improve efficiency for particular source characteristics or set of characteristics of the output file.
+
+Changes will be applied after the preset but before all other parameters.</value>
+  </data>
+  <data name="Video_QualitySlider" xml:space="preserve">
+    <value>Set the desired quality factor. The encoder targets a certain quality. 
+The scale used by each video encoder is different.
+
+x264's scale is logarithmic and lower values correspond to higher quality. 
+So small increases in value will result in progressively larger increases in the resulting file size. 
+A value of 0 means lossless and will result in a file size that is larger than the original source, 
+unless the source was also lossless. 
+Suggested values are: 18 to 20 for Standard Definition and 20 to 23 for High Definition.
+
+FFMpeg's and Theora's scale is more linear. These encoders do not have a lossless mode.</value>
+  </data>
 </root>

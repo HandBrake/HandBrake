@@ -67,8 +67,7 @@ namespace HandBrake.ApplicationServices.Services
             : base(userSettingService)
         {
             this.userSettingService = userSettingService;
-            this.EncodeStarted += this.EncodeEncodeStarted;
-            
+            this.EncodeStarted += this.EncodeEncodeStarted;     
         }
 
         #region Properties

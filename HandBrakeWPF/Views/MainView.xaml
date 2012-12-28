@@ -486,7 +486,7 @@
                 <TabItem Name="pictureTab" Header="Picture">
                     <ContentControl x:Name="PictureSettingsViewModel" />
                 </TabItem>
-                <TabItem Name="filtersTab" Header="Video Filters">
+                <TabItem Name="filtersTab" Header="Filters">
                     <ContentControl x:Name="FiltersViewModel" />
                 </TabItem>
                 <TabItem Name="videoTab" Header="Video">
@@ -501,7 +501,7 @@
                 <TabItem Name="chaptersTab" Header="Chapters">
                     <ContentControl x:Name="ChaptersViewModel" />
                 </TabItem>
-                <TabItem Name="advancedTab" Header="Advanced">
+                <TabItem Name="advancedTab" Header="Advanced" Visibility="{Binding ShowAdvancedTab, Converter={StaticResource boolToVisConverter}}">
                     <ContentControl x:Name="AdvancedViewModel" />
                 </TabItem>
             </TabControl>
