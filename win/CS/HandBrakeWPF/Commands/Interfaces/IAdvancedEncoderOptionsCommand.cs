@@ -1,27 +1,27 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IVideoViewModel.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="IAdvancedEncoderOptionsCommand.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Defines the IVideoViewModel type.
+//   The AdvancedEncoderOptionsCommand interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels.Interfaces
+namespace HandBrakeWPF.Commands.Interfaces
 {
     /// <summary>
-    /// The Video View Model Interface
+    /// The AdvancedEncoderOptionsCommand interface.
     /// </summary>
-    public interface IVideoViewModel : ITabInterface
+    public interface IAdvancedEncoderOptionsCommand
     {
         /// <summary>
-        /// Trigger a Notify Property Changed on the Task to force various UI elements to update.
+        /// Clear out the advanced options
         /// </summary>
-        void RefreshTask();
+        void ExecuteClearAdvanced();
 
         /// <summary>
-        /// Clear the advanced x264 options.
+        /// Clear the advanced encoder options out on the video tab.
         /// </summary>
-        void ClearAdvancedSettings();
+        void ExecuteClearVideo();
     }
 }

@@ -470,8 +470,6 @@ namespace HandBrake.ApplicationServices.Utilities
                     return x264Tune.Ssim;
                 case "fastdecode":
                     return x264Tune.Fastdecode;
-                case "zerolatency":
-                    return x264Tune.Zerolatency;
                 default:
                     return x264Tune.Film;
             }

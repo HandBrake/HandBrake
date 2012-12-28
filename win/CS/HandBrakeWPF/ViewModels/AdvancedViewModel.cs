@@ -18,6 +18,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.Interop.Model.Encoding;
 
+    using HandBrakeWPF.Commands.Interfaces;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -27,6 +28,11 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class AdvancedViewModel : ViewModelBase, IAdvancedViewModel
     {
+        /// <summary>
+        /// The advanced encoder options command.
+        /// </summary>
+        private readonly IAdvancedEncoderOptionsCommand advancedEncoderOptionsCommand;
+
         #region Constants and Fields
 
         /// <summary>
@@ -166,8 +172,9 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="AdvancedViewModel"/> class.
         /// </summary>
-        public AdvancedViewModel()
+        public AdvancedViewModel(IAdvancedEncoderOptionsCommand advancedEncoderOptionsCommand)
         {
+            this.advancedEncoderOptionsCommand = advancedEncoderOptionsCommand;
             this.Task = new EncodeTask();
             this.UpdateUIFromAdvancedOptions();
         }
@@ -243,6 +250,12 @@ namespace HandBrakeWPF.ViewModels
                 this.Task.AdvancedEncoderOptions = value;
                 this.UpdateUIFromAdvancedOptions();
                 this.NotifyOfPropertyChange(() => this.AdvancedOptionsString);
+
+                // Reset the video tab if the user is using this tab.
+                if (!string.IsNullOrEmpty(this.Task.AdvancedEncoderOptions))
+                {
+                    this.advancedEncoderOptionsCommand.ExecuteClearVideo();
+                }
             }
         }
 
@@ -631,14 +644,6 @@ namespace HandBrakeWPF.ViewModels
         #region Public Methods
 
         /// <summary>
-        /// The notify all changed.
-        /// </summary>
-        public void NotifyAllChanged()
-        {
-            this.NotifyOfPropertyChange(() => this.AdvancedOptionsString);
-        }
-
-        /// <summary>
         /// The update ui from advanced options.
         /// </summary>
         public void UpdateUIFromAdvancedOptions()
@@ -885,8 +890,6 @@ namespace HandBrakeWPF.ViewModels
                                 }
 
                                 break;
-                            default:
-                                break;
                         }
                     }
                 }
@@ -931,6 +934,14 @@ namespace HandBrakeWPF.ViewModels
                 this.AdvancedOptionsString = string.Empty;
                 this.DisplayX264Options = false;
             }     
+        }
+
+        /// <summary>
+        /// The clear.
+        /// </summary>
+        public void Clear()
+        {
+            this.AdvancedOptionsString = string.Empty;
         }
 
         #endregion
@@ -1042,7 +1053,7 @@ namespace HandBrakeWPF.ViewModels
                     int equalsIndex = existingSegment.IndexOf('=');
                     if (equalsIndex >= 0)
                     {
-                        optionName = existingSegment.Substring(0, existingSegment.IndexOf("="));
+                        optionName = existingSegment.Substring(0, existingSegment.IndexOf("=", System.StringComparison.Ordinal));
                     }
 
                     if (!this.uiOptions.Contains(optionName) && optionName != string.Empty)
@@ -1154,6 +1165,12 @@ namespace HandBrakeWPF.ViewModels
 
             this.Task.AdvancedEncoderOptions = string.Join(":", newOptions);
             this.NotifyOfPropertyChange(() => this.AdvancedOptionsString);
+
+            // Reset the video tab if the user is using this tab.
+            if (!string.IsNullOrEmpty(this.Task.AdvancedEncoderOptions))
+            {
+                this.advancedEncoderOptionsCommand.ExecuteClearVideo();
+            }
         }
 
         #endregion

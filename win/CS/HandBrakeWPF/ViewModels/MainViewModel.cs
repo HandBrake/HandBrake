@@ -621,10 +621,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public CancelScanCommand CancelScanCommand { get; set; }
 
-        #endregion
-
-        #region Properties for Settings
-
         /// <summary>
         /// Gets or sets Destination.
         /// </summary>
@@ -817,6 +813,17 @@ namespace HandBrakeWPF.ViewModels
 
                 this.VideoViewModel.RefreshTask();
                 this.AudioViewModel.RefreshTask();
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether show advanced tab.
+        /// </summary>
+        public bool ShowAdvancedTab
+        {
+            get
+            {
+                return this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedTab);
             }
         }
 

@@ -211,6 +211,11 @@ namespace HandBrakeWPF
         /// </summary>
         public const string HandBrakePlatform = "HandBrakePlatform";
 
+        /// <summary>
+        /// The show advanced tab.
+        /// </summary>
+        public const string ShowAdvancedTab = "ShowAdvancedTab";
+
         #endregion
     }
 }
