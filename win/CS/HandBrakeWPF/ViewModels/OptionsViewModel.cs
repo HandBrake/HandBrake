@@ -19,10 +19,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using System.Windows;
 
-    using Caliburn.Micro;
-
     using HandBrake.ApplicationServices;
-    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
@@ -353,6 +350,11 @@ namespace HandBrakeWPF.ViewModels
         /// Backing field for EnableLibHb
         /// </summary>
         private bool enableLibHb;
+
+        /// <summary>
+        /// The show advanced tab backing field.
+        /// </summary>
+        private bool showAdvancedTab;
 
         #endregion
 
@@ -1373,6 +1375,22 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether enable lib hb.
+        /// </summary>
+        public bool ShowAdvancedTab
+        {
+            get
+            {
+                return this.showAdvancedTab;
+            }
+            set
+            {
+                this.showAdvancedTab = value;
+                this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);
+            }
+        }
+
         #endregion
 
         #endregion
@@ -1638,6 +1656,7 @@ namespace HandBrakeWPF.ViewModels
             this.MinimiseToTray = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.MainWindowMinimize);
             this.DisablePresetUpdateCheckNotification = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification);
             this.ClearQueueOnEncodeCompleted = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.ClearCompletedFromQueue);
+            this.ShowAdvancedTab = userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedTab);
 
             // Set the preview count
             this.PreviewPicturesToScan.Clear();
@@ -1653,7 +1672,6 @@ namespace HandBrakeWPF.ViewModels
             this.ConstantQualityGranularity.Add("1.00");
             this.ConstantQualityGranularity.Add("0.50");
             this.ConstantQualityGranularity.Add("0.25");
-            this.ConstantQualityGranularity.Add("0.20");
             this.SelectedGranulairty = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step).ToString("0.00", CultureInfo.InvariantCulture);
 
             // Min Title Length
@@ -1873,6 +1891,7 @@ namespace HandBrakeWPF.ViewModels
             userSettingService.SetUserSetting(ASUserSettingConstants.ClearCompletedFromQueue, this.ClearQueueOnEncodeCompleted);
             userSettingService.SetUserSetting(ASUserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
             userSettingService.SetUserSetting(UserSettingConstants.X264Step, double.Parse(this.SelectedGranulairty, CultureInfo.InvariantCulture));
+            userSettingService.SetUserSetting(UserSettingConstants.ShowAdvancedTab, this.ShowAdvancedTab);
 
             int value;
             if (int.TryParse(this.MinLength.ToString(CultureInfo.InvariantCulture), out value))

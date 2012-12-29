@@ -373,7 +373,7 @@
                         <TextBox Name="StartPointText"
                                  MinWidth="60"
                                  Margin="8,0,0,0"
-                                 Text="{Binding SelectedStartPoint}"
+                                 Text="{Binding SelectedStartPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                  Visibility="{Binding ShowTextEntryForPointToPointMode,
                                                       Converter={StaticResource boolToVisConverter},
                                                       ConverterParameter=false}"
@@ -391,7 +391,7 @@
                         <TextBox Name="EndPointText"
                                  MinWidth="60"
                                  Margin="8,0,0,0"
-                                 Text="{Binding SelectedEndPoint}"
+                                 Text="{Binding SelectedEndPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                  Visibility="{Binding ShowTextEntryForPointToPointMode,
                                                       Converter={StaticResource boolToVisConverter},
                                                       ConverterParameter=false}"
@@ -504,7 +504,7 @@
                 <TabItem Name="pictureTab" Header="Picture">
                     <ContentControl x:Name="PictureSettingsViewModel" />
                 </TabItem>
-                <TabItem Name="filtersTab" Header="Video Filters">
+                <TabItem Name="filtersTab" Header="Filters">
                     <ContentControl x:Name="FiltersViewModel" />
                 </TabItem>
                 <TabItem Name="videoTab" Header="Video">
@@ -519,7 +519,7 @@
                 <TabItem Name="chaptersTab" Header="Chapters">
                     <ContentControl x:Name="ChaptersViewModel" />
                 </TabItem>
-                <TabItem Name="advancedTab" Header="Advanced">
+                <TabItem Name="advancedTab" Header="Advanced" Visibility="{Binding ShowAdvancedTab, Converter={StaticResource boolToVisConverter}}">
                     <ContentControl x:Name="AdvancedViewModel" />
                 </TabItem>
             </TabControl>

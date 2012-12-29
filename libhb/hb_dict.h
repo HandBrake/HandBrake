@@ -6,6 +6,8 @@
    It may be used under the terms of the GNU General Public License v2.
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
+#if !defined(HB_DICT_H)
+#define HB_DICT_H
 
 typedef struct hb_dict_entry_s hb_dict_entry_t;
 typedef struct hb_dict_s       hb_dict_t;
@@ -48,3 +50,5 @@ struct hb_dict_s
     int count;
     hb_dict_entry_t * objects;
 };
+
+#endif // !defined(HB_DICT_H)

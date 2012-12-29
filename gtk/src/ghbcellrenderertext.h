@@ -27,11 +27,11 @@
 G_BEGIN_DECLS
 
 
-#define GHB_TYPE_CELL_RENDERER_TEXT		(ghb_cell_renderer_text_get_type ())
-#define GHB_CELL_RENDERER_TEXT(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GHB_TYPE_CELL_RENDERER_TEXT, GhbCellRendererText))
-#define GHB_CELL_RENDERER_TEXT_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GHB_TYPE_CELL_RENDERER_TEXT, GhbCellRendererTextClass))
-#define GHB_IS_CELL_RENDERER_TEXT(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GHB_TYPE_CELL_RENDERER_TEXT))
-#define GHB_IS_CELL_RENDERER_TEXT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GHB_TYPE_CELL_RENDERER_TEXT))
+#define GHB_TYPE_CELL_RENDERER_TEXT     (ghb_cell_renderer_text_get_type ())
+#define GHB_CELL_RENDERER_TEXT(obj)     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GHB_TYPE_CELL_RENDERER_TEXT, GhbCellRendererText))
+#define GHB_CELL_RENDERER_TEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GHB_TYPE_CELL_RENDERER_TEXT, GhbCellRendererTextClass))
+#define GHB_IS_CELL_RENDERER_TEXT(obj)      (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GHB_TYPE_CELL_RENDERER_TEXT))
+#define GHB_IS_CELL_RENDERER_TEXT_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GHB_TYPE_CELL_RENDERER_TEXT))
 #define GHB_CELL_RENDERER_TEXT_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GHB_TYPE_CELL_RENDERER_TEXT, GhbCellRendererTextClass))
 
 typedef struct _GhbCellRendererText      GhbCellRendererText;
@@ -79,11 +79,11 @@ struct _GhbCellRendererTextClass
   GtkCellRendererClass parent_class;
 
   void (* edited) (GhbCellRendererText *cell_renderer_text,
-		   const gchar         *path,
-		   const gchar         *new_text);
+           const gchar         *path,
+           const gchar         *new_text);
 
   gboolean (* keypress) (GhbCellRendererText *cell_renderer_text,
-		   GdkEventKey *event);
+           GdkEventKey *event);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -96,7 +96,7 @@ GType            ghb_cell_renderer_text_get_type (void) G_GNUC_CONST;
 GtkCellRenderer *ghb_cell_renderer_text_new      (void);
 
 void             ghb_cell_renderer_text_set_fixed_height_from_font (GhbCellRendererText *renderer,
-								    gint                 number_of_rows);
+                                    gint                 number_of_rows);
 
 
 G_END_DECLS

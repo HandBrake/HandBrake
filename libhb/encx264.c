@@ -287,7 +287,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     if (job->h264_level != NULL && *job->h264_level)
     {
         if (hb_apply_h264_level(&param, job->h264_level,
-                                job->x264_profile, 0) < 0)
+                                job->x264_profile, 1) < 0)
         {
             free(pv);
             pv = NULL;
@@ -641,11 +641,11 @@ int hb_check_h264_level(const char *h264_level, int width, int height,
     param.i_fps_den         = fps_den;
     param.b_interlaced      = !!interlaced;
     param.b_fake_interlaced = !!fake_interlaced;
-    return (hb_apply_h264_level(&param, h264_level, NULL, 1) != 0);
+    return (hb_apply_h264_level(&param, h264_level, NULL, 0) != 0);
 }
 
 int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
-                        const char *x264_profile, int be_quiet)
+                        const char *x264_profile, int verbose)
 {
     float f_framerate;
     const x264_level_t *x264_level = NULL;
@@ -768,7 +768,7 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
     if (x264_level->frame_only && (param->b_interlaced ||
                                    param->b_fake_interlaced))
     {
-        if (!be_quiet)
+        if (verbose)
         {
             hb_log("hb_apply_h264_level [warning]: interlaced flag not supported for level %s, disabling",
                    h264_level);
@@ -868,7 +868,7 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
      */
     if (x264_level->frame_size < i_mb_size)
     {
-        if (!be_quiet)
+        if (verbose)
         {
             hb_log("hb_apply_h264_level [warning]: frame size (%dx%d, %d macroblocks) too high for level %s (max. %d macroblocks)",
                    i_mb_width * 16, i_mb_height * 16, i_mb_size, h264_level,
@@ -878,7 +878,7 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
     }
     else if (x264_level->mbps < i_mb_rate)
     {
-        if (!be_quiet)
+        if (verbose)
         {
             hb_log("hb_apply_h264_level [warning]: framerate (%.3f) too high for level %s at %dx%d (max. %.3f)",
                    f_framerate, h264_level, param->i_width, param->i_height,
@@ -893,7 +893,7 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
     max_mb_side = sqrt(x264_level->frame_size * 8);
     if (i_mb_width > max_mb_side)
     {
-        if (!be_quiet)
+        if (verbose)
         {
             hb_log("hb_apply_h264_level [warning]: frame too wide (%d) for level %s (max. %d)",
                    param->i_width, h264_level, max_mb_side * 16);
@@ -902,7 +902,7 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
     }
     if (i_mb_height > max_mb_side)
     {
-        if (!be_quiet)
+        if (verbose)
         {
             hb_log("hb_apply_h264_level [warning]: frame too tall (%d) for level %s (max. %d)",
                    param->i_height, h264_level, max_mb_side * 16);
@@ -946,11 +946,31 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
     }
 
     /*
-     * apply the additional advanced x264 options
+     * place additional x264 options in a dictionary
      */
     entry     = NULL;
     x264_opts = hb_encopts_to_dict(x264_encopts, HB_VCODEC_X264);
-    while ((entry = hb_dict_next(x264_opts, entry)))
+
+    /*
+     * some libx264 options are set via dedicated widgets in the video tab or
+     * hardcoded in libhb, and have no effect when present in the advanced x264
+     * options string.
+     *
+     * clear them from x264_opts so as to not apply then during unparse.
+     */
+    hb_dict_unset(&x264_opts, "qp");
+    hb_dict_unset(&x264_opts, "qp_constant");
+    hb_dict_unset(&x264_opts, "crf");
+    hb_dict_unset(&x264_opts, "bitrate");
+    hb_dict_unset(&x264_opts, "fps");
+    hb_dict_unset(&x264_opts, "force-cfr");
+    hb_dict_unset(&x264_opts, "sar");
+    hb_dict_unset(&x264_opts, "annexb");
+
+    /*
+     * apply the additional x264 options
+     */
+    while ((entry = hb_dict_next(x264_opts, entry)) != NULL)
     {
         // let's not pollute GUI logs with x264_param_parse return codes
         x264_param_parse(&param, entry->key, entry->value);
@@ -988,7 +1008,7 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
         param.i_width  = width;
         param.i_height = height;
         // be quiet so at to not pollute GUI logs
-        hb_apply_h264_level(&param, h264_level, x264_profile, 1);
+        hb_apply_h264_level(&param, h264_level, x264_profile, 0);
     }
 
     /*

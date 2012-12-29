@@ -1741,6 +1741,14 @@ static void job_clean( hb_job_t * job )
         job->file = NULL;
         free(job->advanced_opts);
         job->advanced_opts = NULL;
+        free(job->x264_preset);
+        job->x264_preset = NULL;
+        free(job->x264_tune);
+        job->x264_tune = NULL;
+        free(job->x264_profile);
+        job->x264_profile = NULL;
+        free(job->h264_level);
+        job->h264_level = NULL;
 
         // clean up chapter list
         while( ( chapter = hb_list_item( job->list_chapter, 0 ) ) )
@@ -1859,6 +1867,38 @@ void hb_job_set_advanced_opts( hb_job_t *job, const char *advanced_opts )
     if ( job )
     {
         hb_update_str( &job->advanced_opts, advanced_opts );
+    }
+}
+
+void hb_job_set_x264_preset( hb_job_t *job, const char *preset )
+{
+    if ( job )
+    {
+        hb_update_str( &job->x264_preset, preset );
+    }
+}
+
+void hb_job_set_x264_tune( hb_job_t *job, const char *tune )
+{
+    if ( job )
+    {
+        hb_update_str( &job->x264_tune, tune );
+    }
+}
+
+void hb_job_set_x264_profile( hb_job_t *job, const char *profile )
+{
+    if ( job )
+    {
+        hb_update_str( &job->x264_profile, profile );
+    }
+}
+
+void hb_job_set_x264_level( hb_job_t *job, const char *level )
+{
+    if ( job )
+    {
+        hb_update_str( &job->h264_level, level );
     }
 }
 

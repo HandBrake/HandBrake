@@ -19,6 +19,7 @@ namespace HandBrake.ApplicationServices.Factories
     using HandBrake.ApplicationServices.Services;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
+    using HandBrake.Interop.Model.Encoding.x264;
 
     /// <summary>
     /// A Factory to translate a Plist object into a Preset.
@@ -172,13 +173,16 @@ namespace HandBrake.ApplicationServices.Factories
 
                 // Video Tab
                 case "VideoAvgBitrate":
-                    preset.Task.VideoBitrate = int.Parse(kvp.Value);
+                    if (!string.IsNullOrEmpty(kvp.Value))
+                    {
+                        preset.Task.VideoBitrate = int.Parse(kvp.Value);
+                    }
                     break;
                 case "VideoEncoder":
                     preset.Task.VideoEncoder = EnumHelper<VideoEncoder>.GetValue(kvp.Value);
                     break;
                 case "VideoFramerate":
-                    preset.Task.Framerate = kvp.Value == "Same as source" ? null : double.Parse(kvp.Value, CultureInfo.InvariantCulture);
+                    preset.Task.Framerate = kvp.Value == "Same as source" || string.IsNullOrEmpty(kvp.Value) ? null : double.Parse(kvp.Value, CultureInfo.InvariantCulture);
                     break;
                 case "VideoFramerateMode":
                     string parsedValue = kvp.Value;
@@ -209,6 +213,27 @@ namespace HandBrake.ApplicationServices.Factories
                     break;
                 case "VideoTwoPass":
                     preset.Task.TwoPass = kvp.Value == 1;
+                    break;
+                case "x264OptionExtra":
+                    preset.Task.AdvancedEncoderOptions = kvp.Value;
+                    break;
+                case "x264Preset":
+                    preset.Task.X264Preset = EnumHelper<x264Preset>.GetValue(kvp.Value, true);
+                    break;
+                case "h264Profile":
+                    preset.Task.H264Profile = EnumHelper<x264Profile>.GetValue(kvp.Value, true);
+                    break;
+                case "x264Tune":
+                    string value = kvp.Value;
+                    if (value.Contains("fastdecode"))
+                    {
+                        preset.Task.FastDecode = true;
+                        value = value.Replace("fastdecode", string.Empty).Replace(",", string.Empty);
+                    }
+                    preset.Task.X264Tune = EnumHelper<x264Tune>.GetValue(value, true);
+                    break;
+                case "h264Level":
+                    preset.Task.H264Level = kvp.Value;
                     break;
 
                 // Chapter Markers Tab

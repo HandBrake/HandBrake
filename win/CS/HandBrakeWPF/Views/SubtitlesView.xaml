@@ -233,7 +233,8 @@
                                                          Margin="5,0,5,0"
                                                          HorizontalAlignment="Left"
                                                          IsEnabled="{Binding IsSrtSubtitle}"
-                                                         Value="{Binding SrtOffset}" />
+                                                         Minimum="-10800"
+                                                         Value="{Binding SrtOffset, Mode=TwoWay}" />
 
                         </Grid>
 

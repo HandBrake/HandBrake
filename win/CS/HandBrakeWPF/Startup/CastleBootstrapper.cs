@@ -23,6 +23,9 @@ namespace HandBrakeWPF.Startup
     using HandBrake.ApplicationServices;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
+    using HandBrakeWPF.Commands;
+    using HandBrakeWPF.Commands.Interfaces;
+
     using ViewModels;
     using ViewModels.Interfaces;
 
@@ -58,6 +61,9 @@ namespace HandBrakeWPF.Startup
             this.windsorContainer.Register(Component.For<IScanServiceWrapper>().ImplementedBy<ScanServiceWrapper>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<IEncodeServiceWrapper>().ImplementedBy<EncodeServiceWrapper>().LifeStyle.Is(LifestyleType.Singleton));
             this.windsorContainer.Register(Component.For<INotificationService>().ImplementedBy<NotificationService>().LifeStyle.Is(LifestyleType.Singleton));
+
+            // Commands
+            this.windsorContainer.Register(Component.For<IAdvancedEncoderOptionsCommand>().ImplementedBy<AdvancedEncoderOptionsCommand>().LifeStyle.Is(LifestyleType.Singleton));
 
             // Shell
             this.windsorContainer.Register(Component.For<IErrorService>().ImplementedBy<ErrorService>().LifeStyle.Is(LifestyleType.Singleton));

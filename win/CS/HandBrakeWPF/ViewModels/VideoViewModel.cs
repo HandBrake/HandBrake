@@ -11,7 +11,9 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Globalization;
+    using System.Linq;
 
     using Caliburn.Micro;
 
@@ -20,8 +22,13 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.Interop;
+    using HandBrake.Interop.HbLib;
     using HandBrake.Interop.Model.Encoding;
+    using HandBrake.Interop.Model.Encoding.x264;
 
+    using HandBrakeWPF.Commands.Interfaces;
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -30,16 +37,25 @@ namespace HandBrakeWPF.ViewModels
     public class VideoViewModel : ViewModelBase, IVideoViewModel
     {
         #region Constants and Fields
-
         /// <summary>
         /// Same as source constant.
         /// </summary>
         private const string SameAsSource = "Same as source";
 
         /// <summary>
+        /// The possible h264 levels.
+        /// </summary>
+        private static readonly List<string> Levels = new List<string> { "Auto", "1.0", "1b", "1.1", "1.2", "1.3", "2.0", "2.1", "2.2", "3.0", "3.1", "3.2", "4.0", "4.1", "4.2", "5.0", "5.1", "5.2"};
+
+        /// <summary>
         /// Backing field for the user setting service.
         /// </summary>
-        private IUserSettingService userSettingService;
+        private readonly IUserSettingService userSettingService;
+
+        /// <summary>
+        /// The advanced encoder options command
+        /// </summary>
+        private readonly IAdvancedEncoderOptionsCommand advancedEncoderOptionsCommand;
 
         /// <summary>
         /// Backing field used to display / hide the x264 options
@@ -66,6 +82,21 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private int rf;
 
+        /// <summary>
+        /// The x264 preset value.
+        /// </summary>
+        private int x264PresetValue;
+
+        /// <summary>
+        /// The extra arguments.
+        /// </summary>
+        private string extraArguments;
+
+        /// <summary>
+        /// The can clear tracker.
+        /// </summary>
+        private bool canClear;
+
         #endregion
 
         #region Constructors and Destructors
@@ -73,24 +104,26 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="VideoViewModel"/> class.
         /// </summary>
-        /// <param name="windowManager">
-        /// The window manager.
-        /// </param>
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        public VideoViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
+        /// <param name="advancedEncoderOptionsCommand">
+        /// The advanced Encoder Options Command.
+        /// </param>
+        public VideoViewModel(IUserSettingService userSettingService, IAdvancedEncoderOptionsCommand advancedEncoderOptionsCommand)
         {
             this.Task = new EncodeTask { VideoEncoder = VideoEncoder.X264 };
             this.userSettingService = userSettingService;
+            this.advancedEncoderOptionsCommand = advancedEncoderOptionsCommand;
             this.QualityMin = 0;
             this.QualityMax = 51;
             this.IsConstantQuantity = true;
             this.VideoEncoders = EnumHelper<VideoEncoder>.GetEnumList();
 
-            //X264Presets = EnumHelper<x264Preset>.GetEnumList();
-            //X264Profiles = EnumHelper<x264Profile>.GetEnumList();
-            //X264Tunes = EnumHelper<x264Tune>.GetEnumList();
+            X264Presets = new BindingList<x264Preset>(EnumHelper<x264Preset>.GetEnumList().ToList());
+            H264Profiles = EnumHelper<x264Profile>.GetEnumList();
+            X264Tunes = EnumHelper<x264Tune>.GetEnumList().Where(t => t != x264Tune.Fastdecode);
+            this.H264Levels = Levels;
         }
 
         #endregion
@@ -259,7 +292,7 @@ namespace HandBrakeWPF.ViewModels
                 this.rf = value;
 
                 double cqStep = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
-                this.SetQualitySliderBounds(); 
+                this.SetQualitySliderBounds();
                 switch (this.SelectedVideoEncoder)
                 {
                     case VideoEncoder.FFMpeg:
@@ -355,6 +388,9 @@ namespace HandBrakeWPF.ViewModels
 
                 // Update the Quality Slider. Make sure the bounds are up to date with the users settings.
                 this.SetQualitySliderBounds();
+
+                // Hide the x264 controls when not needed.
+                this.DisplayX264Options = value == VideoEncoder.X264;
             }
         }
 
@@ -378,6 +414,193 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets VideoEncoders.
         /// </summary>
         public IEnumerable<VideoEncoder> VideoEncoders { get; set; }
+
+        /// <summary>
+        /// Gets or sets the extra arguments.
+        /// </summary>
+        public string ExtraArguments
+        {
+            get
+            {
+                return this.Task.ExtraAdvancedArguments;
+            }
+            set
+            {
+                if (!object.Equals(this.Task.AdvancedEncoderOptions, value))
+                {
+                    this.Task.ExtraAdvancedArguments = value;
+                    this.NotifyOfPropertyChange(() => this.ExtraArguments);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether display x 264 options.
+        /// </summary>
+        public bool DisplayX264Options
+        {
+            get
+            {
+                return this.displayX264Options;
+            }
+            set
+            {
+                this.displayX264Options = value;
+                this.NotifyOfPropertyChange(() => this.DisplayX264Options);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the x 264 preset value.
+        /// </summary>
+        public int X264PresetValue
+        {
+            get
+            {
+                return this.x264PresetValue;
+            }
+            set
+            {
+                if (!object.Equals(this.X264PresetValue, value))
+                {
+                    this.x264PresetValue = value;
+                    this.X264Preset = this.X264Presets[value];
+                    this.NotifyOfPropertyChange(() => this.x264PresetValue);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets X264Preset.
+        /// </summary>
+        public x264Preset X264Preset
+        {
+            get
+            {
+                return this.Task.X264Preset;
+            }
+            set
+            {
+                if (!object.Equals(this.X264Preset, value))
+                {
+                    this.Task.X264Preset = value;
+                    this.NotifyOfPropertyChange(() => this.X264Preset);
+                    ResetAdvancedTab();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets H264Profile.
+        /// </summary>
+        public x264Profile H264Profile
+        {
+            get
+            {
+                return this.Task.H264Profile;
+            }
+
+            set
+            {
+                if (!object.Equals(this.H264Profile, value))
+                {
+                    this.Task.H264Profile = value;
+                    this.NotifyOfPropertyChange(() => this.H264Profile);
+                    ResetAdvancedTab();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets H264Profile.
+        /// </summary>
+        public string H264Level
+        {
+            get
+            {
+                return this.Task.H264Level;
+            }
+            set
+            {
+                if (!object.Equals(this.H264Level, value))
+                {
+                    this.Task.H264Level = value;
+                    this.NotifyOfPropertyChange(() => this.H264Level);
+                    ResetAdvancedTab();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets X264Tune.
+        /// </summary>
+        public x264Tune X264Tune
+        {
+            get
+            {
+                return this.Task.X264Tune;
+            }
+            set
+            {
+                if (!object.Equals(this.X264Tune, value))
+                {
+                    this.Task.X264Tune = value;
+                    this.NotifyOfPropertyChange(() => this.X264Tune);
+                    ResetAdvancedTab();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether fast decode.
+        /// </summary>
+        public bool FastDecode
+        {
+            get
+            {
+                return this.Task.FastDecode;
+            }
+            set
+            {
+                if (!object.Equals(this.FastDecode, value))
+                {
+                    this.Task.FastDecode = value;
+                    this.NotifyOfPropertyChange(() => this.FastDecode);
+                    ResetAdvancedTab();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets X264Presets.
+        /// </summary>
+        public BindingList<x264Preset> X264Presets { get; set; }
+
+        /// <summary>
+        /// Gets or sets X264Profiles.
+        /// </summary>
+        public IEnumerable<x264Profile> H264Profiles { get; set; }
+
+        /// <summary>
+        /// Gets or sets X264Tunes.
+        /// </summary>
+        public IEnumerable<x264Tune> X264Tunes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the x 264 levels.
+        /// </summary>
+        public IEnumerable<string> H264Levels { get; set; }
+
+        /// <summary>
+        /// Gets the full options tooltip.
+        /// </summary>
+        public string FullOptionsTooltip
+        {
+            get
+            {
+                return "You can provide additional arguments using the standard x264 format"; // string.Format(Resources.Video_x264ExtraArgs, this.GetActualx264Query());
+            }
+        }
 
         #endregion
 
@@ -444,15 +667,15 @@ namespace HandBrakeWPF.ViewModels
             {
                 case VideoEncoder.FFMpeg:
                 case VideoEncoder.FFMpeg2:
-                    int cq;
                     if (preset.Task.Quality.HasValue)
                     {
+                        int cq;
                         int.TryParse(preset.Task.Quality.Value.ToString(CultureInfo.InvariantCulture), out cq);
                         this.RF = 32 - cq;
                     }
                     break;
                 case VideoEncoder.X264:
- 
+
                     double multiplier = 1.0 / cqStep;
                     if (preset.Task.Quality.HasValue)
                     {
@@ -477,15 +700,18 @@ namespace HandBrakeWPF.ViewModels
 
             this.NotifyOfPropertyChange(() => this.Task);
 
-            //if (preset != null && preset.Task != null)
-            //{
-            //    this.Query = preset.Task.AdvancedEncoderOptions;
-            //    this.SetEncoder(preset.Task.VideoEncoder);
-
-            //    this.X264Preset = preset.Task.x264Preset;
-            //    this.X264Profile = preset.Task.x264Profile;
-            //    this.X264Tune = preset.Task.X264Tune;
-            //}
+            if (preset.Task != null)
+            {
+                this.SetEncoder(preset.Task.VideoEncoder);
+                this.X264PresetValue = preset.Task.VideoEncoder == VideoEncoder.X264
+                                           ? (int)preset.Task.X264Preset
+                                           : (int)x264Preset.Medium;
+                this.H264Profile = preset.Task.VideoEncoder == VideoEncoder.X264 ? preset.Task.H264Profile : x264Profile.None;
+                this.X264Tune = preset.Task.VideoEncoder == VideoEncoder.X264 ? preset.Task.X264Tune : x264Tune.None;
+                this.H264Level = preset.Task.VideoEncoder == VideoEncoder.X264 ? preset.Task.H264Level : "Auto";
+                this.FastDecode = preset.Task.VideoEncoder == VideoEncoder.X264 && preset.Task.FastDecode;
+                this.ExtraArguments = preset.Task.ExtraAdvancedArguments;
+            }
         }
 
         /// <summary>
@@ -508,6 +734,13 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.Task.VideoBitrate);
             this.NotifyOfPropertyChange(() => this.Task.TwoPass);
             this.NotifyOfPropertyChange(() => this.Task.TurboFirstPass);
+
+            this.NotifyOfPropertyChange(() => this.X264Tune);
+            this.NotifyOfPropertyChange(() => this.X264Preset);
+            this.NotifyOfPropertyChange(() => this.H264Level);
+            this.NotifyOfPropertyChange(() => this.H264Profile);
+            this.NotifyOfPropertyChange(() => this.FastDecode);
+            this.NotifyOfPropertyChange(() => this.ExtraArguments);
         }
 
         /// <summary>
@@ -518,7 +751,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void SetEncoder(VideoEncoder encoder)
         {
-            //this.DisplayX264Options = encoder == VideoEncoder.X264;
+            this.DisplayX264Options = encoder == VideoEncoder.X264;
         }
 
         /// <summary>
@@ -532,6 +765,21 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.SelectedVideoEncoder = VideoEncoder.X264;
             }
+        }
+
+        /// <summary>
+        /// Clear advanced settings.
+        /// </summary>
+        public void ClearAdvancedSettings()
+        {
+            this.canClear = false;
+            this.X264PresetValue = 5;
+            this.X264Tune = x264Tune.None;
+            this.H264Profile = x264Profile.None;
+            this.FastDecode = false;
+            this.H264Level = "Auto";
+            this.ExtraArguments = string.Empty;
+            this.canClear = true;
         }
 
         #endregion
@@ -561,101 +809,44 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #region Advanced
-        ///// <summary>
-        ///// Gets or sets State.
-        ///// </summary>
-        //public string Query
-        //{
-        //    get
-        //    {
-        //        return this.Task.AdvancedEncoderOptions;
-        //    }
-        //    set
-        //    {
-        //        this.Task.AdvancedEncoderOptions = value;
-        //        this.NotifyOfPropertyChange(() => this.Query);
-        //    }
-        //}
+        /// <summary>
+        /// Reset advanced tab.
+        /// </summary>
+        private void ResetAdvancedTab()
+        {
+            if (canClear)
+            {
+                this.advancedEncoderOptionsCommand.ExecuteClearAdvanced();
+            }
+        }
 
-        ///// <summary>
-        ///// Gets or sets X264Preset.
-        ///// </summary>
-        //public x264Preset X264Preset
-        //{
-        //    get
-        //    {
-        //        return this.Task.x264Preset;
-        //    }
-        //    set
-        //    {
-        //        this.Task.x264Preset = value;
-        //        this.NotifyOfPropertyChange(() => this.X264Preset);
-        //    }
-        //}
+        /// <summary>
+        /// The get actualx 264 query.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        private string GetActualx264Query()
+        {
+            string preset = EnumHelper<x264Preset>.GetDisplay(this.X264Preset);
+            string profile = EnumHelper<x264Profile>.GetDisplay(this.H264Profile);
 
-        ///// <summary>
-        ///// Gets or sets X264Profile.
-        ///// </summary>
-        //public x264Profile X264Profile
-        //{
-        //    get
-        //    {
-        //        return this.Task.x264Profile;
-        //    }
-        //    set
-        //    {
-        //        this.Task.x264Profile = value;
-        //        this.NotifyOfPropertyChange(() => this.X264Profile);
-        //    }
-        //}
+            List<string> tunes = new List<string>();
+            if (X264Tune != x264Tune.None)
+            {
+                tunes.Add(EnumHelper<x264Tune>.GetDisplay(this.X264Tune));
+            }
+            if (this.FastDecode)
+            {
+                tunes.Add("fastdecode");
+            }
 
-        ///// <summary>
-        ///// Gets or sets X264Tune.
-        ///// </summary>
-        //public x264Tune X264Tune
-        //{
-        //    get
-        //    {
-        //        return this.Task.X264Tune;
-        //    }
-        //    set
-        //    {
-        //        this.Task.X264Tune = value;
-        //        this.NotifyOfPropertyChange(() => this.X264Tune);
-        //    }
-        //}
+            // Get the width or height, default if we don't have it yet so we don't crash.
+            int width = this.Task.Width.HasValue ? this.Task.Width.Value : 720;
+            int height = this.Task.Height.HasValue ? this.Task.Height.Value : 576;
 
-        ///// <summary>
-        ///// Gets or sets X264Presets.
-        ///// </summary>
-        //public IEnumerable<x264Preset> X264Presets { get; set; }
-
-        ///// <summary>
-        ///// Gets or sets X264Profiles.
-        ///// </summary>
-        //public IEnumerable<x264Profile> X264Profiles { get; set; }
-
-        ///// <summary>
-        ///// Gets or sets X264Tunes.
-        ///// </summary>
-        //public IEnumerable<x264Tune> X264Tunes { get; set; }
-
-        ///// <summary>
-        ///// Gets or sets a value indicating whether DisplayX264Options.
-        ///// </summary>
-        //public bool DisplayX264Options
-        //{
-        //    get
-        //    {
-        //        return this.displayX264Options;
-        //    }
-        //    set
-        //    {
-        //        this.displayX264Options = value;
-        //        this.NotifyOfPropertyChange(() => this.DisplayX264Options);
-        //    }
-        //}
-        #endregion
+            // TODO figure out what is wrong with this??
+            return HandBrakeUtils.CreateX264OptionsString(preset, tunes, this.ExtraArguments, profile, this.H264Level, width, height);
+        }
     }
 }

@@ -93,12 +93,9 @@ namespace HandBrake.ApplicationServices.Utilities
             Match turboFirstPass = Regex.Match(input, @" -T");
             Match optimizeMP4 = Regex.Match(input, @" -O");
             Match pfr = Regex.Match(input, @" --pfr");
-            Match vfr = Regex.Match(input, @" --vfr");
             Match cfr = Regex.Match(input, @" --cfr");
 
             // Audio Settings Tab
-            Match noAudio = Regex.Match(input, @"-a none");
-            Match audioTracks = Regex.Match(input, @"-a ([0-9,]+)");
             Match audioTrackMixes = Regex.Match(input, @"-6 ([0-9a-zA-Z,]+)");
             Match audioEncoders = Regex.Match(input, @"-E ([a-zA-Z0-9+,:\*]+)");
             Match audioBitrates = Regex.Match(input, @"-B ([0-9a-zA-Z,]+)"); // Auto = a-z
@@ -114,9 +111,11 @@ namespace HandBrake.ApplicationServices.Utilities
 
             // Advanced Tab
             Match advanced = Regex.Match(input, @"-x ([.,/a-zA-Z0-9=:-]*)");
-            Match x264Preset = Regex.Match(input, @"--x264-preset([=a-zA-Z0-9\s]*)");
-            Match x264Tune = Regex.Match(input, @"--x264-tune([=a-zA-Z0-9\s]*)");
-            Match x264Profile = Regex.Match(input, @"--x264-profile([=a-zA-Z0-9\s]*)");
+            Match x264Preset = Regex.Match(input, @"--x264-preset([=a-zA-Z0-9\s ]*)");
+            Match x264Tune = Regex.Match(input, @"--x264-tune([=,a-zA-Z0-9\s ]*)");
+            Match h264Profile = Regex.Match(input, @"--h264-profile([=a-zA-Z0-9\s ]*)");
+            Match x264Profile = Regex.Match(input, @"--x264-profile([=a-zA-Z0-9\s ]*)");
+            Match h264Level = Regex.Match(input, @"--h264-level([=a-zA-Z0-9.\s ]*)");
 
             #endregion
 
@@ -247,7 +246,6 @@ namespace HandBrake.ApplicationServices.Utilities
                             parsed.CustomDecomb = value;
                             parsed.Decomb = parsed.CustomDecomb == "7:2:6:9:1:80" ? Decomb.Fast : Decomb.Custom;
                         }
-
                     }
                 }
 
@@ -368,7 +366,6 @@ namespace HandBrake.ApplicationServices.Utilities
                 }
 
                 // Get the data from the regular expression results
-                string[] trackData = null;
                 string[] trackMixes = null;
                 string[] trackEncoders = null;
                 string[] trackBitrates = null;
@@ -376,8 +373,6 @@ namespace HandBrake.ApplicationServices.Utilities
                 string[] trackDRCvalues = null;
                 string[] trackGainValues = null;
 
-                if (audioTracks.Success)
-                    trackData = audioTracks.ToString().Replace("-a ", string.Empty).Split(',');
                 if (audioTrackMixes.Success)
                     trackMixes = audioTrackMixes.ToString().Replace("-6 ", string.Empty).Split(',');
                 if (audioEncoders.Success)
@@ -396,9 +391,6 @@ namespace HandBrake.ApplicationServices.Utilities
                 for (int x = 0; x < encoderCount; x++)
                 {
                     AudioTrack track = new AudioTrack();
-                    //if (trackData != null)
-                    //    if (trackData.Length >= (x + 1)) // Audio Track
-                    //        track.ScannedTrack = trackData[x].Trim();
 
                     if (trackMixes != null)
                         if (trackMixes.Length >= (x + 1)) // Audio Mix
@@ -461,17 +453,35 @@ namespace HandBrake.ApplicationServices.Utilities
                     parsed.AdvancedEncoderOptions = advanced.ToString().Replace("-x ", string.Empty);
 
                 if (x264Preset.Success)
-                    parsed.x264Preset =
+                    parsed.X264Preset =
                         Converters.Getx264PresetFromCli(x264Preset.ToString().Replace("--x264-preset", string.Empty).Replace("=", string.Empty).Trim());
 
+                if (h264Profile.Success)
+                    parsed.H264Profile =
+                        Converters.Getx264ProfileFromCli(h264Profile.ToString().Replace("--h264-profile", string.Empty).Replace("=", string.Empty).Trim());
+
                 if (x264Profile.Success)
-                    parsed.x264Profile =
-                        Converters.Getx264ProfileFromCli(x264Profile.ToString().Replace("--x264-profile", string.Empty).Replace("=", string.Empty).Trim());
+                    parsed.H264Profile =
+                       Converters.Getx264ProfileFromCli(x264Profile.ToString().Replace("--x264-profile", string.Empty).Replace("=", string.Empty).Trim());
+
+                if (h264Level.Success)
+                    parsed.H264Level =
+                        h264Level.ToString().Replace("--h264-level", string.Empty).Replace("=", string.Empty).Trim();
 
                 if (x264Tune.Success)
-                    parsed.X264Tune =
-                        Converters.Getx264TuneFromCli(x264Tune.ToString().Replace("--x264-tune", string.Empty).Replace("=", string.Empty).Trim());
+                {
+                    string tuneOptions =
+                        x264Tune.ToString().Replace("--x264-tune", string.Empty).Replace("=", string.Empty).Trim();
 
+                    parsed.FastDecode = tuneOptions.Contains("fastdecode");
+
+                    // Remove these options. They are not in the dropdown.
+                    tuneOptions = tuneOptions.Replace("fastdecode", string.Empty).Replace(
+                        ",", string.Empty);
+
+                    parsed.X264Tune = Converters.Getx264TuneFromCli(tuneOptions);
+                }
+                  
                 #endregion
             }
             catch (Exception exc)

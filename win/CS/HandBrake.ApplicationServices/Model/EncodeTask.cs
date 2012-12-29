@@ -34,8 +34,8 @@ namespace HandBrake.ApplicationServices.Model
             this.SubtitleTracks = new ObservableCollection<SubtitleTrack>();
             this.ChapterNames = new ObservableCollection<ChapterMarker>();
             this.AllowedPassthruOptions = new AllowedPassthru();
-            this.x264Preset = x264Preset.None;
-            this.x264Profile = x264Profile.None;
+            this.X264Preset = x264Preset.Medium;
+            this.H264Profile = x264Profile.None;
             this.X264Tune = x264Tune.None;
             this.Modulus = 16;
         }
@@ -59,7 +59,6 @@ namespace HandBrake.ApplicationServices.Model
             {
                 this.AudioTracks.Add(new AudioTrack(track));
             }
-
 
             this.ChapterNames = new ObservableCollection<ChapterMarker>();
             foreach (ChapterMarker track in task.ChapterNames)
@@ -117,9 +116,12 @@ namespace HandBrake.ApplicationServices.Model
             this.VideoEncoder = task.VideoEncoder;
             this.VideoEncodeRateType = task.VideoEncodeRateType;
             this.Width = task.Width;
-            this.x264Preset = task.x264Preset;
-            this.x264Profile = task.x264Profile;
+            this.X264Preset = task.X264Preset;
+            this.H264Profile = task.H264Profile;
             this.X264Tune = task.X264Tune;
+            this.H264Level = task.H264Level;
+            this.FastDecode = task.FastDecode;
+            this.ExtraAdvancedArguments = task.ExtraAdvancedArguments;
 
             this.PreviewStartAt = task.PreviewStartAt;
             this.PreviewDuration = task.PreviewDuration;
@@ -411,17 +413,32 @@ namespace HandBrake.ApplicationServices.Model
         /// <summary>
         /// Gets or sets x264Preset.
         /// </summary>
-        public x264Preset x264Preset { get; set; }
+        public x264Preset X264Preset { get; set; }
 
         /// <summary>
         /// Gets or sets x264Profile.
         /// </summary>
-        public x264Profile x264Profile { get; set; }
+        public x264Profile H264Profile { get; set; }
+
+        /// <summary>
+        /// Gets or sets the x 264 level.
+        /// </summary>
+        public string H264Level { get; set; }
 
         /// <summary>
         /// Gets or sets X264Tune.
         /// </summary>
         public x264Tune X264Tune { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether fast decode.
+        /// </summary>
+        public bool FastDecode { get; set; }
+
+        /// <summary>
+        /// Extra Advanced Arguments for the Video Tab.
+        /// </summary>
+        public string ExtraAdvancedArguments { get; set; }
 
         #endregion
 

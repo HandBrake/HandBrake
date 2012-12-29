@@ -42,35 +42,35 @@
 static void ghb_cell_renderer_text_finalize   (GObject                  *object);
 
 static void ghb_cell_renderer_text_get_property  (GObject                  *object,
-						  guint                     param_id,
-						  GValue                   *value,
-						  GParamSpec               *pspec);
+                          guint                     param_id,
+                          GValue                   *value,
+                          GParamSpec               *pspec);
 static void ghb_cell_renderer_text_set_property  (GObject                  *object,
-						  guint                     param_id,
-						  const GValue             *value,
-						  GParamSpec               *pspec);
+                          guint                     param_id,
+                          const GValue             *value,
+                          GParamSpec               *pspec);
 static void ghb_cell_renderer_text_get_size   (GtkCellRenderer          *cell,
-					       GtkWidget                *widget,
-					       GdkRectangle             *cell_area,
-					       gint                     *x_offset,
-					       gint                     *y_offset,
-					       gint                     *width,
-					       gint                     *height);
+                           GtkWidget                *widget,
+                           GdkRectangle             *cell_area,
+                           gint                     *x_offset,
+                           gint                     *y_offset,
+                           gint                     *width,
+                           gint                     *height);
 static void ghb_cell_renderer_text_render     (GtkCellRenderer          *cell,
-					       GdkWindow                *window,
-					       GtkWidget                *widget,
-					       GdkRectangle             *background_area,
-					       GdkRectangle             *cell_area,
-					       GdkRectangle             *expose_area,
-					       GtkCellRendererState      flags);
+                           GdkWindow                *window,
+                           GtkWidget                *widget,
+                           GdkRectangle             *background_area,
+                           GdkRectangle             *cell_area,
+                           GdkRectangle             *expose_area,
+                           GtkCellRendererState      flags);
 
 static GtkCellEditable *ghb_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
-							      GdkEvent             *event,
-							      GtkWidget            *widget,
-							      const gchar          *path,
-							      GdkRectangle         *background_area,
-							      GdkRectangle         *cell_area,
-							      GtkCellRendererState  flags);
+                                  GdkEvent             *event,
+                                  GtkWidget            *widget,
+                                  const gchar          *path,
+                                  GdkRectangle         *background_area,
+                                  GdkRectangle         *cell_area,
+                                  GtkCellRendererState  flags);
 
 enum {
   EDITED,
@@ -218,12 +218,12 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
                                                         GTK_PARAM_WRITABLE));
 
   g_object_class_install_property (object_class,
-				   PROP_ATTRIBUTES,
-				   g_param_spec_boxed ("attributes",
-						       P_("Attributes"),
-						       P_("A list of style attributes to apply to the text of the renderer"),
-						       PANGO_TYPE_ATTR_LIST,
-						       GTK_PARAM_READWRITE));
+                   PROP_ATTRIBUTES,
+                   g_param_spec_boxed ("attributes",
+                               P_("Attributes"),
+                               P_("A list of style attributes to apply to the text of the renderer"),
+                               PANGO_TYPE_ATTR_LIST,
+                               GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
                                    PROP_SINGLE_PARAGRAPH_MODE,
@@ -372,7 +372,7 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
                                    g_param_spec_int ("rise",
                                                      P_("Rise"),
                                                      P_("Offset of text above the baseline "
-							"(below the baseline if rise is negative)"),
+                            "(below the baseline if rise is negative)"),
                                                      -G_MAXINT,
                                                      G_MAXINT,
                                                      0,
@@ -401,8 +401,8 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
                                    g_param_spec_string ("language",
                                                         P_("Language"),
                                                         P_("The language this text is in, as an ISO code. "
-							   "Pango can use this as a hint when rendering the text. "
-							   "If you don't understand this parameter, you probably don't need it"),
+                               "Pango can use this as a hint when rendering the text. "
+                               "If you don't understand this parameter, you probably don't need it"),
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
 
@@ -420,13 +420,13 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
   g_object_class_install_property (object_class,
                                    PROP_ELLIPSIZE,
                                    g_param_spec_enum ("ellipsize",
-						      P_("Ellipsize"),
-						      P_("The preferred place to ellipsize the string, "
-							 "if the cell renderer does not have enough room "
-							 "to display the entire string"),
-						      PANGO_TYPE_ELLIPSIZE_MODE,
-						      PANGO_ELLIPSIZE_NONE,
-						      GTK_PARAM_READWRITE));
+                              P_("Ellipsize"),
+                              P_("The preferred place to ellipsize the string, "
+                             "if the cell renderer does not have enough room "
+                             "to display the entire string"),
+                              PANGO_TYPE_ELLIPSIZE_MODE,
+                              PANGO_ELLIPSIZE_NONE,
+                              GTK_PARAM_READWRITE));
 
   /**
    * GhbCellRendererText:width-chars:
@@ -459,13 +459,13 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
   g_object_class_install_property (object_class,
                                    PROP_WRAP_MODE,
                                    g_param_spec_enum ("wrap-mode",
-						      P_("Wrap mode"),
-						      P_("How to break the string into multiple lines, "
-							 "if the cell renderer does not have enough room "
-							 "to display the entire string"),
-						      PANGO_TYPE_WRAP_MODE,
-						      PANGO_WRAP_CHAR,
-						      GTK_PARAM_READWRITE));
+                              P_("Wrap mode"),
+                              P_("How to break the string into multiple lines, "
+                             "if the cell renderer does not have enough room "
+                             "to display the entire string"),
+                              PANGO_TYPE_WRAP_MODE,
+                              PANGO_WRAP_CHAR,
+                              GTK_PARAM_READWRITE));
 
   /**
    * GhbCellRendererText:wrap-width:
@@ -477,14 +477,14 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
    * Since: 2.8
    */
   g_object_class_install_property (object_class,
-				   PROP_WRAP_WIDTH,
-				   g_param_spec_int ("wrap-width",
-						     P_("Wrap width"),
-						     P_("The width at which the text is wrapped"),
-						     -1,
-						     G_MAXINT,
-						     -1,
-						     GTK_PARAM_READWRITE));
+                   PROP_WRAP_WIDTH,
+                   g_param_spec_int ("wrap-width",
+                             P_("Wrap width"),
+                             P_("The width at which the text is wrapped"),
+                             -1,
+                             G_MAXINT,
+                             -1,
+                             GTK_PARAM_READWRITE));
 
   /**
    * GhbCellRendererText:alignment:
@@ -500,11 +500,11 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
   g_object_class_install_property (object_class,
                                    PROP_ALIGN,
                                    g_param_spec_enum ("alignment",
-						      P_("Alignment"),
-						      P_("How to align the lines"),
-						      PANGO_TYPE_ALIGNMENT,
-						      PANGO_ALIGN_LEFT,
-						      GTK_PARAM_READWRITE));
+                              P_("Alignment"),
+                              P_("How to align the lines"),
+                              PANGO_TYPE_ALIGNMENT,
+                              PANGO_ALIGN_LEFT,
+                              GTK_PARAM_READWRITE));
   
   /* Style props are set or not */
 
@@ -587,24 +587,24 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
    */
   text_cell_renderer_signals [EDITED] =
     g_signal_new (I_("edited"),
-		  G_OBJECT_CLASS_TYPE (object_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GhbCellRendererTextClass, edited),
-		  NULL, NULL,
-		  ghb_marshal_VOID__STRING_STRING,
-		  G_TYPE_NONE, 2,
-		  G_TYPE_STRING,
-		  G_TYPE_STRING);
+          G_OBJECT_CLASS_TYPE (object_class),
+          G_SIGNAL_RUN_LAST,
+          G_STRUCT_OFFSET (GhbCellRendererTextClass, edited),
+          NULL, NULL,
+          ghb_marshal_VOID__STRING_STRING,
+          G_TYPE_NONE, 2,
+          G_TYPE_STRING,
+          G_TYPE_STRING);
 
   text_cell_renderer_signals [KEYPRESS] =
     g_signal_new (I_("key-press-event"),
-		  G_OBJECT_CLASS_TYPE (object_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GhbCellRendererTextClass, keypress),
-		  NULL, NULL,
-		  ghb_marshal_BOOLEAN__BOXED,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+          G_OBJECT_CLASS_TYPE (object_class),
+          G_SIGNAL_RUN_LAST,
+          G_STRUCT_OFFSET (GhbCellRendererTextClass, keypress),
+          NULL, NULL,
+          ghb_marshal_BOOLEAN__BOXED,
+          G_TYPE_BOOLEAN, 1,
+          GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   g_type_class_add_private (object_class, sizeof (GhbCellRendererTextPrivate));
 }
@@ -654,9 +654,9 @@ get_property_font_set_mask (guint prop_id)
 
 static void
 ghb_cell_renderer_text_get_property (GObject        *object,
-				     guint           param_id,
-				     GValue         *value,
-				     GParamSpec     *pspec)
+                     guint           param_id,
+                     GValue         *value,
+                     GParamSpec     *pspec)
 {
   GhbCellRendererText *celltext = GHB_CELL_RENDERER_TEXT (object);
   GhbCellRendererTextPrivate *priv;
@@ -792,10 +792,10 @@ ghb_cell_renderer_text_get_property (GObject        *object,
     case PROP_STRETCH_SET:
     case PROP_SIZE_SET:
       {
-	PangoFontMask mask = get_property_font_set_mask (param_id);
-	g_value_set_boolean (value, (pango_font_description_get_set_fields (celltext->font) & mask) != 0);
-	
-	break;
+    PangoFontMask mask = get_property_font_set_mask (param_id);
+    g_value_set_boolean (value, (pango_font_description_get_set_fields (celltext->font) & mask) != 0);
+    
+    break;
       }
 
     case PROP_SCALE_SET:
@@ -899,7 +899,7 @@ set_fg_color (GhbCellRendererText *celltext,
 
 static PangoFontMask
 set_font_desc_fields (PangoFontDescription *desc,
-		      PangoFontMask         to_set)
+              PangoFontMask         to_set)
 {
   PangoFontMask changed_mask = 0;
   
@@ -907,10 +907,10 @@ set_font_desc_fields (PangoFontDescription *desc,
     {
       const char *family = pango_font_description_get_family (desc);
       if (!family)
-	{
-	  family = "sans";
-	  changed_mask |= PANGO_FONT_MASK_FAMILY;
-	}
+    {
+      family = "sans";
+      changed_mask |= PANGO_FONT_MASK_FAMILY;
+    }
 
       pango_font_description_set_family (desc, family);
     }
@@ -926,10 +926,10 @@ set_font_desc_fields (PangoFontDescription *desc,
     {
       gint size = pango_font_description_get_size (desc);
       if (size <= 0)
-	{
-	  size = 10 * PANGO_SCALE;
-	  changed_mask |= PANGO_FONT_MASK_SIZE;
-	}
+    {
+      size = 10 * PANGO_SCALE;
+      changed_mask |= PANGO_FONT_MASK_SIZE;
+    }
       
       pango_font_description_set_size (desc, size);
     }
@@ -939,7 +939,7 @@ set_font_desc_fields (PangoFontDescription *desc,
 
 static void
 notify_set_changed (GObject       *object,
-		    PangoFontMask  changed_mask)
+            PangoFontMask  changed_mask)
 {
   if (changed_mask & PANGO_FONT_MASK_FAMILY)
     g_object_notify (object, "family-set");
@@ -957,7 +957,7 @@ notify_set_changed (GObject       *object,
 
 static void
 notify_fields_changed (GObject       *object,
-		       PangoFontMask  changed_mask)
+               PangoFontMask  changed_mask)
 {
   if (changed_mask & PANGO_FONT_MASK_FAMILY)
     g_object_notify (object, "family");
@@ -1023,9 +1023,9 @@ set_font_description (GhbCellRendererText  *celltext,
 
 static void
 ghb_cell_renderer_text_set_property (GObject      *object,
-				     guint         param_id,
-				     const GValue *value,
-				     GParamSpec   *pspec)
+                     guint         param_id,
+                     const GValue *value,
+                     GParamSpec   *pspec)
 {
   GhbCellRendererText *celltext = GHB_CELL_RENDERER_TEXT (object);
   GhbCellRendererTextPrivate *priv;
@@ -1051,7 +1051,7 @@ ghb_cell_renderer_text_set_property (GObject      *object,
 
     case PROP_ATTRIBUTES:
       if (celltext->extra_attrs)
-	pango_attr_list_unref (celltext->extra_attrs);
+    pango_attr_list_unref (celltext->extra_attrs);
 
       celltext->extra_attrs = g_value_get_boxed (value);
       if (celltext->extra_attrs)
@@ -1059,33 +1059,33 @@ ghb_cell_renderer_text_set_property (GObject      *object,
       break;
     case PROP_MARKUP:
       {
-	const gchar *str;
-	gchar *text = NULL;
-	GError *error = NULL;
-	PangoAttrList *attrs = NULL;
+    const gchar *str;
+    gchar *text = NULL;
+    GError *error = NULL;
+    PangoAttrList *attrs = NULL;
 
-	str = g_value_get_string (value);
-	if (str && !pango_parse_markup (str,
-					-1,
-					0,
-					&attrs,
-					&text,
-					NULL,
-					&error))
-	  {
-	    g_warning ("Failed to set text from markup due to error parsing markup: %s",
-		       error->message);
-	    g_error_free (error);
-	    return;
-	  }
+    str = g_value_get_string (value);
+    if (str && !pango_parse_markup (str,
+                    -1,
+                    0,
+                    &attrs,
+                    &text,
+                    NULL,
+                    &error))
+      {
+        g_warning ("Failed to set text from markup due to error parsing markup: %s",
+               error->message);
+        g_error_free (error);
+        return;
+      }
 
-	g_free (celltext->text);
+    g_free (celltext->text);
 
-	if (celltext->extra_attrs)
-	  pango_attr_list_unref (celltext->extra_attrs);
+    if (celltext->extra_attrs)
+      pango_attr_list_unref (celltext->extra_attrs);
 
-	celltext->text = text;
-	celltext->extra_attrs = attrs;
+    celltext->text = text;
+    celltext->extra_attrs = attrs;
         priv->markup_set = TRUE;
       }
       break;
@@ -1146,10 +1146,10 @@ ghb_cell_renderer_text_set_property (GObject      *object,
 
         set_font_description (celltext, font_desc);
 
-	pango_font_description_free (font_desc);
+    pango_font_description_free (font_desc);
         
-	if (celltext->fixed_height_rows != -1)
-	  celltext->calc_fixed_height = TRUE;
+    if (celltext->fixed_height_rows != -1)
+      celltext->calc_fixed_height = TRUE;
       }
       break;
 
@@ -1157,7 +1157,7 @@ ghb_cell_renderer_text_set_property (GObject      *object,
       set_font_description (celltext, g_value_get_boxed (value));
       
       if (celltext->fixed_height_rows != -1)
-	celltext->calc_fixed_height = TRUE;
+    celltext->calc_fixed_height = TRUE;
       break;
 
     case PROP_FAMILY:
@@ -1168,57 +1168,57 @@ ghb_cell_renderer_text_set_property (GObject      *object,
     case PROP_SIZE:
     case PROP_SIZE_POINTS:
       {
-	PangoFontMask old_set_mask = pango_font_description_get_set_fields (celltext->font);
-	
-	switch (param_id)
-	  {
-	  case PROP_FAMILY:
-	    pango_font_description_set_family (celltext->font,
-					       g_value_get_string (value));
-	    break;
-	  case PROP_STYLE:
-	    pango_font_description_set_style (celltext->font,
-					      g_value_get_enum (value));
-	    break;
-	  case PROP_VARIANT:
-	    pango_font_description_set_variant (celltext->font,
-						g_value_get_enum (value));
-	    break;
-	  case PROP_WEIGHT:
-	    pango_font_description_set_weight (celltext->font,
-					       g_value_get_int (value));
-	    break;
-	  case PROP_STRETCH:
-	    pango_font_description_set_stretch (celltext->font,
-						g_value_get_enum (value));
-	    break;
-	  case PROP_SIZE:
-	    pango_font_description_set_size (celltext->font,
-					     g_value_get_int (value));
-	    g_object_notify (object, "size-points");
-	    break;
-	  case PROP_SIZE_POINTS:
-	    pango_font_description_set_size (celltext->font,
-					     g_value_get_double (value) * PANGO_SCALE);
-	    g_object_notify (object, "size");
-	    break;
-	  }
-	
-	if (celltext->fixed_height_rows != -1)
-	  celltext->calc_fixed_height = TRUE;
-	
-	notify_set_changed (object, old_set_mask & pango_font_description_get_set_fields (celltext->font));
-	g_object_notify (object, "font-desc");
-	g_object_notify (object, "font");
+    PangoFontMask old_set_mask = pango_font_description_get_set_fields (celltext->font);
+    
+    switch (param_id)
+      {
+      case PROP_FAMILY:
+        pango_font_description_set_family (celltext->font,
+                           g_value_get_string (value));
+        break;
+      case PROP_STYLE:
+        pango_font_description_set_style (celltext->font,
+                          g_value_get_enum (value));
+        break;
+      case PROP_VARIANT:
+        pango_font_description_set_variant (celltext->font,
+                        g_value_get_enum (value));
+        break;
+      case PROP_WEIGHT:
+        pango_font_description_set_weight (celltext->font,
+                           g_value_get_int (value));
+        break;
+      case PROP_STRETCH:
+        pango_font_description_set_stretch (celltext->font,
+                        g_value_get_enum (value));
+        break;
+      case PROP_SIZE:
+        pango_font_description_set_size (celltext->font,
+                         g_value_get_int (value));
+        g_object_notify (object, "size-points");
+        break;
+      case PROP_SIZE_POINTS:
+        pango_font_description_set_size (celltext->font,
+                         g_value_get_double (value) * PANGO_SCALE);
+        g_object_notify (object, "size");
+        break;
+      }
+    
+    if (celltext->fixed_height_rows != -1)
+      celltext->calc_fixed_height = TRUE;
+    
+    notify_set_changed (object, old_set_mask & pango_font_description_get_set_fields (celltext->font));
+    g_object_notify (object, "font-desc");
+    g_object_notify (object, "font");
 
-	break;
+    break;
       }
       
     case PROP_SCALE:
       celltext->font_scale = g_value_get_double (value);
       celltext->scale_set = TRUE;
       if (celltext->fixed_height_rows != -1)
-	celltext->calc_fixed_height = TRUE;
+    celltext->calc_fixed_height = TRUE;
       g_object_notify (object, "scale-set");
       break;
       
@@ -1250,7 +1250,7 @@ ghb_cell_renderer_text_set_property (GObject      *object,
       celltext->rise_set = TRUE;
       g_object_notify (object, "rise-set");
       if (celltext->fixed_height_rows != -1)
-	celltext->calc_fixed_height = TRUE;
+    celltext->calc_fixed_height = TRUE;
       break;  
 
     case PROP_LANGUAGE:
@@ -1300,18 +1300,18 @@ ghb_cell_renderer_text_set_property (GObject      *object,
     case PROP_STRETCH_SET:
     case PROP_SIZE_SET:
       if (!g_value_get_boolean (value))
-	{
-	  pango_font_description_unset_fields (celltext->font,
-					       get_property_font_set_mask (param_id));
-	}
+    {
+      pango_font_description_unset_fields (celltext->font,
+                           get_property_font_set_mask (param_id));
+    }
       else
-	{
-	  PangoFontMask changed_mask;
-	  
-	  changed_mask = set_font_desc_fields (celltext->font,
-					       get_property_font_set_mask (param_id));
-	  notify_fields_changed (G_OBJECT (celltext), changed_mask);
-	}
+    {
+      PangoFontMask changed_mask;
+      
+      changed_mask = set_font_desc_fields (celltext->font,
+                           get_property_font_set_mask (param_id));
+      notify_fields_changed (G_OBJECT (celltext), changed_mask);
+    }
       break;
 
     case PROP_SCALE_SET:
@@ -1412,7 +1412,7 @@ get_layout (GhbCellRendererText *celltext,
        */
       
       if (celltext->foreground_set
-	  && (flags & GTK_CELL_RENDERER_SELECTED) == 0)
+      && (flags & GTK_CELL_RENDERER_SELECTED) == 0)
         {
           PangoColor color;
 
@@ -1487,9 +1487,9 @@ get_layout (GhbCellRendererText *celltext,
       PangoAlignment align;
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-	align = PANGO_ALIGN_RIGHT;
+    align = PANGO_ALIGN_RIGHT;
       else
-	align = PANGO_ALIGN_LEFT;
+    align = PANGO_ALIGN_LEFT;
 
       pango_layout_set_alignment (layout, align);
     }
@@ -1503,13 +1503,13 @@ get_layout (GhbCellRendererText *celltext,
 
 static void
 get_size (GtkCellRenderer *cell,
-	  GtkWidget       *widget,
-	  GdkRectangle    *cell_area,
-	  PangoLayout     *layout,
-	  gint            *x_offset,
-	  gint            *y_offset,
-	  gint            *width,
-	  gint            *height)
+      GtkWidget       *widget,
+      GdkRectangle    *cell_area,
+      PangoLayout     *layout,
+      gint            *x_offset,
+      gint            *y_offset,
+      gint            *width,
+      gint            *height)
 {
   GhbCellRendererText *celltext = (GhbCellRendererText *) cell;
   PangoRectangle rect;
@@ -1535,32 +1535,32 @@ get_size (GtkCellRenderer *cell,
       pango_font_description_merge_static (font_desc, celltext->font, TRUE);
 
       if (celltext->scale_set)
-	pango_font_description_set_size (font_desc,
-					 celltext->font_scale * pango_font_description_get_size (font_desc));
+    pango_font_description_set_size (font_desc,
+                     celltext->font_scale * pango_font_description_get_size (font_desc));
 
       context = gtk_widget_get_pango_context (widget);
 
       metrics = pango_context_get_metrics (context,
-					   font_desc,
-					   pango_context_get_language (context));
+                       font_desc,
+                       pango_context_get_language (context));
       row_height = (pango_font_metrics_get_ascent (metrics) +
-		    pango_font_metrics_get_descent (metrics));
+            pango_font_metrics_get_descent (metrics));
       pango_font_metrics_unref (metrics);
 
       pango_font_description_free (font_desc);
 
       gtk_cell_renderer_set_fixed_size (cell,
-					cell_width, 2*cell_ypad +
-					celltext->fixed_height_rows * PANGO_PIXELS (row_height));
+                    cell_width, 2*cell_ypad +
+                    celltext->fixed_height_rows * PANGO_PIXELS (row_height));
       
       if (height)
-	{
+    {
           *height = cell_height;
-	  height = NULL;
-	}
+      height = NULL;
+    }
       celltext->calc_fixed_height = FALSE;
       if (width == NULL)
-	return;
+    return;
     }
   
   if (layout)
@@ -1576,20 +1576,20 @@ get_size (GtkCellRenderer *cell,
       rect.width = MIN(rect.width, cell_area->width - 2 * cell_xpad);
 
       if (x_offset)
-	{
-	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-	    *x_offset = (1.0 - cell_xalign) * (cell_area->width - (2 * cell_xpad));
-	  else 
-	    *x_offset = cell_xalign * (cell_area->width - (2 * cell_xpad));
+    {
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+        *x_offset = (1.0 - cell_xalign) * (cell_area->width - (2 * cell_xpad));
+      else 
+        *x_offset = cell_xalign * (cell_area->width - (2 * cell_xpad));
 
-	  if ((priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE) || priv->wrap_width != -1)
-	    *x_offset = MAX(*x_offset, 0);
-	}
+      if ((priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE) || priv->wrap_width != -1)
+        *x_offset = MAX(*x_offset, 0);
+    }
       if (y_offset)
-	{
-	  *y_offset = cell_yalign * (cell_area->height - (rect.height + (2 * cell_ypad)));
-	  *y_offset = MAX (*y_offset, 0);
-	}
+    {
+      *y_offset = cell_yalign * (cell_area->height - (rect.height + (2 * cell_ypad)));
+      *y_offset = MAX (*y_offset, 0);
+    }
     }
   else
     {
@@ -1609,25 +1609,25 @@ get_size (GtkCellRenderer *cell,
 
 static void
 ghb_cell_renderer_text_get_size (GtkCellRenderer *cell,
-				 GtkWidget       *widget,
-				 GdkRectangle    *cell_area,
-				 gint            *x_offset,
-				 gint            *y_offset,
-				 gint            *width,
-				 gint            *height)
+                 GtkWidget       *widget,
+                 GdkRectangle    *cell_area,
+                 gint            *x_offset,
+                 gint            *y_offset,
+                 gint            *width,
+                 gint            *height)
 {
   get_size (cell, widget, cell_area, NULL,
-	    x_offset, y_offset, width, height);
+        x_offset, y_offset, width, height);
 }
 
 static void
 ghb_cell_renderer_text_render (GtkCellRenderer      *cell,
-			       GdkDrawable          *window,
-			       GtkWidget            *widget,
-			       GdkRectangle         *background_area,
-			       GdkRectangle         *cell_area,
-			       GdkRectangle         *expose_area,
-			       GtkCellRendererState  flags)
+                   GdkDrawable          *window,
+                   GtkWidget            *widget,
+                   GdkRectangle         *background_area,
+                   GdkRectangle         *cell_area,
+                   GdkRectangle         *expose_area,
+                   GtkCellRendererState  flags)
 
 {
   GhbCellRendererText *celltext = (GhbCellRendererText *) cell;
@@ -1653,21 +1653,21 @@ ghb_cell_renderer_text_render (GtkCellRenderer      *cell,
   else if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
     {
       if (gtk_widget_has_focus (widget))
-	state = GTK_STATE_SELECTED;
+    state = GTK_STATE_SELECTED;
       else
-	state = GTK_STATE_ACTIVE;
+    state = GTK_STATE_ACTIVE;
     }
   else if ((flags & GTK_CELL_RENDERER_PRELIT) == GTK_CELL_RENDERER_PRELIT &&
-	   GTK_WIDGET_STATE (widget) == GTK_STATE_PRELIGHT)
+       GTK_WIDGET_STATE (widget) == GTK_STATE_PRELIGHT)
     {
       state = GTK_STATE_PRELIGHT;
     }
   else
     {
       if (GTK_WIDGET_STATE (widget) == GTK_STATE_INSENSITIVE)
-	state = GTK_STATE_INSENSITIVE;
+    state = GTK_STATE_INSENSITIVE;
       else
-	state = GTK_STATE_NORMAL;
+    state = GTK_STATE_NORMAL;
     }
 
   gtk_cell_renderer_get_padding(cell, &xpad, &ypad);
@@ -1678,16 +1678,16 @@ ghb_cell_renderer_text_render (GtkCellRenderer      *cell,
       cairo_t *cr = gdk_cairo_create (window);
 
       if (expose_area)
-	{
-	  gdk_cairo_rectangle (cr, expose_area);
-	  cairo_clip (cr);
-	}
+    {
+      gdk_cairo_rectangle (cr, expose_area);
+      cairo_clip (cr);
+    }
 
       gdk_cairo_rectangle (cr, background_area);
       cairo_set_source_rgb (cr,
-			    celltext->background.red / 65535.,
-			    celltext->background.green / 65535.,
-			    celltext->background.blue / 65535.);
+                celltext->background.red / 65535.,
+                celltext->background.green / 65535.,
+                celltext->background.blue / 65535.);
       cairo_fill (cr);
       
       cairo_destroy (cr);
@@ -1695,14 +1695,14 @@ ghb_cell_renderer_text_render (GtkCellRenderer      *cell,
 
   if (priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE)
     pango_layout_set_width (layout, 
-			    (cell_area->width - x_offset - 2 * xpad) * PANGO_SCALE);
+                (cell_area->width - x_offset - 2 * xpad) * PANGO_SCALE);
   else if (priv->wrap_width == -1)
     pango_layout_set_width (layout, -1);
 
   gtk_paint_layout (widget->style,
                     window,
                     state,
-		    TRUE,
+            TRUE,
                     expose_area,
                     widget,
                     "cellrenderertext",
@@ -1715,19 +1715,19 @@ ghb_cell_renderer_text_render (GtkCellRenderer      *cell,
 
 static gboolean
 ghb_cell_renderer_text_keypress(
-	GtkCellEditable *entry,
-	GdkEventKey *event,
-	gpointer data)
+    GtkCellEditable *entry,
+    GdkEventKey *event,
+    gpointer data)
 {
-	gboolean result;
-	g_signal_emit(
-		data, text_cell_renderer_signals[KEYPRESS], 0, event, &result);
-	return result;
+    gboolean result;
+    g_signal_emit(
+        data, text_cell_renderer_signals[KEYPRESS], 0, event, &result);
+    return result;
 }
 
 static void
 ghb_cell_renderer_text_editing_done (GtkCellEditable *entry,
-				     gpointer         data)
+                     gpointer         data)
 {
   const gchar *path;
   const gchar *new_text;
@@ -1758,7 +1758,7 @@ ghb_cell_renderer_text_editing_done (GtkCellEditable *entry,
   gboolean editing_canceled;
   g_object_get(entry, "editing-canceled", &editing_canceled, NULL);
   gtk_cell_renderer_stop_editing (GTK_CELL_RENDERER (data), 
-				  editing_canceled);
+                  editing_canceled);
   if (editing_canceled)
     return;
 
@@ -1823,8 +1823,8 @@ ghb_cell_renderer_text_populate_popup (GtkEntry *entry,
 
 static gboolean
 ghb_cell_renderer_text_focus_out_event (GtkWidget *entry,
-		                        GdkEvent  *event,
-					gpointer   data)
+                                GdkEvent  *event,
+                    gpointer   data)
 {
   GhbCellRendererTextPrivate *priv;
 
@@ -1843,12 +1843,12 @@ ghb_cell_renderer_text_focus_out_event (GtkWidget *entry,
 
 static GtkCellEditable *
 ghb_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
-				      GdkEvent             *event,
-				      GtkWidget            *widget,
-				      const gchar          *path,
-				      GdkRectangle         *background_area,
-				      GdkRectangle         *cell_area,
-				      GtkCellRendererState  flags)
+                      GdkEvent             *event,
+                      GtkWidget            *widget,
+                      const gchar          *path,
+                      GdkRectangle         *background_area,
+                      GdkRectangle         *cell_area,
+                      GtkCellRendererState  flags)
 {
   GtkRequisition requisition;
   GhbCellRendererText *celltext;
@@ -1864,9 +1864,9 @@ ghb_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
   gint xalign;
   g_object_get(cell, "xalign", &xalign, NULL);
   priv->entry = g_object_new (GTK_TYPE_ENTRY,
-			      "has-frame", FALSE,
-			      "xalign", xalign,
-			      NULL);
+                  "has-frame", FALSE,
+                  "xalign", xalign,
+                  NULL);
 
   if (celltext->text)
     gtk_entry_set_text (GTK_ENTRY (priv->entry), celltext->text);
@@ -1881,20 +1881,20 @@ ghb_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
       GtkBorder border;
 
       gtk_widget_style_get (priv->entry,
-			    "inner-border", &style_border,
-			    NULL);
+                "inner-border", &style_border,
+                NULL);
 
       if (style_border)
         {
-	  border = *style_border;
-	  g_boxed_free (GTK_TYPE_BORDER, style_border);
-	}
+      border = *style_border;
+      g_boxed_free (GTK_TYPE_BORDER, style_border);
+    }
       else
         {
-	  /* Since boxed style properties can't have default values ... */
-	  border.left = 2;
-	  border.right = 2;
-	}
+      /* Since boxed style properties can't have default values ... */
+      border.left = 2;
+      border.right = 2;
+    }
 
       border.top = (cell_area->height - requisition.height) / 2;
       border.bottom = (cell_area->height - requisition.height) / 2;
@@ -1909,16 +1909,16 @@ ghb_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
     }
 
   g_signal_connect (priv->entry,
-		    "key-press-event",
-		    G_CALLBACK (ghb_cell_renderer_text_keypress),
-		    celltext);
+            "key-press-event",
+            G_CALLBACK (ghb_cell_renderer_text_keypress),
+            celltext);
   g_signal_connect (priv->entry,
-		    "editing_done",
-		    G_CALLBACK (ghb_cell_renderer_text_editing_done),
-		    celltext);
+            "editing_done",
+            G_CALLBACK (ghb_cell_renderer_text_editing_done),
+            celltext);
   priv->focus_out_id = g_signal_connect_after (priv->entry, "focus_out_event",
-					       G_CALLBACK (ghb_cell_renderer_text_focus_out_event),
-					       celltext);
+                           G_CALLBACK (ghb_cell_renderer_text_focus_out_event),
+                           celltext);
   priv->populate_popup_id =
     g_signal_connect (priv->entry, "populate_popup",
                       G_CALLBACK (ghb_cell_renderer_text_populate_popup),
@@ -1944,7 +1944,7 @@ ghb_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
  **/
 void
 ghb_cell_renderer_text_set_fixed_height_from_font (GhbCellRendererText *renderer,
-						   gint                 number_of_rows)
+                           gint                 number_of_rows)
 {
   g_return_if_fail (GHB_IS_CELL_RENDERER_TEXT (renderer));
   g_return_if_fail (number_of_rows == -1 || number_of_rows > 0);
@@ -1954,8 +1954,8 @@ ghb_cell_renderer_text_set_fixed_height_from_font (GhbCellRendererText *renderer
       gint width;
       g_object_get(renderer, "width", &width, NULL);
       gtk_cell_renderer_set_fixed_size (GTK_CELL_RENDERER (renderer),
-					width,
-					-1);
+                    width,
+                    -1);
     }
   else
     {

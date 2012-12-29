@@ -122,8 +122,10 @@
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MenuItemExtensions.cs" />
     <Compile Include="Commands\CancelScanCommand.cs" />
+    <Compile Include="Commands\Interfaces\IAdvancedEncoderOptionsCommand.cs" />
     <Compile Include="Commands\ProcessShortcutCommand.cs" />
     <Compile Include="Commands\SourceMenuCommand.cs" />
+    <Compile Include="Commands\AdvancedEncoderOptionsCommand.cs" />
     <Compile Include="Controls\Loading.xaml.cs">
       <DependentUpon>Loading.xaml</DependentUpon>
     </Compile>
@@ -137,6 +139,7 @@
     <Compile Include="Converters\Options\OptionsTabConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitlesQueueDisplayConverter.cs" />
     <Compile Include="Converters\Video\VideoEncoderConverter.cs" />
+    <Compile Include="Helpers\GrayscaleImage.cs" />
     <Compile Include="Helpers\GrowlCommunicator.cs" />
     <Compile Include="Services\DriveDetectService.cs" />
     <Compile Include="Services\EncodeServiceWrapper.cs" />

@@ -20,12 +20,12 @@
 // Replace simple accessor functions added to newer gtk versions
 static inline void gtk_widget_set_realized(GtkWidget *widget, gboolean realized)
 {
-	GTK_WIDGET_SET_FLAGS(widget, GTK_REALIZED);
+    GTK_WIDGET_SET_FLAGS(widget, GTK_REALIZED);
 }
 
 static inline gboolean gtk_widget_get_realized(GtkWidget *widget)
 {
-	return GTK_WIDGET_REALIZED(widget);
+    return GTK_WIDGET_REALIZED(widget);
 }
 #endif
 

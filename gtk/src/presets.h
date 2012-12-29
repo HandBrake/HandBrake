@@ -34,7 +34,7 @@ gchar* ghb_get_user_config_dir(gchar *subdir);
 void ghb_settings_to_ui(signal_user_data_t *ud, GValue *dict);
 void ghb_clear_presets_selection(signal_user_data_t *ud);
 void ghb_select_preset(GtkBuilder *builder, 
-		const GValue *preset);
+        const GValue *preset);
 void ghb_select_default_preset(GtkBuilder *builder);
 void ghb_presets_list_init(signal_user_data_t *ud, gint *indices, gint len);
 GValue* ghb_parse_preset_path(const gchar *path);

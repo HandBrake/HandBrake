@@ -61,7 +61,7 @@
                          Margin="10,0,10,5"
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Stretch"
-                         Text="{Binding AdvancedOptionsString}"
+                         Text="{Binding AdvancedOptionsString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          TextWrapping="Wrap"
                          />
             </Grid>

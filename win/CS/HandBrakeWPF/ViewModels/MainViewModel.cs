@@ -203,7 +203,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         /// <param name="notificationService">
         /// The notification Service.
-        /// Leave in Constructor.
+        /// *** Leave in Constructor. ***  TODO find out why?
         /// </param>
         public MainViewModel(IUserSettingService userSettingService, IScanServiceWrapper scanService, IEncodeServiceWrapper encodeService, IPresetService presetService,
             IErrorService errorService, IShellViewModel shellViewModel, IUpdateService updateService, IDriveDetectService driveDetectService, INotificationService notificationService)
@@ -661,10 +661,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public CancelScanCommand CancelScanCommand { get; set; }
 
-        #endregion
-
-        #region Properties for Settings
-
         /// <summary>
         /// Gets or sets Destination.
         /// </summary>
@@ -811,6 +807,28 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.SelectedStartPoint = 1;
                     this.SelectedEndPoint = selectedTitle.Chapters.Last().ChapterNumber;
+                } 
+                else if (value == PointToPointMode.Seconds)
+                {
+                    this.SelectedStartPoint = 0;
+
+                    int timeInSeconds;
+                    if (int.TryParse(selectedTitle.Duration.TotalSeconds.ToString(CultureInfo.InvariantCulture), out timeInSeconds))
+                    {
+                        this.SelectedEndPoint = timeInSeconds;
+                    }    
+                }
+                else
+                {
+                    // Note this does not account for VFR. It's only a guesstimate. 
+                    double estimatedTotalFrames = selectedTitle.Fps * selectedTitle.Duration.TotalSeconds;
+
+                    this.SelectedStartPoint = 0;
+                    int totalFrames;
+                    if (int.TryParse(estimatedTotalFrames.ToString(CultureInfo.InvariantCulture), out totalFrames))
+                    {
+                        this.SelectedEndPoint = totalFrames;
+                    }
                 }
             }
         }
@@ -837,6 +855,17 @@ namespace HandBrakeWPF.ViewModels
 
                 this.VideoViewModel.RefreshTask();
                 this.AudioViewModel.RefreshTask();
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether show advanced tab.
+        /// </summary>
+        public bool ShowAdvancedTab
+        {
+            get
+            {
+                return this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedTab);
             }
         }
 

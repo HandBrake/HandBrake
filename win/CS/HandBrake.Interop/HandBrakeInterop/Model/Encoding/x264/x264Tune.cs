@@ -39,8 +39,5 @@ namespace HandBrake.Interop.Model.Encoding.x264
 
         [Display(Name = "Fast Decode")]
         Fastdecode,
-
-        [Display(Name = "Zero Latency")]
-        Zerolatency,
     }
 }

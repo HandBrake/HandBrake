@@ -1469,6 +1469,15 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
         job_copy->file  = strdup( job->file );
     if ( job->advanced_opts )
         job_copy->advanced_opts  = strdup( job->advanced_opts );
+    if ( job->x264_preset )
+        job_copy->x264_preset  = strdup( job->x264_preset );
+    if ( job->x264_tune )
+        job_copy->x264_tune  = strdup( job->x264_tune );
+    if ( job->x264_profile )
+        job_copy->x264_profile  = strdup( job->x264_profile );
+    if ( job->h264_level )
+        job_copy->h264_level  = strdup( job->h264_level );
+
     job_copy->h     = h;
     job_copy->pause = h->pause_lock;
 

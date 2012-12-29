@@ -267,10 +267,20 @@ namespace HandBrake.ApplicationServices.Utilities
             // Video Settings
             AddEncodeElement(xmlWriter, "VideoAvgBitrate", "string", parsed.VideoBitrate.ToString());
             AddEncodeElement(xmlWriter, "VideoEncoder", "string", EnumHelper<VideoEncoder>.GetDisplay(parsed.VideoEncoder));
-            AddEncodeElement(xmlWriter, "VideoFramerate", "string", parsed.Framerate.ToString());
+            AddEncodeElement(xmlWriter, "VideoFramerate", "string", parsed.Framerate == null ? "Same as source" : parsed.Framerate.ToString());
             AddEncodeElement(xmlWriter, "VideFrameratePFR", "integer", parsed.FramerateMode == FramerateMode.PFR ? "1" : "0");
             AddEncodeElement(xmlWriter, "VideoGrayScale", "integer", parsed.Grayscale ? "1" : "0");
             AddEncodeElement(xmlWriter, "VideoQualitySlider", "real", parsed.Quality.ToString());
+            AddEncodeElement(xmlWriter, "h264Level", "string", parsed.H264Level);
+            AddEncodeElement(xmlWriter, "x264OptionExtra", "string", parsed.AdvancedEncoderOptions);
+            AddEncodeElement(xmlWriter, "x264Preset", "string", parsed.X264Preset.ToString().ToLower());
+            AddEncodeElement(xmlWriter, "h264Profile", "string", parsed.H264Profile.ToString().ToLower());
+            string tune = parsed.X264Tune.ToString().ToLower();
+            if (parsed.FastDecode)
+            {
+                tune = tune == "none" ? "fastdecode" : tune + ",fastdecode";
+            }
+            AddEncodeElement(xmlWriter, "x264Tune", "string", tune);
 
             int videoQualityType = 0;
             if (parsed.VideoBitrate != null) videoQualityType = 1;

@@ -123,6 +123,10 @@ void hb_limit_rational64( int64_t *x, int64_t *y, int64_t num, int64_t den, int6
 void hb_fix_aspect( hb_job_t * job, int keep );
 
 void hb_job_set_advanced_opts( hb_job_t *job, const char *advanced_opts );
+void hb_job_set_x264_preset( hb_job_t *job, const char *preset );
+void hb_job_set_x264_tune( hb_job_t *job, const char *tune );
+void hb_job_set_x264_profile( hb_job_t *job, const char *profile );
+void hb_job_set_x264_level( hb_job_t *job, const char *level );
 void hb_job_set_file( hb_job_t *job, const char *file );
 
 hb_audio_t *hb_audio_copy(const hb_audio_t *src);
