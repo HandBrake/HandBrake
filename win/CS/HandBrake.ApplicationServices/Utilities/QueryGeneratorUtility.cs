@@ -941,6 +941,11 @@ namespace HandBrake.ApplicationServices.Utilities
                     query += string.Format(" -x {0}", task.AdvancedEncoderOptions);
                 }
 
+                if (!string.IsNullOrEmpty(task.ExtraAdvancedArguments))
+                {
+                    query += string.Format(" -x {0}", task.ExtraAdvancedArguments);
+                }
+
                 return query;
             }
 

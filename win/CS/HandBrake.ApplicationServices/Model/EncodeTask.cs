@@ -117,7 +117,9 @@ namespace HandBrake.ApplicationServices.Model
             this.X264Preset = task.X264Preset;
             this.H264Profile = task.H264Profile;
             this.X264Tune = task.X264Tune;
+            this.H264Level = task.H264Level;
             this.FastDecode = task.FastDecode;
+            this.ExtraAdvancedArguments = task.ExtraAdvancedArguments;
 
             this.PreviewStartAt = task.PreviewStartAt;
             this.PreviewDuration = task.PreviewDuration;
@@ -420,6 +422,11 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets a value indicating whether fast decode.
         /// </summary>
         public bool FastDecode { get; set; }
+
+        /// <summary>
+        /// Extra Advanced Arguments for the Video Tab.
+        /// </summary>
+        public string ExtraAdvancedArguments { get; set; }
 
         #endregion
 

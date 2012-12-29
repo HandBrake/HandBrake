@@ -63,11 +63,28 @@ namespace HandBrake.ApplicationServices.Utilities
         /// <returns>The Enum Value</returns>
         public static T GetValue(string description)
         {
+            return GetValue(description, false);
+        }
+
+        /// <summary>
+        /// Get the Enumeration for a given Enum Description
+        /// </summary>
+        /// <param name="description">The String description</param>
+        /// <param name="insensitiveCase">Turn of sensitivity to cases.</param>
+        /// <returns>The Enum Value</returns>
+        public static T GetValue(string description, bool insensitiveCase)
+        {
             foreach (T val in Enum.GetValues(typeof(T)))
             {
                 string currDescription = GetDescription(val);
                 string currDisplay = GetDisplay(val);
                 if (currDescription == description || currDisplay == description)
+                {
+                    return val;
+                }
+
+                if (insensitiveCase && currDescription.ToLower() == description.ToLower() ||
+                    currDisplay.ToLower() == description.ToLower())
                 {
                     return val;
                 }
