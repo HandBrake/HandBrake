@@ -388,6 +388,9 @@ namespace HandBrakeWPF.ViewModels
 
                 // Update the Quality Slider. Make sure the bounds are up to date with the users settings.
                 this.SetQualitySliderBounds();
+
+                // Hide the x264 controls when not needed.
+                this.DisplayX264Options = value == VideoEncoder.X264;
             }
         }
 
@@ -419,13 +422,13 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.extraArguments;
+                return this.Task.ExtraAdvancedArguments;
             }
             set
             {
-                if (!object.Equals(this.extraArguments, value))
+                if (!object.Equals(this.Task.AdvancedEncoderOptions, value))
                 {
-                    this.extraArguments = value;
+                    this.Task.ExtraAdvancedArguments = value;
                     this.NotifyOfPropertyChange(() => this.ExtraArguments);
                 }
             }
@@ -705,7 +708,9 @@ namespace HandBrakeWPF.ViewModels
                                            : (int)x264Preset.Medium;
                 this.H264Profile = preset.Task.VideoEncoder == VideoEncoder.X264 ? preset.Task.H264Profile : x264Profile.None;
                 this.X264Tune = preset.Task.VideoEncoder == VideoEncoder.X264 ? preset.Task.X264Tune : x264Tune.None;
-                this.H264Level = preset.Task.H264Level;
+                this.H264Level = preset.Task.VideoEncoder == VideoEncoder.X264 ? preset.Task.H264Level : "Auto";
+                this.FastDecode = preset.Task.VideoEncoder == VideoEncoder.X264 && preset.Task.FastDecode;
+                this.ExtraArguments = preset.Task.ExtraAdvancedArguments;
             }
         }
 
@@ -729,6 +734,13 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.Task.VideoBitrate);
             this.NotifyOfPropertyChange(() => this.Task.TwoPass);
             this.NotifyOfPropertyChange(() => this.Task.TurboFirstPass);
+
+            this.NotifyOfPropertyChange(() => this.X264Tune);
+            this.NotifyOfPropertyChange(() => this.X264Preset);
+            this.NotifyOfPropertyChange(() => this.H264Level);
+            this.NotifyOfPropertyChange(() => this.H264Profile);
+            this.NotifyOfPropertyChange(() => this.FastDecode);
+            this.NotifyOfPropertyChange(() => this.ExtraArguments);
         }
 
         /// <summary>
