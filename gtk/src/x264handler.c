@@ -1,7 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * x264handler.c
- * Copyright (C) John Stebbins 2008-2011 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2013 <stebbins@stebbins>
  * 
  * x264handler.c is free software.
  * 
