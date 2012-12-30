@@ -2106,6 +2106,14 @@ x264_profile_opts_set(GtkBuilder *builder, const gchar *name)
 
     for (ii = 0; ii < count; ii++)
     {
+        // HandBrake doesn't support high10 (10 bit encoding)
+        // or high422 (YUV422)
+        if (!strcasecmp("high10", profiles[ii]) ||
+            !strcasecmp("high422", profiles[ii]))
+        {
+            continue;
+        }
+
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter, 
                            0, profiles[ii],
