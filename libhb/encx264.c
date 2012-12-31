@@ -340,10 +340,10 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     if( job->grayscale )
     {
-        int uvsize = hb_image_stride( PIX_FMT_YUV420P, job->width, 1 ) *
-                     hb_image_height( PIX_FMT_YUV420P, job->height, 1 );
-        pv->grey_data = malloc( uvsize );
-        memset( pv->grey_data, 0x80, uvsize );
+        int uvsize = (hb_image_stride(AV_PIX_FMT_YUV420P, job->width,  1) *
+                      hb_image_height(AV_PIX_FMT_YUV420P, job->height, 1));
+        pv->grey_data = malloc(uvsize);
+        memset(pv->grey_data, 0x80, uvsize);
         pv->pic_in.img.plane[1] = pv->pic_in.img.plane[2] = pv->grey_data;
     }
 

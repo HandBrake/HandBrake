@@ -66,11 +66,12 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
     context->sample_rate = audio->config.out.samplerate;
 
     AVDictionary *av_opts = NULL;
-    if (w->codec_param == CODEC_ID_AAC)
+    if (w->codec_param == AV_CODEC_ID_AAC)
     {
         av_dict_set(&av_opts, "stereo_mode", "ms_off", 0);
     }
-    else if (w->codec_param == CODEC_ID_AC3 && mode != AV_MATRIX_ENCODING_NONE)
+    else if (w->codec_param == AV_CODEC_ID_AC3 &&
+             mode != AV_MATRIX_ENCODING_NONE)
     {
         av_dict_set(&av_opts, "dsur_mode", "on", 0);
     }
@@ -268,10 +269,10 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
         av_samples_get_buffer_size(&in_linesize, pv->context->channels,
                                    frame.nb_samples, AV_SAMPLE_FMT_FLT, 1);
         int out_samples = avresample_convert(pv->avresample,
-                                             (void**)frame.extended_data,
-                                             out_linesize, frame.nb_samples,
-                                             (void**)&pv->input_buf,
-                                             in_linesize,  frame.nb_samples);
+                                             frame.extended_data, out_linesize,
+                                             frame.nb_samples,
+                                             &pv->input_buf,       in_linesize,
+                                             frame.nb_samples);
         if (out_samples != pv->samples_per_frame)
         {
             // we're not doing sample rate conversion, so this shouldn't happen

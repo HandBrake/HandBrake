@@ -174,27 +174,26 @@ static inline int hb_image_stride( int pix_fmt, int width, int plane )
     return linesize;
 }
 
-static inline int hb_image_width( int pix_fmt, int width, int plane )
+static inline int hb_image_width(int pix_fmt, int width, int plane)
 {
-    const AVPixFmtDescriptor *desc = &av_pix_fmt_descriptors[pix_fmt];
+    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(pix_fmt);
 
-    if ( plane == 1 || plane == 2 )
+    if (desc != NULL && (plane == 1 || plane == 2))
     {
         // The wacky arithmatic assures rounding up.
-        width = -((-width)>>desc->log2_chroma_w);
+        width = -((-width) >> desc->log2_chroma_w);
     }
 
     return width;
 }
 
-static inline int hb_image_height_stride( int pix_fmt, int height, int plane )
+static inline int hb_image_height_stride(int pix_fmt, int height, int plane)
 {
-    const AVPixFmtDescriptor *desc = &av_pix_fmt_descriptors[pix_fmt];
+    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(pix_fmt);
 
     // Decomb requires 6 extra lines and stride aligned to 32 bytes
-    // TODO: eliminate extra buffer copies in decomb
-    height = MULTIPLE_MOD_UP( height + 6, 32 );
-    if ( plane == 1 || plane == 2 )
+    height = MULTIPLE_MOD_UP(height + 6, 32);
+    if (desc != NULL && (plane == 1 || plane == 2))
     {
         height = height >> desc->log2_chroma_h;
     }
@@ -202,14 +201,14 @@ static inline int hb_image_height_stride( int pix_fmt, int height, int plane )
     return height;
 }
 
-static inline int hb_image_height( int pix_fmt, int height, int plane )
+static inline int hb_image_height(int pix_fmt, int height, int plane)
 {
-    const AVPixFmtDescriptor *desc = &av_pix_fmt_descriptors[pix_fmt];
+    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(pix_fmt);
 
-    if ( plane == 1 || plane == 2 )
+    if (desc != NULL && (plane == 1 || plane == 2))
     {
         // The wacky arithmatic assures rounding up.
-        height = -((-height)>>desc->log2_chroma_h);
+        height = -((-height) >> desc->log2_chroma_h);
     }
 
     return height;
@@ -219,7 +218,7 @@ static inline int hb_image_height( int pix_fmt, int height, int plane )
 // with dimensions width x height.
 static inline hb_buffer_t * hb_video_buffer_init( int width, int height )
 {
-    return hb_frame_buffer_init( PIX_FMT_YUV420P, width, height );
+    return hb_frame_buffer_init( AV_PIX_FMT_YUV420P, width, height );
 }
 
 /***********************************************************************

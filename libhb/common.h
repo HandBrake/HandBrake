@@ -101,7 +101,7 @@ typedef struct hb_lock_s hb_lock_t;
 #define PRIVATE const
 #endif
 #include "audio_remap.h"
-#include "libavutil/audioconvert.h"
+#include "libavutil/channel_layout.h"
 
 hb_list_t * hb_list_init();
 int         hb_list_count( const hb_list_t * );

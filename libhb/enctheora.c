@@ -365,7 +365,7 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     buf = hb_buffer_init( op.bytes + sizeof(op) );
     memcpy(buf->data, &op, sizeof(op));
     memcpy(buf->data + sizeof(op), op.packet, op.bytes);
-    buf->f.fmt = PIX_FMT_YUV420P;
+    buf->f.fmt = AV_PIX_FMT_YUV420P;
     buf->f.width = frame_width;
     buf->f.height = frame_height;
     buf->s.frametype = ( th_packet_iskeyframe(&op) ) ? HB_FRAME_KEY : HB_FRAME_REF;

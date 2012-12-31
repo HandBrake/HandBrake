@@ -1,20 +1,20 @@
 diff --git a/libavcodec/mlpdec.c b/libavcodec/mlpdec.c
-index 91efaf3..e6c5c8e 100644
+index 3852f6e..c7217c8 100644
 --- a/libavcodec/mlpdec.c
 +++ b/libavcodec/mlpdec.c
-@@ -30,6 +30,7 @@
- #include "dsputil.h"
+@@ -28,6 +28,7 @@
+ 
+ #include "avcodec.h"
  #include "libavutil/intreadwrite.h"
++#include "libavutil/channel_layout.h"
  #include "get_bits.h"
-+#include "libavutil/audioconvert.h"
+ #include "internal.h"
  #include "libavutil/crc.h"
- #include "parser.h"
- #include "mlp_parser.h"
-@@ -434,6 +435,28 @@ static int read_restart_header(MLPDecodeContext *m, GetBitContext *gbp,
+@@ -435,6 +436,28 @@ static int read_restart_header(MLPDecodeContext *m, GetBitContext *gbp,
          s->ch_assign[ch_assign] = ch;
      }
  
-+    if (m->avctx->codec_id == CODEC_ID_TRUEHD) {
++    if (m->avctx->codec_id == AV_CODEC_ID_TRUEHD) {
 +        switch (m->avctx->channel_layout) {
 +        case AV_CH_LAYOUT_6POINT1:
 +        case (AV_CH_LAYOUT_6POINT1|AV_CH_TOP_CENTER):

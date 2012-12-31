@@ -44,7 +44,7 @@ typedef struct hb_libmpeg2_s
     int                  height;
     int                  rate;
     double               aspect_ratio;
-    enum PixelFormat     pixfmt;
+    enum AVPixelFormat   pixfmt;
     int                  got_iframe;        /* set when we get our first iframe */
     int                  look_for_iframe;   /* need an iframe to add chap break */
     int                  look_for_break;    /* need gop start to add chap break */
@@ -272,7 +272,7 @@ static hb_buffer_t *hb_copy_frame( hb_libmpeg2_t *m )
     hb_job_t * job = m->job;
     int width = m->info->sequence->width;
     int height = m->info->sequence->height;
-    enum PixelFormat pixfmt = m->pixfmt;
+    enum AVPixelFormat pixfmt = m->pixfmt;
     uint8_t *y = m->info->display_fbuf->buf[0];
     uint8_t *u = m->info->display_fbuf->buf[1];
     uint8_t *v = m->info->display_fbuf->buf[2];
@@ -423,11 +423,11 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
             if ( m->info->sequence->width >> 1 == m->info->sequence->chroma_width &&
                  m->info->sequence->height >> 1 == m->info->sequence->chroma_height )
             {
-                m->pixfmt = PIX_FMT_YUV420P;
+                m->pixfmt = AV_PIX_FMT_YUV420P;
             }
             else
             {
-                m->pixfmt = PIX_FMT_YUV422P;
+                m->pixfmt = AV_PIX_FMT_YUV422P;
             }
         }
         else if( state == STATE_GOP && m->look_for_break)

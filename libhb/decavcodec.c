@@ -423,10 +423,10 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
             pos += len;
             if ( pbuffer_size > 0 )
             {
-                AVFrame frame;
                 int got_frame;
+                AVFrame frame = { { 0 } };
                 AVPacket avp;
-                av_init_packet( &avp );
+                av_init_packet(&avp);
                 avp.data = pbuffer;
                 avp.size = pbuffer_size;
 
@@ -504,31 +504,32 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
     hb_buffer_t *buf = hb_video_buffer_init( w, h );
     uint8_t *dst = buf->data;
 
-    if ( context->pix_fmt != PIX_FMT_YUV420P || w != context->width ||
-         h != context->height )
+    if (context->pix_fmt != AV_PIX_FMT_YUV420P || w != context->width ||
+        h != context->height)
     {
         // have to convert to our internal color space and/or rescale
         AVPicture dstpic;
-        hb_avpicture_fill( &dstpic, buf );
+        hb_avpicture_fill(&dstpic, buf);
 
-        if ( ! pv->sws_context || 
-             pv->sws_width != context->width ||
-             pv->sws_height != context->height ||
-             pv->sws_pix_fmt != context->pix_fmt )
+        if (pv->sws_context == NULL            ||
+            pv->sws_width   != context->width  ||
+            pv->sws_height  != context->height ||
+            pv->sws_pix_fmt != context->pix_fmt)
         {
-            if( pv->sws_context )
-                sws_freeContext( pv->sws_context );
-            pv->sws_context = hb_sws_get_context( 
-                            context->width, context->height, context->pix_fmt,
-                            w, h, PIX_FMT_YUV420P,
-                            SWS_LANCZOS|SWS_ACCURATE_RND);
-            pv->sws_width = context->width;
-            pv->sws_height = context->height;
+            if (pv->sws_context != NULL)
+                sws_freeContext(pv->sws_context);
+            pv->sws_context = hb_sws_get_context(context->width,
+                                                 context->height,
+                                                 context->pix_fmt,
+                                                 w, h, AV_PIX_FMT_YUV420P,
+                                                  SWS_LANCZOS|SWS_ACCURATE_RND);
+            pv->sws_width   = context->width;
+            pv->sws_height  = context->height;
             pv->sws_pix_fmt = context->pix_fmt;
         }
-        sws_scale( pv->sws_context, (const uint8_t* const *)frame->data, 
-                   frame->linesize, 0, context->height,
-                   dstpic.data, dstpic.linesize );
+        sws_scale(pv->sws_context,
+                  (const uint8_t* const *)frame->data, frame->linesize,
+                  0, context->height, dstpic.data, dstpic.linesize);
     }
     else
     {
@@ -690,7 +691,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
 {
     hb_work_private_t *pv = w->private_data;
     int got_picture, oldlevel = 0;
-    AVFrame frame;
+    AVFrame frame = { { 0 } };
     AVPacket avp;
 
     if ( global_verbosity_level <= 1 )
@@ -699,11 +700,11 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         av_log_set_level( AV_LOG_QUIET );
     }
 
-    av_init_packet( &avp );
+    av_init_packet(&avp);
     avp.data = data;
     avp.size = size;
-    avp.pts = pts;
-    avp.dts = dts;
+    avp.pts  = pts;
+    avp.dts  = dts;
     /*
      * libav avcodec_decode_video2() needs AVPacket flagged with AV_PKT_FLAG_KEY
      * for some codecs. For example, sequence of PNG in a mov container.
@@ -727,10 +728,9 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         // codecs it simply sets frame.key_frame.  But for others, it only
         // sets frame.pict_type. And for yet others neither gets set at all
         // (qtrle).
-        int key = frame.key_frame ||
-                  ( w->codec_param != CODEC_ID_H264 &&
-                    ( frame.pict_type == AV_PICTURE_TYPE_I ||
-                      frame.pict_type == 0 ) );
+        int key = frame.key_frame || (w->codec_param != AV_CODEC_ID_H264 &&
+                                      (frame.pict_type == 0 ||
+                                       frame.pict_type == AV_PICTURE_TYPE_I));
         if( !key )
         {
             pv->wait_for_keyframe--;
@@ -1058,7 +1058,7 @@ static int setup_extradata( hb_work_object_t *w, hb_buffer_t *in )
     // vc1t_read_header allocates 'extradata' to deal with header issues
     // related to Microsoft's bizarre engineering notions. We alloc a chunk
     // of space to make vc1 work then associate the codec with the context.
-    if ( w->codec_param != CODEC_ID_VC1 )
+    if ( w->codec_param != AV_CODEC_ID_VC1 )
     {
         // we haven't been inflicted with M$ - allocate a little space as
         // a marker and return success.
@@ -1434,9 +1434,10 @@ static void decodeAudio(hb_audio_t *audio, hb_work_private_t *pv, uint8_t *data,
         pv->pts_next = pts;
     while (pos < size)
     {
-        AVFrame frame;
         int got_frame;
+        AVFrame frame = { { 0 } };
         AVPacket avp;
+
         av_init_packet(&avp);
         avp.data = data + pos;
         avp.size = size - pos;

@@ -523,7 +523,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
     if (vcodec == WORK_DECMPEG2)
     {
         vcodec = WORK_DECAVCODECV;
-        title->video_codec_param = CODEC_ID_MPEG2VIDEO;
+        title->video_codec_param = AV_CODEC_ID_MPEG2VIDEO;
     }
 #endif
     hb_work_object_t *vid_decoder = hb_get_work( vcodec );
@@ -1035,11 +1035,12 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
     }
     else if (audio->config.in.channel_layout)
     {
-        int lfe      = !!(audio->config.in.channel_layout & AV_CH_LOW_FREQUENCY);
+        int lfes     = (!!(audio->config.in.channel_layout & AV_CH_LOW_FREQUENCY) +
+                        !!(audio->config.in.channel_layout & AV_CH_LOW_FREQUENCY_2));
         int channels = av_get_channel_layout_nb_channels(audio->config.in.channel_layout);
         char *desc   = audio->config.lang.description +
                         strlen(audio->config.lang.description);
-        sprintf(desc, " (%d.%d ch)", channels - lfe, lfe);
+        sprintf(desc, " (%d.%d ch)", channels - lfes, lfes);
     }
 
     hb_log( "scan: audio 0x%x: %s, rate=%dHz, bitrate=%d %s", audio->id,
