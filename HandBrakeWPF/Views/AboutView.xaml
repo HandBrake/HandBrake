@@ -52,7 +52,7 @@
 
                 <TextBlock Grid.Row="1"
                            Margin="5,0,0,0 "
-                           Text="Copyright 2003-2012 HandBrake Team" />
+                           Text="Copyright 2003-2013 HandBrake Team" />
 
                 <TextBlock Grid.Row="2"
                            Margin="5,10,0,5"
