@@ -125,13 +125,13 @@
                 <Label Content="Left" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" />
                 <Label Content="Right" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" />
 
-                <NumericUpDown:NumericUpDown Width="45" Value="{Binding CropTop, Mode=TwoWay}" IsEnabled="{Binding IsCustomCrop}" Grid.Row="1" Grid.Column="2" 
+                <NumericUpDown:NumericUpDown Width="60" Value="{Binding CropTop, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" IsEnabled="{Binding IsCustomCrop}" Grid.Row="1" Grid.Column="2" 
                                              HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="45" Value="{Binding CropBottom, Mode=TwoWay}" IsEnabled="{Binding IsCustomCrop}" Grid.Row="3" Grid.Column="2" 
+                <NumericUpDown:NumericUpDown Width="60" Value="{Binding CropBottom, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" IsEnabled="{Binding IsCustomCrop}" Grid.Row="3" Grid.Column="2"
                                              HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="45" Value="{Binding CropLeft, Mode=TwoWay}" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="1" 
+                <NumericUpDown:NumericUpDown Width="60" Value="{Binding CropLeft, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="1" 
                                              HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="45" Value="{Binding CropRight, Mode=TwoWay}" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="3"
+                <NumericUpDown:NumericUpDown Width="60" Value="{Binding CropRight, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="3"
                                              HorizontalAlignment="Left" Margin="0,0,0,5" />
 
             </Grid>
