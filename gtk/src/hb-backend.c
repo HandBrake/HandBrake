@@ -2109,7 +2109,8 @@ x264_profile_opts_set(GtkBuilder *builder, const gchar *name)
         // HandBrake doesn't support high10 (10 bit encoding)
         // or high422 (YUV422)
         if (!strcasecmp("high10", profiles[ii]) ||
-            !strcasecmp("high422", profiles[ii]))
+            !strcasecmp("high422", profiles[ii]) ||
+            !strcasecmp("high444", profiles[ii]))
         {
             continue;
         }
@@ -4648,6 +4649,7 @@ ghb_validate_vquality(GValue *settings)
                 return FALSE;
             }
             g_free(message);
+            ghb_settings_set_string(settings, "h264Profile", "auto");
         }
         else if (vquality < min || vquality > max)
         {
