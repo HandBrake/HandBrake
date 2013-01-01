@@ -59,6 +59,24 @@ BOOL                        fIsDragging;
     /* Picture Preview */
     PreviewController            * fPreviewController;
     
+    /* x264 Presets Box */
+    IBOutlet NSButton            * fx264UseAdvancedOptionsCheck;
+    IBOutlet NSBox               * fX264PresetsBox;
+    IBOutlet NSSlider            * fX264PresetsSlider;
+    IBOutlet NSTextField         * fX264PresetSliderLabel;
+    IBOutlet NSTextField         * fX264PresetSelectedTextField;
+    IBOutlet NSPopUpButton       * fX264TunePopUp;
+    IBOutlet NSTextField         * fX264TunePopUpLabel;
+    IBOutlet NSPopUpButton       * fX264ProfilePopUp;
+    IBOutlet NSTextField         * fX264ProfilePopUpLabel;
+    IBOutlet NSPopUpButton       * fX264LevelPopUp;
+    IBOutlet NSTextField         * fX264LevelPopUpLabel;
+    IBOutlet NSButton            * fX264FastDecodeCheck;
+    IBOutlet NSTextField         * fDisplayX264PresetsAdditonalOptionsTextField;
+    IBOutlet NSTextField         * fDisplayX264PresetsAdditonalOptionsLabel;
+    // Text Field to show the expanded opts from unparse()
+    IBOutlet NSTextField         * fDisplayX264PresetsUnparseTextField;
+    
     /* Advanced options tab */
     HBAdvancedController         * fAdvancedOptions;
 	IBOutlet NSBox               * fAdvancedView;
@@ -282,6 +300,11 @@ BOOL                        fIsDragging;
 
 - (void)     updateUI: (NSTimer *) timer;
 - (void)     enableUI: (bool) enable;
+- (IBAction) enableX264PresetWidgets: (id) sender;
+- (IBAction) setupX264PresetsWidgets: (id) sender;
+- (IBAction) x264PresetsSetJobVariables: (id) sender;
+- (IBAction) x264PresetsChangedDisplayExpandedOptions: (id) sender;
+
 - (IBAction) encodeStartStopPopUpChanged: (id) sender;
 
 
@@ -455,5 +478,10 @@ BOOL                        fIsDragging;
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender;
 
 - (void) updateDockIcon:(double)progress withETA:(NSString*)etaStr;
+
+// x264 Presets methods
+- (IBAction) x264PresetsSliderChanged: (id) sender;
+
+
 @end
 

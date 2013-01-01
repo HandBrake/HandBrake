@@ -1319,19 +1319,64 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         [finalString appendString: videoInfo withAttributes:detailAttr];
         [finalString appendString:@"\n" withAttributes:detailAttr];
         
+        // x264 options (for now either the x264 presets panel or the hb x264 advanced panel
         if ([[item objectForKey:@"VideoEncoder"] isEqualToString: @"H.264 (x264)"])
         {
-            [finalString appendString: @"x264 Options: " withAttributes:detailBoldAttr];
-            if ([item objectForKey:@"x264Option"])
+            // check to see if we are using a x264 preset, if so concatenate the display of presets, tunes , etc.
+            if ([item objectForKey:@"x264Preset"])
             {
-                [finalString appendString: [item objectForKey:@"x264Option"] withAttributes:detailAttr];
+                [finalString appendString: @"x264 Presets: " withAttributes:detailBoldAttr];
+                NSString * x264PresetsInfo = @"";
+                x264PresetsInfo = [x264PresetsInfo stringByAppendingString: [NSString stringWithFormat:@"Preset:%@ - ",[item objectForKey:@"x264Preset"]]]; 
+                if ([item objectForKey:@"x264Tune"])
+                {
+                    x264PresetsInfo = [x264PresetsInfo stringByAppendingString: [NSString stringWithFormat:@"Tune:%@ -  ",[item objectForKey:@"x264Tune"]]];   
+                }
+                else
+                {
+                 x264PresetsInfo = [x264PresetsInfo stringByAppendingString: [NSString stringWithFormat:@"Tune:none - "]];   
+                }
+                if ([item objectForKey:@"x264Option"])
+                {
+                     x264PresetsInfo = [x264PresetsInfo stringByAppendingString: [NSString stringWithFormat:@"Additional Options:%@ - ",[item objectForKey:@"x264AdditionalOptions"]]];   
+                }
+                if ([item objectForKey:@"h264Profile"])
+                {
+                    x264PresetsInfo = [x264PresetsInfo stringByAppendingString: [NSString stringWithFormat:@"Profile:%@ - ",[item objectForKey:@"h264Profile"]]];   
+                }
+                else
+                {
+                    x264PresetsInfo = [x264PresetsInfo stringByAppendingString: [NSString stringWithFormat:@"Profile:auto - "]];   
+                }
+                if ([item objectForKey:@"h264Level"])
+                {
+                    x264PresetsInfo = [x264PresetsInfo stringByAppendingString: [NSString stringWithFormat:@"Level:%@",[item objectForKey:@"h264Level"]]];   
+                }
+                else
+                {
+                    x264PresetsInfo = [x264PresetsInfo stringByAppendingString: [NSString stringWithFormat:@"Level:auto"]];   
+                }
+                
+                [finalString appendString: x264PresetsInfo withAttributes:detailAttr];
+                
             }
-            else
+            else /// we are using the HB Advanced Panel
             {
-                [finalString appendString: @"x264 defaults" withAttributes:detailAttr];   
+                [finalString appendString: @"x264 Advanced Options: " withAttributes:detailBoldAttr];
+                if ([item objectForKey:@"x264Option"])
+                {
+                    [finalString appendString: [item objectForKey:@"x264Option"] withAttributes:detailAttr];
+                }
+                else
+                {
+                    [finalString appendString: @"x264 defaults" withAttributes:detailAttr];   
+                }
+                
             }
+            
             [finalString appendString:@"\n" withAttributes:detailAttr];
         }
+        
         /*If we are not x264 and we are not Theora then we must be FFmpeg (lavc) */
         else if (![[item objectForKey:@"VideoEncoder"] isEqualToString: @"VP3 (Theora)"])
         {
