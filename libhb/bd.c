@@ -213,6 +213,9 @@ static int bd_audio_equal( BLURAY_CLIP_INFO *a, BLURAY_CLIP_INFO *b )
     if ( a->audio_stream_count != b->audio_stream_count )
         return 0;
 
+    if ( a->audio_stream_count == 0 )
+        return 0;
+
     for ( ii = 0; ii < a->audio_stream_count; ii++ )
     {
         BLURAY_STREAM_INFO * s = &a->audio_streams[ii];
