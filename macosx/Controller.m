@@ -794,7 +794,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }
     
     [self videoMatrixChanged:nil];
-    [self updateX264Widgets:b];
+    [self enableX264Widgets:b];
 }
 
 
@@ -5298,7 +5298,7 @@ the user is using "Custom" settings by determining the sender*/
     [fDisplayX264PresetsAdditonalOptionsTextField setStringValue:@""];
 }
 
-- (IBAction) updateX264Widgets: (bool) enable
+- (void) enableX264Widgets: (bool) enable
 {
     NSControl * controls[] =
     {
@@ -5350,6 +5350,11 @@ the user is using "Custom" settings by determining the sender*/
     }
     [self x264PresetsSliderChanged:nil];
     [self x264PresetsChangedDisplayExpandedOptions:nil];
+}
+
+- (IBAction) updateX264Widgets: (id) sender
+{
+    [self enableX264Widgets: YES];
 }
 
 
@@ -6153,7 +6158,7 @@ return YES;
                 }
                 /* we enable the advanced panel and update the widgets */
                 [fx264UseAdvancedOptionsCheck setState: NSOnState];
-                [self updateX264Widgets: YES];
+                [self updateX264Widgets:nil];
             }
             /*
              * x264UeAdvancedOptions is set to 0 (disabled),
@@ -6208,7 +6213,7 @@ return YES;
                 }
                 /* we enable the advanced panel and update the widgets */
                 [fx264UseAdvancedOptionsCheck setState: NSOffState];
-                [self updateX264Widgets: YES];
+                [self updateX264Widgets:nil];
             }
         }
         

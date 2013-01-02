@@ -302,8 +302,9 @@ BOOL                        fIsDragging;
 
 - (void)     updateUI: (NSTimer *) timer;
 - (void)     enableUI: (bool) enable;
-- (IBAction) updateX264Widgets: (bool) enable;
-- (IBAction) setupX264PresetsWidgets: (id) sender;
+- (void) setupX264PresetsWidgets: (id) sender;
+- (void) enableX264Widgets: (bool) enable;
+- (IBAction) updateX264Widgets: (id) sender;
 - (IBAction) x264PresetsSetJobVariables: (id) sender;
 - (IBAction) x264PresetsChangedDisplayExpandedOptions: (id) sender;
 

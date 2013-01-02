@@ -7095,7 +7095,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">enableX264PresetWidgets:</string>
+						<string key="label">updateX264Widgets:</string>
 						<reference key="source" ref="2258723"/>
 						<reference key="destination" ref="902460295"/>
 					</object>
@@ -12085,7 +12085,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<string>customSettingUsed:</string>
 							<string>deleteFactoryPresets:</string>
 							<string>deletePreset:</string>
-							<string>enableX264PresetWidgets:</string>
+							<string>updateX264Widgets:</string>
 							<string>encodeStartStopPopUpChanged:</string>
 							<string>formatPopUpChanged:</string>
 							<string>getDefaultPresets:</string>
@@ -12216,7 +12216,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<string>customSettingUsed:</string>
 							<string>deleteFactoryPresets:</string>
 							<string>deletePreset:</string>
-							<string>enableX264PresetWidgets:</string>
+							<string>updateX264Widgets:</string>
 							<string>encodeStartStopPopUpChanged:</string>
 							<string>formatPopUpChanged:</string>
 							<string>getDefaultPresets:</string>
@@ -12362,7 +12362,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">enableX264PresetWidgets:</string>
+								<string key="name">updateX264Widgets:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
