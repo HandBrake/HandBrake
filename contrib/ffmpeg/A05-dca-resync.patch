@@ -1,0 +1,37 @@
+From 280e670dd039d7ba628bc47f1cdee72df9658094 Mon Sep 17 00:00:00 2001
+From: John Stebbins <jstebbins.hb@gmail.com>
+Date: Wed, 2 Jan 2013 11:32:40 -0800
+Subject: [PATCH] dca_parser: Handle loss of bitstream sync better
+
+A change in framesize caused a perpetual loss of synchronization. So
+when the sync pattern is not found where it is expected, reset and
+recalculate the framesize.
+---
+ libavcodec/dca_parser.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/libavcodec/dca_parser.c b/libavcodec/dca_parser.c
+index ab235cf..ad441f8 100644
+--- a/libavcodec/dca_parser.c
++++ b/libavcodec/dca_parser.c
+@@ -88,6 +88,17 @@ static int dca_find_frame_end(DCAParseContext * pc1, const uint8_t * buf,
+                 pc1->size = 0;
+                 return i - 3;
+             }
++            else if (pc1->size == pc1->framesize)
++            {
++                // Lost sync, search for sync and reset framesize as it may
++                // have changed mid-stream
++                pc->frame_start_found = 0;
++                pc->state = -1;
++                pc1->size = 0;
++                pc1->framesize = 0;
++                pc1->lastmarker = 0;
++                return END_NOT_FOUND;
++            }
+         }
+     }
+     pc->frame_start_found = start_found;
+-- 
+1.7.11.7
+
