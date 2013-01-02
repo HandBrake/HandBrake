@@ -1319,76 +1319,63 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         [finalString appendString: videoInfo withAttributes:detailAttr];
         [finalString appendString:@"\n" withAttributes:detailAttr];
         
-        // x264 options (for now either the x264 presets panel or the hb x264 advanced panel
         if ([[item objectForKey:@"VideoEncoder"] isEqualToString: @"H.264 (x264)"])
         {
-            // check to see if we are using a x264 preset, if so concatenate the display of presets, tunes , etc.
-            if ([item objectForKey:@"x264Preset"])
+            /* we are using x264 */
+            NSString *x264Info = @"";
+            if ([[item objectForKey:@"x264UseAdvancedOptions"] intValue])
             {
-                [finalString appendString: @"x264 Presets: " withAttributes:detailBoldAttr];
-                NSString * x264PresetsInfo = @"";
-                x264PresetsInfo = [x264PresetsInfo stringByAppendingString: [NSString stringWithFormat:@"Preset:%@ - ",[item objectForKey:@"x264Preset"]]]; 
-                if ([item objectForKey:@"x264Tune"])
+                // we are using the old advanced panel
+                if ([item objectForKey:@"x264Option"] &&
+                    [[item objectForKey:@"x264Option"] length])
                 {
-                    x264PresetsInfo = [x264PresetsInfo stringByAppendingString: [NSString stringWithFormat:@"Tune:%@ -  ",[item objectForKey:@"x264Tune"]]];   
+                    x264Info = [x264Info stringByAppendingString: [item objectForKey:@"x264Option"]];
                 }
                 else
                 {
-                 x264PresetsInfo = [x264PresetsInfo stringByAppendingString: [NSString stringWithFormat:@"Tune:none - "]];   
+                    x264Info = [x264Info stringByAppendingString: @"default settings"];
                 }
-                if ([item objectForKey:@"x264Option"])
-                {
-                     x264PresetsInfo = [x264PresetsInfo stringByAppendingString: [NSString stringWithFormat:@"Additional Options:%@ - ",[item objectForKey:@"x264AdditionalOptions"]]];   
-                }
-                if ([item objectForKey:@"h264Profile"])
-                {
-                    x264PresetsInfo = [x264PresetsInfo stringByAppendingString: [NSString stringWithFormat:@"Profile:%@ - ",[item objectForKey:@"h264Profile"]]];   
-                }
-                else
-                {
-                    x264PresetsInfo = [x264PresetsInfo stringByAppendingString: [NSString stringWithFormat:@"Profile:auto - "]];   
-                }
-                if ([item objectForKey:@"h264Level"])
-                {
-                    x264PresetsInfo = [x264PresetsInfo stringByAppendingString: [NSString stringWithFormat:@"Level:%@",[item objectForKey:@"h264Level"]]];   
-                }
-                else
-                {
-                    x264PresetsInfo = [x264PresetsInfo stringByAppendingString: [NSString stringWithFormat:@"Level:auto"]];   
-                }
-                
-                [finalString appendString: x264PresetsInfo withAttributes:detailAttr];
-                
-            }
-            else /// we are using the HB Advanced Panel
-            {
-                [finalString appendString: @"x264 Advanced Options: " withAttributes:detailBoldAttr];
-                if ([item objectForKey:@"x264Option"])
-                {
-                    [finalString appendString: [item objectForKey:@"x264Option"] withAttributes:detailAttr];
-                }
-                else
-                {
-                    [finalString appendString: @"x264 defaults" withAttributes:detailAttr];   
-                }
-                
-            }
-            
-            [finalString appendString:@"\n" withAttributes:detailAttr];
-        }
-        
-        /*If we are not x264 and we are not Theora then we must be FFmpeg (lavc) */
-        else if (![[item objectForKey:@"VideoEncoder"] isEqualToString: @"VP3 (Theora)"])
-        {
-            [finalString appendString: @"FFmpeg (lavc) Options: " withAttributes:detailBoldAttr];
-            if ([item objectForKey:@"lavcOption"])
-            {
-                [finalString appendString: [item objectForKey:@"lavcOption"] withAttributes:detailAttr];
             }
             else
             {
-                [finalString appendString: @"FFmpeg (lavc) defaults" withAttributes:detailAttr];   
+                // we are using the x264 system
+                x264Info = [x264Info stringByAppendingString: [NSString stringWithFormat:@"Preset: %@", [item objectForKey:@"x264Preset"]]];
+                if ([[item objectForKey:@"x264Tune"] length])
+                {
+                    x264Info = [x264Info stringByAppendingString: [NSString stringWithFormat:@" - Tune: %@", [item objectForKey:@"x264Tune"]]];
+                }
+                if ([[item objectForKey:@"x264OptionExtra"] length])
+                {
+                    x264Info = [x264Info stringByAppendingString: [NSString stringWithFormat:@" - Options: %@", [item objectForKey:@"x264OptionExtra"]]];
+                }
+                if ([[item objectForKey:@"h264Profile"] length])
+                {
+                    x264Info = [x264Info stringByAppendingString: [NSString stringWithFormat:@" - Profile: %@", [item objectForKey:@"h264Profile"]]];
+                }
+                if ([[item objectForKey:@"h264Level"] length])
+                {
+                    x264Info = [x264Info stringByAppendingString: [NSString stringWithFormat:@" - Level: %@", [item objectForKey:@"h264Level"]]];
+                }
             }
+            [finalString appendString: @"x264: " withAttributes:detailBoldAttr];
+            [finalString appendString: x264Info withAttributes:detailAttr];
+            [finalString appendString:@"\n" withAttributes:detailAttr];
+        }
+        else if (![[item objectForKey:@"VideoEncoder"] isEqualToString: @"VP3 (Theora)"])
+        {
+            /* we are using libavcodec */
+            NSString *lavcInfo = @"";
+            if ([item objectForKey:@"lavcOption"] &&
+                [[item objectForKey:@"lavcOption"] length])
+            {
+                lavcInfo = [lavcInfo stringByAppendingString: [item objectForKey:@"lavcOption"]];
+            }
+            else
+            {
+                lavcInfo = [lavcInfo stringByAppendingString: @"default settings"];
+            }
+            [finalString appendString: @"ffmpeg: " withAttributes:detailBoldAttr];
+            [finalString appendString: lavcInfo withAttributes:detailAttr];
             [finalString appendString:@"\n" withAttributes:detailAttr];
         }
         

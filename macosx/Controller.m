@@ -2532,40 +2532,50 @@ fWorkingCount = 0;
 	/* Video encoder */
 	[queueFileJob setObject:[fVidEncoderPopUp titleOfSelectedItem] forKey:@"VideoEncoder"];
 	
-    /* x264 Preset, Tune, Profile, and Levels */
-    if (![fx264UseAdvancedOptionsCheck state])
+    /* x264 advanced options */
+    if ([fx264UseAdvancedOptionsCheck state])
     {
-        // Set the x264 Preset
-        [queueFileJob setObject:[NSString stringWithFormat:@"%@", [fX264PresetSelectedTextField stringValue]] forKey:@"x264Preset"];
-        
+        // we are using the advanced panel
+        [queueFileJob setObject: [NSNumber numberWithInt:1] forKey: @"x264UseAdvancedOptions"];
+    }
+    else
+    {
+        // we are using the x264 system
+        NSString *x264Preset      = [fX264PresetSelectedTextField stringValue];
+        NSString *x264Tune        = @""; // becomes NULL in prepareJob if unchanged
+        NSString *x264OptionExtra = [fDisplayX264PresetsAdditonalOptionsTextField stringValue];
+        NSString *h264Profile     = @""; // becomes NULL in prepareJob if unchanged
+        NSString *h264Level       = @""; // becomes NULL in prepareJob if unchanged
+        // we can't set "none" in the queue as libhb doesn't handle it
         if ([fX264TunePopUp indexOfSelectedItem] != 0)
-        {            // we check to see if fastdecode is checked and if so we append it to the tune as so...
-            if ([fX264FastDecodeCheck state] == NSOnState)
-            {
-                [queueFileJob setObject:[NSString stringWithFormat:@"%@,%@", [fX264TunePopUp titleOfSelectedItem], @"fastdecode"] forKey:@"x264Tune"];
-                
-                
-            }
-            else
-            {
-                [queueFileJob setObject:[NSString stringWithFormat:@"%@", [fX264TunePopUp titleOfSelectedItem]] forKey:@"x264Tune"];
-                
-            }
+        {
+            x264Tune = [x264Tune stringByAppendingString: [fX264TunePopUp titleOfSelectedItem]];
         }
-    } 
-    
-    // Make sure we are not ignoring the setting, for Profile its "auto" but index 0
-    if ([fX264ProfilePopUp indexOfSelectedItem] != 0)
-    {
-        [queueFileJob setObject:[NSString stringWithFormat:@"%@", [fX264ProfilePopUp titleOfSelectedItem]] forKey:@"h264Profile"];
+        if ([fX264FastDecodeCheck state])
+        {
+            if ([x264Tune length])
+            {
+                x264Tune = [x264Tune stringByAppendingString: @","];
+            }
+            x264Tune = [x264Tune stringByAppendingString: @"fastdecode"];
+        }
+        // we can't set "auto" in the queue as libhb doesn't handle it
+        if ([fX264ProfilePopUp indexOfSelectedItem] != 0)
+        {
+            h264Profile = [fX264ProfilePopUp titleOfSelectedItem];
+        }
+        // we can't set "auto" in the queue as libhb doesn't handle it
+        if ([fX264LevelPopUp indexOfSelectedItem] != 0)
+        {
+            h264Level = [fX264LevelPopUp titleOfSelectedItem];
+        }
+        [queueFileJob setObject: [NSNumber numberWithInt:0] forKey: @"x264UseAdvancedOptions"];
+        [queueFileJob setObject: x264Preset                 forKey: @"x264Preset"];
+        [queueFileJob setObject: x264Tune                   forKey: @"x264Tune"];
+        [queueFileJob setObject: x264OptionExtra            forKey: @"x264OptionExtra"];
+        [queueFileJob setObject: h264Profile                forKey: @"h264Profile"];
+        [queueFileJob setObject: h264Level                  forKey: @"h264Level"];
     }
-    // Make sure we are not ignoring the setting, for Level its "auto" but index 0
-    if ([fX264LevelPopUp indexOfSelectedItem] != 0)
-    {
-        [queueFileJob setObject:[NSString stringWithFormat:@"%@", [fX264LevelPopUp titleOfSelectedItem]] forKey:@"h264Level"];
-    }
-    [queueFileJob setObject:[NSString stringWithFormat:@"%@", [fDisplayX264PresetsAdditonalOptionsTextField stringValue]] forKey:@"x264AdditionalOptions"];
-    /* END x264 Preset, Tune, Profile, and Levels */
     
     /* x264 Advanced Option String */
 	[queueFileJob setObject:[fAdvancedOptions optionsString] forKey:@"x264Option"];
@@ -2891,25 +2901,41 @@ fWorkingCount = 0;
     /*
      * If scanning we need to do some extra setup of the job.
      */
-    if( job->indepth_scan == 1 )
+    if (job->indepth_scan == 1)
     {
-        NSString *advanced_opts_tmp = [NSString stringWithUTF8String: job->advanced_opts];
-        
+        char *x264_preset_tmp  = strdup(job->x264_preset);
+        char *x264_tune_tmp    = strdup(job->x264_tune);
+        char *x264_encopts_tmp = strdup(job->advanced_opts);
+        char *h264_profile_tmp = strdup(job->x264_profile);
+        char *h264_level_tmp   = strdup(job->h264_level);
         /*
          * When subtitle scan is enabled do a fast pre-scan job
          * which will determine which subtitles to enable, if any.
          */
-        job->pass = -1;
+        job->indepth_scan = 1;
+        job->pass         = -1;
+        hb_job_set_x264_preset  (job, NULL);
+        hb_job_set_x264_tune    (job, NULL);
         hb_job_set_advanced_opts(job, NULL);
-        
-        job->indepth_scan = 1;  
-
-        
+        hb_job_set_x264_profile (job, NULL);
+        hb_job_set_x264_level   (job, NULL);
         /*
-         * Add the pre-scan job
+         * add the pre-scan job
          */
-        hb_add( fQueueEncodeLibhb, job );
-        hb_job_set_advanced_opts(job, [advanced_opts_tmp UTF8String] );
+        hb_add(fQueueEncodeLibhb, job);
+        /*
+         * reset the advanced settings
+         */
+        hb_job_set_x264_preset  (job, x264_preset_tmp);
+        hb_job_set_x264_tune    (job, x264_tune_tmp);
+        hb_job_set_advanced_opts(job, x264_encopts_tmp);
+        hb_job_set_x264_profile (job, h264_profile_tmp);
+        hb_job_set_x264_level   (job, h264_level_tmp);
+        free(x264_preset_tmp);
+        free(x264_tune_tmp);
+        free(x264_encopts_tmp);
+        free(h264_profile_tmp);
+        free(h264_level_tmp);
     }
 
     
@@ -3262,32 +3288,63 @@ fWorkingCount = 0;
     /* Format (Muxer) and Video Encoder */
     job->mux = [[fDstFormatPopUp selectedItem] tag];
     job->vcodec = [[fVidEncoderPopUp selectedItem] tag];
+    job->fastfirstpass = 0;
 
     job->chapter_markers = 0;
     
 	if( job->vcodec == HB_VCODEC_X264 )
     {
-		
-		/* Below Sends x264 options to the core library if x264 is selected*/
-		job->fastfirstpass = 0;
-        
-        // we are none on the x264 preset slider so use the advanced options panel
-        //if ([fX264PresetsSlider intValue] == 0)
+        /* advanced x264 options */
+        NSString   *x264Tune     = @"";
+        const char *x264_preset  = NULL;
+        const char *x264_tune    = NULL;
+        const char *x264_encopts = NULL;
+        const char *h264_profile = NULL;
+        const char *h264_level   = NULL;
         if ([fx264UseAdvancedOptionsCheck state])
         {
-            hb_job_set_advanced_opts(job, [[fAdvancedOptions optionsString] UTF8String] );
+            // we are using the advanced panel
+            x264_encopts = [[fAdvancedOptions optionsString] UTF8String];
         }
         else
         {
-            // we are using x264 presets
-            // so we set the presets, and tune etc according to the widgets
-            [self x264PresetsSetJobVariables:nil];
-            
+            // we are using the x264 system
+            x264_preset  = [[fX264PresetSelectedTextField stringValue] UTF8String];
+            x264_encopts = [[fDisplayX264PresetsAdditonalOptionsTextField stringValue] UTF8String];
+            if ([fX264TunePopUp indexOfSelectedItem] != 0)
+            {
+                x264Tune = [x264Tune stringByAppendingString: [fX264TunePopUp titleOfSelectedItem]];
+            }
+            if ([fX264FastDecodeCheck state])
+            {
+                if ([x264Tune length])
+                {
+                    x264Tune = [x264Tune stringByAppendingString: @","];
+                }
+                x264Tune = [x264Tune stringByAppendingString: @"fastdecode"];
+            }
+            if ([x264Tune length])
+            {
+                x264_tune = [x264Tune UTF8String];
+            }
+            if ([fX264ProfilePopUp indexOfSelectedItem] != 0)
+            {
+                h264_profile = [[fX264ProfilePopUp titleOfSelectedItem] UTF8String];
+            }
+            if ([fX264LevelPopUp indexOfSelectedItem] != 0)
+            {
+                h264_level = [[fX264ProfilePopUp titleOfSelectedItem] UTF8String];
+            }
         }
+        hb_job_set_x264_preset  (job, x264_preset);
+        hb_job_set_x264_tune    (job, x264_tune);
+        hb_job_set_advanced_opts(job, x264_encopts);
+        hb_job_set_x264_profile (job, h264_profile);
+        hb_job_set_x264_level   (job, h264_level);
     }
     else if( job->vcodec & HB_VCODEC_FFMPEG_MASK )
     {
-        hb_job_set_advanced_opts(job, [[fAdvancedOptions optionsStringLavc] UTF8String] );
+        hb_job_set_advanced_opts(job, [[fAdvancedOptions optionsStringLavc] UTF8String]);
     }
 
     /* Video settings */
@@ -3776,21 +3833,40 @@ bool one_burned = FALSE;
 			job->fastfirstpass = 0;
 		}
         
-        /* Here we pass the x264 preset, profile, tune, level to libhb or the advanced string */
-        // First make sure we are not on the first tickmark for preset which does not use x264 presets
-        if([queueToApply objectForKey:@"x264Preset"])
+        /* Here we pass the advanced x264 options to libhb */
+        const char *x264_preset  = NULL;
+        const char *x264_tune    = NULL;
+        const char *x264_encopts = NULL;
+        const char *h264_profile = NULL;
+        const char *h264_level   = NULL;
+        if ([[queueToApply objectForKey:@"x264UseAdvancedOptions"] intValue])
         {
-            hb_job_set_x264_preset(job, [[queueToApply objectForKey:@"x264Preset"]UTF8String] );
-            // Note we do not have to append fast decode here to tune because it was already done in preparing the queue file item
-            hb_job_set_x264_tune (job, [[queueToApply objectForKey:@"x264Tune"]UTF8String] );
-            hb_job_set_x264_profile(job, [[queueToApply objectForKey:@"x264Profile"]UTF8String] );
-            hb_job_set_x264_level(job, [[queueToApply objectForKey:@"x264Level"]UTF8String] );
-            hb_job_set_advanced_opts( job, [[queueToApply objectForKey:@"x264AdditionalOptions"] UTF8String] );
+            // we are using the advanced panel
+            x264_encopts = [[queueToApply objectForKey:@"x264Option"] UTF8String];
         }
         else
         {
-            hb_job_set_advanced_opts( job, [[queueToApply objectForKey:@"x264Option"] UTF8String] );
+            // we are using the x264 system
+            x264_preset  = [[queueToApply objectForKey:@"x264Preset"] UTF8String];
+            x264_encopts = [[queueToApply objectForKey:@"x264OptionExtra"] UTF8String];
+            if ([[queueToApply objectForKey:@"x264Tune"] length])
+            {
+                x264_tune = [[queueToApply objectForKey:@"x264Tune"] UTF8String];
+            }
+            if ([[queueToApply objectForKey:@"h264Profile"] length])
+            {
+                h264_profile = [[queueToApply objectForKey:@"h264Profile"] UTF8String];
+            }
+            if ([[queueToApply objectForKey:@"h264Level"] length])
+            {
+                h264_level = [[queueToApply objectForKey:@"h264Level"] UTF8String];
+            }
         }
+        hb_job_set_x264_preset  (job, x264_preset);
+        hb_job_set_x264_tune    (job, x264_tune);
+        hb_job_set_advanced_opts(job, x264_encopts);
+        hb_job_set_x264_profile (job, h264_profile);
+        hb_job_set_x264_level   (job, h264_level);
     }
     else if( job->vcodec & HB_VCODEC_FFMPEG_MASK )
     {
@@ -5429,47 +5505,6 @@ the user is using "Custom" settings by determining the sender*/
     
 }
 
-
-- (IBAction) x264PresetsSetJobVariables: (id) sender
-
-{
-
-        hb_list_t  * list  = hb_get_titles( fHandle );
-        hb_title_t * title = (hb_title_t *) hb_list_item( list,
-                                                         [fSrcTitlePopUp indexOfSelectedItem] );
-        hb_job_t * job = title->job;
-        
-        hb_job_set_x264_preset(job, [[fX264PresetSelectedTextField stringValue]UTF8String] );
-        
-        // Make sure we are not ignoring the setting, for Tune its "none" but index 0
-        if ([fX264TunePopUp indexOfSelectedItem] != 0)
-        {
-            // we check to see if fastdecode is checked and if so we append it to the tune as so...
-            if ([fX264FastDecodeCheck state] == NSOnState)
-            {
-                hb_job_set_x264_tune (job,  [[NSString stringWithFormat:@"%@,%@", [fX264TunePopUp titleOfSelectedItem], @"fastdecode"] UTF8String] );
-                
-            }
-            else
-            {
-                hb_job_set_x264_tune (job, [[fX264TunePopUp titleOfSelectedItem]UTF8String] );   
-            }
-        }
-        // Make sure we are not ignoring the setting, for Profile its "auto" but index 0
-        if ([fX264ProfilePopUp indexOfSelectedItem] != 0)
-        {
-            hb_job_set_x264_profile(job, [[fX264ProfilePopUp titleOfSelectedItem]UTF8String] );
-        }
-        // Make sure we are not ignoring the setting, for Level its "auto" but index 0
-        if ([fX264LevelPopUp indexOfSelectedItem] != 0)
-        {
-            hb_job_set_x264_level(job, [[fX264LevelPopUp titleOfSelectedItem]UTF8String] );
-        }
-        
-        hb_job_set_advanced_opts(job, [[fDisplayX264PresetsAdditonalOptionsTextField stringValue] UTF8String] );
-        
-}
-
 #pragma mark -
 #pragma mark - Picture
 
@@ -6141,7 +6176,7 @@ return YES;
         if ([[chosenPreset objectForKey:@"VideoEncoder"] isEqualToString:@"H.264 (x264)"])
         {
             /*
-             * x264UeAdvancedOptions is not set (legacy preset)
+             * x264UseAdvancedOptions is not set (legacy preset)
              * or set to 1 (enabled), so we use the old advanced panel
              */
             if (![chosenPreset objectForKey:@"x264UseAdvancedOptions"] ||
@@ -6161,30 +6196,29 @@ return YES;
                 [self updateX264Widgets:nil];
             }
             /*
-             * x264UeAdvancedOptions is set to 0 (disabled),
+             * x264UseAdvancedOptions is set to 0 (disabled),
              * so we use the x264 system
              */
             else
             {
-                /* Set the x264 preset slider */
-                const char * const * x264_presets = hb_x264_presets();
-                for (int i = 0; x264_presets[i] != NULL; i++)
+                /* x264Preset */
+                NSString *name;
+                [fX264PresetsSlider setIntegerValue:fX264MediumPresetIndex];
+                NSEnumerator *enumerator = [fX264PresetNames objectEnumerator];
+                NSString *x264Preset = [chosenPreset objectForKey:@"x264Preset"];
+                while ((name = (NSString *)[enumerator nextObject]))
                 {
-                    if ([[chosenPreset objectForKey:@"x264Preset"]
-                                    isEqualToString: [NSString stringWithUTF8String:x264_presets[i]]])
+                    if ([name isEqualToString:x264Preset])
                     {
-                        [fX264PresetsSlider setIntValue: i];
+                        [fX264PresetsSlider setIntegerValue:[fX264PresetNames indexOfObject:name]];
                         [self x264PresetsSliderChanged:nil];
+                        break;
                     }
                 }
                 /* x264Tune */
-                if (![[chosenPreset objectForKey:@"x264Tune"] isEqualToString: @""])
+                [fX264TunePopUp selectItemWithTitle:[chosenPreset objectForKey:@"x264Tune"]];
+                if ([fX264TunePopUp indexOfSelectedItem] == -1)
                 {
-                    [fX264TunePopUp selectItemWithTitle:[chosenPreset objectForKey:@"x264Tune"]];
-                }
-                else
-                {
-                    /* if the preset does not specify, use "none" */
                     [fX264TunePopUp selectItemAtIndex:0];
                 }
                 /* Fast Decode checkbox */
@@ -6192,23 +6226,15 @@ return YES;
                 /*  additional x264 options */
                 [fDisplayX264PresetsAdditonalOptionsTextField setStringValue:[chosenPreset objectForKey:@"x264OptionExtra"]];
                 /* h264Profile */
-                if (![[chosenPreset objectForKey:@"h264Profile"] isEqualToString: @""])
+                [fX264ProfilePopUp selectItemWithTitle:[chosenPreset objectForKey:@"h264Profile"]];
+                if ([fX264ProfilePopUp indexOfSelectedItem] == -1)
                 {
-                    [fX264ProfilePopUp selectItemWithTitle:[chosenPreset objectForKey:@"h264Profile"]];
-                }
-                else
-                {
-                    /* if the preset does not specify, use "auto" */
                     [fX264ProfilePopUp selectItemAtIndex:0];   
                 }
                 /* h264Level */
-                if (![[chosenPreset objectForKey:@"h264Level"] isEqualToString: @""])
+                [fX264LevelPopUp selectItemWithTitle:[chosenPreset objectForKey:@"h264Level"]];
+                if ([fX264LevelPopUp indexOfSelectedItem] == -1)
                 {
-                    [fX264LevelPopUp selectItemWithTitle:[chosenPreset objectForKey:@"h264Level"]];
-                }
-                else
-                {
-                    /* if the preset does not specify, use "auto" */
                     [fX264LevelPopUp selectItemAtIndex:0];   
                 }
                 /* we enable the advanced panel and update the widgets */
@@ -6830,26 +6856,16 @@ return YES;
             [preset setObject:[NSNumber numberWithInt:0] forKey:@"x264UseAdvancedOptions"];
             /* x264 preset */
             [preset setObject:[fX264PresetSelectedTextField stringValue] forKey:@"x264Preset"];
-            /* x264 psy tune, if not "none" */
-            if ([fX264TunePopUp indexOfSelectedItem] != 0)
-            {
-                [preset setObject: [fX264TunePopUp titleOfSelectedItem] forKey:@"x264Tune"];
-                
-            }
-            /* x264 fastdecode - can be set even if tune is "none" */
+            /* x264 psy tune */
+            [preset setObject: [fX264TunePopUp titleOfSelectedItem] forKey:@"x264Tune"];
+            /* x264 fastdecode */
             [preset setObject: [NSNumber numberWithInt:[fX264FastDecodeCheck state]] forKey:@"x264FastDecode"];
             /* additional x264 options */
             [preset setObject:[fDisplayX264PresetsAdditonalOptionsTextField stringValue] forKey:@"x264OptionExtra"];
-            /* h264Profile, if not "auto" */
-            if ([fX264ProfilePopUp indexOfSelectedItem] != 0)
-            {
-                [preset setObject:[fX264ProfilePopUp titleOfSelectedItem] forKey:@"h264Profile"];
-            }
+            /* h264Profile */
+            [preset setObject:[fX264ProfilePopUp titleOfSelectedItem] forKey:@"h264Profile"];
             /* h264 level, if not "auto" */
-            if ([fX264LevelPopUp indexOfSelectedItem] != 0)
-            {
-                [preset setObject:[fX264LevelPopUp titleOfSelectedItem] forKey:@"h264Level"];
-            }
+            [preset setObject:[fX264LevelPopUp titleOfSelectedItem] forKey:@"h264Level"];
             /*
              * bonus: set the unparsed options to make the preset compatible
              * with old HB versions

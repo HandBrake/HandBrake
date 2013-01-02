@@ -305,7 +305,6 @@ BOOL                        fIsDragging;
 - (void) setupX264PresetsWidgets: (id) sender;
 - (void) enableX264Widgets: (bool) enable;
 - (IBAction) updateX264Widgets: (id) sender;
-- (IBAction) x264PresetsSetJobVariables: (id) sender;
 - (IBAction) x264PresetsChangedDisplayExpandedOptions: (id) sender;
 
 - (IBAction) encodeStartStopPopUpChanged: (id) sender;
