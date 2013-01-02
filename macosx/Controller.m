@@ -6147,98 +6147,83 @@ return YES;
              key as that would rule out a vestigial custom hb preset as well (since an older pre-x264Preset
              in HB would not have this key and then go back to using the Advanced Panel).
              */
-            if (![chosenPreset objectForKey:@"x264UseAdvancedOptions"] && [chosenPreset objectForKey:@"x264Preset"])
+            if (![chosenPreset objectForKey:@"x264UseAdvancedOptions"] ||
+                [[chosenPreset objectForKey:@"x264UseAdvancedOptions"] intValue])
             {
-                /* Set the fx264UseAdvancedOptionsCheck */
-                [fx264UseAdvancedOptionsCheck setState: NSOffState];
-                [self setupX264PresetsWidgets: nil];
-                [self enableX264PresetWidgets: nil];
-                
-                /* Set the x264 preset slider */
-                
-                const char * const* x264_presets = hb_x264_presets();
-                for (int i = 0; x264_presets[i] != NULL; i++)
-                {
-                    if ([[chosenPreset objectForKey:@"x264Preset"] isEqualToString: [NSString stringWithFormat: @"%s",x264_presets[i]]])
-                    {
-                        [fX264PresetsSlider setFloatValue: i];
-                        [self x264PresetsSliderChanged:nil];
-                    }
-                }
-                
-                /* x264 tune */
-                if (![[chosenPreset objectForKey:@"x264Tune"] isEqualToString: @""])
-                {
-                    [fX264TunePopUp selectItemWithTitle:[chosenPreset objectForKey:@"x264Tune"]];
-                }
-                else
-                {
-                    /* if the preset does not specify use index 0 */
-                    [fX264TunePopUp selectItemAtIndex:0];
-                }
-                
-                /* Fast Decode checkbox*/
-                if ([chosenPreset objectForKey:@"x264FastDecode"])
-                {
-                    [fX264FastDecodeCheck setState: [[chosenPreset objectForKey:@"x264FastDecode"] intValue]];
-                }
-                else
-                {
-                    [fX264FastDecodeCheck setState: NSOffState];   
-                }
-                
-                /* x264 Profile */
-                if (![[chosenPreset objectForKey:@"h264Profile"] isEqualToString: @""])
-                {
-                    [fX264ProfilePopUp selectItemWithTitle:[chosenPreset objectForKey:@"h264Profile"]];
-                }
-                else
-                {
-                    /* if the preset does not specify use index 0 */
-                    [fX264ProfilePopUp selectItemAtIndex:0];   
-                }
-                
-                /* x264 Level */
-                if (![[chosenPreset objectForKey:@"h264Level"] isEqualToString: @""])
-                {
-                    [fX264LevelPopUp selectItemWithTitle:[chosenPreset objectForKey:@"h264Level"]];
-                }
-                else
-                {
-                    [fX264LevelPopUp selectItemAtIndex:0];   
-                }
-                
-                /* We set the advanced opt string here if applicable*/
-                if ([chosenPreset objectForKey:@"x264Option"])
-                {
-                    [fDisplayX264PresetsAdditonalOptionsTextField setStringValue:[chosenPreset objectForKey:@"x264Option"]];
-                }
-                else
-                {
-                    [fDisplayX264PresetsAdditonalOptionsTextField setStringValue:@""];   
-                }
-                
-            [self x264PresetsChangedDisplayExpandedOptions:nil];
-            }
-            else
-            {
-                /* we are advanced panel so we reset all of the x264 widgets */
-                /* Set the slider to float 0.0 which will trigger the advanced panel */
+                /*
+                 * x264UeAdvancedOptions is not set (legacy preset)
+                 * or set to 1 (enabled), so we use the old advanced panel
+                 */
                 [fx264UseAdvancedOptionsCheck setState: NSOnState];
                 [self setupX264PresetsWidgets: nil];
                 [self enableX264PresetWidgets: nil];
-                
-                /* We set the advanced opt string here if applicable*/
+                /* we set the advanced opt string here if applicable */
                 if ([chosenPreset objectForKey:@"x264Option"])
                 {
                     [fAdvancedOptions setOptions:[chosenPreset objectForKey:@"x264Option"]];
                 }
                 else
                 {
-                    [fAdvancedOptions setOptions:@""];   
+                    [fAdvancedOptions setOptions:@""];
                 }
             }
-            
+            else
+            {
+                /*
+                 * x264UeAdvancedOptions is set to 0 (disabled),
+                 * so we use the x264 system
+                 */
+                [fx264UseAdvancedOptionsCheck setState: NSOffState];
+                [self setupX264PresetsWidgets: nil];
+                [self enableX264PresetWidgets: nil];
+                /* Set the x264 preset slider */
+                const char * const * x264_presets = hb_x264_presets();
+                for (int i = 0; x264_presets[i] != NULL; i++)
+                {
+                    if ([[chosenPreset objectForKey:@"x264Preset"]
+                                    isEqualToString: [NSString stringWithUTF8String:x264_presets[i]]])
+                    {
+                        [fX264PresetsSlider setIntValue: i];
+                        [self x264PresetsSliderChanged:nil];
+                    }
+                }
+                /* x264Tune */
+                if (![[chosenPreset objectForKey:@"x264Tune"] isEqualToString: @""])
+                {
+                    [fX264TunePopUp selectItemWithTitle:[chosenPreset objectForKey:@"x264Tune"]];
+                }
+                else
+                {
+                    /* if the preset does not specify, use "none" */
+                    [fX264TunePopUp selectItemAtIndex:0];
+                }
+                /* Fast Decode checkbox */
+                [fX264FastDecodeCheck setState: [[chosenPreset objectForKey:@"x264FastDecode"] intValue]];
+                /*  additional x264 options */
+                [fDisplayX264PresetsAdditonalOptionsTextField setStringValue:[chosenPreset objectForKey:@"x264OptionExtra"]];
+                /* h264Profile */
+                if (![[chosenPreset objectForKey:@"h264Profile"] isEqualToString: @""])
+                {
+                    [fX264ProfilePopUp selectItemWithTitle:[chosenPreset objectForKey:@"h264Profile"]];
+                }
+                else
+                {
+                    /* if the preset does not specify, use "auto" */
+                    [fX264ProfilePopUp selectItemAtIndex:0];   
+                }
+                /* h264Level */
+                if (![[chosenPreset objectForKey:@"h264Level"] isEqualToString: @""])
+                {
+                    [fX264LevelPopUp selectItemWithTitle:[chosenPreset objectForKey:@"h264Level"]];
+                }
+                else
+                {
+                    /* if the preset does not specify, use "auto" */
+                    [fX264LevelPopUp selectItemAtIndex:0];   
+                }
+                /* unparse */
+                [self x264PresetsChangedDisplayExpandedOptions:nil];
+            }
         }
         
         if ([chosenPreset objectForKey:@"lavcOption"])
@@ -6841,50 +6826,46 @@ return YES;
         [preset setObject:[fVidEncoderPopUp titleOfSelectedItem] forKey:@"VideoEncoder"];
         /* x264 Options, this will either be advanced panel or the video tabs x264 presets panel with modded option string */
         
-        // first lets check the extra left mark which is our custom/none setting in which case we use the advanced panel.
-        // Otherwise we use the x264 presets in the video tab.
-        if ([fX264PresetsSlider intValue] == 0)
+        if ([fx264UseAdvancedOptionsCheck state] == NSOnState)
         {
+            /* use the old advanced panel */
+            [preset setObject:[NSNumber numberWithInt:1] forKey:@"x264UseAdvancedOptions"];
             /* x264 Advanced Panel Option String */
             [preset setObject:[fAdvancedOptions optionsString] forKey:@"x264Option"];
         }
         else
         {
-            /* if we are not using the full advanced panel custom string then we go to the video panel x264 presets
-             tab.
-             */
-            
-            // First we get the x264 preset:
-            // Set the x264 Preset
+            /* use the x264 system */
+            [preset setObject:[NSNumber numberWithInt:0] forKey:@"x264UseAdvancedOptions"];
+            /* x264 preset */
             [preset setObject:[fX264PresetSelectedTextField stringValue] forKey:@"x264Preset"];
-            
-            // Set tune but observe the fast decode checkbox to append fastdecode to the tune:
-            
-            // NOTE TO ME, Check for utf8 string Here though we should be sanitizing it in -presetSelected !!!!!!!!!!
+            /* x264 psy tune, if not "none" */
             if ([fX264TunePopUp indexOfSelectedItem] != 0)
-            {            // we check to see if fastdecode is checked and if so we append it to the tune as so...
+            {
                 [preset setObject: [fX264TunePopUp titleOfSelectedItem] forKey:@"x264Tune"];
                 
-                // Now check to see if we are using Fast Decode  ...
-                [preset setObject: [NSNumber numberWithInt:[fX264FastDecodeCheck state]] forKey:@"x264FastDecode"];
             }
-            
-            // Make sure we are not ignoring the setting, for Profile its "auto" but index 0
+            /* x264 fastdecode - can be set even if tune is "none" */
+            [preset setObject: [NSNumber numberWithInt:[fX264FastDecodeCheck state]] forKey:@"x264FastDecode"];
+            /* additional x264 options */
+            [preset setObject:[fDisplayX264PresetsAdditonalOptionsTextField stringValue] forKey:@"x264OptionExtra"];
+            /* h264Profile, if not "auto" */
             if ([fX264ProfilePopUp indexOfSelectedItem] != 0)
             {
-                [preset setObject:[fX264ProfilePopUp titleOfSelectedItem] forKey:@"x264Profile"];
+                [preset setObject:[fX264ProfilePopUp titleOfSelectedItem] forKey:@"h264Profile"];
             }
-            
-            // Make sure we are not ignoring the setting, for Level its "auto" but index 0
+            /* h264 level, if not "auto" */
             if ([fX264LevelPopUp indexOfSelectedItem] != 0)
             {
-                [preset setObject:[fX264LevelPopUp titleOfSelectedItem] forKey:@"x264Level"];
-            } 
-            
-            // we set the x264Option advanced option key to string from fDisplayX264PresetsAdditonalOptionsTextField
-            
-            [preset setObject:[fDisplayX264PresetsAdditonalOptionsTextField stringValue] forKey:@"x264Option"];
-            
+                [preset setObject:[fX264LevelPopUp titleOfSelectedItem] forKey:@"h264Level"];
+            }
+            /*
+             * bonus: set the unparsed options to make the preset compatible
+             * with old HB versions
+             */
+            NSUInteger skip_prefix = [@"x264 Unparse: " length];
+            [preset setObject:[[fDisplayX264PresetsUnparseTextField stringValue] substringFromIndex:skip_prefix]
+                       forKey:@"x264Option"];
         }
 
         /* FFmpeg (lavc) Option String */
