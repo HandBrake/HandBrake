@@ -60,6 +60,8 @@ BOOL                        fIsDragging;
     PreviewController            * fPreviewController;
     
     /* x264 Presets Box */
+    NSArray                      * fX264PresetNames;
+    NSUInteger                   * fX264MediumPresetIndex;
     IBOutlet NSButton            * fx264UseAdvancedOptionsCheck;
     IBOutlet NSBox               * fX264PresetsBox;
     IBOutlet NSSlider            * fX264PresetsSlider;
@@ -300,7 +302,7 @@ BOOL                        fIsDragging;
 
 - (void)     updateUI: (NSTimer *) timer;
 - (void)     enableUI: (bool) enable;
-- (IBAction) enableX264PresetWidgets: (id) sender;
+- (IBAction) updateX264Widgets: (bool) enable;
 - (IBAction) setupX264PresetsWidgets: (id) sender;
 - (IBAction) x264PresetsSetJobVariables: (id) sender;
 - (IBAction) x264PresetsChangedDisplayExpandedOptions: (id) sender;
