@@ -114,6 +114,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
     [self updateDockIcon:-1.0 withETA:@""];
     
+    /*
+     * initialize fX264PresetsUnparsedUTF8String as early as possible
+     * avoids an invalid free
+     */
+    fX264PresetsUnparsedUTF8String = NULL;
+    
     return self;
 }
 
@@ -2903,11 +2909,11 @@ fWorkingCount = 0;
      */
     if (job->indepth_scan == 1)
     {
-        char *x264_preset_tmp  = strdup(job->x264_preset);
-        char *x264_tune_tmp    = strdup(job->x264_tune);
-        char *x264_encopts_tmp = strdup(job->advanced_opts);
-        char *h264_profile_tmp = strdup(job->x264_profile);
-        char *h264_level_tmp   = strdup(job->h264_level);
+        char *x264_preset_tmp   = strdup(job->x264_preset);
+        char *x264_tune_tmp     = strdup(job->x264_tune);
+        char *advanced_opts_tmp = strdup(job->advanced_opts);
+        char *h264_profile_tmp  = strdup(job->x264_profile);
+        char *h264_level_tmp    = strdup(job->h264_level);
         /*
          * When subtitle scan is enabled do a fast pre-scan job
          * which will determine which subtitles to enable, if any.
@@ -2928,12 +2934,12 @@ fWorkingCount = 0;
          */
         hb_job_set_x264_preset  (job, x264_preset_tmp);
         hb_job_set_x264_tune    (job, x264_tune_tmp);
-        hb_job_set_advanced_opts(job, x264_encopts_tmp);
+        hb_job_set_advanced_opts(job, advanced_opts_tmp);
         hb_job_set_x264_profile (job, h264_profile_tmp);
         hb_job_set_x264_level   (job, h264_level_tmp);
         free(x264_preset_tmp);
         free(x264_tune_tmp);
-        free(x264_encopts_tmp);
+        free(advanced_opts_tmp);
         free(h264_profile_tmp);
         free(h264_level_tmp);
     }
@@ -3295,22 +3301,22 @@ fWorkingCount = 0;
 	if( job->vcodec == HB_VCODEC_X264 )
     {
         /* advanced x264 options */
-        NSString   *x264Tune     = @"";
-        const char *x264_preset  = NULL;
-        const char *x264_tune    = NULL;
-        const char *x264_encopts = NULL;
-        const char *h264_profile = NULL;
-        const char *h264_level   = NULL;
+        NSString   *x264Tune      = @"";
+        const char *x264_preset   = NULL;
+        const char *x264_tune     = NULL;
+        const char *advanced_opts = NULL;
+        const char *h264_profile  = NULL;
+        const char *h264_level    = NULL;
         if ([fx264UseAdvancedOptionsCheck state])
         {
             // we are using the advanced panel
-            x264_encopts = [[fAdvancedOptions optionsString] UTF8String];
+            advanced_opts = [[fAdvancedOptions optionsString] UTF8String];
         }
         else
         {
             // we are using the x264 system
-            x264_preset  = [[fX264PresetSelectedTextField stringValue] UTF8String];
-            x264_encopts = [[fDisplayX264PresetsAdditonalOptionsTextField stringValue] UTF8String];
+            x264_preset   = [[fX264PresetSelectedTextField stringValue] UTF8String];
+            advanced_opts = [[fDisplayX264PresetsAdditonalOptionsTextField stringValue] UTF8String];
             if ([fX264TunePopUp indexOfSelectedItem] != 0)
             {
                 x264Tune = [x264Tune stringByAppendingString: [fX264TunePopUp titleOfSelectedItem]];
@@ -3333,12 +3339,12 @@ fWorkingCount = 0;
             }
             if ([fX264LevelPopUp indexOfSelectedItem] != 0)
             {
-                h264_level = [[fX264ProfilePopUp titleOfSelectedItem] UTF8String];
+                h264_level = [[fX264LevelPopUp titleOfSelectedItem] UTF8String];
             }
         }
         hb_job_set_x264_preset  (job, x264_preset);
         hb_job_set_x264_tune    (job, x264_tune);
-        hb_job_set_advanced_opts(job, x264_encopts);
+        hb_job_set_advanced_opts(job, advanced_opts);
         hb_job_set_x264_profile (job, h264_profile);
         hb_job_set_x264_level   (job, h264_level);
     }
@@ -3834,21 +3840,21 @@ bool one_burned = FALSE;
 		}
         
         /* Here we pass the advanced x264 options to libhb */
-        const char *x264_preset  = NULL;
-        const char *x264_tune    = NULL;
-        const char *x264_encopts = NULL;
-        const char *h264_profile = NULL;
-        const char *h264_level   = NULL;
+        const char *x264_preset   = NULL;
+        const char *x264_tune     = NULL;
+        const char *advanced_opts = NULL;
+        const char *h264_profile  = NULL;
+        const char *h264_level    = NULL;
         if ([[queueToApply objectForKey:@"x264UseAdvancedOptions"] intValue])
         {
             // we are using the advanced panel
-            x264_encopts = [[queueToApply objectForKey:@"x264Option"] UTF8String];
+            advanced_opts = [[queueToApply objectForKey:@"x264Option"] UTF8String];
         }
         else
         {
             // we are using the x264 system
-            x264_preset  = [[queueToApply objectForKey:@"x264Preset"] UTF8String];
-            x264_encopts = [[queueToApply objectForKey:@"x264OptionExtra"] UTF8String];
+            x264_preset   = [[queueToApply objectForKey:@"x264Preset"] UTF8String];
+            advanced_opts = [[queueToApply objectForKey:@"x264OptionExtra"] UTF8String];
             if ([[queueToApply objectForKey:@"x264Tune"] length])
             {
                 x264_tune = [[queueToApply objectForKey:@"x264Tune"] UTF8String];
@@ -3864,7 +3870,7 @@ bool one_burned = FALSE;
         }
         hb_job_set_x264_preset  (job, x264_preset);
         hb_job_set_x264_tune    (job, x264_tune);
-        hb_job_set_advanced_opts(job, x264_encopts);
+        hb_job_set_advanced_opts(job, advanced_opts);
         hb_job_set_x264_profile (job, h264_profile);
         hb_job_set_x264_level   (job, h264_level);
     }
@@ -5447,62 +5453,70 @@ the user is using "Custom" settings by determining the sender*/
  */
 - (IBAction) x264PresetsChangedDisplayExpandedOptions: (id) sender
 
-{ 
-    
-    // first we clear whatever is in fDisplayX264PresetsUnparseTextField
-    [fDisplayX264PresetsUnparseTextField setStringValue:@""];
-    
-    // try to get our unparse from the widgets
-    
-   /* char * hb_x264_param_unparse(const char *x264_preset,  
-                                 const char *x264_tune,
-                                 const char *x264_encopts,
-                                 const char *x264_profile,
-                                 const char *h264_level,
-                                 int width,
-                                 int height);
+{
+    int width, height;
+   /* API reference:
+    *
+    * char * hb_x264_param_unparse(const char *x264_preset,
+    *                              const char *x264_tune,
+    *                              const char *x264_encopts,
+    *                              const char *x264_profile,
+    *                              const char *h264_level,
+    *                              int width, int height);
     */
-    
-    /* We need to create a wrapper to take care of appending fastdecode to tune if Fast Decode is checked */
-    NSString * preset = [fX264PresetSelectedTextField stringValue];
-    NSString * tune = [fX264TunePopUp titleOfSelectedItem];
-    NSString * profile = [fX264ProfilePopUp titleOfSelectedItem];
-    NSString * level = [fX264LevelPopUp titleOfSelectedItem];
-    //Parse out default labels from the popups
-    if ([fX264TunePopUp indexOfSelectedItem] == 0)
+    NSString   *x264Tune      = @"";
+    const char *x264_preset   = [[fX264PresetSelectedTextField stringValue] UTF8String];;
+    const char *x264_tune     = NULL;
+    const char *advanced_opts = [[fDisplayX264PresetsAdditonalOptionsTextField stringValue] UTF8String];
+    const char *h264_profile  = NULL;
+    const char *h264_level    = NULL;
+    int unparse_width, unparse_height;
+    // prepare the tune, profile and level
+    if ([fX264TunePopUp indexOfSelectedItem] != 0)
     {
-        if ([fX264FastDecodeCheck state] == NSOnState)
+        x264Tune = [x264Tune stringByAppendingString: [fX264TunePopUp titleOfSelectedItem]];
+    }
+    if ([fX264FastDecodeCheck state])
+    {
+        if ([x264Tune length])
         {
-            tune = @"fastdecode";
+            x264Tune = [x264Tune stringByAppendingString: @","];
         }
-        else
-        {
-            tune = NULL;
-        }
+        x264Tune = [x264Tune stringByAppendingString: @"fastdecode"];
     }
-    else
+    if ([x264Tune length])
     {
-        if ([fX264FastDecodeCheck state] == NSOnState)
-        {
-            tune = [tune stringByAppendingString:@",fastdecode"];  
-        }
+        // we can't upparse "none" as libhb doesn't handle it
+        x264_tune = [x264Tune UTF8String];
     }
-    
-    if ([fX264ProfilePopUp indexOfSelectedItem] == 0)
+    if ([fX264ProfilePopUp indexOfSelectedItem] != 0)
     {
-        profile = NULL;  
+        // we can't upparse "auto" as libhb doesn't handle it
+        h264_profile = [[fX264ProfilePopUp titleOfSelectedItem] UTF8String];
     }
-    
-    if ([fX264LevelPopUp indexOfSelectedItem] == 0)
+    if ([fX264LevelPopUp indexOfSelectedItem] != 0)
     {
-        level = NULL;  
+        // we can't upparse "auto" as libhb doesn't handle it
+        h264_level = [[fX264LevelPopUp titleOfSelectedItem] UTF8String];
     }
-    
-    /* note we feed hb_x264_param_unparse for now bogus width and height value as per Rodeo, here we use 1280 x 720 */
-    char *unparsed_string = hb_x264_param_unparse([[fX264PresetSelectedTextField stringValue] UTF8String], [tune UTF8String], [[fDisplayX264PresetsAdditonalOptionsTextField stringValue] UTF8String], [profile UTF8String], [level UTF8String], 1280, 720);
-    
-    [fDisplayX264PresetsUnparseTextField setStringValue: [NSString stringWithFormat:@"x264 Unparse: %s", unparsed_string]];
-    
+    // prepare the width and height (FIXME)
+    unparse_width  = 1280;
+    unparse_height = 720;
+    // if the previous unparsed string is non-NULL, free it
+    if (fX264PresetsUnparsedUTF8String != NULL)
+    {
+        free(fX264PresetsUnparsedUTF8String);
+    }
+    // now, unparse
+    fX264PresetsUnparsedUTF8String = hb_x264_param_unparse(x264_preset,
+                                                           x264_tune,
+                                                           advanced_opts,
+                                                           h264_profile,
+                                                           h264_level,
+                                                           unparse_width,
+                                                           unparse_height);
+    // update the text field
+    [fDisplayX264PresetsUnparseTextField setStringValue: [NSString stringWithFormat:@"x264 Unparse: %s", fX264PresetsUnparsedUTF8String]];
 }
 
 #pragma mark -
