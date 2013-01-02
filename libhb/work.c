@@ -144,6 +144,7 @@ hb_work_object_t * hb_codec_encoder( int codec )
             return w;
         }
         case HB_ACODEC_FFFLAC:
+        case HB_ACODEC_FFFLAC24:
         {
             w = hb_get_work( WORK_ENCAVCODEC_AUDIO );
             w->codec_param = AV_CODEC_ID_FLAC;

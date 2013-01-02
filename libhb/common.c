@@ -125,6 +125,7 @@ hb_encoder_t hb_audio_encoders[] =
     { "MP3 Passthru",       "copy:mp3",   HB_ACODEC_MP3_PASS,     HB_MUX_MP4|HB_MUX_MKV },
     { "Vorbis (vorbis)",    "vorbis",     HB_ACODEC_VORBIS,                  HB_MUX_MKV },
     { "FLAC (ffmpeg)",      "ffflac",     HB_ACODEC_FFFLAC,                  HB_MUX_MKV },
+    { "FLAC (24-bit)",      "ffflac24",   HB_ACODEC_FFFLAC24,                HB_MUX_MKV },
     { "Auto Passthru",      "copy",       HB_ACODEC_AUTO_PASS,    HB_MUX_MP4|HB_MUX_MKV },
 };
 int hb_audio_encoders_count = sizeof(hb_audio_encoders) / sizeof(hb_encoder_t);
@@ -161,8 +162,9 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
 
     switch (codec)
     {
-        case HB_ACODEC_FFFLAC:
         case HB_ACODEC_VORBIS:
+        case HB_ACODEC_FFFLAC:
+        case HB_ACODEC_FFFLAC24:
             return (mixdown <= HB_AMIXDOWN_7POINT1);
 
         case HB_ACODEC_LAME:
@@ -597,6 +599,7 @@ void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown,
     {
         // Bitrates don't apply to "lossless" audio
         case HB_ACODEC_FFFLAC:
+        case HB_ACODEC_FFFLAC24:
             *low = *high = -1;
             return;
 
@@ -715,6 +718,7 @@ int hb_get_default_audio_bitrate(uint32_t codec, int samplerate, int mixdown)
     switch (codec)
     {
         case HB_ACODEC_FFFLAC:
+        case HB_ACODEC_FFFLAC24:
             return -1;
 
         // 96, 224, 640 Kbps
@@ -825,6 +829,7 @@ void hb_get_audio_compression_limits(uint32_t codec, float *low, float *high,
     switch (codec)
     {
         case HB_ACODEC_FFFLAC:
+        case HB_ACODEC_FFFLAC24:
             *direction = 0;
             *granularity = 1;
             *high = 12;
@@ -863,6 +868,7 @@ float hb_get_default_audio_compression(uint32_t codec)
     switch (codec)
     {
         case HB_ACODEC_FFFLAC:
+        case HB_ACODEC_FFFLAC24:
             return 5.;
 
         case HB_ACODEC_LAME:
@@ -900,6 +906,7 @@ int hb_get_default_mixdown(uint32_t codec, uint64_t layout)
     {
         // the FLAC encoder defaults to the best mixdown up to 7.1
         case HB_ACODEC_FFFLAC:
+        case HB_ACODEC_FFFLAC24:
             mixdown = HB_AMIXDOWN_7POINT1;
             break;
         // the AC3 encoder defaults to the best mixdown up to 5.1

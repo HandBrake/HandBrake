@@ -91,14 +91,22 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         context->compression_level = audio->config.out.compression_level;
     }
 
-    // set the sample_fmt to something practical
-    if (audio->config.out.codec == HB_ACODEC_FFFLAC)
+    // set the sample format and bit depth to something practical
+    switch (audio->config.out.codec)
     {
-        hb_ff_set_sample_fmt(context, codec, AV_SAMPLE_FMT_S16);
-    }
-    else
-    {
-        hb_ff_set_sample_fmt(context, codec, AV_SAMPLE_FMT_FLT);
+        case HB_ACODEC_FFFLAC:
+            hb_ff_set_sample_fmt(context, codec, AV_SAMPLE_FMT_S16);
+            context->bits_per_raw_sample = 16;
+            break;
+
+        case HB_ACODEC_FFFLAC24:
+            hb_ff_set_sample_fmt(context, codec, AV_SAMPLE_FMT_S32);
+            context->bits_per_raw_sample = 24;
+            break;
+
+        default:
+            hb_ff_set_sample_fmt(context, codec, AV_SAMPLE_FMT_FLTP);
+            break;
     }
 
     if (hb_avcodec_open(context, codec, &av_opts, 0))
