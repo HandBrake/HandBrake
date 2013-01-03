@@ -2991,11 +2991,30 @@ fWorkingCount = 0;
     /* Mux mp4 with http optimization */
     [fDstMp4HttpOptFileCheck setState:[[queueToApply objectForKey:@"Mp4HttpOptimize"] intValue]];
     
-    /* Video encoder */
-    /* We set the advanced opt string here if applicable*/
+    /* video encoder */
     [fVidEncoderPopUp selectItemWithTitle:[queueToApply objectForKey:@"VideoEncoder"]];
-    [fAdvancedOptions setOptions:[queueToApply objectForKey:@"x264Option"]];
-    [fAdvancedOptions setLavcOptions:[queueToApply objectForKey:@"lavcOption"]];
+    [fAdvancedOptions setLavcOptions:     [queueToApply objectForKey:@"lavcOption"]];
+    /* advanced x264 options */
+    if ([[queueToApply objectForKey:@"x264UseAdvancedOptions"] intValue])
+    {
+        // we are using the advanced panel
+        [fAdvancedOptions setOptions:[queueToApply objectForKey:@"x264Option"]];
+        // enable the advanced panel and update the widgets
+        [fx264UseAdvancedOptionsCheck setState: NSOnState];
+        [self updateX264Widgets:nil];
+    }
+    else
+    {
+        // we are using the x264 system
+        [self setX264Preset:      [queueToApply objectForKey:@"x264Preset"]];
+        [self setX264Tune:        [queueToApply objectForKey:@"x264Tune"]];
+        [self setX264OptionExtra: [queueToApply objectForKey:@"x264OptionExtra"]];
+        [self setH264Profile:     [queueToApply objectForKey:@"h264Profile"]];
+        [self setH264Level:       [queueToApply objectForKey:@"h264Level"]];
+        // disable the advanced panel and update the widgets
+        [fx264UseAdvancedOptionsCheck setState: NSOffState];
+        [self updateX264Widgets:nil];
+    }
     
     /* Lets run through the following functions to get variables set there */
     [self videoEncoderPopUpChanged:nil];
@@ -6302,7 +6321,7 @@ return YES;
                 [self setX264OptionExtra: [chosenPreset objectForKey:@"x264OptionExtra"]];
                 [self setH264Profile:     [chosenPreset objectForKey:@"h264Profile"]];
                 [self setH264Level:       [chosenPreset objectForKey:@"h264Level"]];
-                /* we enable the advanced panel and update the widgets */
+                /* we disable the advanced panel and update the widgets */
                 [fx264UseAdvancedOptionsCheck setState: NSOffState];
                 [self updateX264Widgets:nil];
             }
