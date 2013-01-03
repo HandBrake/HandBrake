@@ -3779,13 +3779,13 @@ bool one_burned = FALSE;
         /* iPod 5G atom */
         job->ipod_atom = ([[queueToApply objectForKey:@"Mp4iPodCompatible"]
                            intValue] == 1);
-		
-		/* set fastfirstpass if 2-pass and Turbo are enabled */
-		if ([[queueToApply objectForKey:@"VideoTwoPass"] intValue] == 1)
-		{
-			job->fastfirstpass = ([[queueToApply objectForKey:@"VideoTurboTwoPass"]
+        
+        /* set fastfirstpass if 2-pass and Turbo are enabled */
+        if ([[queueToApply objectForKey:@"VideoTwoPass"] intValue] == 1)
+        {
+            job->fastfirstpass = ([[queueToApply objectForKey:@"VideoTurboTwoPass"]
                                    intValue] == 1);
-		}
+        }
         
         /* advanced x264 options */
         NSString   *tmpString;
