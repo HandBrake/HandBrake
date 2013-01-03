@@ -87,8 +87,13 @@ ifeq (darwin-i386,$(BUILD.system)-$(BUILD.machine))
     endif
 endif
 
-## MPC8 Doesn't compile on SPARC
+## For POSIX.1-2001
 ifeq (solaris,$(BUILD.system))
+    FFMPEG.CONFIGURE.extra += --extra-libs=/usr/lib/values-xpg6.o
+endif
+
+## MPC8 Doesn't compile on SPARC
+ifeq (solaris-sparc,$(BUILD.system)-$(BUILD.machine))
     FFMPEG.CONFIGURE.extra += --disable-demuxer=mpc8
 endif
 
