@@ -1666,6 +1666,10 @@ ghb_get_best_mix(hb_audio_config_t *aconfig, gint acodec, gint mix)
 {
     gint layout;
     layout = aconfig ? aconfig->in.channel_layout : AV_CH_LAYOUT_5POINT1;
+
+    if (mix == HB_AMIXDOWN_NONE)
+        mix = hb_audio_mixdowns[hb_audio_mixdowns_count-1].amixdown;
+    
     return hb_get_best_mixdown( acodec, layout, mix );
 }
 
