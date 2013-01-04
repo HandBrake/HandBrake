@@ -233,32 +233,35 @@ int           hb_get_video_encoders_count();
 hb_encoder_t* hb_get_audio_encoders();
 int           hb_get_audio_encoders_count();
 
-int hb_mixdown_is_supported(int mixdown, uint32_t codec, uint64_t layout);
-int hb_mixdown_has_codec_support(int mixdown, uint32_t codec);
-int hb_mixdown_has_remix_support(int mixdown, uint64_t layout);
-int hb_mixdown_get_discrete_channel_count(int amixdown);
-int hb_mixdown_get_low_freq_channel_count(int amixdown);
-int hb_mixdown_get_mixdown_from_short_name(const char *short_name);
+int         hb_mixdown_is_supported(int mixdown, uint32_t codec, uint64_t layout);
+int         hb_mixdown_has_codec_support(int mixdown, uint32_t codec);
+int         hb_mixdown_has_remix_support(int mixdown, uint64_t layout);
+int         hb_mixdown_get_discrete_channel_count(int amixdown);
+int         hb_mixdown_get_low_freq_channel_count(int amixdown);
+int         hb_mixdown_get_mixdown_from_short_name(const char *short_name);
 const char* hb_mixdown_get_short_name_from_mixdown(int amixdown);
 
-int hb_mixdown_get_mixdown_from_short_name( const char * short_name );
-const char * hb_mixdown_get_short_name_from_mixdown( int amixdown );
-void hb_autopassthru_apply_settings( hb_job_t * job );
-void hb_autopassthru_print_settings( hb_job_t * job );
-int hb_autopassthru_get_encoder( int in_codec, int copy_mask, int fallback, int muxer );
+void hb_autopassthru_apply_settings(hb_job_t *job);
+void hb_autopassthru_print_settings(hb_job_t *job);
+int  hb_autopassthru_get_encoder(int in_codec, int copy_mask, int fallback, int muxer);
+
 int hb_get_best_mixdown(uint32_t codec, uint64_t layout, int mixdown);
 int hb_get_default_mixdown(uint32_t codec, uint64_t layout);
+
 int hb_get_best_samplerate(uint32_t codec, int samplerate, int *sr_shift);
-int hb_find_closest_audio_bitrate(int bitrate);
+
+int  hb_find_closest_audio_bitrate(int bitrate);
 void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown, int *low, int *high);
-int hb_get_best_audio_bitrate( uint32_t codec, int bitrate, int samplerate, int mixdown);
-int hb_get_default_audio_bitrate( uint32_t codec, int samplerate, int mixdown );
-void hb_get_audio_quality_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
-float hb_get_best_audio_quality( uint32_t codec, float quality);
-float hb_get_default_audio_quality( uint32_t codec );
-void hb_get_audio_compression_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
-float hb_get_best_audio_compression( uint32_t codec, float compression);
-float hb_get_default_audio_compression( uint32_t codec );
+int  hb_get_best_audio_bitrate(uint32_t codec, int bitrate, int samplerate, int mixdown);
+int  hb_get_default_audio_bitrate(uint32_t codec, int samplerate, int mixdown);
+
+void  hb_get_audio_quality_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
+float hb_get_best_audio_quality(uint32_t codec, float quality);
+float hb_get_default_audio_quality(uint32_t codec);
+
+void  hb_get_audio_compression_limits(uint32_t codec, float *low, float *high, float *granularity, int *direction);
+float hb_get_best_audio_compression(uint32_t codec, float compression);
+float hb_get_default_audio_compression(uint32_t codec);
 
 struct hb_title_set_s
 {
