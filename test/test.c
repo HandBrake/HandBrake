@@ -2858,12 +2858,12 @@ static void ShowHelp()
     "                             tracks, default: first one).\n"
     "                            Multiple output tracks can be used for one input.\n"
     "    -E, --aencoder <string> Audio encoder(s):\n" );
-    for( i = 0; i < hb_audio_encoders_count; i++ )
+    for (i = 0; i < hb_audio_encoders_count; i++)
     {
-        fprintf( out, "                               %s\n",
-                 hb_audio_encoders[i].short_name );
+        fprintf(out, "                               %s\n",
+                hb_audio_encoders[i].short_name);
     }
-    fprintf( out,
+    fprintf(out,
     "                            copy:* will passthrough the corresponding\n"
     "                            audio unmodified to the muxer if it is a\n"
     "                            supported passthrough audio type.\n"
@@ -2876,17 +2876,19 @@ static void ShowHelp()
     "        --audio-copy-mask   Set audio codecs that are permitted when the\n"
     "                <string>    \"copy\" audio encoder option is specified\n"
     "                            (" );
-    for( i = 0, j = 0; i < hb_audio_encoders_count; i++ )
+    for (i = j = 0; i < hb_audio_encoders_count; i++)
     {
-        if( !strncmp( hb_audio_encoders[i].short_name, "copy:", 5 ) )
+        if ((hb_audio_encoders[i].encoder &  HB_ACODEC_PASS_FLAG) &&
+            (hb_audio_encoders[i].encoder != HB_ACODEC_AUTO_PASS))
         {
-            if( j != 0 )
-                fprintf( out, "/" );
-            fprintf( out, "%s", hb_audio_encoders[i].short_name + 5 );
+            if (j)
+                fprintf(out, "/");
+            // skip "copy:"
+            fprintf(out, "%s", hb_audio_encoders[i].short_name + 5);
             j = 1;
         }
     }
-    fprintf( out, ", default: all).\n"
+    fprintf(out, ", default: all).\n"
     "                            Separated by commas for multiple allowed options.\n"
     "        --audio-fallback    Set audio codec to use when it is not possible\n"
     "                <string>    to copy an audio track without re-encoding.\n"
@@ -2908,10 +2910,13 @@ static void ShowHelp()
     }
     fprintf(out,
     "                            Separated by commas for more than one audio track.\n"
-    "                            Default: up to %s for ffac3 and ffflac,\n",
+    "                            Default: up to %s for ffflac and ffflac24,\n",
+            hb_mixdown_get_short_name_from_mixdown(HB_AMIXDOWN_7POINT1));
+    fprintf(out,
+    "                                     up to %s for ffac3,\n",
             hb_mixdown_get_short_name_from_mixdown(HB_AMIXDOWN_5POINT1));
     fprintf(out,
-    "                                     up to %s for other encoders).\n",
+    "                                     up to %s for other encoders.\n",
             hb_mixdown_get_short_name_from_mixdown(HB_AMIXDOWN_DOLBYPLII));
     fprintf(out,
     "        --normalize-mix     Normalize audio mix levels to prevent clipping.\n"
