@@ -108,6 +108,7 @@ hb_encoder_t hb_video_encoders[] =
 };
 int hb_video_encoders_count = sizeof(hb_video_encoders) / sizeof(hb_encoder_t);
 
+// note: the first encoder in the list must be AAC
 hb_encoder_t hb_audio_encoders[] =
 {
 #ifdef __APPLE__

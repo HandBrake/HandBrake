@@ -2179,11 +2179,7 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         fprintf( stderr, "AAC Passthru requested and input codec is not AAC for track %d, using AAC encoder\n",
                                  audio->out.track );
-#ifdef __APPLE_CC__
-                        audio->out.codec = HB_ACODEC_CA_AAC;
-#else
-                        audio->out.codec = HB_ACODEC_FAAC;
-#endif
+                        audio->out.codec = hb_audio_encoders[0].encoder;
                     }
                     else if( audio->out.codec == HB_ACODEC_AC3_PASS )
                     {
