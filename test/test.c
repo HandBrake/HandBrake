@@ -2903,14 +2903,20 @@ static void ShowHelp()
     }
     fprintf(out,
     "                            Separated by commas for more than one audio track.\n"
-    "                            Default: up to %s for ffflac and ffflac24,\n",
-            hb_mixdown_get_short_name_from_mixdown(HB_AMIXDOWN_7POINT1));
-    fprintf(out,
-    "                                     up to %s for ffac3,\n",
-            hb_mixdown_get_short_name_from_mixdown(HB_AMIXDOWN_5POINT1));
-    fprintf(out,
-    "                                     up to %s for other encoders.\n",
-            hb_mixdown_get_short_name_from_mixdown(HB_AMIXDOWN_DOLBYPLII));
+    "                            Defaults:\n");
+    for (i = 0; i < hb_audio_encoders_count; i++)
+    {
+        if (!(hb_audio_encoders[i].encoder & HB_ACODEC_PASS_FLAG))
+        {
+            // layout: UINT64_MAX (all channels) should work with any mixdown
+            int mixdown = hb_get_default_mixdown(hb_audio_encoders[i].encoder,
+                                                 UINT64_MAX);
+            // assumes that the encoder short name is <= 16 characters long
+            fprintf(out, "                               %-16s up to %s\n",
+                    hb_audio_encoders[i].short_name,
+                    hb_mixdown_get_short_name_from_mixdown(mixdown));
+        }
+    }
     fprintf(out,
     "        --normalize-mix     Normalize audio mix levels to prevent clipping.\n"
     "               <string>     Separated by commas for more than one audio track.\n"
