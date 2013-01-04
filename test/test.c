@@ -3803,7 +3803,7 @@ static int ParseOptions( int argc, char ** argv )
                 {
                     for( j = 0; j < hb_audio_encoders_count; j++ )
                     {
-                        char * encoder = hb_audio_encoders[j].short_name;
+                        const char *encoder = hb_audio_encoders[j].short_name;
                         // skip "copy:"
                         if( strlen( encoder ) > 5 )
                             encoder += 5;

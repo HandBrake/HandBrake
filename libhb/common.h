@@ -170,24 +170,24 @@ void hb_chapter_set_title(hb_chapter_t *chapter, const char *title);
 
 struct hb_rate_s
 {
-    char * string;
-    int    rate;
+    const char *string;
+    int         rate;
 };
 
 struct hb_mixdown_s
 {
-    char * human_readable_name;
-    char * internal_name;
-    char * short_name;
-    int    amixdown;
+    const char *human_readable_name;
+    const char *internal_name;
+    const char *short_name;
+    int         amixdown;
 };
 
 struct hb_encoder_s
 {
-    char * human_readable_name; // note: used in presets
-    char * short_name;          // note: used in CLI
-    int    encoder;             // HB_*CODEC_* define
-    int    muxers;              // supported muxers
+    const char *human_readable_name; // note: used in presets
+    const char *short_name;          // note: used in CLI
+    int         encoder;             // HB_*CODEC_* define
+    int         muxers;              // supported muxers
 };
 
 struct hb_subtitle_config_s

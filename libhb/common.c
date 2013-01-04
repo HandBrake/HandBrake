@@ -378,7 +378,8 @@ void hb_autopassthru_apply_settings( hb_job_t * job )
 void hb_autopassthru_print_settings( hb_job_t * job )
 {
     int i, codec_len;
-    char *mask = NULL, *tmp, *fallback = NULL;
+    char *mask = NULL, *tmp;
+    const char *fallback = NULL;
     for( i = 0; i < hb_audio_encoders_count; i++ )
     {
         if( ( hb_audio_encoders[i].encoder & HB_ACODEC_PASS_FLAG ) &&
