@@ -141,9 +141,16 @@ static volatile int die = 0;
 static void SigHandler( int );
 
 /* Utils */
-static void ShowCommands();
 static void ShowHelp();
 static void ShowPresets();
+static void ShowCommands()
+{
+    fprintf(stdout, "\nCommands:\n");
+    fprintf(stdout, " [h]elp    Show this message\n");
+    fprintf(stdout, " [q]uit    Exit HandBrakeCLI\n");
+    fprintf(stdout, " [p]ause   Pause encoding\n");
+    fprintf(stdout, " [r]esume  Resume encoding\n");
+}
 
 static int  ParseOptions( int argc, char ** argv );
 static int  CheckOptions( int argc, char ** argv );
@@ -372,15 +379,6 @@ int main( int argc, char ** argv )
     fprintf( stderr, "HandBrake has exited.\n" );
 
     return 0;
-}
-
-static void ShowCommands()
-{
-    fprintf( stdout, "\nCommands:\n" );
-    fprintf( stdout, " [h]elp    Show this message\n" );
-    fprintf( stdout, " [q]uit    Exit HandBrakeCLI\n" );
-    fprintf( stdout, " [p]ause   Pause encoding\n" );
-    fprintf( stdout, " [r]esume  Resume encoding\n" );
 }
 
 static void PrintTitleInfo( hb_title_t * title, int feature )
