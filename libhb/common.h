@@ -245,6 +245,8 @@ void hb_autopassthru_apply_settings(hb_job_t *job);
 void hb_autopassthru_print_settings(hb_job_t *job);
 int  hb_autopassthru_get_encoder(int in_codec, int copy_mask, int fallback, int muxer);
 
+int hb_get_default_audio_encoder(int muxer);
+
 int hb_get_best_mixdown(uint32_t codec, uint64_t layout, int mixdown);
 int hb_get_default_mixdown(uint32_t codec, uint64_t layout);
 

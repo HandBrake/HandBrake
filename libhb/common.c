@@ -431,13 +431,7 @@ int hb_autopassthru_get_encoder( int in_codec, int copy_mask, int fallback, int 
         {
             // fallback not possible with current muxer
             // use the default audio encoder instead
-#ifndef __APPLE__
-            if( muxer == HB_MUX_MKV )
-                // Lame is the default for MKV
-                fallback = HB_ACODEC_LAME;
-            else
-#endif          // Core Audio or faac
-                fallback = hb_audio_encoders[0].encoder;
+            fallback = hb_get_default_audio_encoder(muxer);
             break;
         }
     }
@@ -454,6 +448,17 @@ int hb_autopassthru_get_encoder( int in_codec, int copy_mask, int fallback, int 
     if( !( out_codec & HB_ACODEC_PASS_MASK ) )
         return fallback;
     return out_codec;
+}
+
+int hb_get_default_audio_encoder(int muxer)
+{
+#ifndef __APPLE__
+    if (muxer == HB_MUX_MKV)
+    {
+        return HB_ACODEC_LAME;
+    }
+#endif
+    return hb_audio_encoders[0].encoder;
 }
 
 // Given an input bitrate, find closest match in the set of allowed bitrates
