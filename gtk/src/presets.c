@@ -2014,8 +2014,8 @@ ghb_remove_queue_file()
 
 typedef struct
 {
-    gchar *mac_val;
-    gchar *lin_val;
+    const gchar *mac_val;
+    const gchar *lin_val;
 } value_map_t;
 
 static value_map_t vcodec_xlat_compat[] =
