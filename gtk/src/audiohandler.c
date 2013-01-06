@@ -1,7 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * audiohandler.c
- * Copyright (C) John Stebbins 2008-2011 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2013 <stebbins@stebbins>
  * 
  * audiohandler.c is free software.
  * 
@@ -122,7 +122,6 @@ int ghb_get_copy_mask(GValue *settings)
 
 int ghb_select_fallback( GValue *settings, int mux, int acodec )
 {
-    gint mask;
     gint fallback = 0;
 
     switch ( acodec )
@@ -139,30 +138,9 @@ int ghb_select_fallback( GValue *settings, int mux, int acodec )
         default:
         {
             fallback = ghb_settings_combo_int(settings, "AudioEncoderFallback");
+            return hb_autopassthru_get_encoder(acodec, 0, fallback, mux);
         }
     }
-    if ( mux == HB_MUX_MP4 )
-    {
-        mask =  HB_ACODEC_LAME |
-                HB_ACODEC_FFAAC |
-                HB_ACODEC_FAAC |
-                HB_ACODEC_AC3;
-    }
-    if ( mux == HB_MUX_MKV )
-    {
-        mask =  
-                HB_ACODEC_FAAC |
-                HB_ACODEC_LAME |
-                HB_ACODEC_VORBIS |
-                HB_ACODEC_AC3 |
-                HB_ACODEC_FFAAC |
-                HB_ACODEC_FFFLAC;
-    }
-    if (!(fallback & mask ))
-    {
-        fallback = HB_ACODEC_LAME;
-    }
-    return fallback;
 }
 
 void

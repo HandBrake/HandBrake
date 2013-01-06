@@ -2,7 +2,7 @@
  *            hb-backend.c
  *
  *  Fri Mar 28 10:38:44 2008
- *  Copyright  2008-2011  John Stebbins
+ *  Copyright  2008-2013  John Stebbins
  *  <john at stebbins dot name>
  ****************************************************************************/
 
@@ -1666,6 +1666,10 @@ ghb_get_best_mix(hb_audio_config_t *aconfig, gint acodec, gint mix)
 {
     gint layout;
     layout = aconfig ? aconfig->in.channel_layout : AV_CH_LAYOUT_5POINT1;
+
+    if (mix == HB_AMIXDOWN_NONE)
+        mix = hb_audio_mixdowns[hb_audio_mixdowns_count-1].amixdown;
+    
     return hb_get_best_mixdown( acodec, layout, mix );
 }
 
@@ -2106,6 +2110,15 @@ x264_profile_opts_set(GtkBuilder *builder, const gchar *name)
 
     for (ii = 0; ii < count; ii++)
     {
+        // HandBrake doesn't support high10 (10 bit encoding)
+        // or high422 (YUV422)
+        if (!strcasecmp("high10", profiles[ii]) ||
+            !strcasecmp("high422", profiles[ii]) ||
+            !strcasecmp("high444", profiles[ii]))
+        {
+            continue;
+        }
+
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter, 
                            0, profiles[ii],
@@ -4640,6 +4653,7 @@ ghb_validate_vquality(GValue *settings)
                 return FALSE;
             }
             g_free(message);
+            ghb_settings_set_string(settings, "h264Profile", "auto");
         }
         else if (vquality < min || vquality > max)
         {

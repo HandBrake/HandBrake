@@ -11,7 +11,7 @@
 #include "hbffmpeg.h"
 #include "audio_remap.h"
 
-// source: libavutil/audioconvert.h
+// source: libavutil/channel_layout.h
 hb_chan_map_t hb_libav_chan_map =
 {
     {

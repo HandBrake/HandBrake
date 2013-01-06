@@ -141,19 +141,20 @@ hb_work_object_t * hb_codec_encoder( int codec )
         case HB_ACODEC_FFAAC:
         {
             w = hb_get_work( WORK_ENCAVCODEC_AUDIO );
-            w->codec_param = CODEC_ID_AAC;
+            w->codec_param = AV_CODEC_ID_AAC;
             return w;
         }
         case HB_ACODEC_FFFLAC:
+        case HB_ACODEC_FFFLAC24:
         {
             w = hb_get_work( WORK_ENCAVCODEC_AUDIO );
-            w->codec_param = CODEC_ID_FLAC;
+            w->codec_param = AV_CODEC_ID_FLAC;
             return w;
         }
         case HB_ACODEC_AC3:
         {
             w = hb_get_work( WORK_ENCAVCODEC_AUDIO );
-            w->codec_param = CODEC_ID_AC3;
+            w->codec_param = AV_CODEC_ID_AC3;
             return w;
         }
     }
@@ -708,7 +709,7 @@ static void do_job( hb_job_t * job )
         hb_filter_init_t init;
 
         init.job = job;
-        init.pix_fmt = PIX_FMT_YUV420P;
+        init.pix_fmt = AV_PIX_FMT_YUV420P;
         init.width = title->width;
         init.height = title->height;
 #ifdef USE_OPENCL
@@ -1017,7 +1018,7 @@ static void do_job( hb_job_t * job )
     if (vcodec == WORK_DECMPEG2)
     {
         vcodec = WORK_DECAVCODECV;
-        title->video_codec_param = CODEC_ID_MPEG2VIDEO;
+        title->video_codec_param = AV_CODEC_ID_MPEG2VIDEO;
     }
 #endif
 #ifdef USE_OPENCL  
@@ -1088,11 +1089,11 @@ static void do_job( hb_job_t * job )
         {
         case HB_VCODEC_FFMPEG_MPEG4:
             w = hb_get_work( WORK_ENCAVCODEC );
-            w->codec_param = CODEC_ID_MPEG4;
+            w->codec_param = AV_CODEC_ID_MPEG4;
             break;
         case HB_VCODEC_FFMPEG_MPEG2:
             w = hb_get_work( WORK_ENCAVCODEC );
-            w->codec_param = CODEC_ID_MPEG2VIDEO;
+            w->codec_param = AV_CODEC_ID_MPEG2VIDEO;
             break;
         case HB_VCODEC_X264:
             w = hb_get_work( WORK_ENCX264 );

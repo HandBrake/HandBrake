@@ -950,15 +950,11 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
         {
             case HB_ACODEC_AC3_PASS:
             {
-                codec = avcodec_find_encoder( CODEC_ID_AC3 );
+                codec = avcodec_find_encoder( AV_CODEC_ID_AC3 );
             } break;
             case HB_ACODEC_AAC_PASS:
             {
-                codec = avcodec_find_encoder( CODEC_ID_AAC );
-            } break;
-            case HB_ACODEC_MP3_PASS:
-            {
-                codec = avcodec_find_encoder( CODEC_ID_MP3 );
+                codec = avcodec_find_encoder( AV_CODEC_ID_AAC );
             } break;
             default:
             {
@@ -990,16 +986,13 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
         }
 
         // Prepare input frame
-        AVFrame frame;
-        uint8_t * zeros;
-
-        frame.nb_samples= c->frame_size;
+        AVFrame frame = { .nb_samples = c->frame_size, .pts = 0, };
         int input_size = av_samples_get_buffer_size(NULL, c->channels,
-                                frame.nb_samples, c->sample_fmt, 1);
-        zeros = calloc( 1, input_size );
-        avcodec_fill_audio_frame(&frame, c->channels, 
-                                 c->sample_fmt, zeros, input_size, 1);
-        frame.pts = 0;
+                                                    frame.nb_samples,
+                                                    c->sample_fmt, 1);
+        uint8_t *zeros = calloc(1, input_size);
+        avcodec_fill_audio_frame(&frame, c->channels, c->sample_fmt, zeros,
+                                 input_size, 1);
 
         // Allocate enough space for the encoded silence
         // The output should be < the input

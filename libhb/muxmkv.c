@@ -247,11 +247,11 @@ static int MKVInit( hb_mux_object_t * m )
                 }
                 break;
             case HB_ACODEC_FFFLAC:
-                if( audio->priv.config.extradata.bytes )
+            case HB_ACODEC_FFFLAC24:
+                if (audio->priv.config.extradata.bytes)
                 {
-                    track->codecPrivate = create_flac_header( 
-                            audio->priv.config.extradata.bytes,
-                            audio->priv.config.extradata.length );
+                    track->codecPrivate = create_flac_header(audio->priv.config.extradata.bytes,
+                                                             audio->priv.config.extradata.length);
                     track->codecPrivateSize = audio->priv.config.extradata.length + 8;
                 }
                 track->codecID = MK_ACODEC_FLAC;
@@ -307,9 +307,10 @@ static int MKVInit( hb_mux_object_t * m )
             track->extra.audio.channels = hb_mixdown_get_discrete_channel_count(audio->config.out.mixdown);
         }
         mux_data->track = mk_createTrack(m->file, track);
-        if( audio->config.out.codec == HB_ACODEC_VORBIS ||
-            audio->config.out.codec == HB_ACODEC_FFFLAC )
-            free( track->codecPrivate );
+        if (audio->config.out.codec == HB_ACODEC_VORBIS ||
+            audio->config.out.codec == HB_ACODEC_FFFLAC ||
+            audio->config.out.codec == HB_ACODEC_FFFLAC24)
+            free(track->codecPrivate);
     }
 
     char * subidx_fmt =

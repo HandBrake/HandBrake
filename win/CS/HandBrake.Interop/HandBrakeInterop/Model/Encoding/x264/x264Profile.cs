@@ -28,13 +28,13 @@ namespace HandBrake.Interop.Model.Encoding.x264
         [Display(Name = "High")]
         High,
 
-        [Display(Name = "High 10")]
-        High10,
+        //[Display(Name = "High 10")]
+        //High10,  HandBrake does not yet support 10bit.
 
-        [Display(Name = "High 422")]
-        High422,
+        //[Display(Name = "High 422")]
+        //High422,  Not supported
 
-        [Display(Name = "High 444")]
-        High444,
+        //[Display(Name = "High 444")]
+       // High444, Use Auto Instead.
     }
 }

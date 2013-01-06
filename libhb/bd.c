@@ -213,6 +213,9 @@ static int bd_audio_equal( BLURAY_CLIP_INFO *a, BLURAY_CLIP_INFO *b )
     if ( a->audio_stream_count != b->audio_stream_count )
         return 0;
 
+    if ( a->audio_stream_count == 0 )
+        return 0;
+
     for ( ii = 0; ii < a->audio_stream_count; ii++ )
     {
         BLURAY_STREAM_INFO * s = &a->audio_streams[ii];
@@ -352,12 +355,12 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
 
         case BLURAY_STREAM_TYPE_VIDEO_VC1:
             title->video_codec = WORK_DECAVCODECV;
-            title->video_codec_param = CODEC_ID_VC1;
+            title->video_codec_param = AV_CODEC_ID_VC1;
             break;
 
         case BLURAY_STREAM_TYPE_VIDEO_H264:
             title->video_codec = WORK_DECAVCODECV;
-            title->video_codec_param = CODEC_ID_H264;
+            title->video_codec_param = AV_CODEC_ID_H264;
             title->flags |= HBTF_NO_IDR;
             break;
 
@@ -409,62 +412,63 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     }
 
     // Add all the audios found in the above clip.
-    for ( ii = 0; ii < ti->clips[audio_clip_index].audio_stream_count; ii++ )
+    for (ii = 0; ii < ti->clips[audio_clip_index].audio_stream_count; ii++)
     {
         BLURAY_STREAM_INFO * bdaudio;
 
         bdaudio = &ti->clips[audio_clip_index].audio_streams[ii];
 
-        switch( bdaudio->coding_type )
+        switch (bdaudio->coding_type)
         {
             case BLURAY_STREAM_TYPE_AUDIO_TRUHD:
                 // Add 2 audio tracks.  One for TrueHD and one for AC-3
-                add_audio(ii, title->list_audio, bdaudio, 
-                          HB_SUBSTREAM_BD_AC3, HB_ACODEC_AC3, 0);
-                add_audio(ii, title->list_audio, bdaudio, 
-                    HB_SUBSTREAM_BD_TRUEHD, HB_ACODEC_FFMPEG, CODEC_ID_TRUEHD);
+                add_audio(ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_AC3,
+                          HB_ACODEC_AC3, 0);
+                add_audio(ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_TRUEHD,
+                          HB_ACODEC_FFMPEG, AV_CODEC_ID_TRUEHD);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_DTS:
-                add_audio(ii, title->list_audio, bdaudio, 0, HB_ACODEC_DCA,
-                          CODEC_ID_DTS);
+                add_audio(ii, title->list_audio, bdaudio, 0,
+                          HB_ACODEC_DCA, AV_CODEC_ID_DTS);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_MPEG2:
             case BLURAY_STREAM_TYPE_AUDIO_MPEG1:
-                add_audio(ii, title->list_audio, bdaudio, 0, 
-                          HB_ACODEC_FFMPEG, CODEC_ID_MP2);
+                add_audio(ii, title->list_audio, bdaudio, 0,
+                          HB_ACODEC_FFMPEG, AV_CODEC_ID_MP2);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_AC3PLUS:
-                add_audio(ii, title->list_audio, bdaudio, 0, 
-                          HB_ACODEC_FFMPEG, CODEC_ID_EAC3);
+                add_audio(ii, title->list_audio, bdaudio, 0,
+                          HB_ACODEC_FFMPEG, AV_CODEC_ID_EAC3);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_LPCM:
-                add_audio(ii, title->list_audio, bdaudio, 0, 
-                          HB_ACODEC_FFMPEG, CODEC_ID_PCM_BLURAY);
+                add_audio(ii, title->list_audio, bdaudio, 0,
+                          HB_ACODEC_FFMPEG, AV_CODEC_ID_PCM_BLURAY);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_AC3:
-                add_audio(ii, title->list_audio, bdaudio, 0, HB_ACODEC_AC3, 0);
+                add_audio(ii, title->list_audio, bdaudio, 0,
+                          HB_ACODEC_AC3, 0);
                 break;
 
             case BLURAY_STREAM_TYPE_AUDIO_DTSHD_MASTER:
             case BLURAY_STREAM_TYPE_AUDIO_DTSHD:
                 // Add 2 audio tracks.  One for DTS-HD and one for DTS
-                add_audio(ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_DTS, 
-                          HB_ACODEC_DCA, CODEC_ID_DTS);
+                add_audio(ii, title->list_audio, bdaudio, HB_SUBSTREAM_BD_DTS,
+                          HB_ACODEC_DCA, AV_CODEC_ID_DTS);
                 // DTS-HD is special.  The substreams must be concatinated
                 // DTS-core followed by DTS-hd-extensions.  Setting
                 // a substream id of 0 says use all substreams.
                 add_audio(ii, title->list_audio, bdaudio, 0,
-                          HB_ACODEC_DCA_HD, CODEC_ID_DTS);
+                          HB_ACODEC_DCA_HD, AV_CODEC_ID_DTS);
                 break;
 
             default:
-                hb_log( "scan: unknown audio pid 0x%x codec 0x%x",
-                        bdaudio->pid, bdaudio->coding_type );
+                hb_log("scan: unknown audio pid 0x%x codec 0x%x", bdaudio->pid,
+                       bdaudio->coding_type);
                 break;
         }
     }

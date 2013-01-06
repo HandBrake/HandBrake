@@ -536,7 +536,7 @@ static hb_buffer_t * CropSubtitle( hb_work_object_t * w, uint8_t * raw )
     realwidth  = crop[3] - crop[2] + 1;
     realheight = crop[1] - crop[0] + 1;
 
-    buf = hb_frame_buffer_init( PIX_FMT_YUVA420P, realwidth, realheight );
+    buf = hb_frame_buffer_init( AV_PIX_FMT_YUVA420P, realwidth, realheight );
     buf->s.start  = pv->pts_start;
     buf->s.stop   = pv->pts_stop;
     buf->s.type   = SUBTITLE_BUF;

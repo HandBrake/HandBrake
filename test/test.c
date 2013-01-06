@@ -81,11 +81,7 @@ static char ** acompressions  = NULL;
 static char * acodec_fallback = NULL;
 static char * acodecs     = NULL;
 static char ** anames      = NULL;
-#ifdef __APPLE_CC__
-static int    default_acodec = HB_ACODEC_CA_AAC;
-#else
-static int    default_acodec = HB_ACODEC_FAAC;
-#endif
+static int    default_acodec = 0;
 static int    audio_explicit = 0;
 static char ** subtracks   = NULL;
 static char ** subforce    = NULL;
@@ -148,15 +144,24 @@ static volatile int die = 0;
 static void SigHandler( int );
 
 /* Utils */
-static void ShowCommands();
 static void ShowHelp();
 static void ShowPresets();
+static void ShowCommands()
+{
+    fprintf(stdout, "\nCommands:\n");
+    fprintf(stdout, " [h]elp    Show this message\n");
+    fprintf(stdout, " [q]uit    Exit HandBrakeCLI\n");
+    fprintf(stdout, " [p]ause   Pause encoding\n");
+    fprintf(stdout, " [r]esume  Resume encoding\n");
+}
 
 static int  ParseOptions( int argc, char ** argv );
 static int  CheckOptions( int argc, char ** argv );
 static int  HandleEvents( hb_handle_t * h );
 
-static int get_acodec_for_string( char *codec );
+static       int   get_acodec_for_string(const char *codec);
+static const char* get_string_for_acodec(int acodec);
+
 static int is_sample_rate_valid(int rate);
 static void str_vfree( char **strv );
 static char** str_split( char *str, char delem );
@@ -380,15 +385,6 @@ int main( int argc, char ** argv )
     fprintf( stderr, "HandBrake has exited.\n" );
 
     return 0;
-}
-
-static void ShowCommands()
-{
-    fprintf( stdout, "\nCommands:\n" );
-    fprintf( stdout, " [h]elp    Show this message\n" );
-    fprintf( stdout, " [q]uit    Exit HandBrakeCLI\n" );
-    fprintf( stdout, " [p]ause   Pause encoding\n" );
-    fprintf( stdout, " [r]esume  Resume encoding\n" );
 }
 
 static void PrintTitleInfo( hb_title_t * title, int feature )
@@ -2201,11 +2197,7 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         fprintf( stderr, "AAC Passthru requested and input codec is not AAC for track %d, using AAC encoder\n",
                                  audio->out.track );
-#ifdef __APPLE_CC__
-                        audio->out.codec = HB_ACODEC_CA_AAC;
-#else
-                        audio->out.codec = HB_ACODEC_FAAC;
-#endif
+                        audio->out.codec = hb_audio_encoders[0].encoder;
                     }
                     else if( audio->out.codec == HB_ACODEC_AC3_PASS )
                     {
@@ -2885,35 +2877,36 @@ static void ShowHelp()
     "                             tracks, default: first one).\n"
     "                            Multiple output tracks can be used for one input.\n"
     "    -E, --aencoder <string> Audio encoder(s):\n" );
-    for( i = 0; i < hb_audio_encoders_count; i++ )
+    for (i = 0; i < hb_audio_encoders_count; i++)
     {
-        fprintf( out, "                               %s\n",
-                 hb_audio_encoders[i].short_name );
+        fprintf(out, "                               %s\n",
+                hb_audio_encoders[i].short_name);
     }
-    fprintf( out,
+    fprintf(out,
     "                            copy:* will passthrough the corresponding\n"
     "                            audio unmodified to the muxer if it is a\n"
     "                            supported passthrough audio type.\n"
     "                            Separated by commas for more than one audio track.\n"
-#ifdef __APPLE_CC__
-    "                            (default: ca_aac)\n"
-#else
-    "                            (default: faac for mp4, lame for mkv)\n"
-#endif
+    "                            (default: %s for mp4, %s for mkv)\n",
+            get_string_for_acodec(hb_get_default_audio_encoder(HB_MUX_MP4)),
+            get_string_for_acodec(hb_get_default_audio_encoder(HB_MUX_MKV)));
+    fprintf(out,
     "        --audio-copy-mask   Set audio codecs that are permitted when the\n"
     "                <string>    \"copy\" audio encoder option is specified\n"
     "                            (" );
-    for( i = 0, j = 0; i < hb_audio_encoders_count; i++ )
+    for (i = j = 0; i < hb_audio_encoders_count; i++)
     {
-        if( !strncmp( hb_audio_encoders[i].short_name, "copy:", 5 ) )
+        if ((hb_audio_encoders[i].encoder &  HB_ACODEC_PASS_FLAG) &&
+            (hb_audio_encoders[i].encoder != HB_ACODEC_AUTO_PASS))
         {
-            if( j != 0 )
-                fprintf( out, "/" );
-            fprintf( out, "%s", hb_audio_encoders[i].short_name + 5 );
+            if (j)
+                fprintf(out, "/");
+            // skip "copy:"
+            fprintf(out, "%s", hb_audio_encoders[i].short_name + 5);
             j = 1;
         }
     }
-    fprintf( out, ", default: all).\n"
+    fprintf(out, ", default: all).\n"
     "                            Separated by commas for multiple allowed options.\n"
     "        --audio-fallback    Set audio codec to use when it is not possible\n"
     "                <string>    to copy an audio track without re-encoding.\n"
@@ -2935,11 +2928,20 @@ static void ShowHelp()
     }
     fprintf(out,
     "                            Separated by commas for more than one audio track.\n"
-    "                            Default: up to %s for ffac3 and ffflac,\n",
-            hb_mixdown_get_short_name_from_mixdown(HB_AMIXDOWN_5POINT1));
-    fprintf(out,
-    "                                     up to %s for other encoders).\n",
-            hb_mixdown_get_short_name_from_mixdown(HB_AMIXDOWN_DOLBYPLII));
+    "                            Defaults:\n");
+    for (i = 0; i < hb_audio_encoders_count; i++)
+    {
+        if (!(hb_audio_encoders[i].encoder & HB_ACODEC_PASS_FLAG))
+        {
+            // layout: UINT64_MAX (all channels) should work with any mixdown
+            int mixdown = hb_get_default_mixdown(hb_audio_encoders[i].encoder,
+                                                 UINT64_MAX);
+            // assumes that the encoder short name is <= 16 characters long
+            fprintf(out, "                               %-16s up to %s\n",
+                    hb_audio_encoders[i].short_name,
+                    hb_mixdown_get_short_name_from_mixdown(mixdown));
+        }
+    }
     fprintf(out,
     "        --normalize-mix     Normalize audio mix levels to prevent clipping.\n"
     "               <string>     Separated by commas for more than one audio track.\n"
@@ -3839,7 +3841,7 @@ static int ParseOptions( int argc, char ** argv )
                 {
                     for( j = 0; j < hb_audio_encoders_count; j++ )
                     {
-                        char * encoder = hb_audio_encoders[j].short_name;
+                        const char *encoder = hb_audio_encoders[j].short_name;
                         // skip "copy:"
                         if( strlen( encoder ) > 5 )
                             encoder += 5;
@@ -3982,10 +3984,6 @@ static int CheckOptions( int argc, char ** argv )
             else if( p && !strcasecmp(p, ".mkv" ) )
             {
                 mux = HB_MUX_MKV;
-#ifndef __APPLE_CC__
-                // default to Lame for MKV (except under OS X where Core Audio is available)
-                default_acodec = HB_ACODEC_LAME;
-#endif
             }
             else
             {
@@ -4002,10 +4000,6 @@ static int CheckOptions( int argc, char ** argv )
         else if( !strcasecmp( format, "mkv" ) )
         {
             mux = HB_MUX_MKV;
-#ifndef __APPLE_CC__
-            // default to Lame for MKV (except under OS X where Core Audio is available)
-            default_acodec = HB_ACODEC_LAME;
-#endif
         }
         else
         {
@@ -4013,23 +4007,36 @@ static int CheckOptions( int argc, char ** argv )
                      "choices are mp4, m4v and mkv\n.", format );
             return 1;
         }
+        default_acodec = hb_get_default_audio_encoder(mux);
     }
 
     return 0;
 }
 
-static int get_acodec_for_string( char *codec )
+static int get_acodec_for_string(const char *codec)
 {
-    int i, acodec;
-    for( i = 0, acodec = 0; i < hb_audio_encoders_count; i++ )
+    int i;
+    for (i = 0; i < hb_audio_encoders_count; i++)
     {
-        if( !strcasecmp( hb_audio_encoders[i].short_name, codec ) )
+        if (!strcasecmp(hb_audio_encoders[i].short_name, codec))
         {
-            acodec = hb_audio_encoders[i].encoder;
-            break;
+            return hb_audio_encoders[i].encoder;
         }
     }
-    return acodec ? acodec : -1;
+    return -1;
+}
+
+static const char* get_string_for_acodec(int acodec)
+{
+    int i;
+    for (i = 0; i < hb_audio_encoders_count; i++)
+    {
+        if (hb_audio_encoders[i].encoder == acodec)
+        {
+            return hb_audio_encoders[i].short_name;
+        }
+    }
+    return NULL;
 }
 
 static int is_sample_rate_valid(int rate)

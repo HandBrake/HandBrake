@@ -231,8 +231,8 @@ hb_buffer_t* hb_audio_resample(hb_audio_resample_t *resample,
         out = hb_buffer_init(out_size);
 
         out_samples = avresample_convert(resample->avresample,
-                                         (void**)&out->data, out_linesize, nsamples,
-                                         (void**)samples,     in_linesize, nsamples);
+                                         &out->data, out_linesize, nsamples,
+                                         samples,     in_linesize, nsamples);
 
         if (out_samples <= 0)
         {

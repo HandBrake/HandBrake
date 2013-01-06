@@ -66,11 +66,12 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
     context->sample_rate = audio->config.out.samplerate;
 
     AVDictionary *av_opts = NULL;
-    if (w->codec_param == CODEC_ID_AAC)
+    if (w->codec_param == AV_CODEC_ID_AAC)
     {
         av_dict_set(&av_opts, "stereo_mode", "ms_off", 0);
     }
-    else if (w->codec_param == CODEC_ID_AC3 && mode != AV_MATRIX_ENCODING_NONE)
+    else if (w->codec_param == AV_CODEC_ID_AC3 &&
+             mode != AV_MATRIX_ENCODING_NONE)
     {
         av_dict_set(&av_opts, "dsur_mode", "on", 0);
     }
@@ -90,14 +91,22 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         context->compression_level = audio->config.out.compression_level;
     }
 
-    // set the sample_fmt to something practical
-    if (audio->config.out.codec == HB_ACODEC_FFFLAC)
+    // set the sample format and bit depth to something practical
+    switch (audio->config.out.codec)
     {
-        hb_ff_set_sample_fmt(context, codec, AV_SAMPLE_FMT_S16);
-    }
-    else
-    {
-        hb_ff_set_sample_fmt(context, codec, AV_SAMPLE_FMT_FLT);
+        case HB_ACODEC_FFFLAC:
+            hb_ff_set_sample_fmt(context, codec, AV_SAMPLE_FMT_S16);
+            context->bits_per_raw_sample = 16;
+            break;
+
+        case HB_ACODEC_FFFLAC24:
+            hb_ff_set_sample_fmt(context, codec, AV_SAMPLE_FMT_S32);
+            context->bits_per_raw_sample = 24;
+            break;
+
+        default:
+            hb_ff_set_sample_fmt(context, codec, AV_SAMPLE_FMT_FLTP);
+            break;
     }
 
     if (hb_avcodec_open(context, codec, &av_opts, 0))
@@ -268,10 +277,10 @@ static hb_buffer_t* Encode(hb_work_object_t *w)
         av_samples_get_buffer_size(&in_linesize, pv->context->channels,
                                    frame.nb_samples, AV_SAMPLE_FMT_FLT, 1);
         int out_samples = avresample_convert(pv->avresample,
-                                             (void**)frame.extended_data,
-                                             out_linesize, frame.nb_samples,
-                                             (void**)&pv->input_buf,
-                                             in_linesize,  frame.nb_samples);
+                                             frame.extended_data, out_linesize,
+                                             frame.nb_samples,
+                                             &pv->input_buf,       in_linesize,
+                                             frame.nb_samples);
         if (out_samples != pv->samples_per_frame)
         {
             // we're not doing sample rate conversion, so this shouldn't happen

@@ -19,7 +19,7 @@
 
 #include <math.h>
 #include <stdint.h>
-#include "libavutil/audioconvert.h"
+#include "libavutil/channel_layout.h"
 #include "libavresample/avresample.h"
 
 /* Default mix level for center and surround channels */

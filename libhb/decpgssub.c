@@ -42,7 +42,7 @@ struct hb_work_private_s
 
 static int decsubInit( hb_work_object_t * w, hb_job_t * job )
 {
-    AVCodec *codec = avcodec_find_decoder( CODEC_ID_HDMV_PGS_SUBTITLE );
+    AVCodec *codec = avcodec_find_decoder( AV_CODEC_ID_HDMV_PGS_SUBTITLE );
     AVCodecContext *context = avcodec_alloc_context3( codec );
     context->codec = codec;
 
@@ -226,9 +226,10 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
          *   2. we're not doing Foreign Audio Search (!pv->job->indepth_scan) AND
          *   3. the sub is non-empty or we've seen one such sub before (!pv->discard_subtitle)
          * For forced-only extraction, usable subtitles also need to:
-         *   a. be forced (subtitle.forced) OR
+         *   a. be forced (subtitle.rects[0]->flags & AV_SUBTITLE_FLAG_FORCED) OR
          *   b. follow a forced sub (pv->seen_forced_sub) */
-        uint8_t useable_sub = 0;
+        uint8_t forced_sub     = 0;
+        uint8_t useable_sub    = 0;
         uint8_t clear_subtitle = 0;
 
         if (has_subtitle)
@@ -237,8 +238,9 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             if (subtitle.num_rects)
             {
                 w->subtitle->hits++;
-                if (subtitle.forced)
+                if (subtitle.rects[0]->flags & AV_SUBTITLE_FLAG_FORCED)
                 {
+                    forced_sub = 1;
                     w->subtitle->forced_hits++;
                 }
             }
@@ -254,10 +256,10 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 // do we need this subtitle?
                 useable_sub = (!pv->discard_subtitle &&
                                (!w->subtitle->config.force ||
-                                subtitle.forced || pv->seen_forced_sub));
+                                forced_sub || pv->seen_forced_sub));
                 // do we need to create an empty subtitle?
-                if (w->subtitle->config.force && useable_sub &&
-                    !subtitle.forced && !clear_subtitle)
+                if (w->subtitle->config.force &&
+                    useable_sub && !forced_sub && !clear_subtitle)
                 {
                     // We are forced-only and need to output this subtitle, but
                     // it's neither forced nor empty.
@@ -268,7 +270,7 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     clear_subtitle = 1;
                 }
                 // is the subtitle forced?
-                pv->seen_forced_sub = subtitle.forced;
+                pv->seen_forced_sub = forced_sub;
             }
         }
 
@@ -343,8 +345,8 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     {
                         AVSubtitleRect *rect = subtitle.rects[ii];
 
-                        out = hb_frame_buffer_init(
-                                PIX_FMT_YUVA420P, rect->w, rect->h );
+                        out = hb_frame_buffer_init(AV_PIX_FMT_YUVA420P,
+                                                   rect->w, rect->h);
 
                         out->s.id     = in->s.id;
                         out->sequence = in->sequence;

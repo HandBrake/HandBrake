@@ -1,16 +1,16 @@
 diff --git a/libavcodec/h264.c b/libavcodec/h264.c
-index 6ed251e..a3242ce 100644
+index 1a0b341..98a0350 100644
 --- a/libavcodec/h264.c
 +++ b/libavcodec/h264.c
-@@ -2627,6 +2627,7 @@ static void flush_dpb(AVCodecContext *avctx)
-     h->s.first_field = 0;
-     ff_h264_reset_sei(h);
+@@ -2163,6 +2163,7 @@ static void flush_dpb(AVCodecContext *avctx)
+ 
+     flush_change(h);
      ff_mpeg_flush(avctx);
 +    h->recovery_frame= -1;
  }
  
  static int init_poc(H264Context *h)
-@@ -4289,9 +4290,18 @@ again:
+@@ -3976,9 +3977,18 @@ again:
                  if ((err = decode_slice_header(hx, h)))
                      break;
  
@@ -32,10 +32,10 @@ index 6ed251e..a3242ce 100644
                  if (h->current_slice == 1) {
                      if (!(s->flags2 & CODEC_FLAG2_CHUNKS))
 diff --git a/libavcodec/h264.h b/libavcodec/h264.h
-index 570ce2f..454b755 100644
+index 8596121..23daee3 100644
 --- a/libavcodec/h264.h
 +++ b/libavcodec/h264.h
-@@ -569,6 +569,13 @@ typedef struct H264Context {
+@@ -568,6 +568,13 @@ typedef struct H264Context {
       * frames.
       */
      int sei_recovery_frame_cnt;

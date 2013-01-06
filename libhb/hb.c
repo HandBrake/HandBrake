@@ -122,6 +122,12 @@ int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec,
         avctx->thread_count = 1;
     }
 
+    if (codec->capabilities & CODEC_CAP_EXPERIMENTAL)
+    {
+        // "experimental" encoders will not open without this
+        avctx->strict_std_compliance = FF_COMPLIANCE_EXPERIMENTAL;
+    }
+
     ret = avcodec_open2(avctx, codec, av_opts);
     return ret;
 }
@@ -152,20 +158,21 @@ int hb_avpicture_fill(AVPicture *pic, hb_buffer_t *buf)
     return ret;
 }
 
-static int handle_jpeg(enum PixelFormat *format)
+static int handle_jpeg(enum AVPixelFormat *format)
 {
-    switch (*format) {
-    case PIX_FMT_YUVJ420P: *format = PIX_FMT_YUV420P; return 1;
-    case PIX_FMT_YUVJ422P: *format = PIX_FMT_YUV422P; return 1;
-    case PIX_FMT_YUVJ444P: *format = PIX_FMT_YUV444P; return 1;
-    case PIX_FMT_YUVJ440P: *format = PIX_FMT_YUV440P; return 1;
-    default:                                          return 0;
+    switch (*format)
+    {
+        case AV_PIX_FMT_YUVJ420P: *format = AV_PIX_FMT_YUV420P; return 1;
+        case AV_PIX_FMT_YUVJ422P: *format = AV_PIX_FMT_YUV422P; return 1;
+        case AV_PIX_FMT_YUVJ444P: *format = AV_PIX_FMT_YUV444P; return 1;
+        case AV_PIX_FMT_YUVJ440P: *format = AV_PIX_FMT_YUV440P; return 1;
+        default:                                                return 0;
     }
 }
 
 struct SwsContext*
-hb_sws_get_context(int srcW, int srcH, enum PixelFormat srcFormat,
-                   int dstW, int dstH, enum PixelFormat dstFormat,
+hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
+                   int dstW, int dstH, enum AVPixelFormat dstFormat,
                    int flags)
 {
     struct SwsContext * ctx;
@@ -767,7 +774,7 @@ hb_buffer_t * hb_read_preview( hb_handle_t * h, int title_idx, int preview )
     }
 
     hb_buffer_t * buf;
-    buf = hb_frame_buffer_init( PIX_FMT_YUV420P, title->width, title->height );
+    buf = hb_frame_buffer_init( AV_PIX_FMT_YUV420P, title->width, title->height );
 
     int pp, hh;
     for( pp = 0; pp < 3; pp++ )
@@ -810,7 +817,7 @@ void hb_get_preview( hb_handle_t * h, hb_job_t * job, int picture,
 
     swsflags = SWS_LANCZOS | SWS_ACCURATE_RND;
 
-    preview_buf = hb_frame_buffer_init( PIX_FMT_RGB32,
+    preview_buf = hb_frame_buffer_init( AV_PIX_FMT_RGB32,
                                         job->width, job->height );
     hb_avpicture_fill( &pic_preview, preview_buf );
 
@@ -836,26 +843,26 @@ void hb_get_preview( hb_handle_t * h, hb_job_t * job, int picture,
         // we have aligned all buffers to 16 byte width and height strides
         // so there is room in the buffers to accomodate a litte
         // overscan.
-        deint_buf = hb_frame_buffer_init( PIX_FMT_YUV420P,
+        deint_buf = hb_frame_buffer_init( AV_PIX_FMT_YUV420P,
                                           title->width, title->height );
         hb_avpicture_fill( &pic_deint, deint_buf );
-        avpicture_deinterlace( &pic_deint, &pic_in, PIX_FMT_YUV420P,
+        avpicture_deinterlace( &pic_deint, &pic_in, AV_PIX_FMT_YUV420P,
             width, height );
 
-        av_picture_crop( &pic_crop, &pic_deint, PIX_FMT_YUV420P,
+        av_picture_crop( &pic_crop, &pic_deint, AV_PIX_FMT_YUV420P,
                 job->crop[0], job->crop[2] );
     }
     else
     {
         // Crop
-        av_picture_crop( &pic_crop, &pic_in, PIX_FMT_YUV420P, job->crop[0], job->crop[2] );
+        av_picture_crop( &pic_crop, &pic_in, AV_PIX_FMT_YUV420P, job->crop[0], job->crop[2] );
     }
 
     // Get scaling context
     context = hb_sws_get_context(title->width  - (job->crop[2] + job->crop[3]),
                              title->height - (job->crop[0] + job->crop[1]),
-                             PIX_FMT_YUV420P,
-                             job->width, job->height, PIX_FMT_RGB32,
+                             AV_PIX_FMT_YUV420P,
+                             job->width, job->height, AV_PIX_FMT_RGB32,
                              swsflags);
 
     // Scale

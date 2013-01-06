@@ -1,18 +1,8 @@
 diff --git a/configure b/configure
-index 07baa2f..4597a0d 100755
+index 5355300..5ac7bc0 100755
 --- a/configure
 +++ b/configure
-@@ -54,6 +54,9 @@ if test "$E1" != 0 || test "$E2" = 0; then
-     exit 1
- fi
- 
-+# Solaris must use the xpg4 version of grep
-+PATH=/usr/xpg4/bin:$PATH
-+
- show_help(){
- cat <<EOF
- Usage: configure [options]
-@@ -2688,7 +2691,7 @@ EOF
+@@ -3146,7 +3146,7 @@ EOF
  check_cc <<EOF || die "endian test failed"
  unsigned int endian = 'B' << 24 | 'I' << 16 | 'G' << 8 | 'E';
  EOF

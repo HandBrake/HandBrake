@@ -70,11 +70,11 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
     switch ( w->codec_param )
     {
-        case CODEC_ID_MPEG4:
+        case AV_CODEC_ID_MPEG4:
         {
             hb_log("encavcodecInit: MPEG-4 ASP encoder");
         } break;
-        case CODEC_ID_MPEG2VIDEO:
+        case AV_CODEC_ID_MPEG2VIDEO:
         {
             hb_log("encavcodecInit: MPEG-2 encoder");
         } break;
@@ -198,7 +198,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
     context->width     = job->width;
     context->height    = job->height;
-    context->pix_fmt   = PIX_FMT_YUV420P;
+    context->pix_fmt   = AV_PIX_FMT_YUV420P;
 
     if( job->anamorphic.mode )
     {
@@ -539,7 +539,7 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         hb_error( "encavcodec: codec context has uninitialized codec; skipping frame" );
     }
 
-    av_free( frame );
+    avcodec_free_frame(&frame);
 
     *buf_out = buf;
 

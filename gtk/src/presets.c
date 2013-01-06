@@ -1,7 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * presets.c
- * Copyright (C) John Stebbins 2008-2011 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2013 <stebbins@stebbins>
  * 
  * presets.c is free software.
  * 
@@ -2014,47 +2014,77 @@ ghb_remove_queue_file()
 
 typedef struct
 {
-    gchar *mac_val;
-    gchar *lin_val;
+    const gchar *mac_val;
+    const gchar *lin_val;
 } value_map_t;
 
-static value_map_t vcodec_xlat[] =
+static value_map_t vcodec_xlat_compat[] =
 {
-    {"MPEG-2 (FFmpeg)", "ffmpeg2"},
-    {"MPEG-4 (FFmpeg)", "ffmpeg4"},
     {"MPEG-4 (FFmpeg)", "ffmpeg"},
     {"MPEG-4 (XviD)", "ffmpeg4"},
-    {"H.264 (x264)", "x264"},
-    {"VP3 (Theora)", "theora"},
     {NULL,NULL}
 };
 
-static value_map_t acodec_xlat[] =
+static value_map_t *vcodec_xlat;
+
+static value_map_t acodec_xlat_compat[] =
 {
-    {"AAC (ffmpeg)", "ffaac"},
-    {"AAC (faac)", "faac"},
     {"AAC (CoreAudio)", "faac"},
     {"HE-AAC (CoreAudio)", "faac"},
-    {"AC3 (ffmpeg)", "ffac3"},
     {"AC3 (ffmpeg)", "ac3"},
-    {"AC3", "ac3"},         // Backwards compatibility with mac ui
-    {"MP3 Passthru", "copy:mp3"},
+    {"AC3", "ac3"},
     {"MP3 Passthru", "mp3pass"},
-    {"AAC Passthru", "copy:aac"},
     {"AAC Passthru", "aacpass"},
-    {"AC3 Passthru", "copy:ac3"},
     {"AC3 Passthru", "ac3pass"},
-    {"DTS Passthru", "copy:dts"},
     {"DTS Passthru", "dtspass"},
-    {"DTS-HD Passthru", "copy:dtshd"},
     {"DTS-HD Passthru", "dtshdpass"},
-    {"Auto Passthru", "copy"},
     {"Auto Passthru", "auto"},
-    {"MP3 (lame)", "lame"},
-    {"FLAC (ffmpeg)", "ffflac"},
-    {"Vorbis (vorbis)", "vorbis"},
     {NULL,NULL}
 };
+
+static value_map_t *acodec_xlat;
+
+static value_map_t * create_encoder_xlat_tbl(value_map_t *compat, hb_encoder_t *enc, int size)
+{
+    value_map_t *out;
+    int cc, ii;
+
+    for (cc = 0; compat[cc].mac_val != NULL; cc++);
+    
+    out = calloc(cc + size + 1, sizeof(value_map_t));
+
+    for (ii = 0; ii < size; ii++)
+    {
+        out[ii].mac_val = enc[ii].human_readable_name;
+        out[ii].lin_val = enc[ii].short_name;
+    }
+
+    for (ii = 0; ii < cc; ii++)
+        out[ii+size] = compat[ii];
+
+    return out;
+}
+
+static value_map_t * create_mix_xlat_tbl(value_map_t *compat, hb_mixdown_t * mix, int size)
+{
+    value_map_t *out;
+    int cc, ii;
+
+    for (cc = 0; compat[cc].mac_val != NULL; cc++);
+
+    out = calloc(cc + size + 1, sizeof(value_map_t));
+
+    for (ii = 0; ii < size; ii++)
+    {
+        out[ii].mac_val = mix[ii].human_readable_name;
+        out[ii].lin_val = mix[ii].short_name;
+    }
+
+    for (ii = 0; ii < cc; ii++)
+        out[ii+size] = compat[ii];
+
+    return out;
+}
 
 value_map_t container_xlat[] =
 {
@@ -3273,23 +3303,10 @@ update_standard_presets(signal_user_data_t *ud)
 void
 ghb_presets_load(signal_user_data_t *ud)
 {
-    int ii, jj;
-
-    // Create audio mixdown translation table
-    mix_xlat = malloc(sizeof(value_map_t) *
-            (hb_audio_mixdowns_count +
-             sizeof(mix_xlat_compat) / sizeof(value_map_t)));
-    for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
-    {
-        mix_xlat[ii].mac_val = hb_audio_mixdowns[ii].human_readable_name;
-        mix_xlat[ii].lin_val = hb_audio_mixdowns[ii].short_name;
-    }
-    for (jj = 0; mix_xlat_compat[jj].mac_val != NULL; jj++, ii++)
-    {
-        mix_xlat[ii] = mix_xlat_compat[jj];
-    }
-    mix_xlat[ii].mac_val = NULL;
-    mix_xlat[ii].lin_val = NULL;
+    // Create translation tables from libhb tables
+    mix_xlat = create_mix_xlat_tbl(mix_xlat_compat, hb_audio_mixdowns, hb_audio_mixdowns_count);
+    acodec_xlat = create_encoder_xlat_tbl(acodec_xlat_compat, hb_audio_encoders, hb_audio_encoders_count);
+    vcodec_xlat = create_encoder_xlat_tbl(vcodec_xlat_compat, hb_video_encoders, hb_video_encoders_count);
 
     presetsPlist = load_plist("presets");
     if (presetsPlist == NULL)

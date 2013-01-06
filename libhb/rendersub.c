@@ -366,7 +366,7 @@ static hb_buffer_t * RenderSSAFrame( hb_filter_private_t * pv, ASS_Image * frame
     unsigned frameV = (yuv >> 8 ) & 0xff;
     unsigned frameU = (yuv >> 0 ) & 0xff;
 
-    sub = hb_frame_buffer_init( PIX_FMT_YUVA420P, frame->w, frame->h );
+    sub = hb_frame_buffer_init( AV_PIX_FMT_YUVA420P, frame->w, frame->h );
     if( sub == NULL )
         return NULL;
 

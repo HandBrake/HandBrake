@@ -40,7 +40,7 @@ void mcdeint_init( mcdeint_private_t * pv,
     {
         avcodec_register_all();
 
-        AVCodec * enc = avcodec_find_encoder( CODEC_ID_SNOW );
+        AVCodec * enc = avcodec_find_encoder( AV_CODEC_ID_SNOW );
 
         // Snow ME_ITER will crash if width & height are not 16 pixel
         // aligned (or 8 pixel if CODEC_FLAG_4MV is set).

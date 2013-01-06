@@ -1,7 +1,7 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*- */
 /*
  * callbacks.c
- * Copyright (C) John Stebbins 2008-2011 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2013 <stebbins@stebbins>
  * 
  * callbacks.c is free software.
  * 
@@ -1779,6 +1779,12 @@ vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
+
+    double vquality = ghb_settings_get_double(ud->settings, "VideoQualitySlider");
+    if (vquality < 1.0)
+    {
+        ghb_ui_update(ud, "h264Profile", ghb_string_value("auto"));
+    }
 
     gint vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");
     gdouble step;
@@ -3869,6 +3875,7 @@ vqual_granularity_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_vquality_range(ud, &vqmin, &vqmax, &step, &page, &digits, &inverted);
     GtkWidget *qp = GHB_WIDGET(ud->builder, "VideoQualitySlider");
     gtk_range_set_increments (GTK_RANGE(qp), step, page);
+    gtk_scale_set_digits(GTK_SCALE(qp), digits);
 }
 
 G_MODULE_EXPORT void

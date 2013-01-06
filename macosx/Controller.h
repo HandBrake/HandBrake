@@ -59,6 +59,27 @@ BOOL                        fIsDragging;
     /* Picture Preview */
     PreviewController            * fPreviewController;
     
+    /* x264 Presets Box */
+    NSArray                      * fX264PresetNames;
+    NSUInteger                   * fX264MediumPresetIndex;
+    IBOutlet NSButton            * fx264UseAdvancedOptionsCheck;
+    IBOutlet NSBox               * fX264PresetsBox;
+    IBOutlet NSSlider            * fX264PresetsSlider;
+    IBOutlet NSTextField         * fX264PresetSliderLabel;
+    IBOutlet NSTextField         * fX264PresetSelectedTextField;
+    IBOutlet NSPopUpButton       * fX264TunePopUp;
+    IBOutlet NSTextField         * fX264TunePopUpLabel;
+    IBOutlet NSPopUpButton       * fX264ProfilePopUp;
+    IBOutlet NSTextField         * fX264ProfilePopUpLabel;
+    IBOutlet NSPopUpButton       * fX264LevelPopUp;
+    IBOutlet NSTextField         * fX264LevelPopUpLabel;
+    IBOutlet NSButton            * fX264FastDecodeCheck;
+    IBOutlet NSTextField         * fDisplayX264PresetsAdditonalOptionsTextField;
+    IBOutlet NSTextField         * fDisplayX264PresetsAdditonalOptionsLabel;
+    // Text Field to show the expanded opts from unparse()
+    IBOutlet NSTextField         * fDisplayX264PresetsUnparseTextField;
+    char                         * fX264PresetsUnparsedUTF8String;
+    
     /* Advanced options tab */
     HBAdvancedController         * fAdvancedOptions;
 	IBOutlet NSBox               * fAdvancedView;
@@ -280,8 +301,13 @@ BOOL                        fIsDragging;
 
 - (IBAction) cancelScanning:(id)sender;
 
-- (void)     updateUI: (NSTimer *) timer;
-- (void)     enableUI: (bool) enable;
+- (void)     updateUI:                                 (NSTimer*) timer;
+- (void)     enableUI:                                 (bool)     enable;
+- (void)     setupX264PresetsWidgets:                  (id)       sender;
+- (void)     enableX264Widgets:                        (bool)     enable;
+- (IBAction) updateX264Widgets:                        (id)       sender;
+- (IBAction) x264PresetsChangedDisplayExpandedOptions: (id)       sender;
+
 - (IBAction) encodeStartStopPopUpChanged: (id) sender;
 
 
@@ -455,5 +481,20 @@ BOOL                        fIsDragging;
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender;
 
 - (void) updateDockIcon:(double)progress withETA:(NSString*)etaStr;
+
+// x264 system methods
+- (NSString*) x264Preset;
+- (NSString*) x264Tune;
+- (NSString*) x264OptionExtra;
+- (NSString*) h264Profile;
+- (NSString*) h264Level;
+- (void)      setX264Preset:            (NSString*) x264Preset;
+- (void)      setX264Tune:              (NSString*) x264Tune;
+- (void)      setX264OptionExtra:       (NSString*) x264OptionExtra;
+- (void)      setH264Profile:           (NSString*) h264Profile;
+- (void)      setH264Level:             (NSString*) h264Level;
+- (IBAction)  x264PresetsSliderChanged: (id)        sender;
+
+
 @end
 
