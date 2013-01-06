@@ -23,12 +23,10 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop;
-    using HandBrake.Interop.HbLib;
     using HandBrake.Interop.Model.Encoding;
     using HandBrake.Interop.Model.Encoding.x264;
 
     using HandBrakeWPF.Commands.Interfaces;
-    using HandBrakeWPF.Properties;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -241,6 +239,17 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Gets a value indicating whether is lossless.
+        /// </summary>
+        public bool IsLossless
+        {
+            get
+            {
+                return 51.Equals(this.RF);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets QualityMax.
         /// </summary>
         public int QualityMax
@@ -303,8 +312,6 @@ namespace HandBrakeWPF.ViewModels
                         double rfValue = 51.0 - value * cqStep;
                         rfValue = Math.Round(rfValue, 2);
                         this.Task.Quality = rfValue;
-
-                        // TODO: Lossless warning.
                         break;
                     case VideoEncoder.Theora:
                         Task.Quality = value;
@@ -313,6 +320,7 @@ namespace HandBrakeWPF.ViewModels
 
                 this.NotifyOfPropertyChange(() => this.RF);
                 this.NotifyOfPropertyChange(() => this.DisplayRF);
+                this.NotifyOfPropertyChange(() => this.IsLossless);
             }
         }
 
@@ -324,6 +332,14 @@ namespace HandBrakeWPF.ViewModels
             get
             {
                 return Task.Quality.HasValue ? this.Task.Quality.Value : 0;
+            }
+        }
+
+        public string Rfqp
+        {
+            get
+            {
+                return this.SelectedVideoEncoder == VideoEncoder.X264 ? "RF" : "QP";
             }
         }
 
@@ -391,6 +407,8 @@ namespace HandBrakeWPF.ViewModels
 
                 // Hide the x264 controls when not needed.
                 this.DisplayX264Options = value == VideoEncoder.X264;
+
+                this.NotifyOfPropertyChange(() => this.Rfqp);
             }
         }
 

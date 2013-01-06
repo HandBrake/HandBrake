@@ -287,6 +287,31 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Warning: RF 0 is Lossless!.
+        /// </summary>
+        public static string Video_LosslessWarning {
+            get {
+                return ResourceManager.GetString("Video_LosslessWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A value of 0 means lossless and will result in a file size that is larger than the original source, 
+        ///unless the source was also lossless. 
+        ///
+        ///x264&apos;s scale is logarithmic and lower values correspond to higher quality. 
+        ///
+        ///So small increases in value will result in progressively larger increases in the resulting file size. 
+        ///
+        ///Suggested values are: 18 to 20 for Standard Definition and 20 to 23 for High Definition..
+        /// </summary>
+        public static string Video_LosslessWarningTooltip {
+            get {
+                return ResourceManager.GetString("Video_LosslessWarningTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Set the desired quality factor. The encoder targets a certain quality. 
         ///The scale used by each video encoder is different.
         ///

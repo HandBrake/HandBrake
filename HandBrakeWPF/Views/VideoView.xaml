@@ -79,7 +79,10 @@
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
                     <RadioButton Content="Constant Quality:" IsChecked="{Binding IsConstantQuantity}"  Margin="0,0,10,0"/>
                     <TextBlock Text="{Binding DisplayRF}" Width="25" />
-                    <TextBlock Text="RF" FontWeight="Bold" />
+                    <TextBlock Text="{Binding Rfqp}" FontWeight="Bold" />
+
+                    <TextBlock Text="{x:Static Properties:Resources.Video_LosslessWarning}" Visibility="{Binding IsLossless, Converter={StaticResource boolToVisConverter}}" 
+                           Margin="10,0,0,0" ToolTip="{x:Static Properties:Resources.Video_LosslessWarningTooltip}" FontWeight="Bold" />
                 </StackPanel>
 
                 <Slider Width="280" Value="{Binding RF}" HorizontalAlignment="Left"  Maximum="{Binding QualityMax}" Minimum="{Binding QualityMin}"
