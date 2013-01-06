@@ -4769,7 +4769,13 @@ hb_buffer_t * hb_ts_decode_pkt( hb_stream_t *stream, const uint8_t * pkt )
         }
         // if there's an adaptation header & PCR_flag is set
         // get the PCR (Program Clock Reference)
-        if ( adapt_len > 7 && ( pkt[5] & 0x10 ) != 0 )
+        //
+        // JAS: I have a badly mastered BD that does adaptation field
+        // stuffing incorrectly which results in invalid PCRs.  Test
+        // for all 0xff to guard against this.
+        if ( adapt_len > 7 && ( pkt[5] & 0x10 ) != 0 &&
+            !(pkt[5] == 0xff && pkt[6] == 0xff && pkt[7] == 0xff &&
+              pkt[8] == 0xff && pkt[9] == 0xff && pkt[10] == 0xff))
         {
             int64_t pcr;
             pcr =    ( (uint64_t)pkt[6] << (33 - 8) ) |
