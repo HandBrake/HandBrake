@@ -196,7 +196,7 @@ BOOL                        fIsDragging;
     IBOutlet NSButton            * fAudioAllowDTSHDPassCheck;
     IBOutlet NSButton            * fAudioAllowDTSPassCheck;
     IBOutlet NSButton            * fAudioAllowMP3PassCheck;
-    IBOutlet NSButton            * fAudioFallbackPopUp;
+    IBOutlet NSPopUpButton       * fAudioFallbackPopUp;
     
     	    
     /* Chapters box */
