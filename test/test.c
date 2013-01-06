@@ -339,44 +339,45 @@ int main( int argc, char ** argv )
     }
 
     /* Clean up */
-    hb_close( &h );
+    hb_close(&h);
     hb_global_close();
-    if( input )  free( input );
-    if( output ) free( output );
-    if( format ) free( format );
-    if( audios )
+    if (audios != NULL)
     {
-        while( ( audio = hb_list_item( audios, 0 ) ) )
+        while ((audio = hb_list_item(audios, 0)) != NULL)
         {
-            hb_list_rem( audios, audio );
-            if( audio->out.name )
+            hb_list_rem(audios, audio);
+            if (audio->out.name != NULL)
             {
-                free( audio->out.name );
+                free(audio->out.name);
             }
-            free( audio );
+            free(audio);
         }
-        hb_list_close( &audios );
+        hb_list_close(&audios);
     }
-    if( mixdowns ) free( mixdowns );
-    if( dynamic_range_compression ) free( dynamic_range_compression );
-    if( audio_gain ) free( audio_gain );
-    if( atracks ) free( atracks );
-    if( arates ) free( arates );
-    str_vfree( abitrates );
-    str_vfree( aqualities );
-    str_vfree( acompressions );
-    if( acodecs ) free( acodecs );
-    if (native_language ) free (native_language );
-    if( advanced_opts ) free (advanced_opts );
-    if (preset_name) free (preset_name);
-    free( x264_profile );
-    free( x264_preset );
-    free( x264_tune );
-    free( h264_level );
+    if (abitrates                 != NULL) str_vfree(abitrates);
+    if (acompressions             != NULL) str_vfree(acompressions);
+    if (aqualities                != NULL) str_vfree(aqualities);
+    if (acodecs                   != NULL) free(acodecs);
+    if (arates                    != NULL) free(arates);
+    if (atracks                   != NULL) free(atracks);
+    if (audio_gain                != NULL) free(audio_gain);
+    if (dynamic_range_compression != NULL) free(dynamic_range_compression);
+    if (mixdowns                  != NULL) free(mixdowns);
+    if (native_language           != NULL) free(native_language);
+    if (format                    != NULL) free(format);
+    if (input                     != NULL) free(input);
+    if (output                    != NULL) free(output);
+    if (preset_name               != NULL) free(preset_name);
+    if (x264_preset               != NULL) free(x264_preset);
+    if (x264_tune                 != NULL) free(x264_tune);
+    if (advanced_opts             != NULL) free(advanced_opts);
+    if (x264_profile              != NULL) free(x264_profile);
+    if (h264_level                != NULL) free(h264_level);
 
-    // write a carriage return to stdout - avoids overlap / line wrapping when stderr is redirected
-    fprintf( stdout, "\n" );
-    fprintf( stderr, "HandBrake has exited.\n" );
+    // write a carriage return to stdout
+    // avoids overlap / line wrapping when stderr is redirected
+    fprintf(stdout, "\n");
+    fprintf(stderr, "HandBrake has exited.\n");
 
     return 0;
 }
