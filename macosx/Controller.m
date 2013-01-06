@@ -2903,11 +2903,11 @@ fWorkingCount = 0;
         hb_job_set_advanced_opts(job, advanced_opts_tmp);
         hb_job_set_x264_profile (job, h264_profile_tmp);
         hb_job_set_x264_level   (job, h264_level_tmp);
-        if (x264_preset_tmp   != NULL) free(x264_preset_tmp);
-        if (x264_tune_tmp     != NULL) free(x264_tune_tmp);
-        if (advanced_opts_tmp != NULL) free(advanced_opts_tmp);
-        if (h264_profile_tmp  != NULL) free(h264_profile_tmp);
-        if (h264_level_tmp    != NULL) free(h264_level_tmp);
+        free(x264_preset_tmp);
+        free(x264_tune_tmp);
+        free(advanced_opts_tmp);
+        free(h264_profile_tmp);
+        free(h264_level_tmp);
     }
 
     
@@ -5600,11 +5600,8 @@ the user is using "Custom" settings by determining the sender*/
     // prepare the width and height (FIXME)
     unparse_width  = 1280;
     unparse_height = 720;
-    // if the previous unparsed string is non-NULL, free it
-    if (fX264PresetsUnparsedUTF8String != NULL)
-    {
-        free(fX264PresetsUnparsedUTF8String);
-    }
+    // free the previous unparsed string
+    free(fX264PresetsUnparsedUTF8String);
     // now, unparse
     fX264PresetsUnparsedUTF8String = hb_x264_param_unparse(x264_preset,
                                                            x264_tune,
