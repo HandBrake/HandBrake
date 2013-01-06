@@ -26,6 +26,7 @@ typedef struct
 {
     int    startup;
     double average; // average time between packets
+    double filtered_average; // average time between packets
     int64_t last;   // last timestamp seen on this stream
     int id;         // stream id
     int is_audio;   // != 0 if this is an audio stream
@@ -112,6 +113,7 @@ static int hb_reader_init( hb_work_object_t * w, hb_job_t * job )
     r->stream_timing[0].id = r->title->video_id;
     r->stream_timing[0].average = 90000. * (double)job->vrate_base /
                                            (double)job->vrate;
+    r->stream_timing[0].filtered_average = r->stream_timing[0].average;
     r->stream_timing[0].last = -r->stream_timing[0].average;
     r->stream_timing[0].valid = 1;
     r->stream_timing[0].startup = 10;
@@ -256,6 +258,7 @@ static stream_timing_t *id_to_st( hb_work_private_t *r, const hb_buffer_t *buf, 
         }
         st->id = buf->s.id;
         st->average = 30.*90.;
+        st->filtered_average = st->average;
         st->startup = 10;
         st->last = -st->average;
         if ( ( st->is_audio = is_audio( r, buf->s.id ) ) != 0 )
@@ -277,13 +280,15 @@ static void update_ipt( hb_work_private_t *r, const hb_buffer_t *buf )
 
     if( buf->s.renderOffset < 0 )
     {
-        st->last += st->average;
+        st->last += st->filtered_average;
         return;
     }
 
     double dt = buf->s.renderOffset - st->last;
+
     // Protect against spurious bad timestamps
-    if ( dt > -5 * 90000LL && dt < 5 * 90000LL )
+    // timestamps should only move forward and by reasonable increments
+    if ( dt > 0 && dt < 5 * 90000LL )
     {
         if( st->startup )
         {
@@ -293,6 +298,11 @@ static void update_ipt( hb_work_private_t *r, const hb_buffer_t *buf )
         else
         {
             st->average += ( dt - st->average ) * (1./32.);
+        }
+        // Ignore outliers
+        if (dt < 1.5 * st->average)
+        {
+            st->filtered_average += ( dt - st->filtered_average ) * (1./32.);
         }
     }
     st->last = buf->s.renderOffset;
@@ -319,11 +329,13 @@ static void new_scr_offset( hb_work_private_t *r, hb_buffer_t *buf )
     {
         last = st->last;
     }
-    int64_t nxt = last + st->average;
+    int64_t nxt = last + st->filtered_average;
     r->scr_offset = buf->s.renderOffset - nxt;
     // This log is handy when you need to debug timing problems...
-    //hb_log("id %x last %ld avg %g nxt %ld renderOffset %ld scr_offset %ld",
-    //    buf->s.id, last, st->average, nxt, buf->s.renderOffset, r->scr_offset);
+    //hb_log("id %x last %"PRId64" avg %g nxt %"PRId64" renderOffset %"PRId64
+    //       " scr_offset %"PRId64"",
+    //    buf->s.id, last, st->filtered_average, nxt,
+    //    buf->s.renderOffset, r->scr_offset);
     r->scr_changes = r->demux.scr_changes;
 }
 
@@ -616,7 +628,8 @@ void ReadLoop( void * _w )
                         r->start_found = 1;
                     }
                     // This log is handy when you need to debug timing problems
-                    //hb_log("id %x scr_offset %ld start %ld --> %ld", 
+                    //hb_log("id %x scr_offset %"PRId64
+                    //       " start %"PRId64" --> %"PRId64"", 
                     //        buf->s.id, r->scr_offset, buf->s.start, 
                     //        buf->s.start - r->scr_offset);
                     buf->s.start -= r->scr_offset;
@@ -630,10 +643,16 @@ void ReadLoop( void * _w )
                     buf->s.renderOffset -= r->scr_offset;
                     update_ipt( r, buf );
                 }
+#if 0
+                // JAS: This was added to fix a rare "audio time went backward"
+                // sync error I found in one sample.  But it has a bad side
+                // effect on DVDs, causing frequent "adding silence" sync
+                // errors. So I am disabling it.
                 else
                 {
                     update_ipt( r, buf );
                 }
+#endif
             }
             if( fifos )
             {
