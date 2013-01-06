@@ -61,7 +61,7 @@ BOOL                        fIsDragging;
     
     /* x264 Presets Box */
     NSArray                      * fX264PresetNames;
-    NSUInteger                   * fX264MediumPresetIndex;
+    NSUInteger                     fX264MediumPresetIndex;
     IBOutlet NSButton            * fx264UseAdvancedOptionsCheck;
     IBOutlet NSBox               * fX264PresetsBox;
     IBOutlet NSSlider            * fX264PresetsSlider;
