@@ -1,12 +1,15 @@
 ﻿<UserControl x:Class="HandBrakeWPF.Views.PictureSettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:NumericUpDown="clr-namespace:EagleBoost.Wpf.Presentation.Controls.NumericUpDown;assembly=EagleBoost.Wpf.Presentation"
-             xmlns:Converters="clr-namespace:HandBrakeWPF.Converters">
+             xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
+             xmlns:controls="clr-namespace:HandBrakeWPF.Controls">
 
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="boolConverter" />
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+        <Style TargetType="controls:NumberBox">
+            <Setter Property="Height" Value="24" />
+        </Style>
     </UserControl.Resources>
 
     <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -24,10 +27,10 @@
             <!-- Row 2-->
             <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
                 <Label Content="Width:" Grid.Row="1" Grid.Column="0" />
-                <NumericUpDown:NumericUpDown Value="{Binding Width, Mode=TwoWay}" IsEnabled="{Binding WidthControlEnabled}" SmallChange="{Binding SelectedModulus, Mode=OneWay}"
+                <controls:NumberBox Number="{Binding Width, Mode=TwoWay}" IsEnabled="{Binding WidthControlEnabled}" Modulus="{Binding SelectedModulus, Mode=OneWay}"
                                              Minimum="0" Grid.Row="1" Grid.Column="1" Width="60"  />
                 <Label Content="Height:" Grid.Row="1" Grid.Column="2" />
-                <NumericUpDown:NumericUpDown Value="{Binding Height, Mode=TwoWay}" IsEnabled="{Binding HeightControlEnabled}" SmallChange="{Binding SelectedModulus, Mode=OneWay}" 
+                <controls:NumberBox Number="{Binding Height, Mode=TwoWay}" IsEnabled="{Binding HeightControlEnabled}" Modulus="{Binding SelectedModulus, Mode=OneWay}" 
                                              Minimum="0" Grid.Row="1" Grid.Column="3" Width="60"  />
                 <CheckBox Content="Keep Aspect Ratio" IsChecked="{Binding MaintainAspectRatio}" VerticalAlignment="Center" Margin="5,0,0,0" />
             </StackPanel>
@@ -71,10 +74,11 @@
                 <Label Content="PAR Width:" Grid.Row="1" Grid.Column="0" />
                 <Label Content="PAR Height:" Grid.Row="5" Grid.Column="0" />
 
-                <NumericUpDown:NumericUpDown Width="60" Value="{Binding DisplayWidth, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="60" Value="{Binding ParWidth, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"
+                <controls:NumberBox Width="60" Number="{Binding DisplayWidth, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" 
+                                    AllowEmpty="False" />
+                <controls:NumberBox Width="60" Number="{Binding ParWidth, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" AllowEmpty="False"
                                              IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="60" Value="{Binding ParHeight, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" 
+                <controls:NumberBox Width="60" Number="{Binding ParHeight, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" AllowEmpty="False"
                                              IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,0,5" />
             </Grid>
             
@@ -125,14 +129,17 @@
                 <Label Content="Left" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" />
                 <Label Content="Right" Grid.Row="2" Grid.Column="4" HorizontalAlignment="Center" />
 
-                <NumericUpDown:NumericUpDown Width="60" Value="{Binding CropTop, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" IsEnabled="{Binding IsCustomCrop}" Grid.Row="1" Grid.Column="2" 
-                                             HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="60" Value="{Binding CropBottom, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" IsEnabled="{Binding IsCustomCrop}" Grid.Row="3" Grid.Column="2"
-                                             HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="60" Value="{Binding CropLeft, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="1" 
-                                             HorizontalAlignment="Left" Margin="0,0,0,5" />
-                <NumericUpDown:NumericUpDown Width="60" Value="{Binding CropRight, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="3"
-                                             HorizontalAlignment="Left" Margin="0,0,0,5" />
+                <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="1" Grid.Column="2"
+                                    Minimum="0" Modulus="2" Number="{Binding CropTop, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False" />
+
+                <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="3" Grid.Column="2"
+                                    Minimum="0" Modulus="2" Number="{Binding CropBottom, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False" />
+
+                <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="1"
+                                    Minimum="0" Modulus="2" Number="{Binding CropLeft, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False" />
+
+                <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="3"
+                                    Minimum="0" Modulus="2" Number="{Binding CropRight, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False" />
 
             </Grid>
 
