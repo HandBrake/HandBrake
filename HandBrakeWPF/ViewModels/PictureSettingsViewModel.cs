@@ -53,11 +53,6 @@ namespace HandBrakeWPF.ViewModels
         private bool showCustomAnamorphicControls;
 
         /// <summary>
-        /// The source aspect ratio.
-        /// </summary>
-        private double sourceAspectRatio;
-
-        /// <summary>
         /// The source info.
         /// </summary>
         private string sourceInfo;
@@ -148,7 +143,7 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
-                this.Task.Cropping.Bottom = this.CorrectForModulus(this.Task.Cropping.Bottom, value);
+                this.Task.Cropping.Bottom = value;
                 this.NotifyOfPropertyChange(() => this.CropBottom);
                 this.SetDisplaySize();
             }
@@ -166,7 +161,7 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
-                this.Task.Cropping.Left = this.CorrectForModulus(this.Task.Cropping.Left, value);
+                this.Task.Cropping.Left = value;
                 this.NotifyOfPropertyChange(() => this.CropLeft);
                 this.SetDisplaySize();
             }
@@ -184,7 +179,7 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
-                this.Task.Cropping.Right = this.CorrectForModulus(this.Task.Cropping.Right, value);
+                this.Task.Cropping.Right = value;
                 this.NotifyOfPropertyChange(() => this.CropRight);
                 this.SetDisplaySize();
             }
@@ -202,7 +197,7 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
-                this.Task.Cropping.Top = this.CorrectForModulus(this.Task.Cropping.Top, value);
+                this.Task.Cropping.Top = value;
                 this.NotifyOfPropertyChange(() => this.CropTop);
                 this.SetDisplaySize();
             }
@@ -701,7 +696,6 @@ namespace HandBrakeWPF.ViewModels
             if (title != null)
             {
                 // Set cached info
-                this.sourceAspectRatio = title.AspectRatio;
                 this.sourceParValues = title.ParVal;
                 this.sourceResolution = title.Resolution;
 

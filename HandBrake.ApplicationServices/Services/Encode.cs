@@ -118,7 +118,7 @@ namespace HandBrake.ApplicationServices.Services
 
                 if (this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.PreventSleep))
                 {
-                   // Win32.PreventSleep();
+                    Win32.PreventSleep();
                 }
 
                 // Make sure the path exists, attempt to create it if it doesn't
@@ -143,7 +143,7 @@ namespace HandBrake.ApplicationServices.Services
                 ProcessStartInfo cliStart = new ProcessStartInfo(handbrakeCLIPath, query)
                 {
                     RedirectStandardOutput = true,
-                    RedirectStandardError = enableLogging ? true : false,
+                    RedirectStandardError = enableLogging,
                     UseShellExecute = false,
                     CreateNoWindow = true
                 };
