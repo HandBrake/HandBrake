@@ -952,7 +952,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if (x264_profile == NULL)
                     {
-                        x264_profile = strdup("main");
+                        x264_profile = strdup("high");
                     }
                     if (h264_level == NULL)
                     {
