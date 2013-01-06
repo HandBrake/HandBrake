@@ -354,25 +354,25 @@ int main( int argc, char ** argv )
         }
         hb_list_close(&audios);
     }
-    if (abitrates                 != NULL) str_vfree(abitrates);
-    if (acompressions             != NULL) str_vfree(acompressions);
-    if (aqualities                != NULL) str_vfree(aqualities);
-    if (acodecs                   != NULL) free(acodecs);
-    if (arates                    != NULL) free(arates);
-    if (atracks                   != NULL) free(atracks);
-    if (audio_gain                != NULL) free(audio_gain);
-    if (dynamic_range_compression != NULL) free(dynamic_range_compression);
-    if (mixdowns                  != NULL) free(mixdowns);
-    if (native_language           != NULL) free(native_language);
-    if (format                    != NULL) free(format);
-    if (input                     != NULL) free(input);
-    if (output                    != NULL) free(output);
-    if (preset_name               != NULL) free(preset_name);
-    if (x264_preset               != NULL) free(x264_preset);
-    if (x264_tune                 != NULL) free(x264_tune);
-    if (advanced_opts             != NULL) free(advanced_opts);
-    if (x264_profile              != NULL) free(x264_profile);
-    if (h264_level                != NULL) free(h264_level);
+    str_vfree(abitrates);
+    str_vfree(acompressions);
+    str_vfree(aqualities);
+    free(acodecs);
+    free(arates);
+    free(atracks);
+    free(audio_gain);
+    free(dynamic_range_compression);
+    free(mixdowns);
+    free(native_language);
+    free(format);
+    free(input);
+    free(output);
+    free(preset_name);
+    free(x264_preset);
+    free(x264_tune);
+    free(advanced_opts);
+    free(x264_profile);
+    free(h264_level);
 
     // write a carriage return to stdout
     // avoids overlap / line wrapping when stderr is redirected
