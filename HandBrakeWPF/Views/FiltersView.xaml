@@ -59,7 +59,7 @@
                          Visibility="{Binding ShowDenoiseCustom, Converter={StaticResource boolToVisConverter}}" />
 
                 <TextBlock Text="Deblock:" Grid.Row="4" Grid.Column="0" Margin="0,0,0,10"/>
-                <Slider Width="120" Value="{Binding DeblockValue}" Minimum="4" Maximum="15" Grid.Row="4" Grid.Column="1" Margin="0,0,0,10"/>
+                <Slider Width="120" Value="{Binding DeblockValue}" TickPlacement="BottomRight" Minimum="4" Maximum="15" Grid.Row="4" Grid.Column="1" Margin="0,0,0,10"/>
                 <TextBlock Text="{Binding DeblockText}" Grid.Row="4" Grid.Column="2" Margin="0,0,0,10"/>
 
                 <CheckBox Content="Grayscale" IsChecked="{Binding Grayscale}" Grid.Row="5" Grid.Column="1" Margin="0,0,0,10"/>

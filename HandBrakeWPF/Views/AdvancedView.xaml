@@ -31,13 +31,25 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <!-- X264 Query  -->
-        <TextBox Grid.Row="2"
+
+        <TextBlock Grid.Row="2" Margin="10,5,10,0"
+                           VerticalAlignment="Center"
+                           FontWeight="Bold"
+                           Text="x264 Encoder Options:"
+                   Visibility="{Binding DisplayX264Options, Converter={StaticResource BooleanVisibilityConverter}, ConverterParameter=false}"
+                           />
+        
+        <TextBox Grid.Row="3"
+                 Margin="10,2,10, 2"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
+                 Style="{StaticResource LongToolTipHolder}"
+                 ToolTip="{x:Static Properties:Resources.Advanced_EncoderOptions}"
                  Text="{Binding AdvancedOptionsString,
                                 UpdateSourceTrigger=PropertyChanged}"
                  TextWrapping="Wrap"

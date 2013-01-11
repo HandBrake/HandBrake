@@ -61,6 +61,21 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can optionally store a maximum resolution for encodes that use this preset. There are 3 modes:
+        ///
+        ///None:  There is no maximum resolution for encodes using this preset. They will always use the source resolution minus any cropping that may be applied.
+        ///
+        ///Custom: You can optionally set a Maximum width and height. When doing this an encode will be less than or equal to these values.
+        ///
+        ///Source Maximum:  Similar to custom, but the resolution of your current source is used as the Max width and Height values in [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string AddPreset_PictureSizeMode {
+            get {
+                return ResourceManager.GetString("AddPreset_PictureSizeMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to x264 has a variety of algorithms to decide when to use B-frames and how many to use.
         ///
         ///Fast mode takes roughly the same amount of time no matter how many B-frames you specify.  However, while fast, its decisions are often suboptimal.
@@ -149,6 +164,17 @@ namespace HandBrakeWPF.Properties {
         public static string Advanced_EightByEightDctToolTip {
             get {
                 return ResourceManager.GetString("Advanced_EightByEightDctToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The options passed to the x264 encoder. 
+        ///The above controls are only a subset of useful x264 parameters. 
+        ///This box allows you to add or modify additional or current parameters as desired. .
+        /// </summary>
+        public static string Advanced_EncoderOptions {
+            get {
+                return ResourceManager.GetString("Advanced_EncoderOptions", resourceCulture);
             }
         }
         
