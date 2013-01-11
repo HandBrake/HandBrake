@@ -5,6 +5,7 @@
         xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         Title="{Binding Title}"
         Width="350"
         ResizeMode="NoResize"
@@ -16,6 +17,11 @@
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <Converters:EnumComboConverter x:Key="enumComboConverter" />
+
+        <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement">
+            <Setter Property="ToolTipService.ShowDuration" Value="20000" />
+            <Setter Property="Margin" Value="0,2,0,2" />
+        </Style>
     </Window.Resources>
 
     <Grid HorizontalAlignment="Stretch"
@@ -80,11 +86,15 @@
 
             <TextBlock Grid.Row="2"
                        Grid.Column="0"
-                       Text="Use Picture Size:" />
+                       Style="{StaticResource LongToolTipHolder}"
+                       ToolTip="{x:Static Properties:Resources.AddPreset_PictureSizeMode}"
+                       Text="Picture Size:" />
             <ComboBox Grid.Row="2"
                       Grid.Column="1"
                       Width="125"
                       HorizontalAlignment="Left"
+                      Style="{StaticResource LongToolTipHolder}"
+                      ToolTip="{x:Static Properties:Resources.AddPreset_PictureSizeMode}"
                       ItemsSource="{Binding PictureSettingsModes,
                                             Converter={StaticResource enumComboConverter}}"
                       SelectedItem="{Binding SelectedPictureSettingMode,
@@ -104,18 +114,18 @@
             </StackPanel>
 
             <CheckBox Grid.Row="4"
-                      Grid.Column="1"
+                      Grid.Column="0" Grid.ColumnSpan="2"
                       Margin="0,10,0,0"
-                      Content="Use Picture Filters"
+                      Content="Save Video Filter Settings"
                       IsChecked="{Binding Preset.UsePictureFilters}" />
 
             <!--  Description  -->
             <TextBlock Grid.Row="5"
                        Grid.Column="0"
-                       FontWeight="Bold"
+                       FontWeight="Bold" Margin="0,10,0,0"
                        Text="Description:" />
             <TextBox Grid.Row="6"
-                     Grid.ColumnSpan="2"
+                     Grid.ColumnSpan="2" Margin="0,10,0,0"
                      HorizontalAlignment="Stretch"
                      Text="{Binding Preset.Description}" />
         </Grid>
