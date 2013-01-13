@@ -120,13 +120,10 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void AddAllClosedCaptions()
         {
-            if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.UseClosedCaption))
+
+            foreach (Subtitle subtitle in this.SourceTitlesSubset(null).Where(s => s.SubtitleType == SubtitleType.CC))
             {
-                foreach (
-                    Subtitle subtitle in this.SourceTitlesSubset(null).Where(s => s.SubtitleType == SubtitleType.CC))
-                {
-                    this.Add(subtitle);
-                }
+                this.Add(subtitle);
             }
         }
 
@@ -158,38 +155,6 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.Add(subtitle);
             }
-        }
-
-        /// <summary>
-        /// Automatic Subtitle Selection based on user preferences.
-        /// </summary>
-        public void AutomaticSubtitleSelection()
-        {
-            this.Task.SubtitleTracks.Clear();
-
-            // New DUB Settings
-            int mode = this.UserSettingService.GetUserSetting<int>(UserSettingConstants.DubModeSubtitle);
-            switch (mode)
-            {
-                case 1: // Adding all remaining subtitle tracks
-                    this.AddAllRemaining();
-                    break;
-                case 2: // Adding only the first or preferred first subtitle track.
-                    this.Add();
-                    break;
-                case 3: // Selected Languages Only
-                    this.AddAllRemainingForSelectedLanguages();
-                    break;
-                case 4: // Prefered Only
-                    this.AddForPreferredLanaguages(true);
-                    break;
-                case 5: // Prefered Only All
-                    this.AddForPreferredLanaguages(false);
-                    break;
-            }
-
-            // Add all closed captions if enabled.
-            this.AddAllClosedCaptions();
         }
 
         /// <summary>
@@ -277,6 +242,41 @@ namespace HandBrakeWPF.ViewModels
                 track.Burned = false;
             }
             this.NotifyOfPropertyChange(() => this.Task);
+        }
+
+        /// <summary>
+        /// Automatic Subtitle Selection based on user preferences.
+        /// </summary>
+        public void AutomaticSubtitleSelection()
+        {
+            this.Task.SubtitleTracks.Clear();
+
+            // New DUB Settings
+            int mode = this.UserSettingService.GetUserSetting<int>(UserSettingConstants.DubModeSubtitle);
+            switch (mode)
+            {
+                case 1: // Adding all remaining subtitle tracks
+                    this.AddAllRemaining();
+                    break;
+                case 2: // Adding only the first or preferred first subtitle track.
+                    this.Add();
+                    break;
+                case 3: // Selected Languages Only
+                    this.AddAllRemainingForSelectedLanguages();
+                    break;
+                case 4: // Prefered Only
+                    this.AddForPreferredLanaguages(true);
+                    break;
+                case 5: // Prefered Only All
+                    this.AddForPreferredLanaguages(false);
+                    break;
+            }
+
+            // Add all closed captions if enabled.
+            if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.UseClosedCaption))
+            {
+                this.AddAllClosedCaptions();
+            }
         }
 
         #endregion
@@ -419,10 +419,8 @@ namespace HandBrakeWPF.ViewModels
         private IEnumerable<Subtitle> SourceTitlesSubset(IEnumerable<Subtitle> subtitles)
         {
             return subtitles != null
-                       ? subtitles.Where(
-                           subtitle => !this.Task.SubtitleTracks.Any(track => track.SourceTrack == subtitle)).ToList()
-                       : this.SourceTracks.Where(
-                           subtitle => !this.Task.SubtitleTracks.Any(track => track.SourceTrack == subtitle)).ToList();
+                       ? subtitles.Where(subtitle => !this.Task.SubtitleTracks.Any(track => Equals(track.SourceTrack, subtitle))).ToList()
+                       : this.SourceTracks.Where(subtitle => !this.Task.SubtitleTracks.Any(track => Equals(track.SourceTrack, subtitle))).ToList();
         }
 
         #endregion

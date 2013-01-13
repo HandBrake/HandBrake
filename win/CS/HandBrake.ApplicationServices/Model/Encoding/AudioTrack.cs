@@ -260,7 +260,7 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         }
 
         /// <summary>
-        ///  Gets the The UI display value for sample rate
+        ///  Gets or sets the The UI display value for sample rate
         /// </summary>
         public string SampleRateDisplayValue
         {

@@ -1673,7 +1673,6 @@ namespace HandBrakeWPF.ViewModels
                         this.NotifyOfPropertyChange(() => this.ScannedSource.Titles);
                         this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault(t => t.MainTitle)
                                              ?? this.ScannedSource.Titles.FirstOrDefault();
-                        this.SetupTabs();
                     }
 
                     this.ShowStatusWindow = false;
