@@ -896,16 +896,8 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenAboutApplication()
         {
-            Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(AboutView));
-
-            if (window != null)
-            {
-                window.Activate();
-            }
-            else
-            {
-                this.WindowManager.ShowWindow(IoC.Get<IAboutViewModel>());
-            }
+            OpenOptionsScreenCommand command = new OpenOptionsScreenCommand();
+            command.Execute(OptionsTab.About);
         }
 
         /// <summary>
@@ -983,8 +975,8 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void CheckForUpdates()
         {
-            this.ProgramStatusLabel = "Checking for Updates ...";
-            this.updateService.CheckForUpdates(this.HandleManualUpdateCheckResults);
+            OpenOptionsScreenCommand command = new OpenOptionsScreenCommand();
+            command.Execute(OptionsTab.Updates);
         }
 
         /// <summary>
@@ -1614,27 +1606,6 @@ namespace HandBrakeWPF.ViewModels
                 this.ProgramStatusLabel = "A New Update is Available. Goto Tools Menu > Options to Install";
             }
         }
-
-        /// <summary>
-        /// Handle Update Check Results
-        /// </summary>
-        /// <param name="information">
-        /// The information.
-        /// </param>
-        private void HandleManualUpdateCheckResults(UpdateCheckInformation information)
-        {
-            if (information.NewVersionAvailable)
-            {
-                MessageBox.Show("A New Version is available. Goto Tools Menu > Options to Install or visit http://handbrake.fr for details.", "Update Available", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show("There is no new updates at this time.", "No Update Available", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-
-            this.ProgramStatusLabel = "Ready";
-        }
-
         #endregion
 
         #region Event Handlers

@@ -23,6 +23,8 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
 
+    using HandBrakeWPF.Commands;
+    using HandBrakeWPF.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -165,6 +167,15 @@ namespace HandBrakeWPF.ViewModels
                     track.Encoder = AudioEncoder.ffaac;
                 }
             }
+        }
+
+        /// <summary>
+        /// Open the options screen to the Audio and Subtitles tab.
+        /// </summary>
+        public void SetDefaultBehaviour()
+        {
+            OpenOptionsScreenCommand command = new OpenOptionsScreenCommand();
+            command.Execute(OptionsTab.AudioAndSubtitles);
         }
 
         #endregion

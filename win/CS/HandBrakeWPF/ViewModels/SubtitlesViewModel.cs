@@ -22,6 +22,8 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
 
+    using HandBrakeWPF.Commands;
+    using HandBrakeWPF.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Ookii.Dialogs.Wpf;
@@ -277,6 +279,15 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.AddAllClosedCaptions();
             }
+        }
+
+        /// <summary>
+        /// Open the options screen to the Audio and Subtitles tab.
+        /// </summary>
+        public void SetDefaultBehaviour()
+        {
+            OpenOptionsScreenCommand command = new OpenOptionsScreenCommand();
+            command.Execute(OptionsTab.AudioAndSubtitles);
         }
 
         #endregion

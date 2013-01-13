@@ -61,6 +61,25 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copyright (C) 2003-2013 The HandBrake Team
+        ///
+        ///This program is free software; you can redistribute it and/or
+        ///modify it under the terms of the GNU General Public License
+        ///as published by the Free Software Foundation; either version 2
+        ///of the License, or (at your option) any later version.
+        ///
+        ///This program is distributed in the hope that it will be useful,
+        ///but WITHOUT ANY WARRANTY; without even the implied warranty of
+        ///MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        ///GNU General Public License f [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string About_GPL {
+            get {
+                return ResourceManager.GetString("About_GPL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can optionally store a maximum resolution for encodes that use this preset. There are 3 modes:
         ///
         ///None:  There is no maximum resolution for encodes using this preset. They will always use the source resolution minus any cropping that may be applied.

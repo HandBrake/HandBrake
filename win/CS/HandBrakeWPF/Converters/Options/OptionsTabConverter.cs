@@ -15,6 +15,8 @@ namespace HandBrakeWPF.Converters.Options
     using System.Windows;
     using System.Windows.Data;
 
+    using HandBrakeWPF.Model;
+
     /// <summary>
     /// The Options Tab Converter. Controls which tab is dispalyed.
     /// </summary>
@@ -31,22 +33,25 @@ namespace HandBrakeWPF.Converters.Options
         {
             if (value != null && parameter != null)
             {
-                switch (value.ToString())
+                switch ((OptionsTab)value)
                 {
-                    case "General":
-                        if (parameter.ToString() == "General") return Visibility.Visible;
+                    case OptionsTab.General:
+                        if ((OptionsTab)parameter == OptionsTab.General) return Visibility.Visible;
                         break;
-                    case "Output Files":
-                        if (parameter.ToString() == "Output Files") return Visibility.Visible;
+                    case OptionsTab.OutputFiles:
+                        if ((OptionsTab)parameter == OptionsTab.OutputFiles) return Visibility.Visible;
                         break;
-                    case "Audio and Subtitles":
-                        if (parameter.ToString() == "Audio and Subtitles") return Visibility.Visible;
+                    case OptionsTab.AudioAndSubtitles:
+                        if ((OptionsTab)parameter == OptionsTab.AudioAndSubtitles) return Visibility.Visible;
                         break;
-                    case "Advanced":
-                        if (parameter.ToString() == "Advanced") return Visibility.Visible;
+                    case OptionsTab.Advanced:
+                        if ((OptionsTab)parameter == OptionsTab.Advanced) return Visibility.Visible;
                         break;
-                    case "Updates":
-                        if (parameter.ToString() == "Updates") return Visibility.Visible;
+                    case OptionsTab.Updates:
+                        if ((OptionsTab)parameter == OptionsTab.Updates) return Visibility.Visible;
+                        break;
+                    case OptionsTab.About:
+                        if ((OptionsTab)parameter == OptionsTab.About) return Visibility.Visible;
                         break;
                 }
             }
