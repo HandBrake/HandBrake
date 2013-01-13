@@ -9,10 +9,19 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
+    using HandBrakeWPF.Model;
+
     /// <summary>
     /// The Options Screen View Model Interface
     /// </summary>
     public interface IOptionsViewModel
     {
+        /// <summary>
+        /// The goto tab.
+        /// </summary>
+        /// <param name="tab">
+        /// The tab.
+        /// </param>
+        void GotoTab(OptionsTab tab);
     }
 }

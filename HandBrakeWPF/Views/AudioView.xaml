@@ -111,15 +111,14 @@
                     <MenuItem Header="Add All Remaining Selected Languages" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguages]" />
                     <Separator />
                     <MenuItem Header="Clear All" cal:Message.Attach="[Event Click] = [Action Clear]" />
+                    <Separator />
+                    <MenuItem Header="Configure Default Behaviours" cal:Message.Attach="[Event Click] = [Action SetDefaultBehaviour]" />
                 </ContextMenu>
             </ListBox.ContextMenu>
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
-
-                    
-                  
-                    
+                   
                     <Grid HorizontalAlignment="Stretch">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
