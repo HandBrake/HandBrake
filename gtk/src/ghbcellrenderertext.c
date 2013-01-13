@@ -38,6 +38,12 @@
 #define GTK_PARAM_READWRITE G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
 
 
+#if GTK_CHECK_VERSION(3, 0, 0)
+#define MyGdkRectangle  const GdkRectangle
+#else
+#define MyGdkRectangle  GdkRectangle
+#endif
+
 
 static void ghb_cell_renderer_text_finalize   (GObject                  *object);
 
@@ -51,25 +57,34 @@ static void ghb_cell_renderer_text_set_property  (GObject                  *obje
                           GParamSpec               *pspec);
 static void ghb_cell_renderer_text_get_size   (GtkCellRenderer          *cell,
                            GtkWidget                *widget,
-                           GdkRectangle             *cell_area,
+                           MyGdkRectangle           *cell_area,
                            gint                     *x_offset,
                            gint                     *y_offset,
                            gint                     *width,
                            gint                     *height);
+#if GTK_CHECK_VERSION(3, 0, 0)
+static void ghb_cell_renderer_text_render     (GtkCellRenderer          *cell,
+                           cairo_t                  *cr,
+                           GtkWidget                *widget,
+                           MyGdkRectangle           *background_area,
+                           MyGdkRectangle           *cell_area,
+                           GtkCellRendererState      flags);
+#else
 static void ghb_cell_renderer_text_render     (GtkCellRenderer          *cell,
                            GdkWindow                *window,
                            GtkWidget                *widget,
-                           GdkRectangle             *background_area,
-                           GdkRectangle             *cell_area,
+                           MyGdkRectangle           *background_area,
+                           MyGdkRectangle           *cell_area,
                            GdkRectangle             *expose_area,
                            GtkCellRendererState      flags);
+#endif
 
 static GtkCellEditable *ghb_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
                                   GdkEvent             *event,
                                   GtkWidget            *widget,
                                   const gchar          *path,
-                                  GdkRectangle         *background_area,
-                                  GdkRectangle         *cell_area,
+                                  MyGdkRectangle       *background_area,
+                                  MyGdkRectangle       *cell_area,
                                   GtkCellRendererState  flags);
 
 enum {
@@ -1504,7 +1519,7 @@ get_layout (GhbCellRendererText *celltext,
 static void
 get_size (GtkCellRenderer *cell,
       GtkWidget       *widget,
-      GdkRectangle    *cell_area,
+      MyGdkRectangle    *cell_area,
       PangoLayout     *layout,
       gint            *x_offset,
       gint            *y_offset,
@@ -1531,8 +1546,8 @@ get_size (GtkCellRenderer *cell,
       PangoFontDescription *font_desc;
       gint row_height;
 
-      font_desc = pango_font_description_copy_static (widget->style->font_desc);
-      pango_font_description_merge_static (font_desc, celltext->font, TRUE);
+      font_desc = pango_font_description_copy_static(gtk_widget_get_style(widget)->font_desc);
+      pango_font_description_merge_static(font_desc, celltext->font, TRUE);
 
       if (celltext->scale_set)
     pango_font_description_set_size (font_desc,
@@ -1610,7 +1625,7 @@ get_size (GtkCellRenderer *cell,
 static void
 ghb_cell_renderer_text_get_size (GtkCellRenderer *cell,
                  GtkWidget       *widget,
-                 GdkRectangle    *cell_area,
+                 MyGdkRectangle  *cell_area,
                  gint            *x_offset,
                  gint            *y_offset,
                  gint            *width,
@@ -1620,98 +1635,176 @@ ghb_cell_renderer_text_get_size (GtkCellRenderer *cell,
         x_offset, y_offset, width, height);
 }
 
-static void
-ghb_cell_renderer_text_render (GtkCellRenderer      *cell,
-                   GdkDrawable          *window,
-                   GtkWidget            *widget,
-                   GdkRectangle         *background_area,
-                   GdkRectangle         *cell_area,
-                   GdkRectangle         *expose_area,
-                   GtkCellRendererState  flags)
-
+#if GTK_CHECK_VERSION(3, 0, 0)
+static void ghb_cell_renderer_text_render(
+    GtkCellRenderer          *cell,
+    cairo_t                  *cr,
+    GtkWidget                *widget,
+    MyGdkRectangle           *background_area,
+    MyGdkRectangle           *cell_area,
+    GtkCellRendererState      flags)
 {
-  GhbCellRendererText *celltext = (GhbCellRendererText *) cell;
-  PangoLayout *layout;
-  GtkStateType state;
-  gint x_offset;
-  gint y_offset;
-  GhbCellRendererTextPrivate *priv;
+    GhbCellRendererText *celltext = (GhbCellRendererText *) cell;
+    PangoLayout *layout;
+    gint x_offset;
+    gint y_offset;
+    GhbCellRendererTextPrivate *priv;
 
-  priv = GHB_CELL_RENDERER_TEXT_GET_PRIVATE (cell);
+    priv = GHB_CELL_RENDERER_TEXT_GET_PRIVATE (cell);
 
-  layout = get_layout (celltext, widget, TRUE, flags);
-  get_size (cell, widget, cell_area, layout, &x_offset, &y_offset, NULL, NULL);
+    layout = get_layout (celltext, widget, TRUE, flags);
+    get_size(cell, widget, cell_area, layout, &x_offset, &y_offset, NULL, NULL);
 
-  gboolean sensitive;
-  gint xpad, ypad;
+    gint xpad, ypad;
+#if 0
+    GtkStateType state;
+    gboolean sensitive;
 
-  sensitive = gtk_cell_renderer_get_sensitive(cell);
-  if (!sensitive) 
+    sensitive = gtk_cell_renderer_get_sensitive(cell);
+    if (!sensitive) 
     {
       state = GTK_STATE_INSENSITIVE;
     }
-  else if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
+    else if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
     {
-      if (gtk_widget_has_focus (widget))
-    state = GTK_STATE_SELECTED;
-      else
-    state = GTK_STATE_ACTIVE;
+        if (gtk_widget_has_focus (widget))
+            state = GTK_STATE_SELECTED;
+        else
+            state = GTK_STATE_ACTIVE;
     }
-  else if ((flags & GTK_CELL_RENDERER_PRELIT) == GTK_CELL_RENDERER_PRELIT &&
-       GTK_WIDGET_STATE (widget) == GTK_STATE_PRELIGHT)
+    else if ((flags & GTK_CELL_RENDERER_PRELIT) == GTK_CELL_RENDERER_PRELIT &&
+       gtk_widget_get_state(widget) == GTK_STATE_PRELIGHT)
     {
-      state = GTK_STATE_PRELIGHT;
+        state = GTK_STATE_PRELIGHT;
     }
-  else
+    else
     {
-      if (GTK_WIDGET_STATE (widget) == GTK_STATE_INSENSITIVE)
-    state = GTK_STATE_INSENSITIVE;
-      else
-    state = GTK_STATE_NORMAL;
+        if (gtk_widget_get_state(widget) == GTK_STATE_INSENSITIVE)
+            state = GTK_STATE_INSENSITIVE;
+        else
+            state = GTK_STATE_NORMAL;
     }
+#endif
 
-  gtk_cell_renderer_get_padding(cell, &xpad, &ypad);
+    gtk_cell_renderer_get_padding(cell, &xpad, &ypad);
 
-  if (celltext->background_set && 
+    if (celltext->background_set && 
       (flags & GTK_CELL_RENDERER_SELECTED) == 0)
     {
-      cairo_t *cr = gdk_cairo_create (window);
-
-      if (expose_area)
-    {
-      gdk_cairo_rectangle (cr, expose_area);
-      cairo_clip (cr);
-    }
-
-      gdk_cairo_rectangle (cr, background_area);
-      cairo_set_source_rgb (cr,
+        gdk_cairo_rectangle (cr, background_area);
+        cairo_set_source_rgb (cr,
                 celltext->background.red / 65535.,
                 celltext->background.green / 65535.,
                 celltext->background.blue / 65535.);
-      cairo_fill (cr);
-      
-      cairo_destroy (cr);
+        cairo_fill (cr);
     }
 
-  if (priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE)
-    pango_layout_set_width (layout, 
+    if (priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE)
+        pango_layout_set_width (layout, 
                 (cell_area->width - x_offset - 2 * xpad) * PANGO_SCALE);
-  else if (priv->wrap_width == -1)
-    pango_layout_set_width (layout, -1);
+    else if (priv->wrap_width == -1)
+        pango_layout_set_width (layout, -1);
 
-  gtk_paint_layout (widget->style,
-                    window,
-                    state,
-            TRUE,
-                    expose_area,
-                    widget,
-                    "cellrenderertext",
-                    cell_area->x + x_offset + xpad,
-                    cell_area->y + y_offset + ypad,
-                    layout);
+    gtk_render_layout(gtk_widget_get_style_context(widget),
+                      cr,
+                      cell_area->x + x_offset + xpad,
+                      cell_area->y + y_offset + ypad,
+                      layout);
 
-  g_object_unref (layout);
+    g_object_unref (layout);
 }
+#else
+static void ghb_cell_renderer_text_render     (GtkCellRenderer          *cell,
+                           GdkWindow                *window,
+                           GtkWidget                *widget,
+                           MyGdkRectangle           *background_area,
+                           MyGdkRectangle           *cell_area,
+                           GdkRectangle             *expose_area,
+                           GtkCellRendererState      flags)
+{
+    GhbCellRendererText *celltext = (GhbCellRendererText *) cell;
+    PangoLayout *layout;
+    GtkStateType state;
+    gint x_offset;
+    gint y_offset;
+    GhbCellRendererTextPrivate *priv;
+
+    priv = GHB_CELL_RENDERER_TEXT_GET_PRIVATE (cell);
+
+    layout = get_layout (celltext, widget, TRUE, flags);
+    get_size(cell, widget, cell_area, layout, &x_offset, &y_offset, NULL, NULL);
+
+    gboolean sensitive;
+    gint xpad, ypad;
+
+    sensitive = gtk_cell_renderer_get_sensitive(cell);
+    if (!sensitive) 
+    {
+      state = GTK_STATE_INSENSITIVE;
+    }
+    else if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
+    {
+        if (gtk_widget_has_focus (widget))
+            state = GTK_STATE_SELECTED;
+        else
+            state = GTK_STATE_ACTIVE;
+    }
+    else if ((flags & GTK_CELL_RENDERER_PRELIT) == GTK_CELL_RENDERER_PRELIT &&
+       GTK_WIDGET_STATE (widget) == GTK_STATE_PRELIGHT)
+    {
+        state = GTK_STATE_PRELIGHT;
+    }
+    else
+    {
+        if (GTK_WIDGET_STATE (widget) == GTK_STATE_INSENSITIVE)
+            state = GTK_STATE_INSENSITIVE;
+        else
+            state = GTK_STATE_NORMAL;
+    }
+
+    gtk_cell_renderer_get_padding(cell, &xpad, &ypad);
+
+    if (celltext->background_set && 
+      (flags & GTK_CELL_RENDERER_SELECTED) == 0)
+    {
+        cairo_t *cr = gdk_cairo_create (window);
+
+        if (expose_area)
+        {
+            gdk_cairo_rectangle (cr, expose_area);
+            cairo_clip (cr);
+        }
+
+        gdk_cairo_rectangle (cr, background_area);
+        cairo_set_source_rgb (cr,
+                celltext->background.red / 65535.,
+                celltext->background.green / 65535.,
+                celltext->background.blue / 65535.);
+        cairo_fill (cr);
+      
+        cairo_destroy (cr);
+    }
+
+    if (priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE)
+        pango_layout_set_width (layout, 
+                (cell_area->width - x_offset - 2 * xpad) * PANGO_SCALE);
+    else if (priv->wrap_width == -1)
+        pango_layout_set_width (layout, -1);
+
+    gtk_paint_layout (widget->style,
+                      window,
+                      state,
+                      TRUE,
+                      expose_area,
+                      widget,
+                      "cellrenderertext",
+                      cell_area->x + x_offset + xpad,
+                      cell_area->y + y_offset + ypad,
+                      layout);
+
+    g_object_unref (layout);
+}
+#endif
 
 static gboolean
 ghb_cell_renderer_text_keypress(
@@ -1846,87 +1939,94 @@ ghb_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
                       GdkEvent             *event,
                       GtkWidget            *widget,
                       const gchar          *path,
-                      GdkRectangle         *background_area,
-                      GdkRectangle         *cell_area,
+                      MyGdkRectangle       *background_area,
+                      MyGdkRectangle       *cell_area,
                       GtkCellRendererState  flags)
 {
-  GtkRequisition requisition;
-  GhbCellRendererText *celltext;
-  GhbCellRendererTextPrivate *priv;
+    GhbCellRendererText *celltext;
+    GhbCellRendererTextPrivate *priv;
 
-  celltext = GHB_CELL_RENDERER_TEXT (cell);
-  priv = GHB_CELL_RENDERER_TEXT_GET_PRIVATE (cell);
+    celltext = GHB_CELL_RENDERER_TEXT (cell);
+    priv = GHB_CELL_RENDERER_TEXT_GET_PRIVATE (cell);
 
-  /* If the cell isn't editable we return NULL. */
-  if (celltext->editable == FALSE)
-    return NULL;
+    /* If the cell isn't editable we return NULL. */
+    if (celltext->editable == FALSE)
+        return NULL;
 
-  gint xalign;
-  g_object_get(cell, "xalign", &xalign, NULL);
-  priv->entry = g_object_new (GTK_TYPE_ENTRY,
+    gint xalign;
+    g_object_get(cell, "xalign", &xalign, NULL);
+    priv->entry = g_object_new (GTK_TYPE_ENTRY,
                   "has-frame", FALSE,
                   "xalign", xalign,
                   NULL);
 
-  if (celltext->text)
-    gtk_entry_set_text (GTK_ENTRY (priv->entry), celltext->text);
-  g_object_set_data_full (G_OBJECT (priv->entry), I_(GHB_CELL_RENDERER_TEXT_PATH), g_strdup (path), g_free);
-  
-  gtk_editable_select_region (GTK_EDITABLE (priv->entry), 0, -1);
-  
-  gtk_widget_size_request (priv->entry, &requisition);
-  if (requisition.height < cell_area->height)
-    {
-      GtkBorder *style_border;
-      GtkBorder border;
+    if (celltext->text)
+        gtk_entry_set_text (GTK_ENTRY (priv->entry), celltext->text);
 
-      gtk_widget_style_get (priv->entry,
+    g_object_set_data_full (G_OBJECT (priv->entry),
+            I_(GHB_CELL_RENDERER_TEXT_PATH), g_strdup (path), g_free);
+  
+    gtk_editable_select_region (GTK_EDITABLE (priv->entry), 0, -1);
+  
+#if 0
+    GtkRequisition min_size, size;
+
+    gtk_widget_get_preferred_size(priv->entry, &min_size, &size);
+    if (min_size.height > size.height)
+        size.height = min_size.height;
+    if (min_size.width > size.width)
+        size.width = min_size.width;
+    if (size.height < cell_area->height)
+    {
+        GtkBorder *style_border;
+        GtkBorder border;
+
+        gtk_widget_style_get (priv->entry,
                 "inner-border", &style_border,
                 NULL);
 
-      if (style_border)
+        if (style_border)
         {
-      border = *style_border;
-      g_boxed_free (GTK_TYPE_BORDER, style_border);
-    }
-      else
+            border = *style_border;
+            g_boxed_free (GTK_TYPE_BORDER, style_border);
+        }
+        else
         {
-      /* Since boxed style properties can't have default values ... */
-      border.left = 2;
-      border.right = 2;
-    }
+            /* Since boxed style properties can't have default values ... */
+            border.left = 2;
+            border.right = 2;
+        }
 
-      border.top = (cell_area->height - requisition.height) / 2;
-      border.bottom = (cell_area->height - requisition.height) / 2;
-      gtk_entry_set_inner_border (GTK_ENTRY (priv->entry), &border);
+        border.top = (cell_area->height - size.height) / 2;
+        border.bottom = (cell_area->height - size.height) / 2;
+        gtk_entry_set_inner_border (GTK_ENTRY (priv->entry), &border);
     }
-
-  priv->in_entry_menu = FALSE;
-  if (priv->entry_menu_popdown_timeout)
+#endif
+    priv->in_entry_menu = FALSE;
+    if (priv->entry_menu_popdown_timeout)
     {
-      g_source_remove (priv->entry_menu_popdown_timeout);
-      priv->entry_menu_popdown_timeout = 0;
+        g_source_remove (priv->entry_menu_popdown_timeout);
+        priv->entry_menu_popdown_timeout = 0;
     }
 
-  g_signal_connect (priv->entry,
+    g_signal_connect (priv->entry,
             "key-press-event",
             G_CALLBACK (ghb_cell_renderer_text_keypress),
             celltext);
-  g_signal_connect (priv->entry,
+    g_signal_connect (priv->entry,
             "editing_done",
             G_CALLBACK (ghb_cell_renderer_text_editing_done),
             celltext);
-  priv->focus_out_id = g_signal_connect_after (priv->entry, "focus_out_event",
+    priv->focus_out_id = g_signal_connect_after (priv->entry, "focus_out_event",
                            G_CALLBACK (ghb_cell_renderer_text_focus_out_event),
                            celltext);
-  priv->populate_popup_id =
-    g_signal_connect (priv->entry, "populate_popup",
+    priv->populate_popup_id = g_signal_connect (priv->entry, "populate_popup",
                       G_CALLBACK (ghb_cell_renderer_text_populate_popup),
                       celltext);
  
-  gtk_widget_show (priv->entry);
+    gtk_widget_show (priv->entry);
 
-  return GTK_CELL_EDITABLE (priv->entry);
+    return GTK_CELL_EDITABLE (priv->entry);
 }
 
 /**
