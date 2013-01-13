@@ -800,7 +800,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.selectedPreferredLangauge = value;
-                this.NotifyOfPropertyChange("SelectedPreferreedLangauge");
+                this.NotifyOfPropertyChange(() => SelectedPreferredLangauge);
             }
         }
 
@@ -817,7 +817,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.selectedPreferredSubtitleLangauge = value;
-                this.NotifyOfPropertyChange("SelectedPreferredSubtitleLangauge");
+                this.NotifyOfPropertyChange(() => SelectedPreferredSubtitleLangauge);
             }
         }
 
@@ -1731,7 +1731,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Audio List Move Left
         /// </summary>
-        public void LanguageMoveLeft()
+        public void LanguageMoveRight()
         {
             if (this.SelectedAvailableToMove.Count > 0)
             {
@@ -1749,7 +1749,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Audio List Move Right
         /// </summary>
-        public void LanguageMoveRight()
+        public void LanguageMoveLeft()
         {
             if (this.SelectedLangaugesToMove.Count > 0)
             {
