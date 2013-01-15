@@ -745,14 +745,12 @@ GtkEntry {                          \n\
                                     \n\
 #preview_event_box,                 \n\
 #live_preview_play,                 \n\
-#live_encode_progress,              \n\
 #live_duration,                     \n\
 #preview_fullscreen,                \n\
 #hide_settings                      \n\
 {                                   \n\
     background: @black;             \n\
     background-color: @gray18;      \n\
-    border-color: @white;           \n\
     color: @white;                  \n\
 }                                   \n\
                                     \n\
@@ -763,16 +761,25 @@ GtkEntry {                          \n\
     color: @white;                  \n\
 }                                   \n\
                                     \n\
+#live_encode_progress,              \n\
 #live_preview_progress,             \n\
 #preview_frame                      \n\
 {                                   \n\
     background: @black;             \n\
-    background-color: @black;       \n\
+    background-color: @gray46;      \n\
     color: @white;                  \n\
 }                                   \n\
                                     \n\
 #preview_fullscreen:prelight,       \n\
 #hide_settings:prelight             \n\
+{                                   \n\
+    background: @black;             \n\
+    background-color: @gray32;      \n\
+    color: @white;                  \n\
+}                                   \n\
+                                    \n\
+#preview_fullscreen:active,         \n\
+#hide_settings:selected:focused     \n\
 {                                   \n\
     background: @black;             \n\
     background-color: @gray32;      \n\
@@ -1069,7 +1076,7 @@ main(int argc, char *argv[])
 
     // Add dvd devices to File menu
     ghb_volname_cache_init();
-    g_thread_new("Cache Volume Names", (GThreadFunc)ghb_cache_volnames, ud);
+    GHB_THREAD_NEW("Cache Volume Names", (GThreadFunc)ghb_cache_volnames, ud);
 
 #if defined(_USE_APP_IND)
     GtkUIManager * uim = GTK_UI_MANAGER(GHB_OBJECT(ud->builder, "uimanager1"));

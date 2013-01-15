@@ -32,6 +32,14 @@
 #include <gtk/gtk.h>
 #include "settings.h"
 
+#if GTK_CHECK_VERSION(2, 32, 0)
+#define GHB_THREAD_NEW(n, f, p) \
+                g_thread_new(n, (GThreadFunc)(f), (p))
+#else
+#define GHB_THREAD_NEW(n, f, p) \
+                g_thread_create((GThreadFunc)(f), (p), TRUE, NULL)
+#endif
+
 void ghb_check_all_depencencies(signal_user_data_t *ud);
 gboolean ghb_timer_cb(gpointer data);
 gboolean ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data);

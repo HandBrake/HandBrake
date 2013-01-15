@@ -410,7 +410,10 @@ get_dvd_device_name(GDrive *gd)
 #endif
 
 static GHashTable *volname_hash = NULL;
-static GMutex     volname_mutex;
+#if GTK_CHECK_VERSION(2, 32, 0)
+static GMutex     volname_mutex_static;
+#endif
+static GMutex     *volname_mutex;
 
 static void
 free_volname_key(gpointer data)
@@ -458,9 +461,9 @@ get_dvd_volume_name(gpointer gd)
     gchar *drive;
 
     drive = get_dvd_device_name(gd);
-    g_mutex_lock(&volname_mutex);
+    g_mutex_lock(volname_mutex);
     label = g_strdup(g_hash_table_lookup(volname_hash, drive));
-    g_mutex_unlock(&volname_mutex);
+    g_mutex_unlock(volname_mutex);
     if (label != NULL)
     {
         if (uppers_and_unders(label))
@@ -485,7 +488,12 @@ get_dvd_volume_name(gpointer gd)
 void
 ghb_volname_cache_init(void)
 {
-    g_mutex_init(&volname_mutex);
+#if GTK_CHECK_VERSION(2, 32, 0)
+    g_mutex_init(&volname_mutex_static);
+    volname_mutex = &volname_mutex_static;
+#else
+    volname_mutex = g_mutex_new();
+#endif
     volname_hash = g_hash_table_new_full(g_str_hash, g_str_equal,
                                         free_volname_key, free_volname_value);
 }
@@ -510,7 +518,7 @@ ghb_cache_volnames(signal_user_data_t *ud)
     if (drives == NULL)
         return NULL;
 
-    g_mutex_lock(&volname_mutex);
+    g_mutex_lock(volname_mutex);
     g_hash_table_remove_all(volname_hash);
     while (link != NULL)
     {
@@ -542,7 +550,7 @@ ghb_cache_volnames(signal_user_data_t *ud)
         free_drive(link->data);
         link = link->next;
     }
-    g_mutex_unlock(&volname_mutex);
+    g_mutex_unlock(volname_mutex);
 
     g_list_free(drives);
 
@@ -3183,7 +3191,7 @@ ghb_timer_cb(gpointer data)
                 ghb_settings_set_int64(ud->settings, 
                                         "last_update_check", tt);
                 ghb_pref_save(ud->settings, "last_update_check");
-                g_thread_new("Update Check", (GThreadFunc)ghb_check_update, ud);
+                GHB_THREAD_NEW("Update Check", (GThreadFunc)ghb_check_update, ud);
             }
         }
     }
@@ -4097,7 +4105,7 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
         ins_count++;
         if (ins_count == 2)
         {
-            g_thread_new("Cache Volume Names",
+            GHB_THREAD_NEW("Cache Volume Names",
                     (GThreadFunc)ghb_cache_volnames, ud);
             if (ghb_settings_get_boolean(ud->settings, "AutoScan") &&
                 ud->current_dvd_device != NULL &&
@@ -4118,7 +4126,7 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
         rem_count++;
         if (rem_count == 2)
         {
-            g_thread_new("Cache Volume Names",
+            GHB_THREAD_NEW("Cache Volume Names",
                     (GThreadFunc)ghb_cache_volnames, ud);
             if (ud->current_dvd_device != NULL &&
                 strcmp(device, ud->current_dvd_device) == 0)
@@ -4194,7 +4202,7 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
     gint state;
 
     g_debug("drive_changed_cb()");
-    g_thread_new("Cache Volume Names", (GThreadFunc)ghb_cache_volnames, ud);
+    GHB_THREAD_NEW("Cache Volume Names", (GThreadFunc)ghb_cache_volnames, ud);
 
     state = ghb_get_scan_state();
     device = g_drive_get_identifier(gd, G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE);
