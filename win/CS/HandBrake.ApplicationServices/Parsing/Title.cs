@@ -142,6 +142,7 @@ namespace HandBrake.ApplicationServices.Parsing
         {
             var thisTitle = new Title();
             string nextLine = output.ReadLine();
+            string temp;
 
             // Get the Title Number
             Match m = Regex.Match(nextLine, @"^\+ title ([0-9]*):");
@@ -223,12 +224,27 @@ namespace HandBrake.ApplicationServices.Parsing
                     };
             }
 
-            m = Regex.Match(output.ReadLine(), @"^  \+ support opencl: ([0-9]*)");
+            nextLine = output.ReadLine();
+            m = Regex.Match(nextLine, @"^  \+ support opencl:");
             if (m.Success)
-                thisTitle.OpenCLSupport = int.Parse(m.Groups[1].Value.Trim());
-            m = Regex.Match(output.ReadLine(), @"  \+ support uvd: ([0-9]*)");
+            {
+                temp = nextLine.Replace("+ support opencl:", string.Empty).Trim();
+                if (string.Compare(temp, "yes") == 0)
+                    thisTitle.OpenCLSupport = 1;
+                else
+                    thisTitle.OpenCLSupport = 0;
+            }
+
+            nextLine = output.ReadLine();
+            m = Regex.Match(nextLine, @"^  \+ support uvd:");
             if (m.Success)
-                thisTitle.UVDSupport = int.Parse(m.Groups[1].Value.Trim());
+            {
+                temp = nextLine.Replace("+ support uvd:", string.Empty).Trim();
+                if (string.Compare(temp, "yes") == 0)
+                    thisTitle.UVDSupport = 1;
+                else
+                    thisTitle.UVDSupport = 0;
+            }
             thisTitle.Chapters.AddRange(Chapter.ParseList(output));
 
             thisTitle.AudioTracks.AddRange(AudioHelper.ParseList(output));

@@ -245,10 +245,10 @@ namespace HandBrake.ApplicationServices.Utilities
 
             if (task.OpenCLSupport)
                 query += " -P ";
-            if (task.UVDSupport && task.OpenCLSupport)
+
+            if (task.UVDSupport)
                 query += " -U ";
-            else if (task.UVDSupport && !task.OpenCLSupport)
-                query += " -P -U";
+
             return query;
         }
 

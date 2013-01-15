@@ -1721,11 +1721,11 @@ namespace HandBrakeWPF.ViewModels
                     {
                         if (this.selectedTitle.OpenCLSupport == 0)
                         {
-                            this.SupportOpenCL = false;
+                            this.SupportOpenCL = true;
                         }
                         else
                         {
-                            this.SupportOpenCL = true;
+                            this.SupportOpenCL = false;
                         }
                         if (this.selectedTitle.UVDSupport == 0)
                         {

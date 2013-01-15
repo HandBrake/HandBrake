@@ -46,7 +46,7 @@ hb_filter_object_t hb_filter_crop_scale_accl =
 {
     .id            = HB_FILTER_CROP_SCALE_ACCL,
     .enforce_order = 1,
-    .name          = "Hardware Acceleration Crop and Scale",
+    .name          = "Custom Crop and Scale",
     .settings      = NULL,
     .init          = hb_crop_scale_init,
     .work          = hb_crop_scale_work,

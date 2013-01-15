@@ -424,10 +424,14 @@ static void PrintTitleInfo( hb_title_t * title, int feature )
              (float) title->rate / title->rate_base );
     fprintf( stderr, "  + autocrop: %d/%d/%d/%d\n", title->crop[0],
              title->crop[1], title->crop[2], title->crop[3] );
-
-    fprintf( stderr, "  + support opencl: %d \n", title->opencl_support);
-    fprintf( stderr, "  + support uvd: %d\n", title->uvd_support);
-
+    if (title->opencl_support)
+        fprintf( stderr, "  + support opencl: yes\n");
+    else
+        fprintf( stderr, "  + support opencl: no\n");
+    if (title->uvd_support)
+        fprintf( stderr, "  + support uvd: yes\n");
+    else
+        fprintf( stderr, "  + support uvd: no\n");
     fprintf( stderr, "  + chapters:\n" );
     for( i = 0; i < hb_list_count( title->list_chapter ); i++ )
     {

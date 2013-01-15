@@ -276,7 +276,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
     {
         hb_buffer_t *buf;
         int ww, hh;
-        if( (w > pv->job->width || h > pv->job->height) )
+        if( (w > pv->job->width || h > pv->job->height) && (hb_get_gui_info(&hb_gui, 2) == 1) )
         {
             buf = hb_video_buffer_init( pv->job->width, pv->job->height );
             ww = pv->job->width;

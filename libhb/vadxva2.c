@@ -372,7 +372,7 @@ static int hb_d3d_create_device_manager( hb_va_dxva2_t *dxva2 )
         hb_log( "dxva2:cannot load function\n" );
         return HB_WORK_ERROR;
     }
-    hb_log( "dxva2:OurDirect3DCreateDeviceManager9 Success!\n" );
+    //hb_log( "dxva2:OurDirect3DCreateDeviceManager9 Success!\n" );
 
     UINT token;
     IDirect3DDeviceManager9 *devmng;
@@ -383,7 +383,7 @@ static int hb_d3d_create_device_manager( hb_va_dxva2_t *dxva2 )
     }
     dxva2->token  = token;
     dxva2->devmng = devmng;
-    hb_log( "dxva2:obtained IDirect3DDeviceManager9\n" );
+    //hb_log( "dxva2:obtained IDirect3DDeviceManager9\n" );
 
     long hr = IDirect3DDeviceManager9_ResetDevice( devmng, dxva2->d3ddev, token );
     if( FAILED( hr ))
@@ -406,7 +406,7 @@ static int hb_dx_create_video_service( hb_va_dxva2_t *dxva2 )
         hb_log( "dxva2:cannot load function\n" );
         return HB_WORK_ERROR;
     }
-    hb_log( "dxva2:DXVA2CreateVideoService Success!\n" );
+    //hb_log( "dxva2:DXVA2CreateVideoService Success!\n" );
 
     HRESULT hr;
 
@@ -449,7 +449,7 @@ static int hb_dx_find_video_service_conversion( hb_va_dxva2_t *dxva2, GUID *inpu
         const hb_dx_mode_t *mode = hb_dx_find_mode( g );
         if( mode )
         {
-            hb_log( "dxva2:'%s' is supported by hardware\n", mode->name );
+            //hb_log( "dxva2:'%s' is supported by hardware\n", mode->name );
         }
         else
         {
@@ -472,7 +472,7 @@ static int hb_dx_find_video_service_conversion( hb_va_dxva2_t *dxva2, GUID *inpu
         if( !is_suported )
             continue;
 
-        hb_log( "dxva2: Trying to use '%s' as input\n", mode->name );
+        //hb_log( "dxva2: Trying to use '%s' as input\n", mode->name );
         unsigned int output_count = 0;
         D3DFORMAT *output_list = NULL;
         if( FAILED( IDirectXVideoDecoderService_GetDecoderRenderTargets( dxva2->vs, mode->guid, &output_count, &output_list )))
@@ -486,7 +486,7 @@ static int hb_dx_find_video_service_conversion( hb_va_dxva2_t *dxva2, GUID *inpu
             const hb_d3d_format_t *format = hb_d3d_find_format( f );
             if( format )
             {
-                hb_log( "dxva2:%s is supported for output\n", format->name );
+                //hb_log( "dxva2:%s is supported for output\n", format->name );
             }
             else
             {
@@ -505,7 +505,7 @@ static int hb_dx_find_video_service_conversion( hb_va_dxva2_t *dxva2, GUID *inpu
             }
             if( !is_suported )
                 continue;
-            hb_log( "dxva2:Using '%s' to decode to '%s'\n", mode->name, format->name );
+            //hb_log( "dxva2:Using '%s' to decode to '%s'\n", mode->name, format->name );
             *input  = *mode->guid;
             *output = format->format;
             return HB_WORK_OK;
@@ -669,7 +669,7 @@ int hb_va_extract( hb_va_dxva2_t *dxva2, uint8_t *dst, AVFrame *frame, int job_w
             lock.Pitch,
         };
 #ifdef USE_OPENCL
-        if( ( dxva2->width > job_w || dxva2->height > job_h ) && (TestGPU() == 0) )
+        if( ( dxva2->width > job_w || dxva2->height > job_h ) && (TestGPU() == 0) && (hb_get_gui_info(&hb_gui, 2) == 1))
         {
 /*          int i;
             uint8_t *tmp = (uint8_t*)malloc( dxva2->width*dxva2->height*3/2 );
@@ -731,7 +731,7 @@ hb_va_dxva2_t * hb_va_create_dxva2( hb_va_dxva2_t *dxva2, int codec_id )
         goto error;
     }
 
-    hb_log( "dxva2:hb_d3d_create_device succeed" );
+    //hb_log( "dxva2:hb_d3d_create_device succeed" );
     if( hb_d3d_create_device_manager( dxva )== HB_WORK_ERROR )
     {
         hb_log( "dxva2:D3dCreateDeviceManager failed" );

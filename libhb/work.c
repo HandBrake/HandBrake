@@ -555,7 +555,7 @@ static void do_job( hb_job_t * job )
 
     hb_log( "starting job" );
 #ifdef USE_OPENCL
-    if ( job->use_opencl )
+    if ( job->use_opencl || job->use_uvd)
     {
 	    /* init opencl environment */
         hb_log( "Using GPU : Yes.\n" );
@@ -1022,7 +1022,7 @@ static void do_job( hb_job_t * job )
     }
 #endif
 #ifdef USE_OPENCL  
-    if ( job->use_opencl && hb_use_dxva( title ) && (TestGPU() == 0) && job->use_uvd )
+    if ( /*job->use_opencl &&*/ hb_use_dxva( title ) && (TestGPU() == 0) && job->use_uvd )
     {        
         vcodec = WORK_DECAVCODECVACCL;
     }

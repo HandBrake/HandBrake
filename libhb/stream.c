@@ -610,8 +610,10 @@ static int hb_stream_get_type(hb_stream_t *stream)
 
     if ( fread(buf, 1, sizeof(buf), stream->file_handle) == sizeof(buf) )
     {
+#ifdef USE_OPENCL
         if ( hb_get_gui_info(&hb_gui, 1) || (hb_get_gui_info(&hb_gui, 3) == 0) )
             return 0;
+#endif
         int psize;
         if ( ( psize = hb_stream_check_for_ts(buf) ) != 0 )
         {
@@ -1099,24 +1101,25 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream, hb_title_t * title)
     {
         hb_log( "transport stream missing PCRs - using video DTS instead" );
     }
-    if ( hb_get_gui_info(&hb_gui, 3) == 0 )
-    {
-	    hb_va_dxva2_t * dxva2 = NULL;
-	    dxva2 = hb_va_create_dxva2( dxva2, title->video_codec_param );
-	    if (dxva2)
-	    {
-	        title->uvd_support = 1;
-	        hb_va_close(dxva2);
-	        dxva2 = NULL;
-	    }
-	    else
-	        title->uvd_support = 0;
 #ifdef USE_OPENCL
-	    title->opencl_support = TestGPU();
-#else
-	    title->opencl_support = 1;
-#endif
+    hb_va_dxva2_t * dxva2 = NULL;
+    dxva2 = hb_va_create_dxva2( dxva2, title->video_codec_param );
+    if (dxva2)
+    {
+        title->uvd_support = 1;
+        hb_va_close(dxva2);
+        dxva2 = NULL;
     }
+    else
+        title->uvd_support = 0;
+    if (TestGPU() == 0)
+        title->opencl_support = 1;
+    else
+        title->opencl_support = 0;
+#else
+    title->uvd_support = 0;
+	title->opencl_support = 0;
+#endif
     // Height, width, rate and aspect ratio information is filled in
     // when the previews are built
     return title;
@@ -5669,24 +5672,26 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
         hb_list_add( title->list_chapter, chapter );
     }
 
-    if ( hb_get_gui_info(&hb_gui, 3) == 0 )
-    {
-	    hb_va_dxva2_t * dxva2 = NULL;
-	    dxva2 = hb_va_create_dxva2( dxva2, title->video_codec_param );
-	    if (dxva2)
-	    {
-	        title->uvd_support = 1;
-	        hb_va_close(dxva2);
-	        dxva2 = NULL;
-	    }
-	    else
-	        title->uvd_support = 0;
 #ifdef USE_OPENCL
-	    title->opencl_support = TestGPU();
-#else
-	    title->opencl_support = 1;
-#endif
+    hb_va_dxva2_t * dxva2 = NULL;
+    dxva2 = hb_va_create_dxva2( dxva2, title->video_codec_param );
+    if (dxva2)
+    {
+        title->uvd_support = 1;
+        hb_va_close(dxva2);
+        dxva2 = NULL;
     }
+    else
+        title->uvd_support = 0;
+    if (TestGPU() == 0)
+        title->opencl_support = 1;
+    else
+        title->opencl_support = 0;
+#else
+    title->uvd_support = 0;
+    title->opencl_support = 0;
+#endif
+
     return title;
 }
 
