@@ -1,5 +1,5 @@
 diff --git a/libavcodec/h264.c b/libavcodec/h264.c
-index 1a0b341..98a0350 100644
+index 3660597..bf4e072 100644
 --- a/libavcodec/h264.c
 +++ b/libavcodec/h264.c
 @@ -2163,6 +2163,7 @@ static void flush_dpb(AVCodecContext *avctx)
@@ -10,7 +10,7 @@ index 1a0b341..98a0350 100644
  }
  
  static int init_poc(H264Context *h)
-@@ -3976,9 +3977,18 @@ again:
+@@ -3981,9 +3982,18 @@ again:
                  if ((err = decode_slice_header(hx, h)))
                      break;
  

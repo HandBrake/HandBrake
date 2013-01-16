@@ -1,8 +1,8 @@
 diff --git a/configure b/configure
-index 5355300..5ac7bc0 100755
+index e87a326..5ccfc0f 100755
 --- a/configure
 +++ b/configure
-@@ -3146,7 +3146,7 @@ EOF
+@@ -3156,7 +3156,7 @@ EOF
  check_cc <<EOF || die "endian test failed"
  unsigned int endian = 'B' << 24 | 'I' << 16 | 'G' << 8 | 'E';
  EOF
