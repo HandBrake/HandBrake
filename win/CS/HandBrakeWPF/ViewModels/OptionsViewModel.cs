@@ -309,7 +309,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The options tab that is selected.
         /// </summary>
-        private string selectedTab;
+        private OptionsTab selectedTab;
 
         /// <summary>
         /// Update Message
@@ -380,7 +380,7 @@ namespace HandBrakeWPF.ViewModels
             this.updateService = updateService;
             this.OnLoad();
 
-            this.SelectedTab = "General";
+            this.SelectedTab = OptionsTab.General;
             this.UpdateMessage = "Click 'Check for Updates' to check for new versions";
         }
 
@@ -389,20 +389,9 @@ namespace HandBrakeWPF.ViewModels
         #region Window Properties
 
         /// <summary>
-        /// Gets OptionTabs.
-        /// </summary>
-        public IEnumerable<string> OptionTabs
-        {
-            get
-            {
-                return new List<string> { "General", "Output Files", "Audio and Subtitles", "Advanced", "Updates" };
-            }
-        }
-
-        /// <summary>
         /// Gets or sets SelectedTab.
         /// </summary>
-        public string SelectedTab
+        public OptionsTab SelectedTab
         {
             get
             {
@@ -415,6 +404,12 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.SelectedTab);
             }
         }
+
+        /// <summary>
+        /// Gets or sets the about view model.
+        /// </summary>
+        public IAboutViewModel AboutViewModel { get; set; }
+
         #endregion
 
         #region Properties
@@ -800,7 +795,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.selectedPreferredLangauge = value;
-                this.NotifyOfPropertyChange("SelectedPreferreedLangauge");
+                this.NotifyOfPropertyChange(() => SelectedPreferredLangauge);
             }
         }
 
@@ -817,7 +812,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.selectedPreferredSubtitleLangauge = value;
-                this.NotifyOfPropertyChange("SelectedPreferredSubtitleLangauge");
+                this.NotifyOfPropertyChange(() => SelectedPreferredSubtitleLangauge);
             }
         }
 
@@ -1344,7 +1339,7 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Enable Debugging features in the UI.
+        /// Gets or sets a value indicating whether debug features are enabled.
         /// </summary>
         public bool EnableDebugFeatures
         {
@@ -1731,7 +1726,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Audio List Move Left
         /// </summary>
-        public void LanguageMoveLeft()
+        public void LanguageMoveRight()
         {
             if (this.SelectedAvailableToMove.Count > 0)
             {
@@ -1749,7 +1744,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Audio List Move Right
         /// </summary>
-        public void LanguageMoveRight()
+        public void LanguageMoveLeft()
         {
             if (this.SelectedLangaugesToMove.Count > 0)
             {
@@ -1961,6 +1956,17 @@ namespace HandBrakeWPF.ViewModels
 
             Process.Start(Path.Combine(Path.GetTempPath(), "handbrake-setup.exe"));
             Application.Current.Shutdown();
+        }
+
+        /// <summary>
+        /// The goto tab.
+        /// </summary>
+        /// <param name="tab">
+        /// The tab.
+        /// </param>
+        public void GotoTab(OptionsTab tab)
+        {
+            this.SelectedTab = tab;
         }
     }
 }

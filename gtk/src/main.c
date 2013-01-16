@@ -76,9 +76,9 @@
 #ifdef ENABLE_NLS
 #  include <libintl.h>
 #  undef _
-#  define _(String) dgettext (PACKAGE, String)
+#  define _(String) dgettext(PACKAGE, String)
 #  ifdef gettext_noop
-#    define N_(String) gettext_noop (String)
+#    define N_(String) gettext_noop(String)
 #  else
 #    define N_(String) (String)
 #  endif
@@ -108,7 +108,7 @@ create_builder_or_die(const gchar * name)
         "\n"
         "Internal error. Could not parse UI description.\n"
         "%s");
-    g_debug("create_builder_or_die ()\n");
+    g_debug("create_builder_or_die()\n");
     GtkBuilder *xml = gtk_builder_new();
     gval = ghb_resource_get("ghb-ui");
     ghb_ui = g_value_get_string(gval);
@@ -215,15 +215,15 @@ extern G_MODULE_EXPORT void chapter_keypress_cb(void);
 // Create and bind the tree model to the tree view for the chapter list
 // Also, connect up the signal that lets us know the selection has changed
 static void
-bind_chapter_tree_model (signal_user_data_t *ud)
+bind_chapter_tree_model(signal_user_data_t *ud)
 {
     GtkCellRenderer *cell;
     GtkTreeViewColumn *column;
     GtkListStore *treestore;
     GtkTreeView  *treeview;
 
-    g_debug("bind_chapter_tree_model ()\n");
-    treeview = GTK_TREE_VIEW(GHB_WIDGET (ud->builder, "chapters_list"));
+    g_debug("bind_chapter_tree_model()\n");
+    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "chapters_list"));
     treestore = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
     gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
 
@@ -257,7 +257,7 @@ extern G_MODULE_EXPORT void queue_drag_motion_cb(void);
 // Create and bind the tree model to the tree view for the queue list
 // Also, connect up the signal that lets us know the selection has changed
 static void
-bind_queue_tree_model (signal_user_data_t *ud)
+bind_queue_tree_model(signal_user_data_t *ud)
 {
     GtkCellRenderer *cell, *textcell;
     GtkTreeViewColumn *column;
@@ -268,37 +268,37 @@ bind_queue_tree_model (signal_user_data_t *ud)
     SrcEntry.target = "DATA";
     SrcEntry.flags = GTK_TARGET_SAME_WIDGET;
 
-    g_debug("bind_queue_tree_model ()\n");
-    treeview = GTK_TREE_VIEW(GHB_WIDGET (ud->builder, "queue_list"));
-    selection = gtk_tree_view_get_selection (treeview);
+    g_debug("bind_queue_tree_model()\n");
+    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
+    selection = gtk_tree_view_get_selection(treeview);
     treestore = gtk_tree_store_new(3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
     gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
 
     column = gtk_tree_view_column_new();
-    gtk_tree_view_column_set_title (column, _("Job Information"));
+    gtk_tree_view_column_set_title(column, _("Job Information"));
     cell = gtk_cell_renderer_pixbuf_new();
     g_object_set(cell, "yalign", 0.0, NULL);
-    gtk_tree_view_column_pack_start (column, cell, FALSE);
-    gtk_tree_view_column_add_attribute (column, cell, "icon-name", 0);
+    gtk_tree_view_column_pack_start(column, cell, FALSE);
+    gtk_tree_view_column_add_attribute(column, cell, "icon-name", 0);
     textcell = gtk_cell_renderer_text_new();
     g_object_set(textcell, "wrap-mode", PANGO_WRAP_CHAR, NULL);
     g_object_set(textcell, "wrap-width", 500, NULL);
-    gtk_tree_view_column_pack_start (column, textcell, TRUE);
-    gtk_tree_view_column_add_attribute (column, textcell, "markup", 1);
+    gtk_tree_view_column_pack_start(column, textcell, TRUE);
+    gtk_tree_view_column_add_attribute(column, textcell, "markup", 1);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-    gtk_tree_view_column_set_expand (column, TRUE);
-    gtk_tree_view_column_set_max_width (column, 550);
+    gtk_tree_view_column_set_expand(column, TRUE);
+    gtk_tree_view_column_set_max_width(column, 550);
 
     cell = custom_cell_renderer_button_new();
     g_object_set(cell, "yalign", 0.0, NULL);
     column = gtk_tree_view_column_new_with_attributes(
                                     _(""), cell, "icon-name", 2, NULL);
-    gtk_tree_view_column_set_min_width (column, 24);
+    gtk_tree_view_column_set_min_width(column, 24);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
-    gtk_tree_view_enable_model_drag_dest (treeview, &SrcEntry, 1, 
+    gtk_tree_view_enable_model_drag_dest(treeview, &SrcEntry, 1, 
                                             GDK_ACTION_MOVE);
-    gtk_tree_view_enable_model_drag_source (treeview, GDK_BUTTON1_MASK, 
+    gtk_tree_view_enable_model_drag_source(treeview, GDK_BUTTON1_MASK, 
                                             &SrcEntry, 1, GDK_ACTION_MOVE);
 
     g_signal_connect(selection, "changed", queue_list_selection_changed_cb, ud);
@@ -314,7 +314,7 @@ extern G_MODULE_EXPORT void audio_list_selection_changed_cb(void);
 // Create and bind the tree model to the tree view for the audio track list
 // Also, connect up the signal that lets us know the selection has changed
 static void
-bind_audio_tree_model (signal_user_data_t *ud)
+bind_audio_tree_model(signal_user_data_t *ud)
 {
     GtkCellRenderer *cell;
     GtkTreeViewColumn *column;
@@ -323,9 +323,9 @@ bind_audio_tree_model (signal_user_data_t *ud)
     GtkTreeSelection *selection;
     GtkWidget *widget;
 
-    g_debug("bind_audio_tree_model ()\n");
-    treeview = GTK_TREE_VIEW(GHB_WIDGET (ud->builder, "audio_list"));
-    selection = gtk_tree_view_get_selection (treeview);
+    g_debug("bind_audio_tree_model()\n");
+    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list"));
+    selection = gtk_tree_view_get_selection(treeview);
     // 12 columns in model.  6 are visible, the other 6 are for storing
     // values that I need
     treestore = gtk_list_store_new(7, G_TYPE_STRING, G_TYPE_STRING, 
@@ -337,32 +337,32 @@ bind_audio_tree_model (signal_user_data_t *ud)
     column = gtk_tree_view_column_new_with_attributes(
                                     _("Track"), cell, "text", 0, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-    gtk_tree_view_column_set_min_width (column, 200);
-    gtk_tree_view_column_set_max_width (column, 200);
+    gtk_tree_view_column_set_min_width(column, 200);
+    gtk_tree_view_column_set_max_width(column, 200);
 
     cell = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(
                                     _("Codec"), cell, "text", 1, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-    gtk_tree_view_column_set_min_width (column, 110);
+    gtk_tree_view_column_set_min_width(column, 110);
 
     cell = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(
                                     _("Bitrate"), cell, "text", 2, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-    gtk_tree_view_column_set_min_width (column, 50);
+    gtk_tree_view_column_set_min_width(column, 50);
 
     cell = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(
                                     _("Sample Rate"), cell, "text", 3, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-    gtk_tree_view_column_set_min_width (column, 100);
+    gtk_tree_view_column_set_min_width(column, 100);
 
     cell = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(
                                     _("Mix"), cell, "text", 4, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-    gtk_tree_view_column_set_min_width (column, 115);
+    gtk_tree_view_column_set_min_width(column, 115);
 
     cell = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(
@@ -377,7 +377,7 @@ bind_audio_tree_model (signal_user_data_t *ud)
     g_signal_connect(selection, "changed", audio_list_selection_changed_cb, ud);
     // Need to disable remove and update buttons since there are initially
     // no selections
-    widget = GHB_WIDGET (ud->builder, "audio_remove");
+    widget = GHB_WIDGET(ud->builder, "audio_remove");
     gtk_widget_set_sensitive(widget, FALSE);
     g_debug("Done\n");
 }
@@ -390,7 +390,7 @@ extern G_MODULE_EXPORT void subtitle_default_toggled_cb(void);
 // Create and bind the tree model to the tree view for the subtitle track list
 // Also, connect up the signal that lets us know the selection has changed
 static void
-bind_subtitle_tree_model (signal_user_data_t *ud)
+bind_subtitle_tree_model(signal_user_data_t *ud)
 {
     GtkCellRenderer *cell;
     GtkTreeViewColumn *column;
@@ -399,9 +399,9 @@ bind_subtitle_tree_model (signal_user_data_t *ud)
     GtkTreeSelection *selection;
     GtkWidget *widget;
 
-    g_debug("bind_subtitle_tree_model ()\n");
-    treeview = GTK_TREE_VIEW(GHB_WIDGET (ud->builder, "subtitle_list"));
-    selection = gtk_tree_view_get_selection (treeview);
+    g_debug("bind_subtitle_tree_model()\n");
+    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list"));
+    selection = gtk_tree_view_get_selection(treeview);
     // 6 columns in model.  5 are visible, the other 1 is for storing
     // values that I need
     // Track, force, burn, default, type, srt offset, track short, source
@@ -420,8 +420,8 @@ bind_subtitle_tree_model (signal_user_data_t *ud)
     column = gtk_tree_view_column_new_with_attributes(
                                     _("Track"), cell, "text", 0, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-    gtk_tree_view_column_set_min_width (column, 350);
-    gtk_tree_view_column_set_max_width (column, 350);
+    gtk_tree_view_column_set_min_width(column, 350);
+    gtk_tree_view_column_set_max_width(column, 350);
 
     cell = gtk_cell_renderer_toggle_new();
     column = gtk_tree_view_column_new_with_attributes(
@@ -452,7 +452,7 @@ bind_subtitle_tree_model (signal_user_data_t *ud)
     g_signal_connect(selection, "changed", subtitle_list_selection_changed_cb, ud);
     // Need to disable remove and update buttons since there are initially
     // no selections
-    widget = GHB_WIDGET (ud->builder, "subtitle_remove");
+    widget = GHB_WIDGET(ud->builder, "subtitle_remove");
     gtk_widget_set_sensitive(widget, FALSE);
     g_debug("Done\n");
 }
@@ -466,7 +466,7 @@ extern void presets_row_expanded_cb(void);
 // Create and bind the tree model to the tree view for the preset list
 // Also, connect up the signal that lets us know the selection has changed
 static void
-bind_presets_tree_model (signal_user_data_t *ud)
+bind_presets_tree_model(signal_user_data_t *ud)
 {
     GtkCellRenderer *cell;
     GtkTreeViewColumn *column;
@@ -478,9 +478,9 @@ bind_presets_tree_model (signal_user_data_t *ud)
     SrcEntry.target = "DATA";
     SrcEntry.flags = GTK_TARGET_SAME_WIDGET;
 
-    g_debug("bind_presets_tree_model ()\n");
-    treeview = GTK_TREE_VIEW(GHB_WIDGET (ud->builder, "presets_list"));
-    selection = gtk_tree_view_get_selection (treeview);
+    g_debug("bind_presets_tree_model()\n");
+    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+    selection = gtk_tree_view_get_selection(treeview);
     treestore = gtk_tree_store_new(6, G_TYPE_STRING, G_TYPE_INT, G_TYPE_INT, 
                                   G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
     gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
@@ -493,12 +493,12 @@ bind_presets_tree_model (signal_user_data_t *ud)
     g_signal_connect(cell, "edited", preset_edited_cb, ud);
 
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-    gtk_tree_view_column_set_expand (column, TRUE);
-    gtk_tree_view_set_tooltip_column (treeview, 4);
+    gtk_tree_view_column_set_expand(column, TRUE);
+    gtk_tree_view_set_tooltip_column(treeview, 4);
 
-    gtk_tree_view_enable_model_drag_dest (treeview, &SrcEntry, 1, 
+    gtk_tree_view_enable_model_drag_dest(treeview, &SrcEntry, 1, 
                                             GDK_ACTION_MOVE);
-    gtk_tree_view_enable_model_drag_source (treeview, GDK_BUTTON1_MASK, 
+    gtk_tree_view_enable_model_drag_source(treeview, GDK_BUTTON1_MASK, 
                                             &SrcEntry, 1, GDK_ACTION_MOVE);
 
     g_signal_connect(treeview, "drag_data_received", presets_drag_cb, ud);
@@ -506,7 +506,7 @@ bind_presets_tree_model (signal_user_data_t *ud)
     g_signal_connect(treeview, "row_expanded", presets_row_expanded_cb, ud);
     g_signal_connect(treeview, "row_collapsed", presets_row_expanded_cb, ud);
     g_signal_connect(selection, "changed", presets_list_selection_changed_cb, ud);
-    widget = GHB_WIDGET (ud->builder, "presets_remove");
+    widget = GHB_WIDGET(ud->builder, "presets_remove");
     gtk_widget_set_sensitive(widget, FALSE);
     g_debug("Done\n");
 }
@@ -649,7 +649,7 @@ IoRedirect(signal_user_data_t *ud)
     g_free(path);
     g_free(config);
     // Set encoding to raw.
-    g_io_channel_set_encoding (ud->activity_log, NULL, NULL);
+    g_io_channel_set_encoding(ud->activity_log, NULL, NULL);
     // redirect stderr to the writer end of the pipe
 #if defined(_WIN32)
     // dup2 doesn't work on windows for some stupid reason
@@ -658,12 +658,12 @@ IoRedirect(signal_user_data_t *ud)
     dup2(pfd[1], /*stderr*/2);
 #endif
     setvbuf(stderr, NULL, _IONBF, 0);
-    channel = g_io_channel_unix_new (pfd[0]);
+    channel = g_io_channel_unix_new(pfd[0]);
     // I was getting an this error:
     // "Invalid byte sequence in conversion input"
     // Set disable encoding on the channel.
-    g_io_channel_set_encoding (channel, NULL, NULL);
-    g_io_add_watch (channel, G_IO_IN, ghb_log_cb, (gpointer)ud );
+    g_io_channel_set_encoding(channel, NULL, NULL);
+    g_io_add_watch(channel, G_IO_IN, ghb_log_cb, (gpointer)ud );
 }
 
 typedef struct
@@ -706,14 +706,14 @@ watch_volumes(signal_user_data_t *ud)
 {
 #if !defined(_WIN32)
     GVolumeMonitor *gvm;
-    gvm = g_volume_monitor_get ();
+    gvm = g_volume_monitor_get();
 
     g_signal_connect(gvm, "drive-changed", (GCallback)drive_changed_cb, ud);
 #else
     GdkWindow *window;
     GtkWidget *widget;
 
-    widget = GHB_WIDGET (ud->builder, "hb_window");
+    widget = GHB_WIDGET(ud->builder, "hb_window");
     window = gtk_widget_get_parent_window(widget);
     gdk_window_add_filter(window, win_message_cb, ud);
 #endif
@@ -721,8 +721,81 @@ watch_volumes(signal_user_data_t *ud)
 
 G_MODULE_EXPORT void x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void x264_option_changed_cb(GtkWidget *widget, signal_user_data_t *ud);
-void preview_window_expose_cb(void);
+G_MODULE_EXPORT void position_overlay_cb(GtkWidget *widget, signal_user_data_t *ud);
+G_MODULE_EXPORT void preview_hud_size_alloc_cb(GtkWidget *widget, signal_user_data_t *ud);
 
+#if GTK_CHECK_VERSION(3, 0, 0)
+const gchar *MyCSS =
+"                                   \n\
+GtkComboBox {                       \n\
+    padding: 1px;                   \n\
+}                                   \n\
+GtkEntry {                          \n\
+    padding: 4px;                   \n\
+}                                   \n\
+                                    \n\
+@define-color black  #000000;       \n\
+@define-color gray18 #2e2e2e;       \n\
+@define-color gray22 #383838;       \n\
+@define-color gray26 #424242;       \n\
+@define-color gray32 #525252;       \n\
+@define-color gray40 #666666;       \n\
+@define-color gray46 #757575;       \n\
+@define-color white  #ffffff;       \n\
+                                    \n\
+#preview_event_box,                 \n\
+#live_preview_play,                 \n\
+#live_duration,                     \n\
+#preview_fullscreen,                \n\
+#hide_settings                      \n\
+{                                   \n\
+    background: @black;             \n\
+    background-color: @gray18;      \n\
+    color: @white;                  \n\
+}                                   \n\
+                                    \n\
+#preview_show_crop                  \n\
+{                                   \n\
+    background-color: @gray22;      \n\
+    border-color: @white;           \n\
+    color: @white;                  \n\
+}                                   \n\
+                                    \n\
+#live_encode_progress,              \n\
+#live_preview_progress,             \n\
+#preview_frame                      \n\
+{                                   \n\
+    background: @black;             \n\
+    background-color: @gray46;      \n\
+    color: @white;                  \n\
+}                                   \n\
+                                    \n\
+#preview_fullscreen:prelight,       \n\
+#hide_settings:prelight             \n\
+{                                   \n\
+    background: @black;             \n\
+    background-color: @gray32;      \n\
+    color: @white;                  \n\
+}                                   \n\
+                                    \n\
+#preview_fullscreen:active,         \n\
+#hide_settings:selected:focused     \n\
+{                                   \n\
+    background: @black;             \n\
+    background-color: @gray32;      \n\
+    color: @white;                  \n\
+}                                   \n\
+                                    \n\
+#preview_fullscreen:active,         \n\
+#hide_settings:active               \n\
+{                                   \n\
+    background: @black;             \n\
+    background-color: @gray32;      \n\
+    color: @white;                  \n\
+}                                   \n\
+";
+
+#else
 // Some style definitions for the preview window and hud
 const gchar *hud_rcstyle =
 "style \"ghb-entry\" {\n"
@@ -752,13 +825,14 @@ const gchar *hud_rcstyle =
 "widget_class \"*.GtkEntry\" style \"ghb-entry\"\n"
 "widget \"preview_window.*.preview_hud.*\" style \"ghb-hud\"\n"
 "widget \"preview_window\" style \"ghb-preview\"\n";
+#endif
 
 #if GTK_CHECK_VERSION(2, 16, 0)
 extern G_MODULE_EXPORT void status_icon_query_tooltip_cb(void);
 #endif
 
 int
-main (int argc, char *argv[])
+main(int argc, char *argv[])
 {
     signal_user_data_t *ud;
     GValue *preset;
@@ -766,20 +840,23 @@ main (int argc, char *argv[])
     GOptionContext *context;
 
 #ifdef ENABLE_NLS
-    bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
-    bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-    textdomain (GETTEXT_PACKAGE);
+    bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+    textdomain(GETTEXT_PACKAGE);
 #endif
 
-    if (!g_thread_supported())
-        g_thread_init(NULL);
-    context = g_option_context_new ("- Transcode media formats");
-    g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
-    g_option_context_add_group (context, gtk_get_option_group (TRUE));
+    context = g_option_context_new("- Transcode media formats");
+    g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
+    g_option_context_add_group(context, gtk_get_option_group(TRUE));
 #if defined(_ENABLE_GST)
-    g_option_context_add_group (context, gst_init_get_option_group ());
+    g_option_context_add_group(context, gst_init_get_option_group());
 #endif
-    g_option_context_parse (context, &argc, &argv, &error);
+    g_option_context_parse(context, &argc, &argv, &error);
+    if (error != NULL)
+    {
+        g_warning("%s: %s", G_STRFUNC, error->message);
+        g_clear_error(&error);
+    }
     g_option_context_free(context);
 
     if (argc > 1 && dvd_device == NULL && argv[1][0] != '-')
@@ -787,8 +864,27 @@ main (int argc, char *argv[])
         dvd_device = argv[1];
     }
     
-    gtk_init (&argc, &argv);
+    gtk_init(&argc, &argv);
+
+#if GTK_CHECK_VERSION(3, 0, 0)
+    GtkCssProvider *css = gtk_css_provider_new();
+    error = NULL;
+    gtk_css_provider_load_from_data(css, MyCSS, -1, &error);
+    if (error == NULL)
+    {
+        GdkScreen *ss = gdk_screen_get_default();
+        gtk_style_context_add_provider_for_screen(ss, GTK_STYLE_PROVIDER(css),
+                                    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+    else
+    {
+        g_warning("%s: %s", G_STRFUNC, error->message);
+        g_clear_error(&error);
+    }
+#else
     gtk_rc_parse_string(hud_rcstyle);
+#endif
+
     g_type_class_unref(g_type_class_ref(GTK_TYPE_BUTTON));
     g_object_set(gtk_settings_get_default(), "gtk-button-images", TRUE, NULL);
 #if !defined(_WIN32)
@@ -806,13 +902,13 @@ main (int argc, char *argv[])
     ghb_write_pid_file();
     ud = g_malloc0(sizeof(signal_user_data_t));
     ud->debug = ghb_debug;
-    g_log_set_handler (NULL, G_LOG_LEVEL_DEBUG, debug_log_handler, ud);
-    g_log_set_handler ("Gtk", G_LOG_LEVEL_WARNING, warn_log_handler, ud);
-    //g_log_set_handler ("Gtk", G_LOG_LEVEL_CRITICAL, warn_log_handler, ud);
+    g_log_set_handler(NULL, G_LOG_LEVEL_DEBUG, debug_log_handler, ud);
+    g_log_set_handler("Gtk", G_LOG_LEVEL_WARNING, warn_log_handler, ud);
+    //g_log_set_handler("Gtk", G_LOG_LEVEL_CRITICAL, warn_log_handler, ud);
     ud->settings = ghb_settings_new();
-    ud->builder = create_builder_or_die (BUILDER_NAME);
+    ud->builder = create_builder_or_die(BUILDER_NAME);
     // Enable events that alert us to media change events
-    watch_volumes (ud);
+    watch_volumes(ud);
 
     //GtkWidget *widget = GHB_WIDGET(ud->builder, "PictureDetelecineCustom");
     //gtk_entry_set_inner_border(widget, 2);
@@ -825,18 +921,54 @@ main (int argc, char *argv[])
     gtk_widget_hide(widget);
 #endif
 
+    // Must set the names of the widgets that I want to modify
+    // style for.
+    gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_event_box"), "preview_event_box");
+    gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_frame"), "preview_frame");
+    gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_preview_play"), "live_preview_play");
+    gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_preview_progress"), "live_preview_progress");
+    gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_encode_progress"), "live_encode_progress");
+    gtk_widget_set_name(GHB_WIDGET(ud->builder, "live_duration"), "live_duration");
+    gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_show_crop"), "preview_show_crop");
+    gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_fullscreen"), "preview_fullscreen");
+    gtk_widget_set_name(GHB_WIDGET(ud->builder, "hide_settings"), "hide_settings");
     widget = GHB_WIDGET(ud->builder, "preview_hud");
     gtk_widget_set_name(widget, "preview_hud");
     widget = GHB_WIDGET(ud->builder, "preview_window");
     gtk_widget_set_name(widget, "preview_window");
 
     // Set up the "hud" control overlay for the preview window
-    GtkWidget *draw, *hud, *blender, *align;
+    GtkWidget *align, *draw, *hud, *blender;
 
     align = GHB_WIDGET(ud->builder, "preview_window_alignment");
     draw = GHB_WIDGET(ud->builder, "preview_image_align");
     hud = GHB_WIDGET(ud->builder, "preview_hud");
 
+#if 0 // wGTK_CHECK_VERSION(3, 0, 0)
+    // This uses the new GtkOverlay widget.
+    //
+    // Unfortunately, GtkOverlay is broken in a couple of ways.
+    //
+    // First, it doesn't respect gtk_widget_shape_combine_region()
+    // on it's child overlays.  It appears to just ignore the clip
+    // mask of the child.
+    //
+    // Second, it doesn't respect window opacity.
+    //
+    // So for now, I'll just continue using my home-grown overlay
+    // widget (GhbCompositor).
+    blender = gtk_overlay_new();
+    gtk_container_add(GTK_CONTAINER(align), blender);
+    gtk_container_add(GTK_CONTAINER(blender), draw);
+    gtk_widget_set_valign (hud, GTK_ALIGN_END);
+    gtk_widget_set_halign (hud, GTK_ALIGN_CENTER);
+    gtk_overlay_add_overlay(GTK_OVERLAY(blender), hud);
+
+    g_signal_connect(G_OBJECT(blender), "get-child-position",
+                    G_CALLBACK(position_overlay_cb), ud);
+
+    gtk_widget_show(blender);
+#else
     // Set up compositing for hud
     blender = ghb_compositor_new();
 
@@ -844,6 +976,7 @@ main (int argc, char *argv[])
     ghb_compositor_zlist_insert(GHB_COMPOSITOR(blender), draw, 1, 1);
     ghb_compositor_zlist_insert(GHB_COMPOSITOR(blender), hud, 2, .85);
     gtk_widget_show(blender);
+#endif
 
     // Redirect stderr to the activity window
     ghb_preview_init(ud);
@@ -856,12 +989,12 @@ main (int argc, char *argv[])
     // since it can't be done automatically
     GtkTextView *textview;
     GtkTextBuffer *buffer;
-    textview = GTK_TEXT_VIEW(GHB_WIDGET (ud->builder, "x264Option"));
-    buffer = gtk_text_view_get_buffer (textview);
+    textview = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "x264Option"));
+    buffer = gtk_text_view_get_buffer(textview);
     g_signal_connect(buffer, "changed", (GCallback)x264_entry_changed_cb, ud);
 
-    textview = GTK_TEXT_VIEW(GHB_WIDGET (ud->builder, "x264OptionExtra"));
-    buffer = gtk_text_view_get_buffer (textview);
+    textview = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "x264OptionExtra"));
+    buffer = gtk_text_view_get_buffer(textview);
     g_signal_connect(buffer, "changed", (GCallback)x264_option_changed_cb, ud);
 
     ghb_combo_init(ud);
@@ -877,14 +1010,14 @@ main (int argc, char *argv[])
     // Connect up the signals to their callbacks
     // I wrote my own connector so that I could pass user data
     // to the callbacks.  Builder's standard autoconnect doesn't all this.
-    gtk_builder_connect_signals_full (ud->builder, MyConnect, ud);
+    gtk_builder_connect_signals_full(ud->builder, MyConnect, ud);
 
     GtkWidget *presetSlider = GHB_WIDGET(ud->builder, "x264PresetSlider");
     const char * const *x264_presets;
     int count = 0;
     x264_presets = hb_x264_presets();
     while (x264_presets && x264_presets[count]) count++;
-    gtk_range_set_range (GTK_RANGE(presetSlider), 0, count-1);
+    gtk_range_set_range(GTK_RANGE(presetSlider), 0, count-1);
 
     // Load all internal settings
     ghb_settings_init(ud);
@@ -927,7 +1060,7 @@ main (int argc, char *argv[])
     }
 
     // Grey out widgets that are dependent on a disabled feature
-    ghb_check_all_depencencies (ud);
+    ghb_check_all_depencencies(ud);
 
     if (dvd_device != NULL)
     {
@@ -939,11 +1072,11 @@ main (int argc, char *argv[])
     g_idle_add((GSourceFunc)ghb_reload_queue, ud);
 
     // Start timer for monitoring libhb status, 500ms
-    g_timeout_add (500, ghb_timer_cb, (gpointer)ud);
+    g_timeout_add(500, ghb_timer_cb, (gpointer)ud);
 
     // Add dvd devices to File menu
     ghb_volname_cache_init();
-    g_thread_create((GThreadFunc)ghb_cache_volnames, ud, FALSE, NULL);
+    GHB_THREAD_NEW("Cache Volume Names", (GThreadFunc)ghb_cache_volnames, ud);
 
 #if defined(_USE_APP_IND)
     GtkUIManager * uim = GTK_UI_MANAGER(GHB_OBJECT(ud->builder, "uimanager1"));
@@ -982,19 +1115,32 @@ main (int argc, char *argv[])
 
     // Ugly hack to keep subtitle table from bouncing around as I change
     // which set of controls are visible
-    GtkRequisition req;
     gint width, height;
+#if GTK_CHECK_VERSION(3, 0, 0)
+    GtkRequisition min_size, size;
     
     widget = GHB_WIDGET(ud->builder, "SrtCodeset");
-    gtk_widget_size_request( widget, &req );
-    height = req.height;
+    gtk_widget_get_preferred_size( widget, &min_size, &size );
+    height = MAX(min_size.height, size.height);
     widget = GHB_WIDGET(ud->builder, "srt_code_label");
-    gtk_widget_size_request( widget, &req );
-    height += req.height;
+    gtk_widget_get_preferred_size( widget, &min_size, &size );
+    height += MAX(min_size.height, size.height);
     widget = GHB_WIDGET(ud->builder, "subtitle_table");
     gtk_widget_set_size_request(widget, -1, height);
+#else
+    GtkRequisition size;
     
-    widget = GHB_WIDGET (ud->builder, "hb_window");
+    widget = GHB_WIDGET(ud->builder, "SrtCodeset");
+    gtk_widget_size_request( widget, &size );
+    height = size.height;
+    widget = GHB_WIDGET(ud->builder, "srt_code_label");
+    gtk_widget_size_request( widget, &size );
+    height += size.height;
+    widget = GHB_WIDGET(ud->builder, "subtitle_table");
+    gtk_widget_set_size_request(widget, -1, height);
+#endif
+    
+    widget = GHB_WIDGET(ud->builder, "hb_window");
 
     GdkGeometry geo = { 
         -1, -1, 1024, 768, -1, -1, 10, 10, 0, 0, GDK_GRAVITY_NORTH_WEST
@@ -1111,14 +1257,14 @@ main (int argc, char *argv[])
     gtk_file_chooser_set_filter(chooser, filter);
 
     PangoFontDescription *font_desc;
-    font_desc = pango_font_description_from_string ("monospace 10");
-    textview = GTK_TEXT_VIEW(GHB_WIDGET (ud->builder, "activity_view"));
+    font_desc = pango_font_description_from_string("monospace 10");
+    textview = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "activity_view"));
     gtk_widget_modify_font(GTK_WIDGET(textview), font_desc);      
-    pango_font_description_free (font_desc);      
+    pango_font_description_free(font_desc);      
 
     // Everything should be go-to-go.  Lets rock!
 
-    gtk_main ();
+    gtk_main();
     gtk_status_icon_set_visible(si, FALSE);
     ghb_backend_close();
     if (ud->queue)

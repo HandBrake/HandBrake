@@ -526,13 +526,13 @@
                 <key>x264UseAdvancedOptions</key>
                 <false />
                 <key>x264Option</key>
-                <string>cabac=0:ref=2:b-pyramid=none:weightb=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500:level=3.1:8x8dct=0</string>
+                <string>cabac=0:ref=2:b-pyramid=none:weightb=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500:level=3.1</string>
                 <key>x264OptionExtra</key>
                 <string>cabac=0:ref=2:b-pyramid=none:weightb=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500</string>
                 <key>x264Preset</key>
                 <string>medium</string>
                 <key>h264Profile</key>
-                <string>main</string>
+                <string>high</string>
                 <key>x264Tune</key>
                 <string>none</string>
             </dict>

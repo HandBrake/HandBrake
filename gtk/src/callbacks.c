@@ -217,7 +217,7 @@ ghb_check_dependency(
     if (widget != NULL)
     {
         type = G_OBJECT_TYPE(widget);
-        if (type == GTK_TYPE_COMBO_BOX || type == GTK_TYPE_COMBO_BOX_ENTRY)
+        if (type == GTK_TYPE_COMBO_BOX)
             if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) < 0) return;
         name = ghb_get_setting_key(widget);
     }
@@ -410,7 +410,10 @@ get_dvd_device_name(GDrive *gd)
 #endif
 
 static GHashTable *volname_hash = NULL;
-static GMutex     *volname_mutex = NULL;
+#if GTK_CHECK_VERSION(2, 32, 0)
+static GMutex     volname_mutex_static;
+#endif
+static GMutex     *volname_mutex;
 
 static void
 free_volname_key(gpointer data)
@@ -485,7 +488,12 @@ get_dvd_volume_name(gpointer gd)
 void
 ghb_volname_cache_init(void)
 {
+#if GTK_CHECK_VERSION(2, 32, 0)
+    g_mutex_init(&volname_mutex_static);
+    volname_mutex = &volname_mutex_static;
+#else
     volname_mutex = g_mutex_new();
+#endif
     volname_hash = g_hash_table_new_full(g_str_hash, g_str_equal,
                                         free_volname_key, free_volname_value);
 }
@@ -812,20 +820,20 @@ chooser_file_selected_cb(GtkFileChooser *dialog, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-dvd_device_changed_cb(GtkComboBox *combo, signal_user_data_t *ud)
+dvd_device_changed_cb(GtkComboBoxText *combo, signal_user_data_t *ud)
 {
     GtkWidget *dialog;
     gint ii;
 
     g_debug("dvd_device_changed_cb ()");
-    ii = gtk_combo_box_get_active (combo);
+    ii = gtk_combo_box_get_active (GTK_COMBO_BOX(combo));
     if (ii > 0)
     {
         const gchar *device;
         gchar *name;
 
         dialog = GHB_WIDGET(ud->builder, "source_dialog");
-        device = gtk_combo_box_get_active_text (combo);
+        device = gtk_combo_box_text_get_active_text (combo);
         name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(dialog));
         if (name == NULL || strcmp(name, device) != 0)
             gtk_file_chooser_select_filename (GTK_FILE_CHOOSER(dialog), device);
@@ -839,25 +847,26 @@ source_dialog_extra_widgets(
     signal_user_data_t *ud,
     GtkWidget *dialog)
 {
-    GtkComboBox *combo;
+    GtkComboBoxText *combo;
     GList *drives, *link;
     
     g_debug("source_dialog_extra_widgets ()");
-    combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, "source_device"));
-    gtk_list_store_clear(GTK_LIST_STORE(gtk_combo_box_get_model(combo)));
+    combo = GTK_COMBO_BOX_TEXT(GHB_WIDGET(ud->builder, "source_device"));
+    gtk_list_store_clear(GTK_LIST_STORE(
+                gtk_combo_box_get_model(GTK_COMBO_BOX(combo))));
 
     link = drives = dvd_device_list();
-    gtk_combo_box_append_text (combo, "Not Selected");
+    gtk_combo_box_text_append_text (combo, "Not Selected");
     while (link != NULL)
     {
         gchar *name = get_dvd_device_name(link->data);
-        gtk_combo_box_append_text(combo, name);
+        gtk_combo_box_text_append_text(combo, name);
         g_free(name);
         free_drive(link->data);
         link = link->next;
     }
     g_list_free(drives);
-    gtk_combo_box_set_active (combo, 0);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(combo), 0);
 }
 
 extern GValue *ghb_queue_edit_settings;
@@ -3182,8 +3191,7 @@ ghb_timer_cb(gpointer data)
                 ghb_settings_set_int64(ud->settings, 
                                         "last_update_check", tt);
                 ghb_pref_save(ud->settings, "last_update_check");
-                g_thread_create((GThreadFunc)ghb_check_update, ud, 
-                                FALSE, NULL);
+                GHB_THREAD_NEW("Update Check", (GThreadFunc)ghb_check_update, ud);
             }
         }
     }
@@ -3227,7 +3235,8 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
         window = gtk_text_view_get_window(textview, GTK_TEXT_WINDOW_TEXT);
         if (window != NULL)
         {
-            gdk_drawable_get_size(GDK_DRAWABLE(window), &width, &height);
+            width = gdk_window_get_width(window);
+            height = gdk_window_get_height(window);
             gtk_text_view_window_to_buffer_coords(textview, 
                 GTK_TEXT_WINDOW_TEXT, width, height, &x, &y);
             gtk_text_view_get_iter_at_location(textview, &iter, x, y);
@@ -3389,11 +3398,14 @@ browse_url(const gchar *url)
 #endif
 }
 
+#if 0
+    JJJ
 void
 about_web_hook(GtkAboutDialog *about, const gchar *link, gpointer data)
 {
     browse_url(link);
 }
+#endif
 
 G_MODULE_EXPORT void
 about_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
@@ -3402,7 +3414,10 @@ about_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     gchar *ver;
 
     ver = g_strdup_printf("%s (%s)", HB_PROJECT_VERSION, HB_PROJECT_BUILD_ARCH);
+#if 0
+    JJJ
     gtk_about_dialog_set_url_hook(about_web_hook, NULL, NULL);
+#endif
     gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(widget), ver);
     g_free(ver);
     gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(widget), 
@@ -4090,7 +4105,8 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
         ins_count++;
         if (ins_count == 2)
         {
-            g_thread_create((GThreadFunc)ghb_cache_volnames, ud, FALSE, NULL);
+            GHB_THREAD_NEW("Cache Volume Names",
+                    (GThreadFunc)ghb_cache_volnames, ud);
             if (ghb_settings_get_boolean(ud->settings, "AutoScan") &&
                 ud->current_dvd_device != NULL &&
                 strcmp(device, ud->current_dvd_device) == 0)
@@ -4110,7 +4126,8 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
         rem_count++;
         if (rem_count == 2)
         {
-            g_thread_create((GThreadFunc)ghb_cache_volnames, ud, FALSE, NULL);
+            GHB_THREAD_NEW("Cache Volume Names",
+                    (GThreadFunc)ghb_cache_volnames, ud);
             if (ud->current_dvd_device != NULL &&
                 strcmp(device, ud->current_dvd_device) == 0)
             {
@@ -4185,7 +4202,7 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
     gint state;
 
     g_debug("drive_changed_cb()");
-    g_thread_create((GThreadFunc)ghb_cache_volnames, ud, FALSE, NULL);
+    GHB_THREAD_NEW("Cache Volume Names", (GThreadFunc)ghb_cache_volnames, ud);
 
     state = ghb_get_scan_state();
     device = g_drive_get_identifier(gd, G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE);
@@ -4871,7 +4888,7 @@ static void
 process_appcast(signal_user_data_t *ud)
 {
     gchar *description = NULL, *build = NULL, *version = NULL, *msg;
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(_NO_UPDATE_CHECK)
     GtkWidget *window;
     static GtkWidget *html = NULL;
 #endif
@@ -4897,8 +4914,7 @@ process_appcast(signal_user_data_t *ud)
     label = GHB_WIDGET(ud->builder, "update_message");
     gtk_label_set_text(GTK_LABEL(label), msg);
 
-#if !defined(_WIN32)
-#if !defined(_NO_UPDATE_CHECK)
+#if !defined(_WIN32) && !defined(_NO_UPDATE_CHECK)
     if (html == NULL)
     {
         html = webkit_web_view_new();
@@ -4909,7 +4925,6 @@ process_appcast(signal_user_data_t *ud)
         gtk_widget_show(html);
     }
     webkit_web_view_open(WEBKIT_WEB_VIEW(html), description);
-#endif
 #endif
     dialog = GHB_WIDGET(ud->builder, "update_dialog");
     response = gtk_dialog_run(GTK_DIALOG(dialog));

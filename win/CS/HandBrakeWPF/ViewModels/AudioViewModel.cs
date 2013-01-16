@@ -23,6 +23,8 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop.Model.Encoding;
 
+    using HandBrakeWPF.Commands;
+    using HandBrakeWPF.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -167,6 +169,15 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Open the options screen to the Audio and Subtitles tab.
+        /// </summary>
+        public void SetDefaultBehaviour()
+        {
+            OpenOptionsScreenCommand command = new OpenOptionsScreenCommand();
+            command.Execute(OptionsTab.AudioAndSubtitles);
+        }
+
         #endregion
 
         #region Implemented Interfaces
@@ -259,7 +270,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.SourceTracks != null)
             {
-                Audio track = sourceTrack ?? this.SourceTracks.FirstOrDefault();
+                Audio track = sourceTrack ?? this.GetPreferredAudioTrack();
                 if (track != null)
                 {
                     this.Task.AudioTracks.Add(new AudioTrack { ScannedTrack = track });
@@ -272,11 +283,20 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private void AddAllRemainingTracks()
         {
+            // For all the source audio tracks
             foreach (Audio sourceTrack in this.SourceTracks)
             {
-                bool found = this.Task.AudioTracks.Any(audioTrack => audioTrack.ScannedTrack == sourceTrack);
+                // Step 1:  If "Add only One per language" is turned on, check to see if this language is already added.
+                if (this.CanSkipSourceTrack(sourceTrack))
+                {
+                    continue;
+                }
+
+                // Step 2: Check if the track list already contrains this track
+                bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
                 if (!found)
                 {
+                    // If it doesn't, add it.
                     this.Add(sourceTrack);
                 }
             }
@@ -287,24 +307,20 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void AddAllRemainingForSelectedLanguages()
         {
-            // Figure out the source tracks we want to add
-            List<Audio> trackList = new List<Audio>();
-            foreach (
-                string language in
-                    this.UserSettingService.GetUserSetting<StringCollection>(
-                        UserSettingConstants.SelectedLanguages))
-            {
-                // TODO add support for "Add only 1 per language"
-                trackList.AddRange(this.SourceTracks.Where(source => source.Language.Trim() == language));
-            }
-
             // Add them if they are not already added.
-            foreach (Audio sourceTrack in trackList)
+            foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks())
             {
-                bool found = this.Task.AudioTracks.Any(audioTrack => audioTrack.ScannedTrack == sourceTrack);
+                // Step 1:  If "Add only One per language" is turned on, check to see if this language is already added.
+                if (this.CanSkipSourceTrack(sourceTrack))
+                {
+                    continue;
+                }
 
+                // Step 2: Check if the track list already contrains this track
+                bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
                 if (!found)
                 {
+                    // If it doesn't, add it.
                     this.Add(sourceTrack);
                 }
             }
@@ -321,18 +337,10 @@ namespace HandBrakeWPF.ViewModels
             // Clear out the old tracks
             this.Task.AudioTracks.Clear();
 
-            // Get the preferred Language
-            IEnumerable<Audio> preferredAudioTracks =
-                this.SourceTracks.Where(
-                    item =>
-                    item.Language.Contains(
-                        this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage)));
-            Audio preferred = preferredAudioTracks.FirstOrDefault() ?? this.SourceTracks.FirstOrDefault();
-
             // Add the preset audio tracks with the preferred language
             foreach (AudioTrack track in preset.Task.AudioTracks)
             {
-                this.Task.AudioTracks.Add(new AudioTrack(track) { ScannedTrack = preferred });
+                this.Task.AudioTracks.Add(new AudioTrack(track) { ScannedTrack = this.GetPreferredAudioTrack() });
             }
         }
 
@@ -341,44 +349,24 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private void AutomaticTrackSelection()
         {
-            List<Audio> trackList = new List<Audio>();
             if (!this.SourceTracks.Any())
             {
+                // Clear out the old tracks
+                this.Task.AudioTracks.Clear();
+
                 return;
             }
 
-            // Step 1: Fetch all the Preferred Language settings
-            if (this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage) == "Any")
+            // Default all the language tracks to the preferred or first language of this source.
+            foreach (AudioTrack track in this.Task.AudioTracks)
             {
-                // If we have Any as the preferred Language, just set the first track to all audio tracks.
-                trackList.Add(this.SourceTracks.FirstOrDefault());
-            }
-            else
-            {
-                // Otherwise, fetch the preferred language.
-                foreach (
-                    Audio item in
-                        this.SourceTracks.Where(
-                            item =>
-                            item.Language.Contains(
-                                this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage))))
-                {
-                    trackList.Add(item);
-                    break;
-                }
+                track.ScannedTrack = this.GetPreferredAudioTrack();
             }
 
-            // Step 2: Handle "All Remaining Tracks" and "All for Selected Languages" or use the default behaviour
+            // Handle the default selection behaviour.
             int mode = this.UserSettingService.GetUserSetting<int>(UserSettingConstants.DubModeAudio);
-
             switch (mode)
             {
-                default: // Default by setting all existing tracks to a preferred or first source track.
-                    foreach (AudioTrack track in this.Task.AudioTracks)
-                    {
-                        track.ScannedTrack = trackList.FirstOrDefault() ?? this.SourceTracks.FirstOrDefault();
-                    }
-                    break;
                 case 1: // Adding all remaining audio tracks
                     this.AddAllRemaining();
                     break;
@@ -389,35 +377,59 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// The get language tracks.
+        /// The get preferred audio track, or the first if none available.
         /// </summary>
         /// <returns>
-        /// The Users desired audio tracks
+        /// The users preferred language, or the first if none available.
         /// </returns>
-        private List<Audio> GetLanguageTracks()
+        private Audio GetPreferredAudioTrack()
+        {
+            // Get the preferred Language
+            IEnumerable<Audio> preferredAudioTracks =
+                this.SourceTracks.Where(
+                    item =>
+                    item.Language.Contains(
+                        this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage)));
+            return preferredAudioTracks.FirstOrDefault() ?? this.SourceTracks.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets a list of source tracks for the users selected languages.
+        /// </summary>
+        /// <returns>
+        /// A list of source audio tracks.
+        /// </returns>
+        private IEnumerable<Audio> GetSelectedLanguagesTracks()
         {
             List<Audio> trackList = new List<Audio>();
-            if (this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage) == "Any")
+            foreach (string language in this.UserSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages))
             {
-                // If we have Any as the preferred Language, just set the first track to all audio tracks.
-                trackList.Add(this.SourceTracks.FirstOrDefault());
-            }
-            else
-            {
-                // Otherwise, fetch the preferred language.
-                foreach (
-                    Audio item in
-                        this.SourceTracks.Where(
-                            item =>
-                            item.Language.Contains(
-                                this.UserSettingService.GetUserSetting<string>(UserSettingConstants.NativeLanguage))))
-                {
-                    trackList.Add(item);
-                    break;
-                }
+                trackList.AddRange(this.SourceTracks.Where(source => source.Language.Trim() == language));
             }
 
             return trackList;
+        }
+
+        /// <summary>
+        /// Checks to see if we can skip over the given source audio track.
+        /// True when the user has set "Add only one per language" feature AND the language is contained in the track list.
+        /// </summary>
+        /// <param name="sourceTrack">
+        /// The source track.
+        /// </param>
+        /// <returns>
+        /// True when the user has set "Add only one per language" feature AND the language is contained in the track list
+        /// </returns>
+        private bool CanSkipSourceTrack(Audio sourceTrack)
+        {
+            bool addOnlyOnePerLanguage = this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AddOnlyOneAudioPerLanguage);
+            bool sourceTrackLanguageFound = this.Task.AudioTracks.Any(audioTrack => audioTrack.ScannedTrack != null && sourceTrack.Language == audioTrack.ScannedTrack.Language);
+            if (addOnlyOnePerLanguage && sourceTrackLanguageFound)
+            {
+                return true; // This track can be skipped.
+            }
+
+            return false;
         }
 
         #endregion

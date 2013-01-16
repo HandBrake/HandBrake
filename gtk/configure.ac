@@ -83,11 +83,7 @@ AM_PROG_LIBTOOL
 
 case $host in
   *-*-mingw*)
-    if test "x$gst_disable" = "xyes" ; then
-        GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gio-2.0"
-	else
-		GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-video-0.10 gstreamer-pbutils-0.10 gio-2.0"
-	fi
+    GHB_PACKAGES="gthread-2.0 gio-2.0"
 	mingw_flag=yes
     ;;
   *)
@@ -96,46 +92,93 @@ case $host in
 	  pkg_gudev="gudev-1.0"
 	  ;;
     esac
-    if test "x$gst_disable" = "xyes" ; then
-	    GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gio-2.0 libnotify dbus-glib-1 $pkg_gudev"
-    else
-	    GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-video-0.10 gstreamer-pbutils-0.10 gio-2.0 libnotify dbus-glib-1 $pkg_gudev"
-    fi
+    GHB_PACKAGES="gthread-2.0 gio-2.0 libnotify dbus-glib-1 $pkg_gudev"
 	mingw_flag=no
     ;;
 esac
+
+PKG_PROG_PKG_CONFIG
+PKG_CHECK_MODULES(Gtk3, [gtk+-3.0], use_gtk3=yes, use_gtk3=no)
+if test "x$use_gtk3" = "xyes" ; then
+    GHB_PACKAGES="gtk+-3.0 $GHB_PACKAGES"
+else
+    GHB_PACKAGES="gtk+-2.0 >= 2.10 $GHB_PACKAGES"
+fi
+
+GST1_MODULES="gstreamer-1.0 gstreamer-video-1.0 gstreamer-audio-1.0 gstreamer-pbutils-1.0"
+GST0_MODULES="gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-video-0.10 gstreamer-audio-0.10 gstreamer-pbutils-0.10"
+
+if test "x$gst_disable" = "xno" ; then
+    PKG_CHECK_MODULES(GStreamer1, [$GST1_MODULES], use_gst1=yes, use_gst1=no)
+    if test "x$use_gst1" = "xyes" ; then
+        GHB_PACKAGES="$GHB_PACKAGES $GST1_MODULES"
+    else
+        PKG_CHECK_MODULES(GStreamer0, [$GST0_MODULES], use_gst0=yes, use_gst0=no)
+        if test "x$use_gst0" = "xyes" ; then
+            GHB_PACKAGES="$GHB_PACKAGES $GST0_MODULES"
+        else
+            gst_disable="yes"
+        fi
+    fi
+fi
 
 if test "x$gst_disable" = "xno" ; then
 	CXXFLAGS="$CXXFLAGS -D_ENABLE_GST"
 	CFLAGS="$CFLAGS -D_ENABLE_GST"
 fi
 
-PKG_PROG_PKG_CONFIG
 if test "x$update_checks" = "xyes" ; then
-	PKG_CHECK_MODULES(OldWebKitGtk, WebKitGtk, old_webkit=yes, old_webkit=no)
-	if test "x$old_webkit" = "xyes" ; then
-		if test "x$mingw_flag" = "xno" ; then
-			GHB_PACKAGES="$GHB_PACKAGES WebKitGtk"
-			CXXFLAGS="$CXXFLAGS -D_OLD_WEBKIT"
-			CFLAGS="$CFLAGS -D_OLD_WEBKIT"
-		fi
-	else
-		if test "x$mingw_flag" = "xno" ; then
-			GHB_PACKAGES="$GHB_PACKAGES webkit-1.0"
-		fi
-	fi
+    if test "x$use_gtk3" = "xyes" ; then
+        PKG_CHECK_MODULES(WebKitGtk3, webkitgtk-3.0, use_webkitgtk3=yes, use_webkitgtk3=no)
+        if test "x$use_webkitgtk3" = "xyes" ; then
+            GHB_PACKAGES="$GHB_PACKAGES webkitgtk-3.0"
+        else
+            update_checks="no"
+	        CFLAGS="$CFLAGS -D_NO_UPDATE_CHECK"
+        fi
+    else
+        PKG_CHECK_MODULES(OldWebKitGtk1, WebKitGtk, old_webkit=yes, old_webkit=no)
+        if test "x$old_webkit" = "xyes" ; then
+            if test "x$mingw_flag" = "xno" ; then
+                GHB_PACKAGES="$GHB_PACKAGES WebKitGtk"
+                CXXFLAGS="$CXXFLAGS -D_OLD_WEBKIT"
+                CFLAGS="$CFLAGS -D_OLD_WEBKIT"
+            else
+                update_checks="no"
+                CFLAGS="$CFLAGS -D_NO_UPDATE_CHECK"
+            fi
+        else
+            PKG_CHECK_MODULES(WebKitGtk1, webkit-1.0, use_webkit1=yes, use_webkit1=no)
+            if test "x$use_webkit1" = "xyes" ; then
+                GHB_PACKAGES="$GHB_PACKAGES webkit-1.0"
+            else
+                update_checks="no"
+                CFLAGS="$CFLAGS -D_NO_UPDATE_CHECK"
+            fi
+        fi
+    fi
 else
 	CFLAGS="$CFLAGS -D_NO_UPDATE_CHECK"
 fi
 
+if test "x$use_gtk3" = "xyes" ; then
+    PKG_CHECK_MODULES(libappindicator3, appindicator3-0.1, have_appind=yes, have_appind=no)
+    if test "x$have_appind" = "xyes" ; then
+        GHB_PACKAGES="$GHB_PACKAGES appindicator3-0.1"
+        CXXFLAGS="$CXXFLAGS -D_USE_APP_IND"
+        CFLAGS="$CFLAGS -D_USE_APP_IND"
+    fi
+else
+    PKG_CHECK_MODULES(libappindicator, appindicator-0.1, have_appind=yes, have_appind=no)
+    if test "x$have_appind" = "xyes" ; then
+        GHB_PACKAGES="$GHB_PACKAGES appindicator-0.1"
+        CXXFLAGS="$CXXFLAGS -D_USE_APP_IND"
+        CFLAGS="$CFLAGS -D_USE_APP_IND"
+    fi
+fi
+
 AM_CONDITIONAL([MINGW], [test "x$mingw_flag" = "xyes"])
 
-PKG_CHECK_MODULES(libappindicator, appindicator-0.1, have_appind=yes, have_appind=no)
-if test "x$have_appind" = "xyes" ; then
-    GHB_PACKAGES="$GHB_PACKAGES appindicator-0.1"
-    CXXFLAGS="$CXXFLAGS -D_USE_APP_IND"
-    CFLAGS="$CFLAGS -D_USE_APP_IND"
-fi
 PKG_CHECK_MODULES(GHB, [$GHB_PACKAGES])
 
 GHB_CFLAGS="$HBINC $GHB_CFLAGS"

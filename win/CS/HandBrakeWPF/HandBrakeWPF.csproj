@@ -81,7 +81,8 @@
     <Reference Include="Castle.Windsor">
       <HintPath>..\libraries\caliburn\Castle.Windsor.dll</HintPath>
     </Reference>
-    <Reference Include="EagleBoost.Wpf.Presentation">
+    <Reference Include="EagleBoost.Wpf.Presentation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libraries\EagleBoost.Wpf.Presentation.dll</HintPath>
     </Reference>
     <Reference Include="GongSolutions.Wpf.DragDrop">
@@ -100,6 +101,7 @@
     </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
@@ -123,12 +125,17 @@
     <Compile Include="AttachedProperties\MenuItemExtensions.cs" />
     <Compile Include="Commands\CancelScanCommand.cs" />
     <Compile Include="Commands\Interfaces\IAdvancedEncoderOptionsCommand.cs" />
+    <Compile Include="Commands\OpenOptionsScreenCommand.cs" />
     <Compile Include="Commands\ProcessShortcutCommand.cs" />
     <Compile Include="Commands\SourceMenuCommand.cs" />
     <Compile Include="Commands\AdvancedEncoderOptionsCommand.cs" />
     <Compile Include="Controls\Loading.xaml.cs">
       <DependentUpon>Loading.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\NumberBox.xaml.cs">
+      <DependentUpon>NumberBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RefireControl.cs" />
     <Compile Include="Controls\StatusPanel.xaml.cs">
       <DependentUpon>StatusPanel.xaml</DependentUpon>
     </Compile>
@@ -137,10 +144,12 @@
     <Compile Include="Converters\Audio\AudioQueueDisplayConverter.cs" />
     <Compile Include="Converters\BooleanToHiddenVisibilityConverter.cs" />
     <Compile Include="Converters\Options\OptionsTabConverter.cs" />
+    <Compile Include="Converters\Options\OptionsTabNameConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitlesQueueDisplayConverter.cs" />
     <Compile Include="Converters\Video\VideoEncoderConverter.cs" />
     <Compile Include="Helpers\GrayscaleImage.cs" />
     <Compile Include="Helpers\GrowlCommunicator.cs" />
+    <Compile Include="Model\OptionsTab.cs" />
     <Compile Include="Services\DriveDetectService.cs" />
     <Compile Include="Services\EncodeServiceWrapper.cs" />
     <Compile Include="Services\Interfaces\IDriveDetectService.cs" />
@@ -296,6 +305,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\Loading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\NumberBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

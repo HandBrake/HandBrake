@@ -1,5 +1,5 @@
 diff --git a/libswscale/utils.c b/libswscale/utils.c
-index e5e4d60..062ae01 100644
+index f0a2b46..61506c6 100644
 --- a/libswscale/utils.c
 +++ b/libswscale/utils.c
 @@ -531,7 +531,9 @@ static int initFilter(int16_t **outFilter, int32_t **filterPos,

@@ -58,7 +58,7 @@
         <integer>0</integer>
         <key>scale_width</key>
         <integer>0</integer>
-        <key>show_crop</key>
+        <key>preview_show_crop</key>
         <false />
         <key>hide_settings</key>
         <false />

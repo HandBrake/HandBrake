@@ -883,7 +883,7 @@ static const gchar*
 lookup_mix_option(const GValue *mix)
 {
     gint ii;
-    gchar *result = "None";
+    const gchar *result = "None";
 
 
     if (G_VALUE_TYPE(mix) == G_TYPE_STRING)
@@ -920,7 +920,7 @@ static const gchar*
 lookup_mix_string(const GValue *mix)
 {
     gint ii;
-    gchar *result = "none";
+    const gchar *result = "none";
 
 
     if (G_VALUE_TYPE(mix) == G_TYPE_STRING)
@@ -1696,7 +1696,7 @@ init_combo_box(GtkBuilder *builder, const gchar *name)
                                G_TYPE_STRING, G_TYPE_DOUBLE, G_TYPE_STRING);
     gtk_combo_box_set_model(combo, GTK_TREE_MODEL(store));
 
-    if (G_OBJECT_TYPE(combo) == GTK_TYPE_COMBO_BOX)
+    if (!gtk_combo_box_get_has_entry(combo))
     {
         gtk_cell_layout_clear(GTK_CELL_LAYOUT(combo));
         cell = GTK_CELL_RENDERER(gtk_cell_renderer_text_new());
@@ -1706,7 +1706,7 @@ init_combo_box(GtkBuilder *builder, const gchar *name)
     }
     else
     { // Combo box entry
-        gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(combo), 0);
+        gtk_combo_box_set_entry_text_column(GTK_COMBO_BOX(combo), 0);
     }
 }   
 
@@ -3354,7 +3354,7 @@ audio_bitrate_opts_add(GtkBuilder *builder, const gchar *name, gint rate)
 
     if (ghb_audio_bitrates[hb_audio_bitrates_count].string)
     {
-        g_free(ghb_audio_bitrates[hb_audio_bitrates_count].string);
+        g_free((char*)ghb_audio_bitrates[hb_audio_bitrates_count].string);
     }
     ghb_audio_bitrates[hb_audio_bitrates_count].rate = rate;
     if (rate < 0)
@@ -4209,7 +4209,7 @@ set_preview_job_settings(hb_job_t *job, GValue *settings)
         ghb_settings_combo_int(settings, "PictureModulus");
     job->width = ghb_settings_get_int(settings, "scale_width");
     job->height = ghb_settings_get_int(settings, "scale_height");
-    if (ghb_settings_get_boolean(settings, "show_crop"))
+    if (ghb_settings_get_boolean(settings, "preview_show_crop"))
     {
         gdouble xscale = (gdouble)job->width / 
             (gdouble)(job->title->width - job->crop[2] - job->crop[3]);
@@ -4565,7 +4565,7 @@ ghb_validate_audio(GValue *settings)
         gint mix = ghb_settings_combo_int (asettings, "AudioMixdown");
 
         gint jj;
-        gchar *mix_unsup = NULL;
+        const gchar *mix_unsup = NULL;
         if (!hb_mixdown_is_supported(mix, codec, aconfig->in.channel_layout))
         {
             for (jj = 0; jj < hb_audio_mixdowns_count; jj++)
@@ -5577,7 +5577,7 @@ ghb_get_preview_image(
     }
     GdkPixbuf *scaled_preview;
     scaled_preview = gdk_pixbuf_scale_simple(preview, dstWidth, dstHeight, GDK_INTERP_HYPER);
-    if (ghb_settings_get_boolean(settings, "show_crop"))
+    if (ghb_settings_get_boolean(settings, "preview_show_crop"))
     {
         c0 *= yscale;
         c1 *= yscale;

@@ -3,7 +3,8 @@
         xmlns:Helpers="clr-namespace:HandBrakeWPF.Helpers"
               xmlns:Options="clr-namespace:HandBrakeWPF.Converters.Options"
               xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
-              xmlns:Converters="clr-namespace:HandBrakeWPF.Converters" Background="White">
+              xmlns:Converters="clr-namespace:HandBrakeWPF.Converters" xmlns:local="clr-namespace:HandBrakeWPF.Model"
+              Background="White">
 
     <UserControl.Resources>
         <Style TargetType="Button">
@@ -30,7 +31,17 @@
         </Style>
 
         <Options:OptionsTabConverter x:Key="tabConverter" />
+        <Options:OptionsTabNameConverter x:Key="tabNameConverter" />
+        
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+
+        <ObjectDataProvider MethodName="GetValues"
+                        ObjectType="{x:Type local:OptionsTab}"
+                        x:Key="OptionTabsList">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local:OptionsTab" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
     </UserControl.Resources>
 
     <Grid>
@@ -44,14 +55,18 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-
         <StackPanel Orientation="Vertical" Grid.Column="0" Margin="10,10,0,0">
             <Border BorderThickness="0 0 0 1" BorderBrush="LightGray" Margin="0,0,0,10">
                 <TextBlock Text="Preferences" FontSize="16" />
             </Border>
 
-            <ListBox ItemsSource="{Binding OptionTabs}" SelectedItem="{Binding SelectedTab}"
+            <ListBox ItemsSource="{Binding Source={StaticResource OptionTabsList}}" SelectedItem="{Binding SelectedTab}"
                      BorderThickness="0" Background="Transparent">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource tabNameConverter}}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
             </ListBox>
 
         </StackPanel>
@@ -60,7 +75,7 @@
             <StackPanel Orientation="Vertical">
 
                 <StackPanel Name="General" Orientation="Vertical" Margin="10,10,0,0"
-                            Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter='General'}">
+                            Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.General}}">
 
                     <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
                         <TextBlock Text="General" FontSize="16" />
@@ -121,7 +136,7 @@
                 </StackPanel>
 
                 <StackPanel Name="Output" Orientation="Vertical" Margin="10,10,0,0"
-                            Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter='Output Files'}">
+                            Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.OutputFiles}}">
 
                     <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
                         <TextBlock Text="Output Files" FontSize="16" />
@@ -161,7 +176,7 @@
                 </StackPanel>
 
                 <StackPanel Name="Audio" Orientation="Vertical" Margin="10,10,0,0"
-                            Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter='Audio and Subtitles'}">
+                            Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.AudioAndSubtitles}}">
                    
                     
                     <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
@@ -236,8 +251,8 @@
 
                                 <DockPanel Grid.Column="1" Margin="10,0,10,0">
                                     <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                        <Button Content="Move Left"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveLeft]" Width="80" />
                                         <Button Content="Move Right"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveRight]" Width="80" />
+                                        <Button Content="Move Left"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveLeft]" Width="80" />    
                                         <Button Content="Clear" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageClearAll]" Width="80"/>
                                     </StackPanel>
                                 </DockPanel>
@@ -263,7 +278,7 @@
                 </StackPanel>
 
                 <StackPanel Name="Advanced" Orientation="Vertical" Margin="10,10,0,0"
-                            Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter='Advanced'}">
+                            Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.Advanced}}">
 
                     <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
                         <TextBlock Text="Advanced" FontSize="16" />
@@ -364,7 +379,7 @@
                 </StackPanel>
 
                 <StackPanel Name="Updates" Orientation="Vertical" Margin="10,10,0,0"
-                            Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter='Updates'}">
+                            Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.Updates}}">
 
 
                     <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
@@ -396,6 +411,18 @@
                                  Visibility="{Binding UpdateAvailable, Converter={StaticResource boolToVisConverter}}" />
                         <TextBlock Text="{Binding UpdateMessage}" Margin="10,0,10,0" VerticalAlignment="Center" />
                     </StackPanel>
+
+                </StackPanel>
+
+                <StackPanel Name="About" Orientation="Vertical" Margin="10,10,0,0"
+                            Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.About}}">
+
+
+                    <Border BorderThickness="0 0 0 1" BorderBrush="LightGray">
+                        <TextBlock Text="About HandBrake" FontSize="16" />
+                    </Border>
+
+                    <ContentControl x:Name="AboutViewModel" />
 
                 </StackPanel>
             </StackPanel>

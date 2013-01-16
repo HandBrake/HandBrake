@@ -516,7 +516,7 @@ ghb_audio_list_refresh_selected(signal_user_data_t *ud)
     selection = gtk_tree_view_get_selection (treeview);
     if (gtk_tree_selection_get_selected(selection, &store, &iter))
     {
-        const gchar *track, *codec, *br, *sr, *mix;
+        const gchar *track, *codec, *br = NULL, *sr, *mix;
         gchar *s_drc, *s_gain, *s_quality = NULL;
         gdouble drc, gain;
         // Get the row number
@@ -588,7 +588,7 @@ ghb_audio_list_refresh(signal_user_data_t *ud)
     {
         do
         {
-            const gchar *track, *codec, *br, *sr, *mix;
+            const gchar *track, *codec, *br = NULL, *sr, *mix;
             gchar *s_drc, *s_gain, *s_quality = NULL;
             gdouble drc, gain;
             GValue *asettings;
@@ -986,7 +986,7 @@ ghb_add_audio_to_ui(GtkBuilder *builder, const GValue *settings)
     GtkTreeIter iter;
     GtkListStore *store;
     GtkTreeSelection *selection;
-    const gchar *track, *codec, *br, *sr, *mix;
+    const gchar *track, *codec, *br = NULL, *sr, *mix;
     gchar *s_drc, *s_gain, *s_quality = NULL;
     gdouble drc;
     gdouble gain;

@@ -345,44 +345,45 @@ int main( int argc, char ** argv )
     }
 
     /* Clean up */
-    hb_close( &h );
+    hb_close(&h);
     hb_global_close();
-    if( input )  free( input );
-    if( output ) free( output );
-    if( format ) free( format );
-    if( audios )
+    if (audios != NULL)
     {
-        while( ( audio = hb_list_item( audios, 0 ) ) )
+        while ((audio = hb_list_item(audios, 0)) != NULL)
         {
-            hb_list_rem( audios, audio );
-            if( audio->out.name )
+            hb_list_rem(audios, audio);
+            if (audio->out.name != NULL)
             {
-                free( audio->out.name );
+                free(audio->out.name);
             }
-            free( audio );
+            free(audio);
         }
-        hb_list_close( &audios );
+        hb_list_close(&audios);
     }
-    if( mixdowns ) free( mixdowns );
-    if( dynamic_range_compression ) free( dynamic_range_compression );
-    if( audio_gain ) free( audio_gain );
-    if( atracks ) free( atracks );
-    if( arates ) free( arates );
-    str_vfree( abitrates );
-    str_vfree( aqualities );
-    str_vfree( acompressions );
-    if( acodecs ) free( acodecs );
-    if (native_language ) free (native_language );
-    if( advanced_opts ) free (advanced_opts );
-    if (preset_name) free (preset_name);
-    free( x264_profile );
-    free( x264_preset );
-    free( x264_tune );
-    free( h264_level );
+    str_vfree(abitrates);
+    str_vfree(acompressions);
+    str_vfree(aqualities);
+    free(acodecs);
+    free(arates);
+    free(atracks);
+    free(audio_gain);
+    free(dynamic_range_compression);
+    free(mixdowns);
+    free(native_language);
+    free(format);
+    free(input);
+    free(output);
+    free(preset_name);
+    free(x264_preset);
+    free(x264_tune);
+    free(advanced_opts);
+    free(x264_profile);
+    free(h264_level);
 
-    // write a carriage return to stdout - avoids overlap / line wrapping when stderr is redirected
-    fprintf( stdout, "\n" );
-    fprintf( stderr, "HandBrake has exited.\n" );
+    // write a carriage return to stdout
+    // avoids overlap / line wrapping when stderr is redirected
+    fprintf(stdout, "\n");
+    fprintf(stderr, "HandBrake has exited.\n");
 
     return 0;
 }
@@ -965,7 +966,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if (x264_profile == NULL)
                     {
-                        x264_profile = strdup("main");
+                        x264_profile = strdup("high");
                     }
                     if (h264_level == NULL)
                     {
@@ -3104,7 +3105,7 @@ static void ShowPresets()
     printf("\n   + iPod:  -e x264  -q 22.0 -r 30 --pfr  -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 -f mp4 -I -X 320 --modulus 2 -m --x264-preset medium --x264-profile baseline --h264-level 1.3\n");
     printf("\n   + iPhone & iPod Touch:  -e x264  -q 22.0 -r 29.97 --pfr  -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 -f mp4 -4 -X 960 --loose-anamorphic --modulus 2 -m --x264-preset medium --x264-profile high --h264-level 3.1\n");
     printf("\n   + iPad:  -e x264  -q 20.0 -r 29.97 --pfr  -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0.0 -f mp4 -4 -X 1280 --loose-anamorphic --modulus 2 -m --x264-preset medium --x264-profile high --h264-level 3.1\n");
-    printf("\n   + AppleTV:  -e x264  -q 20.0 -r 30 --pfr  -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 -X 960 --loose-anamorphic --modulus 2 -m --x264-preset medium --x264-profile main --h264-level 3.1 -x cabac=0:ref=2:b-pyramid=none:weightb=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500\n");
+    printf("\n   + AppleTV:  -e x264  -q 20.0 -r 30 --pfr  -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 -X 960 --loose-anamorphic --modulus 2 -m --x264-preset medium --x264-profile high --h264-level 3.1 -x cabac=0:ref=2:b-pyramid=none:weightb=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500\n");
     printf("\n   + AppleTV 2:  -e x264  -q 20.0 -r 29.97 --pfr  -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 -X 1280 --loose-anamorphic --modulus 2 -m --x264-preset medium --x264-profile high --h264-level 3.1\n");
     printf("\n   + AppleTV 3:  -e x264  -q 20.0 -r 30 --pfr  -a 1,1 -E faac,copy:ac3 -B 160,160 -6 dpl2,auto -R Auto,Auto -D 0.0,0.0 -f mp4 -4 -X 1920 --decomb=fast --loose-anamorphic --modulus 2 -m --x264-preset medium --x264-profile high --h264-level 4.0\n");
     printf("\n   + Android:  -e x264  -q 22.0 -r 29.97 --pfr  -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0.0 -f mp4 -X 720 --loose-anamorphic --modulus 2 --x264-preset medium --x264-profile main --h264-level 2.2\n");

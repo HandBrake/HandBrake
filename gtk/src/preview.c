@@ -23,7 +23,11 @@
 
 #if defined(_ENABLE_GST)
 #include <gst/gst.h>
+#if GST_CHECK_VERSION(1, 0, 0)
+#include <gst/video/videooverlay.h>
+#else
 #include <gst/interfaces/xoverlay.h>
+#endif
 #include <gst/video/video.h>
 #include <gst/pbutils/missing-plugins.h>
 #endif
@@ -151,8 +155,13 @@ ghb_preview_init(signal_user_data_t *ud)
     ud->preview = g_malloc0(sizeof(preview_t));
     ud->preview->view = GHB_WIDGET(ud->builder, "preview_image");
     gtk_widget_realize(ud->preview->view);
+#if GTK_CHECK_VERSION(3, 0, 0)
+    g_signal_connect(G_OBJECT(ud->preview->view), "draw",
+                    G_CALLBACK(preview_expose_cb), ud);
+#else
     g_signal_connect(G_OBJECT(ud->preview->view), "expose_event",
                     G_CALLBACK(preview_expose_cb), ud);
+#endif
 
     ud->preview->pause = TRUE;
     ud->preview->encode_frame = -1;
@@ -209,7 +218,11 @@ ghb_preview_init(signal_user_data_t *ud)
 
         bus = gst_pipeline_get_bus(GST_PIPELINE(ud->preview->play));
         gst_bus_add_watch(bus, live_preview_cb, ud);
+#if GST_CHECK_VERSION(1, 0, 0)
+        gst_bus_set_sync_handler(bus, create_window, ud->preview, NULL);
+#else
         gst_bus_set_sync_handler(bus, create_window, ud->preview);
+#endif
         gst_object_unref(bus);
         ud->preview->live_enabled = 1;
     }
@@ -241,6 +254,12 @@ create_window(GstBus *bus, GstMessage *msg, gpointer data)
     {
     case GST_MESSAGE_ELEMENT:
     {
+#if GST_CHECK_VERSION(1, 0, 0)
+        if (!gst_is_video_overlay_prepare_window_handle_message(msg))
+            return GST_BUS_PASS;
+        gst_video_overlay_set_window_handle(
+            GST_VIDEO_OVERLAY(GST_MESSAGE_SRC(msg)), preview->xid);
+#else
         if (!gst_structure_has_name(msg->structure, "prepare-xwindow-id"))
             return GST_BUS_PASS;
 #if !defined(_WIN32)
@@ -249,6 +268,7 @@ create_window(GstBus *bus, GstMessage *msg, gpointer data)
 #else
         gst_directdraw_sink_set_window_id(
             GST_X_OVERLAY(GST_MESSAGE_SRC(msg)), preview->xid);
+#endif
 #endif
         gst_message_unref(msg);
         return GST_BUS_DROP;
@@ -259,52 +279,6 @@ create_window(GstBus *bus, GstMessage *msg, gpointer data)
     } break;
     }
     return GST_BUS_PASS;
-}
-
-static GList *
-get_stream_info_objects_for_type (GstElement *play, const gchar *typestr)
-{
-    GValueArray *info_arr = NULL;
-    GList *ret = NULL;
-    guint ii;
-
-    if (play == NULL)
-        return NULL;
-
-    g_object_get(play, "stream-info-value-array", &info_arr, NULL);
-    if (info_arr == NULL)
-        return NULL;
-
-    for (ii = 0; ii < info_arr->n_values; ++ii) 
-    {
-        GObject *info_obj;
-        GValue *val;
-
-        val = g_value_array_get_nth(info_arr, ii);
-        info_obj = g_value_get_object(val);
-        if (info_obj) 
-        {
-            GParamSpec *pspec;
-            GEnumValue *value;
-            gint type = -1;
-
-            g_object_get(info_obj, "type", &type, NULL);
-            pspec = g_object_class_find_property(
-                        G_OBJECT_GET_CLASS (info_obj), "type");
-            value = g_enum_get_value(
-                        G_PARAM_SPEC_ENUM (pspec)->enum_class, type);
-            if (value) 
-            {
-                if (g_ascii_strcasecmp (value->value_nick, typestr) == 0 ||
-                    g_ascii_strcasecmp (value->value_name, typestr) == 0) 
-                {
-                    ret = g_list_prepend (ret, g_object_ref (info_obj));
-                }
-            }
-        }
-    }
-    g_value_array_free (info_arr);
-    return g_list_reverse (ret);
 }
 
 static void
@@ -366,6 +340,87 @@ caps_set(GstCaps *caps, signal_user_data_t *ud)
     }
 }
 
+#if GST_CHECK_VERSION(1, 0, 0)
+static void
+update_stream_info(signal_user_data_t *ud)
+{
+    GstPad *vpad = NULL;
+    gint n_video;
+
+    g_object_get(G_OBJECT(ud->preview->play), "n-video", &n_video, NULL);
+    if (n_video > 0)
+    {
+        gint ii;
+        for (ii = 0; ii < n_video && vpad == NULL; ii++)
+        {
+            g_signal_emit_by_name(ud->preview->play, "get-video-pad", ii, &vpad);
+        }
+    }
+
+    if (vpad)
+    {
+        GstCaps *caps;
+
+        caps = gst_pad_get_current_caps(vpad);
+        if (caps)
+        {
+            caps_set(caps, ud);
+            gst_caps_unref(caps);
+        }
+        //g_signal_connect(vpad, "notify::caps", G_CALLBACK(caps_set_cb), preview);
+        gst_object_unref(vpad);
+    }
+}
+
+#else
+
+static GList *
+get_stream_info_objects_for_type (GstElement *play, const gchar *typestr)
+{
+    GValueArray *info_arr = NULL;
+    GList *ret = NULL;
+    guint ii;
+
+    if (play == NULL)
+        return NULL;
+
+    g_object_get(play, "stream-info-value-array", &info_arr, NULL);
+    if (info_arr == NULL)
+        return NULL;
+
+    for (ii = 0; ii < info_arr->n_values; ++ii) 
+    {
+        GObject *info_obj;
+        GValue *val;
+
+        val = g_value_array_get_nth(info_arr, ii);
+        //val = &((GValue*)info_arr->values)[ii];
+        info_obj = g_value_get_object(val);
+        if (info_obj) 
+        {
+            GParamSpec *pspec;
+            GEnumValue *value;
+            gint type = -1;
+
+            g_object_get(info_obj, "type", &type, NULL);
+            pspec = g_object_class_find_property(
+                        G_OBJECT_GET_CLASS (info_obj), "type");
+            value = g_enum_get_value(
+                        G_PARAM_SPEC_ENUM (pspec)->enum_class, type);
+            if (value) 
+            {
+                if (g_ascii_strcasecmp (value->value_nick, typestr) == 0 ||
+                    g_ascii_strcasecmp (value->value_name, typestr) == 0) 
+                {
+                    ret = g_list_prepend (ret, g_object_ref (info_obj));
+                }
+            }
+        }
+    }
+    g_value_array_free (info_arr);
+    return g_list_reverse (ret);
+}
+
 static void
 update_stream_info(signal_user_data_t *ud)
 {
@@ -397,6 +452,8 @@ update_stream_info(signal_user_data_t *ud)
     g_list_free(vstreams);
 }
 
+#endif
+
 G_MODULE_EXPORT gboolean
 live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data)
 {
@@ -404,8 +461,30 @@ live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data)
 
     switch (GST_MESSAGE_TYPE(msg))
     {
+    case GST_MESSAGE_UNKNOWN:
+    {
+        //printf("unknown");
+    } break;
+
+    case GST_MESSAGE_EOS:
+    {
+        // Done
+        GtkImage *img;
+
+        //printf("eos");
+        img = GTK_IMAGE(GHB_WIDGET(ud->builder, "live_preview_play_image"));
+        gtk_image_set_from_stock(img, "gtk-media-play", GTK_ICON_SIZE_BUTTON);
+        gst_element_set_state(ud->preview->play, GST_STATE_PAUSED);
+        ud->preview->pause = TRUE;
+        gst_element_seek(ud->preview->play, 1.0,
+            GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT,
+            GST_SEEK_TYPE_SET, 0,
+            GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE);
+    } break;
+
     case GST_MESSAGE_ERROR:
     {
+        //printf("error\n");
         GError *err;
         gchar *debug;
 
@@ -415,8 +494,64 @@ live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data)
         g_free(debug);
     } break;
 
+    case GST_MESSAGE_WARNING:
+    case GST_MESSAGE_INFO:
+    case GST_MESSAGE_TAG:
+    case GST_MESSAGE_BUFFERING:
+    case GST_MESSAGE_STATE_CHANGED:
+    {
+        GstState state, pending;
+        gst_element_get_state(ud->preview->play, &state, &pending, 0);
+        //printf("state change %x\n", state);
+        if (state == GST_STATE_PAUSED || state == GST_STATE_PLAYING)
+        {
+            update_stream_info(ud);
+        }
+    } break;
+
+    case GST_MESSAGE_STATE_DIRTY:
+    {
+        //printf("state dirty\n");
+    } break;
+
+    case GST_MESSAGE_STEP_DONE:
+    {
+        //printf("step done\n");
+    } break;
+
+    case GST_MESSAGE_CLOCK_PROVIDE:
+    {
+        //printf("clock provide\n");
+    } break;
+
+    case GST_MESSAGE_CLOCK_LOST:
+    {
+        //printf("clock lost\n");
+    } break;
+
+    case GST_MESSAGE_NEW_CLOCK:
+    {
+        //printf("new clock\n");
+    } break;
+
+    case GST_MESSAGE_STRUCTURE_CHANGE:
+    {
+        //printf("structure change\n");
+    } break;
+
+    case GST_MESSAGE_STREAM_STATUS:
+    {
+        //printf("stream status\n");
+    } break;
+
+    case GST_MESSAGE_APPLICATION:
+    {
+        //printf("application\n");
+    } break;
+
     case GST_MESSAGE_ELEMENT:
     {
+        //printf("element\n");
         if (gst_is_missing_plugin_message(msg))
         {
             gst_element_set_state(ud->preview->play, GST_STATE_PAUSED);
@@ -432,34 +567,85 @@ live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data)
         }
     } break;
 
-    case GST_MESSAGE_STATE_CHANGED:
+    case GST_MESSAGE_SEGMENT_START:
     {
-        GstState state, pending;
-        gst_element_get_state(ud->preview->play, &state, &pending, 0);
-        if (state == GST_STATE_PAUSED || state == GST_STATE_PLAYING)
-        {
-            update_stream_info(ud);
-        }
+        //printf("segment start\n");
     } break;
 
-    case GST_MESSAGE_EOS:
+    case GST_MESSAGE_SEGMENT_DONE:
     {
-        // Done
-        GtkImage *img;
-
-        img = GTK_IMAGE(GHB_WIDGET(ud->builder, "live_preview_play_image"));
-        gtk_image_set_from_stock(img, "gtk-media-play", GTK_ICON_SIZE_BUTTON);
-        gst_element_set_state(ud->preview->play, GST_STATE_PAUSED);
-        ud->preview->pause = TRUE;
-        gst_element_seek(ud->preview->play, 1.0,
-            GST_FORMAT_TIME, GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT,
-            GST_SEEK_TYPE_SET, 0,
-            GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE);
+        //printf("segment done\n");
     } break;
+
+#if GST_CHECK_VERSION(1, 0, 0)
+    case GST_MESSAGE_DURATION_CHANGED:
+    {
+        //printf("duration change\n");
+    };
+#endif
+
+    case GST_MESSAGE_LATENCY:
+    {
+        //printf("latency\n");
+    };
+
+    case GST_MESSAGE_ASYNC_START:
+    {
+        //printf("async start\n");
+    } break;
+
+    case GST_MESSAGE_ASYNC_DONE:
+    {
+        //printf("async done\n");
+    } break;
+
+    case GST_MESSAGE_REQUEST_STATE:
+    {
+        //printf("request state\n");
+    } break;
+
+    case GST_MESSAGE_STEP_START:
+    {
+        //printf("step start\n");
+    } break;
+
+    case GST_MESSAGE_QOS:
+    {
+        //printf("qos\n");
+    } break;
+
+#if GST_CHECK_VERSION(1, 0, 0)
+    case GST_MESSAGE_PROGRESS:
+    {
+        //printf("progress\n");
+    } break;
+
+    case GST_MESSAGE_TOC:
+    {
+        //printf("toc\n");
+    } break;
+
+    case GST_MESSAGE_RESET_TIME:
+    {
+        //printf("reset time\n");
+    } break;
+
+    case GST_MESSAGE_STREAM_START:
+    {
+        //printf("stream start\n");
+    };
+#endif
+
+    case GST_MESSAGE_ANY:
+    {
+        //printf("any\n");
+    } break;
+
 
     default:
     {
         // Ignore
+        //printf("?msg? %x\n", GST_MESSAGE_TYPE(msg));
     }
     }
     return TRUE;
@@ -645,14 +831,22 @@ ghb_live_preview_progress(signal_user_data_t *ud)
         return;
 
     ud->preview->progress_lock = TRUE;
+#if GST_CHECK_VERSION(1, 0, 0)
+    if (gst_element_query_duration(ud->preview->play, fmt, &len))
+#else
     if (gst_element_query_duration(ud->preview->play, &fmt, &len))
+#endif
     {
         if (len != -1 && fmt == GST_FORMAT_TIME)
         {
             ud->preview->len = len / GST_MSECOND;
         }
     }
+#if GST_CHECK_VERSION(1, 0, 0)
+    if (gst_element_query_position(ud->preview->play, fmt, &pos))
+#else
     if (gst_element_query_position(ud->preview->play, &fmt, &pos))
+#endif
     {
         if (pos != -1 && fmt == GST_FORMAT_TIME)
         {
@@ -798,6 +992,31 @@ ghb_set_preview_image(signal_user_data_t *ud)
 }
 
 #if defined(_ENABLE_GST)
+#if GST_CHECK_VERSION(1, 0, 0)
+G_MODULE_EXPORT gboolean
+delayed_expose_cb(signal_user_data_t *ud)
+{
+    GstElement *vsink;
+    GstVideoOverlay *vover;
+
+    if (!ud->preview->live_enabled)
+        return FALSE;
+
+    g_object_get(ud->preview->play, "video-sink", &vsink, NULL);
+    if (vsink == NULL)
+        return FALSE;
+
+    if (GST_IS_BIN(vsink))
+        vover = GST_VIDEO_OVERLAY(gst_bin_get_by_interface(
+                                GST_BIN(vsink), GST_TYPE_VIDEO_OVERLAY));
+    else
+        vover = GST_VIDEO_OVERLAY(vsink);
+    gst_video_overlay_expose(vover);
+    // This function is initiated by g_idle_add.  Must return false
+    // so that it is not called again
+    return FALSE;
+}
+#else
 G_MODULE_EXPORT gboolean
 delayed_expose_cb(signal_user_data_t *ud)
 {
@@ -822,6 +1041,27 @@ delayed_expose_cb(signal_user_data_t *ud)
     return FALSE;
 }
 #endif
+#endif
+
+#if GTK_CHECK_VERSION(3, 0, 0)
+G_MODULE_EXPORT gboolean
+position_overlay_cb(
+    GtkWidget *overlay,
+    GtkWidget *widget, 
+    GdkRectangle *rect, 
+    signal_user_data_t *ud)
+{
+    GtkRequisition min_size, size;
+    gtk_widget_get_preferred_size(widget, &min_size, &size);
+
+    rect->width = MAX(min_size.width, size.width);
+    rect->height = MAX(min_size.height, size.height);
+    rect->x = MAX(0, ud->preview->width / 2 - rect->width / 2);
+    rect->y = MAX(0, ud->preview->height - rect->height - 50);
+
+    return TRUE;
+}
+#endif
 
 G_MODULE_EXPORT gboolean
 preview_expose_cb(
@@ -830,6 +1070,30 @@ preview_expose_cb(
     signal_user_data_t *ud)
 {
 #if defined(_ENABLE_GST)
+#if GST_CHECK_VERSION(1, 0, 0)
+    if (ud->preview->live_enabled && ud->preview->state == PREVIEW_STATE_LIVE)
+    {
+        if (GST_STATE(ud->preview->play) >= GST_STATE_PAUSED)
+        {
+            GstElement *vsink;
+            GstVideoOverlay *vover;
+
+            g_object_get(ud->preview->play, "video-sink", &vsink, NULL);
+            if (GST_IS_BIN(vsink))
+                vover = GST_VIDEO_OVERLAY(gst_bin_get_by_interface(
+                                    GST_BIN(vsink), GST_TYPE_VIDEO_OVERLAY));
+            else
+                vover = GST_VIDEO_OVERLAY(vsink);
+            gst_video_overlay_expose(vover);
+            // For some reason, the exposed region doesn't always get
+            // cleaned up here. But a delayed gst_x_overlay_expose()
+            // takes care of it.
+            g_idle_add((GSourceFunc)delayed_expose_cb, ud);
+            return FALSE;
+        }
+        return TRUE;
+    }
+#else
     if (ud->preview->live_enabled && ud->preview->state == PREVIEW_STATE_LIVE)
     {
         if (GST_STATE(ud->preview->play) >= GST_STATE_PAUSED)
@@ -853,10 +1117,12 @@ preview_expose_cb(
         return TRUE;
     }
 #endif
+#endif
 
     if (ud->preview->pix != NULL)
     {
-        _draw_pixbuf(gtk_widget_get_window(widget), ud->preview->pix);
+        _draw_pixbuf(gtk_widget_get_window(ud->preview->view), ud->preview->pix);
+        //_draw_pixbuf(gtk_widget_get_window(widget), ud->preview->pix);
     }
     return TRUE;
 }
@@ -1166,6 +1432,56 @@ preview_motion_cb(
     return FALSE;
 }
 
+#if GTK_CHECK_VERSION(3, 0, 0)
+cairo_region_t*
+ghb_curved_rect_mask(gint width, gint height, gint radius)
+{
+    cairo_region_t *shape;
+    cairo_surface_t *surface;
+    cairo_t *cr;
+    double w, h;
+
+    if (!width || !height)
+        return NULL;
+
+    surface = cairo_image_surface_create(CAIRO_FORMAT_A8, width, height);
+    cr = cairo_create (surface);
+
+    w = width;
+    h = height;
+    if (radius > width / 2)
+        radius = width / 2;
+    if (radius > height / 2)
+        radius = height / 2;
+
+    // fill shape with black
+    cairo_save(cr);
+    cairo_rectangle (cr, 0, 0, width, height);
+    cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+    cairo_fill (cr);
+    cairo_restore (cr);
+
+    cairo_move_to  (cr, 0, radius);
+    cairo_curve_to (cr, 0 , 0, 0 , 0, radius, 0);
+    cairo_line_to (cr, w - radius, 0);
+    cairo_curve_to (cr, w, 0, w, 0, w, radius);
+    cairo_line_to (cr, w , h - radius);
+    cairo_curve_to (cr, w, h, w, h, w - radius, h);
+    cairo_line_to (cr, 0 + radius, h);
+    cairo_curve_to (cr, 0, h, 0, h, 0, h - radius);
+
+    cairo_close_path(cr);
+
+    cairo_set_source_rgb(cr, 1, 1, 1);
+    cairo_fill(cr);
+
+    cairo_destroy(cr);
+    shape = gdk_cairo_region_create_from_surface(surface);
+    cairo_surface_destroy(surface);
+
+    return shape;
+}
+#else
 GdkDrawable*
 ghb_curved_rect_mask(gint width, gint height, gint radius)
 {
@@ -1212,6 +1528,7 @@ ghb_curved_rect_mask(gint width, gint height, gint radius)
 
     return shape;
 }
+#endif
 
 G_MODULE_EXPORT void
 preview_hud_size_alloc_cb(
@@ -1219,7 +1536,11 @@ preview_hud_size_alloc_cb(
     GtkAllocation *allocation,
     signal_user_data_t *ud)
 {
+#if GTK_CHECK_VERSION(3, 0, 0)
+    cairo_region_t *shape;
+#else
     GdkDrawable *shape;
+#endif
 
     //g_message("preview_hud_size_alloc_cb()");
     if (gtk_widget_get_visible(widget) && allocation->height > 50)
@@ -1228,8 +1549,13 @@ preview_hud_size_alloc_cb(
                                     allocation->height, allocation->height/4);
         if (shape != NULL)
         {
+#if GTK_CHECK_VERSION(3, 0, 0)
+            gtk_widget_shape_combine_region(widget, shape);
+            cairo_region_destroy(shape);
+#else
             gtk_widget_shape_combine_mask(widget, shape, 0, 0);
             gdk_pixmap_unref(shape);
+#endif
         }
     }
 }

@@ -2903,11 +2903,11 @@ fWorkingCount = 0;
         hb_job_set_advanced_opts(job, advanced_opts_tmp);
         hb_job_set_x264_profile (job, h264_profile_tmp);
         hb_job_set_x264_level   (job, h264_level_tmp);
-        if (x264_preset_tmp   != NULL) free(x264_preset_tmp);
-        if (x264_tune_tmp     != NULL) free(x264_tune_tmp);
-        if (advanced_opts_tmp != NULL) free(advanced_opts_tmp);
-        if (h264_profile_tmp  != NULL) free(h264_profile_tmp);
-        if (h264_level_tmp    != NULL) free(h264_level_tmp);
+        free(x264_preset_tmp);
+        free(x264_tune_tmp);
+        free(advanced_opts_tmp);
+        free(h264_profile_tmp);
+        free(h264_level_tmp);
     }
 
     
@@ -5579,7 +5579,8 @@ the user is using "Custom" settings by determining the sender*/
     const char *advanced_opts = NULL;
     const char *h264_profile  = NULL;
     const char *h264_level    = NULL;
-    int unparse_width, unparse_height;
+    int         width         = 1;
+    int         height        = 1;
     // prepare the tune, advanced options, profile and level
     if ([(tmpString = [self x264Tune]) length])
     {
@@ -5597,22 +5598,21 @@ the user is using "Custom" settings by determining the sender*/
     {
         h264_level = [tmpString UTF8String];
     }
-    // prepare the width and height (FIXME)
-    unparse_width  = 1280;
-    unparse_height = 720;
-    // if the previous unparsed string is non-NULL, free it
-    if (fX264PresetsUnparsedUTF8String != NULL)
+    // width and height must be non-zero
+    if (fX264PresetsWidthForUnparse && fX264PresetsHeightForUnparse)
     {
-        free(fX264PresetsUnparsedUTF8String);
+        width  = fX264PresetsWidthForUnparse;
+        height = fX264PresetsHeightForUnparse;
     }
+    // free the previous unparsed string
+    free(fX264PresetsUnparsedUTF8String);
     // now, unparse
     fX264PresetsUnparsedUTF8String = hb_x264_param_unparse(x264_preset,
                                                            x264_tune,
                                                            advanced_opts,
                                                            h264_profile,
                                                            h264_level,
-                                                           unparse_width,
-                                                           unparse_height);
+                                                           width, height);
     // update the text field
     [fDisplayX264PresetsUnparseTextField setStringValue:
      [NSString stringWithFormat:@"x264 Unparse: %s",
@@ -5773,6 +5773,12 @@ the user is using "Custom" settings by determining the sender*/
         videoFilters = [videoFilters stringByAppendingString:@" - Grayscale"];
     }
     [fVideoFiltersField setStringValue: [NSString stringWithFormat:@"Video Filters: %@", videoFilters]];
+    
+    /* Store storage resolution for unparse */
+    fX264PresetsWidthForUnparse  = fTitle->job->width;
+    fX264PresetsHeightForUnparse = fTitle->job->height;
+    // width or height may have changed, unparse
+    [self x264PresetsChangedDisplayExpandedOptions:nil];
     
     //[fPictureController reloadStillPreview]; 
 }

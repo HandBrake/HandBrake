@@ -1,6 +1,12 @@
 #include "marshalers.h"
 #include "renderer_button.h"
 
+#if GTK_CHECK_VERSION(3, 0, 0)
+#define MyGdkRectangle const GdkRectangle
+#else
+#define MyGdkRectangle GdkRectangle
+#endif
+
 /* Some boring function declarations: GObject type system stuff */
 static void     custom_cell_renderer_button_init       (CustomCellRendererButton      *cellprogress);
 static void     custom_cell_renderer_button_class_init (CustomCellRendererButtonClass *klass);
@@ -16,13 +22,14 @@ static void     custom_cell_renderer_button_finalize (GObject *gobject);
 
 // My customized part that adds "clicked" signal
 static gboolean
-custom_cell_renderer_button_activate (GtkCellRenderer      *cell,
-                   GdkEvent             *event,
-                   GtkWidget            *widget,
-                   const gchar          *path,
-                   GdkRectangle   *background_area,
-                   GdkRectangle   *cell_area,
-                   GtkCellRendererState  flags);
+custom_cell_renderer_button_activate (
+                    GtkCellRenderer      *cell,
+                    GdkEvent             *event,
+                    GtkWidget            *widget,
+                    const gchar          *path,
+                    MyGdkRectangle       *background_area,
+                    MyGdkRectangle       *cell_area,
+                    GtkCellRendererState flags);
 
 enum {
   CLICKED,
@@ -196,13 +203,14 @@ custom_cell_renderer_button_new (void)
 }
 
 static gboolean
-custom_cell_renderer_button_activate (GtkCellRenderer      *cell,
-                   GdkEvent             *event,
-                   GtkWidget            *widget,
-                   const gchar          *path,
-                   GdkRectangle   *background_area,
-                   GdkRectangle   *cell_area,
-                   GtkCellRendererState  flags)
+custom_cell_renderer_button_activate (
+        GtkCellRenderer         *cell,
+        GdkEvent                *event,
+        GtkWidget               *widget,
+        const gchar             *path,
+        MyGdkRectangle          *background_area,
+        MyGdkRectangle          *cell_area,
+        GtkCellRendererState    flags)
 {
     g_debug("custom_cell_renderer_button_activate ()\n");
     g_signal_emit (cell, button_cell_signals[CLICKED], 0, path);

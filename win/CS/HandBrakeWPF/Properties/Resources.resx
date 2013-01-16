@@ -277,4 +277,48 @@ Suggested values are: 18 to 20 for Standard Definition and 20 to 23 for High Def
 
 FFMpeg's and Theora's scale is more linear. These encoders do not have a lossless mode.</value>
   </data>
+  <data name="Video_LosslessWarning" xml:space="preserve">
+    <value>Warning: RF 0 is Lossless!</value>
+  </data>
+  <data name="Video_LosslessWarningTooltip" xml:space="preserve">
+    <value>A value of 0 means lossless and will result in a file size that is larger than the original source, 
+unless the source was also lossless. 
+
+x264's scale is logarithmic and lower values correspond to higher quality. 
+
+So small increases in value will result in progressively larger increases in the resulting file size. 
+
+Suggested values are: 18 to 20 for Standard Definition and 20 to 23 for High Definition.</value>
+  </data>
+  <data name="AddPreset_PictureSizeMode" xml:space="preserve">
+    <value>You can optionally store a maximum resolution for encodes that use this preset. There are 3 modes:
+
+None:  There is no maximum resolution for encodes using this preset. They will always use the source resolution minus any cropping that may be applied.
+
+Custom: You can optionally set a Maximum width and height. When doing this an encode will be less than or equal to these values.
+
+Source Maximum:  Similar to custom, but the resolution of your current source is used as the Max width and Height values instead.</value>
+  </data>
+  <data name="Advanced_EncoderOptions" xml:space="preserve">
+    <value>The options passed to the x264 encoder. 
+The above controls are only a subset of useful x264 parameters. 
+This box allows you to add or modify additional or current parameters as desired. </value>
+  </data>
+  <data name="About_GPL" xml:space="preserve">
+    <value>Copyright (C) 2003-2013 The HandBrake Team
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.</value>
+  </data>
 </root>

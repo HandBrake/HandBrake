@@ -9,12 +9,12 @@
 
 namespace HandBrakeWPF.Views
 {
-    using System.Windows;
+    using System.Windows.Controls;
 
     /// <summary>
     /// Interaction logic for AboutView.xaml
     /// </summary>
-    public partial class AboutView : Window
+    public partial class AboutView : UserControl
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AboutView"/> class.

@@ -282,31 +282,16 @@ ghb_widget_value(GtkWidget *widget)
             value = ghb_string_value_new(shortOpt);
             g_free(shortOpt);
         }
+        else if (gtk_combo_box_get_has_entry(GTK_COMBO_BOX(widget)))
+        {
+            const gchar *str;
+            str = gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(widget))));
+            if (str == NULL) str = "";
+            value = ghb_string_value_new(str);
+        }
         else
         {
             value = ghb_string_value_new("");
-        }
-    }
-    else if (type == GTK_TYPE_COMBO_BOX_ENTRY)
-    {
-        GtkTreeModel *store;
-        GtkTreeIter iter;
-        gchar *shortOpt;
-
-        g_debug("\tcombo_box_entry");
-        store = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
-        if (gtk_combo_box_get_active_iter(GTK_COMBO_BOX(widget), &iter))
-        {
-            gtk_tree_model_get(store, &iter, 2, &shortOpt, -1);
-            value = ghb_string_value_new(shortOpt);
-            g_free(shortOpt);
-        }
-        else
-        {
-            const gchar *str;
-            str = gtk_combo_box_get_active_text(GTK_COMBO_BOX(widget));
-            if (str == NULL) str = "";
-            value = ghb_string_value_new(str);
         }
     }
     else if (type == GTK_TYPE_SPIN_BUTTON)
@@ -358,10 +343,12 @@ ghb_widget_value(GtkWidget *widget)
     }
     else if (type == GTK_TYPE_FILE_CHOOSER_BUTTON)
     {
-        gchar *str;
+        gchar *str = NULL;
         str = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(widget));
         if (str == NULL)
+        {
             str = gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(widget));
+        }
         value = ghb_string_value_new(str);
         if (str != NULL)
             g_free(str);
@@ -581,55 +568,21 @@ update_widget(GtkWidget *widget, const GValue *value)
         }
         if (!foundit)
         {
-            gtk_combo_box_set_active (GTK_COMBO_BOX(widget), 0);
-        }
-    }
-    else if (type == GTK_TYPE_COMBO_BOX_ENTRY)
-    {
-        GtkTreeModel *store;
-        GtkTreeIter iter;
-        gchar *shortOpt;
-        gdouble ivalue;
-        gboolean foundit = FALSE;
-
-        g_debug("GTK_COMBO_BOX_ENTRY");
-        store = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
-        if (gtk_tree_model_get_iter_first (store, &iter))
-        {
-            do
+            if (gtk_combo_box_get_has_entry(GTK_COMBO_BOX(widget)))
             {
-                gtk_tree_model_get(store, &iter, 2, &shortOpt, -1);
-                if (strcmp(shortOpt, str) == 0)
+                GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(widget)));
+                if (entry)
                 {
-                    gtk_combo_box_set_active_iter (
-                        GTK_COMBO_BOX(widget), &iter);
-                    g_free(shortOpt);
-                    foundit = TRUE;
-                    break;
+                    gtk_entry_set_text (entry, str);
                 }
-                g_free(shortOpt);
-            } while (gtk_tree_model_iter_next (store, &iter));
-        }
-        if (!foundit && gtk_tree_model_get_iter_first (store, &iter))
-        {
-            do
-            {
-                gtk_tree_model_get(store, &iter, 3, &ivalue, -1);
-                if ((gint)ivalue == ival || ivalue == dval)
+                else
                 {
-                    gtk_combo_box_set_active_iter (
-                        GTK_COMBO_BOX(widget), &iter);
-                    foundit = TRUE;
-                    break;
+                    gtk_combo_box_set_active (GTK_COMBO_BOX(widget), 0);
                 }
-            } while (gtk_tree_model_iter_next (store, &iter));
-        }
-        if (!foundit)
-        {
-            GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(widget)));
-            if (entry)
+            }
+            else
             {
-                gtk_entry_set_text (entry, str);
+                gtk_combo_box_set_active (GTK_COMBO_BOX(widget), 0);
             }
         }
     }
@@ -663,15 +616,16 @@ update_widget(GtkWidget *widget, const GValue *value)
     {
         GtkFileChooserAction act;
         act = gtk_file_chooser_get_action(GTK_FILE_CHOOSER(widget));
+
         if (str[0] == 0)
         {
             // Do nothing
             ;
         }
         else if (act == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-            act == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+                 act == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
         {
-            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(widget), str);
+            gtk_file_chooser_set_filename (GTK_FILE_CHOOSER(widget), str);
         }
         else if (act == GTK_FILE_CHOOSER_ACTION_SAVE)
         {

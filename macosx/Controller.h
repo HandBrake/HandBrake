@@ -61,7 +61,7 @@ BOOL                        fIsDragging;
     
     /* x264 Presets Box */
     NSArray                      * fX264PresetNames;
-    NSUInteger                   * fX264MediumPresetIndex;
+    NSUInteger                     fX264MediumPresetIndex;
     IBOutlet NSButton            * fx264UseAdvancedOptionsCheck;
     IBOutlet NSBox               * fX264PresetsBox;
     IBOutlet NSSlider            * fX264PresetsSlider;
@@ -79,6 +79,8 @@ BOOL                        fIsDragging;
     // Text Field to show the expanded opts from unparse()
     IBOutlet NSTextField         * fDisplayX264PresetsUnparseTextField;
     char                         * fX264PresetsUnparsedUTF8String;
+    NSUInteger                     fX264PresetsHeightForUnparse;
+    NSUInteger                     fX264PresetsWidthForUnparse;
     
     /* Advanced options tab */
     HBAdvancedController         * fAdvancedOptions;
@@ -196,7 +198,7 @@ BOOL                        fIsDragging;
     IBOutlet NSButton            * fAudioAllowDTSHDPassCheck;
     IBOutlet NSButton            * fAudioAllowDTSPassCheck;
     IBOutlet NSButton            * fAudioAllowMP3PassCheck;
-    IBOutlet NSButton            * fAudioFallbackPopUp;
+    IBOutlet NSPopUpButton       * fAudioFallbackPopUp;
     
     	    
     /* Chapters box */

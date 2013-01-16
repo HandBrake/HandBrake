@@ -98,7 +98,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The motion estimation range.
         /// </summary>
-        private AdvancedChoice motionEstimationRange;
+        private int motionEstimationRange;
 
         /// <summary>
         /// The no dct decimate.
@@ -418,7 +418,13 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.motionEstimationMethod = value;
                 this.NotifyOfPropertyChange(() => this.MotionEstimationMethod);
-                this.NotifyOfPropertyChange(() => this.MotionEstimationRangeVisible);
+
+                if ((MotionEstimationMethod.Value == "hex" || MotionEstimationMethod.Value == "dia") && (motionEstimationRange > 16))
+                {
+                    this.motionEstimationRange = 16;
+                    this.NotifyOfPropertyChange(() => this.MotionEstimationRange);
+                }
+
                 this.UpdateOptionsString();
             }
         }
@@ -426,7 +432,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets MotionEstimationRange.
         /// </summary>
-        public AdvancedChoice MotionEstimationRange
+        public int MotionEstimationRange
         {
             get
             {
@@ -435,21 +441,21 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
-                this.motionEstimationRange = value;
+                if ((MotionEstimationMethod.Value == "hex" || MotionEstimationMethod.Value == "dia") && (value > 16))
+                {
+                    this.motionEstimationRange = 16;
+                }
+                else if (value < 4)
+                {
+                    this.motionEstimationRange = 4;
+                }
+                else
+                {
+                    this.motionEstimationRange = value;
+                }
+
                 this.NotifyOfPropertyChange(() => this.MotionEstimationRange);
                 this.UpdateOptionsString();
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether MotionEstimationRangeVisible.
-        /// </summary>
-        public bool MotionEstimationRangeVisible
-        {
-            get
-            {
-                string motionMethod = this.MotionEstimationMethod.Value;
-                return motionMethod == "umh" || motionMethod == "esa" || motionMethod == "tesa";
             }
         }
 
@@ -772,13 +778,7 @@ namespace HandBrakeWPF.ViewModels
                             case "merange":
                                 if (int.TryParse(optionValue, out parseInt))
                                 {
-                                    newChoice =
-                                        AdvancedChoicesHelper.MotionEstimationRange.SingleOrDefault(
-                                            choice => choice.Value == parseInt.ToString(CultureInfo.InvariantCulture));
-                                    if (newChoice != null)
-                                    {
-                                        this.MotionEstimationRange = newChoice;
-                                    }
+                                    this.MotionEstimationRange = parseInt;
                                 }
 
                                 break;
@@ -1015,8 +1015,7 @@ namespace HandBrakeWPF.ViewModels
                 AdvancedChoicesHelper.MotionEstimationMethod.SingleOrDefault(choice => choice.IsDefault);
             this.SubpixelMotionEstimation =
                 AdvancedChoicesHelper.SubpixelMotionEstimation.SingleOrDefault(choice => choice.IsDefault);
-            this.MotionEstimationRange =
-                AdvancedChoicesHelper.MotionEstimationRange.SingleOrDefault(choice => choice.IsDefault);
+            this.MotionEstimationRange = 16;
             this.Analysis = AdvancedChoicesHelper.Analysis.SingleOrDefault(choice => choice.IsDefault);
             this.EightByEightDct = true;
             this.CabacEntropyCoding = true;
@@ -1107,11 +1106,9 @@ namespace HandBrakeWPF.ViewModels
                 newOptions.Add("subme=" + this.SubpixelMotionEstimation.Value);
             }
 
-            string motionEstimation = this.MotionEstimationMethod.Value;
-            if ((motionEstimation == "umh" || motionEstimation == "esa" || motionEstimation == "tesa") &&
-                !this.MotionEstimationRange.IsDefault)
+            if (this.MotionEstimationRange != 16)
             {
-                newOptions.Add("merange=" + this.MotionEstimationRange.Value);
+                newOptions.Add("merange=" + this.MotionEstimationRange);
             }
 
             if (!this.Analysis.IsDefault)
