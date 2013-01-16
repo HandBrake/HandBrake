@@ -79,6 +79,8 @@ BOOL                        fIsDragging;
     // Text Field to show the expanded opts from unparse()
     IBOutlet NSTextField         * fDisplayX264PresetsUnparseTextField;
     char                         * fX264PresetsUnparsedUTF8String;
+    NSUInteger                     fX264PresetsHeightForUnparse;
+    NSUInteger                     fX264PresetsWidthForUnparse;
     
     /* Advanced options tab */
     HBAdvancedController         * fAdvancedOptions;
