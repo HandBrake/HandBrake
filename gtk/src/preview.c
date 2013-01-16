@@ -614,12 +614,12 @@ live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data)
         //printf("qos\n");
     } break;
 
+#if GST_CHECK_VERSION(1, 0, 0)
     case GST_MESSAGE_PROGRESS:
     {
         //printf("progress\n");
     } break;
 
-#if GST_CHECK_VERSION(1, 0, 0)
     case GST_MESSAGE_TOC:
     {
         //printf("toc\n");
