@@ -162,7 +162,7 @@ void hb_va_close( hb_va_dxva2_t *dxva2 )
     if ( dxva2->nv12toyuv_tmp_out )
         free( dxva2->nv12toyuv_tmp_out );
 #endif
-    free( dxva2->description );
+    dxva2->description = NULL;
     free( dxva2 );
 }
 
