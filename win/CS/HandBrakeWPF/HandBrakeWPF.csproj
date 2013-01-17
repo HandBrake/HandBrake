@@ -143,6 +143,7 @@
     <Compile Include="Converters\Audio\AudioEncoderConverter.cs" />
     <Compile Include="Converters\Audio\AudioQueueDisplayConverter.cs" />
     <Compile Include="Converters\BooleanToHiddenVisibilityConverter.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Converters\Options\OptionsTabConverter.cs" />
     <Compile Include="Converters\Options\OptionsTabNameConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitlesQueueDisplayConverter.cs" />

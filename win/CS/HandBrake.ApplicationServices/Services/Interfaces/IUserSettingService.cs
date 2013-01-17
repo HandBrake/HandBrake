@@ -9,11 +9,29 @@
 
 namespace HandBrake.ApplicationServices.Services.Interfaces
 {
+    using HandBrake.ApplicationServices.EventArgs;
+
+    /// <summary>
+    /// The setting event handler.
+    /// </summary>
+    /// <param name="sender">
+    /// The sender.
+    /// </param>
+    /// <param name="e">
+    /// The e.
+    /// </param>
+    public delegate void SettingEventHandler(object sender, SettingChangedEventArgs e);
+
     /// <summary>
     /// The User Setting Service Interace.
     /// </summary>
     public interface IUserSettingService
     {
+        /// <summary>
+        /// The setting changed.
+        /// </summary>
+        event SettingEventHandler SettingChanged;
+
         /// <summary>
         /// Set the specified user setting.
         /// </summary>

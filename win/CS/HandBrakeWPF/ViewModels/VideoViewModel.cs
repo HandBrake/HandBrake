@@ -27,6 +27,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Interop.Model.Encoding.x264;
 
     using HandBrakeWPF.Commands.Interfaces;
+    using HandBrakeWPF.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -95,6 +96,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool canClear;
 
+        /// <summary>
+        /// The use advanced tab.
+        /// </summary>
+        private bool useAdvancedTab;
+
         #endregion
 
         #region Constructors and Destructors
@@ -122,6 +128,8 @@ namespace HandBrakeWPF.ViewModels
             H264Profiles = EnumHelper<x264Profile>.GetEnumList();
             X264Tunes = EnumHelper<x264Tune>.GetEnumList().Where(t => t != x264Tune.Fastdecode);
             this.H264Levels = Levels;
+
+            this.userSettingService.SettingChanged += this.UserSettingServiceSettingChanged;
         }
 
         #endregion
@@ -132,6 +140,44 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets the current Encode Task.
         /// </summary>
         public EncodeTask Task { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether show advanced tab.
+        /// </summary>
+        public bool ShowAdvancedTab
+        {
+            get
+            {
+                bool showAdvTabSetting =
+                    this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedTab);
+                if (!showAdvTabSetting)
+                {
+                    this.UseAdvancedTab = false;
+                }
+
+                return showAdvTabSetting;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether use video tab.
+        /// </summary>
+        public bool UseAdvancedTab
+        {
+            get
+            {
+                return this.useAdvancedTab;
+            }
+            set
+            {
+                if (!object.Equals(value, this.useAdvancedTab))
+                {
+                    this.useAdvancedTab = value;
+                    this.Task.ShowAdvancedTab = value;
+                    this.NotifyOfPropertyChange(() => this.UseAdvancedTab);
+                }
+            }
+        }
 
         /// <summary>
         /// Gets Framerates.
@@ -335,6 +381,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets the rfqp.
+        /// </summary>
         public string Rfqp
         {
             get
@@ -729,6 +778,8 @@ namespace HandBrakeWPF.ViewModels
                 this.H264Level = preset.Task.VideoEncoder == VideoEncoder.X264 ? preset.Task.H264Level : "Auto";
                 this.FastDecode = preset.Task.VideoEncoder == VideoEncoder.X264 && preset.Task.FastDecode;
                 this.ExtraArguments = preset.Task.ExtraAdvancedArguments;
+
+                this.UseAdvancedTab = !string.IsNullOrEmpty(preset.Task.AdvancedEncoderOptions) && this.ShowAdvancedTab;
             }
         }
 
@@ -865,6 +916,23 @@ namespace HandBrakeWPF.ViewModels
 
             // TODO figure out what is wrong with this??
             return HandBrakeUtils.CreateX264OptionsString(preset, tunes, this.ExtraArguments, profile, this.H264Level, width, height);
+        }
+
+        /// <summary>
+        /// The user setting service_ setting changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void UserSettingServiceSettingChanged(object sender, HandBrake.ApplicationServices.EventArgs.SettingChangedEventArgs e)
+        {
+            if (e.Key == UserSettingConstants.ShowAdvancedTab)
+            {
+                this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);
+            }
         }
     }
 }
