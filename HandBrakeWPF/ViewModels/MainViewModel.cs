@@ -213,6 +213,7 @@ namespace HandBrakeWPF.ViewModels
             // Setup Properties
             this.WindowTitle = "HandBrake";
             this.CurrentTask = new EncodeTask();
+            this.CurrentTask.PropertyChanged += this.CurrentTask_PropertyChanged;
             this.ScannedSource = new Source();
 
             // Setup Events
@@ -223,6 +224,7 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueueCompleted += this.QueueCompleted;
             this.queueProcessor.QueueChanged += this.QueueChanged;
             this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeStatusChanged;
+            this.userSettingService.SettingChanged += this.UserSettingServiceSettingChanged;
 
             this.Presets = this.presetService.Presets;
             this.CancelScanCommand = new CancelScanCommand(this.scanService);
@@ -885,6 +887,7 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueueChanged -= this.QueueChanged;
             this.queueProcessor.JobProcessingStarted -= this.QueueProcessorJobProcessingStarted;
             this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
+            this.userSettingService.SettingChanged -= this.UserSettingServiceSettingChanged;
         }
 
         #endregion
@@ -1858,6 +1861,41 @@ namespace HandBrakeWPF.ViewModels
         private void DriveTrayChanged()
         {
             Caliburn.Micro.Execute.OnUIThread(() => this.SourceMenu = this.GenerateSourceMenu());
+        }
+
+        /// <summary>
+        /// Allows the main window to respond to setting changes.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void UserSettingServiceSettingChanged(object sender, HandBrake.ApplicationServices.EventArgs.SettingChangedEventArgs e)
+        {
+            if (e.Key == UserSettingConstants.ShowAdvancedTab)
+            {
+                this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);
+            }
+        }
+
+        /// <summary>
+        /// Handle the property changed event of the encode task. 
+        /// Allows the main window to respond to changes.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void CurrentTask_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+           if (e.PropertyName == UserSettingConstants.ShowAdvancedTab)
+           {
+               this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);
+           }
         }
 
         #endregion

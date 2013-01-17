@@ -172,6 +172,9 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="AdvancedViewModel"/> class.
         /// </summary>
+        /// <param name="advancedEncoderOptionsCommand">
+        /// The advanced Encoder Options Command.
+        /// </param>
         public AdvancedViewModel(IAdvancedEncoderOptionsCommand advancedEncoderOptionsCommand)
         {
             this.advancedEncoderOptionsCommand = advancedEncoderOptionsCommand;
@@ -179,9 +182,32 @@ namespace HandBrakeWPF.ViewModels
             this.UpdateUIFromAdvancedOptions();
         }
 
+        /// <summary>
+        /// The task object property changed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The PropertyChangedEventArgs.
+        /// </param>
+        private void Task_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == UserSettingConstants.ShowAdvancedTab)
+            {
+                ShowX264AdvancedOptions = this.Task.ShowAdvancedTab;
+                this.NotifyOfPropertyChange(() => ShowX264AdvancedOptions);
+            }
+        }
+
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether show x 264 advanced options.
+        /// </summary>
+        public bool ShowX264AdvancedOptions { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether DisplayX264Options.
@@ -195,7 +221,19 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.displayX264Options = value;
+
+                if (this.displayX264Options == false)
+                {
+                    this.ShowX264AdvancedOptions = false;
+                }
+
+                if (this.displayX264Options == true && this.Task.ShowAdvancedTab)
+                {
+                    this.ShowX264AdvancedOptions = true;
+                }
+
                 this.NotifyOfPropertyChange(() => this.DisplayX264Options);
+                this.NotifyOfPropertyChange(() => this.ShowX264AdvancedOptions);
             }
         }
 
@@ -959,7 +997,9 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void SetPreset(Preset preset, EncodeTask task)
         {
+            this.Task.PropertyChanged -= this.Task_PropertyChanged;
             this.Task = task;
+            this.Task.PropertyChanged += this.Task_PropertyChanged;
             this.AdvancedOptionsString = preset.Task.AdvancedEncoderOptions;
         }
 

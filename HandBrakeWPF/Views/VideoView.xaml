@@ -11,8 +11,9 @@
         <Converters:BooleanConverter x:Key="boolConverter" />
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
         <Converters:EnumComboConverter x:Key="enumComboConverter" />
+        <Converters:InverseBooleanConverter x:Key="inverseConverter" />
         <Video:VideoEncoderConverter x:Key="videoEncoderConverter" />
-
+        
         <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement">
             <Setter Property="ToolTipService.ShowDuration" Value="20000" />
         </Style>
@@ -109,63 +110,79 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Optimise Video:" Margin="0,0,0,8" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontWeight="Bold" VerticalAlignment="Center" />
+                <TextBlock Text="Optimise Video:" Margin="0,0,0,8" Grid.Row="0"  Grid.ColumnSpan="2" FontWeight="Bold" VerticalAlignment="Center" />
 
-                <!-- Row 1 -->
-                <TextBlock Text="x264 Preset:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
-                <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal">
-                    <Slider Minimum="0" Maximum="9" Width="150" Value="{Binding X264PresetValue, Mode=Default, UpdateSourceTrigger=PropertyChanged}" 
+                <CheckBox Content="Use Advanced Tab instead" Grid.Row="1" IsChecked="{Binding UseAdvancedTab}" 
+                          Visibility="{Binding ShowAdvancedTab, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+
+                <Grid Grid.Row="2" Margin="0,5,0,0" IsEnabled="{Binding UseAdvancedTab, Converter={StaticResource inverseConverter}}"
+                      Visibility="{Binding DisplayX264Options, Converter={StaticResource boolToVisConverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+
+
+                    <!-- Row 1 -->
+                    <TextBlock Text="x264 Preset:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
+                    <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal">
+                        <Slider Minimum="0" Maximum="9" Width="150" Value="{Binding X264PresetValue, Mode=Default, UpdateSourceTrigger=PropertyChanged}" 
                             IsSnapToTickEnabled="True" TickFrequency="1" TickPlacement="BottomRight" ToolTip="{x:Static Properties:Resources.Video_x264Preset}" 
                             Style="{StaticResource LongToolTipHolder}" />
-                    <TextBlock Text="{Binding X264Preset, Converter={StaticResource enumComboConverter}}" Margin="5,0,0,0" />
-                </StackPanel>
+                        <TextBlock Text="{Binding X264Preset, Converter={StaticResource enumComboConverter}}" Margin="5,0,0,0" />
+                    </StackPanel>
 
-                <TextBlock Text="x264 Tune:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,10,0,0"  />
-                <ComboBox Width="100" Grid.Row="2" Grid.Column="1" Margin="5,10,5,0" Height="22"
+                    <TextBlock Text="x264 Tune:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,10,0,0"  />
+                    <ComboBox Width="100" Grid.Row="2" Grid.Column="1" Margin="5,10,5,0" Height="22"
                           ItemsSource="{Binding X264Tunes, Converter={StaticResource enumComboConverter}}" 
                           SelectedItem="{Binding X264Tune, Converter={StaticResource enumComboConverter}}"
                           ToolTip="{x:Static Properties:Resources.Video_x264Tune}"
                           Style="{StaticResource LongToolTipHolder}" />
-                <CheckBox IsChecked="{Binding FastDecode}" Content="Fast Decode" Grid.Row="2" Grid.Column="2" Margin="10,10,10,0" VerticalAlignment="Center"
+                    <CheckBox IsChecked="{Binding FastDecode}" Content="Fast Decode" Grid.Row="2" Grid.Column="2" Margin="10,10,10,0" VerticalAlignment="Center"
                           ToolTip="{x:Static Properties:Resources.Video_x264FastDecode}"/>
-                
 
-                <!-- Row 2-->
-                <TextBlock Text="H.264 Profile:" Grid.Row="3" Grid.Column="0" Margin="0,10,0,0" VerticalAlignment="Center" />
-                <ComboBox Width="100" Grid.Row="3" Grid.Column="1" Margin="5,10,5,0" Height="22" VerticalAlignment="Center"
+
+                    <!-- Row 2-->
+                    <TextBlock Text="H.264 Profile:" Grid.Row="3" Grid.Column="0" Margin="0,10,0,0" VerticalAlignment="Center" />
+                    <ComboBox Width="100" Grid.Row="3" Grid.Column="1" Margin="5,10,5,0" Height="22" VerticalAlignment="Center"
                           ItemsSource="{Binding H264Profiles, Converter={StaticResource enumComboConverter}}" 
                           SelectedItem="{Binding H264Profile, Converter={StaticResource enumComboConverter}}"
                           Style="{StaticResource LongToolTipHolder}"
                           ToolTip="{x:Static Properties:Resources.Video_x264Profile}" />
 
-                <TextBlock Text="H.264 Level:" Grid.Row="3" Grid.Column="2" Margin="10,10,0,0" VerticalAlignment="Center" />
-                <ComboBox Width="100" Grid.Row="3" Grid.Column="3" Margin="5,10,5,0" Height="22" VerticalAlignment="Center"
+                    <TextBlock Text="H.264 Level:" Grid.Row="3" Grid.Column="2" Margin="10,10,0,0" VerticalAlignment="Center" />
+                    <ComboBox Width="100" Grid.Row="3" Grid.Column="3" Margin="5,10,5,0" Height="22" VerticalAlignment="Center"
                           ItemsSource="{Binding H264Levels}" 
                           SelectedItem="{Binding H264Level}"
                           Style="{StaticResource LongToolTipHolder}"
                           ToolTip="{x:Static Properties:Resources.Video_x264Level}"/>
-                
-                <!-- Row 3 -->
-                <TextBlock Text="Extra Options:" Grid.Row="4" Grid.Column="0" Margin="0,10,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" />
-                <TextBox Text="{Binding ExtraArguments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+
+                    <!-- Row 3 -->
+                    <TextBlock Text="Extra Options:" Grid.Row="4" Grid.Column="0" Margin="0,10,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" />
+                    <TextBox Text="{Binding ExtraArguments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          Height="30" MaxLines="2" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Margin="5,10,0,0" VerticalAlignment="Center"
                          ToolTip="{Binding FullOptionsTooltip}"/>
-                
-                
+
+
+                </Grid>
             </Grid>
+            
+         
         </Grid>
 
     </Grid>

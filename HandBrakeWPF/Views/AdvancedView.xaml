@@ -42,7 +42,7 @@
                            VerticalAlignment="Center"
                            FontWeight="Bold"
                            Text="x264 Encoder Options:"
-                   Visibility="{Binding DisplayX264Options, Converter={StaticResource BooleanVisibilityConverter}, ConverterParameter=false}"
+                   Visibility="{Binding ShowX264AdvancedOptions, Converter={StaticResource BooleanVisibilityConverter}, ConverterParameter=false}"
                            />
         
         <TextBox Grid.Row="3"
@@ -54,7 +54,7 @@
                  Text="{Binding AdvancedOptionsString,
                                 UpdateSourceTrigger=PropertyChanged}"
                  TextWrapping="Wrap"
-                 Visibility="{Binding DisplayX264Options, Converter={StaticResource BooleanVisibilityConverter}, ConverterParameter=false}"
+                 Visibility="{Binding ShowX264AdvancedOptions, Converter={StaticResource BooleanVisibilityConverter}, ConverterParameter=false}"
                  />
 
         <StackPanel Orientation="Vertical">
@@ -80,7 +80,11 @@
             </Grid>
 
             <!--  X264  -->
-            <Grid Visibility="{Binding DisplayX264Options, Converter={StaticResource BooleanVisibilityConverter}, ConverterParameter=false}">
+            <TextBlock Text="{x:Static Properties:Resources.Advanced_NotInUse}"
+                       TextWrapping="Wrap" Width="480" Margin="0, 100, 0, 0" FontSize="12"
+                       Visibility="{Binding ShowX264AdvancedOptions, Converter={StaticResource BooleanVisibilityConverter}, ConverterParameter=true}" />
+            
+            <Grid Visibility="{Binding ShowX264AdvancedOptions, Converter={StaticResource BooleanVisibilityConverter}, ConverterParameter=false}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
