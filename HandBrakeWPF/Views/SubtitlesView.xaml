@@ -8,6 +8,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:NumericUpDown="clr-namespace:EagleBoost.Wpf.Presentation.Controls.NumericUpDown;assembly=EagleBoost.Wpf.Presentation"
+             xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
              d:DesignHeight="153"
              d:DesignWidth="319"
              mc:Ignorable="d">
@@ -229,15 +230,11 @@
                                        VerticalAlignment="Center"
                                        FontWeight="Bold"
                                        Text="Offset (ms)" />
-                            <NumericUpDown:NumericUpDown Grid.Row="1"
-                                                         Grid.Column="5"
-                                                         Width="65"
-                                                         Margin="5,0,5,0"
-                                                         HorizontalAlignment="Left"
-                                                         IsEnabled="{Binding IsSrtSubtitle}"
-                                                         Minimum="-10800"
-                                                         Value="{Binding SrtOffset, Mode=TwoWay}" />
 
+                            <controls:NumberBox Grid.Row="1" Grid.Column="5" Width="65" Height="24" Margin="5,0,5,0"
+                                            Minimum="-900000" Maximum="900000" IsEnabled="{Binding IsSrtSubtitle}"
+                                            Number="{Binding SrtOffset, Mode=TwoWay}" />
+                            
                         </Grid>
 
                         <!--  Delete  -->
