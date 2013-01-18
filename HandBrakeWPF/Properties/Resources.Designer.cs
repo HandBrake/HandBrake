@@ -239,6 +239,8 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to The x264 Preset / Tune / Profile and Level options are currently in use on the Video Tab. 
         ///
+        ///To enable this tab, check the &quot;Use Advanced Tab instead&quot; option on the Video Tab.
+        ///
         ///If you do not use this tab, it can be hidden from: Tools Menu &gt; Options &gt; Advanced..
         /// </summary>
         public static string Advanced_NotInUse {
