@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:NumericUpDown="clr-namespace:EagleBoost.Wpf.Presentation.Controls.NumericUpDown;assembly=EagleBoost.Wpf.Presentation"
+        xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
         Title="Scan Title"
         Width="250"
         Background="#FFF1F0EF"
@@ -39,12 +40,9 @@
                     Margin="10,10,0,10"
                     Orientation="Horizontal">
             <TextBlock Text="Choose a title to scan:" />
-            <NumericUpDown:NumericUpDown Width="60"
-                                         Margin="10,0,0,0"
-                                         Maximum="1000"
-                                         Minimum="0"
-                                         Value="{Binding SelectedTitle,
-                                                         Mode=TwoWay}" />
+
+            <controls:NumberBox Width="60" Height="24" Margin="10,0,0,0"
+                                Minimum="0" Maximum="1000" Number="{Binding SelectedTitle, Mode=TwoWay}" />
         </StackPanel>
 
         <StackPanel Grid.Row="2"

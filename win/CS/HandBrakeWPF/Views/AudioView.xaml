@@ -9,6 +9,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:NumericUpDown="clr-namespace:EagleBoost.Wpf.Presentation.Controls.NumericUpDown;assembly=EagleBoost.Wpf.Presentation"
+             xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
              d:DesignHeight="170"
              d:DesignWidth="616"
              mc:Ignorable="d">
@@ -265,6 +266,7 @@
                                        Visibility="{Binding IsPassthru,
                                                             Converter={StaticResource boolToVisConverter},
                                                             ConverterParameter=true}" />
+
                             <NumericUpDown:NumericUpDown Name="drcNumericCtl"
                                                          Grid.Row="1"
                                                          Grid.Column="3"
