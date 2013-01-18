@@ -2964,11 +2964,11 @@ void hb_hexdump( hb_debug_level_t level, const char * label, const uint8_t * dat
 
 int hb_use_dxva( hb_title_t * title )
 {                
-    return ( (title->video_codec_param == CODEC_ID_MPEG2VIDEO 
-              || title->video_codec_param == CODEC_ID_H264
-              || title->video_codec_param == CODEC_ID_VC1 
-              || title->video_codec_param == CODEC_ID_WMV3 
-              || title->video_codec_param == CODEC_ID_MPEG4 )
+    return ( (title->video_codec_param == AV_CODEC_ID_MPEG2VIDEO 
+              || title->video_codec_param == AV_CODEC_ID_H264
+              || title->video_codec_param == AV_CODEC_ID_VC1 
+              || title->video_codec_param == AV_CODEC_ID_WMV3 
+              || title->video_codec_param == AV_CODEC_ID_MPEG4 )
              && title->opaque_priv );
 }
 int hb_get_gui_info(hb_gui_t * gui, int option)

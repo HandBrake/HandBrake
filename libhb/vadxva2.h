@@ -153,13 +153,13 @@ static const hb_d3d_format_t d3d_formats[] =
 
 static const hb_dx_mode_t dxva2_modes[] =
 {
-    { "DXVA2_ModeMPEG2_VLD",    &DXVA2_ModeMPEG2_VLD,     CODEC_ID_MPEG2VIDEO },
+    { "DXVA2_ModeMPEG2_VLD",    &DXVA2_ModeMPEG2_VLD,     AV_CODEC_ID_MPEG2VIDEO },
     { "DXVA2_ModeMPEG2_MoComp", &DXVA2_ModeMPEG2_MoComp,  0 },
     { "DXVA2_ModeMPEG2_IDCT",   &DXVA2_ModeMPEG2_IDCT,    0 },
 
-    { "H.264 variable-length decoder (VLD), FGT",               &DXVA2_ModeH264_F,         CODEC_ID_H264 },
-    { "H.264 VLD, no FGT",                                      &DXVA2_ModeH264_E,         CODEC_ID_H264 },
-    { "H.264 VLD, no FGT (Intel)",                              &DXVADDI_Intel_ModeH264_E, CODEC_ID_H264 },
+    { "H.264 variable-length decoder (VLD), FGT",               &DXVA2_ModeH264_F,         AV_CODEC_ID_H264 },
+    { "H.264 VLD, no FGT",                                      &DXVA2_ModeH264_E,         AV_CODEC_ID_H264 },
+    { "H.264 VLD, no FGT (Intel)",                              &DXVADDI_Intel_ModeH264_E, AV_CODEC_ID_H264 },
     { "H.264 IDCT, FGT",                                        &DXVA2_ModeH264_D,         0             },
     { "H.264 inverse discrete cosine transform (IDCT), no FGT", &DXVA2_ModeH264_C,         0             },
     { "H.264 inverse discrete cosine transform (IDCT), no FGT (Intel)", &DXVADDI_Intel_ModeH264_C, 0     },
@@ -174,8 +174,8 @@ static const hb_dx_mode_t dxva2_modes[] =
     {  "Windows Media Video 9 MoComp",          &DXVA2_ModeWMV9_B, 0 },
     {  "Windows Media Video 9 post processing", &DXVA2_ModeWMV9_A, 0 },
 
-    { "VC-1 VLD",             &DXVA2_ModeVC1_D, CODEC_ID_VC1 },
-    { "VC-1 VLD",             &DXVA2_ModeVC1_D, CODEC_ID_WMV3 },
+    { "VC-1 VLD",             &DXVA2_ModeVC1_D, AV_CODEC_ID_VC1 },
+    { "VC-1 VLD",             &DXVA2_ModeVC1_D, AV_CODEC_ID_WMV3 },
     { "VC-1 IDCT",            &DXVA2_ModeVC1_C, 0 },
     { "VC-1 MoComp",          &DXVA2_ModeVC1_B, 0 },
     { "VC-1 post processing", &DXVA2_ModeVC1_A, 0 },

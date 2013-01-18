@@ -118,10 +118,10 @@ static int64_t heap_pop( pts_heap_t *heap )
     while( child <= heap->nheap )
     {
         // find the smallest of the two children of parent
-        if( child < heap->nheap && heap->h[child] > heap->h[child+1] )
+        if (child < heap->nheap && heap->h[child] > heap->h[child+1] )
             ++child;
 
-        if( v <= heap->h[child] )
+        if (v <= heap->h[child])
             // new item is smaller than either child so it's the new parent.
             break;
 
@@ -138,7 +138,7 @@ static int64_t heap_pop( pts_heap_t *heap )
 
 static void heap_push( pts_heap_t *heap, int64_t v )
 {
-    if( heap->nheap < HEAP_SIZE )
+    if ( heap->nheap < HEAP_SIZE )
     {
         ++heap->nheap;
     }
@@ -146,9 +146,9 @@ static void heap_push( pts_heap_t *heap, int64_t v )
     // stick the new value on the bottom of the heap then bubble it
     // up to its correct spot.
     int child = heap->nheap;
-    while( child > 1 ) {
+    while (child > 1) {
         int parent = child >> 1;
-        if( heap->h[parent] <= v )
+        if (heap->h[parent] <= v)
             break;
         // move parent down
         int64_t hp = heap->h[parent];
@@ -167,33 +167,34 @@ static void closePrivData( hb_work_private_t ** ppv )
 {
     hb_work_private_t * pv = *ppv;
 
-    if( pv )
+    if ( pv )
     {
         flushDelayQueue( pv );
 
-        if( pv->job && pv->context && pv->context->codec )
+        if ( pv->job && pv->context && pv->context->codec )
         {
             hb_log( "%s-decoder done: %u frames, %u decoder errors, %u drops",
                     pv->context->codec->name, pv->nframes, pv->decode_errors,
                     pv->ndrops );
         }
-        if( pv->sws_context )
+        if ( pv->sws_context )
         {
             sws_freeContext( pv->sws_context );
         }
-        if( pv->parser )
+        if ( pv->parser )
         {
-            av_parser_close( pv->parser );
+            av_parser_close(pv->parser);
         }
-        if( pv->context && pv->context->codec )
+        if ( pv->context && pv->context->codec )
         {
             hb_avcodec_close( pv->context );
         }
-        if( pv->context )
+        if ( pv->context )
         {
+            av_freep( &pv->context->extradata );
             av_free( pv->context );
         }
-        if( pv->list )
+        if ( pv->list )
         {
             hb_list_empty( &pv->list );
         }
@@ -236,13 +237,13 @@ static void closePrivData( hb_work_private_t ** ppv )
 static uint8_t *copy_plane( uint8_t *dst, uint8_t* src, int dstride, int sstride,
                             int h )
 {
-    if( dstride == sstride )
+    if ( dstride == sstride )
     {
         memcpy( dst, src, dstride * h );
         return dst + dstride * h;
     }
-    int lbytes = dstride <= sstride ? dstride : sstride;
-    while( --h >= 0 )
+    int lbytes = dstride <= sstride? dstride : sstride;
+    while ( --h >= 0 )
     {
         memcpy( dst, src, lbytes );
         src += sstride;
@@ -257,9 +258,8 @@ static uint8_t *copy_plane( uint8_t *dst, uint8_t* src, int dstride, int sstride
 static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
 {
     AVCodecContext *context = pv->context;
-
     int w, h;
-    if( !pv->job )
+    if ( ! pv->job )
     {
         // HandBrake's video pipeline uses yuv420 color.  This means all
         // dimensions must be even.  So we must adjust the dimensions
@@ -315,7 +315,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
     {
         hb_buffer_t *buf = hb_video_buffer_init( w, h );
         uint8_t *dst = buf->data;
-        if( context->pix_fmt != PIX_FMT_YUV420P || w != context->width ||
+        if( context->pix_fmt != AV_PIX_FMT_YUV420P || w != context->width ||
             h != context->height )
         {
             // have to convert to our internal color space and/or rescale
@@ -383,18 +383,18 @@ static void log_chapter( hb_work_private_t *pv, int chap_num, int64_t pts )
 {
     hb_chapter_t *c;
 
-    if( !pv->job )
+    if ( !pv->job )
         return;
 
-    c = hb_list_item( pv->job->title->list_chapter, chap_num - 1 );
-    if( c && c->title )
+    c = hb_list_item( pv->job->list_chapter, chap_num - 1 );
+    if ( c && c->title )
     {
-        hb_log( "%s: \"%s\" (%d) at frame %u time %" PRId64,
+        hb_log( "%s: \"%s\" (%d) at frame %u time %"PRId64,
                 pv->context->codec->name, c->title, chap_num, pv->nframes, pts );
     }
     else
     {
-        hb_log( "%s: Chapter %d at frame %u time %" PRId64,
+        hb_log( "%s: Chapter %d at frame %u time %"PRId64,
                 pv->context->codec->name, chap_num, pv->nframes, pts );
     }
 }
@@ -405,7 +405,7 @@ static void flushDelayQueue( hb_work_private_t *pv )
     int slot = pv->queue_primed ? pv->nframes & (HEAP_SIZE-1) : 0;
 
     // flush all the video packets left on our timestamp-reordering delay q
-    while( ( buf = pv->delayq[slot] ) != NULL )
+    while ( ( buf = pv->delayq[slot] ) != NULL )
     {
         buf->s.start = heap_pop( &pv->pts_heap );
         hb_list_add( pv->list, buf );
@@ -428,12 +428,12 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
 {
     /*  Rotate the cadence tracking. */
     int i = 0;
-    for( i = 11; i > 0; i-- )
+    for(i=11; i > 0; i--)
     {
         cadence[i] = cadence[i-1];
     }
 
-    if( !(flags & PROGRESSIVE) && !(flags & TOP_FIRST) )
+    if ( !(flags & PROGRESSIVE) && !(flags & TOP_FIRST) )
     {
         /* Not progressive, not top first...
            That means it's probably bottom
@@ -442,7 +442,7 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
         //hb_log("MPEG2 Flag: Bottom field first, 2 fields displayed.");
         cadence[0] = BT;
     }
-    else if( !(flags & PROGRESSIVE) && (flags & TOP_FIRST) )
+    else if ( !(flags & PROGRESSIVE) && (flags & TOP_FIRST) )
     {
         /* Not progressive, top is first,
            Two fields displayed.
@@ -450,7 +450,7 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
         //hb_log("MPEG2 Flag: Top field first, 2 fields displayed.");
         cadence[0] = TB;
     }
-    else if( (flags & PROGRESSIVE) && !(flags & TOP_FIRST) && !( flags & REPEAT_FIRST )  )
+    else if ( (flags & PROGRESSIVE) && !(flags & TOP_FIRST) && !( flags & REPEAT_FIRST )  )
     {
         /* Progressive, but noting else.
            That means Bottom first,
@@ -459,7 +459,7 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
         //hb_log("MPEG2 Flag: Progressive. Bottom field first, 2 fields displayed.");
         cadence[0] = BT_PROG;
     }
-    else if( (flags & PROGRESSIVE) && !(flags & TOP_FIRST) && ( flags & REPEAT_FIRST )  )
+    else if ( (flags & PROGRESSIVE) && !(flags & TOP_FIRST) && ( flags & REPEAT_FIRST )  )
     {
         /* Progressive, and repeat. .
            That means Bottom first,
@@ -468,7 +468,7 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
         //hb_log("MPEG2 Flag: Progressive repeat. Bottom field first, 3 fields displayed.");
         cadence[0] = BTB_PROG;
     }
-    else if( (flags & PROGRESSIVE) && (flags & TOP_FIRST) && !( flags & REPEAT_FIRST )  )
+    else if ( (flags & PROGRESSIVE) && (flags & TOP_FIRST) && !( flags & REPEAT_FIRST )  )
     {
         /* Progressive, top first.
            That means top first,
@@ -477,7 +477,7 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
         //hb_log("MPEG2 Flag: Progressive. Top field first, 2 fields displayed.");
         cadence[0] = TB_PROG;
     }
-    else if( (flags & PROGRESSIVE) && (flags & TOP_FIRST) && ( flags & REPEAT_FIRST )  )
+    else if ( (flags & PROGRESSIVE) && (flags & TOP_FIRST) && ( flags & REPEAT_FIRST )  )
     {
         /* Progressive, top, repeat.
            That means top first,
@@ -487,10 +487,10 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
         cadence[0] = TBT_PROG;
     }
 
-    if( (cadence[2] <= TB) && (cadence[1] <= TB) && (cadence[0] > TB) && (cadence[11]) )
-        hb_log( "%fs: Video -> Film", (float)start / 90000 );
-    if( (cadence[2] > TB) && (cadence[1] <= TB) && (cadence[0] <= TB) && (cadence[11]) )
-        hb_log( "%fs: Film -> Video", (float)start / 90000 );
+    if ( (cadence[2] <= TB) && (cadence[1] <= TB) && (cadence[0] > TB) && (cadence[11]) )
+        hb_log("%fs: Video -> Film", (float)start / 90000);
+    if ( (cadence[2] > TB) && (cadence[1] <= TB) && (cadence[0] <= TB) && (cadence[11]) )
+        hb_log("%fs: Film -> Video", (float)start / 90000);
 }
 
 /*
@@ -509,24 +509,22 @@ static void checkCadence( int * cadence, uint16_t flags, int64_t start )
  */
 static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequence, int64_t pts, int64_t dts, uint8_t frametype )
 {
-
     hb_work_private_t *pv = w->private_data;
     int got_picture, oldlevel = 0;
-    AVFrame frame;
+    AVFrame frame = { { 0 } };
     AVPacket avp;
-    if( global_verbosity_level <= 1 )
+
+    if ( global_verbosity_level <= 1 )
     {
         oldlevel = av_log_get_level();
         av_log_set_level( AV_LOG_QUIET );
     }
 
-    av_init_packet( &avp );
-
+    av_init_packet(&avp);
     avp.data = data;
     avp.size = size;
-    avp.pts = pts;
-    avp.dts = dts;
-
+    avp.pts  = pts;
+    avp.dts  = dts;
     /*
      * libav avcodec_decode_video2() needs AVPacket flagged with AV_PKT_FLAG_KEY
      * for some codecs. For example, sequence of PNG in a mov container.
@@ -534,26 +532,25 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
     if ( frametype & HB_FRAME_KEY )
     {
         avp.flags |= AV_PKT_FLAG_KEY;
-    }	
-    if( avcodec_decode_video2( pv->context, &frame, &got_picture, &avp ) < 0 )
+    }
+
+    if ( avcodec_decode_video2( pv->context, &frame, &got_picture, &avp ) < 0 )
     {
         ++pv->decode_errors;
     }
-    if( global_verbosity_level <= 1 )
+    if ( global_verbosity_level <= 1 )
     {
         av_log_set_level( oldlevel );
     }
-
     if( got_picture && pv->wait_for_keyframe > 0 )
     {
         // Libav is inconsistant about how it flags keyframes.  For many
         // codecs it simply sets frame.key_frame.  But for others, it only
         // sets frame.pict_type. And for yet others neither gets set at all
         // (qtrle).
-        int key = frame.key_frame ||
-                  ( w->codec_param != CODEC_ID_H264 &&
-                    ( frame.pict_type == AV_PICTURE_TYPE_I ||
-                      frame.pict_type == 0 ) );
+        int key = frame.key_frame || (w->codec_param != AV_CODEC_ID_H264 &&
+                                      (frame.pict_type == 0 ||
+                                       frame.pict_type == AV_PICTURE_TYPE_I));
         if( !key )
         {
             pv->wait_for_keyframe--;
@@ -561,10 +558,8 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         }
         pv->wait_for_keyframe = 0;
     }
-
     if( got_picture )
     {
-
         uint16_t flags = 0;
 
         // ffmpeg makes it hard to attach a pts to a frame. if the MPEG ES
@@ -580,11 +575,11 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         // point frame.pts should hold the frame's pts from the original data
         // stream or AV_NOPTS_VALUE if it didn't have one. in the latter case
         // we generate the next pts in sequence for it.
-        if( !pv->frame_duration_set )
+        if ( !pv->frame_duration_set )
             compute_frame_duration( pv );
 
         double frame_dur = pv->duration;
-        if( frame.repeat_pict )
+        if ( frame.repeat_pict )
         {
             frame_dur += frame.repeat_pict * pv->field_duration;
         }
@@ -603,7 +598,7 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         // If there was no pts for this frame, assume constant frame rate
         // video & estimate the next frame time from the last & duration.
         double pts;
-        if( frame.pkt_pts == AV_NOPTS_VALUE )
+        if (frame.pkt_pts == AV_NOPTS_VALUE)
         {
             pts = pv->pts_next;
         }
@@ -613,30 +608,28 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         }
         pv->pts_next = pts + frame_dur;
 
-        if( frame.top_field_first )
+        if ( frame.top_field_first )
         {
             flags |= PIC_FLAG_TOP_FIELD_FIRST;
         }
-        if( !frame.interlaced_frame )
+        if ( !frame.interlaced_frame )
         {
             flags |= PIC_FLAG_PROGRESSIVE_FRAME;
         }
-        if( frame.repeat_pict == 1 )
+        if ( frame.repeat_pict == 1 )
         {
             flags |= PIC_FLAG_REPEAT_FIRST_FIELD;
         }
-        if( frame.repeat_pict == 2 )
+        if ( frame.repeat_pict == 2 )
         {
             flags |= PIC_FLAG_REPEAT_FRAME;
         }
-
-
 
         hb_buffer_t *buf;
 
         // if we're doing a scan or this content couldn't have been broken
         // by Microsoft we don't worry about timestamp reordering
-        if( !pv->job || !pv->brokenByMicrosoft )
+        if ( ! pv->job || ! pv->brokenByMicrosoft )
         {
             buf = copy_frame( pv, &frame );
             buf->s.start = pts;
@@ -644,14 +637,14 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
 
             buf->s.flags = flags;
 
-            if( pv->new_chap && buf->s.start >= pv->chap_time )
+            if ( pv->new_chap && buf->s.start >= pv->chap_time )
             {
                 buf->s.new_chap = pv->new_chap;
                 log_chapter( pv, pv->new_chap, buf->s.start );
                 pv->new_chap = 0;
                 pv->chap_time = 0;
             }
-            else if( pv->nframes == 0 && pv->job )
+            else if ( pv->nframes == 0 && pv->job )
             {
                 log_chapter( pv, pv->job->chapter_start, buf->s.start );
             }
@@ -684,19 +677,19 @@ static int decodeFrame( hb_work_object_t *w, uint8_t *data, int size, int sequen
         // the frame count & this will become the slot of the newest
         // once we've removed & processed the oldest.
         int slot = pv->nframes & (HEAP_SIZE-1);
-        if( ( buf = pv->delayq[slot] ) != NULL )
+        if ( ( buf = pv->delayq[slot] ) != NULL )
         {
             pv->queue_primed = 1;
             buf->s.start = heap_pop( &pv->pts_heap );
 
-            if( pv->new_chap && buf->s.start >= pv->chap_time )
+            if ( pv->new_chap && buf->s.start >= pv->chap_time )
             {
                 buf->s.new_chap = pv->new_chap;
                 log_chapter( pv, pv->new_chap, buf->s.start );
                 pv->new_chap = 0;
                 pv->chap_time = 0;
             }
-            else if( pv->nframes == 0 && pv->job )
+            else if ( pv->nframes == 0 && pv->job )
             {
                 log_chapter( pv, pv->job->chapter_start, buf->s.start );
             }
@@ -732,7 +725,7 @@ static void decodeVideo( hb_work_object_t *w, uint8_t *data, int size, int seque
         uint8_t *pout;
         int pout_len, len;
         int64_t parser_pts, parser_dts;
-        if( pv->parser )
+        if ( pv->parser )
         {
             len = av_parser_parse2( pv->parser, pv->context, &pout, &pout_len,
                                     data + pos, size - pos, pts, dts, 0 );
@@ -748,21 +741,20 @@ static void decodeVideo( hb_work_object_t *w, uint8_t *data, int size, int seque
         }
         pos += len;
 
-        if( pout_len > 0 )
+        if ( pout_len > 0 )
         {
             decodeFrame( w, pout, pout_len, sequence, parser_pts, parser_dts, frametype );
         }
-    } while( pos < size );
+    } while ( pos < size );
 
     /* the stuff above flushed the parser, now flush the decoder */
-    if( size <= 0 )
+    if ( size <= 0 )
     {
-        while( decodeFrame( w, NULL, 0, sequence, AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0 ) )
+        while ( decodeFrame( w, NULL, 0, sequence, AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0 ) )
         {
         }
         flushDelayQueue( pv );
     }
-    return;
 }
 
 /*
@@ -773,13 +765,13 @@ static hb_buffer_t *link_buf_list( hb_work_private_t *pv )
 {
     hb_buffer_t *head = hb_list_item( pv->list, 0 );
 
-    if( head )
+    if ( head )
     {
         hb_list_rem( pv->list, head );
 
         hb_buffer_t *last = head, *buf;
 
-        while( ( buf = hb_list_item( pv->list, 0 ) ) != NULL )
+        while ( ( buf = hb_list_item( pv->list, 0 ) ) != NULL )
         {
             hb_list_rem( pv->list, buf );
             last->next = buf;
@@ -823,41 +815,35 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     w->private_data = pv;
     pv->wait_for_keyframe = 60;
     pv->job   = job;
-    if( job )
+    if ( job )
         pv->title = job->title;
     else
         pv->title = w->title;
     pv->list = hb_list_init();
 
-    if( pv->job && pv->job->title )
+    if( pv->job && pv->job->title && !pv->job->title->has_resolution_change )
     {
-        if( !pv->job->title->has_resolution_change && w->codec_param != CODEC_ID_PRORES )
-        {
-            pv->threads = HB_FFMPEG_THREADS_AUTO;
-        }
+        pv->threads = HB_FFMPEG_THREADS_AUTO;
     }
-
-    if( pv->title->opaque_priv )
+    if ( pv->title->opaque_priv )
     {
-	
         AVFormatContext *ic = (AVFormatContext*)pv->title->opaque_priv;
         AVCodec *codec = avcodec_find_decoder( w->codec_param );
-        if( codec == NULL )
+        if ( codec == NULL )
         {
             hb_log( "decavcodecvInit: failed to find codec for id (%d)", w->codec_param );
             return 1;
         }
-        pv->context = avcodec_alloc_context3( codec );
-        avcodec_copy_context( pv->context, ic->streams[pv->title->video_id]->codec );
+        pv->context = avcodec_alloc_context3(codec);
+        avcodec_copy_context( pv->context, ic->streams[pv->title->video_id]->codec);
         pv->context->workaround_bugs = FF_BUG_AUTODETECT;
-        // Depricated but still used by Libav (twits!)
         pv->context->err_recognition = AV_EF_CRCCHECK;
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
-        if( ((w->codec_param==CODEC_ID_H264) 
-             || (w->codec_param==CODEC_ID_MPEG2VIDEO)
-             || (w->codec_param==CODEC_ID_VC1)
-             || (w->codec_param==CODEC_ID_WMV3) 
-             || (w->codec_param==CODEC_ID_MPEG4)) 
+        if( ((w->codec_param==AV_CODEC_ID_H264) 
+             || (w->codec_param==AV_CODEC_ID_MPEG2VIDEO)
+             || (w->codec_param==AV_CODEC_ID_VC1)
+             || (w->codec_param==AV_CODEC_ID_WMV3) 
+             || (w->codec_param==AV_CODEC_ID_MPEG4)) 
              && pv->job )
         {
             pv->dxva2 = hb_va_create_dxva2( pv->dxva2, w->codec_param );
@@ -892,7 +878,6 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->parser = av_parser_init( w->codec_param );
         pv->context = avcodec_alloc_context3( codec );
         pv->context->workaround_bugs = FF_BUG_AUTODETECT;
-        // Depricated but still used by Libav (twits!)
         pv->context->err_recognition = AV_EF_CRCCHECK;
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
         init_video_avcodec_context( pv );
@@ -900,14 +885,13 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     return 0;
 }
 
-
 static int next_hdr( hb_buffer_t *in, int offset )
 {
     uint8_t *dat = in->data;
     uint16_t last2 = 0xffff;
-    for( ; in->size - offset > 1; ++offset )
+    for ( ; in->size - offset > 1; ++offset )
     {
-        if( last2 == 0 && dat[offset] == 0x01 )
+        if ( last2 == 0 && dat[offset] == 0x01 )
             // found an mpeg start code
             return offset - 2;
 
@@ -919,13 +903,13 @@ static int next_hdr( hb_buffer_t *in, int offset )
 
 static int find_hdr( hb_buffer_t *in, int offset, uint8_t hdr_type )
 {
-    if( in->size - offset < 4 )
+    if ( in->size - offset < 4 )
         // not enough room for an mpeg start code
         return -1;
 
-    for( ; ( offset = next_hdr( in, offset ) ) >= 0; ++offset )
+    for ( ; ( offset = next_hdr( in, offset ) ) >= 0; ++offset )
     {
-        if( in->data[offset+3] == hdr_type )
+        if ( in->data[offset+3] == hdr_type )
             // found it
             break;
     }
@@ -941,7 +925,7 @@ static int setup_extradata( hb_work_object_t *w, hb_buffer_t *in )
     // vc1t_read_header allocates 'extradata' to deal with header issues
     // related to Microsoft's bizarre engineering notions. We alloc a chunk
     // of space to make vc1 work then associate the codec with the context.
-    if( w->codec_param != CODEC_ID_VC1 )
+    if ( w->codec_param != AV_CODEC_ID_VC1 )
     {
         // we haven't been inflicted with M$ - allocate a little space as
         // a marker and return success.
@@ -951,18 +935,18 @@ static int setup_extradata( hb_work_object_t *w, hb_buffer_t *in )
         // to trigger initialization of extradata and the decoder, so
         // we can not set it to NULL here. So allocate a small
         // buffer instead.
-        pv->context->extradata = av_malloc( 1 );
+        pv->context->extradata = av_malloc(1);
         return 0;
     }
 
     // find the start and and of the sequence header
     int shdr, shdr_end;
-    if( ( shdr = find_hdr( in, 0, 0x0f ) ) < 0 )
+    if ( ( shdr = find_hdr( in, 0, 0x0f ) ) < 0 )
     {
         // didn't find start of seq hdr
         return 1;
     }
-    if( ( shdr_end = next_hdr( in, shdr + 4 ) ) < 0 )
+    if ( ( shdr_end = next_hdr( in, shdr + 4 ) ) < 0 )
     {
         shdr_end = in->size;
     }
@@ -970,12 +954,12 @@ static int setup_extradata( hb_work_object_t *w, hb_buffer_t *in )
 
     // find the start and and of the entry point header
     int ehdr, ehdr_end;
-    if( ( ehdr = find_hdr( in, 0, 0x0e ) ) < 0 )
+    if ( ( ehdr = find_hdr( in, 0, 0x0e ) ) < 0 )
     {
         // didn't find start of entry point hdr
         return 1;
     }
-    if( ( ehdr_end = next_hdr( in, ehdr + 4 ) ) < 0 )
+    if ( ( ehdr_end = next_hdr( in, ehdr + 4 ) ) < 0 )
     {
         ehdr_end = in->size;
     }
@@ -984,10 +968,10 @@ static int setup_extradata( hb_work_object_t *w, hb_buffer_t *in )
     // found both headers - allocate an extradata big enough to hold both
     // then copy them into it.
     pv->context->extradata_size = shdr_end + ehdr_end;
-    pv->context->extradata = av_malloc( pv->context->extradata_size + 8 );
+    pv->context->extradata = av_malloc(pv->context->extradata_size + 8);
     memcpy( pv->context->extradata, in->data + shdr, shdr_end );
     memcpy( pv->context->extradata + shdr_end, in->data + ehdr, ehdr_end );
-    memset( pv->context->extradata + shdr_end + ehdr_end, 0, 8 );
+    memset( pv->context->extradata + shdr_end + ehdr_end, 0, 8);
     return 0;
 }
 
@@ -998,13 +982,14 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_buffer_t *in = *buf_in;
     int64_t pts = AV_NOPTS_VALUE;
     int64_t dts = pts;
+
     *buf_in = NULL;
     *buf_out = NULL;
 
     /* if we got an empty buffer signaling end-of-stream send it downstream */
-    if( in->size == 0 )
+    if ( in->size == 0 )
     {
-        if( pv->context->codec != NULL )
+        if ( pv->context->codec != NULL )
         {
             decodeVideo( w, in->data, in->size, in->sequence, pts, dts, in->s.frametype );
         }
@@ -1015,18 +1000,26 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     // if this is the first frame open the codec (we have to wait for the
     // first frame because of M$ VC1 braindamage).
-    if( !pv->video_codec_opened )
+    if ( !pv->video_codec_opened )
     {
         AVCodec *codec = avcodec_find_decoder( w->codec_param );
-        if( codec == NULL )
+        if ( codec == NULL )
         {
             hb_log( "decavcodecvWork: failed to find codec for id (%d)", w->codec_param );
             *buf_out = hb_buffer_init( 0 );;
             return HB_WORK_DONE;
         }
+        // Note that there is currently a small memory leak in libav at this
+        // point.  pv->context->priv_data gets allocated by
+        // avcodec_alloc_context3(), then avcodec_get_context_defaults3()
+        // memsets the context and looses the pointer.
+        //
+        // avcodec_get_context_defaults3() looks as if they intended for
+        // it to preserve any existing priv_data because they test the pointer
+        // before allocating new memory, but the memset has already cleared it.
         avcodec_get_context_defaults3( pv->context, codec );
         init_video_avcodec_context( pv );
-        if( setup_extradata( w, in ) )
+        if ( setup_extradata( w, in ) )
         {
             // we didn't find the headers needed to set up extradata.
             // the codec will abort if we open it so just free the buf
@@ -1035,7 +1028,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             return HB_WORK_OK;
         }
         // disable threaded decoding for scan, can cause crashes
-        if( hb_avcodec_open( pv->context, codec, NULL, pv->threads ) )
+        if ( hb_avcodec_open( pv->context, codec, NULL, pv->threads ) )
         {
             hb_log( "decavcodecvWork: avcodec_open failed" );
             *buf_out = hb_buffer_init( 0 );;
@@ -1049,10 +1042,10 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pts = in->s.start;
         dts = in->s.renderOffset;
     }
-    if( in->s.new_chap )
+    if ( in->s.new_chap )
     {
         pv->new_chap = in->s.new_chap;
-        pv->chap_time = pts >= 0 ? pts : pv->pts_next;
+        pv->chap_time = pts >= 0? pts : pv->pts_next;
     }
     if( pv->dxva2 && pv->dxva2->do_job==HB_WORK_OK )
     {
@@ -1067,23 +1060,24 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     *buf_out = link_buf_list( pv );
     return HB_WORK_OK;
 }
+
 static void compute_frame_duration( hb_work_private_t *pv )
 {
     double duration = 0.;
     int64_t max_fps = 64L;
 
     // context->time_base may be in fields, so set the max *fields* per second
-    if( pv->context->ticks_per_frame > 1 )
+    if ( pv->context->ticks_per_frame > 1 )
         max_fps *= pv->context->ticks_per_frame;
 
-    if( pv->title->opaque_priv )
+    if ( pv->title->opaque_priv )
     {
         // If ffmpeg is demuxing for us, it collects some additional
         // information about framerates that is often more accurate
         // than context->time_base.
         AVFormatContext *ic = (AVFormatContext*)pv->title->opaque_priv;
         AVStream *st = ic->streams[pv->title->video_id];
-        if( st->nb_frames && st->duration )
+        if ( st->nb_frames && st->duration )
         {
             // compute the average frame duration from the total number
             // of frames & the total duration.
@@ -1097,32 +1091,32 @@ static void compute_frame_duration( hb_work_private_t *pv )
             // Because the time bases are so screwed up, we only take values
             // in the range 8fps - 64fps.
             AVRational *tb = NULL;
-            if( st->avg_frame_rate.den * 64L > st->avg_frame_rate.num &&
-                st->avg_frame_rate.num > st->avg_frame_rate.den * 8L )
+            if ( st->avg_frame_rate.den * 64L > st->avg_frame_rate.num &&
+                 st->avg_frame_rate.num > st->avg_frame_rate.den * 8L )
             {
                 tb = &(st->avg_frame_rate);
                 duration =  (double)tb->den / (double)tb->num;
             }
-            else if( st->time_base.num * 64L > st->time_base.den &&
-                     st->time_base.den > st->time_base.num * 8L )
+            else if ( st->time_base.num * 64L > st->time_base.den &&
+                      st->time_base.den > st->time_base.num * 8L )
             {
                 tb = &(st->time_base);
                 duration =  (double)tb->num / (double)tb->den;
             }
-            else if( st->r_frame_rate.den * 64L > st->r_frame_rate.num &&
-                     st->r_frame_rate.num > st->r_frame_rate.den * 8L )
+            else if ( st->r_frame_rate.den * 64L > st->r_frame_rate.num &&
+                      st->r_frame_rate.num > st->r_frame_rate.den * 8L )
             {
                 tb = &(st->r_frame_rate);
                 duration =  (double)tb->den / (double)tb->num;
             }
         }
-        if( !duration &&
-            pv->context->time_base.num * max_fps > pv->context->time_base.den &&
-            pv->context->time_base.den > pv->context->time_base.num * 8L )
+        if ( !duration &&
+             pv->context->time_base.num * max_fps > pv->context->time_base.den &&
+             pv->context->time_base.den > pv->context->time_base.num * 8L )
         {
             duration =  (double)pv->context->time_base.num /
-                       (double)pv->context->time_base.den;
-            if( pv->context->ticks_per_frame > 1 )
+                        (double)pv->context->time_base.den;
+            if ( pv->context->ticks_per_frame > 1 )
             {
                 // for ffmpeg 0.5 & later, the H.264 & MPEG-2 time base is
                 // field rate rather than frame rate so convert back to frames.
@@ -1132,12 +1126,12 @@ static void compute_frame_duration( hb_work_private_t *pv )
     }
     else
     {
-        if( pv->context->time_base.num * max_fps > pv->context->time_base.den &&
-            pv->context->time_base.den > pv->context->time_base.num * 8L )
+        if ( pv->context->time_base.num * max_fps > pv->context->time_base.den &&
+             pv->context->time_base.den > pv->context->time_base.num * 8L )
         {
             duration =  (double)pv->context->time_base.num /
-                       (double)pv->context->time_base.den;
-            if( pv->context->ticks_per_frame > 1 )
+                            (double)pv->context->time_base.den;
+            if ( pv->context->ticks_per_frame > 1 )
             {
                 // for ffmpeg 0.5 & later, the H.264 & MPEG-2 time base is
                 // field rate rather than frame rate so convert back to frames.
@@ -1145,7 +1139,7 @@ static void compute_frame_duration( hb_work_private_t *pv )
             }
         }
     }
-    if( duration == 0 )
+    if ( duration == 0 )
     {
         // No valid timing info found in the stream, so pick some value
         duration = 1001. / 24000.;
@@ -1156,7 +1150,7 @@ static void compute_frame_duration( hb_work_private_t *pv )
     }
     pv->duration = duration * 90000.;
     pv->field_duration = pv->duration;
-    if( pv->context->ticks_per_frame > 1 )
+    if ( pv->context->ticks_per_frame > 1 )
     {
         pv->field_duration /= pv->context->ticks_per_frame;
     }
@@ -1215,14 +1209,16 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
         }
     }
 
-    /* AVCOL_TRC_BT709 -> HB_COLR_TRA_BT709
-     * AVCOL_TRC_GAMMA22 (bt470m) -> HB_COLR_TRA_BT709
-     * AVCOL_TRC_GAMMA28 (bt470bg) -> HB_COLR_TRA_BT709
-     * AVCOL_TRC_UNSPECIFIED, AVCOL_TRC_NB:
-     * -> ITU BT.709 -> HB_COLR_TRA_BT709
-     * -> ITU BT.601 -> HB_COLR_TRA_BT709
-     * TODO: AVCOL_TRC_SMPTE240M -> HB_COLR_TRA_SMPTE240M but it's not yet in Libav */
-    info->color_transfer = HB_COLR_TRA_BT709;
+    switch( pv->context->color_trc )
+    {
+        case AVCOL_TRC_SMPTE240M:
+            info->color_transfer = HB_COLR_TRA_SMPTE240M;
+            break;
+        default:
+            // ITU BT.601, BT.709, anything else
+            info->color_transfer = HB_COLR_TRA_BT709;
+            break;
+    }
 
     switch( pv->context->colorspace )
     {
@@ -1265,18 +1261,19 @@ static void decavcodecvFlush( hb_work_object_t *w )
 {
     hb_work_private_t *pv = w->private_data;
 
-    if( pv->context->codec )
+    if ( pv->context->codec )
     {
         flushDelayQueue( pv );
         hb_buffer_t *buf = link_buf_list( pv );
         hb_buffer_close( &buf );
-        if( pv->title->opaque_priv == NULL )
+        if ( pv->title->opaque_priv == NULL )
         {
             pv->video_codec_opened = 0;
             hb_avcodec_close( pv->context );
-            if( pv->parser )
+            av_freep( &pv->context->extradata );
+            if ( pv->parser )
             {
-                av_parser_close( pv->parser );
+                av_parser_close(pv->parser);
             }
             pv->parser = av_parser_init( w->codec_param );
         }

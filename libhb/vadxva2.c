@@ -177,7 +177,7 @@ static int hb_dx_create_video_decoder( hb_va_dxva2_t *dxva2, int codec_id, const
     dxva2->surface_height = (fmt->height + 15) & ~15;
     switch( codec_id )
     {
-        case CODEC_ID_H264:
+        case AV_CODEC_ID_H264:
             dxva2->surface_count = 16 + 1;
             break;
         default:
@@ -263,7 +263,7 @@ static int hb_dx_create_video_decoder( hb_va_dxva2_t *dxva2, int codec_id, const
         int score;
         if( cfg->ConfigBitstreamRaw == 1 )
             score = 1;
-        else if( codec_id == CODEC_ID_H264 && cfg->ConfigBitstreamRaw == 2 )
+        else if( codec_id == AV_CODEC_ID_H264 && cfg->ConfigBitstreamRaw == 2 )
             score = 2;
         else
             continue;
