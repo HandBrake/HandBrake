@@ -19,9 +19,20 @@ namespace HandBrake.Interop.SourceData
 	/// </summary>
 	public class Title
 	{
-		private readonly List<AudioTrack> audioTracks;
-		private readonly List<Chapter> chapters;
-		private readonly List<Subtitle> subtitles;
+	    /// <summary>
+	    /// The audio tracks.
+	    /// </summary>
+	    private readonly List<AudioTrack> audioTracks;
+
+	    /// <summary>
+	    /// The chapters.
+	    /// </summary>
+	    private readonly List<Chapter> chapters;
+
+	    /// <summary>
+	    /// The subtitles.
+	    /// </summary>
+	    private readonly List<Subtitle> subtitles;
 		
 		/// <summary>
 		/// Initializes a new instance of the Title class.
