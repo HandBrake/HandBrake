@@ -1034,6 +1034,38 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// The add selection to queue.
+        /// </summary>
+        public void AddSelectionToQueue()
+        {
+            if (this.ScannedSource == null || this.ScannedSource.Titles == null || this.ScannedSource.Titles.Count == 0)
+            {
+                this.errorService.ShowMessageBox("You must first scan a source and setup your job before adding to the queue.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (!AutoNameHelper.IsAutonamingEnabled())
+            {
+                this.errorService.ShowMessageBox("You must turn on automatic file naming in preferences before you can add to the queue.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueSelectionViewModel));
+            IQueueSelectionViewModel viewModel = IoC.Get<IQueueSelectionViewModel>();
+
+            viewModel.Setup(this.ScannedSource, this.SourceName);
+
+            if (window != null)
+            {
+                window.Activate();
+            }
+            else
+            {
+                this.WindowManager.ShowWindow(viewModel);
+            }
+        }
+
+        /// <summary>
         /// Folder Scan
         /// </summary>
         public void FolderScan()

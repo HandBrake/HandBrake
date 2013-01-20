@@ -269,6 +269,7 @@
                             </StackPanel>
                         </MenuItem.Header>
                         <MenuItem Header="Add All" Micro:Message.Attach="[Event Click] = [Action AddAllToQueue]" />
+                        <!--<MenuItem Header="Add Selection" Micro:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" />-->
                     </MenuItem>
                 </Menu>
 

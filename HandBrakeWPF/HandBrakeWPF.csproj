@@ -151,6 +151,7 @@
     <Compile Include="Helpers\GrayscaleImage.cs" />
     <Compile Include="Helpers\GrowlCommunicator.cs" />
     <Compile Include="Model\OptionsTab.cs" />
+    <Compile Include="Model\SelectionTitle.cs" />
     <Compile Include="Services\DriveDetectService.cs" />
     <Compile Include="Services\EncodeServiceWrapper.cs" />
     <Compile Include="Services\Interfaces\IDriveDetectService.cs" />
@@ -163,6 +164,11 @@
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\ScanServiceWrapper.cs" />
     <Compile Include="Services\UpdateService.cs" />
+    <Compile Include="ViewModels\Interfaces\IQueueSelectionViewModel.cs" />
+    <Compile Include="ViewModels\QueueSelectionViewModel.cs" />
+    <Compile Include="Views\QueueSelectionView.xaml.cs">
+      <DependentUpon>QueueSelectionView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
     </Compile>
@@ -316,6 +322,10 @@
     <Page Include="Controls\StatusPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\QueueSelectionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ShellView.xaml">
       <SubType>Designer</SubType>
