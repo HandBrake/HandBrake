@@ -992,7 +992,21 @@ do_source_dialog(GtkButton *button, gboolean single, signal_user_data_t *ud)
     dialog = GHB_WIDGET(ud->builder, "source_dialog");
     source_dialog_extra_widgets(ud, dialog);
 
+#if GTK_CHECK_VERSION(3, 0, 0)
+    // gtk3 has a STUPID BUG!  If you select the "same_path" it ends
+    // up selecting the "Recent Files" shortcut instead of taking you
+    // to the directory and file THAT YOU ASKED FOR!!!  FUUUUK!!!
+    //
+    // So instead, I am just setting the current folder.  It's not
+    // optimal because if you are processing several files in the same
+    // folder, you want the selection to return to where you were last
+    // in the list, but there's not much else I can do at this point.
+    gchar *dirname = g_path_get_dirname(sourcename);
+    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), dirname);
+    g_free(dirname);
+#else
     gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), sourcename);
+#endif
     response = gtk_dialog_run(GTK_DIALOG (dialog));
     gtk_widget_hide(dialog);
     if (response == GTK_RESPONSE_NO)
