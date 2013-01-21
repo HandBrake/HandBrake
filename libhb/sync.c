@@ -1162,7 +1162,7 @@ static void InsertSilence( hb_work_object_t * w, int64_t duration )
     hb_sync_audio_t *sync = &pv->type.audio;
     hb_buffer_t     *buf;
     hb_fifo_t       *fifo;
-    int frame_dur, frame_count;
+    int frame_dur;
 
     // to keep pass-thru and regular audio in sync we generate silence in
     // frame-sized units. If the silence duration isn't an integer multiple
@@ -1178,9 +1178,8 @@ static void InsertSilence( hb_work_object_t * w, int64_t duration )
         frame_dur = ( 90000 * w->audio->config.out.samples_per_frame ) /
                                             w->audio->config.in.samplerate;
     }
-    frame_count = ( duration + (frame_dur >> 1) ) / frame_dur;
 
-    while ( --frame_count >= 0 )
+    while (duration >= frame_dur >> 2)
     {
         if( w->audio->config.out.codec & HB_ACODEC_PASS_FLAG )
         {
@@ -1189,15 +1188,31 @@ static void InsertSilence( hb_work_object_t * w, int64_t duration )
             buf->s.stop  = buf->s.start + frame_dur;
             memcpy( buf->data, sync->silence_buf, buf->size );
             fifo = w->audio->priv.fifo_out;
+            duration -= frame_dur;
         }
         else
         {
-            buf = hb_buffer_init( sizeof( float ) * w->audio->config.out.samples_per_frame *
-                                  hb_mixdown_get_discrete_channel_count( w->audio->config.out.mixdown ) );
+            int channel_count = hb_mixdown_get_discrete_channel_count( w->audio->config.out.mixdown );
+            int size = sizeof( float ) *
+                       w->audio->config.out.samples_per_frame *
+                       channel_count;
+            if (frame_dur > duration)
+            {
+                int samples = duration * w->audio->config.in.samplerate / 90000;
+                if (samples == 0)
+                {
+                    break;
+                }
+                size = sizeof(float) * samples * channel_count;
+                frame_dur = (90000 * samples) / w->audio->config.in.samplerate;
+            }
+            buf = hb_buffer_init(size);
             buf->s.start = sync->next_start;
+            buf->s.duration = frame_dur;
             buf->s.stop  = buf->s.start + frame_dur;
             memset( buf->data, 0, buf->size );
             fifo = w->audio->priv.fifo_sync;
+            duration -= frame_dur;
         }
         buf = OutputAudioFrame( w->audio, buf, sync );
         hb_fifo_push( fifo, buf );
