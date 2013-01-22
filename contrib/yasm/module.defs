@@ -1,5 +1,5 @@
 $(eval $(call import.MODULE.defs,YASM,yasm))
 $(eval $(call import.CONTRIB.defs,YASM))
 
-YASM.FETCH.url = http://download.handbrake.fr/handbrake/contrib/yasm-1.1.0.tar.gz
+YASM.FETCH.url = http://download.handbrake.fr/handbrake/contrib/yasm-1.2.0.tar.gz
 
