@@ -656,6 +656,8 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
 
 #ifdef USE_EXTERNAL_KERNEL
     status = hb_convert_to_string( filename, &source_str, gpu_info, idx );
+    if( status == 0 )
+        return(0);
 #else
     int kernel_src_size = strlen( kernel_src_hscale )+strlen( kernel_src_vscale )+strlen( kernel_src_nvtoyuv );
     source_str = (char*)malloc( kernel_src_size+2 );
@@ -664,8 +666,6 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
     strcat( source_str, kernel_src_nvtoyuv );
 #endif
 
-    if( status == 0 )
-        return(0);
 
     source = source_str;
     source_size[0] = strlen( source );
