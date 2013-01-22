@@ -805,7 +805,7 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
     if (param->i_keyint_max != 1)
     {
         int i_max_dec_frame_buffering =
-            MAX(MIN(x264_level->dpb / (384 * i_mb_size), 16), 1);
+            MAX(MIN(x264_level->dpb / i_mb_size, 16), 1);
         param->i_frame_reference =
             MIN(i_max_dec_frame_buffering, param->i_frame_reference);
         /*
