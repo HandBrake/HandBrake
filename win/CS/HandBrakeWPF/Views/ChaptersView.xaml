@@ -38,7 +38,8 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Chapter Number" Width="150" Binding="{Binding ChapterNumber}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Chapter Number" Width="120" Binding="{Binding ChapterNumber}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Duration" Width="100" Binding="{Binding Duration}" IsReadOnly="True" />
                 <DataGridTextColumn Header="Chapter Name"  Width="*" Binding="{Binding ChapterName}" IsReadOnly="False" />
             </DataGrid.Columns>
         </DataGrid>

@@ -9,6 +9,8 @@
 
 namespace HandBrake.ApplicationServices.Model.Encoding
 {
+    using System;
+
     using Caliburn.Micro;
 
     /// <summary>
@@ -37,10 +39,14 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         /// <param name="name">
         /// The name.
         /// </param>
-        public ChapterMarker(int number, string name)
+        /// <param name="duration">
+        /// The duration.
+        /// </param>
+        public ChapterMarker(int number, string name, TimeSpan duration)
         {
             this.ChapterName = name;
             this.ChapterNumber = number;
+            this.Duration = duration;
         }
 
         /// <summary>
@@ -54,12 +60,18 @@ namespace HandBrake.ApplicationServices.Model.Encoding
         {
             this.ChapterName = chapter.ChapterName;
             this.ChapterNumber = chapter.ChapterNumber;
+            this.Duration = chapter.Duration;
         }
 
         /// <summary>
         /// Gets or sets The number of this Chapter, in regards to it's parent Title
         /// </summary>
         public int ChapterNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets the duration.
+        /// </summary>
+        public TimeSpan Duration { get; set; }
 
         /// <summary>
         /// Gets or sets ChapterName.
