@@ -2879,11 +2879,11 @@ fWorkingCount = 0;
      */
     if (job->indepth_scan == 1)
     {
-        char *x264_preset_tmp   = job->x264_preset   != NULL ? strdup(job->x264_preset)  : NULL;
-        char *x264_tune_tmp     = job->x264_tune     != NULL ? strdup(job->x264_tune)    : NULL;
-        char *advanced_opts_tmp = job->advanced_opts != NULL ? strdup(job->advanced_opts)        : NULL;
-        char *h264_profile_tmp  = job->x264_profile  != NULL ? strdup(job->x264_profile) : NULL;
-        char *h264_level_tmp    = job->h264_level    != NULL ? strdup(job->h264_level)   : NULL;
+        char *x264_preset_tmp   = job->x264_preset   != NULL ? strdup(job->x264_preset)   : NULL;
+        char *x264_tune_tmp     = job->x264_tune     != NULL ? strdup(job->x264_tune)     : NULL;
+        char *advanced_opts_tmp = job->advanced_opts != NULL ? strdup(job->advanced_opts) : NULL;
+        char *h264_profile_tmp  = job->x264_profile  != NULL ? strdup(job->x264_profile)  : NULL;
+        char *h264_level_tmp    = job->h264_level    != NULL ? strdup(job->h264_level)    : NULL;
         /*
          * When subtitle scan is enabled do a fast pre-scan job
          * which will determine which subtitles to enable, if any.
