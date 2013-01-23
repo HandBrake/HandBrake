@@ -440,6 +440,12 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
+                // Sanity Check
+                if (ScannedSource == null || ScannedSource.ScanPath == null)
+                {
+                    return string.Empty;
+                }
+
                 // The title that is selected has a source name. This means it's part of a batch scan.
                 if (selectedTitle != null && !string.IsNullOrEmpty(selectedTitle.SourceName))
                 {
@@ -699,12 +705,18 @@ namespace HandBrakeWPF.ViewModels
             {
                 return this.CurrentTask.StartPoint;
             }
+
             set
             {
                 this.CurrentTask.Angle = value;
                 this.NotifyOfPropertyChange(() => this.SelectedAngle);
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is timespan range.
+        /// </summary>
+        public bool IsTimespanRange { get; set; }
 
         /// <summary>
         /// Gets or sets SelectedStartPoint.
@@ -721,7 +733,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.SelectedStartPoint);
                 this.Duration = this.DurationCalculation();
 
-                if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
+                if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming) && this.ScannedSource.ScanPath != null)
                 {
                     this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
                 }
@@ -743,7 +755,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.SelectedEndPoint);
                 this.Duration = this.DurationCalculation();
 
-                if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
+                if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming) && this.ScannedSource.ScanPath != null)
                 {
                     this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
                 }
@@ -767,21 +779,41 @@ namespace HandBrakeWPF.ViewModels
 
                 if (value == PointToPointMode.Chapters && this.SelectedTitle != null)
                 {
+                    if (this.selectedTitle == null)
+                    {
+                        return;
+                    }
+
+
                     this.SelectedStartPoint = 1;
                     this.SelectedEndPoint = selectedTitle.Chapters.Last().ChapterNumber;
                 } 
                 else if (value == PointToPointMode.Seconds)
                 {
+                    if (this.selectedTitle == null)
+                    {
+                        return;
+                    }
+
+
                     this.SelectedStartPoint = 0;
 
                     int timeInSeconds;
                     if (int.TryParse(selectedTitle.Duration.TotalSeconds.ToString(CultureInfo.InvariantCulture), out timeInSeconds))
                     {
                         this.SelectedEndPoint = timeInSeconds;
-                    }    
+                    }
+
+                    this.IsTimespanRange = true;
+                    this.NotifyOfPropertyChange(() => this.IsTimespanRange);
                 }
                 else
                 {
+                    if (this.selectedTitle == null)
+                    {
+                        return;
+                    }
+
                     // Note this does not account for VFR. It's only a guesstimate. 
                     double estimatedTotalFrames = selectedTitle.Fps * selectedTitle.Duration.TotalSeconds;
 
@@ -791,6 +823,9 @@ namespace HandBrakeWPF.ViewModels
                     {
                         this.SelectedEndPoint = totalFrames;
                     }
+
+                    this.IsTimespanRange = false;
+                    this.NotifyOfPropertyChange(() => this.IsTimespanRange);
                 }
             }
         }
