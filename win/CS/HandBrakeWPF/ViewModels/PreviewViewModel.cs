@@ -113,7 +113,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return new List<int> { 10, 30, 45, 60, 75, 90, 105, 120 };
+                return new List<int> { 5, 10, 30, 45, 60, 75, 90, 105, 120 };
             }
         }
 
