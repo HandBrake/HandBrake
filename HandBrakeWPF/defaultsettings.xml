@@ -481,4 +481,12 @@
       <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">true</anyType>
     </value>
   </item>
+  <item>
+    <key>
+      <string>LastPreviewDuration</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">30</anyType>
+    </value>
+  </item>
 </dictionary>
