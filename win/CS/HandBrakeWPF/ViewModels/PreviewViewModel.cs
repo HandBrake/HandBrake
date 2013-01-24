@@ -95,6 +95,7 @@ namespace HandBrakeWPF.ViewModels
             this.Duration = 30;
 
             UseSystemDefaultPlayer = userSettingService.GetUserSetting<bool>(UserSettingConstants.DefaultPlayer);
+            this.Duration = userSettingService.GetUserSetting<int>(UserSettingConstants.LastPreviewDuration);
         }
 
         #endregion
@@ -381,6 +382,7 @@ namespace HandBrakeWPF.ViewModels
             this.encodeService.EncodeStatusChanged += this.encodeService_EncodeStatusChanged;
 
             this.encodeService.Start((QueueTask)state, false);
+            this.userSettingService.SetUserSetting(UserSettingConstants.LastPreviewDuration, this.Duration);
         }
         #endregion
 

@@ -216,6 +216,11 @@ namespace HandBrakeWPF
         /// </summary>
         public const string ShowAdvancedTab = "ShowAdvancedTab";
 
+        /// <summary>
+        /// The last preview duration
+        /// </summary>
+        public const string LastPreviewDuration = "LastPreviewDuration";
+
         #endregion
     }
 }
