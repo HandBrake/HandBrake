@@ -4,6 +4,35 @@
         <name>GongSolutions.Wpf.DragDrop</name>
     </assembly>
     <members>
+        <member name="T:GongSolutions.Wpf.DragDrop.IDropTarget">
+            <summary>
+            Interface implemented by Drop Handlers.
+            </summary>
+        </member>
+        <member name="M:GongSolutions.Wpf.DragDrop.IDropTarget.DragOver(GongSolutions.Wpf.DragDrop.IDropInfo)">
+            <summary>
+            Updates the current drag state.
+            </summary>
+            
+            <param name="dropInfo">
+              Information about the drag.
+            </param>
+            
+            <remarks>
+            To allow a drop at the current drag position, the <see cref="P:GongSolutions.Wpf.DragDrop.DropInfo.Effects"/> property on 
+            <paramref name="dropInfo"/> should be set to a value other than <see cref="F:System.Windows.DragDropEffects.None"/>
+            and <see cref="P:GongSolutions.Wpf.DragDrop.DropInfo.Data"/> should be set to a non-null value.
+            </remarks>
+        </member>
+        <member name="M:GongSolutions.Wpf.DragDrop.IDropTarget.Drop(GongSolutions.Wpf.DragDrop.IDropInfo)">
+            <summary>
+            Performs a drop.
+            </summary>
+            
+            <param name="dropInfo">
+              Information about the drop.
+            </param>
+        </member>
         <member name="P:GongSolutions.Wpf.DragDrop.IDropInfo.Data">
             <summary>
             Gets the drag data.
@@ -222,29 +251,28 @@
             Gets th orientation of the current drop target.
             </summary>
         </member>
-        <member name="T:GongSolutions.Wpf.DragDrop.IDropTarget">
+        <member name="T:GongSolutions.Wpf.DragDrop.IDragSource">
             <summary>
-            Interface implemented by Drop Handlers.
+            Interface implemented by Drag Handlers.
             </summary>
         </member>
-        <member name="M:GongSolutions.Wpf.DragDrop.IDropTarget.DragOver(GongSolutions.Wpf.DragDrop.IDropInfo)">
+        <member name="M:GongSolutions.Wpf.DragDrop.IDragSource.StartDrag(GongSolutions.Wpf.DragDrop.IDragInfo)">
             <summary>
-            Updates the current drag state.
+            Queries whether a drag can be started.
             </summary>
             
-            <param name="dropInfo">
-              Information about the drag.
+            <param name="dragInfo">
+            Information about the drag.
             </param>
             
             <remarks>
-            To allow a drop at the current drag position, the <see cref="P:GongSolutions.Wpf.DragDrop.DropInfo.Effects"/> property on 
-            <paramref name="dropInfo"/> should be set to a value other than <see cref="F:System.Windows.DragDropEffects.None"/>
-            and <see cref="P:GongSolutions.Wpf.DragDrop.DropInfo.Data"/> should be set to a non-null value.
+            To allow a drag to be started, the <see cref="P:GongSolutions.Wpf.DragDrop.DragInfo.Effects"/> property on <paramref name="dragInfo"/> 
+            should be set to a value other than <see cref="!:DragDropEffects.None"/>. 
             </remarks>
         </member>
-        <member name="M:GongSolutions.Wpf.DragDrop.IDropTarget.Drop(GongSolutions.Wpf.DragDrop.IDropInfo)">
+        <member name="M:GongSolutions.Wpf.DragDrop.IDragSource.Dropped(GongSolutions.Wpf.DragDrop.IDropInfo)">
             <summary>
-            Performs a drop.
+            Notifies the drag handler that a drop has occurred.
             </summary>
             
             <param name="dropInfo">
@@ -418,34 +446,6 @@
             container of the clicked item. For example, if <see cref="P:GongSolutions.Wpf.DragDrop.DragInfo.VisualSource"/> is a ListBox this
             will hold a ListBoxItem.
             </remarks>
-        </member>
-        <member name="T:GongSolutions.Wpf.DragDrop.IDragSource">
-            <summary>
-            Interface implemented by Drag Handlers.
-            </summary>
-        </member>
-        <member name="M:GongSolutions.Wpf.DragDrop.IDragSource.StartDrag(GongSolutions.Wpf.DragDrop.IDragInfo)">
-            <summary>
-            Queries whether a drag can be started.
-            </summary>
-            
-            <param name="dragInfo">
-            Information about the drag.
-            </param>
-            
-            <remarks>
-            To allow a drag to be started, the <see cref="P:GongSolutions.Wpf.DragDrop.DragInfo.Effects"/> property on <paramref name="dragInfo"/> 
-            should be set to a value other than <see cref="!:DragDropEffects.None"/>. 
-            </remarks>
-        </member>
-        <member name="M:GongSolutions.Wpf.DragDrop.IDragSource.Dropped(GongSolutions.Wpf.DragDrop.IDropInfo)">
-            <summary>
-            Notifies the drag handler that a drop has occurred.
-            </summary>
-            
-            <param name="dropInfo">
-              Information about the drop.
-            </param>
         </member>
     </members>
 </doc>
