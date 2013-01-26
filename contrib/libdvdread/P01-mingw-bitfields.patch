@@ -1,0 +1,19 @@
+diff -Naur libdvdread.orig/configure.ac libdvdread/configure.ac
+--- libdvdread.orig/configure.ac	2009-01-08 14:57:10.000000000 -0800
++++ libdvdread/configure.ac	2013-01-26 10:35:21.366836184 -0800
+@@ -141,6 +141,15 @@
+   *mingw32*)
+     CFLAGS="-idirafter \$(top_srcdir)/msvc/include $CFLAGS"
+     LDFLAGS="-no-undefined $LDFLAGS"
++    if test "$GCC" = "yes" ; then
++        gcc_version="`$CC -dumpversion`"
++        gcc_version_major=$(echo $gcc_version | cut -d"." -f1)
++        gcc_version_minor=$(echo $gcc_version | cut -d"." -f2)
++        gcc_version_patch=$(echo $gcc_version | cut -d"." -f3)
++        if test $gcc_version_major -ge 4 -a $gcc_version_minor -ge 7 ; then
++            CFLAGS="-mno-ms-bitfields $CFLAGS"
++        fi
++    fi
+     ;;
+   *cygwin*)
+     LDFLAGS="-no-undefined $LDFLAGS"
