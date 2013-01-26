@@ -15,6 +15,8 @@ namespace HandBrake.ApplicationServices.Services.Base
     using System.Text;
     using System.Text.RegularExpressions;
 
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
@@ -150,11 +152,15 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// </param>
         public void InvokeEncodeStatusChanged(EncodeProgressEventArgs e)
         {
-            EncodeProgessStatus handler = this.EncodeStatusChanged;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            Execute.OnUIThread(
+                () =>
+                {
+                    EncodeProgessStatus handler = this.EncodeStatusChanged;
+                    if (handler != null)
+                    {
+                        handler(this, e);
+                    }
+                });
         }
 
         /// <summary>
@@ -165,11 +171,15 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// </param>
         public void InvokeEncodeCompleted(EncodeCompletedEventArgs e)
         {
-            EncodeCompletedStatus handler = this.EncodeCompleted;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            Execute.OnUIThread(
+                () =>
+                {
+                    EncodeCompletedStatus handler = this.EncodeCompleted;
+                    if (handler != null)
+                    {
+                        handler(this, e);
+                    }
+                });
         }
 
         /// <summary>
@@ -180,11 +190,14 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// </param>
         public void InvokeEncodeStarted(EventArgs e)
         {
-            EventHandler handler = this.EncodeStarted;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            Execute.OnUIThread(() =>
+                {
+                    EventHandler handler = this.EncodeStarted;
+                    if (handler != null)
+                    {
+                        handler(this, e);
+                    }
+                });
         }
 
         #endregion
