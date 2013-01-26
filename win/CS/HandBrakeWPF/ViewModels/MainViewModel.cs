@@ -595,7 +595,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.isMkv = value;
-                this.NotifyOfPropertyChange("IsMkv");
+                this.NotifyOfPropertyChange(() => this.IsMkv);
             }
         }
 
@@ -1549,15 +1549,20 @@ namespace HandBrakeWPF.ViewModels
                     this.NotifyOfPropertyChange(() => this.ScannedSource.Titles);
 
                     // Select the Users Title
-                    this.CurrentTask = new EncodeTask(queueEditTask);
-                    this.NotifyOfPropertyChange(() => this.CurrentTask);
                     this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault(t => t.TitleNumber == this.CurrentTask.Title);
-
-                    // Update the Main UI control Area (TODO)
                     this.CurrentTask = new EncodeTask(queueEditTask);
                     this.NotifyOfPropertyChange(() => this.CurrentTask);
 
-                    // Update the Tab Controls (TODO)
+                    // Update the Main Window
+                    this.NotifyOfPropertyChange(() => this.Destination);
+                    this.NotifyOfPropertyChange(() => this.SelectedStartPoint);
+                    this.NotifyOfPropertyChange(() => this.SelectedEndPoint);
+                    this.NotifyOfPropertyChange(() => this.SelectedAngle);
+                    this.NotifyOfPropertyChange(() => this.SelectedPointToPoint);
+                    this.NotifyOfPropertyChange(() => this.SelectedOutputFormat);
+                    this.NotifyOfPropertyChange(() => IsMkv);
+
+                    // Update the Tab Controls
                     this.PictureSettingsViewModel.UpdateTask(this.CurrentTask);
                     this.VideoViewModel.UpdateTask(this.CurrentTask);
                     this.FiltersViewModel.UpdateTask(this.CurrentTask);
@@ -1566,8 +1571,23 @@ namespace HandBrakeWPF.ViewModels
                     this.ChaptersViewModel.UpdateTask(this.CurrentTask);
                     this.AdvancedViewModel.UpdateTask(this.CurrentTask);
 
+                    // Tell the Preivew Window
+                    IPreviewViewModel viewModel = IoC.Get<IPreviewViewModel>();
+                    viewModel.Task = this.CurrentTask;
+
                     // Cleanup
                     this.ShowStatusWindow = false;
+
+                    if (this.SelectedTitle != null && !string.IsNullOrEmpty(this.SelectedTitle.SourceName))
+                    {
+                        this.SourceLabel = this.SelectedTitle.SourceName;
+                    }
+                    else
+                    {
+                        this.SourceLabel = this.SourceName;
+                    }
+
+                    this.StatusLabel = "Scan Completed";
                 });
         }
 
@@ -1676,6 +1696,7 @@ namespace HandBrakeWPF.ViewModels
                 this.ProgramStatusLabel = "A New Update is Available. Goto Tools Menu > Options to Install";
             }
         }
+
         #endregion
 
         #region Event Handlers

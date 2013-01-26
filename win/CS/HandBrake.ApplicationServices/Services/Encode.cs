@@ -11,17 +11,17 @@ namespace HandBrake.ApplicationServices.Services
 {
     using System;
     using System.Diagnostics;
+    using System.Globalization;
     using System.IO;
-    using System.Threading;
     using System.Windows.Forms;
+
+    using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Base;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
-
-    using Parser = HandBrake.ApplicationServices.Parsing.Parser;
 
     /// <summary>
     /// Class which handles the CLI
@@ -34,11 +34,6 @@ namespace HandBrake.ApplicationServices.Services
         /// The User Setting Service
         /// </summary>
         private readonly IUserSettingService userSettingService;
-
-        /// <summary>
-        /// Gets The Process Handle
-        /// </summary>
-        private IntPtr processHandle;
 
         /// <summary>
         /// Gets the Process ID
@@ -55,6 +50,11 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private QueueTask currentTask;
 
+        /// <summary>
+        /// The init shutdown.
+        /// </summary>
+        private bool initShutdown;
+
         #endregion
 
         /// <summary>
@@ -66,8 +66,7 @@ namespace HandBrake.ApplicationServices.Services
         public Encode(IUserSettingService userSettingService)
             : base(userSettingService)
         {
-            this.userSettingService = userSettingService;
-            this.EncodeStarted += this.EncodeEncodeStarted;     
+            this.userSettingService = userSettingService;  
         }
 
         #region Properties
@@ -83,6 +82,7 @@ namespace HandBrake.ApplicationServices.Services
 
         /// <summary>
         /// Execute a HandBrakeCLI process.
+        /// This should only be called from the UI thread.
         /// </summary>
         /// <param name="encodeQueueTask">
         /// The encodeQueueTask.
@@ -94,14 +94,14 @@ namespace HandBrake.ApplicationServices.Services
         {
             try
             {
-                this.currentTask = encodeQueueTask;
-
                 if (this.IsEncoding)
                 {
                     throw new Exception("HandBrake is already encodeing.");
                 }
 
                 this.IsEncoding = true;
+
+                this.currentTask = encodeQueueTask;
 
                 if (enableLogging)
                 {
@@ -160,8 +160,10 @@ namespace HandBrake.ApplicationServices.Services
                     this.HbProcess.BeginErrorReadLine();
                 }
 
+                this.HbProcess.OutputDataReceived += HbProcess_OutputDataReceived;
+                this.HbProcess.BeginOutputReadLine();
+
                 this.processId = this.HbProcess.Id;
-                this.processHandle = this.HbProcess.Handle;
 
                 // Set the process Priority
                 if (this.processId != -1)
@@ -207,21 +209,9 @@ namespace HandBrake.ApplicationServices.Services
         }
 
         /// <summary>
-        /// Stop the Encode
-        /// </summary>
-        public void Stop()
-        {
-            this.Stop(null);
-        }
-
-        /// <summary>
         /// Kill the CLI process
         /// </summary>
-        /// <param name="exc">
-        /// The Exception that has occured.
-        /// This will get bubbled up through the EncodeCompletedEventArgs
-        /// </param>
-        public override void Stop(Exception exc)
+        public override void Stop()
         {
             try
             {
@@ -234,11 +224,6 @@ namespace HandBrake.ApplicationServices.Services
             {
                 // No need to report anything to the user. If it fails, it's probably already stopped.
             }
-
-            this.InvokeEncodeCompleted(
-                exc == null
-                    ? new EncodeCompletedEventArgs(true, null, string.Empty)
-                    : new EncodeCompletedEventArgs(false, exc, "An Unknown Error has occured when trying to Stop this encode."));
         }
 
         /// <summary>
@@ -264,25 +249,12 @@ namespace HandBrake.ApplicationServices.Services
         /// </param>
         private void HbProcessExited(object sender, EventArgs e)
         {
-            this.IsEncoding = false;
-            if (this.WindowsSeven.IsWindowsSeven)
-            {
-                this.WindowsSeven.SetTaskBarProgressToNoProgress();
-            }
-
-            if (this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.PreventSleep))
-            {
-                Win32.AllowSleep();
-            }
+            HbProcess.WaitForExit();
 
             try
             {
-                // This is just a quick hack to ensure that we are done processing the logging data.
-                // Logging data comes in after the exit event has processed sometimes. We should really impliment ISyncronizingInvoke
-                // and set the SyncObject on the process. I think this may resolve this properly.
-                // For now, just wait 2.5 seconds to let any trailing log messages come in and be processed.
-                Thread.Sleep(2500);
                 this.HbProcess.CancelErrorRead();
+                this.HbProcess.CancelOutputRead();
                 this.ShutdownFileWriter();
             }
             catch (Exception exc)
@@ -290,8 +262,22 @@ namespace HandBrake.ApplicationServices.Services
                 // This exception doesn't warrent user interaction, but it should be logged (TODO)
             }
 
-            this.currentTask.Status = QueueItemStatus.Completed;
-            this.InvokeEncodeCompleted(new EncodeCompletedEventArgs(true, null, string.Empty));
+            Execute.OnUIThread(() =>
+                {
+                    if (this.WindowsSeven.IsWindowsSeven)
+                    {
+                        this.WindowsSeven.SetTaskBarProgressToNoProgress();
+                    }
+
+                    if (this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.PreventSleep))
+                    {
+                        Win32.AllowSleep();
+                    }
+
+                    this.currentTask.Status = QueueItemStatus.Completed;
+                    this.IsEncoding = false;
+                    this.InvokeEncodeCompleted(new EncodeCompletedEventArgs(true, null, string.Empty));
+                });
         }
 
         /// <summary>
@@ -303,87 +289,68 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="e">
         /// DataReceived EventArgs
         /// </param>
+        /// <remarks>
+        /// Worker Thread.
+        /// </remarks>
         private void HbProcErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
             if (!String.IsNullOrEmpty(e.Data))
             {
+                if (initShutdown && this.LogBuffer.Length < 25000000) 
+                {
+                    initShutdown = false; // Reset this flag.
+                }
+
+                if (this.LogBuffer.Length > 25000000 && !initShutdown) // Approx 23.8MB and make sure it's only printed once
+                {
+                    this.ProcessLogMessage("ERROR: Initiating automatic shutdown of encode process. The size of the log file inidcates that there is an error! ");
+                    initShutdown = true;
+                    this.Stop();
+                }
+
                 this.ProcessLogMessage(e.Data);
             }
         }
 
         /// <summary>
-        /// Encode Started
+        /// The hb process output data received.
         /// </summary>
         /// <param name="sender">
         /// The sender.
         /// </param>
         /// <param name="e">
-        /// The EventArgs.
+        /// The e.
         /// </param>
-        private void EncodeEncodeStarted(object sender, EventArgs e)
+        private void HbProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            Thread monitor = new Thread(this.EncodeMonitor);
-            monitor.Start();
-        }
-
-        /// <summary>
-        /// Monitor the QueueTask
-        /// </summary>
-        private void EncodeMonitor()
-        {
-            try
+            if (!String.IsNullOrEmpty(e.Data) && this.IsEncoding)
             {
-                Parser encode = new Parser(this.HbProcess.StandardOutput.BaseStream);
-                encode.OnEncodeProgress += this.EncodeOnEncodeProgress;
-                while (!encode.EndOfStream)
+                EncodeProgressEventArgs eventArgs = this.ReadEncodeStatus(e.Data, this.startTime);
+                if (eventArgs != null)
                 {
-                    encode.ReadEncodeStatus();
+                    Execute.OnUIThread(
+                        () =>
+                            {
+                                if (!this.IsEncoding)
+                                {
+                                    // We can get events out of order since the CLI progress is monitored on a background thread.
+                                    // So make sure we don't send a status update after an encode complete event.
+                                    return;
+                                }
+
+                                this.InvokeEncodeStatusChanged(eventArgs);
+
+                                if (this.WindowsSeven.IsWindowsSeven)
+                                {
+                                    int percent;
+                                    int.TryParse(
+                                        Math.Round(eventArgs.PercentComplete).ToString(CultureInfo.InvariantCulture),
+                                        out percent);
+
+                                    this.WindowsSeven.SetTaskBarProgress(percent);
+                                }
+                            });
                 }
-            }
-            catch (Exception)
-            {
-                this.EncodeOnEncodeProgress(null, 0, 0, 0, 0, 0, "Unknown, status not available..");
-            }
-        }
-
-        /// <summary>
-        /// Displays the Encode status in the GUI
-        /// </summary>
-        /// <param name="sender">The sender</param>
-        /// <param name="currentTask">The current task</param>
-        /// <param name="taskCount">Number of tasks</param>
-        /// <param name="percentComplete">Percent complete</param>
-        /// <param name="currentFps">Current encode speed in fps</param>
-        /// <param name="avg">Avg encode speed</param>
-        /// <param name="timeRemaining">Time Left</param>
-        private void EncodeOnEncodeProgress(object sender, int currentTask, int taskCount, float percentComplete, float currentFps, float avg, string timeRemaining)
-        {
-            if (!this.IsEncoding)
-            {
-                // We can get events out of order since the CLI progress is monitored on a background thread.
-                // So make sure we don't send a status update after an encode complete event.
-                return;
-            }
-
-            EncodeProgressEventArgs eventArgs = new EncodeProgressEventArgs
-            {
-                AverageFrameRate = avg,
-                CurrentFrameRate = currentFps,
-                EstimatedTimeLeft = Converters.EncodeToTimespan(timeRemaining),
-                PercentComplete = percentComplete,
-                Task = currentTask,
-                TaskCount = taskCount,
-                ElapsedTime = DateTime.Now - this.startTime,
-            };
-
-            this.InvokeEncodeStatusChanged(eventArgs);
-
-            if (this.WindowsSeven.IsWindowsSeven)
-            {
-                int percent;
-                int.TryParse(Math.Round(percentComplete).ToString(), out percent);
-
-                this.WindowsSeven.SetTaskBarProgress(percent);
             }
         }
 

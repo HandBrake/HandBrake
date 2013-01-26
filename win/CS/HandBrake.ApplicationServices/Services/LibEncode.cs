@@ -169,19 +169,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Kill the CLI process
         /// </summary>
-        public void Stop()
-        {
-            this.Stop(null);
-        }
-
-        /// <summary>
-        /// Kill the CLI process
-        /// </summary>
-        /// <param name="exc">
-        /// The Exception that has occured.
-        /// This will get bubbled up through the EncodeCompletedEventArgs
-        /// </param>
-        public override void Stop(Exception exc)
+        public override void Stop()
         {
             try
             {
@@ -192,11 +180,6 @@ namespace HandBrake.ApplicationServices.Services
             {
                 // Do Nothing.
             }
-
-            this.InvokeEncodeCompleted(
-                exc == null
-                    ? new EncodeCompletedEventArgs(true, null, string.Empty)
-                    : new EncodeCompletedEventArgs(false, exc, "An Error has occured."));
         }
 
         /// <summary>

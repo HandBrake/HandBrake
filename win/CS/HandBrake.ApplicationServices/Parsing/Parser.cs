@@ -78,10 +78,6 @@ namespace HandBrake.ApplicationServices.Parsing
         /// </summary>
         public event ScanProgressEventHandler OnScanProgress;
 
-        /// <summary>
-        /// Raised upon the catching of a "Scanning title # of #..." in the stream
-        /// </summary>
-        public event EncodeProgressEventHandler OnEncodeProgress;
 
         /// <summary>
         /// Gets the buffer of data that came from the CLI standard input/error
@@ -132,35 +128,6 @@ namespace HandBrake.ApplicationServices.Parsing
                 OnReadToEnd(this, tmp);
 
             return tmp;
-        }
-
-        /// <summary>
-        /// Pase the CLI status output (from standard output)
-        /// </summary>
-        public void ReadEncodeStatus()
-        {
-            string tmp = base.ReadLine();
-
-            Match m = Regex.Match(tmp, @"^Encoding: task ([0-9]*) of ([0-9]*), ([0-9]*\.[0-9]*) %( \(([0-9]*\.[0-9]*) fps, avg ([0-9]*\.[0-9]*) fps, ETA ([0-9]{2})h([0-9]{2})m([0-9]{2})s\))?");
-            if (m.Success && OnEncodeProgress != null)
-            {
-                int currentTask = int.Parse(m.Groups[1].Value);
-                int totalTasks = int.Parse(m.Groups[2].Value);
-                float percent = float.Parse(m.Groups[3].Value, CultureInfo.InvariantCulture);
-                float currentFps = m.Groups[5].Value == string.Empty ? 0.0F : float.Parse(m.Groups[5].Value, CultureInfo.InvariantCulture);
-                float avgFps = m.Groups[6].Value == string.Empty ? 0.0F : float.Parse(m.Groups[6].Value, CultureInfo.InvariantCulture);
-                string remaining = string.Empty;
-                if (m.Groups[7].Value != string.Empty)
-                {
-                    remaining = m.Groups[7].Value + ":" + m.Groups[8].Value + ":" + m.Groups[9].Value;
-                }
-                if (string.IsNullOrEmpty(remaining))
-                {
-                    remaining = "Calculating ...";
-                }
-
-                OnEncodeProgress(this, currentTask, totalTasks, percent, currentFps, avgFps, remaining);
-            }
         }
     }
 }
