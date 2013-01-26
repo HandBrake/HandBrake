@@ -15,21 +15,17 @@
 /* Built-In Preset Dictionaries (one for each built in preset) */
 - (NSDictionary *)createDevicesPresetFolder;
 - (NSDictionary *)createRegularPresetFolder;
-- (NSDictionary *)createLegacyPresetFolder;
 
 - (NSDictionary *)createiPadPreset;
-- (NSDictionary *)createiPhone4Preset;
-- (NSDictionary *)createAppleTv2Preset;
+- (NSDictionary *)createAppleTV2Preset;
 - (NSDictionary *)createAppleTVPreset;
-- (NSDictionary *)createAppleTv3Preset;
-- (NSDictionary *)createAppleUniversalPreset;
-- (NSDictionary *)createClassicPreset;
-- (NSDictionary *)createiPhonePreset;
-- (NSDictionary *)createIpodHighPreset;
-- (NSDictionary *)createIpodLowPreset;
+- (NSDictionary *)createAppleTV3Preset;
+- (NSDictionary *)createUniversalPreset;
+- (NSDictionary *)createiPhoneiPodtouchPreset;
+- (NSDictionary *)createiPodPreset;
 - (NSDictionary *)createNormalPreset;
 - (NSDictionary *)createHighProfilePreset;
-- (NSDictionary *)createAndroidMidPreset;
-- (NSDictionary *)createAndroidHighPreset;
+- (NSDictionary *)createAndroidPreset;
+- (NSDictionary *)createAndroidTabletPreset;
 
 @end

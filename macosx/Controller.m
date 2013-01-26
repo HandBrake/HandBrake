@@ -3102,19 +3102,30 @@ fWorkingCount = 0;
     
     job->modulus = [[queueToApply objectForKey:@"PictureModulus"]  intValue];
     
-    /* we check to make sure the presets width/height does not exceed the sources width/height */
-    if (fTitle->width < [[queueToApply objectForKey:@"PictureWidth"]  intValue] || fTitle->height < [[queueToApply objectForKey:@"PictureHeight"]  intValue])
+    /*
+     * if the preset specifies neither max. width nor height
+     * (both are 0), use the max. picture size
+     *
+     * if the specified non-zero dimensions exceed those of the
+     * source, also use the max. picture size (no upscaling)
+     */
+    if (([[queueToApply objectForKey:@"PictureWidth"]  intValue] <= 0 &&
+         [[queueToApply objectForKey:@"PictureHeight"] intValue] <= 0)              ||
+        ([[queueToApply objectForKey:@"PictureWidth"]  intValue] >  fTitle->width &&
+         [[queueToApply objectForKey:@"PictureHeight"] intValue] >  fTitle->height) ||
+        ([[queueToApply objectForKey:@"PictureHeight"] intValue] <= 0 &&
+         [[queueToApply objectForKey:@"PictureWidth"]  intValue] >  fTitle->width)  ||
+        ([[queueToApply objectForKey:@"PictureWidth"]  intValue] <= 0 &&
+         [[queueToApply objectForKey:@"PictureHeight"] intValue] >  fTitle->height))
     {
-        /* if so, then we use the sources height and width to avoid scaling up */
-        //job->width = fTitle->width;
-        //job->height = fTitle->height;
+        /* use the source's width/height to avoid upscaling */
         [self revertPictureSizeToMax:nil];
     }
-    else // source width/height is >= the preset height/width
+    else // source width/height is >= preset width/height
     {
-        /* we can go ahead and use the presets values for height and width */
-        job->width = [[queueToApply objectForKey:@"PictureWidth"]  intValue];
-        job->height = [[queueToApply objectForKey:@"PictureHeight"]  intValue];
+        /* use the preset values for width/height */
+        job->width  = [[queueToApply objectForKey:@"PictureWidth"]  intValue];
+        job->height = [[queueToApply objectForKey:@"PictureHeight"] intValue];
     }
     job->keep_ratio = [[queueToApply objectForKey:@"PictureKeepRatio"]  intValue];
     if (job->keep_ratio == 1)
@@ -6523,8 +6534,10 @@ return YES;
                 job->modulus = 16;
             }
              
-            /* Check to see if the objectForKey:@"UsesPictureSettings is 2 which is "Use Max for the source */
-            if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] == 2 || [[chosenPreset objectForKey:@"UsesMaxPictureSettings"]  intValue] == 1)
+            /* Check to see if the objectForKey:@"UsesPictureSettings" is 2,
+             * which means "Use max. picture size for the source" */
+            if ([[chosenPreset objectForKey:@"UsesPictureSettings"]    intValue] == 2 ||
+                [[chosenPreset objectForKey:@"UsesMaxPictureSettings"] intValue] == 1)
             {
                 /* Use Max Picture settings for whatever the dvd is.*/
                 [self revertPictureSizeToMax:nil];
@@ -6540,21 +6553,34 @@ return YES;
                 }
                 job->anamorphic.mode = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
             }
-            else // /* If not 0 or 2 we assume objectForKey:@"UsesPictureSettings is 1 which is "Use picture sizing from when the preset was set" */
+            /* If not 0 or 2 we assume objectForKey:@"UsesPictureSettings" is 1,
+             * which means "Use the picture size specified in the preset" */
+            else
             {
-                /* we check to make sure the presets width/height does not exceed the sources width/height */
-                if (fTitle->width < [[chosenPreset objectForKey:@"PictureWidth"]  intValue] || fTitle->height < [[chosenPreset objectForKey:@"PictureHeight"]  intValue])
+                /*
+                 * if the preset specifies neither max. width nor height
+                 * (both are 0), use the max. picture size
+                 *
+                 * if the specified non-zero dimensions exceed those of the
+                 * source, also use the max. picture size (no upscaling)
+                 */
+                if (([[chosenPreset objectForKey:@"PictureWidth"]  intValue] <= 0 &&
+                     [[chosenPreset objectForKey:@"PictureHeight"] intValue] <= 0)              ||
+                    ([[chosenPreset objectForKey:@"PictureWidth"]  intValue] >  fTitle->width &&
+                     [[chosenPreset objectForKey:@"PictureHeight"] intValue] >  fTitle->height) ||
+                    ([[chosenPreset objectForKey:@"PictureHeight"] intValue] <= 0 &&
+                     [[chosenPreset objectForKey:@"PictureWidth"]  intValue] >  fTitle->width)  ||
+                    ([[chosenPreset objectForKey:@"PictureWidth"]  intValue] <= 0 &&
+                     [[chosenPreset objectForKey:@"PictureHeight"] intValue] >  fTitle->height))
                 {
-                    /* if so, then we use the sources height and width to avoid scaling up */
-                    //job->width = fTitle->width;
-                    //job->height = fTitle->height;
+                    /* use the source's width/height to avoid upscaling */
                     [self revertPictureSizeToMax:nil];
                 }
-                else // source width/height is >= the preset height/width
+                else // source width/height is >= preset width/height
                 {
-                    /* we can go ahead and use the presets values for height and width */
-                    job->width = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
-                    job->height = [[chosenPreset objectForKey:@"PictureHeight"]  intValue];
+                    /* use the preset values for width/height */
+                    job->width  = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
+                    job->height = [[chosenPreset objectForKey:@"PictureHeight"] intValue];
                 }
                 job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
                 if (job->keep_ratio == 1)
