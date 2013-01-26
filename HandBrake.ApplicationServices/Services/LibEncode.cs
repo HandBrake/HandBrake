@@ -12,7 +12,6 @@ namespace HandBrake.ApplicationServices.Services
     using System;
     using System.Diagnostics;
 
-    using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Base;
     using HandBrake.ApplicationServices.Services.Interfaces;
