@@ -1884,7 +1884,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 {
     /* use a bool to determine whether or not we can decrypt using vlc */
     BOOL cancelScanDecrypt = 0;
-    BOOL vlcFound = 0;
     NSString *path = scanPath;
     HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
     
@@ -1913,16 +1912,23 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         path = [detector devicePath];
         [self writeToActivityLog: "trying to open a physical dvd at: %s", [scanPath UTF8String]];
         
-        /* lets check for vlc here to make sure we have a dylib available to use for decrypting */
+        
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        NSInteger suppressWarning = [prefs integerForKey:@"suppresslibdvdcss"];
+        
+        /* Notify the user that we don't support removal of copy proteciton. */
         void *dvdcss = dlopen("libdvdcss.2.dylib", RTLD_LAZY);
-        if (dvdcss == NULL) 
+        if (dvdcss == NULL && suppressWarning != 1)
         {
+            /* Only show the user this warning once. They may be using a solution we don't know about. Notifying them each time is annoying. */
+            [prefs setInteger:1 forKey:@"suppresslibdvdcss"];
+            
             /*compatible vlc not found, so we set the bool to cancel scanning to 1 */
             cancelScanDecrypt = 1;
             [self writeToActivityLog: "libdvdcss.2.dylib not found for decrypting physical dvd"];
             int status;
-            status = NSRunAlertPanel(@"HandBrake could not find a compatible version of libdvdcss (32-bit libdvdcss is not compatible with 64-bit HandBrake and vice-versa).",
-                                     @"Please download and install libdvdcss.pkg if you wish to read encrypted DVDs.", @"Get libdvdcss.pkg", @"Cancel Scan", @"Attempt Scan Anyway");
+            status = NSRunAlertPanel(@"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish install libdvdcss or any other 3rd party software for this function.",
+                                     @"Videolan.org provides libdvdcss if you are not currently using another solution.", @"Get libdvdcss.pkg", @"Cancel Scan", @"Attempt Scan Anyway");
             [NSApp requestUserAttention:NSCriticalRequest];
             
             if (status == NSAlertDefaultReturn)
@@ -1933,13 +1939,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             else if (status == NSAlertAlternateReturn)
             {
                 /* User chose to cancel the scan */
-                [self writeToActivityLog: "cannot open physical dvd, scan cancelled"];
+                [self writeToActivityLog: "Cannot open physical dvd, scan cancelled"];
             }
             else
             {
                 /* User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails */
                 cancelScanDecrypt = 0;
-                [self writeToActivityLog: "user overrode dvdcss warning - trying to open physical dvd without decryption"];
+                [self writeToActivityLog: "User overrode copy-proteciton warning - trying to open physical dvd without decryption"];
             }
             
         }
@@ -1947,7 +1953,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         {
             /* VLC was found in /Applications so all is well, we can carry on using vlc's libdvdcss.dylib for decrypting if needed */
             [self writeToActivityLog: "libdvdcss.2.dylib found for decrypting physical dvd"];
-            vlcFound = 1;
             dlclose(dvdcss);
         }
     }
@@ -2792,50 +2797,6 @@ fWorkingCount = 0;
      */
     NSString *path = scanPath;
     HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
-    
-    if( [detector isVideoDVD] )
-    {
-        // The chosen path was actually on a DVD, so use the raw block
-        // device path instead.
-        path = [detector devicePath];
-        [self writeToActivityLog: "trying to open a physical dvd at: %s", [scanPath UTF8String]];
-
-        /* lets check for vlc here to make sure we have a dylib available to use for decrypting */
-        void *dvdcss = dlopen("libdvdcss.2.dylib", RTLD_LAZY);
-        if (dvdcss == NULL) 
-        {
-            /*vlc not found in /Applications so we set the bool to cancel scanning to 1 */
-            cancelScanDecrypt = 1;
-            [self writeToActivityLog: "VLC app not found for decrypting physical dvd"];
-            int status;
-            status = NSRunAlertPanel(@"HandBrake could not find VLC.",@"Please download and install VLC media player in your /Applications folder if you wish to read encrypted DVDs.", @"Get VLC", @"Cancel Scan", @"Attempt Scan Anyway");
-            [NSApp requestUserAttention:NSCriticalRequest];
-            
-            if (status == NSAlertDefaultReturn)
-            {
-                /* User chose to go download vlc (as they rightfully should) so we send them to the vlc site */
-                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.videolan.org/"]];
-            }
-            else if (status == NSAlertAlternateReturn)
-            {
-            /* User chose to cancel the scan */
-            [self writeToActivityLog: "cannot open physical dvd , scan cancelled"];
-            }
-            else
-            {
-            /* User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails */
-            cancelScanDecrypt = 0;
-            [self writeToActivityLog: "user overrode vlc warning -trying to open physical dvd without decryption"];
-            }
-
-        }
-        else
-        {
-            /* VLC was found in /Applications so all is well, we can carry on using vlc's libdvdcss.dylib for decrypting if needed */
-            dlclose(dvdcss);
-            [self writeToActivityLog: "VLC app found for decrypting physical dvd"];
-        }
-    }
 
     if (cancelScanDecrypt == 0)
     {
