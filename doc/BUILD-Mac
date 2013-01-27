@@ -1,4 +1,4 @@
-Build Guide for HandBrake 4394svn on Mac OS X
+Build Guide for HandBrake 5208svn on Mac OS X
 *********************************************
 
 Table of Contents
@@ -55,7 +55,9 @@ possible:
 
    * llvm-gcc-4.2 (GCC) 4.2.1 (Based on Apple Inc. build 5658)
 
-   * yasm 1.1.0.2352
+   * yasm 1.2.x
+
+   * xquartz (http://xquartz.macosforge.org/landing/)
 
      Note: It is recommended to use the platform distribution's
      standard compiler for maximum C++ compatibility. If you build with
@@ -90,7 +92,7 @@ recommended you use these versions or similar:
 This chapter is for building from a terminal/shell environment in as
 few commands as possible. Upon completion of the following commands you
 should have a fresh build of HandBrake. Further instructions are
-available beginning with *note overview:: which describes procedures
+available beginning with *Note overview:: which describes procedures
 suitable for repeating builds. This chapter should be skipped by those
 seeking more than a minimalist build.
 
@@ -699,7 +701,7 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    4394
-     date:   2011-12-30 17:21:44 -0500
+     rev:    5208
+     date:   2013-01-26 18:47:13 +0000
      type:   developer
 
