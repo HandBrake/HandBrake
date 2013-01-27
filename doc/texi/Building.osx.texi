@@ -23,7 +23,8 @@ Building on @value{OS.osx} is well supported. It is the reference platform for @
 @item @value{OS.osx} 10.7.2
 @item Xcode 4.2.1 (Build version 4D502)
 @item llvm-gcc-4.2 (GCC) 4.2.1 (Based on Apple Inc. build 5658)
-@item yasm 1.1.0.2352
+@item yasm 1.2.x
+@item xquartz (http://xquartz.macosforge.org/landing/)
 @end itemize
 
 @include building/prerequisites.bundled.texi

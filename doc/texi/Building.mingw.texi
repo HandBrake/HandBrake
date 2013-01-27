@@ -19,8 +19,8 @@ The following are the recommended specifications for building on @value{OS.mingw
 
 @itemize @bullet
 @item Intel 32-bit or 64-bit hardware
-@item @value{OS.mingw} on Fedora 16, Ubuntu or Debian, gcc 4.5+
-@item yasm 1.1.x.x (for i386 or x86_64 architectures)
+@item @value{OS.mingw} on Fedora 17+, Ubuntu 12+ or Debian, gcc 4.5+
+@item yasm 1.2.x (for i386 or x86_64 architectures)
 @end itemize
 
 @include building/prerequisites.bundled.texi
@@ -33,7 +33,7 @@ As of this writing, @value{OS.mingw} has available to it several versions of gcc
 @end quotation
 
 @example
-../configure --cross=i686-pc-mingw32 --gcc=gcc-4
+../configure --cross=i686-w64-mingw32 --gcc=gcc-4
 @end example
 
 @include building/prerequisites.common.texi
