@@ -5586,9 +5586,16 @@ the user is using "Custom" settings by determining the sender*/
                                                            h264_level,
                                                            width, height);
     // update the text field
-    [fDisplayX264PresetsUnparseTextField setStringValue:
-     [NSString stringWithFormat:@"x264 Unparse: %s",
-      fX264PresetsUnparsedUTF8String]];
+    if (fX264PresetsUnparsedUTF8String != NULL)
+    {
+        [fDisplayX264PresetsUnparseTextField setStringValue:
+         [NSString stringWithFormat:@"x264 Unparse: %s",
+          fX264PresetsUnparsedUTF8String]];
+    }
+    else
+    {
+        [fDisplayX264PresetsUnparseTextField setStringValue:@"x264 Unparse:"];
+    }
 }
 
 #pragma mark -
