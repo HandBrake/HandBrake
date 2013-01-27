@@ -846,6 +846,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [fScanIndicator setIndeterminate: NO];
         [fScanIndicator setDoubleValue: 0.0];
         [fScanIndicator setHidden: YES];
+        [fScanHorizontalLine setHidden: NO];
+        
 		[self showNewScan:nil];
 	}
     
@@ -863,6 +865,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                                             NSLocalizedString( @"Scanning title %d of %d…", @"" ),
                                             p.title_cur, p.title_count]];
             [fScanIndicator setHidden: NO];
+            [fScanHorizontalLine setHidden: YES];
             [fScanIndicator setDoubleValue: 100.0 * ((double)( p.title_cur - 1 ) / p.title_count)];
             break;
 		}
@@ -874,6 +877,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [fScanIndicator setIndeterminate: NO];
             [fScanIndicator setDoubleValue: 0.0];
             [fScanIndicator setHidden: YES];
+            [fScanHorizontalLine setHidden: NO];
 			[self writeToActivityLog:"ScanDone state received from fHandle"];
             [self showNewScan:nil];
             [[fWindow toolbar] validateVisibleItems];
@@ -1868,6 +1872,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         /* We setup the scan status in the main window to indicate a source title scan */
         [fSrcDVD2Field setStringValue: @"Opening a new source title…"];
         [fScanIndicator setHidden: NO];
+        [fScanHorizontalLine setHidden: YES];
         [fScanIndicator setIndeterminate: YES];
         [fScanIndicator startAnimation: nil];
 		
