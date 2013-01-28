@@ -1029,7 +1029,15 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 pass_desc = @"";
             }
             
-			string = [NSMutableString stringWithFormat: NSLocalizedString( @"Encoding: %@ \nPass %d %@ of %d, %.2f %%", @"" ), currentQueueEncodeNameString, p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
+            
+            if ([pass_desc length])
+            {
+                string = [NSMutableString stringWithFormat: NSLocalizedString( @"Encoding: %@ \nPass %d %@ of %d, %.2f %%", @"" ), currentQueueEncodeNameString, p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
+            }
+            else
+            {
+                string = [NSMutableString stringWithFormat: NSLocalizedString( @"Encoding: %@ \nPass %d of %d, %.2f %%", @"" ), currentQueueEncodeNameString, p.job_cur, p.job_count, 100.0 * p.progress];
+            }
             
 			if( p.seconds > -1 )
             {
