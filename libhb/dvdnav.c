@@ -992,7 +992,7 @@ static int try_button( dvdnav_t * dvdnav, int button, hb_list_t * list_title )
 
     cur_title = title;
 
-    for (jj = 0; jj < 5; jj++)
+    for (jj = 0; jj < 10; jj++)
     {
         for (ii = 0; ii < 2000; ii++)
         {
