@@ -1206,18 +1206,25 @@ audio_remove_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
         indices = gtk_tree_path_get_indices (treepath);
         row = indices[0];
         gtk_tree_path_free(treepath);
-        // Remove the selected item
-        gtk_list_store_remove (GTK_LIST_STORE(store), &iter);
-        // remove from audio settings list
         if (row < 0) return;
-        widget = GHB_WIDGET (ud->builder, "audio_add");
-        gtk_widget_set_sensitive(widget, TRUE);
+
         audio_list = ghb_settings_get_value(ud->settings, "audio_list");
         if (row >= ghb_array_len(audio_list))
             return;
+
+        // Update our settings list before removing the row from the
+        // treeview.  Removing from the treeview sometimes provokes an
+        // immediate selection change, so the list needs to be up to date
+        // when this happens.
         GValue *old = ghb_array_get_nth(audio_list, row);
         ghb_value_free(old);
         ghb_array_remove(audio_list, row);
+
+        // Remove the selected item
+        gtk_list_store_remove (GTK_LIST_STORE(store), &iter);
+        // remove from audio settings list
+        widget = GHB_WIDGET (ud->builder, "audio_add");
+        gtk_widget_set_sensitive(widget, TRUE);
     }
 }
 
