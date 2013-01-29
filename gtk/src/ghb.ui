@@ -1679,27 +1679,20 @@
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <child>
-                                      <object class="GtkFrame" id="frame8">
+                                      <object class="GtkAlignment" id="alignment19">
                                         <property name="visible">True</property>
-                                        <property name="label_xalign">0</property>
-                                        <property name="shadow_type">none</property>
+                                        <property name="bottom_padding">4</property>
+                                        <property name="left_padding">4</property>
+                                        <property name="right_padding">4</property>
+                                        <property name="yalign">1</property>
                                         <child>
-                                          <object class="GtkAlignment" id="alignment19">
+                                          <object class="GtkImage" id="preview_button_image">
+                                            <property name="width_request">448</property>
+                                            <property name="height_request">200</property>
                                             <property name="visible">True</property>
-                                            <property name="bottom_padding">4</property>
-                                            <property name="left_padding">4</property>
-                                            <property name="right_padding">4</property>
-                                            <property name="yalign">1</property>
-                                            <child>
-                                              <object class="GtkImage" id="preview_button_image">
-                                                <property name="width_request">448</property>
-                                                <property name="height_request">200</property>
-                                                <property name="visible">True</property>
-                                                <property name="icon_name">hb-icon</property>
-                                                <property name="pixel-size">128</property>
-                                                <signal name="size_allocate" handler="preview_button_size_allocate_cb"/>
-                                              </object>
-                                            </child>
+                                            <property name="icon_name">hb-icon</property>
+                                            <property name="pixel-size">128</property>
+                                            <signal name="size_allocate" handler="preview_button_size_allocate_cb"/>
                                           </object>
                                         </child>
                                       </object>
