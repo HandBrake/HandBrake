@@ -259,7 +259,7 @@ static void next_tag( hb_libmpeg2_t *m, hb_buffer_t *buf_es )
     {
         if ( m->tags[m->cur_tag].start < 0 ||
              ( m->got_iframe && m->tags[m->cur_tag].start >= m->first_pts ) )
-            hb_log("2 mpeg2 tag botch: pts %"PRId64", tag pts %"PRId64" buf %p",
+            hb_log("mpeg2 tag botch: pts %"PRId64", tag pts %"PRId64" buf %p",
                    buf_es->s.start, m->tags[m->cur_tag].start, m->tags[m->cur_tag].cc_buf);
         if ( m->tags[m->cur_tag].cc_buf )
             hb_buffer_close( &m->tags[m->cur_tag].cc_buf );
@@ -395,7 +395,7 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 }
                 else if (m->tags[m->cur_tag].cc_buf)
                 {
-                    hb_log("1 mpeg2 tag botch2: pts %"PRId64", tag pts %"PRId64" buf %p",
+                    hb_log("mpeg2 tag botch2: pts %"PRId64", tag pts %"PRId64" buf %p",
                            buf_es->s.start, m->tags[m->cur_tag].start, m->tags[m->cur_tag].cc_buf);
                     hb_buffer_close( &m->tags[m->cur_tag].cc_buf );
                 }
