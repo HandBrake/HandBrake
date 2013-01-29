@@ -1,0 +1,12 @@
+diff -Naur aotuv-b6.03_20110424.orig/configure.ac aotuv-b6.03_20110424/configure.ac
+--- aotuv-b6.03_20110424.orig/configure.ac	2010-11-01 15:27:12.000000000 -0400
++++ aotuv-b6.03_20110424/configure.ac	2013-01-28 23:43:26.000000000 -0500
+@@ -13,7 +13,7 @@
+ 
+ AM_INIT_AUTOMAKE($PACKAGE_NAME,$PACKAGE_VERSION)
+ AM_MAINTAINER_MODE
+-AM_CONFIG_HEADER([config.h])
++AC_CONFIG_HEADER([config.h])
+ 
+ dnl Add parameters for aclocal
+ AC_SUBST(ACLOCAL_AMFLAGS, "-I m4")
