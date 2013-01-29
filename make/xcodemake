@@ -126,7 +126,7 @@ if [ -n "$reconfigure" ]; then
 
     case "$CONFIGURATION" in
     debug*)
-        debug="--debug=max --optimize=none"
+        debug="--debug=std --optimize=none"
         ;;
     release*|*)
         debug=
