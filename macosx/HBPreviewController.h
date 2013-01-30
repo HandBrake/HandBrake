@@ -38,6 +38,7 @@
     
     BOOL                     isEncoding;
 
+    CGFloat                  backingScaleFactor;
 	
     int                      MaxOutputWidth;
     int                      MaxOutputHeight;

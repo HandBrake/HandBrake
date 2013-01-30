@@ -116,8 +116,12 @@
      [fMovieView setFrameSize:[fPictureViewArea frame].size];
      //[fPreviewWindow setFrameSize:[fPictureViewArea frame].size];
     
-    
+    if( [[self window] respondsToSelector:@selector( backingScaleFactor )] )
+        backingScaleFactor = [[self window] backingScaleFactor];
+    else
+        backingScaleFactor = 1.0;
 }
+
 - (BOOL)acceptsMouseMovedEvents
 {
     return YES;
@@ -221,11 +225,26 @@
 
 }
 
-
+- (void)windowDidChangeBackingProperties:(NSNotification *)notification {
+    
+    NSWindow *theWindow = (NSWindow *)[notification object];
+    
+    CGFloat newBackingScaleFactor = [theWindow backingScaleFactor];
+    CGFloat oldBackingScaleFactor = [[[notification userInfo]
+                                      objectForKey:@"NSBackingPropertyOldScaleFactorKey"]
+                                     doubleValue];
+    if( newBackingScaleFactor != oldBackingScaleFactor )
+    {
+        // Scale factor changed, update the preview window
+        // to the new situation
+        backingScaleFactor = newBackingScaleFactor;
+        [self pictureSliderChanged:self];
+    }
+}
 
 // Adjusts the window to draw the current picture (fPicture) adjusting its size as
 // necessary to display as much of the picture as possible.
-- (void) displayPreview 
+- (void) displayPreview
 {
     hb_job_t * job = fTitle->job;
     /* lets make sure that the still picture view is not hidden and that 
@@ -291,7 +310,7 @@
         displaySize.width = fTitle->job->anamorphic.dar_width + fTitle->job->crop[2] + fTitle->job->crop[3] ;
         displaySize.height = fTitle->job->anamorphic.dar_height + fTitle->job->crop[0] + fTitle->job->crop[1];
         imageScaledSize.width = (int)fTitle->job->anamorphic.dar_width;
-        imageScaledSize.height = (int)fTitle->job->height;   
+        imageScaledSize.height = (int)fTitle->job->height;
     } 
     else // No Anamorphic
     {
@@ -304,12 +323,21 @@
         imageScaledSize.width = fTitle->job->width;
         imageScaledSize.height = fTitle->job->height;
     }
-    
-    
-    
+
+    if( backingScaleFactor != 1.0 )
+    {
+        // HiDPI mode usually display everything
+        // with douple pixel count, but we don't
+        // want to double the size of the video
+        displaySize.height /= backingScaleFactor;
+        displaySize.width /= backingScaleFactor;
+        imageScaledSize.height /= backingScaleFactor;
+        imageScaledSize.width /= backingScaleFactor;
+    }
+
     NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
     [self resizeSheetForViewSize:viewSize];
-
+    
     NSSize windowSize = [[self window] frame].size;    
     
     if (scaleToScreen == YES)
@@ -325,8 +353,8 @@
         
         /* Set our min size to the storage size */
         NSSize minSize;
-        minSize.width = fTitle->width;
-        minSize.height = fTitle->height;
+        minSize.width = fTitle->width / backingScaleFactor;
+        minSize.height = fTitle->height / backingScaleFactor;
 
         /* Set delta's based on minimum size */
         if (imageScaledSize.width <  minSize.width)
@@ -366,17 +394,17 @@
         viewSize.width = viewSize.width - (viewSize.width - imageScaledSize.width);
         viewSize.height = viewSize.height - (viewSize.height - imageScaledSize.height);
         
-        if (fTitle->width > windowSize.width || fTitle->height > windowSize.height)
+        if (fTitle->width / backingScaleFactor > windowSize.width || fTitle->height / backingScaleFactor > windowSize.height)
         {
             CGFloat viewSizeAspect = viewSize.width / viewSize.height;
             if (viewSizeAspect > 1.0) // we are wider than taller, so expand the width to fill the area and scale the height
             {
-                viewSize.width = viewSize.width * (windowSize.width / fTitle->width) ;
+                viewSize.width = viewSize.width * (windowSize.width / fTitle->width / backingScaleFactor) ;
                 viewSize.height = viewSize.width / viewSizeAspect;
             }
             else
             {
-                viewSize.height = viewSize.height * (windowSize.height / fTitle->height);
+                viewSize.height = viewSize.height * (windowSize.height / fTitle->height / backingScaleFactor);
                 viewSize.width = viewSize.height * viewSizeAspect;
             }
         }
@@ -1429,7 +1457,7 @@
     CGFloat paddingX = 0.00;
     CGFloat paddingY = 0.00;
     
-    if (fTitle->width > screenSize.width || fTitle->height > screenSize.height)
+    if (fTitle->width / backingScaleFactor > screenSize.width || fTitle->height / backingScaleFactor > screenSize.height)
     {
         if (scaleToScreen == YES)
         {
@@ -1529,8 +1557,8 @@
     
     /* Set our min size to the storage size */
     NSSize minSize;
-    minSize.width = fTitle->width;
-    minSize.height = fTitle->height;
+    minSize.width = fTitle->width / backingScaleFactor;
+    minSize.height = fTitle->height / backingScaleFactor;
     
     frame.size.width += deltaX;
     frame.size.height += deltaY;
