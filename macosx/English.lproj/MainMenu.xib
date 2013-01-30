@@ -1076,7 +1076,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																<object class="NSTextFieldCell" key="NSCell" id="858212432">
 																	<int key="NSCellFlags">67108864</int>
 																	<int key="NSCellFlags2">71303168</int>
-																	<string key="NSContents">x264 Profile:</string>
+																	<string key="NSContents">h264 Profile:</string>
 																	<reference key="NSSupport" ref="26"/>
 																	<reference key="NSControlView" ref="102651997"/>
 																	<reference key="NSBackgroundColor" ref="242973447"/>
@@ -1095,7 +1095,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																<object class="NSTextFieldCell" key="NSCell" id="248169798">
 																	<int key="NSCellFlags">67108864</int>
 																	<int key="NSCellFlags2">71303168</int>
-																	<string key="NSContents">x264 Level:</string>
+																	<string key="NSContents">h264 Level:</string>
 																	<reference key="NSSupport" ref="26"/>
 																	<reference key="NSControlView" ref="8023338"/>
 																	<reference key="NSBackgroundColor" ref="242973447"/>

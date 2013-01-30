@@ -1282,9 +1282,9 @@ class Display
         commandString << "}\n    "
       end
       if hash["h264Profile"] != "" && hash["h264Profile"] != "auto"
-        commandString << "if (x264_profile == NULL)\n    "
+        commandString << "if (h264_profile == NULL)\n    "
         commandString << "{\n    "
-        commandString << "    x264_profile = strdup(\""
+        commandString << "    h264_profile = strdup(\""
         commandString << hash["h264Profile"] << "\");\n    "
         commandString << "}\n    "
       end

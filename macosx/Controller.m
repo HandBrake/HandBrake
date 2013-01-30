@@ -2856,7 +2856,7 @@ fWorkingCount = 0;
         char *x264_preset_tmp   = job->x264_preset   != NULL ? strdup(job->x264_preset)   : NULL;
         char *x264_tune_tmp     = job->x264_tune     != NULL ? strdup(job->x264_tune)     : NULL;
         char *advanced_opts_tmp = job->advanced_opts != NULL ? strdup(job->advanced_opts) : NULL;
-        char *h264_profile_tmp  = job->x264_profile  != NULL ? strdup(job->x264_profile)  : NULL;
+        char *h264_profile_tmp  = job->h264_profile  != NULL ? strdup(job->h264_profile)  : NULL;
         char *h264_level_tmp    = job->h264_level    != NULL ? strdup(job->h264_level)    : NULL;
         /*
          * When subtitle scan is enabled do a fast pre-scan job
@@ -2865,8 +2865,8 @@ fWorkingCount = 0;
         hb_job_set_x264_preset  (job, NULL);
         hb_job_set_x264_tune    (job, NULL);
         hb_job_set_advanced_opts(job, NULL);
-        hb_job_set_x264_profile (job, NULL);
-        hb_job_set_x264_level   (job, NULL);
+        hb_job_set_h264_profile (job, NULL);
+        hb_job_set_h264_level   (job, NULL);
         job->pass = -1;
         hb_add(fQueueEncodeLibhb, job);
         /*
@@ -2875,8 +2875,8 @@ fWorkingCount = 0;
         hb_job_set_x264_preset  (job, x264_preset_tmp);
         hb_job_set_x264_tune    (job, x264_tune_tmp);
         hb_job_set_advanced_opts(job, advanced_opts_tmp);
-        hb_job_set_x264_profile (job, h264_profile_tmp);
-        hb_job_set_x264_level   (job, h264_level_tmp);
+        hb_job_set_h264_profile (job, h264_profile_tmp);
+        hb_job_set_h264_level   (job, h264_level_tmp);
         free(x264_preset_tmp);
         free(x264_tune_tmp);
         free(advanced_opts_tmp);
@@ -3306,8 +3306,8 @@ fWorkingCount = 0;
         hb_job_set_x264_preset  (job, x264_preset);
         hb_job_set_x264_tune    (job, x264_tune);
         hb_job_set_advanced_opts(job, advanced_opts);
-        hb_job_set_x264_profile (job, h264_profile);
-        hb_job_set_x264_level   (job, h264_level);
+        hb_job_set_h264_profile (job, h264_profile);
+        hb_job_set_h264_level   (job, h264_level);
     }
     else if (job->vcodec & HB_VCODEC_FFMPEG_MASK)
     {
@@ -3831,8 +3831,8 @@ bool one_burned = FALSE;
         hb_job_set_x264_preset  (job, x264_preset);
         hb_job_set_x264_tune    (job, x264_tune);
         hb_job_set_advanced_opts(job, advanced_opts);
-        hb_job_set_x264_profile (job, h264_profile);
-        hb_job_set_x264_level   (job, h264_level);
+        hb_job_set_h264_profile (job, h264_profile);
+        hb_job_set_h264_level   (job, h264_level);
     }
     else if (job->vcodec & HB_VCODEC_FFMPEG_MASK)
     {
@@ -5276,9 +5276,8 @@ the user is using "Custom" settings by determining the sender*/
     NSUInteger i;
     /*
      * now we populate the x264 system widgets via hb_x264_presets(),
-     * hb_x264_tunes(), hb_x264_profiles(), hb_h264_levels()
+     * hb_x264_tunes(), hb_h264_profiles(), hb_h264_levels()
      */
-    
     // store x264 preset names
     const char * const * x264_presets = hb_x264_presets();
     NSMutableArray *tmp_array = [[NSMutableArray alloc] init];
@@ -5305,9 +5304,9 @@ the user is using "Custom" settings by determining the sender*/
     [fX264TunePopUp addItemWithTitle: @"none"];
     const char * const * x264_tunes = hb_x264_tunes();
     for (int i = 0; x264_tunes[i] != NULL; i++)
-    { 
+    {
         // we filter out "fastdecode" as we have a dedicated checkbox for it
-        if (strcasecmp(x264_tunes[i], "fastdecode"))
+        if (strcasecmp(x264_tunes[i], "fastdecode") != 0)
         {
             [fX264TunePopUp addItemWithTitle: [NSString stringWithUTF8String:x264_tunes[i]]];
         }
@@ -5316,18 +5315,16 @@ the user is using "Custom" settings by determining the sender*/
     [fX264FastDecodeCheck setState: NSOffState];
     // setup the h264 profile popup
     [fX264ProfilePopUp removeAllItems];
-    [fX264ProfilePopUp addItemWithTitle: @"auto"];
-    const char * const * x264_profiles = hb_x264_profiles();
-    for (int i = 0; x264_profiles[i] != NULL; i++)
-    { 
-        [fX264ProfilePopUp addItemWithTitle: [NSString stringWithUTF8String:x264_profiles[i]]];
+    const char * const * h264_profiles = hb_h264_profiles();
+    for (int i = 0; h264_profiles[i] != NULL; i++)
+    {
+        [fX264ProfilePopUp addItemWithTitle: [NSString stringWithUTF8String:h264_profiles[i]]];
     }
     // setup the h264 level popup
     [fX264LevelPopUp removeAllItems];
-    [fX264LevelPopUp addItemWithTitle: @"auto"];
     const char * const * h264_levels = hb_h264_levels();
     for (int i = 0; h264_levels[i] != NULL; i++)
-    { 
+    {
         [fX264LevelPopUp addItemWithTitle: [NSString stringWithUTF8String:h264_levels[i]]];
     }
     // clear the additional x264 options
@@ -5554,7 +5551,7 @@ the user is using "Custom" settings by determining the sender*/
     * char * hb_x264_param_unparse(const char *x264_preset,
     *                              const char *x264_tune,
     *                              const char *x264_encopts,
-    *                              const char *x264_profile,
+    *                              const char *h264_profile,
     *                              const char *h264_level,
     *                              int width, int height);
     */

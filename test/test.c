@@ -112,10 +112,10 @@ static int    chapter_start = 0;
 static int    chapter_end   = 0;
 static int    chapter_markers = 0;
 static char * marker_file   = NULL;
-static char * advanced_opts = NULL;
-static char * x264_profile  = NULL;
 static char * x264_preset   = NULL;
 static char * x264_tune     = NULL;
+static char * advanced_opts = NULL;
+static char * h264_profile  = NULL;
 static char * h264_level    = NULL;
 static int    maxHeight     = 0;
 static int    maxWidth      = 0;
@@ -371,7 +371,7 @@ int main( int argc, char ** argv )
     free(x264_preset);
     free(x264_tune);
     free(advanced_opts);
-    free(x264_profile);
+    free(h264_profile);
     free(h264_level);
 
     // write a carriage return to stdout
@@ -734,9 +734,9 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         x264_preset = strdup("fast");
                     }
-                    if (x264_profile == NULL)
+                    if (h264_profile == NULL)
                     {
-                        x264_profile = strdup("baseline");
+                        h264_profile = strdup("baseline");
                     }
                     if (h264_level == NULL)
                     {
@@ -789,9 +789,9 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         x264_preset = strdup("medium");
                     }
-                    if (x264_profile == NULL)
+                    if (h264_profile == NULL)
                     {
-                        x264_profile = strdup("baseline");
+                        h264_profile = strdup("baseline");
                     }
                     if (h264_level == NULL)
                     {
@@ -840,9 +840,9 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         x264_preset = strdup("medium");
                     }
-                    if (x264_profile == NULL)
+                    if (h264_profile == NULL)
                     {
-                        x264_profile = strdup("high");
+                        h264_profile = strdup("high");
                     }
                     if (h264_level == NULL)
                     {
@@ -895,9 +895,9 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         x264_preset = strdup("medium");
                     }
-                    if (x264_profile == NULL)
+                    if (h264_profile == NULL)
                     {
-                        x264_profile = strdup("high");
+                        h264_profile = strdup("high");
                     }
                     if (h264_level == NULL)
                     {
@@ -950,9 +950,9 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         x264_preset = strdup("medium");
                     }
-                    if (x264_profile == NULL)
+                    if (h264_profile == NULL)
                     {
-                        x264_profile = strdup("high");
+                        h264_profile = strdup("high");
                     }
                     if (h264_level == NULL)
                     {
@@ -1009,9 +1009,9 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         x264_preset = strdup("medium");
                     }
-                    if (x264_profile == NULL)
+                    if (h264_profile == NULL)
                     {
-                        x264_profile = strdup("high");
+                        h264_profile = strdup("high");
                     }
                     if (h264_level == NULL)
                     {
@@ -1064,9 +1064,9 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         x264_preset = strdup("medium");
                     }
-                    if (x264_profile == NULL)
+                    if (h264_profile == NULL)
                     {
-                        x264_profile = strdup("high");
+                        h264_profile = strdup("high");
                     }
                     if (h264_level == NULL)
                     {
@@ -1120,9 +1120,9 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         x264_preset = strdup("medium");
                     }
-                    if (x264_profile == NULL)
+                    if (h264_profile == NULL)
                     {
-                        x264_profile = strdup("main");
+                        h264_profile = strdup("main");
                     }
                     if (h264_level == NULL)
                     {
@@ -1173,9 +1173,9 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         x264_preset = strdup("medium");
                     }
-                    if (x264_profile == NULL)
+                    if (h264_profile == NULL)
                     {
-                        x264_profile = strdup("main");
+                        h264_profile = strdup("main");
                     }
                     if (h264_level == NULL)
                     {
@@ -1223,9 +1223,9 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         x264_preset = strdup("veryfast");
                     }
-                    if (x264_profile == NULL)
+                    if (h264_profile == NULL)
                     {
-                        x264_profile = strdup("main");
+                        h264_profile = strdup("main");
                     }
                     if (h264_level == NULL)
                     {
@@ -1275,9 +1275,9 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         x264_preset = strdup("medium");
                     }
-                    if (x264_profile == NULL)
+                    if (h264_profile == NULL)
                     {
-                        x264_profile = strdup("high");
+                        h264_profile = strdup("high");
                     }
                     if (h264_level == NULL)
                     {
@@ -2455,8 +2455,8 @@ static int HandleEvents( hb_handle_t * h )
 
             hb_job_set_x264_preset(job, x264_preset);
             hb_job_set_x264_tune(job, x264_tune);
-            hb_job_set_x264_profile(job, x264_profile);
-            hb_job_set_x264_level(job, h264_level);
+            hb_job_set_h264_profile(job, h264_profile);
+            hb_job_set_h264_level(job, h264_level);
 
             if (maxWidth)
                 job->maxWidth = maxWidth;
@@ -2771,10 +2771,10 @@ static void ShowHelp()
     "    -x, --encopts <string>  Specify advanced encoder options in the\n"
     "                            same style as mencoder (x264 and ffmpeg only):\n"
     "                            option1=value1:option2=value2\n"
-    "        --x264-profile      When using x264, ensures compliance with the\n"
-    "          <string>          specified h.264 profile:\n"
+    "        --h264-profile      When using x264, ensures compliance with the\n"
+    "          <string>          specified H.264 profile:\n"
     "                            ");
-    x264_opts = hb_x264_profiles();
+    x264_opts = hb_h264_profiles();
     tmp[0] = 0;
     len = 0;
     while( x264_opts && *x264_opts )
@@ -2794,7 +2794,7 @@ static void ShowHelp()
         fprintf( out, "%s\n", tmp );
     fprintf( out,
     "        --h264-level        When using x264, ensures compliance with the\n"
-    "          <string>          specified h.264 level:\n"
+    "          <string>          specified H.264 level:\n"
     "                            ");
     x264_opts = hb_h264_levels();
     tmp[0] = 0;
@@ -3196,9 +3196,9 @@ static int ParseOptions( int argc, char ** argv )
     #define ALLOWED_AUDIO_COPY  280
     #define AUDIO_FALLBACK      281
     #define LOOSE_CROP          282
-    #define X264_PROFILE        283
-    #define X264_PRESET         284
-    #define X264_TUNE           285
+    #define X264_PRESET         283
+    #define X264_TUNE           284
+    #define H264_PROFILE        285
     #define H264_LEVEL          286
     #define NORMALIZE_MIX       287
     
@@ -3271,11 +3271,11 @@ static int ParseOptions( int argc, char ** argv )
             { "ac",          required_argument, NULL,    'C' },
             { "rate",        required_argument, NULL,    'r' },
             { "arate",       required_argument, NULL,    'R' },
-            { "encopts",     required_argument, NULL,    'x' },
-            { "x264-profile", required_argument, NULL,   X264_PROFILE },
-            { "h264-profile", required_argument, NULL,   X264_PROFILE },
             { "x264-preset", required_argument, NULL,    X264_PRESET },
             { "x264-tune",   required_argument, NULL,    X264_TUNE },
+            { "encopts",     required_argument, NULL,    'x' },
+            { "x264-profile", required_argument, NULL,   H264_PROFILE },
+            { "h264-profile", required_argument, NULL,   H264_PROFILE },
             { "h264-level",  required_argument, NULL,    H264_LEVEL },
             { "turbo",       no_argument,       NULL,    'T' },
             { "maxHeight",   required_argument, NULL,    'Y' },
@@ -3708,17 +3708,17 @@ static int ParseOptions( int argc, char ** argv )
             case 'C':
                 acompressions = str_split( optarg, ',' );
                 break;
-            case 'x':
-                advanced_opts = strdup( optarg );
-                break;
-            case X264_PROFILE:
-                x264_profile = strdup( optarg );
-                break;
             case X264_PRESET:
                 x264_preset = strdup( optarg );
                 break;
             case X264_TUNE:
                 x264_tune = strdup( optarg );
+                break;
+            case 'x':
+                advanced_opts = strdup( optarg );
+                break;
+            case H264_PROFILE:
+                h264_profile = strdup( optarg );
                 break;
             case H264_LEVEL:
                 h264_level = strdup( optarg );

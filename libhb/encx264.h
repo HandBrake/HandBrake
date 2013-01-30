@@ -9,8 +9,9 @@
 
 #include "x264.h"
 
-static const char * const  hb_h264_level_names[] = { "1.0", "1b", "1.1", "1.2", "1.3", "2.0", "2.1", "2.2", "3.0", "3.1", "3.2", "4.0", "4.1", "4.2", "5.0", "5.1", "5.2",  NULL };
-static const int    const hb_h264_level_values[] = {    10,    9,    11,    12,    13,    20,    21,    22,    30,    31,    32,    40,    41,    42,    50,    51,    52,     0 };
+static const char * const hb_h264_profile_names[] = { "auto", "high", "main", "baseline", NULL, };
+static const char * const   hb_h264_level_names[] = { "auto", "1.0", "1b", "1.1", "1.2", "1.3", "2.0", "2.1", "2.2", "3.0", "3.1", "3.2", "4.0", "4.1", "4.2", "5.0", "5.1", "5.2",  NULL, };
+static const int    const  hb_h264_level_values[] = {     -1,    10,    9,    11,    12,    13,    20,    21,    22,    30,    31,    32,    40,    41,    42,    50,    51,    52,     0, };
 
 /* x264 preferred option names (left) and synonyms (right).
  * The "preferred" names match names used in x264's param2string function more
@@ -68,3 +69,12 @@ int hb_check_h264_level(const char *h264_level, int width, int height,
  */
 int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
                         const char *x264_profile, int verbose);
+
+/*
+ * Applies the restrictions of the requested H.264 profile to an x264_param_t.
+ *
+ * x264_param_apply_profile wrapper designed to always succeed when a valid
+ * H.264 profile is specified (unlike x264's function).
+ */
+int hb_apply_h264_profile(x264_param_t *param, const char *h264_profile,
+                          int verbose);
