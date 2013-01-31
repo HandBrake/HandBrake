@@ -88,7 +88,7 @@ namespace HandBrake.ApplicationServices.Model
             this.IncludeChapterMarkers = task.IncludeChapterMarkers;
             this.IPod5GSupport = task.IPod5GSupport;
             this.OpenCLSupport = task.OpenCLSupport;
-            this.UVDSupport = task.UVDSupport;
+            this.HWDSupport = task.HWDSupport;
             this.KeepDisplayAspect = task.KeepDisplayAspect;
             this.LargeFile = task.LargeFile;
             this.MaxHeight = task.MaxHeight;
@@ -197,9 +197,9 @@ namespace HandBrake.ApplicationServices.Model
         public bool OpenCLSupport { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether UVDSupport.
+        /// Gets or sets a value indicating whether HWDSupport.
         /// </summary>
-        public bool UVDSupport { get; set; }
+        public bool HWDSupport { get; set; }
         #endregion
 
         #region Picture

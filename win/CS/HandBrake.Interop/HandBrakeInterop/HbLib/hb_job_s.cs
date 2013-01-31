@@ -149,7 +149,7 @@ namespace HandBrake.Interop.HbLib
         public int opencl_support;
 
         /// int
-        public int uvd_support;
+        public int hwd_support;
 
 		/// int
 		public int indepth_scan;

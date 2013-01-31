@@ -14,7 +14,7 @@
 
 #ifndef _DXVA2API_H
 #define _DXVA2API_H
-
+#ifdef USE_HWD
 #define MINGW_DXVA2API_H_VERSION (2)
 
 #if __GNUC__ >=3
@@ -818,5 +818,5 @@ __inline float hb_dx_fixedtofloat( const DXVA2_Fixed32 _fixed_ );
 __inline const DXVA2_Fixed32 hb_dx_fixed32_opaque_alpha();
 
 __inline DXVA2_Fixed32 hb_dx_floattofixed( const float _float_ );
-
+#endif
 #endif //_DXVA2API_H

@@ -7,74 +7,61 @@
 #- the names are used as test names and file names
 
 # universal
--i "infile" -t 1  -o "outfile.m4v"  -f mp4 -w 720 --loose-anamorphic  -e x264 -q 20 --vfr  -a 1,1 -E faac,ffac3 -B 160,0 -6 dpl2,auto -R Auto,Auto -D 0,0 --gain=0,0 --audio-copy-mask none --audio-fallback ffac3 --markers="C:\Users\jgallmeier\AppData\Local\Temp\Blueangels-1-1-chapters.csv" -x cabac=0:ref=2:me=umh:bframes=0:weightp=0:8x8dct=0:trellis=0:subq=6 --verbose=1
+-i "infile" -t 1 --angle 1 -c 1 -o "outfile.m4v"  -f mp4  -P  -U  -w 720 --loose-anamorphic  --modulus 2 -e x264 -q 20 -r 30 --pfr -a 1,1 -E faac,copy:ac3 -6 dpl2,auto -R Auto,Auto -B 160,0 -D 0,0 --gain 0,0 --audio-fallback ffac3 --markers="C:\Users\AMDComal\AppData\Local\Temp\2-1-chapters.csv" --x264-preset=fast  --x264-profile=baseline  --h264-level="3.0"  --verbose=1
 
 # iPod
--i "infile" -t 1  -o "outfile.m4v"  -f mp4 -I  -w 320 -l 240 -e x264 -b 700 --vfr  -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0 --gain=0 --audio-copy-mask none --audio-fallback ffac3 --markers="C:\Users\jgallmeier\AppData\Local\Temp\Blueangels-1-1-chapters.csv" -x level=30:bframes=0:weightp=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:subq=6:8x8dct=0:trellis=0 --verbose=1
+-i "infile" -t 1 --angle 1 -c 1 -o "outfile.mp4"  -f mp4  -I  -P  -U  -w 320 -l 180 --modulus 2 -e x264 -q 22 -r 30 --pfr -a 1 -E faac -6 dpl2 -R Auto -B 160 -D 0 --gain 0 --audio-fallback ffac3 --markers="C:\Users\AMDComal\AppData\Local\Temp\2-1-chapters.csv" --x264-profile=baseline  --h264-level="1.3"  --verbose=1
 
 
 # iPhone_iPod_Touch
- -i "infile" -t 1  -o "outfile.m4v"  -f mp4 -w 480 -l 320 -e x264 -q 20 --vfr  -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0 --gain=0 --audio-copy-mask none --audio-fallback ffac3 --markers="C:\Users\jgallmeier\AppData\Local\Temp\Blueangels-1-1-chapters.csv" -x cabac=0:ref=2:me=umh:bframes=0:weightp=0:subq=6:8x8dct=0:trellis=0 --verbose=1
-
-
-# iPhone_4
-  -i "infile" -t 1 -o "outfile.m4v"  -f mp4 -4  -w 960 --loose-anamorphic  -e x264 -q 20 -r 29.97 --pfr  -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0 --gain=0 --audio-copy-mask none --audio-fallback ffac3 --markers="C:\Users\jgallmeier\AppData\Local\Temp\Blueangels-1-1-chapters.csv" --verbose=1
-
+-i "infile" -t 1 --angle 1 -c 1 -o "outfile.mp4"  -f mp4  -4  -P  -U  -w 960 --loose-anamorphic  --modulus 2 -e x264 -q 22 -r 29.97 --pfr -a 1 -E faac -6 dpl2 -R Auto -B 160 -D 0 --gain 0 --audio-fallback ffac3 --markers="C:\Users\AMDComal\AppData\Local\Temp\2-1-chapters.csv" --x264-profile=high  --h264-level="3.1"  --verbose=1
 
 # iPad
+ -i "infile" -t 1 --angle 1 -c 1 -o "outfile.mp4"  -f mp4  -4  -P  -U  -w 1280 --loose-anamorphic  --modulus 2 -e x264 -q 20 -r 29.97 --pfr -a 1 -E faac -6 dpl2 -R Auto -B 160 -D 0 --gain 0 --audio-fallback ffac3 --markers="C:\Users\AMDComal\AppData\Local\Temp\2-1-chapters.csv" --x264-profile=high  --h264-level="3.1"  --verbose=1
 
--i "infile" -t 1 -o "outfile.m4v"  -f mp4 -4  -w 1024 --loose-anamorphic  -e x264 -q 20 -r 29.97 --pfr  -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0 --gain=0 --audio-copy-mask none --audio-fallback ffac3 --markers="C:\Users\jgallmeier\AppData\Local\Temp\Blueangels-1-1-chapters.csv" --verbose=1
+# AppleTV
+ -i "infile" -t 1 --angle 1 -c 1 -o "outfile.m4v"  -f mp4  -4  -P  -U  -w 960 --loose-anamorphic  --modulus 2 -e x264 -q 20 -r 30 --pfr -a 1,1 -E faac,copy:ac3 -6 dpl2,auto -R Auto,Auto -B 160,0 -D 0,0 --gain 0,0 --audio-fallback ffac3 --markers="C:\Users\AMDComal\AppData\Local\Temp\2-1-chapters.csv" -x cabac=0:ref=2:b-pyramid=none:weightb=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500 --verbose=1
 
+# AppleTV2
+-i "infile" -t 1 --angle 1 -c 1 -o "outfile.m4v"  -f mp4  -4  -P  -U  -w 1280 --loose-anamorphic  --modulus 2 -e x264 -q 20 -r 29.97 --pfr -a 1,1 -E faac,copy:ac3 -6 dpl2,auto -R Auto,Auto -B 160,0 -D 0,0 --gain 0,0 --audio-fallback ffac3 --markers="C:\Users\AMDComal\AppData\Local\Temp\2-1-chapters.csv" --x264-profile=high  --h264-level="3.1"  --verbose=1
 
-# Apple_TV
+# AppleTV3
+-i "infile" -t 1 --angle 1 -c 1 -o "outfile.m4v"  -f mp4  -4  -P  -U  --decomb -w 1920 --loose-anamorphic  --modulus 2 -e x264 -q 20 -r 30 --pfr -a 1,1 -E faac,copy:ac3 -6 dpl2,auto -R Auto,Auto -B 160,0 -D 0,0 --gain 0,0 --audio-fallback ffac3 --markers="C:\Users\AMDComal\AppData\Local\Temp\2-1-chapters.csv" --x264-profile=high  --h264-level="4.0"  --verbose=1
 
- -i "infile" -t 1 -o "outfile.m4v"  -f mp4 -4  -w 960 --loose-anamorphic  -e x264 -q 20 --vfr  -a 1,1 -E faac,ffac3 -B 160,0 -6 dpl2,auto -R Auto,Auto -D 0,0 --gain=0,0 --audio-copy-mask none --audio-fallback ffac3 --markers="C:\Users\jgallmeier\AppData\Local\Temp\Blueangels-1-1-chapters.csv" -x cabac=0:ref=2:me=umh:b-pyramid=none:b-adapt=2:weightb=0:trellis=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500 --verbose=1
-
-# Apple_TV_2
--i "infile" -t 1  -o "outfile.m4v"  -f mp4 -4  -w 1280 --loose-anamorphic  -e x264 -q 20 -r 29.97 --pfr  -a 1,1 -E faac,ffac3 -B 160,0 -6 dpl2,auto -R Auto,Auto -D 0,0 --gain=0,0 --audio-copy-mask none --audio-fallback ffac3 --markers="C:\Users\jgallmeier\AppData\Local\Temp\Blueangels-1-1-chapters.csv" --verbose=1
-
-
-# Android_Mid
--i "infile" -t 1  -o "outfile.m4v"  -f mp4 -w 480 -l 270 -e x264 -q 22 -r 29.97 --pfr  -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0 --gain=0 --audio-copy-mask none --audio-fallback ffac3 -x cabac=0:ref=2:me=umh:bframes=0:weightp=0:subq=6:8x8dct=0:trellis=0 --verbose=1
-
-
-# Android_High
- -i "infile" -t 1  -o "outfile.mp4"  -f mp4 -w 720 --loose-anamorphic  -e x264 -q 22 -r 29.97 --pfr  -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0 --gain=0 --audio-copy-mask none --audio-fallback ffac3 -x weightp=0:cabac=0 --verbose=1
+# Android
+-i "infile" -t 1 --angle 1 -c 1 -o "outfile.mp4"  -f mp4  -P  -U  -w 720 --loose-anamorphic  --modulus 2 -e x264 -q 22 -r 29.97 --pfr -a 1 -E faac -6 dpl2 -R Auto -B 128 -D 0 --gain 0 --audio-fallback ffac3 --x264-profile=main  --h264-level="2.2"  --verbose=1
 
 
-# Normal_1080p_to_1080p_fixed_qp
--i "infile" -t 1 -o "outfile.m4v"  -f mp4 --strict-anamorphic  -e x264 -q 20 --vfr  -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0 --gain=0 --audio-copy-mask none --audio-fallback ffac3 --markers="C:\Users\jgallmeier\AppData\Local\Temp\Blueangels-1-1-chapters.csv" -x ref=1:weightp=1:subq=2:rc-lookahead=10:trellis=0:8x8dct=0 --verbose=1
+# Android_Tablet
+-i "infile" -t 1 --angle 1 -c 1 -o "outfile.mp4"  -f mp4  -P  -U  -w 1280 --loose-anamorphic  --modulus 2 -e x264 -q 22 -r 29.97 --pfr -a 1 -E faac -6 dpl2 -R Auto -B 128 -D 0 --gain 0 --audio-fallback ffac3 --x264-profile=main  --h264-level="3.1"  --verbose=1
 
 
-# Normal_1080p_to_720p_fixed_qp
--i "infile" -t 1  -o "outfile.m4v"  -f mp4 -w 1280 -l 720 --custom-anamorphic  --display-width 1282  --keep-display-aspect  -e x264 -q 20 --vfr  -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0 --gain=0 --audio-copy-mask none --audio-fallback ffac3 --markers="C:\Users\jgallmeier\AppData\Local\Temp\Blueangels-1-1-chapters.csv" -x ref=1:weightp=1:subq=2:rc-lookahead=10:trellis=0:8x8dct=0 --verbose=1
+# Normal_to_480p
+-i "infile" -t 1 --angle 1 -c 1 -o "outfile.mp4"  -f mp4  -P  -U  -w 720 --loose-anamorphic  --modulus 2 -e x264 -q 20 --vfr -a 1 -E faac -6 dpl2 -R Auto -B 160 -D 0 --gain 0 --audio-fallback ffac3 --markers="C:\Users\AMDComal\AppData\Local\Temp\1-1-chapters.csv" --x264-preset=veryfast  --x264-profile=main  --h264-level="4.0"  --verbose=1
+
+# Normal_to_720p
+-i "infile" -t 1 --angle 1 -c 1 -o "outfile.mp4"  -f mp4  -P  -U  -w 1280 --loose-anamorphic  --modulus 2 -e x264 -q 20 --vfr -a 1 -E faac -6 dpl2 -R Auto -B 160 -D 0 --gain 0 --audio-fallback ffac3 --markers="C:\Users\AMDComal\AppData\Local\Temp\1-1-chapters.csv" --x264-preset=veryfast  --x264-profile=main  --h264-level="4.0"  --verbose=1
 
 
+# Normal_to_1080p
+-i "infile" -t 1 --angle 1 -c 1 -o "outfile.mp4"  -f mp4  -P  -U  -w 1920 --loose-anamorphic  --modulus 2 -e x264 -q 20 --vfr -a 1 -E faac -6 dpl2 -R Auto -B 160 -D 0 --gain 0 --audio-fallback ffac3 --markers="C:\Users\AMDComal\AppData\Local\Temp\1-1-chapters.csv" --x264-preset=veryfast  --x264-profile=main  --h264-level="4.0"  --verbose=1
 
-# Normal_1080p_to_1080p_13_mbps
--i "infile" -t 1  -o "outfile.m4v"  -f mp4 --strict-anamorphic  -e x264 -b 13000 --vfr  -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0 --gain=0 --audio-copy-mask none --audio-fallback ffac3 --markers="C:\Users\jgallmeier\AppData\Local\Temp\Blueangels-1-1-chapters.csv" -x ref=1:weightp=1:subq=2:rc-lookahead=10:trellis=0:8x8dct=0 --verbose=1
+# Normal_to_1080p_qp
+-i "infile" -t 1 --angle 1 -c 1 -o "outfile.mp4"  -f mp4  -P  -U  -w 1920 -l 1080 --custom-anamorphic  --display-width 1920  --keep-display-aspect  --modulus 2 -e x264 -q 20 --vfr -a 1 -E faac -6 dpl2 -R Auto -B 160 -D 0 --gain 0 --audio-fallback ffac3 --markers="C:\Users\AMDComal\AppData\Local\Temp\1-1-chapters.csv" --x264-preset=veryfast  --x264-profile=main  --h264-level="4.0"  --verbose=1
 
-
-# Normal_1080p_to_720p_6_mbps
- -i "infile" -t 1 -c 1 -o "outfile.m4v"  -f mp4 -w 1280 -l 720 --custom-anamorphic  --display-width 1282  --keep-display-aspect  -e x264 -b 6000 --vfr  -a 1 -E faac -B 160 -6 dpl2 -R Auto -D 0 --gain=0 --audio-copy-mask none --audio-fallback ffac3 --markers="C:\Users\jgallmeier\AppData\Local\Temp\Blueangels-1-1-chapters.csv" -x ref=1:weightp=1:subq=2:rc-lookahead=10:trellis=0:8x8dct=0 --verbose=1
-
-# high_1080p_to_1080p_fixed_qp
--i "infile" -t 1  -o "high_1080p.m4v"  -f mp4 -4  --detelecine --decomb -w 1920 --loose-anamorphic  -e x264 -q 20 --vfr  -a 1,1 -E faac,ffac3 -B 160,0 -6 dpl2,auto -R Auto,Auto -D 0,0 --gain=0,0 --audio-copy-mask none --audio-fallback ffac3 --markers="C:\Users\jgallmeier\AppData\Local\Temp\Blueangels-1-1-chapters.csv" -x b-adapt=2:rc-lookahead=50 --verbose=1
+# High Profile_to_480p
+-i "infile" -t 1 --angle 1 -c 1 -o "outfile.m4v"  -f mp4  -4  -P  -U  --decomb -w 720 --loose-anamorphic  --modulus 2 -e x264 -q 20 --vfr -a 1,1 -E faac,copy:ac3 -6 dpl2,auto -R Auto,Auto -B 160,0 -D 0,0 --gain 0,0 --audio-fallback ffac3 --markers="C:\Users\AMDComal\AppData\Local\Temp\1-1-chapters.csv" --x264-profile=high  --h264-level="4.1"  --verbose=1
 
 
-# high_1080p_to_720p_fixed qp
- -i "infile" -t 1  -o "outfile.m4v"  -f mp4 -4  --detelecine --decomb -w 1280 -l 720 --custom-anamorphic  --display-width 1282  --keep-display-aspect  -e x264 -q 20 --vfr  -a 1,1 -E faac,ffac3 -B 160,0 -6 dpl2,auto -R Auto,Auto -D 0,0 --gain=0,0 --audio-copy-mask none --audio-fallback ffac3 --markers="C:\Users\jgallmeier\AppData\Local\Temp\Blueangels-1-1-chapters.csv" -x b-adapt=2:rc-lookahead=50 --verbose=1
+# High Profile_to_720p
+-i "infile" -t 1 --angle 1 -c 1 -o "outfile.m4v"  -f mp4  -4  -P  -U  --decomb -w 1280 --loose-anamorphic  --modulus 2 -e x264 -q 20 --vfr -a 1,1 -E faac,copy:ac3 -6 dpl2,auto -R Auto,Auto -B 160,0 -D 0,0 --gain 0,0 --audio-fallback ffac3 --markers="C:\Users\AMDComal\AppData\Local\Temp\1-1-chapters.csv" --x264-profile=high  --h264-level="4.1"  --verbose=1
 
 
-# high_1080p_to_1080p_13_mbps
- -i "infile" -t 1 -o "outfile.m4v"  -f mp4 -4  --detelecine --decomb -w 1920 --loose-anamorphic  -e x264 -b 13000 --vfr  -a 1,1 -E faac,ffac3 -B 160,0 -6 dpl2,auto -R Auto,Auto -D 0,0 --gain=0,0 --audio-copy-mask none --audio-fallback ffac3 --markers="C:\Users\jgallmeier\AppData\Local\Temp\Blueangels-1-1-chapters.csv" -x b-adapt=2:rc-lookahead=50 --verbose=1
+# High Profile_to_1080p
+-i "infile" -t 1 --angle 1 -c 1 -o "outfile.m4v"  -f mp4  -4  -P  -U  --decomb -w 1920 --loose-anamorphic  --modulus 2 -e x264 -q 20 --vfr -a 1,1 -E faac,copy:ac3 -6 dpl2,auto -R Auto,Auto -B 160,0 -D 0,0 --gain 0,0 --audio-fallback ffac3 --markers="C:\Users\AMDComal\AppData\Local\Temp\1-1-chapters.csv" --x264-profile=high  --h264-level="4.1"  --verbose=1
 
-
-# high_1080p_to_720p_6mbps
--i "infile" -t 1  -o "outfile.m4v"  -f mp4 -4  --detelecine --decomb -w 1280 -l 720 --custom-anamorphic  --display-width 1282  --keep-display-aspect  -e x264 -b 6000 --vfr  -a 1,1 -E faac,ffac3 -B 160,0 -6 dpl2,auto -R Auto,Auto -D 0,0 --gain=0,0 --audio-copy-mask none --audio-fallback ffac3 --markers="C:\Users\jgallmeier\AppData\Local\Temp\Blueangels-1-1-chapters.csv" -x b-adapt=2:rc-lookahead=50 --verbose=1
-
-# strange_resolution
--i "infile" -t 1  -o "outfile.m4v"  -f mp4 -w 480 -l 1078 -e x264 -q 20 --vfr  -a 1 -E faac -B 128 -6 dpl2 -R Auto -D 0 --gain=0 --audio-copy-mask none --audio-fallback ffac3 --markers="C:\Users\jgallmeier\AppData\Local\Temp\Blueangels-1-1-chapters.csv" -x cabac=0:ref=2:me=umh:bframes=0:weightp=0:subq=6:8x8dct=0:trellis=0 --verbose=1
+# High Profile_to_1080p_qp
+-i "infile" -t 1 --angle 1 -c 1 -o "outfile.m4v"  -f mp4  -4  -P  -U  --decomb -w 1920 -l 1080 --custom-anamorphic  --display-width 720  --pixel-aspect 720:480 --modulus 2 -e x264 -q 20 --vfr -a 1,1 -E faac,copy:ac3 -6 dpl2,auto -R Auto,Auto -B 160,0 -D 0,0 --gain 0,0 --audio-fallback ffac3 --markers="C:\Users\AMDComal\AppData\Local\Temp\1-1-chapters.csv" --x264-profile=high  --h264-level="4.1"  --verbose=1
 
 
 #-end of script

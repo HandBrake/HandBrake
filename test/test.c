@@ -137,7 +137,7 @@ static int64_t stop_at_pts    = 0;
 static int    stop_at_frame = 0;
 static uint64_t min_title_duration = 10;
 static int use_opencl = 0;
-static int use_uvd = 0;
+static int use_hwd = 0;
 
 /* Exit cleanly on Ctrl-C */
 static volatile int die = 0;
@@ -218,7 +218,8 @@ int main( int argc, char ** argv )
     h = hb_init( debug, update );
     hb_dvd_set_dvdnav( dvdnav );
 #ifdef USE_OPENCL
-    hb_get_opencl_env();
+    if ( use_opencl )
+        hb_get_opencl_env();
 #endif
     /* Show version */
     fprintf( stderr, "%s - %s - %s\n",
@@ -260,7 +261,7 @@ int main( int argc, char ** argv )
         titleindex = 0;
     }
 
-    hb_set_gui_info(&hb_gui, use_uvd, use_opencl, titleindex);
+    hb_set_gui_info(&hb_gui, use_hwd, use_opencl, titleindex);
     hb_scan( h, input, titleindex, preview_count, store_previews, min_title_duration * 90000LL );
 
     /* Wait... */
@@ -429,10 +430,10 @@ static void PrintTitleInfo( hb_title_t * title, int feature )
         fprintf( stderr, "  + support opencl: yes\n");
     else
         fprintf( stderr, "  + support opencl: no\n");
-    if (title->uvd_support)
-        fprintf( stderr, "  + support uvd: yes\n");
+    if (title->hwd_support)
+        fprintf( stderr, "  + support hwd: yes\n");
     else
-        fprintf( stderr, "  + support uvd: no\n");
+        fprintf( stderr, "  + support hwd: no\n");
     fprintf( stderr, "  + chapters:\n" );
     for( i = 0; i < hb_list_count( title->list_chapter ); i++ )
     {
@@ -1412,9 +1413,9 @@ static int HandleEvents( hb_handle_t * h )
                 job->maxWidth = maxWidth;
             if (maxHeight)
                 job->maxHeight = maxHeight;
-            if (use_uvd)
+            if (use_hwd)
             {
-                job->use_uvd = use_uvd;
+                job->use_hwd = use_hwd;
             }
 
             switch( anamorphic_mode )
@@ -1588,13 +1589,8 @@ static int HandleEvents( hb_handle_t * h )
             filter_str = hb_strdup_printf("%d:%d:%d:%d:%d:%d",
                 job->width, job->height, 
                 job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
-
-#ifdef USE_OPENCL
-            if ( use_opencl )
-                filter = hb_filter_init( HB_FILTER_CROP_SCALE_ACCL );
-            else
-#endif                    
-                filter = hb_filter_init( HB_FILTER_CROP_SCALE );
+                    
+            filter = hb_filter_init( HB_FILTER_CROP_SCALE );
             hb_add_filter( job, filter, filter_str );
             free( filter_str );
 
@@ -3251,7 +3247,7 @@ static int ParseOptions( int argc, char ** argv )
             { "optimize",    no_argument,       NULL,    'O' },
             { "ipod-atom",   no_argument,       NULL,    'I' },
             { "use-opencl",  no_argument,       NULL,    'P' },
-            { "use-uvd",     no_argument,       NULL,    'U' },
+            { "use-hwd",     no_argument,       NULL,    'U' },
 
             { "title",       required_argument, NULL,    't' },
             { "min-duration",required_argument, NULL,    MIN_DURATION },
@@ -3416,7 +3412,7 @@ static int ParseOptions( int argc, char ** argv )
                 use_opencl = 1;
                 break;
             case 'U':
-                use_uvd = 1;
+                use_hwd = 1;
                 break;
 
             case 't':

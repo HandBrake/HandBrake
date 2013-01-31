@@ -377,7 +377,7 @@ namespace HandBrakeWPF.ViewModels
                     this.CurrentTask.OptimizeMP4 = selectedPreset.Task.OptimizeMP4;
                     this.CurrentTask.IPod5GSupport = selectedPreset.Task.IPod5GSupport;
                     this.CurrentTask.OpenCLSupport = selectedPreset.Task.OpenCLSupport;
-                    this.CurrentTask.UVDSupport = selectedPreset.Task.UVDSupport;
+                    this.CurrentTask.HWDSupport = selectedPreset.Task.HWDSupport;
                     this.SelectedOutputFormat = selectedPreset.Task.OutputFormat;
 
                     // Tab Settings
@@ -1697,7 +1697,7 @@ namespace HandBrakeWPF.ViewModels
                         {
                             this.SupportOpenCL = false;
                         }
-                        if (this.selectedTitle.UVDSupport == 0)
+                        if (this.selectedTitle.HWDSupport == 0)
                         {
                             this.SupportHardwareDecoding = true;
                         }

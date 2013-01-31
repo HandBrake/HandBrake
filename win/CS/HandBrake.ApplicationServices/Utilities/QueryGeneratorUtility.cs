@@ -246,7 +246,7 @@ namespace HandBrake.ApplicationServices.Utilities
             if (task.OpenCLSupport)
                 query += " -P ";
 
-            if (task.UVDSupport)
+            if (task.HWDSupport)
                 query += " -U ";
 
             return query;

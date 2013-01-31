@@ -10,6 +10,7 @@
             Li   Cao <li@multicorewareinc.com> <http://www.multicorewareinc.com/>
 
  */
+#ifdef USE_HWD
 #include "dxva2api.h"
 
 __inline float hb_dx_fixedtofloat( const DXVA2_Fixed32 _fixed_ )
@@ -34,3 +35,4 @@ __inline DXVA2_Fixed32 hb_dx_floattofixed( const float _float_ )
     _fixed_.Value = HIWORD( _float_ * 0x10000 );
     return _fixed_;
 }
+#endif

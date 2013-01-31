@@ -554,18 +554,17 @@ static void do_job( hb_job_t * job )
     job->list_work = hb_list_init();
 
     hb_log( "starting job" );
-#ifdef USE_OPENCL
-    if ( job->use_opencl || job->use_uvd)
+    if ( job->use_opencl || job->use_hwd)
     {
-	    /* init opencl environment */
         hb_log( "Using GPU : Yes.\n" );
-        job->use_opencl =! hb_init_opencl_run_env(0, NULL, "-I.");
+        /* init opencl environment */ 
+#ifdef USE_OPENCL
+        if ( job->use_opencl )
+            job->use_opencl =! hb_init_opencl_run_env(0, NULL, "-I.");
+#endif    
     }
     else
         hb_log( "Using GPU : NO.\n" );
-#else
-    hb_log( "Using GPU : NO.\n" );
-#endif    
     /* Look for the scanned subtitle in the existing subtitle list
      * select_subtitle implies that we did a scan. */
     if( !job->indepth_scan && interjob->select_subtitle )
@@ -1021,10 +1020,11 @@ static void do_job( hb_job_t * job )
         title->video_codec_param = AV_CODEC_ID_MPEG2VIDEO;
     }
 #endif
-#ifdef USE_OPENCL  
-    if ( /*job->use_opencl &&*/ hb_use_dxva( title ) && (TestGPU() == 0) && job->use_uvd )
-    {        
-        vcodec = WORK_DECAVCODECVACCL;
+#ifdef USE_HWD 
+    if ( /*job->use_opencl &&*/ hb_use_dxva( title ) && job->use_hwd )
+    {   
+        //vcodec = WORK_DECAVCODECVACCL;
+		job->use_hw_decode = 1;
     }
 #endif
     hb_list_add( job->list_work, ( w = hb_get_work( vcodec ) ) );

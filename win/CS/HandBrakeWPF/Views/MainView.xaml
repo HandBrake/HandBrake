@@ -482,11 +482,11 @@
                                                    Converter={StaticResource boolToVisConverter},
                                                    ConverterParameter=true}"
                               />
-                    <CheckBox Name="UVD"
+                    <CheckBox Name="HWD"
                               Margin="8,0,0,0"
                               VerticalAlignment="Center"
-                              Content="UVD Support"
-                              IsChecked="{Binding Path=CurrentTask.UVDSupport}" IsEnabled="True" 
+                              Content="HWD Support"
+                              IsChecked="{Binding Path=CurrentTask.HWDSupport}" IsEnabled="True" 
                               Visibility="{Binding SupportHardwareDecoding,
                                                    Converter={StaticResource boolToVisConverter},
                                                    ConverterParameter=true}"

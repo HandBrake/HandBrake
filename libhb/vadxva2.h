@@ -16,6 +16,7 @@
 #ifndef VA_DXVA2_H
 #define VA_DXVA2_H
 
+#ifdef USE_HWD
 #include "hbffmpeg.h"
 #include "d3d9.h"
 #include "libavcodec/dxva2.h"
@@ -143,6 +144,25 @@ typedef struct
 #endif
 } hb_va_dxva2_t;
 
+typedef struct FilterLink_T
+{
+#ifdef USE_OPENCL
+    cl_mem cl_inbuf;
+    cl_mem cl_outbuf;
+#endif
+    uint8_t *mem_inbuf;
+    uint8_t *mem_outbuf;
+    int width;
+    int height;
+    int linesizeY;
+    int linesizeUV;
+    int inmemdataflag;
+    int outmemdataflag;
+    int incldataflag;
+    int outcldataflag;
+    int framenum;
+    int outputSize; 
+} T_FilterLink;
 
 static const hb_d3d_format_t d3d_formats[] =
 {
@@ -191,4 +211,5 @@ void hb_va_new_dxva2( hb_va_dxva2_t *dxva2, AVCodecContext *p_context );
 void hb_va_release( hb_va_dxva2_t *dxva2, AVFrame *frame );
 void  hb_va_close( hb_va_dxva2_t *dxva2 );
 
+#endif
 #endif

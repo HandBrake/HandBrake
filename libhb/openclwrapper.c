@@ -99,6 +99,7 @@ int hb_regist_opencl_kernel()
     ADD_KERNEL_CFG( 0, "frame_h_scale", NULL )
     ADD_KERNEL_CFG( 1, "frame_v_scale", NULL )
     ADD_KERNEL_CFG( 2, "nv12toyuv", NULL )
+	ADD_KERNEL_CFG( 3, "scale_opencl", NULL )
 
     return 0;
 }
@@ -331,7 +332,7 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
 
             if( !hb_write_binary_to_file( fileName, binaries[i], binarySizes[i] ))
             {
-                hb_log( "Notice: Unable to write opencl kernel, writing to tempory directory instead." );
+                hb_log( "Notice: Unable to write opencl kernel, writing to temporary directory instead." );
                 //printf( "opencl-wrapper: write binary[%s] failds\n", fileName);
                 return 0;
             } //else
@@ -450,8 +451,7 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
 
                 if( status != CL_SUCCESS )
                 {
-					hb_log( "Notice: No more platform vendor info.\n" );
-                    return(1);
+                    continue;
                 }
                 gpu_info->platform = platforms[i];
 
@@ -470,8 +470,7 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
 
                 if( status != CL_SUCCESS )
 				{
-					hb_log( "Notice: No available GPU device.\n" );
-                        return(1);
+                    continue;
 				}
 
                 if( numDevices )
@@ -482,6 +481,12 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
         }
         if( NULL == gpu_info->platform )
         {
+	    hb_log( "Notice: No OpenCL-compatible GPU found.\n" );
+            return(1);
+        }
+        if( status != CL_SUCCESS )
+        {
+            hb_log( "Notice: No OpenCL-compatible GPU found.\n" );
             return(1);
         }
 
@@ -659,13 +664,17 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
     if( status == 0 )
         return(0);
 #else
-    int kernel_src_size = strlen( kernel_src_hscale )+strlen( kernel_src_vscale )+strlen( kernel_src_nvtoyuv );
-    source_str = (char*)malloc( kernel_src_size+2 );
+	int kernel_src_size = strlen( kernel_src_hscale ) + strlen( kernel_src_vscale ) + strlen( kernel_src_nvtoyuv ) + strlen( kernel_src_hscaleall ) + strlen( kernel_src_hscalefast ) + strlen( kernel_src_vscalealldither ) + strlen( kernel_src_vscaleallnodither ) + strlen( kernel_src_vscalefast );
+    source_str = (char*)malloc( kernel_src_size + 2 );
     strcpy( source_str, kernel_src_hscale );
     strcat( source_str, kernel_src_vscale );
     strcat( source_str, kernel_src_nvtoyuv );
+    strcat( source_str, kernel_src_hscaleall );
+    strcat( source_str, kernel_src_hscalefast );
+    strcat( source_str, kernel_src_vscalealldither );
+    strcat( source_str, kernel_src_vscaleallnodither );
+    strcat( source_str, kernel_src_vscalefast );
 #endif
-
 
     source = source_str;
     source_size[0] = strlen( source );
@@ -678,7 +687,8 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
                                    sizeof(numDevices),
                                    &numDevices,
                                    NULL );
-        if( status != CL_SUCCESS ){
+        if( status != CL_SUCCESS )
+        {
 			hb_log( "Notice: Unable to get the number of devices in context.\n" );
             return 0;
 		}
@@ -730,7 +740,6 @@ int hb_compile_kernel_file( const char *filename, GPUEnv *gpu_info,
         gpu_info->programs[idx] = clCreateProgramWithSource(
             gpu_info->context, 1, &source, source_size, &status );
     }
-
     if((gpu_info->programs[idx] == (cl_program)NULL) || (status != CL_SUCCESS)){
 		hb_log( "Notice: Unable to get list of devices in context.\n" );
         return(0);
@@ -930,5 +939,32 @@ int hb_get_opencl_env()
         devices = NULL;
     }
     return status;
+}
+
+
+int hb_create_buffer(cl_mem *cl_Buf,int flags,int size)
+{
+	int status;
+	*cl_Buf = clCreateBuffer( gpu_env.context, (flags), (size), NULL, &status );
+	
+    if( status != CL_SUCCESS )
+	{ 
+		printf("clCreateBuffer error '%d'\n\n",status);
+	    return 0; 
+	}
+	return 1;
+}
+
+int hb_read_opencl_buffer(cl_mem cl_inBuf,unsigned char *outbuf,int size)
+{
+	int status;
+
+	status = clEnqueueReadBuffer(gpu_env.command_queue, cl_inBuf, CL_TRUE, 0, size, outbuf, 0, 0, 0);	
+    if( status != CL_SUCCESS )
+	{ 
+		printf("av_read_opencl_buffer error '%d'\n",status);
+	    return 0; 
+	}
+	return 1;
 }
 #endif

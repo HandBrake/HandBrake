@@ -428,7 +428,6 @@ extern hb_filter_object_t hb_filter_denoise;
 extern hb_filter_object_t hb_filter_decomb;
 extern hb_filter_object_t hb_filter_rotate;
 extern hb_filter_object_t hb_filter_crop_scale;
-extern hb_filter_object_t hb_filter_crop_scale_accl;
 extern hb_filter_object_t hb_filter_render_sub;
 extern hb_filter_object_t hb_filter_vfr;
 

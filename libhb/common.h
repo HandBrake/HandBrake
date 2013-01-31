@@ -148,10 +148,10 @@ int hb_subtitle_can_pass( int source, int mux );
 
 hb_attachment_t *hb_attachment_copy(const hb_attachment_t *src);
 int hb_get_gui_info(hb_gui_t *gui, int option);
-void hb_set_gui_info(hb_gui_t *gui, int uvd, int opencl, int titlescan);
+void hb_set_gui_info(hb_gui_t *gui, int hwd, int opencl, int titlescan);
 struct hb_gui_s
 {
-    int use_uvd;
+    int use_hwd;
     int use_opencl;
     int title_scan;
 };
@@ -441,7 +441,8 @@ struct hb_job_s
                                         //  initially (for frame accurate positioning
                                         //  to non-I frames).
     int use_opencl;/* 0 is disable use of opencl. 1 is enable use of opencl */
-    int use_uvd;
+    int use_hwd;
+    int use_hw_decode;
 
 #ifdef __LIBHB__
     /* Internal data */
@@ -786,7 +787,7 @@ struct hb_title_s
     uint32_t    flags;
                 // set if video stream doesn't have IDR frames
     int         opencl_support;
-    int         uvd_support;
+    int         hwd_support;
 #define         HBTF_NO_IDR (1 << 0)
 #define         HBTF_SCAN_COMPLETE (1 << 0)
 };
@@ -1086,9 +1087,7 @@ enum
     HB_FILTER_DENOISE,
     HB_FILTER_RENDER_SUB,
     HB_FILTER_CROP_SCALE,
-#ifdef USE_OPENCL    
-    HB_FILTER_CROP_SCALE_ACCL,
-#endif    
+
     // Finally filters that don't care what order they are in,
     // except that they must be after the above filters
     HB_FILTER_ROTATE,

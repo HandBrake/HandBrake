@@ -1448,7 +1448,7 @@ namespace HandBrake.Interop
 			nativeJob.mp4_optimize = profile.Optimize ? 1 : 0;
 			nativeJob.ipod_atom = profile.IPod5GSupport ? 1 : 0;
             nativeJob.opencl_support = profile.OpenCLGSupport ? 1 : 0;
-            nativeJob.uvd_support = profile.UVDSupport ? 1 : 0;
+            nativeJob.hwd_support = profile.HWDSupport ? 1 : 0;
 
 			if (title.AngleCount > 1)
 			{

@@ -28,7 +28,7 @@ namespace HandBrake.Interop.Model.Encoding
 		public bool Optimize { get; set; }
 		public bool IPod5GSupport { get; set; }
         public bool OpenCLGSupport { get; set; }
-        public bool UVDSupport { get; set; }
+        public bool HWDSupport { get; set; }
 
 		public int Width { get; set; }
 		public int Height { get; set; }
@@ -85,7 +85,7 @@ namespace HandBrake.Interop.Model.Encoding
 				Optimize = this.Optimize,
 				IPod5GSupport = this.IPod5GSupport,
                 OpenCLGSupport = this.OpenCLGSupport,
-                UVDSupport = this.UVDSupport,
+                HWDSupport = this.HWDSupport,
 
 				Width = this.Width,
 				Height = this.Height,

@@ -121,9 +121,9 @@ namespace HandBrake.ApplicationServices.Parsing
         public int OpenCLSupport { get; set; }
 
         /// <summary>
-        /// Gets or sets the UVD
+        /// Gets or sets the HWD
         /// </summary>
-        public int UVDSupport { get; set; }
+        public int HWDSupport { get; set; }
         #endregion
 
         /// <summary>
@@ -236,14 +236,14 @@ namespace HandBrake.ApplicationServices.Parsing
             }
 
             nextLine = output.ReadLine();
-            m = Regex.Match(nextLine, @"^  \+ support uvd:");
+            m = Regex.Match(nextLine, @"^  \+ support hwd:");
             if (m.Success)
             {
-                temp = nextLine.Replace("+ support uvd:", string.Empty).Trim();
+                temp = nextLine.Replace("+ support hwd:", string.Empty).Trim();
                 if (string.Compare(temp, "yes") == 0)
-                    thisTitle.UVDSupport = 1;
+                    thisTitle.HWDSupport = 1;
                 else
-                    thisTitle.UVDSupport = 0;
+                    thisTitle.HWDSupport = 0;
             }
             thisTitle.Chapters.AddRange(Chapter.ParseList(output));
 

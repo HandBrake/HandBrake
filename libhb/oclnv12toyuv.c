@@ -11,6 +11,7 @@
  */
 
 #ifdef USE_OPENCL
+#ifdef USE_HWD
 #include "vadxva2.h"
 #include "oclnv12toyuv.h"
 
@@ -219,4 +220,5 @@ int hb_ocl_nv12toyuv( uint8_t *bufi[], int p, int w, int h, int *crop, hb_va_dxv
     }
     return 0;
 }
+#endif
 #endif

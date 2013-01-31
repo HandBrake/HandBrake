@@ -1087,6 +1087,8 @@ def createCLI():
     grp.add_option( '--enable-ff-mpeg2', default=False, action='store_true', help=h )
     h = IfHost( 'enable OpenCL features', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-opencl', default=False, action='store_true', help=h )
+    h = IfHost( 'enable HWD features', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-hwd', default=False, action='store_true', help=h )
     
     cli.add_option_group( grp )
 
@@ -1521,6 +1523,7 @@ int main ()
     doc.add( 'FEATURE.gst',        int( not options.disable_gst ))
     doc.add( 'FEATURE.ff.mpeg2',   int( options.enable_ff_mpeg2 ))
     doc.add( 'FEATURE.opencl',   int( options.enable_opencl ))
+    doc.add( 'FEATURE.hwd',   int( options.enable_hwd ))
     doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode or options.cross) ))
 
     if not Tools.xcodebuild.fail and not options.disable_xcode:

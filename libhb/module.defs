@@ -40,10 +40,14 @@ endif
 ifeq (1,$(FEATURE.opencl))
 LIBHB.GCC.D += USE_OPENCL
 endif
+ifeq (1,$(FEATURE.hwd))
+LIBHB.GCC.D += USE_HWD
+endif
 LIBHB.GCC.D += __LIBHB__ USE_PTHREAD
 LIBHB.GCC.I += $(LIBHB.build/) $(CONTRIB.build/)include
+ifeq (1,$(FEATURE.opencl))
 LIBHB.GCC.I += $(AMDAPPSDKROOT)/include
-
+endif
 ifeq ($(BUILD.system),cygwin)
     LIBHB.GCC.D += SYS_CYGWIN
 else ifeq ($(BUILD.system),darwin)

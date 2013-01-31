@@ -48,6 +48,9 @@ ifeq (1,$(FEATURE.opencl))
     TEST.GCC.l += OpenCL
     TEST.GCC.D += USE_OPENCL
 endif
+ifeq (1,$(FEATURE.hwd))
+    TEST.GCC.D += USE_HWD
+endif
     TEST.GCC.l += pthreadGC2 iconv ws2_32
     TEST.GCC.D += PTW32_STATIC_LIB
 	TEST.GCC.args.extra.exe++ += -static

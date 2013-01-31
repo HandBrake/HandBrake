@@ -10,31 +10,18 @@
             Li   Cao <li@multicorewareinc.com> <http://www.multicorewareinc.com/>
 
  */
-
 #include "vadxva2.h"
-#include "CL/cl.h"
-#include "oclnv12toyuv.h"
-
-static int   hb_va_setup( hb_va_dxva2_t *dxva2, void **hw, int width, int height );
-static int   hb_va_get( hb_va_dxva2_t *dxva2, AVFrame *frame );
-static int   hb_d3d_create_device( hb_va_dxva2_t *dxva2 );
-static void  hb_d3d_destroy_device( hb_va_dxva2_t *dxvva2 );
-static int   hb_d3d_create_device_manager( hb_va_dxva2_t *dxva2 );
-static void  hb_d3d_destroy_device_manager( hb_va_dxva2_t *dxva2 );
-static int   hb_dx_create_video_service( hb_va_dxva2_t *dxva2 );
-static void  hb_dx_destroy_video_service( hb_va_dxva2_t *dxva2 );
-static int   hb_dx_find_video_service_conversion( hb_va_dxva2_t *dxva2, GUID *input, D3DFORMAT *output );
-static int   hb_dx_create_video_decoder( hb_va_dxva2_t *dxva2, int codec_id, const  hb_title_t* fmt );
-static void  hb_dx_create_video_conversion( hb_va_dxva2_t *dxva2 );
-static const hb_d3d_format_t *hb_d3d_find_format( D3DFORMAT format );
-static const hb_dx_mode_t *hb_dx_find_mode( const GUID *guid );
-static void hb_dx_destroy_video_decoder( hb_va_dxva2_t *dxva2 );
 
 #ifdef USE_OPENCL
+#include "CL/cl.h"
+#include "oclnv12toyuv.h"
+#include "scale.h"
+
 int TestGPU()
 {
     int status = 1;
-    unsigned int i;
+    unsigned int i, j;
+    cl_device_id device;
     cl_uint numPlatforms = 0; 
     status = clGetPlatformIDs(0,NULL,&numPlatforms); 
     if(status != 0) 
@@ -59,24 +46,55 @@ int TestGPU()
                 sizeof (pbuff), 
                 pbuff,
                 NULL); 
-             if (status) 
-		continue; 
-             status = clGetDeviceIDs(platforms[i], 
+            if (status) 
+         		continue; 
+            status = clGetDeviceIDs(platforms[i], 
                                     CL_DEVICE_TYPE_GPU , 
                                     0 , 
                                     NULL , 
                                     &numDevices); 
-             if (status != CL_SUCCESS)
-                 continue;
-             if(numDevices) 
-                   break; 
+            
+   		    cl_device_id *devices = (cl_device_id *)malloc(numDevices * sizeof(cl_device_id));
+		    status = clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_GPU, numDevices, devices, NULL);
+		    for (j = 0; j < numDevices; j++)
+		    {
+			    char dbuff[100];
+			    status = clGetDeviceInfo(devices[j], CL_DEVICE_VENDOR, sizeof(dbuff), dbuff, NULL); 
+			    device = devices[j];
+			    if(!strcmp(dbuff, "Advanced Micro Devices, Inc."))
+			    {
+				    return 0;
+			    }
+		    }
+
+            if (status != CL_SUCCESS)
+                continue;
+            if( numDevices) 
+                break; 
         } 
         free(platforms); 
     } 
     end:
-    return status;
+    return -1;
 }
 #endif
+
+#ifdef USE_HWD
+
+static int   hb_va_setup( hb_va_dxva2_t *dxva2, void **hw, int width, int height );
+static int   hb_va_get( hb_va_dxva2_t *dxva2, AVFrame *frame );
+static int   hb_d3d_create_device( hb_va_dxva2_t *dxva2 );
+static void  hb_d3d_destroy_device( hb_va_dxva2_t *dxvva2 );
+static int   hb_d3d_create_device_manager( hb_va_dxva2_t *dxva2 );
+static void  hb_d3d_destroy_device_manager( hb_va_dxva2_t *dxva2 );
+static int   hb_dx_create_video_service( hb_va_dxva2_t *dxva2 );
+static void  hb_dx_destroy_video_service( hb_va_dxva2_t *dxva2 );
+static int   hb_dx_find_video_service_conversion( hb_va_dxva2_t *dxva2, GUID *input, D3DFORMAT *output );
+static int   hb_dx_create_video_decoder( hb_va_dxva2_t *dxva2, int codec_id, const  hb_title_t* fmt );
+static void  hb_dx_create_video_conversion( hb_va_dxva2_t *dxva2 );
+static const hb_d3d_format_t *hb_d3d_find_format( D3DFORMAT format );
+static const hb_dx_mode_t *hb_dx_find_mode( const GUID *guid );
+static void hb_dx_destroy_video_decoder( hb_va_dxva2_t *dxva2 );
 /**
  * It destroys a Direct3D device manager
  */
@@ -640,6 +658,35 @@ static void hb_copy_from_nv12( uint8_t *dst, uint8_t *src[2], size_t src_pitch[2
         }
     }
 }
+
+#ifdef USE_OPENCL
+void hb_init_filter( cl_mem src, int srcwidth, int srcheight, uint8_t* dst, int dstwidth, int dstheight, int *crop )
+{
+    T_FilterLink fl = {0};
+    int STEP = srcwidth * srcheight * 3 / 2;
+	int OUTSTEP = dstwidth * dstheight * 3 / 2;
+    int HEIGHT = srcheight;
+    int LINESIZEY = srcwidth;
+    int LINESIZEUV = srcwidth / 2;
+
+    cl_mem cl_outbuf;
+
+    if( !hb_create_buffer( &(cl_outbuf), CL_MEM_WRITE_ONLY, STEP ) )
+    {   
+        hb_log("av_create_buffer cl_outbuf Error\n");
+        return;
+    }   
+
+    fl.cl_outbuf = cl_outbuf;
+
+    scale_run( src, fl.cl_outbuf, LINESIZEY, LINESIZEUV, HEIGHT );
+
+	hb_read_opencl_buffer( fl.cl_outbuf, dst, OUTSTEP );
+	CL_FREE( cl_outbuf );
+
+	return;
+}
+#endif
 /**
  *  lock frame data form surface.
  *  nv12 to yuv with opencl and with C reference
@@ -671,20 +718,16 @@ int hb_va_extract( hb_va_dxva2_t *dxva2, uint8_t *dst, AVFrame *frame, int job_w
 #ifdef USE_OPENCL
         if( ( dxva2->width > job_w || dxva2->height > job_h ) && (TestGPU() == 0) && (hb_get_gui_info(&hb_gui, 2) == 1))
         {
-/*          int i;
-            uint8_t *tmp = (uint8_t*)malloc( dxva2->width*dxva2->height*3/2 );
-            for( i = 0; i < dxva2->height; i++ )
-            {
-                memcpy( tmp+i*dxva2->width, plane[0]+i*lock.Pitch, dxva2->width );
-                if( i<dxva2->height>>1 )
-                    memcpy( tmp+(dxva2->width*dxva2->height)+i*dxva2->width, plane[1]+i*lock.Pitch, dxva2->width );
-            }
-*/
             hb_ocl_nv12toyuv( plane, lock.Pitch,  dxva2->width, dxva2->height, crop, dxva2 );
-            //hb_ocl_nv12toyuv( tmp, dxva2->width, dxva2->height, crop, dxva2 );
-            hb_ocl_scale( dxva2->cl_mem_yuv, NULL, dst, dxva2->width - ( crop[2] + crop[3] ), dxva2->height - ( crop[0] + crop[1] ), job_w, job_h, os );
-            //free( tmp );
-        }
+
+			static int init_flag = 0;
+			if(init_flag == 0){
+    			scale_init( dxva2->width - crop[2] - crop[3], dxva2->height - crop[0] - crop[1], job_w, job_h );
+				init_flag = 1;
+			}
+
+			hb_init_filter( dxva2->cl_mem_yuv, dxva2->width - crop[2] - crop[3], dxva2->height - crop[0] - crop[1], dst, job_w, job_h, crop ); 
+		}
         else
 #endif
         {
@@ -785,20 +828,20 @@ void hb_va_new_dxva2( hb_va_dxva2_t *dxva2, AVCodecContext *p_context )
 enum PixelFormat hb_ffmpeg_get_format( AVCodecContext *p_context, const enum PixelFormat *pi_fmt )
 {
     int i;
-    static const char *ppsz_name[PIX_FMT_NB] =
+    static const char *ppsz_name[AV_PIX_FMT_NB] =
     {
-        [PIX_FMT_VDPAU_H264] = "PIX_FMT_VDPAU_H264",
-        [PIX_FMT_VAAPI_IDCT] = "PIX_FMT_VAAPI_IDCT",
-        [PIX_FMT_VAAPI_VLD] = "PIX_FMT_VAAPI_VLD",
-        [PIX_FMT_VAAPI_MOCO] = "PIX_FMT_VAAPI_MOCO",
-        [PIX_FMT_DXVA2_VLD] = "PIX_FMT_DXVA2_VLD",
-        [PIX_FMT_YUYV422] = "PIX_FMT_YUYV422",
-        [PIX_FMT_YUV420P] = "PIX_FMT_YUV420P",
+        [AV_PIX_FMT_VDPAU_H264] = "AV_PIX_FMT_VDPAU_H264",
+        [AV_PIX_FMT_VAAPI_IDCT] = "AV_PIX_FMT_VAAPI_IDCT",
+        [AV_PIX_FMT_VAAPI_VLD] = "AV_PIX_FMT_VAAPI_VLD",
+        [AV_PIX_FMT_VAAPI_MOCO] = "AV_PIX_FMT_VAAPI_MOCO",
+        [AV_PIX_FMT_DXVA2_VLD] = "AV_PIX_FMT_DXVA2_VLD",
+        [AV_PIX_FMT_YUYV422] = "AV_PIX_FMT_YUYV422",
+        [AV_PIX_FMT_YUV420P] = "AV_PIX_FMT_YUV420P",
     };
-    for( i = 0; pi_fmt[i] != PIX_FMT_NONE; i++ )
+    for( i = 0; pi_fmt[i] != AV_PIX_FMT_NONE; i++ )
     {
         hb_log( "dxva2:Available decoder output format %d (%s)", pi_fmt[i], ppsz_name[pi_fmt[i]] ? : "Unknown" );
-        if( pi_fmt[i] == PIX_FMT_DXVA2_VLD )
+        if( pi_fmt[i] == AV_PIX_FMT_DXVA2_VLD )
         {
             return pi_fmt[i];
         }
@@ -825,3 +868,4 @@ int hb_va_get_frame_buf( hb_va_dxva2_t *dxva2, AVCodecContext *p_context, AVFram
     return HB_WORK_OK;
 
 }
+#endif

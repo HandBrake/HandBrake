@@ -13,6 +13,7 @@
  */
 #ifndef __OPENCL_WRAPPER_H
 #define __OPENCL_WRAPPER_H
+#ifdef USE_OPENCL
 #include "common.h"
 
 //support AMD opencl
@@ -21,24 +22,20 @@
 
 typedef struct _KernelEnv
 {
-#ifdef USE_OPENCL
     cl_context context;
     cl_command_queue command_queue;
     cl_program program;
     cl_kernel kernel;
-#endif
     char kernel_name[150];
     int isAMD;
 }KernelEnv;
 
 typedef struct _OpenCLEnv
 {
-#ifdef USE_OPENCL
     cl_platform_id platform;
     cl_context   context;
     cl_device_id devices;
     cl_command_queue command_queue;
-#endif
 }OpenCLEnv;
 
 
@@ -76,4 +73,10 @@ int hb_create_kernel( char * kernelname, KernelEnv * env );
 int hb_release_kernel( KernelEnv * env );
 
 int hb_get_opencl_env();
+
+int hb_create_buffer(cl_mem *cl_Buf,int flags,int size);
+
+int hb_read_opencl_buffer(cl_mem cl_inBuf,unsigned char *outbuf,int size);
+
+#endif
 #endif

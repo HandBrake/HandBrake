@@ -37,7 +37,9 @@ The handbrake_test.txt is a "script" file that contains the individual tests to 
 
 blank lines are ignored.
 
-To enable UVD decoding, add -P -U to each execution line in handbrake_test.txt.
+
+To enable OpenCL, add -P to each execution line in handbrake_test.txt.
+To enable hardware decoding, add -U to each execution line in handbrake_test.txt.
 Example:
 # universal
 -i "infile" -t 1  -o "outfile.m4v"  -P -U -f mp4 -w 720 --loose-anamorphic  -e x264 -q 20 --vfr  -a 1,1 -E faac,ffac3 -B 160,0 -6 dpl2,auto -R Auto,Auto -D 0,0 --gain=0,0 --audio-copy-mask none --audio-fallback ffac3 --markers="C:\Users\jgallmeier\AppData\Local\Temp\Blueangels-1-1-chapters.csv" -x cabac=0:ref=2:me=umh:bframes=0:weightp=0:8x8dct=0:trellis=0:subq=6 --verbose=1

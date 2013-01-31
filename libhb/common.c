@@ -1739,6 +1739,7 @@ static void job_setup( hb_job_t * job, hb_title_t * title )
 
     job->list_attachment = hb_attachment_list_copy( title->list_attachment );
     job->metadata = hb_metadata_copy( title->metadata );
+    job->use_hw_decode = 0;
 }
 
 static void job_clean( hb_job_t * job )
@@ -1993,11 +1994,7 @@ hb_filter_object_t * hb_filter_init( int filter_id )
         case HB_FILTER_CROP_SCALE:
             filter = &hb_filter_crop_scale;
             break;
-#ifdef USE_OPENCL
-        case HB_FILTER_CROP_SCALE_ACCL:
-            filter = &hb_filter_crop_scale_accl;
-            break;
-#endif
+
         case HB_FILTER_ROTATE:
             filter = &hb_filter_rotate;
             break;
@@ -2974,15 +2971,15 @@ int hb_use_dxva( hb_title_t * title )
 int hb_get_gui_info(hb_gui_t * gui, int option)
 {
     if ( option == 1 )
-        return gui->use_uvd;
+        return gui->use_hwd;
     else if ( option == 2 )
         return gui->use_opencl;
     else
         return gui->title_scan;
 }
-void hb_set_gui_info(hb_gui_t *gui, int uvd, int opencl, int titlescan)
+void hb_set_gui_info(hb_gui_t *gui, int hwd, int opencl, int titlescan)
 {
-    gui->use_uvd = uvd;
+    gui->use_hwd = hwd;
     gui->use_opencl = opencl;
     gui->title_scan = titlescan;
 }
