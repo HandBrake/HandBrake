@@ -14,7 +14,13 @@
 }
 @end
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1070
+@interface NSWindow(HBExtensions)
 
+@property (readonly) CGFloat backingScaleFactor;
+
+@end
+#endif
 
 @interface PreviewController (Private)
 
