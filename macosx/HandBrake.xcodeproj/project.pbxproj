@@ -138,6 +138,11 @@
 		27D6C77314B102DA00B785E4 /* libxml2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C74014B102DA00B785E4 /* libxml2.a */; };
 		3490BCB41614CF8D002A5AD7 /* HandBrake.icns in Resources */ = {isa = PBXBuildFile; fileRef = 3490BCB31614CF8D002A5AD7 /* HandBrake.icns */; };
 		46AB433515F98A2B009C0961 /* DockTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 46AB433415F98A2B009C0961 /* DockTextField.m */; };
+		A9E1467B16BC2ABD00C307BC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E1467A16BC2ABD00C307BC /* QuartzCore.framework */; };
+		A9E1468016BC2AD800C307BC /* next-p.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467C16BC2AD800C307BC /* next-p.pdf */; };
+		A9E1468116BC2AD800C307BC /* pause-p.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467D16BC2AD800C307BC /* pause-p.pdf */; };
+		A9E1468216BC2AD800C307BC /* play-p.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467E16BC2AD800C307BC /* play-p.pdf */; };
+		A9E1468316BC2AD800C307BC /* prev-p.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467F16BC2AD800C307BC /* prev-p.pdf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -307,10 +312,15 @@
 		27D6C73E14B102DA00B785E4 /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = external/contrib/lib/libvorbisenc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73F14B102DA00B785E4 /* libx264.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx264.a; path = external/contrib/lib/libx264.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C74014B102DA00B785E4 /* libxml2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxml2.a; path = external/contrib/lib/libxml2.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		3490BCB31614CF8D002A5AD7 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = HandBrake.icns; path = HandBrake.icns; sourceTree = "<group>"; };
+		3490BCB31614CF8D002A5AD7 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = HandBrake.icns; sourceTree = "<group>"; };
 		34FF2FC014EEC363004C2400 /* HBAdvancedController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAdvancedController.h; sourceTree = "<group>"; };
 		46AB433315F98A2B009C0961 /* DockTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockTextField.h; sourceTree = "<group>"; };
 		46AB433415F98A2B009C0961 /* DockTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockTextField.m; sourceTree = "<group>"; };
+		A9E1467A16BC2ABD00C307BC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
+		A9E1467C16BC2AD800C307BC /* next-p.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "next-p.pdf"; sourceTree = "<group>"; };
+		A9E1467D16BC2AD800C307BC /* pause-p.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "pause-p.pdf"; sourceTree = "<group>"; };
+		A9E1467E16BC2AD800C307BC /* play-p.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "play-p.pdf"; sourceTree = "<group>"; };
+		A9E1467F16BC2AD800C307BC /* prev-p.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "prev-p.pdf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -357,6 +367,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9E1467B16BC2ABD00C307BC /* QuartzCore.framework in Frameworks */,
 				273F21C114ADE7A20021BE6D /* Growl.framework in Frameworks */,
 				273F21C214ADE7BC0021BE6D /* Sparkle.framework in Frameworks */,
 				273F20C914ADC5150021BE6D /* AudioToolbox.framework in Frameworks */,
@@ -478,6 +489,7 @@
 		273F203414ADBAC30021BE6D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A9E1467A16BC2ABD00C307BC /* QuartzCore.framework */,
 				273F20C714ADC4FF0021BE6D /* QTKit.framework */,
 				273F202F14ADB9790021BE6D /* AudioToolbox.framework */,
 				273F203B14ADBC210021BE6D /* Cocoa.framework */,
@@ -563,6 +575,10 @@
 		273F212014ADCBF70021BE6D /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				A9E1467C16BC2AD800C307BC /* next-p.pdf */,
+				A9E1467D16BC2AD800C307BC /* pause-p.pdf */,
+				A9E1467E16BC2AD800C307BC /* play-p.pdf */,
+				A9E1467F16BC2AD800C307BC /* prev-p.pdf */,
 				273F212114ADCBF70021BE6D /* ActivityWindow.tiff */,
 				273F212214ADCBF70021BE6D /* AddToQueue.tiff */,
 				273F212414ADCBF70021BE6D /* Brushed_Window.png */,
@@ -787,6 +803,10 @@
 				273F219014ADDDA10021BE6D /* Preferences.xib in Resources */,
 				273F219114ADDDA10021BE6D /* Queue.xib in Resources */,
 				3490BCB41614CF8D002A5AD7 /* HandBrake.icns in Resources */,
+				A9E1468016BC2AD800C307BC /* next-p.pdf in Resources */,
+				A9E1468116BC2AD800C307BC /* pause-p.pdf in Resources */,
+				A9E1468216BC2AD800C307BC /* play-p.pdf in Resources */,
+				A9E1468316BC2AD800C307BC /* prev-p.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
