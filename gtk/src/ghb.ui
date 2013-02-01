@@ -542,12 +542,6 @@
       </popup>
     </ui>
   </object>
-  <object class="GtkListStore" id="device_list">
-    <columns>
-      <!-- column-name device -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
 
   <object class="GtkMenu" id="presets_menu">
     <child>
@@ -8436,14 +8430,8 @@ libx264 authors:
                     <child>
                       <object class="GtkComboBoxText" id="source_device">
                         <property name="visible">True</property>
-                        <property name="model">device_list</property>
+                        <property name="entry-text-column">0</property>
                         <signal handler="dvd_device_changed_cb" name="changed"/>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
                       </object>
                     </child>
                   </object>

@@ -833,12 +833,16 @@ dvd_device_changed_cb(GtkComboBoxText *combo, signal_user_data_t *ud)
         gchar *name;
 
         dialog = GHB_WIDGET(ud->builder, "source_dialog");
-        device = gtk_combo_box_text_get_active_text (combo);
-        name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(dialog));
-        if (name == NULL || strcmp(name, device) != 0)
-            gtk_file_chooser_select_filename (GTK_FILE_CHOOSER(dialog), device);
-        if (name != NULL)
-            g_free(name);
+        device = gtk_combo_box_text_get_active_text(combo);
+        // Protext against unexpected NULL return value
+        if (device != NULL)
+        {
+            name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(dialog));
+            if (name == NULL || strcmp(name, device) != 0)
+                gtk_file_chooser_select_filename (GTK_FILE_CHOOSER(dialog), device);
+            if (name != NULL)
+                g_free(name);
+        }
     }
 }
 
