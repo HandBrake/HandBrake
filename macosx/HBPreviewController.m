@@ -1207,9 +1207,10 @@
 /* fMovieView Keyboard controls */
 - (void)keyDown:(NSEvent *)event
 {
+    unichar key = [[event charactersIgnoringModifiers] characterAtIndex:0];
+
     if (aMovie)
     {
-        unichar key = [[event charactersIgnoringModifiers] characterAtIndex:0];
         if (key == 32)
         {
             if ([self isPlaying])
@@ -1244,8 +1245,22 @@
         else
             [super keyDown:event];
     }
-    else
+    else if (!fEncodeState)
+    {
+        if (key == NSLeftArrowFunctionKey)
+        {
+            [fPictureSlider setIntegerValue:fPicture > [fPictureSlider minValue] ? fPicture - 1 : fPicture];
+            [self pictureSliderChanged:self];
+        }
+        else if (key == NSRightArrowFunctionKey)
+        {
+            [fPictureSlider setIntegerValue:fPicture < [fPictureSlider maxValue] ? fPicture + 1 : fPicture];
+            [self pictureSliderChanged:self];
+        }
         [super keyDown:event];
+    }
+
+    [super keyDown:event];
 }
 
 #pragma mark *** QTTime Utilities ***
