@@ -1,6 +1,64 @@
 <?xml version="1.0"?>
 <!--*- mode: xml -*-->
 <interface>
+  <object class="GtkLabel" id="SubTrackLabel">
+    <property name="visible">True</property>
+    <property name="label" translatable="yes">&lt;b&gt;Track&lt;/b&gt;</property>
+    <property name="tooltip-text" translatable="yes">The source subtitle track
+
+You can choose any of the subtitles
+recognized in your source file.
+
+In addition, there is a special track option
+"Foreign Audio Search".  This option will add
+an extra pass to the encode that searches for
+subtitles that may correspond to a foreign
+language scene.  This option is best used in
+conjunction with the "Forced" option.</property>
+    <property name="use_markup">True</property>
+  </object>
+  <object class="GtkLabel" id="SubForcedLabel">
+    <property name="visible">True</property>
+    <property name="label" translatable="yes">&lt;b&gt;Forced Only&lt;/b&gt;</property>
+    <property name="tooltip-text" translatable="yes">Use only subtitles that have been flagged
+as forced in the source subtitle track
+
+"Forced" subtitles are usually used to show
+subtitles during scenes where someone is speaking
+a foreign language.</property>
+    <property name="use_markup">True</property>
+  </object>
+  <object class="GtkLabel" id="SubBurnedLabel">
+    <property name="visible">True</property>
+    <property name="label" translatable="yes">&lt;b&gt;Burned In&lt;/b&gt;</property>
+    <property name="tooltip-text" translatable="yes">Render the subtitle over the video.
+
+The subtitle will be part of the video and can not be disabled.</property>
+    <property name="use_markup">True</property>
+  </object>
+  <object class="GtkLabel" id="SubDefaultLabel">
+    <property name="visible">True</property>
+    <property name="label" translatable="yes">&lt;b&gt;Default&lt;/b&gt;</property>
+    <property name="tooltip-text" translatable="yes">Set the default output subtitle track.
+
+Most players will automatically display this
+subtitle track whenever the video is played.
+
+This is usefule for creating a "forced" track
+in your output.</property>
+    <property name="use_markup">True</property>
+  </object>
+  <object class="GtkLabel" id="SubSRTOffsetLabel">
+    <property name="visible">True</property>
+    <property name="label" translatable="yes">&lt;b&gt;SRT Offset&lt;/b&gt;</property>
+    <property name="tooltip-text" translatable="yes">Add (or subtract) an offset (in milliseconds)
+to the start of the SRT subtitle track.
+
+Often, the start of an external SRT file
+does not coincide with the start of the video.
+This setting allows you to synchronize the files.</property>
+    <property name="use_markup">True</property>
+  </object>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">100</property>
     <property name="lower">1</property>
