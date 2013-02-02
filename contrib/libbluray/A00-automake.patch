@@ -1,0 +1,12 @@
+diff -Naur libbluray-0.2.3.orig/configure.ac libbluray-0.2.3/configure.ac
+--- libbluray-0.2.3.orig/configure.ac	2012-08-17 07:27:32.000000000 -0400
++++ libbluray-0.2.3/configure.ac	2013-01-28 23:52:04.000000000 -0500
+@@ -22,7 +22,7 @@
+ AC_CONFIG_MACRO_DIR([m4])
+ AC_CANONICAL_SYSTEM
+ AM_INIT_AUTOMAKE([foreign tar-ustar])
+-AM_CONFIG_HEADER(config.h)
++AC_CONFIG_HEADER(config.h)
+ 
+ case "${host_os}" in
+   "")

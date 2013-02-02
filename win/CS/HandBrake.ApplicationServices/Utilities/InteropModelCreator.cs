@@ -23,10 +23,6 @@ namespace HandBrake.ApplicationServices.Utilities
     /// </summary>
     public class InteropModelCreator
     {
-        /*
-         * TODO: This conversion class needs to be finished off before libencode will work.
-         */
-
         /// <summary>
         /// Get an EncodeJob model for a LibHB Encode.
         /// </summary>
@@ -182,12 +178,37 @@ namespace HandBrake.ApplicationServices.Utilities
             // job.SourceType = work.Type;
             job.Title = work.Title;
 
-            // TODO Setup subtitles
+            // Subtitles
             job.Subtitles = new Subtitles { SourceSubtitles = new List<SourceSubtitle>(), SrtSubtitles = new List<SrtSubtitle>() };
-            //foreach (SubtitleTrack track in work.SubtitleTracks)
-            //{
-            //    // TODO
-            //}
+            foreach (SubtitleTrack track in work.SubtitleTracks)
+            {
+                if (track.IsSrtSubtitle)
+                {
+                    job.Subtitles.SrtSubtitles.Add(
+                        new SrtSubtitle
+                            {
+                                CharacterCode = track.SrtCharCode,
+                                Default = track.Default,
+                                FileName = track.SrtFileName,
+                                LanguageCode = track.SrtLang,
+                                Offset = track.SrtOffset
+                            });
+                }
+                else
+                {
+                    if (track.SourceTrack != null)
+                    {
+                        job.Subtitles.SourceSubtitles.Add(
+                            new SourceSubtitle
+                                {
+                                    BurnedIn = track.Burned,
+                                    Default = track.Default,
+                                    Forced = track.Forced,
+                                    TrackNumber = track.SourceTrack.TrackNumber
+                                });
+                    }
+                }
+            }
 
             return job;
         }

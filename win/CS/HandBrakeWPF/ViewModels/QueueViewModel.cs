@@ -11,6 +11,7 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using System.Windows;
 
     using Caliburn.Micro;
@@ -30,6 +31,13 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class QueueViewModel : ViewModelBase, IQueueViewModel
     {
+        /*
+         
+         * TODO FIX THE DRAP/DROP ADORNER!
+         */
+
+
+
         #region Constants and Fields
 
         /// <summary>
@@ -152,17 +160,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets QueueJobs.
-        /// </summary>
-        public ObservableCollection<QueueTask> QueueJobs
-        {
-            get
-            {
-                return this.queueProcessor.Queue;
-            }
-        }
-
-        /// <summary>
         /// Gets or sets WhenDoneAction.
         /// </summary>
         public string WhenDoneAction
@@ -175,6 +172,17 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.whenDoneAction = value;
                 this.NotifyOfPropertyChange(() => this.WhenDoneAction);
+            }
+        }
+
+        /// <summary>
+        /// Gets the queue tasks.
+        /// </summary>
+        public BindingList<QueueTask> QueueTasks
+        {
+            get
+            {
+                return this.queueProcessor.Queue;
             }
         }
 
@@ -270,8 +278,6 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.queueProcessor.Remove(task);
             }
-
-            this.JobsPending = string.Format("{0} jobs pending", this.queueProcessor.Count);
         }
 
         /// <summary>
@@ -408,16 +414,19 @@ namespace HandBrakeWPF.ViewModels
         private void EncodeService_EncodeStatusChanged(
             object sender, EncodeProgressEventArgs e)
         {
-            this.JobStatus =
-                string.Format(
-                    "Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:hh\\:mm\\:ss}", 
-                    e.Task, 
-                    e.TaskCount, 
-                    e.PercentComplete, 
-                    e.CurrentFrameRate, 
-                    e.AverageFrameRate, 
-                    e.EstimatedTimeLeft, 
-                    e.ElapsedTime);
+            if (this.IsEncoding)
+            {
+                this.JobStatus =
+                    string.Format(
+                        "Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:hh\\:mm\\:ss}",
+                        e.Task,
+                        e.TaskCount,
+                        e.PercentComplete,
+                        e.CurrentFrameRate,
+                        e.AverageFrameRate,
+                        e.EstimatedTimeLeft,
+                        e.ElapsedTime);
+            }
         }
 
         /// <summary>

@@ -16,9 +16,6 @@ namespace HandBrake.ApplicationServices.Parsing
     using System.Linq;
     using System.Text.RegularExpressions;
 
-    using Caliburn.Micro;
-
-    using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.Interop.Model;
 
     using Size = System.Drawing.Size;

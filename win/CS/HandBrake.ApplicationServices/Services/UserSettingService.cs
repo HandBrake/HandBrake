@@ -16,6 +16,7 @@ namespace HandBrake.ApplicationServices.Services
     using System.Xml.Serialization;
 
     using HandBrake.ApplicationServices.Collections;
+    using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Exceptions;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
@@ -48,6 +49,11 @@ namespace HandBrake.ApplicationServices.Services
         }
 
         /// <summary>
+        /// The setting changed.
+        /// </summary>
+        public event SettingEventHandler SettingChanged;
+
+        /// <summary>
         /// Set the specified user setting.
         /// </summary>
         /// <param name="name">
@@ -60,6 +66,8 @@ namespace HandBrake.ApplicationServices.Services
         {
             this.userSettings[name] = value;
             this.Save();
+
+            this.OnSettingChanged(new SettingChangedEventArgs {Key = name, Value = value});
         }
 
         /// <summary>
@@ -96,6 +104,21 @@ namespace HandBrake.ApplicationServices.Services
         public StringCollection GetUserSettingStringCollection(string name)
         {
             return (StringCollection)this.userSettings[name];
+        }
+
+        /// <summary>
+        /// The on setting changed.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected virtual void OnSettingChanged(SettingChangedEventArgs e)
+        {
+            SettingEventHandler handler = this.SettingChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
         }
 
         /// <summary>

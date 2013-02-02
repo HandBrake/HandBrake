@@ -216,7 +216,7 @@ namespace HandBrakeWPF.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to This is the distance x264 searches from its best guess at the motion of a block in order to try to find its actual motion.  
-        ///Doesn&apos;t apply to Diamond or Hexagon search options.  
+        ///
         ///The default is fine for most content, but extremely high motion video, especially at HD resolutions, may benefit from higher ranges, albeit at a high speed cost..
         /// </summary>
         public static string Advanced_MotionEstimationRangeToolTip {
@@ -233,6 +233,19 @@ namespace HandBrakeWPF.Properties {
         public static string Advanced_NoDctDecimateToolTip {
             get {
                 return ResourceManager.GetString("Advanced_NoDctDecimateToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The x264 Preset / Tune / Profile and Level options are currently in use on the Video Tab. 
+        ///
+        ///To enable this tab, check the &quot;Use Advanced Tab instead&quot; option on the Video Tab.
+        ///
+        ///If you do not use this tab, it can be hidden from: Tools Menu &gt; Options &gt; Advanced..
+        /// </summary>
+        public static string Advanced_NotInUse {
+            get {
+                return ResourceManager.GetString("Advanced_NotInUse", resourceCulture);
             }
         }
         

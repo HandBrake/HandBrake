@@ -1,6 +1,64 @@
 <?xml version="1.0"?>
 <!--*- mode: xml -*-->
 <interface>
+  <object class="GtkLabel" id="SubTrackLabel">
+    <property name="visible">True</property>
+    <property name="label" translatable="yes">&lt;b&gt;Track&lt;/b&gt;</property>
+    <property name="tooltip-text" translatable="yes">The source subtitle track
+
+You can choose any of the subtitles
+recognized in your source file.
+
+In addition, there is a special track option
+"Foreign Audio Search".  This option will add
+an extra pass to the encode that searches for
+subtitles that may correspond to a foreign
+language scene.  This option is best used in
+conjunction with the "Forced" option.</property>
+    <property name="use_markup">True</property>
+  </object>
+  <object class="GtkLabel" id="SubForcedLabel">
+    <property name="visible">True</property>
+    <property name="label" translatable="yes">&lt;b&gt;Forced Only&lt;/b&gt;</property>
+    <property name="tooltip-text" translatable="yes">Use only subtitles that have been flagged
+as forced in the source subtitle track
+
+"Forced" subtitles are usually used to show
+subtitles during scenes where someone is speaking
+a foreign language.</property>
+    <property name="use_markup">True</property>
+  </object>
+  <object class="GtkLabel" id="SubBurnedLabel">
+    <property name="visible">True</property>
+    <property name="label" translatable="yes">&lt;b&gt;Burned In&lt;/b&gt;</property>
+    <property name="tooltip-text" translatable="yes">Render the subtitle over the video.
+
+The subtitle will be part of the video and can not be disabled.</property>
+    <property name="use_markup">True</property>
+  </object>
+  <object class="GtkLabel" id="SubDefaultLabel">
+    <property name="visible">True</property>
+    <property name="label" translatable="yes">&lt;b&gt;Default&lt;/b&gt;</property>
+    <property name="tooltip-text" translatable="yes">Set the default output subtitle track.
+
+Most players will automatically display this
+subtitle track whenever the video is played.
+
+This is usefule for creating a "forced" track
+in your output.</property>
+    <property name="use_markup">True</property>
+  </object>
+  <object class="GtkLabel" id="SubSRTOffsetLabel">
+    <property name="visible">True</property>
+    <property name="label" translatable="yes">&lt;b&gt;SRT Offset&lt;/b&gt;</property>
+    <property name="tooltip-text" translatable="yes">Add (or subtract) an offset (in milliseconds)
+to the start of the SRT subtitle track.
+
+Often, the start of an external SRT file
+does not coincide with the start of the video.
+This setting allows you to synchronize the files.</property>
+    <property name="use_markup">True</property>
+  </object>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">100</property>
     <property name="lower">1</property>
@@ -541,12 +599,6 @@
           <menuitem action="about"/>
       </popup>
     </ui>
-  </object>
-  <object class="GtkListStore" id="device_list">
-    <columns>
-      <!-- column-name device -->
-      <column type="gchararray"/>
-    </columns>
   </object>
 
   <object class="GtkMenu" id="presets_menu">
@@ -1679,27 +1731,20 @@
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <child>
-                                      <object class="GtkFrame" id="frame8">
+                                      <object class="GtkAlignment" id="alignment19">
                                         <property name="visible">True</property>
-                                        <property name="label_xalign">0</property>
-                                        <property name="shadow_type">none</property>
+                                        <property name="bottom_padding">4</property>
+                                        <property name="left_padding">4</property>
+                                        <property name="right_padding">4</property>
+                                        <property name="yalign">1</property>
                                         <child>
-                                          <object class="GtkAlignment" id="alignment19">
+                                          <object class="GtkImage" id="preview_button_image">
+                                            <property name="width_request">448</property>
+                                            <property name="height_request">200</property>
                                             <property name="visible">True</property>
-                                            <property name="bottom_padding">4</property>
-                                            <property name="left_padding">4</property>
-                                            <property name="right_padding">4</property>
-                                            <property name="yalign">1</property>
-                                            <child>
-                                              <object class="GtkImage" id="preview_button_image">
-                                                <property name="width_request">448</property>
-                                                <property name="height_request">200</property>
-                                                <property name="visible">True</property>
-                                                <property name="icon_name">hb-icon</property>
-                                                <property name="pixel-size">128</property>
-                                                <signal name="size_allocate" handler="preview_button_size_allocate_cb"/>
-                                              </object>
-                                            </child>
+                                            <property name="icon_name">hb-icon</property>
+                                            <property name="pixel-size">128</property>
+                                            <signal name="size_allocate" handler="preview_button_size_allocate_cb"/>
                                           </object>
                                         </child>
                                       </object>
@@ -8443,14 +8488,8 @@ libx264 authors:
                     <child>
                       <object class="GtkComboBoxText" id="source_device">
                         <property name="visible">True</property>
-                        <property name="model">device_list</property>
+                        <property name="entry-text-column">0</property>
                         <signal handler="dvd_device_changed_cb" name="changed"/>
-                        <child>
-                          <object class="GtkCellRendererText" id="cellrenderertext1"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
                       </object>
                     </child>
                   </object>

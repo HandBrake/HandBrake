@@ -275,9 +275,9 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     }
 
     /* Apply profile and level settings last, if present. */
-    if (job->x264_profile != NULL && *job->x264_profile)
+    if (job->h264_profile != NULL && *job->h264_profile)
     {
-        if (x264_param_apply_profile(&param, job->x264_profile))
+        if (hb_apply_h264_profile(&param, job->h264_profile, 1))
         {
             free(pv);
             pv = NULL;
@@ -287,7 +287,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     if (job->h264_level != NULL && *job->h264_level)
     {
         if (hb_apply_h264_level(&param, job->h264_level,
-                                job->x264_profile, 1) < 0)
+                                job->h264_profile, 1) < 0)
         {
             free(pv);
             pv = NULL;
@@ -629,6 +629,60 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     return HB_WORK_OK;
 }
 
+int hb_apply_h264_profile(x264_param_t *param, const char *h264_profile,
+                          int verbose)
+{
+    if (h264_profile != NULL &&
+        strcasecmp(h264_profile, hb_h264_profile_names[0]) != 0)
+    {
+        /*
+         * baseline profile doesn't support interlacing
+         */
+        if ((param->b_interlaced ||
+             param->b_fake_interlaced) &&
+            !strcasecmp(h264_profile, "baseline"))
+        {
+            if (verbose)
+            {
+                hb_log("hb_apply_h264_profile [warning]: baseline profile doesn't support interlacing, disabling");
+            }
+            param->b_interlaced = param->b_fake_interlaced = 0;
+        }
+        /*
+         * lossless requires High 4:4:4 Predictive profile
+         */
+        if (param->rc.f_rf_constant < 1.0 &&
+            param->rc.i_rc_method == X264_RC_CRF &&
+            strcasecmp(h264_profile, "high444") != 0)
+        {
+            if (verbose)
+            {
+                hb_log("hb_apply_h264_profile [warning]: lossless requires high444 profile, disabling");
+            }
+            param->rc.f_rf_constant = 1.0;
+        }
+        if (!strcasecmp(h264_profile, "high10") ||
+            !strcasecmp(h264_profile, "high422"))
+        {
+            // arbitrary profile names may be specified via the CLI
+            // map unsupported high10 and high422 profiles to high
+            return x264_param_apply_profile(param, "high");
+        }
+        return x264_param_apply_profile(param, h264_profile);
+    }
+    else if (!strcasecmp(h264_profile, hb_h264_profile_names[0]))
+    {
+        // "auto", do nothing
+        return 0;
+    }
+    else
+    {
+        // error (profile not a string), abort
+        hb_error("hb_apply_h264_profile: no profile specified");
+        return -1;
+    }
+}
+
 int hb_check_h264_level(const char *h264_level, int width, int height,
                         int fps_num, int fps_den, int interlaced,
                         int fake_interlaced)
@@ -645,76 +699,17 @@ int hb_check_h264_level(const char *h264_level, int width, int height,
 }
 
 int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
-                        const char *x264_profile, int verbose)
+                        const char *h264_profile, int verbose)
 {
     float f_framerate;
     const x264_level_t *x264_level = NULL;
     int i, i_mb_size, i_mb_rate, i_mb_width, i_mb_height, max_mb_side, ret;
 
     /*
-     * the H.264 profile determines VBV constraints
-     */
-    enum
-    {
-        // Main or Baseline (equivalent)
-        HB_H264_PROFILE_MAIN,
-        // High (no 4:2:2 or 10-bit support, so anything lossy is equivalent)
-        HB_H264_PROFILE_HIGH,
-        // Lossless (4:2:0 8-bit for now)
-        HB_H264_PROFILE_HIGH444,
-    } h264_profile;
-
-    /*
-     * H.264 profile
-     *
-     * TODO: we need to guess the profile like x264_sps_init does, otherwise
-     * we'll get an error when setting a Main-incompatible VBV and
-     * x264_sps_init() guesses Main profile. x264_sps_init() may eventually take
-     * VBV into account when guessing profile, at which point this code can be
-     * re-enabled.
-     */
-#if 0
-    if (x264_profile != NULL && *x264_profile)
-    {
-        // if the user explicitly specified a profile, don't guess it
-        if (!strcasecmp(x264_profile, "high444"))
-        {
-            h264_profile = HB_H264_PROFILE_HIGH444;
-        }
-        else if (!strcasecmp(x264_profile, "main") ||
-                 !strcasecmp(x264_profile, "baseline"))
-        {
-            h264_profile = HB_H264_PROFILE_MAIN;
-        }
-        else
-        {
-            h264_profile = HB_H264_PROFILE_HIGH;
-        }
-    }
-    else
-#endif
-    {
-        // guess the H.264 profile if the user didn't request one
-        if (param->rc.i_rc_method == X264_RC_CRF &&
-            param->rc.f_rf_constant < 1.0)
-        {
-            h264_profile = HB_H264_PROFILE_HIGH444;
-        }
-        else if (param->analyse.b_transform_8x8 ||
-                 param->i_cqm_preset != X264_CQM_FLAT)
-        {
-            h264_profile = HB_H264_PROFILE_HIGH;
-        }
-        else
-        {
-            h264_profile = HB_H264_PROFILE_MAIN;
-        }
-    }
-
-    /*
      * find the x264_level_t corresponding to the requested level
      */
-    if (h264_level != NULL && *h264_level)
+    if (h264_level != NULL &&
+        strcasecmp(h264_level, hb_h264_level_names[0]) != 0)
     {
         for (i = 0; hb_h264_level_values[i]; i++)
         {
@@ -739,11 +734,76 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
             return -1;
         }
     }
+    else if(!strcasecmp(h264_level, hb_h264_level_names[0]))
+    {
+        // "auto", do nothing
+        return 0;
+    }
     else
     {
         // error (level not a string), abort
         hb_error("hb_apply_h264_level: no level specified");
         return -1;
+    }
+
+    /*
+     * the H.264 profile determines VBV constraints
+     */
+    enum
+    {
+        // Main or Baseline (equivalent)
+        HB_ENCX264_PROFILE_MAIN,
+        // High (no 4:2:2 or 10-bit support, so anything lossy is equivalent)
+        HB_ENCX264_PROFILE_HIGH,
+        // Lossless (4:2:0 8-bit for now)
+        HB_ENCX264_PROFILE_HIGH444,
+    } hb_encx264_profile;
+
+    /*
+     * H.264 profile
+     *
+     * TODO: we need to guess the profile like x264_sps_init does, otherwise
+     * we'll get an error when setting a Main-incompatible VBV and
+     * x264_sps_init() guesses Main profile. x264_sps_init() may eventually take
+     * VBV into account when guessing profile, at which point this code can be
+     * re-enabled.
+     */
+#if 0
+    if (h264_profile != NULL && *h264_profile)
+    {
+        // if the user explicitly specified a profile, don't guess it
+        if (!strcasecmp(h264_profile, "high444"))
+        {
+            hb_encx264_profile = HB_ENCX264_PROFILE_HIGH444;
+        }
+        else if (!strcasecmp(h264_profile, "main") ||
+                 !strcasecmp(h264_profile, "baseline"))
+        {
+            hb_encx264_profile = HB_ENCX264_PROFILE_MAIN;
+        }
+        else
+        {
+            hb_encx264_profile = HB_ENCX264_PROFILE_HIGH;
+        }
+    }
+    else
+#endif
+    {
+        // guess the H.264 profile if the user didn't request one
+        if (param->rc.i_rc_method == X264_RC_CRF &&
+            param->rc.f_rf_constant < 1.0)
+        {
+            hb_encx264_profile = HB_ENCX264_PROFILE_HIGH444;
+        }
+        else if (param->analyse.b_transform_8x8 ||
+                 param->i_cqm_preset != X264_CQM_FLAT)
+        {
+            hb_encx264_profile = HB_ENCX264_PROFILE_HIGH;
+        }
+        else
+        {
+            hb_encx264_profile = HB_ENCX264_PROFILE_MAIN;
+        }
     }
 
     /*
@@ -805,7 +865,7 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
     if (param->i_keyint_max != 1)
     {
         int i_max_dec_frame_buffering =
-            MAX(MIN(x264_level->dpb / (384 * i_mb_size), 16), 1);
+            MAX(MIN(x264_level->dpb / i_mb_size, 16), 1);
         param->i_frame_reference =
             MIN(i_max_dec_frame_buffering, param->i_frame_reference);
         /*
@@ -825,10 +885,10 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
     /*
      * set and/or sanitize the VBV (if not lossless)
      */
-    if (h264_profile != HB_H264_PROFILE_HIGH444)
+    if (hb_encx264_profile != HB_ENCX264_PROFILE_HIGH444)
     {
         // High profile allows for higher VBV bufsize/maxrate
-        int cbp_factor = h264_profile == HB_H264_PROFILE_HIGH ? 5 : 4;
+        int cbp_factor = hb_encx264_profile == HB_ENCX264_PROFILE_HIGH ? 5 : 4;
         if (!param->rc.i_vbv_max_bitrate)
         {
             param->rc.i_vbv_max_bitrate = (x264_level->bitrate * cbp_factor) / 4;
@@ -918,7 +978,7 @@ int hb_apply_h264_level(x264_param_t *param, const char *h264_level,
 }
 
 char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
-                             const char *x264_encopts, const char *x264_profile,
+                             const char *x264_encopts, const char *h264_profile,
                              const char *h264_level, int width, int height)
 {
     int i;
@@ -979,24 +1039,10 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
     /*
      * apply the x264 profile, if specified
      */
-    if (x264_profile != NULL && *x264_profile)
+    if (h264_profile != NULL && *h264_profile)
     {
-        if (x264_param_apply_profile(&param, x264_profile) < 0)
-        {
-            /*
-             * Note: x264_param_apply_profile can bail even when the specified
-             *       profile is valid; examples:
-             *
-             * 1) when profile is baseline and interlaced is set
-             * 2) when profile is not high444 and lossless is set
-             * 
-             * So this can happen even when calling hb_x264_param_unparse from a
-             * GUI - maybe we should sanitize settings before calling
-             * x264_param_apply_profile()?
-             */
-            hb_dict_free(&x264_opts);
-            return strdup("hb_x264_param_unparse: could not apply x264 profile");
-        }
+        // be quiet so at to not pollute GUI logs
+        hb_apply_h264_profile(&param, h264_profile, 0);
     }
 
     /*
@@ -1008,7 +1054,7 @@ char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
         param.i_width  = width;
         param.i_height = height;
         // be quiet so at to not pollute GUI logs
-        hb_apply_h264_level(&param, h264_level, x264_profile, 0);
+        hb_apply_h264_level(&param, h264_level, h264_profile, 0);
     }
 
     /*
@@ -1590,9 +1636,9 @@ const char * const * hb_x264_tunes()
     return x264_tune_names;
 }
 
-const char * const * hb_x264_profiles()
+const char * const * hb_h264_profiles()
 {
-    return x264_profile_names;
+    return hb_h264_profile_names;
 }
 
 const char * const * hb_h264_levels()

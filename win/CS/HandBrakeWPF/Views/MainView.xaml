@@ -269,6 +269,7 @@
                             </StackPanel>
                         </MenuItem.Header>
                         <MenuItem Header="Add All" Micro:Message.Attach="[Event Click] = [Action AddAllToQueue]" />
+                        <!--<MenuItem Header="Add Selection" Micro:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" />-->
                     </MenuItem>
                 </Menu>
 
@@ -370,14 +371,13 @@
                                                        Converter={StaticResource boolToVisConverter},
                                                        ConverterParameter=true}"
                                   />
-                        <TextBox Name="StartPointText"
-                                 MinWidth="60"
-                                 Margin="8,0,0,0"
-                                 Text="{Binding SelectedStartPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 Visibility="{Binding ShowTextEntryForPointToPointMode,
-                                                      Converter={StaticResource boolToVisConverter},
-                                                      ConverterParameter=false}"
-                                 />
+                        <Controls:TimeSpanBox  Number="{Binding SelectedStartPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                               Minimum="0" AllowEmpty="False" ShowTimeSpan="{Binding IsTimespanRange}"
+                                               MinWidth="80" Margin="8,0,0,0"  Visibility="{Binding ShowTextEntryForPointToPointMode,
+                                                       Converter={StaticResource boolToVisConverter},
+                                                       ConverterParameter=false}"
+                                                />
+                        
                         <Label Margin="8,0,0,0" Content="through" />
                         <ComboBox Name="EndPoint"
                                   MinWidth="60"
@@ -388,14 +388,13 @@
                                                        Converter={StaticResource boolToVisConverter},
                                                        ConverterParameter=true}"
                                   />
-                        <TextBox Name="EndPointText"
-                                 MinWidth="60"
-                                 Margin="8,0,0,0"
-                                 Text="{Binding SelectedEndPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 Visibility="{Binding ShowTextEntryForPointToPointMode,
-                                                      Converter={StaticResource boolToVisConverter},
-                                                      ConverterParameter=false}"
-                                 />
+                        <Controls:TimeSpanBox  Number="{Binding SelectedEndPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                               Minimum="0" AllowEmpty="False" ShowTimeSpan="{Binding IsTimespanRange}"
+                                               MinWidth="80" Margin="8,0,0,0"  Visibility="{Binding ShowTextEntryForPointToPointMode,
+                                                       Converter={StaticResource boolToVisConverter},
+                                                       ConverterParameter=false}"
+                                                />
+  
                         <Label Margin="8,0,0,0" Content="Duration" />
                         <Label Margin="8,0,0,0" Content="{Binding Duration}" />
                     </StackPanel>

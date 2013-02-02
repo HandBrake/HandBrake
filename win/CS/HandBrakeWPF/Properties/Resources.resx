@@ -178,7 +178,7 @@ Transformed Exhaustive: Like exhaustive, but makes even more accurate decisions.
   </data>
   <data name="Advanced_MotionEstimationRangeToolTip" xml:space="preserve">
     <value>This is the distance x264 searches from its best guess at the motion of a block in order to try to find its actual motion.  
-Doesn't apply to Diamond or Hexagon search options.  
+
 The default is fine for most content, but extremely high motion video, especially at HD resolutions, may benefit from higher ranges, albeit at a high speed cost.</value>
   </data>
   <data name="Advanced_NoDctDecimateToolTip" xml:space="preserve">
@@ -320,5 +320,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.</value>
+  </data>
+  <data name="Advanced_NotInUse" xml:space="preserve">
+    <value>The x264 Preset / Tune / Profile and Level options are currently in use on the Video Tab. 
+
+To enable this tab, check the "Use Advanced Tab instead" option on the Video Tab.
+
+If you do not use this tab, it can be hidden from: Tools Menu &gt; Options &gt; Advanced.</value>
   </data>
 </root>

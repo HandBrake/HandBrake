@@ -354,10 +354,10 @@ void hb_display_job_info( hb_job_t * job )
         {
             hb_log( "     + options: %s", job->advanced_opts );
         }
-        if( job->x264_profile && *job->x264_profile &&
+        if( job->h264_profile && *job->h264_profile &&
             job->vcodec == HB_VCODEC_X264 )
         {
-            hb_log( "     + x264 profile: %s", job->x264_profile );
+            hb_log( "     + h264 profile: %s", job->h264_profile );
         }
         if( job->h264_level && *job->h264_level &&
             job->vcodec == HB_VCODEC_X264 )

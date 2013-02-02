@@ -1,17 +1,17 @@
-From 021a7700ff839b295b5776d4552563de1a448df6 Mon Sep 17 00:00:00 2001
+From 9922584ba3b5b02d913e629ea74d72e994870873 Mon Sep 17 00:00:00 2001
 From: John Stebbins <jstebbins.hb@gmail.com>
-Date: Sat, 5 Jan 2013 16:57:06 -0800
+Date: Thu, 17 Jan 2013 19:57:26 +0100
 Subject: [PATCH] dca_parser: Handle changes in dca frame size
 
 A change in framesize caused a perpetual loss of synchronization.
 So read (and use) the frame size from the frame header instead of
 setting it only once.
 ---
- libavcodec/dca_parser.c |   13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ libavcodec/dca_parser.c |   15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
 diff --git a/libavcodec/dca_parser.c b/libavcodec/dca_parser.c
-index ab235cf..75e9321 100644
+index ab235cf..12180f3 100644
 --- a/libavcodec/dca_parser.c
 +++ b/libavcodec/dca_parser.c
 @@ -62,10 +62,12 @@ static int dca_find_frame_end(DCAParseContext * pc1, const uint8_t * buf,
@@ -46,17 +46,19 @@ index ab235cf..75e9321 100644
  {
      GetBitContext gb;
      uint8_t hdr[12 + FF_INPUT_BUFFER_PADDING_SIZE] = { 0 };
-@@ -159,6 +158,10 @@ static int dca_parse_params(const uint8_t *buf, int buf_size, int *duration,
+@@ -159,7 +158,11 @@ static int dca_parse_params(const uint8_t *buf, int buf_size, int *duration,
          return AVERROR_INVALIDDATA;
      *duration = 256 * (sample_blocks / 8);
  
+-    skip_bits(&gb, 20);
 +    *framesize = get_bits(&gb, 14) + 1;
 +    if (*framesize < 95)
 +        return AVERROR_INVALIDDATA;
 +
-     skip_bits(&gb, 20);
++    skip_bits(&gb, 6);
      sr_code = get_bits(&gb, 4);
      *sample_rate = avpriv_dca_sample_rates[sr_code];
+     if (*sample_rate == 0)
 @@ -190,7 +193,7 @@ static int dca_parse(AVCodecParserContext * s,
      }
  

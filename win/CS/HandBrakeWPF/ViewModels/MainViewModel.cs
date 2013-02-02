@@ -221,6 +221,7 @@ namespace HandBrakeWPF.ViewModels
             // Setup Properties
             this.WindowTitle = "HandBrake";
             this.CurrentTask = new EncodeTask();
+            this.CurrentTask.PropertyChanged += this.CurrentTask_PropertyChanged;
             this.ScannedSource = new Source();
 
             // Setup Events
@@ -231,6 +232,7 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueueCompleted += this.QueueCompleted;
             this.queueProcessor.QueueChanged += this.QueueChanged;
             this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeStatusChanged;
+            this.userSettingService.SettingChanged += this.UserSettingServiceSettingChanged;
 
             this.Presets = this.presetService.Presets;
             this.CancelScanCommand = new CancelScanCommand(this.scanService);
@@ -448,6 +450,12 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
+                // Sanity Check
+                if (ScannedSource == null || ScannedSource.ScanPath == null)
+                {
+                    return string.Empty;
+                }
+
                 // The title that is selected has a source name. This means it's part of a batch scan.
                 if (selectedTitle != null && !string.IsNullOrEmpty(selectedTitle.SourceName))
                 {
@@ -597,7 +605,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.isMkv = value;
-                this.NotifyOfPropertyChange("IsMkv");
+                this.NotifyOfPropertyChange(() => this.IsMkv);
             }
         }
   
@@ -737,12 +745,18 @@ namespace HandBrakeWPF.ViewModels
             {
                 return this.CurrentTask.StartPoint;
             }
+
             set
             {
                 this.CurrentTask.Angle = value;
                 this.NotifyOfPropertyChange(() => this.SelectedAngle);
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is timespan range.
+        /// </summary>
+        public bool IsTimespanRange { get; set; }
 
         /// <summary>
         /// Gets or sets SelectedStartPoint.
@@ -759,7 +773,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.SelectedStartPoint);
                 this.Duration = this.DurationCalculation();
 
-                if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
+                if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming) && this.ScannedSource.ScanPath != null)
                 {
                     this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
                 }
@@ -781,7 +795,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.SelectedEndPoint);
                 this.Duration = this.DurationCalculation();
 
-                if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming))
+                if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNaming) && this.ScannedSource.ScanPath != null)
                 {
                     this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName);
                 }
@@ -805,21 +819,41 @@ namespace HandBrakeWPF.ViewModels
 
                 if (value == PointToPointMode.Chapters && this.SelectedTitle != null)
                 {
+                    if (this.selectedTitle == null)
+                    {
+                        return;
+                    }
+
+
                     this.SelectedStartPoint = 1;
                     this.SelectedEndPoint = selectedTitle.Chapters.Last().ChapterNumber;
                 } 
                 else if (value == PointToPointMode.Seconds)
                 {
+                    if (this.selectedTitle == null)
+                    {
+                        return;
+                    }
+
+
                     this.SelectedStartPoint = 0;
 
                     int timeInSeconds;
                     if (int.TryParse(selectedTitle.Duration.TotalSeconds.ToString(CultureInfo.InvariantCulture), out timeInSeconds))
                     {
                         this.SelectedEndPoint = timeInSeconds;
-                    }    
+                    }
+
+                    this.IsTimespanRange = true;
+                    this.NotifyOfPropertyChange(() => this.IsTimespanRange);
                 }
                 else
                 {
+                    if (this.selectedTitle == null)
+                    {
+                        return;
+                    }
+
                     // Note this does not account for VFR. It's only a guesstimate. 
                     double estimatedTotalFrames = selectedTitle.Fps * selectedTitle.Duration.TotalSeconds;
 
@@ -829,6 +863,9 @@ namespace HandBrakeWPF.ViewModels
                     {
                         this.SelectedEndPoint = totalFrames;
                     }
+
+                    this.IsTimespanRange = false;
+                    this.NotifyOfPropertyChange(() => this.IsTimespanRange);
                 }
             }
         }
@@ -927,6 +964,7 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueueChanged -= this.QueueChanged;
             this.queueProcessor.JobProcessingStarted -= this.QueueProcessorJobProcessingStarted;
             this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
+            this.userSettingService.SettingChanged -= this.UserSettingServiceSettingChanged;
         }
 
         #endregion
@@ -1069,6 +1107,38 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.SelectedTitle = title;
                 this.AddToQueue();
+            }
+        }
+
+        /// <summary>
+        /// The add selection to queue.
+        /// </summary>
+        public void AddSelectionToQueue()
+        {
+            if (this.ScannedSource == null || this.ScannedSource.Titles == null || this.ScannedSource.Titles.Count == 0)
+            {
+                this.errorService.ShowMessageBox("You must first scan a source and setup your job before adding to the queue.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (!AutoNameHelper.IsAutonamingEnabled())
+            {
+                this.errorService.ShowMessageBox("You must turn on automatic file naming in preferences before you can add to the queue.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueSelectionViewModel));
+            IQueueSelectionViewModel viewModel = IoC.Get<IQueueSelectionViewModel>();
+
+            viewModel.Setup(this.ScannedSource, this.SourceName);
+
+            if (window != null)
+            {
+                window.Activate();
+            }
+            else
+            {
+                this.WindowManager.ShowWindow(viewModel);
             }
         }
 
@@ -1521,15 +1591,20 @@ namespace HandBrakeWPF.ViewModels
                     this.NotifyOfPropertyChange(() => this.ScannedSource.Titles);
 
                     // Select the Users Title
-                    this.CurrentTask = new EncodeTask(queueEditTask);
-                    this.NotifyOfPropertyChange(() => this.CurrentTask);
                     this.SelectedTitle = this.ScannedSource.Titles.FirstOrDefault(t => t.TitleNumber == this.CurrentTask.Title);
-
-                    // Update the Main UI control Area (TODO)
                     this.CurrentTask = new EncodeTask(queueEditTask);
                     this.NotifyOfPropertyChange(() => this.CurrentTask);
 
-                    // Update the Tab Controls (TODO)
+                    // Update the Main Window
+                    this.NotifyOfPropertyChange(() => this.Destination);
+                    this.NotifyOfPropertyChange(() => this.SelectedStartPoint);
+                    this.NotifyOfPropertyChange(() => this.SelectedEndPoint);
+                    this.NotifyOfPropertyChange(() => this.SelectedAngle);
+                    this.NotifyOfPropertyChange(() => this.SelectedPointToPoint);
+                    this.NotifyOfPropertyChange(() => this.SelectedOutputFormat);
+                    this.NotifyOfPropertyChange(() => IsMkv);
+
+                    // Update the Tab Controls
                     this.PictureSettingsViewModel.UpdateTask(this.CurrentTask);
                     this.VideoViewModel.UpdateTask(this.CurrentTask);
                     this.FiltersViewModel.UpdateTask(this.CurrentTask);
@@ -1538,8 +1613,23 @@ namespace HandBrakeWPF.ViewModels
                     this.ChaptersViewModel.UpdateTask(this.CurrentTask);
                     this.AdvancedViewModel.UpdateTask(this.CurrentTask);
 
+                    // Tell the Preivew Window
+                    IPreviewViewModel viewModel = IoC.Get<IPreviewViewModel>();
+                    viewModel.Task = this.CurrentTask;
+
                     // Cleanup
                     this.ShowStatusWindow = false;
+
+                    if (this.SelectedTitle != null && !string.IsNullOrEmpty(this.SelectedTitle.SourceName))
+                    {
+                        this.SourceLabel = this.SelectedTitle.SourceName;
+                    }
+                    else
+                    {
+                        this.SourceLabel = this.SourceName;
+                    }
+
+                    this.StatusLabel = "Scan Completed";
                 });
         }
 
@@ -1648,6 +1738,7 @@ namespace HandBrakeWPF.ViewModels
                 this.ProgramStatusLabel = "A New Update is Available. Goto Tools Menu > Options to Install";
             }
         }
+
         #endregion
 
         #region Event Handlers
@@ -1919,6 +2010,41 @@ namespace HandBrakeWPF.ViewModels
         private void DriveTrayChanged()
         {
             Caliburn.Micro.Execute.OnUIThread(() => this.SourceMenu = this.GenerateSourceMenu());
+        }
+
+        /// <summary>
+        /// Allows the main window to respond to setting changes.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void UserSettingServiceSettingChanged(object sender, HandBrake.ApplicationServices.EventArgs.SettingChangedEventArgs e)
+        {
+            if (e.Key == UserSettingConstants.ShowAdvancedTab)
+            {
+                this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);
+            }
+        }
+
+        /// <summary>
+        /// Handle the property changed event of the encode task. 
+        /// Allows the main window to respond to changes.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void CurrentTask_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+           if (e.PropertyName == UserSettingConstants.ShowAdvancedTab)
+           {
+               this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);
+           }
         }
 
         #endregion

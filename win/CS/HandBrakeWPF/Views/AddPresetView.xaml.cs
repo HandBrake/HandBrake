@@ -3,7 +3,7 @@
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Interaction logic for VideoView.xaml
+//   Interaction logic for AddPresetView.xaml
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -12,7 +12,7 @@ namespace HandBrakeWPF.Views
     using System.Windows;
 
     /// <summary>
-    /// Interaction logic for VideoView.xaml
+    /// Interaction logic for AddPresetView.xaml
     /// </summary>
     public partial class AddPresetView : Window
     {

@@ -1760,8 +1760,8 @@ static void job_clean( hb_job_t * job )
         job->x264_preset = NULL;
         free(job->x264_tune);
         job->x264_tune = NULL;
-        free(job->x264_profile);
-        job->x264_profile = NULL;
+        free(job->h264_profile);
+        job->h264_profile = NULL;
         free(job->h264_level);
         job->h264_level = NULL;
 
@@ -1901,15 +1901,15 @@ void hb_job_set_x264_tune( hb_job_t *job, const char *tune )
     }
 }
 
-void hb_job_set_x264_profile( hb_job_t *job, const char *profile )
+void hb_job_set_h264_profile( hb_job_t *job, const char *profile )
 {
     if ( job )
     {
-        hb_update_str( &job->x264_profile, profile );
+        hb_update_str( &job->h264_profile, profile );
     }
 }
 
-void hb_job_set_x264_level( hb_job_t *job, const char *level )
+void hb_job_set_h264_level( hb_job_t *job, const char *level )
 {
     if ( job )
     {

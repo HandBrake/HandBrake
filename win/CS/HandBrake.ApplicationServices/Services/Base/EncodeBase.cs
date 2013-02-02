@@ -10,8 +10,12 @@
 namespace HandBrake.ApplicationServices.Services.Base
 {
     using System;
+    using System.Globalization;
     using System.IO;
     using System.Text;
+    using System.Text.RegularExpressions;
+
+    using Caliburn.Micro;
 
     using HandBrake.ApplicationServices.EventArgs;
     using HandBrake.ApplicationServices.Exceptions;
@@ -148,11 +152,15 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// </param>
         public void InvokeEncodeStatusChanged(EncodeProgressEventArgs e)
         {
-            EncodeProgessStatus handler = this.EncodeStatusChanged;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            Execute.OnUIThread(
+                () =>
+                {
+                    EncodeProgessStatus handler = this.EncodeStatusChanged;
+                    if (handler != null)
+                    {
+                        handler(this, e);
+                    }
+                });
         }
 
         /// <summary>
@@ -163,11 +171,15 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// </param>
         public void InvokeEncodeCompleted(EncodeCompletedEventArgs e)
         {
-            EncodeCompletedStatus handler = this.EncodeCompleted;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            Execute.OnUIThread(
+                () =>
+                {
+                    EncodeCompletedStatus handler = this.EncodeCompleted;
+                    if (handler != null)
+                    {
+                        handler(this, e);
+                    }
+                });
         }
 
         /// <summary>
@@ -178,11 +190,14 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// </param>
         public void InvokeEncodeStarted(EventArgs e)
         {
-            EventHandler handler = this.EncodeStarted;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            Execute.OnUIThread(() =>
+                {
+                    EventHandler handler = this.EncodeStarted;
+                    if (handler != null)
+                    {
+                        handler(this, e);
+                    }
+                });
         }
 
         #endregion
@@ -192,10 +207,7 @@ namespace HandBrake.ApplicationServices.Services.Base
         /// <summary>
         /// A Stop Method to be implemeneted.
         /// </summary>
-        /// <param name="exc">
-        /// The Exception that occured that required a STOP action.
-        /// </param>
-        public virtual void Stop(Exception exc)
+        public virtual void Stop()
         {
             // Do Nothing
         }
@@ -249,6 +261,73 @@ namespace HandBrake.ApplicationServices.Services.Base
             }
         }
 
+
+        /// <summary>
+        /// Pase the CLI status output (from standard output)
+        /// </summary>
+        /// <param name="encodeStatus">
+        /// The encode Status.
+        /// </param>
+        /// <param name="startTime">
+        /// The start Time.
+        /// </param>
+        /// <returns>
+        /// The <see cref="EncodeProgressEventArgs"/>.
+        /// </returns>
+        public EncodeProgressEventArgs ReadEncodeStatus(string encodeStatus, DateTime startTime)
+        {
+            try
+            {
+                Match m = Regex.Match(
+                    encodeStatus,
+                    @"^Encoding: task ([0-9]*) of ([0-9]*), ([0-9]*\.[0-9]*) %( \(([0-9]*\.[0-9]*) fps, avg ([0-9]*\.[0-9]*) fps, ETA ([0-9]{2})h([0-9]{2})m([0-9]{2})s\))?");
+
+                if (m.Success)
+                {
+                    int currentTask = int.Parse(m.Groups[1].Value);
+                    int totalTasks = int.Parse(m.Groups[2].Value);
+                    float percent = float.Parse(m.Groups[3].Value, CultureInfo.InvariantCulture);
+                    float currentFps = m.Groups[5].Value == string.Empty
+                                           ? 0.0F
+                                           : float.Parse(m.Groups[5].Value, CultureInfo.InvariantCulture);
+                    float avgFps = m.Groups[6].Value == string.Empty
+                                       ? 0.0F
+                                       : float.Parse(m.Groups[6].Value, CultureInfo.InvariantCulture);
+                    string remaining = string.Empty;
+                    if (m.Groups[7].Value != string.Empty)
+                    {
+                        remaining = m.Groups[7].Value + ":" + m.Groups[8].Value + ":" + m.Groups[9].Value;
+                    }
+                    if (string.IsNullOrEmpty(remaining))
+                    {
+                        remaining = "Calculating ...";
+                    }
+
+                    EncodeProgressEventArgs eventArgs = new EncodeProgressEventArgs
+                                                            {
+                                                                AverageFrameRate = avgFps,
+                                                                CurrentFrameRate = currentFps,
+                                                                EstimatedTimeLeft =
+                                                                    Converters.EncodeToTimespan(
+                                                                        remaining),
+                                                                PercentComplete = percent,
+                                                                Task = currentTask,
+                                                                TaskCount = totalTasks,
+                                                                ElapsedTime =
+                                                                    DateTime.Now - startTime,
+                                                            };
+
+                    return eventArgs;
+                }
+
+                return null;
+            }
+            catch (Exception exc)
+            {
+                return null;
+            }
+        }
+
         /// <summary>
         /// Setup the logging.
         /// </summary>
@@ -286,8 +365,8 @@ namespace HandBrake.ApplicationServices.Services.Base
 
                 this.fileWriter = new StreamWriter(logFile) { AutoFlush = true };
                 this.fileWriter.WriteLine(header);
-                this.fileWriter.WriteLine(String.Format("CLI Query: {0}", query));
-                this.fileWriter.WriteLine(String.Format("User Query: {0}", encodeQueueTask.CustomQuery));
+                this.fileWriter.WriteLine(string.Format("CLI Query: {0}", query));
+                this.fileWriter.WriteLine(string.Format("User Query: {0}", encodeQueueTask.CustomQuery));
                 this.fileWriter.WriteLine();
             }
             catch (Exception)
@@ -324,21 +403,8 @@ namespace HandBrake.ApplicationServices.Services.Base
                         if (this.fileWriter != null && this.fileWriter.BaseStream.CanWrite)
                         {
                             this.fileWriter.WriteLine(message);
-
-                            // If the logging grows past 100MB, kill the encode and stop.
-                            if (this.fileWriter.BaseStream.Length > 100000000)
-                            {
-                                this.Stop(
-                                    new GeneralApplicationException(
-                                        "The encode has been stopped. The log file has grown to over 100MB which indicates a serious problem has occured with the encode.", 
-                                        "Please check the encode log for an indication of what the problem is.", null));
-                            }
                         }
                     }
-                }
-                catch (GeneralApplicationException)
-                {
-                    throw;
                 }
                 catch (Exception exc)
                 {

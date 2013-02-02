@@ -84,6 +84,7 @@
   <ItemGroup>
     <Compile Include="Collections\SerializableDictionary.cs" />
     <Compile Include="Converters\EnumToDescConverter.cs" />
+    <Compile Include="EventArgs\SettingChangedEventArgs.cs" />
     <Compile Include="Exceptions\GeneralApplicationException.cs" />
     <Compile Include="EventArgs\EncodeCompletedEventArgs.cs" />
     <Compile Include="EventArgs\EncodeProgressEventArgs.cs" />

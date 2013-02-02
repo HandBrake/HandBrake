@@ -592,26 +592,27 @@ class Display
     if hash["VideoTurboTwoPass"] == 1 then commandString << " -T" end
 
     #Advanced Options
-    if hash["x264Preset"] != nil && hash["x264Preset"] != "" && hash["x264Preset"] != "custom"
+    if hash["x264UseAdvancedOptions"] != 1
+      if hash["x264Preset"] != ""
         commandString << " --x264-preset "
         commandString << hash["x264Preset"]
-
-        if hash["x264Tune"] != "" && hash["x264Tune"] != "none"
-            commandString << " --x264-tune "
-            commandString << hash["x264Tune"]
-        end
-        if hash["x264Profile"] != "" && hash["x264Profile"] != "auto"
-            commandString << " --x264-profile "
-            commandString << hash["x264Profile"]
-        end
-        if hash["x264Level"] != "" && hash["x264Level"] != "auto"
-            commandString << " --h264-level "
-            commandString << hash["x264Level"]
-        end
-        if hash["x264OptionExtra"] != ""
-          commandString << " -x "
-          commandString << hash["x264OptionExtra"]
-        end
+      end
+      if hash["x264Tune"] != "" && hash["x264Tune"] != "none"
+        commandString << " --x264-tune "
+        commandString << hash["x264Tune"]
+      end
+      if hash["h264Profile"] != "" && hash["h264Profile"] != "auto"
+        commandString << " --h264-profile "
+        commandString << hash["h264Profile"]
+      end
+      if hash["h264Level"] != "" && hash["h264Level"] != "auto"
+        commandString << " --h264-level "
+        commandString << hash["h264Level"]
+      end
+      if hash["x264OptionExtra"] != ""
+        commandString << " -x "
+        commandString << hash["x264OptionExtra"]
+      end
     elsif hash["x264Option"] != ""
       commandString << " -x "
       commandString << hash["x264Option"]
@@ -965,26 +966,27 @@ class Display
     if hash["VideoTurboTwoPass"] == 1 then commandString << " -T" end
 
     #Advanced Options
-    if hash["x264Preset"] != nil && hash["x264Preset"] != "" && hash["x264Preset"] != "custom"
+    if hash["x264UseAdvancedOptions"] != 1
+      if hash["x264Preset"] != ""
         commandString << " --x264-preset "
         commandString << hash["x264Preset"]
-
-        if hash["x264Tune"] != "" && hash["x264Tune"] != "none"
-            commandString << " --x264-tune "
-            commandString << hash["x264Tune"]
-        end
-        if hash["x264Profile"] != "" && hash["x264Profile"] != "auto"
-            commandString << " --x264-profile "
-            commandString << hash["x264Profile"]
-        end
-        if hash["x264Level"] != "" && hash["x264Level"] != "auto"
-            commandString << " --h264-level "
-            commandString << hash["x264Level"]
-        end
-        if hash["x264OptionExtra"] != ""
-          commandString << " -x "
-          commandString << hash["x264OptionExtra"]
-        end
+      end
+      if hash["x264Tune"] != "" && hash["x264Tune"] != "none"
+        commandString << " --x264-tune "
+        commandString << hash["x264Tune"]
+      end
+      if hash["h264Profile"] != "" && hash["h264Profile"] != "auto"
+        commandString << " --h264-profile "
+        commandString << hash["h264Profile"]
+      end
+      if hash["h264Level"] != "" && hash["h264Level"] != "auto"
+        commandString << " --h264-level "
+        commandString << hash["h264Level"]
+      end
+      if hash["x264OptionExtra"] != ""
+        commandString << " -x "
+        commandString << hash["x264OptionExtra"]
+      end
     elsif hash["x264Option"] != ""
       commandString << " -x "
       commandString << hash["x264Option"]
@@ -1263,42 +1265,43 @@ class Display
     end
     
     #Advanced Options
-    if hash["x264Preset"] != nil && hash["x264Preset"] != "" && hash["x264Preset"] != "custom"
+    if hash["x264UseAdvancedOptions"] != 1
+      if hash["x264Preset"] != ""
         commandString << "if (x264_preset == NULL)\n    "
         commandString << "{\n    "
         commandString << "    x264_preset = strdup(\""
         commandString << hash["x264Preset"] << "\");\n    "
         commandString << "}\n    "
-
-        if hash["x264Tune"] != "" && hash["x264Tune"] != "none"
-            commandString << "if (x264_tune == NULL)\n    "
-            commandString << "{\n    "
-            commandString << "    x264_tune = strdup(\""
-            commandString << hash["x264Tune"]
-            commandString << "\");\n    "
-            commandString << "}\n    "
-        end
-        if hash["x264Profile"] != "" && hash["x264Profile"] != "auto"
-            commandString << "if (x264_profile == NULL)\n    "
-            commandString << "{\n    "
-            commandString << "    x264_profile = strdup(\""
-            commandString << hash["x264Profile"] << "\");\n    "
-            commandString << "}\n    "
-        end
-        if hash["x264Level"] != "" && hash["x264Level"] != "auto"
-            commandString << "if (h264_level == NULL)\n    "
-            commandString << "{\n    "
-            commandString << "    h264_level = strdup(\""
-            commandString << hash["x264Level"] << "\");\n    "
-            commandString << "}\n    "
-        end
-        if hash["x264OptionExtra"] != ""
-          commandString << "if (advanced_opts == NULL)\n    "
-          commandString << "{\n    "
-          commandString << "    advanced_opts = strdup(\""
-          commandString << hash["x264OptionExtra"] << "\");\n    "
-          commandString << "}\n    "
-        end
+      end
+      if hash["x264Tune"] != "" && hash["x264Tune"] != "none"
+        commandString << "if (x264_tune == NULL)\n    "
+        commandString << "{\n    "
+        commandString << "    x264_tune = strdup(\""
+        commandString << hash["x264Tune"]
+        commandString << "\");\n    "
+        commandString << "}\n    "
+      end
+      if hash["h264Profile"] != "" && hash["h264Profile"] != "auto"
+        commandString << "if (h264_profile == NULL)\n    "
+        commandString << "{\n    "
+        commandString << "    h264_profile = strdup(\""
+        commandString << hash["h264Profile"] << "\");\n    "
+        commandString << "}\n    "
+      end
+      if hash["h264Level"] != "" && hash["h264Level"] != "auto"
+        commandString << "if (h264_level == NULL)\n    "
+        commandString << "{\n    "
+        commandString << "    h264_level = strdup(\""
+        commandString << hash["h264Level"] << "\");\n    "
+        commandString << "}\n    "
+      end
+      if hash["x264OptionExtra"] != ""
+        commandString << "if (advanced_opts == NULL)\n    "
+        commandString << "{\n    "
+        commandString << "    advanced_opts = strdup(\""
+        commandString << hash["x264OptionExtra"] << "\");\n    "
+        commandString << "}\n    "
+      end
     elsif hash["x264Option"] != ""
       commandString << "if (advanced_opts == NULL)\n    "
       commandString << "{\n    "
@@ -1765,30 +1768,31 @@ class Display
     if hash["VideoTwoPass"] == 1 then commandString << " -2" end
     if hash["VideoTurboTwoPass"] == 1 then commandString << " -T" end
     
-      #Advanced Options
-    if hash["x264Preset"] != nil && hash["x264Preset"] != "" && hash["x264Preset"] != "custom"
+    #Advanced Options
+    if hash["x264UseAdvancedOptions"] != 1
+      if hash["x264Preset"] != ""
         commandString << " --x264-preset "
         commandString << hash["x264Preset"]
-
-        if hash["x264Tune"] != "" && hash["x264Tune"] != "none"
-            commandString << " --x264-tune "
-            commandString << hash["x264Tune"]
-        end
-        if hash["x264Profile"] != "" && hash["x264Profile"] != "auto"
-            commandString << " --x264-profile "
-            commandString << hash["x264Profile"]
-        end
-        if hash["x264Level"] != "" && hash["x264Level"] != "auto"
-            commandString << " --h264-level "
-            commandString << hash["x264Level"]
-        end
-        if hash["x264OptionExtra"] != ""
-          commandString << " -x "
-          commandString << hash["x264OptionExtra"]
-        end
-    elsif hash["x264Option"] != ""
+      end
+      if hash["x264Tune"] != "" && hash["x264Tune"] != "none"
+        commandString << " --x264-tune "
+        commandString << hash["x264Tune"]
+      end
+      if hash["h264Profile"] != "" && hash["h264Profile"] != "auto"
+        commandString << " --h264-profile "
+        commandString << hash["h264Profile"]
+      end
+      if hash["h264Level"] != "" && hash["h264Level"] != "auto"
+        commandString << " --h264-level "
+        commandString << hash["h264Level"]
+      end
+      if hash["x264OptionExtra"] != ""
         commandString << " -x "
-        commandString << hash["x264Option"]
+        commandString << hash["x264OptionExtra"]
+      end
+    elsif hash["x264Option"] != ""
+      commandString << " -x "
+      commandString << hash["x264Option"]
     end
     
     commandString << "\\n\");"

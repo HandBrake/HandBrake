@@ -125,8 +125,8 @@ void hb_fix_aspect( hb_job_t * job, int keep );
 void hb_job_set_advanced_opts( hb_job_t *job, const char *advanced_opts );
 void hb_job_set_x264_preset( hb_job_t *job, const char *preset );
 void hb_job_set_x264_tune( hb_job_t *job, const char *tune );
-void hb_job_set_x264_profile( hb_job_t *job, const char *profile );
-void hb_job_set_x264_level( hb_job_t *job, const char *level );
+void hb_job_set_h264_profile( hb_job_t *job, const char *profile );
+void hb_job_set_h264_level( hb_job_t *job, const char *level );
 void hb_job_set_file( hb_job_t *job, const char *file );
 
 hb_audio_t *hb_audio_copy(const hb_audio_t *src);
@@ -368,10 +368,10 @@ struct hb_job_s
     int             cfr;
     int             pass;
     int             fastfirstpass;
-    char            *advanced_opts;
-    char            *x264_profile;
     char            *x264_preset;
     char            *x264_tune;
+    char            *advanced_opts;
+    char            *h264_profile;
     char            *h264_level;
     int             areBframes;
 
@@ -1112,13 +1112,13 @@ const char * hb_subsource_name( int source );
 
 // unparse a set of x264 settings to an HB encopts string
 char * hb_x264_param_unparse(const char *x264_preset,  const char *x264_tune,
-                             const char *x264_encopts, const char *x264_profile,
+                             const char *x264_encopts, const char *h264_profile,
                              const char *h264_level, int width, int height);
 
-// x264 preset/tune/profile & h264 level helpers
+// x264 preset/tune & h264 profile/level helpers
 const char * const * hb_x264_presets();
 const char * const * hb_x264_tunes();
-const char * const * hb_x264_profiles();
+const char * const * hb_h264_profiles();
 const char * const * hb_h264_levels();
 
 // x264 option name/synonym helper

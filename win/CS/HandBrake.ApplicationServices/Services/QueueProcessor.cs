@@ -11,7 +11,7 @@ namespace HandBrake.ApplicationServices.Services
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
@@ -41,7 +41,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// The Queue of Job objects
         /// </summary>
-        private readonly ObservableCollection<QueueTask> queue = new ObservableCollection<QueueTask>();
+        private readonly BindingList<QueueTask> queue = new BindingList<QueueTask>();
 
         /// <summary>
         /// The User Setting Service
@@ -152,7 +152,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <summary>
         /// Gets The current queue.
         /// </summary>
-        public ObservableCollection<QueueTask> Queue
+        public BindingList<QueueTask> Queue
         {
             get
             {
@@ -595,13 +595,6 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private void ProcessNextJob()
         {
-            if (this.EncodeService.IsEncoding || !this.IsProcessing)
-            {
-                // We don't want to try start a second encode, so just return out. The event will trigger the next encode automatically.
-                // Also, we don't want to start a new encode if we are paused.
-                return;
-            }
-
             QueueTask job = this.GetNextJobForProcessing();
             if (job != null)
             {

@@ -73,6 +73,7 @@ $(PKG.src.deb.stamp): GNUmakefile
 	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)quantal/$(PKG.deb.basename)
 	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)quantal/$(PKG.deb.basename)
 	$(CP.exe) $(STAGE.out.src/)quantal/$(PKG.deb.basename)/debian/control.quantal $(STAGE.out.src/)quantal/$(PKG.deb.basename)/debian/control
+	$(CP.exe) $(STAGE.out.src/)quantal/$(PKG.deb.basename)/debian/rules.quantal $(STAGE.out.src/)quantal/$(PKG.deb.basename)/debian/rules
 	echo "handbrake ($(HB.version)ppa1~quantal1) quantal; urgency=low" > $(STAGE.out.src/)quantal/$(PKG.deb.basename)/debian/changelog
 	echo "  * Snapshot" >> $(STAGE.out.src/)quantal/$(PKG.deb.basename)/debian/changelog
 	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)quantal/$(PKG.deb.basename)/debian/changelog
@@ -84,6 +85,7 @@ $(PKG.src.deb.stamp): GNUmakefile
 	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)precise/$(PKG.deb.basename)
 	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)precise/$(PKG.deb.basename)
 	$(CP.exe) $(STAGE.out.src/)precise/$(PKG.deb.basename)/debian/control.precise $(STAGE.out.src/)precise/$(PKG.deb.basename)/debian/control
+	$(CP.exe) $(STAGE.out.src/)precise/$(PKG.deb.basename)/debian/rules.precise $(STAGE.out.src/)precise/$(PKG.deb.basename)/debian/rules
 	echo "handbrake ($(HB.version)ppa1~precise1) precise; urgency=low" > $(STAGE.out.src/)precise/$(PKG.deb.basename)/debian/changelog
 	echo "  * Snapshot" >> $(STAGE.out.src/)precise/$(PKG.deb.basename)/debian/changelog
 	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)precise/$(PKG.deb.basename)/debian/changelog
@@ -95,6 +97,7 @@ $(PKG.src.deb.stamp): GNUmakefile
 	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)oneiric/$(PKG.deb.basename)
 	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)oneiric/$(PKG.deb.basename)
 	$(CP.exe) $(STAGE.out.src/)oneiric/$(PKG.deb.basename)/debian/control.oneiric $(STAGE.out.src/)oneiric/$(PKG.deb.basename)/debian/control
+	$(CP.exe) $(STAGE.out.src/)oneiric/$(PKG.deb.basename)/debian/rules.oneiric $(STAGE.out.src/)oneiric/$(PKG.deb.basename)/debian/rules
 	echo "handbrake ($(HB.version)ppa1~oneiric1) oneiric; urgency=low" > $(STAGE.out.src/)oneiric/$(PKG.deb.basename)/debian/changelog
 	echo "  * Snapshot" >> $(STAGE.out.src/)oneiric/$(PKG.deb.basename)/debian/changelog
 	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)oneiric/$(PKG.deb.basename)/debian/changelog
@@ -106,6 +109,7 @@ $(PKG.src.deb.stamp): GNUmakefile
 	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)natty/$(PKG.deb.basename)
 	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)natty/$(PKG.deb.basename)
 	$(CP.exe) $(STAGE.out.src/)natty/$(PKG.deb.basename)/debian/control.natty $(STAGE.out.src/)natty/$(PKG.deb.basename)/debian/control
+	$(CP.exe) $(STAGE.out.src/)natty/$(PKG.deb.basename)/debian/rules.natty $(STAGE.out.src/)natty/$(PKG.deb.basename)/debian/rules
 	echo "handbrake ($(HB.version)ppa1~natty1) natty; urgency=low" > $(STAGE.out.src/)natty/$(PKG.deb.basename)/debian/changelog
 	echo "  * Snapshot" >> $(STAGE.out.src/)natty/$(PKG.deb.basename)/debian/changelog
 	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)natty/$(PKG.deb.basename)/debian/changelog

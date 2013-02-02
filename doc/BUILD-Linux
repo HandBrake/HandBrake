@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn4981 (2012092601) on Linux
+Guide to Building HandBrake svn5208 (2013012701) on Linux
 *********************************************************
 
 Table of Contents
@@ -38,11 +38,11 @@ Linux; but is not necessarily the only configuration that is possible:
 
    * Intel 32-bit or 64-bit kernel
 
-   * Ubuntu 10.04, gcc 4.4.3, yasm 0.8.0
+   * Ubuntu 12.04, gcc 4.5, yasm 1.2.x
 
-   * Fedora 14, gcc 4.5.1, yasm 1.0.1
+   * Fedora 17 and 18, gcc 4.5, yasm 1.2.x
 
-   * gcc 4.0.0 or higher is reported to work
+   * gcc 4.5 or higher is reported to work
 
      Note: It is recommended to use the platform distribution's
      standard compiler for maximum C++ compatibility. If you build with
@@ -75,7 +75,7 @@ The GTK UI introduces some significant extra build requirements. If you
 intend to disable building the GUI with `configure --disable-gtk' you
 will not need many of these packages installed:
 
-Ubuntu 10.04 - 10.10 packages:
+Ubuntu 12+ packages:
    * subversion (cli/gui)
 
    * yasm (cli/gui)
@@ -126,7 +126,7 @@ Ubuntu 10.04 - 10.10 packages:
 
    * libgstreamer-plugins-base0.10-dev (gui)
 
-Ubuntu 11.04 - 11.10 packages:
+Ubuntu 12+ packages:
    * libappindicator-dev (gui)
 
 To install these packages:
@@ -137,7 +137,7 @@ To install these packages:
      libgtk2.0-dev libgudev-1.0-dev libwebkit-dev libnotify-dev \
      libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev libappindicator-dev
 
-Fedora 12 - 13 package groups:
+Fedora 17+ package groups:
    * Development Tools
 
    * Development Libraries
@@ -200,7 +200,7 @@ To install these packages:
 This chapter is for building from a terminal/shell environment in as
 few commands as possible. Upon completion of the following commands you
 should have a fresh build of HandBrake. Further instructions are
-available beginning with *note overview:: which describes procedures
+available beginning with *Note overview:: which describes procedures
 suitable for repeating builds. This chapter should be skipped by those
 seeking more than a minimalist build.
 
@@ -590,7 +590,7 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    4981
-     date:   2012-09-25 09:52:53 -0700
+     rev:    5208
+     date:   2013-01-26 18:47:13 +0000
      type:   developer
 

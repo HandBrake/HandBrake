@@ -1484,8 +1484,8 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
         job_copy->x264_preset  = strdup( job->x264_preset );
     if ( job->x264_tune )
         job_copy->x264_tune  = strdup( job->x264_tune );
-    if ( job->x264_profile )
-        job_copy->x264_profile  = strdup( job->x264_profile );
+    if ( job->h264_profile )
+        job_copy->h264_profile  = strdup( job->h264_profile );
     if ( job->h264_level )
         job_copy->h264_level  = strdup( job->h264_level );
 

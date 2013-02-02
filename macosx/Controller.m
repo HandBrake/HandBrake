@@ -846,6 +846,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [fScanIndicator setIndeterminate: NO];
         [fScanIndicator setDoubleValue: 0.0];
         [fScanIndicator setHidden: YES];
+        [fScanHorizontalLine setHidden: NO];
+        
 		[self showNewScan:nil];
 	}
     
@@ -863,6 +865,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                                             NSLocalizedString( @"Scanning title %d of %d…", @"" ),
                                             p.title_cur, p.title_count]];
             [fScanIndicator setHidden: NO];
+            [fScanHorizontalLine setHidden: YES];
             [fScanIndicator setDoubleValue: 100.0 * ((double)( p.title_cur - 1 ) / p.title_count)];
             break;
 		}
@@ -874,6 +877,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [fScanIndicator setIndeterminate: NO];
             [fScanIndicator setDoubleValue: 0.0];
             [fScanIndicator setHidden: YES];
+            [fScanHorizontalLine setHidden: NO];
 			[self writeToActivityLog:"ScanDone state received from fHandle"];
             [self showNewScan:nil];
             [[fWindow toolbar] validateVisibleItems];
@@ -1025,7 +1029,15 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 pass_desc = @"";
             }
             
-			string = [NSMutableString stringWithFormat: NSLocalizedString( @"Encoding: %@ \nPass %d %@ of %d, %.2f %%", @"" ), currentQueueEncodeNameString, p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
+            
+            if ([pass_desc length])
+            {
+                string = [NSMutableString stringWithFormat: NSLocalizedString( @"Encoding: %@ \nPass %d %@ of %d, %.2f %%", @"" ), currentQueueEncodeNameString, p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
+            }
+            else
+            {
+                string = [NSMutableString stringWithFormat: NSLocalizedString( @"Encoding: %@ \nPass %d of %d, %.2f %%", @"" ), currentQueueEncodeNameString, p.job_cur, p.job_count, 100.0 * p.progress];
+            }
             
 			if( p.seconds > -1 )
             {
@@ -1868,6 +1880,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         /* We setup the scan status in the main window to indicate a source title scan */
         [fSrcDVD2Field setStringValue: @"Opening a new source title…"];
         [fScanIndicator setHidden: NO];
+        [fScanHorizontalLine setHidden: YES];
         [fScanIndicator setIndeterminate: YES];
         [fScanIndicator startAnimation: nil];
 		
@@ -1884,7 +1897,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 {
     /* use a bool to determine whether or not we can decrypt using vlc */
     BOOL cancelScanDecrypt = 0;
-    BOOL vlcFound = 0;
     NSString *path = scanPath;
     HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
     
@@ -1913,16 +1925,23 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         path = [detector devicePath];
         [self writeToActivityLog: "trying to open a physical dvd at: %s", [scanPath UTF8String]];
         
-        /* lets check for vlc here to make sure we have a dylib available to use for decrypting */
+        
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        NSInteger suppressWarning = [prefs integerForKey:@"suppresslibdvdcss"];
+        
+        /* Notify the user that we don't support removal of copy proteciton. */
         void *dvdcss = dlopen("libdvdcss.2.dylib", RTLD_LAZY);
-        if (dvdcss == NULL) 
+        if (dvdcss == NULL && suppressWarning != 1)
         {
+            /* Only show the user this warning once. They may be using a solution we don't know about. Notifying them each time is annoying. */
+            [prefs setInteger:1 forKey:@"suppresslibdvdcss"];
+            
             /*compatible vlc not found, so we set the bool to cancel scanning to 1 */
             cancelScanDecrypt = 1;
             [self writeToActivityLog: "libdvdcss.2.dylib not found for decrypting physical dvd"];
             int status;
-            status = NSRunAlertPanel(@"HandBrake could not find a compatible version of libdvdcss (32-bit libdvdcss is not compatible with 64-bit HandBrake and vice-versa).",
-                                     @"Please download and install libdvdcss.pkg if you wish to read encrypted DVDs.", @"Get libdvdcss.pkg", @"Cancel Scan", @"Attempt Scan Anyway");
+            status = NSRunAlertPanel(@"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish install libdvdcss or any other 3rd party software for this function.",
+                                     @"Videolan.org provides libdvdcss if you are not currently using another solution.", @"Get libdvdcss.pkg", @"Cancel Scan", @"Attempt Scan Anyway");
             [NSApp requestUserAttention:NSCriticalRequest];
             
             if (status == NSAlertDefaultReturn)
@@ -1933,13 +1952,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             else if (status == NSAlertAlternateReturn)
             {
                 /* User chose to cancel the scan */
-                [self writeToActivityLog: "cannot open physical dvd, scan cancelled"];
+                [self writeToActivityLog: "Cannot open physical dvd, scan cancelled"];
             }
             else
             {
                 /* User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails */
                 cancelScanDecrypt = 0;
-                [self writeToActivityLog: "user overrode dvdcss warning - trying to open physical dvd without decryption"];
+                [self writeToActivityLog: "User overrode copy-proteciton warning - trying to open physical dvd without decryption"];
             }
             
         }
@@ -1947,7 +1966,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         {
             /* VLC was found in /Applications so all is well, we can carry on using vlc's libdvdcss.dylib for decrypting if needed */
             [self writeToActivityLog: "libdvdcss.2.dylib found for decrypting physical dvd"];
-            vlcFound = 1;
             dlclose(dvdcss);
         }
     }
@@ -2792,50 +2810,6 @@ fWorkingCount = 0;
      */
     NSString *path = scanPath;
     HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
-    
-    if( [detector isVideoDVD] )
-    {
-        // The chosen path was actually on a DVD, so use the raw block
-        // device path instead.
-        path = [detector devicePath];
-        [self writeToActivityLog: "trying to open a physical dvd at: %s", [scanPath UTF8String]];
-
-        /* lets check for vlc here to make sure we have a dylib available to use for decrypting */
-        void *dvdcss = dlopen("libdvdcss.2.dylib", RTLD_LAZY);
-        if (dvdcss == NULL) 
-        {
-            /*vlc not found in /Applications so we set the bool to cancel scanning to 1 */
-            cancelScanDecrypt = 1;
-            [self writeToActivityLog: "VLC app not found for decrypting physical dvd"];
-            int status;
-            status = NSRunAlertPanel(@"HandBrake could not find VLC.",@"Please download and install VLC media player in your /Applications folder if you wish to read encrypted DVDs.", @"Get VLC", @"Cancel Scan", @"Attempt Scan Anyway");
-            [NSApp requestUserAttention:NSCriticalRequest];
-            
-            if (status == NSAlertDefaultReturn)
-            {
-                /* User chose to go download vlc (as they rightfully should) so we send them to the vlc site */
-                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.videolan.org/"]];
-            }
-            else if (status == NSAlertAlternateReturn)
-            {
-            /* User chose to cancel the scan */
-            [self writeToActivityLog: "cannot open physical dvd , scan cancelled"];
-            }
-            else
-            {
-            /* User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails */
-            cancelScanDecrypt = 0;
-            [self writeToActivityLog: "user overrode vlc warning -trying to open physical dvd without decryption"];
-            }
-
-        }
-        else
-        {
-            /* VLC was found in /Applications so all is well, we can carry on using vlc's libdvdcss.dylib for decrypting if needed */
-            dlclose(dvdcss);
-            [self writeToActivityLog: "VLC app found for decrypting physical dvd"];
-        }
-    }
 
     if (cancelScanDecrypt == 0)
     {
@@ -2879,11 +2853,11 @@ fWorkingCount = 0;
      */
     if (job->indepth_scan == 1)
     {
-        char *x264_preset_tmp   = job->x264_preset   != NULL ? strdup(job->x264_preset)  : NULL;
-        char *x264_tune_tmp     = job->x264_tune     != NULL ? strdup(job->x264_tune)    : NULL;
-        char *advanced_opts_tmp = job->advanced_opts != NULL ? job->advanced_opts        : NULL;
-        char *h264_profile_tmp  = job->x264_profile  != NULL ? strdup(job->x264_profile) : NULL;
-        char *h264_level_tmp    = job->h264_level    != NULL ? strdup(job->h264_level)   : NULL;
+        char *x264_preset_tmp   = job->x264_preset   != NULL ? strdup(job->x264_preset)   : NULL;
+        char *x264_tune_tmp     = job->x264_tune     != NULL ? strdup(job->x264_tune)     : NULL;
+        char *advanced_opts_tmp = job->advanced_opts != NULL ? strdup(job->advanced_opts) : NULL;
+        char *h264_profile_tmp  = job->h264_profile  != NULL ? strdup(job->h264_profile)  : NULL;
+        char *h264_level_tmp    = job->h264_level    != NULL ? strdup(job->h264_level)    : NULL;
         /*
          * When subtitle scan is enabled do a fast pre-scan job
          * which will determine which subtitles to enable, if any.
@@ -2891,8 +2865,8 @@ fWorkingCount = 0;
         hb_job_set_x264_preset  (job, NULL);
         hb_job_set_x264_tune    (job, NULL);
         hb_job_set_advanced_opts(job, NULL);
-        hb_job_set_x264_profile (job, NULL);
-        hb_job_set_x264_level   (job, NULL);
+        hb_job_set_h264_profile (job, NULL);
+        hb_job_set_h264_level   (job, NULL);
         job->pass = -1;
         hb_add(fQueueEncodeLibhb, job);
         /*
@@ -2901,8 +2875,8 @@ fWorkingCount = 0;
         hb_job_set_x264_preset  (job, x264_preset_tmp);
         hb_job_set_x264_tune    (job, x264_tune_tmp);
         hb_job_set_advanced_opts(job, advanced_opts_tmp);
-        hb_job_set_x264_profile (job, h264_profile_tmp);
-        hb_job_set_x264_level   (job, h264_level_tmp);
+        hb_job_set_h264_profile (job, h264_profile_tmp);
+        hb_job_set_h264_level   (job, h264_level_tmp);
         free(x264_preset_tmp);
         free(x264_tune_tmp);
         free(advanced_opts_tmp);
@@ -3102,19 +3076,30 @@ fWorkingCount = 0;
     
     job->modulus = [[queueToApply objectForKey:@"PictureModulus"]  intValue];
     
-    /* we check to make sure the presets width/height does not exceed the sources width/height */
-    if (fTitle->width < [[queueToApply objectForKey:@"PictureWidth"]  intValue] || fTitle->height < [[queueToApply objectForKey:@"PictureHeight"]  intValue])
+    /*
+     * if the preset specifies neither max. width nor height
+     * (both are 0), use the max. picture size
+     *
+     * if the specified non-zero dimensions exceed those of the
+     * source, also use the max. picture size (no upscaling)
+     */
+    if (([[queueToApply objectForKey:@"PictureWidth"]  intValue] <= 0 &&
+         [[queueToApply objectForKey:@"PictureHeight"] intValue] <= 0)              ||
+        ([[queueToApply objectForKey:@"PictureWidth"]  intValue] >  fTitle->width &&
+         [[queueToApply objectForKey:@"PictureHeight"] intValue] >  fTitle->height) ||
+        ([[queueToApply objectForKey:@"PictureHeight"] intValue] <= 0 &&
+         [[queueToApply objectForKey:@"PictureWidth"]  intValue] >  fTitle->width)  ||
+        ([[queueToApply objectForKey:@"PictureWidth"]  intValue] <= 0 &&
+         [[queueToApply objectForKey:@"PictureHeight"] intValue] >  fTitle->height))
     {
-        /* if so, then we use the sources height and width to avoid scaling up */
-        //job->width = fTitle->width;
-        //job->height = fTitle->height;
+        /* use the source's width/height to avoid upscaling */
         [self revertPictureSizeToMax:nil];
     }
-    else // source width/height is >= the preset height/width
+    else // source width/height is >= preset width/height
     {
-        /* we can go ahead and use the presets values for height and width */
-        job->width = [[queueToApply objectForKey:@"PictureWidth"]  intValue];
-        job->height = [[queueToApply objectForKey:@"PictureHeight"]  intValue];
+        /* use the preset values for width/height */
+        job->width  = [[queueToApply objectForKey:@"PictureWidth"]  intValue];
+        job->height = [[queueToApply objectForKey:@"PictureHeight"] intValue];
     }
     job->keep_ratio = [[queueToApply objectForKey:@"PictureKeepRatio"]  intValue];
     if (job->keep_ratio == 1)
@@ -3321,8 +3306,8 @@ fWorkingCount = 0;
         hb_job_set_x264_preset  (job, x264_preset);
         hb_job_set_x264_tune    (job, x264_tune);
         hb_job_set_advanced_opts(job, advanced_opts);
-        hb_job_set_x264_profile (job, h264_profile);
-        hb_job_set_x264_level   (job, h264_level);
+        hb_job_set_h264_profile (job, h264_profile);
+        hb_job_set_h264_level   (job, h264_level);
     }
     else if (job->vcodec & HB_VCODEC_FFMPEG_MASK)
     {
@@ -3846,8 +3831,8 @@ bool one_burned = FALSE;
         hb_job_set_x264_preset  (job, x264_preset);
         hb_job_set_x264_tune    (job, x264_tune);
         hb_job_set_advanced_opts(job, advanced_opts);
-        hb_job_set_x264_profile (job, h264_profile);
-        hb_job_set_x264_level   (job, h264_level);
+        hb_job_set_h264_profile (job, h264_profile);
+        hb_job_set_h264_level   (job, h264_level);
     }
     else if (job->vcodec & HB_VCODEC_FFMPEG_MASK)
     {
@@ -5291,9 +5276,8 @@ the user is using "Custom" settings by determining the sender*/
     NSUInteger i;
     /*
      * now we populate the x264 system widgets via hb_x264_presets(),
-     * hb_x264_tunes(), hb_x264_profiles(), hb_h264_levels()
+     * hb_x264_tunes(), hb_h264_profiles(), hb_h264_levels()
      */
-    
     // store x264 preset names
     const char * const * x264_presets = hb_x264_presets();
     NSMutableArray *tmp_array = [[NSMutableArray alloc] init];
@@ -5320,9 +5304,9 @@ the user is using "Custom" settings by determining the sender*/
     [fX264TunePopUp addItemWithTitle: @"none"];
     const char * const * x264_tunes = hb_x264_tunes();
     for (int i = 0; x264_tunes[i] != NULL; i++)
-    { 
+    {
         // we filter out "fastdecode" as we have a dedicated checkbox for it
-        if (strcasecmp(x264_tunes[i], "fastdecode"))
+        if (strcasecmp(x264_tunes[i], "fastdecode") != 0)
         {
             [fX264TunePopUp addItemWithTitle: [NSString stringWithUTF8String:x264_tunes[i]]];
         }
@@ -5331,18 +5315,16 @@ the user is using "Custom" settings by determining the sender*/
     [fX264FastDecodeCheck setState: NSOffState];
     // setup the h264 profile popup
     [fX264ProfilePopUp removeAllItems];
-    [fX264ProfilePopUp addItemWithTitle: @"auto"];
-    const char * const * x264_profiles = hb_x264_profiles();
-    for (int i = 0; x264_profiles[i] != NULL; i++)
-    { 
-        [fX264ProfilePopUp addItemWithTitle: [NSString stringWithUTF8String:x264_profiles[i]]];
+    const char * const * h264_profiles = hb_h264_profiles();
+    for (int i = 0; h264_profiles[i] != NULL; i++)
+    {
+        [fX264ProfilePopUp addItemWithTitle: [NSString stringWithUTF8String:h264_profiles[i]]];
     }
     // setup the h264 level popup
     [fX264LevelPopUp removeAllItems];
-    [fX264LevelPopUp addItemWithTitle: @"auto"];
     const char * const * h264_levels = hb_h264_levels();
     for (int i = 0; h264_levels[i] != NULL; i++)
-    { 
+    {
         [fX264LevelPopUp addItemWithTitle: [NSString stringWithUTF8String:h264_levels[i]]];
     }
     // clear the additional x264 options
@@ -5569,7 +5551,7 @@ the user is using "Custom" settings by determining the sender*/
     * char * hb_x264_param_unparse(const char *x264_preset,
     *                              const char *x264_tune,
     *                              const char *x264_encopts,
-    *                              const char *x264_profile,
+    *                              const char *h264_profile,
     *                              const char *h264_level,
     *                              int width, int height);
     */
@@ -5614,9 +5596,16 @@ the user is using "Custom" settings by determining the sender*/
                                                            h264_level,
                                                            width, height);
     // update the text field
-    [fDisplayX264PresetsUnparseTextField setStringValue:
-     [NSString stringWithFormat:@"x264 Unparse: %s",
-      fX264PresetsUnparsedUTF8String]];
+    if (fX264PresetsUnparsedUTF8String != NULL)
+    {
+        [fDisplayX264PresetsUnparseTextField setStringValue:
+         [NSString stringWithFormat:@"x264 Unparse: %s",
+          fX264PresetsUnparsedUTF8String]];
+    }
+    else
+    {
+        [fDisplayX264PresetsUnparseTextField setStringValue:@"x264 Unparse:"];
+    }
 }
 
 #pragma mark -
@@ -6523,8 +6512,10 @@ return YES;
                 job->modulus = 16;
             }
              
-            /* Check to see if the objectForKey:@"UsesPictureSettings is 2 which is "Use Max for the source */
-            if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] == 2 || [[chosenPreset objectForKey:@"UsesMaxPictureSettings"]  intValue] == 1)
+            /* Check to see if the objectForKey:@"UsesPictureSettings" is 2,
+             * which means "Use max. picture size for the source" */
+            if ([[chosenPreset objectForKey:@"UsesPictureSettings"]    intValue] == 2 ||
+                [[chosenPreset objectForKey:@"UsesMaxPictureSettings"] intValue] == 1)
             {
                 /* Use Max Picture settings for whatever the dvd is.*/
                 [self revertPictureSizeToMax:nil];
@@ -6540,21 +6531,34 @@ return YES;
                 }
                 job->anamorphic.mode = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
             }
-            else // /* If not 0 or 2 we assume objectForKey:@"UsesPictureSettings is 1 which is "Use picture sizing from when the preset was set" */
+            /* If not 0 or 2 we assume objectForKey:@"UsesPictureSettings" is 1,
+             * which means "Use the picture size specified in the preset" */
+            else
             {
-                /* we check to make sure the presets width/height does not exceed the sources width/height */
-                if (fTitle->width < [[chosenPreset objectForKey:@"PictureWidth"]  intValue] || fTitle->height < [[chosenPreset objectForKey:@"PictureHeight"]  intValue])
+                /*
+                 * if the preset specifies neither max. width nor height
+                 * (both are 0), use the max. picture size
+                 *
+                 * if the specified non-zero dimensions exceed those of the
+                 * source, also use the max. picture size (no upscaling)
+                 */
+                if (([[chosenPreset objectForKey:@"PictureWidth"]  intValue] <= 0 &&
+                     [[chosenPreset objectForKey:@"PictureHeight"] intValue] <= 0)              ||
+                    ([[chosenPreset objectForKey:@"PictureWidth"]  intValue] >  fTitle->width &&
+                     [[chosenPreset objectForKey:@"PictureHeight"] intValue] >  fTitle->height) ||
+                    ([[chosenPreset objectForKey:@"PictureHeight"] intValue] <= 0 &&
+                     [[chosenPreset objectForKey:@"PictureWidth"]  intValue] >  fTitle->width)  ||
+                    ([[chosenPreset objectForKey:@"PictureWidth"]  intValue] <= 0 &&
+                     [[chosenPreset objectForKey:@"PictureHeight"] intValue] >  fTitle->height))
                 {
-                    /* if so, then we use the sources height and width to avoid scaling up */
-                    //job->width = fTitle->width;
-                    //job->height = fTitle->height;
+                    /* use the source's width/height to avoid upscaling */
                     [self revertPictureSizeToMax:nil];
                 }
-                else // source width/height is >= the preset height/width
+                else // source width/height is >= preset width/height
                 {
-                    /* we can go ahead and use the presets values for height and width */
-                    job->width = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
-                    job->height = [[chosenPreset objectForKey:@"PictureHeight"]  intValue];
+                    /* use the preset values for width/height */
+                    job->width  = [[chosenPreset objectForKey:@"PictureWidth"]  intValue];
+                    job->height = [[chosenPreset objectForKey:@"PictureHeight"] intValue];
                 }
                 job->keep_ratio = [[chosenPreset objectForKey:@"PictureKeepRatio"]  intValue];
                 if (job->keep_ratio == 1)

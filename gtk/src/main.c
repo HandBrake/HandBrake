@@ -419,6 +419,8 @@ bind_subtitle_tree_model(signal_user_data_t *ud)
     cell = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(
                                     _("Track"), cell, "text", 0, NULL);
+    widget = GHB_WIDGET(ud->builder, "SubTrackLabel");
+    gtk_tree_view_column_set_widget(column, widget);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
     gtk_tree_view_column_set_min_width(column, 350);
     gtk_tree_view_column_set_max_width(column, 350);
@@ -426,6 +428,8 @@ bind_subtitle_tree_model(signal_user_data_t *ud)
     cell = gtk_cell_renderer_toggle_new();
     column = gtk_tree_view_column_new_with_attributes(
             _("Forced Only"), cell, "active", 1, "visible", 7, NULL);
+    widget = GHB_WIDGET(ud->builder, "SubForcedLabel");
+    gtk_tree_view_column_set_widget(column, widget);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
     g_signal_connect(cell, "toggled", subtitle_forced_toggled_cb, ud);
 
@@ -433,6 +437,8 @@ bind_subtitle_tree_model(signal_user_data_t *ud)
     gtk_cell_renderer_toggle_set_radio(GTK_CELL_RENDERER_TOGGLE(cell), TRUE);
     column = gtk_tree_view_column_new_with_attributes(
             _("Burned In"), cell, "active", 2, "visible", 8, NULL);
+    widget = GHB_WIDGET(ud->builder, "SubBurnedLabel");
+    gtk_tree_view_column_set_widget(column, widget);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
     g_signal_connect(cell, "toggled", subtitle_burned_toggled_cb, ud);
 
@@ -440,12 +446,16 @@ bind_subtitle_tree_model(signal_user_data_t *ud)
     gtk_cell_renderer_toggle_set_radio(GTK_CELL_RENDERER_TOGGLE(cell), TRUE);
     column = gtk_tree_view_column_new_with_attributes(
                 _("Default"), cell, "active", 3, NULL);
+    widget = GHB_WIDGET(ud->builder, "SubDefaultLabel");
+    gtk_tree_view_column_set_widget(column, widget);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
     g_signal_connect(cell, "toggled", subtitle_default_toggled_cb, ud);
 
     cell = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new_with_attributes(
             _("Srt Offset"), cell, "text", 4, "visible", 9, NULL);
+    widget = GHB_WIDGET(ud->builder, "SubSRTOffsetLabel");
+    gtk_tree_view_column_set_widget(column, widget);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
 

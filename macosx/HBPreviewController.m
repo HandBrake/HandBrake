@@ -7,22 +7,28 @@
 #import "HBPreviewController.h"
 #import "Controller.h"
 
-@implementation QTMovieView ( HBQTkitExt )
+#define BORDER_SIZE 2.0
+#define HB_NUM_HBLIB_PICTURES 20   // # of preview pictures libhb should generate
+
+@implementation QTMovieView (HBExtensions)
 - (void) mouseMoved:(NSEvent *)theEvent
 {
     [super mouseMoved:theEvent];
 }
 @end
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1070
+@interface NSWindow(HBExtensions)
 
+@property (readonly) CGFloat backingScaleFactor;
+
+@end
+#endif
 
 @interface PreviewController (Private)
 
 - (NSSize)optimalViewSizeForImageSize: (NSSize)imageSize;
-- (void)resizeSheetForViewSize: (NSSize)viewSize;
-- (void)setViewSize: (NSSize)viewSize;
-- (BOOL)viewNeedsToResizeToSize: (NSSize)newSize;
-
+- (void)resizeWindowForViewSize: (NSSize)viewSize;
 @end
 
 @implementation PreviewController
@@ -45,27 +51,8 @@
         /* Init libhb with check for updates libhb style set to "0" so its ignored and lets sparkle take care of it */
         int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
         fPreviewLibhb = hb_init(loggingLevel, 0);
-        
-        
-
 	}
 	return self;
-}
-
-
-//------------------------------------------------------------------------------------
-// Displays and brings the picture window to the front
-//------------------------------------------------------------------------------------
-- (IBAction) showPreviewWindow: (id)sender
-{
-    [self showWindow:sender];
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"PreviewWindowIsOpen"];
-    
-    /* lets set the preview window to accept mouse moved events */
-    [fPreviewWindow setAcceptsMouseMovedEvents:YES];
-    hudTimerSeconds = 0;
-    [self pictureSliderChanged:nil];
-    [self startReceivingLibhbNotifications];
 }
 
 - (void)setHBController: (HBController *)controller
@@ -75,15 +62,16 @@
 
 - (void)awakeFromNib
 {
-    [fPreviewWindow setDelegate:self];
+    [[self window] setDelegate:self];
+
     if( ![[self window] setFrameUsingName:@"Preview"] )
         [[self window] center];
+
     [self setWindowFrameAutosaveName:@"Preview"];
     [[self window] setExcludedFromWindowsMenu:YES];
     
     /* lets set the preview window to accept mouse moved events */
-    [fPreviewWindow setAcceptsMouseMovedEvents:YES];
-    //[self pictureSliderChanged:nil];
+    [[self window] setAcceptsMouseMovedEvents:YES];
     [self startReceivingLibhbNotifications];
     
     hudTimerSeconds = 0;
@@ -92,35 +80,74 @@
     */
     [fMovieCreationProgressIndicator setUsesThreadedAnimation:NO];
     
-    /* Setup our layers for core animation */
-    [fPictureViewArea setWantsLayer:YES];
-    [fPictureView setWantsLayer:YES];
+    /* we set the preview length popup in seconds */
+    [fPreviewMovieLengthPopUp removeAllItems];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"15"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"30"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"45"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"60"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"90"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"105"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"120"];
 
-    [fCancelPreviewMovieButton setWantsLayer:YES];
-    [fMovieCreationProgressIndicator setWantsLayer:YES];
-
-    [fPictureControlBox setWantsLayer:YES];
-    [fEncodingControlBox setWantsLayer:YES];
-	[fMovieView setWantsLayer:YES];
 	[fMovieView setHidden:YES];
     [fMovieView setDelegate:self];
 
-    /* Since the xib has everything off center for easy acess
-     * we align our views and windows here we an align to anything
-     * since it will actually change later upon source load, but
-     * for convenience we will use the fPictureViewArea
-     */
-     
-     /* Align the still preview image view to the picture box */
-     [fPictureView setFrameSize:[fPictureViewArea frame].size];
-     [fMovieView setFrameSize:[fPictureViewArea frame].size];
-     //[fPreviewWindow setFrameSize:[fPictureViewArea frame].size];
+    /* Setup our layers for core animation */
+    [[[self window] contentView] setWantsLayer:YES];
+    [fPictureControlBox setWantsLayer:YES];
+    [fEncodingControlBox setWantsLayer:YES];
+    [fMoviePlaybackControlBox setWantsLayer:YES];
     
+    fWhiteBackground = [CALayer layer];
+    [fWhiteBackground setBounds:CGRectMake(0.0, 0.0, 480.0, 360.0)];
+    [fWhiteBackground setPosition:CGPointMake([[[self window] contentView] frame].size.width /2,
+                                 [[[self window] contentView] frame].size.height /2)];
     
+    [fWhiteBackground setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
+    CGColorRef white = CGColorCreateGenericRGB(1.0, 1.0, 1.0, 1.0);
+    [fWhiteBackground setBackgroundColor: white];
+    CFRelease(white);
+    [fWhiteBackground setShadowOpacity:0.5f];
+    [fWhiteBackground setShadowOffset:CGSizeMake(0, 0)];
+
+    fPictureLayer = [CALayer layer];
+    [fPictureLayer setBounds:CGRectMake(0.0, 0.0, 476.0, 356.0)];
+    [fPictureLayer setPosition:CGPointMake([[[self window] contentView] frame].size.width /2,
+                                             [[[self window] contentView] frame].size.height /2)];
+    
+    [fPictureLayer setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
+
+    NSMutableDictionary *actions = [NSMutableDictionary
+                                    dictionaryWithDictionary:[fPictureLayer actions]];
+
+    // Disable fade on contents change
+    [actions setObject:[NSNull null] forKey:@"contents"];
+    [fPictureLayer setActions:actions];
+
+    [[[[self window] contentView] layer] insertSublayer:fWhiteBackground below: [fMovieView layer]];
+    [[[[self window] contentView] layer] insertSublayer:fPictureLayer below: [fMovieView layer]];
+
+    /* relocate our hud origins */
+    NSPoint hudControlBoxOrigin = [fMoviePlaybackControlBox frame].origin;
+    [fPictureControlBox setFrameOrigin:hudControlBoxOrigin];
+    [fEncodingControlBox setFrameOrigin:hudControlBoxOrigin];
+    [fMoviePlaybackControlBox setFrameOrigin:hudControlBoxOrigin];
+    
+    if( [[self window] respondsToSelector:@selector( backingScaleFactor )] )
+        backingScaleFactor = [[self window] backingScaleFactor];
+    else
+        backingScaleFactor = 1.0;
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(titleChanged:) name: HBTitleChangedNotification object:nil];
 }
-- (BOOL)acceptsMouseMovedEvents
+
+- (void) titleChanged: (NSNotification *) aNotification
 {
-    return YES;
+    /* Notification from HBController, only used to stop
+     * an encoding while the HBController is scanning a new title
+     */
+    [self cancelCreateMoviePreview:self];
 }
 
 - (void)windowWillClose:(NSNotification *)aNotification
@@ -131,20 +158,16 @@
      * to go back to still previews .. just in case nothing is loaded up like in
      * a Launch, cancel new scan then quit type scenario.
      */
-    if (fPicture)
+
+    if (fEncodeState || [self isPlaying])
     {
-        [self pictureSliderChanged:nil];
-        [fMovieTimer invalidate];
-        [fMovieTimer release];
+        [self cancelCreateMoviePreview:self];
+        [fMovieView pause:self];
+        [self stopMovieTimer];
     }
-    
+
     hudTimerSeconds = 0;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"PreviewWindowIsOpen"];
-}
-
-- (BOOL)windowShouldClose:(id)fPictureWindow
-{
-     return YES;
 }
 
 - (void) dealloc
@@ -154,7 +177,7 @@
     {
         [[NSFileManager defaultManager] removeItemAtPath:fPreviewMoviePath error:nil];
         [fPreviewMoviePath release];
-    }    
+    }
     
     [fLibhbTimer invalidate];
     [fLibhbTimer release];
@@ -166,7 +189,6 @@
     [fMovieTimer release];
     
     [fPicturePreviews release];
-    [fFullScreenWindow release];
     
     hb_close(&fPreviewLibhb);
     
@@ -178,18 +200,6 @@
 - (void) SetHandle: (hb_handle_t *) handle
 {
     fHandle = handle;
-    
-
-    
-    /* we set the preview length popup in seconds */
-    [fPreviewMovieLengthPopUp removeAllItems];
-    [fPreviewMovieLengthPopUp addItemWithTitle: @"15"];
-    [fPreviewMovieLengthPopUp addItemWithTitle: @"30"];
-    [fPreviewMovieLengthPopUp addItemWithTitle: @"45"];
-    [fPreviewMovieLengthPopUp addItemWithTitle: @"60"];
-    [fPreviewMovieLengthPopUp addItemWithTitle: @"90"];
-    [fPreviewMovieLengthPopUp addItemWithTitle: @"105"];
-    [fPreviewMovieLengthPopUp addItemWithTitle: @"120"];
     
     /* adjust the preview slider length */
     /* We use our advance pref to determine how many previews we scanned */
@@ -203,56 +213,52 @@
     }
     else
     {
-        /* currently hard set default to 10 seconds */
-        [fPreviewMovieLengthPopUp selectItemAtIndex: 1];
+        /* currently hard set default to 15 seconds */
+        [fPreviewMovieLengthPopUp selectItemAtIndex: 0];
     }
 }
 
 - (void) SetTitle: (hb_title_t *) title
 {
-    hb_job_t * job = title->job;
-    
     fTitle = title;
     fPicture = 0;
-    MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
-    MaxOutputHeight = title->height - job->crop[0] - job->crop[1];
-    
-    [self SettingsChanged: nil];
 
+    [self settingsChanged:nil];
 }
 
-
+- (void)windowDidChangeBackingProperties:(NSNotification *)notification {
+    
+    NSWindow *theWindow = (NSWindow *)[notification object];
+    
+    CGFloat newBackingScaleFactor = [theWindow backingScaleFactor];
+    CGFloat oldBackingScaleFactor = [[[notification userInfo]
+                                      objectForKey:@"NSBackingPropertyOldScaleFactorKey"]
+                                     doubleValue];
+    if( newBackingScaleFactor != oldBackingScaleFactor )
+    {
+        // Scale factor changed, update the preview window
+        // to the new situation
+        backingScaleFactor = newBackingScaleFactor;
+        [self pictureSliderChanged:self];
+    }
+}
 
 // Adjusts the window to draw the current picture (fPicture) adjusting its size as
 // necessary to display as much of the picture as possible.
-- (void) displayPreview 
+- (void) displayPreview
 {
     hb_job_t * job = fTitle->job;
-    /* lets make sure that the still picture view is not hidden and that 
-     * the movie preview is 
-     */
-     aMovie = nil;
-    [fMovieView pause:nil];
-    [fMovieView setHidden:YES];
-	[fMovieView setMovie:nil];
-    [fMovieCreationProgressIndicator stopAnimation: nil];
-    [fMovieCreationProgressIndicator setHidden: YES];
-    [fMoviePlaybackControlBox setHidden: YES];
-    if( fMovieTimer )
-    {
-        [self stopMovieTimer];
-    }
-    [fPictureControlBox setHidden: NO];
-    
-    [fPictureView setHidden:NO];
-    
+
     NSImage *fPreviewImage = [self imageForPicture: fPicture];
     NSSize imageScaledSize = [fPreviewImage size];
-    [fPictureView setImage: fPreviewImage];
-    
+    [fPictureLayer setContents:fPreviewImage];
+
     NSSize displaySize = NSMakeSize( ( CGFloat )fTitle->width, ( CGFloat )fTitle->height );
     NSString *sizeInfoString;
+
     /* Set the picture size display fields below the Preview Picture*/
+    int output_width, output_height, output_par_width, output_par_height;
+    int display_width;
     if( fTitle->job->anamorphic.mode == 1 ) // Original PAR Implementation
     {
         output_width = fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3];
@@ -265,7 +271,7 @@
         displaySize.width = display_width;
         displaySize.height = fTitle->height;
         imageScaledSize.width = display_width;
-        imageScaledSize.height = output_height;   
+        imageScaledSize.height = output_height;
     }
     else if (fTitle->job->anamorphic.mode == 2) // Loose Anamorphic
     {
@@ -283,7 +289,6 @@
     else if (fTitle->job->anamorphic.mode == 3) // Custom Anamorphic
     {
         hb_set_anamorphic_size(job, &output_width, &output_height, &output_par_width, &output_par_height);
-        display_width = output_width * output_par_width / output_par_height;
         sizeInfoString = [NSString stringWithFormat:
                           @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Custom",
                           fTitle->width, fTitle->height, output_width, output_height, fTitle->job->anamorphic.dar_width, fTitle->job->anamorphic.dar_height];
@@ -291,8 +296,8 @@
         displaySize.width = fTitle->job->anamorphic.dar_width + fTitle->job->crop[2] + fTitle->job->crop[3] ;
         displaySize.height = fTitle->job->anamorphic.dar_height + fTitle->job->crop[0] + fTitle->job->crop[1];
         imageScaledSize.width = (int)fTitle->job->anamorphic.dar_width;
-        imageScaledSize.height = (int)fTitle->job->height;   
-    } 
+        imageScaledSize.height = (int)fTitle->job->height;
+    }
     else // No Anamorphic
     {
         sizeInfoString = [NSString stringWithFormat:
@@ -304,113 +309,94 @@
         imageScaledSize.width = fTitle->job->width;
         imageScaledSize.height = fTitle->job->height;
     }
-    
-    
-    
-    NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
-    [self resizeSheetForViewSize:viewSize];
 
-    NSSize windowSize = [[self window] frame].size;    
+    if( backingScaleFactor != 1.0 )
+    {
+        // HiDPI mode usually display everything
+        // with douple pixel count, but we don't
+        // want to double the size of the video
+        displaySize.height /= backingScaleFactor;
+        displaySize.width /= backingScaleFactor;
+        imageScaledSize.height /= backingScaleFactor;
+        imageScaledSize.width /= backingScaleFactor;
+    }
+
+    // Get the optimal view size for the image
+    NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
+    viewSize.width += BORDER_SIZE * 2;
+    viewSize.height += BORDER_SIZE * 2;
     
+    NSSize windowSize;
+    if (scaleToScreen == YES)
+        // Scale the window to the max possible size
+        windowSize = [[[self window] screen] visibleFrame].size;
+    else
+        // Scale the window to the image size
+        windowSize = viewSize;
+
+    [self resizeWindowForViewSize:windowSize];
+    NSSize areaSize = [[[self window] contentView] frame].size;
+    areaSize.width -= BORDER_SIZE * 2;
+    areaSize.height -= BORDER_SIZE * 2;
+
     if (scaleToScreen == YES)
     {
-        /* Note: this should probably become a utility function */
         /* We are in Scale To Screen mode so, we have to get the ratio for height and width against the window
          *size so we can scale from there.
          */
-        CGFloat deltaWidth = imageScaledSize.width / displaySize.width;
-        CGFloat deltaHeight = imageScaledSize.height /displaySize.height;
-        NSSize windowSize = [[self window] frame].size;  
         CGFloat pictureAspectRatio = imageScaledSize.width / imageScaledSize.height;
+        CGFloat areaAspectRatio = areaSize.width / areaSize.height;
         
-        /* Set our min size to the storage size */
-        NSSize minSize;
-        minSize.width = fTitle->width;
-        minSize.height = fTitle->height;
-
-        /* Set delta's based on minimum size */
-        if (imageScaledSize.width <  minSize.width)
+        if (pictureAspectRatio > areaAspectRatio)
         {
-            deltaWidth = imageScaledSize.width / minSize.width;
-        }
-        else
-        {
-            deltaWidth = 1.0;
-        }
-        
-        if (imageScaledSize.height <  minSize.height)
-        {
-            deltaHeight =  imageScaledSize.height / minSize.height;
-        }
-        else
-        {
-            deltaHeight = 1.0;
-        }
-        
-        /* Now apply our deltas to the full screen view */
-        if (pictureAspectRatio > 1.0) // we are wider than taller, so expand the width to fill the area and scale the height
-        {
-            viewSize.width = windowSize.width * deltaWidth;
+            viewSize.width = areaSize.width;
             viewSize.height = viewSize.width / pictureAspectRatio;
-            
         }
         else
         {
-            viewSize.height = windowSize.height * deltaHeight; 
+            viewSize.height = areaSize.height;
             viewSize.width = viewSize.height * pictureAspectRatio;
         }
-        
     }
     else
     {
-        viewSize.width = viewSize.width - (viewSize.width - imageScaledSize.width);
-        viewSize.height = viewSize.height - (viewSize.height - imageScaledSize.height);
-        
-        if (fTitle->width > windowSize.width || fTitle->height > windowSize.height)
+        // If the image is larger then the window, scale the image
+        viewSize = imageScaledSize;
+
+        if (imageScaledSize.width > areaSize.width || imageScaledSize.height > areaSize.height)
         {
-            CGFloat viewSizeAspect = viewSize.width / viewSize.height;
-            if (viewSizeAspect > 1.0) // we are wider than taller, so expand the width to fill the area and scale the height
+            CGFloat pictureAspectRatio = imageScaledSize.width / imageScaledSize.height;
+            CGFloat areaAspectRatio = areaSize.width / areaSize.height;
+            
+            if (pictureAspectRatio > areaAspectRatio)
             {
-                viewSize.width = viewSize.width * (windowSize.width / fTitle->width) ;
-                viewSize.height = viewSize.width / viewSizeAspect;
+                viewSize.width = areaSize.width;
+                viewSize.height = viewSize.width / pictureAspectRatio;
             }
             else
             {
-                viewSize.height = viewSize.height * (windowSize.height / fTitle->height);
-                viewSize.width = viewSize.height * viewSizeAspect;
+                viewSize.height = areaSize.height;
+                viewSize.width = viewSize.height * pictureAspectRatio;
             }
         }
-        
     }
-    
-    [self setViewSize:viewSize];
-    
-    /* relocate our hud origins as per setViewSize */
-    NSPoint hudControlBoxOrigin = [fPictureControlBox frame].origin;
-    hudControlBoxOrigin.y = ([[self window] frame].size.height / 2) - (viewSize.height / 2);
-    hudControlBoxOrigin.x = ([[self window] frame].size.width / 2) - ([fPictureControlBox frame].size.width / 2);
-    [fPictureControlBox setFrameOrigin:hudControlBoxOrigin];
-    [fEncodingControlBox setFrameOrigin:hudControlBoxOrigin];
-    [fMoviePlaybackControlBox setFrameOrigin:hudControlBoxOrigin];
 
+    // Resize the CALayers
+    [fWhiteBackground setBounds:CGRectMake(0, 0, viewSize.width + (BORDER_SIZE * 2), viewSize.height + (BORDER_SIZE * 2))];
+    [fPictureLayer setBounds:CGRectMake(0, 0, viewSize.width, viewSize.height)];
 
     NSString *scaleString;
-    CGFloat scale = ( ( CGFloat )[fPictureView frame].size.width) / ( ( CGFloat )imageScaledSize.width);
+    CGFloat scale = ( ( CGFloat )[fPictureLayer frame].size.width) / ( ( CGFloat )imageScaledSize.width);
     if (scale * 100.0 != 100)
-    {
         scaleString = [NSString stringWithFormat:
                        NSLocalizedString( @" (%.0f%% actual size)",
                                          @"String shown when a preview is scaled" ), scale * 100.0];
-    }
     else
-    {
         scaleString = @"(Actual size)";
-    }
     
     if (scaleToScreen == YES)
-    {
         scaleString = [scaleString stringByAppendingString:@" Scaled To Screen"];
-    }
+
     /* Set the info fields in the hud controller */
     [fInfoField setStringValue: [NSString stringWithFormat:
                                  @"%@", sizeInfoString]];
@@ -423,17 +409,15 @@
 
 - (IBAction) previewDurationPopUpChanged: (id) sender
 {
-    
     [[NSUserDefaults standardUserDefaults] setObject:[fPreviewMovieLengthPopUp titleOfSelectedItem] forKey:@"PreviewLength"];
+}
     
-}    
-    
-- (IBAction) SettingsChanged: (id) sender
+- (IBAction) settingsChanged: (id) sender
 {
-         // Purge the existing picture previews so they get recreated the next time
-        // they are needed.
-        [self purgeImageCache];
-        [self pictureSliderChanged:nil];
+    // Purge the existing picture previews so they get recreated the next time
+    // they are needed.
+    [self purgeImageCache];
+    [self pictureSliderChanged:nil];
 }
 
 - (IBAction) pictureSliderChanged: (id) sender
@@ -442,11 +426,14 @@
     [self cancelCreateMoviePreview:nil];
     
     // Show the picture view
-    [fPictureView setHidden:NO];
-    [fMovieView pause:nil];
-    [fMovieView setHidden:YES];
-	[fMovieView setMovie:nil];
-    [fEncodingControlBox setHidden: YES];
+    if (aMovie)
+    {
+        [fMoviePlaybackControlBox setHidden:YES];
+        [fMovieView pause:nil];
+        [fMovieView setHidden:YES];
+        [fMovieView setMovie:nil];
+        aMovie = nil;
+    }
     
     int newPicture = [fPictureSlider intValue];
     if (newPicture != fPicture)
@@ -457,23 +444,13 @@
     
 }
 
-- (IBAction)showPreviewPanel: (id)sender forTitle: (hb_title_t *)title
+- (IBAction)showWindow:(id)sender
 {
-    if ([fPreviewWindow isVisible])
-    {
-        [fPreviewWindow close];
-    }
-    else
-    {
-        [self showWindow:sender];
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"PreviewWindowIsOpen"];
-        [fPreviewWindow setAcceptsMouseMovedEvents:YES];
-        scaleToScreen = NO;
-        [self pictureSliderChanged:nil];
-    }
+    if (aMovie)
+        [self startMovieTimer];
     
+    [super showWindow:sender];
 }
-
 - (NSString*) pictureSizeInfoString
 {
     return [fInfoField stringValue];
@@ -511,12 +488,12 @@
     NSPoint mouseLoc = [theEvent locationInWindow];
     
     /* Test for mouse location to show/hide hud controls */
-    if( isEncoding == NO ) 
+    if( fEncodeState != 1 )
     {
         /* Since we are not encoding, verify which control hud to show
          * or hide based on aMovie ( aMovie indicates we need movie controls )
          */
-        NSBox           * hudBoxToShow;
+        NSBox *hudBoxToShow;
         if ( aMovie == nil ) // No movie loaded up
         {
             hudBoxToShow = fPictureControlBox;
@@ -531,7 +508,7 @@
             [[hudBoxToShow animator] setHidden: NO];
             [self stopHudTimer];
         }
-		else if( NSPointInRect( mouseLoc, [fPictureViewArea frame] ) )
+		else if( NSPointInRect( mouseLoc, [[[self window] contentView] frame] ) )
         {
             [[hudBoxToShow animator] setHidden: NO];
             [self startHudTimer];
@@ -578,8 +555,6 @@
     }
 }
 
-
-
 - (IBAction)toggleScaleToScreen:(id)sender
 {
     if (scaleToScreen == YES)
@@ -599,85 +574,14 @@
     
 }
 
-
-
-// Title-less windows normally don't receive key presses, override this
-- (BOOL)canBecomeKeyWindow
-{
-    return YES;
-}
-
-// Title-less windows normally can't become main which means that another
-// non-fullscreen window will have the "active" titlebar in expose. Bad, fix it.
-- (BOOL)canBecomeMainWindow
-{
-    return YES;
-}
-
-
-- (IBAction)goWindowedScreen:(id)sender
-{
-    
-    /* Get the screen info to release the display but don't actually do
-     * it until the windowed screen is setup.
-     */
-    scaleToScreen = NO;
-    [self pictureSliderChanged:nil];
-    [fScaleToScreenToggleButton setTitle:@"<->"];
-        
-    NSScreen* mainScreen = [NSScreen mainScreen]; 
-    NSDictionary* screenInfo = [mainScreen deviceDescription]; 
-    NSNumber* screenID = [screenInfo objectForKey:@"NSScreenNumber"];
-    CGDirectDisplayID displayID = (CGDirectDisplayID)[screenID longValue]; 
-    
-    [fFullScreenWindow dealloc];
-    [fFullScreenWindow release];
-    
-    
-    [fPreviewWindow setContentView:fPictureViewArea]; 
-    [fPictureViewArea setNeedsDisplay:YES];
-    [self setWindow:fPreviewWindow];
-    
-    // Show the window. 
-    [fPreviewWindow makeKeyAndOrderFront:self];
-    
-    /* Set the window back to regular level */
-    [fPreviewWindow setLevel:NSNormalWindowLevel];
-    
-    /* Set the isFullScreen flag back to NO */
-    //isFullScreen = NO;
-    scaleToScreen = NO;
-    /* make sure we are set to a still preview */
-    [self pictureSliderChanged:nil];
-    [self showPreviewWindow:nil];
-    
-    /* Change the name of fFullScreenToggleButton appropriately */
-    //[fFullScreenToggleButton setTitle: @"Full Screen"];
-    // [fScaleToScreenToggleButton setHidden:YES];
-    /* set the picture settings pallete back to normal level */
-    [fHBController picturePanelWindowed];
-    
-    /* Release the display now that the we are back in windowed mode */
-    CGDisplayRelease(displayID);
-    
-    [fPreviewWindow setAcceptsMouseMovedEvents:YES];
-    //[fFullScreenWindow setAcceptsMouseMovedEvents:NO];
-    
-    hudTimerSeconds = 0;
-    [self startHudTimer];
-    
-}
-
-
 #pragma mark Still Preview Image Processing
-
 
 // This function converts an image created by libhb (specified via pictureIndex) into
 // an NSImage suitable for the GUI code to use. If removeBorders is YES,
 // makeImageForPicture crops the image generated by libhb stripping off the gray
 // border around the content. This is the low-level method that generates the image.
 // -imageForPicture calls this function whenever it can't find an image in its cache.
-+ (NSImage *) makeImageForPicture: (int)pictureIndex
++ (NSImage *) makeImageForPicture: (NSInteger)pictureIndex
                 libhb:(hb_handle_t*)handle
                 title:(hb_title_t*)title
 {
@@ -696,7 +600,7 @@
         buffer     = (uint8_t *) realloc( buffer, bufferSize );
     }
 
-    hb_get_preview( handle, title->job, pictureIndex, buffer );
+    hb_get_preview( handle, title->job, (int)pictureIndex, buffer );
 
     // Create an NSBitmapImageRep and copy the libhb image into it, converting it from
     // libhb's format to one suitable for NSImage. Along the way, we'll strip off the
@@ -742,11 +646,11 @@
 // cache or by calling makeImageForPicture if it is not cached. Generally, you should
 // use imageForPicture so that images are cached. Calling makeImageForPicture will
 // always generate a new copy of the image.
-- (NSImage *) imageForPicture: (int) pictureIndex
+- (NSImage *) imageForPicture: (NSInteger) pictureIndex
 {
     // The preview for the specified index may not currently exist, so this method
     // generates it if necessary.
-    NSString * key = [NSString stringWithFormat:@"%d", pictureIndex];
+    NSNumber * key = [NSNumber numberWithInteger:pictureIndex];
     NSImage * theImage = [fPicturePreviews objectForKey:key];
     if (!theImage)
     {
@@ -763,58 +667,32 @@
     [fPicturePreviews removeAllObjects];
 }
 
- 
-
 #pragma mark Movie Preview
 
 - (IBAction) cancelCreateMoviePreview: (id) sender
 {
-    
     hb_state_t s;
     hb_get_state2( fPreviewLibhb, &s );
     
-    if(isEncoding && (s.state == HB_STATE_WORKING || s.state == HB_STATE_PAUSED))
+    if(fEncodeState && (s.state == HB_STATE_WORKING || s.state == HB_STATE_PAUSED))
     {
+        fEncodeState = 2;
         hb_stop( fPreviewLibhb );
-        [fPictureView setHidden:NO];
-        [fMovieView pause:nil];
-        [fMovieView setHidden:YES];
-		[fMovieView setMovie:nil];
-        [fPictureSlider setHidden:NO];
-        isEncoding = NO;
-        
-        [self pictureSliderChanged:nil];
-        
+        [NSAnimationContext beginGrouping];
+        [[NSAnimationContext currentContext] setDuration:0.2];
+        [[fEncodingControlBox animator] setHidden:YES];
+        [[fPictureControlBox animator] setHidden:NO];
+        [NSAnimationContext endGrouping];
+
         return;
     }
-    
 }
 
 - (IBAction) createMoviePreview: (id) sender
-{
-    
-    
-    /* Lets make sure the still picture previews are showing in case
-     * there is currently a movie showing */
-    [self pictureSliderChanged:nil];
-    
+{    
     /* Rip or Cancel ? */
     hb_state_t s;
     hb_get_state2( fPreviewLibhb, &s );
-    
-    if(sender == fCancelPreviewMovieButton && (s.state == HB_STATE_WORKING || s.state == HB_STATE_PAUSED))
-    {
-        hb_stop( fPreviewLibhb );
-        [fPictureView setHidden:NO];
-        [fMovieView pause:nil];
-        [fMovieView setHidden:YES];
-		[fMovieView setMovie:nil];
-        [fPictureSlider setHidden:NO];
-        isEncoding = NO;
-        
-        return;
-    }
-    
     
     /* we use controller.mm's prepareJobForPreview to go ahead and set all of our settings
      * however, we want to use a temporary destination field of course
@@ -907,15 +785,16 @@
     /* we need to clean up the various lists after the job(s) have been set  */
     hb_job_reset( job );
 
-    [fEncodingControlBox setHidden: NO];
-    [fPictureControlBox setHidden: YES];
-    
-    [fMovieCreationProgressIndicator setHidden: NO];
-    [fPreviewMovieStatusField setHidden: NO];
-    
-    isEncoding = YES;
+    [fMovieCreationProgressIndicator setDoubleValue:0];
+
+    [NSAnimationContext beginGrouping];
+    [[NSAnimationContext currentContext] setDuration:0.2];
+    [[fEncodingControlBox animator] setHidden: NO];
+    [[fPictureControlBox animator] setHidden: YES];
+    [NSAnimationContext endGrouping];
 
     /* Let fPreviewLibhb do the job */
+    fEncodeState = 1;
     hb_start( fPreviewLibhb );
 	
 }
@@ -943,7 +822,6 @@
     hb_state_t s;
     hb_get_state( fPreviewLibhb, &s );
     [self libhbStateChanged: s];
-    
 }
 
 - (void) libhbStateChanged: (hb_state_t)state
@@ -958,7 +836,6 @@
         case HB_STATE_WORKING:
         {
 #define p state.param.working
-            
             NSMutableString * string;
 			/* Update text field */
 			string = [NSMutableString stringWithFormat: NSLocalizedString( @"Encoding preview:  %.2f %%", @"" ), 100.0 * p.progress];
@@ -973,23 +850,20 @@
             
             [fMovieCreationProgressIndicator setIndeterminate: NO];
             /* Update slider */
-			[fMovieCreationProgressIndicator setDoubleValue: 100.0 * p.progress];
-            
-            [fCreatePreviewMovieButton setTitle: @"Cancel Preview"];
+            [fMovieCreationProgressIndicator setDoubleValue: 100.0 * p.progress];
             
             break;
             
         }
 #undef p
             
-#define p state.param.muxing            
+#define p state.param.muxing
         case HB_STATE_MUXING:
         {
             // Update fMovieCreationProgressIndicator
             [fMovieCreationProgressIndicator setIndeterminate: YES];
             [fMovieCreationProgressIndicator startAnimation: nil];
-            [fPreviewMovieStatusField setStringValue: [NSString stringWithFormat:
-                                         NSLocalizedString( @"Muxing Preview ...", @"" )]];
+            [fPreviewMovieStatusField setStringValue: NSLocalizedString( @"Muxing Preview ...", @"" )];
             break;
         }
 #undef p			
@@ -1005,18 +879,15 @@
                 hb_rem( fHandle, job );
             
             [fPreviewMovieStatusField setStringValue: @""];
-            [fPreviewMovieStatusField setHidden: YES];
-            
             [fMovieCreationProgressIndicator stopAnimation: nil];
-            [fMovieCreationProgressIndicator setHidden: YES];
-            [fEncodingControlBox setHidden: YES];
-            [fPictureControlBox setHidden: YES];
-            isEncoding = NO;
 
-            // Show the movie view
-            [self showMoviePreview:fPreviewMoviePath];
-            [fCreatePreviewMovieButton setTitle: @"Live Preview"];
-
+            if (fEncodeState != 2)
+            {
+                // Show the movie view
+                [self showMoviePreview:fPreviewMoviePath];
+            }
+            
+            fEncodeState = 0;
             break;
         }
     }
@@ -1031,18 +902,17 @@
          * object, given that, we detect the rate to determine whether the movie
          * is playing or not.
          */
-        if ([aMovie rate] != 0) // we are playing 
+        if ([self isPlaying]) // we are playing
         {
             [fMovieView pause:aMovie];
-            [fPlayPauseButton setTitle: @">"];
+            [fPlayPauseButton setState: NSOnState];
         }
         else // we are paused or stopped
         {
             [fMovieView play:aMovie];
-            [fPlayPauseButton setTitle: @"||"];   
+            [fPlayPauseButton setState: NSOffState];
         }
     }
-    
 }
 
 - (IBAction) moviePlaybackGoToBeginning: (id) sender
@@ -1051,8 +921,7 @@
     if (aMovie != nil)
     {
         [fMovieView gotoBeginning:aMovie];
-     }
-    
+    }
 }
 
 - (IBAction) moviePlaybackGoToEnd: (id) sender
@@ -1061,8 +930,7 @@
     if (aMovie != nil)
     {
         [fMovieView gotoEnd:aMovie];
-     }
-    
+    }
 }
 
 - (IBAction) moviePlaybackGoBackwardOneFrame: (id) sender
@@ -1073,7 +941,6 @@
         [fMovieView pause:aMovie]; // Pause the movie
         [fMovieView stepBackward:aMovie];
      }
-    
 }
 
 - (IBAction) moviePlaybackGoForwardOneFrame: (id) sender
@@ -1084,9 +951,7 @@
         [fMovieView pause:aMovie]; // Pause the movie
         [fMovieView stepForward:aMovie];
      }
-    
 }
-
 
 - (void) startMovieTimer
 {
@@ -1110,13 +975,28 @@
 
 - (void) movieTimerFired: (NSTimer*)theTimer
 {
-     if (aMovie != nil)
+    if (aMovie != nil)
     {
         [self adjustPreviewScrubberForCurrentMovieTime];
-        [fMovieInfoField setStringValue: [NSString stringWithFormat:NSLocalizedString( @"%@", @"" ),[self calculatePlaybackSMTPETimecodeForDisplay]]];    
+        [fMovieInfoField setStringValue: [self SMTPETimecode:[aMovie currentTime]]];
     }
 }
 
+- (IBAction) showPicturesPreview: (id) sender
+{
+    [fMovieView pause:self];
+    [self stopMovieTimer];
+
+    [NSAnimationContext beginGrouping];
+    [[NSAnimationContext currentContext] setDuration:0.2];
+    [[fMoviePlaybackControlBox animator] setHidden:YES];
+    [[fMovieView animator] setHidden:YES];
+    [[fPictureControlBox animator] setHidden:NO];
+    [NSAnimationContext endGrouping];
+
+    [fMovieView setMovie:nil];
+    aMovie = nil;
+}
 
 
 - (IBAction) showMoviePreview: (NSString *) path
@@ -1131,7 +1011,6 @@
     /* Load the new movie into fMovieView */
     if (path) 
     {
-		//QTMovie * aMovie;
 		NSError	 *outError;
 		NSURL *movieUrl = [NSURL fileURLWithPath:path];
 		NSDictionary *movieAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -1146,36 +1025,22 @@
         
         aMovie = [[[QTMovie alloc] initWithAttributes:movieAttributes error:&outError] autorelease];
         
-        
 		if (!aMovie) 
         {
-			NSLog(@"Unable to open movie");
+            [fHBController writeToActivityLog: "showMoviePreview: Unable to open movie"];
 		}
         else 
         {
             NSRect movieBounds;
+
+            [fMovieView setControllerVisible:NO];
+
             /* we get some size information from the preview movie */
-            NSSize movieSize= [[aMovie attributeForKey:QTMovieNaturalSizeAttribute] sizeValue];
+            NSSize movieSize = [[aMovie attributeForKey:QTMovieNaturalSizeAttribute] sizeValue];
             movieBounds = [fMovieView movieBounds];
             movieBounds.size.height = movieSize.height;
             /* We also get our view size to use for scaling fMovieView's size */
-            NSSize scaledMovieViewSize = [fPictureView frame].size;
-            [fMovieView setControllerVisible:FALSE];
-            if ([fMovieView isControllerVisible]) 
-            {
-                CGFloat controllerBarHeight = [fMovieView controllerBarHeight];
-                if ( controllerBarHeight != 0 ) //Check if QTKit return a real value or not.
-                {
-                    movieBounds.size.height += controllerBarHeight;
-                    scaledMovieViewSize.height += controllerBarHeight;
-                }
-                else
-                {
-                    movieBounds.size.height += 15;
-                    scaledMovieViewSize.height += 15;
-                }
-            }
-            
+            NSSize scaledMovieViewSize = [fPictureLayer frame].size;
             movieBounds.size.width = movieSize.width;
             
             /* we need to account for an issue where the scaledMovieViewSize > the window size */
@@ -1184,23 +1049,18 @@
                 [fHBController writeToActivityLog: "showMoviePreview: Our window is not tall enough to show the controller bar ..."];
             }
             
-            
-            
             /* Scale the fMovieView to scaledMovieViewSize */
             [fMovieView setFrameSize:scaledMovieViewSize];
             
             /*set our origin try using fPictureViewArea or fPictureView */
-            NSPoint origin = [fPictureView frame].origin;
-            origin.x += trunc( ( [fPictureView frame].size.width -
+            NSPoint origin = [fPictureLayer frame].origin;
+            origin.x += trunc( ( [fPictureLayer frame].size.width -
                                 [fMovieView frame].size.width ) / 2.0 );
-            origin.y += trunc( ( ( [fPictureView frame].size.height -
-                                      [fMovieView frame].size.height ) / 2.0 ) - 7.5 );
+            origin.y += trunc( ( ( [fPictureLayer frame].size.height -
+                                      [fMovieView frame].size.height ) / 2.0 ) );
 
             [fMovieView setFrameOrigin:origin];
             [fMovieView setMovie:aMovie];
-            [fMovieView setHidden:NO];
-            [fMoviePlaybackControlBox setHidden: NO];
-            [fPictureControlBox setHidden: YES];
             
             // get and enable subtitles
             NSArray *subtitlesArray;
@@ -1223,78 +1083,38 @@
             }
             
             // to actually play the movie
-            
+            [NSAnimationContext beginGrouping];
+            [[NSAnimationContext currentContext] setDuration:0.2];
+            [[fEncodingControlBox animator] setHidden: YES];
+            [[fMovieView animator] setHidden:NO];
+            [[fMoviePlaybackControlBox animator] setHidden: NO];
+            [NSAnimationContext endGrouping];
+
             [self initPreviewScrubberForMovie];
             [self startMovieTimer];
             /* Install amovie notifications */
             [aMovie setDelegate:self];
             [self installMovieCallbacks];
             [fMovieView play:aMovie];
-
         }
     }
-    isEncoding = NO;
 }
+
 #pragma mark *** Movie Playback Scrubber and time code methods ***
-
-/* Since MacOSX Leopard QTKit has taken over some responsibility for assessing movie playback
- * information from the old QuickTime carbon api ( time code information as well as fps, etc.).
- * However, the QTKit devs at apple were not really big on documentation and further ...
- * QuickTimes ability to playback HB's largely variable framerate output makes perfectly frame
- * accurate information at best convoluted. Still, for the purpose of a custom hud based custom
- * playback scrubber slider this has so far proven to be as accurate as I have found. To say it
- * could use some better accuracy is not understating it enough probably.
- * Most of this was gleaned from this obscure Apple Mail list thread:
- * http://www.mailinglistarchive.com/quicktime-api@lists.apple.com/msg05642.html
- * Now as we currently do not show a QTKit control bar with scrubber for display sizes > container
- * size, this seems to facilitate playback control from the HB custom HUD controller fairly close
- * to the built in controller bar.
- * Further work needs to be done to try to get accurate frame by frame playback display if we want it.
- * Note that the keyboard commands for frame by frame step through etc. work as always.
- */ 
-
-// Returns a human readable string from the currentTime of movie playback
-- (NSString*) calculatePlaybackSMTPETimecodeForDisplay
-{
-    QTTime time = [aMovie currentTime];
-    
-    NSString *smtpeTimeCodeString;
-    int days, hour, minute, second, frame;
-    long long result;
-    
-    result = time.timeValue / time.timeScale; // second
-    frame = (time.timeValue % time.timeScale) / 100;
-    
-    second = result % 60;
-    
-    result = result / 60; // minute
-    minute = result % 60;
-    
-    result = result / 60; // hour
-    hour = result % 24;	 
-    days = result;
-    
-    smtpeTimeCodeString = [NSString stringWithFormat:@"Time: %02d:%02d:%02d", hour, minute, second]; // hh:mm:ss
-    return smtpeTimeCodeString;
-    
-}
-
 
 // Initialize the preview scrubber min/max to appropriate values for the current movie
 -(void) initPreviewScrubberForMovie
 {
     if (aMovie)
     {
-        
         QTTime duration = [aMovie duration];
-        float result = duration.timeValue / duration.timeScale;
+        CGFloat result = duration.timeValue / duration.timeScale;
         
         [fMovieScrubberSlider setMinValue:0.0];
-        [fMovieScrubberSlider setMaxValue: (float)result];
-        [fMovieScrubberSlider setFloatValue: 0.0];
+        [fMovieScrubberSlider setMaxValue: result];
+        [fMovieScrubberSlider setDoubleValue: 0.0];
     }
 }
-
 
 -(void) adjustPreviewScrubberForCurrentMovieTime
 {
@@ -1302,8 +1122,8 @@
     {
         QTTime time = [aMovie currentTime];
         
-        float result = (float)time.timeValue / (float)time.timeScale;;
-        [fMovieScrubberSlider setFloatValue:result];
+        CGFloat result = (CGFloat)time.timeValue / (CGFloat)time.timeScale;;
+        [fMovieScrubberSlider setDoubleValue:result];
     }
 }
 
@@ -1311,28 +1131,43 @@
 {
     if (aMovie)
     {
-        [fMovieView pause:aMovie]; // Pause the movie
-        QTTime time = [aMovie currentTime];
-        [self setTime: time.timeScale * [fMovieScrubberSlider floatValue]];
-        [self calculatePlaybackSMTPETimecodeForDisplay];
+        [fMovieView pause:aMovie];
+        QTTime time = [self SliderToQTTime:[fMovieScrubberSlider doubleValue]];
+        [aMovie setCurrentTime:time];
+        [fMovieInfoField setStringValue: [self SMTPETimecode:time]];
     }
 }
+
+- (BOOL) isPlaying
+{
+    if (aMovie != nil)
+    {
+        /* For some stupid reason there is no "isPlaying" method for a QTMovie
+         * object, given that, we detect the rate to determine whether the movie
+         * is playing or not.
+         */
+        if ([aMovie rate] != 0.0f) // we are playing
+            return YES;
+        else // we are paused or stopped
+            return NO;
+    }
+    return NO;
+}
+
 #pragma mark *** Movie Notifications ***
 
 - (void) installMovieCallbacks
 {
-
-
-/*Notification for any time the movie rate changes */
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(movieRateDidChange:)
-                                                     name:@"QTMovieRateDidChangeNotification"
-                                                   object:aMovie];
-        /*Notification for when the movie ends */
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(movieDidEnd:)
-                                                     name:@"QTMovieDidEndNotification"
-                                                   object:aMovie];
+    /*Notification for any time the movie rate changes */
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(movieRateDidChange:)
+                                                 name:@"QTMovieRateDidChangeNotification"
+                                               object:aMovie];
+    /*Notification for when the movie ends */
+    [[NSNotificationCenter defaultCenter] addObserver:self  
+                                             selector:@selector(movieDidEnd:)
+                                                 name:@"QTMovieDidEndNotification"
+                                               object:aMovie];
 }
 
 - (void)removeMovieCallbacks
@@ -1354,58 +1189,127 @@
 {
     if (aMovie != nil)
     {
-        /* For some stupid reason there is no "isPlaying" method for a QTMovie
-         * object, given that, we detect the rate to determine whether the movie
-         * is playing or not.
-         */
-        //[self adjustPreviewScrubberForCurrentMovieTime];
-        if ([aMovie rate] != 0) // we are playing 
-        {
-            [fPlayPauseButton setTitle: @"||"];
-        }
-        else // we are paused or stopped
-        {
-            [fPlayPauseButton setTitle: @">"];
-        }
+        if ([self isPlaying])
+            [fPlayPauseButton setState: NSOnState];
+        else
+            [fPlayPauseButton setState: NSOffState];
     }
 }
+
 /* This notification is not currently used. However we should keep it "just in case" as
  * live preview playback is enhanced.
  */
 - (void)movieDidEnd:(NSNotification *)notification
 {
-
     //[fHBController writeToActivityLog: "Movie DidEnd Notification Received"];
 }
 
+/* fMovieView Keyboard controls */
+- (void)keyDown:(NSEvent *)event
+{
+    unichar key = [[event charactersIgnoringModifiers] characterAtIndex:0];
+
+    if (aMovie)
+    {
+        if (key == 32)
+        {
+            if ([self isPlaying])
+                [fMovieView pause:aMovie];
+            else
+                [fMovieView play:aMovie];
+        }
+        else if (key == 'k')
+            [fMovieView pause:aMovie];
+        else if (key == 'l')
+        {
+            float rate = [aMovie rate];
+            rate += 1.0f;
+            [fMovieView play:aMovie];
+            [aMovie setRate:rate];
+        }
+        else if (key == 'j')
+        {
+            float rate = [aMovie rate];
+            rate -= 1.0f;
+            [fMovieView play:aMovie];
+            [aMovie setRate:rate];
+        }
+        else if ([event modifierFlags] & NSAlternateKeyMask && key == NSLeftArrowFunctionKey)
+            [fMovieView gotoBeginning:self];
+        else if ([event modifierFlags] & NSAlternateKeyMask && key == NSRightArrowFunctionKey)
+            [fMovieView gotoEnd:self];
+        else if (key == NSLeftArrowFunctionKey)
+            [fMovieView stepBackward:self];
+        else if (key == NSRightArrowFunctionKey)
+            [fMovieView stepForward:self];
+        else
+            [super keyDown:event];
+    }
+    else if (!fEncodeState)
+    {
+        if (key == NSLeftArrowFunctionKey)
+        {
+            [fPictureSlider setIntegerValue:fPicture > [fPictureSlider minValue] ? fPicture - 1 : fPicture];
+            [self pictureSliderChanged:self];
+        }
+        else if (key == NSRightArrowFunctionKey)
+        {
+            [fPictureSlider setIntegerValue:fPicture < [fPictureSlider maxValue] ? fPicture + 1 : fPicture];
+            [self pictureSliderChanged:self];
+        }
+        [super keyDown:event];
+    }
+
+    [super keyDown:event];
+}
 
 #pragma mark *** QTTime Utilities ***
 
 	// convert a time value (long) to a QTTime structure
--(void)timeToQTTime:(long)timeValue resultTime:(QTTime *)aQTTime
+-(QTTime)SliderToQTTime:(double)value
 {
-	NSNumber *timeScaleObj;
-	long timeScaleValue;
-
-	timeScaleObj = [aMovie attributeForKey:QTMovieTimeScaleAttribute];
-	timeScaleValue = [timeScaleObj longValue];
-
-	*aQTTime = QTMakeTime(timeValue, timeScaleValue);
+	long timeScale = [[aMovie attributeForKey:QTMovieTimeScaleAttribute] longValue];
+	return QTMakeTime(value * timeScale, timeScale);
 }
 
-	// set the movie's current time
--(void)setTime:(int)timeValue
+/* Since MacOSX Leopard QTKit has taken over some responsibility for assessing movie playback
+ * information from the old QuickTime carbon api ( time code information as well as fps, etc.).
+ * However, the QTKit devs at apple were not really big on documentation and further ...
+ * QuickTimes ability to playback HB's largely variable framerate output makes perfectly frame
+ * accurate information at best convoluted. Still, for the purpose of a custom hud based custom
+ * playback scrubber slider this has so far proven to be as accurate as I have found. To say it
+ * could use some better accuracy is not understating it enough probably.
+ * Most of this was gleaned from this obscure Apple Mail list thread:
+ * http://www.mailinglistarchive.com/quicktime-api@lists.apple.com/msg05642.html
+ * Now as we currently do not show a QTKit control bar with scrubber for display sizes > container
+ * size, this seems to facilitate playback control from the HB custom HUD controller fairly close
+ * to the built in controller bar.
+ * Further work needs to be done to try to get accurate frame by frame playback display if we want it.
+ * Note that the keyboard commands for frame by frame step through etc. work as always.
+ */
+
+// Returns a human readable string from the currentTime of movie playback
+- (NSString*) SMTPETimecode:(QTTime)time
 {
-	QTTime movieQTTime;
-	NSValue *valueForQTTime;
-	
-	[self timeToQTTime:timeValue resultTime:&movieQTTime];
-
-	valueForQTTime = [NSValue valueWithQTTime:movieQTTime];
-
-	[aMovie setAttribute:valueForQTTime forKey:QTMovieCurrentTimeAttribute];
+    NSString *smtpeTimeCodeString;
+    int days, hour, minute, second, frame;
+    long long result;
+    
+    result = time.timeValue / time.timeScale; // second
+    frame = (time.timeValue % time.timeScale) / 100;
+    
+    second = result % 60;
+    
+    result = result / 60; // minute
+    minute = result % 60;
+    
+    result = result / 60; // hour
+    hour = result % 24;
+    days = result;
+    
+    smtpeTimeCodeString = [NSString stringWithFormat:@"%02d:%02d:%02d", hour, minute, second]; // hh:mm:ss
+    return smtpeTimeCodeString;
 }
-
 
 @end
 
@@ -1424,56 +1328,16 @@
     CGFloat minHeight = 360.0;
 
     NSSize screenSize = [[[self window] screen] visibleFrame].size;
-    NSSize sheetSize = [[self window] frame].size;
-    NSSize viewAreaSize = [fPictureViewArea frame].size;
-    CGFloat paddingX = 0.00;
-    CGFloat paddingY = 0.00;
-    
-    if (fTitle->width > screenSize.width || fTitle->height > screenSize.height)
-    {
-        if (scaleToScreen == YES)
-        {
-            paddingX = screenSize.width - imageSize.width;
-            paddingY = screenSize.height - imageSize.height;
-        }
-        
-        else
-        {
-            paddingX = sheetSize.width - viewAreaSize.width;
-            paddingY = sheetSize.height - viewAreaSize.height;  
-        }
+    CGFloat maxWidth = screenSize.width;
+    CGFloat maxHeight = screenSize.height;
 
-    }
-    
-    CGFloat maxWidth;
-    CGFloat maxHeight;
-    maxWidth =  screenSize.width - paddingX;
-    maxHeight = screenSize.height - paddingY;
-    
     NSSize resultSize = imageSize;
     CGFloat resultPar = resultSize.width / resultSize.height;
 
     //note, a mbp 15" at 1440 x 900 is a 1.6 ar
     CGFloat screenAspect = screenSize.width / screenSize.height;
-    // Note, a standard dvd will use 720 x 480 which is a 1.5
-    CGFloat viewAreaAspect = viewAreaSize.width / viewAreaSize.height;
-    
-    if (scaleToScreen == YES)
-    {
-        
-        if (screenAspect < viewAreaAspect)
-        {
-            resultSize.width = screenSize.width;
-            resultSize.height = (screenSize.width / viewAreaAspect);
-        }
-        else
-        {
-            resultSize.height = screenSize.height;
-            resultSize.width = resultSize.height * viewAreaAspect;
-        }
-        
-    }
-    else if ( resultSize.width > maxWidth || resultSize.height > maxHeight )
+
+    if ( resultSize.width > maxWidth || resultSize.height > maxHeight )
     {
     	// Source is larger than screen in one or more dimensions
         if ( resultPar > screenAspect )
@@ -1492,56 +1356,51 @@
 
     // If necessary, grow to minimum dimensions to ensure controls overlay is not obstructed
     if ( resultSize.width < minWidth )
-    {
         resultSize.width = minWidth;
-    }
     if ( resultSize.height < minHeight )
-    {
         resultSize.height = minHeight;
-    }
-    
-    return resultSize;
 
-    
+    return resultSize;
 }
 
 //
-// -[PictureController(Private) resizePanelForViewSize:animate:]
+// -[PictureController(Private) resizeWindowForViewSize:]
 //
 // Resizes the entire window to accomodate a view of a particular size.
 //
-- (void)resizeSheetForViewSize: (NSSize)viewSize
+- (void)resizeWindowForViewSize: (NSSize)viewSize
 {
     // Figure out the deltas for the new frame area
-    NSSize currentSize = [fPictureViewArea frame].size;
+    NSSize currentSize = [[[self window] contentView] frame].size;
     CGFloat deltaX = viewSize.width - currentSize.width;
     CGFloat deltaY = viewSize.height - currentSize.height;
     
     // Now resize the whole panel by those same deltas, but don't exceed the min
     NSRect frame = [[self window] frame];
     NSSize maxSize = [[[self window] screen] visibleFrame].size;
-    /* if we are not Scale To Screen, put an 85% of visible screen on the window */
+    /* if we are not Scale To Screen, put an 10% of visible screen on the window */
     if (scaleToScreen == NO )
     {
-        maxSize.width = maxSize.width * 0.85;
-        maxSize.height = maxSize.height * 0.85;
+        maxSize.width = maxSize.width * 0.90;
+        maxSize.height = maxSize.height * 0.90;
     }
     
     /* Set our min size to the storage size */
     NSSize minSize;
-    minSize.width = fTitle->width;
-    minSize.height = fTitle->height;
+    minSize.width = fTitle->width / backingScaleFactor;
+    minSize.height = fTitle->height / backingScaleFactor;
     
     frame.size.width += deltaX;
     frame.size.height += deltaY;
     if( frame.size.width < minSize.width )
     {
         frame.size.width = minSize.width;
+        deltaX = frame.size.width - currentSize.width;
     }
-    
     if( frame.size.height < minSize.height )
     {
         frame.size.height = minSize.height;
+        deltaY = frame.size.height - currentSize.height;
     }
     /* compare frame to max size of screen */
     
@@ -1555,103 +1414,41 @@
         frame.size.height = maxSize.height;
     }
     
-    
-    
-
-    
     // But now the sheet is off-center, so also shift the origin to center it and
     // keep the top aligned.
     if( frame.size.width != [[self window] frame].size.width )
         frame.origin.x -= (deltaX / 2.0);
     
-        
-        /* Since upon launch we can open up the preview window if it was open
-         * the last time we quit (and at the size it was) we want to make
-         * sure that upon resize we do not have the window off the screen
-         * So check the origin against the screen origin and adjust if
-         * necessary.
-         */
-        NSSize screenSize = [[[self window] screen] visibleFrame].size;
-        NSPoint screenOrigin = [[[self window] screen] frame].origin;
-        if (screenSize.height < frame.size.height)
-        {
-            frame.size.height = screenSize.height;
-        }
-        if (screenSize.width < frame.size.width)
-        {
-            frame.size.width = screenSize.width;
-        }
-        
-        
-        /* our origin is off the screen to the left*/
-        if (frame.origin.x < screenOrigin.x)
-        {
-            /* so shift our origin to the right */
-            frame.origin.x = screenOrigin.x;
-        }
-        else if ((frame.origin.x + frame.size.width) > (screenOrigin.x + screenSize.width))
-        {
-            /* the right side of the preview is off the screen, so shift to the left */
-            frame.origin.x = (screenOrigin.x + screenSize.width) - frame.size.width;
-        }
-        
-        [[self window] setFrame:frame display:YES animate:YES];
-    
-    
-}
-
-//
-// -[PictureController(Private) setViewSize:]
-//
-// Changes the view's size and centers it vertically inside of its area.
-// Assumes resizeSheetForViewSize: has already been called.
-//
-- (void)setViewSize: (NSSize)viewSize
-{   
-    
-    /* special case for scaleToScreen */
-    NSSize areaSize = [fPictureViewArea frame].size;
-    CGFloat viewSizeAspect = viewSize.width / viewSize.height;
-    
-    if (viewSize.width > areaSize.width || viewSize.height > areaSize.height)
+    /* Since upon launch we can open up the preview window if it was open
+     * the last time we quit (and at the size it was) we want to make
+     * sure that upon resize we do not have the window off the screen
+     * So check the origin against the screen origin and adjust if
+     * necessary.
+     */
+    NSSize screenSize = [[[self window] screen] visibleFrame].size;
+    NSPoint screenOrigin = [[[self window] screen] frame].origin;
+    if (screenSize.height < frame.size.height)
     {
-        
-        if (viewSizeAspect > 1.0) // we are wider than taller, so expand the width to fill the area and scale the height
-        {
-            viewSize.width = areaSize.width;
-            viewSize.height = viewSize.width / viewSizeAspect;
-        }
-        else
-        {
-            viewSize.height = areaSize.height;
-            viewSize.width = viewSize.height * viewSizeAspect;
-        }
-        
+        frame.size.height = screenSize.height;
+    }
+    if (screenSize.width < frame.size.width)
+    {
+        frame.size.width = screenSize.width;
     }
     
-    [fPictureView setFrameSize:viewSize];
+    /* our origin is off the screen to the left*/
+    if (frame.origin.x < screenOrigin.x)
+    {
+        /* so shift our origin to the right */
+        frame.origin.x = screenOrigin.x;
+    }
+    else if ((frame.origin.x + frame.size.width) > (screenOrigin.x + screenSize.width))
+    {
+        /* the right side of the preview is off the screen, so shift to the left */
+        frame.origin.x = (screenOrigin.x + screenSize.width) - frame.size.width;
+    }
     
-    
-    // center it vertically and horizontally
-    NSPoint origin = [fPictureViewArea frame].origin;
-    origin.y += ([fPictureViewArea frame].size.height -
-                 [fPictureView frame].size.height) / 2.0;
-    
-    origin.x += ([fPictureViewArea frame].size.width -
-                 [fPictureView frame].size.width) / 2.0; 
-
-    origin.x = floor( origin.x );
-    origin.y = floor( origin.y );
-    
-    [fPictureView setFrameOrigin:origin];
-    
-}
-
-
-- (BOOL)viewNeedsToResizeToSize: (NSSize)newSize
-{
-    NSSize viewSize = [fPictureViewArea frame].size;
-    return (newSize.width != viewSize.width || newSize.height != viewSize.height);
+    [[self window] setFrame:frame display:YES animate:YES];
 }
 
 @end

@@ -12,6 +12,8 @@ namespace HandBrake.ApplicationServices.Model
     using System.Collections.ObjectModel;
     using System.Linq;
 
+    using Caliburn.Micro;
+
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Model.Encoding;
@@ -22,8 +24,17 @@ namespace HandBrake.ApplicationServices.Model
     /// <summary>
     /// An Encode Task
     /// </summary>
-    public class EncodeTask
+    public class EncodeTask : PropertyChangedBase
     {
+        #region Private Fields
+
+        /// <summary>
+        /// The advanced panel enabled.
+        /// </summary>
+        private bool showAdvancedTab;
+
+        #endregion
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EncodeTask"/> class.
         /// </summary>
@@ -436,7 +447,7 @@ namespace HandBrake.ApplicationServices.Model
         public bool FastDecode { get; set; }
 
         /// <summary>
-        /// Extra Advanced Arguments for the Video Tab.
+        /// Gets or sets Extra Advanced Arguments for the Video Tab.
         /// </summary>
         public string ExtraAdvancedArguments { get; set; }
 
@@ -493,6 +504,25 @@ namespace HandBrake.ApplicationServices.Model
         /// Gets or sets PreviewEncodeStartAt.
         /// </summary>
         public string PreviewEncodeStartAt { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether advanced panel enabled.
+        /// </summary>
+        public bool ShowAdvancedTab
+        {
+            get
+            {
+                return this.showAdvancedTab;
+            }
+            set
+            {
+                if (!object.Equals(value, this.showAdvancedTab))
+                {
+                    this.showAdvancedTab = value;
+                    this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);
+                }
+            }
+        }
         #endregion
     }
 }

@@ -1348,25 +1348,34 @@ subtitle_remove_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
         {
             gtk_tree_selection_select_iter (selection, &nextIter);
         }
+
         // Get the row number
         treepath = gtk_tree_model_get_path (store, &iter);
         indices = gtk_tree_path_get_indices (treepath);
         row = indices[0];
         gtk_tree_path_free(treepath);
+        if (row < 0) return;
+
+        subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
+        if (row >= ghb_array_len(subtitle_list))
+            return;
+
+        // Update our settings list before removing the row from the
+        // treeview.  Removing from the treeview sometimes provokes an
+        // immediate selection change, so the list needs to be up to date
+        // when this happens.
+        GValue *old = ghb_array_get_nth(subtitle_list, row);
+        ghb_value_free(old);
+        ghb_array_remove(subtitle_list, row);
+
         // Remove the selected item
         gtk_list_store_remove (GTK_LIST_STORE(store), &iter);
         // remove from subtitle settings list
-        if (row < 0) return;
         widget = GHB_WIDGET (ud->builder, "subtitle_add");
         gtk_widget_set_sensitive(widget, TRUE);
         widget = GHB_WIDGET (ud->builder, "srt_add");
         gtk_widget_set_sensitive(widget, TRUE);
-        subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
-        if (row >= ghb_array_len(subtitle_list))
-            return;
-        GValue *old = ghb_array_get_nth(subtitle_list, row);
-        ghb_value_free(old);
-        ghb_array_remove(subtitle_list, row);
+
         ghb_live_reset(ud);
     }
 }

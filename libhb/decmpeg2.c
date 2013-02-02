@@ -60,6 +60,7 @@ typedef struct hb_libmpeg2_s
         int64_t          start;             // start time of this frame
         hb_buffer_t    * cc_buf;            // captions for this frame
     } tags[NTAGS];
+    uint8_t              cc_tag_pending;
 
     struct SwsContext *sws_context; // if we have to rescale or convert color space
     int             sws_width;
@@ -84,7 +85,7 @@ static hb_libmpeg2_t * hb_libmpeg2_init()
     int i;
     for ( i = 0; i < NTAGS; ++i )
     {
-        m->tags[i].start = -1;
+        m->tags[i].start = -2;
     }
 
     return m;
@@ -258,7 +259,7 @@ static void next_tag( hb_libmpeg2_t *m, hb_buffer_t *buf_es )
     {
         if ( m->tags[m->cur_tag].start < 0 ||
              ( m->got_iframe && m->tags[m->cur_tag].start >= m->first_pts ) )
-            hb_log("mpeg2 tag botch: pts %"PRId64", tag pts %"PRId64" buf 0x%p",
+            hb_log("mpeg2 tag botch: pts %"PRId64", tag pts %"PRId64" buf %p",
                    buf_es->s.start, m->tags[m->cur_tag].start, m->tags[m->cur_tag].cc_buf);
         if ( m->tags[m->cur_tag].cc_buf )
             hb_buffer_close( &m->tags[m->cur_tag].cc_buf );
@@ -363,6 +364,7 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
         if( buf_es->s.start >= 0 )
         {
             next_tag( m, buf_es );
+            m->cc_tag_pending = 1;
         }
         mpeg2_buffer( m->libmpeg2, buf_es->data, buf_es->data + buf_es->size );
     }
@@ -385,22 +387,32 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
             // if we don't have a tag for the captions, make one
             if ( m->last_cc1_buf && m->tags[m->cur_tag].cc_buf != m->last_cc1_buf )
             {
-                if (m->tags[m->cur_tag].cc_buf)
+                // If we have not set a CC tag for the picture and
+                // we have a new CC buffer, make a new tag.
+                if (!m->cc_tag_pending && m->tags[m->cur_tag].cc_buf != NULL)
                 {
-                    hb_log("mpeg2 tag botch2: pts %"PRId64", tag pts %"PRId64" buf 0x%p",
+                    next_tag( m, buf_es );
+                }
+                else if (m->tags[m->cur_tag].cc_buf)
+                {
+                    hb_log("mpeg2 tag botch2: pts %"PRId64", tag pts %"PRId64" buf %p",
                            buf_es->s.start, m->tags[m->cur_tag].start, m->tags[m->cur_tag].cc_buf);
                     hb_buffer_close( &m->tags[m->cur_tag].cc_buf );
                 }
                 // see if we already made a tag for the timestamp. If so we
                 // can just use it, otherwise make a new tag.
-                if (m->tags[m->cur_tag].start < 0)
+                if (m->tags[m->cur_tag].start == -2)
                 {
                     next_tag( m, buf_es );
                 }
                 m->tags[m->cur_tag].cc_buf = m->last_cc1_buf;
             }
         }
-        if( state == STATE_SEQUENCE )
+        if( state == STATE_PICTURE )
+        {
+            m->cc_tag_pending = 0;
+        }
+        else if( state == STATE_SEQUENCE )
         {
             if( !( m->width && m->height && m->rate ) )
             {
@@ -463,7 +475,7 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                     int t = m->info->display_picture->tag;
                     buf->s.start = m->tags[t].start;
                     cc_buf = m->tags[t].cc_buf;
-                    m->tags[t].start = -1;
+                    m->tags[t].start = -2;
                     m->tags[t].cc_buf = NULL;
                 }
                 if( buf->s.start < 0 && m->last_pts >= 0 )

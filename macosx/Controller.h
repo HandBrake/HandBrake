@@ -93,10 +93,12 @@ BOOL                        fIsDragging;
     IBOutlet NSTextField         * fQueueStatus;
     
     /* Output panel */
-    HBOutputPanelController       *outputPanel;
+    HBOutputPanelController      * outputPanel;
 	
     /* Source box */
 	IBOutlet NSProgressIndicator * fScanIndicator;
+	IBOutlet NSBox               * fScanHorizontalLine;
+    
 	NSString                     * sourceDisplayName;
     IBOutlet NSTextField         * fSrcDVD2Field;
     IBOutlet NSTextField         * fSrcTitleField;

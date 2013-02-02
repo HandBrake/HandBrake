@@ -2085,53 +2085,35 @@ x264_tune_opts_set(GtkBuilder *builder, const gchar *name)
 }
 
 static void
-x264_profile_opts_set(GtkBuilder *builder, const gchar *name)
+h264_profile_opts_set(GtkBuilder *builder, const gchar *name)
 {
     GtkTreeIter iter;
     GtkListStore *store;
     gint ii, count = 0;
 
     const char * const *profiles;
-    profiles = hb_x264_profiles();
+    profiles = hb_h264_profiles();
     while (profiles && profiles[count]) count++;
 
-    g_debug("x264_profile_opts_set ()\n");
+    g_debug("h264_profile_opts_set ()\n");
     store = get_combo_box_store(builder, name);
     gtk_list_store_clear(store);
 
-    gtk_list_store_append(store, &iter);
-    gtk_list_store_set(store, &iter, 
-                       0, "Auto",
-                       1, TRUE, 
-                       2, "auto",
-                       3, (gdouble)0, 
-                       4, "auto",
-                       -1);
-
     for (ii = 0; ii < count; ii++)
     {
-        // HandBrake doesn't support high10 (10 bit encoding)
-        // or high422 (YUV422)
-        if (!strcasecmp("high10", profiles[ii]) ||
-            !strcasecmp("high422", profiles[ii]) ||
-            !strcasecmp("high444", profiles[ii]))
-        {
-            continue;
-        }
-
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter, 
                            0, profiles[ii],
                            1, TRUE, 
                            2, profiles[ii],
-                           3, (gdouble)ii + 1,
+                           3, (gdouble)ii,
                            4, profiles[ii],
                            -1);
     }
 }
 
 static void
-x264_level_opts_set(GtkBuilder *builder, const gchar *name)
+h264_level_opts_set(GtkBuilder *builder, const gchar *name)
 {
     GtkTreeIter iter;
     GtkListStore *store;
@@ -2141,18 +2123,9 @@ x264_level_opts_set(GtkBuilder *builder, const gchar *name)
     levels = hb_h264_levels();
     while (levels && levels[count]) count++;
 
-    g_debug("x264_level_opts_set ()\n");
+    g_debug("h264_level_opts_set ()\n");
     store = get_combo_box_store(builder, name);
     gtk_list_store_clear(store);
-
-    gtk_list_store_append(store, &iter);
-    gtk_list_store_set(store, &iter, 
-                       0, "Auto",
-                       1, TRUE, 
-                       2, "auto",
-                       3, (gdouble)0, 
-                       4, "auto",
-                       -1);
 
     for (ii = 0; ii < count; ii++)
     {
@@ -2161,7 +2134,7 @@ x264_level_opts_set(GtkBuilder *builder, const gchar *name)
                            0, levels[ii],
                            1, TRUE, 
                            2, levels[ii],
-                           3, (gdouble)ii + 1,
+                           3, (gdouble)ii,
                            4, levels[ii],
                            -1);
     }
@@ -3040,8 +3013,8 @@ ghb_update_ui_combo_box(
         small_opts_set(ud->builder, "x264_analyse", &analyse_opts);
         small_opts_set(ud->builder, "x264_trellis", &trellis_opts);
         x264_tune_opts_set(ud->builder, "x264Tune");
-        x264_profile_opts_set(ud->builder, "h264Profile");
-        x264_level_opts_set(ud->builder, "h264Level");
+        h264_profile_opts_set(ud->builder, "h264Profile");
+        h264_level_opts_set(ud->builder, "h264Level");
     }
     else
     {
@@ -3074,9 +3047,9 @@ ghb_update_ui_combo_box(
         else if (strcmp(name, "x264Tune") == 0)
             x264_tune_opts_set(ud->builder, "x264Tune");
         else if (strcmp(name, "h264Profile") == 0)
-            x264_profile_opts_set(ud->builder, "h264Profile");
+            h264_profile_opts_set(ud->builder, "h264Profile");
         else if (strcmp(name, "h264Level") == 0)
-            x264_level_opts_set(ud->builder, "h264Level");
+            h264_level_opts_set(ud->builder, "h264Level");
         else
             generic_opts_set(ud->builder, name, find_combo_table(name));
     }
@@ -3200,10 +3173,10 @@ void ghb_set_video_encoder_opts(hb_job_t *job, GValue *js)
                     hb_job_set_x264_tune(job, tunes);
 
                 if (profile != NULL && strcasecmp(profile, "auto"))
-                    hb_job_set_x264_profile(job, profile);
+                    hb_job_set_h264_profile(job, profile);
 
                 if (level != NULL && strcasecmp(level, "auto"))
-                    hb_job_set_x264_level(job, level);
+                    hb_job_set_h264_level(job, level);
 
                 hb_job_set_advanced_opts(job, opts);
 

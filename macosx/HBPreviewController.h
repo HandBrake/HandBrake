@@ -12,22 +12,18 @@
 
 @class HBController;
 
-#define HB_NUM_HBLIB_PICTURES      20   // # of preview pictures libhb should generate
-
-@interface PreviewController : NSWindowController
+@interface PreviewController : NSWindowController <NSWindowDelegate>
 {
     hb_handle_t              * fHandle;
     hb_title_t               * fTitle;
 
-    HBController             *fHBController;        // reference to HBController
+    HBController             * fHBController;     // reference to HBController
     
-    IBOutlet NSWindow        * fPreviewWindow;
-    NSWindow                 * fFullScreenWindow; // Full Screen window
     NSMutableDictionary      * fPicturePreviews;  // NSImages, one for each preview libhb creates, created lazily
     int                        fPicture;
 
-    IBOutlet NSImageView     * fPictureView;
-    IBOutlet NSBox           * fPictureViewArea;
+    CALayer                  * fWhiteBackground;
+    CALayer                  * fPictureLayer;
     IBOutlet NSBox           * fPictureControlBox;
     IBOutlet NSBox           * fEncodingControlBox;
     IBOutlet NSBox           * fMoviePlaybackControlBox;
@@ -36,23 +32,16 @@
     IBOutlet NSTextField     * fInfoField;
     IBOutlet NSTextField     * fscaleInfoField;
     
-    BOOL                     isEncoding;
-
-	
-    int                      MaxOutputWidth;
-    int                      MaxOutputHeight;
-
-    int output_width, output_height, output_par_width, output_par_height;
-    int display_width;
+    CGFloat                  backingScaleFactor;
     
     /* Hud Control Overlay */
     NSTimer                         * fHudTimer;
     int                               hudTimerSeconds;
     
     /* Full Screen Mode Toggle */
+    BOOL                              scaleToScreen;
     IBOutlet NSButton               * fScaleToScreenToggleButton;
     IBOutlet NSButton               * fPictureSettingsToggleButton;
-    BOOL                              scaleToScreen;
     
     /* Movie Previews */
     QTMovie                         * aMovie;
@@ -68,13 +57,13 @@
     IBOutlet NSTextField            * fMovieInfoField;
     NSTimer                         * fMovieTimer;
     
-    
     IBOutlet NSButton               * fCreatePreviewMovieButton;
     IBOutlet NSButton               * fCancelPreviewMovieButton;
     IBOutlet NSButton               * fShowPreviewMovieButton;
     NSString                        * fPreviewMoviePath;
     IBOutlet NSProgressIndicator    * fMovieCreationProgressIndicator;
     hb_handle_t                     * fPreviewLibhb;           // private libhb for creating previews
+    NSInteger                         fEncodeState;
     NSTimer                         * fLibhbTimer;             // timer for retrieving state from libhb
     IBOutlet NSTextField            * fPreviewMovieStatusField; 
     IBOutlet NSPopUpButton          * fPreviewMovieLengthPopUp; // popup of choices for length of preview in seconds
@@ -83,18 +72,15 @@
 
 - (void) SetHandle: (hb_handle_t *) handle;
 - (void) SetTitle:  (hb_title_t *)  title;
-- (void)setHBController: (HBController *)controller;
-- (IBAction) showPreviewWindow: (id)sender;
-- (BOOL)acceptsMouseMovedEvents;
+- (void) setHBController: (HBController *)controller;
 - (void) displayPreview;
 
-- (IBAction) SettingsChanged: (id) sender;
+- (IBAction) settingsChanged: (id) sender;
 - (IBAction) pictureSliderChanged: (id) sender;
-- (IBAction)showPictureSettings:(id)sender;
+- (IBAction) showPictureSettings:(id)sender;
 - (NSString*) pictureSizeInfoString;
 
-- (IBAction)toggleScaleToScreen:(id)sender;
-- (IBAction)goWindowedScreen:(id)sender;
+- (IBAction) toggleScaleToScreen:(id)sender;
 
 /* HUD overlay */
 - (void) enableHudControls;
@@ -108,37 +94,36 @@
 - (void) stopReceivingLibhbNotifications;
 
 - (void) installMovieCallbacks;
-- (void)removeMovieCallbacks;
+- (void) removeMovieCallbacks;
 
 - (IBAction) cancelCreateMoviePreview: (id) sender;
 - (IBAction) createMoviePreview: (id) sender;
 - (void) libhbStateChanged: (hb_state_t ) state;
 - (IBAction) showMoviePreview: (NSString *) path;
+- (IBAction) showPicturesPreview: (id) sender;
 - (IBAction) toggleMoviePreviewPlayPause: (id) sender;
 - (IBAction) moviePlaybackGoToBeginning: (id) sender;
 - (IBAction) moviePlaybackGoToEnd: (id) sender;
 - (IBAction) moviePlaybackGoBackwardOneFrame: (id) sender;
 - (IBAction) moviePlaybackGoForwardOneFrame: (id) sender;
 
--(void) initPreviewScrubberForMovie;
--(void) adjustPreviewScrubberForCurrentMovieTime;
+- (void) initPreviewScrubberForMovie;
+- (void) adjustPreviewScrubberForCurrentMovieTime;
 - (IBAction) previewScrubberChanged: (id) sender;
--(void)setTime:(int)timeValue;
--(void)timeToQTTime:(long)timeValue resultTime:(QTTime *)aQTTime;
+- (BOOL) isPlaying;
+
 - (void) startMovieTimer;
 - (void) stopMovieTimer;
-- (NSString*) calculatePlaybackSMTPETimecodeForDisplay;
 
+- (NSString*) SMTPETimecode: (QTTime)time;
+- (QTTime)SliderToQTTime:(double)time;
 
 - (IBAction) previewDurationPopUpChanged: (id) sender;
 
-
-- (IBAction)showPreviewPanel: (id)sender forTitle: (hb_title_t *)title;
-
-+ (NSImage *) makeImageForPicture: (int)pictureIndex
++ (NSImage *) makeImageForPicture: (NSInteger)pictureIndex
                 libhb:(hb_handle_t*)handle
                 title:(hb_title_t*)title;
-- (NSImage *) imageForPicture: (int) pictureIndex;
+- (NSImage *) imageForPicture: (NSInteger) pictureIndex;
 - (void) purgeImageCache;
 @end
 

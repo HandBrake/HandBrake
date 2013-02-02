@@ -129,6 +129,9 @@
     <Compile Include="Commands\ProcessShortcutCommand.cs" />
     <Compile Include="Commands\SourceMenuCommand.cs" />
     <Compile Include="Commands\AdvancedEncoderOptionsCommand.cs" />
+    <Compile Include="Controls\TimeSpanBox.xaml.cs">
+      <DependentUpon>TimeSpanBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Loading.xaml.cs">
       <DependentUpon>Loading.xaml</DependentUpon>
     </Compile>
@@ -143,6 +146,7 @@
     <Compile Include="Converters\Audio\AudioEncoderConverter.cs" />
     <Compile Include="Converters\Audio\AudioQueueDisplayConverter.cs" />
     <Compile Include="Converters\BooleanToHiddenVisibilityConverter.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Converters\Options\OptionsTabConverter.cs" />
     <Compile Include="Converters\Options\OptionsTabNameConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitlesQueueDisplayConverter.cs" />
@@ -150,6 +154,7 @@
     <Compile Include="Helpers\GrayscaleImage.cs" />
     <Compile Include="Helpers\GrowlCommunicator.cs" />
     <Compile Include="Model\OptionsTab.cs" />
+    <Compile Include="Model\SelectionTitle.cs" />
     <Compile Include="Services\DriveDetectService.cs" />
     <Compile Include="Services\EncodeServiceWrapper.cs" />
     <Compile Include="Services\Interfaces\IDriveDetectService.cs" />
@@ -162,6 +167,11 @@
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\ScanServiceWrapper.cs" />
     <Compile Include="Services\UpdateService.cs" />
+    <Compile Include="ViewModels\Interfaces\IQueueSelectionViewModel.cs" />
+    <Compile Include="ViewModels\QueueSelectionViewModel.cs" />
+    <Compile Include="Views\QueueSelectionView.xaml.cs">
+      <DependentUpon>QueueSelectionView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
     </Compile>
@@ -304,6 +314,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\TimeSpanBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\Loading.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -315,6 +329,10 @@
     <Page Include="Controls\StatusPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\QueueSelectionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ShellView.xaml">
       <SubType>Designer</SubType>

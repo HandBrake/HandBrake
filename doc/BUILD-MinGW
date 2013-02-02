@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn4891 (2012080501) on MinGW
+Guide to Building HandBrake svn5208 (2013012701) on MinGW
 *********************************************************
 
 Table of Contents
@@ -38,9 +38,9 @@ MinGW; but is not necessarily the only configuration that is possible:
 
    * Intel 32-bit or 64-bit hardware
 
-   * MinGW on Fedora 16, Ubuntu or Debian, gcc 4.5+
+   * MinGW on Fedora 17+, Ubuntu 12+ or Debian, gcc 4.5+
 
-   * yasm 1.1.x.x (for i386 or x86_64 architectures)
+   * yasm 1.2.x (for i386 or x86_64 architectures)
 
      Note: It is recommended to use the platform distribution's
      standard compiler for maximum C++ compatibility. If you build with
@@ -62,7 +62,7 @@ MinGW; but is not necessarily the only configuration that is possible:
      `g++-4' respectively and you must indicate to configure the
      desired versions. The following syntax should do the trick:
 
-     ../configure --cross=i686-pc-mingw32 --gcc=gcc-4
+     ../configure --cross=i686-w64-mingw32 --gcc=gcc-4
 
 The following general tools are used on various platforms and it is
 recommended you use these versions or similar:
@@ -89,7 +89,7 @@ recommended you use these versions or similar:
 This chapter is for building from a terminal/shell environment in as
 few commands as possible. Upon completion of the following commands you
 should have a fresh build of HandBrake. Further instructions are
-available beginning with *note overview:: which describes procedures
+available beginning with *Note overview:: which describes procedures
 suitable for repeating builds. This chapter should be skipped by those
 seeking more than a minimalist build.
 
@@ -479,6 +479,7 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    4891
-     date:   2012-08-05 17:23:19 +0100
+     rev:    5208
+     date:   2013-01-26 18:47:13 +0000
      type:   developer
+

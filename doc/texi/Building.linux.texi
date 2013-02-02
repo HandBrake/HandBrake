@@ -19,9 +19,9 @@ The following are the recommended specifications for building on @value{OS.linux
 
 @itemize @bullet
 @item Intel 32-bit or 64-bit kernel
-@item Ubuntu 10.04, gcc 4.4.3, yasm 0.8.0
-@item Fedora 14, gcc 4.5.1, yasm 1.0.1
-@item gcc 4.0.0 or higher is reported to work
+@item Ubuntu 12.04, gcc 4.5, yasm 1.2.x
+@item Fedora 17 and 18, gcc 4.5, yasm 1.2.x
+@item gcc 4.5 or higher is reported to work
 @end itemize
 
 @include building/prerequisites.bundled.texi
@@ -30,7 +30,7 @@ The following are the recommended specifications for building on @value{OS.linux
 
 The @b{GTK UI} introduces some significant extra build requirements. If you intend to disable building the GUI with @command{configure --disable-gtk} you will not need many of these packages installed:
 
-Ubuntu 10.04 - 10.10 packages:
+Ubuntu 12+ packages:
 @itemize @bullet
 @item subversion (cli/gui)
 @item yasm (cli/gui)
@@ -59,7 +59,7 @@ Ubuntu 10.04 - 10.10 packages:
 @item libgstreamer-plugins-base0.10-dev (gui)
 @end itemize
 
-Ubuntu 11.04 - 11.10 packages:
+Ubuntu 12+ packages:
 @itemize @bullet
 @item libappindicator-dev (gui)
 @end itemize
@@ -74,7 +74,7 @@ libgtk2.0-dev libgudev-1.0-dev libwebkit-dev libnotify-dev \
 libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev libappindicator-dev
 @end example
 
-Fedora 12 - 13 package groups:
+Fedora 17+ package groups:
 @itemize @bullet
 @item Development Tools
 @item Development Libraries

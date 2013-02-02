@@ -1,4 +1,4 @@
 $(eval $(call import.MODULE.defs,AUTOMAKE,automake,AUTOCONF))
 $(eval $(call import.CONTRIB.defs,AUTOMAKE))
 
-AUTOMAKE.FETCH.url = http://download.handbrake.fr/handbrake/contrib/automake-1.12.3.tar.bz2
+AUTOMAKE.FETCH.url = http://download.handbrake.fr/handbrake/contrib/automake-1.13.1.tar.bz2

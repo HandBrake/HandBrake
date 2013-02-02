@@ -10,7 +10,7 @@
 namespace HandBrake.ApplicationServices.Services.Interfaces
 {
     using System;
-    using System.Collections.ObjectModel;
+    using System.ComponentModel;
 
     using HandBrake.ApplicationServices.Model;
 
@@ -70,7 +70,7 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// <summary>
         /// Gets The current queue.
         /// </summary>
-        ObservableCollection<QueueTask> Queue { get; }
+        BindingList<QueueTask> Queue { get; }
 
         #endregion
 
