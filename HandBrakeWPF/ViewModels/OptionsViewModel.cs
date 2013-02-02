@@ -147,16 +147,6 @@ namespace HandBrakeWPF.ViewModels
         private bool disablePresetUpdateCheckNotification;
 
         /// <summary>
-        /// The display status messages tray icon.
-        /// </summary>
-        private bool displayStatusMessagesTrayIcon;
-
-        /// <summary>
-        /// The enable gui tooltips.
-        /// </summary>
-        private bool enableGuiTooltips;
-
-        /// <summary>
         /// The growl after encode.
         /// </summary>
         private bool growlAfterEncode;
@@ -566,23 +556,6 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.sendFileToPath = value;
                 this.NotifyOfPropertyChange("SendFileToPath");
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether EnableGuiTooltips.
-        /// </summary>
-        public bool EnableGuiTooltips
-        {
-            get
-            {
-                return this.enableGuiTooltips;
-            }
-
-            set
-            {
-                this.enableGuiTooltips = value;
-                this.NotifyOfPropertyChange("EnableGuiTooltips");
             }
         }
 
@@ -1172,23 +1145,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether DisplayStatusMessagesTrayIcon.
-        /// </summary>
-        public bool DisplayStatusMessagesTrayIcon
-        {
-            get
-            {
-                return this.displayStatusMessagesTrayIcon;
-            }
-
-            set
-            {
-                this.displayStatusMessagesTrayIcon = value;
-                this.NotifyOfPropertyChange("DisplayStatusMessagesTrayIcon");
-            }
-        }
-
-        /// <summary>
         /// Gets or sets LogVerbosityOptions.
         /// </summary>
         public BindingList<int> LogVerbosityOptions
@@ -1478,7 +1434,6 @@ namespace HandBrakeWPF.ViewModels
             // General
             // #############################
 
-            this.EnableGuiTooltips = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.TooltipEnable);
             this.CheckForUpdates = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UpdateStatus);
 
             // Days between update checks
@@ -1647,7 +1602,6 @@ namespace HandBrakeWPF.ViewModels
             // #############################
 
             // Minimise to Tray
-            this.DisplayStatusMessagesTrayIcon = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.TrayIconAlerts);
             this.MinimiseToTray = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.MainWindowMinimize);
             this.DisablePresetUpdateCheckNotification = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PresetNotification);
             this.ClearQueueOnEncodeCompleted = userSettingService.GetUserSetting<bool>(ASUserSettingConstants.ClearCompletedFromQueue);
@@ -1839,7 +1793,6 @@ namespace HandBrakeWPF.ViewModels
             /* General */
             this.userSettingService.SetUserSetting(UserSettingConstants.UpdateStatus, this.CheckForUpdates);
             this.userSettingService.SetUserSetting(UserSettingConstants.DaysBetweenUpdateCheck, this.CheckForUpdatesFrequency);
-            this.userSettingService.SetUserSetting(UserSettingConstants.TooltipEnable, this.EnableGuiTooltips);
             this.userSettingService.SetUserSetting(ASUserSettingConstants.WhenCompleteAction, this.WhenDone);
             this.userSettingService.SetUserSetting(UserSettingConstants.GrowlQueue, this.GrowlAfterQueue);
             this.userSettingService.SetUserSetting(UserSettingConstants.GrowlEncode, this.GrowlAfterEncode);
@@ -1881,7 +1834,6 @@ namespace HandBrakeWPF.ViewModels
 
             /* Advanced */
             userSettingService.SetUserSetting(UserSettingConstants.MainWindowMinimize, this.MinimiseToTray);
-            userSettingService.SetUserSetting(UserSettingConstants.TrayIconAlerts, this.DisplayStatusMessagesTrayIcon);
             userSettingService.SetUserSetting(UserSettingConstants.PresetNotification, this.DisablePresetUpdateCheckNotification);
             userSettingService.SetUserSetting(ASUserSettingConstants.ClearCompletedFromQueue, this.ClearQueueOnEncodeCompleted);
             userSettingService.SetUserSetting(ASUserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
