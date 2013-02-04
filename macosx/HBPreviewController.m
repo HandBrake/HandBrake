@@ -1257,10 +1257,11 @@
             [fPictureSlider setIntegerValue:fPicture < [fPictureSlider maxValue] ? fPicture + 1 : fPicture];
             [self pictureSliderChanged:self];
         }
-        [super keyDown:event];
+        else
+            [super keyDown:event];
     }
-
-    [super keyDown:event];
+    else
+        [super keyDown:event];
 }
 
 #pragma mark *** QTTime Utilities ***
