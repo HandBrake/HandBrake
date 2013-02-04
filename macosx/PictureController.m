@@ -1077,22 +1077,6 @@
    hb_job_t * job = fTitle->job; 
    
    [fPreviewController SetTitle:fTitle];
-    /* Sanity Check Here for < 16 px preview to avoid
-     crashing hb_get_preview. In fact, just for kicks
-     lets getting previews at a min limit of 32, since
-     no human can see any meaningful detail below that */
-    if (job->width >= 64 && job->height >= 64)
-    {
-       
-         // Purge the existing picture previews so they get recreated the next time
-        // they are needed.
-      //  [fPreviewController purgeImageCache];
-        /* We actually call displayPreview now from pictureSliderChanged which keeps
-         * our picture preview slider in sync with the previews being shown
-         */
-
-    //[fPreviewController pictureSliderChanged:nil];
-    }
     
 }
 
@@ -1233,6 +1217,8 @@ are maintained across different sources */
     
     fPictureFilterSettings.grayscale = [fGrayscaleCheck state];
     
+    [self decombDeinterlacePreviewImage];
+    
     if (sender != nil)
     {
         [fHBController pictureSettingsDidChange];
@@ -1241,7 +1227,41 @@ are maintained across different sources */
 
 }
 
-
+- (void) decombDeinterlacePreviewImage
+{
+    if ([fDecombDeinterlaceSlider floatValue] < 0.50)
+    {
+        /* Since Libhb only shows a deinterlaced preview image via deinterlace .. for decomb we
+         do a quick switch to get libhb to show a deinterlaced image if needed even though deinterlace
+         has not been changed by the user. so we temporarily switch deinterace accoring to decomb then
+         call reloadStillPreview quickly and then switch deinterlace back to its proper state.
+         */
+        
+        // decomb is chosen
+        if (fPictureFilterSettings.decomb > 0)
+        {
+            /* Temporarily turn on deinterlacing .... */
+            fTitle->job->deinterlace  = 1;
+            /* Grab a still preview ... */
+            [self reloadStillPreview];
+            /* ... then reset deinterlace back to where specified in the ui */
+            fTitle->job->deinterlace  = [fDeinterlacePopUp indexOfSelectedItem];
+            
+        }
+        else
+        {
+            [self reloadStillPreview];   
+        }
+        
+    }
+    else
+    {
+        fTitle->job->deinterlace  = [fDeinterlacePopUp indexOfSelectedItem];
+        [self reloadStillPreview];
+    }
+    
+    
+}
 #pragma mark -
 
 - (IBAction) deblockSliderChanged: (id) sender

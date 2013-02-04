@@ -5769,7 +5769,7 @@ the user is using "Custom" settings by determining the sender*/
     // width or height may have changed, unparse
     [self x264PresetsChangedDisplayExpandedOptions:nil];
     
-    //[fPictureController reloadStillPreview]; 
+    [fPictureController decombDeinterlacePreviewImage];
 }
 
 
