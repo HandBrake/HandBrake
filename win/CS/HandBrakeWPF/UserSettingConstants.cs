@@ -132,16 +132,6 @@ namespace HandBrakeWPF
         public const string Skipversion = "skipversion";
 
         /// <summary>
-        /// Tooltip
-        /// </summary>
-        public const string TooltipEnable = "tooltipEnable";
-
-        /// <summary>
-        /// Tray Icon
-        /// </summary>
-        public const string TrayIconAlerts = "trayIconAlerts";
-
-        /// <summary>
         /// Update Status
         /// </summary>
         public const string UpdateStatus = "updateStatus";

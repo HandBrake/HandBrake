@@ -130,14 +130,6 @@
   </item>
   <item>
     <key>
-      <string>tooltipEnable</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">true</anyType>
-    </value>
-  </item>
-  <item>
-    <key>
       <string>defaultPreset</string>
     </key>
     <value>
@@ -205,7 +197,7 @@
       <string>MainWindowMinimize</string>
     </key>
     <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">true</anyType>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
     </value>
   </item>
   <item>
@@ -222,14 +214,6 @@
     </key>
     <value>
       <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
-    </value>
-  </item>
-  <item>
-    <key>
-      <string>trayIconAlerts</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">true</anyType>
     </value>
   </item>
   <item>

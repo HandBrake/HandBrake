@@ -290,7 +290,7 @@
 
                         <StackPanel Orientation="Vertical" Grid.Column="1" Margin="20,0,0,0">
                             <CheckBox Content="Prevent the system from sleeping while encoding" IsChecked="{Binding PreventSleep}" />
-                            <CheckBox Content="Minimize to system tray (Requires Restart)" Visibility="Collapsed" IsChecked="{Binding MinimiseToTray}" />
+                            <CheckBox Content="Minimize to system tray (Requires Restart)" IsChecked="{Binding MinimiseToTray}" />
                             <CheckBox Content="Display status messages from tray icon (balloon popups)"  Visibility="Collapsed"  IsChecked="{Binding DisplayStatusMessagesTrayIcon}" />
                             <CheckBox Content="Disable built-in preset update notification" IsChecked="{Binding DisablePresetUpdateCheckNotification}" />
                             <CheckBox Content="Always clear completed queue items after an encode completes" IsChecked="{Binding ClearQueueOnEncodeCompleted}" />
