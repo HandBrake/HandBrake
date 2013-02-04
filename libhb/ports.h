@@ -102,6 +102,14 @@ int        hb_net_send( hb_net_t *, char * );
 int        hb_net_recv( hb_net_t *, char *, int );
 void       hb_net_close( hb_net_t ** );
 
+/************************************************************************
+* OS Sleep Allow / Prevent
+***********************************************************************/
+void     * hb_system_sleep_opaque_init();
+void       hb_system_sleep_opaque_close( void ** opaque );
+void       hb_system_sleep_allow( void * opaque );
+void       hb_system_sleep_prevent( void * opaque );
+
 #endif /* __LIBHB__ */
 
 #endif

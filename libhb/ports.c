@@ -66,6 +66,10 @@
 #include <sys/ioctl.h>
 #endif
 
+#ifdef __APPLE__
+#include <IOKit/pwr_mgt/IOPMLib.h>
+#endif
+
 #include <stddef.h>
 #include <unistd.h>
 
@@ -781,3 +785,70 @@ char *strtok_r(char *s, const char *delim, char **save_ptr)
     return token;
 }
 #endif
+
+/************************************************************************
+* OS Sleep Allow / Prevent
+***********************************************************************/
+
+#ifdef __APPLE__
+// 128 chars limit for IOPMAssertionCreateWithName
+static CFStringRef reasonForActivity= CFSTR("HandBrake is currently scanning and/or encoding");
+#endif
+
+void* hb_system_sleep_opaque_init()
+{
+    void* opaque;
+#ifdef __APPLE__
+    opaque = calloc( sizeof( IOPMAssertionID ), 1);
+    IOPMAssertionID * assertionID = (IOPMAssertionID *)opaque;
+    *assertionID = -1;
+#endif
+
+    return opaque;
+}
+
+void hb_system_sleep_opaque_close(void **_opaque)
+{
+#ifdef __APPLE__
+    IOPMAssertionID * assertionID = (IOPMAssertionID *) *_opaque;
+    free( assertionID );
+#endif
+    *_opaque = NULL;
+}
+
+void hb_system_sleep_allow(void *opaque)
+{
+#ifdef __APPLE__
+    IOPMAssertionID * assertionID = (IOPMAssertionID *)opaque;
+
+    if (*assertionID == -1)
+        return;
+
+    IOReturn success = IOPMAssertionRelease(*assertionID);
+
+    if (success == kIOReturnSuccess) {
+        hb_deep_log( 3, "osxsleep: IOPM assertion %d successfully released, sleep allowed", *assertionID );
+        *assertionID = -1;
+    } else {
+        hb_log( "osxsleep: error while trying to unset power management assertion" );
+    }
+#endif
+}
+
+void hb_system_sleep_prevent(void *opaque)
+{
+#ifdef __APPLE__
+    IOPMAssertionID * assertionID = (IOPMAssertionID *)opaque;
+
+    if (*assertionID != -1)
+        return;
+
+    IOReturn success = IOPMAssertionCreateWithName(kIOPMAssertionTypeNoIdleSleep,
+                                                   kIOPMAssertionLevelOn, reasonForActivity, assertionID);
+    if (success == kIOReturnSuccess) {
+        hb_deep_log( 3, "IOPM assertion %d successfully created, prevent sleep", *assertionID);
+    } else {
+        hb_log( "osxsleep: error while trying to set power management assertion" );
+    }
+#endif
+}
