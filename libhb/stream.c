@@ -611,7 +611,7 @@ static int hb_stream_get_type(hb_stream_t *stream)
     if ( fread(buf, 1, sizeof(buf), stream->file_handle) == sizeof(buf) )
     {
 #ifdef USE_HWD
-        if ( hb_get_gui_info(&hb_gui, 1) || (hb_get_gui_info(&hb_gui, 3) == 0) )
+        if ( hb_get_gui_info(&hb_gui, 1) )
             return 0;
 #endif
         int psize;
