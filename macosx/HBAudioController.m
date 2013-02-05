@@ -165,10 +165,12 @@ NSString *HBMixdownChangedNotification = @"HBMixdownChangedNotification";
             audio->out.codec = [[[anAudio codec] objectForKey: keyAudioCodec] intValue];
             audio->out.compression_level = hb_get_default_audio_compression(audio->out.codec);
             audio->out.mixdown = [[[anAudio mixdown] objectForKey: keyAudioMixdown] intValue];
+            audio->out.normalize_mix_level = 0;
             audio->out.bitrate = [[[anAudio bitRate] objectForKey: keyAudioBitrate] intValue];
             audio->out.samplerate = [sampleRateToUse intValue];
             audio->out.dynamic_range_compression = [[anAudio drc] floatValue];
             audio->out.gain = [[anAudio gain] floatValue];
+            audio->out.dither_method = hb_audio_dither_get_default();
 
             hb_audio_add(aJob, audio);
             free(audio);

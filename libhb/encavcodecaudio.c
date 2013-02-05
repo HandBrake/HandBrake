@@ -148,6 +148,16 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
                        context->channel_layout, 0);
         av_opt_set_int(pv->avresample, "out_channel_layout",
                        context->channel_layout, 0);
+        if (hb_audio_dither_is_supported(audio->config.out.codec))
+        {
+            // dithering needs the sample rate
+            av_opt_set_int(pv->avresample, "in_sample_rate",
+                           context->sample_rate, 0);
+            av_opt_set_int(pv->avresample, "out_sample_rate",
+                           context->sample_rate, 0);
+            av_opt_set_int(pv->avresample, "dither_method",
+                           audio->config.out.dither_method, 0);
+        }
         if (avresample_open(pv->avresample))
         {
             hb_error("encavcodecaInit: avresample_open() failed");
