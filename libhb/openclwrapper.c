@@ -15,11 +15,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <windows.h>
 #include "openclwrapper.h"
 #include "openclkernels.h"
 
 //#define USE_EXTERNAL_KERNEL
+#ifdef SYS_MINGW
+#include <windows.h>
+#endif
 
 #if defined(__APPLE__)
 #include <OpenCL/cl.h>
@@ -571,7 +573,9 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
                                CL_QUEUE_THREAD_HANDLE_AMD, sizeof(handle),
                                &handle, NULL ) == CL_SUCCESS && handle != INVALID_HANDLE_VALUE )
     {
+#ifdef SYS_MINGW 
         SetThreadPriority( handle, THREAD_PRIORITY_TIME_CRITICAL );
+#endif
     }
 
     return 0;

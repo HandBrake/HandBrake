@@ -204,7 +204,7 @@ static const hb_dx_mode_t dxva2_modes[] =
 };
 
 int hb_va_get_frame_buf( hb_va_dxva2_t *dxva2, AVCodecContext *p_context, AVFrame *frame );
-int hb_va_extract( hb_va_dxva2_t *dxva2, uint8_t *dst, AVFrame *frame, int job_w, int job_h, int *crop, hb_oclscale_t *os );
+int hb_va_extract( hb_va_dxva2_t *dxva2, uint8_t *dst, AVFrame *frame, int job_w, int job_h, int *crop, hb_oclscale_t *os, int use_opencl );
 enum PixelFormat hb_ffmpeg_get_format( AVCodecContext *, const enum PixelFormat * );
 hb_va_dxva2_t *hb_va_create_dxva2( hb_va_dxva2_t *dxva2, int codec_id );
 void hb_va_new_dxva2( hb_va_dxva2_t *dxva2, AVCodecContext *p_context );

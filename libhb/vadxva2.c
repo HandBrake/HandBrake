@@ -692,7 +692,7 @@ void hb_init_filter( cl_mem src, int srcwidth, int srcheight, uint8_t* dst, int 
  *  nv12 to yuv with opencl and with C reference
  *  scale with opencl
  */
-int hb_va_extract( hb_va_dxva2_t *dxva2, uint8_t *dst, AVFrame *frame, int job_w, int job_h, int *crop, hb_oclscale_t *os )
+int hb_va_extract( hb_va_dxva2_t *dxva2, uint8_t *dst, AVFrame *frame, int job_w, int job_h, int *crop, hb_oclscale_t *os, int use_opencl )
 
 {
     LPDIRECT3DSURFACE9 d3d = (LPDIRECT3DSURFACE9)(uintptr_t)frame->data[3];
@@ -716,7 +716,7 @@ int hb_va_extract( hb_va_dxva2_t *dxva2, uint8_t *dst, AVFrame *frame, int job_w
             lock.Pitch,
         };
 #ifdef USE_OPENCL
-        if( ( dxva2->width > job_w || dxva2->height > job_h ) && (TestGPU() == 0) && (hb_get_gui_info(&hb_gui, 2) == 1))
+        if( ( dxva2->width > job_w || dxva2->height > job_h ) && (TestGPU() == 0) && (use_opencl))
         {
             hb_ocl_nv12toyuv( plane, lock.Pitch,  dxva2->width, dxva2->height, crop, dxva2 );
 

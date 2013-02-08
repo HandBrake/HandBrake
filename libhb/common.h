@@ -147,15 +147,7 @@ int hb_subtitle_can_burn( int source );
 int hb_subtitle_can_pass( int source, int mux );
 
 hb_attachment_t *hb_attachment_copy(const hb_attachment_t *src);
-int hb_get_gui_info(hb_gui_t *gui, int option);
-void hb_set_gui_info(hb_gui_t *gui, int hwd, int opencl, int titlescan);
-struct hb_gui_s
-{
-    int use_hwd;
-    int use_opencl;
-    int title_scan;
-};
-hb_gui_t hb_gui;
+int hb_gui_use_hwd_flag;
 
 hb_list_t *hb_attachment_list_copy(const hb_list_t *src);
 void hb_attachment_close(hb_attachment_t **attachment);
@@ -442,7 +434,6 @@ struct hb_job_s
                                         //  to non-I frames).
     int use_opencl;/* 0 is disable use of opencl. 1 is enable use of opencl */
     int use_hwd;
-    int use_hw_decode;
 
 #ifdef __LIBHB__
     /* Internal data */
@@ -951,7 +942,6 @@ extern hb_work_object_t hb_encca_aac;
 extern hb_work_object_t hb_encca_haac;
 extern hb_work_object_t hb_encavcodeca;
 extern hb_work_object_t hb_reader;
-extern hb_work_object_t hb_decavcodecv_accl;
 
 #define HB_FILTER_OK      0
 #define HB_FILTER_DELAY   1

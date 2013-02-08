@@ -417,8 +417,7 @@ enum
     WORK_ENCAVCODEC_AUDIO,
     WORK_MUX,
     WORK_READER,
-    WORK_DECPGSSUB,
-    WORK_DECAVCODECVACCL
+    WORK_DECPGSSUB
 };
 
 extern hb_filter_object_t hb_filter_detelecine;

@@ -261,7 +261,7 @@ int main( int argc, char ** argv )
         titleindex = 0;
     }
 
-    hb_set_gui_info(&hb_gui, use_hwd, use_opencl, titleindex);
+	hb_gui_use_hwd_flag = use_hwd;
     hb_scan( h, input, titleindex, preview_count, store_previews, min_title_duration * 90000LL );
 
     /* Wait... */

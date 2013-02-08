@@ -40,7 +40,6 @@
 
 #include "hb.h"
 #include "hbffmpeg.h"
-#include "audio_remap.h"
 #include "audio_resample.h"
 
 #ifdef USE_HWD
@@ -543,7 +542,8 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
     {
         hb_buffer_t *buf;
         int ww, hh;
-        if( (w > pv->job->width || h > pv->job->height) && (hb_get_gui_info(&hb_gui, 2) == 1) )
+
+        if( (w > pv->job->width || h > pv->job->height) && (pv->job->use_opencl) )
         {
             buf = hb_video_buffer_init( pv->job->width, pv->job->height );
             ww = pv->job->width;
@@ -559,7 +559,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
         {
             pv->dst_frame = malloc( ww * hh * 3 / 2 );
         }
-        if( hb_va_extract( pv->dxva2, pv->dst_frame, frame, pv->job->width, pv->job->height, pv->job->title->crop, pv->os ) == HB_WORK_ERROR )
+        if( hb_va_extract( pv->dxva2, pv->dst_frame, frame, pv->job->width, pv->job->height, pv->job->title->crop, pv->os, pv->job->use_opencl ) == HB_WORK_ERROR )
         {
             hb_log( "hb_va_Extract failed!!!!!!" );
         }
@@ -1124,7 +1124,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
              || (w->codec_param==AV_CODEC_ID_VC1)
              || (w->codec_param==AV_CODEC_ID_WMV3) 
              || (w->codec_param==AV_CODEC_ID_MPEG4)) 
-             && pv->job && job->use_hw_decode)
+             && pv->job && job->use_hwd && hb_use_dxva( pv->title ) )
         {
             pv->dxva2 = hb_va_create_dxva2( pv->dxva2, w->codec_param );
             if( pv->dxva2 && pv->dxva2->do_job==HB_WORK_OK )
@@ -1579,19 +1579,6 @@ hb_work_object_t hb_decavcodecv =
     .info = decavcodecvInfo,
     .bsinfo = decavcodecvBSInfo
 };
-#ifdef USE_HWD
-hb_work_object_t hb_decavcodecv_accl =
-{
-    .id = WORK_DECAVCODECVACCL,
-    .name = "Video hardware decoder (libavcodec)",
-    .init = decavcodecvInit,
-    .work = decavcodecvWork,
-    .close = decavcodecClose,
-    .flush = decavcodecvFlush,
-    .info = decavcodecvInfo,
-    .bsinfo = decavcodecvBSInfo
-};
-#endif
 static void decodeAudio(hb_audio_t *audio, hb_work_private_t *pv, uint8_t *data,
                         int size, int64_t pts)
 {

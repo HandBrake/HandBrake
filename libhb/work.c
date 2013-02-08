@@ -1020,13 +1020,7 @@ static void do_job( hb_job_t * job )
         title->video_codec_param = AV_CODEC_ID_MPEG2VIDEO;
     }
 #endif
-#ifdef USE_HWD 
-    if ( /*job->use_opencl &&*/ hb_use_dxva( title ) && job->use_hwd )
-    {   
-        //vcodec = WORK_DECAVCODECVACCL;
-		job->use_hw_decode = 1;
-    }
-#endif
+
     hb_list_add( job->list_work, ( w = hb_get_work( vcodec ) ) );
     w->codec_param = title->video_codec_param;
     w->fifo_in  = job->fifo_mpeg2;

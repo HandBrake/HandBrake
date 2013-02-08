@@ -484,9 +484,6 @@ hb_handle_t * hb_init( int verbose, int update_check )
 #endif
 	hb_register( &hb_encavcodeca );
 	hb_register( &hb_reader );
-#ifdef USE_HWD
-	hb_register( &hb_decavcodecv_accl );
-#endif
     
     return h;
 }
@@ -585,9 +582,6 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
 #endif
 	hb_register( &hb_encavcodeca );
 	hb_register( &hb_reader );
-#ifdef USE_HWD
-	hb_register( &hb_decavcodecv_accl );
-#endif
 	return h;
 }
 

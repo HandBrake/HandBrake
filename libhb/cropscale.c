@@ -14,6 +14,7 @@
 
 struct hb_filter_private_s
 {
+	hb_job_t            * job;
     int                 width_in;
     int                 height_in;
     int                 pix_fmt;
@@ -62,6 +63,7 @@ static int hb_crop_scale_init( hb_filter_object_t * filter,
     hb_filter_private_t * pv = filter->private_data;
 
     // TODO: add pix format option to settings
+	pv->job = init->job;
     pv->pix_fmt_out = init->pix_fmt;
     pv->width_in = init->width;
     pv->height_in = init->height;
@@ -69,7 +71,8 @@ static int hb_crop_scale_init( hb_filter_object_t * filter,
     pv->height_out = init->height;
 #ifdef USE_OPENCL
     pv->use_dxva = init->use_dxva;
-    if ( hb_get_gui_info(&hb_gui, 2) )
+
+	if ( pv->job->use_opencl )
     {
         pv->title_width = init->title_width;
         pv->title_height = init->title_height;
@@ -114,7 +117,8 @@ static int hb_crop_scale_info( hb_filter_object_t * filter,
     memcpy( info->out.crop, pv->crop, sizeof( int[4] ) );
 
 #ifdef USE_OPENCL
-    if ( hb_get_gui_info(&hb_gui, 2) )
+
+	if ( pv->job->use_opencl )
     {
         int cropped_width = pv->title_width - ( pv->crop[2] + pv->crop[3] );
         int cropped_height = pv->title_height - ( pv->crop[0] + pv->crop[1] );
@@ -158,7 +162,8 @@ static void hb_crop_scale_close( hb_filter_object_t * filter )
         return;
     }
 #ifdef USE_OPENCL
-    if ( hb_get_gui_info(&hb_gui, 2) && pv->os)
+
+	if ( pv->job->use_opencl && pv->os )
     {
 	CL_FREE( pv->os->h_in_buf );
         CL_FREE( pv->os->h_out_buf );
@@ -217,7 +222,8 @@ static hb_buffer_t* crop_scale( hb_filter_private_t * pv, hb_buffer_t * in )
                      pv->crop[0], pv->crop[2] );
 
 #ifdef USE_OPENCL
-    if ( hb_get_gui_info(&hb_gui, 2) )
+
+	if ( pv->job->use_opencl )
     {
 	int w = in->f.width - ( pv->crop[2] + pv->crop[3] );
 	int h = in->f.height - ( pv->crop[0] + pv->crop[1] );

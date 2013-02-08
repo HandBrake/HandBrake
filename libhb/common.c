@@ -1739,7 +1739,6 @@ static void job_setup( hb_job_t * job, hb_title_t * title )
 
     job->list_attachment = hb_attachment_list_copy( title->list_attachment );
     job->metadata = hb_metadata_copy( title->metadata );
-    job->use_hw_decode = 0;
 }
 
 static void job_clean( hb_job_t * job )
@@ -2968,18 +2967,4 @@ int hb_use_dxva( hb_title_t * title )
               || title->video_codec_param == AV_CODEC_ID_MPEG4 )
              && title->opaque_priv );
 }
-int hb_get_gui_info(hb_gui_t * gui, int option)
-{
-    if ( option == 1 )
-        return gui->use_hwd;
-    else if ( option == 2 )
-        return gui->use_opencl;
-    else
-        return gui->title_scan;
-}
-void hb_set_gui_info(hb_gui_t *gui, int hwd, int opencl, int titlescan)
-{
-    gui->use_hwd = hwd;
-    gui->use_opencl = opencl;
-    gui->title_scan = titlescan;
-}
+
