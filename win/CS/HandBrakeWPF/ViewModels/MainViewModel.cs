@@ -666,6 +666,7 @@ namespace HandBrakeWPF.ViewModels
                     }
 
                     // Use the Path on the Title, or the Source Scan path if one doesn't exist.
+                    this.SourceLabel = this.SourceName;
                     this.CurrentTask.Source = !string.IsNullOrEmpty(this.selectedTitle.SourceName) ? this.selectedTitle.SourceName : this.ScannedSource.ScanPath;
                     this.CurrentTask.Title = value.TitleNumber;
                     this.NotifyOfPropertyChange(() => this.StartEndRangeItems);
@@ -1577,16 +1578,7 @@ namespace HandBrakeWPF.ViewModels
 
                     // Cleanup
                     this.ShowStatusWindow = false;
-
-                    if (this.SelectedTitle != null && !string.IsNullOrEmpty(this.SelectedTitle.SourceName))
-                    {
-                        this.SourceLabel = this.SelectedTitle.SourceName;
-                    }
-                    else
-                    {
-                        this.SourceLabel = this.SourceName;
-                    }
-
+                    this.SourceLabel = this.SourceName;
                     this.StatusLabel = "Scan Completed";
                 });
         }
@@ -1740,15 +1732,7 @@ namespace HandBrakeWPF.ViewModels
                     this.ShowStatusWindow = false;
                     if (e.Successful)
                     {
-                        if (this.SelectedTitle != null && !string.IsNullOrEmpty(this.SelectedTitle.SourceName))
-                        {
-                            this.SourceLabel = this.SelectedTitle.SourceName;
-                        }
-                        else
-                        {
-                            this.SourceLabel = this.SourceName;
-                        }
-
+                        this.SourceLabel = this.SourceName;
                         this.StatusLabel = "Scan Completed";
                     }
                     else if (!e.Successful && e.Exception == null)
