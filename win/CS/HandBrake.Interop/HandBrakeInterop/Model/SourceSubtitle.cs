@@ -9,25 +9,54 @@
 
 namespace HandBrake.Interop.Model
 {
-	public class SourceSubtitle
-	{
-		/// <summary>
-		/// Gets or sets the 1-based subtitle track number. 0 means foreign audio search.
-		/// </summary>
-		public int TrackNumber { get; set; }
-		public bool Default { get; set; }
-		public bool Forced { get; set; }
-		public bool BurnedIn { get; set; }
+    /// <summary>
+    /// The source subtitle.
+    /// </summary>
+    public class SourceSubtitle
+    {
+        #region Properties
 
-		public SourceSubtitle Clone()
-		{
-			return new SourceSubtitle
-			{
-				TrackNumber = this.TrackNumber,
-				Default = this.Default,
-				Forced = this.Forced,
-				BurnedIn = this.BurnedIn
-			};
-		}
-	}
+        /// <summary>
+        /// Gets or sets a value indicating whether burned in.
+        /// </summary>
+        public bool BurnedIn { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether default.
+        /// </summary>
+        public bool Default { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether forced.
+        /// </summary>
+        public bool Forced { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the 1-based subtitle track number. 0 means foreign audio search.
+        /// </summary>
+        public int TrackNumber { get; set; }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="SourceSubtitle"/>.
+        /// </returns>
+        public SourceSubtitle Clone()
+        {
+            return new SourceSubtitle
+                       {
+                           TrackNumber = this.TrackNumber, 
+                           Default = this.Default, 
+                           Forced = this.Forced, 
+                           BurnedIn = this.BurnedIn
+                       };
+        }
+
+        #endregion
+    }
 }

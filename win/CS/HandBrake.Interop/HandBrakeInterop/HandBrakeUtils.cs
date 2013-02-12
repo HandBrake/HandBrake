@@ -12,6 +12,8 @@ namespace HandBrake.Interop
 	using System;
 	using System.Collections.Generic;
 	using System.Runtime.InteropServices;
+
+	using HandBrake.Interop.EventArgs;
 	using HandBrake.Interop.HbLib;
 	using HandBrake.Interop.Model;
 	using HandBrake.Interop.Model.Encoding;

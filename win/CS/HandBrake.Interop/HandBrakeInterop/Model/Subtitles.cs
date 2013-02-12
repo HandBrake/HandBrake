@@ -11,9 +11,23 @@ namespace HandBrake.Interop.Model
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// The subtitles.
+    /// </summary>
     public class Subtitles
-	{
-		public List<SrtSubtitle> SrtSubtitles { get; set; }
-		public List<SourceSubtitle> SourceSubtitles { get; set; }
-	}
+    {
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the source subtitles.
+        /// </summary>
+        public List<SourceSubtitle> SourceSubtitles { get; set; }
+
+        /// <summary>
+        /// Gets or sets the srt subtitles.
+        /// </summary>
+        public List<SrtSubtitle> SrtSubtitles { get; set; }
+
+        #endregion
+    }
 }

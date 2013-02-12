@@ -11,12 +11,14 @@ namespace HandBrake.ApplicationServices.Services
 {
     using System;
     using System.Diagnostics;
+    using System.Globalization;
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Base;
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop;
+    using HandBrake.Interop.EventArgs;
     using HandBrake.Interop.Interfaces;
     using HandBrake.Interop.Model;
 
@@ -174,8 +176,8 @@ namespace HandBrake.ApplicationServices.Services
             {
                 this.IsEncoding = false;
                 this.instance.StopEncode();
-            } 
-            catch(Exception)
+            }
+            catch (Exception)
             {
                 // Do Nothing.
             }
@@ -239,7 +241,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="e">
         /// The Interop.EncodeProgressEventArgs.
         /// </param>
-        private void InstanceEncodeProgress(object sender, Interop.EncodeProgressEventArgs e)
+        private void InstanceEncodeProgress(object sender, Interop.EventArgs.EncodeProgressEventArgs e)
         {
            EncodeProgressEventArgs args = new EncodeProgressEventArgs
             {
@@ -256,7 +258,7 @@ namespace HandBrake.ApplicationServices.Services
             if (this.WindowsSeven.IsWindowsSeven)
             {
                 int percent;
-                int.TryParse(Math.Round(e.FractionComplete).ToString(), out percent);
+                int.TryParse(Math.Round(e.FractionComplete).ToString(CultureInfo.InvariantCulture), out percent);
 
                 this.WindowsSeven.SetTaskBarProgress(percent);
             }
@@ -271,7 +273,7 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="e">
         /// The e.
         /// </param>
-        private void InstanceEncodeCompleted(object sender, Interop.EncodeCompletedEventArgs e)
+        private void InstanceEncodeCompleted(object sender, Interop.EventArgs.EncodeCompletedEventArgs e)
         {
             this.IsEncoding = false;
 

@@ -11,6 +11,9 @@ namespace HandBrake.Interop
 {
     using HandBrake.Interop.Model.Encoding;
 
+    /// <summary>
+    /// The utilities.
+    /// </summary>
     public static class Utilities
 	{
         /// <summary>
@@ -23,6 +26,7 @@ namespace HandBrake.Interop
         /// The b.
         /// </param>
         /// <returns>
+        /// The greatest common factor
         /// </returns>
         public static int GreatestCommonFactor(int a, int b)
 		{
@@ -40,10 +44,8 @@ namespace HandBrake.Interop
 			{
 				return GreatestCommonFactor(a % b, b);
 			}
-			else
-			{
-				return GreatestCommonFactor(a, b % a);
-			}
+            
+            return GreatestCommonFactor(a, b % a);
 		}
 
 		/// <summary>

@@ -11,6 +11,9 @@ namespace HandBrake.Interop.SourceData
 {
     using System.ComponentModel.DataAnnotations;
 
+    /// <summary>
+    /// The input type.
+    /// </summary>
     public enum InputType
 	{
 		[Display(Name = "File")]

@@ -17,12 +17,15 @@ namespace HandBrake.Interop
 	using HandBrake.Interop.SourceData;
 	using HandBrake.Interop.Model;
 
+    /// <summary>
+    /// The converters.
+    /// </summary>
     public static class Converters
 	{
 		/// <summary>
 		/// Video Frame Rates
 		/// </summary>
-		private static Dictionary<double, int> vrates = new Dictionary<double, int>
+		private static readonly Dictionary<double, int> VideoRates = new Dictionary<double, int>
 		{
 			{5, 5400000},
 			{10, 2700000},
@@ -52,12 +55,12 @@ namespace HandBrake.Interop
 		/// </exception>
 		public static int FramerateToVrate(double framerate)
 		{
-			if (!vrates.ContainsKey(framerate))
+			if (!VideoRates.ContainsKey(framerate))
 			{
 				throw new ArgumentException("Framerate not recognized.", "framerate");
 			}
 
-			return vrates[framerate];
+			return VideoRates[framerate];
 		}
 
 		/// <summary>

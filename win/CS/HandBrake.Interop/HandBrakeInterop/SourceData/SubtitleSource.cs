@@ -9,7 +9,10 @@
 
 namespace HandBrake.Interop.SourceData
 {
-	public enum SubtitleSource
+    /// <summary>
+    /// The subtitle source.
+    /// </summary>
+    public enum SubtitleSource
 	{
 		VobSub,
 		SRT,

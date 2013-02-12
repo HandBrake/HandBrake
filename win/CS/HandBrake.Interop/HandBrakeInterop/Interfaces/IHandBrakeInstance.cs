@@ -13,6 +13,7 @@ namespace HandBrake.Interop.Interfaces
     using System.Collections.Generic;
     using System.Windows.Media.Imaging;
 
+    using HandBrake.Interop.EventArgs;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.SourceData;
 
