@@ -2,6 +2,9 @@
 // <copyright file="Encoders.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
+// <summary>
+//   The encoders.
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.Interop.Model
@@ -9,17 +12,35 @@ namespace HandBrake.Interop.Model
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Runtime.InteropServices;
+
 	using HandBrake.Interop.HbLib;
 	using HandBrake.Interop.Model.Encoding;
 	using HandBrake.Interop.SourceData;
 
-	public static class Encoders
+    /// <summary>
+    /// The encoders.
+    /// </summary>
+    public static class Encoders
 	{
-		private static List<HBAudioEncoder> audioEncoders;
-		private static List<HBVideoEncoder> videoEncoders;
-		private static List<HBMixdown> mixdowns;
-		private static List<int> audioBitrates; 
+	    /// <summary>
+	    /// The audio encoders.
+	    /// </summary>
+	    private static List<HBAudioEncoder> audioEncoders;
+
+	    /// <summary>
+	    /// The video encoders.
+	    /// </summary>
+	    private static List<HBVideoEncoder> videoEncoders;
+
+	    /// <summary>
+	    /// The mixdowns.
+	    /// </summary>
+	    private static List<HBMixdown> mixdowns;
+
+	    /// <summary>
+	    /// The audio bitrates.
+	    /// </summary>
+	    private static List<int> audioBitrates; 
 
 		/// <summary>
 		/// Gets a list of supported audio encoders.

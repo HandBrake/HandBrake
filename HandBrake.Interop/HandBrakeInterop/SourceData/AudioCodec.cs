@@ -9,21 +9,45 @@
 
 namespace HandBrake.Interop.SourceData
 {
-	// Only contains 2 real codecs at the moment as those are what we care about. More will be added later.
-	public enum AudioCodec
-	{
-		Ac3,
+    /// <summary>
+    /// The audio codec.
+    /// Only contains 2 real codecs at the moment as those are what we care about. More will be added later.
+    /// </summary>
+    public enum AudioCodec
+    {
+        /// <summary>
+        /// The ac 3.
+        /// </summary>
+        Ac3, 
 
-		Dts,
+        /// <summary>
+        /// The dts.
+        /// </summary>
+        Dts, 
 
-		DtsHD,
+        /// <summary>
+        /// The dts hd.
+        /// </summary>
+        DtsHD, 
 
-		Mp3,
+        /// <summary>
+        /// The mp 3.
+        /// </summary>
+        Mp3, 
 
-		Aac,
+        /// <summary>
+        /// The aac.
+        /// </summary>
+        Aac, 
 
-		Other,
+        /// <summary>
+        /// The other.
+        /// </summary>
+        Other, 
 
+        /// <summary>
+        /// The flac.
+        /// </summary>
         Flac
-	}
+    }
 }

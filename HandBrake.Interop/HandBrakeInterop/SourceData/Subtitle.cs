@@ -48,7 +48,10 @@ namespace HandBrake.Interop.SourceData
 			return string.Format("{0} {1} ({2})", this.TrackNumber, this.Language, this.SubtitleSource);
 		}
 
-		public string Display
+        /// <summary>
+        /// Gets the display.
+        /// </summary>
+        public string Display
 		{
 			get
 			{

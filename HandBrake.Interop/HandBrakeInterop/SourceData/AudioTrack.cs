@@ -90,16 +90,23 @@ namespace HandBrake.Interop.SourceData
 			return this.GetDisplayString(true);
 		}
 
-		private string GetDisplayString(bool includeTrackNumber)
-		{
-			if (includeTrackNumber)
+	    /// <summary>
+	    /// The get display string.
+	    /// </summary>
+	    /// <param name="includeTrackNumber">
+	    /// The include track number.
+	    /// </param>
+	    /// <returns>
+	    /// The <see cref="string"/>.
+	    /// </returns>
+	    private string GetDisplayString(bool includeTrackNumber)
+	    {
+	        if (includeTrackNumber)
 			{
 				return this.TrackNumber + " " + this.Description;
 			}
-			else
-			{
-				return this.Description;
-			}
-		}
+	        
+            return this.Description;
+	    }
 	}
 }

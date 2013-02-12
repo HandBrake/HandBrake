@@ -9,15 +9,42 @@
 
 namespace HandBrake.Interop.Model
 {
-	public class Size
-	{
-		public Size(int width, int height)
-		{
-			this.Width = width;
-			this.Height = height;
-		}
+    /// <summary>
+    /// The size.
+    /// </summary>
+    public class Size
+    {
+        #region Constructors and Destructors
 
-		public int Width { get; set; }
-		public int Height { get; set; }
-	}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Size"/> class.
+        /// </summary>
+        /// <param name="width">
+        /// The width.
+        /// </param>
+        /// <param name="height">
+        /// The height.
+        /// </param>
+        public Size(int width, int height)
+        {
+            this.Width = width;
+            this.Height = height;
+        }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the height.
+        /// </summary>
+        public int Height { get; set; }
+
+        /// <summary>
+        /// Gets or sets the width.
+        /// </summary>
+        public int Width { get; set; }
+
+        #endregion
+    }
 }

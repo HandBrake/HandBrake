@@ -7,11 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop
+namespace HandBrake.Interop.EventArgs
 {
-	using System;
+    using System;
 
-    /// <summary>
+    /// <summary>s
     /// Encode Progress Event Args
     /// </summary>
     public class EncodeProgressEventArgs : EventArgs

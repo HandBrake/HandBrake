@@ -125,8 +125,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters.cs" />
-    <Compile Include="EncodeCompletedEventArgs.cs" />
-    <Compile Include="EncodeProgressEventArgs.cs" />
+    <Compile Include="EventArgs\EncodeCompletedEventArgs.cs" />
+    <Compile Include="EventArgs\EncodeProgressEventArgs.cs" />
     <Compile Include="HandBrakeUtils.cs" />
     <Compile Include="HandBrakeInstance.cs" />
     <Compile Include="HbLib\HBFunctions.cs" />
@@ -144,7 +144,7 @@
     <Compile Include="Language.cs" />
     <Compile Include="LanguageCodes.cs" />
     <Compile Include="MarshalingConstants.cs" />
-    <Compile Include="MessageLoggedEventArgs.cs" />
+    <Compile Include="EventArgs\MessageLoggedEventArgs.cs" />
     <Compile Include="Model\Cropping.cs" />
     <Compile Include="Model\EncodeJob.cs" />
     <Compile Include="Model\Encoders.cs" />
@@ -179,7 +179,7 @@
     <Compile Include="Model\VideoRangeType.cs" />
     <Compile Include="NativeList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScanProgressEventArgs.cs" />
+    <Compile Include="EventArgs\ScanProgressEventArgs.cs" />
     <Compile Include="SourceData\AudioCodec.cs" />
     <Compile Include="SourceData\AudioTrack.cs" />
     <Compile Include="SourceData\Chapter.cs" />

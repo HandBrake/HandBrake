@@ -106,12 +106,9 @@ namespace HandBrake.Interop
 			IntPtr nativeListInternal = Marshal.AllocHGlobal(capacity * intSize);
 			returnList.AllocatedMemory.Add(nativeListInternal);
 
-			hb_list_s nativeListStruct = new hb_list_s();
-			nativeListStruct.items = nativeListInternal;
-			nativeListStruct.items_alloc = capacity;
-			nativeListStruct.items_count = 0;
+			hb_list_s nativeListStruct = new hb_list_s { items = nativeListInternal, items_alloc = capacity, items_count = 0 };
 
-			IntPtr nativeListStructPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(hb_list_s)));
+		    IntPtr nativeListStructPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(hb_list_s)));
 			Marshal.StructureToPtr(nativeListStruct, nativeListStructPtr, false);
 
 			returnList.ListPtr = nativeListStructPtr;
@@ -135,12 +132,14 @@ namespace HandBrake.Interop
 				Marshal.WriteIntPtr(nativeListInternal, i * intSize, list[i]);
 			}
 
-			hb_list_s nativeListStruct = new hb_list_s();
-			nativeListStruct.items = nativeListInternal;
-			nativeListStruct.items_alloc = list.Count;
-			nativeListStruct.items_count = list.Count;
+			hb_list_s nativeListStruct = new hb_list_s
+			                                 {
+			                                     items = nativeListInternal,
+			                                     items_alloc = list.Count,
+			                                     items_count = list.Count
+			                                 };
 
-			IntPtr nativeListStructPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(hb_list_s)));
+		    IntPtr nativeListStructPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(hb_list_s)));
 			Marshal.StructureToPtr(nativeListStruct, nativeListStructPtr, false);
 
 			returnList.ListPtr = nativeListStructPtr;
@@ -169,12 +168,14 @@ namespace HandBrake.Interop
 				Marshal.WriteIntPtr(nativeListInternal, i * intSize, itemPtr);
 			}
 
-			hb_list_s nativeListStruct = new hb_list_s();
-			nativeListStruct.items = nativeListInternal;
-			nativeListStruct.items_alloc = list.Count;
-			nativeListStruct.items_count = list.Count;
+			hb_list_s nativeListStruct = new hb_list_s
+			                                 {
+			                                     items = nativeListInternal,
+			                                     items_alloc = list.Count,
+			                                     items_count = list.Count
+			                                 };
 
-			IntPtr nativeListStructPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(hb_list_s)));
+		    IntPtr nativeListStructPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(hb_list_s)));
 			Marshal.StructureToPtr(nativeListStruct, nativeListStructPtr, false);
 
 			returnList.ListPtr = nativeListStructPtr;

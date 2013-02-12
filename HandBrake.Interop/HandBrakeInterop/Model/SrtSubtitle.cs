@@ -9,24 +9,60 @@
 
 namespace HandBrake.Interop.Model
 {
-	public class SrtSubtitle
-	{
-		public bool Default { get; set; }
-		public string FileName { get; set; }
-		public string LanguageCode { get; set; }
-		public string CharacterCode { get; set; }
-		public int Offset { get; set; }
+    /// <summary>
+    /// The srt subtitle.
+    /// </summary>
+    public class SrtSubtitle
+    {
+        #region Properties
 
-		public SrtSubtitle Clone()
-		{
-			return new SrtSubtitle
-			{
-				Default = this.Default,
-				FileName = this.FileName,
-				LanguageCode = this.LanguageCode,
-				CharacterCode = this.CharacterCode,
-				Offset = this.Offset
-			};
-		}
-	}
+        /// <summary>
+        /// Gets or sets the character code.
+        /// </summary>
+        public string CharacterCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether default.
+        /// </summary>
+        public bool Default { get; set; }
+
+        /// <summary>
+        /// Gets or sets the file name.
+        /// </summary>
+        public string FileName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the language code.
+        /// </summary>
+        public string LanguageCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the offset.
+        /// </summary>
+        public int Offset { get; set; }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="SrtSubtitle"/>.
+        /// </returns>
+        public SrtSubtitle Clone()
+        {
+            return new SrtSubtitle
+                       {
+                           Default = this.Default, 
+                           FileName = this.FileName, 
+                           LanguageCode = this.LanguageCode, 
+                           CharacterCode = this.CharacterCode, 
+                           Offset = this.Offset
+                       };
+        }
+
+        #endregion
+    }
 }
