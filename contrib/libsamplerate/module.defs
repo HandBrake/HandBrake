@@ -3,3 +3,6 @@ $(eval $(call import.CONTRIB.defs,LIBSAMPLERATE))
 
 LIBSAMPLERATE.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libsamplerate-0.1.4.tar.gz
 LIBSAMPLERATE.EXTRACT.tarbase = libsamplerate
+
+# Disable to avoid Carbon.h dependency on OSX
+LIBSAMPLERATE.CONFIGURE.extra = --disable-sndfile
