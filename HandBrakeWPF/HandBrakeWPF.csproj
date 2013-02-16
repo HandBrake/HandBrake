@@ -168,8 +168,18 @@
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\ScanServiceWrapper.cs" />
     <Compile Include="Services\UpdateService.cs" />
+    <Compile Include="ViewModels\AdvancedViewModel.cs" />
+    <Compile Include="ViewModels\EncoderOptionsViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IEncoderOptionsViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IX264ViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IQueueSelectionViewModel.cs" />
     <Compile Include="ViewModels\QueueSelectionViewModel.cs" />
+    <Compile Include="Views\AdvancedView.xaml.cs">
+      <DependentUpon>AdvancedView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EncoderOptionsView.xaml.cs">
+      <DependentUpon>EncoderOptionsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\QueueSelectionView.xaml.cs">
       <DependentUpon>QueueSelectionView.xaml</DependentUpon>
     </Compile>
@@ -204,7 +214,7 @@
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AddPresetViewModel.cs" />
     <Compile Include="ViewModels\AudioViewModel.cs" />
-    <Compile Include="ViewModels\AdvancedViewModel.cs" />
+    <Compile Include="ViewModels\X264ViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ITabInterface.cs" />
     <Compile Include="ViewModels\VideoViewModel.cs" />
     <Compile Include="ViewModels\FiltersViewModel.cs" />
@@ -241,8 +251,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="Views\AdvancedView.xaml.cs">
-      <DependentUpon>AdvancedView.xaml</DependentUpon>
+    <Compile Include="Views\X264View.xaml.cs">
+      <DependentUpon>X264View.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AudioView.xaml.cs">
       <DependentUpon>AudioView.xaml</DependentUpon>
@@ -331,6 +341,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\AdvancedView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\EncoderOptionsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\QueueSelectionView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -347,7 +365,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\AdvancedView.xaml">
+    <Page Include="Views\X264View.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
