@@ -90,6 +90,65 @@ static hb_kernel_node gKernels[MAX_KERNEL_NUM];
         gpu_env.kernel_count++; }
 
 
+int hb_confirm_gpu_type()
+{
+    int status = 1;
+    unsigned int i, j;
+    cl_uint numPlatforms = 0; 
+    status = clGetPlatformIDs(0,NULL,&numPlatforms); 
+    if(status != 0) 
+    { 
+        goto end; 
+    } 
+    if(numPlatforms > 0) 
+    { 
+        cl_platform_id* platforms = (cl_platform_id* )malloc (numPlatforms* sizeof(cl_platform_id)); 
+        status = clGetPlatformIDs (numPlatforms, platforms,NULL); 
+        if(status != 0) 
+        { 
+            goto end; 
+        } 
+        for (i=0; i < numPlatforms; i++) 
+        { 
+            char pbuff[100]; 
+            cl_uint numDevices;
+            status = clGetPlatformInfo( 
+                platforms[i], 
+                CL_PLATFORM_VENDOR, 
+                sizeof (pbuff), 
+                pbuff,
+                NULL); 
+            if (status) 
+         		continue; 
+            status = clGetDeviceIDs(platforms[i], 
+                                    CL_DEVICE_TYPE_GPU , 
+                                    0 , 
+                                    NULL , 
+                                    &numDevices); 
+            
+   		    cl_device_id *devices = (cl_device_id *)malloc(numDevices * sizeof(cl_device_id));
+		    status = clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_GPU, numDevices, devices, NULL);
+		    for (j = 0; j < numDevices; j++)
+		    {
+			    char dbuff[100];
+			    status = clGetDeviceInfo(devices[j], CL_DEVICE_VENDOR, sizeof(dbuff), dbuff, NULL); 
+			    if(!strcmp(dbuff, "Advanced Micro Devices, Inc.") || !strcmp(dbuff, "NVIDIA Corporation"))
+			    {
+				    return 0;
+			    }
+		    }
+
+            if (status != CL_SUCCESS)
+                continue;
+            if( numDevices) 
+                break; 
+        } 
+        free(platforms); 
+    } 
+    end:
+    return -1;
+}
+
 int hb_regist_opencl_kernel()
 {
     if( !gpu_env.isUserCreated )

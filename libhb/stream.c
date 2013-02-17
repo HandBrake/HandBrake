@@ -1116,7 +1116,7 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream, hb_title_t * title)
     title->hwd_support = 0;
 #endif
 #ifdef USE_OPENCL
-    if (TestGPU() == 0)
+    if (hb_confirm_gpu_type() == 0)
         title->opencl_support = 1;
     else
         title->opencl_support = 0;
@@ -5689,7 +5689,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
     title->hwd_support = 0;
 #endif
 #ifdef USE_OPENCL
-    if (TestGPU() == 0)
+    if (hb_confirm_gpu_type() == 0)
         title->opencl_support = 1;
     else
         title->opencl_support = 0;

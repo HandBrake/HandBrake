@@ -94,7 +94,6 @@ typedef struct hb_filter_object_s  hb_filter_object_t;
 typedef struct hb_buffer_s hb_buffer_t;
 typedef struct hb_fifo_s hb_fifo_t;
 typedef struct hb_lock_s hb_lock_t;
-typedef struct hb_gui_s hb_gui_t;
 
 #include "ports.h"
 #ifdef __LIBHB__
@@ -975,7 +974,6 @@ typedef struct hb_oclscale_s
 
 #ifdef USE_OPENCL
 int hb_ocl_scale( cl_mem in_buf, uint8_t *in_data, uint8_t *out_data, int in_w, int in_h, int out_w, int out_h, hb_oclscale_t  *os );
-int TestGPU();
 #endif
 
 #ifdef USE_OPENCL
