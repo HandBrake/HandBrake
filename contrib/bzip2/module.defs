@@ -6,10 +6,10 @@ BZIP2.EXTRACT.tarbase = bzip2
 BZIP2.CONFIGURE = $(TOUCH.exe) $@
 
 BZIP2.BUILD.extra = \
-    CC=$(BZIP2.GCC.gcc) \
-    CFLAGS="$(call fn.ARGS,BZIP2.GCC,*archs *sysroot *minver)" \
+    PREFIX="$(BZIP2.CONFIGURE.prefix)" \
+    CC="$(BZIP2.GCC.gcc)" \
+    $(BZIP2.CONFIGURE.env.CFLAGS) \
     RANLIB="$(RANLIB.exe)"
-    PREFIX=$(call fn.ABSOLUTE,$(CONTRIB.build/))
 
 BZIP2.BUILD.ntargets = libbz2.a
 

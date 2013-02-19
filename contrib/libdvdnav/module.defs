@@ -5,11 +5,7 @@ LIBDVDNAV.FETCH.url = http://download.handbrake.fr/handbrake/contrib/libdvdnav-s
 LIBDVDNAV.EXTRACT.tarbase = libdvdnav
 
 ifneq (max,$(LIBDVDNAV.GCC.g))
-ifeq (none,$(LIBDVDNAV.GCC.O))
-    LIBDVDNAV.CONFIGURE.env.CFLAGS   = CFLAGS="$(call fn.ARGS,LIBDVDNAV.GCC,*sysroot *minver ?extra .O) -DNDEBUG"
-else
-    LIBDVDNAV.CONFIGURE.env.CFLAGS   = CFLAGS="$(call fn.ARGS,LIBDVDNAV.GCC,*sysroot *minver ?extra) -DNDEBUG"
-endif
+    LIBDVDNAV.GCC.D += NDEBUG
 endif
 
 LIBDVDNAV.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; autoreconf -fiv;
