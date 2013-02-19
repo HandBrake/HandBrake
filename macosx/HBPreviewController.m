@@ -89,6 +89,14 @@
     [fPreviewMovieLengthPopUp addItemWithTitle: @"90"];
     [fPreviewMovieLengthPopUp addItemWithTitle: @"105"];
     [fPreviewMovieLengthPopUp addItemWithTitle: @"120"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"135"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"150"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"165"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"180"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"195"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"210"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"225"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"240"];
 
 	[fMovieView setHidden:YES];
     [fMovieView setDelegate:self];
