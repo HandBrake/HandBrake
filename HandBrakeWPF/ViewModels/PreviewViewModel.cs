@@ -22,6 +22,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Model.Encoding;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
+    using HandBrakeWPF.Services;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -35,7 +36,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Backing field for the encode service.
         /// </summary>
-        private readonly IEncode encodeService;
+        private readonly IEncodeServiceWrapper encodeService;
 
         /// <summary>
         /// The error service
@@ -74,18 +75,17 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="PreviewViewModel"/> class.
         /// </summary>
-        /// <param name="encodeService">
-        /// The encode Service.
-        /// </param>
         /// <param name="errorService">
         /// The error Service.
         /// </param>
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        public PreviewViewModel(IEncodeServiceWrapper encodeService, IErrorService errorService, IUserSettingService userSettingService) 
+        public PreviewViewModel(IErrorService errorService, IUserSettingService userSettingService)
         {
-            this.encodeService = encodeService;
+            // Preview needs a seperate instance rather than the shared singleton. This could maybe do with being refactored at some point
+            this.encodeService = new EncodeServiceWrapper(userSettingService); 
+
             this.errorService = errorService;
             this.userSettingService = userSettingService;
             this.Title = "Preview";
@@ -93,6 +93,7 @@ namespace HandBrakeWPF.ViewModels
             this.PercentageValue = 0;
             this.StartAt = 1;
             this.Duration = 30;
+            this.CanPlay = true;
 
             UseSystemDefaultPlayer = userSettingService.GetUserSetting<bool>(UserSettingConstants.DefaultPlayer);
             this.Duration = userSettingService.GetUserSetting<int>(UserSettingConstants.LastPreviewDuration);
@@ -114,7 +115,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return new List<int> { 5, 10, 30, 45, 60, 75, 90, 105, 120 };
+                return new List<int> { 5, 10, 30, 45, 60, 75, 90, 105, 120, 150, 180, 210, 240 };
             }
         }
 
@@ -210,6 +211,8 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.isEncoding = value;
+                this.CanPlay = !value;
+                this.NotifyOfPropertyChange(() => this.CanPlay);
                 this.NotifyOfPropertyChange(() => this.IsEncoding);
             }
         }
@@ -218,6 +221,11 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets the Currently Playing / Encoding Filename.
         /// </summary>
         public string CurrentlyPlaying { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether can play.
+        /// </summary>
+        public bool CanPlay { get; set; }
 
         #endregion
 
@@ -279,7 +287,7 @@ namespace HandBrakeWPF.ViewModels
             }
             else
             {
-                string directory =  Path.GetDirectoryName(encodeTask.Destination) ?? string.Empty;
+                string directory = Path.GetDirectoryName(encodeTask.Destination) ?? string.Empty;
                 string filename = Path.GetFileNameWithoutExtension(encodeTask.Destination);
                 string extension = Path.GetExtension(encodeTask.Destination);
                 string previewFilename = string.Format("{0}_preview{1}", filename, extension);
@@ -287,7 +295,7 @@ namespace HandBrakeWPF.ViewModels
                 encodeTask.Destination = previewFullPath;
                 this.CurrentlyPlaying = previewFullPath;
             }
-            
+
             // Setup the encode task as a preview encode
             encodeTask.IsPreviewEncode = true;
             encodeTask.PreviewEncodeStartAt = this.StartAt.ToString(CultureInfo.InvariantCulture);
@@ -415,6 +423,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.Percentage = "0.00%";
             this.PercentageValue = 0;
+            this.IsEncoding = false;
 
             this.encodeService.EncodeCompleted -= this.encodeService_EncodeCompleted;
             this.encodeService.EncodeStatusChanged -= this.encodeService_EncodeStatusChanged;
