@@ -1614,6 +1614,12 @@ namespace HandBrakeWPF.ViewModels
             this.PreviewPicturesToScan.Add(20);
             this.PreviewPicturesToScan.Add(25);
             this.PreviewPicturesToScan.Add(30);
+            this.PreviewPicturesToScan.Add(35);
+            this.PreviewPicturesToScan.Add(40);
+            this.PreviewPicturesToScan.Add(45);
+            this.PreviewPicturesToScan.Add(50);
+            this.PreviewPicturesToScan.Add(55);
+            this.PreviewPicturesToScan.Add(60);
             this.SelectedPreviewCount = this.userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount);
 
             // x264 step
