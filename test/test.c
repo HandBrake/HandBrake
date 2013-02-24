@@ -3314,7 +3314,7 @@ static int ParseOptions( int argc, char ** argv )
     #define H264_LEVEL          286
 	#define NO_OPENCL           287
     #define NORMALIZE_MIX       288
-    #define AUDIO_DITHER        288
+    #define AUDIO_DITHER        289
     
     for( ;; )
     {
