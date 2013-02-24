@@ -213,10 +213,10 @@ This setting allows you to synchronize the files.</property>
   </object>
   <object class="GtkAdjustment" id="adjustment21">
     <property name="value">15</property>
-    <property name="lower">5</property>
-    <property name="upper">60</property>
-    <property name="step_increment">5</property>
-    <property name="page_increment">10</property>
+    <property name="lower">15</property>
+    <property name="upper">240</property>
+    <property name="step_increment">15</property>
+    <property name="page_increment">15</property>
     <property name="page_size">0</property>
   </object>
   <object class="GtkAdjustment" id="adjustment22">
@@ -339,7 +339,7 @@ This setting allows you to synchronize the files.</property>
     <property name="value">0</property>
   </object>
   <object class="GtkAdjustment" id="preview_count_adj">
-    <property name="upper">30</property>
+    <property name="upper">60</property>
     <property name="lower">5</property>
     <property name="page_increment">10</property>
     <property name="step_increment">5</property>

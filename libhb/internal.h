@@ -39,6 +39,8 @@ void         hb_title_close( hb_title_t ** );
  **********************************************************************/
 int  hb_get_pid( hb_handle_t * );
 void hb_set_state( hb_handle_t *, hb_state_t * );
+void hb_prevent_sleep( hb_handle_t * );
+void hb_allow_sleep( hb_handle_t * );
 
 /***********************************************************************
  * fifo.c
@@ -229,7 +231,7 @@ hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die,
                             const char * path, int title_index, 
                             hb_title_set_t * title_set, int preview_count, 
                             int store_previews, uint64_t min_duration );
-hb_thread_t * hb_work_init( hb_list_t * jobs,
+hb_thread_t * hb_work_init( hb_handle_t * handle, hb_list_t * jobs,
                             volatile int * die, int * error, hb_job_t ** job );
 void ReadLoop( void * _w );
 hb_work_object_t * hb_muxer_init( hb_job_t * );

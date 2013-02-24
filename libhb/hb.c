@@ -64,7 +64,10 @@ struct hb_handle_s
        on multi-pass encodes where frames get dropped.     */
     hb_interjob_t * interjob;
 
-};
+    // Power Management opaque pointer
+    // For OSX, it's an IOPMAssertionID*
+    void          * hb_system_sleep_opaque;
+} ;
 
 hb_work_object_t * hb_objects = NULL;
 int hb_instance_counter = 0;
@@ -407,6 +410,9 @@ hb_handle_t * hb_init( int verbose, int update_check )
     /* Check for an update on the website if asked to */
     h->build = -1;
 
+    /* Initialize opaque for PowerManagement purposes */
+    h->hb_system_sleep_opaque = hb_system_sleep_opaque_init();
+
     if( update_check )
     {
         hb_log( "hb_init: checking for updates" );
@@ -510,6 +516,9 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
 
     /* Check for an update on the website if asked to */
     h->build = -1;
+
+    /* Initialize opaque for PowerManagement purposes */
+    h->hb_system_sleep_opaque = hb_system_sleep_opaque_init();
 
     if( update_check )
     {
@@ -1541,7 +1550,7 @@ void hb_start( hb_handle_t * h )
     h->paused = 0;
 
     h->work_die    = 0;
-    h->work_thread = hb_work_init( h->jobs, &h->work_die, &h->work_error, &h->current_job );
+    h->work_thread = hb_work_init( h, h->jobs, &h->work_die, &h->work_error, &h->current_job );
 }
 
 /**
@@ -1560,6 +1569,8 @@ void hb_pause( hb_handle_t * h )
         hb_lock( h->state_lock );
         h->state.state = HB_STATE_PAUSED;
         hb_unlock( h->state_lock );
+
+        hb_allow_sleep( h );
     }
 }
 
@@ -1571,6 +1582,8 @@ void hb_resume( hb_handle_t * h )
 {
     if( h->paused )
     {
+        hb_prevent_sleep( h );
+
 #define job hb_current_job( h )
         if( job->st_pause_date != -1 )
         {
@@ -1874,6 +1887,16 @@ void hb_set_state( hb_handle_t * h, hb_state_t * s )
     }
     hb_unlock( h->state_lock );
     hb_unlock( h->pause_lock );
+}
+
+void hb_prevent_sleep( hb_handle_t * h )
+{
+    hb_system_sleep_prevent( h->hb_system_sleep_opaque );
+}
+
+void hb_allow_sleep( hb_handle_t * h )
+{
+    hb_system_sleep_allow( h->hb_system_sleep_opaque );
 }
 
 /* Passes a pointer to persistent data */

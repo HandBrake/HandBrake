@@ -198,6 +198,8 @@
 - (IBAction) modeDecombDeinterlaceSliderChanged: (id) sender;
 - (IBAction) deblockSliderChanged: (id) sender;
 
+- (void) decombDeinterlacePreviewImage;
+
 - (int) detelecine;
 - (NSString*) detelecineCustomString;
 - (void) setDetelecine: (int) setting;

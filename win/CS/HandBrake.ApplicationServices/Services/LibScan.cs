@@ -20,10 +20,11 @@ namespace HandBrake.ApplicationServices.Services
     using HandBrake.ApplicationServices.Services.Interfaces;
     using HandBrake.ApplicationServices.Utilities;
     using HandBrake.Interop;
+    using HandBrake.Interop.EventArgs;
     using HandBrake.Interop.Interfaces;
 
     using AudioTrack = HandBrake.ApplicationServices.Parsing.Audio;
-    using ScanProgressEventArgs = HandBrake.Interop.ScanProgressEventArgs;
+    using ScanProgressEventArgs = HandBrake.Interop.EventArgs.ScanProgressEventArgs;
     using Size = System.Drawing.Size;
 
     /// <summary>

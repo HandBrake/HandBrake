@@ -10,6 +10,7 @@
 namespace HandBrake.Interop.SourceData
 {
     using System;
+    using System.Globalization;
 
     /// <summary>
 	/// An object representing a Chapter aosciated with a Title, in a DVD
@@ -32,7 +33,7 @@ namespace HandBrake.Interop.SourceData
 		/// <returns>A string formatted as: {chapter #}</returns>
 		public override string ToString()
 		{
-			return this.ChapterNumber.ToString();
+			return this.ChapterNumber.ToString(CultureInfo.InvariantCulture);
 		}
 	}
 }

@@ -72,6 +72,7 @@
 typedef struct hb_handle_s hb_handle_t;
 typedef struct hb_list_s hb_list_t;
 typedef struct hb_rate_s hb_rate_t;
+typedef struct hb_dither_s hb_dither_t;
 typedef struct hb_mixdown_s hb_mixdown_t;
 typedef struct hb_encoder_s hb_encoder_t;
 typedef struct hb_job_s  hb_job_t;
@@ -178,6 +179,13 @@ struct hb_rate_s
     int         rate;
 };
 
+struct hb_dither_s
+{
+    const char *description;
+    const char *short_name;
+    int         method;
+};
+
 struct hb_mixdown_s
 {
     const char *human_readable_name;
@@ -215,6 +223,8 @@ extern int          hb_audio_rates_count;
 extern int          hb_audio_rates_default;
 extern hb_rate_t    hb_audio_bitrates[];
 extern int          hb_audio_bitrates_count;
+extern hb_dither_t  hb_audio_dithers[];
+extern int          hb_audio_dithers_count;
 extern hb_mixdown_t hb_audio_mixdowns[];
 extern int          hb_audio_mixdowns_count;
 extern hb_encoder_t hb_video_encoders[];
@@ -230,12 +240,19 @@ int           hb_get_audio_rates_count();
 int           hb_get_audio_rates_default();
 hb_rate_t*    hb_get_audio_bitrates();
 int           hb_get_audio_bitrates_count();
+hb_dither_t*  hb_get_audio_dithers();
+int           hb_get_audio_dithers_count();
 hb_mixdown_t* hb_get_audio_mixdowns();
 int           hb_get_audio_mixdowns_count();
 hb_encoder_t* hb_get_video_encoders();
 int           hb_get_video_encoders_count();
 hb_encoder_t* hb_get_audio_encoders();
 int           hb_get_audio_encoders_count();
+
+int         hb_audio_dither_get_default();
+int         hb_audio_dither_get_default_method();
+int         hb_audio_dither_is_supported(uint32_t codec);
+const char* hb_audio_dither_get_description(int method);
 
 int         hb_mixdown_is_supported(int mixdown, uint32_t codec, uint64_t layout);
 int         hb_mixdown_has_codec_support(int mixdown, uint32_t codec);
@@ -525,6 +542,7 @@ struct hb_audio_config_s
         double   dynamic_range_compression; /* Amount of DRC applied to this track */
         double   gain; /* Gain (in dB), negative is quieter */
         int      normalize_mix_level; /* mix level normalization (boolean) */
+        int      dither_method; /* dither algorithm */
         char *   name; /* Output track name */
     } out;
 

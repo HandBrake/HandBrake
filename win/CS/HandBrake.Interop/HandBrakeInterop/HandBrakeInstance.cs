@@ -17,6 +17,7 @@ namespace HandBrake.Interop
 	using System.Runtime.InteropServices;
 	using System.Windows.Media.Imaging;
 
+	using HandBrake.Interop.EventArgs;
 	using HandBrake.Interop.HbLib;
 	using HandBrake.Interop.Interfaces;
 	using HandBrake.Interop.Model;
@@ -124,7 +125,7 @@ namespace HandBrake.Interop
 		/// <summary>
 		/// Fires when a scan has completed.
 		/// </summary>
-		public event EventHandler<EventArgs> ScanCompleted;
+		public event EventHandler<System.EventArgs> ScanCompleted;
 
 		/// <summary>
 		/// Fires for progress updates when encoding.
@@ -785,7 +786,7 @@ namespace HandBrake.Interop
 
 				if (this.ScanCompleted != null)
 				{
-					this.ScanCompleted(this, new EventArgs());
+					this.ScanCompleted(this, new System.EventArgs());
 				}
 			}
 		}

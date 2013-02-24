@@ -193,6 +193,19 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         pv->title = w->title;
     pv->list = hb_list_init();
 
+    codec = avcodec_find_decoder(w->codec_param);
+    pv->context = avcodec_alloc_context3(codec);
+    if (pv->title->opaque_priv != NULL)
+    {
+        AVFormatContext *ic = (AVFormatContext*)pv->title->opaque_priv;
+        avcodec_copy_context(pv->context, ic->streams[w->audio->id]->codec);
+    }
+    else
+    {
+        pv->parser = av_parser_init(w->codec_param);
+    }
+    hb_ff_set_sample_fmt(pv->context, codec, AV_SAMPLE_FMT_FLT);
+
     /* Downmixing & sample_fmt conversion */
     if (!(w->audio->config.out.codec & HB_ACODEC_PASS_FLAG))
     {
@@ -205,26 +218,37 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
             hb_error("decavcodecaInit: hb_audio_resample_init() failed");
             return 1;
         }
+        // some decoders can downmix using embedded coefficients,
+        // or dedicated audio substreams for a specific channel layout
+        switch (w->audio->config.out.mixdown)
+        {
+            case HB_AMIXDOWN_MONO:
+                if (w->codec_param == AV_CODEC_ID_TRUEHD)
+                {
+                    // libavcodec can't decode TrueHD Mono (bug #356)
+                    // work around it by requesting Stereo and downmixing
+                    pv->context->request_channels       = 2;
+                    pv->context->request_channel_layout = AV_CH_LAYOUT_STEREO;
+                    break;
+                }
+                pv->context->request_channel_layout = AV_CH_LAYOUT_MONO;
+                break;
+            // request 5.1 before downmixing to dpl1/dpl2
+            case HB_AMIXDOWN_DOLBY:
+            case HB_AMIXDOWN_DOLBYPLII:
+                pv->context->request_channel_layout = AV_CH_LAYOUT_5POINT1;
+                break;
+            // request the layout corresponding to the selected mixdown
+            default:
+                pv->context->request_channel_layout =
+                    hb_ff_mixdown_xlat(w->audio->config.out.mixdown, NULL);
+                break;
+        }
     }
 
-    codec = avcodec_find_decoder( w->codec_param );
-    if ( pv->title->opaque_priv )
+    if (hb_avcodec_open(pv->context, codec, NULL, 0))
     {
-        AVFormatContext *ic = (AVFormatContext*)pv->title->opaque_priv;
-        pv->context = avcodec_alloc_context3(codec);
-        avcodec_copy_context( pv->context, ic->streams[w->audio->id]->codec);
-        hb_ff_set_sample_fmt( pv->context, codec, AV_SAMPLE_FMT_FLT );
-    }
-    else
-    {
-        pv->parser = av_parser_init( w->codec_param );
-
-        pv->context = avcodec_alloc_context3(codec);
-        hb_ff_set_sample_fmt( pv->context, codec, AV_SAMPLE_FMT_FLT );
-    }
-    if ( hb_avcodec_open( pv->context, codec, NULL, 0 ) )
-    {
-        hb_log( "decavcodecaInit: avcodec_open failed" );
+        hb_log("decavcodecaInit: avcodec_open failed");
         return 1;
     }
 
@@ -437,19 +461,32 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     unsigned char *pbuffer;
     int pos, pbuffer_size;
 
-    while ( buf && !ret )
+    while (buf != NULL && !ret)
     {
         pos = 0;
-        while ( pos < buf->size )
+        while (pos < buf->size)
         {
-            int len;
+            int len, truehd_mono = 0;
 
-            if ( parser != NULL )
+            if (parser != NULL)
             {
-                len = av_parser_parse2( parser, context, &pbuffer,
-                                        &pbuffer_size, buf->data + pos,
-                                        buf->size - pos, buf->s.start,
-                                        buf->s.start, 0 );
+                len = av_parser_parse2(parser, context, &pbuffer, &pbuffer_size,
+                                       buf->data + pos, buf->size - pos,
+                                       buf->s.start, buf->s.start, 0);
+                if (context->codec_id == AV_CODEC_ID_TRUEHD &&
+                    context->channel_layout == AV_CH_LAYOUT_MONO)
+                {
+                    // libavcodec can't decode TrueHD Mono (bug #356)
+                    // work around it by requesting Stereo before decoding
+                    truehd_mono                     = 1;
+                    context->request_channels       = 2;
+                    context->request_channel_layout = AV_CH_LAYOUT_STEREO;
+                }
+                else
+                {
+                    context->request_channels       = 0;
+                    context->request_channel_layout = 0;
+                }
             }
             else
             {
@@ -457,7 +494,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                 len = pbuffer_size = buf->size;
             }
             pos += len;
-            if ( pbuffer_size > 0 )
+            if (pbuffer_size > 0)
             {
                 int got_frame;
                 AVFrame frame = { { 0 } };
@@ -466,17 +503,24 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                 avp.data = pbuffer;
                 avp.size = pbuffer_size;
 
-                len = avcodec_decode_audio4( context, &frame, &got_frame, &avp );
-                if ( len > 0 && context->sample_rate > 0 )
+                len = avcodec_decode_audio4(context, &frame, &got_frame, &avp);
+                if (len > 0 && context->sample_rate > 0)
                 {
-                    info->bitrate = context->bit_rate;
-                    info->rate = context->sample_rate;
-                    info->rate_base = 1;
-                    info->channel_layout =
-                        hb_ff_layout_xlat(context->channel_layout,
-                                          context->channels);
+                    info->rate_base          = 1;
+                    info->rate               = context->sample_rate;
+                    info->bitrate            = context->bit_rate;
+                    info->samples_per_frame  = frame.nb_samples;
+                    if (truehd_mono)
+                    {
+                        info->channel_layout = AV_CH_LAYOUT_MONO;
+                    }
+                    else
+                    {
+                        info->channel_layout =
+                            hb_ff_layout_xlat(context->channel_layout,
+                                              context->channels);
+                    }
                     ret = 1;
-                    info->samples_per_frame = frame.nb_samples;
                     break;
                 }
             }

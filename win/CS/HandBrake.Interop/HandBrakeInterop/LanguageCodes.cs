@@ -10,6 +10,7 @@
 namespace HandBrake.Interop
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
 	/// Contains utilities for converting language codes.
@@ -232,14 +233,7 @@ namespace HandBrake.Interop
 		{
 			get
 			{
-				List<Language> languages = new List<Language>();
-
-				foreach (string languageCode in LanguageMap.Keys)
-				{
-					languages.Add(new Language(languageCode));
-				}
-
-				return languages;
+			    return LanguageMap.Keys.Select(languageCode => new Language(languageCode)).ToList();
 			}
 		}
 

@@ -72,6 +72,7 @@ static int    allowed_audio_copy = -1;
 static char * mixdowns    = NULL;
 static char * dynamic_range_compression = NULL;
 static char * audio_gain  = NULL;
+static char ** audio_dither = NULL;
 static char ** normalize_mix_level  = NULL;
 static char * atracks     = NULL;
 static char * arates      = NULL;
@@ -159,6 +160,7 @@ static int  ParseOptions( int argc, char ** argv );
 static int  CheckOptions( int argc, char ** argv );
 static int  HandleEvents( hb_handle_t * h );
 
+static       int   get_dither_for_string(const char *dither);
 static       int   get_acodec_for_string(const char *codec);
 static const char* get_string_for_acodec(int acodec);
 
@@ -364,6 +366,7 @@ int main( int argc, char ** argv )
     str_vfree(abitrates);
     str_vfree(acompressions);
     str_vfree(aqualities);
+    str_vfree(audio_dither);
     free(acodecs);
     free(arates);
     free(atracks);
@@ -2109,6 +2112,58 @@ static int HandleEvents( hb_handle_t * h )
             }
             /* Audio Gain */
 
+            /* Audio Dither */
+            if (audio_dither != NULL)
+            {
+                int dither_method = hb_audio_dither_get_default();
+                for (i = 0; audio_dither[i] != NULL; i++)
+                {
+                    dither_method = get_dither_for_string(audio_dither[i]);
+                    audio = hb_list_audio_config_item(job->list_audio, i);
+                    if (audio != NULL)
+                    {
+                        if (hb_audio_dither_is_supported(audio->out.codec))
+                        {
+                            audio->out.dither_method = dither_method;
+                        }
+                        else if (dither_method != hb_audio_dither_get_default())
+                        {
+                            fprintf(stderr,
+                                    "Ignoring dither %s, not supported by codec\n",
+                                    audio_dither[i]);
+                        }
+                    }
+                    else
+                    {
+                        fprintf(stderr, "Ignoring dither %s, no audio tracks\n",
+                                audio_dither[i]);
+                    }
+                }
+                if (i < num_audio_tracks && i == 1)
+                {
+                    /*
+                     * We have fewer inputs than audio tracks, and we only have
+                     * one input: use that for all tracks.
+                     */
+                    while (i < num_audio_tracks)
+                    {
+                        audio = hb_list_audio_config_item(job->list_audio, i);
+                        if (hb_audio_dither_is_supported(audio->out.codec))
+                        {
+                            audio->out.dither_method = dither_method;
+                        }
+                        else if (dither_method != hb_audio_dither_get_default())
+                        {
+                            fprintf(stderr,
+                                    "Ignoring dither %s, not supported by codec\n",
+                                    audio_dither[0]);
+                        }
+                        i++;
+                    }
+                }
+            }
+            /* Audio Dither */
+
             /* Audio Mix Normalization */
             i = 0;
             int norm = 0;
@@ -2965,6 +3020,36 @@ static void ShowHelp()
     "                            NOT work with audio passthru (copy). Values are in\n"
     "                            dB.  Negative values attenuate, positive values\n"
     "                            amplify. A 1 dB difference is barely audible.\n"
+    "        --adither <string>  Apply dithering to the audio before encoding.\n"
+    "                            Separated by commas for more than one audio track.\n"
+    "                            Only supported by some encoders (");
+    for (i = j = 0; i < hb_audio_encoders_count; i++)
+    {
+        if (hb_audio_dither_is_supported(hb_audio_encoders[i].encoder))
+        {
+            if (j)
+                fprintf(out, "/");
+            fprintf(out, "%s", hb_audio_encoders[i].short_name);
+            j = 1;
+        }
+    }
+    fprintf(out, ").\n");
+    fprintf(out,
+    "                            Options:\n");
+    for (i = 0; i < hb_audio_dithers_count; i++)
+    {
+        if (hb_audio_dithers[i].method == hb_audio_dither_get_default())
+        {
+            fprintf(out, "                               %s (default)\n",
+                    hb_audio_dithers[i].short_name);
+        }
+        else
+        {
+            fprintf(out, "                               %s\n",
+                    hb_audio_dithers[i].short_name);
+        }
+    }
+    fprintf(out,
     "    -A, --aname <string>    Audio track name(s),\n"
     "                            Separated by commas for more than one audio track.\n"
     "\n"
@@ -3229,6 +3314,7 @@ static int ParseOptions( int argc, char ** argv )
     #define H264_LEVEL          286
 	#define NO_OPENCL           287
     #define NORMALIZE_MIX       288
+    #define AUDIO_DITHER        288
     
     for( ;; )
     {
@@ -3261,6 +3347,7 @@ static int ParseOptions( int argc, char ** argv )
             { "normalize-mix", required_argument, NULL,  NORMALIZE_MIX },
             { "drc",         required_argument, NULL,    'D' },
             { "gain",        required_argument, NULL,    AUDIO_GAIN },
+            { "adither",     required_argument, NULL,    AUDIO_DITHER },
             { "subtitle",    required_argument, NULL,    's' },
             { "subtitle-forced", optional_argument,   NULL,    'F' },
             { "subtitle-burned", optional_argument,   NULL,    SUB_BURNED },
@@ -3485,6 +3572,12 @@ static int ParseOptions( int argc, char ** argv )
                 if( optarg != NULL )
                 {
                     audio_gain = strdup( optarg );
+                }
+                break;
+            case AUDIO_DITHER:
+                if (optarg != NULL)
+                {
+                    audio_dither = str_split(optarg, ',');
                 }
                 break;
             case NORMALIZE_MIX:
@@ -4012,6 +4105,19 @@ static int CheckOptions( int argc, char ** argv )
     }
 
     return 0;
+}
+
+static int get_dither_for_string(const char *dither)
+{
+    int i;
+    for (i = 0; i < hb_audio_dithers_count; i++)
+    {
+        if (!strcasecmp(hb_audio_dithers[i].short_name, dither))
+        {
+            return hb_audio_dithers[i].method;
+        }
+    }
+    return hb_audio_dither_get_default();
 }
 
 static int get_acodec_for_string(const char *codec)

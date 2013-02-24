@@ -140,7 +140,7 @@ namespace HandBrake.Interop.SourceData
 		{
 			get
 			{
-				return (int)Math.Ceiling(((double)this.Duration.TotalSeconds) * this.Framerate);
+				return (int)Math.Ceiling(this.Duration.TotalSeconds * this.Framerate);
 			}
 		}
 

@@ -83,6 +83,17 @@ int hb_audio_bitrates_count = sizeof(hb_audio_bitrates) / sizeof(hb_rate_t);
 
 static hb_error_handler_t *error_handler = NULL;
 
+hb_dither_t hb_audio_dithers[] =
+{
+    { "default",                       "auto",          AV_RESAMPLE_DITHER_NONE - 1,      },
+    { "none",                          "none",          AV_RESAMPLE_DITHER_NONE,          },
+    { "rectangular",                   "rectangular",   AV_RESAMPLE_DITHER_RECTANGULAR,   },
+    { "triangular",                    "triangular",    AV_RESAMPLE_DITHER_TRIANGULAR,    },
+    { "triangular with high pass",     "triangular_hp", AV_RESAMPLE_DITHER_TRIANGULAR_HP, },
+    { "triangular with noise shaping", "triangular_ns", AV_RESAMPLE_DITHER_TRIANGULAR_NS, },
+};
+int hb_audio_dithers_count = sizeof(hb_audio_dithers) / sizeof(hb_dither_t);
+
 hb_mixdown_t hb_audio_mixdowns[] =
 {
     { "None",               "HB_AMIXDOWN_NONE",      "none",       HB_AMIXDOWN_NONE      },
@@ -138,12 +149,55 @@ hb_rate_t*    hb_get_audio_rates()          { return hb_audio_rates;          }
 int           hb_get_audio_rates_count()    { return hb_audio_rates_count;    }
 hb_rate_t*    hb_get_audio_bitrates()       { return hb_audio_bitrates;       }
 int           hb_get_audio_bitrates_count() { return hb_audio_bitrates_count; }
+hb_dither_t*  hb_get_audio_dithers()        { return hb_audio_dithers;        }
+int           hb_get_audio_dithers_count()  { return hb_audio_dithers_count;  }
 hb_mixdown_t* hb_get_audio_mixdowns()       { return hb_audio_mixdowns;       }
 int           hb_get_audio_mixdowns_count() { return hb_audio_mixdowns_count; }
 hb_encoder_t* hb_get_video_encoders()       { return hb_video_encoders;       }
 int           hb_get_video_encoders_count() { return hb_video_encoders_count; }
 hb_encoder_t* hb_get_audio_encoders()       { return hb_audio_encoders;       }
 int           hb_get_audio_encoders_count() { return hb_audio_encoders_count; }
+
+int hb_audio_dither_get_default()
+{
+    // "auto"
+    return hb_audio_dithers[0].method;
+}
+
+int hb_audio_dither_get_default_method()
+{
+    /*
+     * input could be s16 (possibly already dithered) converted to flt, so
+     * let's use a "low-risk" dither algorithm (standard triangular).
+     */
+    return AV_RESAMPLE_DITHER_TRIANGULAR;
+}
+
+int hb_audio_dither_is_supported(uint32_t codec)
+{
+    // encoder's input sample format must be s16(p)
+    switch (codec)
+    {
+        case HB_ACODEC_FFFLAC:
+            return 1;
+        default:
+            return 0;
+    }
+}
+
+const char* hb_audio_dither_get_description(int method)
+{
+    int i;
+    for (i = 0; i < hb_audio_dithers_count; i++)
+    {
+        if (hb_audio_dithers[i].method == method)
+        {
+            return hb_audio_dithers[i].description;
+        }
+    }
+    return "";
+}
+
 
 int hb_mixdown_is_supported(int mixdown, uint32_t codec, uint64_t layout)
 {
@@ -2205,6 +2259,7 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg)
     audiocfg->out.dynamic_range_compression = 0;
     audiocfg->out.gain = 0;
     audiocfg->out.normalize_mix_level = 0;
+    audiocfg->out.dither_method = hb_audio_dither_get_default();
     audiocfg->out.name = NULL;
 }
 
@@ -2255,6 +2310,7 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
         audio->config.out.normalize_mix_level = 0;
         audio->config.out.compression_level = -1;
         audio->config.out.quality = HB_INVALID_AUDIO_QUALITY;
+        audio->config.out.dither_method = AV_RESAMPLE_DITHER_NONE;
     }
     else
     {
@@ -2268,6 +2324,7 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
         audio->config.out.mixdown = audiocfg->out.mixdown;
         audio->config.out.gain = audiocfg->out.gain;
         audio->config.out.normalize_mix_level = audiocfg->out.normalize_mix_level;
+        audio->config.out.dither_method = audiocfg->out.dither_method;
     }
     if (audiocfg->out.name && *audiocfg->out.name)
     {

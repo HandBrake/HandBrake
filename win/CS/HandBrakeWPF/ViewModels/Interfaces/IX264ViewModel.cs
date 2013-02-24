@@ -1,33 +1,32 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Subtitles.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="IX264ViewModel.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Defines the Subtitles type.
+//   Defines the IX264ViewModel type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop.Model
+namespace HandBrakeWPF.ViewModels.Interfaces
 {
-    using System.Collections.Generic;
+    using HandBrake.Interop.Model.Encoding;
 
     /// <summary>
-    /// The subtitles.
+    /// The Advanced View Model Interface
     /// </summary>
-    public class Subtitles
+    public interface IX264ViewModel : ITabInterface
     {
-        #region Properties
+        /// <summary>
+        /// Set the currently selected encoder.
+        /// </summary>
+        /// <param name="encoder">
+        /// The Video Encoder.
+        /// </param>
+        void SetEncoder(VideoEncoder encoder);
 
         /// <summary>
-        /// Gets or sets the source subtitles.
+        /// Clear out the settings.
         /// </summary>
-        public List<SourceSubtitle> SourceSubtitles { get; set; }
-
-        /// <summary>
-        /// Gets or sets the srt subtitles.
-        /// </summary>
-        public List<SrtSubtitle> SrtSubtitles { get; set; }
-
-        #endregion
+        void Clear();
     }
 }

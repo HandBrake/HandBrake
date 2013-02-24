@@ -1,29 +1,24 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ScanProgressEventArgs.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="EncodeCompletedEventArgs.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Defines the ScanProgressEventArgs type.
+//   Defines the EncodeCompletedEventArgs type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Interop
+namespace HandBrake.Interop.EventArgs
 {
-	using System;
+    using System;
 
     /// <summary>
-    /// The Scan Progress Event Args
+    /// Encode Completed Event Args
     /// </summary>
-    public class ScanProgressEventArgs : EventArgs
+    public class EncodeCompletedEventArgs : EventArgs
 	{
 	    /// <summary>
-	    /// Gets or sets CurrentTitle.
+	    /// Gets or sets a value indicating whether Error.
 	    /// </summary>
-	    public int CurrentTitle { get; set; }
-
-	    /// <summary>
-	    /// Gets or sets Titles.
-	    /// </summary>
-	    public int Titles { get; set; }
+	    public bool Error { get; set; }
 	}
 }
