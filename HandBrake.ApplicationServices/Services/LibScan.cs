@@ -262,7 +262,7 @@ namespace HandBrake.ApplicationServices.Services
             IsScanning = false;
 
             if (this.ScanCompleted != null)
-                this.ScanCompleted(this, new ScanCompletedEventArgs(true, null, string.Empty));
+                this.ScanCompleted(this, new ScanCompletedEventArgs(false, null, string.Empty));
         }
 
         /// <summary>
