@@ -273,7 +273,7 @@ int hb_ocl_scale( cl_mem in_buf, uint8_t *in_data, uint8_t *out_data, int in_w, 
         int st = hb_register_kernel_wrapper( "frame_h_scale", hb_ocl_scale_func );
         if( !st )
         {
-            hb_log( "register kernel[%s] faild", "frame_h_scale" );
+            hb_log( "register kernel[%s] failed", "frame_h_scale" );
             return 0;
         }
         init_flag++;
@@ -295,7 +295,7 @@ int hb_ocl_scale( cl_mem in_buf, uint8_t *in_data, uint8_t *out_data, int in_w, 
     data[5] = (void*)out_h;
     data[6] = os;
     if( !hb_run_kernel( "frame_h_scale", data ) )
-        hb_log( "run kernel[%s] faild", "frame_scale" );
+        hb_log( "run kernel[%s] failed", "frame_scale" );
     return 0;
 }
 #endif

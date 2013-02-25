@@ -125,7 +125,7 @@ static int hb_nv12toyuv( void **userdata, KernelEnv *kenv )
     if( kenv->isAMD )
     {
         void *data = clEnqueueMapBuffer( kenv->command_queue, dxva2->cl_mem_nv12, CL_MAP_WRITE_INVALIDATE_REGION, CL_TRUE, 0, in_bytes, 0, NULL, NULL, NULL );
-        //memcpy( data, bufi, in_bytes );
+
         for ( i = 0; i < dxva2->height; i++ )
         {
             memcpy( data+i*dxva2->width, bufi1+i*p, dxva2->width );
@@ -191,7 +191,7 @@ static int hb_nv12toyuv_reg_kernel( void )
     int st = hb_register_kernel_wrapper( "nv12toyuv", hb_nv12toyuv );
     if( !st )
     {
-        hb_log( "register kernel[%s] faild", "nv12toyuv" );
+        hb_log( "register kernel[%s] failed", "nv12toyuv" );
         return -1;
     }
     return 0;
@@ -201,7 +201,6 @@ static int hb_nv12toyuv_reg_kernel( void )
  * bufi is input frame of nv12, w is input frame width, h is input frame height
  */
 int hb_ocl_nv12toyuv( uint8_t *bufi[], int p, int w, int h, int *crop, hb_va_dxva2_t *dxva2 )
-//int hb_ocl_nv12toyuv( uint8_t *bufi, int w, int h, int *crop, hb_va_dxva2_t *dxva2 )
 {
     void *userdata[7];
     userdata[0] = (void*)w;
@@ -215,7 +214,7 @@ int hb_ocl_nv12toyuv( uint8_t *bufi[], int p, int w, int h, int *crop, hb_va_dxv
         return -1;
     if( hb_run_kernel( "nv12toyuv", userdata ) )
     {
-        hb_log( "run kernel[nv12toyuv] faild" );
+        hb_log( "run kernel[nv12toyuv] failed" );
         return -1;
     }
     return 0;

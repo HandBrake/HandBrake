@@ -326,16 +326,16 @@ char *kernel_src_vscalealldither = KERNEL(
         int srcStride,
         int srcChrStride)
     {
-		const unsigned char hb_dither_8x8_128[8][8] = {
-    		{  36, 68,  60, 92,  34, 66,  58, 90, },
-    		{ 100,  4, 124, 28,  98,  2, 122, 26, },
-    		{  52, 84,  44, 76,  50, 82,  42, 74, },
-    		{ 116, 20, 108, 12, 114, 18, 106, 10, },
-    		{  32, 64,  56, 88,  38, 70,  62, 94, },
-    		{  96,  0, 120, 24, 102,  6, 126, 30, },
-    		{  48, 80,  40, 72,  54, 86,  46, 78, },
-    		{ 112, 16, 104,  8, 118, 22, 110, 14, },
-		};
+        const unsigned char hb_dither_8x8_128[8][8] = {
+            {  36, 68,  60, 92,  34, 66,  58, 90, },
+            { 100,  4, 124, 28,  98,  2, 122, 26, },
+            {  52, 84,  44, 76,  50, 82,  42, 74, },
+            { 116, 20, 108, 12, 114, 18, 106, 10, },
+            {  32, 64,  56, 88,  38, 70,  62, 94, },
+            {  96,  0, 120, 24, 102,  6, 126, 30, },
+            {  48, 80,  40, 72,  54, 86,  46, 78, },
+            { 112, 16, 104,  8, 118, 22, 110, 14, },
+        };
 
 
         int w = get_global_id(0);
@@ -414,9 +414,9 @@ char *kernel_src_vscaleallnodither = KERNEL(
         int srcStride,
         int srcChrStride)
     {
-		const unsigned char hb_sws_pb_64[8] = {
-    		64, 64, 64, 64, 64, 64, 64, 64
-		};
+        const unsigned char hb_sws_pb_64[8] = {
+            64, 64, 64, 64, 64, 64, 64, 64
+        };
 
         int w = get_global_id(0);
         int h = get_global_id(1);
@@ -492,9 +492,9 @@ char *kernel_src_vscalefast = KERNEL(
         int srcStride,
         int srcChrStride)
     {
-		const unsigned char hb_sws_pb_64[8] = {
-    		64, 64, 64, 64, 64, 64, 64, 64
-		};
+        const unsigned char hb_sws_pb_64[8] = {
+            64, 64, 64, 64, 64, 64, 64, 64
+        };
 
         int w = get_global_id(0);
         int h = get_global_id(1);

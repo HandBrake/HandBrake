@@ -580,7 +580,7 @@ void hb_init_filter( cl_mem src, int srcwidth, int srcheight, uint8_t* dst, int 
 {
     T_FilterLink fl = {0};
     int STEP = srcwidth * srcheight * 3 / 2;
-	int OUTSTEP = dstwidth * dstheight * 3 / 2;
+    int OUTSTEP = dstwidth * dstheight * 3 / 2;
     int HEIGHT = srcheight;
     int LINESIZEY = srcwidth;
     int LINESIZEUV = srcwidth / 2;
@@ -597,10 +597,10 @@ void hb_init_filter( cl_mem src, int srcwidth, int srcheight, uint8_t* dst, int 
 
     scale_run( src, fl.cl_outbuf, LINESIZEY, LINESIZEUV, HEIGHT );
 
-	hb_read_opencl_buffer( fl.cl_outbuf, dst, OUTSTEP );
-	CL_FREE( cl_outbuf );
+    hb_read_opencl_buffer( fl.cl_outbuf, dst, OUTSTEP );
+    CL_FREE( cl_outbuf );
 
-	return;
+    return;
 }
 #endif
 /**
@@ -636,14 +636,14 @@ int hb_va_extract( hb_va_dxva2_t *dxva2, uint8_t *dst, AVFrame *frame, int job_w
         {
             hb_ocl_nv12toyuv( plane, lock.Pitch,  dxva2->width, dxva2->height, crop, dxva2 );
 
-			static int init_flag = 0;
-			if(init_flag == 0){
-    			scale_init( dxva2->width - crop[2] - crop[3], dxva2->height - crop[0] - crop[1], job_w, job_h );
-				init_flag = 1;
-			}
+            static int init_flag = 0;
+            if(init_flag == 0){
+                scale_init( dxva2->width - crop[2] - crop[3], dxva2->height - crop[0] - crop[1], job_w, job_h );
+                init_flag = 1;
+            }
 
-			hb_init_filter( dxva2->cl_mem_yuv, dxva2->width - crop[2] - crop[3], dxva2->height - crop[0] - crop[1], dst, job_w, job_h, crop ); 
-		}
+            hb_init_filter( dxva2->cl_mem_yuv, dxva2->width - crop[2] - crop[3], dxva2->height - crop[0] - crop[1], dst, job_w, job_h, crop ); 
+        }
         else
 #endif
         {
@@ -743,7 +743,7 @@ void hb_va_new_dxva2( hb_va_dxva2_t *dxva2, AVCodecContext *p_context )
 
 char* hb_get_pix_fmt_name( int pix_fmt )
 {
-	static const char *ppsz_name[AV_PIX_FMT_NB] =
+    static const char *ppsz_name[AV_PIX_FMT_NB] =
     {
         [AV_PIX_FMT_VDPAU_H264] = "AV_PIX_FMT_VDPAU_H264",
         [AV_PIX_FMT_VAAPI_IDCT] = "AV_PIX_FMT_VAAPI_IDCT",
@@ -754,7 +754,7 @@ char* hb_get_pix_fmt_name( int pix_fmt )
         [AV_PIX_FMT_YUV420P] = "AV_PIX_FMT_YUV420P",
     };
 
-	return ppsz_name[pix_fmt];
+    return ppsz_name[pix_fmt];
 }
 
 enum PixelFormat hb_ffmpeg_get_format( AVCodecContext *p_context, const enum PixelFormat *pi_fmt )
