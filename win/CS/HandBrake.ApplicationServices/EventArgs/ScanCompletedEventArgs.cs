@@ -21,8 +21,8 @@ namespace HandBrake.ApplicationServices.EventArgs
         /// <summary>
         /// Initializes a new instance of the <see cref="ScanCompletedEventArgs"/> class.
         /// </summary>
-        /// <param name="sucessful">
-        /// The sucessful.
+        /// <param name="cancelled">
+        /// Whether the scan was cancelled.
         /// </param>
         /// <param name="exception">
         /// The exception.
@@ -30,9 +30,10 @@ namespace HandBrake.ApplicationServices.EventArgs
         /// <param name="errorInformation">
         /// The error information.
         /// </param>
-        public ScanCompletedEventArgs(bool sucessful, Exception exception, string errorInformation)
+        public ScanCompletedEventArgs(bool cancelled, Exception exception, string errorInformation)
         {
-            this.Successful = sucessful;
+            this.Successful = !cancelled && exception == null && string.IsNullOrEmpty(errorInformation);
+            this.Cancelled = cancelled;
             this.Exception = exception;
             this.ErrorInformation = errorInformation;
         }
@@ -42,6 +43,12 @@ namespace HandBrake.ApplicationServices.EventArgs
         /// </summary>
         [DataMember]
         public bool Successful { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether Cancelled.
+        /// </summary>
+        [DataMember]
+        public bool Cancelled { get; set; }
 
         /// <summary>
         /// Gets or sets Exception.

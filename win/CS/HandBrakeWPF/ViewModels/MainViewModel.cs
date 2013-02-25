@@ -1800,15 +1800,19 @@ namespace HandBrakeWPF.ViewModels
                         this.SourceLabel = this.SourceName;
                         this.StatusLabel = "Scan Completed";
                     }
-                    else if (!e.Successful && e.Exception == null)
+                    else if (e.Cancelled)
                     {
                         this.SourceLabel = "Scan Cancelled.";
                         this.StatusLabel = "Scan Cancelled.";
                     }
+                    else if (e.Exception == null && e.ErrorInformation != null)
+                    {
+                        this.SourceLabel = "Scan failed: " + e.ErrorInformation;
+                        this.StatusLabel = "Scan failed: " + e.ErrorInformation;
+                    }
                     else
                     {
-                        this.SourceLabel = "Scan Failed... See Activity Log for details.";
-                        this.StatusLabel = "Scan Failed... See Activity Log for details.";
+                        this.SourceLabel = "Scan Failed... See Activity Log for details.";                        this.StatusLabel = "Scan Failed... See Activity Log for details.";
                     }
                 });
         }

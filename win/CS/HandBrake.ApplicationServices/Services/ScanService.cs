@@ -191,7 +191,7 @@ namespace HandBrake.ApplicationServices.Services
 
                 if (this.ScanCompleted != null)
                 {
-                    this.ScanCompleted(this, new ScanCompletedEventArgs(true, null, string.Empty));
+                    this.ScanCompleted(this, new ScanCompletedEventArgs(false, null, string.Empty));
                 }
             }
             catch (Exception e)
@@ -335,7 +335,10 @@ namespace HandBrake.ApplicationServices.Services
                 {
                     if (this.ScanCompleted != null)
                     {
-                        this.ScanCompleted(this, new ScanCompletedEventArgs(!this.cancelScan, null, string.Empty));
+                        if (logBuffer.ToString().Contains("scan: unrecognized file type"))
+                            this.ScanCompleted(this, new ScanCompletedEventArgs(false, null, "Unrecognized file type."));
+                        else
+                            this.ScanCompleted(this, new ScanCompletedEventArgs(this.cancelScan, null, string.Empty));
                     }
                 }
             }
