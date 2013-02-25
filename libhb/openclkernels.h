@@ -2,10 +2,21 @@
 
 #define KERNEL( ... )# __VA_ARGS__
 
+
 char *kernel_src_hscale = KERNEL(
 
     typedef unsigned char  fixed8;
 
+/*******************************************************************************************************
+dst:          Horizontal scale destination;
+src:          YUV content in opencl buf;
+hf_Y:         Horizontal filter coefficients for Y planes;
+hf_UV:        Horizontal filter coefficients for UV planes;
+hi_Y:         Horizontal filter index for Y planes;
+hi_UV:        Horizontal filter index for UV planes;
+stride:       Src width;
+filter_len:   Length of filter;
+********************************************************************************************************/
     kernel void frame_h_scale(
         global fixed8 *src,
         global float   *hf_Y,
@@ -56,6 +67,16 @@ char *kernel_src_hscale = KERNEL(
     }
     );
 
+/*******************************************************************************************************
+dst:          Vertical scale destination;
+src:          YUV content in opencl buf;
+hf_Y:         Vertical filter coefficients for Y planes;
+hf_UV:        Vertical filter coefficients for UV planes;
+hi_Y:         Vertical filter index for Y planes;
+hi_UV:        Vertical filter index for UV planes;
+stride:       Src height;
+filter_len:   Length of filter;
+********************************************************************************************************/
 char *kernel_src_vscale = KERNEL(
 
     kernel void frame_v_scale(
@@ -105,6 +126,12 @@ char *kernel_src_vscale = KERNEL(
     }
     );
 
+/*******************************************************************************************************
+input:    Input buffer;
+output:   Output buffer;
+w:        Width of frame;
+h:        Height of frame;
+********************************************************************************************************/
 char *kernel_src_nvtoyuv = KERNEL(
 
     kernel void nv12toyuv( global char *input, global char* output, int w, int h )
@@ -118,6 +145,19 @@ char *kernel_src_nvtoyuv = KERNEL(
         output[idx+w*h+((w*h)>>2)] = uv.s1;
     }
     );
+
+/*******************************************************************************************************
+dst:           Horizontal scale destination;
+src:           YUV content in opencl buf;
+yfilter:       Opencl memory of horizontal filter coefficients for luma/alpha planes;
+yfilterPos:    Opencl memory of horizontal filter starting positions for each dst[i] for luma/alpha planes;
+yfilterSize:   Horizontal filter size for luma/alpha pixels;
+cfilter:       Opencl memory of horizontal filter coefficients for chroma planes;
+cfilterPos:    Opencl memory of horizontal filter starting positions for each dst[i] for chroma planes;
+cfilterSize:   Horizontal filter size for chroma pixels;
+dstStride:     Width of destination luma/alpha planes;
+dstChrStride:  Width of destination chroma planes;
+********************************************************************************************************/
 
 char *kernel_src_hscaleall = KERNEL(
 

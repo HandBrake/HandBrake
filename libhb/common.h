@@ -1035,8 +1035,6 @@ typedef struct hb_filter_init_s
     int           cfr;
 #ifdef USE_OPENCL
  	int           use_dxva;
-	int           title_width;
-	int           title_height;
 #endif    
 
 } hb_filter_init_t;

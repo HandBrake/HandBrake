@@ -88,7 +88,7 @@ static int hb_init_nv12toyuv_ocl( KernelEnv *kenv, int w, int h, hb_va_dxva2_t *
     {
         if( hb_nv12toyuv_create_cl_buf( kenv, w, h, dxva2 ) )
         {
-            hb_log( "nv12toyuv_create_cl_buf fial" );
+            hb_log( "nv12toyuv_create_cl_buf fail" );
             return -1;
         }
         if (!dxva2->nv12toyuv_tmp_in) 
@@ -191,7 +191,7 @@ static int hb_nv12toyuv_reg_kernel( void )
     int st = hb_register_kernel_wrapper( "nv12toyuv", hb_nv12toyuv );
     if( !st )
     {
-        hb_log( "register kernel[%s] faild\n", "nv12toyuv" );
+        hb_log( "register kernel[%s] faild", "nv12toyuv" );
         return -1;
     }
     return 0;
@@ -215,7 +215,7 @@ int hb_ocl_nv12toyuv( uint8_t *bufi[], int p, int w, int h, int *crop, hb_va_dxv
         return -1;
     if( hb_run_kernel( "nv12toyuv", userdata ) )
     {
-        printf( "run kernel[nv12toyuv] faild\n" );
+        hb_log( "run kernel[nv12toyuv] faild" );
         return -1;
     }
     return 0;

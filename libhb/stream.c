@@ -50,7 +50,7 @@ typedef struct {
 static const stream2codec_t st2codec[256] = {
     st(0x00, U, 0,                0,                      NULL),
     st(0x01, V, WORK_DECMPEG2,    0,                      "MPEG1"),
-    st(0x02, V, WORK_DECMPEG2,    0,                      "MPEG2"),
+    st(0x02, V, WORK_DECMPEG2,    AV_CODEC_ID_MPEG2VIDEO, "MPEG2"),
     st(0x03, A, HB_ACODEC_FFMPEG, AV_CODEC_ID_MP2,        "MPEG1"),
     st(0x04, A, HB_ACODEC_FFMPEG, AV_CODEC_ID_MP2,        "MPEG2"),
     st(0x05, N, 0,                0,                      "ISO 13818-1 private section"),

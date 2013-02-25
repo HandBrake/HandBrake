@@ -152,7 +152,7 @@ int hb_ocl_scale_func( void **data, KernelEnv *kenv )
     }
     if( !os->h_out_buf )
     {
-        hb_log( "Scaling With OpenCL\n" );
+        hb_log( "Scaling With OpenCL" );
         //malloc filter args
         float *hf_y, *hf_uv, *vf_y, *vf_uv;
         int   *hi_y, *hi_uv, *vi_y, *vi_uv;
@@ -273,7 +273,7 @@ int hb_ocl_scale( cl_mem in_buf, uint8_t *in_data, uint8_t *out_data, int in_w, 
         int st = hb_register_kernel_wrapper( "frame_h_scale", hb_ocl_scale_func );
         if( !st )
         {
-            printf( "register kernel[%s] faild\n", "frame_h_scale" );
+            hb_log( "register kernel[%s] faild", "frame_h_scale" );
             return 0;
         }
         init_flag++;
@@ -295,7 +295,7 @@ int hb_ocl_scale( cl_mem in_buf, uint8_t *in_data, uint8_t *out_data, int in_w, 
     data[5] = (void*)out_h;
     data[6] = os;
     if( !hb_run_kernel( "frame_h_scale", data ) )
-        printf( "run kernel[%s] faild\n", "frame_scale" );
+        hb_log( "run kernel[%s] faild", "frame_scale" );
     return 0;
 }
 #endif

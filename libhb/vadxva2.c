@@ -152,7 +152,7 @@ static int hb_dx_create_video_decoder( hb_va_dxva2_t *dxva2, int codec_id, const
                                                            DXVA2_VideoDecoderRenderTarget,
                                                            surface_list, NULL )))
     {
-        hb_log( "dxva2:IDirectXVideoAccelerationService_CreateSurface failed\n" );
+        hb_log( "dxva2:IDirectXVideoAccelerationService_CreateSurface failed" );
         dxva2->surface_count = 0;
         return HB_WORK_ERROR;
     }
@@ -165,7 +165,7 @@ static int hb_dx_create_video_decoder( hb_va_dxva2_t *dxva2, int codec_id, const
         surface->refcount = 0;
         surface->order = 0;
     }
-    hb_log( "dxva2:CreateSurface succeed with %d, fmt (%dx%d) surfaces (%dx%d)\n", dxva2->surface_count,
+    hb_log( "dxva2:CreateSurface succeed with %d, fmt (%dx%d) surfaces (%dx%d)", dxva2->surface_count,
             fmt->width,
             fmt->height,
             dxva2->surface_width,
@@ -206,17 +206,17 @@ static int hb_dx_create_video_decoder( hb_va_dxva2_t *dxva2, int codec_id, const
     DXVA2_ConfigPictureDecode *cfg_list = NULL;
     if( FAILED( IDirectXVideoDecoderService_GetDecoderConfigurations( dxva2->vs, &dxva2->input, &dsc, NULL, &cfg_count, &cfg_list )))
     {
-        hb_log( "dxva2:IDirectXVideoDecoderService_GetDecoderConfigurations failed\n" );
+        hb_log( "dxva2:IDirectXVideoDecoderService_GetDecoderConfigurations failed" );
         return HB_WORK_ERROR;
     }
-    hb_log( "dxva2:we got %d decoder configurations\n", cfg_count );
+    hb_log( "dxva2:we got %d decoder configurations", cfg_count );
 
     /* Select the best decoder configuration */
     int cfg_score = 0;
     for( i = 0; i < cfg_count; i++ )
     {
         const DXVA2_ConfigPictureDecode *cfg = &cfg_list[i];
-        hb_log( "dxva2:configuration[%d] ConfigBitstreamRaw %d\n", i, cfg->ConfigBitstreamRaw );
+        hb_log( "dxva2:configuration[%d] ConfigBitstreamRaw %d", i, cfg->ConfigBitstreamRaw );
         int score;
         if( cfg->ConfigBitstreamRaw == 1 )
             score = 1;
@@ -235,7 +235,7 @@ static int hb_dx_create_video_decoder( hb_va_dxva2_t *dxva2, int codec_id, const
     //my_release(cfg_list);
     if( cfg_score <= 0 )
     {
-        hb_log( "dxva2:Failed to find a supported decoder configuration\n" );
+        hb_log( "dxva2:Failed to find a supported decoder configuration" );
         return HB_WORK_ERROR;
     }
 
@@ -243,11 +243,11 @@ static int hb_dx_create_video_decoder( hb_va_dxva2_t *dxva2, int codec_id, const
     IDirectXVideoDecoder *decoder;
     if( FAILED( IDirectXVideoDecoderService_CreateVideoDecoder( dxva2->vs, &dxva2->input, &dsc, &dxva2->cfg, surface_list, dxva2->surface_count, &decoder )))
     {
-        hb_log( "dxva2:IDirectXVideoDecoderService_CreateVideoDecoder failed\n" );
+        hb_log( "dxva2:IDirectXVideoDecoderService_CreateVideoDecoder failed" );
         return HB_WORK_ERROR;
     }
     dxva2->decoder = decoder;
-    hb_log( "dxva2:IDirectXVideoDecoderService_CreateVideoDecoder succeed\n" );
+    hb_log( "dxva2:IDirectXVideoDecoderService_CreateVideoDecoder succeed" );
     return HB_WORK_OK;
 }
 
@@ -261,21 +261,21 @@ static int hb_d3d_create_device( hb_va_dxva2_t *dxva2 )
     Create9 = (void*)GetProcAddress( dxva2->hd3d9_dll, TEXT( "Direct3DCreate9" ));
     if( !Create9 )
     {
-        hb_log( "dxva2:Cannot locate reference to Direct3DCreate9 ABI in DLL\n" );
+        hb_log( "dxva2:Cannot locate reference to Direct3DCreate9 ABI in DLL" );
         return HB_WORK_ERROR;
     }
     LPDIRECT3D9 d3dobj;
     d3dobj = Create9( D3D_SDK_VERSION );
     if( !d3dobj )
     {
-        hb_log( "dxva2:Direct3DCreate9 failed\n" );
+        hb_log( "dxva2:Direct3DCreate9 failed" );
         return HB_WORK_ERROR;
     }
     dxva2->d3dobj = d3dobj;
     D3DADAPTER_IDENTIFIER9 *d3dai = &dxva2->d3dai;
     if( FAILED( IDirect3D9_GetAdapterIdentifier( dxva2->d3dobj, D3DADAPTER_DEFAULT, 0, d3dai )))
     {
-        hb_log( "dxva2:IDirect3D9_GetAdapterIdentifier failed\n" );
+        hb_log( "dxva2:IDirect3D9_GetAdapterIdentifier failed" );
         memset( d3dai, 0, sizeof(*d3dai));
     }
 
@@ -308,7 +308,7 @@ static int hb_d3d_create_device( hb_va_dxva2_t *dxva2 )
                                          d3dpp,
                                          &d3ddev )))
     {
-        hb_log( "dxva2:IDirect3D9_CreateDevice failed\n" );
+        hb_log( "dxva2:IDirect3D9_CreateDevice failed" );
         return HB_WORK_ERROR;
     }
     dxva2->d3ddev = d3ddev;
@@ -326,26 +326,24 @@ static int hb_d3d_create_device_manager( hb_va_dxva2_t *dxva2 )
 
     if( !CreateDeviceManager9 )
     {
-        hb_log( "dxva2:cannot load function\n" );
+        hb_log( "dxva2:cannot load function" );
         return HB_WORK_ERROR;
     }
-    //hb_log( "dxva2:OurDirect3DCreateDeviceManager9 Success!\n" );
 
     UINT token;
     IDirect3DDeviceManager9 *devmng;
     if( FAILED( CreateDeviceManager9( &token, &devmng )))
     {
-        hb_log( "dxva2:OurDirect3DCreateDeviceManager9 failed\n" );
+        hb_log( "dxva2:OurDirect3DCreateDeviceManager9 failed" );
         return HB_WORK_ERROR;
     }
     dxva2->token  = token;
     dxva2->devmng = devmng;
-    //hb_log( "dxva2:obtained IDirect3DDeviceManager9\n" );
 
     long hr = IDirect3DDeviceManager9_ResetDevice( devmng, dxva2->d3ddev, token );
     if( FAILED( hr ))
     {
-        hb_log( "dxva2:IDirect3DDeviceManager9_ResetDevice failed: %08x\n", (unsigned)hr );
+        hb_log( "dxva2:IDirect3DDeviceManager9_ResetDevice failed: %08x", (unsigned)hr );
         return HB_WORK_ERROR;
     }
     return HB_WORK_OK;
@@ -360,10 +358,9 @@ static int hb_dx_create_video_service( hb_va_dxva2_t *dxva2 )
 
     if( !CreateVideoService )
     {
-        hb_log( "dxva2:cannot load function\n" );
+        hb_log( "dxva2:cannot load function" );
         return HB_WORK_ERROR;
     }
-    //hb_log( "dxva2:DXVA2CreateVideoService Success!\n" );
 
     HRESULT hr;
 
@@ -371,7 +368,7 @@ static int hb_dx_create_video_service( hb_va_dxva2_t *dxva2 )
     hr = IDirect3DDeviceManager9_OpenDeviceHandle( dxva2->devmng, &device );
     if( FAILED( hr ))
     {
-        hb_log( "dxva2:OpenDeviceHandle failed\n" );
+        hb_log( "dxva2:OpenDeviceHandle failed" );
         return HB_WORK_ERROR;
     }
     dxva2->device = device;
@@ -380,7 +377,7 @@ static int hb_dx_create_video_service( hb_va_dxva2_t *dxva2 )
     hr = IDirect3DDeviceManager9_GetVideoService( dxva2->devmng, device, &IID_IDirectXVideoDecoderService, (void*)&vs );
     if( FAILED( hr ))
     {
-        hb_log( "dxva2:GetVideoService failed\n" );
+        hb_log( "dxva2:GetVideoService failed" );
         return HB_WORK_ERROR;
     }
     dxva2->vs = vs;
@@ -396,7 +393,7 @@ static int hb_dx_find_video_service_conversion( hb_va_dxva2_t *dxva2, GUID *inpu
     GUID *input_list = NULL;
     if( FAILED( IDirectXVideoDecoderService_GetDecoderDeviceGuids( dxva2->vs, &input_count, &input_list )))
     {
-        hb_log( "dxva2:IDirectXVideoDecoderService_GetDecoderDeviceGuids failed\n" );
+        hb_log( "dxva2:IDirectXVideoDecoderService_GetDecoderDeviceGuids failed" );
         return HB_WORK_ERROR;
     }
     unsigned i, j;
@@ -404,15 +401,7 @@ static int hb_dx_find_video_service_conversion( hb_va_dxva2_t *dxva2, GUID *inpu
     {
         const GUID *g = &input_list[i];
         const hb_dx_mode_t *mode = hb_dx_find_mode( g );
-        if( mode )
-        {
-            //hb_log( "dxva2:'%s' is supported by hardware\n", mode->name );
-        }
-        else
-        {
-            //hb_log( "- Unknown GUID = %08X-%04x-%04x-XXXX\n", (unsigned)g->Data1, g->Data2, g->Data3);
-        }
-    }
+     }
 
     for( i = 0; dxva2_modes[i].name; i++ )
     {
@@ -429,7 +418,6 @@ static int hb_dx_find_video_service_conversion( hb_va_dxva2_t *dxva2, GUID *inpu
         if( !is_suported )
             continue;
 
-        //hb_log( "dxva2: Trying to use '%s' as input\n", mode->name );
         unsigned int output_count = 0;
         D3DFORMAT *output_list = NULL;
         if( FAILED( IDirectXVideoDecoderService_GetDecoderRenderTargets( dxva2->vs, mode->guid, &output_count, &output_list )))
@@ -443,11 +431,11 @@ static int hb_dx_find_video_service_conversion( hb_va_dxva2_t *dxva2, GUID *inpu
             const hb_d3d_format_t *format = hb_d3d_find_format( f );
             if( format )
             {
-                //hb_log( "dxva2:%s is supported for output\n", format->name );
+                //hb_log( "dxva2:%s is supported for output", format->name );
             }
             else
             {
-                hb_log( "dxvar2:%d is supported for output (%4.4s)\n", f, (const char*)&f );
+                hb_log( "dxvar2:%d is supported for output (%4.4s)", f, (const char*)&f );
             }
         }
 
@@ -462,7 +450,6 @@ static int hb_dx_find_video_service_conversion( hb_va_dxva2_t *dxva2, GUID *inpu
             }
             if( !is_suported )
                 continue;
-            //hb_log( "dxva2:Using '%s' to decode to '%s'\n", mode->name, format->name );
             *input  = *mode->guid;
             *output = format->format;
             return HB_WORK_OK;
@@ -535,16 +522,6 @@ ok:
 
 static int hb_va_get( hb_va_dxva2_t *dxva2, AVFrame *frame )
 {
-    /*HRESULT hr = IDirect3DDeviceManager9_TestDevice(dxva2->devmng, dxva2->device);
-    if (hr == DXVA2_E_NEW_VIDEO_DEVICE)
-    {
-        return HB_WORK_ERROR;
-    }
-    else if (FAILED(hr))
-    {
-        hb_log( "dxva2:IDirect3DDeviceManager9_TestDevice %u\n", (unsigned)hr);
-        return HB_WORK_ERROR;
-    }*/
     unsigned i, old;
     for( i = 0, old = 0; i < dxva2->surface_count; i++ )
     {
@@ -612,7 +589,7 @@ void hb_init_filter( cl_mem src, int srcwidth, int srcheight, uint8_t* dst, int 
 
     if( !hb_create_buffer( &(cl_outbuf), CL_MEM_WRITE_ONLY, STEP ) )
     {   
-        hb_log("av_create_buffer cl_outbuf Error\n");
+        hb_log("av_create_buffer cl_outbuf Error");
         return;
     }   
 
@@ -638,7 +615,7 @@ int hb_va_extract( hb_va_dxva2_t *dxva2, uint8_t *dst, AVFrame *frame, int job_w
     D3DLOCKED_RECT lock;
     if( FAILED( IDirect3DSurface9_LockRect( d3d, &lock, NULL, D3DLOCK_READONLY )))
     {
-        hb_log( "dxva2:Failed to lock surface\n" );
+        hb_log( "dxva2:Failed to lock surface" );
         return HB_WORK_ERROR;
     }
 
@@ -713,7 +690,6 @@ hb_va_dxva2_t * hb_va_create_dxva2( hb_va_dxva2_t *dxva2, int codec_id )
         goto error;
     }
 
-    //hb_log( "dxva2:hb_d3d_create_device succeed" );
     if( hb_d3d_create_device_manager( dxva )== HB_WORK_ERROR )
     {
         hb_log( "dxva2:D3dCreateDeviceManager failed" );
@@ -759,15 +735,15 @@ void hb_va_new_dxva2( hb_va_dxva2_t *dxva2, AVCodecContext *p_context )
         dxva2->input_pts[0] = 0;
         dxva2->input_pts[1] = 0;
         if( dxva2->description )
-            hb_log(  "dxva2:Using %s for hardware decoding\n", dxva2->description );
+            hb_log(  "dxva2:Using %s for hardware decoding", dxva2->description );
         p_context->draw_horiz_band = NULL;
     }
 
 }
-enum PixelFormat hb_ffmpeg_get_format( AVCodecContext *p_context, const enum PixelFormat *pi_fmt )
+
+char* hb_get_pix_fmt_name( int pix_fmt )
 {
-    int i;
-    static const char *ppsz_name[AV_PIX_FMT_NB] =
+	static const char *ppsz_name[AV_PIX_FMT_NB] =
     {
         [AV_PIX_FMT_VDPAU_H264] = "AV_PIX_FMT_VDPAU_H264",
         [AV_PIX_FMT_VAAPI_IDCT] = "AV_PIX_FMT_VAAPI_IDCT",
@@ -777,9 +753,16 @@ enum PixelFormat hb_ffmpeg_get_format( AVCodecContext *p_context, const enum Pix
         [AV_PIX_FMT_YUYV422] = "AV_PIX_FMT_YUYV422",
         [AV_PIX_FMT_YUV420P] = "AV_PIX_FMT_YUV420P",
     };
+
+	return ppsz_name[pix_fmt];
+}
+
+enum PixelFormat hb_ffmpeg_get_format( AVCodecContext *p_context, const enum PixelFormat *pi_fmt )
+{
+    int i;
     for( i = 0; pi_fmt[i] != AV_PIX_FMT_NONE; i++ )
     {
-        hb_log( "dxva2:Available decoder output format %d (%s)", pi_fmt[i], ppsz_name[pi_fmt[i]] ? : "Unknown" );
+        hb_log( "dxva2:Available decoder output format %d (%s)", pi_fmt[i], hb_get_pix_fmt_name(pi_fmt[i]) ? : "Unknown" );
         if( pi_fmt[i] == AV_PIX_FMT_DXVA2_VLD )
         {
             return pi_fmt[i];
@@ -790,18 +773,10 @@ enum PixelFormat hb_ffmpeg_get_format( AVCodecContext *p_context, const enum Pix
 
 int hb_va_get_frame_buf( hb_va_dxva2_t *dxva2, AVCodecContext *p_context, AVFrame *frame )
 {
-    /*if( va_setup(dxva2, &p_context->hwaccel_context, p_context->width, p_context->height )==HB_WORK_ERROR)
-    {
-        hb_log("dxva2:hb_va_Setup failed");
-        va_close(dxva2);
-        dxva2 = NULL;
-        return HB_WORK_ERROR;
-    }*/
     frame->type = FF_BUFFER_TYPE_USER;
-    //frame->age = 256*256*256*64;
     if( hb_va_get( dxva2, frame ) == HB_WORK_ERROR )
     {
-        hb_log(  "VaGrabSurface failed\n" );
+        hb_log(  "VaGrabSurface failed" );
         return HB_WORK_ERROR;
     }
     return HB_WORK_OK;

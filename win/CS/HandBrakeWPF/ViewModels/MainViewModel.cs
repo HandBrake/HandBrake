@@ -123,6 +123,8 @@ namespace HandBrakeWPF.ViewModels
         /// Support OpenCL
         /// </summary>
         private bool supportOpenCL;
+		
+		/// <summary>
         /// The Toolbar Status Label
         /// </summary>
         private string statusLabel;
@@ -640,6 +642,8 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange("SupportOpenCL");
             }
         }
+		
+		/// <summary>
         /// Gets RangeMode.
         /// </summary>
         public IEnumerable<OutputFormat> OutputFormats

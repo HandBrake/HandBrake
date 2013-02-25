@@ -569,7 +569,7 @@ static void do_job( hb_job_t * job )
     hb_log( "starting job" );
     if ( job->use_opencl || job->use_hwd)
     {
-        hb_log( "Using GPU : Yes.\n" );
+        hb_log( "Using GPU : Yes." );
         /* init opencl environment */ 
 #ifdef USE_OPENCL
         if ( job->use_opencl )
@@ -577,7 +577,7 @@ static void do_job( hb_job_t * job )
 #endif    
     }
     else
-        hb_log( "Using GPU : NO.\n" );
+        hb_log( "Using GPU : NO." );
     /* Look for the scanned subtitle in the existing subtitle list
      * select_subtitle implies that we did a scan. */
     if( !job->indepth_scan && interjob->select_subtitle )
@@ -725,14 +725,7 @@ static void do_job( hb_job_t * job )
         init.width = title->width;
         init.height = title->height;
 #ifdef USE_OPENCL
-        init.title_width = title->width;
-        init.title_height = title->height;
         init.use_dxva = hb_use_dxva( title ); 
-        if ( init.use_dxva && ( title->width > job->width || title->height > job->height ) )
-        {
-            init.width = job->width;
-            init.height = job->height;
-        }
 #endif
         init.par_width = job->anamorphic.par_width;
         init.par_height = job->anamorphic.par_height;
@@ -1511,7 +1504,6 @@ static inline void copy_chapter( hb_buffer_t * dst, hb_buffer_t * src )
     if( src && dst && src->s.start == dst->s.start)
     {
         // restore log below to debug chapter mark propagation problems
-        //hb_log("work %s: Copying Chapter Break @ %"PRId64, w->name, src->s.start);
         dst->s.new_chap = src->s.new_chap;
     }
 }

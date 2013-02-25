@@ -485,7 +485,7 @@ static void pullup_print_aff_and_breaks(struct pullup_context * c,
     int i;
     struct pullup_field * f0 = f;
     const char aff_l[] = "+..", aff_r[] = "..+";
-    printf( "\naffinity: " );
+    hb_log( "affinity: " );
     for( i = 0; i < 4; i++ )
     {
         printf( "%c%d%c",

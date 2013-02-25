@@ -92,17 +92,16 @@ static int initScaleFilter(int16_t **outFilter, int32_t **filterPos,
 
 	*filterPos = (int32_t *)av_malloc((dstW + 3) * sizeof(**filterPos));
 	if (*filterPos == NULL && ((dstW + 3) * sizeof(**filterPos)) != 0) {
-	    printf("Cannot allocate memory.\n"); 
+	    hb_log("Cannot allocate memory."); 
         goto fail;
 	}
 
     if (FFABS(xInc - 0x10000) < 10) { // unscaled
         int i;
         filterSize = 1;
-     // FF_ALLOCZ_OR_GOTO(NULL, filter,dstW * sizeof(*filter) * filterSize, fail);
 		filter = (int64_t *)av_mallocz(dstW * sizeof(*filter) * filterSize);
 		if (filter == NULL && (dstW * sizeof(*filter) * filterSize) != 0) {
-        printf("Cannot allocate memory.\n"); 
+        hb_log("Cannot allocate memory."); 
         goto fail;
 		}
 
@@ -115,11 +114,9 @@ static int initScaleFilter(int16_t **outFilter, int32_t **filterPos,
         int i;
         int64_t xDstInSrc;
         filterSize = 1;
-      //FF_ALLOC_OR_GOTO(NULL, filter,
-      //                 dstW * sizeof(*filter) * filterSize, fail);
 	  filter = (int64_t *)av_malloc(dstW * sizeof(*filter) * filterSize);
 	  if(filter == NULL && (dstW * sizeof(*filter) * filterSize) != 0){
-		  printf("Cannot allocate memory.\n"); 
+		  hb_log("Cannot allocate memory."); 
         goto fail;
 	  }
 
@@ -136,11 +133,9 @@ static int initScaleFilter(int16_t **outFilter, int32_t **filterPos,
         int i;
         int64_t xDstInSrc;
         filterSize = 2;
-       //FF_ALLOC_OR_GOTO(NULL, filter,
-      //                 dstW * sizeof(*filter) * filterSize, fail);
 	   filter = (int64_t *)av_malloc(dstW * sizeof(*filter) * filterSize);
 	  if(filter == NULL && (dstW * sizeof(*filter) * filterSize) != 0){
-		  printf("Cannot allocate memory.\n"); 
+		  hb_log("Cannot allocate memory."); 
         goto fail;
 	  }
 
@@ -194,13 +189,11 @@ static int initScaleFilter(int16_t **outFilter, int32_t **filterPos,
         filterSize = FFMIN(filterSize, srcW - 2);
         filterSize = FFMAX(filterSize, 1);
 
-      // FF_ALLOC_OR_GOTO(NULL, filter,
-       //                dstW * sizeof(*filter) * filterSize, fail);
-	   filter = (int64_t *)av_malloc(dstW * sizeof(*filter) * filterSize);
-	  if(filter == NULL && (dstW * sizeof(*filter) * filterSize) != 0){
-		  printf("Cannot allocate memory.\n"); 
-        goto fail;
-	  }
+        filter = (int64_t *)av_malloc(dstW * sizeof(*filter) * filterSize);
+	    if(filter == NULL && (dstW * sizeof(*filter) * filterSize) != 0){
+		    hb_log("Cannot allocate memory."); 
+            goto fail;
+	    }
 
         xDstInSrc = xInc - 0x10000;
         for (i = 0; i < dstW; i++) {
@@ -305,11 +298,10 @@ static int initScaleFilter(int16_t **outFilter, int32_t **filterPos,
     if (dstFilter)
         filter2Size += dstFilter->length - 1;
     assert(filter2Size > 0);
-  //FF_ALLOCZ_OR_GOTO(NULL, filter2, filter2Size * dstW * sizeof(*filter2), fail);
 	filter2 = (int64_t *)av_mallocz(filter2Size * dstW * sizeof(*filter2));
 	if(filter2 == NULL && (filter2Size * dstW * sizeof(*filter2)) != 0)
 	{
-		printf("Can't alloc memory\n");
+		hb_log("Can't alloc memory.");
 		goto fail;
 	}
 
@@ -380,10 +372,7 @@ static int initScaleFilter(int16_t **outFilter, int32_t **filterPos,
     *outFilterSize = filterSize;
 
     if (flags & SWS_PRINT_INFO)
-        //av_log(NULL, AV_LOG_VERBOSE,
-        //       "SwScaler: reducing / aligning filtersize %d -> %d\n",
-        //       filter2Size, filterSize);
-		printf("SwScaler: reducing / aligning filtersize %d -> %d\n",filter2Size,filterSize);
+		hb_log("SwScaler: reducing / aligning filtersize %d -> %d",filter2Size,filterSize);
     for (i = 0; i < dstW; i++) {
         int j;
 
@@ -430,7 +419,7 @@ static int initScaleFilter(int16_t **outFilter, int32_t **filterPos,
 	*outFilter = (int16_t *)av_mallocz(*outFilterSize * (dstW + 3) * sizeof(int16_t));
 	if( *outFilter == NULL && (*outFilterSize * (dstW + 3) * sizeof(int16_t)) != 0)
 	{
-		printf("Can't alloc memory\n");
+		hb_log("Can't alloc memory");
 		goto fail;
 	}
 
@@ -838,13 +827,11 @@ static av_cold void sws_init_swScale_c(ScaleContext *c)
 
 int scale_init_context(ScaleContext *c, ScaleFilter *srcFilter, ScaleFilter *dstFilter)
 {
-//	int i, j;
     ScaleFilter dummyFilter = { NULL, NULL, NULL, NULL };
     int srcW              = c->srcW;
     int srcH              = c->srcH;
     int dstW              = c->dstW;
     int dstH              = c->dstH;
-//	int dst_stride        = FFALIGN(dstW * sizeof(int16_t) + 66, 16);
     int flags, cpu_flags;
     enum PixelFormat srcFormat = c->srcFormat;
     enum PixelFormat dstFormat = c->dstFormat;
@@ -853,40 +840,13 @@ int scale_init_context(ScaleContext *c, ScaleFilter *srcFilter, ScaleFilter *dst
     flags     = c->flags;
 
     if(srcFormat != c->srcFormat || dstFormat != c->dstFormat){
-		printf("deprecated pixel format used, make sure you did set range correctly\n");
+		hb_log("deprecated pixel format used, make sure you did set range correctly.");
         c->srcFormat = srcFormat;
         c->dstFormat = dstFormat;
     }
 
-/*
-    if (!scale_isSupportedInput(srcFormat)) {
-		printf("%s is not supported as input pixel format\n",av_get_pix_fmt_name(srcFormat));
-        return -1;
-    }
-
-    if (!scale_isSupportedOutput(dstFormat)) {
-		printf("%s is not supported as output pixel format\n",av_get_pix_fmt_name(dstFormat));
-        return -1;
-    }
-    i = flags & (SWS_POINT         |
-                 SWS_AREA          |
-                 SWS_BILINEAR      |
-                 SWS_FAST_BILINEAR |
-                 SWS_BICUBIC       |
-                 SWS_X             |
-                 SWS_GAUSS         |
-                 SWS_LANCZOS       |
-                 SWS_SINC          |
-                 SWS_SPLINE        |
-                 SWS_BICUBLIN);
-    if (!i || (i & (i - 1))) {
-		printf("Exactly one scaler algorithm must be chosen, got %X\n",i);
-        return -1;
-    }
-*/
-
     if (srcW < 4 || srcH < 1 || dstW < 8 || dstH < 1) {
-		printf("%dx%d -> %dx%d is invalid scaling dimension\n",srcW,srcH,dstW,dstH);
+		hb_log("%dx%d -> %dx%d is invalid scaling dimension.",srcW,srcH,dstW,dstH);
         return -1;
     }
 
@@ -904,80 +864,15 @@ int scale_init_context(ScaleContext *c, ScaleFilter *srcFilter, ScaleFilter *dst
     scaleGetSubSampleFactors(&c->chrSrcHSubSample, &c->chrSrcVSubSample, srcFormat);
     scaleGetSubSampleFactors(&c->chrDstHSubSample, &c->chrDstVSubSample, dstFormat);
 
-/*
-    if (isScaleAnyRGB(dstFormat) && !(flags&SWS_FULL_CHR_H_INT)) {
-        if (dstW&1) {
-			printf("Forcing full internal H chroma due to odd output size\n");
-            flags |= SWS_FULL_CHR_H_INT;
-            c->flags = flags;
-        }
-    }
-
-    if (flags & SWS_FULL_CHR_H_INT &&
-        isScaleAnyRGB(dstFormat)        &&
-        dstFormat != AV_PIX_FMT_RGBA  &&
-        dstFormat != AV_PIX_FMT_ARGB  &&
-        dstFormat != AV_PIX_FMT_BGRA  &&
-        dstFormat != AV_PIX_FMT_ABGR  &&
-        dstFormat != AV_PIX_FMT_RGB24 &&
-        dstFormat != AV_PIX_FMT_BGR24) {
-		printf("full chroma interpolation for destination format '%s' not yet implemented\n", av_get_pix_fmt_name(dstFormat));
-        flags   &= ~SWS_FULL_CHR_H_INT;
-        c->flags = flags;
-    }
-
-    if (isScaleAnyRGB(dstFormat) && !(flags & SWS_FULL_CHR_H_INT))
-        c->chrDstHSubSample = 1;
-*/
-
     // drop some chroma lines if the user wants it
     c->vChrDrop          = (flags & SWS_SRC_V_CHR_DROP_MASK) >> SWS_SRC_V_CHR_DROP_SHIFT;
     c->chrSrcVSubSample += c->vChrDrop;
-
-/*
-    if (isScaleAnyRGB(srcFormat) && !(flags & SWS_FULL_CHR_H_INP)   &&
-        srcFormat != AV_PIX_FMT_RGB8 && srcFormat != AV_PIX_FMT_BGR8 &&
-        srcFormat != AV_PIX_FMT_RGB4 && srcFormat != AV_PIX_FMT_BGR4 &&
-        srcFormat != AV_PIX_FMT_RGB4_BYTE && srcFormat != AV_PIX_FMT_BGR4_BYTE &&
-        ((dstW >> c->chrDstHSubSample) <= (srcW >> 1) || (flags & SWS_FAST_BILINEAR)))
-        c->chrSrcHSubSample = 1;
-*/
-
     c->chrSrcW = -((-srcW) >> c->chrSrcHSubSample);
     c->chrSrcH = -((-srcH) >> c->chrSrcVSubSample);
     c->chrDstW = -((-dstW) >> c->chrDstHSubSample);
     c->chrDstH = -((-dstH) >> c->chrDstVSubSample);
-
-/*
-    c->srcBpc = 1 + av_pix_fmt_descriptors[srcFormat].comp[0].depth_minus1;
-    if (c->srcBpc < 8)
-        c->srcBpc = 8;
-    c->dstBpc = 1 + av_pix_fmt_descriptors[dstFormat].comp[0].depth_minus1;
-    if (c->dstBpc < 8)
-        c->dstBpc = 8;
-    if (isScaleAnyRGB(srcFormat) || srcFormat == AV_PIX_FMT_PAL8)
-        c->srcBpc = 16;
-    if (c->dstBpc == 16)
-        dst_stride <<= 1;
-	c->formatConvBuffer = (uint8_t *)av_mallocz(FFALIGN(srcW*2+78, 16) * 2);
-	if( c->formatConvBuffer == NULL && (FFALIGN(srcW*2+78, 16) * 2) != 0)
-	{
-		printf("Can't alloc memory formatConvBuffer\n");
-		goto fail;
-	}
-*/    
-
     c->chrXInc = (((int64_t)c->chrSrcW << 16) + (c->chrDstW >> 1)) / c->chrDstW;
     c->chrYInc = (((int64_t)c->chrSrcH << 16) + (c->chrDstH >> 1)) / c->chrDstH;
-
-/*
-    if (flags & SWS_FAST_BILINEAR) {
-        if (c->canMMX2BeUsed) {
-            c->lumXInc += 20;
-            c->chrXInc += 20;
-        }
-    }
-*/
 
 	const int filterAlign = 1;
 
@@ -1011,110 +906,6 @@ int scale_init_context(ScaleContext *c, ScaleFilter *srcFilter, ScaleFilter *dst
                        cpu_flags, srcFilter->chrV, dstFilter->chrV,
                        c->param) < 0)
         goto fail;
-
-/*
-#if HAVE_ALTIVEC
-    FF_ALLOC_OR_GOTO(c, c->vYCoeffsBank, sizeof(vector signed short) * c->vLumFilterSize * c->dstH,    fail);
-    FF_ALLOC_OR_GOTO(c, c->vCCoeffsBank, sizeof(vector signed short) * c->vChrFilterSize * c->chrDstH, fail);
-
-    for (i = 0; i < c->vLumFilterSize * c->dstH; i++) {
-    	int j;
-        short *p = (short *)&c->vYCoeffsBank[i];
-        for (j = 0; j < 8; j++)
-            p[j] = c->vLumFilter[i];
-    }
-
-    for (i = 0; i < c->vChrFilterSize * c->chrDstH; i++) {
-        int j;
-        short *p = (short *)&c->vCCoeffsBank[i];
-        for (j = 0; j < 8; j++)
-            p[j] = c->vChrFilter[i];
-    }
-#endif
-*/
-
-/*
-    // calculate buffer sizes so that they won't run out while handling these damn slices
-    c->vLumBufSize = c->vLumFilterSize;
-    c->vChrBufSize = c->vChrFilterSize;
-    for (i = 0; i < dstH; i++) {
-        int chrI      = (int64_t)i * c->chrDstH / dstH;
-        int nextSlice = FFMAX(c->vLumFilterPos[i] + c->vLumFilterSize - 1,
-                              ((c->vChrFilterPos[chrI] + c->vChrFilterSize - 1)
-                               << c->chrSrcVSubSample));
-
-        nextSlice >>= c->chrSrcVSubSample;
-        nextSlice <<= c->chrSrcVSubSample;
-        if (c->vLumFilterPos[i] + c->vLumBufSize < nextSlice)
-            c->vLumBufSize = nextSlice - c->vLumFilterPos[i];
-        if (c->vChrFilterPos[chrI] + c->vChrBufSize <
-            (nextSlice >> c->chrSrcVSubSample))
-            c->vChrBufSize = (nextSlice >> c->chrSrcVSubSample) -
-                             c->vChrFilterPos[chrI];
-    }
-
-	c->lumPixBuf = (int16_t **)av_malloc( c->vLumBufSize * 3 * sizeof(int16_t *));
-  	if(c->lumPixBuf == NULL && ( c->vLumBufSize * 3 * sizeof(int16_t *)) != 0)
-  	{
-	  	printf("Can't alloc memory lumPixbuf\n");
-	  	goto fail;
-  	}
-
-  	c->chrUPixBuf = (int16_t **)av_malloc( c->vChrBufSize * 3 * sizeof(int16_t *));
-  	if(c->chrUPixBuf == NULL && ( c->vChrBufSize * 3 * sizeof(int16_t *)) != 0)
-  	{
-	  	printf("Can't alloc memory chrUpixbuf\n");
-	  	goto fail;
-  	}
-
-  	c->chrVPixBuf = (int16_t **)av_malloc( c->vChrBufSize * 3 * sizeof(int16_t *));
-  	if(c->chrVPixBuf == NULL && ( c->vChrBufSize * 3 * sizeof(int16_t *)) != 0)
-  	{
-	  	printf("Can't alloc memory chrVPixBuf\n");
-	  	goto fail;
-  	}
-
-    for (i = 0; i < c->vLumBufSize; i++) {
-	  	c->lumPixBuf[i + c->vLumBufSize] = (int16_t *)malloc( dst_stride + 16);
-	  	if(c->lumPixBuf[i + c->vLumBufSize] == NULL && ( dst_stride + 16) != 0)
-	  	{
-		  	printf("Can't alloc memory lumPixBuf[]\n");
-		  	goto fail;
-	 	}
-        c->lumPixBuf[i] = c->lumPixBuf[i + c->vLumBufSize];
-    }
-
-    c->uv_off   = (dst_stride>>1) + 64 / (c->dstBpc &~ 7);
-    c->uv_offx2 = dst_stride + 16;
-    for (i = 0; i < c->vChrBufSize; i++) {
-	  	c->chrUPixBuf[i + c->vChrBufSize] = (int16_t *)av_malloc( dst_stride * 2  + 32);
-	  	if(c->chrUPixBuf[i + c->vChrBufSize] == NULL && ( dst_stride * 2  + 32) != 0)
-	  	{
-		  	printf("Can't alloc memory chrUPixBuf[]\n");
-		  	goto fail;
-	  	}
-        c->chrUPixBuf[i] = c->chrUPixBuf[i + c->vChrBufSize];
-        c->chrVPixBuf[i] = c->chrVPixBuf[i + c->vChrBufSize]
-                         = c->chrUPixBuf[i] + (dst_stride >> 1) + 8;
-    }
-
-    // try to avoid drawing green stuff between the right end and the stride end
-    for (i = 0; i < c->vChrBufSize; i++)
-        if(av_pix_fmt_descriptors[c->dstFormat].comp[0].depth_minus1 == 15){
-			assert(c->dstBpc > 10);
-            for(j=0; j<dst_stride/2+1; j++)
-                ((int32_t*)(c->chrUPixBuf[i]))[j] = 1<<18;
-        } else
-            for(j=0; j<dst_stride+1; j++)
-                ((int16_t*)(c->chrUPixBuf[i]))[j] = 1<<14;
-
-    assert(c->chrDstH <= dstH);
-*/
-    if (flags & SWS_PRINT_INFO) {
-        printf("I have delete it, Haha\n");
-    }
-
-//	sws_init_swScale_c(c);
     return 0;
 fail:
     return -1;

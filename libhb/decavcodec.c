@@ -1163,12 +1163,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->context->err_recognition = AV_EF_CRCCHECK;
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
 #ifdef USE_HWD
-        if( ((w->codec_param==AV_CODEC_ID_H264) 
-             || (w->codec_param==AV_CODEC_ID_MPEG2VIDEO)
-             || (w->codec_param==AV_CODEC_ID_VC1)
-             || (w->codec_param==AV_CODEC_ID_WMV3) 
-             || (w->codec_param==AV_CODEC_ID_MPEG4)) 
-             && pv->job && job->use_hwd && hb_use_dxva( pv->title ) )
+        if ( pv->job && job->use_hwd && hb_use_dxva( pv->title ) )
         {
             pv->dxva2 = hb_va_create_dxva2( pv->dxva2, w->codec_param );
             if( pv->dxva2 && pv->dxva2->do_job==HB_WORK_OK )

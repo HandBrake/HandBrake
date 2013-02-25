@@ -10,11 +10,11 @@
 
 #define OCLCHECK( method, ...) \
 	status = method(__VA_ARGS__); if(status != CL_SUCCESS) { \
-	printf(" error %s %d\n",# method, status); assert(0); return status; }
+	hb_log(" error %s %d",# method, status); assert(0); return status; }
 	
 #define CREATEBUF( out, flags, size, ptr)\
     out = clCreateBuffer( kenv->context, (flags), (size), ptr, &status );\
-    if( status != CL_SUCCESS ) { printf( "clCreateBuffer faild %d\n", status ); return -1; }
+    if( status != CL_SUCCESS ) { hb_log( "clCreateBuffer faild %d", status ); return -1; }
 
  #define CL_PARAM_NUM 20
 
@@ -72,7 +72,7 @@ int av_scale_frame_func( void **userdata, KernelEnv *kenv )
 	int st = CreateCLBuffer(c,kenv);
     if( !st )
     {
-        printf( "CreateBuffer[%s] faild %d\n", "scale_opencl",st );
+        hb_log( "CreateBuffer[%s] faild %d", "scale_opencl",st );
         return -1;
     }
 
@@ -198,7 +198,7 @@ void av_scale_frame(ScaleContext *c,
         int st = hb_register_kernel_wrapper( "scale_opencl", av_scale_frame_func);
         if( !st )
         {
-            printf( "register kernel[%s] faild %d\n", "scale_opencl",st );
+            hb_log( "register kernel[%s] faild %d", "scale_opencl",st );
             return;
         }
         regflg++;
@@ -206,7 +206,7 @@ void av_scale_frame(ScaleContext *c,
  
 	if( !hb_run_kernel( "scale_opencl", userdata ))
 	{
-		printf("run kernel function[%s] faild\n", "scale_opencl_func" );
+		hb_log("run kernel function[%s] faild", "scale_opencl_func" );
 		return;
 	}     
 }

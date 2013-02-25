@@ -25,8 +25,6 @@ struct hb_filter_private_s
     
 #ifdef USE_OPENCL
     int                 use_dxva;
-    int                 title_width;
-    int                 title_height;
     hb_oclscale_t       * os; //ocl scaler handler
 #endif	
     struct SwsContext * context;
@@ -74,8 +72,6 @@ static int hb_crop_scale_init( hb_filter_object_t * filter,
 
 	if ( pv->job->use_opencl )
     {
-        pv->title_width = init->title_width;
-        pv->title_height = init->title_height;
 	pv->os = ( hb_oclscale_t * )malloc( sizeof( hb_oclscale_t ) );
         memset( pv->os, 0, sizeof( hb_oclscale_t ) );
     }
@@ -116,31 +112,6 @@ static int hb_crop_scale_info( hb_filter_object_t * filter,
     info->out.height = pv->height_out;
     memcpy( info->out.crop, pv->crop, sizeof( int[4] ) );
 
-#ifdef USE_OPENCL
-
-	if ( pv->job->use_opencl )
-    {
-        int cropped_width = pv->title_width - ( pv->crop[2] + pv->crop[3] );
-        int cropped_height = pv->title_height - ( pv->crop[0] + pv->crop[1] );
-
-        sprintf( info->human_readable_desc,
-            "source: %d * %d, crop (%d/%d/%d/%d): %d * %d, scale: %d * %d",
-            pv->title_width, pv->title_height,
-            pv->crop[0], pv->crop[1], pv->crop[2], pv->crop[3],
-            cropped_width, cropped_height, pv->width_out, pv->height_out );
-    }
-    else
-    {
-	    int cropped_width = pv->width_in - ( pv->crop[2] + pv->crop[3] );
-        int cropped_height = pv->height_in - ( pv->crop[0] + pv->crop[1] );
-
-        sprintf( info->human_readable_desc, 
-            "source: %d * %d, crop (%d/%d/%d/%d): %d * %d, scale: %d * %d",
-            pv->width_in, pv->height_in,
-            pv->crop[0], pv->crop[1], pv->crop[2], pv->crop[3],
-            cropped_width, cropped_height, pv->width_out, pv->height_out );
-    }
-#else
     int cropped_width = pv->width_in - ( pv->crop[2] + pv->crop[3] );
     int cropped_height = pv->height_in - ( pv->crop[0] + pv->crop[1] );
 
@@ -149,7 +120,7 @@ static int hb_crop_scale_info( hb_filter_object_t * filter,
         pv->width_in, pv->height_in,
         pv->crop[0], pv->crop[1], pv->crop[2], pv->crop[3],
         cropped_width, cropped_height, pv->width_out, pv->height_out );
-#endif
+
     return 0;
 }
 
