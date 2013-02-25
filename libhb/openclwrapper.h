@@ -55,10 +55,8 @@ int hb_run_kernel( const char *kernel_name, void **userdata );
 // the argc must be set zero , argv must be set NULL, build_option is the options for build the kernel.
 int hb_init_opencl_run_env( int argc, char **argv, const char *build_option );
 
-
 //relase all resource about the opencl , this function must be called after calling any functions related to opencl
 int hb_release_opencl_run_env();
-
 
 // get the opencl status , 0: not init ; 1, inited; this function is used the check whether or not the opencl run time has been created
 int hb_opencl_stats();

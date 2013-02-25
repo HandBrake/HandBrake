@@ -126,7 +126,7 @@ int hb_confirm_gpu_type()
                                     NULL , 
                                     &numDevices); 
             
-               cl_device_id *devices = (cl_device_id *)malloc(numDevices * sizeof(cl_device_id));
+            cl_device_id *devices = (cl_device_id *)malloc(numDevices * sizeof(cl_device_id));
             status = clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_GPU, numDevices, devices, NULL);
             for (j = 0; j < numDevices; j++)
             {
@@ -178,7 +178,6 @@ int hb_convert_to_string(
     result = 0;
     file = fopen( filename, "rb+" );
 
-
     if( file!=NULL )
     {
         fseek( file, 0, SEEK_END );
@@ -203,8 +202,6 @@ int hb_convert_to_string(
     }
     return(0);
 }
-
-
 
 int hb_binary_generated( cl_context context, const char * cl_file_name, FILE ** fhandle )
 {
@@ -287,7 +284,6 @@ int hb_write_binary_to_file( const char* fileName, const char* birary, size_t nu
 
     return 1;
 }
-
 
 int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_name )
 {
@@ -429,7 +425,6 @@ int hb_generat_bin_from_kernel_source( cl_program program, const char * cl_file_
     return 1;
 }
 
-
 int hb_init_opencl_attr( OpenCLEnv * env )
 {
     if( gpu_env.isUserCreated )
@@ -445,7 +440,6 @@ int hb_init_opencl_attr( OpenCLEnv * env )
     return 0;
 }
 
-
 int hb_create_kernel( char * kernelname, KernelEnv * env )
 {
     int status;
@@ -460,8 +454,6 @@ int hb_release_kernel( KernelEnv * env )
     int status = clReleaseKernel( env->kernel );
     return status != CL_SUCCESS ? 1 : 0;
 }
-
-
 
 int hb_init_opencl_env( GPUEnv *gpu_info )
 {
@@ -540,7 +532,7 @@ int hb_init_opencl_env( GPUEnv *gpu_info )
         }
         if( NULL == gpu_info->platform )
         {
-        hb_log( "Notice: No OpenCL-compatible GPU found." );
+            hb_log( "Notice: No OpenCL-compatible GPU found." );
             return(1);
         }
         if( status != CL_SUCCESS )
@@ -852,13 +844,11 @@ int hb_get_kernel_env_and_func( const char *kernel_name,
                                 KernelEnv *env,
                                 cl_kernel_function *function )
 {
-    int i; //,program_idx ;
+    int i;
     for( i = 0; i < gpu_env.kernel_count; i++ )
     {
         if( strcasecmp( kernel_name, gpu_env.kernel_names[i] )==0 )
         {
-            //program_idx = 0;
-            //GetProgramIndex(i, &gpu_env, &program_idx);
             env->context = gpu_env.context;
             env->command_queue = gpu_env.command_queue;
             env->program = gpu_env.programs[0];
@@ -904,7 +894,6 @@ int hb_init_opencl_run_env( int argc, char **argv, const char *build_option )
             return(1);
 
         /*initialize program, kernel_name, kernel_count*/
-        //file_name = argv[i];
         status = hb_compile_kernel_file( "hb-kernels.cl", &gpu_env, 0, build_option );
 
         if( status == 0 || gpu_env.kernel_count == 0 )
