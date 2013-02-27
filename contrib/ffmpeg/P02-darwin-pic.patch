@@ -1,8 +1,8 @@
 diff --git a/configure b/configure
-index e87a326..422a7a5 100755
+index aa31ea0..a7f5380 100755
 --- a/configure
 +++ b/configure
-@@ -2878,6 +2878,7 @@ case $target_os in
+@@ -2889,6 +2889,7 @@ case $target_os in
          AVSERVERLDFLAGS=-Wl,-bind_at_load
          objformat="macho"
          enabled x86_64 && objformat="macho64"
@@ -10,7 +10,7 @@ index e87a326..422a7a5 100755
          enabled_any pic shared ||
              { check_cflags -mdynamic-no-pic && add_asflags -mdynamic-no-pic; }
          ;;
-@@ -3080,7 +3081,7 @@ esc(){
+@@ -3091,7 +3092,7 @@ esc(){
  
  echo "config:$arch:$subarch:$cpu:$target_os:$(esc $cc_ident):$(esc $LIBAV_CONFIGURATION)" >config.fate
  

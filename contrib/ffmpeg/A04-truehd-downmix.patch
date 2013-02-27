@@ -1,8 +1,8 @@
 diff --git a/libavcodec/mlpdec.c b/libavcodec/mlpdec.c
-index 3852f6e..86aecf7 100644
+index 0eaf2e3..ef1812d 100644
 --- a/libavcodec/mlpdec.c
 +++ b/libavcodec/mlpdec.c
-@@ -394,14 +394,24 @@ static int read_restart_header(MLPDecodeContext *m, GetBitContext *gbp,
+@@ -445,14 +445,24 @@ static int read_restart_header(MLPDecodeContext *m, GetBitContext *gbp,
          return AVERROR_INVALIDDATA;
      }
  
@@ -31,16 +31,3 @@ index 3852f6e..86aecf7 100644
      }
  
      s->noise_shift   = get_bits(gbp,  4);
-@@ -463,8 +473,10 @@ static int read_restart_header(MLPDecodeContext *m, GetBitContext *gbp,
-         cp->huff_lsbs        = 24;
-     }
- 
--    if (substr == m->max_decoded_substream)
--        m->avctx->channels = s->max_matrix_channel + 1;
-+    if (substr == m->max_decoded_substream) {
-+        m->avctx->channels       = s->max_matrix_channel + 1;
-+        m->avctx->channel_layout = s->ch_layout;
-+    }
- 
-     return 0;
- }

@@ -1,8 +1,8 @@
 diff --git a/libavcodec/h264.c b/libavcodec/h264.c
-index 3660597..bf4e072 100644
+index 848d6a2..5a12fdb 100644
 --- a/libavcodec/h264.c
 +++ b/libavcodec/h264.c
-@@ -2163,6 +2163,7 @@ static void flush_dpb(AVCodecContext *avctx)
+@@ -2164,6 +2164,7 @@ static void flush_dpb(AVCodecContext *avctx)
  
      flush_change(h);
      ff_mpeg_flush(avctx);
@@ -10,7 +10,7 @@ index 3660597..bf4e072 100644
  }
  
  static int init_poc(H264Context *h)
-@@ -3981,9 +3982,18 @@ again:
+@@ -3992,9 +3993,18 @@ again:
                  if ((err = decode_slice_header(hx, h)))
                      break;
  
@@ -32,7 +32,7 @@ index 3660597..bf4e072 100644
                  if (h->current_slice == 1) {
                      if (!(s->flags2 & CODEC_FLAG2_CHUNKS))
 diff --git a/libavcodec/h264.h b/libavcodec/h264.h
-index 8596121..23daee3 100644
+index 898ebf7..42aaa6f 100644
 --- a/libavcodec/h264.h
 +++ b/libavcodec/h264.h
 @@ -568,6 +568,13 @@ typedef struct H264Context {
