@@ -1947,7 +1947,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             if (status == NSAlertDefaultReturn)
             {
                 /* User chose to go download vlc (as they rightfully should) so we send them to the vlc site */
-                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://download.videolan.org/libdvdcss/last/macosx/"]];
+                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://download.videolan.org/libdvdcss/1.2.12/macosx/"]];
             }
             else if (status == NSAlertAlternateReturn)
             {
