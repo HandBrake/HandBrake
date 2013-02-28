@@ -587,7 +587,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
         hb_buffer_t *buf;
         int ww, hh;
 
-        if( (w > pv->job->width || h > pv->job->height) && (pv->job->use_opencl) )
+        if( (w > pv->job->width || h > pv->job->height) && (pv->job->use_opencl) && (pv->job->use_decomb == 0) &&  (pv->job->use_detelecine == 0) )
         {
             buf = hb_video_buffer_init( pv->job->width, pv->job->height );
             ww = pv->job->width;
@@ -603,7 +603,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
         {
             pv->dst_frame = malloc( ww * hh * 3 / 2 );
         }
-        if( hb_va_extract( pv->dxva2, pv->dst_frame, frame, pv->job->width, pv->job->height, pv->job->title->crop, pv->os, pv->job->use_opencl ) == HB_WORK_ERROR )
+        if( hb_va_extract( pv->dxva2, pv->dst_frame, frame, pv->job->width, pv->job->height, pv->job->title->crop, pv->os, pv->job->use_opencl, pv->job->use_decomb, pv->job->use_detelecine ) == HB_WORK_ERROR )
         {
             hb_log( "hb_va_Extract failed!!!!!!" );
         }

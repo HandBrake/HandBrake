@@ -114,6 +114,8 @@ static int hb_nv12toyuv( void **userdata, KernelEnv *kenv )
 
     uint8_t *bufi2 = userdata[5];
     int p = (int)userdata[6];
+    int decomb = (int)userdata[7];
+    int detelecine = (int)userdata[8];
     int i;
     if( hb_init_nv12toyuv_ocl( kenv, w, h, dxva2 ) )
         return -1;
@@ -150,7 +152,7 @@ static int hb_nv12toyuv( void **userdata, KernelEnv *kenv )
     size_t gdim[2] = {w>>1, h>>1};
     OCLCHECK( clEnqueueNDRangeKernel, kenv->command_queue, kenv->kernel, 2, NULL, gdim, NULL, 0, NULL, NULL );
 
-    if( crop[0] || crop[1] || crop[2] || crop[3] )
+    if( (crop[0] || crop[1] || crop[2] || crop[3]) && (decomb == 0) && (detelecine == 0) )
     {
         AVPicture           pic_in;
         AVPicture           pic_crop;
@@ -200,9 +202,9 @@ static int hb_nv12toyuv_reg_kernel( void )
  * nv12 to yuv interface
  * bufi is input frame of nv12, w is input frame width, h is input frame height
  */
-int hb_ocl_nv12toyuv( uint8_t *bufi[], int p, int w, int h, int *crop, hb_va_dxva2_t *dxva2 )
+int hb_ocl_nv12toyuv( uint8_t *bufi[], int p, int w, int h, int *crop, hb_va_dxva2_t *dxva2, int decomb, int detelecine )
 {
-    void *userdata[7];
+    void *userdata[9];
     userdata[0] = (void*)w;
     userdata[1] = (void*)h;
     userdata[2] = bufi[0];
@@ -210,6 +212,8 @@ int hb_ocl_nv12toyuv( uint8_t *bufi[], int p, int w, int h, int *crop, hb_va_dxv
     userdata[4] = dxva2;
     userdata[5] = bufi[1];
     userdata[6] = (void*)p;
+    userdata[7] = decomb;
+    userdata[8] = detelecine;
     if( hb_nv12toyuv_reg_kernel() )
         return -1;
     if( hb_run_kernel( "nv12toyuv", userdata ) )

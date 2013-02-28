@@ -450,6 +450,8 @@ struct hb_job_s
                                         //  to non-I frames).
     int use_opencl;/* 0 is disable use of opencl. 1 is enable use of opencl */
     int use_hwd;
+    int use_decomb;
+    int use_detelecine;
 
 #ifdef __LIBHB__
     /* Internal data */

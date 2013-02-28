@@ -608,7 +608,7 @@ void hb_init_filter( cl_mem src, int srcwidth, int srcheight, uint8_t* dst, int 
  *  nv12 to yuv with opencl and with C reference
  *  scale with opencl
  */
-int hb_va_extract( hb_va_dxva2_t *dxva2, uint8_t *dst, AVFrame *frame, int job_w, int job_h, int *crop, hb_oclscale_t *os, int use_opencl )
+int hb_va_extract( hb_va_dxva2_t *dxva2, uint8_t *dst, AVFrame *frame, int job_w, int job_h, int *crop, hb_oclscale_t *os, int use_opencl, int use_decomb, int use_detelecine )
 
 {
     LPDIRECT3DSURFACE9 d3d = (LPDIRECT3DSURFACE9)(uintptr_t)frame->data[3];
@@ -634,15 +634,20 @@ int hb_va_extract( hb_va_dxva2_t *dxva2, uint8_t *dst, AVFrame *frame, int job_w
 #ifdef USE_OPENCL
         if( ( dxva2->width > job_w || dxva2->height > job_h ) && (use_opencl))
         {
-            hb_ocl_nv12toyuv( plane, lock.Pitch,  dxva2->width, dxva2->height, crop, dxva2 );
+            hb_ocl_nv12toyuv( plane, lock.Pitch,  dxva2->width, dxva2->height, crop, dxva2, use_decomb, use_detelecine );
+            if ( use_decomb || use_detelecine )
+                hb_read_opencl_buffer( dxva2->cl_mem_yuv, dst, dxva2->width*dxva2->height*3/2 );
+            else
+            {										
+                static int init_flag = 0;
+                if(init_flag == 0)
+                {
+                    scale_init( dxva2->width - crop[2] - crop[3], dxva2->height - crop[0] - crop[1], job_w, job_h );
+                    init_flag = 1;
+                }
 
-            static int init_flag = 0;
-            if(init_flag == 0){
-                scale_init( dxva2->width - crop[2] - crop[3], dxva2->height - crop[0] - crop[1], job_w, job_h );
-                init_flag = 1;
-            }
-
-            hb_init_filter( dxva2->cl_mem_yuv, dxva2->width - crop[2] - crop[3], dxva2->height - crop[0] - crop[1], dst, job_w, job_h, crop ); 
+                hb_init_filter( dxva2->cl_mem_yuv, dxva2->width - crop[2] - crop[3], dxva2->height - crop[0] - crop[1], dst, job_w, job_h, crop ); 
+            }				
         }
         else
 #endif

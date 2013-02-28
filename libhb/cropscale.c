@@ -25,6 +25,8 @@ struct hb_filter_private_s
     
 #ifdef USE_OPENCL
     int                 use_dxva;
+    int                 use_decomb;
+    int                 use_detelecine;
     hb_oclscale_t       * os; //ocl scaler handler
 #endif	
     struct SwsContext * context;
@@ -69,6 +71,8 @@ static int hb_crop_scale_init( hb_filter_object_t * filter,
     pv->height_out = init->height;
 #ifdef USE_OPENCL
     pv->use_dxva = init->use_dxva;
+    pv->use_decomb = init->job->use_decomb;
+    pv->use_detelecine = init->job->use_detelecine;
 
 	if ( pv->job->use_opencl )
     {
@@ -327,7 +331,8 @@ static int hb_crop_scale_work( hb_filter_object_t * filter,
 #ifdef USE_OPENCL
     if ( (in->f.fmt == pv->pix_fmt_out &&
          !pv->crop[0] && !pv->crop[1] && !pv->crop[2] && !pv->crop[3] &&
-         in->f.width == pv->width_out && in->f.height == pv->height_out) ||
+         in->f.width == pv->width_out && in->f.height == pv->height_out) && 
+         (pv->use_decomb == 0) && (pv->use_detelecine == 0) ||
          (pv->use_dxva && in->f.width == pv->width_out && in->f.height == pv->height_out) )
     {
         *buf_out = in;

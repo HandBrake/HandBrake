@@ -1379,6 +1379,9 @@ static int HandleEvents( hb_handle_t * h )
             
             hb_filter_object_t * filter;
 
+            job->use_detelecine = detelecine;
+            job->use_decomb = decomb;
+
             /* Add selected filters */
             if( detelecine )
             {

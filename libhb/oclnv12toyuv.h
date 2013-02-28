@@ -23,7 +23,7 @@
  * bufi is input frame of nv12, w is input frame width, h is input frame height
  */
 #ifdef USE_HWD
-int hb_ocl_nv12toyuv( uint8_t *bufi[], int p, int w, int h, int *crop, hb_va_dxva2_t *dxva2 );
+int hb_ocl_nv12toyuv( uint8_t *bufi[], int p, int w, int h, int *crop, hb_va_dxva2_t *dxva2, int decomb, int detelecine );
 #endif
 #endif
 #endif
