@@ -36,6 +36,9 @@ static void ScanFunc( void * );
 static int  DecodePreviews( hb_scan_t *, hb_title_t * title );
 static void LookForAudio( hb_title_t * title, hb_buffer_t * b );
 static int  AllAudioOK( hb_title_t * title );
+static void UpdateState1(hb_scan_t *scan, int title);
+static void UpdateState2(hb_scan_t *scan, int title);
+static void UpdateState3(hb_scan_t *scan, int preview);
 
 static const char *aspect_to_string( double aspect )
 {
@@ -61,7 +64,7 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
     data->path         = strdup( path );
     data->title_index  = title_index;
     data->title_set    = title_set;
-    
+
     data->preview_count  = preview_count;
     data->store_previews = store_previews;
     data->min_title_duration = min_duration;
@@ -97,6 +100,7 @@ static void ScanFunc( void * _data )
             /* Scan all titles */
             for( i = 0; i < hb_bd_title_count( data->bd ); i++ )
             {
+                UpdateState1(data, i + 1);
                 hb_list_add( data->title_set->list_title,
                              hb_bd_title_scan( data->bd, 
                              i + 1, data->min_title_duration ) );
@@ -121,6 +125,7 @@ static void ScanFunc( void * _data )
             /* Scan all titles */
             for( i = 0; i < hb_dvd_title_count( data->dvd ); i++ )
             {
+                UpdateState1(data, i + 1);
                 hb_list_add( data->title_set->list_title,
                              hb_dvd_title_scan( data->dvd, 
                             i + 1, data->min_title_duration ) );
@@ -147,6 +152,7 @@ static void ScanFunc( void * _data )
             {
                 hb_title_t * title;
 
+                UpdateState1(data, i + 1);
                 title = hb_batch_title_scan( data->batch, i + 1 );
                 if ( title != NULL )
                 {
@@ -157,7 +163,8 @@ static void ScanFunc( void * _data )
     }
     else
     {
-        hb_title_t * title = hb_title_init( data->path, 0 );
+        data->title_index = 1;
+        hb_title_t * title = hb_title_init( data->path, data->title_index );
         if ( (data->stream = hb_stream_open( data->path, title, 1 ) ) != NULL )
         {
             title = hb_stream_title_scan( data->stream, title );
@@ -175,7 +182,6 @@ static void ScanFunc( void * _data )
     for( i = 0; i < hb_list_count( data->title_set->list_title ); )
     {
         int j;
-        hb_state_t state;
         hb_audio_t * audio;
 
         if ( *data->die )
@@ -184,16 +190,7 @@ static void ScanFunc( void * _data )
         }
         title = hb_list_item( data->title_set->list_title, i );
 
-#define p state.param.scanning
-        /* Update the UI */
-        state.state   = HB_STATE_SCANNING;
-        p.title_cur   = title->index;
-        p.title_count = data->dvd ? hb_dvd_title_count( data->dvd ) : 
-                        data->bd ? hb_bd_title_count( data->bd ) :
-                        data->batch ? hb_batch_title_count( data->batch ) :
-                                   hb_list_count(data->title_set->list_title);
-        hb_set_state( data->h, &state );
-#undef p
+        UpdateState2(data, i + 1);
 
         /* Decode previews */
         /* this will also detect more AC3 / DTS information */
@@ -535,6 +532,8 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
     {
         int j;
 
+        UpdateState3(data, i + 1);
+
         if ( *data->die )
         {
             free( info_list );
@@ -793,6 +792,8 @@ skip_preview:
             hb_buffer_close( &vid_buf );
         }
     }
+    UpdateState3(data, i);
+
     vid_decoder->close( vid_decoder );
     free( vid_decoder );
 
@@ -1084,4 +1085,61 @@ static int  AllAudioOK( hb_title_t * title )
         }
     }
     return 1;
+}
+
+static void UpdateState1(hb_scan_t *scan, int title)
+{
+    hb_state_t state;
+
+#define p state.param.scanning
+    /* Update the UI */
+    state.state   = HB_STATE_SCANNING;
+    p.title_cur   = title;
+    p.title_count = scan->dvd ? hb_dvd_title_count( scan->dvd ) :
+                    scan->bd ? hb_bd_title_count( scan->bd ) :
+                    scan->batch ? hb_batch_title_count( scan->batch ) :
+                               hb_list_count(scan->title_set->list_title);
+    p.preview_cur = 0;
+    p.preview_count = 1;
+    p.progress = 0.5 * ((float)p.title_cur + ((float)p.preview_cur / p.preview_count)) / p.title_count;
+#undef p
+
+    hb_set_state(scan->h, &state);
+}
+
+static void UpdateState2(hb_scan_t *scan, int title)
+{
+    hb_state_t state;
+
+#define p state.param.scanning
+    /* Update the UI */
+    state.state   = HB_STATE_SCANNING;
+    p.title_cur   = title;
+    p.title_count = hb_list_count( scan->title_set->list_title );
+    p.preview_cur = 1;
+    p.preview_count = scan->preview_count;
+    if (scan->title_index)
+        p.progress = (float)p.title_cur / p.title_count;
+    else
+        p.progress = 0.5 + 0.5 * (float)p.title_cur / p.title_count;
+#undef p
+
+    hb_set_state(scan->h, &state);
+}
+
+static void UpdateState3(hb_scan_t *scan, int preview)
+{
+    hb_state_t state;
+
+    hb_get_state2(scan->h, &state);
+#define p state.param.scanning
+    p.preview_cur = preview;
+    p.preview_count = scan->preview_count;
+    if (scan->title_index)
+        p.progress = ((float)p.title_cur - 1 + ((float)p.preview_cur / p.preview_count)) / p.title_count;
+    else
+        p.progress = 0.5 + 0.5 * ((float)p.title_cur - 1 + ((float)p.preview_cur / p.preview_count)) / p.title_count;
+#undef p
+
+    hb_set_state(scan->h, &state);
 }

@@ -1082,7 +1082,7 @@ main(int argc, char *argv[])
     g_idle_add((GSourceFunc)ghb_reload_queue, ud);
 
     // Start timer for monitoring libhb status, 500ms
-    g_timeout_add(500, ghb_timer_cb, (gpointer)ud);
+    g_timeout_add(200, ghb_timer_cb, (gpointer)ud);
 
     // Add dvd devices to File menu
     ghb_volname_cache_init();

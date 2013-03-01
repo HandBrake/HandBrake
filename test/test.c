@@ -600,10 +600,17 @@ static int HandleEvents( hb_handle_t * h )
 #define p s.param.scanning
         case HB_STATE_SCANNING:
             /* Show what title is currently being scanned */
-            fprintf( stderr, "Scanning title %d", p.title_cur );
-            if( !titleindex || titlescan )
-                fprintf( stderr, " of %d", p.title_count );
-            fprintf( stderr, "...\n" );
+            if (p.preview_cur)
+            {
+                fprintf(stdout, "\rScanning title %d of %d, preview %d, %.2f %%",
+                        p.title_cur, p.title_count, p.preview_cur, 100 * p.progress);
+            }
+            else
+            {
+                fprintf(stdout, "\rScanning title %d of %d, %.2f %%",
+                        p.title_cur, p.title_count, 100 * p.progress);
+            }
+            fflush(stdout);
             break;
 #undef p
 

@@ -2826,15 +2826,21 @@ ghb_backend_events(signal_user_data_t *ud)
         }
         else
         {
-            status_str = g_strdup_printf ("Scanning title %d of %d...", 
+            if (status.scan.preview_cur == 0)
+                status_str = g_strdup_printf("Scanning title %d of %d...",
                               status.scan.title_cur, status.scan.title_count );
+            else
+                status_str = g_strdup_printf(
+                    "Scanning title %d of %d preview %d...",
+                    status.scan.title_cur, status.scan.title_count,
+                    status.scan.preview_cur);
+
         }
         gtk_label_set_text (label, status_str);
         g_free(status_str);
         if (status.scan.title_count > 0)
         {
-            gtk_progress_bar_set_fraction (scan_prog, 
-                (gdouble)status.scan.title_cur / status.scan.title_count);
+            gtk_progress_bar_set_fraction (scan_prog, status.scan.progress);
         }
     }
     else if (status.scan.state & GHB_STATE_SCANDONE)

@@ -861,12 +861,22 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 #define p s.param.scanning
         case HB_STATE_SCANNING:
 		{
-            [fSrcDVD2Field setStringValue: [NSString stringWithFormat:
-                                            NSLocalizedString( @"Scanning title %d of %d…", @"" ),
-                                            p.title_cur, p.title_count]];
+            if( p.preview_cur )
+            {
+                [fSrcDVD2Field setStringValue: [NSString stringWithFormat:
+                                                NSLocalizedString( @"Scanning title %d of %d, preview %d…", @"" ),
+                                                p.title_cur, p.title_count,
+                                                p.preview_cur]];
+            }
+            else
+            {
+                [fSrcDVD2Field setStringValue: [NSString stringWithFormat:
+                                                NSLocalizedString( @"Scanning title %d of %d…", @"" ),
+                                                p.title_cur, p.title_count]];
+            }
             [fScanIndicator setHidden: NO];
             [fScanHorizontalLine setHidden: YES];
-            [fScanIndicator setDoubleValue: 100.0 * ((double)( p.title_cur - 1 ) / p.title_count)];
+            [fScanIndicator setDoubleValue: 100.0 * p.progress];
             break;
 		}
 #undef p
@@ -935,14 +945,23 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 #define p s.param.scanning
         case HB_STATE_SCANNING:
 		{
-            [fStatusField setStringValue: [NSString stringWithFormat:
-                                           NSLocalizedString( @"Queue Scanning title %d of %d…", @"" ),
-                                           p.title_cur, p.title_count]];
+            NSString *scan_status;
+            if( p.preview_cur )
+            {
+                scan_status = [NSString stringWithFormat:
+                               NSLocalizedString( @"Queue Scanning title %d of %d, preview %d…", @"" ),
+                               p.title_cur, p.title_count, p.preview_cur];
+            }
+            else
+            {
+                scan_status = [NSString stringWithFormat:
+                               NSLocalizedString( @"Queue Scanning title %d of %d…", @"" ),
+                               p.title_cur, p.title_count];
+            }
+            [fStatusField setStringValue: scan_status];
             
-            /* Set the status string in fQueueController as well */                               
-            [fQueueController setQueueStatusString: [NSString stringWithFormat:
-                                                     NSLocalizedString( @"Queue Scanning title %d of %d…", @"" ),
-                                                     p.title_cur, p.title_count]];
+            /* Set the status string in fQueueController as well */
+            [fQueueController setQueueStatusString: scan_status];
             break;
 		}
 #undef p
@@ -968,14 +987,19 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             
             /* Update text field */
             pass_desc = @"";
-            //string = [NSMutableString stringWithFormat: NSLocalizedString( @"Searching for start point: pass %d %@ of %d, %.2f %%", @"" ), p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
+            //string = [NSMutableString stringWithFormat:
+            //          NSLocalizedString( @"Searching for start point: pass %d %@ of %d, %.2f %%", @"" ),
+            //          p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
             /* For now, do not announce "pass x of x for the search phase */
-            string = [NSMutableString stringWithFormat: NSLocalizedString( @"Searching for start point… :  %.2f %%", @"" ), 100.0 * p.progress];
+            string = [NSMutableString stringWithFormat:
+                      NSLocalizedString( @"Searching for start point… :  %.2f %%", @"" ),
+                      100.0 * p.progress];
             
-			if( p.seconds > -1 )
+            if( p.seconds > -1 )
             {
                 [string appendFormat:
-                 NSLocalizedString( @" (ETA %02dh%02dm%02ds)", @"" ), p.hours, p.minutes, p.seconds];
+                 NSLocalizedString( @" (ETA %02dh%02dm%02ds)", @"" ),
+                 p.hours, p.minutes, p.seconds];
             }
             
             [fStatusField setStringValue: string];
@@ -1032,14 +1056,20 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             
             if ([pass_desc length])
             {
-                string = [NSMutableString stringWithFormat: NSLocalizedString( @"Encoding: %@ \nPass %d %@ of %d, %.2f %%", @"" ), currentQueueEncodeNameString, p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
+                string = [NSMutableString stringWithFormat:
+                          NSLocalizedString( @"Encoding: %@ \nPass %d %@ of %d, %.2f %%", @"" ),
+                          currentQueueEncodeNameString,
+                          p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
             }
             else
             {
-                string = [NSMutableString stringWithFormat: NSLocalizedString( @"Encoding: %@ \nPass %d of %d, %.2f %%", @"" ), currentQueueEncodeNameString, p.job_cur, p.job_count, 100.0 * p.progress];
+                string = [NSMutableString stringWithFormat:
+                          NSLocalizedString( @"Encoding: %@ \nPass %d of %d, %.2f %%", @"" ),
+                          currentQueueEncodeNameString,
+                          p.job_cur, p.job_count, 100.0 * p.progress];
             }
             
-			if( p.seconds > -1 )
+            if( p.seconds > -1 )
             {
                 if ( p.rate_cur > 0.0 )
                 {
@@ -1947,7 +1977,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             if (status == NSAlertDefaultReturn)
             {
                 /* User chose to go download vlc (as they rightfully should) so we send them to the vlc site */
-                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://download.videolan.org/libdvdcss/last/macosx/"]];
+                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://download.videolan.org/libdvdcss/1.2.12/macosx/"]];
             }
             else if (status == NSAlertAlternateReturn)
             {

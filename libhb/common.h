@@ -820,6 +820,9 @@ struct hb_state_s
         struct
         {
             /* HB_STATE_SCANNING */
+            float progress;
+            int preview_cur;
+            int preview_count;
             int title_cur;
             int title_count;
         } scanning;
