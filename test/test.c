@@ -588,12 +588,12 @@ static int HandleEvents( hb_handle_t * h )
             if (p.preview_cur)
             {
                 fprintf(stdout, "\rScanning title %d of %d, preview %d, %.2f %%",
-                    p.title_cur, p.title_count, p.preview_cur, 100 * p.progress);
+                        p.title_cur, p.title_count, p.preview_cur, 100 * p.progress);
             }
             else
             {
                 fprintf(stdout, "\rScanning title %d of %d, %.2f %%",
-                    p.title_cur, p.title_count, 100 * p.progress);
+                        p.title_cur, p.title_count, 100 * p.progress);
             }
             fflush(stdout);
             break;

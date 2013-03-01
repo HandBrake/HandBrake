@@ -949,14 +949,14 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             if( p.preview_cur )
             {
                 scan_status = [NSString stringWithFormat:
-                    NSLocalizedString( @"Queue Scanning title %d of %d, preview %d…", @"" ),
-                    p.title_cur, p.title_count, p.preview_cur];
+                               NSLocalizedString( @"Queue Scanning title %d of %d, preview %d…", @"" ),
+                               p.title_cur, p.title_count, p.preview_cur];
             }
             else
             {
                 scan_status = [NSString stringWithFormat:
-                    NSLocalizedString( @"Queue Scanning title %d of %d…", @"" ),
-                    p.title_cur, p.title_count];
+                               NSLocalizedString( @"Queue Scanning title %d of %d…", @"" ),
+                               p.title_cur, p.title_count];
             }
             [fStatusField setStringValue: scan_status];
             
@@ -987,14 +987,19 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             
             /* Update text field */
             pass_desc = @"";
-            //string = [NSMutableString stringWithFormat: NSLocalizedString( @"Searching for start point: pass %d %@ of %d, %.2f %%", @"" ), p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
+            //string = [NSMutableString stringWithFormat:
+            //          NSLocalizedString( @"Searching for start point: pass %d %@ of %d, %.2f %%", @"" ),
+            //          p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
             /* For now, do not announce "pass x of x for the search phase */
-            string = [NSMutableString stringWithFormat: NSLocalizedString( @"Searching for start point… :  %.2f %%", @"" ), 100.0 * p.progress];
+            string = [NSMutableString stringWithFormat:
+                      NSLocalizedString( @"Searching for start point… :  %.2f %%", @"" ),
+                      100.0 * p.progress];
             
-			if( p.seconds > -1 )
+            if( p.seconds > -1 )
             {
                 [string appendFormat:
-                 NSLocalizedString( @" (ETA %02dh%02dm%02ds)", @"" ), p.hours, p.minutes, p.seconds];
+                 NSLocalizedString( @" (ETA %02dh%02dm%02ds)", @"" ),
+                 p.hours, p.minutes, p.seconds];
             }
             
             [fStatusField setStringValue: string];
@@ -1051,14 +1056,20 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             
             if ([pass_desc length])
             {
-                string = [NSMutableString stringWithFormat: NSLocalizedString( @"Encoding: %@ \nPass %d %@ of %d, %.2f %%", @"" ), currentQueueEncodeNameString, p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
+                string = [NSMutableString stringWithFormat:
+                          NSLocalizedString( @"Encoding: %@ \nPass %d %@ of %d, %.2f %%", @"" ),
+                          currentQueueEncodeNameString,
+                          p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
             }
             else
             {
-                string = [NSMutableString stringWithFormat: NSLocalizedString( @"Encoding: %@ \nPass %d of %d, %.2f %%", @"" ), currentQueueEncodeNameString, p.job_cur, p.job_count, 100.0 * p.progress];
+                string = [NSMutableString stringWithFormat:
+                          NSLocalizedString( @"Encoding: %@ \nPass %d of %d, %.2f %%", @"" ),
+                          currentQueueEncodeNameString,
+                          p.job_cur, p.job_count, 100.0 * p.progress];
             }
             
-			if( p.seconds > -1 )
+            if( p.seconds > -1 )
             {
                 if ( p.rate_cur > 0.0 )
                 {
