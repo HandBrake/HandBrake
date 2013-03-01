@@ -14,7 +14,7 @@
 
 struct hb_filter_private_s
 {
-	hb_job_t            * job;
+    hb_job_t            * job;
     int                 width_in;
     int                 height_in;
     int                 pix_fmt;
@@ -28,7 +28,7 @@ struct hb_filter_private_s
     int                 use_decomb;
     int                 use_detelecine;
     hb_oclscale_t       * os; //ocl scaler handler
-#endif	
+#endif    
     struct SwsContext * context;
 };
 
@@ -63,7 +63,7 @@ static int hb_crop_scale_init( hb_filter_object_t * filter,
     hb_filter_private_t * pv = filter->private_data;
 
     // TODO: add pix format option to settings
-	pv->job = init->job;
+    pv->job = init->job;
     pv->pix_fmt_out = init->pix_fmt;
     pv->width_in = init->width;
     pv->height_in = init->height;
@@ -74,9 +74,9 @@ static int hb_crop_scale_init( hb_filter_object_t * filter,
     pv->use_decomb = init->job->use_decomb;
     pv->use_detelecine = init->job->use_detelecine;
 
-	if ( pv->job->use_opencl )
+    if ( pv->job->use_opencl )
     {
-	pv->os = ( hb_oclscale_t * )malloc( sizeof( hb_oclscale_t ) );
+    pv->os = ( hb_oclscale_t * )malloc( sizeof( hb_oclscale_t ) );
         memset( pv->os, 0, sizeof( hb_oclscale_t ) );
     }
 #endif
@@ -138,9 +138,9 @@ static void hb_crop_scale_close( hb_filter_object_t * filter )
     }
 #ifdef USE_OPENCL
 
-	if ( pv->job->use_opencl && pv->os )
+    if ( pv->job->use_opencl && pv->os )
     {
-	CL_FREE( pv->os->h_in_buf );
+    CL_FREE( pv->os->h_in_buf );
         CL_FREE( pv->os->h_out_buf );
         CL_FREE( pv->os->v_out_buf );
         CL_FREE( pv->os->h_coeff_y );
@@ -198,73 +198,73 @@ static hb_buffer_t* crop_scale( hb_filter_private_t * pv, hb_buffer_t * in )
 
 #ifdef USE_OPENCL
 
-	if ( pv->job->use_opencl )
+    if ( pv->job->use_opencl )
     {
-	int w = in->f.width - ( pv->crop[2] + pv->crop[3] );
-	int h = in->f.height - ( pv->crop[0] + pv->crop[1] );
-	uint8_t *tmp_in = malloc( w * h * 3 / 2 );
-	uint8_t *tmp_out = malloc( pv->width_out * pv->height_out * 3 / 2 );
-	if( pic_crop.data[0] || pic_crop.data[1] || pic_crop.data[2] || pic_crop.data[3] )
-	{
-	    int i;
-	    for( i = 0; i< h>>1; i++ )
-	    {
-	        memcpy( tmp_in + ( ( i<<1 ) + 0 ) * w, pic_crop.data[0]+ ( ( i<<1 ) + 0 ) * pic_crop.linesize[0], w );
-	        memcpy( tmp_in + ( ( i<<1 ) + 1 ) * w, pic_crop.data[0]+ ( ( i<<1 ) + 1 ) * pic_crop.linesize[0], w );
-	        memcpy( tmp_in + ( w * h ) + i * ( w>>1 ), pic_crop.data[1] + i * pic_crop.linesize[1], w >> 1 );
-	        memcpy( tmp_in + ( w * h ) + ( ( w * h )>>2 ) + i * ( w>>1 ), pic_crop.data[2] + i * pic_crop.linesize[2], w >> 1 );
-	    }
-	}
-	else
-	{
-	    memcpy( tmp_in, pic_crop.data[0], w * h );
-	    memcpy( tmp_in + w * h, pic_crop.data[1], (w*h)>>2 );
-	    memcpy( tmp_in + w * h + ((w*h)>>2), pic_crop.data[2], (w*h)>>2 );
-	}
-	hb_ocl_scale( NULL, tmp_in, tmp_out, w, h, out->f.width, out->f.height, pv->os );
-	w = out->plane[0].stride;
-	h = out->plane[0].height;
-	uint8_t *dst = out->plane[0].data;
-	copy_plane( dst, tmp_out, w, pv->width_out, h );
-	w = out->plane[1].stride;
-	h = out->plane[1].height;
-	dst = out->plane[1].data;
-	copy_plane( dst, tmp_out + pv->width_out * pv->height_out, w, pv->width_out>>1, h );
-	w = out->plane[2].stride;
-	h = out->plane[2].height;
-	dst = out->plane[2].data;
-	copy_plane( dst, tmp_out + pv->width_out * pv->height_out +( ( pv->width_out * pv->height_out )>>2 ), w, pv->width_out>>1, h );
-	free( tmp_out );
-	free( tmp_in );
+    int w = in->f.width - ( pv->crop[2] + pv->crop[3] );
+    int h = in->f.height - ( pv->crop[0] + pv->crop[1] );
+    uint8_t *tmp_in = malloc( w * h * 3 / 2 );
+    uint8_t *tmp_out = malloc( pv->width_out * pv->height_out * 3 / 2 );
+    if( pic_crop.data[0] || pic_crop.data[1] || pic_crop.data[2] || pic_crop.data[3] )
+    {
+        int i;
+        for( i = 0; i< h>>1; i++ )
+        {
+            memcpy( tmp_in + ( ( i<<1 ) + 0 ) * w, pic_crop.data[0]+ ( ( i<<1 ) + 0 ) * pic_crop.linesize[0], w );
+            memcpy( tmp_in + ( ( i<<1 ) + 1 ) * w, pic_crop.data[0]+ ( ( i<<1 ) + 1 ) * pic_crop.linesize[0], w );
+            memcpy( tmp_in + ( w * h ) + i * ( w>>1 ), pic_crop.data[1] + i * pic_crop.linesize[1], w >> 1 );
+            memcpy( tmp_in + ( w * h ) + ( ( w * h )>>2 ) + i * ( w>>1 ), pic_crop.data[2] + i * pic_crop.linesize[2], w >> 1 );
+        }
     }
     else
     {
-	if ( !pv->context ||
-	     pv->width_in   != in->f.width  ||
-	     pv->height_in  != in->f.height ||
-	     pv->pix_fmt != in->f.fmt )
-	{
-	    // Something changed, need a new scaling context.
-	    if( pv->context )
-	        sws_freeContext( pv->context );
-	        pv->context = hb_sws_get_context(
-	                                in->f.width  - (pv->crop[2] + pv->crop[3]),
-	                                in->f.height - (pv->crop[0] + pv->crop[1]),
-	                                in->f.fmt,
-	                                out->f.width, out->f.height, out->f.fmt,
-	                                SWS_LANCZOS | SWS_ACCURATE_RND );
-	        pv->width_in = in->f.width;
-	        pv->height_in = in->f.height;
-	        pv->pix_fmt = in->f.fmt;
+        memcpy( tmp_in, pic_crop.data[0], w * h );
+        memcpy( tmp_in + w * h, pic_crop.data[1], (w*h)>>2 );
+        memcpy( tmp_in + w * h + ((w*h)>>2), pic_crop.data[2], (w*h)>>2 );
+    }
+    hb_ocl_scale( NULL, tmp_in, tmp_out, w, h, out->f.width, out->f.height, pv->os );
+    w = out->plane[0].stride;
+    h = out->plane[0].height;
+    uint8_t *dst = out->plane[0].data;
+    copy_plane( dst, tmp_out, w, pv->width_out, h );
+    w = out->plane[1].stride;
+    h = out->plane[1].height;
+    dst = out->plane[1].data;
+    copy_plane( dst, tmp_out + pv->width_out * pv->height_out, w, pv->width_out>>1, h );
+    w = out->plane[2].stride;
+    h = out->plane[2].height;
+    dst = out->plane[2].data;
+    copy_plane( dst, tmp_out + pv->width_out * pv->height_out +( ( pv->width_out * pv->height_out )>>2 ), w, pv->width_out>>1, h );
+    free( tmp_out );
+    free( tmp_in );
+    }
+    else
+    {
+    if ( !pv->context ||
+         pv->width_in   != in->f.width  ||
+         pv->height_in  != in->f.height ||
+         pv->pix_fmt != in->f.fmt )
+    {
+        // Something changed, need a new scaling context.
+        if( pv->context )
+            sws_freeContext( pv->context );
+            pv->context = hb_sws_get_context(
+                                    in->f.width  - (pv->crop[2] + pv->crop[3]),
+                                    in->f.height - (pv->crop[0] + pv->crop[1]),
+                                    in->f.fmt,
+                                    out->f.width, out->f.height, out->f.fmt,
+                                    SWS_LANCZOS | SWS_ACCURATE_RND );
+            pv->width_in = in->f.width;
+            pv->height_in = in->f.height;
+            pv->pix_fmt = in->f.fmt;
         }
 
-	    // Scale pic_crop into pic_render according to the
-	    // context set up above
-	sws_scale(pv->context,
-	              (const uint8_t* const*)pic_crop.data,
-	              pic_crop.linesize,
-	              0, in->f.height - (pv->crop[0] + pv->crop[1]),
-	              pic_out.data,  pic_out.linesize);
+        // Scale pic_crop into pic_render according to the
+        // context set up above
+    sws_scale(pv->context,
+                  (const uint8_t* const*)pic_crop.data,
+                  pic_crop.linesize,
+                  0, in->f.height - (pv->crop[0] + pv->crop[1]),
+                  pic_out.data,  pic_out.linesize);
     }
 #else
     if ( !pv->context ||

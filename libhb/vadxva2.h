@@ -11,8 +11,6 @@
 
  */
 
-
-
 #ifndef VA_DXVA2_H
 #define VA_DXVA2_H
 

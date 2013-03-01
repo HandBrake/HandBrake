@@ -1,6 +1,6 @@
 /* oclnv12toyuv.h
 
-    Copyright (c) 2003-2012 HandBrake Team
+   Copyright (c) 2003-2012 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -14,9 +14,17 @@
 #ifdef USE_OPENCL
 #ifndef RENDER_CL_H
 #define RENDER_CL_H
-#include "CL/cl.h"
+
+#if defined(__APPLE__)
+#include <OpenCL/cl.h>
+#else
+#include <CL/cl.h>
+#endif
+
 #include "common.h"
 #include "openclwrapper.h"
+
+
 
 /**
  * nv12 to yuv interface

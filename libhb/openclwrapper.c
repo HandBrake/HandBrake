@@ -1,4 +1,3 @@
-
 /* openclwrapper.c
 
    Copyright (c) 2003-2012 HandBrake Team
@@ -10,6 +9,7 @@
    Authors: Peng Gao <peng@multicorewareinc.com> <http://www.multicorewareinc.com/>
             Li   Cao <li@multicorewareinc.com> <http://www.multicorewareinc.com/>
  */
+ 
 #ifdef USE_OPENCL
 
 #include <stdio.h>
