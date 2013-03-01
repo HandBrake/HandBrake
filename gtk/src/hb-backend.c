@@ -3495,6 +3495,9 @@ ghb_backend_scan(const gchar *path, gint titleindex, gint preview_count, uint64_
     // when computing progress
     hb_status.scan.title_count = 1;
     hb_status.scan.title_cur = 0;
+    hb_status.scan.preview_count = 1;
+    hb_status.scan.preview_cur = 0;
+    hb_status.scan.progress = 0;
 }
 
 void
@@ -3563,6 +3566,9 @@ ghb_track_status()
             hb_status.scan.state |= GHB_STATE_SCANNING;
             hb_status.scan.title_count = p.title_count;
             hb_status.scan.title_cur = p.title_cur;
+            hb_status.scan.preview_count = p.preview_count;
+            hb_status.scan.preview_cur = p.preview_cur;
+            hb_status.scan.progress = p.progress;
         } break;
 #undef p
 
@@ -3637,6 +3643,9 @@ ghb_track_status()
             hb_status.queue.state |= GHB_STATE_SCANNING;
             hb_status.queue.title_count = p.title_count;
             hb_status.queue.title_cur = p.title_cur;
+            hb_status.queue.preview_count = p.preview_count;
+            hb_status.queue.preview_cur = p.preview_cur;
+            hb_status.queue.progress = p.progress;
         } break;
 #undef p
 

@@ -861,12 +861,22 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 #define p s.param.scanning
         case HB_STATE_SCANNING:
 		{
-            [fSrcDVD2Field setStringValue: [NSString stringWithFormat:
-                                            NSLocalizedString( @"Scanning title %d of %d…", @"" ),
-                                            p.title_cur, p.title_count]];
+            if( p.preview_cur )
+            {
+                [fSrcDVD2Field setStringValue: [NSString stringWithFormat:
+                                                NSLocalizedString( @"Scanning title %d of %d, preview %d…", @"" ),
+                                                p.title_cur, p.title_count,
+                                                p.preview_cur]];
+            }
+            else
+            {
+                [fSrcDVD2Field setStringValue: [NSString stringWithFormat:
+                                                NSLocalizedString( @"Scanning title %d of %d…", @"" ),
+                                                p.title_cur, p.title_count]];
+            }
             [fScanIndicator setHidden: NO];
             [fScanHorizontalLine setHidden: YES];
-            [fScanIndicator setDoubleValue: 100.0 * ((double)( p.title_cur - 1 ) / p.title_count)];
+            [fScanIndicator setDoubleValue: 100.0 * p.progress];
             break;
 		}
 #undef p
@@ -935,14 +945,23 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 #define p s.param.scanning
         case HB_STATE_SCANNING:
 		{
-            [fStatusField setStringValue: [NSString stringWithFormat:
-                                           NSLocalizedString( @"Queue Scanning title %d of %d…", @"" ),
-                                           p.title_cur, p.title_count]];
+            NSString *scan_status;
+            if( p.preview_cur )
+            {
+                scan_status = [NSString stringWithFormat:
+                    NSLocalizedString( @"Queue Scanning title %d of %d, preview %d…", @"" ),
+                    p.title_cur, p.title_count, p.preview_cur];
+            }
+            else
+            {
+                scan_status = [NSString stringWithFormat:
+                    NSLocalizedString( @"Queue Scanning title %d of %d…", @"" ),
+                    p.title_cur, p.title_count];
+            }
+            [fStatusField setStringValue: scan_status];
             
-            /* Set the status string in fQueueController as well */                               
-            [fQueueController setQueueStatusString: [NSString stringWithFormat:
-                                                     NSLocalizedString( @"Queue Scanning title %d of %d…", @"" ),
-                                                     p.title_cur, p.title_count]];
+            /* Set the status string in fQueueController as well */
+            [fQueueController setQueueStatusString: scan_status];
             break;
 		}
 #undef p

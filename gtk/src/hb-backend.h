@@ -34,6 +34,8 @@ typedef struct
     // SCANNING
     gint title_count;
     gint title_cur;
+    gint preview_count;
+    gint preview_cur;
 
     // WORKING
     gint unique_id;
