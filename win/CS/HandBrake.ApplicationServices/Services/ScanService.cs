@@ -370,12 +370,14 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="sender">the sender</param>
         /// <param name="currentTitle">the current title being scanned</param>
         /// <param name="titleCount">the total number of titles</param>
-        private void OnScanProgress(object sender, int currentTitle, int titleCount)
+        /// <param name="percentage">The Percentage</param>
+        private void OnScanProgress(object sender, int currentTitle, int titleCount, decimal percentage)
         {
             ScanProgressEventArgs eventArgs = new ScanProgressEventArgs
             {
                 CurrentTitle = currentTitle,
-                Titles = titleCount
+                Titles = titleCount,
+                Percentage = percentage
             };
 
             if (this.ScanStatusChanged != null)
