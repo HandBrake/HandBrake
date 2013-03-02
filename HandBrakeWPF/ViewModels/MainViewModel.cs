@@ -1703,8 +1703,8 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void ScanStatusChanged(object sender, HandBrake.ApplicationServices.EventArgs.ScanProgressEventArgs e)
         {
-            this.SourceLabel = "Scanning Title " + e.CurrentTitle + " of " + e.Titles;
-            this.StatusLabel = "Scanning Title " + e.CurrentTitle + " of " + e.Titles;
+            this.SourceLabel = string.Format("Scanning Title {0} of {1} ({2}%)", e.CurrentTitle, e.Titles, e.Percentage);
+            this.StatusLabel = string.Format("Scanning Title {0} of {1} ({2}%)", e.CurrentTitle, e.Titles, e.Percentage);
         }
 
         /// <summary>
