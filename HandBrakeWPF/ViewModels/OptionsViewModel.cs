@@ -1536,7 +1536,7 @@ namespace HandBrakeWPF.ViewModels
                 this.preferredLanguages.Add(item);
 
                 // In the available languages should be no "Any" and no selected language.
-                if ((item != "Any") && (!this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages).Contains(item)))
+                if ((item != "(Any)") && (!this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.SelectedLanguages).Contains(item)))
                 {
                     this.availableLanguages.Add(item);
                 }
