@@ -62,7 +62,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
             codec_name = "libfdk_aac";
             profile = FF_PROFILE_AAC_HE;
             break;
-        case HB_ACODEC_FAAC:
+        case HB_ACODEC_FFAAC:
             codec_name = "aac";
             break;
         default:
