@@ -260,6 +260,8 @@ static int MKVInit( hb_mux_object_t * m )
             case HB_ACODEC_FFAAC:
             case HB_ACODEC_CA_AAC:
             case HB_ACODEC_CA_HAAC:
+            case HB_ACODEC_FDK_AAC:
+            case HB_ACODEC_FDK_HAAC:
                 track->codecPrivate = audio->priv.config.extradata.bytes;
                 track->codecPrivateSize = audio->priv.config.extradata.length;
                 track->codecID = MK_ACODEC_AAC;
@@ -285,7 +287,8 @@ static int MKVInit( hb_mux_object_t * m )
         lang =  lang_for_code2( audio->config.lang.iso639_2 );
         track->language = lang->iso639_2b ? lang->iso639_2b : lang->iso639_2;
         // sample rate
-        if ((audio->config.out.codec == HB_ACODEC_CA_HAAC) ||
+        if ((audio->config.out.codec == HB_ACODEC_CA_HAAC)  ||
+            (audio->config.out.codec == HB_ACODEC_FDK_HAAC) ||
             (audio->config.out.codec == HB_ACODEC_AAC_PASS &&
              audio->config.in.samples_per_frame > 1024))
         {

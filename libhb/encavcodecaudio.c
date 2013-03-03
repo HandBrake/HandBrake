@@ -44,17 +44,48 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
     AVCodec *codec;
     AVCodecContext *context;
     hb_audio_t *audio = w->audio;
+    const char * codec_name = NULL;
+    int profile = FF_PROFILE_UNKNOWN;
 
     hb_work_private_t *pv = calloc(1, sizeof(hb_work_private_t));
     w->private_data       = pv;
     pv->job               = job;
     pv->list              = hb_list_init();
 
-    codec = avcodec_find_encoder(w->codec_param);
-    if (codec == NULL)
+    switch (audio->config.out.codec)
     {
-        hb_error("encavcodecaInit: avcodec_find_encoder() failed");
-        return 1;
+        case HB_ACODEC_FDK_AAC:
+            codec_name = "libfdk_aac";
+            profile = FF_PROFILE_AAC_LOW;
+            break;
+        case HB_ACODEC_FDK_HAAC:
+            codec_name = "libfdk_aac";
+            profile = FF_PROFILE_AAC_HE;
+            break;
+        case HB_ACODEC_FAAC:
+            codec_name = "aac";
+            break;
+        default:
+            break;
+    }
+    if (codec_name != NULL)
+    {
+        codec = avcodec_find_encoder_by_name(codec_name);
+        if (codec == NULL)
+        {
+            hb_error("encavcodecaInit: avcodec_find_encoder_by_name(%s) failed",
+                     codec_name);
+            return 1;
+        }
+    }
+    else
+    {
+        codec = avcodec_find_encoder(w->codec_param);
+        if (codec == NULL)
+        {
+            hb_error("encavcodecaInit: avcodec_find_encoder() failed");
+            return 1;
+        }
     }
     context = avcodec_alloc_context3(codec);
 
@@ -66,7 +97,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
     context->sample_rate = audio->config.out.samplerate;
 
     AVDictionary *av_opts = NULL;
-    if (w->codec_param == AV_CODEC_ID_AAC)
+    if (audio->config.out.codec == HB_ACODEC_FFAAC)
     {
         av_dict_set(&av_opts, "stereo_mode", "ms_off", 0);
     }
@@ -91,9 +122,25 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         context->compression_level = audio->config.out.compression_level;
     }
 
+    // For some codecs, libav requires the following flag to be set
+    // so that it fills extradata with global header information.
+    // If this flag is not set, it inserts the data into each
+    // packet instead.
+    context->flags |= CODEC_FLAG_GLOBAL_HEADER;
+
     // set the sample format and bit depth to something practical
     switch (audio->config.out.codec)
     {
+        case HB_ACODEC_FDK_AAC:
+        case HB_ACODEC_FDK_HAAC:
+            hb_ff_set_sample_fmt(context, codec, AV_SAMPLE_FMT_S16);
+            context->bits_per_raw_sample = 16;
+            context->profile = profile;
+            // fdk-aac implementation in libav does not support
+            // AV_CH_LAYOUT_5POINT1, so translate to AV_CH_LAYOUT_5POINT1_BACK
+            if (context->channel_layout == AV_CH_LAYOUT_5POINT1)
+                context->channel_layout = AV_CH_LAYOUT_5POINT1_BACK;
+            break;
         case HB_ACODEC_FFFLAC:
             hb_ff_set_sample_fmt(context, codec, AV_SAMPLE_FMT_S16);
             context->bits_per_raw_sample = 16;

@@ -39,6 +39,10 @@ ifneq (,$(filter $(BUILD.system),darwin cygwin mingw))
     MODULES += contrib/libsamplerate
 endif
 
+ifeq (1,$(FEATURE.fdk_aac))
+    MODULES += contrib/fdk-aac
+endif
+
 MODULES += contrib/lame
 MODULES += contrib/faac
 MODULES += contrib/ffmpeg

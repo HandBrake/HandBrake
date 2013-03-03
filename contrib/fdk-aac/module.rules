@@ -1,0 +1,2 @@
+$(eval $(call import.MODULE.rules,FDKAAC))
+$(eval $(call import.CONTRIB.rules,FDKAAC))

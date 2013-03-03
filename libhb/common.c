@@ -127,6 +127,10 @@ hb_encoder_t hb_audio_encoders[] =
     { "HE-AAC (CoreAudio)", "ca_haac",    HB_ACODEC_CA_HAAC,      HB_MUX_MP4|HB_MUX_MKV },
 #endif
     { "AAC (faac)",         "faac",       HB_ACODEC_FAAC,         HB_MUX_MP4|HB_MUX_MKV },
+#ifdef USE_FDK_AAC
+    { "AAC (FDK)",          "fdk_aac",    HB_ACODEC_FDK_AAC,      HB_MUX_MP4|HB_MUX_MKV },
+    { "HE-AAC (FDK)",       "fdk_haac",   HB_ACODEC_FDK_HAAC,     HB_MUX_MP4|HB_MUX_MKV },
+#endif
     { "AAC (ffmpeg)",       "ffaac",      HB_ACODEC_FFAAC,        HB_MUX_MP4|HB_MUX_MKV },
     { "AAC Passthru",       "copy:aac",   HB_ACODEC_AAC_PASS,     HB_MUX_MP4|HB_MUX_MKV },
     { "AC3 (ffmpeg)",       "ffac3",      HB_ACODEC_AC3,          HB_MUX_MP4|HB_MUX_MKV },
@@ -179,6 +183,8 @@ int hb_audio_dither_is_supported(uint32_t codec)
     switch (codec)
     {
         case HB_ACODEC_FFFLAC:
+        case HB_ACODEC_FDK_AAC:
+        case HB_ACODEC_FDK_HAAC:
             return 1;
         default:
             return 0;
@@ -670,6 +676,7 @@ void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown,
             break;
 
         case HB_ACODEC_CA_AAC:
+        case HB_ACODEC_FDK_AAC:
         {
             switch (samplerate)
             {
@@ -705,6 +712,7 @@ void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown,
         } break;
 
         case HB_ACODEC_CA_HAAC:
+        case HB_ACODEC_FDK_HAAC:
             *low  = nchannels * (12 + (4 * (samplerate >= 44100)));
             *high = nchannels * 40;
             break;
@@ -788,6 +796,7 @@ int hb_get_default_audio_bitrate(uint32_t codec, int samplerate, int mixdown)
             break;
 
         case HB_ACODEC_CA_HAAC:
+        case HB_ACODEC_FDK_HAAC:
             bitrate = nchannels * 32;
             break;
 

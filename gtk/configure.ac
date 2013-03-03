@@ -56,6 +56,10 @@ AC_ARG_ENABLE(dl,
 	AS_HELP_STRING([--enable-dl], [enable libdl]),
 	use_libdl=yes, use_libdl=no)
 
+AC_ARG_ENABLE(fdk-aac,
+	AS_HELP_STRING([--enable-fdk-aac], [enable fdk aac encoder]),
+	use_fdk_aac=yes, use_fdk_aac=no)
+
 AC_ARG_ENABLE(gst,
 	AS_HELP_STRING([--disable-gst], [disable gstreamer (live preview)]),
 	gst_disable=yes, gst_disable=no)
@@ -199,6 +203,13 @@ case $host in
     ;;
 esac
 
+HB_LIBS="-lhb -la52 -lmkv -lavresample -lavformat -lavcodec -lavutil -ldvdnav -ldvdread -lfaac -lmp3lame -lmpeg2 -lvorbis -lvorbisenc -logg -lsamplerate -lx264 -lmp4v2 -lswscale -ltheoraenc -ltheoradec -lz -lbz2 -lpthread -lbluray -lass -lfontconfig -lfreetype -lxml2"
+
+if test "x$use_fdk_aac" = "xyes" ; then
+    HB_LIBS+=" -lfdk-aac"
+fi
+
+AC_SUBST(HB_LIBS)
 AC_SUBST(GHB_TOOLS_CFLAGS)
 AC_SUBST(GHB_TOOLS_LIBS)
 AC_SUBST(GHB_CFLAGS)

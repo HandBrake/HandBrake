@@ -29,3 +29,6 @@ ifeq (0,$(FEATURE.gst))
 	GTK.CONFIGURE.extra += --disable-gst
 endif
 
+ifeq (1,$(FEATURE.fdk_aac))
+	GTK.CONFIGURE.extra += --enable-fdk-aac
+endif

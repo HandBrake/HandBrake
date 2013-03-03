@@ -146,6 +146,8 @@ hb_work_object_t * hb_codec_encoder( int codec )
         case HB_ACODEC_CA_AAC: return hb_get_work( WORK_ENC_CA_AAC );
         case HB_ACODEC_CA_HAAC:return hb_get_work( WORK_ENC_CA_HAAC );
         case HB_ACODEC_FFAAC:
+        case HB_ACODEC_FDK_AAC:
+        case HB_ACODEC_FDK_HAAC:
         {
             w = hb_get_work( WORK_ENCAVCODEC_AUDIO );
             w->codec_param = AV_CODEC_ID_AAC;
