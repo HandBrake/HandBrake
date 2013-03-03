@@ -24,7 +24,7 @@ namespace HandBrake.ApplicationServices.Utilities
         {
             IDictionary<string, string> languageMap = new Dictionary<string, string>
                                                           {
-                                                              {"Any", "und"}, 
+                                                              {"(Any)", "und"}, 
                                                               {"Afar", "aar"}, 
                                                               {"Abkhazian", "abk"}, 
                                                               {"Afrikaans", "afr"}, 
