@@ -119,53 +119,36 @@ hb_work_object_t * hb_get_work( int id )
     return NULL;
 }
 
-hb_work_object_t * hb_codec_decoder( int codec )
+hb_work_object_t* hb_codec_decoder(int codec)
 {
-    switch( codec )
+    if (codec & HB_ACODEC_FF_MASK)
     {
-        case HB_ACODEC_AC3:  return hb_get_work( WORK_DECA52 );
-        case HB_ACODEC_LPCM: return hb_get_work( WORK_DECLPCM );
-        default:
-            if ( codec & HB_ACODEC_FF_MASK )
-            {
-                return hb_get_work( WORK_DECAVCODEC );
-            }
-            break;
+        return hb_get_work(WORK_DECAVCODEC);
+    }
+    switch (codec)
+    {
+        case HB_ACODEC_AC3:  return hb_get_work(WORK_DECA52);
+        case HB_ACODEC_LPCM: return hb_get_work(WORK_DECLPCM);
+        default:             break;
     }
     return NULL;
 }
 
-hb_work_object_t * hb_codec_encoder( int codec )
+hb_work_object_t* hb_codec_encoder(int codec)
 {
-    hb_work_object_t * w;
-    switch( codec )
+    if (codec & HB_ACODEC_FF_MASK)
     {
-        case HB_ACODEC_FAAC:   return hb_get_work( WORK_ENCFAAC );
-        case HB_ACODEC_LAME:   return hb_get_work( WORK_ENCLAME );
-        case HB_ACODEC_VORBIS: return hb_get_work( WORK_ENCVORBIS );
-        case HB_ACODEC_CA_AAC: return hb_get_work( WORK_ENC_CA_AAC );
-        case HB_ACODEC_CA_HAAC:return hb_get_work( WORK_ENC_CA_HAAC );
-        case HB_ACODEC_FFAAC:
-        case HB_ACODEC_FDK_AAC:
-        case HB_ACODEC_FDK_HAAC:
-        {
-            w = hb_get_work( WORK_ENCAVCODEC_AUDIO );
-            w->codec_param = AV_CODEC_ID_AAC;
-            return w;
-        }
-        case HB_ACODEC_FFFLAC:
-        case HB_ACODEC_FFFLAC24:
-        {
-            w = hb_get_work( WORK_ENCAVCODEC_AUDIO );
-            w->codec_param = AV_CODEC_ID_FLAC;
-            return w;
-        }
-        case HB_ACODEC_AC3:
-        {
-            w = hb_get_work( WORK_ENCAVCODEC_AUDIO );
-            w->codec_param = AV_CODEC_ID_AC3;
-            return w;
-        }
+        return hb_get_work(WORK_ENCAVCODEC_AUDIO);
+    }
+    switch (codec)
+    {
+        case HB_ACODEC_AC3:     return hb_get_work(WORK_ENCAVCODEC_AUDIO);
+        case HB_ACODEC_FAAC:    return hb_get_work(WORK_ENCFAAC);
+        case HB_ACODEC_LAME:    return hb_get_work(WORK_ENCLAME);
+        case HB_ACODEC_VORBIS:  return hb_get_work(WORK_ENCVORBIS);
+        case HB_ACODEC_CA_AAC:  return hb_get_work(WORK_ENC_CA_AAC);
+        case HB_ACODEC_CA_HAAC: return hb_get_work(WORK_ENC_CA_HAAC);
+        default:                break;
     }
     return NULL;
 }
