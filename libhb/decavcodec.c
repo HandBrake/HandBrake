@@ -994,14 +994,6 @@ static hb_buffer_t *link_buf_list( hb_work_private_t *pv )
     return head;
 }
 
-static void init_video_avcodec_context( hb_work_private_t *pv )
-{
-    /* we have to wrap ffmpeg's get_buffer to be able to set the pts (?!) */
-    pv->context->opaque = pv;
-    pv->context->get_buffer = get_frame_buf;
-    pv->context->reget_buffer = reget_frame_buf;
-}
-
 static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
 {
 
@@ -1057,7 +1049,6 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->context->workaround_bugs = FF_BUG_AUTODETECT;
         pv->context->err_recognition = AV_EF_CRCCHECK;
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
-        init_video_avcodec_context( pv );
     }
     return 0;
 }
@@ -1195,7 +1186,6 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         // it to preserve any existing priv_data because they test the pointer
         // before allocating new memory, but the memset has already cleared it.
         avcodec_get_context_defaults3( pv->context, codec );
-        init_video_avcodec_context( pv );
         if ( setup_extradata( w, in ) )
         {
             // we didn't find the headers needed to set up extradata.
