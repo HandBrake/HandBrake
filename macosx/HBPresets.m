@@ -172,14 +172,13 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
     
-    /* Auto Passthru - TODO: enable
-     [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
-     */
+    /* Auto Passthru */
+    [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
     
     /* Audio track list - no need to add "None" at the end */
     NSMutableArray *audioListArray = [[NSMutableArray alloc] init];
@@ -288,14 +287,13 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
     
-    /* Auto Passthru - TODO: enable
-     [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
-     */
+    /* Auto Passthru */
+    [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
     
     /* Audio track list - no need to add "None" at the end */
     NSMutableArray *audioListArray = [[NSMutableArray alloc] init];
@@ -393,14 +391,13 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
     
-    /* Auto Passthru - TODO: enable
-     [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
-     */
+    /* Auto Passthru */
+    [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
     
     /* Audio track list - no need to add "None" at the end */
     NSMutableArray *audioListArray = [[NSMutableArray alloc] init];
@@ -498,14 +495,13 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
     
-    /* Auto Passthru - TODO: enable
-     [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
-     */
+    /* Auto Passthru */
+    [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
     
     /* Audio track list - no need to add "None" at the end */
     NSMutableArray *audioListArray = [[NSMutableArray alloc] init];
@@ -604,14 +600,13 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
     
-    /* Auto Passthru - TODO: enable
+    /* Auto Passthru */
     [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
-     */
     
     /* Audio track list - no need to add "None" at the end */
     NSMutableArray *audioListArray = [[NSMutableArray alloc] init];
@@ -720,14 +715,13 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
     
-    /* Auto Passthru - TODO: enable
-     [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
-     */
+    /* Auto Passthru */
+    [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
     
     /* Audio track list - no need to add "None" at the end */
     NSMutableArray *audioListArray = [[NSMutableArray alloc] init];
@@ -836,14 +830,13 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
     
-    /* Auto Passthru - TODO: enable
-     [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
-     */
+    /* Auto Passthru */
+    [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
     
     /* Audio track list - no need to add "None" at the end */
     NSMutableArray *audioListArray = [[NSMutableArray alloc] init];
@@ -952,14 +945,13 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
     
-    /* Auto Passthru - TODO: enable
-     [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
-     */
+    /* Auto Passthru */
+    [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
     
     /* Audio track list - no need to add "None" at the end */
     NSMutableArray *audioListArray = [[NSMutableArray alloc] init];
@@ -1057,14 +1049,13 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
     
-    /* Auto Passthru - TODO: enable
-     [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
-     */
+    /* Auto Passthru */
+    [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
     
     /* Audio track list - no need to add "None" at the end */
     NSMutableArray *audioListArray = [[NSMutableArray alloc] init];
@@ -1162,14 +1153,13 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
     
-    /* Auto Passthru - TODO: enable
-     [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
-     */
+    /* Auto Passthru */
+    [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
     
     /* Audio track list - no need to add "None" at the end */
     NSMutableArray *audioListArray = [[NSMutableArray alloc] init];
@@ -1267,14 +1257,13 @@
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureLeftCrop"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureRightCrop"];
     
-    /* Auto Passthru - TODO: enable
-     [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
-     [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
-     */
+    /* Auto Passthru */
+    [preset setObject:@"AC3 (ffmpeg)"            forKey:@"AudioEncoderFallback"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAACPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowAC3Pass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSHDPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowDTSPass"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"AudioAllowMP3Pass"];
     
     /* Audio track list - no need to add "None" at the end */
     NSMutableArray *audioListArray = [[NSMutableArray alloc] init];
