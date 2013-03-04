@@ -1003,6 +1003,12 @@ int hb_get_best_samplerate(uint32_t codec, int samplerate, int *sr_shift)
         best_samplerate  = 32000;
         samplerate_shift = 0;
     }
+    else if (samplerate < 16000 && codec == HB_ACODEC_FDK_HAAC)
+    {
+        // fdk_haac can't do samplerates < 16 kHz
+        best_samplerate  = 16000;
+        samplerate_shift = 1;
+    }
     else
     {
         best_samplerate = samplerate;
