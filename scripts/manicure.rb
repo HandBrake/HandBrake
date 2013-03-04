@@ -998,7 +998,7 @@ class Display
 
   def generateAPIcalls(hash) # Makes a C version of the preset ready for coding into the CLI
     
-    commandString = "if (!strcmp(preset_name, \"" << hash["PresetName"] << "\"))\n{\n    "
+    commandString = "if (!strcasecmp(preset_name, \"" << hash["PresetName"] << "\"))\n{\n    "
     
     #Filename suffix
     commandString << "if( !mux )\n    "
