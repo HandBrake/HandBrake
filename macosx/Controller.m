@@ -5403,6 +5403,8 @@ the user is using "Custom" settings by determining the sender*/
     {
         // using advanced panel, enable if applicable
         [fAdvancedOptions enableUI:enable];
+        // TODO: set the advanced options string based on the previously
+        //       selected x264 system setting
         // reset x264 system widgets
         [fX264PresetsSlider setIntegerValue: fX264MediumPresetIndex];
         [fX264TunePopUp selectItemAtIndex:0];
