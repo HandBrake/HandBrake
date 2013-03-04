@@ -6104,12 +6104,12 @@ return YES;
             
             
         }
-        /* We use Bold Text for the HB Default */
-        if ([[item objectForKey:@"Default"] intValue] == 1)// 1 is HB default
+        /* We use bold text for the default preset */
+        if (presetUserDefault == nil &&                    // no User default found
+            [[item objectForKey:@"Default"] intValue] == 1)// 1 is HB default
         {
             txtFont = [NSFont boldSystemFontOfSize: [NSFont smallSystemFontSize]];
         }
-        /* We use Bold Text for the User Specified Default */
         if ([[item objectForKey:@"Default"] intValue] == 2)// 2 is User default
         {
             txtFont = [NSFont boldSystemFontOfSize: [NSFont smallSystemFontSize]];
