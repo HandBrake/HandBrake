@@ -636,9 +636,36 @@ supported samplerates: 32 - 48 kHz
 Core Audio API provides a range of allowed bitrates:
 32 kHz         12 - 40         24 - 80        64 - 192          N/A           96 - 256
 48 kHz         16 - 40         32 - 80        80 - 192          N/A          112 - 256
-Limits: minimum of 12 (+ 4 if rate >= 44100) Kbps per full-bandwidth channel
+Limits: minimum of 12 Kbps per full-bandwidth channel (<= 32 kHz)
+        minimum of 16 Kbps per full-bandwidth channel ( > 32 kHz)
         maximum of 40 Kbps per full-bandwidth channel
 Note: encCoreAudioInit() will sanitize any mistake made here.
+
+fdk_aac
+-------
+supported samplerates: 8 - 48 kHz
+libfdk limits the bitrate to the following values:
+ 8 kHz              48              96             240
+12 kHz              72             144             360
+16 kHz              96             192             480
+24 kHz             144             288             720
+32 kHz             192             384             960
+48 kHz             288             576            1440
+Limits: minimum of samplerate * 2/3 Kbps per full-bandwidth channel (see ca_aac)
+        maximum of samplerate * 6.0 Kbps per full-bandwidth channel
+ 
+fdk_haac
+--------
+supported samplerates: 16 - 48 kHz
+libfdk limits the bitrate to the following values:
+16 kHz         8 -  48        16 -  96        45 - 199
+24 kHz         8 -  63        16 - 127        45 - 266
+32 kHz         8 -  63        16 - 127        45 - 266
+48 kHz        12 -  63        16 - 127        50 - 266
+Limits: minimum of 12 Kbps per full-bandwidth channel  (<= 32 kHz) (see ca_haac)
+        minimum of 16 Kbps per full-bandwidth channel  ( > 32 kHz) (see ca_haac)
+        maximum of 48,  96 or 192 Kbps (1.0, 2.0, 5.1) (<= 16 kHz)
+        maximum of 64, 128 or 256 Kbps (1.0, 2.0, 5.1) ( > 16 kHz)
 */
 
 void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown,
@@ -676,7 +703,6 @@ void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown,
             break;
 
         case HB_ACODEC_CA_AAC:
-        case HB_ACODEC_FDK_AAC:
         {
             switch (samplerate)
             {
@@ -712,9 +738,20 @@ void hb_get_audio_bitrate_limits(uint32_t codec, int samplerate, int mixdown,
         } break;
 
         case HB_ACODEC_CA_HAAC:
-        case HB_ACODEC_FDK_HAAC:
             *low  = nchannels * (12 + (4 * (samplerate >= 44100)));
             *high = nchannels * 40;
+            break;
+
+        case HB_ACODEC_FDK_AAC:
+            *low  = nchannels * samplerate * 2 / 3000;
+            *high = nchannels * samplerate * 6 / 1000;
+            break;
+
+        case HB_ACODEC_FDK_HAAC:
+            *low  = (nchannels * (12 + (4 * (samplerate >= 44100))));
+            *high = (nchannels - (nchannels > 2)) * (48 +
+                                                     (16 *
+                                                      (samplerate >= 22050)));
             break;
 
         case HB_ACODEC_FAAC:
