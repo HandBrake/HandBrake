@@ -36,10 +36,6 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private readonly IScanServiceWrapper scanService;
 
-        /// <summary>
-        /// Backing field for the selected mode
-        /// </summary>
-        private int selectedMode;
         #endregion
 
         /// <summary>
@@ -56,46 +52,32 @@ namespace HandBrakeWPF.ViewModels
             this.encodeService = encodeService;
             this.scanService = scanService;
             this.Title = "Log Viewer";
-
-            this.SelectedMode = this.encodeService.IsEncoding ? 0 : 1;
         }
+
+        /// <summary>
+        /// Gets or sets the selected tab.
+        /// </summary>
+        public int SelectedTab { get; set; }
 
         /// <summary>
         /// Gets Log.
         /// </summary>
-        public string Log
+        public string ScanLog
         {
             get
             {
-                return this.SelectedMode == 0 ? this.encodeService.ActivityLog : this.scanService.ActivityLog;
+                return this.scanService.ActivityLog;
             }
         }
 
         /// <summary>
-        /// Gets LogModes.
+        /// Gets the encodelog.
         /// </summary>
-        public IEnumerable<string> LogModes
+        public string EncodeLog
         {
             get
             {
-                return new List<string> { "Encode Log", "Scan Log" };
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets SelectedMode.
-        /// </summary>
-        public int SelectedMode
-        {
-            get
-            {
-                return selectedMode;
-            }
-            set
-            {
-                selectedMode = value;
-                this.NotifyOfPropertyChange(() => this.SelectedMode);
-                this.ChangeLogDisplay();
+                return this.encodeService.ActivityLog;
             }
         }
 
@@ -115,7 +97,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void CopyLog()
         {
-            Clipboard.SetDataObject(this.Log, true);
+            Clipboard.SetDataObject(this.SelectedTab == 0 ? this.ScanLog : this.EncodeLog, true);
         }
 
         /// <summary>
@@ -123,13 +105,14 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         protected override void OnActivate()
         {
-            this.scanService.ScanStared += ScanServiceScanStared;
             this.scanService.ScanCompleted += ScanServiceScanCompleted;
-            this.encodeService.EncodeStarted += EncodeServiceEncodeStarted;
             this.encodeService.EncodeCompleted += EncodeServiceEncodeCompleted;
             this.encodeService.EncodeStatusChanged += this.EncodeServiceEncodeStatusChanged;
             this.scanService.ScanStatusChanged += this.ScanServiceScanStatusChanged;
             base.OnActivate();
+
+            this.NotifyOfPropertyChange(() => this.ScanLog);
+            this.NotifyOfPropertyChange(() => this.EncodeLog);
         }
 
         /// <summary>
@@ -143,7 +126,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void ScanServiceScanStatusChanged(object sender, ScanProgressEventArgs e)
         {
-            this.NotifyOfPropertyChange(() => this.Log);
+            this.NotifyOfPropertyChange(() => this.ScanLog);
         }
 
         /// <summary>
@@ -157,7 +140,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void EncodeServiceEncodeStatusChanged(object sender, EncodeProgressEventArgs e)
         {
-            this.NotifyOfPropertyChange(() => this.Log);
+            this.NotifyOfPropertyChange(() => this.EncodeLog);
         }
 
         /// <summary>
@@ -168,50 +151,12 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         protected override void OnDeactivate(bool close)
         {
-            this.scanService.ScanStared -= ScanServiceScanStared;
             this.scanService.ScanCompleted -= ScanServiceScanCompleted;
-            this.encodeService.EncodeStarted -= EncodeServiceEncodeStarted;
             this.encodeService.EncodeCompleted -= EncodeServiceEncodeCompleted;
             this.encodeService.EncodeStatusChanged -= this.EncodeServiceEncodeStatusChanged;
             this.scanService.ScanStatusChanged -= this.ScanServiceScanStatusChanged;
 
             base.OnDeactivate(close);
-        }
-
-        /// <summary>
-        /// Change the Log Display
-        /// </summary>
-        private void ChangeLogDisplay()
-        {
-            this.NotifyOfPropertyChange(() => this.Log);
-        }
-
-        /// <summary>
-        /// Encode Started Event Handler
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void EncodeServiceEncodeStarted(object sender, EventArgs e)
-        {
-            this.SelectedMode = 0;
-        }
-
-        /// <summary>
-        /// Scan Started Event Handler
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void ScanServiceScanStared(object sender, EventArgs e)
-        {
-            this.SelectedMode = 1;
         }
 
         /// <summary>
@@ -225,7 +170,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void ScanServiceScanCompleted(object sender, ScanCompletedEventArgs e)
         {
-            this.NotifyOfPropertyChange(() => this.Log);
+            this.NotifyOfPropertyChange(() => this.ScanLog);
         }
 
         /// <summary>
@@ -239,7 +184,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void EncodeServiceEncodeCompleted(object sender, EncodeCompletedEventArgs e)
         {
-            this.NotifyOfPropertyChange(() => this.Log);
+            this.NotifyOfPropertyChange(() => this.EncodeLog);
         }
     }
 }
