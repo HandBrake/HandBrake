@@ -11,7 +11,6 @@ namespace HandBrake.ApplicationServices.Services
 {
     using System;
     using System.Diagnostics;
-    using System.Globalization;
     using System.IO;
     using System.Windows.Forms;
 
@@ -66,7 +65,7 @@ namespace HandBrake.ApplicationServices.Services
         public Encode(IUserSettingService userSettingService)
             : base(userSettingService)
         {
-            this.userSettingService = userSettingService;  
+            this.userSettingService = userSettingService;
         }
 
         #region Properties
@@ -135,7 +134,7 @@ namespace HandBrake.ApplicationServices.Services
                                        userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount),
                                        userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity),
                                        userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav))
-                                   : QueryGeneratorUtility.GenerateQuery(new EncodeTask(this.currentTask.Task), 
+                                   : QueryGeneratorUtility.GenerateQuery(new EncodeTask(this.currentTask.Task),
                                    userSettingService.GetUserSetting<int>(ASUserSettingConstants.PreviewScanCount),
                                    userSettingService.GetUserSetting<int>(ASUserSettingConstants.Verbosity),
                                    userSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav));
@@ -263,21 +262,16 @@ namespace HandBrake.ApplicationServices.Services
             }
 
             Execute.OnUIThread(() =>
+            {
+                if (this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.PreventSleep))
                 {
-                    if (this.WindowsSeven.IsWindowsSeven)
-                    {
-                        this.WindowsSeven.SetTaskBarProgressToNoProgress();
-                    }
+                    Win32.AllowSleep();
+                }
+            });
 
-                    if (this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.PreventSleep))
-                    {
-                        Win32.AllowSleep();
-                    }
-
-                    this.currentTask.Status = QueueItemStatus.Completed;
-                    this.IsEncoding = false;
-                    this.InvokeEncodeCompleted(new EncodeCompletedEventArgs(true, null, string.Empty));
-                });
+            this.currentTask.Status = QueueItemStatus.Completed;
+            this.IsEncoding = false;
+            this.InvokeEncodeCompleted(new EncodeCompletedEventArgs(true, null, string.Empty));
         }
 
         /// <summary>
@@ -296,14 +290,14 @@ namespace HandBrake.ApplicationServices.Services
         {
             if (!String.IsNullOrEmpty(e.Data))
             {
-                if (initShutdown && this.LogBuffer.Length < 25000000) 
+                if (initShutdown && this.LogBuffer.Length < 25000000)
                 {
                     initShutdown = false; // Reset this flag.
                 }
 
                 if (this.LogBuffer.Length > 25000000 && !initShutdown) // Approx 23.8MB and make sure it's only printed once
                 {
-                    this.ProcessLogMessage("ERROR: Initiating automatic shutdown of encode process. The size of the log file inidcates that there is an error! ");
+                    this.ProcessLogMessage("ERROR: Initiating automatic shutdown of encode process. The size of the log file indicates that there is an error! ");
                     initShutdown = true;
                     this.Stop();
                 }
@@ -328,28 +322,14 @@ namespace HandBrake.ApplicationServices.Services
                 EncodeProgressEventArgs eventArgs = this.ReadEncodeStatus(e.Data, this.startTime);
                 if (eventArgs != null)
                 {
-                    Execute.OnUIThread(
-                        () =>
-                            {
-                                if (!this.IsEncoding)
-                                {
-                                    // We can get events out of order since the CLI progress is monitored on a background thread.
-                                    // So make sure we don't send a status update after an encode complete event.
-                                    return;
-                                }
+                    if (!this.IsEncoding)
+                    {
+                        // We can get events out of order since the CLI progress is monitored on a background thread.
+                        // So make sure we don't send a status update after an encode complete event.
+                        return;
+                    }
 
-                                this.InvokeEncodeStatusChanged(eventArgs);
-
-                                if (this.WindowsSeven.IsWindowsSeven)
-                                {
-                                    int percent;
-                                    int.TryParse(
-                                        Math.Round(eventArgs.PercentComplete).ToString(CultureInfo.InvariantCulture),
-                                        out percent);
-
-                                    this.WindowsSeven.SetTaskBarProgress(percent);
-                                }
-                            });
+                    this.InvokeEncodeStatusChanged(eventArgs);
                 }
             }
         }

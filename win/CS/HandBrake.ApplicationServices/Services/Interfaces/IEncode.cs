@@ -67,6 +67,11 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         string ActivityLog { get; }
 
         /// <summary>
+        /// Gets the log index. The current log row counter.
+        /// </summary>
+        int LogIndex { get; }
+
+        /// <summary>
         /// Start with a LibHb EncodeJob Object
         /// </summary>
         /// <param name="job">
