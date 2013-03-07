@@ -32,7 +32,7 @@
 #include <gtk/gtk.h>
 #include "settings.h"
 
-#if GTK_CHECK_VERSION(2, 32, 0)
+#if GLIB_CHECK_VERSION(2, 32, 0)
 #define GHB_THREAD_NEW(n, f, p) \
                 g_thread_new(n, (GThreadFunc)(f), (p))
 #else

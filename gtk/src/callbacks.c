@@ -410,7 +410,7 @@ get_dvd_device_name(GDrive *gd)
 #endif
 
 static GHashTable *volname_hash = NULL;
-#if GTK_CHECK_VERSION(2, 32, 0)
+#if GLIB_CHECK_VERSION(2, 32, 0)
 static GMutex     volname_mutex_static;
 #endif
 static GMutex     *volname_mutex;
@@ -488,7 +488,7 @@ get_dvd_volume_name(gpointer gd)
 void
 ghb_volname_cache_init(void)
 {
-#if GTK_CHECK_VERSION(2, 32, 0)
+#if GLIB_CHECK_VERSION(2, 32, 0)
     g_mutex_init(&volname_mutex_static);
     volname_mutex = &volname_mutex_static;
 #else
