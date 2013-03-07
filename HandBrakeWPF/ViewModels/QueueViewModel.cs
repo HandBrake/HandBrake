@@ -101,7 +101,7 @@ namespace HandBrakeWPF.ViewModels
             this.errorService = errorService;
             this.Title = "Queue";
             this.JobsPending = "No encodes pending";
-            this.JobStatus = "There are no jobs currently encoding";  
+            this.JobStatus = "There are no jobs currently encoding";
         }
 
         #endregion
@@ -263,9 +263,9 @@ namespace HandBrakeWPF.ViewModels
             {
                 MessageBoxResult result =
                     this.errorService.ShowMessageBox(
-                        "This encode is currently in progress. If you delete it, the encode will be stoped. Are you sure you wish to proceed?", 
-                        "Warning", 
-                        MessageBoxButton.YesNo, 
+                        "This encode is currently in progress. If you delete it, the encode will be stoped. Are you sure you wish to proceed?",
+                        "Warning",
+                        MessageBoxButton.YesNo,
                         MessageBoxImage.Question);
 
                 if (result == MessageBoxResult.Yes)
@@ -330,7 +330,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Import()
         {
-            VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "HandBrake Queue Files (*.hbq)|*.hbq", CheckFileExists = true  };
+            VistaOpenFileDialog dialog = new VistaOpenFileDialog { Filter = "HandBrake Queue Files (*.hbq)|*.hbq", CheckFileExists = true };
             dialog.ShowDialog();
 
             this.queueProcessor.RestoreQueue(dialog.FileName);
@@ -374,7 +374,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.Load();
 
-            this.WhenDoneAction = this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.WhenCompleteAction);    
+            this.WhenDoneAction = this.userSettingService.GetUserSetting<string>(ASUserSettingConstants.WhenCompleteAction);
 
             this.queueProcessor.JobProcessingStarted += this.queueProcessor_JobProcessingStarted;
             this.queueProcessor.QueueCompleted += this.queueProcessor_QueueCompleted;
@@ -414,19 +414,23 @@ namespace HandBrakeWPF.ViewModels
         private void EncodeService_EncodeStatusChanged(
             object sender, EncodeProgressEventArgs e)
         {
-            if (this.IsEncoding)
+            Caliburn.Micro.Execute.OnUIThread(() =>
             {
-                this.JobStatus =
-                    string.Format(
-                        "Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:hh\\:mm\\:ss}",
-                        e.Task,
-                        e.TaskCount,
-                        e.PercentComplete,
-                        e.CurrentFrameRate,
-                        e.AverageFrameRate,
-                        e.EstimatedTimeLeft,
-                        e.ElapsedTime);
-            }
+                if (this.IsEncoding)
+                {
+                    this.JobStatus =
+                        string.Format(
+                            "Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Time Remaining: {5},  Elapsed: {6:hh\\:mm\\:ss}",
+                            e.Task,
+                            e.TaskCount,
+                            e.PercentComplete,
+                            e.CurrentFrameRate,
+                            e.AverageFrameRate,
+                            e.EstimatedTimeLeft,
+                            e.ElapsedTime);
+                }
+
+            });
         }
 
         /// <summary>

@@ -254,14 +254,6 @@ namespace HandBrake.ApplicationServices.Services
             };
 
             this.InvokeEncodeStatusChanged(args);
-
-            if (this.WindowsSeven.IsWindowsSeven)
-            {
-                int percent;
-                int.TryParse(Math.Round(e.FractionComplete).ToString(CultureInfo.InvariantCulture), out percent);
-
-                this.WindowsSeven.SetTaskBarProgress(percent);
-            }
         }
 
         /// <summary>
@@ -281,11 +273,6 @@ namespace HandBrake.ApplicationServices.Services
                 e.Error
                     ? new EncodeCompletedEventArgs(false, null, string.Empty)
                     : new EncodeCompletedEventArgs(true, null, string.Empty));
-
-            if (this.WindowsSeven.IsWindowsSeven)
-            {
-                this.WindowsSeven.SetTaskBarProgressToNoProgress();
-            }
 
             if (this.userSettingService.GetUserSetting<bool>(ASUserSettingConstants.PreventSleep))
             {
