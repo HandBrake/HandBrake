@@ -1215,24 +1215,23 @@ class Display
     
     case hash["AudioEncoderFallback"]
       when /AC3/
-        audioEncoderFallback << "HB_ACODEC_AC3"
+        audioEncoderFallback << "ffac3"
       when "AAC (ffmpeg)"
-        audioEncoderFallback << "HB_ACODEC_FFAAC"
+        audioEncoderFallback << "ffaac"
       when /AAC/
-        audioEncoderFallback << "HB_ACODEC_FAAC"
+        audioEncoderFallback << "faac"
       when /Vorbis/
-        audioEncoderFallback << "HB_ACODEC_VORBIS"
+        audioEncoderFallback << "vorbis"
       when /MP3/
-        audioEncoderFallback << "HB_ACODEC_LAME"
+        audioEncoderFallback << "lame"
       when /FLAC/
-        audioEncoderFallback << "HB_ACODEC_FFFLAC"
+        audioEncoderFallback << "ffflac"
     end
     
     if audioEncoderFallback.size > 0
-      commandString << "if( !acodec_fallback )\n    "
+      commandString << "if( acodec_fallback == NULL )\n    "
       commandString << "{\n    "
-      commandString << "    acodec_fallback = " << audioEncoderFallback
-      commandString << ";\n    "
+      commandString << "    acodec_fallback = \"" << audioEncoderFallback << "\";\n    "
       commandString << "}\n    "
     end
     
