@@ -749,9 +749,9 @@ static int HandleEvents( hb_handle_t * h )
                         allowed_audio_copy |= HB_ACODEC_MP3_PASS;
                         allowed_audio_copy &= HB_ACODEC_PASS_MASK;
                     }
-                    if( !acodec_fallback )
+                    if( acodec_fallback == NULL )
                     {
-                        acodec_fallback = HB_ACODEC_AC3;
+                        acodec_fallback = "ffac3";
                     }
                     maxWidth = 720;
                     maxHeight = 576;
@@ -819,9 +819,9 @@ static int HandleEvents( hb_handle_t * h )
                         allowed_audio_copy |= HB_ACODEC_MP3_PASS;
                         allowed_audio_copy &= HB_ACODEC_PASS_MASK;
                     }
-                    if( !acodec_fallback )
+                    if( acodec_fallback == NULL )
                     {
-                        acodec_fallback = HB_ACODEC_AC3;
+                        acodec_fallback = "ffac3";
                     }
                     maxWidth = 320;
                     maxHeight = 240;
@@ -885,9 +885,9 @@ static int HandleEvents( hb_handle_t * h )
                         allowed_audio_copy |= HB_ACODEC_MP3_PASS;
                         allowed_audio_copy &= HB_ACODEC_PASS_MASK;
                     }
-                    if( !acodec_fallback )
+                    if( acodec_fallback == NULL )
                     {
-                        acodec_fallback = HB_ACODEC_AC3;
+                        acodec_fallback = "ffac3";
                     }
                     maxWidth = 960;
                     maxHeight = 640;
@@ -955,9 +955,9 @@ static int HandleEvents( hb_handle_t * h )
                         allowed_audio_copy |= HB_ACODEC_MP3_PASS;
                         allowed_audio_copy &= HB_ACODEC_PASS_MASK;
                     }
-                    if( !acodec_fallback )
+                    if( acodec_fallback == NULL )
                     {
-                        acodec_fallback = HB_ACODEC_AC3;
+                        acodec_fallback = "ffac3";
                     }
                     maxWidth = 1280;
                     maxHeight = 720;
@@ -1025,9 +1025,9 @@ static int HandleEvents( hb_handle_t * h )
                         allowed_audio_copy |= HB_ACODEC_MP3_PASS;
                         allowed_audio_copy &= HB_ACODEC_PASS_MASK;
                     }
-                    if( !acodec_fallback )
+                    if( acodec_fallback == NULL )
                     {
-                        acodec_fallback = HB_ACODEC_AC3;
+                        acodec_fallback = "ffac3";
                     }
                     maxWidth = 960;
                     maxHeight = 720;
@@ -1099,9 +1099,9 @@ static int HandleEvents( hb_handle_t * h )
                         allowed_audio_copy |= HB_ACODEC_MP3_PASS;
                         allowed_audio_copy &= HB_ACODEC_PASS_MASK;
                     }
-                    if( !acodec_fallback )
+                    if( acodec_fallback == NULL )
                     {
-                        acodec_fallback = HB_ACODEC_AC3;
+                        acodec_fallback = "ffac3";
                     }
                     maxWidth = 1280;
                     maxHeight = 720;
@@ -1169,9 +1169,9 @@ static int HandleEvents( hb_handle_t * h )
                         allowed_audio_copy |= HB_ACODEC_MP3_PASS;
                         allowed_audio_copy &= HB_ACODEC_PASS_MASK;
                     }
-                    if( !acodec_fallback )
+                    if( acodec_fallback == NULL )
                     {
-                        acodec_fallback = HB_ACODEC_AC3;
+                        acodec_fallback = "ffac3";
                     }
                     maxWidth = 1920;
                     maxHeight = 1080;
@@ -1240,9 +1240,9 @@ static int HandleEvents( hb_handle_t * h )
                         allowed_audio_copy |= HB_ACODEC_MP3_PASS;
                         allowed_audio_copy &= HB_ACODEC_PASS_MASK;
                     }
-                    if( !acodec_fallback )
+                    if( acodec_fallback == NULL )
                     {
-                        acodec_fallback = HB_ACODEC_AC3;
+                        acodec_fallback = "ffac3";
                     }
                     maxWidth = 720;
                     maxHeight = 576;
@@ -1308,9 +1308,9 @@ static int HandleEvents( hb_handle_t * h )
                         allowed_audio_copy |= HB_ACODEC_MP3_PASS;
                         allowed_audio_copy &= HB_ACODEC_PASS_MASK;
                     }
-                    if( !acodec_fallback )
+                    if( acodec_fallback == NULL )
                     {
-                        acodec_fallback = HB_ACODEC_AC3;
+                        acodec_fallback = "ffac3";
                     }
                     maxWidth = 1280;
                     maxHeight = 720;
@@ -1374,9 +1374,9 @@ static int HandleEvents( hb_handle_t * h )
                         allowed_audio_copy |= HB_ACODEC_MP3_PASS;
                         allowed_audio_copy &= HB_ACODEC_PASS_MASK;
                     }
-                    if( !acodec_fallback )
+                    if( acodec_fallback == NULL )
                     {
-                        acodec_fallback = HB_ACODEC_AC3;
+                        acodec_fallback = "ffac3";
                     }
                     if (x264_preset == NULL)
                     {
@@ -1440,9 +1440,9 @@ static int HandleEvents( hb_handle_t * h )
                         allowed_audio_copy |= HB_ACODEC_MP3_PASS;
                         allowed_audio_copy &= HB_ACODEC_PASS_MASK;
                     }
-                    if( !acodec_fallback )
+                    if( acodec_fallback == NULL )
                     {
-                        acodec_fallback = HB_ACODEC_AC3;
+                        acodec_fallback = "ffac3";
                     }
                     if (x264_preset == NULL)
                     {
