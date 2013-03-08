@@ -109,7 +109,7 @@ namespace HandBrake.ApplicationServices.Parsing
 
             if (m != null)
                 if (m.Success && OnScanProgress != null)
-                    OnScanProgress(this, int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value), decimal.Parse(m.Groups[4].Value));
+                    OnScanProgress(this, int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value), decimal.Parse(m.Groups[4].Value, CultureInfo.InvariantCulture));
 
             return tmp;
         }
