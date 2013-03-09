@@ -19,7 +19,7 @@ The following are the recommended specifications for building on @value{OS.mingw
 
 @itemize @bullet
 @item Intel 32-bit or 64-bit hardware
-@item @value{OS.mingw} on Fedora 17+, Ubuntu 12+ or Debian, gcc 4.5+
+@item @value{OS.mingw} on Fedora 17+, Ubuntu 12+ or Debian, gcc 4.6+
 @item yasm 1.2.x (for i386 or x86_64 architectures)
 @end itemize
 
