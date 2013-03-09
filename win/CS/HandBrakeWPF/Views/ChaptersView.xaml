@@ -29,6 +29,11 @@
                   VerticalAlignment="Stretch" HorizontalAlignment="Stretch" AutoGenerateColumns="False"
                   CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False"
                   CanUserAddRows="False" CanUserDeleteRows="False">
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="MinHeight" Value="22" />
+                </Style>
+            </DataGrid.CellStyle>
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Import Names" cal:Message.Attach="[Event Click] = [Action Import]" />
